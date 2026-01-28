@@ -1,9 +1,9 @@
 {
-  "extends": "@workspace/typescript-config/react-library.json",
+  "extends": "@merge/ts-cfg/react-lib.json",
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {
-      "@workspace/ui/*": ["./src/*"]
+      "@merge/ui/*": ["./src/*"]
     }
   },
   "include": ["."],

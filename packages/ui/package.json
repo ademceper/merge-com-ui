@@ -1,5 +1,5 @@
 {
-  "name": "@workspace/ui",
+  "name": "@merge/ui",
   "version": "0.0.0",
   "type": "module",
   "private": true,
@@ -7,13 +7,13 @@
     "lint": "eslint . --max-warnings 0"
   },
   "dependencies": {
-    "@radix-ui/react-slot": "^1.2.3",
+    "@radix-ui/react-slot": "^1.2.4",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "lucide-react": "^0.475.0",
     "next-themes": "^0.4.6",
-    "react": "^19.1.1",
-    "react-dom": "^19.1.1",
+    "react": "^19.2.4",
+    "react-dom": "^19.2.4",
     "tailwind-merge": "^3.3.1",
     "tw-animate-css": "^1.3.6",
     "zod": "^3.25.76"
@@ -24,8 +24,8 @@
     "@types/node": "^20.19.9",
     "@types/react": "^19.1.9",
     "@types/react-dom": "^19.1.7",
-    "@workspace/eslint-config": "workspace:*",
-    "@workspace/typescript-config": "workspace:*",
+    "@merge/lint-cfg": "workspace:*",
+    "@merge/ts-cfg": "workspace:*",
     "eslint": "^9.32.0",
     "tailwindcss": "^4.1.11",
     "typescript": "^5.9.2"
