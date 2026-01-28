@@ -6,6 +6,7 @@ import {
   Example,
   ExampleWrapper,
 } from "@/components/example"
+import { toast } from "@merge/ui/components/sonner"
 import {
   AlertDialog,
   AlertDialogAction,
@@ -59,12 +60,83 @@ import {
 import { Textarea } from "@merge/ui/components/textarea"
 import { PlusIcon, BluetoothIcon, DotsThreeVerticalIcon, FileIcon, FolderIcon, FolderOpenIcon, CodeIcon, DotsThreeOutlineIcon, MagnifyingGlassIcon, FloppyDiskIcon, DownloadIcon, EyeIcon, LayoutIcon, PaletteIcon, SunIcon, MoonIcon, MonitorIcon, UserIcon, CreditCardIcon, GearIcon, KeyboardIcon, TranslateIcon, BellIcon, EnvelopeIcon, ShieldIcon, QuestionIcon, FileTextIcon, SignOutIcon } from "@phosphor-icons/react"
 
+import { ThemeToggleButton } from "@merge/ui/components/theme-toggle"
+
 export function ComponentExample() {
   return (
     <ExampleWrapper>
       <CardExample />
+      <ThemeToggleExample />
+      <SonnerExample />
       <FormExample />
     </ExampleWrapper>
+  )
+}
+
+function ThemeToggleExample() {
+  return (
+    <Example title="Theme Toggle" className="items-center justify-center gap-6">
+      <p className="text-muted-foreground text-center text-sm">
+        Tema değiştirmek için butona tıklayın (View Transitions API ile alttan yukarı animasyon).
+      </p>
+      <ThemeToggleButton />
+    </Example>
+  )
+}
+
+function SonnerExample() {
+  return (
+    <Example title="Sonner (Toast)" className="items-center justify-center gap-3">
+      <p className="text-muted-foreground text-center text-sm mb-2">
+        Bildirim türlerini denemek için butonlara tıklayın.
+      </p>
+      <div className="flex flex-wrap items-center justify-center gap-2">
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={() => toast.success("İşlem başarılı!")}
+        >
+          Success
+        </Button>
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={() => toast.error("Bir hata oluştu.")}
+        >
+          Error
+        </Button>
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={() => toast.info("Bilgi mesajı.")}
+        >
+          Info
+        </Button>
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={() => toast.warning("Dikkat!")}
+        >
+          Warning
+        </Button>
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={() =>
+            toast.promise(
+              new Promise((resolve) => setTimeout(resolve, 2000)),
+              {
+                loading: "Yükleniyor...",
+                success: "Tamamlandı.",
+                error: "İptal edildi.",
+              }
+            )
+          }
+        >
+          Promise
+        </Button>
+      </div>
+    </Example>
   )
 }
 

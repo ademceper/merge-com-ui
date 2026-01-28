@@ -128,3 +128,27 @@
     @apply bg-background text-foreground;
   }
 }
+
+::view-transition-group(root) {
+  animation-duration: 0.7s;
+  animation-timing-function: var(--expo-out);
+}
+::view-transition-new(root) {
+  animation-name: reveal-light-bottom-up;
+}
+::view-transition-old(root),
+.dark::view-transition-old(root) {
+  animation: none;
+  z-index: -1;
+}
+.dark::view-transition-new(root) {
+  animation-name: reveal-dark-bottom-up;
+}
+@keyframes reveal-dark-bottom-up {
+  from { clip-path: polygon(0% 100%, 100% 100%, 100% 100%, 0% 100%); }
+  to { clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%); }
+}
+@keyframes reveal-light-bottom-up {
+  from { clip-path: polygon(0% 100%, 100% 100%, 100% 100%, 0% 100%); }
+  to { clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%); }
+}
