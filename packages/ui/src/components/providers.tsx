@@ -15,7 +15,7 @@ export function Providers({ children }: { children: React.ReactNode }) {
       enableColorScheme
     >
       {children}
-      <Toaster position="top-center"  />
+      <Toaster position="top-center" />
     </NextThemesProvider>
   )
 }
