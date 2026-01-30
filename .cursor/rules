@@ -1,0 +1,1000 @@
+# Quick Start
+
+{% embed url="<https://www.youtube.com/watch?v=S-B8Db2dStk>" %}
+Introduction and Tutorial
+{% endembed %}
+
+**Keycloakify** is a tool for creating custom Keycloak themes, enabling you to modify the appearance and behavior of Keycloak's user interfaces. This includes:
+
+* **Login Theme**: The UI for login and registration pages, displayed to users when they attempt to log in or sign up.
+* **Account Theme**: The account management interface, where users can update their email, change their password, and manage other account settings.
+* **Email Theme**: The templates used by Keycloak for automated emails, such as email confirmation or password reset notifications.
+* **Admin Theme**: The Admin Console interface, used by administrators to configure Keycloak.
+
+For a visual preview of these UIs as they appear with Keycloak's built-in theme, visit the Storybook demonstration:
+
+{% embed url="<https://storybook.keycloakify.dev/>" %}
+
+Whether you need to apply light CSS-level customizations to the built-in UIs or perform deeper redesigns at the component level using React, Angular, or Svelte, Keycloakify is the tool to achieve your goals.\
+\
+If you’d like to see Keycloakify in action, check out [Neon](https://neon.tech/). Clicking **Login** or **Sign Up** will take you to their Keycloakify-themed login pages.
+
+## Why Choose Keycloakify?
+
+You might be wondering why you would need a third-party tool like Keycloakify to create your custom UIs instead of relying solely on [Keycloak's built-in theming system](https://www.keycloak.org/docs/latest/server_development/#_themes). Here are a few reasons:
+
+* **Leverage Modern Frontend Technologies**: Keycloakify enables you to use TypeScript, React, Angular, Svelte, and any styling solution or component library you prefer, such as Tailwind, MUI, shadcn/ui, or plain CSS.
+* **Streamlined Testing**: Keycloakify makes it easy to [test your theme](https://docs.keycloakify.dev/testing-your-theme) both [inside](https://docs.keycloakify.dev/testing-your-theme/inside-of-keycloak) and [outside](https://docs.keycloakify.dev/testing-your-theme/outside-of-keycloak) Keycloak, with hot reloading for a smoother development experience.
+* **Automated Theme Bundling**: Keycloakify [bundles your theme into a JAR file](https://docs.keycloakify.dev/deploying-your-theme#building-the-jar-file), ready to import directly into Keycloak.
+* **Version Compatibility**: Themes generated with Keycloakify are backward compatible with Keycloak versions as far back as 11 and are [designed to remain compatible with future Keycloak updates](#user-content-fn-1)[^1].
+* **Built-In Real-Time Validation**: Keycloakify includes real-time frontend validation by default. For example, users receive instant feedback, such as "The password must be at least 12 characters long," rather than waiting until they press the submit button.
+* **Community Support**: We're here to help! If you're stuck or need guidance, reach out through our [Discord channel](https://discord.gg/kYFZG7fQmn) or [GitHub issues](https://github.com/keycloakify/keycloakify/issues/new). We respond quickly and are happy to assist.
+
+If you’re still unsure or want a better understanding before committing to using Keycloakify, check out this guide:
+
+{% content-ref url="<https://app.gitbook.com/s/H3WkQf6kDTNqLCk7O5D7/how-it-works>" %}
+[How does Keycloakify work?](https://app.gitbook.com/s/H3WkQf6kDTNqLCk7O5D7/how-it-works)
+{% endcontent-ref %}
+
+## Pick Your Framework: React, Angular or Svelte
+
+Keycloakify supports React, Angular, and Svelte, allowing you to work with the framework you're most familiar with. If you're only making CSS-level customizations to Keycloak's built-in theme, any of these frameworks will work. For a smoother experience, **React** is recommended, as it has the most complete integration.
+
+For Angular and Svelte users, a few considerations apply:
+
+* **Account Themes**: [The starting UI differs from Keycloak's default](#user-content-fn-2)[^2], requiring additional adjustments.
+* **Admin Themes**: Only React supports custom Admin UIs. However, since the Admin UI is only seen by the Keycloak instance administrator, it is rarely customized.
+* **Angular Setup**: [Keycloakify cannot be directly installed in an existing Angular project](#user-content-fn-3)[^3]. Themes must either be standalone projects or a subproject in a monorepo.
+
+React provides the most seamless experience, but Angular and Svelte are fully supported for login and account themes with some extra effort, which covers the needs of most projects. Choose the framework that best suits your project and expertise. If you have any questions or concerns, feel free to ask us on our [Discord channel](https://discord.gg/kYFZG7fQmn).
+
+## Quick Start
+
+Before futher reading, some practice!
+
+{% tabs %}
+{% tab title="React" %}
+
+```bash
+git clone https://github.com/keycloakify/keycloakify-starter
+```
+
+{% endtab %}
+
+{% tab title="Angular" %}
+
+```bash
+git clone https://github.com/keycloakify/keycloakify-starter-angular-vite keycloakify-starter
+```
+
+Credit goes to [@kathari00](https://github.com/kathari00) for taking the initiative and driving the development of Angular support.
+{% endtab %}
+
+{% tab title="Svelte" %}
+
+```bash
+git clone https://github.com/keycloakify/keycloakify-starter-svelte keycloakify-starter
+```
+
+Credit goes to [@luca-peruzzo](https://github.com/luca-peruzzo) for taking the initiative and driving the development of Svelte support.
+{% endtab %}
+{% endtabs %}
+
+Let's create a story for the Login page and run Storybook[^4].
+
+```bash
+cd keycloakify-starter
+
+yarn install              # You can use any package manager (npm, pnpm, etc.)
+                          # If you do, delete the .yarn.lock file to avoid conflicts.
+
+npx keycloakify add-story # Select login.ftl (for example).
+                          # Always use `npx` to run CLI tools installed in your project.
+                          # This is standard practice across all modern JS projects,
+                          # do not try to adapt this command based on your package 
+                          # manager.
+
+npm run storybook         # `npm run <script>`, `yarn <script>`, and `pnpm run <script>`
+                          # are strictly equivalent. We use `npm run` here for 
+                          # consistency and because `npm` is always available.
+```
+
+You should now be able to see the login pages in different scenarios:
+
+<figure><img src="https://2643300760-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2F4Ls5iTdfTS2xECgBfw90%2Fuploads%2Fgit-blob-698ad7c70ee7e5387c233c53200a3f1c37d6198e%2Fgrafik%20(2).png?alt=media" alt=""><figcaption><p>View of the storybook interface that let you preview the login page of your theme.</p></figcaption></figure>
+
+Now, let's apply our first CSS customization.
+
+Create the following stylesheet:
+
+{% code title="src/login/main.css" %}
+
+```css
+.kcFormHeaderClass {
+    border: 3px solid red;
+}
+```
+
+{% endcode %}
+
+And import it:
+
+{% tabs %}
+{% tab title="React" %}
+
+<pre class="language-tsx" data-title="src/login/KcPage.tsx"><code class="lang-tsx"><strong>import "./main.css";
+</strong>// ...
+</code></pre>
+
+{% endtab %}
+
+{% tab title="Angular" %}
+
+<pre class="language-typescript" data-title="src/login/KcPage.ts"><code class="lang-typescript"><strong>import "./main.css";
+</strong>import { getDefaultPageComponent, type KcPage } from '@keycloakify/angular/login';
+// ...
+</code></pre>
+
+{% endtab %}
+
+{% tab title="Svelte" %}
+
+<pre class="language-html" data-title="src/login/KcPage.svelte"><code class="lang-html">&#x3C;script lang="ts">
+<strong>  import "./main.css";
+</strong>  import Template from '@keycloakify/svelte/login/Template.svelte';
+  ...
+</code></pre>
+
+{% endtab %}
+{% endtabs %}
+
+This is what you should be getting:
+
+<figure><img src="https://2643300760-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2F4Ls5iTdfTS2xECgBfw90%2Fuploads%2Fgit-blob-4b2c89201982b717af62c9eef4a0f0ab286462be%2Fgrafik%20(3).png?alt=media" alt=""><figcaption><p>Screenshot showing the red border being applied to the header section of the login card.</p></figcaption></figure>
+
+Now let's see how CSS customization works in Keycloakify:
+
+{% content-ref url="css-customization" %}
+[css-customization](https://docs.keycloakify.dev/css-customization)
+{% endcontent-ref %}
+
+[^1]: Of course, we can't guarantee that a given build of your theme will work with future major versions of Keycloak. However, our goal is to ensure that when a new Keycloak version introduces breaking changes, the only action required to make your theme compatible is updating the Keycloakify version and rebuilding your theme—no additional adjustments needed.
+
+[^2]: The difference exists because recent Keycloak versions use a React-based Account UI by default, which has not been ported to Angular or Svelte in Keycloakify due to the complexity involved. For Angular and Svelte projects, Keycloakify provides a base UI derived from an older version of the Keycloak Account UI, used before the switch to React.
+
+[^3]: Keycloakify cannot be integrated directly into standard Angular projects because the Keycloakify compiler is designed to work with Vite and Webpack. However, most Angular projects today use Esbuild by default, which is not currently supported.
+
+[^4]: [Storybook](https://storybook.js.org/) is a tool that allows you to develop UI components in isolation. It is set up in the Keycloakify starter repos because it provides an good developer experience and makes it easy to quickly preview the different pages of your theme.
+
+# CSS Customization
+
+{% hint style="info" %}
+This page is a must-read. Even if you plan to redesign the pages at the component level, you should at least understand how to remove the default CSS styles.
+{% endhint %}
+
+## Understanding the CSS class system
+
+When you inspect the DOM in Storybook, you’ll notice most elements have at least a couple of classes applied to them:
+
+* A class starting with `kc`, for example `kcLabelClass`.
+* One or more classes starting with `pf-`, for example `pf-c-form__label`, `pf-c-form__label-text`.
+
+<figure><img src="https://2643300760-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2F4Ls5iTdfTS2xECgBfw90%2Fuploads%2Fgit-blob-ad9325e91796c694acf08adbeff1b864eeb90faf%2Fimage%20(26).png?alt=media" alt=""><figcaption><p>Inspecting an input label on the login page</p></figcaption></figure>
+
+Classes beginning with `kc` don’t have any styles applied to them by default. Their sole purpose is to serve as selectors for your custom styles.
+
+Classes beginning with `pf-` are Patternfly classes. [Patternfly](https://v5-archive.patternfly.org/) is a CSS framework created by RedHat, similar to Bootstrap, that the Keycloak team uses to build all of its UIs.
+
+What you’ll want to do is partially or completely remove the Patternfly styles and then apply your custom ones.
+
+## Applying your custom CSS
+
+{% hint style="danger" %}
+Do not edit any file in the `public/keycloakify-dev-resources` directory. These files are used by Storybook to simulate a Keycloak environment during development, and they aren't part of your actual theme.
+{% endhint %}
+
+To apply your custom CSS style, use the `kc` classes to target the components.
+
+{% code title="src/login/main.css" %}
+
+```css
+.kcLabelClass {
+   border: 3px solid red;
+}
+```
+
+{% endcode %}
+
+{% tabs %}
+{% tab title="React" %}
+
+<pre class="language-tsx" data-title="src/login/KcPage.tsx"><code class="lang-tsx"><strong>import "./main.css";
+</strong>// ...
+</code></pre>
+
+{% endtab %}
+
+{% tab title="Svelte" %}
+
+<pre class="language-html" data-title="src/login/KcPage.svelte"><code class="lang-html">&#x3C;script lang="ts">
+<strong>  import "./main.css";
+</strong>  import Template from '@keycloakify/svelte/login/Template.svelte';
+  ...
+</code></pre>
+
+{% endtab %}
+
+{% tab title="Angular" %}
+
+<pre class="language-typescript" data-title="src/login/KcPage.ts"><code class="lang-typescript"><strong>import "./main.css";
+</strong>import { getDefaultPageComponent, type KcPage } from '@keycloakify/angular/login';
+// ...
+</code></pre>
+
+{% endtab %}
+{% endtabs %}
+
+This is the result:
+
+<figure><img src="https://2643300760-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2F4Ls5iTdfTS2xECgBfw90%2Fuploads%2Fgit-blob-94f2106028bc547135bba7a81226c2ce5ab1533c%2Fimage%20(27).png?alt=media" alt="" width="375"><figcaption><p>A red border has been applied to every input label</p></figcaption></figure>
+
+<details>
+
+<summary>Having different stylesheets for the login page, the register page, etc...</summary>
+
+In this example, we use a global stylesheet that applies to all pages of the login theme. However, you can also assign different stylesheets on a page-by-page basis (e.g., one for the login page, another for the registration page, etc.).
+
+If you plan to customize the pages at the component level using React, Angular, or Svelte, you can skip this section. Once you've learned about the [`npx keycloakify eject-page`](https://docs.keycloakify.dev/common-use-case-examples/using-a-component-library) command, it will be straightforward to import different stylesheets for different ejected pages, and no additional instructions will be necessary.
+
+However, if you plan to customize the theme using only CSS without ejecting the pages, the process may not be immediately clear.\
+You need to be able to load different stylesheet based on the value of `kcContext.pageId`.\
+Below is a snippet of React code demonstrating how you can apply separate stylesheets for different pages:
+
+{% code title="src/login/KcPage.tsx" %}
+
+```tsx
+import {
+    Suspense, 
+    lazy,
+    useMemo
+} from "react";
+
+export default function KcPage(props: { kcContext: KcContext }) {
+    const { kcContext } = props;
+
+    const { i18n } = useI18n({ kcContext });
+
+    const classes = useCustomStyles(kcContext);
+
+    return (
+        <Suspense>
+            {(() => {
+                switch (kcContext.pageId) {
+                    default:
+                        return (
+                            <DefaultPage
+                                kcContext={kcContext}
+                                i18n={i18n}
+                                classes={classes}
+                                Template={Template}
+                                doUseDefaultCss={true}
+                                UserProfileFormFields={UserProfileFormFields}
+                                doMakeUserConfirmPassword={doMakeUserConfirmPassword}
+                            />
+                        );
+                }
+            })()}
+        </Suspense>
+    );
+}
+
+function useCustomStyles(kcContext: KcContext) {
+    return useMemo(() => {
+        
+        // Your stylesheet that applies to all pages.
+        import("./main.css");
+        let classes: { [key in ClassKey]?: string } = {
+            // Classes that apply to all pages
+        };
+
+        switch (kcContext.pageId) {
+            case "login.ftl":
+                // A login page-specific stylesheet.
+                import("./pages/login.css");
+                classes = {
+                    ...classes,
+                    // Classes that apply only to the login page
+                };
+                break;
+            case "register.ftl":
+                // A register page-specific stylesheet.
+                import("./pages/register.css");
+                classes = {
+                    ...classes,
+                    // Classes that apply only to the register page
+                };
+                break;
+            // ...
+        }
+
+        return classes;
+
+    }, []);
+}
+```
+
+{% endcode %}
+
+If this code doesn’t make much sense, you can watch [this video tutorial](https://www.youtube.com/watch?v=Nkoz1iD-HOA) where this approach is demonstrated in practice.
+
+</details>
+
+<details>
+
+<summary>Using Tailwind</summary>
+
+{% hint style="info" %}
+If you wish to use tailwind there is a pre made Starter Theme for Shadcn UI:
+
+[Shadcn UI (Tailwind)](https://app.gitbook.com/s/HIMW3tZgxcAgIZHxk9JD/shadcn-ui-tailwind "mention")
+{% endhint %}
+
+Of course, you can use Tailwind in the usual way by applying utility classes to the React/Angular/Svelte components.\
+But note that you can also use Tailwind without modifying the page structure by using the `@apply` directive. This is shown in [this page](#using-tailwind).
+
+</details>
+
+<details>
+
+<summary>Using <a href="https://getbootstrap.com/">Bootstrap</a> or some other CSS framework</summary>
+
+If you want to use Bootstrap or another CSS framework that provides standardized classes, you might wonder how to apply these classes.\
+\
+Here’s an example with Bootstrap:
+
+```bash
+yarn add bootstrap
+```
+
+<pre class="language-tsx" data-title="src/login/KcPage.tsx"><code class="lang-tsx"><strong>import "bootstrap/dist/css/bootstrap.min.css";
+</strong>import { Suspense, lazy } from "react";
+import type { ClassKey } from "keycloakify/login";
+import type { KcContext } from "./KcContext";
+import { useI18n } from "./i18n";
+import DefaultPage from "keycloakify/login/DefaultPage";
+import Template from "keycloakify/login/Template";
+const UserProfileFormFields = lazy(
+    () => import("keycloakify/login/UserProfileFormFields")
+);
+
+const doMakeUserConfirmPassword = true;
+
+export default function KcPage(props: { kcContext: KcContext }) {
+    const { kcContext } = props;
+
+    const { i18n } = useI18n({ kcContext });
+
+    return (
+        &#x3C;Suspense>
+            {(() => {
+                switch (kcContext.pageId) {
+                    default:
+                        return (
+                            &#x3C;DefaultPage
+                                kcContext={kcContext}
+                                i18n={i18n}
+                                classes={classes}
+                                Template={Template}
+                                doUseDefaultCss={true}
+                                UserProfileFormFields={UserProfileFormFields}
+                                doMakeUserConfirmPassword={doMakeUserConfirmPassword}
+                            />
+                        );
+                }
+            })()}
+        &#x3C;/Suspense>
+    );
+}
+
+const classes = {
+<strong>    kcLabelClass: "form-label col-form-label",
+</strong>} satisfies { [key in ClassKey]?: string };
+</code></pre>
+
+By doing this, you replace the Patternfly classes `pf-c-form__label pf-c-form__label-text` with the Bootstrap classes `form-label col-form-label`.
+
+In practice, if you inspect the element in your browser, the form label that was previously rendered as:
+
+```html
+<label for="username" class="kcLabelClass pf-c-form__label pf-c-form__label-text">
+```
+
+Is now rendered as:
+
+```html
+<label for="username" class="kcLabelClass form-label col-form-label">
+```
+
+</details>
+
+## Removing Some of the Default Styles
+
+Let’s consider the **Sign In** button on the login page:
+
+<figure><img src="https://2643300760-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2F4Ls5iTdfTS2xECgBfw90%2Fuploads%2Fgit-blob-579d92f1b62bc4216451a0128b9acfb707bf52a9%2Fimage%20(21).png?alt=media" alt="" width="375"><figcaption><p>The default look of the "Sign In" button</p></figcaption></figure>
+
+Here’s how we can “unstyle” it so that we can apply custom styles without worrying about conflicts from the default Patternfly styles:
+
+<figure><img src="https://2643300760-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2F4Ls5iTdfTS2xECgBfw90%2Fuploads%2Fgit-blob-f45b6b1cd49795120465328983add64f04f09556%2Fimage%20(22).png?alt=media" alt="" width="375"><figcaption><p>How the "Sign In" button looks when all Patternfly styles are removed</p></figcaption></figure>
+
+To remove the Patternfly styles, inspect the button in your browser:
+
+<figure><img src="https://2643300760-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2F4Ls5iTdfTS2xECgBfw90%2Fuploads%2Fgit-blob-de44d8627a5e975c363a9c4a1f017d53d2c5dbff%2Fimage%20(24).png?alt=media" alt=""><figcaption><p>Inspecting the CSS classes applied to the "Sign In" button</p></figcaption></figure>
+
+We can see which Patternfly classes are applied by default to the standardized element:
+
+* `kcButtonClass` -> `pf-c-button`
+* `kcButtonPrimaryClass` -> `pf-m-primary` and `long-pf-btn`
+* `kcButtonBlockClass` -> `pf-m-block`
+* `kcButtonLargeClass` -> `btn-lg`
+
+Since we want to remove all the default styles, we can tell Keycloakify to remove all classes assigned by default to these `kc` classes:
+
+{% tabs %}
+{% tab title="React" %}
+
+<pre class="language-tsx" data-title="src/login/KcPage.tsx"><code class="lang-tsx">// ...
+
+const classes = {
+<strong>    kcButtonClass: "",
+</strong><strong>    kcButtonPrimaryClass: "",
+</strong><strong>    kcButtonBlockClass: "",
+</strong><strong>    kcButtonLargeClass: ""
+</strong>} satisfies { [key in ClassKey]?: string };
+</code></pre>
+
+{% endtab %}
+
+{% tab title="Angular" %}
+
+<pre class="language-typescript" data-title="src/login/KcPage.ts"><code class="lang-typescript">const classes = {
+<strong>    kcButtonClass: "",
+</strong><strong>    kcButtonPrimaryClass: "",
+</strong><strong>    kcButtonBlockClass: "",
+</strong><strong>    kcButtonLargeClass: ""
+</strong>} satisfies { [key in ClassKey]?: string };
+</code></pre>
+
+{% endtab %}
+
+{% tab title="Svelte" %}
+
+<pre class="language-html" data-title="src/login/KcPage.svelte"><code class="lang-html">&#x3C;script lang="ts">
+// ...
+
+const classes = {
+<strong>    kcButtonClass: "",
+</strong><strong>    kcButtonPrimaryClass: "",
+</strong><strong>    kcButtonBlockClass: "",
+</strong><strong>    kcButtonLargeClass: ""
+</strong>} satisfies { [key in ClassKey]?: string };
+</code></pre>
+
+{% endtab %}
+{% endtabs %}
+
+After saving these changes, here’s the result:
+
+<figure><img src="https://2643300760-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2F4Ls5iTdfTS2xECgBfw90%2Fuploads%2Fgit-blob-ff64dea508059c9a984c9abd06e23f61003aab32%2Fimage%20(25).png?alt=media" alt=""><figcaption><p>All Patternfly classes have been stripped out, restoring the button to its default HTML style.</p></figcaption></figure>
+
+Now you can freely apply your own custom button styles without Patternfly interfering.
+
+<figure><img src="https://2643300760-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2F4Ls5iTdfTS2xECgBfw90%2Fuploads%2Fgit-blob-629f7cf43a2dd805a7f08521d698c18c5b0c844a%2Fcustom-button.gif?alt=media" alt="" width="375"><figcaption><p>Button with custom style</p></figcaption></figure>
+
+<details>
+
+<summary>Reveal custom CSS code for this custom button</summary>
+
+{% code title="src/login/main.css" %}
+
+```css
+.kcButtonClass {
+    padding: 10px 20px;
+    font-size: 16px;
+    font-weight: bold;
+    text-transform: uppercase;
+    color: #ffffff;
+    background: linear-gradient(45deg, #6a11cb, #2575fc);
+    border: none;
+    border-radius: 25px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s, box-shadow 0.2s;
+    cursor: pointer;
+    width: 100%;
+}
+
+.kcButtonClass:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.2);
+}
+
+.kcButtonClass:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.kcButtonClass:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(37, 117, 252, 0.5);
+}
+
+.kcButtonClass:disabled {
+    background: linear-gradient(45deg, #aaa, #ccc);
+    color: #666;
+    cursor: not-allowed;
+    box-shadow: none;
+    transform: none;
+    opacity: 0.6;
+}
+
+.kcButtonClass:disabled:hover,
+.kcButtonClass:disabled:active {
+    transform: none;
+    box-shadow: none;
+}
+```
+
+{% endcode %}
+
+</details>
+
+## Remove All the Default Styles
+
+You may prefer to remove all Patternfly styles altogether and start fresh.
+
+<figure><img src="https://2643300760-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2F4Ls5iTdfTS2xECgBfw90%2Fuploads%2Fgit-blob-8279f965597a8b7016d7539cf10653a60cb2a5c2%2Fimage%20(63).png?alt=media" alt="" width="375"><figcaption><p>The login page completely unstyled (doUseDefaultCss set to false).</p></figcaption></figure>
+
+A benefit of this approach is that not only are all `pf-` classes stripped out in one go, but the global Patternfly stylesheet isn’t even loaded.
+
+{% tabs %}
+{% tab title="React" %}
+
+<pre class="language-tsx" data-title="src/login/KcPages.tsx"><code class="lang-tsx">// ...
+&#x3C;DefaultPage
+    kcContext={kcContext}
+    i18n={i18n}
+    classes={classes}
+    Template={Template}
+<strong>    doUseDefaultCss={false}
+</strong>    UserProfileFormFields={UserProfileFormFields}
+    doMakeUserConfirmPassword={doMakeUserConfirmPassword}
+/>
+</code></pre>
+
+{% endtab %}
+
+{% tab title="Svelte" %}
+
+<pre class="language-html" data-title="src/login/KcPage.svelte"><code class="lang-html">{#await page() then { default: Page }}
+    &#x3C;Page
+      {kcContext}
+      i18n={i18n}
+      {classes}
+      {Template}
+      {UserProfileFormFields}
+<strong>      doUseDefaultCss={false}
+</strong>      {doMakeUserConfirmPassword}
+    >&#x3C;/Page>
+{/await}
+</code></pre>
+
+{% endtab %}
+
+{% tab title="Angular" %}
+
+<pre class="language-typescript" data-title="src/login/KcPage.ts"><code class="lang-typescript">const classes = {} satisfies { [key in ClassKey]?: string };
+<strong>const doUseDefaultCss = false;
+</strong>const doMakeUserConfirmPassword = true;
+
+export async function getKcPage(pageId: KcContext['pageId']): Promise&#x3C;KcPage> {
+  switch (pageId) {
+    default:
+      return {
+        PageComponent: await getDefaultPageComponent(pageId),
+        TemplateComponent,
+        UserProfileFormFieldsComponent,
+        doMakeUserConfirmPassword,
+        doUseDefaultCss,
+        classes,
+      };
+  }
+}
+</code></pre>
+
+{% endtab %}
+{% endtabs %}
+
+### Disabling the default styles only on some pages
+
+A common scenario is using [`npx keycloakify eject-page`](https://docs.keycloakify.dev/common-use-case-examples/using-a-component-library) to customize only certain pages of the login UI in depth.
+
+For pages you've ejected, you’ll likely want to disable all default styles; however, you might prefer to keep the Patternfly styles on the pages you haven't redesigned.\
+Below is an example where `login.ftl` has been ejected and its default styles are disabled, while the other pages remain styled:
+
+{% tabs %}
+{% tab title="React" %}
+
+<pre class="language-tsx" data-title="src/login/KcPages.tsx"><code class="lang-tsx">switch (kcContext.pageId) {
+    case "login.ftl":
+        return (
+            &#x3C;Login
+                {...{ kcContext, i18n, classes }}
+                Template={Template}
+<strong>                doUseDefaultCss={false}
+</strong>            />
+        );
+    default:
+        return (
+            &#x3C;DefaultPage
+                kcContext={kcContext}
+                i18n={i18n}
+                classes={classes}
+                Template={Template}
+<strong>                doUseDefaultCss={true}
+</strong>                UserProfileFormFields={UserProfileFormFields}
+                doMakeUserConfirmPassword={doMakeUserConfirmPassword}
+            />
+        );
+}
+</code></pre>
+
+{% endtab %}
+
+{% tab title="Angular" %}
+
+<pre class="language-typescript" data-title="src/login/KcPage.ts"><code class="lang-typescript">  switch (pageId) {
+    case 'login.ftl':
+      return {
+        PageComponent: (await import('./pages/login/login.component')).LoginComponent,
+        TemplateComponent,
+        UserProfileFormFieldsComponent,
+        doMakeUserConfirmPassword,
+<strong>        doUseDefaultCss: false,
+</strong>        classes,
+      };
+    default:
+      return {
+        PageComponent: await getDefaultPageComponent(pageId),
+        TemplateComponent,
+        UserProfileFormFieldsComponent,
+        doMakeUserConfirmPassword,
+<strong>        doUseDefaultCss: true,
+</strong>        classes,
+      };
+  }
+</code></pre>
+
+{% endtab %}
+
+{% tab title="Svelte" %}
+
+<pre class="language-html" data-title="src/login/KcPage.svelte"><code class="lang-html">&#x3C;script lang="ts">
+  // ...
+<strong>  const doUseDefaultCss = (()=>{
+</strong><strong>    switch(kcContext.pageId){
+</strong><strong>      case "login.ftl": return false;
+</strong><strong>      default: return true;
+</strong><strong>    }
+</strong><strong>  })();
+</strong>  
+  const page = async (): Promise&#x3C;{ default?: Component&#x3C;any> }> => {
+    switch (kcContext.pageId) {
+      case 'login.ftl':
+        return import('./pages/Login.svelte"');
+      default:
+        return import('@keycloakify/svelte/login/DefaultPage.svelte');
+    }
+  };
+&#x3C;/script>
+
+{#await page() then { default: Page }}
+    &#x3C;Page
+      {kcContext}
+      i18n={i18n}
+      {classes}
+      {Template}
+      {UserProfileFormFields}
+<strong>      {doUseDefaultCss}
+</strong>      {doMakeUserConfirmPassword}
+    >&#x3C;/Page>
+{/await}
+</code></pre>
+
+{% endtab %}
+{% endtabs %}
+
+### Removing the classes in ejected components (kcClsx)
+
+If you have ejected some pages with [`npx keycloakify eject-page`](https://docs.keycloakify.dev/common-use-case-examples/using-a-component-library) and disabled the default styles by setting `doUseDefaultCss` to `false`, you might wonder if you need to keep the `kcClsx` in the pages. For example:
+
+<pre class="language-tsx" data-title="src/login/pages/Login.tsx"><code class="lang-tsx">&#x3C;input
+    tabIndex={7}
+    disabled={isLoginButtonDisabled}
+<strong>    className={kcClsx(
+</strong><strong>        "kcButtonClass", 
+</strong><strong>        "kcButtonPrimaryClass", 
+</strong><strong>        "kcButtonBlockClass", 
+</strong><strong>        "kcButtonLargeClass"
+</strong><strong>    )}
+</strong>    name="login"
+    id="kc-login"
+    type="submit"
+    value={msgStr("doLogIn")}
+/>
+</code></pre>
+
+The short answer is no; feel free to remove them.
+
+Just be aware that if you have defined any custom CSS targeting those classes (for example `.kcButtonClass { /* ... */ }`), they will no longer apply once you remove the classes.
+
+# Outside of Keycloak
+
+The recommended way to preview your theme as you develop it is to use [Storybook](https://storybook.js.org/).\
+Storybook is a tool that enables to test UI component in isolation. For reference the following website was generated with storybook:
+
+{% embed url="<https://storybook.keycloakify.dev/>" %}
+
+{% hint style="info" %}
+If you prefer to avoid intoducing Storybook into your stack, it's okay, you can still preview your page in dev mode. Do do so, refer to [this guide](https://docs.keycloakify.dev/testing-your-theme/outside-of-keycloak-without-storybook).
+{% endhint %}
+
+The starter template does not initially contain any story files, instead there's a keycloakify CLI command that let's you import specifically the stories for the pages you want to test into your project.
+
+So, just run this command in the root of your Keycloakify project and select the pages you want.
+
+```bash
+npx keycloakify add-story
+```
+
+It will enables you to select the pages you want to add stories for.
+
+<figure><img src="https://2643300760-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2F4Ls5iTdfTS2xECgBfw90%2Fuploads%2Fgit-blob-075562a7fb3129d26a3ec027f9eeaa58704063df%2Fimage%20(87).png?alt=media" alt=""><figcaption></figcaption></figure>
+
+Selecting login -> register.ftl will result in this file to be created in your project:
+
+<figure><img src="https://2643300760-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2F4Ls5iTdfTS2xECgBfw90%2Fuploads%2Fgit-blob-73ea2c57888a07db44012406ea8409f2fab6b14c%2Fimage%20(88).png?alt=media" alt=""><figcaption></figcaption></figure>
+
+You can run the above command multiple times to add stories for the different pages you want to develop.
+
+Once your added a few stories you can start Storybook locally with:
+
+```bash
+npm run storybook
+```
+
+<figure><img src="https://2643300760-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2F4Ls5iTdfTS2xECgBfw90%2Fuploads%2Fgit-blob-cd32c939434509540128ba04294b0c02e563b0bb%2Fimage%20(89).png?alt=media" alt=""><figcaption></figcaption></figure>
+
+You can see the changes you make in you code in realtime in your Storybook.
+
+The idea of Storybook is to easily let you see the pages in different configuration without having to reproduce the full login/register process in a real Keycloak.\
+Keycloakify provide a default mock context for every pages, the stories let you partially override some specific part of this default mock to reflect pages in different configurations.\
+\
+For example, if you want to create a story that show the register page in chinese you would add this:
+
+{% tabs %}
+{% tab title="React" %}
+
+<pre class="language-tsx" data-title="src/login/pages/Register.stories.tsx"><code class="lang-tsx">import type { Meta, StoryObj } from "@storybook/react";
+import { createKcPageStory } from "../KcPageStory";
+
+const { KcPageStory } = createKcPageStory({ pageId: "register.ftl" });
+
+const meta = {
+    title: "login/register.ftl",
+    component: KcPageStory
+} satisfies Meta&#x3C;typeof KcPageStory>;
+
+export default meta;
+
+type Story = StoryObj&#x3C;typeof meta>;
+
+export const Default: Story = {
+    render: () => &#x3C;KcPageStory />
+};
+
+<strong>export const InChinese: Story = {
+</strong><strong>    render: ()=> (
+</strong><strong>        &#x3C;KcPageStory
+</strong><strong>            kcContext={{
+</strong><strong>                locale: {
+</strong><strong>                    currentLanguageTag: "zh-CN"
+</strong><strong>                }
+</strong><strong>            }}
+</strong><strong>        />
+</strong><strong>    )
+</strong><strong>};
+</strong></code></pre>
+
+{% endtab %}
+
+{% tab title="Angular" %}
+{% code title="src/login/pages/register/register.stories.ts" %}
+
+```typescript
+import { Meta, StoryObj } from '@storybook/angular';
+import { decorators, KcPageStory } from '../KcPageStory';
+import { Attribute } from 'keycloakify/login';
+
+const meta: Meta<KcPageStory> = {
+    title: 'login/register.ftl',
+    component: KcPageStory,
+    decorators: decorators,
+    globals: {
+        pageId: 'register.ftl'
+    }
+};
+
+export default meta;
+
+type Story = StoryObj<KcPageStory>;
+
+export const Default: Story = {};
+
+export const InChinese: Story = {
+    globals: {
+        kcContext: {
+            locale: {
+                    currentLanguageTag: "zh-CN"
+            }
+        }
+    }
+};
+```
+
+{% endcode %}
+{% endtab %}
+
+{% tab title="Svelte" %}
+{% code title="src/login/pages/Login.stories.svelte" %}
+
+```html
+<script
+  context="module"
+  lang="ts"
+>
+  import { defineMeta } from '@storybook/addon-svelte-csf';
+  import type { KcPageStoryProps } from '../KcPageStory';
+  import KcPageStory from '../KcPageStory.svelte';
+
+  const args: KcPageStoryProps = { pageId: 'login.ftl' };
+  const { Story } = defineMeta({
+    title: 'login/login.ftl',
+    component: KcPageStory,
+    args: args,
+  });
+</script>
+
+<Story name="Default" />
+
+<Story
+  name="InChinese"
+  args={{
+    ...args,
+    kcContext: {
+      locale: {
+        currentLanguageTag: "zh-CN"
+      }
+    }
+  }}
+/>
+```
+
+{% endcode %}
+{% endtab %}
+{% endtabs %}
+
+<figure><img src="https://2643300760-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2F4Ls5iTdfTS2xECgBfw90%2Fuploads%2Fgit-blob-532d8ede5a8880593a992aff62f7b2d3ca55bf47%2Fimage%20(90).png?alt=media" alt=""><figcaption></figcaption></figure>
+
+Now let's see how to test our theme in a real Keycloak instance:
+
+{% content-ref url="inside-of-keycloak" %}
+[inside-of-keycloak](https://docs.keycloakify.dev/testing-your-theme/inside-of-keycloak)
+{% endcontent-ref %}
+
+# Inside of Keycloak
+
+Testing your theme in Storybook is helpful, but eventually, you'll need to test it in a real Keycloak instance before deploying it to production.
+
+## Prerequisites
+
+1. **Install Docker**: Ensure [Docker Desktop](https://www.docker.com/products/docker-desktop/) (or just Docker) is installed and running on your computer.
+2. **Install Maven**: Maven is required to build `.jar` files locally. Check if it's already installed by running: `mvn --version`
+
+   If not, follow the instructions below to install Maven.
+
+{% tabs %}
+{% tab title="MacOS" %}
+Using [Homebrew](https://formulae.brew.sh/formula/maven):
+
+```bash
+brew install maven
+```
+
+{% endtab %}
+
+{% tab title="Windows" %}
+On Windows, use the [Chocolatey](https://chocolatey.org/) package manager:
+
+```bash
+choco install openjdk
+choco install maven
+```
+
+Or follow the [manual installation guide](https://chocolatey.org/).
+{% endtab %}
+
+{% tab title="Ubuntu/Debian" %}
+
+```bash
+sudo apt-get install maven
+```
+
+{% endtab %}
+
+{% tab title="Fedora" %}
+
+```bash
+sudo dnf install maven
+```
+
+{% endtab %}
+{% endtabs %}
+
+## Running Keycloak in Docker
+
+Once the prerequisites are set up, you're ready to start Keycloak. Run the following command in your Keycloakify project:
+
+```bash
+npx keycloakify start-keycloak
+```
+
+You will be prompted to select the Keycloak version to spin up:
+
+<figure><img src="https://2643300760-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2F4Ls5iTdfTS2xECgBfw90%2Fuploads%2Fgit-blob-8543be7f091dd4e5f0525d450936c327305f0c09%2Fimage%20(198).png?alt=media" alt=""><figcaption></figcaption></figure>
+
+Keycloakify will launch the selected Keycloak version in a Docker container.
+
+Once the container is running, you’ll see two links:
+
+<figure><img src="https://2643300760-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2F4Ls5iTdfTS2xECgBfw90%2Fuploads%2Fgit-blob-5910a3b94c281df55bfbed0053cf62581d389d8d%2Fimage%20(199).png?alt=media" alt=""><figcaption></figcaption></figure>
+
+1. **Keycloak Admin Console**: <http://localhost:8080>\
+   The Keycloak instance is preconfigured with your theme, a custom realm named `myrealm`, and a test user (`testuser/password123`) for quick testing.\
+   Changes to the configuration are saved in the `.keycloakify` directory so that they persist across restarts.
+2. **Test Web App**: <https://my-theme.keycloakify.dev>\
+   This app redirects to your login theme. Edits to your theme are auto-rebuilt and updated in the Keycloak container. Simply refresh the page to see changes live.
+
+<figure><img src="https://2643300760-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2F4Ls5iTdfTS2xECgBfw90%2Fuploads%2Fgit-blob-3775e94e1b6714123f5ee9f228cef44343561883%2Fimage%20(183).png?alt=media" alt=""><figcaption><p>Accessing the test web app and signing in with testuser/password123</p></figcaption></figure>
+
+<details>
+
+<summary>Inspecting `window.kcContext`</summary>
+
+You can open your browser’s developer tools to inspect the `kcContext` object on the page. This allows you to create new stories for pages with specific configurations.
+
+<img src="https://2643300760-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2F4Ls5iTdfTS2xECgBfw90%2Fuploads%2Fgit-blob-24b732c324409634efef30dcc7b093951b155ea2%2Fimage%20(135).png?alt=media" alt="" data-size="original">
+
+</details>
+
+Logging in with the test user redirects you to a page where you can inspect the decoded ID token (JWT) and access your custom [Account](https://docs.keycloakify.dev/theme-types/account-theme) and [Admin](https://docs.keycloakify.dev/theme-types/admin-theme) themes (if you implement them).
+
+<figure><img src="https://2643300760-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2F4Ls5iTdfTS2xECgBfw90%2Fuploads%2Fgit-blob-c2d66d5614acf2c3d906853da5754105b1a0d4d6%2Fimage%20(200).png?alt=media" alt=""><figcaption></figcaption></figure>
+
+## More Options
+
+Want to use a custom Keycloak image? Load some extentions? Import a realm configuration?\
+No problem! The start-keycloak command support many options!
+
+{% content-ref url="../features/compiler-options/startkeycloakoptions" %}
+[startkeycloakoptions](https://docs.keycloakify.dev/features/compiler-options/startkeycloakoptions)
+{% endcontent-ref %}

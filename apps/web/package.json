@@ -4,11 +4,11 @@
   "type": "module",
   "private": true,
   "scripts": {
-    "dev": "bun --bun next dev --turbopack",
-    "build": "bun --bun next build",
-    "start": "bun --bun next start",
-    "lint": "bun --bun next lint",
-    "lint:fix": "bun --bun next lint --fix",
+    "dev": "bun next dev --turbopack",
+    "build": "bun next build",
+    "start": "bun next start",
+    "lint": "bun next lint",
+    "lint:fix": "bun next lint --fix",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
