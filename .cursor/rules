@@ -998,3 +998,3800 @@ No problem! The start-keycloak command support many options!
 {% content-ref url="../features/compiler-options/startkeycloakoptions" %}
 [startkeycloakoptions](https://docs.keycloakify.dev/features/compiler-options/startkeycloakoptions)
 {% endcontent-ref %}
+
+# Deploying Your Theme
+
+This section explains how to load and enable your theme in your production Keycloak instance.
+
+{% hint style="warning" %}
+**Warning:**\
+If your goal is to test your theme in a Keycloak docker container for development purpose, this is NOT the correct section of the documentation.\
+Refer to the [Testing Your Theme in a Keycloak Docker Container](https://docs.keycloakify.dev/testing-your-theme/inside-of-keycloak) section for detailed instructions.\
+This section is intended for deploying your theme to a **production** Keycloak instance, which involves a completely different process.
+{% endhint %}
+
+## Building the JAR File
+
+Keycloak uses an extension system where themes or other custom plugins are packaged as standardized JAR files.
+
+The first step is to build your theme into a JAR file that can be loaded into Keycloak.
+
+```bash
+npm run build-keycloak-theme
+```
+
+This command will create a **/dist\_keycloak** directory containing the necessary JAR files.
+
+<figure><img src="https://2643300760-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2F4Ls5iTdfTS2xECgBfw90%2Fuploads%2Fgit-blob-68a373e7ab0d136f15c1e56a2b4b101264fdfc65%2Fimage%20(197).png?alt=media" alt="" width="375"><figcaption></figcaption></figure>
+
+By default, Keycloakify generates multiple JAR files to support different Keycloak versions. Here’s how to choose the correct JAR file for your production environment:
+
+• **Keycloak 11 to 21 and 26 and newer**: Use **keycloak-theme-for-kc-all-other-versions.jar**.
+
+• **Keycloak 22 to 25**: Use **keycloak-theme-for-kc-22-to-25.jar**.
+
+You can configure which JAR files are generated and how they are named. For details, refer to this guide:
+
+{% content-ref url="features/compiler-options/keycloakversiontargets" %}
+[keycloakversiontargets](https://docs.keycloakify.dev/features/compiler-options/keycloakversiontargets)
+{% endcontent-ref %}
+
+If you have an OPS team and your responsibility is limited to developing the theme, your job ends here. The JAR file is your deliverable. You can provide it to the person managing your Keycloak instance—they will know what to do with it.
+
+If you are responsible for both development and deployment, keep reading to learn how to load and enable the theme in Keycloak.
+
+## Loading the JAR File into Keycloak
+
+Now that your theme is packaged as a JAR file, you can load it into your Keycloak server, just like any other Keycloak extension.
+
+For official guidance, refer to the [Keycloak documentation on registering provider implementations](https://www.keycloak.org/docs/latest/server_development/#registering-provider-implementations).\
+\
+While the official documentation provides a general overview, you might wonder how to apply those instructions in practice. Below, you’ll find a few code snippets illustrating how to load your theme, depending on the method you use to deploy Keycloak in production.
+
+{% hint style="warning" %}
+Improtrant note:
+
+**How to deploy Keycloak in production is beyond the scope of Keycloakify’s documentation**.
+
+If you’re unfamiliar with deploying a Keycloak instance, we strongly recommend starting with [the official Keycloak deployment guides](https://www.keycloak.org/documentation).
+
+Do **not** attempt to use these snippets directly without understanding how Keycloak deployment works.
+
+Once you’re confident in deploying Keycloak, revisit this section to integrate your custom theme seamlessly.
+{% endhint %}
+
+{% tabs %}
+{% tab title="Docker" %}
+One of the most common ways to deploy Keycloak in production is by using the official Docker image.
+
+If you are following this approach, you can use the `-v` option to mount your JAR file into the `/opt/keycloak` directory inside the container.
+
+Here’s an example of how to run the Keycloak container with your custom theme:
+
+<pre class="language-bash"><code class="lang-bash">docker run \
+    # ...other options
+<strong>    -v "./dist_keycloak/keycloak-theme-for-kc-all-other-versions.jar":/opt/keycloak/providers/keycloak-theme.jar \
+</strong>    quay.io/keycloak/keycloak:26.0.7 \
+    start
+</code></pre>
+
+{% endtab %}
+
+{% tab title="Docker Compose" %}
+This approach builds on the basic Docker setup, providing a more streamlined way to manage your Keycloak deployment with Docker Compose.\
+Let’s assume you have the following directory structure:
+
+```
+./docker-compose.yaml
+./themes/keycloak-theme-for-kc-all-other-versions.jar
+```
+
+{% code title="docker-compose.yaml" %}
+
+```yaml
+version: '3.7'
+
+services:
+  postgres:
+    image: postgres:16.2
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    ports:
+      - 5432:5432
+    networks:
+      - keycloak_network
+
+  keycloak:
+
+    image: quay.io/keycloak/keycloak:26.0.4
+    command: start-dev
+
+    environment:
+      KC_HOSTNAME: ${KEYCLOAK_HOSTNAME}
+      KC_HOSTNAME_PORT: 8080
+      KC_HTTP_ENABLED: true
+      KC_HEALTH_ENABLED: true
+      KC_HOSTNAME_STRICT_HTTPS: false
+      KC_HOSTNAME_STRICT: false
+
+      KC_BOOTSTRAP_ADMIN_USERNAME: ${KEYCLOAK_ADMIN}
+      KC_BOOTSTRAP_ADMIN_PASSWORD: ${KEYCLOAK_ADMIN_PASSWORD}
+      KC_DB: postgres
+      KC_DB_URL: jdbc:postgresql://postgres/${POSTGRES_DB}
+      KC_DB_USERNAME: ${POSTGRES_USER}
+      KC_DB_PASSWORD: ${POSTGRES_PASSWORD}
+    ports:
+      - 8080:8080
+    volumes:
+      - ./themes:/opt/keycloak/providers/
+    restart: unless-stopped
+    depends_on:
+      - postgres
+    networks:
+      - keycloak_network
+
+volumes:
+  postgres_data:
+    driver: local
+
+networks:
+  keycloak_network:
+    driver: bridge
+```
+
+{% endcode %}
+{% endtab %}
+
+{% tab title="Helm" %}
+If you use [Bitnami's Keycloak Helm chart](https://github.com/bitnami/charts/tree/main/bitnami/keycloak) you can leverage the initContainers parameter to load your theme.
+
+{% code title="Chart.yaml" %}
+
+```yaml
+apiVersion: v2
+name: keycloak
+version: 1.0.0
+dependencies:
+  - name: keycloak
+    version: 24.4.10 # Keycloak 26.1.2
+    repository: oci://registry-1.docker.io/bitnamicharts
+```
+
+{% endcode %}
+
+Here we only list the relevant values:
+
+{% code title="values.yaml" %}
+
+```yaml
+# OPTIONAL: Here you can define environment variables that you can access in your theme, see: https://docs.keycloakify.dev/features/environment-variables
+extraEnvVars:
+  - name: MY_APP_PALLET
+    value: "monokai"
+
+initContainers:
+  - name: realm-ext-provider
+    image: curlimages/curl
+    imagePullPolicy: IfNotPresent
+    command:
+      - sh
+    args:
+      - -c
+      - |
+        # Replace USER and PROJECT, use the correct version of the jar for the keycloak version you are deploying
+        mkdir -p /emptydir/app-providers-dir
+        curl -L -f -S -o /emptydir/app-providers-dir/keycloak-theme.jar https://github.com/USER/PROJECT/releases/download/VERSION/keycloak-theme-for-kc-all-other-versions.jar
+
+    volumeMounts:
+      - name: empty-dir
+        mountPath: /emptydir
+```
+
+{% endcode %}
+
+Read [this section of the starter project readme](https://github.com/keycloakify/keycloakify-starter?tab=readme-ov-file#github-actions) to learn how to get GitHub Action to publish your theme's JAR as assets of your GitHub release.
+{% endtab %}
+
+{% tab title="Bare metal" %}
+What you need to know is that your keycloak-theme.jar should be placed in the provider directory of your Keycloak (e.g: `/opt/keycloak/providers)`\
+After that you should run bin/kc.sh build (e.g: `sh /opt/keycloak/bin/kc.sh build`)
+
+Then you can start your Keycloak server, your theme should be available in it.
+{% endtab %}
+
+{% tab title="Docker - Custom Image" %}
+Another common approach is to build a custom Docker image of Keycloak that extends the official Keycloak image and includes your theme.
+
+<pre class="language-bash"><code class="lang-bash">cd ~/github
+git clone https://github.com/keycloakify/keycloakify-starter
+cd keycloakify-starter
+
+cat &#x3C;&#x3C; EOF > ./.dockerignore
+node_modules
+dist
+dist_keycloak
+<strong># IMPORTANT: Make sure `.gitignore` is **not** listed
+</strong><strong># in your .dockerignore file
+</strong>EOF
+
+cat &#x3C;&#x3C; EOF > ./Dockerfile
+<strong>FROM node:20-alpine as build
+</strong><strong>RUN apk update &#x26;&#x26; \
+</strong><strong>    apk add --no-cache openjdk17 maven
+</strong><strong>WORKDIR /app
+</strong><strong>COPY . .
+</strong><strong>RUN yarn install --frozen-lockfile
+</strong><strong>RUN yarn build-keycloak-theme
+</strong>
+FROM quay.io/keycloak/keycloak:26.0.7
+WORKDIR /opt/keycloak
+<strong>COPY --from=build /app/dist_keycloak/keycloak-theme-for-kc-all-other-versions.jar /opt/keycloak/providers/
+</strong>RUN /opt/keycloak/bin/kc.sh build
+ENTRYPOINT ["/opt/keycloak/bin/kc.sh", "start", "--optimized"]
+EOF
+
+docker build -t my-keycloak .
+docker run \
+    -e KC_BOOTSTRAP_ADMIN_USERNAME=admin \
+    -e KC_BOOTSTRAP_ADMIN_PASSWORD=admin \
+    -p 8080:8080 \
+    my-keycloak
+</code></pre>
+
+Ref to official doc: <https://www.keycloak.org/server/containers>
+{% endtab %}
+
+{% tab title="Cloud-IAM" %}
+If you have a Keycloak instance managed by [Cloud-IAM](https://cloud-iam.com/?mtm_campaign=keycloakify-deal\&mtm_source=keycloakify-doc-header), you can simply sign-in to and click on the "Upload JAR File" button.
+{% endtab %}
+{% endtabs %}
+
+## Enabling Your Theme
+
+Once your JAR file is loaded into your Keycloak instance, enable your theme in the Keycloak Admin Console:
+
+1\. Go to **Realm Settings** in your desired realm.
+
+2\. Under the **Themes** section, select your theme from the dropdown menus (e.g., Login Theme).
+
+{% hint style="warning" %}
+Never configure the master realm for your application. Create a separate realm for your application to ensure the master realm remains untouched.
+{% endhint %}
+
+<figure><img src="https://2643300760-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2F4Ls5iTdfTS2xECgBfw90%2Fuploads%2Fgit-blob-415f269fff489f4e111eb8f06b0bdf19502fddb0%2Fimage%20(187).png?alt=media" alt=""><figcaption></figcaption></figure>
+
+Note that the name that apprear in the dropdown (here "keycloakify-starter") can be configured with [the themeName option](https://docs.keycloakify.dev/features/compiler-options/themename). If you implement [theme variants](https://docs.keycloakify.dev/features/theme-variants) you'll have more than one option.
+
+<details>
+
+<summary>Enabling diffrent theme for diffrent client</summary>
+
+The login theme can be applied at the client level. You typically have one Keycloak client per web application.\
+Setting the login theme at the client level means that each application of your realm can have different login/register pages. This comes in handy if you're implementing [Theme Variants](https://docs.keycloakify.dev/features/theme-variants).
+
+To enable a login theme on one of your clients:
+
+* Select your realm in the top left corner
+* -> Clients
+* -> Select your client in the list
+* -> Scroll down to "Login Theme" and select your theme.
+
+The account theme can only be enabled at the realm level; however, accessing the account pages requires authentication. If you don't want your user to inadvertently come across the default login theme when navigating to the account pages after their session has expired, you might want to enable your login theme on the "account-console" client.
+
+* Select your realm in the top left corner
+* -> Clients
+* -> Select "account console"
+* -> Scroll down to "Login Theme" and select one of your login theme.
+
+</details>
+
+# Turborepo
+
+{% hint style="danger" %}
+If you're unsure what this section is about, **this approach is NOT for you.** Instead, follow [the Quick Start Guide and fork the starter project.](https://docs.keycloakify.dev/readme#quick-start)
+{% endhint %}
+
+First you want to create a new subproject in your monorepo, just clone the starter template into apps/keycloak-theme.
+
+```bash
+cd my-turborepo
+git clone https://github.com/keycloakify/keycloakify-starter apps/keycloak-theme
+rm -rf apps/keycloak-theme/.git
+rm -rf apps/keycloak-theme/.github
+```
+
+Change the name field in the package.json of your keycloakify sub app.
+
+{% code title="apps/keycloak-theme/package.json" %}
+
+```diff
+ {
+-    "name": "keycloakify-starter",
++    "name": "keycloak-theme",
+ }
+```
+
+{% endcode %}
+
+Give an actual name to your theme (as you want it to apprear [in the Keycloak Admin Console](https://github.com/keycloakify/keycloakify/assets/6702424/7da4afe2-0f67-4f79-a3d0-bd982636ea23))
+
+<pre class="language-typescript" data-title="apps/keycloak-theme/vite.config.ts"><code class="lang-typescript">import { defineConfig } from "vite";
+import react from "@vitejs/plugin-react";
+import { keycloakify } from "keycloakify/vite-plugin";
+
+// https://vitejs.dev/config/
+export default defineConfig({
+    plugins: [react(), keycloakify({
+<strong>        themeName: "my-app"
+</strong>    })]
+});
+</code></pre>
+
+Then you want to add a new script for building your theme in your root **package.json**
+
+<pre class="language-json" data-title="package.json"><code class="lang-json">{
+  "name": "my-turborepo",
+  "scripts": {
+    "build": "turbo build",
+    "dev": "turbo dev",
+    "lint": "turbo lint",
+    "format": "prettier --write \"**/*.{ts,tsx,md}\"",
+<strong>    "build-keycloak-theme": "turbo run build-keycloak-theme --filter=keycloak-theme",
+</strong><strong>    "start-keycloak": "keycloakify start-keycloak -p apps/keycloak-theme"
+</strong>  },
+  // ...
+}
+</code></pre>
+
+Add a turborepo task
+
+<pre class="language-json" data-title="turbo.json"><code class="lang-json">{
+  "$schema": "https://turbo.build/schema.json",
+  "tasks": {
+    // ... Other tasks
+<strong>    "build-keycloak-theme": {
+</strong><strong>        "outputs": [
+</strong><strong>            "dist/**", 
+</strong><strong>            "dist_keycloak/**"
+</strong><strong>        ]
+</strong><strong>    }
+</strong>  }
+}
+</code></pre>
+
+You can now build your keycloak theme at the root of your monorepo by running
+
+```bash
+npm run build-keycloak-theme
+```
+
+{% embed url="<https://youtu.be/4h9lOf-4ZIE>" %}
+Building the theme, only compiling for Keycloak 25 with a custom jar file name. Demonstrating the effectiveness of turborepo cache
+{% endembed %}
+
+Optionally, if you want to change the location of the directory where the jar for your theme are created you can do:
+
+<pre class="language-typescript" data-title="apps/keycloak-theme/vite.config.ts"><code class="lang-typescript">export default defineConfig({
+    plugins: [react(), keycloakify({
+        themeName: "my-app",
+<strong>        keycloakifyBuildDirPath: "../../dist/apps/keycloak-theme"
+</strong>    })]
+});
+</code></pre>
+
+{% code title="turbo.json" %}
+
+```diff
+ {
+   "$schema": "https://turbo.build/schema.json",
+   "tasks": {
+     // ... Other tasks
+     "build-keycloak-theme": {
+         "outputs": [
+             "dist/**",
+-            "dist_keycloak/**"
++            "../../dist/apps/keycloak-theme/**"
+         ]
+     }
+   }
+ }
+```
+
+{% endcode %}
+
+If you applies those changes, when you'll run `npm run build-keycloak-theme` your JARs are going to be generated in `dist/keycloak-theme/`
+
+When you want to use the keycloakify CLI commands you can either cd into your keycloakify sub app directory or use the [--project option of the Keycloakify CLI](https://docs.keycloakify.dev/features/compiler-options/project).\
+Like for example if you want to run add-story you can do either:
+
+* `cd apps/keycloak-theme && npx keycloakify add-story`
+* `npx keycloakify add-story -p apps/keycloak-theme` from the root of your monorepo
+
+To go beyond the base configuration you might want to explore what [build options](https://docs.keycloakify.dev/features/compiler-options) are available. Starting with with `keycloakVersionTargets` to make sure that you only generates the JARs file you need.
+
+{% content-ref url="../features/compiler-options/keycloakversiontargets" %}
+[keycloakversiontargets](https://docs.keycloakify.dev/features/compiler-options/keycloakversiontargets)
+{% endcontent-ref %}
+
+# Using a Component Library
+
+The Keycloakify starter repository may initially seem sparse in terms of React/Angular/Svelete components, which might be confusing. However, there's no need to worry—this design choice will soon make sense.
+
+By default, Keycloakify internalizes all the components that make up the default UI, exposing only the `DefaultPage` component.
+
+The idea behind this approach is to let you have in your project only the pages that you have modified and don't overwhelm people that only want to apply CSS customization.
+
+If you want to customize any component from the default theme, you can easily do so by running the following command:
+
+```bash
+npx keycloakify eject-page
+```
+
+This command allows you to select specific components from Keycloakify's source code, which will then be copied into your own codebase for further customization.
+
+{% embed url="<https://youtu.be/PhNE-3EwwP8>" %}
+Video tutorial on how to use MUI to customize the login page
+{% endembed %}
+
+{% hint style="info" %}
+Disabling the default styles: One thing that is touched on [only late in the video](https://youtu.be/PhNE-3EwwP8?si=s3e9DjaIlhG2uxQC\&t=1338) is how to disable all the default styles. See documentation [here](https://docs.keycloakify.dev/css-customization#remove-all-the-default-styles).
+{% endhint %}
+
+# Custom Fonts
+
+## Using a web font service
+
+Let's see how to use, for example, [Playwrite Netherland](https://fonts.google.com/specimen/Playwrite+NL) via Google Fonts.\
+\
+Create the following CSS file:
+
+{% code title="src/login/main.css" %}
+
+```css
+@import url('https://fonts.googleapis.com/css2?family=Comic+Neue:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=Playwrite+NL:wght@100..400&family=Playwrite+PL:wght@100..400&display=swap');
+
+.kcHeaderWrapperClass {
+    /* NOTE: We would use `body {` if we'd like the font to be applied to everything. */
+    font-family: "Playwrite NL", cursive;
+}
+```
+
+{% endcode %}
+
+Then import it as a global stylesheet:
+
+{% tabs %}
+{% tab title="React" %}
+
+<pre class="language-tsx" data-title="src/login/KcApp.tsx"><code class="lang-tsx"><strong>import "./main.css";
+</strong>// ...
+</code></pre>
+
+{% endtab %}
+
+{% tab title="Angular" %}
+
+<pre class="language-tsx" data-title="src/login/KcApp.ts"><code class="lang-tsx"><strong>import "./main.css";
+</strong>// ...
+</code></pre>
+
+{% endtab %}
+
+{% tab title="Svelte" %}
+
+<pre class="language-html" data-title="src/login/KcPage.svelte"><code class="lang-html">&#x3C;script lang="ts">
+<strong>  import "./main.css";
+</strong>  import Template from '@keycloakify/svelte/login/Template.svelte';
+  ...
+</code></pre>
+
+{% endtab %}
+{% endtabs %}
+
+That's it!
+
+<figure><img src="https://2643300760-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2F4Ls5iTdfTS2xECgBfw90%2Fuploads%2Fgit-blob-88ad68094f972e9ed85f173ab0724fea221cf7f1%2Fimage%20(92).png?alt=media" alt="" width="375"><figcaption><p>Playwrite NL successfully applied to the header</p></figcaption></figure>
+
+## Using self hosted fonts
+
+Keycloak is often used in enterprise internal network with strict network traffic control. In this context, using a Font CDN isn't an option, you want the font to be bundled in your JAR and served directly by the Keycloak server.
+
+Let's see how we would use a self hosted copy [Vercel's Geist](https://vercel.com/font) font.
+
+First let's download and extract [the font files](https://github.com/keycloakify/keycloakify/releases/download/v0.0.1/geist.zip) in `src/login/assets/fonts/geist/`:
+
+<figure><img src="https://2643300760-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2F4Ls5iTdfTS2xECgBfw90%2Fuploads%2Fgit-blob-47f7c2f9e43f022879c75c9ef21f8c6a621ae1fc%2Fimage%20(84).png?alt=media" alt="" width="375"><figcaption></figcaption></figure>
+
+Now let's set Geist as the default font.
+
+Create the following CSS file:
+
+{% code title="src/login/main.css" %}
+
+```css
+@import url(./assets/fonts/geist/main.css);
+
+body {
+  font-family: Geist;
+}
+```
+
+{% endcode %}
+
+Then import it as a global stylesheet:
+
+{% tabs %}
+{% tab title="React" %}
+
+<pre class="language-tsx" data-title="src/login/KcPage.tsx"><code class="lang-tsx"><strong>import "./main.css";
+</strong>// ...
+</code></pre>
+
+{% endtab %}
+
+{% tab title="Angular" %}
+
+<pre class="language-tsx" data-title="src/login/KcApp.ts"><code class="lang-tsx"><strong>import "./main.css";
+</strong>// ...
+</code></pre>
+
+{% endtab %}
+
+{% tab title="Svelte" %}
+
+<pre class="language-html" data-title="src/login/KcPage.svelte"><code class="lang-html">&#x3C;script lang="ts">
+<strong>  import "./main.css";
+</strong>  import Template from '@keycloakify/svelte/login/Template.svelte';
+  ...
+</code></pre>
+
+{% endtab %}
+{% endtabs %}
+
+That's it!
+
+<figure><img src="https://2643300760-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2F4Ls5iTdfTS2xECgBfw90%2Fuploads%2Fgit-blob-f3326877f898654fe76a88e6447be0b48541f15f%2Fimage%20(121).png?alt=media" alt=""><figcaption><p>Geist successfully applied</p></figcaption></figure>
+
+# Changing the background image
+
+Let's see, as an example, the different ways you have to change the backgrounds image of the login page using CSS only.
+
+{% hint style="info" %}
+There is the equivalent of this guide using CSS-in-JS [here](https://docs.keycloakify.dev/common-use-case-examples/changing-the-background-image-css-in-js).
+{% endhint %}
+
+First let's [download a background image](https://coolbackgrounds.io/) an put it in **src/login/assets/background.png**.
+
+Then let's apply it as background:
+
+{% code title="src/login/main.css" %}
+
+```css
+body.kcBodyClass {
+  background: url(./assets/background.png) no-repeat center center fixed;
+}
+```
+
+{% endcode %}
+
+We import the StyleSheet:
+
+{% tabs %}
+{% tab title="React" %}
+
+<pre class="language-tsx" data-title="src/login/KcPage.tsx"><code class="lang-tsx"><strong>import "./main.css";
+</strong>// ...
+</code></pre>
+
+{% endtab %}
+
+{% tab title="Angular" %}
+
+<pre class="language-typescript" data-title="src/login/KcPage.ts"><code class="lang-typescript"><strong>import "./main.css";
+</strong>import { getDefaultPageComponent, type KcPage } from '@keycloakify/angular/login';
+// ...
+</code></pre>
+
+{% endtab %}
+
+{% tab title="Svelte" %}
+
+<pre class="language-html" data-title="src/login/KcPage.svelte"><code class="lang-html">&#x3C;script lang="ts">
+<strong>  import "./main.css";
+</strong>  ...
+</code></pre>
+
+{% endtab %}
+{% endtabs %}
+
+Result:
+
+<figure><img src="https://2643300760-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2F4Ls5iTdfTS2xECgBfw90%2Fuploads%2Fgit-blob-71d7fd75c0c5775fe245dce9c3b6c7ecabfd8efc%2Fimage%20(124).png?alt=media" alt=""><figcaption><p>Custom background successfully applied</p></figcaption></figure>
+
+<details>
+
+<summary>Replacing the image without re-building the theme</summary>
+
+If you want to be able to "hot swipe" the image, without rebuilding the theme you have to import the image from a different location.
+
+Place the file into **/public/background.png**.
+
+Then, in your CSS code import the image with an absolute path:
+
+{% code title="src/login/main.css" %}
+
+```css
+body.kcBodyClass {
+  background: url(/background.png) no-repeat center center fixed;
+}
+```
+
+{% endcode %}
+
+Now if you want to replace the image directly in Keycloak you'll be able to find it at:
+
+**/opt/keycloak/themes/**[**\<name of your theme>**](https://docs.keycloakify.dev/features/compiler-options/themename)**/login/resources/dist/background.png**
+
+<img src="https://2643300760-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2F4Ls5iTdfTS2xECgBfw90%2Fuploads%2Fgit-blob-df8d4a5ced17260f74f37087d4bbc82746731cb2%2Fimage%20(126).png?alt=media" alt="" data-size="original">
+
+</details>
+
+For a more advanced example, in the following video I show how to load different background for different page and how to create [theme variant](https://docs.keycloakify.dev/features/theme-variants).
+
+{% embed url="<https://youtu.be/Nkoz1iD-HOA?si=hBXt8rw72-Pvhhnr>" %}
+
+# Adding your Logo
+
+{% hint style="info" %}
+NOTE: You can very well change the logo using only CSS without having to ejecting the template. There's a demo in [this video](https://youtu.be/Nkoz1iD-HOA?si=6DLF7iAPTeX-pkNP).
+{% endhint %}
+
+Let's say you want to put the logo of your company on every pages of the theme.
+
+First you'd eject the Template:
+
+```bash
+npx keycloakify eject-page # Select login -> Template.tsx
+```
+
+<figure><img src="https://2643300760-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2F4Ls5iTdfTS2xECgBfw90%2Fuploads%2Fgit-blob-df48b6461f07f67d7aad05fdcb42d2c2057217eb%2Fimage%20(68).png?alt=media" alt=""><figcaption></figcaption></figure>
+
+This will create a **src/login/Template.tsx** file in your project.
+
+Let's use this placeholder for the demo: [logo.png](https://github.com/keycloakify/keycloakify/releases/download/v0.0.1/logo.png) and save it in **src/login/assets/logo.png**.
+
+Now we can use the asset in our component:
+
+{% tabs %}
+{% tab title="React" %}
+
+<pre class="language-tsx" data-title="src/login/Template.tsx"><code class="lang-tsx"><strong>import logoPngUrl from "./assets/logo.png";
+</strong>// ...
+&#x3C;div className={kcClsx("kcLoginClass")}>
+    &#x3C;div id="kc-header" className={kcClsx("kcHeaderClass")}>
+        &#x3C;div id="kc-header-wrapper" className={kcClsx("kcHeaderWrapperClass")}>
+<strong>            {/*{msg("loginTitleHtml", realm.displayNameHtml)}*/}
+</strong><strong>            &#x3C;img src={logoPngUrl} width={500}/>
+</strong>        &#x3C;/div>
+    &#x3C;/div>
+    {/* ... */}
+</code></pre>
+
+{% endtab %}
+
+{% tab title="Svelte" %}
+{% code title="src/login/Template.svelte" %}
+
+```html
+<script lang="ts">
+  import logoPngUrl from "./assets/logo.png";
+  // ...
+</script>
+
+<div
+  id="kc-header-wrapper"
+  class={kcClsx('kcHeaderWrapperClass')}
+>
+  <!--{ msgStr('loginTitleHtml', realm.displayNameHtml) }-->
+  <img src={logoPngUrl} width={500} />
+</div>
+```
+
+{% endcode %}
+{% endtab %}
+
+{% tab title="Angular" %}
+
+<pre class="language-typescript" data-title="src/login/template/template.component.ts"><code class="lang-typescript"><strong>import logoPngUrl from '../assets/logo.png';
+</strong>
+export class TemplateComponent extends ComponentReference {
+<strong>  logoPngUrl = logoPngUrl;
+</strong>  // ...
+</code></pre>
+
+<pre class="language-html" data-title="src/login/template/template.component.html"><code class="lang-html">&#x3C;img
+<strong>  [src]="logoPngUrl"
+</strong>  alt="logo"
+  width="500"
+/>
+</code></pre>
+
+{% endtab %}
+{% endtabs %}
+
+Result:
+
+<figure><img src="https://2643300760-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2F4Ls5iTdfTS2xECgBfw90%2Fuploads%2Fgit-blob-b25cbbde87f90bdb1d4f6c3d63441ba33bcf9c9a%2Fimage%20(70).png?alt=media" alt=""><figcaption></figcaption></figure>
+
+## Optional: Updating the logo without re-building the theme
+
+Some pepoles want to be able to "hot swipe" the asset in the Keycloak file system without having to re-build the theme and re-deploy it.
+
+To ensure that the assets are located in a predictible location you would use the public/ directory.
+
+Move the file to **public/img/logo.png**.
+
+Then make an absolute import from your component:
+
+{% tabs %}
+{% tab title="React - Vite" %}
+It's important that you do not simply harcode `src="/img/logo.png"`, or keycloakify won't be able to patch the URL for Keycloak. Use Vite's builtin `import.meta.env.BASE_URL`.
+
+<pre class="language-tsx" data-title="src/login/Template.tsx"><code class="lang-tsx">&#x3C;div className={kcClsx("kcLoginClass")}>
+    &#x3C;div id="kc-header" className={kcClsx("kcHeaderClass")}>
+        &#x3C;div id="kc-header-wrapper" className={kcClsx("kcHeaderWrapperClass")}>
+<strong>            {/*{msg("loginTitleHtml", realm.displayNameHtml)}*/}
+</strong><strong>            &#x3C;img src={`${import.meta.env.BASE_URL}img/logo.png`} width={500}/>
+</strong>        &#x3C;/div>
+    &#x3C;/div>
+    {/* ... */}
+</code></pre>
+
+Doing this is a good practice in any Vite project (not specially Keycloakify) since it ensure the correctness of your URLs even if you customize the `base` parameter in the your **vite.config.ts**. Hard coding `"/img/logo.png"` only works when base is `"/"` (which is the default)
+{% endtab %}
+
+{% tab title="Svelte" %}
+It's important that you do not simply harcode `src="/img/logo.png"`, or keycloakify won't be able to patch the URL for Keycloak. Use Vite's builtin `import.meta.env.BASE_URL`.
+
+{% code title="src/login/Template.svelte" %}
+
+```html
+<div
+  id="kc-header-wrapper"
+  class={kcClsx('kcHeaderWrapperClass')}
+>
+  <!--{ msgStr('loginTitleHtml', realm.displayNameHtml) }-->
+  <img src={`${import.meta.env.BASE_URL}img/logo.png`} width={500} />
+</div>
+```
+
+{% endcode %}
+
+Doing this is a good practice in any Vite project (not specially Keycloakify) since it ensure the correctness of your URLs even if you customize the "base" parameter in the your vite.config.ts. Writing "/img/logo.png" only works when base is "/" (which is the default)
+{% endtab %}
+
+{% tab title="Angular - Vite" %}
+
+<pre class="language-typescript" data-title="src/login/template/template.component.ts"><code class="lang-typescript">export class TemplateComponent extends ComponentReference {
+<strong>  BASE_URL = import.meta.env.BASE_URL;
+</strong></code></pre>
+
+{% code title="src/login/template/template.component.html" %}
+
+```html
+<img
+  [src]="BASE_URL + 'img/logo.png'"
+  alt="logo"
+  width="500"
+/>
+```
+
+{% endcode %}
+{% endtab %}
+
+{% tab title="React - Webpack/CRA" %}
+It's important that you do not simply harcode `src="/img/logo.png"`, or keycloakify won't be able to patch the URL for Keycloak. Use `PUBLIC_URL` instead.
+
+<pre class="language-tsx" data-title="src/login/Template.tsx"><code class="lang-tsx">import { PUBLIC_URL } from "keycloakify/PUBLIC_URL";
+
+&#x3C;div className={kcClsx("kcLoginClass")}>
+    &#x3C;div id="kc-header" className={kcClsx("kcHeaderClass")}>
+        &#x3C;div id="kc-header-wrapper" className={kcClsx("kcHeaderWrapperClass")}>
+<strong>            {/*{msg("loginTitleHtml", realm.displayNameHtml)}*/}
+</strong><strong>            &#x3C;img src={`${PUBLIC_URL}/img/logo.png`} width={500}/>
+</strong>        &#x3C;/div>
+    &#x3C;/div>
+    {/* ... */}
+</code></pre>
+
+NOTE: You can see PUBLIC\_URL as an equivalent of `process.env.PUBLIC_URL` that will work inside and outside of Keycloak.
+{% endtab %}
+{% endtabs %}
+
+If you ever need to SSH into the Keycloak server and hot swipe the image you can find it at
+
+**/opt/keycloak/themes/**[**\<name of your theme>**](https://docs.keycloakify.dev/features/compiler-options/themename)**/login/resources/dist/img/logo.png**
+
+<figure><img src="https://2643300760-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2F4Ls5iTdfTS2xECgBfw90%2Fuploads%2Fgit-blob-236b76de854b821bae5842d7d304be396573b25a%2Fimage%20(2).png?alt=media" alt=""><figcaption><p>Inspecting the Docker Keycloak docker image file system we can find the logo.png at the expected location.</p></figcaption></figure>
+
+# Using Tailwind
+
+This demo show basic usage of tailwind in a Keycloakify login theme.
+
+We show how you can levrage tailwind @apply directive to customize the default style without having to modify the components, just by tagetting the standardized kc classes.
+
+We allso show how to use tailwind the regular way, at the component level on ejected pages.
+
+Before you start with this exemple it is strongly recommended you read the CSS Level Customization guide. This will teach you how to partially or completely disable the PatternFly[^1] stlyes inherited from the default theme.
+
+{% content-ref url="../css-customization" %}
+[css-customization](https://docs.keycloakify.dev/css-customization)
+{% endcontent-ref %}
+
+To use Tailwind in your Keycloakify project start by following the setup guide for Vite.
+
+{% embed url="<https://tailwindcss.com/docs/guides/vite#react>" %}
+
+Beyond that, here is a demo setup of light modification of the starter template to incorporate tailwind:
+
+{% embed url="<https://github.com/keycloakify/keycloakify-starter/tree/tailwind>" %}
+
+{% embed url="<https://github.com/user-attachments/assets/efaa3fe7-aaf6-43cb-ae55-058858bd40ec>" %}
+Preview on the 'tailwind' branch for the starter template
+{% endembed %}
+
+What has been done:
+
+* [Applying some custom tailwind utilities classes using the @apply directive](https://github.com/keycloakify/keycloakify-starter/blob/dd516e53e4dfa7c1ce02bab557420b999e87eca2/src/login/index.css#L7-L14).
+* Using the [Geist](https://vercel.com/font) font, [here](https://github.com/keycloakify/keycloakify-starter/blob/dd516e53e4dfa7c1ce02bab557420b999e87eca2/tailwind.config.js#L9-L11), [here](https://github.com/keycloakify/keycloakify-starter/blob/dd516e53e4dfa7c1ce02bab557420b999e87eca2/src/login/index.css#L1) and [here](https://github.com/keycloakify/keycloakify-starter/blob/dd516e53e4dfa7c1ce02bab557420b999e87eca2/src/login/index.css#L9).
+* Ejecting the [login.ftl](https://storybook.keycloakify.dev/?path=/story/login-login-ftl--default) page (`npx keycloakify eject-page` and *login -> login.ftl*) and [applying a tailwind class](https://github.com/keycloakify/keycloakify-starter/blob/dd516e53e4dfa7c1ce02bab557420b999e87eca2/src/login/pages/Login.tsx#L172).
+
+Here is the summary of the changes:
+
+{% embed url="<https://github.com/keycloakify/keycloakify-starter/commit/e6c71f13acbc65ccb8f57172c45e8c04a2151007>" %}
+
+[^1]: [PatternFly](https://v5-archive.patternfly.org/) is a utility based CSS framwork by RedHat in akin to [Bootstrap CSS](https://getbootstrap.com/docs/3.4/css/).\
+    It is used by the Keycloak team to build all it's UI.
+
+# Dark Mode Persistence
+
+If your app offers a dark/light mode, you might be wondering how to “transfer” that mode to your login theme. This ensures that if users are browsing your app in dark mode, then click “Login,” they’ll be redirected to a Keycloakify login UI that’s rendered in dark mode.
+
+{% embed url="<https://youtu.be/EbNGhg5aNF8>" %}
+Example of a Keycloakify theme implementation that carries over dark mode
+{% endembed %}
+
+This is somewhat of a niche use case, but it illustrates how you can pass state from your application to your Keycloak UIs.
+
+## In Your Web Application
+
+Typically, when your user clicks your “Login” button in the header, your application will redirect them to a URL that looks something like this:
+
+**https\://\<your-keycloak-url>/realms/protocol/openid-connect/auth?client\_id=\<your-client>**
+
+What we want to do is append, for example, `&dark=true` or `&dark=false` to that URL so it can be retrieved on the other side by your Keycloak theme.
+
+How you do that depends on your stack. Let’s look at an example with:
+
+* A React SPA
+* [oidc-spa](https://www.oidc-spa.dev/), a modern alternative to `keycloak-js`
+* [MUI](https://mui.com/material-ui/), a popular React component library
+
+The following snippet is a React component typically placed in the header of your application for displaying Login and Register buttons.
+
+<figure><img src="https://2643300760-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2F4Ls5iTdfTS2xECgBfw90%2Fuploads%2Fgit-blob-f3b002e62b86250a2074903a8597fdbcc325e01e%2Fimage%20(201).png?alt=media" alt=""><figcaption></figcaption></figure>
+
+```tsx
+import { useOidc } from "oidc";
+import { useTheme } from "@mui/material/styles";
+import Button from "@mui/material/Button";
+import { assert } from "tsafe/assert";
+
+export function AuthButtons() {
+  const { isUserLoggedIn, login } = useOidc();
+
+  assert(
+    !isUserLoggedIn,
+    "If this component is rendered, the user should not be logged in"
+  );
+
+  const theme = useTheme();
+
+  const extraQueryParams = {
+    dark: theme.palette.mode === "dark" ? "true" : "false",
+    // ui_locales is a special query param that Keycloak recognizes.
+    // You can set it to make sure the login pages are
+    // displayed in the correct language.
+    ui_locales: "en"
+  };
+
+  return (
+    <>
+      <Button
+        onClick={() =>
+          login({
+            doesCurrentHrefRequiresAuth: false,
+            extraQueryParams
+          })
+        }
+      >
+        Login
+      </Button>
+      <Button
+        variant="contained"
+        onClick={() =>
+          login({
+            doesCurrentHrefRequiresAuth: false,
+            transformUrlBeforeRedirect: url => {
+              const urlObj = new URL(url);
+              urlObj.pathname = urlObj.pathname.replace(
+                /\/auth$/,
+                "/registrations"
+              );
+              return urlObj.href;
+            },
+            extraQueryParams
+          })
+        }
+      >
+        Register
+      </Button>
+    </>
+  );
+}
+```
+
+## In Your Login Theme
+
+Within your Keycloak theme, you can now create a utility to read your custom `&dark=true|false` parameter.
+
+{% code title="src/shared/isDark.ts" %}
+
+```typescript
+const SESSION_STORAGE_KEY = "isDark";
+
+function getIsDark(): boolean {
+    from_url: {
+        const url = new URL(window.location.href);
+
+        const value = url.searchParams.get("dark");
+
+        if (value === null) {
+            // There was no &dark= query param in the URL,
+            // so we check session storage next.
+            break from_url;
+        }
+
+        // Remove &dark= from the URL (just to keep it clean)
+        url.searchParams.delete("dark");
+        window.history.replaceState({}, "", url.toString());
+
+        const isDark = value === "true";
+        
+        // Persist the value in session storage so that
+        // if the user navigates, for example, from login.ftl to
+        // register.ftl, we don’t lose the state.
+        sessionStorage.setItem(SESSION_STORAGE_KEY, `${isDark}`);
+
+        return isDark;
+    }
+
+    from_session_storage: {
+        const value = sessionStorage.getItem(SESSION_STORAGE_KEY);
+
+        if (value === null) {
+            break from_session_storage;
+        }
+
+        return value === "true";
+    }
+
+    // Return the browser preference
+    return window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+}
+```
+
+{% endcode %}
+
+How you use this utility depends heavily on your framework and UI library. As an example, here’s what it might look like with React/MUI:
+
+<pre class="language-tsx" data-title="src/login/KcPage.tsx"><code class="lang-tsx">import type { KcContext } from "./KcContext";
+import { useI18n } from "./i18n";
+import DefaultPage from "keycloakify/login/DefaultPage";
+import Template from "keycloakify/login/Template";
+import { createTheme, ThemeProvider } from "@mui/material/styles";
+<strong>import { getIsDark } from "../shared/isDark";
+</strong>const UserProfileFormFields = lazy(() => import("keycloakify/login/UserProfileFormFields"));
+
+const doMakeUserConfirmPassword = true;
+
+const theme_dark = createTheme({
+    palette: {
+        mode: "dark"
+    }
+});
+const theme_light = createTheme({
+    palette: {
+        mode: "light"
+    }
+});
+
+export default function KcPage(props: { kcContext: KcContext }) {
+    return (
+<strong>        &#x3C;ThemeProvider theme={getIsDark() ? theme_dark : theme_light}>
+</strong>            &#x3C;KcPageContextualized {...props} />
+        &#x3C;/ThemeProvider>
+    );
+}
+
+function KcPageContextualized(props: { kcContext: KcContext }) {
+    const { kcContext } = props;
+    const { i18n } = useI18n({ kcContext });
+
+    return (
+        &#x3C;Suspense>
+            {(() => {
+                switch (kcContext.pageId) {
+                    default:
+                        return (
+                            &#x3C;DefaultPage
+                                kcContext={kcContext}
+                                i18n={i18n}
+                                classes={classes}
+                                Template={Template}
+                                doUseDefaultCss={true}
+                                UserProfileFormFields={UserProfileFormFields}
+                                doMakeUserConfirmPassword={doMakeUserConfirmPassword}
+                            />
+                        );
+                }
+            })()}
+        &#x3C;/Suspense>
+    );
+}
+</code></pre>
+
+# Basic principles
+
+{% hint style="info" %}
+This documentation explains how i18n works in the Login theme.\
+\
+In the Account Multi-Page theme, everything works the same as in the Login theme. You just need to replace **/login/** by **/account/** in the import paths.
+
+\
+In the Account Single-Page theme, things works differently. [See relevent doc](https://github.com/keycloakify/docs.keycloakify.dev/blob/v11_next/features/account-theme/single-page.md#i18n-internationalization-and-translation).
+{% endhint %}
+
+In the Keycloak Admin Console you can enable localisation by selecting a set of language that you wish to support:
+
+<figure><img src="https://2643300760-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2F4Ls5iTdfTS2xECgBfw90%2Fuploads%2Fgit-blob-70d72cb9054f6a326388b7fac8a7734d80623ddb%2Fimage%20(15).png?alt=media" alt=""><figcaption><p>Enabling English, French and Spanish as supported languages in a Keycloak Realm</p></figcaption></figure>
+
+{% hint style="info" %}
+Want to add languages not in the default set into Keycloakify? [See how](https://docs.keycloakify.dev/features/i18n/adding-support-for-extra-languages).
+{% endhint %}
+
+When Internationalization is enabled you will see a language dropdown select in your UIs:
+
+<figure><img src="https://2643300760-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2F4Ls5iTdfTS2xECgBfw90%2Fuploads%2Fgit-blob-1ff9d797887bb207368f65c1a2f3ea31012e976a%2Fimage%20(16).png?alt=media" alt="" width="375"><figcaption></figcaption></figure>
+
+{% hint style="success" %}
+You shouldn't rely on the language select to let your users select their language.
+
+Infact, I encourage you to hide or remove it.
+
+What you should do instead is, when redirecting your user from your application to your Keycloak login page, add an extra query param to let Keycloak know in what language the page should be rendered.
+
+The parameter to add is ?ui\_locales=fr (Example if we want the UI to be in French).
+
+See [oidc-spa documentation](https://docs.oidc-spa.dev/documentation/usage) for more info on how to provide this parameter. (You can do the same if you use keycloak-js or NextAuth)
+{% endhint %}
+
+If you [eject some pages](https://github.com/keycloakify/docs.keycloakify.dev/blob/v11_next/features/customization-strategies/component-level-customization/README.md), you'll see in your component how the internationalization is actually implemented:
+
+{% tabs %}
+{% tab title="React" %}
+
+<pre class="language-tsx" data-title="src/login/Register.tsx"><code class="lang-tsx">export default function Register(props: RegisterProps) {
+    const { i18n } = props;
+    
+    const { msg, msgStr, advancedMsg, advancedMsgStr } = i18n;
+
+    return (
+        //...
+        &#x3C;a href={url.loginUrl}>
+<strong>            {msg("backToLogin")}
+</strong>        &#x3C;/a>
+        // ...
+    );
+}
+</code></pre>
+
+{% endtab %}
+
+{% tab title="Svelte" %}
+{% code title="src/login/pages/Register.svelte" %}
+
+```html
+<script lang="ts">
+  // ...
+  const props: RegisterProps = $props();
+  const { i18n } = props;
+  const { msg, msgStr, advancedMsg } = $i18n;
+</script>
+
+<a href={url.loginUrl}>{@render msg('backToLogin')()}</a>
+```
+
+{% endcode %}
+{% endtab %}
+
+{% tab title="Angular" %}
+{% code title="src/login/pages/register/register.component.html" %}
+
+```html
+<a
+  [href]="url.loginUrl"
+  [innerHTML]="i18n.msgStr('backToLogin') | kcSanitize: 'html'"
+></a>
+```
+
+{% endcode %}
+{% endtab %}
+{% endtabs %}
+
+<figure><img src="https://2643300760-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2F4Ls5iTdfTS2xECgBfw90%2Fuploads%2Fgit-blob-ed8260cf21af330c736cda53f1fa4b5d11ca0a18%2Fimage%20(17).png?alt=media" alt="" width="374"><figcaption><p><code>msg("backToLogin")</code> gets rendered as <strong>« Back to Login</strong></p></figcaption></figure>
+
+If you want to see the base message translations you can navigate to the **node\_modules/keycloakify/src/login/i18n/messages\_defaultSet/** directory:
+
+{% hint style="danger" %}
+Don't edit this file directly, it's just for seeing what are the default set of i18n messages.
+{% endhint %}
+
+<figure><img src="https://2643300760-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2F4Ls5iTdfTS2xECgBfw90%2Fuploads%2Fgit-blob-d93a500339987d1dc23a7d143ca003b3c81e0b0b%2Fimage%20(18).png?alt=media" alt=""><figcaption></figcaption></figure>
+
+As you can see, the translation message for the key `backToLogin` in English (**en.ts**) is:
+
+`We are <strong>sorry</strong> ...`
+
+{% tabs %}
+{% tab title="React" %}
+As a result calling `<p>{msg("backToLogin")}<p>` returns the following **JSX.Eement**:
+
+```html
+<p>
+  <span data-kc-msg="backToLogin">We are <strong>sorry</strong> ...</span>
+</p>
+```
+
+If you need to get the litteral string `"We are <strong>sorry</strong> ..."` instead of a JSX.Element you can use `msgStr("backToLogin")`.
+{% endtab %}
+
+{% tab title="Svelte" %}
+As a result calling `<p>{@render msg("backToLogin")}</p>` returns the following snippet:
+
+```html
+<span data-kc-msg="backToLogin">We are <strong>sorry</strong> ...</span>
+```
+
+{% endtab %}
+
+{% tab title="Angular" %}
+As a result calling i18n.msgStr('errorTitleHtml') return the string "We are \<strong>sorry\</strong> ..." and you need to pass it sanitarized as \[innerHTML] so that "sorry" be redered in bold:
+
+```html
+    <p
+        [innerHTML]="i18n.msgStr('errorTitleHtml') | kcSanitize: 'html'"
+    ></p>
+```
+
+What will actually be rendered in the DOM will be:
+
+```html
+<p>
+  <span data-kc-msg="backToLogin">We are <strong>sorry</strong> ...</span>
+</p>
+```
+
+{% endtab %}
+{% endtabs %}
+
+The purpose of the `data-kc-msg` attribute is to help you identify the i18n key of the text you want to change when inspecting the DOM.
+
+<figure><img src="https://2643300760-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2F4Ls5iTdfTS2xECgBfw90%2Fuploads%2Fgit-blob-3aa9b4192621518e5e1ada8a7873d6275758c6d9%2Fimage%20(19).png?alt=media" alt=""><figcaption><p>Inspecting the DOM we can see that if we want to change the "Back to Login..." we need to change the "backToLogin" key.</p></figcaption></figure>
+
+Now that you get the main idea, let's see how to preview your pages in different languages:
+
+{% content-ref url="previewing-your-pages-in-different-languages" %}
+[previewing-your-pages-in-different-languages](https://docs.keycloakify.dev/features/i18n/previewing-your-pages-in-different-languages)
+{% endcontent-ref %}
+
+# Previewing Your Pages in Different Languages
+
+{% hint style="info" %}
+This section assume you have read [Testing your Theme Outside of Keycloak](https://docs.keycloakify.dev/testing-your-theme/outside-of-keycloak).
+{% endhint %}
+
+To preview your component in different languages, create separate stories for each language.
+
+<details>
+
+<summary>Note for pepoles that have opted out of using Storybook</summary>
+
+If you're not using storybook here is how to preview your page in dev mode.
+
+<pre class="language-tsx" data-title="src/main.tsx"><code class="lang-tsx">/* eslint-disable react-refresh/only-export-components */
+import { createRoot } from "react-dom/client";
+import { StrictMode } from "react";
+import { KcPage } from "./kc.gen";
+
+// The following block can be uncommented to test a specific page with `yarn dev`
+// Don't forget to comment back or your bundle size will increase
+import { getKcContextMock } from "./login/KcPageStory";
+
+if (import.meta.env.DEV) {
+    window.kcContext = getKcContextMock({
+        pageId: "register.ftl",
+        overrides: {
+            locale: {
+<strong>                currentLanguageTag: "es"
+</strong>            }
+        }
+    });
+}
+
+createRoot(document.getElementById("root")!).render(
+    &#x3C;StrictMode>
+        {!window.kcContext ? (
+            &#x3C;h1>No Keycloak Context&#x3C;/h1>
+        ) : (
+            &#x3C;KcPage kcContext={window.kcContext} />
+        )}
+    &#x3C;/StrictMode>
+);
+</code></pre>
+
+</details>
+
+Example:
+
+<pre class="language-tsx" data-title="src/login/pages/Login.stories.tsx"><code class="lang-tsx">import type { Meta, StoryObj } from "@storybook/react";
+import { createKcPageStory } from "../KcPageStory";
+
+const { KcPageStory } = createKcPageStory({ pageId: "login.ftl" });
+
+const meta = {
+    title: "login/login.ftl",
+    component: KcPageStory
+} satisfies Meta&#x3C;typeof KcPageStory>;
+
+export default meta;
+
+type Story = StoryObj&#x3C;typeof meta>;
+
+export const Default: Story = {
+    render: () => &#x3C;KcPageStory />
+};
+
+<strong>export const French: Story = {
+</strong><strong>    render: ()=> (
+</strong><strong>        &#x3C;KcPageStory
+</strong><strong>            kcContext={{
+</strong><strong>                locale: {
+</strong><strong>                    currentLanguageTag: "fr"
+</strong><strong>                }
+</strong><strong>            }}
+</strong><strong>        />
+</strong><strong>    )
+</strong><strong>};
+</strong>
+<strong>export const Spanish: Story = {
+</strong><strong>    render: ()=> (
+</strong><strong>        &#x3C;KcPageStory
+</strong><strong>            kcContext={{
+</strong><strong>                locale: {
+</strong><strong>                    currentLanguageTag: "es"
+</strong><strong>                }
+</strong><strong>            }}
+</strong><strong>        />
+</strong><strong>    )
+</strong><strong>};
+</strong>
+// Other stories ...
+</code></pre>
+
+<figure><img src="https://github.com/keycloakify/docs.keycloakify.dev/blob/v11_next/features/.gitbook/assets/image%20(7).png" alt=""><figcaption><p>Viewing the French story of the login page</p></figcaption></figure>
+
+If you want all your story to by by default in an other language you can edit:
+
+{% code title="src/login/KcPageStory.tsx" %}
+
+```tsx
+export const { getKcContextMock } = createGetKcContextMock({
+  kcContextExtension,
+  kcContextExtensionPerPage,
+  overrides: {
+    locale: {
+      currentLanguageTag: "de",
+    },
+  },
+  overridesPerPage: {},
+});
+```
+
+{% endcode %}
+
+Ok now let's see how to modify the base translation to best fit your usecase or create new translation messages:
+
+{% content-ref url="adding-new-translation-messages-or-changing-the-default-ones" %}
+[adding-new-translation-messages-or-changing-the-default-ones](https://docs.keycloakify.dev/features/i18n/adding-new-translation-messages-or-changing-the-default-ones)
+{% endcontent-ref %}
+
+# Adding New Translation Messages or Changing the Default Ones
+
+Let's see firs how you can overwrite the default translation messages to best fit your usecases.
+
+## At theme level
+
+See, for example, by default the login page shows "Sign in to your account":
+
+<figure><img src="https://2643300760-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2F4Ls5iTdfTS2xECgBfw90%2Fuploads%2Fgit-blob-62b06173ec24497501945578ce6dd1c85363fbe8%2Fimage%20(1)%20(1)%20(1).png?alt=media" alt="" width="375"><figcaption></figcaption></figure>
+
+Let's say we want to change that with a message more specific to you usecase.
+
+First setp is to identify the message key. You can usually found it just by inspecting the HTML of your page:
+
+<figure><img src="https://2643300760-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2F4Ls5iTdfTS2xECgBfw90%2Fuploads%2Fgit-blob-56d35f25b344a47a67048b1ce1c103656ae42656%2Fimage%20(1)%20(1)%20(1)%20(1).png?alt=media" alt=""><figcaption></figcaption></figure>
+
+Here we can see that the *"Sign in to your account"* translation message corespond to the message key **loginAccountTitle**.
+
+Let's change the English and French translations:
+
+{% code title="src/login/i18n.ts" %}
+
+```typescript
+import { i18nBuilder } from "keycloakify/login or keycloakify/accont";
+import type { ThemeName } from "../kc.gen";
+
+/** @see: https://docs.keycloakify.dev/i18n */
+const { useI18n, ofTypeI18n } = i18nBuilder
+    .withThemeName<ThemeName>()
+    .withExtraLanguages({ /* ... */ })
+    .withCustomTranslations({
+        // WARNING: You can't import the translation from external files
+        en: {
+            loginAccountTitle: "Log in to your ACME account"
+        },
+        // cspell: disable
+        fr: {
+            loginAccountTitle: "Connectez-vous a votre compte ACME"
+        }
+        // cspell: enable
+    })
+    .build();
+
+type I18n = typeof ofTypeI18n;
+
+export { useI18n, type I18n };
+```
+
+{% endcode %}
+
+Here is the result that you should get:
+
+<figure><img src="https://2643300760-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2F4Ls5iTdfTS2xECgBfw90%2Fuploads%2Fgit-blob-6f84675189d378b57556bff231fbb20cb3d304c1%2Fimage%20(2)%20(1).png?alt=media" alt="" width="375"><figcaption></figcaption></figure>
+
+<figure><img src="https://2643300760-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2F4Ls5iTdfTS2xECgBfw90%2Fuploads%2Fgit-blob-97d6e45a5e6fa98221545d3564b87420beb16139%2Fimage%20(3).png?alt=media" alt="" width="375"><figcaption></figcaption></figure>
+
+{% hint style="warning" %}
+The translations that you provide to the `withCustomTranslations` must be statically valuable. You can't import from external files. All the translations must be declared inline.\
+This is because Keycloakify will analyze your code at build time to make Keycloak aware of your modifications of the base messages so that server side generated feedback messages can use your translations.
+
+\
+![](https://2643300760-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2F4Ls5iTdfTS2xECgBfw90%2Fuploads%2Fgit-blob-d38b00c3b2833b4cb09a426017549274afc40f6e%2Fimage%20\(4\).png?alt=media)
+
+![](https://2643300760-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2F4Ls5iTdfTS2xECgBfw90%2Fuploads%2Fgit-blob-3178ae9d339446ed0389d1b551c64781fc036b37%2Fimage%20\(5\).png?alt=media)\
+![](https://2643300760-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2F4Ls5iTdfTS2xECgBfw90%2Fuploads%2Fgit-blob-c50839d29420d547d535f6cb62a3e1a54bbb572a%2Fimage%20\(6\).png?alt=media)
+{% endhint %}
+
+If you have opted for a configuration [at the component level](https://github.com/keycloakify/docs.keycloakify.dev/blob/v11_next/features/customization-strategies/component-level-customization/README.md) it can come handy to define you own custom message keys:
+
+<pre class="language-typescript" data-title="src/login/i18n.ts"><code class="lang-typescript">import { i18nBuilder } from "keycloakify/login or keycloakify/account";
+import type { ThemeName } from "../kc.gen";
+
+/** @see: https://docs.keycloakify.dev/i18n */
+const { useI18n, ofTypeI18n } = i18nBuilder
+    .withThemeName&#x3C;ThemeName>()
+    .withExtraLanguages({ /* ... */ })
+    .withCustomTranslations({
+        en: {
+            loginAccountTitle: "Log in to your ACME account",
+<strong>            myCustomMessage: "This is a custom message"
+</strong>        },
+        // cspell: disable
+        fr: {
+            loginAccountTitle: "Connectez-vous a votre compte ACME",
+<strong>            myCustomMessage: "Ceci est un message personnalisé"
+</strong>        }
+        // cspell: enable
+    })
+    .build();
+
+type I18n = typeof ofTypeI18n;
+
+export { useI18n, type I18n };
+</code></pre>
+
+You'll then be able to use the message key "myCustomMessage" in your components:
+
+<figure><img src="https://2643300760-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2F4Ls5iTdfTS2xECgBfw90%2Fuploads%2Fgit-blob-e68775bb5a8c9646a3af6f51a00cd27c54305547%2Fimage%20(8).png?alt=media" alt="" width="356"><figcaption><p>TypeScript knows that "myCustomMessage" is a valid key</p></figcaption></figure>
+
+{% hint style="success" %}
+If you are implementing theme variants you can provides translations on a per-theme variant basis. [See how](https://docs.keycloakify.dev/features/theme-variants).
+{% endhint %}
+
+Now this is perfect for defining generale purpose text. But some other translations messages are more specific to a specific Keycloak configuration and are best configured via the Keycloak Account Console.\
+I'm thinking in particular as translations related to custom user attribues (favourite pet for example) or terms and conditions.
+
+## In the Keycloak Realm configuration
+
+Some relevant messages, namely [`termsText`](https://docs.keycloakify.dev/page-specific-guides/terms-and-conditions-page) and all the messages used in the User Profile Attributes like for example the Display name, the helper text or the select option labels can be defined at the realm level and it will work as you would expect:
+
+<figure><img src="https://2643300760-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2F4Ls5iTdfTS2xECgBfw90%2Fuploads%2Fgit-blob-e768bc8ba137da65792097065d0d0aa494841b5f%2Fimage%20(9).png?alt=media" alt=""><figcaption><p>The custom user attribute favourite_pet has for Display Name the message key "profile.attributes.favourite_pet"</p></figcaption></figure>
+
+<figure><img src="https://2643300760-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2F4Ls5iTdfTS2xECgBfw90%2Fuploads%2Fgit-blob-000a75f4f1b1f428133e61abf0aa21c69e1c5c11%2Fimage%20(10).png?alt=media" alt=""><figcaption><p>A translation for the message key "profile.attributes.favourite_pet" has been defined for the English language: "Favourite Pet"</p></figcaption></figure>
+
+<figure><img src="https://2643300760-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2F4Ls5iTdfTS2xECgBfw90%2Fuploads%2Fgit-blob-c81713daedf76a2f548276ce6034634074c6565d%2Fimage%20(11).png?alt=media" alt="" width="312"><figcaption><p>"Favourite Pet" is correctly used as Display Name for the input field in the register page</p></figcaption></figure>
+
+Note that if you try to use:
+
+```tsx
+msg("profile.attributes.favourite_pet");
+```
+
+It will work at runtime, you'll get `Favourite Pet` but typescript will complain because `"profile.attributes.favourite_pet"` or `string` isn't a known i18n message key, it makes sense as it's only defined on the server.
+
+This is why you'll see in some place in the code the usage of `advancedMsg(attribute.displayName)`, `advancedMsg()` is basically equivalent to `msg()` except that TypeScript won't complain if the key isn't part of the statically defined set.\
+[More details](https://github.com/keycloakify/keycloakify/blob/60aaa03202763307a82991c38997d166f8f44d65/src/login/i18n/i18n.tsx#L58-L72).
+
+### My Realm Overrides Translation aren't applied
+
+There is a limitation in the current version of Keycloakify: **Not all translations defined at the Keycloak realm level are pulled by the theme**.
+
+It will be addressed in future version but as of now, here is a workarond that you can use.
+
+Let's say you want to make sure that the message key "**doRegister**" and "**invalidUserMessage**" can be overriten at the ream level, you can edit your vite.config.ts like so:
+
+{% code title="vite.config.ts" %}
+
+```typescript
+import { defineConfig } from "vite";
+import react from "@vitejs/plugin-react";
+import { keycloakify } from "keycloakify/vite-plugin";
+
+// https://vitejs.dev/config/
+export default defineConfig({
+    plugins: [
+        react(),
+        keycloakify({
+            // ...
+            kcContextExclusionsFtl: `
+                <@addToXKeycloakifyMessagesIfMessageKey str="doRegister" />
+                <@addToXKeycloakifyMessagesIfMessageKey str="invalidUserMessage" />
+            `
+        })
+    ]
+});
+```
+
+{% endcode %}
+
+# Adding Support for Extra Languages
+
+There are currenly 30 languages supported by default (see list below). If a language you want to support is not in the list, this section will explain how to manually add it.
+
+1. ar - Arabic
+2. ca - Catalan
+3. cs - Czech
+4. da - Danish
+5. de - German
+6. el - Greek
+7. en - English
+8. es - Spanish
+9. fa - Persian (Farsi)
+10. fi - Finnish
+11. fr - French
+12. hu - Hungarian
+13. it - Italian
+14. ja - Japanese
+15. ka - Georgian
+16. lt - Lithuanian
+17. lv - Latvian
+18. nl - Dutch
+19. no - Norwegian
+20. pl - Polish
+21. pt-BR - Portuguese (Brazilian)
+22. pt - Portuguese
+23. ru - Russian
+24. sk - Slovak
+25. sv - Swedish
+26. th - Thai
+27. tr - Turkish
+28. uk - Ukrainian
+29. zh-CN - Chinese (Simplified)
+30. zh-TW - Chinese (Traditional)
+
+You're language is not in the list? Let's see how to add it and enable it in the Keycloak Admin UI.
+
+In this example we're going to add Hindi (hi).
+
+<figure><img src="https://2643300760-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2F4Ls5iTdfTS2xECgBfw90%2Fuploads%2Fgit-blob-31585221f63c7e0088692f4c0c5a13872a86d90d%2Fimage%20(12).png?alt=media" alt=""><figcaption><p>Hindi appear as a supported locales option in the Keycloak Account UI</p></figcaption></figure>
+
+<figure><img src="https://2643300760-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2F4Ls5iTdfTS2xECgBfw90%2Fuploads%2Fgit-blob-597f8b12035eb4ce1c89b48e25ff10d7a7b67531%2Fimage%20(13).png?alt=media" alt=""><figcaption><p>Hindi appear as an option in the language select dropdown</p></figcaption></figure>
+
+To acheive this first step is to create a TypeScript file containing Hindi translation of all the default message keys. I sugest creating this file as `src/login/i18n.hi.ts` but it can be located anywhere under your src directory.
+
+{% code title="src/login/i18n.hi.ts" lineNumbers="true" %}
+
+```typescript
+import type { MessageKey_defaultSet } from "keycloakify/login or keycloakify/accont";
+
+const messages: Record<MessageKey_defaultSet, string> = {
+    // cspell: disable
+    doLogIn: "साइन इन करें",
+    doRegister: "रजिस्टर करें",
+    doRegisterSecurityKey: "रजिस्टर करें",
+    // ... translation for all the other default messages
+    // cspell: enable
+};
+
+export default messages;
+```
+
+{% endcode %}
+
+Wait before panicking realizing that there are hundreds of message keys. ChatGPT can do this for you!
+
+Just take the English translation of the message a reference and ask it to translate for you (you'll have to press continue several times).
+
+You can find the English translations in your repo at:
+
+**node\_modules/keycloakify/src/login/i18n/messages\_defaultSet/en.ts**
+
+<figure><img src="https://2643300760-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2F4Ls5iTdfTS2xECgBfw90%2Fuploads%2Fgit-blob-dc8bb1797a4d9881cae9763b0bef4d2a6aec82f8%2Fimage%20(14).png?alt=media" alt=""><figcaption></figcaption></figure>
+
+{% hint style="danger" %}
+**Do not customize the translations messages to fit your usecase**!
+
+This is not the place to do it.\
+Theses translation should be as generic as they can be.
+
+This process is just a temporary sollution until Keycloak add support for your language, you should be prepared to to delete the file as soon as it's no longer nessesary.\
+For customizing the translation messages and adding your custom messages see [this section](https://docs.keycloakify.dev/features/i18n/adding-new-translation-messages-or-changing-the-default-ones).
+{% endhint %}
+
+Next step is to index the translation file that you have created, edit the **src/login/i18n.ts** file as follow:
+
+<pre class="language-typescript" data-title="src/login/i18n.ts"><code class="lang-typescript">import { i18nBuilder } from "keycloakify/login or keycloakify/account";
+import type { ThemeName } from "../kc.gen";
+
+/** @see: https://docs.keycloakify.dev/i18n */
+const { useI18n, ofTypeI18n } = i18nBuilder
+    .withThemeName&#x3C;ThemeName>()
+<strong>    .withExtraLanguages({
+</strong><strong>        hi: {
+</strong><strong>            // cspell: disable-next-line
+</strong><strong>            label: "हिन्दी",
+</strong><strong>            getMessages: () => import("./i18n.hi")
+</strong><strong>        }
+</strong><strong>    })
+</strong>    .build();
+
+type I18n = typeof ofTypeI18n;
+
+export { useI18n, type I18n };
+</code></pre>
+
+That's it!\
+Now, you should be able to enable Hindi in the Account Console of the Keycloak where your theme is loaded.
+
+# Theme Variants
+
+Theme variant enables you to create multiples Keycloak theme with a single codebase.
+
+{% tabs %}
+{% tab title="Vite" %}
+{% code title="vite.config.ts" %}
+
+```typescript
+import { defineConfig } from "vite";
+import react from "@vitejs/plugin-react";
+import { keycloakify } from "keycloakify/vite-plugin";
+
+export default defineConfig({
+  plugins: [
+    react(),
+    keycloakify({
+      themeName: ["keycloakify-starter", "keycloakify-starter-variant-1"],
+    }),
+  ],
+});
+```
+
+{% endcode %}
+{% endtab %}
+
+{% tab title="Webpack" %}
+{% code title="package.json" %}
+
+```json
+{
+  "keycloakify": {
+    "themeName": ["keycloakify-starter", "keycloakify-starter-variant-1"]
+  }
+}
+```
+
+{% endcode %}
+{% endtab %}
+{% endtabs %}
+
+This will make the theme variant appear in the Keycloak admin select input:
+
+<figure><img src="https://2643300760-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2F4Ls5iTdfTS2xECgBfw90%2Fuploads%2Fgit-blob-47f88d0b97cd077d690e2ea60719e6f0b2006914%2Fimage%20(105).png?alt=media" alt=""><figcaption></figcaption></figure>
+
+In your code you'll be able to load different styles based on the value of `kcContext.themeName`:
+
+<figure><img src="https://2643300760-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2F4Ls5iTdfTS2xECgBfw90%2Fuploads%2Fgit-blob-86a9b99c34b36bb4a1de3136a0d6a55d46a43631%2Fimage%20(66).png?alt=media" alt=""><figcaption><p>NOTE: You need to <code>run npm run dev</code>, <code>npm run storybook</code> or <code>npm run build-keycloak-theme</code> for the types to be updated.</p></figcaption></figure>
+
+{% embed url="<https://youtu.be/Nkoz1iD-HOA>" %}
+Tutorial video
+{% endembed %}
+
+## Different text for each of your theme variants
+
+Keycloakify lets you provide custom tranlations on a per-theme variant basis.
+
+{% hint style="info" %}
+Read [this](https://docs.keycloakify.dev/features/i18n/adding-new-translation-messages-or-changing-the-default-ones) first for context.
+{% endhint %}
+
+Example:
+
+<pre class="language-typescript"><code class="lang-typescript">import { i18nBuilder } from "keycloakify/login";
+import type { ThemeName } from "../kc.gen";
+
+/** @see: https://docs.keycloakify.dev/i18n */
+const { useI18n, ofTypeI18n } = i18nBuilder
+    .withThemeName&#x3C;ThemeName>()
+    .withExtraLanguages({ /* ... */ })
+    .withCustomTranslations({
+        en: {
+            doLogIn: "Log in!",
+<strong>            loginAccountTitle: {
+</strong><strong>                "my-theme-1": "Log in to your ACME1 account",
+</strong><strong>                "my-theme-2": "Log in to your ACME2 account"
+</strong><strong>            }
+</strong>        },
+        // cspell: disable
+        fr: {
+            doLogIn: "Se connecter!",
+<strong>            loginAccountTitle: {
+</strong><strong>                "my-theme-1": "Connectez-vous à votre compte ACME1",
+</strong><strong>                "my-theme-2": "Connectez-vous à votre compte ACME2"
+</strong><strong>            }
+</strong>        }
+        // cspell: enable
+    })
+    .build();
+
+type I18n = typeof ofTypeI18n;
+
+export { useI18n, type I18n };
+
+</code></pre>
+
+<figure><img src="https://2643300760-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2F4Ls5iTdfTS2xECgBfw90%2Fuploads%2Fgit-blob-4a923b84e751879a23c01e091bdc01ecdff34c7f%2Fimage%20(32).png?alt=media" alt=""><figcaption><p>"my-theme-1" view</p></figcaption></figure>
+
+<figure><img src="https://2643300760-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2F4Ls5iTdfTS2xECgBfw90%2Fuploads%2Fgit-blob-6c96dc3e562783899e1760928cb7845c523c2bc7%2Fimage%20(33).png?alt=media" alt=""><figcaption><p>"my-theme-2" view</p></figcaption></figure>
+
+## In Native Themes
+
+For native Email Theme [this video timestamp](https://www.youtube.com/watch?v=IZ9LSLfWxqo\&t=684s).\
+For native Theme in general [this video timestamp](https://youtu.be/OFg9RIM5hSw?si=zQ6Kdd7TgzZMsiH2\&t=139).
+
+# Environment Variables
+
+Environment variables defined on the Keycloak server can be transferred to the theme. This allows for a degree of theme customization without necessitating a rebuild. This approach is particularly useful if multiple parties are reusing your theme. As an example, you can distribute a single .jar file to multiple customers, enabling them to modify certain aspect of the login page by defining specific environment variables.
+
+Let's define two environnement variable:
+
+{% tabs %}
+{% tab title="Vite" %}
+
+<pre class="language-typescript" data-title="vite.config.ts"><code class="lang-typescript">import { defineConfig } from "vite";
+import react from "@vitejs/plugin-react";
+import { keycloakify } from "keycloakify/vite-plugin";
+
+// https://vitejs.dev/config/
+export default defineConfig({
+    plugins: [
+        react(),
+        keycloakify({
+            // ...
+<strong>            environmentVariables: [
+</strong><strong>                { name: "MY_APP_API_URL", default: "" },
+</strong><strong>                { name: "MY_APP_PALETTE", default: "dracula" }
+</strong><strong>            ]
+</strong>        })
+    ]
+});
+
+</code></pre>
+
+{% endtab %}
+
+{% tab title="Webpack" %}
+{% code title="package.json" %}
+
+```json
+{
+    "keycloakify": {
+        "environmentVariables": [
+            { "name": "MY_APP_API_URL", "default": "" },
+            { "name": "MY_APP_PALETTE", "default": "dracula" }
+        ]
+    }
+}
+```
+
+{% endcode %}
+{% endtab %}
+{% endtabs %}
+
+We can then access the runtime value of thoses variables under kcContext.properties:
+
+<figure><img src="https://2643300760-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2F4Ls5iTdfTS2xECgBfw90%2Fuploads%2Fgit-blob-06f339b4920ad03e866cc00029f7374f43723e32%2Fimage%20(163).png?alt=media" alt=""><figcaption><p>Accessing the value of the environement variable defined.</p></figcaption></figure>
+
+Now let's see how you can set the value of thoses environement variable on the Keycloak side:
+
+{% tabs %}
+{% tab title="Docker" %}
+
+<pre class="language-bash"><code class="lang-bash">docker run \
+    -e KEYCLOAK_ADMIN=admin \
+    -e KEYCLOAK_ADMIN_PASSWORD=admin \
+<strong>    --env MY_APP_API_URL='https://api.my-org.com' \
+</strong><strong>    --env MY_APP_PALETTE='solaris'
+</strong>    -p 8080:8080 \
+    start --optimized
+</code></pre>
+
+{% endtab %}
+
+{% tab title="Helm" %}
+
+<pre class="language-bash" data-title="values.json"><code class="lang-bash">keycloak:
+  initContainers: |
+    - name: realm-ext-provider
+      image: curlimages/curl
+      imagePullPolicy: IfNotPresent
+      command:
+        - sh
+      args:
+        - -c
+        - |
+          # Replace USER and PROJECT.    
+          curl -L -f -S -o /extensions/keycloak-theme.jar https://github.com/USER/PROJECT/releases/latest/download/keycloak-theme-for-kc-24.jar
+
+      volumeMounts:
+        - name: extensions
+          mountPath: /extensions
+
+  extraVolumeMounts: |
+    - name: extensions
+      mountPath: /opt/bitnami/keycloak/providers
+
+  extraVolumes: |
+    - name: extensions
+      emptyDir: {}
+      
+  extraEnv: |
+<strong>    - name: MY_APP_API_URL
+</strong><strong>      value: 'https://api.my-org.com'
+</strong><strong>    - name: MY_APP_PALETTE
+</strong><strong>      value: 'solaris'
+</strong></code></pre>
+
+{% endtab %}
+
+{% tab title="Bare Metal" %}
+
+```bash
+MY_APP_API_URL="https://api.my-org.com" MY_APP_PALETTE="solaris" /opt/keycloak/bin/kc.sh start
+```
+
+{% endtab %}
+{% endtabs %}
+
+To test locally, you can pass the environement variable to the start-keycloak CLI command:
+
+```bash
+MY_APP_PALETTE="solaris" MY_APP_API_URL="..." npx keycloakify start-keycloak
+```
+
+You can also create stories with specific ENV values:
+
+```tsx
+export const Solaris: Story = {
+    render: () => (
+        <KcPageStory
+            kcContext={{
+                properties: {
+                    MY_APP_PALETTE: "solaris"
+                },
+            }}
+        />
+    )
+};
+```
+# Styling a Custom Page Not Included in Base Keycloak
+
+{% hint style="info" %}
+If you are looking to implement the pages featured by the [PhaseTwo](https://phasetwo.io/) plugins they are implemented [in this repo](https://github.com/p2-inc/keycloakify-starter/tree/p2/magic-link-extension-templates).
+{% endhint %}
+
+Sometimes certain extensions will add new functionality that requires an additional page not originally shipped with Keycloak. Keycloakify out-of-the-box will only provide customization to base pages, so if a new page is introduced by an extension, there is a good chance the page will not be styled correctly.
+
+To account for these cases, Keycloakify supports the ability to add custom pages and configure them such that style preservation is maintained.
+
+For our example on how to customize this, we will be using Phase Two's `otp-form.ftl` page. Phase Two provides email OTP codes for logging in and as a result has a special page if OTP codes are enabled in the authorization flow.
+
+{% hint style="success" %}
+You can load the extension that you are using in Keycloak container that is started when running `npx keycloakify start-keycloak`. Use [the `extensionJars` option](https://docs.keycloakify.dev/features/compiler-options/startkeycloakoptions).
+{% endhint %}
+
+{% embed url="<https://github.com/p2-inc/keycloak-magic-link/blob/main/src/main/resources/theme-resources/templates/otp-form.ftl>" %}
+You can find the original .ftl file on Phase Two's github
+{% endembed %}
+
+The first thing we want to do is to let Keycloakify know that we are adding a new page:
+
+<pre class="language-typescript" data-title="src/login/KcPageStory.tsx"><code class="lang-typescript">const kcContextExtensionPerPage: KcContextExtensionPerPage = {
+<strong>    "otp-form.ftl": { /* We will delare propreties that we need later */ }
+</strong>};
+</code></pre>
+
+Then, we want to create the page under the pages directory, our file name in this case will be `OtpForm.tsx` and paste in some starter code including the template.
+
+{% code title="src/login/pages/OtpForm.tsx" %}
+
+```tsx
+import { getKcClsx } from "keycloakify/login/lib/kcClsx";
+import type { PageProps } from "keycloakify/login/pages/PageProps";
+import type { KcContext } from "../KcContext";
+import type { I18n } from "../i18n";
+
+export default function OtpForm(props: PageProps<Extract<KcContext, { pageId: "otp-form.ftl" }>, I18n>) {
+    const { kcContext, i18n, doUseDefaultCss, Template, classes } = props;
+
+    const { kcClsx } = getKcClsx({
+        doUseDefaultCss,
+        classes
+    });
+
+    const { msg, msgStr } = i18n;
+
+    const { url } = kcContext;
+
+
+    return (
+        <Template
+            kcContext={kcContext}
+            i18n={i18n}
+            doUseDefaultCss={doUseDefaultCss}
+            classes={classes}
+            displayInfo={false}
+            headerNode={
+                // Header code goes here
+            }
+        >
+            // Page code goes here
+        </Template>
+    );
+}
+```
+
+{% endcode %}
+
+Note the `pageId` variable specified `otp-form.ftl`, that should match the exact name of the page file you are trying to implement. Additionally, we will also need to modify the `kcContext` values to account for certain custom variables, but we will get to that later. For now the last new file we need to add would be the story file for this page:
+
+{% code title="src/login/pages/OtpForm.stories.tsx" %}
+
+```tsx
+import type { Meta, StoryObj } from "@storybook/react";
+import { createKcPageStory } from "../KcPageStory";
+
+const { KcPageStory } = createKcPageStory({ pageId: "otp-form.ftl" });
+
+const meta = {
+    title: "login/otp-form.ftl",
+    component: KcPageStory
+} satisfies Meta<typeof KcPageStory>;
+
+export default meta;
+
+type Story = StoryObj<typeof meta>;
+
+export const Default: Story = {
+    render: () => <KcPageStory />
+};
+```
+
+{% endcode %}
+
+Next the easiest thing is to just paste the default code for the custom page right into the template and begin modifying it for Keycloakify. In our case, here is the code for that page at the time of writing:
+
+<details>
+
+<summary>otp-form.ftl</summary>
+
+```xml
+<#import "template.ftl" as layout>
+<@layout.registrationLayout displayInfo=true; section>
+    <#if section = "title">
+        ${msg("doLogIn")}
+
+    <#elseif section = "header">
+      <div id="kc-username" class="${properties.kcFormGroupClass!}">
+        <label id="kc-attempted-username">${auth.attemptedUsername}</label>
+        <a id="reset-login" href="${url.loginRestartFlowUrl}" aria-label="${msg("restartLoginTooltip")}">
+          <div class="kc-login-tooltip">
+            <i class="${properties.kcResetFlowIcon!}"></i>
+            <span class="kc-tooltip-text">${msg("restartLoginTooltip")}</span>
+          </div>
+        </a>
+      </div>
+
+    <#elseif section = "form">
+      <p>Enter access code</p>
+      <form id="kc-otp-login-form" class="${properties.kcFormClass!}" action="${url.loginAction}" method="post">
+        <div class="${properties.kcFormGroupClass!}">
+          <div class="${properties.kcLabelWrapperClass!}">
+            <label for="otp" class="${properties.kcLabelClass!}">${msg("loginOtpOneTime")}</label>
+          </div>
+
+          <div class="${properties.kcInputWrapperClass!}">
+            <input id="otp" name="otp" autocomplete="off" type="text" class="${properties.kcInputClass!}" autofocus aria-invalid="<#if messagesPerField.existsError('totp')>true</#if>"/>
+            <#if messagesPerField.existsError('totp')>
+              <span id="input-error-otp-code" class="${properties.kcInputErrorMessageClass!}" aria-live="polite">${kcSanitize(messagesPerField.get('totp'))?no_esc}</span>
+            </#if>
+          </div>
+        </div>
+
+        <div class="${properties.kcFormGroupClass!}">
+          <div id="kc-form-options" class="${properties.kcFormOptionsClass!}">
+            <div class="${properties.kcFormOptionsWrapperClass!}">
+            </div>
+          </div>
+
+          <div id="kc-form-buttons" class="${properties.kcFormButtonsClass!}">
+            <input class="${properties.kcButtonClass!} ${properties.kcButtonPrimaryClass!} ${properties.kcButtonLargeClass!}" name="submit" id="kc-submit" type="submit" value="${msg("doSubmit")}" />
+            <input class="${properties.kcButtonClass!} ${properties.kcButtonPrimaryClass!} ${properties.kcButtonLargeClass!}" name="resend" id="kc-resend" type="submit" value="${msg("doResend")}" />
+          </div>
+        </div>
+      </form>
+    </#if>
+</@layout.registrationLayout>
+```
+
+</details>
+
+Breaking down this code:
+
+1. The freemarker, dynamic variables/messages, and classnames will need to be converted to React.
+2. The content in the header section will go in the `headerNode` prop of `<Template>` and the form section will be the child of the `<Template>` element.
+3. `@layout.registrationLayout` has the prop `displayInfo=true` which means we need to set that prop in the `<Template>` element.
+4. The `auth` and `messagesPerField` variables and their attributes which need to be provided in kcContext.
+
+1, 2, and 3 require converting code to JSX. The converted code for the page can be found at the bottom. Here are some tips:
+
+* Any classname provided as a variable will use `kcClsx` to resolve, so `${properties.kcFormClass!}` would turn into `{kcClsx("kcFormGroupClass")}`
+* When dealing with message values, `msg` may return full blown HTML so it can be used as a child element and `msgStr` will return straight text.
+  * Example 1, `aria-label="${msg("restartLoginTooltip")}"` would turn into `aria-label={msgStr("restartLoginTooltip")}`.
+  * Example 2, `msg` variables they can inject HTML as a variable, when this happens we need to dangerously set inner html. Specifcally with a piece of code like this:
+
+    ```html
+    <#if messagesPerField.existsError('totp')>
+      <span id="input-error-otp-code" class="${properties.kcInputErrorMessageClass!}" aria-live="polite">
+        ${kcSanitize(messagesPerField.get('totp'))?no_esc}
+      </span>
+    </#if>
+    ```
+
+    would turn into this:
+
+    ```jsx
+    {
+      messagesPerField.existsError("totp") && (
+        <span
+          id="input-error-otp-code"
+          className={kcClsx("kcInputErrorMessageClass")}
+          aria-live="polite"
+          dangerouslySetInnerHTML={{ __html: messagesPerField.get("totp") }}
+        />
+      );
+    }
+    ```
+
+    Unfortunately, a lot of it is up to you to decide with the extension you might be using, but there may be some trial and error.
+
+4 on the other hand requires changing some code in other files.
+
+{% code title="src/login/KcContext.ts" %}
+
+```tsx
+/* eslint-disable @typescript-eslint/ban-types */
+import type { ExtendKcContext } from "keycloakify/login";
+import type { KcEnvName, ThemeName } from "../kc.gen";
+
+export type KcContextExtension = {
+    themeName: ThemeName;
+    properties: Record<KcEnvName, string> & {};
+};
+
+// added for otp form page, required for the types
+export type KcContextExtensionPerPage = {
+    "otp-form.ftl": {
+        auth: {
+            attemptedUsername: string;
+        };
+        url: {
+            loginRestartFlowUrl: string;
+            loginAction: string;
+        };
+    };
+};
+
+export type KcContext = ExtendKcContext<KcContextExtension, KcContextExtensionPerPage>;
+```
+
+{% endcode %}
+
+As seen above, kcContext is where we can add the type definitions for the props passed into the page. In the freemarker we also see `msg("doResend")` value which is not in the base keycloak i18 library. We would also need add this for mocking purposes.
+
+<pre class="language-typescript" data-title="src/login/i18n.ts"><code class="lang-typescript">import { i18nBuilder } from "keycloakify/login";
+import type { ThemeName } from "../kc.gen";
+
+/** @see: https://docs.keycloakify.dev/i18n */
+const { useI18n, ofTypeI18n } = i18nBuilder
+    .withThemeName&#x3C;ThemeName>()
+    .withExtraLanguages({ /* ... */ })
+    .withCustomTranslations({
+<strong>        en: {
+</strong><strong>            doResend: "Resend"
+</strong><strong>        },
+</strong><strong>        fr: {
+</strong><strong>            doResend: "Renvoyer"
+</strong><strong>        }
+</strong>    })
+    .build();
+
+type I18n = typeof ofTypeI18n;
+
+export { useI18n, type I18n };
+</code></pre>
+
+The last two things we need to do now would be adding the story to the `KcPageStory.tsx`
+
+<pre class="language-typescript" data-title="src/login/KcPageStory.tsx"><code class="lang-typescript">const kcContextExtensionPerPage: KcContextExtensionPerPage = {
+<strong>    "otp-form.ftl": {
+</strong><strong>        auth: {
+</strong><strong>            attemptedUsername: "user@user.com"
+</strong><strong>        },
+</strong><strong>        url: {
+</strong><strong>            loginRestartFlowUrl: "#",
+</strong><strong>            loginAction: "#"
+</strong><strong>        }
+</strong><strong>    }
+</strong>};
+</code></pre>
+
+and adding the page to the `KcPage.tsx`
+
+{% code title="src/login/KcPage.tsx" %}
+
+```tsx
+case "otp-form.ftl":
+    return (
+        <OtpForm
+            {...{ kcContext, i18n, classes }}
+            Template={Template}
+            doUseDefaultCss={true}
+        />
+    );
+```
+
+{% endcode %}
+
+After all that you should be done! You can view the new component in storybook and check everything looks right and then the next time you bundle and build it, it should be deployed.
+
+<details>
+
+<summary>Completed code for OtpForm.tsx:</summary>
+
+```jsx
+import { getKcClsx } from "keycloakify/login/lib/kcClsx";
+import type { PageProps } from "keycloakify/login/pages/PageProps";
+import type { KcContext } from "../KcContext";
+import type { I18n } from "../i18n";
+
+export default function OtpForm(props: PageProps<Extract<KcContext, { pageId: "otp-form.ftl" }>, I18n>) {
+    const { kcContext, i18n, doUseDefaultCss, Template, classes } = props;
+
+    const { kcClsx } = getKcClsx({
+        doUseDefaultCss,
+        classes
+    });
+
+    const { msg, msgStr } = i18n;
+
+    const { auth, url, messagesPerField } = kcContext;
+
+    return (
+        <Template
+            kcContext={kcContext}
+            i18n={i18n}
+            doUseDefaultCss={doUseDefaultCss}
+            classes={classes}
+            displayInfo={false}
+            headerNode={
+                <div id="kc-username" className={kcClsx("kcFormGroupClass")} style={{ fontSize: "16px" }}>
+                    <label id="kc-attempted-username">{auth.attemptedUsername}</label>
+                    <a id="reset-login" href={url.loginRestartFlowUrl} aria-label={msgStr("restartLoginTooltip")}>
+                        <div className="kc-login-tooltip">
+                            <i className={kcClsx("kcResetFlowIcon")}></i>
+                            <span className="kc-tooltip-text">{msg("restartLoginTooltip")}</span>
+                        </div>
+                    </a>
+                </div>
+            }
+        >
+            <p>Enter access code</p>
+            <form id="kc-otp-login-form" className={kcClsx("kcFormClass")} action={url.loginAction} method="post">
+                <div className={kcClsx("kcFormGroupClass")}>
+                    <div className={kcClsx("kcLabelWrapperClass")}>
+                        <label htmlFor="otp" className={kcClsx("kcLabelClass")}>
+                            {msg("loginOtpOneTime")}
+                        </label>
+                    </div>
+
+                    <div className={kcClsx("kcInputWrapperClass")}>
+                        <input
+                            id="otp"
+                            name="otp"
+                            autoComplete="off"
+                            type="text"
+                            className={kcClsx("kcInputClass")}
+                            autoFocus
+                            aria-invalid={messagesPerField.existsError("totp") ? "true" : undefined}
+                        />
+                        {messagesPerField.existsError("totp") && (
+                            <span
+                                id="input-error-otp-code"
+                                className={kcClsx("kcInputErrorMessageClass")}
+                                aria-live="polite"
+                                dangerouslySetInnerHTML={{ __html: messagesPerField.get("totp") }}
+                            />
+                        )}
+                    </div>
+                </div>
+
+                <div className={kcClsx("kcFormGroupClass")}>
+                    <div id="kc-form-options" className={kcClsx("kcFormOptionsClass")}>
+                        <div className={kcClsx("kcFormOptionsWrapperClass")} />
+                    </div>
+
+                    <div id="kc-form-buttons" className={kcClsx("kcFormButtonsClass")}>
+                        <input
+                            className={kcClsx("kcButtonClass", "kcButtonPrimaryClass", "kcButtonLargeClass")}
+                            name="submit"
+                            id="kc-submit"
+                            type="submit"
+                            value={msgStr("doSubmit")}
+                        />
+                        <input
+                            className={kcClsx("kcButtonClass", "kcButtonPrimaryClass", "kcButtonLargeClass")}
+                            name="resend"
+                            id="kc-resend"
+                            type="submit"
+                            value={msgStr("doResend")}
+                        />
+                    </div>
+                </div>
+            </form>
+        </Template>
+    );
+}
+```
+
+</details>
+# Styling a Custom Page Not Included in Base Keycloak
+
+{% hint style="info" %}
+If you are looking to implement the pages featured by the [PhaseTwo](https://phasetwo.io/) plugins they are implemented [in this repo](https://github.com/p2-inc/keycloakify-starter/tree/p2/magic-link-extension-templates).
+{% endhint %}
+
+Sometimes certain extensions will add new functionality that requires an additional page not originally shipped with Keycloak. Keycloakify out-of-the-box will only provide customization to base pages, so if a new page is introduced by an extension, there is a good chance the page will not be styled correctly.
+
+To account for these cases, Keycloakify supports the ability to add custom pages and configure them such that style preservation is maintained.
+
+For our example on how to customize this, we will be using Phase Two's `otp-form.ftl` page. Phase Two provides email OTP codes for logging in and as a result has a special page if OTP codes are enabled in the authorization flow.
+
+{% hint style="success" %}
+You can load the extension that you are using in Keycloak container that is started when running `npx keycloakify start-keycloak`. Use [the `extensionJars` option](https://docs.keycloakify.dev/features/compiler-options/startkeycloakoptions).
+{% endhint %}
+
+{% embed url="<https://github.com/p2-inc/keycloak-magic-link/blob/main/src/main/resources/theme-resources/templates/otp-form.ftl>" %}
+You can find the original .ftl file on Phase Two's github
+{% endembed %}
+
+The first thing we want to do is to let Keycloakify know that we are adding a new page:
+
+<pre class="language-typescript" data-title="src/login/KcPageStory.tsx"><code class="lang-typescript">const kcContextExtensionPerPage: KcContextExtensionPerPage = {
+<strong>    "otp-form.ftl": { /* We will delare propreties that we need later */ }
+</strong>};
+</code></pre>
+
+Then, we want to create the page under the pages directory, our file name in this case will be `OtpForm.tsx` and paste in some starter code including the template.
+
+{% code title="src/login/pages/OtpForm.tsx" %}
+
+```tsx
+import { getKcClsx } from "keycloakify/login/lib/kcClsx";
+import type { PageProps } from "keycloakify/login/pages/PageProps";
+import type { KcContext } from "../KcContext";
+import type { I18n } from "../i18n";
+
+export default function OtpForm(props: PageProps<Extract<KcContext, { pageId: "otp-form.ftl" }>, I18n>) {
+    const { kcContext, i18n, doUseDefaultCss, Template, classes } = props;
+
+    const { kcClsx } = getKcClsx({
+        doUseDefaultCss,
+        classes
+    });
+
+    const { msg, msgStr } = i18n;
+
+    const { url } = kcContext;
+
+
+    return (
+        <Template
+            kcContext={kcContext}
+            i18n={i18n}
+            doUseDefaultCss={doUseDefaultCss}
+            classes={classes}
+            displayInfo={false}
+            headerNode={
+                // Header code goes here
+            }
+        >
+            // Page code goes here
+        </Template>
+    );
+}
+```
+
+{% endcode %}
+
+Note the `pageId` variable specified `otp-form.ftl`, that should match the exact name of the page file you are trying to implement. Additionally, we will also need to modify the `kcContext` values to account for certain custom variables, but we will get to that later. For now the last new file we need to add would be the story file for this page:
+
+{% code title="src/login/pages/OtpForm.stories.tsx" %}
+
+```tsx
+import type { Meta, StoryObj } from "@storybook/react";
+import { createKcPageStory } from "../KcPageStory";
+
+const { KcPageStory } = createKcPageStory({ pageId: "otp-form.ftl" });
+
+const meta = {
+    title: "login/otp-form.ftl",
+    component: KcPageStory
+} satisfies Meta<typeof KcPageStory>;
+
+export default meta;
+
+type Story = StoryObj<typeof meta>;
+
+export const Default: Story = {
+    render: () => <KcPageStory />
+};
+```
+
+{% endcode %}
+
+Next the easiest thing is to just paste the default code for the custom page right into the template and begin modifying it for Keycloakify. In our case, here is the code for that page at the time of writing:
+
+<details>
+
+<summary>otp-form.ftl</summary>
+
+```xml
+<#import "template.ftl" as layout>
+<@layout.registrationLayout displayInfo=true; section>
+    <#if section = "title">
+        ${msg("doLogIn")}
+
+    <#elseif section = "header">
+      <div id="kc-username" class="${properties.kcFormGroupClass!}">
+        <label id="kc-attempted-username">${auth.attemptedUsername}</label>
+        <a id="reset-login" href="${url.loginRestartFlowUrl}" aria-label="${msg("restartLoginTooltip")}">
+          <div class="kc-login-tooltip">
+            <i class="${properties.kcResetFlowIcon!}"></i>
+            <span class="kc-tooltip-text">${msg("restartLoginTooltip")}</span>
+          </div>
+        </a>
+      </div>
+
+    <#elseif section = "form">
+      <p>Enter access code</p>
+      <form id="kc-otp-login-form" class="${properties.kcFormClass!}" action="${url.loginAction}" method="post">
+        <div class="${properties.kcFormGroupClass!}">
+          <div class="${properties.kcLabelWrapperClass!}">
+            <label for="otp" class="${properties.kcLabelClass!}">${msg("loginOtpOneTime")}</label>
+          </div>
+
+          <div class="${properties.kcInputWrapperClass!}">
+            <input id="otp" name="otp" autocomplete="off" type="text" class="${properties.kcInputClass!}" autofocus aria-invalid="<#if messagesPerField.existsError('totp')>true</#if>"/>
+            <#if messagesPerField.existsError('totp')>
+              <span id="input-error-otp-code" class="${properties.kcInputErrorMessageClass!}" aria-live="polite">${kcSanitize(messagesPerField.get('totp'))?no_esc}</span>
+            </#if>
+          </div>
+        </div>
+
+        <div class="${properties.kcFormGroupClass!}">
+          <div id="kc-form-options" class="${properties.kcFormOptionsClass!}">
+            <div class="${properties.kcFormOptionsWrapperClass!}">
+            </div>
+          </div>
+
+          <div id="kc-form-buttons" class="${properties.kcFormButtonsClass!}">
+            <input class="${properties.kcButtonClass!} ${properties.kcButtonPrimaryClass!} ${properties.kcButtonLargeClass!}" name="submit" id="kc-submit" type="submit" value="${msg("doSubmit")}" />
+            <input class="${properties.kcButtonClass!} ${properties.kcButtonPrimaryClass!} ${properties.kcButtonLargeClass!}" name="resend" id="kc-resend" type="submit" value="${msg("doResend")}" />
+          </div>
+        </div>
+      </form>
+    </#if>
+</@layout.registrationLayout>
+```
+
+</details>
+
+Breaking down this code:
+
+1. The freemarker, dynamic variables/messages, and classnames will need to be converted to React.
+2. The content in the header section will go in the `headerNode` prop of `<Template>` and the form section will be the child of the `<Template>` element.
+3. `@layout.registrationLayout` has the prop `displayInfo=true` which means we need to set that prop in the `<Template>` element.
+4. The `auth` and `messagesPerField` variables and their attributes which need to be provided in kcContext.
+
+1, 2, and 3 require converting code to JSX. The converted code for the page can be found at the bottom. Here are some tips:
+
+* Any classname provided as a variable will use `kcClsx` to resolve, so `${properties.kcFormClass!}` would turn into `{kcClsx("kcFormGroupClass")}`
+* When dealing with message values, `msg` may return full blown HTML so it can be used as a child element and `msgStr` will return straight text.
+  * Example 1, `aria-label="${msg("restartLoginTooltip")}"` would turn into `aria-label={msgStr("restartLoginTooltip")}`.
+  * Example 2, `msg` variables they can inject HTML as a variable, when this happens we need to dangerously set inner html. Specifcally with a piece of code like this:
+
+    ```html
+    <#if messagesPerField.existsError('totp')>
+      <span id="input-error-otp-code" class="${properties.kcInputErrorMessageClass!}" aria-live="polite">
+        ${kcSanitize(messagesPerField.get('totp'))?no_esc}
+      </span>
+    </#if>
+    ```
+
+    would turn into this:
+
+    ```jsx
+    {
+      messagesPerField.existsError("totp") && (
+        <span
+          id="input-error-otp-code"
+          className={kcClsx("kcInputErrorMessageClass")}
+          aria-live="polite"
+          dangerouslySetInnerHTML={{ __html: messagesPerField.get("totp") }}
+        />
+      );
+    }
+    ```
+
+    Unfortunately, a lot of it is up to you to decide with the extension you might be using, but there may be some trial and error.
+
+4 on the other hand requires changing some code in other files.
+
+{% code title="src/login/KcContext.ts" %}
+
+```tsx
+/* eslint-disable @typescript-eslint/ban-types */
+import type { ExtendKcContext } from "keycloakify/login";
+import type { KcEnvName, ThemeName } from "../kc.gen";
+
+export type KcContextExtension = {
+    themeName: ThemeName;
+    properties: Record<KcEnvName, string> & {};
+};
+
+// added for otp form page, required for the types
+export type KcContextExtensionPerPage = {
+    "otp-form.ftl": {
+        auth: {
+            attemptedUsername: string;
+        };
+        url: {
+            loginRestartFlowUrl: string;
+            loginAction: string;
+        };
+    };
+};
+
+export type KcContext = ExtendKcContext<KcContextExtension, KcContextExtensionPerPage>;
+```
+
+{% endcode %}
+
+As seen above, kcContext is where we can add the type definitions for the props passed into the page. In the freemarker we also see `msg("doResend")` value which is not in the base keycloak i18 library. We would also need add this for mocking purposes.
+
+<pre class="language-typescript" data-title="src/login/i18n.ts"><code class="lang-typescript">import { i18nBuilder } from "keycloakify/login";
+import type { ThemeName } from "../kc.gen";
+
+/** @see: https://docs.keycloakify.dev/i18n */
+const { useI18n, ofTypeI18n } = i18nBuilder
+    .withThemeName&#x3C;ThemeName>()
+    .withExtraLanguages({ /* ... */ })
+    .withCustomTranslations({
+<strong>        en: {
+</strong><strong>            doResend: "Resend"
+</strong><strong>        },
+</strong><strong>        fr: {
+</strong><strong>            doResend: "Renvoyer"
+</strong><strong>        }
+</strong>    })
+    .build();
+
+type I18n = typeof ofTypeI18n;
+
+export { useI18n, type I18n };
+</code></pre>
+
+The last two things we need to do now would be adding the story to the `KcPageStory.tsx`
+
+<pre class="language-typescript" data-title="src/login/KcPageStory.tsx"><code class="lang-typescript">const kcContextExtensionPerPage: KcContextExtensionPerPage = {
+<strong>    "otp-form.ftl": {
+</strong><strong>        auth: {
+</strong><strong>            attemptedUsername: "user@user.com"
+</strong><strong>        },
+</strong><strong>        url: {
+</strong><strong>            loginRestartFlowUrl: "#",
+</strong><strong>            loginAction: "#"
+</strong><strong>        }
+</strong><strong>    }
+</strong>};
+</code></pre>
+
+and adding the page to the `KcPage.tsx`
+
+{% code title="src/login/KcPage.tsx" %}
+
+```tsx
+case "otp-form.ftl":
+    return (
+        <OtpForm
+            {...{ kcContext, i18n, classes }}
+            Template={Template}
+            doUseDefaultCss={true}
+        />
+    );
+```
+
+{% endcode %}
+
+After all that you should be done! You can view the new component in storybook and check everything looks right and then the next time you bundle and build it, it should be deployed.
+
+<details>
+
+<summary>Completed code for OtpForm.tsx:</summary>
+
+```jsx
+import { getKcClsx } from "keycloakify/login/lib/kcClsx";
+import type { PageProps } from "keycloakify/login/pages/PageProps";
+import type { KcContext } from "../KcContext";
+import type { I18n } from "../i18n";
+
+export default function OtpForm(props: PageProps<Extract<KcContext, { pageId: "otp-form.ftl" }>, I18n>) {
+    const { kcContext, i18n, doUseDefaultCss, Template, classes } = props;
+
+    const { kcClsx } = getKcClsx({
+        doUseDefaultCss,
+        classes
+    });
+
+    const { msg, msgStr } = i18n;
+
+    const { auth, url, messagesPerField } = kcContext;
+
+    return (
+        <Template
+            kcContext={kcContext}
+            i18n={i18n}
+            doUseDefaultCss={doUseDefaultCss}
+            classes={classes}
+            displayInfo={false}
+            headerNode={
+                <div id="kc-username" className={kcClsx("kcFormGroupClass")} style={{ fontSize: "16px" }}>
+                    <label id="kc-attempted-username">{auth.attemptedUsername}</label>
+                    <a id="reset-login" href={url.loginRestartFlowUrl} aria-label={msgStr("restartLoginTooltip")}>
+                        <div className="kc-login-tooltip">
+                            <i className={kcClsx("kcResetFlowIcon")}></i>
+                            <span className="kc-tooltip-text">{msg("restartLoginTooltip")}</span>
+                        </div>
+                    </a>
+                </div>
+            }
+        >
+            <p>Enter access code</p>
+            <form id="kc-otp-login-form" className={kcClsx("kcFormClass")} action={url.loginAction} method="post">
+                <div className={kcClsx("kcFormGroupClass")}>
+                    <div className={kcClsx("kcLabelWrapperClass")}>
+                        <label htmlFor="otp" className={kcClsx("kcLabelClass")}>
+                            {msg("loginOtpOneTime")}
+                        </label>
+                    </div>
+
+                    <div className={kcClsx("kcInputWrapperClass")}>
+                        <input
+                            id="otp"
+                            name="otp"
+                            autoComplete="off"
+                            type="text"
+                            className={kcClsx("kcInputClass")}
+                            autoFocus
+                            aria-invalid={messagesPerField.existsError("totp") ? "true" : undefined}
+                        />
+                        {messagesPerField.existsError("totp") && (
+                            <span
+                                id="input-error-otp-code"
+                                className={kcClsx("kcInputErrorMessageClass")}
+                                aria-live="polite"
+                                dangerouslySetInnerHTML={{ __html: messagesPerField.get("totp") }}
+                            />
+                        )}
+                    </div>
+                </div>
+
+                <div className={kcClsx("kcFormGroupClass")}>
+                    <div id="kc-form-options" className={kcClsx("kcFormOptionsClass")}>
+                        <div className={kcClsx("kcFormOptionsWrapperClass")} />
+                    </div>
+
+                    <div id="kc-form-buttons" className={kcClsx("kcFormButtonsClass")}>
+                        <input
+                            className={kcClsx("kcButtonClass", "kcButtonPrimaryClass", "kcButtonLargeClass")}
+                            name="submit"
+                            id="kc-submit"
+                            type="submit"
+                            value={msgStr("doSubmit")}
+                        />
+                        <input
+                            className={kcClsx("kcButtonClass", "kcButtonPrimaryClass", "kcButtonLargeClass")}
+                            name="resend"
+                            id="kc-resend"
+                            type="submit"
+                            value={msgStr("doResend")}
+                        />
+                    </div>
+                </div>
+            </form>
+        </Template>
+    );
+}
+```
+
+</details>
+
+
+# --project
+
+This option is for Monorepos. More specifically, monorepo system that works with a single package.json at the root of the project.
+
+You can run every subcommand of the `keycloakify` CLI tool from the root of your Keycloakify project using the `--project` (or `-p`) option. Example with the `build` command:
+
+```bash
+npx keycloakify build -p <path>
+```
+
+`<path>` would be typically something like `packages/keycloak-theme`
+
+
+# keycloakVersionTargets
+
+{% embed url="<https://youtu.be/WiiG42jn5T0>" %}
+
+By default, Keycloakify generates diffrent jar files, each one meant to be used with a given Keycloak version range.
+
+{% hint style="info" %}
+Yes, **Keycloak 26 is supported**. Use the *keycloak-theme-for-kc-all-other-version.jar*.
+{% endhint %}
+
+<figure><img src="https://2643300760-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2F4Ls5iTdfTS2xECgBfw90%2Fuploads%2Fgit-blob-fccca9bd010bd8dee1600ba1611813d25d2cf3f6%2Fimage%20(196).png?alt=media" alt="" width="375"><figcaption></figcaption></figure>
+
+However you might want to customize this behavior. If you know ahead of time what Keycloak you theme will using you can build only for this version using the `keycloakVersionTargets` build option.
+
+{% tabs %}
+{% tab title="Vite" %}
+
+<pre class="language-typescript" data-title="vite.config.ts"><code class="lang-typescript">import { defineConfig } from "vite";
+import react from "@vitejs/plugin-react";
+import { keycloakify } from "keycloakify/vite-plugin";
+
+// https://vitejs.dev/config/
+export default defineConfig({
+    plugins: [react(), keycloakify({
+        // ...
+<strong>        keycloakVersionTargets: {
+</strong><strong>            // It depends of your configuration
+</strong><strong>            // Watch the video to learn more
+</strong><strong>        }
+</strong>    })]
+});
+</code></pre>
+
+{% endtab %}
+
+{% tab title="Webpack" %}
+
+<pre class="language-json" data-title="package.json"><code class="lang-json">{
+    "keycloakify": {
+        // ...
+<strong>        "keycloakVersionTargets": {
+</strong><strong>           // It depends of your configuration, if you are implementing
+</strong><strong>           // an Multi-Page account theme or not and of the version
+</strong><strong>           // of keycloakify you are using.  
+</strong><strong>           // Since TypeScript can't help you here the best option 
+</strong><strong>           // to know what ranges are available is to clone the vite
+</strong><strong>           // starter, pin your Keycloakify specific version and 
+</strong><strong>           // set the account implementation that you have in your project.
+</strong><strong>           // Watch the video to learn more.
+</strong><strong>           // The vite starter: https://github.com/keycloakify/keycloakify-starter
+</strong>    }
+}
+</code></pre>
+
+{% endtab %}
+{% endtabs %}
+
+# themeName
+
+This is the name that will appear in the select input of the Keycloak Admin UI that let's you select the theme.
+
+<figure><img src="https://2643300760-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2F4Ls5iTdfTS2xECgBfw90%2Fuploads%2Fgit-blob-b0c93d9ca2ed22f4a885197ef657c27d6708d56c%2Fimage%20(94).png?alt=media" alt="" width="375"><figcaption><p>Here the theme name is "my-react-app"</p></figcaption></figure>
+
+By default it's `package.json["name"]`
+
+{% tabs %}
+{% tab title="Vite" %}
+
+<pre class="language-typescript" data-title="vite.config.ts"><code class="lang-typescript">import { defineConfig } from 'vite'
+import react from '@vitejs/plugin-react'
+import { keycloakify } from "keycloakify/vite-plugin";
+
+export default defineConfig({
+  plugins: [
+    react(), 
+    keycloakify({
+<strong>      themeName: "my-custom-name"
+</strong>    })
+  ],
+})
+</code></pre>
+
+{% endtab %}
+
+{% tab title="Webpack" %}
+{% code title="package.json" %}
+
+```json
+{
+    "keycloakify": {
+        "themeName": "my-custom-name"
+    }
+}
+```
+
+{% endcode %}
+{% endtab %}
+{% endtabs %}
+
+The theme name is also in `kcContext.themeName`
+
+Providing an array enables you to implement theme variant. See:
+
+{% content-ref url="../theme-variants" %}
+[theme-variants](https://docs.keycloakify.dev/features/theme-variants)
+{% endcontent-ref %}
+
+
+# startKeycloakOptions
+
+You can configure the Keycloak testing container using options in your build tool configuration.
+
+{% tabs %}
+{% tab title="Vite" %}
+{% code title="vite.config.ts" %}
+
+```typescript
+import { defineConfig } from "vite";
+import react from "@vitejs/plugin-react";
+import { keycloakify } from "keycloakify/vite-plugin";
+
+// https://vitejs.dev/config/
+export default defineConfig({
+ plugins: [
+  react(),
+  keycloakify({
+   accountThemeImplementation: "none",
+   startKeycloakOptions: {
+    // All the options are optional
+
+    /*
+    By default Keycloakify uses the official Keycloak Docker Image (quay.io/keycloak/keycloak)
+    and lets you select the tag when you run the command by asking you to 
+    select a Keycloak version.
+    Using this option you can use an alternative Docker Image like the one 
+    of Phase2 (https://quay.io/repository/phasetwo/phasetwo-keycloak) and a 
+    specific tag to use.
+    This option can also be used to pin a specific version of the official 
+    Keycloak Docker Image.
+    Example: `dockerImage: "quay.io/keycloak/keycloak:25.0.2"`
+    */
+    dockerImage: "quay.io/phasetwo/phasetwo-keycloak:25.0.2.1721752809",
+
+    /*
+    This option allows you to pass extra docker arguments to the 
+    `docker run` command.
+    */
+    dockerExtraArgs: [
+     "-e", "KC_HTTP_RELATIVE_PATH=/auth"
+    ],
+
+    /*
+    This option allows you to start Keycloak with extra arguments.
+    */
+    keycloakExtraArgs: [
+     "--spi-email-template-provider=freemarker-plus-mustache",
+     "--spi-email-template-freemarker-plus-mustache-enabled=true",
+     "--spi-theme-cache-themes=false"
+    ],
+
+    /*
+    This option allow you to load custom Keycloak extensions in the 
+    Keycloak instance running in the Docker container.
+    In this example we load two extensions:
+    - https://github.com/InseeFr/Keycloak-FranceConnect
+    - https://github.com/micedre/keycloak-mail-whitelisting
+    
+    (NOTE: ./keycloak-resources/ is just an example, you can use any directory)
+    */
+    extensionJars: [
+     "https://github.com/InseeFr/Keycloak-FranceConnect/releases/download/6.2.0/keycloak-franceconnect-6.2.0.jar",
+     "./keycloak-resources/keycloak-mail-whitelisting-2.0.jar"
+    ],
+    /*
+    By default, the Keycloak instance is loaded with a pre-configured 
+    realm so you do not have to create a realm, a client, a user, etc.  
+    However you might want to edit this base realm configuration and 
+    persist the changes that you made.  
+    I explain it in this video: https://www.youtube.com/watch?v=lMOLrdqilqE&t=991s
+    */
+    realmJsonFilePath: "./keycloak-resources/myrealm-realm.json",
+    /*
+     * By default the Keycloak instance will run on port 8080.
+     * This option allows you to change it to another port.
+     */
+    port: 8081
+   }
+  })
+ ]
+});
+```
+
+{% endcode %}
+{% endtab %}
+
+{% tab title="Webpack" %}
+{% code title="package.json" %}
+
+```json
+{
+  "keycloakify": {
+    "startKeycloakOptions": {
+      "dockerImage": "quay.io/phasetwo/phasetwo-keycloak:25.0.2.1721752809",
+      "dockerExtraArgs": [
+        "-e",
+        "KC_HTTP_RELATIVE_PATH=/auth"
+      ],
+      "keycloakExtraArgs": [
+        "--spi-email-template-provider=freemarker-plus-mustache",
+        "--spi-email-template-freemarker-plus-mustache-enabled=true",
+        "--spi-theme-cache-themes=false"
+      ],
+      "extensionJars": [
+        "https://github.com/InseeFr/Keycloak-FranceConnect/releases/download/6.2.0/keycloak-franceconnect-6.2.0.jar",
+        "./keycloak-resources/keycloak-mail-whitelisting-2.0.jar"
+      ],
+      "realmJsonFilePath": "./keycloak-resources/myrealm-realm.json",
+      "port": 8081
+    }
+  }
+}
+```
+
+{% endcode %}
+
+See the **Vite** tab for explanations of the options.
+{% endtab %}
+{% endtabs %}
+
+Configured as above, the resulting Docker command will resemble the following:
+
+<figure><img src="https://2643300760-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2F4Ls5iTdfTS2xECgBfw90%2Fuploads%2Fgit-blob-8be2d23bc62edaa77c1d8ed1e63d1c734ad6274b%2Fimage%20(185).png?alt=media" alt=""><figcaption></figcaption></figure>
+
+
+# themeVersion
+
+Configure the version that will appear in the `pom.xml` file within the jar file of your theme and in the `kcContext.themeVersion`.
+
+This is purely indicative, it's a way for you to quickly see what version of your theme is in production.
+
+<figure><img src="https://2643300760-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2F4Ls5iTdfTS2xECgBfw90%2Fuploads%2Fgit-blob-84586a98a9d1c4040d6be6939d272f65efbf2a62%2Fimage%20(102).png?alt=media" alt=""><figcaption></figcaption></figure>
+
+By default the version that is used is the one in the package.json of your project
+
+{% code title="package.json" %}
+
+```json
+{
+  "version": "1.3.4"
+}
+```
+
+{% endcode %}
+
+But you can overwrite this value using an environment variable:
+
+{% tabs %}
+{% tab title="Vite" %}
+
+<pre class="language-typescript" data-title="vite.config.ts"><code class="lang-typescript">import { defineConfig } from 'vite'
+import react from '@vitejs/plugin-react'
+import { keycloakify } from "keycloakify/vite-plugin";
+
+export default defineConfig({
+  plugins: [
+    react(), 
+    keycloakify({
+<strong>      themeVersion: "1.2.3"
+</strong>    })
+  ],
+})
+</code></pre>
+
+{% endtab %}
+
+{% tab title="Webpack" %}
+{% code title="package.json" %}
+
+```json
+{
+  "keycloakify": {
+    "themeVersion": "1.2.3"
+  }
+}
+```
+
+{% endcode %}
+{% endtab %}
+{% endtabs %}
+
+
+# accountThemeImplementation
+
+Possible values: `"none" | "Single-Page" | "Multi-Page"`
+
+This option is set automatically for you when you run the `npx keycloakify initialize-account-theme` command. **Do not edit the vallue manually!**
+
+You might wonder why this option exists when it could be possible to infer it from the source code.\
+The reason is that the available [keycloakVersionTargets](https://docs.keycloakify.dev/features/compiler-options/keycloakversiontargets) changes when you implement a Multi-Page account theme and when you don't. We want you to get a type error if the version target you specified are incorrect.
+
+{% tabs %}
+{% tab title="Vite" %}
+
+<pre class="language-typescript" data-title="vite.config.ts"><code class="lang-typescript">import { defineConfig } from 'vite'
+import react from '@vitejs/plugin-react'
+import { keycloakify } from "keycloakify/vite-plugin";
+
+export default defineConfig({
+  plugins: [
+    react(), 
+    keycloakify({
+<strong>      accountThemeImplementation: "none"
+</strong>    })
+  ],
+})
+</code></pre>
+
+{% endtab %}
+
+{% tab title="Webpack" %}
+{% code title="package.json" %}
+
+```json
+{
+  "keycloakify": {
+    "accountThemeImplementation": "none"
+  }
+}
+```
+
+{% endcode %}
+{% endtab %}
+{% endtabs %}
+
+
+# postBuild
+
+{% hint style="info" %}
+Only available in Vite projects, not in Webpack
+{% endhint %}
+
+The postBuild hook is called just before Keycloakify bundles the themes resources into the jar.
+
+This gives you the ability to implement some custom transformation.
+
+Let's say, for example, we have a big `material-icons` in our `public` directory and those icons are used in the main app but not in the Keycloak theme. We can use the postBuild hook to make sure that those icons are not bundled in the generated jar files.
+
+<pre class="language-typescript" data-title="vite.config.ts"><code class="lang-typescript">import * as fs from "fs/promises";
+import * as path from "path";
+
+export default defineConfig({
+    plugins: [
+        react(),
+        keycloakify({
+<strong>            postBuild: async (buildContext) => {
+</strong><strong>                await fs.rm(
+</strong><strong>                    path.join(
+</strong><strong>                        "theme",
+</strong><strong>                        buildContext.themeNames[0], // keycloakify-starter
+</strong><strong>                        "login", // Note: We assume we only have an login theme, if we had an account theme we would have to remove it there as well.
+</strong><strong>                        "resources",
+</strong><strong>                        "dist", // Your Vite dist/ or Webpack build/ is here.
+</strong><strong>                        "material-icons"
+</strong><strong>                    ),
+</strong><strong>                    { recursive: true }
+</strong><strong>                );
+</strong><strong>            }
+</strong>        })
+    ]
+});
+</code></pre>
+
+When this function is invoked the current working directory (process.cwd()) is the root of the directory of the files about to be archived.
+
+You can get an idea of how is structured the files inside the jar by extracting it manually:
+
+```bash
+mkdir dist_keycloak/extracted
+cd dist_keycloak/extracted
+jar -xf ../keycloak-theme-for-kc-25-and-above.jar
+```
+
+<figure><img src="https://2643300760-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2F4Ls5iTdfTS2xECgBfw90%2Fuploads%2Fgit-blob-ff87345583fd9c660011fa7c733e376f5c8d7076%2Fimage%20(96).png?alt=media" alt=""><figcaption><p>Overview of the content of the jar extracted</p></figcaption></figure>
+
+### Debugging
+
+Note that the script is executed in a different thread. console.log() won't work.\
+If you want to debug you can write your logs into a file. Example: \\
+
+{% code title="vite.config.ts" %}
+
+```typescript
+import { defineConfig } from "vite";
+import react from "@vitejs/plugin-react";
+import { keycloakify } from "keycloakify/vite-plugin";
+
+// https://vitejs.dev/config/
+export default defineConfig({
+    plugins: [
+        react(),
+        keycloakify({
+            accountThemeImplementation: "Single-Page",
+            postBuild: async (buildContext) => {
+
+                const fs = await import("fs");
+                const path = await import("path");
+
+                const logFilePath = path.join(buildContext.projectDirPath, "postBuildLog.txt");
+
+                fs.rmSync(logFilePath, { force: true });
+
+                const log= (msg: string) => {
+                    fs.appendFileSync(
+                        logFilePath,
+                        Buffer.from(msg + "\n", "utf8")
+                    );
+                };
+
+                // This will be logged into postBuildLog.txt at the root of your project.
+                log("Hello World");
+
+            }
+        })
+    ]
+});
+
+```
+
+{% endcode %}
+
+
+# XDG\_CACHE\_HOME
+
+If this environnement variable is defined this cache directory will be used instead of the default `node_modules/.cache/keycloakify` example:
+
+```bash
+export XDG_CACHE_HOME=/home/runner/.cache/yarn
+npx keycloakify build
+# /home/runner/.cache/yarn/keycloakify will contain various resources
+```
+
+This option is mainly useful if you need to be able to build your theme offline, in a context with network restriction polices.
+
+The Keycloakify caches the default Keycloak theme resources to avoid having to download them over and over.
+
+
+# kcContextExclusionsFtl
+
+[Keycloakify shifts page generation from the backend to the client](https://github.com/keycloakify/keycloakify/discussions/346#discussioncomment-5889791). To achieve this, Keycloakify creates a global `kcContext` object, which holds the necessary information for generating HTML pages.
+
+This object contains no sensitive data—only the information that the Keycloak team considers essential for rendering the various login pages. Additionally, if you have custom plugins, such as [keycloak-email-whitelisting](https://github.com/micedre/keycloak-mail-whitelisting), they may introduce additional values into this object.
+
+<figure><img src="https://2643300760-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2F4Ls5iTdfTS2xECgBfw90%2Fuploads%2Fgit-blob-23b31b9d77ee51e218649b57d6e061e9b700ff93%2Fimage%20(186).png?alt=media" alt=""><figcaption><p>A typical kcContext for the register.ftl page</p></figcaption></figure>
+
+If you'd like to prevent some values of the FreeMarker context from being forwarded to the client you can do it with the `kcContextExclusionsFtl` option.
+
+Let's say in this example that we would like to exclude:
+
+* `kcContext.keycloakifyVersion`
+* `kcContext.realm.actionTokenGeneratedByUserLifespanMinutes` in the register.ftl page
+* `kcContext.realm.idpVerifyAccountLinkActionTokenLifespanMinutes` in the register.ftl page
+
+This is how you would do it:
+
+{% tabs %}
+{% tab title="Vite" %}
+
+<pre class="language-typescript" data-title="vite.config.ts"><code class="lang-typescript">import { defineConfig } from "vite";
+import react from "@vitejs/plugin-react";
+import { keycloakify } from "keycloakify/vite-plugin";
+
+// https://vitejs.dev/config/
+export default defineConfig({
+    plugins: [
+        react(),
+        keycloakify({
+            // ...
+<strong>            kcContextExclusionsFtl: `
+</strong>
+<strong>                &#x3C;#if (
+</strong><strong>                    xKeycloakify.pageId == "register.ftl" &#x26;&#x26;
+</strong><strong>                    [
+</strong><strong>                        "actionTokenGeneratedByUserLifespanMinutes", 
+</strong><strong>                        "idpVerifyAccountLinkActionTokenLifespanMinutes"
+</strong><strong>                    ]?seq_contains(key) &#x26;&#x26;
+</strong><strong>                    areSamePath(path, ["realm"])
+</strong><strong>                )>
+</strong><strong>                    &#x3C;#continue>
+</strong><strong>                &#x3C;/#if>
+</strong>
+<strong>                &#x3C;#if xKeycloakify.keycloakifyVersion != "__hidden__">
+</strong><strong>                    &#x3C;#assign xKeycloakify = xKeycloakify + { "keycloakifyVersion": "__hidden__" }>
+</strong><strong>                &#x3C;/#if>
+</strong>
+<strong>            `
+</strong>        })
+    ]
+});
+</code></pre>
+
+{% hint style="info" %}
+You can also provide a path to a .ftl file instead of inlining the ftl code in your vite.config.ts file.
+{% endhint %}
+{% endtab %}
+
+{% tab title="Webpack" %}
+{% code title="kcContextExclusions.ftl" %}
+
+```ftl
+<#if (
+    xKeycloakify.pageId == "register.ftl" &&
+    [
+        "actionTokenGeneratedByUserLifespanMinutes", 
+        "idpVerifyAccountLinkActionTokenLifespanMinutes"
+    ]?seq_contains(key) &&
+    areSamePath(path, ["realm"])
+)>
+    <#continue>
+</#if>
+
+<#if xKeycloakify.keycloakifyVersion != "__hidden__">
+    <#assign xKeycloakify = xKeycloakify + { "keycloakifyVersion": "__hidden__" }>
+</#if>
+```
+
+{% endcode %}
+
+<pre class="language-json" data-title="package.json"><code class="lang-json">{
+    "keycloakify": {
+        // ...
+<strong>        "kcContextExclusionsFtl": "./kcContextExclusions.ftl"
+</strong>    }
+}
+</code></pre>
+
+{% endtab %}
+{% endtabs %}
+
+To test/debug your exclusion when you are running `npx keycloakify start-keycloak` you can open the file
+
+`dist_keycloak/theme/<theme_name>/login/login.ftl`
+
+Your custom exclusion are injected around line 300. You can edit this code and reload the page immediately.
+
+## Taking full control of how the KcContext is generated
+
+If you feel limited by this option you can take ownership of the FreeMarker template that generates the kcContext. Let's see how it can be done through an example.\
+\
+Some values, like for example the realm attributes (kcContext.realm.attributes) are explicitely excluded from the KcContext.
+
+In the following video we explore how to include them back.
+
+{% embed url="<https://www.youtube.com/watch?v=WdSPrpFObhg>" %}
+
+Note that in the video we includes **all** the realm attributes. We might want to expose only a specific set of values. For this we could do:
+
+{% code title="node\_modules/keycloakify/src/bin/keycloakify/generateFtl/kcContextDeclarationTemplate.ftl" %}
+
+```diff
+-    ) || (
+-        key == "attributes" &&
+-        areSamePath(path, ["realm"])
+-    ) || (
++    ) || (
++        areSamePath(path, ["realm", "attributes"]) &&
++        !["myFirstAttribute", "mySecondAttribute"]?seq_contains(key)
++    ) || (
+```
+
+{% endcode %}
+
+We could also chose to include only the realm attributes with a specific prefix, for example `theme_`:
+
+{% code title="node\_modules/keycloakify/src/bin/keycloakify/generateFtl/kcContextDeclarationTemplate.ftl" %}
+
+```diff
+-    ) || (
+-        key == "attributes" &&
+-        areSamePath(path, ["realm"])
+-    ) || (
++    ) || (
++        areSamePath(path, ["realm", "attributes"]) &&
++        !key?starts_with("theme_")
++    ) || (
+```
+
+{% endcode %}
+
+## Setting up patch-package
+
+As explained in the video:
+
+Add [patch-package](https://www.npmjs.com/package/patch-package) add dev dependency
+
+```bash
+yarn add --dev patch-package
+```
+
+Edit the FreeMarker template that generates the KcContext in:
+
+**node\_modules/keycloakify/src/bin/keycloakify/generateFtl/kcContextDeclarationTemplate.ftl**
+
+You can then create a diff for your changes by running:
+
+```bash
+npx patch-package keycloakify
+```
+
+Then add a postinstall script to your package.json:
+
+<pre class="language-json" data-title="package.json"><code class="lang-json">{
+    "name": "keycloakify-starter",
+    "scripts": {
+<strong>        "postinstall": "patch-package",
+</strong>        "dev": "vite",
+    ...
+}
+</code></pre>
+
+Commit the **patch/** directory that have been created by patch-package.
+
+
+# keycloakifyBuildDirPath
+
+This option enables you to configure in which directory the .jar files should be created.
+
+{% tabs %}
+{% tab title="Vite" %}
+By default it's **./dist\_keycloak**
+
+<pre class="language-typescript" data-title="vite.config.ts"><code class="lang-typescript">import { defineConfig } from 'vite'
+import react from '@vitejs/plugin-react'
+import { keycloakify } from "keycloakify/vite-plugin";
+
+export default defineConfig({
+  plugins: [
+    react(), 
+    keycloakify({
+<strong>      keycloakifyBuildDirPath: "./keycloak-theme-dist"
+</strong>    })
+  ],
+})
+</code></pre>
+
+{% endtab %}
+
+{% tab title="Webpack" %}
+By default it's **./build\_keycloak**
+
+{% code title="package.json" %}
+
+```json
+{
+    "keycloakify": {
+        "keycloakifyBuildDirPath": "./keycloak-theme-jars"
+    }
+}
+```
+
+{% endcode %}
+{% endtab %}
+{% endtabs %}
+
+
+# groupId
+
+Configure the `groupId` that will appear in the `pom.xml` file.
+
+<figure><img src="https://2643300760-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2F4Ls5iTdfTS2xECgBfw90%2Fuploads%2Fgit-blob-6603cc6ca04dce49be41806ce7bd067675566141%2Fimage%20(108).png?alt=media" alt=""><figcaption></figcaption></figure>
+
+{% tabs %}
+{% tab title="Vite" %}
+
+<pre class="language-typescript" data-title="vite.config.ts"><code class="lang-typescript">import { defineConfig } from 'vite'
+import react from '@vitejs/plugin-react'
+import { keycloakify } from "keycloakify/vite-plugin";
+
+export default defineConfig({
+  plugins: [
+    react(), 
+    keycloakify({
+<strong>      groupId: "dev.keycloakify.demo-app-advanced.keycloak"
+</strong>    })
+  ],
+})
+</code></pre>
+
+{% endtab %}
+
+{% tab title="Webpack" %}
+{% code title="package.json" %}
+
+```json
+{
+    "keycloakify": {
+        "groupId": "dev.keycloakify.demo-app-advanced.keycloak"
+    }
+}
+```
+
+{% endcode %}
+{% endtab %}
+{% endtabs %}
+
+By default it's the package.json homepage field at reverse with .keycloak at the end.
+
+You can overwrite this using an environment variable:
+
+```bash
+KEYCLOAKIFY_GROUP_ID="com.your-company.your-project.keycloak" npx keycloakify
+```
+
+
+# artifactId
+
+{% hint style="info" %}
+NOTE: For changing the name of the jar file that is generated by Keycloakify see this option instead: [keycloakVersionTargets](https://docs.keycloakify.dev/features/compiler-options/keycloakversiontargets).
+{% endhint %}
+
+Configure the `artifactId` that will appear in the `pom.xml` file.
+
+<figure><img src="https://2643300760-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2F4Ls5iTdfTS2xECgBfw90%2Fuploads%2Fgit-blob-03f27fa4795fe4499c9cd082849c928f01b6bdb1%2Fimage%20(109).png?alt=media" alt=""><figcaption></figcaption></figure>
+
+{% tabs %}
+{% tab title="Vite" %}
+
+<pre class="language-typescript" data-title="vite.config.ts"><code class="lang-typescript">import { defineConfig } from 'vite'
+import react from '@vitejs/plugin-react'
+import { keycloakify } from "keycloakify/vite-plugin";
+
+export default defineConfig({
+  plugins: [
+    react(), 
+    keycloakify({
+<strong>      artifactId: "keycloakify-advanced-starter-keycloak-theme"
+</strong>    })
+  ],
+})
+</code></pre>
+
+{% endtab %}
+
+{% tab title="Webpack" %}
+{% code title="package.json" %}
+
+```json
+{
+    "keycloakify": {
+        "artifactId": "keycloakify-advanced-starter-keycloak-theme"
+    }
+}
+```
+
+{% endcode %}
+{% endtab %}
+{% endtabs %}
+
+By default it's `<themeName>-keycloak-theme` See, [`keycloak.themeName`](#keyclokify.themename) option.
+
+You can overwrite this using an environment variable:
+
+```bash
+KEYCLOAKIFY_ARTIFACT_ID="my-cool-theme" npx keycloakify build
+```
+
+
+# Registration Page
+
+<details>
+
+<summary>Angular</summary>
+
+The register page can be customized in Angular. As soon as you run `npx keycloakify eject-page` and pick the register page all its sub components are also ejected into your project:\
+![](https://2643300760-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2F4Ls5iTdfTS2xECgBfw90%2Fuploads%2Fgit-blob-25208c7ecbdcabb95505a31bfed0c5aa6b935215%2Fimage%20\(30\).png?alt=media)
+
+</details>
+
+In this video, I explain how to customize the register page of Keycloak, both at the Keycloak configuration level and at the theme level.
+
+{% embed url="<https://youtu.be/lMOLrdqilqE>" %}
+
+## Timestamps
+
+* [01:28](https://www.youtube.com/watch?v=lMOLrdqilqE\&t=88s) - User Profile Attributes Configuration
+* [11:05](https://www.youtube.com/watch?v=lMOLrdqilqE\&t=665s) - Password Policies Configuration
+* [13:27](https://www.youtube.com/watch?v=lMOLrdqilqE\&t=807s) - Email Domain Accept List
+* [15:10](https://www.youtube.com/watch?v=lMOLrdqilqE\&t=910s) - Adding Custom User Attributes to the JWT of the ID and Access Token
+* [16:31](https://www.youtube.com/watch?v=lMOLrdqilqE\&t=991s) - Exporting the Realm Configuration
+* [19:14](https://www.youtube.com/watch?v=lMOLrdqilqE\&t=1154s) - Creating Storybook Stories for the Register Page
+* [23:53](https://www.youtube.com/watch?v=lMOLrdqilqE\&t=1433s) Customizing the Register Page with CSS
+* [26:35](https://www.youtube.com/watch?v=lMOLrdqilqE\&t=1595s) - Customizing the Register Page with React
+
+# Terms and Conditions Page
+
+The Tems and Condition feature of Keycloak enables you to make new users of your service consent to the terms of use of your services upon regisering.
+
+{% embed url="<https://storybook.keycloakify.dev/?path=/story/login-terms-ftl--long-message>" %}
+Preview of the default terms.ftl page
+{% endembed %}
+
+<figure><img src="https://2643300760-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2F4Ls5iTdfTS2xECgBfw90%2Fuploads%2Fgit-blob-16904d86876f3161acd243a34c434a332538ada6%2Fimage%20(85).png?alt=media" alt=""><figcaption><p>Preview of the the term and condition page.</p></figcaption></figure>
+
+## Enabling the feature
+
+If you want you show your terms and condition page when they create an account you have to enable it in your realm configuration.
+
+This is how to do it in the Keycloak Admin Console:
+
+* Navigat to your realm
+* Left bar item: Authentication
+* Tab: Required Actions
+* Terms and condition: Enabled & Set as Default Action
+
+## Defining your Terms and Conditions text
+
+The way of defining your terms of services in Keycloak is to provide a message bundle for your realm that overrides the `termsText` key for the different languages that you have enabled.
+
+In recent Keycloak's versions this can be acheived directly via the Keycloak Admin Console as shown in this video:
+
+{% embed url="<https://youtu.be/naW2TxwJZsA>" %}
+
+{% hint style="info" %}
+If you want to use an iframe as text [read this](https://github.com/keycloakify/keycloakify/discussions/687).
+{% endhint %}
+
+## Customizing how the terms are rendered
+
+If you want to customize the page that display the terms and condition you have to eject the [terms.ftl](https://storybook.keycloakify.dev/?path=/story/login-terms-ftl--default) page.
+
+```bash
+npx keycloakify eject-page
+# Select login -> terms.ftl
+```
+
+This will create `src/login/Terms.tsx` in your project.
+
+You also probably want to add a story for the Term page:
+
+```bash
+npx keycloakify add-story
+# Select login -> terms.ftl
+```
+
+In `src/login/Terms.tsx`, note that `msg("termsText")` returns a `JSX.Element`. It's because the `msg()` function renders the string message as HTML text. You can't work directly with that.
+
+If you want to apply transformation to the text, you should use `msgStr("termsText")` instead. This returns the original string as defined in your realm configuration.
+
+
+# Differences Between Login Themes and Other Types of Themes
+
+Here are the types of themes that exist:
+
+* **Login Theme**: The UI for login and registration pages, displayed to users when they attempt to sign in or sign up.
+* **Account Theme**: The account management interface, where users can update their email, change their password, and manage other account settings.
+* **Email Theme**: Templates for automated emails (e.g., email confirmations or password reset notifications).
+* **Admin Theme**: The Admin Console interface used by administrators to configure Keycloak.
+
+Most of this documentation focuses on the Login Theme.
+
+If you choose to implement a **Multi-Page Account Theme**, note that it works exactly like the Login Theme.
+
+Here are the features that apply to all theme types:
+
+* ✅ [Testing your theme inside Keycloak](https://docs.keycloakify.dev/testing-your-theme/inside-of-keycloak)
+* ✅ [Theme Variants](https://docs.keycloakify.dev/features/theme-variants)
+* ✅ [Environment Variables](https://docs.keycloakify.dev/features/compiler-options/environmentvariables) (except email theme)
+
+Below are the documentation pages that apply **only** to the Login Theme **and** the Multi-Page Account Theme but are handled differently in the other types of themes:
+
+* ❌ [Testing your theme outside of Keycloak](https://docs.keycloakify.dev/testing-your-theme/outside-of-keycloak) (using `npx keycloakify add-story` and Storybook)
+* ❌ [`npx keycloakify eject-page`](https://docs.keycloakify.dev/common-use-case-examples/using-a-component-library)
+* ❌ [Internationalization](https://docs.keycloakify.dev/features/i18n) — the other theme types handle translations differently.
+
+In this section, you’ll find all the information you need to create the other types of themes with Keycloakify:
+
+{% content-ref url="account-theme" %}
+[account-theme](https://docs.keycloakify.dev/theme-types/account-theme)
+{% endcontent-ref %}
+
+{% content-ref url="email-theme" %}
+[email-theme](https://docs.keycloakify.dev/theme-types/email-theme)
+{% endcontent-ref %}
+
+{% content-ref url="admin-theme" %}
+[admin-theme](https://docs.keycloakify.dev/theme-types/admin-theme)
+{% endcontent-ref %}
+
+# Account Theme
+
+## Deciding if you need an account theme or not
+
+The first question you want to ask yourself is: "Do I really need an account theme?"
+
+If you're looking to create an account theme just to allow your users to change their password, update account information such as email, phone number, favorite pets, etc., or delete their account, then you do **not** need an account theme.
+
+There are pages in the login theme for those functions. You only need to add a button to redirect your user to the appropriate page in your main app. Here is how to do it with oidc-spa: [Documentation](https://docs.oidc-spa.dev/documentation/user-account-management).
+
+An added benefit of not having an account theme is that you will reuse the exact same form that you created for the registration page in the `login-update-profile.ftl` page.
+
+Consider creating an account theme only if you need to provide advanced account management features to your users, such as connection logs, management of active sessions, file uploads, etc.
+
+Here is a video that explains this in detail:
+
+{% embed url="<https://youtu.be/PiTUPdpmueA>" %}
+
+## Choosing an account theme type
+
+Keycloakify provide you two ways to create your own account theme.
+
+You can chose between two implementation of the account theme:
+
+### Single Page
+
+<figure><img src="https://2643300760-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2F4Ls5iTdfTS2xECgBfw90%2Fuploads%2Fgit-blob-ca81d28fa91086903625b6eeef5f1979548a37b0%2Fimage%20(49).png?alt=media" alt=""><figcaption><p>Screenshot of the Single Page Account theme</p></figcaption></figure>
+
+The Single Page theme also refered as account v3 is this the default theme that comes with Keycloak 25. [But thanks to Keycloakify's compatiblity layer it works with older Keycloak versions down to 19](https://youtu.be/HWiWHpF5mY0).
+
+#### Pros
+
+* Get's all the latest features.
+* The base code is maintained by the Keycloak team and automatically integrated into Keycloakify. You're using the real thing, not a fork.
+* If you're a React developper you'll feel right at home. It's uing i18n-next and react-router
+
+#### Cons
+
+* Opting for this option will add a lot of dependencies to your project (i18n-next, react-router-dom, patenrnfly and more).
+* CSS level customization beyond [overidding the Paternfly CSS variables](https://www.patternfly.org/components/button/html/#css-variables) is not practical, you'll have to customize at the React component level.
+* No Storybook integration.
+* Only available with React (Angular and Svelte not supported)
+
+To get started with the Single-Page account theme:
+
+{% content-ref url="account-theme/single-page" %}
+[single-page](https://docs.keycloakify.dev/theme-types/account-theme/single-page)
+{% endcontent-ref %}
+
+### Multi Page
+
+<figure><img src="https://2643300760-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2F4Ls5iTdfTS2xECgBfw90%2Fuploads%2Fgit-blob-d642d0209e8c85172c546c474e3967438a08b021%2Fimage%20(50).png?alt=media" alt=""><figcaption></figcaption></figure>
+
+This is a fork of the Account v1 maintained by the Keycloakify team.
+
+#### Pros
+
+* Works exactly the same as the login theme, nothing new to learn.
+* Available in React, Angular and Svelte
+* Storybook support
+* CSS level customization support like in the login theme.
+* As it's maintained by us, we can guarenty a certain level of stability in future version of Keycloak.
+* Compatible with all Keycloak version.
+* Does not add any dependency to your project.
+
+#### Cons
+
+* Don't come with all the feature out of the box yet. You'll have to use the [Keycloak Account REST API if you want to implement the missing features](https://docs.keycloakify.dev/theme-types/account-theme/multi-page).
+* It relies on Java code maintained by us, this code uses Keycloak internal API, you have to trust us to keep maintaining it.
+* The default look is a bit dated.
+
+To get started with the Multi-Page account theme:
+
+{% content-ref url="account-theme/multi-page" %}
+[multi-page](https://docs.keycloakify.dev/theme-types/account-theme/multi-page)
+{% endcontent-ref %}
+
+# Single-Page
+
+To initialize a Single-Page account theme run the following command:
+
+```bash
+npx keycloakify initialize-account-theme # Select 'Sigle-Page'
+```
+
+{% embed url="<https://youtu.be/UKU6zGCH-CY>" %}
+Video Tutorial
+{% endembed %}
+
+📌 Timestamps:\
+[00:00](https://www.youtube.com/watch?v=UKU6zGCH-CY\&t=0s) – Intro\
+[03:33](https://www.youtube.com/watch?v=UKU6zGCH-CY\&t=213s) – Changing the logo\
+[07:46](https://www.youtube.com/watch?v=UKU6zGCH-CY\&t=466s) – Using a custom button component\
+[14:13](https://www.youtube.com/watch?v=UKU6zGCH-CY\&t=853s) – Update process\
+[16:55](https://www.youtube.com/watch?v=UKU6zGCH-CY\&t=1015s) – Translations (i18n)\
+[18:23](https://www.youtube.com/watch?v=UKU6zGCH-CY\&t=1103s) – Enabling your account theme in the Keycloak Admin Console
+
+## Initialize the Account
+
+After initialization, there will be many files that are part of the theme but are currently git-ignored. To customize a file and ensure it's tracked, run the own command included at the top of the file. For instance, at the top of `KcPage.tsx` you'll see `npx keycloakify own --path "account/KcPage.tsx"`.
+
+When a new person clones the project and runs the installation script, their project will populate with all the necessary files while continuing to be git-ignored.
+
+## Running the Server
+
+To preview the application use `npx keycloakify start-keycloak`. This will run your application within a Keycloak container. Open the local realm version and select the Account theme link. Once that is open, you'll be able to work like you normally would on any React application with instant refresh and reload.
+
+**Note**
+
+If you have a Login theme where you are forcing a specific template to render, make sure to comment that out. Otherwise, you will never be able to log in.
+
+## Updating the Logo
+
+1. Own the `Header.tsx` (`src/account/root/Header.tsx`) file.
+2. Add your own logo to the `Assets` (`src/account/assets`) folder.
+3. Update the logo import to your new logo. `import logoSvgUrl from "../assets/logo.svg";` becomes `import logoSvgUrl from "../assets/your-logo.svg";` or whatever.
+4. Run the server with `npx keycloakify start-keycloak`.
+
+## Updating a Custom Component
+
+Updating a component that comes from PatternFly, means that we need to create a new component in some fashion. In order to make it possible to edit the components that are used from PatternFly, those are re-exported from the core library of PatternFly.
+
+1. In the project structure, locate `/src/shared/@patternfly/.../index.tsx` of whatever component or item you want to edit. Run the own command for that specific file.
+2. For the sake of this example, let's create a "CustomButton" component from the `@patternfly/react-core` package. Create a new file `CustomButton.tsx` at the same level as the index file (e.g., `/src/shared/@patternfly/react-core/CustomButton.tsx`).
+3. Inside that component, you can create it however you want. For example, you could do
+
+```tsx
+import { type ButtonProps, Button } from "@patternfly/react-core";
+import { css } from "@patternfly/react-styles";
+import styles from "./CustomButton.module.css"; // Import the CSS module
+
+export function CustomButton(props: ButtonProps) {
+  const { children, variant = "primary", className: className_props, ...rest } = props;
+
+  const className = css(styles.button, styles[variant], className_props);
+
+  if (variant === "link") {
+    return (
+      <Button {...rest} className={className} variant="link">
+        {children}
+      </Button>
+    );
+  }
+
+  return (
+    <button {...rest} className={className}>
+      {children}
+    </button>
+  );
+}
+```
+
+4. You'll notice that it imports a CSS module file. Create `CustomButton.module.css` right next to it and style however you want.
+5. In the `index.tsx` file then export the component. This will then override the button exported by Patternfly and apply it to every page that imports that button.
+
+```tsx
+export * from "@patternfly/react-core";
+export { CustomButton as Button } from "./CustomButton";
+```
+
+## Update Instances
+
+The core module for the account is `@keycloakify/keycloak-account-ui`. You can always update the minor versions without issues (simply update them and run the installation script).
+
+## Translations
+
+Each file has instructions at the top of it. Generally, just create an override file and not own the base translation file. This will help to make sure only those changes take effect.
+
+Read more in the [email theme](https://docs.keycloakify.dev/theme-types/email-theme).
+
+# Multi-Page
+
+## Initializing the Multi-Page Account Theme
+
+<figure><img src="https://2643300760-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2F4Ls5iTdfTS2xECgBfw90%2Fuploads%2Fgit-blob-8c9f7fdd07ff5d30a28e00b0fd58399f5c6a7bb0%2Fimage%20(45).png?alt=media" alt=""><figcaption><p>The Multi-Page Account theme before customization</p></figcaption></figure>
+
+You've made your mind and opted for the Multi-Page Account theme?\
+Great, let's start by initializing you theme:
+
+```bash
+npx keycloakify initialize-account-theme
+```
+
+When asked, select "Multi-Page".
+
+This command will create the nessesary boilerplate for you.
+
+Beyond that there isn't much thing you need to be aware of, things works exactly as in the login theme. You'll be able to use the keycloakify`add-story` and `eject-page` CLI command just select account when asked.
+
+## Internationalization and translation (i18n)
+
+The i18n system of the Multi-Page Account theme is similar in every way to the one of the login theme, you just need to replace **/login/** by **/account/** everywhere.
+
+## Using the REST API
+
+Even if you're using the Multi-Page theme you can still consume the REST API the Single-Page Account is build on top of. So, if some information you need are missing from the `kcContext` you can fetch them dynamically.
+
+{% embed url="<https://youtu.be/FrFr-hqyjb4>" %}
+
+{% tabs %}
+{% tab title="React" %}
+{% embed url="<https://github.com/keycloakify/keycloakify-starter/tree/account_api_poc>" %}
+Branch of the starter template modified to call the Account REST API
+{% endembed %}
+{% endtab %}
+
+{% tab title="Angualr" %}
+{% embed url="<https://github.com/keycloakify/keycloakify-starter-angular-vite/tree/account_api_poc>" %}
+Branch of the starter template modified to call the Account REST API
+{% endembed %}
+{% endtab %}
+
+{% tab title="Svelte" %}
+TODO
+{% endtab %}
+{% endtabs %}
+
+You can find the code for the Account v3 theme [here](https://github.com/keycloak/keycloak/tree/main/js/apps/account-ui/src/api). This will help you infer all the available endpoints. You can also enable the Account v3 theme in your Keycloak and use the network tab to see the available endpoints.
+
+# Email Theme
+
+There are two ways you can create a Keycloak Email theme with Keycloakify
+
+## Using keycloakify-emails
+
+[keycloakify-email](https://github.com/timofei-iatsenko/keycloakify-emails) is a Keycloakify plugin that enable to create an email theme using [jsx-email](https://jsx.email/) or any other email templating solution.
+
+{% embed url="<https://github.com/timofei-iatsenko/keycloakify-emails>" %}
+
+*This plugin will evenutally be integrated to Keycloakify core.*
+
+{% hint style="warning" %}
+This approach only works in Vite project. So not with Webpack/Create-React-App
+{% endhint %}
+
+{% tabs %}
+{% tab title="React" %}
+For react, there is a working example in the /example directory of keycloakify-emails that uses jsx-email\
+[https://github.com/timofei-iatsenko/keycloakify-emails](https://github.com/timofei-iatsenko/keycloakify-emails/tree/main/example)
+{% endtab %}
+
+{% tab title="Svelte" %}
+{% embed url="<https://github.com/keycloakify/svelte-email>" %}
+{% endtab %}
+
+{% tab title="Angular" %}
+{% embed url="<https://github.com/keycloakify/angular-email>" %}
+{% endtab %}
+{% endtabs %}
+
+## Using FreeMarker
+
+`npx keycloakify initialize-email-theme`, select the `native` option.
+
+Running this command will initialize a native email theme in the `src/email` directory.
+
+{% embed url="<https://youtu.be/IZ9LSLfWxqo>" %}
+
+### Using assets in native email theme
+
+To use images you can put them into **src/email/resources/** example:
+
+<figure><img src="https://2643300760-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2F4Ls5iTdfTS2xECgBfw90%2Fuploads%2Fgit-blob-7b9fabdc7c11b13bd944d53571bc9c5e51ef3769%2Fimage%20(1).png?alt=media" alt=""><figcaption><p>kc-logo.png in src/email/resources</p></figcaption></figure>
+
+And then you can import them using the FreeMarker varialble `url.resourcesUrl`. Example:
+
+<figure><img src="https://2643300760-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2F4Ls5iTdfTS2xECgBfw90%2Fuploads%2Fgit-blob-8007df6fcea7de695978609e4469e7d508853f76%2Fimage%20(1)%20(1).png?alt=media" alt=""><figcaption><p>Using kc-logo.png</p></figcaption></figure>
+
+# Admin Theme
+
+To initialize an Admin theme run the following command:
+
+```bash
+npx keycloakify initialize-admin-theme
+```
+
+The [Single-Page Account](https://docs.keycloakify.dev/theme-types/account-theme/single-page) and Admin themes work the same way!\
+You can refer to this video, which covers everything you need to know.\
+The specific timestamp where the Admin theme is addressed is [19:55](https://www.youtube.com/watch?v=UKU6zGCH-CY\&t=1195s).
+
+{% embed url="<https://youtu.be/UKU6zGCH-CY>" %}
+Video Tutorial
+{% endembed %}
+
+📌 Timestamps:\
+[00:00](https://www.youtube.com/watch?v=UKU6zGCH-CY\&t=0s) – Intro\
+[03:33](https://www.youtube.com/watch?v=UKU6zGCH-CY\&t=213s) – Changing the logo\
+[07:46](https://www.youtube.com/watch?v=UKU6zGCH-CY\&t=466s) – Using a custom button component\
+[14:13](https://www.youtube.com/watch?v=UKU6zGCH-CY\&t=853s) – Update process\
+[16:55](https://www.youtube.com/watch?v=UKU6zGCH-CY\&t=1015s) – Translations (i18n)\
+[18:23](https://www.youtube.com/watch?v=UKU6zGCH-CY\&t=1103s) – Enabling your account theme in the Keycloak Admin Console\
+[19:55](https://www.youtube.com/watch?v=UKU6zGCH-CY\&t=1195s) – Admin Theme
+

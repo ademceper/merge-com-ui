@@ -4,17 +4,21 @@
     "type": "module",
     "private": true,
     "scripts": {
-        "dev": "vite",
-        "build": "tsc && vite build",
-        "build-keycloak-theme": "npm run build && keycloakify build",
+        "dev": "keycloakify start-keycloak",
+        "dev:vite": "vite",
+        "build": "tsc && vite build && keycloakify build",
+        "lint": "eslint .",
+        "check-types": "tsc --noEmit",
         "format": "prettier . --write"
     },
     "dependencies": {
+        "@merge/ui": "workspace:*",
         "keycloakify": "^11.14.2",
         "react": "^18.2.0",
         "react-dom": "^18.2.0"
     },
     "devDependencies": {
+        "@tailwindcss/postcss": "^4.1.17",
         "@eslint/js": "^9.15.0",
         "@types/react": "^18.2.43",
         "@types/react-dom": "^18.2.17",
