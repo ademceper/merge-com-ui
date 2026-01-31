@@ -1,6 +1,6 @@
 import { createRoot } from "react-dom/client";
 import { StrictMode } from "react";
-import "@merge/ui/globals.css";
+import "@merge/ui/globals.css"
 import { Providers } from "@merge/ui/components/providers";
 import { KcPage } from "./kc.gen";
 
