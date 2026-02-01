@@ -2,19 +2,19 @@ import type { PageProps } from "keycloakify/account/pages/PageProps";
 import type { KcContext } from "../KcContext";
 import type { I18n } from "../i18n";
 import AccountLayout from "../components/AccountLayout";
-import { Separator } from "@merge/ui/components/separator";
-import { Card, CardContent } from "@merge/ui/components/card";
-import { Button } from "@merge/ui/components/button";
-import { Alert, AlertDescription } from "@merge/ui/components/alert";
-import { Badge } from "@merge/ui/components/badge";
-import { Link as LinkIcon, CheckCircle, XCircle } from "@phosphor-icons/react";
+import { Separator } from "@/components/ui/separator";
+import { Card, CardContent } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Badge } from "@/components/ui/badge";
+import { Link as LinkIcon, CheckCircle2, XCircle } from "lucide-react";
 
 export default function FederatedIdentity(props: PageProps<Extract<KcContext, { pageId: "federatedIdentity.ftl" }>, I18n>) {
     const { kcContext, i18n } = props;
 
     const { url, federatedIdentity, message } = kcContext;
 
-    const { msg } = i18n;
+    const { msg, msgStr } = i18n;
 
     return (
         <AccountLayout kcContext={kcContext} i18n={i18n} currentPage="federatedIdentity.ftl">
@@ -50,7 +50,7 @@ export default function FederatedIdentity(props: PageProps<Extract<KcContext, { 
                                                     {providerDisplayName}
                                                     {isConnected ? (
                                                         <Badge variant="default" className="bg-green-600 text-xs">
-                                                            <CheckCircle className="h-3 w-3 mr-1" />
+                                                            <CheckCircle2 className="h-3 w-3 mr-1" />
                                                             Connected
                                                         </Badge>
                                                     ) : (

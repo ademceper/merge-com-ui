@@ -2,7 +2,7 @@ import { i18nBuilder } from "keycloakify/account";
 import type { ThemeName } from "../kc.gen";
 
 /** @see: https://docs.keycloakify.dev/features/i18n */
-const i18nBuilderResult = i18nBuilder
+const { useI18n, ofTypeI18n } = i18nBuilder
     .withThemeName<ThemeName>()
     .withCustomTranslations({
         en: {
@@ -152,8 +152,7 @@ const i18nBuilderResult = i18nBuilder
     })
     .build();
 
-type I18n = (typeof i18nBuilderResult)["ofTypeI18n"];
+type I18n = typeof ofTypeI18n;
 
-export const { useI18n } = i18nBuilderResult;
-export type { I18n };
+export { useI18n, type I18n };
 

@@ -544,7 +544,7 @@
                 "favourite_pet": ["cat"],
                 "bio": ["Hello I'm Test User and I do not exist."],
                 "phone_number": ["1111111111"],
-                "locale": ["en"],
+                "locale": ["tr"],
                 "favorite_media": ["movies", "series"]
             },
             "createdTimestamp": 1716183898408,
@@ -1626,16 +1626,94 @@
         "strictTransportSecurity": "max-age=31536000; includeSubDomains"
     },
     "smtpServer": {},
-    "loginTheme": "auth",
-    "accountTheme": "",
-    "adminTheme": "",
+    "loginTheme": "keycloakify",
+    "accountTheme": "keycloakify",
+    "adminTheme": "keycloakify",
     "emailTheme": "",
-    "eventsEnabled": false,
+    "eventsEnabled": true,
     "eventsListeners": ["keycloakify-logging", "jboss-logging"],
-    "enabledEventTypes": [],
-    "adminEventsEnabled": false,
-    "adminEventsDetailsEnabled": false,
-    "identityProviders": [],
+    "enabledEventTypes": [
+        "LOGIN",
+        "LOGIN_ERROR",
+        "LOGOUT",
+        "REGISTER",
+        "REGISTER_ERROR",
+        "UPDATE_PASSWORD",
+        "UPDATE_PASSWORD_ERROR",
+        "UPDATE_PROFILE",
+        "UPDATE_PROFILE_ERROR",
+        "UPDATE_EMAIL",
+        "UPDATE_EMAIL_ERROR",
+        "UPDATE_TOTP",
+        "UPDATE_TOTP_ERROR",
+        "REMOVE_TOTP",
+        "REMOVE_TOTP_ERROR",
+        "SEND_RESET_PASSWORD",
+        "SEND_RESET_PASSWORD_ERROR",
+        "SEND_VERIFY_EMAIL",
+        "SEND_VERIFY_EMAIL_ERROR"
+    ],
+    "adminEventsEnabled": true,
+    "adminEventsDetailsEnabled": true,
+    "identityProviders": [
+        {
+            "addReadTokenRoleOnCreate": false,
+            "alias": "google",
+            "authenticateByDefault": false,
+            "displayName": "Google",
+            "enabled": true,
+            "firstBrokerLoginFlowAlias": "first broker login",
+            "linkOnly": false,
+            "providerId": "google",
+            "storeToken": false,
+            "trustEmail": true,
+            "updateProfileFirstLoginMode": "on",
+            "config": {
+                "clientId": "YOUR_GOOGLE_CLIENT_ID",
+                "clientSecret": "YOUR_GOOGLE_CLIENT_SECRET",
+                "defaultScope": "openid profile email"
+            }
+        },
+        {
+            "addReadTokenRoleOnCreate": false,
+            "alias": "apple",
+            "authenticateByDefault": false,
+            "displayName": "Apple",
+            "enabled": true,
+            "firstBrokerLoginFlowAlias": "first broker login",
+            "linkOnly": false,
+            "providerId": "oidc",
+            "storeToken": false,
+            "trustEmail": true,
+            "updateProfileFirstLoginMode": "on",
+            "config": {
+                "authorizationUrl": "https://appleid.apple.com/auth/authorize",
+                "clientId": "YOUR_APPLE_SERVICE_ID",
+                "clientSecret": "YOUR_APPLE_CLIENT_SECRET",
+                "defaultScope": "openid name email",
+                "issuer": "https://appleid.apple.com",
+                "tokenUrl": "https://appleid.apple.com/auth/token"
+            }
+        },
+        {
+            "addReadTokenRoleOnCreate": false,
+            "alias": "facebook",
+            "authenticateByDefault": false,
+            "displayName": "Facebook",
+            "enabled": true,
+            "firstBrokerLoginFlowAlias": "first broker login",
+            "linkOnly": false,
+            "providerId": "facebook",
+            "storeToken": false,
+            "trustEmail": true,
+            "updateProfileFirstLoginMode": "on",
+            "config": {
+                "clientId": "YOUR_FACEBOOK_APP_ID",
+                "clientSecret": "YOUR_FACEBOOK_APP_SECRET",
+                "defaultScope": "email public_profile"
+            }
+        }
+    ],
     "identityProviderMappers": [],
     "components": {
         "org.keycloak.services.clientregistration.policy.ClientRegistrationPolicy": [
@@ -1807,8 +1885,8 @@
         ]
     },
     "internationalizationEnabled": true,
-    "supportedLocales": ["en", "fr", "es"],
-    "defaultLocale": "en",
+    "supportedLocales": ["tr", "en"],
+    "defaultLocale": "tr",
     "authenticationFlows": [
         {
             "id": "0e1abbbe-40e3-4754-9fe2-8a7d1f82354e",

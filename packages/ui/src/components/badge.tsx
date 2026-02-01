@@ -31,13 +31,15 @@ export function Badge({
 }: React.ComponentProps<"span"> &
   VariantProps<typeof badgeVariants> & { asChild?: boolean }) {
   const Comp = asChild ? Slot.Root : "span"
+  // react-i18next tip genişlemesi ile uyumluluk
+  const slotProps = { ...props, children: props.children as React.ReactNode }
 
   return (
     <Comp
       data-slot="badge"
       data-variant={variant}
       className={cn(badgeVariants({ variant }), className)}
-      {...props}
+      {...slotProps}
     />
   )
 }

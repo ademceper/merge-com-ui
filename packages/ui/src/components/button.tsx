@@ -45,6 +45,8 @@ export function Button({
     asChild?: boolean
   }) {
   const Comp = asChild ? Slot.Root : "button"
+  // react-i18next tip genişlemesi ile uyumluluk
+  const slotProps = { ...props, children: props.children as React.ReactNode }
 
   return (
     <Comp
@@ -52,7 +54,7 @@ export function Button({
       data-variant={variant}
       data-size={size}
       className={cn(buttonVariants({ variant, size, className }))}
-      {...props}
+      {...slotProps}
     />
   )
 }

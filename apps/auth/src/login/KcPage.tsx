@@ -7,6 +7,9 @@ import Template from "keycloakify/login/Template";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import LoginResetPassword from "./pages/LoginResetPassword";
+import LoginUpdatePassword from "./pages/LoginUpdatePassword";
+import LoginUpdateProfile from "./pages/LoginUpdateProfile";
+import DeleteAccountConfirm from "./pages/DeleteAccountConfirm";
 
 const UserProfileFormFields = lazy(
     () => import("keycloakify/login/UserProfileFormFields")
@@ -38,11 +41,9 @@ export default function KcPage(props: { kcContext: KcContext }) {
                             <Register
                                 kcContext={kcContext}
                                 i18n={i18n}
-                                classes={classes}
+                                classes={{}}
                                 Template={Template}
                                 doUseDefaultCss={false}
-                                UserProfileFormFields={UserProfileFormFields as never}
-                                doMakeUserConfirmPassword={doMakeUserConfirmPassword}
                             />
                         );
                     case "login-reset-password.ftl":
@@ -50,7 +51,37 @@ export default function KcPage(props: { kcContext: KcContext }) {
                             <LoginResetPassword
                                 kcContext={kcContext}
                                 i18n={i18n}
-                                classes={classes}
+                                classes={{}}
+                                Template={Template}
+                                doUseDefaultCss={false}
+                            />
+                        );
+                    case "login-update-password.ftl":
+                        return (
+                            <LoginUpdatePassword
+                                kcContext={kcContext}
+                                i18n={i18n}
+                                classes={{}}
+                                Template={Template}
+                                doUseDefaultCss={false}
+                            />
+                        );
+                    case "login-update-profile.ftl":
+                        return (
+                            <LoginUpdateProfile
+                                kcContext={kcContext}
+                                i18n={i18n}
+                                classes={{}}
+                                Template={Template}
+                                doUseDefaultCss={false}
+                            />
+                        );
+                    case "delete-account-confirm.ftl":
+                        return (
+                            <DeleteAccountConfirm
+                                kcContext={kcContext}
+                                i18n={i18n}
+                                classes={{}}
                                 Template={Template}
                                 doUseDefaultCss={false}
                             />
@@ -73,23 +104,4 @@ export default function KcPage(props: { kcContext: KcContext }) {
     );
 }
 
-// Shadcn/UI form stilleri (Register UserProfileFormFields için)
-const classes = {
-    kcFormClass: "space-y-4",
-    kcFormGroupClass: "space-y-2",
-    kcLabelWrapperClass: "",
-    kcLabelClass: "text-sm font-medium leading-none",
-    kcInputWrapperClass: "w-full",
-    kcInputClass:
-        "flex h-9 w-full rounded-lg border border-input bg-transparent px-3 py-1 text-sm shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50",
-    kcInputErrorMessageClass: "text-sm text-destructive",
-    kcFormOptionsClass: "",
-    kcFormOptionsWrapperClass: "",
-    kcFormButtonsClass: "",
-    kcButtonClass:
-        "inline-flex h-9 items-center justify-center rounded-lg border border-transparent px-4 py-2 text-sm font-medium shadow transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50",
-    kcButtonPrimaryClass:
-        "bg-primary text-primary-foreground hover:bg-primary/90",
-    kcButtonBlockClass: "w-full",
-    kcButtonLargeClass: "h-10 px-4",
-} satisfies { [key in ClassKey]?: string };
+const classes = {} satisfies { [key in ClassKey]?: string };

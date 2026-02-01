@@ -16,14 +16,20 @@ const { useI18n, ofTypeI18n } = i18nBuilder
             password: "Password",
             rememberMe: "Remember me",
             doLogIn: "Sign in",
+            doContinue: "Continue",
             noAccount: "Don't have an account?",
             doRegister: "Create account",
             doForgotPassword: "Forgot password?",
+            orContinueWith: "Or continue with Google, Apple, or Facebook",
+            "identity-provider-login-label": "Or",
+            continueWithProvider: "Continue with {{provider}}",
+            loginPlaceholder: "Enter phone number or email address",
             
             // Register page
             registerTitle: "Create an account",
             registerAccountDescription: "Create a new account to get started",
             backToLogin: "Already have an account?",
+            signUpWithSocialHint: "You can also sign in with Google, Apple, or Facebook on the login page.",
             email: "Email",
             firstName: "First name",
             lastName: "Last name",
@@ -33,6 +39,7 @@ const { useI18n, ofTypeI18n } = i18nBuilder
             emailForgotDescription: "Enter your email and we'll send you instructions to reset your password",
             backToLoginPage: "Back to login",
             doSubmit: "Submit",
+            doCancel: "Cancel",
             
             // Update Password page
             updatePasswordTitle: "Update your password",
@@ -45,10 +52,19 @@ const { useI18n, ofTypeI18n } = i18nBuilder
             loginProfileTitle: "Update your profile",
             loginProfileDescription: "Please update your profile information",
             loginProfileRequiredDescription: "You need to update your profile information",
+
+            // Delete account confirm
+            deleteAccountConfirm: "Delete account confirmation",
+            irreversibleAction: "This action is irreversible.",
+            deletingImplies: "Deleting your account will:",
+            loggingOutImmediately: "Log you out immediately",
+            errasingData: "Erase all your data",
+            finalDeletionConfirmation: "Are you sure you want to delete your account?",
+            doConfirmDelete: "Yes, delete my account",
         },
         tr: {
             // Login page
-            loginAccountTitle: "Hesabınıza giriş yapın",
+            loginAccountTitle: "Telefon numaranız veya e-posta adresiniz nedir?",
             loginAccountDescription: "Hesabınıza erişmek için bilgilerinizi girin",
             orSeparator: "Veya",
             username: "Kullanıcı adı veya e-posta",
@@ -56,14 +72,20 @@ const { useI18n, ofTypeI18n } = i18nBuilder
             password: "Şifre",
             rememberMe: "Beni hatırla",
             doLogIn: "Giriş yap",
+            doContinue: "Devam",
             noAccount: "Hesabınız yok mu?",
             doRegister: "Hesap oluştur",
             doForgotPassword: "Şifrenizi mi unuttunuz?",
+            orContinueWith: "Google, Apple veya Facebook ile devam edin",
+            "identity-provider-login-label": "Veya",
+            continueWithProvider: "{{provider}} ile devam edin",
+            loginPlaceholder: "Telefon numarası veya e-posta adresi girin",
             
             // Register page
             registerTitle: "Hesap oluştur",
             registerAccountDescription: "Başlamak için yeni bir hesap oluşturun",
             backToLogin: "Zaten hesabınız var mı?",
+            signUpWithSocialHint: "Giriş sayfasından Google, Apple veya Facebook ile de giriş yapabilirsiniz.",
             email: "E-posta",
             firstName: "Ad",
             lastName: "Soyad",
@@ -73,6 +95,7 @@ const { useI18n, ofTypeI18n } = i18nBuilder
             emailForgotDescription: "E-posta adresinizi girin, size şifre sıfırlama talimatları gönderelim",
             backToLoginPage: "Giriş sayfasına dön",
             doSubmit: "Gönder",
+            doCancel: "İptal",
             
             // Update Password page
             updatePasswordTitle: "Şifrenizi güncelleyin",
@@ -85,6 +108,15 @@ const { useI18n, ofTypeI18n } = i18nBuilder
             loginProfileTitle: "Profilinizi güncelleyin",
             loginProfileDescription: "Lütfen profil bilgilerinizi güncelleyin",
             loginProfileRequiredDescription: "Profil bilgilerinizi güncellemeniz gerekiyor",
+
+            // Delete account confirm
+            deleteAccountConfirm: "Hesabı silme onayı",
+            irreversibleAction: "Bu işlem geri alınamaz.",
+            deletingImplies: "Hesabınızı silmek şunları yapacaktır:",
+            loggingOutImmediately: "Hemen oturumunuzu kapatacak",
+            errasingData: "Tüm verilerinizi silecek",
+            finalDeletionConfirmation: "Hesabınızı silmek istediğinizden emin misiniz?",
+            doConfirmDelete: "Evet, hesabımı sil",
         }
     })
     .build();
