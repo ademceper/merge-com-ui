@@ -4,6 +4,7 @@
     "type": "module",
     "private": true,
     "scripts": {
+        "postinstall": "keycloakify sync-extensions",
         "dev": "keycloakify start-keycloak",
         "dev:vite": "vite",
         "build": "tsc && vite build && keycloakify build",
@@ -15,7 +16,8 @@
         "@merge/ui": "workspace:*",
         "keycloakify": "^11.14.2",
         "react": "^18.2.0",
-        "react-dom": "^18.2.0"
+        "react-dom": "^18.2.0",
+        "@keycloakify/keycloak-admin-ui": "~260502.0.0"
     },
     "devDependencies": {
         "@tailwindcss/postcss": "^4.1.17",
