@@ -7,7 +7,7 @@ import { AuthLink } from "../components/AuthLink";
 import { SocialLoginButtons, getFallbackSocialProviders } from "../components/SocialLoginButtons";
 import { Input } from "@merge/ui/components/input";
 import { Alert, AlertDescription } from "@merge/ui/components/alert";
-import { cn } from "@/lib/utils";
+import { cn } from "@merge/ui/lib/utils";
 
 export default function Login(props: PageProps<Extract<KcContext, { pageId: "login.ftl" }>, I18n>) {
     const { kcContext, i18n } = props;

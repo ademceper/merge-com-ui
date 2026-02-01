@@ -5,7 +5,7 @@ import type { I18n } from "../i18n";
 import AuthLayout from "../components/AuthLayout";
 import { Input } from "@merge/ui/components/input";
 import { Alert, AlertDescription } from "@merge/ui/components/alert";
-import { cn } from "@/lib/utils";
+import { cn } from "@merge/ui/lib/utils";
 
 const inputClassName =
     "h-12 rounded-lg bg-gray-100 border-0 text-black placeholder:text-gray-500 focus-visible:ring-2 focus-visible:ring-black/20";

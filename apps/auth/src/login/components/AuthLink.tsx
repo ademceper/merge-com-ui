@@ -1,5 +1,5 @@
 import React from "react";
-import { cn } from "@/lib/utils";
+import { cn } from "@merge/ui/lib/utils";
 
 /** Link001 tarzı: alt çizgi animasyonu + hover’da ok ikonu. Login sayfalarındaki linkler için. */
 export function AuthLink({

@@ -8,8 +8,8 @@ import { Input } from "@merge/ui/components/input";
 import { Button } from "@merge/ui/components/button";
 import { Label } from "@merge/ui/components/label";
 import { Alert, AlertDescription } from "@merge/ui/components/alert";
-import { cn } from "@/lib/utils";
-import { QrCode } from "lucide-react";
+import { cn } from "@merge/ui/lib/utils";
+import { QrCodeIcon } from "@phosphor-icons/react";
 
 export default function Totp(props: PageProps<Extract<KcContext, { pageId: "totp.ftl" }>, I18n>) {
     const { kcContext, i18n } = props;
@@ -74,7 +74,7 @@ export default function Totp(props: PageProps<Extract<KcContext, { pageId: "totp
                                         {totp.manualUrl && (
                                             <Button variant="outline" asChild>
                                                 <a href={totp.manualUrl}>
-                                                    <QrCode className="h-4 w-4 mr-2" />
+                                                    <QrCodeIcon className="h-4 w-4 mr-2" />
                                                     {msg("unableToScan")}
                                                 </a>
                                             </Button>
@@ -90,7 +90,7 @@ export default function Totp(props: PageProps<Extract<KcContext, { pageId: "totp
                                         {totp.qrUrl && (
                                             <Button variant="outline" asChild className="w-full">
                                                 <a href={totp.qrUrl}>
-                                                    <QrCode className="h-4 w-4 mr-2" />
+                                                    <QrCodeIcon className="h-4 w-4 mr-2" />
                                                     {msg("scanBarcode")}
                                                 </a>
                                             </Button>

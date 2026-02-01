@@ -8,7 +8,7 @@ import { Input } from "@merge/ui/components/input";
 import { Button } from "@merge/ui/components/button";
 import { Label } from "@merge/ui/components/label";
 import { Alert, AlertDescription } from "@merge/ui/components/alert";
-import { cn } from "@/lib/utils";
+import { cn } from "@merge/ui/lib/utils";
 
 export default function Password(props: PageProps<Extract<KcContext, { pageId: "password.ftl" }>, I18n>) {
     const { kcContext, i18n } = props;

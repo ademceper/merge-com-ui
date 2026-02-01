@@ -6,7 +6,7 @@ import { Separator } from "@merge/ui/components/separator";
 import { Card, CardContent } from "@merge/ui/components/card";
 import { Alert, AlertDescription } from "@merge/ui/components/alert";
 import { Badge } from "@merge/ui/components/badge";
-import { LogIn, LogOut, ShieldCheck, Key, UserCog, Globe } from "lucide-react";
+import { SignInIcon, SignOutIcon, ShieldCheckIcon, KeyIcon, UserGearIcon, GlobeIcon } from "@phosphor-icons/react";
 
 export default function Log(props: PageProps<Extract<KcContext, { pageId: "log.ftl" }>, I18n>) {
     const { kcContext, i18n } = props;
@@ -20,11 +20,11 @@ export default function Log(props: PageProps<Extract<KcContext, { pageId: "log.f
     };
 
     const getEventIcon = (eventType: string) => {
-        if (eventType.includes("LOGIN")) return <LogIn className="h-4 w-4" />;
-        if (eventType.includes("LOGOUT")) return <LogOut className="h-4 w-4" />;
-        if (eventType.includes("PASSWORD")) return <Key className="h-4 w-4" />;
-        if (eventType.includes("UPDATE")) return <UserCog className="h-4 w-4" />;
-        return <ShieldCheck className="h-4 w-4" />;
+        if (eventType.includes("LOGIN")) return <SignInIcon className="h-4 w-4" />;
+        if (eventType.includes("LOGOUT")) return <SignOutIcon className="h-4 w-4" />;
+        if (eventType.includes("PASSWORD")) return <KeyIcon className="h-4 w-4" />;
+        if (eventType.includes("UPDATE")) return <UserGearIcon className="h-4 w-4" />;
+        return <ShieldCheckIcon className="h-4 w-4" />;
     };
 
     const getEventVariant = (eventType: string): "default" | "secondary" | "destructive" | "outline" => {
@@ -66,7 +66,7 @@ export default function Log(props: PageProps<Extract<KcContext, { pageId: "log.f
                                             {msg("client")}
                                         </th>
                                         <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">
-                                            <Globe className="inline h-3 w-3 mr-1" />
+                                            <GlobeIcon className="inline h-3 w-3 mr-1" />
                                             IP Address
                                         </th>
                                         <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">

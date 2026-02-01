@@ -7,7 +7,7 @@ import { Card, CardContent } from "@merge/ui/components/card";
 import { Button } from "@merge/ui/components/button";
 import { Alert, AlertDescription } from "@merge/ui/components/alert";
 import { Badge } from "@merge/ui/components/badge";
-import { AppWindow, ExternalLink } from "lucide-react";
+import { AppWindowIcon, ArrowSquareOutIcon } from "@phosphor-icons/react";
 
 export default function Applications(props: PageProps<Extract<KcContext, { pageId: "applications.ftl" }>, I18n>) {
     const { kcContext, i18n } = props;
@@ -39,7 +39,7 @@ export default function Applications(props: PageProps<Extract<KcContext, { pageI
                                 <div className="flex items-start justify-between mb-3">
                                     <div className="flex items-center gap-3">
                                         <div className="p-2 rounded bg-primary/10">
-                                            <AppWindow className="h-5 w-5 text-primary" />
+                                            <AppWindowIcon className="h-5 w-5 text-primary" />
                                         </div>
                                         <div>
                                             <div className="text-base font-medium">{app.clientName || app.clientId}</div>
@@ -61,7 +61,7 @@ export default function Applications(props: PageProps<Extract<KcContext, { pageI
                                 <div className="space-y-3">
                                     {app.effectiveUrl && (
                                         <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                                            <ExternalLink className="h-4 w-4" />
+                                            <ArrowSquareOutIcon className="h-4 w-4" />
                                             <a 
                                                 href={app.effectiveUrl} 
                                                 target="_blank" 

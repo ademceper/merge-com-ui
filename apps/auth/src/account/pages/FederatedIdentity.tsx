@@ -7,7 +7,7 @@ import { Card, CardContent } from "@merge/ui/components/card";
 import { Button } from "@merge/ui/components/button";
 import { Alert, AlertDescription } from "@merge/ui/components/alert";
 import { Badge } from "@merge/ui/components/badge";
-import { Link as LinkIcon, CheckCircle2, XCircle } from "lucide-react";
+import { LinkIcon, CheckCircleIcon, XCircleIcon } from "@phosphor-icons/react";
 
 export default function FederatedIdentity(props: PageProps<Extract<KcContext, { pageId: "federatedIdentity.ftl" }>, I18n>) {
     const { kcContext, i18n } = props;
@@ -50,12 +50,12 @@ export default function FederatedIdentity(props: PageProps<Extract<KcContext, { 
                                                     {providerDisplayName}
                                                     {isConnected ? (
                                                         <Badge variant="default" className="bg-green-600 text-xs">
-                                                            <CheckCircle2 className="h-3 w-3 mr-1" />
+                                                            <CheckCircleIcon className="h-3 w-3 mr-1" />
                                                             Connected
                                                         </Badge>
                                                     ) : (
                                                         <Badge variant="secondary" className="text-xs">
-                                                            <XCircle className="h-3 w-3 mr-1" />
+                                                            <XCircleIcon className="h-3 w-3 mr-1" />
                                                             {msg("notLinked")}
                                                         </Badge>
                                                     )}

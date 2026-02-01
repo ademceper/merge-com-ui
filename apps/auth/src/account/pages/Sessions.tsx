@@ -7,7 +7,7 @@ import { Card, CardContent } from "@merge/ui/components/card";
 import { Button } from "@merge/ui/components/button";
 import { Alert, AlertDescription } from "@merge/ui/components/alert";
 import { Badge } from "@merge/ui/components/badge";
-import { Monitor, Smartphone as SmartphoneIcon, Globe } from "lucide-react";
+import { MonitorIcon, DeviceMobileIcon, GlobeIcon } from "@phosphor-icons/react";
 
 export default function Sessions(props: PageProps<Extract<KcContext, { pageId: "sessions.ftl" }>, I18n>) {
     const { kcContext, i18n } = props;
@@ -52,9 +52,9 @@ export default function Sessions(props: PageProps<Extract<KcContext, { pageId: "
                                     <div className="flex items-center gap-3">
                                         <div className="p-2 rounded bg-primary/10">
                                             {session.current ? (
-                                                <Monitor className="h-5 w-5 text-primary" />
+                                                <MonitorIcon className="h-5 w-5 text-primary" />
                                             ) : (
-                                                <SmartphoneIcon className="h-5 w-5 text-primary" />
+                                                <DeviceMobileIcon className="h-5 w-5 text-primary" />
                                             )}
                                         </div>
                                         <div>
@@ -67,7 +67,7 @@ export default function Sessions(props: PageProps<Extract<KcContext, { pageId: "
                                                 )}
                                             </div>
                                             <div className="flex items-center gap-1 mt-1 text-sm text-muted-foreground">
-                                                <Globe className="h-3 w-3" />
+                                                <GlobeIcon className="h-3 w-3" />
                                                 {session.ipAddress}
                                             </div>
                                         </div>

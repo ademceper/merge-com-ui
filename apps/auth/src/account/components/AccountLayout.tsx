@@ -3,7 +3,7 @@ import type { KcContext } from "../KcContext";
 import type { I18n } from "../i18n";
 import { Button, buttonVariants } from "@merge/ui/components/button";
 import { Separator } from "@merge/ui/components/separator";
-import { cn } from "@/lib/utils";
+import { cn } from "@merge/ui/lib/utils";
 
 interface AccountLayoutProps {
     kcContext: KcContext;

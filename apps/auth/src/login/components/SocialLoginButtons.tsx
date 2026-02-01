@@ -1,4 +1,4 @@
-import { cn } from "@/lib/utils";
+import { cn } from "@merge/ui/lib/utils";
 
 export type SocialProvider = {
     loginUrl: string;

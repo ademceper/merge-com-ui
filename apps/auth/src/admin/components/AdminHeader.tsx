@@ -1,6 +1,6 @@
 import { useTranslation } from "react-i18next";
 import { Link, useHref } from "react-router-dom";
-import { ChevronDown, HelpCircle, LogOut, User, Server, Trash2 } from "lucide-react";
+import { CaretDownIcon, QuestionIcon, SignOutIcon, UserIcon, ServerIcon, TrashIcon } from "@phosphor-icons/react";
 import { Button } from "@merge/ui/components/button";
 import {
     DropdownMenu,
@@ -61,9 +61,9 @@ export function AdminHeader() {
                     <DropdownMenu>
                         <DropdownMenuTrigger asChild>
                             <Button variant="ghost" size="sm" className="gap-2">
-                                <User className="size-4" />
+                                <UserIcon className="size-4" />
                                 <span className="hidden sm:inline">{t("manageAccount")}</span>
-                                <ChevronDown className="size-4" />
+                                <CaretDownIcon className="size-4" />
                             </Button>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end" className="w-56">
@@ -71,24 +71,24 @@ export function AdminHeader() {
                                 id="manage-account"
                                 onClick={() => keycloak.accountManagement()}
                             >
-                                <User className="size-4 mr-2" />
+                                <UserIcon className="size-4 mr-2" />
                                 {t("manageAccount")}
                             </DropdownMenuItem>
                             <DropdownMenuItem asChild>
                                 <Link to={toDashboard({ realm })}>
-                                    <Server className="size-4 mr-2" />
+                                    <ServerIcon className="size-4 mr-2" />
                                     {t("realmInfo")}
                                 </Link>
                             </DropdownMenuItem>
                             {isMasterRealm && isManager && (
                                 <DropdownMenuItem onClick={() => toggleClearCaches()}>
-                                    <Trash2 className="size-4 mr-2" />
+                                    <TrashIcon className="size-4 mr-2" />
                                     {t("clearCachesTitle")}
                                 </DropdownMenuItem>
                             )}
                             <DropdownMenuSeparator />
                             <DropdownMenuItem onClick={() => toggleHelp()}>
-                                <HelpCircle className="size-4 mr-2" />
+                                <QuestionIcon className="size-4 mr-2" />
                                 {enabled ? t("helpEnabled") : t("helpDisabled")}
                             </DropdownMenuItem>
                             <DropdownMenuSeparator />
@@ -96,7 +96,7 @@ export function AdminHeader() {
                                 onClick={() => keycloak.logout()}
                                 className="text-destructive focus:text-destructive"
                             >
-                                <LogOut className="size-4 mr-2" />
+                                <SignOutIcon className="size-4 mr-2" />
                                 {t("signOut")}
                             </DropdownMenuItem>
                         </DropdownMenuContent>
