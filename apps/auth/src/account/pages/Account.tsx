@@ -4,7 +4,6 @@ import type { KcContext } from "../KcContext";
 import type { I18n } from "../i18n";
 import { Separator } from "@merge/ui/components/separator";
 import { Input } from "@merge/ui/components/input";
-import { Label } from "@merge/ui/components/label";
 import { Alert, AlertDescription } from "@merge/ui/components/alert";
 import { cn } from "@merge/ui/lib/utils";
 
@@ -16,6 +15,9 @@ export default function Account(props: PageProps<Extract<KcContext, { pageId: "a
     const { msg, msgStr } = i18n;
 
     const [isSubmitting, setIsSubmitting] = useState(false);
+
+    const placeholderStr = (value: unknown, fallback: string) =>
+        typeof value === "string" ? value : fallback;
 
     return (
         <div className="space-y-6">
@@ -45,33 +47,25 @@ export default function Account(props: PageProps<Extract<KcContext, { pageId: "a
                 <input type="hidden" name="stateChecker" value={kcContext.stateChecker} />
 
                 <div className="space-y-2">
-                    <Label htmlFor="username">{msg("username")}</Label>
                     <Input
                         type="text"
                         id="username"
                         name="username"
                         disabled
                         defaultValue={account.username ?? ""}
+                        placeholder={placeholderStr(msgStr("username") ?? msg("username"), "Kullanıcı Adı")}
                         className="h-12 rounded-lg bg-gray-100 border-0 text-black placeholder:text-gray-500 focus-visible:ring-2 focus-visible:ring-black/20"
                     />
-                    <p className="text-sm text-muted-foreground">
-                        This is your username. It cannot be changed.
-                    </p>
                 </div>
 
                 <div className="space-y-2">
-                    <Label htmlFor="email">
-                        {msg("email")}
-                        {kcContext.realm.registrationEmailAsUsername && (
-                            <span className="text-destructive ml-1">*</span>
-                        )}
-                    </Label>
                     <Input
                         type="email"
                         id="email"
                         name="email"
                         autoComplete="email"
                         defaultValue={account.email ?? ""}
+                        placeholder={placeholderStr(msgStr("email") ?? msg("email"), "E-posta") + (kcContext.realm.registrationEmailAsUsername ? " *" : "")}
                         aria-invalid={messagesPerField.existsError("email")}
                         className={cn(
                             "h-12 rounded-lg bg-gray-100 border-0 text-black placeholder:text-gray-500 focus-visible:ring-2 focus-visible:ring-black/20",
@@ -82,23 +76,16 @@ export default function Account(props: PageProps<Extract<KcContext, { pageId: "a
                         <p className="text-sm text-destructive">
                             {messagesPerField.get("email")}
                         </p>
-                    ) : (
-                        <p className="text-sm text-muted-foreground">
-                            This is the email address associated with your account.
-                        </p>
-                    )}
+                    ) : null}
                 </div>
 
                 <div className="space-y-2">
-                    <Label htmlFor="firstName">
-                        {msg("firstName")}
-                        <span className="text-destructive ml-1">*</span>
-                    </Label>
                     <Input
                         type="text"
                         id="firstName"
                         name="firstName"
                         defaultValue={account.firstName ?? ""}
+                        placeholder={placeholderStr(msgStr("firstName") ?? msg("firstName"), "Ad") + " *"}
                         aria-invalid={messagesPerField.existsError("firstName")}
                         className={cn(
                             "h-12 rounded-lg bg-gray-100 border-0 text-black placeholder:text-gray-500 focus-visible:ring-2 focus-visible:ring-black/20",
@@ -113,15 +100,12 @@ export default function Account(props: PageProps<Extract<KcContext, { pageId: "a
                 </div>
 
                 <div className="space-y-2">
-                    <Label htmlFor="lastName">
-                        {msg("lastName")}
-                        <span className="text-destructive ml-1">*</span>
-                    </Label>
                     <Input
                         type="text"
                         id="lastName"
                         name="lastName"
                         defaultValue={account.lastName ?? ""}
+                        placeholder={placeholderStr(msgStr("lastName") ?? msg("lastName"), "Soyad") + " *"}
                         aria-invalid={messagesPerField.existsError("lastName")}
                         className={cn(
                             "h-12 rounded-lg bg-gray-100 border-0 text-black placeholder:text-gray-500 focus-visible:ring-2 focus-visible:ring-black/20",

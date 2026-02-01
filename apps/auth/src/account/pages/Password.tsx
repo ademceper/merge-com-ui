@@ -4,7 +4,6 @@ import type { KcContext } from "../KcContext";
 import type { I18n } from "../i18n";
 import { Separator } from "@merge/ui/components/separator";
 import { Input } from "@merge/ui/components/input";
-import { Label } from "@merge/ui/components/label";
 import { Alert, AlertDescription } from "@merge/ui/components/alert";
 import { cn } from "@merge/ui/lib/utils";
 
@@ -16,6 +15,9 @@ export default function Password(props: PageProps<Extract<KcContext, { pageId: "
     const { msg, msgStr } = i18n;
 
     const [isSubmitting, setIsSubmitting] = useState(false);
+
+    const placeholderStr = (value: unknown, fallback: string) =>
+        typeof value === "string" ? value : fallback;
 
     return (
         <div className="space-y-6">
@@ -47,15 +49,12 @@ export default function Password(props: PageProps<Extract<KcContext, { pageId: "
 
                 {/* Current Password */}
                 <div className="space-y-2">
-                    <Label htmlFor="password">
-                        {msg("currentPassword") || msgStr("password")}
-                        <span className="text-destructive ml-1">*</span>
-                    </Label>
                     <Input
                         type="password"
                         id="password"
                         name="password"
                         autoComplete="current-password"
+                        placeholder={placeholderStr(msgStr("currentPassword"), "Mevcut Şifre") + " *"}
                         aria-invalid={messagesPerField.existsError("password")}
                         className={cn(
                             "h-12 rounded-lg bg-gray-100 border-0 text-black placeholder:text-gray-500 focus-visible:ring-2 focus-visible:ring-black/20",
@@ -71,15 +70,12 @@ export default function Password(props: PageProps<Extract<KcContext, { pageId: "
 
                 {/* New Password */}
                 <div className="space-y-2">
-                    <Label htmlFor="password-new">
-                        {msg("newPassword") || msgStr("passwordNew")}
-                        <span className="text-destructive ml-1">*</span>
-                    </Label>
                     <Input
                         type="password"
                         id="password-new"
                         name="password-new"
                         autoComplete="new-password"
+                        placeholder={placeholderStr(msgStr("newPassword"), "Yeni Şifre") + " *"}
                         aria-invalid={messagesPerField.existsError("password-new")}
                         className={cn(
                             "h-12 rounded-lg bg-gray-100 border-0 text-black placeholder:text-gray-500 focus-visible:ring-2 focus-visible:ring-black/20",
@@ -95,15 +91,12 @@ export default function Password(props: PageProps<Extract<KcContext, { pageId: "
 
                 {/* Confirm New Password */}
                 <div className="space-y-2">
-                    <Label htmlFor="password-confirm">
-                        {msg("passwordConfirm") || msgStr("passwordConfirm")}
-                        <span className="text-destructive ml-1">*</span>
-                    </Label>
                     <Input
                         type="password"
                         id="password-confirm"
                         name="password-confirm"
                         autoComplete="new-password"
+                        placeholder={placeholderStr(msgStr("passwordConfirm"), "Şifre Onayı") + " *"}
                         aria-invalid={messagesPerField.existsError("password-confirm")}
                         className={cn(
                             "h-12 rounded-lg bg-gray-100 border-0 text-black placeholder:text-gray-500 focus-visible:ring-2 focus-visible:ring-black/20",

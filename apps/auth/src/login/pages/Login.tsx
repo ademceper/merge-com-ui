@@ -3,7 +3,7 @@ import type { PageProps } from "keycloakify/login/pages/PageProps";
 import type { KcContext } from "../KcContext";
 import type { I18n } from "../i18n";
 import AuthLayout from "../components/AuthLayout";
-import { AuthLink } from "../components/AuthLink";
+import { Link } from "@merge/ui/components/link";
 import { SocialLoginButtons, getFallbackSocialProviders } from "../components/SocialLoginButtons";
 import { Input } from "@merge/ui/components/input";
 import { Alert, AlertDescription } from "@merge/ui/components/alert";
@@ -90,13 +90,13 @@ export default function Login(props: PageProps<Extract<KcContext, { pageId: "log
                             )}
                             {realm.resetPasswordAllowed && (
                                 <div className="flex justify-end mt-1">
-                                    <AuthLink
+                                    <Link
                                         tabIndex={6}
                                         href={url.loginResetCredentialsUrl}
                                         className="text-sm text-gray-600 hover:text-black"
                                     >
                                         {msg("doForgotPassword")}
-                                    </AuthLink>
+                                    </Link>
                                 </div>
                             )}
                         </div>
@@ -132,9 +132,9 @@ export default function Login(props: PageProps<Extract<KcContext, { pageId: "log
                 {realm.password && realm.registrationAllowed && !registrationDisabled && (
                     <p className="text-center text-sm text-gray-500 pt-2">
                         {msg("noAccount")}{" "}
-                        <AuthLink tabIndex={8} href={url.registrationUrl} className="text-black font-medium">
-                            {msg("doRegister")}
-                        </AuthLink>
+<Link tabIndex={8} href={url.registrationUrl} className="text-black font-medium">
+                                {msg("doRegister")}
+                        </Link>
                     </p>
                 )}
             </div>

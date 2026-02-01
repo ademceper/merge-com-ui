@@ -3,7 +3,7 @@ import type { PageProps } from "keycloakify/login/pages/PageProps";
 import type { KcContext } from "../KcContext";
 import type { I18n } from "../i18n";
 import AuthLayout from "../components/AuthLayout";
-import { AuthLink } from "../components/AuthLink";
+import { Link } from "@merge/ui/components/link";
 import { Input } from "@merge/ui/components/input";
 import { Alert, AlertDescription } from "@merge/ui/components/alert";
 import { cn } from "@merge/ui/lib/utils";
@@ -84,9 +84,9 @@ export default function LoginResetPassword(
                 </form>
 
                 <p className="text-center text-sm text-gray-500 pt-2">
-                    <AuthLink href={url.loginUrl} className="text-black font-medium">
+                    <Link href={url.loginUrl} className="text-black font-medium">
                         {msg("backToLoginPage")}
-                    </AuthLink>
+                    </Link>
                 </p>
             </div>
         </AuthLayout>

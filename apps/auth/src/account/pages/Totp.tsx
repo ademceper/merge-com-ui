@@ -5,7 +5,6 @@ import type { I18n } from "../i18n";
 import { Separator } from "@merge/ui/components/separator";
 import { Input } from "@merge/ui/components/input";
 import { Button } from "@merge/ui/components/button";
-import { Label } from "@merge/ui/components/label";
 import { Alert, AlertDescription } from "@merge/ui/components/alert";
 import { cn } from "@merge/ui/lib/utils";
 import { QrCodeIcon } from "@phosphor-icons/react";
@@ -81,7 +80,7 @@ export default function Totp(props: PageProps<Extract<KcContext, { pageId: "totp
                             )}
                             {mode === "manual" && (
                                 <div className="space-y-2">
-                                    <Label>{msg("scanBarcode")}</Label>
+                                    <div className="text-sm text-muted-foreground">{msg("scanBarcode")}</div>
                                     <div className="p-4 bg-muted rounded-lg font-mono text-center text-lg tracking-wider">
                                         {totp.totpSecretEncoded}
                                     </div>
@@ -116,16 +115,13 @@ export default function Totp(props: PageProps<Extract<KcContext, { pageId: "totp
                             <input type="hidden" name="stateChecker" value={kcContext.stateChecker} />
 
                             <div className="space-y-2">
-                                <Label htmlFor="totp">
-                                    {msg("oneTimeCode")}
-                                    <span className="text-destructive ml-1">*</span>
-                                </Label>
                                 <Input
                                     type="text"
                                     id="totp"
                                     name="totp"
                                     autoComplete="off"
                                     autoFocus
+                                    placeholder={msg("oneTimeCode") + " *"}
                                     aria-invalid={messagesPerField.existsError("totp")}
                                     className={cn(
                                         "h-12 rounded-lg bg-gray-100 border-0 text-black placeholder:text-gray-500 focus-visible:ring-2 focus-visible:ring-black/20 text-center text-2xl tracking-widest font-mono",

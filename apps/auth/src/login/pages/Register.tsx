@@ -2,7 +2,7 @@ import type { PageProps } from "keycloakify/login/pages/PageProps";
 import type { KcContext } from "../KcContext";
 import type { I18n } from "../i18n";
 import AuthLayout from "../components/AuthLayout";
-import { AuthLink } from "../components/AuthLink";
+import { Link } from "@merge/ui/components/link";
 import { SocialLoginButtons, getFallbackSocialProviders } from "../components/SocialLoginButtons";
 import { Input } from "@merge/ui/components/input";
 import { Alert, AlertDescription } from "@merge/ui/components/alert";
@@ -199,9 +199,9 @@ export default function Register(props: PageProps<Extract<KcContext, { pageId: "
 
                 <p className="text-center text-sm text-gray-500 pt-2">
                     {msg("backToLogin")}{" "}
-                    <AuthLink href={url.loginUrl} className="text-black font-medium">
+                    <Link href={url.loginUrl} className="text-black font-medium">
                         {msg("doLogIn")}
-                    </AuthLink>
+                    </Link>
                 </p>
             </div>
         </AuthLayout>
