@@ -1,0 +1,12 @@
+/**
+ * WARNING: Before modifying this file, run the following command:
+ * 
+ * $ npx keycloakify own --path "admin/realm-settings/partial-export.css"
+ * 
+ * This file is provided by @keycloakify/keycloak-admin-ui version 260502.0.0.
+ * It was copied into your repository by the postinstall script: `keycloakify sync-extensions`.
+ */
+
+.keycloak__realm-settings__partial-import_form {
+    padding: var(--pf-v5-global--spacer--lg) 0 var(--pf-v5-global--spacer--lg) 0;
+}

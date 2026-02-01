@@ -1626,9 +1626,9 @@
         "strictTransportSecurity": "max-age=31536000; includeSubDomains"
     },
     "smtpServer": {},
-    "loginTheme": "keycloakify",
-    "accountTheme": "keycloakify",
-    "adminTheme": "keycloakify",
+    "loginTheme": "merge",
+    "accountTheme": "merge",
+    "adminTheme": "merge",
     "emailTheme": "",
     "eventsEnabled": true,
     "eventsListeners": ["keycloakify-logging", "jboss-logging"],

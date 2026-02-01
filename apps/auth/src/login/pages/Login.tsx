@@ -5,8 +5,8 @@ import type { I18n } from "../i18n";
 import AuthLayout from "../components/AuthLayout";
 import { AuthLink } from "../components/AuthLink";
 import { SocialLoginButtons, getFallbackSocialProviders } from "../components/SocialLoginButtons";
-import { Input } from "@/components/ui/input";
-import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Input } from "@merge/ui/components/input";
+import { Alert, AlertDescription } from "@merge/ui/components/alert";
 import { cn } from "@/lib/utils";
 
 export default function Login(props: PageProps<Extract<KcContext, { pageId: "login.ftl" }>, I18n>) {

@@ -1,14 +1,14 @@
 import { useTranslation } from "react-i18next";
 import { Link, useHref } from "react-router-dom";
 import { ChevronDown, HelpCircle, LogOut, User, Server, Trash2 } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { Button } from "@merge/ui/components/button";
 import {
     DropdownMenu,
     DropdownMenuContent,
     DropdownMenuItem,
     DropdownMenuSeparator,
     DropdownMenuTrigger
-} from "@/components/ui/dropdown-menu";
+} from "@merge/ui/components/dropdown-menu";
 import { useEnvironment, useHelp } from "../../shared/keycloak-ui-shared";
 import { toDashboard } from "../dashboard/routes/Dashboard";
 import { useRealm } from "../context/realm-context/RealmContext";

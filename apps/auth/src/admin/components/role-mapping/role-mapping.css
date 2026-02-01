@@ -1,0 +1,12 @@
+/**
+ * WARNING: Before modifying this file, run the following command:
+ * 
+ * $ npx keycloakify own --path "admin/components/role-mapping/role-mapping.css"
+ * 
+ * This file is provided by @keycloakify/keycloak-admin-ui version 260502.0.0.
+ * It was copied into your repository by the postinstall script: `keycloakify sync-extensions`.
+ */
+
+.keycloak-admin--role-mapping__client-name {
+    margin-right: var(--pf-v5-global--spacer--sm);
+}

@@ -2,11 +2,11 @@ import type { PageProps } from "keycloakify/account/pages/PageProps";
 import type { KcContext } from "../KcContext";
 import type { I18n } from "../i18n";
 import AccountLayout from "../components/AccountLayout";
-import { Separator } from "@/components/ui/separator";
-import { Card, CardContent } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Alert, AlertDescription } from "@/components/ui/alert";
-import { Badge } from "@/components/ui/badge";
+import { Separator } from "@merge/ui/components/separator";
+import { Card, CardContent } from "@merge/ui/components/card";
+import { Button } from "@merge/ui/components/button";
+import { Alert, AlertDescription } from "@merge/ui/components/alert";
+import { Badge } from "@merge/ui/components/badge";
 import { Monitor, Smartphone as SmartphoneIcon, Globe } from "lucide-react";
 
 export default function Sessions(props: PageProps<Extract<KcContext, { pageId: "sessions.ftl" }>, I18n>) {

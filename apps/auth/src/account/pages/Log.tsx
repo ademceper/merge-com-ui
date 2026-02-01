@@ -2,10 +2,10 @@ import type { PageProps } from "keycloakify/account/pages/PageProps";
 import type { KcContext } from "../KcContext";
 import type { I18n } from "../i18n";
 import AccountLayout from "../components/AccountLayout";
-import { Separator } from "@/components/ui/separator";
-import { Card, CardContent } from "@/components/ui/card";
-import { Alert, AlertDescription } from "@/components/ui/alert";
-import { Badge } from "@/components/ui/badge";
+import { Separator } from "@merge/ui/components/separator";
+import { Card, CardContent } from "@merge/ui/components/card";
+import { Alert, AlertDescription } from "@merge/ui/components/alert";
+import { Badge } from "@merge/ui/components/badge";
 import { LogIn, LogOut, ShieldCheck, Key, UserCog, Globe } from "lucide-react";
 
 export default function Log(props: PageProps<Extract<KcContext, { pageId: "log.ftl" }>, I18n>) {

@@ -1,0 +1,20 @@
+/**
+ * WARNING: Before modifying this file, run the following command:
+ * 
+ * $ npx keycloakify own --path "admin/clients/scopes/evaluate.css"
+ * 
+ * This file is provided by @keycloakify/keycloak-admin-ui version 260502.0.0.
+ * It was copied into your repository by the postinstall script: `keycloakify sync-extensions`.
+ */
+
+.keycloak__scopes_evaluate__clipboard-copy input {
+    display: none;
+}
+
+.keycloak__scopes_evaluate__tabs {
+    padding-top: var(--pf-v5-global--spacer--2xl);
+}
+
+#tabs .pf-v5-c-tabs__list {
+    max-width: 300px;
+}

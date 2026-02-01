@@ -2,11 +2,11 @@ import type { PageProps } from "keycloakify/account/pages/PageProps";
 import type { KcContext } from "../KcContext";
 import type { I18n } from "../i18n";
 import AccountLayout from "../components/AccountLayout";
-import { Separator } from "@/components/ui/separator";
-import { Card, CardContent } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Alert, AlertDescription } from "@/components/ui/alert";
-import { Badge } from "@/components/ui/badge";
+import { Separator } from "@merge/ui/components/separator";
+import { Card, CardContent } from "@merge/ui/components/card";
+import { Button } from "@merge/ui/components/button";
+import { Alert, AlertDescription } from "@merge/ui/components/alert";
+import { Badge } from "@merge/ui/components/badge";
 import { AppWindow, ExternalLink } from "lucide-react";
 
 export default function Applications(props: PageProps<Extract<KcContext, { pageId: "applications.ftl" }>, I18n>) {

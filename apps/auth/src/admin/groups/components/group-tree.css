@@ -1,0 +1,15 @@
+/**
+ * WARNING: Before modifying this file, run the following command:
+ * 
+ * $ npx keycloakify own --path "admin/groups/components/group-tree.css"
+ * 
+ * This file is provided by @keycloakify/keycloak-admin-ui version 260502.0.0.
+ * It was copied into your repository by the postinstall script: `keycloakify sync-extensions`.
+ */
+
+.keycloak_groups_treeview .pf-v5-c-tree-view__node-text {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: block;
+}

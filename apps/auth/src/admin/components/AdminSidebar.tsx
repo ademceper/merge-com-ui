@@ -1,8 +1,8 @@
 import { useTranslation } from "react-i18next";
 import { NavLink } from "react-router-dom";
-import { buttonVariants } from "@/components/ui/button";
-import { Separator } from "@/components/ui/separator";
-import { Badge } from "@/components/ui/badge";
+import { buttonVariants } from "@merge/ui/components/button";
+import { Separator } from "@merge/ui/components/separator";
+import { Badge } from "@merge/ui/components/badge";
 import { cn } from "@/lib/utils";
 import { label, useEnvironment } from "../../shared/keycloak-ui-shared";
 import { useAccess } from "../context/access/Access";

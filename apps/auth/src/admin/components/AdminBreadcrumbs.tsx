@@ -14,7 +14,7 @@ import {
     BreadcrumbList,
     BreadcrumbPage,
     BreadcrumbSeparator
-} from "@/components/ui/breadcrumb";
+} from "@merge/ui/components/breadcrumb";
 import { useRealm } from "../context/realm-context/RealmContext";
 import { routes, type AppRouteObject } from "../routes";
 

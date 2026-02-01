@@ -1,0 +1,58 @@
+/**
+ * WARNING: Before modifying this file, run the following command:
+ *
+ * $ npx keycloakify own --path "admin/clients/initial-access/AccessTokenDialog.tsx"
+ *
+ * This file is provided by @keycloakify/keycloak-admin-ui version 260502.0.0.
+ * It was copied into your repository by the postinstall script: `keycloakify sync-extensions`.
+ */
+
+/* eslint-disable */
+
+// @ts-nocheck
+
+import { useTranslation } from "react-i18next";
+import {
+    Alert,
+    AlertVariant,
+    ClipboardCopy,
+    Form,
+    FormGroup,
+    Modal,
+    ModalVariant
+} from "../../../shared/@patternfly/react-core";
+
+type AccessTokenDialogProps = {
+    token: string;
+    toggleDialog: () => void;
+};
+
+export const AccessTokenDialog = ({ token, toggleDialog }: AccessTokenDialogProps) => {
+    const { t } = useTranslation();
+    return (
+        <Modal
+            title={t("initialAccessTokenDetails")}
+            isOpen={true}
+            onClose={toggleDialog}
+            variant={ModalVariant.medium}
+        >
+            <Alert
+                title={t("copyInitialAccessToken")}
+                component="h2"
+                isInline
+                variant={AlertVariant.warning}
+            />
+            <Form className="pf-v5-u-mt-md">
+                <FormGroup label={t("initialAccessToken")} fieldId="initialAccessToken">
+                    <ClipboardCopy
+                        id="initialAccessToken"
+                        data-testid="initialAccessToken"
+                        isReadOnly
+                    >
+                        {token}
+                    </ClipboardCopy>
+                </FormGroup>
+            </Form>
+        </Modal>
+    );
+};

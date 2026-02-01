@@ -1,0 +1,14 @@
+/**
+ * WARNING: Before modifying this file, run the following command:
+ * 
+ * $ npx keycloakify own --path "admin/authentication/policies/webauthn-policy.css"
+ * 
+ * This file is provided by @keycloakify/keycloak-admin-ui version 260502.0.0.
+ * It was copied into your repository by the postinstall script: `keycloakify sync-extensions`.
+ */
+
+@media (min-width: 768px) {
+    .keycloak__webauthn_policies_authentication__form .pf-v5-c-form__group {
+        --pf-v5-c-form--m-horizontal__group-label--md--GridColumnWidth: 10rem;
+    }
+}

@@ -1,0 +1,19 @@
+/**
+ * WARNING: Before modifying this file, run the following command:
+ * 
+ * $ npx keycloakify own --path "admin/components/wizard-section-header/wizard-section-header.css"
+ * 
+ * This file is provided by @keycloakify/keycloak-admin-ui version 260502.0.0.
+ * It was copied into your repository by the postinstall script: `keycloakify sync-extensions`.
+ */
+
+.kc-wizard-section-header__title {
+    margin-bottom: var(--pf-v5-global--spacer--lg);
+}
+.kc-wizard-section-header__title--has-description {
+    margin-bottom: var(--pf-v5-global--spacer--sm);
+}
+
+.kc-wizard-section-header__description {
+    margin-bottom: var(--pf-v5-global--spacer--lg);
+}
