@@ -1,7 +1,6 @@
 import type { PageProps } from "keycloakify/account/pages/PageProps";
 import type { KcContext } from "../KcContext";
 import type { I18n } from "../i18n";
-import AccountLayout from "../components/AccountLayout";
 import { Separator } from "@merge/ui/components/separator";
 import { Card, CardContent } from "@merge/ui/components/card";
 import { Button } from "@merge/ui/components/button";
@@ -14,92 +13,90 @@ export default function FederatedIdentity(props: PageProps<Extract<KcContext, { 
 
     const { url, federatedIdentity, message } = kcContext;
 
-    const { msg, msgStr } = i18n;
+    const { msg } = i18n;
 
     return (
-        <AccountLayout kcContext={kcContext} i18n={i18n} currentPage="federatedIdentity.ftl">
-            <div className="space-y-6">
-                <div>
-                    <h3 className="text-lg font-medium">{msg("federatedIdentityTitle")}</h3>
-                    <p className="text-sm text-muted-foreground">{msg("federatedIdentityDescription")}</p>
-                </div>
-                <Separator />
+        <div className="space-y-6">
+            <div>
+                <h3 className="text-lg font-medium">{msg("federatedIdentityTitle")}</h3>
+                <p className="text-sm text-muted-foreground">{msg("federatedIdentityDescription")}</p>
+            </div>
+            <Separator />
 
-                {message && (
-                    <Alert variant={message.type === "error" ? "destructive" : "default"}>
-                        <AlertDescription>{message.summary}</AlertDescription>
-                    </Alert>
-                )}
+            {message && (
+                <Alert variant={message.type === "error" ? "destructive" : "default"}>
+                    <AlertDescription>{message.summary}</AlertDescription>
+                </Alert>
+            )}
 
-                {/* Identity Providers List */}
-                {federatedIdentity?.identities && Object.keys(federatedIdentity.identities).length > 0 ? (
-                    <div className="space-y-4">
-                        {Object.entries(federatedIdentity.identities).map(([providerId, identity]) => {
-                            const isConnected = identity.connected;
-                            const providerDisplayName = identity.displayName || providerId;
+            {/* Identity Providers List */}
+            {federatedIdentity?.identities && Object.keys(federatedIdentity.identities).length > 0 ? (
+                <div className="space-y-4">
+                    {Object.entries(federatedIdentity.identities).map(([providerId, identity]) => {
+                        const isConnected = identity.connected;
+                        const providerDisplayName = identity.displayName || providerId;
 
-                            return (
-                                <div key={providerId} className="rounded-md border p-4">
-                                    <div className="flex items-start justify-between">
-                                        <div className="flex items-center gap-3">
-                                            <div className={`p-2 rounded ${isConnected ? 'bg-green-100 dark:bg-green-900/20' : 'bg-muted'}`}>
-                                                <LinkIcon className={`h-5 w-5 ${isConnected ? 'text-green-600 dark:text-green-400' : 'text-muted-foreground'}`} />
-                                            </div>
-                                            <div>
-                                                <div className="text-base font-medium flex items-center gap-2">
-                                                    {providerDisplayName}
-                                                    {isConnected ? (
-                                                        <Badge variant="default" className="bg-green-600 text-xs">
-                                                            <CheckCircleIcon className="h-3 w-3 mr-1" />
-                                                            Connected
-                                                        </Badge>
-                                                    ) : (
-                                                        <Badge variant="secondary" className="text-xs">
-                                                            <XCircleIcon className="h-3 w-3 mr-1" />
-                                                            {msg("notLinked")}
-                                                        </Badge>
-                                                    )}
-                                                </div>
-                                                {isConnected && identity.userName && (
-                                                    <div className="text-sm text-muted-foreground mt-1">
-                                                        Connected as: {identity.userName}
-                                                    </div>
+                        return (
+                            <div key={providerId} className="rounded-md border p-4">
+                                <div className="flex items-start justify-between">
+                                    <div className="flex items-center gap-3">
+                                        <div className={`p-2 rounded ${isConnected ? 'bg-green-100 dark:bg-green-900/20' : 'bg-muted'}`}>
+                                            <LinkIcon className={`h-5 w-5 ${isConnected ? 'text-green-600 dark:text-green-400' : 'text-muted-foreground'}`} />
+                                        </div>
+                                        <div>
+                                            <div className="text-base font-medium flex items-center gap-2">
+                                                {providerDisplayName}
+                                                {isConnected ? (
+                                                    <Badge variant="default" className="bg-green-600 text-xs">
+                                                        <CheckCircleIcon className="h-3 w-3 mr-1" />
+                                                        Connected
+                                                    </Badge>
+                                                ) : (
+                                                    <Badge variant="secondary" className="text-xs">
+                                                        <XCircleIcon className="h-3 w-3 mr-1" />
+                                                        {msg("notLinked")}
+                                                    </Badge>
                                                 )}
                                             </div>
-                                        </div>
-                                        <form action={url.socialUrl} method="post">
-                                            <input type="hidden" name="stateChecker" value={kcContext.stateChecker} />
-                                            <input type="hidden" name="providerId" value={providerId} />
-                                            {isConnected ? (
-                                                <>
-                                                    <input type="hidden" name="action" value="remove" />
-                                                    <Button type="submit" variant="outline" size="sm">
-                                                        {msg("removeProvider")}
-                                                    </Button>
-                                                </>
-                                            ) : (
-                                                <>
-                                                    <input type="hidden" name="action" value="add" />
-                                                    <Button type="submit" variant="default" size="sm">
-                                                        {msg("addProvider")}
-                                                    </Button>
-                                                </>
+                                            {isConnected && identity.userName && (
+                                                <div className="text-sm text-muted-foreground mt-1">
+                                                    Connected as: {identity.userName}
+                                                </div>
                                             )}
-                                        </form>
+                                        </div>
                                     </div>
+                                    <form action={url.socialUrl} method="post">
+                                        <input type="hidden" name="stateChecker" value={kcContext.stateChecker} />
+                                        <input type="hidden" name="providerId" value={providerId} />
+                                        {isConnected ? (
+                                            <>
+                                                <input type="hidden" name="action" value="remove" />
+                                                <Button type="submit" variant="outline" size="sm">
+                                                    {msg("removeProvider")}
+                                                </Button>
+                                            </>
+                                        ) : (
+                                            <>
+                                                <input type="hidden" name="action" value="add" />
+                                                <Button type="submit" variant="default" size="sm">
+                                                    {msg("addProvider")}
+                                                </Button>
+                                            </>
+                                        )}
+                                    </form>
                                 </div>
-                            );
-                        })}
-                    </div>
-                ) : (
-                    <Card>
-                        <CardContent className="py-12 text-center text-muted-foreground">
-                            No social providers configured
-                        </CardContent>
-                    </Card>
-                )}
-            </div>
-        </AccountLayout>
+                            </div>
+                        );
+                    })}
+                </div>
+            ) : (
+                <Card>
+                    <CardContent className="py-12 text-center text-muted-foreground">
+                        No social providers configured
+                    </CardContent>
+                </Card>
+            )}
+        </div>
     );
 }
 

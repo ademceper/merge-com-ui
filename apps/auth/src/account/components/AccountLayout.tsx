@@ -17,52 +17,25 @@ export default function AccountLayout({ kcContext, i18n, children, currentPage }
     const { msg } = i18n;
 
     const sidebarNavItems = [
-        {
-            title: msg("personalInfo"),
-            href: url.accountUrl,
-            pageId: "account.ftl"
-        },
-        {
-            title: msg("changePassword"),
-            href: url.passwordUrl,
-            pageId: "password.ftl"
-        },
-        {
-            title: msg("authenticator"),
-            href: url.totpUrl,
-            pageId: "totp.ftl"
-        },
-        {
-            title: msg("deviceActivity"),
-            href: url.sessionsUrl,
-            pageId: "sessions.ftl"
-        },
-        {
-            title: msg("applicationsTitle"),
-            href: url.applicationsUrl,
-            pageId: "applications.ftl"
-        },
-        {
-            title: msg("linkedAccounts"),
-            href: url.socialUrl,
-            pageId: "federatedIdentity.ftl",
-            show: !!url.socialUrl
-        },
-        {
-            title: msg("logTitle"),
-            href: url.logUrl,
-            pageId: "log.ftl",
-            show: !!url.logUrl
-        }
+        { title: msg("personalInfo"), href: url.accountUrl, pageId: "account.ftl" },
+        { title: msg("changePassword"), href: url.passwordUrl, pageId: "password.ftl" },
+        { title: msg("authenticator"), href: url.totpUrl, pageId: "totp.ftl" },
+        { title: msg("deviceActivity"), href: url.sessionsUrl, pageId: "sessions.ftl" },
+        { title: msg("applicationsTitle"), href: url.applicationsUrl, pageId: "applications.ftl" },
+        { title: msg("linkedAccounts"), href: url.socialUrl, pageId: "federatedIdentity.ftl", show: !!url.socialUrl },
+        { title: msg("logTitle"), href: url.logUrl, pageId: "log.ftl", show: !!url.logUrl },
     ].filter(item => item.show !== false);
 
     return (
         <div className="container mx-auto p-4 md:p-10 pb-16 max-w-7xl">
-            <div className="space-y-0.5 mb-6">
-                <h2 className="text-2xl font-bold tracking-tight">{msg("accountManagementTitle")}</h2>
-                <p className="text-muted-foreground">
-                    {msg("accountSecurityDescription")}
-                </p>
+            <div className="flex items-center justify-between mb-6">
+                <div className="space-y-0.5">
+                    <h2 className="text-2xl font-bold tracking-tight">{msg("accountManagementTitle")}</h2>
+                    <p className="text-muted-foreground">{msg("accountSecurityDescription")}</p>
+                </div>
+                <Button variant="destructive" size="sm" className="rounded-lg shrink-0" asChild>
+                    <a href={url.getLogoutUrl()}>{msg("doSignOut")}</a>
+                </Button>
             </div>
             <Separator className="mb-6" />
             <div className="flex flex-col gap-6 lg:flex-row lg:gap-12">
@@ -84,22 +57,9 @@ export default function AccountLayout({ kcContext, i18n, children, currentPage }
                             </a>
                         ))}
                     </nav>
-                    <Separator className="my-4" />
-                    <div>
-                        <Button
-                            variant="outline"
-                            className="w-full justify-start"
-                            asChild
-                        >
-                            <a href={url.getLogoutUrl()}>
-                                {msg("doSignOut")}
-                            </a>
-                        </Button>
-                    </div>
                 </aside>
                 <div className="flex-1 w-full lg:max-w-2xl">{children}</div>
             </div>
         </div>
     );
 }
-

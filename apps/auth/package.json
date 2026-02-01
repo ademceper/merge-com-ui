@@ -4,7 +4,7 @@
     "type": "module",
     "scripts": {
         "postinstall": "keycloakify sync-extensions",
-        "dev": "keycloakify start-keycloak",
+        "dev": "keycloakify start-keycloak --keycloak-version 26.5.2",
         "dev:vite": "vite",
         "build": "tsc && vite build",
         "build-keycloak-theme": "npm run build && keycloakify build",
