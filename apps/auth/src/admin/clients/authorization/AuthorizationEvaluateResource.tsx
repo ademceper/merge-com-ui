@@ -12,16 +12,15 @@
 // @ts-nocheck
 
 import { useState } from "react";
+import { Button } from "@merge/ui/components/button";
 import {
-    ExpandableRowContent,
     Table,
-    Tbody,
-    Td,
-    Th,
-    Thead,
-    Tr
-} from "../../../shared/@patternfly/react-table";
-import { DescriptionList } from "@patternfly/react-core/dist/esm/components";
+    TableBody,
+    TableCell,
+    TableHead,
+    TableHeader,
+    TableRow
+} from "@merge/ui/components/table";
 import { useTranslation } from "react-i18next";
 import { AuthorizationEvaluateResourcePolicies } from "./AuthorizationEvaluateResourcePolicies";
 import type EvaluationResultRepresentation from "@keycloak/keycloak-admin-client/lib/defs/evaluationResultRepresentation";
@@ -42,48 +41,49 @@ export const AuthorizationEvaluateResource = ({
     const { t } = useTranslation();
 
     return (
-        <Tbody isExpanded={expanded}>
-            <Tr>
-                <Td
-                    expand={{
-                        rowIndex,
-                        isExpanded: expanded,
-                        onToggle: () => setExpanded(prev => !prev)
-                    }}
-                />
-                <Td data-testid={`name-column-${resource.resource}`}>
+        <TableBody>
+            <TableRow>
+                <TableCell>
+                    <Button
+                        type="button"
+                        variant="ghost"
+                        size="icon-sm"
+                        aria-expanded={expanded}
+                        onClick={() => setExpanded(prev => !prev)}
+                    >
+                        {expanded ? "▼" : "▶"}
+                    </Button>
+                </TableCell>
+                <TableCell data-testid={`name-column-${resource.resource}`}>
                     {resource.resource?.name}
-                </Td>
-                <Td id={resource.status?.toLowerCase()}>
+                </TableCell>
+                <TableCell id={resource.status?.toLowerCase()}>
                     {t(`${resource.status?.toLowerCase()}`)}
-                </Td>
-                <Td>
+                </TableCell>
+                <TableCell>
                     {resource.allowedScopes?.length
                         ? resource.allowedScopes.map(item => item.name)
                         : "-"}
-                </Td>
-            </Tr>
-            <Tr key={`child-${resource.resource}`} isExpanded={expanded}>
-                <Td />
-                <Td colSpan={5}>
-                    <ExpandableRowContent>
-                        {expanded && (
-                            <DescriptionList
-                                isHorizontal
-                                className="keycloak_resource_details"
-                            >
-                                <Table aria-label={t("evaluationResults")}>
-                                    <Thead>
-                                        <Tr>
-                                            <Th aria-hidden="true" />
-                                            <Th>{t("permission")}</Th>
-                                            <Th>{t("results")}</Th>
-                                            <Th>{t("decisionStrategy")}</Th>
-                                            <Th>{t("grantedScopes")}</Th>
-                                            <Th>{t("deniedScopes")}</Th>
-                                            <Th aria-hidden="true" />
-                                        </Tr>
-                                    </Thead>
+                </TableCell>
+            </TableRow>
+            {expanded && (
+                <TableRow key={`child-${resource.resource}`}>
+                    <TableCell />
+                    <TableCell colSpan={5}>
+                        <div className="keycloak_resource_details py-2">
+                            <Table aria-label={t("evaluationResults")} className="text-sm">
+                                <TableHeader>
+                                    <TableRow>
+                                        <TableHead aria-hidden="true" />
+                                        <TableHead>{t("permission")}</TableHead>
+                                        <TableHead>{t("results")}</TableHead>
+                                        <TableHead>{t("decisionStrategy")}</TableHead>
+                                        <TableHead>{t("grantedScopes")}</TableHead>
+                                        <TableHead>{t("deniedScopes")}</TableHead>
+                                        <TableHead aria-hidden="true" />
+                                    </TableRow>
+                                </TableHeader>
+                                <TableBody>
                                     {Object.values(
                                         evaluateResults[rowIndex].policies
                                     ).map((outerPolicy, idx) => (
@@ -97,12 +97,12 @@ export const AuthorizationEvaluateResource = ({
                                             resource={resource}
                                         />
                                     ))}
-                                </Table>
-                            </DescriptionList>
-                        )}
-                    </ExpandableRowContent>
-                </Td>
-            </Tr>
-        </Tbody>
+                                </TableBody>
+                            </Table>
+                        </div>
+                    </TableCell>
+                </TableRow>
+            )}
+        </TableBody>
     );
 };

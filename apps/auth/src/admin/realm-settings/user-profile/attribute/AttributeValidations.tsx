@@ -11,22 +11,17 @@
 
 // @ts-nocheck
 
-import {
-    Button,
-    ButtonVariant,
-    Divider,
-    Text,
-    TextVariants
-} from "../../../../shared/@patternfly/react-core";
-import { PlusCircleIcon } from "../../../../shared/@patternfly/react-icons";
+import { Button } from "@merge/ui/components/button";
+import { Separator } from "@merge/ui/components/separator";
+import { PlusCircle } from "@phosphor-icons/react";
 import {
     Table,
-    Tbody,
-    Td,
-    Th,
-    Thead,
-    Tr
-} from "../../../../shared/@patternfly/react-table";
+    TableBody,
+    TableCell,
+    TableHead,
+    TableHeader,
+    TableRow
+} from "@merge/ui/components/table";
 import { useEffect, useState } from "react";
 import { useFormContext, useWatch } from "react-hook-form";
 import { useTranslation } from "react-i18next";
@@ -60,7 +55,7 @@ export const AttributeValidations = () => {
             validatorName: validatorToDelete
         }),
         continueButtonLabel: "delete",
-        continueButtonVariant: ButtonVariant.danger,
+        continueButtonVariant: "destructive",
         onConfirm: async () => {
             const updatedValidators = validators.filter(
                 validator => validator.key !== validatorToDelete
@@ -102,30 +97,30 @@ export const AttributeValidations = () => {
                     variant="link"
                     data-testid="addValidator"
                     className="kc--attributes-validations--add-validation-button"
-                    icon={<PlusCircleIcon />}
+                    icon={<PlusCircle className="size-4" />}
                 >
                     {t("addValidator")}
                 </Button>
-                <Divider />
+                <Separator />
                 {validators.length !== 0 ? (
-                    <Table>
-                        <Thead>
-                            <Tr>
-                                <Th>{t("validatorColNames.colName")}</Th>
-                                <Th>{t("validatorColNames.colConfig")}</Th>
-                                <Th aria-hidden="true" />
-                            </Tr>
-                        </Thead>
-                        <Tbody>
+                    <Table className="text-sm">
+                        <TableHeader>
+                            <TableRow>
+                                <TableHead>{t("validatorColNames.colName")}</TableHead>
+                                <TableHead>{t("validatorColNames.colConfig")}</TableHead>
+                                <TableHead aria-hidden="true" />
+                            </TableRow>
+                        </TableHeader>
+                        <TableBody>
                             {validators.map(validator => (
-                                <Tr key={validator.key}>
-                                    <Td dataLabel={t("validatorColNames.colName")}>
+                                <TableRow key={validator.key}>
+                                    <TableCell data-label={t("validatorColNames.colName")}>
                                         {validator.key}
-                                    </Td>
-                                    <Td dataLabel={t("validatorColNames.colConfig")}>
+                                    </TableCell>
+                                    <TableCell data-label={t("validatorColNames.colConfig")}>
                                         {JSON.stringify(validator.value)}
-                                    </Td>
-                                    <Td className="kc--attributes-validations--action-cell">
+                                    </TableCell>
+                                    <TableCell className="kc--attributes-validations--action-cell">
                                         <Button
                                             key="validator"
                                             variant="link"
@@ -137,15 +132,15 @@ export const AttributeValidations = () => {
                                         >
                                             {t("delete")}
                                         </Button>
-                                    </Td>
-                                </Tr>
+                                    </TableCell>
+                                </TableRow>
                             ))}
-                        </Tbody>
+                        </TableBody>
                     </Table>
                 ) : (
-                    <Text className="kc-emptyValidators" component={TextVariants.p}>
+                    <p className="kc-emptyValidators">
                         {t("emptyValidators")}
-                    </Text>
+                    </p>
                 )}
             </div>
         </>

@@ -11,19 +11,18 @@
 
 // @ts-nocheck
 
+import { AlertVariant } from "../../shared/keycloak-ui-shared";
+import { Alert, AlertDescription, AlertTitle } from "@merge/ui/components/alert";
+import { Button } from "@merge/ui/components/button";
 import {
-    Alert,
-    AlertVariant,
-    Button,
-    ButtonVariant,
-    Form,
-    FormGroup,
-    Modal,
-    ModalVariant,
-    Switch,
-    Text,
-    TextContent
-} from "../../shared/@patternfly/react-core";
+    Dialog,
+    DialogContent,
+    DialogFooter,
+    DialogHeader,
+    DialogTitle
+} from "@merge/ui/components/dialog";
+import { Label } from "@merge/ui/components/label";
+import { Switch } from "@merge/ui/components/switch";
 import { saveAs } from "file-saver";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -78,77 +77,60 @@ export const PartialExportDialog = ({ isOpen, onClose }: PartialExportDialogProp
     }
 
     return (
-        <Modal
-            variant={ModalVariant.small}
-            title={t("partialExport")}
-            isOpen={isOpen}
-            onClose={onClose}
-            actions={[
-                <Button
-                    key="export"
-                    data-testid="confirm"
-                    isDisabled={isExporting}
-                    onClick={exportRealm}
-                >
-                    {t("export")}
-                </Button>,
-                <Button
-                    key="cancel"
-                    data-testid="cancel"
-                    variant={ButtonVariant.link}
-                    onClick={onClose}
-                >
-                    {t("cancel")}
-                </Button>
-            ]}
-        >
-            <TextContent>
-                <Text>{t("partialExportHeaderText")}</Text>
-            </TextContent>
-            <Form isHorizontal className="keycloak__realm-settings__partial-import_form">
-                <FormGroup
-                    label={t("includeGroupsAndRoles")}
-                    fieldId="include-groups-and-roles-check"
-                    hasNoPaddingTop
-                >
-                    <Switch
-                        id="include-groups-and-roles-check"
-                        data-testid="include-groups-and-roles-check"
-                        isChecked={exportGroupsAndRoles}
-                        onChange={(_event, val) => setExportGroupsAndRoles(val)}
-                        label={t("on")}
-                        labelOff={t("off")}
-                        aria-label={t("includeGroupsAndRoles")}
-                    />
-                </FormGroup>
-                <FormGroup
-                    label={t("includeClients")}
-                    fieldId="include-clients-check"
-                    hasNoPaddingTop
-                >
-                    <Switch
-                        id="include-clients-check"
-                        data-testid="include-clients-check"
-                        onChange={(_event, val) => setExportClients(val)}
-                        isChecked={exportClients}
-                        label={t("on")}
-                        labelOff={t("off")}
-                        aria-label={t("includeClients")}
-                    />
-                </FormGroup>
-            </Form>
+        <Dialog open={isOpen} onOpenChange={open => !open && onClose()}>
+            <DialogContent className="max-w-md">
+                <DialogHeader>
+                    <DialogTitle>{t("partialExport")}</DialogTitle>
+                </DialogHeader>
+                <p>{t("partialExportHeaderText")}</p>
+                <form className="keycloak__realm-settings__partial-import_form space-y-4">
+                    <div className="flex items-center justify-between gap-4">
+                        <Label htmlFor="include-groups-and-roles-check">
+                            {t("includeGroupsAndRoles")}
+                        </Label>
+                        <Switch
+                            id="include-groups-and-roles-check"
+                            data-testid="include-groups-and-roles-check"
+                            checked={exportGroupsAndRoles}
+                            onCheckedChange={setExportGroupsAndRoles}
+                            aria-label={t("includeGroupsAndRoles")}
+                        />
+                    </div>
+                    <div className="flex items-center justify-between gap-4">
+                        <Label htmlFor="include-clients-check">
+                            {t("includeClients")}
+                        </Label>
+                        <Switch
+                            id="include-clients-check"
+                            data-testid="include-clients-check"
+                            checked={exportClients}
+                            onCheckedChange={setExportClients}
+                            aria-label={t("includeClients")}
+                        />
+                    </div>
+                </form>
 
-            {showWarning && (
-                <Alert
-                    data-testid="warning-message"
-                    variant="warning"
-                    component="p"
-                    title={t("exportWarningTitle")}
-                    isInline
-                >
-                    {t("exportWarningDescription")}
-                </Alert>
-            )}
-        </Modal>
+                {showWarning && (
+                    <Alert data-testid="warning-message" variant="destructive">
+                        <AlertTitle>{t("exportWarningTitle")}</AlertTitle>
+                        <AlertDescription>
+                            {t("exportWarningDescription")}
+                        </AlertDescription>
+                    </Alert>
+                )}
+                <DialogFooter>
+                    <Button variant="link" data-testid="cancel" onClick={onClose}>
+                        {t("cancel")}
+                    </Button>
+                    <Button
+                        data-testid="confirm"
+                        disabled={isExporting}
+                        onClick={exportRealm}
+                    >
+                        {t("export")}
+                    </Button>
+                </DialogFooter>
+            </DialogContent>
+        </Dialog>
     );
 };

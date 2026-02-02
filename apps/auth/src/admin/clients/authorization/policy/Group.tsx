@@ -13,16 +13,18 @@
 
 import type GroupRepresentation from "@keycloak/keycloak-admin-client/lib/defs/groupRepresentation";
 import { HelpItem, TextControl, useFetch } from "../../../../shared/keycloak-ui-shared";
-import { Button, Checkbox, FormGroup } from "../../../../shared/@patternfly/react-core";
-import { MinusCircleIcon } from "../../../../shared/@patternfly/react-icons";
+import { Button } from "@merge/ui/components/button";
+import { Checkbox } from "@merge/ui/components/checkbox";
+import { Label } from "@merge/ui/components/label";
+import { MinusCircle } from "@phosphor-icons/react";
 import {
     Table,
-    Tbody,
-    Td,
-    Th,
-    Thead,
-    Tr
-} from "../../../../shared/@patternfly/react-table";
+    TableBody,
+    TableCell,
+    TableHead,
+    TableHeader,
+    TableRow
+} from "@merge/ui/components/table";
 import { useState } from "react";
 import { Controller, useFormContext } from "react-hook-form";
 import { useTranslation } from "react-i18next";
@@ -71,13 +73,12 @@ export const Group = () => {
                 label={t("groupsClaim")}
                 labelIcon={t("groupsClaimHelp")}
             />
-            <FormGroup
-                label={t("groups")}
-                labelIcon={
+            <div className="space-y-2">
+                <Label htmlFor="groups" className="flex items-center gap-1">
+                    {t("groups")}
                     <HelpItem helpText={t("policyGroupsHelp")} fieldLabelId="groups" />
-                }
-                fieldId="groups"
-            >
+                </Label>
+                <div id="groups">
                 <Controller
                     name="groups"
                     control={control}
@@ -121,19 +122,19 @@ export const Group = () => {
                     )}
                 />
                 {selectedGroups.length > 0 && (
-                    <Table variant="compact">
-                        <Thead>
-                            <Tr>
-                                <Th>{t("groups")}</Th>
-                                <Th>{t("extendToChildren")}</Th>
-                                <Th aria-hidden="true" />
-                            </Tr>
-                        </Thead>
-                        <Tbody>
+                    <Table className="text-sm">
+                        <TableHeader>
+                            <TableRow>
+                                <TableHead>{t("groups")}</TableHead>
+                                <TableHead>{t("extendToChildren")}</TableHead>
+                                <TableHead aria-hidden="true" />
+                            </TableRow>
+                        </TableHeader>
+                        <TableBody>
                             {selectedGroups.map((group, index) => (
-                                <Tr key={group.id}>
-                                    <Td>{group.path}</Td>
-                                    <Td>
+                                <TableRow key={group.id}>
+                                    <TableCell>{group.path}</TableCell>
+                                    <TableCell>
                                         <Controller
                                             name={`groups.${index}.extendChildren`}
                                             defaultValue={false}
@@ -143,18 +144,19 @@ export const Group = () => {
                                                     id="extendChildren"
                                                     data-testid="standard"
                                                     name="extendChildren"
-                                                    isChecked={field.value}
-                                                    onChange={field.onChange}
-                                                    isDisabled={group.subGroupCount === 0}
+                                                    checked={field.value}
+                                                    onCheckedChange={field.onChange}
+                                                    disabled={group.subGroupCount === 0}
                                                 />
                                             )}
                                         />
-                                    </Td>
-                                    <Td>
+                                    </TableCell>
+                                    <TableCell>
                                         <Button
-                                            variant="link"
+                                            type="button"
+                                            variant="ghost"
+                                            size="icon"
                                             className="keycloak__client-authorization__policy-row-remove"
-                                            icon={<MinusCircleIcon />}
                                             onClick={() => {
                                                 setValue("groups", [
                                                     ...(values || []).filter(
@@ -167,14 +169,17 @@ export const Group = () => {
                                                     )
                                                 ]);
                                             }}
-                                        />
-                                    </Td>
-                                </Tr>
+                                        >
+                                            <MinusCircle className="size-4" />
+                                        </Button>
+                                    </TableCell>
+                                </TableRow>
                             ))}
-                        </Tbody>
+                        </TableBody>
                     </Table>
                 )}
-            </FormGroup>
+                </div>
+            </div>
         </>
     );
 };

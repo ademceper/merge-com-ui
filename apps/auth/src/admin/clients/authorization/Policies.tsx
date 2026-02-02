@@ -19,24 +19,25 @@ import {
     useAlerts,
     useFetch
 } from "../../../shared/keycloak-ui-shared";
+import { AlertVariant } from "../../../shared/keycloak-ui-shared";
+import { Alert, AlertTitle } from "@merge/ui/components/alert";
+import { Button } from "@merge/ui/components/button";
 import {
-    Alert,
-    AlertVariant,
-    Button,
-    DescriptionList,
-    PageSection,
-    ToolbarItem
-} from "../../../shared/@patternfly/react-core";
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuTrigger,
+} from "@merge/ui/components/dropdown-menu";
 import {
-    ExpandableRowContent,
     Table,
-    Tbody,
-    Td,
-    Th,
-    Thead,
-    Tr
-} from "../../../shared/@patternfly/react-table";
-import { useState } from "react";
+    TableBody,
+    TableCell,
+    TableHead,
+    TableHeader,
+    TableRow,
+} from "@merge/ui/components/table";
+import { CaretDown, CaretRight, DotsThreeVertical } from "@phosphor-icons/react";
+import { Fragment, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Link, useNavigate } from "react-router-dom";
 import { useAdminClient } from "../../admin-client";
@@ -143,17 +144,11 @@ export const AuthorizationPolicies = ({
                 {t("deletePolicyConfirm")}
                 {selectedPolicy?.dependentPolicies &&
                     selectedPolicy.dependentPolicies.length > 0 && (
-                        <Alert
-                            variant="warning"
-                            isInline
-                            isPlain
-                            component="p"
-                            title={t("deletePolicyWarning")}
-                            className="pf-v5-u-pt-lg"
-                        >
-                            <p className="pf-v5-u-pt-xs">
+                        <Alert variant="destructive" className="mt-4">
+                            <AlertTitle>{t("deletePolicyWarning")}</AlertTitle>
+                            <p className="pt-1">
                                 {selectedPolicy.dependentPolicies.map(policy => (
-                                    <strong key={policy.id} className="pf-v5-u-pr-md">
+                                    <strong key={policy.id} className="pr-2">
                                         {policy.name}
                                     </strong>
                                 ))}
@@ -184,7 +179,7 @@ export const AuthorizationPolicies = ({
     const noData = policies.length === 0;
     const searching = Object.keys(search).length !== 0;
     return (
-        <PageSection variant="light" className="pf-v5-u-p-0">
+        <div className="p-0 bg-muted/30">
             <DeleteConfirm />
             {(!noData || searching) && (
                 <>
@@ -221,126 +216,140 @@ export const AuthorizationPolicies = ({
                         }}
                         toolbarItem={
                             <>
-                                <ToolbarItem>
-                                    <SearchDropdown
-                                        types={policyProviders}
-                                        search={search}
-                                        onSearch={setSearch}
-                                        type="policy"
-                                    />
-                                </ToolbarItem>
-                                <ToolbarItem>
-                                    <Button
-                                        data-testid="createPolicy"
-                                        onClick={() => {
-                                            toggleDialog();
-                                        }}
-                                        isDisabled={isDisabled}
-                                    >
-                                        {isAdminPermissionsClient
-                                            ? t("createPermissionPolicy")
-                                            : t("createPolicy")}
-                                    </Button>
-                                </ToolbarItem>
+                                <SearchDropdown
+                                    types={policyProviders}
+                                    search={search}
+                                    onSearch={setSearch}
+                                    type="policy"
+                                />
+                                <Button
+                                    data-testid="createPolicy"
+                                    onClick={() => toggleDialog()}
+                                    disabled={isDisabled}
+                                >
+                                    {isAdminPermissionsClient
+                                        ? t("createPermissionPolicy")
+                                        : t("createPolicy")}
+                                </Button>
                             </>
                         }
                     >
                         {!noData && (
-                            <Table aria-label={t("resources")} variant="compact">
-                                <Thead>
-                                    <Tr>
-                                        <Th aria-hidden="true" />
-                                        <Th>{t("name")}</Th>
-                                        <Th>{t("type")}</Th>
-                                        <Th>{t("dependentPermission")}</Th>
-                                        <Th>{t("description")}</Th>
-                                        <Th aria-hidden="true" />
-                                    </Tr>
-                                </Thead>
-                                {policies.map((policy, rowIndex) => (
-                                    <Tbody key={policy.id} isExpanded={policy.isExpanded}>
-                                        <Tr>
-                                            <Td
-                                                expand={{
-                                                    rowIndex,
-                                                    isExpanded: policy.isExpanded,
-                                                    onToggle: (_, rowIndex) => {
-                                                        const rows = policies.map(
-                                                            (policy, index) =>
-                                                                index === rowIndex
-                                                                    ? {
-                                                                          ...policy,
-                                                                          isExpanded:
-                                                                              !policy.isExpanded
-                                                                      }
-                                                                    : policy
-                                                        );
-                                                        setPolicies(rows);
-                                                    }
-                                                }}
-                                            />
-                                            <Td
-                                                data-testid={`name-column-${policy.name}`}
-                                            >
-                                                {isAdminPermissionsClient ? (
-                                                    <Link
-                                                        to={toPermissionPolicyDetails({
-                                                            realm,
-                                                            permissionClientId: clientId,
-                                                            policyId: policy.id!,
-                                                            policyType: policy.type!
-                                                        })}
+                            <Table aria-label={t("resources")} className="text-sm">
+                                <TableHeader>
+                                    <TableRow>
+                                        <TableHead aria-hidden="true" className="w-10" />
+                                        <TableHead>{t("name")}</TableHead>
+                                        <TableHead>{t("type")}</TableHead>
+                                        <TableHead>{t("dependentPermission")}</TableHead>
+                                        <TableHead>{t("description")}</TableHead>
+                                        {!isDisabled && (
+                                            <TableHead aria-hidden="true" className="w-10" />
+                                        )}
+                                    </TableRow>
+                                </TableHeader>
+                                <TableBody>
+                                    {policies.map((policy, rowIndex) => (
+                                        <Fragment key={policy.id}>
+                                            <TableRow>
+                                                <TableCell className="w-10">
+                                                    <Button
+                                                        variant="ghost"
+                                                        size="icon"
+                                                        className="h-8 w-8"
+                                                        aria-expanded={policy.isExpanded}
+                                                        onClick={() => {
+                                                            const rows = policies.map(
+                                                                (p, index) =>
+                                                                    index === rowIndex
+                                                                        ? {
+                                                                              ...p,
+                                                                              isExpanded:
+                                                                                  !p.isExpanded
+                                                                          }
+                                                                        : p
+                                                            );
+                                                            setPolicies(rows);
+                                                        }}
                                                     >
-                                                        {policy.name}
-                                                    </Link>
-                                                ) : (
-                                                    <Link
-                                                        to={toPolicyDetails({
-                                                            realm,
-                                                            id: clientId,
-                                                            policyType: policy.type!,
-                                                            policyId: policy.id!
-                                                        })}
-                                                    >
-                                                        {policy.name}
-                                                    </Link>
+                                                        {policy.isExpanded ? (
+                                                            <CaretDown className="size-4" />
+                                                        ) : (
+                                                            <CaretRight className="size-4" />
+                                                        )}
+                                                    </Button>
+                                                </TableCell>
+                                                <TableCell
+                                                    data-testid={`name-column-${policy.name}`}
+                                                >
+                                                    {isAdminPermissionsClient ? (
+                                                        <Link
+                                                            to={toPermissionPolicyDetails({
+                                                                realm,
+                                                                permissionClientId: clientId,
+                                                                policyId: policy.id!,
+                                                                policyType: policy.type!
+                                                            })}
+                                                        >
+                                                            {policy.name}
+                                                        </Link>
+                                                    ) : (
+                                                        <Link
+                                                            to={toPolicyDetails({
+                                                                realm,
+                                                                id: clientId,
+                                                                policyType: policy.type!,
+                                                                policyId: policy.id!
+                                                            })}
+                                                        >
+                                                            {policy.name}
+                                                        </Link>
+                                                    )}
+                                                </TableCell>
+                                                <TableCell>{toUpperCase(policy.type!)}</TableCell>
+                                                <TableCell>
+                                                    <DependentPoliciesRenderer row={policy} />
+                                                </TableCell>
+                                                <TableCell>{policy.description}</TableCell>
+                                                {!isDisabled && (
+                                                    <TableCell className="w-10">
+                                                        <DropdownMenu>
+                                                            <DropdownMenuTrigger asChild>
+                                                                <Button
+                                                                    variant="ghost"
+                                                                    size="icon"
+                                                                    className="h-8 w-8"
+                                                                    aria-label={t("delete")}
+                                                                >
+                                                                    <DotsThreeVertical className="size-4" />
+                                                                </Button>
+                                                            </DropdownMenuTrigger>
+                                                            <DropdownMenuContent align="end">
+                                                                <DropdownMenuItem
+                                                                    onClick={() => {
+                                                                        setSelectedPolicy(
+                                                                            policy
+                                                                        );
+                                                                        toggleDeleteDialog();
+                                                                    }}
+                                                                >
+                                                                    {t("delete")}
+                                                                </DropdownMenuItem>
+                                                            </DropdownMenuContent>
+                                                        </DropdownMenu>
+                                                    </TableCell>
                                                 )}
-                                            </Td>
-                                            <Td>{toUpperCase(policy.type!)}</Td>
-                                            <Td>
-                                                <DependentPoliciesRenderer row={policy} />
-                                            </Td>
-                                            <Td>{policy.description}</Td>
-                                            {!isDisabled && (
-                                                <Td
-                                                    actions={{
-                                                        items: [
-                                                            {
-                                                                title: t("delete"),
-                                                                onClick: () => {
-                                                                    setSelectedPolicy(
-                                                                        policy
-                                                                    );
-                                                                    toggleDeleteDialog();
-                                                                }
-                                                            }
-                                                        ]
-                                                    }}
-                                                />
-                                            )}
-                                        </Tr>
-                                        <Tr
-                                            key={`child-${policy.id}`}
-                                            isExpanded={policy.isExpanded}
-                                        >
-                                            <Td />
-                                            <Td colSpan={3 + (isDisabled ? 0 : 1)}>
-                                                <ExpandableRowContent>
-                                                    {policy.isExpanded &&
-                                                        !isAdminPermissionsClient && (
-                                                            <DescriptionList
-                                                                isHorizontal
-                                                                className="keycloak_resource_details"
+                                            </TableRow>
+                                            {policy.isExpanded && (
+                                                <TableRow>
+                                                    <TableCell />
+                                                    <TableCell
+                                                        colSpan={isDisabled ? 4 : 5}
+                                                        className="bg-muted/30 p-4"
+                                                    >
+                                                        {!isAdminPermissionsClient && (
+                                                            <dl
+                                                                className="grid grid-cols-[auto_1fr] gap-x-4 gap-y-1 keycloak_resource_details"
                                                             >
                                                                 <DetailDescriptionLink
                                                                     name="dependentPermission"
@@ -349,54 +358,48 @@ export const AuthorizationPolicies = ({
                                                                     }
                                                                     convert={p => p.name!}
                                                                     link={permission =>
-                                                                        toPermissionDetails(
-                                                                            {
-                                                                                realm,
-                                                                                id: clientId,
-                                                                                permissionId:
-                                                                                    permission.id!,
-                                                                                permissionType:
-                                                                                    permission.type!
-                                                                            }
-                                                                        )
+                                                                        toPermissionDetails({
+                                                                            realm,
+                                                                            id: clientId,
+                                                                            permissionId:
+                                                                                permission.id!,
+                                                                            permissionType:
+                                                                                permission.type!
+                                                                        })
                                                                     }
                                                                 />
-                                                            </DescriptionList>
+                                                            </dl>
                                                         )}
-                                                    {policy.isExpanded &&
-                                                        isAdminPermissionsClient && (
-                                                            <>
-                                                                <Th>
-                                                                    {t(
-                                                                        "dependentPermission"
-                                                                    )}
-                                                                </Th>
-                                                                {policy.dependentPolicies!.map(
-                                                                    (
-                                                                        dependentPolicy,
-                                                                        index
-                                                                    ) => (
-                                                                        <Td key={index}>
+                                                        {isAdminPermissionsClient && (
+                                                            <div className="space-y-2">
+                                                                <div className="font-medium">
+                                                                    {t("dependentPermission")}
+                                                                </div>
+                                                                <div className="flex flex-wrap gap-2">
+                                                                    {policy.dependentPolicies?.map(
+                                                                        (
+                                                                            dependentPolicy,
+                                                                            index
+                                                                        ) => (
                                                                             <span
-                                                                                style={{
-                                                                                    marginLeft:
-                                                                                        "8px"
-                                                                                }}
+                                                                                key={index}
+                                                                                className="ml-2"
                                                                             >
                                                                                 {
                                                                                     dependentPolicy.name
                                                                                 }
                                                                             </span>
-                                                                        </Td>
-                                                                    )
-                                                                )}
-                                                            </>
+                                                                        )
+                                                                    )}
+                                                                </div>
+                                                            </div>
                                                         )}
-                                                </ExpandableRowContent>
-                                            </Td>
-                                        </Tr>
-                                    </Tbody>
-                                ))}
+                                                    </TableCell>
+                                                </TableRow>
+                                            )}
+                                        </Fragment>
+                                    ))}
+                                </TableBody>
                             </Table>
                         )}
                     </PaginatingTableToolbar>
@@ -452,6 +455,6 @@ export const AuthorizationPolicies = ({
                     />
                 </>
             )}
-        </PageSection>
+        </div>
     );
 };

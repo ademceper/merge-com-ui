@@ -19,43 +19,29 @@ import {
     SelectVariant,
     useAlerts
 } from "../../../shared/keycloak-ui-shared";
+import { AlertVariant } from "../../../shared/keycloak-ui-shared";
 import {
-    AlertVariant,
-    Button,
-    ButtonVariant,
-    Divider,
-    Dropdown,
-    DropdownItem,
-    DropdownList,
-    Form,
-    FormGroup,
-    MenuToggle,
     SelectGroup,
-    SelectOption,
-    Text,
-    TextContent,
-    TextInput,
-    TextVariants,
-    ToolbarItem
+    SelectOption
 } from "../../../shared/@patternfly/react-core";
+import { Button } from "@merge/ui/components/button";
+import { Separator } from "@merge/ui/components/separator";
 import {
-    CheckIcon,
-    EllipsisVIcon,
-    PencilAltIcon,
-    SearchIcon,
-    TimesIcon
-} from "../../../shared/@patternfly/react-icons";
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuTrigger,
+} from "@merge/ui/components/dropdown-menu";
+import { Input } from "@merge/ui/components/input";
 import {
-    ActionsColumn,
-    IRow,
-    IRowCell,
     Table,
-    Tbody,
-    Td,
-    Th,
-    Thead,
-    Tr
-} from "../../../shared/@patternfly/react-table";
+    TableBody,
+    TableCell,
+    TableHead,
+    TableHeader,
+    TableRow,
+} from "@merge/ui/components/table";
+import { Check, PencilSimple, X, DotsThreeVertical, MagnifyingGlass } from "@phosphor-icons/react";
 import { cloneDeep, isEqual, uniqWith } from "lodash-es";
 import { ChangeEvent, useEffect, useState, type FormEvent } from "react";
 import { useForm } from "react-hook-form";
@@ -77,6 +63,8 @@ type RealmOverridesProps = {
 };
 
 type EditStatesType = { [key: number]: boolean };
+
+type TableRowData = { key: string; value: string };
 
 export type TranslationForm = {
     key: string;
@@ -107,7 +95,7 @@ export const RealmOverrides = ({
     const [kebabOpen, setKebabOpen] = useState(false);
     const { getValues, handleSubmit } = useForm();
     const [selectMenuValueSelected, setSelectMenuValueSelected] = useState(false);
-    const [tableRows, setTableRows] = useState<IRow[]>([]);
+    const [tableRows, setTableRows] = useState<TableRowData[]>([]);
     const [tableKey, setTableKey] = useState(0);
     const [max, setMax] = useState(10);
     const [first, setFirst] = useState(0);
@@ -159,36 +147,10 @@ export const RealmOverrides = ({
         };
 
         void fetchLocalizationTexts().then(translations => {
-            const updatedRows: IRow[] = translations.map(
-                (translation): IRow => ({
-                    rowEditBtnAriaLabel: () =>
-                        t("rowEditBtnAriaLabel", {
-                            translation: translation[1]
-                        }),
-                    rowSaveBtnAriaLabel: () =>
-                        t("rowSaveBtnAriaLabel", {
-                            translation: translation[1]
-                        }),
-                    rowCancelBtnAriaLabel: () =>
-                        t("rowCancelBtnAriaLabel", {
-                            translation: translation[1]
-                        }),
-                    cells: [
-                        {
-                            title: translation[0],
-                            props: {
-                                value: translation[0]
-                            }
-                        },
-                        {
-                            title: translation[1],
-                            props: {
-                                value: translation[1]
-                            }
-                        }
-                    ]
-                })
-            );
+            const updatedRows: TableRowData[] = translations.map(([key, value]) => ({
+                key,
+                value
+            }));
 
             setTableRows(updatedRows);
         });
@@ -200,11 +162,11 @@ export const RealmOverrides = ({
 
     const options = [
         <SelectGroup label={t("defaultLocale")} key="group1">
-            <SelectOption key={DEFAULT_LOCALE} value={DEFAULT_LOCALE}>
+            <SelectOption key={String(DEFAULT_LOCALE)} value={DEFAULT_LOCALE}>
                 {localeToDisplayName(DEFAULT_LOCALE, whoAmI.displayName)}
             </SelectOption>
         </SelectGroup>,
-        <Divider key="divider" />,
+        <Separator key="divider" className="my-1" />,
         <SelectGroup label={t("supportedLocales")} key="group2">
             {watchSupportedLocales.map(locale => (
                 <SelectOption key={locale} value={locale}>
@@ -246,7 +208,7 @@ export const RealmOverrides = ({
             count: selectedRowKeys.length
         }),
         continueButtonLabel: "delete",
-        continueButtonVariant: ButtonVariant.danger,
+        continueButtonVariant: "destructive",
         onCancel: () => {
             setSelectedRowKeys([]);
             setAreAllRowsSelected(false);
@@ -278,7 +240,7 @@ export const RealmOverrides = ({
     });
 
     const handleRowSelect = (event: ChangeEvent<HTMLInputElement>, rowIndex: number) => {
-        const selectedKey = (tableRows[rowIndex].cells?.[0] as IRowCell).props.value;
+        const selectedKey = tableRows[rowIndex].key;
         if (event.target.checked) {
             setSelectedRowKeys(prevSelected => [...prevSelected, selectedKey]);
         } else {
@@ -296,9 +258,7 @@ export const RealmOverrides = ({
         if (areAllRowsSelected) {
             setSelectedRowKeys([]);
         } else {
-            setSelectedRowKeys(
-                tableRows.map(row => (row.cells?.[0] as IRowCell).props.value)
-            );
+            setSelectedRowKeys(tableRows.map(row => row.key));
         }
         setAreAllRowsSelected(!areAllRowsSelected);
     };
@@ -309,14 +269,10 @@ export const RealmOverrides = ({
 
     const onSubmit = async (inputValue: string, rowIndex: number) => {
         const newRows = cloneDeep(tableRows);
-
-        const newRow = cloneDeep(newRows[rowIndex]);
-        (newRow.cells?.[1] as IRowCell).props.value = inputValue;
-        newRows[rowIndex] = newRow;
+        newRows[rowIndex] = { ...newRows[rowIndex], value: inputValue };
 
         try {
-            const key = (newRow.cells?.[0] as IRowCell).props.value;
-            const value = (newRow.cells?.[1] as IRowCell).props.value;
+            const { key, value } = newRows[rowIndex];
 
             await adminClient.realms.addLocalization(
                 {
@@ -354,11 +310,9 @@ export const RealmOverrides = ({
                     form={translationForm}
                 />
             )}
-            <TextContent>
-                <Text className="pf-v5-u-mt-lg pf-v5-u-ml-md" component={TextVariants.p}>
-                    {t("realmOverridesDescription")}
-                </Text>
-            </TextContent>
+            <p className="mt-4 ml-4 text-sm text-muted-foreground">
+                {t("realmOverridesDescription")}
+            </p>
             <PaginatingTableToolbar
                 count={translations.length}
                 first={first}
@@ -388,48 +342,40 @@ export const RealmOverrides = ({
                         >
                             {t("addTranslation")}
                         </Button>
-                        <ToolbarItem>
-                            <Dropdown
-                                onOpenChange={isOpen => setKebabOpen(isOpen)}
-                                toggle={ref => (
-                                    <MenuToggle
-                                        ref={ref}
-                                        onClick={() => setKebabOpen(!kebabOpen)}
-                                        variant="plain"
-                                        isExpanded={kebabOpen}
-                                        data-testid="toolbar-deleteBtn"
-                                        aria-label="kebab"
-                                    >
-                                        <EllipsisVIcon />
-                                    </MenuToggle>
-                                )}
-                                isOpen={kebabOpen}
-                                isPlain
-                            >
-                                <DropdownList>
-                                    <DropdownItem
-                                        key="action"
-                                        component="button"
-                                        data-testid="delete-selected-TranslationBtn"
-                                        isDisabled={
-                                            translations.length === 0 ||
-                                            selectedRowKeys.length === 0
-                                        }
-                                        onClick={() => {
-                                            toggleDeleteDialog();
-                                            setKebabOpen(false);
-                                        }}
-                                    >
-                                        {t("delete")}
-                                    </DropdownItem>
-                                </DropdownList>
-                            </Dropdown>
-                        </ToolbarItem>
+                        <DropdownMenu
+                            open={kebabOpen}
+                            onOpenChange={setKebabOpen}
+                        >
+                            <DropdownMenuTrigger asChild>
+                                <Button
+                                    variant="ghost"
+                                    size="icon"
+                                    data-testid="toolbar-deleteBtn"
+                                    aria-label="kebab"
+                                >
+                                    <DotsThreeVertical className="size-5" />
+                                </Button>
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent align="end">
+                                <DropdownMenuItem
+                                    data-testid="delete-selected-TranslationBtn"
+                                    disabled={
+                                        translations.length === 0 ||
+                                        selectedRowKeys.length === 0
+                                    }
+                                    onClick={() => {
+                                        toggleDeleteDialog();
+                                        setKebabOpen(false);
+                                    }}
+                                >
+                                    {t("delete")}
+                                </DropdownMenuItem>
+                            </DropdownMenuContent>
+                        </DropdownMenu>
                     </>
                 }
                 searchTypeComponent={
-                    <ToolbarItem>
-                        <KeycloakSelect
+                    <KeycloakSelect
                             width={180}
                             isOpen={filterDropdownOpen}
                             className="kc-filter-by-locale-select"
@@ -452,7 +398,6 @@ export const RealmOverrides = ({
                         >
                             {options}
                         </KeycloakSelect>
-                    </ToolbarItem>
                 }
             >
                 {translations.length === 0 && !filter && (
@@ -466,7 +411,7 @@ export const RealmOverrides = ({
                 {translations.length === 0 && filter && (
                     <ListEmptyState
                         hasIcon
-                        icon={SearchIcon}
+                        icon={MagnifyingGlass}
                         isSearchVariant
                         message={t("noSearchResults")}
                         instructions={t("noRealmOverridesSearchResultsInstructions")}
@@ -476,10 +421,11 @@ export const RealmOverrides = ({
                     <Table
                         aria-label={t("editableRowsTable")}
                         data-testid="editable-rows-table"
+                        className="text-sm"
                     >
-                        <Thead>
-                            <Tr>
-                                <Th className="pf-v5-u-px-lg">
+                        <TableHeader>
+                            <TableRow>
+                                <TableHead className="px-4">
                                     <input
                                         type="checkbox"
                                         aria-label={t("selectAll")}
@@ -487,157 +433,125 @@ export const RealmOverrides = ({
                                         onChange={toggleSelectAllRows}
                                         data-testid="selectAll"
                                     />
-                                </Th>
-                                <Th className="pf-v5-u-py-lg">{t("key")}</Th>
-                                <Th className="pf-v5-u-py-lg">{t("value")}</Th>
-                                <Th aria-hidden="true" />
-                            </Tr>
-                        </Thead>
-                        <Tbody>
+                                </TableHead>
+                                <TableHead className="py-4">{t("key")}</TableHead>
+                                <TableHead className="py-4">{t("value")}</TableHead>
+                                <TableHead aria-hidden="true" className="w-12" />
+                            </TableRow>
+                        </TableHeader>
+                        <TableBody>
                             {tableRows.map((row, rowIndex) => (
-                                <Tr key={(row.cells?.[0] as IRowCell).props.value}>
-                                    <Td
-                                        className="pf-v5-u-px-lg"
-                                        select={{
-                                            rowIndex,
-                                            onSelect: event =>
+                                <TableRow key={row.key}>
+                                    <TableCell className="px-4">
+                                        <input
+                                            type="checkbox"
+                                            aria-label={row.key}
+                                            checked={isRowSelected(row.key)}
+                                            onChange={e =>
                                                 handleRowSelect(
-                                                    event as ChangeEvent<HTMLInputElement>,
+                                                    e as ChangeEvent<HTMLInputElement>,
                                                     rowIndex
-                                                ),
-                                            isSelected: isRowSelected(
-                                                (row.cells?.[0] as IRowCell).props.value
-                                            )
-                                        }}
-                                    />
-                                    <Td
-                                        className="pf-m-sm pf-v5-u-px-sm"
-                                        dataLabel={t("key")}
-                                    >
-                                        {(row.cells?.[0] as IRowCell).props.value}
-                                    </Td>
-                                    <Td
-                                        className="pf-m-sm pf-v5-u-px-sm"
-                                        dataLabel={t("value")}
-                                        key={rowIndex}
-                                    >
-                                        <Form
-                                            isHorizontal
-                                            className="kc-form-translationValue"
+                                                )}
+                                        />
+                                    </TableCell>
+                                    <TableCell className="px-2">{row.key}</TableCell>
+                                    <TableCell className="px-2" key={rowIndex}>
+                                        <form
+                                            className="kc-form-translationValue inline-flex items-center gap-1"
                                             onSubmit={handleSubmit(async () => {
                                                 await onSubmit(formValue, rowIndex);
                                             })}
                                         >
-                                            <FormGroup
-                                                fieldId="kc-translationValue"
-                                                className="pf-v5-u-display-inline-block"
-                                            >
-                                                {editStates[rowIndex] ? (
-                                                    <>
-                                                        <TextInput
-                                                            aria-label={t(
-                                                                "editTranslationValue"
-                                                            )}
-                                                            type="text"
-                                                            className="pf-v5-u-w-initial"
-                                                            data-testid={`editTranslationValueInput-${rowIndex}`}
-                                                            value={formValue}
-                                                            onChange={(
-                                                                event: FormEvent<HTMLInputElement>,
-                                                                value: string
-                                                            ) => {
-                                                                setFormValue(value);
-                                                            }}
-                                                            key={`edit-input-${rowIndex}`}
-                                                        />
-                                                        <Button
-                                                            variant="link"
-                                                            className="pf-m-plain"
-                                                            data-testid={`editTranslationAcceptBtn-${rowIndex}`}
-                                                            type="submit"
-                                                            aria-label={t("acceptBtn")}
-                                                            icon={<CheckIcon />}
-                                                        />
-                                                        <Button
-                                                            variant="link"
-                                                            className="pf-m-plain"
-                                                            data-testid={`editTranslationCancelBtn-${rowIndex}`}
-                                                            icon={<TimesIcon />}
-                                                            aria-label={t("cancelBtn")}
-                                                            onClick={() => {
-                                                                setEditStates(
-                                                                    prevEditStates => ({
-                                                                        ...prevEditStates,
-                                                                        [rowIndex]: false
-                                                                    })
-                                                                );
-                                                            }}
-                                                        />
-                                                    </>
-                                                ) : (
-                                                    <>
-                                                        <span>
-                                                            {
-                                                                (
-                                                                    row
-                                                                        .cells?.[1] as IRowCell
-                                                                ).props.value
-                                                            }
-                                                        </span>
-                                                        <Button
-                                                            onClick={() => {
-                                                                const currentValue = (
-                                                                    tableRows[rowIndex]
-                                                                        .cells?.[1] as IRowCell
-                                                                ).props.value;
-                                                                setFormValue(
-                                                                    currentValue
-                                                                );
-                                                                setEditStates(
-                                                                    prevState => ({
-                                                                        ...prevState,
-                                                                        [rowIndex]: true
-                                                                    })
-                                                                );
-                                                            }}
-                                                            key={`edit-button-${rowIndex}`}
-                                                            aria-label={t("editBtn")}
-                                                            variant="link"
-                                                            className="pf-m-plain"
-                                                            data-testid={`editTranslationBtn-${rowIndex}`}
-                                                        >
-                                                            <PencilAltIcon />
-                                                        </Button>
-                                                    </>
-                                                )}
-                                            </FormGroup>
-                                        </Form>
-                                    </Td>
-                                    <Td isActionCell>
-                                        <ActionsColumn
-                                            items={[
-                                                {
-                                                    title: t("delete"),
-                                                    onClick: () => {
-                                                        setSelectedRowKeys([
-                                                            (row.cells?.[0] as IRowCell)
-                                                                .props.value
-                                                        ]);
-
+                                            {editStates[rowIndex] ? (
+                                                <>
+                                                    <Input
+                                                        aria-label={t("editTranslationValue")}
+                                                        type="text"
+                                                        className="w-auto min-w-[12rem]"
+                                                        data-testid={`editTranslationValueInput-${rowIndex}`}
+                                                        value={formValue}
+                                                        onChange={(
+                                                            e: FormEvent<HTMLInputElement>
+                                                        ) => setFormValue(e.currentTarget.value)}
+                                                        key={`edit-input-${rowIndex}`}
+                                                    />
+                                                    <Button
+                                                        variant="ghost"
+                                                        size="icon"
+                                                        data-testid={`editTranslationAcceptBtn-${rowIndex}`}
+                                                        type="submit"
+                                                        aria-label={t("acceptBtn")}
+                                                    >
+                                                        <Check className="size-4" />
+                                                    </Button>
+                                                    <Button
+                                                        variant="ghost"
+                                                        size="icon"
+                                                        data-testid={`editTranslationCancelBtn-${rowIndex}`}
+                                                        aria-label={t("cancelBtn")}
+                                                        type="button"
+                                                        onClick={() => {
+                                                            setEditStates(prev => ({
+                                                                ...prev,
+                                                                [rowIndex]: false
+                                                            }));
+                                                        }}
+                                                    >
+                                                        <X className="size-4" />
+                                                    </Button>
+                                                </>
+                                            ) : (
+                                                <>
+                                                    <span>{row.value}</span>
+                                                    <Button
+                                                        type="button"
+                                                        variant="ghost"
+                                                        size="icon"
+                                                        aria-label={t("editBtn")}
+                                                        data-testid={`editTranslationBtn-${rowIndex}`}
+                                                        onClick={() => {
+                                                            setFormValue(tableRows[rowIndex].value);
+                                                            setEditStates(prev => ({
+                                                                ...prev,
+                                                                [rowIndex]: true
+                                                            }));
+                                                        }}
+                                                    >
+                                                        <PencilSimple className="size-4" />
+                                                    </Button>
+                                                </>
+                                            )}
+                                        </form>
+                                    </TableCell>
+                                    <TableCell className="w-12">
+                                        <DropdownMenu>
+                                            <DropdownMenuTrigger asChild>
+                                                <Button
+                                                    variant="ghost"
+                                                    size="icon"
+                                                    aria-label={t("delete")}
+                                                >
+                                                    <DotsThreeVertical className="size-4" />
+                                                </Button>
+                                            </DropdownMenuTrigger>
+                                            <DropdownMenuContent align="end">
+                                                <DropdownMenuItem
+                                                    onClick={() => {
+                                                        setSelectedRowKeys([row.key]);
                                                         if (translations.length === 1) {
                                                             setAreAllRowsSelected(true);
                                                         }
-
                                                         toggleDeleteDialog();
-                                                        setKebabOpen(false);
-                                                    }
-                                                }
-                                            ]}
-                                        />
-                                    </Td>
-                                </Tr>
+                                                    }}
+                                                >
+                                                    {t("delete")}
+                                                </DropdownMenuItem>
+                                            </DropdownMenuContent>
+                                        </DropdownMenu>
+                                    </TableCell>
+                                </TableRow>
                             ))}
-                        </Tbody>
+                        </TableBody>
                     </Table>
                 )}
             </PaginatingTableToolbar>

@@ -11,23 +11,16 @@
 
 // @ts-nocheck
 
-import {
-    Alert,
-    Button,
-    Form,
-    Page,
-    PageSection,
-    Tab,
-    Tabs,
-    TabTitleText,
-    TextInput
-} from "../../../shared/@patternfly/react-core";
+import { Alert, AlertDescription, AlertTitle } from "@merge/ui/components/alert";
+import { Button } from "@merge/ui/components/button";
+import { Input } from "@merge/ui/components/input";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@merge/ui/components/tabs";
 
 function PreviewHeader() {
     return (
-        <header className="pf-v5-c-page__header">
-            <div className="pf-v5-c-page__header-brand">
-                <span className="pf-v5-c-page__header-brand-link">Preview</span>
+        <header className="border-b px-4 py-2">
+            <div>
+                <span className="font-medium">Preview</span>
             </div>
         </header>
     );
@@ -46,29 +39,42 @@ export const PreviewWindow = ({ cssVars }: PreviewWindowProps) => (
             .join("\n")}
       }
     `}</style>
-        <Page className="preview" header={<PreviewHeader />}>
-            <PageSection
-                variant="light"
+        <div className="preview min-h-screen flex flex-col">
+            <PreviewHeader />
+            <div
+                className="flex-1 p-4"
                 style={{
                     backgroundColor: cssVars["BackgroundColor--light-100"]
                 }}
             >
-                <Tabs activeKey={1} className="pf-v5-u-p-lg">
-                    <Tab eventKey={0} title={<TabTitleText>Tab One</TabTitleText>} />
-                    <Tab eventKey={1} title={<TabTitleText>Tab Two</TabTitleText>} />
+                <Tabs defaultValue="tab2" className="p-4">
+                    <TabsList>
+                        <TabsTrigger value="tab1">Tab One</TabsTrigger>
+                        <TabsTrigger value="tab2">Tab Two</TabsTrigger>
+                    </TabsList>
+                    <TabsContent value="tab1" />
+                    <TabsContent value="tab2" />
                 </Tabs>
-                <Alert title="Error" isInline variant="danger" />
-                <Alert title="Success" isInline variant="success" />
-                <p className="pf-v5-u-p-lg pf-v5-c-content">
+                <Alert variant="destructive" className="my-2">
+                    <AlertTitle>Error</AlertTitle>
+                    <AlertDescription />
+                </Alert>
+                <Alert variant="default" className="my-2">
+                    <AlertTitle>Success</AlertTitle>
+                    <AlertDescription />
+                </Alert>
+                <p className="p-4 text-sm">
                     Lorem ipsum dolor sit amet, consectetur adipiscing elit.
                 </p>
-                <Form>
-                    <TextInput id="test" placeholder="Text input" />
-                    <Button variant="primary">Primary</Button>
-                    <Button variant="secondary">Secondary</Button>
-                    <Button variant="link">Link button</Button>
-                </Form>
-            </PageSection>
-        </Page>
+                <form className="space-y-2">
+                    <Input id="test" placeholder="Text input" />
+                    <div className="flex gap-2">
+                        <Button>Primary</Button>
+                        <Button variant="secondary">Secondary</Button>
+                        <Button variant="link">Link button</Button>
+                    </div>
+                </form>
+            </div>
+        </div>
     </>
 );

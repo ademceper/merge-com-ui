@@ -14,19 +14,16 @@
 import type ClientRepresentation from "@keycloak/keycloak-admin-client/lib/defs/clientRepresentation";
 import type { ClientQuery } from "@keycloak/keycloak-admin-client/lib/resources/clients";
 import { useAlerts, useEnvironment } from "../../shared/keycloak-ui-shared";
+import { AlertVariant } from "../../shared/keycloak-ui-shared";
+import { Badge } from "@merge/ui/components/badge";
+import { Button } from "@merge/ui/components/button";
 import {
-    AlertVariant,
-    Badge,
-    Button,
-    ButtonVariant,
-    PageSection,
-    Tab,
-    TabTitleText,
-    ToolbarItem,
-    Tooltip
-} from "../../shared/@patternfly/react-core";
-import { WarningTriangleIcon } from "../../shared/@patternfly/react-icons";
-import { IRowData, TableText, cellWidth } from "../../shared/@patternfly/react-table";
+    Tooltip,
+    TooltipContent,
+    TooltipProvider,
+    TooltipTrigger,
+} from "@merge/ui/components/tooltip";
+import { Warning } from "@phosphor-icons/react";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
@@ -55,43 +52,47 @@ const ClientDetailLink = (client: ClientRepresentation) => {
     const { t } = useTranslation();
     const { realm } = useRealm();
     return (
-        <TableText wrapModifier="truncate">
+        <span className="truncate block">
             <Link
                 key={client.id}
                 to={toClient({ realm, clientId: client.id!, tab: "settings" })}
             >
                 {client.clientId}
                 {!client.enabled && (
-                    <Badge key={`${client.id}-disabled`} isRead className="pf-v5-u-ml-sm">
+                    <Badge key={`${client.id}-disabled`} variant="secondary" className="ml-2">
                         {t("disabled")}
                     </Badge>
                 )}
             </Link>
             {client.attributes?.["is_temporary_admin"] === "true" && (
-                <Tooltip content={t("temporaryService")}>
-                    <WarningTriangleIcon
-                        className="pf-v5-u-ml-sm"
-                        id="temporary-admin-label"
-                    />
-                </Tooltip>
+                <TooltipProvider>
+                    <Tooltip>
+                        <TooltipTrigger asChild>
+                            <span className="ml-2 inline-flex" id="temporary-admin-label">
+                                <Warning className="size-4 text-amber-600" />
+                            </span>
+                        </TooltipTrigger>
+                        <TooltipContent>{t("temporaryService")}</TooltipContent>
+                    </Tooltip>
+                </TooltipProvider>
             )}
-        </TableText>
+        </span>
     );
 };
 
 const ClientName = (client: ClientRepresentation) => {
     const { t } = useTranslation();
     return (
-        <TableText wrapModifier="truncate">
+        <span className="truncate block">
             {translationFormatter(t)(client.name) as string}
-        </TableText>
+        </span>
     );
 };
 
 const ClientDescription = (client: ClientRepresentation) => (
-    <TableText wrapModifier="truncate">
+    <span className="truncate block">
         {emptyFormatter()(client.description) as string}
-    </TableText>
+    </span>
 );
 
 const ClientHomeLink = (client: ClientRepresentation) => {
@@ -118,25 +119,12 @@ const ToolbarItems = () => {
 
     return (
         <>
-            <ToolbarItem>
-                <Button
-                    data-testid="createClient"
-                    component={props => <Link {...props} to={toAddClient({ realm })} />}
-                >
-                    {t("createClient")}
-                </Button>
-            </ToolbarItem>
-            <ToolbarItem>
-                <Button
-                    component={props => (
-                        <Link {...props} to={toImportClient({ realm })} />
-                    )}
-                    variant="link"
-                    data-testid="importClient"
-                >
-                    {t("importClient")}
-                </Button>
-            </ToolbarItem>
+            <Button asChild data-testid="createClient">
+                <Link to={toAddClient({ realm })}>{t("createClient")}</Link>
+            </Button>
+            <Button asChild variant="link" data-testid="importClient">
+                <Link to={toImportClient({ realm })}>{t("importClient")}</Link>
+            </Button>
         </>
     );
 };
@@ -177,7 +165,7 @@ export default function ClientsSection() {
         titleKey: t("clientDelete", { clientId: selectedClient?.clientId }),
         messageKey: "clientDeleteConfirm",
         continueButtonLabel: "delete",
-        continueButtonVariant: ButtonVariant.danger,
+        continueButtonVariant: "destructive",
         onConfirm: async () => {
             try {
                 await adminClient.clients.del({
@@ -199,7 +187,7 @@ export default function ClientsSection() {
                 helpUrl={helpUrls.clientsUrl}
                 divider={false}
             />
-            <PageSection variant="light" className="pf-v5-u-p-0">
+            <div className="bg-muted/30 p-0">
                 <RoutableTabs
                     mountOnEnter
                     unmountOnExit
@@ -211,7 +199,7 @@ export default function ClientsSection() {
                 >
                     <Tab
                         data-testid="list"
-                        title={<TabTitleText>{t("clientsList")}</TabTitleText>}
+                        title={t("clientsList")}
                         {...listTab}
                     >
                         <DeleteConfirm />
@@ -222,8 +210,8 @@ export default function ClientsSection() {
                             ariaLabelKey="clientList"
                             searchPlaceholderKey="searchForClient"
                             toolbarItem={<ToolbarItems />}
-                            actionResolver={(rowData: IRowData) => {
-                                const client: ClientRepresentation = rowData.data;
+                            actionResolver={(rowData: { data: ClientRepresentation }) => {
+                                const client = rowData.data;
                                 const actions: Action<ClientRepresentation>[] = [
                                     {
                                         title: t("export"),
@@ -252,19 +240,16 @@ export default function ClientsSection() {
                                 {
                                     name: "clientId",
                                     displayKey: "clientId",
-                                    transforms: [cellWidth(20)],
                                     cellRenderer: ClientDetailLink
                                 },
                                 {
                                     name: "clientName",
                                     displayKey: "clientName",
-                                    transforms: [cellWidth(20)],
                                     cellRenderer: ClientName
                                 },
                                 {
                                     name: "protocol",
                                     displayKey: "type",
-                                    transforms: [cellWidth(10)],
                                     cellRenderer: client =>
                                         getProtocolName(
                                             t,
@@ -274,13 +259,11 @@ export default function ClientsSection() {
                                 {
                                     name: "description",
                                     displayKey: "description",
-                                    transforms: [cellWidth(30)],
                                     cellRenderer: ClientDescription
                                 },
                                 {
                                     name: "baseUrl",
                                     displayKey: "homeURL",
-                                    transforms: [cellWidth(20)],
                                     cellRenderer: ClientHomeLink
                                 }
                             ]}
@@ -288,20 +271,20 @@ export default function ClientsSection() {
                     </Tab>
                     <Tab
                         data-testid="initialAccessToken"
-                        title={<TabTitleText>{t("initialAccessToken")}</TabTitleText>}
+                        title={t("initialAccessToken")}
                         {...initialAccessTokenTab}
                     >
                         <InitialAccessTokenList />
                     </Tab>
                     <Tab
                         data-testid="registration"
-                        title={<TabTitleText>{t("clientRegistration")}</TabTitleText>}
+                        title={t("clientRegistration")}
                         {...clientRegistrationTab}
                     >
                         <ClientRegistration />
                     </Tab>
                 </RoutableTabs>
-            </PageSection>
+            </div>
         </>
     );
 }

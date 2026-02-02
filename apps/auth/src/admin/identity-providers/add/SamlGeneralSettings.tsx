@@ -16,7 +16,7 @@ import {
     TextControl,
     useEnvironment
 } from "../../../shared/keycloak-ui-shared";
-import { FormGroup } from "../../../shared/@patternfly/react-core";
+import { Label } from "@merge/ui/components/label";
 import { useFormContext, useWatch } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 
@@ -58,20 +58,17 @@ export const SamlGeneralSettings = ({
             <TextControl name="displayName" label={t("displayName")} />
             <DisplayOrder />
             {isAliasReadonly && (
-                <FormGroup
-                    label={t("endpoints")}
-                    fieldId="endpoints"
-                    labelIcon={
+                <div className="keycloak__identity-providers__saml_link space-y-2">
+                    <Label htmlFor="endpoints" className="flex items-center gap-1">
+                        {t("endpoints")}
                         <HelpItem helpText={t("aliasHelp")} fieldLabelId="alias" />
-                    }
-                    className="keycloak__identity-providers__saml_link"
-                >
+                    </Label>
                     <FormattedLink
                         title={t("samlEndpointsLabel")}
                         href={`${environment.adminBaseUrl}/realms/${realm}/broker/${alias}/endpoint/descriptor`}
                         isInline
                     />
-                </FormGroup>
+                </div>
             )}
         </>
     );

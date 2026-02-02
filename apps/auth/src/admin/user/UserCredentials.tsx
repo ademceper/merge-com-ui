@@ -18,7 +18,6 @@ import { AlertVariant } from "../../shared/keycloak-ui-shared";
 import { Button } from "@merge/ui/components/button";
 import { Separator } from "@merge/ui/components/separator";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@merge/ui/components/table";
-import { Table as PFTable, Tbody, Td, Th, Thead, Tr } from "../../shared/@patternfly/react-table";
 import { Fragment, DragEvent as ReactDragEvent, useMemo, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useAdminClient } from "../admin-client";
@@ -205,7 +204,7 @@ export const UserCredentials = ({ user, setUser }: UserCredentialsProps) => {
         evt.dataTransfer.effectAllowed = "move";
         evt.dataTransfer.setData("text/plain", evt.currentTarget.id);
         const draggedItemId = evt.currentTarget.id;
-        evt.currentTarget.classList.add(styles.modifiers.ghostRow);
+        evt.currentTarget.classList.add("opacity-50");
         evt.currentTarget.setAttribute("aria-pressed", "true");
         setState({ ...state, draggedItemId, dragging: true });
     };
@@ -236,7 +235,7 @@ export const UserCredentials = ({ user, setUser }: UserCredentialsProps) => {
     const onDragCancel = () => {
         if (!bodyRef.current) return;
         Array.from(bodyRef.current.children).forEach(el => {
-            el.classList.remove(styles.modifiers.ghostRow);
+            el.classList.remove("opacity-50");
             el.setAttribute("aria-pressed", "false");
         });
         setState({
@@ -316,7 +315,7 @@ export const UserCredentials = ({ user, setUser }: UserCredentialsProps) => {
         if (!(target instanceof HTMLTableRowElement)) {
             return;
         }
-        target.classList.remove(styles.modifiers.ghostRow);
+        target.classList.remove("opacity-50");
         target.setAttribute("aria-pressed", "false");
         setState({
             ...state,
@@ -442,25 +441,25 @@ export const UserCredentials = ({ user, setUser }: UserCredentialsProps) => {
                 )}
             {groupedUserCredentials.length !== 0 && (
                 <div className="bg-muted/30 p-4">
-                    <PFTable variant={"compact"}>
-                        <Thead>
-                            <Tr className="kc-table-header">
-                                <Th>
+                    <Table className="text-sm">
+                        <TableHeader>
+                            <TableRow className="kc-table-header">
+                                <TableHead>
                                     <HelpItem
                                         helpText={t("userCredentialsHelpText")}
                                         fieldLabelId="userCredentialsHelpTextLabel"
                                     />
-                                </Th>
-                                <Th aria-hidden="true" />
-                                <Th>{t("type")}</Th>
-                                <Th>{t("userLabel")}</Th>
-                                <Th>{t("createdAt")}</Th>
-                                <Th>{t("data")}</Th>
-                                <Th aria-hidden="true" />
-                                <Th aria-hidden="true" />
-                            </Tr>
-                        </Thead>
-                        <Tbody
+                                </TableHead>
+                                <TableHead aria-hidden="true" />
+                                <TableHead>{t("type")}</TableHead>
+                                <TableHead>{t("userLabel")}</TableHead>
+                                <TableHead>{t("createdAt")}</TableHead>
+                                <TableHead>{t("data")}</TableHead>
+                                <TableHead aria-hidden="true" />
+                                <TableHead aria-hidden="true" />
+                            </TableRow>
+                        </TableHeader>
+                        <TableBody
                             ref={bodyRef}
                             onDragOver={onDragOver}
                             onDrop={onDragOver}
@@ -468,7 +467,7 @@ export const UserCredentials = ({ user, setUser }: UserCredentialsProps) => {
                         >
                             {groupedUserCredentials.map((groupedCredential, rowIndex) => (
                                 <Fragment key={groupedCredential.key}>
-                                    <Tr
+                                    <TableRow
                                         id={groupedCredential.value
                                             .map(({ id }) => id)
                                             .toString()}
@@ -477,26 +476,21 @@ export const UserCredentials = ({ user, setUser }: UserCredentialsProps) => {
                                         onDragEnd={onDragEnd}
                                         onDragStart={onDragStart}
                                     >
-                                        <Td
+                                        <TableCell
                                             className={
                                                 groupedUserCredentials.length === 1
                                                     ? "one-row"
                                                     : ""
                                             }
-                                            draggableRow={{
-                                                id: `draggable-row-${groupedCredential.value.map(
-                                                    ({ id }) => id
-                                                )}`
-                                            }}
                                         />
                                         {groupedCredential.value.length > 1 ? (
-                                            <Td
-                                                className="kc-expandRow-btn"
-                                                expand={{
-                                                    rowIndex,
-                                                    isExpanded:
-                                                        groupedCredential.isExpanded,
-                                                    onToggle: (_, rowIndex) => {
+                                            <TableCell className="kc-expandRow-btn">
+                                                <Button
+                                                    type="button"
+                                                    variant="ghost"
+                                                    size="icon-sm"
+                                                    aria-expanded={groupedCredential.isExpanded}
+                                                    onClick={() => {
                                                         const rows =
                                                             groupedUserCredentials.map(
                                                                 (credential, index) =>
@@ -509,19 +503,21 @@ export const UserCredentials = ({ user, setUser }: UserCredentialsProps) => {
                                                                         : credential
                                                             );
                                                         setGroupedUserCredentials(rows);
-                                                    }
-                                                }}
-                                            />
+                                                    }}
+                                                >
+                                                    {groupedCredential.isExpanded ? "▼" : "▶"}
+                                                </Button>
+                                            </TableCell>
                                         ) : (
-                                            <Td />
+                                            <TableCell />
                                         )}
-                                        <Td
-                                            dataLabel={`columns-${groupedCredential.key}`}
+                                        <TableCell
+                                            data-label={`columns-${groupedCredential.key}`}
                                             className="kc-notExpandableRow-credentialType"
                                             data-testid="credentialType"
                                         >
                                             {toUpperCase(groupedCredential.key)}
-                                        </Td>
+                                        </TableCell>
                                         {groupedCredential.value.length <= 1 &&
                                             groupedCredential.value.map(credential => (
                                                 <UserCredentialsRow
@@ -537,10 +533,10 @@ export const UserCredentials = ({ user, setUser }: UserCredentialsProps) => {
                                                     refresh={refresh}
                                                 />
                                             ))}
-                                    </Tr>
+                                    </TableRow>
                                     {groupedCredential.isExpanded &&
                                         groupedCredential.value.map(credential => (
-                                            <Tr
+                                            <TableRow
                                                 key={credential.id}
                                                 id={credential.id}
                                                 draggable
@@ -548,21 +544,14 @@ export const UserCredentials = ({ user, setUser }: UserCredentialsProps) => {
                                                 onDragEnd={onDragEnd}
                                                 onDragStart={onDragStart}
                                             >
-                                                <Td />
-                                                <Td
-                                                    className="kc-draggable-dropdown-type-icon"
-                                                    draggableRow={{
-                                                        id: `draggable-row-${groupedCredential.value.map(
-                                                            ({ id }) => id
-                                                        )}`
-                                                    }}
-                                                />
-                                                <Td
-                                                    dataLabel={`child-columns-${credential.id}`}
+                                                <TableCell />
+                                                <TableCell className="kc-draggable-dropdown-type-icon" />
+                                                <TableCell
+                                                    data-label={`child-columns-${credential.id}`}
                                                     className="kc-expandableRow-credentialType"
                                                 >
                                                     {toUpperCase(credential.type!)}
-                                                </Td>
+                                                </TableCell>
                                                 <UserCredentialsRow
                                                     credential={credential}
                                                     userId={user.id!}
@@ -574,12 +563,12 @@ export const UserCredentials = ({ user, setUser }: UserCredentialsProps) => {
                                                     }
                                                     refresh={refresh}
                                                 />
-                                            </Tr>
+                                            </TableRow>
                                         ))}
                                 </Fragment>
                             ))}
-                        </Tbody>
-                    </PFTable>
+                        </TableBody>
+                    </Table>
                 </div>
             )}
             {useFederatedCredentials && hasCredentialTypes && (

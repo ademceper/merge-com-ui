@@ -11,7 +11,6 @@
 
 // @ts-nocheck
 
-import { PageSection, Tab, TabTitleText } from "../../shared/@patternfly/react-core";
 import { Trans, useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 import { RoutableTabs, useRoutableTab } from "../components/routable-tabs/RoutableTabs";
@@ -48,26 +47,23 @@ export default function EventsSection() {
                 helpUrl={helpUrls.eventsUrl}
                 divider={false}
             />
-            <PageSection variant="light" className="pf-v5-u-p-0">
+            <div className="bg-muted/30 p-0">
                 <RoutableTabs
                     isBox
                     defaultLocation={toEvents({ realm, tab: "user-events" })}
                 >
-                    <Tab
-                        title={<TabTitleText>{t("userEvents")}</TabTitleText>}
-                        {...userEventsTab}
-                    >
+                    <Tab title={t("userEvents")} {...userEventsTab}>
                         <UserEvents />
                     </Tab>
                     <Tab
-                        title={<TabTitleText>{t("adminEvents")}</TabTitleText>}
+                        title={t("adminEvents")}
                         data-testid="admin-events-tab"
                         {...adminEventsTab}
                     >
                         <AdminEvents />
                     </Tab>
                 </RoutableTabs>
-            </PageSection>
+            </div>
         </>
     );
 }

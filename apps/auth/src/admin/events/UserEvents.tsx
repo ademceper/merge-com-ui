@@ -15,35 +15,27 @@ import type EventRepresentation from "@keycloak/keycloak-admin-client/lib/defs/e
 import type EventType from "@keycloak/keycloak-admin-client/lib/defs/eventTypes";
 import {
     KeycloakDataTable,
-    KeycloakSelect,
     ListEmptyState,
-    SelectVariant,
     TextControl,
     useFetch
 } from "../../shared/keycloak-ui-shared";
+import { Badge } from "@merge/ui/components/badge";
+import { Button } from "@merge/ui/components/button";
+import { Checkbox } from "@merge/ui/components/checkbox";
+import { Input } from "@merge/ui/components/input";
+import { Label } from "@merge/ui/components/label";
 import {
-    ActionGroup,
-    Button,
-    Chip,
-    ChipGroup,
-    DatePicker,
-    DescriptionList,
-    DescriptionListDescription,
-    DescriptionListGroup,
-    DescriptionListTerm,
-    Flex,
-    FlexItem,
-    Form,
-    FormGroup,
-    Icon,
-    SelectOption,
-    Tooltip
-} from "../../shared/@patternfly/react-core";
+    Popover,
+    PopoverContent,
+    PopoverTrigger,
+} from "@merge/ui/components/popover";
 import {
-    CheckCircleIcon,
-    WarningTriangleIcon
-} from "../../shared/@patternfly/react-icons";
-import { cellWidth } from "../../shared/@patternfly/react-table";
+    Tooltip,
+    TooltipContent,
+    TooltipProvider,
+    TooltipTrigger,
+} from "@merge/ui/components/tooltip";
+import { CheckCircle, Warning } from "@phosphor-icons/react";
 import { pickBy } from "lodash-es";
 import { useState } from "react";
 import { Controller, FormProvider, useForm } from "react-hook-form";
@@ -69,39 +61,40 @@ type UserEventSearchForm = {
 
 const StatusRow = (event: EventRepresentation) =>
     !event.error ? (
-        <span>
-            <Icon status="success">
-                <CheckCircleIcon />
-            </Icon>
+        <span className="flex items-center gap-1">
+            <CheckCircle className="size-4 text-green-600" />
             {event.type}
         </span>
     ) : (
-        <Tooltip content={event.error}>
-            <span>
-                <Icon status="warning">
-                    <WarningTriangleIcon />
-                </Icon>
-                {event.type}
-            </span>
-        </Tooltip>
+        <TooltipProvider>
+            <Tooltip>
+                <TooltipTrigger asChild>
+                    <span className="flex items-center gap-1 cursor-help">
+                        <Warning className="size-4 text-amber-600" />
+                        {event.type}
+                    </span>
+                </TooltipTrigger>
+                <TooltipContent>{event.error}</TooltipContent>
+            </Tooltip>
+        </TooltipProvider>
     );
 
 const DetailCell = (event: EventRepresentation) => (
-    <DescriptionList isHorizontal className="keycloak_eventsection_details">
+    <dl className="grid grid-cols-[auto_1fr] gap-x-4 gap-y-1 keycloak_eventsection_details">
         {event.details &&
             Object.entries(event.details).map(([key, value]) => (
-                <DescriptionListGroup key={key}>
-                    <DescriptionListTerm>{key}</DescriptionListTerm>
-                    <DescriptionListDescription>{value}</DescriptionListDescription>
-                </DescriptionListGroup>
+                <span key={key} className="contents">
+                    <dt className="font-medium text-muted-foreground">{key}</dt>
+                    <dd>{value}</dd>
+                </span>
             ))}
         {event.error && (
-            <DescriptionListGroup key="error">
-                <DescriptionListTerm>error</DescriptionListTerm>
-                <DescriptionListDescription>{event.error}</DescriptionListDescription>
-            </DescriptionListGroup>
+            <>
+                <dt className="font-medium text-muted-foreground">error</dt>
+                <dd>{event.error}</dd>
+            </>
         )}
-    </DescriptionList>
+    </dl>
 );
 
 const UserDetailLink = (event: EventRepresentation) => {
@@ -248,11 +241,8 @@ export const UserEvents = ({ user, client }: UserEventsProps) => {
     const userEventSearchFormDisplay = () => {
         return (
             <FormProvider {...form}>
-                <Flex
-                    direction={{ default: "column" }}
-                    spaceItems={{ default: "spaceItemsNone" }}
-                >
-                    <FlexItem>
+                <div className="flex flex-col gap-0">
+                    <div>
                         <DropdownPanel
                             buttonText={t("searchUserEventsBtn")}
                             setSearchDropdownOpen={setSearchDropdownOpen}
@@ -260,11 +250,10 @@ export const UserEvents = ({ user, client }: UserEventsProps) => {
                             marginRight="2.5rem"
                             width="15vw"
                         >
-                            <Form
+                            <form
                                 data-testid="searchForm"
-                                className="keycloak__events_search__form"
+                                className="keycloak__events_search__form flex flex-col gap-4"
                                 onSubmit={handleSubmit(onSubmit)}
-                                isHorizontal
                             >
                                 {!user && (
                                     <TextControl
@@ -273,85 +262,66 @@ export const UserEvents = ({ user, client }: UserEventsProps) => {
                                         data-testid="userId-searchField"
                                     />
                                 )}
-                                <FormGroup
-                                    label={t("eventType")}
-                                    fieldId="kc-eventType"
-                                    className="keycloak__events_search__form_label"
-                                >
+                                <div className="space-y-2">
+                                    <Label htmlFor="kc-eventType">{t("eventType")}</Label>
                                     <Controller
                                         name="type"
                                         control={control}
                                         render={({ field }) => (
-                                            <KeycloakSelect
-                                                className="keycloak__events_search__type_select"
-                                                data-testid="event-type-searchField"
-                                                chipGroupProps={{
-                                                    numChips: 1,
-                                                    expandedText: t("hide"),
-                                                    collapsedText: t("showRemaining")
-                                                }}
-                                                variant={SelectVariant.typeaheadMulti}
-                                                typeAheadAriaLabel="Select"
-                                                onToggle={isOpen => setSelectOpen(isOpen)}
-                                                selections={field.value}
-                                                onSelect={selectedValue => {
-                                                    const option =
-                                                        selectedValue.toString() as EventType;
-                                                    const changedValue =
-                                                        field.value.includes(option)
-                                                            ? field.value.filter(
-                                                                  (item: string) =>
-                                                                      item !== option
-                                                              )
-                                                            : [...field.value, option];
-
-                                                    field.onChange(changedValue);
-                                                }}
-                                                onClear={() => {
-                                                    field.onChange([]);
-                                                }}
-                                                isOpen={selectOpen}
-                                                aria-labelledby={"eventType"}
-                                                chipGroupComponent={
-                                                    <ChipGroup>
-                                                        {field.value.map(
-                                                            (chip: string) => (
-                                                                <Chip
-                                                                    key={chip}
-                                                                    onClick={event => {
-                                                                        event.stopPropagation();
-                                                                        field.onChange(
-                                                                            field.value.filter(
-                                                                                (
-                                                                                    val: string
-                                                                                ) =>
-                                                                                    val !==
-                                                                                    chip
-                                                                            )
-                                                                        );
-                                                                    }}
-                                                                >
-                                                                    {t(
-                                                                        `eventTypes.${chip}.name`
-                                                                    )}
-                                                                </Chip>
-                                                            )
-                                                        )}
-                                                    </ChipGroup>
-                                                }
-                                            >
-                                                {events?.map(option => (
-                                                    <SelectOption
-                                                        key={option}
-                                                        value={option}
+                                            <Popover open={selectOpen} onOpenChange={setSelectOpen}>
+                                                <PopoverTrigger asChild>
+                                                    <Button
+                                                        type="button"
+                                                        variant="outline"
+                                                        className="w-full justify-between"
+                                                        data-testid="event-type-searchField"
                                                     >
-                                                        {t(`eventTypes.${option}.name`)}
-                                                    </SelectOption>
-                                                ))}
-                                            </KeycloakSelect>
+                                                        {field.value.length === 0
+                                                            ? t("select")
+                                                            : field.value.length === 1
+                                                              ? t(`eventTypes.${field.value[0]}.name`)
+                                                              : `${field.value.length} ${t("selected")}`}
+                                                    </Button>
+                                                </PopoverTrigger>
+                                                <PopoverContent className="w-full p-2" align="start">
+                                                    <div className="max-h-60 overflow-auto space-y-2">
+                                                        {events?.map(option => (
+                                                            <label
+                                                                key={option}
+                                                                className="flex items-center gap-2 cursor-pointer"
+                                                            >
+                                                                <Checkbox
+                                                                    checked={field.value.includes(option)}
+                                                                    onCheckedChange={checked => {
+                                                                        const changedValue = checked
+                                                                            ? [...field.value, option]
+                                                                            : field.value.filter((v: string) => v !== option);
+                                                                        field.onChange(changedValue);
+                                                                    }}
+                                                                />
+                                                                {t(`eventTypes.${option}.name`)}
+                                                            </label>
+                                                        ))}
+                                                    </div>
+                                                    <div className="flex flex-wrap gap-1 mt-2">
+                                                        {field.value.map((chip: string) => (
+                                                            <Badge
+                                                                key={chip}
+                                                                variant="secondary"
+                                                                className="cursor-pointer"
+                                                                onClick={() =>
+                                                                    field.onChange(field.value.filter((v: string) => v !== chip))
+                                                                }
+                                                            >
+                                                                {t(`eventTypes.${chip}.name`)} ×
+                                                            </Badge>
+                                                        ))}
+                                                    </div>
+                                                </PopoverContent>
+                                            </Popover>
                                         )}
                                     />
-                                </FormGroup>
+                                </div>
                                 {!client && (
                                     <TextControl
                                         name="client"
@@ -359,74 +329,66 @@ export const UserEvents = ({ user, client }: UserEventsProps) => {
                                         data-testid="client-searchField"
                                     />
                                 )}
-                                <FormGroup
-                                    label={t("dateFrom")}
-                                    fieldId="kc-dateFrom"
-                                    className="keycloak__events_search__form_label"
-                                >
+                                <div className="space-y-2">
+                                    <Label htmlFor="kc-dateFrom">{t("dateFrom")}</Label>
                                     <Controller
                                         name="dateFrom"
                                         control={control}
                                         render={({ field }) => (
-                                            <DatePicker
-                                                className="pf-v5-u-w-100"
+                                            <Input
+                                                id="kc-dateFrom"
+                                                type="date"
+                                                className="w-full"
                                                 value={field.value}
-                                                onChange={(_, value) =>
-                                                    field.onChange(value)
-                                                }
-                                                inputProps={{ id: "kc-dateFrom" }}
+                                                onChange={e => field.onChange(e.target.value)}
                                             />
                                         )}
                                     />
-                                </FormGroup>
-                                <FormGroup
-                                    label={t("dateTo")}
-                                    fieldId="kc-dateTo"
-                                    className="keycloak__events_search__form_label"
-                                >
+                                </div>
+                                <div className="space-y-2">
+                                    <Label htmlFor="kc-dateTo">{t("dateTo")}</Label>
                                     <Controller
                                         name="dateTo"
                                         control={control}
                                         render={({ field }) => (
-                                            <DatePicker
-                                                className="pf-v5-u-w-100"
+                                            <Input
+                                                id="kc-dateTo"
+                                                type="date"
+                                                className="w-full"
                                                 value={field.value}
-                                                onChange={(_, value) =>
-                                                    field.onChange(value)
-                                                }
-                                                inputProps={{ id: "kc-dateTo" }}
+                                                onChange={e => field.onChange(e.target.value)}
                                             />
                                         )}
                                     />
-                                </FormGroup>
+                                </div>
                                 <TextControl
                                     name="ipAddress"
                                     label={t("ipAddress")}
                                     data-testid="ipAddress-searchField"
                                 />
-                                <ActionGroup>
+                                <div className="flex gap-2">
                                     <Button
                                         data-testid="search-events-btn"
-                                        variant="primary"
                                         type="submit"
-                                        isDisabled={!isDirty}
+                                        disabled={!isDirty}
                                     >
                                         {t("searchUserEventsBtn")}
                                     </Button>
                                     <Button
+                                        type="button"
                                         variant="secondary"
                                         onClick={resetSearch}
-                                        isDisabled={!isDirty}
+                                        disabled={!isDirty}
                                     >
                                         {t("resetBtn")}
                                     </Button>
-                                </ActionGroup>
-                            </Form>
+                                </div>
+                            </form>
                         </DropdownPanel>
-                    </FlexItem>
-                    <FlexItem>
+                    </div>
+                    <div>
                         {Object.entries(activeFilters).length > 0 && (
-                            <div className="keycloak__searchChips pf-v5-u-ml-md">
+                            <div className="keycloak__searchChips ml-4 mt-2 flex flex-wrap gap-2">
                                 {Object.entries(activeFilters).map(filter => {
                                     const [key, value] = filter as [
                                         keyof UserEventSearchForm,
@@ -441,34 +403,42 @@ export const UserEvents = ({ user, client }: UserEventsProps) => {
                                     }
 
                                     return (
-                                        <ChipGroup
-                                            className="pf-v5-u-mt-md pf-v5-u-mr-md"
+                                        <div
+                                            className="flex flex-wrap items-center gap-1 mt-2 mr-2"
                                             key={key}
-                                            categoryName={filterLabels[key]}
-                                            onClick={() => removeFilter(key)}
-                                            isClosable
                                         >
+                                            <span className="text-sm font-medium text-muted-foreground">
+                                                {filterLabels[key]}:
+                                            </span>
                                             {typeof value === "string" ? (
-                                                <Chip isReadOnly>{value}</Chip>
+                                                <Badge variant="secondary">{value}</Badge>
                                             ) : (
                                                 value.map(entry => (
-                                                    <Chip
+                                                    <Badge
                                                         key={entry}
-                                                        onClick={() =>
-                                                            removeFilterValue(key, entry)
-                                                        }
+                                                        variant="secondary"
+                                                        className="cursor-pointer"
+                                                        onClick={() => removeFilterValue(key, entry)}
                                                     >
-                                                        {t(`eventTypes.${entry}.name`)}
-                                                    </Chip>
+                                                        {t(`eventTypes.${entry}.name`)} ×
+                                                    </Badge>
                                                 ))
                                             )}
-                                        </ChipGroup>
+                                            <Button
+                                                type="button"
+                                                variant="ghost"
+                                                size="sm"
+                                                onClick={() => removeFilter(key)}
+                                            >
+                                                ×
+                                            </Button>
+                                        </div>
                                     );
                                 })}
                             </div>
                         )}
-                    </FlexItem>
-                </Flex>
+                    </div>
+                </div>
             </FormProvider>
         );
     };
@@ -511,8 +481,7 @@ export const UserEvents = ({ user, client }: UserEventsProps) => {
                     },
                     {
                         name: "ipAddress",
-                        displayKey: "ipAddress",
-                        transforms: [cellWidth(10)]
+                        displayKey: "ipAddress"
                     },
                     ...(!client
                         ? [

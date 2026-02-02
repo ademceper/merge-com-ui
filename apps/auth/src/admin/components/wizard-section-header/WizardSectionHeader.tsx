@@ -11,9 +11,6 @@
 
 // @ts-nocheck
 
-import { Text, TextContent, Title } from "../../../shared/@patternfly/react-core";
-
-
 export type WizardSectionHeaderProps = {
     title: string;
     description?: string;
@@ -27,21 +24,19 @@ export const WizardSectionHeader = ({
 }: WizardSectionHeaderProps) => {
     return (
         <>
-            <Title
-                size={"xl"}
-                headingLevel={"h2"}
+            <h2
                 className={
                     showDescription
-                        ? "kc-wizard-section-header__title--has-description"
-                        : "kc-wizard-section-header__title"
+                        ? "kc-wizard-section-header__title--has-description text-2xl font-semibold"
+                        : "kc-wizard-section-header__title text-2xl font-semibold"
                 }
             >
                 {title}
-            </Title>
+            </h2>
             {showDescription && (
-                <TextContent className="kc-wizard-section-header__description">
-                    <Text>{description}</Text>
-                </TextContent>
+                <p className="kc-wizard-section-header__description text-muted-foreground mt-1">
+                    {description}
+                </p>
             )}
         </>
     );

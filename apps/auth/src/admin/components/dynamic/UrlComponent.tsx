@@ -11,7 +11,7 @@
 
 // @ts-nocheck
 
-import { FormGroup } from "../../../shared/@patternfly/react-core";
+import { Label } from "@merge/ui/components/label";
 import { useTranslation } from "react-i18next";
 
 import { HelpItem } from "../../../shared/keycloak-ui-shared";
@@ -30,13 +30,12 @@ export const UrlComponent = ({ name, label, helpText }: ComponentProps) => {
     });
 
     return (
-        <FormGroup
-            label={t(label!)}
-            fieldId={name!}
-            labelIcon={<HelpItem helpText={t(helpText!)} fieldLabelId={`${label}`} />}
-            className="keycloak__identity-providers__url_component"
-        >
+        <div className="keycloak__identity-providers__url_component space-y-2">
+            <Label htmlFor={name!} className="flex items-center gap-1">
+                {t(label!)}
+                <HelpItem helpText={t(helpText!)} fieldLabelId={`${label}`} />
+            </Label>
             <FormattedLink title={t(helpText!)} href={value} isInline />
-        </FormGroup>
+        </div>
     );
 };

@@ -18,12 +18,8 @@ import {
     useAlerts,
     useFetch
 } from "../../../shared/keycloak-ui-shared";
-import {
-    ActionGroup,
-    AlertVariant,
-    Button,
-    PageSection
-} from "../../../shared/@patternfly/react-core";
+import { AlertVariant } from "../../../shared/keycloak-ui-shared";
+import { Button } from "@merge/ui/components/button";
 import { FormProvider, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { Link, useNavigate } from "react-router-dom";
@@ -120,7 +116,7 @@ export default function CustomProviderSettings() {
     return (
         <FormProvider {...form}>
             <ExtendedHeader provider={providerId} save={() => handleSubmit(save)()} />
-            <PageSection variant="light">
+            <div className="bg-muted/30 p-4">
                 <FormAccess
                     role="manage-realm"
                     isHorizontal
@@ -138,10 +134,9 @@ export default function CustomProviderSettings() {
                     <DynamicComponents properties={provider?.properties || []} />
                     {provider?.metadata.synchronizable && <SyncSettings />}
                     <SettingsCache form={form} unWrap />
-                    <ActionGroup>
+                    <div className="flex gap-2">
                         <Button
-                            isDisabled={!isDirty}
-                            variant="primary"
+                            disabled={!isDirty}
                             type="submit"
                             data-testid="custom-save"
                         >
@@ -149,19 +144,16 @@ export default function CustomProviderSettings() {
                         </Button>
                         <Button
                             variant="link"
-                            component={props => (
-                                <Link
-                                    {...props}
-                                    to={toUserFederation({ realm: realmName })}
-                                />
-                            )}
+                            asChild
                             data-testid="custom-cancel"
                         >
-                            {t("cancel")}
+                            <Link to={toUserFederation({ realm: realmName })}>
+                                {t("cancel")}
+                            </Link>
                         </Button>
-                    </ActionGroup>
+                    </div>
                 </FormAccess>
-            </PageSection>
+            </div>
         </FormProvider>
     );
 }

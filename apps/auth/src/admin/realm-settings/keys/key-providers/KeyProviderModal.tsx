@@ -11,7 +11,12 @@
 
 // @ts-nocheck
 
-import { Modal, ModalVariant } from "../../../../shared/@patternfly/react-core";
+import {
+    Dialog,
+    DialogContent,
+    DialogHeader,
+    DialogTitle,
+} from "@merge/ui/components/dialog";
 import { useTranslation } from "react-i18next";
 import { KeyProviderForm } from "./KeyProviderForm";
 import type { ProviderType } from "../../routes/KeyProvider";
@@ -24,14 +29,13 @@ type KeyProviderModalProps = {
 export const KeyProviderModal = ({ providerType, onClose }: KeyProviderModalProps) => {
     const { t } = useTranslation();
     return (
-        <Modal
-            className=""
-            variant={ModalVariant.medium}
-            title={t("addProvider")}
-            isOpen
-            onClose={onClose}
-        >
-            <KeyProviderForm providerType={providerType} onClose={onClose} />
-        </Modal>
+        <Dialog open onOpenChange={open => !open && onClose()}>
+            <DialogContent className="max-w-2xl">
+                <DialogHeader>
+                    <DialogTitle>{t("addProvider")}</DialogTitle>
+                </DialogHeader>
+                <KeyProviderForm providerType={providerType} onClose={onClose} />
+            </DialogContent>
+        </Dialog>
     );
 };

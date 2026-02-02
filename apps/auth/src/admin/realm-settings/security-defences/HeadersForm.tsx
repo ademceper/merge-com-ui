@@ -12,7 +12,7 @@
 // @ts-nocheck
 
 import type RealmRepresentation from "@keycloak/keycloak-admin-client/lib/defs/realmRepresentation";
-import { ActionGroup, Button } from "../../../shared/@patternfly/react-core";
+import { Button } from "@merge/ui/components/button";
 import { useFormContext } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { FormAccess } from "../../components/form/FormAccess";
@@ -69,19 +69,18 @@ export const HeadersForm = ({ realm, save }: HeadersFormProps) => {
                 url="https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Referrer-Policy"
             />
 
-            <ActionGroup>
+            <div className="flex items-center gap-2">
                 <Button
-                    variant="primary"
                     type="submit"
                     data-testid="headers-form-tab-save"
-                    isDisabled={!isDirty}
+                    disabled={!isDirty}
                 >
                     {t("save")}
                 </Button>
-                <Button variant="link" onClick={() => reset(realm)}>
+                <Button variant="ghost" type="button" onClick={() => reset(realm)}>
                     {t("revert")}
                 </Button>
-            </ActionGroup>
+            </div>
         </FormAccess>
     );
 };

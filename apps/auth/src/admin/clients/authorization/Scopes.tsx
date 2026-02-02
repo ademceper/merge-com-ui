@@ -18,22 +18,23 @@ import {
     PaginatingTableToolbar,
     useFetch
 } from "../../../shared/keycloak-ui-shared";
+import { Button } from "@merge/ui/components/button";
 import {
-    Button,
-    DescriptionList,
-    PageSection,
-    ToolbarItem
-} from "../../../shared/@patternfly/react-core";
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuTrigger,
+} from "@merge/ui/components/dropdown-menu";
 import {
-    ExpandableRowContent,
     Table,
-    Tbody,
-    Td,
-    Th,
-    Thead,
-    Tr
-} from "../../../shared/@patternfly/react-table";
-import { useState } from "react";
+    TableBody,
+    TableCell,
+    TableHead,
+    TableHeader,
+    TableRow,
+} from "@merge/ui/components/table";
+import { CaretDown, CaretRight, DotsThreeVertical } from "@phosphor-icons/react";
+import { Fragment, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Link, useNavigate } from "react-router-dom";
 import { useAdminClient } from "../../admin-client";
@@ -158,7 +159,7 @@ export const AuthorizationScopes = ({ clientId, isDisabled = false }: ScopesProp
     const noData = scopes.length === 0;
     const searching = search !== "";
     return (
-        <PageSection variant="light" className="pf-v5-u-p-0">
+        <div className="p-0 bg-muted/30">
             <DeleteScopeDialog
                 clientId={clientId}
                 open={deleteDialog}
@@ -181,141 +182,147 @@ export const AuthorizationScopes = ({ clientId, isDisabled = false }: ScopesProp
                     inputGroupPlaceholder={t("searchByName")}
                     inputGroupOnEnter={setSearch}
                     toolbarItem={
-                        <ToolbarItem>
-                            <Button
-                                data-testid="createAuthorizationScope"
-                                component={props => (
-                                    <Link
-                                        {...props}
-                                        to={toNewScope({ realm, id: clientId })}
-                                    />
-                                )}
-                            >
+                        <Button
+                            data-testid="createAuthorizationScope"
+                            asChild
+                        >
+                            <Link to={toNewScope({ realm, id: clientId })}>
                                 {t("createAuthorizationScope")}
-                            </Button>
-                        </ToolbarItem>
+                            </Link>
+                        </Button>
                     }
                 >
                     {!noData && (
-                        <Table aria-label={t("scopes")} variant="compact">
-                            <Thead>
-                                <Tr>
-                                    <Th aria-hidden="true" />
-                                    <Th>{t("name")}</Th>
-                                    <Th>{t("displayName")}</Th>
-                                    <Th aria-hidden="true" />
-                                    <Th aria-hidden="true" />
-                                </Tr>
-                            </Thead>
-                            {scopes.map((scope, rowIndex) => (
-                                <Tbody key={scope.id} isExpanded={isExpanded(scope.id)}>
-                                    <Tr>
-                                        <Td
-                                            expand={{
-                                                rowIndex,
-                                                isExpanded: isExpanded(scope.id),
-                                                onToggle: (_event, index, isExpanded) => {
-                                                    setCollapsed([
-                                                        ...collapsed.slice(0, index),
-                                                        { id: scope.id!, isExpanded },
-                                                        ...collapsed.slice(index + 1)
-                                                    ]);
-                                                }
-                                            }}
-                                        />
-                                        <Td data-testid={`name-column-${scope.name}`}>
-                                            <Link
-                                                to={toScopeDetails({
-                                                    realm,
-                                                    id: clientId,
-                                                    scopeId: scope.id!
-                                                })}
-                                            >
-                                                {scope.name}
-                                            </Link>
-                                        </Td>
-                                        <Td>{scope.displayName}</Td>
-                                        <Td width={10}>
-                                            <Button
-                                                variant="link"
-                                                component={props => (
+                        <Table aria-label={t("scopes")} className="text-sm">
+                            <TableHeader>
+                                <TableRow>
+                                    <TableHead aria-hidden="true" className="w-10" />
+                                    <TableHead>{t("name")}</TableHead>
+                                    <TableHead>{t("displayName")}</TableHead>
+                                    <TableHead className="w-10" />
+                                    <TableHead aria-hidden="true" className="w-10" />
+                                </TableRow>
+                            </TableHeader>
+                            <TableBody>
+                                {scopes.map((scope, rowIndex) => (
+                                    <Fragment key={scope.id}>
+                                        <TableRow>
+                                            <TableCell className="w-10">
+                                                <Button
+                                                    variant="ghost"
+                                                    size="icon"
+                                                    className="h-8 w-8"
+                                                    aria-expanded={isExpanded(scope.id)}
+                                                    onClick={() => {
+                                                        const newVal = !isExpanded(scope.id);
+                                                        setCollapsed([
+                                                            ...collapsed.slice(0, rowIndex),
+                                                            { id: scope.id!, isExpanded: newVal },
+                                                            ...collapsed.slice(rowIndex + 1)
+                                                        ]);
+                                                    }}
+                                                >
+                                                    {isExpanded(scope.id) ? (
+                                                        <CaretDown className="size-4" />
+                                                    ) : (
+                                                        <CaretRight className="size-4" />
+                                                    )}
+                                                </Button>
+                                            </TableCell>
+                                            <TableCell data-testid={`name-column-${scope.name}`}>
+                                                <Link
+                                                    to={toScopeDetails({
+                                                        realm,
+                                                        id: clientId,
+                                                        scopeId: scope.id!
+                                                    })}
+                                                >
+                                                    {scope.name}
+                                                </Link>
+                                            </TableCell>
+                                            <TableCell>{scope.displayName}</TableCell>
+                                            <TableCell className="w-10">
+                                                <Button variant="link" asChild>
                                                     <Link
-                                                        {...props}
                                                         to={toNewPermission({
                                                             realm,
                                                             id: clientId,
                                                             permissionType: "scope",
                                                             selectedId: scope.id
                                                         })}
-                                                    />
-                                                )}
-                                            >
-                                                {t("createPermission")}
-                                            </Button>
-                                        </Td>
-                                        <Td
-                                            isActionCell
-                                            actions={{
-                                                items: [
-                                                    {
-                                                        title: t("delete"),
-                                                        onClick: () => {
-                                                            setSelectedScope(scope);
-                                                            toggleDeleteDialog();
-                                                        }
-                                                    }
-                                                ]
-                                            }}
-                                        />
-                                    </Tr>
-                                    <Tr
-                                        key={`child-${scope.id}`}
-                                        isExpanded={isExpanded(scope.id)}
-                                    >
-                                        <Td />
-                                        <Td colSpan={4}>
-                                            <ExpandableRowContent>
-                                                {isExpanded(scope.id) &&
-                                                scope.isLoaded ? (
-                                                    <DescriptionList
-                                                        isHorizontal
-                                                        className="keycloak_resource_details"
                                                     >
-                                                        <DetailDescriptionLink
-                                                            name="resources"
-                                                            array={scope.resources}
-                                                            convert={r => r.name!}
-                                                            link={r =>
-                                                                toResourceDetails({
-                                                                    id: clientId,
-                                                                    realm,
-                                                                    resourceId: r._id!
-                                                                })
-                                                            }
-                                                        />
-                                                        <DetailDescriptionLink
-                                                            name="associatedPermissions"
-                                                            array={scope.permissions}
-                                                            convert={p => p.name!}
-                                                            link={p =>
-                                                                toPermissionDetails({
-                                                                    id: clientId,
-                                                                    realm,
-                                                                    permissionId: p.id!,
-                                                                    permissionType:
-                                                                        p.type!
-                                                                })
-                                                            }
-                                                        />
-                                                    </DescriptionList>
-                                                ) : (
-                                                    <KeycloakSpinner />
-                                                )}
-                                            </ExpandableRowContent>
-                                        </Td>
-                                    </Tr>
-                                </Tbody>
-                            ))}
+                                                        {t("createPermission")}
+                                                    </Link>
+                                                </Button>
+                                            </TableCell>
+                                            <TableCell className="w-10">
+                                                <DropdownMenu>
+                                                    <DropdownMenuTrigger asChild>
+                                                        <Button
+                                                            variant="ghost"
+                                                            size="icon"
+                                                            className="h-8 w-8"
+                                                            aria-label={t("delete")}
+                                                        >
+                                                            <DotsThreeVertical className="size-4" />
+                                                        </Button>
+                                                    </DropdownMenuTrigger>
+                                                    <DropdownMenuContent align="end">
+                                                        <DropdownMenuItem
+                                                            onClick={() => {
+                                                                setSelectedScope(scope);
+                                                                toggleDeleteDialog();
+                                                            }}
+                                                        >
+                                                            {t("delete")}
+                                                        </DropdownMenuItem>
+                                                    </DropdownMenuContent>
+                                                </DropdownMenu>
+                                            </TableCell>
+                                        </TableRow>
+                                        {isExpanded(scope.id) && (
+                                            <TableRow>
+                                                <TableCell />
+                                                <TableCell colSpan={4} className="bg-muted/30 p-4">
+                                                    {scope.isLoaded ? (
+                                                        <dl
+                                                            className="grid grid-cols-[auto_1fr] gap-x-4 gap-y-1 keycloak_resource_details"
+                                                        >
+                                                            <DetailDescriptionLink
+                                                                name="resources"
+                                                                array={scope.resources}
+                                                                convert={r => r.name!}
+                                                                link={r =>
+                                                                    toResourceDetails({
+                                                                        id: clientId,
+                                                                        realm,
+                                                                        resourceId: r._id!
+                                                                    })
+                                                                }
+                                                            />
+                                                            <DetailDescriptionLink
+                                                                name="associatedPermissions"
+                                                                array={scope.permissions}
+                                                                convert={p => p.name!}
+                                                                link={p =>
+                                                                    toPermissionDetails({
+                                                                        id: clientId,
+                                                                        realm,
+                                                                        permissionId: p.id!,
+                                                                        permissionType: p.type!
+                                                                    })
+                                                                }
+                                                            />
+                                                        </dl>
+                                                    ) : (
+                                                        <KeycloakSpinner />
+                                                    )}
+                                                </TableCell>
+                                            </TableRow>
+                                        )}
+                                    </Fragment>
+                                ))}
+                            </TableBody>
                         </Table>
                     )}
                 </PaginatingTableToolbar>
@@ -337,6 +344,6 @@ export const AuthorizationScopes = ({ clientId, isDisabled = false }: ScopesProp
                     instructions={t("noSearchResultsInstructions")}
                 />
             )}
-        </PageSection>
+        </div>
     );
 };

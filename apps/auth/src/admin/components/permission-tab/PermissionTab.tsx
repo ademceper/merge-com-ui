@@ -13,24 +13,25 @@
 
 import type { ManagementPermissionReference } from "@keycloak/keycloak-admin-client/lib/defs/managementPermissionReference";
 import { HelpItem, useFetch } from "../../../shared/keycloak-ui-shared";
+import { Card, CardContent, CardHeader, CardTitle } from "@merge/ui/components/card";
+import { Label } from "@merge/ui/components/label";
+import { Switch } from "@merge/ui/components/switch";
 import {
-    Card,
-    CardBody,
-    CardTitle,
-    Form,
-    FormGroup,
-    PageSection,
-    Switch
-} from "../../../shared/@patternfly/react-core";
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuTrigger,
+} from "@merge/ui/components/dropdown-menu";
 import {
-    ActionsColumn,
     Table,
-    Tbody,
-    Td,
-    Th,
-    Thead,
-    Tr
-} from "../../../shared/@patternfly/react-table";
+    TableBody,
+    TableCell,
+    TableHead,
+    TableHeader,
+    TableRow,
+} from "@merge/ui/components/table";
+import { Button } from "@merge/ui/components/button";
+import { DotsThreeVertical } from "@phosphor-icons/react";
 import { useState } from "react";
 import { Trans, useTranslation } from "react-i18next";
 import { Link, useNavigate } from "react-router-dom";
@@ -138,51 +139,52 @@ export const PermissionsTab = ({ id, type }: PermissionsTabProps) => {
     }
 
     return (
-        <PageSection variant="light">
+        <div className="bg-muted/30 p-4">
             <DisableConfirm />
-            <Card isFlat>
-                <CardTitle>{t("permissions")}</CardTitle>
-                <CardBody>
+            <Card>
+                <CardHeader>
+                    <CardTitle>{t("permissions")}</CardTitle>
+                </CardHeader>
+                <CardContent>
                     {t(`${type}PermissionsHint`)}
-                    <Form isHorizontal className="pf-v5-u-pt-md">
-                        <FormGroup
-                            hasNoPaddingTop
-                            className="permission-label"
-                            label={t("permissionsEnabled")}
-                            fieldId="permissionsEnabled"
-                            labelIcon={
-                                <HelpItem
-                                    helpText={t("permissionsEnabledHelp")}
-                                    fieldLabelId="permissionsEnabled"
-                                />
-                            }
-                        >
+                    <div className="pt-4 permission-label">
+                        <Label htmlFor="permissionsEnabled" className="flex items-center gap-1">
+                            {t("permissionsEnabled")}
+                            <HelpItem
+                                helpText={t("permissionsEnabledHelp")}
+                                fieldLabelId="permissionsEnabled"
+                            />
+                        </Label>
+                        <div className="flex items-center gap-2 pt-2">
                             <Switch
                                 id="permissionsEnabled"
                                 data-testid="permissionSwitch"
-                                label={t("on")}
-                                labelOff={t("off")}
-                                isChecked={permission.enabled}
-                                onChange={async (_event, enabled) => {
+                                checked={permission.enabled}
+                                onCheckedChange={async (enabled) => {
                                     if (enabled) {
-                                        const permission =
+                                        const perm =
                                             await togglePermissionEnabled(enabled);
-                                        setPermission(permission);
+                                        setPermission(perm);
                                     } else {
                                         toggleDisableDialog();
                                     }
                                 }}
                                 aria-label={t("permissionsEnabled")}
                             />
-                        </FormGroup>
-                    </Form>
-                </CardBody>
+                            <span className="text-sm text-muted-foreground">
+                                {permission.enabled ? t("on") : t("off")}
+                            </span>
+                        </div>
+                    </div>
+                </CardContent>
             </Card>
             {permission.enabled && (
                 <>
-                    <Card isFlat className="pf-v5-u-mt-lg">
-                        <CardTitle>{t("permissionsList")}</CardTitle>
-                        <CardBody>
+                    <Card className="mt-4">
+                        <CardHeader>
+                            <CardTitle>{t("permissionsList")}</CardTitle>
+                        </CardHeader>
+                        <CardContent>
                             <Trans i18nKey="permissionsListIntro">
                                 {" "}
                                 <strong>
@@ -195,26 +197,27 @@ export const PermissionsTab = ({ id, type }: PermissionsTabProps) => {
                                 </strong>
                                 .
                             </Trans>
-                        </CardBody>
+                        </CardContent>
                     </Card>
-                    <Card isFlat className="keycloak__permission__permission-table">
-                        <CardBody className="pf-v5-u-p-0">
-                            <Table aria-label={t("permissionsList")} variant="compact">
-                                <Thead>
-                                    <Tr>
-                                        <Th id="permissionsScopeName">
+                    <Card className="keycloak__permission__permission-table">
+                        <CardContent className="p-0">
+                            <Table aria-label={t("permissionsList")} className="text-sm">
+                                <TableHeader>
+                                    <TableRow>
+                                        <TableHead id="permissionsScopeName">
                                             {t("permissionsScopeName")}
-                                        </Th>
-                                        <Th id="description">{t("description")}</Th>
-                                    </Tr>
-                                </Thead>
-                                <Tbody>
+                                        </TableHead>
+                                        <TableHead id="description">{t("description")}</TableHead>
+                                        <TableHead aria-hidden="true" className="w-10" />
+                                    </TableRow>
+                                </TableHeader>
+                                <TableBody>
                                     {localeSort(
                                         Object.entries(permission.scopePermissions || {}),
                                         ([name]) => name
                                     ).map(([name, id]) => (
-                                        <Tr key={id}>
-                                            <Td>
+                                        <TableRow key={id}>
+                                            <TableCell>
                                                 <Link
                                                     to={toPermissionDetails({
                                                         realm,
@@ -225,18 +228,26 @@ export const PermissionsTab = ({ id, type }: PermissionsTabProps) => {
                                                 >
                                                     {name}
                                                 </Link>
-                                            </Td>
-                                            <Td>
+                                            </TableCell>
+                                            <TableCell>
                                                 {t(
                                                     `scopePermissions.${type}.${name}-description`
                                                 )}
-                                            </Td>
-                                            <Td isActionCell>
-                                                <ActionsColumn
-                                                    items={[
-                                                        {
-                                                            title: t("edit"),
-                                                            onClick() {
+                                            </TableCell>
+                                            <TableCell>
+                                                <DropdownMenu>
+                                                    <DropdownMenuTrigger asChild>
+                                                        <Button
+                                                            variant="ghost"
+                                                            size="icon"
+                                                            aria-label={t("edit")}
+                                                        >
+                                                            <DotsThreeVertical className="size-4" />
+                                                        </Button>
+                                                    </DropdownMenuTrigger>
+                                                    <DropdownMenuContent align="end">
+                                                        <DropdownMenuItem
+                                                            onClick={() =>
                                                                 navigate(
                                                                     toPermissionDetails({
                                                                         realm,
@@ -245,20 +256,22 @@ export const PermissionsTab = ({ id, type }: PermissionsTabProps) => {
                                                                             "scope",
                                                                         permissionId: id
                                                                     })
-                                                                );
+                                                                )
                                                             }
-                                                        }
-                                                    ]}
-                                                />
-                                            </Td>
-                                        </Tr>
+                                                        >
+                                                            {t("edit")}
+                                                        </DropdownMenuItem>
+                                                    </DropdownMenuContent>
+                                                </DropdownMenu>
+                                            </TableCell>
+                                        </TableRow>
                                     ))}
-                                </Tbody>
+                                </TableBody>
                             </Table>
-                        </CardBody>
+                        </CardContent>
                     </Card>
                 </>
             )}
-        </PageSection>
+        </div>
     );
 };

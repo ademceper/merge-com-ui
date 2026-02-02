@@ -11,21 +11,15 @@
 
 // @ts-nocheck
 
-import {
-    Tab,
-    TabProps,
-    Tabs,
-    TabsComponent,
-    TabsProps
-} from "../../../shared/@patternfly/react-core";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@merge/ui/components/tabs";
 import {
     Children,
     JSXElementConstructor,
-    PropsWithChildren,
     ReactElement,
     isValidElement
 } from "react";
 import {
+    Link,
     Path,
     generatePath,
     matchPath,
@@ -39,21 +33,24 @@ import { TAB_PROVIDER } from "../../page/constants";
 import useIsFeatureEnabled, { Feature } from "../../utils/useIsFeatureEnabled";
 import { useTranslation } from "react-i18next";
 
-// TODO: Remove the custom 'children' props and type once the following issue has been resolved:
-// https://github.com/patternfly/patternfly-react/issues/6766
-type ChildElement = ReactElement<TabProps, JSXElementConstructor<TabProps>>;
+type TabChildProps = { eventKey: string; title: React.ReactNode; children?: React.ReactNode; id?: string; "data-testid"?: string };
+type ChildElement = ReactElement<TabChildProps, JSXElementConstructor<TabChildProps>>;
 type Child = ChildElement | boolean | null | undefined;
 
-// TODO: Figure out why we need to omit 'ref' from the props.
 type RoutableTabsProps = {
     children: Child | Child[];
     defaultLocation?: Partial<Path>;
-} & Omit<TabsProps, "ref" | "activeKey" | "defaultActiveKey" | "component" | "children">;
+    isBox?: boolean;
+    mountOnEnter?: boolean;
+    unmountOnExit?: boolean;
+    "data-testid"?: string;
+};
 
 export const RoutableTabs = ({
     children,
     defaultLocation,
-    ...otherProps
+    isBox = false,
+    ...rest
 }: RoutableTabsProps) => {
     const { pathname } = useLocation();
     const params = useParams();
@@ -71,67 +68,69 @@ export const RoutableTabs = ({
                 ...t.metadata.params
             })
         }));
-    // Extract all keys from matchedTabs
-    const matchedTabsKeys = matchedTabs.map(t => t.pathname);
 
-    // Extract event keys from children
-    const eventKeys = Children.toArray(children)
-        .filter((child): child is ChildElement => isValidElement(child))
-        .map(child => child.props.eventKey.toString());
+    const tabChildren = Children.toArray(children).filter(
+        (child): child is ChildElement => isValidElement(child) && typeof (child.props as TabChildProps).eventKey === "string"
+    );
+    const eventKeys = tabChildren.map(c => (c.props as TabChildProps).eventKey.toString());
 
-    const allKeys = [...eventKeys, ...matchedTabsKeys];
-
-    // Determine if there is an exact match.
-    const exactMatch = allKeys.find(eventKey => eventKey === decodeURI(pathname));
-
-    // Determine which event keys at least partially match the current path, then sort them so the nearest match ends up on top.
+    const exactMatch = eventKeys.find(eventKey => eventKey === decodeURI(pathname));
     const nearestMatch = eventKeys
         .filter(eventKey => pathname.includes(eventKey))
         .sort((a, b) => a.length - b.length)
         .pop();
 
+    const activeValue = exactMatch ?? nearestMatch ?? defaultLocation?.pathname ?? pathname;
+
     return (
-        <Tabs
-            activeKey={
-                exactMatch ?? nearestMatch ?? defaultLocation?.pathname ?? pathname
-            }
-            component={TabsComponent.nav}
-            inset={{
-                default: "insetNone",
-                xl: "insetLg",
-                "2xl": "inset2xl"
-            }}
-            unmountOnExit
-            mountOnEnter
-            {...otherProps}
-        >
-            {children as any}
+        <Tabs value={activeValue} className={isBox ? "w-full" : ""} {...rest}>
+            <TabsList className={isBox ? "w-full justify-start border-b rounded-none h-auto p-0 bg-transparent gap-0" : ""} variant={isBox ? "line" : "default"}>
+                {tabChildren.map(child => {
+                    const { eventKey, title, id, "data-testid": dataTestId } = child.props as TabChildProps;
+                    return (
+                        <TabTriggerLink key={eventKey} eventKey={eventKey} id={id} data-testid={dataTestId}>
+                            {title}
+                        </TabTriggerLink>
+                    );
+                })}
+                {isFeatureEnabled(Feature.DeclarativeUI) &&
+                    matchedTabs.map(tab => (
+                        <TabsTrigger key={tab.id} value={tab.pathname} asChild>
+                            <Link to={tab.pathname}>{t(tab.id)}</Link>
+                        </TabsTrigger>
+                    ))}
+            </TabsList>
+            {tabChildren.map(child => {
+                const { eventKey, children: tabContent } = child.props as TabChildProps;
+                return (
+                    <TabsContent key={eventKey} value={eventKey} className="mt-2 focus-visible:outline-none">
+                        {tabContent}
+                    </TabsContent>
+                );
+            })}
             {isFeatureEnabled(Feature.DeclarativeUI) &&
-                matchedTabs.map<any>(tab => (
-                    <DynamicTab key={tab.id} eventKey={tab.pathname} title={t(tab.id)}>
+                matchedTabs.map(tab => (
+                    <TabsContent key={tab.id} value={tab.pathname} className="mt-2 focus-visible:outline-none">
                         <PageHandler page={tab} providerType={TAB_PROVIDER} />
-                    </DynamicTab>
+                    </TabsContent>
                 ))}
         </Tabs>
     );
 };
 
-type DynamicTabProps = {
-    title: string;
-    eventKey: string;
-};
-
-const DynamicTab = ({ children, ...props }: PropsWithChildren<DynamicTabProps>) => {
-    const href = useHref(props.eventKey);
-
+function TabTriggerLink({ eventKey, children, id, "data-testid": dataTestId }: { eventKey: string; children: React.ReactNode; id?: string; "data-testid"?: string }) {
+    const href = useHref({ pathname: eventKey });
     return (
-        <Tab href={href} {...props}>
-            {children}
-        </Tab>
+        <TabsTrigger value={eventKey} asChild id={id} data-testid={dataTestId}>
+            <Link to={href}>{children}</Link>
+        </TabsTrigger>
     );
-};
+}
 
 export const useRoutableTab = (to: Partial<Path>) => ({
     eventKey: to.pathname ?? "",
     href: useHref(to)
 });
+
+/** Placeholder for RoutableTabs: pass eventKey, title, children. Content is rendered by RoutableTabs. */
+export const Tab = (_props: TabChildProps & { children?: React.ReactNode }) => null;

@@ -18,8 +18,8 @@ import type { TFunction } from "i18next";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { toUpperCase } from "../../util";
+import { DropdownMenuItem } from "@merge/ui/components/dropdown-menu";
 import {
-    DropdownItem,
     MenuToggle,
     Select,
     SelectOption,
@@ -59,9 +59,9 @@ export const clientScopeTypesDropdown = (
     onClick: (scope: ClientScopeType) => void
 ) =>
     clientScopeTypes.map(type => (
-        <DropdownItem key={type} onClick={() => onClick(type as ClientScopeType)}>
+        <DropdownMenuItem key={type} onClick={() => onClick(type as ClientScopeType)}>
             {t(`clientScopeType.${type}`)}
-        </DropdownItem>
+        </DropdownMenuItem>
     ));
 
 type CellDropdownProps = Omit<SelectProps, "toggle"> & {

@@ -19,24 +19,25 @@ import {
     useAlerts,
     useFetch
 } from "../../../shared/keycloak-ui-shared";
+import { AlertVariant } from "../../../shared/keycloak-ui-shared";
+import { Alert, AlertTitle } from "@merge/ui/components/alert";
+import { Button } from "@merge/ui/components/button";
 import {
-    Alert,
-    AlertVariant,
-    Button,
-    PageSection,
-    ToolbarItem
-} from "../../../shared/@patternfly/react-core";
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuTrigger,
+} from "@merge/ui/components/dropdown-menu";
 import {
-    ExpandableRowContent,
     Table,
-    TableText,
-    Tbody,
-    Td,
-    Th,
-    Thead,
-    Tr
-} from "../../../shared/@patternfly/react-table";
-import { useState } from "react";
+    TableBody,
+    TableCell,
+    TableHead,
+    TableHeader,
+    TableRow,
+} from "@merge/ui/components/table";
+import { CaretDown, CaretRight, DotsThreeVertical } from "@phosphor-icons/react";
+import { Fragment, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Link, useNavigate } from "react-router-dom";
 import { useAdminClient } from "../../admin-client";
@@ -60,9 +61,9 @@ type ExpandableResourceRepresentation = ResourceRepresentation & {
 };
 
 const UriRenderer = ({ row }: { row: ResourceRepresentation }) => (
-    <TableText wrapModifier="truncate">
+    <span className="truncate block max-w-[200px]">
         {row.uris?.[0]} <MoreLabel array={row.uris} />
-    </TableText>
+    </span>
 );
 
 export const AuthorizationResources = ({
@@ -118,16 +119,11 @@ export const AuthorizationResources = ({
             <>
                 {t("deleteResourceConfirm")}
                 {permissions?.length && (
-                    <Alert
-                        variant="warning"
-                        isInline
-                        isPlain
-                        title={t("deleteResourceWarning")}
-                        className="pf-v5-u-pt-lg"
-                    >
-                        <p className="pf-v5-u-pt-xs">
+                    <Alert variant="destructive" className="mt-4">
+                        <AlertTitle>{t("deleteResourceWarning")}</AlertTitle>
+                        <p className="pt-1">
                             {permissions.map(permission => (
-                                <strong key={permission.id} className="pf-v5-u-pr-md">
+                                <strong key={permission.id} className="pr-2">
                                     {permission.name}
                                 </strong>
                             ))}
@@ -158,7 +154,7 @@ export const AuthorizationResources = ({
     const noData = resources.length === 0;
     const searching = Object.keys(search).length !== 0;
     return (
-        <PageSection variant="light" className="pf-v5-u-p-0">
+        <div className="p-0 bg-muted/30">
             <DeleteConfirm />
             {(!noData || searching) && (
                 <PaginatingTableToolbar
@@ -173,76 +169,76 @@ export const AuthorizationResources = ({
                     }}
                     toolbarItem={
                         <>
-                            <ToolbarItem>
-                                <SearchDropdown
-                                    search={search}
-                                    onSearch={setSearch}
-                                    type="resource"
-                                />
-                            </ToolbarItem>
-
-                            <ToolbarItem>
-                                <Button
-                                    data-testid="createResource"
-                                    isDisabled={isDisabled}
-                                    component={props => (
-                                        <Link
-                                            {...props}
-                                            to={toCreateResource({ realm, id: clientId })}
-                                        />
-                                    )}
-                                >
+                            <SearchDropdown
+                                search={search}
+                                onSearch={setSearch}
+                                type="resource"
+                            />
+                            <Button
+                                data-testid="createResource"
+                                disabled={isDisabled}
+                                asChild
+                            >
+                                <Link to={toCreateResource({ realm, id: clientId })}>
                                     {t("createResource")}
-                                </Button>
-                            </ToolbarItem>
+                                </Link>
+                            </Button>
                         </>
                     }
                 >
                     {!noData && (
-                        <Table aria-label={t("resources")} variant="compact">
-                            <Thead>
-                                <Tr>
-                                    <Th aria-hidden="true" />
-                                    <Th>{t("name")}</Th>
-                                    <Th>{t("displayName")}</Th>
-                                    <Th>{t("type")}</Th>
-                                    <Th>{t("owner")}</Th>
-                                    <Th>{t("uris")}</Th>
+                        <Table aria-label={t("resources")} className="text-sm">
+                            <TableHeader>
+                                <TableRow>
+                                    <TableHead aria-hidden="true" className="w-10" />
+                                    <TableHead>{t("name")}</TableHead>
+                                    <TableHead>{t("displayName")}</TableHead>
+                                    <TableHead>{t("type")}</TableHead>
+                                    <TableHead>{t("owner")}</TableHead>
+                                    <TableHead>{t("uris")}</TableHead>
                                     {!isDisabled && (
                                         <>
-                                            <Th aria-hidden="true" />
-                                            <Th aria-hidden="true" />
+                                            <TableHead className="w-10" />
+                                            <TableHead aria-hidden="true" className="w-10" />
                                         </>
                                     )}
-                                </Tr>
-                            </Thead>
-                            {resources.map((resource, rowIndex) => (
-                                <Tbody
-                                    key={resource._id}
-                                    isExpanded={resource.isExpanded}
-                                >
-                                    <Tr>
-                                        <Td
-                                            expand={{
-                                                rowIndex,
-                                                isExpanded: resource.isExpanded,
-                                                onToggle: (_, rowIndex) => {
-                                                    const rows = resources.map(
-                                                        (resource, index) =>
-                                                            index === rowIndex
-                                                                ? {
-                                                                      ...resource,
-                                                                      isExpanded:
-                                                                          !resource.isExpanded
-                                                                  }
-                                                                : resource
-                                                    );
-                                                    setResources(rows);
-                                                }
-                                            }}
-                                        />
-                                        <Td data-testid={`name-column-${resource.name}`}>
-                                            <TableText wrapModifier="truncate">
+                                </TableRow>
+                            </TableHeader>
+                            <TableBody>
+                                {resources.map((resource, rowIndex) => (
+                                    <Fragment key={resource._id}>
+                                        <TableRow>
+                                            <TableCell className="w-10">
+                                                <Button
+                                                    variant="ghost"
+                                                    size="icon"
+                                                    className="h-8 w-8"
+                                                    aria-expanded={resource.isExpanded}
+                                                    onClick={() => {
+                                                        const rows = resources.map(
+                                                            (r, index) =>
+                                                                index === rowIndex
+                                                                    ? {
+                                                                          ...r,
+                                                                          isExpanded:
+                                                                              !r.isExpanded
+                                                                      }
+                                                                    : r
+                                                        );
+                                                        setResources(rows);
+                                                    }}
+                                                >
+                                                    {resource.isExpanded ? (
+                                                        <CaretDown className="size-4" />
+                                                    ) : (
+                                                        <CaretRight className="size-4" />
+                                                    )}
+                                                </Button>
+                                            </TableCell>
+                                            <TableCell
+                                                data-testid={`name-column-${resource.name}`}
+                                                className="max-w-[150px] truncate"
+                                            >
                                                 <Link
                                                     to={toResourceDetails({
                                                         realm,
@@ -252,34 +248,24 @@ export const AuthorizationResources = ({
                                                 >
                                                     {resource.name}
                                                 </Link>
-                                            </TableText>
-                                        </Td>
-                                        <Td>
-                                            <TableText wrapModifier="truncate">
+                                            </TableCell>
+                                            <TableCell className="max-w-[120px] truncate">
                                                 {resource.displayName}
-                                            </TableText>
-                                        </Td>
-                                        <Td>
-                                            <TableText wrapModifier="truncate">
+                                            </TableCell>
+                                            <TableCell className="max-w-[100px] truncate">
                                                 {resource.type}
-                                            </TableText>
-                                        </Td>
-                                        <Td>
-                                            <TableText wrapModifier="truncate">
+                                            </TableCell>
+                                            <TableCell className="max-w-[120px] truncate">
                                                 {resource.owner?.name}
-                                            </TableText>
-                                        </Td>
-                                        <Td>
-                                            <UriRenderer row={resource} />
-                                        </Td>
-                                        {!isDisabled && (
-                                            <>
-                                                <Td width={10}>
-                                                    <Button
-                                                        variant="link"
-                                                        component={props => (
+                                            </TableCell>
+                                            <TableCell>
+                                                <UriRenderer row={resource} />
+                                            </TableCell>
+                                            {!isDisabled && (
+                                                <>
+                                                    <TableCell className="w-10">
+                                                        <Button variant="link" asChild>
                                                             <Link
-                                                                {...props}
                                                                 to={toNewPermission({
                                                                     realm,
                                                                     id: clientId,
@@ -288,54 +274,65 @@ export const AuthorizationResources = ({
                                                                     selectedId:
                                                                         resource._id
                                                                 })}
-                                                            />
-                                                        )}
-                                                    >
-                                                        {t("createPermission")}
-                                                    </Button>
-                                                </Td>
-                                                <Td
-                                                    actions={{
-                                                        items: [
-                                                            {
-                                                                title: t("delete"),
-                                                                onClick: async () => {
-                                                                    setSelectedResource(
-                                                                        resource
-                                                                    );
-                                                                    setPermission(
-                                                                        await fetchPermissions(
-                                                                            resource._id!
-                                                                        )
-                                                                    );
-                                                                    toggleDeleteDialog();
-                                                                }
-                                                            }
-                                                        ]
-                                                    }}
-                                                />
-                                            </>
-                                        )}
-                                    </Tr>
-                                    <Tr
-                                        key={`child-${resource._id}`}
-                                        isExpanded={resource.isExpanded}
-                                    >
-                                        <Td />
-                                        <Td colSpan={4}>
-                                            <ExpandableRowContent>
-                                                {resource.isExpanded && (
+                                                            >
+                                                                {t("createPermission")}
+                                                            </Link>
+                                                        </Button>
+                                                    </TableCell>
+                                                    <TableCell className="w-10">
+                                                        <DropdownMenu>
+                                                            <DropdownMenuTrigger asChild>
+                                                                <Button
+                                                                    variant="ghost"
+                                                                    size="icon"
+                                                                    className="h-8 w-8"
+                                                                    aria-label={t("delete")}
+                                                                >
+                                                                    <DotsThreeVertical className="size-4" />
+                                                                </Button>
+                                                            </DropdownMenuTrigger>
+                                                            <DropdownMenuContent align="end">
+                                                                <DropdownMenuItem
+                                                                    onClick={async () => {
+                                                                        setSelectedResource(
+                                                                            resource
+                                                                        );
+                                                                        setPermission(
+                                                                            await fetchPermissions(
+                                                                                resource._id!
+                                                                            )
+                                                                        );
+                                                                        toggleDeleteDialog();
+                                                                    }}
+                                                                >
+                                                                    {t("delete")}
+                                                                </DropdownMenuItem>
+                                                            </DropdownMenuContent>
+                                                        </DropdownMenu>
+                                                    </TableCell>
+                                                </>
+                                            )}
+                                        </TableRow>
+                                        {resource.isExpanded && (
+                                            <TableRow>
+                                                <TableCell />
+                                                <TableCell
+                                                    colSpan={
+                                                        isDisabled ? 5 : 7
+                                                    }
+                                                    className="bg-muted/30 p-4"
+                                                >
                                                     <DetailCell
                                                         clientId={clientId}
                                                         id={resource._id!}
                                                         uris={resource.uris}
                                                     />
-                                                )}
-                                            </ExpandableRowContent>
-                                        </Td>
-                                    </Tr>
-                                </Tbody>
-                            ))}
+                                                </TableCell>
+                                            </TableRow>
+                                        )}
+                                    </Fragment>
+                                ))}
+                            </TableBody>
                         </Table>
                     )}
                 </PaginatingTableToolbar>
@@ -358,6 +355,6 @@ export const AuthorizationResources = ({
                     }
                 />
             )}
-        </PageSection>
+        </div>
     );
 };

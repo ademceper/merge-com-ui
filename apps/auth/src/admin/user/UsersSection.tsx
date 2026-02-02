@@ -12,7 +12,6 @@
 // @ts-nocheck
 
 import { useTranslation } from "react-i18next";
-import { Tab, TabTitleText } from "../../shared/@patternfly/react-core";
 
 import { ViewHeader } from "../components/view-header/ViewHeader";
 import { useRealm } from "../context/realm-context/RealmContext";
@@ -75,7 +74,7 @@ export default function UsersSection() {
                         <Tab
                             id="permissions"
                             data-testid="permissionsTab"
-                            title={<TabTitleText>{t("permissions")}</TabTitleText>}
+                            title={t("permissions")}
                             {...permissionsTab}
                         >
                             <PermissionsTab type="users" />

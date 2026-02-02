@@ -16,29 +16,26 @@ import {
     PaginatingTableToolbar,
     useFetch
 } from "../../../../shared/keycloak-ui-shared";
+import { MagnifyingGlass } from "@phosphor-icons/react";
 import {
-    Button,
-    Flex,
-    FlexItem,
-    Form,
-    FormGroup,
-    Label,
-    Modal,
-    ModalVariant,
-    Text,
-    TextContent,
-    TextInput,
-    TextVariants
-} from "../../../../shared/@patternfly/react-core";
-import { SearchIcon } from "../../../../shared/@patternfly/react-icons";
+    Dialog,
+    DialogContent,
+    DialogFooter,
+    DialogHeader,
+    DialogTitle
+} from "@merge/ui/components/dialog";
+import { Badge } from "@merge/ui/components/badge";
+import { Button } from "@merge/ui/components/button";
+import { Input } from "@merge/ui/components/input";
+import { Label } from "@merge/ui/components/label";
 import {
     Table,
-    Tbody,
-    Td,
-    Th,
-    Thead,
-    Tr
-} from "../../../../shared/@patternfly/react-table";
+    TableBody,
+    TableCell,
+    TableHead,
+    TableHeader,
+    TableRow
+} from "@merge/ui/components/table";
 import { useState } from "react";
 import { useFormContext } from "react-hook-form";
 import { Trans, useTranslation } from "react-i18next";
@@ -127,40 +124,12 @@ export const AddTranslationsDialog = ({
     );
 
     return (
-        <Modal
-            variant={ModalVariant.medium}
-            title={t("addTranslationsModalTitle")}
-            isOpen
-            onClose={toggleDialog}
-            actions={[
-                <Button
-                    key="ok"
-                    data-testid="okTranslationBtn"
-                    variant="primary"
-                    form="add-translation"
-                    isDisabled={!isValid}
-                    onClick={toggleDialog}
-                >
-                    {t("addTranslationDialogOkBtn")}
-                </Button>,
-                <Button
-                    key="cancel"
-                    data-testid="cancelTranslationBtn"
-                    variant="link"
-                    onClick={() => {
-                        setupForm({ [translationKey]: translations });
-                        toggleDialog();
-                    }}
-                >
-                    {t("cancel")}
-                </Button>
-            ]}
-        >
-            <Flex
-                direction={{ default: "column" }}
-                spaceItems={{ default: "spaceItemsNone" }}
-            >
-                <FlexItem>
+        <Dialog open onOpenChange={open => !open && toggleDialog()}>
+            <DialogContent className="max-w-2xl">
+                <DialogHeader>
+                    <DialogTitle>{t("addTranslationsModalTitle")}</DialogTitle>
+                </DialogHeader>
+                <div className="flex flex-col gap-4">
                     <Trans
                         i18nKey="addTranslationsModalTitle"
                         values={{ fieldName: t(fieldName) }}
@@ -168,31 +137,26 @@ export const AddTranslationsDialog = ({
                         You are able to translate the fieldName based on your locale or
                         <strong>location</strong>
                     </Trans>
-                </FlexItem>
-                <FlexItem>
-                    <Form id="add-translation" data-testid="addTranslationForm">
-                        <FormGroup label={t("translationKey")} fieldId="translationKey">
-                            <TextInput
+                    <form id="add-translation" data-testid="addTranslationForm" className="flex flex-col gap-4">
+                        <div className="space-y-2">
+                            <Label htmlFor="translationKey">{t("translationKey")}</Label>
+                            <Input
                                 id="translationKey"
-                                label={t("translationKey")}
                                 data-testid="translation-key"
-                                isDisabled
+                                disabled
                                 value={
                                     predefinedAttributes?.includes(orgKey)
                                         ? `\${${orgKey}}`
                                         : `\${${translationKey}}`
                                 }
+                                readOnly
+                                className="bg-muted"
                             />
-                        </FormGroup>
-                        <FlexItem>
-                            <TextContent>
-                                <Text
-                                    className="pf-v5-u-font-size-sm pf-v5-u-font-weight-bold"
-                                    component={TextVariants.p}
-                                >
-                                    {t("translationsTableHeading")}
-                                </Text>
-                            </TextContent>
+                        </div>
+                        <div>
+                            <p className="text-sm font-semibold">
+                                {t("translationsTableHeading")}
+                            </p>
                             <PaginatingTableToolbar
                                 count={translations.length}
                                 first={first}
@@ -214,7 +178,7 @@ export const AddTranslationsDialog = ({
                                 {translations.length === 0 && filter && (
                                     <ListEmptyState
                                         hasIcon
-                                        icon={SearchIcon}
+                                        icon={MagnifyingGlass}
                                         isSearchVariant
                                         message={t("noSearchResults")}
                                         instructions={t(
@@ -226,26 +190,27 @@ export const AddTranslationsDialog = ({
                                     <Table
                                         aria-label={t("addTranslationsDialogRowsTable")}
                                         data-testid="add-translations-dialog-rows-table"
+                                        className="text-sm"
                                     >
-                                        <Thead>
-                                            <Tr>
-                                                <Th className="pf-v5-u-py-lg">
+                                        <TableHeader>
+                                            <TableRow>
+                                                <TableHead className="py-2">
                                                     {t(
                                                         "supportedLanguagesTableColumnName"
                                                     )}
-                                                </Th>
-                                                <Th className="pf-v5-u-py-lg">
+                                                </TableHead>
+                                                <TableHead className="py-2">
                                                     {t("translationTableColumnName")}
-                                                </Th>
-                                            </Tr>
-                                        </Thead>
-                                        <Tbody>
+                                                </TableHead>
+                                            </TableRow>
+                                        </TableHeader>
+                                        <TableBody>
                                             {translations
                                                 .slice(0, max)
                                                 .map((translation, index) => (
-                                                    <Tr key={index}>
-                                                        <Td
-                                                            dataLabel={t(
+                                                    <TableRow key={index}>
+                                                        <TableCell
+                                                            data-label={t(
                                                                 "supportedLanguage"
                                                             )}
                                                         >
@@ -255,16 +220,13 @@ export const AddTranslationsDialog = ({
                                                             )}
                                                             {translation.locale ===
                                                                 realm?.defaultLocale && (
-                                                                <Label
-                                                                    className="pf-v5-u-ml-xs"
-                                                                    color="blue"
-                                                                >
+                                                                <Badge variant="secondary" className="ml-1">
                                                                     {t("defaultLanguage")}
-                                                                </Label>
+                                                                </Badge>
                                                             )}
-                                                        </Td>
-                                                        <Td>
-                                                            <TextInput
+                                                        </TableCell>
+                                                        <TableCell>
+                                                            <Input
                                                                 id={`${prefix}.${index}.value`}
                                                                 data-testid={`translation-value-${index}`}
                                                                 {...register(
@@ -282,17 +244,37 @@ export const AddTranslationsDialog = ({
                                                                     }
                                                                 )}
                                                             />
-                                                        </Td>
-                                                    </Tr>
+                                                        </TableCell>
+                                                    </TableRow>
                                                 ))}
-                                        </Tbody>
+                                        </TableBody>
                                     </Table>
                                 )}
                             </PaginatingTableToolbar>
-                        </FlexItem>
-                    </Form>
-                </FlexItem>
-            </Flex>
-        </Modal>
+                        </div>
+                    </form>
+                </div>
+                <DialogFooter>
+                    <Button
+                        data-testid="cancelTranslationBtn"
+                        variant="link"
+                        onClick={() => {
+                            setupForm({ [translationKey]: translations });
+                            toggleDialog();
+                        }}
+                    >
+                        {t("cancel")}
+                    </Button>
+                    <Button
+                        data-testid="okTranslationBtn"
+                        form="add-translation"
+                        disabled={!isValid}
+                        onClick={toggleDialog}
+                    >
+                        {t("addTranslationDialogOkBtn")}
+                    </Button>
+                </DialogFooter>
+            </DialogContent>
+        </Dialog>
     );
 };

@@ -23,25 +23,13 @@ import {
     useFetch,
     useHelp
 } from "../../../shared/keycloak-ui-shared";
-import {
-    ClipboardCopy,
-    Form,
-    FormGroup,
-    Grid,
-    GridItem,
-    PageSection,
-    SelectOption,
-    Split,
-    SplitItem,
-    Tab,
-    TabContent,
-    Tabs,
-    TabTitleText,
-    Text,
-    TextContent
-} from "../../../shared/@patternfly/react-core";
-import { QuestionCircleIcon } from "../../../shared/@patternfly/react-icons";
-import { useEffect, useRef, useState } from "react";
+import { SelectOption } from "../../../shared/@patternfly/react-core";
+import { Button } from "@merge/ui/components/button";
+import { Input } from "@merge/ui/components/input";
+import { Label } from "@merge/ui/components/label";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@merge/ui/components/tabs";
+import { Question } from "@phosphor-icons/react";
+import { useEffect, useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { useAdminClient } from "../../admin-client";
@@ -150,12 +138,6 @@ export const EvaluateScopes = ({ clientId, protocol }: EvaluateScopesProps) => {
     const [userInfo, setUserInfo] = useState("");
     const [idToken, setIdToken] = useState("");
 
-    const tabContent1 = useRef(null);
-    const tabContent2 = useRef(null);
-    const tabContent3 = useRef(null);
-    const tabContent4 = useRef(null);
-    const tabContent5 = useRef(null);
-
     const form = useForm();
     const { watch } = form;
     const selectedAudience: string[] = watch("targetAudience");
@@ -241,29 +223,29 @@ export const EvaluateScopes = ({ clientId, protocol }: EvaluateScopesProps) => {
         [form.getValues("user"), selected, selectedAudience]
     );
 
+    const copyScopeToClipboard = () => {
+        void navigator.clipboard.writeText(selected.join(" "));
+    };
+
     return (
         <>
-            <PageSection variant="light">
+            <div className="bg-muted/30 p-4">
                 {enabled && (
-                    <TextContent className="keycloak__section_intro__help">
-                        <Text>
-                            <QuestionCircleIcon /> {t("evaluateExplain")}
-                        </Text>
-                    </TextContent>
+                    <p className="keycloak__section_intro__help text-sm flex items-center gap-1">
+                        <Question className="size-4" /> {t("evaluateExplain")}
+                    </p>
                 )}
-                <Form isHorizontal>
-                    <FormGroup
-                        label={t("scopeParameter")}
-                        fieldId="scopeParameter"
-                        labelIcon={
+                <form className="space-y-4">
+                    <div className="space-y-2">
+                        <Label htmlFor="scopeParameter" className="flex items-center gap-1">
+                            {t("scopeParameter")}
                             <HelpItem
                                 helpText={t("scopeParameterHelp")}
                                 fieldLabelId="scopeParameter"
                             />
-                        }
-                    >
-                        <Split hasGutter>
-                            <SplitItem isFilled>
+                        </Label>
+                        <div className="flex gap-2 items-center flex-wrap">
+                            <div className="flex-1 min-w-[200px]">
                                 <KeycloakSelect
                                     toggleId="scopeParameter"
                                     variant={SelectVariant.typeaheadMulti}
@@ -294,14 +276,25 @@ export const EvaluateScopes = ({ clientId, protocol }: EvaluateScopesProps) => {
                                         </SelectOption>
                                     ))}
                                 </KeycloakSelect>
-                            </SplitItem>
-                            <SplitItem>
-                                <ClipboardCopy className="keycloak__scopes_evaluate__clipboard-copy">
-                                    {selected.join(" ")}
-                                </ClipboardCopy>
-                            </SplitItem>
-                        </Split>
-                    </FormGroup>
+                            </div>
+                            <div className="flex gap-1 keycloak__scopes_evaluate__clipboard-copy">
+                                <Input
+                                    readOnly
+                                    className="flex-1 min-w-[120px] font-mono text-sm"
+                                    value={selected.join(" ")}
+                                />
+                                <Button
+                                    type="button"
+                                    variant="secondary"
+                                    size="sm"
+                                    onClick={copyScopeToClipboard}
+                                    aria-label={t("copyToClipboard")}
+                                >
+                                    {t("copy")}
+                                </Button>
+                            </div>
+                        </div>
+                    </div>
                     {hasViewUsers && (
                         <FormProvider {...form}>
                             <UserSelect
@@ -324,169 +317,91 @@ export const EvaluateScopes = ({ clientId, protocol }: EvaluateScopesProps) => {
                             placeholderText={t("targetAudiencePlaceHolder")}
                         />
                     </FormProvider>
-                </Form>
-            </PageSection>
+                </form>
+            </div>
 
-            <Grid hasGutter className="keycloak__scopes_evaluate__tabs">
-                <GridItem span={8}>
-                    <TabContent
-                        aria-labelledby="pf-tab-0-effectiveProtocolMappers"
-                        eventKey={0}
-                        id="effectiveProtocolMappers"
-                        ref={tabContent1}
-                    >
-                        <ProtocolMappers protocolMappers={protocolMappers} />
-                    </TabContent>
-                    <TabContent
-                        aria-labelledby="pf-tab-0-effectiveRoleScopeMappings"
-                        eventKey={1}
-                        id="effectiveRoleScopeMappings"
-                        ref={tabContent2}
-                        hidden
-                    >
-                        <EffectiveRoles effectiveRoles={effectiveRoles} />
-                    </TabContent>
-                    <TabContent
-                        aria-labelledby={t("generatedAccessToken")}
-                        eventKey={2}
-                        id="tab-generated-access-token"
-                        ref={tabContent3}
-                        hidden
-                    >
-                        <GeneratedCodeTab
-                            text={accessToken}
-                            user={form.getValues("user")}
-                            label="generatedAccessToken"
-                        />
-                    </TabContent>
-                    <TabContent
-                        aria-labelledby={t("generatedIdToken")}
-                        eventKey={3}
-                        id="tab-generated-id-token"
-                        ref={tabContent4}
-                        hidden
-                    >
-                        <GeneratedCodeTab
-                            text={idToken}
-                            user={form.getValues("user")}
-                            label="generatedIdToken"
-                        />
-                    </TabContent>
-                    <TabContent
-                        aria-labelledby={t("generatedUserInfo")}
-                        eventKey={4}
-                        id="tab-generated-user-info"
-                        ref={tabContent5}
-                        hidden
-                    >
-                        <GeneratedCodeTab
-                            text={userInfo}
-                            user={form.getValues("user")}
-                            label="generatedUserInfo"
-                        />
-                    </TabContent>
-                </GridItem>
-                <GridItem span={4}>
-                    <Tabs
-                        id="tabs"
-                        key={key}
-                        isVertical
-                        activeKey={activeTab}
-                        onSelect={(_, key) => setActiveTab(key as number)}
-                    >
-                        <Tab
-                            id="effectiveProtocolMappers"
-                            aria-controls="effectiveProtocolMappers"
-                            data-testid="effective-protocol-mappers-tab"
-                            eventKey={0}
-                            title={
-                                <TabTitleText>
-                                    {t("effectiveProtocolMappers")}{" "}
-                                    <HelpItem
-                                        fieldLabelId="effectiveProtocolMappers"
-                                        helpText={t("effectiveProtocolMappersHelp")}
-                                        noVerticalAlign={false}
-                                        unWrap
-                                    />
-                                </TabTitleText>
-                            }
-                            tabContentRef={tabContent1}
-                        />
-                        <Tab
-                            id="effectiveRoleScopeMappings"
-                            aria-controls="effectiveRoleScopeMappings"
-                            data-testid="effective-role-scope-mappings-tab"
-                            eventKey={1}
-                            title={
-                                <TabTitleText>
-                                    {t("effectiveRoleScopeMappings")}{" "}
-                                    <HelpItem
-                                        fieldLabelId="effectiveRoleScopeMappings"
-                                        helpText={t("effectiveRoleScopeMappingsHelp")}
-                                        noVerticalAlign={false}
-                                        unWrap
-                                    />
-                                </TabTitleText>
-                            }
-                            tabContentRef={tabContent2}
-                        ></Tab>
-                        <Tab
-                            id="generatedAccessToken"
-                            aria-controls="generatedAccessToken"
-                            data-testid="generated-access-token-tab"
-                            eventKey={2}
-                            title={
-                                <TabTitleText>
-                                    {t("generatedAccessToken")}{" "}
-                                    <HelpItem
-                                        fieldLabelId="generatedAccessToken"
-                                        helpText={t("generatedAccessTokenHelp")}
-                                        noVerticalAlign={false}
-                                        unWrap
-                                    />
-                                </TabTitleText>
-                            }
-                            tabContentRef={tabContent3}
-                        />
-                        <Tab
-                            id="generatedIdToken"
-                            aria-controls="generatedIdToken"
-                            data-testid="generated-id-token-tab"
-                            eventKey={3}
-                            title={
-                                <TabTitleText>
-                                    {t("generatedIdToken")}{" "}
-                                    <HelpItem
-                                        fieldLabelId="generatedIdToken"
-                                        helpText={t("generatedIdTokenHelp")}
-                                        noVerticalAlign={false}
-                                        unWrap
-                                    />
-                                </TabTitleText>
-                            }
-                            tabContentRef={tabContent4}
-                        />
-                        <Tab
-                            id="generatedUserInfo"
-                            aria-controls="generatedUserInfo"
-                            data-testid="generated-user-info-tab"
-                            eventKey={4}
-                            title={
-                                <TabTitleText>
-                                    {t("generatedUserInfo")}{" "}
-                                    <HelpItem
-                                        fieldLabelId="generatedUserInfo"
-                                        helpText={t("generatedUserInfoHelp")}
-                                        noVerticalAlign={false}
-                                        unWrap
-                                    />
-                                </TabTitleText>
-                            }
-                            tabContentRef={tabContent5}
-                        />
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 keycloak__scopes_evaluate__tabs">
+                <div className="lg:col-span-2">
+                    <Tabs value={String(activeTab)} onValueChange={v => setActiveTab(Number(v))} className="w-full">
+                        <TabsList className="grid w-full grid-cols-5">
+                            <TabsTrigger value="0" data-testid="effective-protocol-mappers-tab">
+                                {t("effectiveProtocolMappers")}
+                            </TabsTrigger>
+                            <TabsTrigger value="1" data-testid="effective-role-scope-mappings-tab">
+                                {t("effectiveRoleScopeMappings")}
+                            </TabsTrigger>
+                            <TabsTrigger value="2" data-testid="generated-access-token-tab">
+                                {t("generatedAccessToken")}
+                            </TabsTrigger>
+                            <TabsTrigger value="3" data-testid="generated-id-token-tab">
+                                {t("generatedIdToken")}
+                            </TabsTrigger>
+                            <TabsTrigger value="4" data-testid="generated-user-info-tab">
+                                {t("generatedUserInfo")}
+                            </TabsTrigger>
+                        </TabsList>
+                        <TabsContent value="0" id="effectiveProtocolMappers">
+                            <ProtocolMappers protocolMappers={protocolMappers} />
+                        </TabsContent>
+                        <TabsContent value="1" id="effectiveRoleScopeMappings">
+                            <EffectiveRoles effectiveRoles={effectiveRoles} />
+                        </TabsContent>
+                        <TabsContent value="2" id="tab-generated-access-token">
+                            <GeneratedCodeTab
+                                text={accessToken}
+                                user={form.getValues("user")}
+                                label="generatedAccessToken"
+                            />
+                        </TabsContent>
+                        <TabsContent value="3" id="tab-generated-id-token">
+                            <GeneratedCodeTab
+                                text={idToken}
+                                user={form.getValues("user")}
+                                label="generatedIdToken"
+                            />
+                        </TabsContent>
+                        <TabsContent value="4" id="tab-generated-user-info">
+                            <GeneratedCodeTab
+                                text={userInfo}
+                                user={form.getValues("user")}
+                                label="generatedUserInfo"
+                            />
+                        </TabsContent>
                     </Tabs>
-                </GridItem>
-            </Grid>
+                </div>
+                <div className="flex flex-col gap-2">
+                    <HelpItem
+                        fieldLabelId="effectiveProtocolMappers"
+                        helpText={t("effectiveProtocolMappersHelp")}
+                        noVerticalAlign={false}
+                        unWrap
+                    />
+                    <HelpItem
+                        fieldLabelId="effectiveRoleScopeMappings"
+                        helpText={t("effectiveRoleScopeMappingsHelp")}
+                        noVerticalAlign={false}
+                        unWrap
+                    />
+                    <HelpItem
+                        fieldLabelId="generatedAccessToken"
+                        helpText={t("generatedAccessTokenHelp")}
+                        noVerticalAlign={false}
+                        unWrap
+                    />
+                    <HelpItem
+                        fieldLabelId="generatedIdToken"
+                        helpText={t("generatedIdTokenHelp")}
+                        noVerticalAlign={false}
+                        unWrap
+                    />
+                    <HelpItem
+                        fieldLabelId="generatedUserInfo"
+                        helpText={t("generatedUserInfoHelp")}
+                        noVerticalAlign={false}
+                        unWrap
+                    />
+                </div>
+            </div>
         </>
     );
 };

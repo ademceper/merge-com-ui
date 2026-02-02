@@ -13,7 +13,7 @@
 
 import type UserSessionRepresentation from "@keycloak/keycloak-admin-client/lib/defs/userSessionRepresentation";
 import { Info } from "@phosphor-icons/react";
-import { CubesIcon } from "../../shared/@patternfly/react-icons";
+import { Cube } from "@phosphor-icons/react";
 import { useEnvironment } from "../../shared/keycloak-ui-shared";
 import { Badge } from "@merge/ui/components/badge";
 import { Button } from "@merge/ui/components/button";
@@ -22,7 +22,6 @@ import {
     TooltipContent,
     TooltipTrigger
 } from "@merge/ui/components/tooltip";
-import { IRowData } from "../../shared/@patternfly/react-table";
 import { ReactNode, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Link, useMatch, useNavigate } from "react-router-dom";
@@ -178,8 +177,8 @@ export default function SessionsTable({
         }
     });
 
-    async function onClickRevoke(rowData: IRowData) {
-        const session = rowData.data as UserSessionRepresentation;
+    async function onClickRevoke(rowData: { data: UserSessionRepresentation }) {
+        const session = rowData.data;
         await adminClient.realms.deleteSession({
             realm,
             session: session.id!,
@@ -189,8 +188,8 @@ export default function SessionsTable({
         refresh();
     }
 
-    async function onClickSignOut(rowData: IRowData) {
-        const session = rowData.data as UserSessionRepresentation;
+    async function onClickSignOut(rowData: { data: UserSessionRepresentation }) {
+        const session = rowData.data;
         await adminClient.realms.deleteSession({
             realm,
             session: session.id!,
@@ -227,7 +226,7 @@ export default function SessionsTable({
                     )
                 }
                 columns={columns}
-                actionResolver={(rowData: IRowData) => {
+                actionResolver={(rowData: { data: UserSessionRepresentation }) => {
                     if (
                         rowData.data.type === "Offline" ||
                         rowData.data.type === "OFFLINE"
@@ -249,7 +248,7 @@ export default function SessionsTable({
                 emptyState={
                     <ListEmptyState
                         hasIcon
-                        icon={CubesIcon}
+                        icon={Cube}
                         message={t("noSessions")}
                         primaryActionText={t("refresh")}
                         onPrimaryAction={refresh}

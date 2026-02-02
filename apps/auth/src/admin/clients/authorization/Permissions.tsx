@@ -19,29 +19,26 @@ import {
     useAlerts,
     useFetch
 } from "../../../shared/keycloak-ui-shared";
+import { AlertVariant } from "../../../shared/keycloak-ui-shared";
+import { Alert, AlertTitle } from "@merge/ui/components/alert";
+import { Button } from "@merge/ui/components/button";
 import {
-    Alert,
-    AlertVariant,
-    ButtonVariant,
-    DescriptionList,
-    Divider,
-    Dropdown,
-    DropdownItem,
-    DropdownList,
-    MenuToggle,
-    PageSection,
-    ToolbarItem
-} from "../../../shared/@patternfly/react-core";
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuSeparator,
+    DropdownMenuTrigger,
+} from "@merge/ui/components/dropdown-menu";
 import {
-    ExpandableRowContent,
     Table,
-    Tbody,
-    Td,
-    Th,
-    Thead,
-    Tr
-} from "../../../shared/@patternfly/react-table";
-import { useState } from "react";
+    TableBody,
+    TableCell,
+    TableHead,
+    TableHeader,
+    TableRow,
+} from "@merge/ui/components/table";
+import { CaretDown, CaretRight, DotsThreeVertical } from "@phosphor-icons/react";
+import { Fragment, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Link, useNavigate } from "react-router-dom";
 import { useAdminClient } from "../../admin-client";
@@ -191,7 +188,7 @@ export const AuthorizationPermissions = ({
     const noData = permissions.length === 0;
     const searching = Object.keys(search).length !== 0;
     return (
-        <PageSection variant="light" className="pf-v5-u-p-0">
+        <div className="p-0 bg-muted/30">
             <DeleteConfirm />
             {(!noData || searching) && (
                 <PaginatingTableToolbar
@@ -206,174 +203,175 @@ export const AuthorizationPermissions = ({
                     }}
                     toolbarItem={
                         <>
-                            <ToolbarItem>
-                                <SearchDropdown
-                                    types={policyProviders}
-                                    search={search}
-                                    onSearch={setSearch}
-                                    type="permission"
-                                />
-                            </ToolbarItem>
-                            <ToolbarItem>
-                                <Dropdown
-                                    onOpenChange={toggleCreate}
-                                    toggle={ref => (
-                                        <MenuToggle
-                                            ref={ref}
-                                            onClick={toggleCreate}
-                                            isDisabled={isDisabled}
-                                            variant="primary"
-                                            data-testid="permissionCreateDropdown"
-                                        >
-                                            {t("createPermission")}
-                                        </MenuToggle>
+                            <SearchDropdown
+                                types={policyProviders}
+                                search={search}
+                                onSearch={setSearch}
+                                type="permission"
+                            />
+                            <DropdownMenu open={createOpen} onOpenChange={toggleCreate}>
+                                <DropdownMenuTrigger asChild>
+                                    <Button
+                                        data-testid="permissionCreateDropdown"
+                                        disabled={isDisabled}
+                                    >
+                                        {t("createPermission")}
+                                    </Button>
+                                </DropdownMenuTrigger>
+                                <DropdownMenuContent align="end">
+                                    <DropdownMenuItem
+                                        data-testid="create-resource"
+                                        disabled={
+                                            isDisabled || disabledCreate?.resources
+                                        }
+                                        onClick={() =>
+                                            navigate(
+                                                toNewPermission({
+                                                    realm,
+                                                    id: clientId,
+                                                    permissionType: "resource"
+                                                })
+                                            )
+                                        }
+                                    >
+                                        {t("createResourceBasedPermission")}
+                                    </DropdownMenuItem>
+                                    <DropdownMenuSeparator />
+                                    <DropdownMenuItem
+                                        data-testid="create-scope"
+                                        disabled={
+                                            isDisabled || disabledCreate?.scopes
+                                        }
+                                        onClick={() =>
+                                            navigate(
+                                                toNewPermission({
+                                                    realm,
+                                                    id: clientId,
+                                                    permissionType: "scope"
+                                                })
+                                            )
+                                        }
+                                    >
+                                        {t("createScopeBasedPermission")}
+                                    </DropdownMenuItem>
+                                    {disabledCreate?.scopes && (
+                                        <div className="p-2">
+                                            <Alert variant="destructive" className="mt-2">
+                                                <AlertTitle>{t("noScopeCreateHint")}</AlertTitle>
+                                            </Alert>
+                                        </div>
                                     )}
-                                    isOpen={createOpen}
-                                >
-                                    <DropdownList>
-                                        <DropdownItem
-                                            data-testid="create-resource"
-                                            isDisabled={
-                                                isDisabled || disabledCreate?.resources
-                                            }
-                                            component="button"
-                                            onClick={() =>
-                                                navigate(
-                                                    toNewPermission({
-                                                        realm,
-                                                        id: clientId,
-                                                        permissionType: "resource"
-                                                    })
-                                                )
-                                            }
-                                        >
-                                            {t("createResourceBasedPermission")}
-                                        </DropdownItem>
-                                        <Divider />
-                                        <DropdownItem
-                                            data-testid="create-scope"
-                                            isDisabled={
-                                                isDisabled || disabledCreate?.scopes
-                                            }
-                                            component="button"
-                                            onClick={() =>
-                                                navigate(
-                                                    toNewPermission({
-                                                        realm,
-                                                        id: clientId,
-                                                        permissionType: "scope"
-                                                    })
-                                                )
-                                            }
-                                        >
-                                            {t("createScopeBasedPermission")}
-                                            {disabledCreate?.scopes && (
-                                                <Alert
-                                                    className="pf-v5-u-mt-sm"
-                                                    variant="warning"
-                                                    isInline
-                                                    isPlain
-                                                    title={t("noScopeCreateHint")}
-                                                />
-                                            )}
-                                        </DropdownItem>
-                                    </DropdownList>
-                                </Dropdown>
-                            </ToolbarItem>
+                                </DropdownMenuContent>
+                            </DropdownMenu>
                         </>
                     }
                 >
                     {!noData && (
-                        <Table aria-label={t("resources")} variant="compact">
-                            <Thead>
-                                <Tr>
-                                    <Th aria-hidden="true" />
-                                    <Th>{t("name")}</Th>
-                                    <Th>{t("type")}</Th>
-                                    <Th>{t("associatedPolicy")}</Th>
-                                    <Th>{t("description")}</Th>
-                                    <Th aria-hidden="true" />
-                                </Tr>
-                            </Thead>
-                            {permissions.map((permission, rowIndex) => (
-                                <Tbody
-                                    key={permission.id}
-                                    isExpanded={permission.isExpanded}
-                                >
-                                    <Tr>
-                                        <Td
-                                            expand={{
-                                                rowIndex,
-                                                isExpanded: permission.isExpanded,
-                                                onToggle: (_, rowIndex) => {
-                                                    const rows = permissions.map(
-                                                        (p, index) =>
-                                                            index === rowIndex
-                                                                ? {
-                                                                      ...p,
-                                                                      isExpanded:
-                                                                          !p.isExpanded
+                        <Table aria-label={t("resources")} className="text-sm">
+                            <TableHeader>
+                                <TableRow>
+                                    <TableHead aria-hidden="true" className="w-10" />
+                                    <TableHead>{t("name")}</TableHead>
+                                    <TableHead>{t("type")}</TableHead>
+                                    <TableHead>{t("associatedPolicy")}</TableHead>
+                                    <TableHead>{t("description")}</TableHead>
+                                    <TableHead aria-hidden="true" className="w-10" />
+                                </TableRow>
+                            </TableHeader>
+                            <TableBody>
+                                {permissions.map((permission, rowIndex) => (
+                                    <Fragment key={permission.id}>
+                                        <TableRow>
+                                            <TableCell className="w-10">
+                                                <Button
+                                                    variant="ghost"
+                                                    size="icon"
+                                                    className="h-8 w-8"
+                                                    aria-expanded={permission.isExpanded}
+                                                    onClick={() => {
+                                                        const rows = permissions.map(
+                                                            (p, index) =>
+                                                                index === rowIndex
+                                                                    ? {
+                                                                          ...p,
+                                                                          isExpanded:
+                                                                              !p.isExpanded
                                                                   }
                                                                 : p
-                                                    );
-                                                    setPermissions(rows);
-                                                }
-                                            }}
-                                        />
-                                        <Td
-                                            data-testid={`name-column-${permission.name}`}
-                                        >
-                                            <Link
-                                                to={toPermissionDetails({
-                                                    realm,
-                                                    id: clientId,
-                                                    permissionType: permission.type!,
-                                                    permissionId: permission.id!
-                                                })}
+                                                        );
+                                                        setPermissions(rows);
+                                                    }}
+                                                >
+                                                    {permission.isExpanded ? (
+                                                        <CaretDown className="size-4" />
+                                                    ) : (
+                                                        <CaretRight className="size-4" />
+                                                    )}
+                                                </Button>
+                                            </TableCell>
+                                            <TableCell
+                                                data-testid={`name-column-${permission.name}`}
                                             >
-                                                {permission.name}
-                                            </Link>
-                                        </Td>
-                                        <Td>
-                                            {
-                                                policyProviders?.find(
-                                                    p => p.type === permission.type
-                                                )?.name
-                                            }
-                                        </Td>
-                                        <Td>
-                                            <AssociatedPoliciesRenderer
-                                                row={permission}
-                                            />
-                                        </Td>
-                                        <Td>{permission.description || "—"}</Td>
-                                        <Td
-                                            actions={{
-                                                items: [
-                                                    {
-                                                        title: t("delete"),
-                                                        onClick: async () => {
-                                                            setSelectedPermission(
-                                                                permission
-                                                            );
-                                                            toggleDeleteDialog();
-                                                        }
-                                                    }
-                                                ]
-                                            }}
-                                        ></Td>
-                                    </Tr>
-                                    <Tr
-                                        key={`child-${permission.id}`}
-                                        isExpanded={permission.isExpanded}
-                                    >
-                                        <Td />
-                                        <Td colSpan={5}>
-                                            <ExpandableRowContent>
-                                                {permission.isExpanded && (
-                                                    <DescriptionList
-                                                        isHorizontal
-                                                        className="keycloak_resource_details"
+                                                <Link
+                                                    to={toPermissionDetails({
+                                                        realm,
+                                                        id: clientId,
+                                                        permissionType: permission.type!,
+                                                        permissionId: permission.id!
+                                                    })}
+                                                >
+                                                    {permission.name}
+                                                </Link>
+                                            </TableCell>
+                                            <TableCell>
+                                                {
+                                                    policyProviders?.find(
+                                                        p => p.type === permission.type
+                                                    )?.name
+                                                }
+                                            </TableCell>
+                                            <TableCell>
+                                                <AssociatedPoliciesRenderer
+                                                    row={permission}
+                                                />
+                                            </TableCell>
+                                            <TableCell>{permission.description || "—"}</TableCell>
+                                            <TableCell className="w-10">
+                                                <DropdownMenu>
+                                                    <DropdownMenuTrigger asChild>
+                                                        <Button
+                                                            variant="ghost"
+                                                            size="icon"
+                                                            className="h-8 w-8"
+                                                            aria-label={t("delete")}
+                                                        >
+                                                            <DotsThreeVertical className="size-4" />
+                                                        </Button>
+                                                    </DropdownMenuTrigger>
+                                                    <DropdownMenuContent align="end">
+                                                        <DropdownMenuItem
+                                                            onClick={() => {
+                                                                setSelectedPermission(
+                                                                    permission
+                                                                );
+                                                                toggleDeleteDialog();
+                                                            }}
+                                                        >
+                                                            {t("delete")}
+                                                        </DropdownMenuItem>
+                                                    </DropdownMenuContent>
+                                                </DropdownMenu>
+                                            </TableCell>
+                                        </TableRow>
+                                        {permission.isExpanded && (
+                                            <TableRow>
+                                                <TableCell />
+                                                <TableCell
+                                                    colSpan={5}
+                                                    className="bg-muted/30 p-4"
+                                                >
+                                                    <dl
+                                                        className="grid grid-cols-[auto_1fr] gap-x-4 gap-y-1 keycloak_resource_details"
                                                     >
                                                         <DetailDescriptionLink
                                                             name="associatedPolicy"
@@ -390,13 +388,13 @@ export const AuthorizationPermissions = ({
                                                                 })
                                                             }
                                                         />
-                                                    </DescriptionList>
-                                                )}
-                                            </ExpandableRowContent>
-                                        </Td>
-                                    </Tr>
-                                </Tbody>
-                            ))}
+                                                    </dl>
+                                                </TableCell>
+                                            </TableRow>
+                                        )}
+                                    </Fragment>
+                                ))}
+                            </TableBody>
                         </Table>
                     )}
                 </PaginatingTableToolbar>
@@ -415,6 +413,6 @@ export const AuthorizationPermissions = ({
                     instructions={t("noSearchResultsInstructions")}
                 />
             )}
-        </PageSection>
+        </div>
     );
 };

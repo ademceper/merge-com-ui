@@ -13,13 +13,13 @@
 
 import type RealmRepresentation from "@keycloak/keycloak-admin-client/lib/defs/realmRepresentation";
 import { useEnvironment } from "../../../shared/keycloak-ui-shared";
-import { Tab, TabTitleText } from "../../../shared/@patternfly/react-core";
-import JSZip from "jszip";
-import { useTranslation } from "react-i18next";
 import {
     RoutableTabs,
+    Tab,
     useRoutableTab
 } from "../../components/routable-tabs/RoutableTabs";
+import JSZip from "jszip";
+import { useTranslation } from "react-i18next";
 import { useRealm } from "../../context/realm-context/RealmContext";
 import { joinPath } from "../../utils/joinPath";
 import useIsFeatureEnabled, { Feature } from "../../utils/useIsFeatureEnabled";
@@ -178,7 +178,7 @@ styles=css/login.css css/theme-styles.css
         >
             <Tab
                 id="themes-settings"
-                title={<TabTitleText>{t("themes")} </TabTitleText>}
+                title={t("themes")}
                 data-testid="themes-settings-tab"
                 {...settingsTab}
             >
@@ -186,7 +186,7 @@ styles=css/login.css css/theme-styles.css
             </Tab>
             <Tab
                 id="lightColors"
-                title={<TabTitleText>{t("themeColorsLight")}</TabTitleText>}
+                title={t("themeColorsLight")}
                 data-testid="lightColors-tab"
                 {...lightColorsTab}
             >
@@ -196,7 +196,7 @@ styles=css/login.css css/theme-styles.css
             </Tab>
             <Tab
                 id="darkColors"
-                title={<TabTitleText>{t("themeColorsDark")}</TabTitleText>}
+                title={t("themeColorsDark")}
                 data-testid="darkColors-tab"
                 {...darkColorsTab}
             >

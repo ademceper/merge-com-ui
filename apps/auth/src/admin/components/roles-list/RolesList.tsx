@@ -13,11 +13,8 @@
 
 import type RoleRepresentation from "@keycloak/keycloak-admin-client/lib/defs/roleRepresentation";
 import { HelpItem, useAlerts } from "../../../shared/keycloak-ui-shared";
-import {
-    AlertVariant,
-    Button,
-    ButtonVariant
-} from "../../../shared/@patternfly/react-core";
+import { AlertVariant } from "../../../shared/keycloak-ui-shared";
+import { Button } from "@merge/ui/components/button";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Link, To, useNavigate } from "react-router-dom";
@@ -98,7 +95,7 @@ export const RolesList = ({
             selectedRoleName: selectedRole ? selectedRole!.name : ""
         }),
         continueButtonLabel: "delete",
-        continueButtonVariant: ButtonVariant.danger,
+        continueButtonVariant: "destructive",
         onConfirm: async () => {
             try {
                 if (!parentRoleId) {
@@ -131,9 +128,9 @@ export const RolesList = ({
                     !isReadOnly && (
                         <Button
                             data-testid="create-role"
-                            component={props => <Link {...props} to={toCreate} />}
+                            asChild
                         >
-                            {t("createRole")}
+                            <Link to={toCreate}>{t("createRole")}</Link>
                         </Button>
                     )
                 }

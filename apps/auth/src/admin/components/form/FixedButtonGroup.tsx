@@ -12,13 +12,9 @@
 // @ts-nocheck
 
 import { useTranslation } from "react-i18next";
-import {
-    ActionGroup,
-    ActionGroupProps,
-    Button
-} from "../../../shared/@patternfly/react-core";
+import { Button } from "@merge/ui/components/button";
 
-type FixedButtonGroupProps = ActionGroupProps & {
+type FixedButtonGroupProps = React.ComponentProps<"div"> & {
     name: string;
     save?: () => void;
     saveText?: string;
@@ -41,10 +37,10 @@ export const FixedButtonsGroup = ({
 }: FixedButtonGroupProps) => {
     const { t } = useTranslation();
     return (
-        <ActionGroup {...rest}>
+        <div className="flex gap-2" {...rest}>
             {(save || isSubmit) && (
                 <Button
-                    isDisabled={isDisabled}
+                    disabled={isDisabled}
                     data-testid={`${name}-save`}
                     onClick={() => save?.()}
                     type={isSubmit ? "submit" : "button"}
@@ -54,15 +50,15 @@ export const FixedButtonsGroup = ({
             )}
             {reset && (
                 <Button
-                    isDisabled={isDisabled}
+                    disabled={isDisabled}
                     data-testid={`${name}-revert`}
-                    variant="link"
+                    variant="ghost"
                     onClick={() => reset()}
                 >
                     {!resetText ? t("revert") : resetText}
                 </Button>
             )}
             {children}
-        </ActionGroup>
+        </div>
     );
 };

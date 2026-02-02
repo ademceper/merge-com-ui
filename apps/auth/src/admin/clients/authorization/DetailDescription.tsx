@@ -11,11 +11,6 @@
 
 // @ts-nocheck
 
-import {
-    DescriptionListDescription,
-    DescriptionListGroup,
-    DescriptionListTerm
-} from "../../../shared/@patternfly/react-core";
 import { useTranslation } from "react-i18next";
 import { Link, Path } from "react-router-dom";
 
@@ -41,9 +36,9 @@ export function DetailDescriptionLink<T>({
 }: DetailDescriptionLinkProps<T>) {
     const { t } = useTranslation();
     return (
-        <DescriptionListGroup>
-            <DescriptionListTerm>{t(name)}</DescriptionListTerm>
-            <DescriptionListDescription>
+        <>
+            <dt className="font-medium text-muted-foreground">{t(name)}</dt>
+            <dd>
                 {array?.map(element => {
                     const value =
                         typeof element === "string" ? element : convert!(element);
@@ -51,18 +46,18 @@ export function DetailDescriptionLink<T>({
                         <Link
                             key={value}
                             to={link(element as T)}
-                            className="pf-v5-u-pr-sm"
+                            className="pr-2"
                         >
                             {value}
                         </Link>
                     ) : (
-                        <span key={value} className="pf-v5-u-pr-sm">
+                        <span key={value} className="pr-2">
                             {value}
                         </span>
                     );
                 })}
                 {array?.length === 0 && <i>{t("none")}</i>}
-            </DescriptionListDescription>
-        </DescriptionListGroup>
+            </dd>
+        </>
     );
 }

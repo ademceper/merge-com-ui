@@ -14,24 +14,21 @@
 import AuthenticationFlowRepresentation from "@keycloak/keycloak-admin-client/lib/defs/authenticationFlowRepresentation";
 import type { AuthenticationProviderRepresentation } from "@keycloak/keycloak-admin-client/lib/defs/authenticatorConfigRepresentation";
 import AuthenticatorConfigRepresentation from "@keycloak/keycloak-admin-client/lib/defs/authenticatorConfigRepresentation";
-import { useAlerts, useFetch } from "../../shared/keycloak-ui-shared";
+import { AlertVariant, useAlerts, useFetch } from "../../shared/keycloak-ui-shared";
+import { Button } from "@merge/ui/components/button";
+import { Label } from "@merge/ui/components/label";
 import {
-    AlertVariant,
-    Button,
-    ButtonVariant,
+    DropdownMenuItem,
+} from "@merge/ui/components/dropdown-menu";
+import {
+    Table,
+    TableBody,
+} from "@merge/ui/components/table";
+import { ChartNetwork, Table as TableIconPhosphor } from "@phosphor-icons/react";
+import {
     DragDrop,
-    DropdownItem,
     Droppable,
-    Label,
-    PageSection,
-    ToggleGroup,
-    ToggleGroupItem,
-    Toolbar,
-    ToolbarContent,
-    ToolbarItem
 } from "../../shared/@patternfly/react-core";
-import { DomainIcon, TableIcon } from "../../shared/@patternfly/react-icons";
-import { Table, Tbody } from "../../shared/@patternfly/react-table";
 import { useState } from "react";
 import { Trans, useTranslation } from "react-i18next";
 import { useNavigate, useParams } from "react-router-dom";
@@ -244,7 +241,7 @@ export default function FlowDetails() {
             </Trans>
         ),
         continueButtonLabel: "delete",
-        continueButtonVariant: ButtonVariant.danger,
+        continueButtonVariant: "destructive",
         onConfirm: async () => {
             try {
                 await adminClient.authenticationManagement.delExecution({
@@ -267,7 +264,7 @@ export default function FlowDetails() {
             </Trans>
         ),
         continueButtonLabel: "delete",
-        continueButtonVariant: ButtonVariant.danger,
+        continueButtonVariant: "destructive",
         onConfirm: async () => {
             try {
                 await adminClient.authenticationManagement.deleteFlow({
@@ -286,38 +283,38 @@ export default function FlowDetails() {
     const dropdownItems = [
         ...(usedBy !== "DEFAULT"
             ? [
-                  <DropdownItem
+                  <DropdownMenuItem
                       data-testid="set-as-default"
                       key="default"
                       onClick={toggleBindFlow}
                   >
                       {t("bindFlow")}
-                  </DropdownItem>
+                  </DropdownMenuItem>
               ]
             : []),
-        <DropdownItem key="duplicate" onClick={() => setOpen(true)}>
+        <DropdownMenuItem key="duplicate" onClick={() => setOpen(true)}>
             {t("duplicate")}
-        </DropdownItem>,
+        </DropdownMenuItem>,
         ...(!builtIn
             ? [
-                  <DropdownItem
+                  <DropdownMenuItem
                       data-testid="edit-flow"
                       key="edit"
                       onClick={() => setEdit(true)}
                   >
                       {t("editInfo")}
-                  </DropdownItem>
+                  </DropdownMenuItem>
               ]
             : []),
         ...(!builtIn && !usedBy
             ? [
-                  <DropdownItem
+                  <DropdownMenuItem
                       data-testid="delete-flow"
                       key="delete"
                       onClick={() => toggleDeleteFlow()}
                   >
                       {t("delete")}
-                  </DropdownItem>
+                  </DropdownMenuItem>
               ]
             : [])
     ];
@@ -375,49 +372,47 @@ export default function FlowDetails() {
                 ]}
                 dropdownItems={dropdownItems}
             />
-            <PageSection variant="light">
+            <div className="bg-muted/30 p-4">
                 {executionList && hasExecutions && (
                     <>
-                        <Toolbar id="toolbar">
-                            <ToolbarContent>
-                                <ToolbarItem>
-                                    <ToggleGroup>
-                                        <ToggleGroupItem
-                                            icon={<TableIcon />}
+                        <div id="toolbar" className="flex flex-wrap items-center gap-2 mb-4">
+                            <div className="flex rounded-lg border p-0.5">
+                                        <Button
+                                            type="button"
+                                            variant={tableView ? "secondary" : "ghost"}
+                                            size="sm"
                                             aria-label={t("tableView")}
-                                            buttonId="tableView"
-                                            isSelected={tableView}
-                                            onChange={() => setTableView(true)}
-                                        />
-                                        <ToggleGroupItem
-                                            icon={<DomainIcon />}
+                                            data-testid="tableView"
+                                            onClick={() => setTableView(true)}
+                                        >
+                                            <TableIconPhosphor className="size-4" />
+                                        </Button>
+                                        <Button
+                                            type="button"
+                                            variant={!tableView ? "secondary" : "ghost"}
+                                            size="sm"
                                             aria-label={t("diagramView")}
-                                            buttonId="diagramView"
-                                            isSelected={!tableView}
-                                            onChange={() => setTableView(false)}
-                                        />
-                                    </ToggleGroup>
-                                </ToolbarItem>
-                                <ToolbarItem>
-                                    <Button
-                                        data-testid="addStep"
-                                        variant="secondary"
-                                        onClick={() => setShowAddExecutionDialog(true)}
-                                    >
-                                        {t("addExecution")}
-                                    </Button>
-                                </ToolbarItem>
-                                <ToolbarItem>
-                                    <Button
-                                        data-testid="addSubFlow"
-                                        variant="secondary"
-                                        onClick={() => setShowSubFlowDialog(true)}
-                                    >
-                                        {t("addSubFlow")}
-                                    </Button>
-                                </ToolbarItem>
-                            </ToolbarContent>
-                        </Toolbar>
+                                            data-testid="diagramView"
+                                            onClick={() => setTableView(false)}
+                                        >
+                                            <ChartNetwork className="size-4" />
+                                        </Button>
+                            </div>
+                            <Button
+                                data-testid="add-step"
+                                variant="secondary"
+                                onClick={() => setShowAddExecutionDialog(true)}
+                            >
+                                {t("addExecution")}
+                            </Button>
+                            <Button
+                                data-testid="add-sub-flow"
+                                variant="secondary"
+                                onClick={() => setShowSubFlowDialog(true)}
+                            >
+                                {t("addSubFlow")}
+                            </Button>
+                        </div>
                         <DeleteConfirm />
                         {tableView && (
                             <DragDrop
@@ -467,12 +462,18 @@ export default function FlowDetails() {
                                 }}
                             >
                                 <Droppable hasNoWrapper>
-                                    <Table aria-label={t("flows")} isTreeTable>
+                                    <Table
+                                        aria-label={t("flows")}
+                                        className="text-sm"
+                                    >
                                         <FlowHeader />
                                         <>
                                             {executionList.expandableList.map(
                                                 execution => (
-                                                    <Tbody draggable key={execution.id}>
+                                                    <TableBody
+                                                        draggable
+                                                        key={execution.id}
+                                                    >
                                                         <FlowRow
                                                             builtIn={!!builtIn}
                                                             execution={execution}
@@ -509,7 +510,7 @@ export default function FlowDetails() {
                                                                 toggleDeleteDialog();
                                                             }}
                                                         />
-                                                    </Tbody>
+                                                    </TableBody>
                                                 )
                                             )}
                                         </>
@@ -563,7 +564,7 @@ export default function FlowDetails() {
                             onAddFlow={newFlow => addFlow(flow.alias!, newFlow)}
                         />
                     ))}
-            </PageSection>
+            </div>
         </AuthenticationProviderContextProvider>
     );
 }

@@ -11,14 +11,17 @@
 
 // @ts-nocheck
 
-import { Label } from "../../shared/@patternfly/react-core";
-import { CheckCircleIcon } from "../../shared/@patternfly/react-icons";
+import { Label } from "@merge/ui/components/label";
+import { CheckCircle } from "@phosphor-icons/react";
 import { useTranslation } from "react-i18next";
 
 export const BuildInLabel = () => {
     const { t } = useTranslation();
 
     return (
-        <Label icon={<CheckCircleIcon />}>{t("buildIn")}</Label>
+        <Label className="inline-flex items-center gap-1">
+            <CheckCircle className="size-4" />
+            {t("buildIn")}
+        </Label>
     );
 };

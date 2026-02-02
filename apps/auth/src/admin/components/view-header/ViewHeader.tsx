@@ -11,23 +11,16 @@
 
 // @ts-nocheck
 
+import { Badge } from "@merge/ui/components/badge";
+import { Button } from "@merge/ui/components/button";
 import {
-    Badge,
-    Button,
-    Divider,
-    Dropdown,
-    DropdownList,
-    Level,
-    LevelItem,
-    MenuToggle,
-    PageSection,
-    Switch,
-    Text,
-    TextContent,
-    Toolbar,
-    ToolbarContent,
-    ToolbarItem
-} from "../../../shared/@patternfly/react-core";
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuTrigger,
+} from "@merge/ui/components/dropdown-menu";
+import { Label } from "@merge/ui/components/label";
+import { Separator } from "@merge/ui/components/separator";
+import { Switch } from "@merge/ui/components/switch";
 import { ReactElement, ReactNode, useState, isValidElement, Fragment } from "react";
 import { useTranslation } from "react-i18next";
 import { FormattedLink } from "../external-link/FormattedLink";
@@ -94,146 +87,113 @@ export const ViewHeader = ({
 
     return (
         <>
-            <PageSection variant="light">
-                <Level hasGutter>
-                    <LevelItem>
-                        <Level>
-                            <LevelItem>
-                                <TextContent className="pf-v5-u-mr-sm">
-                                    <Text
-                                        className={className}
-                                        component="h1"
-                                        data-testid="view-header"
-                                    >
-                                        {i18n.exists(titleKey) ? t(titleKey) : titleKey}
-                                    </Text>
-                                </TextContent>
-                            </LevelItem>
-                            {badges && (
-                                <LevelItem>
-                                    {badges.map((badge, index) => (
-                                        <Fragment key={index}>
-                                            {!isValidElement(badge.text) && (
-                                                <Fragment key={badge.text as string}>
-                                                    <Badge
-                                                        data-testid={badge.id}
-                                                        isRead={badge.readonly}
-                                                    >
-                                                        {badge.text}
-                                                    </Badge>{" "}
-                                                </Fragment>
-                                            )}
-                                            {isValidElement(badge.text) &&
-                                                badge.text}{" "}
-                                        </Fragment>
-                                    ))}
-                                </LevelItem>
-                            )}
-                        </Level>
-                    </LevelItem>
-                    <LevelItem>
-                        <Toolbar className="pf-v5-u-p-0">
-                            <ToolbarContent>
-                                {onToggle && (
-                                    <ToolbarItem alignSelf="center">
-                                        <Switch
-                                            id={`${toKey(titleKey)}-switch`}
-                                            data-testid={`${titleKey}-switch`}
-                                            label={t("enabled")}
-                                            labelOff={t("disabled")}
-                                            className="pf-v5-u-mr-lg"
-                                            isDisabled={isReadOnly}
-                                            isChecked={isEnabled}
-                                            aria-label={t("enabled")}
-                                            onChange={(_event, value) => {
-                                                onToggle(value);
-                                            }}
-                                        />
-                                        {helpTextKey && (
-                                            <HelpItem
-                                                helpText={t(helpTextKey)}
-                                                fieldLabelId={`${toKey(titleKey)}-switch`}
-                                            />
+            <div className="bg-muted/30 p-4">
+                <div className="flex flex-wrap items-center justify-between gap-4">
+                    <div className="flex flex-wrap items-center gap-2">
+                        <h1
+                            className={className}
+                            data-testid="view-header"
+                        >
+                            {i18n.exists(titleKey) ? t(titleKey) : titleKey}
+                        </h1>
+                        {badges && (
+                            <>
+                                {badges.map((badge, index) => (
+                                    <Fragment key={index}>
+                                        {!isValidElement(badge.text) && (
+                                            <Badge
+                                                data-testid={badge.id}
+                                                variant={badge.readonly ? "secondary" : "default"}
+                                            >
+                                                {badge.text}
+                                            </Badge>
                                         )}
-                                    </ToolbarItem>
-                                )}
-                                {dropdownItems && (
-                                    <ToolbarItem>
-                                        <Dropdown
-                                            popperProps={{
-                                                position: "right"
-                                            }}
-                                            onOpenChange={onDropdownToggle}
-                                            toggle={ref => (
-                                                <MenuToggle
-                                                    ref={ref}
-                                                    isDisabled={isDropdownDisabled}
-                                                    id={actionsDropdownId}
-                                                    onClick={onDropdownToggle}
-                                                    data-testid="action-dropdown"
-                                                >
-                                                    {t("action")}
-                                                </MenuToggle>
-                                            )}
-                                            isOpen={isDropdownOpen}
-                                        >
-                                            <DropdownList>{dropdownItems}</DropdownList>
-                                        </Dropdown>
-                                    </ToolbarItem>
-                                )}
-                            </ToolbarContent>
-                        </Toolbar>
-                    </LevelItem>
-                </Level>
-                {enabled && (
-                    <TextContent id="view-header-subkey">
-                        <Text>
-                            {isValidElement(subKey)
-                                ? subKey
-                                : subKey
-                                  ? t(subKey as string)
-                                  : ""}
-                            {helpUrl && (
-                                <FormattedLink
-                                    title={t("learnMore")}
-                                    href={helpUrl}
-                                    isInline
-                                    className="pf-v5-u-ml-md"
+                                        {isValidElement(badge.text) && badge.text}
+                                    </Fragment>
+                                ))}
+                            </>
+                        )}
+                    </div>
+                    <div className="flex items-center gap-2">
+                        {onToggle && (
+                            <div className="flex items-center gap-2 mr-4">
+                                <Label htmlFor={`${toKey(titleKey)}-switch`} className="text-sm">
+                                    {t("enabled")}
+                                </Label>
+                                <Switch
+                                    id={`${toKey(titleKey)}-switch`}
+                                    data-testid={`${titleKey}-switch`}
+                                    disabled={isReadOnly}
+                                    checked={isEnabled}
+                                    aria-label={t("enabled")}
+                                    onCheckedChange={onToggle}
                                 />
-                            )}
-                        </Text>
-                    </TextContent>
+                                {helpTextKey && (
+                                    <HelpItem
+                                        helpText={t(helpTextKey)}
+                                        fieldLabelId={`${toKey(titleKey)}-switch`}
+                                    />
+                                )}
+                            </div>
+                        )}
+                        {dropdownItems && dropdownItems.length > 0 && (
+                            <DropdownMenu open={isDropdownOpen} onOpenChange={setDropdownOpen}>
+                                <DropdownMenuTrigger asChild>
+                                    <Button
+                                        disabled={isDropdownDisabled}
+                                        id={actionsDropdownId}
+                                        data-testid="action-dropdown"
+                                    >
+                                        {t("action")}
+                                    </Button>
+                                </DropdownMenuTrigger>
+                                <DropdownMenuContent align="end">
+                                    {dropdownItems}
+                                </DropdownMenuContent>
+                            </DropdownMenu>
+                        )}
+                    </div>
+                </div>
+                {enabled && (
+                    <p id="view-header-subkey" className="text-muted-foreground mt-1">
+                        {isValidElement(subKey)
+                            ? subKey
+                            : subKey
+                              ? t(subKey as string)
+                              : ""}
+                        {helpUrl && (
+                            <FormattedLink
+                                title={t("learnMore")}
+                                href={helpUrl}
+                                isInline
+                                className="ml-4"
+                            />
+                        )}
+                    </p>
                 )}
                 {lowerDropdownItems && (
-                    <Dropdown
-                        className="keycloak__user-federation__dropdown"
-                        onOpenChange={onLowerDropdownToggle}
-                        toggle={ref => (
-                            <MenuToggle
-                                ref={ref}
-                                onClick={onLowerDropdownToggle}
-                                variant="primary"
-                                id="ufToggleId"
-                            >
+                    <DropdownMenu open={isLowerDropdownOpen} onOpenChange={setIsLowerDropdownOpen}>
+                        <DropdownMenuTrigger asChild>
+                            <Button id="ufToggleId">
                                 {t(lowerDropdownMenuTitle)}
-                            </MenuToggle>
-                        )}
-                        isOpen={isLowerDropdownOpen}
-                    >
-                        <DropdownList>{lowerDropdownItems}</DropdownList>
-                    </Dropdown>
+                            </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent align="start">
+                            {lowerDropdownItems}
+                        </DropdownMenuContent>
+                    </DropdownMenu>
                 )}
                 {lowerButton && (
                     <Button
-                        variant={lowerButton.variant}
+                        variant={lowerButton.variant === "primary" ? "default" : (lowerButton.variant as "outline" | "secondary" | "ghost" | "link" | "destructive")}
                         onClick={lowerButton.onClick}
                         data-testid="viewHeader-lower-btn"
                     >
                         {lowerButton.lowerButtonTitle}
                     </Button>
                 )}
-            </PageSection>
-            {divider && <Divider component="div" />}
+            </div>
+            {divider && <Separator />}
         </>
     );
 };

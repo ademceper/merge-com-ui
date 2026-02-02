@@ -13,22 +13,22 @@
 
 import type ClientScopeRepresentation from "@keycloak/keycloak-admin-client/lib/defs/clientScopeRepresentation";
 import { KeycloakSelect } from "../../../shared/keycloak-ui-shared";
+import { Button } from "@merge/ui/components/button";
 import {
-    Button,
-    ButtonVariant,
-    Dropdown,
-    DropdownItem,
-    DropdownList,
-    MenuToggle,
-    Modal,
-    ModalVariant,
-    SelectOption
-} from "../../../shared/@patternfly/react-core";
+    Dialog,
+    DialogContent,
+    DialogFooter,
+    DialogHeader,
+    DialogTitle,
+} from "@merge/ui/components/dialog";
 import {
-    CaretDownIcon,
-    CaretUpIcon,
-    FilterIcon
-} from "../../../shared/@patternfly/react-icons";
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuTrigger,
+} from "@merge/ui/components/dropdown-menu";
+import { SelectOption } from "../../../shared/@patternfly/react-core";
+import { CaretDown, CaretUp, Funnel } from "@phosphor-icons/react";
 import { useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import {
@@ -160,87 +160,16 @@ export const AddScopeDialog = ({
     }, [t, isOid4vcEnabled]);
 
     return (
-        <Modal
-            variant={ModalVariant.medium}
-            title={
-                isClientScopesConditionType
-                    ? t("addClientScope")
-                    : t("addClientScopesTo", { clientName })
-            }
-            isOpen={open}
-            onClose={toggleDialog}
-            actions={
-                isClientScopesConditionType
-                    ? [
-                          <Button
-                              id="modal-add"
-                              data-testid="confirm"
-                              key="add"
-                              variant={ButtonVariant.primary}
-                              onClick={() => {
-                                  const scopes = rows.map(scope => ({ scope }));
-                                  onAdd(scopes);
-                                  toggleDialog();
-                              }}
-                              isDisabled={rows.length === 0}
-                          >
-                              {t("add")}
-                          </Button>,
-                          <Button
-                              id="modal-cancel"
-                              data-testid="cancel"
-                              key="cancel"
-                              variant={ButtonVariant.link}
-                              onClick={() => {
-                                  setRows([]);
-                                  toggleDialog();
-                              }}
-                          >
-                              {t("cancel")}
-                          </Button>
-                      ]
-                    : [
-                          <Dropdown
-                              popperProps={{
-                                  direction: "up"
-                              }}
-                              onOpenChange={isOpen => setAddToggle(isOpen)}
-                              className="keycloak__client-scopes-add__add-dropdown"
-                              key="add-dropdown"
-                              isOpen={addToggle}
-                              toggle={ref => (
-                                  <MenuToggle
-                                      ref={ref}
-                                      isDisabled={rows.length === 0}
-                                      onClick={() => setAddToggle(!addToggle)}
-                                      variant="primary"
-                                      id="add-dropdown"
-                                      data-testid="add-dropdown"
-                                      statusIcon={<CaretUpIcon />}
-                                  >
-                                      {t("add")}
-                                  </MenuToggle>
-                              )}
-                          >
-                              <DropdownList>
-                                  {clientScopeTypesDropdown(t, action)}
-                              </DropdownList>
-                          </Dropdown>,
-                          <Button
-                              id="modal-cancel"
-                              key="cancel"
-                              variant={ButtonVariant.link}
-                              onClick={() => {
-                                  setRows([]);
-                                  toggleDialog();
-                              }}
-                          >
-                              {t("cancel")}
-                          </Button>
-                      ]
-            }
-        >
-            <KeycloakDataTable
+        <Dialog open={open} onOpenChange={open => !open && toggleDialog()}>
+            <DialogContent className="max-w-2xl">
+                <DialogHeader>
+                    <DialogTitle>
+                        {isClientScopesConditionType
+                            ? t("addClientScope")
+                            : t("addClientScopesTo", { clientName })}
+                    </DialogTitle>
+                </DialogHeader>
+                <KeycloakDataTable
                 loader={clientScopes}
                 ariaLabelKey="chooseAMapperType"
                 searchPlaceholderKey={
@@ -248,68 +177,50 @@ export const AddScopeDialog = ({
                 }
                 isSearching={filterType !== FilterType.Name}
                 searchTypeComponent={
-                    <Dropdown
-                        onSelect={() => {
-                            onFilterTypeDropdownSelect(filterType);
-                        }}
-                        onOpenChange={toggleIsFilterTypeDropdownOpen}
-                        toggle={ref => (
-                            <MenuToggle
-                                ref={ref}
+                    <DropdownMenu open={isFilterTypeDropdownOpen} onOpenChange={toggleIsFilterTypeDropdownOpen}>
+                        <DropdownMenuTrigger asChild>
+                            <Button
                                 data-testid="filter-type-dropdown"
                                 id="toggle-id-9"
-                                onClick={toggleIsFilterTypeDropdownOpen}
-                                icon={<FilterIcon />}
-                                statusIcon={<CaretDownIcon />}
+                                variant="outline"
                             >
+                                <Funnel className="size-4 mr-1" />
                                 {filterType}
-                            </MenuToggle>
-                        )}
-                        isOpen={isFilterTypeDropdownOpen}
-                    >
-                        <DropdownList>
-                            <DropdownItem
+                                <CaretDown className="size-4 ml-1" />
+                            </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent>
+                            <DropdownMenuItem
                                 data-testid="filter-type-dropdown-item"
-                                key="filter-type"
+                                onClick={() => onFilterTypeDropdownSelect(filterType)}
                             >
                                 {filterType === FilterType.Name
                                     ? t("protocol")
                                     : t("name")}
-                            </DropdownItem>
-                        </DropdownList>
-                    </Dropdown>
+                            </DropdownMenuItem>
+                        </DropdownMenuContent>
+                    </DropdownMenu>
                 }
                 toolbarItem={
                     filterType === FilterType.Protocol && (
                         <>
-                            <Dropdown
-                                onSelect={() => {
-                                    onFilterTypeDropdownSelect(filterType);
-                                }}
-                                onOpenChange={toggleIsFilterTypeDropdownOpen}
-                                data-testid="filter-type-dropdown"
-                                toggle={ref => (
-                                    <MenuToggle
-                                        ref={ref}
-                                        id="toggle-id-9"
-                                        onClick={toggleIsFilterTypeDropdownOpen}
-                                        statusIcon={<CaretDownIcon />}
-                                        icon={<FilterIcon />}
-                                    >
+                            <DropdownMenu open={isFilterTypeDropdownOpen} onOpenChange={toggleIsFilterTypeDropdownOpen}>
+                                <DropdownMenuTrigger asChild>
+                                    <Button variant="outline" data-testid="filter-type-dropdown" id="toggle-id-9">
+                                        <Funnel className="size-4 mr-1" />
                                         {filterType}
-                                    </MenuToggle>
-                                )}
-                                isOpen={isFilterTypeDropdownOpen}
-                            >
-                                <DropdownList>
-                                    <DropdownItem
+                                        <CaretDown className="size-4 ml-1" />
+                                    </Button>
+                                </DropdownMenuTrigger>
+                                <DropdownMenuContent>
+                                    <DropdownMenuItem
                                         data-testid="filter-type-dropdown-item"
-                                        key="filter-type"
+                                        onClick={() => onFilterTypeDropdownSelect(filterType)}
                                     >
                                         {t("name")}
-                                    </DropdownItem>
-                                </DropdownList>
-                            </Dropdown>
+                                    </DropdownMenuItem>
+                                </DropdownMenuContent>
+                            </DropdownMenu>
                             <KeycloakSelect
                                 className="kc-protocolType-select"
                                 aria-label={t("selectOne")}
@@ -348,6 +259,64 @@ export const AddScopeDialog = ({
                     />
                 }
             />
-        </Modal>
+                <DialogFooter>
+                    {isClientScopesConditionType ? (
+                        <>
+                            <Button
+                                id="modal-add"
+                                data-testid="confirm"
+                                onClick={() => {
+                                    const scopes = rows.map(scope => ({ scope }));
+                                    onAdd(scopes);
+                                    toggleDialog();
+                                }}
+                                disabled={rows.length === 0}
+                            >
+                                {t("add")}
+                            </Button>
+                            <Button
+                                id="modal-cancel"
+                                data-testid="cancel"
+                                variant="ghost"
+                                onClick={() => {
+                                    setRows([]);
+                                    toggleDialog();
+                                }}
+                            >
+                                {t("cancel")}
+                            </Button>
+                        </>
+                    ) : (
+                        <>
+                            <DropdownMenu open={addToggle} onOpenChange={setAddToggle}>
+                                <DropdownMenuTrigger asChild>
+                                    <Button
+                                        id="add-dropdown"
+                                        data-testid="add-dropdown"
+                                        disabled={rows.length === 0}
+                                    >
+                                        {t("add")}
+                                        <CaretUp className="size-4 ml-1" />
+                                    </Button>
+                                </DropdownMenuTrigger>
+                                <DropdownMenuContent side="top">
+                                    {clientScopeTypesDropdown(t, action)}
+                                </DropdownMenuContent>
+                            </DropdownMenu>
+                            <Button
+                                id="modal-cancel"
+                                variant="ghost"
+                                onClick={() => {
+                                    setRows([]);
+                                    toggleDialog();
+                                }}
+                            >
+                                {t("cancel")}
+                            </Button>
+                        </>
+                    )}
+                </DialogFooter>
+            </DialogContent>
+        </Dialog>
     );
 };

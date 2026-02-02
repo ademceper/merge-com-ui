@@ -13,13 +13,7 @@
 
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
-import {
-    Button,
-    Flex,
-    FlexItem,
-    Title,
-    TitleSizes
-} from "../../shared/@patternfly/react-core";
+import { Button } from "@merge/ui/components/button";
 
 import type AuthenticationFlowRepresentation from "@keycloak/keycloak-admin-client/lib/defs/authenticationFlowRepresentation";
 import type { AuthenticationProviderRepresentation } from "@keycloak/keycloak-admin-client/lib/defs/authenticatorConfigRepresentation";
@@ -76,25 +70,22 @@ export const EmptyExecutionState = ({
 
             <div className="keycloak__empty-execution-state__block">
                 {SECTIONS.map(section => (
-                    <Flex key={section} className="keycloak__empty-execution-state__help">
-                        <FlexItem flex={{ default: "flex_1" }}>
-                            <Title headingLevel="h2" size={TitleSizes.md}>
-                                {t(`${section}Title`)}
-                            </Title>
-                            <p>{t(section)}</p>
-                        </FlexItem>
-                        <Flex alignSelf={{ default: "alignSelfCenter" }}>
-                            <FlexItem>
-                                <Button
-                                    data-testid={section}
-                                    variant="tertiary"
-                                    onClick={() => setShow(section)}
-                                >
-                                    {t(section)}
-                                </Button>
-                            </FlexItem>
-                        </Flex>
-                    </Flex>
+                    <div
+                        key={section}
+                        className="keycloak__empty-execution-state__help flex flex-1 items-center justify-between gap-4"
+                    >
+                        <div className="flex-1">
+                            <h2 className="text-base font-medium">{t(`${section}Title`)}</h2>
+                            <p className="text-sm text-muted-foreground">{t(section)}</p>
+                        </div>
+                        <Button
+                            data-testid={section}
+                            variant="outline"
+                            onClick={() => setShow(section)}
+                        >
+                            {t(section)}
+                        </Button>
+                    </div>
                 ))}
             </div>
         </>

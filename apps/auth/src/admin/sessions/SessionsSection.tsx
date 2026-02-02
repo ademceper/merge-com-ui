@@ -13,12 +13,8 @@
 
 import UserSessionRepresentation from "@keycloak/keycloak-admin-client/lib/defs/userSessionRepresentation";
 import { KeycloakSelect } from "../../shared/keycloak-ui-shared";
-import {
-    DropdownItem,
-    PageSection,
-    SelectOption
-} from "../../shared/@patternfly/react-core";
-import { FilterIcon } from "../../shared/@patternfly/react-icons";
+import { SelectOption } from "../../shared/@patternfly/react-core";
+import { Funnel } from "@phosphor-icons/react";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useAdminClient } from "../admin-client";
@@ -50,7 +46,7 @@ const SessionFilter = ({ filterType, onChange }: SessionFilterProps) => {
             data-testid="filter-session-type-select"
             isOpen={open}
             onToggle={toggle}
-            toggleIcon={<FilterIcon />}
+            toggleIcon={<Funnel className="size-4" />}
             onSelect={value => {
                 const filter = value as FilterType;
                 onChange(filter);
@@ -123,29 +119,29 @@ export default function SessionsSection() {
             <LogoutConfirm />
             <ViewHeader
                 dropdownItems={[
-                    <DropdownItem
+                    <button
                         key="toggle-modal"
                         data-testid="revocation"
-                        component="button"
+                        type="button"
                         onClick={() => handleRevocationModalToggle()}
                     >
                         {t("revocation")}
-                    </DropdownItem>,
-                    <DropdownItem
+                    </button>,
+                    <button
                         key="delete-role"
                         data-testid="logout-all"
-                        component="button"
-                        isDisabled={noSessions}
+                        type="button"
+                        disabled={noSessions}
                         onClick={toggleLogoutDialog}
                     >
                         {t("signOutAllActiveSessions")}
-                    </DropdownItem>
+                    </button>
                 ]}
                 titleKey="titleSessions"
                 subKey="sessionExplain"
                 helpUrl={helpUrls.sessionsUrl}
             />
-            <PageSection variant="light" className="pf-v5-u-p-0">
+            <div className="bg-muted/30 p-0">
                 {revocationModalOpen && (
                     <RevocationModal
                         handleModalToggle={handleRevocationModalToggle}
@@ -169,7 +165,7 @@ export default function SessionsSection() {
                         />
                     }
                 />
-            </PageSection>
+            </div>
         </>
     );
 }

@@ -11,39 +11,65 @@
 
 // @ts-nocheck
 
-import styles from "@patternfly/react-styles/css/components/DataList/data-list";
 import {
-    ActionsColumn,
-    IAction,
     Table,
-    Tbody,
-    Td,
-    Th,
-    Thead,
-    Tr,
-    type TableProps,
-    ThProps
-} from "../../../shared/@patternfly/react-table";
-import type { ThInfoType } from "@patternfly/react-table/dist/esm/components/Table/base/types";
+    TableBody,
+    TableCell,
+    TableHead,
+    TableHeader,
+    TableRow,
+} from "@merge/ui/components/table";
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuTrigger,
+} from "@merge/ui/components/dropdown-menu";
+import { Button } from "@merge/ui/components/button";
+import {
+    Tooltip,
+    TooltipContent,
+    TooltipTrigger,
+    TooltipProvider,
+} from "@merge/ui/components/tooltip";
+import { DotsSixVertical, DotsThreeVertical } from "@phosphor-icons/react";
 import { get } from "lodash-es";
-import { DragEvent as ReactDragEvent, ReactNode, useMemo, useRef, useState } from "react";
+import {
+    type DragEvent as ReactDragEvent,
+    type ReactNode,
+    useMemo,
+    useRef,
+    useState,
+} from "react";
 import { useTranslation } from "react-i18next";
+import { cn } from "@merge/ui/lib/utils";
 
-export type Field<T> = Pick<ThProps, "width"> & {
+export type Field<T> = {
     name: string;
     displayKey?: string;
     cellRenderer?: (row: T) => ReactNode;
     thTooltipText?: string;
+    width?: number | string;
 };
 
-export type Action<T> = IAction & { isActionable?: (item: T) => boolean };
+export type Action<T> = {
+    title: string;
+    onClick?: (event: unknown, row: T) => void;
+    isDisabled?: boolean;
+    isActionable?: (item: T) => boolean;
+};
 
-type DraggableTableProps<T> = Omit<TableProps, "data" | "ref"> & {
+type DraggableTableProps<T> = Omit<
+    React.ComponentProps<typeof Table>,
+    "data" | "ref"
+> & {
     keyField: string;
     columns: Field<T>[];
     data: T[];
     actions?: Action<T>[];
     onDragFinish: (dragged: string, newOrder: string[]) => void;
+    /** @deprecated PF-specific; ignored when using @merge/ui table */
+    variant?: string;
 };
 
 export function DraggableTable<T>({
@@ -52,6 +78,8 @@ export function DraggableTable<T>({
     data,
     actions,
     onDragFinish,
+    className,
+    variant: _variant,
     ...props
 }: DraggableTableProps<T>) {
     const { t } = useTranslation();
@@ -61,19 +89,23 @@ export function DraggableTable<T>({
         draggedItemId: "",
         draggingToItemIndex: -1,
         dragging: false,
-        tempItemOrder: [""]
+        tempItemOrder: [""],
     });
 
-    const itemOrder: string[] = useMemo(() => data.map(d => get(d, keyField)), [data]);
+    const itemOrder: string[] = useMemo(
+        () => data.map(d => get(d, keyField)),
+        [data, keyField]
+    );
 
     const onDragStart = (evt: ReactDragEvent) => {
         evt.dataTransfer.effectAllowed = "move";
         evt.dataTransfer.setData("text/plain", evt.currentTarget.id);
         const draggedItemId = evt.currentTarget.id;
 
-        evt.currentTarget.classList.add(styles.modifiers.ghostRow);
+        const tr = evt.currentTarget.closest("tr");
+        if (tr) tr.classList.add("opacity-50");
         evt.currentTarget.setAttribute("aria-grabbed", "true");
-        setState({ ...state, draggedItemId, dragging: true });
+        setState(prev => ({ ...prev, draggedItemId, dragging: true }));
     };
 
     const moveItem = (arr: string[], i1: string, toIndex: number) => {
@@ -99,32 +131,34 @@ export function DraggableTable<T>({
         }
 
         itemOrder.forEach(id => {
-            ulNode.appendChild(nodes.find(n => n.id === id)!);
+            const node = nodes.find(n => n.id === id);
+            if (node) ulNode.appendChild(node);
         });
     };
 
     const onDragCancel = () => {
         Array.from(bodyRef.current?.children || []).forEach(el => {
-            el.classList.remove(styles.modifiers.ghostRow);
+            el.classList.remove("opacity-50");
             el.setAttribute("aria-grabbed", "false");
         });
-        setState({
-            ...state,
+        setState(prev => ({
+            ...prev,
             draggedItemId: "",
             draggingToItemIndex: -1,
-            dragging: false
-        });
+            dragging: false,
+        }));
     };
 
     const onDragLeave = (evt: ReactDragEvent) => {
         if (!isValidDrop(evt)) {
             move(itemOrder);
-            setState({ ...state, draggingToItemIndex: -1 });
+            setState(prev => ({ ...prev, draggingToItemIndex: -1 }));
         }
     };
 
     const isValidDrop = (evt: ReactDragEvent) => {
-        const ulRect = bodyRef.current!.getBoundingClientRect();
+        if (!bodyRef.current) return false;
+        const ulRect = bodyRef.current.getBoundingClientRect();
         return (
             evt.clientX > ulRect.x &&
             evt.clientX < ulRect.x + ulRect.width &&
@@ -165,104 +199,141 @@ export function DraggableTable<T>({
                 );
                 move(tempItemOrder);
 
-                setState({
-                    ...state,
+                setState(prev => ({
+                    ...prev,
                     draggingToItemIndex,
-                    tempItemOrder
-                });
+                    tempItemOrder,
+                }));
             }
         }
     };
 
     const onDragEnd = (evt: ReactDragEvent) => {
         const tr = evt.target as HTMLTableRowElement;
-        tr.classList.remove(styles.modifiers.ghostRow);
+        tr.classList.remove("opacity-50");
         tr.setAttribute("aria-grabbed", "false");
-        setState({
-            ...state,
+        setState(prev => ({
+            ...prev,
             draggedItemId: "",
             draggingToItemIndex: -1,
-            dragging: false
-        });
-    };
-
-    const thInfo = (column: Field<T>): ThInfoType | undefined => {
-        if (!column.thTooltipText) return undefined;
-        return {
-            popover: <div>{t(column.thTooltipText)}</div>,
-            ariaLabel: t(column.thTooltipText)
-        };
+            dragging: false,
+        }));
     };
 
     return (
         <Table
             aria-label="Draggable table"
-            className={state.dragging ? styles.modifiers.dragOver : ""}
+            className={cn(
+                "text-sm",
+                state.dragging && "select-none",
+                className
+            )}
             {...props}
         >
-            <Thead>
-                <Tr>
-                    <Th aria-hidden="true" />
+            <TableHeader>
+                <TableRow>
+                    <TableHead aria-hidden="true" className="w-10" />
                     {columns.map(column => (
-                        <Th
+                        <TableHead
                             key={column.name}
-                            info={thInfo(column)}
-                            width={column.width}
-                            modifier="fitContent"
+                            style={
+                                column.width
+                                    ? { width: column.width, minWidth: column.width }
+                                    : undefined
+                            }
+                            className="whitespace-nowrap"
                         >
-                            {t(column.displayKey || column.name)}
-                        </Th>
+                            {column.thTooltipText ? (
+                                <TooltipProvider>
+                                    <Tooltip>
+                                        <TooltipTrigger asChild>
+                                            <span>{t(column.displayKey || column.name)}</span>
+                                        </TooltipTrigger>
+                                        <TooltipContent>
+                                            {t(column.thTooltipText)}
+                                        </TooltipContent>
+                                    </Tooltip>
+                                </TooltipProvider>
+                            ) : (
+                                t(column.displayKey || column.name)
+                            )}
+                        </TableHead>
                     ))}
-                </Tr>
-            </Thead>
-            <Tbody
+                </TableRow>
+            </TableHeader>
+            <TableBody
                 ref={bodyRef}
                 onDragOver={onDragOver}
-                onDrop={onDragOver}
+                onDrop={onDrop}
                 onDragLeave={onDragLeave}
             >
                 {data.map(row => (
-                    <Tr
+                    <TableRow
                         key={get(row, keyField)}
                         id={get(row, keyField)}
                         draggable
                         onDrop={onDrop}
                         onDragEnd={onDragEnd}
                         onDragStart={onDragStart}
+                        className={cn(
+                            get(row, keyField) === state.draggedItemId && "opacity-50"
+                        )}
                     >
-                        <Td
-                            draggableRow={{
-                                id: `draggable-row-${get(row, keyField)}`
-                            }}
-                        />
+                        <TableCell
+                            className="w-10 cursor-grab active:cursor-grabbing"
+                            id={`draggable-row-${get(row, keyField)}`}
+                        >
+                            <DotsSixVertical className="size-4 text-muted-foreground" />
+                        </TableCell>
                         {columns.map(column => (
-                            <Td
+                            <TableCell
                                 key={`${get(row, keyField)}_${column.name}`}
-                                dataLabel={column.name}
+                                data-label={column.name}
                             >
                                 {column.cellRenderer
                                     ? column.cellRenderer(row)
                                     : get(row, column.name)}
-                            </Td>
+                            </TableCell>
                         ))}
-                        {actions && (
-                            <Td isActionCell>
-                                <ActionsColumn
-                                    items={actions.map(({ isActionable, ...action }) =>
-                                        isActionable
-                                            ? {
-                                                  ...action,
-                                                  isDisabled: !isActionable(row)
-                                              }
-                                            : action
-                                    )}
-                                    rowData={row!}
-                                />
-                            </Td>
+                        {actions && actions.length > 0 && (
+                            <TableCell className="w-10">
+                                <DropdownMenu>
+                                    <DropdownMenuTrigger asChild>
+                                        <Button
+                                            variant="ghost"
+                                            size="icon"
+                                            className="h-8 w-8"
+                                            aria-label={t("actions")}
+                                        >
+                                            <DotsThreeVertical className="size-4" />
+                                        </Button>
+                                    </DropdownMenuTrigger>
+                                    <DropdownMenuContent align="end">
+                                        {actions.map(
+                                            ({ isActionable, isDisabled, ...action }, idx) => (
+                                                <DropdownMenuItem
+                                                    key={idx}
+                                                    disabled={
+                                                        isDisabled ??
+                                                        (isActionable
+                                                            ? !isActionable(row)
+                                                            : false)
+                                                    }
+                                                    onClick={e =>
+                                                        action.onClick?.(e, row)
+                                                    }
+                                                >
+                                                    {action.title}
+                                                </DropdownMenuItem>
+                                            )
+                                        )}
+                                    </DropdownMenuContent>
+                                </DropdownMenu>
+                            </TableCell>
                         )}
-                    </Tr>
+                    </TableRow>
                 ))}
-            </Tbody>
+            </TableBody>
         </Table>
     );
 }

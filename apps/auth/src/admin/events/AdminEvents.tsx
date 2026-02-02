@@ -35,19 +35,11 @@ import {
     TableHeader,
     TableRow
 } from "@merge/ui/components/table";
-import {
-    ActionGroup,
-    Button,
-    Chip,
-    ChipGroup,
-    DatePicker,
-    Flex,
-    FlexItem,
-    Form,
-    FormGroup,
-    SelectOption
-} from "../../shared/@patternfly/react-core";
-import { cellWidth } from "../../shared/@patternfly/react-table";
+import { SelectOption } from "../../shared/@patternfly/react-core";
+import { Button } from "@merge/ui/components/button";
+import { Input } from "@merge/ui/components/input";
+import { Label } from "@merge/ui/components/label";
+import { Badge } from "@merge/ui/components/badge";
 import { pickBy } from "lodash-es";
 import { PropsWithChildren, useMemo, useState } from "react";
 import { Controller, FormProvider, useForm } from "react-hook-form";
@@ -306,11 +298,8 @@ export const AdminEvents = ({ resourcePath }: AdminEventsProps) => {
                 ariaLabelKey="adminEvents"
                 toolbarItem={
                     <FormProvider {...form}>
-                        <Flex
-                            direction={{ default: "column" }}
-                            spaceItems={{ default: "spaceItemsNone" }}
-                        >
-                            <FlexItem>
+                        <div className="flex flex-col gap-0">
+                            <div>
                                 <DropdownPanel
                                     buttonText={t("searchForAdminEvent")}
                                     setSearchDropdownOpen={setSearchDropdownOpen}
@@ -318,16 +307,13 @@ export const AdminEvents = ({ resourcePath }: AdminEventsProps) => {
                                     marginRight="2.5rem"
                                     width="15vw"
                                 >
-                                    <Form
-                                        isHorizontal
-                                        className="keycloak__events_search__form"
+                                    <form
+                                        className="keycloak__events_search__form space-y-4"
                                         data-testid="searchForm"
                                     >
-                                        <FormGroup
-                                            label={t("resourceTypes")}
-                                            fieldId="kc-resourceTypes"
-                                            className="keycloak__events_search__form_label"
-                                        >
+                                        <div className="space-y-2 keycloak__events_search__form_label">
+                                            <Label htmlFor="kc-resourceTypes">{t("resourceTypes")}</Label>
+                                            <div>
                                             <Controller
                                                 name="resourceTypes"
                                                 control={control}
@@ -378,29 +364,27 @@ export const AdminEvents = ({ resourcePath }: AdminEventsProps) => {
                                                         isOpen={selectResourceTypesOpen}
                                                         aria-labelledby={"resourceTypes"}
                                                         chipGroupComponent={
-                                                            <ChipGroup>
+                                                            <div className="flex flex-wrap gap-1">
                                                                 {field.value.map(
                                                                     (chip: string) => (
-                                                                        <Chip
+                                                                        <Badge
                                                                             key={chip}
-                                                                            onClick={resource => {
-                                                                                resource.stopPropagation();
+                                                                            variant="secondary"
+                                                                            className="cursor-pointer"
+                                                                            onClick={e => {
+                                                                                e.stopPropagation();
                                                                                 field.onChange(
                                                                                     field.value.filter(
-                                                                                        (
-                                                                                            val: string
-                                                                                        ) =>
-                                                                                            val !==
-                                                                                            chip
+                                                                                        (val: string) => val !== chip
                                                                                     )
                                                                                 );
                                                                             }}
                                                                         >
                                                                             {chip}
-                                                                        </Chip>
+                                                                        </Badge>
                                                                     )
                                                                 )}
-                                                            </ChipGroup>
+                                                            </div>
                                                         }
                                                     >
                                                         {resourceTypes?.map(option => (
@@ -414,12 +398,11 @@ export const AdminEvents = ({ resourcePath }: AdminEventsProps) => {
                                                     </KeycloakSelect>
                                                 )}
                                             />
-                                        </FormGroup>
-                                        <FormGroup
-                                            label={t("operationTypes")}
-                                            fieldId="kc-operationTypes"
-                                            className="keycloak__events_search__form_label"
-                                        >
+                                            </div>
+                                        </div>
+                                        <div className="space-y-2 keycloak__events_search__form_label">
+                                            <Label htmlFor="kc-operationTypes">{t("operationTypes")}</Label>
+                                            <div>
                                             <Controller
                                                 name="operationTypes"
                                                 control={control}
@@ -470,29 +453,27 @@ export const AdminEvents = ({ resourcePath }: AdminEventsProps) => {
                                                         isOpen={selectOperationTypesOpen}
                                                         aria-labelledby={"operationTypes"}
                                                         chipGroupComponent={
-                                                            <ChipGroup>
+                                                            <div className="flex flex-wrap gap-1">
                                                                 {field.value.map(
                                                                     (chip: string) => (
-                                                                        <Chip
+                                                                        <Badge
                                                                             key={chip}
-                                                                            onClick={operation => {
-                                                                                operation.stopPropagation();
+                                                                            variant="secondary"
+                                                                            className="cursor-pointer"
+                                                                            onClick={e => {
+                                                                                e.stopPropagation();
                                                                                 field.onChange(
                                                                                     field.value.filter(
-                                                                                        (
-                                                                                            val: string
-                                                                                        ) =>
-                                                                                            val !==
-                                                                                            chip
+                                                                                        (val: string) => val !== chip
                                                                                     )
                                                                                 );
                                                                             }}
                                                                         >
                                                                             {chip}
-                                                                        </Chip>
+                                                                        </Badge>
                                                                     )
                                                                 )}
-                                                            </ChipGroup>
+                                                            </div>
                                                         }
                                                     >
                                                         {operationTypes?.map(option => (
@@ -506,7 +487,8 @@ export const AdminEvents = ({ resourcePath }: AdminEventsProps) => {
                                                     </KeycloakSelect>
                                                 )}
                                             />
-                                        </FormGroup>
+                                            </div>
+                                        </div>
                                         {!resourcePath && (
                                             <TextControl
                                                 name="resourcePath"
@@ -529,69 +511,64 @@ export const AdminEvents = ({ resourcePath }: AdminEventsProps) => {
                                             name="authIpAddress"
                                             label={t("ipAddress")}
                                         />
-                                        <FormGroup
-                                            label={t("dateFrom")}
-                                            fieldId="kc-dateFrom"
-                                            className="keycloak__events_search__form_label"
-                                        >
+                                        <div className="space-y-2 keycloak__events_search__form_label">
+                                            <Label htmlFor="kc-dateFrom">{t("dateFrom")}</Label>
                                             <Controller
                                                 name="dateFrom"
                                                 control={control}
                                                 render={({ field }) => (
-                                                    <DatePicker
-                                                        className="pf-v5-u-w-100"
+                                                    <Input
+                                                        id="kc-dateFrom"
+                                                        type="date"
+                                                        className="w-full"
                                                         value={field.value}
-                                                        onChange={(_, value) =>
-                                                            field.onChange(value)
+                                                        onChange={e =>
+                                                            field.onChange(e.target.value)
                                                         }
-                                                        inputProps={{ id: "kc-dateFrom" }}
                                                     />
                                                 )}
                                             />
-                                        </FormGroup>
-                                        <FormGroup
-                                            label={t("dateTo")}
-                                            fieldId="kc-dateTo"
-                                            className="keycloak__events_search__form_label"
-                                        >
+                                        </div>
+                                        <div className="space-y-2 keycloak__events_search__form_label">
+                                            <Label htmlFor="kc-dateTo">{t("dateTo")}</Label>
                                             <Controller
                                                 name="dateTo"
                                                 control={control}
                                                 render={({ field }) => (
-                                                    <DatePicker
-                                                        className="pf-v5-u-w-100"
+                                                    <Input
+                                                        id="kc-dateTo"
+                                                        type="date"
+                                                        className="w-full"
                                                         value={field.value}
-                                                        onChange={(_, value) =>
-                                                            field.onChange(value)
+                                                        onChange={e =>
+                                                            field.onChange(e.target.value)
                                                         }
-                                                        inputProps={{ id: "kc-dateTo" }}
                                                     />
                                                 )}
                                             />
-                                        </FormGroup>
-                                        <ActionGroup>
+                                        </div>
+                                        <div className="flex gap-2">
                                             <Button
-                                                variant={"primary"}
                                                 onClick={submitSearch}
                                                 data-testid="search-events-btn"
-                                                isDisabled={!isDirty}
+                                                disabled={!isDirty}
                                             >
                                                 {t("searchAdminEventsBtn")}
                                             </Button>
                                             <Button
                                                 variant="secondary"
                                                 onClick={resetSearch}
-                                                isDisabled={!isDirty}
+                                                disabled={!isDirty}
                                             >
                                                 {t("resetBtn")}
                                             </Button>
-                                        </ActionGroup>
-                                    </Form>
+                                        </div>
+                                    </form>
                                 </DropdownPanel>
-                            </FlexItem>
-                            <FlexItem>
+                            </div>
+                            <div>
                                 {Object.entries(activeFilters).length > 0 && (
-                                    <div className="keycloak__searchChips pf-v5-u-ml-md">
+                                    <div className="keycloak__searchChips ml-4">
                                         {Object.entries(activeFilters).map(filter => {
                                             const [key, value] = filter as [
                                                 keyof AdminEventSearchForm,
@@ -606,18 +583,19 @@ export const AdminEvents = ({ resourcePath }: AdminEventsProps) => {
                                             }
 
                                             return (
-                                                <ChipGroup
-                                                    className="pf-v5-u-mt-md pf-v5-u-mr-md"
+                                                <div
+                                                    className="flex flex-wrap items-center gap-1 mt-2 mr-2"
                                                     key={key}
-                                                    categoryName={filterLabels[key]}
-                                                    onClick={() => removeFilter(key)}
                                                 >
+                                                    <span className="text-sm font-medium">{filterLabels[key]}:</span>
                                                     {typeof value === "string" ? (
-                                                        <Chip isReadOnly>{value}</Chip>
+                                                        <Badge variant="secondary">{value}</Badge>
                                                     ) : (
                                                         value.map(entry => (
-                                                            <Chip
+                                                            <Badge
                                                                 key={entry}
+                                                                variant="secondary"
+                                                                className="cursor-pointer"
                                                                 onClick={() =>
                                                                     removeFilterValue(
                                                                         key,
@@ -626,16 +604,25 @@ export const AdminEvents = ({ resourcePath }: AdminEventsProps) => {
                                                                 }
                                                             >
                                                                 {entry}
-                                                            </Chip>
+                                                            </Badge>
                                                         ))
                                                     )}
-                                                </ChipGroup>
+                                                    <Button
+                                                        type="button"
+                                                        variant="ghost"
+                                                        size="sm"
+                                                        onClick={() => removeFilter(key)}
+                                                        aria-label={t("removeFilter")}
+                                                    >
+                                                        ×
+                                                    </Button>
+                                                </div>
                                             );
                                         })}
                                     </div>
                                 )}
-                            </FlexItem>
-                        </Flex>
+                            </div>
+                        </div>
                     </FormProvider>
                 }
                 actions={
@@ -668,8 +655,7 @@ export const AdminEvents = ({ resourcePath }: AdminEventsProps) => {
                     },
                     {
                         name: "operationType",
-                        displayKey: "operationType",
-                        transforms: [cellWidth(10)]
+                        displayKey: "operationType"
                     },
                     {
                         name: "",

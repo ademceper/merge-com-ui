@@ -12,16 +12,20 @@
 // @ts-nocheck
 
 import { KeycloakDataTable } from "../../../shared/keycloak-ui-shared";
+import { Button } from "@merge/ui/components/button";
 import {
-    Button,
-    Modal,
-    ModalVariant,
+    Dialog,
+    DialogContent,
+    DialogFooter,
+    DialogHeader,
+    DialogTitle,
+} from "@merge/ui/components/dialog";
+import {
     Popover,
-    Text,
-    TextContent,
-    TextVariants
-} from "../../../shared/@patternfly/react-core";
-import { CheckCircleIcon } from "../../../shared/@patternfly/react-icons";
+    PopoverContent,
+    PopoverTrigger,
+} from "@merge/ui/components/popover";
+import { CheckCircle } from "@phosphor-icons/react";
 import { useTranslation } from "react-i18next";
 import { useAdminClient } from "../../admin-client";
 import { fetchUsedBy } from "../../components/role-mapping/resource";
@@ -35,7 +39,7 @@ type UsedByProps = {
 
 const Label = ({ label }: { label: string }) => (
     <>
-        <CheckCircleIcon /> {label}
+        <CheckCircle className="size-4 inline mr-1" /> {label}
     </>
 );
 
@@ -66,43 +70,39 @@ const UsedByModal = ({ id, isSpecificClient, onClose }: UsedByModalProps) => {
     };
 
     return (
-        <Modal
-            header={
-                <TextContent>
-                    <Text component={TextVariants.h1}>{t("flowUsedBy")}</Text>
-                    <Text>
+        <Dialog open onOpenChange={open => !open && onClose()}>
+            <DialogContent className="max-w-2xl">
+                <DialogHeader>
+                    <DialogTitle>{t("flowUsedBy")}</DialogTitle>
+                    <p className="text-sm text-muted-foreground">
                         {t("flowUsedByDescription", {
                             value: isSpecificClient ? t("clients") : t("identiyProviders")
                         })}
-                    </Text>
-                </TextContent>
-            }
-            variant={ModalVariant.medium}
-            isOpen
-            onClose={onClose}
-            actions={[
-                <Button
-                    data-testid="cancel"
-                    id="modal-cancel"
-                    key="cancel"
-                    onClick={onClose}
-                >
-                    {t("close")}
-                </Button>
-            ]}
-        >
-            <KeycloakDataTable
-                loader={loader}
-                isPaginated
-                ariaLabelKey="usedBy"
-                searchPlaceholderKey="search"
-                columns={[
-                    {
-                        name: "name"
-                    }
-                ]}
-            />
-        </Modal>
+                    </p>
+                </DialogHeader>
+                <KeycloakDataTable
+                    loader={loader}
+                    isPaginated
+                    ariaLabelKey="usedBy"
+                    searchPlaceholderKey="search"
+                    columns={[
+                        {
+                            name: "name"
+                        }
+                    ]}
+                />
+                <DialogFooter>
+                    <Button
+                        data-testid="cancel"
+                        id="modal-cancel"
+                        variant="ghost"
+                        onClick={onClose}
+                    >
+                        {t("close")}
+                    </Button>
+                </DialogFooter>
+            </DialogContent>
+        </Dialog>
     );
 };
 
@@ -125,10 +125,13 @@ export const UsedBy = ({ authType: { id, usedBy } }: UsedByProps) => {
             {(usedBy?.type === "SPECIFIC_PROVIDERS" ||
                 usedBy?.type === "SPECIFIC_CLIENTS") &&
                 (usedBy.values.length <= 8 ? (
-                    <Popover
-                        key={id}
-                        aria-label={t("usedBy")}
-                        bodyContent={
+                    <Popover key={id}>
+                        <PopoverTrigger asChild>
+                            <Button variant="ghost" className="h-auto p-0">
+                                <Label label={t(`used.${usedBy.type}`)} />
+                            </Button>
+                        </PopoverTrigger>
+                        <PopoverContent aria-label={t("usedBy")}>
                             <div key={`usedBy-${id}-${usedBy.values}`}>
                                 {t(
                                     "appliedBy" +
@@ -137,20 +140,16 @@ export const UsedBy = ({ authType: { id, usedBy } }: UsedByProps) => {
                                             : "Providers")
                                 )}{" "}
                                 {usedBy.values.map((used, index) => (
-                                    <>
+                                    <span key={index}>
                                         <strong>{used}</strong>
                                         {index < usedBy.values.length - 1 ? ", " : ""}
-                                    </>
+                                    </span>
                                 ))}
                             </div>
-                        }
-                    >
-                        <Button variant="link">
-                            <Label label={t(`used.${usedBy.type}`)} />
-                        </Button>
+                        </PopoverContent>
                     </Popover>
                 ) : (
-                    <Button variant="link" onClick={toggle}>
+                    <Button variant="ghost" className="h-auto p-0" onClick={toggle}>
                         <Label label={t(`used.${usedBy.type}`)} />
                     </Button>
                 ))}

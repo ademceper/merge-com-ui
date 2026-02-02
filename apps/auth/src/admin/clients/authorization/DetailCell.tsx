@@ -13,7 +13,6 @@
 
 import type ResourceServerRepresentation from "@keycloak/keycloak-admin-client/lib/defs/resourceServerRepresentation";
 import { useFetch } from "../../../shared/keycloak-ui-shared";
-import { DescriptionList } from "../../../shared/@patternfly/react-core";
 import { useState } from "react";
 import { useAdminClient } from "../../admin-client";
 import { KeycloakSpinner } from "../../../shared/keycloak-ui-shared";
@@ -62,7 +61,7 @@ export const DetailCell = ({ id, clientId, uris }: DetailCellProps) => {
     }
 
     return (
-        <DescriptionList isHorizontal className="keycloak_resource_details">
+        <dl className="grid grid-cols-[auto_1fr] gap-x-4 gap-y-1 keycloak_resource_details">
             <DetailDescription name="uris" array={uris} />
             <DetailDescriptionLink
                 name="scopes"
@@ -85,6 +84,6 @@ export const DetailCell = ({ id, clientId, uris }: DetailCellProps) => {
                     })
                 }
             />
-        </DescriptionList>
+        </dl>
     );
 };

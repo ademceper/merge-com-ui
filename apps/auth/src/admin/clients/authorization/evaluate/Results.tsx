@@ -11,25 +11,25 @@
 
 // @ts-nocheck
 
+import { MagnifyingGlass } from "@phosphor-icons/react";
+import { Button } from "@merge/ui/components/button";
+import { Input } from "@merge/ui/components/input";
 import {
-    Button,
-    ButtonVariant,
-    Divider,
-    Form,
-    InputGroup,
-    PageSection,
-    TextInput,
-    Toolbar,
-    ToolbarGroup,
-    ToolbarItem,
-    InputGroupItem,
     Select,
-    MenuToggle,
-    SelectList,
-    SelectOption
-} from "../../../../shared/@patternfly/react-core";
-import { SearchIcon } from "../../../../shared/@patternfly/react-icons";
-import { Table, Th, Thead, Tr } from "../../../../shared/@patternfly/react-table";
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue
+} from "@merge/ui/components/select";
+import { Separator } from "@merge/ui/components/separator";
+import {
+    Table,
+    TableBody,
+    TableCell,
+    TableHead,
+    TableHeader,
+    TableRow
+} from "@merge/ui/components/table";
 import { KeyboardEvent, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 
@@ -37,7 +37,6 @@ import type EvaluationResultRepresentation from "@keycloak/keycloak-admin-client
 import type PolicyEvaluationResponse from "@keycloak/keycloak-admin-client/lib/defs/policyEvaluationResponse";
 import { FixedButtonsGroup } from "../../../components/form/FixedButtonGroup";
 import { ListEmptyState } from "../../../../shared/keycloak-ui-shared";
-import useToggle from "../../../utils/useToggle";
 import { AuthorizationDataModal } from "../AuthorizationDataModal";
 import { AuthorizationEvaluateResource } from "../AuthorizationEvaluateResource";
 
@@ -95,90 +94,75 @@ export const Results = ({ evaluateResult, refresh, back }: ResultProps) => {
     const noFilteredData = filteredResources.length === 0;
 
     return (
-        <PageSection>
-            <Toolbar>
-                <ToolbarGroup className="providers-toolbar">
-                    <ToolbarItem>
-                        <InputGroup>
-                            <InputGroupItem isFill>
-                                <TextInput
-                                    name={"inputGroupName"}
-                                    id={"inputGroupName"}
-                                    type="search"
-                                    aria-label={t("search")}
-                                    placeholder={t("search")}
-                                    onChange={(_event, val) => setSearchInput(val)}
-                                    onKeyDown={handleKeyDown}
-                                />
-                            </InputGroupItem>
-                            <InputGroupItem>
-                                <Button
-                                    variant={ButtonVariant.control}
-                                    aria-label={t("search")}
-                                    onClick={() => confirmSearchQuery()}
-                                >
-                                    <SearchIcon />
-                                </Button>
-                            </InputGroupItem>
-                        </InputGroup>
-                    </ToolbarItem>
-                    <ToolbarItem>
-                        <Select
-                            data-testid="filter-type-select"
-                            isOpen={filterDropdownOpen}
-                            className="kc-filter-type-select"
-                            toggle={ref => (
-                                <MenuToggle
-                                    ref={ref}
-                                    onClick={toggleFilterDropdown}
-                                    isExpanded={filterDropdownOpen}
-                                    style={{ width: "300px" }}
-                                >
-                                    {filter}
-                                </MenuToggle>
-                            )}
-                            onSelect={(_, value) => {
-                                setFilter(value as ResultsFilter);
-                                toggleFilterDropdown();
-                                refresh();
-                            }}
-                            selected={filter}
+        <div>
+            <div className="flex flex-wrap items-center gap-2 providers-toolbar">
+                <div className="flex flex-1 min-w-0 gap-1">
+                    <Input
+                        name="inputGroupName"
+                        id="inputGroupName"
+                        type="search"
+                        aria-label={t("search")}
+                        placeholder={t("search")}
+                        value={searchInput}
+                        onChange={e => setSearchInput(e.target.value)}
+                        onKeyDown={handleKeyDown}
+                        className="flex-1"
+                    />
+                    <Button
+                        variant="secondary"
+                        aria-label={t("search")}
+                        type="button"
+                        onClick={() => confirmSearchQuery()}
+                    >
+                        <MagnifyingGlass className="size-4" />
+                    </Button>
+                </div>
+                <Select
+                    value={filter}
+                    onValueChange={value => {
+                        setFilter(value as ResultsFilter);
+                        refresh();
+                    }}
+                >
+                    <SelectTrigger
+                        data-testid="filter-type-select"
+                        className="kc-filter-type-select w-[300px]"
+                    >
+                        <SelectValue>{filter}</SelectValue>
+                    </SelectTrigger>
+                    <SelectContent>
+                        <SelectItem
+                            data-testid="all-results-option"
+                            value={ResultsFilter.All}
                         >
-                            <SelectList>
-                                <SelectOption
-                                    data-testid="all-results-option"
-                                    value={ResultsFilter.All}
-                                >
-                                    {t("allResults")}
-                                </SelectOption>
-                                <SelectOption
-                                    data-testid="result-permit-option"
-                                    value={ResultsFilter.StatusPermitted}
-                                >
-                                    {t("resultPermit")}
-                                </SelectOption>
-                                <SelectOption
-                                    data-testid="result-deny-option"
-                                    value={ResultsFilter.StatusDenied}
-                                >
-                                    {t("resultDeny")}
-                                </SelectOption>
-                            </SelectList>
-                        </Select>
-                    </ToolbarItem>
-                </ToolbarGroup>
-            </Toolbar>
+                            {t("allResults")}
+                        </SelectItem>
+                        <SelectItem
+                            data-testid="result-permit-option"
+                            value={ResultsFilter.StatusPermitted}
+                        >
+                            {t("resultPermit")}
+                        </SelectItem>
+                        <SelectItem
+                            data-testid="result-deny-option"
+                            value={ResultsFilter.StatusDenied}
+                        >
+                            {t("resultDeny")}
+                        </SelectItem>
+                    </SelectContent>
+                </Select>
+            </div>
             {!noFilteredData && (
                 <Table aria-label={t("evaluationResults")}>
-                    <Thead>
-                        <Tr>
-                            <Th aria-hidden="true" />
-                            <Th>{t("resource")}</Th>
-                            <Th>{t("overallResults")}</Th>
-                            <Th>{t("scopes")}</Th>
-                            <Th aria-hidden="true" />
-                        </Tr>
-                    </Thead>
+                    <TableHeader>
+                        <TableRow>
+                            <TableHead aria-hidden="true" />
+                            <TableHead>{t("resource")}</TableHead>
+                            <TableHead>{t("overallResults")}</TableHead>
+                            <TableHead>{t("scopes")}</TableHead>
+                            <TableHead aria-hidden="true" />
+                        </TableRow>
+                    </TableHeader>
                     {filteredResources.map((resource, rowIndex) => (
                         <AuthorizationEvaluateResource
                             key={rowIndex}
@@ -191,7 +175,7 @@ export const Results = ({ evaluateResult, refresh, back }: ResultProps) => {
             )}
             {(noFilteredData || noEvaluatedData) && (
                 <>
-                    <Divider />
+                    <Separator />
                     <ListEmptyState
                         isSearchVariant
                         message={t("noSearchResults")}
@@ -199,22 +183,23 @@ export const Results = ({ evaluateResult, refresh, back }: ResultProps) => {
                     />
                 </>
             )}
-            <Form>
+            <form onSubmit={e => e.preventDefault()}>
                 <FixedButtonsGroup name="authorization">
-                    <Button data-testid="authorization-eval" id="back-btn" onClick={back}>
+                    <Button type="button" data-testid="authorization-eval" id="back-btn" onClick={back}>
                         {t("back")}
-                    </Button>{" "}
+                    </Button>
                     <Button
+                        type="button"
                         data-testid="authorization-reevaluate"
                         id="reevaluate-btn"
                         variant="secondary"
                         onClick={refresh}
                     >
                         {t("reevaluate")}
-                    </Button>{" "}
+                    </Button>
                     <AuthorizationDataModal data={evaluateResult.rpt!} />
                 </FixedButtonsGroup>
-            </Form>
-        </PageSection>
+            </form>
+        </div>
     );
 };

@@ -12,12 +12,16 @@
 // @ts-nocheck
 
 import { useState } from "react";
-import { Tooltip } from "../../../shared/@patternfly/react-core";
-import type { TableTextProps } from "../../../shared/@patternfly/react-table";
+import {
+    Tooltip,
+    TooltipContent,
+    TooltipProvider,
+    TooltipTrigger,
+} from "@merge/ui/components/tooltip";
 
 import type GroupRepresentation from "@keycloak/keycloak-admin-client/lib/defs/groupRepresentation";
 
-type GroupPathProps = TableTextProps & {
+type GroupPathProps = React.ComponentProps<"span"> & {
     group: GroupRepresentation;
 };
 
@@ -27,7 +31,7 @@ export const GroupPath = ({
     ...props
 }: GroupPathProps) => {
     const [tooltip, setTooltip] = useState("");
-    const onMouseEnter = (event: any) => {
+    const onMouseEnter = (event: React.MouseEvent<HTMLSpanElement>) => {
         setTooltip(path!);
         onMouseEnterProp?.(event);
     };
@@ -38,9 +42,12 @@ export const GroupPath = ({
     );
 
     return tooltip !== "" ? (
-        <Tooltip content={tooltip} isVisible>
-            {text}
-        </Tooltip>
+        <TooltipProvider>
+            <Tooltip open>
+                <TooltipTrigger asChild>{text}</TooltipTrigger>
+                <TooltipContent>{tooltip}</TooltipContent>
+            </Tooltip>
+        </TooltipProvider>
     ) : (
         text
     );

@@ -12,13 +12,9 @@
 // @ts-nocheck
 
 import type RealmRepresentation from "@keycloak/keycloak-admin-client/lib/defs/realmRepresentation";
-import {
-    ActionGroup,
-    Button,
-    FormGroup,
-    PageSection,
-    Switch
-} from "../../shared/@patternfly/react-core";
+import { Button } from "@merge/ui/components/button";
+import { Label } from "@merge/ui/components/label";
+import { Switch } from "@merge/ui/components/switch";
 import { Controller, useFormContext, useWatch } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { FormPanel, HelpItem } from "../../shared/keycloak-ui-shared";
@@ -46,7 +42,7 @@ export const RealmSettingsSessionsTab = ({
     });
 
     return (
-        <PageSection variant="light">
+        <div className="bg-muted/30 p-4">
             <FormPanel
                 title={t("SSOSessionSettings")}
                 className="kc-sso-session-template"
@@ -56,16 +52,14 @@ export const RealmSettingsSessionsTab = ({
                     role="manage-realm"
                     onSubmit={handleSubmit(save)}
                 >
-                    <FormGroup
-                        label={t("SSOSessionIdle")}
-                        fieldId="SSOSessionIdle"
-                        labelIcon={
+                    <div className="space-y-2">
+                        <Label htmlFor="SSOSessionIdle" className="flex items-center gap-1">
+                            {t("SSOSessionIdle")}
                             <HelpItem
                                 helpText={t("ssoSessionIdle")}
                                 fieldLabelId="SSOSessionIdle"
                             />
-                        }
-                    >
+                        </Label>
                         <Controller
                             name="ssoSessionIdleTimeout"
                             defaultValue={realm.ssoSessionIdleTimeout}
@@ -80,18 +74,16 @@ export const RealmSettingsSessionsTab = ({
                                 />
                             )}
                         />
-                    </FormGroup>
+                    </div>
 
-                    <FormGroup
-                        label={t("SSOSessionMax")}
-                        fieldId="SSOSessionMax"
-                        labelIcon={
+                    <div className="space-y-2">
+                        <Label htmlFor="SSOSessionMax" className="flex items-center gap-1">
+                            {t("SSOSessionMax")}
                             <HelpItem
                                 helpText={t("ssoSessionMax")}
                                 fieldLabelId="SSOSessionMax"
                             />
-                        }
-                    >
+                        </Label>
                         <Controller
                             name="ssoSessionMaxLifespan"
                             control={control}
@@ -105,18 +97,16 @@ export const RealmSettingsSessionsTab = ({
                                 />
                             )}
                         />
-                    </FormGroup>
+                    </div>
 
-                    <FormGroup
-                        label={t("SSOSessionIdleRememberMe")}
-                        fieldId="SSOSessionIdleRememberMe"
-                        labelIcon={
+                    <div className="space-y-2">
+                        <Label htmlFor="SSOSessionIdleRememberMe" className="flex items-center gap-1">
+                            {t("SSOSessionIdleRememberMe")}
                             <HelpItem
                                 helpText={t("ssoSessionIdleRememberMe")}
                                 fieldLabelId="SSOSessionIdleRememberMe"
                             />
-                        }
-                    >
+                        </Label>
                         <Controller
                             name="ssoSessionIdleTimeoutRememberMe"
                             control={control}
@@ -130,18 +120,16 @@ export const RealmSettingsSessionsTab = ({
                                 />
                             )}
                         />
-                    </FormGroup>
+                    </div>
 
-                    <FormGroup
-                        label={t("SSOSessionMaxRememberMe")}
-                        fieldId="SSOSessionMaxRememberMe"
-                        labelIcon={
+                    <div className="space-y-2">
+                        <Label htmlFor="SSOSessionMaxRememberMe" className="flex items-center gap-1">
+                            {t("SSOSessionMaxRememberMe")}
                             <HelpItem
                                 helpText={t("ssoSessionMaxRememberMe")}
                                 fieldLabelId="SSOSessionMaxRememberMe"
                             />
-                        }
-                    >
+                        </Label>
                         <Controller
                             name="ssoSessionMaxLifespanRememberMe"
                             control={control}
@@ -155,7 +143,7 @@ export const RealmSettingsSessionsTab = ({
                                 />
                             )}
                         />
-                    </FormGroup>
+                    </div>
                 </FormAccess>
             </FormPanel>
             <FormPanel
@@ -438,6 +426,6 @@ export const RealmSettingsSessionsTab = ({
                     </ActionGroup>
                 </FormAccess>
             </FormPanel>
-        </PageSection>
+        </div>
     );
 };

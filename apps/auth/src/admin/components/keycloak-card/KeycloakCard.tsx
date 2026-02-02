@@ -11,24 +11,23 @@
 
 // @ts-nocheck
 
+import { Button } from "@merge/ui/components/button";
 import {
     Card,
-    CardBody,
+    CardContent,
     CardFooter,
     CardHeader,
     CardTitle,
-    Dropdown,
-    DropdownList,
-    Flex,
-    FlexItem,
-    Label,
-    MenuToggle,
-    MenuToggleElement
-} from "../../../shared/@patternfly/react-core";
+} from "@merge/ui/components/card";
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuTrigger,
+} from "@merge/ui/components/dropdown-menu";
+import { Label } from "@merge/ui/components/label";
+import { DotsThreeVertical } from "@phosphor-icons/react";
 import { ReactElement, useState } from "react";
 import { Link, To } from "react-router-dom";
-
-import { EllipsisVIcon } from "../../../shared/@patternfly/react-icons";
 
 export type KeycloakCardProps = {
     title: string;
@@ -54,50 +53,38 @@ export const KeycloakCard = ({
     };
 
     return (
-        <Card isSelectable isClickable>
+        <Card className="cursor-pointer transition-colors hover:bg-muted/50">
             <CardHeader
-                actions={{
-                    actions: dropdownItems ? (
-                        <Dropdown
-                            popperProps={{
-                                position: "right"
-                            }}
-                            onOpenChange={onDropdownToggle}
-                            toggle={(ref: React.Ref<MenuToggleElement>) => (
-                                <MenuToggle
-                                    ref={ref}
-                                    onClick={onDropdownToggle}
-                                    variant="plain"
-                                    data-testid={`${title}-dropdown`}
-                                >
-                                    <EllipsisVIcon />
-                                </MenuToggle>
-                            )}
-                            isOpen={isDropdownOpen}
-                        >
-                            <DropdownList>{dropdownItems}</DropdownList>
-                        </Dropdown>
-                    ) : undefined,
-                    hasNoOffset: false,
-                    className: undefined
-                }}
+                className="flex-row items-center justify-between space-y-0"
+                action={dropdownItems ? (
+                    <DropdownMenu open={isDropdownOpen} onOpenChange={setIsDropdownOpen}>
+                        <DropdownMenuTrigger asChild>
+                            <Button
+                                variant="ghost"
+                                size="icon"
+                                data-testid={`${title}-dropdown`}
+                            >
+                                <DotsThreeVertical className="size-4" />
+                            </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent align="end">
+                            {dropdownItems}
+                        </DropdownMenuContent>
+                    </DropdownMenu>
+                ) : undefined}
             >
                 <CardTitle data-testid="keycloak-card-title">
                     <Link to={to}>{title}</Link>
                 </CardTitle>
             </CardHeader>
-            <CardBody />
-            <CardFooter>
-                <Flex>
-                    <FlexItem className="keycloak--keycloak-card__footer">
-                        {footerText && footerText}
-                    </FlexItem>
-                    <FlexItem>
-                        {labelText && (
-                            <Label color={labelColor || "gray"}>{labelText}</Label>
-                        )}
-                    </FlexItem>
-                </Flex>
+            <CardContent />
+            <CardFooter className="flex items-center justify-between gap-2">
+                <span className="keycloak--keycloak-card__footer">{footerText}</span>
+                {labelText && (
+                    <Label variant={labelColor === "blue" ? "default" : "secondary"}>
+                        {labelText}
+                    </Label>
+                )}
             </CardFooter>
         </Card>
     );

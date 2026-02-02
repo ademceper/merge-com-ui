@@ -12,8 +12,7 @@
 // @ts-nocheck
 
 import { useEffect, useRef } from "react";
-import { Icon } from "../../../shared/@patternfly/react-core";
-import { CaretDownIcon } from "../../../shared/@patternfly/react-icons";
+import { CaretDown } from "@phosphor-icons/react";
 
 type DropdownPanelProps = {
     buttonText: string;
@@ -70,9 +69,7 @@ const DropdownPanel: React.FC<DropdownPanelProps> = ({
                 data-testid="dropdown-panel-btn"
             >
                 {buttonText}
-                <Icon className="kc-dropdown-panel-icon">
-                    <CaretDownIcon />
-                </Icon>
+                <CaretDown className="kc-dropdown-panel-icon size-4" />
             </button>
             {searchDropdownOpen && (
                 <div className="kc-dropdown-panel-content">{children}</div>

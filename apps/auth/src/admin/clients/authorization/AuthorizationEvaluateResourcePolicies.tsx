@@ -14,19 +14,12 @@
 import type EvaluationResultRepresentation from "@keycloak/keycloak-admin-client/lib/defs/evaluationResultRepresentation";
 import { DecisionEffect } from "@keycloak/keycloak-admin-client/lib/defs/policyRepresentation";
 import type PolicyResultRepresentation from "@keycloak/keycloak-admin-client/lib/defs/policyResultRepresentation";
+import { capitalize } from "lodash-es";
+import { Button } from "@merge/ui/components/button";
 import {
-    capitalize,
-    DescriptionList,
-    TextContent,
-    TextList,
-    TextListItem
-} from "../../../shared/@patternfly/react-core";
-import {
-    ExpandableRowContent,
-    Tbody,
-    Td,
-    Tr
-} from "../../../shared/@patternfly/react-table";
+    TableCell,
+    TableRow
+} from "@merge/ui/components/table";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
@@ -56,16 +49,20 @@ export const AuthorizationEvaluateResourcePolicies = ({
     const { clientId } = useParams<ClientParams>();
 
     return (
-        <Tbody key={idx} isExpanded={expanded}>
-            <Tr>
-                <Td
-                    expand={{
-                        rowIndex,
-                        isExpanded: expanded,
-                        onToggle: () => setExpanded(prev => !prev)
-                    }}
-                />
-                <Td data-testid={`name-column-${resource.resource}`}>
+        <>
+            <TableRow key={idx}>
+                <TableCell>
+                    <Button
+                        type="button"
+                        variant="ghost"
+                        size="icon-sm"
+                        aria-expanded={expanded}
+                        onClick={() => setExpanded(prev => !prev)}
+                    >
+                        {expanded ? "▼" : "▶"}
+                    </Button>
+                </TableCell>
+                <TableCell data-testid={`name-column-${resource.resource}`}>
                     <Link
                         to={toPermissionDetails({
                             realm,
@@ -76,60 +73,53 @@ export const AuthorizationEvaluateResourcePolicies = ({
                     >
                         {outerPolicy.policy?.name}
                     </Link>
-                </Td>
-                <Td id={outerPolicy.status?.toLowerCase()}>
+                </TableCell>
+                <TableCell id={outerPolicy.status?.toLowerCase()}>
                     {t(outerPolicy.status?.toLowerCase() as string)}
-                </Td>
-                <Td>{t(`${outerPolicy.policy?.decisionStrategy?.toLowerCase()}`)}</Td>
-                <Td>
+                </TableCell>
+                <TableCell>{t(`${outerPolicy.policy?.decisionStrategy?.toLowerCase()}`)}</TableCell>
+                <TableCell>
                     {outerPolicy.status === DecisionEffect.Permit
                         ? resource.policies?.[rowIndex]?.scopes?.join(", ")
                         : "-"}
-                </Td>
-                <Td>
+                </TableCell>
+                <TableCell>
                     {outerPolicy.status === DecisionEffect.Deny &&
                     resource.policies?.[rowIndex]?.scopes?.length
                         ? resource.policies[rowIndex].scopes?.join(", ")
                         : "-"}
-                </Td>
-            </Tr>
-            <Tr key={`child-${resource.resource}`} isExpanded={expanded}>
-                <Td />
-                <Td colSpan={5}>
-                    {expanded && (
-                        <ExpandableRowContent>
-                            <DescriptionList
-                                isHorizontal
-                                className="keycloak_resource_details"
-                            >
-                                <TextContent>
-                                    <TextList>
-                                        {outerPolicy.associatedPolicies?.map(item => (
-                                            <TextListItem key="policyDetails">
-                                                <Link
-                                                    to={toPolicyDetails({
-                                                        realm,
-                                                        id: clientId,
-                                                        policyType: item.policy?.type!,
-                                                        policyId: item.policy?.id!
-                                                    })}
-                                                >
-                                                    {item.policy?.name}
-                                                </Link>{" "}
-                                                {t("votedToStatus", {
-                                                    status: capitalize(
-                                                        item.status as string
-                                                    )
-                                                })}
-                                            </TextListItem>
-                                        ))}
-                                    </TextList>
-                                </TextContent>
-                            </DescriptionList>
-                        </ExpandableRowContent>
-                    )}
-                </Td>
-            </Tr>
-        </Tbody>
+                </TableCell>
+            </TableRow>
+            {expanded && (
+                <TableRow key={`child-${resource.resource}-${idx}`}>
+                    <TableCell />
+                    <TableCell colSpan={5}>
+                        <div className="keycloak_resource_details py-2">
+                            <ul className="list-disc list-inside space-y-1">
+                                {outerPolicy.associatedPolicies?.map(item => (
+                                    <li key={item.policy?.id ?? "policyDetails"}>
+                                        <Link
+                                            to={toPolicyDetails({
+                                                realm,
+                                                id: clientId,
+                                                policyType: item.policy?.type!,
+                                                policyId: item.policy?.id!
+                                            })}
+                                        >
+                                            {item.policy?.name}
+                                        </Link>{" "}
+                                        {t("votedToStatus", {
+                                            status: capitalize(
+                                                item.status as string
+                                            )
+                                        })}
+                                    </li>
+                                ))}
+                            </ul>
+                        </div>
+                    </TableCell>
+                </TableRow>
+            )}
+        </>
     );
 };

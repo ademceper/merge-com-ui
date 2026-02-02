@@ -11,11 +11,11 @@
 
 // @ts-nocheck
 
-import { Tab, TabTitleText } from "../../../shared/@patternfly/react-core";
 import { useTranslation } from "react-i18next";
 import { HelpItem } from "../../../shared/keycloak-ui-shared";
 import {
     RoutableTabs,
+    Tab,
     useRoutableTab
 } from "../../components/routable-tabs/RoutableTabs";
 import { useRealm } from "../../context/realm-context/RealmContext";
@@ -44,7 +44,7 @@ export const ClientRegistration = () => {
             <Tab
                 data-testid="anonymous"
                 title={
-                    <TabTitleText>
+                    <>
                         {t("anonymousAccessPolicies")}{" "}
                         <HelpItem
                             fieldLabelId=""
@@ -52,7 +52,7 @@ export const ClientRegistration = () => {
                             noVerticalAlign={false}
                             unWrap
                         />
-                    </TabTitleText>
+                    </>
                 }
                 {...anonymousTab}
             >
@@ -61,7 +61,7 @@ export const ClientRegistration = () => {
             <Tab
                 data-testid="authenticated"
                 title={
-                    <TabTitleText>
+                    <>
                         {t("authenticatedAccessPolicies")}{" "}
                         <HelpItem
                             fieldLabelId=""
@@ -69,7 +69,7 @@ export const ClientRegistration = () => {
                             noVerticalAlign={false}
                             unWrap
                         />
-                    </TabTitleText>
+                    </>
                 }
                 {...authenticatedTab}
             >

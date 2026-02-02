@@ -13,22 +13,11 @@
 
 import type GroupRepresentation from "@keycloak/keycloak-admin-client/lib/defs/groupRepresentation";
 import { useFetch } from "../../shared/keycloak-ui-shared";
-import {
-    Button,
-    Drawer,
-    DrawerContent,
-    DrawerContentBody,
-    DrawerHead,
-    DrawerPanelContent,
-    DropdownItem,
-    PageSection,
-    PageSectionVariants,
-    Tab,
-    TabTitleText,
-    Tabs,
-    Tooltip
-} from "../../shared/@patternfly/react-core";
-import { AngleLeftIcon, TreeIcon } from "../../shared/@patternfly/react-icons";
+import { Button } from "@merge/ui/components/button";
+import { DropdownMenuItem } from "@merge/ui/components/dropdown-menu";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@merge/ui/components/tabs";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@merge/ui/components/tooltip";
+import { CaretLeft, TreeStructure } from "@phosphor-icons/react";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useLocation, useNavigate } from "react-router-dom";
@@ -123,7 +112,7 @@ export default function GroupsSection() {
     );
 
     return (
-        <>
+        <div>
             <DeleteGroup
                 show={deleteOpen}
                 toggleDialog={toggleDeleteOpen}
@@ -147,200 +136,136 @@ export default function GroupsSection() {
                     handleModalToggle={() => setRename(undefined)}
                 />
             )}
-            <PageSection variant={PageSectionVariants.light} className="pf-v5-u-p-0">
-                <Drawer isInline isExpanded={open} key={key} position="left">
-                    <DrawerContent
-                        panelContent={
-                            <DrawerPanelContent isResizable>
-                                <DrawerHead>
-                                    <GroupTree
-                                        refresh={refresh}
-                                        canViewDetails={canViewDetails}
-                                    />
-                                </DrawerHead>
-                            </DrawerPanelContent>
-                        }
-                    >
-                        <DrawerContentBody>
-                            <Tooltip content={open ? t("hide") : t("show")}>
-                                <Button
-                                    aria-label={open ? t("hide") : t("show")}
-                                    variant="plain"
-                                    icon={open ? <AngleLeftIcon /> : <TreeIcon />}
-                                    onClick={toggle}
+            <div className="p-0 bg-muted/30">
+                <div className="flex min-h-0" key={key}>
+                    {open && (
+                        <div className="flex shrink-0 border-r bg-background w-64 min-h-0 flex flex-col">
+                            <div className="p-2">
+                                <GroupTree
+                                    refresh={refresh}
+                                    canViewDetails={canViewDetails}
                                 />
+                            </div>
+                        </div>
+                    )}
+                    <div className="flex flex-1 flex-col min-w-0">
+                        <TooltipProvider>
+                            <Tooltip>
+                                <TooltipTrigger asChild>
+                                    <Button
+                                        variant="ghost"
+                                        size="icon"
+                                        aria-label={open ? t("hide") : t("show")}
+                                        onClick={toggle}
+                                    >
+                                        {open ? <CaretLeft className="size-5" /> : <TreeStructure className="size-5" />}
+                                    </Button>
+                                </TooltipTrigger>
+                                <TooltipContent>{open ? t("hide") : t("show")}</TooltipContent>
                             </Tooltip>
-                            <GroupBreadCrumbs />
-                            <ViewHeader
-                                titleKey={!id ? "groups" : currentGroup()?.name!}
-                                subKey={!id ? "groupsDescription" : ""}
-                                helpUrl={!id ? helpUrls.groupsUrl : ""}
-                                divider={!id}
-                                dropdownItems={
-                                    id && canManageGroup
-                                        ? [
-                                              <DropdownItem
-                                                  data-testid="renameGroupAction"
-                                                  key="renameGroup"
-                                                  onClick={() =>
-                                                      setRename(currentGroup())
-                                                  }
-                                              >
-                                                  {t("edit")}
-                                              </DropdownItem>,
-                                              <DropdownItem
-                                                  data-testid="deleteGroup"
-                                                  key="deleteGroup"
-                                                  onClick={toggleDeleteOpen}
-                                              >
-                                                  {t("deleteGroup")}
-                                              </DropdownItem>
-                                          ]
-                                        : undefined
-                                }
-                            />
-                            <PageSection className="pf-v5-u-pt-0">
-                                {currentGroup()?.description}
-                            </PageSection>
+                        </TooltipProvider>
+                        <GroupBreadCrumbs />
+                        <ViewHeader
+                            titleKey={!id ? "groups" : currentGroup()?.name!}
+                            subKey={!id ? "groupsDescription" : ""}
+                            helpUrl={!id ? helpUrls.groupsUrl : ""}
+                            divider={!id}
+                            dropdownItems={
+                                id && canManageGroup
+                                    ? [
+                                          <DropdownMenuItem
+                                              data-testid="renameGroupAction"
+                                              key="renameGroup"
+                                              onClick={() =>
+                                                  setRename(currentGroup())
+                                              }
+                                          >
+                                              {t("edit")}
+                                          </DropdownMenuItem>,
+                                          <DropdownMenuItem
+                                              data-testid="deleteGroup"
+                                              key="deleteGroup"
+                                              onClick={toggleDeleteOpen}
+                                          >
+                                              {t("deleteGroup")}
+                                          </DropdownMenuItem>
+                                      ]
+                                    : undefined
+                            }
+                        />
+                        <div className="pt-0">
+                            {currentGroup()?.description}
+                        </div>
                             {subGroups.length > 0 && (
-                                <Tabs
-                                    inset={{
-                                        default: "insetNone",
-                                        md: "insetSm",
-                                        xl: "insetLg",
-                                        "2xl": "inset2xl"
-                                    }}
-                                    activeKey={activeTab}
-                                    onSelect={(_, key) => setActiveTab(key as number)}
-                                    isBox
-                                    mountOnEnter
-                                    unmountOnExit
-                                >
-                                    <Tab
-                                        data-testid="groups"
-                                        eventKey={0}
-                                        title={
-                                            <TabTitleText>
-                                                {t("childGroups")}
-                                            </TabTitleText>
-                                        }
-                                    >
+                                <Tabs value={String(activeTab)} onValueChange={v => setActiveTab(Number(v))} className="w-full">
+                                    <TabsList className="w-full flex-wrap">
+                                        <TabsTrigger value="0" data-testid="groups">{t("childGroups")}</TabsTrigger>
+                                        {canViewMembers && (
+                                            <TabsTrigger value="1" data-testid="members">{t("members")}</TabsTrigger>
+                                        )}
+                                        <TabsTrigger value="2" data-testid="attributesTab">{t("attributes")}</TabsTrigger>
+                                        {canViewRoles && (
+                                            <TabsTrigger value="3" data-testid="role-mapping-tab">{t("roleMapping")}</TabsTrigger>
+                                        )}
+                                        {canViewPermissions && (
+                                            <TabsTrigger value="4" data-testid="permissionsTab">{t("permissions")}</TabsTrigger>
+                                        )}
+                                        {hasAccess("view-events") && (
+                                            <TabsTrigger value="5" data-testid="admin-events-tab">{t("adminEvents")}</TabsTrigger>
+                                        )}
+                                    </TabsList>
+                                    <TabsContent value="0">
                                         <GroupTable refresh={refresh} />
-                                    </Tab>
+                                    </TabsContent>
                                     {canViewMembers && (
-                                        <Tab
-                                            data-testid="members"
-                                            eventKey={1}
-                                            title={
-                                                <TabTitleText>
-                                                    {t("members")}
-                                                </TabTitleText>
-                                            }
-                                        >
+                                        <TabsContent value="1">
                                             <Members />
-                                        </Tab>
+                                        </TabsContent>
                                     )}
-                                    <Tab
-                                        data-testid="attributesTab"
-                                        eventKey={2}
-                                        title={
-                                            <TabTitleText>{t("attributes")}</TabTitleText>
-                                        }
-                                    >
+                                    <TabsContent value="2">
                                         <GroupAttributes />
-                                    </Tab>
+                                    </TabsContent>
                                     {canViewRoles && (
-                                        <Tab
-                                            eventKey={3}
-                                            data-testid="role-mapping-tab"
-                                            title={
-                                                <TabTitleText>
-                                                    {t("roleMapping")}
-                                                </TabTitleText>
-                                            }
-                                        >
+                                        <TabsContent value="3">
                                             <GroupRoleMapping
                                                 id={id!}
                                                 name={currentGroup()?.name!}
                                                 canManageGroup={canManageGroup}
                                             />
-                                        </Tab>
+                                        </TabsContent>
                                     )}
                                     {canViewPermissions && (
-                                        <Tab
-                                            eventKey={4}
-                                            data-testid="permissionsTab"
-                                            title={
-                                                <TabTitleText>
-                                                    {t("permissions")}
-                                                </TabTitleText>
-                                            }
-                                        >
+                                        <TabsContent value="4">
                                             <PermissionsTab id={id} type="groups" />
-                                        </Tab>
+                                        </TabsContent>
                                     )}
                                     {hasAccess("view-events") && (
-                                        <Tab
-                                            eventKey={5}
-                                            data-testid="admin-events-tab"
-                                            title={
-                                                <TabTitleText>
-                                                    {t("adminEvents")}
-                                                </TabTitleText>
-                                            }
-                                        >
-                                            <Tabs
-                                                activeKey={activeEventsTab}
-                                                onSelect={(_, key) =>
-                                                    setActiveEventsTab(key as string)
-                                                }
-                                            >
-                                                <Tab
-                                                    eventKey="adminEvents"
-                                                    title={
-                                                        <TabTitleText>
-                                                            {t("adminEvents")}
-                                                        </TabTitleText>
-                                                    }
-                                                >
-                                                    <AdminEvents
-                                                        resourcePath={`groups/${id}`}
-                                                    />
-                                                </Tab>
-                                                <Tab
-                                                    eventKey="membershipEvents"
-                                                    title={
-                                                        <TabTitleText>
-                                                            {t("membershipEvents")}
-                                                        </TabTitleText>
-                                                    }
-                                                >
-                                                    <AdminEvents
-                                                        resourcePath={`users/*/groups/${id}`}
-                                                    />
-                                                </Tab>
-                                                <Tab
-                                                    eventKey="childGroupEvents"
-                                                    title={
-                                                        <TabTitleText>
-                                                            {t("childGroupEvents")}
-                                                        </TabTitleText>
-                                                    }
-                                                >
-                                                    <AdminEvents
-                                                        resourcePath={`groups/${id}/children`}
-                                                    />
-                                                </Tab>
+                                        <TabsContent value="5">
+                                            <Tabs value={activeEventsTab} onValueChange={setActiveEventsTab}>
+                                                <TabsList>
+                                                    <TabsTrigger value="adminEvents">{t("adminEvents")}</TabsTrigger>
+                                                    <TabsTrigger value="membershipEvents">{t("membershipEvents")}</TabsTrigger>
+                                                    <TabsTrigger value="childGroupEvents">{t("childGroupEvents")}</TabsTrigger>
+                                                </TabsList>
+                                                <TabsContent value="adminEvents">
+                                                    <AdminEvents resourcePath={`groups/${id}`} />
+                                                </TabsContent>
+                                                <TabsContent value="membershipEvents">
+                                                    <AdminEvents resourcePath={`users/*/groups/${id}`} />
+                                                </TabsContent>
+                                                <TabsContent value="childGroupEvents">
+                                                    <AdminEvents resourcePath={`groups/${id}/children`} />
+                                                </TabsContent>
                                             </Tabs>
-                                        </Tab>
+                                        </TabsContent>
                                     )}
                                 </Tabs>
                             )}
                             {subGroups.length === 0 && <GroupTable refresh={refresh} />}
-                        </DrawerContentBody>
-                    </DrawerContent>
-                </Drawer>
-            </PageSection>
-        </>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     );
 }

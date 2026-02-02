@@ -13,22 +13,10 @@
 
 import type ComponentRepresentation from "@keycloak/keycloak-admin-client/lib/defs/componentRepresentation";
 import { useAlerts, useFetch } from "../../shared/keycloak-ui-shared";
-import {
-    AlertVariant,
-    ButtonVariant,
-    CardTitle,
-    DropdownItem,
-    Gallery,
-    GalleryItem,
-    Icon,
-    PageSection,
-    Split,
-    SplitItem,
-    Text,
-    TextContent,
-    TextVariants
-} from "../../shared/@patternfly/react-core";
-import { DatabaseIcon } from "../../shared/@patternfly/react-icons";
+import { AlertVariant } from "../../shared/keycloak-ui-shared";
+import { CardTitle } from "@merge/ui/components/card";
+import { DropdownMenuItem } from "@merge/ui/components/dropdown-menu";
+import { Database } from "@phosphor-icons/react";
 import { useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
@@ -83,7 +71,7 @@ export default function UserFederationSection() {
     const ufAddProviderDropdownItems = useMemo(
         () =>
             providers.map(p => (
-                <DropdownItem
+                <DropdownMenuItem
                     key={p.id}
                     onClick={() =>
                         navigate(toNewCustomUserFederation({ realm, providerId: p.id! }))
@@ -92,7 +80,7 @@ export default function UserFederationSection() {
                     {p.id.toUpperCase() == "LDAP"
                         ? p.id.toUpperCase()
                         : toUpperCase(p.id)}
-                </DropdownItem>
+                </DropdownMenuItem>
             )),
         []
     );
@@ -110,7 +98,7 @@ export default function UserFederationSection() {
         titleKey: t("userFedDeleteConfirmTitle"),
         messageKey: t("userFedDeleteConfirm"),
         continueButtonLabel: "delete",
-        continueButtonVariant: ButtonVariant.danger,
+        continueButtonVariant: "destructive",
         onConfirm: async () => {
             try {
                 await adminClient.components.del({ id: currentCard });
@@ -146,14 +134,14 @@ export default function UserFederationSection() {
 
     if (userFederations) {
         cards = userFederations.sort(cardSorter).map((userFederation, index) => (
-            <GalleryItem
+            <div
                 key={index}
                 className="keycloak-admin--user-federation__gallery-item"
             >
                 <KeycloakCard
                     to={toDetails(userFederation.providerId!, userFederation.id!)}
                     dropdownItems={[
-                        <DropdownItem
+                        <DropdownMenuItem
                             key={`${index}-cardDelete`}
                             onClick={() => {
                                 toggleDeleteForCard(userFederation.id!);
@@ -161,7 +149,7 @@ export default function UserFederationSection() {
                             data-testid="card-delete"
                         >
                             {t("delete")}
-                        </DropdownItem>
+                        </DropdownMenuItem>
                     ]}
                     title={userFederation.name!}
                     footerText={toUpperCase(userFederation.providerId!)}
@@ -176,7 +164,7 @@ export default function UserFederationSection() {
                             : "gray"
                     }
                 />
-            </GalleryItem>
+            </div>
         ));
     }
 
@@ -201,21 +189,17 @@ export default function UserFederationSection() {
                       }
                     : {})}
             />
-            <PageSection>
+            <div>
                 {userFederations && userFederations.length > 0 ? (
-                    <Gallery hasGutter>{cards}</Gallery>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+                        {cards}
+                    </div>
                 ) : (
                     <>
-                        <TextContent>
-                            <Text component={TextVariants.p}>{t("getStarted")}</Text>
-                        </TextContent>
-                        <TextContent>
-                            <Text className="pf-v5-u-mt-lg" component={TextVariants.h2}>
-                                {t("add-providers")}
-                            </Text>
-                        </TextContent>
-                        <hr className="pf-v5-u-mb-lg" />
-                        <Gallery hasGutter>
+                        <p>{t("getStarted")}</p>
+                        <h2 className="mt-4 text-lg font-semibold">{t("add-providers")}</h2>
+                        <hr className="mb-4" />
+                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
                             {providers.map(p => (
                                 <ClickableCard
                                     key={p.id}
@@ -229,27 +213,21 @@ export default function UserFederationSection() {
                                     }
                                     data-testid={`${p.id}-card`}
                                 >
-                                    <CardTitle>
-                                        <Split hasGutter>
-                                            <SplitItem>
-                                                <Icon size="lg">
-                                                    <DatabaseIcon />
-                                                </Icon>
-                                            </SplitItem>
-                                            <SplitItem isFilled>
-                                                {t("addProvider", {
-                                                    provider: toUpperCase(p.id!),
-                                                    count: 4
-                                                })}
-                                            </SplitItem>
-                                        </Split>
+                                    <CardTitle className="flex items-center gap-2">
+                                        <Database className="size-6 shrink-0" />
+                                        <span>
+                                            {t("addProvider", {
+                                                provider: toUpperCase(p.id!),
+                                                count: 4
+                                            })}
+                                        </span>
                                     </CardTitle>
                                 </ClickableCard>
                             ))}
-                        </Gallery>
+                        </div>
                     </>
                 )}
-            </PageSection>
+            </div>
         </>
     );
 }

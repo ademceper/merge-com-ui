@@ -12,18 +12,15 @@
 // @ts-nocheck
 
 import type ClientScopeRepresentation from "@keycloak/keycloak-admin-client/lib/defs/clientScopeRepresentation";
-import { useAlerts } from "../../../shared/keycloak-ui-shared";
+import { AlertVariant, useAlerts } from "../../../shared/keycloak-ui-shared";
+import { Button } from "@merge/ui/components/button";
 import {
-    AlertVariant,
-    Button,
-    ButtonVariant,
-    Dropdown,
-    DropdownItem,
-    DropdownList,
-    MenuToggle,
-    ToolbarItem
-} from "../../../shared/@patternfly/react-core";
-import { EllipsisVIcon } from "../../../shared/@patternfly/react-icons";
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuTrigger,
+} from "@merge/ui/components/dropdown-menu";
+import { DotsThreeVertical } from "@phosphor-icons/react";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
@@ -231,7 +228,7 @@ export const ClientScopes = ({
         }),
         messageKey: "deleteConfirmClientScopes",
         continueButtonLabel: "delete",
-        continueButtonVariant: ButtonVariant.danger,
+        continueButtonVariant: "destructive",
         onConfirm: async () => {
             try {
                 await removeClientScope(
@@ -307,71 +304,60 @@ export const ClientScopes = ({
                         {isManager && (
                             <>
                                 <DeleteConfirm />
-                                <ToolbarItem>
-                                    <Button onClick={() => setAddDialogOpen(true)}>
-                                        {t("addClientScope")}
-                                    </Button>
-                                </ToolbarItem>
-                                <ToolbarItem>
-                                    <ChangeTypeDropdown
-                                        clientId={clientId}
-                                        selectedRows={selectedRows}
-                                        refresh={refresh}
-                                    />
-                                </ToolbarItem>
-                                <ToolbarItem>
-                                    <Dropdown
-                                        onOpenChange={isOpen => setKebabOpen(isOpen)}
-                                        toggle={ref => (
-                                            <MenuToggle
-                                                data-testid="kebab"
-                                                aria-label="Kebab toggle"
-                                                ref={ref}
-                                                variant="plain"
-                                                onClick={() => setKebabOpen(!kebabOpen)}
-                                                isExpanded={kebabOpen}
-                                            >
-                                                <EllipsisVIcon />
-                                            </MenuToggle>
-                                        )}
-                                        isOpen={kebabOpen}
-                                    >
-                                        <DropdownList>
-                                            <DropdownItem
-                                                key="deleteAll"
-                                                isDisabled={selectedRows.length === 0}
-                                                onClick={async () => {
-                                                    try {
-                                                        await Promise.all(
-                                                            selectedRows.map(row =>
-                                                                removeClientScope(
-                                                                    adminClient,
-                                                                    clientId,
-                                                                    { ...row },
-                                                                    row.type as ClientScope
-                                                                )
+                                <Button onClick={() => setAddDialogOpen(true)}>
+                                    {t("addClientScope")}
+                                </Button>
+                                <ChangeTypeDropdown
+                                    clientId={clientId}
+                                    selectedRows={selectedRows}
+                                    refresh={refresh}
+                                />
+                                <DropdownMenu open={kebabOpen} onOpenChange={setKebabOpen}>
+                                    <DropdownMenuTrigger asChild>
+                                        <Button
+                                            data-testid="kebab"
+                                            aria-label="Kebab toggle"
+                                            variant="ghost"
+                                            size="icon"
+                                        >
+                                            <DotsThreeVertical className="size-4" />
+                                        </Button>
+                                    </DropdownMenuTrigger>
+                                    <DropdownMenuContent align="end">
+                                        <DropdownMenuItem
+                                            key="deleteAll"
+                                            disabled={selectedRows.length === 0}
+                                            onClick={async () => {
+                                                try {
+                                                    await Promise.all(
+                                                        selectedRows.map(row =>
+                                                            removeClientScope(
+                                                                adminClient,
+                                                                clientId,
+                                                                { ...row },
+                                                                row.type as ClientScope
                                                             )
-                                                        );
+                                                        )
+                                                    );
 
-                                                        setKebabOpen(false);
-                                                        setSelectedRows([]);
-                                                        addAlert(
-                                                            t("clientScopeRemoveSuccess")
-                                                        );
-                                                        refresh();
-                                                    } catch (error) {
-                                                        addError(
-                                                            "clientScopeRemoveError",
-                                                            error
-                                                        );
-                                                    }
-                                                }}
-                                            >
-                                                {t("remove")}
-                                            </DropdownItem>
-                                        </DropdownList>
-                                    </Dropdown>
-                                </ToolbarItem>
+                                                    setKebabOpen(false);
+                                                    setSelectedRows([]);
+                                                    addAlert(
+                                                        t("clientScopeRemoveSuccess")
+                                                    );
+                                                    refresh();
+                                                } catch (error) {
+                                                    addError(
+                                                        "clientScopeRemoveError",
+                                                        error
+                                                    );
+                                                }
+                                            }}
+                                        >
+                                            {t("remove")}
+                                        </DropdownMenuItem>
+                                    </DropdownMenuContent>
+                                </DropdownMenu>
                             </>
                         )}
                     </>

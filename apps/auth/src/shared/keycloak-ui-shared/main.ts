@@ -31,6 +31,7 @@ export {
 export { getInjectedEnvironment, type BaseEnvironment } from "./context/environment";
 export { ContinueCancelModal } from "./continue-cancel/ContinueCancelModal";
 export { FormErrorText, type FormErrorTextProps } from "./controls/FormErrorText";
+export { FormLabel, type FieldProps } from "./controls/FormLabel";
 export { HelpItem } from "./controls/HelpItem";
 export { NumberControl } from "./controls/NumberControl";
 export { PasswordControl } from "./controls/PasswordControl";

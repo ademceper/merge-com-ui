@@ -13,16 +13,18 @@
 
 import type ClientScopeRepresentation from "@keycloak/keycloak-admin-client/lib/defs/clientScopeRepresentation";
 import { HelpItem, useFetch } from "../../../../shared/keycloak-ui-shared";
-import { Button, Checkbox, FormGroup } from "../../../../shared/@patternfly/react-core";
-import { MinusCircleIcon } from "../../../../shared/@patternfly/react-icons";
+import { Button } from "@merge/ui/components/button";
+import { Checkbox } from "@merge/ui/components/checkbox";
+import { Label } from "@merge/ui/components/label";
+import { MinusCircle } from "@phosphor-icons/react";
 import {
     Table,
-    Tbody,
-    Td,
-    Th,
-    Thead,
-    Tr
-} from "../../../../shared/@patternfly/react-table";
+    TableBody,
+    TableCell,
+    TableHead,
+    TableHeader,
+    TableRow
+} from "@merge/ui/components/table";
 import { useState } from "react";
 import { Controller, useFormContext } from "react-hook-form";
 import { useTranslation } from "react-i18next";
@@ -60,16 +62,15 @@ export const ClientScope = () => {
     );
 
     return (
-        <FormGroup
-            label={t("clientScopes")}
-            labelIcon={
+        <div className="space-y-2">
+            <Label htmlFor="clientScopes" className="flex items-center gap-1">
+                {t("clientScopes")}
                 <HelpItem
                     helpText={t("clientsClientScopesHelp")}
                     fieldLabelId="clientScopes"
                 />
-            }
-            fieldId="clientScopes"
-        >
+            </Label>
+            <div id="clientScopes">
             <Controller
                 name="clientScopes"
                 control={control}
@@ -105,11 +106,10 @@ export const ClientScope = () => {
                             />
                         )}
                         <Button
+                            type="button"
                             data-testid="select-scope-button"
                             variant="secondary"
-                            onClick={() => {
-                                setOpen(true);
-                            }}
+                            onClick={() => setOpen(true)}
                         >
                             {t("addClientScopes")}
                         </Button>
@@ -117,19 +117,19 @@ export const ClientScope = () => {
                 )}
             />
             {selectedScopes.length > 0 && (
-                <Table variant="compact">
-                    <Thead>
-                        <Tr>
-                            <Th>{t("clientScopeTitle")}</Th>
-                            <Th>{t("required")}</Th>
-                            <Th aria-hidden="true" />
-                        </Tr>
-                    </Thead>
-                    <Tbody>
+                <Table className="text-sm">
+                    <TableHeader>
+                        <TableRow>
+                            <TableHead>{t("clientScopeTitle")}</TableHead>
+                            <TableHead>{t("required")}</TableHead>
+                            <TableHead aria-hidden="true" />
+                        </TableRow>
+                    </TableHeader>
+                    <TableBody>
                         {selectedScopes.map((scope, index) => (
-                            <Tr key={scope.id}>
-                                <Td>{scope.name}</Td>
-                                <Td>
+                            <TableRow key={scope.id}>
+                                <TableCell>{scope.name}</TableCell>
+                                <TableCell>
                                     <Controller
                                         name={`clientScopes.${index}.required`}
                                         defaultValue={false}
@@ -139,17 +139,18 @@ export const ClientScope = () => {
                                                 id="required"
                                                 data-testid="standard"
                                                 name="required"
-                                                isChecked={field.value}
-                                                onChange={field.onChange}
+                                                checked={field.value}
+                                                onCheckedChange={field.onChange}
                                             />
                                         )}
                                     />
-                                </Td>
-                                <Td>
+                                </TableCell>
+                                <TableCell>
                                     <Button
-                                        variant="link"
+                                        type="button"
+                                        variant="ghost"
+                                        size="icon"
                                         className="keycloak__client-authorization__policy-row-remove"
-                                        icon={<MinusCircleIcon />}
                                         onClick={() => {
                                             setValue("clientScopes", [
                                                 ...getValues("clientScopes").filter(
@@ -160,15 +161,18 @@ export const ClientScope = () => {
                                                 ...selectedScopes.filter(
                                                     s => s.id !== scope.id
                                                 )
-                                            ]);
-                                        }}
-                                    />
-                                </Td>
-                            </Tr>
-                        ))}
-                    </Tbody>
-                </Table>
+                                        ]);
+                                    }}
+                                    >
+                                        <MinusCircle className="size-4" />
+                                    </Button>
+                                </TableCell>
+                        </TableRow>
+                    ))}
+                </TableBody>
+            </Table>
             )}
-        </FormGroup>
+            </div>
+        </div>
     );
 };

@@ -13,17 +13,20 @@
 
 import RoleRepresentation from "@keycloak/keycloak-admin-client/lib/defs/roleRepresentation";
 import { KeycloakDataTable, ListEmptyState } from "../../../shared/keycloak-ui-shared";
+import { Button } from "@merge/ui/components/button";
 import {
-    Button,
-    Dropdown,
-    DropdownItem,
-    DropdownList,
-    DropdownProps,
-    MenuToggle,
-    Modal,
-    ModalVariant
-} from "../../../shared/@patternfly/react-core";
-import { cellWidth, TableText } from "../../../shared/@patternfly/react-table";
+    Dialog,
+    DialogContent,
+    DialogFooter,
+    DialogHeader,
+    DialogTitle,
+} from "@merge/ui/components/dialog";
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuTrigger,
+} from "@merge/ui/components/dropdown-menu";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useAdminClient } from "../../admin-client";
@@ -52,75 +55,67 @@ export type FilterType = "roles" | "clients";
 const RoleDescription = ({ role }: { role: RoleRepresentation }) => {
     const { t } = useTranslation();
     return (
-        <TableText wrapModifier="truncate">
+        <span className="truncate block">
             {translationFormatter(t)(role.description) as string}
-        </TableText>
+        </span>
     );
 };
 
-type AddRoleButtonProps = Omit<
-    DropdownProps,
-    "children" | "toggle" | "isOpen" | "onOpenChange"
-> & {
+type AddRoleButtonProps = {
     label?: string;
-    variant?: "default" | "plain" | "primary" | "plainText" | "secondary";
+    variant?: "default" | "destructive" | "outline" | "secondary" | "ghost" | "link";
     isDisabled?: boolean;
     onFilerTypeChange: (type: FilterType) => void;
+    children?: React.ReactNode;
 };
 
 export const AddRoleButton = ({
     label,
-    variant,
+    variant = "default",
     isDisabled,
     onFilerTypeChange,
-    ...rest
+    children
 }: AddRoleButtonProps) => {
     const { t } = useTranslation();
-    const [open, toggle] = useToggle();
+    const [open, setOpen] = useState(false);
 
     const { hasAccess } = useAccess();
     const canViewRealmRoles = hasAccess("view-realm") || hasAccess("query-users");
 
     return (
-        <Dropdown
-            onOpenChange={toggle}
-            toggle={ref => (
-                <MenuToggle
-                    ref={ref}
-                    onClick={toggle}
-                    variant={variant || "primary"}
-                    isDisabled={isDisabled}
+        <DropdownMenu open={open} onOpenChange={setOpen}>
+            <DropdownMenuTrigger asChild>
+                <Button
+                    variant={variant === "primary" ? "default" : variant}
+                    disabled={isDisabled}
                     data-testid="add-role-mapping-button"
                 >
-                    {t(label || "assignRole")}
-                </MenuToggle>
-            )}
-            isOpen={open}
-            {...rest}
-        >
-            <DropdownList>
-                <DropdownItem
+                    {children ?? t(label || "assignRole")}
+                </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="start">
+                <DropdownMenuItem
                     data-testid="client-role"
-                    component="button"
                     onClick={() => {
                         onFilerTypeChange("clients");
+                        setOpen(false);
                     }}
                 >
                     {t("clientRoles")}
-                </DropdownItem>
+                </DropdownMenuItem>
                 {canViewRealmRoles && (
-                    <DropdownItem
+                    <DropdownMenuItem
                         data-testid="roles-role"
-                        component="button"
                         onClick={() => {
                             onFilerTypeChange("roles");
+                            setOpen(false);
                         }}
                     >
                         {t("realmRoles")}
-                    </DropdownItem>
+                    </DropdownMenuItem>
                 )}
-            </DropdownList>
-        </Dropdown>
+            </DropdownMenuContent>
+        </DropdownMenu>
     );
 };
 
@@ -212,41 +207,18 @@ export const AddRoleMappingModal = ({
     }
 
     return (
-        <Modal
-            variant={ModalVariant.large}
-            title={
-                title ||
-                t("assignRolesTo", {
-                    type: filterType === "roles" ? t("realm") : t("client"),
-                    client: name
-                })
-            }
-            isOpen
-            onClose={onClose}
-            actions={[
-                <Button
-                    data-testid="assign"
-                    key="confirm"
-                    isDisabled={selectedRows.length === 0}
-                    variant="primary"
-                    onClick={() => {
-                        onAssign(selectedRows);
-                        onClose();
-                    }}
-                >
-                    {actionLabel || t("assign")}
-                </Button>,
-                <Button
-                    data-testid="cancel"
-                    key="cancel"
-                    variant="link"
-                    onClick={onClose}
-                >
-                    {t("cancel")}
-                </Button>
-            ]}
-        >
-            <KeycloakDataTable
+        <Dialog open onOpenChange={open => !open && onClose()}>
+            <DialogContent className="max-w-4xl max-h-[90vh] overflow-auto">
+                <DialogHeader>
+                    <DialogTitle>
+                        {title ||
+                            t("assignRolesTo", {
+                                type: filterType === "roles" ? t("realm") : t("client"),
+                                client: name
+                            })}
+                    </DialogTitle>
+                </DialogHeader>
+                <KeycloakDataTable
                 onSelect={rows => setSelectedRows([...rows])}
                 searchPlaceholderKey={
                     filterType === "roles" ? "searchByRoleName" : "search"
@@ -264,6 +236,22 @@ export const AddRoleMappingModal = ({
                     />
                 }
             />
-        </Modal>
+                <DialogFooter>
+                    <Button
+                        data-testid="assign"
+                        disabled={selectedRows.length === 0}
+                        onClick={() => {
+                            onAssign(selectedRows);
+                            onClose();
+                        }}
+                    >
+                        {actionLabel || t("assign")}
+                    </Button>
+                    <Button data-testid="cancel" variant="ghost" onClick={onClose}>
+                        {t("cancel")}
+                    </Button>
+                </DialogFooter>
+            </DialogContent>
+        </Dialog>
     );
 };

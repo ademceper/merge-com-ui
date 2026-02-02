@@ -12,7 +12,12 @@
 // @ts-nocheck
 
 import IdentityProviderRepresentation from "@keycloak/keycloak-admin-client/lib/defs/identityProviderRepresentation";
-import { ExpandableSection } from "../../../shared/@patternfly/react-core";
+import {
+    Collapsible,
+    CollapsibleContent,
+    CollapsibleTrigger,
+} from "@merge/ui/components/collapsible";
+import { Button } from "@merge/ui/components/button";
 import { useState } from "react";
 import { useFormContext, useWatch } from "react-hook-form";
 import { useTranslation } from "react-i18next";
@@ -144,14 +149,20 @@ export const DiscoverySettings = ({ readOnly, isOIDC }: DiscoverySettingsProps) 
     return (
         <>
             {readOnly && (
-                <ExpandableSection
+                <Collapsible
+                    open={isExpanded}
+                    onOpenChange={setIsExpanded}
                     className="keycloak__discovery-settings__metadata"
-                    toggleText={isExpanded ? t("hideMetaData") : t("showMetaData")}
-                    onToggle={() => setIsExpanded(!isExpanded)}
-                    isExpanded={isExpanded}
                 >
-                    <Fields readOnly={readOnly} isOIDC={isOIDC} />
-                </ExpandableSection>
+                    <CollapsibleTrigger asChild>
+                        <Button variant="ghost" type="button">
+                            {isExpanded ? t("hideMetaData") : t("showMetaData")}
+                        </Button>
+                    </CollapsibleTrigger>
+                    <CollapsibleContent>
+                        <Fields readOnly={readOnly} isOIDC={isOIDC} />
+                    </CollapsibleContent>
+                </Collapsible>
             )}
             {!readOnly && <Fields readOnly={readOnly} isOIDC={isOIDC} />}
         </>
