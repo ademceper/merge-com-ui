@@ -4,6 +4,7 @@ import type { KcContext } from "../KcContext";
 import type { I18n } from "../i18n";
 import AuthLayout from "../components/AuthLayout";
 import { Input } from "@merge/ui/components/input";
+import { Button } from "@merge/ui/components/button";
 import { Alert, AlertDescription } from "@merge/ui/components/alert";
 import { cn } from "@merge/ui/lib/utils";
 
@@ -109,22 +110,22 @@ export default function LoginUpdatePassword(
 
                     <div className="flex gap-3 pt-2 justify-between">
                         {isAppInitiatedAction && (
-                            <button
+                            <Button
                                 type="submit"
                                 name="cancel-aia"
                                 value="true"
                                 className={secondaryButtonClassName}
                             >
                                 {msgStr("doCancel")}
-                            </button>
+                            </Button>
                         )}
-                        <button
+                        <Button
                             type="submit"
                             disabled={isSubmitting}
                             className={primaryButtonClassName}
                         >
                             {msgStr("doSubmit")}
-                        </button>
+                        </Button>
                     </div>
                 </form>
             </div>

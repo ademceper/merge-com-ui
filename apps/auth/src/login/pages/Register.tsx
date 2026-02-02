@@ -5,6 +5,7 @@ import AuthLayout from "../components/AuthLayout";
 import { Link } from "@merge/ui/components/link";
 import { SocialLoginButtons, getFallbackSocialProviders } from "../components/SocialLoginButtons";
 import { Input } from "@merge/ui/components/input";
+import { Button } from "@merge/ui/components/button";
 import { Alert, AlertDescription } from "@merge/ui/components/alert";
 import { cn } from "@merge/ui/lib/utils";
 
@@ -177,9 +178,9 @@ export default function Register(props: PageProps<Extract<KcContext, { pageId: "
                         </div>
                     )}
 
-                    <button type="submit" className={primaryButtonClassName}>
+                    <Button type="submit" className={primaryButtonClassName}>
                         {msgStr("doRegister")}
-                    </button>
+                    </Button>
                 </form>
 
                 {(() => {
@@ -199,7 +200,7 @@ export default function Register(props: PageProps<Extract<KcContext, { pageId: "
 
                 <p className="text-center text-sm text-muted-foreground pt-2">
                     {msg("backToLogin")}{" "}
-                    <Link href={url.loginUrl} className="text-foreground font-medium hover:underline">
+                    <Link href={url.loginUrl} className="text-foreground font-medium">
                         {msg("doLogIn")}
                     </Link>
                 </p>

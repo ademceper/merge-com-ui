@@ -5,6 +5,7 @@ import type { I18n } from "../i18n";
 import { EyeIcon, EyeSlashIcon } from "@phosphor-icons/react";
 import { Separator } from "@merge/ui/components/separator";
 import { Input } from "@merge/ui/components/input";
+import { Button } from "@merge/ui/components/button";
 import { Alert, AlertDescription } from "@merge/ui/components/alert";
 import { cn } from "@merge/ui/lib/utils";
 
@@ -62,19 +63,21 @@ export default function Password(props: PageProps<Extract<KcContext, { pageId: "
                             placeholder={placeholderStr(msgStr("currentPassword"), "Mevcut Şifre")}
                             aria-invalid={messagesPerField.existsError("password")}
                             className={cn(
-                                "h-12 rounded-lg bg-gray-100 border-0 text-black placeholder:text-gray-500 focus-visible:ring-2 focus-visible:ring-black/20 pr-12",
+                                "h-12 rounded-lg bg-muted border-0 text-foreground placeholder:text-muted-foreground focus-visible:ring-2 focus-visible:ring-ring pr-12",
                                 messagesPerField.existsError("password") && "border border-red-500"
                             )}
                         />
-                        <button
+                        <Button
                             type="button"
                             tabIndex={-1}
                             onClick={() => setShowPassword((v) => !v)}
-                            className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700 focus:outline-none"
+                            variant="ghost"
+                            size="icon"
+                            className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700 h-8 w-8"
                             aria-label={showPassword ? "Şifreyi gizle" : "Şifreyi göster"}
                         >
                             {showPassword ? <EyeSlashIcon size={20} /> : <EyeIcon size={20} />}
-                        </button>
+                        </Button>
                     </div>
                     {messagesPerField.existsError("password") && (
                         <p className="text-sm text-destructive">
@@ -94,19 +97,21 @@ export default function Password(props: PageProps<Extract<KcContext, { pageId: "
                             placeholder={placeholderStr(msgStr("newPassword"), "Yeni Şifre")}
                             aria-invalid={messagesPerField.existsError("password-new")}
                             className={cn(
-                                "h-12 rounded-lg bg-gray-100 border-0 text-black placeholder:text-gray-500 focus-visible:ring-2 focus-visible:ring-black/20 pr-12",
+                                "h-12 rounded-lg bg-muted border-0 text-foreground placeholder:text-muted-foreground focus-visible:ring-2 focus-visible:ring-ring pr-12",
                                 messagesPerField.existsError("password-new") && "border border-red-500"
                             )}
                         />
-                        <button
+                        <Button
                             type="button"
                             tabIndex={-1}
                             onClick={() => setShowNewPassword((v) => !v)}
-                            className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700 focus:outline-none"
+                            variant="ghost"
+                            size="icon"
+                            className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700 h-8 w-8"
                             aria-label={showNewPassword ? "Şifreyi gizle" : "Şifreyi göster"}
                         >
                             {showNewPassword ? <EyeSlashIcon size={20} /> : <EyeIcon size={20} />}
-                        </button>
+                        </Button>
                     </div>
                     {messagesPerField.existsError("password-new") && (
                         <p className="text-sm text-destructive">
@@ -126,19 +131,21 @@ export default function Password(props: PageProps<Extract<KcContext, { pageId: "
                             placeholder={placeholderStr(msgStr("passwordConfirm"), "Şifre Onayı")}
                             aria-invalid={messagesPerField.existsError("password-confirm")}
                             className={cn(
-                                "h-12 rounded-lg bg-gray-100 border-0 text-black placeholder:text-gray-500 focus-visible:ring-2 focus-visible:ring-black/20 pr-12",
+                                "h-12 rounded-lg bg-muted border-0 text-foreground placeholder:text-muted-foreground focus-visible:ring-2 focus-visible:ring-ring pr-12",
                                 messagesPerField.existsError("password-confirm") && "border border-red-500"
                             )}
                         />
-                        <button
+                        <Button
                             type="button"
                             tabIndex={-1}
                             onClick={() => setShowConfirmPassword((v) => !v)}
-                            className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700 focus:outline-none"
+                            variant="ghost"
+                            size="icon"
+                            className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700 h-8 w-8"
                             aria-label={showConfirmPassword ? "Şifreyi gizle" : "Şifreyi göster"}
                         >
                             {showConfirmPassword ? <EyeSlashIcon size={20} /> : <EyeIcon size={20} />}
-                        </button>
+                        </Button>
                     </div>
                     {messagesPerField.existsError("password-confirm") && (
                         <p className="text-sm text-destructive">
@@ -147,13 +154,13 @@ export default function Password(props: PageProps<Extract<KcContext, { pageId: "
                     )}
                 </div>
 
-                <button
+                <Button
                     type="submit"
                     disabled={isSubmitting}
-                    className="w-full h-12 rounded-lg bg-black text-white font-medium text-sm hover:bg-black/90 transition-colors disabled:opacity-50"
+                    className="w-full h-12 rounded-lg bg-primary text-primary-foreground font-medium text-sm hover:bg-primary/90 transition-colors disabled:opacity-50"
                 >
                     {msg("updatePassword")}
-                </button>
+                </Button>
             </form>
         </div>
     );

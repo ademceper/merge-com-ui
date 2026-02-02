@@ -6,6 +6,7 @@ import AuthLayout from "../components/AuthLayout";
 import { Link } from "@merge/ui/components/link";
 import { SocialLoginButtons, getFallbackSocialProviders } from "../components/SocialLoginButtons";
 import { Input } from "@merge/ui/components/input";
+import { Button } from "@merge/ui/components/button";
 import { Alert, AlertDescription } from "@merge/ui/components/alert";
 import { cn } from "@merge/ui/lib/utils";
 
@@ -108,14 +109,14 @@ export default function Login(props: PageProps<Extract<KcContext, { pageId: "log
                             value={auth.selectedCredential}
                         />
 
-                        <button
+                        <Button
                             tabIndex={7}
                             type="submit"
                             disabled={isLoginButtonDisabled}
                             className="w-full h-12 rounded-lg bg-primary text-primary-foreground font-medium text-sm hover:bg-primary/90 transition-colors disabled:opacity-50"
                         >
                             {msgStr("doContinue") || msgStr("doLogIn")}
-                        </button>
+                        </Button>
                     </form>
                 )}
 
@@ -132,7 +133,7 @@ export default function Login(props: PageProps<Extract<KcContext, { pageId: "log
                 {realm.password && realm.registrationAllowed && !registrationDisabled && (
                     <p className="text-center text-sm text-muted-foreground pt-2">
                         {msg("noAccount")}{" "}
-                        <Link tabIndex={8} href={url.registrationUrl} className="text-foreground font-medium hover:underline">
+                        <Link tabIndex={8} href={url.registrationUrl} className="text-foreground font-medium">
                                 {msg("doRegister")}
                         </Link>
                     </p>

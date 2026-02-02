@@ -5,6 +5,7 @@ import type { I18n } from "../i18n";
 import AuthLayout from "../components/AuthLayout";
 import { Link } from "@merge/ui/components/link";
 import { Input } from "@merge/ui/components/input";
+import { Button } from "@merge/ui/components/button";
 import { Alert, AlertDescription } from "@merge/ui/components/alert";
 import { cn } from "@merge/ui/lib/utils";
 
@@ -74,17 +75,17 @@ export default function LoginResetPassword(
                         )}
                     </div>
 
-                    <button
+                    <Button
                         type="submit"
                         disabled={isSubmitting}
                         className={primaryButtonClassName}
                     >
                         {msgStr("doSubmit")}
-                    </button>
+                    </Button>
                 </form>
 
                 <p className="text-center text-sm text-muted-foreground pt-2">
-                    <Link href={url.loginUrl} className="text-foreground font-medium hover:underline">
+                    <Link href={url.loginUrl} className="text-foreground font-medium">
                         {msg("backToLoginPage")}
                     </Link>
                 </p>

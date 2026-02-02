@@ -2,6 +2,7 @@ import type { PageProps } from "keycloakify/login/pages/PageProps";
 import type { KcContext } from "../KcContext";
 import type { I18n } from "../i18n";
 import AuthLayout from "../components/AuthLayout";
+import { Button } from "@merge/ui/components/button";
 import { Alert, AlertDescription } from "@merge/ui/components/alert";
 
 const primaryButtonClassName =
@@ -39,18 +40,18 @@ export default function DeleteAccountConfirm(
                 <form action={url.loginAction} method="post" className="pt-2">
                     <div className="flex gap-3 justify-between">
                         {triggered_from_aia && (
-                            <button
+                            <Button
                                 type="submit"
                                 name="cancel-aia"
                                 value="true"
                                 className={secondaryButtonClassName}
                             >
                                 {msgStr("doCancel")}
-                            </button>
+                            </Button>
                         )}
-                        <button type="submit" className={primaryButtonClassName}>
+                        <Button type="submit" className={primaryButtonClassName}>
                             {msgStr("doConfirmDelete")}
-                        </button>
+                        </Button>
                     </div>
                 </form>
             </div>

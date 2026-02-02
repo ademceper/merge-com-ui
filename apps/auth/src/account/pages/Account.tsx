@@ -4,6 +4,7 @@ import type { KcContext } from "../KcContext";
 import type { I18n } from "../i18n";
 import { Separator } from "@merge/ui/components/separator";
 import { Input } from "@merge/ui/components/input";
+import { Button } from "@merge/ui/components/button";
 import { Alert, AlertDescription } from "@merge/ui/components/alert";
 import { cn } from "@merge/ui/lib/utils";
 
@@ -54,7 +55,7 @@ export default function Account(props: PageProps<Extract<KcContext, { pageId: "a
                         disabled
                         defaultValue={account.username ?? ""}
                         placeholder={placeholderStr(msgStr("username") ?? msg("username"), "Kullanıcı Adı")}
-                        className="h-12 rounded-lg bg-gray-100 border-0 text-black placeholder:text-gray-500 focus-visible:ring-2 focus-visible:ring-black/20"
+                        className="h-12 rounded-lg bg-muted border-0 text-foreground placeholder:text-muted-foreground focus-visible:ring-2 focus-visible:ring-ring"
                     />
                     <p className="text-sm text-muted-foreground">{msg("usernameFieldDescription")}</p>
                 </div>
@@ -69,7 +70,7 @@ export default function Account(props: PageProps<Extract<KcContext, { pageId: "a
                         placeholder={placeholderStr(msgStr("email") ?? msg("email"), "E-posta") + (kcContext.realm.registrationEmailAsUsername ? " *" : "")}
                         aria-invalid={messagesPerField.existsError("email")}
                         className={cn(
-                            "h-12 rounded-lg bg-gray-100 border-0 text-black placeholder:text-gray-500 focus-visible:ring-2 focus-visible:ring-black/20",
+                            "h-12 rounded-lg bg-muted border-0 text-foreground placeholder:text-muted-foreground focus-visible:ring-2 focus-visible:ring-ring",
                             messagesPerField.existsError("email") && "border border-red-500"
                         )}
                     />
@@ -90,7 +91,7 @@ export default function Account(props: PageProps<Extract<KcContext, { pageId: "a
                         placeholder={placeholderStr(msgStr("firstName") ?? msg("firstName"), "Ad")}
                         aria-invalid={messagesPerField.existsError("firstName")}
                         className={cn(
-                            "h-12 rounded-lg bg-gray-100 border-0 text-black placeholder:text-gray-500 focus-visible:ring-2 focus-visible:ring-black/20",
+                            "h-12 rounded-lg bg-muted border-0 text-foreground placeholder:text-muted-foreground focus-visible:ring-2 focus-visible:ring-ring",
                             messagesPerField.existsError("firstName") && "border border-red-500"
                         )}
                     />
@@ -110,7 +111,7 @@ export default function Account(props: PageProps<Extract<KcContext, { pageId: "a
                         placeholder={placeholderStr(msgStr("lastName") ?? msg("lastName"), "Soyad")}
                         aria-invalid={messagesPerField.existsError("lastName")}
                         className={cn(
-                            "h-12 rounded-lg bg-gray-100 border-0 text-black placeholder:text-gray-500 focus-visible:ring-2 focus-visible:ring-black/20",
+                            "h-12 rounded-lg bg-muted border-0 text-foreground placeholder:text-muted-foreground focus-visible:ring-2 focus-visible:ring-ring",
                             messagesPerField.existsError("lastName") && "border border-red-500"
                         )}
                     />
@@ -121,13 +122,13 @@ export default function Account(props: PageProps<Extract<KcContext, { pageId: "a
                     )}
                 </div>
 
-                <button
+                <Button
                     type="submit"
                     disabled={isSubmitting}
-                    className="w-full h-12 rounded-lg bg-black text-white font-medium text-sm hover:bg-black/90 transition-colors disabled:opacity-50"
+                    className="w-full h-12 rounded-lg bg-primary text-primary-foreground font-medium text-sm hover:bg-primary/90 transition-colors disabled:opacity-50"
                 >
                     {msgStr("save")}
-                </button>
+                </Button>
             </form>
         </div>
     );

@@ -124,7 +124,7 @@ export default function Totp(props: PageProps<Extract<KcContext, { pageId: "totp
                                     placeholder={msg("oneTimeCode") + " *"}
                                     aria-invalid={messagesPerField.existsError("totp")}
                                     className={cn(
-                                        "h-12 rounded-lg bg-gray-100 border-0 text-black placeholder:text-gray-500 focus-visible:ring-2 focus-visible:ring-black/20 text-center text-2xl tracking-widest font-mono",
+                                        "h-12 rounded-lg bg-muted border-0 text-foreground placeholder:text-muted-foreground focus-visible:ring-2 focus-visible:ring-ring text-center text-2xl tracking-widest font-mono",
                                         messagesPerField.existsError("totp") && "border border-red-500"
                                     )}
                                     maxLength={6}
@@ -137,16 +137,16 @@ export default function Totp(props: PageProps<Extract<KcContext, { pageId: "totp
                             </div>
 
                             <div className="flex gap-4">
-                                <button
+                                <Button
                                     type="submit"
                                     disabled={isSubmitting}
-                                    className="flex-1 h-12 rounded-lg bg-black text-white font-medium text-sm hover:bg-black/90 transition-colors disabled:opacity-50"
+                                    className="flex-1 h-12 rounded-lg bg-primary text-primary-foreground font-medium text-sm hover:bg-primary/90 transition-colors disabled:opacity-50"
                                 >
                                     Submit
-                                </button>
+                                </Button>
                                 <a
                                     href={url.accountUrl}
-                                    className="flex-1 h-12 rounded-lg border border-gray-300 flex items-center justify-center font-medium text-sm text-black hover:bg-gray-100 transition-colors"
+                                    className="flex-1 h-12 rounded-lg border border-border flex items-center justify-center font-medium text-sm text-foreground hover:bg-muted transition-colors"
                                 >
                                     {msgStr("doCancel")}
                                 </a>
