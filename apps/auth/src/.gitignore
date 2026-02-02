@@ -22,6 +22,7 @@
 # admin/Root.tsx
 # admin/routes.tsx
 # admin/util.ts
+# shared/SessionExpirationWarningOverlay.tsx
 # admin/assets/favicon.svg
 # admin/assets/icon.svg
 # admin/assets/img_avatar.svg
@@ -213,6 +214,8 @@
 # admin/workflows/routes.ts
 # admin/workflows/WorkflowDetailForm.tsx
 # admin/workflows/WorkflowsSection.tsx
+# shared/keycloak-ui-shared/index.ts
+# shared/keycloak-ui-shared/main.ts
 # admin/assets/theme/login.css
 # admin/authentication/components/AddFlowDropdown.tsx
 # admin/authentication/components/AuthenticationProviderContext.tsx
@@ -620,6 +623,63 @@
 # admin/user-federation/shared/SettingsCache.tsx
 # admin/workflows/routes/WorkflowDetail.tsx
 # admin/workflows/routes/Workflows.tsx
+# shared/@patternfly/react-core/index.tsx
+# shared/@patternfly/react-icons/index.tsx
+# shared/@patternfly/react-styles/index.tsx
+# shared/@patternfly/react-table/index.tsx
+# shared/keycloak-ui-shared/alerts/AlertPanel.tsx
+# shared/keycloak-ui-shared/alerts/Alerts.tsx
+# shared/keycloak-ui-shared/buttons/FormSubmitButton.tsx
+# shared/keycloak-ui-shared/context/environment.ts
+# shared/keycloak-ui-shared/context/ErrorPage.tsx
+# shared/keycloak-ui-shared/context/HelpContext.tsx
+# shared/keycloak-ui-shared/context/KeycloakContext.tsx
+# shared/keycloak-ui-shared/continue-cancel/ContinueCancelModal.tsx
+# shared/keycloak-ui-shared/controls/FileUploadControl.tsx
+# shared/keycloak-ui-shared/controls/FormErrorText.tsx
+# shared/keycloak-ui-shared/controls/FormLabel.tsx
+# shared/keycloak-ui-shared/controls/HelpItem.tsx
+# shared/keycloak-ui-shared/controls/KeycloakSpinner.tsx
+# shared/keycloak-ui-shared/controls/NumberControl.tsx
+# shared/keycloak-ui-shared/controls/OrganizationTable.tsx
+# shared/keycloak-ui-shared/controls/PasswordControl.tsx
+# shared/keycloak-ui-shared/controls/PasswordInput.tsx
+# shared/keycloak-ui-shared/controls/SwitchControl.tsx
+# shared/keycloak-ui-shared/controls/TextAreaControl.tsx
+# shared/keycloak-ui-shared/controls/TextControl.tsx
+# shared/keycloak-ui-shared/icons/IconMapper.tsx
+# shared/keycloak-ui-shared/masthead/DefaultAvatar.tsx
+# shared/keycloak-ui-shared/masthead/KeycloakDropdown.tsx
+# shared/keycloak-ui-shared/masthead/Masthead.tsx
+# shared/keycloak-ui-shared/scroll-form/form-title.module.css
+# shared/keycloak-ui-shared/scroll-form/FormPanel.tsx
+# shared/keycloak-ui-shared/scroll-form/FormTitle.tsx
+# shared/keycloak-ui-shared/scroll-form/scroll-form.module.css
+# shared/keycloak-ui-shared/scroll-form/ScrollForm.tsx
+# shared/keycloak-ui-shared/scroll-form/ScrollPanel.tsx
+# shared/keycloak-ui-shared/select/KeycloakSelect.tsx
+# shared/keycloak-ui-shared/select/SingleSelect.tsx
+# shared/keycloak-ui-shared/select/TypeaheadSelect.tsx
+# shared/keycloak-ui-shared/user-profile/LocaleSelector.tsx
+# shared/keycloak-ui-shared/user-profile/MultiInputComponent.tsx
+# shared/keycloak-ui-shared/user-profile/OptionsComponent.tsx
+# shared/keycloak-ui-shared/user-profile/SelectComponent.tsx
+# shared/keycloak-ui-shared/user-profile/TextAreaComponent.tsx
+# shared/keycloak-ui-shared/user-profile/TextComponent.tsx
+# shared/keycloak-ui-shared/user-profile/UserProfileFields.tsx
+# shared/keycloak-ui-shared/user-profile/UserProfileGroup.tsx
+# shared/keycloak-ui-shared/user-profile/utils.ts
+# shared/keycloak-ui-shared/utils/createNamedContext.ts
+# shared/keycloak-ui-shared/utils/ErrorBoundary.tsx
+# shared/keycloak-ui-shared/utils/errors.ts
+# shared/keycloak-ui-shared/utils/generateId.ts
+# shared/keycloak-ui-shared/utils/getRuleValue.ts
+# shared/keycloak-ui-shared/utils/isDefined.ts
+# shared/keycloak-ui-shared/utils/useFetch.ts
+# shared/keycloak-ui-shared/utils/useRequiredContext.ts
+# shared/keycloak-ui-shared/utils/useSetTimeout.ts
+# shared/keycloak-ui-shared/utils/useStorageItem.ts
+# shared/keycloak-ui-shared/utils/useStoredState.ts
 # admin/authentication/components/diagram/auto-layout.ts
 # admin/authentication/components/diagram/ButtonEdge.tsx
 # admin/authentication/components/diagram/ConditionalNode.tsx
@@ -658,76 +718,16 @@
 # admin/realm-settings/user-profile/attribute/ValueSelect.tsx
 # admin/user-federation/ldap/mappers/LdapMapperDetails.tsx
 # admin/user-federation/ldap/mappers/LdapMapperList.tsx
+# shared/keycloak-ui-shared/controls/keycloak-text-area/KeycloakTextArea.tsx
+# shared/keycloak-ui-shared/controls/select-control/SelectControl.tsx
+# shared/keycloak-ui-shared/controls/select-control/SingleSelectControl.tsx
+# shared/keycloak-ui-shared/controls/select-control/TypeaheadSelectControl.tsx
+# shared/keycloak-ui-shared/controls/table/KeycloakDataTable.tsx
+# shared/keycloak-ui-shared/controls/table/ListEmptyState.tsx
+# shared/keycloak-ui-shared/controls/table/PaginatingTableToolbar.tsx
+# shared/keycloak-ui-shared/controls/table/TableToolbar.tsx
 # === Owned files end =====
 
 # === @keycloakify/keycloak-admin-ui v260502.0.0 ===
 
 # === @keycloakify/keycloak-ui-shared v260502.0.0 ===
-/shared/SessionExpirationWarningOverlay.tsx
-/shared/keycloak-ui-shared/index.ts
-/shared/keycloak-ui-shared/main.ts
-/shared/@patternfly/react-core/index.tsx
-/shared/@patternfly/react-icons/index.tsx
-/shared/@patternfly/react-styles/index.tsx
-/shared/@patternfly/react-table/index.tsx
-/shared/keycloak-ui-shared/alerts/AlertPanel.tsx
-/shared/keycloak-ui-shared/alerts/Alerts.tsx
-/shared/keycloak-ui-shared/buttons/FormSubmitButton.tsx
-/shared/keycloak-ui-shared/context/environment.ts
-/shared/keycloak-ui-shared/context/ErrorPage.tsx
-/shared/keycloak-ui-shared/context/HelpContext.tsx
-/shared/keycloak-ui-shared/context/KeycloakContext.tsx
-/shared/keycloak-ui-shared/continue-cancel/ContinueCancelModal.tsx
-/shared/keycloak-ui-shared/controls/FileUploadControl.tsx
-/shared/keycloak-ui-shared/controls/FormErrorText.tsx
-/shared/keycloak-ui-shared/controls/FormLabel.tsx
-/shared/keycloak-ui-shared/controls/HelpItem.tsx
-/shared/keycloak-ui-shared/controls/KeycloakSpinner.tsx
-/shared/keycloak-ui-shared/controls/NumberControl.tsx
-/shared/keycloak-ui-shared/controls/OrganizationTable.tsx
-/shared/keycloak-ui-shared/controls/PasswordControl.tsx
-/shared/keycloak-ui-shared/controls/PasswordInput.tsx
-/shared/keycloak-ui-shared/controls/SwitchControl.tsx
-/shared/keycloak-ui-shared/controls/TextAreaControl.tsx
-/shared/keycloak-ui-shared/controls/TextControl.tsx
-/shared/keycloak-ui-shared/icons/IconMapper.tsx
-/shared/keycloak-ui-shared/masthead/DefaultAvatar.tsx
-/shared/keycloak-ui-shared/masthead/KeycloakDropdown.tsx
-/shared/keycloak-ui-shared/masthead/Masthead.tsx
-/shared/keycloak-ui-shared/scroll-form/form-title.module.css
-/shared/keycloak-ui-shared/scroll-form/FormPanel.tsx
-/shared/keycloak-ui-shared/scroll-form/FormTitle.tsx
-/shared/keycloak-ui-shared/scroll-form/scroll-form.module.css
-/shared/keycloak-ui-shared/scroll-form/ScrollForm.tsx
-/shared/keycloak-ui-shared/scroll-form/ScrollPanel.tsx
-/shared/keycloak-ui-shared/select/KeycloakSelect.tsx
-/shared/keycloak-ui-shared/select/SingleSelect.tsx
-/shared/keycloak-ui-shared/select/TypeaheadSelect.tsx
-/shared/keycloak-ui-shared/user-profile/LocaleSelector.tsx
-/shared/keycloak-ui-shared/user-profile/MultiInputComponent.tsx
-/shared/keycloak-ui-shared/user-profile/OptionsComponent.tsx
-/shared/keycloak-ui-shared/user-profile/SelectComponent.tsx
-/shared/keycloak-ui-shared/user-profile/TextAreaComponent.tsx
-/shared/keycloak-ui-shared/user-profile/TextComponent.tsx
-/shared/keycloak-ui-shared/user-profile/UserProfileFields.tsx
-/shared/keycloak-ui-shared/user-profile/UserProfileGroup.tsx
-/shared/keycloak-ui-shared/user-profile/utils.ts
-/shared/keycloak-ui-shared/utils/createNamedContext.ts
-/shared/keycloak-ui-shared/utils/ErrorBoundary.tsx
-/shared/keycloak-ui-shared/utils/errors.ts
-/shared/keycloak-ui-shared/utils/generateId.ts
-/shared/keycloak-ui-shared/utils/getRuleValue.ts
-/shared/keycloak-ui-shared/utils/isDefined.ts
-/shared/keycloak-ui-shared/utils/useFetch.ts
-/shared/keycloak-ui-shared/utils/useRequiredContext.ts
-/shared/keycloak-ui-shared/utils/useSetTimeout.ts
-/shared/keycloak-ui-shared/utils/useStorageItem.ts
-/shared/keycloak-ui-shared/utils/useStoredState.ts
-/shared/keycloak-ui-shared/controls/keycloak-text-area/KeycloakTextArea.tsx
-/shared/keycloak-ui-shared/controls/select-control/SelectControl.tsx
-/shared/keycloak-ui-shared/controls/select-control/SingleSelectControl.tsx
-/shared/keycloak-ui-shared/controls/select-control/TypeaheadSelectControl.tsx
-/shared/keycloak-ui-shared/controls/table/KeycloakDataTable.tsx
-/shared/keycloak-ui-shared/controls/table/ListEmptyState.tsx
-/shared/keycloak-ui-shared/controls/table/PaginatingTableToolbar.tsx
-/shared/keycloak-ui-shared/controls/table/TableToolbar.tsx
