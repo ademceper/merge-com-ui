@@ -6,7 +6,7 @@ import { Card, CardContent } from "@merge/ui/components/card";
 import { Button } from "@merge/ui/components/button";
 import { Alert, AlertDescription } from "@merge/ui/components/alert";
 import { Badge } from "@merge/ui/components/badge";
-import { MonitorIcon, DeviceMobileIcon, GlobeIcon } from "@phosphor-icons/react";
+import { MonitorIcon, DeviceMobileIcon } from "@phosphor-icons/react";
 
 /** Keycloak session – API'de current/browser olabilir */
 type SessionItem = {
@@ -40,13 +40,13 @@ export default function Sessions(props: PageProps<Extract<KcContext, { pageId: "
                     <h3 className="text-lg font-medium">{msg("sessionsTitle")}</h3>
                     <p className="text-sm text-muted-foreground">{msg("sessionsDescription")}</p>
                 </div>
-<form action={sessionsLogoutUrl} method="post">
-                        <input type="hidden" name="stateChecker" value={kcContext.stateChecker} />
-                        <input type="hidden" name="action" value="logoutAll" />
-                        <Button type="submit" variant="destructive" size="sm">
-                            {msg("signOutAll")}
-                        </Button>
-                    </form>
+                <form action={sessionsLogoutUrl} method="post">
+                    <input type="hidden" name="stateChecker" value={kcContext.stateChecker} />
+                    <input type="hidden" name="action" value="logoutAll" />
+                    <Button type="submit" variant="destructive" size="sm">
+                        {msg("signOutAll")}
+                    </Button>
+                </form>
             </div>
             <Separator />
 
@@ -57,39 +57,35 @@ export default function Sessions(props: PageProps<Extract<KcContext, { pageId: "
             )}
 
             {/* Sessions List */}
-{sessions?.sessions && sessions.sessions.length > 0 ? (
-                    <div className="space-y-4">
-                        {(sessions.sessions as SessionItem[]).map((session) => (
-                            <div key={session.id} className="rounded-md border p-4">
-                                <div className="flex items-start justify-between mb-4">
-                                    <div className="flex items-center gap-3">
-                                        <div className="p-2 rounded bg-primary/10">
-                                            {session.current ? (
-                                                <MonitorIcon className="h-5 w-5 text-primary" />
-                                            ) : (
-                                                <DeviceMobileIcon className="h-5 w-5 text-primary" />
+            {sessions?.sessions && sessions.sessions.length > 0 ? (
+                <div className="space-y-4">
+                    {(sessions.sessions as SessionItem[]).map((session) => (
+                        <div key={session.id} className="rounded-md border p-4">
+                            <div className="flex items-start justify-between mb-4">
+                                <div className="flex items-center gap-3">
+                                    <div className="p-2 rounded bg-primary/10">
+                                        {session.current ? (
+                                            <MonitorIcon className="h-5 w-5 text-primary" />
+                                        ) : (
+                                            <DeviceMobileIcon className="h-5 w-5 text-primary" />
+                                        )}
+                                    </div>
+                                    <div>
+                                        <div className="text-base font-medium flex items-center gap-2">
+                                            {session.browser ?? session.ipAddress ?? session.id}
+                                            {session.current && (
+                                                <Badge variant="default" className="text-xs">
+                                                    {msg("currentSession")}
+                                                </Badge>
                                             )}
                                         </div>
-                                        <div>
-                                            <div className="text-base font-medium flex items-center gap-2">
-                                                {session.browser ?? session.ipAddress ?? session.id}
-                                                {session.current && (
-                                                    <Badge variant="default" className="text-xs">
-                                                        {msg("currentSession")}
-                                                    </Badge>
-                                                )}
-                                            </div>
-                                            <div className="flex items-center gap-1 mt-1 text-sm text-muted-foreground">
-                                                <GlobeIcon className="h-3 w-3" />
-                                                {session.ipAddress}
-                                            </div>
-                                        </div>
                                     </div>
-                                    {!session.current && (
-                                        <form action={sessionsLogoutUrl} method="post">
+                                </div>
+                                {!session.current && (
+                                    <form action={sessionsLogoutUrl} method="post">
                                         <input type="hidden" name="stateChecker" value={kcContext.stateChecker} />
                                         <input type="hidden" name="session" value={session.id} />
-                                        <Button type="submit" variant="outline" size="sm">
+                                        <Button type="submit" variant="destructive" size="sm">
                                             {msgStr("doSignOut")}
                                         </Button>
                                     </form>
@@ -115,11 +111,11 @@ export default function Sessions(props: PageProps<Extract<KcContext, { pageId: "
                                 <div className="mt-4 pt-4 border-t">
                                     <div className="text-sm text-muted-foreground mb-2">{msg("clients")}</div>
                                     <div className="flex flex-wrap gap-2">
-{session.clients.map((client: string) => (
-                                                <Badge key={client} variant="secondary" className="text-xs">
-                                                    {client}
-                                                </Badge>
-                                            ))}
+                                        {session.clients.map((client: string) => (
+                                            <Badge key={client} variant="secondary" className="text-xs">
+                                                {client}
+                                            </Badge>
+                                        ))}
                                     </div>
                                 </div>
                             )}

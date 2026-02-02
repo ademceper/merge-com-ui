@@ -2,7 +2,7 @@ import { ReactNode } from "react";
 import type { KcContext } from "../KcContext";
 import type { I18n } from "../i18n";
 import { Link } from "@merge/ui/components/link";
-import { ThemeToggleButton, useThemeToggle } from "@merge/ui/components/theme-toggle";
+import { useThemeToggle } from "@merge/ui/components/theme-toggle";
 import { buttonVariants } from "@merge/ui/components/button";
 import { Separator } from "@merge/ui/components/separator";
 import { cn } from "@merge/ui/lib/utils";
@@ -45,7 +45,6 @@ export default function AccountLayout({ kcContext, i18n, children, currentPage }
                             <p className="text-muted-foreground">{msg("accountSecurityDescription")}</p>
                         </div>
                         <div className="flex items-center gap-3 shrink-0">
-                            <ThemeToggleButton />
                             <Link href={url.getLogoutUrl()} className="text-foreground hover:text-destructive text-sm font-medium">
                                 {msg("doSignOut")}
                             </Link>

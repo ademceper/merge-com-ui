@@ -1,5 +1,5 @@
 import { ReactNode } from "react";
-import { ThemeToggleButton, useThemeToggle } from "@merge/ui/components/theme-toggle";
+import { useThemeToggle } from "@merge/ui/components/theme-toggle";
 
 const baseUrl = import.meta.env.BASE_URL;
 
@@ -19,9 +19,6 @@ export default function AuthLayout({ children }: AuthLayoutProps) {
 
     return (
         <div className="min-h-screen bg-background flex flex-col items-center justify-center px-4 py-8 relative">
-            <div className="absolute top-4 right-4">
-                <ThemeToggleButton />
-            </div>
             <div id="kc-header" className="flex justify-center mb-8 w-full">
                 <div id="kc-header-wrapper" className="flex justify-center">
                     <img

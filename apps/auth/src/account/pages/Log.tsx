@@ -5,7 +5,6 @@ import { Separator } from "@merge/ui/components/separator";
 import { Card, CardContent } from "@merge/ui/components/card";
 import { Alert, AlertDescription } from "@merge/ui/components/alert";
 import { Badge } from "@merge/ui/components/badge";
-import { SignInIcon, SignOutIcon, ShieldCheckIcon, KeyIcon, UserGearIcon, GlobeIcon } from "@phosphor-icons/react";
 
 export default function Log(props: PageProps<Extract<KcContext, { pageId: "log.ftl" }>, I18n>) {
     const { kcContext, i18n } = props;
@@ -16,14 +15,6 @@ export default function Log(props: PageProps<Extract<KcContext, { pageId: "log.f
 
     const formatDate = (timestamp: number | string | Date) => {
         return new Date(timestamp).toLocaleString();
-    };
-
-    const getEventIcon = (eventType: string) => {
-        if (eventType.includes("LOGIN")) return <SignInIcon className="h-4 w-4" />;
-        if (eventType.includes("LOGOUT")) return <SignOutIcon className="h-4 w-4" />;
-        if (eventType.includes("PASSWORD")) return <KeyIcon className="h-4 w-4" />;
-        if (eventType.includes("UPDATE")) return <UserGearIcon className="h-4 w-4" />;
-        return <ShieldCheckIcon className="h-4 w-4" />;
     };
 
     const getEventVariant = (eventType: string): "default" | "secondary" | "destructive" | "outline" => {
@@ -64,7 +55,6 @@ export default function Log(props: PageProps<Extract<KcContext, { pageId: "log.f
                                         {msg("client")}
                                     </th>
                                     <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">
-                                        <GlobeIcon className="inline h-3 w-3 mr-1" />
                                         IP Address
                                     </th>
                                     <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">
@@ -76,14 +66,9 @@ export default function Log(props: PageProps<Extract<KcContext, { pageId: "log.f
                                 {log.events.map((event, index) => (
                                     <tr key={index} className="border-b transition-colors hover:bg-muted/50">
                                         <td className="p-4 align-middle">
-                                            <div className="flex items-center gap-2">
-                                                <div className="p-1.5 rounded bg-primary/10">
-                                                    {getEventIcon(event.event)}
-                                                </div>
-                                                <Badge variant={getEventVariant(event.event)} className="text-xs">
-                                                    {event.event}
-                                                </Badge>
-                                            </div>
+                                            <Badge variant={getEventVariant(event.event)} className="text-xs">
+                                                {event.event}
+                                            </Badge>
                                         </td>
                                         <td className="p-4 align-middle">
                                             <div className="text-sm">{formatDate(event.date)}</div>
