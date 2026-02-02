@@ -12,13 +12,8 @@
 // @ts-nocheck
 
 import { FormSubmitButton, TextControl } from "../../shared/keycloak-ui-shared";
-import {
-    Button,
-    ButtonVariant,
-    Form,
-    Modal,
-    ModalVariant
-} from "../../shared/@patternfly/react-core";
+import { Button } from "@merge/ui/components/button";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@merge/ui/components/dialog";
 import { FormProvider, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { useAdminClient } from "../admin-client";
@@ -52,45 +47,43 @@ export const InviteMemberModal = ({ orgId, onClose }: InviteMemberModalProps) =>
     };
 
     return (
-        <Modal
-            variant={ModalVariant.small}
-            title={t("inviteMember")}
-            isOpen
-            onClose={onClose}
-            actions={[
-                <FormSubmitButton
-                    formState={formState}
-                    data-testid="save"
-                    key="confirm"
-                    form="form"
-                    allowInvalid
-                    allowNonDirty
-                >
-                    {t("send")}
-                </FormSubmitButton>,
-                <Button
-                    id="modal-cancel"
-                    data-testid="cancel"
-                    key="cancel"
-                    variant={ButtonVariant.link}
-                    onClick={onClose}
-                >
-                    {t("cancel")}
-                </Button>
-            ]}
-        >
-            <FormProvider {...form}>
-                <Form id="form" onSubmit={handleSubmit(submitForm)}>
-                    <TextControl
-                        name="email"
-                        label={t("email")}
-                        rules={{ required: t("required") }}
-                        autoFocus
-                    />
-                    <TextControl name="firstName" label={t("firstName")} />
-                    <TextControl name="lastName" label={t("lastName")} />
-                </Form>
-            </FormProvider>
-        </Modal>
+        <Dialog open onOpenChange={(open) => { if (!open) onClose(); }}>
+            <DialogContent>
+                <DialogHeader>
+                    <DialogTitle>{t("inviteMember")}</DialogTitle>
+                </DialogHeader>
+                <FormProvider {...form}>
+                    <form id="form" onSubmit={handleSubmit(submitForm)}>
+                        <TextControl
+                            name="email"
+                            label={t("email")}
+                            rules={{ required: t("required") }}
+                            autoFocus
+                        />
+                        <TextControl name="firstName" label={t("firstName")} />
+                        <TextControl name="lastName" label={t("lastName")} />
+                    </form>
+                </FormProvider>
+                <DialogFooter>
+                    <FormSubmitButton
+                        formState={formState}
+                        data-testid="save"
+                        form="form"
+                        allowInvalid
+                        allowNonDirty
+                    >
+                        {t("send")}
+                    </FormSubmitButton>
+                    <Button
+                        id="modal-cancel"
+                        data-testid="cancel"
+                        variant="link"
+                        onClick={onClose}
+                    >
+                        {t("cancel")}
+                    </Button>
+                </DialogFooter>
+            </DialogContent>
+        </Dialog>
     );
 };

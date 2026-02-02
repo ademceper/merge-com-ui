@@ -21,13 +21,9 @@ import {
     SelectVariant,
     useFetch
 } from "../../../shared/keycloak-ui-shared";
-import {
-    FormGroup,
-    SelectOption,
-    Switch,
-    TextInput,
-    ValidatedOptions
-} from "../../../shared/@patternfly/react-core";
+import { Input } from "@merge/ui/components/input";
+import { Label } from "@merge/ui/components/label";
+import { Switch } from "@merge/ui/components/switch";
 import { useState } from "react";
 import { Controller, useFormContext, useWatch } from "react-hook-form";
 import { useTranslation } from "react-i18next";
@@ -59,11 +55,11 @@ const LoginFlow = ({
     );
 
     return (
-        <FormGroup
-            label={t(label)}
-            labelIcon={<HelpItem helpText={t(`${label}Help`)} fieldLabelId={label} />}
-            fieldId={label}
-        >
+        <div className="space-y-2">
+            <div className="flex items-center gap-2">
+                <Label htmlFor={label}>{t(label)}</Label>
+                <HelpItem helpText={t(`${label}Help`)} fieldLabelId={label} />
+            </div>
             <Controller
                 name={field}
                 defaultValue={defaultValue}
@@ -102,7 +98,7 @@ const LoginFlow = ({
                     </KeycloakSelect>
                 )}
             />
-        </FormGroup>
+        </div>
     );
 };
 
@@ -198,10 +194,8 @@ export const AdvancedSettings = ({ isOIDC, isSAML, isOAuth2 }: AdvancedSettingsP
                         render={({ field }) => (
                             <Switch
                                 id="filteredByClaim"
-                                label={t("on")}
-                                labelOff={t("off")}
-                                isChecked={field.value === "true"}
-                                onChange={(_event, value) => {
+                                checked={field.value === "true"}
+                                onCheckedChange={(value) => {
                                     field.onChange(value.toString());
                                 }}
                             />
@@ -211,58 +205,44 @@ export const AdvancedSettings = ({ isOIDC, isSAML, isOAuth2 }: AdvancedSettingsP
             )}
             {(!isSAML || isOIDC) && claimFilterRequired && (
                 <>
-                    <FormGroup
-                        label={t("claimFilterName")}
-                        labelIcon={
+                    <div className="space-y-2">
+                        <div className="flex items-center gap-2">
+                            <Label htmlFor="kc-claim-filter-name">{t("claimFilterName")}</Label>
                             <HelpItem
                                 helpText={t("claimFilterNameHelp")}
                                 fieldLabelId="claimFilterName"
                             />
-                        }
-                        fieldId="kc-claim-filter-name"
-                        isRequired
-                    >
-                        <TextInput
-                            isRequired
+                        </div>
+                        <Input
+                            required
                             id="kc-claim-filter-name"
                             data-testid="claimFilterName"
-                            validated={
-                                errors.config?.claimFilterName
-                                    ? ValidatedOptions.error
-                                    : ValidatedOptions.default
-                            }
+                            className={errors.config?.claimFilterName ? "border-destructive" : ""}
                             {...register("config.claimFilterName", { required: true })}
                         />
                         {errors.config?.claimFilterName && (
                             <FormErrorText message={t("required")} />
                         )}
-                    </FormGroup>
-                    <FormGroup
-                        label={t("claimFilterValue")}
-                        labelIcon={
+                    </div>
+                    <div className="space-y-2">
+                        <div className="flex items-center gap-2">
+                            <Label htmlFor="kc-claim-filter-value">{t("claimFilterValue")}</Label>
                             <HelpItem
                                 helpText={t("claimFilterValueHelp")}
                                 fieldLabelId="claimFilterName"
                             />
-                        }
-                        fieldId="kc-claim-filter-value"
-                        isRequired
-                    >
-                        <TextInput
-                            isRequired
+                        </div>
+                        <Input
+                            required
                             id="kc-claim-filter-value"
                             data-testid="claimFilterValue"
-                            validated={
-                                errors.config?.claimFilterValue
-                                    ? ValidatedOptions.error
-                                    : ValidatedOptions.default
-                            }
+                            className={errors.config?.claimFilterValue ? "border-destructive" : ""}
                             {...register("config.claimFilterValue", { required: true })}
                         />
                         {errors.config?.claimFilterValue && (
                             <FormErrorText message={t("required")} />
                         )}
-                    </FormGroup>
+                    </div>
                 </>
             )}
             <LoginFlow
@@ -286,10 +266,8 @@ export const AdvancedSettings = ({ isOIDC, isSAML, isOAuth2 }: AdvancedSettingsP
                         render={({ field }) => (
                             <Switch
                                 id="doNotStoreUsers"
-                                label={t("on")}
-                                labelOff={t("off")}
-                                isChecked={field.value === "true"}
-                                onChange={(_event, value) => {
+                                checked={field.value === "true"}
+                                onCheckedChange={(value) => {
                                     field.onChange(value.toString());
                                     // if field is checked, set sync mode to import
                                     if (value) {

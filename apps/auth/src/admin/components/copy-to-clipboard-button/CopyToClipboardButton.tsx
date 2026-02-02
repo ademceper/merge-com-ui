@@ -12,10 +12,9 @@
 // @ts-nocheck
 
 import { useSetTimeout } from "../../../shared/keycloak-ui-shared";
-import {
-    ClipboardCopyButton,
-    ClipboardCopyButtonProps
-} from "../../../shared/@patternfly/react-core";
+import { Button } from "@merge/ui/components/button";
+import { Tooltip, TooltipContent, TooltipTrigger, TooltipProvider } from "@merge/ui/components/tooltip";
+import { Copy } from "@phosphor-icons/react";
 import { useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 
@@ -27,17 +26,18 @@ enum CopyState {
     Error
 }
 
-type CopyToClipboardButtonProps = Pick<ClipboardCopyButtonProps, "variant"> & {
+type CopyToClipboardButtonProps = {
     id: string;
     label: string;
     text: string;
+    variant?: "ghost" | "outline";
 };
 
 export const CopyToClipboardButton = ({
     id,
     label,
     text,
-    variant = "plain"
+    variant = "ghost"
 }: CopyToClipboardButtonProps) => {
     const { t } = useTranslation();
     const setTimeout = useSetTimeout();
@@ -78,15 +78,22 @@ export const CopyToClipboardButton = ({
     };
 
     return (
-        <ClipboardCopyButton
-            id={`copy-button-${id}`}
-            textId={label}
-            aria-label={t("copyToClipboard")}
-            onClick={() => copyToClipboard(text)}
-            exitDelay={600}
-            variant={variant}
-        >
-            {t(copyMessageKey)}
-        </ClipboardCopyButton>
+        <TooltipProvider>
+            <Tooltip>
+                <TooltipTrigger asChild>
+                    <Button
+                        id={`copy-button-${id}`}
+                        aria-label={t("copyToClipboard")}
+                        onClick={() => copyToClipboard(text)}
+                        variant={variant}
+                        size="sm"
+                        disabled={permissionDenied}
+                    >
+                        <Copy className="size-4" />
+                    </Button>
+                </TooltipTrigger>
+                <TooltipContent>{t(copyMessageKey)}</TooltipContent>
+            </Tooltip>
+        </TooltipProvider>
     );
 };

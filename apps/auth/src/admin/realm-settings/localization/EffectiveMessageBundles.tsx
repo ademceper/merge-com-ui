@@ -12,22 +12,13 @@
 // @ts-nocheck
 
 import { KeycloakSelect, SelectVariant } from "../../../shared/keycloak-ui-shared";
-import {
-    ActionGroup,
-    Button,
-    Chip,
-    ChipGroup,
-    Divider,
-    Flex,
-    FlexItem,
-    Form,
-    FormGroup,
-    SelectOption,
-    Text,
-    TextContent,
-    TextInput,
-    TextVariants
-} from "../../../shared/@patternfly/react-core";
+import { Button } from "@merge/ui/components/button";
+import { Badge } from "@merge/ui/components/badge";
+import { Input } from "@merge/ui/components/input";
+import { Label } from "@merge/ui/components/label";
+import { Separator } from "@merge/ui/components/separator";
+import { X } from "@phosphor-icons/react";
+import { SelectOption } from "../../../shared/@patternfly/react-core";
 import { pickBy } from "lodash-es";
 import { useMemo, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
@@ -207,21 +198,13 @@ export const EffectiveMessageBundles = ({
 
     const effectiveMessageBunldesSearchFormDisplay = () => {
         return (
-            <Flex
-                direction={{ default: "column" }}
-                spaceItems={{ default: "spaceItemsNone" }}
-            >
-                <FlexItem>
-                    <TextContent>
-                        <Text
-                            className="pf-v5-u-mb-md pf-v5-u-mt-0 pf-v5-u-mr-md"
-                            component={TextVariants.p}
-                        >
-                            {t("effectiveMessageBundlesDescription")}
-                        </Text>
-                    </TextContent>
-                </FlexItem>
-                <FlexItem>
+            <div className="flex flex-col">
+                <div>
+                    <p className="mb-4 mt-0 mr-4 text-sm text-muted-foreground">
+                        {t("effectiveMessageBundlesDescription")}
+                    </p>
+                </div>
+                <div>
                     <DropdownPanel
                         buttonText={t("searchForEffectiveMessageBundles")}
                         setSearchDropdownOpen={setSearchDropdownOpen}
@@ -229,13 +212,13 @@ export const EffectiveMessageBundles = ({
                         marginRight="2.5rem"
                         width="15vw"
                     >
-                        <Form
-                            isHorizontal
-                            className="pf-v5-u-w-25vw"
+                        <form
+                            className="w-[25vw]"
                             data-testid="effectiveMessageBundlesSearchForm"
                             onSubmit={e => e.preventDefault()}
                         >
-                            <FormGroup label={t("theme")} fieldId="kc-theme" isRequired>
+                            <div className="space-y-2">
+                                <Label htmlFor="kc-theme">{t("theme")} *</Label>
                                 <Controller
                                     name="theme"
                                     control={control}
@@ -265,17 +248,11 @@ export const EffectiveMessageBundles = ({
                                             isOpen={selectThemesOpen}
                                             aria-label={t("selectTheme")}
                                             chipGroupComponent={
-                                                <ChipGroup>
-                                                    <Chip
-                                                        key={field.value}
-                                                        onClick={theme => {
-                                                            theme.stopPropagation();
-                                                            field.onChange("");
-                                                        }}
-                                                    >
-                                                        {field.value}
-                                                    </Chip>
-                                                </ChipGroup>
+                                                <div className="flex flex-wrap gap-1">
+                                                    <Badge variant="secondary" className="cursor-pointer" key={field.value} onClick={(e) => { e.stopPropagation(); field.onChange(""); }}>
+                                                        {field.value} <X className="size-3 ml-1 inline" />
+                                                    </Badge>
+                                                </div>
                                             }
                                         >
                                             {[
@@ -299,12 +276,9 @@ export const EffectiveMessageBundles = ({
                                         </KeycloakSelect>
                                     )}
                                 />
-                            </FormGroup>
-                            <FormGroup
-                                label={t("themeType")}
-                                fieldId="kc-themeType"
-                                isRequired
-                            >
+                            </div>
+                            <div className="space-y-2">
+                                <Label htmlFor="kc-themeType">{t("themeType")} *</Label>
                                 <Controller
                                     name="themeType"
                                     control={control}
@@ -334,17 +308,11 @@ export const EffectiveMessageBundles = ({
                                             isOpen={selectThemeTypeOpen}
                                             aria-label={t("selectThemeType")}
                                             chipGroupComponent={
-                                                <ChipGroup>
-                                                    <Chip
-                                                        key={field.value}
-                                                        onClick={themeType => {
-                                                            themeType.stopPropagation();
-                                                            field.onChange("");
-                                                        }}
-                                                    >
-                                                        {field.value}
-                                                    </Chip>
-                                                </ChipGroup>
+                                                <div className="flex flex-wrap gap-1">
+                                                    <Badge variant="secondary" className="cursor-pointer" key={field.value} onClick={(e) => { e.stopPropagation(); field.onChange(""); }}>
+                                                        {field.value} <X className="size-3 ml-1 inline" />
+                                                    </Badge>
+                                                </div>
                                             }
                                         >
                                             {[
@@ -368,12 +336,9 @@ export const EffectiveMessageBundles = ({
                                         </KeycloakSelect>
                                     )}
                                 />
-                            </FormGroup>
-                            <FormGroup
-                                label={t("language")}
-                                fieldId="kc-language"
-                                isRequired
-                            >
+                            </div>
+                            <div className="space-y-2">
+                                <Label htmlFor="kc-language">{t("language")} *</Label>
                                 <Controller
                                     name="locale"
                                     control={control}
@@ -403,22 +368,13 @@ export const EffectiveMessageBundles = ({
                                             isOpen={selectLanguageOpen}
                                             aria-label={t("selectLanguage")}
                                             chipGroupComponent={
-                                                <ChipGroup>
+                                                <div className="flex flex-wrap gap-1">
                                                     {field.value ? (
-                                                        <Chip
-                                                            key={field.value}
-                                                            onClick={language => {
-                                                                language.stopPropagation();
-                                                                field.onChange("");
-                                                            }}
-                                                        >
-                                                            {localeToDisplayName(
-                                                                field.value,
-                                                                whoAmI.locale
-                                                            )}
-                                                        </Chip>
+                                                        <Badge variant="secondary" className="cursor-pointer" key={field.value} onClick={(e) => { e.stopPropagation(); field.onChange(""); }}>
+                                                            {localeToDisplayName(field.value, whoAmI.locale)} <X className="size-3 ml-1 inline" />
+                                                        </Badge>
                                                     ) : null}
-                                                </ChipGroup>
+                                                </div>
                                             }
                                         >
                                             {[
@@ -445,67 +401,49 @@ export const EffectiveMessageBundles = ({
                                         </KeycloakSelect>
                                     )}
                                 />
-                            </FormGroup>
-                            <FormGroup label={t("hasWords")} fieldId="kc-hasWords">
+                            </div>
+                            <div className="space-y-2">
+                                <Label htmlFor="kc-hasWords">{t("hasWords")}</Label>
                                 <Controller
                                     name="hasWords"
                                     control={control}
                                     render={({ field }) => (
                                         <div>
-                                            <TextInput
+                                            <Input
                                                 id="kc-hasWords"
                                                 data-testid="effective-message-bundles-hasWords-searchField"
                                                 value={field.value.join(" ")}
                                                 onChange={e => {
-                                                    const target =
-                                                        e.target as HTMLInputElement;
-                                                    const input = target.value;
-
+                                                    const input = e.target.value;
                                                     if (input.trim().length === 0) {
                                                         field.onChange([]);
                                                     } else {
-                                                        const words = input
-                                                            .split(" ")
-                                                            .map(word => word.trim());
+                                                        const words = input.split(" ").map(word => word.trim());
                                                         field.onChange(words);
                                                     }
                                                 }}
                                             />
-                                            <ChipGroup>
+                                            <div className="flex flex-wrap gap-1 mt-1">
                                                 {field.value.map(
                                                     (word: string, index: number) => (
-                                                        <Chip
-                                                            key={index}
-                                                            onClick={e => {
-                                                                e.stopPropagation();
-                                                                const newWords =
-                                                                    field.value.filter(
-                                                                        (
-                                                                            _: string,
-                                                                            i: number
-                                                                        ) => i !== index
-                                                                    );
-                                                                field.onChange(newWords);
-                                                            }}
-                                                        >
-                                                            {word}
-                                                        </Chip>
+                                                        <Badge variant="secondary" className="cursor-pointer" key={index} onClick={(e) => { e.stopPropagation(); field.onChange(field.value.filter((_: string, i: number) => i !== index)); }}>
+                                                            {word} <X className="size-3 ml-1 inline" />
+                                                        </Badge>
                                                     )
                                                 )}
-                                            </ChipGroup>
+                                            </div>
                                         </div>
                                     )}
                                 />
-                            </FormGroup>
-                            <ActionGroup className="pf-v5-u-mt-sm">
+                            </div>
+                            <div className="flex gap-2 mt-2">
                                 <Button
-                                    variant={"primary"}
                                     onClick={() => {
                                         setSearchPerformed(true);
                                         submitSearch();
                                     }}
                                     data-testid="search-effective-message-bundles-btn"
-                                    isDisabled={!isValid}
+                                    disabled={!isValid}
                                 >
                                     {t("search")}
                                 </Button>
@@ -513,68 +451,56 @@ export const EffectiveMessageBundles = ({
                                     variant="secondary"
                                     onClick={resetSearch}
                                     data-testid="reset-search-effective-message-bundles-btn"
-                                    isDisabled={!isDirty}
+                                    disabled={!isDirty}
                                 >
                                     {t("reset")}
                                 </Button>
-                            </ActionGroup>
-                        </Form>
+                            </div>
+                        </form>
                     </DropdownPanel>
-                </FlexItem>
-                <FlexItem>
+                </div>
+                <div>
                     {Object.entries(activeFilters).length > 0 && (
-                        <>
+                        <div className="flex flex-wrap gap-2 mt-4">
                             {Object.entries(activeFilters).map(filter => {
                                 const [key, value] = filter as [
                                     keyof EffectiveMessageBundlesSearchForm,
                                     string | string[]
                                 ];
                                 return (
-                                    <ChipGroup
-                                        className="pf-v5-u-mt-md pf-v5-u-mr-md"
-                                        key={key}
-                                        categoryName={filterLabels[key]}
-                                        isClosable
-                                        onClick={() => removeFilter(key)}
-                                    >
+                                    <div key={key} className="flex items-center gap-1">
+                                        <span className="text-xs text-muted-foreground">{filterLabels[key]}:</span>
                                         {typeof value === "string" ? (
-                                            <Chip isReadOnly>
+                                            <Badge variant="secondary">
                                                 {key === "locale"
-                                                    ? localeToDisplayName(
-                                                          value,
-                                                          whoAmI.locale
-                                                      )?.toLowerCase()
+                                                    ? localeToDisplayName(value, whoAmI.locale)?.toLowerCase()
                                                     : value}
-                                            </Chip>
+                                                <button className="ml-1" onClick={() => removeFilter(key)}><X className="size-3 inline" /></button>
+                                            </Badge>
                                         ) : (
                                             value.map(entry => (
-                                                <Chip
-                                                    key={entry}
-                                                    onClick={() =>
-                                                        removeFilterValue(key, entry)
-                                                    }
-                                                >
-                                                    {entry}
-                                                </Chip>
+                                                <Badge variant="secondary" key={entry} className="cursor-pointer" onClick={() => removeFilterValue(key, entry)}>
+                                                    {entry} <X className="size-3 ml-1 inline" />
+                                                </Badge>
                                             ))
                                         )}
-                                    </ChipGroup>
+                                    </div>
                                 );
                             })}
-                        </>
+                        </div>
                     )}
-                </FlexItem>
-            </Flex>
+                </div>
+            </div>
         );
     };
 
     if (!searchPerformed) {
         return (
             <>
-                <div className="pf-v5-u-py-lg pf-v5-u-pl-md">
+                <div className="py-4 pl-4">
                     {effectiveMessageBunldesSearchFormDisplay()}
                 </div>
-                <Divider />
+                <Separator />
                 <ListEmptyState
                     message={t("emptyEffectiveMessageBundles")}
                     instructions={t("emptyEffectiveMessageBundlesInstructions")}

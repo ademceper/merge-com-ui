@@ -11,17 +11,9 @@
 
 // @ts-nocheck
 
-import {
-    Button,
-    TextInputGroup,
-    TextInputGroupMain,
-    TextInputGroupUtilities
-} from "../../../shared/@patternfly/react-core";
-import {
-    ArrowRightIcon,
-    SearchIcon,
-    TimesIcon
-} from "../../../shared/@patternfly/react-icons";
+import { Button } from "@merge/ui/components/button";
+import { Input } from "@merge/ui/components/input";
+import { ArrowRight, MagnifyingGlass, X } from "@phosphor-icons/react";
 import { useTranslation } from "react-i18next";
 
 type SearchInputComponentProps = {
@@ -44,38 +36,39 @@ export const SearchInputComponent = ({
     const { t } = useTranslation();
 
     return (
-        <>
-            <TextInputGroup>
-                <TextInputGroupMain
-                    icon={<SearchIcon />}
+        <div className="flex gap-1">
+            <div className="relative flex-1">
+                <MagnifyingGlass className="size-4 absolute left-2 top-1/2 -translate-y-1/2 text-muted-foreground" />
+                <Input
                     value={value}
-                    onChange={(event: React.FormEvent<HTMLInputElement>) =>
-                        onChange(event.currentTarget.value)
-                    }
+                    onChange={(e) => onChange(e.target.value)}
                     placeholder={placeholder}
                     aria-label={ariaLabel}
                     data-testid="search-input"
+                    className="pl-8"
                 />
-                <TextInputGroupUtilities style={{ marginInline: "0px" }}>
-                    {value && (
-                        <Button
-                            variant="plain"
-                            onClick={onClear}
-                            aria-label={t("clear")}
-                            data-testid="clear-search"
-                            icon={<TimesIcon />}
-                        />
-                    )}
-                </TextInputGroupUtilities>
-            </TextInputGroup>
+                {value && (
+                    <Button
+                        variant="ghost"
+                        size="sm"
+                        className="absolute right-1 top-1/2 -translate-y-1/2"
+                        onClick={onClear}
+                        aria-label={t("clear")}
+                        data-testid="clear-search"
+                    >
+                        <X className="size-4" />
+                    </Button>
+                )}
+            </div>
             <Button
-                icon={<ArrowRightIcon />}
-                variant="control"
+                variant="outline"
                 style={{ marginLeft: "0.1rem" }}
                 onClick={() => onSearch(value)}
                 aria-label={t("search")}
                 data-testid="search"
-            />
-        </>
+            >
+                <ArrowRight className="size-4" />
+            </Button>
+        </div>
     );
 };

@@ -11,12 +11,8 @@
 
 // @ts-nocheck
 
-import {
-    useWizardContext,
-    Wizard,
-    WizardFooter,
-    WizardStep
-} from "@patternfly/react-core/";
+import { Button } from "@merge/ui/components/button";
+import { useState } from "react";
 import { useTranslation } from "react-i18next";
 
 import { KerberosSettingsRequired } from "./kerberos/KerberosSettingsRequired";
@@ -24,47 +20,50 @@ import { SettingsCache } from "./shared/SettingsCache";
 import type ComponentRepresentation from "@keycloak/keycloak-admin-client/lib/defs/componentRepresentation";
 import { useForm } from "react-hook-form";
 
-const UserFedKerberosFooter = () => {
-    const { t } = useTranslation();
-    const { activeStep, goToNextStep, goToPrevStep, close } = useWizardContext();
-    return (
-        <WizardFooter
-            activeStep={activeStep}
-            onNext={goToNextStep}
-            onBack={goToPrevStep}
-            onClose={close}
-            isBackDisabled={activeStep.index === 1}
-            backButtonText={t("back")}
-            nextButtonText={t("next")}
-            cancelButtonText={t("cancel")}
-        />
-    );
-};
-
 export const UserFederationKerberosWizard = () => {
     const { t } = useTranslation();
     const form = useForm<ComponentRepresentation>({ mode: "onChange" });
+    const [step, setStep] = useState(0);
+
+    const steps = [
+        { id: "kerberosRequiredSettingsStep", name: t("requiredSettings") },
+        { id: "cacheSettingsStep", name: t("cacheSettings") }
+    ];
+
+    const isLast = step === steps.length - 1;
+    const isFirst = step === 0;
 
     return (
-        <Wizard height="100%" footer={<UserFedKerberosFooter />}>
-            <WizardStep name={t("requiredSettings")} id="kerberosRequiredSettingsStep">
-                <KerberosSettingsRequired
-                    form={form}
-                    showSectionHeading
-                    showSectionDescription
-                />
-            </WizardStep>
-            <WizardStep
-                name={t("cacheSettings")}
-                id="cacheSettingsStep"
-                footer={{
-                    backButtonText: t("back"),
-                    nextButtonText: t("finish"),
-                    cancelButtonText: t("cancel")
-                }}
-            >
-                <SettingsCache form={form} showSectionHeading showSectionDescription />
-            </WizardStep>
-        </Wizard>
+        <div className="flex flex-col h-full">
+            <div className="flex gap-2 p-4 border-b">
+                {steps.map((s, i) => (
+                    <Button
+                        key={s.id}
+                        variant={i === step ? "default" : "outline"}
+                        size="sm"
+                        onClick={() => setStep(i)}
+                    >
+                        {s.name}
+                    </Button>
+                ))}
+            </div>
+            <div className="flex-1 overflow-auto p-6">
+                {step === 0 && (
+                    <KerberosSettingsRequired form={form} showSectionHeading showSectionDescription />
+                )}
+                {step === 1 && (
+                    <SettingsCache form={form} showSectionHeading showSectionDescription />
+                )}
+            </div>
+            <div className="flex gap-2 p-4 border-t">
+                <Button variant="secondary" onClick={() => setStep(s => s - 1)} disabled={isFirst}>
+                    {t("back")}
+                </Button>
+                <Button onClick={() => setStep(s => s + 1)} disabled={isLast}>
+                    {isLast ? t("finish") : t("next")}
+                </Button>
+                <Button variant="link">{t("cancel")}</Button>
+            </div>
+        </div>
     );
 };

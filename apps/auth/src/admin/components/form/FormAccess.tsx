@@ -24,6 +24,7 @@ import {
     StackItem,
     TextArea
 } from "../../../shared/@patternfly/react-core";
+// Note: PF components kept here because they're used in type-checking within recursiveCloneChildren
 import {
     Children,
     cloneElement,

@@ -19,26 +19,24 @@ import type {
 } from "@keycloak/keycloak-admin-client/lib/defs/realmRepresentation";
 import type RoleRepresentation from "@keycloak/keycloak-admin-client/lib/defs/roleRepresentation";
 import { KeycloakSelect } from "../../shared/keycloak-ui-shared";
+import { Button } from "@merge/ui/components/button";
+import { Checkbox } from "@merge/ui/components/checkbox";
+import { Badge } from "@merge/ui/components/badge";
+import { Separator } from "@merge/ui/components/separator";
+import { Label } from "@merge/ui/components/label";
+import {
+    Dialog,
+    DialogContent,
+    DialogFooter,
+    DialogHeader,
+    DialogTitle
+} from "@merge/ui/components/dialog";
 import {
     Alert,
-    Button,
-    ButtonVariant,
-    Checkbox,
-    DataList,
-    DataListCell,
-    DataListItem,
-    DataListItemCells,
-    DataListItemRow,
-    Divider,
-    Label,
-    Modal,
-    ModalVariant,
-    SelectOption,
-    Stack,
-    StackItem,
-    Text,
-    TextContent
-} from "../../shared/@patternfly/react-core";
+    AlertDescription,
+    AlertTitle
+} from "@merge/ui/components/alert";
+import { SelectOption } from "../../shared/@patternfly/react-core";
 import { FormEvent, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useAdminClient } from "../admin-client";
@@ -218,27 +216,21 @@ export const PartialImportDialog = (props: PartialImportProps) => {
 
     const resourceDataListItem = (resource: Resource, resourceDisplayName: string) => {
         return (
-            <DataListItem aria-labelledby={`${resource}-list-item`}>
-                <DataListItemRow>
-                    <DataListItemCells
-                        dataListCells={[
-                            <DataListCell key={resource}>
-                                <Checkbox
-                                    id={`${resource}-checkbox`}
-                                    label={`${itemCount(resource)} ${resourceDisplayName}`}
-                                    aria-labelledby={`${resource}-checkbox`}
-                                    name={resource}
-                                    isChecked={resourcesToImport[resource]}
-                                    onChange={(event, checked: boolean) =>
-                                        handleResourceCheckBox(checked, event)
-                                    }
-                                    data-testid={resource + "-checkbox"}
-                                />
-                            </DataListCell>
-                        ]}
-                    />
-                </DataListItemRow>
-            </DataListItem>
+            <li className="flex items-center gap-2 py-2 px-3" aria-labelledby={`${resource}-list-item`}>
+                <Checkbox
+                    id={`${resource}-checkbox`}
+                    name={resource}
+                    checked={resourcesToImport[resource]}
+                    onCheckedChange={(checked: boolean) => {
+                        setResourcesToImport({
+                            ...resourcesToImport,
+                            [resource]: checked
+                        });
+                    }}
+                    data-testid={resource + "-checkbox"}
+                />
+                <Label htmlFor={`${resource}-checkbox`}>{`${itemCount(resource)} ${resourceDisplayName}`}</Label>
+            </li>
         );
     };
 
@@ -282,121 +274,115 @@ export const PartialImportDialog = (props: PartialImportProps) => {
 
     const importModal = () => {
         return (
-            <Modal
-                variant={ModalVariant.medium}
-                title={t("partialImport")}
-                isOpen={props.open}
-                onClose={props.toggleDialog}
-                actions={[
-                    <Button
-                        id="modal-import"
-                        data-testid="confirm"
-                        key="import"
-                        isDisabled={!isAnyResourceChecked}
-                        onClick={async () => {
-                            await doImport();
-                        }}
-                    >
-                        {t("import")}
-                    </Button>,
-                    <Button
-                        id="modal-cancel"
-                        data-testid="cancel"
-                        key="cancel"
-                        variant={ButtonVariant.link}
-                        onClick={() => {
-                            props.toggleDialog();
-                        }}
-                    >
-                        {t("cancel")}
-                    </Button>
-                ]}
-            >
-                <Stack hasGutter>
-                    <StackItem>
-                        <TextContent>
-                            <Text>{t("partialImportHeaderText")}</Text>
-                        </TextContent>
-                    </StackItem>
-                    <StackItem>
-                        <JsonFileUpload
-                            id="partial-import-file"
-                            allowEditingUploadedText
-                            onChange={handleFileChange}
-                        />
-                    </StackItem>
+            <Dialog open={props.open} onOpenChange={(open) => { if (!open) props.toggleDialog(); }}>
+                <DialogContent className="max-w-2xl">
+                    <DialogHeader>
+                        <DialogTitle>{t("partialImport")}</DialogTitle>
+                    </DialogHeader>
+                    <div className="flex flex-col gap-4">
+                        <div>
+                            <p className="text-sm text-muted-foreground">{t("partialImportHeaderText")}</p>
+                        </div>
+                        <div>
+                            <JsonFileUpload
+                                id="partial-import-file"
+                                allowEditingUploadedText
+                                onChange={handleFileChange}
+                            />
+                        </div>
 
-                    {isFileSelected && targetHasResources() && (
-                        <>
-                            <StackItem>
-                                <Divider />
-                            </StackItem>
-                            {Array.isArray(importedFile) && importedFile.length > 1 && (
-                                <StackItem>
-                                    <Text>{t("selectRealm")}:</Text>
+                        {isFileSelected && targetHasResources() && (
+                            <>
+                                <Separator />
+                                {Array.isArray(importedFile) && importedFile.length > 1 && (
+                                    <div>
+                                        <p className="text-sm font-medium">{t("selectRealm")}:</p>
+                                        <KeycloakSelect
+                                            toggleId="realm-selector"
+                                            isOpen={isRealmSelectOpen}
+                                            typeAheadAriaLabel={t("realmSelector")}
+                                            aria-label={t("realmSelector")}
+                                            onToggle={() =>
+                                                setIsRealmSelectOpen(!isRealmSelectOpen)
+                                            }
+                                            selections={targetRealm.id}
+                                            onSelect={value => handleRealmSelect(value)}
+                                            placeholderText={
+                                                targetRealm.realm || targetRealm.id
+                                            }
+                                        >
+                                            {realmSelectOptions(importedFile)}
+                                        </KeycloakSelect>
+                                    </div>
+                                )}
+                                <div>
+                                    <p className="text-sm font-medium">{t("chooseResources")}:</p>
+                                    <ul className="divide-y border rounded-md" aria-label={t("resourcesToImport")}>
+                                        {targetHasResource("users") &&
+                                            resourceDataListItem("users", t("users"))}
+                                        {targetHasResource("groups") &&
+                                            resourceDataListItem("groups", t("groups"))}
+                                        {targetHasResource("clients") &&
+                                            resourceDataListItem("clients", t("clients"))}
+                                        {targetHasResource("identityProviders") &&
+                                            resourceDataListItem(
+                                                "identityProviders",
+                                                t("identityProviders")
+                                            )}
+                                        {targetHasRealmRoles() &&
+                                            resourceDataListItem(
+                                                "realmRoles",
+                                                t("realmRoles")
+                                            )}
+                                        {targetHasClientRoles() &&
+                                            resourceDataListItem(
+                                                "clientRoles",
+                                                t("clientRoles")
+                                            )}
+                                    </ul>
+                                </div>
+                                <div>
+                                    <p className="text-sm font-medium">{t("selectIfResourceExists")}:</p>
                                     <KeycloakSelect
-                                        toggleId="realm-selector"
-                                        isOpen={isRealmSelectOpen}
-                                        typeAheadAriaLabel={t("realmSelector")}
-                                        aria-label={t("realmSelector")}
-                                        onToggle={() =>
-                                            setIsRealmSelectOpen(!isRealmSelectOpen)
-                                        }
-                                        selections={targetRealm.id}
-                                        onSelect={value => handleRealmSelect(value)}
-                                        placeholderText={
-                                            targetRealm.realm || targetRealm.id
-                                        }
+                                        isOpen={isCollisionSelectOpen}
+                                        direction="up"
+                                        onToggle={() => {
+                                            setIsCollisionSelectOpen(!isCollisionSelectOpen);
+                                        }}
+                                        selections={collisionOption}
+                                        onSelect={handleCollisionSelect}
+                                        placeholderText={t(collisionOption)}
                                     >
-                                        {realmSelectOptions(importedFile)}
+                                        {collisionOptions()}
                                     </KeycloakSelect>
-                                </StackItem>
-                            )}
-                            <StackItem>
-                                <Text>{t("chooseResources")}:</Text>
-                                <DataList aria-label={t("resourcesToImport")} isCompact>
-                                    {targetHasResource("users") &&
-                                        resourceDataListItem("users", t("users"))}
-                                    {targetHasResource("groups") &&
-                                        resourceDataListItem("groups", t("groups"))}
-                                    {targetHasResource("clients") &&
-                                        resourceDataListItem("clients", t("clients"))}
-                                    {targetHasResource("identityProviders") &&
-                                        resourceDataListItem(
-                                            "identityProviders",
-                                            t("identityProviders")
-                                        )}
-                                    {targetHasRealmRoles() &&
-                                        resourceDataListItem(
-                                            "realmRoles",
-                                            t("realmRoles")
-                                        )}
-                                    {targetHasClientRoles() &&
-                                        resourceDataListItem(
-                                            "clientRoles",
-                                            t("clientRoles")
-                                        )}
-                                </DataList>
-                            </StackItem>
-                            <StackItem>
-                                <Text>{t("selectIfResourceExists")}:</Text>
-                                <KeycloakSelect
-                                    isOpen={isCollisionSelectOpen}
-                                    direction="up"
-                                    onToggle={() => {
-                                        setIsCollisionSelectOpen(!isCollisionSelectOpen);
-                                    }}
-                                    selections={collisionOption}
-                                    onSelect={handleCollisionSelect}
-                                    placeholderText={t(collisionOption)}
-                                >
-                                    {collisionOptions()}
-                                </KeycloakSelect>
-                            </StackItem>
-                        </>
-                    )}
-                </Stack>
-            </Modal>
+                                </div>
+                            </>
+                        )}
+                    </div>
+                    <DialogFooter>
+                        <Button
+                            id="modal-import"
+                            data-testid="confirm"
+                            disabled={!isAnyResourceChecked}
+                            onClick={async () => {
+                                await doImport();
+                            }}
+                        >
+                            {t("import")}
+                        </Button>
+                        <Button
+                            id="modal-cancel"
+                            data-testid="cancel"
+                            variant="ghost"
+                            onClick={() => {
+                                props.toggleDialog();
+                            }}
+                        >
+                            {t("cancel")}
+                        </Button>
+                    </DialogFooter>
+                </DialogContent>
+            </Dialog>
         );
     };
 
@@ -424,21 +410,21 @@ export const PartialImportDialog = (props: PartialImportProps) => {
         switch (importRecord.action) {
             case "ADDED":
                 return (
-                    <Label key={importRecord.id} color="green">
+                    <Badge key={importRecord.id} variant="secondary" className="bg-green-500/20 text-green-700">
                         {t("added")}
-                    </Label>
+                    </Badge>
                 );
             case "SKIPPED":
                 return (
-                    <Label key={importRecord.id} color="orange">
+                    <Badge key={importRecord.id} variant="secondary" className="bg-orange-500/20 text-orange-700">
                         {t("skipped")}
-                    </Label>
+                    </Badge>
                 );
             case "OVERWRITTEN":
                 return (
-                    <Label key={importRecord.id} color="purple">
+                    <Badge key={importRecord.id} variant="secondary" className="bg-purple-500/20 text-purple-700">
                         {t("overwritten")}
-                    </Label>
+                    </Badge>
                 );
             default:
                 return "";
@@ -460,57 +446,52 @@ export const PartialImportDialog = (props: PartialImportProps) => {
 
     const importCompletedModal = () => {
         return (
-            <Modal
-                variant={ModalVariant.medium}
-                title={t("partialImport")}
-                isOpen={props.open}
-                onClose={props.toggleDialog}
-                actions={[
-                    <Button
-                        id="modal-close"
-                        data-testid="close-button"
-                        key="close"
-                        variant={ButtonVariant.primary}
-                        onClick={() => {
-                            props.toggleDialog();
-                        }}
-                    >
-                        {t("close")}
-                    </Button>
-                ]}
-            >
-                <Alert
-                    variant="success"
-                    component="p"
-                    isInline
-                    title={importCompleteMessage()}
-                />
-                <KeycloakDataTable
-                    loader={loader}
-                    isPaginated
-                    ariaLabelKey="partialImport"
-                    columns={[
-                        {
-                            name: "action",
-                            displayKey: "action",
-                            cellRenderer: ActionLabel
-                        },
-                        {
-                            name: "resourceType",
-                            displayKey: "type",
-                            cellRenderer: TypeRenderer
-                        },
-                        {
-                            name: "resourceName",
-                            displayKey: "name"
-                        },
-                        {
-                            name: "id",
-                            displayKey: "id"
-                        }
-                    ]}
-                />
-            </Modal>
+            <Dialog open={props.open} onOpenChange={(open) => { if (!open) props.toggleDialog(); }}>
+                <DialogContent className="max-w-2xl">
+                    <DialogHeader>
+                        <DialogTitle>{t("partialImport")}</DialogTitle>
+                    </DialogHeader>
+                    <Alert>
+                        <AlertTitle>{importCompleteMessage()}</AlertTitle>
+                    </Alert>
+                    <KeycloakDataTable
+                        loader={loader}
+                        isPaginated
+                        ariaLabelKey="partialImport"
+                        columns={[
+                            {
+                                name: "action",
+                                displayKey: "action",
+                                cellRenderer: ActionLabel
+                            },
+                            {
+                                name: "resourceType",
+                                displayKey: "type",
+                                cellRenderer: TypeRenderer
+                            },
+                            {
+                                name: "resourceName",
+                                displayKey: "name"
+                            },
+                            {
+                                name: "id",
+                                displayKey: "id"
+                            }
+                        ]}
+                    />
+                    <DialogFooter>
+                        <Button
+                            id="modal-close"
+                            data-testid="close-button"
+                            onClick={() => {
+                                props.toggleDialog();
+                            }}
+                        >
+                            {t("close")}
+                        </Button>
+                    </DialogFooter>
+                </DialogContent>
+            </Dialog>
         );
     };
 

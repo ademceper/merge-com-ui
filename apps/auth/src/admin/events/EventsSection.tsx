@@ -13,7 +13,7 @@
 
 import { Trans, useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
-import { RoutableTabs, useRoutableTab } from "../components/routable-tabs/RoutableTabs";
+import { RoutableTabs, Tab, useRoutableTab } from "../components/routable-tabs/RoutableTabs";
 import { ViewHeader } from "../components/view-header/ViewHeader";
 import { useRealm } from "../context/realm-context/RealmContext";
 import helpUrls from "../help-urls";
@@ -56,6 +56,7 @@ export default function EventsSection() {
                         <UserEvents />
                     </Tab>
                     <Tab
+                        eventKey={adminEventsTab.eventKey}
                         title={t("adminEvents")}
                         data-testid="admin-events-tab"
                         {...adminEventsTab}

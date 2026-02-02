@@ -12,15 +12,9 @@
 // @ts-nocheck
 
 import type PolicyRepresentation from "@keycloak/keycloak-admin-client/lib/defs/policyRepresentation";
-import { useAlerts, useFetch } from "../../../../shared/keycloak-ui-shared";
-import {
-    ActionGroup,
-    AlertVariant,
-    Button,
-    ButtonVariant,
-    DropdownItem,
-    PageSection
-} from "../../../../shared/@patternfly/react-core";
+import { useAlerts, useFetch, AlertVariant } from "../../../../shared/keycloak-ui-shared";
+import { Button } from "@merge/ui/components/button";
+import { DropdownMenuItem } from "@merge/ui/components/dropdown-menu";
 import { useState, type JSX } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
@@ -209,18 +203,18 @@ export default function PolicyDetails() {
                 dropdownItems={
                     policyId
                         ? [
-                              <DropdownItem
+                              <DropdownMenuItem
                                   key="delete"
                                   data-testid="delete-policy"
                                   onClick={() => toggleDeleteDialog()}
                               >
                                   {t("delete")}
-                              </DropdownItem>
+                              </DropdownMenuItem>
                           ]
                         : undefined
                 }
             />
-            <PageSection variant="light">
+            <section className="py-6 bg-muted/30">
                 <FormAccess
                     isHorizontal
                     onSubmit={handleSubmit(policy => onSubmitPolicy(policy))}
@@ -231,46 +225,40 @@ export default function PolicyDetails() {
                         <ComponentType />
                         <LogicSelector isDisabled={isDisabled} />
                     </FormProvider>
-                    <ActionGroup>
-                        <div className="pf-v5-u-mt-md">
-                            <Button
-                                isDisabled={isDisabled}
-                                variant={ButtonVariant.primary}
-                                className="pf-v5-u-mr-md"
-                                type="submit"
-                                data-testid="save"
-                            >
-                                {t("save")}
-                            </Button>
-
-                            <Button
-                                variant="link"
-                                data-testid="cancel"
-                                component={props => (
-                                    <Link
-                                        {...props}
-                                        to={
-                                            isAdminPermissionsClient
-                                                ? toPermissionsConfigurationTabs({
-                                                      realm: realm!,
-                                                      permissionClientId,
-                                                      tab: "policies"
-                                                  })
-                                                : toAuthorizationTab({
-                                                      realm,
-                                                      clientId: id,
-                                                      tab: "policies"
-                                                  })
-                                        }
-                                    />
-                                )}
+                    <div className="flex gap-2 mt-4">
+                        <Button
+                            disabled={isDisabled}
+                            type="submit"
+                            data-testid="save"
+                        >
+                            {t("save")}
+                        </Button>
+                        <Button
+                            variant="ghost"
+                            data-testid="cancel"
+                            asChild
+                        >
+                            <Link
+                                to={
+                                    isAdminPermissionsClient
+                                        ? toPermissionsConfigurationTabs({
+                                              realm: realm!,
+                                              permissionClientId,
+                                              tab: "policies"
+                                          })
+                                        : toAuthorizationTab({
+                                              realm,
+                                              clientId: id,
+                                              tab: "policies"
+                                          })
+                                }
                             >
                                 {t("cancel")}
-                            </Button>
-                        </div>
-                    </ActionGroup>
+                            </Link>
+                        </Button>
+                    </div>
                 </FormAccess>
-            </PageSection>
+            </section>
         </>
     );
 }

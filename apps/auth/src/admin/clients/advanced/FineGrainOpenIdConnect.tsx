@@ -12,12 +12,9 @@
 // @ts-nocheck
 
 import { ProviderRepresentation } from "@keycloak/keycloak-admin-client/lib/defs/serverInfoRepesentation";
-import {
-    ActionGroup,
-    Button,
-    FormGroup,
-    Switch
-} from "../../../shared/@patternfly/react-core";
+import { Button } from "@merge/ui/components/button";
+import { Switch } from "@merge/ui/components/switch";
+import { Label } from "@merge/ui/components/label";
 import { useTranslation } from "react-i18next";
 import { HelpItem, SelectControl } from "../../../shared/keycloak-ui-shared";
 import { FormAccess } from "../../components/form/FormAccess";
@@ -78,17 +75,14 @@ export const FineGrainOpenIdConnect = ({
                 }}
                 options={prependEmpty(clientSignatureProviders!)}
             />
-            <FormGroup
-                label={t("useRfc9068AccessTokenType")}
-                fieldId="useRfc9068AccessTokenType"
-                hasNoPaddingTop
-                labelIcon={
+            <div className="space-y-2">
+                <div className="flex items-center gap-2">
+                    <Label htmlFor="useRfc9068AccessTokenType">{t("useRfc9068AccessTokenType")}</Label>
                     <HelpItem
                         helpText={t("useRfc9068AccessTokenTypeHelp")}
                         fieldLabelId="useRfc9068AccessTokenType"
                     />
-                }
-            >
+                </div>
                 <Controller
                     name={convertAttributeNameToForm<FormFields>(
                         "attributes.access.token.header.type.rfc9068"
@@ -98,15 +92,13 @@ export const FineGrainOpenIdConnect = ({
                     render={({ field }) => (
                         <Switch
                             id="useRfc9068AccessTokenType"
-                            label={t("on")}
-                            labelOff={t("off")}
-                            isChecked={field.value === "true"}
-                            onChange={(_event, value) => field.onChange(value.toString())}
+                            checked={field.value === "true"}
+                            onCheckedChange={(value) => field.onChange(value.toString())}
                             aria-label={t("useRfc9068AccessTokenType")}
                         />
                     )}
                 />
-            </FormGroup>
+            </div>
             <SelectControl
                 name={convertAttributeNameToForm<FormFields>(
                     "attributes.id.token.signed.response.alg"
@@ -140,17 +132,14 @@ export const FineGrainOpenIdConnect = ({
                 }}
                 options={prependEmpty(contentEncryptionProviders!)}
             />
-            <FormGroup
-                label={t("idTokenAsDetachedSignature")}
-                fieldId="idTokenAsDetachedSignature"
-                hasNoPaddingTop
-                labelIcon={
+            <div className="space-y-2">
+                <div className="flex items-center gap-2">
+                    <Label htmlFor="idTokenAsDetachedSignature">{t("idTokenAsDetachedSignature")}</Label>
                     <HelpItem
                         helpText={t("idTokenAsDetachedSignatureHelp")}
                         fieldLabelId="idTokenAsDetachedSignature"
                     />
-                }
-            >
+                </div>
                 <Controller
                     name={convertAttributeNameToForm<FormFields>(
                         "attributes.id.token.as.detached.signature"
@@ -160,15 +149,13 @@ export const FineGrainOpenIdConnect = ({
                     render={({ field }) => (
                         <Switch
                             id="idTokenAsDetachedSignature"
-                            label={t("on")}
-                            labelOff={t("off")}
-                            isChecked={field.value === "true"}
-                            onChange={(_event, value) => field.onChange(value.toString())}
+                            checked={field.value === "true"}
+                            onCheckedChange={(value) => field.onChange(value.toString())}
                             aria-label={t("idTokenAsDetachedSignature")}
                         />
                     )}
                 />
-            </FormGroup>
+            </div>
             <SelectControl
                 name={convertAttributeNameToForm<FormFields>(
                     "attributes.user.info.response.signature.alg"
@@ -254,23 +241,21 @@ export const FineGrainOpenIdConnect = ({
                     value: t(`requestObject.${p}`)
                 }))}
             />
-            <FormGroup
-                label={t("validRequestURIs")}
-                fieldId="validRequestURIs"
-                labelIcon={
+            <div className="space-y-2">
+                <div className="flex items-center gap-2">
+                    <Label htmlFor="validRequestURIs">{t("validRequestURIs")}</Label>
                     <HelpItem
                         helpText={t("validRequestURIsHelp")}
                         fieldLabelId="validRequestURIs"
                     />
-                }
-            >
+                </div>
                 <MultiLineInput
                     name={convertAttributeNameToForm("attributes.request.uris")}
                     aria-label={t("validRequestURIs")}
                     addButtonLabel="addRequestUri"
                     stringify
                 />
-            </FormGroup>
+            </div>
             <SelectControl
                 name={convertAttributeNameToForm<FormFields>(
                     "attributes.authorization.signed.response.alg"
@@ -304,7 +289,7 @@ export const FineGrainOpenIdConnect = ({
                 }}
                 options={prependEmpty(contentEncryptionProviders!)}
             />
-            <ActionGroup>
+            <div className="flex gap-2">
                 <Button
                     variant="secondary"
                     id="fineGrainSave"
@@ -321,7 +306,7 @@ export const FineGrainOpenIdConnect = ({
                 >
                     {t("revert")}
                 </Button>
-            </ActionGroup>
+            </div>
         </FormAccess>
     );
 };

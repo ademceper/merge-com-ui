@@ -12,8 +12,6 @@
 // @ts-nocheck
 
 import { useTranslation } from "react-i18next";
-import { PageSection } from "../shared/@patternfly/react-core";
-
 import type { AccessType } from "@keycloak/keycloak-admin-client/lib/defs/whoAmIRepresentation";
 
 type ForbiddenSectionProps = {
@@ -27,9 +25,9 @@ export const ForbiddenSection = ({ permissionNeeded }: ForbiddenSectionProps) =>
         : [permissionNeeded];
 
     return (
-        <PageSection>
+        <div className="p-6">
             {t("forbidden", { count: permissionNeededArray.length })}{" "}
             {permissionNeededArray.map(p => p.toString()).join(", ")}
-        </PageSection>
+        </div>
     );
 };

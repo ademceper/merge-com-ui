@@ -13,12 +13,8 @@
 
 import { RequiredActionAlias } from "@keycloak/keycloak-admin-client/lib/defs/requiredActionProviderRepresentation";
 import type UserRepresentation from "@keycloak/keycloak-admin-client/lib/defs/userRepresentation";
-import {
-    AlertVariant,
-    ButtonVariant,
-    Form,
-    FormGroup
-} from "../../../shared/@patternfly/react-core";
+import { AlertVariant } from "../../../shared/keycloak-ui-shared";
+import { Label } from "@merge/ui/components/label";
 import { FormProvider, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { FormErrorText, PasswordInput } from "../../../shared/keycloak-ui-shared";
@@ -86,7 +82,7 @@ export const ResetPasswordDialog = ({
             ? t("resetPasswordConfirmText", { username: user.username })
             : t("setPasswordConfirmText", { username: user.username }),
         continueButtonLabel: isResetPassword ? "resetPassword" : "savePassword",
-        continueButtonVariant: ButtonVariant.danger,
+        continueButtonVariant: "destructive",
         onConfirm: () => handleSubmit(saveUserPassword)()
     });
 
@@ -148,17 +144,12 @@ export const ResetPasswordDialog = ({
                 confirmButtonDisabled={!isValid}
                 continueButtonLabel="save"
             >
-                <Form
+                <form
                     id="userCredentials-form"
-                    isHorizontal
-                    className="keycloak__user-credentials__reset-form"
+                    className="keycloak__user-credentials__reset-form space-y-4"
                 >
-                    <FormGroup
-                        name="password"
-                        label={t("password")}
-                        fieldId="password"
-                        isRequired
-                    >
+                    <div className="space-y-2">
+                        <Label htmlFor="password">{t("password")} *</Label>
                         <PasswordInput
                             data-testid="passwordField"
                             id="password"
@@ -178,17 +169,13 @@ export const ResetPasswordDialog = ({
                             {...rest}
                         />
                         {errors.password && <FormErrorText message={t("required")} />}
-                    </FormGroup>
-                    <FormGroup
-                        name="passwordConfirmation"
-                        label={
-                            isResetPassword
+                    </div>
+                    <div className="space-y-2">
+                        <Label htmlFor="passwordConfirmation">
+                            {isResetPassword
                                 ? t("resetPasswordConfirmation")
-                                : t("passwordConfirmation")
-                        }
-                        fieldId="passwordConfirmation"
-                        isRequired
-                    >
+                                : t("passwordConfirmation")} *
+                        </Label>
                         <PasswordInput
                             data-testid="passwordConfirmationField"
                             id="passwordConfirmation"
@@ -203,17 +190,17 @@ export const ResetPasswordDialog = ({
                                 message={errors.passwordConfirmation.message as string}
                             />
                         )}
-                    </FormGroup>
+                    </div>
                     <FormProvider {...form}>
                         <DefaultSwitchControl
                             name="temporaryPassword"
                             label={t("temporaryPassword")}
                             labelIcon={t("temporaryPasswordHelpText")}
-                            className="pf-v5-u-mb-md"
+                            className="mb-4"
                             defaultValue="true"
                         />
                     </FormProvider>
-                </Form>
+                </form>
             </ConfirmDialogModal>
         </>
     );

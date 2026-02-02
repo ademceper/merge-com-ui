@@ -13,14 +13,9 @@
 
 import type RoleRepresentation from "@keycloak/keycloak-admin-client/lib/defs/roleRepresentation";
 import { KeycloakSpinner, useAlerts, useFetch } from "../../shared/keycloak-ui-shared";
-import {
-    AlertVariant,
-    ButtonVariant,
-    DropdownItem,
-    PageSection,
-    Tab,
-    TabTitleText
-} from "../../shared/@patternfly/react-core";
+import { AlertVariant } from "../../shared/keycloak-ui-shared";
+import { DropdownMenuItem } from "@merge/ui/components/dropdown-menu";
+import { Tab } from "../components/routable-tabs/RoutableTabs";
 import { useState } from "react";
 import { FormProvider, SubmitHandler, useForm, useWatch } from "react-hook-form";
 import { useTranslation } from "react-i18next";
@@ -202,7 +197,7 @@ export default function RealmRoleTabs() {
             selectedRoleName: roleName || t("createRole")
         }),
         continueButtonLabel: "delete",
-        continueButtonVariant: ButtonVariant.danger,
+        continueButtonVariant: "destructive",
         onConfirm: async () => {
             try {
                 if (!clientId) {
@@ -268,13 +263,10 @@ export default function RealmRoleTabs() {
                 ]}
                 divider={false}
             />
-            <PageSection variant="light" className="pf-v5-u-p-0">
+            <section className="py-6 bg-muted/30 p-0">
                 <FormProvider {...form}>
                     <RoutableTabs isBox mountOnEnter defaultLocation={toTab("details")}>
-                        <Tab
-                            title={<TabTitleText>{t("details")}</TabTitleText>}
-                            {...detailsTab}
-                        >
+                        <Tab title={t("details")} eventKey={detailsTab.eventKey}>
                             <RoleForm
                                 form={form}
                                 onSubmit={onSubmit}
@@ -310,8 +302,8 @@ export default function RealmRoleTabs() {
                             <Tab
                                 data-testid="attributesTab"
                                 className="kc-attributes-tab"
-                                title={<TabTitleText>{t("attributes")}</TabTitleText>}
-                                {...attributesTab}
+                                title={t("attributes")}
+                                eventKey={attributesTab.eventKey}
                             >
                                 <AttributesForm
                                     form={form}
@@ -328,8 +320,8 @@ export default function RealmRoleTabs() {
                         {!isDefaultRole(roleName) && (
                             <Tab
                                 data-testid="usersInRoleTab"
-                                title={<TabTitleText>{t("usersInRole")}</TabTitleText>}
-                                {...usersInRoleTab}
+                                title={t("usersInRole")}
+                                eventKey={usersInRoleTab.eventKey}
                             >
                                 <UsersInRoleTab data-cy="users-in-role-tab" />
                             </Tab>
@@ -337,10 +329,8 @@ export default function RealmRoleTabs() {
                         {isFeatureEnabled(Feature.AdminFineGrainedAuthz) &&
                             canViewPermissionsTab && (
                                 <Tab
-                                    title={
-                                        <TabTitleText>{t("permissions")}</TabTitleText>
-                                    }
-                                    {...permissionsTab}
+                                    title={t("permissions")}
+                                    eventKey={permissionsTab.eventKey}
                                 >
                                     <PermissionsTab id={id} type="roles" />
                                 </Tab>
@@ -348,15 +338,15 @@ export default function RealmRoleTabs() {
                         {hasAccess("view-events") && (
                             <Tab
                                 data-testid="admin-events-tab"
-                                title={<TabTitleText>{t("adminEvents")}</TabTitleText>}
-                                {...eventsTab}
+                                title={t("adminEvents")}
+                                eventKey={eventsTab.eventKey}
                             >
                                 <AdminEvents resourcePath={`roles-by-id/${id}`} />
                             </Tab>
                         )}
                     </RoutableTabs>
                 </FormProvider>
-            </PageSection>
+            </section>
         </>
     );
 }

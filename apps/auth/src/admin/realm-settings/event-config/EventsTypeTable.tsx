@@ -16,7 +16,7 @@ import {
     KeycloakDataTable,
     ListEmptyState
 } from "../../../shared/keycloak-ui-shared";
-import { Button, ToolbarItem } from "../../../shared/@patternfly/react-core";
+import { Button } from "@merge/ui/components/button";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { translationFormatter } from "../../utils/translationFormatter";
@@ -60,7 +60,7 @@ export function EventsTypeTable({
             toolbarItem={
                 <>
                     {addTypes && (
-                        <ToolbarItem>
+                        <div>
                             <Button
                                 id="addTypes"
                                 onClick={addTypes}
@@ -68,19 +68,19 @@ export function EventsTypeTable({
                             >
                                 {t("addSavedTypes")}
                             </Button>
-                        </ToolbarItem>
+                        </div>
                     )}
                     {onDeleteAll && (
-                        <ToolbarItem>
+                        <div>
                             <Button
                                 onClick={() => onDeleteAll(selectedTypes)}
                                 data-testid="removeAll"
                                 variant="secondary"
-                                isDisabled={selectedTypes.length === 0}
+                                disabled={selectedTypes.length === 0}
                             >
                                 {t("remove")}
                             </Button>
-                        </ToolbarItem>
+                        </div>
                     )}
                 </>
             }

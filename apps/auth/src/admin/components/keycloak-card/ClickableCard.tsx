@@ -11,10 +11,10 @@
 
 // @ts-nocheck
 
-import { KeyboardEvent, useId } from "react";
-import { Card, CardHeader, CardProps } from "../../../shared/@patternfly/react-core";
+import React, { KeyboardEvent, useId } from "react";
+import { Card, CardHeader } from "@merge/ui/components/card";
 
-type ClickableCardProps = Omit<CardProps, "onClick"> & {
+type ClickableCardProps = React.HTMLAttributes<HTMLDivElement> & {
     onClick: () => void;
 };
 
@@ -26,14 +26,8 @@ export const ClickableCard = ({ onClick, children, ...rest }: ClickableCardProps
         }
     };
     return (
-        <Card id={id} isClickable onKeyDown={onKeyDown} onClick={onClick} {...rest}>
-            <CardHeader
-                selectableActions={{
-                    onClickAction: onClick,
-                    selectableActionId: `input-${id}`,
-                    selectableActionAriaLabelledby: id
-                }}
-            >
+        <Card id={id} className="cursor-pointer" onKeyDown={onKeyDown} onClick={onClick} {...rest}>
+            <CardHeader>
                 {children}
             </CardHeader>
         </Card>

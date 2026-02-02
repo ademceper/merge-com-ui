@@ -13,13 +13,8 @@
 
 import IdentityProviderRepresentation from "@keycloak/keycloak-admin-client/lib/defs/identityProviderRepresentation";
 import { FormSubmitButton, SelectControl } from "../../shared/keycloak-ui-shared";
-import {
-    Button,
-    ButtonVariant,
-    Form,
-    Modal,
-    ModalVariant
-} from "../../shared/@patternfly/react-core";
+import { Button } from "@merge/ui/components/button";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@merge/ui/components/dialog";
 import { useEffect } from "react";
 import { FormProvider, useForm, useFormContext } from "react-hook-form";
 import { useTranslation } from "react-i18next";
@@ -107,71 +102,69 @@ export const LinkIdentityProviderModal = ({
     };
 
     return (
-        <Modal
-            variant={ModalVariant.small}
-            title={t("linkIdentityProvider")}
-            isOpen
-            onClose={onClose}
-            actions={[
-                <FormSubmitButton
-                    formState={formState}
-                    data-testid="confirm"
-                    key="confirm"
-                    form="form"
-                    allowInvalid
-                    allowNonDirty
-                >
-                    {t("save")}
-                </FormSubmitButton>,
-                <Button
-                    id="modal-cancel"
-                    data-testid="cancel"
-                    key="cancel"
-                    variant={ButtonVariant.link}
-                    onClick={onClose}
-                >
-                    {t("cancel")}
-                </Button>
-            ]}
-        >
-            <FormProvider {...form}>
-                <Form id="form" onSubmit={handleSubmit(submitForm)}>
-                    <IdentityProviderSelect
-                        name="alias"
-                        label={t("identityProvider")}
-                        defaultValue={[]}
-                        isRequired
-                        isDisabled={!!identityProvider}
-                    />
-                    <SelectControl
-                        name={convertAttributeNameToForm("config.kc.org.domain")}
-                        label={t("domain")}
-                        controller={{ defaultValue: "" }}
-                        options={[
-                            { key: "", value: t("none") },
-                            { key: "ANY", value: t("any") },
-                            ...(getValues("domains")
-                                ? getValues("domains")!.map(d => ({ key: d, value: d }))
-                                : [])
-                        ]}
-                        menuAppendTo="parent"
-                    />
-                    <DefaultSwitchControl
-                        name="hideOnLogin"
-                        label={t("hideOnLoginPage")}
-                        labelIcon={t("hideOnLoginPageHelp")}
-                        defaultValue={true}
-                    />
-                    <DefaultSwitchControl
-                        name={convertAttributeNameToForm(
-                            "config.kc.org.broker.redirect.mode.email-matches"
-                        )}
-                        label={t("redirectWhenEmailMatches")}
-                        labelIcon={t("redirectWhenEmailMatchesHelp")}
-                        stringify
-                    />
-                </Form>
-            </FormProvider>
-        </Modal>
+        <Dialog open onOpenChange={(open) => { if (!open) onClose(); }}>
+            <DialogContent>
+                <DialogHeader>
+                    <DialogTitle>{t("linkIdentityProvider")}</DialogTitle>
+                </DialogHeader>
+                <FormProvider {...form}>
+                    <form id="form" onSubmit={handleSubmit(submitForm)}>
+                        <IdentityProviderSelect
+                            name="alias"
+                            label={t("identityProvider")}
+                            defaultValue={[]}
+                            isRequired
+                            isDisabled={!!identityProvider}
+                        />
+                        <SelectControl
+                            name={convertAttributeNameToForm("config.kc.org.domain")}
+                            label={t("domain")}
+                            controller={{ defaultValue: "" }}
+                            options={[
+                                { key: "", value: t("none") },
+                                { key: "ANY", value: t("any") },
+                                ...(getValues("domains")
+                                    ? getValues("domains")!.map(d => ({ key: d, value: d }))
+                                    : [])
+                            ]}
+                            menuAppendTo="parent"
+                        />
+                        <DefaultSwitchControl
+                            name="hideOnLogin"
+                            label={t("hideOnLoginPage")}
+                            labelIcon={t("hideOnLoginPageHelp")}
+                            defaultValue={true}
+                        />
+                        <DefaultSwitchControl
+                            name={convertAttributeNameToForm(
+                                "config.kc.org.broker.redirect.mode.email-matches"
+                            )}
+                            label={t("redirectWhenEmailMatches")}
+                            labelIcon={t("redirectWhenEmailMatchesHelp")}
+                            stringify
+                        />
+                    </form>
+                </FormProvider>
+                <DialogFooter>
+                    <FormSubmitButton
+                        formState={formState}
+                        data-testid="confirm"
+                        form="form"
+                        allowInvalid
+                        allowNonDirty
+                    >
+                        {t("save")}
+                    </FormSubmitButton>
+                    <Button
+                        id="modal-cancel"
+                        data-testid="cancel"
+                        variant="link"
+                        onClick={onClose}
+                    >
+                        {t("cancel")}
+                    </Button>
+                </DialogFooter>
+            </DialogContent>
+        </Dialog>
     );
 };

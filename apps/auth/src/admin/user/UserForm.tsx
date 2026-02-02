@@ -26,18 +26,14 @@ import {
     UserProfileFields,
     ContinueCancelModal
 } from "../../shared/keycloak-ui-shared";
-import {
-    Alert,
-    AlertVariant,
-    Button,
-    Chip,
-    ChipGroup,
-    FormGroup,
-    InputGroup,
-    InputGroupItem,
-    Switch,
-    TextInput
-} from "../../shared/@patternfly/react-core";
+import { Alert, AlertDescription } from "@merge/ui/components/alert";
+import { AlertVariant } from "../../shared/keycloak-ui-shared";
+import { Button } from "@merge/ui/components/button";
+import { Badge } from "@merge/ui/components/badge";
+import { Input } from "@merge/ui/components/input";
+import { Label } from "@merge/ui/components/label";
+import { Switch } from "@merge/ui/components/switch";
+import { X } from "@phosphor-icons/react";
 import { TFunction } from "i18next";
 import { useEffect, useState } from "react";
 import { Controller, FormProvider, UseFormReturn } from "react-hook-form";
@@ -194,7 +190,7 @@ export const UserForm = ({
             onSubmit={handleSubmit(save)}
             role="query-users"
             fineGrainedAccess={user?.access?.manage}
-            className="pf-v5-u-mt-lg"
+            className="mt-6"
         >
             <FormProvider {...form}>
                 {open && (
@@ -220,37 +216,35 @@ export const UserForm = ({
                 )}
                 {user?.id && (
                     <>
-                        <FormGroup label={t("id")} fieldId="kc-id" isRequired>
-                            <InputGroup>
-                                <InputGroupItem isFill>
-                                    <TextInput
+                        <div className="space-y-2">
+                            <Label htmlFor="kc-id">{t("id")} *</Label>
+                            <div className="flex gap-2">
+                                <div className="flex-1">
+                                    <Input
                                         id={user.id}
                                         aria-label={t("userID")}
                                         value={user.id}
                                         readOnly
                                     />
-                                </InputGroupItem>
-                                <InputGroupItem>
+                                </div>
+                                <div>
                                     <CopyToClipboardButton
                                         id={`user-${user.id}`}
                                         text={user.id}
                                         label={t("userID")}
                                         variant="control"
                                     />
-                                </InputGroupItem>
-                            </InputGroup>
-                        </FormGroup>
-                        <FormGroup
-                            label={t("createdAt")}
-                            fieldId="kc-created-at"
-                            isRequired
-                        >
-                            <TextInput
+                                </div>
+                            </div>
+                        </div>
+                        <div className="space-y-2">
+                            <Label htmlFor="kc-created-at">{t("createdAt")} *</Label>
+                            <Input
                                 value={formatDate(new Date(user.createdTimestamp!))}
                                 id="kc-created-at"
                                 readOnly
                             />
-                        </FormGroup>
+                        </div>
                     </>
                 )}
                 <RequiredActionMultiSelect
@@ -259,17 +253,16 @@ export const UserForm = ({
                     help="requiredUserActionsHelp"
                 />
                 {user?.federationLink && canViewFederationLink && (
-                    <FormGroup
-                        label={t("federationLink")}
-                        labelIcon={
+                    <div className="space-y-2">
+                        <div className="flex items-center gap-1">
+                            <Label>{t("federationLink")}</Label>
                             <HelpItem
                                 helpText={t("federationLinkHelp")}
                                 fieldLabelId="federationLink"
                             />
-                        }
-                    >
+                        </div>
                         <FederatedUserLink user={user} />
-                    </FormGroup>
+                    </div>
                 )}
                 {userProfileMetadata ? (
                     <>
@@ -279,27 +272,25 @@ export const UserForm = ({
                             labelIcon={t("emailVerifiedHelp")}
                         />
                         {user?.attributes?.["kc.email.pending"] && (
-                            <Alert
-                                variant={AlertVariant.warning}
-                                isInline
-                                isPlain
-                                title={t("emailPendingVerificationAlertTitle")}
-                            >
-                                {t("userNotYetConfirmedNewEmail", {
-                                    email: user.attributes!["kc.email.pending"]
-                                })}
-                                <ContinueCancelModal
-                                    buttonTitle={t("emailPendingVerificationResetAction")}
-                                    modalTitle={t(
-                                        "confirmEmailPendingVerificationAction"
-                                    )}
-                                    continueLabel={t("confirm")}
-                                    cancelLabel={t("cancel")}
-                                    buttonVariant="link"
-                                    onContinue={handleEmailVerificationReset}
-                                >
-                                    {t("emailPendingVerificationActionMessage")}
-                                </ContinueCancelModal>
+                            <Alert variant="warning">
+                                <AlertDescription>
+                                    <p className="font-semibold">{t("emailPendingVerificationAlertTitle")}</p>
+                                    {t("userNotYetConfirmedNewEmail", {
+                                        email: user.attributes!["kc.email.pending"]
+                                    })}
+                                    <ContinueCancelModal
+                                        buttonTitle={t("emailPendingVerificationResetAction")}
+                                        modalTitle={t(
+                                            "confirmEmailPendingVerificationAction"
+                                        )}
+                                        continueLabel={t("confirm")}
+                                        cancelLabel={t("cancel")}
+                                        buttonVariant="link"
+                                        onContinue={handleEmailVerificationReset}
+                                    >
+                                        {t("emailPendingVerificationActionMessage")}
+                                    </ContinueCancelModal>
+                                </AlertDescription>
                             </Alert>
                         )}
                         <UserProfileFields
@@ -360,59 +351,56 @@ export const UserForm = ({
                     </>
                 )}
                 {isBruteForceProtected && (
-                    <FormGroup
-                        label={t("temporaryLocked")}
-                        fieldId="temporaryLocked"
-                        labelIcon={
+                    <div className="space-y-2">
+                        <div className="flex items-center gap-1">
+                            <Label htmlFor="temporaryLocked">{t("temporaryLocked")}</Label>
                             <HelpItem
                                 helpText={t("temporaryLockedHelp")}
                                 fieldLabelId="temporaryLocked"
                             />
-                        }
-                    >
-                        <Switch
-                            data-testid="user-locked-switch"
-                            id="temporaryLocked"
-                            onChange={async (_event, value) => {
-                                await unLockUser();
-                                setLocked(value);
-                            }}
-                            isChecked={locked}
-                            isDisabled={!locked}
-                            label={t("on")}
-                            labelOff={t("off")}
-                        />
-                    </FormGroup>
+                        </div>
+                        <div className="flex items-center gap-2">
+                            <Switch
+                                data-testid="user-locked-switch"
+                                id="temporaryLocked"
+                                onCheckedChange={async (value) => {
+                                    await unLockUser();
+                                    setLocked(value);
+                                }}
+                                checked={locked}
+                                disabled={!locked}
+                            />
+                            <span className="text-sm">{locked ? t("on") : t("off")}</span>
+                        </div>
+                    </div>
                 )}
                 {!user?.id && (
-                    <FormGroup
-                        label={t("groups")}
-                        fieldId="kc-groups"
-                        labelIcon={
+                    <div className="space-y-2">
+                        <div className="flex items-center gap-1">
+                            <Label htmlFor="kc-groups">{t("groups")}</Label>
                             <HelpItem helpText={t("groupsHelp")} fieldLabelId="groups" />
-                        }
-                    >
+                        </div>
                         <Controller
                             name="groups"
                             defaultValue={[]}
                             control={control}
                             render={() => (
-                                <InputGroup>
-                                    <InputGroupItem>
-                                        <ChipGroup categoryName={" "}>
-                                            {selectedGroups.map(currentChip => (
-                                                <Chip
-                                                    key={currentChip.id}
-                                                    onClick={() =>
-                                                        deleteItem(currentChip.name!)
-                                                    }
-                                                >
-                                                    {currentChip.path}
-                                                </Chip>
-                                            ))}
-                                        </ChipGroup>
-                                    </InputGroupItem>
-                                    <InputGroupItem>
+                                <div className="flex gap-2 items-center flex-wrap">
+                                    <div className="flex gap-1 flex-wrap">
+                                        {selectedGroups.map(currentChip => (
+                                            <Badge
+                                                key={currentChip.id}
+                                                className="cursor-pointer inline-flex items-center gap-1"
+                                                onClick={() =>
+                                                    deleteItem(currentChip.name!)
+                                                }
+                                            >
+                                                {currentChip.path}
+                                                <X className="size-3" />
+                                            </Badge>
+                                        ))}
+                                    </div>
+                                    <div>
                                         <Button
                                             id="kc-join-groups-button"
                                             onClick={toggleModal}
@@ -421,14 +409,14 @@ export const UserForm = ({
                                         >
                                             {t("joinGroups")}
                                         </Button>
-                                    </InputGroupItem>
-                                </InputGroup>
+                                    </div>
+                                </div>
                             )}
                         />
                         {errors.requiredActions && (
                             <FormErrorText message={t("required")} />
                         )}
-                    </FormGroup>
+                    </div>
                 )}
             </FormProvider>
             <FixedButtonsGroup

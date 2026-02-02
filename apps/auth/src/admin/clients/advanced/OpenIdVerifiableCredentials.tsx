@@ -11,7 +11,7 @@
 
 // @ts-nocheck
 
-import { Button, ActionGroup } from "../../../shared/@patternfly/react-core";
+import { Button } from "@merge/ui/components/button";
 import { useTranslation } from "react-i18next";
 import { FormAccess } from "../../components/form/FormAccess";
 import { convertAttributeNameToForm } from "../../util";
@@ -41,7 +41,7 @@ export const OpenIdVerifiableCredentials = ({
                 labelIcon={t("oid4vciEnabledHelp")}
                 stringify
             />
-            <ActionGroup>
+            <div className="flex gap-2">
                 <Button
                     variant="secondary"
                     id="oid4vciSave"
@@ -58,7 +58,7 @@ export const OpenIdVerifiableCredentials = ({
                 >
                     {t("revert")}
                 </Button>
-            </ActionGroup>
+            </div>
         </FormAccess>
     );
 };

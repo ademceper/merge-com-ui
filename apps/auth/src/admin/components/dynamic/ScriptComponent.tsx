@@ -12,7 +12,7 @@
 // @ts-nocheck
 
 import { HelpItem } from "../../../shared/keycloak-ui-shared";
-import { FormGroup } from "../../../shared/@patternfly/react-core";
+import { Label } from "@merge/ui/components/label";
 import { Controller, useFormContext } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import CodeEditor from "../form/CodeEditor";
@@ -31,17 +31,14 @@ export const ScriptComponent = ({
     const { control } = useFormContext();
 
     return (
-        <FormGroup
-            label={t(label!)}
-            labelIcon={
+        <div className="space-y-2">
+            <div className="flex items-center gap-1">
+                <Label htmlFor={name!}>{t(label!)}{required && " *"}</Label>
                 <HelpItem
                     helpText={<span style={{ whiteSpace: "pre-wrap" }}>{helpText}</span>}
                     fieldLabelId={`${label}`}
                 />
-            }
-            fieldId={name!}
-            isRequired={required}
-        >
+            </div>
             <Controller
                 name={convertToName(name!)}
                 defaultValue={defaultValue}
@@ -58,6 +55,6 @@ export const ScriptComponent = ({
                     />
                 )}
             />
-        </FormGroup>
+        </div>
     );
 };

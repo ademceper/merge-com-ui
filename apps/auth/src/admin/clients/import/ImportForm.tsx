@@ -13,12 +13,8 @@
 
 import { fetchWithError } from "@keycloak/keycloak-admin-client";
 import type ClientRepresentation from "@keycloak/keycloak-admin-client/lib/defs/clientRepresentation";
-import {
-    ActionGroup,
-    AlertVariant,
-    Button,
-    PageSection
-} from "../../../shared/@patternfly/react-core";
+import { AlertVariant } from "../../../shared/keycloak-ui-shared";
+import { Button } from "@merge/ui/components/button";
 import { useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
@@ -111,7 +107,7 @@ export default function ImportForm() {
     return (
         <>
             <ViewHeader titleKey="importClient" subKey="clientsExplain" />
-            <PageSection variant="light">
+            <div className="p-6">
                 <FormAccess
                     isHorizontal
                     onSubmit={handleSubmit(save)}
@@ -128,7 +124,7 @@ export default function ImportForm() {
                         <ClientDescription hasConfigureAccess />
                         <TextControl name="protocol" label={t("type")} readOnly />
                         <CapabilityConfig unWrap={true} />
-                        <ActionGroup>
+                        <div className="flex gap-2 mt-4">
                             <FormSubmitButton
                                 formState={formState}
                                 allowInvalid
@@ -138,16 +134,16 @@ export default function ImportForm() {
                             </FormSubmitButton>
                             <Button
                                 variant="link"
-                                component={props => (
-                                    <Link {...props} to={toClients({ realm })} />
-                                )}
+                                asChild
                             >
-                                {t("cancel")}
+                                <Link to={toClients({ realm })}>
+                                    {t("cancel")}
+                                </Link>
                             </Button>
-                        </ActionGroup>
+                        </div>
                     </FormProvider>
                 </FormAccess>
-            </PageSection>
+            </div>
         </>
     );
 }

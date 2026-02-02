@@ -13,7 +13,8 @@
 
 import type { OrganizationInvitationRepresentation } from "@keycloak/keycloak-admin-client";
 import { OrganizationInvitationStatus } from "@keycloak/keycloak-admin-client";
-import { Button, Chip, ToolbarItem } from "../../shared/@patternfly/react-core";
+import { Button } from "@merge/ui/components/button";
+import { Badge } from "@merge/ui/components/badge";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useAdminClient } from "../admin-client";
@@ -33,9 +34,9 @@ const InvitationStatusBadge = ({ status }: { status?: OrganizationInvitationStat
     const { t } = useTranslation();
 
     return (
-        <Chip isReadOnly>
+        <Badge variant="outline">
             {status ? t(`organizationInvitationStatus.${status.toLowerCase()}`) : ""}
-        </Chip>
+        </Badge>
     );
 };
 
@@ -179,7 +180,7 @@ export const Invitations = () => {
                 canSelectAll
                 toolbarItem={
                     <>
-                        <ToolbarItem>
+                        <div>
                             <SearchInputComponent
                                 value={searchText}
                                 onChange={setSearchText}
@@ -188,22 +189,22 @@ export const Invitations = () => {
                                 placeholder={t("searchInvitations")}
                                 aria-label={t("searchInvitations")}
                             />
-                        </ToolbarItem>
-                        <ToolbarItem>
-                            <Button variant="primary" onClick={toggleInviteMembers}>
+                        </div>
+                        <div>
+                            <Button variant="default" onClick={toggleInviteMembers}>
                                 {t("inviteMember")}
                             </Button>
-                        </ToolbarItem>
-                        <ToolbarItem>
+                        </div>
+                        <div>
                             <Button
-                                variant="plain"
-                                isDisabled={selectedInvitations.length === 0}
+                                variant="ghost"
+                                disabled={selectedInvitations.length === 0}
                                 onClick={toggleDeleteDialog}
                             >
                                 {t("deleteInvitations")}
                             </Button>
-                        </ToolbarItem>
-                        <ToolbarItem>
+                        </div>
+                        <div>
                             <CheckboxFilterComponent
                                 filterPlaceholderText={t("filterByStatus")}
                                 isOpen={isStatusFilterOpen}
@@ -216,7 +217,7 @@ export const Invitations = () => {
                                 selectedItems={filteredStatuses}
                                 width="200px"
                             />
-                        </ToolbarItem>
+                        </div>
                     </>
                 }
                 actionResolver={rowData => {

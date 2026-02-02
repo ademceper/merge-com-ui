@@ -12,18 +12,12 @@
 // @ts-nocheck
 
 import type RealmRepresentation from "@keycloak/keycloak-admin-client/lib/defs/realmRepresentation";
-import {
-    ActionGroup,
-    ActionListItem,
-    Alert,
-    AlertActionLink,
-    AlertVariant,
-    Button,
-    Checkbox,
-    Radio,
-    FormGroup,
-    PageSection
-} from "../../shared/@patternfly/react-core";
+import { AlertVariant } from "../../shared/keycloak-ui-shared";
+import { Alert, AlertDescription, AlertTitle } from "@merge/ui/components/alert";
+import { Button } from "@merge/ui/components/button";
+import { Checkbox } from "@merge/ui/components/checkbox";
+import { RadioGroup, RadioGroupItem } from "@merge/ui/components/radio-group";
+import { Label } from "@merge/ui/components/label";
 import { Controller, FormProvider, useForm, useWatch } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
@@ -109,13 +103,13 @@ export const RealmSettingsEmailTab = ({ realm, save }: RealmSettingsEmailTabProp
     };
 
     return (
-        <PageSection variant="light">
+        <div className="p-6">
             <FormProvider {...form}>
                 <FormPanel title={t("template")} className="kc-email-template">
                     <FormAccess
                         isHorizontal
                         role="manage-realm"
-                        className="pf-v5-u-mt-lg"
+                        className="mt-4"
                         onSubmit={handleSubmit(save)}
                     >
                         <TextControl
@@ -170,7 +164,7 @@ export const RealmSettingsEmailTab = ({ realm, save }: RealmSettingsEmailTabProp
                     <FormAccess
                         isHorizontal
                         role="manage-realm"
-                        className="pf-v5-u-mt-lg"
+                        className="mt-4"
                         onSubmit={handleSubmit(save)}
                     >
                         <TextControl
@@ -185,21 +179,24 @@ export const RealmSettingsEmailTab = ({ realm, save }: RealmSettingsEmailTabProp
                             label={t("port")}
                             placeholder={t("smtpPortPlaceholder")}
                         />
-                        <FormGroup label={t("encryption")} fieldId="kc-html-display-name">
+                        <div className="space-y-2">
+                            <label>{t("encryption")}</label>
                             <Controller
                                 name="smtpServer.ssl"
                                 control={control}
                                 defaultValue="false"
                                 render={({ field }) => (
-                                    <Checkbox
-                                        id="kc-enable-ssl"
-                                        data-testid="enable-ssl"
-                                        label={t("enableSSL")}
-                                        isChecked={field.value === "true"}
-                                        onChange={(_event, value) =>
-                                            field.onChange("" + value)
-                                        }
-                                    />
+                                    <div className="flex items-center gap-2">
+                                        <Checkbox
+                                            id="kc-enable-ssl"
+                                            data-testid="enable-ssl"
+                                            checked={field.value === "true"}
+                                            onCheckedChange={(value) =>
+                                                field.onChange("" + value)
+                                            }
+                                        />
+                                        <Label htmlFor="kc-enable-ssl">{t("enableSSL")}</Label>
+                                    </div>
                                 )}
                             />
                             <Controller
@@ -207,18 +204,20 @@ export const RealmSettingsEmailTab = ({ realm, save }: RealmSettingsEmailTabProp
                                 control={control}
                                 defaultValue="false"
                                 render={({ field }) => (
-                                    <Checkbox
-                                        id="kc-enable-start-tls"
-                                        data-testid="enable-start-tls"
-                                        label={t("enableStartTLS")}
-                                        isChecked={field.value === "true"}
-                                        onChange={(_event, value) =>
-                                            field.onChange("" + value)
-                                        }
-                                    />
+                                    <div className="flex items-center gap-2">
+                                        <Checkbox
+                                            id="kc-enable-start-tls"
+                                            data-testid="enable-start-tls"
+                                            checked={field.value === "true"}
+                                            onCheckedChange={(value) =>
+                                                field.onChange("" + value)
+                                            }
+                                        />
+                                        <Label htmlFor="kc-enable-start-tls">{t("enableStartTLS")}</Label>
+                                    </div>
                                 )}
                             />
-                        </FormGroup>
+                        </div>
                         <SwitchControl
                             name="smtpServer.auth"
                             label={t("authentication")}
@@ -238,46 +237,37 @@ export const RealmSettingsEmailTab = ({ realm, save }: RealmSettingsEmailTabProp
                                         required: t("required")
                                     }}
                                 />
-                                <FormGroup
-                                    label={t("authenticationType")}
-                                    fieldId="authType"
-                                >
+                                <div className="space-y-2">
+                                    <label>{t("authenticationType")}</label>
                                     <Controller
                                         name="smtpServer.authType"
                                         control={control}
                                         defaultValue="basic"
                                         render={({ field }) => (
-                                            <>
-                                                <Radio
-                                                    id="basicAuth"
-                                                    name="smtpServer.authType"
-                                                    data-testid="smtpServer.authType.basic"
-                                                    label={t(
-                                                        "authenticationTypeBasicAuth"
-                                                    )}
-                                                    value="basic"
-                                                    isChecked={field.value === "basic"}
-                                                    onChange={() =>
-                                                        field.onChange("basic")
-                                                    }
-                                                />
-                                                <Radio
-                                                    id="tokenAuth"
-                                                    name="smtpServer.authType"
-                                                    data-testid="smtpServer.authType.token"
-                                                    label={t(
-                                                        "authenticationTypeTokenAuth"
-                                                    )}
-                                                    value="token"
-                                                    isChecked={field.value === "token"}
-                                                    onChange={() =>
-                                                        field.onChange("token")
-                                                    }
-                                                />
-                                            </>
+                                            <RadioGroup
+                                                value={field.value}
+                                                onValueChange={field.onChange}
+                                            >
+                                                <div className="flex items-center gap-2">
+                                                    <RadioGroupItem
+                                                        id="basicAuth"
+                                                        value="basic"
+                                                        data-testid="smtpServer.authType.basic"
+                                                    />
+                                                    <Label htmlFor="basicAuth">{t("authenticationTypeBasicAuth")}</Label>
+                                                </div>
+                                                <div className="flex items-center gap-2">
+                                                    <RadioGroupItem
+                                                        id="tokenAuth"
+                                                        value="token"
+                                                        data-testid="smtpServer.authType.token"
+                                                    />
+                                                    <Label htmlFor="tokenAuth">{t("authenticationTypeTokenAuth")}</Label>
+                                                </div>
+                                            </RadioGroup>
                                         )}
                                     />
-                                </FormGroup>
+                                </div>
                                 {authType === "basic" && (
                                     <PasswordControl
                                         name="smtpServer.password"
@@ -365,87 +355,79 @@ export const RealmSettingsEmailTab = ({ realm, save }: RealmSettingsEmailTabProp
                             control={control}
                             defaultValue="false"
                             render={({ field }) => (
-                                <Checkbox
-                                    id="kc-enable-debug"
-                                    data-testid="enable-debug"
-                                    label={t("enableDebugSMTP")}
-                                    isChecked={field.value === "true"}
-                                    onChange={(_event, value) =>
-                                        field.onChange("" + value)
-                                    }
-                                />
+                                <div className="flex items-center gap-2">
+                                    <Checkbox
+                                        id="kc-enable-debug"
+                                        data-testid="enable-debug"
+                                        checked={field.value === "true"}
+                                        onCheckedChange={(value) =>
+                                            field.onChange("" + value)
+                                        }
+                                    />
+                                    <Label htmlFor="kc-enable-debug">{t("enableDebugSMTP")}</Label>
+                                </div>
                             )}
                         />
                         {currentUser && (
-                            <FormGroup id="descriptionTestConnection">
+                            <div id="descriptionTestConnection">
                                 {currentUser.email ? (
-                                    <Alert
-                                        variant="info"
-                                        component="h2"
-                                        isInline
-                                        title={t("testConnectionHint.withEmail", {
-                                            email: currentUser.email
-                                        })}
-                                    />
+                                    <Alert variant="default">
+                                        <AlertTitle>
+                                            {t("testConnectionHint.withEmail", {
+                                                email: currentUser.email
+                                            })}
+                                        </AlertTitle>
+                                    </Alert>
                                 ) : (
-                                    <Alert
-                                        variant="warning"
-                                        component="h2"
-                                        isInline
-                                        title={t("testConnectionHint.withoutEmail", {
-                                            userName: currentUser.username
-                                        })}
-                                        actionLinks={
-                                            <AlertActionLink
-                                                component={props => (
-                                                    <Link
-                                                        {...props}
-                                                        to={toUser({
-                                                            realm: currentUser.realm!,
-                                                            id: currentUser.id!,
-                                                            tab: "settings"
-                                                        })}
-                                                    />
-                                                )}
+                                    <Alert variant="destructive">
+                                        <AlertTitle>
+                                            {t("testConnectionHint.withoutEmail", {
+                                                userName: currentUser.username
+                                            })}
+                                        </AlertTitle>
+                                        <AlertDescription>
+                                            <Link
+                                                to={toUser({
+                                                    realm: currentUser.realm!,
+                                                    id: currentUser.id!,
+                                                    tab: "settings"
+                                                })}
                                             >
                                                 {t(
                                                     "testConnectionHint.withoutEmailAction"
                                                 )}
-                                            </AlertActionLink>
-                                        }
-                                    />
+                                            </Link>
+                                        </AlertDescription>
+                                    </Alert>
                                 )}
-                            </FormGroup>
+                            </div>
                         )}
-                        <ActionGroup>
-                            <ActionListItem>
+                        <div className="flex gap-2">
+                            <div>
                                 <Button
-                                    variant="primary"
                                     type="submit"
                                     data-testid="email-tab-save"
                                 >
                                     {t("save")}
                                 </Button>
-                            </ActionListItem>
-                            <ActionListItem>
+                            </div>
+                            <div>
                                 <Button
                                     variant="secondary"
                                     onClick={() => testConnection()}
                                     data-testid="test-connection-button"
-                                    isDisabled={
+                                    disabled={
                                         !(
                                             emailRegexPattern.test(watchFromValue) &&
                                             watchHostValue
                                         ) || !currentUser?.email
                                     }
                                     aria-describedby="descriptionTestConnection"
-                                    isLoading={isTesting}
-                                    spinnerAriaValueText={t("testingConnection")}
                                 >
-                                    {t("testConnection")}
+                                    {isTesting ? t("testingConnection") : t("testConnection")}
                                 </Button>
-                            </ActionListItem>
-                            <ActionListItem>
+                            </div>
+                            <div>
                                 <Button
                                     variant="link"
                                     onClick={reset}
@@ -453,11 +435,11 @@ export const RealmSettingsEmailTab = ({ realm, save }: RealmSettingsEmailTabProp
                                 >
                                     {t("revert")}
                                 </Button>
-                            </ActionListItem>
-                        </ActionGroup>
+                            </div>
+                        </div>
                     </FormAccess>
                 </FormPanel>
             </FormProvider>
-        </PageSection>
+        </div>
     );
 };

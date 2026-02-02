@@ -21,27 +21,12 @@ import {
     useAlerts,
     useFetch
 } from "../../shared/keycloak-ui-shared";
-import {
-    AlertVariant,
-    Badge,
-    Button,
-    ButtonVariant,
-    CardTitle,
-    Checkbox,
-    Dropdown,
-    DropdownGroup,
-    DropdownItem,
-    DropdownList,
-    Gallery,
-    MenuToggle,
-    PageSection,
-    Split,
-    SplitItem,
-    Text,
-    TextContent,
-    TextVariants,
-    ToolbarItem
-} from "../../shared/@patternfly/react-core";
+import { Button } from "@merge/ui/components/button";
+import { Badge } from "@merge/ui/components/badge";
+import { Checkbox } from "@merge/ui/components/checkbox";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger, DropdownMenuGroup, DropdownMenuLabel } from "@merge/ui/components/dropdown-menu";
+import { CardTitle } from "@merge/ui/components/card";
+import { AlertVariant } from "../../shared/keycloak-ui-shared";
 import { groupBy, sortBy } from "lodash-es";
 import { Fragment, useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -77,8 +62,8 @@ const DetailLink = (identityProvider: IdentityProviderRepresentation) => {
             {!identityProvider.enabled && (
                 <Badge
                     key={`${identityProvider.providerId}-disabled`}
-                    isRead
-                    className="pf-v5-u-ml-sm"
+                    variant="secondary"
+                    className="ml-2"
                 >
                     {t("disabled")}
                 </Badge>
@@ -158,12 +143,11 @@ export default function IdentityProvidersSection() {
 
     const identityProviderOptions = () =>
         Object.keys(identityProviders).map(group => (
-            <DropdownGroup key={group} label={group}>
+            <DropdownMenuGroup key={group}>
+                <DropdownMenuLabel>{group}</DropdownMenuLabel>
                 {sortBy(identityProviders[group], "name").map(provider => (
-                    <DropdownItem
+                    <DropdownMenuItem
                         key={provider.id}
-                        value={provider.id}
-                        component="a"
                         data-testid={provider.id}
                         onClick={() =>
                             navigate(
@@ -175,16 +159,16 @@ export default function IdentityProvidersSection() {
                         }
                     >
                         {provider.name}
-                    </DropdownItem>
+                    </DropdownMenuItem>
                 ))}
-            </DropdownGroup>
+            </DropdownMenuGroup>
         ));
 
     const [toggleDeleteDialog, DeleteConfirm] = useConfirmDialog({
         titleKey: "deleteProvider",
         messageKey: t("deleteConfirm", { provider: selectedProvider?.alias }),
         continueButtonLabel: "delete",
-        continueButtonVariant: ButtonVariant.danger,
+        continueButtonVariant: "destructive",
         onConfirm: async () => {
             try {
                 await adminClient.identityProviders.del({
@@ -215,27 +199,17 @@ export default function IdentityProvidersSection() {
                 subKey="listExplain"
                 helpUrl={helpUrls.identityProvidersUrl}
             />
-            <PageSection
-                variant={!hasProviders ? "default" : "light"}
-                className={!hasProviders ? "" : "pf-v5-u-p-0"}
-            >
+            <div className={!hasProviders ? "p-6" : "p-0"}>
                 {!hasProviders && (
                     <>
-                        <TextContent>
-                            <Text component={TextVariants.p}>{t("getStarted")}</Text>
-                        </TextContent>
+                        <p>{t("getStarted")}</p>
                         {Object.keys(identityProviders).map(group => (
                             <Fragment key={group}>
-                                <TextContent>
-                                    <Text
-                                        className="pf-v5-u-mt-lg"
-                                        component={TextVariants.h2}
-                                    >
-                                        {group}:
-                                    </Text>
-                                </TextContent>
-                                <hr className="pf-v5-u-mb-lg" />
-                                <Gallery hasGutter>
+                                <h2 className="mt-6">
+                                    {group}:
+                                </h2>
+                                <hr className="mb-6" />
+                                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
                                     {sortBy(identityProviders[group], "name").map(
                                         provider => (
                                             <ClickableCard
@@ -246,21 +220,21 @@ export default function IdentityProvidersSection() {
                                                 }
                                             >
                                                 <CardTitle>
-                                                    <Split hasGutter>
-                                                        <SplitItem>
+                                                    <div className="flex items-center gap-2">
+                                                        <div>
                                                             <IconMapper
                                                                 icon={provider.id}
                                                             />
-                                                        </SplitItem>
-                                                        <SplitItem isFilled>
+                                                        </div>
+                                                        <div className="flex-1">
                                                             {provider.name}
-                                                        </SplitItem>
-                                                    </Split>
+                                                        </div>
+                                                    </div>
                                                 </CardTitle>
                                             </ClickableCard>
                                         )
                                     )}
-                                </Gallery>
+                                </div>
                             </Fragment>
                         ))}
                     </>
@@ -274,44 +248,36 @@ export default function IdentityProvidersSection() {
                         searchPlaceholderKey="searchForProvider"
                         toolbarItem={
                             <>
-                                <ToolbarItem alignSelf="center">
-                                    <Checkbox
-                                        label={t("hideOrganizationLinkedIdps")}
-                                        id="hideOrganizationLinkedIdps"
-                                        data-testid="hideOrganizationLinkedIdps"
-                                        isChecked={hide}
-                                        onChange={(_event, check) => {
-                                            setHide(check);
-                                            refresh();
-                                        }}
-                                    />
-                                </ToolbarItem>
-                                <ToolbarItem>
-                                    <Dropdown
-                                        data-testid="addProviderDropdown"
-                                        onOpenChange={isOpen =>
-                                            setAddProviderOpen(isOpen)
-                                        }
-                                        toggle={ref => (
-                                            <MenuToggle
-                                                ref={ref}
-                                                onClick={() =>
-                                                    setAddProviderOpen(!addProviderOpen)
-                                                }
-                                                variant="primary"
+                                <div className="flex items-center">
+                                    <div className="flex items-center gap-2">
+                                        <Checkbox
+                                            id="hideOrganizationLinkedIdps"
+                                            data-testid="hideOrganizationLinkedIdps"
+                                            checked={hide}
+                                            onCheckedChange={(check) => {
+                                                setHide(!!check);
+                                                refresh();
+                                            }}
+                                        />
+                                        <label htmlFor="hideOrganizationLinkedIdps">{t("hideOrganizationLinkedIdps")}</label>
+                                    </div>
+                                </div>
+                                <div>
+                                    <DropdownMenu>
+                                        <DropdownMenuTrigger asChild>
+                                            <Button
+                                                data-testid="addProviderDropdown"
                                             >
                                                 {t("addProvider")}
-                                            </MenuToggle>
-                                        )}
-                                        isOpen={addProviderOpen}
-                                    >
-                                        <DropdownList>
+                                            </Button>
+                                        </DropdownMenuTrigger>
+                                        <DropdownMenuContent>
                                             {identityProviderOptions()}
-                                        </DropdownList>
-                                    </Dropdown>
-                                </ToolbarItem>
+                                        </DropdownMenuContent>
+                                    </DropdownMenu>
+                                </div>
 
-                                <ToolbarItem>
+                                <div>
                                     <Button
                                         data-testid="manageDisplayOrder"
                                         variant="link"
@@ -319,7 +285,7 @@ export default function IdentityProvidersSection() {
                                     >
                                         {t("manageDisplayOrder")}
                                     </Button>
-                                </ToolbarItem>
+                                </div>
                             </>
                         }
                         actions={[
@@ -360,14 +326,14 @@ export default function IdentityProvidersSection() {
                                             setHide(false);
                                             refresh();
                                         },
-                                        type: ButtonVariant.link
+                                        type: "link"
                                     }
                                 ]}
                             />
                         }
                     />
                 )}
-            </PageSection>
+            </div>
         </>
     );
 }

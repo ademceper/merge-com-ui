@@ -12,14 +12,15 @@
 // @ts-nocheck
 
 import type RealmRepresentation from "@keycloak/keycloak-admin-client/lib/defs/realmRepresentation";
-import { SelectControl, useAlerts } from "../../shared/keycloak-ui-shared";
+import { AlertVariant, SelectControl, useAlerts } from "../../shared/keycloak-ui-shared";
+import { Button } from "@merge/ui/components/button";
 import {
-    AlertVariant,
-    Button,
-    ButtonVariant,
-    Form,
-    Modal
-} from "../../shared/@patternfly/react-core";
+    Dialog,
+    DialogContent,
+    DialogHeader,
+    DialogTitle,
+    DialogFooter
+} from "@merge/ui/components/dialog";
 import { FormProvider, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { useAdminClient } from "../admin-client";
@@ -61,43 +62,43 @@ export const BindFlowDialog = ({ flowAlias, onClose }: BindFlowDialogProps) => {
     const flowKeys = Array.from(REALM_FLOWS.keys());
 
     return (
-        <Modal
-            title={t("bindFlow")}
-            variant="small"
-            onClose={() => onClose()}
-            actions={[
-                <Button key="confirm" data-testid="save" type="submit" form="bind-form">
-                    {t("save")}
-                </Button>,
-                <Button
-                    data-testid="cancel"
-                    key="cancel"
-                    variant={ButtonVariant.link}
-                    onClick={() => onClose()}
-                >
-                    {t("cancel")}
-                </Button>
-            ]}
-            isOpen
-        >
-            <Form id="bind-form" isHorizontal onSubmit={form.handleSubmit(onSubmit)}>
-                <FormProvider {...form}>
-                    <SelectControl
-                        id="chooseBindingType"
-                        name="bindingType"
-                        label={t("chooseBindingType")}
-                        options={flowKeys
-                            .filter(f => f !== "dockerAuthenticationFlow")
-                            .map(key => ({
-                                key,
-                                value: t(`flow.${REALM_FLOWS.get(key)}`)
-                            }))}
-                        controller={{ defaultValue: flowKeys[0] }}
-                        menuAppendTo="parent"
-                        aria-label={t("chooseBindingType")}
-                    />
-                </FormProvider>
-            </Form>
-        </Modal>
+        <Dialog open onOpenChange={(open) => { if (!open) onClose(); }}>
+            <DialogContent className="max-w-md">
+                <DialogHeader>
+                    <DialogTitle>{t("bindFlow")}</DialogTitle>
+                </DialogHeader>
+                <form id="bind-form" onSubmit={form.handleSubmit(onSubmit)}>
+                    <FormProvider {...form}>
+                        <SelectControl
+                            id="chooseBindingType"
+                            name="bindingType"
+                            label={t("chooseBindingType")}
+                            options={flowKeys
+                                .filter(f => f !== "dockerAuthenticationFlow")
+                                .map(key => ({
+                                    key,
+                                    value: t(`flow.${REALM_FLOWS.get(key)}`)
+                                }))}
+                            controller={{ defaultValue: flowKeys[0] }}
+                            menuAppendTo="parent"
+                            aria-label={t("chooseBindingType")}
+                        />
+                    </FormProvider>
+                </form>
+                <DialogFooter>
+                    <Button key="confirm" data-testid="save" type="submit" form="bind-form">
+                        {t("save")}
+                    </Button>
+                    <Button
+                        data-testid="cancel"
+                        key="cancel"
+                        variant="link"
+                        onClick={() => onClose()}
+                    >
+                        {t("cancel")}
+                    </Button>
+                </DialogFooter>
+            </DialogContent>
+        </Dialog>
     );
 };

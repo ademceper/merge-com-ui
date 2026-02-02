@@ -14,14 +14,11 @@
 import type GroupRepresentation from "@keycloak/keycloak-admin-client/lib/defs/groupRepresentation";
 import type UserRepresentation from "@keycloak/keycloak-admin-client/lib/defs/userRepresentation";
 import { useHelp } from "../../shared/keycloak-ui-shared";
-import {
-    AlertVariant,
-    Button,
-    ButtonVariant,
-    Checkbox,
-    Popover
-} from "../../shared/@patternfly/react-core";
-import { QuestionCircleIcon } from "../../shared/@patternfly/react-icons";
+import { AlertVariant } from "../../shared/keycloak-ui-shared";
+import { Button } from "@merge/ui/components/button";
+import { Checkbox } from "@merge/ui/components/checkbox";
+import { Popover, PopoverContent, PopoverTrigger } from "@merge/ui/components/popover";
+import { Question } from "@phosphor-icons/react";
 import { cellWidth } from "../../shared/@patternfly/react-table";
 import { intersectionBy, sortBy, uniqBy } from "lodash-es";
 import { useState } from "react";
@@ -116,7 +113,7 @@ export const UserGroups = ({ user }: UserGroupsProps) => {
             username: user.username
         }),
         continueButtonLabel: "leave",
-        continueButtonVariant: ButtonVariant.danger,
+        continueButtonVariant: "destructive",
         onConfirm: async () => {
             try {
                 await Promise.all(
@@ -204,47 +201,48 @@ export const UserGroups = ({ user }: UserGroupsProps) => {
                             className="kc-join-group-button"
                             onClick={toggleModal}
                             data-testid="add-group-button"
-                            isDisabled={!user.access?.manageGroupMembership}
+                            disabled={!user.access?.manageGroupMembership}
                         >
                             {t("joinGroup")}
                         </Button>
-                        <Checkbox
-                            label={t("directMembership")}
-                            key="direct-membership-check"
-                            id="kc-direct-membership-checkbox"
-                            onChange={() => {
-                                setDirectMembership(!isDirectMembership);
-                                refresh();
-                            }}
-                            isChecked={isDirectMembership}
-                            className="pf-v5-u-mt-sm"
-                        />
+                        <div className="flex items-center gap-2 mt-1">
+                            <Checkbox
+                                id="kc-direct-membership-checkbox"
+                                checked={isDirectMembership}
+                                onCheckedChange={() => {
+                                    setDirectMembership(!isDirectMembership);
+                                    refresh();
+                                }}
+                            />
+                            <label htmlFor="kc-direct-membership-checkbox" className="text-sm">
+                                {t("directMembership")}
+                            </label>
+                        </div>
                         <Button
                             onClick={() => leave(selectedGroups)}
                             data-testid="leave-group-button"
                             variant="link"
-                            isDisabled={selectedGroups.length === 0}
-                            className="pf-v5-u-ml-md"
+                            disabled={selectedGroups.length === 0}
+                            className="ml-4"
                         >
                             {t("leave")}
                         </Button>
 
                         {enabled && (
-                            <Popover
-                                aria-label="Basic popover"
-                                position="bottom"
-                                bodyContent={
+                            <Popover>
+                                <PopoverTrigger asChild>
+                                    <Button
+                                        variant="link"
+                                        className="kc-who-will-appear-button"
+                                        key="who-will-appear-button"
+                                    >
+                                        <Question className="size-4" />
+                                        {t("whoWillAppearLinkTextUsers")}
+                                    </Button>
+                                </PopoverTrigger>
+                                <PopoverContent>
                                     <div>{t("whoWillAppearPopoverTextUsers")}</div>
-                                }
-                            >
-                                <Button
-                                    variant="link"
-                                    className="kc-who-will-appear-button"
-                                    key="who-will-appear-button"
-                                    icon={<QuestionCircleIcon />}
-                                >
-                                    {t("whoWillAppearLinkTextUsers")}
-                                </Button>
+                                </PopoverContent>
                             </Popover>
                         )}
                     </>
@@ -277,7 +275,7 @@ export const UserGroups = ({ user }: UserGroupsProps) => {
                                     data-testid={`leave-${group.name}`}
                                     onClick={() => leave([group])}
                                     variant="link"
-                                    isDisabled={!user.access?.manageGroupMembership}
+                                    disabled={!user.access?.manageGroupMembership}
                                 >
                                     {t("leave")}
                                 </Button>

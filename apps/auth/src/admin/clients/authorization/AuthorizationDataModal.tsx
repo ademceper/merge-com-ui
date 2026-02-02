@@ -12,15 +12,9 @@
 // @ts-nocheck
 
 import type AccessTokenRepresentation from "@keycloak/keycloak-admin-client/lib/defs/accessTokenRepresentation";
-import {
-    Button,
-    Modal,
-    ModalVariant,
-    Text,
-    TextArea,
-    TextContent,
-    TextVariants
-} from "../../../shared/@patternfly/react-core";
+import { Button } from "@merge/ui/components/button";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@merge/ui/components/dialog";
+import { Textarea } from "@merge/ui/components/textarea";
 import { useTranslation } from "react-i18next";
 
 import { prettyPrintJSON } from "../../util";
@@ -43,30 +37,24 @@ export const AuthorizationDataModal = ({ data }: AuthorizationDataModalProps) =>
             >
                 {t("showAuthData")}
             </Button>
-            <Modal
-                variant={ModalVariant.medium}
-                isOpen={show}
-                aria-label={t("authData")}
-                header={
-                    <TextContent>
-                        <Text component={TextVariants.h1}>{t("authData")}</Text>
-                        <Text>{t("authDataDescription")}</Text>
-                    </TextContent>
-                }
-                onClose={toggle}
-                actions={[
-                    <Button
-                        data-testid="cancel"
-                        id="modal-cancel"
-                        key="cancel"
-                        onClick={toggle}
-                    >
-                        {t("cancel")}
-                    </Button>
-                ]}
-            >
-                <TextArea readOnly rows={20} value={prettyPrintJSON(data)} />
-            </Modal>
+            <Dialog open={show} onOpenChange={(open) => { if (!open) toggle(); }}>
+                <DialogContent className="max-w-2xl">
+                    <DialogHeader>
+                        <DialogTitle>{t("authData")}</DialogTitle>
+                        <p>{t("authDataDescription")}</p>
+                    </DialogHeader>
+                    <Textarea readOnly rows={20} value={prettyPrintJSON(data)} />
+                    <DialogFooter>
+                        <Button
+                            data-testid="cancel"
+                            id="modal-cancel"
+                            onClick={toggle}
+                        >
+                            {t("cancel")}
+                        </Button>
+                    </DialogFooter>
+                </DialogContent>
+            </Dialog>
         </>
     );
 };

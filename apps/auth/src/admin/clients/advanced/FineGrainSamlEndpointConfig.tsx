@@ -11,7 +11,7 @@
 
 // @ts-nocheck
 
-import { ActionGroup, Button } from "../../../shared/@patternfly/react-core";
+import { Button } from "@merge/ui/components/button";
 import { useTranslation } from "react-i18next";
 
 import { FormAccess } from "../../components/form/FormAccess";
@@ -80,14 +80,14 @@ export const FineGrainSamlEndpointConfig = ({
                 type="url"
             />
 
-            <ActionGroup>
-                <Button variant="tertiary" onClick={save} data-testid="fineGrainSave">
+            <div className="flex gap-2">
+                <Button variant="outline" onClick={save} data-testid="fineGrainSave">
                     {t("save")}
                 </Button>
                 <Button variant="link" onClick={reset} data-testid="fineGrainRevert">
                     {t("revert")}
                 </Button>
-            </ActionGroup>
+            </div>
         </FormAccess>
     );
 };

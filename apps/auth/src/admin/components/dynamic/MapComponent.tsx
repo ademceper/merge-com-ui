@@ -12,19 +12,10 @@
 // @ts-nocheck
 
 import { HelpItem, generateId } from "../../../shared/keycloak-ui-shared";
-import {
-    ActionList,
-    ActionListItem,
-    Button,
-    EmptyState,
-    EmptyStateBody,
-    EmptyStateFooter,
-    Flex,
-    FlexItem,
-    FormGroup,
-    TextInput
-} from "../../../shared/@patternfly/react-core";
-import { MinusCircleIcon, PlusCircleIcon } from "../../../shared/@patternfly/react-icons";
+import { Button } from "@merge/ui/components/button";
+import { Input } from "@merge/ui/components/input";
+import { Label } from "@merge/ui/components/label";
+import { MinusCircle, PlusCircle } from "@phosphor-icons/react";
 import { useEffect, useState } from "react";
 import { useFormContext } from "react-hook-form";
 import { useTranslation } from "react-i18next";
@@ -88,98 +79,88 @@ export const MapComponent = ({
     };
 
     return map.length !== 0 ? (
-        <FormGroup
-            label={t(label!)}
-            labelIcon={<HelpItem helpText={t(helpText!)} fieldLabelId={`${label}`} />}
-            fieldId={name!}
-            isRequired={required}
-        >
-            <Flex direction={{ default: "column" }}>
-                <Flex>
-                    <FlexItem
-                        grow={{ default: "grow" }}
-                        spacer={{ default: "spacerNone" }}
-                    >
+        <div className="space-y-2">
+            <div className="flex items-center gap-1">
+                <Label htmlFor={name!}>{t(label!)}{required && " *"}</Label>
+                <HelpItem helpText={t(helpText!)} fieldLabelId={`${label}`} />
+            </div>
+            <div className="flex flex-col gap-2">
+                <div className="flex gap-2">
+                    <div className="flex-1">
                         <strong>{t("key")}</strong>
-                    </FlexItem>
-                    <FlexItem grow={{ default: "grow" }}>
+                    </div>
+                    <div className="flex-1">
                         <strong>{t("value")}</strong>
-                    </FlexItem>
-                </Flex>
+                    </div>
+                </div>
                 {map.map((attribute, index) => (
-                    <Flex key={attribute.id} data-testid="row">
-                        <FlexItem grow={{ default: "grow" }}>
-                            <TextInput
+                    <div className="flex gap-2" key={attribute.id} data-testid="row">
+                        <div className="flex-1">
+                            <Input
                                 name={`${fieldName}.${index}.key`}
                                 placeholder={t("keyPlaceholder")}
                                 aria-label={t("key")}
                                 defaultValue={attribute.key}
                                 data-testid={`${fieldName}.${index}.key`}
-                                onChange={(_event, value) => updateKey(index, value)}
+                                onChange={(e) => updateKey(index, e.target.value)}
                                 onBlur={() => update()}
                             />
-                        </FlexItem>
-                        <FlexItem
-                            grow={{ default: "grow" }}
-                            spacer={{ default: "spacerNone" }}
-                        >
-                            <TextInput
+                        </div>
+                        <div className="flex-1">
+                            <Input
                                 name={`${fieldName}.${index}.value`}
                                 placeholder={t("valuePlaceholder")}
                                 aria-label={t("value")}
                                 defaultValue={attribute.value}
                                 data-testid={`${fieldName}.${index}.value`}
-                                onChange={(_event, value) => updateValue(index, value)}
+                                onChange={(e) => updateValue(index, e.target.value)}
                                 onBlur={() => update()}
                             />
-                        </FlexItem>
-                        <FlexItem>
+                        </div>
+                        <div>
                             <Button
                                 variant="link"
                                 title={t("removeAttribute")}
-                                isDisabled={isDisabled}
+                                disabled={isDisabled}
                                 onClick={() => remove(index)}
                                 data-testid={`${fieldName}.${index}.remove`}
                             >
-                                <MinusCircleIcon />
+                                <MinusCircle className="size-4" />
                             </Button>
-                        </FlexItem>
-                    </Flex>
+                        </div>
+                    </div>
                 ))}
-            </Flex>
-            <ActionList>
-                <ActionListItem>
-                    <Button
-                        data-testid={`${fieldName}-add-row`}
-                        className="pf-v5-u-px-0 pf-v5-u-mt-sm"
-                        variant="link"
-                        icon={<PlusCircleIcon />}
-                        onClick={() => appendNew()}
-                    >
-                        {t("addAttribute", { label })}
-                    </Button>
-                </ActionListItem>
-            </ActionList>
-        </FormGroup>
+            </div>
+            <div className="mt-2">
+                <Button
+                    data-testid={`${fieldName}-add-row`}
+                    className="px-0 mt-1"
+                    variant="link"
+                    onClick={() => appendNew()}
+                >
+                    <PlusCircle className="size-4 mr-1" />
+                    {t("addAttribute", { label })}
+                </Button>
+            </div>
+        </div>
     ) : (
-        <EmptyState
+        <div
             data-testid={`${name}-empty-state`}
-            className="pf-v5-u-p-0"
-            variant="xs"
+            className="p-0 text-center"
         >
-            <EmptyStateBody>{t("missingAttributes", { label })}</EmptyStateBody>
-            <EmptyStateFooter>
+            <p className="text-muted-foreground">{t("missingAttributes", { label })}</p>
+            <div className="mt-2">
                 <Button
                     data-testid={`${name}-add-row`}
                     variant="link"
-                    icon={<PlusCircleIcon />}
                     size="sm"
                     onClick={appendNew}
-                    isDisabled={isDisabled}
+                    disabled={isDisabled}
                 >
+                    <PlusCircle className="size-4 mr-1" />
                     {t("addAttribute", { label })}
                 </Button>
-            </EmptyStateFooter>
-        </EmptyState>
+            </div>
+        </div>
     );
 };

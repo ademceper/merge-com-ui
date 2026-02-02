@@ -14,14 +14,7 @@
 import type { RealmEventsConfigRepresentation } from "@keycloak/keycloak-admin-client/lib/defs/realmEventsConfigRepresentation";
 import type RealmRepresentation from "@keycloak/keycloak-admin-client/lib/defs/realmRepresentation";
 import { useAlerts, useFetch } from "../../../shared/keycloak-ui-shared";
-import {
-    AlertVariant,
-    ButtonVariant,
-    PageSection,
-    Tab,
-    Tabs,
-    TabTitleText
-} from "../../../shared/@patternfly/react-core";
+import { AlertVariant } from "../../../shared/keycloak-ui-shared";
 import { isEqual } from "lodash-es";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
@@ -78,7 +71,7 @@ export const EventsTab = ({ realm }: EventsTabProps) => {
         titleKey: "deleteEvents",
         messageKey: "deleteEventsConfirm",
         continueButtonLabel: "clear",
-        continueButtonVariant: ButtonVariant.danger,
+        continueButtonVariant: "destructive",
         onConfirm: async () => {
             try {
                 switch (type) {
@@ -181,16 +174,38 @@ export const EventsTab = ({ realm }: EventsTabProps) => {
                     onClose={() => setAddEventType(false)}
                 />
             )}
-            <Tabs
-                activeKey={activeTab}
-                onSelect={(_, key) => setActiveTab(key as string)}
-            >
-                <Tab
-                    eventKey="event"
-                    title={<TabTitleText>{t("eventListeners")}</TabTitleText>}
-                    data-testid="rs-event-listeners-tab"
-                >
-                    <PageSection>
+            <div>
+                <div className="flex border-b" role="tablist">
+                    <button
+                        role="tab"
+                        className={`px-4 py-2 text-sm font-medium ${activeTab === "event" ? "border-b-2 border-primary text-primary" : "text-muted-foreground"}`}
+                        aria-selected={activeTab === "event"}
+                        onClick={() => setActiveTab("event")}
+                        data-testid="rs-event-listeners-tab"
+                    >
+                        {t("eventListeners")}
+                    </button>
+                    <button
+                        role="tab"
+                        className={`px-4 py-2 text-sm font-medium ${activeTab === "user" ? "border-b-2 border-primary text-primary" : "text-muted-foreground"}`}
+                        aria-selected={activeTab === "user"}
+                        onClick={() => setActiveTab("user")}
+                        data-testid="rs-events-tab"
+                    >
+                        {t("userEventsSettings")}
+                    </button>
+                    <button
+                        role="tab"
+                        className={`px-4 py-2 text-sm font-medium ${activeTab === "admin" ? "border-b-2 border-primary text-primary" : "text-muted-foreground"}`}
+                        aria-selected={activeTab === "admin"}
+                        onClick={() => setActiveTab("admin")}
+                        data-testid="rs-admin-events-tab"
+                    >
+                        {t("adminEventsSettings")}
+                    </button>
+                </div>
+                {activeTab === "event" && (
+                    <div className="p-6">
                         <FormAccess
                             role="manage-events"
                             isHorizontal
@@ -201,43 +216,37 @@ export const EventsTab = ({ realm }: EventsTabProps) => {
                                 reset={() => setupForm(events)}
                             />
                         </FormAccess>
-                    </PageSection>
-                </Tab>
-                <Tab
-                    eventKey="user"
-                    title={<TabTitleText>{t("userEventsSettings")}</TabTitleText>}
-                    data-testid="rs-events-tab"
-                >
-                    <PageSection>
-                        <FormAccess
-                            role="manage-events"
-                            isHorizontal
-                            onSubmit={handleSubmit(save)}
-                        >
-                            <EventConfigForm
-                                type="user"
-                                form={form}
-                                reset={() => setupForm(events)}
-                                clear={() => clear("user")}
+                    </div>
+                )}
+                {activeTab === "user" && (
+                    <>
+                        <div className="p-6">
+                            <FormAccess
+                                role="manage-events"
+                                isHorizontal
+                                onSubmit={handleSubmit(save)}
+                            >
+                                <EventConfigForm
+                                    type="user"
+                                    form={form}
+                                    reset={() => setupForm(events)}
+                                    clear={() => clear("user")}
+                                />
+                            </FormAccess>
+                        </div>
+                        <div className="p-6">
+                            <EventsTypeTable
+                                key={tableKey}
+                                addTypes={() => setAddEventType(true)}
+                                eventTypes={events?.enabledEventTypes || []}
+                                onDelete={value => removeEvents([value])}
+                                onDeleteAll={removeEvents}
                             />
-                        </FormAccess>
-                    </PageSection>
-                    <PageSection>
-                        <EventsTypeTable
-                            key={tableKey}
-                            addTypes={() => setAddEventType(true)}
-                            eventTypes={events?.enabledEventTypes || []}
-                            onDelete={value => removeEvents([value])}
-                            onDeleteAll={removeEvents}
-                        />
-                    </PageSection>
-                </Tab>
-                <Tab
-                    eventKey="admin"
-                    title={<TabTitleText>{t("adminEventsSettings")}</TabTitleText>}
-                    data-testid="rs-admin-events-tab"
-                >
-                    <PageSection>
+                        </div>
+                    </>
+                )}
+                {activeTab === "admin" && (
+                    <div className="p-6">
                         <FormAccess
                             role="manage-events"
                             isHorizontal
@@ -250,9 +259,9 @@ export const EventsTab = ({ realm }: EventsTabProps) => {
                                 clear={() => clear("admin")}
                             />
                         </FormAccess>
-                    </PageSection>
-                </Tab>
-            </Tabs>
+                    </div>
+                )}
+            </div>
         </>
     );
 };

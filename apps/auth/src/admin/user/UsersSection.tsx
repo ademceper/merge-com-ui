@@ -19,7 +19,7 @@ import helpUrls from "../help-urls";
 import { PermissionsTab } from "../components/permission-tab/PermissionTab";
 import { UserDataTable } from "../components/users/UserDataTable";
 import { toUsers, UserTab } from "./routes/Users";
-import { RoutableTabs, useRoutableTab } from "../components/routable-tabs/RoutableTabs";
+import { RoutableTabs, Tab, useRoutableTab } from "../components/routable-tabs/RoutableTabs";
 import useIsFeatureEnabled, { Feature } from "../utils/useIsFeatureEnabled";
 import { useAccess } from "../context/access/Access";
 
@@ -63,15 +63,17 @@ export default function UsersSection() {
                     mountOnEnter
                 >
                     <Tab
+                        eventKey={listTab.eventKey}
                         id="list"
                         data-testid="listTab"
-                        title={<TabTitleText>{t("userList")}</TabTitleText>}
+                        title={t("userList")}
                         {...listTab}
                     >
                         <UserDataTable />
                     </Tab>
                     {canViewPermissions && (
                         <Tab
+                            eventKey={permissionsTab.eventKey}
                             id="permissions"
                             data-testid="permissionsTab"
                             title={t("permissions")}

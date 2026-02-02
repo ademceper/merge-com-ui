@@ -12,13 +12,8 @@
 // @ts-nocheck
 
 import { HelpItem } from "../../../shared/keycloak-ui-shared";
-import { Label } from "../../../shared/@patternfly/react-core";
-import {
-    CodeBranchIcon,
-    MapMarkerIcon,
-    ProcessAutomationIcon,
-    TaskIcon
-} from "../../../shared/@patternfly/react-icons";
+import { Badge } from "@merge/ui/components/badge";
+import { GitBranch, MapPin, Robot, ListChecks } from "@phosphor-icons/react";
 import { useTranslation } from "react-i18next";
 import { useAuthenticationProvider } from "./AuthenticationProviderContext";
 import { FlowType } from "./FlowRow";
@@ -34,13 +29,13 @@ type FlowTitleProps = {
 const FlowIcon = ({ type }: { type: FlowType }) => {
     switch (type) {
         case "condition":
-            return <TaskIcon />;
+            return <ListChecks className="size-4" />;
         case "flow":
-            return <CodeBranchIcon />;
+            return <GitBranch className="size-4" />;
         case "execution":
-            return <ProcessAutomationIcon />;
+            return <Robot className="size-4" />;
         case "step":
-            return <MapMarkerIcon />;
+            return <MapPin className="size-4" />;
         default:
             return undefined;
     }
@@ -68,9 +63,10 @@ export const FlowTitle = ({ id, type, title, subtitle, providerId }: FlowTitlePr
     return (
         <div data-testid={title}>
             <span data-id={id} id={`title-id-${id}`}>
-                <Label icon={<FlowIcon type={type} />} color={mapTypeToColor(type)}>
+                <Badge variant="secondary" className="gap-1">
+                    <FlowIcon type={type} />
                     {t(type)}
-                </Label>{" "}
+                </Badge>{" "}
                 {title} {helpText && <HelpItem helpText={helpText} fieldLabelId={id!} />}
             </span>
         </div>

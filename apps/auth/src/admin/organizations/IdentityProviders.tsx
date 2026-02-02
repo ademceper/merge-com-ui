@@ -18,15 +18,10 @@ import {
     useAlerts,
     useFetch
 } from "../../shared/keycloak-ui-shared";
-import {
-    Button,
-    ButtonVariant,
-    PageSection,
-    Switch,
-    ToolbarItem
-} from "../../shared/@patternfly/react-core";
+import { Button } from "@merge/ui/components/button";
+import { Switch } from "@merge/ui/components/switch";
 import { sortBy } from "lodash-es";
-import { BellIcon } from "../../shared/@patternfly/react-icons";
+import { Bell } from "@phosphor-icons/react";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useParams } from "react-router-dom";
@@ -66,10 +61,8 @@ const ShownOnLoginPageCheck = ({ row, refresh }: ShownOnLoginPageCheckProps) => 
 
     return (
         <Switch
-            label={t("on")}
-            labelOff={t("off")}
-            isChecked={row.hideOnLogin}
-            onChange={(_, value) => toggle(value)}
+            checked={row.hideOnLogin}
+            onCheckedChange={(value) => toggle(value)}
         />
     );
 };
@@ -107,7 +100,7 @@ export const IdentityProviders = () => {
         titleKey: "identityProviderUnlink",
         messageKey: "identityProviderUnlinkConfirm",
         continueButtonLabel: "unLinkIdentityProvider",
-        continueButtonVariant: ButtonVariant.danger,
+        continueButtonVariant: "destructive",
         onConfirm: async () => {
             try {
                 await adminClient.organizations.unLinkIdp({
@@ -134,7 +127,7 @@ export const IdentityProviders = () => {
                     }}
                 />
             )}
-            <PageSection variant="light">
+            <div className="p-6">
                 <UnlinkConfirm />
                 {open && (
                     <LinkIdentityProviderModal
@@ -148,7 +141,7 @@ export const IdentityProviders = () => {
                 )}
                 {!hasProviders ? (
                     <ListEmptyState
-                        icon={BellIcon}
+                        icon={Bell}
                         message={t("noIdentityProvider")}
                         instructions={t("noIdentityProviderInstructions")}
                     />
@@ -160,7 +153,7 @@ export const IdentityProviders = () => {
                         searchPlaceholderKey="searchProvider"
                         toolbarItem={
                             <>
-                                <ToolbarItem>
+                                <div>
                                     <Button
                                         onClick={() => {
                                             setSelectedRow(undefined);
@@ -169,8 +162,8 @@ export const IdentityProviders = () => {
                                     >
                                         {t("linkIdentityProvider")}
                                     </Button>
-                                </ToolbarItem>
-                                <ToolbarItem>
+                                </div>
+                                <div>
                                     <Button
                                         data-testid="manageDisplayOrder"
                                         variant="link"
@@ -178,7 +171,7 @@ export const IdentityProviders = () => {
                                     >
                                         {t("manageDisplayOrder")}
                                     </Button>
-                                </ToolbarItem>
+                                </div>
                             </>
                         }
                         actions={[
@@ -227,7 +220,7 @@ export const IdentityProviders = () => {
                         }
                     />
                 )}
-            </PageSection>
+            </div>
         </>
     );
 };

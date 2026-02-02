@@ -13,33 +13,20 @@
 
 import type PasswordPolicyTypeRepresentation from "@keycloak/keycloak-admin-client/lib/defs/passwordPolicyTypeRepresentation";
 import type RealmRepresentation from "@keycloak/keycloak-admin-client/lib/defs/realmRepresentation";
+import { AlertVariant, useAlerts } from "../../../shared/keycloak-ui-shared";
+import { Button } from "@merge/ui/components/button";
+import { Separator } from "@merge/ui/components/separator";
 import {
-    ActionGroup,
-    AlertVariant,
-    Button,
-    ButtonVariant,
-    Divider,
-    EmptyState,
-    EmptyStateActions,
-    EmptyStateBody,
-    EmptyStateFooter,
-    EmptyStateHeader,
-    EmptyStateIcon,
-    PageSection,
-    Toolbar,
-    ToolbarContent,
-    ToolbarItem,
-    Select,
-    MenuToggle,
-    SelectList,
-    SelectOption
-} from "../../../shared/@patternfly/react-core";
-import { PlusCircleIcon } from "../../../shared/@patternfly/react-icons";
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuTrigger
+} from "@merge/ui/components/dropdown-menu";
+import { PlusCircle } from "@phosphor-icons/react";
 import { useEffect, useMemo, useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { useAdminClient } from "../../admin-client";
-import { useAlerts } from "../../../shared/keycloak-ui-shared";
 import { FormAccess } from "../../components/form/FormAccess";
 import { useRealm } from "../../context/realm-context/RealmContext";
 import { useServerInfo } from "../../context/server-info/ServerInfoProvider";
@@ -65,33 +52,31 @@ const PolicySelect = ({ onSelect, selectedPolicies }: PolicySelectProps) => {
     );
 
     return (
-        <Select
-            onSelect={(_, selection) => {
-                onSelect(selection as PasswordPolicyTypeRepresentation);
-                setOpen(false);
-            }}
-            toggle={ref => (
-                <MenuToggle
-                    ref={ref}
-                    onClick={() => setOpen(!open)}
-                    isExpanded={open}
-                    isDisabled={policies?.length === 0}
+        <DropdownMenu open={open} onOpenChange={setOpen}>
+            <DropdownMenuTrigger asChild>
+                <Button
+                    variant="outline"
+                    disabled={policies?.length === 0}
                     style={{ width: "300px" }}
                     data-testid="add-policy"
                 >
                     {t("addPolicy")}
-                </MenuToggle>
-            )}
-            isOpen={open}
-        >
-            <SelectList>
+                </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent>
                 {policies?.map(policy => (
-                    <SelectOption key={policy.id} value={policy}>
+                    <DropdownMenuItem
+                        key={policy.id}
+                        onClick={() => {
+                            onSelect(policy);
+                            setOpen(false);
+                        }}
+                    >
                         {policy.displayName}
-                    </SelectOption>
+                    </DropdownMenuItem>
                 ))}
-            </SelectList>
-        </Select>
+            </DropdownMenuContent>
+        </DropdownMenu>
     );
 };
 
@@ -153,21 +138,17 @@ export const PasswordPolicy = ({ realm, realmUpdated }: PasswordPolicyProps) => 
     };
 
     return (
-        <PageSection variant="light" className="pf-v5-u-p-0">
+        <div className="p-0">
             {(rows.length !== 0 || realm.passwordPolicy) && (
                 <>
-                    <Toolbar>
-                        <ToolbarContent>
-                            <ToolbarItem>
-                                <PolicySelect
-                                    onSelect={onSelect}
-                                    selectedPolicies={rows}
-                                />
-                            </ToolbarItem>
-                        </ToolbarContent>
-                    </Toolbar>
-                    <Divider />
-                    <PageSection variant="light">
+                    <div className="flex items-center gap-2 p-4">
+                        <PolicySelect
+                            onSelect={onSelect}
+                            selectedPolicies={rows}
+                        />
+                    </div>
+                    <Separator />
+                    <div className="p-6">
                         <FormProvider {...form}>
                             <FormAccess
                                 className="keycloak__policies_authentication__form"
@@ -185,7 +166,7 @@ export const PasswordPolicy = ({ realm, realmUpdated }: PasswordPolicyProps) => 
                                         }}
                                     />
                                 ))}
-                                <ActionGroup>
+                                <div className="flex gap-2">
                                     <Button
                                         data-testid="save"
                                         variant="primary"
@@ -196,32 +177,25 @@ export const PasswordPolicy = ({ realm, realmUpdated }: PasswordPolicyProps) => 
                                     </Button>
                                     <Button
                                         data-testid="reload"
-                                        variant={ButtonVariant.link}
+                                        variant="link"
                                         onClick={() => setupForm(realm)}
                                     >
                                         {t("reload")}
                                     </Button>
-                                </ActionGroup>
+                                </div>
                             </FormAccess>
                         </FormProvider>
-                    </PageSection>
+                    </div>
                 </>
             )}
             {!rows.length && !realm.passwordPolicy && (
-                <EmptyState data-testid="empty-state" variant="lg">
-                    <EmptyStateHeader
-                        titleText={<>{t("noPasswordPolicies")}</>}
-                        icon={<EmptyStateIcon icon={PlusCircleIcon} />}
-                        headingLevel="h1"
-                    />
-                    <EmptyStateBody>{t("noPasswordPoliciesInstructions")}</EmptyStateBody>
-                    <EmptyStateFooter>
-                        <EmptyStateActions>
-                            <PolicySelect onSelect={onSelect} selectedPolicies={[]} />
-                        </EmptyStateActions>
-                    </EmptyStateFooter>
-                </EmptyState>
+                <div data-testid="empty-state" className="flex flex-col items-center justify-center py-16 gap-4">
+                    <PlusCircle className="size-10 text-muted-foreground" />
+                    <h1 className="text-xl font-semibold">{t("noPasswordPolicies")}</h1>
+                    <p className="text-muted-foreground">{t("noPasswordPoliciesInstructions")}</p>
+                    <PolicySelect onSelect={onSelect} selectedPolicies={[]} />
+                </div>
             )}
-        </PageSection>
+        </div>
     );
 };

@@ -12,12 +12,8 @@
 // @ts-nocheck
 
 import type ClientInitialAccessPresentation from "@keycloak/keycloak-admin-client/lib/defs/clientInitialAccessPresentation";
-import {
-    AlertVariant,
-    Button,
-    ButtonVariant
-} from "../../../shared/@patternfly/react-core";
-import { wrappable } from "../../../shared/@patternfly/react-table";
+import { AlertVariant } from "../../../shared/keycloak-ui-shared";
+import { Button } from "@merge/ui/components/button";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Link, useNavigate } from "react-router-dom";
@@ -55,7 +51,7 @@ export const InitialAccessTokenList = () => {
         titleKey: "tokenDeleteConfirmTitle",
         messageKey: t("tokenDeleteConfirm", { id: token?.id }),
         continueButtonLabel: "delete",
-        continueButtonVariant: ButtonVariant.danger,
+        continueButtonVariant: "danger",
         onConfirm: async () => {
             try {
                 await adminClient.realms.delClientsInitialAccess({
@@ -80,11 +76,11 @@ export const InitialAccessTokenList = () => {
                 loader={loader}
                 toolbarItem={
                     <Button
-                        component={props => (
-                            <Link {...props} to={toCreateInitialAccessToken({ realm })} />
-                        )}
+                        asChild
                     >
-                        {t("create")}
+                        <Link to={toCreateInitialAccessToken({ realm })}>
+                            {t("create")}
+                        </Link>
                     </Button>
                 }
                 actions={[
@@ -125,8 +121,7 @@ export const InitialAccessTokenList = () => {
                     },
                     {
                         name: "remainingCount",
-                        displayKey: "remainingCount",
-                        transforms: [wrappable]
+                        displayKey: "remainingCount"
                     }
                 ]}
                 emptyState={

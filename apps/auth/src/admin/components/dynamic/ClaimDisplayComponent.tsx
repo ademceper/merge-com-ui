@@ -11,19 +11,10 @@
 
 // @ts-nocheck
 
-import {
-    ActionList,
-    ActionListItem,
-    Button,
-    EmptyState,
-    EmptyStateBody,
-    EmptyStateFooter,
-    Flex,
-    FlexItem,
-    FormGroup,
-    TextInput
-} from "../../../shared/@patternfly/react-core";
-import { MinusCircleIcon, PlusCircleIcon } from "../../../shared/@patternfly/react-icons";
+import { Button } from "@merge/ui/components/button";
+import { Input } from "@merge/ui/components/input";
+import { Label } from "@merge/ui/components/label";
+import { MinusCircle, PlusCircle } from "@phosphor-icons/react";
 import { useEffect, useState, useRef } from "react";
 import { useFormContext } from "react-hook-form";
 import { useTranslation } from "react-i18next";
@@ -142,92 +133,88 @@ export const ClaimDisplayComponent = ({
     };
 
     return displays.length !== 0 ? (
-        <FormGroup
-            label={t(label!)}
-            labelIcon={<HelpItem helpText={t(helpText!)} fieldLabelId={`${label}`} />}
-            fieldId={name!}
-            isRequired={required}
-        >
-            <Flex direction={{ default: "column" }}>
-                <Flex>
-                    <FlexItem flex={{ default: "flex_1" }}>
+        <div className="space-y-2">
+            <div className="flex items-center gap-1">
+                <Label htmlFor={name!}>{t(label!)}{required && " *"}</Label>
+                <HelpItem helpText={t(helpText!)} fieldLabelId={`${label}`} />
+            </div>
+            <div className="flex flex-col gap-2">
+                <div className="flex gap-2">
+                    <div className="flex-1">
                         <strong>{t("claimDisplayName")}</strong>
-                    </FlexItem>
-                    <FlexItem flex={{ default: "flex_1" }}>
+                    </div>
+                    <div className="flex-1">
                         <strong>{t("claimDisplayLocale")}</strong>
-                    </FlexItem>
-                </Flex>
+                    </div>
+                </div>
                 {displays.map((display, index) => (
-                    <Flex key={display.id} data-testid="claim-display-row">
-                        <FlexItem flex={{ default: "flex_1" }}>
-                            <TextInput
+                    <div className="flex gap-2" key={display.id} data-testid="claim-display-row">
+                        <div className="flex-1">
+                            <Input
                                 id={`${fieldName}.${index}.name`}
                                 data-testid={`${fieldName}.${index}.name`}
                                 value={display.name}
-                                onChange={(_event, value) => updateName(index, value)}
+                                onChange={(e) => updateName(index, e.target.value)}
                                 onBlur={() => flushUpdate()}
-                                isDisabled={isDisabled}
+                                disabled={isDisabled}
                                 placeholder={t("claimDisplayNamePlaceholder")}
                             />
-                        </FlexItem>
-                        <FlexItem flex={{ default: "flex_1" }}>
-                            <TextInput
+                        </div>
+                        <div className="flex-1">
+                            <Input
                                 id={`${fieldName}.${index}.locale`}
                                 data-testid={`${fieldName}.${index}.locale`}
                                 value={display.locale}
-                                onChange={(_event, value) => updateLocale(index, value)}
+                                onChange={(e) => updateLocale(index, e.target.value)}
                                 onBlur={() => flushUpdate()}
-                                isDisabled={isDisabled}
+                                disabled={isDisabled}
                                 placeholder={t("claimDisplayLocalePlaceholder")}
                             />
-                        </FlexItem>
-                        <FlexItem>
+                        </div>
+                        <div>
                             <Button
                                 variant="link"
                                 title={t("removeClaimDisplay")}
-                                isDisabled={isDisabled}
+                                disabled={isDisabled}
                                 onClick={() => remove(index)}
                                 data-testid={`${fieldName}.${index}.remove`}
                             >
-                                <MinusCircleIcon />
+                                <MinusCircle className="size-4" />
                             </Button>
-                        </FlexItem>
-                    </Flex>
+                        </div>
+                    </div>
                 ))}
-            </Flex>
-            <ActionList>
-                <ActionListItem>
-                    <Button
-                        data-testid={`${fieldName}-add-row`}
-                        className="pf-v5-u-px-0 pf-v5-u-mt-sm"
-                        variant="link"
-                        icon={<PlusCircleIcon />}
-                        onClick={() => appendNew()}
-                    >
-                        {t("addClaimDisplay")}
-                    </Button>
-                </ActionListItem>
-            </ActionList>
-        </FormGroup>
+            </div>
+            <div className="mt-2">
+                <Button
+                    data-testid={`${fieldName}-add-row`}
+                    className="px-0 mt-1"
+                    variant="link"
+                    onClick={() => appendNew()}
+                >
+                    <PlusCircle className="size-4 mr-1" />
+                    {t("addClaimDisplay")}
+                </Button>
+            </div>
+        </div>
     ) : (
-        <EmptyState
+        <div
             data-testid={`${fieldName}-empty-state`}
-            className="pf-v5-u-p-0"
-            variant="xs"
+            className="p-0 text-center"
         >
-            <EmptyStateBody>{t("noClaimDisplayEntries")}</EmptyStateBody>
-            <EmptyStateFooter>
+            <p className="text-muted-foreground">{t("noClaimDisplayEntries")}</p>
+            <div className="mt-2">
                 <Button
                     data-testid={`${fieldName}-add-row`}
                     variant="link"
-                    icon={<PlusCircleIcon />}
                     size="sm"
                     onClick={appendNew}
-                    isDisabled={isDisabled}
+                    disabled={isDisabled}
                 >
+                    <PlusCircle className="size-4 mr-1" />
                     {t("addClaimDisplay")}
                 </Button>
-            </EmptyStateFooter>
-        </EmptyState>
+            </div>
+        </div>
     );
 };

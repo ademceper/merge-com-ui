@@ -18,22 +18,13 @@ import {
     SelectVariant,
     useAlerts
 } from "../../../shared/keycloak-ui-shared";
-import {
-    ActionGroup,
-    Alert,
-    AlertVariant,
-    Button,
-    ButtonVariant,
-    Checkbox,
-    InputGroup,
-    InputGroupItem,
-    SelectOption,
-    Text,
-    TextContent,
-    TextInput,
-    TextVariants
-} from "../../../shared/@patternfly/react-core";
-import { CheckIcon } from "../../../shared/@patternfly/react-icons";
+import { Alert, AlertDescription } from "@merge/ui/components/alert";
+import { AlertVariant } from "../../../shared/keycloak-ui-shared";
+import { Button } from "@merge/ui/components/button";
+import { Checkbox } from "@merge/ui/components/checkbox";
+import { Input } from "@merge/ui/components/input";
+import { SelectOption } from "../../../shared/@patternfly/react-core";
+import { Check } from "@phosphor-icons/react";
 import { ReactNode, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
@@ -191,10 +182,10 @@ export function UserDataTableAttributeSearchForm({
             );
         } else {
             return (
-                <TextInput
+                <Input
                     id="name"
                     placeholder={t("keyPlaceholder")}
-                    validated={errors.name && "error"}
+                    className={errors.name ? "border-destructive" : ""}
                     onKeyDown={e => e.key === "Enter" && addToFilter()}
                     {...register("name", {
                         required: true,
@@ -210,34 +201,33 @@ export function UserDataTableAttributeSearchForm({
             className="user-attribute-search-form"
             data-testid="user-attribute-search-form"
         >
-            <TextContent className="user-attribute-search-form-headline">
-                <Text component={TextVariants.h2}>{t("selectAttributes")}</Text>
-            </TextContent>
+            <div className="user-attribute-search-form-headline">
+                <h2>{t("selectAttributes")}</h2>
+            </div>
             <Alert
-                isInline
                 className="user-attribute-search-form-alert"
-                variant="info"
-                title={t("searchUserByAttributeDescription")}
-                component="h3"
-            />
-            <TextContent className="user-attribute-search-form-key-value">
+                variant="default"
+            >
+                <AlertDescription>{t("searchUserByAttributeDescription")}</AlertDescription>
+            </Alert>
+            <div className="user-attribute-search-form-key-value flex gap-4">
                 <div className="user-attribute-search-form-left">
-                    <Text component={TextVariants.h3}>{t("key")}</Text>
+                    <h3>{t("key")}</h3>
                 </div>
                 <div className="user-attribute-search-form-right">
-                    <Text component={TextVariants.h3}>{t("value")}</Text>
+                    <h3>{t("value")}</h3>
                 </div>
-            </TextContent>
+            </div>
             <div className="user-attribute-search-form-left">
                 {createAttributeKeyInputField()}
             </div>
             <div className="user-attribute-search-form-right">
-                <InputGroup>
-                    <InputGroupItem>
-                        <TextInput
+                <div className="flex gap-2">
+                    <div className="flex-1">
+                        <Input
                             id="value"
                             placeholder={t("valuePlaceholder")}
-                            validated={errors.value && "error"}
+                            className={errors.value ? "border-destructive" : ""}
                             onKeyDown={e => {
                                 if (e.key === "Enter") {
                                     e.preventDefault();
@@ -249,46 +239,48 @@ export function UserDataTableAttributeSearchForm({
                                 validate: isAttributeValueValid
                             })}
                         />
-                    </InputGroupItem>
-                    <InputGroupItem>
+                    </div>
+                    <div>
                         <Button
                             data-testid="user-attribute-search-add-filter-button"
-                            variant="control"
-                            icon={<CheckIcon />}
+                            variant="outline"
                             onClick={addToFilter}
                             aria-label={t("addToFilter")}
-                        />
-                    </InputGroupItem>
-                </InputGroup>
+                        >
+                            <Check className="size-4" />
+                        </Button>
+                    </div>
+                </div>
             </div>
             {createAttributeSearchChips()}
 
             <div className="pf-v5-u-pt-lg">
-                <Checkbox
-                    id="exact"
-                    data-testid="exact"
-                    label={t("exactSearch")}
-                    isChecked={activeFilters.exact}
-                    onChange={(_, value) => {
-                        setActiveFilters({
-                            ...activeFilters,
-                            exact: value
-                        });
-                    }}
-                />
+                <div className="flex items-center gap-2">
+                    <Checkbox
+                        id="exact"
+                        data-testid="exact"
+                        checked={activeFilters.exact}
+                        onCheckedChange={(value) => {
+                            setActiveFilters({
+                                ...activeFilters,
+                                exact: !!value
+                            });
+                        }}
+                    />
+                    <label htmlFor="exact">{t("exactSearch")}</label>
+                </div>
             </div>
-            <ActionGroup className="user-attribute-search-form-action-group">
+            <div className="flex gap-2 user-attribute-search-form-action-group">
                 <Button
                     data-testid="search-user-attribute-btn"
-                    variant="primary"
                     type="submit"
-                    isDisabled={!activeFilters.userAttribute.length}
+                    disabled={!activeFilters.userAttribute.length}
                     onClick={searchUserWithAttributes}
                 >
                     {t("search")}
                 </Button>
                 <Button
-                    variant={ButtonVariant.link}
+                    variant="link"
                     onClick={() => {
                         reset();
                         clearActiveFilters();
@@ -296,7 +288,7 @@ export function UserDataTableAttributeSearchForm({
                 >
                     {t("reset")}
                 </Button>
-            </ActionGroup>
+            </div>
         </Form>
     );
 }

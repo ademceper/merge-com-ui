@@ -12,7 +12,7 @@
 // @ts-nocheck
 
 import { FormSubmitButton } from "../../shared/keycloak-ui-shared";
-import { ActionGroup, Button, PageSection } from "../../shared/@patternfly/react-core";
+import { Button } from "@merge/ui/components/button";
 import { FormProvider, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { Link, useNavigate } from "react-router-dom";
@@ -48,27 +48,27 @@ export default function NewOrganization() {
     return (
         <>
             <ViewHeader titleKey="createOrganization" />
-            <PageSection variant="light">
+            <div className="p-6">
                 <FormAccess role="anyone" onSubmit={handleSubmit(save)} isHorizontal>
                     <FormProvider {...form}>
                         <OrganizationForm />
-                        <ActionGroup>
+                        <div className="flex gap-2">
                             <FormSubmitButton formState={formState} data-testid="save">
                                 {t("save")}
                             </FormSubmitButton>
                             <Button
                                 data-testid="cancel"
                                 variant="link"
-                                component={props => (
-                                    <Link {...props} to={toOrganizations({ realm })} />
-                                )}
+                                asChild
                             >
-                                {t("cancel")}
+                                <Link to={toOrganizations({ realm })}>
+                                    {t("cancel")}
+                                </Link>
                             </Button>
-                        </ActionGroup>
+                        </div>
                     </FormProvider>
                 </FormAccess>
-            </PageSection>
+            </div>
         </>
     );
 }

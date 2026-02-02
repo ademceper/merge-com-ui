@@ -13,8 +13,8 @@
 
 import type UserRepresentation from "@keycloak/keycloak-admin-client/lib/defs/userRepresentation";
 import { FormErrorText, HelpItem, useFetch } from "../../../shared/keycloak-ui-shared";
+import { Button } from "@merge/ui/components/button";
 import {
-    Button,
     Chip,
     ChipGroup,
     FormGroup,
@@ -26,7 +26,7 @@ import {
     TextInputGroupMain,
     TextInputGroupUtilities
 } from "../../../shared/@patternfly/react-core";
-import { TimesIcon } from "../../../shared/@patternfly/react-icons";
+import { X } from "@phosphor-icons/react";
 import { debounce } from "lodash-es";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Controller, useFormContext } from "react-hook-form";
@@ -220,7 +220,7 @@ export const UserSelect = ({
                                                 }}
                                                 aria-label="Clear input value"
                                             >
-                                                <TimesIcon aria-hidden />
+                                                <X className="size-4" aria-hidden />
                                             </Button>
                                         )}
                                     </TextInputGroupUtilities>

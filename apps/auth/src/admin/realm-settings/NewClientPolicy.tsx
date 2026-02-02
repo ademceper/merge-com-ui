@@ -15,32 +15,18 @@ import type ClientPolicyRepresentation from "@keycloak/keycloak-admin-client/lib
 import type ClientProfileRepresentation from "@keycloak/keycloak-admin-client/lib/defs/clientProfileRepresentation";
 import {
     HelpItem,
-    KeycloakTextArea,
     TextControl,
     useAlerts,
-    useFetch
+    useFetch,
+    AlertVariant
 } from "../../shared/keycloak-ui-shared";
-import {
-    ActionGroup,
-    AlertVariant,
-    Button,
-    ButtonVariant,
-    DataList,
-    DataListCell,
-    DataListItem,
-    DataListItemCells,
-    DataListItemRow,
-    Divider,
-    DropdownItem,
-    Flex,
-    FlexItem,
-    FormGroup,
-    Label,
-    PageSection,
-    Text,
-    TextVariants
-} from "../../shared/@patternfly/react-core";
-import { PlusCircleIcon, TrashIcon } from "../../shared/@patternfly/react-icons";
+import { Badge } from "@merge/ui/components/badge";
+import { Button } from "@merge/ui/components/button";
+import { DropdownMenuItem } from "@merge/ui/components/dropdown-menu";
+import { Label } from "@merge/ui/components/label";
+import { Separator } from "@merge/ui/components/separator";
+import { Textarea } from "@merge/ui/components/textarea";
+import { Plus, Trash } from "@phosphor-icons/react";
 import { useState } from "react";
 import { Controller, FormProvider, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
@@ -217,7 +203,7 @@ export default function NewClientPolicy() {
             policyName: policyName
         }),
         continueButtonLabel: t("delete"),
-        continueButtonVariant: ButtonVariant.danger,
+        continueButtonVariant: "destructive",
         onConfirm: async () => {
             const updatedPolicies = policies?.filter(
                 policy => policy.name !== policyName
@@ -246,7 +232,7 @@ export default function NewClientPolicy() {
             condition: conditionToDelete?.name
         }),
         continueButtonLabel: t("delete"),
-        continueButtonVariant: ButtonVariant.danger,
+        continueButtonVariant: "destructive",
         onConfirm: async () => {
             if (conditionToDelete?.name) {
                 currentPolicy?.conditions?.splice(conditionToDelete.idx!, 1);
@@ -289,7 +275,7 @@ export default function NewClientPolicy() {
             policyName
         }),
         continueButtonLabel: t("delete"),
-        continueButtonVariant: ButtonVariant.danger,
+        continueButtonVariant: "destructive",
         onConfirm: async () => {
             if (profileToDelete?.name) {
                 currentPolicy?.profiles?.splice(profileToDelete.idx!, 1);
@@ -430,16 +416,13 @@ export default function NewClientPolicy() {
                                 (showAddConditionsAndProfilesForm || policyName) &&
                                 !isGlobalPolicy
                                     ? [
-                                          <DropdownItem
+                                            <DropdownMenuItem
                                               key="delete"
-                                              value="delete"
-                                              onClick={() => {
-                                                  toggleDeleteDialog();
-                                              }}
                                               data-testid="deleteClientPolicyDropdown"
+                                              onClick={() => toggleDeleteDialog()}
                                           >
                                               {t("deleteClientPolicy")}
-                                          </DropdownItem>
+                                          </DropdownMenuItem>
                                       ]
                                     : undefined
                             }
@@ -457,12 +440,12 @@ export default function NewClientPolicy() {
                     </>
                 )}
             />
-            <PageSection variant="light">
+            <section className="py-6 bg-muted/30">
                 <FormAccess
                     onSubmit={handleSubmit(save)}
                     isHorizontal
                     role="view-realm"
-                    className="pf-v5-u-mt-lg"
+                    className="mt-6"
                 >
                     <FormProvider {...form}>
                         <TextControl
@@ -476,26 +459,27 @@ export default function NewClientPolicy() {
                                         : true
                             }}
                         />
-                        <FormGroup label={t("description")} fieldId="kc-description">
-                            <KeycloakTextArea
-                                aria-label={t("description")}
+                        <div className="space-y-2">
+                            <Label htmlFor="kc-client-policy-description">{t("description")}</Label>
+                            <Textarea
                                 id="kc-client-policy-description"
                                 data-testid="client-policy-description"
                                 {...form.register("description")}
+                                className="min-h-[80px]"
                             />
-                        </FormGroup>
-                        <ActionGroup>
+                        </div>
+                        <div className="flex gap-2 mt-4">
                             <Button
-                                variant="primary"
                                 type="submit"
                                 data-testid="saveCreatePolicy"
-                                isDisabled={!form.formState.isValid || isGlobalPolicy}
+                                disabled={!form.formState.isValid || isGlobalPolicy}
                             >
                                 {t("save")}
                             </Button>
                             <Button
                                 id="cancelCreatePolicy"
-                                variant="link"
+                                variant="ghost"
+                                type="button"
                                 onClick={() =>
                                     (showAddConditionsAndProfilesForm || policyName) &&
                                     !isGlobalPolicy
@@ -513,143 +497,92 @@ export default function NewClientPolicy() {
                                     ? t("reload")
                                     : t("cancel")}
                             </Button>
-                        </ActionGroup>
+                        </div>
                         {(showAddConditionsAndProfilesForm ||
                             form.formState.isSubmitted) && (
                             <>
-                                <Flex>
-                                    <FlexItem>
-                                        <Text
-                                            className="kc-conditions"
-                                            component={TextVariants.h1}
-                                        >
-                                            {t("conditions")}
-                                            <HelpItem
-                                                helpText={t("conditionsHelp")}
-                                                fieldLabelId="conditions"
-                                            />
-                                        </Text>
-                                    </FlexItem>
+                                <div className="flex flex-wrap items-center justify-between gap-4 mt-6">
+                                    <h2 className="kc-conditions text-lg font-medium">
+                                        {t("conditions")}
+                                        <HelpItem
+                                            helpText={t("conditionsHelp")}
+                                            fieldLabelId="conditions"
+                                        />
+                                    </h2>
                                     {!isGlobalPolicy && (
-                                        <FlexItem align={{ default: "alignRight" }}>
-                                            <Button
-                                                id="addCondition"
-                                                component={props => (
-                                                    <Link
-                                                        {...props}
-                                                        to={toNewClientPolicyCondition({
-                                                            realm,
-                                                            policyName: policyName!
-                                                        })}
-                                                    ></Link>
-                                                )}
-                                                variant="link"
-                                                className="kc-addCondition"
-                                                data-testid="addCondition"
-                                                icon={<PlusCircleIcon />}
-                                            >
+                                        <Button
+                                            id="addCondition"
+                                            variant="ghost"
+                                            className="kc-addCondition"
+                                            data-testid="addCondition"
+                                            asChild
+                                        >
+                                            <Link to={toNewClientPolicyCondition({ realm, policyName: policyName! })}>
+                                                <Plus className="size-4 mr-1 inline" />
                                                 {t("addCondition")}
-                                            </Button>
-                                        </FlexItem>
+                                            </Link>
+                                        </Button>
                                     )}
-                                </Flex>
+                                </div>
                                 {policyConditions.length > 0 ? (
-                                    <DataList aria-label={t("conditions")} isCompact>
+                                    <ul className="mt-2 space-y-1 border rounded-md divide-y" aria-label={t("conditions")}>
                                         {policyConditions.map((condition, idx) => (
-                                            <DataListItem
-                                                aria-labelledby="conditions-list-item"
+                                            <li
                                                 key={`list-item-${idx}`}
                                                 id={condition.condition}
                                                 data-testid="conditions-list-item"
+                                                className="flex items-center justify-between gap-2 py-2 px-3"
                                             >
-                                                <DataListItemRow data-testid="conditions-list-row">
-                                                    <DataListItemCells
-                                                        dataListCells={[
-                                                            <DataListCell
-                                                                key={`name-${idx}`}
-                                                                data-testid="condition-type"
-                                                            >
-                                                                {Object.keys(
-                                                                    condition.configuration!
-                                                                ).length !== 0 ? (
-                                                                    <Link
-                                                                        key={
-                                                                            condition.condition
-                                                                        }
-                                                                        data-testid={`${condition.condition}-condition-link`}
-                                                                        to={toEditClientPolicyCondition(
-                                                                            {
-                                                                                realm,
-                                                                                conditionName:
-                                                                                    condition.condition!,
-                                                                                policyName:
-                                                                                    policyName
-                                                                            }
-                                                                        )}
-                                                                        className="kc-condition-link"
+                                                <span data-testid="condition-type" className="flex items-center gap-2 min-w-0">
+                                                    {Object.keys(condition.configuration!).length !== 0 ? (
+                                                        <Link
+                                                            key={condition.condition}
+                                                            data-testid={`${condition.condition}-condition-link`}
+                                                            to={toEditClientPolicyCondition({
+                                                                realm,
+                                                                conditionName: condition.condition!,
+                                                                policyName: policyName
+                                                            })}
+                                                            className="kc-condition-link text-primary underline underline-offset-4"
+                                                        >
+                                                            {condition.condition}
+                                                        </Link>
+                                                    ) : (
+                                                        condition.condition
+                                                    )}
+                                                    {conditionTypes?.map(type =>
+                                                        type.id === condition.condition && (
+                                                            <span key={type.id} className="flex items-center gap-1">
+                                                                <HelpItem helpText={type.helpText} fieldLabelId={condition.condition} />
+                                                                {!isGlobalPolicy && (
+                                                                    <Button
+                                                                        type="button"
+                                                                        variant="ghost"
+                                                                        size="icon"
+                                                                        aria-label="remove-condition"
+                                                                        className="kc-conditionType-trash-icon shrink-0"
+                                                                        data-testid={`delete-${condition.condition}-condition`}
+                                                                        onClick={() => {
+                                                                            toggleDeleteConditionDialog();
+                                                                            setConditionToDelete({ idx, name: type.id! });
+                                                                        }}
                                                                     >
-                                                                        {
-                                                                            condition.condition
-                                                                        }
-                                                                    </Link>
-                                                                ) : (
-                                                                    condition.condition
+                                                                        <Trash className="size-4" />
+                                                                    </Button>
                                                                 )}
-                                                                {conditionTypes?.map(
-                                                                    type =>
-                                                                        type.id ===
-                                                                            condition.condition && (
-                                                                            <>
-                                                                                <HelpItem
-                                                                                    helpText={
-                                                                                        type.helpText
-                                                                                    }
-                                                                                    fieldLabelId={
-                                                                                        condition.condition
-                                                                                    }
-                                                                                />
-                                                                                {!isGlobalPolicy && (
-                                                                                    <Button
-                                                                                        variant="link"
-                                                                                        aria-label="remove-condition"
-                                                                                        isInline
-                                                                                        icon={
-                                                                                            <TrashIcon
-                                                                                                className="kc-conditionType-trash-icon"
-                                                                                                data-testid={`delete-${condition.condition}-condition`}
-                                                                                                onClick={() => {
-                                                                                                    toggleDeleteConditionDialog();
-                                                                                                    setConditionToDelete(
-                                                                                                        {
-                                                                                                            idx: idx,
-                                                                                                            name: type.id!
-                                                                                                        }
-                                                                                                    );
-                                                                                                }}
-                                                                                            />
-                                                                                        }
-                                                                                    ></Button>
-                                                                                )}
-                                                                            </>
-                                                                        )
-                                                                )}
-                                                            </DataListCell>
-                                                        ]}
-                                                    />
-                                                </DataListItemRow>
-                                            </DataListItem>
+                                                            </span>
+                                                        )
+                                                    )}
+                                                </span>
+                                            </li>
                                         ))}
-                                    </DataList>
+                                    </ul>
                                 ) : (
                                     <>
-                                        <Divider />
-                                        <Text
-                                            data-testid="no-conditions"
-                                            className="kc-emptyConditions"
-                                            component={TextVariants.h2}
-                                        >
+                                        <Separator className="my-4" />
+                                        <h3 data-testid="no-conditions" className="kc-emptyConditions text-base font-medium text-muted-foreground">
                                             {t("emptyConditions")}
-                                        </Text>
+                                        </h3>
                                     </>
                                 )}
                             </>
@@ -784,7 +717,7 @@ export default function NewClientPolicy() {
                         )}
                     </FormProvider>
                 </FormAccess>
-            </PageSection>
+            </section>
         </>
     );
 }

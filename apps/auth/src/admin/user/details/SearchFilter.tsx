@@ -12,15 +12,10 @@
 // @ts-nocheck
 
 import { KeycloakSelect } from "../../../shared/keycloak-ui-shared";
-import {
-    Dropdown,
-    DropdownItem,
-    DropdownList,
-    MenuToggle,
-    SelectOption,
-    ToolbarItem
-} from "../../../shared/@patternfly/react-core";
-import { FilterIcon } from "../../../shared/@patternfly/react-icons";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@merge/ui/components/dropdown-menu";
+import { Button } from "@merge/ui/components/button";
+import { SelectOption } from "../../../shared/@patternfly/react-core";
+import { Funnel } from "@phosphor-icons/react";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 
@@ -37,38 +32,36 @@ export const SearchDropdown = ({ searchType, onSelect }: SearchDropdownProps) =>
     const { t } = useTranslation();
     const [searchToggle, setSearchToggle] = useState(false);
 
-    const createDropdown = (searchType: SearchType) => (
-        <DropdownItem
-            key={searchType}
+    const createDropdownItem = (type: SearchType) => (
+        <DropdownMenuItem
+            key={type}
             onClick={() => {
-                onSelect(searchType);
+                onSelect(type);
                 setSearchToggle(false);
             }}
         >
-            {t(`searchType.${searchType}`)}
-        </DropdownItem>
+            {t(`searchType.${type}`)}
+        </DropdownMenuItem>
     );
-    const options = [createDropdown("default"), createDropdown("attribute")];
 
     return (
-        <Dropdown
-            className="keycloak__users__searchtype"
-            onOpenChange={isOpen => setSearchToggle(isOpen)}
-            toggle={ref => (
-                <MenuToggle
+        <DropdownMenu open={searchToggle} onOpenChange={setSearchToggle}>
+            <DropdownMenuTrigger asChild>
+                <Button
                     data-testid="user-search-toggle"
-                    ref={ref}
                     id="toggle-id"
-                    onClick={() => setSearchToggle(!searchToggle)}
-                    icon={<FilterIcon />}
+                    variant="outline"
+                    className="keycloak__users__searchtype"
                 >
+                    <Funnel className="size-4" />
                     {t(`searchType.${searchType}`)}
-                </MenuToggle>
-            )}
-            isOpen={searchToggle}
-        >
-            <DropdownList>{options}</DropdownList>
-        </Dropdown>
+                </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent>
+                {createDropdownItem("default")}
+                {createDropdownItem("attribute")}
+            </DropdownMenuContent>
+        </DropdownMenu>
     );
 };
 
@@ -78,10 +71,10 @@ export const SearchToolbar = ({ searchType, onSelect }: SearchToolbarProps) => {
 
     return (
         <>
-            <ToolbarItem>
+            <div>
                 <SearchDropdown searchType={searchType} onSelect={onSelect} />
-            </ToolbarItem>
-            <ToolbarItem>
+            </div>
+            <div>
                 <KeycloakSelect
                     className="keycloak__users__searchtype"
                     onToggle={val => setOpen(val)}
@@ -92,7 +85,7 @@ export const SearchToolbar = ({ searchType, onSelect }: SearchToolbarProps) => {
                     <SelectOption value={"default"}>{t("default")}</SelectOption>
                     <SelectOption value={"attribute"}>{t("attribute")}</SelectOption>
                 </KeycloakSelect>
-            </ToolbarItem>
+            </div>
         </>
     );
 };

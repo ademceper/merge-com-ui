@@ -22,14 +22,10 @@ import {
     useAlerts,
     useFetch
 } from "../../shared/keycloak-ui-shared";
-import {
-    ActionGroup,
-    AlertVariant,
-    Button,
-    FormGroup,
-    PageSection,
-    SelectOption
-} from "../../shared/@patternfly/react-core";
+import { AlertVariant } from "../../shared/keycloak-ui-shared";
+import { Button } from "@merge/ui/components/button";
+import { Label } from "@merge/ui/components/label";
+import { SelectOption } from "../../shared/@patternfly/react-core";
 import { camelCase } from "lodash-es";
 import { useState } from "react";
 import { Controller, FormProvider, useForm } from "react-hook-form";
@@ -204,18 +200,17 @@ export default function NewClientPolicyCondition() {
                 }
                 divider
             />
-            <PageSection variant="light">
+            <div className="p-6">
                 <FormAccess
                     isHorizontal
                     role="manage-realm"
                     isReadOnly={isGlobalPolicy}
-                    className="pf-v5-u-mt-lg"
+                    className="mt-6"
                     onSubmit={form.handleSubmit(save)}
                 >
-                    <FormGroup
-                        label={t("conditionType")}
-                        fieldId="conditionType"
-                        labelIcon={
+                    <div className="space-y-2">
+                        <div className="flex items-center gap-1">
+                            <Label htmlFor="conditionType">{t("conditionType")}</Label>
                             <HelpItem
                                 helpText={
                                     conditionType
@@ -224,8 +219,7 @@ export default function NewClientPolicyCondition() {
                                 }
                                 fieldLabelId="conditionType"
                             />
-                        }
-                    >
+                        </div>
                         <Controller
                             name="conditions"
                             defaultValue={"any-client"}
@@ -279,18 +273,17 @@ export default function NewClientPolicyCondition() {
                                 </KeycloakSelect>
                             )}
                         />
-                    </FormGroup>
+                    </div>
 
                     <FormProvider {...form}>
                         <DynamicComponents properties={conditionProperties} />
                     </FormProvider>
                     {!isGlobalPolicy && (
-                        <ActionGroup>
+                        <div className="flex gap-2">
                             <Button
-                                variant="primary"
                                 type="submit"
                                 data-testid="addCondition-saveBtn"
-                                isDisabled={
+                                disabled={
                                     conditionType === "" &&
                                     !conditionName &&
                                     isGlobalPolicy
@@ -299,7 +292,7 @@ export default function NewClientPolicyCondition() {
                                 {conditionName ? t("save") : t("add")}
                             </Button>
                             <Button
-                                variant="link"
+                                variant="ghost"
                                 data-testid="addCondition-cancelBtn"
                                 onClick={() =>
                                     navigate(
@@ -312,28 +305,19 @@ export default function NewClientPolicyCondition() {
                             >
                                 {t("cancel")}
                             </Button>
-                        </ActionGroup>
+                        </div>
                     )}
                 </FormAccess>
                 {isGlobalPolicy && (
                     <div className="kc-backToProfile">
-                        <Button
-                            component={props => (
-                                <Link
-                                    {...props}
-                                    to={toEditClientPolicy({
-                                        realm,
-                                        policyName: policyName!
-                                    })}
-                                />
-                            )}
-                            variant="primary"
-                        >
-                            {t("back")}
+                        <Button asChild>
+                            <Link to={toEditClientPolicy({ realm, policyName: policyName! })}>
+                                {t("back")}
+                            </Link>
                         </Button>
                     </div>
                 )}
-            </PageSection>
+            </div>
         </>
     );
 }

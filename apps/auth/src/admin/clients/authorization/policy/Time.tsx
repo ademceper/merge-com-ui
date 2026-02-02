@@ -11,17 +11,9 @@
 
 // @ts-nocheck
 
-import {
-    DatePicker,
-    Flex,
-    FlexItem,
-    FormGroup,
-    NumberInput,
-    Radio,
-    Split,
-    SplitItem,
-    TimePicker
-} from "../../../../shared/@patternfly/react-core";
+import { Input } from "@merge/ui/components/input";
+import { Label } from "@merge/ui/components/label";
+import { RadioGroup, RadioGroupItem } from "@merge/ui/components/radio-group";
 import { useState } from "react";
 import { FormErrorText, HelpItem } from "../../../../shared/keycloak-ui-shared";
 import { useTranslation } from "react-i18next";
@@ -76,25 +68,24 @@ const DateTime = ({ name }: { name: string }) => {
                     "00"
                 ];
                 return (
-                    <Split hasGutter id={name}>
-                        <SplitItem>
-                            <DatePicker
-                                value={dateTime[1]}
-                                onChange={(event, value, date) => {
-                                    field.onChange(parseDate(field.value, date));
-                                }}
-                            />
-                        </SplitItem>
-                        <SplitItem>
-                            <TimePicker
-                                time={`${dateTime[2]}:${dateTime[3]}`}
-                                onChange={(event, time, hour, minute) =>
-                                    field.onChange(parseTime(field.value, hour, minute))
-                                }
-                                is24Hour
-                            />
-                        </SplitItem>
-                    </Split>
+                    <div className="flex gap-2" id={name}>
+                        <Input
+                            type="date"
+                            value={dateTime[1]}
+                            onChange={(e) => {
+                                const date = e.target.valueAsDate;
+                                field.onChange(parseDate(field.value, date || undefined));
+                            }}
+                        />
+                        <Input
+                            type="time"
+                            value={`${dateTime[2].padStart(2, '0')}:${dateTime[3]}`}
+                            onChange={(e) => {
+                                const [h, m] = e.target.value.split(':').map(Number);
+                                field.onChange(parseTime(field.value, h, m));
+                            }}
+                        />
+                    </div>
                 );
             }}
         />
@@ -117,13 +108,12 @@ const NumberControl = ({ name, min, max }: NumberControlProps) => {
             defaultValue=""
             control={control}
             render={({ field }) => (
-                <NumberInput
+                <Input
+                    type="number"
                     id={name}
                     value={field.value}
                     min={min}
                     max={max}
-                    onPlus={() => field.onChange(Number(field.value) + 1)}
-                    onMinus={() => field.onChange(Number(field.value) - 1)}
                     onChange={event => {
                         const newValue = Number(event.currentTarget.value);
                         field.onChange(setValue(!isNaN(newValue) ? newValue : 0));
@@ -138,21 +128,17 @@ const FromTo = ({ name, ...rest }: NumberControlProps) => {
     const { t } = useTranslation();
 
     return (
-        <FormGroup
-            label={t(name)}
-            fieldId={name}
-            labelIcon={<HelpItem helpText={t(`${name}Help`)} fieldLabelId={name} />}
-        >
-            <Split hasGutter>
-                <SplitItem>
-                    <NumberControl name={name} {...rest} />
-                </SplitItem>
-                <SplitItem>{t("to")}</SplitItem>
-                <SplitItem>
-                    <NumberControl name={`${name}End`} {...rest} />
-                </SplitItem>
-            </Split>
-        </FormGroup>
+        <div className="space-y-2">
+            <div className="flex items-center gap-2">
+                <Label>{t(name)}</Label>
+                <HelpItem helpText={t(`${name}Help`)} fieldLabelId={name} />
+            </div>
+            <div className="flex gap-2 items-center">
+                <NumberControl name={name} {...rest} />
+                <span>{t("to")}</span>
+                <NumberControl name={`${name}End`} {...rest} />
+            </div>
+        </div>
     );
 };
 
@@ -165,36 +151,26 @@ export const Time = () => {
     const [repeat, setRepeat] = useState(getValues("month"));
     return (
         <>
-            <FormGroup
-                label={t("repeat")}
-                fieldId="repeat"
-                labelIcon={<HelpItem helpText={t("repeatHelp")} fieldLabelId="repeat" />}
-            >
-                <Flex>
-                    <FlexItem>
-                        <Radio
-                            id="notRepeat"
-                            data-testid="notRepeat"
-                            isChecked={!repeat}
-                            name="repeat"
-                            onChange={() => setRepeat(false)}
-                            label={t("notRepeat")}
-                            className="pf-v5-u-mb-md"
-                        />
-                    </FlexItem>
-                    <FlexItem>
-                        <Radio
-                            id="repeat"
-                            data-testid="repeat"
-                            isChecked={repeat}
-                            name="repeat"
-                            onChange={() => setRepeat(true)}
-                            label={t("repeat")}
-                            className="pf-v5-u-mb-md"
-                        />
-                    </FlexItem>
-                </Flex>
-            </FormGroup>
+            <div className="space-y-2">
+                <div className="flex items-center gap-2">
+                    <Label>{t("repeat")}</Label>
+                    <HelpItem helpText={t("repeatHelp")} fieldLabelId="repeat" />
+                </div>
+                <RadioGroup
+                    value={repeat ? "repeat" : "notRepeat"}
+                    onValueChange={(v) => setRepeat(v === "repeat")}
+                    className="flex gap-4"
+                >
+                    <div className="flex items-center gap-2" data-testid="notRepeat">
+                        <RadioGroupItem value="notRepeat" id="notRepeat" />
+                        <Label htmlFor="notRepeat">{t("notRepeat")}</Label>
+                    </div>
+                    <div className="flex items-center gap-2" data-testid="repeat">
+                        <RadioGroupItem value="repeat" id="repeat" />
+                        <Label htmlFor="repeat">{t("repeat")}</Label>
+                    </div>
+                </RadioGroup>
+            </div>
             {repeat && (
                 <>
                     <FromTo name="month" min={1} max={12} />
@@ -203,28 +179,22 @@ export const Time = () => {
                     <FromTo name="minute" min={0} max={59} />
                 </>
             )}
-            <FormGroup
-                label={t("startTime")}
-                fieldId="notBefore"
-                labelIcon={
+            <div className="space-y-2">
+                <div className="flex items-center gap-2">
+                    <Label>{t("startTime")}</Label>
                     <HelpItem helpText={t("startTimeHelp")} fieldLabelId="startTime" />
-                }
-                isRequired
-            >
+                </div>
                 <DateTime name="notBefore" />
                 {errors.notBefore && <FormErrorText message={t("required")} />}
-            </FormGroup>
-            <FormGroup
-                label={t("expireTime")}
-                fieldId="notOnOrAfter"
-                labelIcon={
+            </div>
+            <div className="space-y-2">
+                <div className="flex items-center gap-2">
+                    <Label>{t("expireTime")}</Label>
                     <HelpItem helpText={t("expireTimeHelp")} fieldLabelId="expireTime" />
-                }
-                isRequired
-            >
+                </div>
                 <DateTime name="notOnOrAfter" />
                 {errors.notOnOrAfter && <FormErrorText message={t("required")} />}
-            </FormGroup>
+            </div>
         </>
     );
 };

@@ -11,7 +11,7 @@
 
 // @ts-nocheck
 
-import { ActionGroup, Button, PageSection } from "../../../shared/@patternfly/react-core";
+import { Button } from "@merge/ui/components/button";
 import { SubmitHandler, UseFormReturn, useFormContext, useWatch } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { Link, To } from "react-router-dom";
@@ -52,7 +52,7 @@ export const RoleForm = ({
     return (
         <>
             {!editMode && <ViewHeader titleKey={t("createRole")} />}
-            <PageSection variant="light">
+            <div className="p-6">
                 <FormAccess
                     isHorizontal
                     onSubmit={handleSubmit(onSubmit)}
@@ -84,7 +84,7 @@ export const RoleForm = ({
                         }}
                         isDisabled={roleName?.includes("default-roles") ?? false}
                     />
-                    <ActionGroup>
+                    <div className="flex gap-2">
                         <FormSubmitButton
                             formState={formState}
                             data-testid="save"
@@ -100,9 +100,9 @@ export const RoleForm = ({
                         >
                             {t("cancel")}
                         </Button>
-                    </ActionGroup>
+                    </div>
                 </FormAccess>
-            </PageSection>
+            </div>
         </>
     );
 };

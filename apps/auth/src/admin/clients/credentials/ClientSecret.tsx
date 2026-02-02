@@ -12,15 +12,9 @@
 // @ts-nocheck
 
 import type ClientRepresentation from "@keycloak/keycloak-admin-client/lib/defs/clientRepresentation";
-import {
-    Alert,
-    Button,
-    FormGroup,
-    InputGroup,
-    InputGroupItem,
-    Split,
-    SplitItem
-} from "../../../shared/@patternfly/react-core";
+import { Alert, AlertTitle } from "@merge/ui/components/alert";
+import { Button } from "@merge/ui/components/button";
+import { Label } from "@merge/ui/components/label";
 import { useEffect, useState } from "react";
 import { useFormContext } from "react-hook-form";
 import { useTranslation } from "react-i18next";
@@ -50,32 +44,28 @@ const SecretInput = ({ id, buttonLabel, client, secret, toggle }: SecretInputPro
     const isManager = hasAccess("manage-clients") || client.access?.configure;
 
     return (
-        <Split hasGutter>
-            <SplitItem isFilled>
-                <InputGroup>
-                    <InputGroupItem isFill>
+        <div className="flex gap-2">
+            <div className="flex-1">
+                <div className="flex">
+                    <div className="flex-1">
                         <PasswordInput id={id} value={secret} readOnly />
-                    </InputGroupItem>
-                    <InputGroupItem>
-                        <CopyToClipboardButton
-                            id={id}
-                            text={secret}
-                            label="clientSecret"
-                            variant="control"
-                        />
-                    </InputGroupItem>
-                </InputGroup>
-            </SplitItem>
-            <SplitItem>
-                <Button
-                    variant="secondary"
-                    isDisabled={form.formState.isDirty || !isManager}
-                    onClick={toggle}
-                >
-                    {t(buttonLabel)}
-                </Button>
-            </SplitItem>
-        </Split>
+                    </div>
+                    <CopyToClipboardButton
+                        id={id}
+                        text={secret}
+                        label="clientSecret"
+                        variant="control"
+                    />
+                </div>
+            </div>
+            <Button
+                variant="secondary"
+                disabled={form.formState.isDirty || !isManager}
+                onClick={toggle}
+            >
+                {t(buttonLabel)}
+            </Button>
+        </div>
     );
 };
 
@@ -137,11 +127,8 @@ export const ClientSecret = ({ client, secret, toggle }: ClientSecretProps) => {
     return (
         <>
             <InvalidateConfirm />
-            <FormGroup
-                label={t("clientSecret")}
-                fieldId="kc-client-secret"
-                className="pf-v5-u-my-md"
-            >
+            <div className="space-y-2 my-4">
+                <Label>{t("clientSecret")}</Label>
                 <SecretInput
                     id="kc-client-secret"
                     client={client}
@@ -151,11 +138,14 @@ export const ClientSecret = ({ client, secret, toggle }: ClientSecretProps) => {
                 />
                 <ExpireDateFormatter time={secretExpirationTime} />
                 {expired(secretExpirationTime) && (
-                    <Alert variant="warning" isInline title={t("secretHasExpired")} />
+                    <Alert variant="destructive">
+                        <AlertTitle>{t("secretHasExpired")}</AlertTitle>
+                    </Alert>
                 )}
-            </FormGroup>
+            </div>
             {secretRotated && (
-                <FormGroup label={t("secretRotated")} fieldId="secretRotated">
+                <div className="space-y-2">
+                    <Label>{t("secretRotated")}</Label>
                     <SecretInput
                         id="secretRotated"
                         client={client}
@@ -164,7 +154,7 @@ export const ClientSecret = ({ client, secret, toggle }: ClientSecretProps) => {
                         buttonLabel="invalidateSecret"
                     />
                     <ExpireDateFormatter time={secretRotatedExpirationTime} />
-                </FormGroup>
+                </div>
             )}
         </>
     );

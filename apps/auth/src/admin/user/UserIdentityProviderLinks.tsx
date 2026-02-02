@@ -14,16 +14,9 @@
 import type FederatedIdentityRepresentation from "@keycloak/keycloak-admin-client/lib/defs/federatedIdentityRepresentation";
 import type IdentityProviderRepresentation from "@keycloak/keycloak-admin-client/lib/defs/identityProviderRepresentation";
 import type { IdentityProvidersQuery } from "@keycloak/keycloak-admin-client/lib/resources/identityProviders";
-import {
-    AlertVariant,
-    Button,
-    ButtonVariant,
-    Label,
-    PageSection,
-    Text,
-    TextContent,
-    Spinner
-} from "../../shared/@patternfly/react-core";
+import { AlertVariant, KeycloakSpinner } from "../../shared/keycloak-ui-shared";
+import { Button } from "@merge/ui/components/button";
+import { Badge } from "@merge/ui/components/badge";
 import { cellWidth } from "../../shared/@patternfly/react-table";
 import { capitalize } from "lodash-es";
 import { useState } from "react";
@@ -124,7 +117,7 @@ export const UserIdentityProviderLinks = ({ userId }: UserIdentityProviderLinksP
             provider: capitalize(federatedId)
         }),
         continueButtonLabel: "unlink",
-        continueButtonVariant: ButtonVariant.primary,
+        continueButtonVariant: "default",
         onConfirm: async () => {
             try {
                 await adminClient.users.delFromFederatedIdentity({
@@ -161,9 +154,9 @@ export const UserIdentityProviderLinks = ({ userId }: UserIdentityProviderLinksP
             provider => provider["id"] === idp.identityProvider
         )?.groupName!;
         return (
-            <Label color={groupName === "Social" ? "blue" : "orange"}>
+            <Badge variant={groupName === "Social" ? "default" : "secondary"}>
                 {groupName === "Social" ? t("idpType.social") : t("idpType.custom")}
-            </Label>
+            </Badge>
         );
     };
 
@@ -172,13 +165,13 @@ export const UserIdentityProviderLinks = ({ userId }: UserIdentityProviderLinksP
             provider => provider["id"] === idp.providerId
         )?.groupName!;
         return (
-            <Label color={groupName === "User-defined" ? "orange" : "blue"}>
+            <Badge variant={groupName === "User-defined" ? "secondary" : "default"}>
                 {groupName === "User-defined"
                     ? "Custom"
                     : groupName! === "Social"
                       ? t("idpType.social")
                       : groupName!}
-            </Label>
+            </Badge>
         );
     };
 
@@ -263,13 +256,11 @@ export const UserIdentityProviderLinks = ({ userId }: UserIdentityProviderLinksP
                 />
             )}
             <UnlinkConfirm />
-            <PageSection variant="light" className="pf-v5-u-p-0">
+            <div className="p-0">
                 <FormPanel title={t("linkedIdPs")} className="kc-linked-idps">
-                    <TextContent>
-                        <Text className="kc-available-idps-text">
-                            {t("linkedIdPsText")}
-                        </Text>
-                    </TextContent>
+                    <p className="kc-available-idps-text">
+                        {t("linkedIdPsText")}
+                    </p>
                     <KeycloakDataTable
                         loader={linkedIdPsLoader}
                         key={key}
@@ -278,21 +269,19 @@ export const UserIdentityProviderLinks = ({ userId }: UserIdentityProviderLinksP
                         className="kc-linked-IdPs-table"
                         columns={linkedIdpColumns()}
                         emptyState={
-                            <TextContent className="kc-no-providers-text">
-                                <Text>{t("noProvidersLinked")}</Text>
-                            </TextContent>
+                            <p className="kc-no-providers-text">
+                                {t("noProvidersLinked")}
+                            </p>
                         }
                     />
                 </FormPanel>
                 {hasAccess("manage-users") && canQueryIDPDetails && (
                     <FormPanel className="kc-available-idps" title={t("availableIdPs")}>
-                        <TextContent>
-                            <Text className="kc-available-idps-text">
-                                {t("availableIdPsText")}
-                            </Text>
-                        </TextContent>
+                        <p className="kc-available-idps-text">
+                            {t("availableIdPsText")}
+                        </p>
                         {isLoading ? (
-                            <Spinner />
+                            <KeycloakSpinner />
                         ) : (
                             <KeycloakDataTable
                                 loader={availableIdPsLoader}
@@ -323,15 +312,15 @@ export const UserIdentityProviderLinks = ({ userId }: UserIdentityProviderLinksP
                                     }
                                 ]}
                                 emptyState={
-                                    <TextContent className="kc-no-providers-text">
-                                        <Text>{t("noAvailableIdentityProviders")}</Text>
-                                    </TextContent>
+                                    <p className="kc-no-providers-text">
+                                        {t("noAvailableIdentityProviders")}
+                                    </p>
                                 }
                             />
                         )}
                     </FormPanel>
                 )}
-            </PageSection>
+            </div>
         </>
     );
 };

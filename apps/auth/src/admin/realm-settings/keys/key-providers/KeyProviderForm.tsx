@@ -13,12 +13,8 @@
 
 import type ComponentRepresentation from "@keycloak/keycloak-admin-client/lib/defs/componentRepresentation";
 import { TextControl, useAlerts, useFetch } from "../../../../shared/keycloak-ui-shared";
-import {
-    ActionGroup,
-    AlertVariant,
-    Button,
-    PageSection
-} from "../../../../shared/@patternfly/react-core";
+import { AlertVariant } from "../../../../shared/keycloak-ui-shared";
+import { Button } from "@merge/ui/components/button";
 import { FormProvider, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
@@ -124,18 +120,17 @@ export const KeyProviderForm = ({ providerType, onClose }: KeyProviderFormProps)
                             ?.properties || []
                     }
                 />
-                <ActionGroup>
+                <div className="flex gap-2">
                     <Button
                         data-testid="add-provider-button"
-                        variant="primary"
                         type="submit"
                     >
                         {t("save")}
                     </Button>
-                    <Button onClick={() => onClose?.()} variant="link">
+                    <Button onClick={() => onClose?.()} variant="ghost">
                         {t("cancel")}
                     </Button>
-                </ActionGroup>
+                </div>
             </FormProvider>
         </FormAccess>
     );
@@ -149,14 +144,14 @@ export default function KeyProviderFormPage() {
     return (
         <>
             <ViewHeader titleKey={t("editProvider")} subKey={params.providerType} />
-            <PageSection variant="light">
+            <div className="p-6">
                 <KeyProviderForm
                     {...params}
                     onClose={() =>
                         navigate(toKeysTab({ realm: params.realm, tab: "providers" }))
                     }
                 />
-            </PageSection>
+            </div>
         </>
     );
 }

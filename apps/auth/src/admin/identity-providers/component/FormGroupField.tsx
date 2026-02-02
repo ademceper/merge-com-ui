@@ -11,7 +11,7 @@
 
 // @ts-nocheck
 
-import { FormGroup } from "../../../shared/@patternfly/react-core";
+import { Label } from "@merge/ui/components/label";
 import { PropsWithChildren } from "react";
 import { useTranslation } from "react-i18next";
 
@@ -26,12 +26,12 @@ export const FormGroupField = ({
 }: PropsWithChildren<FormGroupFieldProps>) => {
     const { t } = useTranslation();
     return (
-        <FormGroup
-            label={t(label)}
-            fieldId={label}
-            labelIcon={<HelpItem helpText={t(`${label}Help`)} fieldLabelId={label} />}
-        >
+        <div className="space-y-2">
+            <div className="flex items-center gap-1">
+                <Label htmlFor={label}>{t(label)}</Label>
+                <HelpItem helpText={t(`${label}Help`)} fieldLabelId={label} />
+            </div>
             {children}
-        </FormGroup>
+        </div>
     );
 };

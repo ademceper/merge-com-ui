@@ -13,7 +13,7 @@
 
 import UserSessionRepresentation from "@keycloak/keycloak-admin-client/lib/defs/userSessionRepresentation";
 import { KeycloakSelect } from "../../shared/keycloak-ui-shared";
-import { SelectOption } from "../../shared/@patternfly/react-core";
+import { SelectOption } from "../../shared/keycloak-ui-shared";
 import { Funnel } from "@phosphor-icons/react";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";

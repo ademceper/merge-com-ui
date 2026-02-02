@@ -13,7 +13,7 @@
 
 import type ResourceRepresentation from "@keycloak/keycloak-admin-client/lib/defs/resourceRepresentation";
 import { KeycloakSelect, SelectVariant } from "../../../shared/keycloak-ui-shared";
-import { SelectOption } from "../../../shared/@patternfly/react-core";
+const SelectOption = ({ value, children, selected, ...props }: any) => <option value={value} {...props}>{children}</option>;
 import { Button } from "@merge/ui/components/button";
 import { Input } from "@merge/ui/components/input";
 import {

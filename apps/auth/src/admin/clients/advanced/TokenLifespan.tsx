@@ -11,15 +11,8 @@
 
 // @ts-nocheck
 
-import {
-    FormGroup,
-    MenuToggle,
-    Select,
-    SelectList,
-    SelectOption,
-    Split,
-    SplitItem
-} from "../../../shared/@patternfly/react-core";
+import { Label } from "@merge/ui/components/label";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@merge/ui/components/select";
 import { useState } from "react";
 import { Controller, useFormContext } from "react-hook-form";
 import { useTranslation } from "react-i18next";
@@ -52,66 +45,58 @@ export const TokenLifespan = ({ id, name, defaultValue, units }: TokenLifespanPr
         focused;
 
     return (
-        <FormGroup
-            label={t(id)}
-            fieldId={id}
-            labelIcon={<HelpItem helpText={t(`${id}Help`)} fieldLabelId={id} />}
-            data-testid={`token-lifespan-${id}`}
-        >
+        <div className="space-y-2" data-testid={`token-lifespan-${id}`}>
+            <div className="flex items-center gap-2">
+                <Label htmlFor={id}>{t(id)}</Label>
+                <HelpItem helpText={t(`${id}Help`)} fieldLabelId={id} />
+            </div>
             <Controller
                 name={name}
                 defaultValue=""
                 control={control}
                 render={({ field }) => (
-                    <Split hasGutter>
-                        <SplitItem>
+                    <div className="flex gap-4">
+                        <div>
                             <Select
-                                toggle={ref => (
-                                    <MenuToggle
-                                        ref={ref}
-                                        onClick={() => setOpen(!open)}
-                                        isExpanded={open}
-                                    >
+                                value={isExpireSet(field.value) ? "60" : ""}
+                                onValueChange={(value) => {
+                                    field.onChange(value === "" ? "" : 60);
+                                }}
+                            >
+                                <SelectTrigger className="w-[180px]">
+                                    <SelectValue>
                                         {isExpireSet(field.value)
                                             ? t(expires)
                                             : t(inherited)}
-                                    </MenuToggle>
-                                )}
-                                isOpen={open}
-                                onOpenChange={isOpen => setOpen(isOpen)}
-                                onSelect={(_, value) => {
-                                    field.onChange(value);
-                                    setOpen(false);
-                                }}
-                                selected={
-                                    isExpireSet(field.value) ? t(expires) : t(inherited)
-                                }
-                            >
-                                <SelectList>
-                                    <SelectOption value="">{t(inherited)}</SelectOption>
-                                    <SelectOption value={60}>{t(expires)}</SelectOption>
-                                </SelectList>
+                                    </SelectValue>
+                                </SelectTrigger>
+                                <SelectContent>
+                                    <SelectItem value="">{t(inherited)}</SelectItem>
+                                    <SelectItem value="60">{t(expires)}</SelectItem>
+                                </SelectContent>
                             </Select>
-                        </SplitItem>
-                        <SplitItem hidden={!isExpireSet(field.value)}>
-                            <TimeSelector
-                                validated={
-                                    isExpireSet(field.value) && field.value! < 1
-                                        ? "warning"
-                                        : "default"
-                                }
-                                units={units}
-                                value={field.value === "" ? defaultValue : field.value}
-                                onChange={field.onChange}
-                                onFocus={onFocus}
-                                onBlur={onBlur}
-                                min={1}
-                                isDisabled={!isExpireSet(field.value)}
-                            />
-                        </SplitItem>
-                    </Split>
+                        </div>
+                        {isExpireSet(field.value) && (
+                            <div>
+                                <TimeSelector
+                                    validated={
+                                        isExpireSet(field.value) && field.value! < 1
+                                            ? "warning"
+                                            : "default"
+                                    }
+                                    units={units}
+                                    value={field.value === "" ? defaultValue : field.value}
+                                    onChange={field.onChange}
+                                    onFocus={onFocus}
+                                    onBlur={onBlur}
+                                    min={1}
+                                    isDisabled={!isExpireSet(field.value)}
+                                />
+                            </div>
+                        )}
+                    </div>
                 )}
             />
-        </FormGroup>
+        </div>
     );
 };

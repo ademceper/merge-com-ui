@@ -20,7 +20,7 @@ import {
     SelectVariant,
     TextControl
 } from "../../../shared/keycloak-ui-shared";
-import { FormGroup, SelectOption } from "../../../shared/@patternfly/react-core";
+import { Label } from "@merge/ui/components/label";
 import { useState } from "react";
 import { Controller, UseFormReturn } from "react-hook-form";
 import { useTranslation } from "react-i18next";
@@ -70,13 +70,11 @@ export const AddMapperForm = ({
                 }))}
                 controller={{ defaultValue: syncModes[0].toUpperCase() }}
             />
-            <FormGroup
-                label={t("mapperType")}
-                labelIcon={
+            <div className="space-y-2">
+                <div className="flex items-center gap-2">
+                    <Label htmlFor="identityProviderMapper">{t("mapperType")}</Label>
                     <HelpItem helpText={mapperType.helpText} fieldLabelId="mapperType" />
-                }
-                fieldId="identityProviderMapper"
-            >
+                </div>
                 <Controller
                     name="identityProviderMapper"
                     defaultValue={mapperTypes[0].id}
@@ -112,7 +110,7 @@ export const AddMapperForm = ({
                         </KeycloakSelect>
                     )}
                 />
-            </FormGroup>
+            </div>
         </>
     );
 };

@@ -12,18 +12,12 @@
 // @ts-nocheck
 
 import type AuthenticationFlowRepresentation from "@keycloak/keycloak-admin-client/lib/defs/authenticationFlowRepresentation";
-import {
-    ActionGroup,
-    AlertVariant,
-    Button,
-    PageSection
-} from "../../../shared/@patternfly/react-core";
+import { AlertVariant, FormSubmitButton, SelectControl, useAlerts } from "../../../shared/keycloak-ui-shared";
+import { Button } from "@merge/ui/components/button";
 import { FormProvider, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { Link, useNavigate } from "react-router-dom";
-import { FormSubmitButton, SelectControl } from "../../../shared/keycloak-ui-shared";
 import { useAdminClient } from "../../admin-client";
-import { useAlerts } from "../../../shared/keycloak-ui-shared";
 import { FormAccess } from "../../components/form/FormAccess";
 import { ViewHeader } from "../../components/view-header/ViewHeader";
 import { useRealm } from "../../context/realm-context/RealmContext";
@@ -69,7 +63,7 @@ export default function CreateFlow() {
     return (
         <>
             <ViewHeader titleKey="createFlow" subKey="authenticationCreateFlowHelp" />
-            <PageSection variant="light">
+            <div className="p-6">
                 <FormProvider {...form}>
                     <FormAccess
                         isHorizontal
@@ -88,7 +82,7 @@ export default function CreateFlow() {
                                 value: t(`top-level-flow-type.${type}`)
                             }))}
                         />
-                        <ActionGroup>
+                        <div className="flex gap-2">
                             <FormSubmitButton
                                 formState={formState}
                                 data-testid="create"
@@ -109,10 +103,10 @@ export default function CreateFlow() {
                             >
                                 {t("cancel")}
                             </Button>
-                        </ActionGroup>
+                        </div>
                     </FormAccess>
                 </FormProvider>
-            </PageSection>
+            </div>
         </>
     );
 }

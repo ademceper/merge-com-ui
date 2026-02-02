@@ -16,39 +16,14 @@ import FeatureRepresentation, {
     FeatureType
 } from "@keycloak/keycloak-admin-client/lib/defs/featureRepresentation";
 import { HelpItem, label, useEnvironment } from "../../shared/keycloak-ui-shared";
-import {
-    ActionList,
-    ActionListItem,
-    Brand,
-    Button,
-    Card,
-    CardBody,
-    CardTitle,
-    DescriptionList,
-    DescriptionListDescription,
-    DescriptionListGroup,
-    DescriptionListTerm,
-    EmptyState,
-    EmptyStateBody,
-    EmptyStateHeader,
-    Grid,
-    GridItem,
-    Label,
-    List,
-    ListItem,
-    ListVariant,
-    PageSection,
-    Tab,
-    TabTitleText,
-    Text,
-    TextContent,
-    TextVariants,
-    Title
-} from "../../shared/@patternfly/react-core";
+import { Button } from "@merge/ui/components/button";
+import { Card, CardContent, CardTitle } from "@merge/ui/components/card";
+import { Badge } from "@merge/ui/components/badge";
+import { Empty, EmptyHeader, EmptyTitle, EmptyDescription } from "@merge/ui/components/empty";
+import { RoutableTabs, Tab, useRoutableTab } from "../components/routable-tabs/RoutableTabs";
 import { useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { KeycloakSpinner } from "../../shared/keycloak-ui-shared";
-import { RoutableTabs, useRoutableTab } from "../components/routable-tabs/RoutableTabs";
 import { useRealm } from "../context/realm-context/RealmContext";
 import { useServerInfo } from "../context/server-info/ServerInfoProvider";
 import helpUrls from "../help-urls";
@@ -58,26 +33,26 @@ import { DashboardTab, toDashboard } from "./routes/Dashboard";
 
 
 const EmptyDashboard = () => {
-    const { environment } = useEnvironment();
-
     const { t } = useTranslation();
     const { realm, realmRepresentation: realmInfo } = useRealm();
 
     const realmDisplayInfo = label(t, realmInfo?.displayName, realm);
 
     return (
-        <PageSection variant="light">
-            <EmptyState variant="lg">
-                <Brand
+        <section className="py-6 bg-muted/30">
+            <Empty className="keycloak__dashboard_empty min-h-[280px]">
+                <img
                     src={iconSvgUrl}
                     alt="Keycloak icon"
-                    className="keycloak__dashboard_icon"
+                    className="keycloak__dashboard_icon size-16 object-contain"
                 />
-                <EmptyStateHeader titleText={<>{t("welcome")}</>} headingLevel="h2" />
-                <EmptyStateHeader titleText={realmDisplayInfo} headingLevel="h1" />
-                <EmptyStateBody>{t("introduction")}</EmptyStateBody>
-            </EmptyState>
-        </PageSection>
+                <EmptyHeader>
+                    <EmptyTitle className="text-2xl">{t("welcome")}</EmptyTitle>
+                    <EmptyTitle className="text-3xl font-semibold">{realmDisplayInfo}</EmptyTitle>
+                </EmptyHeader>
+                <EmptyDescription>{t("introduction")}</EmptyDescription>
+            </Empty>
+        </section>
     );
 };
 
@@ -87,28 +62,20 @@ type FeatureItemProps = {
 
 const FeatureItem = ({ feature }: FeatureItemProps) => {
     const { t } = useTranslation();
+    const badgeVariant = feature.type === FeatureType.Experimental ? "secondary" : feature.type === FeatureType.Preview || feature.type === FeatureType.PreviewDisabledByDefault ? "default" : feature.type === FeatureType.Deprecated ? "outline" : "default";
+    const badgeClass = feature.type === FeatureType.Experimental ? "bg-orange-500/20 text-orange-700 dark:text-orange-300" : feature.type === FeatureType.Preview || feature.type === FeatureType.PreviewDisabledByDefault ? "bg-blue-500/20 text-blue-700 dark:text-blue-300" : feature.type === FeatureType.Default || feature.type === FeatureType.DisabledByDefault ? "bg-green-500/20 text-green-700 dark:text-green-300" : feature.type === FeatureType.Deprecated ? "bg-muted text-muted-foreground" : "";
     return (
-        <ListItem className="pf-v5-u-mb-sm">
+        <li className="mb-1.5 inline-block mr-2">
             {feature.name}&nbsp;
-            {feature.type === FeatureType.Experimental && (
-                <Label color="orange">{t("experimental")}</Label>
+            {(feature.type === FeatureType.Experimental || feature.type === FeatureType.Preview || feature.type === FeatureType.PreviewDisabledByDefault || feature.type === FeatureType.Default || feature.type === FeatureType.DisabledByDefault || feature.type === FeatureType.Deprecated) && (
+                <Badge variant={badgeVariant} className={badgeClass}>
+                    {feature.type === FeatureType.Experimental && t("experimental")}
+                    {(feature.type === FeatureType.Preview || feature.type === FeatureType.PreviewDisabledByDefault) && t("preview")}
+                    {(feature.type === FeatureType.Default || feature.type === FeatureType.DisabledByDefault) && t("supported")}
+                    {feature.type === FeatureType.Deprecated && t("deprecated")}
+                </Badge>
             )}
-            {feature.type === FeatureType.Preview && (
-                <Label color="blue">{t("preview")}</Label>
-            )}
-            {feature.type === FeatureType.PreviewDisabledByDefault && (
-                <Label color="blue">{t("preview")}</Label>
-            )}
-            {feature.type === FeatureType.Default && (
-                <Label color="green">{t("supported")}</Label>
-            )}
-            {feature.type === FeatureType.DisabledByDefault && (
-                <Label color="green">{t("supported")}</Label>
-            )}
-            {feature.type === FeatureType.Deprecated && (
-                <Label color="grey">{t("deprecated")}</Label>
-            )}
-        </ListItem>
+        </li>
     );
 };
 
@@ -153,12 +120,10 @@ const Dashboard = () => {
 
     return (
         <>
-            <PageSection variant="light">
-                <TextContent className="pf-v5-u-mr-sm">
-                    <Text component="h1">{t("realmNameTitle", { name: realm })}</Text>
-                </TextContent>
-            </PageSection>
-            <PageSection variant="light" className="pf-v5-u-p-0">
+            <section className="py-6 bg-muted/30">
+                <h1 className="text-2xl font-semibold">{t("realmNameTitle", { name: realm })}</h1>
+            </section>
+            <section className="py-0 bg-muted/30">
                 <RoutableTabs
                     data-testid="dashboard-tabs"
                     defaultLocation={toDashboard({
@@ -171,219 +136,150 @@ const Dashboard = () => {
                     <Tab
                         id="welcome"
                         data-testid="welcomeTab"
-                        title={<TabTitleText>{t("welcomeTabTitle")}</TabTitleText>}
-                        {...welcomeTab}
+                        title={t("welcomeTabTitle")}
+                        eventKey={welcomeTab.eventKey}
                     >
-                        <PageSection variant="light">
-                            <div className="pf-v5-l-grid pf-v5-u-ml-lg">
-                                <div className="pf-v5-l-grid__item pf-m-12-col">
-                                    <Title
+                        <section className="py-6 bg-muted/30">
+                            <div className="grid gap-4 ml-6">
+                                <div className="col-span-12">
+                                    <h2
                                         data-testid="welcomeTitle"
-                                        className="pf-v5-u-font-weight-bold"
-                                        headingLevel="h2"
-                                        size="3xl"
+                                        className="font-bold text-3xl"
                                     >
                                         {t("welcomeTo", { realmDisplayInfo })}
-                                    </Title>
+                                    </h2>
                                 </div>
-                                <div className="pf-v5-l-grid__item keycloak__dashboard_welcome_tab">
-                                    <Text component={TextVariants.h3}>
-                                        {t("welcomeText")}
-                                    </Text>
+                                <div className="keycloak__dashboard_welcome_tab">
+                                    <h3 className="text-xl font-medium">{t("welcomeText")}</h3>
                                 </div>
-                                <div className="pf-v5-l-grid__item pf-m-10-col pf-v5-u-mt-md">
-                                    <Button
-                                        className="pf-v5-u-px-lg pf-v5-u-py-sm"
-                                        component="a"
-                                        href={helpUrls.documentation}
-                                        target="_blank"
-                                        variant="primary"
-                                    >
-                                        {t("viewDocumentation")}
+                                <div className="mt-4">
+                                    <Button asChild>
+                                        <a href={helpUrls.documentation} target="_blank" rel="noreferrer">
+                                            {t("viewDocumentation")}
+                                        </a>
                                     </Button>
                                 </div>
-                                <ActionList className="pf-v5-u-mt-sm">
-                                    <ActionListItem>
-                                        <Button
-                                            component="a"
-                                            href={helpUrls.guides}
-                                            target="_blank"
-                                            variant="tertiary"
-                                        >
+                                <div className="flex flex-wrap gap-2 mt-2">
+                                    <Button variant="ghost" asChild>
+                                        <a href={helpUrls.guides} target="_blank" rel="noreferrer">
                                             {t("viewGuides")}
-                                        </Button>
-                                    </ActionListItem>
-                                    <ActionListItem>
-                                        <Button
-                                            component="a"
-                                            href={helpUrls.community}
-                                            target="_blank"
-                                            variant="tertiary"
-                                        >
+                                        </a>
+                                    </Button>
+                                    <Button variant="ghost" asChild>
+                                        <a href={helpUrls.community} target="_blank" rel="noreferrer">
                                             {t("joinCommunity")}
-                                        </Button>
-                                    </ActionListItem>
-                                    <ActionListItem>
-                                        <Button
-                                            component="a"
-                                            href={helpUrls.blog}
-                                            target="_blank"
-                                            variant="tertiary"
-                                        >
+                                        </a>
+                                    </Button>
+                                    <Button variant="ghost" asChild>
+                                        <a href={helpUrls.blog} target="_blank" rel="noreferrer">
                                             {t("readBlog")}
-                                        </Button>
-                                    </ActionListItem>
-                                </ActionList>
+                                        </a>
+                                    </Button>
+                                </div>
                             </div>
-                        </PageSection>
+                        </section>
                     </Tab>
                     <Tab
                         id="info"
                         data-testid="infoTab"
-                        title={<TabTitleText>{t("serverInfo")}</TabTitleText>}
-                        {...infoTab}
+                        title={t("serverInfo")}
+                        eventKey={infoTab.eventKey}
                     >
-                        <PageSection variant="light">
-                            <Grid hasGutter>
-                                <GridItem lg={2} sm={12}>
+                        <section className="py-6 bg-muted/30">
+                            <div className="grid grid-cols-1 lg:grid-cols-12 gap-4">
+                                <div className="lg:col-span-2">
                                     <Card className="keycloak__dashboard_card">
                                         <CardTitle>{t("serverInfo")}</CardTitle>
-                                        <CardBody>
-                                            <DescriptionList>
-                                                <DescriptionListGroup>
-                                                    <DescriptionListTerm>
-                                                        {t("version")}
-                                                    </DescriptionListTerm>
-                                                    <DescriptionListDescription>
-                                                        {serverInfo.systemInfo?.version}
-                                                    </DescriptionListDescription>
-                                                </DescriptionListGroup>
-                                            </DescriptionList>
-                                        </CardBody>
+                                        <CardContent>
+                                            <dl className="space-y-2">
+                                                <div>
+                                                    <dt className="font-medium">{t("version")}</dt>
+                                                    <dd className="text-muted-foreground">{serverInfo.systemInfo?.version}</dd>
+                                                </div>
+                                            </dl>
+                                        </CardContent>
                                         <CardTitle>{t("cpu")}</CardTitle>
-                                        <CardBody>
-                                            <DescriptionList>
-                                                <DescriptionListGroup>
-                                                    <DescriptionListTerm>
-                                                        {t("processorCount")}
-                                                    </DescriptionListTerm>
-                                                    <DescriptionListDescription>
-                                                        {
-                                                            serverInfo.cpuInfo
-                                                                ?.processorCount
-                                                        }
-                                                    </DescriptionListDescription>
-                                                </DescriptionListGroup>
-                                            </DescriptionList>
-                                        </CardBody>
+                                        <CardContent>
+                                            <dl className="space-y-2">
+                                                <div>
+                                                    <dt className="font-medium">{t("processorCount")}</dt>
+                                                    <dd className="text-muted-foreground">{serverInfo.cpuInfo?.processorCount}</dd>
+                                                </div>
+                                            </dl>
+                                        </CardContent>
                                         <CardTitle>{t("memory")}</CardTitle>
-                                        <CardBody>
-                                            <DescriptionList>
-                                                <DescriptionListGroup>
-                                                    <DescriptionListTerm>
-                                                        {t("totalMemory")}
-                                                    </DescriptionListTerm>
-                                                    <DescriptionListDescription>
-                                                        {
-                                                            serverInfo.memoryInfo
-                                                                ?.totalFormated
-                                                        }
-                                                    </DescriptionListDescription>
-                                                    <DescriptionListTerm>
-                                                        {t("freeMemory")}
-                                                    </DescriptionListTerm>
-                                                    <DescriptionListDescription>
-                                                        {
-                                                            serverInfo.memoryInfo
-                                                                ?.freeFormated
-                                                        }
-                                                    </DescriptionListDescription>
-                                                    <DescriptionListTerm>
-                                                        {t("usedMemory")}
-                                                    </DescriptionListTerm>
-                                                    <DescriptionListDescription>
-                                                        {
-                                                            serverInfo.memoryInfo
-                                                                ?.usedFormated
-                                                        }
-                                                    </DescriptionListDescription>
-                                                </DescriptionListGroup>
-                                            </DescriptionList>
-                                        </CardBody>
+                                        <CardContent>
+                                            <dl className="space-y-2">
+                                                <div>
+                                                    <dt className="font-medium">{t("totalMemory")}</dt>
+                                                    <dd className="text-muted-foreground">{serverInfo.memoryInfo?.totalFormated}</dd>
+                                                </div>
+                                                <div>
+                                                    <dt className="font-medium">{t("freeMemory")}</dt>
+                                                    <dd className="text-muted-foreground">{serverInfo.memoryInfo?.freeFormated}</dd>
+                                                </div>
+                                                <div>
+                                                    <dt className="font-medium">{t("usedMemory")}</dt>
+                                                    <dd className="text-muted-foreground">{serverInfo.memoryInfo?.usedFormated}</dd>
+                                                </div>
+                                            </dl>
+                                        </CardContent>
                                     </Card>
-                                </GridItem>
-                                <GridItem lg={10} sm={12}>
+                                </div>
+                                <div className="lg:col-span-10">
                                     <Card className="keycloak__dashboard_card">
                                         <CardTitle>{t("profile")}</CardTitle>
-                                        <CardBody>
-                                            <DescriptionList>
-                                                <DescriptionListGroup>
-                                                    <DescriptionListTerm>
+                                        <CardContent>
+                                            <dl className="space-y-4">
+                                                <div>
+                                                    <dt className="font-medium flex items-center gap-1">
                                                         {t("enabledFeatures")}{" "}
                                                         <HelpItem
                                                             fieldLabelId="enabledFeatures"
-                                                            helpText={t(
-                                                                "infoEnabledFeatures"
-                                                            )}
+                                                            helpText={t("infoEnabledFeatures")}
                                                         />
-                                                    </DescriptionListTerm>
-                                                    <DescriptionListDescription>
-                                                        <List
-                                                            variant={ListVariant.inline}
-                                                        >
-                                                            {enabledFeatures.map(
-                                                                feature => (
-                                                                    <FeatureItem
-                                                                        key={feature.name}
-                                                                        feature={feature}
-                                                                    />
-                                                                )
-                                                            )}
-                                                        </List>
-                                                    </DescriptionListDescription>
-                                                </DescriptionListGroup>
-                                                <DescriptionListGroup>
-                                                    <DescriptionListTerm>
+                                                    </dt>
+                                                    <dd>
+                                                        <ul className="flex flex-wrap list-none gap-x-2 p-0 m-0">
+                                                            {enabledFeatures.map(feature => (
+                                                                <FeatureItem key={feature.name} feature={feature} />
+                                                            ))}
+                                                        </ul>
+                                                    </dd>
+                                                </div>
+                                                <div>
+                                                    <dt className="font-medium flex items-center gap-1">
                                                         {t("disabledFeatures")}{" "}
                                                         <HelpItem
                                                             fieldLabelId="disabledFeatures"
-                                                            helpText={t(
-                                                                "infoDisabledFeatures"
-                                                            )}
+                                                            helpText={t("infoDisabledFeatures")}
                                                         />
-                                                    </DescriptionListTerm>
-                                                    <DescriptionListDescription>
-                                                        <List
-                                                            variant={ListVariant.inline}
-                                                        >
-                                                            {disabledFeatures.map(
-                                                                feature => (
-                                                                    <FeatureItem
-                                                                        key={feature.name}
-                                                                        feature={feature}
-                                                                    />
-                                                                )
-                                                            )}
-                                                        </List>
-                                                    </DescriptionListDescription>
-                                                </DescriptionListGroup>
-                                            </DescriptionList>
-                                        </CardBody>
+                                                    </dt>
+                                                    <dd>
+                                                        <ul className="flex flex-wrap list-none gap-x-2 p-0 m-0">
+                                                            {disabledFeatures.map(feature => (
+                                                                <FeatureItem key={feature.name} feature={feature} />
+                                                            ))}
+                                                        </ul>
+                                                    </dd>
+                                                </div>
+                                            </dl>
+                                        </CardContent>
                                     </Card>
-                                </GridItem>
-                            </Grid>
-                        </PageSection>
+                                </div>
+                            </div>
+                        </section>
                     </Tab>
                     <Tab
                         id="providers"
                         data-testid="providersTab"
-                        title={<TabTitleText>{t("providerInfo")}</TabTitleText>}
-                        {...providersTab}
+                        title={t("providerInfo")}
+                        eventKey={providersTab.eventKey}
                     >
                         <ProviderInfo />
                     </Tab>
                 </RoutableTabs>
-            </PageSection>
+            </section>
         </>
     );
 };

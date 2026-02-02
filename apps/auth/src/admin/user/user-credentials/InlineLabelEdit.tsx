@@ -12,18 +12,11 @@
 // @ts-nocheck
 
 import type CredentialRepresentation from "@keycloak/keycloak-admin-client/lib/defs/credentialRepresentation";
-import {
-    AlertVariant,
-    Button,
-    Form,
-    FormGroup,
-    TextInput
-} from "../../../shared/@patternfly/react-core";
-import {
-    CheckIcon,
-    PencilAltIcon,
-    TimesIcon
-} from "../../../shared/@patternfly/react-icons";
+import { AlertVariant } from "../../../shared/keycloak-ui-shared";
+import { Button } from "@merge/ui/components/button";
+import { Input } from "@merge/ui/components/input";
+import { Label } from "@merge/ui/components/label";
+import { Check, PencilSimple, X } from "@phosphor-icons/react";
 import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { useAdminClient } from "../../admin-client";
@@ -70,16 +63,15 @@ export const InlineLabelEdit = ({
     };
 
     return (
-        <Form
-            isHorizontal
+        <form
             className="kc-form-userLabel"
             onSubmit={handleSubmit(saveUserLabel)}
         >
-            <FormGroup fieldId="kc-userLabel" className="kc-userLabel-row">
+            <div className="space-y-2 kc-userLabel-row">
                 <div className="kc-form-group-userLabel">
                     {isEditable ? (
                         <>
-                            <TextInput
+                            <Input
                                 data-testid="userLabelFld"
                                 defaultValue={credential.userLabel}
                                 className="kc-userLabel"
@@ -93,16 +85,18 @@ export const InlineLabelEdit = ({
                                     className="kc-editUserLabelAcceptBtn"
                                     aria-label={t("acceptBtn")}
                                     type="submit"
-                                    icon={<CheckIcon />}
-                                />
+                                >
+                                    <Check className="size-4" />
+                                </Button>
                                 <Button
                                     data-testid="editUserLabelCancelBtn"
                                     variant="link"
                                     className="kc-editUserLabel-cancelBtn"
                                     aria-label={t("cancelBtn")}
                                     onClick={toggle}
-                                    icon={<TimesIcon />}
-                                />
+                                >
+                                    <X className="size-4" />
+                                </Button>
                             </div>
                         </>
                     ) : (
@@ -114,12 +108,13 @@ export const InlineLabelEdit = ({
                                 className="kc-editUserLabel-btn"
                                 onClick={toggle}
                                 data-testid="editUserLabelBtn"
-                                icon={<PencilAltIcon />}
-                            />
+                            >
+                                <PencilSimple className="size-4" />
+                            </Button>
                         </>
                     )}
                 </div>
-            </FormGroup>
-        </Form>
+            </div>
+        </form>
     );
 };

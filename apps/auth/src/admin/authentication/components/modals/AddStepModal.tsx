@@ -13,15 +13,14 @@
 
 import type { AuthenticationProviderRepresentation } from "@keycloak/keycloak-admin-client/lib/defs/authenticatorConfigRepresentation";
 import { PaginatingTableToolbar, useFetch } from "../../../../shared/keycloak-ui-shared";
+import { Button } from "@merge/ui/components/button";
 import {
-    Button,
-    ButtonVariant,
-    Form,
-    Modal,
-    ModalVariant,
-    PageSection,
-    Radio
-} from "../../../../shared/@patternfly/react-core";
+    Dialog,
+    DialogContent,
+    DialogHeader,
+    DialogTitle,
+    DialogFooter
+} from "@merge/ui/components/dialog";
 import { useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useAdminClient } from "../../../admin-client";
@@ -38,23 +37,28 @@ const AuthenticationProviderList = ({
     setValue
 }: AuthenticationProviderListProps) => {
     return (
-        <PageSection variant="light" className="pf-v5-u-py-lg">
-            <Form isHorizontal>
+        <div className="p-6">
+            <form>
                 {list?.map(provider => (
-                    <Radio
-                        id={provider.id!}
-                        key={provider.id}
-                        name="provider"
-                        label={provider.displayName}
-                        data-testid={provider.id}
-                        description={provider.description}
-                        onChange={() => {
-                            setValue(provider);
-                        }}
-                    />
+                    <label key={provider.id} className="flex items-start gap-2 py-1 cursor-pointer">
+                        <input
+                            type="radio"
+                            id={provider.id!}
+                            name="provider"
+                            data-testid={provider.id}
+                            onChange={() => {
+                                setValue(provider);
+                            }}
+                            className="mt-1"
+                        />
+                        <div>
+                            <div>{provider.displayName}</div>
+                            {provider.description && <div className="text-sm text-muted-foreground">{provider.description}</div>}
+                        </div>
+                    </label>
                 ))}
-            </Form>
-        </PageSection>
+            </form>
+        </div>
     );
 };
 
@@ -114,58 +118,58 @@ export const AddStepModal = ({ name, type, onSelect }: AddStepModalProps) => {
     }, [providers, search, first, max]);
 
     return (
-        <Modal
-            variant={ModalVariant.medium}
-            isOpen={true}
-            title={
-                type == "condition"
-                    ? t("addConditionTo", { name })
-                    : t("addExecutionTo", { name })
-            }
-            onClose={() => onSelect()}
-            actions={[
-                <Button
-                    id="modal-add"
-                    data-testid="modal-add"
-                    key="add"
-                    onClick={() => onSelect(value)}
-                >
-                    {t("add")}
-                </Button>,
-                <Button
-                    data-testid="cancel"
-                    id="modal-cancel"
-                    key="cancel"
-                    variant={ButtonVariant.link}
-                    onClick={() => {
-                        onSelect();
-                    }}
-                >
-                    {t("cancel")}
-                </Button>
-            ]}
-        >
-            {providers && (
-                <PaginatingTableToolbar
-                    count={page.length || 0}
-                    first={first}
-                    max={max}
-                    onNextClick={setFirst}
-                    onPreviousClick={setFirst}
-                    onPerPageSelect={(first, max) => {
-                        setFirst(first);
-                        setMax(max);
-                    }}
-                    inputGroupName="search"
-                    inputGroupPlaceholder={t("search")}
-                    inputGroupOnEnter={setSearch}
-                >
-                    <AuthenticationProviderList
-                        list={page.slice(0, max)}
-                        setValue={setValue}
-                    />
-                </PaginatingTableToolbar>
-            )}
-        </Modal>
+        <Dialog open onOpenChange={(open) => { if (!open) onSelect(); }}>
+            <DialogContent className="max-w-2xl">
+                <DialogHeader>
+                    <DialogTitle>
+                        {type == "condition"
+                            ? t("addConditionTo", { name })
+                            : t("addExecutionTo", { name })}
+                    </DialogTitle>
+                </DialogHeader>
+                {providers && (
+                    <PaginatingTableToolbar
+                        count={page.length || 0}
+                        first={first}
+                        max={max}
+                        onNextClick={setFirst}
+                        onPreviousClick={setFirst}
+                        onPerPageSelect={(first, max) => {
+                            setFirst(first);
+                            setMax(max);
+                        }}
+                        inputGroupName="search"
+                        inputGroupPlaceholder={t("search")}
+                        inputGroupOnEnter={setSearch}
+                    >
+                        <AuthenticationProviderList
+                            list={page.slice(0, max)}
+                            setValue={setValue}
+                        />
+                    </PaginatingTableToolbar>
+                )}
+                <DialogFooter>
+                    <Button
+                        id="modal-add"
+                        data-testid="modal-add"
+                        key="add"
+                        onClick={() => onSelect(value)}
+                    >
+                        {t("add")}
+                    </Button>
+                    <Button
+                        data-testid="cancel"
+                        id="modal-cancel"
+                        key="cancel"
+                        variant="link"
+                        onClick={() => {
+                            onSelect();
+                        }}
+                    >
+                        {t("cancel")}
+                    </Button>
+                </DialogFooter>
+            </DialogContent>
+        </Dialog>
     );
 };

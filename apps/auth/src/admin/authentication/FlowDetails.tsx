@@ -24,7 +24,7 @@ import {
     Table,
     TableBody,
 } from "@merge/ui/components/table";
-import { ChartNetwork, Table as TableIconPhosphor } from "@phosphor-icons/react";
+import { Graph, Table as TableIconPhosphor } from "@phosphor-icons/react";
 import {
     DragDrop,
     Droppable,
@@ -395,7 +395,7 @@ export default function FlowDetails() {
                                             data-testid="diagramView"
                                             onClick={() => setTableView(false)}
                                         >
-                                            <ChartNetwork className="size-4" />
+                                            <Graph className="size-4" />
                                         </Button>
                             </div>
                             <Button

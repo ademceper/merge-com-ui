@@ -11,7 +11,7 @@
 
 // @ts-nocheck
 
-import { PlusIcon } from "../../../../shared/@patternfly/react-icons";
+import { Plus } from "@phosphor-icons/react";
 import { ComponentType, MouseEvent as ReactMouseEvent } from "react";
 import { EdgeProps, getBezierPath, getMarkerEnd, MarkerType } from "reactflow";
 
@@ -91,7 +91,7 @@ export const ButtonEdge = ({
                         className="edgebutton"
                         onClick={event => onEdgeClick(event, id)}
                     >
-                        <PlusIcon />
+                        <Plus className="size-4" />
                     </button>
                 </foreignObject>
             )}

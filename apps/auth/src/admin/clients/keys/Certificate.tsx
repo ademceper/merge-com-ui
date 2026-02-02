@@ -12,7 +12,8 @@
 // @ts-nocheck
 
 import type CertificateRepresentation from "@keycloak/keycloak-admin-client/lib/defs/certificateRepresentation";
-import { FormGroup, TextArea } from "../../../shared/@patternfly/react-core";
+import { Label } from "@merge/ui/components/label";
+import { Textarea } from "@merge/ui/components/textarea";
 import { useId } from "react";
 import { useTranslation } from "react-i18next";
 import { HelpItem } from "../../../shared/keycloak-ui-shared";
@@ -30,7 +31,7 @@ type CertificateDisplayProps = {
 const CertificateDisplay = ({ id, keyInfo }: CertificateDisplayProps) => {
     const { t } = useTranslation();
     return (
-        <TextArea
+        <Textarea
             readOnly
             rows={5}
             id={id}
@@ -52,12 +53,12 @@ export const Certificate = ({
     return plain ? (
         <CertificateDisplay id={id} keyInfo={keyInfo} />
     ) : (
-        <FormGroup
-            label={t("certificate")}
-            fieldId={id}
-            labelIcon={<HelpItem helpText={t(helpTextKey)} fieldLabelId={id} />}
-        >
+        <div className="space-y-2">
+            <div className="flex items-center gap-2">
+                <Label>{t("certificate")}</Label>
+                <HelpItem helpText={t(helpTextKey)} fieldLabelId={id} />
+            </div>
             <CertificateDisplay id={id} keyInfo={keyInfo} />
-        </FormGroup>
+        </div>
     );
 };

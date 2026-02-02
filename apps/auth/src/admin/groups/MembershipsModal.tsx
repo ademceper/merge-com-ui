@@ -13,15 +13,11 @@
 
 import type GroupRepresentation from "@keycloak/keycloak-admin-client/lib/defs/groupRepresentation";
 import UserRepresentation from "@keycloak/keycloak-admin-client/lib/defs/userRepresentation";
-import { Modal, ModalVariant } from "../../shared/@patternfly/react-core";
-import {
-    Button,
-    ButtonVariant,
-    Checkbox,
-    Popover
-} from "../../shared/@patternfly/react-core";
-import { QuestionCircleIcon } from "../../shared/@patternfly/react-icons";
-import { cellWidth } from "../../shared/@patternfly/react-table";
+import { Button } from "@merge/ui/components/button";
+import { Checkbox } from "@merge/ui/components/checkbox";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@merge/ui/components/dialog";
+import { Popover, PopoverContent, PopoverTrigger } from "@merge/ui/components/popover";
+import { Question } from "@phosphor-icons/react";
 import { useHelp } from "../../shared/keycloak-ui-shared";
 import { ListEmptyState } from "../../shared/keycloak-ui-shared";
 import { KeycloakDataTable } from "../../shared/keycloak-ui-shared";
@@ -83,88 +79,82 @@ export const MembershipsModal = ({ user, onClose }: CredentialDataDialogProps) =
     };
 
     return (
-        <Modal
-            variant={ModalVariant.large}
-            title={t("showMembershipsTitle", { username: user.username })}
-            data-testid="showMembershipsDialog"
-            isOpen
-            onClose={onClose}
-            actions={[
-                <Button
-                    id="modal-cancel"
-                    data-testid="cancel"
-                    key="cancel"
-                    variant={ButtonVariant.primary}
-                    onClick={onClose}
-                >
-                    {t("cancel")}
-                </Button>
-            ]}
-        >
-            <KeycloakDataTable
-                key={key}
-                loader={loader}
-                className="keycloak_user-section_groups-table"
-                isPaginated
-                ariaLabelKey="roleList"
-                searchPlaceholderKey="searchGroup"
-                toolbarItem={
-                    <>
-                        <Checkbox
-                            label={t("directMembership")}
-                            key="direct-membership-check"
-                            id="kc-direct-membership-checkbox"
-                            onChange={() => {
-                                setDirectMembership(!isDirectMembership);
-                                refresh();
-                            }}
-                            isChecked={isDirectMembership}
-                            className="pf-v5-u-mt-sm"
-                        />
-                        {enabled && (
-                            <Popover
-                                aria-label="Basic popover"
-                                position="bottom"
-                                bodyContent={
-                                    <div>{t("whoWillAppearPopoverTextUsers")}</div>
-                                }
-                            >
-                                <Button
-                                    variant="link"
-                                    className="kc-who-will-appear-button"
-                                    key="who-will-appear-button"
-                                    icon={<QuestionCircleIcon />}
-                                >
-                                    {t("whoWillAppearLinkTextUsers")}
-                                </Button>
-                            </Popover>
-                        )}
-                    </>
-                }
-                columns={[
-                    {
-                        name: "groupMembership",
-                        displayKey: "groupMembership",
-                        cellRenderer: (group: GroupRepresentation) => group.name || "-",
-                        transforms: [cellWidth(40)]
-                    },
-                    {
-                        name: "path",
-                        displayKey: "path",
-                        cellRenderer: (group: GroupRepresentation) => (
-                            <GroupPath group={group} />
-                        ),
-                        transforms: [cellWidth(45)]
+        <Dialog open onOpenChange={(open) => { if (!open) onClose(); }}>
+            <DialogContent className="max-w-4xl" data-testid="showMembershipsDialog">
+                <DialogHeader>
+                    <DialogTitle>{t("showMembershipsTitle", { username: user.username })}</DialogTitle>
+                </DialogHeader>
+                <KeycloakDataTable
+                    key={key}
+                    loader={loader}
+                    className="keycloak_user-section_groups-table"
+                    isPaginated
+                    ariaLabelKey="roleList"
+                    searchPlaceholderKey="searchGroup"
+                    toolbarItem={
+                        <>
+                            <div className="flex items-center gap-2 mt-2">
+                                <Checkbox
+                                    id="kc-direct-membership-checkbox"
+                                    checked={isDirectMembership}
+                                    onCheckedChange={() => {
+                                        setDirectMembership(!isDirectMembership);
+                                        refresh();
+                                    }}
+                                />
+                                <label htmlFor="kc-direct-membership-checkbox">{t("directMembership")}</label>
+                            </div>
+                            {enabled && (
+                                <Popover>
+                                    <PopoverTrigger asChild>
+                                        <Button
+                                            variant="link"
+                                            className="kc-who-will-appear-button"
+                                        >
+                                            <Question className="size-4" />
+                                            {t("whoWillAppearLinkTextUsers")}
+                                        </Button>
+                                    </PopoverTrigger>
+                                    <PopoverContent>
+                                        <div>{t("whoWillAppearPopoverTextUsers")}</div>
+                                    </PopoverContent>
+                                </Popover>
+                            )}
+                        </>
                     }
-                ]}
-                emptyState={
-                    <ListEmptyState
-                        hasIcon
-                        message={t("noGroupMemberships")}
-                        instructions={t("noGroupMembershipsText")}
-                    />
-                }
-            />
-        </Modal>
+                    columns={[
+                        {
+                            name: "groupMembership",
+                            displayKey: "groupMembership",
+                            cellRenderer: (group: GroupRepresentation) => group.name || "-"
+                        },
+                        {
+                            name: "path",
+                            displayKey: "path",
+                            cellRenderer: (group: GroupRepresentation) => (
+                                <GroupPath group={group} />
+                            )
+                        }
+                    ]}
+                    emptyState={
+                        <ListEmptyState
+                            hasIcon
+                            message={t("noGroupMemberships")}
+                            instructions={t("noGroupMembershipsText")}
+                        />
+                    }
+                />
+                <DialogFooter>
+                    <Button
+                        id="modal-cancel"
+                        data-testid="cancel"
+                        variant="default"
+                        onClick={onClose}
+                    >
+                        {t("cancel")}
+                    </Button>
+                </DialogFooter>
+            </DialogContent>
+        </Dialog>
     );
 };

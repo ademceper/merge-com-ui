@@ -12,7 +12,7 @@
 // @ts-nocheck
 
 import { HelpItem } from "../../../shared/keycloak-ui-shared";
-import { FormGroup } from "../../../shared/@patternfly/react-core";
+import { Label } from "@merge/ui/components/label";
 import { useTranslation } from "react-i18next";
 import { MultiLineInput } from "../multi-line-input/MultiLineInput";
 import type { ComponentProps } from "./components";
@@ -35,12 +35,11 @@ export const MultiValuedStringComponent = ({
     const fieldName = convertToName(name!);
 
     return (
-        <FormGroup
-            label={t(label!)}
-            labelIcon={<HelpItem helpText={t(helpText!)} fieldLabelId={`${label}`} />}
-            fieldId={name!}
-            isRequired={required}
-        >
+        <div className="space-y-2">
+            <div className="flex items-center gap-1">
+                <Label htmlFor={name!}>{t(label!)}{required && " *"}</Label>
+                <HelpItem helpText={t(helpText!)} fieldLabelId={`${label}`} />
+            </div>
             <MultiLineInput
                 aria-label={t(label!)}
                 name={fieldName}
@@ -51,6 +50,6 @@ export const MultiValuedStringComponent = ({
                 })}
                 stringify={stringify}
             />
-        </FormGroup>
+        </div>
     );
 };

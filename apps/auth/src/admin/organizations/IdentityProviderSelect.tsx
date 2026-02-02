@@ -14,20 +14,12 @@
 import IdentityProviderRepresentation from "@keycloak/keycloak-admin-client/lib/defs/identityProviderRepresentation";
 import { IdentityProvidersQuery } from "@keycloak/keycloak-admin-client/lib/resources/identityProviders";
 import { FormErrorText, HelpItem, useFetch } from "../../shared/keycloak-ui-shared";
-import {
-    Button,
-    Chip,
-    ChipGroup,
-    FormGroup,
-    MenuToggle,
-    Select,
-    SelectList,
-    SelectOption,
-    TextInputGroup,
-    TextInputGroupMain,
-    TextInputGroupUtilities
-} from "../../shared/@patternfly/react-core";
-import { TimesIcon } from "../../shared/@patternfly/react-icons";
+import { Button } from "@merge/ui/components/button";
+import { Badge } from "@merge/ui/components/badge";
+import { Label } from "@merge/ui/components/label";
+import { Input } from "@merge/ui/components/input";
+import { Popover, PopoverContent, PopoverTrigger } from "@merge/ui/components/popover";
+import { X } from "@phosphor-icons/react";
 import { debounce } from "lodash-es";
 import { useCallback, useRef, useState } from "react";
 import { Controller, useFormContext } from "react-hook-form";
@@ -85,38 +77,17 @@ export const IdentityProviderSelect = ({
         [search]
     );
 
-    const convert = (
-        identityProviders: (IdentityProviderRepresentation | undefined)[]
-    ) => {
-        const options = identityProviders.map(option => (
-            <SelectOption
-                key={option!.alias}
-                value={option}
-                selected={values?.includes(option!.alias!)}
-            >
-                {option!.alias}
-            </SelectOption>
-        ));
-        if (options.length === 0) {
-            return <SelectOption value="">{t("noResultsFound")}</SelectOption>;
-        }
-        return options;
-    };
-
     if (!idps) {
         return <KeycloakSpinner />;
     }
     return (
-        <FormGroup
-            label={t(label!)}
-            isRequired={isRequired}
-            labelIcon={
-                helpText ? (
-                    <HelpItem helpText={helpText!} fieldLabelId={label!} />
-                ) : undefined
-            }
-            fieldId={name!}
-        >
+        <div className="space-y-2">
+            <div className="flex items-center gap-1">
+                <Label htmlFor={name!}>
+                    {t(label!)}{isRequired && " *"}
+                </Label>
+                {helpText && <HelpItem helpText={helpText!} fieldLabelId={label!} />}
+            </div>
             <Controller
                 name={name!}
                 defaultValue={defaultValue}
@@ -128,120 +99,88 @@ export const IdentityProviderSelect = ({
                             : undefined
                 }}
                 render={({ field }) => (
-                    <Select
-                        id={name!}
-                        onOpenChange={toggleOpen}
-                        toggle={ref => (
-                            <MenuToggle
+                    <Popover open={open} onOpenChange={setOpen}>
+                        <PopoverTrigger asChild>
+                            <div
                                 data-testid={name!}
-                                ref={ref}
-                                variant="typeahead"
+                                className={`flex items-center border rounded-md px-3 py-2 cursor-pointer w-full ${errors[name!] ? "border-red-500" : ""} ${isDisabled ? "opacity-50 pointer-events-none" : ""}`}
                                 onClick={toggleOpen}
-                                isExpanded={open}
-                                isFullWidth
-                                isDisabled={isDisabled}
-                                status={errors[name!] ? "danger" : undefined}
                             >
-                                <TextInputGroup isPlain>
-                                    <TextInputGroupMain
-                                        value={inputValue || field.value}
-                                        onClick={toggleOpen}
-                                        onChange={(_, value) => {
+                                <div className="flex-1 flex flex-wrap gap-1">
+                                    {variant === "typeaheadMulti" && Array.isArray(field.value) && field.value.map((selection: string, index: number) => (
+                                        <Badge key={index} variant="secondary" className="cursor-pointer" onClick={ev => {
+                                            ev.stopPropagation();
+                                            field.onChange(field.value.filter((item: string) => item !== selection));
+                                        }}>
+                                            {selection} <X className="size-3 ml-1 inline" />
+                                        </Badge>
+                                    ))}
+                                    <Input
+                                        ref={textInputRef}
+                                        value={inputValue || (variant !== "typeaheadMulti" ? field.value?.[0] || "" : "")}
+                                        onChange={(e) => {
                                             setOpen(true);
-                                            setInputValue(value);
-                                            debounceFn(value);
+                                            setInputValue(e.target.value);
+                                            debounceFn(e.target.value);
                                         }}
+                                        onClick={(e) => { e.stopPropagation(); setOpen(true); }}
                                         autoComplete="off"
-                                        innerRef={textInputRef}
-                                        placeholderText={t("selectAUser")}
-                                        {...(field.value && {
-                                            "aria-activedescendant": field.value
-                                        })}
-                                        role="combobox"
-                                        isExpanded={open}
-                                        aria-controls="select-create-typeahead-listbox"
+                                        placeholder={t("selectAUser")}
+                                        className="border-0 p-0 h-auto focus-visible:ring-0 shadow-none"
+                                    />
+                                </div>
+                                {!!search && (
+                                    <Button
+                                        variant="ghost"
+                                        className="h-auto p-1"
+                                        onClick={(e) => {
+                                            e.stopPropagation();
+                                            setInputValue("");
+                                            setSearch("");
+                                            field.onChange([]);
+                                            textInputRef?.current?.focus();
+                                        }}
+                                        aria-label={t("clear")}
                                     >
-                                        {variant === "typeaheadMulti" &&
-                                            Array.isArray(field.value) && (
-                                                <ChipGroup aria-label="Current selections">
-                                                    {field.value.map(
-                                                        (
-                                                            selection: string,
-                                                            index: number
-                                                        ) => (
-                                                            <Chip
-                                                                key={index}
-                                                                onClick={ev => {
-                                                                    ev.stopPropagation();
-                                                                    field.onChange(
-                                                                        field.value.filter(
-                                                                            (
-                                                                                item: string
-                                                                            ) =>
-                                                                                item !==
-                                                                                selection
-                                                                        )
-                                                                    );
-                                                                }}
-                                                            >
-                                                                {selection}
-                                                            </Chip>
-                                                        )
-                                                    )}
-                                                </ChipGroup>
-                                            )}
-                                    </TextInputGroupMain>
-                                    <TextInputGroupUtilities>
-                                        {!!search && (
-                                            <Button
-                                                variant="plain"
-                                                onClick={() => {
-                                                    setInputValue("");
-                                                    setSearch("");
-                                                    field.onChange([]);
-                                                    textInputRef?.current?.focus();
-                                                }}
-                                                aria-label={t("clear")}
-                                            >
-                                                <TimesIcon aria-hidden />
-                                            </Button>
-                                        )}
-                                    </TextInputGroupUtilities>
-                                </TextInputGroup>
-                            </MenuToggle>
-                        )}
-                        isOpen={open}
-                        selected={field.value}
-                        onSelect={(_, v) => {
-                            const idp = v as IdentityProviderRepresentation;
-                            const option = idp.alias!;
-                            if (variant !== "typeaheadMulti") {
-                                const removed = field.value.includes(option);
-
-                                if (removed) {
-                                    field.onChange([]);
-                                } else {
-                                    field.onChange([option]);
-                                }
-
-                                setInputValue(removed ? "" : option || "");
-                                setOpen(false);
-                            } else {
-                                const changedValue = field.value.find(
-                                    (v: string) => v === option
-                                )
-                                    ? field.value.filter((v: string) => v !== option)
-                                    : [...field.value, option];
-                                field.onChange(changedValue);
-                            }
-                        }}
-                        aria-label={t(name!)}
-                    >
-                        <SelectList>{convert(idps)}</SelectList>
-                    </Select>
+                                        <X className="size-4" aria-hidden />
+                                    </Button>
+                                )}
+                            </div>
+                        </PopoverTrigger>
+                        <PopoverContent className="w-[var(--radix-popover-trigger-width)] p-0" align="start">
+                            <div className="max-h-60 overflow-auto">
+                                {idps.length === 0 ? (
+                                    <div className="px-3 py-2 text-sm text-muted-foreground">{t("noResultsFound")}</div>
+                                ) : (
+                                    idps.map(option => (
+                                        <div
+                                            key={option!.alias}
+                                            className={`px-3 py-2 text-sm cursor-pointer hover:bg-muted ${values?.includes(option!.alias!) ? "bg-muted" : ""}`}
+                                            onClick={() => {
+                                                const alias = option!.alias!;
+                                                if (variant !== "typeaheadMulti") {
+                                                    const removed = field.value.includes(alias);
+                                                    field.onChange(removed ? [] : [alias]);
+                                                    setInputValue(removed ? "" : alias);
+                                                    setOpen(false);
+                                                } else {
+                                                    const changedValue = field.value.find((v: string) => v === alias)
+                                                        ? field.value.filter((v: string) => v !== alias)
+                                                        : [...field.value, alias];
+                                                    field.onChange(changedValue);
+                                                }
+                                            }}
+                                        >
+                                            {option!.alias}
+                                        </div>
+                                    ))
+                                )}
+                            </div>
+                        </PopoverContent>
+                    </Popover>
                 )}
             />
             {errors[name!] && <FormErrorText message={t("required")} />}
-        </FormGroup>
+        </div>
     );
 };

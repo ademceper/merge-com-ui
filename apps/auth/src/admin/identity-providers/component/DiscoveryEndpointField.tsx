@@ -11,7 +11,9 @@
 
 // @ts-nocheck
 
-import { FormGroup, Spinner, Switch } from "../../../shared/@patternfly/react-core";
+import { Label } from "@merge/ui/components/label";
+import { Switch } from "@merge/ui/components/switch";
+import { KeycloakSpinner as Spinner } from "../../../shared/keycloak-ui-shared";
 import debouncePromise from "p-debounce";
 import { ReactNode, useMemo, useState } from "react";
 import { useFormContext } from "react-hook-form";
@@ -66,10 +68,9 @@ export const DiscoveryEndpointField = ({
 
     return (
         <>
-            <FormGroup
-                label={t(id === "oidc" ? "useDiscoveryEndpoint" : "useEntityDescriptor")}
-                fieldId="kc-discovery-endpoint"
-                labelIcon={
+            <div className="space-y-2">
+                <div className="flex items-center gap-1">
+                    <Label htmlFor="kc-discovery-endpoint">{t(id === "oidc" ? "useDiscoveryEndpoint" : "useEntityDescriptor")}</Label>
                     <HelpItem
                         helpText={t(
                             id === "oidc"
@@ -78,14 +79,11 @@ export const DiscoveryEndpointField = ({
                         )}
                         fieldLabelId="discoveryEndpoint"
                     />
-                }
-            >
+                </div>
                 <Switch
                     id="kc-discovery-endpoint-switch"
-                    label={t("on")}
-                    labelOff={t("off")}
-                    isChecked={discovery}
-                    onChange={(_event, checked) => {
+                    checked={discovery}
+                    onCheckedChange={(checked) => {
                         clearErrors("discoveryError");
                         setDiscovery(checked);
                     }}
@@ -93,7 +91,7 @@ export const DiscoveryEndpointField = ({
                         id === "oidc" ? "useDiscoveryEndpoint" : "useEntityDescriptor"
                     )}
                 />
-            </FormGroup>
+            </div>
             {discovery && (
                 <>
                     <div style={{ display: "none" }} data-testid="playwright-result">

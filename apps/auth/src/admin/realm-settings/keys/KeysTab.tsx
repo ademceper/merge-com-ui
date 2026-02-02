@@ -12,7 +12,7 @@
 // @ts-nocheck
 
 import type ComponentRepresentation from "@keycloak/keycloak-admin-client/lib/defs/componentRepresentation";
-import { Tab, TabTitleText } from "../../../shared/@patternfly/react-core";
+import { Tab } from "../../components/routable-tabs/RoutableTabs";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 
@@ -83,8 +83,8 @@ export const KeysTab = () => {
                 id="keysList"
                 data-testid="rs-keys-list-tab"
                 aria-label="keys-list-subtab"
-                title={<TabTitleText>{t("keysList")}</TabTitleText>}
-                {...listTab}
+                title={t("keysList")}
+                eventKey={listTab.eventKey}
             >
                 <KeysListTab realmComponents={realmComponents} />
             </Tab>
@@ -92,8 +92,8 @@ export const KeysTab = () => {
                 id="providers"
                 data-testid="rs-providers-tab"
                 aria-label="rs-providers-tab"
-                title={<TabTitleText>{t("providers")}</TabTitleText>}
-                {...providersTab}
+                title={t("providers")}
+                eventKey={providersTab.eventKey}
             >
                 <KeysProvidersTab realmComponents={realmComponents} refresh={refresh} />
             </Tab>

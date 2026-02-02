@@ -11,8 +11,8 @@
 
 // @ts-nocheck
 
+import { Badge } from "@merge/ui/components/badge";
 import {
-    Badge,
     MenuToggle,
     Select,
     SelectList,
@@ -56,7 +56,7 @@ export const CheckboxFilterComponent = ({
         >
             {filterPlaceholderText}
             {selectedItems.length > 0 && (
-                <Badge isRead className="pf-v5-u-m-xs">
+                <Badge variant="secondary" className="ml-1">
                     {selectedItems.length}
                 </Badge>
             )}

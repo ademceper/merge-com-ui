@@ -12,12 +12,8 @@
 // @ts-nocheck
 
 import type IdentityProviderRepresentation from "@keycloak/keycloak-admin-client/lib/defs/identityProviderRepresentation";
-import {
-    ActionGroup,
-    AlertVariant,
-    Button,
-    PageSection
-} from "../../../shared/@patternfly/react-core";
+import { Button } from "@merge/ui/components/button";
+import { AlertVariant } from "../../../shared/keycloak-ui-shared";
 import { useMemo } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
@@ -104,7 +100,7 @@ export default function AddIdentityProvider() {
                     provider: toUpperCase(providerId)
                 })}
             />
-            <PageSection variant="light">
+            <div className="p-6">
                 <FormAccess
                     role="manage-identity-providers"
                     isHorizontal
@@ -119,10 +115,9 @@ export default function AddIdentityProvider() {
                             />
                         )}
                     </FormProvider>
-                    <ActionGroup>
+                    <div className="flex gap-2">
                         <Button
-                            isDisabled={!isValid}
-                            variant="primary"
+                            disabled={!isValid}
                             type="submit"
                             data-testid="createProvider"
                         >
@@ -131,15 +126,15 @@ export default function AddIdentityProvider() {
                         <Button
                             variant="link"
                             data-testid="cancel"
-                            component={props => (
-                                <Link {...props} to={toIdentityProviders({ realm })} />
-                            )}
+                            asChild
                         >
-                            {t("cancel")}
+                            <Link to={toIdentityProviders({ realm })}>
+                                {t("cancel")}
+                            </Link>
                         </Button>
-                    </ActionGroup>
+                    </div>
                 </FormAccess>
-            </PageSection>
+            </div>
         </>
     );
 }

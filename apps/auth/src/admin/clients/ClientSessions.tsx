@@ -13,7 +13,6 @@
 
 import type ClientRepresentation from "@keycloak/keycloak-admin-client/lib/defs/clientRepresentation";
 import type UserSessionRepresentation from "@keycloak/keycloak-admin-client/lib/defs/userSessionRepresentation";
-import { PageSection } from "../../shared/@patternfly/react-core";
 import { useTranslation } from "react-i18next";
 import { useAdminClient } from "../admin-client";
 import { fetchAdminUI } from "../context/auth/admin-ui-endpoint";
@@ -38,12 +37,12 @@ export const ClientSessions = ({ client }: ClientSessionsProps) => {
         });
 
     return (
-        <PageSection variant="light" className="pf-v5-u-p-0">
+        <div className="p-0">
             <SessionsTable
                 loader={loader}
                 hiddenColumns={["clients"]}
                 emptyInstructions={t("noSessionsForClient")}
             />
-        </PageSection>
+        </div>
     );
 };

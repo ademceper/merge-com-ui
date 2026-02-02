@@ -13,18 +13,16 @@
 
 import type AuthenticatorConfigInfoRepresentation from "@keycloak/keycloak-admin-client/lib/defs/authenticatorConfigInfoRepresentation";
 import type AuthenticatorConfigRepresentation from "@keycloak/keycloak-admin-client/lib/defs/authenticatorConfigRepresentation";
-import { TextControl, useAlerts, useFetch } from "../../../shared/keycloak-ui-shared";
+import { AlertVariant, TextControl, useAlerts, useFetch } from "../../../shared/keycloak-ui-shared";
+import { Button } from "@merge/ui/components/button";
 import {
-    ActionGroup,
-    AlertVariant,
-    Button,
-    ButtonVariant,
-    Form,
-    Modal,
-    ModalVariant,
-    Tooltip
-} from "../../../shared/@patternfly/react-core";
-import { CogIcon, TrashIcon } from "../../../shared/@patternfly/react-icons";
+    Dialog,
+    DialogContent,
+    DialogHeader,
+    DialogTitle
+} from "@merge/ui/components/dialog";
+import { Tooltip, TooltipContent, TooltipTrigger, TooltipProvider } from "@merge/ui/components/tooltip";
+import { Gear, Trash } from "@phosphor-icons/react";
 import { useEffect, useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
@@ -150,70 +148,76 @@ export const ExecutionConfigModal = ({ execution }: ExecutionConfigModalProps) =
 
     return (
         <>
-            <Tooltip content={t("settings")}>
-                <Button
-                    variant="plain"
-                    aria-label={t("settings")}
-                    onClick={() => setShow(true)}
-                >
-                    <CogIcon />
-                </Button>
-            </Tooltip>
+            <TooltipProvider>
+                <Tooltip>
+                    <TooltipTrigger asChild>
+                        <Button
+                            variant="ghost"
+                            size="icon"
+                            aria-label={t("settings")}
+                            onClick={() => setShow(true)}
+                        >
+                            <Gear className="size-4" />
+                        </Button>
+                    </TooltipTrigger>
+                    <TooltipContent>{t("settings")}</TooltipContent>
+                </Tooltip>
+            </TooltipProvider>
             {configDescription && (
-                <Modal
-                    variant={ModalVariant.small}
-                    isOpen={show}
-                    title={t("executionConfig", { name: configDescription.name })}
-                    onClose={() => setShow(false)}
-                >
-                    <Form id="execution-config-form" onSubmit={handleSubmit(save)}>
-                        <FormProvider {...form}>
-                            <TextControl
-                                name="alias"
-                                label={t("alias")}
-                                labelIcon={t("authenticationAliasHelp")}
-                                rules={{ required: t("required") }}
-                                isDisabled={!!config}
-                            />
-                            <DynamicComponents
-                                stringify
-                                properties={configDescription.properties || []}
-                            />
-                        </FormProvider>
-                        <ActionGroup>
-                            <Button data-testid="save" variant="primary" type="submit">
-                                {t("save")}
-                            </Button>
-                            <Button
-                                data-testid="cancel"
-                                variant={ButtonVariant.link}
-                                onClick={() => {
-                                    setShow(false);
-                                }}
-                            >
-                                {t("cancel")}
-                            </Button>
-                            {config && (
+                <Dialog open={show} onOpenChange={(open) => { if (!open) setShow(false); }}>
+                    <DialogContent className="max-w-md">
+                        <DialogHeader>
+                            <DialogTitle>{t("executionConfig", { name: configDescription.name })}</DialogTitle>
+                        </DialogHeader>
+                        <form id="execution-config-form" onSubmit={handleSubmit(save)}>
+                            <FormProvider {...form}>
+                                <TextControl
+                                    name="alias"
+                                    label={t("alias")}
+                                    labelIcon={t("authenticationAliasHelp")}
+                                    rules={{ required: t("required") }}
+                                    isDisabled={!!config}
+                                />
+                                <DynamicComponents
+                                    stringify
+                                    properties={configDescription.properties || []}
+                                />
+                            </FormProvider>
+                            <div className="flex gap-2 mt-4">
+                                <Button data-testid="save" type="submit">
+                                    {t("save")}
+                                </Button>
                                 <Button
-                                    className="pf-v5-u-ml-4xl"
-                                    data-testid="clear"
-                                    variant={ButtonVariant.link}
-                                    onClick={async () => {
-                                        await adminClient.authenticationManagement.delConfig(
-                                            {
-                                                id: config.id!
-                                            }
-                                        );
-                                        setConfig(undefined);
+                                    data-testid="cancel"
+                                    variant="link"
+                                    onClick={() => {
                                         setShow(false);
                                     }}
                                 >
-                                    {t("clear")} <TrashIcon />
+                                    {t("cancel")}
                                 </Button>
-                            )}
-                        </ActionGroup>
-                    </Form>
-                </Modal>
+                                {config && (
+                                    <Button
+                                        className="ml-auto"
+                                        data-testid="clear"
+                                        variant="link"
+                                        onClick={async () => {
+                                            await adminClient.authenticationManagement.delConfig(
+                                                {
+                                                    id: config.id!
+                                                }
+                                            );
+                                            setConfig(undefined);
+                                            setShow(false);
+                                        }}
+                                    >
+                                        {t("clear")} <Trash className="size-4" />
+                                    </Button>
+                                )}
+                            </div>
+                        </form>
+                    </DialogContent>
+                </Dialog>
             )}
         </>
     );

@@ -17,7 +17,8 @@ import {
     KeycloakSelect,
     SelectVariant
 } from "../../../shared/keycloak-ui-shared";
-import { FormGroup, SelectOption } from "../../../shared/@patternfly/react-core";
+import { Label } from "@merge/ui/components/label";
+import { SelectOption } from "../../../shared/@patternfly/react-core";
 import { useState } from "react";
 import { Controller, useFormContext } from "react-hook-form";
 import { useTranslation } from "react-i18next";
@@ -70,12 +71,11 @@ export const MultiValuedListComponent = ({
     };
 
     return (
-        <FormGroup
-            label={t(label!)}
-            labelIcon={<HelpItem helpText={t(helpText!)} fieldLabelId={`${label}`} />}
-            fieldId={name!}
-            isRequired={required}
-        >
+        <div className="space-y-2">
+            <div className="flex items-center gap-1">
+                <Label htmlFor={name!}>{t(label!)}{required && " *"}</Label>
+                <HelpItem helpText={t(helpText!)} fieldLabelId={`${label}`} />
+            </div>
             <Controller
                 name={convertedName}
                 control={control}
@@ -154,6 +154,6 @@ export const MultiValuedListComponent = ({
                     </>
                 )}
             />
-        </FormGroup>
+        </div>
     );
 };

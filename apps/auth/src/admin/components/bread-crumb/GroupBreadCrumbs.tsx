@@ -14,7 +14,7 @@
 import { useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { Breadcrumb, BreadcrumbItem } from "../../../shared/@patternfly/react-core";
+// Breadcrumb replaced with HTML nav + tailwind
 
 import { useSubGroups } from "../../groups/SubGroupsContext";
 import { useRealm } from "../../context/realm-context/RealmContext";
@@ -34,31 +34,38 @@ export const GroupBreadCrumbs = () => {
     }, [location]);
 
     return subGroups.length !== 0 ? (
-        <Breadcrumb>
-            <BreadcrumbItem key="home">
+        <nav aria-label="breadcrumb" className="flex items-center gap-1 text-sm">
+            <span key="home">
                 <Link to={`/${realm}/groups`}>{t("groups")}</Link>
-            </BreadcrumbItem>
+                <span className="mx-1">/</span>
+            </span>
             {subGroups.map((group, i) => {
                 const isLastGroup = i === subGroups.length - 1;
                 return (
-                    <BreadcrumbItem key={group.id} isActive={isLastGroup}>
+                    <span key={group.id}>
                         {!isLastGroup && (
-                            <Link
-                                to={location.pathname.substring(
-                                    0,
-                                    location.pathname.indexOf(group.id!) +
-                                        group.id!.length
-                                )}
-                                onClick={() => remove(group)}
-                            >
-                                {group.name}
-                            </Link>
+                            <>
+                                <Link
+                                    to={location.pathname.substring(
+                                        0,
+                                        location.pathname.indexOf(group.id!) +
+                                            group.id!.length
+                                    )}
+                                    onClick={() => remove(group)}
+                                >
+                                    {group.name}
+                                </Link>
+                                <span className="mx-1">/</span>
+                            </>
                         )}
-                        {isLastGroup &&
-                            (group.id === "search" ? group.name : t("groupDetails"))}
-                    </BreadcrumbItem>
+                        {isLastGroup && (
+                            <span className="font-medium">
+                                {group.id === "search" ? group.name : t("groupDetails")}
+                            </span>
+                        )}
+                    </span>
                 );
             })}
-        </Breadcrumb>
+        </nav>
     ) : null;
 };

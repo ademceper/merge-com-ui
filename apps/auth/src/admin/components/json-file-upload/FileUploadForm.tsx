@@ -11,17 +11,22 @@
 
 // @ts-nocheck
 
+import { Button } from "@merge/ui/components/button";
 import {
-    Button,
+    Dialog,
+    DialogContent,
+    DialogHeader,
+    DialogTitle,
+    DialogFooter
+} from "@merge/ui/components/dialog";
+import {
     DropEvent,
     FileUpload,
     FileUploadProps,
     FormGroup,
     FormHelperText,
     HelperText,
-    HelperTextItem,
-    Modal,
-    ModalVariant
+    HelperTextItem
 } from "../../../shared/@patternfly/react-core";
 import {
     ChangeEvent,
@@ -90,35 +95,34 @@ export const FileUploadForm = ({
     return (
         <>
             {fileUpload.modal && (
-                <Modal
-                    variant={ModalVariant.small}
-                    title={t("clearFile")}
-                    isOpen
-                    onClose={removeDialog}
-                    actions={[
-                        <Button
-                            key="confirm"
-                            variant="primary"
-                            data-testid="clear-button"
-                            onClick={() => {
-                                setFileUpload(defaultUpload);
-                                onChange("");
-                            }}
-                        >
-                            {t("clear")}
-                        </Button>,
-                        <Button
-                            data-testid="cancel"
-                            key="cancel"
-                            variant="link"
-                            onClick={removeDialog}
-                        >
-                            {t("cancel")}
-                        </Button>
-                    ]}
-                >
-                    {t("clearFileExplain")}
-                </Modal>
+                <Dialog open onOpenChange={(open) => { if (!open) removeDialog(); }}>
+                    <DialogContent className="max-w-md">
+                        <DialogHeader>
+                            <DialogTitle>{t("clearFile")}</DialogTitle>
+                        </DialogHeader>
+                        <p>{t("clearFileExplain")}</p>
+                        <DialogFooter>
+                            <Button
+                                key="confirm"
+                                data-testid="clear-button"
+                                onClick={() => {
+                                    setFileUpload(defaultUpload);
+                                    onChange("");
+                                }}
+                            >
+                                {t("clear")}
+                            </Button>
+                            <Button
+                                data-testid="cancel"
+                                key="cancel"
+                                variant="link"
+                                onClick={removeDialog}
+                            >
+                                {t("cancel")}
+                            </Button>
+                        </DialogFooter>
+                    </DialogContent>
+                </Dialog>
             )}
             {unWrap && (
                 <FileUpload

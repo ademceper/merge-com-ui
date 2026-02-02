@@ -13,12 +13,8 @@
 
 import type ResourceServerRepresentation from "@keycloak/keycloak-admin-client/lib/defs/resourceServerRepresentation";
 import { KeycloakSpinner, useAlerts, useFetch } from "../../../shared/keycloak-ui-shared";
-import {
-    ActionGroup,
-    AlertVariant,
-    Button,
-    PageSection
-} from "../../../shared/@patternfly/react-core";
+import { AlertVariant } from "../../../shared/keycloak-ui-shared";
+import { Button } from "@merge/ui/components/button";
 import CodeEditor from "@uiw/react-textarea-code-editor";
 import { saveAs } from "file-saver";
 import { useState } from "react";
@@ -72,7 +68,7 @@ export const AuthorizationExport = () => {
     }
 
     return (
-        <PageSection>
+        <div className="p-6">
             <FormAccess
                 isHorizontal
                 role="manage-authorization"
@@ -86,7 +82,7 @@ export const AuthorizationExport = () => {
                     rows={10}
                     style={{ height: "30rem", overflow: "scroll" }}
                 />
-                <ActionGroup>
+                <div className="flex gap-2">
                     <Button
                         data-testid="authorization-export-download"
                         onClick={() => exportAuthDetails()}
@@ -107,8 +103,8 @@ export const AuthorizationExport = () => {
                     >
                         {t("copy")}
                     </Button>
-                </ActionGroup>
+                </div>
             </FormAccess>
-        </PageSection>
+        </div>
     );
 };

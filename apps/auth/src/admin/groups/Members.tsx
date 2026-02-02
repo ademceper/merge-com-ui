@@ -21,17 +21,11 @@ import {
     useAlerts,
     useFetch
 } from "../../shared/keycloak-ui-shared";
-import {
-    Button,
-    Checkbox,
-    Dropdown,
-    DropdownItem,
-    DropdownList,
-    Label,
-    MenuToggle,
-    ToolbarItem
-} from "../../shared/@patternfly/react-core";
-import { EllipsisVIcon, InfoCircleIcon } from "../../shared/@patternfly/react-icons";
+import { Button } from "@merge/ui/components/button";
+import { Checkbox } from "@merge/ui/components/checkbox";
+import { Label } from "@merge/ui/components/label";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@merge/ui/components/dropdown-menu";
+import { DotsThreeVertical, Info } from "@phosphor-icons/react";
 import { uniqBy } from "lodash-es";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -55,7 +49,8 @@ const UserDetailLink = (user: UserRepresentation) => {
         <Link key={user.id} to={toUser({ realm, id: user.id!, tab: "settings" })}>
             {user.username}{" "}
             {!user.enabled && (
-                <Label color="red" icon={<InfoCircleIcon />}>
+                <Label className="text-red-500">
+                    <Info className="size-4 inline mr-1" />
                     {t("disabled")}
                 </Label>
             )}
@@ -194,47 +189,39 @@ export const Members = () => {
                 toolbarItem={
                     isManager && (
                         <>
-                            <ToolbarItem>
+                            <div>
                                 <Button
                                     data-testid="addMember"
-                                    variant="primary"
+                                    variant="default"
                                     onClick={() => setAddMembers(true)}
                                 >
                                     {t("addMember")}
                                 </Button>
-                            </ToolbarItem>
-                            <ToolbarItem>
+                            </div>
+                            <div className="flex items-center gap-2">
                                 <Checkbox
                                     data-testid="includeSubGroupsCheck"
-                                    label={t("includeSubGroups")}
                                     id="kc-include-sub-groups"
-                                    isChecked={includeSubGroup}
-                                    onChange={() => setIncludeSubGroup(!includeSubGroup)}
+                                    checked={includeSubGroup}
+                                    onCheckedChange={() => setIncludeSubGroup(!includeSubGroup)}
                                 />
-                            </ToolbarItem>
-                            <ToolbarItem>
-                                <Dropdown
-                                    onOpenChange={isOpen => setIsKebabOpen(isOpen)}
-                                    toggle={ref => (
-                                        <MenuToggle
+                                <label htmlFor="kc-include-sub-groups">{t("includeSubGroups")}</label>
+                            </div>
+                            <div>
+                                <DropdownMenu>
+                                    <DropdownMenuTrigger asChild>
+                                        <Button
                                             data-testid="kebab"
-                                            ref={ref}
-                                            variant="plain"
-                                            onClick={() => setIsKebabOpen(!isKebabOpen)}
-                                            isExpanded={isKebabOpen}
-                                            isDisabled={selectedRows.length === 0}
+                                            variant="ghost"
+                                            disabled={selectedRows.length === 0}
                                             aria-label="Actions"
                                         >
-                                            <EllipsisVIcon />
-                                        </MenuToggle>
-                                    )}
-                                    shouldFocusToggleOnSelect
-                                    isOpen={isKebabOpen}
-                                >
-                                    <DropdownList>
-                                        <DropdownItem
+                                            <DotsThreeVertical className="size-4" />
+                                        </Button>
+                                    </DropdownMenuTrigger>
+                                    <DropdownMenuContent>
+                                        <DropdownMenuItem
                                             key="action"
-                                            component="button"
                                             onClick={async () => {
                                                 try {
                                                     await Promise.all(
@@ -261,10 +248,10 @@ export const Members = () => {
                                             }}
                                         >
                                             {t("leave")}
-                                        </DropdownItem>
-                                    </DropdownList>
-                                </Dropdown>
-                            </ToolbarItem>
+                                        </DropdownMenuItem>
+                                    </DropdownMenuContent>
+                                </DropdownMenu>
+                            </div>
                         </>
                     )
                 }

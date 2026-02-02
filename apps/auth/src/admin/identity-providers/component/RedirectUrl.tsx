@@ -11,7 +11,10 @@
 
 // @ts-nocheck
 
-import { ClipboardCopy, FormGroup } from "../../../shared/@patternfly/react-core";
+import { Button } from "@merge/ui/components/button";
+import { Input } from "@merge/ui/components/input";
+import { Label } from "@merge/ui/components/label";
+import { Copy } from "@phosphor-icons/react";
 import { useTranslation } from "react-i18next";
 import { HelpItem, useEnvironment } from "../../../shared/keycloak-ui-shared";
 import { useRealm } from "../../context/realm-context/RealmContext";
@@ -27,14 +30,17 @@ export const RedirectUrl = ({ id }: { id: string }) => {
     )}realms/${realm}/broker`;
 
     return (
-        <FormGroup
-            label={t("redirectURI")}
-            labelIcon={
+        <div className="space-y-2">
+            <div className="flex items-center gap-1">
+                <Label htmlFor="kc-redirect-uri">{t("redirectURI")}</Label>
                 <HelpItem helpText={t("redirectURIHelp")} fieldLabelId="redirectURI" />
-            }
-            fieldId="kc-redirect-uri"
-        >
-            <ClipboardCopy isReadOnly>{`${callbackUrl}/${id}/endpoint`}</ClipboardCopy>
-        </FormGroup>
+            </div>
+            <div className="flex gap-2">
+                <Input id="kc-redirect-uri" readOnly value={`${callbackUrl}/${id}/endpoint`} />
+                <Button variant="outline" onClick={() => navigator.clipboard.writeText(`${callbackUrl}/${id}/endpoint`)}>
+                    <Copy className="size-4" />
+                </Button>
+            </div>
+        </div>
     );
 };

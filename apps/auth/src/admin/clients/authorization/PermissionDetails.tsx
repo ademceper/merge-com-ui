@@ -22,17 +22,12 @@ import {
     useAlerts,
     useFetch
 } from "../../../shared/keycloak-ui-shared";
-import {
-    ActionGroup,
-    AlertVariant,
-    Button,
-    ButtonVariant,
-    DropdownItem,
-    FormGroup,
-    PageSection,
-    Radio,
-    Switch
-} from "../../../shared/@patternfly/react-core";
+import { AlertVariant } from "../../../shared/keycloak-ui-shared";
+import { Button } from "@merge/ui/components/button";
+import { Switch } from "@merge/ui/components/switch";
+import { Label } from "@merge/ui/components/label";
+import { RadioGroup, RadioGroupItem } from "@merge/ui/components/radio-group";
+import { DropdownMenuItem } from "@merge/ui/components/dropdown-menu";
 import { useState } from "react";
 import { Controller, FormProvider, useForm, useWatch } from "react-hook-form";
 import { useTranslation } from "react-i18next";
@@ -169,7 +164,7 @@ export default function PermissionDetails() {
         messageKey: t("deletePermissionConfirm", {
             permission: permission?.name
         }),
-        continueButtonVariant: ButtonVariant.danger,
+        continueButtonVariant: "danger",
         continueButtonLabel: "confirm",
         onConfirm: async () => {
             try {
@@ -208,19 +203,19 @@ export default function PermissionDetails() {
                 dropdownItems={
                     permissionId
                         ? [
-                              <DropdownItem
+                              <DropdownMenuItem
                                   key="delete"
                                   data-testid="delete-resource"
                                   isDisabled={isDisabled}
                                   onClick={() => toggleDeleteDialog()}
                               >
                                   {t("delete")}
-                              </DropdownItem>
+                              </DropdownMenuItem>
                           ]
                         : undefined
                 }
             />
-            <PageSection variant="light">
+            <div className="p-6">
                 <FormAccess
                     isHorizontal
                     role="manage-authorization"
@@ -246,28 +241,21 @@ export default function PermissionDetails() {
                                 }
                             }}
                         />
-                        <FormGroup
-                            label={t("applyToResourceTypeFlag")}
-                            fieldId="applyToResourceTypeFlag"
-                            labelIcon={
+                        <div className="space-y-2">
+                            <div className="flex items-center gap-2">
+                                <Label>{t("applyToResourceTypeFlag")}</Label>
                                 <HelpItem
                                     helpText={t("applyToResourceTypeFlagHelp")}
                                     fieldLabelId="applyToResourceTypeFlag"
                                 />
-                            }
-                        >
+                            </div>
                             <Switch
                                 id="applyToResourceTypeFlag"
-                                name="applyToResourceTypeFlag"
-                                label={t("on")}
-                                labelOff={t("off")}
-                                isChecked={applyToResourceTypeFlag}
-                                onChange={(_event, val) =>
-                                    setApplyToResourceTypeFlag(val)
-                                }
+                                checked={applyToResourceTypeFlag}
+                                onCheckedChange={setApplyToResourceTypeFlag}
                                 aria-label={t("applyToResourceTypeFlag")}
                             />
-                        </FormGroup>
+                        </div>
                         {applyToResourceTypeFlag ? (
                             <TextControl
                                 name="resourceType"
@@ -281,17 +269,14 @@ export default function PermissionDetails() {
                                 }}
                             />
                         ) : (
-                            <FormGroup
-                                label={t("resource")}
-                                fieldId="resources"
-                                labelIcon={
+                            <div className="space-y-2">
+                                <div className="flex items-center gap-2">
+                                    <Label>{t("resource")}</Label>
                                     <HelpItem
                                         helpText={t("permissionResources")}
                                         fieldLabelId="resources"
                                     />
-                                }
-                                isRequired={permissionType !== "scope"}
-                            >
+                                </div>
                                 <ResourcesPolicySelect
                                     name="resources"
                                     clientId={id}
@@ -311,20 +296,17 @@ export default function PermissionDetails() {
                                 {errors.resources && (
                                     <FormErrorText message={t("required")} />
                                 )}
-                            </FormGroup>
+                            </div>
                         )}
                         {permissionType === "scope" && (
-                            <FormGroup
-                                label={t("authorizationScopes")}
-                                fieldId="scopes"
-                                labelIcon={
+                            <div className="space-y-2">
+                                <div className="flex items-center gap-2">
+                                    <Label>{t("authorizationScopes")}</Label>
                                     <HelpItem
                                         helpText={t("permissionScopesHelp")}
                                         fieldLabelId="scopesSelect"
                                     />
-                                }
-                                isRequired
-                            >
+                                </div>
                                 <ScopeSelect
                                     clientId={id}
                                     resourceId={resourcesIds?.[0]}
@@ -333,92 +315,79 @@ export default function PermissionDetails() {
                                 {errors.scopes && (
                                     <FormErrorText message={t("required")} />
                                 )}
-                            </FormGroup>
+                            </div>
                         )}
-                        <FormGroup
-                            label={t("policies")}
-                            fieldId="policies"
-                            labelIcon={
+                        <div className="space-y-2">
+                            <div className="flex items-center gap-2">
+                                <Label>{t("policies")}</Label>
                                 <HelpItem
                                     helpText={t("permissionPoliciesHelp")}
                                     fieldLabelId="policies"
                                 />
-                            }
-                        >
+                            </div>
                             <ResourcesPolicySelect
                                 name="policies"
                                 clientId={id}
                                 permissionId={permissionId}
                             />
-                        </FormGroup>
-                        <FormGroup
-                            label={t("decisionStrategy")}
-                            labelIcon={
+                        </div>
+                        <div className="space-y-2">
+                            <div className="flex items-center gap-2">
+                                <Label>{t("decisionStrategy")}</Label>
                                 <HelpItem
                                     helpText={t("permissionDecisionStrategyHelp")}
                                     fieldLabelId="decisionStrategy"
                                 />
-                            }
-                            fieldId="policyEnforcementMode"
-                            hasNoPaddingTop
-                        >
+                            </div>
                             <Controller
                                 name="decisionStrategy"
                                 data-testid="decisionStrategy"
                                 defaultValue={DecisionStrategy.UNANIMOUS}
                                 control={control}
                                 render={({ field }) => (
-                                    <>
+                                    <RadioGroup
+                                        value={field.value}
+                                        onValueChange={field.onChange}
+                                        disabled={isDisabled}
+                                        className="flex flex-col gap-2"
+                                    >
                                         {Object.values(DecisionStrategy).map(strategy => (
-                                            <Radio
-                                                id={strategy}
-                                                key={strategy}
-                                                data-testid={strategy}
-                                                isChecked={field.value === strategy}
-                                                isDisabled={isDisabled}
-                                                name="decisionStrategies"
-                                                onChange={() => field.onChange(strategy)}
-                                                label={t(
-                                                    `decisionStrategies.${strategy}`
-                                                )}
-                                                className="pf-v5-u-mb-md"
-                                            />
+                                            <div key={strategy} className="flex items-center gap-2" data-testid={strategy}>
+                                                <RadioGroupItem value={strategy} id={strategy} />
+                                                <Label htmlFor={strategy}>{t(`decisionStrategies.${strategy}`)}</Label>
+                                            </div>
                                         ))}
-                                    </>
+                                    </RadioGroup>
                                 )}
                             />
-                        </FormGroup>
-                        <ActionGroup>
-                            <div className="pf-v5-u-mt-md">
-                                <Button
-                                    variant={ButtonVariant.primary}
-                                    type="submit"
-                                    data-testid="save"
-                                >
-                                    {t("save")}
-                                </Button>
+                        </div>
+                        <div className="flex gap-2 mt-4">
+                            <Button
+                                type="submit"
+                                data-testid="save"
+                            >
+                                {t("save")}
+                            </Button>
 
-                                <Button
-                                    variant="link"
-                                    data-testid="cancel"
-                                    component={props => (
-                                        <Link
-                                            {...props}
-                                            to={toAuthorizationTab({
-                                                realm,
-                                                clientId: id,
-                                                tab: "permissions"
-                                            })}
-                                        ></Link>
-                                    )}
+                            <Button
+                                variant="link"
+                                data-testid="cancel"
+                                asChild
+                            >
+                                <Link
+                                    to={toAuthorizationTab({
+                                        realm,
+                                        clientId: id,
+                                        tab: "permissions"
+                                    })}
                                 >
                                     {t("cancel")}
-                                </Button>
-                            </div>
-                        </ActionGroup>
+                                </Link>
+                            </Button>
+                        </div>
                     </FormProvider>
                 </FormAccess>
-            </PageSection>
+            </div>
         </>
     );
 }

@@ -15,15 +15,10 @@ import type KeycloakAdminClient from "@keycloak/keycloak-admin-client";
 import type ClientRepresentation from "@keycloak/keycloak-admin-client/lib/defs/clientRepresentation";
 import type RoleRepresentation from "@keycloak/keycloak-admin-client/lib/defs/roleRepresentation";
 import { useAlerts } from "../../../shared/keycloak-ui-shared";
-import {
-    AlertVariant,
-    Badge,
-    Button,
-    ButtonVariant,
-    Checkbox,
-    ToolbarItem
-} from "../../../shared/@patternfly/react-core";
-import { cellWidth } from "../../../shared/@patternfly/react-table";
+import { AlertVariant } from "../../../shared/keycloak-ui-shared";
+import { Badge } from "@merge/ui/components/badge";
+import { Button } from "@merge/ui/components/button";
+import { Checkbox } from "@merge/ui/components/checkbox";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useAdminClient } from "../../admin-client";
@@ -71,7 +66,7 @@ export const mapRoles = (assignedRoles: Row[], effectiveRoles: Row[], hide: bool
 export const ServiceRole = ({ role, client }: Row) => (
     <>
         {client?.clientId && (
-            <Badge isRead className="keycloak-admin--role-mapping__client-name">
+            <Badge variant="secondary" className="keycloak-admin--role-mapping__client-name">
                 {client.clientId}
             </Badge>
         )}
@@ -163,7 +158,7 @@ export const RoleMapping = ({
         titleKey: "removeMappingTitle",
         messageKey: t("removeMappingConfirm", { count: selected.length }),
         continueButtonLabel: "remove",
-        continueButtonVariant: ButtonVariant.danger,
+        continueButtonVariant: "destructive",
         onCancel: () => {
             setSelected([]);
             refresh();
@@ -206,38 +201,40 @@ export const RoleMapping = ({
                 }
                 toolbarItem={
                     <>
-                        <ToolbarItem>
-                            <Checkbox
-                                label={t("hideInheritedRoles")}
-                                id="hideInheritedRoles"
-                                data-testid="hideInheritedRoles"
-                                isChecked={hide}
-                                onChange={(_event, check) => {
-                                    setHide(check);
-                                    refresh();
-                                }}
-                            />
-                        </ToolbarItem>
+                        <div>
+                            <div className="flex items-center gap-2">
+                                <Checkbox
+                                    id="hideInheritedRoles"
+                                    data-testid="hideInheritedRoles"
+                                    checked={hide}
+                                    onCheckedChange={(check) => {
+                                        setHide(!!check);
+                                        refresh();
+                                    }}
+                                />
+                                <label htmlFor="hideInheritedRoles">{t("hideInheritedRoles")}</label>
+                            </div>
+                        </div>
                         {isManager && (
                             <>
-                                <ToolbarItem>
+                                <div>
                                     <AddRoleButton
                                         onFilerTypeChange={type => {
                                             setFilterType(type);
                                             setShowAssign(true);
                                         }}
                                     />
-                                </ToolbarItem>
-                                <ToolbarItem>
+                                </div>
+                                <div>
                                     <Button
                                         variant="link"
                                         data-testid="unAssignRole"
                                         onClick={toggleDeleteDialog}
-                                        isDisabled={selected.length === 0}
+                                        disabled={selected.length === 0}
                                     >
                                         {t("unAssignRole")}
                                     </Button>
-                                </ToolbarItem>
+                                </div>
                             </>
                         )}
                     </>
@@ -260,7 +257,6 @@ export const RoleMapping = ({
                     {
                         name: "role.name",
                         displayKey: "name",
-                        transforms: [cellWidth(30)],
                         cellRenderer: ServiceRole
                     },
                     {

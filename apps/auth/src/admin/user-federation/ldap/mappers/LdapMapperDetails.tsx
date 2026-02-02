@@ -15,6 +15,7 @@ import type ComponentRepresentation from "@keycloak/keycloak-admin-client/lib/de
 import type ComponentTypeRepresentation from "@keycloak/keycloak-admin-client/lib/defs/componentTypeRepresentation";
 import { DirectionType } from "@keycloak/keycloak-admin-client/lib/resources/userStorageProvider";
 import {
+    AlertVariant,
     HelpItem,
     KeycloakSelect,
     KeycloakSpinner,
@@ -23,16 +24,10 @@ import {
     useAlerts,
     useFetch
 } from "../../../../shared/keycloak-ui-shared";
-import {
-    ActionGroup,
-    AlertVariant,
-    Button,
-    ButtonVariant,
-    DropdownItem,
-    FormGroup,
-    PageSection,
-    SelectOption
-} from "../../../../shared/@patternfly/react-core";
+import { Button } from "@merge/ui/components/button";
+import { DropdownMenuItem } from "@merge/ui/components/dropdown-menu";
+import { Label } from "@merge/ui/components/label";
+import { SelectOption } from "../../../../shared/@patternfly/react-core";
 import { useState } from "react";
 import { Controller, FormProvider, useForm, useWatch } from "react-hook-form";
 import { useTranslation } from "react-i18next";
@@ -154,7 +149,7 @@ export default function LdapMapperDetails() {
         titleKey: "deleteMappingTitle",
         messageKey: "deleteMappingConfirm",
         continueButtonLabel: "delete",
-        continueButtonVariant: ButtonVariant.danger,
+        continueButtonVariant: "destructive",
         onConfirm: async () => {
             try {
                 await adminClient.components.del({
@@ -199,35 +194,35 @@ export default function LdapMapperDetails() {
                     isNew
                         ? undefined
                         : [
-                              <DropdownItem key="delete" onClick={toggleDeleteDialog}>
+                              <DropdownMenuItem key="delete" onClick={toggleDeleteDialog}>
                                   {t("delete")}
-                              </DropdownItem>,
+                              </DropdownMenuItem>,
                               ...(mapper?.metadata.fedToKeycloakSyncSupported
                                   ? [
-                                        <DropdownItem
+                                        <DropdownMenuItem
                                             key="fedSync"
                                             onClick={() => sync("fedToKeycloak")}
                                         >
                                             {t(mapper.metadata.fedToKeycloakSyncMessage)}
-                                        </DropdownItem>
+                                        </DropdownMenuItem>
                                     ]
                                   : []),
                               ...(mapper?.metadata.keycloakToFedSyncSupported
                                   ? [
-                                        <DropdownItem
+                                        <DropdownMenuItem
                                             key="ldapSync"
                                             onClick={async () => {
                                                 await sync("keycloakToFed");
                                             }}
                                         >
                                             {t(mapper.metadata.keycloakToFedSyncMessage)}
-                                        </DropdownItem>
+                                        </DropdownMenuItem>
                                     ]
                                   : [])
                           ]
                 }
             />
-            <PageSection variant="light" isFilled>
+            <div className="p-6 flex-1">
                 <FormProvider {...form}>
                     <FormAccess
                         role="manage-realm"
@@ -267,9 +262,9 @@ export default function LdapMapperDetails() {
                                 isDisabled={!isNew}
                             />
                         ) : (
-                            <FormGroup
-                                label={t("mapperType")}
-                                labelIcon={
+                            <div className="space-y-2">
+                                <div className="flex items-center gap-1">
+                                    <Label htmlFor="kc-providerId">{t("mapperType")} *</Label>
                                     <HelpItem
                                         helpText={
                                             mapper?.helpText
@@ -278,10 +273,7 @@ export default function LdapMapperDetails() {
                                         }
                                         fieldLabelId="mapperType"
                                     />
-                                }
-                                fieldId="kc-providerId"
-                                isRequired
-                            >
+                                </div>
                                 <Controller
                                     name="providerId"
                                     defaultValue=""
@@ -321,16 +313,15 @@ export default function LdapMapperDetails() {
                                         </KeycloakSelect>
                                     )}
                                 ></Controller>
-                            </FormGroup>
+                            </div>
                         )}
 
                         {!!mapperType && (
                             <DynamicComponents properties={mapper?.properties!} />
                         )}
-                        <ActionGroup>
+                        <div className="flex gap-2">
                             <Button
-                                isDisabled={!form.formState.isDirty}
-                                variant="primary"
+                                disabled={!form.formState.isDirty}
                                 type="submit"
                                 data-testid="ldap-mapper-save"
                             >
@@ -351,10 +342,10 @@ export default function LdapMapperDetails() {
                             >
                                 {t("cancel")}
                             </Button>
-                        </ActionGroup>
+                        </div>
                     </FormAccess>
                 </FormProvider>
-            </PageSection>
+            </div>
         </>
     );
 }

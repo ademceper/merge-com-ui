@@ -19,13 +19,9 @@ import {
     SelectVariant,
     useFetch
 } from "../../../shared/keycloak-ui-shared";
-import {
-    Button,
-    ButtonVariant,
-    PageSection,
-    SelectOption
-} from "../../../shared/@patternfly/react-core";
-import { FilterIcon } from "../../../shared/@patternfly/react-icons";
+import { Button } from "@merge/ui/components/button";
+import { Funnel } from "@phosphor-icons/react";
+import { SelectOption } from "../../../shared/@patternfly/react-core";
 import { cellWidth } from "../../../shared/@patternfly/react-table";
 import { useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -70,7 +66,7 @@ const SelectFilter = ({ onFilter }: SelectFilterProps) => {
             className="kc-filter-type-select"
             variant={SelectVariant.single}
             onToggle={toggleFilter}
-            toggleIcon={<FilterIcon />}
+            toggleIcon={<Funnel />}
             onSelect={value => {
                 const filter =
                     FILTER_OPTIONS.find(o => o === value.toString()) || FILTER_OPTIONS[0];
@@ -134,7 +130,7 @@ export const KeysListTab = ({ realmComponents }: KeysListTabProps) => {
         titleKey: t("publicKey"),
         messageKey: publicKey,
         continueButtonLabel: "close",
-        continueButtonVariant: ButtonVariant.primary,
+        continueButtonVariant: "default",
         onConfirm: () => Promise.resolve()
     });
 
@@ -142,7 +138,7 @@ export const KeysListTab = ({ realmComponents }: KeysListTabProps) => {
         titleKey: t("certificate"),
         messageKey: certificate,
         continueButtonLabel: "close",
-        continueButtonVariant: ButtonVariant.primary,
+        continueButtonVariant: "default",
         onConfirm: () => Promise.resolve()
     });
 
@@ -151,7 +147,7 @@ export const KeysListTab = ({ realmComponents }: KeysListTabProps) => {
     }
 
     return (
-        <PageSection variant="light" padding={{ default: "noPadding" }}>
+        <div>
             <PublicKeyDialog />
             <CertificateDialog />
             <KeycloakDataTable
@@ -207,25 +203,27 @@ export const KeysListTab = ({ realmComponents }: KeysListTabProps) => {
                         cellRenderer: ({ publicKey, certificate }: KeyData) => {
                             if (certificate) {
                                 return (
-                                    <div className="button-wrapper">
+                                    <div className="button-wrapper flex gap-2">
                                         <Button
+                                            type="button"
+                                            variant="secondary"
+                                            id={publicKey}
                                             onClick={() => {
                                                 togglePublicKeyDialog();
                                                 setPublicKey(publicKey!);
                                             }}
-                                            variant="secondary"
-                                            id={publicKey}
                                         >
                                             {t("publicKey")}
                                         </Button>
                                         <Button
+                                            type="button"
+                                            variant="secondary"
+                                            id={certificate}
+                                            className="kc-certificate"
                                             onClick={() => {
                                                 toggleCertificateDialog();
                                                 setCertificate(certificate!);
                                             }}
-                                            variant="secondary"
-                                            id={certificate}
-                                            className="kc-certificate"
                                         >
                                             {t("certificate")}
                                         </Button>
@@ -262,6 +260,6 @@ export const KeysListTab = ({ realmComponents }: KeysListTabProps) => {
                     />
                 }
             />
-        </PageSection>
+        </div>
     );
 };

@@ -11,13 +11,10 @@
 
 // @ts-nocheck
 
-import {
-    ActionGroup,
-    Button,
-    Divider,
-    FormGroup,
-    Switch
-} from "../../../shared/@patternfly/react-core";
+import { Button } from "@merge/ui/components/button";
+import { Switch } from "@merge/ui/components/switch";
+import { Separator } from "@merge/ui/components/separator";
+import { Label } from "@merge/ui/components/label";
 import { Controller, FormProvider, UseFormReturn } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { HelpItem } from "../../../shared/keycloak-ui-shared";
@@ -55,40 +52,38 @@ export const EventConfigForm = ({ type, form, reset, clear }: EventConfigFormPro
     return (
         <FormProvider {...form}>
             <DisableConfirm />
-            <FormGroup
-                hasNoPaddingTop
-                label={t("saveEvents")}
-                fieldId={eventKey}
-                labelIcon={
+            <div className="space-y-2">
+                <div className="flex items-center gap-1">
+                    <Label htmlFor={eventKey}>{t("saveEvents")}</Label>
                     <HelpItem
                         helpText={t(`save-${type}-eventsHelp`)}
                         fieldLabelId="saveEvents"
                     />
-                }
-            >
+                </div>
                 <Controller
                     name={eventKey}
                     defaultValue={false}
                     control={control}
                     render={({ field }) => (
-                        <Switch
-                            data-testid={eventKey}
-                            id={`${eventKey}-switch`}
-                            label={t("on")}
-                            labelOff={t("off")}
-                            isChecked={field.value}
-                            onChange={(_event, value) => {
-                                if (!value) {
-                                    toggleDisableDialog();
-                                } else {
-                                    field.onChange(value);
-                                }
-                            }}
-                            aria-label={t("saveEvents")}
-                        />
+                        <div className="flex items-center gap-2">
+                            <Switch
+                                data-testid={eventKey}
+                                id={`${eventKey}-switch`}
+                                checked={field.value}
+                                onCheckedChange={(value) => {
+                                    if (!value) {
+                                        toggleDisableDialog();
+                                    } else {
+                                        field.onChange(value);
+                                    }
+                                }}
+                                aria-label={t("saveEvents")}
+                            />
+                            <span className="text-sm">{field.value ? t("on") : t("off")}</span>
+                        </div>
                     )}
                 />
-            </FormGroup>
+            </div>
             {type === "admin" && (
                 <DefaultSwitchControl
                     name="adminEventsDetailsEnabled"
@@ -108,40 +103,37 @@ export const EventConfigForm = ({ type, form, reset, clear }: EventConfigFormPro
                     }}
                 />
             )}
-            <ActionGroup>
+            <div className="flex gap-2">
                 <Button
-                    variant="primary"
                     type="submit"
                     id={`save-${type}`}
                     data-testid={`save-${type}`}
-                    isDisabled={!isDirty}
+                    disabled={!isDirty}
                 >
                     {t("save")}
                 </Button>
-                <Button variant="link" onClick={reset}>
+                <Button variant="ghost" onClick={reset}>
                     {t("revert")}
                 </Button>
-            </ActionGroup>
-            <Divider />
-            <FormGroup
-                label={type === "user" ? t("clearUserEvents") : t("clearAdminEvents")}
-                fieldId={`clear-${type}-events`}
-                labelIcon={
+            </div>
+            <Separator />
+            <div className="space-y-2">
+                <div className="flex items-center gap-1">
+                    <Label htmlFor={`clear-${type}-events`}>{type === "user" ? t("clearUserEvents") : t("clearAdminEvents")}</Label>
                     <HelpItem
                         helpText={t(`${type}-clearEventsHelp`)}
                         fieldLabelId={`clear-${type}-events`}
                     />
-                }
-            >
+                </div>
                 <Button
-                    variant="danger"
+                    variant="destructive"
                     id={`clear-${type}-events`}
                     data-testid={`clear-${type}-events`}
                     onClick={() => clear()}
                 >
                     {type === "user" ? t("clearUserEvents") : t("clearAdminEvents")}
                 </Button>
-            </FormGroup>
+            </div>
         </FormProvider>
     );
 };

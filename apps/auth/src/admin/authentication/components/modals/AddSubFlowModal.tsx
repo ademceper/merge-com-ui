@@ -17,13 +17,14 @@ import {
     TextControl,
     useFetch
 } from "../../../../shared/keycloak-ui-shared";
+import { Button } from "@merge/ui/components/button";
 import {
-    Button,
-    ButtonVariant,
-    Form,
-    Modal,
-    ModalVariant
-} from "../../../../shared/@patternfly/react-core";
+    Dialog,
+    DialogContent,
+    DialogHeader,
+    DialogTitle,
+    DialogFooter
+} from "@merge/ui/components/dialog";
 import { useEffect, useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
@@ -65,67 +66,67 @@ export const AddSubFlowModal = ({ name, onConfirm, onCancel }: AddSubFlowProps) 
     }, [formProviders]);
 
     return (
-        <Modal
-            variant={ModalVariant.medium}
-            title={t("addSubFlowTo", { name })}
-            onClose={onCancel}
-            actions={[
-                <Button
-                    key="add"
-                    data-testid="modal-add"
-                    type="submit"
-                    form="sub-flow-form"
-                >
-                    {t("add")}
-                </Button>,
-                <Button
-                    key="cancel"
-                    data-testid="cancel"
-                    variant={ButtonVariant.link}
-                    onClick={onCancel}
-                >
-                    {t("cancel")}
-                </Button>
-            ]}
-            isOpen
-        >
-            <Form id="sub-flow-form" onSubmit={form.handleSubmit(onConfirm)} isHorizontal>
-                <FormProvider {...form}>
-                    <TextControl
-                        name="name"
-                        label={t("name")}
-                        labelIcon={t("clientIdHelp")}
-                        rules={{ required: t("required") }}
-                    />
-                    <TextControl
-                        name="description"
-                        label={t("description")}
-                        labelIcon={t("flowNameDescriptionHelp")}
-                    />
-                    <SelectControl
-                        name="type"
-                        menuAppendTo="parent"
-                        label={t("flowType")}
-                        options={types.map(type => ({
-                            key: type,
-                            value: t(`flow-type.${type}`)
-                        }))}
-                        controller={{ defaultValue: types[0] }}
-                    />
-                    {formProviders && formProviders.length > 1 && (
-                        <SelectControl
-                            name="provider"
-                            label={t("provider")}
-                            labelIcon={t("authenticationFlowTypeHelp")}
-                            options={formProviders.map(provider => ({
-                                key: provider.id!,
-                                value: provider.displayName!
-                            }))}
-                            controller={{ defaultValue: "" }}
+        <Dialog open onOpenChange={(open) => { if (!open) onCancel(); }}>
+            <DialogContent className="max-w-2xl">
+                <DialogHeader>
+                    <DialogTitle>{t("addSubFlowTo", { name })}</DialogTitle>
+                </DialogHeader>
+                <form id="sub-flow-form" onSubmit={form.handleSubmit(onConfirm)}>
+                    <FormProvider {...form}>
+                        <TextControl
+                            name="name"
+                            label={t("name")}
+                            labelIcon={t("clientIdHelp")}
+                            rules={{ required: t("required") }}
                         />
-                    )}
-                </FormProvider>
-            </Form>
-        </Modal>
+                        <TextControl
+                            name="description"
+                            label={t("description")}
+                            labelIcon={t("flowNameDescriptionHelp")}
+                        />
+                        <SelectControl
+                            name="type"
+                            menuAppendTo="parent"
+                            label={t("flowType")}
+                            options={types.map(type => ({
+                                key: type,
+                                value: t(`flow-type.${type}`)
+                            }))}
+                            controller={{ defaultValue: types[0] }}
+                        />
+                        {formProviders && formProviders.length > 1 && (
+                            <SelectControl
+                                name="provider"
+                                label={t("provider")}
+                                labelIcon={t("authenticationFlowTypeHelp")}
+                                options={formProviders.map(provider => ({
+                                    key: provider.id!,
+                                    value: provider.displayName!
+                                }))}
+                                controller={{ defaultValue: "" }}
+                            />
+                        )}
+                    </FormProvider>
+                </form>
+                <DialogFooter>
+                    <Button
+                        key="add"
+                        data-testid="modal-add"
+                        type="submit"
+                        form="sub-flow-form"
+                    >
+                        {t("add")}
+                    </Button>
+                    <Button
+                        key="cancel"
+                        data-testid="cancel"
+                        variant="link"
+                        onClick={onCancel}
+                    >
+                        {t("cancel")}
+                    </Button>
+                </DialogFooter>
+            </DialogContent>
+        </Dialog>
     );
 };

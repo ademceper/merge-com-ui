@@ -17,12 +17,7 @@ import {
     OrganizationTable,
     useAlerts
 } from "../../shared/keycloak-ui-shared";
-import {
-    Button,
-    ButtonVariant,
-    PageSection,
-    ToolbarItem
-} from "../../shared/@patternfly/react-core";
+import { Button } from "@merge/ui/components/button";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Link, useNavigate } from "react-router-dom";
@@ -53,7 +48,7 @@ export default function OrganizationSection() {
         titleKey: "organizationDelete",
         messageKey: "organizationDeleteConfirm",
         continueButtonLabel: "delete",
-        continueButtonVariant: ButtonVariant.danger,
+        continueButtonVariant: "destructive",
         onConfirm: async () => {
             try {
                 await adminClient.organizations.delById({
@@ -74,7 +69,7 @@ export default function OrganizationSection() {
                 subKey="organizationsExplain"
                 divider
             />
-            <PageSection variant="light" className="pf-v5-u-p-0">
+            <div className="p-0">
                 <DeleteConfirm />
                 <OrganizationTable
                     link={({ organization, children }) => (
@@ -94,16 +89,16 @@ export default function OrganizationSection() {
                     searchPlaceholderKey="searchOrganization"
                     isPaginated
                     toolbarItem={
-                        <ToolbarItem>
+                        <div>
                             <Button
                                 data-testid="addOrganization"
-                                component={props => (
-                                    <Link {...props} to={toAddOrganization({ realm })} />
-                                )}
+                                asChild
                             >
-                                {t("createOrganization")}
+                                <Link to={toAddOrganization({ realm })}>
+                                    {t("createOrganization")}
+                                </Link>
                             </Button>
-                        </ToolbarItem>
+                        </div>
                     }
                     onDelete={org => {
                         setSelectedOrg(org);
@@ -117,7 +112,7 @@ export default function OrganizationSection() {
                         onPrimaryAction={() => navigate(toAddOrganization({ realm }))}
                     />
                 </OrganizationTable>
-            </PageSection>
+            </div>
         </>
     );
 }

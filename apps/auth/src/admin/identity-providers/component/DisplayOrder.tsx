@@ -11,7 +11,8 @@
 
 // @ts-nocheck
 
-import { FormGroup, TextInput } from "../../../shared/@patternfly/react-core";
+import { Input } from "@merge/ui/components/input";
+import { Label } from "@merge/ui/components/label";
 import { Controller, useFormContext } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 
@@ -23,31 +24,30 @@ export const DisplayOrder = () => {
     const { control } = useFormContext();
 
     return (
-        <FormGroup
-            label={t("displayOrder")}
-            labelIcon={
+        <div className="space-y-2">
+            <div className="flex items-center gap-1">
+                <Label htmlFor="kc-display-order">{t("displayOrder")}</Label>
                 <HelpItem helpText={t("displayOrderHelp")} fieldLabelId="displayOrder" />
-            }
-            fieldId="kc-display-order"
-        >
+            </div>
             <Controller
                 name="config.guiOrder"
                 control={control}
                 defaultValue=""
                 render={({ field }) => (
-                    <TextInput
+                    <Input
                         id="kc-display-order"
                         type="number"
                         value={field.value}
                         data-testid="displayOrder"
                         min={0}
-                        onChange={(_event, value) => {
+                        onChange={(e) => {
+                            const value = e.target.value;
                             const num = Number(value);
                             field.onChange(value === "" ? value : num < 0 ? 0 : num);
                         }}
                     />
                 )}
             />
-        </FormGroup>
+        </div>
     );
 };

@@ -13,17 +13,15 @@
 
 import { fetchWithError } from "@keycloak/keycloak-admin-client";
 import { HelpItem, useFetch, useHelp } from "../../../shared/keycloak-ui-shared";
+import { Textarea } from "@merge/ui/components/textarea";
+import { Label } from "@merge/ui/components/label";
 import {
-    Form,
     FormGroup,
     MenuToggle,
     ModalVariant,
     Select,
     SelectList,
-    SelectOption,
-    Stack,
-    StackItem,
-    TextArea
+    SelectOption
 } from "../../../shared/@patternfly/react-core";
 import { saveAs } from "file-saver";
 import { useEffect, useMemo, useState } from "react";
@@ -120,9 +118,9 @@ export const DownloadDialog = ({
             toggleDialog={toggleDialog}
             variant={ModalVariant.medium}
         >
-            <Form>
-                <Stack hasGutter>
-                    <StackItem>
+            <form>
+                <div className="flex flex-col gap-4">
+                    <div>
                         <FormGroup
                             fieldId="type"
                             label={t("formatOption")}
@@ -174,9 +172,9 @@ export const DownloadDialog = ({
                                 </SelectList>
                             </Select>
                         </FormGroup>
-                    </StackItem>
+                    </div>
                     {!selectedConfig?.downloadOnly && (
-                        <StackItem isFilled>
+                        <div className="flex-1">
                             <FormGroup
                                 fieldId="details"
                                 label={t("details")}
@@ -187,11 +185,11 @@ export const DownloadDialog = ({
                                     />
                                 }
                             >
-                                <TextArea
+                                <Textarea
                                     id="details"
                                     readOnly
                                     rows={12}
-                                    resizeOrientation="vertical"
+                                    className="resize-y"
                                     value={
                                         snippet && typeof snippet === "string"
                                             ? snippet
@@ -200,10 +198,10 @@ export const DownloadDialog = ({
                                     aria-label="text area example"
                                 />
                             </FormGroup>
-                        </StackItem>
+                        </div>
                     )}
-                </Stack>
-            </Form>
+                </div>
+            </form>
         </ConfirmDialogModal>
     );
 };

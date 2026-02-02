@@ -19,7 +19,8 @@ import {
     SelectVariant,
     useFetch
 } from "../../../shared/keycloak-ui-shared";
-import { FormGroup, SelectOption } from "../../../shared/@patternfly/react-core";
+import { Label } from "@merge/ui/components/label";
+const SelectOption = ({ value, children, ...props }: any) => <option value={value} {...props}>{children}</option>;
 import { useState } from "react";
 import { Controller, useFormContext } from "react-hook-form";
 import { useTranslation } from "react-i18next";
@@ -79,14 +80,11 @@ export const ScopePicker = ({ clientId, resourceTypeScopes }: ScopePickerProps) 
             : scopes?.map(scope => scope.name!);
 
     return (
-        <FormGroup
-            label={t("authorizationScopes")}
-            labelIcon={
+        <div className="space-y-2">
+            <div className="flex items-center gap-2">
+                <Label>{t("authorizationScopes")}</Label>
                 <HelpItem helpText={t("clientScopesHelp")} fieldLabelId="scopes" />
-            }
-            fieldId="scopes"
-            isRequired={isAdminPermissionsClient}
-        >
+            </div>
             <Controller
                 name="scopes"
                 defaultValue={[]}
@@ -140,6 +138,6 @@ export const ScopePicker = ({ clientId, resourceTypeScopes }: ScopePickerProps) 
                     );
                 }}
             />
-        </FormGroup>
+        </div>
     );
 };

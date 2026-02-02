@@ -11,7 +11,7 @@
 
 // @ts-nocheck
 
-import { FormGroup } from "../../../../shared/@patternfly/react-core";
+import { Label } from "@merge/ui/components/label";
 import { useTranslation } from "react-i18next";
 import { HelpItem } from "../../../../shared/keycloak-ui-shared";
 import { useParams } from "../../../utils/useParams";
@@ -27,18 +27,16 @@ export const Aggregate = () => {
 
     return (
         <>
-            <FormGroup
-                label={t("applyPolicy")}
-                fieldId="policies"
-                labelIcon={
+            <div className="space-y-2">
+                <div className="flex items-center gap-2">
+                    <Label>{t("applyPolicy")}</Label>
                     <HelpItem helpText={t("applyPolicyHelp")} fieldLabelId="policies" />
-                }
-            >
+                </div>
                 <ResourcesPolicySelect
                     name="policies"
                     clientId={permissionClientId || id}
                 />
-            </FormGroup>
+            </div>
             <DecisionStrategySelect helpLabel="policyDecisionStagey" />
         </>
     );

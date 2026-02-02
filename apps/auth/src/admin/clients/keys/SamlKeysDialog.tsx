@@ -14,23 +14,11 @@
 import KeycloakAdminClient from "@keycloak/keycloak-admin-client";
 import type CertificateRepresentation from "@keycloak/keycloak-admin-client/lib/defs/certificateRepresentation";
 import type KeyStoreConfig from "@keycloak/keycloak-admin-client/lib/defs/keystoreConfig";
-import {
-    AlertVariant,
-    Button,
-    ButtonVariant,
-    Flex,
-    FlexItem,
-    Form,
-    FormGroup,
-    Modal,
-    ModalVariant,
-    Radio,
-    Split,
-    SplitItem,
-    Text,
-    TextContent,
-    Title
-} from "../../../shared/@patternfly/react-core";
+import { AlertVariant } from "../../../shared/keycloak-ui-shared";
+import { Button } from "@merge/ui/components/button";
+import { Label } from "@merge/ui/components/label";
+import { RadioGroup, RadioGroupItem } from "@merge/ui/components/radio-group";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@merge/ui/components/dialog";
 import { saveAs } from "file-saver";
 import { useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
@@ -127,96 +115,52 @@ export const SamlKeysDialog = ({
     };
 
     return (
-        <Modal
-            variant={ModalVariant.medium}
-            aria-label={t("enableClientSignatureRequiredModal")}
-            header={
-                <TextContent>
-                    <Title headingLevel="h1">
+        <Dialog open={true} onOpenChange={(open) => { if (!open) onClose(); }}>
+            <DialogContent className="max-w-lg">
+                <DialogHeader>
+                    <DialogTitle>
                         {t("enableClientSignatureRequired", {
                             key: t(localeKey)
                         })}
-                    </Title>
-                    <Text>
+                    </DialogTitle>
+                    <p className="text-sm text-muted-foreground">
                         {t("enableClientSignatureRequiredExplain", {
                             key: t(localeKey)
                         })}
-                    </Text>
-                </TextContent>
-            }
-            isOpen={true}
-            onClose={onClose}
-            actions={[
-                <Button
-                    id="modal-confirm"
-                    key="confirm"
-                    data-testid="confirm"
-                    variant="primary"
-                    isDisabled={!isValid && !keys}
-                    onClick={async () => {
-                        if (type) {
-                            await handleSubmit(submit)();
-                        }
-                        onClose();
-                    }}
-                >
-                    {t("confirm")}
-                </Button>,
-                <Button
-                    id="modal-cancel"
-                    key="cancel"
-                    data-testid="cancel"
-                    variant={ButtonVariant.link}
-                    onClick={onCancel}
-                >
-                    {t("cancel")}
-                </Button>
-            ]}
-        >
-            <FormProvider {...form}>
-                <Form isHorizontal>
-                    <FormGroup
-                        label={t("selectMethod")}
-                        fieldId="selectMethod"
-                        hasNoPaddingTop
-                    >
-                        <Flex>
-                            <FlexItem>
-                                <Radio
-                                    isChecked={!type}
-                                    name="selectMethodType"
-                                    onChange={() => setType(false)}
-                                    label={t("selectMethodType.generate")}
-                                    id="selectMethodType-generate"
-                                />
-                            </FlexItem>
-                            <FlexItem>
-                                <Radio
-                                    isChecked={type}
-                                    name="selectMethodType"
-                                    onChange={() => setType(true)}
-                                    label={t("selectMethodType.import")}
-                                    id="selectMethodType-import"
-                                />
-                            </FlexItem>
-                        </Flex>
-                    </FormGroup>
-                    {!type && (
-                        <FormGroup
-                            label={t("certificate")}
-                            fieldId="certificate"
-                            labelIcon={
-                                <HelpItem
-                                    helpText={t(`saml${localeKey}CertificateHelp`)}
-                                    fieldLabelId="certificate"
-                                />
-                            }
-                        >
-                            <Split hasGutter>
-                                <SplitItem isFilled>
-                                    <Certificate plain keyInfo={keys} />
-                                </SplitItem>
-                                <SplitItem>
+                    </p>
+                </DialogHeader>
+                <FormProvider {...form}>
+                    <form className="space-y-4">
+                        <div className="space-y-2">
+                            <Label>{t("selectMethod")}</Label>
+                            <RadioGroup
+                                value={type ? "import" : "generate"}
+                                onValueChange={(v) => setType(v === "import")}
+                                className="flex gap-4"
+                            >
+                                <div className="flex items-center gap-2">
+                                    <RadioGroupItem value="generate" id="selectMethodType-generate" />
+                                    <Label htmlFor="selectMethodType-generate">{t("selectMethodType.generate")}</Label>
+                                </div>
+                                <div className="flex items-center gap-2">
+                                    <RadioGroupItem value="import" id="selectMethodType-import" />
+                                    <Label htmlFor="selectMethodType-import">{t("selectMethodType.import")}</Label>
+                                </div>
+                            </RadioGroup>
+                        </div>
+                        {!type && (
+                            <div className="space-y-2">
+                                <div className="flex items-center gap-2">
+                                    <Label>{t("certificate")}</Label>
+                                    <HelpItem
+                                        helpText={t(`saml${localeKey}CertificateHelp`)}
+                                        fieldLabelId="certificate"
+                                    />
+                                </div>
+                                <div className="flex gap-2">
+                                    <div className="flex-1">
+                                        <Certificate plain keyInfo={keys} />
+                                    </div>
                                     <Button
                                         variant="secondary"
                                         data-testid="generate"
@@ -224,13 +168,36 @@ export const SamlKeysDialog = ({
                                     >
                                         {t("generate")}
                                     </Button>
-                                </SplitItem>
-                            </Split>
-                        </FormGroup>
-                    )}
-                </Form>
-                {type && <KeyForm useFile hasPem />}
-            </FormProvider>
-        </Modal>
+                                </div>
+                            </div>
+                        )}
+                    </form>
+                    {type && <KeyForm useFile hasPem />}
+                </FormProvider>
+                <DialogFooter>
+                    <Button
+                        id="modal-confirm"
+                        data-testid="confirm"
+                        disabled={!isValid && !keys}
+                        onClick={async () => {
+                            if (type) {
+                                await handleSubmit(submit)();
+                            }
+                            onClose();
+                        }}
+                    >
+                        {t("confirm")}
+                    </Button>
+                    <Button
+                        id="modal-cancel"
+                        data-testid="cancel"
+                        variant="link"
+                        onClick={onCancel}
+                    >
+                        {t("cancel")}
+                    </Button>
+                </DialogFooter>
+            </DialogContent>
+        </Dialog>
     );
 };

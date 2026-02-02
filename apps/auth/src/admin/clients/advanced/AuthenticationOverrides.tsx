@@ -13,7 +13,7 @@
 
 import AuthenticationFlowRepresentation from "@keycloak/keycloak-admin-client/lib/defs/authenticationFlowRepresentation";
 import { SelectControl, useFetch } from "../../../shared/keycloak-ui-shared";
-import { ActionGroup, Button } from "../../../shared/@patternfly/react-core";
+import { Button } from "@merge/ui/components/button";
 import { sortBy } from "lodash-es";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -82,7 +82,7 @@ export const AuthenticationOverrides = ({
                     ]}
                 />
             )}
-            <ActionGroup>
+            <div className="flex gap-2">
                 <Button
                     variant="secondary"
                     onClick={save}
@@ -97,7 +97,7 @@ export const AuthenticationOverrides = ({
                 >
                     {t("revert")}
                 </Button>
-            </ActionGroup>
+            </div>
         </FormAccess>
     );
 };

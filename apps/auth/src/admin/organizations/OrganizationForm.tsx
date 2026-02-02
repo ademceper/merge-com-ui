@@ -18,7 +18,7 @@ import {
     TextAreaControl,
     TextControl
 } from "../../shared/keycloak-ui-shared";
-import { FormGroup } from "../../shared/@patternfly/react-core";
+import { Label } from "@merge/ui/components/label";
 import { useEffect } from "react";
 import { useFormContext, useWatch } from "react-hook-form";
 import { useTranslation } from "react-i18next";
@@ -68,16 +68,14 @@ export const OrganizationForm = ({ readOnly = false }: OrganizationFormProps) =>
                 labelIcon={t("organizationAliasHelp")}
                 isDisabled={readOnly}
             />
-            <FormGroup
-                label={t("domain")}
-                fieldId="domain"
-                labelIcon={
+            <div className="space-y-2">
+                <div className="flex items-center gap-1">
+                    <Label htmlFor="domain">{t("domain")}</Label>
                     <HelpItem
                         helpText={t("organizationDomainHelp")}
                         fieldLabelId="domain"
                     />
-                }
-            >
+                </div>
                 <MultiLineInput
                     id="domain"
                     name="domains"
@@ -87,7 +85,7 @@ export const OrganizationForm = ({ readOnly = false }: OrganizationFormProps) =>
                 {errors?.["domains"]?.message && (
                     <FormErrorText message={errors["domains"].message.toString()} />
                 )}
-            </FormGroup>
+            </div>
             <TextControl
                 label={t("redirectUrl")}
                 name="redirectUrl"

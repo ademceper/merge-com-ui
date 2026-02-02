@@ -13,13 +13,7 @@
 
 import type RealmRepresentation from "@keycloak/keycloak-admin-client/lib/defs/realmRepresentation";
 import { SelectControl, SwitchControl } from "../../../shared/keycloak-ui-shared";
-import {
-    ActionGroup,
-    Button,
-    Tab,
-    TabTitleText,
-    Tabs
-} from "../../../shared/@patternfly/react-core";
+import { Button } from "@merge/ui/components/button";
 import { useMemo, useState } from "react";
 import { FormProvider, useFormContext, useWatch } from "react-hook-form";
 import { useTranslation } from "react-i18next";
@@ -76,17 +70,41 @@ export const LocalizationTab = ({ save, realm, tableData }: LocalizationTabProps
     });
 
     return (
-        <Tabs activeKey={activeTab} onSelect={(_, key) => setActiveTab(key as number)}>
-            <Tab
-                id="locales"
-                eventKey={0}
-                title={<TabTitleText>{t("locales")}</TabTitleText>}
-                data-testid="rs-localization-locales-tab"
-            >
+        <div>
+            <div className="flex border-b" role="tablist">
+                <button
+                    role="tab"
+                    className={`px-4 py-2 text-sm font-medium ${activeTab === 0 ? "border-b-2 border-primary text-primary" : "text-muted-foreground"}`}
+                    aria-selected={activeTab === 0}
+                    onClick={() => setActiveTab(0)}
+                    data-testid="rs-localization-locales-tab"
+                >
+                    {t("locales")}
+                </button>
+                <button
+                    role="tab"
+                    className={`px-4 py-2 text-sm font-medium ${activeTab === 1 ? "border-b-2 border-primary text-primary" : "text-muted-foreground"}`}
+                    aria-selected={activeTab === 1}
+                    onClick={() => setActiveTab(1)}
+                    data-testid="rs-localization-realm-overrides-tab"
+                >
+                    {t("realmOverrides")}
+                </button>
+                <button
+                    role="tab"
+                    className={`px-4 py-2 text-sm font-medium ${activeTab === 2 ? "border-b-2 border-primary text-primary" : "text-muted-foreground"}`}
+                    aria-selected={activeTab === 2}
+                    onClick={() => setActiveTab(2)}
+                    data-testid="rs-localization-effective-message-bundles-tab"
+                >
+                    {t("effectiveMessageBundles")}
+                </button>
+            </div>
+            {activeTab === 0 && (
                 <FormAccess
                     isHorizontal
                     role="manage-realm"
-                    className="pf-v5-u-mt-lg pf-v5-u-ml-md"
+                    className="mt-6 ml-4"
                     onSubmit={handleSubmit(save)}
                 >
                     <FormProvider {...form}>
@@ -144,45 +162,34 @@ export const LocalizationTab = ({ save, realm, tableData }: LocalizationTabProps
                             </>
                         )}
                     </FormProvider>
-                    <ActionGroup>
+                    <div className="flex gap-2">
                         <Button
-                            variant="primary"
-                            isDisabled={!formState.isDirty}
+                            disabled={!formState.isDirty}
                             type="submit"
                             data-testid="localization-tab-save"
                         >
                             {t("save")}
                         </Button>
-                        <Button variant="link" onClick={() => reset(realm)}>
+                        <Button variant="ghost" onClick={() => reset(realm)}>
                             {t("revert")}
                         </Button>
-                    </ActionGroup>
+                    </div>
                 </FormAccess>
-            </Tab>
-            <Tab
-                id="realm-overrides"
-                eventKey={1}
-                title={<TabTitleText>{t("realmOverrides")} </TabTitleText>}
-                data-testid="rs-localization-realm-overrides-tab"
-            >
+            )}
+            {activeTab === 1 && (
                 <RealmOverrides
                     internationalizationEnabled={internationalizationEnabled || false}
                     watchSupportedLocales={watchSupportedLocales || []}
                     realm={realm}
                     tableData={tableData}
                 />
-            </Tab>
-            <Tab
-                id="effective-message-bundles"
-                eventKey={2}
-                title={<TabTitleText>{t("effectiveMessageBundles")}</TabTitleText>}
-                data-testid="rs-localization-effective-message-bundles-tab"
-            >
+            )}
+            {activeTab === 2 && (
                 <EffectiveMessageBundles
                     defaultSupportedLocales={defaultSupportedLocales}
                     defaultLocales={[defaultLocales!]}
                 />
-            </Tab>
-        </Tabs>
+            )}
+        </div>
     );
 };

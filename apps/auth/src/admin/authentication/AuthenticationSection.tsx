@@ -13,28 +13,21 @@
 
 import { fetchWithError } from "@keycloak/keycloak-admin-client";
 import {
+    AlertVariant,
     KeycloakDataTable,
     KeycloakSpinner,
     ListEmptyState,
     useAlerts
 } from "../../shared/keycloak-ui-shared";
-import {
-    AlertVariant,
-    Button,
-    ButtonVariant,
-    Label,
-    PageSection,
-    Tab,
-    TabTitleText,
-    ToolbarItem
-} from "../../shared/@patternfly/react-core";
+import { Button } from "@merge/ui/components/button";
+import { Label } from "@merge/ui/components/label";
 import { sortBy } from "lodash-es";
 import { useState } from "react";
 import { Trans, useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 import { useAdminClient } from "../admin-client";
 import { useConfirmDialog } from "../components/confirm-dialog/ConfirmDialog";
-import { RoutableTabs, useRoutableTab } from "../components/routable-tabs/RoutableTabs";
+import { RoutableTabs, useRoutableTab, Tab } from "../components/routable-tabs/RoutableTabs";
 import { ViewHeader } from "../components/view-header/ViewHeader";
 import { useRealm } from "../context/realm-context/RealmContext";
 import helpUrls from "../help-urls";
@@ -124,7 +117,7 @@ export default function AuthenticationSection() {
             </Trans>
         ),
         continueButtonLabel: "delete",
-        continueButtonVariant: ButtonVariant.danger,
+        continueButtonVariant: "destructive",
         onConfirm: async () => {
             try {
                 await adminClient.authenticationManagement.deleteFlow({
@@ -169,14 +162,14 @@ export default function AuthenticationSection() {
                 helpUrl={helpUrls.authenticationUrl}
                 divider={false}
             />
-            <PageSection variant="light" className="pf-v5-u-p-0">
+            <div className="p-0">
                 <RoutableTabs
                     isBox
                     defaultLocation={toAuthentication({ realm: realmName, tab: "flows" })}
                 >
                     <Tab
                         data-testid="flows"
-                        title={<TabTitleText>{t("flows")}</TabTitleText>}
+                        title={<span>{t("flows")}</span>}
                         {...flowsTab}
                     >
                         <KeycloakDataTable
@@ -185,7 +178,7 @@ export default function AuthenticationSection() {
                             ariaLabelKey="titleAuthentication"
                             searchPlaceholderKey="searchForFlow"
                             toolbarItem={
-                                <ToolbarItem>
+                                <div>
                                     <Button
                                         component={props => (
                                             <Link
@@ -196,7 +189,7 @@ export default function AuthenticationSection() {
                                     >
                                         {t("createFlow")}
                                     </Button>
-                                </ToolbarItem>
+                                </div>
                             }
                             actionResolver={({ data }) => [
                                 {
@@ -255,20 +248,20 @@ export default function AuthenticationSection() {
                     </Tab>
                     <Tab
                         data-testid="requiredActions"
-                        title={<TabTitleText>{t("requiredActions")}</TabTitleText>}
+                        title={<span>{t("requiredActions")}</span>}
                         {...requiredActionsTab}
                     >
                         <RequiredActions />
                     </Tab>
                     <Tab
                         data-testid="policies"
-                        title={<TabTitleText>{t("policies")}</TabTitleText>}
+                        title={<span>{t("policies")}</span>}
                         {...policiesTab}
                     >
                         <Policies />
                     </Tab>
                 </RoutableTabs>
-            </PageSection>
+            </div>
         </>
     );
 }

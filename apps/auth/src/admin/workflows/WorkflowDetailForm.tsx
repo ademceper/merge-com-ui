@@ -11,12 +11,8 @@
 
 // @ts-nocheck
 
-import {
-    ActionGroup,
-    Button,
-    FormGroup,
-    PageSection
-} from "../../shared/@patternfly/react-core";
+import { Button } from "@merge/ui/components/button";
+import { Label } from "@merge/ui/components/label";
 import { AlertVariant } from "../../shared/keycloak-ui-shared";
 import { Controller, FormProvider, SubmitHandler, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
@@ -132,7 +128,7 @@ export default function WorkflowDetailForm() {
             <ViewHeader titleKey={titlekeyMap[mode]} subKey={subkeyMap[mode]} />
 
             <FormProvider {...form}>
-                <PageSection variant="light">
+                <div className="bg-muted/30 p-4">
                     <FormAccess
                         isHorizontal
                         onSubmit={
@@ -141,20 +137,17 @@ export default function WorkflowDetailForm() {
                                 : handleSubmit(onCreate)
                         }
                         role={"manage-realm"}
-                        className="pf-v5-u-mt-lg"
+                        className="mt-4"
                         fineGrainedAccess={true}
                     >
-                        <FormGroup
-                            label={t("workflowYAML")}
-                            labelIcon={
+                        <div className="space-y-2">
+                            <Label htmlFor="code" className="flex items-center gap-1">
+                                {t("workflowYAML")}
                                 <HelpItem
                                     helpText={t("workflowYAMLHelp")}
                                     fieldLabelId="code"
                                 />
-                            }
-                            fieldId="code"
-                            isRequired
-                        >
+                            </Label>
                             <Controller
                                 name="workflowYAML"
                                 control={control}
@@ -169,8 +162,8 @@ export default function WorkflowDetailForm() {
                                     />
                                 )}
                             />
-                        </FormGroup>
-                        <ActionGroup>
+                        </div>
+                        <div className="flex gap-2">
                             <FormSubmitButton
                                 formState={form.formState}
                                 data-testid="save"
@@ -181,35 +174,24 @@ export default function WorkflowDetailForm() {
                                 {mode === "update" ? t("save") : t("create")}
                             </FormSubmitButton>
                             {mode === "update" && (
-                                <Button
-                                    data-testid="copy"
-                                    variant="link"
-                                    component={props => (
-                                        <Link
-                                            {...props}
-                                            to={toWorkflowDetail({
-                                                realm,
-                                                mode: "copy",
-                                                id: id!
-                                            })}
-                                        />
-                                    )}
-                                >
-                                    {t("copy")}
-                                </Button>
+                                <Button data-testid="copy" variant="link" asChild>
+                                    <Link
+                                        to={toWorkflowDetail({
+                                            realm,
+                                            mode: "copy",
+                                            id: id!
+                                        })}
+                                    >
+                                        {t("copy")}
+                                    </Link>
+                                />
                             )}
-                            <Button
-                                data-testid="cancel"
-                                variant="link"
-                                component={props => (
-                                    <Link {...props} to={toWorkflows({ realm })} />
-                                )}
-                            >
-                                {t("cancel")}
+                            <Button data-testid="cancel" variant="link" asChild>
+                                <Link to={toWorkflows({ realm })}>{t("cancel")}</Link>
                             </Button>
-                        </ActionGroup>
+                        </div>
                     </FormAccess>
-                </PageSection>
+                </div>
             </FormProvider>
         </>
     );

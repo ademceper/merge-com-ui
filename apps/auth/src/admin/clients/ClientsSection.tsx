@@ -30,7 +30,7 @@ import { Link } from "react-router-dom";
 import { useAdminClient } from "../admin-client";
 import { useConfirmDialog } from "../components/confirm-dialog/ConfirmDialog";
 import { FormattedLink } from "../components/external-link/FormattedLink";
-import { RoutableTabs, useRoutableTab } from "../components/routable-tabs/RoutableTabs";
+import { RoutableTabs, Tab, useRoutableTab } from "../components/routable-tabs/RoutableTabs";
 import { Action, KeycloakDataTable } from "../../shared/keycloak-ui-shared";
 import { ViewHeader } from "../components/view-header/ViewHeader";
 import { useAccess } from "../context/access/Access";

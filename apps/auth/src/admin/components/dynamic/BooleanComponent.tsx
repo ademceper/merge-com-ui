@@ -11,7 +11,8 @@
 
 // @ts-nocheck
 
-import { FormGroup, Switch } from "../../../shared/@patternfly/react-core";
+import { Switch } from "@merge/ui/components/switch";
+import { Label } from "@merge/ui/components/label";
 import { Controller, useFormContext } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 
@@ -31,34 +32,37 @@ export const BooleanComponent = ({
     const { control } = useFormContext();
 
     return (
-        <FormGroup
-            hasNoPaddingTop
-            label={t(label!)}
-            fieldId={name!}
-            labelIcon={<HelpItem helpText={t(helpText!)} fieldLabelId={`${label}`} />}
-        >
+        <div className="space-y-2">
+            <div className="flex items-center gap-1">
+                <Label htmlFor={name!}>{t(label!)}</Label>
+                <HelpItem helpText={t(helpText!)} fieldLabelId={`${label}`} />
+            </div>
             <Controller
                 name={convertToName(name!)}
                 data-testid={name}
                 defaultValue={isNew ? defaultValue : false}
                 control={control}
                 render={({ field }) => (
-                    <Switch
-                        id={name!}
-                        isDisabled={isDisabled}
-                        label={t("on")}
-                        labelOff={t("off")}
-                        isChecked={
-                            field.value === "true" ||
-                            field.value === true ||
-                            field.value?.[0] === "true"
-                        }
-                        onChange={(_event, value) => field.onChange("" + value)}
-                        data-testid={name}
-                        aria-label={t(label!)}
-                    />
+                    <div className="flex items-center gap-2">
+                        <Switch
+                            id={name!}
+                            disabled={isDisabled}
+                            checked={
+                                field.value === "true" ||
+                                field.value === true ||
+                                field.value?.[0] === "true"
+                            }
+                            onCheckedChange={(value) => field.onChange("" + value)}
+                            data-testid={name}
+                            aria-label={t(label!)}
+                        />
+                        <span className="text-sm">{
+                            (field.value === "true" || field.value === true || field.value?.[0] === "true")
+                                ? t("on") : t("off")
+                        }</span>
+                    </div>
                 )}
             />
-        </FormGroup>
+        </div>
     );
 };

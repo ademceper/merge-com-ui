@@ -11,13 +11,14 @@
 
 // @ts-nocheck
 
+import { Button } from "@merge/ui/components/button";
 import {
-    Button,
-    ButtonVariant,
-    Form,
-    Modal,
-    ModalVariant
-} from "../../shared/@patternfly/react-core";
+    Dialog,
+    DialogContent,
+    DialogFooter,
+    DialogHeader,
+    DialogTitle
+} from "@merge/ui/components/dialog";
 import { FormProvider, SubmitHandler, UseFormReturn } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { TextControl } from "../../shared/keycloak-ui-shared";
@@ -44,53 +45,50 @@ export const AddTranslationModal = ({
     const { t } = useTranslation();
 
     return (
-        <Modal
-            variant={ModalVariant.small}
-            title={t("addTranslation")}
-            isOpen
-            onClose={handleModalToggle}
-            actions={[
-                <Button
-                    data-testid="add-translation-confirm-button"
-                    key="confirm"
-                    variant="primary"
-                    type="submit"
-                    form="translation-form"
-                >
-                    {t("create")}
-                </Button>,
-                <Button
-                    id="modal-cancel"
-                    data-testid="cancel"
-                    key="cancel"
-                    variant={ButtonVariant.link}
-                    onClick={() => {
-                        handleModalToggle();
-                    }}
-                >
-                    {t("cancel")}
-                </Button>
-            ]}
-        >
-            <Form id="translation-form" isHorizontal onSubmit={form.handleSubmit(save)}>
-                <FormProvider {...form}>
-                    <TextControl
-                        name="key"
-                        label={t("key")}
-                        autoFocus
-                        rules={{
-                            required: t("required")
+        <Dialog open onOpenChange={(open) => { if (!open) handleModalToggle(); }}>
+            <DialogContent className="max-w-md">
+                <DialogHeader>
+                    <DialogTitle>{t("addTranslation")}</DialogTitle>
+                </DialogHeader>
+                <form id="translation-form" onSubmit={form.handleSubmit(save)}>
+                    <FormProvider {...form}>
+                        <TextControl
+                            name="key"
+                            label={t("key")}
+                            autoFocus
+                            rules={{
+                                required: t("required")
+                            }}
+                        />
+                        <TextControl
+                            name="value"
+                            label={t("value")}
+                            rules={{
+                                required: t("required")
+                            }}
+                        />
+                    </FormProvider>
+                </form>
+                <DialogFooter>
+                    <Button
+                        data-testid="add-translation-confirm-button"
+                        type="submit"
+                        form="translation-form"
+                    >
+                        {t("create")}
+                    </Button>
+                    <Button
+                        id="modal-cancel"
+                        data-testid="cancel"
+                        variant="ghost"
+                        onClick={() => {
+                            handleModalToggle();
                         }}
-                    />
-                    <TextControl
-                        name="value"
-                        label={t("value")}
-                        rules={{
-                            required: t("required")
-                        }}
-                    />
-                </FormProvider>
-            </Form>
-        </Modal>
+                    >
+                        {t("cancel")}
+                    </Button>
+                </DialogFooter>
+            </DialogContent>
+        </Dialog>
     );
 };

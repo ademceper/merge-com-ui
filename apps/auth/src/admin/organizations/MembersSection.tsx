@@ -11,7 +11,6 @@
 
 // @ts-nocheck
 
-import { Tab, Tabs, TabTitleText } from "../../shared/@patternfly/react-core";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Invitations } from "./Invitations";
@@ -22,21 +21,25 @@ export const MembersSection = () => {
     const [activeTab, setActiveTab] = useState("members");
 
     return (
-        <Tabs activeKey={activeTab} onSelect={(_, key) => setActiveTab(key as string)}>
-            <Tab
-                eventKey="members"
-                title={<TabTitleText>{t("members")}</TabTitleText>}
-                data-testid="organization-members-tab"
-            >
-                <Members />
-            </Tab>
-            <Tab
-                eventKey="invitations"
-                title={<TabTitleText>{t("invitations")}</TabTitleText>}
-                data-testid="organization-invitations-tab"
-            >
-                <Invitations />
-            </Tab>
-        </Tabs>
+        <div>
+            <div className="flex border-b">
+                <button
+                    className={`px-4 py-2 text-sm font-medium ${activeTab === "members" ? "border-b-2 border-primary" : ""}`}
+                    onClick={() => setActiveTab("members")}
+                    data-testid="organization-members-tab"
+                >
+                    {t("members")}
+                </button>
+                <button
+                    className={`px-4 py-2 text-sm font-medium ${activeTab === "invitations" ? "border-b-2 border-primary" : ""}`}
+                    onClick={() => setActiveTab("invitations")}
+                    data-testid="organization-invitations-tab"
+                >
+                    {t("invitations")}
+                </button>
+            </div>
+            {activeTab === "members" && <Members />}
+            {activeTab === "invitations" && <Invitations />}
+        </div>
     );
 };

@@ -15,21 +15,20 @@ import RequiredActionConfigInfoRepresentation from "@keycloak/keycloak-admin-cli
 import RequiredActionConfigRepresentation from "@keycloak/keycloak-admin-client/lib/defs/requiredActionConfigRepresentation";
 import type RequiredActionProviderRepresentation from "@keycloak/keycloak-admin-client/lib/defs/requiredActionProviderRepresentation";
 import {
+    AlertVariant,
     isUserProfileError,
     setUserProfileServerError,
     useAlerts,
     useFetch
 } from "../../../shared/keycloak-ui-shared";
+import { Button } from "@merge/ui/components/button";
 import {
-    ActionGroup,
-    AlertVariant,
-    Button,
-    ButtonVariant,
-    Form,
-    Modal,
-    ModalVariant
-} from "../../../shared/@patternfly/react-core";
-import { TrashIcon } from "../../../shared/@patternfly/react-icons";
+    Dialog,
+    DialogContent,
+    DialogHeader,
+    DialogTitle
+} from "@merge/ui/components/dialog";
+import { Trash } from "@phosphor-icons/react";
 import { useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
@@ -125,48 +124,48 @@ export const RequiredActionConfigModal = ({
     };
 
     return (
-        <Modal
-            variant={ModalVariant.small}
-            isOpen
-            title={t("requiredActionConfig", { name: requiredAction.name })}
-            onClose={onClose}
-        >
-            <Form id="required-action-config-form" onSubmit={handleSubmit(save)}>
-                <FormProvider {...form}>
-                    <DynamicComponents
-                        stringify
-                        properties={configDescription?.properties || []}
-                    />
-                </FormProvider>
-                <ActionGroup>
-                    <Button data-testid="save" variant="primary" type="submit">
-                        {t("save")}
-                    </Button>
-                    <Button
-                        data-testid="cancel"
-                        variant={ButtonVariant.link}
-                        onClick={onClose}
-                    >
-                        {t("cancel")}
-                    </Button>
-                    <Button
-                        className="pf-v5-u-ml-3xl"
-                        data-testid="clear"
-                        variant={ButtonVariant.link}
-                        onClick={async () => {
-                            await adminClient.authenticationManagement.removeRequiredActionConfig(
-                                {
-                                    alias: requiredAction.alias!
-                                }
-                            );
-                            form.reset({});
-                            onClose();
-                        }}
-                    >
-                        {t("clear")} <TrashIcon />
-                    </Button>
-                </ActionGroup>
-            </Form>
-        </Modal>
+        <Dialog open onOpenChange={(open) => { if (!open) onClose(); }}>
+            <DialogContent className="max-w-md">
+                <DialogHeader>
+                    <DialogTitle>{t("requiredActionConfig", { name: requiredAction.name })}</DialogTitle>
+                </DialogHeader>
+                <form id="required-action-config-form" onSubmit={handleSubmit(save)}>
+                    <FormProvider {...form}>
+                        <DynamicComponents
+                            stringify
+                            properties={configDescription?.properties || []}
+                        />
+                    </FormProvider>
+                    <div className="flex gap-2 mt-4">
+                        <Button data-testid="save" type="submit">
+                            {t("save")}
+                        </Button>
+                        <Button
+                            data-testid="cancel"
+                            variant="link"
+                            onClick={onClose}
+                        >
+                            {t("cancel")}
+                        </Button>
+                        <Button
+                            className="ml-auto"
+                            data-testid="clear"
+                            variant="link"
+                            onClick={async () => {
+                                await adminClient.authenticationManagement.removeRequiredActionConfig(
+                                    {
+                                        alias: requiredAction.alias!
+                                    }
+                                );
+                                form.reset({});
+                                onClose();
+                            }}
+                        >
+                            {t("clear")} <Trash className="size-4" />
+                        </Button>
+                    </div>
+                </form>
+            </DialogContent>
+        </Dialog>
     );
 };

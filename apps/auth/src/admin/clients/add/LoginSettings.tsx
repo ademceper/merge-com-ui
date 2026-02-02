@@ -11,7 +11,7 @@
 
 // @ts-nocheck
 
-import { FormGroup } from "../../../shared/@patternfly/react-core";
+import { Label } from "@merge/ui/components/label";
 import { useFormContext } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { HelpItem, TextControl } from "../../../shared/keycloak-ui-shared";
@@ -47,33 +47,29 @@ export const LoginSettings = ({ protocol = "openid-connect" }: LoginSettingsProp
             />
             {(standardFlowEnabled || implicitFlowEnabled) && (
                 <>
-                    <FormGroup
-                        label={t("validRedirectUri")}
-                        fieldId="kc-redirect"
-                        labelIcon={
+                    <div className="space-y-2">
+                        <div className="flex items-center gap-2">
+                            <Label htmlFor="kc-redirect">{t("validRedirectUri")}</Label>
                             <HelpItem
                                 helpText={t("validRedirectURIsHelp")}
                                 fieldLabelId="validRedirectUri"
                             />
-                        }
-                    >
+                        </div>
                         <MultiLineInput
                             id="kc-redirect"
                             name="redirectUris"
                             aria-label={t("validRedirectUri")}
                             addButtonLabel="addRedirectUri"
                         />
-                    </FormGroup>
-                    <FormGroup
-                        label={t("validPostLogoutRedirectUri")}
-                        fieldId="kc-postLogoutRedirect"
-                        labelIcon={
+                    </div>
+                    <div className="space-y-2">
+                        <div className="flex items-center gap-2">
+                            <Label htmlFor="kc-postLogoutRedirect">{t("validPostLogoutRedirectUri")}</Label>
                             <HelpItem
                                 helpText={t("validPostLogoutRedirectURIsHelp")}
                                 fieldLabelId="validPostLogoutRedirectUri"
                             />
-                        }
-                    >
+                        </div>
                         <MultiLineInput
                             id="kc-postLogoutRedirect"
                             name={convertAttributeNameToForm(
@@ -83,7 +79,7 @@ export const LoginSettings = ({ protocol = "openid-connect" }: LoginSettingsProp
                             addButtonLabel="addPostLogoutRedirectUri"
                             stringify
                         />
-                    </FormGroup>
+                    </div>
                 </>
             )}
             {protocol === "saml" && (
@@ -107,23 +103,21 @@ export const LoginSettings = ({ protocol = "openid-connect" }: LoginSettingsProp
                 </>
             )}
             {protocol !== "saml" && standardFlowEnabled && (
-                <FormGroup
-                    label={t("webOrigins")}
-                    fieldId="kc-web-origins"
-                    labelIcon={
+                <div className="space-y-2">
+                    <div className="flex items-center gap-2">
+                        <Label htmlFor="kc-web-origins">{t("webOrigins")}</Label>
                         <HelpItem
                             helpText={t("webOriginsHelp")}
                             fieldLabelId="webOrigins"
                         />
-                    }
-                >
+                    </div>
                     <MultiLineInput
                         id="kc-web-origins"
                         name="webOrigins"
                         aria-label={t("webOrigins")}
                         addButtonLabel="addWebOrigins"
                     />
-                </FormGroup>
+                </div>
             )}
         </>
     );

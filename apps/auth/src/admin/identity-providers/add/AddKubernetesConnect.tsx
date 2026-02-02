@@ -12,12 +12,8 @@
 // @ts-nocheck
 
 import type IdentityProviderRepresentation from "@keycloak/keycloak-admin-client/lib/defs/identityProviderRepresentation";
-import {
-    ActionGroup,
-    AlertVariant,
-    Button,
-    PageSection
-} from "../../../shared/@patternfly/react-core";
+import { Button } from "@merge/ui/components/button";
+import { AlertVariant } from "../../../shared/keycloak-ui-shared";
 import { FormProvider, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { Link, useNavigate } from "react-router-dom";
@@ -74,7 +70,7 @@ export default function AddKubernetesConnect() {
     return (
         <>
             <ViewHeader titleKey={t("addKubernetesProvider")} />
-            <PageSection variant="light">
+            <div className="p-6">
                 <FormProvider {...form}>
                     <FormAccess
                         role="manage-identity-providers"
@@ -82,9 +78,8 @@ export default function AddKubernetesConnect() {
                         onSubmit={handleSubmit(onSubmit)}
                     >
                         <KubernetesSettings />
-                        <ActionGroup>
+                        <div className="flex gap-2">
                             <Button
-                                variant="primary"
                                 type="submit"
                                 data-testid="createProvider"
                             >
@@ -93,19 +88,16 @@ export default function AddKubernetesConnect() {
                             <Button
                                 variant="link"
                                 data-testid="cancel"
-                                component={props => (
-                                    <Link
-                                        {...props}
-                                        to={toIdentityProviders({ realm })}
-                                    />
-                                )}
+                                asChild
                             >
-                                {t("cancel")}
+                                <Link to={toIdentityProviders({ realm })}>
+                                    {t("cancel")}
+                                </Link>
                             </Button>
-                        </ActionGroup>
+                        </div>
                     </FormAccess>
                 </FormProvider>
-            </PageSection>
+            </div>
         </>
     );
 }

@@ -24,19 +24,10 @@ import {
     useAlerts,
     useFetch
 } from "../../../shared/keycloak-ui-shared";
-import {
-    AlertVariant,
-    Button,
-    ButtonVariant,
-    Divider,
-    DropdownItem,
-    Form,
-    PageSection,
-    Tab,
-    TabTitleText,
-    Text,
-    ToolbarItem
-} from "../../../shared/@patternfly/react-core";
+import { Button } from "@merge/ui/components/button";
+import { Separator } from "@merge/ui/components/separator";
+import { DropdownMenuItem } from "@merge/ui/components/dropdown-menu";
+import { AlertVariant } from "../../../shared/keycloak-ui-shared";
 import { useMemo, useState } from "react";
 import {
     Controller,
@@ -202,12 +193,12 @@ const Header = ({ onChange, value, save, toggleDeleteDialog }: HeaderProps) => {
                     !formState.isDirty &&
                     value
                         ? [
-                              <DropdownItem
+                              <DropdownMenuItem
                                   key="reloadKeys"
                                   onClick={() => reloadSamlKeys(provider.alias!)}
                               >
                                   {t("reloadKeys")}
-                              </DropdownItem>
+                              </DropdownMenuItem>
                           ]
                         : provider?.providerId?.includes("saml") &&
                             validateSignature === "true" &&
@@ -215,7 +206,7 @@ const Header = ({ onChange, value, save, toggleDeleteDialog }: HeaderProps) => {
                             metadataDescriptorUrl &&
                             !formState.isDirty
                           ? [
-                                <DropdownItem
+                                <DropdownMenuItem
                                     key="importKeys"
                                     onClick={() =>
                                         importSamlKeys(
@@ -225,13 +216,13 @@ const Header = ({ onChange, value, save, toggleDeleteDialog }: HeaderProps) => {
                                     }
                                 >
                                     {t("importKeys")}
-                                </DropdownItem>
+                                </DropdownMenuItem>
                             ]
                           : []),
-                    <Divider key="separator" />,
-                    <DropdownItem key="delete" onClick={() => toggleDeleteDialog()}>
+                    <Separator key="separator" />,
+                    <DropdownMenuItem key="delete" onClick={() => toggleDeleteDialog()}>
                         {t("delete")}
-                    </DropdownItem>
+                    </DropdownMenuItem>
                 ]}
                 isEnabled={value}
                 onToggle={value => {
@@ -384,7 +375,7 @@ export default function DetailSettings() {
         titleKey: "deleteProvider",
         messageKey: t("deleteConfirmIdentityProvider", { provider: alias }),
         continueButtonLabel: "delete",
-        continueButtonVariant: ButtonVariant.danger,
+        continueButtonVariant: "destructive",
         onConfirm: async () => {
             try {
                 await adminClient.identityProviders.del({ alias: alias });
@@ -402,7 +393,7 @@ export default function DetailSettings() {
             mapper: selectedMapper?.name
         }),
         continueButtonLabel: "delete",
-        continueButtonVariant: ButtonVariant.danger,
+        continueButtonVariant: "destructive",
         onConfirm: async () => {
             try {
                 await adminClient.identityProviders.delMapper({
@@ -495,10 +486,10 @@ export default function DetailSettings() {
             panel: (
                 <>
                     <DiscoverySettings readOnly={false} isOIDC={isOIDC} />
-                    <Form isHorizontal className="pf-v5-u-py-lg">
-                        <Divider />
+                    <form className="py-4">
+                        <Separator />
                         <OIDCAuthentication create={false} />
-                    </Form>
+                    </form>
                     <ExtendedNonDiscoverySettings />
                 </>
             )
@@ -509,10 +500,10 @@ export default function DetailSettings() {
             panel: (
                 <>
                     <DiscoverySettings readOnly={false} isOIDC={isOIDC} />
-                    <Form isHorizontal className="pf-v5-u-py-lg">
-                        <Divider />
+                    <form className="py-4">
+                        <Separator />
                         <OIDCAuthentication create={false} />
-                    </Form>
+                    </form>
                     <UserProfileClaimsSettings />
                     <ExtendedOAuth2Settings />
                 </>
@@ -523,12 +514,11 @@ export default function DetailSettings() {
             isHidden: !isJWTAuthorizationGrantSupported,
             panel: (
                 <>
-                    <Text className="pf-v5-u-pb-lg">
+                    <p className="pb-4">
                         {t("authorizationGrantSettingsHelp")}
-                    </Text>
-                    <Form
-                        isHorizontal
-                        className="pf-v5-u-py-lg"
+                    </p>
+                    <form
+                        className="py-4"
                         onSubmit={handleSubmit(save)}
                     >
                         <DefaultSwitchControl
@@ -541,7 +531,7 @@ export default function DetailSettings() {
                         {jwtAuthorizationGrantEnabled === "true" && (
                             <JWTAuthorizationGrantAssertionSettings />
                         )}
-                    </Form>
+                    </form>
                 </>
             )
         },
@@ -549,42 +539,39 @@ export default function DetailSettings() {
             title: t("generalSettings"),
             isHidden: !isSPIFFE,
             panel: (
-                <Form
-                    isHorizontal
-                    className="pf-v5-u-py-lg"
+                <form
+                    className="py-4"
                     onSubmit={handleSubmit(save)}
                 >
                     <SpiffeSettings />
                     <FixedButtonsGroup name="idp-details" isSubmit reset={reset} />
-                </Form>
+                </form>
             )
         },
         {
             title: t("generalSettings"),
             isHidden: !isJWTAuthorizationGrant,
             panel: (
-                <Form
-                    isHorizontal
-                    className="pf-v5-u-py-lg"
+                <form
+                    className="py-4"
                     onSubmit={handleSubmit(save)}
                 >
                     <JWTAuthorizationGrantSettings />
                     <FixedButtonsGroup name="idp-details" isSubmit reset={reset} />
-                </Form>
+                </form>
             )
         },
         {
             title: t("generalSettings"),
             isHidden: !isKubernetes,
             panel: (
-                <Form
-                    isHorizontal
-                    className="pf-v5-u-py-lg"
+                <form
+                    className="py-4"
                     onSubmit={handleSubmit(save)}
                 >
                     <KubernetesSettings />
                     <FixedButtonsGroup name="idp-details" isSubmit reset={reset} />
-                </Form>
+                </form>
             )
         },
         {
@@ -644,16 +631,16 @@ export default function DetailSettings() {
                 )}
             />
 
-            <PageSection variant="light" className="pf-v5-u-p-0">
+            <div className="p-0">
                 <RoutableTabs isBox defaultLocation={toTab("settings")}>
                     <Tab
                         id="settings"
-                        title={<TabTitleText>{t("settings")}</TabTitleText>}
+                        title={t("settings")}
                         {...settingsTab}
                     >
                         <ScrollForm
                             label={t("jumpToSection")}
-                            className="pf-v5-u-px-lg"
+                            className="px-4"
                             sections={sections}
                         />
                     </Tab>
@@ -661,7 +648,7 @@ export default function DetailSettings() {
                         id="mappers"
                         isHidden={isSPIFFE || isKubernetes || isJWTAuthorizationGrant}
                         data-testid="mappers-tab"
-                        title={<TabTitleText>{t("mappers")}</TabTitleText>}
+                        title={t("mappers")}
                         {...mappersTab}
                     >
                         <KeycloakDataTable
@@ -687,25 +674,24 @@ export default function DetailSettings() {
                             ariaLabelKey="mappersList"
                             searchPlaceholderKey="searchForMapper"
                             toolbarItem={
-                                <ToolbarItem>
+                                <div>
                                     <Button
                                         id="add-mapper-button"
-                                        component={props => (
-                                            <Link
-                                                {...props}
-                                                to={toIdentityProviderAddMapper({
-                                                    realm,
-                                                    alias: alias!,
-                                                    providerId: provider.providerId!,
-                                                    tab: "mappers"
-                                                })}
-                                            />
-                                        )}
+                                        asChild
                                         data-testid="addMapper"
                                     >
-                                        {t("addMapper")}
+                                        <Link
+                                            to={toIdentityProviderAddMapper({
+                                                realm,
+                                                alias: alias!,
+                                                providerId: provider.providerId!,
+                                                tab: "mappers"
+                                            })}
+                                        >
+                                            {t("addMapper")}
+                                        </Link>
                                     </Button>
-                                </ToolbarItem>
+                                </div>
                             }
                             columns={[
                                 {
@@ -739,7 +725,7 @@ export default function DetailSettings() {
                         <Tab
                             id="permissions"
                             data-testid="permissionsTab"
-                            title={<TabTitleText>{t("permissions")}</TabTitleText>}
+                            title={t("permissions")}
                             {...permissionsTab}
                         >
                             <PermissionsTab id={alias} type="identityProviders" />
@@ -749,7 +735,7 @@ export default function DetailSettings() {
                         hasAccess("view-events") && (
                             <Tab
                                 data-testid="admin-events-tab"
-                                title={<TabTitleText>{t("adminEvents")}</TabTitleText>}
+                                title={t("adminEvents")}
                                 {...eventsTab}
                             >
                                 <AdminEvents
@@ -758,7 +744,7 @@ export default function DetailSettings() {
                             </Tab>
                         )}
                 </RoutableTabs>
-            </PageSection>
+            </div>
         </FormProvider>
     );
 }

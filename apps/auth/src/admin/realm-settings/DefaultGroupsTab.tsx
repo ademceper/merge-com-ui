@@ -17,22 +17,13 @@ import {
     KeycloakDataTable,
     useAlerts,
     useFetch,
-    useHelp
+    useHelp,
+    AlertVariant
 } from "../../shared/keycloak-ui-shared";
-import {
-    AlertVariant,
-    Button,
-    ButtonVariant,
-    Dropdown,
-    DropdownItem,
-    DropdownList,
-    MenuToggle,
-    Popover,
-    Text,
-    TextContent,
-    ToolbarItem
-} from "../../shared/@patternfly/react-core";
-import { EllipsisVIcon, QuestionCircleIcon } from "../../shared/@patternfly/react-icons";
+import { Button } from "@merge/ui/components/button";
+import { Popover, PopoverContent, PopoverTrigger } from "@merge/ui/components/popover";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@merge/ui/components/dropdown-menu";
+import { DotsThreeVertical, Question } from "@phosphor-icons/react";
 import { useState } from "react";
 import { Trans, useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
@@ -123,7 +114,7 @@ export const DefaultsGroupsTab = () => {
         titleKey: t("removeConfirmTitle", { count: selectedRows.length }),
         messageKey: t("removeConfirm", { count: selectedRows.length }),
         continueButtonLabel: "delete",
-        continueButtonVariant: ButtonVariant.danger,
+        continueButtonVariant: "danger",
         onConfirm: removeGroup
     });
 
@@ -149,24 +140,22 @@ export const DefaultsGroupsTab = () => {
                 />
             )}
             {enabled && (
-                <Popover
-                    bodyContent={
+                <Popover>
+                    <PopoverTrigger asChild>
+                        <div
+                            className="keycloak__section_intro__help pl-6 cursor-pointer"
+                        >
+                            <p>
+                                <Question className="size-4 inline" /> {t("whatIsDefaultGroups")}
+                            </p>
+                        </div>
+                    </PopoverTrigger>
+                    <PopoverContent>
                         <Trans i18nKey="defaultGroupsHelp">
                             {" "}
                             <Link to={toUserFederation({ realm })} />.
                         </Trans>
-                    }
-                >
-                    <TextContent
-                        className="keycloak__section_intro__help"
-                        style={{
-                            paddingLeft: "var(--pf-v5-c-page__main-section--PaddingLeft)"
-                        }}
-                    >
-                        <Text>
-                            <QuestionCircleIcon /> {t("whatIsDefaultGroups")}
-                        </Text>
-                    </TextContent>
+                    </PopoverContent>
                 </Popover>
             )}
             <KeycloakDataTable
@@ -179,46 +168,36 @@ export const DefaultsGroupsTab = () => {
                 toolbarItem={
                     canAddOrRemoveGroups && (
                         <>
-                            <ToolbarItem>
+                            <div>
                                 <Button
                                     data-testid="openCreateGroupModal"
-                                    variant="primary"
                                     onClick={toggleGroupPicker}
                                 >
                                     {t("addGroups")}
                                 </Button>
-                            </ToolbarItem>
-                            <ToolbarItem>
-                                <Dropdown
-                                    onOpenChange={toggleKebab}
-                                    toggle={ref => (
-                                        <MenuToggle
-                                            ref={ref}
-                                            isExpanded={isKebabOpen}
-                                            variant="plain"
-                                            onClick={toggleKebab}
-                                            isDisabled={selectedRows!.length === 0}
+                            </div>
+                            <div>
+                                <DropdownMenu open={isKebabOpen} onOpenChange={toggleKebab}>
+                                    <DropdownMenuTrigger asChild>
+                                        <Button
+                                            variant="ghost"
+                                            disabled={selectedRows!.length === 0}
                                         >
-                                            <EllipsisVIcon />
-                                        </MenuToggle>
-                                    )}
-                                    isOpen={isKebabOpen}
-                                    shouldFocusToggleOnSelect
-                                >
-                                    <DropdownList>
-                                        <DropdownItem
-                                            key="action"
-                                            component="button"
+                                            <DotsThreeVertical className="size-4" />
+                                        </Button>
+                                    </DropdownMenuTrigger>
+                                    <DropdownMenuContent>
+                                        <DropdownMenuItem
                                             onClick={() => {
                                                 toggleRemoveDialog();
                                                 toggleKebab();
                                             }}
                                         >
                                             {t("remove")}
-                                        </DropdownItem>
-                                    </DropdownList>
-                                </Dropdown>
-                            </ToolbarItem>
+                                        </DropdownMenuItem>
+                                    </DropdownMenuContent>
+                                </DropdownMenu>
+                            </div>
                         </>
                     )
                 }
@@ -254,7 +233,7 @@ export const DefaultsGroupsTab = () => {
                             <Trans i18nKey="noDefaultGroupsInstructions">
                                 {" "}
                                 <Link
-                                    className="pf-v5-u-font-weight-light"
+                                    className="font-light"
                                     to={toUserFederation({ realm })}
                                     role="navigation"
                                     aria-label={t("identityBrokeringLink")}

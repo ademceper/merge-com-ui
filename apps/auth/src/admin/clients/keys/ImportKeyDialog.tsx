@@ -12,15 +12,8 @@
 // @ts-nocheck
 
 import { SelectControl, FileUploadControl } from "../../../shared/keycloak-ui-shared";
-import {
-    Button,
-    ButtonVariant,
-    Form,
-    Modal,
-    ModalVariant,
-    Text,
-    TextContent
-} from "../../../shared/@patternfly/react-core";
+import { Button } from "@merge/ui/components/button";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@merge/ui/components/dialog";
 import { FormProvider, useForm, useWatch } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { useServerInfo } from "../../context/server-info/ServerInfoProvider";

@@ -11,19 +11,12 @@
 
 // @ts-nocheck
 
-import {
-    AlertVariant,
-    PageSection,
-    useWizardContext,
-    Wizard,
-    WizardFooter,
-    WizardStep
-} from "../../../shared/@patternfly/react-core";
+import { AlertVariant, useAlerts } from "../../../shared/keycloak-ui-shared";
+import { Button } from "@merge/ui/components/button";
 import { FormProvider, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 import { useAdminClient } from "../../admin-client";
-import { useAlerts } from "../../../shared/keycloak-ui-shared";
 import { FormAccess } from "../../components/form/FormAccess";
 import { ViewHeader } from "../../components/view-header/ViewHeader";
 import { useRealm } from "../../context/realm-context/RealmContext";
@@ -36,30 +29,11 @@ import { GeneralSettings } from "./GeneralSettings";
 import { LoginSettings } from "./LoginSettings";
 import { useState } from "react";
 
-const NewClientFooter = (newClientForm: any) => {
-    const { t } = useTranslation();
-    const { trigger } = newClientForm;
-    const { activeStep, goToNextStep, goToPrevStep, close } = useWizardContext();
-
-    const forward = async (onNext: () => void) => {
-        if (!(await trigger())) {
-            return;
-        }
-        onNext?.();
-    };
-
-    return (
-        <WizardFooter
-            activeStep={activeStep}
-            onNext={() => forward(goToNextStep)}
-            onBack={goToPrevStep}
-            onClose={close}
-            isBackDisabled={activeStep.index === 1}
-            backButtonText={t("back")}
-            nextButtonText={t("next")}
-            cancelButtonText={t("cancel")}
-        />
-    );
+type WizardStep = {
+    name: string;
+    id: string;
+    isHidden?: boolean;
+    component: React.ReactNode;
 };
 
 export default function NewClientForm() {
@@ -69,6 +43,7 @@ export default function NewClientForm() {
     const { realm } = useRealm();
     const navigate = useNavigate();
     const [saving, setSaving] = useState<boolean>(false);
+    const [currentStep, setCurrentStep] = useState(0);
 
     const { addAlert, addError } = useAlerts();
     const form = useForm<FormFields>({
@@ -89,7 +64,7 @@ export default function NewClientForm() {
             }
         }
     });
-    const { getValues, watch } = form;
+    const { getValues, watch, trigger } = form;
     const protocol = watch("protocol");
 
     const save = async () => {
@@ -110,51 +85,79 @@ export default function NewClientForm() {
         }
     };
 
-    const title = t("createClient");
+    const steps: WizardStep[] = [
+        {
+            name: t("generalSettings"),
+            id: "generalSettings",
+            component: <GeneralSettings />
+        },
+        {
+            name: t("capabilityConfig"),
+            id: "capabilityConfig",
+            isHidden: protocol === "saml",
+            component: <CapabilityConfig protocol={protocol} />
+        },
+        {
+            name: t("loginSettings"),
+            id: "loginSettings",
+            component: (
+                <FormAccess isHorizontal role="manage-clients">
+                    <LoginSettings protocol={protocol} />
+                </FormAccess>
+            )
+        }
+    ].filter(step => !step.isHidden);
+
+    const isLastStep = currentStep === steps.length - 1;
+
+    const forward = async () => {
+        if (!(await trigger())) return;
+        if (isLastStep) {
+            save();
+        } else {
+            setCurrentStep(currentStep + 1);
+        }
+    };
+
     return (
         <>
             <ViewHeader titleKey="createClient" subKey="clientsExplain" />
-            <PageSection variant="light">
+            <div className="p-6">
                 <FormProvider {...form}>
-                    <Wizard
-                        onClose={() => navigate(toClients({ realm }))}
-                        navAriaLabel={`${title} steps`}
-                        onSave={save}
-                        isProgressive
-                        footer={<NewClientFooter {...form} />}
-                    >
-                        <WizardStep
-                            name={t("generalSettings")}
-                            id="generalSettings"
-                            key="generalSettings"
+                    <nav aria-label={`${t("createClient")} steps`} className="mb-6">
+                        <ol className="flex gap-4">
+                            {steps.map((step, index) => (
+                                <li
+                                    key={step.id}
+                                    className={`text-sm font-medium ${index === currentStep ? "text-primary" : "text-muted-foreground"}`}
+                                >
+                                    {index + 1}. {step.name}
+                                </li>
+                            ))}
+                        </ol>
+                    </nav>
+                    <div>{steps[currentStep]?.component}</div>
+                    <div className="flex gap-2 mt-6">
+                        <Button
+                            variant="outline"
+                            onClick={() => navigate(toClients({ realm }))}
                         >
-                            <GeneralSettings />
-                        </WizardStep>
-                        <WizardStep
-                            name={t("capabilityConfig")}
-                            id="capabilityConfig"
-                            key="capabilityConfig"
-                            isHidden={protocol === "saml"}
-                        >
-                            <CapabilityConfig protocol={protocol} />
-                        </WizardStep>
-                        <WizardStep
-                            name={t("loginSettings")}
-                            id="loginSettings"
-                            key="loginSettings"
-                            footer={{
-                                backButtonText: t("back"),
-                                nextButtonText: t("save"),
-                                cancelButtonText: t("cancel")
-                            }}
-                        >
-                            <FormAccess isHorizontal role="manage-clients">
-                                <LoginSettings protocol={protocol} />
-                            </FormAccess>
-                        </WizardStep>
-                    </Wizard>
+                            {t("cancel")}
+                        </Button>
+                        {currentStep > 0 && (
+                            <Button
+                                variant="secondary"
+                                onClick={() => setCurrentStep(currentStep - 1)}
+                            >
+                                {t("back")}
+                            </Button>
+                        )}
+                        <Button onClick={forward}>
+                            {isLastStep ? t("save") : t("next")}
+                        </Button>
+                    </div>
                 </FormProvider>
-            </PageSection>
+            </div>
         </>
     );
 }

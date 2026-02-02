@@ -20,11 +20,10 @@ import { useTranslation } from "react-i18next";
 import { toUpperCase } from "../../util";
 import { DropdownMenuItem } from "@merge/ui/components/dropdown-menu";
 import {
-    MenuToggle,
-    Select,
-    SelectOption,
-    SelectProps
-} from "../../../shared/@patternfly/react-core";
+    KeycloakSelect,
+    SelectVariant
+} from "../../../shared/keycloak-ui-shared";
+import { SelectOption } from "../../../shared/@patternfly/react-core";
 
 export enum ClientScope {
     default = "default",
@@ -64,7 +63,7 @@ export const clientScopeTypesDropdown = (
         </DropdownMenuItem>
     ));
 
-type CellDropdownProps = Omit<SelectProps, "toggle"> & {
+type CellDropdownProps = {
     clientScope: ClientScopeRepresentation;
     type: ClientScopeType | AllClientScopeType;
     all?: boolean;
@@ -77,43 +76,33 @@ export const CellDropdown = ({
     type,
     onSelect,
     all = false,
-    isDisabled,
-    ...props
+    isDisabled
 }: CellDropdownProps) => {
     const { t } = useTranslation();
     const [open, setOpen] = useState(false);
 
     return (
-        <Select
+        <KeycloakSelect
             key={clientScope.id}
-            toggle={ref => (
-                <MenuToggle
-                    data-testid="cell-dropdown"
-                    className={`keycloak__client-scope__${type}`}
-                    ref={ref}
-                    onClick={() => setOpen(!open)}
-                    isExpanded={open}
-                    isDisabled={isDisabled}
-                >
-                    {t(`clientScopeType.${type}`)}
-                </MenuToggle>
-            )}
+            toggleId="cell-dropdown"
+            className={`keycloak__client-scope__${type}`}
+            variant={SelectVariant.single}
+            onToggle={() => setOpen(!open)}
             isOpen={open}
-            onOpenChange={isOpen => setOpen(isOpen)}
-            selected={[type]}
-            onSelect={(_, value) => {
+            selections={[type]}
+            onSelect={value => {
                 onSelect(
                     all ? (value as ClientScopeType) : (value as AllClientScopeType)
                 );
                 setOpen(false);
             }}
-            {...props}
+            isDisabled={isDisabled}
         >
             {clientScopeTypesSelectOptions(
                 t,
                 all ? allClientScopeTypes : clientScopeTypes
             )}
-        </Select>
+        </KeycloakSelect>
     );
 };
 

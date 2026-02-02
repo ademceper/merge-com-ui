@@ -12,14 +12,7 @@
 // @ts-nocheck
 
 import { FormSubmitButton, useAlerts, useFetch } from "../../shared/keycloak-ui-shared";
-import {
-    ActionGroup,
-    Button,
-    PageSection,
-    Tab,
-    Tabs,
-    TabTitleText
-} from "../../shared/@patternfly/react-core";
+import { Button } from "@merge/ui/components/button";
 import { FormProvider, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { useAdminClient } from "../admin-client";
@@ -96,7 +89,7 @@ export default function DetailOrganization() {
     const [activeEventsTab, setActiveEventsTab] = useState("adminEvents");
 
     return (
-        <PageSection variant="light" className="pf-v5-u-p-0">
+        <div className="p-0">
             <FormProvider {...form}>
                 <DetailOrganizationHeader save={() => save(form.getValues())} />
                 <RoutableTabs
@@ -108,17 +101,17 @@ export default function DetailOrganization() {
                     <Tab
                         id="settings"
                         data-testid="settingsTab"
-                        title={<TabTitleText>{t("settings")}</TabTitleText>}
+                        title={t("settings")}
                         {...settingsTab}
                     >
-                        <PageSection>
+                        <div className="p-6">
                             <FormAccess
                                 role="anyone"
                                 onSubmit={form.handleSubmit(save)}
                                 isHorizontal
                             >
                                 <OrganizationForm readOnly />
-                                <ActionGroup>
+                                <div className="flex gap-2">
                                     <FormSubmitButton
                                         formState={form.formState}
                                         data-testid="save"
@@ -132,17 +125,17 @@ export default function DetailOrganization() {
                                     >
                                         {t("reset")}
                                     </Button>
-                                </ActionGroup>
+                                </div>
                             </FormAccess>
-                        </PageSection>
+                        </div>
                     </Tab>
                     <Tab
                         id="attributes"
                         data-testid="attributeTab"
-                        title={<TabTitleText>{t("attributes")}</TabTitleText>}
+                        title={t("attributes")}
                         {...attributesTab}
                     >
-                        <PageSection variant="light">
+                        <div className="p-6">
                             <AttributesForm
                                 form={form}
                                 save={save}
@@ -153,12 +146,12 @@ export default function DetailOrganization() {
                                 }
                                 name="attributes"
                             />
-                        </PageSection>
+                        </div>
                     </Tab>
                     <Tab
                         id="members"
                         data-testid="membersTab"
-                        title={<TabTitleText>{t("members")}</TabTitleText>}
+                        title={t("members")}
                         {...membersTab}
                     >
                         <MembersSection />
@@ -166,7 +159,7 @@ export default function DetailOrganization() {
                     <Tab
                         id="identityProviders"
                         data-testid="identityProvidersTab"
-                        title={<TabTitleText>{t("identityProviders")}</TabTitleText>}
+                        title={t("identityProviders")}
                         {...identityProvidersTab}
                     >
                         <IdentityProviders />
@@ -175,44 +168,39 @@ export default function DetailOrganization() {
                         hasAccess("view-events") && (
                             <Tab
                                 data-testid="admin-events-tab"
-                                title={<TabTitleText>{t("adminEvents")}</TabTitleText>}
+                                title={t("adminEvents")}
                                 {...eventsTab}
                             >
-                                <Tabs
-                                    activeKey={activeEventsTab}
-                                    onSelect={(_, key) =>
-                                        setActiveEventsTab(key as string)
-                                    }
-                                >
-                                    <Tab
-                                        eventKey="adminEvents"
-                                        title={
-                                            <TabTitleText>
-                                                {t("adminEvents")}
-                                            </TabTitleText>
-                                        }
-                                    >
+                                <div>
+                                    <div className="flex border-b">
+                                        <button
+                                            className={`px-4 py-2 text-sm font-medium ${activeEventsTab === "adminEvents" ? "border-b-2 border-primary" : ""}`}
+                                            onClick={() => setActiveEventsTab("adminEvents")}
+                                        >
+                                            {t("adminEvents")}
+                                        </button>
+                                        <button
+                                            className={`px-4 py-2 text-sm font-medium ${activeEventsTab === "membershipEvents" ? "border-b-2 border-primary" : ""}`}
+                                            onClick={() => setActiveEventsTab("membershipEvents")}
+                                        >
+                                            {t("membershipEvents")}
+                                        </button>
+                                    </div>
+                                    {activeEventsTab === "adminEvents" && (
                                         <AdminEvents
                                             resourcePath={`organizations/${id}`}
                                         />
-                                    </Tab>
-                                    <Tab
-                                        eventKey="membershipEvents"
-                                        title={
-                                            <TabTitleText>
-                                                {t("membershipEvents")}
-                                            </TabTitleText>
-                                        }
-                                    >
+                                    )}
+                                    {activeEventsTab === "membershipEvents" && (
                                         <AdminEvents
                                             resourcePath={`organizations/${id}/members`}
                                         />
-                                    </Tab>
-                                </Tabs>
+                                    )}
+                                </div>
                             </Tab>
                         )}
                 </RoutableTabs>
             </FormProvider>
-        </PageSection>
+        </div>
     );
 }

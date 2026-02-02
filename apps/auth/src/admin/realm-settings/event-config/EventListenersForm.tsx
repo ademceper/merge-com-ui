@@ -11,7 +11,7 @@
 
 // @ts-nocheck
 
-import { ActionGroup, Button } from "../../../shared/@patternfly/react-core";
+import { Button } from "@merge/ui/components/button";
 import { FormProvider, UseFormReturn } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import {
@@ -72,22 +72,21 @@ export const EventListenersForm = ({ form, reset }: EventListenersFormProps) => 
                 variant={SelectVariant.typeaheadMulti}
                 options={eventListeners.map(value => value.id)}
             />
-            <ActionGroup>
+            <div className="flex gap-2">
                 <Button
-                    variant="primary"
                     type="submit"
                     data-testid={"saveEventListenerBtn"}
                 >
                     {t("save")}
                 </Button>
                 <Button
-                    variant="link"
+                    variant="ghost"
                     data-testid={"revertEventListenerBtn"}
                     onClick={reset}
                 >
                     {t("revert")}
                 </Button>
-            </ActionGroup>
+            </div>
         </FormProvider>
     );
 };

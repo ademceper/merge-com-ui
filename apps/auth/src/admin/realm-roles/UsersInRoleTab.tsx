@@ -11,8 +11,9 @@
 
 // @ts-nocheck
 
-import { Button, PageSection, Popover } from "../../shared/@patternfly/react-core";
-import { QuestionCircleIcon } from "../../shared/@patternfly/react-icons";
+import { Button } from "@merge/ui/components/button";
+import { Popover, PopoverContent, PopoverTrigger } from "@merge/ui/components/popover";
+import { Question } from "@phosphor-icons/react";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 import { useHelp } from "../../shared/keycloak-ui-shared";
@@ -60,7 +61,7 @@ export const UsersInRoleTab = () => {
     const { enabled } = useHelp();
 
     return (
-        <PageSection data-testid="users-page" variant="light">
+        <section className="py-6 bg-muted/30" data-testid="users-page">
             <KeycloakDataTable
                 isPaginated
                 loader={loader}
@@ -69,39 +70,40 @@ export const UsersInRoleTab = () => {
                 data-testid="users-in-role-table"
                 toolbarItem={
                     enabled && (
-                        <Popover
-                            aria-label="Basic popover"
-                            position="bottom"
-                            bodyContent={
-                                <div>
-                                    {t("whoWillAppearPopoverTextRoles")}
-                                    <Button
-                                        className="kc-groups-link"
-                                        variant="link"
-                                        onClick={() => navigate(`/${realm}/groups`)}
-                                    >
-                                        {t("groups")}
-                                    </Button>
-                                    {t("or")}
-                                    <Button
-                                        className="kc-users-link"
-                                        variant="link"
-                                        onClick={() => navigate(`/${realm}/users`)}
-                                    >
-                                        {t("users")}.
-                                    </Button>
+                        <Popover>
+                            <PopoverTrigger asChild>
+                                <Button
+                                    variant="ghost"
+                                    className="kc-who-will-appear-button"
+                                    key="who-will-appear-button"
+                                >
+                                    <Question className="size-4 mr-1" />
+                                    {t("whoWillAppearLinkTextRoles")}
+                                </Button>
+                            </PopoverTrigger>
+                            <PopoverContent className="max-w-sm" align="start">
+                                <div className="space-y-2 text-sm">
+                                    <p>
+                                        {t("whoWillAppearPopoverTextRoles")}
+                                        <Button
+                                            variant="link"
+                                            className="kc-groups-link p-0 h-auto ml-1"
+                                            onClick={() => navigate(`/${realm}/groups`)}
+                                        >
+                                            {t("groups")}
+                                        </Button>
+                                        {t("or")}
+                                        <Button
+                                            variant="link"
+                                            className="kc-users-link p-0 h-auto ml-1"
+                                            onClick={() => navigate(`/${realm}/users`)}
+                                        >
+                                            {t("users")}.
+                                        </Button>
+                                    </p>
+                                    <p className="text-muted-foreground">{t("whoWillAppearPopoverFooterText")}</p>
                                 </div>
-                            }
-                            footerContent={t("whoWillAppearPopoverFooterText")}
-                        >
-                            <Button
-                                variant="link"
-                                className="kc-who-will-appear-button"
-                                key="who-will-appear-button"
-                                icon={<QuestionCircleIcon />}
-                            >
-                                {t("whoWillAppearLinkTextRoles")}
-                            </Button>
+                            </PopoverContent>
                         </Popover>
                     )
                 }
@@ -155,6 +157,6 @@ export const UsersInRoleTab = () => {
                     }
                 ]}
             />
-        </PageSection>
+        </section>
     );
 };

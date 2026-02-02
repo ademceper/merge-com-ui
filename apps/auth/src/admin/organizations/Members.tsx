@@ -17,7 +17,7 @@ import {
     ListEmptyState,
     useAlerts
 } from "../../shared/keycloak-ui-shared";
-import { Button, ToolbarItem } from "../../shared/@patternfly/react-core";
+import { Button } from "@merge/ui/components/button";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
@@ -173,7 +173,7 @@ export const Members = () => {
                 canSelectAll
                 toolbarItem={
                     <>
-                        <ToolbarItem>
+                        <div>
                             <SearchInputComponent
                                 value={searchText}
                                 onChange={handleChange}
@@ -182,22 +182,22 @@ export const Members = () => {
                                 placeholder={t("searchMembers")}
                                 aria-label={t("searchMembers")}
                             />
-                        </ToolbarItem>
-                        <ToolbarItem>
-                            <Button variant="primary" onClick={toggleAddMembers}>
+                        </div>
+                        <div>
+                            <Button variant="default" onClick={toggleAddMembers}>
                                 {t("addMember")}
                             </Button>
-                        </ToolbarItem>
-                        <ToolbarItem>
+                        </div>
+                        <div>
                             <Button
-                                variant="plain"
-                                isDisabled={selectedMembers.length === 0}
+                                variant="ghost"
+                                disabled={selectedMembers.length === 0}
                                 onClick={() => removeMember(selectedMembers)}
                             >
                                 {t("removeMember")}
                             </Button>
-                        </ToolbarItem>
-                        <ToolbarItem>
+                        </div>
+                        <div>
                             <CheckboxFilterComponent
                                 filterPlaceholderText={t("filterByMembershipType")}
                                 isOpen={isOpen}
@@ -208,7 +208,7 @@ export const Members = () => {
                                 selectedItems={filteredMembershipTypes}
                                 width={"260px"}
                             />
-                        </ToolbarItem>
+                        </div>
                     </>
                 }
                 actions={[

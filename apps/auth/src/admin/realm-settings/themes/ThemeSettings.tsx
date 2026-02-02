@@ -13,7 +13,7 @@
 
 import type RealmRepresentation from "@keycloak/keycloak-admin-client/lib/defs/realmRepresentation";
 import { SelectControl } from "../../../shared/keycloak-ui-shared";
-import { ActionGroup, Button, PageSection } from "../../../shared/@patternfly/react-core";
+import { Button } from "@merge/ui/components/button";
 import { useEffect } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
@@ -116,15 +116,15 @@ export const ThemeSettingsTab = ({ realm, save }: ThemeSettingsTabProps) => {
                         )}
                     />
                 </FormProvider>
-                <ActionGroup>
-                    <Button variant="primary" type="submit" data-testid="themes-tab-save">
+                <div className="flex gap-2">
+                    <Button type="submit" data-testid="themes-tab-save">
                         {t("save")}
                     </Button>
-                    <Button variant="link" onClick={setupForm}>
+                    <Button variant="link" type="button" onClick={setupForm}>
                         {t("revert")}
                     </Button>
-                </ActionGroup>
+                </div>
             </FormAccess>
-        </PageSection>
+        </div>
     );
 };

@@ -18,13 +18,8 @@ import {
     ListEmptyState,
     useAlerts
 } from "../../shared/keycloak-ui-shared";
-import {
-    Button,
-    ButtonVariant,
-    PageSection,
-    ToolbarItem
-} from "../../shared/@patternfly/react-core";
-import { IRowData } from "../../shared/@patternfly/react-table";
+import { Button } from "@merge/ui/components/button";
+type IRowData = { data: any };
 import { get } from "lodash-es";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -83,7 +78,7 @@ export default function PageList() {
         titleKey: "itemDeleteConfirmTitle",
         messageKey: "itemDeleteConfirm",
         continueButtonLabel: "delete",
-        continueButtonVariant: ButtonVariant.danger,
+        continueButtonVariant: "destructive",
         onConfirm: async () => {
             try {
                 await adminClient.components.del({
@@ -98,27 +93,24 @@ export default function PageList() {
     });
 
     return (
-        <PageSection variant="light" className="pf-v5-u-p-0">
+        <div className="p-0">
             <DeleteConfirm />
             <ViewHeader titleKey={page.id} subKey={page.helpText} divider={false} />
             <KeycloakDataTable
                 key={key}
                 toolbarItem={
-                    <ToolbarItem>
-                        <Button
-                            component={props => (
-                                <Link
-                                    {...props}
-                                    to={addDetailPage({
-                                        realm: realmName,
-                                        providerId: page.id
-                                    })}
-                                />
-                            )}
-                        >
-                            {t("createItem")}
+                    <div>
+                        <Button asChild>
+                            <Link
+                                to={addDetailPage({
+                                    realm: realmName,
+                                    providerId: page.id
+                                })}
+                            >
+                                {t("createItem")}
+                            </Link>
                         </Button>
-                    </ToolbarItem>
+                    </div>
                 }
                 actionResolver={(item: IRowData) => [
                     {
@@ -161,6 +153,6 @@ export default function PageList() {
                     />
                 }
             />
-        </PageSection>
+        </section>
     );
 }

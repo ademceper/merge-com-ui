@@ -12,21 +12,19 @@
 // @ts-nocheck
 
 import { NetworkError } from "@keycloak/keycloak-admin-client";
-import { KeycloakDataTable, useAlerts } from "../../shared/keycloak-ui-shared";
+import { KeycloakDataTable } from "../../shared/keycloak-ui-shared";
+import { useAlerts, AlertVariant } from "../../shared/keycloak-ui-shared";
+import { Badge } from "@merge/ui/components/badge";
+import { Button } from "@merge/ui/components/button";
 import {
-    AlertVariant,
-    Badge,
-    Button,
-    Dropdown,
-    DropdownItem,
-    DropdownList,
-    MenuToggle,
-    PageSection,
-    Popover,
-    ToolbarItem
-} from "../../shared/@patternfly/react-core";
-import { EllipsisVIcon } from "../../shared/@patternfly/react-icons";
-import { cellWidth } from "../../shared/@patternfly/react-table";
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuTrigger,
+} from "@merge/ui/components/dropdown-menu";
+import { Popover, PopoverContent, PopoverTrigger } from "@merge/ui/components/popover";
+import { DotsThreeVertical } from "@phosphor-icons/react";
+const cellWidth = (_width: number) => (value: any) => value;
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Link, useNavigate } from "react-router-dom";
@@ -49,39 +47,24 @@ export type RealmNameRepresentation = {
 
 const RecentRealmsDropdown = () => {
     const { t } = useTranslation();
-    const [open, setOpen] = useState(false);
     const recentRealms = useRecentRealms();
 
     if (recentRealms.length < 3) return null;
     return (
-        <Dropdown
-            shouldFocusToggleOnSelect
-            onOpenChange={isOpen => setOpen(isOpen)}
-            toggle={ref => (
-                <MenuToggle
-                    data-testid="kebab"
-                    aria-label="Kebab toggle"
-                    ref={ref}
-                    onClick={() => setOpen(!open)}
-                >
+        <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+                <Button variant="outline" data-testid="kebab" aria-label="Recent realms">
                     {t("recentRealms")}
-                </MenuToggle>
-            )}
-            isOpen={open}
-        >
-            <DropdownList>
+                </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
                 {recentRealms.map(({ name }) => (
-                    <DropdownItem
-                        key="server info"
-                        component={props => (
-                            <Link {...props} to={toDashboard({ realm: name })} />
-                        )}
-                    >
-                        {name}
-                    </DropdownItem>
+                    <DropdownMenuItem key={name} asChild>
+                        <Link to={toDashboard({ realm: name })}>{name}</Link>
+                    </DropdownMenuItem>
                 ))}
-            </DropdownList>
-        </Dropdown>
+            </DropdownMenuContent>
+        </DropdownMenu>
     );
 };
 
@@ -92,37 +75,27 @@ type KebabDropdownProps = {
 
 const KebabDropdown = ({ onClick, isDisabled }: KebabDropdownProps) => {
     const { t } = useTranslation();
-    const [open, setOpen] = useState(false);
     return (
-        <Dropdown
-            shouldFocusToggleOnSelect
-            onOpenChange={isOpen => setOpen(isOpen)}
-            toggle={ref => (
-                <MenuToggle
+        <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+                <Button
                     data-testid="kebab"
                     aria-label="Kebab toggle"
-                    ref={ref}
-                    onClick={() => setOpen(!open)}
-                    variant="plain"
-                    isDisabled={isDisabled}
+                    variant="ghost"
+                    disabled={isDisabled}
                 >
-                    <EllipsisVIcon />
-                </MenuToggle>
-            )}
-            isOpen={open}
-        >
-            <DropdownList>
-                <DropdownItem
+                    <DotsThreeVertical className="size-4" />
+                </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent>
+                <DropdownMenuItem
                     data-testid="delete"
-                    onClick={() => {
-                        setOpen(false);
-                        onClick();
-                    }}
+                    onClick={onClick}
                 >
                     {t("delete")}
-                </DropdownItem>
-            </DropdownList>
-        </Dropdown>
+                </DropdownMenuItem>
+            </DropdownMenuContent>
+        </DropdownMenu>
     );
 };
 
@@ -201,7 +174,7 @@ export default function RealmSection() {
                 />
             )}
             <ViewHeader titleKey="manageRealms" divider={false} />
-            <PageSection variant="light" className="pf-v5-u-p-0">
+            <section className="py-6 bg-muted/30 p-0">
                 <KeycloakDataTable
                     key={key}
                     loader={loader}
@@ -221,25 +194,22 @@ export default function RealmSection() {
                     ]}
                     toolbarItem={
                         <>
-                            <ToolbarItem>
+                            <div>
                                 {whoAmI.createRealm && (
-                                    <Button
-                                        onClick={() => setOpenNewRealm(true)}
-                                        data-testid="add-realm"
-                                    >
+                                    <Button onClick={() => setOpenNewRealm(true)} data-testid="add-realm">
                                         {t("createRealm")}
                                     </Button>
                                 )}
-                            </ToolbarItem>
-                            <ToolbarItem>
+                            </div>
+                            <div>
                                 <RecentRealmsDropdown />
-                            </ToolbarItem>
-                            <ToolbarItem>
+                            </div>
+                            <div>
                                 <KebabDropdown
                                     onClick={toggleDeleteDialog}
                                     isDisabled={selected.length === 0}
                                 />
-                            </ToolbarItem>
+                            </div>
                         </>
                     }
                     columns={[
@@ -250,14 +220,15 @@ export default function RealmSection() {
                                 name !== realm ? (
                                     <Link to={toDashboard({ realm: name })}>{name}</Link>
                                 ) : (
-                                    <Popover
-                                        bodyContent={t("currentRealmExplain")}
-                                        triggerAction="hover"
-                                    >
-                                        <>
-                                            {name}{" "}
-                                            <Badge isRead>{t("currentRealm")}</Badge>
-                                        </>
+                                    <Popover>
+                                        <PopoverTrigger asChild>
+                                            <span className="inline-flex items-center gap-1 cursor-help">
+                                                {name} <Badge variant="secondary">{t("currentRealm")}</Badge>
+                                            </span>
+                                        </PopoverTrigger>
+                                        <PopoverContent className="max-w-xs">
+                                            {t("currentRealmExplain")}
+                                        </PopoverContent>
                                     </Popover>
                                 )
                         },
@@ -268,7 +239,7 @@ export default function RealmSection() {
                         }
                     ]}
                 />
-            </PageSection>
+            </section>
         </>
     );
 }

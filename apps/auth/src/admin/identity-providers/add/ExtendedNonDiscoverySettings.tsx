@@ -16,13 +16,9 @@ import {
     KeycloakSelect,
     SelectVariant
 } from "../../../shared/keycloak-ui-shared";
-import {
-    ExpandableSection,
-    Form,
-    FormGroup,
-    NumberInput,
-    SelectOption
-} from "../../../shared/@patternfly/react-core";
+import { Input } from "@merge/ui/components/input";
+import { Label } from "@merge/ui/components/label";
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@merge/ui/components/collapsible";
 import { useState } from "react";
 import { Controller, useFormContext } from "react-hook-form";
 import { useTranslation } from "react-i18next";
@@ -46,12 +42,14 @@ export const ExtendedNonDiscoverySettings = () => {
     const [promptOpen, setPromptOpen] = useState(false);
 
     return (
-        <ExpandableSection
-            toggleText={t("advanced")}
-            onToggle={() => setIsExpanded(!isExpanded)}
-            isExpanded={isExpanded}
-        >
-            <Form isHorizontal>
+        <Collapsible open={isExpanded} onOpenChange={setIsExpanded}>
+            <CollapsibleTrigger asChild>
+                <button type="button" className="font-medium text-sm">
+                    {t("advanced")}
+                </button>
+            </CollapsibleTrigger>
+            <CollapsibleContent>
+            <div>
                 <SwitchField label="passLoginHint" field="config.loginHint" />
                 <SwitchField label="passMaxAge" field="config.passMaxAge" />
                 <SwitchField label="passCurrentLocale" field="config.uiLocales" />
@@ -114,16 +112,14 @@ export const ExtendedNonDiscoverySettings = () => {
                     field="config.requiresShortStateParameter"
                     label="requiresShortStateParameter"
                 />
-                <FormGroup
-                    label={t("allowedClockSkew")}
-                    labelIcon={
+                <div className="space-y-2">
+                    <div className="flex items-center gap-2">
+                        <Label htmlFor="allowedClockSkew">{t("allowedClockSkew")}</Label>
                         <HelpItem
                             helpText={t("allowedClockSkewHelp")}
                             fieldLabelId="allowedClockSkew"
                         />
-                    }
-                    fieldId="allowedClockSkew"
-                >
+                    </div>
                     <Controller
                         name="config.allowedClockSkew"
                         defaultValue={0}
@@ -131,28 +127,25 @@ export const ExtendedNonDiscoverySettings = () => {
                         render={({ field }) => {
                             const v = Number(field.value);
                             return (
-                                <NumberInput
+                                <Input
+                                    type="number"
                                     data-testid="allowedClockSkew"
-                                    inputName="allowedClockSkew"
+                                    name="allowedClockSkew"
                                     min={0}
                                     max={2147483}
                                     value={v}
-                                    readOnly
-                                    onPlus={() => field.onChange(v + 1)}
-                                    onMinus={() => field.onChange(v - 1)}
                                     onChange={event => {
-                                        const value = Number(
-                                            (event.target as HTMLInputElement).value
-                                        );
+                                        const value = Number(event.target.value);
                                         field.onChange(value < 0 ? 0 : value);
                                     }}
                                 />
                             );
                         }}
                     />
-                </FormGroup>
+                </div>
                 <TextField field="config.forwardParameters" label="forwardParameters" />
-            </Form>
-        </ExpandableSection>
+            </div>
+            </CollapsibleContent>
+        </Collapsible>
     );
 };

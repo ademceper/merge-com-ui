@@ -11,7 +11,8 @@
 
 // @ts-nocheck
 
-import { Tab, Tabs, TabTitleText } from "../../../shared/@patternfly/react-core";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@merge/ui/components/tabs";
+
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { KeycloakSpinner } from "../../../shared/keycloak-ui-shared";
@@ -31,51 +32,29 @@ export const Policies = () => {
     }
 
     return (
-        <Tabs
-            activeKey={subTab}
-            onSelect={(_, key) => setSubTab(key as number)}
-            mountOnEnter
-            unmountOnExit
-        >
-            <Tab
-                id="passwordPolicy"
-                data-testid="passwordPolicy"
-                eventKey={1}
-                title={<TabTitleText>{t("passwordPolicy")}</TabTitleText>}
-            >
+        <Tabs value={String(subTab)} onValueChange={(val) => setSubTab(Number(val))}>
+            <TabsList>
+                <TabsTrigger value="1" data-testid="passwordPolicy">{t("passwordPolicy")}</TabsTrigger>
+                <TabsTrigger value="2" data-testid="otpPolicy">{t("otpPolicy")}</TabsTrigger>
+                <TabsTrigger value="3" data-testid="webauthnPolicy">{t("webauthnPolicy")}</TabsTrigger>
+                <TabsTrigger value="4" data-testid="webauthnPasswordlessPolicy">{t("webauthnPasswordlessPolicy")}</TabsTrigger>
+                <TabsTrigger value="5" data-testid="tab-ciba-policy">{t("cibaPolicy")}</TabsTrigger>
+            </TabsList>
+            <TabsContent value="1">
                 <PasswordPolicy realm={realm} realmUpdated={refresh} />
-            </Tab>
-            <Tab
-                id="otpPolicy"
-                data-testid="otpPolicy"
-                eventKey={2}
-                title={<TabTitleText>{t("otpPolicy")}</TabTitleText>}
-            >
+            </TabsContent>
+            <TabsContent value="2">
                 <OtpPolicy realm={realm} realmUpdated={refresh} />
-            </Tab>
-            <Tab
-                id="webauthnPolicy"
-                data-testid="webauthnPolicy"
-                eventKey={3}
-                title={<TabTitleText>{t("webauthnPolicy")}</TabTitleText>}
-            >
+            </TabsContent>
+            <TabsContent value="3">
                 <WebauthnPolicy realm={realm} realmUpdated={refresh} />
-            </Tab>
-            <Tab
-                id="webauthnPasswordlessPolicy"
-                data-testid="webauthnPasswordlessPolicy"
-                eventKey={4}
-                title={<TabTitleText>{t("webauthnPasswordlessPolicy")}</TabTitleText>}
-            >
+            </TabsContent>
+            <TabsContent value="4">
                 <WebauthnPolicy realm={realm} realmUpdated={refresh} isPasswordLess />
-            </Tab>
-            <Tab
-                data-testid="tab-ciba-policy"
-                eventKey={5}
-                title={<TabTitleText>{t("cibaPolicy")}</TabTitleText>}
-            >
+            </TabsContent>
+            <TabsContent value="5">
                 <CibaPolicy realm={realm} realmUpdated={refresh} />
-            </Tab>
+            </TabsContent>
         </Tabs>
     );
 };

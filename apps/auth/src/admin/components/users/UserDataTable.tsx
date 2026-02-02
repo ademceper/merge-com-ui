@@ -20,27 +20,16 @@ import {
     useAlerts,
     useFetch
 } from "../../../shared/keycloak-ui-shared";
+import { AlertVariant } from "../../../shared/keycloak-ui-shared";
+import { Button } from "@merge/ui/components/button";
+import { Badge } from "@merge/ui/components/badge";
+import { Label } from "@merge/ui/components/label";
+import { Tooltip, TooltipContent, TooltipTrigger, TooltipProvider } from "@merge/ui/components/tooltip";
 import {
-    AlertVariant,
-    Button,
-    ButtonVariant,
     Chip,
-    ChipGroup,
-    EmptyState,
-    FlexItem,
-    Label,
-    Text,
-    TextContent,
-    Toolbar,
-    ToolbarContent,
-    ToolbarItem,
-    Tooltip
+    ChipGroup
 } from "../../../shared/@patternfly/react-core";
-import {
-    ExclamationCircleIcon,
-    InfoCircleIcon,
-    WarningTriangleIcon
-} from "../../../shared/@patternfly/react-icons";
+import { WarningCircle, Info, Warning } from "@phosphor-icons/react";
 import type { IRowData } from "../../../shared/@patternfly/react-table";
 import { JSX, useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -79,12 +68,17 @@ const UserDetailLink = (user: BruteUser) => {
                 <StatusRow user={user} />
             </Link>
             {user.attributes?.["is_temporary_admin"]?.[0] === "true" && (
-                <Tooltip content={t("temporaryAdmin")}>
-                    <WarningTriangleIcon
-                        className="pf-v5-u-ml-sm"
-                        id="temporary-admin-label"
-                    />
-                </Tooltip>
+                <TooltipProvider>
+                    <Tooltip>
+                        <TooltipTrigger asChild>
+                            <Warning
+                                className="size-4 ml-1 inline"
+                                id="temporary-admin-label"
+                            />
+                        </TooltipTrigger>
+                        <TooltipContent>{t("temporaryAdmin")}</TooltipContent>
+                    </Tooltip>
+                </TooltipProvider>
             )}
         </>
     );
@@ -99,12 +93,14 @@ const StatusRow = ({ user }: StatusRowProps) => {
     return (
         <>
             {!user.enabled && (
-                <Label color="red" icon={<InfoCircleIcon />}>
+                <Label className="text-red-600 inline-flex items-center gap-1">
+                    <Info className="size-4" />
                     {t("disabled")}
                 </Label>
             )}
             {user.bruteForceStatus?.disabled && (
-                <Label color="orange" icon={<WarningTriangleIcon />}>
+                <Label className="text-orange-600 inline-flex items-center gap-1">
+                    <Warning className="size-4" />
                     {t("temporaryLocked")}
                 </Label>
             )}
@@ -117,9 +113,14 @@ const ValidatedEmail = (user: UserRepresentation) => {
     return (
         <>
             {!user.emailVerified && (
-                <Tooltip content={t("notVerified")}>
-                    <ExclamationCircleIcon className="keycloak__user-section__email-verified" />
-                </Tooltip>
+                <TooltipProvider>
+                    <Tooltip>
+                        <TooltipTrigger asChild>
+                            <WarningCircle className="size-4 keycloak__user-section__email-verified inline" />
+                        </TooltipTrigger>
+                        <TooltipContent>{t("notVerified")}</TooltipContent>
+                    </Tooltip>
+                </TooltipProvider>
             )}{" "}
             {emptyFormatter()(user.email) as JSX.Element}
         </>
@@ -226,7 +227,7 @@ export function UserDataTable() {
         }),
         messageKey: t("deleteConfirmDialog", { count: selectedRows.length }),
         continueButtonLabel: "delete",
-        continueButtonVariant: ButtonVariant.danger,
+        continueButtonVariant: "destructive",
         onConfirm: async () => {
             try {
                 for (const user of selectedRows) {
@@ -271,7 +272,7 @@ export function UserDataTable() {
 
     const createAttributeSearchChips = () => {
         return (
-            <FlexItem>
+            <div>
                 {activeFilters.userAttribute.length > 0 && (
                     <>
                         {Object.values(activeFilters.userAttribute).map(entry => {
@@ -310,7 +311,7 @@ export function UserDataTable() {
                         })}
                     </>
                 )}
-            </FlexItem>
+            </div>
         );
     };
 
@@ -345,8 +346,8 @@ export function UserDataTable() {
         }
         return (
             <div className="user-attribute-search-form-subtoolbar">
-                <ToolbarItem>{createAttributeSearchChips()}</ToolbarItem>
-                <ToolbarItem>
+                <div>{createAttributeSearchChips()}</div>
+                <div>
                     <Button
                         variant="link"
                         onClick={() => {
@@ -355,7 +356,7 @@ export function UserDataTable() {
                     >
                         {t("clearAllFilters")}
                     </Button>
-                </ToolbarItem>
+                </div>
             </div>
         );
     };
@@ -377,14 +378,14 @@ export function UserDataTable() {
                 emptyState={
                     !listUsers ? (
                         <>
-                            <Toolbar>
-                                <ToolbarContent>{toolbar()}</ToolbarContent>
-                            </Toolbar>
-                            <EmptyState data-testid="empty-state" variant="lg">
-                                <TextContent className="kc-search-users-text">
-                                    <Text>{t("searchForUserDescription")}</Text>
-                                </TextContent>
-                            </EmptyState>
+                            <div className="flex items-center gap-2 p-4">
+                                {toolbar()}
+                            </div>
+                            <div data-testid="empty-state" className="p-8 text-center">
+                                <div className="kc-search-users-text">
+                                    <p>{t("searchForUserDescription")}</p>
+                                </div>
+                            </div>
                         </>
                     ) : (
                         <ListEmptyState

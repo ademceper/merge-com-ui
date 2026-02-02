@@ -16,7 +16,7 @@ import {
     GroupQuery,
     SubGroupQuery
 } from "@keycloak/keycloak-admin-client/lib/resources/groups";
-import { SearchInput, ToolbarItem } from "../../shared/@patternfly/react-core";
+import { Input } from "@merge/ui/components/input";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Link, useLocation } from "react-router-dom";
@@ -142,24 +142,25 @@ export const GroupTable = ({ refresh: viewRefresh }: GroupTableProps) => {
                 isSearching={!!search}
                 toolbarItem={
                     <>
-                        <ToolbarItem>
-                            <SearchInput
+                        <div>
+                            <Input
                                 data-testid="group-search"
                                 placeholder={t("filterGroups")}
                                 value={search}
-                                onChange={(_, value) => {
+                                onChange={(e) => {
+                                    const value = e.target.value;
                                     setSearch(value);
                                     if (value === "") {
                                         refresh();
                                     }
                                 }}
-                                onSearch={refresh}
-                                onClear={() => {
-                                    setSearch("");
-                                    refresh();
+                                onKeyDown={(e) => {
+                                    if (e.key === "Enter") {
+                                        refresh();
+                                    }
                                 }}
                             />
-                        </ToolbarItem>
+                        </div>
                         <GroupToolbar
                             toggleCreate={toggleCreateOpen}
                             toggleDelete={toggleShowDelete}

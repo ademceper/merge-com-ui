@@ -15,17 +15,11 @@ import RealmRepresentation from "@keycloak/keycloak-admin-client/lib/defs/realmR
 import { TextControl } from "../../../shared/keycloak-ui-shared";
 import {
     Alert,
-    Flex,
-    FlexItem,
-    FormGroup,
-    InputGroup,
-    InputGroupItem,
-    PageSection,
-    Text,
-    TextContent,
-    TextInputProps
-} from "../../../shared/@patternfly/react-core";
-import { useEffect, useMemo } from "react";
+    AlertDescription,
+    AlertTitle
+} from "@merge/ui/components/alert";
+import { Label } from "@merge/ui/components/label";
+import React, { useEffect, useMemo } from "react";
 import { FormProvider, useForm, useFormContext, useWatch } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { FixedButtonsGroup } from "../../components/form/FixedButtonGroup";
@@ -41,7 +35,7 @@ import { UploadJar } from "./UploadJar";
 
 type ThemeType = "light" | "dark";
 
-type ColorControlProps = TextInputProps & {
+type ColorControlProps = React.InputHTMLAttributes<HTMLInputElement> & {
     name: string;
     label: string;
     color: string;
@@ -55,16 +49,16 @@ const ColorControl = ({ name, color, label, ...props }: ColorControlProps) => {
         name
     });
     return (
-        <InputGroup>
-            <InputGroupItem isFill>
+        <div className="flex items-center gap-2">
+            <div className="flex-1">
                 <TextControl {...props} name={name} label={t(label)} />
-            </InputGroupItem>
+            </div>
             <input
                 type="color"
                 value={currentValue || color}
                 onChange={e => setValue(name, e.target.value)}
             />
-        </InputGroup>
+        </div>
     );
 };
 

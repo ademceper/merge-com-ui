@@ -12,7 +12,8 @@
 // @ts-nocheck
 
 import { HelpItem, TextControl } from "../../../shared/keycloak-ui-shared";
-import { ActionGroup, Button, FormGroup } from "../../../shared/@patternfly/react-core";
+import { Button } from "@merge/ui/components/button";
+import { Label } from "@merge/ui/components/label";
 import { Controller, useFormContext } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { DefaultSwitchControl } from "../../components/SwitchControl";
@@ -50,16 +51,14 @@ export const AdvancedSettings = ({
             isHorizontal
         >
             {protocol !== "openid-connect" && (
-                <FormGroup
-                    label={t("assertionLifespan")}
-                    fieldId="assertionLifespan"
-                    labelIcon={
+                <div className="space-y-2">
+                    <div className="flex items-center gap-2">
+                        <Label htmlFor="assertionLifespan">{t("assertionLifespan")}</Label>
                         <HelpItem
                             helpText={t("assertionLifespanHelp")}
                             fieldLabelId="assertionLifespan"
                         />
-                    }
-                >
+                    </div>
                     <Controller
                         name={convertAttributeNameToForm<FormFields>(
                             "attributes.saml.assertion.lifespan"
@@ -74,7 +73,7 @@ export const AdvancedSettings = ({
                             />
                         )}
                     />
-                </FormGroup>
+                </div>
             )}
             {protocol === "openid-connect" && (
                 <>
@@ -158,31 +157,27 @@ export const AdvancedSettings = ({
                         labelIcon={t("supportJwtClaimInIntrospectionResponseHelp")}
                         stringify
                     />
-                    <FormGroup
-                        label={t("acrToLoAMapping")}
-                        fieldId="acrToLoAMapping"
-                        labelIcon={
+                    <div className="space-y-2">
+                        <div className="flex items-center gap-2">
+                            <Label htmlFor="acrToLoAMapping">{t("acrToLoAMapping")}</Label>
                             <HelpItem
                                 helpText={t("acrToLoAMappingHelp")}
                                 fieldLabelId="acrToLoAMapping"
                             />
-                        }
-                    >
+                        </div>
                         <KeyValueInput
                             label={t("acrToLoAMapping")}
                             name={convertAttributeNameToForm("attributes.acr.loa.map")}
                         />
-                    </FormGroup>
-                    <FormGroup
-                        label={t("defaultACRValues")}
-                        fieldId="defaultACRValues"
-                        labelIcon={
+                    </div>
+                    <div className="space-y-2">
+                        <div className="flex items-center gap-2">
+                            <Label htmlFor="defaultACRValues">{t("defaultACRValues")}</Label>
                             <HelpItem
                                 helpText={t("defaultACRValuesHelp")}
                                 fieldLabelId="defaultACRValues"
                             />
-                        }
-                    >
+                        </div>
                         <MultiLineInput
                             id="defaultACRValues"
                             aria-label="defaultACRValues"
@@ -191,7 +186,7 @@ export const AdvancedSettings = ({
                             )}
                             stringify
                         />
-                    </FormGroup>
+                    </div>
                     <TextControl
                         type="text"
                         name={convertAttributeNameToForm("attributes.minimum.acr.value")}
@@ -200,14 +195,14 @@ export const AdvancedSettings = ({
                     />
                 </>
             )}
-            <ActionGroup>
+            <div className="flex gap-2">
                 <Button variant="secondary" onClick={save} data-testid="OIDCAdvancedSave">
                     {t("save")}
                 </Button>
                 <Button variant="link" onClick={reset} data-testid="OIDCAdvancedRevert">
                     {t("revert")}
                 </Button>
-            </ActionGroup>
+            </div>
         </FormAccess>
     );
 };

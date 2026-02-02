@@ -21,14 +21,10 @@ import {
     useAlerts,
     useFetch
 } from "../../shared/keycloak-ui-shared";
-import {
-    ActionGroup,
-    AlertVariant,
-    Button,
-    FormGroup,
-    PageSection,
-    SelectOption
-} from "../../shared/@patternfly/react-core";
+import { AlertVariant } from "../../shared/keycloak-ui-shared";
+import { Button } from "@merge/ui/components/button";
+import { Label } from "@merge/ui/components/label";
+import { SelectOption } from "../../shared/@patternfly/react-core";
 import { useState } from "react";
 import { Controller, FormProvider, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
@@ -164,18 +160,17 @@ export default function ExecutorForm() {
     return (
         <>
             <ViewHeader titleKey={editMode ? executorName : t("addExecutor")} divider />
-            <PageSection variant="light">
+            <div className="p-6">
                 <FormAccess
                     isHorizontal
                     role="manage-realm"
-                    className="pf-v5-u-mt-lg"
+                    className="mt-6"
                     isReadOnly={!!globalProfile}
                 >
-                    <FormGroup
-                        label={t("executorType")}
-                        fieldId="kc-executorType"
-                        labelIcon={
-                            executors.length > 0 && executors[0].helpText! !== "" ? (
+                    <div className="space-y-2">
+                        <div className="flex items-center gap-1">
+                            <Label htmlFor="kc-executorType">{t("executorType")}</Label>
+                            {executors.length > 0 && executors[0].helpText! !== "" ? (
                                 <HelpItem
                                     helpText={executors[0].helpText}
                                     fieldLabelId="executorTypeHelpText"
@@ -185,9 +180,8 @@ export default function ExecutorForm() {
                                     helpText={profileExecutorType?.helpText}
                                     fieldLabelId="executorTypeHelpText"
                                 />
-                            ) : undefined
-                        }
-                    >
+                            ) : undefined}
+                        </div>
                         <Controller
                             name="executor"
                             defaultValue=""
@@ -233,7 +227,7 @@ export default function ExecutorForm() {
                                 </KeycloakSelect>
                             )}
                         />
-                    </FormGroup>
+                    </div>
                     <FormProvider {...form}>
                         <DynamicComponents
                             properties={
@@ -242,45 +236,35 @@ export default function ExecutorForm() {
                         />
                     </FormProvider>
                     {!globalProfile && (
-                        <ActionGroup>
+                        <div className="flex gap-2">
                             <Button
-                                variant="primary"
                                 onClick={() => handleSubmit(save)()}
                                 data-testid="addExecutor-saveBtn"
                             >
                                 {editMode ? t("save") : t("add")}
                             </Button>
                             <Button
-                                variant="link"
-                                component={props => (
-                                    <Link
-                                        {...props}
-                                        to={toClientProfile({ realm, profileName })}
-                                    />
-                                )}
+                                variant="ghost"
                                 data-testid="addExecutor-cancelBtn"
+                                asChild
                             >
-                                {t("cancel")}
+                                <Link to={toClientProfile({ realm, profileName })}>
+                                    {t("cancel")}
+                                </Link>
                             </Button>
-                        </ActionGroup>
+                        </div>
                     )}
                 </FormAccess>
                 {editMode && globalProfile && (
                     <div className="kc-backToProfile">
-                        <Button
-                            component={props => (
-                                <Link
-                                    {...props}
-                                    to={toClientProfile({ realm, profileName })}
-                                />
-                            )}
-                            variant="primary"
-                        >
-                            {t("back")}
+                        <Button asChild>
+                            <Link to={toClientProfile({ realm, profileName })}>
+                                {t("back")}
+                            </Link>
                         </Button>
                     </div>
                 )}
-            </PageSection>
+            </div>
         </>
     );
 }

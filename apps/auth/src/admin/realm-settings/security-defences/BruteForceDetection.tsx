@@ -19,12 +19,9 @@ import {
     SelectVariant,
     SelectControl
 } from "../../../shared/keycloak-ui-shared";
-import {
-    ActionGroup,
-    Button,
-    FormGroup,
-    SelectOption
-} from "../../../shared/@patternfly/react-core";
+import { Button } from "@merge/ui/components/button";
+import { Label } from "@merge/ui/components/label";
+import { SelectOption } from "../../../shared/@patternfly/react-core";
 import { useEffect, useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
@@ -86,16 +83,14 @@ export const BruteForceDetection = ({ realm, save }: BruteForceDetectionProps) =
     return (
         <FormProvider {...form}>
             <FormAccess role="manage-realm" isHorizontal onSubmit={handleSubmit(save)}>
-                <FormGroup
-                    label={t("bruteForceMode")}
-                    fieldId="kc-brute-force-mode"
-                    labelIcon={
+                <div className="space-y-2">
+                    <div className="flex items-center gap-1">
+                        <Label htmlFor="kc-brute-force-mode">{t("bruteForceMode")}</Label>
                         <HelpItem
                             helpText={t("bruteForceModeHelpText")}
                             fieldLabelId="bruteForceMode"
                         />
-                    }
-                >
+                    </div>
                     <KeycloakSelect
                         toggleId="kc-brute-force-mode"
                         onToggle={() => setIsBruteForceModeOpen(!isBruteForceModeOpen)}
@@ -137,7 +132,7 @@ export const BruteForceDetection = ({ realm, save }: BruteForceDetectionProps) =
                             </SelectOption>
                         ))}
                     </KeycloakSelect>
-                </FormGroup>
+                </div>
                 {bruteForceMode !== BruteForceMode.Disabled && (
                     <>
                         <NumberControl
@@ -195,19 +190,18 @@ export const BruteForceDetection = ({ realm, save }: BruteForceDetectionProps) =
                     </>
                 )}
 
-                <ActionGroup>
+                <div className="flex gap-2">
                     <Button
-                        variant="primary"
                         type="submit"
                         data-testid="brute-force-tab-save"
-                        isDisabled={!isDirty && !isBruteForceModeUpdated}
+                        disabled={!isDirty && !isBruteForceModeUpdated}
                     >
                         {t("save")}
                     </Button>
-                    <Button variant="link" onClick={setupForm}>
+                    <Button variant="ghost" onClick={setupForm}>
                         {t("revert")}
                     </Button>
-                </ActionGroup>
+                </div>
             </FormAccess>
         </FormProvider>
     );

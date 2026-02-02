@@ -12,25 +12,8 @@
 // @ts-nocheck
 
 import type ComponentRepresentation from "@keycloak/keycloak-admin-client/lib/defs/componentRepresentation";
-import {
-    Button,
-    ButtonVariant,
-    DataList,
-    DataListCell,
-    DataListControl,
-    DataListDragButton,
-    DataListItem,
-    DataListItemCells,
-    DataListItemRow,
-    DragDrop,
-    Draggable,
-    DraggableItemPosition,
-    Droppable,
-    Modal,
-    ModalVariant,
-    Text,
-    TextContent
-} from "../../shared/@patternfly/react-core";
+import { Button } from "@merge/ui/components/button";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@merge/ui/components/dialog";
 import { sortBy } from "lodash-es";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -55,115 +38,97 @@ export const ManagePriorityDialog = ({
     const [order, setOrder] = useState(
         sortBy(components, "config.priority", "name").map(component => component.name!)
     );
+    const [dragIndex, setDragIndex] = useState<number | null>(null);
 
-    const onDragStart = ({ index }: DraggableItemPosition) => {
+    const onDragStartHandler = (index: number) => {
+        setDragIndex(index);
         setLiveText(t("onDragStart", { item: order[index] }));
-        return true;
     };
 
-    const onDragMove = ({ index }: DraggableItemPosition) => {
+    const onDragOverHandler = (e: React.DragEvent, index: number) => {
+        e.preventDefault();
+        if (dragIndex === null || dragIndex === index) return;
+        const result = [...order];
+        const [removed] = result.splice(dragIndex, 1);
+        result.splice(index, 0, removed);
+        setOrder(result);
+        setDragIndex(index);
         setLiveText(t("onDragMove", { item: order[index] }));
     };
 
-    const onDragFinish = (
-        source: DraggableItemPosition,
-        dest?: DraggableItemPosition
-    ) => {
-        if (dest) {
-            const result = [...order];
-            const [removed] = result.splice(source.index, 1);
-            result.splice(dest.index, 0, removed);
-            setLiveText(t("onDragFinish", { list: result }));
-            setOrder(result);
-            return true;
-        } else {
-            setLiveText(t("onDragCancel"));
-            return false;
-        }
+    const onDragEndHandler = () => {
+        setDragIndex(null);
+        setLiveText(t("onDragFinish", { list: order }));
     };
 
     return (
-        <Modal
-            variant={ModalVariant.small}
-            title={t("managePriorityOrder")}
-            isOpen={true}
-            onClose={onClose}
-            actions={[
-                <Button
-                    id="modal-confirm"
-                    key="confirm"
-                    onClick={async () => {
-                        const updates = order.map((name, index) => {
-                            const component = components!.find(c => c.name === name)!;
-                            component.config!.priority = [index.toString()];
-                            return adminClient.components.update(
-                                { id: component.id! },
-                                component
-                            );
-                        });
+        <Dialog open onOpenChange={(open) => { if (!open) onClose(); }}>
+            <DialogContent className="sm:max-w-md">
+                <DialogHeader>
+                    <DialogTitle>{t("managePriorityOrder")}</DialogTitle>
+                </DialogHeader>
 
-                        try {
-                            await Promise.all(updates);
-                            addAlert(t("orderChangeSuccessUserFed"));
-                        } catch (error) {
-                            addError("orderChangeErrorUserFed", error);
-                        }
+                <p className="pb-4">{t("managePriorityInfo")}</p>
 
-                        onClose();
-                    }}
+                <div
+                    aria-label={t("manageOrderTableAria")}
+                    data-testid="manageOrderDataList"
+                    className="space-y-1"
                 >
-                    {t("save")}
-                </Button>,
-                <Button
-                    id="modal-cancel"
-                    key="cancel"
-                    variant={ButtonVariant.link}
-                    onClick={onClose}
-                >
-                    {t("cancel")}
-                </Button>
-            ]}
-        >
-            <TextContent className="pf-v5-u-pb-lg">
-                <Text>{t("managePriorityInfo")}</Text>
-            </TextContent>
+                    {order.map((name, index) => (
+                        <div
+                            key={name}
+                            draggable
+                            onDragStart={() => onDragStartHandler(index)}
+                            onDragOver={(e) => onDragOverHandler(e, index)}
+                            onDragEnd={onDragEndHandler}
+                            className="flex items-center gap-2 p-2 border rounded cursor-grab"
+                            aria-label={name}
+                            id={name}
+                        >
+                            <span className="text-muted-foreground cursor-grab" aria-label={t("dragHelp")}>☰</span>
+                            <span data-testid={name}>{name}</span>
+                        </div>
+                    ))}
+                </div>
+                <div className="sr-only" aria-live="assertive">
+                    {liveText}
+                </div>
 
-            <DragDrop onDrag={onDragStart} onDragMove={onDragMove} onDrop={onDragFinish}>
-                <Droppable hasNoWrapper>
-                    <DataList
-                        aria-label={t("manageOrderTableAria")}
-                        data-testid="manageOrderDataList"
-                        isCompact
+                <DialogFooter>
+                    <Button
+                        id="modal-confirm"
+                        onClick={async () => {
+                            const updates = order.map((name, index) => {
+                                const component = components!.find(c => c.name === name)!;
+                                component.config!.priority = [index.toString()];
+                                return adminClient.components.update(
+                                    { id: component.id! },
+                                    component
+                                );
+                            });
+
+                            try {
+                                await Promise.all(updates);
+                                addAlert(t("orderChangeSuccessUserFed"));
+                            } catch (error) {
+                                addError("orderChangeErrorUserFed", error);
+                            }
+
+                            onClose();
+                        }}
                     >
-                        {order.map(name => (
-                            <Draggable key={name} hasNoWrapper>
-                                <DataListItem aria-label={name} id={name}>
-                                    <DataListItemRow>
-                                        <DataListControl>
-                                            <DataListDragButton
-                                                aria-label={t("dragHelp")}
-                                            />
-                                        </DataListControl>
-                                        <DataListItemCells
-                                            dataListCells={[
-                                                <DataListCell
-                                                    key={name}
-                                                    data-testid={name}
-                                                >
-                                                    {name}
-                                                </DataListCell>
-                                            ]}
-                                        />
-                                    </DataListItemRow>
-                                </DataListItem>
-                            </Draggable>
-                        ))}
-                    </DataList>
-                </Droppable>
-            </DragDrop>
-            <div className="pf-v5-screen-reader" aria-live="assertive">
-                {liveText}
-            </div>
-        </Modal>
+                        {t("save")}
+                    </Button>
+                    <Button
+                        id="modal-cancel"
+                        variant="link"
+                        onClick={onClose}
+                    >
+                        {t("cancel")}
+                    </Button>
+                </DialogFooter>
+            </DialogContent>
+        </Dialog>
     );
 };

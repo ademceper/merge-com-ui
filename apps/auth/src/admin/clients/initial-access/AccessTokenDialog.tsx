@@ -12,15 +12,9 @@
 // @ts-nocheck
 
 import { useTranslation } from "react-i18next";
-import {
-    Alert,
-    AlertVariant,
-    ClipboardCopy,
-    Form,
-    FormGroup,
-    Modal,
-    ModalVariant
-} from "../../../shared/@patternfly/react-core";
+import { Alert, AlertTitle } from "@merge/ui/components/alert";
+import { Label } from "@merge/ui/components/label";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@merge/ui/components/dialog";
 
 type AccessTokenDialogProps = {
     token: string;
@@ -30,29 +24,25 @@ type AccessTokenDialogProps = {
 export const AccessTokenDialog = ({ token, toggleDialog }: AccessTokenDialogProps) => {
     const { t } = useTranslation();
     return (
-        <Modal
-            title={t("initialAccessTokenDetails")}
-            isOpen={true}
-            onClose={toggleDialog}
-            variant={ModalVariant.medium}
-        >
-            <Alert
-                title={t("copyInitialAccessToken")}
-                component="h2"
-                isInline
-                variant={AlertVariant.warning}
-            />
-            <Form className="pf-v5-u-mt-md">
-                <FormGroup label={t("initialAccessToken")} fieldId="initialAccessToken">
-                    <ClipboardCopy
+        <Dialog open={true} onOpenChange={(open) => { if (!open) toggleDialog(); }}>
+            <DialogContent className="max-w-lg">
+                <DialogHeader>
+                    <DialogTitle>{t("initialAccessTokenDetails")}</DialogTitle>
+                </DialogHeader>
+                <Alert variant="destructive">
+                    <AlertTitle>{t("copyInitialAccessToken")}</AlertTitle>
+                </Alert>
+                <div className="space-y-2 mt-4">
+                    <Label>{t("initialAccessToken")}</Label>
+                    <code
                         id="initialAccessToken"
                         data-testid="initialAccessToken"
-                        isReadOnly
+                        className="block p-2 bg-muted rounded text-sm break-all select-all"
                     >
                         {token}
-                    </ClipboardCopy>
-                </FormGroup>
-            </Form>
-        </Modal>
+                    </code>
+                </div>
+            </DialogContent>
+        </Dialog>
     );
 };

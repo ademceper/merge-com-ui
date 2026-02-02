@@ -13,18 +13,13 @@
 
 import type ComponentRepresentation from "@keycloak/keycloak-admin-client/lib/defs/componentRepresentation";
 import { KeycloakSpinner, useAlerts, useFetch } from "../../shared/keycloak-ui-shared";
-import {
-    AlertVariant,
-    PageSection,
-    Tab,
-    TabTitleText
-} from "../../shared/@patternfly/react-core";
+import { AlertVariant } from "../../shared/keycloak-ui-shared";
 import { useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { useParams } from "react-router-dom";
 import { useAdminClient } from "../admin-client";
-import { RoutableTabs, useRoutableTab } from "../components/routable-tabs/RoutableTabs";
+import { RoutableTabs, useRoutableTab, Tab } from "../components/routable-tabs/RoutableTabs";
 import { useRealm } from "../context/realm-context/RealmContext";
 import {
     LdapComponentRepresentation,
@@ -108,7 +103,7 @@ export default function UserFederationLdapSettings() {
                 editMode={component.config?.editMode}
                 save={() => form.handleSubmit(onSubmit)()}
             />
-            <PageSection variant="light" className="pf-v5-u-p-0">
+            <div className="p-0">
                 <RoutableTabs
                     defaultLocation={toUserFederationLdap({
                         realm,
@@ -119,16 +114,16 @@ export default function UserFederationLdapSettings() {
                 >
                     <Tab
                         id="settings"
-                        title={<TabTitleText>{t("settings")}</TabTitleText>}
+                        title={<span>{t("settings")}</span>}
                         {...settingsTab}
                     >
-                        <PageSection variant="light">
+                        <div className="p-6">
                             <UserFederationLdapForm id={id} onSubmit={onSubmit} />
-                        </PageSection>
+                        </div>
                     </Tab>
                     <Tab
                         id="mappers"
-                        title={<TabTitleText>{t("mappers")}</TabTitleText>}
+                        title={<span>{t("mappers")}</span>}
                         data-testid="ldap-mappers-tab"
                         {...mappersTab}
                     >
@@ -148,7 +143,7 @@ export default function UserFederationLdapSettings() {
                         />
                     </Tab>
                 </RoutableTabs>
-            </PageSection>
+            </div>
         </FormProvider>
     );
 }

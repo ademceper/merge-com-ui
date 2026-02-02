@@ -19,22 +19,12 @@ import {
     ScrollForm,
     useAlerts,
     SelectControl,
-    NumberControl
+    NumberControl,
+    AlertVariant
 } from "../../shared/keycloak-ui-shared";
-import {
-    AlertVariant,
-    FormGroup,
-    FormHelperText,
-    HelperText,
-    HelperTextItem,
-    NumberInput,
-    SelectOption,
-    Switch,
-    Text,
-    TextInput,
-    TextArea,
-    TextVariants
-} from "../../shared/@patternfly/react-core";
+import { Input } from "@merge/ui/components/input";
+import { Textarea } from "@merge/ui/components/textarea";
+import { Switch } from "@merge/ui/components/switch";
 import { useState } from "react";
 import { Controller, useFormContext, useWatch } from "react-hook-form";
 import { useTranslation } from "react-i18next";
@@ -124,16 +114,14 @@ export const RealmSettingsTokensTab = ({ realm, save }: RealmSettingsTokensTabPr
                     role="manage-realm"
                     onSubmit={handleSubmit(save)}
                 >
-                    <FormGroup
-                        label={t("defaultSigAlg")}
-                        fieldId="kc-default-signature-algorithm"
-                        labelIcon={
+                    <div className="space-y-2">
+                        <div className="flex items-center gap-1">
+                            <label htmlFor="kc-default-signature-algorithm">{t("defaultSigAlg")}</label>
                             <HelpItem
                                 helpText={t("defaultSigAlgHelp")}
                                 fieldLabelId="algorithm"
                             />
-                        }
-                    >
+                        </div>
                         <Controller
                             name="defaultSignatureAlgorithm"
                             defaultValue={"RS256"}
@@ -157,31 +145,29 @@ export const RealmSettingsTokensTab = ({ realm, save }: RealmSettingsTokensTabPr
                                     data-testid="select-default-sig-alg"
                                 >
                                     {defaultSigAlgOptions!.map((p, idx) => (
-                                        <SelectOption
+                                        <option
                                             selected={p === field.value}
                                             key={`default-sig-alg-${idx}`}
                                             value={p}
                                         >
                                             {p}
-                                        </SelectOption>
+                                        </option>
                                     ))}
                                 </KeycloakSelect>
                             )}
                         />
-                    </FormGroup>
+                    </div>
 
                     {isFeatureEnabled(Feature.DeviceFlow) && (
                         <>
-                            <FormGroup
-                                label={t("oAuthDeviceCodeLifespan")}
-                                fieldId="oAuthDeviceCodeLifespan"
-                                labelIcon={
+                            <div className="space-y-2">
+                                <div className="flex items-center gap-1">
+                                    <label htmlFor="oAuthDeviceCodeLifespan">{t("oAuthDeviceCodeLifespan")}</label>
                                     <HelpItem
                                         helpText={t("oAuthDeviceCodeLifespanHelp")}
                                         fieldLabelId="oAuthDeviceCodeLifespan"
                                     />
-                                }
-                            >
+                                </div>
                                 <Controller
                                     name="oauth2DeviceCodeLifespan"
                                     defaultValue={0}
@@ -196,36 +182,25 @@ export const RealmSettingsTokensTab = ({ realm, save }: RealmSettingsTokensTabPr
                                         />
                                     )}
                                 />
-                            </FormGroup>
-                            <FormGroup
-                                label={t("oAuthDevicePollingInterval")}
-                                fieldId="oAuthDevicePollingInterval"
-                                labelIcon={
+                            </div>
+                            <div className="space-y-2">
+                                <div className="flex items-center gap-1">
+                                    <label htmlFor="oAuthDevicePollingInterval">{t("oAuthDevicePollingInterval")}</label>
                                     <HelpItem
                                         helpText={t("oAuthDevicePollingIntervalHelp")}
                                         fieldLabelId="oAuthDevicePollingInterval"
                                     />
-                                }
-                            >
+                                </div>
                                 <Controller
                                     name="oauth2DevicePollingInterval"
                                     defaultValue={0}
                                     control={control}
                                     render={({ field }) => (
-                                        <NumberInput
+                                        <Input
+                                            type="number"
                                             id="oAuthDevicePollingInterval"
                                             value={field.value}
                                             min={0}
-                                            onPlus={() =>
-                                                field.onChange(Number(field?.value) + 1)
-                                            }
-                                            onMinus={() =>
-                                                field.onChange(
-                                                    Number(field?.value) > 0
-                                                        ? Number(field?.value) - 1
-                                                        : 0
-                                                )
-                                            }
                                             onChange={event => {
                                                 const newValue = Number(
                                                     event.currentTarget.value
@@ -238,33 +213,29 @@ export const RealmSettingsTokensTab = ({ realm, save }: RealmSettingsTokensTabPr
                                         />
                                     )}
                                 />
-                            </FormGroup>
-                            <FormGroup
-                                label={t("shortVerificationUri")}
-                                fieldId="shortVerificationUri"
-                                labelIcon={
+                            </div>
+                            <div className="space-y-2">
+                                <div className="flex items-center gap-1">
+                                    <label htmlFor="shortVerificationUri">{t("shortVerificationUri")}</label>
                                     <HelpItem
                                         helpText={t("shortVerificationUriTooltipHelp")}
                                         fieldLabelId="shortVerificationUri"
                                     />
-                                }
-                            >
-                                <TextInput
+                                </div>
+                                <Input
                                     id="shortVerificationUri"
                                     placeholder={t("shortVerificationUri")}
                                     {...register("attributes.shortVerificationUri")}
                                 />
-                            </FormGroup>
-                            <FormGroup
-                                label={t("parRequestUriLifespan")}
-                                fieldId="parRequestUriLifespan"
-                                labelIcon={
+                            </div>
+                            <div className="space-y-2">
+                                <div className="flex items-center gap-1">
+                                    <label htmlFor="parRequestUriLifespan">{t("parRequestUriLifespan")}</label>
                                     <HelpItem
                                         helpText={t("parRequestUriLifespanHelp")}
                                         fieldLabelId="parRequestUriLifespan"
                                     />
-                                }
-                            >
+                                </div>
                                 <Controller
                                     name="attributes.parRequestUriLifespan"
                                     control={control}
@@ -279,7 +250,7 @@ export const RealmSettingsTokensTab = ({ realm, save }: RealmSettingsTokensTabPr
                                         />
                                     )}
                                 />
-                            </FormGroup>
+                            </div>
                         </>
                     )}
                 </FormAccess>
@@ -291,59 +262,53 @@ export const RealmSettingsTokensTab = ({ realm, save }: RealmSettingsTokensTabPr
                 <FormAccess
                     isHorizontal
                     role="manage-realm"
-                    className="pf-v5-u-mt-lg"
+                    className="mt-4"
                     onSubmit={handleSubmit(save)}
                 >
-                    <FormGroup
-                        hasNoPaddingTop
-                        label={t("revokeRefreshToken")}
-                        fieldId="kc-revoke-refresh-token"
-                        labelIcon={
+                    <div className="space-y-2">
+                        <div className="flex items-center gap-1">
+                            <label htmlFor="kc-revoke-refresh-token">{t("revokeRefreshToken")}</label>
                             <HelpItem
                                 helpText={t("revokeRefreshTokenHelp")}
                                 fieldLabelId="revokeRefreshToken"
                             />
-                        }
-                    >
+                        </div>
                         <Controller
                             name="revokeRefreshToken"
                             control={control}
                             defaultValue={false}
                             render={({ field }) => (
-                                <Switch
-                                    id="kc-revoke-refresh-token"
-                                    data-testid="revoke-refresh-token-switch"
-                                    aria-label={t("revokeRefreshToken")}
-                                    label={t("enabled")}
-                                    labelOff={t("disabled")}
-                                    isChecked={field.value}
-                                    onChange={field.onChange}
-                                />
+                                <div className="flex items-center gap-2">
+                                    <Switch
+                                        id="kc-revoke-refresh-token"
+                                        data-testid="revoke-refresh-token-switch"
+                                        aria-label={t("revokeRefreshToken")}
+                                        checked={field.value}
+                                        onCheckedChange={field.onChange}
+                                    />
+                                    <span className="text-sm">{field.value ? t("enabled") : t("disabled")}</span>
+                                </div>
                             )}
                         />
-                    </FormGroup>
+                    </div>
                     {revokeRefreshToken && (
-                        <FormGroup
-                            label={t("refreshTokenMaxReuse")}
-                            labelIcon={
+                        <div className="space-y-2">
+                            <div className="flex items-center gap-1">
+                                <label htmlFor="refreshTokenMaxReuse">{t("refreshTokenMaxReuse")}</label>
                                 <HelpItem
                                     helpText={t("refreshTokenMaxReuseHelp")}
                                     fieldLabelId="refreshTokenMaxReuse"
                                 />
-                            }
-                            fieldId="refreshTokenMaxReuse"
-                        >
+                            </div>
                             <Controller
                                 name="refreshTokenMaxReuse"
                                 defaultValue={0}
                                 control={control}
                                 render={({ field }) => (
-                                    <NumberInput
-                                        type="text"
+                                    <Input
+                                        type="number"
                                         id="refreshTokenMaxReuseMs"
                                         value={field.value}
-                                        onPlus={() => field.onChange(field.value! + 1)}
-                                        onMinus={() => field.onChange(field.value! - 1)}
                                         onChange={event =>
                                             field.onChange(
                                                 Number(
@@ -355,7 +320,7 @@ export const RealmSettingsTokensTab = ({ realm, save }: RealmSettingsTokensTabPr
                                     />
                                 )}
                             />
-                        </FormGroup>
+                        </div>
                     )}
                 </FormAccess>
             )
@@ -366,19 +331,17 @@ export const RealmSettingsTokensTab = ({ realm, save }: RealmSettingsTokensTabPr
                 <FormAccess
                     isHorizontal
                     role="manage-realm"
-                    className="pf-v5-u-mt-lg"
+                    className="mt-4"
                     onSubmit={handleSubmit(save)}
                 >
-                    <FormGroup
-                        label={t("accessTokenLifespan")}
-                        fieldId="accessTokenLifespan"
-                        labelIcon={
+                    <div className="space-y-2">
+                        <div className="flex items-center gap-1">
+                            <label htmlFor="accessTokenLifespan">{t("accessTokenLifespan")}</label>
                             <HelpItem
                                 helpText={t("accessTokenLifespanHelp")}
                                 fieldLabelId="accessTokenLifespan"
                             />
-                        }
-                    >
+                        </div>
                         <Controller
                             name="accessTokenLifespan"
                             control={control}
@@ -398,30 +361,24 @@ export const RealmSettingsTokensTab = ({ realm, save }: RealmSettingsTokensTabPr
                                 />
                             )}
                         />
-                        <FormHelperText>
-                            <HelperText>
-                                <HelperTextItem>
-                                    {t("recommendedSsoTimeout", {
-                                        time: toHumanFormat(
-                                            ssoSessionIdleTimeout!,
-                                            whoAmI.locale
-                                        )
-                                    })}
-                                </HelperTextItem>
-                            </HelperText>
-                        </FormHelperText>
-                    </FormGroup>
+                        <p className="text-sm text-muted-foreground">
+                            {t("recommendedSsoTimeout", {
+                                time: toHumanFormat(
+                                    ssoSessionIdleTimeout!,
+                                    whoAmI.locale
+                                )
+                            })}
+                        </p>
+                    </div>
 
-                    <FormGroup
-                        label={t("accessTokenLifespanImplicitFlow")}
-                        fieldId="accessTokenLifespanImplicitFlow"
-                        labelIcon={
+                    <div className="space-y-2">
+                        <div className="flex items-center gap-1">
+                            <label htmlFor="accessTokenLifespanImplicitFlow">{t("accessTokenLifespanImplicitFlow")}</label>
                             <HelpItem
                                 helpText={t("accessTokenLifespanImplicitFlow")}
                                 fieldLabelId="accessTokenLifespanImplicitFlow"
                             />
-                        }
-                    >
+                        </div>
                         <Controller
                             name="accessTokenLifespanForImplicitFlow"
                             control={control}
@@ -435,17 +392,15 @@ export const RealmSettingsTokensTab = ({ realm, save }: RealmSettingsTokensTabPr
                                 />
                             )}
                         />
-                    </FormGroup>
-                    <FormGroup
-                        label={t("clientLoginTimeout")}
-                        fieldId="clientLoginTimeout"
-                        labelIcon={
+                    </div>
+                    <div className="space-y-2">
+                        <div className="flex items-center gap-1">
+                            <label htmlFor="clientLoginTimeout">{t("clientLoginTimeout")}</label>
                             <HelpItem
                                 helpText={t("clientLoginTimeoutHelp")}
                                 fieldLabelId="clientLoginTimeout"
                             />
-                        }
-                    >
+                        </div>
                         <Controller
                             name="accessCodeLifespan"
                             control={control}
@@ -460,20 +415,17 @@ export const RealmSettingsTokensTab = ({ realm, save }: RealmSettingsTokensTabPr
                                 />
                             )}
                         />
-                    </FormGroup>
+                    </div>
 
                     {offlineSessionMaxEnabled && (
-                        <FormGroup
-                            label={t("offlineSessionMax")}
-                            fieldId="offlineSessionMax"
-                            id="offline-session-max-label"
-                            labelIcon={
+                        <div className="space-y-2" id="offline-session-max-label">
+                            <div className="flex items-center gap-1">
+                                <label htmlFor="offlineSessionMax">{t("offlineSessionMax")}</label>
                                 <HelpItem
                                     helpText={t("offlineSessionMaxHelp")}
                                     fieldLabelId="offlineSessionMax"
                                 />
-                            }
-                        >
+                            </div>
                             <Controller
                                 name="offlineSessionMaxLifespan"
                                 control={control}
@@ -487,7 +439,7 @@ export const RealmSettingsTokensTab = ({ realm, save }: RealmSettingsTokensTabPr
                                     />
                                 )}
                             />
-                        </FormGroup>
+                        </div>
                     )}
                 </FormAccess>
             )
@@ -498,20 +450,17 @@ export const RealmSettingsTokensTab = ({ realm, save }: RealmSettingsTokensTabPr
                 <FormAccess
                     isHorizontal
                     role="manage-realm"
-                    className="pf-v5-u-mt-lg"
+                    className="mt-4"
                     onSubmit={handleSubmit(save)}
                 >
-                    <FormGroup
-                        label={t("userInitiatedActionLifespan")}
-                        id="kc-user-initiated-action-lifespan"
-                        fieldId="userInitiatedActionLifespan"
-                        labelIcon={
+                    <div className="space-y-2" id="kc-user-initiated-action-lifespan">
+                        <div className="flex items-center gap-1">
+                            <label htmlFor="userInitiatedActionLifespan">{t("userInitiatedActionLifespan")}</label>
                             <HelpItem
                                 helpText={t("userInitiatedActionLifespanHelp")}
                                 fieldLabelId="userInitiatedActionLifespan"
                             />
-                        }
-                    >
+                        </div>
                         <Controller
                             name="actionTokenGeneratedByUserLifespan"
                             control={control}
@@ -526,18 +475,15 @@ export const RealmSettingsTokensTab = ({ realm, save }: RealmSettingsTokensTabPr
                                 />
                             )}
                         />
-                    </FormGroup>
-                    <FormGroup
-                        label={t("defaultAdminInitiated")}
-                        fieldId="defaultAdminInitiated"
-                        id="default-admin-initiated-label"
-                        labelIcon={
+                    </div>
+                    <div className="space-y-2" id="default-admin-initiated-label">
+                        <div className="flex items-center gap-1">
+                            <label htmlFor="defaultAdminInitiated">{t("defaultAdminInitiated")}</label>
                             <HelpItem
                                 helpText={t("defaultAdminInitiatedActionLifespanHelp")}
                                 fieldLabelId="defaultAdminInitiated"
                             />
-                        }
-                    >
+                        </div>
                         <Controller
                             name="actionTokenGeneratedByAdminLifespan"
                             control={control}
@@ -552,24 +498,18 @@ export const RealmSettingsTokensTab = ({ realm, save }: RealmSettingsTokensTabPr
                                 />
                             )}
                         />
-                    </FormGroup>
-                    <Text
-                        className="kc-override-action-tokens-subtitle"
-                        component={TextVariants.h1}
-                    >
+                    </div>
+                    <h1 className="kc-override-action-tokens-subtitle text-xl font-semibold">
                         {t("overrideActionTokens")}
-                    </Text>
-                    <FormGroup
-                        label={t("emailVerification")}
-                        fieldId="emailVerification"
-                        id="email-verification"
-                        labelIcon={
+                    </h1>
+                    <div className="space-y-2" id="email-verification">
+                        <div className="flex items-center gap-1">
+                            <label htmlFor="emailVerification">{t("emailVerification")}</label>
                             <HelpItem
                                 helpText={t("emailVerificationHelp")}
                                 fieldLabelId="emailVerification"
                             />
-                        }
-                    >
+                        </div>
                         <Controller
                             name={`attributes.${beerify(
                                 "actionTokenGeneratedByUserLifespan.verify-email"
@@ -586,18 +526,15 @@ export const RealmSettingsTokensTab = ({ realm, save }: RealmSettingsTokensTabPr
                                 />
                             )}
                         />
-                    </FormGroup>
-                    <FormGroup
-                        label={t("idpAccountEmailVerification")}
-                        fieldId="idpAccountEmailVerification"
-                        id="idp-acct-label"
-                        labelIcon={
+                    </div>
+                    <div className="space-y-2" id="idp-acct-label">
+                        <div className="flex items-center gap-1">
+                            <label htmlFor="idpAccountEmailVerification">{t("idpAccountEmailVerification")}</label>
                             <HelpItem
                                 helpText={t("idpAccountEmailVerificationHelp")}
                                 fieldLabelId="idpAccountEmailVerification"
                             />
-                        }
-                    >
+                        </div>
                         <Controller
                             name={`attributes.${beerify(
                                 "actionTokenGeneratedByUserLifespan.idp-verify-account-via-email"
@@ -614,18 +551,15 @@ export const RealmSettingsTokensTab = ({ realm, save }: RealmSettingsTokensTabPr
                                 />
                             )}
                         />
-                    </FormGroup>
-                    <FormGroup
-                        label={t("forgotPassword")}
-                        fieldId="forgotPassword"
-                        id="forgot-password-label"
-                        labelIcon={
+                    </div>
+                    <div className="space-y-2" id="forgot-password-label">
+                        <div className="flex items-center gap-1">
+                            <label htmlFor="forgotPassword">{t("forgotPassword")}</label>
                             <HelpItem
                                 helpText={t("forgotPasswordHelp")}
                                 fieldLabelId="forgotPassword"
                             />
-                        }
-                    >
+                        </div>
                         <Controller
                             name={`attributes.${beerify(
                                 "actionTokenGeneratedByUserLifespan.reset-credentials"
@@ -642,18 +576,15 @@ export const RealmSettingsTokensTab = ({ realm, save }: RealmSettingsTokensTabPr
                                 />
                             )}
                         />
-                    </FormGroup>
-                    <FormGroup
-                        label={t("executeActions")}
-                        fieldId="executeActions"
-                        id="execute-actions"
-                        labelIcon={
+                    </div>
+                    <div className="space-y-2" id="execute-actions">
+                        <div className="flex items-center gap-1">
+                            <label htmlFor="executeActions">{t("executeActions")}</label>
                             <HelpItem
                                 helpText={t("executeActionsHelp")}
                                 fieldLabelId="executeActions"
                             />
-                        }
-                    >
+                        </div>
                         <Controller
                             name={`attributes.${beerify(
                                 "actionTokenGeneratedByUserLifespan.execute-actions"
@@ -670,7 +601,7 @@ export const RealmSettingsTokensTab = ({ realm, save }: RealmSettingsTokensTabPr
                                 />
                             )}
                         />
-                    </FormGroup>
+                    </div>
                     {!isFeatureEnabled(Feature.OpenId4VCI) && (
                         <FixedButtonsGroup
                             name="tokens-tab"
@@ -689,7 +620,7 @@ export const RealmSettingsTokensTab = ({ realm, save }: RealmSettingsTokensTabPr
                 <FormAccess
                     isHorizontal
                     role="manage-realm"
-                    className="pf-v5-u-mt-lg"
+                    className="mt-4"
                     onSubmit={handleSubmit(save, onError)}
                 >
                     <TimeSelectorControl
@@ -792,23 +723,18 @@ export const RealmSettingsTokensTab = ({ realm, save }: RealmSettingsTokensTabPr
                         data-testid="batch-issuance-size"
                     />
 
-                    <Text
-                        className="kc-override-action-tokens-subtitle"
-                        component={TextVariants.h1}
-                    >
+                    <h1 className="kc-override-action-tokens-subtitle text-xl font-semibold">
                         {t("attestationTrust")}
-                    </Text>
-                    <FormGroup
-                        label={t("trustedKeyIds")}
-                        fieldId="trustedKeyIds"
-                        labelIcon={
+                    </h1>
+                    <div className="space-y-2">
+                        <div className="flex items-center gap-1">
+                            <label htmlFor="trustedKeyIds">{t("trustedKeyIds")}</label>
                             <HelpItem
                                 helpText={t("trustedKeyIdsHelp")}
                                 fieldLabelId="trustedKeyIds"
                             />
-                        }
-                    >
-                        <TextInput
+                        </div>
+                        <Input
                             id="trustedKeyIds"
                             data-testid="trusted-key-ids"
                             {...register(
@@ -817,17 +743,15 @@ export const RealmSettingsTokensTab = ({ realm, save }: RealmSettingsTokensTabPr
                                 )
                             )}
                         />
-                    </FormGroup>
-                    <FormGroup
-                        label={t("trustedKeys")}
-                        fieldId="trustedKeys"
-                        labelIcon={
+                    </div>
+                    <div className="space-y-2">
+                        <div className="flex items-center gap-1">
+                            <label htmlFor="trustedKeys">{t("trustedKeys")}</label>
                             <HelpItem
                                 helpText={t("trustedKeysHelp")}
                                 fieldLabelId="trustedKeys"
                             />
-                        }
-                    >
+                        </div>
                         <Controller
                             name={convertAttributeNameToForm(
                                 "attributes.oid4vc.attestation.trusted_keys"
@@ -837,23 +761,20 @@ export const RealmSettingsTokensTab = ({ realm, save }: RealmSettingsTokensTabPr
                                 realm.attributes?.["oid4vc.attestation.trusted_keys"]
                             }
                             render={({ field }) => (
-                                <TextArea
+                                <Textarea
                                     id="trustedKeys"
                                     data-testid="trusted-keys"
                                     value={field.value}
-                                    onChange={(_event, value) => field.onChange(value)}
-                                    resizeOrientation="vertical"
+                                    onChange={e => field.onChange(e.target.value)}
+                                    className="resize-y"
                                 />
                             )}
                         />
-                    </FormGroup>
+                    </div>
 
-                    <Text
-                        className="kc-override-action-tokens-subtitle"
-                        component={TextVariants.h1}
-                    >
+                    <h1 className="kc-override-action-tokens-subtitle text-xl font-semibold">
                         {t("timeClaimCorrelationMitigation")}
-                    </Text>
+                    </h1>
                     <SelectControl
                         name={convertAttributeNameToForm(
                             "attributes.oid4vci.time.claims.strategy"
@@ -919,7 +840,7 @@ export const RealmSettingsTokensTab = ({ realm, save }: RealmSettingsTokensTabPr
     return (
         <ScrollForm
             label={t("jumpToSection")}
-            className="pf-v5-u-px-lg pf-v5-u-pb-lg"
+            className="px-4 pb-4"
             sections={sections}
         />
     );

@@ -12,7 +12,7 @@
 // @ts-nocheck
 
 import type GroupRepresentation from "@keycloak/keycloak-admin-client/lib/defs/groupRepresentation";
-import { ButtonVariant } from "../../../shared/@patternfly/react-core";
+const ButtonVariant = { danger: "destructive" as const };
 import { useTranslation } from "react-i18next";
 import { useAdminClient } from "../../admin-client";
 import { useAlerts } from "../../../shared/keycloak-ui-shared";

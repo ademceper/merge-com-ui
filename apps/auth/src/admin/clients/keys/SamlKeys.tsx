@@ -18,19 +18,10 @@ import {
     useAlerts,
     useFetch
 } from "../../../shared/keycloak-ui-shared";
-import {
-    ActionGroup,
-    AlertVariant,
-    Button,
-    Card,
-    CardBody,
-    Form,
-    FormGroup,
-    PageSection,
-    Switch,
-    Text,
-    TextContent
-} from "../../../shared/@patternfly/react-core";
+import { AlertVariant } from "../../../shared/keycloak-ui-shared";
+import { Button } from "@merge/ui/components/button";
+import { Label } from "@merge/ui/components/label";
+import { Switch } from "@merge/ui/components/switch";
 import { saveAs } from "file-saver";
 import { Fragment, useState } from "react";
 import { Controller, useFormContext } from "react-hook-form";
@@ -132,18 +123,13 @@ const KeySection = ({
                 />
             )}
             <FormPanel title={t(title)} className="kc-form-panel__panel">
-                <TextContent className="pf-v5-u-pb-lg">
-                    <Text>{t(`${title}Explain`)}</Text>
-                </TextContent>
+                <p className="pb-4 text-sm text-muted-foreground">{t(`${title}Explain`)}</p>
                 <FormAccess role="manage-clients" isHorizontal>
-                    <FormGroup
-                        labelIcon={
+                    <div className="space-y-2">
+                        <div className="flex items-center gap-2">
+                            <Label>{t(key)}</Label>
                             <HelpItem helpText={t(`${key}Help`)} fieldLabelId={key} />
-                        }
-                        label={t(key)}
-                        fieldId={key}
-                        hasNoPaddingTop
-                    >
+                        </div>
                         <Controller
                             name={name as keyof FormFields}
                             control={control}
@@ -152,11 +138,9 @@ const KeySection = ({
                                 <Switch
                                     data-testid={key}
                                     id={key}
-                                    label={t("on")}
-                                    labelOff={t("off")}
-                                    isChecked={field.value === "true"}
-                                    onChange={(_event, value) => {
-                                        const v = value.toString();
+                                    checked={field.value === "true"}
+                                    onCheckedChange={(checked) => {
+                                        const v = checked.toString();
                                         if (
                                             v === "true" &&
                                             useMetadataDescriptorUrl === "true"
@@ -174,20 +158,20 @@ const KeySection = ({
                                 />
                             )}
                         />
-                    </FormGroup>
+                    </div>
                 </FormAccess>
             </FormPanel>
             {useMetadataDescriptorUrl !== "true" &&
                 keyInfo?.certificate &&
                 section === "true" && (
-                    <Card isFlat>
-                        <CardBody className="kc-form-panel__body">
-                            <Form isHorizontal>
+                    <div className="border rounded-lg">
+                        <div className="p-4">
+                            <form className="space-y-4">
                                 <Certificate
                                     helpTextKey={`saml${key}CertificateHelp`}
                                     keyInfo={keyInfo}
                                 />
-                                <ActionGroup>
+                                <div className="flex gap-2">
                                     <Button
                                         variant="secondary"
                                         onClick={() => onGenerate(attr, true)}
@@ -201,15 +185,15 @@ const KeySection = ({
                                         {t("importKey")}
                                     </Button>
                                     <Button
-                                        variant="tertiary"
+                                        variant="outline"
                                         onClick={toggleImportDialog}
                                     >
                                         {t("export")}
                                     </Button>
-                                </ActionGroup>
-                            </Form>
-                        </CardBody>
-                    </Card>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
                 )}
         </>
     );
@@ -291,7 +275,7 @@ export const SamlKeys = ({ clientId, save }: SamlKeysProps) => {
     });
 
     return (
-        <PageSection variant="light" className="keycloak__form">
+        <div className="p-6">
             {isChanged && (
                 <SamlKeysDialog
                     id={clientId}
@@ -344,6 +328,6 @@ export const SamlKeys = ({ clientId, save }: SamlKeysProps) => {
                     />
                 </Fragment>
             ))}
-        </PageSection>
+        </div>
     );
 };

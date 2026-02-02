@@ -13,14 +13,11 @@
 
 import type ResourceServerRepresentation from "@keycloak/keycloak-admin-client/lib/defs/resourceServerRepresentation";
 import { HelpItem, useAlerts, useFetch } from "../../../shared/keycloak-ui-shared";
-import {
-    AlertVariant,
-    Button,
-    Divider,
-    FormGroup,
-    PageSection,
-    Radio
-} from "../../../shared/@patternfly/react-core";
+import { AlertVariant } from "../../../shared/keycloak-ui-shared";
+import { Button } from "@merge/ui/components/button";
+import { Separator } from "@merge/ui/components/separator";
+import { Label } from "@merge/ui/components/label";
+import { RadioGroup, RadioGroupItem } from "@merge/ui/components/radio-group";
 import { useState } from "react";
 import { Controller, FormProvider, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
@@ -86,7 +83,7 @@ export const AuthorizationSettings = ({ clientId }: { clientId: string }) => {
     }
 
     return (
-        <PageSection variant="light">
+        <div className="p-6">
             {importDialog && (
                 <ImportDialog
                     onConfirm={importResource}
@@ -98,53 +95,46 @@ export const AuthorizationSettings = ({ clientId }: { clientId: string }) => {
                 isHorizontal
                 onSubmit={handleSubmit(onSubmit)}
             >
-                <FormGroup
-                    label={t("import")}
-                    fieldId="import"
-                    labelIcon={
+                <div className="space-y-2">
+                    <div className="flex items-center gap-2">
+                        <Label>{t("import")}</Label>
                         <HelpItem helpText={t("importHelp")} fieldLabelId="import" />
-                    }
-                >
+                    </div>
                     <Button variant="secondary" onClick={toggleImportDialog}>
                         {t("import")}
                     </Button>
-                </FormGroup>
-                <Divider />
-                <FormGroup
-                    label={t("policyEnforcementMode")}
-                    labelIcon={
+                </div>
+                <Separator />
+                <div className="space-y-2">
+                    <div className="flex items-center gap-2">
+                        <Label>{t("policyEnforcementMode")}</Label>
                         <HelpItem
                             helpText={t("policyEnforcementModeHelp")}
                             fieldLabelId="policyEnforcementMode"
                         />
-                    }
-                    fieldId="policyEnforcementMode"
-                    hasNoPaddingTop
-                >
+                    </div>
                     <Controller
                         name="policyEnforcementMode"
                         data-testid="policyEnforcementMode"
                         defaultValue={POLICY_ENFORCEMENT_MODES[0]}
                         control={control}
                         render={({ field }) => (
-                            <>
+                            <RadioGroup
+                                value={field.value}
+                                onValueChange={field.onChange}
+                                disabled={isDisabled}
+                                className="flex flex-col gap-2"
+                            >
                                 {POLICY_ENFORCEMENT_MODES.map(mode => (
-                                    <Radio
-                                        id={mode}
-                                        key={mode}
-                                        data-testid={mode}
-                                        isChecked={field.value === mode}
-                                        isDisabled={isDisabled}
-                                        name="policyEnforcementMode"
-                                        onChange={() => field.onChange(mode)}
-                                        label={t(`policyEnforcementModes.${mode}`)}
-                                        className="pf-v5-u-mb-md"
-                                    />
+                                    <div key={mode} className="flex items-center gap-2" data-testid={mode}>
+                                        <RadioGroupItem value={mode} id={mode} />
+                                        <Label htmlFor={mode}>{t(`policyEnforcementModes.${mode}`)}</Label>
+                                    </div>
                                 ))}
-                            </>
+                            </RadioGroup>
                         )}
                     />
-                </FormGroup>
+                </div>
                 <FormProvider {...form}>
                     <DecisionStrategySelect isLimited />
                     <DefaultSwitchControl
@@ -159,6 +149,6 @@ export const AuthorizationSettings = ({ clientId }: { clientId: string }) => {
                     isSubmit
                 />
             </FormAccess>
-        </PageSection>
+        </div>
     );
 };

@@ -13,14 +13,9 @@
 
 import type ScopeRepresentation from "@keycloak/keycloak-admin-client/lib/defs/scopeRepresentation";
 import { TextControl, useAlerts, useFetch } from "../../../shared/keycloak-ui-shared";
-import {
-    ActionGroup,
-    AlertVariant,
-    Button,
-    ButtonVariant,
-    DropdownItem,
-    PageSection
-} from "../../../shared/@patternfly/react-core";
+import { AlertVariant } from "../../../shared/keycloak-ui-shared";
+import { Button } from "@merge/ui/components/button";
+import { DropdownMenuItem } from "@merge/ui/components/dropdown-menu";
 import { useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
@@ -114,18 +109,18 @@ export default function ScopeDetails() {
                 dropdownItems={
                     scopeId
                         ? [
-                              <DropdownItem
+                              <DropdownMenuItem
                                   key="delete"
                                   data-testid="delete-resource"
                                   onClick={() => toggleDeleteDialog()}
                               >
                                   {t("delete")}
-                              </DropdownItem>
+                              </DropdownMenuItem>
                           ]
                         : undefined
                 }
             />
-            <PageSection variant="light">
+            <div className="p-6">
                 <FormProvider {...form}>
                     <FormAccess
                         isHorizontal
@@ -148,47 +143,43 @@ export default function ScopeDetails() {
                             label={t("iconUri")}
                             labelIcon={t("iconUriHelp")}
                         />
-                        <ActionGroup>
-                            <div className="pf-v5-u-mt-md">
-                                <Button
-                                    variant={ButtonVariant.primary}
-                                    type="submit"
-                                    data-testid="save"
-                                >
-                                    {t("save")}
-                                </Button>
+                        <div className="flex gap-2 mt-4">
+                            <Button
+                                type="submit"
+                                data-testid="save"
+                            >
+                                {t("save")}
+                            </Button>
 
-                                {!scope ? (
-                                    <Button
-                                        variant="link"
-                                        data-testid="cancel"
-                                        component={props => (
-                                            <Link
-                                                {...props}
-                                                to={toAuthorizationTab({
-                                                    realm,
-                                                    clientId: id,
-                                                    tab: "scopes"
-                                                })}
-                                            ></Link>
-                                        )}
+                            {!scope ? (
+                                <Button
+                                    variant="link"
+                                    data-testid="cancel"
+                                    asChild
+                                >
+                                    <Link
+                                        to={toAuthorizationTab({
+                                            realm,
+                                            clientId: id,
+                                            tab: "scopes"
+                                        })}
                                     >
                                         {t("cancel")}
-                                    </Button>
-                                ) : (
-                                    <Button
-                                        variant="link"
-                                        data-testid="revert"
-                                        onClick={() => reset({ ...scope })}
-                                    >
-                                        {t("revert")}
-                                    </Button>
-                                )}
-                            </div>
-                        </ActionGroup>
+                                    </Link>
+                                </Button>
+                            ) : (
+                                <Button
+                                    variant="link"
+                                    data-testid="revert"
+                                    onClick={() => reset({ ...scope })}
+                                >
+                                    {t("revert")}
+                                </Button>
+                            )}
+                        </div>
                     </FormAccess>
                 </FormProvider>
-            </PageSection>
+            </div>
         </>
     );
 }

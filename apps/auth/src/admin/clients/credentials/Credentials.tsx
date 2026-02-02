@@ -20,21 +20,11 @@ import {
     useAlerts,
     useFetch
 } from "../../../shared/keycloak-ui-shared";
-import {
-    ActionGroup,
-    Alert,
-    AlertVariant,
-    Button,
-    Card,
-    CardBody,
-    ClipboardCopy,
-    Divider,
-    Form,
-    FormGroup,
-    PageSection,
-    Split,
-    SplitItem
-} from "../../../shared/@patternfly/react-core";
+import { AlertVariant } from "../../../shared/keycloak-ui-shared";
+import { Alert, AlertTitle } from "@merge/ui/components/alert";
+import { Button } from "@merge/ui/components/button";
+import { Label } from "@merge/ui/components/label";
+import { Separator } from "@merge/ui/components/separator";
 import { useMemo, useState } from "react";
 import { useFormContext, useWatch } from "react-hook-form";
 import { useTranslation } from "react-i18next";
@@ -161,18 +151,18 @@ export const Credentials = ({ client, save, refresh }: CredentialsProps) => {
     });
 
     return (
-        <PageSection>
+        <div className="p-6">
             <FormAccess
                 onSubmit={handleSubmit(save)}
                 isHorizontal
-                className="pf-v5-u-mt-md"
+                className="mt-4"
                 role="manage-clients"
                 fineGrainedAccess={client.access?.configure}
             >
                 <ClientSecretConfirm />
                 <AccessTokenConfirm />
-                <Card isFlat>
-                    <CardBody>
+                <div className="border rounded-lg">
+                    <div className="p-4">
                         <SelectControl
                             name="clientAuthenticatorType"
                             label={t("clientAuthenticator")}
@@ -192,75 +182,69 @@ export const Credentials = ({ client, save, refresh }: CredentialsProps) => {
                             />
                         )}
                         {clientAuthenticatorType === "client-jwt" && (
-                            <FormGroup>
-                                <Alert
-                                    variant="info"
-                                    isInline
-                                    title={t("signedJWTConfirm")}
-                                />
-                            </FormGroup>
+                            <div>
+                                <Alert>
+                                    <AlertTitle>{t("signedJWTConfirm")}</AlertTitle>
+                                </Alert>
+                            </div>
                         )}
                         {clientAuthenticatorType === "client-x509" && <X509 />}
                         {providerProperties && (
-                            <Form>
+                            <form>
                                 <DynamicComponents
                                     properties={providerProperties}
                                     convertToName={name =>
                                         convertAttributeNameToForm(`attributes.${name}`)
                                     }
                                 />
-                            </Form>
+                            </form>
                         )}
-                        <ActionGroup>
-                            <Button variant="primary" type="submit" isDisabled={!isDirty}>
+                        <div className="flex gap-2 mt-4">
+                            <Button type="submit" disabled={!isDirty}>
                                 {t("save")}
                             </Button>
-                        </ActionGroup>
-                    </CardBody>
+                        </div>
+                    </div>
                     {selectedProvider?.supportsSecret && (
                         <>
-                            <Divider />
-                            <CardBody>
+                            <Separator />
+                            <div className="p-4">
                                 <ClientSecret
                                     client={client}
                                     secret={secret}
                                     toggle={toggleClientSecretConfirm}
                                 />
-                            </CardBody>
+                            </div>
                         </>
                     )}
-                </Card>
-                <Card isFlat>
-                    <CardBody>
-                        <FormGroup
-                            label={t("registrationAccessToken")}
-                            fieldId="kc-access-token"
-                            labelIcon={
+                </div>
+                <div className="border rounded-lg">
+                    <div className="p-4">
+                        <div className="space-y-2">
+                            <div className="flex items-center gap-2">
+                                <Label>{t("registrationAccessToken")}</Label>
                                 <HelpItem
                                     helpText={t("registrationAccessTokenHelp")}
                                     fieldLabelId="registrationAccessToken"
                                 />
-                            }
-                        >
-                            <Split hasGutter>
-                                <SplitItem isFilled>
-                                    <ClipboardCopy id="kc-access-token" isReadOnly>
+                            </div>
+                            <div className="flex gap-2">
+                                <div className="flex-1">
+                                    <code className="block p-2 bg-muted rounded text-sm break-all" id="kc-access-token">
                                         {accessToken}
-                                    </ClipboardCopy>
-                                </SplitItem>
-                                <SplitItem>
-                                    <Button
-                                        variant="secondary"
-                                        onClick={toggleAccessTokenConfirm}
-                                    >
-                                        {t("regenerate")}
-                                    </Button>
-                                </SplitItem>
-                            </Split>
-                        </FormGroup>
-                    </CardBody>
-                </Card>
+                                    </code>
+                                </div>
+                                <Button
+                                    variant="secondary"
+                                    onClick={toggleAccessTokenConfirm}
+                                >
+                                    {t("regenerate")}
+                                </Button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </FormAccess>
-        </PageSection>
+        </div>
     );
 };

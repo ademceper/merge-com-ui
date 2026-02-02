@@ -11,16 +11,10 @@
 
 // @ts-nocheck
 
-import {
-    AlertVariant,
-    Button,
-    ButtonVariant,
-    ExpandableSection,
-    FormGroup,
-    Split,
-    SplitItem,
-    ToolbarItem
-} from "../../../shared/@patternfly/react-core";
+import { AlertVariant } from "../../../shared/keycloak-ui-shared";
+import { Button } from "@merge/ui/components/button";
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@merge/ui/components/collapsible";
+import { Label } from "@merge/ui/components/label";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { HelpItem } from "../../../shared/keycloak-ui-shared";
@@ -68,7 +62,7 @@ export const ClusteringPanel = ({
             node: selectedNode
         }),
         continueButtonLabel: "delete",
-        continueButtonVariant: ButtonVariant.danger,
+        continueButtonVariant: "danger",
         onConfirm: async () => {
             try {
                 await adminClient.clients.deleteClusterNode({
@@ -98,30 +92,28 @@ export const ClusteringPanel = ({
                 fineGrainedAccess={access?.configure}
                 isHorizontal
             >
-                <FormGroup
-                    label={t("nodeReRegistrationTimeout")}
-                    fieldId="kc-node-reregistration-timeout"
-                    labelIcon={
+                <div className="space-y-2">
+                    <div className="flex items-center gap-2">
+                        <Label htmlFor="kc-node-reregistration-timeout">{t("nodeReRegistrationTimeout")}</Label>
                         <HelpItem
                             helpText={t("nodeReRegistrationTimeoutHelp")}
                             fieldLabelId="nodeReRegistrationTimeout"
                         />
-                    }
-                >
-                    <Split hasGutter>
-                        <SplitItem>
+                    </div>
+                    <div className="flex gap-4">
+                        <div>
                             <TimeSelectorForm name="nodeReRegistrationTimeout" />
-                        </SplitItem>
-                        <SplitItem>
+                        </div>
+                        <div>
                             <Button
-                                variant={ButtonVariant.secondary}
+                                variant="secondary"
                                 onClick={() => save()}
                             >
                                 {t("save")}
                             </Button>
-                        </SplitItem>
-                    </Split>
-                </FormGroup>
+                        </div>
+                    </div>
+                </div>
             </FormAccess>
             <>
                 <DeleteNodeConfirm />
@@ -134,11 +126,11 @@ export const ClusteringPanel = ({
                     }}
                     onClose={() => setAddNodeOpen(false)}
                 />
-                <ExpandableSection
-                    toggleText={t("registeredClusterNodes")}
-                    onToggle={(_event, val) => setExpanded(val)}
-                    isExpanded={expanded}
-                >
+                <Collapsible open={expanded} onOpenChange={setExpanded}>
+                    <CollapsibleTrigger className="font-medium">
+                        {t("registeredClusterNodes")}
+                    </CollapsibleTrigger>
+                    <CollapsibleContent>
                     <KeycloakDataTable
                         key={key}
                         ariaLabelKey="registeredClusterNodes"
@@ -151,27 +143,27 @@ export const ClusteringPanel = ({
                         }
                         toolbarItem={
                             <>
-                                <ToolbarItem>
+                                <div>
                                     <Button
                                         id="testClusterAvailability"
                                         data-testid="test-cluster-availability"
                                         onClick={testCluster}
-                                        variant={ButtonVariant.secondary}
-                                        isDisabled={Object.keys(nodes).length === 0}
+                                        variant="secondary"
+                                        disabled={Object.keys(nodes).length === 0}
                                     >
                                         {t("testClusterAvailability")}
                                     </Button>
-                                </ToolbarItem>
-                                <ToolbarItem>
+                                </div>
+                                <div>
                                     <Button
                                         id="registerNodeManually"
                                         data-testid="registerNodeManually"
                                         onClick={() => setAddNodeOpen(true)}
-                                        variant={ButtonVariant.tertiary}
+                                        variant="outline"
                                     >
                                         {t("registerNodeManually")}
                                     </Button>
-                                </ToolbarItem>
+                                </div>
                             </>
                         }
                         actions={[
@@ -213,7 +205,8 @@ export const ClusteringPanel = ({
                             />
                         }
                     />
-                </ExpandableSection>
+                    </CollapsibleContent>
+                </Collapsible>
             </>
         </>
     );

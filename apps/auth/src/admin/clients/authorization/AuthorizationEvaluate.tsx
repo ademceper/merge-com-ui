@@ -25,18 +25,10 @@ import {
     useAlerts,
     useFetch
 } from "../../../shared/keycloak-ui-shared";
-import {
-    ActionGroup,
-    Button,
-    ExpandableSection,
-    FormGroup,
-    PageSection,
-    Panel,
-    PanelHeader,
-    PanelMainBody,
-    Switch,
-    Title
-} from "../../../shared/@patternfly/react-core";
+import { Button } from "@merge/ui/components/button";
+import { Switch } from "@merge/ui/components/switch";
+import { Label } from "@merge/ui/components/label";
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@merge/ui/components/collapsible";
 import { useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
@@ -197,13 +189,13 @@ const AuthorizationEvaluateContent = ({ client }: Props) => {
     }
 
     return (
-        <PageSection>
+        <div className="p-6">
             <FormProvider {...form}>
-                <Panel>
-                    <PanelHeader>
-                        <Title headingLevel="h2">{t("identityInformation")}</Title>
-                    </PanelHeader>
-                    <PanelMainBody>
+                <div className="border rounded-lg">
+                    <div className="p-4 border-b">
+                        <h2 className="text-lg font-semibold">{t("identityInformation")}</h2>
+                    </div>
+                    <div className="p-4">
                         <FormAccess isHorizontal role="view-clients">
                             <ClientSelect
                                 name="client"
@@ -234,47 +226,38 @@ const AuthorizationEvaluateContent = ({ client }: Props) => {
                                 options={clientRoles.map(role => role.name!)}
                             />
                         </FormAccess>
-                    </PanelMainBody>
-                </Panel>
-                <Panel>
-                    <PanelHeader>
-                        <Title headingLevel="h2">{t("permissions")}</Title>
-                    </PanelHeader>
-                    <PanelMainBody>
+                    </div>
+                </div>
+                <div className="border rounded-lg mt-4">
+                    <div className="p-4 border-b">
+                        <h2 className="text-lg font-semibold">{t("permissions")}</h2>
+                    </div>
+                    <div className="p-4">
                         <FormAccess isHorizontal role="view-clients">
-                            <FormGroup
-                                label={t("applyToResourceType")}
-                                fieldId="applyToResourceType"
-                                labelIcon={
+                            <div className="space-y-2">
+                                <div className="flex items-center gap-2">
+                                    <Label htmlFor="applyToResourceType">{t("applyToResourceType")}</Label>
                                     <HelpItem
                                         helpText={t("applyToResourceTypeHelp")}
                                         fieldLabelId="applyToResourceType"
                                     />
-                                }
-                            >
+                                </div>
                                 <Switch
                                     id="applyToResource-switch"
-                                    label={t("on")}
-                                    labelOff={t("off")}
-                                    isChecked={applyToResourceType}
-                                    onChange={(_event, val) =>
-                                        setApplyToResourceType(val)
-                                    }
+                                    checked={applyToResourceType}
+                                    onCheckedChange={setApplyToResourceType}
                                     aria-label={t("applyToResourceType")}
                                 />
-                            </FormGroup>
+                            </div>
                             {!applyToResourceType ? (
-                                <FormGroup
-                                    label={t("resourcesAndScopes")}
-                                    id="resourcesAndScopes"
-                                    labelIcon={
+                                <div className="space-y-2">
+                                    <div className="flex items-center gap-2">
+                                        <Label>{t("resourcesAndScopes")}</Label>
                                         <HelpItem
                                             helpText={t("contextualAttributesHelp")}
                                             fieldLabelId={`resourcesAndScopes`}
                                         />
-                                    }
-                                    fieldId="resourcesAndScopes"
-                                >
+                                    </div>
                                     <KeyBasedAttributeInput
                                         selectableValues={resources.map<AttributeType>(
                                             item => ({
@@ -285,7 +268,7 @@ const AuthorizationEvaluateContent = ({ client }: Props) => {
                                         resources={resources}
                                         name="resources"
                                     />
-                                </FormGroup>
+                                </div>
                             ) : (
                                 <>
                                     <TextControl
@@ -306,37 +289,34 @@ const AuthorizationEvaluateContent = ({ client }: Props) => {
                                     />
                                 </>
                             )}
-                            <ExpandableSection
-                                toggleText={t("contextualInfo")}
-                                onToggle={() => setIsExpanded(!isExpanded)}
-                                isExpanded={isExpanded}
-                            >
-                                <FormGroup
-                                    label={t("contextualAttributes")}
-                                    id="contextualAttributes"
-                                    labelIcon={
-                                        <HelpItem
-                                            helpText={t("contextualAttributesHelp")}
-                                            fieldLabelId={`contextualAttributes`}
+                            <Collapsible open={isExpanded} onOpenChange={setIsExpanded}>
+                                <CollapsibleTrigger className="font-medium">
+                                    {t("contextualInfo")}
+                                </CollapsibleTrigger>
+                                <CollapsibleContent>
+                                    <div className="space-y-2">
+                                        <div className="flex items-center gap-2">
+                                            <Label>{t("contextualAttributes")}</Label>
+                                            <HelpItem
+                                                helpText={t("contextualAttributesHelp")}
+                                                fieldLabelId={`contextualAttributes`}
+                                            />
+                                        </div>
+                                        <KeyBasedAttributeInput
+                                            selectableValues={defaultContextAttributes}
+                                            name="context.attributes"
                                         />
-                                    }
-                                    fieldId="contextualAttributes"
-                                >
-                                    <KeyBasedAttributeInput
-                                        selectableValues={defaultContextAttributes}
-                                        name="context.attributes"
-                                    />
-                                </FormGroup>
-                            </ExpandableSection>
+                                    </div>
+                                </CollapsibleContent>
+                            </Collapsible>
                         </FormAccess>
-                    </PanelMainBody>
-                </Panel>
-                <ActionGroup>
+                    </div>
+                </div>
+                <div className="flex gap-2 mt-4">
                     <Button
                         data-testid="authorization-eval"
                         id="authorization-eval"
-                        className="pf-v5-u-mr-md"
-                        isDisabled={!isValid}
+                        disabled={!isValid}
                         onClick={() => evaluate()}
                     >
                         {t("evaluate")}
@@ -344,14 +324,13 @@ const AuthorizationEvaluateContent = ({ client }: Props) => {
                     <Button
                         data-testid="authorization-revert"
                         id="authorization-revert"
-                        className="pf-v5-u-mr-md"
                         variant="link"
                         onClick={() => reset()}
                     >
                         {t("revert")}
                     </Button>
-                </ActionGroup>
+                </div>
             </FormProvider>
-        </PageSection>
+        </div>
     );
 };

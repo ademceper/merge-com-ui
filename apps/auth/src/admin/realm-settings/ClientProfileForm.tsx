@@ -20,26 +20,13 @@ import {
     useAlerts,
     useFetch
 } from "../../shared/keycloak-ui-shared";
-import {
-    ActionGroup,
-    AlertVariant,
-    Button,
-    ButtonVariant,
-    DataList,
-    DataListCell,
-    DataListItem,
-    DataListItemCells,
-    DataListItemRow,
-    Divider,
-    DropdownItem,
-    Flex,
-    FlexItem,
-    Label,
-    PageSection,
-    Text,
-    TextVariants
-} from "../../shared/@patternfly/react-core";
-import { PlusCircleIcon, TrashIcon } from "../../shared/@patternfly/react-icons";
+import { AlertVariant } from "../../shared/keycloak-ui-shared";
+import { Badge } from "@merge/ui/components/badge";
+import { Button } from "@merge/ui/components/button";
+import { DropdownMenuItem } from "@merge/ui/components/dropdown-menu";
+import { Label } from "@merge/ui/components/label";
+import { Separator } from "@merge/ui/components/separator";
+import { Plus, Trash } from "@phosphor-icons/react";
 import { Fragment, useMemo, useState } from "react";
 import { FormProvider, useFieldArray, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
@@ -167,7 +154,7 @@ export default function ClientProfileForm() {
                   profileName
               }),
         continueButtonLabel: t("delete"),
-        continueButtonVariant: ButtonVariant.danger,
+        continueButtonVariant: "destructive",
 
         onConfirm: async () => {
             if (executorToDelete?.name!) {
@@ -217,21 +204,20 @@ export default function ClientProfileForm() {
                 dropdownItems={
                     editMode && !isGlobalProfile
                         ? [
-                              <DropdownItem
+                              <DropdownMenuItem
                                   key="delete"
-                                  value="delete"
-                                  onClick={toggleDeleteDialog}
                                   data-testid="deleteClientProfileDropdown"
+                                  onClick={toggleDeleteDialog}
                               >
                                   {t("deleteClientProfile")}
-                              </DropdownItem>
+                              </DropdownMenuItem>
                           ]
                         : undefined
                 }
             />
-            <PageSection variant="light">
+            <section className="py-6 bg-muted/30">
                 <FormProvider {...form}>
-                    <FormAccess isHorizontal role="view-realm" className="pf-v5-u-mt-lg">
+                    <FormAccess isHorizontal role="view-realm" className="mt-6">
                         <TextControl
                             name="name"
                             label={t("newClientProfileName")}
@@ -246,23 +232,22 @@ export default function ClientProfileForm() {
                             label={t("description")}
                             readOnly={isGlobalProfile}
                         />
-                        <ActionGroup>
+                        <div className="flex gap-2 mt-4">
                             {!isGlobalProfile && (
                                 <Button
-                                    variant="primary"
                                     onClick={() => handleSubmit(save)()}
                                     data-testid="saveCreateProfile"
-                                    isDisabled={!isDirty}
+                                    disabled={!isDirty}
                                 >
                                     {t("save")}
                                 </Button>
                             )}
                             {editMode && !isGlobalProfile && (
                                 <Button
-                                    id={"reloadProfile"}
-                                    variant="link"
-                                    data-testid={"reloadProfile"}
-                                    isDisabled={!isDirty}
+                                    id="reloadProfile"
+                                    variant="ghost"
+                                    data-testid="reloadProfile"
+                                    disabled={!isDirty}
                                     onClick={reload}
                                 >
                                     {t("reload")}
@@ -270,200 +255,99 @@ export default function ClientProfileForm() {
                             )}
                             {!editMode && !isGlobalProfile && (
                                 <Button
-                                    id={"cancelCreateProfile"}
-                                    variant="link"
-                                    component={props => (
-                                        <Link
-                                            {...props}
-                                            to={toClientPolicies({
-                                                realm,
-                                                tab: "profiles"
-                                            })}
-                                        />
-                                    )}
-                                    data-testid={"cancelCreateProfile"}
+                                    id="cancelCreateProfile"
+                                    variant="ghost"
+                                    data-testid="cancelCreateProfile"
+                                    asChild
                                 >
-                                    {t("cancel")}
+                                    <Link to={toClientPolicies({ realm, tab: "profiles" })}>
+                                        {t("cancel")}
+                                    </Link>
                                 </Button>
                             )}
-                        </ActionGroup>
+                        </div>
                         {editMode && (
                             <>
-                                <Flex>
-                                    <FlexItem>
-                                        <Text
-                                            className="kc-executors"
-                                            component={TextVariants.h1}
-                                        >
-                                            {t("executors")}
-                                            <HelpItem
-                                                helpText={t("executorsHelpText")}
-                                                fieldLabelId="executors"
-                                            />
-                                        </Text>
-                                    </FlexItem>
+                                <div className="flex flex-wrap items-center justify-between gap-4 mt-6">
+                                    <h2 className="kc-executors text-lg font-medium">
+                                        {t("executors")}
+                                        <HelpItem helpText={t("executorsHelpText")} fieldLabelId="executors" />
+                                    </h2>
                                     {!isGlobalProfile && (
-                                        <FlexItem align={{ default: "alignRight" }}>
-                                            <Button
-                                                id="addExecutor"
-                                                component={props => (
-                                                    <Link
-                                                        {...props}
-                                                        to={toAddExecutor({
-                                                            realm,
-                                                            profileName
-                                                        })}
-                                                    />
-                                                )}
-                                                variant="link"
-                                                className="kc-addExecutor"
-                                                data-testid="addExecutor"
-                                                icon={<PlusCircleIcon />}
-                                            >
+                                        <Button
+                                            id="addExecutor"
+                                            variant="ghost"
+                                            className="kc-addExecutor"
+                                            data-testid="addExecutor"
+                                            asChild
+                                        >
+                                            <Link to={toAddExecutor({ realm, profileName })}>
+                                                <Plus className="size-4 mr-1 inline" />
                                                 {t("addExecutor")}
-                                            </Button>
-                                        </FlexItem>
+                                            </Link>
+                                        </Button>
                                     )}
-                                </Flex>
+                                </div>
                                 {profileExecutors.length > 0 && (
                                     <>
-                                        <DataList aria-label={t("executors")} isCompact>
+                                        <ul className="mt-2 space-y-1 border rounded-md divide-y" aria-label={t("executors")}>
                                             {profileExecutors.map((executor, idx) => (
-                                                <DataListItem
-                                                    aria-labelledby={
-                                                        "executors-list-item"
-                                                    }
-                                                    key={executor.executor}
-                                                    id={executor.executor}
-                                                >
-                                                    <DataListItemRow data-testid="executors-list-row">
-                                                        <DataListItemCells
-                                                            dataListCells={[
-                                                                <DataListCell
-                                                                    key="executor"
-                                                                    data-testid="executor-type"
-                                                                >
-                                                                    {executor.configuration ? (
-                                                                        <Button
-                                                                            component={props => (
-                                                                                <Link
-                                                                                    {...props}
-                                                                                    to={toExecutor(
-                                                                                        {
-                                                                                            realm,
-                                                                                            profileName,
-                                                                                            executorName:
-                                                                                                executor.executor!
-                                                                                        }
-                                                                                    )}
-                                                                                />
-                                                                            )}
-                                                                            variant="link"
-                                                                            data-testid="editExecutor"
-                                                                        >
-                                                                            {
-                                                                                executor.executor
-                                                                            }
-                                                                        </Button>
-                                                                    ) : (
-                                                                        <span className="kc-unclickable-executor">
-                                                                            {
-                                                                                executor.executor
-                                                                            }
-                                                                        </span>
-                                                                    )}
-                                                                    {executorTypes
-                                                                        ?.filter(
-                                                                            type =>
-                                                                                type.id ===
-                                                                                executor.executor
-                                                                        )
-                                                                        .map(type => (
-                                                                            <Fragment
-                                                                                key={
-                                                                                    type.id
-                                                                                }
-                                                                            >
-                                                                                <HelpItem
-                                                                                    key={
-                                                                                        type.id
-                                                                                    }
-                                                                                    helpText={
-                                                                                        type.helpText
-                                                                                    }
-                                                                                    fieldLabelId="executorTypeTextHelpText"
-                                                                                />
-                                                                                {!isGlobalProfile && (
-                                                                                    <Button
-                                                                                        data-testid={`deleteExecutor-${type.id}`}
-                                                                                        variant="link"
-                                                                                        isInline
-                                                                                        icon={
-                                                                                            <TrashIcon
-                                                                                                key={`executorType-trash-icon-${type.id}`}
-                                                                                                className="kc-executor-trash-icon"
-                                                                                            />
-                                                                                        }
-                                                                                        onClick={() => {
-                                                                                            toggleDeleteDialog();
-                                                                                            setExecutorToDelete(
-                                                                                                {
-                                                                                                    idx: idx,
-                                                                                                    name: type.id
-                                                                                                }
-                                                                                            );
-                                                                                        }}
-                                                                                        aria-label={t(
-                                                                                            "remove"
-                                                                                        )}
-                                                                                    />
-                                                                                )}
-                                                                            </Fragment>
-                                                                        ))}
-                                                                </DataListCell>
-                                                            ]}
-                                                        />
-                                                    </DataListItemRow>
-                                                </DataListItem>
+                                                <li key={executor.executor} id={executor.executor} className="flex items-center justify-between gap-2 py-2 px-3">
+                                                    <span data-testid="executor-type" className="flex items-center gap-2 min-w-0">
+                                                        {executor.configuration ? (
+                                                            <Button variant="ghost" className="p-0 h-auto font-normal text-primary underline" data-testid="editExecutor" asChild>
+                                                                <Link to={toExecutor({ realm, profileName, executorName: executor.executor! })}>
+                                                                    {executor.executor}
+                                                                </Link>
+                                                            </Button>
+                                                        ) : (
+                                                            <span className="kc-unclickable-executor">{executor.executor}</span>
+                                                        )}
+                                                        {executorTypes?.filter(type => type.id === executor.executor).map(type => (
+                                                            <Fragment key={type.id}>
+                                                                <HelpItem helpText={type.helpText} fieldLabelId="executorTypeTextHelpText" />
+                                                                {!isGlobalProfile && (
+                                                                    <Button
+                                                                        type="button"
+                                                                        variant="ghost"
+                                                                        size="icon"
+                                                                        data-testid={`deleteExecutor-${type.id}`}
+                                                                        className="kc-executor-trash-icon shrink-0"
+                                                                        onClick={() => {
+                                                                            toggleDeleteDialog();
+                                                                            setExecutorToDelete({ idx, name: type.id });
+                                                                        }}
+                                                                        aria-label={t("remove")}
+                                                                    >
+                                                                        <Trash className="size-4" />
+                                                                    </Button>
+                                                                )}
+                                                            </Fragment>
+                                                        ))}
+                                                    </span>
+                                                </li>
                                             ))}
-                                        </DataList>
+                                        </ul>
                                         {isGlobalProfile && (
-                                            <Button
-                                                id="backToClientPolicies"
-                                                component={props => (
-                                                    <Link
-                                                        {...props}
-                                                        to={toClientPolicies({
-                                                            realm,
-                                                            tab: "profiles"
-                                                        })}
-                                                    />
-                                                )}
-                                                variant="primary"
-                                                className="kc-backToPolicies"
-                                                data-testid="backToClientPolicies"
-                                            >
-                                                {t("back")}
+                                            <Button id="backToClientPolicies" className="kc-backToPolicies mt-4" data-testid="backToClientPolicies" asChild>
+                                                <Link to={toClientPolicies({ realm, tab: "profiles" })}>{t("back")}</Link>
                                             </Button>
                                         )}
                                     </>
                                 )}
                                 {profileExecutors.length === 0 && (
                                     <>
-                                        <Divider />
-                                        <Text
-                                            className="kc-emptyExecutors"
-                                            component={TextVariants.h2}
-                                        >
+                                        <Separator className="my-4" />
+                                        <h3 className="kc-emptyExecutors text-base font-medium text-muted-foreground">
                                             {t("emptyExecutors")}
-                                        </Text>
+                                        </h3>
                                     </>
                                 )}
                             </>
                         )}
                     </FormAccess>
                 </FormProvider>
-            </PageSection>
+            </section>
         </>
     );
 }

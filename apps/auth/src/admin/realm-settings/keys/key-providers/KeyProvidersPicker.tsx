@@ -12,13 +12,11 @@
 // @ts-nocheck
 
 import {
-    DataList,
-    DataListCell,
-    DataListItem,
-    DataListItemCells,
-    DataListItemRow,
-    Modal
-} from "../../../../shared/@patternfly/react-core";
+    Dialog,
+    DialogContent,
+    DialogHeader,
+    DialogTitle
+} from "@merge/ui/components/dialog";
 import { useTranslation } from "react-i18next";
 import { useServerInfo } from "../../../context/server-info/ServerInfoProvider";
 import { KEY_PROVIDER_TYPE } from "../../../util";
@@ -34,41 +32,25 @@ export const KeyProvidersPicker = ({ onConfirm, onClose }: KeyProvidersPickerPro
     const keyProviderComponentTypes =
         serverInfo.componentTypes?.[KEY_PROVIDER_TYPE] ?? [];
     return (
-        <Modal variant="medium" title={t("addProvider")} isOpen onClose={onClose}>
-            <DataList
-                onSelectDataListItem={(_event, id) => {
-                    onConfirm(id);
-                }}
-                aria-label={t("addPredefinedMappers")}
-                isCompact
-            >
-                {keyProviderComponentTypes.map(provider => (
-                    <DataListItem
-                        aria-label={provider.id}
-                        key={provider.id}
-                        id={provider.id}
-                    >
-                        <DataListItemRow>
-                            <DataListItemCells
-                                dataListCells={[
-                                    <DataListCell
-                                        key={`name-${provider.id}`}
-                                        data-testid={`option-${provider.id}`}
-                                    >
-                                        {provider.id}
-                                    </DataListCell>,
-                                    <DataListCell
-                                        width={2}
-                                        key={`helpText-${provider.helpText}`}
-                                    >
-                                        {provider.helpText}
-                                    </DataListCell>
-                                ]}
-                            />
-                        </DataListItemRow>
-                    </DataListItem>
-                ))}
-            </DataList>
-        </Modal>
+        <Dialog open onOpenChange={(open) => { if (!open) onClose(); }}>
+            <DialogContent className="max-w-2xl">
+                <DialogHeader>
+                    <DialogTitle>{t("addProvider")}</DialogTitle>
+                </DialogHeader>
+                <ul className="divide-y border rounded-md" aria-label={t("addPredefinedMappers")}>
+                    {keyProviderComponentTypes.map(provider => (
+                        <li
+                            key={provider.id}
+                            className="flex items-center gap-4 py-3 px-4 cursor-pointer hover:bg-muted/50"
+                            data-testid={`option-${provider.id}`}
+                            onClick={() => onConfirm(provider.id)}
+                        >
+                            <span className="font-medium">{provider.id}</span>
+                            <span className="text-sm text-muted-foreground flex-1">{provider.helpText}</span>
+                        </li>
+                    ))}
+                </ul>
+            </DialogContent>
+        </Dialog>
     );
 };

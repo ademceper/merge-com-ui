@@ -18,7 +18,7 @@ import { useServerInfo } from "../../context/server-info/ServerInfoProvider";
 import { convertAttributeNameToForm } from "../../util";
 import { FormFields } from "../ClientDetails";
 import { TimeSelector } from "../../components/time-selector/TimeSelector";
-import { FormGroup } from "../../../shared/@patternfly/react-core";
+import { Label } from "@merge/ui/components/label";
 import { HelpItem } from "../../../shared/keycloak-ui-shared";
 
 type SignedJWTProps = {
@@ -53,17 +53,14 @@ export const SignedJWT = ({ clientAuthenticatorType }: SignedJWTProps) => {
                     ...providers.map(option => ({ key: option, value: option }))
                 ]}
             />
-            <FormGroup
-                label={t("signatureMaxExp")}
-                fieldId="signatureMaxExp"
-                className="pf-v5-u-my-md"
-                labelIcon={
+            <div className="space-y-2 my-4">
+                <div className="flex items-center gap-2">
+                    <Label>{t("signatureMaxExp")}</Label>
                     <HelpItem
                         helpText={t("signatureMaxExpHelp")}
                         fieldLabelId="signatureMaxExp"
                     />
-                }
-            >
+                </div>
                 <Controller
                     name={convertAttributeNameToForm<FormFields>(
                         "attributes.token.endpoint.auth.signing.max.exp"
@@ -79,7 +76,7 @@ export const SignedJWT = ({ clientAuthenticatorType }: SignedJWTProps) => {
                         />
                     )}
                 />
-            </FormGroup>
+            </div>
         </>
     );
 };

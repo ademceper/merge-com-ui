@@ -20,21 +20,12 @@ import {
     useAlerts,
     useFetch
 } from "../../shared/keycloak-ui-shared";
-import {
-    ActionGroup,
-    AlertVariant,
-    Button,
-    ButtonVariant,
-    Divider,
-    Flex,
-    FlexItem,
-    FormGroup,
-    Label,
-    PageSection,
-    Radio,
-    Title,
-    ToolbarItem
-} from "../../shared/@patternfly/react-core";
+import { AlertVariant } from "../../shared/keycloak-ui-shared";
+import { Button } from "@merge/ui/components/button";
+import { Badge } from "@merge/ui/components/badge";
+import { Label } from "@merge/ui/components/label";
+import { RadioGroup, RadioGroupItem } from "@merge/ui/components/radio-group";
+import { Separator } from "@merge/ui/components/separator";
 import { omit } from "lodash-es";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -101,7 +92,7 @@ export default function ProfilesTab() {
             profileName: selectedProfile?.name
         }),
         continueButtonLabel: t("delete"),
-        continueButtonVariant: ButtonVariant.danger,
+        continueButtonVariant: "destructive",
         onConfirm: async () => {
             const updatedProfiles = tableProfiles
                 ?.filter(
@@ -130,7 +121,7 @@ export default function ProfilesTab() {
             })}
             key={row.name}
         >
-            {row.name} {row.global && <Label color="blue">{t("global")}</Label>}
+            {row.name} {row.global && <Badge variant="secondary" className="bg-blue-500/20 text-blue-700 dark:text-blue-300 ml-1">{t("global")}</Badge>}
         </Link>
     );
 
@@ -171,38 +162,24 @@ export default function ProfilesTab() {
     return (
         <>
             <DeleteConfirm />
-            <PageSection>
-                <Flex className="kc-profiles-config-section">
-                    <FlexItem>
-                        <Title headingLevel="h1" size="md">
-                            {t("profilesConfigType")}
-                        </Title>
-                    </FlexItem>
-                    <FlexItem>
-                        <Radio
-                            isChecked={!show}
-                            name="profilesView"
-                            onChange={() => setShow(false)}
-                            label={t("profilesConfigTypes.formView")}
-                            id="formView-profilesView"
-                            className="kc-form-radio-btn pf-v5-u-mr-sm pf-v5-u-ml-sm"
-                            data-testid="formView-profilesView"
-                        />
-                    </FlexItem>
-                    <FlexItem>
-                        <Radio
-                            isChecked={show}
-                            name="profilesView"
-                            onChange={() => setShow(true)}
-                            label={t("profilesConfigTypes.jsonEditor")}
-                            id="jsonEditor-profilesView"
-                            className="kc-editor-radio-btn"
-                            data-testid="jsonEditor-profilesView"
-                        />
-                    </FlexItem>
-                </Flex>
-            </PageSection>
-            <Divider />
+            <section className="py-6">
+                <div className="flex flex-wrap items-center gap-4 kc-profiles-config-section">
+                    <h1 className="text-lg font-medium">
+                        {t("profilesConfigType")}
+                    </h1>
+                    <RadioGroup value={show ? "json" : "form"} onValueChange={(v) => setShow(v === "json")} className="flex flex-wrap items-center gap-4">
+                        <div className="flex items-center gap-2 kc-form-radio-btn mr-2 ml-2" data-testid="formView-profilesView">
+                            <RadioGroupItem value="form" id="formView-profilesView" />
+                            <Label htmlFor="formView-profilesView" className="cursor-pointer">{t("profilesConfigTypes.formView")}</Label>
+                        </div>
+                        <div className="flex items-center gap-2 kc-editor-radio-btn" data-testid="jsonEditor-profilesView">
+                            <RadioGroupItem value="json" id="jsonEditor-profilesView" />
+                            <Label htmlFor="jsonEditor-profilesView" className="cursor-pointer">{t("profilesConfigTypes.jsonEditor")}</Label>
+                        </div>
+                    </RadioGroup>
+                </div>
+            </section>
+            <Separator />
             {!show ? (
                 <KeycloakDataTable
                     key={tableProfiles.length}
@@ -210,23 +187,13 @@ export default function ProfilesTab() {
                     searchPlaceholderKey="clientProfileSearch"
                     loader={loader}
                     toolbarItem={
-                        <ToolbarItem>
-                            <Button
-                                id="createProfile"
-                                component={props => (
-                                    <Link
-                                        {...props}
-                                        to={toAddClientProfile({
-                                            realm,
-                                            tab: "profiles"
-                                        })}
-                                    />
-                                )}
-                                data-testid="createProfile"
-                            >
-                                {t("createClientProfile")}
+                        <div>
+                            <Button asChild id="createProfile" data-testid="createProfile">
+                                <Link to={toAddClientProfile({ realm, tab: "profiles" })}>
+                                    {t("createClientProfile")}
+                                </Link>
                             </Button>
-                        </ToolbarItem>
+                        </div>
                     }
                     isRowDisabled={value => value.global}
                     actions={[
@@ -257,8 +224,9 @@ export default function ProfilesTab() {
                     }
                 />
             ) : (
-                <FormGroup fieldId={"jsonEditor"}>
-                    <div className="pf-v5-u-mt-md pf-v5-u-ml-lg">
+                <div className="space-y-4">
+                    <div className="mt-4 ml-6" id="jsonEditor">
+                        <Label className="sr-only">JSON Editor</Label>
                         <CodeEditor
                             value={code}
                             language="json"
@@ -266,28 +234,19 @@ export default function ProfilesTab() {
                             height={480}
                         />
                     </div>
-                    <ActionGroup>
-                        <div className="pf-v5-u-mt-md">
-                            <Button
-                                variant={ButtonVariant.primary}
-                                className="pf-v5-u-mr-md pf-v5-u-ml-lg"
-                                onClick={save}
-                                data-testid="jsonEditor-saveBtn"
-                            >
-                                {t("save")}
-                            </Button>
-                            <Button
-                                variant={ButtonVariant.link}
-                                onClick={() => {
-                                    setCode(prettyPrintJSON(tableProfiles));
-                                }}
-                                data-testid="jsonEditor-reloadBtn"
-                            >
-                                {t("reload")}
-                            </Button>
-                        </div>
-                    </ActionGroup>
-                </FormGroup>
+                    <div className="flex gap-2 mt-4 ml-6">
+                        <Button onClick={save} data-testid="jsonEditor-saveBtn">
+                            {t("save")}
+                        </Button>
+                        <Button
+                            variant="ghost"
+                            onClick={() => setCode(prettyPrintJSON(tableProfiles))}
+                            data-testid="jsonEditor-reloadBtn"
+                        >
+                            {t("reload")}
+                        </Button>
+                    </div>
+                </div>
             )}
         </>
     );

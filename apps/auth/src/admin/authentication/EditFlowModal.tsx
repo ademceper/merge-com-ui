@@ -12,15 +12,15 @@
 // @ts-nocheck
 
 import type AuthenticationFlowRepresentation from "@keycloak/keycloak-admin-client/lib/defs/authenticationFlowRepresentation";
-import { useAlerts } from "../../shared/keycloak-ui-shared";
+import { AlertVariant, useAlerts } from "../../shared/keycloak-ui-shared";
+import { Button } from "@merge/ui/components/button";
 import {
-    AlertVariant,
-    Button,
-    ButtonVariant,
-    Form,
-    Modal,
-    ModalVariant
-} from "../../shared/@patternfly/react-core";
+    Dialog,
+    DialogContent,
+    DialogHeader,
+    DialogTitle,
+    DialogFooter
+} from "@merge/ui/components/dialog";
 import { useEffect } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
@@ -57,35 +57,35 @@ export const EditFlowModal = ({ flow, toggleDialog }: EditFlowModalProps) => {
     };
 
     return (
-        <Modal
-            title={t("editFlow")}
-            onClose={toggleDialog}
-            variant={ModalVariant.small}
-            actions={[
-                <Button
-                    key="confirm"
-                    data-testid="confirm"
-                    type="submit"
-                    form="edit-flow-form"
-                >
-                    {t("edit")}
-                </Button>,
-                <Button
-                    key="cancel"
-                    data-testid="cancel"
-                    variant={ButtonVariant.link}
-                    onClick={() => toggleDialog()}
-                >
-                    {t("cancel")}
-                </Button>
-            ]}
-            isOpen
-        >
-            <FormProvider {...form}>
-                <Form id="edit-flow-form" onSubmit={handleSubmit(onSubmit)} isHorizontal>
-                    <NameDescription />
-                </Form>
-            </FormProvider>
-        </Modal>
+        <Dialog open onOpenChange={(open) => { if (!open) toggleDialog(); }}>
+            <DialogContent className="max-w-md">
+                <DialogHeader>
+                    <DialogTitle>{t("editFlow")}</DialogTitle>
+                </DialogHeader>
+                <FormProvider {...form}>
+                    <form id="edit-flow-form" onSubmit={handleSubmit(onSubmit)}>
+                        <NameDescription />
+                    </form>
+                </FormProvider>
+                <DialogFooter>
+                    <Button
+                        key="confirm"
+                        data-testid="confirm"
+                        type="submit"
+                        form="edit-flow-form"
+                    >
+                        {t("edit")}
+                    </Button>
+                    <Button
+                        key="cancel"
+                        data-testid="cancel"
+                        variant="link"
+                        onClick={() => toggleDialog()}
+                    >
+                        {t("cancel")}
+                    </Button>
+                </DialogFooter>
+            </DialogContent>
+        </Dialog>
     );
 };

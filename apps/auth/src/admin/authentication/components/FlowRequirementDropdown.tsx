@@ -12,11 +12,12 @@
 // @ts-nocheck
 
 import {
-    MenuToggle,
-    Select,
-    SelectList,
-    SelectOption
-} from "../../../shared/@patternfly/react-core";
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuTrigger
+} from "@merge/ui/components/dropdown-menu";
+import { Button } from "@merge/ui/components/button";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 
@@ -34,37 +35,33 @@ export const FlowRequirementDropdown = ({
     const { t } = useTranslation();
     const [open, setOpen] = useState(false);
 
-    const options = flow.requirementChoices!.map((option, index) => (
-        <SelectOption key={index} value={option}>
-            {t(`requirements.${option}`)}
-        </SelectOption>
-    ));
-
     return (
         <>
             {flow.requirementChoices && flow.requirementChoices.length > 1 && (
-                <Select
-                    onOpenChange={isOpen => setOpen(isOpen)}
-                    onSelect={(_event, value) => {
-                        flow.requirement = value?.toString();
-                        onChange(flow);
-                        setOpen(false);
-                    }}
-                    selected={flow.requirement}
-                    isOpen={open}
-                    toggle={ref => (
-                        <MenuToggle
+                <DropdownMenu open={open} onOpenChange={setOpen}>
+                    <DropdownMenuTrigger asChild>
+                        <Button
+                            variant="outline"
                             className="keycloak__authentication__requirement-dropdown"
-                            ref={ref}
-                            onClick={() => setOpen(!open)}
-                            isExpanded={open}
                         >
                             {t(`requirements.${flow.requirement}`)}
-                        </MenuToggle>
-                    )}
-                >
-                    <SelectList>{options}</SelectList>
-                </Select>
+                        </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent>
+                        {flow.requirementChoices!.map((option, index) => (
+                            <DropdownMenuItem
+                                key={index}
+                                onClick={() => {
+                                    flow.requirement = option;
+                                    onChange(flow);
+                                    setOpen(false);
+                                }}
+                            >
+                                {t(`requirements.${option}`)}
+                            </DropdownMenuItem>
+                        ))}
+                    </DropdownMenuContent>
+                </DropdownMenu>
             )}
             {(!flow.requirementChoices || flow.requirementChoices.length <= 1) && (
                 <>{t(`requirements.${flow.requirement}`)}</>

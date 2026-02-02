@@ -13,7 +13,8 @@
 
 import { useTranslation } from "react-i18next";
 import { Controller, useFormContext } from "react-hook-form";
-import { FormGroup, Radio } from "../../../../shared/@patternfly/react-core";
+import { Label } from "@merge/ui/components/label";
+import { RadioGroup, RadioGroupItem } from "@merge/ui/components/radio-group";
 
 import { HelpItem } from "../../../../shared/keycloak-ui-shared";
 
@@ -28,35 +29,32 @@ export const LogicSelector = ({ isDisabled }: LogicSelectorProps) => {
     const { control } = useFormContext();
 
     return (
-        <FormGroup
-            label={t("logic")}
-            labelIcon={<HelpItem helpText={t("logicHelp")} fieldLabelId="logic" />}
-            fieldId="logic"
-            hasNoPaddingTop
-        >
+        <div className="space-y-2">
+            <div className="flex items-center gap-2">
+                <Label>{t("logic")}</Label>
+                <HelpItem helpText={t("logicHelp")} fieldLabelId="logic" />
+            </div>
             <Controller
                 name="logic"
                 data-testid="logic"
                 defaultValue={LOGIC_TYPES[0]}
                 control={control}
                 render={({ field }) => (
-                    <>
+                    <RadioGroup
+                        value={field.value}
+                        onValueChange={field.onChange}
+                        disabled={isDisabled}
+                        className="flex flex-col gap-2"
+                    >
                         {LOGIC_TYPES.map(type => (
-                            <Radio
-                                id={type}
-                                key={type}
-                                data-testid={type}
-                                isChecked={field.value === type}
-                                name="logic"
-                                onChange={() => field.onChange(type)}
-                                label={t(`logicType.${type.toLowerCase()}`)}
-                                className="pf-v5-u-mb-md"
-                                isDisabled={isDisabled}
-                            />
+                            <div key={type} className="flex items-center gap-2" data-testid={type}>
+                                <RadioGroupItem value={type} id={type} />
+                                <Label htmlFor={type}>{t(`logicType.${type.toLowerCase()}`)}</Label>
+                            </div>
                         ))}
-                    </>
+                    </RadioGroup>
                 )}
             />
-        </FormGroup>
+        </div>
     );
 };

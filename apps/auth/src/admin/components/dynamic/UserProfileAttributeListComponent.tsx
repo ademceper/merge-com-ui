@@ -13,7 +13,7 @@
 
 import type { UserProfileConfig } from "@keycloak/keycloak-admin-client/lib/defs/userProfileMetadata";
 import { FormErrorText, HelpItem, useFetch } from "../../../shared/keycloak-ui-shared";
-import { FormGroup } from "../../../shared/@patternfly/react-core";
+import { Label } from "@merge/ui/components/label";
 import { useState } from "react";
 import { useFormContext } from "react-hook-form";
 import { useTranslation } from "react-i18next";
@@ -62,18 +62,17 @@ export const UserProfileAttributeListComponent = ({
     };
 
     return (
-        <FormGroup
-            label={t(label!)}
-            isRequired={required}
-            labelIcon={<HelpItem helpText={t(helpText!)} fieldLabelId={label!} />}
-            fieldId={convertedName!}
-        >
+        <div className="space-y-2">
+            <div className="flex items-center gap-1">
+                <Label htmlFor={convertedName!}>{t(label!)}{required && " *"}</Label>
+                <HelpItem helpText={t(helpText!)} fieldLabelId={label!} />
+            </div>
             <KeySelect
                 name={convertedName}
                 rules={required ? { required: true } : {}}
                 selectItems={convert(config)}
             />
             {getError() && <FormErrorText message={t("required")} />}
-        </FormGroup>
+        </div>
     );
 };

@@ -12,14 +12,9 @@
 // @ts-nocheck
 
 import GroupRepresentation from "@keycloak/keycloak-admin-client/lib/defs/groupRepresentation";
-import {
-    Button,
-    Chip,
-    ChipGroup,
-    FormGroup,
-    InputGroup,
-    InputGroupItem
-} from "../../../shared/@patternfly/react-core";
+import { Button } from "@merge/ui/components/button";
+import { Label } from "@merge/ui/components/label";
+import { Chip, ChipGroup } from "../../../shared/@patternfly/react-core";
 import { useState } from "react";
 import { Controller, useFormContext } from "react-hook-form";
 import { useTranslation } from "react-i18next";
@@ -64,16 +59,13 @@ export const GroupComponent = ({
                         />
                     )}
 
-                    <FormGroup
-                        label={t(label!)}
-                        labelIcon={
+                    <div className="space-y-2">
+                        <div className="flex items-center gap-1">
+                            <Label htmlFor={name!}>{t(label!)}{required && " *"}</Label>
                             <HelpItem helpText={t(helpText!)} fieldLabelId={`${label}`} />
-                        }
-                        fieldId={name!}
-                        isRequired={required}
-                    >
-                        <InputGroup>
-                            <InputGroupItem>
+                        </div>
+                        <div className="flex gap-2">
+                            <div>
                                 <ChipGroup>
                                     {field.value && (
                                         <Chip onClick={() => field.onChange(undefined)}>
@@ -81,8 +73,8 @@ export const GroupComponent = ({
                                         </Chip>
                                     )}
                                 </ChipGroup>
-                            </InputGroupItem>
-                            <InputGroupItem>
+                            </div>
+                            <div>
                                 <Button
                                     id="kc-join-groups-button"
                                     onClick={() => setOpen(!open)}
@@ -91,9 +83,9 @@ export const GroupComponent = ({
                                 >
                                     {t("selectGroup")}
                                 </Button>
-                            </InputGroupItem>
-                        </InputGroup>
-                    </FormGroup>
+                            </div>
+                        </div>
+                    </div>
                 </>
             )}
         />

@@ -11,11 +11,11 @@
 
 // @ts-nocheck
 
+import { AlertVariant } from "../../../shared/keycloak-ui-shared";
 import {
-    AlertVariant,
-    Divider,
-    DropdownItem
-} from "../../../shared/@patternfly/react-core";
+    DropdownMenuSeparator,
+    DropdownMenuItem
+} from "@merge/ui/components/dropdown-menu";
 import { useFormContext, useWatch } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { useParams } from "react-router-dom";
@@ -143,31 +143,31 @@ export const ExtendedHeader = ({
                 noDivider={noDivider}
                 save={save}
                 dropdownItems={[
-                    <DropdownItem
+                    <DropdownMenuItem
                         key="sync"
                         onClick={syncChangedUsers}
-                        isDisabled={hasImportUsers === "false"}
+                        disabled={hasImportUsers === "false"}
                     >
                         {t("syncChangedUsers")}
-                    </DropdownItem>,
-                    <DropdownItem
+                    </DropdownMenuItem>,
+                    <DropdownMenuItem
                         key="syncall"
                         onClick={syncAllUsers}
-                        isDisabled={hasImportUsers === "false"}
+                        disabled={hasImportUsers === "false"}
                     >
                         {t("syncAllUsers")}
-                    </DropdownItem>,
-                    <DropdownItem
+                    </DropdownMenuItem>,
+                    <DropdownMenuItem
                         key="unlink"
-                        isDisabled={editMode ? editMode.includes("UNSYNCED") : false}
+                        disabled={editMode ? editMode.includes("UNSYNCED") : false}
                         onClick={toggleUnlinkUsersDialog}
                     >
                         {t("unlinkUsers")}
-                    </DropdownItem>,
-                    <DropdownItem key="remove" onClick={toggleRemoveUsersDialog}>
+                    </DropdownMenuItem>,
+                    <DropdownMenuItem key="remove" onClick={toggleRemoveUsersDialog}>
                         {t("removeImported")}
-                    </DropdownItem>,
-                    <Divider key="separator" />
+                    </DropdownMenuItem>,
+                    <DropdownMenuSeparator key="separator" />
                 ]}
             />
         </>

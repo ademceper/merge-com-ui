@@ -13,7 +13,7 @@
 
 import ComponentRepresentation from "@keycloak/keycloak-admin-client/lib/defs/componentRepresentation";
 import { useAlerts, useFetch } from "../../shared/keycloak-ui-shared";
-import { ButtonVariant, DropdownItem } from "../../shared/@patternfly/react-core";
+import { DropdownMenuItem } from "@merge/ui/components/dropdown-menu";
 import { get } from "lodash-es";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -76,13 +76,13 @@ export default function Page() {
                 dropdownItems={
                     id
                         ? [
-                              <DropdownItem
+                              <DropdownMenuItem
                                   data-testid="delete-item"
                                   key="delete"
                                   onClick={() => toggleDeleteDialog()}
                               >
                                   {t("delete")}
-                              </DropdownItem>
+                              </DropdownMenuItem>
                           ]
                         : undefined
                 }

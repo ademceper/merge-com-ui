@@ -13,12 +13,8 @@
 
 import { NetworkError } from "@keycloak/keycloak-admin-client";
 import { useEnvironment, type FallbackProps } from "../../../shared/keycloak-ui-shared";
-import {
-    Alert,
-    AlertActionLink,
-    AlertVariant,
-    PageSection
-} from "../../../shared/@patternfly/react-core";
+import { Alert, AlertDescription } from "@merge/ui/components/alert";
+import { Button } from "@merge/ui/components/button";
 import { useTranslation } from "react-i18next";
 
 export const ErrorRenderer = ({ error }: FallbackProps) => {
@@ -35,23 +31,21 @@ export const ErrorRenderer = ({ error }: FallbackProps) => {
     }
 
     return (
-        <PageSection>
-            <Alert
-                isInline
-                variant={AlertVariant.danger}
-                title={message}
-                actionLinks={
-                    isPermissionError ? (
-                        <AlertActionLink onClick={async () => await keycloak.logout()}>
+        <div className="p-6">
+            <Alert variant="destructive">
+                <AlertDescription>{message}</AlertDescription>
+                <div className="mt-2">
+                    {isPermissionError ? (
+                        <Button variant="link" onClick={async () => await keycloak.logout()}>
                             {t("signOut")}
-                        </AlertActionLink>
+                        </Button>
                     ) : (
-                        <AlertActionLink onClick={() => location.reload()}>
+                        <Button variant="link" onClick={() => location.reload()}>
                             {t("reload")}
-                        </AlertActionLink>
-                    )
-                }
-            ></Alert>
-        </PageSection>
+                        </Button>
+                    )}
+                </div>
+            </Alert>
+        </div>
     );
 };

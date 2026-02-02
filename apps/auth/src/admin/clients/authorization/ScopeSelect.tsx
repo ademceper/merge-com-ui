@@ -17,7 +17,7 @@ import {
     SelectVariant,
     useFetch
 } from "../../../shared/keycloak-ui-shared";
-import { SelectOption } from "../../../shared/@patternfly/react-core";
+const SelectOption = ({ value, children, ...props }: any) => <option value={value} {...props}>{children}</option>;
 import { useRef, useState } from "react";
 import { Controller, useFormContext } from "react-hook-form";
 import { useTranslation } from "react-i18next";

@@ -20,13 +20,11 @@ import {
     SelectVariant,
     TextControl
 } from "../../../shared/keycloak-ui-shared";
-import {
-    AlertVariant,
-    Button,
-    FormGroup,
-    SelectOption,
-    Switch
-} from "../../../shared/@patternfly/react-core";
+import { AlertVariant } from "../../../shared/keycloak-ui-shared";
+import { Button } from "@merge/ui/components/button";
+import { Label } from "@merge/ui/components/label";
+import { Switch } from "@merge/ui/components/switch";
+import { SelectOption } from "../../../shared/@patternfly/react-core";
 import { get, isEqual } from "lodash-es";
 import { useState } from "react";
 import { Controller, FormProvider, UseFormReturn, useWatch } from "react-hook-form";
@@ -120,35 +118,32 @@ export const LdapSettingsConnection = ({
                         required: t("validateConnectionUrl")
                     }}
                 />
-                <FormGroup
-                    label={t("enableStartTls")}
-                    labelIcon={
+                <div className="space-y-2">
+                    <div className="flex items-center gap-1">
+                        <Label htmlFor="kc-enable-start-tls">{t("enableStartTls")}</Label>
                         <HelpItem
                             helpText={t("enableStartTlsHelp")}
                             fieldLabelId="enableStartTls"
                         />
-                    }
-                    fieldId="kc-enable-start-tls"
-                    hasNoPaddingTop
-                >
+                    </div>
                     <Controller
                         name="config.startTls"
                         defaultValue={["false"]}
                         control={form.control}
                         render={({ field }) => (
-                            <Switch
-                                id={"kc-enable-start-tls"}
-                                data-testid="enable-start-tls"
-                                isDisabled={false}
-                                onChange={(_event, value) => field.onChange([`${value}`])}
-                                isChecked={field.value[0] === "true"}
-                                label={t("on")}
-                                labelOff={t("off")}
-                                aria-label={t("enableStartTls")}
-                            />
+                            <div className="flex items-center gap-2">
+                                <Switch
+                                    id={"kc-enable-start-tls"}
+                                    data-testid="enable-start-tls"
+                                    onCheckedChange={(value) => field.onChange([`${value}`])}
+                                    checked={field.value[0] === "true"}
+                                    aria-label={t("enableStartTls")}
+                                />
+                                <span className="text-sm">{field.value[0] === "true" ? t("on") : t("off")}</span>
+                            </div>
                         )}
                     />
-                </FormGroup>
+                </div>
                 <SelectControl
                     id="useTruststoreSpi"
                     name="config.useTruststoreSpi[0]"
@@ -162,35 +157,32 @@ export const LdapSettingsConnection = ({
                         { key: "never", value: t("never") }
                     ]}
                 />
-                <FormGroup
-                    label={t("connectionPooling")}
-                    labelIcon={
+                <div className="space-y-2">
+                    <div className="flex items-center gap-1">
+                        <Label htmlFor="kc-connection-pooling">{t("connectionPooling")}</Label>
                         <HelpItem
                             helpText={t("connectionPoolingHelp")}
                             fieldLabelId="connectionPooling"
                         />
-                    }
-                    fieldId="kc-connection-pooling"
-                    hasNoPaddingTop
-                >
+                    </div>
                     <Controller
                         name="config.connectionPooling"
                         defaultValue={["true"]}
                         control={form.control}
                         render={({ field }) => (
-                            <Switch
-                                id={"kc-connection-pooling"}
-                                data-testid="connection-pooling"
-                                isDisabled={false}
-                                onChange={(_event, value) => field.onChange([`${value}`])}
-                                isChecked={field.value[0] === "true"}
-                                label={t("on")}
-                                labelOff={t("off")}
-                                aria-label={t("connectionPooling")}
-                            />
+                            <div className="flex items-center gap-2">
+                                <Switch
+                                    id={"kc-connection-pooling"}
+                                    data-testid="connection-pooling"
+                                    onCheckedChange={(value) => field.onChange([`${value}`])}
+                                    checked={field.value[0] === "true"}
+                                    aria-label={t("connectionPooling")}
+                                />
+                                <span className="text-sm">{field.value[0] === "true" ? t("on") : t("off")}</span>
+                            </div>
                         )}
                     />
-                </FormGroup>
+                </div>
                 <TextControl
                     name="config.connectionTimeout.0"
                     label={t("connectionTimeout")}
@@ -198,7 +190,7 @@ export const LdapSettingsConnection = ({
                     type="number"
                     min={0}
                 />
-                <FormGroup fieldId="kc-test-connection-button">
+                <div>
                     <Button
                         variant="secondary"
                         id="kc-test-connection-button"
@@ -207,15 +199,12 @@ export const LdapSettingsConnection = ({
                     >
                         {t("testConnection")}
                     </Button>
-                </FormGroup>
-                <FormGroup
-                    label={t("bindType")}
-                    labelIcon={
+                </div>
+                <div className="space-y-2">
+                    <div className="flex items-center gap-1">
+                        <Label htmlFor="kc-bind-type">{t("bindType")} *</Label>
                         <HelpItem helpText={t("bindTypeHelp")} fieldLabelId="bindType" />
-                    }
-                    fieldId="kc-bind-type"
-                    isRequired
-                >
+                    </div>
                     <Controller
                         name="config.authType[0]"
                         defaultValue="simple"
@@ -241,7 +230,7 @@ export const LdapSettingsConnection = ({
                             </KeycloakSelect>
                         )}
                     />
-                </FormGroup>
+                </div>
 
                 {isEqual(ldapBindType, ["simple"]) && (
                     <>
@@ -264,7 +253,7 @@ export const LdapSettingsConnection = ({
                         />
                     </>
                 )}
-                <FormGroup fieldId="kc-test-auth-button">
+                <div>
                     <Button
                         variant="secondary"
                         id="kc-test-auth-button"
@@ -273,7 +262,7 @@ export const LdapSettingsConnection = ({
                     >
                         {t("testAuthentication")}
                     </Button>
-                </FormGroup>
+                </div>
             </FormAccess>
         </FormProvider>
     );

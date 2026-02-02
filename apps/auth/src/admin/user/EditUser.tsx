@@ -16,23 +16,17 @@ import type {
     UserProfileMetadata
 } from "@keycloak/keycloak-admin-client/lib/defs/userProfileMetadata";
 import {
+    AlertVariant,
     isUserProfileError,
     setUserProfileServerError,
     useAlerts,
     useFetch
 } from "../../shared/keycloak-ui-shared";
-import {
-    AlertVariant,
-    ButtonVariant,
-    DropdownItem,
-    Label,
-    PageSection,
-    Tab,
-    Tabs,
-    TabTitleText,
-    Tooltip
-} from "../../shared/@patternfly/react-core";
-import { InfoCircleIcon } from "../../shared/@patternfly/react-icons";
+import { Label } from "@merge/ui/components/label";
+import { Tooltip, TooltipContent, TooltipTrigger, TooltipProvider } from "@merge/ui/components/tooltip";
+import { DropdownMenuItem } from "@merge/ui/components/dropdown-menu";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@merge/ui/components/tabs";
+import { Info } from "@phosphor-icons/react";
 import { TFunction } from "i18next";
 import { useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
@@ -42,7 +36,7 @@ import { useAdminClient } from "../admin-client";
 import { useConfirmDialog } from "../components/confirm-dialog/ConfirmDialog";
 import { KeyValueType } from "../components/key-value-form/key-value-convert";
 import { KeycloakSpinner } from "../../shared/keycloak-ui-shared";
-import { RoutableTabs, useRoutableTab } from "../components/routable-tabs/RoutableTabs";
+import { RoutableTabs, useRoutableTab, Tab } from "../components/routable-tabs/RoutableTabs";
 import { ViewHeader } from "../components/view-header/ViewHeader";
 import { useAccess } from "../context/access/Access";
 import { useRealm } from "../context/realm-context/RealmContext";
@@ -241,7 +235,7 @@ export default function EditUser() {
         titleKey: "deleteConfirmUsers",
         messageKey: "deleteConfirmCurrentUser",
         continueButtonLabel: "delete",
-        continueButtonVariant: ButtonVariant.danger,
+        continueButtonVariant: "destructive",
         onConfirm: async () => {
             try {
                 if (lightweightUser) {
@@ -296,34 +290,40 @@ export default function EditUser() {
                         ? [
                               {
                                   text: (
-                                      <Tooltip content={t("transientUserTooltip")}>
-                                          <Label
-                                              data-testid="user-details-label-transient-user"
-                                              icon={<InfoCircleIcon />}
-                                          >
-                                              {t("transientUser")}
-                                          </Label>
-                                      </Tooltip>
+                                      <TooltipProvider>
+                                          <Tooltip>
+                                              <TooltipTrigger asChild>
+                                                  <Label
+                                                      data-testid="user-details-label-transient-user"
+                                                      className="inline-flex items-center gap-1"
+                                                  >
+                                                      <Info className="size-4" />
+                                                      {t("transientUser")}
+                                                  </Label>
+                                              </TooltipTrigger>
+                                              <TooltipContent>{t("transientUserTooltip")}</TooltipContent>
+                                          </Tooltip>
+                                      </TooltipProvider>
                                   )
                               }
                           ]
                         : []
                 }
                 dropdownItems={[
-                    <DropdownItem
+                    <DropdownMenuItem
                         key="impersonate"
-                        isDisabled={!user.access?.impersonate}
+                        disabled={!user.access?.impersonate}
                         onClick={() => toggleImpersonateDialog()}
                     >
                         {t("impersonate")}
-                    </DropdownItem>,
-                    <DropdownItem
+                    </DropdownMenuItem>,
+                    <DropdownMenuItem
                         key="delete"
-                        isDisabled={!user.access?.manage}
+                        disabled={!user.access?.manage}
                         onClick={() => toggleDeleteDialog()}
                     >
                         {t("delete")}
-                    </DropdownItem>
+                    </DropdownMenuItem>
                 ]}
                 onToggle={async value => {
                     if (!value) {
@@ -338,7 +338,7 @@ export default function EditUser() {
                 isEnabled={user.enabled}
             />
 
-            <PageSection variant="light" className="pf-v5-u-p-0">
+            <div className="p-0">
                 <UserProfileProvider>
                     <FormProvider {...form}>
                         <RoutableTabs
@@ -348,10 +348,10 @@ export default function EditUser() {
                         >
                             <Tab
                                 data-testid="user-details-tab"
-                                title={<TabTitleText>{t("details")}</TabTitleText>}
+                                title={<span>{t("details")}</span>}
                                 {...settingsTab}
                             >
-                                <PageSection variant="light">
+                                <div className="p-6">
                                     <UserForm
                                         form={form}
                                         realm={realm!}
@@ -361,12 +361,12 @@ export default function EditUser() {
                                         refresh={refresh}
                                         save={save}
                                     />
-                                </PageSection>
+                                </div>
                             </Tab>
                             {isUnmanagedAttributesEnabled && (
                                 <Tab
                                     data-testid="attributesTab"
-                                    title={<TabTitleText>{t("attributes")}</TabTitleText>}
+                                    title={<span>{t("attributes")}</span>}
                                     {...attributesTab}
                                 >
                                     <UserAttributes
@@ -379,7 +379,7 @@ export default function EditUser() {
                             <Tab
                                 data-testid="credentials"
                                 isHidden={!user.access?.view}
-                                title={<TabTitleText>{t("credentials")}</TabTitleText>}
+                                title={<span>{t("credentials")}</span>}
                                 {...credentialsTab}
                             >
                                 <UserCredentials user={user} setUser={setUser} />
@@ -387,7 +387,7 @@ export default function EditUser() {
                             <Tab
                                 data-testid="role-mapping-tab"
                                 isHidden={!user.access?.view}
-                                title={<TabTitleText>{t("roleMapping")}</TabTitleText>}
+                                title={<span>{t("roleMapping")}</span>}
                                 {...roleMappingTab}
                             >
                                 <UserRoleMapping id={user.id!} name={user.username!} />
@@ -395,7 +395,7 @@ export default function EditUser() {
                             {hasAccess("query-groups") && (
                                 <Tab
                                     data-testid="user-groups-tab"
-                                    title={<TabTitleText>{t("groups")}</TabTitleText>}
+                                    title={<span>{t("groups")}</span>}
                                     {...groupsTab}
                                 >
                                     <UserGroups user={user} />
@@ -405,7 +405,7 @@ export default function EditUser() {
                                 <Tab
                                     data-testid="user-organizations-tab"
                                     title={
-                                        <TabTitleText>{t("organizations")}</TabTitleText>
+                                        <span>{t("organizations")}</span>
                                     }
                                     {...organizationsTab}
                                 >
@@ -414,7 +414,7 @@ export default function EditUser() {
                             )}
                             <Tab
                                 data-testid="user-consents-tab"
-                                title={<TabTitleText>{t("consents")}</TabTitleText>}
+                                title={<span>{t("consents")}</span>}
                                 {...consentsTab}
                             >
                                 <UserConsents />
@@ -422,9 +422,9 @@ export default function EditUser() {
                             <Tab
                                 data-testid="identity-provider-links-tab"
                                 title={
-                                    <TabTitleText>
+                                    <span>
                                         {t("identityProviderLinks")}
-                                    </TabTitleText>
+                                    </span>
                                 }
                                 {...identityProviderLinksTab}
                             >
@@ -432,7 +432,7 @@ export default function EditUser() {
                             </Tab>
                             <Tab
                                 data-testid="user-sessions-tab"
-                                title={<TabTitleText>{t("sessions")}</TabTitleText>}
+                                title={<span>{t("sessions")}</span>}
                                 {...sessionsTab}
                             >
                                 <UserSessions />
@@ -440,44 +440,33 @@ export default function EditUser() {
                             {hasAccess("view-events") && (
                                 <Tab
                                     data-testid="events-tab"
-                                    title={<TabTitleText>{t("events")}</TabTitleText>}
+                                    title={<span>{t("events")}</span>}
                                     {...eventsTab}
                                 >
-                                    <Tabs
-                                        activeKey={activeEventsTab}
-                                        onSelect={(_, key) =>
-                                            setActiveEventsTab(key as string)
-                                        }
-                                    >
-                                        <Tab
-                                            eventKey="userEvents"
-                                            title={
-                                                <TabTitleText>
-                                                    {t("userEvents")}
-                                                </TabTitleText>
-                                            }
-                                        >
+                                    <Tabs value={activeEventsTab} onValueChange={setActiveEventsTab}>
+                                        <TabsList>
+                                            <TabsTrigger value="userEvents">
+                                                {t("userEvents")}
+                                            </TabsTrigger>
+                                            <TabsTrigger value="adminEvents">
+                                                {t("adminEvents")}
+                                            </TabsTrigger>
+                                        </TabsList>
+                                        <TabsContent value="userEvents">
                                             <UserEvents user={user.id} />
-                                        </Tab>
-                                        <Tab
-                                            eventKey="adminEvents"
-                                            title={
-                                                <TabTitleText>
-                                                    {t("adminEvents")}
-                                                </TabTitleText>
-                                            }
-                                        >
+                                        </TabsContent>
+                                        <TabsContent value="adminEvents">
                                             <AdminEvents
                                                 resourcePath={`users/${user.id}*`}
                                             />
-                                        </Tab>
+                                        </TabsContent>
                                     </Tabs>
                                 </Tab>
                             )}
                         </RoutableTabs>
                     </FormProvider>
                 </UserProfileProvider>
-            </PageSection>
+            </div>
         </>
     );
 }

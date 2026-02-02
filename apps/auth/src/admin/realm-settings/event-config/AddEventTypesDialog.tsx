@@ -13,7 +13,14 @@
 
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
-import { Button, Modal, ModalVariant } from "../../../shared/@patternfly/react-core";
+import { Button } from "@merge/ui/components/button";
+import {
+    Dialog,
+    DialogContent,
+    DialogFooter,
+    DialogHeader,
+    DialogTitle
+} from "@merge/ui/components/dialog";
 
 import { EventsTypeTable, EventType } from "./EventsTypeTable";
 import { useServerInfo } from "../../context/server-info/ServerInfoProvider";
@@ -34,37 +41,34 @@ export const AddEventTypesDialog = ({
 
     const [selectedTypes, setSelectedTypes] = useState<EventType[]>([]);
     return (
-        <Modal
-            variant={ModalVariant.medium}
-            title={t("addTypes")}
-            isOpen={true}
-            onClose={onClose}
-            actions={[
-                <Button
-                    data-testid="addEventTypeConfirm"
-                    key="confirm"
-                    variant="primary"
-                    onClick={() => onConfirm(selectedTypes)}
-                >
-                    {t("add")}
-                </Button>,
-                <Button
-                    data-testid="moveCancel"
-                    key="cancel"
-                    variant="link"
-                    onClick={onClose}
-                >
-                    {t("cancel")}
-                </Button>
-            ]}
-        >
-            <EventsTypeTable
-                ariaLabelKey="addTypes"
-                onSelect={selected => setSelectedTypes(selected)}
-                eventTypes={enums!["eventType"].filter(
-                    type => !configured.includes(type)
-                )}
-            />
-        </Modal>
+        <Dialog open onOpenChange={(open) => { if (!open) onClose(); }}>
+            <DialogContent className="max-w-2xl">
+                <DialogHeader>
+                    <DialogTitle>{t("addTypes")}</DialogTitle>
+                </DialogHeader>
+                <EventsTypeTable
+                    ariaLabelKey="addTypes"
+                    onSelect={selected => setSelectedTypes(selected)}
+                    eventTypes={enums!["eventType"].filter(
+                        type => !configured.includes(type)
+                    )}
+                />
+                <DialogFooter>
+                    <Button
+                        data-testid="addEventTypeConfirm"
+                        onClick={() => onConfirm(selectedTypes)}
+                    >
+                        {t("add")}
+                    </Button>
+                    <Button
+                        data-testid="moveCancel"
+                        variant="ghost"
+                        onClick={onClose}
+                    >
+                        {t("cancel")}
+                    </Button>
+                </DialogFooter>
+            </DialogContent>
+        </Dialog>
     );
 };

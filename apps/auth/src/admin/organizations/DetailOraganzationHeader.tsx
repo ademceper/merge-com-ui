@@ -11,7 +11,7 @@
 
 // @ts-nocheck
 
-import { ButtonVariant, DropdownItem } from "../../shared/@patternfly/react-core";
+import { DropdownMenuItem } from "@merge/ui/components/dropdown-menu";
 import { ViewHeader } from "../components/view-header/ViewHeader";
 import { useTranslation } from "react-i18next";
 import { useConfirmDialog } from "../components/confirm-dialog/ConfirmDialog";
@@ -53,7 +53,7 @@ export const DetailOrganizationHeader = ({ save }: DetailOrganizationHeaderProps
         titleKey: "organizationDelete",
         messageKey: "organizationDeleteConfirm",
         continueButtonLabel: "delete",
-        continueButtonVariant: ButtonVariant.danger,
+        continueButtonVariant: "destructive",
         onConfirm: async () => {
             try {
                 await adminClient.organizations.delById({ id });
@@ -76,13 +76,13 @@ export const DetailOrganizationHeader = ({ save }: DetailOrganizationHeaderProps
                         titleKey={name || ""}
                         divider={false}
                         dropdownItems={[
-                            <DropdownItem
+                            <DropdownMenuItem
                                 data-testid="delete-client"
                                 key="delete"
                                 onClick={toggleDeleteDialog}
                             >
                                 {t("delete")}
-                            </DropdownItem>
+                            </DropdownMenuItem>
                         ]}
                         isEnabled={value}
                         onToggle={value => {

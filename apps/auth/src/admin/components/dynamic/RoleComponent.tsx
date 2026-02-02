@@ -12,12 +12,9 @@
 // @ts-nocheck
 
 import { FormErrorText, HelpItem } from "../../../shared/keycloak-ui-shared";
-import {
-    Chip,
-    FormGroup,
-    Split,
-    SplitItem
-} from "../../../shared/@patternfly/react-core";
+import { Label } from "@merge/ui/components/label";
+import { Badge } from "@merge/ui/components/badge";
+import { Chip } from "../../../shared/@patternfly/react-core";
 import { useState } from "react";
 import { Controller, useFormContext } from "react-hook-form";
 import { useTranslation } from "react-i18next";
@@ -60,18 +57,17 @@ export const RoleComponent = ({
     const fieldName = convertToName(name!);
 
     return (
-        <FormGroup
-            label={t(label!)}
-            labelIcon={<HelpItem helpText={t(helpText!)} fieldLabelId={`${label}`} />}
-            fieldId={name!}
-            isRequired={required}
-        >
+        <div className="space-y-2">
+            <div className="flex items-center gap-1">
+                <Label htmlFor={name!}>{t(label!)}{required && " *"}</Label>
+                <HelpItem helpText={t(helpText!)} fieldLabelId={`${label}`} />
+            </div>
             <Controller
                 name={fieldName}
                 defaultValue={defaultValue || ""}
                 control={control}
                 render={({ field }) => (
-                    <Split>
+                    <div className="flex gap-4">
                         {openModal && (
                             <AddRoleMappingModal
                                 id="id"
@@ -85,7 +81,7 @@ export const RoleComponent = ({
                         )}
 
                         {field.value !== "" && (
-                            <SplitItem>
+                            <div>
                                 <Chip
                                     textMaxWidth="500px"
                                     onClick={() => field.onChange("")}
@@ -95,9 +91,9 @@ export const RoleComponent = ({
                                         client={{ clientId: parseValue(field.value)[0] }}
                                     />
                                 </Chip>
-                            </SplitItem>
+                            </div>
                         )}
-                        <SplitItem>
+                        <div>
                             <AddRoleButton
                                 label="selectRole.label"
                                 onFilerTypeChange={type => {
@@ -108,11 +104,11 @@ export const RoleComponent = ({
                                 data-testid="add-roles"
                                 isDisabled={isDisabled}
                             />
-                        </SplitItem>
-                    </Split>
+                        </div>
+                    </div>
                 )}
             />
             {errors[fieldName] && <FormErrorText message={t("required")} />}
-        </FormGroup>
+        </div>
     );
 };

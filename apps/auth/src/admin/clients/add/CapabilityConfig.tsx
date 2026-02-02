@@ -13,15 +13,9 @@
 
 import type ClientRepresentation from "@keycloak/keycloak-admin-client/lib/defs/clientRepresentation";
 import { HelpItem, SelectControl } from "../../../shared/keycloak-ui-shared";
-import {
-    Checkbox,
-    FormGroup,
-    Grid,
-    GridItem,
-    InputGroup,
-    InputGroupItem,
-    Switch
-} from "../../../shared/@patternfly/react-core";
+import { Checkbox } from "@merge/ui/components/checkbox";
+import { Switch } from "@merge/ui/components/switch";
+import { Label } from "@merge/ui/components/label";
 import { Controller, useFormContext } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { DefaultSwitchControl } from "../../components/SwitchControl";
@@ -63,17 +57,14 @@ export const CapabilityConfig = ({ unWrap, protocol: type }: CapabilityConfigPro
         >
             {protocol === "openid-connect" && (
                 <>
-                    <FormGroup
-                        hasNoPaddingTop
-                        label={t("clientAuthentication")}
-                        fieldId="kc-authentication"
-                        labelIcon={
+                    <div className="space-y-2">
+                        <div className="flex items-center gap-2">
+                            <Label htmlFor="kc-authentication">{t("clientAuthentication")}</Label>
                             <HelpItem
                                 helpText={t("authenticationHelp")}
                                 fieldLabelId="authentication"
                             />
-                        }
-                    >
+                        </div>
                         <Controller
                             name="publicClient"
                             defaultValue={false}
@@ -82,10 +73,8 @@ export const CapabilityConfig = ({ unWrap, protocol: type }: CapabilityConfigPro
                                 <Switch
                                     data-testid="authentication"
                                     id="kc-authentication"
-                                    label={t("on")}
-                                    labelOff={t("off")}
-                                    isChecked={!field.value}
-                                    onChange={(_event, value) => {
+                                    checked={!field.value}
+                                    onCheckedChange={(value) => {
                                         field.onChange(!value);
                                         if (!value) {
                                             setValue(
@@ -117,18 +106,15 @@ export const CapabilityConfig = ({ unWrap, protocol: type }: CapabilityConfigPro
                                 />
                             )}
                         />
-                    </FormGroup>
-                    <FormGroup
-                        hasNoPaddingTop
-                        label={t("clientAuthorization")}
-                        fieldId="kc-authorization"
-                        labelIcon={
+                    </div>
+                    <div className="space-y-2">
+                        <div className="flex items-center gap-2">
+                            <Label htmlFor="kc-authorization">{t("clientAuthorization")}</Label>
                             <HelpItem
                                 helpText={t("authorizationHelp")}
                                 fieldLabelId="authorization"
                             />
-                        }
-                    >
+                        </div>
                         <Controller
                             name="authorizationServicesEnabled"
                             defaultValue={false}
@@ -137,148 +123,127 @@ export const CapabilityConfig = ({ unWrap, protocol: type }: CapabilityConfigPro
                                 <Switch
                                     data-testid="authorization"
                                     id="kc-authorization-switch"
-                                    label={t("on")}
-                                    labelOff={t("off")}
-                                    isChecked={field.value && !clientAuthentication}
-                                    onChange={(_event, value) => {
+                                    checked={field.value && !clientAuthentication}
+                                    onCheckedChange={(value) => {
                                         field.onChange(value);
                                         if (value) {
                                             setValue("serviceAccountsEnabled", true);
                                         }
                                     }}
-                                    isDisabled={clientAuthentication}
+                                    disabled={clientAuthentication}
                                     aria-label={t("clientAuthorization")}
                                 />
                             )}
                         />
-                    </FormGroup>
-                    <FormGroup
-                        hasNoPaddingTop
-                        label={t("authenticationFlow")}
-                        fieldId="kc-flow"
-                    >
-                        <Grid id="authenticationFlowGrid" hasGutter>
-                            <GridItem lg={4} sm={6}>
+                    </div>
+                    <div className="space-y-2">
+                        <Label>{t("authenticationFlow")}</Label>
+                        <div id="authenticationFlowGrid" className="grid grid-cols-2 gap-4">
+                            <div>
                                 <Controller
                                     name="standardFlowEnabled"
                                     defaultValue={true}
                                     control={control}
                                     render={({ field }) => (
-                                        <InputGroup>
-                                            <InputGroupItem>
-                                                <Checkbox
-                                                    data-testid="standard"
-                                                    label={t("standardFlow")}
-                                                    id="kc-flow-standard"
-                                                    isChecked={
-                                                        field.value?.toString() === "true"
-                                                    }
-                                                    onChange={field.onChange}
-                                                />
-                                            </InputGroupItem>
-                                            <InputGroupItem>
-                                                <HelpItem
-                                                    helpText={t("standardFlowHelp")}
-                                                    fieldLabelId="standardFlow"
-                                                />
-                                            </InputGroupItem>
-                                        </InputGroup>
+                                        <div className="flex items-center gap-2">
+                                            <Checkbox
+                                                data-testid="standard"
+                                                id="kc-flow-standard"
+                                                checked={
+                                                    field.value?.toString() === "true"
+                                                }
+                                                onCheckedChange={field.onChange}
+                                            />
+                                            <Label htmlFor="kc-flow-standard">{t("standardFlow")}</Label>
+                                            <HelpItem
+                                                helpText={t("standardFlowHelp")}
+                                                fieldLabelId="standardFlow"
+                                            />
+                                        </div>
                                     )}
                                 />
-                            </GridItem>
-                            <GridItem lg={8} sm={6}>
+                            </div>
+                            <div>
                                 <Controller
                                     name="directAccessGrantsEnabled"
                                     defaultValue={false}
                                     control={control}
                                     render={({ field }) => (
-                                        <InputGroup>
-                                            <InputGroupItem>
-                                                <Checkbox
-                                                    data-testid="direct"
-                                                    label={t("directAccess")}
-                                                    id="kc-flow-direct"
-                                                    isChecked={field.value}
-                                                    onChange={field.onChange}
-                                                />
-                                            </InputGroupItem>
-                                            <InputGroupItem>
-                                                <HelpItem
-                                                    helpText={t("directAccessHelp")}
-                                                    fieldLabelId="directAccess"
-                                                />
-                                            </InputGroupItem>
-                                        </InputGroup>
+                                        <div className="flex items-center gap-2">
+                                            <Checkbox
+                                                data-testid="direct"
+                                                id="kc-flow-direct"
+                                                checked={field.value}
+                                                onCheckedChange={field.onChange}
+                                            />
+                                            <Label htmlFor="kc-flow-direct">{t("directAccess")}</Label>
+                                            <HelpItem
+                                                helpText={t("directAccessHelp")}
+                                                fieldLabelId="directAccess"
+                                            />
+                                        </div>
                                     )}
                                 />
-                            </GridItem>
-                            <GridItem lg={4} sm={6}>
+                            </div>
+                            <div>
                                 <Controller
                                     name="implicitFlowEnabled"
                                     defaultValue={true}
                                     control={control}
                                     render={({ field }) => (
-                                        <InputGroup>
-                                            <InputGroupItem>
-                                                <Checkbox
-                                                    data-testid="implicit"
-                                                    label={t("implicitFlow")}
-                                                    id="kc-flow-implicit"
-                                                    isChecked={
-                                                        field.value?.toString() === "true"
-                                                    }
-                                                    onChange={field.onChange}
-                                                />
-                                            </InputGroupItem>
-                                            <InputGroupItem>
-                                                <HelpItem
-                                                    helpText={t("implicitFlowHelp")}
-                                                    fieldLabelId="implicitFlow"
-                                                />
-                                            </InputGroupItem>
-                                        </InputGroup>
+                                        <div className="flex items-center gap-2">
+                                            <Checkbox
+                                                data-testid="implicit"
+                                                id="kc-flow-implicit"
+                                                checked={
+                                                    field.value?.toString() === "true"
+                                                }
+                                                onCheckedChange={field.onChange}
+                                            />
+                                            <Label htmlFor="kc-flow-implicit">{t("implicitFlow")}</Label>
+                                            <HelpItem
+                                                helpText={t("implicitFlowHelp")}
+                                                fieldLabelId="implicitFlow"
+                                            />
+                                        </div>
                                     )}
                                 />
-                            </GridItem>
-                            <GridItem lg={8} sm={6}>
+                            </div>
+                            <div>
                                 <Controller
                                     name="serviceAccountsEnabled"
                                     defaultValue={false}
                                     control={control}
                                     render={({ field }) => (
-                                        <InputGroup>
-                                            <InputGroupItem>
-                                                <Checkbox
-                                                    data-testid="service-account"
-                                                    label={t("serviceAccount")}
-                                                    id="kc-flow-service-account"
-                                                    isChecked={
-                                                        field.value?.toString() ===
-                                                            "true" ||
-                                                        (clientAuthentication &&
-                                                            authorization)
-                                                    }
-                                                    onChange={field.onChange}
-                                                    isDisabled={
-                                                        (clientAuthentication &&
-                                                            !authorization) ||
-                                                        (!clientAuthentication &&
-                                                            authorization)
-                                                    }
-                                                />
-                                            </InputGroupItem>
-                                            <InputGroupItem>
-                                                <HelpItem
-                                                    helpText={t("serviceAccountHelp")}
-                                                    fieldLabelId="serviceAccount"
-                                                />
-                                            </InputGroupItem>
-                                        </InputGroup>
+                                        <div className="flex items-center gap-2">
+                                            <Checkbox
+                                                data-testid="service-account"
+                                                id="kc-flow-service-account"
+                                                checked={
+                                                    field.value?.toString() ===
+                                                        "true" ||
+                                                    (clientAuthentication &&
+                                                        authorization)
+                                                }
+                                                onCheckedChange={field.onChange}
+                                                disabled={
+                                                    (clientAuthentication &&
+                                                        !authorization) ||
+                                                    (!clientAuthentication &&
+                                                        authorization)
+                                                }
+                                            />
+                                            <Label htmlFor="kc-flow-service-account">{t("serviceAccount")}</Label>
+                                            <HelpItem
+                                                helpText={t("serviceAccountHelp")}
+                                                fieldLabelId="serviceAccount"
+                                            />
+                                        </div>
                                     )}
                                 />
-                            </GridItem>
+                            </div>
                             {isFeatureEnabled(Feature.StandardTokenExchangeV2) && (
-                                <GridItem lg={8} sm={6}>
+                                <div>
                                     <Controller
                                         name={convertAttributeNameToForm<
                                             Required<ClientRepresentation["attributes"]>
@@ -286,39 +251,32 @@ export const CapabilityConfig = ({ unWrap, protocol: type }: CapabilityConfigPro
                                         defaultValue={false}
                                         control={control}
                                         render={({ field }) => (
-                                            <InputGroup>
-                                                <InputGroupItem>
-                                                    <Checkbox
-                                                        data-testid="standard-token-exchange-enabled"
-                                                        label={t(
-                                                            "standardTokenExchangeEnabled"
-                                                        )}
-                                                        id="kc-standard-token-exchange-enabled"
-                                                        name="standard-token-exchange-enabled"
-                                                        isChecked={
-                                                            field.value.toString() ===
-                                                                "true" &&
-                                                            !clientAuthentication
-                                                        }
-                                                        onChange={field.onChange}
-                                                        isDisabled={clientAuthentication}
-                                                    />
-                                                </InputGroupItem>
-                                                <InputGroupItem>
-                                                    <HelpItem
-                                                        helpText={t(
-                                                            "standardTokenExchangeEnabledHelp"
-                                                        )}
-                                                        fieldLabelId="standardTokenExchangeEnabled"
-                                                    />
-                                                </InputGroupItem>
-                                            </InputGroup>
+                                            <div className="flex items-center gap-2">
+                                                <Checkbox
+                                                    data-testid="standard-token-exchange-enabled"
+                                                    id="kc-standard-token-exchange-enabled"
+                                                    checked={
+                                                        field.value.toString() ===
+                                                            "true" &&
+                                                        !clientAuthentication
+                                                    }
+                                                    onCheckedChange={field.onChange}
+                                                    disabled={clientAuthentication}
+                                                />
+                                                <Label htmlFor="kc-standard-token-exchange-enabled">{t("standardTokenExchangeEnabled")}</Label>
+                                                <HelpItem
+                                                    helpText={t(
+                                                        "standardTokenExchangeEnabledHelp"
+                                                    )}
+                                                    fieldLabelId="standardTokenExchangeEnabled"
+                                                />
+                                            </div>
                                         )}
                                     />
-                                </GridItem>
+                                </div>
                             )}
                             {isFeatureEnabled(Feature.JWTAuthorizationGrant) && (
-                                <GridItem lg={8} sm={6}>
+                                <div>
                                     <Controller
                                         name={convertAttributeNameToForm<
                                             Required<ClientRepresentation["attributes"]>
@@ -328,39 +286,32 @@ export const CapabilityConfig = ({ unWrap, protocol: type }: CapabilityConfigPro
                                         defaultValue={false}
                                         control={control}
                                         render={({ field }) => (
-                                            <InputGroup>
-                                                <InputGroupItem>
-                                                    <Checkbox
-                                                        data-testid="jwt-authorization-grant-enabled"
-                                                        label={t(
-                                                            "jwtAuthorizationGrantEnabled"
-                                                        )}
-                                                        id="kc-jwt-authorization-grant-enabled"
-                                                        name="jwt-authorization-grant-enabled"
-                                                        isChecked={
-                                                            field.value.toString() ===
-                                                                "true" &&
-                                                            !clientAuthentication
-                                                        }
-                                                        onChange={field.onChange}
-                                                        isDisabled={clientAuthentication}
-                                                    />
-                                                </InputGroupItem>
-                                                <InputGroupItem>
-                                                    <HelpItem
-                                                        helpText={t(
-                                                            "jwtAuthorizationGrantEnabledHelp"
-                                                        )}
-                                                        fieldLabelId="jwtAuthorizationGrantEnabled"
-                                                    />
-                                                </InputGroupItem>
-                                            </InputGroup>
+                                            <div className="flex items-center gap-2">
+                                                <Checkbox
+                                                    data-testid="jwt-authorization-grant-enabled"
+                                                    id="kc-jwt-authorization-grant-enabled"
+                                                    checked={
+                                                        field.value.toString() ===
+                                                            "true" &&
+                                                        !clientAuthentication
+                                                    }
+                                                    onCheckedChange={field.onChange}
+                                                    disabled={clientAuthentication}
+                                                />
+                                                <Label htmlFor="kc-jwt-authorization-grant-enabled">{t("jwtAuthorizationGrantEnabled")}</Label>
+                                                <HelpItem
+                                                    helpText={t(
+                                                        "jwtAuthorizationGrantEnabledHelp"
+                                                    )}
+                                                    fieldLabelId="jwtAuthorizationGrantEnabled"
+                                                />
+                                            </div>
                                         )}
                                     />
-                                </GridItem>
+                                </div>
                             )}
                             {isFeatureEnabled(Feature.DeviceFlow) && (
-                                <GridItem lg={8} sm={6}>
+                                <div>
                                     <Controller
                                         name={convertAttributeNameToForm<
                                             Required<ClientRepresentation["attributes"]>
@@ -370,36 +321,29 @@ export const CapabilityConfig = ({ unWrap, protocol: type }: CapabilityConfigPro
                                         defaultValue={false}
                                         control={control}
                                         render={({ field }) => (
-                                            <InputGroup>
-                                                <InputGroupItem>
-                                                    <Checkbox
-                                                        data-testid="oauth-device-authorization-grant"
-                                                        label={t(
-                                                            "oauthDeviceAuthorizationGrant"
-                                                        )}
-                                                        id="kc-oauth-device-authorization-grant"
-                                                        name="oauth2.device.authorization.grant.enabled"
-                                                        isChecked={
-                                                            field.value.toString() ===
-                                                            "true"
-                                                        }
-                                                        onChange={field.onChange}
-                                                    />
-                                                </InputGroupItem>
-                                                <InputGroupItem>
-                                                    <HelpItem
-                                                        helpText={t(
-                                                            "oauthDeviceAuthorizationGrantHelp"
-                                                        )}
-                                                        fieldLabelId="oauthDeviceAuthorizationGrant"
-                                                    />
-                                                </InputGroupItem>
-                                            </InputGroup>
+                                            <div className="flex items-center gap-2">
+                                                <Checkbox
+                                                    data-testid="oauth-device-authorization-grant"
+                                                    id="kc-oauth-device-authorization-grant"
+                                                    checked={
+                                                        field.value.toString() ===
+                                                        "true"
+                                                    }
+                                                    onCheckedChange={field.onChange}
+                                                />
+                                                <Label htmlFor="kc-oauth-device-authorization-grant">{t("oauthDeviceAuthorizationGrant")}</Label>
+                                                <HelpItem
+                                                    helpText={t(
+                                                        "oauthDeviceAuthorizationGrantHelp"
+                                                    )}
+                                                    fieldLabelId="oauthDeviceAuthorizationGrant"
+                                                />
+                                            </div>
                                         )}
                                     />
-                                </GridItem>
+                                </div>
                             )}
-                            <GridItem lg={8} sm={6}>
+                            <div>
                                 <Controller
                                     name={convertAttributeNameToForm<FormFields>(
                                         "attributes.oidc.ciba.grant.enabled"
@@ -407,32 +351,27 @@ export const CapabilityConfig = ({ unWrap, protocol: type }: CapabilityConfigPro
                                     defaultValue={false}
                                     control={control}
                                     render={({ field }) => (
-                                        <InputGroup>
-                                            <InputGroupItem>
-                                                <Checkbox
-                                                    data-testid="oidc-ciba-grant"
-                                                    label={t("oidcCibaGrant")}
-                                                    id="kc-oidc-ciba-grant"
-                                                    name="oidc.ciba.grant.enabled"
-                                                    isChecked={
-                                                        field.value.toString() === "true"
-                                                    }
-                                                    onChange={field.onChange}
-                                                    isDisabled={clientAuthentication}
-                                                />
-                                            </InputGroupItem>
-                                            <InputGroupItem>
-                                                <HelpItem
-                                                    helpText={t("oidcCibaGrantHelp")}
-                                                    fieldLabelId="oidcCibaGrant"
-                                                />
-                                            </InputGroupItem>
-                                        </InputGroup>
+                                        <div className="flex items-center gap-2">
+                                            <Checkbox
+                                                data-testid="oidc-ciba-grant"
+                                                id="kc-oidc-ciba-grant"
+                                                checked={
+                                                    field.value.toString() === "true"
+                                                }
+                                                onCheckedChange={field.onChange}
+                                                disabled={clientAuthentication}
+                                            />
+                                            <Label htmlFor="kc-oidc-ciba-grant">{t("oidcCibaGrant")}</Label>
+                                            <HelpItem
+                                                helpText={t("oidcCibaGrantHelp")}
+                                                fieldLabelId="oidcCibaGrant"
+                                            />
+                                        </div>
                                     )}
                                 />
-                            </GridItem>
-                        </Grid>
-                    </FormGroup>
+                            </div>
+                        </div>
+                    </div>
                     <SelectControl
                         id="keyForCodeExchange"
                         label={t("keyForCodeExchange")}

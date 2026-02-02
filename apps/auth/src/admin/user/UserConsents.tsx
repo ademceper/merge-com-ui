@@ -12,13 +12,9 @@
 // @ts-nocheck
 
 import type UserConsentRepresentation from "@keycloak/keycloak-admin-client/lib/defs/userConsentRepresentation";
-import {
-    AlertVariant,
-    ButtonVariant,
-    Chip,
-    ChipGroup
-} from "../../shared/@patternfly/react-core";
-import { CubesIcon } from "../../shared/@patternfly/react-icons";
+import { AlertVariant } from "../../shared/keycloak-ui-shared";
+import { Badge } from "@merge/ui/components/badge";
+import { Cube } from "@phosphor-icons/react";
 import { cellWidth } from "../../shared/@patternfly/react-table";
 import { sortBy } from "lodash-es";
 import { useState } from "react";
@@ -56,13 +52,13 @@ export const UserConsents = () => {
 
     const clientScopesRenderer = ({ grantedClientScopes }: UserConsentRepresentation) => {
         return (
-            <ChipGroup className="kc-consents-chip-group">
+            <div className="flex gap-1 flex-wrap kc-consents-chip-group">
                 {grantedClientScopes!.map(currentChip => (
-                    <Chip key={currentChip} isReadOnly className="kc-consents-chip">
+                    <Badge key={currentChip} variant="secondary" className="kc-consents-chip">
                         {currentChip}
-                    </Chip>
+                    </Badge>
                 ))}
-            </ChipGroup>
+            </div>
         );
     };
 
@@ -72,7 +68,7 @@ export const UserConsents = () => {
             clientId: selectedClient?.clientId
         }),
         continueButtonLabel: "revoke",
-        continueButtonVariant: ButtonVariant.danger,
+        continueButtonVariant: "destructive",
         onConfirm: async () => {
             try {
                 await adminClient.users.revokeConsent({
@@ -137,7 +133,7 @@ export const UserConsents = () => {
                 emptyState={
                     <ListEmptyState
                         hasIcon={true}
-                        icon={CubesIcon}
+                        icon={Cube}
                         message={t("noConsents")}
                         instructions={t("noConsentsText")}
                     />

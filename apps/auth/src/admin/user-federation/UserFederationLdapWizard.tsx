@@ -12,14 +12,8 @@
 // @ts-nocheck
 
 import type ComponentRepresentation from "@keycloak/keycloak-admin-client/lib/defs/componentRepresentation";
-import {
-    Button,
-    useWizardContext,
-    Wizard,
-    WizardFooter,
-    WizardFooterWrapper,
-    WizardStep
-} from "../../shared/@patternfly/react-core";
+import { Button } from "@merge/ui/components/button";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 
@@ -32,120 +26,76 @@ import { LdapSettingsSearching } from "./ldap/LdapSettingsSearching";
 import { LdapSettingsSynchronization } from "./ldap/LdapSettingsSynchronization";
 import { SettingsCache } from "./shared/SettingsCache";
 
-const UserFedLdapFooter = () => {
-    const { t } = useTranslation();
-    const { activeStep, goToNextStep, goToPrevStep, close } = useWizardContext();
-    return (
-        <WizardFooter
-            activeStep={activeStep}
-            onNext={goToNextStep}
-            onBack={goToPrevStep}
-            onClose={close}
-            isBackDisabled={activeStep.index === 1}
-            backButtonText={t("back")}
-            nextButtonText={t("next")}
-            cancelButtonText={t("cancel")}
-        />
-    );
-};
-const SkipCustomizationFooter = () => {
-    const { goToNextStep, goToPrevStep, close } = useWizardContext();
-    const { t } = useTranslation();
-    return (
-        <WizardFooterWrapper>
-            <Button variant="secondary" onClick={goToPrevStep}>
-                {t("back")}
-            </Button>
-            <Button variant="primary" type="submit" onClick={goToNextStep}>
-                {t("next")}
-            </Button>
-            {/* TODO: validate last step and finish */}
-            <Button variant="link">{t("skipCustomizationAndFinish")}</Button>
-            <Button variant="link" onClick={close}>
-                {t("cancel")}
-            </Button>
-        </WizardFooterWrapper>
-    );
-};
 export const UserFederationLdapWizard = () => {
     const form = useForm<ComponentRepresentation>();
     const { t } = useTranslation();
     const isFeatureEnabled = useIsFeatureEnabled();
+    const [step, setStep] = useState(0);
+
+    const steps = [
+        { id: "ldapRequiredSettingsStep", name: t("requiredSettings") },
+        { id: "ldapConnectionSettingsStep", name: t("connectionAndAuthenticationSettings") },
+        { id: "ldapSearchingSettingsStep", name: t("ldapSearchingAndUpdatingSettings") },
+        { id: "ldapSynchronizationSettingsStep", name: t("synchronizationSettings") },
+        ...(isFeatureEnabled(Feature.Kerberos)
+            ? [{ id: "ldapKerberosIntegrationSettingsStep", name: t("kerberosIntegration") }]
+            : []),
+        { id: "ldapCacheSettingsStep", name: t("cacheSettings") },
+        { id: "ldapAdvancedSettingsStep", name: t("advancedSettings") }
+    ];
+
+    const isLast = step === steps.length - 1;
+    const isFirst = step === 0;
 
     return (
-        <Wizard height="100%" footer={<UserFedLdapFooter />}>
-            <WizardStep name={t("requiredSettings")} id="ldapRequiredSettingsStep">
-                <LdapSettingsGeneral
-                    form={form}
-                    showSectionHeading
-                    showSectionDescription
-                />
-            </WizardStep>
-            <WizardStep
-                name={t("connectionAndAuthenticationSettings")}
-                id="ldapConnectionSettingsStep"
-            >
-                <LdapSettingsConnection
-                    form={form}
-                    showSectionHeading
-                    showSectionDescription
-                />
-            </WizardStep>
-            <WizardStep
-                name={t("ldapSearchingAndUpdatingSettings")}
-                id="ldapSearchingSettingsStep"
-            >
-                <LdapSettingsSearching
-                    form={form}
-                    showSectionHeading
-                    showSectionDescription
-                />
-            </WizardStep>
-            <WizardStep
-                name={t("synchronizationSettings")}
-                id="ldapSynchronizationSettingsStep"
-                footer={<SkipCustomizationFooter />}
-            >
-                <LdapSettingsSynchronization
-                    form={form}
-                    showSectionHeading
-                    showSectionDescription
-                />
-            </WizardStep>
-            <WizardStep
-                name={t("kerberosIntegration")}
-                id="ldapKerberosIntegrationSettingsStep"
-                isDisabled={!isFeatureEnabled(Feature.Kerberos)}
-                footer={<SkipCustomizationFooter />}
-            >
-                <LdapSettingsKerberosIntegration
-                    form={form}
-                    showSectionHeading
-                    showSectionDescription
-                />
-            </WizardStep>
-            <WizardStep
-                name={t("cacheSettings")}
-                id="ldapCacheSettingsStep"
-                footer={<SkipCustomizationFooter />}
-            >
-                <SettingsCache form={form} showSectionHeading showSectionDescription />
-            </WizardStep>
-            <WizardStep
-                name={t("advancedSettings")}
-                id="ldapAdvancedSettingsStep"
-                footer={{
-                    backButtonText: t("back"),
-                    nextButtonText: t("finish"),
-                    cancelButtonText: t("cancel")
-                }}
-            >
-                <LdapSettingsAdvanced
-                    form={form}
-                    showSectionHeading
-                    showSectionDescription
-                />
-            </WizardStep>
-        </Wizard>
+        <div className="flex flex-col h-full">
+            <div className="flex gap-2 p-4 border-b">
+                {steps.map((s, i) => (
+                    <Button
+                        key={s.id}
+                        variant={i === step ? "default" : "outline"}
+                        size="sm"
+                        onClick={() => setStep(i)}
+                    >
+                        {s.name}
+                    </Button>
+                ))}
+            </div>
+            <div className="flex-1 overflow-auto p-6">
+                {steps[step]?.id === "ldapRequiredSettingsStep" && (
+                    <LdapSettingsGeneral form={form} showSectionHeading showSectionDescription />
+                )}
+                {steps[step]?.id === "ldapConnectionSettingsStep" && (
+                    <LdapSettingsConnection form={form} showSectionHeading showSectionDescription />
+                )}
+                {steps[step]?.id === "ldapSearchingSettingsStep" && (
+                    <LdapSettingsSearching form={form} showSectionHeading showSectionDescription />
+                )}
+                {steps[step]?.id === "ldapSynchronizationSettingsStep" && (
+                    <LdapSettingsSynchronization form={form} showSectionHeading showSectionDescription />
+                )}
+                {steps[step]?.id === "ldapKerberosIntegrationSettingsStep" && (
+                    <LdapSettingsKerberosIntegration form={form} showSectionHeading showSectionDescription />
+                )}
+                {steps[step]?.id === "ldapCacheSettingsStep" && (
+                    <SettingsCache form={form} showSectionHeading showSectionDescription />
+                )}
+                {steps[step]?.id === "ldapAdvancedSettingsStep" && (
+                    <LdapSettingsAdvanced form={form} showSectionHeading showSectionDescription />
+                )}
+            </div>
+            <div className="flex gap-2 p-4 border-t">
+                <Button variant="secondary" onClick={() => setStep(s => s - 1)} disabled={isFirst}>
+                    {t("back")}
+                </Button>
+                <Button onClick={() => setStep(s => s + 1)} disabled={isLast}>
+                    {isLast ? t("finish") : t("next")}
+                </Button>
+                {!isFirst && !isLast && (
+                    <Button variant="link">{t("skipCustomizationAndFinish")}</Button>
+                )}
+                <Button variant="link">{t("cancel")}</Button>
+            </div>
+        </div>
     );
 };

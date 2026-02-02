@@ -14,18 +14,8 @@
 import type CertificateRepresentation from "@keycloak/keycloak-admin-client/lib/defs/certificateRepresentation";
 import type KeyStoreConfig from "@keycloak/keycloak-admin-client/lib/defs/keystoreConfig";
 import { TextControl, useAlerts, useFetch } from "../../../shared/keycloak-ui-shared";
-import {
-    ActionGroup,
-    AlertVariant,
-    Button,
-    Card,
-    CardBody,
-    CardHeader,
-    CardTitle,
-    PageSection,
-    Text,
-    TextContent
-} from "../../../shared/@patternfly/react-core";
+import { AlertVariant } from "../../../shared/keycloak-ui-shared";
+import { Button } from "@merge/ui/components/button";
 import { saveAs } from "file-saver";
 import { useState } from "react";
 import { useFormContext, useWatch } from "react-hook-form";
@@ -132,7 +122,7 @@ export const Keys = ({
     };
 
     return (
-        <PageSection variant="light" className="keycloak__form">
+        <div className="p-6">
             {openGenerateKeys && (
                 <GenerateKeyDialog
                     clientId={getValues("clientId")!}
@@ -143,16 +133,14 @@ export const Keys = ({
             {openImportKeys && (
                 <ImportKeyDialog toggleDialog={toggleOpenImportKeys} save={importKey} />
             )}
-            <Card isFlat>
-                <CardHeader>
-                    <CardTitle>{t("jwksUrlConfig")}</CardTitle>
-                </CardHeader>
-                <CardBody>
-                    <TextContent>
-                        <Text>{t("keysIntro")}</Text>
-                    </TextContent>
-                </CardBody>
-                <CardBody>
+            <div className="border rounded-lg">
+                <div className="p-4 border-b">
+                    <h3 className="text-lg font-semibold">{t("jwksUrlConfig")}</h3>
+                </div>
+                <div className="p-4">
+                    <p className="text-sm text-muted-foreground">{t("keysIntro")}</p>
+                </div>
+                <div className="p-4">
                     <FormAccess
                         role="manage-clients"
                         fineGrainedAccess={hasConfigureAccess}
@@ -178,11 +166,11 @@ export const Keys = ({
                                 type="url"
                             />
                         )}
-                        <ActionGroup>
+                        <div className="flex gap-2 mt-4">
                             <Button
                                 data-testid="saveKeys"
                                 onClick={save}
-                                isDisabled={!isDirty}
+                                disabled={!isDirty}
                             >
                                 {t("save")}
                             </Button>
@@ -197,14 +185,14 @@ export const Keys = ({
                                 data-testid="import"
                                 variant="secondary"
                                 onClick={() => setOpenImportKeys(true)}
-                                isDisabled={useJwksUrl === "true"}
+                                disabled={useJwksUrl === "true"}
                             >
                                 {t("import")}
                             </Button>
-                        </ActionGroup>
+                        </div>
                     </FormAccess>
-                </CardBody>
-            </Card>
-        </PageSection>
+                </div>
+            </div>
+        </div>
     );
 };

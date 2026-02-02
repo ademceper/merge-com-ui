@@ -12,7 +12,7 @@
 // @ts-nocheck
 
 import { NumberControl, SelectControl } from "../../../shared/keycloak-ui-shared";
-import { ExpandableSection, Form } from "../../../shared/@patternfly/react-core";
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@merge/ui/components/collapsible";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { SwitchField } from "../component/SwitchField";
@@ -24,12 +24,12 @@ export const ExtendedOAuth2Settings = () => {
     const [isExpanded, setIsExpanded] = useState(false);
 
     return (
-        <ExpandableSection
-            toggleText={t("advanced")}
-            onToggle={() => setIsExpanded(!isExpanded)}
-            isExpanded={isExpanded}
-        >
-            <Form isHorizontal>
+        <Collapsible open={isExpanded} onOpenChange={setIsExpanded}>
+            <CollapsibleTrigger className="flex items-center gap-2 py-2 cursor-pointer text-sm font-medium">
+                {t("advanced")}
+            </CollapsibleTrigger>
+            <CollapsibleContent>
+            <form>
                 <TextField field="config.defaultScope" label="scopes" />
                 <SelectControl
                     name="config.prompt"
@@ -58,7 +58,8 @@ export const ExtendedOAuth2Settings = () => {
                     controller={{ defaultValue: 0, rules: { min: 0 } }}
                 />
                 <TextField field="config.forwardParameters" label="forwardParameters" />
-            </Form>
-        </ExpandableSection>
+            </form>
+            </CollapsibleContent>
+        </Collapsible>
     );
 };

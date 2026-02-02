@@ -12,7 +12,6 @@
 // @ts-nocheck
 
 import type ClientRepresentation from "@keycloak/keycloak-admin-client/lib/defs/clientRepresentation";
-import { Form } from "../../shared/@patternfly/react-core";
 import { useFormContext } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { ScrollForm } from "../../shared/keycloak-ui-shared";
@@ -47,12 +46,12 @@ export const ClientSettings = (props: ClientSettingsProps) => {
                 {
                     title: t("generalSettings"),
                     panel: (
-                        <Form isHorizontal>
+                        <form className="space-y-4">
                             <ClientDescription
                                 protocol={client.protocol}
                                 hasConfigureAccess={client.access?.configure}
                             />
-                        </Form>
+                        </form>
                     )
                 },
                 {

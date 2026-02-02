@@ -13,19 +13,13 @@
 
 import type ClientRepresentation from "@keycloak/keycloak-admin-client/lib/defs/clientRepresentation";
 import { useAlerts, useFetch } from "../../shared/keycloak-ui-shared";
-import {
-    AlertVariant,
-    ButtonVariant,
-    Divider,
-    DropdownItem,
-    Label,
-    PageSection,
-    Tab,
-    Tabs,
-    TabTitleText,
-    Tooltip
-} from "../../shared/@patternfly/react-core";
-import { InfoCircleIcon } from "../../shared/@patternfly/react-icons";
+import { AlertVariant } from "../../shared/keycloak-ui-shared";
+import { Label } from "@merge/ui/components/label";
+import { Badge } from "@merge/ui/components/badge";
+import { Tooltip, TooltipContent, TooltipTrigger, TooltipProvider } from "@merge/ui/components/tooltip";
+import { Separator } from "@merge/ui/components/separator";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@merge/ui/components/dropdown-menu";
+import { Info } from "@phosphor-icons/react";
 import { cloneDeep, sortBy } from "lodash-es";
 import { useMemo, useState } from "react";
 import { Controller, FormProvider, useForm, useWatch } from "react-hook-form";
@@ -41,7 +35,8 @@ import type { KeyValueType } from "../components/key-value-form/key-value-conver
 import { KeycloakSpinner } from "../../shared/keycloak-ui-shared";
 import { PermissionsTab } from "../components/permission-tab/PermissionTab";
 import { RolesList } from "../components/roles-list/RolesList";
-import { RoutableTabs, useRoutableTab } from "../components/routable-tabs/RoutableTabs";
+import { RoutableTabs, useRoutableTab, Tab } from "../components/routable-tabs/RoutableTabs";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@merge/ui/components/tabs";
 import { ViewHeader, ViewHeaderBadge } from "../components/view-header/ViewHeader";
 import { useAccess } from "../context/access/Access";
 import { useRealm } from "../context/realm-context/RealmContext";
@@ -113,17 +108,22 @@ const ClientDetailHeader = ({
         const protocolName = getProtocolName(t, client.protocol ?? "openid-connect");
 
         const text = client.bearerOnly ? (
-            <Tooltip
-                data-testid="bearer-only-explainer-tooltip"
-                content={t("explainBearerOnly")}
-            >
-                <Label
-                    data-testid="bearer-only-explainer-label"
-                    icon={<InfoCircleIcon />}
-                >
-                    {protocolName}
-                </Label>
-            </Tooltip>
+            <TooltipProvider>
+                <Tooltip>
+                    <TooltipTrigger asChild>
+                        <span
+                            data-testid="bearer-only-explainer-label"
+                            className="inline-flex items-center gap-1"
+                        >
+                            <Info className="size-4" />
+                            <Label>{protocolName}</Label>
+                        </span>
+                    </TooltipTrigger>
+                    <TooltipContent data-testid="bearer-only-explainer-tooltip">
+                        {t("explainBearerOnly")}
+                    </TooltipContent>
+                </Tooltip>
+            </TooltipProvider>
         ) : (
             <Label>{protocolName}</Label>
         );
@@ -135,22 +135,22 @@ const ClientDetailHeader = ({
     const isManager = hasAccess("manage-clients") || client.access?.configure;
 
     const dropdownItems = [
-        <DropdownItem key="download" onClick={toggleDownloadDialog}>
+        <DropdownMenuItem key="download" onClick={toggleDownloadDialog}>
             {t("downloadAdapterConfig")}
-        </DropdownItem>,
-        <DropdownItem key="export" onClick={() => exportClient(client)}>
+        </DropdownMenuItem>,
+        <DropdownMenuItem key="export" onClick={() => exportClient(client)}>
             {t("export")}
-        </DropdownItem>,
+        </DropdownMenuItem>,
         ...(!isRealmClient(client) && isManager
             ? [
-                  <Divider key="divider" />,
-                  <DropdownItem
+                  <Separator key="divider" />,
+                  <DropdownMenuItem
                       data-testid="delete-client"
                       key="delete"
                       onClick={toggleDeleteDialog}
                   >
                       {t("delete")}
-                  </DropdownItem>
+                  </DropdownMenuItem>
               ]
             : [])
     ];
@@ -285,7 +285,7 @@ export default function ClientDetails() {
         titleKey: "clientDeleteConfirmTitle",
         messageKey: "clientDeleteConfirm",
         continueButtonLabel: "delete",
-        continueButtonVariant: ButtonVariant.danger,
+        continueButtonVariant: "danger",
         onConfirm: async () => {
             try {
                 await adminClient.clients.del({ id: clientId });
@@ -420,7 +420,7 @@ export default function ClientDetails() {
                     />
                 )}
             />
-            <PageSection variant="light" className="pf-v5-u-p-0">
+            <div className="p-0">
                 <FormProvider {...form}>
                     <RoutableTabs
                         data-testid="client-tabs"
@@ -720,37 +720,31 @@ export default function ClientDetails() {
                                 {...eventsTab}
                             >
                                 <Tabs
-                                    activeKey={activeEventsTab}
-                                    onSelect={(_, key) =>
-                                        setActiveEventsTab(key as string)
-                                    }
+                                    value={activeEventsTab}
+                                    onValueChange={setActiveEventsTab}
                                 >
-                                    <Tab
-                                        eventKey="userEvents"
-                                        title={
-                                            <TabTitleText>{t("userEvents")}</TabTitleText>
-                                        }
-                                    >
+                                    <TabsList>
+                                        <TabsTrigger value="userEvents">
+                                            {t("userEvents")}
+                                        </TabsTrigger>
+                                        <TabsTrigger value="adminEvents">
+                                            {t("adminEvents")}
+                                        </TabsTrigger>
+                                    </TabsList>
+                                    <TabsContent value="userEvents">
                                         <UserEvents client={client.clientId} />
-                                    </Tab>
-                                    <Tab
-                                        eventKey="adminEvents"
-                                        title={
-                                            <TabTitleText>
-                                                {t("adminEvents")}
-                                            </TabTitleText>
-                                        }
-                                    >
+                                    </TabsContent>
+                                    <TabsContent value="adminEvents">
                                         <AdminEvents
                                             resourcePath={`clients/${client.id}`}
                                         />
-                                    </Tab>
+                                    </TabsContent>
                                 </Tabs>
                             </Tab>
                         )}
                     </RoutableTabs>
                 </FormProvider>
-            </PageSection>
+            </div>
         </>
     );
 }

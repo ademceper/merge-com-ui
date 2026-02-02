@@ -12,13 +12,9 @@
 // @ts-nocheck
 
 import type ClientInitialAccessPresentation from "@keycloak/keycloak-admin-client/lib/defs/clientInitialAccessPresentation";
-import {
-    ActionGroup,
-    AlertVariant,
-    Button,
-    FormGroup,
-    PageSection
-} from "../../../shared/@patternfly/react-core";
+import { AlertVariant } from "../../../shared/keycloak-ui-shared";
+import { Button } from "@merge/ui/components/button";
+import { Label } from "@merge/ui/components/label";
 import { useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
@@ -76,7 +72,7 @@ export default function CreateInitialAccessToken() {
                 />
             )}
             <ViewHeader titleKey="createToken" subKey="createTokenHelp" />
-            <PageSection variant="light">
+            <div className="p-6">
                 <FormAccess
                     isHorizontal
                     role="create-client"
@@ -107,47 +103,43 @@ export default function CreateInitialAccessToken() {
                             defaultValue: 1
                         }}
                     />
-                    <FormGroup
-                        label={t("webOrigins")}
-                        fieldId="kc-web-origins"
-                        labelIcon={
+                    <div className="space-y-2">
+                        <div className="flex items-center gap-2">
+                            <Label>{t("webOrigins")}</Label>
                             <HelpItem
                                 helpText={t("webOriginsHelp")}
                                 fieldLabelId="webOrigins"
                             />
-                        }
-                    >
+                        </div>
                         <MultiLineInput
                             id="kc-web-origins"
                             name="webOrigins"
                             aria-label={t("webOrigins")}
                             addButtonLabel="addWebOrigins"
                         />
-                    </FormGroup>
-                    <ActionGroup>
+                    </div>
+                    <div className="flex gap-2 mt-4">
                         <Button
-                            variant="primary"
                             type="submit"
                             data-testid="save"
-                            isDisabled={!isValid}
+                            disabled={!isValid}
                         >
                             {t("save")}
                         </Button>
                         <Button
                             data-testid="cancel"
                             variant="link"
-                            component={props => (
-                                <Link
-                                    {...props}
-                                    to={toClients({ realm, tab: "initial-access-token" })}
-                                />
-                            )}
+                            asChild
                         >
-                            {t("cancel")}
+                            <Link
+                                to={toClients({ realm, tab: "initial-access-token" })}
+                            >
+                                {t("cancel")}
+                            </Link>
                         </Button>
-                    </ActionGroup>
+                    </div>
                 </FormAccess>
-            </PageSection>
+            </div>
         </FormProvider>
     );
 }

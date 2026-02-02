@@ -11,7 +11,8 @@
 
 // @ts-nocheck
 
-import { FormGroup, Switch } from "../../../shared/@patternfly/react-core";
+import { Switch } from "@merge/ui/components/switch";
+import { Label } from "@merge/ui/components/label";
 import { Controller, useFormContext } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { HelpItem, TextControl } from "../../../shared/keycloak-ui-shared";
@@ -49,17 +50,14 @@ export const LogoutPanel = ({ save, reset, client: { access } }: ClientSettingsP
             fineGrainedAccess={access?.configure}
             role="manage-clients"
         >
-            <FormGroup
-                label={t("frontchannelLogout")}
-                labelIcon={
+            <div className="space-y-2">
+                <div className="flex items-center gap-2">
+                    <Label htmlFor="kc-frontchannelLogout">{t("frontchannelLogout")}</Label>
                     <HelpItem
                         helpText={t(frontchannelLogoutTooltip)}
                         fieldLabelId="frontchannelLogout"
                     />
-                }
-                fieldId="kc-frontchannelLogout"
-                hasNoPaddingTop
-            >
+                </div>
                 <Controller
                     name="frontchannelLogout"
                     defaultValue={true}
@@ -67,15 +65,13 @@ export const LogoutPanel = ({ save, reset, client: { access } }: ClientSettingsP
                     render={({ field }) => (
                         <Switch
                             id="kc-frontchannelLogout-switch"
-                            label={t("on")}
-                            labelOff={t("off")}
-                            isChecked={field.value}
-                            onChange={field.onChange}
+                            checked={field.value}
+                            onCheckedChange={field.onChange}
                             aria-label={t("frontchannelLogout")}
                         />
                     )}
                 />
-            </FormGroup>
+            </div>
             {protocol === "openid-connect" && frontchannelLogout && (
                 <TextControl
                     data-testid="frontchannelLogoutUrl"
@@ -115,17 +111,14 @@ export const LogoutPanel = ({ save, reset, client: { access } }: ClientSettingsP
                             validate: uri => validateUrl(uri, t("backchannelUrlInvalid"))
                         }}
                     />
-                    <FormGroup
-                        label={t("backchannelLogoutSessionRequired")}
-                        labelIcon={
+                    <div className="space-y-2">
+                        <div className="flex items-center gap-2">
+                            <Label htmlFor="backchannelLogoutSessionRequired">{t("backchannelLogoutSessionRequired")}</Label>
                             <HelpItem
                                 helpText={t("backchannelLogoutSessionRequiredHelp")}
                                 fieldLabelId="backchannelLogoutSessionRequired"
                             />
-                        }
-                        fieldId="backchannelLogoutSessionRequired"
-                        hasNoPaddingTop
-                    >
+                        </div>
                         <Controller
                             name={convertAttributeNameToForm<FormFields>(
                                 "attributes.backchannel.logout.session.required"
@@ -135,28 +128,23 @@ export const LogoutPanel = ({ save, reset, client: { access } }: ClientSettingsP
                             render={({ field }) => (
                                 <Switch
                                     id="backchannelLogoutSessionRequired"
-                                    label={t("on")}
-                                    labelOff={t("off")}
-                                    isChecked={field.value === "true"}
-                                    onChange={(_event, value) =>
+                                    checked={field.value === "true"}
+                                    onCheckedChange={(value) =>
                                         field.onChange(value.toString())
                                     }
                                     aria-label={t("backchannelLogoutSessionRequired")}
                                 />
                             )}
                         />
-                    </FormGroup>
-                    <FormGroup
-                        label={t("backchannelLogoutRevokeOfflineSessions")}
-                        labelIcon={
+                    </div>
+                    <div className="space-y-2">
+                        <div className="flex items-center gap-2">
+                            <Label htmlFor="backchannelLogoutRevokeOfflineSessions">{t("backchannelLogoutRevokeOfflineSessions")}</Label>
                             <HelpItem
                                 helpText={t("backchannelLogoutRevokeOfflineSessionsHelp")}
                                 fieldLabelId="backchannelLogoutRevokeOfflineSessions"
                             />
-                        }
-                        fieldId="backchannelLogoutRevokeOfflineSessions"
-                        hasNoPaddingTop
-                    >
+                        </div>
                         <Controller
                             name={convertAttributeNameToForm<FormFields>(
                                 "attributes.backchannel.logout.revoke.offline.tokens"
@@ -166,10 +154,8 @@ export const LogoutPanel = ({ save, reset, client: { access } }: ClientSettingsP
                             render={({ field }) => (
                                 <Switch
                                     id="backchannelLogoutRevokeOfflineSessions"
-                                    label={t("on")}
-                                    labelOff={t("off")}
-                                    isChecked={field.value === "true"}
-                                    onChange={(_event, value) =>
+                                    checked={field.value === "true"}
+                                    onCheckedChange={(value) =>
                                         field.onChange(value.toString())
                                     }
                                     aria-label={t(
@@ -178,7 +164,7 @@ export const LogoutPanel = ({ save, reset, client: { access } }: ClientSettingsP
                                 />
                             )}
                         />
-                    </FormGroup>
+                    </div>
                 </>
             )}
             {protocol === "openid-connect" && (

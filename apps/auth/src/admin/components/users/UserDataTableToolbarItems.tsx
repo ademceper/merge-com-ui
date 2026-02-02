@@ -13,19 +13,15 @@
 
 import type RealmRepresentation from "@keycloak/keycloak-admin-client/lib/defs/realmRepresentation";
 import type { UserProfileConfig } from "@keycloak/keycloak-admin-client/lib/defs/userProfileMetadata";
+import { Button } from "@merge/ui/components/button";
+import { Input } from "@merge/ui/components/input";
 import {
-    Button,
-    ButtonVariant,
-    Dropdown,
-    DropdownItem,
-    DropdownList,
-    InputGroup,
-    InputGroupItem,
-    MenuToggle,
-    SearchInput,
-    ToolbarItem
-} from "../../../shared/@patternfly/react-core";
-import { ArrowRightIcon, EllipsisVIcon } from "../../../shared/@patternfly/react-icons";
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuTrigger
+} from "@merge/ui/components/dropdown-menu";
+import { ArrowRight, DotsThreeVertical } from "@phosphor-icons/react";
 import { ReactNode, useState } from "react";
 import { useTranslation } from "react-i18next";
 
@@ -89,9 +85,9 @@ export function UserDataTableToolbarItems({
 
     const searchItem = () => {
         return (
-            <ToolbarItem>
-                <InputGroup>
-                    <InputGroupItem>
+            <div>
+                <div className="flex gap-2">
+                    <div>
                         <SearchDropdown
                             searchType={searchType}
                             onSelect={searchType => {
@@ -99,26 +95,24 @@ export function UserDataTableToolbarItems({
                                 setSearchType(searchType);
                             }}
                         />
-                    </InputGroupItem>
+                    </div>
                     {searchType === "default" && defaultSearchInput()}
                     {searchType === "attribute" && attributeSearchInput()}
-                </InputGroup>
-            </ToolbarItem>
+                </div>
+            </div>
         );
     };
 
     const defaultSearchInput = () => {
         return (
-            <ToolbarItem>
-                <SearchInput
+            <div>
+                <Input
+                    type="search"
                     data-testid="table-search-input"
                     placeholder={t("searchForUser")}
                     aria-label={t("search")}
                     value={searchUser}
-                    onSearch={(_, _v, attribute) => {
-                        setSearchUser(attribute["haswords"]);
-                        refresh();
-                    }}
+                    onChange={e => setSearchUser(e.target.value)}
                     onKeyDown={e => {
                         if (e.key === "Enter") {
                             const target = e.target as HTMLInputElement;
@@ -126,12 +120,8 @@ export function UserDataTableToolbarItems({
                             refresh();
                         }
                     }}
-                    onClear={() => {
-                        setSearchUser("");
-                        refresh();
-                    }}
                 />
-            </ToolbarItem>
+            </div>
         );
     };
 
@@ -158,8 +148,8 @@ export function UserDataTableToolbarItems({
                     />
                 </DropdownPanel>
                 <Button
-                    icon={<ArrowRightIcon />}
-                    variant="control"
+                    icon={<ArrowRight className="size-4" />}
+                    variant="outline"
                     onClick={() => {
                         searchUserWithAttributes();
                         setSearchDropdownOpen(false);
@@ -171,68 +161,60 @@ export function UserDataTableToolbarItems({
     };
 
     const bruteForceProtectionToolbarItem = !realm.bruteForceProtected ? (
-        <ToolbarItem>
+        <div>
             <Button
-                variant={ButtonVariant.link}
+                variant="link"
                 onClick={toggleDeleteDialog}
                 data-testid="delete-user-btn"
-                isDisabled={hasSelectedRows}
+                disabled={hasSelectedRows}
             >
                 {t("deleteUser")}
             </Button>
-        </ToolbarItem>
+        </div>
     ) : (
-        <ToolbarItem>
-            <Dropdown
-                onOpenChange={isOpen => setKebabOpen(isOpen)}
-                toggle={ref => (
-                    <MenuToggle
-                        ref={ref}
-                        isExpanded={kebabOpen}
-                        variant="plain"
+        <div>
+            <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                    <Button
+                        variant="ghost"
                         onClick={() => setKebabOpen(!kebabOpen)}
                     >
-                        <EllipsisVIcon />
-                    </MenuToggle>
-                )}
-                isOpen={kebabOpen}
-                shouldFocusToggleOnSelect
-            >
-                <DropdownList>
-                    <DropdownItem
+                        <DotsThreeVertical className="size-4" />
+                    </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent>
+                    <DropdownMenuItem
                         key="deleteUser"
-                        component="button"
-                        isDisabled={hasSelectedRows}
+                        disabled={hasSelectedRows}
                         onClick={() => {
                             toggleDeleteDialog();
                             setKebabOpen(false);
                         }}
                     >
                         {t("deleteUser")}
-                    </DropdownItem>
+                    </DropdownMenuItem>
 
-                    <DropdownItem
+                    <DropdownMenuItem
                         key="unlock"
-                        component="button"
                         onClick={() => {
                             toggleUnlockUsersDialog();
                             setKebabOpen(false);
                         }}
                     >
                         {t("unlockAllUsers")}
-                    </DropdownItem>
-                </DropdownList>
-            </Dropdown>
-        </ToolbarItem>
+                    </DropdownMenuItem>
+                </DropdownMenuContent>
+            </DropdownMenu>
+        </div>
     );
 
     const actionItems = (
         <>
-            <ToolbarItem>
+            <div>
                 <Button data-testid="add-user" onClick={goToCreate}>
                     {t("addUser")}
                 </Button>
-            </ToolbarItem>
+            </div>
             {bruteForceProtectionToolbarItem}
         </>
     );

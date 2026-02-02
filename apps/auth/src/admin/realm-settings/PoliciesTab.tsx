@@ -18,21 +18,14 @@ import {
     KeycloakSpinner,
     ListEmptyState,
     useAlerts,
-    useFetch
+    useFetch,
+    AlertVariant
 } from "../../shared/keycloak-ui-shared";
-import {
-    AlertVariant,
-    Button,
-    ButtonVariant,
-    Divider,
-    Flex,
-    FlexItem,
-    PageSection,
-    Radio,
-    Switch,
-    Title,
-    ToolbarItem
-} from "../../shared/@patternfly/react-core";
+import { Button } from "@merge/ui/components/button";
+import { Switch } from "@merge/ui/components/switch";
+import { Separator } from "@merge/ui/components/separator";
+import { RadioGroup, RadioGroupItem } from "@merge/ui/components/radio-group";
+import { Label } from "@merge/ui/components/label";
 import { omit } from "lodash-es";
 import { useState } from "react";
 import { Controller, useForm, type UseFormReturn } from "react-hook-form";
@@ -166,7 +159,7 @@ export const PoliciesTab = () => {
             policyName: selectedPolicy?.name
         }),
         continueButtonLabel: t("delete"),
-        continueButtonVariant: ButtonVariant.danger,
+        continueButtonVariant: "danger",
         onConfirm: async () => {
             const updatedPolicies = policies
                 ?.filter(policy => {
@@ -196,38 +189,36 @@ export const PoliciesTab = () => {
     return (
         <>
             <DeleteConfirm />
-            <PageSection>
-                <Flex className="kc-policies-config-section">
-                    <FlexItem>
-                        <Title headingLevel="h1" size="md">
+            <div className="p-6">
+                <div className="flex gap-2 kc-policies-config-section items-center">
+                    <div>
+                        <h1 className="text-base font-medium">
                             {t("policiesConfigType")}
-                        </Title>
-                    </FlexItem>
-                    <FlexItem>
-                        <Radio
-                            isChecked={!show}
-                            name="policiesView"
-                            onChange={() => setShow(false)}
-                            label={t("policiesConfigTypes.formView")}
-                            id="formView-policiesView"
-                            data-testid="formView-policiesView"
-                            className="kc-form-radio-btn pf-v5-u-mr-sm pf-v5-u-ml-sm"
-                        />
-                    </FlexItem>
-                    <FlexItem>
-                        <Radio
-                            isChecked={show}
-                            name="policiesView"
-                            onChange={() => setShow(true)}
-                            label={t("policiesConfigTypes.jsonEditor")}
-                            id="jsonEditor-policiesView"
-                            data-testid="jsonEditor-policiesView"
-                            className="kc-editor-radio-btn"
-                        />
-                    </FlexItem>
-                </Flex>
-            </PageSection>
-            <Divider />
+                        </h1>
+                    </div>
+                    <div className="flex items-center gap-2">
+                        <RadioGroup value={show ? "json" : "form"} onValueChange={(v) => setShow(v === "json")}>
+                            <div className="flex items-center gap-2">
+                                <RadioGroupItem
+                                    value="form"
+                                    id="formView-policiesView"
+                                    data-testid="formView-policiesView"
+                                />
+                                <Label htmlFor="formView-policiesView">{t("policiesConfigTypes.formView")}</Label>
+                            </div>
+                            <div className="flex items-center gap-2">
+                                <RadioGroupItem
+                                    value="json"
+                                    id="jsonEditor-policiesView"
+                                    data-testid="jsonEditor-policiesView"
+                                />
+                                <Label htmlFor="jsonEditor-policiesView">{t("policiesConfigTypes.jsonEditor")}</Label>
+                            </div>
+                        </RadioGroup>
+                    </div>
+                </div>
+            </div>
+            <Separator />
             {!show ? (
                 <KeycloakDataTable
                     key={policies.length}
@@ -243,17 +234,17 @@ export const PoliciesTab = () => {
                     searchPlaceholderKey="clientPolicySearch"
                     loader={loader}
                     toolbarItem={
-                        <ToolbarItem>
+                        <div>
                             <Button
                                 id="createPolicy"
-                                component={props => (
-                                    <Link {...props} to={toAddClientPolicy({ realm })} />
-                                )}
+                                asChild
                                 data-testid="createPolicy"
                             >
-                                {t("createClientPolicy")}
+                                <Link to={toAddClientPolicy({ realm })}>
+                                    {t("createClientPolicy")}
+                                </Link>
                             </Button>
-                        </ToolbarItem>
+                        </div>
                     }
                     isRowDisabled={value => !!value.global}
                     actions={[
@@ -299,7 +290,7 @@ export const PoliciesTab = () => {
                 />
             ) : (
                 <>
-                    <div className="pf-v5-u-mt-md pf-v5-u-ml-lg">
+                    <div className="mt-4 ml-4">
                         <CodeEditor
                             value={code}
                             language="json"
@@ -307,17 +298,15 @@ export const PoliciesTab = () => {
                             height={480}
                         />
                     </div>
-                    <div className="pf-v5-u-mt-md">
+                    <div className="mt-4 flex gap-2 ml-4">
                         <Button
-                            variant={ButtonVariant.primary}
-                            className="pf-v5-u-mr-md pf-v5-u-ml-lg"
                             data-testid="jsonEditor-policies-saveBtn"
                             onClick={save}
                         >
                             {t("save")}
                         </Button>
                         <Button
-                            variant={ButtonVariant.link}
+                            variant="link"
                             data-testid="jsonEditor-reloadBtn"
                             onClick={() => {
                                 setCode(prettyPrintJSON(tablePolicies));
@@ -362,21 +351,22 @@ const SwitchRenderer = ({
                 defaultValue={clientPolicy.enabled}
                 control={form.control}
                 render={({ field }) => (
-                    <Switch
-                        label={t("enabled")}
-                        labelOff={t("disabled")}
-                        isChecked={field.value}
-                        isDisabled={clientPolicy.global}
-                        onChange={(_event, value) => {
-                            if (!value) {
-                                toggleDisableDialog();
-                            } else {
-                                field.onChange(value);
-                                saveStatus();
-                            }
-                        }}
-                        aria-label={clientPolicy.name!}
-                    />
+                    <div className="flex items-center gap-2">
+                        <Switch
+                            checked={field.value}
+                            disabled={clientPolicy.global}
+                            onCheckedChange={(value) => {
+                                if (!value) {
+                                    toggleDisableDialog();
+                                } else {
+                                    field.onChange(value);
+                                    saveStatus();
+                                }
+                            }}
+                            aria-label={clientPolicy.name!}
+                        />
+                        <span className="text-sm">{field.value ? t("enabled") : t("disabled")}</span>
+                    </div>
                 )}
             />
         </>

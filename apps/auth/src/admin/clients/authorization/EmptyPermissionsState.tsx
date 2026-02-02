@@ -13,16 +13,9 @@
 
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import {
-    EmptyState,
-    EmptyStateIcon,
-    EmptyStateBody,
-    Button,
-    Tooltip,
-    EmptyStateHeader,
-    EmptyStateFooter
-} from "../../../shared/@patternfly/react-core";
-import { PlusCircleIcon } from "../../../shared/@patternfly/react-icons";
+import { Button } from "@merge/ui/components/button";
+import { Tooltip, TooltipContent, TooltipTrigger, TooltipProvider } from "@merge/ui/components/tooltip";
+import { PlusCircle } from "@phosphor-icons/react";
 
 import { PermissionType, toNewPermission } from "../routes/NewPermission";
 import { useRealm } from "../../context/realm-context/RealmContext";
@@ -60,9 +53,16 @@ const EmptyButton = ({
 const TooltipEmptyButton = ({ permissionType, disabled, ...props }: EmptyButtonProps) => {
     const { t } = useTranslation();
     return disabled ? (
-        <Tooltip content={t(`no${toUpperCase(permissionType)}CreateHint`)}>
-            <EmptyButton {...props} disabled={disabled} permissionType={permissionType} />
-        </Tooltip>
+        <TooltipProvider>
+            <Tooltip>
+                <TooltipTrigger asChild>
+                    <span>
+                        <EmptyButton {...props} disabled={disabled} permissionType={permissionType} />
+                    </span>
+                </TooltipTrigger>
+                <TooltipContent>{t(`no${toUpperCase(permissionType)}CreateHint`)}</TooltipContent>
+            </Tooltip>
+        </TooltipProvider>
     ) : (
         <EmptyButton {...props} disabled={disabled} permissionType={permissionType} />
     );
@@ -81,26 +81,22 @@ export const EmptyPermissionsState = ({
 }: EmptyPermissionsStateProps) => {
     const { t } = useTranslation();
     return (
-        <EmptyState data-testid="empty-state" variant="lg">
-            <EmptyStateHeader
-                titleText={<>{t("emptyPermissions")}</>}
-                icon={<EmptyStateIcon icon={PlusCircleIcon} />}
-                headingLevel="h1"
-            />
-            <EmptyStateBody>{t("emptyPermissionInstructions")}</EmptyStateBody>
-            <EmptyStateFooter>
+        <div data-testid="empty-state" className="flex flex-col items-center justify-center py-12 gap-4">
+            <PlusCircle className="size-12 text-muted-foreground" />
+            <h1 className="text-xl font-semibold">{t("emptyPermissions")}</h1>
+            <p className="text-muted-foreground">{t("emptyPermissionInstructions")}</p>
+            <div className="flex flex-col gap-2">
                 <TooltipEmptyButton
                     permissionType="resource"
                     disabled={isResourceEnabled}
                     clientId={clientId}
                 />
-                <br />
                 <TooltipEmptyButton
                     permissionType="scope"
                     disabled={isScopeEnabled}
                     clientId={clientId}
                 />
-            </EmptyStateFooter>
-        </EmptyState>
+            </div>
+        </div>
     );
 };

@@ -11,16 +11,10 @@
 
 // @ts-nocheck
 
-import {
-    Button,
-    ButtonVariant,
-    InputGroup,
-    InputGroupItem,
-    TextInput,
-    TextInputProps
-} from "../../../shared/@patternfly/react-core";
-import { MinusCircleIcon, PlusCircleIcon } from "../../../shared/@patternfly/react-icons";
-import { Fragment, useEffect, useMemo } from "react";
+import { Button } from "@merge/ui/components/button";
+import { Input } from "@merge/ui/components/input";
+import { MinusCircle, PlusCircle } from "@phosphor-icons/react";
+import React, { Fragment, useEffect, useMemo } from "react";
 import { useFormContext, useWatch } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 
@@ -32,7 +26,7 @@ function toStringValue(formValue: string[]): string {
     return formValue.join("##");
 }
 
-export type MultiLineInputProps = Omit<TextInputProps, "form"> & {
+export type MultiLineInputProps = Omit<React.InputHTMLAttributes<HTMLInputElement>, "form" | "defaultValue"> & {
     name: string;
     addButtonLabel?: string;
     isDisabled?: boolean;
@@ -110,40 +104,40 @@ export const MultiLineInput = ({
         <div id={id}>
             {fields.map((value, index) => (
                 <Fragment key={index}>
-                    <InputGroup>
-                        <InputGroupItem isFill>
-                            <TextInput
+                    <div className="flex gap-2">
+                        <div className="flex-1">
+                            <Input
                                 data-testid={name + index}
-                                onChange={(_event, value) => updateValue(index, value)}
+                                onChange={(e) => updateValue(index, e.target.value)}
                                 name={`${name}.${index}.value`}
                                 value={value}
-                                isDisabled={isDisabled}
+                                disabled={isDisabled}
                                 {...rest}
                             />
-                        </InputGroupItem>
-                        <InputGroupItem>
+                        </div>
+                        <div>
                             <Button
                                 data-testid={"remove" + index}
-                                variant={ButtonVariant.link}
+                                variant="link"
                                 onClick={() => remove(index)}
                                 tabIndex={-1}
                                 aria-label={t("remove")}
-                                isDisabled={fields.length === 1 || isDisabled}
+                                disabled={fields.length === 1 || isDisabled}
                             >
-                                <MinusCircleIcon />
+                                <MinusCircle className="size-4" />
                             </Button>
-                        </InputGroupItem>
-                    </InputGroup>
+                        </div>
+                    </div>
                     {index === fields.length - 1 && (
                         <Button
-                            variant={ButtonVariant.link}
+                            variant="link"
                             onClick={append}
                             tabIndex={-1}
                             aria-label={t("add")}
                             data-testid={`${name}-addValue`}
-                            isDisabled={!value || isDisabled}
+                            disabled={!value || isDisabled}
                         >
-                            <PlusCircleIcon /> {t(addButtonLabel || "add")}
+                            <PlusCircle className="size-4 mr-1" /> {t(addButtonLabel || "add")}
                         </Button>
                     )}
                 </Fragment>

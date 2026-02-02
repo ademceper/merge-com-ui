@@ -19,17 +19,9 @@ import {
     SwitchControl,
     useAlerts
 } from "../../../shared/keycloak-ui-shared";
-import {
-    ActionGroup,
-    AlertVariant,
-    Button,
-    ButtonVariant,
-    Chip,
-    ChipGroup,
-    FormGroup,
-    PageSection,
-    Radio
-} from "../../../shared/@patternfly/react-core";
+import { AlertVariant } from "../../../shared/keycloak-ui-shared";
+import { Button } from "@merge/ui/components/button";
+import { Badge } from "@merge/ui/components/badge";
 import { useMemo } from "react";
 import { Controller, FormProvider, useForm, useWatch } from "react-hook-form";
 import { useTranslation } from "react-i18next";
@@ -108,7 +100,7 @@ export const OtpPolicy = ({ realm, realmUpdated }: OtpPolicyProps) => {
     };
 
     return (
-        <PageSection variant="light">
+        <div className="p-6">
             <FormAccess
                 role="manage-realm"
                 isHorizontal
@@ -116,16 +108,14 @@ export const OtpPolicy = ({ realm, realmUpdated }: OtpPolicyProps) => {
                 className="keycloak__otp_policies_authentication__form"
             >
                 <FormProvider {...form}>
-                    <FormGroup
-                        label={t("otpType")}
-                        labelIcon={
+                    <div className="space-y-2">
+                        <div className="flex items-center gap-2">
+                            <label>{t("otpType")}</label>
                             <HelpItem
                                 helpText={t("otpTypeHelp")}
                                 fieldLabelId="otpType"
                             />
-                        }
-                        hasNoPaddingTop
-                    >
+                        </div>
                         <Controller
                             name="otpPolicyType"
                             data-testid="otpPolicyType"
@@ -134,21 +124,22 @@ export const OtpPolicy = ({ realm, realmUpdated }: OtpPolicyProps) => {
                             render={({ field: { value, onChange } }) => (
                                 <>
                                     {POLICY_TYPES.map(type => (
-                                        <Radio
-                                            key={type}
-                                            id={type}
-                                            data-testid={type}
-                                            isChecked={value === type}
-                                            name="otpPolicyType"
-                                            onChange={() => onChange(type)}
-                                            label={t(`policyType.${type}`)}
-                                            className="keycloak__otp_policies_authentication__policy-type"
-                                        />
+                                        <label key={type} className="flex items-center gap-2">
+                                            <input
+                                                type="radio"
+                                                id={type}
+                                                data-testid={type}
+                                                checked={value === type}
+                                                name="otpPolicyType"
+                                                onChange={() => onChange(type)}
+                                            />
+                                            {t(`policyType.${type}`)}
+                                        </label>
                                     ))}
                                 </>
                             )}
                         />
-                    </FormGroup>
+                    </div>
                     <SelectControl
                         name="otpPolicyAlgorithm"
                         label={t("otpHashAlgorithm")}
@@ -159,16 +150,14 @@ export const OtpPolicy = ({ realm, realmUpdated }: OtpPolicyProps) => {
                         }))}
                         controller={{ defaultValue: `Hmac${OTP_HASH_ALGORITHMS[0]}` }}
                     />
-                    <FormGroup
-                        label={t("otpPolicyDigits")}
-                        labelIcon={
+                    <div className="space-y-2">
+                        <div className="flex items-center gap-2">
+                            <label>{t("otpPolicyDigits")}</label>
                             <HelpItem
                                 helpText={t("otpPolicyDigitsHelp")}
                                 fieldLabelId="otpPolicyDigits"
                             />
-                        }
-                        hasNoPaddingTop
-                    >
+                        </div>
                         <Controller
                             name="otpPolicyDigits"
                             data-testid="otpPolicyDigits"
@@ -177,21 +166,22 @@ export const OtpPolicy = ({ realm, realmUpdated }: OtpPolicyProps) => {
                             render={({ field }) => (
                                 <>
                                     {NUMBER_OF_DIGITS.map(type => (
-                                        <Radio
-                                            key={type}
-                                            id={`digit-${type}`}
-                                            data-testid={`digit-${type}`}
-                                            isChecked={field.value === type}
-                                            name="otpPolicyDigits"
-                                            onChange={() => field.onChange(type)}
-                                            label={type}
-                                            className="keycloak__otp_policies_authentication__number-of-digits"
-                                        />
+                                        <label key={type} className="flex items-center gap-2">
+                                            <input
+                                                type="radio"
+                                                id={`digit-${type}`}
+                                                data-testid={`digit-${type}`}
+                                                checked={field.value === type}
+                                                name="otpPolicyDigits"
+                                                onChange={() => field.onChange(type)}
+                                            />
+                                            {type}
+                                        </label>
                                     ))}
                                 </>
                             )}
                         />
-                    </FormGroup>
+                    </div>
                     <NumberControl
                         name="otpPolicyLookAheadWindow"
                         label={t("lookAround")}
@@ -226,25 +216,22 @@ export const OtpPolicy = ({ realm, realmUpdated }: OtpPolicyProps) => {
                             controller={{ defaultValue: 30, rules: { min: 1, max: 120 } }}
                         />
                     )}
-                    <FormGroup
-                        label={t("supportedApplications")}
-                        labelIcon={
+                    <div className="space-y-2">
+                        <div className="flex items-center gap-2">
+                            <label>{t("supportedApplications")}</label>
                             <HelpItem
                                 helpText={t("supportedApplicationsHelp")}
                                 fieldLabelId="supportedApplications"
                             />
-                        }
-                    >
-                        <span data-testid="supportedApplications">
-                            <ChipGroup>
-                                {supportedApplications.map(label => (
-                                    <Chip key={label} isReadOnly>
-                                        {label}
-                                    </Chip>
-                                ))}
-                            </ChipGroup>
+                        </div>
+                        <span data-testid="supportedApplications" className="flex flex-wrap gap-1">
+                            {supportedApplications.map(label => (
+                                <Badge key={label} variant="secondary">
+                                    {label}
+                                </Badge>
+                            ))}
                         </span>
-                    </FormGroup>
+                    </div>
 
                     {otpType === POLICY_TYPES[0] && (
                         <SwitchControl
@@ -256,7 +243,7 @@ export const OtpPolicy = ({ realm, realmUpdated }: OtpPolicyProps) => {
                         />
                     )}
 
-                    <ActionGroup>
+                    <div className="flex gap-2">
                         <Button
                             data-testid="save"
                             variant="primary"
@@ -267,14 +254,14 @@ export const OtpPolicy = ({ realm, realmUpdated }: OtpPolicyProps) => {
                         </Button>
                         <Button
                             data-testid="reload"
-                            variant={ButtonVariant.link}
+                            variant="link"
                             onClick={() => reset({ ...realm })}
                         >
                             {t("reload")}
                         </Button>
-                    </ActionGroup>
+                    </div>
                 </FormProvider>
             </FormAccess>
-        </PageSection>
+        </div>
     );
 };

@@ -11,13 +11,9 @@
 
 // @ts-nocheck
 
-import { Tab, TabTitleText } from "../../../shared/@patternfly/react-core";
-
+import { Tab } from "../../components/routable-tabs/RoutableTabs";
 import { useTranslation } from "react-i18next";
-import {
-    RoutableTabs,
-    useRoutableTab
-} from "../../components/routable-tabs/RoutableTabs";
+import { RoutableTabs, useRoutableTab } from "../../components/routable-tabs/RoutableTabs";
 import { useRealm } from "../../context/realm-context/RealmContext";
 import { toUserProfile, UserProfileTab as IUserProfileTab } from "../routes/UserProfile";
 import { AttributesGroupTab } from "./AttributesGroupTab";
@@ -49,23 +45,23 @@ export const UserProfileTab = ({ setTableData }: UserProfileTabProps) => {
                 mountOnEnter
             >
                 <Tab
-                    title={<TabTitleText>{t("attributes")}</TabTitleText>}
+                    title={t("attributes")}
                     data-testid="attributesTab"
-                    {...attributesTab}
+                    eventKey={attributesTab.eventKey}
                 >
                     <AttributesTab setTableData={setTableData} />
                 </Tab>
                 <Tab
-                    title={<TabTitleText>{t("attributesGroup")}</TabTitleText>}
+                    title={t("attributesGroup")}
                     data-testid="attributesGroupTab"
-                    {...attributesGroupTab}
+                    eventKey={attributesGroupTab.eventKey}
                 >
                     <AttributesGroupTab setTableData={setTableData} />
                 </Tab>
                 <Tab
-                    title={<TabTitleText>{t("jsonEditor")}</TabTitleText>}
+                    title={t("jsonEditor")}
                     data-testid="jsonEditorTab"
-                    {...jsonEditorTab}
+                    eventKey={jsonEditorTab.eventKey}
                 >
                     <JsonEditorTab />
                 </Tab>

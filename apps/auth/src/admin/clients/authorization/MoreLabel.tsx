@@ -12,7 +12,7 @@
 // @ts-nocheck
 
 import { useTranslation } from "react-i18next";
-import { Label } from "../../../shared/@patternfly/react-core";
+import { Badge } from "@merge/ui/components/badge";
 
 type MoreLabelProps = {
     array: unknown[] | undefined;
@@ -24,5 +24,5 @@ export const MoreLabel = ({ array }: MoreLabelProps) => {
     if (!array || array.length <= 1) {
         return null;
     }
-    return <Label color="blue">{t("more", { count: array.length - 1 })}</Label>;
+    return <Badge variant="secondary">{t("more", { count: array.length - 1 })}</Badge>;
 };

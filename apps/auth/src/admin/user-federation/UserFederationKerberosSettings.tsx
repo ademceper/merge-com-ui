@@ -13,13 +13,8 @@
 
 import type ComponentRepresentation from "@keycloak/keycloak-admin-client/lib/defs/componentRepresentation";
 import { useAlerts, useFetch } from "../../shared/keycloak-ui-shared";
-import {
-    ActionGroup,
-    AlertVariant,
-    Button,
-    Form,
-    PageSection
-} from "../../shared/@patternfly/react-core";
+import { AlertVariant } from "../../shared/keycloak-ui-shared";
+import { Button } from "@merge/ui/components/button";
 import { FormProvider, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
@@ -84,16 +79,15 @@ export default function UserFederationKerberosSettings() {
     return (
         <FormProvider {...form}>
             <Header provider="Kerberos" save={() => form.handleSubmit(save)()} />
-            <PageSection variant="light">
+            <div className="p-6">
                 <KerberosSettingsRequired form={form} showSectionHeading />
-            </PageSection>
-            <PageSection variant="light" isFilled>
+            </div>
+            <div className="p-6 flex-1">
                 <SettingsCache form={form} showSectionHeading />
-                <Form onSubmit={form.handleSubmit(save)}>
-                    <ActionGroup>
+                <form onSubmit={form.handleSubmit(save)}>
+                    <div className="flex gap-2">
                         <Button
-                            isDisabled={!form.formState.isDirty}
-                            variant="primary"
+                            disabled={!form.formState.isDirty}
                             type="submit"
                             data-testid="kerberos-save"
                         >
@@ -106,9 +100,9 @@ export default function UserFederationKerberosSettings() {
                         >
                             {t("cancel")}
                         </Button>
-                    </ActionGroup>
-                </Form>
-            </PageSection>
+                    </div>
+                </form>
+            </div>
         </FormProvider>
     );
 }

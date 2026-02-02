@@ -12,18 +12,10 @@
 // @ts-nocheck
 
 import type RealmRepresentation from "@keycloak/keycloak-admin-client/lib/defs/realmRepresentation";
-import {
-    ActionGroup,
-    AlertVariant,
-    Button,
-    ButtonVariant,
-    FormGroup,
-    PageSection,
-    Popover,
-    Text,
-    TextContent
-} from "../../../shared/@patternfly/react-core";
-import { QuestionCircleIcon } from "../../../shared/@patternfly/react-icons";
+import { AlertVariant } from "../../../shared/keycloak-ui-shared";
+import { Button } from "@merge/ui/components/button";
+import { Popover, PopoverContent, PopoverTrigger } from "@merge/ui/components/popover";
+import { Question } from "@phosphor-icons/react";
 import { useEffect } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
@@ -141,14 +133,15 @@ export const WebauthnPolicy = ({
     const isFeatureEnabled = useIsFeatureEnabled();
 
     return (
-        <PageSection variant="light">
+        <div className="p-6">
             {enabled && (
-                <Popover bodyContent={t(`${namePrefix}FormHelp`)}>
-                    <TextContent className="keycloak__section_intro__help">
-                        <Text>
-                            <QuestionCircleIcon /> {t("webauthnIntro")}
-                        </Text>
-                    </TextContent>
+                <Popover>
+                    <PopoverTrigger asChild>
+                        <p className="keycloak__section_intro__help cursor-pointer">
+                            <Question className="size-4 inline" /> {t("webauthnIntro")}
+                        </p>
+                    </PopoverTrigger>
+                    <PopoverContent>{t(`${namePrefix}FormHelp`)}</PopoverContent>
                 </Popover>
             )}
 
@@ -228,38 +221,34 @@ export const WebauthnPolicy = ({
                         labelOn={t("on")}
                         labelOff={t("off")}
                     />
-                    <FormGroup
-                        label={t("webAuthnPolicyAcceptableAaguids")}
-                        fieldId="webAuthnPolicyAcceptableAaguids"
-                        labelIcon={
+                    <div className="space-y-2">
+                        <div className="flex items-center gap-2">
+                            <label htmlFor="webAuthnPolicyAcceptableAaguids">{t("webAuthnPolicyAcceptableAaguids")}</label>
                             <HelpItem
                                 helpText={t("webAuthnPolicyAcceptableAaguidsHelp")}
                                 fieldLabelId="webAuthnPolicyAcceptableAaguids"
                             />
-                        }
-                    >
+                        </div>
                         <MultiLineInput
                             name={`${namePrefix}AcceptableAaguids`}
                             aria-label={t("webAuthnPolicyAcceptableAaguids")}
                             addButtonLabel="addAaguids"
                         />
-                    </FormGroup>
-                    <FormGroup
-                        label={t("webAuthnPolicyExtraOrigins")}
-                        fieldId="webAuthnPolicyExtraOrigins"
-                        labelIcon={
+                    </div>
+                    <div className="space-y-2">
+                        <div className="flex items-center gap-2">
+                            <label htmlFor="webAuthnPolicyExtraOrigins">{t("webAuthnPolicyExtraOrigins")}</label>
                             <HelpItem
                                 helpText={t("webAuthnPolicyExtraOriginsHelp")}
                                 fieldLabelId="webAuthnPolicyExtraOrigins"
                             />
-                        }
-                    >
+                        </div>
                         <MultiLineInput
                             name={`${namePrefix}ExtraOrigins`}
                             aria-label={t("webAuthnPolicyExtraOrigins")}
                             addButtonLabel="addOrigins"
                         />
-                    </FormGroup>
+                    </div>
                     {isPasswordLess && isFeatureEnabled(Feature.Passkeys) && (
                         <SwitchControl
                             name={`${namePrefix}PasskeysEnabled`}
@@ -271,7 +260,7 @@ export const WebauthnPolicy = ({
                     )}
                 </FormProvider>
 
-                <ActionGroup>
+                <div className="flex gap-2">
                     <Button
                         data-testid="save"
                         variant="primary"
@@ -282,13 +271,13 @@ export const WebauthnPolicy = ({
                     </Button>
                     <Button
                         data-testid="reload"
-                        variant={ButtonVariant.link}
+                        variant="link"
                         onClick={() => setupForm(realm)}
                     >
                         {t("reload")}
                     </Button>
-                </ActionGroup>
+                </div>
             </FormAccess>
-        </PageSection>
+        </div>
     );
 };

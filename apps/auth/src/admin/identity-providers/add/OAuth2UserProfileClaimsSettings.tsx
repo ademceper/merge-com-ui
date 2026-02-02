@@ -13,16 +13,16 @@
 
 import { useTranslation } from "react-i18next";
 import { TextControl } from "../../../shared/keycloak-ui-shared";
-import { Form, Title } from "../../../shared/@patternfly/react-core";
+// Form and Title replaced with HTML equivalents
 
 export const UserProfileClaimsSettings = () => {
     const { t } = useTranslation();
 
     return (
-        <Form isHorizontal className="pf-v5-u-py-lg">
-            <Title headingLevel="h2" size="xl" className="kc-form-panel__title">
+        <form className="py-4">
+            <h2 className="text-xl font-semibold mb-4">
                 {t("userProfileClaims")}
-            </Title>
+            </h2>
             <TextControl
                 name="config.userIDClaim"
                 label={t("userIDClaim")}
@@ -68,6 +68,6 @@ export const UserProfileClaimsSettings = () => {
                 labelIcon={t("familyNameClaimHelp")}
                 defaultValue={"family_name"}
             />
-        </Form>
+        </form>
     );
 };

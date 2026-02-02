@@ -16,7 +16,7 @@ import {
     KeycloakSelect,
     SelectVariant
 } from "../../../shared/keycloak-ui-shared";
-import { FormGroup, SelectOption } from "../../../shared/@patternfly/react-core";
+import { Label } from "@merge/ui/components/label";
 import { useState } from "react";
 import { Controller, useFormContext } from "react-hook-form";
 import { useTranslation } from "react-i18next";
@@ -30,13 +30,11 @@ export const ReqAuthnConstraints = () => {
     const [comparisonOpen, setComparisonOpen] = useState(false);
     return (
         <>
-            <FormGroup
-                label={t("comparison")}
-                labelIcon={
+            <div className="space-y-2">
+                <div className="flex items-center gap-2">
+                    <Label htmlFor="comparison">{t("comparison")}</Label>
                     <HelpItem helpText={t("comparisonHelp")} fieldLabelId="comparison" />
-                }
-                fieldId="comparison"
-            >
+                </div>
                 <Controller
                     name="config.authnContextComparisonType"
                     defaultValue={comparisonValues[0]}
@@ -67,41 +65,37 @@ export const ReqAuthnConstraints = () => {
                         </KeycloakSelect>
                     )}
                 />
-            </FormGroup>
-            <FormGroup
-                label={t("authnContextClassRefs")}
-                fieldId="kc-authnContextClassRefs"
-                labelIcon={
+            </div>
+            <div className="space-y-2">
+                <div className="flex items-center gap-2">
+                    <Label htmlFor="kc-authnContextClassRefs">{t("authnContextClassRefs")}</Label>
                     <HelpItem
                         helpText={t("authnContextClassRefsHelp")}
                         fieldLabelId="authnContextClassRefs"
                     />
-                }
-            >
+                </div>
                 <MultiLineInput
                     name="config.authnContextClassRefs"
                     aria-label={t("identify-providers:authnContextClassRefs")}
                     addButtonLabel="addAuthnContextClassRef"
                     data-testid="classref-field"
                 />
-            </FormGroup>
-            <FormGroup
-                label={t("authnContextDeclRefs")}
-                fieldId="kc-authnContextDeclRefs"
-                labelIcon={
+            </div>
+            <div className="space-y-2">
+                <div className="flex items-center gap-2">
+                    <Label htmlFor="kc-authnContextDeclRefs">{t("authnContextDeclRefs")}</Label>
                     <HelpItem
                         helpText={t("authnContextDeclRefsHelp")}
                         fieldLabelId="authnContextDeclRefs"
                     />
-                }
-            >
+                </div>
                 <MultiLineInput
                     name="config.authnContextDeclRefs"
                     aria-label={t("identify-providers:authnContextDeclRefs")}
                     addButtonLabel="addAuthnContextDeclRef"
                     data-testid="declref-field"
                 />
-            </FormGroup>
+            </div>
         </>
     );
 };

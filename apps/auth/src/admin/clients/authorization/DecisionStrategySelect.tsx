@@ -11,7 +11,8 @@
 
 // @ts-nocheck
 
-import { FormGroup, Radio } from "../../../shared/@patternfly/react-core";
+import { RadioGroup, RadioGroupItem } from "@merge/ui/components/radio-group";
+import { Label } from "@merge/ui/components/label";
 import { Controller, useFormContext } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 
@@ -34,43 +35,38 @@ export const DecisionStrategySelect = ({
     const { control } = useFormContext();
 
     return (
-        <FormGroup
-            label={t("decisionStrategy")}
-            labelIcon={
+        <div className="space-y-2">
+            <div className="flex items-center gap-2">
+                <Label>{t("decisionStrategy")}</Label>
                 <HelpItem
                     helpText={t(helpLabel || "decisionStrategyHelp")}
                     fieldLabelId="decisionStrategy"
                 />
-            }
-            fieldId="decisionStrategy"
-            hasNoPaddingTop
-        >
+            </div>
             <Controller
                 name="decisionStrategy"
                 data-testid="decisionStrategy"
                 defaultValue={DECISION_STRATEGY[0]}
                 control={control}
                 render={({ field }) => (
-                    <>
+                    <RadioGroup
+                        value={field.value}
+                        onValueChange={field.onChange}
+                        disabled={isDisabled}
+                        className="flex flex-col gap-2"
+                    >
                         {(isLimited
                             ? DECISION_STRATEGY.slice(0, 2)
                             : DECISION_STRATEGY
                         ).map(strategy => (
-                            <Radio
-                                id={strategy}
-                                key={strategy}
-                                data-testid={strategy}
-                                isChecked={field.value === strategy}
-                                isDisabled={isDisabled}
-                                name="decisionStrategy"
-                                onChange={() => field.onChange(strategy)}
-                                label={t(`decisionStrategies.${strategy}`)}
-                                className="pf-v5-u-mb-md"
-                            />
+                            <div key={strategy} className="flex items-center gap-2" data-testid={strategy}>
+                                <RadioGroupItem value={strategy} id={strategy} />
+                                <Label htmlFor={strategy}>{t(`decisionStrategies.${strategy}`)}</Label>
+                            </div>
                         ))}
-                    </>
+                    </RadioGroup>
                 )}
             />
-        </FormGroup>
+        </div>
     );
 };

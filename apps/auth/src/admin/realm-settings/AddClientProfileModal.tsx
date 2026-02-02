@@ -14,7 +14,15 @@
 import type ClientProfileRepresentation from "@keycloak/keycloak-admin-client/lib/defs/clientProfileRepresentation";
 import type RoleRepresentation from "@keycloak/keycloak-admin-client/lib/defs/roleRepresentation";
 import { KeycloakDataTable, useFetch } from "../../shared/keycloak-ui-shared";
-import { Button, Label, Modal, ModalVariant } from "../../shared/@patternfly/react-core";
+import { Button } from "@merge/ui/components/button";
+import { Badge } from "@merge/ui/components/badge";
+import {
+    Dialog,
+    DialogContent,
+    DialogFooter,
+    DialogHeader,
+    DialogTitle
+} from "@merge/ui/components/dialog";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useAdminClient } from "../admin-client";
@@ -31,7 +39,7 @@ const AliasRenderer = ({ name, global }: ClientProfile) => {
 
     return (
         <>
-            {name} {global && <Label color="blue">{t("global")}</Label>}
+            {name} {global && <Badge variant="secondary" className="bg-blue-500/20 text-blue-700 dark:text-blue-300 ml-1">{t("global")}</Badge>}
         </>
     );
 };
@@ -81,64 +89,60 @@ export const AddClientProfileModal = (props: AddClientProfileModalProps) => {
     }
 
     return (
-        <Modal
-            data-testid="addClientProfile"
-            title={t("addClientProfile")}
-            isOpen={props.open}
-            onClose={props.toggleDialog}
-            variant={ModalVariant.large}
-            actions={[
-                <Button
-                    key="add"
-                    data-testid="add-client-profile-button"
-                    variant="primary"
-                    isDisabled={!selectedRows.length}
-                    onClick={() => {
-                        props.toggleDialog();
-                        props.onConfirm(selectedRows);
+        <Dialog open={props.open} onOpenChange={(open) => { if (!open) props.toggleDialog(); }}>
+            <DialogContent data-testid="addClientProfile" className="max-w-4xl">
+                <DialogHeader>
+                    <DialogTitle>{t("addClientProfile")}</DialogTitle>
+                </DialogHeader>
+                <KeycloakDataTable
+                    loader={loader}
+                    ariaLabelKey="profilesList"
+                    searchPlaceholderKey="searchProfile"
+                    canSelectAll
+                    onSelect={rows => {
+                        setSelectedRows([...rows]);
                     }}
-                >
-                    {t("add")}
-                </Button>,
-                <Button
-                    key="cancel"
-                    variant="link"
-                    onClick={() => {
-                        props.toggleDialog();
-                    }}
-                >
-                    {t("cancel")}
-                </Button>
-            ]}
-        >
-            <KeycloakDataTable
-                loader={loader}
-                ariaLabelKey="profilesList"
-                searchPlaceholderKey="searchProfile"
-                canSelectAll
-                onSelect={rows => {
-                    setSelectedRows([...rows]);
-                }}
-                columns={[
-                    {
-                        name: "name",
-                        displayKey: "clientProfileName",
-                        cellRenderer: AliasRenderer
-                    },
-                    {
-                        name: "description",
-                        cellFormatters: [translationFormatter(t)]
+                    columns={[
+                        {
+                            name: "name",
+                            displayKey: "clientProfileName",
+                            cellRenderer: AliasRenderer
+                        },
+                        {
+                            name: "description",
+                            cellFormatters: [translationFormatter(t)]
+                        }
+                    ]}
+                    emptyState={
+                        <ListEmptyState
+                            hasIcon
+                            message={t("noRoles")}
+                            instructions={t("noRolesInstructions")}
+                            primaryActionText={t("createRole")}
+                        />
                     }
-                ]}
-                emptyState={
-                    <ListEmptyState
-                        hasIcon
-                        message={t("noRoles")}
-                        instructions={t("noRolesInstructions")}
-                        primaryActionText={t("createRole")}
-                    />
-                }
-            />
-        </Modal>
+                />
+                <DialogFooter>
+                    <Button
+                        data-testid="add-client-profile-button"
+                        disabled={!selectedRows.length}
+                        onClick={() => {
+                            props.toggleDialog();
+                            props.onConfirm(selectedRows);
+                        }}
+                    >
+                        {t("add")}
+                    </Button>
+                    <Button
+                        variant="ghost"
+                        onClick={() => {
+                            props.toggleDialog();
+                        }}
+                    >
+                        {t("cancel")}
+                    </Button>
+                </DialogFooter>
+            </DialogContent>
+        </Dialog>
     );
 };

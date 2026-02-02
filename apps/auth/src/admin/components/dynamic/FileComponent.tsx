@@ -12,7 +12,8 @@
 // @ts-nocheck
 
 import { HelpItem } from "../../../shared/keycloak-ui-shared";
-import { FileUpload, FormGroup } from "../../../shared/@patternfly/react-core";
+import { Label } from "@merge/ui/components/label";
+import { FileUpload } from "../../../shared/@patternfly/react-core";
 import { useState } from "react";
 import { Controller, useFormContext } from "react-hook-form";
 import { useTranslation } from "react-i18next";
@@ -33,12 +34,11 @@ export const FileComponent = ({
     const [isLoading, setIsLoading] = useState(false);
 
     return (
-        <FormGroup
-            label={t(label!)}
-            labelIcon={<HelpItem helpText={t(helpText!)} fieldLabelId={`${label}`} />}
-            fieldId={name!}
-            isRequired={required}
-        >
+        <div className="space-y-2">
+            <div className="flex items-center gap-1">
+                <Label htmlFor={name!}>{t(label!)}{required && " *"}</Label>
+                <HelpItem helpText={t(helpText!)} fieldLabelId={`${label}`} />
+            </div>
             <Controller
                 name={convertToName(name!)}
                 control={control}
@@ -68,6 +68,6 @@ export const FileComponent = ({
                     />
                 )}
             />
-        </FormGroup>
+        </div>
     );
 };

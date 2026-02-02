@@ -13,11 +13,7 @@
 
 import GroupRepresentation from "@keycloak/keycloak-admin-client/lib/defs/groupRepresentation";
 import { useAlerts, useFetch } from "../../shared/keycloak-ui-shared";
-import {
-    AlertVariant,
-    PageSection,
-    PageSectionVariants
-} from "../../shared/@patternfly/react-core";
+import { AlertVariant } from "../../shared/keycloak-ui-shared";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
@@ -68,7 +64,7 @@ export const GroupAttributes = () => {
     };
 
     return (
-        <PageSection variant={PageSectionVariants.light}>
+        <div className="p-6">
             <AttributesForm
                 form={form}
                 save={save}
@@ -79,6 +75,6 @@ export const GroupAttributes = () => {
                     })
                 }
             />
-        </PageSection>
+        </div>
     );
 };

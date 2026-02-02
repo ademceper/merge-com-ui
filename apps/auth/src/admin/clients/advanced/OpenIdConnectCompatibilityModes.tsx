@@ -11,12 +11,9 @@
 
 // @ts-nocheck
 
-import {
-    ActionGroup,
-    Button,
-    FormGroup,
-    Switch
-} from "../../../shared/@patternfly/react-core";
+import { Button } from "@merge/ui/components/button";
+import { Switch } from "@merge/ui/components/switch";
+import { Label } from "@merge/ui/components/label";
 import { Controller, useFormContext } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 
@@ -55,17 +52,14 @@ export const OpenIdConnectCompatibilityModes = ({
             fineGrainedAccess={hasConfigureAccess}
             isHorizontal
         >
-            <FormGroup
-                label={t("excludeSessionStateFromAuthenticationResponse")}
-                fieldId="excludeSessionStateFromAuthenticationResponse"
-                hasNoPaddingTop
-                labelIcon={
+            <div className="space-y-2">
+                <div className="flex items-center gap-2">
+                    <Label>{t("excludeSessionStateFromAuthenticationResponse")}</Label>
                     <HelpItem
                         helpText={t("excludeSessionStateFromAuthenticationResponseHelp")}
                         fieldLabelId="excludeSessionStateFromAuthenticationResponse"
                     />
-                }
-            >
+                </div>
                 <Controller
                     name={convertAttributeNameToForm<FormFields>(
                         "attributes.exclude.session.state.from.auth.response"
@@ -75,28 +69,23 @@ export const OpenIdConnectCompatibilityModes = ({
                     render={({ field }) => (
                         <Switch
                             id="excludeSessionStateFromAuthenticationResponse-switch"
-                            label={t("on")}
-                            labelOff={t("off")}
-                            isChecked={field.value === "true"}
-                            onChange={(_event, value) => field.onChange(value.toString())}
+                            checked={field.value === "true"}
+                            onCheckedChange={(value) => field.onChange(value.toString())}
                             aria-label={t(
                                 "excludeSessionStateFromAuthenticationResponse"
                             )}
                         />
                     )}
                 />
-            </FormGroup>
-            <FormGroup
-                label={t("excludeIssuerFromAuthenticationResponse")}
-                fieldId="excludeIssuerFromAuthenticationResponse"
-                hasNoPaddingTop
-                labelIcon={
+            </div>
+            <div className="space-y-2">
+                <div className="flex items-center gap-2">
+                    <Label>{t("excludeIssuerFromAuthenticationResponse")}</Label>
                     <HelpItem
                         helpText={t("excludeIssuerFromAuthenticationResponseHelp")}
                         fieldLabelId="excludeIssuerFromAuthenticationResponse"
                     />
-                }
-            >
+                </div>
                 <Controller
                     name={convertAttributeNameToForm<FormFields>(
                         "attributes.exclude.issuer.from.auth.response"
@@ -106,26 +95,21 @@ export const OpenIdConnectCompatibilityModes = ({
                     render={({ field }) => (
                         <Switch
                             id="excludeIssuerFromAuthenticationResponse-switch"
-                            label={t("on")}
-                            labelOff={t("off")}
-                            isChecked={field.value === "true"}
-                            onChange={(_event, value) => field.onChange(value.toString())}
+                            checked={field.value === "true"}
+                            onCheckedChange={(value) => field.onChange(value.toString())}
                             aria-label={t("excludeIssuerFromAuthenticationResponse")}
                         />
                     )}
                 />
-            </FormGroup>
-            <FormGroup
-                label={t("useRefreshTokens")}
-                fieldId="useRefreshTokens"
-                hasNoPaddingTop
-                labelIcon={
+            </div>
+            <div className="space-y-2">
+                <div className="flex items-center gap-2">
+                    <Label>{t("useRefreshTokens")}</Label>
                     <HelpItem
                         helpText={t("useRefreshTokensHelp")}
                         fieldLabelId="useRefreshTokens"
                     />
-                }
-            >
+                </div>
                 <Controller
                     name={convertAttributeNameToForm<FormFields>(
                         "attributes.use.refresh.tokens"
@@ -135,26 +119,21 @@ export const OpenIdConnectCompatibilityModes = ({
                     render={({ field }) => (
                         <Switch
                             id="useRefreshTokens"
-                            label={t("on")}
-                            labelOff={t("off")}
-                            isChecked={field.value === "true"}
-                            onChange={(_event, value) => field.onChange(value.toString())}
+                            checked={field.value === "true"}
+                            onCheckedChange={(value) => field.onChange(value.toString())}
                             aria-label={t("useRefreshTokens")}
                         />
                     )}
                 />
-            </FormGroup>
-            <FormGroup
-                label={t("useRefreshTokenForClientCredentialsGrant")}
-                fieldId="useRefreshTokenForClientCredentialsGrant"
-                hasNoPaddingTop
-                labelIcon={
+            </div>
+            <div className="space-y-2">
+                <div className="flex items-center gap-2">
+                    <Label>{t("useRefreshTokenForClientCredentialsGrant")}</Label>
                     <HelpItem
                         helpText={t("useRefreshTokenForClientCredentialsGrantHelp")}
                         fieldLabelId="useRefreshTokenForClientCredentialsGrant"
                     />
-                }
-            >
+                </div>
                 <Controller
                     name={convertAttributeNameToForm<FormFields>(
                         "attributes.client_credentials.use_refresh_token"
@@ -164,26 +143,21 @@ export const OpenIdConnectCompatibilityModes = ({
                     render={({ field }) => (
                         <Switch
                             id="useRefreshTokenForClientCredentialsGrant"
-                            label={t("on")}
-                            labelOff={t("off")}
-                            isChecked={field.value === "true"}
-                            onChange={(_event, value) => field.onChange(value.toString())}
+                            checked={field.value === "true"}
+                            onCheckedChange={(value) => field.onChange(value.toString())}
                             aria-label={t("useRefreshTokenForClientCredentialsGrant")}
                         />
                     )}
                 />
-            </FormGroup>
-            <FormGroup
-                label={t("useLowerCaseBearerType")}
-                fieldId="useLowerCaseBearerType"
-                hasNoPaddingTop
-                labelIcon={
+            </div>
+            <div className="space-y-2">
+                <div className="flex items-center gap-2">
+                    <Label>{t("useLowerCaseBearerType")}</Label>
                     <HelpItem
                         helpText={t("useLowerCaseBearerTypeHelp")}
                         fieldLabelId="useLowerCaseBearerType"
                     />
-                }
-            >
+                </div>
                 <Controller
                     name={convertAttributeNameToForm<FormFields>(
                         "attributes.token.response.type.bearer.lower-case"
@@ -193,15 +167,13 @@ export const OpenIdConnectCompatibilityModes = ({
                     render={({ field }) => (
                         <Switch
                             id="useLowerCaseBearerType"
-                            label={t("on")}
-                            labelOff={t("off")}
-                            isChecked={field.value === "true"}
-                            onChange={(_event, value) => field.onChange(value.toString())}
+                            checked={field.value === "true"}
+                            onCheckedChange={(value) => field.onChange(value.toString())}
                             aria-label={t("useLowerCaseBearerType")}
                         />
                     )}
                 />
-            </FormGroup>
+            </div>
 
             {isFeatureEnabled(Feature.StandardTokenExchangeV2) && (
                 <SelectControl
@@ -224,7 +196,7 @@ export const OpenIdConnectCompatibilityModes = ({
                     ]}
                 />
             )}
-            <ActionGroup>
+            <div className="flex gap-2">
                 <Button
                     variant="secondary"
                     onClick={save}
@@ -239,7 +211,7 @@ export const OpenIdConnectCompatibilityModes = ({
                 >
                     {t("revert")}
                 </Button>
-            </ActionGroup>
+            </div>
         </FormAccess>
     );
 };

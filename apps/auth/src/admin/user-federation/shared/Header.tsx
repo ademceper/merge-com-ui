@@ -11,11 +11,8 @@
 
 // @ts-nocheck
 
-import {
-    AlertVariant,
-    ButtonVariant,
-    DropdownItem
-} from "../../../shared/@patternfly/react-core";
+import { AlertVariant } from "../../../shared/keycloak-ui-shared";
+import { DropdownMenuItem } from "@merge/ui/components/dropdown-menu";
 import { ReactElement } from "react";
 import { Controller, useFormContext } from "react-hook-form";
 import { useTranslation } from "react-i18next";
@@ -66,7 +63,7 @@ export const Header = ({
         titleKey: "userFedDeleteConfirmTitle",
         messageKey: "userFedDeleteConfirm",
         continueButtonLabel: "delete",
-        continueButtonVariant: ButtonVariant.danger,
+        continueButtonVariant: "destructive",
         onConfirm: async () => {
             try {
                 await adminClient.components.del({ id: id! });
@@ -100,13 +97,13 @@ export const Header = ({
                             titleKey={provider}
                             dropdownItems={[
                                 ...dropdownItems,
-                                <DropdownItem
+                                <DropdownMenuItem
                                     key="delete"
                                     onClick={() => toggleDeleteDialog()}
                                     data-testid="delete-cmd"
                                 >
                                     {t("deleteProvider")}
-                                </DropdownItem>
+                                </DropdownMenuItem>
                             ]}
                             isEnabled={
                                 field.value?.[0] === "true" || field.value === "true"

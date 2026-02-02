@@ -19,15 +19,8 @@ import {
     useAlerts,
     useFetch
 } from "../../shared/keycloak-ui-shared";
-import {
-    Button,
-    ButtonVariant,
-    Dropdown,
-    DropdownItem,
-    DropdownList,
-    MenuToggle,
-    ToolbarItem
-} from "../../shared/@patternfly/react-core";
+import { Button } from "@merge/ui/components/button";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@merge/ui/components/dropdown-menu";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Link, useNavigate, useParams } from "react-router-dom";
@@ -161,7 +154,7 @@ export const Organizations = ({ user }: OrganizationProps) => {
         titleKey: "removeConfirmOrganizationTitle",
         messageKey: t("organizationRemoveConfirm", { count: selectedOrgs.length }),
         continueButtonLabel: "remove",
-        continueButtonVariant: ButtonVariant.danger,
+        continueButtonVariant: "destructive",
         onConfirm: async () => {
             try {
                 await Promise.all(
@@ -255,7 +248,7 @@ export const Organizations = ({ user }: OrganizationProps) => {
                 }}
                 toolbarItem={
                     <>
-                        <ToolbarItem>
+                        <div>
                             <SearchInputComponent
                                 value={searchText}
                                 placeholder={t("searchMembers")}
@@ -264,24 +257,19 @@ export const Organizations = ({ user }: OrganizationProps) => {
                                 onClear={clearInput}
                                 aria-label={t("searchMembers")}
                             />
-                        </ToolbarItem>
-                        <ToolbarItem>
-                            <Dropdown
-                                onOpenChange={setJoinToggle}
-                                toggle={ref => (
-                                    <MenuToggle
-                                        ref={ref}
+                        </div>
+                        <div>
+                            <DropdownMenu open={joinToggle} onOpenChange={setJoinToggle}>
+                                <DropdownMenuTrigger asChild>
+                                    <Button
                                         id="toggle-id"
                                         onClick={toggle}
-                                        variant="primary"
                                     >
                                         {t("joinOrganization")}
-                                    </MenuToggle>
-                                )}
-                                isOpen={joinToggle}
-                            >
-                                <DropdownList>
-                                    <DropdownItem
+                                    </Button>
+                                </DropdownMenuTrigger>
+                                <DropdownMenuContent>
+                                    <DropdownMenuItem
                                         key="join"
                                         onClick={() => {
                                             setShouldJoin(true);
@@ -289,8 +277,8 @@ export const Organizations = ({ user }: OrganizationProps) => {
                                         }}
                                     >
                                         {t("joinOrganization")}
-                                    </DropdownItem>
-                                    <DropdownItem
+                                    </DropdownMenuItem>
+                                    <DropdownMenuItem
                                         key="invite"
                                         onClick={() => {
                                             setShouldJoin(false);
@@ -298,21 +286,21 @@ export const Organizations = ({ user }: OrganizationProps) => {
                                         }}
                                     >
                                         {t("sendInvite")}
-                                    </DropdownItem>
-                                </DropdownList>
-                            </Dropdown>
-                        </ToolbarItem>
-                        <ToolbarItem>
+                                    </DropdownMenuItem>
+                                </DropdownMenuContent>
+                            </DropdownMenu>
+                        </div>
+                        <div>
                             <Button
                                 data-testid="removeOrganization"
                                 variant="secondary"
-                                isDisabled={selectedOrgs.length === 0}
+                                disabled={selectedOrgs.length === 0}
                                 onClick={() => toggleDeleteDialog()}
                             >
                                 {t("remove")}
                             </Button>
-                        </ToolbarItem>
-                        <ToolbarItem>
+                        </div>
+                        <div>
                             <CheckboxFilterComponent
                                 filterPlaceholderText={t("filterByMembershipType")}
                                 isOpen={isOpen}
@@ -323,7 +311,7 @@ export const Organizations = ({ user }: OrganizationProps) => {
                                 selectedItems={filteredMembershipTypes}
                                 width={"260px"}
                             />
-                        </ToolbarItem>
+                        </div>
                     </>
                 }
             >

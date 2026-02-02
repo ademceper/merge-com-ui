@@ -13,12 +13,8 @@
 
 import type ClientRepresentation from "@keycloak/keycloak-admin-client/lib/defs/clientRepresentation";
 import { useAlerts, useFetch } from "../../shared/keycloak-ui-shared";
-import {
-    AlertVariant,
-    PageSection,
-    Tab,
-    TabTitleText
-} from "../../shared/@patternfly/react-core";
+import { AlertVariant } from "../../shared/keycloak-ui-shared";
+import { Tab } from "../../shared/@patternfly/react-core";
 import { useState } from "react";
 import { FormProvider, useForm, useWatch } from "react-hook-form";
 import { useTranslation } from "react-i18next";
@@ -159,7 +155,7 @@ export default function PermissionsConfigurationSection() {
                         })}
                     </>
                 </ConfirmDialogModal>
-                <PageSection variant="light" className="pf-v5-u-p-0">
+                <div className="p-0">
                     <FormProvider {...form}>
                         <ViewHeader
                             titleKey={t("permissions")}
@@ -177,7 +173,7 @@ export default function PermissionsConfigurationSection() {
                             <Tab
                                 id="resources"
                                 data-testid="permissionsResources"
-                                title={<TabTitleText>{t("permissions")}</TabTitleText>}
+                                title={t("permissions")}
                                 {...permissionsResourcesTab}
                             >
                                 <PermissionsConfigurationTab
@@ -210,7 +206,7 @@ export default function PermissionsConfigurationSection() {
                             )}
                         </RoutableTabs>
                     </FormProvider>
-                </PageSection>
+                </div>
             </>
         )
     );

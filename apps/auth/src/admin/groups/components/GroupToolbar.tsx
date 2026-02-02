@@ -11,15 +11,9 @@
 
 // @ts-nocheck
 
-import {
-    Button,
-    Dropdown,
-    DropdownItem,
-    DropdownList,
-    MenuToggle,
-    ToolbarItem
-} from "../../../shared/@patternfly/react-core";
-import { EllipsisVIcon } from "../../../shared/@patternfly/react-icons";
+import { Button } from "@merge/ui/components/button";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@merge/ui/components/dropdown-menu";
+import { DotsThreeVertical } from "@phosphor-icons/react";
 import { useTranslation } from "react-i18next";
 import { useAccess } from "../../context/access/Access";
 import useToggle from "../../utils/useToggle";
@@ -47,47 +41,39 @@ export const GroupToolbar = ({
 
     return (
         <>
-            <ToolbarItem>
+            <div>
                 <Button
                     data-testid="openCreateGroupModal"
-                    variant="primary"
+                    variant="default"
                     onClick={toggleCreate}
                 >
                     {t("createGroup")}
                 </Button>
-            </ToolbarItem>
-            <ToolbarItem>
-                <Dropdown
-                    onOpenChange={toggleKebab}
-                    toggle={ref => (
-                        <MenuToggle
+            </div>
+            <div>
+                <DropdownMenu open={openKebab} onOpenChange={toggleKebab}>
+                    <DropdownMenuTrigger asChild>
+                        <Button
                             data-testid="kebab"
-                            ref={ref}
-                            isExpanded={openKebab}
-                            onClick={toggleKebab}
-                            isDisabled={kebabDisabled}
-                            variant="plain"
+                            variant="ghost"
+                            disabled={kebabDisabled}
                             aria-label="Actions"
                         >
-                            <EllipsisVIcon />
-                        </MenuToggle>
-                    )}
-                    isOpen={openKebab}
-                >
-                    <DropdownList>
-                        <DropdownItem
-                            key="action"
-                            component="button"
+                            <DotsThreeVertical className="size-4" />
+                        </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent>
+                        <DropdownMenuItem
                             onClick={() => {
                                 toggleDelete();
                                 toggleKebab();
                             }}
                         >
                             {t("delete")}
-                        </DropdownItem>
-                    </DropdownList>
-                </Dropdown>
-            </ToolbarItem>
+                        </DropdownMenuItem>
+                    </DropdownMenuContent>
+                </DropdownMenu>
+            </div>
         </>
     );
 };

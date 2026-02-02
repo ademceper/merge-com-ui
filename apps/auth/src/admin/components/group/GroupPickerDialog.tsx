@@ -21,21 +21,16 @@ import {
     PaginatingTableToolbar,
     useFetch
 } from "../../../shared/keycloak-ui-shared";
+import { Button } from "@merge/ui/components/button";
 import {
-    Breadcrumb,
-    BreadcrumbItem,
-    Button,
-    DataList,
-    DataListAction,
-    DataListCell,
-    DataListCheck,
-    DataListItem,
-    DataListItemCells,
-    DataListItemRow,
-    Modal,
-    ModalVariant
-} from "../../../shared/@patternfly/react-core";
-import { AngleRightIcon } from "../../../shared/@patternfly/react-icons";
+    Dialog,
+    DialogContent,
+    DialogHeader,
+    DialogTitle,
+    DialogFooter
+} from "@merge/ui/components/dialog";
+import { Checkbox } from "@merge/ui/components/checkbox";
+import { CaretRight } from "@phosphor-icons/react";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useAdminClient } from "../../admin-client";
@@ -149,35 +144,14 @@ export const GroupPickerDialog = ({
     };
 
     return (
-        <Modal
-            variant={filter !== "" ? ModalVariant.medium : ModalVariant.small}
-            title={t(text.title, {
-                group1: filterGroups?.[0]?.name,
-                group2: navigation.length ? currentGroup().name : t("root")
-            })}
-            isOpen
-            onClose={onClose}
-            actions={[
-                <Button
-                    data-testid={`${text.ok}-button`}
-                    key="confirm"
-                    variant="primary"
-                    form="group-form"
-                    onClick={() => {
-                        onConfirm(
-                            type === "selectMany"
-                                ? selectedRows
-                                : navigation.length
-                                  ? [currentGroup()]
-                                  : undefined
-                        );
-                    }}
-                    isDisabled={type === "selectMany" && selectedRows.length === 0}
-                >
-                    {t(text.ok)}
-                </Button>
-            ]}
-        >
+        <Dialog open onOpenChange={(open) => { if (!open) onClose(); }}>
+            <DialogContent className={filter !== "" ? "max-w-2xl" : "max-w-md"}>
+                <DialogHeader>
+                    <DialogTitle>{t(text.title, {
+                        group1: filterGroups?.[0]?.name,
+                        group2: navigation.length ? currentGroup().name : t("root")
+                    })}</DialogTitle>
+                </DialogHeader>
             <PaginatingTableToolbar
                 count={count}
                 first={first}
@@ -198,9 +172,9 @@ export const GroupPickerDialog = ({
                 }}
                 inputGroupPlaceholder={t("searchForGroups")}
             >
-                <Breadcrumb>
+                <nav aria-label="breadcrumb" className="flex items-center gap-1 text-sm mb-2">
                     {navigation.length > 0 && (
-                        <BreadcrumbItem key="home">
+                        <span key="home">
                             <Button
                                 variant="link"
                                 onClick={() => {
@@ -212,28 +186,32 @@ export const GroupPickerDialog = ({
                             >
                                 {t("groups")}
                             </Button>
-                        </BreadcrumbItem>
+                            <span className="mx-1">/</span>
+                        </span>
                     )}
                     {navigation.map((group, i) => (
-                        <BreadcrumbItem key={i}>
+                        <span key={i}>
                             {navigation.length - 1 !== i && (
-                                <Button
-                                    variant="link"
-                                    onClick={() => {
-                                        setGroupId(group.id);
-                                        setNavigation([...navigation].slice(0, i));
-                                        setFirst(0);
-                                        setMax(10);
-                                    }}
-                                >
-                                    {group.name}
-                                </Button>
+                                <>
+                                    <Button
+                                        variant="link"
+                                        onClick={() => {
+                                            setGroupId(group.id);
+                                            setNavigation([...navigation].slice(0, i));
+                                            setFirst(0);
+                                            setMax(10);
+                                        }}
+                                    >
+                                        {group.name}
+                                    </Button>
+                                    <span className="mx-1">/</span>
+                                </>
                             )}
-                            {navigation.length - 1 === i && group.name}
-                        </BreadcrumbItem>
+                            {navigation.length - 1 === i && <span className="font-medium">{group.name}</span>}
+                        </span>
                     ))}
-                </Breadcrumb>
-                <DataList aria-label={t("groups")} isCompact>
+                </nav>
+                <div aria-label={t("groups")} className="space-y-1">
                     {filter == ""
                         ? groups.slice(0, max).map((group: SelectableGroup) => (
                               <GroupRow
@@ -269,7 +247,7 @@ export const GroupPickerDialog = ({
                                       canBrowse={false}
                                   />
                               ))}
-                </DataList>
+                </div>
                 {groups.length === 0 && filter === "" && (
                     <ListEmptyState
                         hasIcon={false}
@@ -286,7 +264,27 @@ export const GroupPickerDialog = ({
                     />
                 )}
             </PaginatingTableToolbar>
-        </Modal>
+                <DialogFooter>
+                    <Button
+                        data-testid={`${text.ok}-button`}
+                        key="confirm"
+                        form="group-form"
+                        onClick={() => {
+                            onConfirm(
+                                type === "selectMany"
+                                    ? selectedRows
+                                    : navigation.length
+                                      ? [currentGroup()]
+                                      : undefined
+                            );
+                        }}
+                        disabled={type === "selectMany" && selectedRows.length === 0}
+                    >
+                        {t(text.ok)}
+                    </Button>
+                </DialogFooter>
+            </DialogContent>
+        </Dialog>
     );
 };
 
@@ -327,7 +325,7 @@ const GroupRow = ({
     const { t } = useTranslation();
 
     return (
-        <DataListItem
+        <div
             aria-labelledby={group.name}
             key={group.id}
             id={group.id}
@@ -342,22 +340,23 @@ const GroupRow = ({
                     setIsSearching?.(false);
                 }
             }}
+            className="border-b last:border-b-0"
         >
-            <DataListItemRow
-                className={`join-group-dialog-row${
-                    isRowDisabled(group) ? "-m-disabled" : ""
+            <div
+                className={`flex items-center gap-2 p-2 join-group-dialog-row${
+                    isRowDisabled(group) ? "-m-disabled opacity-50" : ""
                 }`}
                 data-testid={group.name}
             >
                 {type === "selectMany" && (
-                    <DataListCheck
+                    <Checkbox
                         className="kc-join-group-modal-check"
                         data-testid={`${group.name}-check`}
                         aria-label={group.name}
                         checked={group.checked}
-                        isDisabled={isRowDisabled(group)}
-                        onChange={(_event, checked) => {
-                            group.checked = checked;
+                        disabled={isRowDisabled(group)}
+                        onCheckedChange={(checked) => {
+                            group.checked = !!checked;
                             let newSelectedRows: SelectableGroup[] = [];
                             if (!group.checked) {
                                 newSelectedRows = selectedRows.filter(
@@ -373,33 +372,24 @@ const GroupRow = ({
                     />
                 )}
 
-                <DataListItemCells
-                    dataListCells={[
-                        <DataListCell
-                            key={`name-${group.id}`}
-                            className="keycloak-groups-group-path"
-                        >
-                            {isSearching ? (
-                                <GroupPath id={`select-${group.name}`} group={group} />
-                            ) : (
-                                <span id={`select-${group.name}`}>{group.name}</span>
-                            )}
-                        </DataListCell>
-                    ]}
-                />
-                <DataListAction
-                    id="actions"
+                <div className="flex-1 keycloak-groups-group-path">
+                    {isSearching ? (
+                        <GroupPath id={`select-${group.name}`} group={group} />
+                    ) : (
+                        <span id={`select-${group.name}`}>{group.name}</span>
+                    )}
+                </div>
+                <div
                     aria-labelledby={`select-${group.name}`}
                     aria-label={t("groupName")}
-                    isPlainButtonAction
                 >
                     {(canBrowse || type === "selectOne") && group.subGroupCount !== 0 && (
                         <Button variant="link" aria-label={t("select")}>
-                            <AngleRightIcon />
+                            <CaretRight className="size-4" />
                         </Button>
                     )}
-                </DataListAction>
-            </DataListItemRow>
-        </DataListItem>
+                </div>
+            </div>
+        </div>
     );
 };

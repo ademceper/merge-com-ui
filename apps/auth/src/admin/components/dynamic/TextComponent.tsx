@@ -11,7 +11,7 @@
 
 // @ts-nocheck
 
-import { FormGroup } from "../../../shared/@patternfly/react-core";
+import { Label } from "@merge/ui/components/label";
 import { useFormContext } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { KeycloakTextArea, HelpItem } from "../../../shared/keycloak-ui-shared";
@@ -30,12 +30,11 @@ export const TextComponent = ({
     const { register } = useFormContext();
 
     return (
-        <FormGroup
-            label={t(label!)}
-            labelIcon={<HelpItem helpText={t(helpText!)} fieldLabelId={`${label}`} />}
-            fieldId={name!}
-            required={required}
-        >
+        <div className="space-y-2">
+            <div className="flex items-center gap-1">
+                <Label htmlFor={name!}>{t(label!)}{required && " *"}</Label>
+                <HelpItem helpText={t(helpText!)} fieldLabelId={`${label}`} />
+            </div>
             <KeycloakTextArea
                 id={name!}
                 data-testid={name}
@@ -43,6 +42,6 @@ export const TextComponent = ({
                 defaultValue={defaultValue?.toString()}
                 {...register(convertToName(name!))}
             />
-        </FormGroup>
+        </div>
     );
 };

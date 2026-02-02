@@ -35,7 +35,7 @@ import {
     TableHeader,
     TableRow
 } from "@merge/ui/components/table";
-import { SelectOption } from "../../shared/@patternfly/react-core";
+import { SelectOption } from "../../shared/keycloak-ui-shared";
 import { Button } from "@merge/ui/components/button";
 import { Input } from "@merge/ui/components/input";
 import { Label } from "@merge/ui/components/label";

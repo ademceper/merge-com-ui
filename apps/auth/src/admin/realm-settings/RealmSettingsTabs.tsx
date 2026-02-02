@@ -14,17 +14,9 @@
 import { fetchWithError } from "@keycloak/keycloak-admin-client";
 import type RealmRepresentation from "@keycloak/keycloak-admin-client/lib/defs/realmRepresentation";
 import { UserProfileConfig } from "@keycloak/keycloak-admin-client/lib/defs/userProfileMetadata";
-import { useAlerts, useEnvironment } from "../../shared/keycloak-ui-shared";
-import {
-    AlertVariant,
-    ButtonVariant,
-    Divider,
-    DropdownItem,
-    PageSection,
-    Tab,
-    TabTitleText,
-    Tooltip
-} from "../../shared/@patternfly/react-core";
+import { useAlerts, useEnvironment, AlertVariant } from "../../shared/keycloak-ui-shared";
+import { Tooltip, TooltipContent, TooltipTrigger, TooltipProvider } from "@merge/ui/components/tooltip";
+import { Separator } from "@merge/ui/components/separator";
 import { useEffect, useState } from "react";
 import { Controller, FormProvider, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
@@ -106,7 +98,7 @@ const RealmSettingsHeader = ({
         titleKey: "deleteConfirmTitle",
         messageKey: "deleteConfirmRealmSetting",
         continueButtonLabel: "delete",
-        continueButtonVariant: ButtonVariant.danger,
+        continueButtonVariant: "danger",
         onConfirm: async () => {
             try {
                 await adminClient.realms.del({ realm: realmName });
@@ -137,32 +129,35 @@ const RealmSettingsHeader = ({
                 helpUrl={helpUrls.realmSettingsUrl}
                 divider={false}
                 dropdownItems={[
-                    <DropdownItem
+                    <button
                         key="import"
                         data-testid="openPartialImportModal"
-                        isDisabled={!canManageRealm}
+                        disabled={!canManageRealm}
                         onClick={() => {
                             setPartialImportOpen(true);
                         }}
+                        className="w-full text-left px-2 py-1.5 text-sm"
                     >
                         {t("partialImport")}
-                    </DropdownItem>,
-                    <DropdownItem
+                    </button>,
+                    <button
                         key="export"
                         data-testid="openPartialExportModal"
-                        isDisabled={!canManageRealm}
+                        disabled={!canManageRealm}
                         onClick={() => setPartialExportOpen(true)}
+                        className="w-full text-left px-2 py-1.5 text-sm"
                     >
                         {t("partialExport")}
-                    </DropdownItem>,
-                    <Divider key="separator" />,
-                    <DropdownItem
+                    </button>,
+                    <Separator key="separator" />,
+                    <button
                         key="delete"
-                        isDisabled={!canManageRealm}
+                        disabled={!canManageRealm}
                         onClick={toggleDeleteDialog}
+                        className="w-full text-left px-2 py-1.5 text-sm"
                     >
                         {t("delete")}
-                    </DropdownItem>
+                    </button>
                 ]}
                 isEnabled={value}
                 isReadOnly={!canManageRealm}
@@ -330,7 +325,7 @@ export const RealmSettingsTabs = () => {
                     />
                 )}
             />
-            <PageSection variant="light" className="pf-v5-u-p-0">
+            <div className="p-0">
                 <RoutableTabs
                     isBox
                     mountOnEnter
@@ -436,9 +431,16 @@ export const RealmSettingsTabs = () => {
                                     aria-label={t("clientProfilesSubTab")}
                                     title={<TabTitleText>{t("profiles")}</TabTitleText>}
                                     tooltip={
-                                        <Tooltip
-                                            content={t("clientPoliciesProfilesHelpText")}
-                                        />
+                                        <TooltipProvider>
+                                            <Tooltip>
+                                                <TooltipTrigger asChild>
+                                                    <span />
+                                                </TooltipTrigger>
+                                                <TooltipContent>
+                                                    {t("clientPoliciesProfilesHelpText")}
+                                                </TooltipContent>
+                                            </Tooltip>
+                                        </TooltipProvider>
                                     }
                                     {...clientPoliciesProfilesTab}
                                 >
@@ -451,9 +453,16 @@ export const RealmSettingsTabs = () => {
                                     {...clientPoliciesPoliciesTab}
                                     title={<TabTitleText>{t("policies")}</TabTitleText>}
                                     tooltip={
-                                        <Tooltip
-                                            content={t("clientPoliciesPoliciesHelpText")}
-                                        />
+                                        <TooltipProvider>
+                                            <Tooltip>
+                                                <TooltipTrigger asChild>
+                                                    <span />
+                                                </TooltipTrigger>
+                                                <TooltipContent>
+                                                    {t("clientPoliciesPoliciesHelpText")}
+                                                </TooltipContent>
+                                            </Tooltip>
+                                        </TooltipProvider>
                                     }
                                 >
                                     <PoliciesTab />
@@ -478,7 +487,7 @@ export const RealmSettingsTabs = () => {
                         </Tab>
                     )}
                 </RoutableTabs>
-            </PageSection>
+            </div>
         </FormProvider>
     );
 };

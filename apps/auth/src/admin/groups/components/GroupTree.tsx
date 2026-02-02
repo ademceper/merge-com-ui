@@ -13,30 +13,34 @@
 
 import type GroupRepresentation from "@keycloak/keycloak-admin-client/lib/defs/groupRepresentation";
 import {
-    AlertVariant,
-    Button,
-    Checkbox,
-    Divider,
-    Dropdown,
-    DropdownItem,
-    DropdownList,
-    InputGroup,
-    InputGroupItem,
-    MenuToggle,
-    Spinner,
-    Tooltip,
-    TreeView,
-    TreeViewDataItem
-} from "../../../shared/@patternfly/react-core";
-
-import {
     PaginatingTableToolbar,
     useAlerts,
-    useFetch
+    useFetch,
+    AlertVariant
 } from "../../../shared/keycloak-ui-shared";
-import { AngleRightIcon, EllipsisVIcon } from "../../../shared/@patternfly/react-icons";
+import { Button } from "@merge/ui/components/button";
+import { Checkbox } from "@merge/ui/components/checkbox";
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuTrigger,
+} from "@merge/ui/components/dropdown-menu";
+import { Separator } from "@merge/ui/components/separator";
+import { Spinner } from "@merge/ui/components/spinner";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@merge/ui/components/tooltip";
+import { CaretRight, DotsThreeVertical } from "@phosphor-icons/react";
 import { unionBy } from "lodash-es";
+import type { ReactNode } from "react";
 import { useRef, useState } from "react";
+
+export type TreeViewDataItem = {
+    id?: string;
+    name: ReactNode;
+    children?: TreeViewDataItem[];
+    action?: ReactNode;
+    defaultExpanded?: boolean;
+};
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 import { useAdminClient } from "../../admin-client";
@@ -114,40 +118,20 @@ const GroupTreeContextMenu = ({ group, refresh }: GroupTreeContextMenuProps) => 
                     refresh();
                 }}
             />
-            <Dropdown
-                popperProps={{
-                    position: "right"
-                }}
-                onOpenChange={toggleOpen}
-                toggle={ref => (
-                    <MenuToggle
-                        ref={ref}
-                        onClick={toggleOpen}
-                        isExpanded={isOpen}
-                        variant="plain"
-                        aria-label="Actions"
-                    >
-                        <EllipsisVIcon />
-                    </MenuToggle>
-                )}
-                isOpen={isOpen}
-            >
-                <DropdownList>
-                    <DropdownItem key="rename" onClick={toggleRenameOpen}>
-                        {t("edit")}
-                    </DropdownItem>
-                    <DropdownItem key="move" onClick={toggleMoveOpen}>
-                        {t("moveTo")}
-                    </DropdownItem>
-                    <DropdownItem key="create" onClick={toggleCreateOpen}>
-                        {t("createChildGroup")}
-                    </DropdownItem>
-                    <Divider key="separator" />
-                    <DropdownItem key="delete" onClick={toggleDeleteOpen}>
-                        {t("delete")}
-                    </DropdownItem>
-                </DropdownList>
-            </Dropdown>
+            <DropdownMenu open={isOpen} onOpenChange={toggleOpen}>
+                <DropdownMenuTrigger asChild>
+                    <Button variant="ghost" size="icon" aria-label="Actions">
+                        <DotsThreeVertical className="size-4" />
+                    </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end">
+                    <DropdownMenuItem onClick={toggleRenameOpen}>{t("edit")}</DropdownMenuItem>
+                    <DropdownMenuItem onClick={toggleMoveOpen}>{t("moveTo")}</DropdownMenuItem>
+                    <DropdownMenuItem onClick={toggleCreateOpen}>{t("createChildGroup")}</DropdownMenuItem>
+                    <Separator />
+                    <DropdownMenuItem onClick={toggleDeleteOpen}>{t("delete")}</DropdownMenuItem>
+                </DropdownMenuContent>
+            </DropdownMenu>
         </>
     );
 };
@@ -159,12 +143,86 @@ type GroupTreeProps = {
 
 const SUBGROUP_COUNT = 50;
 
+type SimpleTreeViewProps = {
+    data: ExtendedTreeViewDataItem[];
+    allExpanded: boolean;
+    activeItems?: ExtendedTreeViewDataItem[];
+    onExpand: (_e: unknown, item: ExtendedTreeViewDataItem) => void;
+    onSelect: (_e: unknown, item: ExtendedTreeViewDataItem) => void;
+};
+
+function SimpleTreeView({ data, allExpanded, activeItems = [], onExpand, onSelect }: SimpleTreeViewProps) {
+    const [expanded, setExpanded] = useState<Set<string>>(() =>
+        new Set(data.filter(i => i.defaultExpanded && i.id).map(i => i.id!))
+    );
+    const isExpanded = (id: string | undefined) => id && (allExpanded || expanded.has(id));
+    const toggle = (id: string | undefined) => {
+        if (!id) return;
+        setExpanded(prev => {
+            const next = new Set(prev);
+            if (next.has(id)) next.delete(id);
+            else next.add(id);
+            return next;
+        });
+    };
+
+    const renderItem = (item: ExtendedTreeViewDataItem, depth: number) => {
+        const hasChildren = item.children && item.children.length > 0;
+        const expanded_ = isExpanded(item.id);
+        const active = activeItems.some(a => a.id === item.id);
+
+        return (
+            <div key={item.id ?? `depth-${depth}`} className="keycloak_groups_treeview">
+                <div
+                    className={`flex items-center gap-1 py-1 px-2 border-l-2 border-transparent hover:bg-muted/50 cursor-pointer min-h-8 ${active ? "border-primary bg-muted/50" : ""}`}
+                    style={{ paddingLeft: `${depth * 16 + 8}px` }}
+                    onClick={() => {
+                        if (item.id === "next") return;
+                        if (hasChildren && item.id) toggle(item.id);
+                        onExpand(null as unknown, item);
+                        onSelect(null as unknown, item);
+                    }}
+                >
+                    <span className="w-5 flex items-center justify-center shrink-0">
+                        {hasChildren ? (
+                            <button
+                                type="button"
+                                className="p-0 border-0 bg-transparent cursor-pointer inline-flex"
+                                onClick={e => {
+                                    e.stopPropagation();
+                                    if (item.id) toggle(item.id);
+                                }}
+                                aria-expanded={expanded_}
+                            >
+                                <CaretRight className={`size-4 transition-transform ${expanded_ ? "rotate-90" : ""}`} />
+                            </button>
+                        ) : null}
+                    </span>
+                    <span className="flex-1 min-w-0 truncate">{item.name}</span>
+                    {item.action ? <span onClick={e => e.stopPropagation()}>{item.action}</span> : null}
+                </div>
+                {hasChildren && expanded_ && (
+                    <div>
+                        {item.children!.map((child, i) => renderItem(child as ExtendedTreeViewDataItem, depth + 1))}
+                    </div>
+                )}
+            </div>
+        );
+    };
+
+    return (
+        <div className="rounded-md border">
+            {data.map((item, i) => renderItem(item, 0))}
+        </div>
+    );
+}
+
 const TreeLoading = () => {
     const { t } = useTranslation();
     return (
-        <>
-            <Spinner size="sm" /> {t("spinnerLoading")}
-        </>
+        <span className="flex items-center gap-2">
+            <Spinner className="size-4" /> {t("spinnerLoading")}
+        </span>
     );
 };
 
@@ -211,8 +269,11 @@ export const GroupTree = ({ refresh: viewRefresh, canViewDetails }: GroupTreePro
         return {
             id: group.id,
             name: (
-                <Tooltip content={group.name}>
-                    <span>{group.name}</span>
+                <Tooltip>
+                    <TooltipTrigger asChild>
+                        <span className="cursor-default">{group.name}</span>
+                    </TooltipTrigger>
+                    <TooltipContent>{group.name}</TooltipContent>
                 </Tooltip>
             ),
             access: group.access || {},
@@ -366,39 +427,27 @@ export const GroupTree = ({ refresh: viewRefresh, canViewDetails }: GroupTreePro
             inputGroupPlaceholder={t("searchForGroups")}
             inputGroupOnEnter={setSearch}
             toolbarItem={
-                <InputGroup className="pf-v5-u-pt-sm">
-                    <InputGroupItem>
-                        <Checkbox
-                            id="exact"
-                            data-testid="exact-search"
-                            name="exact"
-                            isChecked={exact}
-                            onChange={(_event, value) => setExact(value)}
-                            className="pf-v5-u-mr-xs"
-                        />
-                    </InputGroupItem>
-                    <InputGroupItem>
-                        <label htmlFor="exact" className="pf-v5-u-pl-sm">
-                            {t("exactSearch")}
-                        </label>
-                    </InputGroupItem>
-                </InputGroup>
+                <div className="flex items-center gap-2 pt-2">
+                    <Checkbox
+                        id="exact"
+                        data-testid="exact-search"
+                        checked={exact}
+                        onCheckedChange={(checked) => setExact(checked === true)}
+                        className="mr-1"
+                    />
+                    <label htmlFor="exact" className="text-sm cursor-pointer pl-1">
+                        {t("exactSearch")}
+                    </label>
+                </div>
             }
         >
             {data.length > 0 && (
-                <TreeView
+                <SimpleTreeView
                     data={data.slice(0, max)}
                     allExpanded={search.length > 0}
                     activeItems={activeItem ? [activeItem] : undefined}
-                    hasGuides
-                    hasSelectableNodes
-                    className="keycloak_groups_treeview"
-                    onExpand={(_, item) => {
-                        nav(item, data);
-                    }}
-                    onSelect={(_, item) => {
-                        nav(item, data);
-                    }}
+                    onExpand={(_, item) => nav(item, data)}
+                    onSelect={(_, item) => nav(item, data)}
                 />
             )}
         </PaginatingTableToolbar>

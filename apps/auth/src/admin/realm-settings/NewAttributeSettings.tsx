@@ -16,12 +16,8 @@ import type {
     UserProfileConfig
 } from "@keycloak/keycloak-admin-client/lib/defs/userProfileMetadata";
 import { ScrollForm, useAlerts, useFetch } from "../../shared/keycloak-ui-shared";
-import {
-    AlertVariant,
-    Button,
-    Form,
-    PageSection
-} from "../../shared/@patternfly/react-core";
+import { AlertVariant } from "../../shared/keycloak-ui-shared";
+import { Button } from "@merge/ui/components/button";
 import { flatten } from "flat";
 import { useState } from "react";
 import { FormProvider, useForm, useFormContext } from "react-hook-form";
@@ -117,10 +113,9 @@ const CreateAttributeFormContent = ({
                     { title: t("annotations"), panel: <AttributeAnnotations /> }
                 ]}
             />
-            <Form onSubmit={form.handleSubmit(save)}>
+            <form onSubmit={form.handleSubmit(save)}>
                 <FixedButtonsGroup name="attribute-settings">
                     <Button
-                        variant="primary"
                         type="submit"
                         data-testid="attribute-create"
                     >
@@ -134,7 +129,7 @@ const CreateAttributeFormContent = ({
                         {t("cancel")}
                     </Link>
                 </FixedButtonsGroup>
-            </Form>
+            </form>
         </UserProfileProvider>
     );
 };
@@ -306,9 +301,9 @@ export default function NewAttributeSettings() {
                 titleKey={editMode ? attributeName : t("createAttribute")}
                 subKey={editMode ? "" : t("createAttributeSubTitle")}
             />
-            <PageSection variant="light">
+            <div className="p-6">
                 <CreateAttributeFormContent save={() => form.handleSubmit(save)()} />
-            </PageSection>
+            </div>
         </FormProvider>
     );
 }

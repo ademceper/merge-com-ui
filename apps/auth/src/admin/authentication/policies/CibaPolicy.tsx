@@ -12,19 +12,12 @@
 // @ts-nocheck
 
 import type RealmRepresentation from "@keycloak/keycloak-admin-client/lib/defs/realmRepresentation";
-import {
-    ActionGroup,
-    AlertVariant,
-    Button,
-    ButtonVariant,
-    PageSection
-} from "../../../shared/@patternfly/react-core";
+import { AlertVariant, SelectControl, TextControl, useAlerts } from "../../../shared/keycloak-ui-shared";
+import { Button } from "@merge/ui/components/button";
 import { useEffect } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
-import { SelectControl, TextControl } from "../../../shared/keycloak-ui-shared";
 import { useAdminClient } from "../../admin-client";
-import { useAlerts } from "../../../shared/keycloak-ui-shared";
 import { FormAccess } from "../../components/form/FormAccess";
 import { useRealm } from "../../context/realm-context/RealmContext";
 import { convertFormValuesToObject, convertToFormValues } from "../../util";
@@ -75,7 +68,7 @@ export const CibaPolicy = ({ realm, realmUpdated }: CibaPolicyProps) => {
     };
 
     return (
-        <PageSection variant="light">
+        <div className="p-6">
             <FormAccess
                 role="manage-realm"
                 isHorizontal
@@ -143,7 +136,7 @@ export const CibaPolicy = ({ realm, realmUpdated }: CibaPolicyProps) => {
                         isDisabled
                     />
                 </FormProvider>
-                <ActionGroup>
+                <div className="flex gap-2">
                     <Button
                         data-testid="save"
                         variant="primary"
@@ -154,13 +147,13 @@ export const CibaPolicy = ({ realm, realmUpdated }: CibaPolicyProps) => {
                     </Button>
                     <Button
                         data-testid="reload"
-                        variant={ButtonVariant.link}
+                        variant="link"
                         onClick={() => setupForm({ ...realm })}
                     >
                         {t("reload")}
                     </Button>
-                </ActionGroup>
+                </div>
             </FormAccess>
-        </PageSection>
+        </div>
     );
 };

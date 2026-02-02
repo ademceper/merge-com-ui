@@ -14,12 +14,7 @@
 import ComponentRepresentation from "@keycloak/keycloak-admin-client/lib/defs/componentRepresentation";
 import ComponentTypeRepresentation from "@keycloak/keycloak-admin-client/lib/defs/componentTypeRepresentation";
 import { KeycloakSpinner, useAlerts, useFetch } from "../../shared/keycloak-ui-shared";
-import {
-    ActionGroup,
-    Button,
-    Form,
-    PageSection
-} from "../../shared/@patternfly/react-core";
+import { Button } from "@merge/ui/components/button";
 import { useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
@@ -102,33 +97,26 @@ export const PageHandler = ({
     }
 
     return (
-        <PageSection variant="light">
-            <Form
-                isHorizontal
+        <section className="py-6 bg-muted/30">
+            <form
                 onSubmit={form.handleSubmit(onSubmit)}
-                className="keycloak__form"
+                className="keycloak__form space-y-4"
             >
                 <FormProvider {...form}>
                     <DynamicComponents properties={page.properties} />
                 </FormProvider>
 
-                <ActionGroup>
+                <div className="flex gap-2">
                     <Button data-testid="save" type="submit">
                         {t("save")}
                     </Button>
-                    <Button
-                        variant="link"
-                        component={props => (
-                            <Link
-                                {...props}
-                                to={toPage({ realm: realmName, providerId: providerId! })}
-                            />
-                        )}
-                    >
-                        {t("cancel")}
+                    <Button variant="ghost" asChild>
+                        <Link to={toPage({ realm: realmName, providerId: providerId! })}>
+                            {t("cancel")}
+                        </Link>
                     </Button>
-                </ActionGroup>
-            </Form>
-        </PageSection>
+                </div>
+            </form>
+        </section>
     );
 };

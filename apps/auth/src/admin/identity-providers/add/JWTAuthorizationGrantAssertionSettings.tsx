@@ -13,7 +13,7 @@
 
 import { useTranslation } from "react-i18next";
 import { DefaultSwitchControl } from "../../components/SwitchControl";
-import { FormGroup } from "../../../shared/@patternfly/react-core";
+import { Label } from "@merge/ui/components/label";
 import { useFormContext, Controller } from "react-hook-form";
 import { TimeSelector } from "../../components/time-selector/TimeSelector";
 import { SelectControl, HelpItem } from "../../../shared/keycloak-ui-shared";
@@ -33,18 +33,16 @@ export const JWTAuthorizationGrantAssertionSettings = () => {
                 stringify
             />
 
-            <FormGroup
-                label={t("jwtAuthorizationGrantMaxAllowedAssertionExpiration")}
-                fieldId="jwtAuthorizationGrantMaxAllowedAssertionExpiration"
-                labelIcon={
+            <div className="space-y-2">
+                <div className="flex items-center gap-1">
+                    <Label htmlFor="jwtAuthorizationGrantMaxAllowedAssertionExpiration">{t("jwtAuthorizationGrantMaxAllowedAssertionExpiration")}</Label>
                     <HelpItem
                         helpText={t(
                             "jwtAuthorizationGrantMaxAllowedAssertionExpirationHelp"
                         )}
                         fieldLabelId="jwtAuthorizationGrantMaxAllowedAssertionExpirationHelp"
                     />
-                }
-            >
+                </div>
                 <Controller
                     name="config.jwtAuthorizationGrantMaxAllowedAssertionExpirationHelp"
                     defaultValue={300}
@@ -58,7 +56,7 @@ export const JWTAuthorizationGrantAssertionSettings = () => {
                         />
                     )}
                 />
-            </FormGroup>
+            </div>
             <SelectControl
                 name="config.jwtAuthorizationGrantAssertionSignatureAlg"
                 label={t("jwtAuthorizationGrantAssertionSignatureAlg")}

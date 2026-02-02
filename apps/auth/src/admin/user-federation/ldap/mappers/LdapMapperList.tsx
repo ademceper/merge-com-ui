@@ -14,17 +14,13 @@
 import type ComponentRepresentation from "@keycloak/keycloak-admin-client/lib/defs/componentRepresentation";
 import {
     Action,
+    AlertVariant,
     KeycloakDataTable,
     ListEmptyState,
     useAlerts,
     useFetch
 } from "../../../../shared/keycloak-ui-shared";
-import {
-    AlertVariant,
-    Button,
-    ButtonVariant,
-    ToolbarItem
-} from "../../../../shared/@patternfly/react-core";
+import { Button } from "@merge/ui/components/button";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Link, To, useNavigate, useParams } from "react-router-dom";
@@ -86,7 +82,7 @@ export const LdapMapperList = ({ toCreate, toDetail }: LdapMapperListProps) => {
         titleKey: t("deleteMappingTitle", { mapperId: selectedMapper?.id }),
         messageKey: "deleteMappingConfirm",
         continueButtonLabel: "delete",
-        continueButtonVariant: ButtonVariant.danger,
+        continueButtonVariant: "destructive",
         onConfirm: async () => {
             try {
                 await adminClient.components.del({
@@ -110,15 +106,14 @@ export const LdapMapperList = ({ toCreate, toDetail }: LdapMapperListProps) => {
                 ariaLabelKey="ldapMappersList"
                 searchPlaceholderKey="searchForMapper"
                 toolbarItem={
-                    <ToolbarItem>
+                    <div>
                         <Button
                             data-testid="add-mapper-btn"
-                            variant="primary"
-                            component={props => <Link {...props} to={toCreate} />}
+                            asChild
                         >
-                            {t("addMapper")}
+                            <Link to={toCreate}>{t("addMapper")}</Link>
                         </Button>
-                    </ToolbarItem>
+                    </div>
                 }
                 actions={[
                     {

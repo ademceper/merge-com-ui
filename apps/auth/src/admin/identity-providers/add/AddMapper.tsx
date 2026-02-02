@@ -15,14 +15,9 @@ import type IdentityProviderMapperRepresentation from "@keycloak/keycloak-admin-
 import type { IdentityProviderMapperTypeRepresentation } from "@keycloak/keycloak-admin-client/lib/defs/identityProviderMapperTypeRepresentation";
 import type RoleRepresentation from "@keycloak/keycloak-admin-client/lib/defs/roleRepresentation";
 import { TextControl, useAlerts, useFetch } from "../../../shared/keycloak-ui-shared";
-import {
-    ActionGroup,
-    AlertVariant,
-    Button,
-    ButtonVariant,
-    DropdownItem,
-    PageSection
-} from "../../../shared/@patternfly/react-core";
+import { Button } from "@merge/ui/components/button";
+import { DropdownMenuItem } from "@merge/ui/components/dropdown-menu";
+import { AlertVariant } from "../../../shared/keycloak-ui-shared";
 import { useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
@@ -127,7 +122,7 @@ export default function AddMapper() {
             mapper: currentMapper?.name
         }),
         continueButtonLabel: "delete",
-        continueButtonVariant: ButtonVariant.danger,
+        continueButtonVariant: "destructive",
         onConfirm: async () => {
             try {
                 await adminClient.identityProviders.delMapper({
@@ -175,7 +170,7 @@ export default function AddMapper() {
     }
 
     return (
-        <PageSection variant="light">
+        <div className="p-6">
             <DeleteMapperConfirm />
             <ViewHeader
                 className="kc-add-mapper-title"
@@ -193,12 +188,12 @@ export default function AddMapper() {
                 dropdownItems={
                     id
                         ? [
-                              <DropdownItem
+                              <DropdownMenuItem
                                   key="delete"
                                   onClick={toggleDeleteMapperDialog}
                               >
                                   {t("delete")}
-                              </DropdownItem>
+                              </DropdownMenuItem>
                           ]
                         : undefined
                 }
@@ -208,7 +203,7 @@ export default function AddMapper() {
                 role="manage-identity-providers"
                 isHorizontal
                 onSubmit={handleSubmit(save)}
-                className="pf-v5-u-mt-lg"
+                className="mt-6"
             >
                 <FormProvider {...form}>
                     {id && (
@@ -235,10 +230,9 @@ export default function AddMapper() {
                         </>
                     )}
                 </FormProvider>
-                <ActionGroup>
+                <div className="flex gap-2">
                     <Button
                         data-testid="new-mapper-save-button"
-                        variant="primary"
                         type="submit"
                     >
                         {t("save")}
@@ -246,22 +240,21 @@ export default function AddMapper() {
                     <Button
                         data-testid="new-mapper-cancel-button"
                         variant="link"
-                        component={props => (
-                            <Link
-                                {...props}
-                                to={toIdentityProvider({
-                                    realm,
-                                    providerId,
-                                    alias: alias!,
-                                    tab: "mappers"
-                                })}
-                            />
-                        )}
+                        asChild
                     >
-                        {t("cancel")}
+                        <Link
+                            to={toIdentityProvider({
+                                realm,
+                                providerId,
+                                alias: alias!,
+                                tab: "mappers"
+                            })}
+                        >
+                            {t("cancel")}
+                        </Link>
                     </Button>
-                </ActionGroup>
+                </div>
             </FormAccess>
-        </PageSection>
+        </div>
     );
 }

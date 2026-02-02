@@ -24,13 +24,9 @@ import {
     useFetch,
     Variant
 } from "../../../shared/keycloak-ui-shared";
-import {
-    Button,
-    ButtonVariant,
-    Chip,
-    ChipGroup,
-    SelectOption
-} from "../../../shared/@patternfly/react-core";
+import { Button } from "@merge/ui/components/button";
+import { Badge } from "@merge/ui/components/badge";
+const SelectOption = ({ value, children, ...props }: any) => <option value={value} {...props}>{children}</option>;
 import { useState } from "react";
 import {
     Controller,
@@ -199,7 +195,7 @@ export const ResourcesPolicySelect = ({
         titleKey: t("unsavedChangesTitle"),
         messageKey: t("unsavedChangesConfirm"),
         continueButtonLabel: t("continue"),
-        continueButtonVariant: ButtonVariant.danger,
+        continueButtonVariant: "danger",
         onConfirm: () => onUnsavedChangesConfirm?.()
     });
 
@@ -228,10 +224,12 @@ export const ResourcesPolicySelect = ({
         field: ControllerRenderProps<PolicyRepresentation, Type>
     ) => {
         return (
-            <ChipGroup>
+            <div className="flex flex-wrap gap-1">
                 {selected?.map(item => (
-                    <Chip
+                    <Badge
                         key={item.id}
+                        variant="secondary"
+                        className="cursor-pointer"
                         onClick={() => {
                             field.onChange(
                                 field.value?.filter(id => id !== item.id) || []
@@ -257,9 +255,10 @@ export const ResourcesPolicySelect = ({
                         ) : (
                             item.name
                         )}
-                    </Chip>
+                        &times;
+                    </Badge>
                 ))}
-            </ChipGroup>
+            </div>
         );
     };
 

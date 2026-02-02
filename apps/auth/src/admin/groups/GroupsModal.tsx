@@ -18,15 +18,10 @@ import {
     useAlerts,
     useFetch
 } from "../../shared/keycloak-ui-shared";
-import {
-    Alert,
-    AlertVariant,
-    Button,
-    ButtonVariant,
-    Form,
-    Modal,
-    ModalVariant
-} from "../../shared/@patternfly/react-core";
+import { Button } from "@merge/ui/components/button";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@merge/ui/components/dialog";
+import { Alert, AlertDescription, AlertTitle } from "@merge/ui/components/alert";
+import { AlertVariant } from "../../shared/keycloak-ui-shared";
 import { useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
@@ -272,58 +267,54 @@ export const GroupsModal = ({
     };
 
     return (
-        <Modal
-            variant={ModalVariant.small}
-            title={
-                rename
-                    ? t("editGroup")
-                    : duplicateId
-                      ? t("duplicateAGroup")
-                      : t("createAGroup")
-            }
-            isOpen
-            onClose={handleModalToggle}
-            actions={[
-                <FormSubmitButton
-                    formState={formState}
-                    data-testid={`${rename ? "rename" : duplicateId ? "duplicate" : "create"}Group`}
-                    key="confirm"
-                    form="group-form"
-                    allowInvalid
-                    allowNonDirty
-                >
-                    {t(rename ? "edit" : duplicateId ? "duplicate" : "create")}
-                </FormSubmitButton>,
-                <Button
-                    id="modal-cancel"
-                    data-testid="cancel"
-                    key="cancel"
-                    variant={ButtonVariant.link}
-                    onClick={handleModalToggle}
-                >
-                    {t("cancel")}
-                </Button>
-            ]}
-        >
-            <FormProvider {...form}>
-                <Form id="group-form" isHorizontal onSubmit={handleSubmit(submitForm)}>
-                    {duplicateId && (
-                        <Alert
-                            variant="warning"
-                            component="h2"
-                            isInline
-                            title={t("duplicateGroupWarning")}
+        <Dialog open onOpenChange={(open) => { if (!open) handleModalToggle(); }}>
+            <DialogContent>
+                <DialogHeader>
+                    <DialogTitle>
+                        {rename
+                            ? t("editGroup")
+                            : duplicateId
+                              ? t("duplicateAGroup")
+                              : t("createAGroup")}
+                    </DialogTitle>
+                </DialogHeader>
+                <FormProvider {...form}>
+                    <form id="group-form" onSubmit={handleSubmit(submitForm)}>
+                        {duplicateId && (
+                            <Alert variant="destructive">
+                                <AlertTitle>{t("duplicateGroupWarning")}</AlertTitle>
+                            </Alert>
+                        )}
+                        <TextControl
+                            name="name"
+                            label={t("name")}
+                            rules={{ required: t("required") }}
+                            autoFocus
                         />
-                    )}
-                    <TextControl
-                        name="name"
-                        label={t("name")}
-                        rules={{ required: t("required") }}
-                        autoFocus
-                    />
-                    <TextControl name="description" label={t("description")} />
-                </Form>
-            </FormProvider>
-        </Modal>
+                        <TextControl name="description" label={t("description")} />
+                    </form>
+                </FormProvider>
+                <DialogFooter>
+                    <FormSubmitButton
+                        formState={formState}
+                        data-testid={`${rename ? "rename" : duplicateId ? "duplicate" : "create"}Group`}
+                        key="confirm"
+                        form="group-form"
+                        allowInvalid
+                        allowNonDirty
+                    >
+                        {t(rename ? "edit" : duplicateId ? "duplicate" : "create")}
+                    </FormSubmitButton>
+                    <Button
+                        id="modal-cancel"
+                        data-testid="cancel"
+                        variant="link"
+                        onClick={handleModalToggle}
+                    >
+                        {t("cancel")}
+                    </Button>
+                </DialogFooter>
+            </DialogContent>
+        </Dialog>
     );
 };

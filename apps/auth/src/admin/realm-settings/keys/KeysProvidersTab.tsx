@@ -14,25 +14,15 @@
 import type ComponentRepresentation from "@keycloak/keycloak-admin-client/lib/defs/componentRepresentation";
 import type ComponentTypeRepresentation from "@keycloak/keycloak-admin-client/lib/defs/componentTypeRepresentation";
 import type { KeyMetadataRepresentation } from "@keycloak/keycloak-admin-client/lib/defs/keyMetadataRepresentation";
-import {
-    AlertVariant,
-    Button,
-    ButtonVariant,
-    InputGroup,
-    InputGroupItem,
-    PageSection,
-    TextInput,
-    Toolbar,
-    ToolbarGroup,
-    ToolbarItem
-} from "../../../shared/@patternfly/react-core";
-import { SearchIcon } from "../../../shared/@patternfly/react-icons";
+import { useAlerts, AlertVariant } from "../../../shared/keycloak-ui-shared";
+import { Button } from "@merge/ui/components/button";
+import { Input } from "@merge/ui/components/input";
+import { MagnifyingGlass } from "@phosphor-icons/react";
 import { KeyboardEvent, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 import { useAdminClient } from "../../admin-client";
 import { DraggableTable } from "../../authentication/components/DraggableTable";
-import { useAlerts } from "../../../shared/keycloak-ui-shared";
 import { useConfirmDialog } from "../../components/confirm-dialog/ConfirmDialog";
 import { useRealm } from "../../context/realm-context/RealmContext";
 import { useServerInfo } from "../../context/server-info/ServerInfoProvider";
@@ -99,7 +89,7 @@ export const KeysProvidersTab = ({ realmComponents, refresh }: KeysProvidersTabP
             provider: selectedComponent?.name
         }),
         continueButtonLabel: "delete",
-        continueButtonVariant: ButtonVariant.danger,
+        continueButtonVariant: "destructive",
         onConfirm: async () => {
             try {
                 await adminClient.components.del({
@@ -163,47 +153,40 @@ export const KeysProvidersTab = ({ realmComponents, refresh }: KeysProvidersTabP
                 />
             )}
             <DeleteConfirm />
-            <PageSection variant="light" padding={{ default: "noPadding" }}>
-                <Toolbar>
-                    <ToolbarGroup className="providers-toolbar">
-                        <ToolbarItem>
-                            <InputGroup>
-                                <InputGroupItem isFill>
-                                    <TextInput
-                                        name={"inputGroupName"}
-                                        id={"inputGroupName"}
-                                        data-testid="provider-search-input"
-                                        type="search"
-                                        aria-label={t("search")}
-                                        placeholder={t("search")}
-                                        onChange={(_event, value: string) =>
-                                            handleInputChange(value)
-                                        }
-                                        onKeyDown={handleKeyDown}
-                                    />
-                                </InputGroupItem>
-                                <InputGroupItem>
-                                    <Button
-                                        variant={ButtonVariant.control}
-                                        aria-label={t("search")}
-                                        onClick={onSearch}
-                                    >
-                                        <SearchIcon />
-                                    </Button>
-                                </InputGroupItem>
-                            </InputGroup>
-                        </ToolbarItem>
-                        <ToolbarItem>
-                            <Button
-                                data-testid="addProviderDropdown"
-                                className="add-provider-dropdown"
-                                onClick={() => toggleProviderOpen()}
-                            >
-                                {t("addProvider")}
-                            </Button>
-                        </ToolbarItem>
-                    </ToolbarGroup>
-                </Toolbar>
+            <section className="py-6 bg-muted/30 p-0">
+                <div className="flex flex-wrap items-center gap-4 providers-toolbar mb-4">
+                    <div className="flex flex-1 min-w-[200px] gap-2">
+                        <Input
+                            name="inputGroupName"
+                            id="inputGroupName"
+                            data-testid="provider-search-input"
+                            type="search"
+                            aria-label={t("search")}
+                            placeholder={t("search")}
+                            value={searchVal}
+                            onChange={(e) => handleInputChange(e.target.value)}
+                            onKeyDown={handleKeyDown}
+                            className="flex-1"
+                        />
+                        <Button
+                            type="button"
+                            variant="secondary"
+                            size="icon"
+                            aria-label={t("search")}
+                            onClick={onSearch}
+                        >
+                            <MagnifyingGlass className="size-4" />
+                        </Button>
+                    </div>
+                    <Button
+                        type="button"
+                        data-testid="addProviderDropdown"
+                        className="add-provider-dropdown"
+                        onClick={() => toggleProviderOpen()}
+                    >
+                        {t("addProvider")}
+                    </Button>
+                </div>
                 <DraggableTable
                     variant="compact"
                     className="kc-draggable-table"
@@ -280,7 +263,7 @@ export const KeysProvidersTab = ({ realmComponents, refresh }: KeysProvidersTabP
                         }
                     ]}
                 />
-            </PageSection>
+            </section>
         </>
     );
 };

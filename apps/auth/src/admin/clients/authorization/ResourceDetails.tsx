@@ -20,16 +20,11 @@ import {
     useAlerts,
     useFetch
 } from "../../../shared/keycloak-ui-shared";
-import {
-    ActionGroup,
-    Alert,
-    AlertVariant,
-    Button,
-    ButtonVariant,
-    DropdownItem,
-    FormGroup,
-    PageSection
-} from "../../../shared/@patternfly/react-core";
+import { AlertVariant } from "../../../shared/keycloak-ui-shared";
+import { Alert, AlertDescription, AlertTitle } from "@merge/ui/components/alert";
+import { Button } from "@merge/ui/components/button";
+import { Label } from "@merge/ui/components/label";
+import { DropdownMenuItem } from "@merge/ui/components/dropdown-menu";
 import { useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
@@ -132,20 +127,17 @@ export default function ResourceDetails() {
             <>
                 {t("deleteResourceConfirm")}
                 {permissions?.length !== 0 && (
-                    <Alert
-                        variant="warning"
-                        isInline
-                        isPlain
-                        title={t("deleteResourceWarning")}
-                        className="pf-v5-u-pt-lg"
-                    >
-                        <p className="pf-v5-u-pt-xs">
+                    <Alert variant="destructive" className="pt-4">
+                        <AlertTitle>{t("deleteResourceWarning")}</AlertTitle>
+                        <AlertDescription>
+                        <p className="pt-1">
                             {permissions?.map(permission => (
-                                <strong key={permission.id} className="pf-v5-u-pr-md">
+                                <strong key={permission.id} className="pr-2">
                                     {permission.name}
                                 </strong>
                             ))}
                         </p>
+                        </AlertDescription>
                     </Alert>
                 )}
             </>
@@ -177,19 +169,19 @@ export default function ResourceDetails() {
                 dropdownItems={
                     resourceId
                         ? [
-                              <DropdownItem
+                              <DropdownMenuItem
                                   key="delete"
                                   data-testid="delete-resource"
                                   isDisabled={isDisabled}
                                   onClick={() => toggleDeleteDialog()}
                               >
                                   {t("delete")}
-                              </DropdownItem>
+                              </DropdownMenuItem>
                           ]
                         : undefined
                 }
             />
-            <PageSection variant="light">
+            <div className="p-6">
                 <FormProvider {...form}>
                     <FormAccess
                         isHorizontal
@@ -221,20 +213,18 @@ export default function ResourceDetails() {
                             label={t("type")}
                             labelIcon={t("resourceDetailsTypeHelp")}
                         />
-                        <FormGroup
-                            label={t("uris")}
-                            fieldId="uris"
-                            labelIcon={
+                        <div className="space-y-2">
+                            <div className="flex items-center gap-2">
+                                <Label>{t("uris")}</Label>
                                 <HelpItem helpText={t("urisHelp")} fieldLabelId="uris" />
-                            }
-                        >
+                            </div>
                             <MultiLineInput
                                 name="uris"
                                 type="url"
                                 aria-label={t("uris")}
                                 addButtonLabel="addUri"
                             />
-                        </FormGroup>
+                        </div>
                         <ScopePicker clientId={id} />
                         <TextControl
                             name="icon_uri"
@@ -247,50 +237,43 @@ export default function ResourceDetails() {
                             label={t("ownerManagedAccess")}
                             labelIcon={t("ownerManagedAccessHelp")}
                         />
-                        <FormGroup
-                            hasNoPaddingTop
-                            label={t("resourceAttribute")}
-                            labelIcon={
+                        <div className="space-y-2">
+                            <div className="flex items-center gap-2">
+                                <Label>{t("resourceAttribute")}</Label>
                                 <HelpItem
                                     helpText={t("resourceAttributeHelp")}
                                     fieldLabelId="resourceAttribute"
                                 />
-                            }
-                            fieldId="resourceAttribute"
-                        >
+                            </div>
                             <KeyValueInput name="attributes" isDisabled={isDisabled} />
-                        </FormGroup>
-                        <ActionGroup>
-                            <div className="pf-v5-u-mt-md">
-                                <Button
-                                    variant={ButtonVariant.primary}
-                                    type="submit"
-                                    data-testid="save"
-                                >
-                                    {t("save")}
-                                </Button>
+                        </div>
+                        <div className="flex gap-2 mt-4">
+                            <Button
+                                type="submit"
+                                data-testid="save"
+                            >
+                                {t("save")}
+                            </Button>
 
-                                <Button
-                                    variant="link"
-                                    data-testid="cancel"
-                                    component={props => (
-                                        <Link
-                                            {...props}
-                                            to={toAuthorizationTab({
-                                                realm,
-                                                clientId: id,
-                                                tab: "resources"
-                                            })}
-                                        ></Link>
-                                    )}
+                            <Button
+                                variant="link"
+                                data-testid="cancel"
+                                asChild
+                            >
+                                <Link
+                                    to={toAuthorizationTab({
+                                        realm,
+                                        clientId: id,
+                                        tab: "resources"
+                                    })}
                                 >
                                     {t("cancel")}
-                                </Button>
-                            </div>
-                        </ActionGroup>
+                                </Link>
+                            </Button>
+                        </div>
                     </FormAccess>
                 </FormProvider>
-            </PageSection>
+            </div>
         </>
     );
 }

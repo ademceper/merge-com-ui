@@ -11,7 +11,7 @@
 
 // @ts-nocheck
 
-import { FormGroup, ValidatedOptions } from "../../../shared/@patternfly/react-core";
+import { Label } from "@merge/ui/components/label";
 import {
     Controller,
     ControllerProps,
@@ -57,16 +57,12 @@ export const TimeSelectorControl = <
     const error = errors[name];
 
     return (
-        <FormGroup
-            isRequired={controller.rules?.required === true}
-            label={label || name}
-            fieldId={name}
-            labelIcon={
-                labelIcon ? (
-                    <HelpItem helpText={labelIcon} fieldLabelId={name} />
-                ) : undefined
-            }
-        >
+        <div className="space-y-2">
+            <Label htmlFor={name} className="flex items-center gap-1">
+                {controller.rules?.required === true && <span className="text-destructive">*</span>}
+                {label || name}
+                {labelIcon && <HelpItem helpText={labelIcon} fieldLabelId={name} />}
+            </Label>
             <Controller
                 {...controller}
                 name={name}
@@ -78,9 +74,7 @@ export const TimeSelectorControl = <
                         data-testid={name}
                         value={field.value}
                         onChange={field.onChange}
-                        validated={
-                            error ? ValidatedOptions.error : ValidatedOptions.default
-                        }
+                        validated={error ? "error" : "default"}
                     />
                 )}
             />
@@ -90,6 +84,6 @@ export const TimeSelectorControl = <
                     message={error.message as string}
                 />
             )}
-        </FormGroup>
+        </div>
     );
 };

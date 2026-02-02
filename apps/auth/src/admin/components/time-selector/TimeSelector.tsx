@@ -16,14 +16,9 @@ import {
     KeycloakSelectProps,
     SelectVariant
 } from "../../../shared/keycloak-ui-shared";
-import {
-    SelectOption,
-    Split,
-    SplitItem,
-    TextInput,
-    TextInputProps
-} from "../../../shared/@patternfly/react-core";
-import { useEffect, useMemo, useState } from "react";
+import { Input } from "@merge/ui/components/input";
+import { SelectOption } from "../../../shared/@patternfly/react-core";
+import React, { useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 
 export type Unit = "second" | "minute" | "hour" | "day";
@@ -37,7 +32,7 @@ const allTimes: TimeUnit[] = [
     { unit: "day", label: "times.days", multiplier: 86400 }
 ];
 
-export type TimeSelectorProps = Omit<TextInputProps, "onChange" | "defaultValue"> &
+export type TimeSelectorProps = Omit<React.InputHTMLAttributes<HTMLInputElement>, "onChange" | "defaultValue"> &
     Pick<KeycloakSelectProps, "menuAppendTo"> & {
         value?: number;
         units?: Unit[];
@@ -124,21 +119,22 @@ export const TimeSelector = ({
     };
 
     return (
-        <Split hasGutter className={className}>
-            <SplitItem>
-                <TextInput
+        <div className={`flex gap-4 ${className || ""}`}>
+            <div>
+                <Input
                     {...rest}
                     type="number"
                     aria-label="kc-time"
                     min={min || 0}
                     value={timeValue}
                     className={`${className}-input`}
-                    onChange={(_event, value) => {
+                    onChange={(e) => {
+                        const value = e.target.value;
                         updateTimeout("" === value ? value : parseInt(value));
                     }}
                 />
-            </SplitItem>
-            <SplitItem id={`${className}-select-menu`}>
+            </div>
+            <div id={`${className}-select-menu`}>
                 <KeycloakSelect
                     variant={SelectVariant.single}
                     aria-label={t("unitLabel")}
@@ -166,7 +162,7 @@ export const TimeSelector = ({
                         </SelectOption>
                     ))}
                 </KeycloakSelect>
-            </SplitItem>
-        </Split>
+            </div>
+        </div>
     );
 };

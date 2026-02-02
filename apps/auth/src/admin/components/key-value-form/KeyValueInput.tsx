@@ -11,20 +11,9 @@
 
 // @ts-nocheck
 
-import {
-    ActionList,
-    ActionListItem,
-    Button,
-    EmptyState,
-    EmptyStateBody,
-    EmptyStateFooter,
-    Grid,
-    GridItem,
-    HelperText,
-    HelperTextItem,
-    TextInput
-} from "../../../shared/@patternfly/react-core";
-import { MinusCircleIcon, PlusCircleIcon } from "../../../shared/@patternfly/react-icons";
+import { Button } from "@merge/ui/components/button";
+import { Input } from "@merge/ui/components/input";
+import { MinusCircle, PlusCircle } from "@phosphor-icons/react";
 import { Fragment, FunctionComponent, PropsWithChildren } from "react";
 import { FieldValues, useFieldArray, useFormContext, useWatch } from "react-hook-form";
 import { useTranslation } from "react-i18next";
@@ -80,13 +69,13 @@ export const KeyValueInput = ({
 
     return fields.length > 0 ? (
         <>
-            <Grid hasGutter>
-                <GridItem className="pf-v5-c-form__label" span={5}>
-                    <span className="pf-v5-c-form__label-text">{t("key")}</span>
-                </GridItem>
-                <GridItem className="pf-v5-c-form__label" span={7}>
-                    <span className="pf-v5-c-form__label-text">{t("value")}</span>
-                </GridItem>
+            <div className="grid grid-cols-12 gap-4">
+                <div className="col-span-5 font-medium">
+                    <span>{t("key")}</span>
+                </div>
+                <div className="col-span-7 font-medium">
+                    <span>{t("value")}</span>
+                </div>
                 {fields.map((attribute, index) => {
                     const error = (errors as any)[name]?.[index];
                     const keyError = !!error?.key;
@@ -94,108 +83,99 @@ export const KeyValueInput = ({
                     const valueError = error?.message || t("valueError");
                     return (
                         <Fragment key={attribute.id}>
-                            <GridItem span={5}>
+                            <div className="col-span-5">
                                 {KeyComponent ? (
                                     <KeyComponent name={`${name}.${index}.key`} />
                                 ) : (
-                                    <TextInput
+                                    <Input
                                         placeholder={t("keyPlaceholder")}
                                         aria-label={t("key")}
                                         data-testid={`${name}-key`}
                                         {...register(`${name}.${index}.key`, {
                                             required: true
                                         })}
-                                        validated={keyError ? "error" : "default"}
-                                        isRequired
-                                        isDisabled={isDisabled}
+                                        className={keyError ? "border-destructive" : ""}
+                                        required
+                                        disabled={isDisabled}
                                     />
                                 )}
                                 {keyError && (
-                                    <HelperText>
-                                        <HelperTextItem variant="error">
-                                            {t("keyError")}
-                                        </HelperTextItem>
-                                    </HelperText>
+                                    <p className="text-sm text-destructive mt-1">
+                                        {t("keyError")}
+                                    </p>
                                 )}
-                            </GridItem>
-                            <GridItem span={5}>
+                            </div>
+                            <div className="col-span-5">
                                 {ValueComponent ? (
                                     <ValueComponent
                                         name={`${name}.${index}.value`}
                                         keyValue={values[index]?.key}
                                     />
                                 ) : (
-                                    <TextInput
+                                    <Input
                                         placeholder={t("valuePlaceholder")}
                                         aria-label={t("value")}
                                         data-testid={`${name}-value`}
                                         {...register(`${name}.${index}.value`, {
                                             required: true
                                         })}
-                                        validated={
-                                            valueErrorPresent ? "error" : "default"
-                                        }
-                                        isRequired
-                                        isDisabled={isDisabled}
+                                        className={valueErrorPresent ? "border-destructive" : ""}
+                                        required
+                                        disabled={isDisabled}
                                     />
                                 )}
                                 {valueErrorPresent && (
-                                    <HelperText>
-                                        <HelperTextItem variant="error">
-                                            {valueError}
-                                        </HelperTextItem>
-                                    </HelperText>
+                                    <p className="text-sm text-destructive mt-1">
+                                        {valueError}
+                                    </p>
                                 )}
-                            </GridItem>
-                            <GridItem span={2}>
+                            </div>
+                            <div className="col-span-2">
                                 <Button
                                     variant="link"
                                     title={t("removeAttribute")}
                                     onClick={() => remove(index)}
                                     data-testid={`${name}-remove`}
-                                    isDisabled={isDisabled}
+                                    disabled={isDisabled}
                                 >
-                                    <MinusCircleIcon />
+                                    <MinusCircle className="size-4" />
                                 </Button>
-                            </GridItem>
+                            </div>
                         </Fragment>
                     );
                 })}
-            </Grid>
-            <ActionList>
-                <ActionListItem>
-                    <Button
-                        data-testid={`${name}-add-row`}
-                        className="pf-v5-u-px-0 pf-v5-u-mt-sm"
-                        variant="link"
-                        icon={<PlusCircleIcon />}
-                        onClick={appendNew}
-                        isDisabled={isDisabled}
-                    >
-                        {t("addAttribute", { label })}
-                    </Button>
-                </ActionListItem>
-            </ActionList>
+            </div>
+            <div className="mt-2">
+                <Button
+                    data-testid={`${name}-add-row`}
+                    className="px-0 mt-1"
+                    variant="link"
+                    onClick={appendNew}
+                    disabled={isDisabled}
+                >
+                    <PlusCircle className="size-4 mr-1" />
+                    {t("addAttribute", { label })}
+                </Button>
+            </div>
         </>
     ) : (
-        <EmptyState
+        <div
             data-testid={`${name}-empty-state`}
-            className="pf-v5-u-p-0"
-            variant="xs"
+            className="p-0 text-center"
         >
-            <EmptyStateBody>{t("missingAttributes", { label })}</EmptyStateBody>
-            <EmptyStateFooter>
+            <p className="text-muted-foreground">{t("missingAttributes", { label })}</p>
+            <div className="mt-2">
                 <Button
                     data-testid={`${name}-add-row`}
                     variant="link"
-                    icon={<PlusCircleIcon />}
                     size="sm"
                     onClick={appendNew}
-                    isDisabled={isDisabled}
+                    disabled={isDisabled}
                 >
+                    <PlusCircle className="size-4 mr-1" />
                     {t("addAttribute", { label })}
                 </Button>
-            </EmptyStateFooter>
-        </EmptyState>
+            </div>
+        </div>
     );
 };

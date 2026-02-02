@@ -12,17 +12,17 @@
 // @ts-nocheck
 
 import type GlobalRequestResult from "@keycloak/keycloak-admin-client/lib/defs/globalRequestResult";
+import { AlertVariant } from "../../shared/keycloak-ui-shared";
+import { Button } from "@merge/ui/components/button";
 import {
-    AlertVariant,
-    Button,
-    ButtonVariant,
-    Form,
-    FormGroup,
-    Modal,
-    ModalVariant,
-    TextContent,
-    TextInput
-} from "../../shared/@patternfly/react-core";
+    Dialog,
+    DialogContent,
+    DialogFooter,
+    DialogHeader,
+    DialogTitle
+} from "@merge/ui/components/dialog";
+import { Input } from "@merge/ui/components/input";
+import { Label } from "@merge/ui/components/label";
 import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { useAdminClient } from "../admin-client";
@@ -114,86 +114,77 @@ export const RevocationModal = ({ handleModalToggle, save }: RevocationModalProp
     };
 
     return (
-        <Modal
-            variant={ModalVariant.small}
-            title={t("revocation")}
-            isOpen={true}
-            onClose={handleModalToggle}
-            actions={[
-                <Button
-                    data-testid="set-to-now-button"
-                    key="set-to-now"
-                    variant="tertiary"
-                    onClick={async () => {
-                        await setToNow();
-                        handleModalToggle();
-                    }}
-                    form="revocation-modal-form"
-                >
-                    {t("setToNow")}
-                </Button>,
-                <Button
-                    data-testid="clear-not-before-button"
-                    key="clear"
-                    variant="tertiary"
-                    onClick={async () => {
-                        await clearNotBefore();
-                        handleModalToggle();
-                    }}
-                    form="revocation-modal-form"
-                >
-                    {t("clear")}
-                </Button>,
-                <Button
-                    data-testid="modal-test-connection-button"
-                    key="push"
-                    variant="secondary"
-                    onClick={async () => {
-                        await push();
-                        handleModalToggle();
-                    }}
-                    form="revocation-modal-form"
-                >
-                    {t("push")}
-                </Button>,
-                <Button
-                    id="modal-cancel"
-                    data-testid="cancel"
-                    key="cancel"
-                    variant={ButtonVariant.link}
-                    onClick={() => {
-                        handleModalToggle();
-                    }}
-                >
-                    {t("cancel")}
-                </Button>
-            ]}
-        >
-            <TextContent className="kc-revocation-description-text">
-                {t("revocationDescription")}
-            </TextContent>
-            <Form id="revocation-modal-form" isHorizontal onSubmit={handleSubmit(save)}>
-                <FormGroup
-                    className="kc-revocation-modal-form-group"
-                    label={t("notBefore")}
-                    name="notBefore"
-                    fieldId="not-before"
-                >
-                    <TextInput
-                        data-testid="not-before-input"
-                        autoFocus
-                        readOnly
-                        value={
-                            realm?.notBefore === 0
-                                ? (t("none") as string)
-                                : new Date(realm?.notBefore! * 1000).toString()
-                        }
-                        type="text"
-                        id="not-before"
-                        {...register("notBefore")}
-                    />
-                </FormGroup>
-            </Form>
-        </Modal>
+        <Dialog open onOpenChange={open => !open && handleModalToggle()}>
+            <DialogContent className="max-w-md">
+                <DialogHeader>
+                    <DialogTitle>{t("revocation")}</DialogTitle>
+                </DialogHeader>
+                <p className="kc-revocation-description-text text-sm">
+                    {t("revocationDescription")}
+                </p>
+                <form id="revocation-modal-form" className="space-y-4" onSubmit={handleSubmit(save)}>
+                    <div className="space-y-2 kc-revocation-modal-form-group">
+                        <Label htmlFor="not-before">{t("notBefore")}</Label>
+                        <Input
+                            data-testid="not-before-input"
+                            autoFocus
+                            readOnly
+                            value={
+                                realm?.notBefore === 0
+                                    ? (t("none") as string)
+                                    : new Date(realm?.notBefore! * 1000).toString()
+                            }
+                            id="not-before"
+                            className="bg-muted"
+                            {...register("notBefore")}
+                        />
+                    </div>
+                </form>
+                <DialogFooter>
+                    <Button
+                        id="modal-cancel"
+                        data-testid="cancel"
+                        variant="link"
+                        type="button"
+                        onClick={handleModalToggle}
+                    >
+                        {t("cancel")}
+                    </Button>
+                    <Button
+                        data-testid="modal-test-connection-button"
+                        variant="secondary"
+                        type="button"
+                        onClick={async () => {
+                            await push();
+                            handleModalToggle();
+                        }}
+                    >
+                        {t("push")}
+                    </Button>
+                    <Button
+                        data-testid="clear-not-before-button"
+                        variant="outline"
+                        type="button"
+                        onClick={async () => {
+                            await clearNotBefore();
+                            handleModalToggle();
+                        }}
+                    >
+                        {t("clear")}
+                    </Button>
+                    <Button
+                        data-testid="set-to-now-button"
+                        variant="outline"
+                        type="button"
+                        onClick={async () => {
+                            await setToNow();
+                            handleModalToggle();
+                        }}
+                    >
+                        {t("setToNow")}
+                    </Button>
+                </DialogFooter>
+            </DialogContent>
+        </Dialog>
     );
 };

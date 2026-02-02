@@ -266,6 +266,5 @@ export default function GroupsSection() {
                     </div>
                 </div>
             </div>
-        </div>
     );
 }

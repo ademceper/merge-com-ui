@@ -19,7 +19,7 @@ import {
     TextControl,
     useEnvironment
 } from "../../../shared/keycloak-ui-shared";
-import { FormGroup, Title } from "../../../shared/@patternfly/react-core";
+import { Label } from "@merge/ui/components/label";
 import { useFormContext } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 
@@ -94,9 +94,9 @@ export const SamlConnectSettings = () => {
 
     return (
         <>
-            <Title headingLevel="h2" size="xl" className="kc-form-panel__title">
+            <h2 className="text-xl font-bold">
                 {t("samlSettings")}
-            </Title>
+            </h2>
 
             <TextControl
                 name="config.entityId"
@@ -111,16 +111,14 @@ export const SamlConnectSettings = () => {
             <DiscoveryEndpointField
                 id="saml"
                 fileUpload={
-                    <FormGroup
-                        label={t("importConfig")}
-                        fieldId="kc-import-config"
-                        labelIcon={
+                    <div className="space-y-2">
+                        <div className="flex items-center gap-2">
+                            <Label htmlFor="kc-import-config">{t("importConfig")}</Label>
                             <HelpItem
                                 helpText={t("importConfigHelp")}
                                 fieldLabelId="importConfig"
                             />
-                        }
-                    >
+                        </div>
                         <FileUploadForm
                             id="kc-import-config"
                             extension=".xml"
@@ -134,7 +132,7 @@ export const SamlConnectSettings = () => {
                                 message={errors.discoveryError.message as string}
                             />
                         )}
-                    </FormGroup>
+                    </div>
                 }
             >
                 {readonly => <DescriptorSettings readOnly={readonly} />}

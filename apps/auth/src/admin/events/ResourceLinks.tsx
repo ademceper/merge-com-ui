@@ -13,7 +13,7 @@
 
 import { ReactElement } from "react";
 import { Link } from "react-router-dom";
-import { Tooltip } from "../../shared/@patternfly/react-core";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@merge/ui/components/tooltip";
 
 import type AdminEventRepresentation from "@keycloak/keycloak-admin-client/lib/defs/adminEventRepresentation";
 import { useRealm } from "../context/realm-context/RealmContext";
@@ -41,7 +41,12 @@ const Truncate = ({
     const needsTruncation = definedText.length > MAX_TEXT_LENGTH;
     const truncatedText = definedText.substring(0, MAX_TEXT_LENGTH);
     return needsTruncation ? (
-        <Tooltip content={text}>{children(truncatedText + "…")}</Tooltip>
+        <Tooltip>
+            <TooltipTrigger asChild>
+                <span className="cursor-default">{children(truncatedText + "…")}</span>
+            </TooltipTrigger>
+            <TooltipContent>{text}</TooltipContent>
+        </Tooltip>
     ) : (
         children(definedText)
     );
