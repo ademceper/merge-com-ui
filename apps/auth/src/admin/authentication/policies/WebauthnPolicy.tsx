@@ -43,7 +43,6 @@ import { convertFormValuesToObject, convertToFormValues } from "../../util";
 import useIsFeatureEnabled, { Feature } from "../../utils/useIsFeatureEnabled";
 
 import { useAdminClient } from "../../admin-client";
-import "./webauthn-policy.css";
 
 const SIGNATURE_ALGORITHMS = [
     "ES256",

@@ -8,6 +8,17 @@ import { SidebarTrigger } from "@merge/ui/components/sidebar";
 import { ThemeToggleButton } from "@merge/ui/components/theme-toggle";
 import { PageBreadCrumbs } from "./bread-crumb/PageBreadCrumbs";
 
+export type UserMenuInfo = {
+    keycloak: {
+        idTokenParsed?: unknown;
+        logout: (options?: { redirectUri?: string }) => Promise<void>;
+    };
+    userName: string;
+    userEmail: string;
+    userAvatarUrl?: string;
+    initials: string;
+};
+
 export function AdminHeader() {
     return (
         <header className="flex h-16 shrink-0 items-center gap-2 border-b bg-background">

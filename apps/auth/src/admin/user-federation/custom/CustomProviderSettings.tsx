@@ -40,7 +40,6 @@ import { ExtendedHeader } from "../shared/ExtendedHeader";
 import { SettingsCache } from "../shared/SettingsCache";
 import { SyncSettings } from "./SyncSettings";
 
-import "./custom-provider-settings.css";
 import { useState } from "react";
 
 export default function CustomProviderSettings() {

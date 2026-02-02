@@ -12,7 +12,8 @@
 // @ts-nocheck
 
 import { HelpItem, SelectControl, TextControl } from "../../../shared/keycloak-ui-shared";
-import { FormGroup, Switch } from "../../../shared/@patternfly/react-core";
+import { Switch } from "@merge/ui/components/switch";
+import { FormLabel } from "../../../shared/keycloak-ui-shared";
 import { isEqual } from "lodash-es";
 import { useEffect } from "react";
 import { Controller, FormProvider, UseFormReturn, useWatch } from "react-hook-form";
@@ -102,12 +103,12 @@ export const KerberosSettingsRequired = ({
                         required: t("validateKeyTab")
                     }}
                 />
-                <FormGroup
+                <FormLabel
+                    name="kc-debug"
                     label={t("debug")}
                     labelIcon={
                         <HelpItem helpText={t("debugHelp")} fieldLabelId="debug" />
                     }
-                    fieldId="kc-debug"
                     hasNoPaddingTop
                 >
                     <Controller
@@ -116,18 +117,17 @@ export const KerberosSettingsRequired = ({
                         control={form.control}
                         render={({ field }) => (
                             <Switch
-                                id={"kc-debug"}
+                                id="kc-debug"
                                 data-testid="debug"
-                                onChange={(_event, value) => field.onChange([`${value}`])}
-                                isChecked={field.value?.[0] === "true"}
-                                label={t("on")}
-                                labelOff={t("off")}
+                                checked={field.value?.[0] === "true"}
+                                onCheckedChange={(value) => field.onChange([`${value}`])}
                                 aria-label={t("debug")}
                             />
                         )}
                     />
-                </FormGroup>
-                <FormGroup
+                </FormLabel>
+                <FormLabel
+                    name="kc-allow-password-authentication"
                     label={t("allowPasswordAuthentication")}
                     labelIcon={
                         <HelpItem
@@ -135,7 +135,6 @@ export const KerberosSettingsRequired = ({
                             fieldLabelId="allowPasswordAuthentication"
                         />
                     }
-                    fieldId="kc-allow-password-authentication"
                     hasNoPaddingTop
                 >
                     <Controller
@@ -144,17 +143,15 @@ export const KerberosSettingsRequired = ({
                         control={form.control}
                         render={({ field }) => (
                             <Switch
-                                id={"kc-allow-password-authentication"}
+                                id="kc-allow-password-authentication"
                                 data-testid="allow-password-authentication"
-                                onChange={(_event, value) => field.onChange([`${value}`])}
-                                isChecked={field.value?.[0] === "true"}
-                                label={t("on")}
-                                labelOff={t("off")}
+                                checked={field.value?.[0] === "true"}
+                                onCheckedChange={(value) => field.onChange([`${value}`])}
                                 aria-label={t("allowPasswordAuthentication")}
                             />
                         )}
                     />
-                </FormGroup>
+                </FormLabel>
                 {isEqual(allowPassAuth, ["true"]) ? (
                     <SelectControl
                         name="config.editMode[0]"
@@ -167,7 +164,8 @@ export const KerberosSettingsRequired = ({
                         options={["READ_ONLY", "UNSYNCED"]}
                     />
                 ) : null}
-                <FormGroup
+                <FormLabel
+                    name="kc-update-first-login"
                     label={t("updateFirstLogin")}
                     labelIcon={
                         <HelpItem
@@ -175,7 +173,6 @@ export const KerberosSettingsRequired = ({
                             fieldLabelId="updateFirstLogin"
                         />
                     }
-                    fieldId="kc-update-first-login"
                     hasNoPaddingTop
                 >
                     <Controller
@@ -184,17 +181,15 @@ export const KerberosSettingsRequired = ({
                         control={form.control}
                         render={({ field }) => (
                             <Switch
-                                id={"kc-update-first-login"}
+                                id="kc-update-first-login"
                                 data-testid="update-first-login"
-                                onChange={(_event, value) => field.onChange([`${value}`])}
-                                isChecked={field.value?.[0] === "true"}
-                                label={t("on")}
-                                labelOff={t("off")}
+                                checked={field.value?.[0] === "true"}
+                                onCheckedChange={(value) => field.onChange([`${value}`])}
                                 aria-label={t("updateFirstLogin")}
                             />
                         )}
                     />
-                </FormGroup>
+                </FormLabel>
             </FormAccess>
         </FormProvider>
     );

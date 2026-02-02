@@ -53,7 +53,6 @@ import { GroupTree } from "./components/GroupTree";
 import { getId, getLastId } from "./groupIdUtils";
 import { toGroups } from "./routes/Groups";
 
-import "./GroupsSection.css";
 
 export default function GroupsSection() {
     const { adminClient } = useAdminClient();

@@ -13,20 +13,20 @@
 
 import { ReactNode, useMemo } from "react";
 import { useTranslation } from "react-i18next";
-import { Td } from "../../../shared/@patternfly/react-table";
 import {
-    Button,
-    Dropdown,
-    DropdownItem,
-    DropdownList,
-    MenuToggle
-} from "../../../shared/@patternfly/react-core";
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuTrigger,
+} from "@merge/ui/components/dropdown-menu";
+import { Button } from "@merge/ui/components/button";
+import { TableCell } from "@merge/ui/components/table";
 import type CredentialRepresentation from "@keycloak/keycloak-admin-client/lib/defs/credentialRepresentation";
 import useToggle from "../../utils/useToggle";
 import useLocaleSort from "../../utils/useLocaleSort";
 import { CredentialDataDialog } from "./CredentialDataDialog";
 import useFormatDate from "../../utils/useFormatDate";
-import { EllipsisVIcon } from "../../../shared/@patternfly/react-icons";
+import { DotsThreeVertical } from "@phosphor-icons/react";
 
 type CredentialRowProps = {
     credential: CredentialRepresentation;
@@ -78,9 +78,9 @@ export const CredentialRow = ({
                 />
             )}
 
-            <Td>{children}</Td>
-            <Td>{formatDate(new Date(credential.createdDate!))}</Td>
-            <Td>
+            <TableCell>{children}</TableCell>
+            <TableCell>{formatDate(new Date(credential.createdDate!))}</TableCell>
+            <TableCell>
                 <Button
                     className="kc-showData-btn"
                     variant="link"
@@ -89,54 +89,44 @@ export const CredentialRow = ({
                 >
                     {t("showDataBtn")}
                 </Button>
-            </Td>
+            </TableCell>
             {credential.type === "password" ? (
-                <Td isActionCell>
+                <TableCell>
                     <Button
-                        variant="secondary"
+                        variant="outline"
                         data-testid="resetPasswordBtn"
                         onClick={resetPassword}
                     >
                         {t("resetPasswordBtn")}
                     </Button>
-                </Td>
+                </TableCell>
             ) : (
-                <Td />
+                <TableCell />
             )}
-            <Td isActionCell>
-                <Dropdown
-                    popperProps={{
-                        position: "right"
-                    }}
-                    onOpenChange={toggleKebab}
-                    toggle={ref => (
-                        <MenuToggle
-                            ref={ref}
-                            isExpanded={kebabOpen}
-                            onClick={toggleKebab}
-                            variant="plain"
+            <TableCell>
+                <DropdownMenu open={kebabOpen} onOpenChange={toggleKebab}>
+                    <DropdownMenuTrigger asChild>
+                        <Button
+                            variant="ghost"
+                            size="icon-sm"
                             aria-label="Kebab toggle"
                         >
-                            <EllipsisVIcon />
-                        </MenuToggle>
-                    )}
-                    isOpen={kebabOpen}
-                >
-                    <DropdownList>
-                        <DropdownItem
-                            key={credential.id}
+                            <DotsThreeVertical className="size-4" />
+                        </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="end">
+                        <DropdownMenuItem
                             data-testid="deleteDropdownItem"
-                            component="button"
                             onClick={() => {
                                 toggleDelete();
                                 toggleKebab();
                             }}
                         >
                             {t("deleteBtn")}
-                        </DropdownItem>
-                    </DropdownList>
-                </Dropdown>
-            </Td>
+                        </DropdownMenuItem>
+                    </DropdownMenuContent>
+                </DropdownMenu>
+            </TableCell>
         </>
     );
 };

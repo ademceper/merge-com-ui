@@ -22,33 +22,32 @@ import {
     useFetch
 } from "../../shared/keycloak-ui-shared";
 import {
+    Dialog,
+    DialogContent,
+    DialogHeader,
+    DialogTitle
+} from "@merge/ui/components/dialog";
+import {
+    Table,
+    TableBody,
+    TableCell,
+    TableHead,
+    TableHeader,
+    TableRow
+} from "@merge/ui/components/table";
+import {
     ActionGroup,
     Button,
     Chip,
     ChipGroup,
     DatePicker,
-    DescriptionList,
-    DescriptionListDescription,
-    DescriptionListGroup,
-    DescriptionListTerm,
     Flex,
     FlexItem,
     Form,
     FormGroup,
-    Modal,
-    ModalVariant,
     SelectOption
 } from "../../shared/@patternfly/react-core";
-import {
-    Table,
-    TableVariant,
-    Tbody,
-    Td,
-    Th,
-    Thead,
-    Tr,
-    cellWidth
-} from "../../shared/@patternfly/react-table";
+import { cellWidth } from "../../shared/@patternfly/react-table";
 import { pickBy } from "lodash-es";
 import { PropsWithChildren, useMemo, useState } from "react";
 import { Controller, FormProvider, useForm } from "react-hook-form";
@@ -63,12 +62,12 @@ import { prettyPrintJSON } from "../util";
 import useFormatDate, { FORMAT_DATE_AND_TIME } from "../utils/useFormatDate";
 import { CellResourceLinkRenderer } from "./ResourceLinks";
 
-import "./events.css";
 
-type DisplayDialogProps = {
+type DisplayDialogProps = PropsWithChildren<{
     titleKey: string;
     onClose: () => void;
-};
+    "data-testid"?: string;
+}>;
 
 type AdminEventSearchForm = {
     resourceTypes: string[];
@@ -85,37 +84,40 @@ type AdminEventSearchForm = {
 const DisplayDialog = ({
     titleKey,
     onClose,
-    children
-}: PropsWithChildren<DisplayDialogProps>) => {
+    children,
+    "data-testid": dataTestId
+}: DisplayDialogProps) => {
     const { t } = useTranslation();
     return (
-        <Modal
-            variant={ModalVariant.medium}
-            title={t(titleKey)}
-            isOpen={true}
-            onClose={onClose}
-        >
-            {children}
-        </Modal>
+        <Dialog open={true} onOpenChange={open => !open && onClose()}>
+            <DialogContent className="max-w-2xl" data-testid={dataTestId}>
+                <DialogHeader>
+                    <DialogTitle>{t(titleKey)}</DialogTitle>
+                </DialogHeader>
+                {children}
+            </DialogContent>
+        </Dialog>
     );
 };
 
 const DetailCell = (event: AdminEventRepresentation) => (
-    <DescriptionList isHorizontal className="keycloak_eventsection_details">
-        {event.details &&
-            Object.entries(event.details).map(([key, value]) => (
-                <DescriptionListGroup key={key}>
-                    <DescriptionListTerm>{key}</DescriptionListTerm>
-                    <DescriptionListDescription>{value}</DescriptionListDescription>
-                </DescriptionListGroup>
-            ))}
-        {event.error && (
-            <DescriptionListGroup key="error">
-                <DescriptionListTerm>error</DescriptionListTerm>
-                <DescriptionListDescription>{event.error}</DescriptionListDescription>
-            </DescriptionListGroup>
-        )}
-    </DescriptionList>
+    <Table>
+        <TableBody>
+            {event.details &&
+                Object.entries(event.details).map(([key, value]) => (
+                    <TableRow key={key}>
+                        <TableCell className="font-medium">{key}</TableCell>
+                        <TableCell>{String(value)}</TableCell>
+                    </TableRow>
+                ))}
+            {event.error && (
+                <TableRow>
+                    <TableCell className="font-medium">error</TableCell>
+                    <TableCell>{event.error}</TableCell>
+                </TableRow>
+            )}
+        </TableBody>
+    </Table>
 );
 
 type AdminEventsProps = {
@@ -252,35 +254,31 @@ export const AdminEvents = ({ resourcePath }: AdminEventsProps) => {
         <>
             {authEvent && (
                 <DisplayDialog titleKey="auth" onClose={() => setAuthEvent(undefined)}>
-                    <Table
-                        aria-label="authData"
-                        data-testid="auth-dialog"
-                        variant={TableVariant.compact}
-                    >
-                        <Thead>
-                            <Tr>
-                                <Th>{t("attribute")}</Th>
-                                <Th>{t("value")}</Th>
-                            </Tr>
-                        </Thead>
-                        <Tbody>
-                            <Tr>
-                                <Td>{t("realm")}</Td>
-                                <Td>{authEvent.authDetails?.realmId}</Td>
-                            </Tr>
-                            <Tr>
-                                <Td>{t("client")}</Td>
-                                <Td>{authEvent.authDetails?.clientId}</Td>
-                            </Tr>
-                            <Tr>
-                                <Td>{t("user")}</Td>
-                                <Td>{authEvent.authDetails?.userId}</Td>
-                            </Tr>
-                            <Tr>
-                                <Td>{t("ipAddress")}</Td>
-                                <Td>{authEvent.authDetails?.ipAddress}</Td>
-                            </Tr>
-                        </Tbody>
+                    <Table aria-label="authData" data-testid="auth-dialog">
+                        <TableHeader>
+                            <TableRow>
+                                <TableHead>{t("attribute")}</TableHead>
+                                <TableHead>{t("value")}</TableHead>
+                            </TableRow>
+                        </TableHeader>
+                        <TableBody>
+                            <TableRow>
+                                <TableCell>{t("realm")}</TableCell>
+                                <TableCell>{authEvent.authDetails?.realmId}</TableCell>
+                            </TableRow>
+                            <TableRow>
+                                <TableCell>{t("client")}</TableCell>
+                                <TableCell>{authEvent.authDetails?.clientId}</TableCell>
+                            </TableRow>
+                            <TableRow>
+                                <TableCell>{t("user")}</TableCell>
+                                <TableCell>{authEvent.authDetails?.userId}</TableCell>
+                            </TableRow>
+                            <TableRow>
+                                <TableCell>{t("ipAddress")}</TableCell>
+                                <TableCell>{authEvent.authDetails?.ipAddress}</TableCell>
+                            </TableRow>
+                        </TableBody>
                     </Table>
                 </DisplayDialog>
             )}

@@ -47,7 +47,7 @@ import { InitialAccessTokenList } from "./initial-access/InitialAccessTokenList"
 import { ClientRegistration } from "./registration/ClientRegistration";
 import { toAddClient } from "./routes/AddClient";
 import { toClient } from "./routes/Client";
-import { ClientsTab, toClients } from "./routes/Clients";
+import { ClientsTab, toClients } from "./routes/clients-path";
 import { toImportClient } from "./routes/ImportClient";
 import { getProtocolName, isRealmClient } from "./utils";
 

@@ -12,11 +12,25 @@
 // @ts-nocheck
 
 import { TableToolbar } from "../../shared/keycloak-ui-shared";
-import { ExpandableSection, PageSection } from "../../shared/@patternfly/react-core";
-import { Table, Tbody, Td, Th, Thead, Tr } from "../../shared/@patternfly/react-table";
+import {
+    Table,
+    TableBody,
+    TableCell,
+    TableHead,
+    TableHeader,
+    TableRow,
+} from "@merge/ui/components/table";
+import {
+    Collapsible,
+    CollapsibleContent,
+    CollapsibleTrigger,
+} from "@merge/ui/components/collapsible";
+import { Button } from "@merge/ui/components/button";
 import { useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useServerInfo } from "../context/server-info/ServerInfoProvider";
+import { CaretDown, CaretRight } from "@phosphor-icons/react";
+import { cn } from "@merge/ui/lib/utils";
 
 export const ProviderInfo = () => {
     const { t } = useTranslation();
@@ -41,79 +55,87 @@ export const ProviderInfo = () => {
     };
 
     return (
-        <PageSection variant="light">
+        <div className="bg-muted/30 p-4">
             <TableToolbar
                 inputGroupName="search"
                 inputGroupPlaceholder={t("search")}
                 inputGroupOnEnter={setFilter}
             >
-                <Table variant="compact">
-                    <Thead>
-                        <Tr>
-                            <Th width={20}>{t("spi")}</Th>
-                            <Th>{t("providers")}</Th>
-                        </Tr>
-                    </Thead>
-                    <Tbody>
+                <Table className="text-sm">
+                    <TableHeader>
+                        <TableRow>
+                            <TableHead className="w-[20%]">{t("spi")}</TableHead>
+                            <TableHead>{t("providers")}</TableHead>
+                        </TableRow>
+                    </TableHeader>
+                    <TableBody>
                         {providerInfo.map(([name, { providers }]) => (
-                            <Tr key={name}>
-                                <Td>{name}</Td>
-                                <Td>
-                                    <ul>
+                            <TableRow key={name}>
+                                <TableCell>{name}</TableCell>
+                                <TableCell>
+                                    <ul className="list-none space-y-1">
                                         {Object.entries(providers).map(
                                             ([key, { operationalInfo }]) => (
                                                 <li key={key}>
                                                     {key}
                                                     {operationalInfo ? (
-                                                        <ExpandableSection
-                                                            key={key}
-                                                            isExpanded={open.includes(
-                                                                key
-                                                            )}
-                                                            onToggle={() =>
-                                                                toggleOpen(key)
-                                                            }
-                                                            toggleText={
-                                                                open.includes(key)
-                                                                    ? t("showLess")
-                                                                    : t("showMore")
-                                                            }
+                                                        <Collapsible
+                                                            open={open.includes(key)}
+                                                            onOpenChange={(isOpen) => {
+                                                                if (isOpen) setOpen([...open, key]);
+                                                                else setOpen(open.filter((x: string) => x !== key));
+                                                            }}
                                                         >
-                                                            <Table borders={false}>
-                                                                <Tbody>
-                                                                    {Object.entries(
-                                                                        operationalInfo
-                                                                    ).map(
-                                                                        ([
-                                                                            key,
-                                                                            value
-                                                                        ]) => (
-                                                                            <Tr key={key}>
-                                                                                <Td>
-                                                                                    {key}
-                                                                                </Td>
-                                                                                <Td>
-                                                                                    {
-                                                                                        value
-                                                                                    }
-                                                                                </Td>
-                                                                            </Tr>
-                                                                        )
+                                                            <CollapsibleTrigger asChild>
+                                                                <Button
+                                                                    variant="link"
+                                                                    className="h-auto p-0 text-xs"
+                                                                >
+                                                                    {open.includes(key) ? (
+                                                                        <CaretDown className="mr-1 size-3" />
+                                                                    ) : (
+                                                                        <CaretRight className="mr-1 size-3" />
                                                                     )}
-                                                                </Tbody>
-                                                            </Table>
-                                                        </ExpandableSection>
+                                                                    {open.includes(key)
+                                                                        ? t("showLess")
+                                                                        : t("showMore")}
+                                                                </Button>
+                                                            </CollapsibleTrigger>
+                                                            <CollapsibleContent>
+                                                                <Table className="mt-2 border-0 text-sm">
+                                                                    <TableBody>
+                                                                        {Object.entries(
+                                                                            operationalInfo
+                                                                        ).map(
+                                                                            ([
+                                                                                k,
+                                                                                value
+                                                                            ]) => (
+                                                                                <TableRow key={k}>
+                                                                                    <TableCell className="border-0 py-0.5">
+                                                                                        {k}
+                                                                                    </TableCell>
+                                                                                    <TableCell className="border-0 py-0.5">
+                                                                                        {String(value)}
+                                                                                    </TableCell>
+                                                                                </TableRow>
+                                                                            )
+                                                                        )}
+                                                                    </TableBody>
+                                                                </Table>
+                                                            </CollapsibleContent>
+                                                        </Collapsible>
                                                     ) : null}
                                                 </li>
                                             )
                                         )}
                                     </ul>
-                                </Td>
-                            </Tr>
+                                </TableCell>
+                            </TableRow>
                         ))}
-                    </Tbody>
+                    </TableBody>
                 </Table>
             </TableToolbar>
-        </PageSection>
+        </div>
     );
 };

@@ -22,7 +22,7 @@ import { useRealm } from "../../context/realm-context/RealmContext";
 import {
     ClientRegistrationTab,
     toClientRegistration
-} from "../routes/ClientRegistration";
+} from "../routes/client-registration-path";
 import { ClientRegistrationList } from "./ClientRegistrationList";
 
 export const ClientRegistration = () => {

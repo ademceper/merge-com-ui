@@ -36,8 +36,6 @@ import { AddRoleButton, AddRoleMappingModal, FilterType } from "./AddRoleMapping
 import { deleteMapping, getEffectiveRoles, getMapping } from "./queries";
 import { getEffectiveClientRoles } from "./resource";
 
-import "./role-mapping.css";
-
 export type CompositeRole = RoleRepresentation & {
     parent: RoleRepresentation;
     isInherited?: boolean;

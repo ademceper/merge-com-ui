@@ -28,8 +28,6 @@ import { useTranslation } from "react-i18next";
 import helpUrls from "../../help-urls";
 import { FormattedLink } from "../external-link/FormattedLink";
 
-import "./help-header.css";
-
 export const HelpHeader = () => {
     const [open, setOpen] = useState(false);
     const help = useHelp();

@@ -13,16 +13,24 @@
 
 import type ResourceRepresentation from "@keycloak/keycloak-admin-client/lib/defs/resourceRepresentation";
 import { KeycloakSelect, SelectVariant } from "../../../shared/keycloak-ui-shared";
-import { Button, SelectOption, TextInput } from "../../../shared/@patternfly/react-core";
-import { MinusCircleIcon, PlusCircleIcon } from "../../../shared/@patternfly/react-icons";
-import { Table, Tbody, Td, Th, Thead, Tr } from "../../../shared/@patternfly/react-table";
+import { SelectOption } from "../../../shared/@patternfly/react-core";
+import { Button } from "@merge/ui/components/button";
+import { Input } from "@merge/ui/components/input";
+import {
+    Table,
+    TableBody,
+    TableCell,
+    TableHead,
+    TableHeader,
+    TableRow,
+} from "@merge/ui/components/table";
+import { MinusCircle, Plus } from "@phosphor-icons/react";
 import { camelCase } from "lodash-es";
 import { useEffect, useMemo, useState } from "react";
 import { Controller, useFieldArray, useFormContext } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { defaultContextAttributes } from "../utils";
 
-import "./key-based-attribute-input.css";
 
 export type AttributeType = {
     key?: string;
@@ -100,7 +108,7 @@ const ValueInput = ({
         camelCase(attributeName).replace(/\W/g, "");
 
     return (
-        <Td>
+        <TableCell>
             {resources || attributeValues?.length ? (
                 <Controller
                     name={`${name}.${rowIndex}.value`}
@@ -132,7 +140,7 @@ const ValueInput = ({
                     )}
                 />
             ) : (
-                <TextInput
+                <Input
                     id={`${getMessageBundleKey(attribute.key)}-value`}
                     className="value-input"
                     defaultValue={attribute.value}
@@ -141,7 +149,7 @@ const ValueInput = ({
                     {...register(`${name}.${rowIndex}.value`)}
                 />
             )}
-        </Td>
+        </TableCell>
     );
 };
 
@@ -174,20 +182,20 @@ export const KeyBasedAttributeInput = ({
 
     return (
         <Table
-            className="kc-attributes__table"
+            className="kc-attributes__table text-sm"
             aria-label="Role attribute keys and values"
-            variant="compact"
         >
-            <Thead>
-                <Tr>
-                    <Th width={40}>{t("key")}</Th>
-                    <Th width={40}>{t("value")}</Th>
-                </Tr>
-            </Thead>
-            <Tbody>
+            <TableHeader>
+                <TableRow>
+                    <TableHead className="w-[40%]">{t("key")}</TableHead>
+                    <TableHead className="w-[40%]">{t("value")}</TableHead>
+                    <TableHead aria-hidden="true" />
+                </TableRow>
+            </TableHeader>
+            <TableBody>
                 {fields.map((attribute, rowIndex) => (
-                    <Tr key={attribute.id} data-testid="attribute-row">
-                        <Td>
+                    <TableRow key={attribute.id} data-testid="attribute-row">
+                        <TableCell>
                             <Controller
                                 name={`${name}.${rowIndex}.key`}
                                 defaultValue=""
@@ -224,7 +232,7 @@ export const KeyBasedAttributeInput = ({
                                     </KeycloakSelect>
                                 )}
                             />
-                        </Td>
+                        </TableCell>
                         <ValueInput
                             name={name}
                             attribute={attribute}
@@ -232,21 +240,22 @@ export const KeyBasedAttributeInput = ({
                             selectableValues={selectableValues}
                             resources={resources}
                         />
-                        <Td>
+                        <TableCell>
                             <Button
                                 id={`${name}-minus-button-${rowIndex}`}
                                 variant="link"
+                                size="icon-sm"
                                 className="kc-attributes__minus-icon"
                                 onClick={() => remove(rowIndex)}
                                 aria-label={t("remove")}
                             >
-                                <MinusCircleIcon />
+                                <MinusCircle className="size-4" />
                             </Button>
-                        </Td>
-                    </Tr>
+                        </TableCell>
+                    </TableRow>
                 ))}
-                <Tr>
-                    <Td>
+                <TableRow>
+                    <TableCell colSpan={3}>
                         <Button
                             aria-label={t("addAttribute", { label: t("attribute") })}
                             id={`${name}-plus-icon`}
@@ -256,15 +265,15 @@ export const KeyBasedAttributeInput = ({
                                 append({ key: "", value: "" });
                                 setIsKeyOpenArray([...isKeyOpenArray, false]);
                             }}
-                            icon={<PlusCircleIcon />}
-                            isDisabled={!watchLastValue}
+                            disabled={!watchLastValue}
                             data-testid="attribute-add-row"
                         >
+                            <Plus className="size-4" />
                             {t("addAttribute", { label: t("attribute") })}
                         </Button>
-                    </Td>
-                </Tr>
-            </Tbody>
+                    </TableCell>
+                </TableRow>
+            </TableBody>
         </Table>
     );
 };

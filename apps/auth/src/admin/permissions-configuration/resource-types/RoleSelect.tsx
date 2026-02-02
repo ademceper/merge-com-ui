@@ -11,10 +11,17 @@
 
 // @ts-nocheck
 
-import { FormErrorText, HelpItem, useFetch } from "../../../shared/keycloak-ui-shared";
-import { Button, FormGroup } from "../../../shared/@patternfly/react-core";
-import { MinusCircleIcon } from "../../../shared/@patternfly/react-icons";
-import { Table, Tbody, Td, Th, Thead, Tr } from "../../../shared/@patternfly/react-table";
+import { FormErrorText, HelpItem, useFetch, FormLabel } from "../../../shared/keycloak-ui-shared";
+import { Button } from "@merge/ui/components/button";
+import {
+    Table,
+    TableBody,
+    TableCell,
+    TableHead,
+    TableHeader,
+    TableRow,
+} from "@merge/ui/components/table";
+import { MinusCircle } from "@phosphor-icons/react";
 import { useState } from "react";
 import { useFormContext } from "react-hook-form";
 import { useTranslation } from "react-i18next";
@@ -68,7 +75,8 @@ export const RoleSelect = ({ name, isRadio = false }: RoleSelectorProps) => {
     );
 
     return (
-        <FormGroup
+        <FormLabel
+            name={name}
             label={isRadio ? t("role") : t("roles")}
             labelIcon={
                 <HelpItem
@@ -76,7 +84,6 @@ export const RoleSelect = ({ name, isRadio = false }: RoleSelectorProps) => {
                     fieldLabelId="roles"
                 />
             }
-            fieldId={name}
             isRequired
         >
             {isModalOpen && (
@@ -111,24 +118,24 @@ export const RoleSelect = ({ name, isRadio = false }: RoleSelectorProps) => {
                 }}
             />
             {selectedRoles.length > 0 && (
-                <Table variant="compact">
-                    <Thead>
-                        <Tr>
-                            <Th>{t("roles")}</Th>
-                            <Th aria-hidden="true" />
-                        </Tr>
-                    </Thead>
-                    <Tbody>
+                <Table className="mt-2 text-sm">
+                    <TableHeader>
+                        <TableRow>
+                            <TableHead>{t("roles")}</TableHead>
+                            <TableHead aria-hidden="true" />
+                        </TableRow>
+                    </TableHeader>
+                    <TableBody>
                         {selectedRoles.map(row => (
-                            <Tr key={row.role.id}>
-                                <Td>
+                            <TableRow key={row.role.id}>
+                                <TableCell>
                                     <ServiceRole role={row.role} client={row.client} />
-                                </Td>
-                                <Td>
+                                </TableCell>
+                                <TableCell>
                                     <Button
                                         variant="link"
+                                        size="icon-sm"
                                         className="keycloak__client-authorization__policy-row-remove"
-                                        icon={<MinusCircleIcon />}
                                         onClick={() => {
                                             setValue(
                                                 name,
@@ -140,14 +147,16 @@ export const RoleSelect = ({ name, isRadio = false }: RoleSelectorProps) => {
                                                 )
                                             );
                                         }}
-                                    />
-                                </Td>
-                            </Tr>
+                                    >
+                                        <MinusCircle className="size-4" />
+                                    </Button>
+                                </TableCell>
+                            </TableRow>
                         ))}
-                    </Tbody>
+                    </TableBody>
                 </Table>
             )}
             {errors[name] && <FormErrorText message={t("requiredRoles")} />}
-        </FormGroup>
+        </FormLabel>
     );
 };

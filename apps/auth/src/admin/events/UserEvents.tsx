@@ -57,7 +57,6 @@ import { toUser } from "../user/routes/User";
 import useFormatDate, { FORMAT_DATE_AND_TIME } from "../utils/useFormatDate";
 import useLocaleSort from "../utils/useLocaleSort";
 
-import "./events.css";
 
 type UserEventSearchForm = {
     client: string;

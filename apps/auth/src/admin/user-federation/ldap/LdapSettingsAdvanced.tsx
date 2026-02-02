@@ -11,8 +11,10 @@
 
 // @ts-nocheck
 
-import { Button, FormGroup, Switch } from "../../../shared/@patternfly/react-core";
 import { Controller, UseFormReturn } from "react-hook-form";
+import { Button } from "@merge/ui/components/button";
+import { Switch } from "@merge/ui/components/switch";
+import { FormLabel } from "../../../shared/keycloak-ui-shared";
 import { useTranslation } from "react-i18next";
 import { HelpItem } from "../../../shared/keycloak-ui-shared";
 import { useAdminClient } from "../../admin-client";
@@ -75,7 +77,8 @@ export const LdapSettingsAdvanced = ({
             )}
 
             <FormAccess role="manage-realm" isHorizontal>
-                <FormGroup
+                <FormLabel
+                    name="kc-enable-ldapv3-password"
                     label={t("enableLdapv3Password")}
                     labelIcon={
                         <HelpItem
@@ -83,7 +86,6 @@ export const LdapSettingsAdvanced = ({
                             fieldLabelId="enableLdapv3Password"
                         />
                     }
-                    fieldId="kc-enable-ldapv3-password"
                     hasNoPaddingTop
                 >
                     <Controller
@@ -92,20 +94,18 @@ export const LdapSettingsAdvanced = ({
                         control={form.control}
                         render={({ field }) => (
                             <Switch
-                                id={"kc-enable-ldapv3-password"}
+                                id="kc-enable-ldapv3-password"
                                 data-testid="ldapv3-password"
-                                isDisabled={false}
-                                onChange={(_event, value) => field.onChange([`${value}`])}
-                                isChecked={field.value[0] === "true"}
-                                label={t("on")}
-                                labelOff={t("off")}
+                                checked={field.value[0] === "true"}
+                                onCheckedChange={(value) => field.onChange([`${value}`])}
                                 aria-label={t("enableLdapv3Password")}
                             />
                         )}
-                    ></Controller>
-                </FormGroup>
+                    />
+                </FormLabel>
 
-                <FormGroup
+                <FormLabel
+                    name="kc-validate-password-policy"
                     label={t("validatePasswordPolicy")}
                     labelIcon={
                         <HelpItem
@@ -113,7 +113,6 @@ export const LdapSettingsAdvanced = ({
                             fieldLabelId="validatePasswordPolicy"
                         />
                     }
-                    fieldId="kc-validate-password-policy"
                     hasNoPaddingTop
                 >
                     <Controller
@@ -122,20 +121,18 @@ export const LdapSettingsAdvanced = ({
                         control={form.control}
                         render={({ field }) => (
                             <Switch
-                                id={"kc-validate-password-policy"}
+                                id="kc-validate-password-policy"
                                 data-testid="password-policy"
-                                isDisabled={false}
-                                onChange={(_event, value) => field.onChange([`${value}`])}
-                                isChecked={field.value[0] === "true"}
-                                label={t("on")}
-                                labelOff={t("off")}
+                                checked={field.value[0] === "true"}
+                                onCheckedChange={(value) => field.onChange([`${value}`])}
                                 aria-label={t("validatePasswordPolicy")}
                             />
                         )}
-                    ></Controller>
-                </FormGroup>
+                    />
+                </FormLabel>
 
-                <FormGroup
+                <FormLabel
+                    name="kc-trust-email"
                     label={t("trustEmail")}
                     labelIcon={
                         <HelpItem
@@ -143,7 +140,6 @@ export const LdapSettingsAdvanced = ({
                             fieldLabelId="trustEmail"
                         />
                     }
-                    fieldId="kc-trust-email"
                     hasNoPaddingTop
                 >
                     <Controller
@@ -152,19 +148,17 @@ export const LdapSettingsAdvanced = ({
                         control={form.control}
                         render={({ field }) => (
                             <Switch
-                                id={"kc-trust-email"}
+                                id="kc-trust-email"
                                 data-testid="trust-email"
-                                isDisabled={false}
-                                onChange={(_event, value) => field.onChange([`${value}`])}
-                                isChecked={field.value[0] === "true"}
-                                label={t("on")}
-                                labelOff={t("off")}
+                                checked={field.value[0] === "true"}
+                                onCheckedChange={(value) => field.onChange([`${value}`])}
                                 aria-label={t("trustEmail")}
                             />
                         )}
-                    ></Controller>
-                </FormGroup>
-                <FormGroup
+                    />
+                </FormLabel>
+                <FormLabel
+                    name="kc-connection-trace"
                     label={t("connectionTrace")}
                     labelIcon={
                         <HelpItem
@@ -172,7 +166,6 @@ export const LdapSettingsAdvanced = ({
                             fieldLabelId="connectionTrace"
                         />
                     }
-                    fieldId="kc-connection-trace"
                     hasNoPaddingTop
                 >
                     <Controller
@@ -181,28 +174,25 @@ export const LdapSettingsAdvanced = ({
                         control={form.control}
                         render={({ field }) => (
                             <Switch
-                                id={"kc-connection-trace"}
+                                id="kc-connection-trace"
                                 data-testid="connection-trace"
-                                isDisabled={false}
-                                onChange={(_event, value) => field.onChange([`${value}`])}
-                                isChecked={field.value[0] === "true"}
-                                label={t("on")}
-                                labelOff={t("off")}
+                                checked={field.value[0] === "true"}
+                                onCheckedChange={(value) => field.onChange([`${value}`])}
                                 aria-label={t("connectionTrace")}
                             />
                         )}
-                    ></Controller>
-                </FormGroup>
-                <FormGroup fieldId="query-extensions">
+                    />
+                </FormLabel>
+                <div>
                     <Button
-                        variant="secondary"
+                        variant="outline"
                         id="query-extensions"
                         data-testid="query-extensions"
                         onClick={testLdap}
                     >
                         {t("queryExtensions")}
                     </Button>
-                </FormGroup>
+                </div>
             </FormAccess>
         </>
     );

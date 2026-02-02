@@ -11,31 +11,23 @@
 
 // @ts-nocheck
 
-import { lazy } from "react";
-import type { Path } from "react-router-dom";
-import { generateEncodedPath } from "../../utils/generateEncodedPath";
 import type { AppRouteObject } from "../../routes";
+import {
+    CLIENT_REGISTRATION_PATH,
+    type ClientRegistrationParams,
+    type ClientRegistrationTab,
+    toClientRegistration
+} from "./client-registration-path";
+import ClientsSection from "../ClientsSection";
 
-export type ClientRegistrationTab = "anonymous" | "authenticated";
-
-export type ClientRegistrationParams = {
-    realm: string;
-    subTab: ClientRegistrationTab;
-};
-
-const ClientsSection = lazy(() => import("../ClientsSection"));
+export type { ClientRegistrationParams, ClientRegistrationTab };
+export { toClientRegistration };
 
 export const ClientRegistrationRoute: AppRouteObject = {
-    path: "/:realm/clients/client-registration/:subTab",
+    path: CLIENT_REGISTRATION_PATH,
     element: <ClientsSection />,
     breadcrumb: t => t("clientRegistration"),
     handle: {
         access: "view-clients"
     }
 };
-
-export const toClientRegistration = (
-    params: ClientRegistrationParams
-): Partial<Path> => ({
-    pathname: generateEncodedPath(ClientRegistrationRoute.path, params)
-});

@@ -12,7 +12,8 @@
 // @ts-nocheck
 
 import type RealmRepresentation from "@keycloak/keycloak-admin-client/lib/defs/realmRepresentation";
-import { FormGroup, PageSection, Switch } from "../../shared/@patternfly/react-core";
+import { Switch } from "@merge/ui/components/switch";
+import { FormLabel } from "../../shared/keycloak-ui-shared";
 import { useTranslation } from "react-i18next";
 import { FormPanel, HelpItem } from "../../shared/keycloak-ui-shared";
 import { useAdminClient } from "../admin-client";
@@ -57,12 +58,12 @@ export const RealmSettingsLoginTab = ({ realm, refresh }: RealmSettingsLoginTabP
     };
 
     return (
-        <PageSection variant="light">
+        <div className="bg-muted/30 p-4">
             <FormPanel className="kc-login-screen" title={t("loginScreenCustomization")}>
                 <FormAccess isHorizontal role="manage-realm">
-                    <FormGroup
+                    <FormLabel
+                        name="kc-user-reg"
                         label={t("registrationAllowed")}
-                        fieldId="kc-user-reg"
                         labelIcon={
                             <HelpItem
                                 helpText={t("userRegistrationHelpText")}
@@ -74,19 +75,16 @@ export const RealmSettingsLoginTab = ({ realm, refresh }: RealmSettingsLoginTabP
                         <Switch
                             id="kc-user-reg-switch"
                             data-testid="user-reg-switch"
-                            value={realm.registrationAllowed ? "on" : "off"}
-                            label={t("on")}
-                            labelOff={t("off")}
-                            isChecked={realm.registrationAllowed}
-                            onChange={async (_event, value) => {
+                            checked={!!realm.registrationAllowed}
+                            onCheckedChange={async (value) => {
                                 await updateSwitchValue({ registrationAllowed: value });
                             }}
                             aria-label={t("registrationAllowed")}
                         />
-                    </FormGroup>
-                    <FormGroup
+                    </FormLabel>
+                    <FormLabel
+                        name="kc-forgot-pw"
                         label={t("resetPasswordAllowed")}
-                        fieldId="kc-forgot-pw"
                         labelIcon={
                             <HelpItem
                                 helpText={t("forgotPasswordHelpText")}
@@ -98,20 +96,16 @@ export const RealmSettingsLoginTab = ({ realm, refresh }: RealmSettingsLoginTabP
                         <Switch
                             id="kc-forgot-pw-switch"
                             data-testid="forgot-pw-switch"
-                            name="resetPasswordAllowed"
-                            value={realm.resetPasswordAllowed ? "on" : "off"}
-                            label={t("on")}
-                            labelOff={t("off")}
-                            isChecked={realm.resetPasswordAllowed}
-                            onChange={async (_event, value) => {
+                            checked={!!realm.resetPasswordAllowed}
+                            onCheckedChange={async (value) => {
                                 await updateSwitchValue({ resetPasswordAllowed: value });
                             }}
                             aria-label={t("resetPasswordAllowed")}
                         />
-                    </FormGroup>
-                    <FormGroup
+                    </FormLabel>
+                    <FormLabel
+                        name="kc-remember-me"
                         label={t("rememberMe")}
-                        fieldId="kc-remember-me"
                         labelIcon={
                             <HelpItem
                                 helpText={t("rememberMeHelpText")}
@@ -123,23 +117,20 @@ export const RealmSettingsLoginTab = ({ realm, refresh }: RealmSettingsLoginTabP
                         <Switch
                             id="kc-remember-me-switch"
                             data-testid="remember-me-switch"
-                            value={realm.rememberMe ? "on" : "off"}
-                            label={t("on")}
-                            labelOff={t("off")}
-                            isChecked={realm.rememberMe}
-                            onChange={async (_event, value) => {
+                            checked={!!realm.rememberMe}
+                            onCheckedChange={async (value) => {
                                 await updateSwitchValue({ rememberMe: value });
                             }}
                             aria-label={t("rememberMe")}
                         />
-                    </FormGroup>
+                    </FormLabel>
                 </FormAccess>
             </FormPanel>
             <FormPanel className="kc-email-settings" title={t("emailSettings")}>
                 <FormAccess isHorizontal role="manage-realm">
-                    <FormGroup
+                    <FormLabel
+                        name="kc-email-as-username"
                         label={t("registrationEmailAsUsername")}
-                        fieldId="kc-email-as-username"
                         labelIcon={
                             <HelpItem
                                 helpText={t("emailAsUsernameHelpText")}
@@ -151,11 +142,8 @@ export const RealmSettingsLoginTab = ({ realm, refresh }: RealmSettingsLoginTabP
                         <Switch
                             id="kc-email-as-username-switch"
                             data-testid="email-as-username-switch"
-                            value={realm.registrationEmailAsUsername ? "on" : "off"}
-                            label={t("on")}
-                            labelOff={t("off")}
-                            isChecked={realm.registrationEmailAsUsername}
-                            onChange={async (_event, value) => {
+                            checked={!!realm.registrationEmailAsUsername}
+                            onCheckedChange={async (value) => {
                                 await updateSwitchValue([
                                     {
                                         registrationEmailAsUsername: value
@@ -167,10 +155,10 @@ export const RealmSettingsLoginTab = ({ realm, refresh }: RealmSettingsLoginTabP
                             }}
                             aria-label={t("registrationEmailAsUsername")}
                         />
-                    </FormGroup>
-                    <FormGroup
+                    </FormLabel>
+                    <FormLabel
+                        name="kc-login-with-email"
                         label={t("loginWithEmailAllowed")}
-                        fieldId="kc-login-with-email"
                         labelIcon={
                             <HelpItem
                                 helpText={t("loginWithEmailHelpText")}
@@ -182,11 +170,8 @@ export const RealmSettingsLoginTab = ({ realm, refresh }: RealmSettingsLoginTabP
                         <Switch
                             id="kc-login-with-email-switch"
                             data-testid="login-with-email-switch"
-                            value={realm.loginWithEmailAllowed ? "on" : "off"}
-                            label={t("on")}
-                            labelOff={t("off")}
-                            isChecked={realm.loginWithEmailAllowed}
-                            onChange={async (_event, value) => {
+                            checked={!!realm.loginWithEmailAllowed}
+                            onCheckedChange={async (value) => {
                                 await updateSwitchValue([
                                     {
                                         loginWithEmailAllowed: value
@@ -196,10 +181,10 @@ export const RealmSettingsLoginTab = ({ realm, refresh }: RealmSettingsLoginTabP
                             }}
                             aria-label={t("loginWithEmailAllowed")}
                         />
-                    </FormGroup>
-                    <FormGroup
+                    </FormLabel>
+                    <FormLabel
+                        name="kc-duplicate-emails"
                         label={t("duplicateEmailsAllowed")}
-                        fieldId="kc-duplicate-emails"
                         labelIcon={
                             <HelpItem
                                 helpText={t("duplicateEmailsHelpText")}
@@ -211,24 +196,22 @@ export const RealmSettingsLoginTab = ({ realm, refresh }: RealmSettingsLoginTabP
                         <Switch
                             id="kc-duplicate-emails-switch"
                             data-testid="duplicate-emails-switch"
-                            label={t("on")}
-                            labelOff={t("off")}
-                            isChecked={realm.duplicateEmailsAllowed}
-                            onChange={async (_event, value) => {
+                            checked={!!realm.duplicateEmailsAllowed}
+                            onCheckedChange={async (value) => {
                                 await updateSwitchValue({
                                     duplicateEmailsAllowed: value
                                 });
                             }}
-                            isDisabled={
-                                realm.loginWithEmailAllowed ||
-                                realm.registrationEmailAsUsername
+                            disabled={
+                                !!realm.loginWithEmailAllowed ||
+                                !!realm.registrationEmailAsUsername
                             }
                             aria-label={t("duplicateEmailsAllowed")}
                         />
-                    </FormGroup>
-                    <FormGroup
+                    </FormLabel>
+                    <FormLabel
+                        name="kc-verify-email"
                         label={t("verifyEmail")}
-                        fieldId="kc-verify-email"
                         labelIcon={
                             <HelpItem
                                 helpText={t("verifyEmailHelpText")}
@@ -240,24 +223,20 @@ export const RealmSettingsLoginTab = ({ realm, refresh }: RealmSettingsLoginTabP
                         <Switch
                             id="kc-verify-email-switch"
                             data-testid="verify-email-switch"
-                            name="verifyEmail"
-                            value={realm.verifyEmail ? "on" : "off"}
-                            label={t("on")}
-                            labelOff={t("off")}
-                            isChecked={realm.verifyEmail}
-                            onChange={async (_event, value) => {
+                            checked={!!realm.verifyEmail}
+                            onCheckedChange={async (value) => {
                                 await updateSwitchValue({ verifyEmail: value });
                             }}
                             aria-label={t("verifyEmail")}
                         />
-                    </FormGroup>
+                    </FormLabel>
                 </FormAccess>
             </FormPanel>
             <FormPanel className="kc-user-info-settings" title={t("userInfoSettings")}>
                 <FormAccess isHorizontal role="manage-realm">
-                    <FormGroup
+                    <FormLabel
+                        name="kc-edit-username"
                         label={t("editUsernameAllowed")}
-                        fieldId="kc-edit-username"
                         labelIcon={
                             <HelpItem
                                 helpText={t("editUsernameHelp")}
@@ -269,18 +248,15 @@ export const RealmSettingsLoginTab = ({ realm, refresh }: RealmSettingsLoginTabP
                         <Switch
                             id="kc-edit-username-switch"
                             data-testid="edit-username-switch"
-                            value={realm.editUsernameAllowed ? "on" : "off"}
-                            label={t("on")}
-                            labelOff={t("off")}
-                            isChecked={realm.editUsernameAllowed}
-                            onChange={async (_event, value) => {
+                            checked={!!realm.editUsernameAllowed}
+                            onCheckedChange={async (value) => {
                                 await updateSwitchValue({ editUsernameAllowed: value });
                             }}
                             aria-label={t("editUsernameAllowed")}
                         />
-                    </FormGroup>
+                    </FormLabel>
                 </FormAccess>
             </FormPanel>
-        </PageSection>
+        </div>
     );
 };

@@ -12,7 +12,7 @@
 // @ts-nocheck
 
 import type ComponentRepresentation from "@keycloak/keycloak-admin-client/lib/defs/componentRepresentation";
-import { Button, Form } from "../../shared/@patternfly/react-core";
+import { Button } from "@merge/ui/components/button";
 import { useFormContext } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
@@ -82,13 +82,14 @@ export const UserFederationLdapForm = ({ id, onSubmit }: UserFederationLdapFormP
                     }
                 ]}
             />
-            <Form onSubmit={form.handleSubmit(onSubmit)}>
+            <form onSubmit={form.handleSubmit(onSubmit)}>
                 <FixedButtonsGroup
                     name="ldap"
                     isDisabled={!form.formState.isDirty}
                     isSubmit
                 >
                     <Button
+                        type="button"
                         variant="link"
                         onClick={() => navigate(toUserFederation({ realm }))}
                         data-testid="ldap-cancel"
@@ -96,7 +97,7 @@ export const UserFederationLdapForm = ({ id, onSubmit }: UserFederationLdapFormP
                         {t("cancel")}
                     </Button>
                 </FixedButtonsGroup>
-            </Form>
+            </form>
         </>
     );
 };

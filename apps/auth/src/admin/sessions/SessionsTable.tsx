@@ -12,17 +12,16 @@
 // @ts-nocheck
 
 import type UserSessionRepresentation from "@keycloak/keycloak-admin-client/lib/defs/userSessionRepresentation";
+import { Info } from "@phosphor-icons/react";
+import { CubesIcon } from "../../shared/@patternfly/react-icons";
 import { useEnvironment } from "../../shared/keycloak-ui-shared";
+import { Badge } from "@merge/ui/components/badge";
+import { Button } from "@merge/ui/components/button";
 import {
-    Button,
-    Label,
-    List,
-    ListItem,
-    ListVariant,
-    ToolbarItem,
-    Tooltip
-} from "../../shared/@patternfly/react-core";
-import { CubesIcon, InfoCircleIcon } from "../../shared/@patternfly/react-icons";
+    Tooltip,
+    TooltipContent,
+    TooltipTrigger
+} from "@merge/ui/components/tooltip";
 import { IRowData } from "../../shared/@patternfly/react-table";
 import { ReactNode, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -66,14 +65,18 @@ const UsernameCell = (row: UserSessionRepresentation) => {
             {row.transientUser && (
                 <>
                     {" "}
-                    <Tooltip content={t("transientUserTooltip")}>
-                        <Label
-                            data-testid="user-details-label-transient-user"
-                            icon={<InfoCircleIcon />}
-                            isCompact
-                        >
-                            {t("transientUser")}
-                        </Label>
+                    <Tooltip>
+                        <TooltipTrigger asChild>
+                            <Badge
+                                variant="secondary"
+                                data-testid="user-details-label-transient-user"
+                                className="gap-1 cursor-help"
+                            >
+                                <Info className="size-3" />
+                                {t("transientUser")}
+                            </Badge>
+                        </TooltipTrigger>
+                        <TooltipContent>{t("transientUserTooltip")}</TooltipContent>
                     </Tooltip>
                 </>
             )}
@@ -84,15 +87,17 @@ const UsernameCell = (row: UserSessionRepresentation) => {
 const ClientsCell = (row: UserSessionRepresentation) => {
     const { realm } = useRealm();
     return (
-        <List variant={ListVariant.inline}>
+        <div className="flex flex-wrap gap-x-2 gap-y-1">
             {Object.entries(row.clients!).map(([clientId, client]) => (
-                <ListItem key={clientId}>
-                    <Link to={toClient({ realm, clientId, tab: "sessions" })}>
-                        {client}
-                    </Link>
-                </ListItem>
+                <Link
+                    key={clientId}
+                    to={toClient({ realm, clientId, tab: "sessions" })}
+                    className="text-primary hover:underline"
+                >
+                    {client}
+                </Link>
             ))}
-        </List>
+        </div>
     );
 };
 
@@ -214,11 +219,11 @@ export default function SessionsTable({
                 searchTypeComponent={filter}
                 toolbarItem={
                     logoutUser && (
-                        <ToolbarItem>
+                        <div>
                             <Button onClick={toggleLogoutDialog}>
                                 {t("logoutAllSessions")}
                             </Button>
-                        </ToolbarItem>
+                        </div>
                     )
                 }
                 columns={columns}

@@ -22,7 +22,6 @@ import { UserDataTable } from "../components/users/UserDataTable";
 import { toUsers, UserTab } from "./routes/Users";
 import { RoutableTabs, useRoutableTab } from "../components/routable-tabs/RoutableTabs";
 import useIsFeatureEnabled, { Feature } from "../utils/useIsFeatureEnabled";
-import "./user-section.css";
 import { useAccess } from "../context/access/Access";
 
 export default function UsersSection() {

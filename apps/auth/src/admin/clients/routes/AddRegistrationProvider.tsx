@@ -15,7 +15,7 @@ import { lazy } from "react";
 import type { Path } from "react-router-dom";
 import { generateEncodedPath } from "../../utils/generateEncodedPath";
 import type { AppRouteObject } from "../../routes";
-import { ClientRegistrationTab } from "./ClientRegistration";
+import { ClientRegistrationTab } from "./client-registration-path";
 
 export type RegistrationProviderParams = {
     realm: string;

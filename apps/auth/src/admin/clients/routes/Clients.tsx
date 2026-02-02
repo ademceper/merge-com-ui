@@ -11,22 +11,21 @@
 
 // @ts-nocheck
 
-import { lazy } from "react";
-import type { Path } from "react-router-dom";
-import { generateEncodedPath } from "../../utils/generateEncodedPath";
 import type { AppRouteObject } from "../../routes";
+import {
+    CLIENTS_PATH,
+    CLIENTS_PATH_WITH_TAB,
+    type ClientsParams,
+    type ClientsTab,
+    toClients
+} from "./clients-path";
+import ClientsSection from "../ClientsSection";
 
-export type ClientsTab = "list" | "initial-access-token" | "client-registration";
-
-export type ClientsParams = {
-    realm: string;
-    tab?: ClientsTab;
-};
-
-const ClientsSection = lazy(() => import("../ClientsSection"));
+export type { ClientsParams, ClientsTab };
+export { toClients };
 
 export const ClientsRoute: AppRouteObject = {
-    path: "/:realm/clients",
+    path: CLIENTS_PATH,
     element: <ClientsSection />,
     breadcrumb: t => t("clientList"),
     handle: {
@@ -36,13 +35,5 @@ export const ClientsRoute: AppRouteObject = {
 
 export const ClientsRouteWithTab: AppRouteObject = {
     ...ClientsRoute,
-    path: "/:realm/clients/:tab"
-};
-
-export const toClients = (params: ClientsParams): Partial<Path> => {
-    const path = params.tab ? ClientsRouteWithTab.path : ClientsRoute.path;
-
-    return {
-        pathname: generateEncodedPath(path, params)
-    };
+    path: CLIENTS_PATH_WITH_TAB
 };

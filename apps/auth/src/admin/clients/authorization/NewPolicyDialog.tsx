@@ -13,13 +13,20 @@
 
 import { useTranslation } from "react-i18next";
 import {
-    Modal,
-    ModalVariant,
-    TextContent,
-    Text,
-    TextVariants
-} from "../../../shared/@patternfly/react-core";
-import { Table, Tbody, Td, Th, Thead, Tr } from "../../../shared/@patternfly/react-table";
+    Dialog,
+    DialogContent,
+    DialogHeader,
+    DialogTitle,
+} from "@merge/ui/components/dialog";
+import {
+    Table,
+    TableBody,
+    TableCell,
+    TableHead,
+    TableHeader,
+    TableRow,
+} from "@merge/ui/components/table";
+import { cn } from "@merge/ui/lib/utils";
 
 import type PolicyProviderRepresentation from "@keycloak/keycloak-admin-client/lib/defs/policyProviderRepresentation";
 import { isValidComponentType } from "./policy/PolicyDetails";
@@ -46,42 +53,37 @@ export const NewPolicyDialog = ({
     );
 
     return (
-        <Modal
-            aria-label={t("createPolicy")}
-            variant={ModalVariant.medium}
-            header={
-                <TextContent>
-                    <Text component={TextVariants.h1}>{t("chooseAPolicyType")}</Text>
-                    <Text>{t("chooseAPolicyTypeInstructions")}</Text>
-                </TextContent>
-            }
-            isOpen
-            onClose={toggleDialog}
-        >
-            <Table aria-label={t("policies")} variant="compact">
-                <Thead>
-                    <Tr>
-                        <Th>{t("name")}</Th>
-                        <Th>{t("description")}</Th>
-                    </Tr>
-                </Thead>
-                <Tbody>
-                    {sortedPolicies.map(provider => (
-                        <Tr
-                            key={provider.type}
-                            data-testid={provider.type}
-                            onRowClick={() => onSelect(provider)}
-                            isClickable
-                        >
-                            <Td>{provider.name}</Td>
-                            <Td style={{ textWrap: "wrap" }}>
-                                {isValidComponentType(provider.type!) &&
-                                    t(`policyProvider.${provider.type}`)}
-                            </Td>
-                        </Tr>
-                    ))}
-                </Tbody>
-            </Table>
-        </Modal>
+        <Dialog open={true} onOpenChange={(v) => !v && toggleDialog()}>
+            <DialogContent showCloseButton className="sm:max-w-lg" aria-label={t("createPolicy")}>
+                <DialogHeader>
+                    <DialogTitle>{t("chooseAPolicyType")}</DialogTitle>
+                    <p className="text-muted-foreground text-sm">{t("chooseAPolicyTypeInstructions")}</p>
+                </DialogHeader>
+                <Table aria-label={t("policies")} className="text-sm">
+                    <TableHeader>
+                        <TableRow>
+                            <TableHead>{t("name")}</TableHead>
+                            <TableHead>{t("description")}</TableHead>
+                        </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                        {sortedPolicies.map(provider => (
+                            <TableRow
+                                key={provider.type}
+                                data-testid={provider.type}
+                                onClick={() => onSelect(provider)}
+                                className={cn("cursor-pointer")}
+                            >
+                                <TableCell>{provider.name}</TableCell>
+                                <TableCell className="whitespace-normal">
+                                    {isValidComponentType(provider.type!) &&
+                                        t(`policyProvider.${provider.type}`)}
+                                </TableCell>
+                            </TableRow>
+                        ))}
+                    </TableBody>
+                </Table>
+            </DialogContent>
+        </Dialog>
     );
 };

@@ -11,8 +11,9 @@
 
 // @ts-nocheck
 
-import { FormGroup, Switch } from "../../../shared/@patternfly/react-core";
 import { Controller, FormProvider, useFormContext } from "react-hook-form";
+import { Switch } from "@merge/ui/components/switch";
+import { FormLabel } from "../../../shared/keycloak-ui-shared";
 import { useTranslation } from "react-i18next";
 import { HelpItem, TextControl } from "../../../shared/keycloak-ui-shared";
 
@@ -25,7 +26,8 @@ export const SyncSettings = () => {
 
     return (
         <FormProvider {...form}>
-            <FormGroup
+            <FormLabel
+                name="kc-periodic-full-sync"
                 label={t("periodicFullSync")}
                 labelIcon={
                     <HelpItem
@@ -33,7 +35,6 @@ export const SyncSettings = () => {
                         fieldLabelId="periodicFullSync"
                     />
                 }
-                fieldId="kc-periodic-full-sync"
                 hasNoPaddingTop
             >
                 <Controller
@@ -44,17 +45,15 @@ export const SyncSettings = () => {
                         <Switch
                             id="kc-periodic-full-sync"
                             data-testid="periodic-full-sync"
-                            onChange={(_event, value) => {
+                            checked={field.value !== "-1"}
+                            onCheckedChange={(value) => {
                                 field.onChange(value ? "604800" : "-1");
                             }}
-                            isChecked={field.value !== "-1"}
-                            label={t("on")}
-                            labelOff={t("off")}
                             aria-label={t("periodicFullSync")}
                         />
                     )}
                 />
-            </FormGroup>
+            </FormLabel>
             {watchPeriodicSync !== "-1" && (
                 <TextControl
                     name="config.fullSyncPeriod"
@@ -65,7 +64,8 @@ export const SyncSettings = () => {
                     defaultValue="604800"
                 />
             )}
-            <FormGroup
+            <FormLabel
+                name="kc-periodic-changed-users-sync"
                 label={t("periodicChangedUsersSync")}
                 labelIcon={
                     <HelpItem
@@ -73,7 +73,6 @@ export const SyncSettings = () => {
                         fieldLabelId="periodicChangedUsersSync"
                     />
                 }
-                fieldId="kc-periodic-changed-users-sync"
                 hasNoPaddingTop
             >
                 <Controller
@@ -84,17 +83,15 @@ export const SyncSettings = () => {
                         <Switch
                             id="kc-periodic-changed-users-sync"
                             data-testid="periodic-changed-users-sync"
-                            onChange={(_event, value) => {
+                            checked={field.value !== "-1"}
+                            onCheckedChange={(value) => {
                                 field.onChange(value ? "86400" : "-1");
                             }}
-                            isChecked={field.value !== "-1"}
-                            label={t("on")}
-                            labelOff={t("off")}
                             aria-label={t("periodicChangedUsersSync")}
                         />
                     )}
                 />
-            </FormGroup>
+            </FormLabel>
             {watchChangedSync !== "-1" && (
                 <TextControl
                     name="config.changedSyncPeriod"

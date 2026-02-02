@@ -18,7 +18,8 @@ import {
     SelectVariant,
     TextControl
 } from "../../../shared/keycloak-ui-shared";
-import { FormGroup, SelectOption } from "../../../shared/@patternfly/react-core";
+import { SelectOption } from "../../../shared/@patternfly/react-core";
+import { FormLabel } from "../../../shared/keycloak-ui-shared";
 import { useEffect, useState } from "react";
 import { Controller, FormProvider, UseFormReturn } from "react-hook-form";
 import { useTranslation } from "react-i18next";
@@ -137,12 +138,12 @@ export const LdapSettingsGeneral = ({
                         required: t("validateName")
                     }}
                 />
-                <FormGroup
+                <FormLabel
+                    name="kc-vendor"
                     label={t("vendor")}
                     labelIcon={
                         <HelpItem helpText={t("vendorHelp")} fieldLabelId="vendor" />
                     }
-                    fieldId="kc-vendor"
                     isRequired
                 >
                     <Controller
@@ -183,8 +184,8 @@ export const LdapSettingsGeneral = ({
                                 </SelectOption>
                             </KeycloakSelect>
                         )}
-                    ></Controller>
-                </FormGroup>
+                    />
+                </FormLabel>
             </FormAccess>
         </FormProvider>
     );

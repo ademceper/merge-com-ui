@@ -27,7 +27,7 @@ import { Action, KeycloakDataTable } from "../../../shared/keycloak-ui-shared";
 import { useRealm } from "../../context/realm-context/RealmContext";
 import useToggle from "../../utils/useToggle";
 import { toRegistrationProvider } from "../routes/AddRegistrationProvider";
-import { ClientRegistrationParams } from "../routes/ClientRegistration";
+import { ClientRegistrationParams } from "../routes/client-registration-path";
 import { AddProviderDialog } from "./AddProviderDialog";
 
 type ClientRegistrationListProps = {

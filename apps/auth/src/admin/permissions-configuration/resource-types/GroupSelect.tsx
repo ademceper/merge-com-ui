@@ -12,10 +12,17 @@
 // @ts-nocheck
 
 import GroupRepresentation from "@keycloak/keycloak-admin-client/lib/defs/groupRepresentation";
-import { FormErrorText, HelpItem, useFetch } from "../../../shared/keycloak-ui-shared";
-import { Button, FormGroup } from "../../../shared/@patternfly/react-core";
-import { MinusCircleIcon } from "../../../shared/@patternfly/react-icons";
-import { Table, Tbody, Td, Th, Thead, Tr } from "../../../shared/@patternfly/react-table";
+import { FormErrorText, HelpItem, useFetch, FormLabel } from "../../../shared/keycloak-ui-shared";
+import { Button } from "@merge/ui/components/button";
+import {
+    Table,
+    TableBody,
+    TableCell,
+    TableHead,
+    TableHeader,
+    TableRow,
+} from "@merge/ui/components/table";
+import { MinusCircle } from "@phosphor-icons/react";
 import { useState } from "react";
 import { Controller, useFormContext } from "react-hook-form";
 import { useTranslation } from "react-i18next";
@@ -70,10 +77,10 @@ export const GroupSelect = ({
     const selectOne = variant === "typeahead";
 
     return (
-        <FormGroup
+        <FormLabel
+            name="groups"
             label={t(label!)}
             labelIcon={<HelpItem helpText={t(helpText!)} fieldLabelId="groups" />}
-            fieldId="groups"
             isRequired={isRequired}
         >
             <Controller
@@ -114,8 +121,8 @@ export const GroupSelect = ({
                         )}
                         <Button
                             data-testid="select-group-button"
-                            isDisabled={isDisabled}
-                            variant="secondary"
+                            disabled={isDisabled}
+                            variant="outline"
                             onClick={() => {
                                 setOpen(true);
                             }}
@@ -126,22 +133,22 @@ export const GroupSelect = ({
                 )}
             />
             {groups.length > 0 && (
-                <Table variant="compact">
-                    <Thead>
-                        <Tr>
-                            <Th>{t("groups")}</Th>
-                            <Th aria-hidden="true" />
-                        </Tr>
-                    </Thead>
-                    <Tbody>
+                <Table className="mt-2 text-sm">
+                    <TableHeader>
+                        <TableRow>
+                            <TableHead>{t("groups")}</TableHead>
+                            <TableHead aria-hidden="true" />
+                        </TableRow>
+                    </TableHeader>
+                    <TableBody>
                         {groups.map(group => (
-                            <Tr key={group.id}>
-                                <Td>{group.path}</Td>
-                                <Td>
+                            <TableRow key={group.id}>
+                                <TableCell>{group.path}</TableCell>
+                                <TableCell>
                                     <Button
                                         variant="link"
+                                        size="icon-sm"
                                         className="keycloak__client-authorization__policy-row-remove"
-                                        icon={<MinusCircleIcon />}
                                         onClick={() => {
                                             setValue(name!, [
                                                 ...convertGroups(
@@ -156,14 +163,16 @@ export const GroupSelect = ({
                                                 )
                                             ]);
                                         }}
-                                    />
-                                </Td>
-                            </Tr>
+                                    >
+                                        <MinusCircle className="size-4" />
+                                    </Button>
+                                </TableCell>
+                            </TableRow>
                         ))}
-                    </Tbody>
+                    </TableBody>
                 </Table>
             )}
             {errors[name!] && <FormErrorText message={t("requiredGroups")} />}
-        </FormGroup>
+        </FormLabel>
     );
 };

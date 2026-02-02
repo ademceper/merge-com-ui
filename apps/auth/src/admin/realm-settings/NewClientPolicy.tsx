@@ -60,7 +60,6 @@ import { toClientProfile } from "./routes/ClientProfile";
 import { EditClientPolicyParams, toEditClientPolicy } from "./routes/EditClientPolicy";
 import { toEditClientPolicyCondition } from "./routes/EditCondition";
 
-import "./realm-settings-section.css";
 
 type FormFields = Required<ClientPolicyRepresentation>;
 

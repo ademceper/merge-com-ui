@@ -49,7 +49,6 @@ import { Role } from "./Role";
 import { Time } from "./Time";
 import { User } from "./User";
 
-import "./policy-details.css";
 
 type Policy = Omit<PolicyRepresentation, "roles"> & {
     groups?: GroupValue[];

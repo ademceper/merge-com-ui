@@ -18,7 +18,7 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger
 } from "@merge/ui/components/dropdown-menu";
-import type { UserMenuInfo } from "../PageHeader";
+import type { UserMenuInfo } from "./AdminHeader";
 import { useHelp } from "../../shared/keycloak-ui-shared";
 import { useRealm } from "../context/realm-context/RealmContext";
 import { useAccess } from "../context/access/Access";

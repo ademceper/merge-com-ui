@@ -22,7 +22,7 @@ import { useAccess } from "../context/access/Access";
 import { useRealm } from "../context/realm-context/RealmContext";
 import { useServerInfo } from "../context/server-info/ServerInfoProvider";
 import type { Environment } from "../environment";
-import type { UserMenuInfo } from "../PageHeader";
+import type { UserMenuInfo } from "./AdminHeader";
 import { toPage } from "../page/routes";
 import { routes } from "../routes";
 import useIsFeatureEnabled, { Feature } from "../utils/useIsFeatureEnabled";

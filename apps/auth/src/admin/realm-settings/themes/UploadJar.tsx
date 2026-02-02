@@ -11,7 +11,7 @@
 
 // @ts-nocheck
 
-import { Button } from "../../../shared/@patternfly/react-core";
+import { Button } from "@merge/ui/components/button";
 import JSZip from "jszip";
 import { ChangeEvent } from "react";
 import { useTranslation } from "react-i18next";
@@ -57,7 +57,7 @@ export const UploadJar = ({ onUpload }: UploadJarProps) => {
                 style={{ display: "none" }}
                 onChange={acceptedFiles => handleAcceptedFiles(acceptedFiles)}
             />
-            <Button variant="secondary" onClick={triggerUpload}>
+            <Button variant="outline" onClick={triggerUpload}>
                 {t("uploadGeneratedThemeJar")}
             </Button>
         </>

@@ -11,7 +11,6 @@
 
 // @ts-nocheck
 
-import loginCssUrl from "../../assets/theme/login.css?url";
 import type RealmRepresentation from "@keycloak/keycloak-admin-client/lib/defs/realmRepresentation";
 import { useEnvironment } from "../../../shared/keycloak-ui-shared";
 import { Tab, TabTitleText } from "../../../shared/@patternfly/react-core";
@@ -128,7 +127,7 @@ styles=css/login.css css/theme-styles.css
                 .map(([key, value]) => `--pf-v5-global--${key}: ${value};`)
                 .join("\n");
 
-        const logoCss = (await fetch(loginCssUrl)).text();
+        const logoCss = "";
         zip.file("theme/quick-theme/common/resources/css/login.css", logoCss);
 
         zip.file(

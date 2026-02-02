@@ -37,7 +37,7 @@ import {
     RegistrationProviderParams,
     toRegistrationProvider
 } from "../routes/AddRegistrationProvider";
-import { toClientRegistration } from "../routes/ClientRegistration";
+import { toClientRegistration } from "../routes/client-registration-path";
 
 export default function DetailProvider() {
     const { adminClient } = useAdminClient();

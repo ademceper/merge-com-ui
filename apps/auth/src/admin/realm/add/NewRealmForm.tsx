@@ -17,7 +17,15 @@ import {
     TextControl,
     useAlerts
 } from "../../../shared/keycloak-ui-shared";
-import { Button, Modal } from "../../../shared/@patternfly/react-core";
+import { Button } from "@merge/ui/components/button";
+import {
+    Dialog,
+    DialogContent,
+    DialogDescription,
+    DialogFooter,
+    DialogHeader,
+    DialogTitle,
+} from "@merge/ui/components/dialog";
 import { useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
@@ -72,34 +80,13 @@ export default function NewRealmForm({ onClose }: NewRealmFormProps) {
     };
 
     return (
-        <Modal
-            variant="medium"
-            title={t("createRealm")}
-            description={t("realmExplain")}
-            onClose={onClose}
-            isOpen
-            actions={[
-                <FormSubmitButton
-                    form="realm-form"
-                    data-testid="create"
-                    formState={formState}
-                    allowInvalid
-                    allowNonDirty
-                    key="confirm"
-                >
-                    {t("create")}
-                </FormSubmitButton>,
-                <Button
-                    variant="link"
-                    onClick={onClose}
-                    key={"cancel"}
-                    data-testid="cancel"
-                >
-                    {t("cancel")}
-                </Button>
-            ]}
-        >
-            <FormProvider {...form}>
+        <Dialog open={true} onOpenChange={(v) => !v && onClose()}>
+            <DialogContent showCloseButton className="sm:max-w-lg">
+                <DialogHeader>
+                    <DialogTitle>{t("createRealm")}</DialogTitle>
+                    <DialogDescription>{t("realmExplain")}</DialogDescription>
+                </DialogHeader>
+                <FormProvider {...form}>
                 <FormAccess
                     id="realm-form"
                     isHorizontal
@@ -124,6 +111,21 @@ export default function NewRealmForm({ onClose }: NewRealmFormProps) {
                     />
                 </FormAccess>
             </FormProvider>
-        </Modal>
+                <DialogFooter>
+                    <FormSubmitButton
+                        form="realm-form"
+                        data-testid="create"
+                        formState={formState}
+                        allowInvalid
+                        allowNonDirty
+                    >
+                        {t("create")}
+                    </FormSubmitButton>
+                    <Button variant="link" onClick={onClose} data-testid="cancel">
+                        {t("cancel")}
+                    </Button>
+                </DialogFooter>
+            </DialogContent>
+        </Dialog>
     );
 }

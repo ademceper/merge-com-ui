@@ -49,7 +49,6 @@ import { useWhoAmI } from "../context/whoami/WhoAmI";
 import { beerify, sortProviders } from "../util";
 import useIsFeatureEnabled, { Feature } from "../utils/useIsFeatureEnabled";
 
-import "./realm-settings-section.css";
 
 type RealmSettingsTokensTabProps = {
     realm: RealmRepresentation;

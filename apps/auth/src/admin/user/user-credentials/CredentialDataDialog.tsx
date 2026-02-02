@@ -12,16 +12,20 @@
 // @ts-nocheck
 
 import { useTranslation } from "react-i18next";
-import { Modal, ModalVariant } from "../../../shared/@patternfly/react-core";
+import {
+    Dialog,
+    DialogContent,
+    DialogHeader,
+    DialogTitle,
+} from "@merge/ui/components/dialog";
 import {
     Table,
-    TableVariant,
-    Tbody,
-    Td,
-    Th,
-    Thead,
-    Tr
-} from "../../../shared/@patternfly/react-table";
+    TableBody,
+    TableCell,
+    TableHead,
+    TableHeader,
+    TableRow,
+} from "@merge/ui/components/table";
 
 type CredentialDataDialogProps = {
     title: string;
@@ -36,35 +40,28 @@ export const CredentialDataDialog = ({
 }: CredentialDataDialogProps) => {
     const { t } = useTranslation();
     return (
-        <Modal
-            variant={ModalVariant.medium}
-            title={title}
-            data-testid="passwordDataDialog"
-            isOpen
-            onClose={onClose}
-        >
-            <Table
-                aria-label={title}
-                data-testid="password-data-dialog"
-                variant={TableVariant.compact}
-            >
-                <Thead>
-                    <Tr>
-                        <Th>{t("showPasswordDataName")}</Th>
-                        <Th>{t("showPasswordDataValue")}</Th>
-                    </Tr>
-                </Thead>
-                <Tbody>
-                    {credentialData.map((cred, index) => {
-                        return (
-                            <Tr key={index}>
-                                <Td>{cred[0]}</Td>
-                                <Td>{cred[1]}</Td>
-                            </Tr>
-                        );
-                    })}
-                </Tbody>
-            </Table>
-        </Modal>
+        <Dialog open={true} onOpenChange={(v) => !v && onClose()}>
+            <DialogContent showCloseButton className="sm:max-w-lg" data-testid="passwordDataDialog">
+                <DialogHeader>
+                    <DialogTitle>{title}</DialogTitle>
+                </DialogHeader>
+                <Table aria-label={title} data-testid="password-data-dialog" className="text-sm">
+                    <TableHeader>
+                        <TableRow>
+                            <TableHead>{t("showPasswordDataName")}</TableHead>
+                            <TableHead>{t("showPasswordDataValue")}</TableHead>
+                        </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                        {credentialData.map((cred, index) => (
+                            <TableRow key={index}>
+                                <TableCell>{cred[0]}</TableCell>
+                                <TableCell>{cred[1]}</TableCell>
+                            </TableRow>
+                        ))}
+                    </TableBody>
+                </Table>
+            </DialogContent>
+        </Dialog>
     );
 };

@@ -11,8 +11,9 @@
 
 // @ts-nocheck
 
-import { FormGroup, Switch } from "../../../shared/@patternfly/react-core";
 import { Controller, FormProvider, UseFormReturn, useWatch } from "react-hook-form";
+import { Switch } from "@merge/ui/components/switch";
+import { FormLabel } from "../../../shared/keycloak-ui-shared";
 import { useTranslation } from "react-i18next";
 import { HelpItem, TextControl } from "../../../shared/keycloak-ui-shared";
 import { FormAccess } from "../../components/form/FormAccess";
@@ -48,7 +49,8 @@ export const LdapSettingsKerberosIntegration = ({
             )}
 
             <FormAccess role="manage-realm" isHorizontal>
-                <FormGroup
+                <FormLabel
+                    name="kc-allow-kerberos-authentication"
                     label={t("allowKerberosAuthentication")}
                     labelIcon={
                         <HelpItem
@@ -56,7 +58,6 @@ export const LdapSettingsKerberosIntegration = ({
                             fieldLabelId="allowKerberosAuthentication"
                         />
                     }
-                    fieldId="kc-allow-kerberos-authentication"
                     hasNoPaddingTop
                 >
                     <Controller
@@ -67,16 +68,13 @@ export const LdapSettingsKerberosIntegration = ({
                             <Switch
                                 id="kc-allow-kerberos-authentication"
                                 data-testid="allow-kerberos-auth"
-                                isDisabled={false}
-                                onChange={(_event, value) => field.onChange([`${value}`])}
-                                isChecked={field.value[0] === "true"}
-                                label={t("on")}
-                                labelOff={t("off")}
+                                checked={field.value[0] === "true"}
+                                onCheckedChange={(value) => field.onChange([`${value}`])}
                                 aria-label={t("allowKerberosAuthentication")}
                             />
                         )}
-                    ></Controller>
-                </FormGroup>
+                    />
+                </FormLabel>
 
                 {allowKerberosAuth[0] === "true" && (
                     <>
@@ -110,7 +108,8 @@ export const LdapSettingsKerberosIntegration = ({
                             labelIcon={t("krbPrincipalAttributeHelp")}
                         />
 
-                        <FormGroup
+                        <FormLabel
+                            name="kc-debug"
                             label={t("debug")}
                             labelIcon={
                                 <HelpItem
@@ -118,7 +117,6 @@ export const LdapSettingsKerberosIntegration = ({
                                     fieldLabelId="debug"
                                 />
                             }
-                            fieldId="kc-debug"
                             hasNoPaddingTop
                         >
                             <Controller
@@ -129,21 +127,19 @@ export const LdapSettingsKerberosIntegration = ({
                                     <Switch
                                         id="kc-debug"
                                         data-testid="debug"
-                                        isDisabled={false}
-                                        onChange={(_event, value) =>
+                                        checked={field.value[0] === "true"}
+                                        onCheckedChange={(value) =>
                                             field.onChange([`${value}`])
                                         }
-                                        isChecked={field.value[0] === "true"}
-                                        label={t("on")}
-                                        labelOff={t("off")}
                                         aria-label={t("debug")}
                                     />
                                 )}
                             />
-                        </FormGroup>
+                        </FormLabel>
                     </>
                 )}
-                <FormGroup
+                <FormLabel
+                    name="kc-use-kerberos-password-authentication"
                     label={t("useKerberosForPasswordAuthentication")}
                     labelIcon={
                         <HelpItem
@@ -151,7 +147,6 @@ export const LdapSettingsKerberosIntegration = ({
                             fieldLabelId="useKerberosForPasswordAuthentication"
                         />
                     }
-                    fieldId="kc-use-kerberos-password-authentication"
                     hasNoPaddingTop
                 >
                     <Controller
@@ -162,16 +157,13 @@ export const LdapSettingsKerberosIntegration = ({
                             <Switch
                                 id="kc-use-kerberos-password-authentication"
                                 data-testid="use-kerberos-pw-auth"
-                                isDisabled={false}
-                                onChange={(_event, value) => field.onChange([`${value}`])}
-                                isChecked={field.value[0] === "true"}
-                                label={t("on")}
-                                labelOff={t("off")}
+                                checked={field.value[0] === "true"}
+                                onCheckedChange={(value) => field.onChange([`${value}`])}
                                 aria-label={t("useKerberosForPasswordAuthentication")}
                             />
                         )}
-                    ></Controller>
-                </FormGroup>
+                    />
+                </FormLabel>
             </FormAccess>
         </FormProvider>
     );

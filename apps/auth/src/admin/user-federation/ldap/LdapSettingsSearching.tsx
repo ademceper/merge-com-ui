@@ -12,8 +12,9 @@
 // @ts-nocheck
 
 import { HelpItem, SelectControl, TextControl } from "../../../shared/keycloak-ui-shared";
-import { FormGroup, Switch } from "../../../shared/@patternfly/react-core";
 import { Controller, FormProvider, UseFormReturn } from "react-hook-form";
+import { Switch } from "@merge/ui/components/switch";
+import { FormLabel } from "../../../shared/keycloak-ui-shared";
 import { useTranslation } from "react-i18next";
 import { FormAccess } from "../../components/form/FormAccess";
 import { WizardSectionHeader } from "../../components/wizard-section-header/WizardSectionHeader";
@@ -138,7 +139,8 @@ export const LdapSettingsSearching = ({
                     type="number"
                     min={0}
                 />
-                <FormGroup
+                <FormLabel
+                    name="kc-ui-pagination"
                     label={t("pagination")}
                     labelIcon={
                         <HelpItem
@@ -146,7 +148,6 @@ export const LdapSettingsSearching = ({
                             fieldLabelId="pagination"
                         />
                     }
-                    fieldId="kc-ui-pagination"
                     hasNoPaddingTop
                 >
                     <Controller
@@ -157,16 +158,13 @@ export const LdapSettingsSearching = ({
                             <Switch
                                 id="kc-ui-pagination"
                                 data-testid="ui-pagination"
-                                isDisabled={false}
-                                onChange={(_event, value) => field.onChange([`${value}`])}
-                                isChecked={field.value[0] === "true"}
-                                label={t("on")}
-                                labelOff={t("off")}
+                                checked={field.value[0] === "true"}
+                                onCheckedChange={(value) => field.onChange([`${value}`])}
                                 aria-label={t("pagination")}
                             />
                         )}
-                    ></Controller>
-                </FormGroup>
+                    />
+                </FormLabel>
                 <SelectControl
                     name="config.referral.0"
                     label={t("referral")}

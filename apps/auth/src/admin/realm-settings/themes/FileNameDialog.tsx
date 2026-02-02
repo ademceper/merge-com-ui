@@ -12,7 +12,6 @@
 // @ts-nocheck
 
 import { TextControl } from "../../../shared/keycloak-ui-shared";
-import { Form } from "../../../shared/@patternfly/react-core";
 import { ConfirmDialogModal } from "../../components/confirm-dialog/ConfirmDialog";
 import { useTranslation } from "react-i18next";
 import { FormProvider, useForm } from "react-hook-form";
@@ -38,7 +37,7 @@ export const FileNameDialog = ({ onSave, onClose }: FileNameDialogProps) => {
             toggleDialog={onClose}
             onConfirm={() => handleSubmit(save)()}
         >
-            <Form isHorizontal onSubmit={handleSubmit(save)}>
+            <form className="flex flex-col gap-4" onSubmit={handleSubmit(save)}>
                 <FormProvider {...form}>
                     <TextControl
                         name="fileName"
@@ -46,7 +45,7 @@ export const FileNameDialog = ({ onSave, onClose }: FileNameDialogProps) => {
                         defaultValue="quick-theme.jar"
                     />
                 </FormProvider>
-            </Form>
+            </form>
         </ConfirmDialogModal>
     );
 };

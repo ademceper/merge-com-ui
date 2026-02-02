@@ -14,16 +14,11 @@
 import type CredentialRepresentation from "@keycloak/keycloak-admin-client/lib/defs/credentialRepresentation";
 import type UserRepresentation from "@keycloak/keycloak-admin-client/lib/defs/userRepresentation";
 import { HelpItem, useAlerts, useFetch } from "../../shared/keycloak-ui-shared";
-import {
-    AlertVariant,
-    Button,
-    ButtonVariant,
-    Divider,
-    PageSection,
-    PageSectionVariants
-} from "../../shared/@patternfly/react-core";
-import styles from "@patternfly/react-styles/css/components/Table/table";
-import { Table, Tbody, Td, Th, Thead, Tr } from "../../shared/@patternfly/react-table";
+import { AlertVariant } from "../../shared/keycloak-ui-shared";
+import { Button } from "@merge/ui/components/button";
+import { Separator } from "@merge/ui/components/separator";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@merge/ui/components/table";
+import { Table as PFTable, Tbody, Td, Th, Thead, Tr } from "../../shared/@patternfly/react-table";
 import { Fragment, DragEvent as ReactDragEvent, useMemo, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useAdminClient } from "../admin-client";
@@ -38,7 +33,6 @@ import { ResetCredentialDialog } from "./user-credentials/ResetCredentialDialog"
 import { ResetPasswordDialog } from "./user-credentials/ResetPasswordDialog";
 import useFormatDate from "../utils/useFormatDate";
 
-import "./user-credentials.css";
 
 type UserCredentialsProps = {
     user: UserRepresentation;
@@ -181,7 +175,7 @@ export const UserCredentials = ({ user, setUser }: UserCredentialsProps) => {
         titleKey: t("deleteCredentialsConfirmTitle"),
         messageKey: t("deleteCredentialsConfirm"),
         continueButtonLabel: t("delete"),
-        continueButtonVariant: ButtonVariant.danger,
+        continueButtonVariant: "destructive",
         onConfirm: async () => {
             try {
                 await adminClient.users.deleteCredential({
@@ -443,12 +437,12 @@ export const UserCredentials = ({ user, setUser }: UserCredentialsProps) => {
                         >
                             {t("setPassword")}
                         </Button>
-                        <Divider />
+                        <Separator />
                     </>
                 )}
             {groupedUserCredentials.length !== 0 && (
-                <PageSection variant={PageSectionVariants.light}>
-                    <Table variant={"compact"}>
+                <div className="bg-muted/30 p-4">
+                    <PFTable variant={"compact"}>
                         <Thead>
                             <Tr className="kc-table-header">
                                 <Th>
@@ -585,47 +579,47 @@ export const UserCredentials = ({ user, setUser }: UserCredentialsProps) => {
                                 </Fragment>
                             ))}
                         </Tbody>
-                    </Table>
-                </PageSection>
+                    </PFTable>
+                </div>
             )}
             {useFederatedCredentials && hasCredentialTypes && (
-                <PageSection variant={PageSectionVariants.light}>
-                    <Table variant="compact">
-                        <Thead>
-                            <Tr>
-                                <Th>{t("type")}</Th>
-                                <Th>{t("providedBy")}</Th>
-                                <Th>{t("createdAt")}</Th>
-                                <Th aria-hidden="true" />
-                            </Tr>
-                        </Thead>
-                        <Tbody>
+                <div className="bg-muted/30 p-4">
+                    <Table className="text-sm">
+                        <TableHeader>
+                            <TableRow>
+                                <TableHead>{t("type")}</TableHead>
+                                <TableHead>{t("providedBy")}</TableHead>
+                                <TableHead>{t("createdAt")}</TableHead>
+                                <TableHead aria-hidden="true" />
+                            </TableRow>
+                        </TableHeader>
+                        <TableBody>
                             {credentialTypes.map(credential => (
-                                <Tr key={credential.type}>
-                                    <Td>
+                                <TableRow key={credential.type}>
+                                    <TableCell>
                                         <b>{credential.type}</b>
-                                    </Td>
-                                    <Td>
+                                    </TableCell>
+                                    <TableCell>
                                         <FederatedUserLink user={user} />
-                                    </Td>
-                                    <Td>
+                                    </TableCell>
+                                    <TableCell>
                                         {formatDate(new Date(credential.createdDate!))}
-                                    </Td>
+                                    </TableCell>
                                     {credential.type === "password" && (
-                                        <Td modifier="fitContent">
+                                        <TableCell className="w-fit">
                                             <Button
-                                                variant="secondary"
+                                                variant="outline"
                                                 onClick={toggleModal}
                                             >
                                                 {t("setPassword")}
                                             </Button>
-                                        </Td>
+                                        </TableCell>
                                     )}
-                                </Tr>
+                                </TableRow>
                             ))}
-                        </Tbody>
+                        </TableBody>
                     </Table>
-                </PageSection>
+                </div>
             )}
             {emptyState && (
                 <ListEmptyState
@@ -640,7 +634,7 @@ export const UserCredentials = ({ user, setUser }: UserCredentialsProps) => {
                                   {
                                       text: t("credentialResetBtn"),
                                       onClick: toggleCredentialsResetModal,
-                                      type: ButtonVariant.link
+                                      type: "link"
                                   }
                               ]
                             : undefined

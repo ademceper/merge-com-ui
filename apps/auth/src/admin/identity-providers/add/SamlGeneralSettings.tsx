@@ -26,7 +26,6 @@ import type { Environment } from "../../environment";
 import { DisplayOrder } from "../component/DisplayOrder";
 import { RedirectUrl } from "../component/RedirectUrl";
 
-import "./saml-general-settings.css";
 
 type SamlGeneralSettingsProps = {
     isAliasReadonly?: boolean;

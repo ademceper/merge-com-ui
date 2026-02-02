@@ -11,17 +11,18 @@
 
 // @ts-nocheck
 
-import { HelpItem, useFetch } from "../../../../shared/keycloak-ui-shared";
-import { Button, Checkbox, FormGroup } from "../../../../shared/@patternfly/react-core";
-import { MinusCircleIcon } from "../../../../shared/@patternfly/react-icons";
+import { HelpItem, useFetch, FormLabel } from "../../../../shared/keycloak-ui-shared";
+import { Button } from "@merge/ui/components/button";
+import { Checkbox } from "@merge/ui/components/checkbox";
 import {
     Table,
-    Tbody,
-    Td,
-    Th,
-    Thead,
-    Tr
-} from "../../../../shared/@patternfly/react-table";
+    TableBody,
+    TableCell,
+    TableHead,
+    TableHeader,
+    TableRow,
+} from "@merge/ui/components/table";
+import { MinusCircle } from "@phosphor-icons/react";
 import { useState } from "react";
 import { Controller, useFormContext } from "react-hook-form";
 import { useTranslation } from "react-i18next";
@@ -75,12 +76,12 @@ export const Role = () => {
 
     return (
         <>
-            <FormGroup
+            <FormLabel
+                name="roles"
                 label={t("roles")}
                 labelIcon={
                     <HelpItem helpText={t("policyRolesHelp")} fieldLabelId="roles" />
                 }
-                fieldId="roles"
             >
                 <Controller
                     name="roles"
@@ -119,24 +120,24 @@ export const Role = () => {
                     )}
                 />
                 {selectedRoles.length > 0 && (
-                    <Table variant="compact">
-                        <Thead>
-                            <Tr>
-                                <Th>{t("roles")}</Th>
-                                <Th>{t("required")}</Th>
-                                <Th aria-hidden="true" />
-                            </Tr>
-                        </Thead>
-                        <Tbody>
+                    <Table className="mt-2 text-sm">
+                        <TableHeader>
+                            <TableRow>
+                                <TableHead>{t("roles")}</TableHead>
+                                <TableHead>{t("required")}</TableHead>
+                                <TableHead aria-hidden="true" />
+                            </TableRow>
+                        </TableHeader>
+                        <TableBody>
                             {selectedRoles.map((row, index) => (
-                                <Tr key={row.role.id}>
-                                    <Td>
+                                <TableRow key={row.role.id}>
+                                    <TableCell>
                                         <ServiceRole
                                             role={row.role}
                                             client={row.client}
                                         />
-                                    </Td>
-                                    <Td>
+                                    </TableCell>
+                                    <TableCell>
                                         <Controller
                                             name={`roles.${index}.required`}
                                             defaultValue={false}
@@ -145,18 +146,17 @@ export const Role = () => {
                                                 <Checkbox
                                                     id="required"
                                                     data-testid="standard"
-                                                    name="required"
-                                                    isChecked={field.value}
-                                                    onChange={field.onChange}
+                                                    checked={field.value}
+                                                    onCheckedChange={field.onChange}
                                                 />
                                             )}
                                         />
-                                    </Td>
-                                    <Td>
+                                    </TableCell>
+                                    <TableCell>
                                         <Button
                                             variant="link"
+                                            size="icon-sm"
                                             className="keycloak__client-authorization__policy-row-remove"
-                                            icon={<MinusCircleIcon />}
                                             onClick={() => {
                                                 setValue("roles", [
                                                     ...(values || []).filter(
@@ -169,14 +169,16 @@ export const Role = () => {
                                                     )
                                                 ]);
                                             }}
-                                        />
-                                    </Td>
-                                </Tr>
+                                        >
+                                            <MinusCircle className="size-4" />
+                                        </Button>
+                                    </TableCell>
+                                </TableRow>
                             ))}
-                        </Tbody>
+                        </TableBody>
                     </Table>
                 )}
-            </FormGroup>
+            </FormLabel>
             <DefaultSwitchControl
                 name="fetchRoles"
                 label={t("fetchRoles")}

@@ -14,14 +14,21 @@
 import { ResourceTypesRepresentation } from "@keycloak/keycloak-admin-client/lib/defs/resourceServerRepresentation";
 import { useTranslation } from "react-i18next";
 import {
-    Modal,
-    ModalVariant,
-    TextContent,
-    Text,
-    TextVariants,
-    Alert
-} from "../../../shared/@patternfly/react-core";
-import { Table, Tbody, Td, Th, Thead, Tr } from "../../../shared/@patternfly/react-table";
+    Dialog,
+    DialogContent,
+    DialogHeader,
+    DialogTitle,
+} from "@merge/ui/components/dialog";
+import { Alert, AlertTitle } from "@merge/ui/components/alert";
+import {
+    Table,
+    TableBody,
+    TableCell,
+    TableHead,
+    TableHeader,
+    TableRow,
+} from "@merge/ui/components/table";
+import { cn } from "@merge/ui/lib/utils";
 
 type NewPermissionConfigurationDialogProps = {
     resourceTypes?: ResourceTypesRepresentation[];
@@ -37,51 +44,41 @@ export const NewPermissionConfigurationDialog = ({
     const { t } = useTranslation();
 
     return (
-        <Modal
-            aria-label={t("createPermission")}
-            variant={ModalVariant.medium}
-            header={
-                <TextContent>
-                    <Text component={TextVariants.h1}>{t("chooseAResourceType")}</Text>
-                    <Alert
-                        variant="info"
-                        isInline
-                        title={t("chooseAResourceTypeInstructions")}
-                        component="p"
-                    />
-                </TextContent>
-            }
-            isOpen
-            onClose={toggleDialog}
-        >
-            <Table aria-label={t("permissions")} variant="compact">
-                <Thead>
-                    <Tr>
-                        <Th>{t("resourceType")}</Th>
-                        <Th>{t("description")}</Th>
-                    </Tr>
-                </Thead>
-                <Tbody>
-                    {Object.keys(resourceTypes || {}).map((key: any) => {
-                        const resourceType = resourceTypes![key];
-                        return (
-                            <Tr
-                                key={resourceType.type}
-                                data-testid={resourceType.type}
-                                onRowClick={() => {
-                                    onSelect(resourceType);
-                                }}
-                                isClickable
-                            >
-                                <Td>{resourceType.type}</Td>
-                                <Td style={{ textWrap: "wrap" }}>
-                                    {t(`resourceType.${resourceType.type}`)}
-                                </Td>
-                            </Tr>
-                        );
-                    })}
-                </Tbody>
-            </Table>
-        </Modal>
+        <Dialog open={true} onOpenChange={(v) => !v && toggleDialog()}>
+            <DialogContent showCloseButton className="sm:max-w-lg" aria-label={t("createPermission")}>
+                <DialogHeader>
+                    <DialogTitle>{t("chooseAResourceType")}</DialogTitle>
+                    <Alert className="mt-2">
+                        <AlertTitle>{t("chooseAResourceTypeInstructions")}</AlertTitle>
+                    </Alert>
+                </DialogHeader>
+                <Table aria-label={t("permissions")} className="text-sm">
+                    <TableHeader>
+                        <TableRow>
+                            <TableHead>{t("resourceType")}</TableHead>
+                            <TableHead>{t("description")}</TableHead>
+                        </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                        {Object.keys(resourceTypes || {}).map((key: any) => {
+                            const resourceType = resourceTypes![key];
+                            return (
+                                <TableRow
+                                    key={resourceType.type}
+                                    data-testid={resourceType.type}
+                                    onClick={() => onSelect(resourceType)}
+                                    className={cn("cursor-pointer")}
+                                >
+                                    <TableCell>{resourceType.type}</TableCell>
+                                    <TableCell className="whitespace-normal">
+                                        {t(`resourceType.${resourceType.type}`)}
+                                    </TableCell>
+                                </TableRow>
+                            );
+                        })}
+                    </TableBody>
+                </Table>
+            </DialogContent>
+        </Dialog>
     );
 };

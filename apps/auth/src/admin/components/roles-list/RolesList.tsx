@@ -31,8 +31,6 @@ import { useConfirmDialog } from "../confirm-dialog/ConfirmDialog";
 import { ListEmptyState } from "../../../shared/keycloak-ui-shared";
 import { Action, KeycloakDataTable } from "../../../shared/keycloak-ui-shared";
 
-import "./RolesList.css";
-
 type RoleDetailLinkProps = RoleRepresentation & {
     defaultRoleName?: string;
     toDetail: (roleId: string) => To;

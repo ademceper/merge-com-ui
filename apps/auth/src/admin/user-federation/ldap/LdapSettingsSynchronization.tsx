@@ -11,8 +11,9 @@
 
 // @ts-nocheck
 
-import { FormGroup, Switch } from "../../../shared/@patternfly/react-core";
 import { Controller, FormProvider, UseFormReturn } from "react-hook-form";
+import { Switch } from "@merge/ui/components/switch";
+import { FormLabel } from "../../../shared/keycloak-ui-shared";
 import { useTranslation } from "react-i18next";
 import { HelpItem, TextControl } from "../../../shared/keycloak-ui-shared";
 import { FormAccess } from "../../components/form/FormAccess";
@@ -45,8 +46,9 @@ export const LdapSettingsSynchronization = ({
             )}
 
             <FormAccess role="manage-realm" isHorizontal>
-                <FormGroup
+                <FormLabel
                     hasNoPaddingTop
+                    name="kc-import-users"
                     label={t("importUsers")}
                     labelIcon={
                         <HelpItem
@@ -54,7 +56,6 @@ export const LdapSettingsSynchronization = ({
                             fieldLabelId="importUsers"
                         />
                     }
-                    fieldId="kc-import-users"
                 >
                     <Controller
                         name="config.importEnabled"
@@ -64,19 +65,16 @@ export const LdapSettingsSynchronization = ({
                             <Switch
                                 id="kc-import-users"
                                 data-testid="import-users"
-                                name="importEnabled"
-                                label={t("on")}
-                                labelOff={t("off")}
-                                onChange={(_event, value) => field.onChange([`${value}`])}
-                                isChecked={field.value[0] === "true"}
-                                isDisabled={false}
+                                checked={field.value[0] === "true"}
+                                onCheckedChange={(value) => field.onChange([`${value}`])}
                                 aria-label={t("importUsers")}
                             />
                         )}
-                    ></Controller>
-                </FormGroup>
-                <FormGroup
+                    />
+                </FormLabel>
+                <FormLabel
                     hasNoPaddingTop
+                    name="syncRegistrations"
                     label={t("syncRegistrations")}
                     labelIcon={
                         <HelpItem
@@ -84,7 +82,6 @@ export const LdapSettingsSynchronization = ({
                             fieldLabelId="syncRegistrations"
                         />
                     }
-                    fieldId="syncRegistrations"
                 >
                     <Controller
                         name="config.syncRegistrations"
@@ -94,15 +91,13 @@ export const LdapSettingsSynchronization = ({
                             <Switch
                                 id="syncRegistrations"
                                 data-testid="syncRegistrations"
-                                label={t("on")}
-                                labelOff={t("off")}
-                                onChange={(_event, value) => field.onChange([`${value}`])}
-                                isChecked={field.value[0] === "true"}
+                                checked={field.value[0] === "true"}
+                                onCheckedChange={(value) => field.onChange([`${value}`])}
                                 aria-label={t("syncRegistrations")}
                             />
                         )}
                     />
-                </FormGroup>
+                </FormLabel>
                 <TextControl
                     name="config.batchSizeForSync.0"
                     type="number"
@@ -110,7 +105,8 @@ export const LdapSettingsSynchronization = ({
                     label={t("batchSize")}
                     labelIcon={t("batchSizeHelp")}
                 />
-                <FormGroup
+                <FormLabel
+                    name="kc-periodic-full-sync"
                     label={t("periodicFullSync")}
                     labelIcon={
                         <HelpItem
@@ -118,7 +114,6 @@ export const LdapSettingsSynchronization = ({
                             fieldLabelId="periodicFullSync"
                         />
                     }
-                    fieldId="kc-periodic-full-sync"
                     hasNoPaddingTop
                 >
                     <Controller
@@ -129,16 +124,13 @@ export const LdapSettingsSynchronization = ({
                             <Switch
                                 id="kc-periodic-full-sync"
                                 data-testid="periodic-full-sync"
-                                isDisabled={false}
-                                onChange={(_event, value) => field.onChange(value)}
-                                isChecked={field.value === true}
-                                label={t("on")}
-                                labelOff={t("off")}
+                                checked={field.value === true}
+                                onCheckedChange={(value) => field.onChange(value)}
                                 aria-label={t("periodicFullSync")}
                             />
                         )}
                     />
-                </FormGroup>
+                </FormLabel>
                 {watchPeriodicSync && (
                     <TextControl
                         name="config.fullSyncPeriod.0"
@@ -149,7 +141,8 @@ export const LdapSettingsSynchronization = ({
                         defaultValue={604800}
                     />
                 )}
-                <FormGroup
+                <FormLabel
+                    name="kc-periodic-changed-users-sync"
                     label={t("periodicChangedUsersSync")}
                     labelIcon={
                         <HelpItem
@@ -157,7 +150,6 @@ export const LdapSettingsSynchronization = ({
                             fieldLabelId="periodicChangedUsersSync"
                         />
                     }
-                    fieldId="kc-periodic-changed-users-sync"
                     hasNoPaddingTop
                 >
                     <Controller
@@ -168,16 +160,13 @@ export const LdapSettingsSynchronization = ({
                             <Switch
                                 id="kc-periodic-changed-users-sync"
                                 data-testid="periodic-changed-users-sync"
-                                isDisabled={false}
-                                onChange={(_event, value) => field.onChange(value)}
-                                isChecked={field.value === true}
-                                label={t("on")}
-                                labelOff={t("off")}
+                                checked={field.value === true}
+                                onCheckedChange={(value) => field.onChange(value)}
                                 aria-label={t("periodicChangedUsersSync")}
                             />
                         )}
                     />
-                </FormGroup>
+                </FormLabel>
                 {watchChangedSync && (
                     <TextControl
                         name="config.changedSyncPeriod.0"
@@ -188,7 +177,8 @@ export const LdapSettingsSynchronization = ({
                         defaultValue={86400}
                     />
                 )}
-                <FormGroup
+                <FormLabel
+                    name="kc-remove-invalid-users"
                     label={t("removeInvalidUsers")}
                     labelIcon={
                         <HelpItem
@@ -196,7 +186,6 @@ export const LdapSettingsSynchronization = ({
                             fieldLabelId="removeInvalidUsers"
                         />
                     }
-                    fieldId="kc-remove-invalid-users"
                     hasNoPaddingTop
                 >
                     <Controller
@@ -207,16 +196,13 @@ export const LdapSettingsSynchronization = ({
                             <Switch
                                 id="kc-remove-invalid-users"
                                 data-testid="remove-invalid-users"
-                                isDisabled={false}
-                                onChange={(_event, value) => field.onChange([`${value}`])}
-                                isChecked={field.value[0] === "true"}
-                                label={t("on")}
-                                labelOff={t("off")}
+                                checked={field.value[0] === "true"}
+                                onCheckedChange={(value) => field.onChange([`${value}`])}
                                 aria-label={t("removeInvalidUsers")}
                             />
                         )}
                     />
-                </FormGroup>
+                </FormLabel>
             </FormAccess>
         </FormProvider>
     );
