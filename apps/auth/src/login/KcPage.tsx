@@ -10,6 +10,7 @@ import LoginResetPassword from "./pages/LoginResetPassword";
 import LoginUpdatePassword from "./pages/LoginUpdatePassword";
 import LoginUpdateProfile from "./pages/LoginUpdateProfile";
 import DeleteAccountConfirm from "./pages/DeleteAccountConfirm";
+import LoginPageExpired from "./pages/LoginPageExpired";
 
 const UserProfileFormFields = lazy(
     () => import("keycloakify/login/UserProfileFormFields")
@@ -79,6 +80,16 @@ export default function KcPage(props: { kcContext: KcContext }) {
                     case "delete-account-confirm.ftl":
                         return (
                             <DeleteAccountConfirm
+                                kcContext={kcContext}
+                                i18n={i18n}
+                                classes={{}}
+                                Template={Template}
+                                doUseDefaultCss={false}
+                            />
+                        );
+                    case "login-page-expired.ftl":
+                        return (
+                            <LoginPageExpired
                                 kcContext={kcContext}
                                 i18n={i18n}
                                 classes={{}}

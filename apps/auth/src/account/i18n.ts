@@ -45,6 +45,7 @@ const { useI18n, ofTypeI18n } = i18nBuilder
             totpStep2: "Open the application and scan the barcode",
             totpStep3: "Enter the one-time code provided by the application and click Submit",
             oneTimeCode: "One-time code",
+            totpConfiguredDescription: "Mobile authenticator is configured for your account",
             
             // Sessions page
             sessionsTitle: "Device Activity",
@@ -119,6 +120,7 @@ const { useI18n, ofTypeI18n } = i18nBuilder
             totpStep2: "Uygulamayı açın ve barkodu tarayın",
             totpStep3: "Uygulama tarafından sağlanan tek kullanımlık kodu girin ve Gönder'e tıklayın",
             oneTimeCode: "Tek kullanımlık kod",
+            totpConfiguredDescription: "Mobil kimlik doğrulayıcı hesabınız için yapılandırıldı",
             
             // Sessions page
             sessionsTitle: "Cihaz Aktivitesi",

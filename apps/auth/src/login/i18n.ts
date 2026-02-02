@@ -61,6 +61,13 @@ const { useI18n, ofTypeI18n } = i18nBuilder
             errasingData: "Erase all your data",
             finalDeletionConfirmation: "Are you sure you want to delete your account?",
             doConfirmDelete: "Yes, delete my account",
+
+            // Login page expired
+            pageExpiredTitle: "Page expired",
+            pageExpiredMsg1: "The page you were trying to access has expired.",
+            pageExpiredMsg2: "Or",
+            pageExpiredRestartLogin: "Restart login",
+            pageExpiredContinueToApp: "continue to your application",
         },
         tr: {
             // Login page
@@ -117,6 +124,13 @@ const { useI18n, ofTypeI18n } = i18nBuilder
             errasingData: "Tüm verilerinizi silecek",
             finalDeletionConfirmation: "Hesabınızı silmek istediğinizden emin misiniz?",
             doConfirmDelete: "Evet, hesabımı sil",
+
+            // Login page expired
+            pageExpiredTitle: "Sayfa süresi doldu",
+            pageExpiredMsg1: "Erişmeye çalıştığınız sayfanın süresi doldu.",
+            pageExpiredMsg2: "Veya",
+            pageExpiredRestartLogin: "girişe yeniden başlayın",
+            pageExpiredContinueToApp: "uygulamaya devam edin",
         }
     })
     .build();

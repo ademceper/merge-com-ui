@@ -158,14 +158,14 @@ export default function Totp(props: PageProps<Extract<KcContext, { pageId: "totp
 
             {/* Remove TOTP */}
             {!isSetupMode && (
-                <div className="rounded-md border p-4">
-                    <div className="mb-4">
+                <div className="rounded-md border p-4 flex items-center justify-between gap-4">
+                    <div className="min-w-0">
                         <h4 className="text-base font-medium">{msg("authenticator")}</h4>
                         <p className="text-sm text-muted-foreground mt-1">
-                            Mobile authenticator is configured for your account
+                            {msg("totpConfiguredDescription")}
                         </p>
                     </div>
-                    <form action={url.totpUrl} method="post">
+                    <form action={url.totpUrl} method="post" className="shrink-0">
                         <input type="hidden" name="stateChecker" value={kcContext.stateChecker} />
                         <input type="hidden" name="submitAction" value="Delete" />
                         <Button type="submit" variant="destructive" size="sm">

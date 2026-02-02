@@ -6,8 +6,6 @@
 - **Package Manager: NPM kullanılıyor (yarn değil)**
 - React 18 ve TypeScript kullanılır
 - Vite build tool olarak kullanılır
-- Storybook ile component geliştirme yapılır
-
 ## Kod Stili
 - TypeScript strict mode kullanılmalı
 - Functional components tercih edilmeli
@@ -19,36 +17,27 @@
 - `src/login/` - Keycloak login teması dosyaları
 - `src/login/KcPage.tsx` - Ana sayfa komponenti
 - `src/login/KcContext.ts` - Keycloak context tanımları
-- `src/login/KcPageStory.tsx` - Storybook için story helper
 - `src/login/i18n.ts` - Çeviri dosyaları
 - `public/keycloakify-dev-resources/` - Keycloak geliştirme kaynakları
 
 ## Keycloakify Özellikleri
 - Her sayfa için KcContext kullanılır
-- Storybook ile sayfa önizlemesi yapılır
-- `createKcPageStory` ile story oluşturulur
 - Tema özelleştirmeleri `kc.gen.tsx` ile yapılır
 
 ## Komutlar
 - `npm run dev` - Vite dev sunucusu (React uygulaması)
-- `npm run storybook` - Storybook dev sunucusu (Keycloak sayfaları önizleme)
 - `npm run build` - Production build
 - `npm run build-keycloak-theme` - Keycloak teması build
 - `npm run format` - Prettier ile formatla
 
 ## Geliştirme Akışı
-1. Yeni Keycloak sayfası eklerken önce story oluştur
-2. Storybook'ta geliştir ve test et
-3. KcPage.tsx'te sayfa routing'ini ekle
-4. i18n.ts'te gerekli çevirileri ekle
-5. Build ve test et
+1. KcPage.tsx'te sayfa routing'ini ekle
+2. i18n.ts'te gerekli çevirileri ekle
+3. Build ve test et
 
 ## Dikkat Edilmesi Gerekenler
 - Keycloak context'i her sayfa için farklıdır
-- Story dosyaları `.stories.tsx` uzantısı ile bitmeli
 - Tema dosyaları build sonrası `.jar` formatında üretilir
-- Geliştirmede Storybook kullanılmalı, Vite dev server sadece test içindir
-
 ---
 
 # KEYCLOAKIFY RESMİ DOKÜMANTASYON

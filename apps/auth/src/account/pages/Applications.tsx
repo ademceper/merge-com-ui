@@ -8,7 +8,6 @@ import { Alert, AlertDescription } from "@merge/ui/components/alert";
 import { Badge } from "@merge/ui/components/badge";
 import { AppWindowIcon, ArrowSquareOutIcon } from "@phosphor-icons/react";
 
-/** Keycloak API uygulama öğesi – client altında veya düz alanlar olabilir */
 type AppItem = {
     client?: { clientId?: string; name?: string; description?: string };
     clientId?: string;
@@ -43,7 +42,6 @@ export default function Applications(props: PageProps<Extract<KcContext, { pageI
                 </Alert>
             )}
 
-            {/* Applications List */}
             {applications?.applications && applications.applications.length > 0 ? (
                 <div className="space-y-4">
                     {(applications.applications as AppItem[]).map((app) => {
@@ -52,42 +50,42 @@ export default function Applications(props: PageProps<Extract<KcContext, { pageI
                         const description = app.client?.description ?? app.description;
                         return (
                         <div key={clientId} className="rounded-md border p-4">
-                            <div className="flex items-start justify-between mb-3">
-                                <div className="flex items-center gap-3">
-                                    <div className="p-2 rounded bg-primary/10">
+                            <div className="flex items-center justify-between gap-4">
+                                <div className="flex items-center gap-3 min-w-0">
+                                    <div className="p-2 rounded bg-primary/10 shrink-0">
                                         <AppWindowIcon className="h-5 w-5 text-primary" />
                                     </div>
-                                    <div>
+                                    <div className="min-w-0 space-y-1">
                                         <div className="text-base font-medium">{displayName}</div>
                                         {description && (
-                                            <div className="text-sm text-muted-foreground mt-1">{description}</div>
+                                            <div className="text-sm text-muted-foreground">{description}</div>
+                                        )}
+                                        {app.effectiveUrl && (
+                                            <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                                                <ArrowSquareOutIcon className="h-4 w-4 shrink-0" />
+                                                <a
+                                                    href={app.effectiveUrl}
+                                                    target="_blank"
+                                                    rel="noopener noreferrer"
+                                                    className="hover:underline truncate"
+                                                >
+                                                    {app.effectiveUrl}
+                                                </a>
+                                            </div>
                                         )}
                                     </div>
                                 </div>
-                                <form action={url.applicationsUrl} method="post">
+                                <form action={url.applicationsUrl} method="post" className="shrink-0">
                                     <input type="hidden" name="stateChecker" value={kcContext.stateChecker} />
                                     <input type="hidden" name="clientId" value={clientId} />
                                     <input type="hidden" name="action" value="revoke" />
-                                    <Button type="submit" variant="outline" size="sm">
+                                    <Button type="submit" variant="destructive" size="sm">
                                         {msg("revokeAccess")}
                                     </Button>
                                 </form>
                             </div>
 
                             <div className="space-y-3">
-                                {(app.effectiveUrl) && (
-                                    <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                                        <ArrowSquareOutIcon className="h-4 w-4" />
-                                        <a
-                                            href={app.effectiveUrl}
-                                            target="_blank"
-                                            rel="noopener noreferrer"
-                                            className="hover:underline"
-                                        >
-                                            {app.effectiveUrl}
-                                        </a>
-                                    </div>
-                                )}
                                 {app.consent && (
                                     <div className="pt-3 border-t">
                                         <div className="text-sm text-muted-foreground mb-2">
