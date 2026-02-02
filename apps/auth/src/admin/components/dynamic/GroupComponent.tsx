@@ -12,9 +12,9 @@
 // @ts-nocheck
 
 import GroupRepresentation from "@keycloak/keycloak-admin-client/lib/defs/groupRepresentation";
+import { Badge } from "@merge/ui/components/badge";
 import { Button } from "@merge/ui/components/button";
 import { Label } from "@merge/ui/components/label";
-import { Chip, ChipGroup } from "../../../shared/@patternfly/react-core";
 import { useState } from "react";
 import { Controller, useFormContext } from "react-hook-form";
 import { useTranslation } from "react-i18next";
@@ -64,16 +64,16 @@ export const GroupComponent = ({
                             <Label htmlFor={name!}>{t(label!)}{required && " *"}</Label>
                             <HelpItem helpText={t(helpText!)} fieldLabelId={`${label}`} />
                         </div>
-                        <div className="flex gap-2">
-                            <div>
-                                <ChipGroup>
-                                    {field.value && (
-                                        <Chip onClick={() => field.onChange(undefined)}>
-                                            {field.value}
-                                        </Chip>
-                                    )}
-                                </ChipGroup>
-                            </div>
+                        <div className="flex gap-2 flex-wrap">
+                            {field.value && (
+                                <Badge
+                                    variant="secondary"
+                                    className="cursor-pointer hover:bg-muted"
+                                    onClick={() => field.onChange(undefined)}
+                                >
+                                    {field.value}
+                                </Badge>
+                            )}
                             <div>
                                 <Button
                                     id="kc-join-groups-button"

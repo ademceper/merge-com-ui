@@ -14,13 +14,8 @@
 import PolicyRepresentation from "@keycloak/keycloak-admin-client/lib/defs/policyRepresentation";
 import UserRepresentation from "@keycloak/keycloak-admin-client/lib/defs/userRepresentation";
 import { SelectControl, TextControl } from "../../../shared/keycloak-ui-shared";
-import {
-    ActionGroup,
-    Button,
-    Dropdown,
-    Form,
-    MenuToggle
-} from "../../../shared/@patternfly/react-core";
+import { Button } from "@merge/ui/components/button";
+import { Popover, PopoverContent, PopoverTrigger } from "@merge/ui/components/popover";
 import { useEffect, useRef, useState } from "react";
 import { FormProvider, useForm, useWatch } from "react-hook-form";
 import { useTranslation } from "react-i18next";
@@ -84,24 +79,21 @@ export const SearchDropdown = ({ types, search, onSearch }: SearchDropdownProps)
     }, [search]);
 
     return (
-        <Dropdown
-            toggle={ref => (
-                <MenuToggle
+        <Popover open={open} onOpenChange={toggle}>
+            <PopoverTrigger asChild>
+                <Button
+                    variant="outline"
                     data-testid="searchdropdown_dorpdown"
-                    ref={ref}
                     onClick={toggle}
-                    className="keycloak__client_authentication__searchdropdown"
                 >
                     {t("searchClientAuthorizationPermission")}
-                </MenuToggle>
-            )}
-            isOpen={open}
-        >
+                </Button>
+            </PopoverTrigger>
+            <PopoverContent className="w-80">
             <FormProvider {...form}>
-                <Form
+                <form
                     key={key}
-                    isHorizontal
-                    className="keycloak__client_authentication__searchdropdown_form"
+                    className="keycloak__client_authentication__searchdropdown_form space-y-4"
                     onSubmit={handleSubmit(submit)}
                 >
                     <TextControl name="name" label={t("name")} />
@@ -148,12 +140,11 @@ export const SearchDropdown = ({ types, search, onSearch }: SearchDropdownProps)
                         </>
                     )}
 
-                    <ActionGroup>
+                    <div className="flex gap-2">
                         <Button
-                            variant="primary"
                             type="submit"
                             data-testid="search-btn"
-                            isDisabled={!isDirty}
+                            disabled={!isDirty}
                         >
                             {t("search")}
                         </Button>
@@ -167,9 +158,10 @@ export const SearchDropdown = ({ types, search, onSearch }: SearchDropdownProps)
                         >
                             {t("clear")}
                         </Button>
-                    </ActionGroup>
-                </Form>
+                    </div>
+                </form>
             </FormProvider>
-        </Dropdown>
+            </PopoverContent>
+        </Popover>
     );
 };

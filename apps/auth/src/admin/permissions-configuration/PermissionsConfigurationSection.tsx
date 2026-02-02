@@ -14,7 +14,7 @@
 import type ClientRepresentation from "@keycloak/keycloak-admin-client/lib/defs/clientRepresentation";
 import { useAlerts, useFetch } from "../../shared/keycloak-ui-shared";
 import { AlertVariant } from "../../shared/keycloak-ui-shared";
-import { Tab } from "../../shared/@patternfly/react-core";
+import { Tab } from "../components/routable-tabs/RoutableTabs";
 import { useState } from "react";
 import { FormProvider, useForm, useWatch } from "react-hook-form";
 import { useTranslation } from "react-i18next";
@@ -174,7 +174,7 @@ export default function PermissionsConfigurationSection() {
                                 id="resources"
                                 data-testid="permissionsResources"
                                 title={t("permissions")}
-                                {...permissionsResourcesTab}
+                                eventKey={permissionsResourcesTab.eventKey}
                             >
                                 <PermissionsConfigurationTab
                                     clientId={adminPermissionsClient.id!}
@@ -183,8 +183,8 @@ export default function PermissionsConfigurationSection() {
                             <Tab
                                 id="policies"
                                 data-testid="permissionsPolicies"
-                                title={<TabTitleText>{t("policies")}</TabTitleText>}
-                                {...permissionsPoliciesTab}
+                                title={t("policies")}
+                                eventKey={permissionsPoliciesTab.eventKey}
                             >
                                 <AuthorizationPolicies
                                     clientId={adminPermissionsClient.id!}
@@ -195,8 +195,8 @@ export default function PermissionsConfigurationSection() {
                                 <Tab
                                     id="evaluation"
                                     data-testid="permissionsEvaluation"
-                                    title={<TabTitleText>{t("evaluation")}</TabTitleText>}
-                                    {...permissionsEvaluateTab}
+                                    title={t("evaluation")}
+                                    eventKey={permissionsEvaluateTab.eventKey}
                                 >
                                     <PermissionsEvaluationTab
                                         client={adminPermissionsClient}

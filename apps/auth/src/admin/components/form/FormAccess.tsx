@@ -12,19 +12,7 @@
 // @ts-nocheck
 
 import type { AccessType } from "@keycloak/keycloak-admin-client/lib/defs/whoAmIRepresentation";
-import {
-    ActionGroup,
-    ClipboardCopy,
-    Form,
-    FormGroup,
-    FormProps,
-    Grid,
-    GridItem,
-    Stack,
-    StackItem,
-    TextArea
-} from "../../../shared/@patternfly/react-core";
-// Note: PF components kept here because they're used in type-checking within recursiveCloneChildren
+import type { FormProps } from "../../../shared/@patternfly/react-core";
 import {
     Children,
     cloneElement,
@@ -98,46 +86,31 @@ export const FormAccess = ({
                     });
                 }
                 const children = recursiveCloneChildren(element.props.children, newProps);
-                switch (child.type) {
-                    case FixedButtonsGroup:
-                        return cloneElement(child, {
-                            isActive: !newProps.isDisabled,
-                            children
-                        } as any);
-                    case TextArea:
-                        return cloneElement(child, {
-                            readOnly: newProps.isDisabled,
-                            children
-                        } as any);
+                if (child.type === FixedButtonsGroup) {
+                    return cloneElement(child, {
+                        isActive: !newProps.isDisabled,
+                        children
+                    } as any);
                 }
-
-                return cloneElement(
-                    child,
-                    child.type === FormGroup ||
-                        child.type === GridItem ||
-                        child.type === Grid ||
-                        child.type === ActionGroup ||
-                        child.type === ClipboardCopy ||
-                        child.type === Stack ||
-                        child.type === StackItem
-                        ? { children }
-                        : { ...newProps, children }
-                );
+                return cloneElement(child, { ...newProps, children });
             }
             return child;
         });
     };
 
     const isDisabled = isReadOnly || (!hasAccess(role) && !fineGrainedAccess);
+    const disabledProps = isDisabled
+        ? { isDisabled: true, disabled: true, readOnly: true }
+        : {};
 
     return (
         <>
             {!unWrap && (
-                <Form {...rest} className={"keycloak__form " + (rest.className || "")}>
-                    {recursiveCloneChildren(children, isDisabled ? { isDisabled } : {})}
-                </Form>
+                <form {...rest} className={"keycloak__form " + (rest.className || "")}>
+                    {recursiveCloneChildren(children, disabledProps)}
+                </form>
             )}
-            {unWrap && recursiveCloneChildren(children, isDisabled ? { isDisabled } : {})}
+            {unWrap && recursiveCloneChildren(children, disabledProps)}
         </>
     );
 };

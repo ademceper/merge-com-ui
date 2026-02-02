@@ -21,15 +21,10 @@ import {
     useFetch,
     useHelp
 } from "../../shared/keycloak-ui-shared";
-import {
-    Alert,
-    AlertVariant,
-    ButtonVariant,
-    DropdownItem,
-    PageSection,
-    Tab,
-    TabTitleText
-} from "../../shared/@patternfly/react-core";
+import { Alert, AlertTitle } from "@merge/ui/components/alert";
+import { DropdownMenuItem } from "@merge/ui/components/dropdown-menu";
+import { AlertVariant } from "../../shared/keycloak-ui-shared";
+import { Tab } from "../../shared/@patternfly/react-core";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
@@ -135,7 +130,7 @@ export default function EditClientScope() {
         }),
         messageKey: "deleteConfirmClientScopes",
         continueButtonLabel: "delete",
-        continueButtonVariant: ButtonVariant.danger,
+        continueButtonVariant: "destructive",
         onConfirm: async () => {
             try {
                 await adminClient.clientScopes.del({ id });
@@ -229,30 +224,30 @@ export default function EditClientScope() {
             <ViewHeader
                 titleKey={clientScope.name!}
                 dropdownItems={[
-                    <DropdownItem key="delete" onClick={toggleDeleteDialog}>
+                    <DropdownMenuItem key="delete" onClick={toggleDeleteDialog}>
                         {t("delete")}
-                    </DropdownItem>
+                    </DropdownMenuItem>
                 ]}
                 badges={[{ text: clientScope.protocol }]}
                 divider={false}
             />
 
-            <PageSection variant="light" className="pf-v5-u-p-0">
+            <div className="p-0">
                 <RoutableTabs isBox mountOnEnter unmountOnExit>
                     <Tab
                         id="settings"
                         data-testid="settings"
-                        title={<TabTitleText>{t("settings")}</TabTitleText>}
+                        title={t("settings")}
                         {...settingsTab}
                     >
-                        <PageSection variant="light">
+                        <div className="p-6">
                             <ScopeForm save={onSubmit} clientScope={clientScope} />
-                        </PageSection>
+                        </div>
                     </Tab>
                     <Tab
                         id="mappers"
                         data-testid="mappers"
-                        title={<TabTitleText>{t("mappers")}</TabTitleText>}
+                        title={t("mappers")}
                         {...mappersTab}
                     >
                         <MapperList
@@ -272,18 +267,15 @@ export default function EditClientScope() {
                     <Tab
                         id="scope"
                         data-testid="scopeTab"
-                        title={<TabTitleText>{t("scope")}</TabTitleText>}
+                        title={t("scope")}
                         {...scopeTab}
                     >
                         {enabled && (
-                            <PageSection>
-                                <Alert
-                                    variant="info"
-                                    isInline
-                                    title={t("clientScopesRolesScope")}
-                                    component="h2"
-                                />
-                            </PageSection>
+                            <div className="p-6">
+                                <Alert>
+                                    <AlertTitle>{t("clientScopesRolesScope")}</AlertTitle>
+                                </Alert>
+                            </div>
                         )}
                         <RoleMapping
                             id={clientScope.id!}
@@ -296,14 +288,14 @@ export default function EditClientScope() {
                         hasAccess("view-events") && (
                             <Tab
                                 data-testid="admin-events-tab"
-                                title={<TabTitleText>{t("adminEvents")}</TabTitleText>}
+                                title={t("adminEvents")}
                                 {...eventsTab}
                             >
                                 <AdminEvents resourcePath={`*client-scopes/${id}`} />
                             </Tab>
                         )}
                 </RoutableTabs>
-            </PageSection>
+            </div>
         </>
     );
 }

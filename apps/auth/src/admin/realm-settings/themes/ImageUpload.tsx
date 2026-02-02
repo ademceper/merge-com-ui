@@ -12,7 +12,8 @@
 // @ts-nocheck
 
 import { KeycloakSpinner } from "../../../shared/keycloak-ui-shared";
-import { FileUpload } from "../../../shared/@patternfly/react-core";
+import { Button } from "@merge/ui/components/button";
+import { Input } from "@merge/ui/components/input";
 import { useEffect, useState } from "react";
 import { Controller, useFormContext } from "react-hook-form";
 
@@ -61,39 +62,45 @@ export const ImageUpload = ({ name, onChange }: ImageUploadProps) => {
             control={control}
             defaultValue=""
             render={({ field }) => (
-                <>
+                <div className="space-y-2">
                     {isLoading && <KeycloakSpinner />}
-                    {dataUri && <img src={dataUri} width={200} height={200} />}
-                    <FileUpload
-                        id={name}
-                        type="dataURL"
-                        filename={file?.name}
-                        dropzoneProps={{
-                            accept: {
-                                "image/*": [
-                                    ".png",
-                                    ".gif",
-                                    ".jpeg",
-                                    ".jpg",
-                                    ".svg",
-                                    ".webp"
-                                ]
-                            }
-                        }}
-                        onFileInputChange={(_, file) => setFile(file)}
-                        onReadStarted={() => setIsLoading(true)}
-                        onReadFinished={(_, file) => {
-                            setFile(file);
-                            field.onChange(file);
-                            setIsLoading(false);
-                        }}
-                        onClearClick={() => {
-                            setFile(undefined);
-                            field.onChange(undefined);
-                            setDataUri("");
-                        }}
-                    />
-                </>
+                    {dataUri && <img src={dataUri} width={200} height={200} alt="" className="rounded border" />}
+                    <div className="flex gap-2 items-center">
+                        <Input
+                            id={name}
+                            type="file"
+                            accept=".png,.gif,.jpeg,.jpg,.svg,.webp,image/*"
+                            onChange={(e) => {
+                                const f = e.target.files?.[0];
+                                if (f) {
+                                    setFile(f);
+                                    setIsLoading(true);
+                                    const reader = new FileReader();
+                                    reader.onload = (ev) => {
+                                        const dataUrl = ev.target?.result as string;
+                                        setDataUri(dataUrl);
+                                        field.onChange(dataUrl);
+                                        setIsLoading(false);
+                                    };
+                                    reader.readAsDataURL(f);
+                                }
+                            }}
+                        />
+                        <Button
+                            type="button"
+                            variant="outline"
+                            size="sm"
+                            onClick={() => {
+                                setFile(undefined);
+                                field.onChange(undefined);
+                                setDataUri("");
+                            }}
+                        >
+                            Clear
+                        </Button>
+                    </div>
+                    {file?.name && <span className="text-sm text-muted-foreground">{file.name}</span>}
+                </div>
             )}
         />
     );

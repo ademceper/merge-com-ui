@@ -13,11 +13,7 @@
 
 import ComponentRepresentation from "@keycloak/keycloak-admin-client/lib/defs/componentRepresentation";
 import { ListEmptyState, useAlerts, useFetch } from "../../../shared/keycloak-ui-shared";
-import {
-    Button,
-    ButtonVariant,
-    ToolbarItem
-} from "../../../shared/@patternfly/react-core";
+import { Button } from "@merge/ui/components/button";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Link, useNavigate, useParams } from "react-router-dom";
@@ -81,7 +77,7 @@ export const ClientRegistrationList = ({ subType }: ClientRegistrationListProps)
             name: selectedPolicy?.name
         }),
         continueButtonLabel: "delete",
-        continueButtonVariant: ButtonVariant.danger,
+        continueButtonVariant: "danger",
         onConfirm: async () => {
             try {
                 await adminClient.components.del({
@@ -119,14 +115,14 @@ export const ClientRegistrationList = ({ subType }: ClientRegistrationListProps)
                 data-testid={`clientRegistration-${subType}`}
                 loader={policies}
                 toolbarItem={
-                    <ToolbarItem>
+                    <div>
                         <Button
                             data-testid={`createPolicy-${subType}`}
                             onClick={toggleAddDialog}
                         >
                             {t("createPolicy")}
                         </Button>
-                    </ToolbarItem>
+                    </div>
                 }
                 actions={[
                     {

@@ -15,12 +15,8 @@ import {
     KeycloakSelect,
     SelectControlOption
 } from "../../../../shared/keycloak-ui-shared";
-import {
-    Grid,
-    GridItem,
-    SelectOption,
-    TextInput
-} from "../../../../shared/@patternfly/react-core";
+import { Input } from "@merge/ui/components/input";
+import { SelectOption } from "../../../../shared/@patternfly/react-core";
 import { useState } from "react";
 import { UseControllerProps, useController } from "react-hook-form";
 import { useTranslation } from "react-i18next";
@@ -39,8 +35,8 @@ export const KeySelect = ({ selectItems, ...rest }: KeySelectProp) => {
     );
 
     return (
-        <Grid>
-            <GridItem lg={custom ? 2 : 12}>
+        <div className="flex gap-2">
+            <div className={custom ? "w-1/6" : "w-full"}>
                 <KeycloakSelect
                     onToggle={() => toggle()}
                     isOpen={open}
@@ -64,10 +60,10 @@ export const KeySelect = ({ selectItems, ...rest }: KeySelectProp) => {
                         ))
                     ]}
                 </KeycloakSelect>
-            </GridItem>
+            </div>
             {custom && (
-                <GridItem lg={10}>
-                    <TextInput
+                <div className="flex-1">
+                    <Input
                         id="customValue"
                         data-testid={rest.name}
                         placeholder={t("keyPlaceholder")}
@@ -75,8 +71,8 @@ export const KeySelect = ({ selectItems, ...rest }: KeySelectProp) => {
                         onChange={field.onChange}
                         autoFocus
                     />
-                </GridItem>
+                </div>
             )}
-        </Grid>
+        </div>
     );
 };

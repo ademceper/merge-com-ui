@@ -13,13 +13,10 @@
 
 import type ClientRepresentation from "@keycloak/keycloak-admin-client/lib/defs/clientRepresentation";
 import type { RoleMappingPayload } from "@keycloak/keycloak-admin-client/lib/defs/roleRepresentation";
-import {
-    AlertVariant,
-    Divider,
-    FormGroup,
-    PageSection,
-    Switch
-} from "../../../shared/@patternfly/react-core";
+import { AlertVariant } from "../../../shared/keycloak-ui-shared";
+import { Label } from "@merge/ui/components/label";
+import { Separator } from "@merge/ui/components/separator";
+import { Switch } from "@merge/ui/components/switch";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { HelpItem } from "../../../shared/keycloak-ui-shared";
@@ -88,36 +85,31 @@ export const DedicatedScope = ({ client: initialClient }: DedicatedScopeProps) =
     };
 
     return (
-        <PageSection>
+        <div className="p-6">
             <FormAccess
                 role="manage-clients"
                 fineGrainedAccess={client.access?.manage}
                 isHorizontal
             >
-                <FormGroup
-                    hasNoPaddingTop
-                    label={t("fullScopeAllowed")}
-                    labelIcon={
+                <div className="space-y-2">
+                    <div className="flex items-center gap-2">
+                        <Label>{t("fullScopeAllowed")}</Label>
                         <HelpItem
                             helpText={t("fullScopeAllowedHelp")}
                             fieldLabelId="fullScopeAllowed"
                         />
-                    }
-                    fieldId="fullScopeAllowed"
-                >
+                    </div>
                     <Switch
                         id="fullScopeAllowed"
-                        label={t("on")}
-                        labelOff={t("off")}
-                        isChecked={client.fullScopeAllowed}
-                        onChange={update}
+                        checked={client.fullScopeAllowed}
+                        onCheckedChange={update}
                         aria-label={t("fullScopeAllowed")}
                     />
-                </FormGroup>
+                </div>
             </FormAccess>
             {!client.fullScopeAllowed && (
                 <>
-                    <Divider />
+                    <Separator />
                     <RoleMapping
                         name={client.clientId!}
                         id={client.id!}
@@ -127,6 +119,6 @@ export const DedicatedScope = ({ client: initialClient }: DedicatedScopeProps) =
                     />
                 </>
             )}
-        </PageSection>
+        </div>
     );
 };

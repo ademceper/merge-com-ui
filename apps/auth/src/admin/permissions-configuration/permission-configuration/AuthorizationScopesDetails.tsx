@@ -13,17 +13,8 @@
 
 import { useTranslation } from "react-i18next";
 import { capitalize } from "lodash-es";
-import {
-    Label,
-    LabelGroup,
-    Popover,
-    Text,
-    TextContent,
-    TextList,
-    TextListItem,
-    TextListItemVariants,
-    TextListVariants
-} from "../../../shared/@patternfly/react-core";
+import { Badge } from "@merge/ui/components/badge";
+import { Popover, PopoverContent, PopoverTrigger } from "@merge/ui/components/popover";
 
 type AuthorizationScopesDetailsProps = {
     row: {
@@ -38,47 +29,40 @@ export const AuthorizationScopesDetails = ({ row }: AuthorizationScopesDetailsPr
     const associatedScopes = row.associatedScopes || [];
 
     return (
-        <LabelGroup>
+        <div className="flex flex-wrap gap-1">
             {associatedScopes.map((scope, index) => (
-                <Popover
-                    key={index}
-                    aria-label={`Authorization scope popover for ${scope.name}`}
-                    position="top"
-                    hasAutoWidth
-                    bodyContent={
-                        <TextContent>
-                            <Text className="pf-v5-u-font-size-md pf-v5-u-font-weight-bold">
-                                {t("authorizationScopeDetailsTitle")}
-                            </Text>
-                            <Text className="pf-v5-u-font-size-sm">
-                                {t("authorizationScopeDetailsSubtitle")}
-                            </Text>
-                            <TextList
-                                component={TextListVariants.dl}
-                                className="pf-v5-u-font-size-sm"
-                            >
-                                <TextListItem component={TextListItemVariants.dt}>
-                                    {t("authorizationScopeDetailsName")}
-                                </TextListItem>
-                                <TextListItem component={TextListItemVariants.dd}>
-                                    {capitalize(scope.name)}
-                                </TextListItem>
-                                <TextListItem component={TextListItemVariants.dt}>
-                                    {t("authorizationScopeDetailsDescription")}
-                                </TextListItem>
-                                <TextListItem component={TextListItemVariants.dd}>
-                                    {" "}
-                                    {t(
-                                        `authorizationScope.${row.resourceType}.${scope.name}`
-                                    )}
-                                </TextListItem>
-                            </TextList>
-                        </TextContent>
-                    }
-                >
-                    <Label color="blue">{capitalize(scope.name)}</Label>
+                <Popover key={index}>
+                    <PopoverTrigger asChild>
+                        <Badge variant="secondary" className="cursor-pointer">
+                            {capitalize(scope.name)}
+                        </Badge>
+                    </PopoverTrigger>
+                    <PopoverContent>
+                        <p className="font-bold text-md">
+                            {t("authorizationScopeDetailsTitle")}
+                        </p>
+                        <p className="text-sm">
+                            {t("authorizationScopeDetailsSubtitle")}
+                        </p>
+                        <dl className="text-sm mt-2">
+                            <dt className="font-medium">
+                                {t("authorizationScopeDetailsName")}
+                            </dt>
+                            <dd>
+                                {capitalize(scope.name)}
+                            </dd>
+                            <dt className="font-medium mt-1">
+                                {t("authorizationScopeDetailsDescription")}
+                            </dt>
+                            <dd>
+                                {t(
+                                    `authorizationScope.${row.resourceType}.${scope.name}`
+                                )}
+                            </dd>
+                        </dl>
+                    </PopoverContent>
                 </Popover>
             ))}
-        </LabelGroup>
+        </div>
     );
 };

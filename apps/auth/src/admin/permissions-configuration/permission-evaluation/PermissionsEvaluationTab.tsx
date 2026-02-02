@@ -20,20 +20,9 @@ import {
     SelectControl,
     useAlerts
 } from "../../../shared/keycloak-ui-shared";
-import {
-    ActionGroup,
-    Alert,
-    AlertActionCloseButton,
-    Button,
-    PageSection,
-    Panel,
-    PanelHeader,
-    PanelMainBody,
-    Split,
-    SplitItem,
-    Title
-} from "../../../shared/@patternfly/react-core";
-import { BellIcon } from "../../../shared/@patternfly/react-icons";
+import { Button } from "@merge/ui/components/button";
+import { Alert, AlertTitle, AlertDescription } from "@merge/ui/components/alert";
+import { Bell, X } from "@phosphor-icons/react";
 import { useMemo, useState } from "react";
 import { FormProvider, useForm, useWatch } from "react-hook-form";
 import { useTranslation } from "react-i18next";
@@ -161,27 +150,22 @@ const PermissionEvaluateContent = ({ client }: Props) => {
     };
 
     return (
-        <PageSection>
-            <Split hasGutter>
-                <SplitItem>
+        <div className="p-6">
+            <div className="flex gap-4">
+                <div>
                     <FormProvider {...form}>
-                        <Panel>
-                            <PanelMainBody style={{ width: "50rem" }}>
+                        <div>
+                            <div style={{ width: "50rem" }}>
                                 <FormAccess isHorizontal role="view-clients">
                                     {isAlertOpened && (
-                                        <Alert
-                                            variant="info"
-                                            isInline
-                                            title={t("permissionsEvaluationInstructions")}
-                                            component="p"
-                                            actionClose={
-                                                <AlertActionCloseButton
-                                                    onClose={() =>
-                                                        setIsAlertOpened(false)
-                                                    }
-                                                />
-                                            }
-                                        />
+                                        <Alert>
+                                            <AlertTitle className="flex items-center justify-between">
+                                                {t("permissionsEvaluationInstructions")}
+                                                <button onClick={() => setIsAlertOpened(false)}>
+                                                    <X className="size-4" />
+                                                </button>
+                                            </AlertTitle>
+                                        </Alert>
                                     )}
                                     <UserSelect
                                         name="user"
@@ -226,14 +210,14 @@ const PermissionEvaluateContent = ({ client }: Props) => {
                                         options={authScopes}
                                     />
                                 </FormAccess>
-                            </PanelMainBody>
-                        </Panel>
-                        <ActionGroup>
+                            </div>
+                        </div>
+                        <div className="flex gap-2 mt-4">
                             <Button
                                 data-testid="permission-eval"
                                 id="permission-eval"
-                                className="pf-v5-u-mr-md"
-                                isDisabled={!form.formState.isValid}
+                                className="mr-2"
+                                disabled={!form.formState.isValid}
                                 onClick={() => evaluate()}
                             >
                                 {t("evaluate")}
@@ -241,7 +225,7 @@ const PermissionEvaluateContent = ({ client }: Props) => {
                             <Button
                                 data-testid="permission-eval-revert"
                                 id="permission-eval-revert"
-                                className="pf-v5-u-mr-md"
+                                className="mr-2"
                                 variant="link"
                                 onClick={() => {
                                     reset();
@@ -251,20 +235,19 @@ const PermissionEvaluateContent = ({ client }: Props) => {
                             >
                                 {t("revert")}
                             </Button>
-                        </ActionGroup>
+                        </div>
                     </FormProvider>
-                </SplitItem>
-                <SplitItem>
-                    <Panel>
-                        <PanelHeader>
-                            <Title headingLevel="h1" size="md">
+                </div>
+                <div>
+                    <div className="border rounded-lg">
+                        <div className="p-4 border-b">
+                            <h1 className="text-md font-medium">
                                 {t("permissionEvaluationPreview")}
-                            </Title>
-                        </PanelHeader>
-                        <PanelMainBody>
+                            </h1>
+                        </div>
+                        <div className="p-4">
                             {!isEvaluated ? (
                                 <ListEmptyState
-                                    icon={BellIcon}
                                     message={t("noPermissionsEvaluationResults")}
                                     instructions={t(
                                         "noPermissionsEvaluationResultsInstructions"
@@ -275,10 +258,10 @@ const PermissionEvaluateContent = ({ client }: Props) => {
                                     evaluateResult={evaluateResult!}
                                 />
                             )}
-                        </PanelMainBody>
-                    </Panel>
-                </SplitItem>
-            </Split>
-        </PageSection>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     );
 };

@@ -27,7 +27,7 @@ import {
     DropdownMenuItem,
     DropdownMenuTrigger,
 } from "@merge/ui/components/dropdown-menu";
-import { SelectOption } from "../../../shared/@patternfly/react-core";
+const SelectOption = ({ value, children, ...props }: any) => <option value={value} {...props}>{children}</option>;
 import { CaretDown, CaretUp, Funnel } from "@phosphor-icons/react";
 import { useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";

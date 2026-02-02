@@ -20,14 +20,9 @@ import {
     ListEmptyState,
     useFetch
 } from "../../../shared/keycloak-ui-shared";
-import {
-    Button,
-    Dropdown,
-    DropdownItem,
-    DropdownList,
-    FormGroup,
-    MenuToggle
-} from "../../../shared/@patternfly/react-core";
+import { Button } from "@merge/ui/components/button";
+import { Label } from "@merge/ui/components/label";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@merge/ui/components/dropdown-menu";
 import { useState } from "react";
 import { Controller, useFormContext } from "react-hook-form";
 import { useTranslation } from "react-i18next";
@@ -35,10 +30,10 @@ import { useAdminClient } from "../../admin-client";
 import { NewPermissionPolicyDialog } from "./NewPermissionPolicyDialog";
 import PolicyProviderRepresentation from "@keycloak/keycloak-admin-client/lib/defs/policyProviderRepresentation";
 import { ExistingPoliciesDialog } from "./ExistingPoliciesDialog";
-import { CaretDownIcon, FilterIcon } from "../../../shared/@patternfly/react-icons";
+import { Funnel, CaretDown } from "@phosphor-icons/react";
 import { capitalize, sortBy } from "lodash-es";
 import useToggle from "../../utils/useToggle";
-import { IRowData } from "../../../shared/@patternfly/react-table";
+type IRowData = { data: any };
 
 type AssignedPoliciesProps = {
     permissionClientId: string;
@@ -136,17 +131,14 @@ export const AssignedPolicies = ({
         : selectedPolicies;
 
     return (
-        <FormGroup
-            label={t("policies")}
-            labelIcon={
+        <div className="space-y-2">
+            <div className="flex items-center gap-2">
+                <Label htmlFor="policies">{t("policies")} *</Label>
                 <HelpItem
                     helpText={t("permissionPoliciesHelp")}
                     fieldLabelId="policies"
                 />
-            }
-            fieldId="policies"
-            isRequired
-        >
+            </div>
             <Controller
                 name="policies"
                 control={control}
@@ -210,45 +202,35 @@ export const AssignedPolicies = ({
                     searchPlaceholderKey={t("searchClientAuthorizationPolicy")}
                     isSearching={true}
                     searchTypeComponent={
-                        <Dropdown
-                            onSelect={(event, value) => {
-                                setFilterType(value as string | undefined);
-                                toggleIsFilterTypeDropdownOpen();
-                            }}
-                            onOpenChange={toggleIsFilterTypeDropdownOpen}
-                            toggle={ref => (
-                                <MenuToggle
-                                    ref={ref}
+                        <DropdownMenu>
+                            <DropdownMenuTrigger asChild>
+                                <Button
+                                    variant="outline"
                                     data-testid="filter-type-dropdown-existingPolicies"
-                                    id="toggle-id-10"
-                                    onClick={toggleIsFilterTypeDropdownOpen}
-                                    icon={<FilterIcon />}
-                                    statusIcon={<CaretDownIcon />}
                                 >
+                                    <Funnel className="size-4 mr-1" />
                                     {filterType ? capitalize(filterType) : t("allTypes")}
-                                </MenuToggle>
-                            )}
-                            isOpen={isFilterTypeDropdownOpen}
-                        >
-                            <DropdownList>
-                                <DropdownItem
+                                    <CaretDown className="size-4 ml-1" />
+                                </Button>
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent>
+                                <DropdownMenuItem
                                     data-testid="filter-type-dropdown-existingPolicies-all"
-                                    key="all"
                                     onClick={() => setFilterType(undefined)}
                                 >
                                     {t("allTypes")}
-                                </DropdownItem>
+                                </DropdownMenuItem>
                                 {sortedProviders.map(name => (
-                                    <DropdownItem
+                                    <DropdownMenuItem
                                         data-testid={`filter-type-dropdown-existingPolicies-${name}`}
                                         key={name}
                                         onClick={() => setFilterType(name)}
                                     >
                                         {name}
-                                    </DropdownItem>
+                                    </DropdownMenuItem>
                                 ))}
-                            </DropdownList>
-                        </Dropdown>
+                            </DropdownMenuContent>
+                        </DropdownMenu>
                     }
                     actionResolver={(rowData: IRowData) => [
                         {
@@ -274,6 +256,6 @@ export const AssignedPolicies = ({
                 />
             )}
             {errors.policies && <FormErrorText message={t("requiredPolicies")} />}
-        </FormGroup>
+        </div>
     );
 };

@@ -18,17 +18,10 @@ import {
     ListEmptyState,
     useFetch
 } from "../../../shared/keycloak-ui-shared";
-import {
-    Button,
-    ButtonVariant,
-    Dropdown,
-    DropdownItem,
-    DropdownList,
-    MenuToggle,
-    Modal,
-    ModalVariant
-} from "../../../shared/@patternfly/react-core";
-import { CaretDownIcon, FilterIcon } from "../../../shared/@patternfly/react-icons";
+import { Button } from "@merge/ui/components/button";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@merge/ui/components/dialog";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@merge/ui/components/dropdown-menu";
+import { Funnel, CaretDown } from "@phosphor-icons/react";
 import { sortBy } from "lodash-es";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -91,32 +84,82 @@ export const ExistingPoliciesDialog = ({
     };
 
     return (
-        <Modal
-            variant={ModalVariant.medium}
-            title={t("assignExistingPolicies")}
-            isOpen={open}
-            onClose={toggleDialog}
-            actions={[
-                <>
+        <Dialog open={open} onOpenChange={toggleDialog}>
+            <DialogContent className="max-w-3xl">
+                <DialogHeader>
+                    <DialogTitle>{t("assignExistingPolicies")}</DialogTitle>
+                </DialogHeader>
+                <KeycloakDataTable
+                    key={filterType}
+                    loader={loader}
+                    ariaLabelKey={t("chooseAPolicyType")}
+                    searchPlaceholderKey={t("searchClientAuthorizationPolicy")}
+                    isSearching={true}
+                    searchTypeComponent={
+                        <DropdownMenu>
+                            <DropdownMenuTrigger asChild>
+                                <Button
+                                    variant="outline"
+                                    data-testid="filter-type-dropdown-existingPolicies"
+                                >
+                                    <Funnel className="size-4 mr-1" />
+                                    {filterType ? filterType : t("allTypes")}
+                                    <CaretDown className="size-4 ml-1" />
+                                </Button>
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent>
+                                <DropdownMenuItem
+                                    data-testid="filter-type-dropdown-existingPolicies-all"
+                                    onClick={() => setFilterType(undefined)}
+                                >
+                                    {t("allTypes")}
+                                </DropdownMenuItem>
+                                {providers.map(name => (
+                                    <DropdownMenuItem
+                                        data-testid={`filter-type-dropdown-existingPolicies-${name}`}
+                                        key={name}
+                                        onClick={() => setFilterType(name)}
+                                    >
+                                        {name}
+                                    </DropdownMenuItem>
+                                ))}
+                            </DropdownMenuContent>
+                        </DropdownMenu>
+                    }
+                    canSelectAll
+                    onSelect={selectedRows => setRows(selectedRows)}
+                    columns={[
+                        { name: "name" },
+                        {
+                            name: "type",
+                            cellFormatters: [capitalizeFirstLetterFormatter()]
+                        },
+                        { name: "description" }
+                    ]}
+                    emptyState={
+                        <ListEmptyState
+                            message={t("emptyAssignExistingPolicies")}
+                            instructions={t("emptyAssignExistingPoliciesInstructions")}
+                        />
+                    }
+                />
+                <DialogFooter>
                     <Button
                         id="modal-assignExistingPolicies"
                         data-testid="confirm"
-                        key="assign"
-                        variant={ButtonVariant.primary}
                         onClick={() => {
                             const selectedPolicies = rows.map(policy => ({ policy }));
                             onAssign(selectedPolicies);
                             toggleDialog();
                         }}
-                        isDisabled={rows.length === 0}
+                        disabled={rows.length === 0}
                     >
                         {t("assign")}
                     </Button>
                     <Button
                         id="modal-cancelExistingPolicies"
                         data-testid="cancel"
-                        key="cancel"
-                        variant={ButtonVariant.link}
+                        variant="link"
                         onClick={() => {
                             setRows([]);
                             toggleDialog();
@@ -124,73 +167,8 @@ export const ExistingPoliciesDialog = ({
                     >
                         {t("cancel")}
                     </Button>
-                </>
-            ]}
-        >
-            <KeycloakDataTable
-                key={filterType}
-                loader={loader}
-                ariaLabelKey={t("chooseAPolicyType")}
-                searchPlaceholderKey={t("searchClientAuthorizationPolicy")}
-                isSearching={true}
-                searchTypeComponent={
-                    <Dropdown
-                        onSelect={(_, value) => {
-                            setFilterType(value as string | undefined);
-                            toggleIsFilterTypeDropdownOpen();
-                        }}
-                        onOpenChange={toggleIsFilterTypeDropdownOpen}
-                        toggle={ref => (
-                            <MenuToggle
-                                ref={ref}
-                                data-testid="filter-type-dropdown-existingPolicies"
-                                id="toggle-id-10"
-                                onClick={toggleIsFilterTypeDropdownOpen}
-                                icon={<FilterIcon />}
-                                statusIcon={<CaretDownIcon />}
-                            >
-                                {filterType ? filterType : t("allTypes")}
-                            </MenuToggle>
-                        )}
-                        isOpen={isFilterTypeDropdownOpen}
-                    >
-                        <DropdownList>
-                            <DropdownItem
-                                data-testid="filter-type-dropdown-existingPolicies-all"
-                                key="all"
-                                onClick={() => setFilterType(undefined)}
-                            >
-                                {t("allTypes")}
-                            </DropdownItem>
-                            {providers.map(name => (
-                                <DropdownItem
-                                    data-testid={`filter-type-dropdown-existingPolicies-${name}`}
-                                    key={name}
-                                    onClick={() => setFilterType(name)}
-                                >
-                                    {name}
-                                </DropdownItem>
-                            ))}
-                        </DropdownList>
-                    </Dropdown>
-                }
-                canSelectAll
-                onSelect={selectedRows => setRows(selectedRows)}
-                columns={[
-                    { name: "name" },
-                    {
-                        name: "type",
-                        cellFormatters: [capitalizeFirstLetterFormatter()]
-                    },
-                    { name: "description" }
-                ]}
-                emptyState={
-                    <ListEmptyState
-                        message={t("emptyAssignExistingPolicies")}
-                        instructions={t("emptyAssignExistingPoliciesInstructions")}
-                    />
-                }
-            />
-        </Modal>
+                </DialogFooter>
+            </DialogContent>
+        </Dialog>
     );
 };

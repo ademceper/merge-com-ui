@@ -12,12 +12,7 @@
 // @ts-nocheck
 
 import type { UserProfileGroup } from "@keycloak/keycloak-admin-client/lib/defs/userProfileMetadata";
-import {
-    Button,
-    ButtonVariant,
-    PageSection,
-    ToolbarItem
-} from "../../../shared/@patternfly/react-core";
+import { Button } from "@merge/ui/components/button";
 import { useEffect, useState } from "react";
 import { Trans, useTranslation } from "react-i18next";
 import { Link, useNavigate } from "react-router-dom";
@@ -63,7 +58,7 @@ export const AttributesGroupTab = ({ setTableData }: AttributesGroupTabProps) =>
             </Trans>
         ),
         continueButtonLabel: "delete",
-        continueButtonVariant: ButtonVariant.danger,
+        continueButtonVariant: "destructive",
         onConfirm: async () => {
             const groups = (config?.groups ?? []).filter(
                 group => group !== groupToDelete
@@ -136,26 +131,23 @@ export const AttributesGroupTab = ({ setTableData }: AttributesGroupTabProps) =>
     }
 
     return (
-        <PageSection variant="light" className="pf-v5-u-p-0">
+        <div className="p-0">
             <DeleteConfirm />
             <KeycloakDataTable
                 key={key}
                 loader={loader}
                 ariaLabelKey="tableTitle"
                 toolbarItem={
-                    <ToolbarItem>
+                    <div>
                         <Button
-                            component={props => (
-                                <Link
-                                    data-testid="create-attributes-groups-action"
-                                    {...props}
-                                    to={toNewAttributesGroup({ realm })}
-                                />
-                            )}
+                            data-testid="create-attributes-groups-action"
+                            asChild
                         >
-                            {t("createGroupText")}
+                            <Link to={toNewAttributesGroup({ realm })}>
+                                {t("createGroupText")}
+                            </Link>
                         </Button>
-                    </ToolbarItem>
+                    </div>
                 }
                 columns={[
                     {
@@ -196,6 +188,6 @@ export const AttributesGroupTab = ({ setTableData }: AttributesGroupTabProps) =>
                     />
                 }
             />
-        </PageSection>
+        </div>
     );
 };

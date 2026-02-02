@@ -12,12 +12,7 @@
 // @ts-nocheck
 
 import { useAlerts } from "../../../shared/keycloak-ui-shared";
-import {
-    ActionGroup,
-    Button,
-    Form,
-    PageSection
-} from "../../../shared/@patternfly/react-core";
+import { Button } from "@merge/ui/components/button";
 import CodeEditor from "../../components/form/CodeEditor";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -50,28 +45,25 @@ export const JsonEditorTab = () => {
     }
 
     return (
-        <PageSection variant="light">
+        <section className="py-6 bg-muted/30">
             <CodeEditor
                 language="json"
                 value={code}
                 onChange={value => setCode(value ?? "")}
                 height={480}
             />
-            <Form>
-                <ActionGroup>
-                    <Button
-                        data-testid="save"
-                        variant="primary"
-                        onClick={handleSave}
-                        isDisabled={isSaving}
-                    >
-                        {t("save")}
-                    </Button>
-                    <Button variant="link" onClick={resetCode} isDisabled={isSaving}>
-                        {t("revert")}
-                    </Button>
-                </ActionGroup>
-            </Form>
-        </PageSection>
+            <div className="flex gap-2 mt-4">
+                <Button
+                    data-testid="save"
+                    onClick={handleSave}
+                    disabled={isSaving}
+                >
+                    {t("save")}
+                </Button>
+                <Button variant="ghost" onClick={resetCode} disabled={isSaving}>
+                    {t("revert")}
+                </Button>
+            </div>
+        </section>
     );
 };

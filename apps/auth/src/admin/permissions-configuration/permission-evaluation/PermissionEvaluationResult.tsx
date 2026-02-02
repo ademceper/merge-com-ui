@@ -13,7 +13,7 @@
 
 import PolicyEvaluationResponse from "@keycloak/keycloak-admin-client/lib/defs/policyEvaluationResponse";
 import { useMemo } from "react";
-import { Alert, List, ListItem, Text } from "../../../shared/@patternfly/react-core";
+import { Alert, AlertTitle, AlertDescription } from "@merge/ui/components/alert";
 import { useTranslation } from "react-i18next";
 import { sortBy } from "lodash-es";
 
@@ -53,54 +53,57 @@ export const PermissionEvaluationResult = ({
 
         return (
             <>
-                <Text className="pf-v5-u-pt-sm">
+                <p className="pt-2">
                     <strong>{t(title)}</strong>:
-                </Text>
-                <List className="pf-v5-u-mt-sm">
+                </p>
+                <ul className="mt-2 list-disc pl-4">
                     {permissions.map(p => (
-                        <ListItem key={p.policy?.id}>
+                        <li key={p.policy?.id}>
                             {t("evaluatedPolicy", {
                                 name: p.policy?.name,
                                 status: p.status
                             })}
-                        </ListItem>
+                        </li>
                     ))}
-                </List>
+                </ul>
             </>
         );
     };
 
     return (
-        <Alert isInline variant={alertVariant} title={alertTitle} component="h6">
+        <Alert variant={alertVariant === "success" ? "default" : "destructive"}>
+            <AlertTitle>{alertTitle}</AlertTitle>
+            <AlertDescription>
             {evaluatedAllowedScopes.length > 0 && (
                 <>
-                    <Text>
+                    <p>
                         <b>{t("grantedScope")}</b>
-                    </Text>
-                    <List className="pf-v5-u-mt-sm">
+                    </p>
+                    <ul className="mt-2 list-disc pl-4">
                         {evaluatedAllowedScopes.map(scope => (
-                            <ListItem key={scope.id}>{scope.name}</ListItem>
+                            <li key={scope.id}>{scope.name}</li>
                         ))}
-                    </List>
+                    </ul>
                 </>
             )}
 
             {evaluatedDeniedScopes.length > 0 && (
                 <>
-                    <Text className="pf-v5-u-pt-sm">
+                    <p className="pt-2">
                         <strong>{t("deniedScope")}</strong>
-                    </Text>
+                    </p>
 
-                    <List className="pf-v5-u-mt-sm">
+                    <ul className="mt-2 list-disc pl-4">
                         {evaluatedDeniedScopes.map(scope => (
-                            <ListItem key={scope.id}>{scope.name}</ListItem>
+                            <li key={scope.id}>{scope.name}</li>
                         ))}
-                    </List>
+                    </ul>
                 </>
             )}
 
             {evaluatedPermission("grantedPermissions", "PERMIT")}
             {evaluatedPermission("deniedPermissions", "DENY")}
+            </AlertDescription>
         </Alert>
     );
 };

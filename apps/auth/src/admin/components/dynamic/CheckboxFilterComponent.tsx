@@ -12,12 +12,13 @@
 // @ts-nocheck
 
 import { Badge } from "@merge/ui/components/badge";
+import { Checkbox } from "@merge/ui/components/checkbox";
 import {
-    MenuToggle,
-    Select,
-    SelectList,
-    SelectOption
-} from "../../../shared/@patternfly/react-core";
+    Popover,
+    PopoverContent,
+    PopoverTrigger,
+} from "@merge/ui/components/popover";
+import { Button } from "@merge/ui/components/button";
 
 type CheckboxFilterOptions = {
     value: string;
@@ -45,50 +46,43 @@ export const CheckboxFilterComponent = ({
     selectedItems,
     width
 }: CheckboxFilterComponentProps) => {
-    const toggle = (toggleRef: React.RefObject<HTMLButtonElement>) => (
-        <MenuToggle
-            ref={toggleRef}
-            onClick={onToggleClick}
-            isExpanded={isOpen}
-            style={{
-                width
-            }}
-        >
-            {filterPlaceholderText}
-            {selectedItems.length > 0 && (
-                <Badge variant="secondary" className="ml-1">
-                    {selectedItems.length}
-                </Badge>
-            )}
-        </MenuToggle>
-    );
-
     return (
-        <Select
-            role="menu"
-            id="checkbox-select"
-            isOpen={isOpen}
-            selected={selectedItems}
-            onSelect={(event, value) => {
-                onSelect(event as React.MouseEvent<HTMLButtonElement>, value as string);
-            }}
-            onOpenChange={onOpenChange}
-            toggle={toggle}
-            data-testid="checkbox-filter-select"
-        >
-            <SelectList>
-                {options.map(option => (
-                    <SelectOption
-                        key={option.value}
-                        hasCheckbox
-                        value={option.value}
-                        isSelected={selectedItems.includes(option.value)}
-                        data-testid={`checkbox-filter-option-${option.value}`}
-                    >
-                        {option.label}
-                    </SelectOption>
-                ))}
-            </SelectList>
-        </Select>
+        <Popover open={isOpen} onOpenChange={onOpenChange}>
+            <PopoverTrigger asChild>
+                <Button
+                    id="checkbox-select"
+                    variant="outline"
+                    data-testid="checkbox-filter-select"
+                    style={{ width }}
+                    onClick={onToggleClick}
+                >
+                    {filterPlaceholderText}
+                    {selectedItems.length > 0 && (
+                        <Badge variant="secondary" className="ml-1">
+                            {selectedItems.length}
+                        </Badge>
+                    )}
+                </Button>
+            </PopoverTrigger>
+            <PopoverContent className="w-[var(--radix-popover-trigger-width)] p-2" align="start">
+                <div className="flex flex-col gap-2 max-h-64 overflow-auto">
+                    {options.map(option => (
+                        <label
+                            key={option.value}
+                            className="flex items-center gap-2 cursor-pointer text-sm"
+                            data-testid={`checkbox-filter-option-${option.value}`}
+                        >
+                            <Checkbox
+                                checked={selectedItems.includes(option.value)}
+                                onCheckedChange={() => {
+                                    onSelect({} as React.MouseEvent<HTMLButtonElement>, option.value);
+                                }}
+                            />
+                            <span>{option.label}</span>
+                        </label>
+                    ))}
+                </div>
+            </PopoverContent>
+        </Popover>
     );
 };

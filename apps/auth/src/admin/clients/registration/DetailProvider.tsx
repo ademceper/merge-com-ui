@@ -14,13 +14,8 @@
 import ComponentRepresentation from "@keycloak/keycloak-admin-client/lib/defs/componentRepresentation";
 import ComponentTypeRepresentation from "@keycloak/keycloak-admin-client/lib/defs/componentTypeRepresentation";
 import { TextControl, useAlerts, useFetch } from "../../../shared/keycloak-ui-shared";
-import {
-    ActionGroup,
-    Button,
-    ButtonVariant,
-    DropdownItem,
-    PageSection
-} from "../../../shared/@patternfly/react-core";
+import { Button } from "@merge/ui/components/button";
+import { DropdownMenuItem } from "@merge/ui/components/dropdown-menu";
 import { useState } from "react";
 import { FormProvider, useForm, useWatch } from "react-hook-form";
 import { useTranslation } from "react-i18next";
@@ -102,7 +97,7 @@ export default function DetailProvider() {
             name: providerName
         }),
         continueButtonLabel: "delete",
-        continueButtonVariant: ButtonVariant.danger,
+        continueButtonVariant: "danger",
         onConfirm: async () => {
             try {
                 await adminClient.components.del({
@@ -129,19 +124,19 @@ export default function DetailProvider() {
                 dropdownItems={
                     id
                         ? [
-                              <DropdownItem
+                              <DropdownMenuItem
                                   data-testid="delete"
                                   key="delete"
                                   onClick={toggleDeleteDialog}
                               >
                                   {t("delete")}
-                              </DropdownItem>
+                              </DropdownMenuItem>
                           ]
                         : undefined
                 }
             />
             <DeleteConfirm />
-            <PageSection variant="light">
+            <div className="p-6">
                 <FormProvider {...form}>
                     <FormAccess
                         role="manage-clients"
@@ -156,26 +151,25 @@ export default function DetailProvider() {
                             rules={{ required: t("required") }}
                         />
                         <DynamicComponents properties={provider.properties} />
-                        <ActionGroup>
+                        <div className="flex gap-2 mt-4">
                             <Button data-testid="save" type="submit">
                                 {t("save")}
                             </Button>
                             <Button
                                 data-testid="cancel"
                                 variant="link"
-                                component={props => (
-                                    <Link
-                                        {...props}
-                                        to={toClientRegistration({ realm, subTab })}
-                                    ></Link>
-                                )}
+                                asChild
                             >
-                                {t("cancel")}
+                                <Link
+                                    to={toClientRegistration({ realm, subTab })}
+                                >
+                                    {t("cancel")}
+                                </Link>
                             </Button>
-                        </ActionGroup>
+                        </div>
                     </FormAccess>
                 </FormProvider>
-            </PageSection>
+            </div>
         </>
     );
 }

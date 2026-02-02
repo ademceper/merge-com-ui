@@ -13,7 +13,7 @@
 
 import type ClientScopeRepresentation from "@keycloak/keycloak-admin-client/lib/defs/clientScopeRepresentation";
 import type { KeyMetadataRepresentation } from "@keycloak/keycloak-admin-client/lib/defs/keyMetadataRepresentation";
-import { ActionGroup, Button } from "../../../shared/@patternfly/react-core";
+import { Button } from "@merge/ui/components/button";
 import { useEffect, useMemo, useState } from "react";
 import { FormProvider, useForm, useWatch } from "react-hook-form";
 import { useTranslation } from "react-i18next";
@@ -438,7 +438,7 @@ export const ScopeForm = ({ clientScope, save }: ScopeFormProps) => {
                     </>
                 )}
 
-                <ActionGroup>
+                <div className="flex gap-2">
                     <FormSubmitButton
                         data-testid="save"
                         formState={formState}
@@ -448,13 +448,11 @@ export const ScopeForm = ({ clientScope, save }: ScopeFormProps) => {
                     </FormSubmitButton>
                     <Button
                         variant="link"
-                        component={props => (
-                            <Link {...props} to={toClientScopes({ realm })}></Link>
-                        )}
+                        asChild
                     >
-                        {t("cancel")}
+                        <Link to={toClientScopes({ realm })}>{t("cancel")}</Link>
                     </Button>
-                </ActionGroup>
+                </div>
             </FormProvider>
         </FormAccess>
     );

@@ -11,15 +11,7 @@
 
 // @ts-nocheck
 
-import {
-    DataList,
-    DataListCell,
-    DataListItem,
-    DataListItemCells,
-    DataListItemRow,
-    Modal,
-    ModalVariant
-} from "../../../shared/@patternfly/react-core";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@merge/ui/components/dialog";
 import { useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { useServerInfo } from "../../context/server-info/ServerInfoProvider";
@@ -55,56 +47,32 @@ export const AddProviderDialog = ({
         [providers, descriptions]
     );
     return (
-        <Modal
-            variant={ModalVariant.medium}
-            title={t("chooseAPolicyProvider")}
-            isOpen
-            onClose={toggleDialog}
-        >
-            <DataList
-                onSelectDataListItem={(_event, id) => {
-                    onConfirm(id);
-                    toggleDialog();
-                }}
-                aria-label={t("addPredefinedMappers")}
-                isCompact
-            >
-                <DataListItem aria-label={t("headerName")} id="header">
-                    <DataListItemRow>
-                        <DataListItemCells
-                            dataListCells={[t("name"), t("description")].map(name => (
-                                <DataListCell style={{ fontWeight: 700 }} key={name}>
-                                    {name}
-                                </DataListCell>
-                            ))}
-                        />
-                    </DataListItemRow>
-                </DataListItem>
-                {rows.map(provider => (
-                    <DataListItem
-                        aria-label={provider.id}
-                        key={provider.id}
-                        data-testid={provider.id}
-                        id={provider.id}
-                    >
-                        <DataListItemRow>
-                            <DataListItemCells
-                                dataListCells={[
-                                    <DataListCell width={2} key={`name-${provider.id}`}>
-                                        {provider.id}
-                                    </DataListCell>,
-                                    <DataListCell
-                                        width={4}
-                                        key={`description-${provider.id}`}
-                                    >
-                                        {provider.helpText}
-                                    </DataListCell>
-                                ]}
-                            />
-                        </DataListItemRow>
-                    </DataListItem>
-                ))}
-            </DataList>
-        </Modal>
+        <Dialog open onOpenChange={(open) => { if (!open) toggleDialog(); }}>
+            <DialogContent className="max-w-lg">
+                <DialogHeader>
+                    <DialogTitle>{t("chooseAPolicyProvider")}</DialogTitle>
+                </DialogHeader>
+                <div className="space-y-1" aria-label={t("addPredefinedMappers")}>
+                    <div className="grid grid-cols-[1fr_2fr] gap-2 p-2 font-bold text-sm">
+                        <span>{t("name")}</span>
+                        <span>{t("description")}</span>
+                    </div>
+                    {rows.map(provider => (
+                        <div
+                            key={provider.id}
+                            data-testid={provider.id}
+                            className="grid grid-cols-[1fr_2fr] gap-2 p-2 hover:bg-muted cursor-pointer rounded text-sm"
+                            onClick={() => {
+                                onConfirm(provider.id);
+                                toggleDialog();
+                            }}
+                        >
+                            <span>{provider.id}</span>
+                            <span>{provider.helpText}</span>
+                        </div>
+                    ))}
+                </div>
+            </DialogContent>
+        </Dialog>
     );
 };

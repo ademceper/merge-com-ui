@@ -14,7 +14,6 @@
 import { FormErrorText, HelpItem } from "../../../shared/keycloak-ui-shared";
 import { Label } from "@merge/ui/components/label";
 import { Badge } from "@merge/ui/components/badge";
-import { Chip } from "../../../shared/@patternfly/react-core";
 import { useState } from "react";
 import { Controller, useFormContext } from "react-hook-form";
 import { useTranslation } from "react-i18next";
@@ -81,17 +80,16 @@ export const RoleComponent = ({
                         )}
 
                         {field.value !== "" && (
-                            <div>
-                                <Chip
-                                    textMaxWidth="500px"
-                                    onClick={() => field.onChange("")}
-                                >
-                                    <ServiceRole
-                                        role={{ name: parseValue(field.value)[1] }}
-                                        client={{ clientId: parseValue(field.value)[0] }}
-                                    />
-                                </Chip>
-                            </div>
+                            <Badge
+                                variant="secondary"
+                                className="max-w-[500px] cursor-pointer truncate py-1.5 px-2 hover:bg-muted"
+                                onClick={() => field.onChange("")}
+                            >
+                                <ServiceRole
+                                    role={{ name: parseValue(field.value)[1] }}
+                                    client={{ clientId: parseValue(field.value)[0] }}
+                                />
+                            </Badge>
                         )}
                         <div>
                             <AddRoleButton

@@ -15,12 +15,7 @@ import type ClientRepresentation from "@keycloak/keycloak-admin-client/lib/defs/
 import type ProtocolMapperRepresentation from "@keycloak/keycloak-admin-client/lib/defs/protocolMapperRepresentation";
 import type { ProtocolMapperTypeRepresentation } from "@keycloak/keycloak-admin-client/lib/defs/serverInfoRepesentation";
 import { useAlerts, useFetch } from "../../../shared/keycloak-ui-shared";
-import {
-    AlertVariant,
-    PageSection,
-    Tab,
-    TabTitleText
-} from "../../../shared/@patternfly/react-core";
+import { AlertVariant } from "../../../shared/keycloak-ui-shared";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
@@ -29,7 +24,8 @@ import { MapperList } from "../../client-scopes/details/MapperList";
 import { KeycloakSpinner } from "../../../shared/keycloak-ui-shared";
 import {
     RoutableTabs,
-    useRoutableTab
+    useRoutableTab,
+    Tab
 } from "../../components/routable-tabs/RoutableTabs";
 import { ViewHeader } from "../../components/view-header/ViewHeader";
 import { useParams } from "../../utils/useParams";
@@ -114,7 +110,7 @@ export default function DedicatedScopes() {
                 subKey="dedicatedScopeExplain"
                 divider={false}
             />
-            <PageSection variant="light" className="pf-v5-u-p-0">
+            <div className="p-0">
                 <RoutableTabs
                     isBox
                     mountOnEnter
@@ -125,7 +121,7 @@ export default function DedicatedScopes() {
                     })}
                 >
                     <Tab
-                        title={<TabTitleText>{t("mappers")}</TabTitleText>}
+                        title={t("mappers")}
                         data-testid="mappersTab"
                         {...mappersTab}
                     >
@@ -144,14 +140,14 @@ export default function DedicatedScopes() {
                         />
                     </Tab>
                     <Tab
-                        title={<TabTitleText>{t("scope")}</TabTitleText>}
+                        title={t("scope")}
                         data-testid="scopeTab"
                         {...scopeTab}
                     >
                         <DedicatedScope client={client} />
                     </Tab>
                 </RoutableTabs>
-            </PageSection>
+            </div>
         </>
     );
 }

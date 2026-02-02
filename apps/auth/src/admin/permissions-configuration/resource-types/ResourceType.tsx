@@ -12,7 +12,7 @@
 // @ts-nocheck
 
 import { useTranslation } from "react-i18next";
-import { FormGroup, Radio } from "../../../shared/@patternfly/react-core";
+import { Label } from "@merge/ui/components/label";
 import { HelpItem } from "../../../shared/keycloak-ui-shared";
 import { useFormContext } from "react-hook-form";
 import { useState, type JSX } from "react";
@@ -62,43 +62,45 @@ export const ResourceType = ({
     return (
         <>
             {withEnforceAccessTo && (
-                <FormGroup
-                    label={t("enforceAccessTo")}
-                    labelIcon={
+                <div className="space-y-2">
+                    <div className="flex items-center gap-2">
+                        <Label htmlFor="EnforceAccessTo">{t("enforceAccessTo")} *</Label>
                         <HelpItem
                             helpText={t("enforceAccessToHelpText")}
                             fieldLabelId="enforce-access-to"
                         />
-                    }
-                    fieldId="EnforceAccessTo"
-                    hasNoPaddingTop
-                    isRequired
-                >
-                    <Radio
-                        id="allResources"
-                        data-testid="allResources"
-                        isChecked={!isSpecificResources}
-                        name="EnforceAccessTo"
-                        label={t(`allResourceType`, { resourceType })}
-                        onChange={() => {
-                            setIsSpecificResources(false);
-                            form.setValue("resources", []);
-                        }}
-                        className="pf-v5-u-mb-md"
-                    />
-                    <Radio
-                        id="specificResources"
-                        data-testid="specificResources"
-                        isChecked={isSpecificResources}
-                        name="EnforceAccessTo"
-                        label={t(`specificResourceType`, { resourceType })}
-                        onChange={() => {
-                            setIsSpecificResources(true);
-                            form.setValue("resources", []);
-                        }}
-                        className="pf-v5-u-mb-md"
-                    />
-                </FormGroup>
+                    </div>
+                    <div className="flex flex-col gap-2">
+                        <label className="flex items-center gap-2 cursor-pointer">
+                            <input
+                                type="radio"
+                                id="allResources"
+                                data-testid="allResources"
+                                checked={!isSpecificResources}
+                                name="EnforceAccessTo"
+                                onChange={() => {
+                                    setIsSpecificResources(false);
+                                    form.setValue("resources", []);
+                                }}
+                            />
+                            {t(`allResourceType`, { resourceType })}
+                        </label>
+                        <label className="flex items-center gap-2 cursor-pointer">
+                            <input
+                                type="radio"
+                                id="specificResources"
+                                data-testid="specificResources"
+                                checked={isSpecificResources}
+                                name="EnforceAccessTo"
+                                onChange={() => {
+                                    setIsSpecificResources(true);
+                                    form.setValue("resources", []);
+                                }}
+                            />
+                            {t(`specificResourceType`, { resourceType })}
+                        </label>
+                    </div>
+                </div>
             )}
             {isSpecificResources && ComponentType && (
                 <ComponentType

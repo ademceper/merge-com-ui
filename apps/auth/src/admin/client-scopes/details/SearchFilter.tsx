@@ -13,17 +13,11 @@
 
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
-import {
-    Dropdown,
-    DropdownItem,
-    DropdownList,
-    MenuToggle,
-    Select,
-    SelectList,
-    SelectOption,
-    ToolbarItem
-} from "../../../shared/@patternfly/react-core";
-import { FilterIcon } from "../../../shared/@patternfly/react-icons";
+import { Button } from "@merge/ui/components/button";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@merge/ui/components/dropdown-menu";
+import { Select, SelectList, SelectOption } from "../../../shared/@patternfly/react-core";
+import { MenuToggle } from "../../../shared/@patternfly/react-core";
+import { Funnel } from "@phosphor-icons/react";
 
 import {
     AllClientScopes,
@@ -69,39 +63,34 @@ export const SearchDropdown = ({
     const { t } = useTranslation();
     const [searchToggle, setSearchToggle] = useState(false);
 
-    const createDropdown = (searchType: SearchType) => (
-        <DropdownItem
-            key={searchType}
+    const createDropdownItem = (st: SearchType) => (
+        <DropdownMenuItem
+            key={st}
             onClick={() => {
-                onSelect(searchType);
+                onSelect(st);
                 setSearchToggle(false);
             }}
         >
-            {t(`clientScopeSearch.${searchType}`)}
-        </DropdownItem>
+            {t(`clientScopeSearch.${st}`)}
+        </DropdownMenuItem>
     );
-    const options = [createDropdown("name"), createDropdown("type")];
+    const options = [createDropdownItem("name"), createDropdownItem("type")];
     if (withProtocol) {
-        options.push(createDropdown("protocol"));
+        options.push(createDropdownItem("protocol"));
     }
 
     return (
-        <Dropdown
-            onOpenChange={isOpen => setSearchToggle(isOpen)}
-            toggle={ref => (
-                <MenuToggle
+        <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+                <Button
+                    variant="outline"
                     data-testid="clientScopeSearch"
-                    ref={ref}
-                    id="toggle-id"
-                    onClick={() => setSearchToggle(!searchToggle)}
                 >
-                    <FilterIcon /> {t(`clientScopeSearch.${searchType}`)}
-                </MenuToggle>
-            )}
-            isOpen={searchToggle}
-        >
-            <DropdownList>{options}</DropdownList>
-        </Dropdown>
+                    <Funnel className="size-4 mr-1" /> {t(`clientScopeSearch.${searchType}`)}
+                </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent>{options}</DropdownMenuContent>
+        </DropdownMenu>
     );
 };
 
@@ -128,14 +117,14 @@ export const SearchToolbar = ({
         <>
             {searchType === "type" && (
                 <>
-                    <ToolbarItem>
+                    <div>
                         <SearchDropdown
                             searchType={searchType}
                             onSelect={onSelect}
                             withProtocol={!!protocol}
                         />
-                    </ToolbarItem>
-                    <ToolbarItem>
+                    </div>
+                    <div>
                         <Select
                             toggle={ref => (
                                 <MenuToggle
@@ -168,19 +157,19 @@ export const SearchToolbar = ({
                                 {clientScopeTypesSelectOptions(t)}
                             </SelectList>
                         </Select>
-                    </ToolbarItem>
+                    </div>
                 </>
             )}
             {searchType === "protocol" && !!protocol && (
                 <>
-                    <ToolbarItem>
+                    <div>
                         <SearchDropdown
                             searchType={searchType}
                             onSelect={onSelect}
                             withProtocol
                         />
-                    </ToolbarItem>
-                    <ToolbarItem>
+                    </div>
+                    <div>
                         <Select
                             toggle={ref => (
                                 <MenuToggle
@@ -208,7 +197,7 @@ export const SearchToolbar = ({
                                 ))}
                             </SelectList>
                         </Select>
-                    </ToolbarItem>
+                    </div>
                 </>
             )}
         </>

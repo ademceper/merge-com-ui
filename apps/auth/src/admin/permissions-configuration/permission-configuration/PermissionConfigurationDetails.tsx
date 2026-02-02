@@ -13,14 +13,9 @@
 
 import PolicyProviderRepresentation from "@keycloak/keycloak-admin-client/lib/defs/policyProviderRepresentation";
 import { useAlerts, useFetch } from "../../../shared/keycloak-ui-shared";
-import {
-    ActionGroup,
-    AlertVariant,
-    Button,
-    ButtonVariant,
-    DropdownItem,
-    PageSection
-} from "../../../shared/@patternfly/react-core";
+import { Button } from "@merge/ui/components/button";
+import { DropdownMenuItem } from "@merge/ui/components/dropdown-menu";
+import { AlertVariant } from "../../../shared/keycloak-ui-shared";
 import { useMemo, useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
@@ -203,7 +198,7 @@ export default function PermissionConfigurationDetails() {
         messageKey: t("deleteAdminPermissionConfirm", {
             permission: permission?.name
         }),
-        continueButtonVariant: ButtonVariant.danger,
+        continueButtonVariant: "destructive",
         continueButtonLabel: "confirm",
         onConfirm: async () => {
             try {
@@ -243,18 +238,18 @@ export default function PermissionConfigurationDetails() {
                 dropdownItems={
                     permissionId
                         ? [
-                              <DropdownItem
+                              <DropdownMenuItem
                                   key="delete"
                                   data-testid="delete-permission"
                                   onClick={() => toggleDeleteDialog()}
                               >
                                   {t("delete")}
-                              </DropdownItem>
+                              </DropdownMenuItem>
                           ]
                         : undefined
                 }
             />
-            <PageSection variant="light">
+            <div className="p-6">
                 <FormAccess isHorizontal onSubmit={handleSubmit(save)} role="anyone">
                     <FormProvider {...form}>
                         <NameDescription clientId={permissionClientId} />
@@ -270,36 +265,32 @@ export default function PermissionConfigurationDetails() {
                             resourceType={resourceType}
                         />
                     </FormProvider>
-                    <ActionGroup>
-                        <div className="pf-v5-u-mt-md">
-                            <Button
-                                variant={ButtonVariant.primary}
-                                className="pf-v5-u-mr-md"
-                                type="submit"
-                                data-testid="save"
-                            >
-                                {t("save")}
-                            </Button>
-                            <Button
-                                variant="link"
-                                data-testid="cancel"
-                                component={props => (
-                                    <Link
-                                        {...props}
-                                        to={toPermissionsConfigurationTabs({
-                                            realm,
-                                            permissionClientId,
-                                            tab: "permissions"
-                                        })}
-                                    />
-                                )}
+                    <div className="flex gap-2 mt-4">
+                        <Button
+                            className="mr-2"
+                            type="submit"
+                            data-testid="save"
+                        >
+                            {t("save")}
+                        </Button>
+                        <Button
+                            variant="link"
+                            data-testid="cancel"
+                            asChild
+                        >
+                            <Link
+                                to={toPermissionsConfigurationTabs({
+                                    realm,
+                                    permissionClientId,
+                                    tab: "permissions"
+                                })}
                             >
                                 {t("cancel")}
-                            </Button>
-                        </div>
-                    </ActionGroup>
+                            </Link>
+                        </Button>
+                    </div>
                 </FormAccess>
-            </PageSection>
+            </div>
         </>
     );
 }

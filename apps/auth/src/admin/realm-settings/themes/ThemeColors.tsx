@@ -150,29 +150,32 @@ export const ThemeColors = ({ realm, save, theme }: ThemeColorsProps) => {
                     onClose={toggle}
                 />
             )}
-            <PageSection variant="light">
-                <TextContent className="pf-v5-u-mb-lg">
-                    <Text>{t("themeColorInfo")}</Text>
-                </TextContent>
+            <div className="p-6">
+                <p className="mb-6 text-sm text-muted-foreground">{t("themeColorInfo")}</p>
                 {mediaQuery.matches && theme === "light" && (
-                    <Alert variant="info" isInline title={t("themePreviewInfo")} />
+                    <Alert>
+                        <AlertTitle>{t("themePreviewInfo")}</AlertTitle>
+                    </Alert>
                 )}
-                <Flex className="pf-v5-u-pt-lg">
-                    <FlexItem>
+                <div className="flex gap-6 pt-4">
+                    <div>
                         <FormAccess isHorizontal role="manage-realm">
                             <FormProvider {...form}>
-                                <FormGroup label={t("favicon")}>
+                                <div className="space-y-2">
+                                    <Label>{t("favicon")}</Label>
                                     <ImageUpload name="favicon" />
-                                </FormGroup>
-                                <FormGroup label={t("logo")}>
+                                </div>
+                                <div className="space-y-2">
+                                    <Label>{t("logo")}</Label>
                                     <ImageUpload
                                         name="logo"
                                         onChange={logo => contextLogo?.setLogo(logo)}
                                     />
-                                </FormGroup>
-                                <FormGroup label={t("backgroundImage")}>
+                                </div>
+                                <div className="space-y-2">
+                                    <Label>{t("backgroundImage")}</Label>
                                     <ImageUpload name="bgimage" />
-                                </FormGroup>
+                                </div>
                                 {mapping.map(m => (
                                     <ColorControl
                                         key={m.name}
@@ -183,11 +186,11 @@ export const ThemeColors = ({ realm, save, theme }: ThemeColorsProps) => {
                                 ))}
                             </FormProvider>
                         </FormAccess>
-                    </FlexItem>
-                    <FlexItem grow={{ default: "grow" }} style={{ zIndex: 0 }}>
+                    </div>
+                    <div className="flex-1" style={{ zIndex: 0 }}>
                         <PreviewWindow cssVars={style?.[theme] || {}} />
-                    </FlexItem>
-                </Flex>
+                    </div>
+                </div>
                 <FixedButtonsGroup
                     name="colors"
                     saveText={t("downloadThemeJar")}
@@ -196,7 +199,7 @@ export const ThemeColors = ({ realm, save, theme }: ThemeColorsProps) => {
                 >
                     <UploadJar onUpload={upload} />
                 </FixedButtonsGroup>
-            </PageSection>
+            </div>
         </>
     );
 };

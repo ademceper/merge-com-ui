@@ -14,16 +14,11 @@
 import type ProtocolMapperRepresentation from "@keycloak/keycloak-admin-client/lib/defs/protocolMapperRepresentation";
 import type { ProtocolMapperTypeRepresentation } from "@keycloak/keycloak-admin-client/lib/defs/serverInfoRepesentation";
 import { TextControl, useAlerts, useFetch } from "../../../shared/keycloak-ui-shared";
-import {
-    ActionGroup,
-    AlertVariant,
-    Button,
-    ButtonVariant,
-    DropdownItem,
-    FormGroup,
-    PageSection,
-    TextInput
-} from "../../../shared/@patternfly/react-core";
+import { Button } from "@merge/ui/components/button";
+import { Label } from "@merge/ui/components/label";
+import { Input } from "@merge/ui/components/input";
+import { DropdownMenuItem } from "@merge/ui/components/dropdown-menu";
+import { AlertVariant } from "../../../shared/keycloak-ui-shared";
 import { useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
@@ -134,7 +129,7 @@ export default function MappingDetails() {
         titleKey: "deleteMappingTitle",
         messageKey: "deleteMappingConfirm",
         continueButtonLabel: "delete",
-        continueButtonVariant: ButtonVariant.danger,
+        continueButtonVariant: "destructive",
         onConfirm: async () => {
             try {
                 if (isOnClientScope) {
@@ -197,33 +192,33 @@ export default function MappingDetails() {
                 dropdownItems={
                     isUpdating
                         ? [
-                              <DropdownItem
+                              <DropdownMenuItem
                                   key="delete"
-                                  value="delete"
                                   onClick={toggleDeleteDialog}
                               >
                                   {t("delete")}
-                              </DropdownItem>
+                              </DropdownMenuItem>
                           ]
                         : undefined
                 }
             />
-            <PageSection variant="light">
+            <div className="p-6">
                 <FormProvider {...form}>
                     <FormAccess
                         isHorizontal
                         onSubmit={handleSubmit(save)}
                         role="manage-clients"
                     >
-                        <FormGroup label={t("mapperType")} fieldId="mapperType">
-                            <TextInput
+                        <div className="space-y-2">
+                            <Label htmlFor="mapperType">{t("mapperType")}</Label>
+                            <Input
                                 type="text"
                                 id="mapperType"
                                 name="mapperType"
-                                readOnlyVariant="default"
+                                readOnly
                                 value={mapping?.name}
                             />
-                        </FormGroup>
+                        </div>
                         <TextControl
                             name="name"
                             label={t("name")}
@@ -236,21 +231,21 @@ export default function MappingDetails() {
                             isNew={!isUpdating}
                             stringify
                         />
-                        <ActionGroup>
-                            <Button variant="primary" type="submit" data-testid="save">
+                        <div className="flex gap-2">
+                            <Button type="submit" data-testid="save">
                                 {t("save")}
                             </Button>
                             <Button
                                 data-testid="cancel"
                                 variant="link"
-                                component={props => <Link {...props} to={toDetails()} />}
+                                asChild
                             >
-                                {t("cancel")}
+                                <Link to={toDetails()}>{t("cancel")}</Link>
                             </Button>
-                        </ActionGroup>
+                        </div>
                     </FormAccess>
                 </FormProvider>
-            </PageSection>
+            </div>
         </>
     );
 }

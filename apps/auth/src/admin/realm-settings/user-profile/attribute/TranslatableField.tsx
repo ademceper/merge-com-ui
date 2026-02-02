@@ -14,15 +14,10 @@
 import KeycloakAdminClient from "@keycloak/keycloak-admin-client";
 import RealmRepresentation from "@keycloak/keycloak-admin-client/lib/defs/realmRepresentation";
 import { FormErrorText } from "../../../../shared/keycloak-ui-shared";
-import {
-    Alert,
-    Button,
-    FormHelperText,
-    InputGroup,
-    InputGroupItem,
-    TextInput
-} from "../../../../shared/@patternfly/react-core";
-import { GlobeRouteIcon } from "../../../../shared/@patternfly/react-icons";
+import { Alert, AlertDescription } from "@merge/ui/components/alert";
+import { Button } from "@merge/ui/components/button";
+import { Input } from "@merge/ui/components/input";
+import { Globe } from "@phosphor-icons/react";
 import { TFunction } from "i18next";
 import { useEffect } from "react";
 import { useFormContext, useWatch } from "react-hook-form";
@@ -139,35 +134,33 @@ export const TranslatableField = ({
                     toggleDialog={toggle}
                 />
             )}
-            <InputGroup>
-                <InputGroupItem isFill>
-                    <TextInput
+            <div className="flex gap-2">
+                <div className="flex-1">
+                    <Input
                         id={`kc-attribute-${fieldName}`}
                         data-testid={`attributes-${fieldName}`}
-                        isDisabled={realm?.internationalizationEnabled}
+                        disabled={realm?.internationalizationEnabled}
                         {...register(fieldName)}
                     />
-                </InputGroupItem>
+                </div>
                 {realm?.internationalizationEnabled && (
-                    <InputGroupItem>
+                    <div>
                         <Button
-                            variant="link"
-                            className="pf-m-plain"
+                            variant="ghost"
+                            size="icon"
                             data-testid={`addAttribute${fieldName}TranslationBtn`}
                             aria-label={t("addAttributeTranslation", { fieldName })}
                             onClick={toggle}
-                            icon={<GlobeRouteIcon />}
-                        />
-                    </InputGroupItem>
+                        >
+                            <Globe className="size-4" />
+                        </Button>
+                    </div>
                 )}
-            </InputGroup>
+            </div>
             {realm?.internationalizationEnabled && (
-                <FormHelperText>
-                    <Alert
-                        variant="info"
-                        isInline
-                        isPlain
-                        title={
+                <div className="text-sm text-muted-foreground">
+                    <Alert>
+                        <AlertDescription>
                             <Trans
                                 i18nKey="addTranslationsModalSubTitle"
                                 values={{ fieldName: t(fieldName) }}
@@ -176,12 +169,12 @@ export const TranslatableField = ({
                                 locale or
                                 <strong>location</strong>
                             </Trans>
-                        }
-                    />
+                        </AlertDescription>
+                    </Alert>
                     {getFieldState(requiredTranslationName).error && (
                         <FormErrorText message={t("required")} />
                     )}
-                </FormHelperText>
+                </div>
             )}
         </>
     );

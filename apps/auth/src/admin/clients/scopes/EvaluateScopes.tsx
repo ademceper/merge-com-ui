@@ -23,7 +23,7 @@ import {
     useFetch,
     useHelp
 } from "../../../shared/keycloak-ui-shared";
-import { SelectOption } from "../../../shared/@patternfly/react-core";
+const SelectOption = ({ value, children, ...props }: any) => <option value={value} {...props}>{children}</option>;
 import { Button } from "@merge/ui/components/button";
 import { Input } from "@merge/ui/components/input";
 import { Label } from "@merge/ui/components/label";

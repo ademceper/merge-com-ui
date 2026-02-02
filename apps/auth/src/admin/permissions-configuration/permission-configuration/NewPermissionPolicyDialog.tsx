@@ -17,18 +17,9 @@ import PolicyRepresentation, {
 } from "@keycloak/keycloak-admin-client/lib/defs/policyRepresentation";
 import PolicyProviderRepresentation from "@keycloak/keycloak-admin-client/lib/defs/policyProviderRepresentation";
 import { useTranslation } from "react-i18next";
-import {
-    Modal,
-    ModalVariant,
-    TextContent,
-    Text,
-    TextVariants,
-    ActionGroup,
-    Button,
-    Form,
-    ButtonVariant,
-    AlertVariant
-} from "../../../shared/@patternfly/react-core";
+import { Button } from "@merge/ui/components/button";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@merge/ui/components/dialog";
+import { AlertVariant } from "../../../shared/keycloak-ui-shared";
 import {
     SelectControl,
     TextControl,
@@ -179,24 +170,17 @@ export const NewPermissionPolicyDialog = ({
     };
 
     return (
-        <Modal
-            aria-label={t("createPermissionPolicy")}
-            variant={ModalVariant.medium}
-            header={
-                <TextContent>
-                    <Text component={TextVariants.h1}>{t("createPermissionPolicy")}</Text>
-                </TextContent>
-            }
-            isOpen
-            onClose={toggleDialog}
-        >
-            <Form
+        <Dialog open onOpenChange={(open) => { if (!open) toggleDialog(); }}>
+            <DialogContent className="max-w-2xl" aria-label={t("createPermissionPolicy")}>
+                <DialogHeader>
+                    <DialogTitle>{t("createPermissionPolicy")}</DialogTitle>
+                </DialogHeader>
+            <form
                 id="createPermissionPolicy-form"
                 onSubmit={async e => {
                     e.stopPropagation();
                     await handleSubmit(save)(e);
                 }}
-                isHorizontal
             >
                 <FormProvider {...form}>
                     <TextControl
@@ -223,30 +207,28 @@ export const NewPermissionPolicyDialog = ({
                     />
                     <LogicSelector />
                 </FormProvider>
-                <ActionGroup>
-                    <div className="pf-v5-u-mt-md">
-                        <Button
-                            variant={ButtonVariant.primary}
-                            className="pf-v5-u-mr-md"
-                            type="submit"
-                            data-testid="save"
-                            isDisabled={
-                                policies?.length === 0 &&
-                                policyTypeSelector === "aggregate"
-                            }
-                        >
-                            {t("save")}
-                        </Button>
-                        <Button
-                            variant="link"
-                            data-testid="cancel"
-                            onClick={toggleDialog}
-                        >
-                            {t("cancel")}
-                        </Button>
-                    </div>
-                </ActionGroup>
-            </Form>
-        </Modal>
+                <div className="flex gap-2 mt-4">
+                    <Button
+                        className="mr-2"
+                        type="submit"
+                        data-testid="save"
+                        disabled={
+                            policies?.length === 0 &&
+                            policyTypeSelector === "aggregate"
+                        }
+                    >
+                        {t("save")}
+                    </Button>
+                    <Button
+                        variant="link"
+                        data-testid="cancel"
+                        onClick={toggleDialog}
+                    >
+                        {t("cancel")}
+                    </Button>
+                </div>
+            </form>
+            </DialogContent>
+        </Dialog>
     );
 };

@@ -13,12 +13,14 @@
 
 import ComponentRepresentation from "@keycloak/keycloak-admin-client/lib/defs/componentRepresentation";
 import ComponentTypeRepresentation from "@keycloak/keycloak-admin-client/lib/defs/componentTypeRepresentation";
+import { Button } from "@merge/ui/components/button";
 import {
-    Button,
-    Form,
-    Modal,
-    ModalVariant
-} from "../../../../shared/@patternfly/react-core";
+    Dialog,
+    DialogContent,
+    DialogHeader,
+    DialogTitle,
+    DialogFooter
+} from "@merge/ui/components/dialog";
 import { useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
@@ -55,50 +57,47 @@ export const AddValidatorDialog = ({
     };
 
     return (
-        <Modal
-            variant={ModalVariant.small}
-            title={t("addValidator")}
-            isOpen
-            onClose={toggleDialog}
-            actions={[
-                <Button
-                    key="save"
-                    data-testid="save-validator-role-button"
-                    variant="primary"
-                    type="submit"
-                    form="add-validator"
-                >
-                    {t("save")}
-                </Button>,
-                <Button
-                    key="cancel"
-                    data-testid="cancel-validator-role-button"
-                    variant="link"
-                    onClick={toggleDialog}
-                >
-                    {t("cancel")}
-                </Button>
-            ]}
-        >
-            {allSelected ? (
-                t("emptyValidators")
-            ) : (
-                <Form id="add-validator" onSubmit={handleSubmit(save)}>
-                    <ValidatorSelect
-                        selectedValidators={selectedValidators.map(
-                            validator => validator.key
+        <Dialog open onOpenChange={open => !open && toggleDialog()}>
+            <DialogContent aria-describedby={undefined}>
+                <DialogHeader>
+                    <DialogTitle>{t("addValidator")}</DialogTitle>
+                </DialogHeader>
+                {allSelected ? (
+                    t("emptyValidators")
+                ) : (
+                    <form id="add-validator" onSubmit={handleSubmit(save)}>
+                        <ValidatorSelect
+                            selectedValidators={selectedValidators.map(
+                                validator => validator.key
+                            )}
+                            onChange={setSelectedValidator}
+                        />
+                        {selectedValidator && (
+                            <FormProvider {...form}>
+                                <DynamicComponents
+                                    properties={selectedValidator.properties}
+                                />
+                            </FormProvider>
                         )}
-                        onChange={setSelectedValidator}
-                    />
-                    {selectedValidator && (
-                        <FormProvider {...form}>
-                            <DynamicComponents
-                                properties={selectedValidator.properties}
-                            />
-                        </FormProvider>
-                    )}
-                </Form>
-            )}
-        </Modal>
+                    </form>
+                )}
+                <DialogFooter>
+                    <Button
+                        data-testid="save-validator-role-button"
+                        type="submit"
+                        form="add-validator"
+                    >
+                        {t("save")}
+                    </Button>
+                    <Button
+                        data-testid="cancel-validator-role-button"
+                        variant="ghost"
+                        onClick={toggleDialog}
+                    >
+                        {t("cancel")}
+                    </Button>
+                </DialogFooter>
+            </DialogContent>
+        </Dialog>
     );
 };

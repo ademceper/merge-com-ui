@@ -11,19 +11,11 @@
 
 // @ts-nocheck
 
-import {
-    AlertVariant,
-    Button,
-    ButtonVariant,
-    Dropdown,
-    DropdownItem,
-    DropdownList,
-    MenuToggle,
-    PageSection,
-    ToolbarItem
-} from "../../shared/@patternfly/react-core";
-import { EllipsisVIcon } from "../../shared/@patternfly/react-icons";
-import { cellWidth } from "../../shared/@patternfly/react-table";
+import { Button } from "@merge/ui/components/button";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@merge/ui/components/dropdown-menu";
+import { DotsThreeVertical } from "@phosphor-icons/react";
+import { AlertVariant } from "../../shared/keycloak-ui-shared";
+const cellWidth = (_width: number) => (value: any) => value;
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
@@ -166,7 +158,7 @@ export default function ClientScopesSection() {
         }),
         messageKey: "deleteConfirmClientScopes",
         continueButtonLabel: "delete",
-        continueButtonVariant: ButtonVariant.danger,
+        continueButtonVariant: "destructive",
         onConfirm: async () => {
             const clientScopes = await adminClient.clientScopes.find();
             const clientScopeLength = Object.keys(clientScopes).length;
@@ -202,7 +194,7 @@ export default function ClientScopesSection() {
                 subKey="clientScopeExplain"
                 helpUrl={helpUrls.clientScopesUrl}
             />
-            <PageSection variant="light" className="pf-v5-u-p-0">
+            <div className="p-0">
                 <KeycloakDataTable
                     key={key}
                     loader={loader}
@@ -245,55 +237,44 @@ export default function ClientScopesSection() {
                                 }}
                             />
 
-                            <ToolbarItem>
-                                <Button
-                                    component={props => (
-                                        <Link
-                                            {...props}
-                                            to={toNewClientScope({ realm })}
-                                        />
-                                    )}
-                                >
-                                    {t("createClientScope")}
+                            <div>
+                                <Button asChild>
+                                    <Link to={toNewClientScope({ realm })}>
+                                        {t("createClientScope")}
+                                    </Link>
                                 </Button>
-                            </ToolbarItem>
-                            <ToolbarItem>
+                            </div>
+                            <div>
                                 <ChangeTypeDropdown
                                     selectedRows={selectedScopes}
                                     refresh={refresh}
                                 />
-                            </ToolbarItem>
-                            <ToolbarItem>
-                                <Dropdown
-                                    shouldFocusToggleOnSelect
-                                    onOpenChange={isOpen => setKebabOpen(isOpen)}
-                                    toggle={ref => (
-                                        <MenuToggle
+                            </div>
+                            <div>
+                                <DropdownMenu>
+                                    <DropdownMenuTrigger asChild>
+                                        <Button
+                                            variant="ghost"
                                             data-testid="kebab"
                                             aria-label="Kebab toggle"
-                                            ref={ref}
-                                            onClick={() => setKebabOpen(!kebabOpen)}
-                                            variant="plain"
                                         >
-                                            <EllipsisVIcon />
-                                        </MenuToggle>
-                                    )}
-                                    isOpen={kebabOpen}
-                                >
-                                    <DropdownList>
-                                        <DropdownItem
+                                            <DotsThreeVertical className="size-4" />
+                                        </Button>
+                                    </DropdownMenuTrigger>
+                                    <DropdownMenuContent>
+                                        <DropdownMenuItem
                                             data-testid="delete"
-                                            isDisabled={selectedScopes.length === 0}
+                                            disabled={selectedScopes.length === 0}
                                             onClick={() => {
                                                 toggleDeleteDialog();
                                                 setKebabOpen(false);
                                             }}
                                         >
                                             {t("delete")}
-                                        </DropdownItem>
-                                    </DropdownList>
-                                </Dropdown>
-                            </ToolbarItem>
+                                        </DropdownMenuItem>
+                                    </DropdownMenuContent>
+                                </DropdownMenu>
+                            </div>
                         </>
                     }
                     actions={[
@@ -333,7 +314,7 @@ export default function ClientScopesSection() {
                         { name: "description", cellFormatters: [emptyFormatter()] }
                     ]}
                 />
-            </PageSection>
+            </div>
         </>
     );
 }

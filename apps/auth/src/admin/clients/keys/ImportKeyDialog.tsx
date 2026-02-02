@@ -58,61 +58,57 @@ export const ImportKeyDialog = ({
     });
 
     return (
-        <Modal
-            variant={ModalVariant.medium}
-            title={t(title)}
-            isOpen
-            onClose={toggleDialog}
-            actions={[
-                <Button
-                    id="modal-confirm"
-                    data-testid="confirm"
-                    key="confirm"
-                    onClick={async () => {
-                        await handleSubmit(importFile => {
-                            save(importFile);
-                            toggleDialog();
-                        })();
-                    }}
-                >
-                    {t("import")}
-                </Button>,
-                <Button
-                    id="modal-cancel"
-                    data-testid="cancel"
-                    key="cancel"
-                    variant={ButtonVariant.link}
-                    onClick={toggleDialog}
-                >
-                    {t("cancel")}
-                </Button>
-            ]}
-        >
-            <TextContent>
-                <Text>{t(description)}</Text>
-            </TextContent>
-            <Form className="pf-v5-u-pt-lg">
-                <FormProvider {...form}>
-                    <SelectControl
-                        name="keystoreFormat"
-                        label={t("archiveFormat")}
-                        labelIcon={t("archiveFormatHelp")}
-                        controller={{
-                            defaultValue: formats[0]
+        <Dialog open onOpenChange={(open) => { if (!open) toggleDialog(); }}>
+            <DialogContent className="max-w-lg">
+                <DialogHeader>
+                    <DialogTitle>{t(title)}</DialogTitle>
+                </DialogHeader>
+                <p className="text-sm text-muted-foreground">{t(description)}</p>
+                <form className="pt-4 space-y-4">
+                    <FormProvider {...form}>
+                        <SelectControl
+                            name="keystoreFormat"
+                            label={t("archiveFormat")}
+                            labelIcon={t("archiveFormatHelp")}
+                            controller={{
+                                defaultValue: formats[0]
+                            }}
+                            options={formats}
+                        />
+                        <FileUploadControl
+                            label={t("importFile")}
+                            id="importFile"
+                            name="file"
+                            rules={{
+                                required: t("required")
+                            }}
+                        />
+                        {baseFormats.includes(format) && <StoreSettings hidePassword />}
+                    </FormProvider>
+                </form>
+                <DialogFooter>
+                    <Button
+                        id="modal-confirm"
+                        data-testid="confirm"
+                        onClick={async () => {
+                            await handleSubmit(importFile => {
+                                save(importFile);
+                                toggleDialog();
+                            })();
                         }}
-                        options={formats}
-                    />
-                    <FileUploadControl
-                        label={t("importFile")}
-                        id="importFile"
-                        name="file"
-                        rules={{
-                            required: t("required")
-                        }}
-                    />
-                    {baseFormats.includes(format) && <StoreSettings hidePassword />}
-                </FormProvider>
-            </Form>
-        </Modal>
+                    >
+                        {t("import")}
+                    </Button>
+                    <Button
+                        id="modal-cancel"
+                        data-testid="cancel"
+                        variant="link"
+                        onClick={toggleDialog}
+                    >
+                        {t("cancel")}
+                    </Button>
+                </DialogFooter>
+            </DialogContent>
+        </Dialog>
     );
 };

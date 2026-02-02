@@ -13,14 +13,8 @@
 
 import type { UserProfileGroup } from "@keycloak/keycloak-admin-client/lib/defs/userProfileMetadata";
 import { HelpItem, TextControl, useAlerts } from "../../../shared/keycloak-ui-shared";
-import {
-    ActionGroup,
-    Button,
-    FormGroup,
-    PageSection,
-    Text,
-    TextContent
-} from "../../../shared/@patternfly/react-core";
+import { Button } from "@merge/ui/components/button";
+import { Label } from "@merge/ui/components/label";
 import { useEffect, useMemo } from "react";
 import { FormProvider, SubmitHandler, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
@@ -139,7 +133,7 @@ export default function AttributesGroupForm() {
                 titleKey={matchingGroup ? "editGroupText" : "createGroupText"}
                 divider
             />
-            <PageSection variant="light" onSubmit={form.handleSubmit(onSubmit)}>
+            <div className="p-6" onSubmit={form.handleSubmit(onSubmit)}>
                 <FormAccess isHorizontal role="manage-realm">
                     <TextControl
                         name="name"
@@ -150,69 +144,57 @@ export default function AttributesGroupForm() {
                             required: t("required")
                         }}
                     />
-                    <FormGroup
-                        label={t("displayHeader")}
-                        labelIcon={
+                    <div className="space-y-2">
+                        <div className="flex items-center gap-1">
+                            <Label htmlFor="kc-attributes-group-display-header">{t("displayHeader")}</Label>
                             <HelpItem
                                 helpText={t("displayHeaderHintHelp")}
                                 fieldLabelId="displayHeader"
                             />
-                        }
-                        fieldId="kc-attributes-group-display-header"
-                    >
+                        </div>
                         <TranslatableField
                             fieldName="displayHeader"
                             attributeName="name"
                             prefix="profile.attribute-group"
                         />
-                    </FormGroup>
-                    <FormGroup
-                        label={t("displayDescription")}
-                        labelIcon={
+                    </div>
+                    <div className="space-y-2">
+                        <div className="flex items-center gap-1">
+                            <Label htmlFor="kc-attributes-group-display-description">{t("displayDescription")}</Label>
                             <HelpItem
                                 helpText={t("displayDescriptionHintHelp")}
                                 fieldLabelId="displayDescription"
                             />
-                        }
-                        fieldId="kc-attributes-group-display-description"
-                    >
+                        </div>
                         <TranslatableField
                             fieldName="displayDescription"
                             attributeName="name"
                             prefix="profile.attribute-group-description"
                         />
-                    </FormGroup>
-                    <TextContent>
-                        <Text component="h2">{t("annotationsText")}</Text>
-                    </TextContent>
-                    <FormGroup label={t("annotationsText")} fieldId="kc-annotations">
+                    </div>
+                    <h2 className="text-lg font-medium">{t("annotationsText")}</h2>
+                    <div className="space-y-2">
+                        <Label htmlFor="kc-annotations">{t("annotationsText")}</Label>
                         <KeyValueInput label={t("annotationsText")} name="annotations" />
-                    </FormGroup>
-                    <ActionGroup>
+                    </div>
+                    <div className="flex gap-2">
                         <Button
-                            variant="primary"
                             type="submit"
                             data-testid="saveGroupBtn"
                         >
                             {t("save")}
                         </Button>
                         <Button
-                            variant="link"
-                            component={props => (
-                                <Link
-                                    {...props}
-                                    to={toUserProfile({
-                                        realm: realmName,
-                                        tab: "attributes-group"
-                                    })}
-                                />
-                            )}
+                            variant="ghost"
+                            asChild
                         >
-                            {t("cancel")}
+                            <Link to={toUserProfile({ realm: realmName, tab: "attributes-group" })}>
+                                {t("cancel")}
+                            </Link>
                         </Button>
-                    </ActionGroup>
+                    </div>
                 </FormAccess>
-            </PageSection>
+            </div>
         </FormProvider>
     );
 }

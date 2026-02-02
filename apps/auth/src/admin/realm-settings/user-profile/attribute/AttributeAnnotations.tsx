@@ -11,12 +11,8 @@
 
 // @ts-nocheck
 
-import {
-    FormGroup,
-    Grid,
-    GridItem,
-    TextInput
-} from "../../../../shared/@patternfly/react-core";
+import { Input } from "@merge/ui/components/input";
+import { Label } from "@merge/ui/components/label";
 import { useFormContext } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { FormAccess } from "../../../components/form/FormAccess";
@@ -31,14 +27,10 @@ export const AttributeAnnotations = () => {
 
     return (
         <FormAccess role="manage-realm" isHorizontal>
-            <FormGroup
-                hasNoPaddingTop
-                label={t("annotations")}
-                fieldId="kc-annotations"
-                className="kc-annotations-label"
-            >
-                <Grid className="kc-annotations">
-                    <GridItem>
+            <div className="space-y-2">
+                <Label htmlFor="kc-annotations">{t("annotations")}</Label>
+                <div>
+                    <div>
                         <KeyValueInput
                             name="annotations"
                             label={t("annotations")}
@@ -117,7 +109,7 @@ export const AttributeAnnotations = () => {
                                         {...props}
                                     />
                                 ) : (
-                                    <TextInput
+                                    <Input
                                         aria-label={t("customValue")}
                                         data-testid={props.name}
                                         {...props}
@@ -126,9 +118,9 @@ export const AttributeAnnotations = () => {
                                 )
                             }
                         />
-                    </GridItem>
-                </Grid>
-            </FormGroup>
+                    </div>
+                </div>
+            </div>
         </FormAccess>
     );
 };

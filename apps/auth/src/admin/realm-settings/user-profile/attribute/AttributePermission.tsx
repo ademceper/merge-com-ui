@@ -11,12 +11,8 @@
 
 // @ts-nocheck
 
-import {
-    Checkbox,
-    FormGroup,
-    Grid,
-    GridItem
-} from "../../../../shared/@patternfly/react-core";
+import { Checkbox } from "@merge/ui/components/checkbox";
+import { Label } from "@merge/ui/components/label";
 import { Controller, useFormContext } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 
@@ -29,21 +25,19 @@ const Permissions = ({ name }: { name: string }) => {
     const { control } = useFormContext();
 
     return (
-        <Grid>
+        <div className="flex gap-4">
             <Controller
                 name={`permissions.${name}`}
                 control={control}
                 defaultValue={[]}
                 render={({ field }) => (
                     <>
-                        <GridItem lg={4} sm={6}>
+                        <div className="flex items-center gap-2">
                             <Checkbox
                                 id={`user-${name}`}
-                                label={t("user")}
-                                value="user"
                                 data-testid={`user-${name}`}
-                                isChecked={field.value.includes("user")}
-                                onChange={() => {
+                                checked={field.value.includes("user")}
+                                onCheckedChange={() => {
                                     const option = "user";
                                     const changedValue = field.value.includes(option)
                                         ? field.value.filter(
@@ -54,15 +48,14 @@ const Permissions = ({ name }: { name: string }) => {
                                     field.onChange(changedValue);
                                 }}
                             />
-                        </GridItem>
-                        <GridItem lg={8} sm={6}>
+                            <Label htmlFor={`user-${name}`}>{t("user")}</Label>
+                        </div>
+                        <div className="flex items-center gap-2">
                             <Checkbox
                                 id={`admin-${name}`}
-                                label={t("admin")}
-                                value="admin"
                                 data-testid={`admin-${name}`}
-                                isChecked={field.value.includes("admin")}
-                                onChange={() => {
+                                checked={field.value.includes("admin")}
+                                onCheckedChange={() => {
                                     const option = "admin";
                                     const changedValue = field.value.includes(option)
                                         ? field.value.filter(
@@ -73,11 +66,12 @@ const Permissions = ({ name }: { name: string }) => {
                                     field.onChange(changedValue);
                                 }}
                             />
-                        </GridItem>
+                            <Label htmlFor={`admin-${name}`}>{t("admin")}</Label>
+                        </div>
                     </>
                 )}
             />
-        </Grid>
+        </div>
     );
 };
 
@@ -86,26 +80,20 @@ export const AttributePermission = () => {
 
     return (
         <FormAccess role="manage-realm" isHorizontal>
-            <FormGroup
-                hasNoPaddingTop
-                label={t("whoCanEdit")}
-                labelIcon={
+            <div className="space-y-2">
+                <div className="flex items-center gap-1">
+                    <Label htmlFor="kc-who-can-edit">{t("whoCanEdit")}</Label>
                     <HelpItem helpText={t("whoCanEditHelp")} fieldLabelId="whoCanEdit" />
-                }
-                fieldId="kc-who-can-edit"
-            >
+                </div>
                 <Permissions name="edit" />
-            </FormGroup>
-            <FormGroup
-                hasNoPaddingTop
-                label={t("whoCanView")}
-                labelIcon={
+            </div>
+            <div className="space-y-2">
+                <div className="flex items-center gap-1">
+                    <Label htmlFor="kc-who-can-view">{t("whoCanView")}</Label>
                     <HelpItem helpText={t("whoCanViewHelp")} fieldLabelId="whoCanView" />
-                }
-                fieldId="kc-who-can-view"
-            >
+                </div>
                 <Permissions name="view" />
-            </FormGroup>
+            </div>
         </FormAccess>
     );
 };

@@ -22,13 +22,11 @@ import {
     TextControl,
     useFetch
 } from "../../../../shared/keycloak-ui-shared";
-import {
-    Divider,
-    FormGroup,
-    Radio,
-    SelectOption,
-    Switch
-} from "../../../../shared/@patternfly/react-core";
+import { Label } from "@merge/ui/components/label";
+import { RadioGroup, RadioGroupItem } from "@merge/ui/components/radio-group";
+import { Separator } from "@merge/ui/components/separator";
+import { Switch } from "@merge/ui/components/switch";
+import { SelectOption } from "../../../../shared/@patternfly/react-core";
 import { isEqual } from "lodash-es";
 import { useState } from "react";
 import { Controller, FormProvider, useFormContext, useWatch } from "react-hook-form";
@@ -118,16 +116,14 @@ export const AttributeGeneralSettings = () => {
                         required: t("validateAttributeName")
                     }}
                 />
-                <FormGroup
-                    label={t("attributeDisplayName")}
-                    labelIcon={
+                <div className="space-y-2">
+                    <div className="flex items-center gap-1">
+                        <Label htmlFor="kc-attribute-displayName">{t("attributeDisplayName")}</Label>
                         <HelpItem
                             helpText={t("attributeDisplayNameHelp")}
                             fieldLabelId="attributeDisplayName"
                         />
-                    }
-                    fieldId="kc-attribute-displayName"
-                >
+                    </div>
                     <TranslatableField
                         attributeName="name"
                         prefix="profile.attributes"
@@ -139,7 +135,7 @@ export const AttributeGeneralSettings = () => {
                             "lastName"
                         ]}
                     />
-                </FormGroup>
+                </div>
                 <DefaultSwitchControl
                     name="multivalued"
                     label={t("multivalued")}
@@ -169,39 +165,31 @@ export const AttributeGeneralSettings = () => {
                 />
                 {!USERNAME_EMAIL.includes(attributeName) && (
                     <>
-                        <Divider />
-                        <FormGroup
-                            label={t("enabledWhen")}
-                            labelIcon={
+                        <Separator />
+                        <div className="space-y-2">
+                            <div className="flex items-center gap-1">
+                                <Label>{t("enabledWhen")}</Label>
                                 <HelpItem
                                     helpText={t("enabledWhenTooltip")}
                                     fieldLabelId="enabled-when"
                                 />
-                            }
-                            fieldId="enabledWhen"
-                            hasNoPaddingTop
-                        >
-                            <Radio
-                                id="always"
-                                data-testid="always"
-                                isChecked={!hasSelector}
-                                name="enabledWhen"
-                                label={t("always")}
-                                onChange={() => setHasSelector(false)}
-                                className="pf-v5-u-mb-md"
-                            />
-                            <Radio
-                                id="scopesAsRequested"
-                                data-testid="scopesAsRequested"
-                                isChecked={hasSelector}
-                                name="enabledWhen"
-                                label={t("scopesAsRequested")}
-                                onChange={() => setHasSelector(true)}
-                                className="pf-v5-u-mb-md"
-                            />
-                        </FormGroup>
+                            </div>
+                            <RadioGroup
+                                value={hasSelector ? "scopesAsRequested" : "always"}
+                                onValueChange={value => setHasSelector(value === "scopesAsRequested")}
+                            >
+                                <div className="flex items-center gap-2 mb-2">
+                                    <RadioGroupItem value="always" id="always" data-testid="always" />
+                                    <Label htmlFor="always">{t("always")}</Label>
+                                </div>
+                                <div className="flex items-center gap-2 mb-2">
+                                    <RadioGroupItem value="scopesAsRequested" id="scopesAsRequested" data-testid="scopesAsRequested" />
+                                    <Label htmlFor="scopesAsRequested">{t("scopesAsRequested")}</Label>
+                                </div>
+                            </RadioGroup>
+                        </div>
                         {hasSelector && (
-                            <FormGroup fieldId="kc-scope-enabled-when">
+                            <div>
                                 <Controller
                                     name="selector.scopes"
                                     control={form.control}
@@ -252,24 +240,21 @@ export const AttributeGeneralSettings = () => {
                                         </KeycloakSelect>
                                     )}
                                 />
-                            </FormGroup>
+                            </div>
                         )}
                     </>
                 )}
                 {attributeName !== "username" && (
                     <>
-                        <Divider />
-                        <FormGroup
-                            label={t("required")}
-                            labelIcon={
+                        <Separator />
+                        <div className="space-y-2">
+                            <div className="flex items-center gap-1">
+                                <Label>{t("required")}</Label>
                                 <HelpItem
                                     helpText={t("requiredHelp")}
                                     fieldLabelId="required"
                                 />
-                            }
-                            fieldId="kc-required"
-                            hasNoPaddingTop
-                        >
+                            </div>
                             <Controller
                                 name="isRequired"
                                 data-testid="required"
@@ -278,82 +263,70 @@ export const AttributeGeneralSettings = () => {
                                 render={({ field }) => (
                                     <Switch
                                         id={"kc-required"}
-                                        onChange={field.onChange}
-                                        isChecked={field.value}
-                                        label={t("on")}
-                                        labelOff={t("off")}
+                                        onCheckedChange={field.onChange}
+                                        checked={field.value}
                                         aria-label={t("required")}
                                     />
                                 )}
                             />
-                        </FormGroup>
+                        </div>
                         {required && (
                             <>
-                                <FormGroup
-                                    label={t("requiredFor")}
-                                    fieldId="requiredFor"
-                                    hasNoPaddingTop
-                                >
+                                <div className="space-y-2">
+                                    <Label>{t("requiredFor")}</Label>
                                     <Controller
                                         name="required.roles"
                                         data-testid="requiredFor"
                                         defaultValue={REQUIRED_FOR[0].value}
                                         control={form.control}
                                         render={({ field }) => (
-                                            <div className="kc-requiredFor">
+                                            <div>
                                                 {REQUIRED_FOR.map(option => (
-                                                    <Radio
-                                                        id={option.label}
-                                                        key={option.label}
-                                                        data-testid={option.label}
-                                                        isChecked={isEqual(
-                                                            field.value,
-                                                            option.value
-                                                        )}
-                                                        name="roles"
-                                                        onChange={() => {
-                                                            field.onChange(option.value);
-                                                        }}
-                                                        label={t(option.label)}
-                                                        className="kc-requiredFor-option"
-                                                    />
+                                                    <div key={option.label} className="flex items-center gap-2 mb-2">
+                                                        <input
+                                                            type="radio"
+                                                            id={option.label}
+                                                            data-testid={option.label}
+                                                            checked={isEqual(
+                                                                field.value,
+                                                                option.value
+                                                            )}
+                                                            name="roles"
+                                                            onChange={() => {
+                                                                field.onChange(option.value);
+                                                            }}
+                                                        />
+                                                        <Label htmlFor={option.label}>{t(option.label)}</Label>
+                                                    </div>
                                                 ))}
                                             </div>
                                         )}
                                     />
-                                </FormGroup>
-                                <FormGroup
-                                    label={t("requiredWhen")}
-                                    labelIcon={
+                                </div>
+                                <div className="space-y-2">
+                                    <div className="flex items-center gap-1">
+                                        <Label>{t("requiredWhen")}</Label>
                                         <HelpItem
                                             helpText={t("requiredWhenTooltip")}
                                             fieldLabelId="required-when"
                                         />
-                                    }
-                                    fieldId="requiredWhen"
-                                    hasNoPaddingTop
-                                >
-                                    <Radio
-                                        id="requiredAlways"
-                                        data-testid="requiredAlways"
-                                        isChecked={!hasRequiredScopes}
-                                        name="requiredWhen"
-                                        label={t("always")}
-                                        onChange={() => setHasRequiredScopes(false)}
-                                        className="pf-v5-u-mb-md"
-                                    />
-                                    <Radio
-                                        id="requiredScopesAsRequested"
-                                        data-testid="requiredScopesAsRequested"
-                                        isChecked={hasRequiredScopes}
-                                        name="requiredWhen"
-                                        label={t("scopesAsRequested")}
-                                        onChange={() => setHasRequiredScopes(true)}
-                                        className="pf-v5-u-mb-md"
-                                    />
-                                </FormGroup>
+                                    </div>
+                                    <RadioGroup
+                                        value={hasRequiredScopes ? "requiredScopesAsRequested" : "requiredAlways"}
+                                        onValueChange={value => setHasRequiredScopes(value === "requiredScopesAsRequested")}
+                                    >
+                                        <div className="flex items-center gap-2 mb-2">
+                                            <RadioGroupItem value="requiredAlways" id="requiredAlways" data-testid="requiredAlways" />
+                                            <Label htmlFor="requiredAlways">{t("always")}</Label>
+                                        </div>
+                                        <div className="flex items-center gap-2 mb-2">
+                                            <RadioGroupItem value="requiredScopesAsRequested" id="requiredScopesAsRequested" data-testid="requiredScopesAsRequested" />
+                                            <Label htmlFor="requiredScopesAsRequested">{t("scopesAsRequested")}</Label>
+                                        </div>
+                                    </RadioGroup>
+                                </div>
                                 {hasRequiredScopes && (
-                                    <FormGroup fieldId="kc-scope-required-when">
+                                    <div>
                                         <Controller
                                             name="required.scopes"
                                             control={form.control}
@@ -414,7 +387,7 @@ export const AttributeGeneralSettings = () => {
                                                 </KeycloakSelect>
                                             )}
                                         />
-                                    </FormGroup>
+                                    </div>
                                 )}
                             </>
                         )}

@@ -16,13 +16,12 @@ import { HelpItem, useFetch, useHelp } from "../../../shared/keycloak-ui-shared"
 import { Textarea } from "@merge/ui/components/textarea";
 import { Label } from "@merge/ui/components/label";
 import {
-    FormGroup,
-    MenuToggle,
-    ModalVariant,
     Select,
-    SelectList,
-    SelectOption
-} from "../../../shared/@patternfly/react-core";
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from "@merge/ui/components/select";
 import { saveAs } from "file-saver";
 import { useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -56,7 +55,6 @@ export const DownloadDialog = ({
     const configFormats = serverInfo.clientInstallations![protocol];
     const [selected, setSelected] = useState(configFormats[configFormats.length - 1].id);
     const [snippet, setSnippet] = useState<string | ArrayBuffer>();
-    const [openType, setOpenType] = useState(false);
 
     const selectedConfig = useMemo(
         () => configFormats.find(config => config.id === selected) ?? null,
@@ -116,88 +114,56 @@ export const DownloadDialog = ({
             }}
             open={open}
             toggleDialog={toggleDialog}
-            variant={ModalVariant.medium}
         >
             <form>
                 <div className="flex flex-col gap-4">
-                    <div>
-                        <FormGroup
-                            fieldId="type"
-                            label={t("formatOption")}
-                            labelIcon={
-                                <HelpItem
-                                    helpText={t("downloadType")}
-                                    fieldLabelId="formatOption"
-                                />
-                            }
+                    <div className="space-y-2">
+                        <Label htmlFor="type" className="flex items-center gap-1">
+                            {t("formatOption")}
+                            <HelpItem helpText={t("downloadType")} fieldLabelId="formatOption" />
+                        </Label>
+                        <Select
+                            value={selected}
+                            onValueChange={(value) => setSelected(value || "")}
                         >
-                            <Select
-                                isOpen={openType}
-                                onOpenChange={isOpen => setOpenType(isOpen)}
-                                toggle={ref => (
-                                    <MenuToggle
-                                        id="type"
-                                        ref={ref}
-                                        onClick={() => setOpenType(!openType)}
-                                        isExpanded={openType}
+                            <SelectTrigger id="type" aria-label={t("selectOne")} className="w-full">
+                                <SelectValue />
+                            </SelectTrigger>
+                            <SelectContent>
+                                {configFormats.map(configFormat => (
+                                    <SelectItem
+                                        key={configFormat.id}
+                                        value={configFormat.id}
                                     >
-                                        {selected}
-                                    </MenuToggle>
-                                )}
-                                selected={selected}
-                                onSelect={(_, value) => {
-                                    setSelected(value?.toString() || "");
-                                    setOpenType(false);
-                                }}
-                                aria-label={t("selectOne")}
-                                popperProps={{
-                                    appendTo: document.body
-                                }}
-                            >
-                                <SelectList>
-                                    {configFormats.map(configFormat => (
-                                        <SelectOption
-                                            key={configFormat.id}
-                                            value={configFormat.id}
-                                            isSelected={selected === configFormat.id}
-                                            description={
-                                                enabled
-                                                    ? configFormat.helpText
-                                                    : undefined
-                                            }
-                                        >
-                                            {configFormat.displayType}
-                                        </SelectOption>
-                                    ))}
-                                </SelectList>
-                            </Select>
-                        </FormGroup>
+                                        <span>{configFormat.displayType}</span>
+                                        {enabled && configFormat.helpText && (
+                                            <span className="block text-xs text-muted-foreground mt-0.5">
+                                                {configFormat.helpText}
+                                            </span>
+                                        )}
+                                    </SelectItem>
+                                ))}
+                            </SelectContent>
+                        </Select>
                     </div>
                     {!selectedConfig?.downloadOnly && (
-                        <div className="flex-1">
-                            <FormGroup
-                                fieldId="details"
-                                label={t("details")}
-                                labelIcon={
-                                    <HelpItem
-                                        helpText={t("detailsHelp")}
-                                        fieldLabelId="details"
-                                    />
+                        <div className="flex-1 space-y-2">
+                            <Label htmlFor="details" className="flex items-center gap-1">
+                                {t("details")}
+                                <HelpItem helpText={t("detailsHelp")} fieldLabelId="details" />
+                            </Label>
+                            <Textarea
+                                id="details"
+                                readOnly
+                                rows={12}
+                                className="resize-y"
+                                value={
+                                    snippet && typeof snippet === "string"
+                                        ? snippet
+                                        : ""
                                 }
-                            >
-                                <Textarea
-                                    id="details"
-                                    readOnly
-                                    rows={12}
-                                    className="resize-y"
-                                    value={
-                                        snippet && typeof snippet === "string"
-                                            ? snippet
-                                            : ""
-                                    }
-                                    aria-label="text area example"
-                                />
-                            </FormGroup>
+                                aria-label="text area example"
+                            />
                         </div>
                     )}
                 </div>

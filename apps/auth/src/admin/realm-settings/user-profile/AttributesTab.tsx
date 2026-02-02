@@ -13,16 +13,10 @@
 
 import type { UserProfileAttribute } from "@keycloak/keycloak-admin-client/lib/defs/userProfileMetadata";
 import { KeycloakSelect, SelectVariant } from "../../../shared/keycloak-ui-shared";
-import {
-    Button,
-    ButtonVariant,
-    Divider,
-    SelectOption,
-    Toolbar,
-    ToolbarContent,
-    ToolbarItem
-} from "../../../shared/@patternfly/react-core";
-import { FilterIcon } from "../../../shared/@patternfly/react-icons";
+import { Button } from "@merge/ui/components/button";
+import { Separator } from "@merge/ui/components/separator";
+import { Funnel } from "@phosphor-icons/react";
+import { SelectOption } from "../../../shared/@patternfly/react-core";
 import { uniqBy } from "lodash-es";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -66,7 +60,7 @@ export const AttributesTab = ({ setTableData }: AttributesTabProps) => {
             attributeName: attributeToDelete
         }),
         continueButtonLabel: t("delete"),
-        continueButtonVariant: ButtonVariant.danger,
+        continueButtonVariant: "destructive",
         onConfirm: async () => {
             if (!config?.attributes) return;
 
@@ -171,9 +165,9 @@ export const AttributesTab = ({ setTableData }: AttributesTabProps) => {
 
     return (
         <>
-            <Toolbar>
-                <ToolbarContent>
-                    <ToolbarItem>
+            <div className="flex flex-wrap items-center gap-4 p-4">
+                <div className="flex items-center gap-2">
+                    <div>
                         <KeycloakSelect
                             toggleId="kc-group-filter"
                             width={200}
@@ -181,7 +175,7 @@ export const AttributesTab = ({ setTableData }: AttributesTabProps) => {
                             isOpen={isFilterTypeDropdownOpen}
                             variant={SelectVariant.single}
                             onToggle={toggleIsFilterTypeDropdownOpen}
-                            toggleIcon={<FilterIcon />}
+                            toggleIcon={<Funnel className="size-4" />}
                             onSelect={value => {
                                 const filter = value.toString();
                                 setFilter(filter);
@@ -212,21 +206,20 @@ export const AttributesTab = ({ setTableData }: AttributesTabProps) => {
                                 ))
                             ]}
                         </KeycloakSelect>
-                    </ToolbarItem>
-                    <ToolbarItem className="kc-toolbar-attributesTab">
+                    </div>
+                    <div>
                         <Button
                             data-testid="createAttributeBtn"
-                            variant="primary"
-                            component={props => (
-                                <Link {...props} to={toAddAttribute({ realm })} />
-                            )}
+                            asChild
                         >
-                            {t("createAttribute")}
+                            <Link to={toAddAttribute({ realm })}>
+                                {t("createAttribute")}
+                            </Link>
                         </Button>
-                    </ToolbarItem>
-                </ToolbarContent>
-            </Toolbar>
-            <Divider />
+                    </div>
+                </div>
+            </div>
+            <Separator />
             <DeleteConfirm />
             <DraggableTable
                 keyField="name"
