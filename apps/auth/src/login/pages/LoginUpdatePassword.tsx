@@ -8,11 +8,11 @@ import { Alert, AlertDescription } from "@merge/ui/components/alert";
 import { cn } from "@merge/ui/lib/utils";
 
 const inputClassName =
-    "h-12 rounded-lg bg-gray-100 border-0 text-black placeholder:text-gray-500 focus-visible:ring-2 focus-visible:ring-black/20";
+    "h-12 rounded-lg bg-muted border-0 text-foreground placeholder:text-muted-foreground focus-visible:ring-2 focus-visible:ring-ring";
 const primaryButtonClassName =
-    "w-full h-12 rounded-lg bg-black text-white font-medium text-sm hover:bg-black/90 transition-colors disabled:opacity-50";
+    "w-full h-12 rounded-lg bg-primary text-primary-foreground font-medium text-sm hover:bg-primary/90 transition-colors disabled:opacity-50";
 const secondaryButtonClassName =
-    "w-full h-12 rounded-lg bg-gray-100 text-black font-medium text-sm hover:bg-gray-200 transition-colors border-0";
+    "w-full h-12 rounded-lg bg-muted text-foreground font-medium text-sm hover:bg-muted/80 transition-colors border-0";
 
 export default function LoginUpdatePassword(
     props: PageProps<Extract<KcContext, { pageId: "login-update-password.ftl" }>, I18n>
@@ -79,7 +79,7 @@ export default function LoginUpdatePassword(
                             aria-invalid={messagesPerField.existsError("password", "password-confirm")}
                             className={cn(
                                 inputClassName,
-                                messagesPerField.existsError("password", "password-confirm") && "border border-red-500"
+                                messagesPerField.existsError("password", "password-confirm") && "border border-destructive"
                             )}
                         />
                         {messagesPerField.existsError("password", "password-confirm") && (
@@ -99,11 +99,11 @@ export default function LoginUpdatePassword(
                             aria-invalid={messagesPerField.existsError("password-confirm")}
                             className={cn(
                                 inputClassName,
-                                messagesPerField.existsError("password-confirm") && "border border-red-500"
+                                messagesPerField.existsError("password-confirm") && "border border-destructive"
                             )}
                         />
                         {messagesPerField.existsError("password-confirm") && (
-                            <p className="text-sm text-red-600">{messagesPerField.get("password-confirm")}</p>
+                            <p className="text-sm text-destructive">{messagesPerField.get("password-confirm")}</p>
                         )}
                     </div>
 

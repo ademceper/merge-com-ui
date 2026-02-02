@@ -28,7 +28,9 @@ const { useI18n, ofTypeI18n } = i18nBuilder
             
             // Account page fields
             username: "Username",
+            usernameFieldDescription: "Your unique identifier for signing in. It cannot be changed.",
             email: "Email",
+            emailFieldDescription: "Your email address for account notifications and recovery.",
             firstName: "First Name",
             lastName: "Last Name",
             save: "Save Changes",
@@ -100,7 +102,9 @@ const { useI18n, ofTypeI18n } = i18nBuilder
             
             // Account page fields
             username: "Kullanıcı Adı",
+            usernameFieldDescription: "Giriş yapmak için kullandığınız benzersiz kimlik. Değiştirilemez.",
             email: "E-posta",
+            emailFieldDescription: "Hesap bildirimleri ve kurtarma için e-posta adresiniz.",
             firstName: "Ad",
             lastName: "Soyad",
             save: "Değişiklikleri Kaydet",

@@ -56,6 +56,7 @@ export default function Account(props: PageProps<Extract<KcContext, { pageId: "a
                         placeholder={placeholderStr(msgStr("username") ?? msg("username"), "Kullanıcı Adı")}
                         className="h-12 rounded-lg bg-gray-100 border-0 text-black placeholder:text-gray-500 focus-visible:ring-2 focus-visible:ring-black/20"
                     />
+                    <p className="text-sm text-muted-foreground">{msg("usernameFieldDescription")}</p>
                 </div>
 
                 <div className="space-y-2">
@@ -72,6 +73,7 @@ export default function Account(props: PageProps<Extract<KcContext, { pageId: "a
                             messagesPerField.existsError("email") && "border border-red-500"
                         )}
                     />
+                    <p className="text-sm text-muted-foreground">{msg("emailFieldDescription")}</p>
                     {messagesPerField.existsError("email") ? (
                         <p className="text-sm text-destructive">
                             {messagesPerField.get("email")}
@@ -85,7 +87,7 @@ export default function Account(props: PageProps<Extract<KcContext, { pageId: "a
                         id="firstName"
                         name="firstName"
                         defaultValue={account.firstName ?? ""}
-                        placeholder={placeholderStr(msgStr("firstName") ?? msg("firstName"), "Ad") + " *"}
+                        placeholder={placeholderStr(msgStr("firstName") ?? msg("firstName"), "Ad")}
                         aria-invalid={messagesPerField.existsError("firstName")}
                         className={cn(
                             "h-12 rounded-lg bg-gray-100 border-0 text-black placeholder:text-gray-500 focus-visible:ring-2 focus-visible:ring-black/20",
@@ -105,7 +107,7 @@ export default function Account(props: PageProps<Extract<KcContext, { pageId: "a
                         id="lastName"
                         name="lastName"
                         defaultValue={account.lastName ?? ""}
-                        placeholder={placeholderStr(msgStr("lastName") ?? msg("lastName"), "Soyad") + " *"}
+                        placeholder={placeholderStr(msgStr("lastName") ?? msg("lastName"), "Soyad")}
                         aria-invalid={messagesPerField.existsError("lastName")}
                         className={cn(
                             "h-12 rounded-lg bg-gray-100 border-0 text-black placeholder:text-gray-500 focus-visible:ring-2 focus-visible:ring-black/20",

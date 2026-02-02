@@ -23,7 +23,7 @@ export default function Login(props: PageProps<Extract<KcContext, { pageId: "log
     return (
         <AuthLayout>
             <div className="space-y-5">
-                <h1 className="text-xl font-semibold text-black tracking-tight">
+                <h1 className="text-xl font-semibold text-foreground tracking-tight">
                     {msg("loginAccountTitle")}
                 </h1>
 
@@ -57,12 +57,12 @@ export default function Login(props: PageProps<Extract<KcContext, { pageId: "log
                                     placeholder={msgStr("loginPlaceholder") || msgStr("usernameOrEmail")}
                                     aria-invalid={messagesPerField.existsError("username", "password")}
                                     className={cn(
-                                        "h-12 rounded-lg bg-gray-100 border-0 text-black placeholder:text-gray-500 focus-visible:ring-2 focus-visible:ring-black/20",
-                                        messagesPerField.existsError("username", "password") && "border border-red-500"
+                                        "h-12 rounded-lg bg-muted border-0 text-foreground placeholder:text-muted-foreground focus-visible:ring-2 focus-visible:ring-ring",
+                                        messagesPerField.existsError("username", "password") && "border border-destructive"
                                     )}
                                 />
                                 {messagesPerField.existsError("username", "password") && (
-                                    <p className="text-sm text-red-600">
+                                    <p className="text-sm text-destructive">
                                         {messagesPerField.getFirstError("username", "password")}
                                     </p>
                                 )}
@@ -79,12 +79,12 @@ export default function Login(props: PageProps<Extract<KcContext, { pageId: "log
                                 placeholder={msgStr("password")}
                                 aria-invalid={messagesPerField.existsError("username", "password")}
                                 className={cn(
-                                    "h-12 rounded-lg bg-gray-100 border-0 text-black placeholder:text-gray-500 focus-visible:ring-2 focus-visible:ring-black/20",
-                                    usernameHidden && messagesPerField.existsError("username", "password") && "border border-red-500"
+                                    "h-12 rounded-lg bg-muted border-0 text-foreground placeholder:text-muted-foreground focus-visible:ring-2 focus-visible:ring-ring",
+                                    usernameHidden && messagesPerField.existsError("username", "password") && "border border-destructive"
                                 )}
                             />
                             {usernameHidden && messagesPerField.existsError("username", "password") && (
-                                <p className="text-sm text-red-600">
+                                <p className="text-sm text-destructive">
                                     {messagesPerField.getFirstError("username", "password")}
                                 </p>
                             )}
@@ -93,7 +93,7 @@ export default function Login(props: PageProps<Extract<KcContext, { pageId: "log
                                     <Link
                                         tabIndex={6}
                                         href={url.loginResetCredentialsUrl}
-                                        className="text-sm text-gray-600 hover:text-black"
+                                        className="text-sm text-muted-foreground hover:text-foreground"
                                     >
                                         {msg("doForgotPassword")}
                                     </Link>
@@ -112,7 +112,7 @@ export default function Login(props: PageProps<Extract<KcContext, { pageId: "log
                             tabIndex={7}
                             type="submit"
                             disabled={isLoginButtonDisabled}
-                            className="w-full h-12 rounded-lg bg-black text-white font-medium text-sm hover:bg-black/90 transition-colors disabled:opacity-50"
+                            className="w-full h-12 rounded-lg bg-primary text-primary-foreground font-medium text-sm hover:bg-primary/90 transition-colors disabled:opacity-50"
                         >
                             {msgStr("doContinue") || msgStr("doLogIn")}
                         </button>
@@ -130,9 +130,9 @@ export default function Login(props: PageProps<Extract<KcContext, { pageId: "log
                 )}
 
                 {realm.password && realm.registrationAllowed && !registrationDisabled && (
-                    <p className="text-center text-sm text-gray-500 pt-2">
+                    <p className="text-center text-sm text-muted-foreground pt-2">
                         {msg("noAccount")}{" "}
-<Link tabIndex={8} href={url.registrationUrl} className="text-black font-medium">
+                        <Link tabIndex={8} href={url.registrationUrl} className="text-foreground font-medium hover:underline">
                                 {msg("doRegister")}
                         </Link>
                     </p>

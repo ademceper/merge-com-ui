@@ -9,9 +9,9 @@ import { Alert, AlertDescription } from "@merge/ui/components/alert";
 import { cn } from "@merge/ui/lib/utils";
 
 const inputClassName =
-    "h-12 rounded-lg bg-gray-100 border-0 text-black placeholder:text-gray-500 focus-visible:ring-2 focus-visible:ring-black/20";
+    "h-12 rounded-lg bg-muted border-0 text-foreground placeholder:text-muted-foreground focus-visible:ring-2 focus-visible:ring-ring";
 const primaryButtonClassName =
-    "w-full h-12 rounded-lg bg-black text-white font-medium text-sm hover:bg-black/90 transition-colors disabled:opacity-50";
+    "w-full h-12 rounded-lg bg-primary text-primary-foreground font-medium text-sm hover:bg-primary/90 transition-colors disabled:opacity-50";
 
 export default function LoginResetPassword(
     props: PageProps<Extract<KcContext, { pageId: "login-reset-password.ftl" }>, I18n>
@@ -27,10 +27,10 @@ export default function LoginResetPassword(
     return (
         <AuthLayout>
             <div className="space-y-5">
-                <h1 className="text-xl font-semibold text-black tracking-tight">
+                <h1 className="text-xl font-semibold text-foreground tracking-tight">
                     {msg("emailForgotTitle")}
                 </h1>
-                <p className="text-sm text-gray-500">{msg("emailForgotDescription")}</p>
+                <p className="text-sm text-muted-foreground">{msg("emailForgotDescription")}</p>
 
                 {message && (
                     <Alert variant={message.type === "error" ? "destructive" : "default"} className="rounded-lg">
@@ -66,11 +66,11 @@ export default function LoginResetPassword(
                             aria-invalid={messagesPerField.existsError("username")}
                             className={cn(
                                 inputClassName,
-                                messagesPerField.existsError("username") && "border border-red-500"
+                                messagesPerField.existsError("username") && "border border-destructive"
                             )}
                         />
                         {messagesPerField.existsError("username") && (
-                            <p className="text-sm text-red-600">{messagesPerField.get("username")}</p>
+                            <p className="text-sm text-destructive">{messagesPerField.get("username")}</p>
                         )}
                     </div>
 
@@ -83,8 +83,8 @@ export default function LoginResetPassword(
                     </button>
                 </form>
 
-                <p className="text-center text-sm text-gray-500 pt-2">
-                    <Link href={url.loginUrl} className="text-black font-medium">
+                <p className="text-center text-sm text-muted-foreground pt-2">
+                    <Link href={url.loginUrl} className="text-foreground font-medium hover:underline">
                         {msg("backToLoginPage")}
                     </Link>
                 </p>

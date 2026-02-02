@@ -5,9 +5,9 @@ import AuthLayout from "../components/AuthLayout";
 import { Alert, AlertDescription } from "@merge/ui/components/alert";
 
 const primaryButtonClassName =
-    "w-full h-12 rounded-lg bg-black text-white font-medium text-sm hover:bg-black/90 transition-colors disabled:opacity-50";
+    "w-full h-12 rounded-lg bg-primary text-primary-foreground font-medium text-sm hover:bg-primary/90 transition-colors disabled:opacity-50";
 const secondaryButtonClassName =
-    "w-full h-12 rounded-lg bg-gray-100 text-black font-medium text-sm hover:bg-gray-200 transition-colors border-0";
+    "w-full h-12 rounded-lg bg-muted text-foreground font-medium text-sm hover:bg-muted/80 transition-colors border-0";
 
 export default function DeleteAccountConfirm(
     props: PageProps<Extract<KcContext, { pageId: "delete-account-confirm.ftl" }>, I18n>
@@ -21,20 +21,20 @@ export default function DeleteAccountConfirm(
     return (
         <AuthLayout>
             <div className="space-y-5">
-                <h1 className="text-xl font-semibold text-black tracking-tight">
+                <h1 className="text-xl font-semibold text-foreground tracking-tight">
                     {msg("deleteAccountConfirm")}
                 </h1>
 
-                <Alert variant="default" className="rounded-lg border-amber-200 bg-amber-50 text-amber-900">
+                <Alert variant="default" className="rounded-lg border-border bg-muted text-foreground">
                     <AlertDescription>{msg("irreversibleAction")}</AlertDescription>
                 </Alert>
 
-                <p className="text-sm text-gray-600">{msg("deletingImplies")}</p>
-                <ul className="list-inside list-disc space-y-1 text-sm text-gray-600">
+                <p className="text-sm text-muted-foreground">{msg("deletingImplies")}</p>
+                <ul className="list-inside list-disc space-y-1 text-sm text-muted-foreground">
                     <li>{msg("loggingOutImmediately")}</li>
                     <li>{msg("errasingData")}</li>
                 </ul>
-                <p className="text-sm text-gray-600">{msg("finalDeletionConfirmation")}</p>
+                <p className="text-sm text-muted-foreground">{msg("finalDeletionConfirmation")}</p>
 
                 <form action={url.loginAction} method="post" className="pt-2">
                     <div className="flex gap-3 justify-between">

@@ -9,9 +9,9 @@ import { Alert, AlertDescription } from "@merge/ui/components/alert";
 import { cn } from "@merge/ui/lib/utils";
 
 const inputClassName =
-    "h-12 rounded-lg bg-gray-100 border-0 text-black placeholder:text-gray-500 focus-visible:ring-2 focus-visible:ring-black/20";
+    "h-12 rounded-lg bg-muted border-0 text-foreground placeholder:text-muted-foreground focus-visible:ring-2 focus-visible:ring-ring";
 const primaryButtonClassName =
-    "w-full h-12 rounded-lg bg-black text-white font-medium text-sm hover:bg-black/90 transition-colors disabled:opacity-50";
+    "w-full h-12 rounded-lg bg-primary text-primary-foreground font-medium text-sm hover:bg-primary/90 transition-colors disabled:opacity-50";
 
 type RegisterWithSocial = Extract<KcContext, { pageId: "register.ftl" }> & {
     social?: { providers?: { loginUrl: string; alias: string; providerId: string; displayName: string; iconClasses?: string }[] };
@@ -37,7 +37,7 @@ export default function Register(props: PageProps<Extract<KcContext, { pageId: "
     return (
         <AuthLayout>
             <div className="space-y-5">
-                <h1 className="text-xl font-semibold text-black tracking-tight">
+                <h1 className="text-xl font-semibold text-foreground tracking-tight">
                     {msg("registerTitle")}
                 </h1>
 
@@ -69,11 +69,11 @@ export default function Register(props: PageProps<Extract<KcContext, { pageId: "
                                 aria-invalid={messagesPerField.existsError("firstName")}
                                 className={cn(
                                     inputClassName,
-                                    messagesPerField.existsError("firstName") && "border border-red-500"
+                                    messagesPerField.existsError("firstName") && "border border-destructive"
                                 )}
                             />
                             {messagesPerField.existsError("firstName") && (
-                                <p className="text-sm text-red-600">{messagesPerField.get("firstName")}</p>
+                                <p className="text-sm text-destructive">{messagesPerField.get("firstName")}</p>
                             )}
                         </div>
                         <div className="space-y-2">
@@ -85,11 +85,11 @@ export default function Register(props: PageProps<Extract<KcContext, { pageId: "
                                 aria-invalid={messagesPerField.existsError("lastName")}
                                 className={cn(
                                     inputClassName,
-                                    messagesPerField.existsError("lastName") && "border border-red-500"
+                                    messagesPerField.existsError("lastName") && "border border-destructive"
                                 )}
                             />
                             {messagesPerField.existsError("lastName") && (
-                                <p className="text-sm text-red-600">{messagesPerField.get("lastName")}</p>
+                                <p className="text-sm text-destructive">{messagesPerField.get("lastName")}</p>
                             )}
                         </div>
                     </div>
@@ -104,11 +104,11 @@ export default function Register(props: PageProps<Extract<KcContext, { pageId: "
                             aria-invalid={messagesPerField.existsError("email")}
                             className={cn(
                                 inputClassName,
-                                messagesPerField.existsError("email") && "border border-red-500"
+                                messagesPerField.existsError("email") && "border border-destructive"
                             )}
                         />
                         {messagesPerField.existsError("email") && (
-                            <p className="text-sm text-red-600">{messagesPerField.get("email")}</p>
+                            <p className="text-sm text-destructive">{messagesPerField.get("email")}</p>
                         )}
                     </div>
 
@@ -123,11 +123,11 @@ export default function Register(props: PageProps<Extract<KcContext, { pageId: "
                                 aria-invalid={messagesPerField.existsError("username")}
                                 className={cn(
                                     inputClassName,
-                                    messagesPerField.existsError("username") && "border border-red-500"
+                                    messagesPerField.existsError("username") && "border border-destructive"
                                 )}
                             />
                             {messagesPerField.existsError("username") && (
-                                <p className="text-sm text-red-600">{messagesPerField.get("username")}</p>
+                                <p className="text-sm text-destructive">{messagesPerField.get("username")}</p>
                             )}
                         </div>
                     )}
@@ -144,11 +144,11 @@ export default function Register(props: PageProps<Extract<KcContext, { pageId: "
                                     aria-invalid={messagesPerField.existsError("password")}
                                     className={cn(
                                         inputClassName,
-                                        messagesPerField.existsError("password") && "border border-red-500"
+                                        messagesPerField.existsError("password") && "border border-destructive"
                                     )}
                                 />
                                 {messagesPerField.existsError("password") && (
-                                    <p className="text-sm text-red-600">{messagesPerField.get("password")}</p>
+                                    <p className="text-sm text-destructive">{messagesPerField.get("password")}</p>
                                 )}
                             </div>
                             <div className="space-y-2">
@@ -161,11 +161,11 @@ export default function Register(props: PageProps<Extract<KcContext, { pageId: "
                                     aria-invalid={messagesPerField.existsError("password-confirm")}
                                     className={cn(
                                         inputClassName,
-                                        messagesPerField.existsError("password-confirm") && "border border-red-500"
+                                        messagesPerField.existsError("password-confirm") && "border border-destructive"
                                     )}
                                 />
                                 {messagesPerField.existsError("password-confirm") && (
-                                    <p className="text-sm text-red-600">{messagesPerField.get("password-confirm")}</p>
+                                    <p className="text-sm text-destructive">{messagesPerField.get("password-confirm")}</p>
                                 )}
                             </div>
                         </>
@@ -197,9 +197,9 @@ export default function Register(props: PageProps<Extract<KcContext, { pageId: "
                     ) : null;
                 })()}
 
-                <p className="text-center text-sm text-gray-500 pt-2">
+                <p className="text-center text-sm text-muted-foreground pt-2">
                     {msg("backToLogin")}{" "}
-                    <Link href={url.loginUrl} className="text-black font-medium">
+                    <Link href={url.loginUrl} className="text-foreground font-medium hover:underline">
                         {msg("doLogIn")}
                     </Link>
                 </p>

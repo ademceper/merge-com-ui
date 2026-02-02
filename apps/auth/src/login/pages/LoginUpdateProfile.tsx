@@ -8,11 +8,11 @@ import { Alert, AlertDescription } from "@merge/ui/components/alert";
 import { cn } from "@merge/ui/lib/utils";
 
 const inputClassName =
-    "h-12 rounded-lg bg-gray-100 border-0 text-black placeholder:text-gray-500 focus-visible:ring-2 focus-visible:ring-black/20";
+    "h-12 rounded-lg bg-muted border-0 text-foreground placeholder:text-muted-foreground focus-visible:ring-2 focus-visible:ring-ring";
 const primaryButtonClassName =
-    "w-full h-12 rounded-lg bg-black text-white font-medium text-sm hover:bg-black/90 transition-colors disabled:opacity-50";
+    "w-full h-12 rounded-lg bg-primary text-primary-foreground font-medium text-sm hover:bg-primary/90 transition-colors disabled:opacity-50";
 const secondaryButtonClassName =
-    "w-full h-12 rounded-lg bg-gray-100 text-black font-medium text-sm hover:bg-gray-200 transition-colors border-0";
+    "w-full h-12 rounded-lg bg-muted text-foreground font-medium text-sm hover:bg-muted/80 transition-colors border-0";
 
 export default function LoginUpdateProfile(
     props: PageProps<Extract<KcContext, { pageId: "login-update-profile.ftl" }>, I18n>
@@ -35,10 +35,10 @@ export default function LoginUpdateProfile(
     return (
         <AuthLayout>
             <div className="space-y-5">
-                <h1 className="text-xl font-semibold text-black tracking-tight">
+                <h1 className="text-xl font-semibold text-foreground tracking-tight">
                     {msg("loginProfileTitle")}
                 </h1>
-                <p className="text-sm text-gray-500">
+                <p className="text-sm text-muted-foreground">
                     {isAppInitiatedAction
                         ? msg("loginProfileDescription")
                         : msg("loginProfileRequiredDescription")}
@@ -72,11 +72,11 @@ export default function LoginUpdateProfile(
                                 aria-invalid={messagesPerField.existsError("username")}
                                 className={cn(
                                     inputClassName,
-                                    messagesPerField.existsError("username") && "border border-red-500"
+                                    messagesPerField.existsError("username") && "border border-destructive"
                                 )}
                             />
                             {messagesPerField.existsError("username") && (
-                                <p className="text-sm text-red-600">{messagesPerField.get("username")}</p>
+                                <p className="text-sm text-destructive">{messagesPerField.get("username")}</p>
                             )}
                         </div>
                     )}
@@ -92,11 +92,11 @@ export default function LoginUpdateProfile(
                             aria-invalid={messagesPerField.existsError("email")}
                             className={cn(
                                 inputClassName,
-                                messagesPerField.existsError("email") && "border border-red-500"
+                                messagesPerField.existsError("email") && "border border-destructive"
                             )}
                         />
                         {messagesPerField.existsError("email") && (
-                            <p className="text-sm text-red-600">{messagesPerField.get("email")}</p>
+                            <p className="text-sm text-destructive">{messagesPerField.get("email")}</p>
                         )}
                     </div>
 
@@ -112,11 +112,11 @@ export default function LoginUpdateProfile(
                                 aria-invalid={messagesPerField.existsError("firstName")}
                                 className={cn(
                                     inputClassName,
-                                    messagesPerField.existsError("firstName") && "border border-red-500"
+                                    messagesPerField.existsError("firstName") && "border border-destructive"
                                 )}
                             />
                             {messagesPerField.existsError("firstName") && (
-                                <p className="text-sm text-red-600">{messagesPerField.get("firstName")}</p>
+                                <p className="text-sm text-destructive">{messagesPerField.get("firstName")}</p>
                             )}
                         </div>
                         <div className="space-y-2">
@@ -130,11 +130,11 @@ export default function LoginUpdateProfile(
                                 aria-invalid={messagesPerField.existsError("lastName")}
                                 className={cn(
                                     inputClassName,
-                                    messagesPerField.existsError("lastName") && "border border-red-500"
+                                    messagesPerField.existsError("lastName") && "border border-destructive"
                                 )}
                             />
                             {messagesPerField.existsError("lastName") && (
-                                <p className="text-sm text-red-600">{messagesPerField.get("lastName")}</p>
+                                <p className="text-sm text-destructive">{messagesPerField.get("lastName")}</p>
                             )}
                         </div>
                     </div>

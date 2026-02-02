@@ -37,6 +37,7 @@
         "embla-carousel-react": "^8.6.0",
         "file-saver": "^2.0.5",
         "flat": "^6.0.1",
+        "framer-motion": "^12.0.0",
         "i18next": "^25.7.3",
         "i18next-fetch-backend": "^6.0.0",
         "input-otp": "^1.4.2",

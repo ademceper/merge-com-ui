@@ -2,6 +2,7 @@ import { useState } from "react";
 import type { PageProps } from "keycloakify/account/pages/PageProps";
 import type { KcContext } from "../KcContext";
 import type { I18n } from "../i18n";
+import { EyeIcon, EyeSlashIcon } from "@phosphor-icons/react";
 import { Separator } from "@merge/ui/components/separator";
 import { Input } from "@merge/ui/components/input";
 import { Alert, AlertDescription } from "@merge/ui/components/alert";
@@ -15,6 +16,9 @@ export default function Password(props: PageProps<Extract<KcContext, { pageId: "
     const { msg, msgStr } = i18n;
 
     const [isSubmitting, setIsSubmitting] = useState(false);
+    const [showPassword, setShowPassword] = useState(false);
+    const [showNewPassword, setShowNewPassword] = useState(false);
+    const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
     const placeholderStr = (value: unknown, fallback: string) =>
         typeof value === "string" ? value : fallback;
@@ -49,18 +53,29 @@ export default function Password(props: PageProps<Extract<KcContext, { pageId: "
 
                 {/* Current Password */}
                 <div className="space-y-2">
-                    <Input
-                        type="password"
-                        id="password"
-                        name="password"
-                        autoComplete="current-password"
-                        placeholder={placeholderStr(msgStr("currentPassword"), "Mevcut Şifre") + " *"}
-                        aria-invalid={messagesPerField.existsError("password")}
-                        className={cn(
-                            "h-12 rounded-lg bg-gray-100 border-0 text-black placeholder:text-gray-500 focus-visible:ring-2 focus-visible:ring-black/20",
-                            messagesPerField.existsError("password") && "border border-red-500"
-                        )}
-                    />
+                    <div className="relative">
+                        <Input
+                            type={showPassword ? "text" : "password"}
+                            id="password"
+                            name="password"
+                            autoComplete="current-password"
+                            placeholder={placeholderStr(msgStr("currentPassword"), "Mevcut Şifre")}
+                            aria-invalid={messagesPerField.existsError("password")}
+                            className={cn(
+                                "h-12 rounded-lg bg-gray-100 border-0 text-black placeholder:text-gray-500 focus-visible:ring-2 focus-visible:ring-black/20 pr-12",
+                                messagesPerField.existsError("password") && "border border-red-500"
+                            )}
+                        />
+                        <button
+                            type="button"
+                            tabIndex={-1}
+                            onClick={() => setShowPassword((v) => !v)}
+                            className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700 focus:outline-none"
+                            aria-label={showPassword ? "Şifreyi gizle" : "Şifreyi göster"}
+                        >
+                            {showPassword ? <EyeSlashIcon size={20} /> : <EyeIcon size={20} />}
+                        </button>
+                    </div>
                     {messagesPerField.existsError("password") && (
                         <p className="text-sm text-destructive">
                             {messagesPerField.get("password")}
@@ -70,18 +85,29 @@ export default function Password(props: PageProps<Extract<KcContext, { pageId: "
 
                 {/* New Password */}
                 <div className="space-y-2">
-                    <Input
-                        type="password"
-                        id="password-new"
-                        name="password-new"
-                        autoComplete="new-password"
-                        placeholder={placeholderStr(msgStr("newPassword"), "Yeni Şifre") + " *"}
-                        aria-invalid={messagesPerField.existsError("password-new")}
-                        className={cn(
-                            "h-12 rounded-lg bg-gray-100 border-0 text-black placeholder:text-gray-500 focus-visible:ring-2 focus-visible:ring-black/20",
-                            messagesPerField.existsError("password-new") && "border border-red-500"
-                        )}
-                    />
+                    <div className="relative">
+                        <Input
+                            type={showNewPassword ? "text" : "password"}
+                            id="password-new"
+                            name="password-new"
+                            autoComplete="new-password"
+                            placeholder={placeholderStr(msgStr("newPassword"), "Yeni Şifre")}
+                            aria-invalid={messagesPerField.existsError("password-new")}
+                            className={cn(
+                                "h-12 rounded-lg bg-gray-100 border-0 text-black placeholder:text-gray-500 focus-visible:ring-2 focus-visible:ring-black/20 pr-12",
+                                messagesPerField.existsError("password-new") && "border border-red-500"
+                            )}
+                        />
+                        <button
+                            type="button"
+                            tabIndex={-1}
+                            onClick={() => setShowNewPassword((v) => !v)}
+                            className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700 focus:outline-none"
+                            aria-label={showNewPassword ? "Şifreyi gizle" : "Şifreyi göster"}
+                        >
+                            {showNewPassword ? <EyeSlashIcon size={20} /> : <EyeIcon size={20} />}
+                        </button>
+                    </div>
                     {messagesPerField.existsError("password-new") && (
                         <p className="text-sm text-destructive">
                             {messagesPerField.get("password-new")}
@@ -91,18 +117,29 @@ export default function Password(props: PageProps<Extract<KcContext, { pageId: "
 
                 {/* Confirm New Password */}
                 <div className="space-y-2">
-                    <Input
-                        type="password"
-                        id="password-confirm"
-                        name="password-confirm"
-                        autoComplete="new-password"
-                        placeholder={placeholderStr(msgStr("passwordConfirm"), "Şifre Onayı") + " *"}
-                        aria-invalid={messagesPerField.existsError("password-confirm")}
-                        className={cn(
-                            "h-12 rounded-lg bg-gray-100 border-0 text-black placeholder:text-gray-500 focus-visible:ring-2 focus-visible:ring-black/20",
-                            messagesPerField.existsError("password-confirm") && "border border-red-500"
-                        )}
-                    />
+                    <div className="relative">
+                        <Input
+                            type={showConfirmPassword ? "text" : "password"}
+                            id="password-confirm"
+                            name="password-confirm"
+                            autoComplete="new-password"
+                            placeholder={placeholderStr(msgStr("passwordConfirm"), "Şifre Onayı")}
+                            aria-invalid={messagesPerField.existsError("password-confirm")}
+                            className={cn(
+                                "h-12 rounded-lg bg-gray-100 border-0 text-black placeholder:text-gray-500 focus-visible:ring-2 focus-visible:ring-black/20 pr-12",
+                                messagesPerField.existsError("password-confirm") && "border border-red-500"
+                            )}
+                        />
+                        <button
+                            type="button"
+                            tabIndex={-1}
+                            onClick={() => setShowConfirmPassword((v) => !v)}
+                            className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700 focus:outline-none"
+                            aria-label={showConfirmPassword ? "Şifreyi gizle" : "Şifreyi göster"}
+                        >
+                            {showConfirmPassword ? <EyeSlashIcon size={20} /> : <EyeIcon size={20} />}
+                        </button>
+                    </div>
                     {messagesPerField.existsError("password-confirm") && (
                         <p className="text-sm text-destructive">
                             {messagesPerField.get("password-confirm")}
