@@ -34,7 +34,7 @@ export default function AccountLayout({ kcContext, i18n, children, currentPage }
 
     return (
         <div className="container mx-auto p-4 md:p-10 pb-16 max-w-7xl">
-            <div className="w-full lg:max-w-[58rem]">
+            <div className="w-full lg:max-w-[58rem] mx-auto">
                 <header className="grid grid-cols-1 lg:grid-cols-[16rem_1fr] lg:gap-x-12 items-center mb-6 gap-y-4">
                     <div className="flex items-center justify-center lg:justify-start">
                         <img key={logoUrl} src={logoUrl} alt="Merge" className="h-11 w-auto max-w-[13rem] object-contain" />
