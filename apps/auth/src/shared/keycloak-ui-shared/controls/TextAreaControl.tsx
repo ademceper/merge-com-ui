@@ -11,7 +11,7 @@
 
 // @ts-nocheck
 
-import { TextArea, TextAreaProps, ValidatedOptions } from "../../@patternfly/react-core";
+import { Textarea } from "@merge/ui/components/textarea";
 import {
     FieldPath,
     FieldValues,
@@ -26,7 +26,7 @@ export type TextAreaControlProps<
     T extends FieldValues,
     P extends FieldPath<T> = FieldPath<T>
 > = UseControllerProps<T, P> &
-    TextAreaProps & {
+    Omit<React.ComponentProps<typeof Textarea>, "name"> & {
         label: string;
         labelIcon?: string;
         isDisabled?: boolean;
@@ -54,14 +54,12 @@ export const TextAreaControl = <
             name={props.name}
             error={fieldState.error}
         >
-            <TextArea
-                isRequired={required}
+            <Textarea
+                required={required}
                 id={props.name}
                 data-testid={props.name}
-                validated={
-                    fieldState.error ? ValidatedOptions.error : ValidatedOptions.default
-                }
-                isDisabled={props.isDisabled}
+                aria-invalid={!!fieldState.error}
+                disabled={props.isDisabled}
                 {...props}
                 {...field}
             />

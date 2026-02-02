@@ -12,7 +12,7 @@
 // @ts-nocheck
 
 import type { RequiredActionAlias } from "@keycloak/keycloak-admin-client/lib/defs/requiredActionProviderRepresentation";
-import { AlertVariant, Form, ModalVariant } from "../../../shared/@patternfly/react-core";
+import { AlertVariant } from "../../../shared/keycloak-ui-shared";
 import { isEmpty } from "lodash-es";
 import { FormProvider, useForm, useWatch } from "react-hook-form";
 import { useTranslation } from "react-i18next";
@@ -79,7 +79,6 @@ export const ResetCredentialDialog = ({
 
     return (
         <ConfirmDialogModal
-            variant={ModalVariant.medium}
             titleKey="credentialReset"
             open
             onCancel={onClose}
@@ -90,9 +89,9 @@ export const ResetCredentialDialog = ({
             }}
             confirmButtonDisabled={!resetIsNotDisabled}
         >
-            <Form
+            <form
                 id="userCredentialsReset-form"
-                isHorizontal
+                className="flex flex-col gap-4"
                 data-testid="credential-reset-modal"
             >
                 <FormProvider {...form}>
@@ -103,7 +102,7 @@ export const ResetCredentialDialog = ({
                     />
                     <LifespanField />
                 </FormProvider>
-            </Form>
+            </form>
         </ConfirmDialogModal>
     );
 };

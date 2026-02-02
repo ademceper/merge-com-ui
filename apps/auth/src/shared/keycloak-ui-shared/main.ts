@@ -14,9 +14,12 @@
 export {
     AlertProvider,
     useAlerts,
+    AlertVariant,
     type AddAlertFunction,
     type AddErrorFunction,
-    type AlertProps
+    type AlertEntry,
+    type AlertProps,
+    type AlertVariantType
 } from "./alerts/Alerts";
 export { ErrorPage } from "./context/ErrorPage";
 export { Help, useHelp } from "./context/HelpContext";

@@ -12,17 +12,18 @@
 // @ts-nocheck
 
 import {
-    Button,
     InputGroup,
-    InputGroupItem,
-    TextInput,
-    type TextInputProps
-} from "../../@patternfly/react-core";
-import { EyeIcon, EyeSlashIcon } from "../../@patternfly/react-icons";
+    InputGroupButton,
+    InputGroupInput,
+} from "@merge/ui/components/input-group";
+import { Eye, EyeSlash } from "@phosphor-icons/react";
 import { MutableRefObject, Ref, forwardRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 
-export type PasswordInputProps = TextInputProps & {
+export type PasswordInputProps = Omit<
+    React.ComponentProps<typeof InputGroupInput>,
+    "type"
+> & {
     hasReveal?: boolean;
 };
 
@@ -30,26 +31,26 @@ const PasswordInputBase = ({
     hasReveal = true,
     innerRef,
     ...rest
-}: PasswordInputProps) => {
+}: PasswordInputProps & { innerRef?: Ref<HTMLInputElement> }) => {
     const { t } = useTranslation();
     const [hidePassword, setHidePassword] = useState(true);
     return (
         <InputGroup>
-            <InputGroupItem isFill>
-                <TextInput
-                    {...rest}
-                    type={hidePassword ? "password" : "text"}
-                    ref={innerRef}
-                />
-            </InputGroupItem>
+            <InputGroupInput
+                {...rest}
+                type={hidePassword ? "password" : "text"}
+                ref={innerRef as MutableRefObject<HTMLInputElement>}
+            />
             {hasReveal && (
-                <Button
-                    variant="control"
+                <InputGroupButton
+                    type="button"
+                    variant="ghost"
+                    size="xs"
                     aria-label={t("showPassword")}
                     onClick={() => setHidePassword(!hidePassword)}
                 >
-                    {hidePassword ? <EyeIcon /> : <EyeSlashIcon />}
-                </Button>
+                    {hidePassword ? <Eye className="size-4" /> : <EyeSlash className="size-4" />}
+                </InputGroupButton>
             )}
         </InputGroup>
     );
@@ -57,7 +58,7 @@ const PasswordInputBase = ({
 
 export const PasswordInput = forwardRef(
     (props: PasswordInputProps, ref: Ref<HTMLInputElement>) => (
-        <PasswordInputBase {...props} innerRef={ref as MutableRefObject<any>} />
+        <PasswordInputBase {...props} innerRef={ref} />
     )
 );
 PasswordInput.displayName = "PasswordInput";

@@ -13,7 +13,7 @@
 
 import type ClientRepresentation from "@keycloak/keycloak-admin-client/lib/defs/clientRepresentation";
 import type GlobalRequestResult from "@keycloak/keycloak-admin-client/lib/defs/globalRequestResult";
-import { AlertVariant, PageSection, Text } from "../../shared/@patternfly/react-core";
+import { AlertVariant } from "../../shared/keycloak-ui-shared";
 import type { TFunction } from "i18next";
 import { useFormContext } from "react-hook-form";
 import { useTranslation } from "react-i18next";
@@ -82,7 +82,7 @@ export const AdvancedTab = ({ save, client }: AdvancedProps) => {
     };
 
     return (
-        <PageSection variant="light" className="pf-v5-u-py-0">
+        <div className="bg-muted/30 py-0">
             <ScrollForm
                 label={t("jumpToSection")}
                 sections={[
@@ -96,9 +96,9 @@ export const AdvancedTab = ({ save, client }: AdvancedProps) => {
                         isHidden: protocol !== PROTOCOL_OIDC,
                         panel: (
                             <>
-                                <Text className="pf-v5-u-pb-lg">
+                                <p className="pb-6">
                                     {t("fineGrainOpenIdConnectConfigurationHelp")}
-                                </Text>
+                                </p>
                                 <FineGrainOpenIdConnect
                                     save={save}
                                     reset={() => {
@@ -134,9 +134,9 @@ export const AdvancedTab = ({ save, client }: AdvancedProps) => {
                         isHidden: protocol !== PROTOCOL_OIDC,
                         panel: (
                             <>
-                                <Text className="pf-v5-u-pb-lg">
+                                <p className="pb-6">
                                     {t("openIdConnectCompatibilityModesHelp")}
-                                </Text>
+                                </p>
                                 <OpenIdConnectCompatibilityModes
                                     save={() => save()}
                                     reset={() =>
@@ -156,9 +156,9 @@ export const AdvancedTab = ({ save, client }: AdvancedProps) => {
                         isHidden: protocol === PROTOCOL_OIDC,
                         panel: (
                             <>
-                                <Text className="pf-v5-u-pb-lg">
+                                <p className="pb-6">
                                     {t("fineGrainSamlEndpointConfigHelp")}
-                                </Text>
+                                </p>
                                 <FineGrainSamlEndpointConfig
                                     save={() => save()}
                                     reset={() =>
@@ -183,9 +183,9 @@ export const AdvancedTab = ({ save, client }: AdvancedProps) => {
                         title: t("advancedSettings"),
                         panel: (
                             <>
-                                <Text className="pf-v5-u-pb-lg">
+                                <p className="pb-6">
                                     {t("advancedSettings" + toUpperCase(protocol || ""))}
-                                </Text>
+                                </p>
                                 <AdvancedSettings
                                     protocol={protocol}
                                     save={() => save()}
@@ -220,9 +220,9 @@ export const AdvancedTab = ({ save, client }: AdvancedProps) => {
                             !isFeatureEnabled(Feature.OpenId4VCI),
                         panel: (
                             <>
-                                <Text className="pf-v5-u-pb-lg">
+                                <p className="pb-6">
                                     {t("openIdVerifiableCredentialsHelp")}
-                                </Text>
+                                </p>
                                 <OpenIdVerifiableCredentials
                                     client={client}
                                     save={save}
@@ -235,9 +235,9 @@ export const AdvancedTab = ({ save, client }: AdvancedProps) => {
                         title: t("authenticationOverrides"),
                         panel: (
                             <>
-                                <Text className="pf-v5-u-pb-lg">
+                                <p className="pb-6">
                                     {t("authenticationOverridesHelp")}
-                                </Text>
+                                </p>
                                 <AuthenticationOverrides
                                     protocol={protocol}
                                     save={() => save()}
@@ -258,6 +258,6 @@ export const AdvancedTab = ({ save, client }: AdvancedProps) => {
                 ]}
                 borders
             />
-        </PageSection>
+        </div>
     );
 };

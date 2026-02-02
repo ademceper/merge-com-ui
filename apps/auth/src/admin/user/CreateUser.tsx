@@ -19,7 +19,7 @@ import {
     useAlerts,
     useFetch
 } from "../../shared/keycloak-ui-shared";
-import { AlertVariant, PageSection } from "../../shared/@patternfly/react-core";
+import { AlertVariant } from "../../shared/keycloak-ui-shared";
 import { TFunction } from "i18next";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
@@ -85,7 +85,7 @@ export default function CreateUser() {
     return (
         <>
             <ViewHeader titleKey={t("createUser")} className="kc-username-view-header" />
-            <PageSection variant="light">
+            <div className="bg-muted/30 p-4">
                 <UserForm
                     form={form}
                     realm={realm}
@@ -93,7 +93,7 @@ export default function CreateUser() {
                     onGroupsUpdate={setAddedGroups}
                     save={save}
                 />
-            </PageSection>
+            </div>
         </>
     );
 }

@@ -12,19 +12,35 @@
 // @ts-nocheck
 
 import { ReactNode, useState } from "react";
-import { Button, ButtonProps, Modal, ModalProps } from "../../@patternfly/react-core";
+import { Button } from "@merge/ui/components/button";
+import {
+    Dialog,
+    DialogContent,
+    DialogFooter,
+    DialogHeader,
+    DialogTitle,
+} from "@merge/ui/components/dialog";
 
-export type ContinueCancelModalProps = Omit<ModalProps, "ref" | "children"> & {
+type ButtonVariant = React.ComponentProps<typeof Button>["variant"];
+
+export type ContinueCancelModalProps = {
     modalTitle: string;
     continueLabel: string;
     cancelLabel: string;
     buttonTitle: string | ReactNode;
-    buttonVariant?: ButtonProps["variant"];
+    buttonVariant?: ButtonVariant;
     buttonTestRole?: string;
     isDisabled?: boolean;
     onContinue: () => void;
     component?: React.ElementType<any> | React.ComponentType<any>;
     children?: ReactNode;
+};
+
+const mapPfVariantToUi = (variant?: string): ButtonVariant => {
+    if (variant === "primary") return "default";
+    if (variant === "danger") return "destructive";
+    if (variant === "link") return "link";
+    return "default";
 };
 
 export const ContinueCancelModal = ({
@@ -36,53 +52,50 @@ export const ContinueCancelModal = ({
     buttonVariant,
     buttonTestRole,
     onContinue,
-    component = Button,
+    component: Component = Button,
     children,
-    ...rest
 }: ContinueCancelModalProps) => {
     const [open, setOpen] = useState(false);
-    const Component = component;
+
+    const handleContinue = () => {
+        setOpen(false);
+        onContinue();
+    };
 
     return (
         <>
             <Component
-                variant={buttonVariant}
+                variant={typeof buttonVariant === "string" ? mapPfVariantToUi(buttonVariant) : buttonVariant}
                 onClick={() => setOpen(true)}
-                isDisabled={isDisabled}
+                disabled={isDisabled}
                 data-testrole={buttonTestRole}
             >
                 {buttonTitle}
             </Component>
-            <Modal
-                variant="small"
-                {...rest}
-                title={modalTitle}
-                isOpen={open}
-                onClose={() => setOpen(false)}
-                actions={[
-                    <Button
-                        id="modal-confirm"
-                        key="confirm"
-                        variant="primary"
-                        onClick={() => {
-                            setOpen(false);
-                            onContinue();
-                        }}
-                    >
-                        {continueLabel}
-                    </Button>,
-                    <Button
-                        id="modal-cancel"
-                        key="cancel"
-                        variant="secondary"
-                        onClick={() => setOpen(false)}
-                    >
-                        {cancelLabel}
-                    </Button>
-                ]}
-            >
-                {children}
-            </Modal>
+            <Dialog open={open} onOpenChange={setOpen}>
+                <DialogContent showCloseButton={true} className="sm:max-w-sm">
+                    <DialogHeader>
+                        <DialogTitle>{modalTitle}</DialogTitle>
+                    </DialogHeader>
+                    {children}
+                    <DialogFooter>
+                        <Button
+                            id="modal-confirm"
+                            variant="default"
+                            onClick={handleContinue}
+                        >
+                            {continueLabel}
+                        </Button>
+                        <Button
+                            id="modal-cancel"
+                            variant="outline"
+                            onClick={() => setOpen(false)}
+                        >
+                            {cancelLabel}
+                        </Button>
+                    </DialogFooter>
+                </DialogContent>
+            </Dialog>
         </>
     );
 };

@@ -11,7 +11,6 @@
 
 // @ts-nocheck
 
-import { AlertVariant } from "../../@patternfly/react-core";
 import { PropsWithChildren, useCallback, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 
@@ -24,9 +23,17 @@ import { AlertPanel } from "./AlertPanel";
 
 const ALERT_TIMEOUT = 8000;
 
+export const AlertVariant = {
+    success: "success",
+    danger: "danger",
+    warning: "warning",
+    info: "info",
+} as const;
+export type AlertVariantType = (typeof AlertVariant)[keyof typeof AlertVariant];
+
 export type AddAlertFunction = (
     message: string,
-    variant?: AlertVariant,
+    variant?: AlertVariantType,
     description?: string
 ) => void;
 
@@ -47,7 +54,7 @@ export const useAlerts = () => useRequiredContext(AlertContext);
 export type AlertEntry = {
     id: number;
     message: string;
-    variant: AlertVariant;
+    variant: AlertVariantType;
     description?: string;
 };
 
@@ -60,7 +67,7 @@ export const AlertProvider = ({ children }: PropsWithChildren) => {
         setAlerts(alerts => alerts.filter(alert => alert.id !== id));
 
     const addAlert = useCallback<AddAlertFunction>(
-        (message, variant = AlertVariant.success, description) => {
+        (message, variant = "success", description) => {
             const alert: AlertEntry = {
                 id: generateId(),
                 message,
@@ -79,7 +86,7 @@ export const AlertProvider = ({ children }: PropsWithChildren) => {
             const message = t(messageKey, { error: getErrorMessage(error) });
             const description = getErrorDescription(error);
 
-            addAlert(message, AlertVariant.danger, description);
+            addAlert(message, "danger", description);
         },
         [addAlert, t]
     );

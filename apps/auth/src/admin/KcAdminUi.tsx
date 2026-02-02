@@ -9,15 +9,11 @@
 
 /* eslint-disable */
 
-import "@patternfly/patternfly/patternfly-addons.css";
-import "@patternfly/react-core/dist/styles/base.css";
 import { useEffect, useReducer } from "react";
 import { startColorSchemeManagement } from "./colorScheme";
 import { createHashRouter, RouterProvider } from "react-router-dom";
 import { i18n } from "./i18n/i18n";
 import { RootRoute } from "./routes";
-
-import "./index.css";
 
 document.title = "Keycloak Administration Console";
 

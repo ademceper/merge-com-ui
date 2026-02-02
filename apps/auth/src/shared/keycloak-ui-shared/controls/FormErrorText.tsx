@@ -11,26 +11,18 @@
 
 // @ts-nocheck
 
-import {
-    FormHelperText,
-    FormHelperTextProps,
-    HelperText,
-    HelperTextItem
-} from "../../@patternfly/react-core";
-import { ExclamationCircleIcon } from "../../@patternfly/react-icons";
+import { WarningCircle } from "@phosphor-icons/react";
+import { FieldError } from "@merge/ui/components/field";
 
-export type FormErrorTextProps = FormHelperTextProps & {
+export type FormErrorTextProps = React.ComponentProps<"div"> & {
     message: string;
 };
 
 export const FormErrorText = ({ message, ...props }: FormErrorTextProps) => {
     return (
-        <FormHelperText {...props}>
-            <HelperText>
-                <HelperTextItem icon={<ExclamationCircleIcon />} variant="error">
-                    {message}
-                </HelperTextItem>
-            </HelperText>
-        </FormHelperText>
+        <FieldError className="flex items-center gap-1.5 text-destructive text-sm" {...props}>
+            <WarningCircle size={16} className="shrink-0" />
+            {message}
+        </FieldError>
     );
 };

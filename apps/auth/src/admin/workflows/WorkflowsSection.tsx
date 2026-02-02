@@ -11,15 +11,12 @@
 
 // @ts-nocheck
 
-import {
-    AlertVariant,
-    Button,
-    ButtonVariant,
-    PageSection,
-    Switch
-} from "../../shared/@patternfly/react-core";
+import { Button } from "@merge/ui/components/button";
+import { Label } from "@merge/ui/components/label";
+import { Switch } from "@merge/ui/components/switch";
 import {
     Action,
+    AlertVariant,
     KeycloakDataTable,
     ListEmptyState,
     useAlerts
@@ -79,7 +76,7 @@ export default function WorkflowsSection() {
             selectedRoleName: selectedWorkflow ? selectedWorkflow!.name : ""
         }),
         continueButtonLabel: "delete",
-        continueButtonVariant: ButtonVariant.danger,
+        continueButtonVariant: "destructive",
         onConfirm: async () => {
             try {
                 await adminClient.workflows.delById({ id: selectedWorkflow!.id! });
@@ -99,25 +96,21 @@ export default function WorkflowsSection() {
                 subKey="workflowsExplain"
                 helpUrl={helpUrls.workflowsUrl}
             />
-            <PageSection variant="light" padding={{ default: "noPadding" }}>
+            <div className="bg-muted/30 p-0">
                 <DeleteConfirm />
                 <KeycloakDataTable
                     key={key}
                     toolbarItem={
-                        <Button
-                            data-testid="create-workflow"
-                            component={props => (
-                                <Link
-                                    {...props}
-                                    to={toWorkflowDetail({
-                                        realm,
-                                        mode: "create",
-                                        id: "new"
-                                    })}
-                                />
-                            )}
-                        >
-                            {t("createWorkflow")}
+                        <Button asChild data-testid="create-workflow">
+                            <Link
+                                to={toWorkflowDetail({
+                                    realm,
+                                    mode: "create",
+                                    id: "new"
+                                })}
+                            >
+                                {t("createWorkflow")}
+                            </Link>
                         </Button>
                     }
                     columns={[
@@ -144,13 +137,14 @@ export default function WorkflowsSection() {
                             name: "status",
                             displayKey: "status",
                             cellRenderer: (workflow: WorkflowRepresentation) => (
-                                <Switch
-                                    data-testid={`toggle-enabled-${workflow.name}`}
-                                    label={t("enabled")}
-                                    labelOff={t("disabled")}
-                                    isChecked={workflow.enabled ?? true}
-                                    onChange={() => toggleEnabled(workflow)}
-                                />
+                                <Label className="flex items-center gap-2 cursor-pointer">
+                                    <Switch
+                                        data-testid={`toggle-enabled-${workflow.name}`}
+                                        checked={workflow.enabled ?? true}
+                                        onCheckedChange={() => toggleEnabled(workflow)}
+                                    />
+                                    <span>{workflow.enabled ? t("enabled") : t("disabled")}</span>
+                                </Label>
                             )
                         }
                     ]}
@@ -191,7 +185,7 @@ export default function WorkflowsSection() {
                         />
                     }
                 />
-            </PageSection>
+            </div>
         </>
     );
 }

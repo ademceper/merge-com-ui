@@ -11,7 +11,6 @@
 
 // @ts-nocheck
 
-import { PageSection } from "../../shared/@patternfly/react-core";
 import { useTranslation } from "react-i18next";
 import { useAdminClient } from "../admin-client";
 import { useRealm } from "../context/realm-context/RealmContext";
@@ -29,13 +28,13 @@ export const UserSessions = () => {
     const loader = () => adminClient.users.listSessions({ id, realm });
 
     return (
-        <PageSection variant="light" className="pf-v5-u-p-0">
+        <div className="bg-muted/30 p-0">
             <SessionsTable
                 loader={loader}
                 hiddenColumns={["username", "type"]}
                 emptyInstructions={t("noSessionsForUser")}
                 logoutUser={id}
             />
-        </PageSection>
+        </div>
     );
 };

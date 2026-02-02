@@ -15,8 +15,10 @@ import { fetchWithError } from "@keycloak/keycloak-admin-client";
 import type RequiredActionProviderRepresentation from "@keycloak/keycloak-admin-client/lib/defs/requiredActionProviderRepresentation";
 import type RequiredActionProviderSimpleRepresentation from "@keycloak/keycloak-admin-client/lib/defs/requiredActionProviderSimpleRepresentation";
 import { useAlerts, useFetch } from "../../shared/keycloak-ui-shared";
-import { AlertVariant, Button, Switch } from "../../shared/@patternfly/react-core";
-import { CogIcon } from "../../shared/@patternfly/react-icons";
+import { AlertVariant } from "../../shared/keycloak-ui-shared";
+import { Button } from "@merge/ui/components/button";
+import { Switch } from "@merge/ui/components/switch";
+import { Gear } from "@phosphor-icons/react";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useAdminClient } from "../admin-client";
@@ -182,10 +184,8 @@ export const RequiredActions = () => {
                         cellRenderer: row => (
                             <Switch
                                 id={`enable-${toKey(row.name || "")}`}
-                                label={t("on")}
-                                labelOff={t("off")}
-                                isChecked={row.enabled}
-                                onChange={async () => {
+                                checked={row.enabled}
+                                onCheckedChange={async () => {
                                     await updateAction(row.data, "enabled");
                                 }}
                                 aria-label={row.name}
@@ -200,11 +200,9 @@ export const RequiredActions = () => {
                         cellRenderer: row => (
                             <Switch
                                 id={`default-${toKey(row.name || "")}`}
-                                label={t("on")}
-                                isDisabled={!row.enabled}
-                                labelOff={!row.enabled ? t("disabledOff") : t("off")}
-                                isChecked={row.defaultAction}
-                                onChange={async () => {
+                                disabled={!row.enabled}
+                                checked={row.defaultAction}
+                                onCheckedChange={async () => {
                                     await updateAction(row.data, "defaultAction");
                                 }}
                                 aria-label={row.name}
@@ -218,11 +216,12 @@ export const RequiredActions = () => {
                         cellRenderer: row =>
                             row.data.configurable ? (
                                 <Button
-                                    variant="plain"
+                                    variant="ghost"
+                                    size="icon-sm"
                                     aria-label={t("settings")}
                                     onClick={() => setSelectedAction(row.data)}
                                 >
-                                    <CogIcon />
+                                    <Gear className="size-4" />
                                 </Button>
                             ) : undefined,
                         width: 10

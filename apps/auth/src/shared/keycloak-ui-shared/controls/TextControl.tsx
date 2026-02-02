@@ -11,14 +11,7 @@
 
 // @ts-nocheck
 
-import {
-    FormHelperText,
-    HelperText,
-    HelperTextItem,
-    TextInput,
-    TextInputProps,
-    ValidatedOptions
-} from "../../@patternfly/react-core";
+import { Input } from "@merge/ui/components/input";
 import { ReactNode } from "react";
 import {
     FieldPath,
@@ -34,7 +27,7 @@ export type TextControlProps<
     T extends FieldValues,
     P extends FieldPath<T> = FieldPath<T>
 > = UseControllerProps<T, P> &
-    Omit<TextInputProps, "name" | "isRequired" | "required"> & {
+    Omit<React.ComponentProps<typeof Input>, "name" | "required"> & {
         label: string;
         labelIcon?: string | ReactNode;
         isDisabled?: boolean;
@@ -63,23 +56,17 @@ export const TextControl = <T extends FieldValues, P extends FieldPath<T> = Fiel
             isRequired={required}
             error={fieldState.error}
         >
-            <TextInput
-                isRequired={required}
+            <Input
+                required={required}
                 id={props.name}
                 data-testid={props["data-testid"] || props.name}
-                validated={
-                    fieldState.error ? ValidatedOptions.error : ValidatedOptions.default
-                }
-                isDisabled={props.isDisabled}
+                aria-invalid={!!fieldState.error}
+                disabled={props.isDisabled}
                 {...rest}
                 {...field}
             />
             {helperText && (
-                <FormHelperText>
-                    <HelperText>
-                        <HelperTextItem>{helperText}</HelperTextItem>
-                    </HelperText>
-                </FormHelperText>
+                <p className="text-muted-foreground text-xs mt-1.5">{helperText}</p>
             )}
         </FormLabel>
     );

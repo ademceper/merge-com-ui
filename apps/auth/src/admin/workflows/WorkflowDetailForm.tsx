@@ -17,7 +17,7 @@ import {
     FormGroup,
     PageSection
 } from "../../shared/@patternfly/react-core";
-import { AlertVariant } from "../../shared/@patternfly/react-core";
+import { AlertVariant } from "../../shared/keycloak-ui-shared";
 import { Controller, FormProvider, SubmitHandler, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { Link, useNavigate } from "react-router-dom";

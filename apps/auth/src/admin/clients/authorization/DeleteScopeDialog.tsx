@@ -12,10 +12,11 @@
 // @ts-nocheck
 
 import type ScopeRepresentation from "@keycloak/keycloak-admin-client/lib/defs/scopeRepresentation";
-import { Alert, AlertVariant } from "../../../shared/@patternfly/react-core";
+import { Alert, AlertTitle, AlertDescription } from "@merge/ui/components/alert";
 import { useTranslation } from "react-i18next";
 import { useAdminClient } from "../../admin-client";
 import { useAlerts } from "../../../shared/keycloak-ui-shared";
+import { AlertVariant } from "../../../shared/keycloak-ui-shared";
 import { ConfirmDialogModal } from "../../components/confirm-dialog/ConfirmDialog";
 import type { PermissionScopeRepresentation } from "./Scopes";
 
@@ -63,20 +64,17 @@ export const DeleteScopeDialog = ({
                 "permissions" in selectedScope &&
                 selectedScope.permissions &&
                 selectedScope.permissions.length > 0 && (
-                    <Alert
-                        variant="warning"
-                        isInline
-                        isPlain
-                        title={t("deleteScopeWarning")}
-                        className="pf-v5-u-pt-lg"
-                    >
-                        <p className="pf-v5-u-pt-xs">
-                            {selectedScope.permissions.map(permission => (
-                                <strong key={permission.id} className="pf-v5-u-pr-md">
-                                    {permission.name}
-                                </strong>
-                            ))}
-                        </p>
+                    <Alert className="mt-4 border-amber-500/50 bg-amber-500/10">
+                        <AlertTitle>{t("deleteScopeWarning")}</AlertTitle>
+                        <AlertDescription>
+                            <p className="pt-1">
+                                {selectedScope.permissions.map(permission => (
+                                    <strong key={permission.id} className="pr-2">
+                                        {permission.name}
+                                    </strong>
+                                ))}
+                            </p>
+                        </AlertDescription>
                     </Alert>
                 )}
         </ConfirmDialogModal>

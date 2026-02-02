@@ -11,11 +11,7 @@
 
 // @ts-nocheck
 
-import {
-    NumberInput,
-    NumberInputProps,
-    ValidatedOptions
-} from "../../@patternfly/react-core";
+import { Input } from "@merge/ui/components/input";
 import {
     Controller,
     ControllerProps,
@@ -36,7 +32,7 @@ export type NumberControlOption = {
 export type NumberControlProps<
     T extends FieldValues,
     P extends FieldPath<T> = FieldPath<T>
-> = Omit<NumberInputProps, "name" | "isRequired" | "required"> &
+> = Omit<React.ComponentProps<typeof Input>, "name" | "required" | "type"> &
     UseControllerProps<T, P> & {
         name: string;
         label?: string;
@@ -74,6 +70,7 @@ export const NumberControl = <
                 render={({ field }) => {
                     const required = !!controller.rules?.required;
                     const min = getRuleValue(controller.rules?.min);
+                    const max = getRuleValue(controller.rules?.max);
                     const value = field.value ?? controller.defaultValue;
                     const setValue = (newValue: number) =>
                         field.onChange(
@@ -81,26 +78,23 @@ export const NumberControl = <
                         );
 
                     return (
-                        <NumberInput
+                        <Input
                             {...rest}
+                            type="number"
                             id={name}
-                            value={value}
-                            validated={
-                                errors[name]
-                                    ? ValidatedOptions.error
-                                    : ValidatedOptions.default
-                            }
+                            value={value ?? ""}
+                            aria-invalid={!!errors[name]}
                             required={required}
-                            min={Number(min)}
-                            max={Number(controller.rules?.max)}
-                            onPlus={() => setValue(value + 1)}
-                            onMinus={() => setValue(value - 1)}
-                            onChange={event => {
+                            min={min !== undefined ? Number(min) : undefined}
+                            max={max !== undefined ? Number(max) : undefined}
+                            onChange={(event) => {
                                 const newValue = Number(event.currentTarget.value);
                                 setValue(
-                                    !isNaN(newValue) ? newValue : controller.defaultValue
+                                    !Number.isNaN(newValue) ? newValue : (controller.defaultValue ?? 0)
                                 );
                             }}
+                            onBlur={field.onBlur}
+                            ref={field.ref}
                         />
                     );
                 }}

@@ -12,12 +12,14 @@
 // @ts-nocheck
 
 import { ReactElement, ReactNode, useState } from "react";
+import { Button } from "@merge/ui/components/button";
 import {
-    Button,
-    ButtonVariant,
-    Modal,
-    ModalVariant
-} from "../../../shared/@patternfly/react-core";
+    Dialog,
+    DialogContent,
+    DialogFooter,
+    DialogHeader,
+    DialogTitle,
+} from "@merge/ui/components/dialog";
 import { useTranslation } from "react-i18next";
 
 export const useConfirmDialog = (
@@ -52,8 +54,7 @@ export type ConfirmDialogProps = {
     confirmButtonDisabled?: boolean;
     cancelButtonLabel?: string;
     continueButtonLabel?: string;
-    continueButtonVariant?: ButtonVariant;
-    variant?: ModalVariant;
+    continueButtonVariant?: React.ComponentProps<typeof Button>["variant"];
     onConfirm: () => void;
     onCancel?: () => void;
     children?: ReactNode;
@@ -65,54 +66,53 @@ export const ConfirmDialogModal = ({
     noCancelButton,
     cancelButtonLabel,
     continueButtonLabel,
-    continueButtonVariant,
+    continueButtonVariant = "default",
     onConfirm,
     onCancel,
     children,
     open = true,
-    variant = ModalVariant.small,
     toggleDialog,
     confirmButtonDisabled
 }: ConfirmDialogModalProps) => {
     const { t } = useTranslation();
     return (
-        <Modal
-            title={t(titleKey)}
-            isOpen={open}
-            onClose={toggleDialog}
-            variant={variant}
-            actions={[
-                <Button
-                    id="modal-confirm"
-                    data-testid="confirm"
-                    key="confirm"
-                    isDisabled={confirmButtonDisabled}
-                    variant={continueButtonVariant || ButtonVariant.primary}
-                    onClick={() => {
-                        onConfirm();
-                        toggleDialog();
-                    }}
-                >
-                    {t(continueButtonLabel || "continue")}
-                </Button>,
-                !noCancelButton && (
+        <Dialog open={open} onOpenChange={(v) => { if (!v) toggleDialog(); }}>
+            <DialogContent showCloseButton={true}>
+                <DialogHeader>
+                    <DialogTitle>{t(titleKey)}</DialogTitle>
+                </DialogHeader>
+                <div className="py-2">
+                    {!messageKey && children}
+                    {messageKey && t(messageKey)}
+                </div>
+                <DialogFooter>
                     <Button
-                        id="modal-cancel"
-                        data-testid="cancel"
-                        key="cancel"
-                        variant={ButtonVariant.link}
+                        id="modal-confirm"
+                        data-testid="confirm"
+                        disabled={confirmButtonDisabled}
+                        variant={continueButtonVariant}
                         onClick={() => {
-                            if (onCancel) onCancel();
+                            onConfirm();
                             toggleDialog();
                         }}
                     >
-                        {t(cancelButtonLabel || "cancel")}
+                        {t(continueButtonLabel || "continue")}
                     </Button>
-                )
-            ]}
-        >
-            {!messageKey && children}
-            {messageKey && t(messageKey)}
-        </Modal>
+                    {!noCancelButton && (
+                        <Button
+                            id="modal-cancel"
+                            data-testid="cancel"
+                            variant="ghost"
+                            onClick={() => {
+                                if (onCancel) onCancel();
+                                toggleDialog();
+                            }}
+                        >
+                            {t(cancelButtonLabel || "cancel")}
+                        </Button>
+                    )}
+                </DialogFooter>
+            </DialogContent>
+        </Dialog>
     );
 };

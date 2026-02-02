@@ -12,7 +12,7 @@
 // @ts-nocheck
 
 import { useTranslation } from "react-i18next";
-import { PageSection, Tab, TabTitleText } from "../../shared/@patternfly/react-core";
+import { Tab, TabTitleText } from "../../shared/@patternfly/react-core";
 
 import { ViewHeader } from "../components/view-header/ViewHeader";
 import { useRealm } from "../context/realm-context/RealmContext";
@@ -54,7 +54,7 @@ export default function UsersSection() {
                 helpUrl={helpUrls.usersUrl}
                 divider={false}
             />
-            <PageSection data-testid="users-page" variant="light" className="pf-v5-u-p-0">
+            <div data-testid="users-page" className="bg-muted/30 p-0">
                 <RoutableTabs
                     data-testid="user-tabs"
                     defaultLocation={toUsers({
@@ -83,7 +83,7 @@ export default function UsersSection() {
                         </Tab>
                     )}
                 </RoutableTabs>
-            </PageSection>
+            </div>
         </>
     );
 }

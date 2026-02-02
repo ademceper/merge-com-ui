@@ -12,12 +12,6 @@
 // @ts-nocheck
 
 import {
-    FormHelperText,
-    HelperText,
-    HelperTextItem,
-    ValidatedOptions
-} from "../../@patternfly/react-core";
-import {
     FieldPath,
     FieldValues,
     PathValue,
@@ -32,7 +26,7 @@ export type PasswordControlProps<
     T extends FieldValues,
     P extends FieldPath<T> = FieldPath<T>
 > = UseControllerProps<T, P> &
-    Omit<PasswordInputProps, "name" | "isRequired" | "required"> & {
+    Omit<PasswordInputProps, "name" | "required"> & {
         label: string;
         labelIcon?: string;
         isDisabled?: boolean;
@@ -63,22 +57,16 @@ export const PasswordControl = <
             error={fieldState.error}
         >
             <PasswordInput
-                isRequired={required}
+                required={required}
                 id={props.name}
                 data-testid={props.name}
-                validated={
-                    fieldState.error ? ValidatedOptions.error : ValidatedOptions.default
-                }
-                isDisabled={props.isDisabled}
+                aria-invalid={!!fieldState.error}
+                disabled={props.isDisabled}
                 {...rest}
                 {...field}
             />
             {props.helperText && (
-                <FormHelperText>
-                    <HelperText>
-                        <HelperTextItem>{props.helperText}</HelperTextItem>
-                    </HelperText>
-                </FormHelperText>
+                <p className="text-muted-foreground text-xs mt-1.5">{props.helperText}</p>
             )}
         </FormLabel>
     );

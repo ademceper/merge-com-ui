@@ -14,7 +14,7 @@
 import type ComponentRepresentation from "@keycloak/keycloak-admin-client/lib/defs/componentRepresentation";
 import type UserRepresentation from "@keycloak/keycloak-admin-client/lib/defs/userRepresentation";
 import { useFetch } from "../../shared/keycloak-ui-shared";
-import { Button } from "../../shared/@patternfly/react-core";
+import { Button } from "@merge/ui/components/button";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { useAdminClient } from "../admin-client";
@@ -52,20 +52,16 @@ export const FederatedUserLink = ({ user }: FederatedUserLinkProps) => {
     if (!access.hasAccess("view-realm")) return <span>{component.name}</span>;
 
     return (
-        <Button
-            variant="link"
-            component={props => (
-                <Link
-                    {...props}
-                    to={toCustomUserFederation({
-                        id: component.id!,
-                        providerId: component.providerId!,
-                        realm
-                    })}
-                />
-            )}
-        >
-            {component.name}
+        <Button variant="link" asChild>
+            <Link
+                to={toCustomUserFederation({
+                    id: component.id!,
+                    providerId: component.providerId!,
+                    realm
+                })}
+            >
+                {component.name}
+            </Link>
         </Button>
     );
 };

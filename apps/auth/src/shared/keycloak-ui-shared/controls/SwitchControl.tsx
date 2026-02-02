@@ -19,14 +19,14 @@ import {
     PathValue,
     useFormContext
 } from "react-hook-form";
-import { SwitchProps, Switch } from "../../@patternfly/react-core";
+import { Switch } from "@merge/ui/components/switch";
 import { FormLabel } from "./FormLabel";
 import { debeerify } from "../user-profile/utils";
 
 export type SwitchControlProps<
     T extends FieldValues,
     P extends FieldPath<T> = FieldPath<T>
-> = Omit<SwitchProps, "name" | "defaultValue" | "ref"> &
+> = Omit<React.ComponentProps<typeof Switch>, "name" | "checked" | "onCheckedChange"> &
     UseControllerProps<any, P> & {
         name: string;
         label?: string;
@@ -62,19 +62,22 @@ export const SwitchControl = <
                 name={props.name}
                 defaultValue={defValue}
                 render={({ field: { onChange, value } }) => (
-                    <Switch
-                        {...props}
-                        id={props.name}
-                        data-testid={debeerify(props.name)}
-                        label={labelOn}
-                        aria-label={props.label}
-                        isChecked={stringify ? value === "true" : value}
-                        onChange={(e, checked) => {
-                            const value = stringify ? checked.toString() : checked;
-                            props.onChange?.(e, checked);
-                            onChange(value);
-                        }}
-                    />
+                    <div className="flex items-center gap-2">
+                        <Switch
+                            {...props}
+                            id={props.name}
+                            data-testid={debeerify(props.name)}
+                            aria-label={props.label}
+                            checked={stringify ? value === "true" : value}
+                            onCheckedChange={(checked) => {
+                                const value = stringify ? checked.toString() : checked;
+                                onChange(value);
+                            }}
+                        />
+                        <span className="text-sm text-muted-foreground">
+                            {stringify ? (value === "true" ? labelOn : props.labelOff) : (value ? labelOn : props.labelOff)}
+                        </span>
+                    </div>
                 )}
             />
         </FormLabel>

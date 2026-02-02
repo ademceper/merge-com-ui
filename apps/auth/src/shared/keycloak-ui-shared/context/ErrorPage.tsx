@@ -11,14 +11,15 @@
 
 // @ts-nocheck
 
+import { Button } from "@merge/ui/components/button";
 import {
-    Button,
-    Modal,
-    ModalVariant,
-    Page,
-    Text,
-    TextContent
-} from "../../@patternfly/react-core";
+    Dialog,
+    DialogContent,
+    DialogFooter,
+    DialogHeader,
+    DialogTitle,
+} from "@merge/ui/components/dialog";
+import { WarningCircle } from "@phosphor-icons/react";
 import { useTranslation } from "react-i18next";
 import { getNetworkErrorMessage } from "../utils/errors";
 
@@ -37,31 +38,29 @@ export const ErrorPage = (props: ErrorPageProps) => {
         location.href = location.origin + location.pathname;
     }
 
+    const message = errorMessage
+        ? t(errorMessage)
+        : networkErrorMessage && i18n.exists(networkErrorMessage)
+          ? t(networkErrorMessage)
+          : t("somethingWentWrongDescription");
+
     return (
-        <Page>
-            <Modal
-                variant={ModalVariant.small}
-                title={t("somethingWentWrong")}
-                titleIconVariant="danger"
-                showClose={false}
-                isOpen
-                actions={[
-                    <Button key="tryAgain" variant="primary" onClick={onRetry}>
-                        {t("tryAgain")}
-                    </Button>
-                ]}
-            >
-                <TextContent>
-                    {errorMessage ? (
-                        <Text>{t(errorMessage)}</Text>
-                    ) : networkErrorMessage && i18n.exists(networkErrorMessage) ? (
-                        <Text>{t(networkErrorMessage)}</Text>
-                    ) : (
-                        <Text>{t("somethingWentWrongDescription")}</Text>
-                    )}
-                </TextContent>
-            </Modal>
-        </Page>
+        <div className="min-h-screen flex items-center justify-center p-4 bg-muted/30">
+            <Dialog open={true}>
+                <DialogContent showCloseButton={false} className="sm:max-w-sm">
+                    <DialogHeader className="flex flex-row items-center gap-2">
+                        <WarningCircle className="size-5 text-destructive shrink-0" aria-hidden />
+                        <DialogTitle>{t("somethingWentWrong")}</DialogTitle>
+                    </DialogHeader>
+                    <p className="text-sm text-muted-foreground">{message}</p>
+                    <DialogFooter>
+                        <Button variant="default" onClick={onRetry}>
+                            {t("tryAgain")}
+                        </Button>
+                    </DialogFooter>
+                </DialogContent>
+            </Dialog>
+        </div>
     );
 };
 

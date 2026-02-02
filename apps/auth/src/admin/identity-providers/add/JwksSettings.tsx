@@ -12,7 +12,9 @@
 // @ts-nocheck
 
 import IdentityProviderRepresentation from "@keycloak/keycloak-admin-client/lib/defs/identityProviderRepresentation";
-import { AlertVariant, FormGroup, Button } from "../../../shared/@patternfly/react-core";
+import { AlertVariant } from "../../../shared/keycloak-ui-shared";
+import { Button } from "@merge/ui/components/button";
+import { Field } from "@merge/ui/components/field";
 import { useFormContext, useWatch } from "react-hook-form";
 import { DefaultSwitchControl } from "../../components/SwitchControl";
 import { useTranslation } from "react-i18next";
@@ -121,15 +123,15 @@ export const JwksSettings = ({ readOnly = false }: JwksSettingsProps) => {
                         readOnly={readOnly}
                     />
                     {!readOnly && (
-                        <FormGroup fieldId="kc-import-certificate-button">
+                        <Field className="pt-2">
                             <Button
-                                variant="secondary"
+                                variant="outline"
                                 data-testid="import-certificate-button"
                                 onClick={() => setOpenImportKeys(true)}
                             >
                                 {t("import")}
                             </Button>
-                        </FormGroup>
+                        </Field>
                     )}
                 </>
             )}

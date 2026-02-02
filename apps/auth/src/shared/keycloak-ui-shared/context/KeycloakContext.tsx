@@ -11,7 +11,7 @@
 
 // @ts-nocheck
 
-import { Spinner } from "../../@patternfly/react-core";
+import { KeycloakSpinner } from "../controls/KeycloakSpinner";
 import { Keycloak } from "oidc-spa/keycloak-js";
 import {
     PropsWithChildren,
@@ -94,7 +94,7 @@ export const KeycloakProvider = <T extends BaseEnvironment>({
     }
 
     if (!init) {
-        return <Spinner />;
+        return <KeycloakSpinner />;
     }
 
     return (

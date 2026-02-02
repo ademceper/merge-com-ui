@@ -12,7 +12,8 @@
 // @ts-nocheck
 
 import { UserProfileAttributeMetadata } from "@keycloak/keycloak-admin-client/lib/defs/userProfileMetadata";
-import { FormGroup, InputGroup } from "../../@patternfly/react-core";
+import { Field, FieldContent, FieldLabel } from "@merge/ui/components/field";
+import { InputGroup } from "@merge/ui/components/input-group";
 import { TFunction } from "i18next";
 import { get } from "lodash-es";
 import { PropsWithChildren, ReactNode } from "react";
@@ -51,31 +52,30 @@ export const UserProfileGroup = ({
     const error = get(errors, fieldName(attribute.name)) as FieldError;
 
     return (
-        <FormGroup
-            key={attribute.name}
-            label={labelAttribute(t, attribute) || ""}
-            fieldId={attribute.name}
-            isRequired={isRequiredAttribute(attribute)}
-            labelIcon={
-                helpText ? (
+        <Field key={attribute.name} className="w-full">
+            <FieldLabel htmlFor={attribute.name} className="flex items-center gap-1.5">
+                {labelAttribute(t, attribute) || ""}
+                {isRequiredAttribute(attribute) && <span className="text-destructive">*</span>}
+                {helpText && (
                     <HelpItem helpText={helpText} fieldLabelId={attribute.name!} />
-                ) : undefined
-            }
-        >
-            {component ? (
-                <InputGroup>
-                    {children}
-                    {component}
-                </InputGroup>
-            ) : (
-                children
-            )}
-            {error && (
-                <FormErrorText
-                    data-testid={`${attribute.name}-helper`}
-                    message={error.message as string}
-                />
-            )}
-        </FormGroup>
+                )}
+            </FieldLabel>
+            <FieldContent>
+                {component ? (
+                    <InputGroup>
+                        {children}
+                        {component}
+                    </InputGroup>
+                ) : (
+                    children
+                )}
+                {error?.message && (
+                    <FormErrorText
+                        data-testid={`${attribute.name}-helper`}
+                        message={error.message as string}
+                    />
+                )}
+            </FieldContent>
+        </Field>
     );
 };

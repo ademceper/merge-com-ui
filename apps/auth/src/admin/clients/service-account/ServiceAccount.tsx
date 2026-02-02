@@ -15,8 +15,8 @@ import type ClientRepresentation from "@keycloak/keycloak-admin-client/lib/defs/
 import type { RoleMappingPayload } from "@keycloak/keycloak-admin-client/lib/defs/roleRepresentation";
 import type UserRepresentation from "@keycloak/keycloak-admin-client/lib/defs/userRepresentation";
 import { useAlerts, useFetch } from "../../../shared/keycloak-ui-shared";
-import { AlertVariant, PageSection } from "../../../shared/@patternfly/react-core";
-import { InfoCircleIcon } from "../../../shared/@patternfly/react-icons";
+import { AlertVariant } from "../../../shared/keycloak-ui-shared";
+import { Info } from "@phosphor-icons/react";
 import { useState } from "react";
 import { Trans, useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
@@ -82,9 +82,9 @@ export const ServiceAccount = ({ client }: ServiceAccountProps) => {
     };
     return serviceAccount ? (
         <>
-            <PageSection className="pf-v5-u-pb-0">
-                <InfoCircleIcon className="pf-v5-c-alert__icon keycloak--service-account--info-text" />
-                <span className="pf-v5-u-pl-sm">
+            <div className="pb-0 flex items-center gap-2">
+                <Info className="size-4 shrink-0 keycloak--service-account--info-text" />
+                <span>
                     <Trans i18nKey="manageServiceAccountUser">
                         {""}
                         <Link
@@ -98,7 +98,7 @@ export const ServiceAccount = ({ client }: ServiceAccountProps) => {
                         </Link>
                     </Trans>
                 </span>
-            </PageSection>
+            </div>
             <RoleMapping
                 name={client.clientId!}
                 id={serviceAccount.id!}

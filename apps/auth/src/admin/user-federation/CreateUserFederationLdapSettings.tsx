@@ -11,7 +11,7 @@
 
 // @ts-nocheck
 
-import { AlertVariant, PageSection } from "../../shared/@patternfly/react-core";
+import { AlertVariant } from "../../shared/keycloak-ui-shared";
 import { FormProvider, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
@@ -52,11 +52,11 @@ export default function CreateUserFederationLdapSettings() {
                 noDivider
                 save={() => form.handleSubmit(onSubmit)()}
             />
-            <PageSection variant="light" className="pf-v5-u-p-0">
-                <PageSection variant="light">
+<div className="p-0">
+                    <div className="bg-muted/30 p-4">
                     <UserFederationLdapForm onSubmit={onSubmit} />
-                </PageSection>
-            </PageSection>
+                </div>
+            </div>
         </FormProvider>
     );
 }

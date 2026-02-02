@@ -11,12 +11,14 @@
 
 // @ts-nocheck
 
+import { X } from "@phosphor-icons/react";
 import {
-    AlertGroup,
     Alert,
-    AlertActionCloseButton,
-    AlertVariant
-} from "../../@patternfly/react-core";
+    AlertAction,
+    AlertDescription,
+    AlertTitle,
+} from "@merge/ui/components/alert";
+import { Button } from "@merge/ui/components/button";
 
 import type { AlertEntry } from "./Alerts";
 
@@ -27,30 +29,37 @@ export type AlertPanelProps = {
 
 export function AlertPanel({ alerts, onCloseAlert }: AlertPanelProps) {
     return (
-        <AlertGroup
+        <div
             data-testid="global-alerts"
-            isToast
+            className="fixed top-4 right-4 z-[100] flex flex-col gap-2 max-w-md"
             style={{ whiteSpace: "pre-wrap" }}
+            role="region"
+            aria-live="polite"
         >
             {alerts.map(({ id, variant, message, description }, index) => (
                 <Alert
                     key={id}
                     data-testid={index === 0 ? "last-alert" : undefined}
-                    isLiveRegion
-                    variant={AlertVariant[variant]}
-                    component="p"
-                    variantLabel=""
-                    title={message}
-                    actionClose={
-                        <AlertActionCloseButton
-                            title={message}
-                            onClose={() => onCloseAlert(id)}
-                        />
-                    }
+                    variant={variant === "danger" ? "destructive" : "default"}
                 >
-                    {description && <p>{description}</p>}
+                    <AlertTitle>{message}</AlertTitle>
+                    {description && (
+                        <AlertDescription>
+                            <p>{description}</p>
+                        </AlertDescription>
+                    )}
+                    <AlertAction>
+                        <Button
+                            variant="ghost"
+                            size="icon"
+                            aria-label="Close"
+                            onClick={() => onCloseAlert(id)}
+                        >
+                            <X size={16} />
+                        </Button>
+                    </AlertAction>
                 </Alert>
             ))}
-        </AlertGroup>
+        </div>
     );
 }

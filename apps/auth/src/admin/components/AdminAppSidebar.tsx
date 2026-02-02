@@ -1,10 +1,13 @@
 /* eslint-disable */
 // @ts-nocheck
 
+import type { KeycloakTokenParsed } from "oidc-spa/keycloak-js";
+import type { TFunction } from "i18next";
 import { label, useEnvironment } from "../../shared/keycloak-ui-shared";
 import {
     Sidebar,
     SidebarContent,
+    SidebarFooter,
     SidebarGroup,
     SidebarGroupContent,
     SidebarGroupLabel,
@@ -14,14 +17,39 @@ import {
     SidebarMenuItem
 } from "@merge/ui/components/sidebar";
 import { useTranslation } from "react-i18next";
-import { NavLink, useLocation, useNavigate } from "react-router-dom";
+import { NavLink, useLocation } from "react-router-dom";
 import { useAccess } from "../context/access/Access";
 import { useRealm } from "../context/realm-context/RealmContext";
 import { useServerInfo } from "../context/server-info/ServerInfoProvider";
 import type { Environment } from "../environment";
+import type { UserMenuInfo } from "../PageHeader";
 import { toPage } from "../page/routes";
 import { routes } from "../routes";
 import useIsFeatureEnabled, { Feature } from "../utils/useIsFeatureEnabled";
+import { AdminNavUser } from "./AdminNavUser";
+
+function loggedInUserName(token: KeycloakTokenParsed | undefined, t: TFunction) {
+    if (!token) return t("unknownUser");
+    const givenName = token.given_name;
+    const familyName = token.family_name;
+    const preferredUsername = token.preferred_username;
+    if (givenName && familyName) return t("fullName", { givenName, familyName });
+    return givenName || familyName || preferredUsername || t("unknownUser");
+}
+
+function avatarInitials(token: KeycloakTokenParsed | undefined): string {
+    if (!token) return "?";
+    const given = token.given_name?.[0] ?? "";
+    const family = token.family_name?.[0] ?? "";
+    if (given || family) return `${given}${family}`.toUpperCase();
+    const preferred = token.preferred_username?.[0];
+    return preferred ? preferred.toUpperCase() : "?";
+}
+
+function userEmailFromToken(token: KeycloakTokenParsed | undefined): string {
+    if (!token) return "";
+    return (token as { email?: string }).email ?? token.preferred_username ?? "";
+}
 
 type LeftNavProps = {
     title: string;
@@ -69,7 +97,7 @@ function LeftNav({ title, path, id }: LeftNavProps) {
 
 export function AdminAppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
     const { t } = useTranslation();
-    const { environment } = useEnvironment<Environment>();
+    const { environment, keycloak } = useEnvironment<Environment>();
     const { hasAccess, hasSomeAccess } = useAccess();
     const { componentTypes } = useServerInfo();
     const isFeatureEnabled = useIsFeatureEnabled();
@@ -96,7 +124,7 @@ export function AdminAppSidebar({ ...props }: React.ComponentProps<typeof Sideba
     const showManageRealm = environment.masterRealm === environment.realm;
 
     return (
-        <Sidebar variant="inset" collapsible="icon" {...props}>
+        <Sidebar variant="inset" collapsible="offcanvas" {...props}>
             <SidebarHeader>
                 <SidebarMenu>
                     <SidebarMenuItem>
@@ -182,6 +210,17 @@ export function AdminAppSidebar({ ...props }: React.ComponentProps<typeof Sideba
                     </SidebarGroup>
                 )}
             </SidebarContent>
+            <SidebarFooter>
+                <AdminNavUser
+                    userMenuInfo={{
+                        keycloak,
+                        userName: loggedInUserName(keycloak.idTokenParsed, t),
+                        userEmail: userEmailFromToken(keycloak.idTokenParsed),
+                        userAvatarUrl: keycloak.idTokenParsed?.picture ?? undefined,
+                        initials: avatarInitials(keycloak.idTokenParsed)
+                    }}
+                />
+            </SidebarFooter>
         </Sidebar>
     );
 }

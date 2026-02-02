@@ -12,7 +12,6 @@
 // @ts-nocheck
 
 import type UserRepresentation from "@keycloak/keycloak-admin-client/lib/defs/userRepresentation";
-import { PageSection, PageSectionVariants } from "../../shared/@patternfly/react-core";
 import { UseFormReturn, useFormContext } from "react-hook-form";
 
 import {
@@ -35,7 +34,7 @@ export const UserAttributes = ({ user, save, upConfig }: UserAttributesProps) =>
     const form = useFormContext<UserFormFields>();
 
     return (
-        <PageSection variant={PageSectionVariants.light}>
+        <div className="bg-muted/30 p-4">
             <AttributesForm
                 form={form as UseFormReturn<AttributeForm>}
                 save={save}
@@ -52,6 +51,6 @@ export const UserAttributes = ({ user, save, upConfig }: UserAttributesProps) =>
                     upConfig?.unmanagedAttributePolicy
                 }
             />
-        </PageSection>
+        </div>
     );
 };

@@ -11,7 +11,7 @@
 
 // @ts-nocheck
 
-import { AlertVariant, PageSection } from "../../shared/@patternfly/react-core";
+import { AlertVariant } from "../../shared/keycloak-ui-shared";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 import { useAdminClient } from "../admin-client";
@@ -57,7 +57,7 @@ export default function CreateClientScope() {
                 clientScope.type
             );
 
-            addAlert(t("createClientScopeSuccess", AlertVariant.success));
+            addAlert(t("createClientScopeSuccess"), AlertVariant.success);
 
             navigate(
                 toClientScope({
@@ -74,11 +74,11 @@ export default function CreateClientScope() {
     return (
         <>
             <ViewHeader titleKey="createClientScope" />
-            <PageSection variant="light" className="pf-v5-u-p-0">
-                <PageSection variant="light">
+            <div className="p-0">
+                <div className="bg-muted/30 p-4">
                     <ScopeForm save={onSubmit} />
-                </PageSection>
-            </PageSection>
+                </div>
+            </div>
         </>
     );
 }

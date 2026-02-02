@@ -11,11 +11,11 @@
 
 // @ts-nocheck
 
-import { Button, ButtonProps } from "../../@patternfly/react-core";
+import { Button } from "@merge/ui/components/button";
 import { PropsWithChildren } from "react";
 import { FieldValues, FormState } from "react-hook-form";
 
-export type FormSubmitButtonProps = Omit<ButtonProps, "isDisabled"> & {
+export type FormSubmitButtonProps = Omit<React.ComponentProps<typeof Button>, "disabled"> & {
     formState: FormState<FieldValues>;
     allowNonDirty?: boolean;
     allowInvalid?: boolean;
@@ -46,8 +46,8 @@ export const FormSubmitButton = ({
 }: PropsWithChildren<FormSubmitButtonProps>) => {
     return (
         <Button
-            variant="primary"
-            isDisabled={
+            variant="default"
+            disabled={
                 (formState && !isSubmittable(formState, allowNonDirty, allowInvalid)) ||
                 isDisabled
             }
