@@ -11,6 +11,14 @@ img.keycloak__pageheader_brand {
     height: 35px;
 }
 
+/* Header tam genişlik ve sol hizalı (PatternFly grid override) */
+.pf-v5-c-page header.pf-v5-c-page__header[data-testid="page-header"] {
+    display: flex !important;
+    width: 100% !important;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+}
+
 .keycloak__form {
     max-width: 1024px;
     padding-bottom: var(--pf-v5-global--spacer--4xl);

@@ -22,7 +22,7 @@ import {
     TabTitleText,
     TextInput
 } from "../../../shared/@patternfly/react-core";
-import { Header } from "../../PageHeader";
+import { MinimalHeader } from "../../PageHeader";
 
 type PreviewWindowProps = {
     cssVars: Record<string, string>;
@@ -37,7 +37,7 @@ export const PreviewWindow = ({ cssVars }: PreviewWindowProps) => (
             .join("\n")}
       }
     `}</style>
-        <Page className="preview" header={<Header />}>
+        <Page className="preview" header={<MinimalHeader />}>
             <PageSection
                 variant="light"
                 style={{

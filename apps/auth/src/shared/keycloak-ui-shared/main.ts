@@ -73,7 +73,6 @@ export { useRequiredContext } from "./utils/useRequiredContext";
 export { useStoredState } from "./utils/useStoredState";
 export { useSetTimeout } from "./utils/useSetTimeout";
 export { generateId } from "./utils/generateId";
-export { default as KeycloakMasthead } from "./masthead/Masthead";
 export { KeycloakSelect } from "./select/KeycloakSelect";
 export type { Variant, KeycloakSelectProps } from "./select/KeycloakSelect";
 export { KeycloakDataTable } from "./controls/table/KeycloakDataTable";

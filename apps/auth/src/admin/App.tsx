@@ -14,7 +14,7 @@
 import { SessionExpirationWarningOverlay } from "../shared/SessionExpirationWarningOverlay";
 import KeycloakAdminClient from "@keycloak/keycloak-admin-client";
 import { mainPageContentId, useEnvironment } from "../shared/keycloak-ui-shared";
-import { Flex, FlexItem, Page } from "../shared/@patternfly/react-core";
+import { SidebarInset, SidebarProvider } from "@merge/ui/components/sidebar";
 import { PropsWithChildren, Suspense, useEffect, useState } from "react";
 import { Outlet } from "react-router-dom";
 
@@ -23,9 +23,8 @@ import {
     ErrorBoundaryProvider,
     KeycloakSpinner
 } from "../shared/keycloak-ui-shared";
-import { Header } from "./PageHeader";
-import { PageNav } from "./PageNav";
 import { AdminClientContext, initAdminClient } from "./admin-client";
+import { AdminAppSidebar } from "./components/AdminAppSidebar";
 import { PageBreadCrumbs } from "./components/bread-crumb/PageBreadCrumbs";
 import { ErrorRenderer } from "./components/error/ErrorRenderer";
 import { RecentRealmsProvider } from "./context/RecentRealms";
@@ -37,6 +36,7 @@ import type { Environment } from "./environment";
 import { SubGroups } from "./groups/SubGroupsContext";
 import { AuthWall } from "./root/AuthWall";
 import { Banners } from "./Banners";
+import { AdminHeader } from "./components/AdminHeader";
 
 export const AppContexts = ({ children }: PropsWithChildren) => (
     <ErrorBoundaryProvider>
@@ -77,22 +77,14 @@ export const App = () => {
     return (
         <AdminClientContext.Provider value={{ keycloak, adminClient }}>
             <AppContexts>
-                <Flex
-                    direction={{ default: "column" }}
-                    flexWrap={{ default: "nowrap" }}
-                    spaceItems={{ default: "spaceItemsNone" }}
-                    style={{ height: "100%" }}
-                >
-                    <FlexItem>
-                        <Banners />
-                    </FlexItem>
-                    <FlexItem grow={{ default: "grow" }} style={{ minHeight: 0 }}>
-                        <Page
-                            header={<Header />}
-                            isManagedSidebar
-                            sidebar={<PageNav />}
-                            breadcrumb={<PageBreadCrumbs />}
-                            mainContainerId={mainPageContentId}
+                <Banners />
+                <SidebarProvider defaultOpen={true} className="min-h-svh">
+                    <AdminAppSidebar />
+                    <SidebarInset>
+                        <AdminHeader />
+                        <div
+                            id={mainPageContentId}
+                            className="flex flex-1 flex-col gap-4 p-4 pt-0"
                         >
                             <ErrorBoundaryFallback fallback={ErrorRenderer}>
                                 <Suspense fallback={<KeycloakSpinner />}>
@@ -101,9 +93,9 @@ export const App = () => {
                                     </AuthWall>
                                 </Suspense>
                             </ErrorBoundaryFallback>
-                        </Page>
-                    </FlexItem>
-                </Flex>
+                        </div>
+                    </SidebarInset>
+                </SidebarProvider>
                 <SessionExpirationWarningOverlay warnUserSecondsBeforeAutoLogout={45} />
             </AppContexts>
         </AdminClientContext.Provider>

@@ -1,111 +1,103 @@
+"use client";
+
+/* eslint-disable */
+// @ts-nocheck
+
 import { useTranslation } from "react-i18next";
-import { Link, useHref } from "react-router-dom";
-import { CaretDownIcon, QuestionIcon, SignOutIcon, UserIcon, ServerIcon, TrashIcon } from "@phosphor-icons/react";
-import { Button } from "@merge/ui/components/button";
+import type { KeycloakTokenParsed } from "oidc-spa/keycloak-js";
+import type { TFunction } from "i18next";
+import { Separator } from "@merge/ui/components/separator";
+import { SidebarTrigger } from "@merge/ui/components/sidebar";
+import { ThemeToggleButton } from "@merge/ui/components/theme-toggle";
+import { useEnvironment } from "../../shared/keycloak-ui-shared";
+import type { Environment } from "../environment";
+import type { UserMenuInfo } from "../PageHeader";
+import { AdminNavUser } from "./AdminNavUser";
+import { PageBreadCrumbs } from "./bread-crumb/PageBreadCrumbs";
+import { DotsThreeVertical } from "@phosphor-icons/react";
 import {
     DropdownMenu,
     DropdownMenuContent,
     DropdownMenuItem,
+    DropdownMenuLabel,
     DropdownMenuSeparator,
     DropdownMenuTrigger
 } from "@merge/ui/components/dropdown-menu";
-import { useEnvironment, useHelp } from "../../shared/keycloak-ui-shared";
-import { toDashboard } from "../dashboard/routes/Dashboard";
-import { useRealm } from "../context/realm-context/RealmContext";
-import { useAccess } from "../context/access/Access";
-import useToggle from "../utils/useToggle";
-import { PageHeaderClearCachesModal } from "../PageHeaderClearCachesModal";
-import { HelpHeader } from "./help-enabler/HelpHeader";
-import { AdminBreadcrumbs } from "./AdminBreadcrumbs";
-import { joinPath } from "../utils/joinPath";
-import { usePreviewLogo } from "../realm-settings/themes/LogoContext";
-import type { Environment } from "../environment";
-import logoSvgUrl from "../assets/logo.svg";
+
+function loggedInUserName(token: KeycloakTokenParsed | undefined, t: TFunction) {
+    if (!token) return t("unknownUser");
+    const givenName = token.given_name;
+    const familyName = token.family_name;
+    const preferredUsername = token.preferred_username;
+    if (givenName && familyName) return t("fullName", { givenName, familyName });
+    return givenName || familyName || preferredUsername || t("unknownUser");
+}
+
+function avatarInitials(token: KeycloakTokenParsed | undefined): string {
+    if (!token) return "?";
+    const given = token.given_name?.[0] ?? "";
+    const family = token.family_name?.[0] ?? "";
+    if (given || family) return `${given}${family}`.toUpperCase();
+    const preferred = token.preferred_username?.[0];
+    return preferred ? preferred.toUpperCase() : "?";
+}
+
+function userEmailFromToken(token: KeycloakTokenParsed | undefined): string {
+    if (!token) return "";
+    return (token as { email?: string }).email ?? token.preferred_username ?? "";
+}
 
 export function AdminHeader() {
     const { t } = useTranslation();
-    const { environment, keycloak } = useEnvironment<Environment>();
-    const { realm } = useRealm();
-    const { hasAccess } = useAccess();
-    const { enabled, toggleHelp } = useHelp();
-    const [clearCachesOpen, toggleClearCaches] = useToggle();
-    const contextLogo = usePreviewLogo();
-    const customLogo = contextLogo?.logo;
-    const isMasterRealm = realm === "master";
-    const isManager = hasAccess("manage-realm");
-    const url = useHref(toDashboard({ realm }));
-    const logoSrc = customLogo
-        ? customLogo.startsWith("/")
-            ? joinPath(environment["resourceUrl"], customLogo)
-            : customLogo
-        : logoSvgUrl;
+    const { keycloak } = useEnvironment<Environment>();
+    const picture = keycloak.idTokenParsed?.picture;
+    const userMenuInfo: UserMenuInfo = {
+        keycloak,
+        userName: loggedInUserName(keycloak.idTokenParsed, t),
+        userEmail: userEmailFromToken(keycloak.idTokenParsed),
+        userAvatarUrl: picture ?? undefined,
+        initials: avatarInitials(keycloak.idTokenParsed)
+    };
 
     return (
-        <header className="sticky top-0 z-40 border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-            <div className="container flex h-14 items-center gap-4 px-4 md:px-6">
-                <Link to={url} className="flex items-center gap-2 shrink-0">
-                    <img
-                        src={logoSrc}
-                        alt={t("brandName")}
-                        className="h-8 w-auto object-contain"
-                    />
-                    <span className="font-semibold hidden sm:inline-block">
-                        {t("brandName")}
-                    </span>
-                </Link>
-                <div className="flex-1 min-w-0 flex items-center gap-4">
-                    <AdminBreadcrumbs />
+        <header className="flex h-16 shrink-0 items-center gap-2 border-b bg-background">
+            <div className="flex items-center gap-2 px-4">
+                <SidebarTrigger className="-ml-1" />
+                <Separator
+                    orientation="vertical"
+                    className="mr-2 h-4 data-[orientation=vertical]:h-4"
+                />
+                <PageBreadCrumbs />
+            </div>
+            <div className="flex-1 min-w-0" />
+            <div className="flex items-center gap-2 overflow-visible px-4">
+                <div className="hidden md:flex items-center gap-2 overflow-visible">
+                    <AdminNavUser userMenuInfo={userMenuInfo} />
+                    <ThemeToggleButton />
                 </div>
-                <div className="flex items-center gap-2">
-                    <HelpHeader />
-                    <DropdownMenu>
-                        <DropdownMenuTrigger asChild>
-                            <Button variant="ghost" size="sm" className="gap-2">
-                                <UserIcon className="size-4" />
-                                <span className="hidden sm:inline">{t("manageAccount")}</span>
-                                <CaretDownIcon className="size-4" />
-                            </Button>
+                <div className="md:hidden overflow-visible">
+                    <DropdownMenu modal={false}>
+                        <DropdownMenuTrigger
+                            data-testid="options-kebab-toggle"
+                            className="rounded p-1 border-0 bg-transparent cursor-pointer inline-flex text-foreground hover:bg-muted"
+                        >
+                            <DotsThreeVertical className="size-5" weight="bold" />
                         </DropdownMenuTrigger>
-                        <DropdownMenuContent align="end" className="w-56">
-                            <DropdownMenuItem
-                                id="manage-account"
-                                onClick={() => keycloak.accountManagement()}
-                            >
-                                <UserIcon className="size-4 mr-2" />
+                        <DropdownMenuContent className="min-w-52 z-[9999]" align="end" sideOffset={4}>
+                            <DropdownMenuLabel className="font-normal text-muted-foreground">
+                                {loggedInUserName(keycloak.idTokenParsed, t)}
+                            </DropdownMenuLabel>
+                            <DropdownMenuSeparator />
+                            <DropdownMenuItem onClick={() => keycloak.accountManagement()}>
                                 {t("manageAccount")}
                             </DropdownMenuItem>
-                            <DropdownMenuItem asChild>
-                                <Link to={toDashboard({ realm })}>
-                                    <ServerIcon className="size-4 mr-2" />
-                                    {t("realmInfo")}
-                                </Link>
-                            </DropdownMenuItem>
-                            {isMasterRealm && isManager && (
-                                <DropdownMenuItem onClick={() => toggleClearCaches()}>
-                                    <TrashIcon className="size-4 mr-2" />
-                                    {t("clearCachesTitle")}
-                                </DropdownMenuItem>
-                            )}
-                            <DropdownMenuSeparator />
-                            <DropdownMenuItem onClick={() => toggleHelp()}>
-                                <QuestionIcon className="size-4 mr-2" />
-                                {enabled ? t("helpEnabled") : t("helpDisabled")}
-                            </DropdownMenuItem>
-                            <DropdownMenuSeparator />
-                            <DropdownMenuItem
-                                onClick={() => keycloak.logout()}
-                                className="text-destructive focus:text-destructive"
-                            >
-                                <SignOutIcon className="size-4 mr-2" />
+                            <DropdownMenuItem onClick={() => keycloak.logout()} variant="destructive">
                                 {t("signOut")}
                             </DropdownMenuItem>
                         </DropdownMenuContent>
                     </DropdownMenu>
                 </div>
             </div>
-            {clearCachesOpen && (
-                <PageHeaderClearCachesModal onClose={() => toggleClearCaches()} />
-            )}
         </header>
     );
 }

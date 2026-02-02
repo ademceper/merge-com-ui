@@ -11,9 +11,16 @@
 
 // @ts-nocheck
 
-import { Breadcrumb, BreadcrumbItem } from "../../../shared/@patternfly/react-core";
+import {
+    Breadcrumb,
+    BreadcrumbItem,
+    BreadcrumbLink,
+    BreadcrumbList,
+    BreadcrumbPage,
+    BreadcrumbSeparator
+} from "@merge/ui/components/breadcrumb";
 import { uniqBy } from "lodash-es";
-import { isValidElement } from "react";
+import React, { isValidElement } from "react";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 import useBreadcrumbs, {
@@ -30,7 +37,7 @@ export const PageBreadCrumbs = () => {
     const elementText = (crumb: BreadcrumbData) =>
         isValidElement(crumb.breadcrumb) && crumb.breadcrumb.props.children;
 
-    const routesWithCrumbs: BreadcrumbsRoute[] = routes.map(route => ({
+    const routesWithCrumbs: BreadcrumbsRoute[] = routes.map((route) => ({
         ...route,
         breadcrumb: route.breadcrumb?.(t)
     }));
@@ -42,17 +49,25 @@ export const PageBreadCrumbs = () => {
         }),
         elementText
     );
-    return crumbs.length > 1 ? (
+    if (crumbs.length <= 1) return null;
+    return (
         <Breadcrumb>
-            {crumbs.map(({ match, breadcrumb: crumb }, i) => (
-                <BreadcrumbItem key={i} isActive={crumbs.length - 1 === i}>
-                    {crumbs.length - 1 !== i ? (
-                        <Link to={match.pathname}>{crumb}</Link>
-                    ) : (
-                        crumb
-                    )}
-                </BreadcrumbItem>
-            ))}
+            <BreadcrumbList>
+                {crumbs.map(({ match, breadcrumb: crumb }, i) => (
+                    <React.Fragment key={i}>
+                        <BreadcrumbItem>
+                            {crumbs.length - 1 !== i ? (
+                                <BreadcrumbLink asChild>
+                                    <Link to={match.pathname}>{crumb}</Link>
+                                </BreadcrumbLink>
+                            ) : (
+                                <BreadcrumbPage>{crumb}</BreadcrumbPage>
+                            )}
+                        </BreadcrumbItem>
+                        {i < crumbs.length - 1 && <BreadcrumbSeparator />}
+                    </React.Fragment>
+                ))}
+            </BreadcrumbList>
         </Breadcrumb>
-    ) : null;
+    );
 };
