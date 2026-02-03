@@ -35,6 +35,7 @@ import { arrayToKeyValue } from "../components/key-value-form/key-value-convert"
 import { useConfirmDialog } from "../components/confirm-dialog/ConfirmDialog";
 import { FormAccess } from "../components/form/FormAccess";
 import { ViewHeader } from "../components/view-header/ViewHeader";
+import helpUrls from "../help-urls";
 import { useRealm } from "../context/realm-context/RealmContext";
 import {
     OrganizationForm,
@@ -182,6 +183,7 @@ export default function OrganizationSection() {
             <ViewHeader
                 titleKey="organizationsList"
                 subKey="organizationsExplain"
+                helpUrl={helpUrls.organizationsUrl}
                 divider
             />
             <div className="py-6 px-0">

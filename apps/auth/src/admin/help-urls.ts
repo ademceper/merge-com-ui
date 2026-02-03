@@ -27,6 +27,7 @@ export default {
     realmSettingsUrl: `${adminGuide}#configuring-realms`,
     authenticationUrl: `${adminGuide}#configuring-authentication`,
     identityProvidersUrl: `${adminGuide}#_identity_broker`,
+    organizationsUrl: `${adminGuide}#organizations`,
     userFederationUrl: `${adminGuide}#_user-storage-federation`,
     documentation: `${keycloakHomepageURL}/documentation`,
     guides: `${keycloakHomepageURL}/guides`,

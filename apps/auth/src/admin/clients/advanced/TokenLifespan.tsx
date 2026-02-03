@@ -30,6 +30,9 @@ type TokenLifespanProps = {
 const inherited = "tokenLifespan.inherited";
 const expires = "tokenLifespan.expires";
 
+/** Select.Item cannot use value=""; reserved for clearing selection. */
+const INHERITED_VALUE = "__inherited__";
+
 export const TokenLifespan = ({ id, name, defaultValue, units }: TokenLifespanProps) => {
     const { t } = useTranslation();
     const [open, setOpen] = useState(false);
@@ -58,9 +61,9 @@ export const TokenLifespan = ({ id, name, defaultValue, units }: TokenLifespanPr
                     <div className="flex gap-4">
                         <div>
                             <Select
-                                value={isExpireSet(field.value) ? "60" : ""}
+                                value={isExpireSet(field.value) ? "60" : INHERITED_VALUE}
                                 onValueChange={(value) => {
-                                    field.onChange(value === "" ? "" : 60);
+                                    field.onChange(value === INHERITED_VALUE ? "" : 60);
                                 }}
                             >
                                 <SelectTrigger className="w-[180px]">
@@ -71,7 +74,7 @@ export const TokenLifespan = ({ id, name, defaultValue, units }: TokenLifespanPr
                                     </SelectValue>
                                 </SelectTrigger>
                                 <SelectContent>
-                                    <SelectItem value="">{t(inherited)}</SelectItem>
+                                    <SelectItem value={INHERITED_VALUE}>{t(inherited)}</SelectItem>
                                     <SelectItem value="60">{t(expires)}</SelectItem>
                                 </SelectContent>
                             </Select>

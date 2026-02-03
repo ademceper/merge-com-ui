@@ -455,8 +455,8 @@ export function DataTable<TData>({
         </div>
       </div>
 
-      <div className="rounded-md border bg-background">
-        <Table className="table-fixed">
+      <div className="overflow-x-auto rounded-md border bg-background [-webkit-overflow-scrolling:touch]">
+        <Table className="table-fixed min-w-full">
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow

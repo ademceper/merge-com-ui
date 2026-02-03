@@ -25,6 +25,12 @@ import { getRuleValue } from "../../utils/getRuleValue";
 import { FormLabel } from "../FormLabel";
 import { SelectControlProps, isSelectBasedOptions, isString, key } from "./SelectControl";
 
+/** Select.Item cannot use value=""; Radix reserves it for clearing. Map "" to this in UI only. */
+const EMPTY_OPTION_VALUE = "__empty__";
+
+const toSelectValue = (k: string) => (k === "" ? EMPTY_OPTION_VALUE : k);
+const toFormValue = (v: string) => (v === EMPTY_OPTION_VALUE ? "" : v);
+
 export const SingleSelectControl = <
     T extends FieldValues,
     P extends FieldPath<T> = FieldPath<T>
@@ -68,14 +74,17 @@ export const SingleSelectControl = <
                     const displayValue = isSelectBasedOptions(allOptions)
                         ? allOptions.find(o => o.key === strValue)?.value ?? ""
                         : (strValue ?? "");
+                    const rawFormValue = strValue ?? "";
+                    const selectValue = toSelectValue(rawFormValue);
                     return (
                         <Select
                             {...rest}
                             open={open}
                             onOpenChange={setOpen}
-                            value={strValue ?? ""}
+                            value={selectValue}
                             onValueChange={v => {
-                                const convertedValue = Array.isArray(value) ? [v] : v;
+                                const formVal = toFormValue(v);
+                                const convertedValue = Array.isArray(value) ? [formVal] : formVal;
                                 if (onSelect) {
                                     onSelect(convertedValue, onChange);
                                 } else {
@@ -96,11 +105,14 @@ export const SingleSelectControl = <
                                 </SelectValue>
                             </SelectTrigger>
                             <SelectContent data-testid={`select-${name}`}>
-                                {allOptions.map(option => (
-                                    <SelectItem key={key(option)} value={key(option)}>
-                                        {isString(option) ? option : option.value}
-                                    </SelectItem>
-                                ))}
+                                {allOptions.map(option => {
+                                    const optKey = key(option);
+                                    return (
+                                        <SelectItem key={optKey} value={toSelectValue(optKey)}>
+                                            {isString(option) ? option : option.value}
+                                        </SelectItem>
+                                    );
+                                })}
                             </SelectContent>
                         </Select>
                     );

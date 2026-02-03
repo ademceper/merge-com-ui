@@ -23,7 +23,7 @@ import { Separator } from "@merge/ui/components/separator";
 import { Switch } from "@merge/ui/components/switch";
 import { ReactElement, ReactNode, useState, isValidElement, Fragment } from "react";
 import { useTranslation } from "react-i18next";
-import { FormattedLink } from "../external-link/FormattedLink";
+import { Link } from "@merge/ui/components/link";
 import { useHelp, HelpItem } from "../../../shared/keycloak-ui-shared";
 import "../../help-urls";
 
@@ -162,12 +162,15 @@ export const ViewHeader = ({
                               ? t(subKey as string)
                               : ""}
                         {helpUrl && (
-                            <FormattedLink
-                                title={t("learnMore")}
+                            <Link
                                 href={helpUrl}
-                                isInline
+                                target="_blank"
+                                rel="noreferrer noopener"
+                                externalIcon={false}
                                 className="ml-4"
-                            />
+                            >
+                                {t("learnMore")}
+                            </Link>
                         )}
                     </p>
                 )}

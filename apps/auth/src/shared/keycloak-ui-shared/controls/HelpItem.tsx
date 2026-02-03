@@ -13,10 +13,10 @@
 
 import { Question } from "@phosphor-icons/react";
 import {
-    Popover,
-    PopoverContent,
-    PopoverTrigger,
-} from "@merge/ui/components/popover";
+    Tooltip,
+    TooltipContent,
+    TooltipTrigger,
+} from "@merge/ui/components/tooltip";
 import { ReactNode } from "react";
 import { useHelp } from "../context/HelpContext";
 
@@ -37,25 +37,24 @@ export const HelpItem = ({
     if (!enabled) return null;
     const icon = <Question size={14} className={noVerticalAlign ? "inline-block align-middle" : ""} />;
     return (
-        <Popover>
+        <Tooltip>
             {!unWrap ? (
-                <PopoverTrigger asChild>
+                <TooltipTrigger asChild>
                     <button
                         type="button"
                         data-testid={`help-label-${fieldLabelId}`}
                         aria-label={fieldLabelId}
-                        onClick={(e) => e.preventDefault()}
                         className="text-muted-foreground hover:text-foreground rounded p-0.5 outline-none focus-visible:ring-2 focus-visible:ring-ring"
                     >
                         {icon}
                     </button>
-                </PopoverTrigger>
+                </TooltipTrigger>
             ) : (
                 <span>{icon}</span>
             )}
-            <PopoverContent className="max-w-sm p-3 text-sm" side="top">
+            <TooltipContent className="z-[100] max-w-sm p-3 text-sm" side="top">
                 {helpText}
-            </PopoverContent>
-        </Popover>
+            </TooltipContent>
+        </Tooltip>
     );
 };
