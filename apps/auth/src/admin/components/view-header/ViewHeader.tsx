@@ -87,7 +87,7 @@ export const ViewHeader = ({
 
     return (
         <>
-            <div className="p-4">
+            <div className="px-0 pt-4 pb-4">
                 <div className="flex flex-wrap items-center justify-between gap-4">
                     <div className="flex flex-wrap items-center gap-2">
                         <h1

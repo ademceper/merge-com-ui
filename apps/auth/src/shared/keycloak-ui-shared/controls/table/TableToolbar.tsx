@@ -3,7 +3,7 @@
  *
  * $ npx keycloakify own --path "shared/keycloak-ui-shared/controls/table/TableToolbar.tsx"
  *
- * This file is provided by @keycloakify/keycloak-ui-shared version 260502.0.0.
+ * This file is provided by @keycloakify/keycloak-admin-ui version 260502.0.0.
  * It was copied into your repository by the postinstall script: `keycloakify sync-extensions`.
  */
 
@@ -11,16 +11,11 @@
 
 // @ts-nocheck
 
-import {
-    Divider,
-    InputGroup,
-    SearchInput,
-    Toolbar,
-    ToolbarContent,
-    ToolbarItem
-} from "../../../@patternfly/react-core";
+import { Input } from "@merge/ui/components/input";
+import { Separator } from "@merge/ui/components/separator";
 import { KeyboardEvent, PropsWithChildren, ReactNode, useState } from "react";
 import { useTranslation } from "react-i18next";
+import { MagnifyingGlass, X } from "@phosphor-icons/react";
 
 type TableToolbarProps = {
     toolbarItem?: ReactNode;
@@ -58,40 +53,50 @@ export const TableToolbar = ({
 
     return (
         <>
-            <Toolbar data-testid="table-toolbar">
-                <ToolbarContent>
-                    {inputGroupName && (
-                        <ToolbarItem>
-                            <InputGroup data-testid={inputGroupName}>
-                                {searchTypeComponent}
-                                {inputGroupPlaceholder && (
-                                    <SearchInput
-                                        data-testid="table-search-input"
-                                        placeholder={inputGroupPlaceholder}
-                                        aria-label={t("search")}
-                                        value={searchValue}
-                                        onChange={(_, value) => {
-                                            setSearchValue(value);
-                                        }}
-                                        onSearch={() => onSearch(searchValue)}
-                                        onKeyDown={handleKeyDown}
-                                        onClear={() => onSearch("")}
-                                    />
+            <div data-testid="table-toolbar" className="flex flex-wrap items-center gap-2">
+                {inputGroupName && (
+                    <div data-testid={inputGroupName} className="flex flex-1 min-w-0 items-center gap-1 rounded-lg border border-input bg-transparent px-2">
+                        {searchTypeComponent}
+                        {inputGroupPlaceholder && (
+                            <>
+                                <MagnifyingGlass className="text-muted-foreground size-4 shrink-0" />
+                                <Input
+                                    data-testid="table-search-input"
+                                    placeholder={inputGroupPlaceholder}
+                                    aria-label={t("search")}
+                                    value={searchValue}
+                                    onChange={e => setSearchValue(e.target.value)}
+                                    onKeyDown={handleKeyDown}
+                                    className="border-0 bg-transparent shadow-none focus-visible:ring-0"
+                                />
+                                {searchValue && (
+                                    <button
+                                        type="button"
+                                        onClick={() => onSearch("")}
+                                        className="text-muted-foreground hover:text-foreground shrink-0 rounded p-0.5"
+                                        aria-label={t("clear")}
+                                    >
+                                        <X className="size-4" />
+                                    </button>
                                 )}
-                            </InputGroup>
-                        </ToolbarItem>
-                    )}
-                    {toolbarItem}
-                </ToolbarContent>
-            </Toolbar>
+                            </>
+                        )}
+                    </div>
+                )}
+                {toolbarItem}
+            </div>
             {subToolbar && (
-                <Toolbar>
-                    <ToolbarContent>{subToolbar}</ToolbarContent>
-                </Toolbar>
+                <div className="flex flex-wrap items-center gap-2">
+                    {subToolbar}
+                </div>
             )}
-            <Divider />
+            <Separator />
             {children}
-            <Toolbar>{toolbarItemFooter}</Toolbar>
+            {toolbarItemFooter && (
+                <div className="flex flex-wrap items-center gap-2">
+                    {toolbarItemFooter}
+                </div>
+            )}
         </>
     );
 };

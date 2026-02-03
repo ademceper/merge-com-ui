@@ -1,13 +1,10 @@
 /* eslint-disable */
 // @ts-nocheck
 
-import type { KeycloakTokenParsed } from "oidc-spa/keycloak-js";
-import type { TFunction } from "i18next";
 import { label, useEnvironment } from "../../shared/keycloak-ui-shared";
 import {
     Sidebar,
     SidebarContent,
-    SidebarFooter,
     SidebarGroup,
     SidebarGroupContent,
     SidebarGroupLabel,
@@ -34,31 +31,9 @@ import type { UserMenuInfo } from "./AdminHeader";
 import { toPage } from "../page/routes";
 import { routes } from "../routes";
 import useIsFeatureEnabled, { Feature } from "../utils/useIsFeatureEnabled";
-import { AdminNavUser } from "./AdminNavUser";
 import { CaretRightIcon } from "@phosphor-icons/react";
 
-function loggedInUserName(token: KeycloakTokenParsed | undefined, t: TFunction) {
-    if (!token) return t("unknownUser");
-    const givenName = token.given_name;
-    const familyName = token.family_name;
-    const preferredUsername = token.preferred_username;
-    if (givenName && familyName) return t("fullName", { givenName, familyName });
-    return givenName || familyName || preferredUsername || t("unknownUser");
-}
-
-function avatarInitials(token: KeycloakTokenParsed | undefined): string {
-    if (!token) return "?";
-    const given = token.given_name?.[0] ?? "";
-    const family = token.family_name?.[0] ?? "";
-    if (given || family) return `${given}${family}`.toUpperCase();
-    const preferred = token.preferred_username?.[0];
-    return preferred ? preferred.toUpperCase() : "?";
-}
-
-function userEmailFromToken(token: KeycloakTokenParsed | undefined): string {
-    if (!token) return "";
-    return (token as { email?: string }).email ?? token.preferred_username ?? "";
-}
+const baseUrl = import.meta.env.BASE_URL;
 
 type LeftNavProps = {
     title: string;
@@ -152,14 +127,26 @@ export function AdminAppSidebar({ ...props }: React.ComponentProps<typeof Sideba
     return (
         <Sidebar variant="inset" collapsible="offcanvas" {...props}>
             <SidebarHeader>
+                <div className="flex w-full items-center justify-start px-2 pb-2 group-data-[collapsible=icon]:hidden">
+                    <img
+                        src={`${baseUrl}merge-black-text.svg`}
+                        alt="Merge"
+                        className="h-8 w-auto max-w-full object-contain object-left dark:hidden"
+                    />
+                    <img
+                        src={`${baseUrl}merge-white-text.svg`}
+                        alt="Merge"
+                        className="hidden h-8 w-auto max-w-full object-contain object-left dark:block"
+                    />
+                </div>
                 <SidebarMenu>
                     <SidebarMenuItem>
                         <SidebarMenuButton size="lg" asChild>
-                            <a href={environment.logoUrl || "#"}>
-                                <div className="bg-sidebar-primary text-sidebar-primary-foreground flex aspect-square size-8 items-center justify-center rounded-lg font-semibold">
+                            <a href={environment.logoUrl || "#"} className="flex items-center gap-2">
+                                <div className="bg-sidebar-primary text-sidebar-primary-foreground flex aspect-square size-8 shrink-0 items-center justify-center rounded-lg font-semibold">
                                     {realm?.slice(0, 2).toUpperCase() ?? "KC"}
                                 </div>
-                                <div className="grid flex-1 text-left text-sm leading-tight">
+                                <div className="grid flex-1 text-left text-sm leading-tight min-w-0">
                                     <span className="truncate font-medium">
                                         {label(t, realmRepresentation?.displayName, realm)}
                                     </span>
@@ -560,17 +547,6 @@ export function AdminAppSidebar({ ...props }: React.ComponentProps<typeof Sideba
                     </SidebarGroup>
                 )}
             </SidebarContent>
-            <SidebarFooter>
-                <AdminNavUser
-                    userMenuInfo={{
-                        keycloak,
-                        userName: loggedInUserName(keycloak.idTokenParsed, t),
-                        userEmail: userEmailFromToken(keycloak.idTokenParsed),
-                        userAvatarUrl: keycloak.idTokenParsed?.picture ?? undefined,
-                        initials: avatarInitials(keycloak.idTokenParsed)
-                    }}
-                />
-            </SidebarFooter>
         </Sidebar>
     );
 }

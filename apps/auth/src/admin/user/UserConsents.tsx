@@ -15,7 +15,7 @@ import type UserConsentRepresentation from "@keycloak/keycloak-admin-client/lib/
 import { AlertVariant } from "../../shared/keycloak-ui-shared";
 import { Badge } from "@merge/ui/components/badge";
 import { Cube } from "@phosphor-icons/react";
-import { cellWidth } from "../../shared/@patternfly/react-table";
+import { cellWidth } from "../../shared/keycloak-ui-shared";
 import { sortBy } from "lodash-es";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";

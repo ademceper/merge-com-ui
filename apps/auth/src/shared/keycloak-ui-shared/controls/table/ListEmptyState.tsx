@@ -3,7 +3,7 @@
  *
  * $ npx keycloakify own --path "shared/keycloak-ui-shared/controls/table/ListEmptyState.tsx"
  *
- * This file is provided by @keycloakify/keycloak-ui-shared version 260502.0.0.
+ * This file is provided by @keycloakify/keycloak-admin-ui version 260502.0.0.
  * It was copied into your repository by the postinstall script: `keycloakify sync-extensions`.
  */
 
@@ -11,23 +11,21 @@
 
 // @ts-nocheck
 
-import { ComponentClass, MouseEventHandler, PropsWithChildren, ReactNode } from "react";
+import { MouseEventHandler, PropsWithChildren, ReactNode } from "react";
 import {
-    EmptyState,
-    EmptyStateIcon,
-    EmptyStateBody,
-    Button,
-    ButtonVariant,
-    EmptyStateActions,
-    EmptyStateHeader,
-    EmptyStateFooter
-} from "../../../@patternfly/react-core";
-import type { SVGIconProps } from "@patternfly/react-icons/dist/js/createIcon";
+    Empty,
+    EmptyContent,
+    EmptyDescription,
+    EmptyHeader,
+    EmptyMedia,
+    EmptyTitle
+} from "@merge/ui/components/empty";
+import { Button } from "@merge/ui/components/button";
 import { MagnifyingGlass, PlusCircle } from "@phosphor-icons/react";
 
 export type Action = {
     text: string;
-    type?: ButtonVariant;
+    type?: "default" | "destructive" | "outline" | "secondary" | "ghost" | "link";
     onClick: MouseEventHandler<HTMLButtonElement>;
 };
 
@@ -37,7 +35,7 @@ export type ListEmptyStateProps = {
     primaryActionText?: string;
     onPrimaryAction?: MouseEventHandler<HTMLButtonElement>;
     hasIcon?: boolean;
-    icon?: ComponentClass<SVGIconProps>;
+    icon?: React.ComponentType<{ className?: string }>;
     isSearchVariant?: boolean;
     secondaryActions?: Action[];
     isDisabled?: boolean;
@@ -51,51 +49,51 @@ export const ListEmptyState = ({
     isSearchVariant,
     primaryActionText,
     secondaryActions,
-    icon,
+    icon: Icon,
     isDisabled = false,
     children
 }: PropsWithChildren<ListEmptyStateProps>) => {
+    const IconComponent = isSearchVariant ? MagnifyingGlass : (Icon || PlusCircle);
+
     return (
-        <EmptyState data-testid="empty-state" variant="lg">
-            {hasIcon && isSearchVariant ? (
-                <EmptyStateIcon icon={MagnifyingGlass as unknown as ComponentClass<SVGIconProps>} />
-            ) : (
-                hasIcon && <EmptyStateIcon icon={(icon as ComponentClass<SVGIconProps>) || (PlusCircle as unknown as ComponentClass<SVGIconProps>)} />
-            )}
-            <EmptyStateHeader titleText={message} headingLevel="h1" />
-            <EmptyStateBody>{instructions}</EmptyStateBody>
-            <EmptyStateFooter>
+        <Empty data-testid="empty-state" className="py-12">
+            <EmptyHeader>
+                {hasIcon && (
+                    <EmptyMedia variant="icon">
+                        <IconComponent className="size-4" />
+                    </EmptyMedia>
+                )}
+                <EmptyTitle className="text-base font-medium">{message}</EmptyTitle>
+            </EmptyHeader>
+            <EmptyContent>
+                <EmptyDescription>{instructions}</EmptyDescription>
                 {primaryActionText && (
                     <Button
-                        data-testid={`${message
-                            .replace(/\W+/g, "-")
-                            .toLowerCase()}-empty-action`}
-                        variant="primary"
+                        data-testid={`${message.replace(/\W+/g, "-").toLowerCase()}-empty-action`}
+                        variant="default"
                         onClick={onPrimaryAction}
-                        isDisabled={isDisabled}
+                        disabled={isDisabled}
                     >
                         {primaryActionText}
                     </Button>
                 )}
                 {children}
                 {secondaryActions && (
-                    <EmptyStateActions>
+                    <div className="flex flex-wrap justify-center gap-2">
                         {secondaryActions.map(action => (
                             <Button
                                 key={action.text}
-                                data-testid={`${action.text
-                                    .replace(/\W+/g, "-")
-                                    .toLowerCase()}-empty-action`}
-                                variant={action.type || ButtonVariant.secondary}
+                                data-testid={`${action.text.replace(/\W+/g, "-").toLowerCase()}-empty-action`}
+                                variant={action.type || "secondary"}
                                 onClick={action.onClick}
-                                isDisabled={isDisabled}
+                                disabled={isDisabled}
                             >
                                 {action.text}
                             </Button>
                         ))}
-                    </EmptyStateActions>
+                    </div>
                 )}
-            </EmptyStateFooter>
-        </EmptyState>
+            </EmptyContent>
+        </Empty>
     );
 };

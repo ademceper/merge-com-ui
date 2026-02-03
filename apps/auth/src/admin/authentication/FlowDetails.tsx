@@ -492,7 +492,7 @@ export default function FlowDetails() {
                                 )}
                             </>
                         )}
-                        <div className="pf-v5-screen-reader" aria-live="assertive">
+                        <div className="sr-only" aria-live="assertive">
                             {liveText}
                         </div>
                     </>

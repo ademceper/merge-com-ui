@@ -62,7 +62,7 @@ export const Header = () => {
         ? customLogo.startsWith("/")
             ? joinPath(environment["resourceUrl"], customLogo)
             : customLogo
-        : `${baseUrl}merge-black-text.svg`;
+        : null;
 
     return (
         <header
@@ -80,11 +80,26 @@ export const Header = () => {
                                     navigate(dashboardHref);
                                 }}
                             >
-                                <img
-                                    src={logoSrc}
-                                    alt={t("logo")}
-                                    className="h-11 w-auto max-w-52 object-contain"
-                                />
+                                {logoSrc ? (
+                                    <img
+                                        src={logoSrc}
+                                        alt={t("logo")}
+                                        className="h-11 w-auto max-w-52 object-contain"
+                                    />
+                                ) : (
+                                    <>
+                                        <img
+                                            src={`${baseUrl}merge-black-text.svg`}
+                                            alt={t("logo")}
+                                            className="h-11 w-auto max-w-52 object-contain dark:hidden"
+                                        />
+                                        <img
+                                            src={`${baseUrl}merge-white-text.svg`}
+                                            alt={t("logo")}
+                                            className="hidden h-11 w-auto max-w-52 object-contain dark:block"
+                                        />
+                                    </>
+                                )}
                             </a>
                         </div>
                         <div className="flex flex-row items-center justify-between gap-4">

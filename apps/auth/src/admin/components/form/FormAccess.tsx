@@ -12,7 +12,10 @@
 // @ts-nocheck
 
 import type { AccessType } from "@keycloak/keycloak-admin-client/lib/defs/whoAmIRepresentation";
-import type { FormProps } from "../../../shared/@patternfly/react-core";
+import type { ComponentProps } from "react";
+
+/** Form element props (replaces PatternFly FormProps). */
+type FormProps = ComponentProps<"form">;
 import {
     Children,
     cloneElement,

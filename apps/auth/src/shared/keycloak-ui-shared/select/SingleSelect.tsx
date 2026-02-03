@@ -8,10 +8,28 @@ import {
     SelectTrigger,
     SelectValue,
 } from "@merge/ui/components/select";
-import { Children, useState } from "react";
+import { Children, isValidElement, useState, type ReactNode } from "react";
 import type { KeycloakSelectProps } from "./KeycloakSelect";
 
 type SingleSelectProps = Omit<KeycloakSelectProps, "variant">;
+
+/** Recursively collect items with value prop (SelectItem or legacy SelectOption). */
+function collectSelectItems(nodes: ReactNode): Array<{ value: unknown; children: ReactNode; key?: React.Key }> {
+    const out: Array<{ value: unknown; children: ReactNode; key?: React.Key }> = [];
+    Children.forEach(nodes, (child) => {
+        if (!isValidElement<{ value?: unknown; children?: ReactNode }>(child)) return;
+        if (child.props?.value !== undefined && child.props?.value !== null) {
+            out.push({
+                value: child.props.value,
+                children: child.props.children,
+                key: child.key,
+            });
+        } else if (child.props?.children != null) {
+            out.push(...collectSelectItems(child.props.children));
+        }
+    });
+    return out;
+}
 
 export const SingleSelect = ({
     toggleId,
@@ -32,15 +50,12 @@ export const SingleSelect = ({
         onToggle(v);
     };
 
-    const childArray = Children.toArray(children) as React.ReactElement[];
+    const items = collectSelectItems(children);
     const valueToStr = (v: unknown) =>
         v == null ? "" : typeof v === "object" ? (v as { id?: string })?.id ?? JSON.stringify(v) : String(v);
     const value = selections != null ? valueToStr(selections) : "";
     const valueMap = new Map<string, unknown>();
-    childArray.forEach((child) => {
-        const val = child.props?.value;
-        if (val !== undefined && val !== null) valueMap.set(valueToStr(val), val);
-    });
+    items.forEach((item) => valueMap.set(valueToStr(item.value), item.value));
 
     return (
         <Select
@@ -61,14 +76,11 @@ export const SingleSelect = ({
                 <SelectValue placeholder={placeholderText} />
             </SelectTrigger>
             <SelectContent>
-                {childArray.map((child) => {
-                    const val = child.props?.value;
-                    const key = child.key ?? valueToStr(val);
-                    if (val === undefined || val === null) return null;
-                    const valueStr = valueToStr(val);
+                {items.map((item, i) => {
+                    const valueStr = valueToStr(item.value);
                     return (
-                        <SelectItem key={key} value={valueStr}>
-                            {child.props?.children ?? valueStr}
+                        <SelectItem key={item.key ?? i} value={valueStr}>
+                            {item.children ?? valueStr}
                         </SelectItem>
                     );
                 })}

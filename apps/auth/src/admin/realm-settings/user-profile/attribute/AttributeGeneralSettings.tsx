@@ -26,7 +26,7 @@ import { Label } from "@merge/ui/components/label";
 import { RadioGroup, RadioGroupItem } from "@merge/ui/components/radio-group";
 import { Separator } from "@merge/ui/components/separator";
 import { Switch } from "@merge/ui/components/switch";
-import { SelectOption } from "../../../../shared/@patternfly/react-core";
+import { SelectOption } from "../../../../shared/keycloak-ui-shared";
 import { isEqual } from "lodash-es";
 import { useState } from "react";
 import { Controller, FormProvider, useFormContext, useWatch } from "react-hook-form";

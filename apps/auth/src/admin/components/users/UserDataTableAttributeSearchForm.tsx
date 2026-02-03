@@ -23,7 +23,7 @@ import { AlertVariant } from "../../../shared/keycloak-ui-shared";
 import { Button } from "@merge/ui/components/button";
 import { Checkbox } from "@merge/ui/components/checkbox";
 import { Input } from "@merge/ui/components/input";
-import { SelectOption } from "../../../shared/@patternfly/react-core";
+import { SelectOption } from "../../../shared/keycloak-ui-shared";
 import { Check } from "@phosphor-icons/react";
 import { ReactNode, useState } from "react";
 import { useForm } from "react-hook-form";

@@ -1,8 +1,9 @@
 "use client";
 
 import { useTranslation } from "react-i18next";
+import { useTheme } from "next-themes";
 import { Link } from "react-router-dom";
-import { CaretDownIcon, QuestionIcon, SignOutIcon, UserIcon, GearIcon, TrashIcon } from "@phosphor-icons/react";
+import { CaretDownIcon, QuestionIcon, SignOutIcon, UserIcon, GearIcon, TrashIcon, PaletteIcon, SunIcon, MoonIcon, MonitorIcon } from "@phosphor-icons/react";
 import {
     Avatar,
     AvatarFallback,
@@ -15,7 +16,13 @@ import {
     DropdownMenuGroup,
     DropdownMenuItem,
     DropdownMenuLabel,
+    DropdownMenuPortal,
+    DropdownMenuRadioGroup,
+    DropdownMenuRadioItem,
     DropdownMenuSeparator,
+    DropdownMenuSub,
+    DropdownMenuSubContent,
+    DropdownMenuSubTrigger,
     DropdownMenuTrigger
 } from "@merge/ui/components/dropdown-menu";
 import type { UserMenuInfo } from "./AdminHeader";
@@ -26,13 +33,28 @@ import { toDashboard } from "../dashboard/routes/Dashboard";
 import useToggle from "../utils/useToggle";
 import { PageHeaderClearCachesModal } from "../PageHeaderClearCachesModal";
 
-export function AdminNavUser({ userMenuInfo }: { userMenuInfo: UserMenuInfo }) {
+export function AdminNavUser({
+    userMenuInfo,
+    avatarOnly = false
+}: {
+    userMenuInfo: UserMenuInfo;
+    avatarOnly?: boolean;
+}) {
     const { t } = useTranslation();
+    const { theme, setTheme } = useTheme();
     const { keycloak, userName, userEmail, userAvatarUrl, initials } = userMenuInfo;
     const { realm } = useRealm();
     const { hasAccess } = useAccess();
     const { enabled, toggleHelp } = useHelp();
     const [clearCachesOpen, toggleClearCaches] = useToggle();
+
+    const onThemeChange = (value: string) => {
+        if (typeof window !== "undefined" && document.startViewTransition) {
+            document.startViewTransition(() => setTheme(value));
+        } else {
+            setTheme(value);
+        }
+    };
 
     const isMasterRealm = realm === "master";
     const isManager = hasAccess("manage-realm");
@@ -42,25 +64,37 @@ export function AdminNavUser({ userMenuInfo }: { userMenuInfo: UserMenuInfo }) {
             <DropdownMenu modal={false}>
                 <DropdownMenuTrigger
                     className={cn(
-                        "h-auto gap-2 py-2 pr-2 pl-2 inline-flex w-full min-w-0 rounded-lg",
-                        "bg-transparent hover:bg-muted/50 text-foreground font-medium",
-                        "data-[state=open]:bg-muted/70 data-[state=open]:text-foreground",
-                        "border-0 outline-none cursor-pointer"
+                        "inline-flex items-center justify-center rounded-lg",
+                        "text-foreground font-medium border-0 outline-none cursor-pointer",
+                        "focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background",
+                        !avatarOnly && "bg-transparent hover:bg-muted/50 data-[state=open]:bg-muted/70",
+                        avatarOnly && "size-9 p-0 bg-transparent hover:bg-transparent data-[state=open]:bg-transparent",
+                        !avatarOnly && "h-auto w-full min-w-0 gap-2 py-2 pr-2 pl-2"
                     )}
                 >
-                    <Avatar className="h-8 w-8 rounded-lg shrink-0 bg-muted text-muted-foreground">
+                    <Avatar
+                        className={cn(
+                            "shrink-0 bg-muted text-muted-foreground",
+                            avatarOnly && "after:border-0",
+                            avatarOnly ? "size-8 rounded-lg" : "h-8 w-8 rounded-lg"
+                        )}
+                    >
                         <AvatarImage src={userAvatarUrl} alt={userName} />
                         <AvatarFallback className="rounded-lg text-xs font-medium">
                             {initials}
                         </AvatarFallback>
                     </Avatar>
-                    <div className="grid flex-1 text-left text-sm leading-tight min-w-0">
-                        <span className="truncate font-medium text-foreground">{userName}</span>
-                        <span className="truncate text-xs text-muted-foreground">
-                            {userEmail || " "}
-                        </span>
-                    </div>
-                    <CaretDownIcon className="ml-auto size-4 shrink-0 text-muted-foreground" />
+                    {!avatarOnly && (
+                        <>
+                            <div className="grid flex-1 text-left text-sm leading-tight min-w-0">
+                                <span className="truncate font-medium text-foreground">{userName}</span>
+                                <span className="truncate text-xs text-muted-foreground">
+                                    {userEmail || " "}
+                                </span>
+                            </div>
+                            <CaretDownIcon className="ml-auto size-4 shrink-0 text-muted-foreground" />
+                        </>
+                    )}
                 </DropdownMenuTrigger>
                 <DropdownMenuContent
                     className="min-w-56 rounded-lg z-[9999] bg-background border border-border text-foreground shadow-lg"
@@ -70,7 +104,7 @@ export function AdminNavUser({ userMenuInfo }: { userMenuInfo: UserMenuInfo }) {
                 >
                     <DropdownMenuLabel className="p-0 font-normal">
                         <div className="flex items-center gap-2 px-2 py-2 text-left text-sm bg-background">
-                            <Avatar className="h-8 w-8 rounded-lg shrink-0 bg-muted text-muted-foreground">
+                            <Avatar className="h-8 w-8 rounded-lg shrink-0 bg-muted text-muted-foreground after:border-0">
                                 <AvatarImage src={userAvatarUrl} alt={userName} />
                                 <AvatarFallback className="rounded-lg text-xs font-medium">
                                     {initials}
@@ -105,6 +139,39 @@ export function AdminNavUser({ userMenuInfo }: { userMenuInfo: UserMenuInfo }) {
                                 {t("clearCachesTitle")}
                             </DropdownMenuItem>
                         )}
+                    </DropdownMenuGroup>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuGroup>
+                        <DropdownMenuSub>
+                            <DropdownMenuSubTrigger>
+                                <PaletteIcon className="size-4 mr-2" />
+                                {t("theme", "Theme")}
+                            </DropdownMenuSubTrigger>
+                            <DropdownMenuPortal>
+                                <DropdownMenuSubContent>
+                                    <DropdownMenuGroup>
+                                        <DropdownMenuLabel>{t("appearance", "Appearance")}</DropdownMenuLabel>
+                                        <DropdownMenuRadioGroup
+                                            value={theme ?? "system"}
+                                            onValueChange={onThemeChange}
+                                        >
+                                            <DropdownMenuRadioItem value="light">
+                                                <SunIcon className="size-4 mr-2" />
+                                                {t("light", "Light")}
+                                            </DropdownMenuRadioItem>
+                                            <DropdownMenuRadioItem value="dark">
+                                                <MoonIcon className="size-4 mr-2" />
+                                                {t("dark", "Dark")}
+                                            </DropdownMenuRadioItem>
+                                            <DropdownMenuRadioItem value="system">
+                                                <MonitorIcon className="size-4 mr-2" />
+                                                {t("system", "System")}
+                                            </DropdownMenuRadioItem>
+                                        </DropdownMenuRadioGroup>
+                                    </DropdownMenuGroup>
+                                </DropdownMenuSubContent>
+                            </DropdownMenuPortal>
+                        </DropdownMenuSub>
                     </DropdownMenuGroup>
                     <DropdownMenuSeparator />
                     <DropdownMenuItem onClick={() => toggleHelp()}>

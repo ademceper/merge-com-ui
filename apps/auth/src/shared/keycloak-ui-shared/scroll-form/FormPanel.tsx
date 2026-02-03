@@ -11,7 +11,7 @@
 
 // @ts-nocheck
 
-import { Card, CardBody, CardHeader, CardTitle } from "../../@patternfly/react-core";
+import { Card, CardContent, CardHeader, CardTitle } from "@merge/ui/components/card";
 import { PropsWithChildren, useId } from "react";
 import { FormTitle } from "./FormTitle";
 
@@ -30,13 +30,13 @@ export const FormPanel = ({
     const id = useId();
 
     return (
-        <Card id={id} className={className} isFlat>
+        <Card id={id} className={className}>
             <CardHeader className="kc-form-panel__header">
                 <CardTitle tabIndex={0}>
                     <FormTitle id={scrollId} title={title} />
                 </CardTitle>
             </CardHeader>
-            <CardBody className="kc-form-panel__body">{children}</CardBody>
+            <CardContent className="kc-form-panel__body">{children}</CardContent>
         </Card>
     );
 };

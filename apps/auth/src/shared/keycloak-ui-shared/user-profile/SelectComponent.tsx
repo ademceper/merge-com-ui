@@ -11,7 +11,7 @@
 
 // @ts-nocheck
 
-import { SelectOption } from "../../@patternfly/react-core";
+import { SelectItem as SelectOption } from "@merge/ui/components/select";
 import { useState } from "react";
 import { Controller, ControllerRenderProps } from "react-hook-form";
 import { KeycloakSelect, SelectVariant } from "../select/KeycloakSelect";
@@ -54,7 +54,7 @@ export const SelectComponent = (props: UserProfileFieldProps) => {
         options
             .filter(o => fetchLabel(o)!.toLowerCase().includes(filter.toLowerCase()))
             .map(option => (
-                <SelectOption selected={selected === option} key={option} value={option}>
+                <SelectOption key={option} value={option}>
                     {fetchLabel(option)}
                 </SelectOption>
             ));

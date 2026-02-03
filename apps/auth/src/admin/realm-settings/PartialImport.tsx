@@ -36,7 +36,7 @@ import {
     AlertDescription,
     AlertTitle
 } from "@merge/ui/components/alert";
-import { SelectOption } from "../../shared/@patternfly/react-core";
+import { SelectOption } from "../../shared/keycloak-ui-shared";
 import { FormEvent, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useAdminClient } from "../admin-client";

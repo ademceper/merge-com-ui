@@ -21,8 +21,7 @@ import {
 } from "../../../shared/keycloak-ui-shared";
 import { Button } from "@merge/ui/components/button";
 import { Funnel } from "@phosphor-icons/react";
-import { SelectOption } from "../../../shared/@patternfly/react-core";
-import { cellWidth } from "../../../shared/@patternfly/react-table";
+import { SelectOption, cellWidth } from "../../../shared/keycloak-ui-shared";
 import { useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";

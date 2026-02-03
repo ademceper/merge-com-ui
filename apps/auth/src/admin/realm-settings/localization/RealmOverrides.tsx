@@ -22,8 +22,9 @@ import {
 import { AlertVariant } from "../../../shared/keycloak-ui-shared";
 import {
     SelectGroup,
-    SelectOption
-} from "../../../shared/@patternfly/react-core";
+    SelectLabel,
+    SelectItem
+} from "@merge/ui/components/select";
 import { Button } from "@merge/ui/components/button";
 import { Separator } from "@merge/ui/components/separator";
 import {
@@ -161,17 +162,19 @@ export const RealmOverrides = ({
     };
 
     const options = [
-        <SelectGroup label={t("defaultLocale")} key="group1">
-            <SelectOption key={String(DEFAULT_LOCALE)} value={DEFAULT_LOCALE}>
+        <SelectGroup key="group1">
+            <SelectLabel>{t("defaultLocale")}</SelectLabel>
+            <SelectItem key={String(DEFAULT_LOCALE)} value={DEFAULT_LOCALE}>
                 {localeToDisplayName(DEFAULT_LOCALE, whoAmI.displayName)}
-            </SelectOption>
+            </SelectItem>
         </SelectGroup>,
         <Separator key="divider" className="my-1" />,
-        <SelectGroup label={t("supportedLocales")} key="group2">
+        <SelectGroup key="group2">
+            <SelectLabel>{t("supportedLocales")}</SelectLabel>
             {watchSupportedLocales.map(locale => (
-                <SelectOption key={locale} value={locale}>
+                <SelectItem key={locale} value={locale}>
                     {localeToDisplayName(locale, whoAmI.locale)}
-                </SelectOption>
+                </SelectItem>
             ))}
         </SelectGroup>
     ];

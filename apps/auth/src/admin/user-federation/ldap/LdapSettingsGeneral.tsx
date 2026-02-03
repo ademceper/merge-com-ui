@@ -18,7 +18,7 @@ import {
     SelectVariant,
     TextControl
 } from "../../../shared/keycloak-ui-shared";
-import { SelectOption } from "../../../shared/@patternfly/react-core";
+import { SelectOption } from "../../../shared/keycloak-ui-shared";
 import { FormLabel } from "../../../shared/keycloak-ui-shared";
 import { useEffect, useState } from "react";
 import { Controller, FormProvider, UseFormReturn } from "react-hook-form";

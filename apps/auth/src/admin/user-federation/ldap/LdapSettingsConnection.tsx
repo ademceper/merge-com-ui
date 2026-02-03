@@ -24,7 +24,7 @@ import { AlertVariant } from "../../../shared/keycloak-ui-shared";
 import { Button } from "@merge/ui/components/button";
 import { Label } from "@merge/ui/components/label";
 import { Switch } from "@merge/ui/components/switch";
-import { SelectOption } from "../../../shared/@patternfly/react-core";
+import { SelectOption } from "../../../shared/keycloak-ui-shared";
 import { get, isEqual } from "lodash-es";
 import { useState } from "react";
 import { Controller, FormProvider, UseFormReturn, useWatch } from "react-hook-form";

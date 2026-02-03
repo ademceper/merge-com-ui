@@ -11,14 +11,23 @@
 
 // @ts-nocheck
 
-import { Title, TitleProps } from "../../@patternfly/react-core";
+import { cn } from "@merge/ui/lib/utils";
 
 import style from "./form-title.module.css";
 
-type FormTitleProps = Omit<TitleProps, "headingLevel"> & {
+type FormTitleProps = {
     id?: string;
     title: string;
     headingLevel?: "h1" | "h2" | "h3" | "h4" | "h5" | "h6";
+    size?: "lg" | "xl" | "2xl" | "3xl";
+    className?: string;
+};
+
+const sizeClass: Record<string, string> = {
+    lg: "text-lg",
+    xl: "text-xl",
+    "2xl": "text-2xl",
+    "3xl": "text-3xl"
 };
 
 export const FormTitle = ({
@@ -26,16 +35,18 @@ export const FormTitle = ({
     title,
     headingLevel = "h1",
     size = "xl",
+    className,
     ...rest
-}: FormTitleProps) => (
-    <Title
-        headingLevel={headingLevel}
-        size={size}
-        className={style.title}
-        id={id}
-        tabIndex={0} // so that jumpLink sends focus to the section for a11y
-        {...rest}
-    >
-        {title}
-    </Title>
-);
+}: FormTitleProps) => {
+    const Tag = headingLevel;
+    return (
+        <Tag
+            className={cn(style.title, sizeClass[size] || sizeClass.xl, className)}
+            id={id}
+            tabIndex={0}
+            {...rest}
+        >
+            {title}
+        </Tag>
+    );
+};

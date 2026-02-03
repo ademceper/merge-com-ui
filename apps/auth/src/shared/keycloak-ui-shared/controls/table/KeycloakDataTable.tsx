@@ -1,41 +1,26 @@
-/**
- * WARNING: Before modifying this file, run the following command:
- *
- * $ npx keycloakify own --path "shared/keycloak-ui-shared/controls/table/KeycloakDataTable.tsx"
- *
- * This file is provided by @keycloakify/keycloak-ui-shared version 260502.0.0.
- * It was copied into your repository by the postinstall script: `keycloakify sync-extensions`.
- */
-
 /* eslint-disable */
-
 // @ts-nocheck
 
-import { Button, ButtonVariant, ToolbarItem } from "../../../@patternfly/react-core";
-import { ArrowsClockwise } from "@phosphor-icons/react";
-import type { SVGIconProps } from "@patternfly/react-icons/dist/js/createIcon";
+import { ArrowsClockwise, CaretDown, CaretRight, DotsThreeVertical } from "@phosphor-icons/react";
+import { Button } from "@merge/ui/components/button";
+import { Checkbox } from "@merge/ui/components/checkbox";
 import {
-    ActionsColumn,
-    ExpandableRowContent,
-    IAction,
-    IActions,
-    IActionsResolver,
-    IFormatter,
-    IRow,
-    IRowCell,
-    ITransform,
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuTrigger,
+} from "@merge/ui/components/dropdown-menu";
+import {
     Table,
-    TableProps,
-    TableVariant,
-    Tbody,
-    Td,
-    Th,
-    Thead,
-    Tr
-} from "../../../@patternfly/react-table";
+    TableBody,
+    TableCell,
+    TableHead,
+    TableHeader,
+    TableRow,
+} from "@merge/ui/components/table";
 import { cloneDeep, get, intersectionBy } from "lodash-es";
 import {
-    ComponentClass,
+    Fragment,
     ReactNode,
     isValidElement,
     useEffect,
@@ -43,7 +28,8 @@ import {
     useMemo,
     useRef,
     useState,
-    type JSX
+    type JSX,
+    type ComponentType
 } from "react";
 import { useTranslation } from "react-i18next";
 import { useFetch } from "../../utils/useFetch";
@@ -51,6 +37,24 @@ import { useStoredState } from "../../utils/useStoredState";
 import { KeycloakSpinner } from "../KeycloakSpinner";
 import { ListEmptyState } from "./ListEmptyState";
 import { PaginatingTableToolbar } from "./PaginatingTableToolbar";
+
+// Local types (replacing PatternFly table types)
+export type IRowCell = { title: ReactNode } | ReactNode;
+export type IFormatter = (value: unknown) => unknown;
+export type ITransform = () => { className?: string };
+export type IAction = {
+    title: string | ReactNode;
+    onClick?: (event: React.MouseEvent, rowIndex: number, rowData: unknown) => void;
+    isDisabled?: boolean;
+};
+export type IActions = IAction[];
+export type IActionsResolver = (row: IRow, extraData: { rowIndex?: number }) => IActions | undefined;
+export type IRow = {
+    data: unknown;
+    cells: IRowCell[];
+    disableSelection?: boolean;
+    disableActions?: boolean;
+};
 
 type TitleCell = { title: JSX.Element };
 type Cell<T> = keyof T | JSX.Element | TitleCell;
@@ -93,20 +97,39 @@ type CellRendererProps = {
     actionResolver?: IActionsResolver;
 };
 
-const isRow = (c: ReactNode | IRowCell): c is IRowCell =>
-    !!c && (c as IRowCell).title !== undefined;
+const isRowCell = (c: ReactNode | IRowCell): c is IRowCell =>
+    !!c && typeof c === "object" && "title" in c;
 
-const CellRenderer = ({ row, index, actions, actionResolver }: CellRendererProps) => {
-    const items = actions || actionResolver?.(row, {});
+const CellRenderer = ({ row, index = 0, actions, actionResolver }: CellRendererProps) => {
+    const items = actions || actionResolver?.(row, { rowIndex: index });
     return (
         <>
             {row.cells!.map((c, i) => (
-                <Td key={`cell-${i}`}>{(isRow(c) ? c.title : c) as ReactNode}</Td>
+                <TableCell key={`cell-${i}`}>
+                    {isRowCell(c) ? (c as { title: ReactNode }).title : (c as ReactNode)}
+                </TableCell>
             ))}
             {items && items.length > 0 && !row.disableActions && (
-                <Td isActionCell>
-                    <ActionsColumn items={items} extraData={{ rowIndex: index }} />
-                </Td>
+                <TableCell className="w-[50px] text-right">
+                    <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                            <Button variant="ghost" size="icon" className="size-8" aria-label="Actions">
+                                <DotsThreeVertical className="size-4" />
+                            </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent align="end">
+                            {items.map((action, i) => (
+                                <DropdownMenuItem
+                                    key={i}
+                                    disabled={action.isDisabled}
+                                    onClick={e => action.onClick?.(e, index, row.data)}
+                                >
+                                    {action.title}
+                                </DropdownMenuItem>
+                            ))}
+                        </DropdownMenuContent>
+                    </DropdownMenu>
+                </TableCell>
             )}
         </>
     );
@@ -114,7 +137,9 @@ const CellRenderer = ({ row, index, actions, actionResolver }: CellRendererProps
 
 const ExpandableRowRenderer = ({ row }: CellRendererProps) =>
     row.cells!.map((c, i) => (
-        <div key={`cell-${i}`}>{(isRow(c) ? c.title : c) as ReactNode}</div>
+        <div key={`cell-${i}`} className="py-2 pl-4">
+            {isRowCell(c) ? (c as { title: ReactNode }).title : (c as ReactNode)}
+        </div>
     ));
 
 function DataTable<T>({
@@ -130,7 +155,6 @@ function DataTable<T>({
     canSelect,
     isNotCompact,
     isRadio,
-    ...props
 }: DataTableProps<T>) {
     const { t } = useTranslation();
     const [selectedRows, setSelectedRows] = useState<T[]>(selected || []);
@@ -191,113 +215,156 @@ function DataTable<T>({
         }
     };
 
+    const mainRows = rows.filter((_, i) => !("parent" in rows[i])) as Row<T>[];
+    const hasExpand = !!onCollapse && mainRows.some((_, i) => rows[i * 2 + 1] && (rows[i * 2 + 1] as SubRow<T>).cells?.length > 0);
+
     return (
-        <Table
-            {...props}
-            variant={isNotCompact ? undefined : TableVariant.compact}
-            aria-label={t(ariaLabelKey)}
-        >
-            <Thead>
-                <Tr>
-                    {onCollapse && <Th screenReaderText={t("expandRow")} />}
-                    {canSelectAll && (
-                        <Th
-                            screenReaderText={t("selectAll")}
-                            select={
-                                !isRadio
-                                    ? {
-                                          onSelect: (_, isSelected) => {
-                                              updateState(-1, isSelected);
-                                          },
-                                          isSelected:
-                                              rowsSelectedOnPage.length === rows.length
-                                      }
-                                    : undefined
-                            }
-                        />
+        <Table aria-label={t(ariaLabelKey)} className={isNotCompact ? "" : "text-sm"}>
+            <TableHeader>
+                <TableRow>
+                    {hasExpand && (
+                        <TableHead className="w-10" scope="col">
+                            <span className="sr-only">{t("expandRow")}</span>
+                        </TableHead>
+                    )}
+                    {canSelect && (
+                        <TableHead className="w-10 pr-0" scope="col">
+                            {canSelectAll ? (
+                                <>
+                                    <span className="sr-only">{t("selectAll")}</span>
+                                    <Checkbox
+                                        name="check-all"
+                                        checked={rowsSelectedOnPage.length === rows.length}
+                                        onCheckedChange={checked =>
+                                            updateState(-1, !!checked)
+                                        }
+                                        aria-label={t("selectAll")}
+                                        className="mt-1"
+                                    />
+                                </>
+                            ) : (
+                                <span className="sr-only">{t("select")}</span>
+                            )}
+                        </TableHead>
                     )}
                     {columns.map(column => (
-                        <Th
-                            screenReaderText={t("expandRow")}
+                        <TableHead
                             key={column.displayKey || column.name}
-                            className={column.transforms?.[0]().className}
+                            className={column.transforms?.[0]?.()?.className}
                         >
                             {t(column.displayKey || column.name)}
-                        </Th>
+                        </TableHead>
                     ))}
-                </Tr>
-            </Thead>
-            {!onCollapse ? (
-                <Tbody>
-                    {(rows as IRow[]).map((row, index) => (
-                        <Tr key={index} isExpanded={expandedRows[index]}>
-                            {canSelect && (
-                                <Td
-                                    select={{
-                                        rowIndex: index,
-                                        onSelect: (_, isSelected, rowIndex) => {
-                                            updateState(rowIndex, isSelected);
-                                        },
-                                        isSelected: !!selectedRows.find(
-                                            v => get(v, "id") === row.data.id
-                                        ),
-                                        variant: isRadio ? "radio" : "checkbox",
-                                        isDisabled: row.disableSelection
-                                    }}
-                                />
-                            )}
-                            <CellRenderer
-                                row={row}
-                                index={index}
-                                actions={actions}
-                                actionResolver={actionResolver}
-                            />
-                        </Tr>
-                    ))}
-                </Tbody>
-            ) : (
-                (rows as IRow[]).map((row, index) => (
-                    <Tbody key={index}>
-                        {index % 2 === 0 ? (
-                            <Tr>
-                                <Td
-                                    expand={
-                                        rows[index + 1].cells.length === 0
-                                            ? undefined
-                                            : {
-                                                  isExpanded:
-                                                      expandedRows[index] ?? false,
-                                                  rowIndex: index,
-                                                  expandId: "expandable-row-",
-                                                  onToggle: (_, rowIndex, isOpen) => {
-                                                      onCollapse(isOpen, rowIndex);
-                                                      const expand = [...expandedRows];
-                                                      expand[index] = isOpen;
-                                                      setExpandedRows(expand);
+                    {((actions && actions.length > 0) || actionResolver) && (
+                        <TableHead className="w-[50px]" scope="col" />
+                    )}
+                </TableRow>
+            </TableHeader>
+            <TableBody>
+                {!onCollapse
+                    ? mainRows.map((row, index) => (
+                          <TableRow key={index}>
+                              {canSelect && (
+                                  <TableCell className="pr-0">
+                                      <Checkbox
+                                          checked={!!selectedRows.find(
+                                              v => get(v, "id") === row.data.id
+                                          )}
+                                          disabled={row.disableSelection}
+                                          onCheckedChange={checked =>
+                                              updateState(index, !!checked)
+                                          }
+                                          aria-label={t("selectRow")}
+                                      />
+                                  </TableCell>
+                              )}
+                              <CellRenderer
+                                  row={row as IRow}
+                                  index={index}
+                                  actions={actions}
+                                  actionResolver={actionResolver}
+                              />
+                          </TableRow>
+                      ))
+                    : mainRows.map((row, index) => {
+                          const subRow = rows[index * 2 + 1] as SubRow<T> | undefined;
+                          const hasSub = subRow?.cells?.length;
+                          const isExpanded = expandedRows[index] ?? false;
+                          return (
+                              <Fragment key={index}>
+                                  <TableRow>
+                                      {hasExpand && (
+                                          <TableCell className="w-10">
+                                              {hasSub ? (
+                                                  <Button
+                                                      variant="ghost"
+                                                      size="icon"
+                                                      className="size-8"
+                                                      onClick={() => {
+                                                          onCollapse(!isExpanded, index);
+                                                          setExpandedRows(prev => {
+                                                              const n = [...prev];
+                                                              n[index] = !isExpanded;
+                                                              return n;
+                                                          });
+                                                      }}
+                                                      aria-expanded={isExpanded}
+                                                      aria-label={t("expandRow")}
+                                                  >
+                                                      {isExpanded ? (
+                                                          <CaretDown className="size-4" />
+                                                      ) : (
+                                                          <CaretRight className="size-4" />
+                                                      )}
+                                                  </Button>
+                                              ) : null}
+                                          </TableCell>
+                                      )}
+                                      {canSelect && (
+                                          <TableCell className="pr-0">
+                                              <Checkbox
+                                                  checked={!!selectedRows.find(
+                                                      v => get(v, "id") === row.data.id
+                                                  )}
+                                                  disabled={row.disableSelection}
+                                                  onCheckedChange={checked =>
+                                                      updateState(index, !!checked)
                                                   }
+                                                  aria-label={t("selectRow")}
+                                              />
+                                          </TableCell>
+                                      )}
+                                      <CellRenderer
+                                          row={row as IRow}
+                                          index={index}
+                                          actions={actions}
+                                          actionResolver={actionResolver}
+                                      />
+                                  </TableRow>
+                                  {hasSub && isExpanded && (
+                                      <TableRow key={`${index}-exp`} className="bg-muted/30">
+                                          <TableCell
+                                              colSpan={
+                                                  (canSelect ? 1 : 0) +
+                                                  (hasExpand ? 1 : 0) +
+                                                  columns.length +
+                                                  1
                                               }
-                                    }
-                                />
-                                <CellRenderer
-                                    row={row}
-                                    index={index}
-                                    actions={actions}
-                                    actionResolver={actionResolver}
-                                />
-                            </Tr>
-                        ) : (
-                            <Tr isExpanded={expandedRows[index - 1] ?? false}>
-                                <Td />
-                                <Td colSpan={columns.length}>
-                                    <ExpandableRowContent>
-                                        <ExpandableRowRenderer row={row} />
-                                    </ExpandableRowContent>
-                                </Td>
-                            </Tr>
-                        )}
-                    </Tbody>
-                ))
-            )}
+                                              className="border-b py-0"
+                                          >
+                                              <ExpandableRowRenderer
+                                                  row={subRow as IRow}
+                                                  index={index}
+                                                  actions={actions}
+                                                  actionResolver={actionResolver}
+                                              />
+                                          </TableCell>
+                                      </TableRow>
+                                  )}
+                              </Fragment>
+                          );
+                      })}
+            </TableBody>
         </Table>
     );
 }
@@ -326,7 +393,7 @@ export type LoaderFunction<T> = (
     search?: string
 ) => Promise<T[]>;
 
-export type DataListProps<T> = Omit<TableProps, "rows" | "cells" | "onSelect"> & {
+export type DataListProps<T> = {
     loader: T[] | LoaderFunction<T>;
     onSelect?: (value: T[]) => void;
     canSelectAll?: boolean;
@@ -342,35 +409,12 @@ export type DataListProps<T> = Omit<TableProps, "rows" | "cells" | "onSelect"> &
     toolbarItem?: ReactNode;
     subToolbar?: ReactNode;
     emptyState?: ReactNode;
-    icon?: ComponentClass<SVGIconProps>;
+    icon?: ComponentType<{ className?: string }>;
     isNotCompact?: boolean;
     isRadio?: boolean;
     isSearching?: boolean;
 };
 
-/**
- * A generic component that can be used to show the initial list most sections have. Takes care of the loading of the date and filtering.
- * All you have to define is how the columns are displayed.
- * @example
- *   <KeycloakDataTable columns={[
- *     {
- *        name: "clientId", //name of the field from the array of object the loader returns to display in this column
- *        displayKey: "clientId", //i18n key to use to lookup the name of the column header
- *        cellRenderer: ClientDetailLink, //optionally you can use a component to render the column when you don't want just the content of the field, the whole row / entire object is passed in.
- *     }
- *   ]}
- * @param {DataListProps} props - The properties.
- * @param {string} props.ariaLabelKey - The aria label key i18n key to lookup the label
- * @param {string} props.searchPlaceholderKey - The i18n key to lookup the placeholder for the search box
- * @param {boolean} props.isPaginated - if true, the loader will be called with first, max and search and a pager will be added in the header
- * @param {(first?: number, max?: number, search?: string) => Promise<T[]>} props.loader - loader function that will fetch the data to display first, max and search are only applicable when isPaginated = true
- * @param {Field<T>} props.columns - definition of the columns
- * @param {Field<T>} props.detailColumns - definition of the columns expandable columns
- * @param {Action[]} props.actions - the actions that appear on the row
- * @param {IActionsResolver} props.actionResolver Resolver for the given action
- * @param {ReactNode} props.toolbarItem - Toolbar items that appear on the top of the table {@link toolbarItem}
- * @param {ReactNode} props.emptyState - ReactNode show when the list is empty could be any component but best to use {@link ListEmptyState}
- */
 export function KeycloakDataTable<T>({
     ariaLabelKey,
     searchPlaceholderKey,
@@ -423,7 +467,6 @@ export function KeycloakDataTable<T>({
             }
             if (col.cellRenderer) {
                 const Component = col.cellRenderer;
-                //@ts-ignore
                 return { title: <Component {...value} /> };
             }
             return get(value, col.name);
@@ -552,7 +595,6 @@ export function KeycloakDataTable<T>({
     const data = filteredData || rows;
     const noData = !data || data.length === 0;
     const searching = search !== "" || isSearching;
-    // if we use detail columns there are twice the number of rows
     const maxRows = detailColumns ? max * 2 : max;
     const rowLength = detailColumns ? (data?.length || 0) / 2 : data?.length || 0;
 
@@ -579,16 +621,19 @@ export function KeycloakDataTable<T>({
                     searchTypeComponent={searchTypeComponent}
                     toolbarItem={
                         <>
-                            {toolbarItem} <ToolbarItem variant="separator" />{" "}
-                            <ToolbarItem>
+                            {toolbarItem}
+                            <span className="mx-2" aria-hidden />
+                            <div className="flex items-center">
                                 <Button
                                     variant="link"
+                                    size="sm"
                                     onClick={refresh}
                                     data-testid="refresh"
+                                    className="h-auto p-0"
                                 >
-                                    <ArrowsClockwise size={16} /> {t("refresh")}
+                                    <ArrowsClockwise className="size-4 mr-1" /> {t("refresh")}
                                 </Button>
-                            </ToolbarItem>
+                            </div>
                         </>
                     }
                     subToolbar={subToolbar}
@@ -626,7 +671,7 @@ export function KeycloakDataTable<T>({
                                           {
                                               text: t("clearAllFilters"),
                                               onClick: () => setSearch(""),
-                                              type: ButtonVariant.link
+                                              type: "link"
                                           }
                                       ]
                                     : []

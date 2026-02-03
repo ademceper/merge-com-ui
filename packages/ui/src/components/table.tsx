@@ -56,6 +56,11 @@ import {
   PaginationItem,
 } from "@merge/ui/components/pagination"
 import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuTrigger,
+} from "@merge/ui/components/dropdown-menu"
+import {
   Popover,
   PopoverContent,
   PopoverTrigger,
@@ -379,19 +384,18 @@ export function DataTable<TData>({
               </PopoverContent>
             </Popover>
           )}
-          <Popover open={viewOpen} onOpenChange={setViewOpen}>
-            <PopoverTrigger asChild>
+          <DropdownMenu open={viewOpen} onOpenChange={setViewOpen}>
+            <DropdownMenuTrigger asChild>
               <Button
                 type="button"
                 variant="outline"
                 size="sm"
-                onClick={() => setViewOpen(true)}
               >
                 <Columns size={16} className="-ms-1 opacity-60" />
                 View
               </Button>
-            </PopoverTrigger>
-            <PopoverContent align="end" className="z-[2147483647] w-auto min-w-36 p-1" style={{ zIndex: 2147483647 }}>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end" className="w-auto min-w-36 p-1" style={{ zIndex: 2147483647 }}>
               <div className="px-1.5 py-1 text-xs font-medium text-muted-foreground">
                 Toggle columns
               </div>
@@ -411,8 +415,8 @@ export function DataTable<TData>({
                     <span className="capitalize">{col.id}</span>
                   </label>
                 ))}
-            </PopoverContent>
-          </Popover>
+            </DropdownMenuContent>
+          </DropdownMenu>
         </div>
         <div className="flex items-center gap-3">
           {onDeleteRows &&
@@ -665,24 +669,22 @@ export function DataTableRowActions<TData>({
       onClick={(e) => e.stopPropagation()}
       onPointerDown={(e) => e.stopPropagation()}
     >
-      <Popover open={open} onOpenChange={setOpen}>
-        <PopoverTrigger asChild>
+      <DropdownMenu open={open} onOpenChange={setOpen}>
+        <DropdownMenuTrigger asChild>
           <Button
             type="button"
             aria-label="Open menu"
             variant="ghost"
             size="icon"
             className="shadow-none"
-            onClick={() => setOpen(true)}
           >
             <DotsThree size={16} />
           </Button>
-        </PopoverTrigger>
-        <PopoverContent
+        </DropdownMenuTrigger>
+        <DropdownMenuContent
           align="end"
-          className="z-[2147483647] w-auto min-w-32 p-1"
-          style={{ zIndex: 2147483647 }}
-          onOpenAutoFocus={(e) => e.preventDefault()}
+          className="w-auto min-w-32 p-1"
+          onCloseAutoFocus={(e) => e.preventDefault()}
         >
           <div onClick={() => setOpen(false)} className="flex flex-col">
             {children ?? (
@@ -700,8 +702,8 @@ export function DataTableRowActions<TData>({
               </>
             )}
           </div>
-        </PopoverContent>
-      </Popover>
+        </DropdownMenuContent>
+      </DropdownMenu>
     </div>
   )
 }

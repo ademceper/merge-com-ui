@@ -15,8 +15,13 @@ import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Button } from "@merge/ui/components/button";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@merge/ui/components/dropdown-menu";
-import { Select, SelectList, SelectOption } from "../../../shared/@patternfly/react-core";
-import { MenuToggle } from "../../../shared/@patternfly/react-core";
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from "@merge/ui/components/select";
 import { Funnel } from "@phosphor-icons/react";
 
 import {
@@ -126,36 +131,23 @@ export const SearchToolbar = ({
                     </div>
                     <div>
                         <Select
-                            toggle={ref => (
-                                <MenuToggle
-                                    data-testid="clientScopeSearchType"
-                                    ref={ref}
-                                    isExpanded={open}
-                                    onClick={() => setOpen(!open)}
-                                >
-                                    {type === AllClientScopes.none
-                                        ? t("allTypes")
-                                        : t(`clientScopeTypes.${type}`)}
-                                </MenuToggle>
-                            )}
-                            onOpenChange={val => setOpen(val)}
-                            isOpen={open}
-                            selected={
-                                type === AllClientScopes.none
-                                    ? t("allTypes")
-                                    : t(`clientScopeTypes.${type}`)
-                            }
-                            onSelect={(_, value) => {
-                                onType(value as AllClientScopes);
+                            open={open}
+                            onOpenChange={setOpen}
+                            value={type === AllClientScopes.none ? "" : type}
+                            onValueChange={(value) => {
+                                onType((value || AllClientScopes.none) as AllClientScopes);
                                 setOpen(false);
                             }}
                         >
-                            <SelectList>
-                                <SelectOption value={AllClientScopes.none}>
+                            <SelectTrigger data-testid="clientScopeSearchType" className="w-[180px]">
+                                <SelectValue placeholder={t("allTypes")} />
+                            </SelectTrigger>
+                            <SelectContent>
+                                <SelectItem value={AllClientScopes.none}>
                                     {t("allTypes")}
-                                </SelectOption>
+                                </SelectItem>
                                 {clientScopeTypesSelectOptions(t)}
-                            </SelectList>
+                            </SelectContent>
                         </Select>
                     </div>
                 </>
@@ -171,31 +163,24 @@ export const SearchToolbar = ({
                     </div>
                     <div>
                         <Select
-                            toggle={ref => (
-                                <MenuToggle
-                                    data-testid="clientScopeSearchProtocol"
-                                    ref={ref}
-                                    isExpanded={open}
-                                    onClick={() => setOpen(!open)}
-                                >
-                                    {t(`protocolTypes.${protocol}`)}
-                                </MenuToggle>
-                            )}
-                            onOpenChange={val => setOpen(val)}
-                            isOpen={open}
-                            selected={t(`protocolTypes.${protocol}`)}
-                            onSelect={(_, value) => {
+                            open={open}
+                            onOpenChange={setOpen}
+                            value={protocol}
+                            onValueChange={(value) => {
                                 onProtocol?.(value as ProtocolType);
                                 setOpen(false);
                             }}
                         >
-                            <SelectList>
-                                {protocols.map(type => (
-                                    <SelectOption key={type} value={type}>
-                                        {t(`protocolTypes.${type}`)}
-                                    </SelectOption>
+                            <SelectTrigger data-testid="clientScopeSearchProtocol" className="w-[180px]">
+                                <SelectValue>{t(`protocolTypes.${protocol}`)}</SelectValue>
+                            </SelectTrigger>
+                            <SelectContent>
+                                {protocols.map((p) => (
+                                    <SelectItem key={p} value={p}>
+                                        {t(`protocolTypes.${p}`)}
+                                    </SelectItem>
                                 ))}
-                            </SelectList>
+                            </SelectContent>
                         </Select>
                     </div>
                 </>

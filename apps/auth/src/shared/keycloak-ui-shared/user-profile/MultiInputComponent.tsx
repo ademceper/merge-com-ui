@@ -3,7 +3,7 @@
  *
  * $ npx keycloakify own --path "shared/keycloak-ui-shared/user-profile/MultiInputComponent.tsx"
  *
- * This file is provided by @keycloakify/keycloak-ui-shared version 260502.0.0.
+ * This file is provided by @keycloakify/keycloak-admin-ui version 260502.0.0.
  * It was copied into your repository by the postinstall script: `keycloakify sync-extensions`.
  */
 
@@ -11,15 +11,8 @@
 
 // @ts-nocheck
 
-import {
-    Button,
-    ButtonVariant,
-    InputGroup,
-    TextInput,
-    TextInputProps,
-    TextInputTypes,
-    InputGroupItem
-} from "../../@patternfly/react-core";
+import { Button } from "@merge/ui/components/button";
+import { Input } from "@merge/ui/components/input";
 import { MinusCircle, PlusCircle } from "@phosphor-icons/react";
 import { type TFunction } from "i18next";
 import { Fragment, useEffect, useMemo } from "react";
@@ -51,7 +44,7 @@ export const MultiInputComponent = ({
     </UserProfileGroup>
 );
 
-export type MultiLineInputProps = Omit<TextInputProps, "form"> & {
+export type MultiLineInputProps = {
     t: TFunction;
     name: FieldPath<UserFormFields>;
     form: UseFormReturn<UserFormFields>;
@@ -59,7 +52,11 @@ export type MultiLineInputProps = Omit<TextInputProps, "form"> & {
     isDisabled?: boolean;
     defaultValue?: string[];
     inputType: InputType;
+    id?: string;
+    [key: string]: unknown;
 };
+
+type HtmlInputType = "text" | "email" | "tel" | "url";
 
 const MultiLineInput = ({
     t,
@@ -91,8 +88,8 @@ const MultiLineInput = ({
         update([...fields, ""]);
     };
 
-    const updateValue = (index: number, value: string) => {
-        update([...fields.slice(0, index), value, ...fields.slice(index + 1)]);
+    const updateValue = (index: number, val: string) => {
+        update([...fields.slice(0, index), val, ...fields.slice(index + 1)]);
     };
 
     const update = (values: string[]) => {
@@ -102,8 +99,8 @@ const MultiLineInput = ({
         });
     };
 
-    const type = inputType.startsWith("html")
-        ? (inputType.substring("html".length + 2) as TextInputTypes)
+    const type: HtmlInputType = inputType.startsWith("html")
+        ? (inputType.substring("html".length + 2) as HtmlInputType)
         : "text";
 
     useEffect(() => {
@@ -111,44 +108,45 @@ const MultiLineInput = ({
     }, [register]);
 
     return (
-        <div id={id}>
-            {fields.map((value, index) => (
+        <div id={id} className="flex flex-col gap-2">
+            {fields.map((val, index) => (
                 <Fragment key={index}>
-                    <InputGroup>
-                        <InputGroupItem isFill>
-                            <TextInput
-                                data-testid={name + index}
-                                onChange={(_event, value) => updateValue(index, value)}
-                                name={`${name}.${index}.value`}
-                                value={value}
-                                isDisabled={isDisabled}
-                                type={type}
-                                {...rest}
-                            />
-                        </InputGroupItem>
-                        <InputGroupItem>
-                            <Button
-                                data-testid={"remove" + index}
-                                variant={ButtonVariant.link}
-                                onClick={() => remove(index)}
-                                tabIndex={-1}
-                                aria-label={t("remove")}
-                                isDisabled={fields.length === 1 || isDisabled}
-                            >
-                                <MinusCircle size={20} />
-                            </Button>
-                        </InputGroupItem>
-                    </InputGroup>
+                    <div className="flex w-full items-center gap-1 rounded-lg border border-input bg-transparent">
+                        <Input
+                            data-testid={name + index}
+                            onChange={e => updateValue(index, e.target.value)}
+                            value={val}
+                            disabled={isDisabled}
+                            type={type}
+                            className="flex-1 border-0 shadow-none focus-visible:ring-0"
+                            {...rest}
+                        />
+                        <Button
+                            type="button"
+                            variant="ghost"
+                            size="icon"
+                            data-testid={"remove" + index}
+                            onClick={() => remove(index)}
+                            tabIndex={-1}
+                            aria-label={t("remove")}
+                            disabled={fields.length === 1 || isDisabled}
+                            className="shrink-0"
+                        >
+                            <MinusCircle className="size-5" />
+                        </Button>
+                    </div>
                     {index === fields.length - 1 && (
                         <Button
-                            variant={ButtonVariant.link}
+                            type="button"
+                            variant="link"
                             onClick={append}
                             tabIndex={-1}
                             aria-label={t("add")}
                             data-testid="addValue"
-                            isDisabled={!value || isDisabled}
+                            disabled={!val || isDisabled}
+                            className="h-auto p-0"
                         >
-                            <PlusCircle size={20} /> {t(addButtonLabel || "add")}
+                            <PlusCircle className="size-5 mr-1" /> {t(addButtonLabel || "add")}
                         </Button>
                     )}
                 </Fragment>

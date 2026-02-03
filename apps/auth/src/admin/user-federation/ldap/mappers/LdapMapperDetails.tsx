@@ -27,7 +27,7 @@ import {
 import { Button } from "@merge/ui/components/button";
 import { DropdownMenuItem } from "@merge/ui/components/dropdown-menu";
 import { Label } from "@merge/ui/components/label";
-import { SelectOption } from "../../../../shared/@patternfly/react-core";
+import { SelectOption } from "../../../../shared/keycloak-ui-shared";
 import { useState } from "react";
 import { Controller, FormProvider, useForm, useWatch } from "react-hook-form";
 import { useTranslation } from "react-i18next";

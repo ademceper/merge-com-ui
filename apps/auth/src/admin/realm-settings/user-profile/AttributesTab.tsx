@@ -16,7 +16,7 @@ import { KeycloakSelect, SelectVariant } from "../../../shared/keycloak-ui-share
 import { Button } from "@merge/ui/components/button";
 import { Separator } from "@merge/ui/components/separator";
 import { Funnel } from "@phosphor-icons/react";
-import { SelectOption } from "../../../shared/@patternfly/react-core";
+import { SelectOption } from "../../../shared/keycloak-ui-shared";
 import { uniqBy } from "lodash-es";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";

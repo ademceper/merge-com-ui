@@ -11,17 +11,13 @@
 
 // @ts-nocheck
 
-import { PropsWithChildren, useCallback, useMemo, useState } from "react";
+import { PropsWithChildren, useCallback, useMemo } from "react";
 import { useTranslation } from "react-i18next";
 
+import { toast } from "@merge/ui/components/sonner";
 import { createNamedContext } from "../utils/createNamedContext";
 import { getErrorDescription, getErrorMessage } from "../utils/errors";
-import { generateId } from "../utils/generateId";
 import { useRequiredContext } from "../utils/useRequiredContext";
-import { useSetTimeout } from "../utils/useSetTimeout";
-import { AlertPanel } from "./AlertPanel";
-
-const ALERT_TIMEOUT = 8000;
 
 export const AlertVariant = {
     success: "success",
@@ -60,25 +56,25 @@ export type AlertEntry = {
 
 export const AlertProvider = ({ children }: PropsWithChildren) => {
     const { t } = useTranslation();
-    const setTimeout = useSetTimeout();
-    const [alerts, setAlerts] = useState<AlertEntry[]>([]);
-
-    const removeAlert = (id: number) =>
-        setAlerts(alerts => alerts.filter(alert => alert.id !== id));
 
     const addAlert = useCallback<AddAlertFunction>(
         (message, variant = "success", description) => {
-            const alert: AlertEntry = {
-                id: generateId(),
-                message,
-                variant,
-                description
-            };
-
-            setAlerts(alerts => [alert, ...alerts]);
-            setTimeout(() => removeAlert(alert.id), ALERT_TIMEOUT);
+            const options = description ? { description } : undefined;
+            switch (variant) {
+                case "danger":
+                    toast.error(message, options);
+                    break;
+                case "warning":
+                    toast.warning(message, options);
+                    break;
+                case "info":
+                    toast.info(message, options);
+                    break;
+                default:
+                    toast.success(message, options);
+            }
         },
-        [setTimeout]
+        []
     );
 
     const addError = useCallback<AddErrorFunction>(
@@ -95,7 +91,6 @@ export const AlertProvider = ({ children }: PropsWithChildren) => {
 
     return (
         <AlertContext.Provider value={value}>
-            <AlertPanel alerts={alerts} onCloseAlert={removeAlert} />
             {children}
         </AlertContext.Provider>
     );

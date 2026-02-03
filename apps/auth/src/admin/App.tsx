@@ -84,7 +84,7 @@ export const App = () => {
                         <AdminHeader />
                         <div
                             id={mainPageContentId}
-                            className="flex flex-1 flex-col gap-4 p-4 pt-0"
+                            className="flex flex-1 flex-col gap-4 px-4 py-4 pt-0"
                         >
                             <ErrorBoundaryFallback fallback={ErrorRenderer}>
                                 <Suspense fallback={<KeycloakSpinner />}>

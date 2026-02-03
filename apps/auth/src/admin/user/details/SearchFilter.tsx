@@ -14,7 +14,7 @@
 import { KeycloakSelect } from "../../../shared/keycloak-ui-shared";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@merge/ui/components/dropdown-menu";
 import { Button } from "@merge/ui/components/button";
-import { SelectOption } from "../../../shared/@patternfly/react-core";
+import { SelectOption } from "../../../shared/keycloak-ui-shared";
 import { Funnel } from "@phosphor-icons/react";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";

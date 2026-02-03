@@ -11,7 +11,7 @@
 
 // @ts-nocheck
 
-import iconSvgUrl from "../assets/icon.svg";
+const baseUrl = import.meta.env.BASE_URL;
 import FeatureRepresentation, {
     FeatureType
 } from "@keycloak/keycloak-admin-client/lib/defs/featureRepresentation";
@@ -38,13 +38,20 @@ const EmptyDashboard = () => {
     const realmDisplayInfo = label(t, realmInfo?.displayName, realm);
 
     return (
-        <section className="py-6 bg-muted/30">
+        <section className="py-6">
             <Empty className="keycloak__dashboard_empty min-h-[280px]">
-                <img
-                    src={iconSvgUrl}
-                    alt="Keycloak icon"
-                    className="keycloak__dashboard_icon size-16 object-contain"
-                />
+                <div className="keycloak__dashboard_icon flex items-center justify-center gap-0">
+                    <img
+                        src={`${baseUrl}merge-black-text.svg`}
+                        alt=""
+                        className="h-8 w-auto object-contain dark:hidden"
+                    />
+                    <img
+                        src={`${baseUrl}merge-white-text.svg`}
+                        alt=""
+                        className="hidden h-8 w-auto object-contain dark:block"
+                    />
+                </div>
                 <EmptyHeader>
                     <EmptyTitle className="text-2xl">{t("welcome")}</EmptyTitle>
                     <EmptyTitle className="text-3xl font-semibold">{realmDisplayInfo}</EmptyTitle>
@@ -110,7 +117,7 @@ const Dashboard = () => {
         switch (tab) {
             case "info":
                 return (
-                    <section className="py-6 bg-muted/30">
+                    <section className="py-6">
                         <div className="grid grid-cols-1 lg:grid-cols-12 gap-4">
                             <div className="lg:col-span-2">
                                 <Card className="keycloak__dashboard_card">
@@ -199,7 +206,7 @@ const Dashboard = () => {
                 return <ProviderInfo />;
             default:
                 return (
-                    <section className="py-6 bg-muted/30">
+                    <section className="py-6">
                         <div className="grid gap-4 ml-6">
                             <div className="col-span-12">
                                 <h2
@@ -244,10 +251,10 @@ const Dashboard = () => {
 
     return (
         <>
-            <section className="py-6 bg-muted/30">
+            <section className="py-6">
                 <h1 className="text-2xl font-semibold">{t("realmNameTitle", { name: realm })}</h1>
             </section>
-            <section className="py-0 bg-muted/30">
+            <section className="py-0">
                 {renderContent()}
             </section>
         </>

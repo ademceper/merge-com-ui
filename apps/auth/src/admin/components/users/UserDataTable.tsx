@@ -25,12 +25,8 @@ import { Button } from "@merge/ui/components/button";
 import { Badge } from "@merge/ui/components/badge";
 import { Label } from "@merge/ui/components/label";
 import { Tooltip, TooltipContent, TooltipTrigger, TooltipProvider } from "@merge/ui/components/tooltip";
-import {
-    Chip,
-    ChipGroup
-} from "../../../shared/@patternfly/react-core";
 import { WarningCircle, Info, Warning } from "@phosphor-icons/react";
-import type { IRowData } from "../../../shared/@patternfly/react-table";
+import type { IRowData } from "../../../shared/keycloak-ui-shared";
 import { JSX, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Link, useNavigate } from "react-router-dom";
@@ -272,45 +268,34 @@ export function UserDataTable() {
 
     const createAttributeSearchChips = () => {
         return (
-            <div>
-                {activeFilters.userAttribute.length > 0 && (
-                    <>
-                        {Object.values(activeFilters.userAttribute).map(entry => {
-                            return (
-                                <ChipGroup
-                                    className="pf-v5-u-mt-md pf-v5-u-mr-md"
-                                    data-testid="user-attribute-search-chips-group"
-                                    key={entry.name}
-                                    categoryName={
-                                        entry.displayName.length
-                                            ? entry.displayName
-                                            : entry.name
-                                    }
-                                    isClosable
-                                    onClick={event => {
-                                        event.stopPropagation();
-
-                                        const filtered = [
-                                            ...activeFilters.userAttribute
-                                        ].filter(chip => chip.name !== entry.name);
-                                        const active = {
-                                            userAttribute: filtered,
-                                            exact: activeFilters.exact
-                                        };
-
-                                        setActiveFilters(active);
-                                        setQuery(createQueryString(active));
-                                        refresh();
-                                    }}
-                                >
-                                    <Chip key={entry.name} isReadOnly>
-                                        {entry.value}
-                                    </Chip>
-                                </ChipGroup>
-                            );
-                        })}
-                    </>
-                )}
+            <div className="mt-2 mr-2 flex flex-wrap gap-1">
+                {activeFilters.userAttribute.length > 0 &&
+                    Object.values(activeFilters.userAttribute).map(entry => {
+                        const categoryName =
+                            entry.displayName.length ? entry.displayName : entry.name;
+                        return (
+                            <Badge
+                                key={entry.name}
+                                variant="secondary"
+                                data-testid="user-attribute-search-chips-group"
+                                className="cursor-pointer gap-1 py-1 pr-1"
+                                onClick={event => {
+                                    event.stopPropagation();
+                                    const filtered = activeFilters.userAttribute.filter(
+                                        chip => chip.name !== entry.name
+                                    );
+                                    setActiveFilters({
+                                        userAttribute: filtered,
+                                        exact: activeFilters.exact
+                                    });
+                                    setQuery(createQueryString({ userAttribute: filtered, exact: activeFilters.exact }));
+                                    refresh();
+                                }}
+                            >
+                                <span className="font-medium">{categoryName}:</span> {entry.value}
+                            </Badge>
+                        );
+                    })}
             </div>
         );
     };

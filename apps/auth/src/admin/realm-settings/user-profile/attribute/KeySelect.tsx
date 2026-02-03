@@ -16,7 +16,7 @@ import {
     SelectControlOption
 } from "../../../../shared/keycloak-ui-shared";
 import { Input } from "@merge/ui/components/input";
-import { SelectOption } from "../../../../shared/@patternfly/react-core";
+import { SelectOption } from "../../../../shared/keycloak-ui-shared";
 import { useState } from "react";
 import { UseControllerProps, useController } from "react-hook-form";
 import { useTranslation } from "react-i18next";

@@ -12,8 +12,7 @@
 // @ts-nocheck
 
 import OrganizationRepresentation from "@keycloak/keycloak-admin-client/lib/defs/organizationRepresentation";
-import { Badge, Chip, ChipGroup } from "../../@patternfly/react-core";
-import { TableText } from "../../@patternfly/react-table";
+import { Badge } from "@merge/ui/components/badge";
 import { FunctionComponent, PropsWithChildren, ReactNode } from "react";
 import { useTranslation } from "react-i18next";
 import { KeycloakDataTable, LoaderFunction } from "./table/KeycloakDataTable";
@@ -29,40 +28,35 @@ const OrgDetailLink = ({ link, organization }: OrgDetailLinkProps) => {
     const { t } = useTranslation();
     const Component = link;
     return (
-        <TableText wrapModifier="truncate">
+        <span className="truncate block">
             <Component organization={organization}>
                 {organization.name}
                 {!organization.enabled && (
                     <Badge
                         key={`${organization.id}-disabled`}
-                        isRead
-                        className="pf-v5-u-ml-sm"
+                        variant="secondary"
+                        className="ml-2"
                     >
                         {t("disabled")}
                     </Badge>
                 )}
             </Component>
-        </TableText>
+        </span>
     );
 };
 
 const Domains = (org: OrganizationRepresentation) => {
-    const { t } = useTranslation();
     return (
-        <ChipGroup
-            numChips={2}
-            expandedText={t("hide")}
-            collapsedText={t("showRemaining")}
-        >
+        <div className="flex flex-wrap gap-1">
             {org.domains?.map(dn => {
                 const name = typeof dn === "string" ? dn : dn.name;
                 return (
-                    <Chip key={name} isReadOnly>
+                    <Badge key={name} variant="secondary">
                         {name}
-                    </Chip>
+                    </Badge>
                 );
             })}
-        </ChipGroup>
+        </div>
     );
 };
 

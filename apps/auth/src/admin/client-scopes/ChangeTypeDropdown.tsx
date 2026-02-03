@@ -12,10 +12,12 @@
 // @ts-nocheck
 
 import {
-    MenuToggle,
     Select,
-    SelectList
-} from "../../shared/@patternfly/react-core";
+    SelectContent,
+    SelectTrigger,
+    SelectValue
+} from "@merge/ui/components/select";
+import { Button } from "@merge/ui/components/button";
 import { AlertVariant } from "../../shared/keycloak-ui-shared";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -50,25 +52,13 @@ export const ChangeTypeDropdown = ({
 
     return (
         <Select
-            aria-label="change-type-to"
-            onOpenChange={isOpen => setOpen(isOpen)}
-            isOpen={open}
-            toggle={ref => (
-                <MenuToggle
-                    id="change-type-dropdown"
-                    isDisabled={selectedRows.length === 0}
-                    ref={ref}
-                    onClick={() => setOpen(!open)}
-                    isExpanded={open}
-                >
-                    {t("changeTypeTo")}
-                </MenuToggle>
-            )}
-            onSelect={async (_, value) => {
+            open={open}
+            onOpenChange={setOpen}
+            onValueChange={async (value) => {
                 try {
                     await Promise.all(
-                        selectedRows.map(row => {
-                            return clientId
+                        selectedRows.map(row =>
+                            clientId
                                 ? changeClientScope(
                                       adminClient,
                                       clientId,
@@ -76,8 +66,8 @@ export const ChangeTypeDropdown = ({
                                       row.type,
                                       value as ClientScope
                                   )
-                                : changeScope(adminClient, row, value as ClientScope);
-                        })
+                                : changeScope(adminClient, row, value as ClientScope)
+                        )
                     );
                     setOpen(false);
                     refresh();
@@ -87,12 +77,22 @@ export const ChangeTypeDropdown = ({
                 }
             }}
         >
-            <SelectList>
+            <SelectTrigger asChild>
+                <Button
+                    id="change-type-dropdown"
+                    variant="outline"
+                    disabled={selectedRows.length === 0}
+                    aria-label="change-type-to"
+                >
+                    <SelectValue placeholder={t("changeTypeTo")} />
+                </Button>
+            </SelectTrigger>
+            <SelectContent>
                 {clientScopeTypesSelectOptions(
                     t,
                     !clientId ? allClientScopeTypes : undefined
                 )}
-            </SelectList>
+            </SelectContent>
         </Select>
     );
 };

@@ -1,10 +1,11 @@
-/* eslint-disable */
-// @ts-nocheck
-
-import { Separator } from "@merge/ui/components/separator";
+import { useTranslation } from "react-i18next";
 import { SidebarTrigger } from "@merge/ui/components/sidebar";
-import { ThemeToggleButton } from "@merge/ui/components/theme-toggle";
 import { PageBreadCrumbs } from "./bread-crumb/PageBreadCrumbs";
+import { Separator } from "@merge/ui/components/separator";
+import { useEnvironment } from "../../shared/keycloak-ui-shared";
+import type { Environment } from "../environment";
+import { AdminNavUser } from "./AdminNavUser";
+import { loggedInUserName, avatarInitials, userEmailFromToken } from "../utils/userMenuUtils";
 
 export type UserMenuInfo = {
     keycloak: {
@@ -18,19 +19,32 @@ export type UserMenuInfo = {
 };
 
 export function AdminHeader() {
+    const { t } = useTranslation();
+    const { keycloak } = useEnvironment<Environment>();
+
+    const userMenuInfo: UserMenuInfo = {
+        keycloak,
+        userName: loggedInUserName(keycloak.idTokenParsed, t),
+        userEmail: userEmailFromToken(keycloak.idTokenParsed),
+        userAvatarUrl: keycloak.idTokenParsed?.picture ?? undefined,
+        initials: avatarInitials(keycloak.idTokenParsed)
+    };
+
     return (
-        <header className="flex h-16 shrink-0 items-center gap-2 border-b bg-background">
+        <header className="flex h-16 shrink-0 items-center gap-2 bg-background">
             <div className="flex items-center gap-2 px-4">
-                <SidebarTrigger className="-ml-1" />
-                <Separator
-                    orientation="vertical"
-                    className="mr-2 h-4 data-[orientation=vertical]:h-4"
-                />
+                <div className="flex h-4 items-center gap-2">
+                    <SidebarTrigger />
+                    <Separator
+                        orientation="vertical"
+                        className="h-4 w-px shrink-0"
+                    />
+                </div>
                 <PageBreadCrumbs />
             </div>
             <div className="flex-1 min-w-0" />
-            <div className="flex items-center gap-2 px-4">
-                <ThemeToggleButton />
+            <div className="flex items-center px-4">
+                <AdminNavUser userMenuInfo={userMenuInfo} avatarOnly />
             </div>
         </header>
     );

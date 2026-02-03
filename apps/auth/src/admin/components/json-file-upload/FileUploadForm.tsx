@@ -21,7 +21,8 @@ import {
 } from "@merge/ui/components/dialog";
 import { Label } from "@merge/ui/components/label";
 import { Input } from "@merge/ui/components/input";
-import type { FileUploadProps } from "../../../shared/@patternfly/react-core";
+/** Local type replacing PatternFly FileUploadProps; only used for Omit. */
+type FileUploadProps = { id?: string; value?: string; filename?: string; onChange?: (value: string) => void; onClear?: () => void; isDisabled?: boolean };
 import {
     ChangeEvent,
     DragEvent as ReactDragEvent,

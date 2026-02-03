@@ -99,3 +99,5 @@ export {
 } from "./utils/ErrorBoundary";
 export type { FallbackProps } from "./utils/ErrorBoundary";
 export { OrganizationTable } from "./controls/OrganizationTable";
+export { cellWidth } from "./controls/table/table-utils";
+export type { IRowData } from "./controls/table/table-utils";

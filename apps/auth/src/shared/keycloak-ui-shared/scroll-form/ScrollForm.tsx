@@ -3,7 +3,7 @@
  *
  * $ npx keycloakify own --path "shared/keycloak-ui-shared/scroll-form/ScrollForm.tsx"
  *
- * This file is provided by @keycloakify/keycloak-ui-shared version 260502.0.0.
+ * This file is provided by @keycloakify/keycloak-admin-ui version 260502.0.0.
  * It was copied into your repository by the postinstall script: `keycloakify sync-extensions`.
  */
 
@@ -11,14 +11,6 @@
 
 // @ts-nocheck
 
-import {
-    Grid,
-    GridItem,
-    GridProps,
-    JumpLinks,
-    JumpLinksItem,
-    PageSection
-} from "../../@patternfly/react-core";
 import { Fragment, ReactNode, useMemo } from "react";
 import { FormPanel } from "./FormPanel";
 import { ScrollPanel } from "./ScrollPanel";
@@ -33,10 +25,11 @@ type ScrollSection = {
     isHidden?: boolean;
 };
 
-type ScrollFormProps = GridProps & {
+type ScrollFormProps = {
     label: string;
     sections: ScrollSection[];
     borders?: boolean;
+    className?: string;
 };
 
 const spacesToHyphens = (string: string): string => {
@@ -47,7 +40,7 @@ export const ScrollForm = ({
     label,
     sections,
     borders = false,
-    ...rest
+    className
 }: ScrollFormProps) => {
     const shownSections = useMemo(
         () => sections.filter(({ isHidden }) => !isHidden),
@@ -55,8 +48,8 @@ export const ScrollForm = ({
     );
 
     return (
-        <Grid hasGutter {...rest}>
-            <GridItem md={8} sm={12}>
+        <div className={className ?? "grid grid-cols-1 gap-4 md:grid-cols-12"}>
+            <div className="md:col-span-8">
                 {shownSections.map(({ title, panel }) => {
                     const scrollId = spacesToHyphens(title.toLowerCase());
 
@@ -78,41 +71,34 @@ export const ScrollForm = ({
                         </Fragment>
                     );
                 })}
-            </GridItem>
-            <GridItem md={4} sm={12} order={{ default: "-1", md: "1" }}>
-                <PageSection className={style.sticky}>
-                    <JumpLinks
-                        isVertical
-                        // scrollableSelector has to point to the id of the element whose scrollTop changes
-                        // to scroll the entire main section, it has to be the pf-v5-c-page__main
-                        scrollableSelector={`#${mainPageContentId}`}
-                        label={label}
-                        offset={100}
-                    >
-                        {shownSections.map(({ title }) => {
-                            const scrollId = spacesToHyphens(title.toLowerCase());
+            </div>
+            <div className={style.sticky + " md:order-1 md:col-span-4"}>
+                <nav aria-label={label} className="flex flex-col gap-1">
+                    {shownSections.map(({ title }) => {
+                        const scrollId = spacesToHyphens(title.toLowerCase());
 
-                            return (
-                                <JumpLinksItem
-                                    key={title}
-                                    onClick={() => {
-                                        const element = document.getElementById(scrollId);
-                                        if (element) {
-                                            element.scrollIntoView({
-                                                behavior: "smooth",
-                                                block: "start"
-                                            });
-                                        }
-                                    }}
-                                    data-testid={`jump-link-${scrollId}`}
-                                >
-                                    {title}
-                                </JumpLinksItem>
-                            );
-                        })}
-                    </JumpLinks>
-                </PageSection>
-            </GridItem>
-        </Grid>
+                        return (
+                            <button
+                                key={title}
+                                type="button"
+                                className="text-primary hover:underline text-left text-sm"
+                                onClick={() => {
+                                    const element = document.getElementById(scrollId);
+                                    if (element) {
+                                        element.scrollIntoView({
+                                            behavior: "smooth",
+                                            block: "start"
+                                        });
+                                    }
+                                }}
+                                data-testid={`jump-link-${scrollId}`}
+                            >
+                                {title}
+                            </button>
+                        );
+                    })}
+                </nav>
+            </div>
+        </div>
     );
 };

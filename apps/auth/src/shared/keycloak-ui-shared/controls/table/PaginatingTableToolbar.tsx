@@ -3,8 +3,8 @@
  *
  * $ npx keycloakify own --path "shared/keycloak-ui-shared/controls/table/PaginatingTableToolbar.tsx"
  *
- * This file is provided by @keycloakify/keycloak-ui-shared version 260502.0.0.
- * It was copied into your repository by the postinstall script: `keycloakify sync-extensions`.
+ * This file is provided by @keycloakify/keycloak-admin-ui version 260502.0.0.
+ * It was copied into your repository by the keycloakify sync-extensions.
  */
 
 /* eslint-disable */
@@ -13,9 +13,19 @@
 
 import {
     Pagination,
-    PaginationToggleTemplateProps,
-    ToolbarItem
-} from "../../../@patternfly/react-core";
+    PaginationContent,
+    PaginationItem,
+    PaginationNext,
+    PaginationPrevious,
+} from "@merge/ui/components/pagination";
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from "@merge/ui/components/select";
+import { Button } from "@merge/ui/components/button";
 import { PropsWithChildren, ReactNode } from "react";
 import { useTranslation } from "react-i18next";
 
@@ -41,6 +51,8 @@ type TableToolbarProps = KeycloakPaginationProps & {
     inputGroupOnEnter?: (value: string) => void;
 };
 
+const PER_PAGE_OPTIONS = [10, 20, 50, 100];
+
 const KeycloakPagination = ({
     id,
     variant = "top",
@@ -53,29 +65,61 @@ const KeycloakPagination = ({
 }: KeycloakPaginationProps) => {
     const { t } = useTranslation();
     const page = Math.round(first / max);
+    const totalPages = Math.ceil((count + page * max) / max) || 1;
+    const currentPage = page + 1;
+    const firstIndex = first + 1;
+    const lastIndex = Math.min(first + max, count + page * max);
+
     return (
-        <Pagination
-            widgetId={id}
-            titles={{
-                paginationAriaLabel: `${t("pagination")} ${variant} `
-            }}
-            isCompact
-            toggleTemplate={({
-                firstIndex,
-                lastIndex
-            }: PaginationToggleTemplateProps) => (
-                <b>
-                    {firstIndex} - {lastIndex}
-                </b>
-            )}
-            itemCount={count + page * max}
-            page={page + 1}
-            perPage={max}
-            onNextClick={(_, p) => onNextClick((p - 1) * max)}
-            onPreviousClick={(_, p) => onPreviousClick((p - 1) * max)}
-            onPerPageSelect={(_, m, f) => onPerPageSelect(f - 1, m)}
-            variant={variant}
-        />
+        <div id={id} className="flex items-center gap-2" aria-label={`${t("pagination")} ${variant}`}>
+            <span className="text-muted-foreground text-sm whitespace-nowrap">
+                <strong>{firstIndex}</strong> - <strong>{lastIndex}</strong>
+            </span>
+            <Select
+                value={String(max)}
+                onValueChange={v => onPerPageSelect(Number(v), 0)}
+            >
+                <SelectTrigger size="sm" className="w-[70px]">
+                    <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                    {PER_PAGE_OPTIONS.map(n => (
+                        <SelectItem key={n} value={String(n)}>
+                            {n}
+                        </SelectItem>
+                    ))}
+                </SelectContent>
+            </Select>
+            <Pagination>
+                <PaginationContent>
+                    <PaginationItem>
+                        <PaginationPrevious
+                            href="#"
+                            onClick={e => {
+                                e?.preventDefault?.();
+                                if (currentPage > 1) onPreviousClick((currentPage - 2) * max);
+                            }}
+                            className={currentPage <= 1 ? "pointer-events-none opacity-50" : ""}
+                        />
+                    </PaginationItem>
+                    <PaginationItem>
+                        <span className="text-muted-foreground px-2 text-sm">
+                            {t("paginationPage", { page: currentPage, total: totalPages })}
+                        </span>
+                    </PaginationItem>
+                    <PaginationItem>
+                        <PaginationNext
+                            href="#"
+                            onClick={e => {
+                                e?.preventDefault?.();
+                                if (currentPage < totalPages) onNextClick(currentPage * max);
+                            }}
+                            className={currentPage >= totalPages ? "pointer-events-none opacity-50" : ""}
+                        />
+                    </PaginationItem>
+                </PaginationContent>
+            </Pagination>
+        </div>
     );
 };
 
@@ -96,17 +140,17 @@ export const PaginatingTableToolbar = ({
             toolbarItem={
                 <>
                     {toolbarItem}
-                    <ToolbarItem variant="pagination">
+                    <div className="flex items-center">
                         <KeycloakPagination count={count} {...rest} />
-                    </ToolbarItem>
+                    </div>
                 </>
             }
             subToolbar={subToolbar}
             toolbarItemFooter={
                 count !== 0 ? (
-                    <ToolbarItem variant="pagination">
+                    <div className="flex items-center">
                         <KeycloakPagination count={count} variant="bottom" {...rest} />
-                    </ToolbarItem>
+                    </div>
                 ) : null
             }
             inputGroupName={inputGroupName}

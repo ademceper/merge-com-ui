@@ -18,7 +18,7 @@ import { Input } from "@merge/ui/components/input";
 import { Label } from "@merge/ui/components/label";
 import { Separator } from "@merge/ui/components/separator";
 import { X } from "@phosphor-icons/react";
-import { SelectOption } from "../../../shared/@patternfly/react-core";
+import { SelectOption } from "../../../shared/keycloak-ui-shared";
 import { pickBy } from "lodash-es";
 import { useMemo, useState } from "react";
 import { Controller, useForm } from "react-hook-form";

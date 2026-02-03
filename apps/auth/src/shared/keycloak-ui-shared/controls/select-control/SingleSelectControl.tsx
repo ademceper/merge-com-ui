@@ -3,7 +3,7 @@
  *
  * $ npx keycloakify own --path "shared/keycloak-ui-shared/controls/select-control/SingleSelectControl.tsx"
  *
- * This file is provided by @keycloakify/keycloak-ui-shared version 260502.0.0.
+ * This file is provided by @keycloakify/keycloak-admin-ui version 260502.0.0.
  * It was copied into your repository by the postinstall script: `keycloakify sync-extensions`.
  */
 
@@ -12,12 +12,12 @@
 // @ts-nocheck
 
 import {
-    MenuToggle,
-    MenuToggleStatus,
     Select,
-    SelectList,
-    SelectOption
-} from "../../../@patternfly/react-core";
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from "@merge/ui/components/select";
 import { get } from "lodash-es";
 import { useState } from "react";
 import { Controller, FieldPath, FieldValues, useFormContext } from "react-hook-form";
@@ -38,6 +38,7 @@ export const SingleSelectControl = <
     labelIcon,
     isDisabled,
     onSelect,
+    placeholderText,
     ...rest
 }: SelectControlProps<T, P>) => {
     const {
@@ -46,6 +47,8 @@ export const SingleSelectControl = <
     } = useFormContext();
     const [open, setOpen] = useState(false);
     const required = getRuleValue(controller.rules?.required) === true;
+
+    const allOptions = [...(Array.isArray(options) ? options : []), ...(selectedOptions || [])];
 
     return (
         <FormLabel
@@ -60,70 +63,48 @@ export const SingleSelectControl = <
                 {...controller}
                 name={name}
                 control={control}
-                render={({ field: { onChange, value } }) => (
-                    <Select
-                        {...rest}
-                        variant="default"
-                        onClick={() => setOpen(!open)}
-                        onOpenChange={() => setOpen(false)}
-                        selected={
-                            isSelectBasedOptions(options)
-                                ? options
-                                      .filter(o =>
-                                          Array.isArray(value)
-                                              ? value.includes(o.key)
-                                              : value === o.key
-                                      )
-                                      .map(o => o.value)
-                                : value
-                        }
-                        toggle={ref => (
-                            <MenuToggle
-                                id={id || name}
-                                ref={ref}
-                                onClick={() => setOpen(!open)}
-                                isExpanded={open}
-                                isFullWidth
-                                status={
-                                    get(errors, name)
-                                        ? MenuToggleStatus.danger
-                                        : undefined
+                render={({ field: { onChange, value } }) => {
+                    const strValue = Array.isArray(value) ? value[0] : value;
+                    const displayValue = isSelectBasedOptions(allOptions)
+                        ? allOptions.find(o => o.key === strValue)?.value ?? ""
+                        : (strValue ?? "");
+                    return (
+                        <Select
+                            {...rest}
+                            open={open}
+                            onOpenChange={setOpen}
+                            value={strValue ?? ""}
+                            onValueChange={v => {
+                                const convertedValue = Array.isArray(value) ? [v] : v;
+                                if (onSelect) {
+                                    onSelect(convertedValue, onChange);
+                                } else {
+                                    onChange(convertedValue);
                                 }
+                                setOpen(false);
+                            }}
+                            disabled={isDisabled}
+                        >
+                            <SelectTrigger
+                                id={id || name}
                                 aria-label={label}
-                                isDisabled={isDisabled}
+                                aria-invalid={!!get(errors, name)}
+                                className="w-full"
                             >
-                                {isSelectBasedOptions(options)
-                                    ? options.find(
-                                          o =>
-                                              o.key ===
-                                              (Array.isArray(value) ? value[0] : value)
-                                      )?.value
-                                    : value}
-                            </MenuToggle>
-                        )}
-                        onSelect={(_event, v) => {
-                            const option = v?.toString()!;
-                            const convertedValue = Array.isArray(value)
-                                ? [option]
-                                : option;
-                            if (onSelect) {
-                                onSelect(convertedValue, onChange);
-                            } else {
-                                onChange(convertedValue);
-                            }
-                            setOpen(false);
-                        }}
-                        isOpen={open}
-                    >
-                        <SelectList data-testid={`select-${name}`}>
-                            {[...options, ...selectedOptions].map(option => (
-                                <SelectOption key={key(option)} value={key(option)}>
-                                    {isString(option) ? option : option.value}
-                                </SelectOption>
-                            ))}
-                        </SelectList>
-                    </Select>
-                )}
+                                <SelectValue placeholder={placeholderText}>
+                                    {displayValue}
+                                </SelectValue>
+                            </SelectTrigger>
+                            <SelectContent data-testid={`select-${name}`}>
+                                {allOptions.map(option => (
+                                    <SelectItem key={key(option)} value={key(option)}>
+                                        {isString(option) ? option : option.value}
+                                    </SelectItem>
+                                ))}
+                            </SelectContent>
+                        </Select>
+                    );
+                }}
             />
         </FormLabel>
     );

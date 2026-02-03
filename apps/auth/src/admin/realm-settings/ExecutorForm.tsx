@@ -24,7 +24,7 @@ import {
 import { AlertVariant } from "../../shared/keycloak-ui-shared";
 import { Button } from "@merge/ui/components/button";
 import { Label } from "@merge/ui/components/label";
-import { SelectOption } from "../../shared/@patternfly/react-core";
+import { SelectOption } from "../../shared/keycloak-ui-shared";
 import { useState } from "react";
 import { Controller, FormProvider, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";

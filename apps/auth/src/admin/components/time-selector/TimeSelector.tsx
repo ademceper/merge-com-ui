@@ -17,7 +17,7 @@ import {
     SelectVariant
 } from "../../../shared/keycloak-ui-shared";
 import { Input } from "@merge/ui/components/input";
-import { SelectOption } from "../../../shared/@patternfly/react-core";
+import { SelectOption } from "../../../shared/keycloak-ui-shared";
 import React, { useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 

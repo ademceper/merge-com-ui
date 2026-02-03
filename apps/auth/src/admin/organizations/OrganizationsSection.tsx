@@ -142,7 +142,7 @@ export default function OrganizationSection() {
                 subKey="organizationsExplain"
                 divider
             />
-            <div className="p-6">
+            <div className="py-6 px-0">
                 <DeleteConfirm />
                 <DataTable
                     key={key}

@@ -13,7 +13,7 @@
 
 import ComponentTypeRepresentation from "@keycloak/keycloak-admin-client/lib/defs/componentTypeRepresentation";
 import { KeycloakSelect } from "../../../../shared/keycloak-ui-shared";
-import { SelectOption } from "../../../../shared/@patternfly/react-core";
+import { SelectOption } from "../../../../shared/keycloak-ui-shared";
 import { Label } from "@merge/ui/components/label";
 import { useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";

@@ -23,7 +23,7 @@ import {
     KeycloakSelect,
     SelectVariant
 } from "../../../shared/keycloak-ui-shared";
-import { SelectOption } from "../../../shared/@patternfly/react-core";
+import { SelectOption } from "../../../shared/keycloak-ui-shared";
 
 export enum ClientScope {
     default = "default",

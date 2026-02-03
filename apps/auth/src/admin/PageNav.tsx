@@ -12,16 +12,9 @@
 // @ts-nocheck
 
 import { label, useEnvironment } from "../shared/keycloak-ui-shared";
-import {
-    Label,
-    Nav,
-    NavGroup,
-    PageSidebar,
-    PageSidebarBody
-} from "../shared/@patternfly/react-core";
-import { FormEvent } from "react";
+import { Label } from "@merge/ui/components/label";
 import { useTranslation } from "react-i18next";
-import { NavLink, useNavigate } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import { useAccess } from "./context/access/Access";
 import { useRealm } from "./context/realm-context/RealmContext";
 import { useServerInfo } from "./context/server-info/ServerInfoProvider";
@@ -29,8 +22,6 @@ import { Environment } from "./environment";
 import { toPage } from "./page/routes";
 import { routes } from "./routes";
 import useIsFeatureEnabled, { Feature } from "./utils/useIsFeatureEnabled";
-
-import "./page-nav.css";
 
 type LeftNavProps = {
     title: string;
@@ -65,7 +56,7 @@ const LeftNav = ({ title, path, id }: LeftNavProps) => {
                 data-testid={name}
                 to={`/${encodedRealm}${path}`}
                 className={({ isActive }) =>
-                    `pf-v5-c-nav__link${isActive ? " pf-m-current" : ""}`
+                    `block rounded-md px-2 py-1.5 text-sm no-underline outline-none hover:bg-muted focus-visible:ring-2 focus-visible:ring-ring${isActive ? " bg-muted font-medium" : ""}`
                 }
             >
                 {t(title)}
@@ -81,20 +72,7 @@ export const PageNav = () => {
     const { componentTypes } = useServerInfo();
     const isFeatureEnabled = useIsFeatureEnabled();
     const pages = componentTypes?.["org.keycloak.services.ui.extend.UiPageProvider"];
-    const navigate = useNavigate();
     const { realm, realmRepresentation } = useRealm();
-
-    type SelectedItem = {
-        groupId: number | string;
-        itemId: number | string;
-        to: string;
-        event: FormEvent<HTMLInputElement>;
-    };
-
-    const onSelect = (item: SelectedItem) => {
-        navigate(item.to);
-        item.event.preventDefault();
-    };
 
     const showManage = hasSomeAccess(
         "view-realm",
@@ -116,25 +94,26 @@ export const PageNav = () => {
     const showManageRealm = environment.masterRealm === environment.realm;
 
     return (
-        <PageSidebar className="keycloak__page_nav__nav">
-            <PageSidebarBody>
-                <Nav onSelect={(_event, item) => onSelect(item as SelectedItem)}>
+        <aside className="keycloak__page_nav__nav border-r bg-muted/30 flex w-56 flex-col">
+            <div className="flex flex-1 flex-col gap-1 overflow-y-auto p-2">
+                <nav className="flex flex-col gap-1" aria-label={t("navigation")}>
                     <h2
-                        className="pf-v5-c-nav__section-title"
+                        className="text-muted-foreground px-2 text-xs font-medium"
                         style={{ wordWrap: "break-word" }}
                     >
                         <span data-testid="currentRealm">
                             {label(t, realmRepresentation?.displayName, realm)}
                         </span>{" "}
-                        <Label color="blue">{t("currentRealm")}</Label>
+                        <Label className="text-primary">{t("currentRealm")}</Label>
                     </h2>
                     {showManageRealm && (
-                        <NavGroup>
+                        <ul className="flex flex-col gap-0.5">
                             <LeftNav title={t("manageRealms")} path="/realms" />
-                        </NavGroup>
+                        </ul>
                     )}
                     {showManage && (
-                        <NavGroup aria-label={t("manage")} title={t("manage")}>
+                        <ul className="flex flex-col gap-0.5" aria-label={t("manage")}>
+                            <li className="px-2 py-1 text-xs font-medium text-muted-foreground">{t("manage")}</li>
                             {isFeatureEnabled(Feature.Organizations) &&
                                 realmRepresentation?.organizationsEnabled && (
                                     <LeftNav
@@ -149,11 +128,12 @@ export const PageNav = () => {
                             <LeftNav title="groups" path="/groups" />
                             <LeftNav title="sessions" path="/sessions" />
                             <LeftNav title="events" path="/events" />
-                        </NavGroup>
+                        </ul>
                     )}
 
                     {showConfigure && (
-                        <NavGroup aria-label={t("configure")} title={t("configure")}>
+                        <ul className="flex flex-col gap-0.5" aria-label={t("configure")}>
+                            <li className="px-2 py-1 text-xs font-medium text-muted-foreground">{t("configure")}</li>
                             <LeftNav title="realmSettings" path="/realm-settings" />
                             <LeftNav title="authentication" path="/authentication" />
                             {isFeatureEnabled(Feature.AdminFineGrainedAuthzV2) &&
@@ -177,10 +157,10 @@ export const PageNav = () => {
                                         id="/page-section"
                                     />
                                 ))}
-                        </NavGroup>
+                        </ul>
                     )}
-                </Nav>
-            </PageSidebarBody>
-        </PageSidebar>
+                </nav>
+            </div>
+        </aside>
     );
 };

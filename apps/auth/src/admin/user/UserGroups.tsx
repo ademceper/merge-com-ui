@@ -19,7 +19,7 @@ import { Button } from "@merge/ui/components/button";
 import { Checkbox } from "@merge/ui/components/checkbox";
 import { Popover, PopoverContent, PopoverTrigger } from "@merge/ui/components/popover";
 import { Question } from "@phosphor-icons/react";
-import { cellWidth } from "../../shared/@patternfly/react-table";
+import { cellWidth } from "../../shared/keycloak-ui-shared";
 import { intersectionBy, sortBy, uniqBy } from "lodash-es";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";

@@ -17,7 +17,7 @@ import type { IdentityProvidersQuery } from "@keycloak/keycloak-admin-client/lib
 import { AlertVariant, KeycloakSpinner } from "../../shared/keycloak-ui-shared";
 import { Button } from "@merge/ui/components/button";
 import { Badge } from "@merge/ui/components/badge";
-import { cellWidth } from "../../shared/@patternfly/react-table";
+import { cellWidth } from "../../shared/keycloak-ui-shared";
 import { capitalize } from "lodash-es";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
