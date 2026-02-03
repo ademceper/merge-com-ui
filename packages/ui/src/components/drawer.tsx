@@ -46,8 +46,13 @@ export function DrawerOverlay({
 export function DrawerContent({
   className,
   children,
+  hideHandle,
+  contentClassName,
   ...props
-}: React.ComponentProps<typeof DrawerPrimitive.Content>) {
+}: React.ComponentProps<typeof DrawerPrimitive.Content> & {
+  hideHandle?: boolean
+  contentClassName?: string
+}) {
   const childArray = React.Children.toArray(children)
   const hasHeader = childArray.length >= 2
   const hasFooter = childArray.length >= 3
@@ -71,18 +76,27 @@ export function DrawerContent({
         )}
         {...props}
       >
-        <div className="bg-muted mx-auto hidden h-1 w-12 shrink-0 rounded-full group-data-[vaul-drawer-direction=bottom]/drawer-content:block" />
+        {!hideHandle && (
+          <div className="bg-muted mx-auto hidden h-1 w-12 shrink-0 rounded-full group-data-[vaul-drawer-direction=bottom]/drawer-content:block" />
+        )}
         {headerChild != null && (
           <div className="shrink-0">
             {headerChild}
             <Separator />
           </div>
         )}
-        <div className="min-h-0 flex-1 overflow-y-auto overflow-x-hidden">
+        <div
+          className={cn(
+            "min-h-0 flex-1 overflow-y-auto overflow-x-hidden",
+            contentClassName
+          )}
+        >
           {contentChildren}
         </div>
         {footerChild != null && (
-          <div className="shrink-0 border-t bg-background sticky bottom-0">{footerChild}</div>
+          <div className="shrink-0 border-t border-border bg-background sticky bottom-0">
+            {footerChild}
+          </div>
         )}
       </DrawerPrimitive.Content>
     </DrawerPortal>

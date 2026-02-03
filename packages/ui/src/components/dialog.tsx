@@ -78,13 +78,28 @@ export function DialogContent({
 }) {
   const isMobile = useIsMobile()
   if (isMobile) {
+    const childArray = React.Children.toArray(children)
+    const hasHeader = childArray.length >= 2
+    const hasFooter = childArray.length >= 3
+    const headerChild = hasHeader ? childArray[0] : null
+    const footerChild = hasFooter ? childArray[childArray.length - 1] : null
+    const contentChildren =
+      childArray.length === 1
+        ? childArray
+        : childArray.length === 2
+          ? childArray.slice(1)
+          : childArray.slice(1, -1)
+
     return (
       <DrawerContentBase
         data-slot="dialog-content"
-        className={cn("gap-4 px-4 pt-4 pb-0", className)}
+        contentClassName="px-4 pt-4 pb-4 border-b-0 [&_input]:focus-visible:ring-inset"
+        className={cn("gap-0 pt-4 pb-0", className)}
         {...props}
       >
-        {children}
+        {headerChild != null && headerChild}
+        {contentChildren}
+        {footerChild != null && footerChild}
       </DrawerContentBase>
     )
   }
@@ -124,7 +139,7 @@ export function DialogContent({
           {contentChildren}
         </div>
         {footerChild != null && (
-          <div className="shrink-0 border-t bg-background">{footerChild}</div>
+          <div className="shrink-0 border-t border-border bg-background">{footerChild}</div>
         )}
       </DialogPrimitive.Content>
     </DialogPortal>
@@ -137,7 +152,7 @@ export function DialogHeader({ className, ...props }: React.ComponentProps<"div"
     return (
       <DrawerHeaderBase
         data-slot="dialog-header"
-        className={cn("gap-2 flex flex-col", className)}
+        className={cn("gap-2 flex flex-col px-4", className)}
         {...props}
       />
     )
@@ -168,7 +183,7 @@ export function DialogFooter({
       <DrawerFooterBase
         data-slot="dialog-footer"
         className={cn(
-          "bg-muted/50 rounded-b-xl border-t -mx-4 px-4 pt-3 pb-3 flex flex-row justify-end gap-2",
+          "bg-muted/50 border-t border-border px-4 pt-3 pb-3 flex flex-col gap-2",
           className
         )}
         {...props}
@@ -186,7 +201,7 @@ export function DialogFooter({
     <div
       data-slot="dialog-footer"
       className={cn(
-        "bg-muted/50 rounded-b-xl border-t px-4 pt-3 pb-3 flex flex-col-reverse gap-2 sm:flex-row sm:justify-end",
+        "bg-muted/50 rounded-b-xl border-t border-border px-4 pt-3 pb-3 flex flex-col-reverse gap-2 sm:flex-row sm:justify-end",
         className
       )}
       {...props}
