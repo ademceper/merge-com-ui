@@ -25,10 +25,6 @@ import {
     TableBody,
 } from "@merge/ui/components/table";
 import { Graph, Table as TableIconPhosphor } from "@phosphor-icons/react";
-import {
-    DragDrop,
-    Droppable,
-} from "../../shared/@patternfly/react-core";
 import { useState } from "react";
 import { Trans, useTranslation } from "react-i18next";
 import { useNavigate, useParams } from "react-router-dom";
@@ -415,108 +411,56 @@ export default function FlowDetails() {
                         </div>
                         <DeleteConfirm />
                         {tableView && (
-                            <DragDrop
-                                onDrag={({ index }) => {
-                                    const item = executionList.findExecution(index)!;
-                                    setLiveText(
-                                        t("onDragStart", { item: item.displayName })
-                                    );
-                                    if (!item.isCollapsed) {
-                                        item.isCollapsed = true;
-                                        setExecutionList(executionList.clone());
-                                    }
-                                    return true;
-                                }}
-                                onDragMove={({ index }) => {
-                                    const dragged = executionList.findExecution(index);
-                                    setLiveText(
-                                        t("onDragMove", { item: dragged?.displayName })
-                                    );
-                                }}
-                                onDrop={(source, dest) => {
-                                    if (dest) {
-                                        const dragged = executionList.findExecution(
-                                            source.index
-                                        )!;
-                                        const order = executionList
-                                            .order()
-                                            .map(ex => ex.id!);
-                                        setLiveText(
-                                            t("onDragFinish", {
-                                                list: dragged.displayName
-                                            })
-                                        );
-
-                                        const [removed] = order.splice(source.index, 1);
-                                        order.splice(dest.index, 0, removed);
-                                        const change = executionList.getChange(
-                                            dragged,
-                                            order
-                                        );
-                                        void executeChange(dragged, change);
-                                        return true;
-                                    } else {
-                                        setLiveText(t("onDragCancel"));
-                                        return false;
-                                    }
-                                }}
+                            <Table
+                                aria-label={t("flows")}
+                                className="text-sm"
                             >
-                                <Droppable hasNoWrapper>
-                                    <Table
-                                        aria-label={t("flows")}
-                                        className="text-sm"
-                                    >
-                                        <FlowHeader />
-                                        <>
-                                            {executionList.expandableList.map(
-                                                execution => (
-                                                    <TableBody
-                                                        draggable
-                                                        key={execution.id}
-                                                    >
-                                                        <FlowRow
-                                                            builtIn={!!builtIn}
-                                                            execution={execution}
-                                                            onRowClick={execution => {
-                                                                execution.isCollapsed =
-                                                                    !execution.isCollapsed;
-                                                                setExecutionList(
-                                                                    executionList.clone()
-                                                                );
-                                                            }}
-                                                            onRowChange={update}
-                                                            onAddExecution={(
-                                                                execution,
-                                                                type
-                                                            ) =>
-                                                                addExecution(
-                                                                    execution.displayName!,
-                                                                    type
-                                                                )
-                                                            }
-                                                            onAddFlow={(
-                                                                execution,
-                                                                flow
-                                                            ) =>
-                                                                addFlow(
-                                                                    execution.displayName!,
-                                                                    flow
-                                                                )
-                                                            }
-                                                            onDelete={execution => {
-                                                                setSelectedExecution(
-                                                                    execution
-                                                                );
-                                                                toggleDeleteDialog();
-                                                            }}
-                                                        />
-                                                    </TableBody>
-                                                )
-                                            )}
-                                        </>
-                                    </Table>
-                                </Droppable>
-                            </DragDrop>
+                                <FlowHeader />
+                                <>
+                                    {executionList.expandableList.map(
+                                        execution => (
+                                            <TableBody key={execution.id}>
+                                                <FlowRow
+                                                    builtIn={!!builtIn}
+                                                    execution={execution}
+                                                    onRowClick={execution => {
+                                                        execution.isCollapsed =
+                                                            !execution.isCollapsed;
+                                                        setExecutionList(
+                                                            executionList.clone()
+                                                        );
+                                                    }}
+                                                    onRowChange={update}
+                                                    onAddExecution={(
+                                                        execution,
+                                                        type
+                                                    ) =>
+                                                        addExecution(
+                                                            execution.displayName!,
+                                                            type
+                                                        )
+                                                    }
+                                                    onAddFlow={(
+                                                        execution,
+                                                        flow
+                                                    ) =>
+                                                        addFlow(
+                                                            execution.displayName!,
+                                                            flow
+                                                        )
+                                                    }
+                                                    onDelete={execution => {
+                                                        setSelectedExecution(
+                                                            execution
+                                                        );
+                                                        toggleDeleteDialog();
+                                                    }}
+                                                />
+                                            </TableBody>
+                                        )
+                                    )}
+                                </>
+                            </Table>
                         )}
                         {flow && (
                             <>

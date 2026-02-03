@@ -1,24 +1,15 @@
-/**
- * WARNING: Before modifying this file, run the following command:
- *
- * $ npx keycloakify own --path "shared/keycloak-ui-shared/select/SingleSelect.tsx"
- *
- * This file is provided by @keycloakify/keycloak-ui-shared version 260502.0.0.
- * It was copied into your repository by the postinstall script: `keycloakify sync-extensions`.
- */
-
 /* eslint-disable */
-
 // @ts-nocheck
 
 import {
-    MenuToggle,
     Select,
-    SelectList,
-    SelectOptionProps
-} from "../../@patternfly/react-core";
-import { Children, useRef, useState } from "react";
-import { KeycloakSelectProps, propertyToString } from "./KeycloakSelect";
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from "@merge/ui/components/select";
+import { Children, useState } from "react";
+import type { KeycloakSelectProps } from "./KeycloakSelect";
 
 type SingleSelectProps = Omit<KeycloakSelectProps, "variant">;
 
@@ -28,74 +19,60 @@ export const SingleSelect = ({
     onSelect,
     selections,
     isOpen,
-    menuAppendTo,
-    direction,
-    width,
-    maxHeight,
-    toggleIcon,
+    placeholderText,
     className,
     isDisabled,
     children,
     ...props
 }: SingleSelectProps) => {
     const [open, setOpen] = useState(false);
-    const ref = useRef<HTMLElement>();
-    const toggle = () => {
-        setOpen(!open);
-        onToggle(!open);
+    const controlledOpen = isOpen !== undefined ? isOpen : open;
+    const setControlledOpen = (v: boolean) => {
+        if (isOpen === undefined) setOpen(v);
+        onToggle(v);
     };
 
-    const append = () => {
-        if (menuAppendTo === "parent") {
-            return ref.current?.parentElement || "inline";
-        }
-        return "inline";
-    };
-
-    const childArray = Children.toArray(
-        children
-    ) as React.ReactElement<SelectOptionProps>[];
+    const childArray = Children.toArray(children) as React.ReactElement[];
+    const valueToStr = (v: unknown) =>
+        v == null ? "" : typeof v === "object" ? (v as { id?: string })?.id ?? JSON.stringify(v) : String(v);
+    const value = selections != null ? valueToStr(selections) : "";
+    const valueMap = new Map<string, unknown>();
+    childArray.forEach((child) => {
+        const val = child.props?.value;
+        if (val !== undefined && val !== null) valueMap.set(valueToStr(val), val);
+    });
 
     return (
         <Select
-            ref={ref}
-            maxMenuHeight={propertyToString(maxHeight)}
-            isScrollable
-            popperProps={{
-                appendTo: append(),
-                direction,
-                width: propertyToString(width)
+            value={value || undefined}
+            onValueChange={(v) => {
+                onSelect?.(valueMap.get(v) ?? v);
+                setControlledOpen(false);
             }}
-            {...props}
-            onClick={toggle}
-            onOpenChange={isOpen => {
-                if (isOpen !== open) toggle();
-            }}
-            selected={selections}
-            onSelect={(_, value) => {
-                onSelect?.(value || "");
-                toggle();
-            }}
-            toggle={ref => (
-                <MenuToggle
-                    id={toggleId}
-                    ref={ref}
-                    className={className}
-                    onClick={toggle}
-                    isExpanded={isOpen}
-                    aria-label={props["aria-label"]}
-                    icon={toggleIcon}
-                    isDisabled={isDisabled}
-                    isFullWidth
-                >
-                    {childArray.find(c => c.props.value === selections)?.props.children ||
-                        selections ||
-                        props["aria-label"]}
-                </MenuToggle>
-            )}
-            isOpen={isOpen}
+            open={controlledOpen}
+            onOpenChange={setControlledOpen}
+            disabled={isDisabled}
         >
-            <SelectList>{children}</SelectList>
+            <SelectTrigger
+                id={toggleId}
+                className={className}
+                aria-label={props["aria-label"]}
+            >
+                <SelectValue placeholder={placeholderText} />
+            </SelectTrigger>
+            <SelectContent>
+                {childArray.map((child) => {
+                    const val = child.props?.value;
+                    const key = child.key ?? valueToStr(val);
+                    if (val === undefined || val === null) return null;
+                    const valueStr = valueToStr(val);
+                    return (
+                        <SelectItem key={key} value={valueStr}>
+                            {child.props?.children ?? valueStr}
+                        </SelectItem>
+                    );
+                })}
+            </SelectContent>
         </Select>
     );
 };

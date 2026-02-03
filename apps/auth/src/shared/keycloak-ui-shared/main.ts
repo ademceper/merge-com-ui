@@ -79,7 +79,7 @@ export { useSetTimeout } from "./utils/useSetTimeout";
 export { generateId } from "./utils/generateId";
 export { KeycloakSelect } from "./select/KeycloakSelect";
 export type { Variant, KeycloakSelectProps } from "./select/KeycloakSelect";
-export { SelectOption } from "../@patternfly/react-core";
+export { SelectItem as SelectOption } from "@merge/ui/components/select";
 export { KeycloakDataTable } from "./controls/table/KeycloakDataTable";
 export type {
     Action,
