@@ -2,7 +2,7 @@
 
 import { useTranslation } from "react-i18next";
 import { useTheme } from "next-themes";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { CaretDownIcon, QuestionIcon, SignOutIcon, UserIcon, GearIcon, TrashIcon, PaletteIcon, SunIcon, MoonIcon, MonitorIcon } from "@phosphor-icons/react";
 import {
     Avatar,
@@ -41,6 +41,7 @@ export function AdminNavUser({
     avatarOnly?: boolean;
 }) {
     const { t } = useTranslation();
+    const navigate = useNavigate();
     const { theme, setTheme } = useTheme();
     const { keycloak, userName, userEmail, userAvatarUrl, initials } = userMenuInfo;
     const { realm } = useRealm();
@@ -61,12 +62,11 @@ export function AdminNavUser({
 
     return (
         <>
-            <DropdownMenu modal={false}>
+            <DropdownMenu>
                 <DropdownMenuTrigger
                     className={cn(
-                        "inline-flex items-center justify-center rounded-lg",
-                        "text-foreground font-medium border-0 outline-none cursor-pointer",
-                        "focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background",
+                        "inline-flex items-center justify-center rounded-lg border-0 outline-none cursor-pointer",
+                        "text-foreground font-medium focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background",
                         !avatarOnly && "bg-transparent hover:bg-muted/50 data-[state=open]:bg-muted/70",
                         avatarOnly && "size-9 p-0 bg-transparent hover:bg-transparent data-[state=open]:bg-transparent",
                         !avatarOnly && "h-auto w-full min-w-0 gap-2 py-2 pr-2 pl-2"
@@ -97,7 +97,7 @@ export function AdminNavUser({
                     )}
                 </DropdownMenuTrigger>
                 <DropdownMenuContent
-                    className="min-w-56 rounded-lg z-[9999] bg-background border border-border text-foreground shadow-lg"
+                    className="min-w-56 rounded-lg z-[99999] bg-background border border-border text-foreground shadow-lg"
                     side="bottom"
                     align="end"
                     sideOffset={4}
@@ -127,11 +127,11 @@ export function AdminNavUser({
                             <UserIcon className="size-4 mr-2" />
                             {t("manageAccount")}
                         </DropdownMenuItem>
-                        <DropdownMenuItem asChild>
-                            <Link to={toDashboard({ realm }).pathname}>
-                                <GearIcon className="size-4 mr-2" />
-                                {t("realmInfo")}
-                            </Link>
+                        <DropdownMenuItem
+                            onClick={() => navigate(toDashboard({ realm }).pathname ?? `/${encodeURIComponent(realm)}`)}
+                        >
+                            <GearIcon className="size-4 mr-2" />
+                            {t("realmInfo")}
                         </DropdownMenuItem>
                         {isMasterRealm && isManager && (
                             <DropdownMenuItem onClick={() => toggleClearCaches()}>

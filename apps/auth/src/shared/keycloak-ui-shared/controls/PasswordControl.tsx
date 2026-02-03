@@ -55,6 +55,7 @@ export const PasswordControl = <
             labelIcon={labelIcon}
             isRequired={required}
             error={fieldState.error}
+            showLabel={false}
         >
             <PasswordInput
                 required={required}
@@ -62,6 +63,7 @@ export const PasswordControl = <
                 data-testid={props.name}
                 aria-invalid={!!fieldState.error}
                 disabled={props.isDisabled}
+                placeholder={rest.placeholder ?? props.label}
                 {...rest}
                 {...field}
             />

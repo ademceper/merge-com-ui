@@ -12,6 +12,7 @@
 // @ts-nocheck
 
 import { Textarea } from "@merge/ui/components/textarea";
+import { cn } from "@merge/ui/lib/utils";
 import {
     FieldPath,
     FieldValues,
@@ -20,6 +21,7 @@ import {
     useController
 } from "react-hook-form";
 
+import { formTextareaClassName } from "./form-input-styles";
 import { FormLabel } from "./FormLabel";
 
 export type TextAreaControlProps<
@@ -53,15 +55,18 @@ export const TextAreaControl = <
             labelIcon={props.labelIcon}
             name={props.name}
             error={fieldState.error}
+            showLabel={false}
         >
             <Textarea
+                {...props}
+                {...field}
                 required={required}
                 id={props.name}
                 data-testid={props.name}
                 aria-invalid={!!fieldState.error}
                 disabled={props.isDisabled}
-                {...props}
-                {...field}
+                placeholder={props.placeholder ?? props.label}
+                className={cn(formTextareaClassName, props.className)}
             />
         </FormLabel>
     );

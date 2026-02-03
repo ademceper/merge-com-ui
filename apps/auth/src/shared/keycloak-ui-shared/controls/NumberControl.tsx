@@ -12,6 +12,7 @@
 // @ts-nocheck
 
 import { Input } from "@merge/ui/components/input";
+import { cn } from "@merge/ui/lib/utils";
 import {
     Controller,
     ControllerProps,
@@ -22,6 +23,7 @@ import {
 } from "react-hook-form";
 
 import { getRuleValue } from "../utils/getRuleValue";
+import { formInputClassName } from "./form-input-styles";
 import { FormLabel } from "./FormLabel";
 
 export type NumberControlOption = {
@@ -62,6 +64,7 @@ export const NumberControl = <
             isRequired={controller.rules?.required === true}
             error={errors[name]}
             labelIcon={labelIcon}
+            showLabel={false}
         >
             <Controller
                 {...controller}
@@ -82,6 +85,8 @@ export const NumberControl = <
                             {...rest}
                             type="number"
                             id={name}
+                            placeholder={rest.placeholder ?? label}
+                            className={cn(formInputClassName, rest.className)}
                             value={value ?? ""}
                             aria-invalid={!!errors[name]}
                             required={required}

@@ -12,6 +12,7 @@
 // @ts-nocheck
 
 import { Input } from "@merge/ui/components/input";
+import { cn } from "@merge/ui/lib/utils";
 import { ReactNode } from "react";
 import {
     FieldPath,
@@ -21,6 +22,7 @@ import {
     useController
 } from "react-hook-form";
 import { getRuleValue } from "../utils/getRuleValue";
+import { formInputClassName } from "./form-input-styles";
 import { FormLabel } from "./FormLabel";
 
 export type TextControlProps<
@@ -55,15 +57,18 @@ export const TextControl = <T extends FieldValues, P extends FieldPath<T> = Fiel
             labelIcon={labelIcon}
             isRequired={required}
             error={fieldState.error}
+            showLabel={false}
         >
             <Input
+                {...rest}
+                {...field}
                 required={required}
                 id={props.name}
                 data-testid={props["data-testid"] || props.name}
                 aria-invalid={!!fieldState.error}
                 disabled={props.isDisabled}
-                {...rest}
-                {...field}
+                placeholder={rest.placeholder ?? props.label}
+                className={cn(formInputClassName, rest.className)}
             />
             {helperText && (
                 <p className="text-muted-foreground text-xs mt-1.5">{helperText}</p>

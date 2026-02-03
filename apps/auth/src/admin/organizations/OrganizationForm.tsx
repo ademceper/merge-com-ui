@@ -12,13 +12,7 @@
 // @ts-nocheck
 
 import OrganizationRepresentation from "@keycloak/keycloak-admin-client/lib/defs/organizationRepresentation";
-import {
-    FormErrorText,
-    HelpItem,
-    TextAreaControl,
-    TextControl
-} from "../../shared/keycloak-ui-shared";
-import { Label } from "@merge/ui/components/label";
+import { FormErrorText, TextAreaControl, TextControl } from "../../shared/keycloak-ui-shared";
 import { useEffect } from "react";
 import { useFormContext, useWatch } from "react-hook-form";
 import { useTranslation } from "react-i18next";
@@ -56,7 +50,7 @@ export const OrganizationForm = ({ readOnly = false }: OrganizationFormProps) =>
     }, [name, readOnly]);
 
     return (
-        <>
+        <div className="flex flex-col gap-5">
             <TextControl
                 label={t("name")}
                 name="name"
@@ -69,18 +63,13 @@ export const OrganizationForm = ({ readOnly = false }: OrganizationFormProps) =>
                 isDisabled={readOnly}
             />
             <div className="space-y-2">
-                <div className="flex items-center gap-1">
-                    <Label htmlFor="domain">{t("domain")}</Label>
-                    <HelpItem
-                        helpText={t("organizationDomainHelp")}
-                        fieldLabelId="domain"
-                    />
-                </div>
                 <MultiLineInput
                     id="domain"
                     name="domains"
                     aria-label={t("domain")}
                     addButtonLabel="addDomain"
+                    placeholder={t("domain")}
+                    labelIcon={t("organizationDomainHelp")}
                 />
                 {errors?.["domains"]?.message && (
                     <FormErrorText message={errors["domains"].message.toString()} />
@@ -92,6 +81,6 @@ export const OrganizationForm = ({ readOnly = false }: OrganizationFormProps) =>
                 labelIcon={t("organizationRedirectUrlHelp")}
             />
             <TextAreaControl name="description" label={t("description")} />
-        </>
+        </div>
     );
 };

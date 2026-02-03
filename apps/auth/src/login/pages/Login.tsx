@@ -9,6 +9,7 @@ import { Input } from "@merge/ui/components/input";
 import { Button } from "@merge/ui/components/button";
 import { Alert, AlertDescription } from "@merge/ui/components/alert";
 import { cn } from "@merge/ui/lib/utils";
+import { formInputClassName } from "../../shared/keycloak-ui-shared";
 
 export default function Login(props: PageProps<Extract<KcContext, { pageId: "login.ftl" }>, I18n>) {
     const { kcContext, i18n } = props;
@@ -58,7 +59,7 @@ export default function Login(props: PageProps<Extract<KcContext, { pageId: "log
                                     placeholder={msgStr("loginPlaceholder") || msgStr("usernameOrEmail")}
                                     aria-invalid={messagesPerField.existsError("username", "password")}
                                     className={cn(
-                                        "h-12 rounded-lg bg-muted border-0 text-foreground placeholder:text-muted-foreground focus-visible:ring-2 focus-visible:ring-ring",
+                                        formInputClassName,
                                         messagesPerField.existsError("username", "password") && "border border-destructive"
                                     )}
                                 />
@@ -80,7 +81,7 @@ export default function Login(props: PageProps<Extract<KcContext, { pageId: "log
                                 placeholder={msgStr("password")}
                                 aria-invalid={messagesPerField.existsError("username", "password")}
                                 className={cn(
-                                    "h-12 rounded-lg bg-muted border-0 text-foreground placeholder:text-muted-foreground focus-visible:ring-2 focus-visible:ring-ring",
+                                    formInputClassName,
                                     usernameHidden && messagesPerField.existsError("username", "password") && "border border-destructive"
                                 )}
                             />

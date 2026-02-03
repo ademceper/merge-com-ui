@@ -13,10 +13,12 @@
 
 import { Button } from "@merge/ui/components/button";
 import { Input } from "@merge/ui/components/input";
+import { cn } from "@merge/ui/lib/utils";
 import { MinusCircle, PlusCircle } from "@phosphor-icons/react";
 import React, { Fragment, useEffect, useMemo } from "react";
 import { useFormContext, useWatch } from "react-hook-form";
 import { useTranslation } from "react-i18next";
+import { formInputWrapperClassName, HelpItem } from "../../../shared/keycloak-ui-shared";
 
 function stringToMultiline(value?: string): string[] {
     return typeof value === "string" ? value.split("##") : [value || ""];
@@ -33,6 +35,10 @@ export type MultiLineInputProps = Omit<React.InputHTMLAttributes<HTMLInputElemen
     defaultValue?: string[];
     stringify?: boolean;
     isRequired?: boolean;
+    /** Placeholder for inputs (no label shown). */
+    placeholder?: string;
+    /** Help icon shown on the right of the first row (with placeholder, no label). */
+    labelIcon?: string | React.ReactNode;
 };
 
 export const MultiLineInput = ({
@@ -42,6 +48,8 @@ export const MultiLineInput = ({
     defaultValue,
     stringify = false,
     isRequired = false,
+    placeholder,
+    labelIcon,
     id,
     ...rest
 }: MultiLineInputProps) => {
@@ -101,33 +109,70 @@ export const MultiLineInput = ({
     }, [register]);
 
     return (
-        <div id={id}>
+        <div id={id} className="flex flex-col gap-3">
             {fields.map((value, index) => (
                 <Fragment key={index}>
-                    <div className="flex gap-2">
-                        <div className="flex-1">
+                    {index === 0 && labelIcon != null ? (
+                        <div className="flex min-w-0 items-center gap-2">
+                            <div className={cn(formInputWrapperClassName, "min-w-0 flex-1")}>
+                                <Input
+                                    data-testid={name + index}
+                                    onChange={(e) => updateValue(index, e.target.value)}
+                                    name={`${name}.${index}.value`}
+                                    value={value}
+                                    disabled={isDisabled}
+                                    placeholder={placeholder}
+                                    className={cn(
+                                        "h-full flex-1 min-w-0 border-0 rounded-none bg-transparent dark:bg-transparent px-3 py-2 text-foreground placeholder:text-muted-foreground outline-none focus-visible:ring-0",
+                                        rest.className
+                                    )}
+                                    {...rest}
+                                />
+                                <Button
+                                    type="button"
+                                    data-testid={"remove" + index}
+                                    variant="ghost"
+                                    size="icon-sm"
+                                    onClick={() => remove(index)}
+                                    tabIndex={-1}
+                                    aria-label={t("remove")}
+                                    disabled={fields.length === 1 || isDisabled}
+                                    className="!bg-transparent hover:!bg-transparent shrink-0 rounded-full text-muted-foreground hover:text-foreground mr-2"
+                                >
+                                    <MinusCircle className="size-4" />
+                                </Button>
+                            </div>
+                            <HelpItem helpText={labelIcon} fieldLabelId={id || name} />
+                        </div>
+                    ) : (
+                        <div className={formInputWrapperClassName}>
                             <Input
                                 data-testid={name + index}
                                 onChange={(e) => updateValue(index, e.target.value)}
                                 name={`${name}.${index}.value`}
                                 value={value}
                                 disabled={isDisabled}
+                                className={cn(
+                                    "h-full flex-1 min-w-0 border-0 rounded-none bg-transparent dark:bg-transparent px-3 py-2 text-foreground placeholder:text-muted-foreground outline-none focus-visible:ring-0",
+                                    rest.className
+                                )}
                                 {...rest}
                             />
-                        </div>
-                        <div>
                             <Button
+                                type="button"
                                 data-testid={"remove" + index}
-                                variant="link"
+                                variant="ghost"
+                                size="icon-sm"
                                 onClick={() => remove(index)}
                                 tabIndex={-1}
                                 aria-label={t("remove")}
                                 disabled={fields.length === 1 || isDisabled}
+                                className="!bg-transparent hover:!bg-transparent shrink-0 rounded-full text-muted-foreground hover:text-foreground mr-2"
                             >
                                 <MinusCircle className="size-4" />
                             </Button>
                         </div>
-                    </div>
+                    )}
                     {index === fields.length - 1 && (
                         <Button
                             variant="link"
@@ -135,7 +180,8 @@ export const MultiLineInput = ({
                             tabIndex={-1}
                             aria-label={t("add")}
                             data-testid={`${name}-addValue`}
-                            disabled={!value || isDisabled}
+                            disabled={isDisabled}
+                            className="px-0 h-auto font-medium"
                         >
                             <PlusCircle className="size-4 mr-1" /> {t(addButtonLabel || "add")}
                         </Button>

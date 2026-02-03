@@ -11,6 +11,7 @@ export type UserMenuInfo = {
     keycloak: {
         idTokenParsed?: unknown;
         logout: (options?: { redirectUri?: string }) => Promise<void>;
+        accountManagement: () => void;
     };
     userName: string;
     userEmail: string;
@@ -31,7 +32,7 @@ export function AdminHeader() {
     };
 
     return (
-        <header className="flex h-16 shrink-0 items-center gap-2 bg-background">
+        <header className="relative z-50 flex h-16 shrink-0 items-center gap-2 bg-background">
             <div className="flex items-center gap-2 px-4">
                 <div className="flex h-4 items-center gap-2">
                     <SidebarTrigger />

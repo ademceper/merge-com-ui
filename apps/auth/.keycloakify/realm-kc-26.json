@@ -1803,14 +1803,14 @@
                 "subComponents": {},
                 "config": {
                     "allowed-protocol-mapper-types": [
-                        "oidc-usermodel-attribute-mapper",
-                        "oidc-usermodel-property-mapper",
                         "saml-user-attribute-mapper",
+                        "oidc-address-mapper",
                         "saml-role-list-mapper",
-                        "saml-user-property-mapper",
+                        "oidc-usermodel-property-mapper",
                         "oidc-sha256-pairwise-sub-mapper",
-                        "oidc-full-name-mapper",
-                        "oidc-address-mapper"
+                        "oidc-usermodel-attribute-mapper",
+                        "saml-user-property-mapper",
+                        "oidc-full-name-mapper"
                     ]
                 }
             },
@@ -1840,14 +1840,14 @@
                 "subComponents": {},
                 "config": {
                     "allowed-protocol-mapper-types": [
-                        "saml-user-attribute-mapper",
-                        "oidc-usermodel-property-mapper",
                         "oidc-usermodel-attribute-mapper",
                         "saml-role-list-mapper",
-                        "oidc-address-mapper",
                         "oidc-sha256-pairwise-sub-mapper",
+                        "oidc-usermodel-property-mapper",
+                        "oidc-address-mapper",
                         "oidc-full-name-mapper",
-                        "saml-user-property-mapper"
+                        "saml-user-property-mapper",
+                        "saml-user-attribute-mapper"
                     ]
                 }
             },
@@ -2641,11 +2641,27 @@
     "verifiableCredentialsEnabled": false,
     "organizations": [
         {
-            "alias": "asdadad",
+            "alias": "asdads",
             "description": "",
             "enabled": true,
-            "id": "f24c6a62-1f1a-47d3-be08-f0dbe2801c7b",
-            "name": "asdadadsdadsa",
+            "id": "f6d944bd-8aef-4f72-a80b-f4f0019a7afb",
+            "name": "asdads",
+            "attributes": {}
+        },
+        {
+            "alias": "asdas",
+            "description": "",
+            "enabled": true,
+            "id": "cdba3ac2-6e8c-42db-9800-f238230b545d",
+            "name": "asdas",
+            "attributes": {}
+        },
+        {
+            "alias": "dasdad",
+            "description": "",
+            "enabled": true,
+            "id": "27b53ef6-7b68-4ab3-948f-602f8d641f83",
+            "name": "dasdad",
             "attributes": {}
         },
         {

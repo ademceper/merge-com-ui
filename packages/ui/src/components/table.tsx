@@ -30,7 +30,7 @@ import {
   Funnel,
   MagnifyingGlass,
   Trash,
-  DotsThree,
+  DotsThreeVertical,
 } from "@phosphor-icons/react"
 import { useId, useMemo, useRef, useState } from "react"
 
@@ -72,8 +72,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@merge/ui/components/select"
-
-// ============ Primitives (keep for direct use) ============
 
 export function Table({
   className,
@@ -206,12 +204,10 @@ export type DataTableProps<TData> = {
   defaultSorting?: SortingState
   searchColumnId?: string
   searchPlaceholder?: string
-  /** Column id for facet filter popover (e.g. "status"). Shows checkboxes with unique values. */
   facetFilterColumnId?: string
   facetFilterLabel?: string
-  /** Called with selected rows when user confirms delete. */
   onDeleteRows?: (rows: Row<TData>[]) => void
-  /** Custom toolbar slot (e.g. "Add" button) */
+  onRowClick?: (row: Row<TData>) => void
   toolbar?: React.ReactNode
   className?: string
 }
@@ -228,6 +224,7 @@ export function DataTable<TData>({
   facetFilterColumnId,
   facetFilterLabel = "Filters",
   onDeleteRows,
+  onRowClick,
   toolbar,
   className,
 }: DataTableProps<TData>) {
@@ -302,14 +299,14 @@ export function DataTable<TData>({
 
   return (
     <div className={cn("space-y-4", className)}>
-      <div className="flex flex-wrap items-center justify-between gap-3">
-        <div className="flex items-center gap-3">
+      <div className="flex flex-nowrap items-center justify-between gap-2 sm:flex-wrap sm:gap-3">
+        <div className="flex min-w-0 flex-1 items-center gap-2 sm:flex-initial sm:min-w-0 sm:gap-3">
           {searchColumnId && searchColumn && (
-            <div className="relative">
+            <div className="relative min-w-0 flex-1 sm:min-w-0 sm:flex-initial">
               <Input
                 aria-label={searchPlaceholder}
                 className={cn(
-                  "peer min-w-60 ps-9",
+                  "peer h-9 min-w-0 flex-1 ps-9 sm:min-w-60",
                   searchValue && "pe-9"
                 )}
                 id={`${id}-input`}
@@ -384,16 +381,12 @@ export function DataTable<TData>({
               </PopoverContent>
             </Popover>
           )}
-          <DropdownMenu open={viewOpen} onOpenChange={setViewOpen}>
-            <DropdownMenuTrigger asChild>
-              <Button
-                type="button"
-                variant="outline"
-                size="sm"
-              >
-                <Columns size={16} className="-ms-1 opacity-60" />
-                View
-              </Button>
+          <DropdownMenu modal={false} open={viewOpen} onOpenChange={setViewOpen}>
+            <DropdownMenuTrigger
+              className="inline-flex h-9 items-center justify-center gap-1.5 rounded-md border border-dashed border-input bg-background px-3 text-sm font-medium hover:bg-accent/10 cursor-pointer hover:text-accent-foreground focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+            >
+              <Columns size={16} className="-ms-1 opacity-60" />
+              View
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" className="w-auto min-w-36 p-1" style={{ zIndex: 2147483647 }}>
               <div className="px-1.5 py-1 text-xs font-medium text-muted-foreground">
@@ -410,7 +403,6 @@ export function DataTable<TData>({
                     <Checkbox
                       checked={col.getIsVisible()}
                       onCheckedChange={(v) => col.toggleVisibility(!!v)}
-                      onClick={(e) => e.preventDefault()}
                     />
                     <span className="capitalize">{col.id}</span>
                   </label>
@@ -418,7 +410,7 @@ export function DataTable<TData>({
             </DropdownMenuContent>
           </DropdownMenu>
         </div>
-        <div className="flex items-center gap-3">
+        <div className="flex shrink-0 items-center gap-2 sm:gap-3">
           {onDeleteRows &&
             table.getSelectedRowModel().rows.length > 0 && (
               <AlertDialog>
@@ -531,6 +523,16 @@ export function DataTable<TData>({
                 <TableRow
                   data-state={row.getIsSelected() && "selected"}
                   key={row.id}
+                  className={onRowClick ? "cursor-pointer" : undefined}
+                  onClick={
+                    onRowClick
+                      ? (e) => {
+                          const target = e.target as HTMLElement
+                          if (!target.closest("button, a, [role='button'], [data-slot='dropdown-menu-trigger']"))
+                            onRowClick(row)
+                        }
+                      : undefined
+                  }
                 >
                   {row.getVisibleCells().map((cell) => (
                     <TableCell className="last:py-0" key={cell.id}>
@@ -653,8 +655,6 @@ export function DataTable<TData>({
   )
 }
 
-// ============ Row actions (optional default) ============
-
 export function DataTableRowActions<TData>({
   row,
   children,
@@ -669,17 +669,12 @@ export function DataTableRowActions<TData>({
       onClick={(e) => e.stopPropagation()}
       onPointerDown={(e) => e.stopPropagation()}
     >
-      <DropdownMenu open={open} onOpenChange={setOpen}>
-        <DropdownMenuTrigger asChild>
-          <Button
-            type="button"
-            aria-label="Open menu"
-            variant="ghost"
-            size="icon"
-            className="shadow-none"
-          >
-            <DotsThree size={16} />
-          </Button>
+      <DropdownMenu modal={false} open={open} onOpenChange={setOpen}>
+        <DropdownMenuTrigger
+          aria-label="Open menu"
+          className="inline-flex size-8 cursor-pointer items-center justify-center rounded-md hover:bg-muted/50 focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+        >
+          <DotsThreeVertical size={16} />
         </DropdownMenuTrigger>
         <DropdownMenuContent
           align="end"
@@ -708,5 +703,4 @@ export function DataTableRowActions<TData>({
   )
 }
 
-// Re-export TanStack types for convenience
 export type { ColumnDef, FilterFn, Row, SortingState }
