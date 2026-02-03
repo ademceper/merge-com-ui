@@ -1,21 +1,10 @@
-/**
- * WARNING: Before modifying this file, run the following command:
- *
- * $ npx keycloakify own --path "shared/keycloak-ui-shared/select/KeycloakSelect.tsx"
- *
- * This file is provided by @keycloakify/keycloak-ui-shared version 260502.0.0.
- * It was copied into your repository by the postinstall script: `keycloakify sync-extensions`.
- */
-
 /* eslint-disable */
-
 // @ts-nocheck
 
-import { ChipGroupProps, SelectProps } from "../../@patternfly/react-core";
 import { SingleSelect } from "./SingleSelect";
 import { TypeaheadSelect } from "./TypeaheadSelect";
 
-export type Variant = `${SelectVariant}`;
+export type Variant = "single" | "typeahead" | "typeaheadMulti";
 
 export enum SelectVariant {
     single = "single",
@@ -26,10 +15,7 @@ export enum SelectVariant {
 export const propertyToString = (prop: string | number | undefined) =>
     typeof prop === "number" ? prop + "px" : prop;
 
-export type KeycloakSelectProps = Omit<
-    SelectProps,
-    "name" | "toggle" | "selected" | "onClick" | "onSelect" | "variant"
-> & {
+export type KeycloakSelectProps = {
     toggleId?: string;
     onFilter?: (value: string) => void;
     onClear?: () => void;
@@ -43,20 +29,24 @@ export type KeycloakSelectProps = Omit<
     placeholderText?: string;
     onSelect?: (value: string | number | object) => void;
     onToggle: (val: boolean) => void;
-    selections?: string | string[] | number | number[];
+    selections?: string | string[] | number | object;
     validated?: "success" | "warning" | "error" | "default";
     typeAheadAriaLabel?: string;
-    chipGroupProps?: Omit<ChipGroupProps, "children" | "ref">;
+    chipGroupProps?: Record<string, unknown>;
     chipGroupComponent?: React.ReactNode;
     footer?: React.ReactNode;
+    className?: string;
+    "aria-label"?: string;
+    children?: React.ReactNode;
+    isOpen?: boolean;
 };
+
 export const KeycloakSelect = ({
     variant = SelectVariant.single,
     ...rest
 }: KeycloakSelectProps) => {
     if (variant === SelectVariant.single) {
         return <SingleSelect {...rest} />;
-    } else {
-        return <TypeaheadSelect {...rest} variant={variant} />;
     }
+    return <TypeaheadSelect {...rest} variant={variant} />;
 };

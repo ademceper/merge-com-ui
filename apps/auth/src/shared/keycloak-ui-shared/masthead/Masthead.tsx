@@ -9,22 +9,10 @@
 
 // @ts-nocheck
 
-import {
-    Avatar,
-    AvatarProps,
-    DropdownItem,
-    Masthead,
-    MastheadBrand,
-    MastheadBrandProps,
-    MastheadContent,
-    MastheadMainProps,
-    MastheadToggle,
-    PageToggleButton,
-    Toolbar,
-    ToolbarContent,
-    ToolbarItem
-} from "../../@patternfly/react-core";
-import { BarsIcon } from "../../@patternfly/react-icons";
+import { DropdownMenuItem } from "@merge/ui/components/dropdown-menu";
+import { Button } from "@merge/ui/components/button";
+import { Avatar, type AvatarProps as MergeAvatarProps } from "@merge/ui/components/avatar";
+import { List } from "@phosphor-icons/react";
 import { TFunction } from "i18next";
 import type { Keycloak, KeycloakTokenParsed } from "oidc-spa/keycloak-js";
 import { ReactNode } from "react";
@@ -48,12 +36,12 @@ function loggedInUserName(token: KeycloakTokenParsed | undefined, t: TFunction) 
     return givenName || familyName || preferredUsername || t("unknownUser");
 }
 
-type BrandLogo = MastheadBrandProps;
+type BrandLogo = { src?: string; alt?: string; className?: string; [k: string]: unknown };
 
-type KeycloakMastheadProps = MastheadMainProps & {
+type KeycloakMastheadProps = {
     keycloak: Keycloak;
     brand: BrandLogo;
-    avatar?: AvatarProps;
+    avatar?: MergeAvatarProps & { src?: string };
     features?: {
         hasLogout?: boolean;
         hasManageAccount?: boolean;
@@ -77,93 +65,61 @@ const KeycloakMasthead = ({
     ...rest
 }: KeycloakMastheadProps) => {
     const { t } = useTranslation();
-    const extraItems = [];
-    if (hasManageAccount) {
+    const extraItems: ReactNode[] = [];
+    if (hasManageAccount && typeof keycloak.accountManagement === "function") {
         extraItems.push(
-            <DropdownItem
-                key="manageAccount"
-                onClick={() => keycloak.accountManagement()}
-            >
+            <DropdownMenuItem key="manageAccount" onClick={() => keycloak.accountManagement!()}>
                 {t("manageAccount")}
-            </DropdownItem>
+            </DropdownMenuItem>
         );
     }
     if (hasLogout) {
         extraItems.push(
-            <DropdownItem key="signOut" onClick={() => keycloak.logout()}>
+            <DropdownMenuItem key="signOut" onClick={() => keycloak.logout()}>
                 {t("signOut")}
-            </DropdownItem>
+            </DropdownMenuItem>
         );
     }
 
-    const picture = keycloak.idTokenParsed?.picture;
+    const picture = keycloak.idTokenParsed?.picture as string | undefined;
     return (
-        <Masthead {...rest}>
-            <MastheadToggle>
-                <PageToggleButton variant="plain" aria-label={t("navigation")}>
-                    <BarsIcon />
-                </PageToggleButton>
-            </MastheadToggle>
-            <MastheadBrand {...brandProps}>
+        <header className="flex h-14 shrink-0 items-center gap-4 border-b bg-background px-4" {...rest}>
+            <Button variant="ghost" size="icon" aria-label={t("navigation")}>
+                <List size={20} />
+            </Button>
+            <div {...brandProps} className="flex shrink-0 items-center">
                 <img src={src} alt={alt} className={className} />
-            </MastheadBrand>
-            <MastheadContent>
+            </div>
+            <div className="flex flex-1 items-center justify-end gap-2">
                 {toolbar}
-                <Toolbar>
-                    <ToolbarContent>
-                        {toolbarItems?.map((item, index) => (
-                            <ToolbarItem key={index} align={{ default: "alignRight" }}>
-                                {item}
-                            </ToolbarItem>
-                        ))}
-                        <ToolbarItem
-                            visibility={{
-                                default: "hidden",
-                                md: "visible"
-                            }} /** this user dropdown is hidden on mobile sizes */
-                        >
-                            <KeycloakDropdown
-                                data-testid="options"
-                                dropDownItems={[...dropdownItems, extraItems]}
-                                title={
-                                    hasUsername
-                                        ? loggedInUserName(keycloak.idTokenParsed, t)
-                                        : undefined
-                                }
-                            />
-                        </ToolbarItem>
-                        <ToolbarItem
-                            align={{ default: "alignLeft" }}
-                            visibility={{
-                                md: "hidden"
-                            }}
-                        >
-                            <KeycloakDropdown
-                                data-testid="options-kebab"
-                                isKebab
-                                dropDownItems={[
-                                    ...(kebabDropdownItems || dropdownItems),
-                                    extraItems
-                                ]}
-                            />
-                        </ToolbarItem>
-                        <ToolbarItem
-                            variant="overflow-menu"
-                            align={{ default: "alignRight" }}
-                            className="pf-v5-u-m-0-on-lg"
-                        >
-                            {picture || avatar?.src ? (
-                                <Avatar
-                                    {...{ src: picture, alt: t("avatar"), ...avatar }}
-                                />
-                            ) : (
-                                <DefaultAvatar {...avatar} />
-                            )}
-                        </ToolbarItem>
-                    </ToolbarContent>
-                </Toolbar>
-            </MastheadContent>
-        </Masthead>
+                {toolbarItems?.map((item, index) => <div key={index}>{item}</div>)}
+                <div className="hidden md:block">
+                    <KeycloakDropdown
+                        data-testid="options"
+                        dropDownItems={[...dropdownItems, ...extraItems]}
+                        title={
+                            hasUsername
+                                ? loggedInUserName(keycloak.idTokenParsed, t)
+                                : undefined
+                        }
+                    />
+                </div>
+                <div className="md:hidden">
+                    <KeycloakDropdown
+                        data-testid="options-kebab"
+                        isKebab
+                        dropDownItems={[...(kebabDropdownItems || dropdownItems), ...extraItems]}
+                    />
+                </div>
+                <div className="flex items-center">
+                    {picture || avatar?.src ? (
+                        <Avatar src={picture || avatar?.src} alt={t("avatar")} {...avatar} />
+                    ) : (
+                        <DefaultAvatar {...avatar} />
+                    )}
+                </div>
+            </div>
+        </header>
     );
 };
 

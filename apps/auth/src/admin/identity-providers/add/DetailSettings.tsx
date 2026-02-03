@@ -37,17 +37,13 @@ import {
     useWatch
 } from "react-hook-form";
 import { useTranslation } from "react-i18next";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useParams as useRouterParams } from "react-router-dom";
 import { useAdminClient } from "../../admin-client";
 import { useConfirmDialog } from "../../components/confirm-dialog/ConfirmDialog";
 import { DynamicComponents } from "../../components/dynamic/DynamicComponents";
 import { FixedButtonsGroup } from "../../components/form/FixedButtonGroup";
 import { FormAccess } from "../../components/form/FormAccess";
 import { PermissionsTab } from "../../components/permission-tab/PermissionTab";
-import {
-    RoutableTabs,
-    useRoutableTab
-} from "../../components/routable-tabs/RoutableTabs";
 import { ViewHeader } from "../../components/view-header/ViewHeader";
 import { useAccess } from "../../context/access/Access";
 import { useRealm } from "../../context/realm-context/RealmContext";
@@ -59,7 +55,6 @@ import { toIdentityProviderAddMapper } from "../routes/AddMapper";
 import { toIdentityProviderEditMapper } from "../routes/EditMapper";
 import {
     IdentityProviderParams,
-    IdentityProviderTab,
     toIdentityProvider
 } from "../routes/IdentityProvider";
 import { toIdentityProviders } from "../routes/IdentityProviders";
@@ -265,6 +260,7 @@ export default function DetailSettings() {
 
     const { t } = useTranslation();
     const { alias, providerId } = useParams<IdentityProviderParams>();
+    const { tab } = useRouterParams<{ tab?: string }>();
     const isFeatureEnabled = useIsFeatureEnabled();
     const form = useForm<IdentityProviderRepresentation>();
     const { handleSubmit, getValues, reset, control } = form;
@@ -321,21 +317,6 @@ export default function DetailSettings() {
         },
         []
     );
-
-    const toTab = (tab: IdentityProviderTab) =>
-        toIdentityProvider({
-            realm,
-            alias,
-            providerId,
-            tab
-        });
-
-    const useTab = (tab: IdentityProviderTab) => useRoutableTab(toTab(tab));
-
-    const settingsTab = useTab("settings");
-    const mappersTab = useTab("mappers");
-    const permissionsTab = useTab("permissions");
-    const eventsTab = useTab("events");
 
     const save = async (savedProvider?: IdentityProviderRepresentation) => {
         const p = savedProvider || getValues();
@@ -456,6 +437,101 @@ export default function DetailSettings() {
         });
 
         return components;
+    };
+
+    const renderContent = () => {
+        switch (tab) {
+            case "mappers":
+                return (isSPIFFE || isKubernetes || isJWTAuthorizationGrant) ? null : (
+                    <KeycloakDataTable
+                        emptyState={
+                            <ListEmptyState
+                                message={t("noMappers")}
+                                instructions={t("noMappersInstructions")}
+                                primaryActionText={t("addMapper")}
+                                onPrimaryAction={() =>
+                                    navigate(
+                                        toIdentityProviderAddMapper({
+                                            realm,
+                                            alias: alias!,
+                                            providerId: provider.providerId!,
+                                            tab: "mappers"
+                                        })
+                                    )
+                                }
+                            />
+                        }
+                        loader={loader}
+                        key={key}
+                        ariaLabelKey="mappersList"
+                        searchPlaceholderKey="searchForMapper"
+                        toolbarItem={
+                            <div>
+                                <Button
+                                    id="add-mapper-button"
+                                    asChild
+                                    data-testid="addMapper"
+                                >
+                                    <Link
+                                        to={toIdentityProviderAddMapper({
+                                            realm,
+                                            alias: alias!,
+                                            providerId: provider.providerId!,
+                                            tab: "mappers"
+                                        })}
+                                    >
+                                        {t("addMapper")}
+                                    </Link>
+                                </Button>
+                            </div>
+                        }
+                        columns={[
+                            {
+                                name: "name",
+                                displayKey: "name",
+                                cellRenderer: row => (
+                                    <MapperLink {...row} provider={provider} />
+                                )
+                            },
+                            {
+                                name: "category",
+                                displayKey: "category"
+                            },
+                            {
+                                name: "type",
+                                displayKey: "type"
+                            }
+                        ]}
+                        actions={[
+                            {
+                                title: t("delete"),
+                                onRowClick: mapper => {
+                                    setSelectedMapper(mapper);
+                                    toggleDeleteMapperDialog();
+                                }
+                            } as Action<IdPWithMapperAttributes>
+                        ]}
+                    />
+                );
+            case "permissions":
+                return isFeatureEnabled(Feature.AdminFineGrainedAuthz) ? (
+                    <PermissionsTab id={alias} type="identityProviders" />
+                ) : null;
+            case "events":
+                return (realmRepresentation?.adminEventsEnabled && hasAccess("view-events")) ? (
+                    <AdminEvents
+                        resourcePath={`identity-provider/instances/${alias}`}
+                    />
+                ) : null;
+            default:
+                return (
+                    <ScrollForm
+                        label={t("jumpToSection")}
+                        className="px-4"
+                        sections={sections}
+                    />
+                );
+        }
     };
 
     const sections = [
@@ -632,118 +708,9 @@ export default function DetailSettings() {
             />
 
             <div className="p-0">
-                <RoutableTabs isBox defaultLocation={toTab("settings")}>
-                    <Tab
-                        id="settings"
-                        title={t("settings")}
-                        {...settingsTab}
-                    >
-                        <ScrollForm
-                            label={t("jumpToSection")}
-                            className="px-4"
-                            sections={sections}
-                        />
-                    </Tab>
-                    <Tab
-                        id="mappers"
-                        isHidden={isSPIFFE || isKubernetes || isJWTAuthorizationGrant}
-                        data-testid="mappers-tab"
-                        title={t("mappers")}
-                        {...mappersTab}
-                    >
-                        <KeycloakDataTable
-                            emptyState={
-                                <ListEmptyState
-                                    message={t("noMappers")}
-                                    instructions={t("noMappersInstructions")}
-                                    primaryActionText={t("addMapper")}
-                                    onPrimaryAction={() =>
-                                        navigate(
-                                            toIdentityProviderAddMapper({
-                                                realm,
-                                                alias: alias!,
-                                                providerId: provider.providerId!,
-                                                tab: "mappers"
-                                            })
-                                        )
-                                    }
-                                />
-                            }
-                            loader={loader}
-                            key={key}
-                            ariaLabelKey="mappersList"
-                            searchPlaceholderKey="searchForMapper"
-                            toolbarItem={
-                                <div>
-                                    <Button
-                                        id="add-mapper-button"
-                                        asChild
-                                        data-testid="addMapper"
-                                    >
-                                        <Link
-                                            to={toIdentityProviderAddMapper({
-                                                realm,
-                                                alias: alias!,
-                                                providerId: provider.providerId!,
-                                                tab: "mappers"
-                                            })}
-                                        >
-                                            {t("addMapper")}
-                                        </Link>
-                                    </Button>
-                                </div>
-                            }
-                            columns={[
-                                {
-                                    name: "name",
-                                    displayKey: "name",
-                                    cellRenderer: row => (
-                                        <MapperLink {...row} provider={provider} />
-                                    )
-                                },
-                                {
-                                    name: "category",
-                                    displayKey: "category"
-                                },
-                                {
-                                    name: "type",
-                                    displayKey: "type"
-                                }
-                            ]}
-                            actions={[
-                                {
-                                    title: t("delete"),
-                                    onRowClick: mapper => {
-                                        setSelectedMapper(mapper);
-                                        toggleDeleteMapperDialog();
-                                    }
-                                } as Action<IdPWithMapperAttributes>
-                            ]}
-                        />
-                    </Tab>
-                    {isFeatureEnabled(Feature.AdminFineGrainedAuthz) && (
-                        <Tab
-                            id="permissions"
-                            data-testid="permissionsTab"
-                            title={t("permissions")}
-                            {...permissionsTab}
-                        >
-                            <PermissionsTab id={alias} type="identityProviders" />
-                        </Tab>
-                    )}
-                    {realmRepresentation?.adminEventsEnabled &&
-                        hasAccess("view-events") && (
-                            <Tab
-                                data-testid="admin-events-tab"
-                                title={t("adminEvents")}
-                                {...eventsTab}
-                            >
-                                <AdminEvents
-                                    resourcePath={`identity-provider/instances/${alias}`}
-                                />
-                            </Tab>
-                        )}
-                </RoutableTabs>
+                <div className="bg-muted/30">
+                    {renderContent()}
+                </div>
             </div>
         </FormProvider>
     );

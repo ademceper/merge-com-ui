@@ -18,22 +18,13 @@ import { useAlerts, useFetch } from "../../../shared/keycloak-ui-shared";
 import { AlertVariant } from "../../../shared/keycloak-ui-shared";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams as useRouterParams } from "react-router-dom";
 import { useAdminClient } from "../../admin-client";
 import { MapperList } from "../../client-scopes/details/MapperList";
 import { KeycloakSpinner } from "../../../shared/keycloak-ui-shared";
-import {
-    RoutableTabs,
-    useRoutableTab,
-    Tab
-} from "../../components/routable-tabs/RoutableTabs";
 import { ViewHeader } from "../../components/view-header/ViewHeader";
 import { useParams } from "../../utils/useParams";
-import {
-    DedicatedScopeDetailsParams,
-    DedicatedScopeTab,
-    toDedicatedScope
-} from "../routes/DedicatedScopeDetails";
+import { DedicatedScopeDetailsParams } from "../routes/DedicatedScopeDetails";
 import { toMapper } from "../routes/Mapper";
 import { DedicatedScope } from "./DedicatedScope";
 
@@ -43,17 +34,12 @@ export default function DedicatedScopes() {
     const { t } = useTranslation();
     const navigate = useNavigate();
     const { realm, clientId } = useParams<DedicatedScopeDetailsParams>();
+    const { tab } = useRouterParams<{ tab?: string }>();
     const { addAlert, addError } = useAlerts();
 
     const [client, setClient] = useState<ClientRepresentation>();
 
     useFetch(() => adminClient.clients.findOne({ id: clientId }), setClient, []);
-
-    const useTab = (tab: DedicatedScopeTab) =>
-        useRoutableTab(toDedicatedScope({ realm, clientId, tab }));
-
-    const mappersTab = useTab("mappers");
-    const scopeTab = useTab("scope");
 
     if (!client) {
         return <KeycloakSpinner />;
@@ -103,6 +89,29 @@ export default function DedicatedScopes() {
         return true;
     };
 
+    const renderContent = () => {
+        switch (tab) {
+            case "scope":
+                return <DedicatedScope client={client} />;
+            default:
+                return (
+                    <MapperList
+                        model={client}
+                        onAdd={addMappers}
+                        onDelete={onDeleteMapper}
+                        detailLink={mapperId =>
+                            toMapper({
+                                realm,
+                                id: client.id!,
+                                mapperId,
+                                viewMode: "edit"
+                            })
+                        }
+                    />
+                );
+        }
+    };
+
     return (
         <>
             <ViewHeader
@@ -111,42 +120,9 @@ export default function DedicatedScopes() {
                 divider={false}
             />
             <div className="p-0">
-                <RoutableTabs
-                    isBox
-                    mountOnEnter
-                    defaultLocation={toDedicatedScope({
-                        realm,
-                        clientId,
-                        tab: "mappers"
-                    })}
-                >
-                    <Tab
-                        title={t("mappers")}
-                        data-testid="mappersTab"
-                        {...mappersTab}
-                    >
-                        <MapperList
-                            model={client}
-                            onAdd={addMappers}
-                            onDelete={onDeleteMapper}
-                            detailLink={mapperId =>
-                                toMapper({
-                                    realm,
-                                    id: client.id!,
-                                    mapperId,
-                                    viewMode: "edit"
-                                })
-                            }
-                        />
-                    </Tab>
-                    <Tab
-                        title={t("scope")}
-                        data-testid="scopeTab"
-                        {...scopeTab}
-                    >
-                        <DedicatedScope client={client} />
-                    </Tab>
-                </RoutableTabs>
+                <div className="bg-muted/30">
+                    {renderContent()}
+                </div>
             </div>
         </>
     );

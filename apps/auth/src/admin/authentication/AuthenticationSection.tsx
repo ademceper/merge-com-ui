@@ -24,10 +24,9 @@ import { Label } from "@merge/ui/components/label";
 import { sortBy } from "lodash-es";
 import { useState } from "react";
 import { Trans, useTranslation } from "react-i18next";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { useAdminClient } from "../admin-client";
 import { useConfirmDialog } from "../components/confirm-dialog/ConfirmDialog";
-import { RoutableTabs, useRoutableTab, Tab } from "../components/routable-tabs/RoutableTabs";
 import { ViewHeader } from "../components/view-header/ViewHeader";
 import { useRealm } from "../context/realm-context/RealmContext";
 import helpUrls from "../help-urls";
@@ -41,7 +40,6 @@ import { RequiredActions } from "./RequiredActions";
 import { UsedBy } from "./components/UsedBy";
 import { AuthenticationType } from "./constants";
 import { Policies } from "./policies/Policies";
-import { AuthenticationTab, toAuthentication } from "./routes/Authentication";
 import { toCreateFlow } from "./routes/CreateFlow";
 import { toFlow } from "./routes/Flow";
 
@@ -71,6 +69,7 @@ export default function AuthenticationSection() {
     const { adminClient } = useAdminClient();
     const { t } = useTranslation();
     const { realm: realmName, realmRepresentation: realm } = useRealm();
+    const { tab } = useParams<{ tab?: string }>();
     const [key, setKey] = useState(0);
     const refresh = () => setKey(key + 1);
     const { addAlert, addError } = useAlerts();
@@ -101,13 +100,6 @@ export default function AuthenticationSection() {
         );
     };
 
-    const useTab = (tab: AuthenticationTab) =>
-        useRoutableTab(toAuthentication({ realm: realmName, tab }));
-
-    const flowsTab = useTab("flows");
-    const requiredActionsTab = useTab("required-actions");
-    const policiesTab = useTab("policies");
-
     const [toggleDeleteDialog, DeleteConfirm] = useConfirmDialog({
         titleKey: "deleteConfirmFlow",
         children: (
@@ -133,45 +125,36 @@ export default function AuthenticationSection() {
 
     if (!realm) return <KeycloakSpinner />;
 
-    return (
-        <>
-            <DeleteConfirm />
-            {open && selectedFlow && (
-                <DuplicateFlowModal
-                    name={selectedFlow.alias!}
-                    description={selectedFlow.description!}
-                    toggleDialog={toggleOpen}
-                    onComplete={() => {
-                        refresh();
-                        toggleOpen();
-                    }}
-                />
-            )}
-            {bindFlowOpen && (
-                <BindFlowDialog
-                    onClose={() => {
-                        toggleBindFlow();
-                        refresh();
-                    }}
-                    flowAlias={selectedFlow?.alias!}
-                />
-            )}
-            <ViewHeader
-                titleKey="titleAuthentication"
-                subKey="authenticationExplain"
-                helpUrl={helpUrls.authenticationUrl}
-                divider={false}
-            />
-            <div className="p-0">
-                <RoutableTabs
-                    isBox
-                    defaultLocation={toAuthentication({ realm: realmName, tab: "flows" })}
-                >
-                    <Tab
-                        data-testid="flows"
-                        title={<span>{t("flows")}</span>}
-                        {...flowsTab}
-                    >
+    const renderContent = () => {
+        switch (tab) {
+            case "required-actions":
+                return <RequiredActions />;
+            case "policies":
+                return <Policies />;
+            default:
+                return (
+                    <>
+                        <DeleteConfirm />
+                        {open && selectedFlow && (
+                            <DuplicateFlowModal
+                                name={selectedFlow.alias!}
+                                description={selectedFlow.description!}
+                                toggleDialog={toggleOpen}
+                                onComplete={() => {
+                                    refresh();
+                                    toggleOpen();
+                                }}
+                            />
+                        )}
+                        {bindFlowOpen && (
+                            <BindFlowDialog
+                                onClose={() => {
+                                    toggleBindFlow();
+                                    refresh();
+                                }}
+                                flowAlias={selectedFlow?.alias!}
+                            />
+                        )}
                         <KeycloakDataTable
                             key={key}
                             loader={loader}
@@ -245,22 +228,21 @@ export default function AuthenticationSection() {
                                 />
                             }
                         />
-                    </Tab>
-                    <Tab
-                        data-testid="requiredActions"
-                        title={<span>{t("requiredActions")}</span>}
-                        {...requiredActionsTab}
-                    >
-                        <RequiredActions />
-                    </Tab>
-                    <Tab
-                        data-testid="policies"
-                        title={<span>{t("policies")}</span>}
-                        {...policiesTab}
-                    >
-                        <Policies />
-                    </Tab>
-                </RoutableTabs>
+                    </>
+                );
+        }
+    };
+
+    return (
+        <>
+            <ViewHeader
+                titleKey="titleAuthentication"
+                subKey="authenticationExplain"
+                helpUrl={helpUrls.authenticationUrl}
+                divider={false}
+            />
+            <div className="p-0">
+                {renderContent()}
             </div>
         </>
     );

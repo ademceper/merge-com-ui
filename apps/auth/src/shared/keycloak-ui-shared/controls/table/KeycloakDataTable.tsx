@@ -12,7 +12,7 @@
 // @ts-nocheck
 
 import { Button, ButtonVariant, ToolbarItem } from "../../../@patternfly/react-core";
-import { SyncAltIcon } from "../../../@patternfly/react-icons";
+import { ArrowsClockwise } from "@phosphor-icons/react";
 import type { SVGIconProps } from "@patternfly/react-icons/dist/js/createIcon";
 import {
     ActionsColumn,
@@ -586,7 +586,7 @@ export function KeycloakDataTable<T>({
                                     onClick={refresh}
                                     data-testid="refresh"
                                 >
-                                    <SyncAltIcon /> {t("refresh")}
+                                    <ArrowsClockwise size={16} /> {t("refresh")}
                                 </Button>
                             </ToolbarItem>
                         </>

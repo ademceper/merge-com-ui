@@ -31,12 +31,11 @@ import { TFunction } from "i18next";
 import { useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams as useRouterParams } from "react-router-dom";
 import { useAdminClient } from "../admin-client";
 import { useConfirmDialog } from "../components/confirm-dialog/ConfirmDialog";
 import { KeyValueType } from "../components/key-value-form/key-value-convert";
 import { KeycloakSpinner } from "../../shared/keycloak-ui-shared";
-import { RoutableTabs, useRoutableTab, Tab } from "../components/routable-tabs/RoutableTabs";
 import { ViewHeader } from "../components/view-header/ViewHeader";
 import { useAccess } from "../context/access/Access";
 import { useRealm } from "../context/realm-context/RealmContext";
@@ -74,6 +73,7 @@ export default function EditUser() {
     const navigate = useNavigate();
     const { hasAccess } = useAccess();
     const { id } = useParams<UserParams>();
+    const { tab } = useRouterParams<{ tab?: string }>();
     const { realm: realmName, realmRepresentation: realm } = useRealm();
     // Validation of form fields is performed on server, thus we need to clear all errors before submit
     const clearAllErrorsBeforeSubmit = async (values: UserFormFields) => ({
@@ -99,25 +99,7 @@ export default function EditUser() {
     const showOrganizations =
         isFeatureEnabled(Feature.Organizations) && realm?.organizationsEnabled;
 
-    const toTab = (tab: UserTab) =>
-        toUser({
-            realm: realmName,
-            id: user?.id || "",
-            tab
-        });
-
     const [activeEventsTab, setActiveEventsTab] = useState("userEvents");
-
-    const settingsTab = useRoutableTab(toTab("settings"));
-    const attributesTab = useRoutableTab(toTab("attributes"));
-    const credentialsTab = useRoutableTab(toTab("credentials"));
-    const roleMappingTab = useRoutableTab(toTab("role-mapping"));
-    const groupsTab = useRoutableTab(toTab("groups"));
-    const organizationsTab = useRoutableTab(toTab("organizations"));
-    const consentsTab = useRoutableTab(toTab("consents"));
-    const identityProviderLinksTab = useRoutableTab(toTab("identity-provider-links"));
-    const sessionsTab = useRoutableTab(toTab("sessions"));
-    const eventsTab = useRoutableTab(toTab("events"));
 
     useFetch(
         async () =>
@@ -276,6 +258,76 @@ export default function EditUser() {
         return <KeycloakSpinner />;
     }
 
+    const renderContent = () => {
+        switch (tab) {
+            case "attributes":
+                return isUnmanagedAttributesEnabled ? (
+                    <UserAttributes
+                        user={user}
+                        save={save}
+                        upConfig={upConfig}
+                    />
+                ) : null;
+            case "credentials":
+                return user.access?.view ? (
+                    <UserCredentials user={user} setUser={setUser} />
+                ) : null;
+            case "role-mapping":
+                return user.access?.view ? (
+                    <UserRoleMapping id={user.id!} name={user.username!} />
+                ) : null;
+            case "groups":
+                return hasAccess("query-groups") ? (
+                    <UserGroups user={user} />
+                ) : null;
+            case "organizations":
+                return showOrganizations && realmHasOrganizations ? (
+                    <Organizations user={user} />
+                ) : null;
+            case "consents":
+                return <UserConsents />;
+            case "identity-provider-links":
+                return <UserIdentityProviderLinks userId={user.id!} />;
+            case "sessions":
+                return <UserSessions />;
+            case "events":
+                return hasAccess("view-events") ? (
+                    <Tabs value={activeEventsTab} onValueChange={setActiveEventsTab}>
+                        <TabsList>
+                            <TabsTrigger value="userEvents">
+                                {t("userEvents")}
+                            </TabsTrigger>
+                            <TabsTrigger value="adminEvents">
+                                {t("adminEvents")}
+                            </TabsTrigger>
+                        </TabsList>
+                        <TabsContent value="userEvents">
+                            <UserEvents user={user.id} />
+                        </TabsContent>
+                        <TabsContent value="adminEvents">
+                            <AdminEvents
+                                resourcePath={`users/${user.id}*`}
+                            />
+                        </TabsContent>
+                    </Tabs>
+                ) : null;
+            default:
+                return (
+                    <div className="p-6">
+                        <UserForm
+                            form={form}
+                            realm={realm!}
+                            user={user}
+                            bruteForce={bruteForced}
+                            userProfileMetadata={userProfileMetadata}
+                            refresh={refresh}
+                            save={save}
+                        />
+                    </div>
+                );
+        }
+    };
+
     return (
         <>
             <ImpersonateConfirm />
@@ -341,129 +393,9 @@ export default function EditUser() {
             <div className="p-0">
                 <UserProfileProvider>
                     <FormProvider {...form}>
-                        <RoutableTabs
-                            isBox
-                            mountOnEnter
-                            defaultLocation={toTab("settings")}
-                        >
-                            <Tab
-                                data-testid="user-details-tab"
-                                title={<span>{t("details")}</span>}
-                                {...settingsTab}
-                            >
-                                <div className="p-6">
-                                    <UserForm
-                                        form={form}
-                                        realm={realm!}
-                                        user={user}
-                                        bruteForce={bruteForced}
-                                        userProfileMetadata={userProfileMetadata}
-                                        refresh={refresh}
-                                        save={save}
-                                    />
-                                </div>
-                            </Tab>
-                            {isUnmanagedAttributesEnabled && (
-                                <Tab
-                                    data-testid="attributesTab"
-                                    title={<span>{t("attributes")}</span>}
-                                    {...attributesTab}
-                                >
-                                    <UserAttributes
-                                        user={user}
-                                        save={save}
-                                        upConfig={upConfig}
-                                    />
-                                </Tab>
-                            )}
-                            <Tab
-                                data-testid="credentials"
-                                isHidden={!user.access?.view}
-                                title={<span>{t("credentials")}</span>}
-                                {...credentialsTab}
-                            >
-                                <UserCredentials user={user} setUser={setUser} />
-                            </Tab>
-                            <Tab
-                                data-testid="role-mapping-tab"
-                                isHidden={!user.access?.view}
-                                title={<span>{t("roleMapping")}</span>}
-                                {...roleMappingTab}
-                            >
-                                <UserRoleMapping id={user.id!} name={user.username!} />
-                            </Tab>
-                            {hasAccess("query-groups") && (
-                                <Tab
-                                    data-testid="user-groups-tab"
-                                    title={<span>{t("groups")}</span>}
-                                    {...groupsTab}
-                                >
-                                    <UserGroups user={user} />
-                                </Tab>
-                            )}
-                            {showOrganizations && realmHasOrganizations && (
-                                <Tab
-                                    data-testid="user-organizations-tab"
-                                    title={
-                                        <span>{t("organizations")}</span>
-                                    }
-                                    {...organizationsTab}
-                                >
-                                    <Organizations user={user} />
-                                </Tab>
-                            )}
-                            <Tab
-                                data-testid="user-consents-tab"
-                                title={<span>{t("consents")}</span>}
-                                {...consentsTab}
-                            >
-                                <UserConsents />
-                            </Tab>
-                            <Tab
-                                data-testid="identity-provider-links-tab"
-                                title={
-                                    <span>
-                                        {t("identityProviderLinks")}
-                                    </span>
-                                }
-                                {...identityProviderLinksTab}
-                            >
-                                <UserIdentityProviderLinks userId={user.id!} />
-                            </Tab>
-                            <Tab
-                                data-testid="user-sessions-tab"
-                                title={<span>{t("sessions")}</span>}
-                                {...sessionsTab}
-                            >
-                                <UserSessions />
-                            </Tab>
-                            {hasAccess("view-events") && (
-                                <Tab
-                                    data-testid="events-tab"
-                                    title={<span>{t("events")}</span>}
-                                    {...eventsTab}
-                                >
-                                    <Tabs value={activeEventsTab} onValueChange={setActiveEventsTab}>
-                                        <TabsList>
-                                            <TabsTrigger value="userEvents">
-                                                {t("userEvents")}
-                                            </TabsTrigger>
-                                            <TabsTrigger value="adminEvents">
-                                                {t("adminEvents")}
-                                            </TabsTrigger>
-                                        </TabsList>
-                                        <TabsContent value="userEvents">
-                                            <UserEvents user={user.id} />
-                                        </TabsContent>
-                                        <TabsContent value="adminEvents">
-                                            <AdminEvents
-                                                resourcePath={`users/${user.id}*`}
-                                            />
-                                        </TabsContent>
-                                    </Tabs>
-                                </Tab>
-                            )}
-                        </RoutableTabs>
+                        <div className="bg-muted/30">
+                            {renderContent()}
+                        </div>
                     </FormProvider>
                 </UserProfileProvider>
             </div>

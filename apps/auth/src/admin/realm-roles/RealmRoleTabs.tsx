@@ -15,11 +15,10 @@ import type RoleRepresentation from "@keycloak/keycloak-admin-client/lib/defs/ro
 import { KeycloakSpinner, useAlerts, useFetch } from "../../shared/keycloak-ui-shared";
 import { AlertVariant } from "../../shared/keycloak-ui-shared";
 import { DropdownMenuItem } from "@merge/ui/components/dropdown-menu";
-import { Tab } from "../components/routable-tabs/RoutableTabs";
 import { useState } from "react";
 import { FormProvider, SubmitHandler, useForm, useWatch } from "react-hook-form";
 import { useTranslation } from "react-i18next";
-import { useMatch, useNavigate } from "react-router-dom";
+import { useMatch, useNavigate, useParams as useRouterParams } from "react-router-dom";
 import { useAdminClient } from "../admin-client";
 import { toClient } from "../clients/routes/Client";
 import {
@@ -41,7 +40,6 @@ import {
 import { PermissionsTab } from "../components/permission-tab/PermissionTab";
 import { RoleForm } from "../components/role-form/RoleForm";
 import { RoleMapping } from "../components/role-mapping/RoleMapping";
-import { RoutableTabs, useRoutableTab } from "../components/routable-tabs/RoutableTabs";
 import { ViewHeader } from "../components/view-header/ViewHeader";
 import { useAccess } from "../context/access/Access";
 import { useRealm } from "../context/realm-context/RealmContext";
@@ -64,6 +62,7 @@ export default function RealmRoleTabs() {
     const navigate = useNavigate();
 
     const { id, clientId } = useParams<ClientRoleParams>();
+    const { tab } = useRouterParams<{ tab?: string }>();
     const { realm: realmName, realmRepresentation: realm } = useRealm();
     const [key, setKey] = useState(0);
     const [attributes, setAttributes] = useState<KeyValueType[] | undefined>();
@@ -184,13 +183,6 @@ export default function RealmRoleTabs() {
         throw new Error("Route could not be determined.");
     };
 
-    const detailsTab = useRoutableTab(toTab("details"));
-    const associatedRolesTab = useRoutableTab(toTab("associated-roles"));
-    const attributesTab = useRoutableTab(toTab("attributes"));
-    const usersInRoleTab = useRoutableTab(toTab("users-in-role"));
-    const permissionsTab = useRoutableTab(toTab("permissions"));
-    const eventsTab = useRoutableTab(toTab("events"));
-
     const [toggleDeleteDialog, DeleteConfirm] = useConfirmDialog({
         titleKey: "roleDeleteConfirm",
         messageKey: t("roleDeleteConfirmDialog", {
@@ -237,6 +229,64 @@ export default function RealmRoleTabs() {
         return <KeycloakSpinner />;
     }
 
+    const renderContent = () => {
+        switch (tab) {
+            case "associated-roles":
+                return (
+                    <RoleMapping
+                        name={roleName!}
+                        id={id}
+                        type="roles"
+                        isManager
+                        save={rows => addComposites(rows.map(r => r.role))}
+                    />
+                );
+            case "attributes":
+                return !isDefaultRole(roleName) ? (
+                    <AttributesForm
+                        form={form}
+                        save={onSubmit}
+                        fineGrainedAccess={canManageClientRole}
+                        reset={() =>
+                            setValue("attributes", attributes, {
+                                shouldDirty: false
+                            })
+                        }
+                    />
+                ) : null;
+            case "users-in-role":
+                return !isDefaultRole(roleName) ? (
+                    <UsersInRoleTab data-cy="users-in-role-tab" />
+                ) : null;
+            case "permissions":
+                return (isFeatureEnabled(Feature.AdminFineGrainedAuthz) && canViewPermissionsTab) ? (
+                    <PermissionsTab id={id} type="roles" />
+                ) : null;
+            case "events":
+                return hasAccess("view-events") ? (
+                    <AdminEvents resourcePath={`roles-by-id/${id}`} />
+                ) : null;
+            default:
+                return (
+                    <RoleForm
+                        form={form}
+                        onSubmit={onSubmit}
+                        role={clientRoleMatch ? "manage-clients" : "manage-realm"}
+                        cancelLink={
+                            clientRoleMatch
+                                ? toClient({
+                                      realm: realmName,
+                                      clientId,
+                                      tab: "roles"
+                                  })
+                                : toRealmRoles({ realm: realmName })
+                        }
+                        editMode
+                    />
+                );
+        }
+    };
+
     return (
         <>
             <DeleteConfirm />
@@ -251,100 +301,22 @@ export default function RealmRoleTabs() {
                 ]}
                 actionsDropdownId="roles-actions-dropdown"
                 dropdownItems={[
-                    <DropdownItem
+                    <DropdownMenuItem
                         key="delete-role"
-                        component="button"
                         onClick={() => {
                             toggleDeleteDialog();
                         }}
                     >
                         {t("deleteRole")}
-                    </DropdownItem>
+                    </DropdownMenuItem>
                 ]}
                 divider={false}
             />
             <section className="py-6 bg-muted/30 p-0">
                 <FormProvider {...form}>
-                    <RoutableTabs isBox mountOnEnter defaultLocation={toTab("details")}>
-                        <Tab title={t("details")} eventKey={detailsTab.eventKey}>
-                            <RoleForm
-                                form={form}
-                                onSubmit={onSubmit}
-                                role={clientRoleMatch ? "manage-clients" : "manage-realm"}
-                                cancelLink={
-                                    clientRoleMatch
-                                        ? toClient({
-                                              realm: realmName,
-                                              clientId,
-                                              tab: "roles"
-                                          })
-                                        : toRealmRoles({ realm: realmName })
-                                }
-                                editMode
-                            />
-                        </Tab>
-                        <Tab
-                            data-testid="associatedRolesTab"
-                            title={
-                                <TabTitleText>{t("associatedRolesText")}</TabTitleText>
-                            }
-                            {...associatedRolesTab}
-                        >
-                            <RoleMapping
-                                name={roleName!}
-                                id={id}
-                                type="roles"
-                                isManager
-                                save={rows => addComposites(rows.map(r => r.role))}
-                            />
-                        </Tab>
-                        {!isDefaultRole(roleName) && (
-                            <Tab
-                                data-testid="attributesTab"
-                                className="kc-attributes-tab"
-                                title={t("attributes")}
-                                eventKey={attributesTab.eventKey}
-                            >
-                                <AttributesForm
-                                    form={form}
-                                    save={onSubmit}
-                                    fineGrainedAccess={canManageClientRole}
-                                    reset={() =>
-                                        setValue("attributes", attributes, {
-                                            shouldDirty: false
-                                        })
-                                    }
-                                />
-                            </Tab>
-                        )}
-                        {!isDefaultRole(roleName) && (
-                            <Tab
-                                data-testid="usersInRoleTab"
-                                title={t("usersInRole")}
-                                eventKey={usersInRoleTab.eventKey}
-                            >
-                                <UsersInRoleTab data-cy="users-in-role-tab" />
-                            </Tab>
-                        )}
-                        {isFeatureEnabled(Feature.AdminFineGrainedAuthz) &&
-                            canViewPermissionsTab && (
-                                <Tab
-                                    title={t("permissions")}
-                                    eventKey={permissionsTab.eventKey}
-                                >
-                                    <PermissionsTab id={id} type="roles" />
-                                </Tab>
-                            )}
-                        {hasAccess("view-events") && (
-                            <Tab
-                                data-testid="admin-events-tab"
-                                title={t("adminEvents")}
-                                eventKey={eventsTab.eventKey}
-                            >
-                                <AdminEvents resourcePath={`roles-by-id/${id}`} />
-                            </Tab>
-                        )}
-                    </RoutableTabs>
+                    <div className="bg-muted/30">
+                        {renderContent()}
+                    </div>
                 </FormProvider>
             </section>
         </>

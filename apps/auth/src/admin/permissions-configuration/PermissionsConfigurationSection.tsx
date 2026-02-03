@@ -14,19 +14,17 @@
 import type ClientRepresentation from "@keycloak/keycloak-admin-client/lib/defs/clientRepresentation";
 import { useAlerts, useFetch } from "../../shared/keycloak-ui-shared";
 import { AlertVariant } from "../../shared/keycloak-ui-shared";
-import { Tab } from "../components/routable-tabs/RoutableTabs";
 import { useState } from "react";
 import { FormProvider, useForm, useWatch } from "react-hook-form";
 import { useTranslation } from "react-i18next";
+import { useParams } from "react-router-dom";
 import { useAdminClient } from "../admin-client";
 import { AuthorizationPolicies } from "../clients/authorization/Policies";
 import { FormFields, SaveOptions } from "../clients/ClientDetails";
 import { ConfirmDialogModal } from "../components/confirm-dialog/ConfirmDialog";
-import { RoutableTabs, useRoutableTab } from "../components/routable-tabs/RoutableTabs";
 import { ViewHeader } from "../components/view-header/ViewHeader";
 import { useAccess } from "../context/access/Access";
 import { useRealm } from "../context/realm-context/RealmContext";
-import { toPermissionsConfigurationTabs } from "../permissions-configuration/routes/PermissionsConfigurationTabs";
 import { convertFormValuesToObject, convertToFormValues } from "../util";
 import useToggle from "../utils/useToggle";
 import { PermissionsConfigurationTab } from "./permission-configuration/PermissionsConfigurationTab";
@@ -38,6 +36,7 @@ export default function PermissionsConfigurationSection() {
     const { realm } = useRealm();
     const { hasAccess } = useAccess();
     const { addAlert, addError } = useAlerts();
+    const { tab } = useParams<{ tab?: string }>();
     const [adminPermissionsClient, setAdminPermissionsClient] = useState<
         ClientRepresentation | undefined
     >();
@@ -53,27 +52,6 @@ export default function PermissionsConfigurationSection() {
 
     const hasManageAuthorization = hasAccess("manage-authorization");
     const hasViewUsers = hasAccess("view-users");
-    const permissionsResourcesTab = useRoutableTab(
-        toPermissionsConfigurationTabs({
-            realm,
-            permissionClientId: realmRepresentation?.adminPermissionsClient?.id!,
-            tab: "permissions"
-        })
-    );
-    const permissionsPoliciesTab = useRoutableTab(
-        toPermissionsConfigurationTabs({
-            realm,
-            permissionClientId: realmRepresentation?.adminPermissionsClient?.id!,
-            tab: "policies"
-        })
-    );
-    const permissionsEvaluateTab = useRoutableTab(
-        toPermissionsConfigurationTabs({
-            realm,
-            permissionClientId: realmRepresentation?.adminPermissionsClient?.id!,
-            tab: "evaluation"
-        })
-    );
 
     useFetch(
         async () => {
@@ -136,6 +114,33 @@ export default function PermissionsConfigurationSection() {
         }
     };
 
+    const renderContent = () => {
+        if (!adminPermissionsClient) return null;
+
+        switch (tab) {
+            case "policies":
+                return (
+                    <AuthorizationPolicies
+                        clientId={adminPermissionsClient.id!}
+                        isDisabled={!hasManageAuthorization}
+                    />
+                );
+            case "evaluation":
+                return hasViewUsers ? (
+                    <PermissionsEvaluationTab
+                        client={adminPermissionsClient}
+                        save={save}
+                    />
+                ) : null;
+            default:
+                return (
+                    <PermissionsConfigurationTab
+                        clientId={adminPermissionsClient.id!}
+                    />
+                );
+        }
+    };
+
     return (
         adminPermissionsClient && (
             <>
@@ -161,50 +166,9 @@ export default function PermissionsConfigurationSection() {
                             titleKey={t("permissions")}
                             subKey={t("permissionsSubTitle")}
                         />
-                        <RoutableTabs
-                            mountOnEnter
-                            unmountOnExit
-                            defaultLocation={toPermissionsConfigurationTabs({
-                                realm,
-                                permissionClientId: adminPermissionsClient.id!,
-                                tab: "permissions"
-                            })}
-                        >
-                            <Tab
-                                id="resources"
-                                data-testid="permissionsResources"
-                                title={t("permissions")}
-                                eventKey={permissionsResourcesTab.eventKey}
-                            >
-                                <PermissionsConfigurationTab
-                                    clientId={adminPermissionsClient.id!}
-                                />
-                            </Tab>
-                            <Tab
-                                id="policies"
-                                data-testid="permissionsPolicies"
-                                title={t("policies")}
-                                eventKey={permissionsPoliciesTab.eventKey}
-                            >
-                                <AuthorizationPolicies
-                                    clientId={adminPermissionsClient.id!}
-                                    isDisabled={!hasManageAuthorization}
-                                />
-                            </Tab>
-                            {hasViewUsers && (
-                                <Tab
-                                    id="evaluation"
-                                    data-testid="permissionsEvaluation"
-                                    title={t("evaluation")}
-                                    eventKey={permissionsEvaluateTab.eventKey}
-                                >
-                                    <PermissionsEvaluationTab
-                                        client={adminPermissionsClient}
-                                        save={save}
-                                    />
-                                </Tab>
-                            )}
-                        </RoutableTabs>
+                        <div className="bg-muted/30">
+                            {renderContent()}
+                        </div>
                     </FormProvider>
                 </div>
             </>

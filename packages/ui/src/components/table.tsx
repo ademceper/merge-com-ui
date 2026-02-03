@@ -48,15 +48,6 @@ import {
 } from "@merge/ui/components/alert-dialog"
 import { Button } from "@merge/ui/components/button"
 import { Checkbox } from "@merge/ui/components/checkbox"
-import {
-  DropdownMenu,
-  DropdownMenuCheckboxItem,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@merge/ui/components/dropdown-menu"
 import { Input } from "@merge/ui/components/input"
 import { Label } from "@merge/ui/components/label"
 import {
@@ -302,6 +293,8 @@ export function DataTable<TData>({
     : null
   const searchValue = (searchColumn?.getFilterValue() ?? "") as string
 
+  const [viewOpen, setViewOpen] = useState(false)
+
   return (
     <div className={cn("space-y-4", className)}>
       <div className="flex flex-wrap items-center justify-between gap-3">
@@ -386,31 +379,40 @@ export function DataTable<TData>({
               </PopoverContent>
             </Popover>
           )}
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-                <Button variant="outline" size="sm">
-                  <Columns size={16} className="-ms-1 opacity-60" />
+          <Popover open={viewOpen} onOpenChange={setViewOpen}>
+            <PopoverTrigger asChild>
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                onClick={() => setViewOpen(true)}
+              >
+                <Columns size={16} className="-ms-1 opacity-60" />
                 View
               </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-              <DropdownMenuLabel>Toggle columns</DropdownMenuLabel>
+            </PopoverTrigger>
+            <PopoverContent align="end" className="z-[2147483647] w-auto min-w-36 p-1" style={{ zIndex: 2147483647 }}>
+              <div className="px-1.5 py-1 text-xs font-medium text-muted-foreground">
+                Toggle columns
+              </div>
               {table
                 .getAllColumns()
                 .filter((col) => col.getCanHide())
                 .map((col) => (
-                  <DropdownMenuCheckboxItem
+                  <label
                     key={col.id}
-                    checked={col.getIsVisible()}
-                    className="capitalize"
-                    onCheckedChange={(v) => col.toggleVisibility(!!v)}
-                    onSelect={(e) => e.preventDefault()}
+                    className="flex cursor-pointer items-center gap-2 rounded-md px-1.5 py-1 text-sm hover:bg-accent hover:text-accent-foreground"
                   >
-                    {col.id}
-                  </DropdownMenuCheckboxItem>
+                    <Checkbox
+                      checked={col.getIsVisible()}
+                      onCheckedChange={(v) => col.toggleVisibility(!!v)}
+                      onClick={(e) => e.preventDefault()}
+                    />
+                    <span className="capitalize">{col.id}</span>
+                  </label>
                 ))}
-            </DropdownMenuContent>
-          </DropdownMenu>
+            </PopoverContent>
+          </Popover>
         </div>
         <div className="flex items-center gap-3">
           {onDeleteRows &&
@@ -457,7 +459,7 @@ export function DataTable<TData>({
         </div>
       </div>
 
-      <div className="overflow-hidden rounded-md border bg-background">
+      <div className="rounded-md border bg-background">
         <Table className="table-fixed">
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
@@ -656,31 +658,51 @@ export function DataTableRowActions<TData>({
   row: Row<TData>
   children?: React.ReactNode
 }) {
+  const [open, setOpen] = useState(false)
   return (
-    <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        <Button
-          aria-label="Open menu"
-          variant="ghost"
-          size="icon"
-          className="shadow-none"
+    <div
+      className="relative z-0"
+      onClick={(e) => e.stopPropagation()}
+      onPointerDown={(e) => e.stopPropagation()}
+    >
+      <Popover open={open} onOpenChange={setOpen}>
+        <PopoverTrigger asChild>
+          <Button
+            type="button"
+            aria-label="Open menu"
+            variant="ghost"
+            size="icon"
+            className="shadow-none"
+            onClick={() => setOpen(true)}
+          >
+            <DotsThree size={16} />
+          </Button>
+        </PopoverTrigger>
+        <PopoverContent
+          align="end"
+          className="z-[2147483647] w-auto min-w-32 p-1"
+          style={{ zIndex: 2147483647 }}
+          onOpenAutoFocus={(e) => e.preventDefault()}
         >
-          <DotsThree size={16} />
-        </Button>
-      </DropdownMenuTrigger>
-      <DropdownMenuContent align="end">
-        {children ?? (
-          <>
-            <DropdownMenuItem>Edit</DropdownMenuItem>
-            <DropdownMenuItem>Duplicate</DropdownMenuItem>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem className="text-destructive focus:text-destructive">
-              Delete
-            </DropdownMenuItem>
-          </>
-        )}
-      </DropdownMenuContent>
-    </DropdownMenu>
+          <div onClick={() => setOpen(false)} className="flex flex-col">
+            {children ?? (
+              <>
+                <button type="button" className="rounded-md px-1.5 py-1 text-left text-sm hover:bg-accent hover:text-accent-foreground">
+                  Edit
+                </button>
+                <button type="button" className="rounded-md px-1.5 py-1 text-left text-sm hover:bg-accent hover:text-accent-foreground">
+                  Duplicate
+                </button>
+                <div className="my-1 h-px bg-border" />
+                <button type="button" className="rounded-md px-1.5 py-1 text-left text-sm text-destructive hover:bg-destructive/10 hover:text-destructive">
+                  Delete
+                </button>
+              </>
+            )}
+          </div>
+        </PopoverContent>
+      </Popover>
+    </div>
   )
 }
 

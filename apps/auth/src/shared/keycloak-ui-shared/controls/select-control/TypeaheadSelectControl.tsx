@@ -24,7 +24,7 @@ import {
     TextInputGroupMain,
     TextInputGroupUtilities
 } from "../../../@patternfly/react-core";
-import { TimesIcon } from "../../../@patternfly/react-icons";
+import { X } from "@phosphor-icons/react";
 import { get } from "lodash-es";
 import { useMemo, useRef, useState } from "react";
 import {
@@ -311,7 +311,7 @@ export const TypeaheadSelectControl = <
                                                 }}
                                                 aria-label="Clear input value"
                                             >
-                                                <TimesIcon aria-hidden />
+                                                <X size={16} aria-hidden />
                                             </Button>
                                         )}
                                     </TextInputGroupUtilities>

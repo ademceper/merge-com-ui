@@ -20,7 +20,7 @@ import {
     TextInputTypes,
     InputGroupItem
 } from "../../@patternfly/react-core";
-import { MinusCircleIcon, PlusCircleIcon } from "../../@patternfly/react-icons";
+import { MinusCircle, PlusCircle } from "@phosphor-icons/react";
 import { type TFunction } from "i18next";
 import { Fragment, useEffect, useMemo } from "react";
 import { FieldPath, UseFormReturn, useWatch } from "react-hook-form";
@@ -135,7 +135,7 @@ const MultiLineInput = ({
                                 aria-label={t("remove")}
                                 isDisabled={fields.length === 1 || isDisabled}
                             >
-                                <MinusCircleIcon />
+                                <MinusCircle size={20} />
                             </Button>
                         </InputGroupItem>
                     </InputGroup>
@@ -148,7 +148,7 @@ const MultiLineInput = ({
                             data-testid="addValue"
                             isDisabled={!value || isDisabled}
                         >
-                            <PlusCircleIcon /> {t(addButtonLabel || "add")}
+                            <PlusCircle size={20} /> {t(addButtonLabel || "add")}
                         </Button>
                     )}
                 </Fragment>

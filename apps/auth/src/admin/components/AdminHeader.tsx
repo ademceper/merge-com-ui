@@ -1,5 +1,3 @@
-"use client";
-
 /* eslint-disable */
 // @ts-nocheck
 

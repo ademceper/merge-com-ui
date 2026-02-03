@@ -25,7 +25,7 @@ import {
     TextInputGroupMain,
     TextInputGroupUtilities
 } from "../../@patternfly/react-core";
-import { TimesIcon } from "../../@patternfly/react-icons";
+import { X } from "@phosphor-icons/react";
 import { Children, useRef, useState } from "react";
 import { KeycloakSelectProps, SelectVariant, propertyToString } from "./KeycloakSelect";
 
@@ -196,7 +196,7 @@ export const TypeaheadSelect = ({
                                     }}
                                     aria-label="Clear input value"
                                 >
-                                    <TimesIcon aria-hidden />
+                                    <X size={16} aria-hidden />
                                 </Button>
                             )}
                         </TextInputGroupUtilities>

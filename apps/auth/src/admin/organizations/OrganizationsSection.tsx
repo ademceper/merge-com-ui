@@ -12,12 +12,13 @@
 // @ts-nocheck
 
 import OrganizationRepresentation from "@keycloak/keycloak-admin-client/lib/defs/organizationRepresentation";
-import {
-    ListEmptyState,
-    OrganizationTable,
-    useAlerts
-} from "../../shared/keycloak-ui-shared";
+import { useFetch, useAlerts } from "../../shared/keycloak-ui-shared";
 import { Button } from "@merge/ui/components/button";
+import {
+    DataTable,
+    DataTableRowActions,
+    type ColumnDef
+} from "@merge/ui/components/table";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Link, useNavigate } from "react-router-dom";
@@ -38,11 +39,14 @@ export default function OrganizationSection() {
     const [key, setKey] = useState(0);
     const refresh = () => setKey(key + 1);
 
+    const [organizations, setOrganizations] = useState<OrganizationRepresentation[]>([]);
     const [selectedOrg, setSelectedOrg] = useState<OrganizationRepresentation>();
 
-    async function loader(first?: number, max?: number, search?: string) {
-        return await adminClient.organizations.find({ first, max, search });
-    }
+    useFetch(
+        () => adminClient.organizations.find({}),
+        (orgs) => setOrganizations(orgs),
+        [key]
+    );
 
     const [toggleDeleteDialog, DeleteConfirm] = useConfirmDialog({
         titleKey: "organizationDelete",
@@ -62,6 +66,75 @@ export default function OrganizationSection() {
         }
     });
 
+    const columns: ColumnDef<OrganizationRepresentation>[] = [
+        {
+            accessorKey: "name",
+            header: t("name"),
+            cell: ({ row }) => (
+                <Link
+                    className="text-primary hover:underline"
+                    to={toEditOrganization({
+                        realm,
+                        id: row.original.id!,
+                        tab: "settings"
+                    })}
+                >
+                    {row.original.name}
+                </Link>
+            )
+        },
+        {
+            accessorKey: "domains",
+            header: t("domains"),
+            cell: ({ row }) => {
+                const domains = row.original.domains;
+                if (!domains || domains.length === 0) return "-";
+                return domains.map(d => d.name).join(", ");
+            }
+        },
+        {
+            accessorKey: "description",
+            header: t("description"),
+            cell: ({ row }) => row.original.description || "-"
+        },
+        {
+            id: "actions",
+            header: "",
+            size: 50,
+            enableHiding: false,
+            cell: ({ row }) => (
+                <DataTableRowActions row={row}>
+                    <button
+                        type="button"
+                        className="w-full rounded-md px-1.5 py-1 text-left text-sm hover:bg-accent hover:text-accent-foreground"
+                        onClick={() =>
+                            navigate(
+                                toEditOrganization({
+                                    realm,
+                                    id: row.original.id!,
+                                    tab: "settings"
+                                })
+                            )
+                        }
+                    >
+                        {t("edit")}
+                    </button>
+                    <div className="my-1 h-px bg-border" />
+                    <button
+                        type="button"
+                        className="w-full rounded-md px-1.5 py-1 text-left text-sm text-destructive hover:bg-destructive/10 hover:text-destructive"
+                        onClick={() => {
+                            setSelectedOrg(row.original);
+                            toggleDeleteDialog();
+                        }}
+                    >
+                        {t("delete")}
+                    </button>
+                </DataTableRowActions>
+            )
+        }
+    ];
+
     return (
         <>
             <ViewHeader
@@ -69,49 +142,23 @@ export default function OrganizationSection() {
                 subKey="organizationsExplain"
                 divider
             />
-            <div className="p-0">
+            <div className="p-6">
                 <DeleteConfirm />
-                <OrganizationTable
-                    link={({ organization, children }) => (
-                        <Link
-                            key={organization.id}
-                            to={toEditOrganization({
-                                realm,
-                                id: organization.id!,
-                                tab: "settings"
-                            })}
-                        >
-                            {children}
-                        </Link>
-                    )}
+                <DataTable
                     key={key}
-                    loader={loader}
-                    searchPlaceholderKey="searchOrganization"
-                    isPaginated
-                    toolbarItem={
-                        <div>
-                            <Button
-                                data-testid="addOrganization"
-                                asChild
-                            >
-                                <Link to={toAddOrganization({ realm })}>
-                                    {t("createOrganization")}
-                                </Link>
-                            </Button>
-                        </div>
+                    columns={columns}
+                    data={organizations}
+                    searchColumnId="name"
+                    searchPlaceholder={t("searchOrganization")}
+                    emptyMessage={t("emptyOrganizations")}
+                    toolbar={
+                        <Button data-testid="addOrganization" asChild>
+                            <Link to={toAddOrganization({ realm })}>
+                                {t("createOrganization")}
+                            </Link>
+                        </Button>
                     }
-                    onDelete={org => {
-                        setSelectedOrg(org);
-                        toggleDeleteDialog();
-                    }}
-                >
-                    <ListEmptyState
-                        message={t("emptyOrganizations")}
-                        instructions={t("emptyOrganizationsInstructions")}
-                        primaryActionText={t("createOrganization")}
-                        onPrimaryAction={() => navigate(toAddOrganization({ realm }))}
-                    />
-                </OrganizationTable>
+                />
             </div>
         </>
     );

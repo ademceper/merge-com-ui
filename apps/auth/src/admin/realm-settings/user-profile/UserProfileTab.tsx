@@ -11,11 +11,6 @@
 
 // @ts-nocheck
 
-import { Tab } from "../../components/routable-tabs/RoutableTabs";
-import { useTranslation } from "react-i18next";
-import { RoutableTabs, useRoutableTab } from "../../components/routable-tabs/RoutableTabs";
-import { useRealm } from "../../context/realm-context/RealmContext";
-import { toUserProfile, UserProfileTab as IUserProfileTab } from "../routes/UserProfile";
 import { AttributesGroupTab } from "./AttributesGroupTab";
 import { AttributesTab } from "./AttributesTab";
 import { JsonEditorTab } from "./JsonEditorTab";
@@ -25,47 +20,24 @@ type UserProfileTabProps = {
     setTableData: React.Dispatch<
         React.SetStateAction<Record<string, string>[] | undefined>
     >;
+    subTab?: string;
 };
 
-export const UserProfileTab = ({ setTableData }: UserProfileTabProps) => {
-    const { realm } = useRealm();
-    const { t } = useTranslation();
-
-    const useTab = (tab: IUserProfileTab) =>
-        useRoutableTab(toUserProfile({ realm, tab }));
-
-    const attributesTab = useTab("attributes");
-    const attributesGroupTab = useTab("attributes-group");
-    const jsonEditorTab = useTab("json-editor");
+export const UserProfileTab = ({ setTableData, subTab = "attributes" }: UserProfileTabProps) => {
+    const renderContent = () => {
+        switch (subTab) {
+            case "attributes-group":
+                return <AttributesGroupTab setTableData={setTableData} />;
+            case "json-editor":
+                return <JsonEditorTab />;
+            default:
+                return <AttributesTab setTableData={setTableData} />;
+        }
+    };
 
     return (
         <UserProfileProvider>
-            <RoutableTabs
-                defaultLocation={toUserProfile({ realm, tab: "attributes" })}
-                mountOnEnter
-            >
-                <Tab
-                    title={t("attributes")}
-                    data-testid="attributesTab"
-                    eventKey={attributesTab.eventKey}
-                >
-                    <AttributesTab setTableData={setTableData} />
-                </Tab>
-                <Tab
-                    title={t("attributesGroup")}
-                    data-testid="attributesGroupTab"
-                    eventKey={attributesGroupTab.eventKey}
-                >
-                    <AttributesGroupTab setTableData={setTableData} />
-                </Tab>
-                <Tab
-                    title={t("jsonEditor")}
-                    data-testid="jsonEditorTab"
-                    eventKey={jsonEditorTab.eventKey}
-                >
-                    <JsonEditorTab />
-                </Tab>
-            </RoutableTabs>
+            {renderContent()}
         </UserProfileProvider>
     );
 };

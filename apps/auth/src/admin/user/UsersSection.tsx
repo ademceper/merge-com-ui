@@ -12,20 +12,19 @@
 // @ts-nocheck
 
 import { useTranslation } from "react-i18next";
-
+import { useParams } from "react-router-dom";
 import { ViewHeader } from "../components/view-header/ViewHeader";
 import { useRealm } from "../context/realm-context/RealmContext";
 import helpUrls from "../help-urls";
 import { PermissionsTab } from "../components/permission-tab/PermissionTab";
 import { UserDataTable } from "../components/users/UserDataTable";
-import { toUsers, UserTab } from "./routes/Users";
-import { RoutableTabs, Tab, useRoutableTab } from "../components/routable-tabs/RoutableTabs";
 import useIsFeatureEnabled, { Feature } from "../utils/useIsFeatureEnabled";
 import { useAccess } from "../context/access/Access";
 
 export default function UsersSection() {
     const { t } = useTranslation();
     const { realm: realmName } = useRealm();
+    const { tab } = useParams<{ tab?: string }>();
     const { hasAccess } = useAccess();
     const isFeatureEnabled = useIsFeatureEnabled();
 
@@ -33,16 +32,12 @@ export default function UsersSection() {
         isFeatureEnabled(Feature.AdminFineGrainedAuthz) &&
         hasAccess("manage-authorization", "manage-users", "manage-clients");
 
-    const useTab = (tab: UserTab) =>
-        useRoutableTab(
-            toUsers({
-                realm: realmName,
-                tab
-            })
-        );
-
-    const listTab = useTab("list");
-    const permissionsTab = useTab("permissions");
+    const content = () => {
+        if (tab === "permissions" && canViewPermissions) {
+            return <PermissionsTab type="users" />;
+        }
+        return <UserDataTable />;
+    };
 
     return (
         <>
@@ -53,36 +48,7 @@ export default function UsersSection() {
                 divider={false}
             />
             <div data-testid="users-page" className="bg-muted/30 p-0">
-                <RoutableTabs
-                    data-testid="user-tabs"
-                    defaultLocation={toUsers({
-                        realm: realmName,
-                        tab: "list"
-                    })}
-                    isBox
-                    mountOnEnter
-                >
-                    <Tab
-                        eventKey={listTab.eventKey}
-                        id="list"
-                        data-testid="listTab"
-                        title={t("userList")}
-                        {...listTab}
-                    >
-                        <UserDataTable />
-                    </Tab>
-                    {canViewPermissions && (
-                        <Tab
-                            eventKey={permissionsTab.eventKey}
-                            id="permissions"
-                            data-testid="permissionsTab"
-                            title={t("permissions")}
-                            {...permissionsTab}
-                        >
-                            <PermissionsTab type="users" />
-                        </Tab>
-                    )}
-                </RoutableTabs>
+                {content()}
             </div>
         </>
     );

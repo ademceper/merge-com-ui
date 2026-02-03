@@ -17,19 +17,22 @@ import type RoleRepresentation from "@keycloak/keycloak-admin-client/lib/defs/ro
 import type { ProtocolMapperTypeRepresentation } from "@keycloak/keycloak-admin-client/lib/defs/serverInfoRepesentation";
 import {
     HelpItem,
-    KeycloakDataTable,
     KeycloakSelect,
     SelectVariant,
     useFetch,
     useHelp
 } from "../../../shared/keycloak-ui-shared";
+import {
+    DataTable,
+    type ColumnDef
+} from "@merge/ui/components/table";
 const SelectOption = ({ value, children, ...props }: any) => <option value={value} {...props}>{children}</option>;
 import { Button } from "@merge/ui/components/button";
 import { Input } from "@merge/ui/components/input";
 import { Label } from "@merge/ui/components/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@merge/ui/components/tabs";
 import { Question } from "@phosphor-icons/react";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { useAdminClient } from "../../admin-client";
@@ -52,62 +55,75 @@ const ProtocolMappers = ({
 }: {
     protocolMappers: ProtocolMapperRepresentation[];
 }) => {
+    const { t } = useTranslation();
     const [key, setKey] = useState(0);
     useEffect(() => {
         setKey(key + 1);
     }, [protocolMappers]);
+
+    const columns: ColumnDef<ProtocolMapperRepresentation>[] = useMemo(() => [
+        {
+            accessorKey: "mapperName",
+            header: t("name"),
+            cell: ({ row }) => row.original.mapperName || "-"
+        },
+        {
+            accessorKey: "containerName",
+            header: t("parentClientScope"),
+            cell: ({ row }) => row.original.containerName || "-"
+        },
+        {
+            id: "category",
+            header: t("category"),
+            cell: ({ row }) => (row.original as any).type?.category || "-"
+        },
+        {
+            id: "priority",
+            header: t("priority"),
+            cell: ({ row }) => (row.original as any).type?.priority || "-"
+        }
+    ], [t]);
+
     return (
-        <KeycloakDataTable
+        <DataTable
             key={key}
-            loader={() => Promise.resolve(protocolMappers)}
-            ariaLabelKey="effectiveProtocolMappers"
-            searchPlaceholderKey="searchForProtocol"
-            data-testid="effective-protocol-mappers"
-            columns={[
-                {
-                    name: "mapperName",
-                    displayKey: "name"
-                },
-                {
-                    name: "containerName",
-                    displayKey: "parentClientScope"
-                },
-                {
-                    name: "type.category",
-                    displayKey: "category"
-                },
-                {
-                    name: "type.priority",
-                    displayKey: "priority"
-                }
-            ]}
+            columns={columns}
+            data={protocolMappers}
+            searchColumnId="mapperName"
+            searchPlaceholder={t("searchForProtocol")}
+            emptyMessage={t("noProtocolMappers")}
         />
     );
 };
 
 const EffectiveRoles = ({ effectiveRoles }: { effectiveRoles: RoleRepresentation[] }) => {
+    const { t } = useTranslation();
     const [key, setKey] = useState(0);
     useEffect(() => {
         setKey(key + 1);
     }, [effectiveRoles]);
 
+    const columns: ColumnDef<RoleRepresentation>[] = useMemo(() => [
+        {
+            accessorKey: "name",
+            header: t("role"),
+            cell: ({ row }) => row.original.name || "-"
+        },
+        {
+            accessorKey: "containerId",
+            header: t("origin"),
+            cell: ({ row }) => row.original.containerId || "-"
+        }
+    ], [t]);
+
     return (
-        <KeycloakDataTable
+        <DataTable
             key={key}
-            loader={() => Promise.resolve(effectiveRoles)}
-            ariaLabelKey="effectiveRoleScopeMappings"
-            searchPlaceholderKey="searchForRole"
-            data-testid="effective-role-scope-mappings"
-            columns={[
-                {
-                    name: "name",
-                    displayKey: "role"
-                },
-                {
-                    name: "containerId",
-                    displayKey: "origin"
-                }
-            ]}
+            columns={columns}
+            data={effectiveRoles}
+            searchColumnId="name"
+            searchPlaceholder={t("searchForRole")}
+            emptyMessage={t("noRoles")}
         />
     );
 };

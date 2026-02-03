@@ -12,20 +12,13 @@
 // @ts-nocheck
 
 import type ComponentRepresentation from "@keycloak/keycloak-admin-client/lib/defs/componentRepresentation";
-import { Tab } from "../../components/routable-tabs/RoutableTabs";
 import { useState } from "react";
-import { useTranslation } from "react-i18next";
 
 import { useFetch } from "../../../shared/keycloak-ui-shared";
 import { useAdminClient } from "../../admin-client";
 import { KeycloakSpinner } from "../../../shared/keycloak-ui-shared";
-import {
-    RoutableTabs,
-    useRoutableTab
-} from "../../components/routable-tabs/RoutableTabs";
 import { useRealm } from "../../context/realm-context/RealmContext";
 import { KEY_PROVIDER_TYPE } from "../../util";
-import { KeySubTab, toKeysTab } from "../routes/KeysTab";
 import { KeysListTab } from "./KeysListTab";
 import { KeysProvidersTab } from "./KeysProvidersTab";
 
@@ -40,11 +33,12 @@ const sortByPriority = (components: ComponentRepresentation[]) => {
     return sortedComponents;
 };
 
-export const KeysTab = () => {
+type KeysTabProps = {
+    subTab?: string;
+};
+
+export const KeysTab = ({ subTab = "list" }: KeysTabProps) => {
     const { adminClient } = useAdminClient();
-
-    const { t } = useTranslation();
-
     const { realm: realmName } = useRealm();
 
     const [realmComponents, setRealmComponents] = useState<ComponentRepresentation[]>();
@@ -63,40 +57,13 @@ export const KeysTab = () => {
         [key]
     );
 
-    const useTab = (tab: KeySubTab) =>
-        useRoutableTab(toKeysTab({ realm: realmName, tab }));
-
-    const listTab = useTab("list");
-    const providersTab = useTab("providers");
-
     if (!realmComponents) {
         return <KeycloakSpinner />;
     }
 
-    return (
-        <RoutableTabs
-            mountOnEnter
-            unmountOnExit
-            defaultLocation={toKeysTab({ realm: realmName, tab: "list" })}
-        >
-            <Tab
-                id="keysList"
-                data-testid="rs-keys-list-tab"
-                aria-label="keys-list-subtab"
-                title={t("keysList")}
-                eventKey={listTab.eventKey}
-            >
-                <KeysListTab realmComponents={realmComponents} />
-            </Tab>
-            <Tab
-                id="providers"
-                data-testid="rs-providers-tab"
-                aria-label="rs-providers-tab"
-                title={t("providers")}
-                eventKey={providersTab.eventKey}
-            >
-                <KeysProvidersTab realmComponents={realmComponents} refresh={refresh} />
-            </Tab>
-        </RoutableTabs>
-    );
+    if (subTab === "providers") {
+        return <KeysProvidersTab realmComponents={realmComponents} refresh={refresh} />;
+    }
+
+    return <KeysListTab realmComponents={realmComponents} />;
 };

@@ -87,11 +87,11 @@ export const ViewHeader = ({
 
     return (
         <>
-            <div className="bg-muted/30 p-4">
+            <div className="p-4">
                 <div className="flex flex-wrap items-center justify-between gap-4">
                     <div className="flex flex-wrap items-center gap-2">
                         <h1
-                            className={className}
+                            className={`text-2xl font-semibold ${className || ""}`}
                             data-testid="view-header"
                         >
                             {i18n.exists(titleKey) ? t(titleKey) : titleKey}

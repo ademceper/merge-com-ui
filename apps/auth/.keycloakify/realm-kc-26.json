@@ -1184,7 +1184,8 @@
                         "id.token.claim": "true",
                         "introspection.token.claim": "true",
                         "jsonType.label": "String",
-                        "user.session.note": "client_id"
+                        "user.session.note": "client_id",
+                        "userinfo.token.claim": "true"
                     }
                 },
                 {
@@ -1199,7 +1200,8 @@
                         "id.token.claim": "true",
                         "introspection.token.claim": "true",
                         "jsonType.label": "String",
-                        "user.session.note": "clientHost"
+                        "user.session.note": "clientHost",
+                        "userinfo.token.claim": "true"
                     }
                 },
                 {
@@ -1214,7 +1216,8 @@
                         "id.token.claim": "true",
                         "introspection.token.claim": "true",
                         "jsonType.label": "String",
-                        "user.session.note": "clientAddress"
+                        "user.session.note": "clientAddress",
+                        "userinfo.token.claim": "true"
                     }
                 }
             ]
@@ -1800,12 +1803,12 @@
                 "subComponents": {},
                 "config": {
                     "allowed-protocol-mapper-types": [
-                        "oidc-full-name-mapper",
-                        "saml-role-list-mapper",
-                        "saml-user-property-mapper",
-                        "oidc-sha256-pairwise-sub-mapper",
                         "oidc-address-mapper",
                         "saml-user-attribute-mapper",
+                        "saml-user-property-mapper",
+                        "oidc-full-name-mapper",
+                        "saml-role-list-mapper",
+                        "oidc-sha256-pairwise-sub-mapper",
                         "oidc-usermodel-property-mapper",
                         "oidc-usermodel-attribute-mapper"
                     ]
@@ -1837,14 +1840,14 @@
                 "subComponents": {},
                 "config": {
                     "allowed-protocol-mapper-types": [
+                        "saml-role-list-mapper",
                         "saml-user-attribute-mapper",
-                        "oidc-usermodel-property-mapper",
+                        "oidc-full-name-mapper",
                         "saml-user-property-mapper",
+                        "oidc-usermodel-property-mapper",
                         "oidc-usermodel-attribute-mapper",
                         "oidc-sha256-pairwise-sub-mapper",
-                        "oidc-full-name-mapper",
-                        "oidc-address-mapper",
-                        "saml-role-list-mapper"
+                        "oidc-address-mapper"
                     ]
                 }
             },
@@ -2635,5 +2638,15 @@
     "adminPermissionsEnabled": false,
     "displayName": "",
     "displayNameHtml": "",
-    "verifiableCredentialsEnabled": false
+    "verifiableCredentialsEnabled": false,
+    "organizations": [
+        {
+            "alias": "deneme",
+            "description": "asdad",
+            "enabled": true,
+            "id": "89454c88-53c1-4d37-a9fd-b44b779ad9f7",
+            "name": "deneme",
+            "attributes": {}
+        }
+    ]
 }

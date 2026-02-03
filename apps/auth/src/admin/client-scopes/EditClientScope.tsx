@@ -24,10 +24,9 @@ import {
 import { Alert, AlertTitle } from "@merge/ui/components/alert";
 import { DropdownMenuItem } from "@merge/ui/components/dropdown-menu";
 import { AlertVariant } from "../../shared/keycloak-ui-shared";
-import { Tab } from "../../shared/@patternfly/react-core";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams as useRouterParams } from "react-router-dom";
 import { useAdminClient } from "../admin-client";
 import {
     AllClientScopes,
@@ -37,14 +36,13 @@ import {
 } from "../components/client-scope/ClientScopeTypes";
 import { useConfirmDialog } from "../components/confirm-dialog/ConfirmDialog";
 import { RoleMapping, Row } from "../components/role-mapping/RoleMapping";
-import { RoutableTabs, useRoutableTab } from "../components/routable-tabs/RoutableTabs";
 import { ViewHeader } from "../components/view-header/ViewHeader";
 import { useRealm } from "../context/realm-context/RealmContext";
 import { convertFormValuesToObject } from "../util";
 import { useParams } from "../utils/useParams";
 import { MapperList } from "./details/MapperList";
 import { ScopeForm } from "./details/ScopeForm";
-import { ClientScopeParams, toClientScope } from "./routes/ClientScope";
+import { ClientScopeParams } from "./routes/ClientScope";
 import { toClientScopes } from "./routes/ClientScopes";
 import { toMapper } from "./routes/Mapper";
 import { useAccess } from "../context/access/Access";
@@ -57,6 +55,7 @@ export default function EditClientScope() {
     const navigate = useNavigate();
     const { realm, realmRepresentation } = useRealm();
     const { id } = useParams<ClientScopeParams>();
+    const { tab } = useRouterParams<{ tab?: string }>();
     const { addAlert, addError } = useAlerts();
     const { enabled } = useHelp();
     const [clientScope, setClientScope] = useState<ClientScopeDefaultOptionalType>();
@@ -101,11 +100,6 @@ export default function EditClientScope() {
 
         return hasOptionalScope ? ClientScope.optional : AllClientScopes.none;
     }
-
-    const settingsTab = useRoutableTab(toClientScope({ realm, id, tab: "settings" }));
-    const mappersTab = useRoutableTab(toClientScope({ realm, id, tab: "mappers" }));
-    const scopeTab = useRoutableTab(toClientScope({ realm, id, tab: "scope" }));
-    const eventsTab = useRoutableTab(toClientScope({ realm, id, tab: "events" }));
 
     const onSubmit = async (formData: ClientScopeDefaultOptionalType) => {
         const clientScope = convertFormValuesToObject({
@@ -218,6 +212,55 @@ export default function EditClientScope() {
         return <KeycloakSpinner />;
     }
 
+    const renderContent = () => {
+        switch (tab) {
+            case "mappers":
+                return (
+                    <MapperList
+                        model={clientScope}
+                        onAdd={addMappers}
+                        onDelete={onDelete}
+                        detailLink={mapperId =>
+                            toMapper({
+                                realm,
+                                id: clientScope.id!,
+                                mapperId: mapperId!,
+                                viewMode: "edit"
+                            })
+                        }
+                    />
+                );
+            case "scope":
+                return (
+                    <>
+                        {enabled && (
+                            <div className="p-6">
+                                <Alert>
+                                    <AlertTitle>{t("clientScopesRolesScope")}</AlertTitle>
+                                </Alert>
+                            </div>
+                        )}
+                        <RoleMapping
+                            id={clientScope.id!}
+                            name={clientScope.name!}
+                            type="clientScopes"
+                            save={assignRoles}
+                        />
+                    </>
+                );
+            case "events":
+                return (realmRepresentation?.adminEventsEnabled && hasAccess("view-events")) ? (
+                    <AdminEvents resourcePath={`*client-scopes/${id}`} />
+                ) : null;
+            default:
+                return (
+                    <div className="p-6">
+                        <ScopeForm save={onSubmit} clientScope={clientScope} />
+                    </div>
+                );
+        }
+    };
+
     return (
         <>
             <DeleteConfirm />
@@ -233,68 +276,9 @@ export default function EditClientScope() {
             />
 
             <div className="p-0">
-                <RoutableTabs isBox mountOnEnter unmountOnExit>
-                    <Tab
-                        id="settings"
-                        data-testid="settings"
-                        title={t("settings")}
-                        {...settingsTab}
-                    >
-                        <div className="p-6">
-                            <ScopeForm save={onSubmit} clientScope={clientScope} />
-                        </div>
-                    </Tab>
-                    <Tab
-                        id="mappers"
-                        data-testid="mappers"
-                        title={t("mappers")}
-                        {...mappersTab}
-                    >
-                        <MapperList
-                            model={clientScope}
-                            onAdd={addMappers}
-                            onDelete={onDelete}
-                            detailLink={id =>
-                                toMapper({
-                                    realm,
-                                    id: clientScope.id!,
-                                    mapperId: id!,
-                                    viewMode: "edit"
-                                })
-                            }
-                        />
-                    </Tab>
-                    <Tab
-                        id="scope"
-                        data-testid="scopeTab"
-                        title={t("scope")}
-                        {...scopeTab}
-                    >
-                        {enabled && (
-                            <div className="p-6">
-                                <Alert>
-                                    <AlertTitle>{t("clientScopesRolesScope")}</AlertTitle>
-                                </Alert>
-                            </div>
-                        )}
-                        <RoleMapping
-                            id={clientScope.id!}
-                            name={clientScope.name!}
-                            type="clientScopes"
-                            save={assignRoles}
-                        />
-                    </Tab>
-                    {realmRepresentation?.adminEventsEnabled &&
-                        hasAccess("view-events") && (
-                            <Tab
-                                data-testid="admin-events-tab"
-                                title={t("adminEvents")}
-                                {...eventsTab}
-                            >
-                                <AdminEvents resourcePath={`*client-scopes/${id}`} />
-                            </Tab>
-                        )}
-                </RoutableTabs>
+                <div className="bg-muted/30">
+                    {renderContent()}
+                </div>
             </div>
         </>
     );

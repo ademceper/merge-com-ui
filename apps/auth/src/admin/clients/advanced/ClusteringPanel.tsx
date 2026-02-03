@@ -15,15 +15,18 @@ import { AlertVariant } from "../../../shared/keycloak-ui-shared";
 import { Button } from "@merge/ui/components/button";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@merge/ui/components/collapsible";
 import { Label } from "@merge/ui/components/label";
-import { useState } from "react";
+import {
+    DataTable,
+    DataTableRowActions,
+    type ColumnDef
+} from "@merge/ui/components/table";
+import { useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { HelpItem } from "../../../shared/keycloak-ui-shared";
 import { useAdminClient } from "../../admin-client";
 import { useAlerts } from "../../../shared/keycloak-ui-shared";
 import { useConfirmDialog } from "../../components/confirm-dialog/ConfirmDialog";
 import { FormAccess } from "../../components/form/FormAccess";
-import { ListEmptyState } from "../../../shared/keycloak-ui-shared";
-import { Action, KeycloakDataTable } from "../../../shared/keycloak-ui-shared";
 import { TimeSelectorForm } from "../../components/time-selector/TimeSelectorForm";
 import useFormatDate, { FORMAT_DATE_AND_TIME } from "../../utils/useFormatDate";
 import { AddHostDialog } from ".././advanced/AddHostDialog";
@@ -51,6 +54,14 @@ export const ClusteringPanel = ({
     const [key, setKey] = useState(0);
     const refresh = () => setKey(new Date().getTime());
 
+    const nodeData = useMemo(() =>
+        Object.entries(nodes || {}).map(entry => ({
+            host: entry[0],
+            registration: entry[1]
+        })),
+        [nodes]
+    );
+
     const testCluster = async () => {
         const result = await adminClient.clients.testNodesAvailable({ id: id! });
         parseResult(result, "testCluster", addAlert, t);
@@ -62,7 +73,7 @@ export const ClusteringPanel = ({
             node: selectedNode
         }),
         continueButtonLabel: "delete",
-        continueButtonVariant: "danger",
+        continueButtonVariant: "destructive",
         onConfirm: async () => {
             try {
                 await adminClient.clients.deleteClusterNode({
@@ -84,6 +95,45 @@ export const ClusteringPanel = ({
             }
         }
     });
+
+    const columns: ColumnDef<Node>[] = [
+        {
+            accessorKey: "host",
+            header: t("nodeHost"),
+            cell: ({ row }) => row.original.host
+        },
+        {
+            accessorKey: "registration",
+            header: t("lastRegistration"),
+            cell: ({ row }) =>
+                row.original.registration
+                    ? formatDate(
+                          new Date(parseInt(row.original.registration.toString()) * 1000),
+                          FORMAT_DATE_AND_TIME
+                      )
+                    : ""
+        },
+        {
+            id: "actions",
+            header: "",
+            size: 50,
+            enableHiding: false,
+            cell: ({ row }) => (
+                <DataTableRowActions row={row}>
+                    <button
+                        type="button"
+                        className="w-full rounded-md px-1.5 py-1 text-left text-sm text-destructive hover:bg-destructive/10 hover:text-destructive"
+                        onClick={() => {
+                            setSelectedNode(row.original.host);
+                            toggleDeleteNodeConfirm();
+                        }}
+                    >
+                        {t("delete")}
+                    </button>
+                </DataTableRowActions>
+            )
+        }
+    ];
 
     return (
         <>
@@ -131,19 +181,15 @@ export const ClusteringPanel = ({
                         {t("registeredClusterNodes")}
                     </CollapsibleTrigger>
                     <CollapsibleContent>
-                    <KeycloakDataTable
-                        key={key}
-                        ariaLabelKey="registeredClusterNodes"
-                        loader={() =>
-                            Promise.resolve<Node[]>(
-                                Object.entries(nodes || {}).map(entry => {
-                                    return { host: entry[0], registration: entry[1] };
-                                })
-                            )
-                        }
-                        toolbarItem={
-                            <>
-                                <div>
+                        <DataTable
+                            key={key}
+                            columns={columns}
+                            data={nodeData}
+                            searchColumnId="host"
+                            searchPlaceholder={t("searchByHost")}
+                            emptyMessage={t("noNodes")}
+                            toolbar={
+                                <div className="flex gap-2">
                                     <Button
                                         id="testClusterAvailability"
                                         data-testid="test-cluster-availability"
@@ -153,8 +199,6 @@ export const ClusteringPanel = ({
                                     >
                                         {t("testClusterAvailability")}
                                     </Button>
-                                </div>
-                                <div>
                                     <Button
                                         id="registerNodeManually"
                                         data-testid="registerNodeManually"
@@ -164,47 +208,8 @@ export const ClusteringPanel = ({
                                         {t("registerNodeManually")}
                                     </Button>
                                 </div>
-                            </>
-                        }
-                        actions={[
-                            {
-                                title: t("delete"),
-                                onRowClick: node => {
-                                    setSelectedNode(node.host);
-                                    toggleDeleteNodeConfirm();
-                                }
-                            } as Action<Node>
-                        ]}
-                        columns={[
-                            {
-                                name: "host",
-                                displayKey: "nodeHost"
-                            },
-                            {
-                                name: "registration",
-                                displayKey: "lastRegistration",
-                                cellFormatters: [
-                                    value =>
-                                        value
-                                            ? formatDate(
-                                                  new Date(
-                                                      parseInt(value.toString()) * 1000
-                                                  ),
-                                                  FORMAT_DATE_AND_TIME
-                                              )
-                                            : ""
-                                ]
                             }
-                        ]}
-                        emptyState={
-                            <ListEmptyState
-                                message={t("noNodes")}
-                                instructions={t("noNodesInstructions")}
-                                primaryActionText={t("registerNodeManually")}
-                                onPrimaryAction={() => setAddNodeOpen(true)}
-                            />
-                        }
-                    />
+                        />
                     </CollapsibleContent>
                 </Collapsible>
             </>

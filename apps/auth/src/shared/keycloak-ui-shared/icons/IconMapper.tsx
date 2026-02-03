@@ -11,22 +11,18 @@
 
 // @ts-nocheck
 
-import { Icon } from "../../@patternfly/react-core";
 import {
-    BitbucketIcon,
-    CubeIcon,
-    FacebookSquareIcon,
-    GithubIcon,
-    GitlabIcon,
-    GoogleIcon,
-    InstagramIcon,
-    LinkedinIcon,
-    MicrosoftIcon,
-    OpenshiftIcon,
-    PaypalIcon,
-    StackOverflowIcon,
-    TwitterIcon
-} from "../../@patternfly/react-icons";
+    Cube,
+    GithubLogo,
+    FacebookLogo,
+    GitlabLogo,
+    GoogleLogo,
+    InstagramLogo,
+    LinkedinLogo,
+    StackOverflowLogo,
+    TwitterLogo,
+    PaypalLogo
+} from "@phosphor-icons/react";
 
 type IconMapperProps = {
     icon: string;
@@ -35,41 +31,40 @@ type IconMapperProps = {
 export const IconMapper = ({ icon }: IconMapperProps) => {
     const SpecificIcon = getIcon(icon);
     return (
-        <Icon size="lg">
-            <SpecificIcon alt={icon} />
-        </Icon>
+        <span className="inline-flex items-center justify-center [&_svg]:size-6" aria-hidden>
+            <SpecificIcon size={24} alt={icon} />
+        </span>
     );
 };
 
 function getIcon(icon: string) {
     switch (icon) {
         case "github":
-            return GithubIcon;
+            return GithubLogo;
         case "facebook":
-            return FacebookSquareIcon;
+            return FacebookLogo;
         case "gitlab":
-            return GitlabIcon;
+            return GitlabLogo;
         case "google":
-            return GoogleIcon;
+            return GoogleLogo;
         case "linkedin":
         case "linkedin-openid-connect":
-            return LinkedinIcon;
-
+            return LinkedinLogo;
         case "openshift-v4":
-            return OpenshiftIcon;
+            return Cube;
         case "stackoverflow":
-            return StackOverflowIcon;
+            return StackOverflowLogo;
         case "twitter":
-            return TwitterIcon;
+            return TwitterLogo;
         case "microsoft":
-            return MicrosoftIcon;
+            return Cube; // Phosphor has no Microsoft logo
         case "bitbucket":
-            return BitbucketIcon;
+            return Cube;
         case "instagram":
-            return InstagramIcon;
+            return InstagramLogo;
         case "paypal":
-            return PaypalIcon;
+            return PaypalLogo;
         default:
-            return CubeIcon;
+            return Cube;
     }
 }

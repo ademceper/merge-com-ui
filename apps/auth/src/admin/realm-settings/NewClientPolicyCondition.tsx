@@ -1,31 +1,18 @@
-/**
- * WARNING: Before modifying this file, run the following command:
- *
- * $ npx keycloakify own --path "admin/realm-settings/NewClientPolicyCondition.tsx"
- *
- * This file is provided by @keycloakify/keycloak-admin-ui version 260502.0.0.
- * It was copied into your repository by the postinstall script: `keycloakify sync-extensions`.
- */
-
-/* eslint-disable */
-
-// @ts-nocheck
-
 import type { ConfigPropertyRepresentation } from "@keycloak/keycloak-admin-client/lib/defs/authenticatorConfigInfoRepresentation";
 import type ClientPolicyConditionRepresentation from "@keycloak/keycloak-admin-client/lib/defs/clientPolicyConditionRepresentation";
 import type ClientPolicyRepresentation from "@keycloak/keycloak-admin-client/lib/defs/clientPolicyRepresentation";
 import type ComponentTypeRepresentation from "@keycloak/keycloak-admin-client/lib/defs/componentTypeRepresentation";
-import {
-    HelpItem,
-    KeycloakSelect,
-    SelectVariant,
-    useAlerts,
-    useFetch
-} from "../../shared/keycloak-ui-shared";
+import { HelpItem, useAlerts, useFetch } from "../../shared/keycloak-ui-shared";
 import { AlertVariant } from "../../shared/keycloak-ui-shared";
 import { Button } from "@merge/ui/components/button";
 import { Label } from "@merge/ui/components/label";
-import { SelectOption } from "../../shared/@patternfly/react-core";
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue
+} from "@merge/ui/components/select";
 import { camelCase } from "lodash-es";
 import { useState } from "react";
 import { Controller, FormProvider, useForm } from "react-hook-form";
@@ -224,54 +211,55 @@ export default function NewClientPolicyCondition() {
                             name="conditions"
                             defaultValue={"any-client"}
                             control={form.control}
-                            render={({ field }) => (
-                                <KeycloakSelect
-                                    placeholderText={t("selectACondition")}
-                                    className="kc-conditionType-select"
-                                    data-testid="conditionType-select"
-                                    toggleId="provider"
-                                    isDisabled={!!conditionName}
-                                    onToggle={toggle => setOpenConditionType(toggle)}
-                                    onSelect={value => {
-                                        field.onChange(value);
-                                        setConditionProperties(
-                                            (value as ComponentTypeRepresentation)
-                                                .properties
-                                        );
-                                        setConditionType(
-                                            (value as ComponentTypeRepresentation).id
-                                        );
-                                        setCondition([
-                                            {
-                                                condition: (
-                                                    value as ComponentTypeRepresentation
-                                                ).id
+                            render={({ field }) => {
+                                const selectedId =
+                                    conditionName ||
+                                    conditionType ||
+                                    (typeof field.value === "object" && field.value?.id
+                                        ? field.value.id
+                                        : field.value);
+                                return (
+                                    <Select
+                                        value={selectedId || ""}
+                                        onValueChange={value => {
+                                            const item = conditionTypes?.find(
+                                                c => c.id === value
+                                            );
+                                            if (item) {
+                                                field.onChange(item);
+                                                setConditionProperties(item.properties);
+                                                setConditionType(item.id);
+                                                setCondition([{ condition: item.id }]);
+                                                setOpenConditionType(false);
                                             }
-                                        ]);
-                                        setOpenConditionType(false);
-                                    }}
-                                    selections={
-                                        conditionName ? conditionName : conditionType
-                                    }
-                                    variant={SelectVariant.single}
-                                    aria-label={t("conditionType")}
-                                    isOpen={openConditionType}
-                                >
-                                    {conditionTypes?.map(condition => (
-                                        <SelectOption
-                                            data-testid={condition.id}
-                                            selected={condition.id === field.value}
-                                            description={t(
-                                                camelCase(condition.id.replace(/-/g, " "))
-                                            )}
-                                            key={condition.id}
-                                            value={condition}
+                                        }}
+                                        disabled={!!conditionName}
+                                        onOpenChange={setOpenConditionType}
+                                    >
+                                        <SelectTrigger
+                                            id="provider"
+                                            className="kc-conditionType-select w-full"
+                                            data-testid="conditionType-select"
+                                            aria-label={t("conditionType")}
                                         >
-                                            {condition.id}
-                                        </SelectOption>
-                                    ))}
-                                </KeycloakSelect>
-                            )}
+                                            <SelectValue
+                                                placeholder={t("selectACondition")}
+                                            />
+                                        </SelectTrigger>
+                                        <SelectContent>
+                                            {conditionTypes?.map(condition => (
+                                                <SelectItem
+                                                    key={condition.id}
+                                                    value={condition.id}
+                                                    data-testid={condition.id}
+                                                >
+                                                    {condition.id}
+                                                </SelectItem>
+                                            ))}
+                                        </SelectContent>
+                                    </Select>
+                                );
+                            }}
                         />
                     </div>
 

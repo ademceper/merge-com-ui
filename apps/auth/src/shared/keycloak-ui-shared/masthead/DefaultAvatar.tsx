@@ -11,13 +11,19 @@
 
 // @ts-nocheck
 
-import styles from "@patternfly/react-styles/css/components/Avatar/avatar";
-import { css } from "../../@patternfly/react-styles";
+import { cn } from "@merge/ui/lib/utils";
 
 type DefaultAvatarProps = {
     className?: string;
     border?: "light" | "dark";
     size?: "sm" | "md" | "lg" | "xl";
+};
+
+const sizeClasses = {
+    sm: "size-8",
+    md: "size-10",
+    lg: "size-12",
+    xl: "size-16"
 };
 
 export const DefaultAvatar = ({
@@ -26,11 +32,11 @@ export const DefaultAvatar = ({
     size = "md"
 }: DefaultAvatarProps) => (
     <svg
-        className={css(
-            styles.avatar,
-            styles.modifiers[size],
-            border === "light" && styles.modifiers.light,
-            border === "dark" && styles.modifiers.dark,
+        className={cn(
+            "rounded-full",
+            sizeClasses[size],
+            border === "light" && "ring-2 ring-border",
+            border === "dark" && "ring-2 ring-foreground/20",
             className
         )}
         enableBackground="new 0 0 36 36"

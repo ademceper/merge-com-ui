@@ -27,6 +27,11 @@ import {
     DropdownMenuItem,
     DropdownMenuTrigger,
 } from "@merge/ui/components/dropdown-menu";
+import {
+    DataTable,
+    type ColumnDef
+} from "@merge/ui/components/table";
+import { Checkbox } from "@merge/ui/components/checkbox";
 const SelectOption = ({ value, children, ...props }: any) => <option value={value} {...props}>{children}</option>;
 import { CaretDown, CaretUp, Funnel } from "@phosphor-icons/react";
 import { useMemo, useState } from "react";
@@ -35,8 +40,6 @@ import {
     ClientScopeType,
     clientScopeTypesDropdown
 } from "../../components/client-scope/ClientScopeTypes";
-import { ListEmptyState } from "../../../shared/keycloak-ui-shared";
-import { KeycloakDataTable } from "../../../shared/keycloak-ui-shared";
 import useToggle from "../../utils/useToggle";
 import { getProtocolName } from "../utils";
 import useIsFeatureEnabled, { Feature } from "../../utils/useIsFeatureEnabled";
@@ -159,6 +162,56 @@ export const AddScopeDialog = ({
         return options;
     }, [t, isOid4vcEnabled]);
 
+    const toggleRowSelection = (scope: ClientScopeRepresentation) => {
+        const isSelected = rows.some(r => r.id === scope.id);
+        if (isSelected) {
+            setRows(rows.filter(r => r.id !== scope.id));
+        } else {
+            setRows([...rows, scope]);
+        }
+    };
+
+    const columns: ColumnDef<ClientScopeRepresentation>[] = [
+        {
+            id: "select",
+            header: ({ table }) => (
+                <Checkbox
+                    checked={rows.length === clientScopes.length && clientScopes.length > 0}
+                    onCheckedChange={(checked) => {
+                        if (checked) {
+                            setRows([...clientScopes]);
+                        } else {
+                            setRows([]);
+                        }
+                    }}
+                />
+            ),
+            cell: ({ row }) => (
+                <Checkbox
+                    checked={rows.some(r => r.id === row.original.id)}
+                    onCheckedChange={() => toggleRowSelection(row.original)}
+                />
+            ),
+            size: 40,
+            enableHiding: false
+        },
+        {
+            accessorKey: "name",
+            header: t("name"),
+            cell: ({ row }) => row.original.name || "-"
+        },
+        {
+            accessorKey: "protocol",
+            header: t("protocol"),
+            cell: ({ row }) => getProtocolName(t, row.original.protocol ?? "openid-connect")
+        },
+        {
+            accessorKey: "description",
+            header: t("description"),
+            cell: ({ row }) => row.original.description || "-"
+        }
+    ];
+
     return (
         <Dialog open={open} onOpenChange={open => !open && toggleDialog()}>
             <DialogContent className="max-w-2xl">
@@ -169,44 +222,21 @@ export const AddScopeDialog = ({
                             : t("addClientScopesTo", { clientName })}
                     </DialogTitle>
                 </DialogHeader>
-                <KeycloakDataTable
-                loader={clientScopes}
-                ariaLabelKey="chooseAMapperType"
-                searchPlaceholderKey={
-                    filterType === FilterType.Name ? "searchForClientScope" : undefined
-                }
-                isSearching={filterType !== FilterType.Name}
-                searchTypeComponent={
-                    <DropdownMenu open={isFilterTypeDropdownOpen} onOpenChange={toggleIsFilterTypeDropdownOpen}>
-                        <DropdownMenuTrigger asChild>
-                            <Button
-                                data-testid="filter-type-dropdown"
-                                id="toggle-id-9"
-                                variant="outline"
-                            >
-                                <Funnel className="size-4 mr-1" />
-                                {filterType}
-                                <CaretDown className="size-4 ml-1" />
-                            </Button>
-                        </DropdownMenuTrigger>
-                        <DropdownMenuContent>
-                            <DropdownMenuItem
-                                data-testid="filter-type-dropdown-item"
-                                onClick={() => onFilterTypeDropdownSelect(filterType)}
-                            >
-                                {filterType === FilterType.Name
-                                    ? t("protocol")
-                                    : t("name")}
-                            </DropdownMenuItem>
-                        </DropdownMenuContent>
-                    </DropdownMenu>
-                }
-                toolbarItem={
-                    filterType === FilterType.Protocol && (
-                        <>
+                <DataTable
+                    columns={columns}
+                    data={clientScopes}
+                    searchColumnId="name"
+                    searchPlaceholder={t("searchForClientScope")}
+                    emptyMessage={t("emptyAddClientScopes")}
+                    toolbar={
+                        <div className="flex gap-2">
                             <DropdownMenu open={isFilterTypeDropdownOpen} onOpenChange={toggleIsFilterTypeDropdownOpen}>
                                 <DropdownMenuTrigger asChild>
-                                    <Button variant="outline" data-testid="filter-type-dropdown" id="toggle-id-9">
+                                    <Button
+                                        data-testid="filter-type-dropdown"
+                                        variant="outline"
+                                        size="sm"
+                                    >
                                         <Funnel className="size-4 mr-1" />
                                         {filterType}
                                         <CaretDown className="size-4 ml-1" />
@@ -217,48 +247,29 @@ export const AddScopeDialog = ({
                                         data-testid="filter-type-dropdown-item"
                                         onClick={() => onFilterTypeDropdownSelect(filterType)}
                                     >
-                                        {t("name")}
+                                        {filterType === FilterType.Name
+                                            ? t("protocol")
+                                            : t("name")}
                                     </DropdownMenuItem>
                                 </DropdownMenuContent>
                             </DropdownMenu>
-                            <KeycloakSelect
-                                className="kc-protocolType-select"
-                                aria-label={t("selectOne")}
-                                onToggle={toggleIsProtocolTypeDropdownOpen}
-                                onSelect={value =>
-                                    onProtocolTypeDropdownSelect(value.toString())
-                                }
-                                selections={protocolType}
-                                isOpen={isProtocolTypeDropdownOpen}
-                            >
-                                {protocolTypeOptions}
-                            </KeycloakSelect>
-                        </>
-                    )
-                }
-                canSelectAll
-                onSelect={rows => setRows(rows)}
-                columns={[
-                    {
-                        name: "name"
-                    },
-                    {
-                        name: "protocol",
-                        displayKey: "protocol",
-                        cellRenderer: client =>
-                            getProtocolName(t, client.protocol ?? "openid-connect")
-                    },
-                    {
-                        name: "description"
+                            {filterType === FilterType.Protocol && (
+                                <KeycloakSelect
+                                    className="kc-protocolType-select"
+                                    aria-label={t("selectOne")}
+                                    onToggle={toggleIsProtocolTypeDropdownOpen}
+                                    onSelect={value =>
+                                        onProtocolTypeDropdownSelect(value.toString())
+                                    }
+                                    selections={protocolType}
+                                    isOpen={isProtocolTypeDropdownOpen}
+                                >
+                                    {protocolTypeOptions}
+                                </KeycloakSelect>
+                            )}
+                        </div>
                     }
-                ]}
-                emptyState={
-                    <ListEmptyState
-                        message={t("emptyAddClientScopes")}
-                        instructions={t("emptyAddClientScopesInstructions")}
-                    />
-                }
-            />
+                />
                 <DialogFooter>
                     {isClientScopesConditionType ? (
                         <>

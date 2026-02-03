@@ -12,23 +12,20 @@
 // @ts-nocheck
 
 import { Trans, useTranslation } from "react-i18next";
-import { Link } from "react-router-dom";
-import { RoutableTabs, Tab, useRoutableTab } from "../components/routable-tabs/RoutableTabs";
+import { Link, useParams } from "react-router-dom";
 import { ViewHeader } from "../components/view-header/ViewHeader";
 import { useRealm } from "../context/realm-context/RealmContext";
 import helpUrls from "../help-urls";
 import { toRealmSettings } from "../realm-settings/routes/RealmSettings";
 import { AdminEvents } from "./AdminEvents";
 import { UserEvents } from "./UserEvents";
-import { toEvents } from "./routes/Events";
-
 
 export default function EventsSection() {
     const { t } = useTranslation();
     const { realm } = useRealm();
+    const { tab } = useParams<{ tab?: string }>();
 
-    const userEventsTab = useRoutableTab(toEvents({ realm, tab: "user-events" }));
-    const adminEventsTab = useRoutableTab(toEvents({ realm, tab: "admin-events" }));
+    const content = tab === "admin-events" ? <AdminEvents /> : <UserEvents />;
 
     return (
         <>
@@ -48,22 +45,7 @@ export default function EventsSection() {
                 divider={false}
             />
             <div className="bg-muted/30 p-0">
-                <RoutableTabs
-                    isBox
-                    defaultLocation={toEvents({ realm, tab: "user-events" })}
-                >
-                    <Tab title={t("userEvents")} {...userEventsTab}>
-                        <UserEvents />
-                    </Tab>
-                    <Tab
-                        eventKey={adminEventsTab.eventKey}
-                        title={t("adminEvents")}
-                        data-testid="admin-events-tab"
-                        {...adminEventsTab}
-                    >
-                        <AdminEvents />
-                    </Tab>
-                </RoutableTabs>
+                {content}
             </div>
         </>
     );

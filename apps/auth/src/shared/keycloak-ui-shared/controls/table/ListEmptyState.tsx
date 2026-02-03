@@ -23,7 +23,7 @@ import {
     EmptyStateFooter
 } from "../../../@patternfly/react-core";
 import type { SVGIconProps } from "@patternfly/react-icons/dist/js/createIcon";
-import { PlusCircleIcon, SearchIcon } from "../../../@patternfly/react-icons";
+import { MagnifyingGlass, PlusCircle } from "@phosphor-icons/react";
 
 export type Action = {
     text: string;
@@ -58,9 +58,9 @@ export const ListEmptyState = ({
     return (
         <EmptyState data-testid="empty-state" variant="lg">
             {hasIcon && isSearchVariant ? (
-                <EmptyStateIcon icon={SearchIcon} />
+                <EmptyStateIcon icon={MagnifyingGlass as unknown as ComponentClass<SVGIconProps>} />
             ) : (
-                hasIcon && <EmptyStateIcon icon={icon ? icon : PlusCircleIcon} />
+                hasIcon && <EmptyStateIcon icon={(icon as ComponentClass<SVGIconProps>) || (PlusCircle as unknown as ComponentClass<SVGIconProps>)} />
             )}
             <EmptyStateHeader titleText={message} headingLevel="h1" />
             <EmptyStateBody>{instructions}</EmptyStateBody>

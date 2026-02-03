@@ -13,17 +13,8 @@
 
 import type RealmRepresentation from "@keycloak/keycloak-admin-client/lib/defs/realmRepresentation";
 import { useEnvironment } from "../../../shared/keycloak-ui-shared";
-import {
-    RoutableTabs,
-    Tab,
-    useRoutableTab
-} from "../../components/routable-tabs/RoutableTabs";
 import JSZip from "jszip";
-import { useTranslation } from "react-i18next";
-import { useRealm } from "../../context/realm-context/RealmContext";
-import { joinPath } from "../../utils/joinPath";
 import useIsFeatureEnabled, { Feature } from "../../utils/useIsFeatureEnabled";
-import { ThemesTabType, toThemesTab } from "../routes/ThemesTab";
 import { LogoContext } from "./LogoContext";
 import { ThemeColors } from "./ThemeColors";
 import { ThemeSettingsTab } from "./ThemeSettings";
@@ -31,6 +22,7 @@ import { ThemeSettingsTab } from "./ThemeSettings";
 type ThemesTabProps = {
     realm: RealmRepresentation;
     save: (realm: RealmRepresentation) => void;
+    subTab?: string;
 };
 
 export type ThemeRealmRepresentation = RealmRepresentation & {
@@ -40,10 +32,7 @@ export type ThemeRealmRepresentation = RealmRepresentation & {
     bgimage?: File;
 };
 
-export default function ThemesTab({ realm, save }: ThemesTabProps) {
-    const { t } = useTranslation();
-    const { realm: realmName } = useRealm();
-    const { environment } = useEnvironment();
+export default function ThemesTab({ realm, save, subTab = "settings" }: ThemesTabProps) {
     const isFeatureEnabled = useIsFeatureEnabled();
 
     const saveTheme = async (realm: ThemeRealmRepresentation) => {
@@ -154,56 +143,24 @@ styles=css/login.css css/theme-styles.css
         });
     };
 
-    const param = (tab: ThemesTabType) => ({
-        realm: realmName,
-        tab
-    });
-
-    const settingsTab = useRoutableTab(toThemesTab(param("settings")));
-    const lightColorsTab = useRoutableTab(toThemesTab(param("lightColors")));
-    const darkColorsTab = useRoutableTab(toThemesTab(param("darkColors")));
-
     if (!isFeatureEnabled(Feature.QuickTheme)) {
         return <ThemeSettingsTab realm={realm} save={save} />;
     }
 
-    return (
-        <RoutableTabs
-            mountOnEnter
-            unmountOnExit
-            defaultLocation={toThemesTab({
-                realm: realmName,
-                tab: "settings"
-            })}
-        >
-            <Tab
-                id="themes-settings"
-                title={t("themes")}
-                data-testid="themes-settings-tab"
-                {...settingsTab}
-            >
-                <ThemeSettingsTab realm={realm} save={save} />
-            </Tab>
-            <Tab
-                id="lightColors"
-                title={t("themeColorsLight")}
-                data-testid="lightColors-tab"
-                {...lightColorsTab}
-            >
+    switch (subTab) {
+        case "lightColors":
+            return (
                 <LogoContext>
                     <ThemeColors realm={realm} save={saveTheme} theme="light" />
                 </LogoContext>
-            </Tab>
-            <Tab
-                id="darkColors"
-                title={t("themeColorsDark")}
-                data-testid="darkColors-tab"
-                {...darkColorsTab}
-            >
+            );
+        case "darkColors":
+            return (
                 <LogoContext>
                     <ThemeColors realm={realm} save={saveTheme} theme="dark" />
                 </LogoContext>
-            </Tab>
-        </RoutableTabs>
-    );
+            );
+        default:
+            return <ThemeSettingsTab realm={realm} save={save} />;
+    }
 }
