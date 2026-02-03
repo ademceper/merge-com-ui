@@ -153,6 +153,6 @@ export default function PageList() {
                     />
                 }
             />
-        </section>
+        </div>
     );
 }

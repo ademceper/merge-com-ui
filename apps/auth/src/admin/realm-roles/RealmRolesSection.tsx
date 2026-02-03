@@ -58,7 +58,7 @@ export default function RealmRolesSection() {
                     }
                     isReadOnly={!isManager}
                 />
-            </section>
+            </PageSection>
         </>
     );
 }

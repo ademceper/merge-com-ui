@@ -45,7 +45,7 @@ export const ThemeSettingsTab = ({ realm, save }: ThemeSettingsTabProps) => {
     ];
 
     return (
-        <PageSection variant="light">
+        <div className="space-y-4">
             <FormAccess
                 isHorizontal
                 role="manage-realm"

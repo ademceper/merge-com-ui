@@ -184,7 +184,7 @@ export default function WorkflowDetailForm() {
                                     >
                                         {t("copy")}
                                     </Link>
-                                />
+                                </Button>
                             )}
                             <Button data-testid="cancel" variant="link" asChild>
                                 <Link to={toWorkflows({ realm })}>{t("cancel")}</Link>
