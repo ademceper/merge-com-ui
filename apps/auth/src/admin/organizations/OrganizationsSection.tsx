@@ -28,7 +28,7 @@ import {
 } from "@merge/ui/components/table";
 import { useEffect, useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
-import { Plus } from "@phosphor-icons/react";
+import { PencilSimple, Plus, Trash } from "@phosphor-icons/react";
 import { useTranslation } from "react-i18next";
 import { useAdminClient } from "../admin-client";
 import { arrayToKeyValue } from "../components/key-value-form/key-value-convert";
@@ -154,20 +154,22 @@ export default function OrganizationSection() {
                 <DataTableRowActions row={row}>
                     <button
                         type="button"
-                        className="w-full rounded-md px-1.5 py-1 text-left text-sm hover:bg-accent hover:text-accent-foreground"
+                        className="flex w-full items-center gap-2 rounded-md px-1.5 py-1 text-left text-sm hover:bg-accent hover:text-accent-foreground"
                         onClick={() => setEditOrg(row.original)}
                     >
+                        <PencilSimple className="size-4 shrink-0" />
                         {t("edit")}
                     </button>
                     <div className="my-1 h-px bg-border" />
                     <button
                         type="button"
-                        className="w-full rounded-md px-1.5 py-1 text-left text-sm text-destructive hover:bg-destructive/10 hover:text-destructive"
+                        className="flex w-full items-center gap-2 rounded-md px-1.5 py-1 text-left text-sm text-destructive hover:bg-destructive/10 hover:text-destructive"
                         onClick={() => {
                             setSelectedOrg(row.original);
                             toggleDeleteDialog();
                         }}
                     >
+                        <Trash className="size-4 shrink-0" />
                         {t("delete")}
                     </button>
                 </DataTableRowActions>
@@ -192,6 +194,7 @@ export default function OrganizationSection() {
                                 <DialogTitle>{t("createOrganization")}</DialogTitle>
                             </DialogHeader>
                             <FormAccess
+                                id="create-org-form"
                                 role="anyone"
                                 onSubmit={createForm.handleSubmit(onCreateSave)}
                                 isHorizontal
@@ -207,6 +210,7 @@ export default function OrganizationSection() {
                                     {t("cancel")}
                                 </Button>
                                 <FormSubmitButton
+                                    form="create-org-form"
                                     formState={createForm.formState}
                                     data-testid="save"
                                 >
@@ -224,6 +228,7 @@ export default function OrganizationSection() {
                                 <DialogTitle>{t("organizationDetails")}</DialogTitle>
                             </DialogHeader>
                             <FormAccess
+                                id="edit-org-form"
                                 role="anyone"
                                 onSubmit={editForm.handleSubmit(onEditSave)}
                                 isHorizontal
@@ -239,6 +244,7 @@ export default function OrganizationSection() {
                                     {t("cancel")}
                                 </Button>
                                 <FormSubmitButton
+                                    form="edit-org-form"
                                     formState={editForm.formState}
                                     data-testid="save"
                                 >

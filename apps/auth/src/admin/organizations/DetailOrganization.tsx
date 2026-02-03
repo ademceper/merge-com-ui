@@ -22,7 +22,7 @@ import { AttributesForm } from "../components/key-value-form/AttributeForm";
 import { arrayToKeyValue } from "../components/key-value-form/key-value-convert";
 import { useRealm } from "../context/realm-context/RealmContext";
 import { useParams } from "../utils/useParams";
-import { DetailOrganizationHeader } from "./DetailOraganzationHeader";
+import { DetailOrganizationHeader } from "./DetailOrganizationHeader";
 import { IdentityProviders } from "./IdentityProviders";
 import { MembersSection } from "./MembersSection";
 import { OrganizationForm, OrganizationFormType, convertToOrg } from "./OrganizationForm";

@@ -81,7 +81,7 @@ export function DialogContent({
     return (
       <DrawerContentBase
         data-slot="dialog-content"
-        className={cn("gap-4 p-4", className)}
+        className={cn("gap-4 px-4 pt-4 pb-0", className)}
         {...props}
       >
         {children}
@@ -168,7 +168,7 @@ export function DialogFooter({
       <DrawerFooterBase
         data-slot="dialog-footer"
         className={cn(
-          "bg-muted/50 rounded-b-xl border-t p-4 flex flex-col-reverse gap-2 sm:flex-row sm:justify-end",
+          "bg-muted/50 rounded-b-xl border-t -mx-4 px-4 pt-3 pb-3 flex flex-row justify-end gap-2",
           className
         )}
         {...props}
@@ -186,7 +186,7 @@ export function DialogFooter({
     <div
       data-slot="dialog-footer"
       className={cn(
-        "bg-muted/50 rounded-b-xl border-t p-4 flex flex-col-reverse gap-2 sm:flex-row sm:justify-end",
+        "bg-muted/50 rounded-b-xl border-t px-4 pt-3 pb-3 flex flex-col-reverse gap-2 sm:flex-row sm:justify-end",
         className
       )}
       {...props}

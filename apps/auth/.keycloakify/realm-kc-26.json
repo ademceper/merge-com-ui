@@ -1803,14 +1803,14 @@
                 "subComponents": {},
                 "config": {
                     "allowed-protocol-mapper-types": [
-                        "saml-user-attribute-mapper",
                         "oidc-address-mapper",
-                        "saml-role-list-mapper",
                         "oidc-usermodel-property-mapper",
-                        "oidc-sha256-pairwise-sub-mapper",
-                        "oidc-usermodel-attribute-mapper",
                         "saml-user-property-mapper",
-                        "oidc-full-name-mapper"
+                        "oidc-full-name-mapper",
+                        "saml-role-list-mapper",
+                        "oidc-sha256-pairwise-sub-mapper",
+                        "saml-user-attribute-mapper",
+                        "oidc-usermodel-attribute-mapper"
                     ]
                 }
             },
@@ -1840,12 +1840,12 @@
                 "subComponents": {},
                 "config": {
                     "allowed-protocol-mapper-types": [
-                        "oidc-usermodel-attribute-mapper",
-                        "saml-role-list-mapper",
                         "oidc-sha256-pairwise-sub-mapper",
+                        "oidc-usermodel-attribute-mapper",
+                        "oidc-full-name-mapper",
+                        "saml-role-list-mapper",
                         "oidc-usermodel-property-mapper",
                         "oidc-address-mapper",
-                        "oidc-full-name-mapper",
                         "saml-user-property-mapper",
                         "saml-user-attribute-mapper"
                     ]
@@ -2640,6 +2640,38 @@
     "displayNameHtml": "",
     "verifiableCredentialsEnabled": false,
     "organizations": [
+        {
+            "alias": "adadad",
+            "description": "",
+            "enabled": true,
+            "id": "d43a3200-84c1-443d-82ba-ba79f8d08534",
+            "name": "adadad",
+            "attributes": {}
+        },
+        {
+            "alias": "adem",
+            "description": "",
+            "enabled": true,
+            "id": "3307a2ff-d5e1-44c0-9e76-b5626c8a667d",
+            "name": "adem",
+            "attributes": {}
+        },
+        {
+            "alias": "adem1",
+            "description": "",
+            "enabled": true,
+            "id": "cc8584f8-29df-48dc-bb8d-5210fbba4150",
+            "name": "adem1",
+            "attributes": {}
+        },
+        {
+            "alias": "asdadada",
+            "description": "",
+            "enabled": true,
+            "id": "56e18856-f5d7-4f2b-90c5-96f14e1bb553",
+            "name": "asdadada",
+            "attributes": {}
+        },
         {
             "alias": "asdads",
             "description": "",

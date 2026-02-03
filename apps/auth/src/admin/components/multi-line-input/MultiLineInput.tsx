@@ -14,7 +14,7 @@
 import { Button } from "@merge/ui/components/button";
 import { Input } from "@merge/ui/components/input";
 import { cn } from "@merge/ui/lib/utils";
-import { MinusCircle, PlusCircle } from "@phosphor-icons/react";
+import { MinusCircle, Plus } from "@phosphor-icons/react";
 import React, { Fragment, useEffect, useMemo } from "react";
 import { useFormContext, useWatch } from "react-hook-form";
 import { useTranslation } from "react-i18next";
@@ -183,7 +183,7 @@ export const MultiLineInput = ({
                             disabled={isDisabled}
                             className="px-0 h-auto font-medium"
                         >
-                            <PlusCircle className="size-4 mr-1" /> {t(addButtonLabel || "add")}
+                            <Plus className="size-4 mr-1" /> {t(addButtonLabel || "add")}
                         </Button>
                     )}
                 </Fragment>
