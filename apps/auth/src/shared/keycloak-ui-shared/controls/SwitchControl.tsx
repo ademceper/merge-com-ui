@@ -62,21 +62,24 @@ export const SwitchControl = <
                 name={props.name}
                 defaultValue={defValue}
                 render={({ field: { onChange, value } }) => (
-                    <div className="flex items-center gap-2">
-                        <Switch
-                            {...props}
-                            id={props.name}
-                            data-testid={debeerify(props.name)}
-                            aria-label={props.label}
-                            checked={stringify ? value === "true" : value}
-                            onCheckedChange={(checked) => {
-                                const value = stringify ? checked.toString() : checked;
-                                onChange(value);
-                            }}
-                        />
-                        <span className="text-sm text-muted-foreground">
-                            {stringify ? (value === "true" ? labelOn : props.labelOff) : (value ? labelOn : props.labelOff)}
-                        </span>
+                    <div className="flex w-full items-center justify-between gap-2">
+                        <span className="text-sm font-medium">{props.label}</span>
+                        <div className="flex shrink-0 items-center gap-2">
+                            <span className="text-sm text-muted-foreground">
+                                {stringify ? (value === "true" ? labelOn : props.labelOff) : (value ? labelOn : props.labelOff)}
+                            </span>
+                            <Switch
+                                {...props}
+                                id={props.name}
+                                data-testid={debeerify(props.name)}
+                                aria-label={props.label}
+                                checked={stringify ? value === "true" : value}
+                                onCheckedChange={(checked) => {
+                                    const value = stringify ? checked.toString() : checked;
+                                    onChange(value);
+                                }}
+                            />
+                        </div>
                     </div>
                 )}
             />

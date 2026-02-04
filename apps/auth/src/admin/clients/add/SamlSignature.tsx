@@ -71,10 +71,10 @@ export const SamlSignature = () => {
 
     return (
         <FormAccess
-            isHorizontal
             role="manage-clients"
             className="keycloak__capability-config__form"
         >
+            <div className="flex flex-col gap-5">
             <Toggle
                 name={convertAttributeNameToForm("attributes.saml.server.signature")}
                 label="signDocuments"
@@ -95,6 +95,8 @@ export const SamlSignature = () => {
                             defaultValue: SIGNATURE_ALGORITHMS[0]
                         }}
                         options={[...SIGNATURE_ALGORITHMS]}
+                        triggerClassName="py-1 dark:border-transparent"
+                        triggerStyle={{ height: "3rem", minHeight: "3rem" }}
                     />
                     <SelectControl
                         name={convertAttributeNameToForm<FormFields>(
@@ -106,6 +108,8 @@ export const SamlSignature = () => {
                             defaultValue: KEYNAME_TRANSFORMER[0]
                         }}
                         options={[...KEYNAME_TRANSFORMER]}
+                        triggerClassName="py-1 dark:border-transparent"
+                        triggerStyle={{ height: "3rem", minHeight: "3rem" }}
                     />
                     <SelectControl
                         name="attributes.saml_signature_canonicalization_method"
@@ -118,6 +122,8 @@ export const SamlSignature = () => {
                             key: value,
                             value: name
                         }))}
+                        triggerClassName="py-1 dark:border-transparent"
+                        triggerStyle={{ height: "3rem", minHeight: "3rem" }}
                     />
                     <TextControl
                         name={convertAttributeNameToForm<FormFields>(
@@ -142,6 +148,7 @@ export const SamlSignature = () => {
                     {samlEncryption === "true" && <SamlEncryption />}
                 </>
             )}
+            </div>
         </FormAccess>
     );
 };

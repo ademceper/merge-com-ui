@@ -32,7 +32,7 @@ export const LoginSettings = ({ protocol = "openid-connect" }: LoginSettingsProp
     const implicitFlowEnabled = watch("implicitFlowEnabled");
 
     return (
-        <>
+        <div className="flex flex-col gap-5">
             <TextControl
                 type="url"
                 name="rootUrl"
@@ -47,8 +47,8 @@ export const LoginSettings = ({ protocol = "openid-connect" }: LoginSettingsProp
             />
             {(standardFlowEnabled || implicitFlowEnabled) && (
                 <>
-                    <div className="space-y-2">
-                        <div className="flex items-center gap-2">
+                    <div className="flex flex-col gap-2">
+                        <div className="flex w-full items-center justify-between gap-2">
                             <Label htmlFor="kc-redirect">{t("validRedirectUri")}</Label>
                             <HelpItem
                                 helpText={t("validRedirectURIsHelp")}
@@ -62,8 +62,8 @@ export const LoginSettings = ({ protocol = "openid-connect" }: LoginSettingsProp
                             addButtonLabel="addRedirectUri"
                         />
                     </div>
-                    <div className="space-y-2">
-                        <div className="flex items-center gap-2">
+                    <div className="flex flex-col gap-2">
+                        <div className="flex w-full items-center justify-between gap-2">
                             <Label htmlFor="kc-postLogoutRedirect">{t("validPostLogoutRedirectUri")}</Label>
                             <HelpItem
                                 helpText={t("validPostLogoutRedirectURIsHelp")}
@@ -103,8 +103,8 @@ export const LoginSettings = ({ protocol = "openid-connect" }: LoginSettingsProp
                 </>
             )}
             {protocol !== "saml" && standardFlowEnabled && (
-                <div className="space-y-2">
-                    <div className="flex items-center gap-2">
+                <div className="flex flex-col gap-2">
+                    <div className="flex w-full items-center justify-between gap-2">
                         <Label htmlFor="kc-web-origins">{t("webOrigins")}</Label>
                         <HelpItem
                             helpText={t("webOriginsHelp")}
@@ -119,6 +119,6 @@ export const LoginSettings = ({ protocol = "openid-connect" }: LoginSettingsProp
                     />
                 </div>
             )}
-        </>
+        </div>
     );
 };

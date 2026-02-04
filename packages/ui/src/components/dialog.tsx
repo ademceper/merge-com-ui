@@ -137,7 +137,7 @@ export function DialogContent({
           </DialogPrimitive.Close>
         )}
         {headerChild != null && <div className="shrink-0 px-4 pt-4">{headerChild}</div>}
-        <div className="dialog-content-scroll min-h-0 flex-1 overflow-y-auto overflow-x-hidden px-4 pt-4 pb-4">
+        <div className="min-h-0 flex-1 overflow-y-auto overflow-x-hidden px-4 pt-4 pb-4">
           {contentChildren}
         </div>
         {footerChild != null && (

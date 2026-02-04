@@ -173,98 +173,98 @@ export default function GroupsSection() {
                             dropdownItems={
                                 id && canManageGroup
                                     ? [
-                                          <DropdownMenuItem
-                                              data-testid="renameGroupAction"
-                                              key="renameGroup"
-                                              onClick={() =>
-                                                  setRename(currentGroup())
-                                              }
-                                          >
-                                              {t("edit")}
-                                          </DropdownMenuItem>,
-                                          <DropdownMenuItem
-                                              data-testid="deleteGroup"
-                                              key="deleteGroup"
-                                              onClick={toggleDeleteOpen}
-                                          >
-                                              {t("deleteGroup")}
-                                          </DropdownMenuItem>
-                                      ]
+                                        <DropdownMenuItem
+                                            data-testid="renameGroupAction"
+                                            key="renameGroup"
+                                            onClick={() =>
+                                                setRename(currentGroup())
+                                            }
+                                        >
+                                            {t("edit")}
+                                        </DropdownMenuItem>,
+                                        <DropdownMenuItem
+                                            data-testid="deleteGroup"
+                                            key="deleteGroup"
+                                            onClick={toggleDeleteOpen}
+                                        >
+                                            {t("deleteGroup")}
+                                        </DropdownMenuItem>
+                                    ]
                                     : undefined
                             }
                         />
                         <div className="pt-0">
                             {currentGroup()?.description}
                         </div>
-                            {subGroups.length > 0 && (
-                                <Tabs value={String(activeTab)} onValueChange={v => setActiveTab(Number(v))} className="w-full">
-                                    <TabsList className="w-full flex-wrap">
-                                        <TabsTrigger value="0" data-testid="groups">{t("childGroups")}</TabsTrigger>
-                                        {canViewMembers && (
-                                            <TabsTrigger value="1" data-testid="members">{t("members")}</TabsTrigger>
-                                        )}
-                                        <TabsTrigger value="2" data-testid="attributesTab">{t("attributes")}</TabsTrigger>
-                                        {canViewRoles && (
-                                            <TabsTrigger value="3" data-testid="role-mapping-tab">{t("roleMapping")}</TabsTrigger>
-                                        )}
-                                        {canViewPermissions && (
-                                            <TabsTrigger value="4" data-testid="permissionsTab">{t("permissions")}</TabsTrigger>
-                                        )}
-                                        {hasAccess("view-events") && (
-                                            <TabsTrigger value="5" data-testid="admin-events-tab">{t("adminEvents")}</TabsTrigger>
-                                        )}
-                                    </TabsList>
-                                    <TabsContent value="0">
-                                        <GroupTable refresh={refresh} />
-                                    </TabsContent>
+                        {subGroups.length > 0 && (
+                            <Tabs value={String(activeTab)} onValueChange={v => setActiveTab(Number(v))} className="w-full">
+                                <TabsList className="w-full flex-wrap">
+                                    <TabsTrigger value="0" data-testid="groups">{t("childGroups")}</TabsTrigger>
                                     {canViewMembers && (
-                                        <TabsContent value="1">
-                                            <Members />
-                                        </TabsContent>
+                                        <TabsTrigger value="1" data-testid="members">{t("members")}</TabsTrigger>
                                     )}
-                                    <TabsContent value="2">
-                                        <GroupAttributes />
-                                    </TabsContent>
+                                    <TabsTrigger value="2" data-testid="attributesTab">{t("attributes")}</TabsTrigger>
                                     {canViewRoles && (
-                                        <TabsContent value="3">
-                                            <GroupRoleMapping
-                                                id={id!}
-                                                name={currentGroup()?.name!}
-                                                canManageGroup={canManageGroup}
-                                            />
-                                        </TabsContent>
+                                        <TabsTrigger value="3" data-testid="role-mapping-tab">{t("roleMapping")}</TabsTrigger>
                                     )}
                                     {canViewPermissions && (
-                                        <TabsContent value="4">
-                                            <PermissionsTab id={id} type="groups" />
-                                        </TabsContent>
+                                        <TabsTrigger value="4" data-testid="permissionsTab">{t("permissions")}</TabsTrigger>
                                     )}
                                     {hasAccess("view-events") && (
-                                        <TabsContent value="5">
-                                            <Tabs value={activeEventsTab} onValueChange={setActiveEventsTab}>
-                                                <TabsList>
-                                                    <TabsTrigger value="adminEvents">{t("adminEvents")}</TabsTrigger>
-                                                    <TabsTrigger value="membershipEvents">{t("membershipEvents")}</TabsTrigger>
-                                                    <TabsTrigger value="childGroupEvents">{t("childGroupEvents")}</TabsTrigger>
-                                                </TabsList>
-                                                <TabsContent value="adminEvents">
-                                                    <AdminEvents resourcePath={`groups/${id}`} />
-                                                </TabsContent>
-                                                <TabsContent value="membershipEvents">
-                                                    <AdminEvents resourcePath={`users/*/groups/${id}`} />
-                                                </TabsContent>
-                                                <TabsContent value="childGroupEvents">
-                                                    <AdminEvents resourcePath={`groups/${id}/children`} />
-                                                </TabsContent>
-                                            </Tabs>
-                                        </TabsContent>
+                                        <TabsTrigger value="5" data-testid="admin-events-tab">{t("adminEvents")}</TabsTrigger>
                                     )}
-                                </Tabs>
-                            )}
-                            {subGroups.length === 0 && <GroupTable refresh={refresh} />}
-                        </div>
+                                </TabsList>
+                                <TabsContent value="0">
+                                    <GroupTable refresh={refresh} />
+                                </TabsContent>
+                                {canViewMembers && (
+                                    <TabsContent value="1">
+                                        <Members />
+                                    </TabsContent>
+                                )}
+                                <TabsContent value="2">
+                                    <GroupAttributes />
+                                </TabsContent>
+                                {canViewRoles && (
+                                    <TabsContent value="3">
+                                        <GroupRoleMapping
+                                            id={id!}
+                                            name={currentGroup()?.name!}
+                                            canManageGroup={canManageGroup}
+                                        />
+                                    </TabsContent>
+                                )}
+                                {canViewPermissions && (
+                                    <TabsContent value="4">
+                                        <PermissionsTab id={id} type="groups" />
+                                    </TabsContent>
+                                )}
+                                {hasAccess("view-events") && (
+                                    <TabsContent value="5">
+                                        <Tabs value={activeEventsTab} onValueChange={setActiveEventsTab}>
+                                            <TabsList>
+                                                <TabsTrigger value="adminEvents">{t("adminEvents")}</TabsTrigger>
+                                                <TabsTrigger value="membershipEvents">{t("membershipEvents")}</TabsTrigger>
+                                                <TabsTrigger value="childGroupEvents">{t("childGroupEvents")}</TabsTrigger>
+                                            </TabsList>
+                                            <TabsContent value="adminEvents">
+                                                <AdminEvents resourcePath={`groups/${id}`} />
+                                            </TabsContent>
+                                            <TabsContent value="membershipEvents">
+                                                <AdminEvents resourcePath={`users/*/groups/${id}`} />
+                                            </TabsContent>
+                                            <TabsContent value="childGroupEvents">
+                                                <AdminEvents resourcePath={`groups/${id}/children`} />
+                                            </TabsContent>
+                                        </Tabs>
+                                    </TabsContent>
+                                )}
+                            </Tabs>
+                        )}
+                        {subGroups.length === 0 && <GroupTable refresh={refresh} />}
                     </div>
                 </div>
             </div>
+        </div>
     );
 }

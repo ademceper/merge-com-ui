@@ -120,18 +120,14 @@
   --sidebar-ring: oklch(0.556 0 0);
 }
 
-/* Dialog içerik: scrollbar gizli, yer kaplamaz – form daralmaz, sağda boşluk kalmaz */
-.dialog-content-scroll {
-  scrollbar-width: none;
-  -ms-overflow-style: none;
-}
-.dialog-content-scroll::-webkit-scrollbar {
-  display: none;
-}
-
 @layer base {
   * {
     @apply border-border outline-ring/50;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+  *::-webkit-scrollbar {
+    display: none;
   }
   body {
     @apply bg-background text-foreground;

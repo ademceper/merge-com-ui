@@ -41,12 +41,11 @@ export const ClientSettings = (props: ClientSettingsProps) => {
     return (
         <ScrollForm
             label={t("jumpToSection")}
-            className="pf-v5-u-px-lg pf-v5-u-pb-lg"
             sections={[
                 {
                     title: t("generalSettings"),
                     panel: (
-                        <form className="space-y-4">
+                        <form className="flex flex-col gap-5">
                             <ClientDescription
                                 protocol={client.protocol}
                                 hasConfigureAccess={client.access?.configure}

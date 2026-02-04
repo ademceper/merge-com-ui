@@ -41,10 +41,10 @@ export const SamlConfig = () => {
 
     return (
         <FormAccess
-            isHorizontal
             role="manage-clients"
             className="keycloak__capability-config__form"
         >
+            <div className="flex flex-col gap-5">
             <SelectControl
                 name="attributes.saml_name_id_format"
                 label={t("nameIdFormat")}
@@ -53,6 +53,8 @@ export const SamlConfig = () => {
                     defaultValue: "username"
                 }}
                 options={["username", "email", "transient", "persistent"]}
+                triggerClassName="py-1 dark:border-transparent"
+                triggerStyle={{ height: "3rem", minHeight: "3rem" }}
             />
             <Toggle
                 name="attributes.saml_force_name_id_format"
@@ -84,6 +86,7 @@ export const SamlConfig = () => {
                 name={convertAttributeNameToForm("attributes.saml.allow.ecp.flow")}
                 label="allowEcpFlow"
             />
+            </div>
         </FormAccess>
     );
 };

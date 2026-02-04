@@ -12,6 +12,7 @@
 // @ts-nocheck
 
 import { Badge } from "@merge/ui/components/badge";
+import { buttonVariants } from "@merge/ui/components/button";
 import { Button } from "@merge/ui/components/button";
 import {
     DropdownMenu,
@@ -138,14 +139,13 @@ export const ViewHeader = ({
                         )}
                         {dropdownItems && dropdownItems.length > 0 && (
                             <DropdownMenu open={isDropdownOpen} onOpenChange={setDropdownOpen}>
-                                <DropdownMenuTrigger asChild>
-                                    <Button
-                                        disabled={isDropdownDisabled}
-                                        id={actionsDropdownId}
-                                        data-testid="action-dropdown"
-                                    >
-                                        {t("action")}
-                                    </Button>
+                                <DropdownMenuTrigger
+                                    disabled={isDropdownDisabled}
+                                    id={actionsDropdownId}
+                                    data-testid="action-dropdown"
+                                    className={buttonVariants()}
+                                >
+                                    {t("action")}
                                 </DropdownMenuTrigger>
                                 <DropdownMenuContent align="end">
                                     {dropdownItems}
@@ -155,22 +155,24 @@ export const ViewHeader = ({
                     </div>
                 </div>
                 {enabled && (
-                    <p id="view-header-subkey" className="text-muted-foreground mt-1">
+                    <p id="view-header-subkey" className="text-muted-foreground mt-1 pl-0">
                         {isValidElement(subKey)
                             ? subKey
                             : subKey
                               ? t(subKey as string)
                               : ""}
                         {helpUrl && (
-                            <Link
-                                href={helpUrl}
-                                target="_blank"
-                                rel="noreferrer noopener"
-                                externalIcon={false}
-                                className="ml-4"
-                            >
-                                {t("learnMore")}
-                            </Link>
+                            <span className="mt-1 block sm:inline sm:ml-4">
+                                <Link
+                                    href={helpUrl}
+                                    target="_blank"
+                                    rel="noreferrer noopener"
+                                    externalIcon={false}
+                                    className="inline-flex items-center w-fit"
+                                >
+                                    {t("learnMore")}
+                                </Link>
+                            </span>
                         )}
                     </p>
                 )}

@@ -1,10 +1,3 @@
-/**
- * Client oluşturma wizard'ı Dialog içinde. Step göstergeleri ve merge UI Dialog kullanır.
- */
-
-/* eslint-disable */
-// @ts-nocheck
-
 import { AlertVariant, useAlerts } from "../../../shared/keycloak-ui-shared";
 import { Button } from "@merge/ui/components/button";
 import {
@@ -92,7 +85,7 @@ export function AddClientDialog({ trigger, onSuccess }: AddClientDialogProps) {
             name: t("loginSettings"),
             id: "loginSettings",
             component: (
-                <FormAccess isHorizontal role="manage-clients">
+                <FormAccess role="manage-clients">
                     <LoginSettings protocol={protocol} />
                 </FormAccess>
             ),
@@ -151,13 +144,33 @@ export function AddClientDialog({ trigger, onSuccess }: AddClientDialogProps) {
             <DialogTrigger asChild>{trigger}</DialogTrigger>
             <DialogContent className="max-w-lg sm:max-w-lg">
                 <DialogHeader>
-                    <DialogTitle>{steps[effectiveStep]?.name ?? t("createClient")}</DialogTitle>
+                    <div className="flex w-full flex-row items-center justify-between gap-2 md:block">
+                        <DialogTitle className="min-w-0 flex-1 md:flex-none">{steps[effectiveStep]?.name ?? t("createClient")}</DialogTitle>
+                        <div className="flex md:hidden shrink-0 items-center justify-end gap-1.5 text-muted-foreground">
+                            <span className="text-xs">
+                                {effectiveStep + 1} / {totalSteps}
+                            </span>
+                            <span className="text-xs">·</span>
+                            <span className="text-xs">{steps[effectiveStep]?.name}</span>
+                            <div className="ml-1 flex gap-1.5">
+                                {[...Array(totalSteps)].map((_, index) => (
+                                    <div
+                                        key={String(index)}
+                                        className={cn(
+                                            "size-1.5 rounded-full bg-primary",
+                                            index === effectiveStep ? "opacity-100" : "opacity-20",
+                                        )}
+                                    />
+                                ))}
+                            </div>
+                        </div>
+                    </div>
                 </DialogHeader>
                 <FormProvider {...form}>
                     <div className="min-h-[200px]">{steps[effectiveStep]?.component}</div>
                 </FormProvider>
                 <DialogFooter className="flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-                    <div className="flex w-full items-center justify-center gap-1.5 text-muted-foreground sm:w-auto sm:justify-start">
+                    <div className="hidden md:flex w-full items-center justify-center gap-1.5 text-muted-foreground sm:w-auto sm:justify-start">
                         <span className="text-xs">
                             {effectiveStep + 1} / {totalSteps}
                         </span>

@@ -159,7 +159,7 @@ const ClientDetailHeader = ({
                 titleKey={client.clientId!}
                 subKey="clientsExplain"
                 badges={badges}
-                divider={false}
+                divider
                 isReadOnly={!isManager}
                 helpTextKey="enableDisable"
                 dropdownItems={dropdownItems}
@@ -560,11 +560,9 @@ export default function ClientDetails() {
                     />
                 )}
             />
-            <div className="p-0">
+            <div className="py-6 px-0">
                 <FormProvider {...form}>
-                    <div className="bg-muted/30">
-                        {renderContent()}
-                    </div>
+                    {renderContent()}
                 </FormProvider>
             </div>
         </>

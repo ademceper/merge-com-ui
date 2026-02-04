@@ -33,10 +33,10 @@ export const AccessSettings = ({ client, save, reset }: ClientSettingsProps) => 
 
     return (
         <FormAccess
-            isHorizontal
             fineGrainedAccess={client.access?.configure}
             role="manage-clients"
         >
+            <div className="flex flex-col gap-5">
             {!client.bearerOnly && <LoginSettings protocol={protocol} />}
             {protocol !== "saml" && (
                 <TextControl
@@ -54,6 +54,7 @@ export const AccessSettings = ({ client, save, reset }: ClientSettingsProps) => 
                     isDisabled={isManager}
                 />
             )}
+            </div>
         </FormAccess>
     );
 };

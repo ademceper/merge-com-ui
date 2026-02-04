@@ -31,7 +31,8 @@ export const LoginSettingsPanel = ({ access }: { access?: boolean }) => {
     );
 
     return (
-        <FormAccess isHorizontal fineGrainedAccess={access} role="manage-clients">
+        <FormAccess fineGrainedAccess={access} role="manage-clients">
+            <div className="flex flex-col gap-5">
             <SelectControl
                 name="attributes.login_theme"
                 label={t("loginTheme")}
@@ -43,6 +44,8 @@ export const LoginSettingsPanel = ({ access }: { access?: boolean }) => {
                     { key: "", value: t("choose") },
                     ...loginThemes.map(({ name }) => ({ key: name, value: name }))
                 ]}
+                triggerClassName="py-1 dark:border-transparent"
+                triggerStyle={{ height: "3rem", minHeight: "3rem" }}
             />
             <DefaultSwitchControl
                 name="consentRequired"
@@ -66,6 +69,7 @@ export const LoginSettingsPanel = ({ access }: { access?: boolean }) => {
                 labelIcon={t("consentScreenTextHelp")}
                 isDisabled={!(consentRequired && displayOnConsentScreen === "true")}
             />
+            </div>
         </FormAccess>
     );
 };

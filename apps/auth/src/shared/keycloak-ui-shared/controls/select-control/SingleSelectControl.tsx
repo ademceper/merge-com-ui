@@ -21,11 +21,11 @@ import {
 import { get } from "lodash-es";
 import { useState } from "react";
 import { Controller, FieldPath, FieldValues, useFormContext } from "react-hook-form";
+import { cn } from "@merge/ui/lib/utils";
 import { getRuleValue } from "../../utils/getRuleValue";
 import { FormLabel } from "../FormLabel";
 import { SelectControlProps, isSelectBasedOptions, isString, key } from "./SelectControl";
 
-/** Select.Item cannot use value=""; Radix reserves it for clearing. Map "" to this in UI only. */
 const EMPTY_OPTION_VALUE = "__empty__";
 
 const toSelectValue = (k: string) => (k === "" ? EMPTY_OPTION_VALUE : k);
@@ -45,6 +45,8 @@ export const SingleSelectControl = <
     isDisabled,
     onSelect,
     placeholderText,
+    triggerClassName,
+    triggerStyle,
     ...rest
 }: SelectControlProps<T, P>) => {
     const {
@@ -98,7 +100,8 @@ export const SingleSelectControl = <
                                 id={id || name}
                                 aria-label={label}
                                 aria-invalid={!!get(errors, name)}
-                                className="w-full"
+                                className={cn("w-full", triggerClassName)}
+                                style={triggerStyle}
                             >
                                 <SelectValue placeholder={placeholderText}>
                                     {displayValue}

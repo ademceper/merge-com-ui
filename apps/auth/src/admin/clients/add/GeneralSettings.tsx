@@ -23,20 +23,24 @@ export const GeneralSettings = () => {
     const providers = useLoginProviders();
 
     return (
-        <FormAccess isHorizontal role="manage-clients">
-            <SelectControl
-                name="protocol"
-                label={t("clientType")}
-                labelIcon={t("clientTypeHelp")}
-                controller={{
-                    defaultValue: ""
-                }}
-                options={providers.map(option => ({
-                    key: option,
-                    value: getProtocolName(t, option)
-                }))}
-            />
-            <ClientDescription hasConfigureAccess />
+        <FormAccess role="manage-clients">
+            <div className="flex flex-col gap-5">
+                <SelectControl
+                    name="protocol"
+                    label={t("clientType")}
+                    labelIcon={t("clientTypeHelp")}
+                    controller={{
+                        defaultValue: ""
+                    }}
+                    options={providers.map(option => ({
+                        key: option,
+                        value: getProtocolName(t, option)
+                    }))}
+                    triggerClassName="py-1 dark:border-transparent"
+                    triggerStyle={{ height: "3rem", minHeight: "3rem" }}
+                />
+                <ClientDescription hasConfigureAccess />
+            </div>
         </FormAccess>
     );
 };

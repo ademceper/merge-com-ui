@@ -13,8 +13,6 @@
 
 import { cn } from "@merge/ui/lib/utils";
 
-import style from "./form-title.module.css";
-
 type FormTitleProps = {
     id?: string;
     title: string;
@@ -33,15 +31,15 @@ const sizeClass: Record<string, string> = {
 export const FormTitle = ({
     id,
     title,
-    headingLevel = "h1",
-    size = "xl",
+    headingLevel = "h2",
+    size = "lg",
     className,
     ...rest
 }: FormTitleProps) => {
     const Tag = headingLevel;
     return (
         <Tag
-            className={cn(style.title, sizeClass[size] || sizeClass.xl, className)}
+            className={cn("font-semibold text-foreground", sizeClass[size] || sizeClass.lg, className)}
             id={id}
             tabIndex={0}
             {...rest}

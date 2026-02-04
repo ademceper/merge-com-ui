@@ -14,6 +14,7 @@
 /* eslint-disable react/jsx-no-useless-fragment */
 // See: https://github.com/i18next/react-i18next/issues/1543
 import { HTMLProps } from "react";
+import { cn } from "@merge/ui/lib/utils";
 import { FormTitle } from "./FormTitle";
 
 type ScrollPanelProps = HTMLProps<HTMLFormElement> & {
@@ -22,13 +23,11 @@ type ScrollPanelProps = HTMLProps<HTMLFormElement> & {
 };
 
 export const ScrollPanel = (props: ScrollPanelProps) => {
-    const { title, children, scrollId, ...rest } = props;
+    const { title, children, scrollId, className, ...rest } = props;
     return (
-        <section {...rest} style={{ marginTop: "var(--pf-v5-global--spacer--lg)" }}>
-            <>
-                <FormTitle id={scrollId} title={title} />
-                {children}
-            </>
+        <section {...rest} className={cn("mt-8", className)}>
+            <FormTitle id={scrollId} title={title} className="mb-4" />
+            {children}
         </section>
     );
 };

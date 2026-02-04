@@ -24,11 +24,11 @@ export function AdminLayout() {
                     </p>
                 </div>
                 <hr className="mb-6 border-border" />
-                <div className="flex flex-col gap-6 lg:flex-row lg:gap-12">
+                <div className="flex min-h-0 flex-col gap-6 lg:max-h-[calc(100vh-14rem)] lg:flex-row lg:gap-12">
                     <AdminSidebar />
                     <main
                         id={mainPageContentId}
-                        className="flex-1 w-full min-w-0 lg:max-w-[calc(100%-20rem)] overflow-auto"
+                        className="min-h-0 flex-1 w-full min-w-0 overflow-auto lg:max-h-[calc(100vh-14rem)] lg:max-w-[calc(100%-20rem)]"
                     >
                         <ErrorBoundaryFallback fallback={ErrorRenderer}>
                             <Suspense fallback={<KeycloakSpinner />}>
