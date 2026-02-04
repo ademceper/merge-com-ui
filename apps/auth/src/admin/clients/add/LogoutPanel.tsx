@@ -18,7 +18,6 @@ import { useTranslation } from "react-i18next";
 import { HelpItem, TextControl } from "../../../shared/keycloak-ui-shared";
 
 import { DefaultSwitchControl } from "../../components/SwitchControl";
-import { FixedButtonsGroup } from "../../components/form/FixedButtonGroup";
 import { FormAccess } from "../../components/form/FormAccess";
 import { useAccess } from "../../context/access/Access";
 import { convertAttributeNameToForm } from "../../util";
@@ -193,12 +192,6 @@ export const LogoutPanel = ({ save, reset, client: { access } }: ClientSettingsP
                     stringify
                 />
             )}
-            <FixedButtonsGroup
-                name="settings"
-                save={save}
-                reset={reset}
-                isDisabled={!isManager}
-            />
             </div>
         </FormAccess>
     );

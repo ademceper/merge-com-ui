@@ -31,6 +31,12 @@ export const convertToOrg = (org: OrganizationFormType): OrganizationRepresentat
     attributes: keyValueToArray(org.attributes)
 });
 
+/** Güncelleme için: alias Keycloak tarafında değiştirilemediği için payload'dan çıkarılır. */
+export const convertToOrgForUpdate = (org: OrganizationFormType): Omit<OrganizationRepresentation, "alias"> => {
+    const { alias: _alias, ...rest } = convertToOrg(org);
+    return rest;
+};
+
 type OrganizationFormProps = {
     readOnly?: boolean;
 };

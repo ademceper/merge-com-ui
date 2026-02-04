@@ -1,22 +1,10 @@
-/**
- * WARNING: Before modifying this file, run the following command:
- *
- * $ npx keycloakify own --path "admin/App.tsx"
- *
- * This file is provided by @keycloakify/keycloak-admin-ui version 260502.0.0.
- * It was copied into your repository by the postinstall script: `keycloakify sync-extensions`.
- */
-
-/* eslint-disable */
-
-// @ts-nocheck
-
 import { SessionExpirationWarningOverlay } from "../shared/SessionExpirationWarningOverlay";
 import KeycloakAdminClient from "@keycloak/keycloak-admin-client";
 import { mainPageContentId, useEnvironment } from "../shared/keycloak-ui-shared";
 import { SidebarInset, SidebarProvider } from "@merge/ui/components/sidebar";
+import type { ComponentType } from "react";
 import { PropsWithChildren, Suspense, useEffect, useState } from "react";
-import { Outlet } from "react-router-dom";
+import { Outlet, useMatches } from "react-router-dom";
 
 import {
     ErrorBoundaryFallback,
@@ -25,7 +13,6 @@ import {
 } from "../shared/keycloak-ui-shared";
 import { AdminClientContext, initAdminClient } from "./admin-client";
 import { AdminAppSidebar } from "./components/AdminAppSidebar";
-import { PageBreadCrumbs } from "./components/bread-crumb/PageBreadCrumbs";
 import { ErrorRenderer } from "./components/error/ErrorRenderer";
 import { RecentRealmsProvider } from "./context/RecentRealms";
 import { AccessContextProvider } from "./context/access/Access";
@@ -37,6 +24,8 @@ import { SubGroups } from "./groups/SubGroupsContext";
 import { AuthWall } from "./root/AuthWall";
 import { Banners } from "./Banners";
 import { AdminHeader } from "./components/AdminHeader";
+
+const OutletComponent = Outlet as ComponentType;
 
 export const AppContexts = ({ children }: PropsWithChildren) => (
     <ErrorBoundaryProvider>
@@ -73,7 +62,27 @@ export const App = () => {
         init().catch(console.error);
     }, [environment, keycloak]);
 
+    const matches = useMatches();
+    const isNotFound = matches.some(
+        (m) => (m.handle as { isNotFound?: true } | undefined)?.isNotFound === true
+    );
+
     if (!adminClient) return <KeycloakSpinner />;
+
+    if (isNotFound) {
+        return (
+            <AdminClientContext.Provider value={{ keycloak, adminClient }}>
+                <AppContexts>
+                    <Banners />
+                    <div className="min-h-svh flex flex-1 flex-col">
+                        <OutletComponent />
+                    </div>
+                    <SessionExpirationWarningOverlay warnUserSecondsBeforeAutoLogout={45} />
+                </AppContexts>
+            </AdminClientContext.Provider>
+        );
+    }
+
     return (
         <AdminClientContext.Provider value={{ keycloak, adminClient }}>
             <AppContexts>
@@ -89,7 +98,7 @@ export const App = () => {
                             <ErrorBoundaryFallback fallback={ErrorRenderer}>
                                 <Suspense fallback={<KeycloakSpinner />}>
                                     <AuthWall>
-                                        <Outlet />
+                                        <OutletComponent />
                                     </AuthWall>
                                 </Suspense>
                             </ErrorBoundaryFallback>

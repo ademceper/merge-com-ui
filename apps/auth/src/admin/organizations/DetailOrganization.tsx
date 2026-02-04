@@ -25,7 +25,7 @@ import { useParams } from "../utils/useParams";
 import { DetailOrganizationHeader } from "./DetailOrganizationHeader";
 import { IdentityProviders } from "./IdentityProviders";
 import { MembersSection } from "./MembersSection";
-import { OrganizationForm, OrganizationFormType, convertToOrg } from "./OrganizationForm";
+import { OrganizationForm, OrganizationFormType, convertToOrgForUpdate } from "./OrganizationForm";
 import { EditOrganizationParams } from "./routes/EditOrganization";
 import { useAccess } from "../context/access/Access";
 import { AdminEvents } from "../events/AdminEvents";
@@ -44,8 +44,8 @@ export default function DetailOrganization() {
 
     const save = async (org: OrganizationFormType) => {
         try {
-            const organization = convertToOrg(org);
-            await adminClient.organizations.updateById({ id }, organization);
+            const payload = convertToOrgForUpdate(org);
+            await adminClient.organizations.updateById({ id }, payload);
             addAlert(t("organizationSaveSuccess"));
         } catch (error) {
             addError("organizationSaveError", error);

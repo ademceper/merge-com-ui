@@ -40,7 +40,8 @@ import { useRealm } from "../context/realm-context/RealmContext";
 import {
     OrganizationForm,
     OrganizationFormType,
-    convertToOrg
+    convertToOrg,
+    convertToOrgForUpdate
 } from "./OrganizationForm";
 
 export default function OrganizationSection() {
@@ -116,8 +117,8 @@ export default function OrganizationSection() {
     const onEditSave = async (org: OrganizationFormType) => {
         if (!editOrg?.id) return;
         try {
-            const organization = convertToOrg(org);
-            await adminClient.organizations.updateById({ id: editOrg.id }, organization);
+            const payload = convertToOrgForUpdate(org);
+            await adminClient.organizations.updateById({ id: editOrg.id }, payload);
             addAlert(t("organizationSaveSuccess"));
             setEditOrg(null);
             refresh();

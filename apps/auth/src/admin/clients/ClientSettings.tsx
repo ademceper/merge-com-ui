@@ -15,6 +15,8 @@ import type ClientRepresentation from "@keycloak/keycloak-admin-client/lib/defs/
 import { useFormContext } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { ScrollForm } from "../../shared/keycloak-ui-shared";
+import { FixedButtonsGroup } from "../components/form/FixedButtonGroup";
+import { useAccess } from "../context/access/Access";
 import { ClientDescription } from "./ClientDescription";
 import { FormFields } from "./ClientDetails";
 import { AccessSettings } from "./add/AccessSettings";
@@ -32,15 +34,25 @@ export type ClientSettingsProps = {
 
 export const ClientSettings = (props: ClientSettingsProps) => {
     const { t } = useTranslation();
+    const { hasAccess } = useAccess();
 
     const { watch } = useFormContext<FormFields>();
     const protocol = watch("protocol");
 
-    const { client } = props;
+    const { client, save, reset } = props;
+    const isManager = hasAccess("manage-clients") || client.access?.configure;
 
     return (
         <ScrollForm
             label={t("jumpToSection")}
+            actions={
+                <FixedButtonsGroup
+                    name="settings"
+                    save={save}
+                    reset={reset}
+                    isDisabled={!isManager}
+                />
+            }
             sections={[
                 {
                     title: t("generalSettings"),

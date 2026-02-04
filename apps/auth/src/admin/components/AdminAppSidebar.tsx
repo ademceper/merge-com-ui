@@ -14,7 +14,8 @@ import {
     SidebarMenuItem,
     SidebarMenuSub,
     SidebarMenuSubItem,
-    SidebarMenuSubButton
+    SidebarMenuSubButton,
+    SidebarSeparator
 } from "@merge/ui/components/sidebar";
 import {
     Collapsible,
@@ -31,6 +32,7 @@ import type { UserMenuInfo } from "./AdminHeader";
 import { toPage } from "../page/routes";
 import { routes } from "../routes";
 import useIsFeatureEnabled, { Feature } from "../utils/useIsFeatureEnabled";
+import { Badge } from "@merge/ui/components/badge";
 import { CaretRightIcon } from "@phosphor-icons/react";
 
 const baseUrl = import.meta.env.BASE_URL;
@@ -142,18 +144,18 @@ export function AdminAppSidebar({ ...props }: React.ComponentProps<typeof Sideba
                 <SidebarMenu>
                     <SidebarMenuItem>
                         <SidebarMenuButton size="lg" asChild>
-                            <a href={environment.logoUrl || "#"} className="flex items-center gap-2">
-                                <div className="bg-sidebar-primary text-sidebar-primary-foreground flex aspect-square size-8 shrink-0 items-center justify-center rounded-lg font-semibold">
-                                    {realm?.slice(0, 2).toUpperCase() ?? "KC"}
-                                </div>
-                                <div className="grid flex-1 text-left text-sm leading-tight min-w-0">
-                                    <span className="truncate font-medium">
+                            <a
+                                href={environment.logoUrl || "#"}
+                                className="flex min-w-0 items-center gap-2 rounded-sm px-2 py-1.5 text-left text-sm leading-tight transition-colors hover:bg-white dark:hover:bg-white/3"
+                            >
+                                <span className="shrink-0 text-muted-foreground">
+                                    {t("currentRealm")}
+                                </span>
+                                <span className="flex min-w-0 flex-1 justify-center">
+                                    <Badge variant="secondary" className="max-w-full truncate font-medium rounded-sm bg-indigo-500/15 text-indigo-700 dark:bg-indigo-400/20 dark:text-indigo-300 border-0 h-auto py-1 px-2">
                                         {label(t, realmRepresentation?.displayName, realm)}
-                                    </span>
-                                    <span className="truncate text-xs text-muted-foreground">
-                                        {t("currentRealm")}
-                                    </span>
-                                </div>
+                                    </Badge>
+                                </span>
                             </a>
                         </SidebarMenuButton>
                     </SidebarMenuItem>

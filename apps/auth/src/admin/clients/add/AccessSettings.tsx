@@ -15,7 +15,6 @@ import { useFormContext } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { TextControl } from "../../../shared/keycloak-ui-shared";
 
-import { FixedButtonsGroup } from "../../components/form/FixedButtonGroup";
 import { FormAccess } from "../../components/form/FormAccess";
 import { useAccess } from "../../context/access/Access";
 import { FormFields } from "../ClientDetails";
@@ -44,14 +43,6 @@ export const AccessSettings = ({ client, save, reset }: ClientSettingsProps) => 
                     name="adminUrl"
                     label={t("adminURL")}
                     labelIcon={t("adminURLHelp")}
-                />
-            )}
-            {client.bearerOnly && (
-                <FixedButtonsGroup
-                    name="settings"
-                    save={save}
-                    reset={reset}
-                    isDisabled={isManager}
                 />
             )}
             </div>

@@ -1,21 +1,8 @@
-/**
- * WARNING: Before modifying this file, run the following command:
- *
- * $ npx keycloakify own --path "admin/routes.tsx"
- *
- * This file is provided by @keycloakify/keycloak-admin-ui version 260502.0.0.
- * It was copied into your repository by the postinstall script: `keycloakify sync-extensions`.
- */
-
-/* eslint-disable */
-
-// @ts-nocheck
-
 import type { AccessType } from "@keycloak/keycloak-admin-client/lib/defs/whoAmIRepresentation";
 import type { TFunction } from "i18next";
 import type { ComponentType } from "react";
 import type { NonIndexRouteObject, RouteObject } from "react-router-dom";
-import { PageNotFoundSection } from "./PageNotFoundSection";
+import { NotFound } from "./NotFound";
 import { Root } from "./Root";
 import authenticationRoutes from "./authentication/routes";
 import clientScopesRoutes from "./client-scopes/routes";
@@ -37,6 +24,7 @@ import workflowRoutes from "./workflows/routes";
 
 export type AppRouteObjectHandle = {
     access: AccessType | AccessType[];
+    isNotFound?: true;
 };
 
 export interface AppRouteObject extends NonIndexRouteObject {
@@ -47,9 +35,10 @@ export interface AppRouteObject extends NonIndexRouteObject {
 
 export const NotFoundRoute: AppRouteObject = {
     path: "*",
-    element: <PageNotFoundSection />,
+    element: <NotFound />,
     handle: {
-        access: "anyone"
+        access: "anyone",
+        isNotFound: true
     }
 };
 
