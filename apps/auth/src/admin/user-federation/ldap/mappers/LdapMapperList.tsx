@@ -1,25 +1,9 @@
-/**
- * WARNING: Before modifying this file, run the following command:
- *
- * $ npx keycloakify own --path "admin/user-federation/ldap/mappers/LdapMapperList.tsx"
- *
- * This file is provided by @keycloakify/keycloak-admin-ui version 260502.0.0.
- * It was copied into your repository by the postinstall script: `keycloakify sync-extensions`.
- */
-
-/* eslint-disable */
-
-// @ts-nocheck
-
 import type ComponentRepresentation from "@keycloak/keycloak-admin-client/lib/defs/componentRepresentation";
-import {
-    Action,
-    AlertVariant,
+import { getErrorDescription, getErrorMessage, Action,
     KeycloakDataTable,
     ListEmptyState,
-    useAlerts,
-    useFetch
-} from "../../../../shared/keycloak-ui-shared";
+    useFetch } from "../../../../shared/keycloak-ui-shared";
+import { toast } from "@merge/ui/components/sonner";
 import { Button } from "@merge/ui/components/button";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -46,8 +30,7 @@ export const LdapMapperList = ({ toCreate, toDetail }: LdapMapperListProps) => {
 
     const navigate = useNavigate();
     const { t } = useTranslation();
-    const { addAlert, addError } = useAlerts();
-    const [key, setKey] = useState(0);
+const [key, setKey] = useState(0);
     const refresh = () => setKey(key + 1);
 
     const [mappers, setMappers] = useState<ComponentRepresentation[]>([]);
@@ -89,10 +72,10 @@ export const LdapMapperList = ({ toCreate, toDetail }: LdapMapperListProps) => {
                     id: selectedMapper!.id!
                 });
                 refresh();
-                addAlert(t("mappingDeletedSuccess"), AlertVariant.success);
+                toast.success(t("mappingDeletedSuccess"));
                 setSelectedMapper(undefined);
             } catch (error) {
-                addError("mappingDeletedError", error);
+                toast.error(t("mappingDeletedError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
             }
         }
     });

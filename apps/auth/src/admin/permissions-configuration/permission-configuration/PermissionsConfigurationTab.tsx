@@ -1,27 +1,11 @@
-/**
- * WARNING: Before modifying this file, run the following command:
- *
- * $ npx keycloakify own --path "admin/permissions-configuration/permission-configuration/PermissionsConfigurationTab.tsx"
- *
- * This file is provided by @keycloakify/keycloak-admin-ui version 260502.0.0.
- * It was copied into your repository by the postinstall script: `keycloakify sync-extensions`.
- */
-
-/* eslint-disable */
-
-// @ts-nocheck
-
 import type PolicyRepresentation from "@keycloak/keycloak-admin-client/lib/defs/policyRepresentation";
 import ResourceRepresentation from "@keycloak/keycloak-admin-client/lib/defs/resourceRepresentation";
 import ScopeRepresentation from "@keycloak/keycloak-admin-client/lib/defs/scopeRepresentation";
-import {
-    AlertVariant,
-    KeycloakSpinner,
+import { getErrorDescription, getErrorMessage, KeycloakSpinner,
     ListEmptyState,
     PaginatingTableToolbar,
-    useAlerts,
-    useFetch
-} from "../../../shared/keycloak-ui-shared";
+    useFetch } from "../../../shared/keycloak-ui-shared";
+import { toast } from "@merge/ui/components/sonner";
 import { Button } from "@merge/ui/components/button";
 import {
     DropdownMenu,
@@ -69,8 +53,7 @@ export const PermissionsConfigurationTab = ({
     const { adminClient } = useAdminClient();
     const { t } = useTranslation();
     const navigate = useNavigate();
-    const { addAlert, addError } = useAlerts();
-    const { realm } = useRealm();
+const { realm } = useRealm();
     const [permissions, setPermissions] = useState<ExpandablePolicyRepresentation[]>();
     const [selectedPermission, setSelectedPermission] = useState<PolicyRepresentation>();
     const [search, setSearch] = useState<SearchForm>({});
@@ -139,10 +122,10 @@ export const PermissionsConfigurationTab = ({
                     type: selectedPermission?.type!,
                     permissionId: selectedPermission?.id!
                 });
-                addAlert(t("permissionDeletedSuccess"), AlertVariant.success);
+                toast.success(t("permissionDeletedSuccess"));
                 refresh();
             } catch (error) {
-                addError("permissionDeletedError", error);
+                toast.error(t("permissionDeletedError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
             }
         }
     });

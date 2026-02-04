@@ -1,24 +1,9 @@
-/**
- * WARNING: Before modifying this file, run the following command:
- *
- * $ npx keycloakify own --path "admin/user/Organizations.tsx"
- *
- * This file is provided by @keycloakify/keycloak-admin-ui version 260502.0.0.
- * It was copied into your repository by the postinstall script: `keycloakify sync-extensions`.
- */
-
-/* eslint-disable */
-
-// @ts-nocheck
-
 import OrganizationRepresentation from "@keycloak/keycloak-admin-client/lib/defs/organizationRepresentation";
 import UserRepresentation from "@keycloak/keycloak-admin-client/lib/defs/userRepresentation";
-import {
-    ListEmptyState,
+import { getErrorDescription, getErrorMessage, ListEmptyState,
     OrganizationTable,
-    useAlerts,
-    useFetch
-} from "../../shared/keycloak-ui-shared";
+    useFetch } from "../../shared/keycloak-ui-shared";
+import { toast } from "@merge/ui/components/sonner";
 import { Button } from "@merge/ui/components/button";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@merge/ui/components/dropdown-menu";
 import { useState } from "react";
@@ -50,8 +35,7 @@ export const Organizations = ({ user }: OrganizationProps) => {
     const { t } = useTranslation();
     const { id } = useParams<UserParams>();
     const navigate = useNavigate();
-    const { addAlert, addError } = useAlerts();
-    const { realm } = useRealm();
+const { realm } = useRealm();
     const [key, setKey] = useState(0);
     const refresh = () => setKey(key + 1);
     const [joinToggle, toggle, setJoinToggle] = useToggle();
@@ -165,7 +149,7 @@ export const Organizations = ({ user }: OrganizationProps) => {
                         })
                     )
                 );
-                addAlert(t("organizationRemovedSuccess"));
+                toast.success(t("organizationRemovedSuccess"));
                 const user = await adminClient.users.findOne({ id: id! });
                 if (!user) {
                     navigate(toUsers({ realm: realm }));
@@ -173,7 +157,7 @@ export const Organizations = ({ user }: OrganizationProps) => {
                 setSelectedOrgs([]);
                 refresh();
             } catch (error) {
-                addError("organizationRemoveError", error);
+                toast.error(t("organizationRemoveError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
             }
         }
     });
@@ -202,21 +186,22 @@ export const Organizations = ({ user }: OrganizationProps) => {
                                           );
                                 })
                             );
-                            addAlert(
-                                t(
+                            toast.success(t(
                                     shouldJoin
                                         ? "userAddedOrganization"
                                         : "userInvitedOrganization",
                                     { count: orgs.length }
-                                )
-                            );
+                                ));
                             refresh();
                         } catch (error) {
-                            addError(
-                                shouldJoin
-                                    ? "userAddedOrganizationError"
-                                    : "userInvitedError",
-                                error
+                            toast.error(
+                                t(
+                                    shouldJoin
+                                        ? "userAddedOrganizationError"
+                                        : "userInvitedError",
+                                    { error: getErrorMessage(error) }
+                                ),
+                                { description: getErrorDescription(error) }
                             );
                         }
                     }}

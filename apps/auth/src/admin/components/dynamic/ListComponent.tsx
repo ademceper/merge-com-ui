@@ -1,16 +1,3 @@
-/**
- * WARNING: Before modifying this file, run the following command:
- *
- * $ npx keycloakify own --path "admin/components/dynamic/ListComponent.tsx"
- *
- * This file is provided by @keycloakify/keycloak-admin-ui version 260502.0.0.
- * It was copied into your repository by the postinstall script: `keycloakify sync-extensions`.
- */
-
-/* eslint-disable */
-
-// @ts-nocheck
-
 import {
     HelpItem,
     KeycloakSelect,
@@ -64,7 +51,6 @@ export const ListComponent = ({
                     >
                         {options?.map(option => (
                             <SelectOption
-                                selected={option === field.value}
                                 key={option}
                                 value={option}
                             >

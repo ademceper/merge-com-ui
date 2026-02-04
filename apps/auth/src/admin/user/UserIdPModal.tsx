@@ -1,18 +1,4 @@
-/**
- * WARNING: Before modifying this file, run the following command:
- *
- * $ npx keycloakify own --path "admin/user/UserIdPModal.tsx"
- *
- * This file is provided by @keycloakify/keycloak-admin-ui version 260502.0.0.
- * It was copied into your repository by the postinstall script: `keycloakify sync-extensions`.
- */
-
-/* eslint-disable */
-
-// @ts-nocheck
-
 import type FederatedIdentityRepresentation from "@keycloak/keycloak-admin-client/lib/defs/federatedIdentityRepresentation";
-import { AlertVariant } from "../../shared/keycloak-ui-shared";
 import { Button } from "@merge/ui/components/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@merge/ui/components/dialog";
 import { Input } from "@merge/ui/components/input";
@@ -22,7 +8,8 @@ import { FormProvider, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { TextControl } from "../../shared/keycloak-ui-shared";
 import { useAdminClient } from "../admin-client";
-import { useAlerts } from "../../shared/keycloak-ui-shared";
+import { getErrorDescription, getErrorMessage } from "../../shared/keycloak-ui-shared";
+import { toast } from "@merge/ui/components/sonner";
 
 type UserIdpModalProps = {
     userId: string;
@@ -40,8 +27,7 @@ export const UserIdpModal = ({
     const { adminClient } = useAdminClient();
 
     const { t } = useTranslation();
-    const { addAlert, addError } = useAlerts();
-    const form = useForm<FederatedIdentityRepresentation>({
+const form = useForm<FederatedIdentityRepresentation>({
         mode: "onChange"
     });
     const {
@@ -56,11 +42,11 @@ export const UserIdpModal = ({
                 federatedIdentityId: federatedId,
                 federatedIdentity
             });
-            addAlert(t("idpLinkSuccess"), AlertVariant.success);
+            toast.success(t("idpLinkSuccess"));
             onClose();
             onRefresh();
         } catch (error) {
-            addError("couldNotLinkIdP", error);
+            toast.error(t("couldNotLinkIdP", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
         }
     };
 

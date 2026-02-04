@@ -1,14 +1,3 @@
-/**
- * WARNING: Before modifying this file, run the following command:
- *
- * $ npx keycloakify own --path "admin/colorScheme.ts"
- *
- * This file is provided by @keycloakify/keycloak-admin-ui version 260502.0.0.
- * It was copied into your repository by the postinstall script: `keycloakify sync-extensions`.
- */
-
-/* eslint-disable */
-
 /* IMPORTANT NOTE:
  * If you modify how the light/dark mode is implemented
  * you must also update public/admin/early-color-scheme.js

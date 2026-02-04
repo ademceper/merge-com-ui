@@ -1,20 +1,7 @@
-/**
- * WARNING: Before modifying this file, run the following command:
- *
- * $ npx keycloakify own --path "admin/user/UserIdentityProviderLinks.tsx"
- *
- * This file is provided by @keycloakify/keycloak-admin-ui version 260502.0.0.
- * It was copied into your repository by the postinstall script: `keycloakify sync-extensions`.
- */
-
-/* eslint-disable */
-
-// @ts-nocheck
-
 import type FederatedIdentityRepresentation from "@keycloak/keycloak-admin-client/lib/defs/federatedIdentityRepresentation";
 import type IdentityProviderRepresentation from "@keycloak/keycloak-admin-client/lib/defs/identityProviderRepresentation";
 import type { IdentityProvidersQuery } from "@keycloak/keycloak-admin-client/lib/resources/identityProviders";
-import { AlertVariant, KeycloakSpinner } from "../../shared/keycloak-ui-shared";
+import { KeycloakSpinner } from "../../shared/keycloak-ui-shared";
 import { Button } from "@merge/ui/components/button";
 import { Badge } from "@merge/ui/components/badge";
 import { cellWidth } from "../../shared/keycloak-ui-shared";
@@ -24,7 +11,8 @@ import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 import { FormPanel } from "../../shared/keycloak-ui-shared";
 import { useAdminClient } from "../admin-client";
-import { useAlerts, useFetch } from "../../shared/keycloak-ui-shared";
+import { getErrorDescription, getErrorMessage, useFetch } from "../../shared/keycloak-ui-shared";
+import { toast } from "@merge/ui/components/sonner";
 import { useConfirmDialog } from "../components/confirm-dialog/ConfirmDialog";
 import { KeycloakDataTable } from "../../shared/keycloak-ui-shared";
 import { useRealm } from "../context/realm-context/RealmContext";
@@ -46,8 +34,7 @@ export const UserIdentityProviderLinks = ({ userId }: UserIdentityProviderLinksP
     const [federatedId, setFederatedId] = useState("");
     const [isLinkIdPModalOpen, setIsLinkIdPModalOpen] = useState(false);
     const { realm } = useRealm();
-    const { addAlert, addError } = useAlerts();
-    const { t } = useTranslation();
+const { t } = useTranslation();
     const { hasAccess, hasSomeAccess } = useAccess();
 
     const canQueryIDPDetails = hasSomeAccess(
@@ -124,10 +111,10 @@ export const UserIdentityProviderLinks = ({ userId }: UserIdentityProviderLinksP
                     id: userId,
                     federatedIdentityId: federatedId
                 });
-                addAlert(t("idpUnlinkSuccess"), AlertVariant.success);
+                toast.success(t("idpUnlinkSuccess"));
                 refresh();
             } catch (error) {
-                addError("mappingDeletedError", error);
+                toast.error(t("mappingDeletedError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
             }
         }
     });

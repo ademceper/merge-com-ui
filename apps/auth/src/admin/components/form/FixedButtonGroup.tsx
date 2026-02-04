@@ -1,20 +1,7 @@
-/**
- * WARNING: Before modifying this file, run the following command:
- *
- * $ npx keycloakify own --path "admin/components/form/FixedButtonGroup.tsx"
- *
- * This file is provided by @keycloakify/keycloak-admin-ui version 260502.0.0.
- * It was copied into your repository by the postinstall script: `keycloakify sync-extensions`.
- */
-
-/* eslint-disable */
-
-// @ts-nocheck
-
 import { useTranslation } from "react-i18next";
 import { Button } from "@merge/ui/components/button";
 
-type FixedButtonGroupProps = React.ComponentProps<"div"> & {
+type FixedButtonGroupProps = Omit<React.ComponentProps<"div">, "children"> & {
     name: string;
     save?: () => void;
     saveText?: string;
@@ -22,6 +9,7 @@ type FixedButtonGroupProps = React.ComponentProps<"div"> & {
     resetText?: string;
     isSubmit?: boolean;
     isDisabled?: boolean;
+    children?: React.ReactNode;
 };
 
 export const FixedButtonsGroup = ({

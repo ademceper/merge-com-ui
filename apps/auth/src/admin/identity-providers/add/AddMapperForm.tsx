@@ -1,22 +1,10 @@
-/**
- * WARNING: Before modifying this file, run the following command:
- *
- * $ npx keycloakify own --path "admin/identity-providers/add/AddMapperForm.tsx"
- *
- * This file is provided by @keycloakify/keycloak-admin-ui version 260502.0.0.
- * It was copied into your repository by the postinstall script: `keycloakify sync-extensions`.
- */
-
-/* eslint-disable */
-
-// @ts-nocheck
-
 import type IdentityProviderMapperRepresentation from "@keycloak/keycloak-admin-client/lib/defs/identityProviderMapperRepresentation";
 import type { IdentityProviderMapperTypeRepresentation } from "@keycloak/keycloak-admin-client/lib/defs/identityProviderMapperTypeRepresentation";
 import {
     HelpItem,
     KeycloakSelect,
     SelectControl,
+    SelectOption,
     SelectVariant,
     TextControl
 } from "../../../shared/keycloak-ui-shared";
@@ -99,10 +87,9 @@ export const AddMapperForm = ({
                         >
                             {mapperTypes.map(option => (
                                 <SelectOption
-                                    selected={option === field.value}
                                     data-testid={option.id}
                                     key={option.name}
-                                    value={option}
+                                    value={option.name ?? option.id ?? ""}
                                 >
                                     {option.name}
                                 </SelectOption>

@@ -1,27 +1,10 @@
-/**
- * WARNING: Before modifying this file, run the following command:
- *
- * $ npx keycloakify own --path "admin/realm-settings/ClientProfileForm.tsx"
- *
- * This file is provided by @keycloakify/keycloak-admin-ui version 260502.0.0.
- * It was copied into your repository by the postinstall script: `keycloakify sync-extensions`.
- */
-
-/* eslint-disable */
-
-// @ts-nocheck
-
 import type ClientProfileRepresentation from "@keycloak/keycloak-admin-client/lib/defs/clientProfileRepresentation";
 import type ClientProfilesRepresentation from "@keycloak/keycloak-admin-client/lib/defs/clientProfilesRepresentation";
-import {
-    HelpItem,
+import { getErrorDescription, getErrorMessage, HelpItem,
     TextAreaControl,
     TextControl,
-    useAlerts,
-    useFetch
-} from "../../shared/keycloak-ui-shared";
-import { AlertVariant } from "../../shared/keycloak-ui-shared";
-import { Badge } from "@merge/ui/components/badge";
+    useFetch } from "../../shared/keycloak-ui-shared";
+import { toast } from "@merge/ui/components/sonner";
 import { Button } from "@merge/ui/components/button";
 import { DropdownMenuItem } from "@merge/ui/components/dropdown-menu";
 import { Label } from "@merge/ui/components/label";
@@ -42,7 +25,6 @@ import { toAddExecutor } from "./routes/AddExecutor";
 import { toClientPolicies } from "./routes/ClientPolicies";
 import { ClientProfileParams, toClientProfile } from "./routes/ClientProfile";
 import { toExecutor } from "./routes/Executor";
-
 
 type ClientProfileForm = Required<ClientProfileRepresentation>;
 
@@ -74,9 +56,7 @@ export default function ClientProfileForm() {
         name: "executors",
         control
     });
-
-    const { addAlert, addError } = useAlerts();
-    const [profiles, setProfiles] = useState<ClientProfilesRepresentation>();
+const [profiles, setProfiles] = useState<ClientProfilesRepresentation>();
     const [isGlobalProfile, setIsGlobalProfile] = useState(false);
     const { realm, profileName } = useParams<ClientProfileParams>();
     const serverInfo = useServerInfo();
@@ -126,18 +106,17 @@ export default function ClientProfileForm() {
                 profiles: [...(profiles?.profiles || []), updatedProfiles]
             });
 
-            addAlert(
+            toast.success(
                 editMode
                     ? t("updateClientProfileSuccess")
-                    : t("createClientProfileSuccess"),
-                AlertVariant.success
+                    : t("createClientProfileSuccess")
             );
 
             navigate(toClientProfile({ realm, profileName: form.name }));
         } catch (error) {
-            addError(
-                editMode ? "updateClientProfileError" : "createClientProfileError",
-                error
+            toast.error(
+                t(editMode ? "updateClientProfileError" : "createClientProfileError", { error: getErrorMessage(error) }),
+                { description: getErrorDescription(error) }
             );
         }
     };
@@ -164,18 +143,18 @@ export default function ClientProfileForm() {
                         ...profiles,
                         profiles: [...(profiles!.profiles || []), getValues()]
                     });
-                    addAlert(t("deleteExecutorSuccess"), AlertVariant.success);
+                    toast.success(t("deleteExecutorSuccess"));
                     navigate(toClientProfile({ realm, profileName }));
                 } catch (error) {
-                    addError("deleteExecutorError", error);
+                    toast.error(t("deleteExecutorError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
                 }
             } else {
                 try {
                     await adminClient.clientPolicies.createProfiles(profiles);
-                    addAlert(t("deleteClientSuccess"), AlertVariant.success);
+                    toast.success(t("deleteClientSuccess"));
                     navigate(toClientPolicies({ realm, tab: "profiles" }));
                 } catch (error) {
-                    addError("deleteClientError", error);
+                    toast.error(t("deleteClientError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
                 }
             }
         }

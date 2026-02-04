@@ -1,16 +1,3 @@
-/**
- * WARNING: Before modifying this file, run the following command:
- *
- * $ npx keycloakify own --path "admin/client-scopes/ChangeTypeDropdown.tsx"
- *
- * This file is provided by @keycloakify/keycloak-admin-ui version 260502.0.0.
- * It was copied into your repository by the postinstall script: `keycloakify sync-extensions`.
- */
-
-/* eslint-disable */
-
-// @ts-nocheck
-
 import {
     Select,
     SelectContent,
@@ -18,12 +5,12 @@ import {
     SelectValue
 } from "@merge/ui/components/select";
 import { Button } from "@merge/ui/components/button";
-import { AlertVariant } from "../../shared/keycloak-ui-shared";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useAdminClient } from "../admin-client";
 import type { Row } from "../clients/scopes/ClientScopes";
-import { useAlerts } from "../../shared/keycloak-ui-shared";
+import { getErrorDescription, getErrorMessage } from "../../shared/keycloak-ui-shared";
+import { toast } from "@merge/ui/components/sonner";
 import {
     ClientScope,
     allClientScopeTypes,
@@ -47,10 +34,7 @@ export const ChangeTypeDropdown = ({
 
     const { t } = useTranslation();
     const [open, setOpen] = useState(false);
-
-    const { addAlert, addError } = useAlerts();
-
-    return (
+return (
         <Select
             open={open}
             onOpenChange={setOpen}
@@ -71,9 +55,9 @@ export const ChangeTypeDropdown = ({
                     );
                     setOpen(false);
                     refresh();
-                    addAlert(t("clientScopeSuccess"), AlertVariant.success);
+                    toast.success(t("clientScopeSuccess"));
                 } catch (error) {
-                    addError("clientScopeError", error);
+                    toast.error(t("clientScopeError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
                 }
             }}
         >

@@ -1,16 +1,3 @@
-/**
- * WARNING: Before modifying this file, run the following command:
- *
- * $ npx keycloakify own --path "admin/realm-settings/PartialImport.tsx"
- *
- * This file is provided by @keycloakify/keycloak-admin-ui version 260502.0.0.
- * It was copied into your repository by the postinstall script: `keycloakify sync-extensions`.
- */
-
-/* eslint-disable */
-
-// @ts-nocheck
-
 import type RealmRepresentation from "@keycloak/keycloak-admin-client/lib/defs/realmRepresentation";
 import type {
     PartialImportRealmRepresentation,
@@ -33,14 +20,14 @@ import {
 } from "@merge/ui/components/dialog";
 import {
     Alert,
-    AlertDescription,
     AlertTitle
 } from "@merge/ui/components/alert";
 import { SelectOption } from "../../shared/keycloak-ui-shared";
-import { FormEvent, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useAdminClient } from "../admin-client";
-import { useAlerts } from "../../shared/keycloak-ui-shared";
+import { getErrorDescription, getErrorMessage } from "../../shared/keycloak-ui-shared";
+import { toast } from "@merge/ui/components/sonner";
 import { JsonFileUpload } from "../components/json-file-upload/JsonFileUpload";
 import { KeycloakDataTable } from "../../shared/keycloak-ui-shared";
 import { useRealm } from "../context/realm-context/RealmContext";
@@ -85,7 +72,6 @@ export const PartialImportDialog = (props: PartialImportProps) => {
     const [collisionOption, setCollisionOption] = useState<CollisionOption>("FAIL");
     const [targetRealm, setTargetRealm] = useState<RealmRepresentation>({});
     const [importResponse, setImportResponse] = useState<PartialImportResponse>();
-    const { addError } = useAlerts();
 
     const [resourcesToImport, setResourcesToImport] = useState(INITIAL_RESOURCES);
     const isAnyResourceChecked = Object.values(resourcesToImport).some(
@@ -127,23 +113,11 @@ export const PartialImportDialog = (props: PartialImportProps) => {
         resetResourcesToImport();
     };
 
-    const handleResourceCheckBox = (
-        checked: boolean,
-        event: FormEvent<HTMLInputElement>
-    ) => {
-        const resource = event.currentTarget.name as Resource;
-
-        setResourcesToImport({
-            ...resourcesToImport,
-            [resource]: checked
-        });
-    };
-
     const realmSelectOptions = (realms: RealmRepresentation[]) =>
         realms.map(realm => (
             <SelectOption
                 key={realm.id}
-                value={realm}
+                value={realm.realm ?? realm.id ?? ""}
                 data-testid={realm.id + "-select-option"}
             >
                 {realm.realm || realm.id}
@@ -266,7 +240,7 @@ export const PartialImportDialog = (props: PartialImportProps) => {
             });
             setImportResponse(importResults);
         } catch (error) {
-            addError("importFail", error);
+            toast.error(t("importFail", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
         }
 
         setImportInProgress(false);

@@ -1,21 +1,8 @@
-/**
- * WARNING: Before modifying this file, run the following command:
- *
- * $ npx keycloakify own --path "admin/authentication/RequiredActions.tsx"
- *
- * This file is provided by @keycloakify/keycloak-admin-ui version 260502.0.0.
- * It was copied into your repository by the postinstall script: `keycloakify sync-extensions`.
- */
-
-/* eslint-disable */
-
-// @ts-nocheck
-
 import { fetchWithError } from "@keycloak/keycloak-admin-client";
 import type RequiredActionProviderRepresentation from "@keycloak/keycloak-admin-client/lib/defs/requiredActionProviderRepresentation";
 import type RequiredActionProviderSimpleRepresentation from "@keycloak/keycloak-admin-client/lib/defs/requiredActionProviderSimpleRepresentation";
-import { useAlerts, useFetch } from "../../shared/keycloak-ui-shared";
-import { AlertVariant } from "../../shared/keycloak-ui-shared";
+import { getErrorDescription, getErrorMessage, useFetch } from "../../shared/keycloak-ui-shared";
+import { toast } from "@merge/ui/components/sonner";
 import { Button } from "@merge/ui/components/button";
 import { Switch } from "@merge/ui/components/switch";
 import { Gear } from "@phosphor-icons/react";
@@ -45,9 +32,7 @@ export const RequiredActions = () => {
     const { adminClient } = useAdminClient();
 
     const { t } = useTranslation();
-    const { addAlert, addError } = useAlerts();
-
-    const [actions, setActions] = useState<Row[]>();
+const [actions, setActions] = useState<Row[]>();
     const [selectedAction, setSelectedAction] = useState<DataType>();
     const [key, setKey] = useState(0);
     const refresh = () => setKey(key + 1);
@@ -113,9 +98,9 @@ export const RequiredActions = () => {
                 });
             }
             refresh();
-            addAlert(t("updatedRequiredActionSuccess"), AlertVariant.success);
+            toast.success(t("updatedRequiredActionSuccess"));
         } catch (error) {
-            addError("updatedRequiredActionError", error);
+            toast.error(t("updatedRequiredActionError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
         }
     };
 
@@ -142,9 +127,9 @@ export const RequiredActions = () => {
             }
             refresh();
 
-            addAlert(t("updatedRequiredActionSuccess"), AlertVariant.success);
+            toast.success(t("updatedRequiredActionSuccess"));
         } catch (error) {
-            addError("updatedRequiredActionError", error);
+            toast.error(t("updatedRequiredActionError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
         }
     };
 

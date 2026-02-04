@@ -1,16 +1,3 @@
-/**
- * WARNING: Before modifying this file, run the following command:
- *
- * $ npx keycloakify own --path "admin/identity-providers/add/SamlGeneralSettings.tsx"
- *
- * This file is provided by @keycloakify/keycloak-admin-ui version 260502.0.0.
- * It was copied into your repository by the postinstall script: `keycloakify sync-extensions`.
- */
-
-/* eslint-disable */
-
-// @ts-nocheck
-
 import {
     HelpItem,
     TextControl,
@@ -25,7 +12,6 @@ import { useRealm } from "../../context/realm-context/RealmContext";
 import type { Environment } from "../../environment";
 import { DisplayOrder } from "../component/DisplayOrder";
 import { RedirectUrl } from "../component/RedirectUrl";
-
 
 type SamlGeneralSettingsProps = {
     isAliasReadonly?: boolean;

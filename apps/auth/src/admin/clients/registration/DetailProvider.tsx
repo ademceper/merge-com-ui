@@ -1,19 +1,7 @@
-/**
- * WARNING: Before modifying this file, run the following command:
- *
- * $ npx keycloakify own --path "admin/clients/registration/DetailProvider.tsx"
- *
- * This file is provided by @keycloakify/keycloak-admin-ui version 260502.0.0.
- * It was copied into your repository by the postinstall script: `keycloakify sync-extensions`.
- */
-
-/* eslint-disable */
-
-// @ts-nocheck
-
 import ComponentRepresentation from "@keycloak/keycloak-admin-client/lib/defs/componentRepresentation";
 import ComponentTypeRepresentation from "@keycloak/keycloak-admin-client/lib/defs/componentTypeRepresentation";
-import { TextControl, useAlerts, useFetch } from "../../../shared/keycloak-ui-shared";
+import { getErrorDescription, getErrorMessage, TextControl, useFetch } from "../../../shared/keycloak-ui-shared";
+import { toast } from "@merge/ui/components/sonner";
 import { Button } from "@merge/ui/components/button";
 import { DropdownMenuItem } from "@merge/ui/components/dropdown-menu";
 import { useState } from "react";
@@ -46,8 +34,7 @@ export default function DetailProvider() {
     const { control, handleSubmit, reset } = form;
 
     const { realm, realmRepresentation } = useRealm();
-    const { addAlert, addError } = useAlerts();
-    const [provider, setProvider] = useState<ComponentTypeRepresentation>();
+const [provider, setProvider] = useState<ComponentTypeRepresentation>();
 
     useFetch(
         async () =>
@@ -85,9 +72,9 @@ export default function DetailProvider() {
                 const { id } = await adminClient.components.create(updatedComponent);
                 navigate(toRegistrationProvider({ id, realm, subTab, providerId }));
             }
-            addAlert(t(`provider${id ? "Updated" : "Create"}Success`));
+            toast.success(t(`provider${id ? "Updated" : "Create"}Success`));
         } catch (error) {
-            addError(`provider${id ? "Updated" : "Create"}Error`, error);
+            toast.error(t(`provider${id ? "Updated" : "Create"}Error`, { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
         }
     };
 
@@ -97,17 +84,17 @@ export default function DetailProvider() {
             name: providerName
         }),
         continueButtonLabel: "delete",
-        continueButtonVariant: "danger",
+        continueButtonVariant: "destructive",
         onConfirm: async () => {
             try {
                 await adminClient.components.del({
                     realm,
                     id: id!
                 });
-                addAlert(t("clientRegisterPolicyDeleteSuccess"));
+                toast.success(t("clientRegisterPolicyDeleteSuccess"));
                 navigate(toClientRegistration({ realm, subTab }));
             } catch (error) {
-                addError("clientRegisterPolicyDeleteError", error);
+                toast.error(t("clientRegisterPolicyDeleteError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
             }
         }
     });

@@ -1,16 +1,3 @@
-/**
- * WARNING: Before modifying this file, run the following command:
- *
- * $ npx keycloakify own --path "shared/keycloak-ui-shared/controls/TextControl.tsx"
- *
- * This file is provided by @keycloakify/keycloak-ui-shared version 260502.0.0.
- * It was copied into your repository by the postinstall script: `keycloakify sync-extensions`.
- */
-
-/* eslint-disable */
-
-// @ts-nocheck
-
 import { Input } from "@merge/ui/components/input";
 import { cn } from "@merge/ui/lib/utils";
 import { ReactNode } from "react";
@@ -30,9 +17,13 @@ export type TextControlProps<
     P extends FieldPath<T> = FieldPath<T>
 > = UseControllerProps<T, P> &
     Omit<React.ComponentProps<typeof Input>, "name" | "required"> & {
+        id?: string;
         label: string;
         labelIcon?: string | ReactNode;
         isDisabled?: boolean;
+        readOnlyVariant?: string;
+        validated?: string;
+        customIcon?: ReactNode;
         helperText?: string;
         "data-testid"?: string;
         type?: string;

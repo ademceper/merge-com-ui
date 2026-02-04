@@ -1,25 +1,9 @@
-/**
- * WARNING: Before modifying this file, run the following command:
- *
- * $ npx keycloakify own --path "admin/realm-settings/localization/RealmOverrides.tsx"
- *
- * This file is provided by @keycloakify/keycloak-admin-ui version 260502.0.0.
- * It was copied into your repository by the postinstall script: `keycloakify sync-extensions`.
- */
-
-/* eslint-disable */
-
-// @ts-nocheck
-
 import type RealmRepresentation from "@keycloak/keycloak-admin-client/lib/defs/realmRepresentation";
-import {
-    KeycloakSelect,
+import { getErrorDescription, getErrorMessage, KeycloakSelect,
     ListEmptyState,
     PaginatingTableToolbar,
-    SelectVariant,
-    useAlerts
-} from "../../../shared/keycloak-ui-shared";
-import { AlertVariant } from "../../../shared/keycloak-ui-shared";
+    SelectVariant } from "../../../shared/keycloak-ui-shared";
+import { toast } from "@merge/ui/components/sonner";
 import {
     SelectGroup,
     SelectLabel,
@@ -102,8 +86,7 @@ export const RealmOverrides = ({
     const [first, setFirst] = useState(0);
     const [filter, setFilter] = useState("");
     const translationForm = useForm<TranslationForm>({ mode: "onChange" });
-    const { addAlert, addError } = useAlerts();
-    const { realm: currentRealm } = useRealm();
+const { realm: currentRealm } = useRealm();
     const { whoAmI } = useWhoAmI();
     const [selectedRowKeys, setSelectedRowKeys] = useState<string[]>([]);
     const [areAllRowsSelected, setAreAllRowsSelected] = useState(false);
@@ -199,9 +182,9 @@ export const RealmOverrides = ({
             translationForm.setValue("value", "");
             await i18n.reloadResources();
 
-            addAlert(t("addTranslationSuccess"), AlertVariant.success);
+            toast.success(t("addTranslationSuccess"));
         } catch (error) {
-            addError("addTranslationError", error);
+            toast.error(t("addTranslationError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
         }
     };
 
@@ -235,9 +218,9 @@ export const RealmOverrides = ({
                 setSelectedRowKeys([]);
                 refreshTable();
 
-                addAlert(t("deleteAllTranslationsSuccess"), AlertVariant.success);
+                toast.success(t("deleteAllTranslationsSuccess"));
             } catch (error) {
-                addError("deleteAllTranslationsError", error);
+                toast.error(t("deleteAllTranslationsError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
             }
         }
     });
@@ -288,10 +271,10 @@ export const RealmOverrides = ({
             );
             await i18n.reloadResources();
 
-            addAlert(t("updateTranslationSuccess"), AlertVariant.success);
+            toast.success(t("updateTranslationSuccess"));
             setTableRows(newRows);
         } catch (error) {
-            addError("updateTranslationError", error);
+            toast.error(t("updateTranslationError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
         }
 
         setEditStates(prevEditStates => ({

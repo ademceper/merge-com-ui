@@ -1,33 +1,17 @@
-/**
- * WARNING: Before modifying this file, run the following command:
- *
- * $ npx keycloakify own --path "admin/components/users/UserDataTable.tsx"
- *
- * This file is provided by @keycloakify/keycloak-admin-ui version 260502.0.0.
- * It was copied into your repository by the postinstall script: `keycloakify sync-extensions`.
- */
-
-/* eslint-disable */
-
-// @ts-nocheck
-
 import type { UserProfileConfig } from "@keycloak/keycloak-admin-client/lib/defs/userProfileMetadata";
 import type UserRepresentation from "@keycloak/keycloak-admin-client/lib/defs/userRepresentation";
-import {
-    KeycloakDataTable,
+import { getErrorDescription, getErrorMessage, KeycloakDataTable,
     KeycloakSpinner,
     ListEmptyState,
-    useAlerts,
-    useFetch
-} from "../../../shared/keycloak-ui-shared";
-import { AlertVariant } from "../../../shared/keycloak-ui-shared";
+    useFetch } from "../../../shared/keycloak-ui-shared";
+import { toast } from "@merge/ui/components/sonner";
 import { Button } from "@merge/ui/components/button";
 import { Badge } from "@merge/ui/components/badge";
 import { Label } from "@merge/ui/components/label";
 import { Tooltip, TooltipContent, TooltipTrigger, TooltipProvider } from "@merge/ui/components/tooltip";
 import { WarningCircle, Info, Warning } from "@phosphor-icons/react";
 import type { IRowData } from "../../../shared/keycloak-ui-shared";
-import { JSX, useState } from "react";
+import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Link, useNavigate } from "react-router-dom";
 import { useAdminClient } from "../../admin-client";
@@ -118,7 +102,7 @@ const ValidatedEmail = (user: UserRepresentation) => {
                     </Tooltip>
                 </TooltipProvider>
             )}{" "}
-            {emptyFormatter()(user.email) as JSX.Element}
+            {emptyFormatter()(user.email)}
         </>
     );
 };
@@ -127,8 +111,7 @@ export function UserDataTable() {
     const { adminClient } = useAdminClient();
 
     const { t } = useTranslation();
-    const { addAlert, addError } = useAlerts();
-    const { realm: realmName, realmRepresentation: realm } = useRealm();
+const { realm: realmName, realmRepresentation: realm } = useRealm();
     const navigate = useNavigate();
     const [uiRealmInfo, setUiRealmInfo] = useState<UiRealmInfo>({});
     const [searchUser, setSearchUser] = useState("");
@@ -193,9 +176,9 @@ export function UserDataTable() {
             });
         } catch (error) {
             if (uiRealmInfo.userProfileProvidersEnabled) {
-                addError("noUsersFoundErrorStorage", error);
+                toast.error(t("noUsersFoundErrorStorage", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
             } else {
-                addError("noUsersFoundError", error);
+                toast.error(t("noUsersFoundError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
             }
             return [];
         }
@@ -209,9 +192,9 @@ export function UserDataTable() {
             try {
                 await adminClient.attackDetection.delAll();
                 refresh();
-                addAlert(t("unlockUsersSuccess"), AlertVariant.success);
+                toast.success(t("unlockUsersSuccess"));
             } catch (error) {
-                addError("unlockUsersError", error);
+                toast.error(t("unlockUsersError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
             }
         }
     });
@@ -231,9 +214,9 @@ export function UserDataTable() {
                 }
                 setSelectedRows([]);
                 clearAllFilters();
-                addAlert(t("userDeletedSuccess"), AlertVariant.success);
+                toast.success(t("userDeletedSuccess"));
             } catch (error) {
-                addError("userDeletedError", error);
+                toast.error(t("userDeletedError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
             }
         }
     });
@@ -387,7 +370,7 @@ export function UserDataTable() {
                     {
                         title: t("delete"),
                         onClick: () => {
-                            setSelectedRows([rowData.data]);
+                            setSelectedRows([rowData.data as UserRepresentation]);
                             toggleDeleteDialog();
                         }
                     }

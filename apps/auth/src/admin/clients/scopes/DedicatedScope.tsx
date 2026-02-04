@@ -1,19 +1,5 @@
-/**
- * WARNING: Before modifying this file, run the following command:
- *
- * $ npx keycloakify own --path "admin/clients/scopes/DedicatedScope.tsx"
- *
- * This file is provided by @keycloakify/keycloak-admin-ui version 260502.0.0.
- * It was copied into your repository by the postinstall script: `keycloakify sync-extensions`.
- */
-
-/* eslint-disable */
-
-// @ts-nocheck
-
 import type ClientRepresentation from "@keycloak/keycloak-admin-client/lib/defs/clientRepresentation";
 import type { RoleMappingPayload } from "@keycloak/keycloak-admin-client/lib/defs/roleRepresentation";
-import { AlertVariant } from "../../../shared/keycloak-ui-shared";
 import { Label } from "@merge/ui/components/label";
 import { Separator } from "@merge/ui/components/separator";
 import { Switch } from "@merge/ui/components/switch";
@@ -21,7 +7,8 @@ import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { HelpItem } from "../../../shared/keycloak-ui-shared";
 import { useAdminClient } from "../../admin-client";
-import { useAlerts } from "../../../shared/keycloak-ui-shared";
+import { getErrorDescription, getErrorMessage } from "../../../shared/keycloak-ui-shared";
+import { toast } from "@merge/ui/components/sonner";
 import { FormAccess } from "../../components/form/FormAccess";
 import { RoleMapping, Row } from "../../components/role-mapping/RoleMapping";
 import { useAccess } from "../../context/access/Access";
@@ -34,9 +21,7 @@ export const DedicatedScope = ({ client: initialClient }: DedicatedScopeProps) =
     const { adminClient } = useAdminClient();
 
     const { t } = useTranslation();
-    const { addAlert, addError } = useAlerts();
-
-    const [client, setClient] = useState<ClientRepresentation>(initialClient);
+const [client, setClient] = useState<ClientRepresentation>(initialClient);
 
     const { hasAccess } = useAccess();
     const isManager = hasAccess("manage-clients") || client.access?.manage;
@@ -67,9 +52,9 @@ export const DedicatedScope = ({ client: initialClient }: DedicatedScopeProps) =
                     )
             ]);
 
-            addAlert(t("clientScopeSuccess"), AlertVariant.success);
+            toast.success(t("clientScopeSuccess"));
         } catch (error) {
-            addError("clientScopeError", error);
+            toast.error(t("clientScopeError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
         }
     };
 
@@ -77,10 +62,10 @@ export const DedicatedScope = ({ client: initialClient }: DedicatedScopeProps) =
         const newClient = { ...client, fullScopeAllowed: !client.fullScopeAllowed };
         try {
             await adminClient.clients.update({ id: client.id! }, newClient);
-            addAlert(t("clientScopeSuccess"), AlertVariant.success);
+            toast.success(t("clientScopeSuccess"));
             setClient(newClient);
         } catch (error) {
-            addError("clientScopeError", error);
+            toast.error(t("clientScopeError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
         }
     };
 

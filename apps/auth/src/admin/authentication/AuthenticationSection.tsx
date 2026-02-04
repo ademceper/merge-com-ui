@@ -1,24 +1,8 @@
-/**
- * WARNING: Before modifying this file, run the following command:
- *
- * $ npx keycloakify own --path "admin/authentication/AuthenticationSection.tsx"
- *
- * This file is provided by @keycloakify/keycloak-admin-ui version 260502.0.0.
- * It was copied into your repository by the postinstall script: `keycloakify sync-extensions`.
- */
-
-/* eslint-disable */
-
-// @ts-nocheck
-
 import { fetchWithError } from "@keycloak/keycloak-admin-client";
-import {
-    AlertVariant,
-    KeycloakDataTable,
+import { getErrorDescription, getErrorMessage, KeycloakDataTable,
     KeycloakSpinner,
-    ListEmptyState,
-    useAlerts
-} from "../../shared/keycloak-ui-shared";
+    ListEmptyState } from "../../shared/keycloak-ui-shared";
+import { toast } from "@merge/ui/components/sonner";
 import { Button } from "@merge/ui/components/button";
 import { Label } from "@merge/ui/components/label";
 import { sortBy } from "lodash-es";
@@ -72,8 +56,7 @@ export default function AuthenticationSection() {
     const { tab } = useParams<{ tab?: string }>();
     const [key, setKey] = useState(0);
     const refresh = () => setKey(key + 1);
-    const { addAlert, addError } = useAlerts();
-    const localeSort = useLocaleSort();
+const localeSort = useLocaleSort();
     const [selectedFlow, setSelectedFlow] = useState<AuthenticationType>();
     const [open, toggleOpen] = useToggle();
     const [bindFlowOpen, toggleBindFlow] = useToggle();
@@ -116,9 +99,9 @@ export default function AuthenticationSection() {
                     flowId: selectedFlow!.id!
                 });
                 refresh();
-                addAlert(t("deleteFlowSuccess"), AlertVariant.success);
+                toast.success(t("deleteFlowSuccess"));
             } catch (error) {
-                addError("deleteFlowError", error);
+                toast.error(t("deleteFlowError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
             }
         }
     });
@@ -162,49 +145,47 @@ export default function AuthenticationSection() {
                             searchPlaceholderKey="searchForFlow"
                             toolbarItem={
                                 <div>
-                                    <Button
-                                        component={props => (
-                                            <Link
-                                                {...props}
-                                                to={toCreateFlow({ realm: realmName })}
-                                            />
-                                        )}
-                                    >
-                                        {t("createFlow")}
+                                    <Button asChild>
+                                        <Link to={toCreateFlow({ realm: realmName })}>
+                                            {t("createFlow")}
+                                        </Link>
                                     </Button>
                                 </div>
                             }
-                            actionResolver={({ data }) => [
-                                {
-                                    title: t("duplicate"),
-                                    onClick: () => {
-                                        toggleOpen();
-                                        setSelectedFlow(data);
-                                    }
-                                },
-                                ...(data.usedBy?.type !== "DEFAULT"
-                                    ? [
-                                          {
-                                              title: t("bindFlow"),
-                                              onClick: () => {
-                                                  toggleBindFlow();
-                                                  setSelectedFlow(data);
+                            actionResolver={row => {
+                                const data = row.data as AuthenticationType;
+                                return [
+                                    {
+                                        title: t("duplicate"),
+                                        onClick: () => {
+                                            toggleOpen();
+                                            setSelectedFlow(data);
+                                        }
+                                    },
+                                    ...(data.usedBy?.type !== "DEFAULT"
+                                        ? [
+                                              {
+                                                  title: t("bindFlow"),
+                                                  onClick: () => {
+                                                      toggleBindFlow();
+                                                      setSelectedFlow(data);
+                                                  }
                                               }
-                                          }
-                                      ]
-                                    : []),
-                                ...(!data.builtIn && !data.usedBy
-                                    ? [
-                                          {
-                                              title: t("delete"),
-                                              onClick: () => {
-                                                  setSelectedFlow(data);
-                                                  toggleDeleteDialog();
+                                          ]
+                                        : []),
+                                    ...(!data.builtIn && !data.usedBy
+                                        ? [
+                                              {
+                                                  title: t("delete"),
+                                                  onClick: () => {
+                                                      setSelectedFlow(data);
+                                                      toggleDeleteDialog();
+                                                  }
                                               }
-                                          }
-                                      ]
-                                    : [])
-                            ]}
+                                          ]
+                                        : [])
+                                ];
+                            }}
                             columns={[
                                 {
                                     name: "alias",

@@ -1,18 +1,4 @@
-/**
- * WARNING: Before modifying this file, run the following command:
- *
- * $ npx keycloakify own --path "admin/user/UserConsents.tsx"
- *
- * This file is provided by @keycloakify/keycloak-admin-ui version 260502.0.0.
- * It was copied into your repository by the postinstall script: `keycloakify sync-extensions`.
- */
-
-/* eslint-disable */
-
-// @ts-nocheck
-
 import type UserConsentRepresentation from "@keycloak/keycloak-admin-client/lib/defs/userConsentRepresentation";
-import { AlertVariant } from "../../shared/keycloak-ui-shared";
 import { Badge } from "@merge/ui/components/badge";
 import { Cube } from "@phosphor-icons/react";
 import { cellWidth } from "../../shared/keycloak-ui-shared";
@@ -20,7 +6,8 @@ import { sortBy } from "lodash-es";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useAdminClient } from "../admin-client";
-import { useAlerts } from "../../shared/keycloak-ui-shared";
+import { getErrorDescription, getErrorMessage } from "../../shared/keycloak-ui-shared";
+import { toast } from "@merge/ui/components/sonner";
 import { useConfirmDialog } from "../components/confirm-dialog/ConfirmDialog";
 import { ListEmptyState } from "../../shared/keycloak-ui-shared";
 import { Action, KeycloakDataTable } from "../../shared/keycloak-ui-shared";
@@ -33,8 +20,7 @@ export const UserConsents = () => {
 
     const [selectedClient, setSelectedClient] = useState<UserConsentRepresentation>();
     const { t } = useTranslation();
-    const { addAlert, addError } = useAlerts();
-    const formatDate = useFormatDate();
+const formatDate = useFormatDate();
     const [key, setKey] = useState(0);
 
     const { id } = useParams<{ id: string }>();
@@ -78,9 +64,9 @@ export const UserConsents = () => {
 
                 refresh();
 
-                addAlert(t("deleteGrantsSuccess"), AlertVariant.success);
+                toast.success(t("deleteGrantsSuccess"));
             } catch (error) {
-                addError("deleteGrantsError", error);
+                toast.error(t("deleteGrantsError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
             }
         }
     });

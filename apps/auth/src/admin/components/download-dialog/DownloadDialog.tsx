@@ -1,16 +1,3 @@
-/**
- * WARNING: Before modifying this file, run the following command:
- *
- * $ npx keycloakify own --path "admin/components/download-dialog/DownloadDialog.tsx"
- *
- * This file is provided by @keycloakify/keycloak-admin-ui version 260502.0.0.
- * It was copied into your repository by the postinstall script: `keycloakify sync-extensions`.
- */
-
-/* eslint-disable */
-
-// @ts-nocheck
-
 import { fetchWithError } from "@keycloak/keycloak-admin-client";
 import { HelpItem, useFetch, useHelp } from "../../../shared/keycloak-ui-shared";
 import { Textarea } from "@merge/ui/components/textarea";

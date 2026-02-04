@@ -1,16 +1,3 @@
-/**
- * WARNING: Before modifying this file, run the following command:
- *
- * $ npx keycloakify own --path "admin/organizations/Invitations.tsx"
- *
- * This file is provided by @keycloakify/keycloak-admin-ui version 260502.0.0.
- * It was copied into your repository by the postinstall script: `keycloakify sync-extensions`.
- */
-
-/* eslint-disable */
-
-// @ts-nocheck
-
 import type { OrganizationInvitationRepresentation } from "@keycloak/keycloak-admin-client";
 import { OrganizationInvitationStatus } from "@keycloak/keycloak-admin-client";
 import { Button } from "@merge/ui/components/button";
@@ -19,7 +6,8 @@ import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useAdminClient } from "../admin-client";
 import { CheckboxFilterComponent } from "../components/dynamic/CheckboxFilterComponent";
-import { useAlerts } from "../../shared/keycloak-ui-shared";
+import { getErrorDescription, getErrorMessage } from "../../shared/keycloak-ui-shared";
+import { toast } from "@merge/ui/components/sonner";
 import { ListEmptyState } from "../../shared/keycloak-ui-shared";
 import { KeycloakDataTable } from "../../shared/keycloak-ui-shared";
 import { useParams } from "../utils/useParams";
@@ -58,8 +46,7 @@ export const Invitations = () => {
     const { t } = useTranslation();
     const { adminClient } = useAdminClient();
     const { id: orgId } = useParams<EditOrganizationParams>();
-    const { addAlert, addError } = useAlerts();
-    const [key, setKey] = useState(0);
+const [key, setKey] = useState(0);
     const refresh = () => setKey(key + 1);
     const [openInviteMembers, toggleInviteMembers] = useToggle();
     const [selectedInvitations, setSelectedInvitations] = useState<
@@ -91,7 +78,7 @@ export const Invitations = () => {
 
             return invitations;
         } catch (error) {
-            addError("organizationsInvitationsListError", error);
+            toast.error(t("organizationsInvitationsListError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
             return [];
         }
     };
@@ -113,10 +100,10 @@ export const Invitations = () => {
                 orgId,
                 invitationId: invitation.id!
             });
-            addAlert(t("organizationInvitationResent"));
+            toast.success(t("organizationInvitationResent"));
             refresh();
         } catch (error) {
-            addError("organizationInvitationResendError", error);
+            toast.error(t("organizationInvitationResendError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
         }
     };
 
@@ -132,10 +119,10 @@ export const Invitations = () => {
                     })
                 )
             );
-            addAlert(t("organizationInvitationsDeleted", { count: invitations.length }));
+            toast.success(t("organizationInvitationsDeleted", { count: invitations.length }));
             refresh();
         } catch (error) {
-            addError("organizationInvitationsDeleteError", error);
+            toast.error(t("organizationInvitationsDeleteError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
         }
     };
 
@@ -221,7 +208,7 @@ export const Invitations = () => {
                     </>
                 }
                 actionResolver={rowData => {
-                    const invitation: OrganizationInvitationRepresentation = rowData.data;
+                    const invitation = rowData.data as OrganizationInvitationRepresentation;
                     const actions = [
                         {
                             title: t("resendInvitation"),
@@ -244,9 +231,9 @@ export const Invitations = () => {
                                     await navigator.clipboard.writeText(
                                         invitation.inviteLink!
                                     );
-                                    addAlert(t("inviteLinkCopied"));
+                                    toast.success(t("inviteLinkCopied"));
                                 } catch (error) {
-                                    addError("clipboardCopyError", error);
+                                    toast.error(t("clipboardCopyError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
                                 }
                             }
                         });

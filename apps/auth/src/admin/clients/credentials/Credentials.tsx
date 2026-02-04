@@ -1,26 +1,10 @@
-/**
- * WARNING: Before modifying this file, run the following command:
- *
- * $ npx keycloakify own --path "admin/clients/credentials/Credentials.tsx"
- *
- * This file is provided by @keycloakify/keycloak-admin-ui version 260502.0.0.
- * It was copied into your repository by the postinstall script: `keycloakify sync-extensions`.
- */
-
-/* eslint-disable */
-
-// @ts-nocheck
-
 import type { AuthenticationProviderRepresentation } from "@keycloak/keycloak-admin-client/lib/defs/authenticatorConfigRepresentation";
 import type ClientRepresentation from "@keycloak/keycloak-admin-client/lib/defs/clientRepresentation";
 import type CredentialRepresentation from "@keycloak/keycloak-admin-client/lib/defs/credentialRepresentation";
-import {
-    HelpItem,
+import { getErrorDescription, getErrorMessage, HelpItem,
     SelectControl,
-    useAlerts,
-    useFetch
-} from "../../../shared/keycloak-ui-shared";
-import { AlertVariant } from "../../../shared/keycloak-ui-shared";
+    useFetch } from "../../../shared/keycloak-ui-shared";
+import { toast } from "@merge/ui/components/sonner";
 import { Alert, AlertTitle } from "@merge/ui/components/alert";
 import { Button } from "@merge/ui/components/button";
 import { Label } from "@merge/ui/components/label";
@@ -53,8 +37,7 @@ export const Credentials = ({ client, save, refresh }: CredentialsProps) => {
     const { adminClient } = useAdminClient();
 
     const { t } = useTranslation();
-    const { addAlert, addError } = useAlerts();
-    const clientId = client.id!;
+const clientId = client.id!;
 
     const [providers, setProviders] = useState<AuthenticationProviderRepresentation[]>(
         []
@@ -109,10 +92,10 @@ export const Credentials = ({ client, save, refresh }: CredentialsProps) => {
     ): Promise<T | undefined> {
         try {
             const data = await call(clientId);
-            addAlert(t(`${message}Success`), AlertVariant.success);
+            toast.success(t(`${message}Success`));
             return data;
         } catch (error) {
-            addError(`${message}Error`, error);
+            toast.error(t(`${message}Error`, { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
         }
     }
 

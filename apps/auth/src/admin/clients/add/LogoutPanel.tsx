@@ -1,16 +1,3 @@
-/**
- * WARNING: Before modifying this file, run the following command:
- *
- * $ npx keycloakify own --path "admin/clients/add/LogoutPanel.tsx"
- *
- * This file is provided by @keycloakify/keycloak-admin-ui version 260502.0.0.
- * It was copied into your repository by the postinstall script: `keycloakify sync-extensions`.
- */
-
-/* eslint-disable */
-
-// @ts-nocheck
-
 import { Switch } from "@merge/ui/components/switch";
 import { Label } from "@merge/ui/components/label";
 import { Controller, useFormContext } from "react-hook-form";
@@ -29,12 +16,11 @@ const validateUrl = (uri: string | undefined, error: string) =>
     uri === "" ||
     error;
 
-export const LogoutPanel = ({ save, reset, client: { access } }: ClientSettingsProps) => {
+export const LogoutPanel = ({ client: { access } }: ClientSettingsProps) => {
     const { t } = useTranslation();
     const { control, watch } = useFormContext<FormFields>();
 
-    const { hasAccess } = useAccess();
-    const isManager = hasAccess("manage-clients") || access?.configure;
+    useAccess();
 
     const protocol = watch("protocol");
     const frontchannelLogout = watch("frontchannelLogout");

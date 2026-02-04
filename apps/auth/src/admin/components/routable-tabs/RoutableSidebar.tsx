@@ -3,9 +3,6 @@
  * RoutableTabs ile aynı API: Tab children (eventKey, title, children).
  */
 
-/* eslint-disable */
-// @ts-nocheck
-
 import { Tabs, TabsContent } from "@merge/ui/components/tabs";
 import { Button } from "@merge/ui/components/button";
 import { Sheet, SheetContent, SheetTrigger } from "@merge/ui/components/sheet";

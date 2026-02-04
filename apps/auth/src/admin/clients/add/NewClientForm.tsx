@@ -1,17 +1,5 @@
-/**
- * WARNING: Before modifying this file, run the following command:
- *
- * $ npx keycloakify own --path "admin/clients/add/NewClientForm.tsx"
- *
- * This file is provided by @keycloakify/keycloak-admin-ui version 260502.0.0.
- * It was copied into your repository by the postinstall script: `keycloakify sync-extensions`.
- */
-
-/* eslint-disable */
-
-// @ts-nocheck
-
-import { AlertVariant, useAlerts } from "../../../shared/keycloak-ui-shared";
+import { getErrorDescription, getErrorMessage } from "../../../shared/keycloak-ui-shared";
+import { toast } from "@merge/ui/components/sonner";
 import { Button } from "@merge/ui/components/button";
 import { FormProvider, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
@@ -44,9 +32,7 @@ export default function NewClientForm() {
     const navigate = useNavigate();
     const [saving, setSaving] = useState<boolean>(false);
     const [currentStep, setCurrentStep] = useState(0);
-
-    const { addAlert, addError } = useAlerts();
-    const form = useForm<FormFields>({
+const form = useForm<FormFields>({
         defaultValues: {
             protocol: "openid-connect",
             clientId: "",
@@ -76,10 +62,10 @@ export default function NewClientForm() {
                 ...client,
                 clientId: client.clientId?.trim()
             });
-            addAlert(t("createClientSuccess"), AlertVariant.success);
+            toast.success(t("createClientSuccess"));
             navigate(toClient({ realm, clientId: newClient.id, tab: "settings" }));
         } catch (error) {
-            addError("createClientError", error);
+            toast.error(t("createClientError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
         } finally {
             setSaving(false);
         }

@@ -1,22 +1,9 @@
-/**
- * WARNING: Before modifying this file, run the following command:
- *
- * $ npx keycloakify own --path "admin/realm-settings/NewAttributeSettings.tsx"
- *
- * This file is provided by @keycloakify/keycloak-admin-ui version 260502.0.0.
- * It was copied into your repository by the postinstall script: `keycloakify sync-extensions`.
- */
-
-/* eslint-disable */
-
-// @ts-nocheck
-
 import type {
     UserProfileAttribute,
     UserProfileConfig
 } from "@keycloak/keycloak-admin-client/lib/defs/userProfileMetadata";
-import { ScrollForm, useAlerts, useFetch } from "../../shared/keycloak-ui-shared";
-import { AlertVariant } from "../../shared/keycloak-ui-shared";
+import { getErrorDescription, getErrorMessage, ScrollForm, useFetch } from "../../shared/keycloak-ui-shared";
+import { toast } from "@merge/ui/components/sonner";
 import { Button } from "@merge/ui/components/button";
 import { flatten } from "flat";
 import { useState } from "react";
@@ -140,8 +127,7 @@ export default function NewAttributeSettings() {
     const form = useForm<UserProfileAttributeFormFields>();
     const { t } = useTranslation();
     const navigate = useNavigate();
-    const { addAlert, addError } = useAlerts();
-    const [config, setConfig] = useState<UserProfileConfig | null>(null);
+const [config, setConfig] = useState<UserProfileConfig | null>(null);
     const editMode = attributeName ? true : false;
 
     useFetch(
@@ -284,14 +270,14 @@ export default function NewAttributeSettings() {
                         }
                     });
                 } catch (error) {
-                    addError(t("errorSavingTranslations"), error);
+                    toast.error(t("errorSavingTranslations", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
                 }
             }
             navigate(toUserProfile({ realm: realmName, tab: "attributes" }));
 
-            addAlert(t("createAttributeSuccess"), AlertVariant.success);
+            toast.success(t("createAttributeSuccess"));
         } catch (error) {
-            addError("createAttributeError", error);
+            toast.error(t("createAttributeError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
         }
     };
 

@@ -1,18 +1,6 @@
-/**
- * WARNING: Before modifying this file, run the following command:
- *
- * $ npx keycloakify own --path "admin/authentication/BindFlowDialog.tsx"
- *
- * This file is provided by @keycloakify/keycloak-admin-ui version 260502.0.0.
- * It was copied into your repository by the postinstall script: `keycloakify sync-extensions`.
- */
-
-/* eslint-disable */
-
-// @ts-nocheck
-
 import type RealmRepresentation from "@keycloak/keycloak-admin-client/lib/defs/realmRepresentation";
-import { AlertVariant, SelectControl, useAlerts } from "../../shared/keycloak-ui-shared";
+import { getErrorDescription, getErrorMessage, SelectControl } from "../../shared/keycloak-ui-shared";
+import { toast } from "@merge/ui/components/sonner";
 import { Button } from "@merge/ui/components/button";
 import {
     Dialog,
@@ -41,8 +29,7 @@ export const BindFlowDialog = ({ flowAlias, onClose }: BindFlowDialogProps) => {
 
     const { t } = useTranslation();
     const form = useForm<BindingForm>();
-    const { addAlert, addError } = useAlerts();
-    const { realm, realmRepresentation: realmRep, refresh } = useRealm();
+const { realm, realmRepresentation: realmRep, refresh } = useRealm();
 
     const onSubmit = async ({ bindingType }: BindingForm) => {
         try {
@@ -51,9 +38,9 @@ export const BindFlowDialog = ({ flowAlias, onClose }: BindFlowDialogProps) => {
                 { ...realmRep, [bindingType]: flowAlias }
             );
             refresh();
-            addAlert(t("updateFlowSuccess"), AlertVariant.success);
+            toast.success(t("updateFlowSuccess"));
         } catch (error) {
-            addError("updateFlowError", error);
+            toast.error(t("updateFlowError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
         }
 
         onClose(true);

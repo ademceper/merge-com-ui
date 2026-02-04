@@ -1,23 +1,9 @@
-/**
- * WARNING: Before modifying this file, run the following command:
- *
- * $ npx keycloakify own --path "admin/realm-settings/security-defences/HeadersForm.tsx"
- *
- * This file is provided by @keycloakify/keycloak-admin-ui version 260502.0.0.
- * It was copied into your repository by the postinstall script: `keycloakify sync-extensions`.
- */
-
-/* eslint-disable */
-
-// @ts-nocheck
-
 import type RealmRepresentation from "@keycloak/keycloak-admin-client/lib/defs/realmRepresentation";
 import { Button } from "@merge/ui/components/button";
 import { useFormContext } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { FormAccess } from "../../components/form/FormAccess";
 import { HelpLinkTextInput } from "./HelpLinkTextInput";
-
 
 type HeadersFormProps = {
     realm: RealmRepresentation;

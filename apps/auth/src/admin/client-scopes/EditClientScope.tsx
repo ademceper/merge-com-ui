@@ -1,29 +1,13 @@
-/**
- * WARNING: Before modifying this file, run the following command:
- *
- * $ npx keycloakify own --path "admin/client-scopes/EditClientScope.tsx"
- *
- * This file is provided by @keycloakify/keycloak-admin-ui version 260502.0.0.
- * It was copied into your repository by the postinstall script: `keycloakify sync-extensions`.
- */
-
-/* eslint-disable */
-
-// @ts-nocheck
-
 import ClientScopeRepresentation from "@keycloak/keycloak-admin-client/lib/defs/clientScopeRepresentation";
 import type ProtocolMapperRepresentation from "@keycloak/keycloak-admin-client/lib/defs/protocolMapperRepresentation";
 import type { RoleMappingPayload } from "@keycloak/keycloak-admin-client/lib/defs/roleRepresentation";
 import type { ProtocolMapperTypeRepresentation } from "@keycloak/keycloak-admin-client/lib/defs/serverInfoRepesentation";
-import {
-    KeycloakSpinner,
-    useAlerts,
+import { getErrorDescription, getErrorMessage, KeycloakSpinner,
     useFetch,
-    useHelp
-} from "../../shared/keycloak-ui-shared";
+    useHelp } from "../../shared/keycloak-ui-shared";
+import { toast } from "@merge/ui/components/sonner";
 import { Alert, AlertTitle } from "@merge/ui/components/alert";
 import { DropdownMenuItem } from "@merge/ui/components/dropdown-menu";
-import { AlertVariant } from "../../shared/keycloak-ui-shared";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useNavigate, useParams as useRouterParams } from "react-router-dom";
@@ -56,8 +40,7 @@ export default function EditClientScope() {
     const { realm, realmRepresentation } = useRealm();
     const { id } = useParams<ClientScopeParams>();
     const { tab } = useRouterParams<{ tab?: string }>();
-    const { addAlert, addError } = useAlerts();
-    const { enabled } = useHelp();
+const { enabled } = useHelp();
     const [clientScope, setClientScope] = useState<ClientScopeDefaultOptionalType>();
     const [key, setKey] = useState(0);
     const refresh = () => setKey(key + 1);
@@ -111,9 +94,9 @@ export default function EditClientScope() {
             await adminClient.clientScopes.update({ id }, clientScope);
             await changeScope(adminClient, { ...clientScope, id }, clientScope.type);
 
-            addAlert(t("updateSuccessClientScope"), AlertVariant.success);
+            toast.success(t("updateSuccessClientScope"));
         } catch (error) {
-            addError("updateErrorClientScope", error);
+            toast.error(t("updateErrorClientScope", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
         }
     };
 
@@ -128,10 +111,10 @@ export default function EditClientScope() {
         onConfirm: async () => {
             try {
                 await adminClient.clientScopes.del({ id });
-                addAlert(t("deletedSuccessClientScope"), AlertVariant.success);
+                toast.success(t("deletedSuccessClientScope"));
                 navigate(toClientScopes({ realm }));
             } catch (error) {
-                addError("deleteErrorClientScope", error);
+                toast.error(t("deleteErrorClientScope", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
             }
         }
     });
@@ -161,9 +144,9 @@ export default function EditClientScope() {
                         )
                     )
             );
-            addAlert(t("roleMappingUpdatedSuccess"), AlertVariant.success);
+            toast.success(t("roleMappingUpdatedSuccess"));
         } catch (error) {
-            addError("roleMappingUpdatedError", error);
+            toast.error(t("roleMappingUpdatedError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
         }
     };
 
@@ -187,9 +170,9 @@ export default function EditClientScope() {
                     mappers as ProtocolMapperRepresentation[]
                 );
                 refresh();
-                addAlert(t("mappingCreatedSuccess"), AlertVariant.success);
+                toast.success(t("mappingCreatedSuccess"));
             } catch (error) {
-                addError("mappingCreatedError", error);
+                toast.error(t("mappingCreatedError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
             }
         }
     };
@@ -200,10 +183,10 @@ export default function EditClientScope() {
                 id: clientScope!.id!,
                 mapperId: mapper.id!
             });
-            addAlert(t("mappingDeletedSuccess"), AlertVariant.success);
+            toast.success(t("mappingDeletedSuccess"));
             refresh();
         } catch (error) {
-            addError("mappingDeletedError", error);
+            toast.error(t("mappingDeletedError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
         }
         return true;
     };

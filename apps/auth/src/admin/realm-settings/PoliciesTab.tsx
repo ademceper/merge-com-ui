@@ -1,26 +1,10 @@
-/**
- * WARNING: Before modifying this file, run the following command:
- *
- * $ npx keycloakify own --path "admin/realm-settings/PoliciesTab.tsx"
- *
- * This file is provided by @keycloakify/keycloak-admin-ui version 260502.0.0.
- * It was copied into your repository by the postinstall script: `keycloakify sync-extensions`.
- */
-
-/* eslint-disable */
-
-// @ts-nocheck
-
 import type ClientPolicyRepresentation from "@keycloak/keycloak-admin-client/lib/defs/clientPolicyRepresentation";
-import {
-    Action,
+import { getErrorDescription, getErrorMessage, Action,
     KeycloakDataTable,
     KeycloakSpinner,
     ListEmptyState,
-    useAlerts,
-    useFetch,
-    AlertVariant
-} from "../../shared/keycloak-ui-shared";
+    useFetch } from "../../shared/keycloak-ui-shared";
+import { toast } from "@merge/ui/components/sonner";
 import { Button } from "@merge/ui/components/button";
 import { Switch } from "@merge/ui/components/switch";
 import { Separator } from "@merge/ui/components/separator";
@@ -41,7 +25,6 @@ import { toAddClientPolicy } from "./routes/AddClientPolicy";
 import { toClientPolicies } from "./routes/ClientPolicies";
 import { toEditClientPolicy } from "./routes/EditClientPolicy";
 
-
 type ClientPolicy = ClientPolicyRepresentation & {
     global?: boolean;
 };
@@ -50,8 +33,7 @@ export const PoliciesTab = () => {
     const { adminClient } = useAdminClient();
 
     const { t } = useTranslation();
-    const { addAlert, addError } = useAlerts();
-    const { realm } = useRealm();
+const { realm } = useRealm();
     const navigate = useNavigate();
     const [show, setShow] = useState(false);
     const [policies, setPolicies] = useState<ClientPolicy[]>();
@@ -112,9 +94,9 @@ export const PoliciesTab = () => {
                 policies: updatedPolicies
             });
             navigate(toClientPolicies({ realm, tab: "policies" }));
-            addAlert(t("updateClientPolicySuccess"), AlertVariant.success);
+            toast.success(t("updateClientPolicySuccess"));
         } catch (error) {
-            addError("updateClientPolicyError", error);
+            toast.error(t("updateClientPolicyError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
         }
     };
 
@@ -142,14 +124,14 @@ export const PoliciesTab = () => {
                     policies: changedPolicies,
                     globalPolicies: changedGlobalPolicies
                 });
-                addAlert(t("updateClientPoliciesSuccess"), AlertVariant.success);
+                toast.success(t("updateClientPoliciesSuccess"));
                 refresh();
             } catch (error) {
-                addError("updateClientPoliciesError", error);
+                toast.error(t("updateClientPoliciesError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
             }
         } catch (error) {
             console.warn("Invalid json, ignoring value using {}");
-            addError("invalidJsonClientPoliciesError", error);
+            toast.error(t("invalidJsonClientPoliciesError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
         }
     };
 
@@ -159,7 +141,7 @@ export const PoliciesTab = () => {
             policyName: selectedPolicy?.name
         }),
         continueButtonLabel: t("delete"),
-        continueButtonVariant: "danger",
+        continueButtonVariant: "destructive",
         onConfirm: async () => {
             const updatedPolicies = policies
                 ?.filter(policy => {
@@ -175,10 +157,10 @@ export const PoliciesTab = () => {
                 await adminClient.clientPolicies.updatePolicy({
                     policies: updatedPolicies
                 });
-                addAlert(t("deleteClientPolicySuccess"), AlertVariant.success);
+                toast.success(t("deleteClientPolicySuccess"));
                 refresh();
             } catch (error) {
-                addError("deleteClientPolicyError", error);
+                toast.error(t("deleteClientPolicyError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
             }
         }
     });

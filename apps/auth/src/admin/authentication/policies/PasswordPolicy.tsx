@@ -1,19 +1,7 @@
-/**
- * WARNING: Before modifying this file, run the following command:
- *
- * $ npx keycloakify own --path "admin/authentication/policies/PasswordPolicy.tsx"
- *
- * This file is provided by @keycloakify/keycloak-admin-ui version 260502.0.0.
- * It was copied into your repository by the postinstall script: `keycloakify sync-extensions`.
- */
-
-/* eslint-disable */
-
-// @ts-nocheck
-
 import type PasswordPolicyTypeRepresentation from "@keycloak/keycloak-admin-client/lib/defs/passwordPolicyTypeRepresentation";
 import type RealmRepresentation from "@keycloak/keycloak-admin-client/lib/defs/realmRepresentation";
-import { AlertVariant, useAlerts } from "../../../shared/keycloak-ui-shared";
+import { getErrorDescription, getErrorMessage } from "../../../shared/keycloak-ui-shared";
+import { toast } from "@merge/ui/components/sonner";
 import { Button } from "@merge/ui/components/button";
 import { Separator } from "@merge/ui/components/separator";
 import {
@@ -90,9 +78,7 @@ export const PasswordPolicy = ({ realm, realmUpdated }: PasswordPolicyProps) => 
 
     const { t } = useTranslation();
     const { passwordPolicies } = useServerInfo();
-
-    const { addAlert, addError } = useAlerts();
-    const { realm: realmName, refresh } = useRealm();
+const { realm: realmName, refresh } = useRealm();
 
     const [rows, setRows] = useState<PasswordPolicyTypeRepresentation[]>([]);
     const onSelect = (row: PasswordPolicyTypeRepresentation) => {
@@ -131,9 +117,9 @@ export const PasswordPolicy = ({ realm, realmUpdated }: PasswordPolicyProps) => 
             realmUpdated(updatedRealm);
             setupForm(updatedRealm);
             refresh();
-            addAlert(t("updatePasswordPolicySuccess"), AlertVariant.success);
+            toast.success(t("updatePasswordPolicySuccess"));
         } catch (error: any) {
-            addError("updatePasswordPolicyError", error);
+            toast.error(t("updatePasswordPolicyError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
         }
     };
 
@@ -169,9 +155,9 @@ export const PasswordPolicy = ({ realm, realmUpdated }: PasswordPolicyProps) => 
                                 <div className="flex gap-2">
                                     <Button
                                         data-testid="save"
-                                        variant="primary"
+                                        variant="default"
                                         type="submit"
-                                        isDisabled={!isDirty}
+                                        disabled={!isDirty}
                                     >
                                         {t("save")}
                                     </Button>

@@ -1,16 +1,3 @@
-/**
- * WARNING: Before modifying this file, run the following command:
- *
- * $ npx keycloakify own --path "admin/user-federation/ldap/LdapSettingsKerberosIntegration.tsx"
- *
- * This file is provided by @keycloakify/keycloak-admin-ui version 260502.0.0.
- * It was copied into your repository by the postinstall script: `keycloakify sync-extensions`.
- */
-
-/* eslint-disable */
-
-// @ts-nocheck
-
 import { Controller, FormProvider, UseFormReturn, useWatch } from "react-hook-form";
 import { Switch } from "@merge/ui/components/switch";
 import { FormLabel } from "../../../shared/keycloak-ui-shared";

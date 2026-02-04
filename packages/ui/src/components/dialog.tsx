@@ -93,10 +93,8 @@ export function DialogContent({
     return (
       <DrawerContentBase
         data-slot="dialog-content"
-        contentClassName={cn(
-          "min-h-0 flex-1 overflow-y-auto overflow-x-hidden overscroll-contain [-webkit-overflow-scrolling:touch] px-4 pt-4 pb-4 border-b-0 [&_input]:focus-visible:ring-inset"
-        )}
-        className={cn("gap-0 pt-4 pb-0 flex min-h-0 flex-col", className)}
+        contentClassName="px-4 pt-4 pb-4 border-b-0 [&_input]:focus-visible:ring-inset"
+        className={cn("gap-0 pt-4 pb-0", className)}
         {...props}
       >
         {headerChild != null && headerChild}
@@ -123,7 +121,7 @@ export function DialogContent({
       <DialogPrimitive.Content
         data-slot="dialog-content"
         className={cn(
-          "bg-background data-open:animate-in data-closed:animate-out data-closed:fade-out-0 data-open:fade-in-0 data-closed:zoom-out-95 data-open:zoom-in-95 ring-foreground/10 flex min-h-0 max-h-[60vh] max-w-[calc(100%-2rem)] flex-col overflow-hidden rounded-xl text-sm ring-1 duration-100 sm:max-w-sm fixed top-1/2 left-1/2 z-50 w-full -translate-x-1/2 -translate-y-1/2",
+          "bg-background data-open:animate-in data-closed:animate-out data-closed:fade-out-0 data-open:fade-in-0 data-closed:zoom-out-95 data-open:zoom-in-95 ring-foreground/10 flex min-h-0 max-h-[90vh] max-w-[calc(100%-2rem)] flex-col overflow-hidden rounded-xl text-sm ring-1 duration-100 sm:max-w-sm fixed top-1/2 left-1/2 z-50 w-full -translate-x-1/2 -translate-y-1/2",
           className
         )}
         {...props}
@@ -137,7 +135,7 @@ export function DialogContent({
           </DialogPrimitive.Close>
         )}
         {headerChild != null && <div className="shrink-0 px-4 pt-4">{headerChild}</div>}
-        <div className="min-h-0 flex-1 overflow-y-auto overflow-x-hidden px-4 pt-4 pb-4">
+        <div className="min-h-0 flex-auto overflow-y-auto overflow-x-hidden px-4 pt-4 pb-4">
           {contentChildren}
         </div>
         {footerChild != null && (
@@ -185,8 +183,7 @@ export function DialogFooter({
       <DrawerFooterBase
         data-slot="dialog-footer"
         className={cn(
-          "bg-muted/50 border-t border-border px-4 pt-3 pb-3 flex flex-col gap-3",
-          "[&>div:last-child]:flex [&>div:last-child]:w-full [&>div:last-child]:flex-col [&>div:last-child]:gap-2 [&>div:last-child>*]:w-full",
+          "bg-muted/50 border-t border-border px-4 pt-3 pb-3 flex flex-col gap-2",
           className
         )}
         {...props}

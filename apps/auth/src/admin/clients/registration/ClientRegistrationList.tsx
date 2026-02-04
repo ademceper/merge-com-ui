@@ -1,18 +1,6 @@
-/**
- * WARNING: Before modifying this file, run the following command:
- *
- * $ npx keycloakify own --path "admin/clients/registration/ClientRegistrationList.tsx"
- *
- * This file is provided by @keycloakify/keycloak-admin-ui version 260502.0.0.
- * It was copied into your repository by the postinstall script: `keycloakify sync-extensions`.
- */
-
-/* eslint-disable */
-
-// @ts-nocheck
-
 import ComponentRepresentation from "@keycloak/keycloak-admin-client/lib/defs/componentRepresentation";
-import { useAlerts, useFetch } from "../../../shared/keycloak-ui-shared";
+import { getErrorDescription, getErrorMessage, useFetch } from "../../../shared/keycloak-ui-shared";
+import { toast } from "@merge/ui/components/sonner";
 import { Button } from "@merge/ui/components/button";
 import {
     DataTable,
@@ -40,9 +28,7 @@ export const ClientRegistrationList = ({ subType }: ClientRegistrationListProps)
     const { t } = useTranslation();
     const { subTab } = useParams<ClientRegistrationParams>();
     const navigate = useNavigate();
-
-    const { addAlert, addError } = useAlerts();
-    const { realm } = useRealm();
+const { realm } = useRealm();
     const [policies, setPolicies] = useState<ComponentRepresentation[]>([]);
     const [selectedPolicy, setSelectedPolicy] = useState<ComponentRepresentation>();
     const [isAddDialogOpen, toggleAddDialog] = useToggle();
@@ -71,11 +57,11 @@ export const ClientRegistrationList = ({ subType }: ClientRegistrationListProps)
                     realm,
                     id: selectedPolicy?.id!
                 });
-                addAlert(t("clientRegisterPolicyDeleteSuccess"));
+                toast.success(t("clientRegisterPolicyDeleteSuccess"));
                 setSelectedPolicy(undefined);
                 refresh();
             } catch (error) {
-                addError("clientRegisterPolicyDeleteError", error);
+                toast.error(t("clientRegisterPolicyDeleteError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
             }
         }
     });

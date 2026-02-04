@@ -1,22 +1,9 @@
-/**
- * WARNING: Before modifying this file, run the following command:
- *
- * $ npx keycloakify own --path "admin/clients/authorization/DeleteScopeDialog.tsx"
- *
- * This file is provided by @keycloakify/keycloak-admin-ui version 260502.0.0.
- * It was copied into your repository by the postinstall script: `keycloakify sync-extensions`.
- */
-
-/* eslint-disable */
-
-// @ts-nocheck
-
 import type ScopeRepresentation from "@keycloak/keycloak-admin-client/lib/defs/scopeRepresentation";
 import { Alert, AlertTitle, AlertDescription } from "@merge/ui/components/alert";
 import { useTranslation } from "react-i18next";
 import { useAdminClient } from "../../admin-client";
-import { useAlerts } from "../../../shared/keycloak-ui-shared";
-import { AlertVariant } from "../../../shared/keycloak-ui-shared";
+import { getErrorDescription, getErrorMessage } from "../../../shared/keycloak-ui-shared";
+import { toast } from "@merge/ui/components/sonner";
 import { ConfirmDialogModal } from "../../components/confirm-dialog/ConfirmDialog";
 import type { PermissionScopeRepresentation } from "./Scopes";
 
@@ -38,9 +25,7 @@ export const DeleteScopeDialog = ({
     const { adminClient } = useAdminClient();
 
     const { t } = useTranslation();
-    const { addAlert, addError } = useAlerts();
-
-    return (
+return (
         <ConfirmDialogModal
             open={open}
             toggleDialog={toggleDialog}
@@ -52,10 +37,10 @@ export const DeleteScopeDialog = ({
                         id: clientId,
                         scopeId: selectedScope?.id!
                     });
-                    addAlert(t("resourceScopeSuccess"), AlertVariant.success);
+                    toast.success(t("resourceScopeSuccess"));
                     refresh();
                 } catch (error) {
-                    addError("resourceScopeError", error);
+                    toast.error(t("resourceScopeError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
                 }
             }}
         >

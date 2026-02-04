@@ -1,19 +1,6 @@
-/**
- * WARNING: Before modifying this file, run the following command:
- *
- * $ npx keycloakify own --path "admin/components/roles-list/RolesList.tsx"
- *
- * This file is provided by @keycloakify/keycloak-admin-ui version 260502.0.0.
- * It was copied into your repository by the postinstall script: `keycloakify sync-extensions`.
- */
-
-/* eslint-disable */
-
-// @ts-nocheck
-
 import type RoleRepresentation from "@keycloak/keycloak-admin-client/lib/defs/roleRepresentation";
-import { HelpItem, useAlerts } from "../../../shared/keycloak-ui-shared";
-import { AlertVariant } from "../../../shared/keycloak-ui-shared";
+import { getErrorDescription, getErrorMessage, HelpItem } from "../../../shared/keycloak-ui-shared";
+import { toast } from "@merge/ui/components/sonner";
 import { Button } from "@merge/ui/components/button";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -84,8 +71,7 @@ export const RolesList = ({
 
     const { t } = useTranslation();
     const navigate = useNavigate();
-    const { addAlert, addError } = useAlerts();
-    const { realmRepresentation: realm } = useRealm();
+const { realmRepresentation: realm } = useRealm();
 
     const [selectedRole, setSelectedRole] = useState<RoleRepresentation>();
 
@@ -108,9 +94,9 @@ export const RolesList = ({
                     ]);
                 }
                 setSelectedRole(undefined);
-                addAlert(t("roleDeletedSuccess"), AlertVariant.success);
+                toast.success(t("roleDeletedSuccess"));
             } catch (error) {
-                addError("roleDeleteError", error);
+                toast.error(t("roleDeleteError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
             }
         }
     });
@@ -146,10 +132,7 @@ export const RolesList = ({
                                           realm?.defaultRole &&
                                           role.name === realm!.defaultRole!.name
                                       ) {
-                                          addAlert(
-                                              t("defaultRoleDeleteError"),
-                                              AlertVariant.danger
-                                          );
+                                          toast.error(t("defaultRoleDeleteError"));
                                       } else toggleDeleteDialog();
                                   }
                               } as Action<RoleRepresentation>

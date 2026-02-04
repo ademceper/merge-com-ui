@@ -1,16 +1,3 @@
-/**
- * WARNING: Before modifying this file, run the following command:
- *
- * $ npx keycloakify own --path "admin/organizations/OrganizationForm.tsx"
- *
- * This file is provided by @keycloakify/keycloak-admin-ui version 260502.0.0.
- * It was copied into your repository by the postinstall script: `keycloakify sync-extensions`.
- */
-
-/* eslint-disable */
-
-// @ts-nocheck
-
 import OrganizationRepresentation from "@keycloak/keycloak-admin-client/lib/defs/organizationRepresentation";
 import { FormErrorText, TextAreaControl, TextControl } from "../../shared/keycloak-ui-shared";
 import { useEffect } from "react";
@@ -31,10 +18,19 @@ export const convertToOrg = (org: OrganizationFormType): OrganizationRepresentat
     attributes: keyValueToArray(org.attributes)
 });
 
-/** Güncelleme için: alias Keycloak tarafında değiştirilemediği için payload'dan çıkarılır. */
-export const convertToOrgForUpdate = (org: OrganizationFormType): Omit<OrganizationRepresentation, "alias"> => {
-    const { alias: _alias, ...rest } = convertToOrg(org);
-    return rest;
+/**
+ * Güncelleme için: Keycloak alias değişikliğine izin vermiyor ("Cannot change the alias").
+ * Sadece güncellenebilir alanları açıkça gönderiyoruz; alias ve id hiç eklenmiyor.
+ */
+export const convertToOrgForUpdate = (org: OrganizationFormType): Omit<OrganizationRepresentation, "alias" | "id"> => {
+    return {
+        name: org.name,
+        description: org.description,
+        domains: org.domains?.map(d => ({ name: d, verified: false })),
+        redirectUrl: org.redirectUrl,
+        attributes: keyValueToArray(org.attributes),
+        enabled: org.enabled
+    };
 };
 
 type OrganizationFormProps = {

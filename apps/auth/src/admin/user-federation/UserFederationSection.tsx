@@ -1,19 +1,6 @@
-/**
- * WARNING: Before modifying this file, run the following command:
- *
- * $ npx keycloakify own --path "admin/user-federation/UserFederationSection.tsx"
- *
- * This file is provided by @keycloakify/keycloak-admin-ui version 260502.0.0.
- * It was copied into your repository by the postinstall script: `keycloakify sync-extensions`.
- */
-
-/* eslint-disable */
-
-// @ts-nocheck
-
 import type ComponentRepresentation from "@keycloak/keycloak-admin-client/lib/defs/componentRepresentation";
-import { useAlerts, useFetch } from "../../shared/keycloak-ui-shared";
-import { AlertVariant } from "../../shared/keycloak-ui-shared";
+import { getErrorDescription, getErrorMessage, useFetch } from "../../shared/keycloak-ui-shared";
+import { toast } from "@merge/ui/components/sonner";
 import { CardTitle } from "@merge/ui/components/card";
 import { DropdownMenuItem } from "@merge/ui/components/dropdown-menu";
 import { Database } from "@phosphor-icons/react";
@@ -35,13 +22,11 @@ import { toNewCustomUserFederation } from "./routes/NewCustomUserFederation";
 import { toUserFederationKerberos } from "./routes/UserFederationKerberos";
 import { toUserFederationLdap } from "./routes/UserFederationLdap";
 
-
 export default function UserFederationSection() {
     const { adminClient } = useAdminClient();
 
     const [userFederations, setUserFederations] = useState<ComponentRepresentation[]>();
-    const { addAlert, addError } = useAlerts();
-    const { t } = useTranslation();
+const { t } = useTranslation();
     const { realm, realmRepresentation } = useRealm();
     const [key, setKey] = useState(0);
     const refresh = () => setKey(new Date().getTime());
@@ -103,9 +88,9 @@ export default function UserFederationSection() {
             try {
                 await adminClient.components.del({ id: currentCard });
                 refresh();
-                addAlert(t("userFedDeletedSuccess"), AlertVariant.success);
+                toast.success(t("userFedDeletedSuccess"));
             } catch (error) {
-                addError("userFedDeleteError", error);
+                toast.error(t("userFedDeleteError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
             }
         }
     });

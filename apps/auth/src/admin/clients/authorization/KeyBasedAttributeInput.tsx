@@ -1,16 +1,3 @@
-/**
- * WARNING: Before modifying this file, run the following command:
- *
- * $ npx keycloakify own --path "admin/clients/authorization/KeyBasedAttributeInput.tsx"
- *
- * This file is provided by @keycloakify/keycloak-admin-ui version 260502.0.0.
- * It was copied into your repository by the postinstall script: `keycloakify sync-extensions`.
- */
-
-/* eslint-disable */
-
-// @ts-nocheck
-
 import type ResourceRepresentation from "@keycloak/keycloak-admin-client/lib/defs/resourceRepresentation";
 import { KeycloakSelect, SelectVariant } from "../../../shared/keycloak-ui-shared";
 const SelectOption = ({ value, children, selected, ...props }: any) => <option value={value} {...props}>{children}</option>;
@@ -30,7 +17,6 @@ import { useEffect, useMemo, useState } from "react";
 import { Controller, useFieldArray, useFormContext } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { defaultContextAttributes } from "../utils";
-
 
 export type AttributeType = {
     key?: string;

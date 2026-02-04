@@ -1,16 +1,3 @@
-/**
- * WARNING: Before modifying this file, run the following command:
- *
- * $ npx keycloakify own --path "admin/user/UsersSection.tsx"
- *
- * This file is provided by @keycloakify/keycloak-admin-ui version 260502.0.0.
- * It was copied into your repository by the postinstall script: `keycloakify sync-extensions`.
- */
-
-/* eslint-disable */
-
-// @ts-nocheck
-
 import { useTranslation } from "react-i18next";
 import { useParams } from "react-router-dom";
 import { ViewHeader } from "../components/view-header/ViewHeader";
@@ -22,8 +9,8 @@ import useIsFeatureEnabled, { Feature } from "../utils/useIsFeatureEnabled";
 import { useAccess } from "../context/access/Access";
 
 export default function UsersSection() {
-    const { t } = useTranslation();
-    const { realm: realmName } = useRealm();
+    useTranslation();
+    useRealm();
     const { tab } = useParams<{ tab?: string }>();
     const { hasAccess } = useAccess();
     const isFeatureEnabled = useIsFeatureEnabled();

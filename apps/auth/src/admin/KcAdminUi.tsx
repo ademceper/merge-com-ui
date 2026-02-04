@@ -5,7 +5,7 @@ import { createHashRouter, RouterProvider } from "react-router-dom";
 import { i18n } from "./i18n/i18n";
 import { RootRoute } from "./routes";
 
-document.title = "Keycloak Administration Console";
+document.title = "Merge Administration Console";
 
 const router = createHashRouter([RootRoute]);
 const prI18nInitialized = i18n.init();

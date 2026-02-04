@@ -4,9 +4,6 @@
  * (used inside ClientsSection) does not import the module that lazy-loads ClientsSection.
  */
 
-/* eslint-disable */
-// @ts-nocheck
-
 import type { Path } from "react-router-dom";
 import { generateEncodedPath } from "../../utils/generateEncodedPath";
 

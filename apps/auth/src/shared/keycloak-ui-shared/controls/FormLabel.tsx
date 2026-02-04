@@ -1,16 +1,3 @@
-/**
- * WARNING: Before modifying this file, run the following command:
- *
- * $ npx keycloakify own --path "shared/keycloak-ui-shared/controls/FormLabel.tsx"
- *
- * This file is provided by @keycloakify/keycloak-ui-shared version 260502.0.0.
- * It was copied into your repository by the postinstall script: `keycloakify sync-extensions`.
- */
-
-/* eslint-disable */
-
-// @ts-nocheck
-
 import { Field, FieldContent, FieldLabel } from "@merge/ui/components/field";
 import { cn } from "@merge/ui/lib/utils";
 import { PropsWithChildren, ReactNode } from "react";

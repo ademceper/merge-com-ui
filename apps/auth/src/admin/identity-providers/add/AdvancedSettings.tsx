@@ -1,16 +1,3 @@
-/**
- * WARNING: Before modifying this file, run the following command:
- *
- * $ npx keycloakify own --path "admin/identity-providers/add/AdvancedSettings.tsx"
- *
- * This file is provided by @keycloakify/keycloak-admin-ui version 260502.0.0.
- * It was copied into your repository by the postinstall script: `keycloakify sync-extensions`.
- */
-
-/* eslint-disable */
-
-// @ts-nocheck
-
 import type AuthenticationFlowRepresentation from "@keycloak/keycloak-admin-client/lib/defs/authenticationFlowRepresentation";
 import type IdentityProviderRepresentation from "@keycloak/keycloak-admin-client/lib/defs/identityProviderRepresentation";
 import {
@@ -18,6 +5,7 @@ import {
     HelpItem,
     KeycloakSelect,
     SelectControl,
+    SelectOption,
     SelectVariant,
     useFetch
 } from "../../../shared/keycloak-ui-shared";
@@ -87,9 +75,8 @@ const LoginFlow = ({
                                 : []),
                             ...(flows?.map(option => (
                                 <SelectOption
-                                    selected={option.alias === field.value}
                                     key={option.id}
-                                    value={option.alias}
+                                    value={option.alias ?? ""}
                                 >
                                     {option.alias}
                                 </SelectOption>

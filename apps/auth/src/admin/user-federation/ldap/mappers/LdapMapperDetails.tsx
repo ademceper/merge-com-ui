@@ -1,29 +1,13 @@
-/**
- * WARNING: Before modifying this file, run the following command:
- *
- * $ npx keycloakify own --path "admin/user-federation/ldap/mappers/LdapMapperDetails.tsx"
- *
- * This file is provided by @keycloakify/keycloak-admin-ui version 260502.0.0.
- * It was copied into your repository by the postinstall script: `keycloakify sync-extensions`.
- */
-
-/* eslint-disable */
-
-// @ts-nocheck
-
 import type ComponentRepresentation from "@keycloak/keycloak-admin-client/lib/defs/componentRepresentation";
 import type ComponentTypeRepresentation from "@keycloak/keycloak-admin-client/lib/defs/componentTypeRepresentation";
 import { DirectionType } from "@keycloak/keycloak-admin-client/lib/resources/userStorageProvider";
-import {
-    AlertVariant,
-    HelpItem,
+import { getErrorDescription, getErrorMessage, HelpItem,
     KeycloakSelect,
     KeycloakSpinner,
     SelectVariant,
     TextControl,
-    useAlerts,
-    useFetch
-} from "../../../../shared/keycloak-ui-shared";
+    useFetch } from "../../../../shared/keycloak-ui-shared";
+import { toast } from "@merge/ui/components/sonner";
 import { Button } from "@merge/ui/components/button";
 import { DropdownMenuItem } from "@merge/ui/components/dropdown-menu";
 import { Label } from "@merge/ui/components/label";
@@ -57,9 +41,7 @@ export default function LdapMapperDetails() {
     const navigate = useNavigate();
     const { realm } = useRealm();
     const { t } = useTranslation();
-    const { addAlert, addError } = useAlerts();
-
-    const [isMapperDropdownOpen, setIsMapperDropdownOpen] = useState(false);
+const [isMapperDropdownOpen, setIsMapperDropdownOpen] = useState(false);
     const [mapperTypeFilter, setMapperTypeFilter] = useState("");
     const [key, setKey] = useState(0);
     const refresh = () => setKey(key + 1);
@@ -115,14 +97,11 @@ export default function LdapMapperDetails() {
                 await adminClient.components.update({ id: mapperId }, map);
             }
             setupForm(map as ComponentRepresentation);
-            addAlert(
-                t(mapperId === "new" ? "mappingCreatedSuccess" : "mappingUpdatedSuccess"),
-                AlertVariant.success
-            );
+            toast.success(t(mapperId === "new" ? "mappingCreatedSuccess" : "mappingUpdatedSuccess"));
         } catch (error) {
-            addError(
-                mapperId === "new" ? "mappingCreatedError" : "mappingUpdatedError",
-                error
+            toast.error(
+                t(mapperId === "new" ? "mappingCreatedError" : "mappingUpdatedError", { error: getErrorMessage(error) }),
+                { description: getErrorDescription(error) }
             );
         }
     };
@@ -134,13 +113,11 @@ export default function LdapMapperDetails() {
                 id: mapperId,
                 direction
             });
-            addAlert(
-                t("syncLDAPGroupsSuccessful", {
+            toast.success(t("syncLDAPGroupsSuccessful", {
                     result: result.status
-                })
-            );
+                }));
         } catch (error) {
-            addError("syncLDAPGroupsError", error);
+            toast.error(t("syncLDAPGroupsError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
         }
         refresh();
     };
@@ -155,10 +132,10 @@ export default function LdapMapperDetails() {
                 await adminClient.components.del({
                     id: mapping!.id!
                 });
-                addAlert(t("mappingDeletedSuccess"), AlertVariant.success);
+                toast.success(t("mappingDeletedSuccess"));
                 navigate(toUserFederationLdap({ id, realm, tab: "mappers" }));
             } catch (error) {
-                addError("mappingDeletedError", error);
+                toast.error(t("mappingDeletedError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
             }
         }
     });

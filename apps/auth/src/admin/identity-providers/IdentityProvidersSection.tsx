@@ -1,32 +1,16 @@
-/**
- * WARNING: Before modifying this file, run the following command:
- *
- * $ npx keycloakify own --path "admin/identity-providers/IdentityProvidersSection.tsx"
- *
- * This file is provided by @keycloakify/keycloak-admin-ui version 260502.0.0.
- * It was copied into your repository by the postinstall script: `keycloakify sync-extensions`.
- */
-
-/* eslint-disable */
-
-// @ts-nocheck
-
 import type IdentityProviderRepresentation from "@keycloak/keycloak-admin-client/lib/defs/identityProviderRepresentation";
 import type { IdentityProvidersQuery } from "@keycloak/keycloak-admin-client/lib/resources/identityProviders";
-import {
-    Action,
+import { getErrorDescription, getErrorMessage, Action,
     IconMapper,
     KeycloakDataTable,
     ListEmptyState,
-    useAlerts,
-    useFetch
-} from "../../shared/keycloak-ui-shared";
+    useFetch } from "../../shared/keycloak-ui-shared";
+import { toast } from "@merge/ui/components/sonner";
 import { Button } from "@merge/ui/components/button";
 import { Badge } from "@merge/ui/components/badge";
 import { Checkbox } from "@merge/ui/components/checkbox";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger, DropdownMenuGroup, DropdownMenuLabel } from "@merge/ui/components/dropdown-menu";
 import { CardTitle } from "@merge/ui/components/card";
-import { AlertVariant } from "../../shared/keycloak-ui-shared";
 import { groupBy, sortBy } from "lodash-es";
 import { Fragment, useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -105,14 +89,12 @@ export default function IdentityProvidersSection() {
     const refresh = () => setKey(key + 1);
 
     const [hide, setHide] = useState(false);
-    const [addProviderOpen, setAddProviderOpen] = useState(false);
+    const [_addProviderOpen, _setAddProviderOpen] = useState(false);
     const [manageDisplayDialog, setManageDisplayDialog] = useState(false);
     const [hasProviders, setHasProviders] = useState(false);
     const [selectedProvider, setSelectedProvider] =
         useState<IdentityProviderRepresentation>();
-    const { addAlert, addError } = useAlerts();
-
-    useFetch(
+useFetch(
         async () => adminClient.identityProviders.find({ max: 1 }),
         providers => {
             setHasProviders(providers.length === 1);
@@ -175,9 +157,9 @@ export default function IdentityProvidersSection() {
                     alias: selectedProvider!.alias!
                 });
                 refresh();
-                addAlert(t("deletedSuccessIdentityProvider"), AlertVariant.success);
+                toast.success(t("deletedSuccessIdentityProvider"));
             } catch (error) {
-                addError("deleteErrorIdentityProvider", error);
+                toast.error(t("deleteErrorIdentityProvider", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
             }
         }
     });

@@ -1,30 +1,14 @@
-/**
- * WARNING: Before modifying this file, run the following command:
- *
- * $ npx keycloakify own --path "admin/workflows/WorkflowDetailForm.tsx"
- *
- * This file is provided by @keycloakify/keycloak-admin-ui version 260502.0.0.
- * It was copied into your repository by the postinstall script: `keycloakify sync-extensions`.
- */
-
-/* eslint-disable */
-
-// @ts-nocheck
-
 import { Button } from "@merge/ui/components/button";
 import { Label } from "@merge/ui/components/label";
-import { AlertVariant } from "../../shared/keycloak-ui-shared";
 import { Controller, FormProvider, SubmitHandler, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { Link, useNavigate } from "react-router-dom";
 import yaml from "yaml";
 import { useAdminClient } from "../admin-client";
-import {
-    HelpItem,
+import { getErrorDescription, getErrorMessage, HelpItem,
     FormSubmitButton,
-    useAlerts,
-    useFetch
-} from "../../shared/keycloak-ui-shared";
+    useFetch } from "../../shared/keycloak-ui-shared";
+import { toast } from "@merge/ui/components/sonner";
 import { useRealm } from "../context/realm-context/RealmContext";
 import { FormAccess } from "../components/form/FormAccess";
 import { toWorkflows } from "./routes/Workflows";
@@ -32,7 +16,7 @@ import CodeEditor from "../components/form/CodeEditor";
 import { useParams } from "../utils/useParams";
 import { WorkflowDetailParams, toWorkflowDetail } from "./routes/WorkflowDetail";
 import { ViewHeader } from "../components/view-header/ViewHeader";
-import WorkflowRepresentation from "libs/keycloak-admin-client/lib/defs/workflowRepresentation";
+import type WorkflowRepresentation from "@keycloak/keycloak-admin-client/lib/defs/workflowRepresentation";
 
 type AttributeForm = {
     workflowYAML: string;
@@ -44,8 +28,7 @@ export default function WorkflowDetailForm() {
     const { t } = useTranslation();
     const navigate = useNavigate();
     const { realm } = useRealm();
-    const { addAlert, addError } = useAlerts();
-    const { mode, id } = useParams<WorkflowDetailParams>();
+const { mode, id } = useParams<WorkflowDetailParams>();
     const form = useForm<AttributeForm>({
         mode: "onChange",
         defaultValues: {
@@ -92,9 +75,9 @@ export default function WorkflowDetailForm() {
         try {
             const json = validateworkflowYAML(data.workflowYAML);
             await adminClient.workflows.update({ id }, json);
-            addAlert(t("workflowUpdated"), AlertVariant.success);
+            toast.success(t("workflowUpdated"));
         } catch (error) {
-            addError("workflowUpdateError", error);
+            toast.error(t("workflowUpdateError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
         }
     };
 
@@ -104,10 +87,10 @@ export default function WorkflowDetailForm() {
                 realm,
                 yaml: data.workflowYAML
             });
-            addAlert(t("workflowCreated"), AlertVariant.success);
+            toast.success(t("workflowCreated"));
             navigate(toWorkflows({ realm }));
         } catch (error) {
-            addError("workflowCreateError", error);
+            toast.error(t("workflowCreateError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
         }
     };
 

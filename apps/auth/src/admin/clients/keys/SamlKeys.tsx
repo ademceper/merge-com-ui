@@ -1,24 +1,8 @@
-/**
- * WARNING: Before modifying this file, run the following command:
- *
- * $ npx keycloakify own --path "admin/clients/keys/SamlKeys.tsx"
- *
- * This file is provided by @keycloakify/keycloak-admin-ui version 260502.0.0.
- * It was copied into your repository by the postinstall script: `keycloakify sync-extensions`.
- */
-
-/* eslint-disable */
-
-// @ts-nocheck
-
 import type CertificateRepresentation from "@keycloak/keycloak-admin-client/lib/defs/certificateRepresentation";
-import {
-    FormPanel,
+import { getErrorDescription, getErrorMessage, FormPanel,
     HelpItem,
-    useAlerts,
-    useFetch
-} from "../../../shared/keycloak-ui-shared";
-import { AlertVariant } from "../../../shared/keycloak-ui-shared";
+    useFetch } from "../../../shared/keycloak-ui-shared";
+import { toast } from "@merge/ui/components/sonner";
 import { Button } from "@merge/ui/components/button";
 import { Label } from "@merge/ui/components/label";
 import { Switch } from "@merge/ui/components/switch";
@@ -210,9 +194,7 @@ export const SamlKeys = ({ clientId, save }: SamlKeysProps) => {
     const [refresh, setRefresh] = useState(0);
 
     const { setValue } = useFormContext();
-    const { addAlert, addError } = useAlerts();
-
-    useFetch(
+useFetch(
         () =>
             Promise.all(
                 KEYS.map(attr => adminClient.clients.getKeyInfo({ id: clientId, attr }))
@@ -238,9 +220,9 @@ export const SamlKeys = ({ clientId, save }: SamlKeysProps) => {
                 "private.key"
             );
 
-            addAlert(t("generateSuccess"), AlertVariant.success);
+            toast.success(t("generateSuccess"));
         } catch (error) {
-            addError("generateError", error);
+            toast.error(t("generateError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
         }
     };
 

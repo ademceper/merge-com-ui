@@ -1,19 +1,6 @@
-/**
- * WARNING: Before modifying this file, run the following command:
- *
- * $ npx keycloakify own --path "shared/keycloak-ui-shared/masthead/DefaultAvatar.tsx"
- *
- * This file is provided by @keycloakify/keycloak-ui-shared version 260502.0.0.
- * It was copied into your repository by the postinstall script: `keycloakify sync-extensions`.
- */
-
-/* eslint-disable */
-
-// @ts-nocheck
-
 import { cn } from "@merge/ui/lib/utils";
 
-type DefaultAvatarProps = {
+export type DefaultAvatarProps = {
     className?: string;
     border?: "light" | "dark";
     size?: "sm" | "md" | "lg" | "xl";

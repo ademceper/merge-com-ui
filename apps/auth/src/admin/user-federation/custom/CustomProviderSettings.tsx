@@ -1,24 +1,8 @@
-/**
- * WARNING: Before modifying this file, run the following command:
- *
- * $ npx keycloakify own --path "admin/user-federation/custom/CustomProviderSettings.tsx"
- *
- * This file is provided by @keycloakify/keycloak-admin-ui version 260502.0.0.
- * It was copied into your repository by the postinstall script: `keycloakify sync-extensions`.
- */
-
-/* eslint-disable */
-
-// @ts-nocheck
-
 import type ComponentRepresentation from "@keycloak/keycloak-admin-client/lib/defs/componentRepresentation";
-import {
-    KeycloakSpinner,
+import { getErrorDescription, getErrorMessage, KeycloakSpinner,
     TextControl,
-    useAlerts,
-    useFetch
-} from "../../../shared/keycloak-ui-shared";
-import { AlertVariant } from "../../../shared/keycloak-ui-shared";
+    useFetch } from "../../../shared/keycloak-ui-shared";
+import { toast } from "@merge/ui/components/sonner";
 import { Button } from "@merge/ui/components/button";
 import { FormProvider, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
@@ -53,9 +37,7 @@ export default function CustomProviderSettings() {
         handleSubmit,
         formState: { isDirty }
     } = form;
-
-    const { addAlert, addError } = useAlerts();
-    const { realm: realmName, realmRepresentation: realm } = useRealm();
+const { realm: realmName, realmRepresentation: realm } = useRealm();
     const [loading, setLoading] = useState(true);
 
     const provider = (
@@ -102,12 +84,9 @@ export default function CustomProviderSettings() {
                 await adminClient.components.update({ id }, saveComponent);
             }
             reset({ ...component });
-            addAlert(
-                t(!id ? "createUserProviderSuccess" : "userProviderSaveSuccess"),
-                AlertVariant.success
-            );
+            toast.success(t(!id ? "createUserProviderSuccess" : "userProviderSaveSuccess"));
         } catch (error) {
-            addError(!id ? "createUserProviderError" : "userProviderSaveError", error);
+            toast.error(t(!id ? "createUserProviderError" : "userProviderSaveError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
         }
     };
 

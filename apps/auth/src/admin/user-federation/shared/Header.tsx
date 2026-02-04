@@ -1,24 +1,11 @@
-/**
- * WARNING: Before modifying this file, run the following command:
- *
- * $ npx keycloakify own --path "admin/user-federation/shared/Header.tsx"
- *
- * This file is provided by @keycloakify/keycloak-admin-ui version 260502.0.0.
- * It was copied into your repository by the postinstall script: `keycloakify sync-extensions`.
- */
-
-/* eslint-disable */
-
-// @ts-nocheck
-
-import { AlertVariant } from "../../../shared/keycloak-ui-shared";
 import { DropdownMenuItem } from "@merge/ui/components/dropdown-menu";
 import { ReactElement } from "react";
 import { Controller, useFormContext } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { useNavigate, useParams } from "react-router-dom";
 import { useAdminClient } from "../../admin-client";
-import { useAlerts } from "../../../shared/keycloak-ui-shared";
+import { getErrorDescription, getErrorMessage } from "../../../shared/keycloak-ui-shared";
+import { toast } from "@merge/ui/components/sonner";
 import { useConfirmDialog } from "../../components/confirm-dialog/ConfirmDialog";
 import { ViewHeader } from "../../components/view-header/ViewHeader";
 import { useRealm } from "../../context/realm-context/RealmContext";
@@ -43,9 +30,7 @@ export const Header = ({
     const { t } = useTranslation();
     const { id } = useParams<Partial<CustomUserFederationRouteParams>>();
     const navigate = useNavigate();
-
-    const { addAlert, addError } = useAlerts();
-    const { realm } = useRealm();
+const { realm } = useRealm();
 
     const { control, setValue } = useFormContext();
 
@@ -67,10 +52,10 @@ export const Header = ({
         onConfirm: async () => {
             try {
                 await adminClient.components.del({ id: id! });
-                addAlert(t("userFedDeletedSuccess"), AlertVariant.success);
+                toast.success(t("userFedDeletedSuccess"));
                 navigate(toUserFederation({ realm }), { replace: true });
             } catch (error) {
-                addError("userFedDeleteError", error);
+                toast.error(t("userFedDeleteError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
             }
         }
     });

@@ -1,23 +1,11 @@
-/**
- * WARNING: Before modifying this file, run the following command:
- *
- * $ npx keycloakify own --path "admin/realm-settings/LoginTab.tsx"
- *
- * This file is provided by @keycloakify/keycloak-admin-ui version 260502.0.0.
- * It was copied into your repository by the postinstall script: `keycloakify sync-extensions`.
- */
-
-/* eslint-disable */
-
-// @ts-nocheck
-
 import type RealmRepresentation from "@keycloak/keycloak-admin-client/lib/defs/realmRepresentation";
 import { Switch } from "@merge/ui/components/switch";
 import { FormLabel } from "../../shared/keycloak-ui-shared";
 import { useTranslation } from "react-i18next";
 import { FormPanel, HelpItem } from "../../shared/keycloak-ui-shared";
 import { useAdminClient } from "../admin-client";
-import { useAlerts } from "../../shared/keycloak-ui-shared";
+import { getErrorDescription, getErrorMessage } from "../../shared/keycloak-ui-shared";
+import { toast } from "@merge/ui/components/sonner";
 import { FormAccess } from "../components/form/FormAccess";
 import { useRealm } from "../context/realm-context/RealmContext";
 
@@ -32,9 +20,7 @@ export const RealmSettingsLoginTab = ({ realm, refresh }: RealmSettingsLoginTabP
     const { adminClient } = useAdminClient();
 
     const { t } = useTranslation();
-
-    const { addAlert, addError } = useAlerts();
-    const { realm: realmName } = useRealm();
+const { realm: realmName } = useRealm();
 
     const updateSwitchValue = async (switches: SwitchType | SwitchType[]) => {
         const name = Array.isArray(switches)
@@ -50,10 +36,10 @@ export const RealmSettingsLoginTab = ({ realm, refresh }: RealmSettingsLoginTabP
                     ? switches.reduce((realm, s) => Object.assign(realm, s), realm)
                     : Object.assign(realm, switches)
             );
-            addAlert(t("enableSwitchSuccess", { switch: t(name) }));
+            toast.success(t("enableSwitchSuccess", { switch: t(name) }));
             refresh();
         } catch (error) {
-            addError("enableSwitchError", error);
+            toast.error(t("enableSwitchError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
         }
     };
 

@@ -1,18 +1,6 @@
-/**
- * WARNING: Before modifying this file, run the following command:
- *
- * $ npx keycloakify own --path "admin/authentication/EditFlowModal.tsx"
- *
- * This file is provided by @keycloakify/keycloak-admin-ui version 260502.0.0.
- * It was copied into your repository by the postinstall script: `keycloakify sync-extensions`.
- */
-
-/* eslint-disable */
-
-// @ts-nocheck
-
 import type AuthenticationFlowRepresentation from "@keycloak/keycloak-admin-client/lib/defs/authenticationFlowRepresentation";
-import { AlertVariant, useAlerts } from "../../shared/keycloak-ui-shared";
+import { getErrorDescription, getErrorMessage } from "../../shared/keycloak-ui-shared";
+import { toast } from "@merge/ui/components/sonner";
 import { Button } from "@merge/ui/components/button";
 import {
     Dialog,
@@ -37,8 +25,7 @@ export const EditFlowModal = ({ flow, toggleDialog }: EditFlowModalProps) => {
     const { adminClient } = useAdminClient();
 
     const { t } = useTranslation();
-    const { addAlert, addError } = useAlerts();
-    const form = useForm<AuthenticationFlowRepresentation>({ mode: "onChange" });
+const form = useForm<AuthenticationFlowRepresentation>({ mode: "onChange" });
     const { reset, handleSubmit } = form;
 
     useEffect(() => reset(flow), [flow]);
@@ -49,9 +36,9 @@ export const EditFlowModal = ({ flow, toggleDialog }: EditFlowModalProps) => {
                 { flowId: flow.id! },
                 { ...flow, ...formValues }
             );
-            addAlert(t("updateFlowSuccess"), AlertVariant.success);
+            toast.success(t("updateFlowSuccess"));
         } catch (error) {
-            addError("updateFlowError", error);
+            toast.error(t("updateFlowError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
         }
         toggleDialog();
     };

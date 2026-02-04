@@ -1,16 +1,3 @@
-/**
- * WARNING: Before modifying this file, run the following command:
- *
- * $ npx keycloakify own --path "admin/components/multi-line-input/MultiLineInput.tsx"
- *
- * This file is provided by @keycloakify/keycloak-admin-ui version 260502.0.0.
- * It was copied into your repository by the postinstall script: `keycloakify sync-extensions`.
- */
-
-/* eslint-disable */
-
-// @ts-nocheck
-
 import { Button } from "@merge/ui/components/button";
 import { Input } from "@merge/ui/components/input";
 import { cn } from "@merge/ui/lib/utils";
@@ -72,7 +59,9 @@ export const MultiLineInput = ({
 
         if (!Array.isArray(values) || values.length === 0) {
             values = (stringify
-                ? stringToMultiline(defaultValue as string)
+                ? stringToMultiline(
+                      Array.isArray(defaultValue) ? defaultValue.join("##") : (defaultValue as string | undefined) ?? ""
+                  )
                 : defaultValue) || [""];
         }
 

@@ -1,23 +1,11 @@
-/**
- * WARNING: Before modifying this file, run the following command:
- *
- * $ npx keycloakify own --path "admin/organizations/InviteMemberModal.tsx"
- *
- * This file is provided by @keycloakify/keycloak-admin-ui version 260502.0.0.
- * It was copied into your repository by the postinstall script: `keycloakify sync-extensions`.
- */
-
-/* eslint-disable */
-
-// @ts-nocheck
-
 import { FormSubmitButton, TextControl } from "../../shared/keycloak-ui-shared";
 import { Button } from "@merge/ui/components/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@merge/ui/components/dialog";
 import { FormProvider, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { useAdminClient } from "../admin-client";
-import { useAlerts } from "../../shared/keycloak-ui-shared";
+import { getErrorDescription, getErrorMessage } from "../../shared/keycloak-ui-shared";
+import { toast } from "@merge/ui/components/sonner";
 
 type InviteMemberModalProps = {
     orgId: string;
@@ -26,9 +14,7 @@ type InviteMemberModalProps = {
 
 export const InviteMemberModal = ({ orgId, onClose }: InviteMemberModalProps) => {
     const { adminClient } = useAdminClient();
-    const { addAlert, addError } = useAlerts();
-
-    const { t } = useTranslation();
+const { t } = useTranslation();
     const form = useForm<Record<string, string>>();
     const { handleSubmit, formState } = form;
 
@@ -39,10 +25,10 @@ export const InviteMemberModal = ({ orgId, onClose }: InviteMemberModalProps) =>
                 formData.append(key, data[key]);
             }
             await adminClient.organizations.invite({ orgId }, formData);
-            addAlert(t("inviteSent"));
+            toast.success(t("inviteSent"));
             onClose();
         } catch (error) {
-            addError("inviteSentError", error);
+            toast.error(t("inviteSentError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
         }
     };
 

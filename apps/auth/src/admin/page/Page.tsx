@@ -1,18 +1,6 @@
-/**
- * WARNING: Before modifying this file, run the following command:
- *
- * $ npx keycloakify own --path "admin/page/Page.tsx"
- *
- * This file is provided by @keycloakify/keycloak-admin-ui version 260502.0.0.
- * It was copied into your repository by the postinstall script: `keycloakify sync-extensions`.
- */
-
-/* eslint-disable */
-
-// @ts-nocheck
-
 import ComponentRepresentation from "@keycloak/keycloak-admin-client/lib/defs/componentRepresentation";
-import { useAlerts, useFetch } from "../../shared/keycloak-ui-shared";
+import { getErrorDescription, getErrorMessage, useFetch } from "../../shared/keycloak-ui-shared";
+import { toast } from "@merge/ui/components/sonner";
 import { DropdownMenuItem } from "@merge/ui/components/dropdown-menu";
 import { get } from "lodash-es";
 import { useState } from "react";
@@ -36,8 +24,7 @@ export default function Page() {
     const pages = componentTypes?.[PAGE_PROVIDER];
     const navigate = useNavigate();
     const { id, providerId } = useParams<PageParams>();
-    const { addAlert, addError } = useAlerts();
-    const [pageData, setPageData] = useState<ComponentRepresentation>();
+const [pageData, setPageData] = useState<ComponentRepresentation>();
 
     const page = pages?.find(p => p.id === providerId);
     if (!page) {
@@ -50,16 +37,16 @@ export default function Page() {
         titleKey: "itemDeleteConfirmTitle",
         messageKey: "itemDeleteConfirm",
         continueButtonLabel: "delete",
-        continueButtonVariant: ButtonVariant.danger,
+        continueButtonVariant: "destructive",
         onConfirm: async () => {
             try {
                 await adminClient.components.del({
                     id: id!
                 });
-                addAlert(t("itemDeletedSuccess"));
+                toast.success(t("itemDeletedSuccess"));
                 navigate(toPage({ realm, providerId: providerId! }));
             } catch (error) {
-                addError("itemSaveError", error);
+                toast.error(t("itemSaveError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
             }
         }
     });

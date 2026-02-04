@@ -1,16 +1,3 @@
-/**
- * WARNING: Before modifying this file, run the following command:
- *
- * $ npx keycloakify own --path "admin/clients/authorization/DetailCell.tsx"
- *
- * This file is provided by @keycloakify/keycloak-admin-ui version 260502.0.0.
- * It was copied into your repository by the postinstall script: `keycloakify sync-extensions`.
- */
-
-/* eslint-disable */
-
-// @ts-nocheck
-
 import type ResourceServerRepresentation from "@keycloak/keycloak-admin-client/lib/defs/resourceServerRepresentation";
 import { useFetch } from "../../../shared/keycloak-ui-shared";
 import { useState } from "react";
@@ -20,7 +7,6 @@ import { useRealm } from "../../context/realm-context/RealmContext";
 import { toPermissionDetails } from "../routes/PermissionDetails";
 import { toScopeDetails } from "../routes/Scope";
 import { DetailDescription, DetailDescriptionLink } from "./DetailDescription";
-
 
 type Scope = { id: string; name: string }[];
 

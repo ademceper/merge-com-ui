@@ -1,16 +1,3 @@
-/**
- * WARNING: Before modifying this file, run the following command:
- *
- * $ npx keycloakify own --path "shared/keycloak-ui-shared/user-profile/SelectComponent.tsx"
- *
- * This file is provided by @keycloakify/keycloak-ui-shared version 260502.0.0.
- * It was copied into your repository by the postinstall script: `keycloakify sync-extensions`.
- */
-
-/* eslint-disable */
-
-// @ts-nocheck
-
 import { SelectItem as SelectOption } from "@merge/ui/components/select";
 import { useState } from "react";
 import { Controller, ControllerRenderProps } from "react-hook-form";
@@ -50,7 +37,7 @@ export const SelectComponent = (props: UserProfileFieldProps) => {
     const fetchLabel = (option: string) =>
         label(props.t, optionLabel[option], option, prefix);
 
-    const convertOptions = (selected: string) =>
+    const convertOptions = (_selected: string) =>
         options
             .filter(o => fetchLabel(o)!.toLowerCase().includes(filter.toLowerCase()))
             .map(option => (

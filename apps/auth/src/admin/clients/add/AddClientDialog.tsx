@@ -1,4 +1,5 @@
-import { AlertVariant, useAlerts } from "../../../shared/keycloak-ui-shared";
+import { getErrorDescription, getErrorMessage } from "../../../shared/keycloak-ui-shared";
+import { toast } from "@merge/ui/components/sonner";
 import { Button } from "@merge/ui/components/button";
 import {
     Dialog,
@@ -47,7 +48,6 @@ export function AddClientDialog({ trigger, onSuccess }: AddClientDialogProps) {
     const [saving, setSaving] = useState(false);
     const [currentStep, setCurrentStep] = useState(0);
 
-    const { addAlert, addError } = useAlerts();
     const form = useForm<FormFields>({
         defaultValues: {
             protocol: "openid-connect",
@@ -111,12 +111,12 @@ export function AddClientDialog({ trigger, onSuccess }: AddClientDialogProps) {
                 ...client,
                 clientId: client.clientId?.trim(),
             });
-            addAlert(t("createClientSuccess"), AlertVariant.success);
+            toast.success(t("createClientSuccess"));
             setOpen(false);
             onSuccess?.(newClient.id!);
             navigate(toClient({ realm, clientId: newClient.id!, tab: "settings" }));
         } catch (error) {
-            addError("createClientError", error);
+            toast.error(t("createClientError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
         } finally {
             setSaving(false);
         }

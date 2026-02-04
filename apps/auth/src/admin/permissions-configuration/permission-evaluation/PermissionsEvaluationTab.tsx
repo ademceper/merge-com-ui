@@ -1,28 +1,13 @@
-/**
- * WARNING: Before modifying this file, run the following command:
- *
- * $ npx keycloakify own --path "admin/permissions-configuration/permission-evaluation/PermissionsEvaluationTab.tsx"
- *
- * This file is provided by @keycloakify/keycloak-admin-ui version 260502.0.0.
- * It was copied into your repository by the postinstall script: `keycloakify sync-extensions`.
- */
-
-/* eslint-disable */
-
-// @ts-nocheck
-
 import type ClientRepresentation from "@keycloak/keycloak-admin-client/lib/defs/clientRepresentation";
 import type EvaluationResultRepresentation from "@keycloak/keycloak-admin-client/lib/defs/evaluationResultRepresentation";
 import PolicyEvaluationResponse from "@keycloak/keycloak-admin-client/lib/defs/policyEvaluationResponse";
 import type ResourceEvaluation from "@keycloak/keycloak-admin-client/lib/defs/resourceEvaluation";
-import {
-    ListEmptyState,
-    SelectControl,
-    useAlerts
-} from "../../../shared/keycloak-ui-shared";
+import { getErrorDescription, getErrorMessage, ListEmptyState,
+    SelectControl } from "../../../shared/keycloak-ui-shared";
+import { toast } from "@merge/ui/components/sonner";
 import { Button } from "@merge/ui/components/button";
-import { Alert, AlertTitle, AlertDescription } from "@merge/ui/components/alert";
-import { Bell, X } from "@phosphor-icons/react";
+import { Alert, AlertTitle } from "@merge/ui/components/alert";
+import { X } from "@phosphor-icons/react";
 import { useMemo, useState } from "react";
 import { FormProvider, useForm, useWatch } from "react-hook-form";
 import { useTranslation } from "react-i18next";
@@ -65,7 +50,6 @@ const PermissionEvaluateContent = ({ client }: Props) => {
     const { t } = useTranslation();
     const { adminClient } = useAdminClient();
     const realm = useRealm();
-    const { addError } = useAlerts();
     const form = useForm<EvaluateFormInputs>({
         mode: "onChange",
         defaultValues: {
@@ -145,7 +129,7 @@ const PermissionEvaluateContent = ({ client }: Props) => {
             setEvaluateResult(evaluation);
             setIsEvaluated(true);
         } catch (error) {
-            addError("evaluateError", error);
+            toast.error(t("evaluateError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
         }
     };
 

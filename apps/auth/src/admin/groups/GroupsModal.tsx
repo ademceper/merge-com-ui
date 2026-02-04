@@ -1,27 +1,11 @@
-/**
- * WARNING: Before modifying this file, run the following command:
- *
- * $ npx keycloakify own --path "admin/groups/GroupsModal.tsx"
- *
- * This file is provided by @keycloakify/keycloak-admin-ui version 260502.0.0.
- * It was copied into your repository by the postinstall script: `keycloakify sync-extensions`.
- */
-
-/* eslint-disable */
-
-// @ts-nocheck
-
 import type GroupRepresentation from "@keycloak/keycloak-admin-client/lib/defs/groupRepresentation";
-import {
-    FormSubmitButton,
+import { getErrorDescription, getErrorMessage, FormSubmitButton,
     TextControl,
-    useAlerts,
-    useFetch
-} from "../../shared/keycloak-ui-shared";
+    useFetch } from "../../shared/keycloak-ui-shared";
+import { toast } from "@merge/ui/components/sonner";
 import { Button } from "@merge/ui/components/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@merge/ui/components/dialog";
-import { Alert, AlertDescription, AlertTitle } from "@merge/ui/components/alert";
-import { AlertVariant } from "../../shared/keycloak-ui-shared";
+import { Alert, AlertTitle } from "@merge/ui/components/alert";
 import { useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
@@ -56,8 +40,7 @@ export const GroupsModal = ({
 }: GroupsModalProps) => {
     const { adminClient } = useAdminClient();
     const { t } = useTranslation();
-    const { addAlert, addError } = useAlerts();
-    const isFeatureEnabled = useIsFeatureEnabled();
+const isFeatureEnabled = useIsFeatureEnabled();
     const [duplicateGroupDetails, setDuplicateGroupDetails] =
         useState<GroupRepresentation | null>(null);
 
@@ -109,7 +92,7 @@ export const GroupsModal = ({
 
             return clientRoleMappings;
         } catch (error) {
-            addError("couldNotFetchClientRoleMappings", error);
+            toast.error(t("couldNotFetchClientRoleMappings", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
             throw error;
         }
     };
@@ -200,7 +183,7 @@ export const GroupsModal = ({
 
             return createdGroup;
         } catch (error) {
-            addError("couldNotDuplicateGroup", error);
+            toast.error(t("couldNotDuplicateGroup", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
             throw error;
         }
     };
@@ -228,7 +211,7 @@ export const GroupsModal = ({
                 })
             );
         } catch (error) {
-            addError("roleMappingUpdatedError", error);
+            toast.error(t("roleMappingUpdatedError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
         }
     };
 
@@ -251,18 +234,15 @@ export const GroupsModal = ({
 
             refresh(rename ? { ...rename, ...group } : undefined);
             handleModalToggle();
-            addAlert(
-                t(
+            toast.success(t(
                     rename
                         ? "groupUpdated"
                         : duplicateId
                           ? "groupDuplicated"
                           : "groupCreated"
-                ),
-                AlertVariant.success
-            );
+                ));
         } catch (error) {
-            addError("couldNotCreateGroup", error);
+            toast.error(t("couldNotCreateGroup", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
         }
     };
 

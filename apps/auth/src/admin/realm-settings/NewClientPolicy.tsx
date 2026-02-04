@@ -1,26 +1,9 @@
-/**
- * WARNING: Before modifying this file, run the following command:
- *
- * $ npx keycloakify own --path "admin/realm-settings/NewClientPolicy.tsx"
- *
- * This file is provided by @keycloakify/keycloak-admin-ui version 260502.0.0.
- * It was copied into your repository by the postinstall script: `keycloakify sync-extensions`.
- */
-
-/* eslint-disable */
-
-// @ts-nocheck
-
 import type ClientPolicyRepresentation from "@keycloak/keycloak-admin-client/lib/defs/clientPolicyRepresentation";
 import type ClientProfileRepresentation from "@keycloak/keycloak-admin-client/lib/defs/clientProfileRepresentation";
-import {
-    HelpItem,
+import { getErrorDescription, getErrorMessage, HelpItem,
     TextControl,
-    useAlerts,
-    useFetch,
-    AlertVariant
-} from "../../shared/keycloak-ui-shared";
-import { Badge } from "@merge/ui/components/badge";
+    useFetch } from "../../shared/keycloak-ui-shared";
+import { toast } from "@merge/ui/components/sonner";
 import { Button } from "@merge/ui/components/button";
 import { DropdownMenuItem } from "@merge/ui/components/dropdown-menu";
 import { Label } from "@merge/ui/components/label";
@@ -46,7 +29,6 @@ import { toClientProfile } from "./routes/ClientProfile";
 import { EditClientPolicyParams, toEditClientPolicy } from "./routes/EditClientPolicy";
 import { toEditClientPolicyCondition } from "./routes/EditCondition";
 
-
 type FormFields = Required<ClientPolicyRepresentation>;
 
 const defaultValues: FormFields = {
@@ -67,8 +49,7 @@ export default function NewClientPolicy() {
 
     const { t } = useTranslation();
     const { realm } = useRealm();
-    const { addAlert, addError } = useAlerts();
-    const [isGlobalPolicy, setIsGlobalPolicy] = useState(false);
+const [isGlobalPolicy, setIsGlobalPolicy] = useState(false);
     const [policies, setPolicies] = useState<ClientPolicyRepresentation[]>();
     const [globalPolicies, setGlobalPolicies] = useState<ClientPolicyRepresentation[]>();
     const [allPolicies, setAllPolicies] = useState<ClientPolicyRepresentation[]>();
@@ -184,16 +165,15 @@ export default function NewClientPolicy() {
             await adminClient.clientPolicies.updatePolicy({
                 policies: getAllPolicies()
             });
-            addAlert(
+            toast.success(
                 policyName
                     ? t("updateClientPolicySuccess")
-                    : t("createClientPolicySuccess"),
-                AlertVariant.success
+                    : t("createClientPolicySuccess")
             );
             navigate(toEditClientPolicy({ realm, policyName: createdForm.name! }));
             setShowAddConditionsAndProfilesForm(true);
         } catch (error) {
-            addError("createClientPolicyError", error);
+            toast.error(t("createClientPolicyError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
         }
     };
 
@@ -213,7 +193,7 @@ export default function NewClientPolicy() {
                 await adminClient.clientPolicies.updatePolicy({
                     policies: updatedPolicies
                 });
-                addAlert(t("deleteClientPolicySuccess"), AlertVariant.success);
+                toast.success(t("deleteClientPolicySuccess"));
                 navigate(
                     toClientPolicies({
                         realm,
@@ -221,7 +201,7 @@ export default function NewClientPolicy() {
                     })
                 );
             } catch (error) {
-                addError("deleteClientPolicyError", error);
+                toast.error(t("deleteClientPolicyError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
             }
         }
     });
@@ -240,10 +220,10 @@ export default function NewClientPolicy() {
                     await adminClient.clientPolicies.updatePolicy({
                         policies: policies
                     });
-                    addAlert(t("deleteConditionSuccess"), AlertVariant.success);
+                    toast.success(t("deleteConditionSuccess"));
                     navigate(toEditClientPolicy({ realm, policyName: formValues.name! }));
                 } catch (error) {
-                    addError("deleteConditionError", error);
+                    toast.error(t("deleteConditionError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
                 }
             } else {
                 const updatedPolicies = policies?.filter(
@@ -254,7 +234,7 @@ export default function NewClientPolicy() {
                     await adminClient.clientPolicies.updatePolicy({
                         policies: updatedPolicies
                     });
-                    addAlert(t("deleteClientSuccess"), AlertVariant.success);
+                    toast.success(t("deleteClientSuccess"));
                     navigate(
                         toClientPolicies({
                             realm,
@@ -262,7 +242,7 @@ export default function NewClientPolicy() {
                         })
                     );
                 } catch (error) {
-                    addError("deleteClientError", error);
+                    toast.error(t("deleteClientError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
                 }
             }
         }
@@ -283,11 +263,11 @@ export default function NewClientPolicy() {
                     await adminClient.clientPolicies.updatePolicy({
                         policies: policies
                     });
-                    addAlert(t("deleteClientPolicyProfileSuccess"), AlertVariant.success);
+                    toast.success(t("deleteClientPolicyProfileSuccess"));
                     form.setValue("profiles", currentPolicy?.profiles || []);
                     navigate(toEditClientPolicy({ realm, policyName: formValues.name! }));
                 } catch (error) {
-                    addError("deleteClientPolicyProfileError", error);
+                    toast.error(t("deleteClientPolicyProfileError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
                 }
             } else {
                 const updatedPolicies = policies?.filter(
@@ -298,7 +278,7 @@ export default function NewClientPolicy() {
                     await adminClient.clientPolicies.updatePolicy({
                         policies: updatedPolicies
                     });
-                    addAlert(t("deleteClientSuccess"), AlertVariant.success);
+                    toast.success(t("deleteClientSuccess"));
                     navigate(
                         toClientPolicies({
                             realm,
@@ -306,7 +286,7 @@ export default function NewClientPolicy() {
                         })
                     );
                 } catch (error) {
-                    addError("deleteClientError", error);
+                    toast.error(t("deleteClientError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
                 }
             }
         }
@@ -355,9 +335,9 @@ export default function NewClientPolicy() {
             setCurrentPolicy(createdPolicy);
             form.setValue("profiles", createdPolicy.profiles);
             navigate(toEditClientPolicy({ realm, policyName: formValues.name! }));
-            addAlert(t("addClientProfileSuccess"), AlertVariant.success);
+            toast.success(t("addClientProfileSuccess"));
         } catch (error) {
-            addError("addClientProfileError", error);
+            toast.error(t("addClientProfileError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
         }
     };
 
@@ -587,130 +567,91 @@ export default function NewClientPolicy() {
                                 )}
                             </>
                         )}
-                        {(showAddConditionsAndProfilesForm ||
+{(showAddConditionsAndProfilesForm ||
                             form.formState.isSubmitted) && (
                             <>
-                                <Flex>
-                                    <FlexItem>
-                                        <Text
-                                            className="kc-client-profiles"
-                                            component={TextVariants.h1}
-                                        >
-                                            {t("clientProfiles")}
-                                            <HelpItem
-                                                helpText={t("clientProfilesHelp")}
-                                                fieldLabelId="clientProfiles"
-                                            />
-                                        </Text>
-                                    </FlexItem>
+                                <div className="flex items-center justify-between gap-4">
+                                    <h2 className="kc-client-profiles text-lg font-semibold">
+                                        {t("clientProfiles")}
+                                        <HelpItem
+                                            helpText={t("clientProfilesHelp")}
+                                            fieldLabelId="clientProfiles"
+                                        />
+                                    </h2>
                                     {!isGlobalPolicy && (
-                                        <FlexItem align={{ default: "alignRight" }}>
-                                            <Button
-                                                id="addClientProfile"
-                                                variant="link"
-                                                className="kc-addClientProfile"
-                                                data-testid="addClientProfile"
-                                                icon={<PlusCircleIcon />}
-                                                onClick={toggleModal}
-                                            >
-                                                {t("addClientProfile")}
-                                            </Button>
-                                        </FlexItem>
+                                        <Button
+                                            id="addClientProfile"
+                                            variant="link"
+                                            className="kc-addClientProfile"
+                                            data-testid="addClientProfile"
+                                            onClick={toggleModal}
+                                        >
+                                            <Plus className="size-4" />
+                                            {t("addClientProfile")}
+                                        </Button>
                                     )}
-                                </Flex>
+                                </div>
                                 {policyProfiles.length > 0 ? (
-                                    <DataList aria-label={t("profiles")} isCompact>
+                                    <ul aria-label={t("profiles")} className="list-none divide-y divide-border rounded-md border border-border p-0">
                                         {policyProfiles.map((profile, idx) => (
-                                            <DataListItem
-                                                aria-labelledby={`${profile}-profile-list-item`}
+                                            <li
                                                 key={profile}
                                                 id={`${profile}-profile-list-item`}
-                                                data-testid={"profile-list-item"}
+                                                data-testid="profile-list-item"
+                                                aria-labelledby={`${profile}-profile-list-item`}
+                                                className="flex items-center gap-2 px-3 py-2"
                                             >
-                                                <DataListItemRow data-testid="profile-list-row">
-                                                    <DataListItemCells
-                                                        dataListCells={[
-                                                            <DataListCell
-                                                                key="name"
-                                                                data-testid="profile-name"
-                                                            >
-                                                                {profile && (
-                                                                    <Link
-                                                                        key={profile}
-                                                                        data-testid="profile-name-link"
-                                                                        to={toClientProfile(
-                                                                            {
-                                                                                realm,
-                                                                                profileName:
-                                                                                    profile
-                                                                            }
-                                                                        )}
-                                                                        className="kc-profile-link"
+                                                <div data-testid="profile-name" className="flex flex-1 flex-wrap items-center gap-1">
+                                                    {profile && (
+                                                        <Link
+                                                            key={profile}
+                                                            data-testid="profile-name-link"
+                                                            to={toClientProfile({
+                                                                realm,
+                                                                profileName: profile
+                                                            })}
+                                                            className="kc-profile-link text-primary underline-offset-4 hover:underline"
+                                                        >
+                                                            {profile}
+                                                        </Link>
+                                                    )}
+                                                    {policyProfiles
+                                                        .filter(type => type === profile)
+                                                        .map(type => (
+                                                            <span key={type} className="inline-flex items-center gap-1">
+                                                                <HelpItem
+                                                                    helpText={
+                                                                        clientProfiles.find(p => type === p.name)?.description
+                                                                    }
+                                                                    fieldLabelId={profile}
+                                                                />
+                                                                {!isGlobalPolicy && (
+                                                                    <Button
+                                                                        type="button"
+                                                                        variant="link"
+                                                                        aria-label="remove-client-profile"
+                                                                        className="p-0"
+                                                                        data-testid="deleteClientProfileDropdown"
+                                                                        onClick={() => {
+                                                                            toggleDeleteProfileDialog();
+                                                                            setProfileToDelete({ idx, name: type! });
+                                                                        }}
                                                                     >
-                                                                        {profile}
-                                                                    </Link>
+                                                                        <Trash className="kc-conditionType-trash-icon size-4" />
+                                                                    </Button>
                                                                 )}
-                                                                {policyProfiles
-                                                                    .filter(
-                                                                        type =>
-                                                                            type ===
-                                                                            profile
-                                                                    )
-                                                                    .map(type => (
-                                                                        <>
-                                                                            <HelpItem
-                                                                                helpText={
-                                                                                    clientProfiles.find(
-                                                                                        profile =>
-                                                                                            type ===
-                                                                                            profile.name
-                                                                                    )
-                                                                                        ?.description
-                                                                                }
-                                                                                fieldLabelId={
-                                                                                    profile
-                                                                                }
-                                                                            />
-                                                                            {!isGlobalPolicy && (
-                                                                                <Button
-                                                                                    variant="link"
-                                                                                    aria-label="remove-client-profile"
-                                                                                    isInline
-                                                                                    icon={
-                                                                                        <TrashIcon
-                                                                                            className="kc-conditionType-trash-icon"
-                                                                                            data-testid="deleteClientProfileDropdown"
-                                                                                            onClick={() => {
-                                                                                                toggleDeleteProfileDialog();
-                                                                                                setProfileToDelete(
-                                                                                                    {
-                                                                                                        idx: idx,
-                                                                                                        name: type!
-                                                                                                    }
-                                                                                                );
-                                                                                            }}
-                                                                                        />
-                                                                                    }
-                                                                                ></Button>
-                                                                            )}
-                                                                        </>
-                                                                    ))}
-                                                            </DataListCell>
-                                                        ]}
-                                                    />
-                                                </DataListItemRow>
-                                            </DataListItem>
+                                                            </span>
+                                                        ))}
+                                                </div>
+                                            </li>
                                         ))}
-                                    </DataList>
+                                    </ul>
                                 ) : (
                                     <>
-                                        <Divider />
-                                        <Text
-                                            className="kc-emptyClientProfiles"
-                                            component={TextVariants.h2}
-                                        >
+                                        <Separator />
+                                        <h3 className="kc-emptyClientProfiles text-base font-medium text-muted-foreground">
                                             {t("emptyProfiles")}
-                                        </Text>
+                                        </h3>
                                     </>
                                 )}
                             </>

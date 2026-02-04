@@ -1,16 +1,3 @@
-/**
- * WARNING: Before modifying this file, run the following command:
- *
- * $ npx keycloakify own --path "admin/PageHeaderClearCachesModal.tsx"
- *
- * This file is provided by @keycloakify/keycloak-admin-ui version 260502.0.0.
- * It was copied into your repository by the postinstall script: `keycloakify sync-extensions`.
- */
-
-/* eslint-disable */
-
-// @ts-nocheck
-
 import { Button } from "@merge/ui/components/button";
 import {
     Dialog,
@@ -22,7 +9,8 @@ import { Separator } from "@merge/ui/components/separator";
 import { useRealm } from "./context/realm-context/RealmContext";
 import { useAdminClient } from "./admin-client";
 import { useTranslation } from "react-i18next";
-import { AlertVariant, HelpItem, useAlerts } from "../shared/keycloak-ui-shared";
+import { getErrorDescription, getErrorMessage, HelpItem } from "../shared/keycloak-ui-shared";
+import { toast } from "@merge/ui/components/sonner";
 
 export type ClearCachesModalProps = {
     onClose: () => void;
@@ -31,16 +19,15 @@ export const PageHeaderClearCachesModal = ({ onClose }: ClearCachesModalProps) =
     const { realm: realmName } = useRealm();
     const { t } = useTranslation();
     const { adminClient } = useAdminClient();
-    const { addError, addAlert } = useAlerts();
 
     const clearCache =
         (clearCacheFn: typeof adminClient.cache.clearRealmCache) =>
         async (realm: string) => {
             try {
                 await clearCacheFn({ realm });
-                addAlert(t("clearCacheSuccess"), AlertVariant.success);
+                toast.success(t("clearCacheSuccess"));
             } catch (error) {
-                addError("clearCacheError", error);
+                toast.error(t("clearCacheError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
             }
         };
     const clearRealmCache = clearCache(adminClient.cache.clearRealmCache);

@@ -1,21 +1,8 @@
-/**
- * WARNING: Before modifying this file, run the following command:
- *
- * $ npx keycloakify own --path "admin/clients/scopes/DedicatedScopes.tsx"
- *
- * This file is provided by @keycloakify/keycloak-admin-ui version 260502.0.0.
- * It was copied into your repository by the postinstall script: `keycloakify sync-extensions`.
- */
-
-/* eslint-disable */
-
-// @ts-nocheck
-
 import type ClientRepresentation from "@keycloak/keycloak-admin-client/lib/defs/clientRepresentation";
 import type ProtocolMapperRepresentation from "@keycloak/keycloak-admin-client/lib/defs/protocolMapperRepresentation";
 import type { ProtocolMapperTypeRepresentation } from "@keycloak/keycloak-admin-client/lib/defs/serverInfoRepesentation";
-import { useAlerts, useFetch } from "../../../shared/keycloak-ui-shared";
-import { AlertVariant } from "../../../shared/keycloak-ui-shared";
+import { getErrorDescription, getErrorMessage, useFetch } from "../../../shared/keycloak-ui-shared";
+import { toast } from "@merge/ui/components/sonner";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useNavigate, useParams as useRouterParams } from "react-router-dom";
@@ -35,9 +22,7 @@ export default function DedicatedScopes() {
     const navigate = useNavigate();
     const { realm, clientId } = useParams<DedicatedScopeDetailsParams>();
     const { tab } = useRouterParams<{ tab?: string }>();
-    const { addAlert, addError } = useAlerts();
-
-    const [client, setClient] = useState<ClientRepresentation>();
+const [client, setClient] = useState<ClientRepresentation>();
 
     useFetch(() => adminClient.clients.findOne({ id: clientId }), setClient, []);
 
@@ -65,9 +50,9 @@ export default function DedicatedScopes() {
                     mappers as ProtocolMapperRepresentation[]
                 );
                 setClient(await adminClient.clients.findOne({ id: client.id! }));
-                addAlert(t("mappingCreatedSuccess"), AlertVariant.success);
+                toast.success(t("mappingCreatedSuccess"));
             } catch (error) {
-                addError("mappingCreatedError", error);
+                toast.error(t("mappingCreatedError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
             }
         }
     };
@@ -82,9 +67,9 @@ export default function DedicatedScopes() {
                 ...client,
                 protocolMappers: client.protocolMappers?.filter(m => m.id !== mapper.id)
             });
-            addAlert(t("mappingDeletedSuccess"), AlertVariant.success);
+            toast.success(t("mappingDeletedSuccess"));
         } catch (error) {
-            addError("mappingDeletedError", error);
+            toast.error(t("mappingDeletedError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
         }
         return true;
     };

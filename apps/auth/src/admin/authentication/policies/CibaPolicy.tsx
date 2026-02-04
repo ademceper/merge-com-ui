@@ -1,18 +1,6 @@
-/**
- * WARNING: Before modifying this file, run the following command:
- *
- * $ npx keycloakify own --path "admin/authentication/policies/CibaPolicy.tsx"
- *
- * This file is provided by @keycloakify/keycloak-admin-ui version 260502.0.0.
- * It was copied into your repository by the postinstall script: `keycloakify sync-extensions`.
- */
-
-/* eslint-disable */
-
-// @ts-nocheck
-
 import type RealmRepresentation from "@keycloak/keycloak-admin-client/lib/defs/realmRepresentation";
-import { AlertVariant, SelectControl, TextControl, useAlerts } from "../../../shared/keycloak-ui-shared";
+import { getErrorDescription, getErrorMessage, SelectControl, TextControl } from "../../../shared/keycloak-ui-shared";
+import { toast } from "@merge/ui/components/sonner";
 import { Button } from "@merge/ui/components/button";
 import { useEffect } from "react";
 import { FormProvider, useForm } from "react-hook-form";
@@ -41,9 +29,7 @@ export const CibaPolicy = ({ realm, realmUpdated }: CibaPolicyProps) => {
     const { t } = useTranslation();
     const form = useForm<FormFields>({ mode: "onChange" });
     const { realm: realmName } = useRealm();
-    const { addAlert, addError } = useAlerts();
-
-    const setupForm = (realm: RealmRepresentation) =>
+const setupForm = (realm: RealmRepresentation) =>
         convertToFormValues(realm, form.setValue);
 
     useEffect(() => setupForm(realm), []);
@@ -61,9 +47,9 @@ export const CibaPolicy = ({ realm, realmUpdated }: CibaPolicyProps) => {
 
             realmUpdated(updatedRealm!);
             setupForm(updatedRealm!);
-            addAlert(t("updateCibaSuccess"), AlertVariant.success);
+            toast.success(t("updateCibaSuccess"));
         } catch (error) {
-            addError("updateCibaError", error);
+            toast.error(t("updateCibaError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
         }
     };
 
@@ -139,9 +125,9 @@ export const CibaPolicy = ({ realm, realmUpdated }: CibaPolicyProps) => {
                 <div className="flex gap-2">
                     <Button
                         data-testid="save"
-                        variant="primary"
+                        variant="default"
                         type="submit"
-                        isDisabled={!form.formState.isValid || !form.formState.isDirty}
+                        disabled={!form.formState.isValid || !form.formState.isDirty}
                     >
                         {t("save")}
                     </Button>

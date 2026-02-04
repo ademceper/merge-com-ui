@@ -125,4 +125,3 @@ export default function Applications(props: PageProps<Extract<KcContext, { pageI
         </div>
     );
 }
-

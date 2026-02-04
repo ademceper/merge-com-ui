@@ -177,4 +177,3 @@ export default function Totp(props: PageProps<Extract<KcContext, { pageId: "totp
         </div>
     );
 }
-

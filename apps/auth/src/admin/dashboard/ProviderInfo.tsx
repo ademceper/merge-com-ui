@@ -1,16 +1,3 @@
-/**
- * WARNING: Before modifying this file, run the following command:
- *
- * $ npx keycloakify own --path "admin/dashboard/ProviderInfo.tsx"
- *
- * This file is provided by @keycloakify/keycloak-admin-ui version 260502.0.0.
- * It was copied into your repository by the postinstall script: `keycloakify sync-extensions`.
- */
-
-/* eslint-disable */
-
-// @ts-nocheck
-
 import { TableToolbar } from "../../shared/keycloak-ui-shared";
 import {
     Table,
@@ -30,8 +17,6 @@ import { useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useServerInfo } from "../context/server-info/ServerInfoProvider";
 import { CaretDown, CaretRight } from "@phosphor-icons/react";
-import { cn } from "@merge/ui/lib/utils";
-
 export const ProviderInfo = () => {
     const { t } = useTranslation();
     const serverInfo = useServerInfo();
@@ -45,14 +30,6 @@ export const ProviderInfo = () => {
             ),
         [filter]
     );
-
-    const toggleOpen = (option: string) => {
-        if (open.includes(option)) {
-            setOpen(open.filter((item: string) => item !== option));
-        } else {
-            setOpen([...open, option]);
-        }
-    };
 
     return (
         <div className="bg-muted/30 p-4">

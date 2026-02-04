@@ -1,16 +1,3 @@
-/**
- * WARNING: Before modifying this file, run the following command:
- *
- * $ npx keycloakify own --path "admin/sessions/SessionsSection.tsx"
- *
- * This file is provided by @keycloakify/keycloak-admin-ui version 260502.0.0.
- * It was copied into your repository by the postinstall script: `keycloakify sync-extensions`.
- */
-
-/* eslint-disable */
-
-// @ts-nocheck
-
 import UserSessionRepresentation from "@keycloak/keycloak-admin-client/lib/defs/userSessionRepresentation";
 import { KeycloakSelect } from "../../shared/keycloak-ui-shared";
 import { SelectOption } from "../../shared/keycloak-ui-shared";
@@ -18,7 +5,8 @@ import { Funnel } from "@phosphor-icons/react";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useAdminClient } from "../admin-client";
-import { useAlerts } from "../../shared/keycloak-ui-shared";
+import { getErrorDescription, getErrorMessage } from "../../shared/keycloak-ui-shared";
+import { toast } from "@merge/ui/components/sonner";
 import { useConfirmDialog } from "../components/confirm-dialog/ConfirmDialog";
 import { ViewHeader } from "../components/view-header/ViewHeader";
 import { fetchAdminUI } from "../context/auth/admin-ui-endpoint";
@@ -27,7 +15,6 @@ import helpUrls from "../help-urls";
 import useToggle from "../utils/useToggle";
 import { RevocationModal } from "./RevocationModal";
 import SessionsTable from "./SessionsTable";
-
 
 type FilterType = "ALL" | "REGULAR" | "OFFLINE";
 
@@ -74,7 +61,6 @@ export default function SessionsSection() {
 
     const [key, setKey] = useState(0);
     const refresh = () => setKey(key + 1);
-    const { addError } = useAlerts();
     const { realm } = useRealm();
 
     const [revocationModalOpen, setRevocationModalOpen] = useState(false);
@@ -109,7 +95,7 @@ export default function SessionsSection() {
                 await adminClient.realms.logoutAll({ realm });
                 refresh();
             } catch (error) {
-                addError("logoutAllSessionsError", error);
+                toast.error(t("logoutAllSessionsError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
             }
         }
     });

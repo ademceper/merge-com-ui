@@ -1,16 +1,3 @@
-/**
- * WARNING: Before modifying this file, run the following command:
- *
- * $ npx keycloakify own --path "admin/components/bread-crumb/PageBreadCrumbs.tsx"
- *
- * This file is provided by @keycloakify/keycloak-admin-ui version 260502.0.0.
- * It was copied into your repository by the postinstall script: `keycloakify sync-extensions`.
- */
-
-/* eslint-disable */
-
-// @ts-nocheck
-
 import {
     Breadcrumb,
     BreadcrumbItem,
@@ -35,7 +22,7 @@ export const PageBreadCrumbs = () => {
     const { t } = useTranslation();
     const { realm } = useRealm();
     const elementText = (crumb: BreadcrumbData) =>
-        isValidElement(crumb.breadcrumb) && crumb.breadcrumb.props.children;
+        isValidElement(crumb.breadcrumb) && (crumb.breadcrumb as React.ReactElement<{ children?: unknown }>).props?.children;
 
     const routesWithCrumbs: BreadcrumbsRoute[] = routes.map((route) => ({
         ...route,

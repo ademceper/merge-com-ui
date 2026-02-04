@@ -99,4 +99,3 @@ export default function FederatedIdentity(props: PageProps<Extract<KcContext, { 
         </div>
     );
 }
-

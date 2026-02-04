@@ -1,16 +1,3 @@
-/**
- * WARNING: Before modifying this file, run the following command:
- *
- * $ npx keycloakify own --path "shared/keycloak-ui-shared/user-profile/utils.ts"
- *
- * This file is provided by @keycloakify/keycloak-ui-shared version 260502.0.0.
- * It was copied into your repository by the postinstall script: `keycloakify sync-extensions`.
- */
-
-/* eslint-disable */
-
-// @ts-nocheck
-
 import { UserProfileAttributeMetadata } from "@keycloak/keycloak-admin-client/lib/defs/userProfileMetadata";
 import UserRepresentation from "@keycloak/keycloak-admin-client/lib/defs/userRepresentation";
 import { TFunction } from "i18next";
@@ -91,7 +78,6 @@ export function setUserProfileServerError<T>(
             message: t(
                 isBundleKey(e.errorMessage) ? unWrap(e.errorMessage) : e.errorMessage,
                 {
-                    /* eslint-disable @typescript-eslint/no-misused-spread */
                     ...params,
                     defaultValue: e.errorMessage || e.field
                 }

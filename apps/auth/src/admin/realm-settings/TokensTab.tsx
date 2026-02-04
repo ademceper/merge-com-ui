@@ -1,27 +1,11 @@
-/**
- * WARNING: Before modifying this file, run the following command:
- *
- * $ npx keycloakify own --path "admin/realm-settings/TokensTab.tsx"
- *
- * This file is provided by @keycloakify/keycloak-admin-ui version 260502.0.0.
- * It was copied into your repository by the postinstall script: `keycloakify sync-extensions`.
- */
-
-/* eslint-disable */
-
-// @ts-nocheck
-
 import type RealmRepresentation from "@keycloak/keycloak-admin-client/lib/defs/realmRepresentation";
-import {
-    HelpItem,
+import { HelpItem,
     KeycloakSelect,
     SelectVariant,
     ScrollForm,
-    useAlerts,
     SelectControl,
-    NumberControl,
-    AlertVariant
-} from "../../shared/keycloak-ui-shared";
+    NumberControl } from "../../shared/keycloak-ui-shared";
+import { toast } from "@merge/ui/components/sonner";
 import { Input } from "@merge/ui/components/input";
 import { Textarea } from "@merge/ui/components/textarea";
 import { Switch } from "@merge/ui/components/switch";
@@ -39,7 +23,6 @@ import { useWhoAmI } from "../context/whoami/WhoAmI";
 import { beerify, sortProviders } from "../util";
 import useIsFeatureEnabled, { Feature } from "../utils/useIsFeatureEnabled";
 
-
 type RealmSettingsTokensTabProps = {
     realm: RealmRepresentation;
     save: (realm: RealmRepresentation) => void;
@@ -47,7 +30,6 @@ type RealmSettingsTokensTabProps = {
 
 export const RealmSettingsTokensTab = ({ realm, save }: RealmSettingsTokensTabProps) => {
     const { t } = useTranslation();
-    const { addAlert } = useAlerts();
     const serverInfo = useServerInfo();
     const isFeatureEnabled = useIsFeatureEnabled();
     const { whoAmI } = useWhoAmI();
@@ -66,7 +48,7 @@ export const RealmSettingsTokensTab = ({ realm, save }: RealmSettingsTokensTabPr
 
     // Show a global error notification if validation fails
     const onError = () => {
-        addAlert(t("oid4vciFormValidationError"), AlertVariant.danger);
+        toast.error(t("oid4vciFormValidationError"));
     };
 
     const offlineSessionMaxEnabled = useWatch({

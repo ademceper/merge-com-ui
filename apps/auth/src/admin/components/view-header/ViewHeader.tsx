@@ -1,16 +1,3 @@
-/**
- * WARNING: Before modifying this file, run the following command:
- *
- * $ npx keycloakify own --path "admin/components/view-header/ViewHeader.tsx"
- *
- * This file is provided by @keycloakify/keycloak-admin-ui version 260502.0.0.
- * It was copied into your repository by the postinstall script: `keycloakify sync-extensions`.
- */
-
-/* eslint-disable */
-
-// @ts-nocheck
-
 import { Badge } from "@merge/ui/components/badge";
 import { buttonVariants } from "@merge/ui/components/button";
 import { Button } from "@merge/ui/components/button";
@@ -75,14 +62,6 @@ export const ViewHeader = ({
     const { enabled } = useHelp();
     const [isDropdownOpen, setDropdownOpen] = useState(false);
     const [isLowerDropdownOpen, setIsLowerDropdownOpen] = useState(false);
-
-    const onDropdownToggle = () => {
-        setDropdownOpen(!isDropdownOpen);
-    };
-
-    const onLowerDropdownToggle = () => {
-        setIsLowerDropdownOpen(!isLowerDropdownOpen);
-    };
 
     const toKey = (value: string) => value.replace(/\s/g, "-");
 
@@ -167,7 +146,6 @@ export const ViewHeader = ({
                                     href={helpUrl}
                                     target="_blank"
                                     rel="noreferrer noopener"
-                                    externalIcon={false}
                                     className="inline-flex items-center w-fit"
                                 >
                                     {t("learnMore")}

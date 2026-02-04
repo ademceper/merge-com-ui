@@ -109,4 +109,3 @@ export default function KcAccountPage(props: { kcContext: KcContext }) {
         </AccountLayout>
     );
 }
-

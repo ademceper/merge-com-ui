@@ -1,16 +1,3 @@
-/**
- * WARNING: Before modifying this file, run the following command:
- *
- * $ npx keycloakify own --path "admin/components/dynamic/GroupComponent.tsx"
- *
- * This file is provided by @keycloakify/keycloak-admin-ui version 260502.0.0.
- * It was copied into your repository by the postinstall script: `keycloakify sync-extensions`.
- */
-
-/* eslint-disable */
-
-// @ts-nocheck
-
 import GroupRepresentation from "@keycloak/keycloak-admin-client/lib/defs/groupRepresentation";
 import { Badge } from "@merge/ui/components/badge";
 import { Button } from "@merge/ui/components/button";

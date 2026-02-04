@@ -1,16 +1,3 @@
-/**
- * WARNING: Before modifying this file, run the following command:
- *
- * $ npx keycloakify own --path "admin/sessions/SessionsTable.tsx"
- *
- * This file is provided by @keycloakify/keycloak-admin-ui version 260502.0.0.
- * It was copied into your repository by the postinstall script: `keycloakify sync-extensions`.
- */
-
-/* eslint-disable */
-
-// @ts-nocheck
-
 import type UserSessionRepresentation from "@keycloak/keycloak-admin-client/lib/defs/userSessionRepresentation";
 import { Info } from "@phosphor-icons/react";
 import { Cube } from "@phosphor-icons/react";
@@ -27,7 +14,8 @@ import { useTranslation } from "react-i18next";
 import { Link, useMatch, useNavigate } from "react-router-dom";
 import { useAdminClient } from "../admin-client";
 import { toClient } from "../clients/routes/Client";
-import { useAlerts } from "../../shared/keycloak-ui-shared";
+import { getErrorDescription, getErrorMessage } from "../../shared/keycloak-ui-shared";
+import { toast } from "@merge/ui/components/sonner";
 import { useConfirmDialog } from "../components/confirm-dialog/ConfirmDialog";
 import { ListEmptyState } from "../../shared/keycloak-ui-shared";
 import {
@@ -116,7 +104,6 @@ export default function SessionsTable({
     const { whoAmI } = useWhoAmI();
     const navigate = useNavigate();
     const { t } = useTranslation();
-    const { addError } = useAlerts();
     const formatDate = useFormatDate();
     const [key, setKey] = useState(0);
     const refresh = () => setKey(value => value + 1);
@@ -172,7 +159,7 @@ export default function SessionsTable({
                     refresh();
                 }
             } catch (error) {
-                addError("logoutAllSessionsError", error);
+                toast.error(t("logoutAllSessionsError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
             }
         }
     });
@@ -226,11 +213,10 @@ export default function SessionsTable({
                     )
                 }
                 columns={columns}
-                actionResolver={(rowData: { data: UserSessionRepresentation }) => {
-                    if (
-                        rowData.data.type === "Offline" ||
-                        rowData.data.type === "OFFLINE"
-                    ) {
+                actionResolver={row => {
+                    const rowData = { data: row.data as UserSessionRepresentation };
+                    const session = rowData.data as UserSessionRepresentation & { type?: string };
+                    if (session.type === "Offline" || session.type === "OFFLINE") {
                         return [
                             {
                                 title: t("revoke"),

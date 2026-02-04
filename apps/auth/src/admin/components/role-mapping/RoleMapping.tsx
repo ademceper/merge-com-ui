@@ -1,21 +1,8 @@
-/**
- * WARNING: Before modifying this file, run the following command:
- *
- * $ npx keycloakify own --path "admin/components/role-mapping/RoleMapping.tsx"
- *
- * This file is provided by @keycloakify/keycloak-admin-ui version 260502.0.0.
- * It was copied into your repository by the postinstall script: `keycloakify sync-extensions`.
- */
-
-/* eslint-disable */
-
-// @ts-nocheck
-
 import type KeycloakAdminClient from "@keycloak/keycloak-admin-client";
 import type ClientRepresentation from "@keycloak/keycloak-admin-client/lib/defs/clientRepresentation";
 import type RoleRepresentation from "@keycloak/keycloak-admin-client/lib/defs/roleRepresentation";
-import { useAlerts } from "../../../shared/keycloak-ui-shared";
-import { AlertVariant } from "../../../shared/keycloak-ui-shared";
+import { getErrorDescription, getErrorMessage } from "../../../shared/keycloak-ui-shared";
+import { toast } from "@merge/ui/components/sonner";
 import { Badge } from "@merge/ui/components/badge";
 import { Button } from "@merge/ui/components/button";
 import { Checkbox } from "@merge/ui/components/checkbox";
@@ -94,9 +81,7 @@ export const RoleMapping = ({
     const { adminClient } = useAdminClient();
 
     const { t } = useTranslation();
-    const { addAlert, addError } = useAlerts();
-
-    const [key, setKey] = useState(0);
+const [key, setKey] = useState(0);
     const refresh = () => setKey(key + 1);
 
     const [hide, setHide] = useState(true);
@@ -166,11 +151,11 @@ export const RoleMapping = ({
         onConfirm: async () => {
             try {
                 await Promise.all(deleteMapping(adminClient, type, id, selected));
-                addAlert(t("roleMappingUpdatedSuccess"), AlertVariant.success);
+                toast.success(t("roleMappingUpdatedSuccess"));
                 setSelected([]);
                 refresh();
             } catch (error) {
-                addError("roleMappingUpdatedError", error);
+                toast.error(t("roleMappingUpdatedError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
             }
         }
     });

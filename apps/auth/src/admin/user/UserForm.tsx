@@ -1,16 +1,3 @@
-/**
- * WARNING: Before modifying this file, run the following command:
- *
- * $ npx keycloakify own --path "admin/user/UserForm.tsx"
- *
- * This file is provided by @keycloakify/keycloak-admin-ui version 260502.0.0.
- * It was copied into your repository by the postinstall script: `keycloakify sync-extensions`.
- */
-
-/* eslint-disable */
-
-// @ts-nocheck
-
 import type GroupRepresentation from "@keycloak/keycloak-admin-client/lib/defs/groupRepresentation";
 import type RealmRepresentation from "@keycloak/keycloak-admin-client/lib/defs/realmRepresentation";
 import {
@@ -27,7 +14,6 @@ import {
     ContinueCancelModal
 } from "../../shared/keycloak-ui-shared";
 import { Alert, AlertDescription } from "@merge/ui/components/alert";
-import { AlertVariant } from "../../shared/keycloak-ui-shared";
 import { Button } from "@merge/ui/components/button";
 import { Badge } from "@merge/ui/components/badge";
 import { Input } from "@merge/ui/components/input";
@@ -40,7 +26,8 @@ import { Controller, FormProvider, UseFormReturn } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { useAdminClient } from "../admin-client";
 import { DefaultSwitchControl } from "../components/SwitchControl";
-import { useAlerts } from "../../shared/keycloak-ui-shared";
+import { getErrorDescription, getErrorMessage } from "../../shared/keycloak-ui-shared";
+import { toast } from "@merge/ui/components/sonner";
 import { FormAccess } from "../components/form/FormAccess";
 import { GroupPickerDialog } from "../components/group/GroupPickerDialog";
 import { useAccess } from "../context/access/Access";
@@ -88,8 +75,7 @@ export const UserForm = ({
 
     const { t } = useTranslation();
     const formatDate = useFormatDate();
-    const { addAlert, addError } = useAlerts();
-    const { hasAccess } = useAccess();
+const { hasAccess } = useAccess();
     const isManager = hasAccess("manage-users");
     const canViewFederationLink = hasAccess("view-realm");
     const { whoAmI } = useWhoAmI();
@@ -109,12 +95,12 @@ export const UserForm = ({
     const unLockUser = async () => {
         try {
             await adminClient.users.update({ id: user!.id! }, { enabled: true });
-            addAlert(t("unlockSuccess"), AlertVariant.success);
+            toast.success(t("unlockSuccess"));
             if (refresh) {
                 refresh();
             }
         } catch (error) {
-            addError("unlockError", error);
+            toast.error(t("unlockError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
         }
     };
 
@@ -137,9 +123,9 @@ export const UserForm = ({
                     id: user!.id!,
                     groupId: group.id!
                 });
-                addAlert(t("addedGroupMembership"), AlertVariant.success);
+                toast.success(t("addedGroupMembership"));
             } catch (error) {
-                addError("addedGroupMembershipError", error);
+                toast.error(t("addedGroupMembershipError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
             }
         });
     };
@@ -180,7 +166,7 @@ export const UserForm = ({
                 refresh();
             }
         } catch (error) {
-            addError("emailPendingVerificationUpdateError", error);
+            toast.error(t("emailPendingVerificationUpdateError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
         }
     };
 
@@ -232,7 +218,7 @@ export const UserForm = ({
                                         id={`user-${user.id}`}
                                         text={user.id}
                                         label={t("userID")}
-                                        variant="control"
+                                        variant="outline"
                                     />
                                 </div>
                             </div>
@@ -272,7 +258,7 @@ export const UserForm = ({
                             labelIcon={t("emailVerifiedHelp")}
                         />
                         {user?.attributes?.["kc.email.pending"] && (
-                            <Alert variant="warning">
+                            <Alert variant="destructive">
                                 <AlertDescription>
                                     <p className="font-semibold">{t("emailPendingVerificationAlertTitle")}</p>
                                     {t("userNotYetConfirmedNewEmail", {

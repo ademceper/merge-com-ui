@@ -1,16 +1,3 @@
-/**
- * WARNING: Before modifying this file, run the following command:
- *
- * $ npx keycloakify own --path "admin/components/permission-tab/PermissionTab.tsx"
- *
- * This file is provided by @keycloakify/keycloak-admin-ui version 260502.0.0.
- * It was copied into your repository by the postinstall script: `keycloakify sync-extensions`.
- */
-
-/* eslint-disable */
-
-// @ts-nocheck
-
 import type { ManagementPermissionReference } from "@keycloak/keycloak-admin-client/lib/defs/managementPermissionReference";
 import { HelpItem, useFetch } from "../../../shared/keycloak-ui-shared";
 import { Card, CardContent, CardHeader, CardTitle } from "@merge/ui/components/card";
@@ -41,7 +28,6 @@ import { KeycloakSpinner } from "../../../shared/keycloak-ui-shared";
 import { useRealm } from "../../context/realm-context/RealmContext";
 import useLocaleSort from "../../utils/useLocaleSort";
 import { useConfirmDialog } from "../confirm-dialog/ConfirmDialog";
-
 
 type PermissionScreenType =
     | "clients"

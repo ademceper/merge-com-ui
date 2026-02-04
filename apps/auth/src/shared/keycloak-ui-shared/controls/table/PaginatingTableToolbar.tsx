@@ -1,16 +1,3 @@
-/**
- * WARNING: Before modifying this file, run the following command:
- *
- * $ npx keycloakify own --path "shared/keycloak-ui-shared/controls/table/PaginatingTableToolbar.tsx"
- *
- * This file is provided by @keycloakify/keycloak-admin-ui version 260502.0.0.
- * It was copied into your repository by the keycloakify sync-extensions.
- */
-
-/* eslint-disable */
-
-// @ts-nocheck
-
 import {
     Pagination,
     PaginationContent,
@@ -25,7 +12,6 @@ import {
     SelectTrigger,
     SelectValue,
 } from "@merge/ui/components/select";
-import { Button } from "@merge/ui/components/button";
 import { PropsWithChildren, ReactNode } from "react";
 import { useTranslation } from "react-i18next";
 

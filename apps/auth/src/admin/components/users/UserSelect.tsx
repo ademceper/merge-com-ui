@@ -1,18 +1,5 @@
-/**
- * WARNING: Before modifying this file, run the following command:
- *
- * $ npx keycloakify own --path "admin/components/users/UserSelect.tsx"
- *
- * This file is provided by @keycloakify/keycloak-admin-ui version 260502.0.0.
- * It was copied into your repository by the postinstall script: `keycloakify sync-extensions`.
- */
-
-/* eslint-disable */
-
-// @ts-nocheck
-
 import type UserRepresentation from "@keycloak/keycloak-admin-client/lib/defs/userRepresentation";
-import { FormLabel, HelpItem, useFetch } from "../../../shared/keycloak-ui-shared";
+import { FormLabel, useFetch } from "../../../shared/keycloak-ui-shared";
 import { Button } from "@merge/ui/components/button";
 import { Input } from "@merge/ui/components/input";
 import { Badge } from "@merge/ui/components/badge";
@@ -55,7 +42,7 @@ export const UserSelect = ({
     } = useFormContext();
     const values: string[] | undefined = getValues(name!);
 
-    const [open, toggleOpen, setOpen] = useToggle();
+    const [open, _toggleOpen, setOpen] = useToggle();
     const [selectedUsers, setSelectedUsers] = useState<UserRepresentation[]>([]);
     const [searchedUsers, setSearchedUsers] = useState<UserRepresentation[]>([]);
     const [inputValue, setInputValue] = useState("");

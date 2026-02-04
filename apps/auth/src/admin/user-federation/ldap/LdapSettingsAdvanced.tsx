@@ -1,16 +1,3 @@
-/**
- * WARNING: Before modifying this file, run the following command:
- *
- * $ npx keycloakify own --path "admin/user-federation/ldap/LdapSettingsAdvanced.tsx"
- *
- * This file is provided by @keycloakify/keycloak-admin-ui version 260502.0.0.
- * It was copied into your repository by the postinstall script: `keycloakify sync-extensions`.
- */
-
-/* eslint-disable */
-
-// @ts-nocheck
-
 import { Controller, UseFormReturn } from "react-hook-form";
 import { Button } from "@merge/ui/components/button";
 import { Switch } from "@merge/ui/components/switch";
@@ -18,7 +5,8 @@ import { FormLabel } from "../../../shared/keycloak-ui-shared";
 import { useTranslation } from "react-i18next";
 import { HelpItem } from "../../../shared/keycloak-ui-shared";
 import { useAdminClient } from "../../admin-client";
-import { useAlerts } from "../../../shared/keycloak-ui-shared";
+import { getErrorDescription, getErrorMessage } from "../../../shared/keycloak-ui-shared";
+import { toast } from "@merge/ui/components/sonner";
 import { FormAccess } from "../../components/form/FormAccess";
 import { WizardSectionHeader } from "../../components/wizard-section-header/WizardSectionHeader";
 import { useRealm } from "../../context/realm-context/RealmContext";
@@ -44,9 +32,7 @@ export const LdapSettingsAdvanced = ({
     const { t } = useTranslation();
 
     const { realm } = useRealm();
-    const { addAlert, addError } = useAlerts();
-
-    const testLdap = async () => {
+const testLdap = async () => {
         if (!(await form.trigger())) return;
         try {
             const settings = convertFormToSettings(form);
@@ -54,7 +40,7 @@ export const LdapSettingsAdvanced = ({
                 { realm },
                 { ...settings, componentId: id }
             );
-            addAlert(t("testSuccess"));
+            toast.success(t("testSuccess"));
             const passwordModifyOid = ldapOids.filter(
                 (id: { oid: string }) => id.oid === PASSWORD_MODIFY_OID
             );
@@ -62,7 +48,7 @@ export const LdapSettingsAdvanced = ({
                 (passwordModifyOid.length > 0).toString()
             ]);
         } catch (error) {
-            addError("testError", error);
+            toast.error(t("testError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
         }
     };
 

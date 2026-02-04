@@ -1,16 +1,3 @@
-/**
- * WARNING: Before modifying this file, run the following command:
- *
- * $ npx keycloakify own --path "shared/keycloak-ui-shared/controls/select-control/SingleSelectControl.tsx"
- *
- * This file is provided by @keycloakify/keycloak-admin-ui version 260502.0.0.
- * It was copied into your repository by the postinstall script: `keycloakify sync-extensions`.
- */
-
-/* eslint-disable */
-
-// @ts-nocheck
-
 import {
     Select,
     SelectContent,
@@ -24,7 +11,7 @@ import { Controller, FieldPath, FieldValues, useFormContext } from "react-hook-f
 import { cn } from "@merge/ui/lib/utils";
 import { getRuleValue } from "../../utils/getRuleValue";
 import { FormLabel } from "../FormLabel";
-import { SelectControlProps, isSelectBasedOptions, isString, key } from "./SelectControl";
+import { SelectControlProps, isSelectBasedOptions, isString, key, type OptionType, type SelectControlOption } from "./SelectControl";
 
 const EMPTY_OPTION_VALUE = "__empty__";
 
@@ -73,8 +60,8 @@ export const SingleSelectControl = <
                 control={control}
                 render={({ field: { onChange, value } }) => {
                     const strValue = Array.isArray(value) ? value[0] : value;
-                    const displayValue = isSelectBasedOptions(allOptions)
-                        ? allOptions.find(o => o.key === strValue)?.value ?? ""
+                    const displayValue = isSelectBasedOptions(allOptions as OptionType)
+                        ? (allOptions as SelectControlOption[]).find(o => o.key === strValue)?.value ?? ""
                         : (strValue ?? "");
                     const rawFormValue = strValue ?? "";
                     const selectValue = toSelectValue(rawFormValue);

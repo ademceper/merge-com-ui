@@ -1,20 +1,9 @@
-/**
- * WARNING: Before modifying this file, run the following command:
- *
- * $ npx keycloakify own --path "admin/components/role-form/RoleForm.tsx"
- *
- * This file is provided by @keycloakify/keycloak-admin-ui version 260502.0.0.
- * It was copied into your repository by the postinstall script: `keycloakify sync-extensions`.
- */
-
-/* eslint-disable */
-
-// @ts-nocheck
-
-import { Button } from "@merge/ui/components/button";
+import type { ComponentType } from "react";
 import { SubmitHandler, UseFormReturn, useFormContext, useWatch } from "react-hook-form";
 import { useTranslation } from "react-i18next";
-import { Link, To } from "react-router-dom";
+import { Link, type LinkProps, type To } from "react-router-dom";
+
+const RouterLink = Link as ComponentType<LinkProps>;
 import {
     FormSubmitButton,
     TextAreaControl,
@@ -58,7 +47,7 @@ export const RoleForm = ({
                     onSubmit={handleSubmit(onSubmit)}
                     role={role}
                     className="pf-v5-u-mt-lg"
-                    fineGrainedAccess={true} // We would never want to show this form in read-only mode
+                    fineGrainedAccess={true}
                 >
                     <TextControl
                         name="name"
@@ -93,13 +82,13 @@ export const RoleForm = ({
                         >
                             {t("save")}
                         </FormSubmitButton>
-                        <Button
+                        <RouterLink
+                            to={cancelLink}
                             data-testid="cancel"
-                            variant="link"
-                            component={props => <Link {...props} to={cancelLink} />}
+                            className="text-primary underline-offset-4 hover:underline"
                         >
                             {t("cancel")}
-                        </Button>
+                        </RouterLink>
                     </div>
                 </FormAccess>
             </div>

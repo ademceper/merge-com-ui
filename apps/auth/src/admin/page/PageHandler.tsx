@@ -1,19 +1,7 @@
-/**
- * WARNING: Before modifying this file, run the following command:
- *
- * $ npx keycloakify own --path "admin/page/PageHandler.tsx"
- *
- * This file is provided by @keycloakify/keycloak-admin-ui version 260502.0.0.
- * It was copied into your repository by the postinstall script: `keycloakify sync-extensions`.
- */
-
-/* eslint-disable */
-
-// @ts-nocheck
-
 import ComponentRepresentation from "@keycloak/keycloak-admin-client/lib/defs/componentRepresentation";
 import ComponentTypeRepresentation from "@keycloak/keycloak-admin-client/lib/defs/componentTypeRepresentation";
-import { KeycloakSpinner, useAlerts, useFetch } from "../../shared/keycloak-ui-shared";
+import { getErrorDescription, getErrorMessage, KeycloakSpinner, useFetch } from "../../shared/keycloak-ui-shared";
+import { toast } from "@merge/ui/components/sonner";
 import { Button } from "@merge/ui/components/button";
 import { useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
@@ -42,8 +30,7 @@ export const PageHandler = ({
     const { t } = useTranslation();
     const form = useForm<ComponentTypeRepresentation>();
     const { realm: realmName, realmRepresentation: realm } = useRealm();
-    const { addAlert, addError } = useAlerts();
-    const [id, setId] = useState(idAttribute);
+const [id, setId] = useState(idAttribute);
     const params = useParams();
 
     const [isLoading, setIsLoading] = useState(true);
@@ -86,9 +73,9 @@ export const PageHandler = ({
                 const { id } = await adminClient.components.create(updatedComponent);
                 setId(id);
             }
-            addAlert(t("itemSaveSuccessful"));
+            toast.success(t("itemSaveSuccessful"));
         } catch (error) {
-            addError("itemSaveError", error);
+            toast.error(t("itemSaveError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
         }
     };
 

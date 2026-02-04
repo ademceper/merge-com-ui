@@ -1,26 +1,10 @@
-/**
- * WARNING: Before modifying this file, run the following command:
- *
- * $ npx keycloakify own --path "admin/realm-settings/ProfilesTab.tsx"
- *
- * This file is provided by @keycloakify/keycloak-admin-ui version 260502.0.0.
- * It was copied into your repository by the postinstall script: `keycloakify sync-extensions`.
- */
-
-/* eslint-disable */
-
-// @ts-nocheck
-
 import type ClientProfileRepresentation from "@keycloak/keycloak-admin-client/lib/defs/clientProfileRepresentation";
-import {
-    Action,
+import { getErrorDescription, getErrorMessage, Action,
     KeycloakDataTable,
     KeycloakSpinner,
     ListEmptyState,
-    useAlerts,
-    useFetch
-} from "../../shared/keycloak-ui-shared";
-import { AlertVariant } from "../../shared/keycloak-ui-shared";
+    useFetch } from "../../shared/keycloak-ui-shared";
+import { toast } from "@merge/ui/components/sonner";
 import { Button } from "@merge/ui/components/button";
 import { Badge } from "@merge/ui/components/badge";
 import { Label } from "@merge/ui/components/label";
@@ -38,7 +22,6 @@ import { prettyPrintJSON } from "../util";
 import { toAddClientProfile } from "./routes/AddClientProfile";
 import { toClientProfile } from "./routes/ClientProfile";
 
-
 type ClientProfile = ClientProfileRepresentation & {
     global: boolean;
 };
@@ -48,8 +31,7 @@ export default function ProfilesTab() {
 
     const { t } = useTranslation();
     const { realm } = useRealm();
-    const { addAlert, addError } = useAlerts();
-    const [tableProfiles, setTableProfiles] = useState<ClientProfile[]>();
+const [tableProfiles, setTableProfiles] = useState<ClientProfile[]>();
     const [globalProfiles, setGlobalProfiles] = useState<ClientProfileRepresentation[]>();
     const [selectedProfile, setSelectedProfile] = useState<ClientProfile>();
     const [show, setShow] = useState(false);
@@ -105,10 +87,10 @@ export default function ProfilesTab() {
                     profiles: updatedProfiles,
                     globalProfiles
                 });
-                addAlert(t("deleteClientSuccess"), AlertVariant.success);
+                toast.success(t("deleteClientSuccess"));
                 setKey(key + 1);
             } catch (error) {
-                addError("deleteClientError", error);
+                toast.error(t("deleteClientError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
             }
         }
     });
@@ -149,13 +131,13 @@ export default function ProfilesTab() {
                     profiles: changedProfiles,
                     globalProfiles: changedGlobalProfiles
                 });
-                addAlert(t("updateClientProfilesSuccess"), AlertVariant.success);
+                toast.success(t("updateClientProfilesSuccess"));
                 setKey(key + 1);
             } catch (error) {
-                addError("updateClientProfilesError", error);
+                toast.error(t("updateClientProfilesError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
             }
         } catch (error) {
-            addError("invalidJsonClientProfilesError", error);
+            toast.error(t("invalidJsonClientProfilesError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
         }
     };
 

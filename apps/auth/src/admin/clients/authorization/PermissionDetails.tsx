@@ -1,28 +1,12 @@
-/**
- * WARNING: Before modifying this file, run the following command:
- *
- * $ npx keycloakify own --path "admin/clients/authorization/PermissionDetails.tsx"
- *
- * This file is provided by @keycloakify/keycloak-admin-ui version 260502.0.0.
- * It was copied into your repository by the postinstall script: `keycloakify sync-extensions`.
- */
-
-/* eslint-disable */
-
-// @ts-nocheck
-
 import type PolicyRepresentation from "@keycloak/keycloak-admin-client/lib/defs/policyRepresentation";
 import { DecisionStrategy } from "@keycloak/keycloak-admin-client/lib/defs/policyRepresentation";
-import {
-    FormErrorText,
+import { getErrorDescription, getErrorMessage, FormErrorText,
     HelpItem,
     SelectVariant,
     TextAreaControl,
     TextControl,
-    useAlerts,
-    useFetch
-} from "../../../shared/keycloak-ui-shared";
-import { AlertVariant } from "../../../shared/keycloak-ui-shared";
+    useFetch } from "../../../shared/keycloak-ui-shared";
+import { toast } from "@merge/ui/components/sonner";
 import { Button } from "@merge/ui/components/button";
 import { Switch } from "@merge/ui/components/switch";
 import { Label } from "@merge/ui/components/label";
@@ -72,9 +56,7 @@ export default function PermissionDetails() {
     const { id, realm, permissionType, permissionId, selectedId } = useParams<
         NewPermissionParams & PermissionDetailsParams
     >();
-
-    const { addAlert, addError } = useAlerts();
-    const [permission, setPermission] = useState<PolicyRepresentation>();
+const [permission, setPermission] = useState<PolicyRepresentation>();
     const [applyToResourceTypeFlag, setApplyToResourceTypeFlag] = useState(false);
     const { hasAccess } = useAccess();
 
@@ -150,12 +132,11 @@ export default function PermissionDetails() {
                     })
                 );
             }
-            addAlert(
-                t((permissionId ? "update" : "create") + "PermissionSuccess"),
-                AlertVariant.success
+            toast.success(
+                t((permissionId ? "update" : "create") + "PermissionSuccess")
             );
         } catch (error) {
-            addError("permissionSaveError", error);
+            toast.error(t("permissionSaveError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
         }
     };
 
@@ -164,7 +145,7 @@ export default function PermissionDetails() {
         messageKey: t("deletePermissionConfirm", {
             permission: permission?.name
         }),
-        continueButtonVariant: "danger",
+        continueButtonVariant: "destructive",
         continueButtonLabel: "confirm",
         onConfirm: async () => {
             try {
@@ -173,10 +154,10 @@ export default function PermissionDetails() {
                     type: permissionType,
                     permissionId: permissionId
                 });
-                addAlert(t("permissionDeletedSuccess"), AlertVariant.success);
+                toast.success(t("permissionDeletedSuccess"));
                 navigate(toAuthorizationTab({ realm, clientId: id, tab: "permissions" }));
             } catch (error) {
-                addError("permissionDeletedError", error);
+                toast.error(t("permissionDeletedError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
             }
         }
     });
@@ -206,7 +187,7 @@ export default function PermissionDetails() {
                               <DropdownMenuItem
                                   key="delete"
                                   data-testid="delete-resource"
-                                  isDisabled={isDisabled}
+                                  disabled={isDisabled}
                                   onClick={() => toggleDeleteDialog()}
                               >
                                   {t("delete")}

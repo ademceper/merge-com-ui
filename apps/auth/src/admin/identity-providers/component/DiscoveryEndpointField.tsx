@@ -1,16 +1,3 @@
-/**
- * WARNING: Before modifying this file, run the following command:
- *
- * $ npx keycloakify own --path "admin/identity-providers/component/DiscoveryEndpointField.tsx"
- *
- * This file is provided by @keycloakify/keycloak-admin-ui version 260502.0.0.
- * It was copied into your repository by the postinstall script: `keycloakify sync-extensions`.
- */
-
-/* eslint-disable */
-
-// @ts-nocheck
-
 import { Label } from "@merge/ui/components/label";
 import { Switch } from "@merge/ui/components/switch";
 import { KeycloakSpinner as Spinner } from "../../../shared/keycloak-ui-shared";
@@ -124,7 +111,7 @@ export const DiscoveryEndpointField = ({
                                   ? "default"
                                   : "success"
                         }
-                        customIcon={discovering ? <Spinner isInline /> : undefined}
+                        customIcon={discovering ? <Spinner /> : undefined}
                         rules={{
                             required: t("required"),
                             validate: (value: string) => discoverDebounced(value)

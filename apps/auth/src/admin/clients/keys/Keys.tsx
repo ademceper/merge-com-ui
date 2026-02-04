@@ -1,20 +1,7 @@
-/**
- * WARNING: Before modifying this file, run the following command:
- *
- * $ npx keycloakify own --path "admin/clients/keys/Keys.tsx"
- *
- * This file is provided by @keycloakify/keycloak-admin-ui version 260502.0.0.
- * It was copied into your repository by the postinstall script: `keycloakify sync-extensions`.
- */
-
-/* eslint-disable */
-
-// @ts-nocheck
-
 import type CertificateRepresentation from "@keycloak/keycloak-admin-client/lib/defs/certificateRepresentation";
 import type KeyStoreConfig from "@keycloak/keycloak-admin-client/lib/defs/keystoreConfig";
-import { TextControl, useAlerts, useFetch } from "../../../shared/keycloak-ui-shared";
-import { AlertVariant } from "../../../shared/keycloak-ui-shared";
+import { getErrorDescription, getErrorMessage, TextControl, useFetch } from "../../../shared/keycloak-ui-shared";
+import { toast } from "@merge/ui/components/sonner";
 import { Button } from "@merge/ui/components/button";
 import { saveAs } from "file-saver";
 import { useState } from "react";
@@ -53,9 +40,7 @@ export const Keys = ({
         getValues,
         formState: { isDirty }
     } = useFormContext<FormFields>();
-    const { addAlert, addError } = useAlerts();
-
-    const [keyInfo, setKeyInfo] = useState<CertificateRepresentation>();
+const [keyInfo, setKeyInfo] = useState<CertificateRepresentation>();
     const [openGenerateKeys, toggleOpenGenerateKeys, setOpenGenerateKeys] = useToggle();
     const [openImportKeys, toggleOpenImportKeys, setOpenImportKeys] = useToggle();
     const [key, setKey] = useState(0);
@@ -75,7 +60,7 @@ export const Keys = ({
             try {
                 return await adminClient.clients.getKeyInfo({ id: clientId, attr });
             } catch (error) {
-                addError("getKeyInfoError", error);
+                toast.error(t("getKeyInfoError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
                 return {} as CertificateRepresentation;
             }
         },
@@ -96,10 +81,10 @@ export const Keys = ({
                 new Blob([keyStore], { type: "application/octet-stream" }),
                 `keystore.${getFileExtension(config.format ?? "")}`
             );
-            addAlert(t("generateSuccess"), AlertVariant.success);
+            toast.success(t("generateSuccess"));
             refresh();
         } catch (error) {
-            addError("generateError", error);
+            toast.error(t("generateError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
         }
     };
 
@@ -114,10 +99,10 @@ export const Keys = ({
 
             formData.append("file", file);
             await adminClient.clients.uploadCertificate({ id: clientId, attr }, formData);
-            addAlert(t("importSuccess"), AlertVariant.success);
+            toast.success(t("importSuccess"));
             refresh();
         } catch (error) {
-            addError("importError", error);
+            toast.error(t("importError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
         }
     };
 

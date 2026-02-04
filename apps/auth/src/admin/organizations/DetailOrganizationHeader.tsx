@@ -1,23 +1,11 @@
-/**
- * WARNING: Before modifying this file, run the following command:
- *
- * $ npx keycloakify own --path "admin/organizations/DetailOraganzationHeader.tsx"
- *
- * This file is provided by @keycloakify/keycloak-admin-ui version 260502.0.0.
- * It was copied into your repository by the postinstall script: `keycloakify sync-extensions`.
- */
-
-/* eslint-disable */
-
-// @ts-nocheck
-
 import { DropdownMenuItem } from "@merge/ui/components/dropdown-menu";
 import { ViewHeader } from "../components/view-header/ViewHeader";
 import { useTranslation } from "react-i18next";
 import { useConfirmDialog } from "../components/confirm-dialog/ConfirmDialog";
 import { useAdminClient } from "../admin-client";
 import { useNavigate } from "react-router-dom";
-import { useAlerts } from "../../shared/keycloak-ui-shared";
+import { getErrorDescription, getErrorMessage } from "../../shared/keycloak-ui-shared";
+import { toast } from "@merge/ui/components/sonner";
 import { Controller, useFormContext, useWatch } from "react-hook-form";
 import { toOrganizations } from "./routes/Organizations";
 import { useRealm } from "../context/realm-context/RealmContext";
@@ -32,9 +20,7 @@ export const DetailOrganizationHeader = ({ save }: DetailOrganizationHeaderProps
     const navigate = useNavigate();
 
     const { t } = useTranslation();
-    const { addAlert, addError } = useAlerts();
-
-    const id = useWatch({ name: "id" });
+const id = useWatch({ name: "id" });
     const name = useWatch({ name: "name" });
 
     const { setValue } = useFormContext();
@@ -57,10 +43,10 @@ export const DetailOrganizationHeader = ({ save }: DetailOrganizationHeaderProps
         onConfirm: async () => {
             try {
                 await adminClient.organizations.delById({ id });
-                addAlert(t("organizationDeletedSuccess"));
+                toast.success(t("organizationDeletedSuccess"));
                 navigate(toOrganizations({ realm }));
             } catch (error) {
-                addError("organizationDeleteError", error);
+                toast.error(t("organizationDeleteError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
             }
         }
     });

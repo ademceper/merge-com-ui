@@ -1,16 +1,3 @@
-/**
- * WARNING: Before modifying this file, run the following command:
- *
- * $ npx keycloakify own --path "shared/keycloak-ui-shared/controls/select-control/SelectControl.tsx"
- *
- * This file is provided by @keycloakify/keycloak-ui-shared version 260502.0.0.
- * It was copied into your repository by the postinstall script: `keycloakify sync-extensions`.
- */
-
-/* eslint-disable */
-
-// @ts-nocheck
-
 import {
     ControllerProps,
     FieldPath,
@@ -39,6 +26,7 @@ export type SelectControlProps<
     T extends FieldValues,
     P extends FieldPath<T> = FieldPath<T>
 > = UseControllerProps<T, P> & {
+    id?: string;
     name: string;
     label?: string;
     options: OptionType;
@@ -59,6 +47,10 @@ export type SelectControlProps<
     triggerClassName?: string;
     /** Trigger yüksekliğini input ile eşitlemek için (örn. formInputClassName h-12 = 3rem) */
     triggerStyle?: React.CSSProperties;
+    /** Legacy PatternFly: scrollable menu; ignored in UI lib. */
+    isScrollable?: boolean;
+    maxMenuHeight?: string;
+    className?: string;
 };
 
 export const isSelectBasedOptions = (

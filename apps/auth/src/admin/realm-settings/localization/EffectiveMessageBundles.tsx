@@ -1,16 +1,3 @@
-/**
- * WARNING: Before modifying this file, run the following command:
- *
- * $ npx keycloakify own --path "admin/realm-settings/localization/EffectiveMessageBundles.tsx"
- *
- * This file is provided by @keycloakify/keycloak-admin-ui version 260502.0.0.
- * It was copied into your repository by the postinstall script: `keycloakify sync-extensions`.
- */
-
-/* eslint-disable */
-
-// @ts-nocheck
-
 import { KeycloakSelect, SelectVariant } from "../../../shared/keycloak-ui-shared";
 import { Button } from "@merge/ui/components/button";
 import { Badge } from "@merge/ui/components/badge";
@@ -258,8 +245,8 @@ export const EffectiveMessageBundles = ({
                                             {[
                                                 <SelectOption
                                                     key="theme_placeholder"
-                                                    label={t("selectTheme")}
-                                                    isDisabled
+                                                    value=""
+                                                    disabled
                                                 >
                                                     {t("selectTheme")}
                                                 </SelectOption>
@@ -318,8 +305,8 @@ export const EffectiveMessageBundles = ({
                                             {[
                                                 <SelectOption
                                                     key="themeType_placeholder"
-                                                    label={t("selectThemeType")}
-                                                    isDisabled
+                                                    value=""
+                                                    disabled
                                                 >
                                                     {t("selectThemeType")}
                                                 </SelectOption>
@@ -380,8 +367,8 @@ export const EffectiveMessageBundles = ({
                                             {[
                                                 <SelectOption
                                                     key="language_placeholder"
-                                                    label={t("selectLanguage")}
-                                                    isDisabled
+                                                    value=""
+                                                    disabled
                                                 >
                                                     {t("selectLanguage")}
                                                 </SelectOption>

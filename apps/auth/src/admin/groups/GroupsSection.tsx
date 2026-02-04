@@ -1,16 +1,3 @@
-/**
- * WARNING: Before modifying this file, run the following command:
- *
- * $ npx keycloakify own --path "admin/groups/GroupsSection.tsx"
- *
- * This file is provided by @keycloakify/keycloak-admin-ui version 260502.0.0.
- * It was copied into your repository by the postinstall script: `keycloakify sync-extensions`.
- */
-
-/* eslint-disable */
-
-// @ts-nocheck
-
 import type GroupRepresentation from "@keycloak/keycloak-admin-client/lib/defs/groupRepresentation";
 import { useFetch } from "../../shared/keycloak-ui-shared";
 import { Button } from "@merge/ui/components/button";
@@ -41,7 +28,6 @@ import { DeleteGroup } from "./components/DeleteGroup";
 import { GroupTree } from "./components/GroupTree";
 import { getId, getLastId } from "./groupIdUtils";
 import { toGroups } from "./routes/Groups";
-
 
 export default function GroupsSection() {
     const { adminClient } = useAdminClient();

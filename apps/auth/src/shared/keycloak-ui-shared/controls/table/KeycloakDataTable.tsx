@@ -1,5 +1,3 @@
-/* eslint-disable */
-// @ts-nocheck
 
 import { ArrowsClockwise, CaretDown, CaretRight, DotsThreeVertical } from "@phosphor-icons/react";
 import { Button } from "@merge/ui/components/button";
@@ -8,6 +6,7 @@ import {
     DropdownMenu,
     DropdownMenuContent,
     DropdownMenuItem,
+    DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from "@merge/ui/components/dropdown-menu";
 import {
@@ -41,7 +40,7 @@ import { PaginatingTableToolbar } from "./PaginatingTableToolbar";
 // Local types (replacing PatternFly table types)
 export type IRowCell = { title: ReactNode } | ReactNode;
 export type IFormatter = (value: unknown) => unknown;
-export type ITransform = () => { className?: string };
+export type ITransform = () => { className?: string; width?: string };
 export type IAction = {
     title: string | ReactNode;
     onClick?: (event: React.MouseEvent, rowIndex: number, rowData: unknown) => void;
@@ -118,15 +117,19 @@ const CellRenderer = ({ row, index = 0, actions, actionResolver }: CellRendererP
                             </Button>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end">
-                            {items.map((action, i) => (
-                                <DropdownMenuItem
-                                    key={i}
-                                    disabled={action.isDisabled}
-                                    onClick={e => action.onClick?.(e, index, row.data)}
-                                >
-                                    {action.title}
-                                </DropdownMenuItem>
-                            ))}
+                            {items.map((action, i) =>
+                                (action as IAction & { isSeparator?: boolean }).isSeparator ? (
+                                    <DropdownMenuSeparator key={i} />
+                                ) : (
+                                    <DropdownMenuItem
+                                        key={i}
+                                        disabled={action.isDisabled}
+                                        onClick={e => action.onClick?.(e, index, row.data)}
+                                    >
+                                        {action.title}
+                                    </DropdownMenuItem>
+                                )
+                            )}
                         </DropdownMenuContent>
                     </DropdownMenu>
                 </TableCell>
@@ -207,7 +210,7 @@ function DataTable<T>({
                 } else {
                     updateSelectedRows(
                         selectedRows.filter(
-                            v => get(v, "id") !== (rows[rowIndex] as IRow).data.id
+                            v => get(v, "id") !== get((rows[rowIndex] as IRow).data, "id")
                         )
                     );
                 }
@@ -268,7 +271,7 @@ function DataTable<T>({
                                   <TableCell className="pr-0">
                                       <Checkbox
                                           checked={!!selectedRows.find(
-                                              v => get(v, "id") === row.data.id
+                                              v => get(v, "id") === get(row.data, "id")
                                           )}
                                           disabled={row.disableSelection}
                                           onCheckedChange={checked =>
@@ -324,7 +327,7 @@ function DataTable<T>({
                                           <TableCell className="pr-0">
                                               <Checkbox
                                                   checked={!!selectedRows.find(
-                                                      v => get(v, "id") === row.data.id
+                                                      v => get(v, "id") === get(row.data, "id")
                                                   )}
                                                   disabled={row.disableSelection}
                                                   onCheckedChange={checked =>
@@ -385,6 +388,8 @@ export type DetailField<T> = {
 
 export type Action<T> = IAction & {
     onRowClick?: (row: T) => Promise<boolean | void> | void;
+    /** Legacy: render a separator in the actions dropdown. */
+    isSeparator?: boolean;
 };
 
 export type LoaderFunction<T> = (
@@ -413,6 +418,7 @@ export type DataListProps<T> = {
     isNotCompact?: boolean;
     isRadio?: boolean;
     isSearching?: boolean;
+    className?: string;
 };
 
 export function KeycloakDataTable<T>({
@@ -452,10 +458,10 @@ export function KeycloakDataTable<T>({
     const [max, setMax] = useState(defaultPageSize);
     const [first, setFirst] = useState(0);
     const [search, setSearch] = useState<string>("");
-    const prevSearch = useRef<string>();
+    const prevSearch = useRef<string | undefined>(undefined);
 
     const [key, setKey] = useState(0);
-    const prevKey = useRef<number>();
+    const prevKey = useRef<number | undefined>(undefined);
     const refresh = () => setKey(key + 1);
     const id = useId();
 
@@ -467,7 +473,7 @@ export function KeycloakDataTable<T>({
             }
             if (col.cellRenderer) {
                 const Component = col.cellRenderer;
-                return { title: <Component {...value} /> };
+                return { title: Component(value) };
             }
             return get(value, col.name);
         });

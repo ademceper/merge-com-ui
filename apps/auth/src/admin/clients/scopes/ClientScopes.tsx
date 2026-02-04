@@ -1,18 +1,6 @@
-/**
- * WARNING: Before modifying this file, run the following command:
- *
- * $ npx keycloakify own --path "admin/clients/scopes/ClientScopes.tsx"
- *
- * This file is provided by @keycloakify/keycloak-admin-ui version 260502.0.0.
- * It was copied into your repository by the postinstall script: `keycloakify sync-extensions`.
- */
-
-/* eslint-disable */
-
-// @ts-nocheck
-
 import type ClientScopeRepresentation from "@keycloak/keycloak-admin-client/lib/defs/clientScopeRepresentation";
-import { AlertVariant, useAlerts, useFetch } from "../../../shared/keycloak-ui-shared";
+import { getErrorDescription, getErrorMessage, useFetch } from "../../../shared/keycloak-ui-shared";
+import { toast } from "@merge/ui/components/sonner";
 import { Button } from "@merge/ui/components/button";
 import {
     DataTable,
@@ -50,7 +38,6 @@ import { AddScopeDialog } from "./AddScopeDialog";
 import useIsFeatureEnabled, { Feature } from "../../utils/useIsFeatureEnabled";
 import { PROTOCOL_OIDC, PROTOCOL_OID4VC } from "../constants";
 
-
 export type ClientScopesProps = {
     clientId: string;
     protocol: string;
@@ -80,9 +67,7 @@ const TypeSelector = ({
     const { adminClient } = useAdminClient();
 
     const { t } = useTranslation();
-    const { addAlert, addError } = useAlerts();
-
-    const { hasAccess } = useAccess();
+const { hasAccess } = useAccess();
 
     const isDedicatedRow = (value: Row) => value.id === DEDICATED_ROW;
     const isManager = hasAccess("manage-clients") || fineGrainedAccess;
@@ -101,10 +86,10 @@ const TypeSelector = ({
                         scope.type,
                         value as ClientScope
                     );
-                    addAlert(t("clientScopeSuccess"), AlertVariant.success);
+                    toast.success(t("clientScopeSuccess"));
                     refresh();
                 } catch (error) {
-                    addError("clientScopeError", error);
+                    toast.error(t("clientScopeError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
                 }
             }}
         />
@@ -121,8 +106,7 @@ export const ClientScopes = ({
     const isFeatureEnabled = useIsFeatureEnabled();
 
     const { t } = useTranslation();
-    const { addAlert, addError } = useAlerts();
-    const { realm } = useRealm();
+const { realm } = useRealm();
     const localeSort = useLocaleSort();
 
     const [addDialogOpen, setAddDialogOpen] = useState(false);
@@ -229,10 +213,10 @@ export const ClientScopes = ({
                     selectedRows[0],
                     selectedRows[0].type as ClientScope
                 );
-                addAlert(t("clientScopeRemoveSuccess"), AlertVariant.success);
+                toast.success(t("clientScopeRemoveSuccess"));
                 refresh();
             } catch (error) {
-                addError("clientScopeRemoveError", error);
+                toast.error(t("clientScopeRemoveError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
             }
         }
     });
@@ -318,10 +302,10 @@ export const ClientScopes = ({
                                         )
                                 )
                             );
-                            addAlert(t("clientScopeSuccess"), AlertVariant.success);
+                            toast.success(t("clientScopeSuccess"));
                             refresh();
                         } catch (error) {
-                            addError("clientScopeError", error);
+                            toast.error(t("clientScopeError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
                         }
                     }}
                 />
@@ -375,15 +359,10 @@ export const ClientScopes = ({
 
                                                 setKebabOpen(false);
                                                 setSelectedRows([]);
-                                                addAlert(
-                                                    t("clientScopeRemoveSuccess")
-                                                );
+                                                toast.success(t("clientScopeRemoveSuccess"));
                                                 refresh();
                                             } catch (error) {
-                                                addError(
-                                                    "clientScopeRemoveError",
-                                                    error
-                                                );
+                                                toast.error(t("clientScopeRemoveError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
                                             }
                                         }}
                                     >

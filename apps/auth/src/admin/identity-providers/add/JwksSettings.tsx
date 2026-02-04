@@ -1,28 +1,12 @@
-/**
- * WARNING: Before modifying this file, run the following command:
- *
- * $ npx keycloakify own --path "admin/identity-providers/add/JwksSettings.tsx"
- *
- * This file is provided by @keycloakify/keycloak-admin-ui version 260502.0.0.
- * It was copied into your repository by the postinstall script: `keycloakify sync-extensions`.
- */
-
-/* eslint-disable */
-
-// @ts-nocheck
-
 import IdentityProviderRepresentation from "@keycloak/keycloak-admin-client/lib/defs/identityProviderRepresentation";
-import { AlertVariant } from "../../../shared/keycloak-ui-shared";
 import { Button } from "@merge/ui/components/button";
 import { Field } from "@merge/ui/components/field";
 import { useFormContext, useWatch } from "react-hook-form";
 import { DefaultSwitchControl } from "../../components/SwitchControl";
 import { useTranslation } from "react-i18next";
-import {
-    TextAreaControl,
-    TextControl,
-    useAlerts
-} from "../../../shared/keycloak-ui-shared";
+import { getErrorDescription, getErrorMessage, TextAreaControl,
+    TextControl } from "../../../shared/keycloak-ui-shared";
+import { toast } from "@merge/ui/components/sonner";
 import { ImportFile, ImportKeyDialog } from "../../clients/keys/ImportKeyDialog";
 import useToggle from "../../utils/useToggle";
 import { useAdminClient } from "../../admin-client";
@@ -35,8 +19,7 @@ export const JwksSettings = ({ readOnly = false }: JwksSettingsProps) => {
     const { t } = useTranslation();
     const { control, setValue } = useFormContext<IdentityProviderRepresentation>();
     const { adminClient } = useAdminClient();
-    const { addAlert, addError } = useAlerts();
-    const [openImportKeys, toggleOpenImportKeys, setOpenImportKeys] = useToggle();
+const [openImportKeys, toggleOpenImportKeys, setOpenImportKeys] = useToggle();
     const useJwks = useWatch({
         control,
         name: "config.useJwksUrl",
@@ -64,15 +47,15 @@ export const JwksSettings = ({ readOnly = false }: JwksSettingsProps) => {
             if (info.jwks) {
                 setValue("config.publicKeySignatureVerifier", info.jwks);
                 setValue("config.publicKeySignatureVerifierKeyId", "");
-                addAlert(t("importSuccess"), AlertVariant.success);
+                toast.success(t("importSuccess"));
             } else if (info.publicKey) {
                 setValue("config.publicKeySignatureVerifier", info.publicKey);
-                addAlert(t("importSuccess"), AlertVariant.success);
+                toast.success(t("importSuccess"));
             } else {
-                addError("importError", t("emptyResources"));
+                toast.error(t("importError", { error: t("emptyResources") }));
             }
         } catch (error) {
-            addError("importError", error);
+            toast.error(t("importError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
         }
     };
 

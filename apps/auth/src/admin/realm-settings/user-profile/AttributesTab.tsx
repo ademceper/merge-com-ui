@@ -1,16 +1,3 @@
-/**
- * WARNING: Before modifying this file, run the following command:
- *
- * $ npx keycloakify own --path "admin/realm-settings/user-profile/AttributesTab.tsx"
- *
- * This file is provided by @keycloakify/keycloak-admin-ui version 260502.0.0.
- * It was copied into your repository by the postinstall script: `keycloakify sync-extensions`.
- */
-
-/* eslint-disable */
-
-// @ts-nocheck
-
 import type { UserProfileAttribute } from "@keycloak/keycloak-admin-client/lib/defs/userProfileMetadata";
 import { KeycloakSelect, SelectVariant } from "../../../shared/keycloak-ui-shared";
 import { Button } from "@merge/ui/components/button";
@@ -200,7 +187,7 @@ export const AttributesTab = ({ setTableData }: AttributesTabProps) => {
                                     attributes.filter(attr => !!attr.group),
                                     "group"
                                 ).map(attr => (
-                                    <SelectOption key={attr.group} value={attr.group}>
+                                    <SelectOption key={attr.group} value={attr.group ?? ""}>
                                         {attr.group}
                                     </SelectOption>
                                 ))
@@ -212,7 +199,7 @@ export const AttributesTab = ({ setTableData }: AttributesTabProps) => {
                             data-testid="createAttributeBtn"
                             asChild
                         >
-                            <Link to={toAddAttribute({ realm })}>
+                            <Link to={toAddAttribute({ realm: realm ?? "" })}>
                                 {t("createAttribute")}
                             </Link>
                         </Button>
@@ -235,11 +222,13 @@ export const AttributesTab = ({ setTableData }: AttributesTabProps) => {
                 actions={[
                     {
                         title: t("edit"),
-                        onClick: (_key, _idx, component) => {
+                        onClick: (_event, row) => {
+                            const name = row.name ?? "";
+                            if (!name) return;
                             navigate(
                                 toAttribute({
                                     realm,
-                                    attributeName: component.name
+                                    attributeName: name
                                 })
                             );
                         }
@@ -248,8 +237,8 @@ export const AttributesTab = ({ setTableData }: AttributesTabProps) => {
                         title: t("delete"),
                         isActionable: ({ name }) =>
                             !RESTRICTED_ATTRIBUTES.includes(name!),
-                        onClick: (_key, _idx, component) => {
-                            setAttributeToDelete(component.name);
+                        onClick: (_event, row) => {
+                            setAttributeToDelete(row.name ?? "");
                             toggleDeleteDialog();
                         }
                     }

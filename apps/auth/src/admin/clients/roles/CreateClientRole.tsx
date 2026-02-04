@@ -1,23 +1,10 @@
-/**
- * WARNING: Before modifying this file, run the following command:
- *
- * $ npx keycloakify own --path "admin/clients/roles/CreateClientRole.tsx"
- *
- * This file is provided by @keycloakify/keycloak-admin-ui version 260502.0.0.
- * It was copied into your repository by the postinstall script: `keycloakify sync-extensions`.
- */
-
-/* eslint-disable */
-
-// @ts-nocheck
-
 import type RoleRepresentation from "@keycloak/keycloak-admin-client/lib/defs/roleRepresentation";
-import { AlertVariant } from "../../../shared/keycloak-ui-shared";
 import { FormProvider, SubmitHandler, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { useNavigate, useParams } from "react-router-dom";
 import { useAdminClient } from "../../admin-client";
-import { useAlerts } from "../../../shared/keycloak-ui-shared";
+import { getErrorDescription, getErrorMessage } from "../../../shared/keycloak-ui-shared";
+import { toast } from "@merge/ui/components/sonner";
 import { AttributeForm } from "../../components/key-value-form/AttributeForm";
 import { RoleForm } from "../../components/role-form/RoleForm";
 import { useRealm } from "../../context/realm-context/RealmContext";
@@ -33,9 +20,7 @@ export default function CreateClientRole() {
     const navigate = useNavigate();
     const { clientId } = useParams<NewRoleParams>();
     const { realm } = useRealm();
-    const { addAlert, addError } = useAlerts();
-
-    const onSubmit: SubmitHandler<AttributeForm> = async formValues => {
+const onSubmit: SubmitHandler<AttributeForm> = async formValues => {
         const role: RoleRepresentation = {
             ...formValues,
             name: formValues.name?.trim(),
@@ -53,7 +38,7 @@ export default function CreateClientRole() {
                 roleName: role.name!
             }))!;
 
-            addAlert(t("roleCreated"), AlertVariant.success);
+            toast.success(t("roleCreated"));
             navigate(
                 toClientRole({
                     realm,
@@ -63,7 +48,7 @@ export default function CreateClientRole() {
                 })
             );
         } catch (error) {
-            addError("roleCreateError", error);
+            toast.error(t("roleCreateError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
         }
     };
 

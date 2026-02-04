@@ -1,17 +1,3 @@
-/**
- * WARNING: Before modifying this file, run the following command:
- *
- * $ npx keycloakify own --path "admin/user-federation/shared/ExtendedHeader.tsx"
- *
- * This file is provided by @keycloakify/keycloak-admin-ui version 260502.0.0.
- * It was copied into your repository by the postinstall script: `keycloakify sync-extensions`.
- */
-
-/* eslint-disable */
-
-// @ts-nocheck
-
-import { AlertVariant } from "../../../shared/keycloak-ui-shared";
 import {
     DropdownMenuSeparator,
     DropdownMenuItem
@@ -20,7 +6,8 @@ import { useFormContext, useWatch } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { useParams } from "react-router-dom";
 import { useAdminClient } from "../../admin-client";
-import { useAlerts } from "../../../shared/keycloak-ui-shared";
+import { getErrorDescription, getErrorMessage } from "../../../shared/keycloak-ui-shared";
+import { toast } from "@merge/ui/components/sonner";
 import { useConfirmDialog } from "../../components/confirm-dialog/ConfirmDialog";
 import { Header } from "./Header";
 
@@ -41,9 +28,7 @@ export const ExtendedHeader = ({
 
     const { t } = useTranslation();
     const { id } = useParams<{ id: string }>();
-    const { addAlert, addError } = useAlerts();
-
-    const { control } = useFormContext();
+const { control } = useFormContext();
     const hasImportUsers = useWatch({
         name: "config.importEnabled",
         control,
@@ -70,56 +55,54 @@ export const ExtendedHeader = ({
         try {
             if (id) {
                 await adminClient.userStorageProvider.removeImportedUsers({ id });
-                addAlert(t("removeImportedUsersSuccess"), AlertVariant.success);
+                toast.success(t("removeImportedUsersSuccess"));
             }
         } catch (error) {
-            addError("removeImportedUsersError", error);
+            toast.error(t("removeImportedUsersError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
         }
     };
 
     const syncChangedUsers = async () => {
         try {
             if (id) {
-                addAlert(t("syncUsersStarted"), AlertVariant.info);
+                toast.info(t("syncUsersStarted"));
                 const response = await adminClient.userStorageProvider.sync({
                     id: id,
                     action: "triggerChangedUsersSync"
                 });
                 if (response.ignored) {
-                    addAlert(`${response.status}.`, AlertVariant.warning);
+                    toast.warning(`${response.status}.`);
                 } else {
-                    addAlert(
+                    toast.success(
                         t("syncUsersSuccess") +
-                            `${response.added} users added, ${response.updated} users updated, ${response.removed} users removed, ${response.failed} users failed.`,
-                        AlertVariant.success
+                            `${response.added} users added, ${response.updated} users updated, ${response.removed} users removed, ${response.failed} users failed.`
                     );
                 }
             }
         } catch (error) {
-            addError("syncUsersError", error);
+            toast.error(t("syncUsersError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
         }
     };
 
     const syncAllUsers = async () => {
         try {
             if (id) {
-                addAlert(t("syncUsersStarted"), AlertVariant.info);
+                toast.info(t("syncUsersStarted"));
                 const response = await adminClient.userStorageProvider.sync({
                     id: id,
                     action: "triggerFullSync"
                 });
                 if (response.ignored) {
-                    addAlert(`${response.status}.`, AlertVariant.warning);
+                    toast.warning(`${response.status}.`);
                 } else {
-                    addAlert(
+                    toast.success(
                         t("syncUsersSuccess") +
-                            `${response.added} users added, ${response.updated} users updated, ${response.removed} users removed, ${response.failed} users failed.`,
-                        AlertVariant.success
+                            `${response.added} users added, ${response.updated} users updated, ${response.removed} users removed, ${response.failed} users failed.`
                     );
                 }
             }
         } catch (error) {
-            addError("syncUsersError", error);
+            toast.error(t("syncUsersError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
         }
     };
 
@@ -128,9 +111,9 @@ export const ExtendedHeader = ({
             if (id) {
                 await adminClient.userStorageProvider.unlinkUsers({ id });
             }
-            addAlert(t("unlinkUsersSuccess"), AlertVariant.success);
+            toast.success(t("unlinkUsersSuccess"));
         } catch (error) {
-            addError("unlinkUsersError", error);
+            toast.error(t("unlinkUsersError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
         }
     };
 

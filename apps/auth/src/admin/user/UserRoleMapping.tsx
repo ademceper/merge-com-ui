@@ -1,21 +1,8 @@
-/**
- * WARNING: Before modifying this file, run the following command:
- *
- * $ npx keycloakify own --path "admin/user/UserRoleMapping.tsx"
- *
- * This file is provided by @keycloakify/keycloak-admin-ui version 260502.0.0.
- * It was copied into your repository by the postinstall script: `keycloakify sync-extensions`.
- */
-
-/* eslint-disable */
-
-// @ts-nocheck
-
 import type { RoleMappingPayload } from "@keycloak/keycloak-admin-client/lib/defs/roleRepresentation";
-import { AlertVariant } from "../../shared/keycloak-ui-shared";
 import { useTranslation } from "react-i18next";
 import { useAdminClient } from "../admin-client";
-import { useAlerts } from "../../shared/keycloak-ui-shared";
+import { getErrorDescription, getErrorMessage } from "../../shared/keycloak-ui-shared";
+import { toast } from "@merge/ui/components/sonner";
 import { RoleMapping, Row } from "../components/role-mapping/RoleMapping";
 
 type UserRoleMappingProps = {
@@ -27,9 +14,7 @@ export const UserRoleMapping = ({ id, name }: UserRoleMappingProps) => {
     const { adminClient } = useAdminClient();
 
     const { t } = useTranslation();
-    const { addAlert, addError } = useAlerts();
-
-    const assignRoles = async (rows: Row[]) => {
+const assignRoles = async (rows: Row[]) => {
         try {
             const realmRoles = rows
                 .filter(row => row.client === undefined)
@@ -50,9 +35,9 @@ export const UserRoleMapping = ({ id, name }: UserRoleMappingProps) => {
                         })
                     )
             );
-            addAlert(t("userRoleMappingUpdatedSuccess"), AlertVariant.success);
+            toast.success(t("userRoleMappingUpdatedSuccess"));
         } catch (error) {
-            addError("roleMappingUpdatedError", error);
+            toast.error(t("roleMappingUpdatedError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
         }
     };
 

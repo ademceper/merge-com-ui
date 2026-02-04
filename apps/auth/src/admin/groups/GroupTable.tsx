@@ -1,16 +1,3 @@
-/**
- * WARNING: Before modifying this file, run the following command:
- *
- * $ npx keycloakify own --path "admin/groups/GroupTable.tsx"
- *
- * This file is provided by @keycloakify/keycloak-admin-ui version 260502.0.0.
- * It was copied into your repository by the postinstall script: `keycloakify sync-extensions`.
- */
-
-/* eslint-disable */
-
-// @ts-nocheck
-
 import type GroupRepresentation from "@keycloak/keycloak-admin-client/lib/defs/groupRepresentation";
 import {
     GroupQuery,
@@ -208,6 +195,7 @@ export const GroupTable = ({ refresh: viewRefresh }: GroupTableProps) => {
                                     ]
                                   : []),
                               {
+                                  title: "",
                                   isSeparator: true
                               },
                               {

@@ -1,18 +1,4 @@
-/**
- * WARNING: Before modifying this file, run the following command:
- *
- * $ npx keycloakify own --path "admin/authentication/policies/WebauthnPolicy.tsx"
- *
- * This file is provided by @keycloakify/keycloak-admin-ui version 260502.0.0.
- * It was copied into your repository by the postinstall script: `keycloakify sync-extensions`.
- */
-
-/* eslint-disable */
-
-// @ts-nocheck
-
 import type RealmRepresentation from "@keycloak/keycloak-admin-client/lib/defs/realmRepresentation";
-import { AlertVariant } from "../../../shared/keycloak-ui-shared";
 import { Button } from "@merge/ui/components/button";
 import { Popover, PopoverContent, PopoverTrigger } from "@merge/ui/components/popover";
 import { Question } from "@phosphor-icons/react";
@@ -26,7 +12,8 @@ import {
     TextControl,
     useHelp
 } from "../../../shared/keycloak-ui-shared";
-import { useAlerts } from "../../../shared/keycloak-ui-shared";
+import { getErrorDescription, getErrorMessage } from "../../../shared/keycloak-ui-shared";
+import { toast } from "@merge/ui/components/sonner";
 import { FormAccess } from "../../components/form/FormAccess";
 import { MultiLineInput } from "../../components/multi-line-input/MultiLineInput";
 import { TimeSelectorControl } from "../../components/time-selector/TimeSelectorControl";
@@ -101,8 +88,7 @@ export const WebauthnPolicy = ({
     const { adminClient } = useAdminClient();
 
     const { t } = useTranslation();
-    const { addAlert, addError } = useAlerts();
-    const { realm: realmName } = useRealm();
+const { realm: realmName } = useRealm();
     const { enabled } = useHelp();
     const form = useForm({ mode: "onChange" });
     const {
@@ -124,9 +110,9 @@ export const WebauthnPolicy = ({
             await adminClient.realms.update({ realm: realmName }, submittedRealm);
             realmUpdated(submittedRealm);
             setupForm(submittedRealm);
-            addAlert(t("webAuthnUpdateSuccess"), AlertVariant.success);
+            toast.success(t("webAuthnUpdateSuccess"));
         } catch (error) {
-            addError("webAuthnUpdateError", error);
+            toast.error(t("webAuthnUpdateError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
         }
     };
 
@@ -263,9 +249,9 @@ export const WebauthnPolicy = ({
                 <div className="flex gap-2">
                     <Button
                         data-testid="save"
-                        variant="primary"
+                        variant="default"
                         type="submit"
-                        isDisabled={!isDirty}
+                        disabled={!isDirty}
                     >
                         {t("save")}
                     </Button>

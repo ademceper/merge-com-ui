@@ -1,16 +1,3 @@
-/**
- * WARNING: Before modifying this file, run the following command:
- *
- * $ npx keycloakify own --path "admin/client-scopes/details/SearchFilter.tsx"
- *
- * This file is provided by @keycloakify/keycloak-admin-ui version 260502.0.0.
- * It was copied into your repository by the postinstall script: `keycloakify sync-extensions`.
- */
-
-/* eslint-disable */
-
-// @ts-nocheck
-
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Button } from "@merge/ui/components/button";
@@ -66,7 +53,7 @@ export const SearchDropdown = ({
     onSelect
 }: SearchDropdownProps) => {
     const { t } = useTranslation();
-    const [searchToggle, setSearchToggle] = useState(false);
+    const [_searchToggle, setSearchToggle] = useState(false);
 
     const createDropdownItem = (st: SearchType) => (
         <DropdownMenuItem

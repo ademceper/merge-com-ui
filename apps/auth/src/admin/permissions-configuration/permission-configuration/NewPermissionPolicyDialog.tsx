@@ -1,16 +1,3 @@
-/**
- * WARNING: Before modifying this file, run the following command:
- *
- * $ npx keycloakify own --path "admin/permissions-configuration/permission-configuration/NewPermissionPolicyDialog.tsx"
- *
- * This file is provided by @keycloakify/keycloak-admin-ui version 260502.0.0.
- * It was copied into your repository by the postinstall script: `keycloakify sync-extensions`.
- */
-
-/* eslint-disable */
-
-// @ts-nocheck
-
 import PolicyRepresentation, {
     DecisionStrategy,
     Logic
@@ -19,12 +6,9 @@ import PolicyProviderRepresentation from "@keycloak/keycloak-admin-client/lib/de
 import { useTranslation } from "react-i18next";
 import { Button } from "@merge/ui/components/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@merge/ui/components/dialog";
-import { AlertVariant } from "../../../shared/keycloak-ui-shared";
-import {
-    SelectControl,
-    TextControl,
-    useAlerts
-} from "../../../shared/keycloak-ui-shared";
+import { getErrorDescription, getErrorMessage, SelectControl,
+    TextControl } from "../../../shared/keycloak-ui-shared";
+import { toast } from "@merge/ui/components/sonner";
 import { FormProvider, useForm, useWatch } from "react-hook-form";
 import { useAdminClient } from "../../admin-client";
 import { useRealm } from "../../context/realm-context/RealmContext";
@@ -108,8 +92,7 @@ export const NewPermissionPolicyDialog = ({
         mode: "onChange",
         defaultValues
     });
-    const { addAlert, addError } = useAlerts();
-    const { handleSubmit, reset } = form;
+const { handleSubmit, reset } = form;
     const isPermissionClient = realmRepresentation?.adminPermissionsEnabled;
 
     const policyTypeSelector = useWatch({
@@ -163,9 +146,9 @@ export const NewPermissionPolicyDialog = ({
 
             onAssign(createdPolicy);
             toggleDialog();
-            addAlert(t("createPolicySuccess"), AlertVariant.success);
+            toast.success(t("createPolicySuccess"));
         } catch (error) {
-            addError("policySaveError", error);
+            toast.error(t("policySaveError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
         }
     };
 

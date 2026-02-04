@@ -1,16 +1,3 @@
-/**
- * WARNING: Before modifying this file, run the following command:
- *
- * $ npx keycloakify own --path "admin/realm-settings/user-profile/attribute/AttributeAnnotations.tsx"
- *
- * This file is provided by @keycloakify/keycloak-admin-ui version 260502.0.0.
- * It was copied into your repository by the postinstall script: `keycloakify sync-extensions`.
- */
-
-/* eslint-disable */
-
-// @ts-nocheck
-
 import { Input } from "@merge/ui/components/input";
 import { Label } from "@merge/ui/components/label";
 import { useFormContext } from "react-hook-form";
@@ -19,7 +6,6 @@ import { FormAccess } from "../../../components/form/FormAccess";
 import { KeyValueInput } from "../../../components/key-value-form/KeyValueInput";
 import { KeySelect } from "./KeySelect";
 import { ValueSelect } from "./ValueSelect";
-
 
 export const AttributeAnnotations = () => {
     const { t } = useTranslation();

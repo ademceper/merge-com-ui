@@ -1,18 +1,5 @@
-/**
- * WARNING: Before modifying this file, run the following command:
- *
- * $ npx keycloakify own --path "admin/components/role-mapping/AddRoleMappingModal.tsx"
- *
- * This file is provided by @keycloakify/keycloak-admin-ui version 260502.0.0.
- * It was copied into your repository by the postinstall script: `keycloakify sync-extensions`.
- */
-
-/* eslint-disable */
-
-// @ts-nocheck
-
 import RoleRepresentation from "@keycloak/keycloak-admin-client/lib/defs/roleRepresentation";
-import { KeycloakDataTable, ListEmptyState } from "../../../shared/keycloak-ui-shared";
+import { KeycloakDataTable, ListEmptyState, cellWidth } from "../../../shared/keycloak-ui-shared";
 import { Button } from "@merge/ui/components/button";
 import {
     Dialog,
@@ -33,7 +20,6 @@ import { useAdminClient } from "../../admin-client";
 import { useAccess } from "../../context/access/Access";
 import { translationFormatter } from "../../utils/translationFormatter";
 import useLocaleSort from "../../utils/useLocaleSort";
-import useToggle from "../../utils/useToggle";
 import { ResourcesKey, Row } from "./RoleMapping";
 import { getAvailableRoles } from "./queries";
 import { getAvailableClientRoles } from "./resource";
@@ -86,7 +72,7 @@ export const AddRoleButton = ({
         <DropdownMenu open={open} onOpenChange={setOpen}>
             <DropdownMenuTrigger asChild>
                 <Button
-                    variant={variant === "primary" ? "default" : variant}
+                    variant={variant}
                     disabled={isDisabled}
                     data-testid="add-role-mapping-button"
                 >

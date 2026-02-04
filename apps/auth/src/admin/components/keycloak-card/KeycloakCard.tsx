@@ -1,19 +1,7 @@
-/**
- * WARNING: Before modifying this file, run the following command:
- *
- * $ npx keycloakify own --path "admin/components/keycloak-card/KeycloakCard.tsx"
- *
- * This file is provided by @keycloakify/keycloak-admin-ui version 260502.0.0.
- * It was copied into your repository by the postinstall script: `keycloakify sync-extensions`.
- */
-
-/* eslint-disable */
-
-// @ts-nocheck
-
 import { Button } from "@merge/ui/components/button";
 import {
     Card,
+    CardAction,
     CardContent,
     CardFooter,
     CardHeader,
@@ -48,40 +36,42 @@ export const KeycloakCard = ({
 }: KeycloakCardProps) => {
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
-    const onDropdownToggle = () => {
-        setIsDropdownOpen(!isDropdownOpen);
-    };
-
     return (
         <Card className="cursor-pointer transition-colors hover:bg-muted/50">
-            <CardHeader
-                className="flex-row items-center justify-between space-y-0"
-                action={dropdownItems ? (
-                    <DropdownMenu open={isDropdownOpen} onOpenChange={setIsDropdownOpen}>
-                        <DropdownMenuTrigger asChild>
-                            <Button
-                                variant="ghost"
-                                size="icon"
-                                data-testid={`${title}-dropdown`}
-                            >
-                                <DotsThreeVertical className="size-4" />
-                            </Button>
-                        </DropdownMenuTrigger>
-                        <DropdownMenuContent align="end">
-                            {dropdownItems}
-                        </DropdownMenuContent>
-                    </DropdownMenu>
-                ) : undefined}
-            >
+            <CardHeader className="flex-row items-center justify-between space-y-0">
                 <CardTitle data-testid="keycloak-card-title">
                     <Link to={to}>{title}</Link>
                 </CardTitle>
+                {dropdownItems ? (
+                    <CardAction>
+                        <DropdownMenu open={isDropdownOpen} onOpenChange={setIsDropdownOpen}>
+                            <DropdownMenuTrigger asChild>
+                                <Button
+                                    variant="ghost"
+                                    size="icon"
+                                    data-testid={`${title}-dropdown`}
+                                >
+                                    <DotsThreeVertical className="size-4" />
+                                </Button>
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent align="end">
+                                {dropdownItems}
+                            </DropdownMenuContent>
+                        </DropdownMenu>
+                    </CardAction>
+                ) : null}
             </CardHeader>
             <CardContent />
             <CardFooter className="flex items-center justify-between gap-2">
                 <span className="keycloak--keycloak-card__footer">{footerText}</span>
                 {labelText && (
-                    <Label variant={labelColor === "blue" ? "default" : "secondary"}>
+                    <Label
+                        className={
+                            labelColor === "blue"
+                                ? "text-primary"
+                                : "text-muted-foreground"
+                        }
+                    >
                         {labelText}
                     </Label>
                 )}

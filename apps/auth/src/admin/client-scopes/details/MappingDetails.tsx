@@ -1,24 +1,11 @@
-/**
- * WARNING: Before modifying this file, run the following command:
- *
- * $ npx keycloakify own --path "admin/client-scopes/details/MappingDetails.tsx"
- *
- * This file is provided by @keycloakify/keycloak-admin-ui version 260502.0.0.
- * It was copied into your repository by the postinstall script: `keycloakify sync-extensions`.
- */
-
-/* eslint-disable */
-
-// @ts-nocheck
-
 import type ProtocolMapperRepresentation from "@keycloak/keycloak-admin-client/lib/defs/protocolMapperRepresentation";
 import type { ProtocolMapperTypeRepresentation } from "@keycloak/keycloak-admin-client/lib/defs/serverInfoRepesentation";
-import { TextControl, useAlerts, useFetch } from "../../../shared/keycloak-ui-shared";
+import { getErrorDescription, getErrorMessage, TextControl, useFetch } from "../../../shared/keycloak-ui-shared";
+import { toast } from "@merge/ui/components/sonner";
 import { Button } from "@merge/ui/components/button";
 import { Label } from "@merge/ui/components/label";
 import { Input } from "@merge/ui/components/input";
 import { DropdownMenuItem } from "@merge/ui/components/dropdown-menu";
-import { AlertVariant } from "../../../shared/keycloak-ui-shared";
 import { useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
@@ -40,9 +27,7 @@ export default function MappingDetails() {
     const { adminClient } = useAdminClient();
 
     const { t } = useTranslation();
-    const { addAlert, addError } = useAlerts();
-
-    const { id, mapperId, viewMode } = useParams<MapperParams>();
+const { id, mapperId, viewMode } = useParams<MapperParams>();
     const form = useForm();
     const { setValue, handleSubmit } = form;
     const [mapping, setMapping] = useState<ProtocolMapperTypeRepresentation>();
@@ -143,10 +128,10 @@ export default function MappingDetails() {
                         mapperId
                     });
                 }
-                addAlert(t("mappingDeletedSuccess"), AlertVariant.success);
+                toast.success(t("mappingDeletedSuccess"));
                 navigate(toDetails());
             } catch (error) {
-                addError("mappingDeletedError", error);
+                toast.error(t("mappingDeletedError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
             }
         }
     });
@@ -174,12 +159,12 @@ export default function MappingDetails() {
                     await adminClient.clients.addProtocolMapper({ id }, mapping);
                 }
             }
-            addAlert(t(`mapping${key}Success`), AlertVariant.success);
+            toast.success(t(`mapping${key}Success`));
             if (!isUpdating) {
                 navigate(toDetails());
             }
         } catch (error) {
-            addError(`mapping${key}Error`, error);
+            toast.error(t(`mapping${key}Error`, { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
         }
     };
 

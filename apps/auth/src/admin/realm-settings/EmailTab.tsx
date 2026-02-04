@@ -1,18 +1,4 @@
-/**
- * WARNING: Before modifying this file, run the following command:
- *
- * $ npx keycloakify own --path "admin/realm-settings/EmailTab.tsx"
- *
- * This file is provided by @keycloakify/keycloak-admin-ui version 260502.0.0.
- * It was copied into your repository by the postinstall script: `keycloakify sync-extensions`.
- */
-
-/* eslint-disable */
-
-// @ts-nocheck
-
 import type RealmRepresentation from "@keycloak/keycloak-admin-client/lib/defs/realmRepresentation";
-import { AlertVariant } from "../../shared/keycloak-ui-shared";
 import { Alert, AlertDescription, AlertTitle } from "@merge/ui/components/alert";
 import { Button } from "@merge/ui/components/button";
 import { Checkbox } from "@merge/ui/components/checkbox";
@@ -28,13 +14,13 @@ import {
     TextControl
 } from "../../shared/keycloak-ui-shared";
 import { useAdminClient } from "../admin-client";
-import { useAlerts } from "../../shared/keycloak-ui-shared";
+import { getErrorDescription, getErrorMessage } from "../../shared/keycloak-ui-shared";
+import { toast } from "@merge/ui/components/sonner";
 import { FormAccess } from "../components/form/FormAccess";
 import { toUser } from "../user/routes/User";
 import { emailRegexPattern } from "../util";
 import { useCurrentUser } from "../utils/useCurrentUser";
 import useToggle from "../utils/useToggle";
-
 
 type RealmSettingsEmailTabProps = {
     realm: RealmRepresentation;
@@ -47,8 +33,7 @@ export const RealmSettingsEmailTab = ({ realm, save }: RealmSettingsEmailTabProp
     const { adminClient } = useAdminClient();
 
     const { t } = useTranslation();
-    const { addAlert, addError } = useAlerts();
-    const currentUser = useCurrentUser();
+const currentUser = useCurrentUser();
 
     const form = useForm<FormFields>({ defaultValues: realm });
     const { control, handleSubmit, watch, reset: resetForm, getValues } = form;
@@ -95,9 +80,9 @@ export const RealmSettingsEmailTab = ({ realm, save }: RealmSettingsEmailTabProp
                 { realm: realm.realm! },
                 serverSettings
             );
-            addAlert(t("testConnectionSuccess"), AlertVariant.success);
+            toast.success(t("testConnectionSuccess"));
         } catch (error) {
-            addError("testConnectionError", error);
+            toast.error(t("testConnectionError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
         }
         toggleTest();
     };

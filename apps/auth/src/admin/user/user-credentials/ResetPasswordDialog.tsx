@@ -1,26 +1,13 @@
-/**
- * WARNING: Before modifying this file, run the following command:
- *
- * $ npx keycloakify own --path "admin/user/user-credentials/ResetPasswordDialog.tsx"
- *
- * This file is provided by @keycloakify/keycloak-admin-ui version 260502.0.0.
- * It was copied into your repository by the postinstall script: `keycloakify sync-extensions`.
- */
-
-/* eslint-disable */
-
-// @ts-nocheck
-
 import { RequiredActionAlias } from "@keycloak/keycloak-admin-client/lib/defs/requiredActionProviderRepresentation";
 import type UserRepresentation from "@keycloak/keycloak-admin-client/lib/defs/userRepresentation";
-import { AlertVariant } from "../../../shared/keycloak-ui-shared";
 import { Label } from "@merge/ui/components/label";
 import { FormProvider, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { FormErrorText, PasswordInput } from "../../../shared/keycloak-ui-shared";
 import { useAdminClient } from "../../admin-client";
 import { DefaultSwitchControl } from "../../components/SwitchControl";
-import { useAlerts } from "../../../shared/keycloak-ui-shared";
+import { getErrorDescription, getErrorMessage } from "../../../shared/keycloak-ui-shared";
+import { toast } from "@merge/ui/components/sonner";
 import {
     ConfirmDialogModal,
     useConfirmDialog
@@ -73,10 +60,7 @@ export const ResetPasswordDialog = ({
     const [confirm, toggle] = useToggle(true);
     const password = watch("password", "");
     const passwordConfirmation = watch("passwordConfirmation", "");
-
-    const { addAlert, addError } = useAlerts();
-
-    const [toggleConfirmSaveModal, ConfirmSaveModal] = useConfirmDialog({
+const [toggleConfirmSaveModal, ConfirmSaveModal] = useConfirmDialog({
         titleKey: isResetPassword ? "resetPasswordConfirm" : "setPasswordConfirm",
         messageKey: isResetPassword
             ? t("resetPasswordConfirmText", { username: user.username })
@@ -115,13 +99,12 @@ export const ResetPasswordDialog = ({
                     t("defaultPasswordLabel")
                 );
             }
-            addAlert(
-                isResetPassword ? t("resetCredentialsSuccess") : t("savePasswordSuccess"),
-                AlertVariant.success
+            toast.success(
+                isResetPassword ? t("resetCredentialsSuccess") : t("savePasswordSuccess")
             );
             refresh();
         } catch (error) {
-            addError(isResetPassword ? "resetPasswordError" : "savePasswordError", error);
+            toast.error(t(isResetPassword ? "resetPasswordError" : "savePasswordError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
         }
 
         onClose();

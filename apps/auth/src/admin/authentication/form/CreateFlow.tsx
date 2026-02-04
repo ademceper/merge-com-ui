@@ -1,18 +1,6 @@
-/**
- * WARNING: Before modifying this file, run the following command:
- *
- * $ npx keycloakify own --path "admin/authentication/form/CreateFlow.tsx"
- *
- * This file is provided by @keycloakify/keycloak-admin-ui version 260502.0.0.
- * It was copied into your repository by the postinstall script: `keycloakify sync-extensions`.
- */
-
-/* eslint-disable */
-
-// @ts-nocheck
-
 import type AuthenticationFlowRepresentation from "@keycloak/keycloak-admin-client/lib/defs/authenticationFlowRepresentation";
-import { AlertVariant, FormSubmitButton, SelectControl, useAlerts } from "../../../shared/keycloak-ui-shared";
+import { FormSubmitButton, SelectControl } from "../../../shared/keycloak-ui-shared";
+import { toast } from "@merge/ui/components/sonner";
 import { Button } from "@merge/ui/components/button";
 import { FormProvider, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
@@ -33,7 +21,6 @@ export default function CreateFlow() {
     const { t } = useTranslation();
     const navigate = useNavigate();
     const { realm } = useRealm();
-    const { addAlert } = useAlerts();
     const form = useForm<AuthenticationFlowRepresentation>();
     const { handleSubmit, formState } = form;
 
@@ -42,7 +29,7 @@ export default function CreateFlow() {
 
         try {
             const { id } = await adminClient.authenticationManagement.createFlow(flow);
-            addAlert(t("flowCreatedSuccess"), AlertVariant.success);
+            toast.success(t("flowCreatedSuccess"));
             navigate(
                 toFlow({
                     realm,
@@ -51,12 +38,9 @@ export default function CreateFlow() {
                 })
             );
         } catch (error: any) {
-            addAlert(
-                t("flowCreateError", {
+            toast.error(t("flowCreateError", {
                     error: error.response?.data?.errorMessage || error
-                }),
-                AlertVariant.danger
-            );
+                }));
         }
     };
 
@@ -91,17 +75,8 @@ export default function CreateFlow() {
                             >
                                 {t("create")}
                             </FormSubmitButton>
-                            <Button
-                                data-testid="cancel"
-                                variant="link"
-                                component={props => (
-                                    <Link
-                                        {...props}
-                                        to={toAuthentication({ realm })}
-                                    ></Link>
-                                )}
-                            >
-                                {t("cancel")}
+                            <Button asChild data-testid="cancel" variant="link">
+                                <Link to={toAuthentication({ realm })}>{t("cancel")}</Link>
                             </Button>
                         </div>
                     </FormAccess>

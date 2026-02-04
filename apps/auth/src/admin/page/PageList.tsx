@@ -1,23 +1,8 @@
-/**
- * WARNING: Before modifying this file, run the following command:
- *
- * $ npx keycloakify own --path "admin/page/PageList.tsx"
- *
- * This file is provided by @keycloakify/keycloak-admin-ui version 260502.0.0.
- * It was copied into your repository by the postinstall script: `keycloakify sync-extensions`.
- */
-
-/* eslint-disable */
-
-// @ts-nocheck
-
 import ComponentRepresentation from "@keycloak/keycloak-admin-client/lib/defs/componentRepresentation";
 import type { ComponentQuery } from "@keycloak/keycloak-admin-client/lib/resources/components";
-import {
-    KeycloakDataTable,
-    ListEmptyState,
-    useAlerts
-} from "../../shared/keycloak-ui-shared";
+import { getErrorDescription, getErrorMessage, KeycloakDataTable,
+    ListEmptyState } from "../../shared/keycloak-ui-shared";
+import { toast } from "@merge/ui/components/sonner";
 import { Button } from "@merge/ui/components/button";
 type IRowData = { data: any };
 import { get } from "lodash-es";
@@ -53,8 +38,7 @@ export default function PageList() {
     const { adminClient } = useAdminClient();
 
     const { t } = useTranslation();
-    const { addAlert, addError } = useAlerts();
-    const navigate = useNavigate();
+const navigate = useNavigate();
     const { providerId } = useParams<PageListParams>();
     const [key, setKey] = useState(0);
     const refresh = () => setKey(key + 1);
@@ -84,10 +68,10 @@ export default function PageList() {
                 await adminClient.components.del({
                     id: selectedItem!.id!
                 });
-                addAlert(t("itemDeletedSuccess"));
+                toast.success(t("itemDeletedSuccess"));
                 refresh();
             } catch (error) {
-                addError("itemSaveError", error);
+                toast.error(t("itemSaveError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
             }
         }
     });

@@ -1,20 +1,8 @@
-/**
- * WARNING: Before modifying this file, run the following command:
- *
- * $ npx keycloakify own --path "admin/realm-settings/RealmSettingsTabs.tsx"
- *
- * This file is provided by @keycloakify/keycloak-admin-ui version 260502.0.0.
- * It was copied into your repository by the postinstall script: `keycloakify sync-extensions`.
- */
-
-/* eslint-disable */
-
-// @ts-nocheck
-
 import { fetchWithError } from "@keycloak/keycloak-admin-client";
 import type RealmRepresentation from "@keycloak/keycloak-admin-client/lib/defs/realmRepresentation";
 import { UserProfileConfig } from "@keycloak/keycloak-admin-client/lib/defs/userProfileMetadata";
-import { useAlerts, useEnvironment, AlertVariant } from "../../shared/keycloak-ui-shared";
+import { getErrorDescription, getErrorMessage, useEnvironment } from "../../shared/keycloak-ui-shared";
+import { toast } from "@merge/ui/components/sonner";
 import { Separator } from "@merge/ui/components/separator";
 import { useEffect, useState } from "react";
 import { Controller, FormProvider, useForm } from "react-hook-form";
@@ -48,7 +36,7 @@ import { UserRegistration } from "./UserRegistration";
 import { EventsTab } from "./event-config/EventsTab";
 import { KeysTab } from "./keys/KeysTab";
 import { LocalizationTab } from "./localization/LocalizationTab";
-import { RealmSettingsTab, toRealmSettings } from "./routes/RealmSettings";
+import { toRealmSettings } from "./routes/RealmSettings";
 import { SecurityDefenses } from "./security-defences/SecurityDefenses";
 import { UserProfileTab } from "./user-profile/UserProfileTab";
 
@@ -74,8 +62,7 @@ const RealmSettingsHeader = ({
     const { adminClient } = useAdminClient();
     const { environment } = useEnvironment<Environment>();
     const { t } = useTranslation();
-    const { addAlert, addError } = useAlerts();
-    const navigate = useNavigate();
+const navigate = useNavigate();
     const [partialImportOpen, setPartialImportOpen] = useState(false);
     const [partialExportOpen, setPartialExportOpen] = useState(false);
     const { hasAccess } = useAccess();
@@ -95,15 +82,15 @@ const RealmSettingsHeader = ({
         titleKey: "deleteConfirmTitle",
         messageKey: "deleteConfirmRealmSetting",
         continueButtonLabel: "delete",
-        continueButtonVariant: "danger",
+        continueButtonVariant: "destructive",
         onConfirm: async () => {
             try {
                 await adminClient.realms.del({ realm: realmName });
-                addAlert(t("deletedSuccessRealmSetting"), AlertVariant.success);
+                toast.success(t("deletedSuccessRealmSetting"));
                 navigate(toDashboard({ realm: environment.masterRealm }));
                 refresh();
             } catch (error) {
-                addError("deleteErrorRealmSetting", error);
+                toast.error(t("deleteErrorRealmSetting", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
             }
         }
     });
@@ -171,7 +158,7 @@ const RealmSettingsHeader = ({
     );
 };
 
-function ClientPoliciesSubTabs({ realmName, subTab = "profiles" }: { realmName: string; subTab?: string }) {
+function ClientPoliciesSubTabs({ realmName: _realmName, subTab = "profiles" }: { realmName: string; subTab?: string }) {
     if (subTab === "policies") {
         return <PoliciesTab />;
     }
@@ -181,8 +168,7 @@ function ClientPoliciesSubTabs({ realmName, subTab = "profiles" }: { realmName: 
 export const RealmSettingsTabs = () => {
     const { adminClient } = useAdminClient();
     const { t } = useTranslation();
-    const { addAlert, addError } = useAlerts();
-    const { realm: realmName, realmRepresentation: realm, refresh } = useRealm();
+const { realm: realmName, realmRepresentation: realm, refresh } = useRealm();
     const combinedLocales = useLocale();
     const navigate = useNavigate();
     const isFeatureEnabled = useIsFeatureEnabled();
@@ -268,9 +254,9 @@ export const RealmSettingsTabs = () => {
                 }
             );
             if (!response.ok) throw new Error(response.statusText);
-            addAlert(t("realmSaveSuccess"), AlertVariant.success);
+            toast.success(t("realmSaveSuccess"));
         } catch (error) {
-            addError("realmSaveError", error);
+            toast.error(t("realmSaveError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
         }
 
         const isRealmRenamed = realmName !== (r.realm || realm?.realm);

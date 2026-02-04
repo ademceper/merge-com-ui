@@ -1,19 +1,6 @@
-/**
- * WARNING: Before modifying this file, run the following command:
- *
- * $ npx keycloakify own --path "admin/clients/authorization/AuthorizationExport.tsx"
- *
- * This file is provided by @keycloakify/keycloak-admin-ui version 260502.0.0.
- * It was copied into your repository by the postinstall script: `keycloakify sync-extensions`.
- */
-
-/* eslint-disable */
-
-// @ts-nocheck
-
 import type ResourceServerRepresentation from "@keycloak/keycloak-admin-client/lib/defs/resourceServerRepresentation";
-import { KeycloakSpinner, useAlerts, useFetch } from "../../../shared/keycloak-ui-shared";
-import { AlertVariant } from "../../../shared/keycloak-ui-shared";
+import { getErrorDescription, getErrorMessage, KeycloakSpinner, useFetch } from "../../../shared/keycloak-ui-shared";
+import { toast } from "@merge/ui/components/sonner";
 import { Button } from "@merge/ui/components/button";
 import CodeEditor from "@uiw/react-textarea-code-editor";
 import { saveAs } from "file-saver";
@@ -30,9 +17,7 @@ export const AuthorizationExport = () => {
 
     const { t } = useTranslation();
     const { clientId } = useParams<ClientParams>();
-    const { addAlert, addError } = useAlerts();
-
-    const [code, setCode] = useState<string>();
+const [code, setCode] = useState<string>();
     const [authorizationDetails, setAuthorizationDetails] =
         useState<ResourceServerRepresentation>();
 
@@ -57,9 +42,9 @@ export const AuthorizationExport = () => {
                 }),
                 "test-authz-config.json"
             );
-            addAlert(t("exportAuthDetailsSuccess"), AlertVariant.success);
+            toast.success(t("exportAuthDetailsSuccess"));
         } catch (error) {
-            addError("exportAuthDetailsError", error);
+            toast.error(t("exportAuthDetailsError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
         }
     };
 
@@ -95,9 +80,9 @@ export const AuthorizationExport = () => {
                         onClick={async () => {
                             try {
                                 await navigator.clipboard.writeText(code!);
-                                addAlert(t("copied"), AlertVariant.success);
+                                toast.success(t("copied"));
                             } catch (error) {
-                                addError("copyError", error);
+                                toast.error(t("copyError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
                             }
                         }}
                     >

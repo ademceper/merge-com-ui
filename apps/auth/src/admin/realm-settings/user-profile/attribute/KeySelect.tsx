@@ -1,16 +1,3 @@
-/**
- * WARNING: Before modifying this file, run the following command:
- *
- * $ npx keycloakify own --path "admin/realm-settings/user-profile/attribute/KeySelect.tsx"
- *
- * This file is provided by @keycloakify/keycloak-admin-ui version 260502.0.0.
- * It was copied into your repository by the postinstall script: `keycloakify sync-extensions`.
- */
-
-/* eslint-disable */
-
-// @ts-nocheck
-
 import {
     KeycloakSelect,
     SelectControlOption
@@ -50,7 +37,7 @@ export const KeySelect = ({ selectItems, ...rest }: KeySelectProp) => {
                     selections={!custom ? [field.value] : ""}
                 >
                     {[
-                        <SelectOption key="custom" onClick={() => setCustom(true)}>
+                        <SelectOption key="custom" value="__custom__">
                             {t("customAttribute")}
                         </SelectOption>,
                         ...selectItems.map(item => (

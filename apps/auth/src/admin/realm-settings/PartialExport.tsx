@@ -1,17 +1,3 @@
-/**
- * WARNING: Before modifying this file, run the following command:
- *
- * $ npx keycloakify own --path "admin/realm-settings/PartialExport.tsx"
- *
- * This file is provided by @keycloakify/keycloak-admin-ui version 260502.0.0.
- * It was copied into your repository by the postinstall script: `keycloakify sync-extensions`.
- */
-
-/* eslint-disable */
-
-// @ts-nocheck
-
-import { AlertVariant } from "../../shared/keycloak-ui-shared";
 import { Alert, AlertDescription, AlertTitle } from "@merge/ui/components/alert";
 import { Button } from "@merge/ui/components/button";
 import {
@@ -27,10 +13,10 @@ import { saveAs } from "file-saver";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useAdminClient } from "../admin-client";
-import { useAlerts } from "../../shared/keycloak-ui-shared";
+import { getErrorDescription, getErrorMessage } from "../../shared/keycloak-ui-shared";
+import { toast } from "@merge/ui/components/sonner";
 import { useRealm } from "../context/realm-context/RealmContext";
 import { prettyPrintJSON } from "../util";
-
 
 export type PartialExportDialogProps = {
     isOpen: boolean;
@@ -42,9 +28,7 @@ export const PartialExportDialog = ({ isOpen, onClose }: PartialExportDialogProp
 
     const { t } = useTranslation();
     const { realm } = useRealm();
-    const { addAlert, addError } = useAlerts();
-
-    const [exportGroupsAndRoles, setExportGroupsAndRoles] = useState(false);
+const [exportGroupsAndRoles, setExportGroupsAndRoles] = useState(false);
     const [exportClients, setExportClients] = useState(false);
     const [isExporting, setIsExporting] = useState(false);
 
@@ -67,10 +51,10 @@ export const PartialExportDialog = ({ isOpen, onClose }: PartialExportDialogProp
                 "realm-export.json"
             );
 
-            addAlert(t("exportSuccess"), AlertVariant.success);
+            toast.success(t("exportSuccess"));
             onClose();
         } catch (error) {
-            addError("exportFail", error);
+            toast.error(t("exportFail", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
         }
 
         setIsExporting(false);

@@ -1,25 +1,9 @@
-/**
- * WARNING: Before modifying this file, run the following command:
- *
- * $ npx keycloakify own --path "admin/clients/authorization/Resources.tsx"
- *
- * This file is provided by @keycloakify/keycloak-admin-ui version 260502.0.0.
- * It was copied into your repository by the postinstall script: `keycloakify sync-extensions`.
- */
-
-/* eslint-disable */
-
-// @ts-nocheck
-
 import type ResourceRepresentation from "@keycloak/keycloak-admin-client/lib/defs/resourceRepresentation";
 import type ResourceServerRepresentation from "@keycloak/keycloak-admin-client/lib/defs/resourceServerRepresentation";
-import {
-    ListEmptyState,
+import { getErrorDescription, getErrorMessage, ListEmptyState,
     PaginatingTableToolbar,
-    useAlerts,
-    useFetch
-} from "../../../shared/keycloak-ui-shared";
-import { AlertVariant } from "../../../shared/keycloak-ui-shared";
+    useFetch } from "../../../shared/keycloak-ui-shared";
+import { toast } from "@merge/ui/components/sonner";
 import { Alert, AlertTitle } from "@merge/ui/components/alert";
 import { Button } from "@merge/ui/components/button";
 import {
@@ -74,8 +58,7 @@ export const AuthorizationResources = ({
 
     const { t } = useTranslation();
     const navigate = useNavigate();
-    const { addAlert, addError } = useAlerts();
-    const { realm } = useRealm();
+const { realm } = useRealm();
 
     const [resources, setResources] = useState<ExpandableResourceRepresentation[]>();
     const [selectedResource, setSelectedResource] = useState<ResourceRepresentation>();
@@ -139,10 +122,10 @@ export const AuthorizationResources = ({
                     id: clientId,
                     resourceId: selectedResource?._id!
                 });
-                addAlert(t("resourceDeletedSuccess"), AlertVariant.success);
+                toast.success(t("resourceDeletedSuccess"));
                 refresh();
             } catch (error) {
-                addError("resourceDeletedError", error);
+                toast.error(t("resourceDeletedError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
             }
         }
     });

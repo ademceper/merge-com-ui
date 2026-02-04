@@ -1,16 +1,3 @@
-/**
- * WARNING: Before modifying this file, run the following command:
- *
- * $ npx keycloakify own --path "admin/clients/authorization/AuthorizationEvaluate.tsx"
- *
- * This file is provided by @keycloakify/keycloak-admin-ui version 260502.0.0.
- * It was copied into your repository by the postinstall script: `keycloakify sync-extensions`.
- */
-
-/* eslint-disable */
-
-// @ts-nocheck
-
 import type ClientRepresentation from "@keycloak/keycloak-admin-client/lib/defs/clientRepresentation";
 import type EvaluationResultRepresentation from "@keycloak/keycloak-admin-client/lib/defs/evaluationResultRepresentation";
 import type PolicyEvaluationResponse from "@keycloak/keycloak-admin-client/lib/defs/policyEvaluationResponse";
@@ -18,13 +5,11 @@ import type ResourceEvaluation from "@keycloak/keycloak-admin-client/lib/defs/re
 import type ResourceRepresentation from "@keycloak/keycloak-admin-client/lib/defs/resourceRepresentation";
 import type RoleRepresentation from "@keycloak/keycloak-admin-client/lib/defs/roleRepresentation";
 import type ScopeRepresentation from "@keycloak/keycloak-admin-client/lib/defs/scopeRepresentation";
-import {
-    HelpItem,
+import { getErrorDescription, getErrorMessage, HelpItem,
     SelectControl,
     TextControl,
-    useAlerts,
-    useFetch
-} from "../../../shared/keycloak-ui-shared";
+    useFetch } from "../../../shared/keycloak-ui-shared";
+import { toast } from "@merge/ui/components/sonner";
 import { Button } from "@merge/ui/components/button";
 import { Switch } from "@merge/ui/components/switch";
 import { Label } from "@merge/ui/components/label";
@@ -102,7 +87,6 @@ const AuthorizationEvaluateContent = ({ client }: Props) => {
         formState: { isValid }
     } = form;
     const { t } = useTranslation();
-    const { addError } = useAlerts();
     const realm = useRealm();
     const [isExpanded, setIsExpanded] = useState(false);
     const [applyToResourceType, setApplyToResourceType] = useState(false);
@@ -174,7 +158,7 @@ const AuthorizationEvaluateContent = ({ client }: Props) => {
 
             setEvaluateResult(evaluation);
         } catch (error) {
-            addError("evaluateError", error);
+            toast.error(t("evaluateError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
         }
     };
 

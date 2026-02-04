@@ -1,16 +1,3 @@
-/**
- * WARNING: Before modifying this file, run the following command:
- *
- * $ npx keycloakify own --path "admin/authentication/EmptyExecutionState.tsx"
- *
- * This file is provided by @keycloakify/keycloak-admin-ui version 260502.0.0.
- * It was copied into your repository by the postinstall script: `keycloakify sync-extensions`.
- */
-
-/* eslint-disable */
-
-// @ts-nocheck
-
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Button } from "@merge/ui/components/button";
@@ -20,7 +7,6 @@ import type { AuthenticationProviderRepresentation } from "@keycloak/keycloak-ad
 import { ListEmptyState } from "../../shared/keycloak-ui-shared";
 import { AddStepModal } from "./components/modals/AddStepModal";
 import { AddSubFlowModal, Flow } from "./components/modals/AddSubFlowModal";
-
 
 const SECTIONS = ["addExecution", "addSubFlow"] as const;
 type SectionType = (typeof SECTIONS)[number] | undefined;

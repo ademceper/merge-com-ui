@@ -1,16 +1,3 @@
-/**
- * WARNING: Before modifying this file, run the following command:
- *
- * $ npx keycloakify own --path "admin/groups/components/CheckableTreeView.tsx"
- *
- * This file is provided by @keycloakify/keycloak-admin-ui version 260502.0.0.
- * It was copied into your repository by the postinstall script: `keycloakify sync-extensions`.
- */
-
-/* eslint-disable */
-
-// @ts-nocheck
-
 import { Checkbox } from "@merge/ui/components/checkbox";
 import { CaretRight } from "@phosphor-icons/react";
 import type { ReactNode } from "react";
@@ -114,7 +101,7 @@ export const CheckableTreeView = ({ data, onSelect }: CheckableTreeViewProps) =>
                     {hasChildren && <CaretRight className="size-4" />}
                     <span>{item.name}</span>
                 </div>
-                {hasChildren && item.children!.map((child, i) => renderItem(child, depth + 1))}
+                {hasChildren && item.children!.map((child, _i) => renderItem(child, depth + 1))}
             </div>
         );
     };
@@ -122,7 +109,7 @@ export const CheckableTreeView = ({ data, onSelect }: CheckableTreeViewProps) =>
     const mapped = state.options.map(item => mapTree(item));
     return (
         <div className="rounded-md border p-2">
-            {mapped.map((item, i) => renderItem(item, 0))}
+            {mapped.map((item, _i) => renderItem(item, 0))}
         </div>
     );
 };

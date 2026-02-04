@@ -1,16 +1,3 @@
-/**
- * WARNING: Before modifying this file, run the following command:
- *
- * $ npx keycloakify own --path "admin/events/UserEvents.tsx"
- *
- * This file is provided by @keycloakify/keycloak-admin-ui version 260502.0.0.
- * It was copied into your repository by the postinstall script: `keycloakify sync-extensions`.
- */
-
-/* eslint-disable */
-
-// @ts-nocheck
-
 import type EventRepresentation from "@keycloak/keycloak-admin-client/lib/defs/eventRepresentation";
 import type EventType from "@keycloak/keycloak-admin-client/lib/defs/eventTypes";
 import {
@@ -48,7 +35,6 @@ import { useRealm } from "../context/realm-context/RealmContext";
 import { toUser } from "../user/routes/User";
 import useFormatDate, { FORMAT_DATE_AND_TIME } from "../utils/useFormatDate";
 import useLocaleSort from "../utils/useLocaleSort";
-
 
 type UserEventSearchForm = {
     client: string;
@@ -291,11 +277,11 @@ export const UserEvents = ({ user, client }: UserEventsProps) => {
                                                                 className="flex items-center gap-2 cursor-pointer"
                                                             >
                                                                 <Checkbox
-                                                                    checked={field.value.includes(option)}
+                                                                    checked={field.value.includes(option as EventType)}
                                                                     onCheckedChange={checked => {
                                                                         const changedValue = checked
-                                                                            ? [...field.value, option]
-                                                                            : field.value.filter((v: string) => v !== option);
+                                                                            ? [...field.value, option as EventType]
+                                                                            : field.value.filter((v: EventType) => v !== option);
                                                                         field.onChange(changedValue);
                                                                     }}
                                                                 />

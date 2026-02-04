@@ -1,16 +1,3 @@
-/**
- * WARNING: Before modifying this file, run the following command:
- *
- * $ npx keycloakify own --path "admin/realm-roles/RealmRolesSection.tsx"
- *
- * This file is provided by @keycloakify/keycloak-admin-ui version 260502.0.0.
- * It was copied into your repository by the postinstall script: `keycloakify sync-extensions`.
- */
-
-/* eslint-disable */
-
-// @ts-nocheck
-
 import { useAdminClient } from "../admin-client";
 import { RolesList } from "../components/roles-list/RolesList";
 import { ViewHeader } from "../components/view-header/ViewHeader";
@@ -49,7 +36,7 @@ export default function RealmRolesSection() {
                 subKey="roleExplain"
                 helpUrl={helpUrls.realmRolesUrl}
             />
-            <PageSection variant="light" padding={{ default: "noPadding" }}>
+            <div className="py-4">
                 <RolesList
                     loader={loader}
                     toCreate={toAddRole({ realm })}
@@ -58,7 +45,7 @@ export default function RealmRolesSection() {
                     }
                     isReadOnly={!isManager}
                 />
-            </PageSection>
+            </div>
         </>
     );
 }

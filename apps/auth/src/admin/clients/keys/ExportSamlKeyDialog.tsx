@@ -1,16 +1,3 @@
-/**
- * WARNING: Before modifying this file, run the following command:
- *
- * $ npx keycloakify own --path "admin/clients/keys/ExportSamlKeyDialog.tsx"
- *
- * This file is provided by @keycloakify/keycloak-admin-ui version 260502.0.0.
- * It was copied into your repository by the postinstall script: `keycloakify sync-extensions`.
- */
-
-/* eslint-disable */
-
-// @ts-nocheck
-
 import KeyStoreConfig from "@keycloak/keycloak-admin-client/lib/defs/keystoreConfig";
 import { Button } from "@merge/ui/components/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@merge/ui/components/dialog";
@@ -18,7 +5,8 @@ import { saveAs } from "file-saver";
 import { FormProvider, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { useAdminClient } from "../../admin-client";
-import { useAlerts } from "../../../shared/keycloak-ui-shared";
+import { getErrorDescription, getErrorMessage } from "../../../shared/keycloak-ui-shared";
+import { toast } from "@merge/ui/components/sonner";
 import { useRealm } from "../../context/realm-context/RealmContext";
 import { KeyForm, getFileExtension } from "./GenerateKeyDialog";
 import { KeyTypes } from "./SamlKeys";
@@ -38,10 +26,7 @@ export const ExportSamlKeyDialog = ({
 
     const { t } = useTranslation();
     const { realm } = useRealm();
-
-    const { addAlert, addError } = useAlerts();
-
-    const form = useForm<KeyStoreConfig>({
+const form = useForm<KeyStoreConfig>({
         defaultValues: { realmAlias: realm }
     });
 
@@ -58,10 +43,10 @@ export const ExportSamlKeyDialog = ({
                 new Blob([keyStore], { type: "application/octet-stream" }),
                 `keystore.${getFileExtension(config.format ?? "")}`
             );
-            addAlert(t("samlKeysExportSuccess"));
+            toast.success(t("samlKeysExportSuccess"));
             close();
         } catch (error) {
-            addError("samlKeysExportError", error);
+            toast.error(t("samlKeysExportError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
         }
     };
 

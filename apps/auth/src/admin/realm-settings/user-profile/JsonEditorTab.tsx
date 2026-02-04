@@ -1,17 +1,5 @@
-/**
- * WARNING: Before modifying this file, run the following command:
- *
- * $ npx keycloakify own --path "admin/realm-settings/user-profile/JsonEditorTab.tsx"
- *
- * This file is provided by @keycloakify/keycloak-admin-ui version 260502.0.0.
- * It was copied into your repository by the postinstall script: `keycloakify sync-extensions`.
- */
-
-/* eslint-disable */
-
-// @ts-nocheck
-
-import { useAlerts } from "../../../shared/keycloak-ui-shared";
+import { getErrorDescription, getErrorMessage } from "../../../shared/keycloak-ui-shared";
+import { toast } from "@merge/ui/components/sonner";
 import { Button } from "@merge/ui/components/button";
 import CodeEditor from "../../components/form/CodeEditor";
 import { useState } from "react";
@@ -22,7 +10,6 @@ import { useUserProfile } from "./UserProfileContext";
 export const JsonEditorTab = () => {
     const { config, save, isSaving } = useUserProfile();
     const { t } = useTranslation();
-    const { addError } = useAlerts();
     const [code, setCode] = useState(prettyPrintJSON(config));
 
     function resetCode() {
@@ -39,7 +26,7 @@ export const JsonEditorTab = () => {
         try {
             await save(JSON.parse(value));
         } catch (error) {
-            addError("invalidJsonError", error);
+            toast.error(t("invalidJsonError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
             return;
         }
     }

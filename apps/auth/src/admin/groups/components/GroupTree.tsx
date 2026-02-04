@@ -1,23 +1,7 @@
-/**
- * WARNING: Before modifying this file, run the following command:
- *
- * $ npx keycloakify own --path "admin/groups/components/GroupTree.tsx"
- *
- * This file is provided by @keycloakify/keycloak-admin-ui version 260502.0.0.
- * It was copied into your repository by the postinstall script: `keycloakify sync-extensions`.
- */
-
-/* eslint-disable */
-
-// @ts-nocheck
-
 import type GroupRepresentation from "@keycloak/keycloak-admin-client/lib/defs/groupRepresentation";
-import {
-    PaginatingTableToolbar,
-    useAlerts,
-    useFetch,
-    AlertVariant
-} from "../../../shared/keycloak-ui-shared";
+import { PaginatingTableToolbar,
+    useFetch } from "../../../shared/keycloak-ui-shared";
+import { toast } from "@merge/ui/components/sonner";
 import { Button } from "@merge/ui/components/button";
 import { Checkbox } from "@merge/ui/components/checkbox";
 import {
@@ -54,7 +38,6 @@ import { useSubGroups } from "../SubGroupsContext";
 import { toGroups } from "../routes/Groups";
 import { DeleteGroup } from "./DeleteGroup";
 import { MoveDialog } from "./MoveDialog";
-
 
 type ExtendedTreeViewDataItem = TreeViewDataItem & {
     access?: Record<string, boolean>;
@@ -192,7 +175,7 @@ function SimpleTreeView({ data, allExpanded, activeItems = [], onExpand, onSelec
                                     e.stopPropagation();
                                     if (item.id) toggle(item.id);
                                 }}
-                                aria-expanded={expanded_}
+                                aria-expanded={!!expanded_}
                             >
                                 <CaretRight className={`size-4 transition-transform ${expanded_ ? "rotate-90" : ""}`} />
                             </button>
@@ -203,7 +186,7 @@ function SimpleTreeView({ data, allExpanded, activeItems = [], onExpand, onSelec
                 </div>
                 {hasChildren && expanded_ && (
                     <div>
-                        {item.children!.map((child, i) => renderItem(child as ExtendedTreeViewDataItem, depth + 1))}
+                        {item.children!.map((child, _i) => renderItem(child as ExtendedTreeViewDataItem, depth + 1))}
                     </div>
                 )}
             </div>
@@ -212,7 +195,7 @@ function SimpleTreeView({ data, allExpanded, activeItems = [], onExpand, onSelec
 
     return (
         <div className="rounded-md border">
-            {data.map((item, i) => renderItem(item, 0))}
+            {data.map((item, _i) => renderItem(item, 0))}
         </div>
     );
 }
@@ -238,7 +221,6 @@ export const GroupTree = ({ refresh: viewRefresh, canViewDetails }: GroupTreePro
     const { t } = useTranslation();
     const { realm } = useRealm();
     const navigate = useNavigate();
-    const { addAlert } = useAlerts();
     const { hasAccess } = useAccess();
 
     const [data, setData] = useState<ExtendedTreeViewDataItem[]>();
@@ -334,12 +316,12 @@ export const GroupTree = ({ refresh: viewRefresh, canViewDetails }: GroupTreePro
                                       id: "next",
                                       name: (
                                           <Button
-                                              variant="plain"
+                                              variant="ghost"
                                               onClick={() =>
                                                   setFirstSub(firstSub + SUBGROUP_COUNT)
                                               }
                                           >
-                                              <AngleRightIcon />
+                                              <CaretRight className="size-4" />
                                           </Button>
                                       )
                                   }
@@ -407,7 +389,7 @@ export const GroupTree = ({ refresh: viewRefresh, canViewDetails }: GroupTreePro
                 })
             );
         } else {
-            addAlert(t("noViewRights"), AlertVariant.warning);
+            toast.warning(t("noViewRights"));
             navigate(toGroups({ realm }));
         }
     };

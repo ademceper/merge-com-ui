@@ -1,23 +1,10 @@
-/**
- * WARNING: Before modifying this file, run the following command:
- *
- * $ npx keycloakify own --path "admin/identity-providers/add/AddMapper.tsx"
- *
- * This file is provided by @keycloakify/keycloak-admin-ui version 260502.0.0.
- * It was copied into your repository by the postinstall script: `keycloakify sync-extensions`.
- */
-
-/* eslint-disable */
-
-// @ts-nocheck
-
 import type IdentityProviderMapperRepresentation from "@keycloak/keycloak-admin-client/lib/defs/identityProviderMapperRepresentation";
 import type { IdentityProviderMapperTypeRepresentation } from "@keycloak/keycloak-admin-client/lib/defs/identityProviderMapperTypeRepresentation";
 import type RoleRepresentation from "@keycloak/keycloak-admin-client/lib/defs/roleRepresentation";
-import { TextControl, useAlerts, useFetch } from "../../../shared/keycloak-ui-shared";
+import { getErrorDescription, getErrorMessage, TextControl, useFetch } from "../../../shared/keycloak-ui-shared";
+import { toast } from "@merge/ui/components/sonner";
 import { Button } from "@merge/ui/components/button";
 import { DropdownMenuItem } from "@merge/ui/components/dropdown-menu";
-import { AlertVariant } from "../../../shared/keycloak-ui-shared";
 import { useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
@@ -56,8 +43,7 @@ export default function AddMapper() {
         shouldUnregister: true
     });
     const { handleSubmit } = form;
-    const { addAlert, addError } = useAlerts();
-    const navigate = useNavigate();
+const navigate = useNavigate();
     const localeSort = useLocaleSort();
 
     const { realm } = useRealm();
@@ -90,9 +76,9 @@ export default function AddMapper() {
                     },
                     { ...identityProviderMapper, id }
                 );
-                addAlert(t("mapperSaveSuccess"), AlertVariant.success);
+                toast.success(t("mapperSaveSuccess"));
             } catch (error) {
-                addError("mapperSaveError", error);
+                toast.error(t("mapperSaveError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
             }
         } else {
             try {
@@ -101,7 +87,7 @@ export default function AddMapper() {
                     alias: alias!
                 });
 
-                addAlert(t("mapperCreateSuccess"), AlertVariant.success);
+                toast.success(t("mapperCreateSuccess"));
                 navigate(
                     toIdentityProviderEditMapper({
                         realm,
@@ -111,7 +97,7 @@ export default function AddMapper() {
                     })
                 );
             } catch (error) {
-                addError("mapperCreateError", error);
+                toast.error(t("mapperCreateError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
             }
         }
     };
@@ -129,12 +115,12 @@ export default function AddMapper() {
                     alias: alias,
                     id: id!
                 });
-                addAlert(t("deleteMapperSuccess"), AlertVariant.success);
+                toast.success(t("deleteMapperSuccess"));
                 navigate(
                     toIdentityProvider({ providerId, alias, tab: "mappers", realm })
                 );
             } catch (error) {
-                addError("deleteErrorIdentityProvider", error);
+                toast.error(t("deleteErrorIdentityProvider", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
             }
         }
     });

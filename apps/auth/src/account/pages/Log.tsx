@@ -109,4 +109,3 @@ export default function Log(props: PageProps<Extract<KcContext, { pageId: "log.f
         </div>
     );
 }
-

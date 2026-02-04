@@ -1,25 +1,9 @@
-/**
- * WARNING: Before modifying this file, run the following command:
- *
- * $ npx keycloakify own --path "admin/realm-settings/DefaultGroupsTab.tsx"
- *
- * This file is provided by @keycloakify/keycloak-admin-ui version 260502.0.0.
- * It was copied into your repository by the postinstall script: `keycloakify sync-extensions`.
- */
-
-/* eslint-disable */
-
-// @ts-nocheck
-
 import type GroupRepresentation from "@keycloak/keycloak-admin-client/lib/defs/groupRepresentation";
-import {
-    Action,
+import { getErrorDescription, getErrorMessage, Action,
     KeycloakDataTable,
-    useAlerts,
     useFetch,
-    useHelp,
-    AlertVariant
-} from "../../shared/keycloak-ui-shared";
+    useHelp } from "../../shared/keycloak-ui-shared";
+import { toast } from "@merge/ui/components/sonner";
 import { Button } from "@merge/ui/components/button";
 import { Popover, PopoverContent, PopoverTrigger } from "@merge/ui/components/popover";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@merge/ui/components/dropdown-menu";
@@ -52,8 +36,7 @@ export const DefaultsGroupsTab = () => {
     const reload = () => setLoad(load + 1);
 
     const { realm } = useRealm();
-    const { addAlert, addError } = useAlerts();
-    const { enabled } = useHelp();
+const { enabled } = useHelp();
 
     const { hasAccess } = useAccess();
     const canAddOrRemoveGroups = hasAccess("view-users", "manage-realm");
@@ -79,13 +62,10 @@ export const DefaultsGroupsTab = () => {
                     })
                 )
             );
-            addAlert(
-                t("groupRemove", { count: selectedRows.length }),
-                AlertVariant.success
-            );
+            toast.success(t("groupRemove", { count: selectedRows.length }));
             setSelectedRows([]);
         } catch (error) {
-            addError("groupRemoveError", error);
+            toast.error(t("groupRemoveError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
         }
         reload();
     };
@@ -100,12 +80,9 @@ export const DefaultsGroupsTab = () => {
                     })
                 )
             );
-            addAlert(
-                t("defaultGroupAdded", { count: groups.length }),
-                AlertVariant.success
-            );
+            toast.success(t("defaultGroupAdded", { count: groups.length }));
         } catch (error) {
-            addError("defaultGroupAddedError", error);
+            toast.error(t("defaultGroupAddedError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
         }
         reload();
     };
@@ -114,7 +91,7 @@ export const DefaultsGroupsTab = () => {
         titleKey: t("removeConfirmTitle", { count: selectedRows.length }),
         messageKey: t("removeConfirm", { count: selectedRows.length }),
         continueButtonLabel: "delete",
-        continueButtonVariant: "danger",
+        continueButtonVariant: "destructive",
         onConfirm: removeGroup
     });
 

@@ -1,16 +1,3 @@
-/**
- * WARNING: Before modifying this file, run the following command:
- *
- * $ npx keycloakify own --path "admin/clients/scopes/AddScopeDialog.tsx"
- *
- * This file is provided by @keycloakify/keycloak-admin-ui version 260502.0.0.
- * It was copied into your repository by the postinstall script: `keycloakify sync-extensions`.
- */
-
-/* eslint-disable */
-
-// @ts-nocheck
-
 import type ClientScopeRepresentation from "@keycloak/keycloak-admin-client/lib/defs/clientScopeRepresentation";
 import { KeycloakSelect } from "../../../shared/keycloak-ui-shared";
 import { Button } from "@merge/ui/components/button";
@@ -43,7 +30,6 @@ import {
 import useToggle from "../../utils/useToggle";
 import { getProtocolName } from "../utils";
 import useIsFeatureEnabled, { Feature } from "../../utils/useIsFeatureEnabled";
-
 
 export type AddScopeDialogProps = {
     clientScopes: ClientScopeRepresentation[];
@@ -174,7 +160,7 @@ export const AddScopeDialog = ({
     const columns: ColumnDef<ClientScopeRepresentation>[] = [
         {
             id: "select",
-            header: ({ table }) => (
+            header: () => (
                 <Checkbox
                     checked={rows.length === clientScopes.length && clientScopes.length > 0}
                     onCheckedChange={(checked) => {

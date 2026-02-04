@@ -1,26 +1,12 @@
-/**
- * WARNING: Before modifying this file, run the following command:
- *
- * $ npx keycloakify own --path "admin/user/user-credentials/InlineLabelEdit.tsx"
- *
- * This file is provided by @keycloakify/keycloak-admin-ui version 260502.0.0.
- * It was copied into your repository by the postinstall script: `keycloakify sync-extensions`.
- */
-
-/* eslint-disable */
-
-// @ts-nocheck
-
 import type CredentialRepresentation from "@keycloak/keycloak-admin-client/lib/defs/credentialRepresentation";
-import { AlertVariant } from "../../../shared/keycloak-ui-shared";
 import { Button } from "@merge/ui/components/button";
 import { Input } from "@merge/ui/components/input";
-import { Label } from "@merge/ui/components/label";
 import { Check, PencilSimple, X } from "@phosphor-icons/react";
 import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { useAdminClient } from "../../admin-client";
-import { useAlerts } from "../../../shared/keycloak-ui-shared";
+import { getErrorDescription, getErrorMessage } from "../../../shared/keycloak-ui-shared";
+import { toast } from "@merge/ui/components/sonner";
 
 type UserLabelForm = {
     userLabel: string;
@@ -43,10 +29,7 @@ export const InlineLabelEdit = ({
 
     const { t } = useTranslation();
     const { register, handleSubmit } = useForm<UserLabelForm>();
-
-    const { addAlert, addError } = useAlerts();
-
-    const saveUserLabel = async (userLabel: UserLabelForm) => {
+const saveUserLabel = async (userLabel: UserLabelForm) => {
         try {
             await adminClient.users.updateCredentialLabel(
                 {
@@ -55,10 +38,10 @@ export const InlineLabelEdit = ({
                 },
                 userLabel.userLabel || ""
             );
-            addAlert(t("updateCredentialUserLabelSuccess"), AlertVariant.success);
+            toast.success(t("updateCredentialUserLabelSuccess"));
             toggle();
         } catch (error) {
-            addError("updateCredentialUserLabelError", error);
+            toast.error(t("updateCredentialUserLabelError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
         }
     };
 

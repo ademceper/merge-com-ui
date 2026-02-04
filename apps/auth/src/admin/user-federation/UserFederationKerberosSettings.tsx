@@ -1,19 +1,6 @@
-/**
- * WARNING: Before modifying this file, run the following command:
- *
- * $ npx keycloakify own --path "admin/user-federation/UserFederationKerberosSettings.tsx"
- *
- * This file is provided by @keycloakify/keycloak-admin-ui version 260502.0.0.
- * It was copied into your repository by the postinstall script: `keycloakify sync-extensions`.
- */
-
-/* eslint-disable */
-
-// @ts-nocheck
-
 import type ComponentRepresentation from "@keycloak/keycloak-admin-client/lib/defs/componentRepresentation";
-import { useAlerts, useFetch } from "../../shared/keycloak-ui-shared";
-import { AlertVariant } from "../../shared/keycloak-ui-shared";
+import { getErrorDescription, getErrorMessage, useFetch } from "../../shared/keycloak-ui-shared";
+import { toast } from "@merge/ui/components/sonner";
 import { Button } from "@merge/ui/components/button";
 import { FormProvider, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
@@ -35,10 +22,7 @@ export default function UserFederationKerberosSettings() {
     const { realm } = useRealm();
 
     const { id } = useParams<{ id?: string }>();
-
-    const { addAlert, addError } = useAlerts();
-
-    useFetch(
+useFetch(
         async () => {
             if (id) {
                 return adminClient.components.findOne({ id });
@@ -67,12 +51,9 @@ export default function UserFederationKerberosSettings() {
                 await adminClient.components.update({ id }, component);
             }
             setupForm(component as ComponentRepresentation);
-            addAlert(
-                t(!id ? "createUserProviderSuccess" : "userProviderSaveSuccess"),
-                AlertVariant.success
-            );
+            toast.success(t(!id ? "createUserProviderSuccess" : "userProviderSaveSuccess"));
         } catch (error) {
-            addError(!id ? "createUserProviderError" : "userProviderSaveError", error);
+            toast.error(t(!id ? "createUserProviderError" : "userProviderSaveError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
         }
     };
 

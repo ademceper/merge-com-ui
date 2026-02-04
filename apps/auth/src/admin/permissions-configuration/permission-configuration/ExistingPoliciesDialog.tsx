@@ -1,16 +1,3 @@
-/**
- * WARNING: Before modifying this file, run the following command:
- *
- * $ npx keycloakify own --path "admin/permissions-configuration/permission-configuration/ExistingPoliciesDialog.tsx"
- *
- * This file is provided by @keycloakify/keycloak-admin-ui version 260502.0.0.
- * It was copied into your repository by the postinstall script: `keycloakify sync-extensions`.
- */
-
-/* eslint-disable */
-
-// @ts-nocheck
-
 import PolicyRepresentation from "@keycloak/keycloak-admin-client/lib/defs/policyRepresentation";
 import { PolicyQuery } from "@keycloak/keycloak-admin-client/lib/resources/clients";
 import {
@@ -46,7 +33,7 @@ export const ExistingPoliciesDialog = ({
     const { adminClient } = useAdminClient();
     const [rows, setRows] = useState<PolicyRepresentation[]>([]);
     const [filterType, setFilterType] = useState<string | undefined>(undefined);
-    const [isFilterTypeDropdownOpen, toggleIsFilterTypeDropdownOpen] = useToggle();
+    const [_isFilterTypeDropdownOpen, _toggleIsFilterTypeDropdownOpen] = useToggle();
     const [providers, setProviders] = useState<string[]>([]);
 
     useFetch(

@@ -1,16 +1,3 @@
-/**
- * WARNING: Before modifying this file, run the following command:
- *
- * $ npx keycloakify own --path "admin/organizations/LinkIdentityProviderModal.tsx"
- *
- * This file is provided by @keycloakify/keycloak-admin-ui version 260502.0.0.
- * It was copied into your repository by the postinstall script: `keycloakify sync-extensions`.
- */
-
-/* eslint-disable */
-
-// @ts-nocheck
-
 import IdentityProviderRepresentation from "@keycloak/keycloak-admin-client/lib/defs/identityProviderRepresentation";
 import { FormSubmitButton, SelectControl } from "../../shared/keycloak-ui-shared";
 import { Button } from "@merge/ui/components/button";
@@ -20,7 +7,8 @@ import { FormProvider, useForm, useFormContext } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { useAdminClient } from "../admin-client";
 import { DefaultSwitchControl } from "../components/SwitchControl";
-import { useAlerts } from "../../shared/keycloak-ui-shared";
+import { getErrorDescription, getErrorMessage } from "../../shared/keycloak-ui-shared";
+import { toast } from "@merge/ui/components/sonner";
 import {
     convertAttributeNameToForm,
     convertFormValuesToObject,
@@ -50,9 +38,7 @@ export const LinkIdentityProviderModal = ({
 }: LinkIdentityProviderModalProps) => {
     const { adminClient } = useAdminClient();
     const { t } = useTranslation();
-    const { addAlert, addError } = useAlerts();
-
-    const form = useForm<LinkRepresentation>({ mode: "onChange" });
+const form = useForm<LinkRepresentation>({ mode: "onChange" });
     const { handleSubmit, formState, setValue } = form;
     const { getValues } = useFormContext<OrganizationFormType>();
 
@@ -94,10 +80,10 @@ export const LinkIdentityProviderModal = ({
                     alias: data.alias[0]
                 });
             }
-            addAlert(t(!identityProvider ? "linkSuccessful" : "linkUpdatedSuccessful"));
+            toast.success(t(!identityProvider ? "linkSuccessful" : "linkUpdatedSuccessful"));
             onClose();
         } catch (error) {
-            addError(!identityProvider ? "linkError" : "linkUpdatedError", error);
+            toast.error(t(!identityProvider ? "linkError" : "linkUpdatedError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
         }
     };
 

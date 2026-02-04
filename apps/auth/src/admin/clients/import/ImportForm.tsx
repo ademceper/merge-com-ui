@@ -1,19 +1,5 @@
-/**
- * WARNING: Before modifying this file, run the following command:
- *
- * $ npx keycloakify own --path "admin/clients/import/ImportForm.tsx"
- *
- * This file is provided by @keycloakify/keycloak-admin-ui version 260502.0.0.
- * It was copied into your repository by the postinstall script: `keycloakify sync-extensions`.
- */
-
-/* eslint-disable */
-
-// @ts-nocheck
-
 import { fetchWithError } from "@keycloak/keycloak-admin-client";
 import type ClientRepresentation from "@keycloak/keycloak-admin-client/lib/defs/clientRepresentation";
-import { AlertVariant } from "../../../shared/keycloak-ui-shared";
 import { Button } from "@merge/ui/components/button";
 import { useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
@@ -21,7 +7,8 @@ import { useTranslation } from "react-i18next";
 import { Link, useNavigate } from "react-router-dom";
 import { FormSubmitButton, TextControl } from "../../../shared/keycloak-ui-shared";
 import { useAdminClient } from "../../admin-client";
-import { useAlerts } from "../../../shared/keycloak-ui-shared";
+import { getErrorDescription, getErrorMessage } from "../../../shared/keycloak-ui-shared";
+import { toast } from "@merge/ui/components/sonner";
 import { FormAccess } from "../../components/form/FormAccess";
 import { FileUploadForm } from "../../components/json-file-upload/FileUploadForm";
 import { ViewHeader } from "../../components/view-header/ViewHeader";
@@ -49,17 +36,14 @@ export default function ImportForm() {
     const form = useForm<FormFields>();
     const { handleSubmit, setValue, formState } = form;
     const [imported, setImported] = useState<ClientRepresentation>({});
-
-    const { addAlert, addError } = useAlerts();
-
-    const handleFileChange = async (contents: string) => {
+const handleFileChange = async (contents: string) => {
         try {
             const parsed = await parseFileContents(contents);
 
             convertToFormValues(parsed, setValue);
             setImported(parsed);
         } catch (error) {
-            addError("importParseError", error);
+            toast.error(t("importParseError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
         }
     };
 
@@ -97,10 +81,10 @@ export default function ImportForm() {
                     attributes: client.attributes || {}
                 })
             });
-            addAlert(t("clientImportSuccess"), AlertVariant.success);
+            toast.success(t("clientImportSuccess"));
             navigate(toClient({ realm, clientId: newClient.id, tab: "settings" }));
         } catch (error) {
-            addError("clientImportError", error);
+            toast.error(t("clientImportError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
         }
     };
 

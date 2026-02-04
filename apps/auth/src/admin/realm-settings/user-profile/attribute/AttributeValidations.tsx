@@ -1,16 +1,3 @@
-/**
- * WARNING: Before modifying this file, run the following command:
- *
- * $ npx keycloakify own --path "admin/realm-settings/user-profile/attribute/AttributeValidations.tsx"
- *
- * This file is provided by @keycloakify/keycloak-admin-ui version 260502.0.0.
- * It was copied into your repository by the postinstall script: `keycloakify sync-extensions`.
- */
-
-/* eslint-disable */
-
-// @ts-nocheck
-
 import { Button } from "@merge/ui/components/button";
 import { Separator } from "@merge/ui/components/separator";
 import { PlusCircle } from "@phosphor-icons/react";
@@ -31,7 +18,6 @@ import { DefaultValue } from "../../../components/key-value-form/KeyValueInput";
 import useToggle from "../../../utils/useToggle";
 import type { IndexedValidations } from "../../NewAttributeSettings";
 import { AddValidatorDialog } from "../attribute/AddValidatorDialog";
-
 
 export const AttributeValidations = () => {
     const { t } = useTranslation();
@@ -97,8 +83,8 @@ export const AttributeValidations = () => {
                     variant="link"
                     data-testid="addValidator"
                     className="kc--attributes-validations--add-validation-button"
-                    icon={<PlusCircle className="size-4" />}
                 >
+                    <PlusCircle className="size-4" />
                     {t("addValidator")}
                 </Button>
                 <Separator />

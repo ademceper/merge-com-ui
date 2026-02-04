@@ -1,16 +1,3 @@
-/**
- * WARNING: Before modifying this file, run the following command:
- *
- * $ npx keycloakify own --path "admin/realm-settings/keys/KeysListTab.tsx"
- *
- * This file is provided by @keycloakify/keycloak-admin-ui version 260502.0.0.
- * It was copied into your repository by the postinstall script: `keycloakify sync-extensions`.
- */
-
-/* eslint-disable */
-
-// @ts-nocheck
-
 import type ComponentRepresentation from "@keycloak/keycloak-admin-client/lib/defs/componentRepresentation";
 import type { KeyMetadataRepresentation } from "@keycloak/keycloak-admin-client/lib/defs/keyMetadataRepresentation";
 import {
@@ -34,7 +21,6 @@ import { emptyFormatter } from "../../util";
 import useFormatDate from "../../utils/useFormatDate";
 import useToggle from "../../utils/useToggle";
 import { toKeysTab } from "../routes/KeysTab";
-
 
 const FILTER_OPTIONS = ["ACTIVE", "PASSIVE", "DISABLED"] as const;
 

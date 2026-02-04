@@ -132,4 +132,3 @@ export default function Sessions(props: PageProps<Extract<KcContext, { pageId: "
         </div>
     );
 }
-

@@ -1,17 +1,5 @@
-/**
- * WARNING: Before modifying this file, run the following command:
- *
- * $ npx keycloakify own --path "admin/organizations/DetailOrganization.tsx"
- *
- * This file is provided by @keycloakify/keycloak-admin-ui version 260502.0.0.
- * It was copied into your repository by the postinstall script: `keycloakify sync-extensions`.
- */
-
-/* eslint-disable */
-
-// @ts-nocheck
-
-import { FormSubmitButton, useAlerts, useFetch } from "../../shared/keycloak-ui-shared";
+import { FormSubmitButton, getErrorDescription, getErrorMessage, useFetch } from "../../shared/keycloak-ui-shared";
+import { toast } from "@merge/ui/components/sonner";
 import { Button } from "@merge/ui/components/button";
 import { FormProvider, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
@@ -33,9 +21,8 @@ import { useState } from "react";
 
 export default function DetailOrganization() {
     const { adminClient } = useAdminClient();
-    const { addAlert, addError } = useAlerts();
 
-    const { realm, realmRepresentation } = useRealm();
+    const { realmRepresentation } = useRealm();
     const { id } = useParams<EditOrganizationParams>();
     const { tab } = useRouterParams<{ tab?: string }>();
     const { t } = useTranslation();
@@ -44,11 +31,11 @@ export default function DetailOrganization() {
 
     const save = async (org: OrganizationFormType) => {
         try {
-            const payload = convertToOrgForUpdate(org);
+            const payload = { ...convertToOrgForUpdate(org), alias: org.alias };
             await adminClient.organizations.updateById({ id }, payload);
-            addAlert(t("organizationSaveSuccess"));
+            toast.success(t("organizationSaveSuccess"));
         } catch (error) {
-            addError("organizationSaveError", error);
+            toast.error(t("organizationSaveError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
         }
     };
 

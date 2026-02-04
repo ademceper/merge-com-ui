@@ -1,5 +1,3 @@
-/* eslint-disable */
-// @ts-nocheck
 
 import { SingleSelect } from "./SingleSelect";
 import type { KeycloakSelectProps } from "./KeycloakSelect";

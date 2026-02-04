@@ -1,16 +1,3 @@
-/**
- * WARNING: Before modifying this file, run the following command:
- *
- * $ npx keycloakify own --path "admin/authentication/components/FlowTitle.tsx"
- *
- * This file is provided by @keycloakify/keycloak-admin-ui version 260502.0.0.
- * It was copied into your repository by the postinstall script: `keycloakify sync-extensions`.
- */
-
-/* eslint-disable */
-
-// @ts-nocheck
-
 import { HelpItem } from "../../../shared/keycloak-ui-shared";
 import { Badge } from "@merge/ui/components/badge";
 import { GitBranch, MapPin, Robot, ListChecks } from "@phosphor-icons/react";
@@ -40,21 +27,6 @@ const FlowIcon = ({ type }: { type: FlowType }) => {
             return undefined;
     }
 };
-
-function mapTypeToColor(type: FlowType) {
-    switch (type) {
-        case "condition":
-            return "purple";
-        case "flow":
-            return "green";
-        case "execution":
-            return "blue";
-        case "step":
-            return "cyan";
-        default:
-            return "grey";
-    }
-}
 
 export const FlowTitle = ({ id, type, title, subtitle, providerId }: FlowTitleProps) => {
     const { t } = useTranslation();

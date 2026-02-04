@@ -1,25 +1,12 @@
-/**
- * WARNING: Before modifying this file, run the following command:
- *
- * $ npx keycloakify own --path "admin/identity-providers/add/AddIdentityProvider.tsx"
- *
- * This file is provided by @keycloakify/keycloak-admin-ui version 260502.0.0.
- * It was copied into your repository by the postinstall script: `keycloakify sync-extensions`.
- */
-
-/* eslint-disable */
-
-// @ts-nocheck
-
 import type IdentityProviderRepresentation from "@keycloak/keycloak-admin-client/lib/defs/identityProviderRepresentation";
 import { Button } from "@merge/ui/components/button";
-import { AlertVariant } from "../../../shared/keycloak-ui-shared";
 import { useMemo } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { Link, useNavigate } from "react-router-dom";
 import { useAdminClient } from "../../admin-client";
-import { useAlerts } from "../../../shared/keycloak-ui-shared";
+import { getErrorDescription, getErrorMessage } from "../../../shared/keycloak-ui-shared";
+import { toast } from "@merge/ui/components/sonner";
 import { DynamicComponents } from "../../components/dynamic/DynamicComponents";
 import { FormAccess } from "../../components/form/FormAccess";
 import { ViewHeader } from "../../components/view-header/ViewHeader";
@@ -61,9 +48,7 @@ export default function AddIdentityProvider() {
         handleSubmit,
         formState: { isValid }
     } = form;
-
-    const { addAlert, addError } = useAlerts();
-    const navigate = useNavigate();
+const navigate = useNavigate();
     const { realm } = useRealm();
 
     const onSubmit = async (provider: IdentityProviderRepresentation) => {
@@ -73,7 +58,7 @@ export default function AddIdentityProvider() {
                 providerId,
                 alias: provider.alias!
             });
-            addAlert(t("createIdentityProviderSuccess"), AlertVariant.success);
+            toast.success(t("createIdentityProviderSuccess"));
             navigate(
                 toIdentityProvider({
                     realm,
@@ -83,7 +68,7 @@ export default function AddIdentityProvider() {
                 })
             );
         } catch (error) {
-            addError("createError", error);
+            toast.error(t("createError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
         }
     };
 

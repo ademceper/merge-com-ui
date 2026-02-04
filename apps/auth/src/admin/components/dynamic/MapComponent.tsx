@@ -1,16 +1,3 @@
-/**
- * WARNING: Before modifying this file, run the following command:
- *
- * $ npx keycloakify own --path "admin/components/dynamic/MapComponent.tsx"
- *
- * This file is provided by @keycloakify/keycloak-admin-ui version 260502.0.0.
- * It was copied into your repository by the postinstall script: `keycloakify sync-extensions`.
- */
-
-/* eslint-disable */
-
-// @ts-nocheck
-
 import { HelpItem, generateId } from "../../../shared/keycloak-ui-shared";
 import { Button } from "@merge/ui/components/button";
 import { Input } from "@merge/ui/components/input";
@@ -55,7 +42,6 @@ export const MapComponent = ({
         setValue(
             fieldName,
             JSON.stringify(
-                // eslint-disable-next-line @typescript-eslint/no-unused-vars
                 val.filter(e => e.key !== "").map(({ id, ...entry }) => entry)
             )
         );

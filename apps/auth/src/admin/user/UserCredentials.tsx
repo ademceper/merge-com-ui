@@ -1,20 +1,7 @@
-/**
- * WARNING: Before modifying this file, run the following command:
- *
- * $ npx keycloakify own --path "admin/user/UserCredentials.tsx"
- *
- * This file is provided by @keycloakify/keycloak-admin-ui version 260502.0.0.
- * It was copied into your repository by the postinstall script: `keycloakify sync-extensions`.
- */
-
-/* eslint-disable */
-
-// @ts-nocheck
-
 import type CredentialRepresentation from "@keycloak/keycloak-admin-client/lib/defs/credentialRepresentation";
 import type UserRepresentation from "@keycloak/keycloak-admin-client/lib/defs/userRepresentation";
-import { HelpItem, useAlerts, useFetch } from "../../shared/keycloak-ui-shared";
-import { AlertVariant } from "../../shared/keycloak-ui-shared";
+import { getErrorDescription, getErrorMessage, HelpItem, useFetch } from "../../shared/keycloak-ui-shared";
+import { toast } from "@merge/ui/components/sonner";
 import { Button } from "@merge/ui/components/button";
 import { Separator } from "@merge/ui/components/separator";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@merge/ui/components/table";
@@ -31,7 +18,6 @@ import { InlineLabelEdit } from "./user-credentials/InlineLabelEdit";
 import { ResetCredentialDialog } from "./user-credentials/ResetCredentialDialog";
 import { ResetPasswordDialog } from "./user-credentials/ResetPasswordDialog";
 import useFormatDate from "../utils/useFormatDate";
-
 
 type UserCredentialsProps = {
     user: UserRepresentation;
@@ -98,8 +84,7 @@ export const UserCredentials = ({ user, setUser }: UserCredentialsProps) => {
     const { adminClient } = useAdminClient();
 
     const { t } = useTranslation();
-    const { addAlert, addError } = useAlerts();
-    const [key, setKey] = useState(0);
+const [key, setKey] = useState(0);
     const formatDate = useFormatDate();
     const refresh = () => setKey(key + 1);
     const [isOpen, setIsOpen] = useState(false);
@@ -181,10 +166,10 @@ export const UserCredentials = ({ user, setUser }: UserCredentialsProps) => {
                     id: user.id!,
                     credentialId: selectedCredential.id!
                 });
-                addAlert(t("deleteCredentialsSuccess"), AlertVariant.success);
+                toast.success(t("deleteCredentialsSuccess"));
                 setKey(key => key + 1);
             } catch (error) {
-                addError("deleteCredentialsError", error);
+                toast.error(t("deleteCredentialsError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
             }
         }
     });
@@ -350,9 +335,9 @@ export const UserCredentials = ({ user, setUser }: UserCredentialsProps) => {
                 }
 
             refresh();
-            addAlert(t("updatedCredentialMoveSuccess"), AlertVariant.success);
+            toast.success(t("updatedCredentialMoveSuccess"));
         } catch (error) {
-            addError("updatedCredentialMoveError", error);
+            toast.error(t("updatedCredentialMoveError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
         }
     };
 
@@ -414,7 +399,7 @@ export const UserCredentials = ({ user, setUser }: UserCredentialsProps) => {
             {user.email && !emptyState && (
                 <Button
                     className="kc-resetCredentialBtn-header"
-                    variant="primary"
+                    variant="default"
                     data-testid="credentialResetBtn"
                     onClick={() => setOpenCredentialReset(true)}
                 >
@@ -428,7 +413,7 @@ export const UserCredentials = ({ user, setUser }: UserCredentialsProps) => {
                         <Button
                             className="kc-setPasswordBtn-tbl"
                             data-testid="setPasswordBtn-table"
-                            variant="primary"
+                            variant="default"
                             form="userCredentials-form"
                             onClick={() => {
                                 setIsOpen(true);

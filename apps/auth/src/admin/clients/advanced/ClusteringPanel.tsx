@@ -1,17 +1,3 @@
-/**
- * WARNING: Before modifying this file, run the following command:
- *
- * $ npx keycloakify own --path "admin/clients/advanced/ClusteringPanel.tsx"
- *
- * This file is provided by @keycloakify/keycloak-admin-ui version 260502.0.0.
- * It was copied into your repository by the postinstall script: `keycloakify sync-extensions`.
- */
-
-/* eslint-disable */
-
-// @ts-nocheck
-
-import { AlertVariant } from "../../../shared/keycloak-ui-shared";
 import { Button } from "@merge/ui/components/button";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@merge/ui/components/collapsible";
 import { Label } from "@merge/ui/components/label";
@@ -24,7 +10,8 @@ import { useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { HelpItem } from "../../../shared/keycloak-ui-shared";
 import { useAdminClient } from "../../admin-client";
-import { useAlerts } from "../../../shared/keycloak-ui-shared";
+import { getErrorDescription, getErrorMessage } from "../../../shared/keycloak-ui-shared";
+import { toast } from "@merge/ui/components/sonner";
 import { useConfirmDialog } from "../../components/confirm-dialog/ConfirmDialog";
 import { FormAccess } from "../../components/form/FormAccess";
 import { TimeSelectorForm } from "../../components/time-selector/TimeSelectorForm";
@@ -44,8 +31,7 @@ export const ClusteringPanel = ({
     const { adminClient } = useAdminClient();
 
     const { t } = useTranslation();
-    const { addAlert, addError } = useAlerts();
-    const formatDate = useFormatDate();
+const formatDate = useFormatDate();
 
     const [nodes, setNodes] = useState(registeredNodes || {});
     const [expanded, setExpanded] = useState(false);
@@ -64,7 +50,7 @@ export const ClusteringPanel = ({
 
     const testCluster = async () => {
         const result = await adminClient.clients.testNodesAvailable({ id: id! });
-        parseResult(result, "testCluster", addAlert, t);
+        parseResult(result, "testCluster", t);
     };
 
     const [toggleDeleteNodeConfirm, DeleteNodeConfirm] = useConfirmDialog({
@@ -89,9 +75,9 @@ export const ClusteringPanel = ({
                     }, {})
                 });
                 refresh();
-                addAlert(t("deleteNodeSuccess"), AlertVariant.success);
+                toast.success(t("deleteNodeSuccess"));
             } catch (error) {
-                addError("deleteNodeFail", error);
+                toast.error(t("deleteNodeFail", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
             }
         }
     });

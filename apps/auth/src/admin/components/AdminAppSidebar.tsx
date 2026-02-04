@@ -1,5 +1,3 @@
-/* eslint-disable */
-// @ts-nocheck
 
 import { label, useEnvironment } from "../../shared/keycloak-ui-shared";
 import {
@@ -14,8 +12,7 @@ import {
     SidebarMenuItem,
     SidebarMenuSub,
     SidebarMenuSubItem,
-    SidebarMenuSubButton,
-    SidebarSeparator
+    SidebarMenuSubButton
 } from "@merge/ui/components/sidebar";
 import {
     Collapsible,
@@ -28,7 +25,6 @@ import { useAccess } from "../context/access/Access";
 import { useRealm } from "../context/realm-context/RealmContext";
 import { useServerInfo } from "../context/server-info/ServerInfoProvider";
 import type { Environment } from "../environment";
-import type { UserMenuInfo } from "./AdminHeader";
 import { toPage } from "../page/routes";
 import { routes } from "../routes";
 import useIsFeatureEnabled, { Feature } from "../utils/useIsFeatureEnabled";
@@ -100,7 +96,7 @@ function SubNavLink({ to, title, dataTestId }: SubNavLinkProps) {
 export function AdminAppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
     const { t } = useTranslation();
     const location = useLocation();
-    const { environment, keycloak } = useEnvironment<Environment>();
+    const { environment } = useEnvironment<Environment>();
     const { hasAccess, hasSomeAccess } = useAccess();
     const { componentTypes } = useServerInfo();
     const isFeatureEnabled = useIsFeatureEnabled();

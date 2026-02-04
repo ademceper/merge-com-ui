@@ -1,16 +1,3 @@
-/**
- * WARNING: Before modifying this file, run the following command:
- *
- * $ npx keycloakify own --path "admin/user-federation/ManagePriorityDialog.tsx"
- *
- * This file is provided by @keycloakify/keycloak-admin-ui version 260502.0.0.
- * It was copied into your repository by the postinstall script: `keycloakify sync-extensions`.
- */
-
-/* eslint-disable */
-
-// @ts-nocheck
-
 import type ComponentRepresentation from "@keycloak/keycloak-admin-client/lib/defs/componentRepresentation";
 import { Button } from "@merge/ui/components/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@merge/ui/components/dialog";
@@ -18,7 +5,8 @@ import { sortBy } from "lodash-es";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useAdminClient } from "../admin-client";
-import { useAlerts } from "../../shared/keycloak-ui-shared";
+import { getErrorDescription, getErrorMessage } from "../../shared/keycloak-ui-shared";
+import { toast } from "@merge/ui/components/sonner";
 
 type ManagePriorityDialogProps = {
     components: ComponentRepresentation[];
@@ -32,9 +20,7 @@ export const ManagePriorityDialog = ({
     const { adminClient } = useAdminClient();
 
     const { t } = useTranslation();
-    const { addAlert, addError } = useAlerts();
-
-    const [liveText, setLiveText] = useState("");
+const [liveText, setLiveText] = useState("");
     const [order, setOrder] = useState(
         sortBy(components, "config.priority", "name").map(component => component.name!)
     );
@@ -110,9 +96,9 @@ export const ManagePriorityDialog = ({
 
                             try {
                                 await Promise.all(updates);
-                                addAlert(t("orderChangeSuccessUserFed"));
+                                toast.success(t("orderChangeSuccessUserFed"));
                             } catch (error) {
-                                addError("orderChangeErrorUserFed", error);
+                                toast.error(t("orderChangeErrorUserFed", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
                             }
 
                             onClose();

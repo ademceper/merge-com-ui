@@ -1,22 +1,7 @@
-/**
- * WARNING: Before modifying this file, run the following command:
- *
- * $ npx keycloakify own --path "admin/realm/add/NewRealmForm.tsx"
- *
- * This file is provided by @keycloakify/keycloak-admin-ui version 260502.0.0.
- * It was copied into your repository by the postinstall script: `keycloakify sync-extensions`.
- */
-
-/* eslint-disable */
-
-// @ts-nocheck
-
 import type RealmRepresentation from "@keycloak/keycloak-admin-client/lib/defs/realmRepresentation";
-import {
-    FormSubmitButton,
-    TextControl,
-    useAlerts
-} from "../../../shared/keycloak-ui-shared";
+import { getErrorDescription, getErrorMessage, FormSubmitButton,
+    TextControl } from "../../../shared/keycloak-ui-shared";
+import { toast } from "@merge/ui/components/sonner";
 import { Button } from "@merge/ui/components/button";
 import {
     Dialog,
@@ -48,8 +33,7 @@ export default function NewRealmForm({ onClose }: NewRealmFormProps) {
     const { t } = useTranslation();
     const navigate = useNavigate();
     const { refresh, whoAmI } = useWhoAmI();
-    const { addAlert, addError } = useAlerts();
-    const [realm, setRealm] = useState<RealmRepresentation>();
+const [realm, setRealm] = useState<RealmRepresentation>();
 
     const form = useForm<RealmRepresentation>({
         mode: "onChange"
@@ -69,13 +53,13 @@ export default function NewRealmForm({ onClose }: NewRealmFormProps) {
                 ...realm,
                 ...convertFormValuesToObject(fields)
             });
-            addAlert(t("saveRealmSuccess"));
+            toast.success(t("saveRealmSuccess"));
 
             refresh();
             onClose();
             navigate(toRealm({ realm: fields.realm! }));
         } catch (error) {
-            addError("saveRealmError", error);
+            toast.error(t("saveRealmError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
         }
     };
 

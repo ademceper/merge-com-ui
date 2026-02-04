@@ -133,4 +133,3 @@ export default function Account(props: PageProps<Extract<KcContext, { pageId: "a
         </div>
     );
 }
-

@@ -1,24 +1,10 @@
-/**
- * WARNING: Before modifying this file, run the following command:
- *
- * $ npx keycloakify own --path "admin/clients/AdvancedTab.tsx"
- *
- * This file is provided by @keycloakify/keycloak-admin-ui version 260502.0.0.
- * It was copied into your repository by the postinstall script: `keycloakify sync-extensions`.
- */
-
-/* eslint-disable */
-
-// @ts-nocheck
-
 import type ClientRepresentation from "@keycloak/keycloak-admin-client/lib/defs/clientRepresentation";
 import type GlobalRequestResult from "@keycloak/keycloak-admin-client/lib/defs/globalRequestResult";
-import { AlertVariant } from "../../shared/keycloak-ui-shared";
 import type { TFunction } from "i18next";
 import { useFormContext } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { ScrollForm } from "../../shared/keycloak-ui-shared";
-import type { AddAlertFunction } from "../../shared/keycloak-ui-shared";
+import { toast } from "@merge/ui/components/sonner";
 import { convertAttributeNameToForm, toUpperCase } from "../util";
 import useIsFeatureEnabled, { Feature } from "../utils/useIsFeatureEnabled";
 import type { FormFields, SaveOptions } from "./ClientDetails";
@@ -34,28 +20,18 @@ import { PROTOCOL_OIDC, PROTOCOL_OID4VC } from "./constants";
 export const parseResult = (
     result: GlobalRequestResult,
     prefixKey: string,
-    addAlert: AddAlertFunction,
     t: TFunction
 ) => {
     const successCount = result.successRequests?.length || 0;
     const failedCount = result.failedRequests?.length || 0;
 
     if (successCount === 0 && failedCount === 0) {
-        addAlert(t("noAdminUrlSet"), AlertVariant.warning);
+        toast.warning(t("noAdminUrlSet"));
     } else if (failedCount > 0) {
-        addAlert(
-            t(prefixKey + "Success", { successNodes: result.successRequests }),
-            AlertVariant.success
-        );
-        addAlert(
-            t(prefixKey + "Fail", { failedNodes: result.failedRequests }),
-            AlertVariant.danger
-        );
+        toast.success(t(prefixKey + "Success", { successNodes: result.successRequests }));
+        toast.error(t(prefixKey + "Fail", { failedNodes: result.failedRequests }));
     } else {
-        addAlert(
-            t(prefixKey + "Success", { successNodes: result.successRequests }),
-            AlertVariant.success
-        );
+        toast.success(t(prefixKey + "Success", { successNodes: result.successRequests }));
     }
 };
 

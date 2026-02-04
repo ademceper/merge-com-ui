@@ -1,28 +1,14 @@
-/**
- * WARNING: Before modifying this file, run the following command:
- *
- * $ npx keycloakify own --path "admin/client-scopes/ClientScopesSection.tsx"
- *
- * This file is provided by @keycloakify/keycloak-admin-ui version 260502.0.0.
- * It was copied into your repository by the postinstall script: `keycloakify sync-extensions`.
- */
-
-/* eslint-disable */
-
-// @ts-nocheck
-
 import { Button } from "@merge/ui/components/button";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@merge/ui/components/dropdown-menu";
 import { DotsThreeVertical } from "@phosphor-icons/react";
-import { AlertVariant } from "../../shared/keycloak-ui-shared";
-const cellWidth = (_width: number) => (value: any) => value;
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 import { useAdminClient } from "../admin-client";
 import type { Row } from "../clients/scopes/ClientScopes";
 import { getProtocolName } from "../clients/utils";
-import { useAlerts } from "../../shared/keycloak-ui-shared";
+import { getErrorDescription, getErrorMessage } from "../../shared/keycloak-ui-shared";
+import { toast } from "@merge/ui/components/sonner";
 import {
     AllClientScopeType,
     AllClientScopes,
@@ -33,7 +19,7 @@ import {
     removeScope
 } from "../components/client-scope/ClientScopeTypes";
 import { useConfirmDialog } from "../components/confirm-dialog/ConfirmDialog";
-import { Action, KeycloakDataTable } from "../../shared/keycloak-ui-shared";
+import { Action, KeycloakDataTable, cellWidth } from "../../shared/keycloak-ui-shared";
 import { ViewHeader } from "../components/view-header/ViewHeader";
 import { useRealm } from "../context/realm-context/RealmContext";
 import helpUrls from "../help-urls";
@@ -60,9 +46,7 @@ const TypeSelector = (scope: TypeSelectorProps) => {
     const { adminClient } = useAdminClient();
 
     const { t } = useTranslation();
-    const { addAlert, addError } = useAlerts();
-
-    return (
+return (
         <CellDropdown
             clientScope={scope}
             type={scope.type}
@@ -70,10 +54,10 @@ const TypeSelector = (scope: TypeSelectorProps) => {
             onSelect={async value => {
                 try {
                     await changeScope(adminClient, scope, value as AllClientScopeType);
-                    addAlert(t("clientScopeSuccess"), AlertVariant.success);
+                    toast.success(t("clientScopeSuccess"));
                     scope.refresh();
                 } catch (error) {
-                    addError("clientScopeError", error);
+                    toast.error(t("clientScopeError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
                 }
             }}
         />
@@ -94,9 +78,7 @@ export default function ClientScopesSection() {
 
     const { realm } = useRealm();
     const { t } = useTranslation();
-    const { addAlert, addError } = useAlerts();
-
-    const [kebabOpen, setKebabOpen] = useState(false);
+const [_kebabOpen, setKebabOpen] = useState(false);
     const [selectedScopes, setSelectedScopes] = useState<
         ClientScopeDefaultOptionalType[]
     >([]);
@@ -175,13 +157,13 @@ export default function ClientScopesSection() {
                         }
                         await adminClient.clientScopes.del({ id: scope.id! });
                     }
-                    addAlert(t("deletedSuccessClientScope"), AlertVariant.success);
+                    toast.success(t("deletedSuccessClientScope"));
                     refresh();
                 } catch (error) {
-                    addError("deleteErrorClientScope", error);
+                    toast.error(t("deleteErrorClientScope", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
                 }
             } else {
-                addAlert(t("notAllowedToDeleteAllClientScopes"), AlertVariant.danger);
+                toast.error(t("notAllowedToDeleteAllClientScopes"));
             }
         }
     });

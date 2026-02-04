@@ -1,20 +1,8 @@
-/**
- * WARNING: Before modifying this file, run the following command:
- *
- * $ npx keycloakify own --path "admin/realm-settings/keys/KeysProvidersTab.tsx"
- *
- * This file is provided by @keycloakify/keycloak-admin-ui version 260502.0.0.
- * It was copied into your repository by the postinstall script: `keycloakify sync-extensions`.
- */
-
-/* eslint-disable */
-
-// @ts-nocheck
-
 import type ComponentRepresentation from "@keycloak/keycloak-admin-client/lib/defs/componentRepresentation";
 import type ComponentTypeRepresentation from "@keycloak/keycloak-admin-client/lib/defs/componentTypeRepresentation";
 import type { KeyMetadataRepresentation } from "@keycloak/keycloak-admin-client/lib/defs/keyMetadataRepresentation";
-import { useAlerts, AlertVariant } from "../../../shared/keycloak-ui-shared";
+import { getErrorDescription, getErrorMessage } from "../../../shared/keycloak-ui-shared";
+import { toast } from "@merge/ui/components/sonner";
 import { Button } from "@merge/ui/components/button";
 import { Input } from "@merge/ui/components/input";
 import { MagnifyingGlass } from "@phosphor-icons/react";
@@ -31,7 +19,6 @@ import useToggle from "../../utils/useToggle";
 import { ProviderType, toKeyProvider } from "../routes/KeyProvider";
 import { KeyProviderModal } from "./key-providers/KeyProviderModal";
 import { KeyProvidersPicker } from "./key-providers/KeyProvidersPicker";
-
 
 type ComponentData = KeyMetadataRepresentation & {
     id?: string;
@@ -51,8 +38,7 @@ export const KeysProvidersTab = ({ realmComponents, refresh }: KeysProvidersTabP
     const { adminClient } = useAdminClient();
 
     const { t } = useTranslation();
-    const { addAlert, addError } = useAlerts();
-    const { realm } = useRealm();
+const { realm } = useRealm();
 
     const [searchVal, setSearchVal] = useState("");
     const [filteredComponents, setFilteredComponents] = useState<ComponentData[]>([]);
@@ -99,9 +85,9 @@ export const KeysProvidersTab = ({ realmComponents, refresh }: KeysProvidersTabP
 
                 refresh();
 
-                addAlert(t("deleteProviderSuccess"), AlertVariant.success);
+                toast.success(t("deleteProviderSuccess"));
             } catch (error) {
-                addError("deleteProviderError", error);
+                toast.error(t("deleteProviderError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
             }
         }
     });
@@ -219,9 +205,9 @@ export const KeysProvidersTab = ({ realmComponents, refresh }: KeysProvidersTabP
                         try {
                             await Promise.all(updateAll);
                             refresh();
-                            addAlert(t("saveProviderListSuccess"), AlertVariant.success);
+                            toast.success(t("saveProviderListSuccess"));
                         } catch (error) {
-                            addError("saveProviderError", error);
+                            toast.error(t("saveProviderError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
                         }
                     }}
                     columns={[
@@ -254,9 +240,9 @@ export const KeysProvidersTab = ({ realmComponents, refresh }: KeysProvidersTabP
                     actions={[
                         {
                             title: t("delete"),
-                            onClick: (_key, _idx, component) => {
+                            onClick: (_event, row) => {
                                 setSelectedComponent(
-                                    component as ComponentRepresentation
+                                    row as ComponentRepresentation
                                 );
                                 toggleDeleteDialog();
                             }

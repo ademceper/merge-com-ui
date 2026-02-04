@@ -1,19 +1,6 @@
-/**
- * WARNING: Before modifying this file, run the following command:
- *
- * $ npx keycloakify own --path "admin/clients/authorization/Settings.tsx"
- *
- * This file is provided by @keycloakify/keycloak-admin-ui version 260502.0.0.
- * It was copied into your repository by the postinstall script: `keycloakify sync-extensions`.
- */
-
-/* eslint-disable */
-
-// @ts-nocheck
-
 import type ResourceServerRepresentation from "@keycloak/keycloak-admin-client/lib/defs/resourceServerRepresentation";
-import { HelpItem, useAlerts, useFetch } from "../../../shared/keycloak-ui-shared";
-import { AlertVariant } from "../../../shared/keycloak-ui-shared";
+import { getErrorDescription, getErrorMessage, HelpItem, useFetch } from "../../../shared/keycloak-ui-shared";
+import { toast } from "@merge/ui/components/sonner";
 import { Button } from "@merge/ui/components/button";
 import { Separator } from "@merge/ui/components/separator";
 import { Label } from "@merge/ui/components/label";
@@ -44,9 +31,7 @@ export const AuthorizationSettings = ({ clientId }: { clientId: string }) => {
 
     const form = useForm<FormFields>({});
     const { control, reset, handleSubmit } = form;
-
-    const { addAlert, addError } = useAlerts();
-    const { hasAccess } = useAccess();
+const { hasAccess } = useAccess();
 
     const isDisabled = !hasAccess("manage-authorization");
 
@@ -62,19 +47,19 @@ export const AuthorizationSettings = ({ clientId }: { clientId: string }) => {
     const importResource = async (value: ResourceServerRepresentation) => {
         try {
             await adminClient.clients.importResource({ id: clientId }, value);
-            addAlert(t("importResourceSuccess"), AlertVariant.success);
+            toast.success(t("importResourceSuccess"));
             reset({ ...value });
         } catch (error) {
-            addError("importResourceError", error);
+            toast.error(t("importResourceError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
         }
     };
 
     const onSubmit = async (resource: ResourceServerRepresentation) => {
         try {
             await adminClient.clients.updateResourceServer({ id: clientId }, resource);
-            addAlert(t("updateResourceSuccess"), AlertVariant.success);
+            toast.success(t("updateResourceSuccess"));
         } catch (error) {
-            addError("resourceSaveError", error);
+            toast.error(t("resourceSaveError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
         }
     };
 

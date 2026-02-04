@@ -1,16 +1,3 @@
-/**
- * WARNING: Before modifying this file, run the following command:
- *
- * $ npx keycloakify own --path "admin/components/time-selector/TimeSelector.tsx"
- *
- * This file is provided by @keycloakify/keycloak-admin-ui version 260502.0.0.
- * It was copied into your repository by the postinstall script: `keycloakify sync-extensions`.
- */
-
-/* eslint-disable */
-
-// @ts-nocheck
-
 import {
     KeycloakSelect,
     KeycloakSelectProps,
@@ -38,6 +25,7 @@ export type TimeSelectorProps = Omit<React.InputHTMLAttributes<HTMLInputElement>
         units?: Unit[];
         onChange?: (time: number | string) => void;
         className?: string;
+        validated?: "success" | "warning" | "error" | "default";
     };
 
 const getTimeUnit = (units: TimeUnit[], value = 0) =>
@@ -64,6 +52,7 @@ export const TimeSelector = ({
     className,
     min,
     menuAppendTo,
+    validated: _validated,
     ...rest
 }: TimeSelectorProps) => {
     const { t } = useTranslation();
@@ -150,13 +139,13 @@ export const TimeSelector = ({
                         setOpen(!open);
                     }}
                     isOpen={open}
-                    isDisabled={rest.isDisabled}
+                    isDisabled={rest.disabled}
                 >
                     {times.map(time => (
                         <SelectOption
                             id={time.label}
                             key={time.label}
-                            value={time.multiplier}
+                            value={String(time.multiplier)}
                         >
                             {t(time.label)}
                         </SelectOption>

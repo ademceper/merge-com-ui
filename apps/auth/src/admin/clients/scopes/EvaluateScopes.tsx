@@ -1,16 +1,3 @@
-/**
- * WARNING: Before modifying this file, run the following command:
- *
- * $ npx keycloakify own --path "admin/clients/scopes/EvaluateScopes.tsx"
- *
- * This file is provided by @keycloakify/keycloak-admin-ui version 260502.0.0.
- * It was copied into your repository by the postinstall script: `keycloakify sync-extensions`.
- */
-
-/* eslint-disable */
-
-// @ts-nocheck
-
 import type ClientScopeRepresentation from "@keycloak/keycloak-admin-client/lib/defs/clientScopeRepresentation";
 import type ProtocolMapperRepresentation from "@keycloak/keycloak-admin-client/lib/defs/protocolMapperRepresentation";
 import type RoleRepresentation from "@keycloak/keycloak-admin-client/lib/defs/roleRepresentation";
@@ -44,7 +31,6 @@ import { useServerInfo } from "../../context/server-info/ServerInfoProvider";
 import { prettyPrintJSON } from "../../util";
 import { GeneratedCodeTab } from "./GeneratedCodeTab";
 
-
 export type EvaluateScopesProps = {
     clientId: string;
     protocol: string;
@@ -65,12 +51,12 @@ const ProtocolMappers = ({
         {
             accessorKey: "mapperName",
             header: t("name"),
-            cell: ({ row }) => row.original.mapperName || "-"
+            cell: ({ row }) => (row.original as Record<string, unknown>).mapperName as string || "-"
         },
         {
             accessorKey: "containerName",
             header: t("parentClientScope"),
-            cell: ({ row }) => row.original.containerName || "-"
+            cell: ({ row }) => (row.original as Record<string, unknown>).containerName as string || "-"
         },
         {
             id: "category",
@@ -144,7 +130,7 @@ export const EvaluateScopes = ({ clientId, protocol }: EvaluateScopesProps) => {
     const [selected, setSelected] = useState<string[]>([prefix]);
     const [activeTab, setActiveTab] = useState(0);
 
-    const [key, setKey] = useState("");
+    const [_key, setKey] = useState("");
     const refresh = () => setKey(`${new Date().getTime()}`);
     const [effectiveRoles, setEffectiveRoles] = useState<RoleRepresentation[]>([]);
     const [protocolMappers, setProtocolMappers] = useState<

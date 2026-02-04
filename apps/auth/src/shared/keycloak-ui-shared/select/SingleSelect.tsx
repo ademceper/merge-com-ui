@@ -1,5 +1,3 @@
-/* eslint-disable */
-// @ts-nocheck
 
 import {
     Select,
@@ -22,7 +20,7 @@ function collectSelectItems(nodes: ReactNode): Array<{ value: unknown; children:
             out.push({
                 value: child.props.value,
                 children: child.props.children,
-                key: child.key,
+                key: child.key ?? undefined,
             });
         } else if (child.props?.children != null) {
             out.push(...collectSelectItems(child.props.children));

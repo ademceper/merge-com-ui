@@ -1,16 +1,3 @@
-/**
- * WARNING: Before modifying this file, run the following command:
- *
- * $ npx keycloakify own --path "admin/clients/authorization/ResourcesPolicySelect.tsx"
- *
- * This file is provided by @keycloakify/keycloak-admin-ui version 260502.0.0.
- * It was copied into your repository by the postinstall script: `keycloakify sync-extensions`.
- */
-
-/* eslint-disable */
-
-// @ts-nocheck
-
 import PolicyProviderRepresentation from "@keycloak/keycloak-admin-client/lib/defs/policyProviderRepresentation";
 import type PolicyRepresentation from "@keycloak/keycloak-admin-client/lib/defs/policyRepresentation";
 import type ResourceRepresentation from "@keycloak/keycloak-admin-client/lib/defs/resourceRepresentation";
@@ -195,7 +182,7 @@ export const ResourcesPolicySelect = ({
         titleKey: t("unsavedChangesTitle"),
         messageKey: t("unsavedChangesConfirm"),
         continueButtonLabel: t("continue"),
-        continueButtonVariant: "danger",
+        continueButtonVariant: "destructive",
         onConfirm: () => onUnsavedChangesConfirm?.()
     });
 
@@ -323,7 +310,7 @@ export const ResourcesPolicySelect = ({
                             name === "policies" && !isAdminPermissionsClient ? (
                                 <Button
                                     variant="link"
-                                    isInline
+                                    className="inline"
                                     onClick={() => {
                                         if (isDirty) {
                                             setOpen(false);

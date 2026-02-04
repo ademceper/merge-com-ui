@@ -1,26 +1,10 @@
-/**
- * WARNING: Before modifying this file, run the following command:
- *
- * $ npx keycloakify own --path "admin/workflows/WorkflowsSection.tsx"
- *
- * This file is provided by @keycloakify/keycloak-admin-ui version 260502.0.0.
- * It was copied into your repository by the postinstall script: `keycloakify sync-extensions`.
- */
-
-/* eslint-disable */
-
-// @ts-nocheck
-
 import { Button } from "@merge/ui/components/button";
 import { Label } from "@merge/ui/components/label";
 import { Switch } from "@merge/ui/components/switch";
-import {
-    Action,
-    AlertVariant,
+import { getErrorDescription, getErrorMessage, Action,
     KeycloakDataTable,
-    ListEmptyState,
-    useAlerts
-} from "../../shared/keycloak-ui-shared";
+    ListEmptyState } from "../../shared/keycloak-ui-shared";
+import { toast } from "@merge/ui/components/sonner";
 import WorkflowRepresentation from "@keycloak/keycloak-admin-client/lib/defs/workflowRepresentation";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -38,9 +22,7 @@ export default function WorkflowsSection() {
     const { realm } = useRealm();
     const { t } = useTranslation();
     const navigate = useNavigate();
-    const { addAlert, addError } = useAlerts();
-
-    const [key, setKey] = useState(0);
+const [key, setKey] = useState(0);
     const refresh = () => setKey(key + 1);
 
     const [selectedWorkflow, setSelectedWorkflow] = useState<WorkflowRepresentation>();
@@ -60,13 +42,12 @@ export default function WorkflowsSection() {
         try {
             await adminClient.workflows.update({ id: workflow.id! }, workflowToUpdate);
 
-            addAlert(
-                workflowToUpdate.enabled ? t("workflowEnabled") : t("workflowDisabled"),
-                AlertVariant.success
+            toast.success(
+                workflowToUpdate.enabled ? t("workflowEnabled") : t("workflowDisabled")
             );
             refresh();
         } catch (error) {
-            addError("workflowUpdateError", error);
+            toast.error(t("workflowUpdateError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
         }
     };
 
@@ -81,10 +62,10 @@ export default function WorkflowsSection() {
             try {
                 await adminClient.workflows.delById({ id: selectedWorkflow!.id! });
                 setSelectedWorkflow(undefined);
-                addAlert(t("workflowDeletedSuccess"), AlertVariant.success);
+                toast.success(t("workflowDeletedSuccess"));
                 refresh();
             } catch (error) {
-                addError("workflowDeleteError", error);
+                toast.error(t("workflowDeleteError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
             }
         }
     });

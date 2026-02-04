@@ -40,7 +40,6 @@ export default function Password(props: PageProps<Extract<KcContext, { pageId: "
                 </Alert>
             )}
 
-
             <form
                 action={url.passwordUrl}
                 method="post"
@@ -165,4 +164,3 @@ export default function Password(props: PageProps<Extract<KcContext, { pageId: "
         </div>
     );
 }
-

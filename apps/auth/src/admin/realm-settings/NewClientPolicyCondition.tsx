@@ -1,9 +1,8 @@
 import type { ConfigPropertyRepresentation } from "@keycloak/keycloak-admin-client/lib/defs/authenticatorConfigInfoRepresentation";
 import type ClientPolicyConditionRepresentation from "@keycloak/keycloak-admin-client/lib/defs/clientPolicyConditionRepresentation";
 import type ClientPolicyRepresentation from "@keycloak/keycloak-admin-client/lib/defs/clientPolicyRepresentation";
-import type ComponentTypeRepresentation from "@keycloak/keycloak-admin-client/lib/defs/componentTypeRepresentation";
-import { HelpItem, useAlerts, useFetch } from "../../shared/keycloak-ui-shared";
-import { AlertVariant } from "../../shared/keycloak-ui-shared";
+import { getErrorDescription, getErrorMessage, HelpItem, useFetch } from "../../shared/keycloak-ui-shared";
+import { toast } from "@merge/ui/components/sonner";
 import { Button } from "@merge/ui/components/button";
 import { Label } from "@merge/ui/components/label";
 import {
@@ -38,11 +37,10 @@ export default function NewClientPolicyCondition() {
     const { adminClient } = useAdminClient();
 
     const { t } = useTranslation();
-    const { addAlert, addError } = useAlerts();
-    const navigate = useNavigate();
+const navigate = useNavigate();
     const { realm } = useRealm();
 
-    const [openConditionType, setOpenConditionType] = useState(false);
+    const [_openConditionType, setOpenConditionType] = useState(false);
     const [isGlobalPolicy, setIsGlobalPolicy] = useState(false);
     const [policies, setPolicies] = useState<ClientPolicyRepresentation[]>([]);
 
@@ -164,14 +162,13 @@ export default function NewClientPolicyCondition() {
             });
             setPolicies(updatedPolicies);
             navigate(toEditClientPolicy({ realm, policyName: policyName! }));
-            addAlert(
+            toast.success(
                 conditionName
                     ? t("updateClientConditionSuccess")
-                    : t("createClientConditionSuccess"),
-                AlertVariant.success
+                    : t("createClientConditionSuccess")
             );
         } catch (error) {
-            addError("createClientConditionError", error);
+            toast.error(t("createClientConditionError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
         }
     };
 

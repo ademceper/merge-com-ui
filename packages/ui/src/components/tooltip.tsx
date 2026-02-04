@@ -159,7 +159,7 @@ export function TooltipContent({
           }
           onPointerDownOutside?.(e)
         }}
-        onEscapeKeyDown={(e) => {
+        onEscapeKeyDown={() => {
           if (mobile?.isMobile) {
             mobile.onOpenChange(false)
           }

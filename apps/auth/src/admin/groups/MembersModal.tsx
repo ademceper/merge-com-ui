@@ -1,16 +1,3 @@
-/**
- * WARNING: Before modifying this file, run the following command:
- *
- * $ npx keycloakify own --path "admin/groups/MembersModal.tsx"
- *
- * This file is provided by @keycloakify/keycloak-admin-ui version 260502.0.0.
- * It was copied into your repository by the postinstall script: `keycloakify sync-extensions`.
- */
-
-/* eslint-disable */
-
-// @ts-nocheck
-
 import type UserRepresentation from "@keycloak/keycloak-admin-client/lib/defs/userRepresentation";
 import { Button } from "@merge/ui/components/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@merge/ui/components/dialog";
@@ -20,7 +7,8 @@ import { differenceBy } from "lodash-es";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useAdminClient } from "../admin-client";
-import { useAlerts } from "../../shared/keycloak-ui-shared";
+import { getErrorDescription, getErrorMessage } from "../../shared/keycloak-ui-shared";
+import { toast } from "@merge/ui/components/sonner";
 import { ListEmptyState } from "../../shared/keycloak-ui-shared";
 import { KeycloakDataTable } from "../../shared/keycloak-ui-shared";
 import { emptyFormatter } from "../util";
@@ -49,7 +37,6 @@ export const MemberModal = ({ membersQuery, onAdd, onClose }: MemberModalProps) 
     const { adminClient } = useAdminClient();
 
     const { t } = useTranslation();
-    const { addError } = useAlerts();
     const [selectedRows, setSelectedRows] = useState<UserRepresentation[]>([]);
 
     const loader = async (first?: number, max?: number, search?: string) => {
@@ -64,7 +51,7 @@ export const MemberModal = ({ membersQuery, onAdd, onClose }: MemberModalProps) 
             const users = await adminClient.users.find({ ...params });
             return differenceBy(users, members, "id").slice(0, max);
         } catch (error) {
-            addError("noUsersFoundError", error);
+            toast.error(t("noUsersFoundError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
             return [];
         }
     };

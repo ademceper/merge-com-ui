@@ -1,16 +1,3 @@
-/**
- * WARNING: Before modifying this file, run the following command:
- *
- * $ npx keycloakify own --path "admin/components/form/FormAccess.tsx"
- *
- * This file is provided by @keycloakify/keycloak-admin-ui version 260502.0.0.
- * It was copied into your repository by the postinstall script: `keycloakify sync-extensions`.
- */
-
-/* eslint-disable */
-
-// @ts-nocheck
-
 import type { AccessType } from "@keycloak/keycloak-admin-client/lib/defs/whoAmIRepresentation";
 import type { ComponentProps } from "react";
 
@@ -52,6 +39,9 @@ export type FormAccessProps = FormProps & {
      * Overwrite the fineGrainedAccess and make form regardless of access rights.
      */
     isReadOnly?: boolean;
+
+    /** Horizontal layout (PatternFly-style). */
+    isHorizontal?: boolean;
 };
 
 /**
@@ -63,6 +53,7 @@ export const FormAccess = ({
     role,
     fineGrainedAccess = false,
     isReadOnly = false,
+    isHorizontal = false,
     unWrap = false,
     ...rest
 }: PropsWithChildren<FormAccessProps>) => {
@@ -74,28 +65,28 @@ export const FormAccess = ({
                 return child;
             }
 
-            if (child.props) {
-                const element = child as ReactElement;
+            if (child.props && typeof child.props === "object") {
+                const element = child as ReactElement<Record<string, unknown>>;
                 if (child.type === Controller) {
                     return cloneElement(child, {
                         ...element.props,
-                        render: (props: any) => {
-                            const renderElement = element.props.render(props);
+                        render: (props: unknown) => {
+                            const renderElement = (element.props as { render: (p: unknown) => ReactElement }).render(props);
                             return cloneElement(renderElement, {
-                                ...renderElement.props,
+                                ...(renderElement.props as Record<string, unknown>),
                                 ...newProps
-                            });
+                            } as Record<string, unknown>);
                         }
-                    });
+                    } as Record<string, unknown>);
                 }
-                const children = recursiveCloneChildren(element.props.children, newProps);
+                const clonedChildren = recursiveCloneChildren(element.props.children as ReactNode, newProps);
                 if (child.type === FixedButtonsGroup) {
                     return cloneElement(child, {
-                        isActive: !newProps.isDisabled,
-                        children
-                    } as any);
+                        isActive: !(newProps as { isDisabled?: boolean }).isDisabled,
+                        children: clonedChildren
+                    } as Record<string, unknown>);
                 }
-                return cloneElement(child, { ...newProps, children });
+                return cloneElement(child, { ...newProps, children: clonedChildren } as Record<string, unknown>);
             }
             return child;
         });
@@ -109,7 +100,7 @@ export const FormAccess = ({
     return (
         <>
             {!unWrap && (
-                <form {...rest} className={"keycloak__form " + (rest.className || "")}>
+                <form {...rest} className={"keycloak__form " + (isHorizontal ? "pf-m-horizontal " : "") + (rest.className || "")}>
                     {recursiveCloneChildren(children, disabledProps)}
                 </form>
             )}

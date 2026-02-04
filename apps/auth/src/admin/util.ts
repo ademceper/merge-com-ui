@@ -1,20 +1,8 @@
-/**
- * WARNING: Before modifying this file, run the following command:
- *
- * $ npx keycloakify own --path "admin/util.ts"
- *
- * This file is provided by @keycloakify/keycloak-admin-ui version 260502.0.0.
- * It was copied into your repository by the postinstall script: `keycloakify sync-extensions`.
- */
-
-/* eslint-disable */
-
-// @ts-nocheck
-
 import type ClientRepresentation from "@keycloak/keycloak-admin-client/lib/defs/clientRepresentation";
 import type { ProviderRepresentation } from "@keycloak/keycloak-admin-client/lib/defs/serverInfoRepesentation";
 type IFormatterValueType = string | undefined;
-type IFormatter = (data?: IFormatterValueType) => string | undefined;
+/** Compatible with KeycloakDataTable IFormatter (value: unknown) => unknown */
+export type IFormatter = (data: unknown) => string | undefined;
 import { saveAs } from "file-saver";
 import { flatten } from "flat";
 import { cloneDeep } from "lodash-es";
@@ -151,19 +139,20 @@ export function convertFormValuesToObject<T extends Record<string, any>, G = T>(
     return result;
 }
 
-export const emptyFormatter = (): IFormatter => (data?: IFormatterValueType) => {
-    return data ? data : "—";
+export const emptyFormatter = (): IFormatter => (data: unknown) => {
+    const v = data as IFormatterValueType;
+    return v ? v : "—";
 };
 
-export const upperCaseFormatter = (): IFormatter => (data?: IFormatterValueType) => {
-    const value = data?.toString();
+export const upperCaseFormatter = (): IFormatter => (data: unknown) => {
+    const value = (data as IFormatterValueType)?.toString();
 
     return (value ? toUpperCase(value) : undefined) as string;
 };
 
 export const capitalizeFirstLetterFormatter =
-    (): IFormatter => (data?: IFormatterValueType) => {
-        const value = data?.toString();
+    (): IFormatter => (data: unknown) => {
+        const value = (data as IFormatterValueType)?.toString();
 
         return (
             value

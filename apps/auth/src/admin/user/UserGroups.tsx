@@ -1,20 +1,6 @@
-/**
- * WARNING: Before modifying this file, run the following command:
- *
- * $ npx keycloakify own --path "admin/user/UserGroups.tsx"
- *
- * This file is provided by @keycloakify/keycloak-admin-ui version 260502.0.0.
- * It was copied into your repository by the postinstall script: `keycloakify sync-extensions`.
- */
-
-/* eslint-disable */
-
-// @ts-nocheck
-
 import type GroupRepresentation from "@keycloak/keycloak-admin-client/lib/defs/groupRepresentation";
 import type UserRepresentation from "@keycloak/keycloak-admin-client/lib/defs/userRepresentation";
 import { useHelp } from "../../shared/keycloak-ui-shared";
-import { AlertVariant } from "../../shared/keycloak-ui-shared";
 import { Button } from "@merge/ui/components/button";
 import { Checkbox } from "@merge/ui/components/checkbox";
 import { Popover, PopoverContent, PopoverTrigger } from "@merge/ui/components/popover";
@@ -24,7 +10,8 @@ import { intersectionBy, sortBy, uniqBy } from "lodash-es";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useAdminClient } from "../admin-client";
-import { useAlerts } from "../../shared/keycloak-ui-shared";
+import { getErrorDescription, getErrorMessage } from "../../shared/keycloak-ui-shared";
+import { toast } from "@merge/ui/components/sonner";
 import { useConfirmDialog } from "../components/confirm-dialog/ConfirmDialog";
 import { GroupPath } from "../components/group/GroupPath";
 import { GroupPickerDialog } from "../components/group/GroupPickerDialog";
@@ -40,8 +27,7 @@ export const UserGroups = ({ user }: UserGroupsProps) => {
     const { adminClient } = useAdminClient();
 
     const { t } = useTranslation();
-    const { addAlert, addError } = useAlerts();
-    const [key, setKey] = useState(0);
+const [key, setKey] = useState(0);
     const refresh = () => setKey(key + 1);
 
     const [selectedGroups, setSelectedGroups] = useState<GroupRepresentation[]>([]);
@@ -126,9 +112,9 @@ export const UserGroups = ({ user }: UserGroupsProps) => {
                 );
 
                 setSelectedGroups([]);
-                addAlert(t("removedGroupMembership"), AlertVariant.success);
+                toast.success(t("removedGroupMembership"));
             } catch (error) {
-                addError("removedGroupMembershipError", error);
+                toast.error(t("removedGroupMembershipError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
             }
             refresh();
         }
@@ -150,9 +136,9 @@ export const UserGroups = ({ user }: UserGroupsProps) => {
                 )
             );
 
-            addAlert(t("addedGroupMembership"), AlertVariant.success);
+            toast.success(t("addedGroupMembership"));
         } catch (error) {
-            addError("addedGroupMembershipError", error);
+            toast.error(t("addedGroupMembershipError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
         }
         refresh();
     };

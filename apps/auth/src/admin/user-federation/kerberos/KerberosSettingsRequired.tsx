@@ -1,16 +1,3 @@
-/**
- * WARNING: Before modifying this file, run the following command:
- *
- * $ npx keycloakify own --path "admin/user-federation/kerberos/KerberosSettingsRequired.tsx"
- *
- * This file is provided by @keycloakify/keycloak-admin-ui version 260502.0.0.
- * It was copied into your repository by the postinstall script: `keycloakify sync-extensions`.
- */
-
-/* eslint-disable */
-
-// @ts-nocheck
-
 import { HelpItem, SelectControl, TextControl } from "../../../shared/keycloak-ui-shared";
 import { Switch } from "@merge/ui/components/switch";
 import { FormLabel } from "../../../shared/keycloak-ui-shared";

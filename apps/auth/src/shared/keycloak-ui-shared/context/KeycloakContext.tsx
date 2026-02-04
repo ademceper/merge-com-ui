@@ -1,16 +1,3 @@
-/**
- * WARNING: Before modifying this file, run the following command:
- *
- * $ npx keycloakify own --path "shared/keycloak-ui-shared/context/KeycloakContext.tsx"
- *
- * This file is provided by @keycloakify/keycloak-ui-shared version 260502.0.0.
- * It was copied into your repository by the postinstall script: `keycloakify sync-extensions`.
- */
-
-/* eslint-disable */
-
-// @ts-nocheck
-
 import { KeycloakSpinner } from "../controls/KeycloakSpinner";
 import { Keycloak } from "oidc-spa/keycloak-js";
 import {
@@ -22,7 +9,6 @@ import {
     useRef,
     useState
 } from "react";
-import { AlertProvider } from "../alerts/Alerts";
 import { ErrorPage } from "./ErrorPage";
 import { Help } from "./HelpContext";
 import { BaseEnvironment } from "./environment";
@@ -99,9 +85,7 @@ export const KeycloakProvider = <T extends BaseEnvironment>({
 
     return (
         <KeycloakEnvContext.Provider value={{ environment, keycloak }}>
-            <AlertProvider>
-                <Help>{children}</Help>
-            </AlertProvider>
+            <Help>{children}</Help>
         </KeycloakEnvContext.Provider>
     );
 };

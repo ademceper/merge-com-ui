@@ -1,19 +1,6 @@
-/**
- * WARNING: Before modifying this file, run the following command:
- *
- * $ npx keycloakify own --path "admin/permissions-configuration/PermissionsConfigurationSection.tsx"
- *
- * This file is provided by @keycloakify/keycloak-admin-ui version 260502.0.0.
- * It was copied into your repository by the postinstall script: `keycloakify sync-extensions`.
- */
-
-/* eslint-disable */
-
-// @ts-nocheck
-
 import type ClientRepresentation from "@keycloak/keycloak-admin-client/lib/defs/clientRepresentation";
-import { useAlerts, useFetch } from "../../shared/keycloak-ui-shared";
-import { AlertVariant } from "../../shared/keycloak-ui-shared";
+import { getErrorDescription, getErrorMessage, useFetch } from "../../shared/keycloak-ui-shared";
+import { toast } from "@merge/ui/components/sonner";
 import { useState } from "react";
 import { FormProvider, useForm, useWatch } from "react-hook-form";
 import { useTranslation } from "react-i18next";
@@ -33,16 +20,14 @@ import { PermissionsEvaluationTab } from "./permission-evaluation/PermissionsEva
 export default function PermissionsConfigurationSection() {
     const { adminClient } = useAdminClient();
     const { t } = useTranslation();
-    const { realm } = useRealm();
     const { hasAccess } = useAccess();
-    const { addAlert, addError } = useAlerts();
-    const { tab } = useParams<{ tab?: string }>();
+const { tab } = useParams<{ tab?: string }>();
     const [adminPermissionsClient, setAdminPermissionsClient] = useState<
         ClientRepresentation | undefined
     >();
     const [changeAuthenticatorOpen, toggleChangeAuthenticatorOpen] = useToggle();
     const form = useForm<FormFields>();
-    const { realmRepresentation } = useRealm();
+    useRealm();
 
     const clientAuthenticatorType = useWatch({
         control: form.control,
@@ -108,9 +93,9 @@ export default function PermissionsConfigurationSection() {
             );
             setupForm(newClient);
             setAdminPermissionsClient(newClient);
-            addAlert(t(messageKey), AlertVariant.success);
+            toast.success(t(messageKey));
         } catch (error) {
-            addError("clientSaveError", error);
+            toast.error(t("clientSaveError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
         }
     };
 

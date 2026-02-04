@@ -1,18 +1,6 @@
-/**
- * WARNING: Before modifying this file, run the following command:
- *
- * $ npx keycloakify own --path "admin/authentication/DuplicateFlowModal.tsx"
- *
- * This file is provided by @keycloakify/keycloak-admin-ui version 260502.0.0.
- * It was copied into your repository by the postinstall script: `keycloakify sync-extensions`.
- */
-
-/* eslint-disable */
-
-// @ts-nocheck
-
 import AuthenticationFlowRepresentation from "@keycloak/keycloak-admin-client/lib/defs/authenticationFlowRepresentation";
-import { AlertVariant, useAlerts } from "../../shared/keycloak-ui-shared";
+import { getErrorDescription, getErrorMessage } from "../../shared/keycloak-ui-shared";
+import { toast } from "@merge/ui/components/sonner";
 import { Button } from "@merge/ui/components/button";
 import {
     Dialog,
@@ -53,8 +41,7 @@ export const DuplicateFlowModal = ({
         }
     });
     const { getValues, handleSubmit } = form;
-    const { addAlert, addError } = useAlerts();
-    const navigate = useNavigate();
+const navigate = useNavigate();
     const { realm } = useRealm();
 
     const onSubmit = async () => {
@@ -75,7 +62,7 @@ export const DuplicateFlowModal = ({
                     newFlow
                 );
             }
-            addAlert(t("copyFlowSuccess"), AlertVariant.success);
+            toast.success(t("copyFlowSuccess"));
             navigate(
                 toFlow({
                     realm,
@@ -85,7 +72,7 @@ export const DuplicateFlowModal = ({
                 })
             );
         } catch (error) {
-            addError("copyFlowError", error);
+            toast.error(t("copyFlowError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
         }
         onComplete();
     };

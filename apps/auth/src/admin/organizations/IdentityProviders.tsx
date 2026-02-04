@@ -1,23 +1,8 @@
-/**
- * WARNING: Before modifying this file, run the following command:
- *
- * $ npx keycloakify own --path "admin/organizations/IdentityProviders.tsx"
- *
- * This file is provided by @keycloakify/keycloak-admin-ui version 260502.0.0.
- * It was copied into your repository by the postinstall script: `keycloakify sync-extensions`.
- */
-
-/* eslint-disable */
-
-// @ts-nocheck
-
 import IdentityProviderRepresentation from "@keycloak/keycloak-admin-client/lib/defs/identityProviderRepresentation";
-import {
-    KeycloakDataTable,
+import { getErrorDescription, getErrorMessage, KeycloakDataTable,
     ListEmptyState,
-    useAlerts,
-    useFetch
-} from "../../shared/keycloak-ui-shared";
+    useFetch } from "../../shared/keycloak-ui-shared";
+import { toast } from "@merge/ui/components/sonner";
 import { Button } from "@merge/ui/components/button";
 import { Switch } from "@merge/ui/components/switch";
 import { sortBy } from "lodash-es";
@@ -39,8 +24,7 @@ type ShownOnLoginPageCheckProps = {
 
 const ShownOnLoginPageCheck = ({ row, refresh }: ShownOnLoginPageCheckProps) => {
     const { adminClient } = useAdminClient();
-    const { addAlert, addError } = useAlerts();
-    const { t } = useTranslation();
+const { t } = useTranslation();
 
     const toggle = async (value: boolean) => {
         try {
@@ -51,11 +35,11 @@ const ShownOnLoginPageCheck = ({ row, refresh }: ShownOnLoginPageCheckProps) => 
                     hideOnLogin: value
                 }
             );
-            addAlert(t("linkUpdatedSuccessful"));
+            toast.success(t("linkUpdatedSuccessful"));
 
             refresh();
         } catch (error) {
-            addError("linkUpdatedError", error);
+            toast.error(t("linkUpdatedError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
         }
     };
 
@@ -71,9 +55,7 @@ export const IdentityProviders = () => {
     const { adminClient } = useAdminClient();
     const { t } = useTranslation();
     const { id: orgId } = useParams<EditOrganizationParams>();
-    const { addAlert, addError } = useAlerts();
-
-    const [key, setKey] = useState(0);
+const [key, setKey] = useState(0);
     const refresh = () => setKey(key + 1);
 
     const [manageDisplayDialog, setManageDisplayDialog] = useState(false);
@@ -108,10 +90,10 @@ export const IdentityProviders = () => {
                     alias: selectedRow!.alias! as string
                 });
                 setSelectedRow(undefined);
-                addAlert(t("unLinkSuccessful"));
+                toast.success(t("unLinkSuccessful"));
                 refresh();
             } catch (error) {
-                addError("unLinkError", error);
+                toast.error(t("unLinkError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
             }
         }
     });

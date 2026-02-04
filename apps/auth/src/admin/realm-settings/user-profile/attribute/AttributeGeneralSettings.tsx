@@ -1,16 +1,3 @@
-/**
- * WARNING: Before modifying this file, run the following command:
- *
- * $ npx keycloakify own --path "admin/realm-settings/user-profile/attribute/AttributeGeneralSettings.tsx"
- *
- * This file is provided by @keycloakify/keycloak-admin-ui version 260502.0.0.
- * It was copied into your repository by the postinstall script: `keycloakify sync-extensions`.
- */
-
-/* eslint-disable */
-
-// @ts-nocheck
-
 import type ClientScopeRepresentation from "@keycloak/keycloak-admin-client/lib/defs/clientScopeRepresentation";
 import type { UserProfileConfig } from "@keycloak/keycloak-admin-client/lib/defs/userProfileMetadata";
 import {
@@ -97,7 +84,7 @@ export const AttributeGeneralSettings = () => {
         localeSort(clientScopes, mapByKey("name"))
             .filter(s => enabledWhenSearch === "" || s.name?.includes(enabledWhenSearch))
             .map(option => (
-                <SelectOption key={option.name} value={option.name}>
+                <SelectOption key={option.name} value={option.name ?? ""}>
                     {option.name}
                 </SelectOption>
             ));
@@ -379,7 +366,7 @@ export const AttributeGeneralSettings = () => {
                                                     {clientScopes.map(option => (
                                                         <SelectOption
                                                             key={option.name}
-                                                            value={option.name}
+                                                            value={option.name ?? ""}
                                                         >
                                                             {option.name}
                                                         </SelectOption>

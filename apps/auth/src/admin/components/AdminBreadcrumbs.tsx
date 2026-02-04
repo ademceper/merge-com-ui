@@ -22,7 +22,7 @@ export function AdminBreadcrumbs() {
     const { t } = useTranslation();
     const { realm } = useRealm();
     const elementText = (crumb: BreadcrumbData) =>
-        isValidElement(crumb.breadcrumb) && crumb.breadcrumb.props.children;
+        isValidElement(crumb.breadcrumb) && (crumb.breadcrumb as React.ReactElement<{ children?: unknown }>).props?.children;
 
     const routesWithCrumbs: BreadcrumbsRoute[] = routes.map((route: AppRouteObject) => ({
         ...route,

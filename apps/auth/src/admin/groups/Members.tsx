@@ -1,26 +1,11 @@
-/**
- * WARNING: Before modifying this file, run the following command:
- *
- * $ npx keycloakify own --path "admin/groups/Members.tsx"
- *
- * This file is provided by @keycloakify/keycloak-admin-ui version 260502.0.0.
- * It was copied into your repository by the postinstall script: `keycloakify sync-extensions`.
- */
-
-/* eslint-disable */
-
-// @ts-nocheck
-
 import type GroupRepresentation from "@keycloak/keycloak-admin-client/lib/defs/groupRepresentation";
 import type UserRepresentation from "@keycloak/keycloak-admin-client/lib/defs/userRepresentation";
 import { SubGroupQuery } from "@keycloak/keycloak-admin-client/lib/resources/groups";
-import {
-    Action,
+import { getErrorDescription, getErrorMessage, Action,
     KeycloakDataTable,
     ListEmptyState,
-    useAlerts,
-    useFetch
-} from "../../shared/keycloak-ui-shared";
+    useFetch } from "../../shared/keycloak-ui-shared";
+import { toast } from "@merge/ui/components/sonner";
 import { Button } from "@merge/ui/components/button";
 import { Checkbox } from "@merge/ui/components/checkbox";
 import { Label } from "@merge/ui/components/label";
@@ -61,14 +46,13 @@ const UserDetailLink = (user: UserRepresentation) => {
 export const Members = () => {
     const { adminClient } = useAdminClient();
     const { t } = useTranslation();
-    const { addAlert, addError } = useAlerts();
-    const location = useLocation();
+const location = useLocation();
     const id = getLastId(location.pathname);
     const [includeSubGroup, setIncludeSubGroup] = useState(false);
     const { currentGroup: group } = useSubGroups();
     const [currentGroup, setCurrentGroup] = useState<GroupRepresentation>();
     const [addMembers, setAddMembers] = useState(false);
-    const [isKebabOpen, setIsKebabOpen] = useState(false);
+    const [_isKebabOpen, setIsKebabOpen] = useState(false);
     const [selectedRows, setSelectedRows] = useState<UserRepresentation[]>([]);
     const [selectedUser, setSelectedUser] = useState<UserRepresentation>();
     const [showMemberships, toggleShowMemberships] = useToggle();
@@ -159,9 +143,9 @@ export const Members = () => {
                                     })
                                 )
                             );
-                            addAlert(t("usersAdded", { count: selectedRows.length }));
+                            toast.success(t("usersAdded", { count: selectedRows.length }));
                         } catch (error) {
-                            addError("usersAddedError", error);
+                            toast.error(t("usersAddedError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
                         }
                     }}
                     onClose={() => {
@@ -235,13 +219,11 @@ export const Members = () => {
                                                         )
                                                     );
                                                     setIsKebabOpen(false);
-                                                    addAlert(
-                                                        t("usersLeft", {
+                                                    toast.success(t("usersLeft", {
                                                             count: selectedRows.length
-                                                        })
-                                                    );
+                                                        }));
                                                 } catch (error) {
-                                                    addError("usersLeftError", error);
+                                                    toast.error(t("usersLeftError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
                                                 }
 
                                                 refresh();
@@ -266,9 +248,9 @@ export const Members = () => {
                                               id: user.id!,
                                               groupId: id!
                                           });
-                                          addAlert(t("usersLeft", { count: 1 }));
+                                          toast.success(t("usersLeft", { count: 1 }));
                                       } catch (error) {
-                                          addError("usersLeftError", error);
+                                          toast.error(t("usersLeftError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
                                       }
                                       return true;
                                   }

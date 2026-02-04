@@ -1,16 +1,3 @@
-/**
- * WARNING: Before modifying this file, run the following command:
- *
- * $ npx keycloakify own --path "admin/organizations/IdentityProviderSelect.tsx"
- *
- * This file is provided by @keycloakify/keycloak-admin-ui version 260502.0.0.
- * It was copied into your repository by the postinstall script: `keycloakify sync-extensions`.
- */
-
-/* eslint-disable */
-
-// @ts-nocheck
-
 import IdentityProviderRepresentation from "@keycloak/keycloak-admin-client/lib/defs/identityProviderRepresentation";
 import { IdentityProvidersQuery } from "@keycloak/keycloak-admin-client/lib/resources/identityProviders";
 import { FormErrorText, HelpItem, useFetch } from "../../shared/keycloak-ui-shared";
@@ -53,9 +40,9 @@ export const IdentityProviderSelect = ({
     } = useFormContext();
     const values: string[] | undefined = getValues(name!);
 
-    const [open, toggleOpen, setOpen] = useToggle();
+    const [open, toggleOpen, setOpen] = useToggle(false);
     const [inputValue, setInputValue] = useState("");
-    const textInputRef = useRef<HTMLInputElement>();
+    const textInputRef = useRef<HTMLInputElement | null>(null);
     const [idps, setIdps] = useState<(IdentityProviderRepresentation | undefined)[]>([]);
     const [search, setSearch] = useState("");
 

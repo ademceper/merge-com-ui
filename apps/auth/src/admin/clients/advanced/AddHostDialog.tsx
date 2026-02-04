@@ -1,24 +1,11 @@
-/**
- * WARNING: Before modifying this file, run the following command:
- *
- * $ npx keycloakify own --path "admin/clients/advanced/AddHostDialog.tsx"
- *
- * This file is provided by @keycloakify/keycloak-admin-ui version 260502.0.0.
- * It was copied into your repository by the postinstall script: `keycloakify sync-extensions`.
- */
-
-/* eslint-disable */
-
-// @ts-nocheck
-
-import { AlertVariant } from "../../../shared/keycloak-ui-shared";
 import { Button } from "@merge/ui/components/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@merge/ui/components/dialog";
 import { FormProvider, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { TextControl } from "../../../shared/keycloak-ui-shared";
 import { useAdminClient } from "../../admin-client";
-import { useAlerts } from "../../../shared/keycloak-ui-shared";
+import { getErrorDescription, getErrorMessage } from "../../../shared/keycloak-ui-shared";
+import { toast } from "@merge/ui/components/sonner";
 
 type FormFields = {
     node: string;
@@ -45,18 +32,16 @@ export const AddHostDialog = ({
         handleSubmit,
         formState: { isDirty, isValid }
     } = form;
-    const { addAlert, addError } = useAlerts();
-
-    async function onSubmit({ node }: FormFields) {
+async function onSubmit({ node }: FormFields) {
         try {
             await adminClient.clients.addClusterNode({
                 id,
                 node
             });
             onAdded(node);
-            addAlert(t("addedNodeSuccess"), AlertVariant.success);
+            toast.success(t("addedNodeSuccess"));
         } catch (error) {
-            addError("addedNodeFail", error);
+            toast.error(t("addedNodeFail", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
         }
 
         onClose();

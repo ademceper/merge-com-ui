@@ -1,27 +1,11 @@
-/**
- * WARNING: Before modifying this file, run the following command:
- *
- * $ npx keycloakify own --path "admin/user/EditUser.tsx"
- *
- * This file is provided by @keycloakify/keycloak-admin-ui version 260502.0.0.
- * It was copied into your repository by the postinstall script: `keycloakify sync-extensions`.
- */
-
-/* eslint-disable */
-
-// @ts-nocheck
-
 import type {
     UserProfileConfig,
     UserProfileMetadata
 } from "@keycloak/keycloak-admin-client/lib/defs/userProfileMetadata";
-import {
-    AlertVariant,
-    isUserProfileError,
+import { getErrorDescription, getErrorMessage, isUserProfileError,
     setUserProfileServerError,
-    useAlerts,
-    useFetch
-} from "../../shared/keycloak-ui-shared";
+    useFetch } from "../../shared/keycloak-ui-shared";
+import { toast } from "@merge/ui/components/sonner";
 import { Label } from "@merge/ui/components/label";
 import { Tooltip, TooltipContent, TooltipTrigger, TooltipProvider } from "@merge/ui/components/tooltip";
 import { DropdownMenuItem } from "@merge/ui/components/dropdown-menu";
@@ -59,7 +43,7 @@ import {
     toUserFormFields,
     toUserRepresentation
 } from "./form-state";
-import { UserParams, UserTab, toUser } from "./routes/User";
+import { UserParams } from "./routes/User";
 import { toUsers } from "./routes/Users";
 import { isLightweightUser } from "./utils";
 
@@ -69,8 +53,7 @@ export default function EditUser() {
     const { adminClient } = useAdminClient();
 
     const { t } = useTranslation();
-    const { addAlert, addError } = useAlerts();
-    const navigate = useNavigate();
+const navigate = useNavigate();
     const { hasAccess } = useAccess();
     const { id } = useParams<UserParams>();
     const { tab } = useRouterParams<{ tab?: string }>();
@@ -149,7 +132,7 @@ export default function EditUser() {
     const save = async (data: UserFormFields) => {
         try {
             await adminClient.users.update({ id: user!.id! }, toUserRepresentation(data));
-            addAlert(t("userSaved"), AlertVariant.success);
+            toast.success(t("userSaved"));
             refresh();
         } catch (error) {
             if (isUserProfileError(error)) {
@@ -194,9 +177,9 @@ export default function EditUser() {
                         param
                     ) => t(key as string, param as any)) as TFunction);
                 }
-                addError("userNotSaved", "");
+                toast.error(t("userNotSaved"));
             } else {
-                addError("userCreateError", error);
+                toast.error(t("userCreateError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
             }
         }
     };
@@ -225,10 +208,10 @@ export default function EditUser() {
                 } else {
                     await adminClient.users.del({ id: user!.id! });
                 }
-                addAlert(t("userDeletedSuccess"), AlertVariant.success);
+                toast.success(t("userDeletedSuccess"));
                 navigate(toUsers({ realm: realmName }));
             } catch (error) {
-                addError("userDeletedError", error);
+                toast.error(t("userDeletedError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
             }
         }
     });
@@ -249,7 +232,7 @@ export default function EditUser() {
                     window.open(data.redirect, "_blank");
                 }
             } catch (error) {
-                addError("impersonateError", error);
+                toast.error(t("impersonateError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
             }
         }
     });

@@ -1,26 +1,10 @@
-/**
- * WARNING: Before modifying this file, run the following command:
- *
- * $ npx keycloakify own --path "admin/clients/authorization/ResourceDetails.tsx"
- *
- * This file is provided by @keycloakify/keycloak-admin-ui version 260502.0.0.
- * It was copied into your repository by the postinstall script: `keycloakify sync-extensions`.
- */
-
-/* eslint-disable */
-
-// @ts-nocheck
-
 import type ClientRepresentation from "@keycloak/keycloak-admin-client/lib/defs/clientRepresentation";
 import type ResourceRepresentation from "@keycloak/keycloak-admin-client/lib/defs/resourceRepresentation";
 import type ResourceServerRepresentation from "@keycloak/keycloak-admin-client/lib/defs/resourceServerRepresentation";
-import {
-    HelpItem,
+import { getErrorDescription, getErrorMessage, HelpItem,
     TextControl,
-    useAlerts,
-    useFetch
-} from "../../../shared/keycloak-ui-shared";
-import { AlertVariant } from "../../../shared/keycloak-ui-shared";
+    useFetch } from "../../../shared/keycloak-ui-shared";
+import { toast } from "@merge/ui/components/sonner";
 import { Alert, AlertDescription, AlertTitle } from "@merge/ui/components/alert";
 import { Button } from "@merge/ui/components/button";
 import { Label } from "@merge/ui/components/label";
@@ -57,9 +41,7 @@ export default function ResourceDetails() {
     const [resource, setResource] = useState<ResourceRepresentation>();
 
     const [permissions, setPermission] = useState<ResourceServerRepresentation[]>();
-
-    const { addAlert, addError } = useAlerts();
-    const form = useForm<SubmittedResource>({
+const form = useForm<SubmittedResource>({
         mode: "onChange"
     });
     const { setValue, handleSubmit } = form;
@@ -112,12 +94,11 @@ export default function ResourceDetails() {
                 setResource(resource);
                 navigate(toResourceDetails({ realm, id, resourceId: result._id! }));
             }
-            addAlert(
-                t((resourceId ? "update" : "create") + "ResourceSuccess"),
-                AlertVariant.success
+            toast.success(
+                t((resourceId ? "update" : "create") + "ResourceSuccess")
             );
         } catch (error) {
-            addError("resourceSaveError", error);
+            toast.error(t("resourceSaveError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
         }
     };
 
@@ -149,10 +130,10 @@ export default function ResourceDetails() {
                     id,
                     resourceId: resourceId!
                 });
-                addAlert(t("resourceDeletedSuccess"), AlertVariant.success);
+                toast.success(t("resourceDeletedSuccess"));
                 navigate(toAuthorizationTab({ realm, clientId: id, tab: "resources" }));
             } catch (error) {
-                addError("resourceDeletedError", error);
+                toast.error(t("resourceDeletedError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
             }
         }
     });
@@ -172,7 +153,7 @@ export default function ResourceDetails() {
                               <DropdownMenuItem
                                   key="delete"
                                   data-testid="delete-resource"
-                                  isDisabled={isDisabled}
+                                  disabled={isDisabled}
                                   onClick={() => toggleDeleteDialog()}
                               >
                                   {t("delete")}

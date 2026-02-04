@@ -1,25 +1,9 @@
-/**
- * WARNING: Before modifying this file, run the following command:
- *
- * $ npx keycloakify own --path "admin/clients/authorization/Policies.tsx"
- *
- * This file is provided by @keycloakify/keycloak-admin-ui version 260502.0.0.
- * It was copied into your repository by the postinstall script: `keycloakify sync-extensions`.
- */
-
-/* eslint-disable */
-
-// @ts-nocheck
-
 import type PolicyProviderRepresentation from "@keycloak/keycloak-admin-client/lib/defs/policyProviderRepresentation";
 import type PolicyRepresentation from "@keycloak/keycloak-admin-client/lib/defs/policyRepresentation";
-import {
-    ListEmptyState,
+import { getErrorDescription, getErrorMessage, ListEmptyState,
     PaginatingTableToolbar,
-    useAlerts,
-    useFetch
-} from "../../../shared/keycloak-ui-shared";
-import { AlertVariant } from "../../../shared/keycloak-ui-shared";
+    useFetch } from "../../../shared/keycloak-ui-shared";
+import { toast } from "@merge/ui/components/sonner";
 import { Alert, AlertTitle } from "@merge/ui/components/alert";
 import { Button } from "@merge/ui/components/button";
 import {
@@ -82,8 +66,7 @@ export const AuthorizationPolicies = ({
     const { adminClient } = useAdminClient();
 
     const { t } = useTranslation();
-    const { addAlert, addError } = useAlerts();
-    const { realm } = useRealm();
+const { realm } = useRealm();
     const navigate = useNavigate();
 
     const [policies, setPolicies] = useState<ExpandablePolicyRepresentation[]>();
@@ -164,10 +147,10 @@ export const AuthorizationPolicies = ({
                     id: clientId,
                     policyId: selectedPolicy?.id!
                 });
-                addAlert(t("policyDeletedSuccess"), AlertVariant.success);
+                toast.success(t("policyDeletedSuccess"));
                 refresh();
             } catch (error) {
-                addError("policyDeletedError", error);
+                toast.error(t("policyDeletedError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
             }
         }
     });

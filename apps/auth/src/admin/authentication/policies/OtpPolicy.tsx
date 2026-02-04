@@ -1,25 +1,9 @@
-/**
- * WARNING: Before modifying this file, run the following command:
- *
- * $ npx keycloakify own --path "admin/authentication/policies/OtpPolicy.tsx"
- *
- * This file is provided by @keycloakify/keycloak-admin-ui version 260502.0.0.
- * It was copied into your repository by the postinstall script: `keycloakify sync-extensions`.
- */
-
-/* eslint-disable */
-
-// @ts-nocheck
-
 import type RealmRepresentation from "@keycloak/keycloak-admin-client/lib/defs/realmRepresentation";
-import {
-    HelpItem,
+import { getErrorDescription, getErrorMessage, HelpItem,
     NumberControl,
     SelectControl,
-    SwitchControl,
-    useAlerts
-} from "../../../shared/keycloak-ui-shared";
-import { AlertVariant } from "../../../shared/keycloak-ui-shared";
+    SwitchControl } from "../../../shared/keycloak-ui-shared";
+import { toast } from "@merge/ui/components/sonner";
 import { Button } from "@merge/ui/components/button";
 import { Badge } from "@merge/ui/components/badge";
 import { useMemo } from "react";
@@ -30,7 +14,6 @@ import { FormAccess } from "../../components/form/FormAccess";
 import { TimeSelectorControl } from "../../components/time-selector/TimeSelectorControl";
 import { useRealm } from "../../context/realm-context/RealmContext";
 import useLocaleSort from "../../utils/useLocaleSort";
-
 
 const POLICY_TYPES = ["totp", "hotp"] as const;
 const OTP_HASH_ALGORITHMS = ["SHA1", "SHA256", "SHA512"] as const;
@@ -70,8 +53,7 @@ export const OtpPolicy = ({ realm, realmUpdated }: OtpPolicyProps) => {
         formState: { isValid, isDirty }
     } = form;
     const { realm: realmName } = useRealm();
-    const { addAlert, addError } = useAlerts();
-    const localeSort = useLocaleSort();
+const localeSort = useLocaleSort();
 
     const otpType = useWatch({ name: "otpPolicyType", control });
 
@@ -93,9 +75,9 @@ export const OtpPolicy = ({ realm, realmUpdated }: OtpPolicyProps) => {
             });
             realmUpdated(updatedRealm!);
             setupForm(updatedRealm!);
-            addAlert(t("updateOtpSuccess"), AlertVariant.success);
+            toast.success(t("updateOtpSuccess"));
         } catch (error) {
-            addError("updateOtpError", error);
+            toast.error(t("updateOtpError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
         }
     };
 
@@ -246,9 +228,9 @@ export const OtpPolicy = ({ realm, realmUpdated }: OtpPolicyProps) => {
                     <div className="flex gap-2">
                         <Button
                             data-testid="save"
-                            variant="primary"
+                            variant="default"
                             type="submit"
-                            isDisabled={!isValid || !isDirty}
+                            disabled={!isValid || !isDirty}
                         >
                             {t("save")}
                         </Button>

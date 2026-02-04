@@ -1,24 +1,11 @@
-/**
- * WARNING: Before modifying this file, run the following command:
- *
- * $ npx keycloakify own --path "admin/identity-providers/add/AddSpiffeConnect.tsx"
- *
- * This file is provided by @keycloakify/keycloak-admin-ui version 260502.0.0.
- * It was copied into your repository by the postinstall script: `keycloakify sync-extensions`.
- */
-
-/* eslint-disable */
-
-// @ts-nocheck
-
 import type IdentityProviderRepresentation from "@keycloak/keycloak-admin-client/lib/defs/identityProviderRepresentation";
 import { Button } from "@merge/ui/components/button";
-import { AlertVariant } from "../../../shared/keycloak-ui-shared";
 import { FormProvider, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { Link, useNavigate } from "react-router-dom";
 import { useAdminClient } from "../../admin-client";
-import { useAlerts } from "../../../shared/keycloak-ui-shared";
+import { getErrorDescription, getErrorMessage } from "../../../shared/keycloak-ui-shared";
+import { toast } from "@merge/ui/components/sonner";
 import { FormAccess } from "../../components/form/FormAccess";
 import { ViewHeader } from "../../components/view-header/ViewHeader";
 import { useRealm } from "../../context/realm-context/RealmContext";
@@ -45,9 +32,7 @@ export default function AddSamlConnect() {
         handleSubmit,
         formState: { isDirty }
     } = form;
-
-    const { addAlert, addError } = useAlerts();
-    const { realm } = useRealm();
+const { realm } = useRealm();
 
     const onSubmit = async (provider: DiscoveryIdentityProvider) => {
         delete provider.discoveryEndpoint;
@@ -56,7 +41,7 @@ export default function AddSamlConnect() {
                 ...provider,
                 providerId: id
             });
-            addAlert(t("createIdentityProviderSuccess"), AlertVariant.success);
+            toast.success(t("createIdentityProviderSuccess"));
             navigate(
                 toIdentityProvider({
                     realm,
@@ -66,7 +51,7 @@ export default function AddSamlConnect() {
                 })
             );
         } catch (error: any) {
-            addError("createIdentityProviderError", error);
+            toast.error(t("createIdentityProviderError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
         }
     };
 

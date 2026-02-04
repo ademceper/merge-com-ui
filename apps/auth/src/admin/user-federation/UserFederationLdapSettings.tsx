@@ -1,19 +1,6 @@
-/**
- * WARNING: Before modifying this file, run the following command:
- *
- * $ npx keycloakify own --path "admin/user-federation/UserFederationLdapSettings.tsx"
- *
- * This file is provided by @keycloakify/keycloak-admin-ui version 260502.0.0.
- * It was copied into your repository by the postinstall script: `keycloakify sync-extensions`.
- */
-
-/* eslint-disable */
-
-// @ts-nocheck
-
 import type ComponentRepresentation from "@keycloak/keycloak-admin-client/lib/defs/componentRepresentation";
-import { KeycloakSpinner, useAlerts, useFetch } from "../../shared/keycloak-ui-shared";
-import { AlertVariant } from "../../shared/keycloak-ui-shared";
+import { getErrorDescription, getErrorMessage, KeycloakSpinner, useFetch } from "../../shared/keycloak-ui-shared";
+import { toast } from "@merge/ui/components/sonner";
 import { useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
@@ -37,8 +24,7 @@ export default function UserFederationLdapSettings() {
     const form = useForm<LdapComponentRepresentation>({ mode: "onChange" });
     const { realm } = useRealm();
     const { id, tab } = useParams<UserFederationLdapParams & { tab?: string }>();
-    const { addAlert, addError } = useAlerts();
-    const [component, setComponent] = useState<ComponentRepresentation>();
+const [component, setComponent] = useState<ComponentRepresentation>();
     const [refreshCount, setRefreshCount] = useState(0);
 
     const refresh = () => setRefreshCount(count => count + 1);
@@ -73,10 +59,10 @@ export default function UserFederationLdapSettings() {
     const onSubmit = async (formData: LdapComponentRepresentation) => {
         try {
             await adminClient.components.update({ id: id! }, serializeFormData(formData));
-            addAlert(t("userProviderSaveSuccess"), AlertVariant.success);
+            toast.success(t("userProviderSaveSuccess"));
             refresh();
         } catch (error) {
-            addError("userProviderSaveError", error);
+            toast.error(t("userProviderSaveError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
         }
     };
 

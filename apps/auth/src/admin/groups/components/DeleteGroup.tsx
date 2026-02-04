@@ -1,21 +1,9 @@
-/**
- * WARNING: Before modifying this file, run the following command:
- *
- * $ npx keycloakify own --path "admin/groups/components/DeleteGroup.tsx"
- *
- * This file is provided by @keycloakify/keycloak-admin-ui version 260502.0.0.
- * It was copied into your repository by the postinstall script: `keycloakify sync-extensions`.
- */
-
-/* eslint-disable */
-
-// @ts-nocheck
-
 import type GroupRepresentation from "@keycloak/keycloak-admin-client/lib/defs/groupRepresentation";
 const ButtonVariant = { danger: "destructive" as const };
 import { useTranslation } from "react-i18next";
 import { useAdminClient } from "../../admin-client";
-import { useAlerts } from "../../../shared/keycloak-ui-shared";
+import { getErrorDescription, getErrorMessage } from "../../../shared/keycloak-ui-shared";
+import { toast } from "@merge/ui/components/sonner";
 import { ConfirmDialogModal } from "../../components/confirm-dialog/ConfirmDialog";
 
 type DeleteConfirmProps = {
@@ -34,9 +22,7 @@ export const DeleteGroup = ({
     const { adminClient } = useAdminClient();
 
     const { t } = useTranslation();
-    const { addAlert, addError } = useAlerts();
-
-    const multiDelete = async () => {
+const multiDelete = async () => {
         try {
             for (const group of selectedRows) {
                 await adminClient.groups.del({
@@ -44,9 +30,9 @@ export const DeleteGroup = ({
                 });
             }
             refresh();
-            addAlert(t("groupDeleted", { count: selectedRows.length }));
+            toast.success(t("groupDeleted", { count: selectedRows.length }));
         } catch (error) {
-            addError("groupDeleteError", error);
+            toast.error(t("groupDeleteError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
         }
     };
 

@@ -1,16 +1,3 @@
-/**
- * WARNING: Before modifying this file, run the following command:
- *
- * $ npx keycloakify own --path "admin/components/key-value-form/AttributeForm.tsx"
- *
- * This file is provided by @keycloakify/keycloak-admin-ui version 260502.0.0.
- * It was copied into your repository by the postinstall script: `keycloakify sync-extensions`.
- */
-
-/* eslint-disable */
-
-// @ts-nocheck
-
 import type RoleRepresentation from "@keycloak/keycloak-admin-client/lib/defs/roleRepresentation";
 import { FormProvider, UseFormReturn } from "react-hook-form";
 
@@ -18,7 +5,6 @@ import { FormAccess } from "../form/FormAccess";
 import type { KeyValueType } from "./key-value-convert";
 import { KeyValueInput } from "./KeyValueInput";
 import { FixedButtonsGroup } from "../form/FixedButtonGroup";
-
 
 export type AttributeForm = Omit<RoleRepresentation, "attributes"> & {
     attributes?: KeyValueType[];

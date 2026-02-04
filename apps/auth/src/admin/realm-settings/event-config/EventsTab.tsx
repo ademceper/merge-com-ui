@@ -1,20 +1,7 @@
-/**
- * WARNING: Before modifying this file, run the following command:
- *
- * $ npx keycloakify own --path "admin/realm-settings/event-config/EventsTab.tsx"
- *
- * This file is provided by @keycloakify/keycloak-admin-ui version 260502.0.0.
- * It was copied into your repository by the postinstall script: `keycloakify sync-extensions`.
- */
-
-/* eslint-disable */
-
-// @ts-nocheck
-
 import type { RealmEventsConfigRepresentation } from "@keycloak/keycloak-admin-client/lib/defs/realmEventsConfigRepresentation";
 import type RealmRepresentation from "@keycloak/keycloak-admin-client/lib/defs/realmRepresentation";
-import { useAlerts, useFetch } from "../../../shared/keycloak-ui-shared";
-import { AlertVariant } from "../../../shared/keycloak-ui-shared";
+import { getErrorDescription, getErrorMessage, useFetch } from "../../../shared/keycloak-ui-shared";
+import { toast } from "@merge/ui/components/sonner";
 import { isEqual } from "lodash-es";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
@@ -53,9 +40,7 @@ export const EventsTab = ({ realm }: EventsTabProps) => {
     const [events, setEvents] = useState<RealmEventsConfigRepresentation>();
     const [type, setType] = useState<EventsType>();
     const [addEventType, setAddEventType] = useState(false);
-
-    const { addAlert, addError } = useAlerts();
-    const { realm: realmName, refresh: refreshRealm } = useRealm();
+const { realm: realmName, refresh: refreshRealm } = useRealm();
 
     const setupForm = (eventConfig?: EventsConfigForm) => {
         setEvents(eventConfig);
@@ -82,9 +67,9 @@ export const EventsTab = ({ realm }: EventsTabProps) => {
                         await adminClient.realms.clearEvents({ realm: realmName });
                         break;
                 }
-                addAlert(t(`${type}-events-cleared`), AlertVariant.success);
+                toast.success(t(`${type}-events-cleared`));
             } catch (error) {
-                addError(`${type}-events-cleared-error`, error);
+                toast.error(t(`${type}-events-cleared-error`, { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
             }
         }
     });
@@ -124,18 +109,20 @@ export const EventsTab = ({ realm }: EventsTabProps) => {
                 eventConfig
             );
             setupForm({ ...events, ...eventConfig, adminEventsExpiration });
-            addAlert(
+            toast.success(
                 updatedEventListener
                     ? t("saveEventListenersSuccess")
-                    : t("eventConfigSuccessfully"),
-                AlertVariant.success
+                    : t("eventConfigSuccessfully")
             );
         } catch (error) {
-            addError(
-                updatedEventListener
-                    ? t("saveEventListenersError")
-                    : t("eventConfigError"),
-                error
+            toast.error(
+                t(
+                    updatedEventListener
+                        ? "saveEventListenersError"
+                        : "eventConfigError",
+                    { error: getErrorMessage(error) }
+                ),
+                { description: getErrorDescription(error) }
             );
         }
 

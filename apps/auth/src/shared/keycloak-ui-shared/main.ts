@@ -1,26 +1,3 @@
-/**
- * WARNING: Before modifying this file, run the following command:
- *
- * $ npx keycloakify own --path "shared/keycloak-ui-shared/main.ts"
- *
- * This file is provided by @keycloakify/keycloak-ui-shared version 260502.0.0.
- * It was copied into your repository by the postinstall script: `keycloakify sync-extensions`.
- */
-
-/* eslint-disable */
-
-// @ts-nocheck
-
-export {
-    AlertProvider,
-    useAlerts,
-    AlertVariant,
-    type AddAlertFunction,
-    type AddErrorFunction,
-    type AlertEntry,
-    type AlertProps,
-    type AlertVariantType
-} from "./alerts/Alerts";
 export { ErrorPage } from "./context/ErrorPage";
 export { Help, useHelp } from "./context/HelpContext";
 export {

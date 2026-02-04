@@ -1,16 +1,3 @@
-/**
- * WARNING: Before modifying this file, run the following command:
- *
- * $ npx keycloakify own --path "admin/permissions-configuration/permission-configuration/AssignedPolicies.tsx"
- *
- * This file is provided by @keycloakify/keycloak-admin-ui version 260502.0.0.
- * It was copied into your repository by the postinstall script: `keycloakify sync-extensions`.
- */
-
-/* eslint-disable */
-
-// @ts-nocheck
-
 import PolicyRepresentation from "@keycloak/keycloak-admin-client/lib/defs/policyRepresentation";
 import {
     Action,
@@ -66,7 +53,7 @@ export const AssignedPolicies = ({
     const [newPolicyOpen, setNewPolicyOpen] = useState(false);
     const [selectedPolicies, setSelectedPolicies] = useState<PolicyRepresentation[]>([]);
     const [filterType, setFilterType] = useState<string | undefined>(undefined);
-    const [isFilterTypeDropdownOpen, toggleIsFilterTypeDropdownOpen] = useToggle();
+    const [_isFilterTypeDropdownOpen, _toggleIsFilterTypeDropdownOpen] = useToggle();
 
     useFetch(
         () => {

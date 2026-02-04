@@ -1,16 +1,3 @@
-/**
- * WARNING: Before modifying this file, run the following command:
- *
- * $ npx keycloakify own --path "admin/clients/credentials/SignedJWT.tsx"
- *
- * This file is provided by @keycloakify/keycloak-admin-ui version 260502.0.0.
- * It was copied into your repository by the postinstall script: `keycloakify sync-extensions`.
- */
-
-/* eslint-disable */
-
-// @ts-nocheck
-
 import { useTranslation } from "react-i18next";
 import { Controller, useFormContext } from "react-hook-form";
 import { SelectControl } from "../../../shared/keycloak-ui-shared";
@@ -46,7 +33,6 @@ export const SignedJWT = ({ clientAuthenticatorType }: SignedJWTProps) => {
                 controller={{
                     defaultValue: ""
                 }}
-                isScrollable
                 maxMenuHeight="200px"
                 options={[
                     { key: "", value: t("anyAlgorithm") },

@@ -1,16 +1,3 @@
-/**
- * WARNING: Before modifying this file, run the following command:
- *
- * $ npx keycloakify own --path "shared/keycloak-ui-shared/controls/SwitchControl.tsx"
- *
- * This file is provided by @keycloakify/keycloak-ui-shared version 260502.0.0.
- * It was copied into your repository by the postinstall script: `keycloakify sync-extensions`.
- */
-
-/* eslint-disable */
-
-// @ts-nocheck
-
 import {
     Controller,
     FieldValues,
@@ -34,6 +21,9 @@ export type SwitchControlProps<
         labelOn: string;
         labelOff: string;
         stringify?: boolean;
+        isDisabled?: boolean;
+        /** Called when switch value changes; receives (value: boolean). Named onValueChange to avoid conflict with form onChange. */
+        onValueChange?: (value: boolean) => void;
     };
 
 export const SwitchControl = <
@@ -44,6 +34,8 @@ export const SwitchControl = <
     stringify,
     defaultValue,
     labelIcon,
+    isDisabled,
+    onValueChange: onValueChangeProp,
     ...props
 }: SwitchControlProps<T, P>) => {
     const fallbackValue = stringify ? "false" : false;
@@ -74,9 +66,11 @@ export const SwitchControl = <
                                 data-testid={debeerify(props.name)}
                                 aria-label={props.label}
                                 checked={stringify ? value === "true" : value}
+                                disabled={isDisabled}
                                 onCheckedChange={(checked) => {
                                     const value = stringify ? checked.toString() : checked;
                                     onChange(value);
+                                    onValueChangeProp?.(checked);
                                 }}
                             />
                         </div>

@@ -208,4 +208,3 @@ export default function Register(props: PageProps<Extract<KcContext, { pageId: "
         </AuthLayout>
     );
 }
-

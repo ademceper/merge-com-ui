@@ -161,4 +161,3 @@ const { useI18n, ofTypeI18n } = i18nBuilder
 type I18n = typeof ofTypeI18n;
 
 export { useI18n, type I18n };
-

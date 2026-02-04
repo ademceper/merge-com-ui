@@ -1,19 +1,7 @@
-/**
- * WARNING: Before modifying this file, run the following command:
- *
- * $ npx keycloakify own --path "admin/authentication/components/ExecutionConfigModal.tsx"
- *
- * This file is provided by @keycloakify/keycloak-admin-ui version 260502.0.0.
- * It was copied into your repository by the postinstall script: `keycloakify sync-extensions`.
- */
-
-/* eslint-disable */
-
-// @ts-nocheck
-
 import type AuthenticatorConfigInfoRepresentation from "@keycloak/keycloak-admin-client/lib/defs/authenticatorConfigInfoRepresentation";
 import type AuthenticatorConfigRepresentation from "@keycloak/keycloak-admin-client/lib/defs/authenticatorConfigRepresentation";
-import { AlertVariant, TextControl, useAlerts, useFetch } from "../../../shared/keycloak-ui-shared";
+import { getErrorDescription, getErrorMessage, TextControl, useFetch } from "../../../shared/keycloak-ui-shared";
+import { toast } from "@merge/ui/components/sonner";
 import { Button } from "@merge/ui/components/button";
 import {
     Dialog,
@@ -44,9 +32,7 @@ export const ExecutionConfigModal = ({ execution }: ExecutionConfigModalProps) =
     const { adminClient } = useAdminClient();
 
     const { t } = useTranslation();
-    const { addAlert, addError } = useAlerts();
-
-    const [show, setShow] = useState(false);
+const [show, setShow] = useState(false);
     const [config, setConfig] = useState<AuthenticatorConfigRepresentation>();
     const [configDescription, setConfigDescription] =
         useState<AuthenticatorConfigInfoRepresentation>();
@@ -139,10 +125,10 @@ export const ExecutionConfigModal = ({ execution }: ExecutionConfigModalProps) =
                     await adminClient.authenticationManagement.createConfig(newConfig);
                 setConfig({ ...newConfig.config, id, alias: newConfig.alias });
             }
-            addAlert(t("configSaveSuccess"), AlertVariant.success);
+            toast.success(t("configSaveSuccess"));
             setShow(false);
         } catch (error) {
-            addError("configSaveError", error);
+            toast.error(t("configSaveError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
         }
     };
 

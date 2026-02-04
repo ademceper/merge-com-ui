@@ -1,18 +1,5 @@
-/**
- * WARNING: Before modifying this file, run the following command:
- *
- * $ npx keycloakify own --path "admin/clients/keys/SamlImportKeyDialog.tsx"
- *
- * This file is provided by @keycloakify/keycloak-admin-ui version 260502.0.0.
- * It was copied into your repository by the postinstall script: `keycloakify sync-extensions`.
- */
-
-/* eslint-disable */
-
-// @ts-nocheck
-
-import { useAlerts } from "../../../shared/keycloak-ui-shared";
-import { AlertVariant } from "../../../shared/keycloak-ui-shared";
+import { getErrorDescription, getErrorMessage } from "../../../shared/keycloak-ui-shared";
+import { toast } from "@merge/ui/components/sonner";
 import { FormProvider, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { useAdminClient } from "../../admin-client";
@@ -42,15 +29,12 @@ export const SamlImportKeyDialog = ({
         handleSubmit,
         formState: { isValid }
     } = form;
-
-    const { addAlert, addError } = useAlerts();
-
-    const submit = async (form: SamlKeysDialogForm) => {
+const submit = async (form: SamlKeysDialogForm) => {
         await submitForm(adminClient, form, id, attr, error => {
             if (error) {
-                addError("importError", error);
+                toast.error(t("importError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
             } else {
-                addAlert(t("importSuccess"), AlertVariant.success);
+                toast.success(t("importSuccess"));
                 onImported();
             }
         });

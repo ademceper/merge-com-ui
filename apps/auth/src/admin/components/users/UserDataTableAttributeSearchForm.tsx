@@ -1,25 +1,9 @@
-/**
- * WARNING: Before modifying this file, run the following command:
- *
- * $ npx keycloakify own --path "admin/components/users/UserDataTableAttributeSearchForm.tsx"
- *
- * This file is provided by @keycloakify/keycloak-admin-ui version 260502.0.0.
- * It was copied into your repository by the postinstall script: `keycloakify sync-extensions`.
- */
-
-/* eslint-disable */
-
-// @ts-nocheck
-
 import type { UserProfileConfig } from "@keycloak/keycloak-admin-client/lib/defs/userProfileMetadata";
-import {
-    KeycloakSelect,
+import { KeycloakSelect,
     label,
-    SelectVariant,
-    useAlerts
-} from "../../../shared/keycloak-ui-shared";
+    SelectVariant } from "../../../shared/keycloak-ui-shared";
+import { toast } from "@merge/ui/components/sonner";
 import { Alert, AlertDescription } from "@merge/ui/components/alert";
-import { AlertVariant } from "../../../shared/keycloak-ui-shared";
 import { Button } from "@merge/ui/components/button";
 import { Checkbox } from "@merge/ui/components/checkbox";
 import { Input } from "@merge/ui/components/input";
@@ -51,7 +35,6 @@ export function UserDataTableAttributeSearchForm({
     clearAllFilters
 }: UserDataTableAttributeSearchFormProps) {
     const { t } = useTranslation();
-    const { addAlert } = useAlerts();
     const [selectAttributeKeyOpen, setSelectAttributeKeyOpen] = useState(false);
 
     const defaultValues: UserAttribute = {
@@ -123,11 +106,11 @@ export function UserDataTableAttributeSearchForm({
             reset(defaultValues);
         } else {
             if (errors.name?.message) {
-                addAlert(errors.name.message, AlertVariant.danger);
+                toast.error(errors.name.message);
             }
 
             if (errors.value?.message) {
-                addAlert(errors.value.message, AlertVariant.danger);
+                toast.error(errors.value.message);
             }
         }
     };

@@ -1,18 +1,6 @@
-/**
- * WARNING: Before modifying this file, run the following command:
- *
- * $ npx keycloakify own --path "admin/identity-providers/ManageOrderDialog.tsx"
- *
- * This file is provided by @keycloakify/keycloak-admin-ui version 260502.0.0.
- * It was copied into your repository by the postinstall script: `keycloakify sync-extensions`.
- */
-
-/* eslint-disable */
-
-// @ts-nocheck
-
 import type IdentityProviderRepresentation from "@keycloak/keycloak-admin-client/lib/defs/identityProviderRepresentation";
-import { KeycloakSpinner, useAlerts, useFetch } from "../../shared/keycloak-ui-shared";
+import { getErrorDescription, getErrorMessage, KeycloakSpinner, useFetch } from "../../shared/keycloak-ui-shared";
+import { toast } from "@merge/ui/components/sonner";
 import { Button } from "@merge/ui/components/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@merge/ui/components/dialog";
 import { DotsSixVertical } from "@phosphor-icons/react";
@@ -35,9 +23,7 @@ export const ManageOrderDialog = ({
     const { adminClient } = useAdminClient();
 
     const { t } = useTranslation();
-    const { addAlert, addError } = useAlerts();
-
-    const [liveText, setLiveText] = useState("");
+const [liveText, setLiveText] = useState("");
     const [providers, setProviders] = useState<IdentityProviderRepresentation[]>();
     const [order, setOrder] = useState<string[]>([]);
     const [dragIndex, setDragIndex] = useState<number | null>(null);
@@ -134,9 +120,9 @@ export const ManageOrderDialog = ({
 
                             try {
                                 await Promise.all(updates);
-                                addAlert(t("orderChangeSuccess"));
+                                toast.success(t("orderChangeSuccess"));
                             } catch (error) {
-                                addError("orderChangeError", error);
+                                toast.error(t("orderChangeError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
                             }
 
                             onClose();

@@ -1,27 +1,13 @@
-/**
- * WARNING: Before modifying this file, run the following command:
- *
- * $ npx keycloakify own --path "shared/keycloak-ui-shared/user-profile/OptionsComponent.tsx"
- *
- * This file is provided by @keycloakify/keycloak-ui-shared version 260502.0.0.
- * It was copied into your repository by the postinstall script: `keycloakify sync-extensions`.
- */
-
-/* eslint-disable */
-
-// @ts-nocheck
-
 import { Checkbox } from "@merge/ui/components/checkbox";
 import { RadioGroup, RadioGroupItem } from "@merge/ui/components/radio-group";
 import { Label } from "@merge/ui/components/label";
 import { Controller } from "react-hook-form";
 import { OptionLabel, Options, UserProfileFieldProps } from "./UserProfileFields";
 import { UserProfileGroup } from "./UserProfileGroup";
-import { fieldName, isRequiredAttribute, label } from "./utils";
+import { fieldName, label } from "./utils";
 
 export const OptionComponent = (props: UserProfileFieldProps) => {
     const { form, inputType, attribute } = props;
-    const isRequired = isRequiredAttribute(attribute);
     const isMultiSelect = inputType.startsWith("multiselect");
     const options = (attribute.validators?.options as Options | undefined)?.options || [];
 

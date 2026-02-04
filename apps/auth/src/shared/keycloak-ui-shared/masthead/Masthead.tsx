@@ -5,19 +5,17 @@
  * $ npx keycloakify own --path "shared/keycloak-ui-shared/masthead/Masthead.tsx" --revert
  */
 
-/* eslint-disable */
-
-// @ts-nocheck
-
 import { DropdownMenuItem } from "@merge/ui/components/dropdown-menu";
 import { Button } from "@merge/ui/components/button";
-import { Avatar, type AvatarProps as MergeAvatarProps } from "@merge/ui/components/avatar";
+import { Avatar, AvatarImage } from "@merge/ui/components/avatar";
+import type { ComponentProps } from "react";
 import { List } from "@phosphor-icons/react";
 import { TFunction } from "i18next";
 import type { Keycloak, KeycloakTokenParsed } from "oidc-spa/keycloak-js";
 import { ReactNode } from "react";
 import { useTranslation } from "react-i18next";
 import { DefaultAvatar } from "./DefaultAvatar";
+import type { DefaultAvatarProps } from "./DefaultAvatar";
 import { KeycloakDropdown } from "./KeycloakDropdown";
 
 function loggedInUserName(token: KeycloakTokenParsed | undefined, t: TFunction) {
@@ -41,7 +39,7 @@ type BrandLogo = { src?: string; alt?: string; className?: string; [k: string]: 
 type KeycloakMastheadProps = {
     keycloak: Keycloak;
     brand: BrandLogo;
-    avatar?: MergeAvatarProps & { src?: string };
+    avatar?: Omit<ComponentProps<typeof Avatar>, "children"> & { src?: string };
     features?: {
         hasLogout?: boolean;
         hasManageAccount?: boolean;
@@ -113,9 +111,11 @@ const KeycloakMasthead = ({
                 </div>
                 <div className="flex items-center">
                     {picture || avatar?.src ? (
-                        <Avatar src={picture || avatar?.src} alt={t("avatar")} {...avatar} />
+                        <Avatar {...(avatar ? { className: avatar.className, size: avatar.size } : {})}>
+                            <AvatarImage src={picture || avatar?.src} alt={t("avatar")} />
+                        </Avatar>
                     ) : (
-                        <DefaultAvatar {...avatar} />
+                        <DefaultAvatar {...(avatar as DefaultAvatarProps)} />
                     )}
                 </div>
             </div>

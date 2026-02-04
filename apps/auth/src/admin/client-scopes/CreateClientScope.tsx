@@ -1,21 +1,8 @@
-/**
- * WARNING: Before modifying this file, run the following command:
- *
- * $ npx keycloakify own --path "admin/client-scopes/CreateClientScope.tsx"
- *
- * This file is provided by @keycloakify/keycloak-admin-ui version 260502.0.0.
- * It was copied into your repository by the postinstall script: `keycloakify sync-extensions`.
- */
-
-/* eslint-disable */
-
-// @ts-nocheck
-
-import { AlertVariant } from "../../shared/keycloak-ui-shared";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 import { useAdminClient } from "../admin-client";
-import { useAlerts } from "../../shared/keycloak-ui-shared";
+import { getErrorDescription, getErrorMessage } from "../../shared/keycloak-ui-shared";
+import { toast } from "@merge/ui/components/sonner";
 import {
     ClientScopeDefaultOptionalType,
     changeScope
@@ -32,9 +19,7 @@ export default function CreateClientScope() {
     const { t } = useTranslation();
     const navigate = useNavigate();
     const { realm } = useRealm();
-    const { addAlert, addError } = useAlerts();
-
-    const onSubmit = async (formData: ClientScopeDefaultOptionalType) => {
+const onSubmit = async (formData: ClientScopeDefaultOptionalType) => {
         const clientScope = convertFormValuesToObject({
             ...formData,
             name: formData.name?.trim().replace(/ /g, "_")
@@ -57,7 +42,7 @@ export default function CreateClientScope() {
                 clientScope.type
             );
 
-            addAlert(t("createClientScopeSuccess"), AlertVariant.success);
+            toast.success(t("createClientScopeSuccess"));
 
             navigate(
                 toClientScope({
@@ -67,7 +52,7 @@ export default function CreateClientScope() {
                 })
             );
         } catch (error) {
-            addError("createClientScopeError", error);
+            toast.error(t("createClientScopeError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
         }
     };
 

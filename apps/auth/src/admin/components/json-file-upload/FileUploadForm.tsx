@@ -1,16 +1,3 @@
-/**
- * WARNING: Before modifying this file, run the following command:
- *
- * $ npx keycloakify own --path "admin/components/json-file-upload/FileUploadForm.tsx"
- *
- * This file is provided by @keycloakify/keycloak-admin-ui version 260502.0.0.
- * It was copied into your repository by the postinstall script: `keycloakify sync-extensions`.
- */
-
-/* eslint-disable */
-
-// @ts-nocheck
-
 import { Button } from "@merge/ui/components/button";
 import {
     Dialog,
@@ -22,7 +9,16 @@ import {
 import { Label } from "@merge/ui/components/label";
 import { Input } from "@merge/ui/components/input";
 /** Local type replacing PatternFly FileUploadProps; only used for Omit. */
-type FileUploadProps = { id?: string; value?: string; filename?: string; onChange?: (value: string) => void; onClear?: () => void; isDisabled?: boolean };
+type FileUploadProps = {
+    id?: string;
+    value?: string;
+    filename?: string;
+    onChange?: (value: string) => void;
+    onClear?: () => void;
+    isDisabled?: boolean;
+    hideDefaultPreview?: boolean;
+    allowEditingUploadedText?: boolean;
+};
 import {
     ChangeEvent,
     DragEvent as ReactDragEvent,
@@ -52,6 +48,7 @@ export type FileUploadFormProps = Omit<FileUploadProps, "onChange"> & {
     unWrap?: boolean;
     language?: string;
     previewMaxLength?: number;
+    validated?: string;
 };
 
 export const FileUploadForm = ({
@@ -73,10 +70,6 @@ export const FileUploadForm = ({
     };
     const [fileUpload, setFileUpload] = useState<FileUploadType>(defaultUpload);
     const removeDialog = () => setFileUpload({ ...fileUpload, modal: false });
-
-    const handleFileInputChange = (_event: DropEvent, file: File) => {
-        setFileUpload({ ...fileUpload, filename: file.name });
-    };
 
     const handleTextOrDataChange = (value: string) => {
         setFileUpload({ ...fileUpload, value });

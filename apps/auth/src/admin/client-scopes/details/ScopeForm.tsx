@@ -1,16 +1,3 @@
-/**
- * WARNING: Before modifying this file, run the following command:
- *
- * $ npx keycloakify own --path "admin/client-scopes/details/ScopeForm.tsx"
- *
- * This file is provided by @keycloakify/keycloak-admin-ui version 260502.0.0.
- * It was copied into your repository by the postinstall script: `keycloakify sync-extensions`.
- */
-
-/* eslint-disable */
-
-// @ts-nocheck
-
 import type ClientScopeRepresentation from "@keycloak/keycloak-admin-client/lib/defs/clientScopeRepresentation";
 import type { KeyMetadataRepresentation } from "@keycloak/keycloak-admin-client/lib/defs/keyMetadataRepresentation";
 import { Button } from "@merge/ui/components/button";
@@ -191,7 +178,7 @@ export const ScopeForm = ({ clientScope, save }: ScopeFormProps) => {
                             )}
                             label={t("dynamicScope")}
                             labelIcon={t("dynamicScopeHelp")}
-                            onChange={(event, value) => {
+                            onValueChange={(value: boolean) => {
                                 setDynamicRegex(
                                     value ? form.getValues("name") || "" : "",
                                     value
@@ -442,7 +429,7 @@ export const ScopeForm = ({ clientScope, save }: ScopeFormProps) => {
                     <FormSubmitButton
                         data-testid="save"
                         formState={formState}
-                        disabled={!isDirty || !isValid}
+                        isDisabled={!isDirty || !isValid}
                     >
                         {t("save")}
                     </FormSubmitButton>

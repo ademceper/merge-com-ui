@@ -1,16 +1,3 @@
-/**
- * WARNING: Before modifying this file, run the following command:
- *
- * $ npx keycloakify own --path "shared/keycloak-ui-shared/controls/NumberControl.tsx"
- *
- * This file is provided by @keycloakify/keycloak-ui-shared version 260502.0.0.
- * It was copied into your repository by the postinstall script: `keycloakify sync-extensions`.
- */
-
-/* eslint-disable */
-
-// @ts-nocheck
-
 import { Input } from "@merge/ui/components/input";
 import { cn } from "@merge/ui/lib/utils";
 import {
@@ -40,6 +27,9 @@ export type NumberControlProps<
         label?: string;
         labelIcon?: string;
         controller: Omit<ControllerProps, "name" | "render">;
+        isDisabled?: boolean;
+        widthChars?: number;
+        unit?: string;
     };
 
 export const NumberControl = <
@@ -50,6 +40,9 @@ export const NumberControl = <
     label,
     controller,
     labelIcon,
+    isDisabled,
+    widthChars: _widthChars,
+    unit: _unit,
     ...rest
 }: NumberControlProps<T, P>) => {
     const {
@@ -90,6 +83,7 @@ export const NumberControl = <
                             value={value ?? ""}
                             aria-invalid={!!errors[name]}
                             required={required}
+                            disabled={isDisabled}
                             min={min !== undefined ? Number(min) : undefined}
                             max={max !== undefined ? Number(max) : undefined}
                             onChange={(event) => {

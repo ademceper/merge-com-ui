@@ -1,25 +1,9 @@
-/**
- * WARNING: Before modifying this file, run the following command:
- *
- * $ npx keycloakify own --path "admin/user/CreateUser.tsx"
- *
- * This file is provided by @keycloakify/keycloak-admin-ui version 260502.0.0.
- * It was copied into your repository by the postinstall script: `keycloakify sync-extensions`.
- */
-
-/* eslint-disable */
-
-// @ts-nocheck
-
 import type GroupRepresentation from "@keycloak/keycloak-admin-client/lib/defs/groupRepresentation";
 import type { UserProfileMetadata } from "@keycloak/keycloak-admin-client/lib/defs/userProfileMetadata";
-import {
-    isUserProfileError,
+import { getErrorDescription, getErrorMessage, isUserProfileError,
     setUserProfileServerError,
-    useAlerts,
-    useFetch
-} from "../../shared/keycloak-ui-shared";
-import { AlertVariant } from "../../shared/keycloak-ui-shared";
+    useFetch } from "../../shared/keycloak-ui-shared";
+import { toast } from "@merge/ui/components/sonner";
 import { TFunction } from "i18next";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
@@ -33,13 +17,11 @@ import { UserForm } from "./UserForm";
 import { UserFormFields, toUserRepresentation } from "./form-state";
 import { toUser } from "./routes/User";
 
-
 export default function CreateUser() {
     const { adminClient } = useAdminClient();
 
     const { t } = useTranslation();
-    const { addAlert, addError } = useAlerts();
-    const navigate = useNavigate();
+const navigate = useNavigate();
     const { realm: realmName, realmRepresentation: realm } = useRealm();
     const form = useForm<UserFormFields>({ mode: "onChange" });
     const [addedGroups, setAddedGroups] = useState<GroupRepresentation[]>([]);
@@ -65,14 +47,14 @@ export default function CreateUser() {
                 enabled: true
             });
 
-            addAlert(t("userCreated"), AlertVariant.success);
+            toast.success(t("userCreated"));
             navigate(toUser({ id: createdUser.id, realm: realmName, tab: "settings" }));
         } catch (error) {
             if (isUserProfileError(error)) {
                 setUserProfileServerError(error, form.setError, ((key, param) =>
                     t(key as string, param as any)) as TFunction);
             } else {
-                addError("userCreateError", error);
+                toast.error(t("userCreateError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
             }
         }
     };

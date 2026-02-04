@@ -1,16 +1,3 @@
-/**
- * WARNING: Before modifying this file, run the following command:
- *
- * $ npx keycloakify own --path "admin/clients/authorization/evaluate/Results.tsx"
- *
- * This file is provided by @keycloakify/keycloak-admin-ui version 260502.0.0.
- * It was copied into your repository by the postinstall script: `keycloakify sync-extensions`.
- */
-
-/* eslint-disable */
-
-// @ts-nocheck
-
 import { MagnifyingGlass } from "@phosphor-icons/react";
 import { Button } from "@merge/ui/components/button";
 import { Input } from "@merge/ui/components/input";
@@ -24,8 +11,6 @@ import {
 import { Separator } from "@merge/ui/components/separator";
 import {
     Table,
-    TableBody,
-    TableCell,
     TableHead,
     TableHeader,
     TableRow
@@ -35,6 +20,7 @@ import { useTranslation } from "react-i18next";
 
 import type EvaluationResultRepresentation from "@keycloak/keycloak-admin-client/lib/defs/evaluationResultRepresentation";
 import type PolicyEvaluationResponse from "@keycloak/keycloak-admin-client/lib/defs/policyEvaluationResponse";
+import useToggle from "../../../utils/useToggle";
 import { FixedButtonsGroup } from "../../../components/form/FixedButtonGroup";
 import { ListEmptyState } from "../../../../shared/keycloak-ui-shared";
 import { AuthorizationDataModal } from "../AuthorizationDataModal";
@@ -66,7 +52,7 @@ function filterResults(results: EvaluationResultRepresentation[], filter: Result
 export const Results = ({ evaluateResult, refresh, back }: ResultProps) => {
     const { t } = useTranslation();
 
-    const [filterDropdownOpen, toggleFilterDropdown] = useToggle();
+    const [_filterDropdownOpen, _toggleFilterDropdown] = useToggle();
 
     const [filter, setFilter] = useState(ResultsFilter.All);
     const [searchQuery, setSearchQuery] = useState("");

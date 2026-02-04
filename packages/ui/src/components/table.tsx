@@ -656,7 +656,6 @@ export function DataTable<TData>({
 }
 
 export function DataTableRowActions<TData>({
-  row,
   children,
 }: {
   row: Row<TData>

@@ -1,16 +1,3 @@
-/**
- * WARNING: Before modifying this file, run the following command:
- *
- * $ npx keycloakify own --path "admin/client-scopes/details/MapperList.tsx"
- *
- * This file is provided by @keycloakify/keycloak-admin-ui version 260502.0.0.
- * It was copied into your repository by the postinstall script: `keycloakify sync-extensions`.
- */
-
-/* eslint-disable */
-
-// @ts-nocheck
-
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import type { Path } from "react-router-dom";
@@ -54,7 +41,7 @@ const MapperLink = ({ id, name, detailLink }: MapperLinkProps) => (
 export const MapperList = ({ model, onAdd, onDelete, detailLink }: MapperListProps) => {
     const { t } = useTranslation();
 
-    const [mapperAction, setMapperAction] = useState(false);
+    const [_mapperAction, _setMapperAction] = useState(false);
     const mapperList = model.protocolMappers;
     const mapperTypes = useServerInfo().protocolMapperTypes![model.protocol!];
 

@@ -1,21 +1,8 @@
-/**
- * WARNING: Before modifying this file, run the following command:
- *
- * $ npx keycloakify own --path "admin/permissions-configuration/permission-configuration/PermissionConfigurationDetails.tsx"
- *
- * This file is provided by @keycloakify/keycloak-admin-ui version 260502.0.0.
- * It was copied into your repository by the postinstall script: `keycloakify sync-extensions`.
- */
-
-/* eslint-disable */
-
-// @ts-nocheck
-
 import PolicyProviderRepresentation from "@keycloak/keycloak-admin-client/lib/defs/policyProviderRepresentation";
-import { useAlerts, useFetch } from "../../../shared/keycloak-ui-shared";
+import { getErrorDescription, getErrorMessage, useFetch } from "../../../shared/keycloak-ui-shared";
+import { toast } from "@merge/ui/components/sonner";
 import { Button } from "@merge/ui/components/button";
 import { DropdownMenuItem } from "@merge/ui/components/dropdown-menu";
-import { AlertVariant } from "../../../shared/keycloak-ui-shared";
 import { useMemo, useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
@@ -47,8 +34,7 @@ export default function PermissionConfigurationDetails() {
     const navigate = useNavigate();
     const form = useForm();
     const { handleSubmit, reset } = form;
-    const { addAlert, addError } = useAlerts();
-    const [permission, setPermission] = useState<PolicyRepresentation>();
+const [permission, setPermission] = useState<PolicyRepresentation>();
     const [providers, setProviders] = useState<PolicyProviderRepresentation[]>();
     const [policies, setPolicies] = useState<PolicyRepresentation[]>();
     const resourceTypes = useSortedResourceTypes({
@@ -184,12 +170,9 @@ export default function PermissionConfigurationDetails() {
                 );
             }
 
-            addAlert(
-                t(permissionId ? "updatePermissionSuccess" : "createPermissionSuccess"),
-                AlertVariant.success
-            );
+            toast.success(t(permissionId ? "updatePermissionSuccess" : "createPermissionSuccess"));
         } catch (error) {
-            addError("permissionSaveError", error);
+            toast.error(t("permissionSaveError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
         }
     };
 
@@ -207,7 +190,7 @@ export default function PermissionConfigurationDetails() {
                     type: "scope",
                     permissionId: permissionId
                 });
-                addAlert(t("permissionDeletedSuccess"), AlertVariant.success);
+                toast.success(t("permissionDeletedSuccess"));
                 navigate(
                     toPermissionsConfigurationTabs({
                         realm,
@@ -216,7 +199,7 @@ export default function PermissionConfigurationDetails() {
                     })
                 );
             } catch (error) {
-                addError("permissionDeletedError", error);
+                toast.error(t("permissionDeletedError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
             }
         }
     });

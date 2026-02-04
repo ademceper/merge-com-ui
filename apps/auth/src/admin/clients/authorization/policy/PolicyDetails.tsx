@@ -1,24 +1,15 @@
-/**
- * WARNING: Before modifying this file, run the following command:
- *
- * $ npx keycloakify own --path "admin/clients/authorization/policy/PolicyDetails.tsx"
- *
- * This file is provided by @keycloakify/keycloak-admin-ui version 260502.0.0.
- * It was copied into your repository by the postinstall script: `keycloakify sync-extensions`.
- */
-
-/* eslint-disable */
-
-// @ts-nocheck
-
 import type PolicyRepresentation from "@keycloak/keycloak-admin-client/lib/defs/policyRepresentation";
-import { useAlerts, useFetch, AlertVariant } from "../../../../shared/keycloak-ui-shared";
+import { getErrorDescription, getErrorMessage, useFetch } from "../../../../shared/keycloak-ui-shared";
+import { toast } from "@merge/ui/components/sonner";
 import { Button } from "@merge/ui/components/button";
 import { DropdownMenuItem } from "@merge/ui/components/dropdown-menu";
+import type { ComponentType } from "react";
 import { useState, type JSX } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, type LinkProps, useNavigate } from "react-router-dom";
+
+const RouterLink = Link as ComponentType<LinkProps>;
 import { useAdminClient } from "../../../admin-client";
 import { useConfirmDialog } from "../../../components/confirm-dialog/ConfirmDialog";
 import { FormAccess } from "../../../components/form/FormAccess";
@@ -42,7 +33,6 @@ import { Regex } from "./Regex";
 import { Role } from "./Role";
 import { Time } from "./Time";
 import { User } from "./User";
-
 
 type Policy = Omit<PolicyRepresentation, "roles"> & {
     groups?: GroupValue[];
@@ -74,8 +64,7 @@ export default function PolicyDetails() {
     const navigate = useNavigate();
     const form = useForm();
     const { reset, handleSubmit } = form;
-    const { addAlert, addError } = useAlerts();
-    const [policy, setPolicy] = useState<PolicyRepresentation>();
+const [policy, setPolicy] = useState<PolicyRepresentation>();
     const isDisabled = policyType === "js";
     const isAdminPermissionsClient = useIsAdminPermissionsClient(permissionClientId);
 
@@ -146,12 +135,11 @@ export default function PolicyDetails() {
                     })
                 );
             }
-            addAlert(
-                t((policyId ? "update" : "create") + "PolicySuccess"),
-                AlertVariant.success
+            toast.success(
+                t((policyId ? "update" : "create") + "PolicySuccess")
             );
         } catch (error) {
-            addError("policySaveError", error);
+            toast.error(t("policySaveError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
         }
     };
 
@@ -165,7 +153,7 @@ export default function PolicyDetails() {
                     id: isAdminPermissionsClient ? permissionClientId : id,
                     policyId
                 });
-                addAlert(t("policyDeletedSuccess"), AlertVariant.success);
+                toast.success(t("policyDeletedSuccess"));
                 navigate(
                     isAdminPermissionsClient
                         ? toPermissionsConfigurationTabs({
@@ -176,7 +164,7 @@ export default function PolicyDetails() {
                         : toAuthorizationTab({ realm, clientId: id, tab: "policies" })
                 );
             } catch (error) {
-                addError("policyDeletedError", error);
+                toast.error(t("policyDeletedError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
             }
         }
     });
@@ -238,7 +226,7 @@ export default function PolicyDetails() {
                             data-testid="cancel"
                             asChild
                         >
-                            <Link
+                            <RouterLink
                                 to={
                                     isAdminPermissionsClient
                                         ? toPermissionsConfigurationTabs({
@@ -254,7 +242,7 @@ export default function PolicyDetails() {
                                 }
                             >
                                 {t("cancel")}
-                            </Link>
+                            </RouterLink>
                         </Button>
                     </div>
                 </FormAccess>

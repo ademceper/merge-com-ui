@@ -1,16 +1,3 @@
-/**
- * WARNING: Before modifying this file, run the following command:
- *
- * $ npx keycloakify own --path "admin/clients/credentials/ClientSecret.tsx"
- *
- * This file is provided by @keycloakify/keycloak-admin-ui version 260502.0.0.
- * It was copied into your repository by the postinstall script: `keycloakify sync-extensions`.
- */
-
-/* eslint-disable */
-
-// @ts-nocheck
-
 import type ClientRepresentation from "@keycloak/keycloak-admin-client/lib/defs/clientRepresentation";
 import { Alert, AlertTitle } from "@merge/ui/components/alert";
 import { Button } from "@merge/ui/components/button";
@@ -20,7 +7,8 @@ import { useFormContext } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { PasswordInput } from "../../../shared/keycloak-ui-shared";
 import { useAdminClient } from "../../admin-client";
-import { useAlerts } from "../../../shared/keycloak-ui-shared";
+import { getErrorDescription, getErrorMessage } from "../../../shared/keycloak-ui-shared";
+import { toast } from "@merge/ui/components/sonner";
 import { useConfirmDialog } from "../../components/confirm-dialog/ConfirmDialog";
 import { useAccess } from "../../context/access/Access";
 import useFormatDate from "../../utils/useFormatDate";
@@ -54,7 +42,7 @@ const SecretInput = ({ id, buttonLabel, client, secret, toggle }: SecretInputPro
                         id={id}
                         text={secret}
                         label="clientSecret"
-                        variant="control"
+                        variant="outline"
                     />
                 </div>
             </div>
@@ -89,9 +77,7 @@ export const ClientSecret = ({ client, secret, toggle }: ClientSecretProps) => {
     const { adminClient } = useAdminClient();
 
     const { t } = useTranslation();
-    const { addAlert, addError } = useAlerts();
-
-    const [secretRotated, setSecretRotated] = useState<string | undefined>(
+const [secretRotated, setSecretRotated] = useState<string | undefined>(
         client.attributes?.["client.secret.rotated"]
     );
     const secretExpirationTime: number =
@@ -111,9 +97,9 @@ export const ClientSecret = ({ client, secret, toggle }: ClientSecretProps) => {
                     id: client.id!
                 });
                 setSecretRotated(undefined);
-                addAlert(t("invalidateRotatedSuccess"));
+                toast.success(t("invalidateRotatedSuccess"));
             } catch (error) {
-                addError("invalidateRotatedError", error);
+                toast.error(t("invalidateRotatedError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
             }
         }
     });

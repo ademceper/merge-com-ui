@@ -1,33 +1,17 @@
-/**
- * WARNING: Before modifying this file, run the following command:
- *
- * $ npx keycloakify own --path "admin/identity-providers/add/DetailSettings.tsx"
- *
- * This file is provided by @keycloakify/keycloak-admin-ui version 260502.0.0.
- * It was copied into your repository by the postinstall script: `keycloakify sync-extensions`.
- */
-
-/* eslint-disable */
-
-// @ts-nocheck
-
 import type IdentityProviderMapperRepresentation from "@keycloak/keycloak-admin-client/lib/defs/identityProviderMapperRepresentation";
 import IdentityProviderRepresentation, {
     IdentityProviderType
 } from "@keycloak/keycloak-admin-client/lib/defs/identityProviderRepresentation";
-import {
-    Action,
+import { getErrorDescription, getErrorMessage, Action,
     KeycloakDataTable,
     KeycloakSpinner,
     ListEmptyState,
     ScrollForm,
-    useAlerts,
-    useFetch
-} from "../../../shared/keycloak-ui-shared";
+    useFetch } from "../../../shared/keycloak-ui-shared";
+import { toast } from "@merge/ui/components/sonner";
 import { Button } from "@merge/ui/components/button";
 import { Separator } from "@merge/ui/components/separator";
 import { DropdownMenuItem } from "@merge/ui/components/dropdown-menu";
-import { AlertVariant } from "../../../shared/keycloak-ui-shared";
 import { useMemo, useState } from "react";
 import {
     Controller,
@@ -97,8 +81,7 @@ const Header = ({ onChange, value, save, toggleDeleteDialog }: HeaderProps) => {
     const { t } = useTranslation();
     const { alias: displayName } = useParams<{ alias: string }>();
     const [provider, setProvider] = useState<IdentityProviderRepresentation>();
-    const { addAlert, addError } = useAlerts();
-    const { setValue, formState, control } = useFormContext();
+const { setValue, formState, control } = useFormContext();
 
     const validateSignature = useWatch({
         control,
@@ -144,12 +127,12 @@ const Header = ({ onChange, value, save, toggleDeleteDialog }: HeaderProps) => {
             });
             if (result.signingCertificate) {
                 setValue(`config.signingCertificate`, result.signingCertificate);
-                addAlert(t("importKeysSuccess"), AlertVariant.success);
+                toast.success(t("importKeysSuccess"));
             } else {
-                addError("importKeysError", t("importKeysErrorNoSigningCertificate"));
+                toast.error(t("importKeysError", { error: t("importKeysErrorNoSigningCertificate") }));
             }
         } catch (error) {
-            addError("importKeysError", error);
+            toast.error(t("importKeysError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
         }
     };
 
@@ -159,12 +142,12 @@ const Header = ({ onChange, value, save, toggleDeleteDialog }: HeaderProps) => {
                 alias: alias
             });
             if (result) {
-                addAlert(t("reloadKeysSuccess"), AlertVariant.success);
+                toast.success(t("reloadKeysSuccess"));
             } else {
-                addAlert(t("reloadKeysSuccessButFalse"), AlertVariant.warning);
+                toast.warning(t("reloadKeysSuccessButFalse"));
             }
         } catch (error) {
-            addError("reloadKeysError", error);
+            toast.error(t("reloadKeysError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
         }
     };
 
@@ -283,9 +266,7 @@ export default function DetailSettings() {
             }
         }
     }, [serverInfo, providerId]);
-
-    const { addAlert, addError } = useAlerts();
-    const navigate = useNavigate();
+const navigate = useNavigate();
     const { realm, realmRepresentation } = useRealm();
     const [key, setKey] = useState(0);
     const refresh = () => setKey(key + 1);
@@ -346,9 +327,9 @@ export default function DetailSettings() {
                 p.config!.authnContextDeclRefs = origAuthnContextDeclRefs;
             }
             reset(p);
-            addAlert(t("updateSuccessIdentityProvider"), AlertVariant.success);
+            toast.success(t("updateSuccessIdentityProvider"));
         } catch (error) {
-            addError("updateErrorIdentityProvider", error);
+            toast.error(t("updateErrorIdentityProvider", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
         }
     };
 
@@ -360,10 +341,10 @@ export default function DetailSettings() {
         onConfirm: async () => {
             try {
                 await adminClient.identityProviders.del({ alias: alias });
-                addAlert(t("deletedSuccessIdentityProvider"), AlertVariant.success);
+                toast.success(t("deletedSuccessIdentityProvider"));
                 navigate(toIdentityProviders({ realm }));
             } catch (error) {
-                addError("deleteErrorIdentityProvider", error);
+                toast.error(t("deleteErrorIdentityProvider", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
             }
         }
     });
@@ -381,13 +362,13 @@ export default function DetailSettings() {
                     alias: alias,
                     id: selectedMapper?.mapperId!
                 });
-                addAlert(t("deleteMapperSuccess"), AlertVariant.success);
+                toast.success(t("deleteMapperSuccess"));
                 refresh();
                 navigate(
                     toIdentityProvider({ providerId, alias, tab: "mappers", realm })
                 );
             } catch (error) {
-                addError("deleteErrorIdentityProvider", error);
+                toast.error(t("deleteErrorIdentityProvider", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
             }
         }
     });

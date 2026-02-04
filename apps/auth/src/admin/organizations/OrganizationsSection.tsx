@@ -1,18 +1,6 @@
-/**
- * WARNING: Before modifying this file, run the following command:
- *
- * $ npx keycloakify own --path "admin/organizations/OrganizationsSection.tsx"
- *
- * This file is provided by @keycloakify/keycloak-admin-ui version 260502.0.0.
- * It was copied into your repository by the postinstall script: `keycloakify sync-extensions`.
- */
-
-/* eslint-disable */
-
-// @ts-nocheck
-
 import OrganizationRepresentation from "@keycloak/keycloak-admin-client/lib/defs/organizationRepresentation";
-import { FormSubmitButton, useFetch, useAlerts } from "../../shared/keycloak-ui-shared";
+import { FormSubmitButton, getErrorDescription, getErrorMessage, useFetch } from "../../shared/keycloak-ui-shared";
+import { toast } from "@merge/ui/components/sonner";
 import { Button } from "@merge/ui/components/button";
 import {
     Dialog,
@@ -46,9 +34,8 @@ import {
 
 export default function OrganizationSection() {
     const { adminClient } = useAdminClient();
-    const { realm } = useRealm();
+    useRealm();
     const { t } = useTranslation();
-    const { addAlert, addError } = useAlerts();
 
     const [key, setKey] = useState(0);
     const refresh = () => setKey(key + 1);
@@ -93,10 +80,10 @@ export default function OrganizationSection() {
                 await adminClient.organizations.delById({
                     id: selectedOrg!.id!
                 });
-                addAlert(t("organizationDeletedSuccess"));
+                toast.success(t("organizationDeletedSuccess"));
                 refresh();
             } catch (error) {
-                addError("organizationDeleteError", error);
+                toast.error(t("organizationDeleteError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
             }
         }
     });
@@ -105,25 +92,25 @@ export default function OrganizationSection() {
         try {
             const organization = convertToOrg(org);
             await adminClient.organizations.create(organization);
-            addAlert(t("organizationSaveSuccess"));
+            toast.success(t("organizationSaveSuccess"));
             setCreateDialogOpen(false);
             createForm.reset();
             refresh();
         } catch (error) {
-            addError("organizationSaveError", error);
+            toast.error(t("organizationSaveError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
         }
     };
 
     const onEditSave = async (org: OrganizationFormType) => {
         if (!editOrg?.id) return;
         try {
-            const payload = convertToOrgForUpdate(org);
+            const payload = { ...convertToOrgForUpdate(org), alias: editOrg.alias };
             await adminClient.organizations.updateById({ id: editOrg.id }, payload);
-            addAlert(t("organizationSaveSuccess"));
+            toast.success(t("organizationSaveSuccess"));
             setEditOrg(null);
             refresh();
         } catch (error) {
-            addError("organizationSaveError", error);
+            toast.error(t("organizationSaveError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
         }
     };
 
@@ -236,7 +223,7 @@ export default function OrganizationSection() {
                                 onSubmit={editForm.handleSubmit(onEditSave)}
                                 isHorizontal
                             >
-                                <OrganizationForm readOnly={false} />
+                                <OrganizationForm readOnly />
                             </FormAccess>
                             <DialogFooter>
                                 <Button

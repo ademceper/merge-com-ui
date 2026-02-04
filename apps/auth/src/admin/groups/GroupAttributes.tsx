@@ -1,19 +1,6 @@
-/**
- * WARNING: Before modifying this file, run the following command:
- *
- * $ npx keycloakify own --path "admin/groups/GroupAttributes.tsx"
- *
- * This file is provided by @keycloakify/keycloak-admin-ui version 260502.0.0.
- * It was copied into your repository by the postinstall script: `keycloakify sync-extensions`.
- */
-
-/* eslint-disable */
-
-// @ts-nocheck
-
 import GroupRepresentation from "@keycloak/keycloak-admin-client/lib/defs/groupRepresentation";
-import { useAlerts, useFetch } from "../../shared/keycloak-ui-shared";
-import { AlertVariant } from "../../shared/keycloak-ui-shared";
+import { getErrorDescription, getErrorMessage, useFetch } from "../../shared/keycloak-ui-shared";
+import { toast } from "@merge/ui/components/sonner";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
@@ -31,8 +18,7 @@ export const GroupAttributes = () => {
     const { adminClient } = useAdminClient();
 
     const { t } = useTranslation();
-    const { addAlert, addError } = useAlerts();
-    const form = useForm<AttributeForm>({
+const form = useForm<AttributeForm>({
         mode: "onChange"
     });
 
@@ -57,9 +43,9 @@ export const GroupAttributes = () => {
             await adminClient.groups.update({ id: id! }, { ...currentGroup, attributes });
 
             setCurrentGroup({ ...currentGroup, attributes });
-            addAlert(t("groupUpdated"), AlertVariant.success);
+            toast.success(t("groupUpdated"));
         } catch (error) {
-            addError("groupUpdateError", error);
+            toast.error(t("groupUpdateError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
         }
     };
 

@@ -1,17 +1,3 @@
-/**
- * WARNING: Before modifying this file, run the following command:
- *
- * $ npx keycloakify own --path "shared/keycloak-ui-shared/controls/FileUploadControl.tsx"
- *
- * This file is provided by @keycloakify/keycloak-ui-shared version 260502.0.0.
- * It was copied into your repository by the postinstall script: `keycloakify sync-extensions`.
- */
-
-/* eslint-disable */
-
-// @ts-nocheck
-
-import { Button } from "@merge/ui/components/button";
 import {
     InputGroup,
     InputGroupButton,
@@ -34,6 +20,7 @@ export type FileUploadControlProps<
     T extends FieldValues,
     P extends FieldPath<T> = FieldPath<T>
 > = UseControllerProps<T, P> & {
+    id?: string;
     label: string;
     labelIcon?: string | ReactNode;
     isDisabled?: boolean;
@@ -47,7 +34,7 @@ export const FileUploadControl = <
 >(
     props: FileUploadControlProps<T, P>
 ) => {
-    const { labelIcon, ...rest } = props;
+    const { labelIcon } = props;
     const required = !!getRuleValue(props.rules?.required);
     const defaultValue = props.defaultValue ?? (null as PathValue<T, P>);
 

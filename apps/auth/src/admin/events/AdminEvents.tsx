@@ -1,16 +1,3 @@
-/**
- * WARNING: Before modifying this file, run the following command:
- *
- * $ npx keycloakify own --path "admin/events/AdminEvents.tsx"
- *
- * This file is provided by @keycloakify/keycloak-admin-ui version 260502.0.0.
- * It was copied into your repository by the postinstall script: `keycloakify sync-extensions`.
- */
-
-/* eslint-disable */
-
-// @ts-nocheck
-
 import type AdminEventRepresentation from "@keycloak/keycloak-admin-client/lib/defs/adminEventRepresentation";
 import {
     Action,
@@ -53,7 +40,6 @@ import { useServerInfo } from "../context/server-info/ServerInfoProvider";
 import { prettyPrintJSON } from "../util";
 import useFormatDate, { FORMAT_DATE_AND_TIME } from "../utils/useFormatDate";
 import { CellResourceLinkRenderer } from "./ResourceLinks";
-
 
 type DisplayDialogProps = PropsWithChildren<{
     titleKey: string;

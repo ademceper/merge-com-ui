@@ -1,24 +1,10 @@
-/**
- * WARNING: Before modifying this file, run the following command:
- *
- * $ npx keycloakify own --path "admin/clients/ClientDetails.tsx"
- *
- * This file is provided by @keycloakify/keycloak-admin-ui version 260502.0.0.
- * It was copied into your repository by the postinstall script: `keycloakify sync-extensions`.
- */
-
-/* eslint-disable */
-
-// @ts-nocheck
-
 import type ClientRepresentation from "@keycloak/keycloak-admin-client/lib/defs/clientRepresentation";
-import { useAlerts, useFetch } from "../../shared/keycloak-ui-shared";
-import { AlertVariant } from "../../shared/keycloak-ui-shared";
-import { Label } from "@merge/ui/components/label";
+import { getErrorDescription, getErrorMessage, useFetch } from "../../shared/keycloak-ui-shared";
+import { toast } from "@merge/ui/components/sonner";
 import { Badge } from "@merge/ui/components/badge";
 import { Tooltip, TooltipContent, TooltipTrigger, TooltipProvider } from "@merge/ui/components/tooltip";
 import { Separator } from "@merge/ui/components/separator";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@merge/ui/components/dropdown-menu";
+import { DropdownMenuItem } from "@merge/ui/components/dropdown-menu";
 import { Info } from "@phosphor-icons/react";
 import { cloneDeep, sortBy } from "lodash-es";
 import { useMemo, useState } from "react";
@@ -61,14 +47,14 @@ import { AuthorizationSettings } from "./authorization/Settings";
 import { Credentials } from "./credentials/Credentials";
 import { Keys } from "./keys/Keys";
 import { SamlKeys } from "./keys/SamlKeys";
-import { ClientParams, ClientTab, toClient } from "./routes/Client";
+import { ClientParams } from "./routes/Client";
 import { toClientRole } from "./routes/ClientRole";
 import { toClients } from "./routes/Clients";
 import { toCreateRole } from "./routes/NewRole";
 import { ClientScopes } from "./scopes/ClientScopes";
 import { EvaluateScopes } from "./scopes/EvaluateScopes";
 import { ServiceAccount } from "./service-account/ServiceAccount";
-import { getProtocolName, isRealmClient } from "./utils";
+import { isRealmClient } from "./utils";
 import { UserEvents } from "../events/UserEvents";
 import { useIsAdminPermissionsClient } from "../utils/useIsAdminPermissionsClient";
 import { AdminEvents } from "../events/AdminEvents";
@@ -102,7 +88,9 @@ const ClientDetailHeader = ({
     });
 
     const badges = useMemo<ViewHeaderBadge[]>(() => {
-        const protocolName = getProtocolName(t, client.protocol ?? "openid-connect");
+        const protocol = client.protocol ?? "openid-connect";
+        const label =
+            protocol === "openid-connect" ? "OIDC" : protocol === "saml" ? "SAML" : protocol === "oid4vc" ? "OID4VC" : protocol ?? "";
 
         const text = client.bearerOnly ? (
             <TooltipProvider>
@@ -113,7 +101,9 @@ const ClientDetailHeader = ({
                             className="inline-flex items-center gap-1"
                         >
                             <Info className="size-4" />
-                            <Label>{protocolName}</Label>
+                            <Badge variant="secondary" className="max-w-full truncate font-medium rounded-sm bg-indigo-500/15 text-indigo-700 dark:bg-indigo-400/20 dark:text-indigo-300 border-0 h-auto py-1 px-2">
+                                {label}
+                            </Badge>
                         </span>
                     </TooltipTrigger>
                     <TooltipContent data-testid="bearer-only-explainer-tooltip">
@@ -122,7 +112,9 @@ const ClientDetailHeader = ({
                 </Tooltip>
             </TooltipProvider>
         ) : (
-            <Label>{protocolName}</Label>
+            <Badge variant="secondary" className="max-w-full truncate font-medium rounded-sm bg-indigo-500/15 text-indigo-700 dark:bg-indigo-400/20 dark:text-indigo-300 border-0 h-auto py-1 px-2">
+                {label}
+            </Badge>
         );
 
         return [{ text }];
@@ -191,7 +183,6 @@ export default function ClientDetails() {
     const { adminClient } = useAdminClient();
 
     const { t } = useTranslation();
-    const { addAlert, addError } = useAlerts();
     const { realm } = useRealm();
     const { hasAccess } = useAccess();
     const isFeatureEnabled = useIsFeatureEnabled();
@@ -242,14 +233,14 @@ export default function ClientDetails() {
         titleKey: "clientDeleteConfirmTitle",
         messageKey: "clientDeleteConfirm",
         continueButtonLabel: "delete",
-        continueButtonVariant: "danger",
+        continueButtonVariant: "destructive",
         onConfirm: async () => {
             try {
                 await adminClient.clients.del({ id: clientId });
-                addAlert(t("clientDeletedSuccess"), AlertVariant.success);
+                toast.success(t("clientDeletedSuccess"));
                 navigate(toClients({ realm }));
             } catch (error) {
-                addError("clientDeleteError", error);
+                toast.error(t("clientDeleteError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
             }
         }
     });
@@ -257,11 +248,10 @@ export default function ClientDetails() {
     const setupForm = (client: ClientRepresentation) => {
         convertToFormValues(client, form.setValue);
         if (client.attributes?.["acr.loa.map"]) {
-            form.setValue(
+            (form.setValue as (name: string, value: unknown) => void)(
                 convertAttributeNameToForm("attributes.acr.loa.map"),
-                // @ts-ignore
                 Object.entries(JSON.parse(client.attributes["acr.loa.map"])).flatMap(
-                    ([key, value]) => ({ key, value })
+                    ([key, value]: [string, unknown]) => ({ key, value })
                 )
             );
         }
@@ -325,9 +315,9 @@ export default function ClientDetails() {
             await adminClient.clients.update({ id: clientId }, newClient);
             setupForm(newClient);
             setClient(newClient);
-            addAlert(t(messageKey), AlertVariant.success);
+            toast.success(t(messageKey));
         } catch (error) {
-            addError("clientSaveError", error);
+            toast.error(t("clientSaveError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
         }
     };
 

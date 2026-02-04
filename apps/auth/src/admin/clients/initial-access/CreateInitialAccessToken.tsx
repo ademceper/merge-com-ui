@@ -1,18 +1,4 @@
-/**
- * WARNING: Before modifying this file, run the following command:
- *
- * $ npx keycloakify own --path "admin/clients/initial-access/CreateInitialAccessToken.tsx"
- *
- * This file is provided by @keycloakify/keycloak-admin-ui version 260502.0.0.
- * It was copied into your repository by the postinstall script: `keycloakify sync-extensions`.
- */
-
-/* eslint-disable */
-
-// @ts-nocheck
-
 import type ClientInitialAccessPresentation from "@keycloak/keycloak-admin-client/lib/defs/clientInitialAccessPresentation";
-import { AlertVariant } from "../../../shared/keycloak-ui-shared";
 import { Button } from "@merge/ui/components/button";
 import { Label } from "@merge/ui/components/label";
 import { useState } from "react";
@@ -21,7 +7,8 @@ import { useTranslation } from "react-i18next";
 import { Link, useNavigate } from "react-router-dom";
 import { NumberControl } from "../../../shared/keycloak-ui-shared";
 import { useAdminClient } from "../../admin-client";
-import { useAlerts } from "../../../shared/keycloak-ui-shared";
+import { getErrorDescription, getErrorMessage } from "../../../shared/keycloak-ui-shared";
+import { toast } from "@merge/ui/components/sonner";
 import { FormAccess } from "../../components/form/FormAccess";
 import { TimeSelectorControl } from "../../components/time-selector/TimeSelectorControl";
 import { ViewHeader } from "../../components/view-header/ViewHeader";
@@ -42,9 +29,7 @@ export default function CreateInitialAccessToken() {
     } = form;
 
     const { realm } = useRealm();
-    const { addAlert, addError } = useAlerts();
-
-    const navigate = useNavigate();
+const navigate = useNavigate();
     const [token, setToken] = useState("");
 
     const save = async (clientToken: ClientInitialAccessPresentation) => {
@@ -55,7 +40,7 @@ export default function CreateInitialAccessToken() {
             );
             setToken(access.token!);
         } catch (error) {
-            addError("tokenSaveError", error);
+            toast.error(t("tokenSaveError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
         }
     };
 
@@ -66,7 +51,7 @@ export default function CreateInitialAccessToken() {
                     token={token}
                     toggleDialog={() => {
                         setToken("");
-                        addAlert(t("tokenSaveSuccess"), AlertVariant.success);
+                        toast.success(t("tokenSaveSuccess"));
                         navigate(toClients({ realm, tab: "initial-access-token" }));
                     }}
                 />

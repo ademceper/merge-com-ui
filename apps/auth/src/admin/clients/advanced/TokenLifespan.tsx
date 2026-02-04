@@ -1,16 +1,3 @@
-/**
- * WARNING: Before modifying this file, run the following command:
- *
- * $ npx keycloakify own --path "admin/clients/advanced/TokenLifespan.tsx"
- *
- * This file is provided by @keycloakify/keycloak-admin-ui version 260502.0.0.
- * It was copied into your repository by the postinstall script: `keycloakify sync-extensions`.
- */
-
-/* eslint-disable */
-
-// @ts-nocheck
-
 import { Label } from "@merge/ui/components/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@merge/ui/components/select";
 import { useState } from "react";
@@ -35,7 +22,7 @@ const INHERITED_VALUE = "__inherited__";
 
 export const TokenLifespan = ({ id, name, defaultValue, units }: TokenLifespanProps) => {
     const { t } = useTranslation();
-    const [open, setOpen] = useState(false);
+    const [_open, _setOpen] = useState(false);
 
     const [focused, setFocused] = useState(false);
     const onFocus = () => setFocused(true);
@@ -93,7 +80,7 @@ export const TokenLifespan = ({ id, name, defaultValue, units }: TokenLifespanPr
                                     onFocus={onFocus}
                                     onBlur={onBlur}
                                     min={1}
-                                    isDisabled={!isExpireSet(field.value)}
+                                    disabled={!isExpireSet(field.value)}
                                 />
                             </div>
                         )}

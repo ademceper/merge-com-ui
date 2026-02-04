@@ -1,16 +1,3 @@
-/**
- * WARNING: Before modifying this file, run the following command:
- *
- * $ npx keycloakify own --path "admin/authentication/policies/PolicyRow.tsx"
- *
- * This file is provided by @keycloakify/keycloak-admin-ui version 260502.0.0.
- * It was copied into your repository by the postinstall script: `keycloakify sync-extensions`.
- */
-
-/* eslint-disable */
-
-// @ts-nocheck
-
 import type PasswordPolicyTypeRepresentation from "@keycloak/keycloak-admin-client/lib/defs/passwordPolicyTypeRepresentation";
 import { Button } from "@merge/ui/components/button";
 import { Input } from "@merge/ui/components/input";
@@ -20,7 +7,6 @@ import { MinusCircle } from "@phosphor-icons/react";
 import { Controller, useFormContext } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { FormErrorText, HelpItem } from "../../../shared/keycloak-ui-shared";
-
 
 type PolicyRowProps = {
     policy: PasswordPolicyTypeRepresentation;

@@ -1,4 +1,7 @@
 import { nextJsConfig } from "@merge/lint-cfg/next-js"
 
 /** @type {import("eslint").Linter.Config} */
-export default nextJsConfig
+export default [
+  { ignores: [".next/**", "node_modules/**"] },
+  ...nextJsConfig,
+]

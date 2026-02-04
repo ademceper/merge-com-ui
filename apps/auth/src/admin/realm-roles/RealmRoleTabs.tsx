@@ -1,19 +1,6 @@
-/**
- * WARNING: Before modifying this file, run the following command:
- *
- * $ npx keycloakify own --path "admin/realm-roles/RealmRoleTabs.tsx"
- *
- * This file is provided by @keycloakify/keycloak-admin-ui version 260502.0.0.
- * It was copied into your repository by the postinstall script: `keycloakify sync-extensions`.
- */
-
-/* eslint-disable */
-
-// @ts-nocheck
-
 import type RoleRepresentation from "@keycloak/keycloak-admin-client/lib/defs/roleRepresentation";
-import { KeycloakSpinner, useAlerts, useFetch } from "../../shared/keycloak-ui-shared";
-import { AlertVariant } from "../../shared/keycloak-ui-shared";
+import { getErrorDescription, getErrorMessage, KeycloakSpinner, useFetch } from "../../shared/keycloak-ui-shared";
+import { toast } from "@merge/ui/components/sonner";
 import { DropdownMenuItem } from "@merge/ui/components/dropdown-menu";
 import { useState } from "react";
 import { FormProvider, SubmitHandler, useForm, useWatch } from "react-hook-form";
@@ -68,10 +55,7 @@ export default function RealmRoleTabs() {
     const [attributes, setAttributes] = useState<KeyValueType[] | undefined>();
 
     const refresh = () => setKey(key + 1);
-
-    const { addAlert, addError } = useAlerts();
-
-    const { hasAccess } = useAccess();
+const { hasAccess } = useAccess();
     const canViewPermissionsTab = hasAccess("query-clients", "manage-authorization");
 
     const [canManageClientRole, setCanManageClientRole] = useState(false);
@@ -137,9 +121,9 @@ export default function RealmRoleTabs() {
             }
 
             setAttributes(attributes);
-            addAlert(t("roleSaveSuccess"), AlertVariant.success);
+            toast.success(t("roleSaveSuccess"));
         } catch (error) {
-            addError("roleSaveError", error);
+            toast.error(t("roleSaveError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
         }
     };
 
@@ -200,10 +184,10 @@ export default function RealmRoleTabs() {
                         roleName: roleName!
                     });
                 }
-                addAlert(t("roleDeletedSuccess"), AlertVariant.success);
+                toast.success(t("roleDeletedSuccess"));
                 navigate(toOverview());
             } catch (error) {
-                addError("roleDeleteError", error);
+                toast.error(t("roleDeleteError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
             }
         }
     });
@@ -216,9 +200,9 @@ export default function RealmRoleTabs() {
             );
             refresh();
             navigate(toTab("associated-roles"));
-            addAlert(t("addAssociatedRolesSuccess"), AlertVariant.success);
+            toast.success(t("addAssociatedRolesSuccess"));
         } catch (error) {
-            addError("addAssociatedRolesError", error);
+            toast.error(t("addAssociatedRolesError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
         }
     };
 

@@ -1,18 +1,6 @@
-/**
- * WARNING: Before modifying this file, run the following command:
- *
- * $ npx keycloakify own --path "admin/realm-settings/user-profile/AttributesGroupForm.tsx"
- *
- * This file is provided by @keycloakify/keycloak-admin-ui version 260502.0.0.
- * It was copied into your repository by the postinstall script: `keycloakify sync-extensions`.
- */
-
-/* eslint-disable */
-
-// @ts-nocheck
-
 import type { UserProfileGroup } from "@keycloak/keycloak-admin-client/lib/defs/userProfileMetadata";
-import { HelpItem, TextControl, useAlerts } from "../../../shared/keycloak-ui-shared";
+import { getErrorDescription, getErrorMessage, HelpItem, TextControl } from "../../../shared/keycloak-ui-shared";
+import { toast } from "@merge/ui/components/sonner";
 import { Button } from "@merge/ui/components/button";
 import { Label } from "@merge/ui/components/label";
 import { useEffect, useMemo } from "react";
@@ -70,7 +58,6 @@ export default function AttributesGroupForm() {
     const navigate = useNavigate();
     const params = useParams<EditAttributesGroupParams>();
     const form = useForm<FormFields>({ defaultValues });
-    const { addError } = useAlerts();
     const editMode = params.name ? true : false;
 
     const matchingGroup = useMemo(
@@ -120,7 +107,7 @@ export default function AttributesGroupForm() {
                         translationsData: { translation }
                     });
                 } catch (error) {
-                    addError(t("errorSavingTranslations"), error);
+                    toast.error(t("errorSavingTranslations", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
                 }
             }
             navigate(toUserProfile({ realm: realmName, tab: "attributes-group" }));

@@ -1,16 +1,3 @@
-/**
- * WARNING: Before modifying this file, run the following command:
- *
- * $ npx keycloakify own --path "admin/user-federation/ldap/LdapSettingsConnection.tsx"
- *
- * This file is provided by @keycloakify/keycloak-admin-ui version 260502.0.0.
- * It was copied into your repository by the postinstall script: `keycloakify sync-extensions`.
- */
-
-/* eslint-disable */
-
-// @ts-nocheck
-
 import type TestLdapConnectionRepresentation from "@keycloak/keycloak-admin-client/lib/defs/testLdapConnection";
 import {
     HelpItem,
@@ -20,7 +7,6 @@ import {
     SelectVariant,
     TextControl
 } from "../../../shared/keycloak-ui-shared";
-import { AlertVariant } from "../../../shared/keycloak-ui-shared";
 import { Button } from "@merge/ui/components/button";
 import { Label } from "@merge/ui/components/label";
 import { Switch } from "@merge/ui/components/switch";
@@ -30,7 +16,8 @@ import { useState } from "react";
 import { Controller, FormProvider, UseFormReturn, useWatch } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { useAdminClient } from "../../admin-client";
-import { useAlerts } from "../../../shared/keycloak-ui-shared";
+import { getErrorDescription, getErrorMessage } from "../../../shared/keycloak-ui-shared";
+import { toast } from "@merge/ui/components/sonner";
 import { FormAccess } from "../../components/form/FormAccess";
 import { WizardSectionHeader } from "../../components/wizard-section-header/WizardSectionHeader";
 import { useRealm } from "../../context/realm-context/RealmContext";
@@ -75,8 +62,7 @@ export const LdapSettingsConnection = ({
 
     const { t } = useTranslation();
     const { realm } = useRealm();
-    const { addAlert, addError } = useAlerts();
-    const edit = !!id;
+const edit = !!id;
 
     const testLdap = async (testType: TestTypes) => {
         try {
@@ -85,9 +71,9 @@ export const LdapSettingsConnection = ({
                 { realm },
                 { ...settings, action: testType, componentId: id }
             );
-            addAlert(t("testSuccess"), AlertVariant.success);
+            toast.success(t("testSuccess"));
         } catch (error) {
-            addError("testError", error);
+            toast.error(t("testError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
         }
     };
 

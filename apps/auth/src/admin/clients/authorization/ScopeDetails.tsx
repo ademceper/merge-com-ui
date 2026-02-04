@@ -1,19 +1,6 @@
-/**
- * WARNING: Before modifying this file, run the following command:
- *
- * $ npx keycloakify own --path "admin/clients/authorization/ScopeDetails.tsx"
- *
- * This file is provided by @keycloakify/keycloak-admin-ui version 260502.0.0.
- * It was copied into your repository by the postinstall script: `keycloakify sync-extensions`.
- */
-
-/* eslint-disable */
-
-// @ts-nocheck
-
 import type ScopeRepresentation from "@keycloak/keycloak-admin-client/lib/defs/scopeRepresentation";
-import { TextControl, useAlerts, useFetch } from "../../../shared/keycloak-ui-shared";
-import { AlertVariant } from "../../../shared/keycloak-ui-shared";
+import { getErrorDescription, getErrorMessage, TextControl, useFetch } from "../../../shared/keycloak-ui-shared";
+import { toast } from "@merge/ui/components/sonner";
 import { Button } from "@merge/ui/components/button";
 import { DropdownMenuItem } from "@merge/ui/components/dropdown-menu";
 import { useState } from "react";
@@ -37,8 +24,7 @@ export default function ScopeDetails() {
     const { t } = useTranslation();
     const { id, scopeId, realm } = useParams<ScopeDetailsParams>();
     const navigate = useNavigate();
-    const { addAlert, addError } = useAlerts();
-    const [deleteDialog, toggleDeleteDialog] = useToggle();
+const [deleteDialog, toggleDeleteDialog] = useToggle();
     const [scope, setScope] = useState<ScopeRepresentation>();
     const form = useForm<FormFields>({
         mode: "onChange"
@@ -84,12 +70,11 @@ export default function ScopeDetails() {
                 );
                 navigate(toAuthorizationTab({ realm, clientId: id, tab: "scopes" }));
             }
-            addAlert(
-                t((scopeId ? "update" : "create") + "ScopeSuccess"),
-                AlertVariant.success
+            toast.success(
+                t((scopeId ? "update" : "create") + "ScopeSuccess")
             );
         } catch (error) {
-            addError("scopeSaveError", error);
+            toast.error(t("scopeSaveError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
         }
     };
 

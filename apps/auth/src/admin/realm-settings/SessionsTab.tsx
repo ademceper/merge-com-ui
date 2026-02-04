@@ -1,16 +1,3 @@
-/**
- * WARNING: Before modifying this file, run the following command:
- *
- * $ npx keycloakify own --path "admin/realm-settings/SessionsTab.tsx"
- *
- * This file is provided by @keycloakify/keycloak-admin-ui version 260502.0.0.
- * It was copied into your repository by the postinstall script: `keycloakify sync-extensions`.
- */
-
-/* eslint-disable */
-
-// @ts-nocheck
-
 import type RealmRepresentation from "@keycloak/keycloak-admin-client/lib/defs/realmRepresentation";
 import { Button } from "@merge/ui/components/button";
 import { Label } from "@merge/ui/components/label";
@@ -18,9 +5,10 @@ import { Switch } from "@merge/ui/components/switch";
 import { Controller, useFormContext, useWatch } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { FormPanel, HelpItem } from "../../shared/keycloak-ui-shared";
+import { ActionGroup } from "../components/form/ActionGroup";
 import { FormAccess } from "../components/form/FormAccess";
+import { FormGroup } from "../components/form/FormGroup";
 import { TimeSelector } from "../components/time-selector/TimeSelector";
-
 
 type RealmSettingsSessionsTabProps = {
     realm: RealmRepresentation;
@@ -289,10 +277,8 @@ export const RealmSettingsSessionsTab = ({
                                     id="kc-offline-session-max"
                                     data-testid="offline-session-max-switch"
                                     aria-label={t("offlineSessionMaxLimited")}
-                                    label={t("enabled")}
-                                    labelOff={t("disabled")}
-                                    isChecked={field.value}
-                                    onChange={field.onChange}
+                                    checked={field.value}
+                                    onCheckedChange={field.onChange}
                                 />
                             )}
                         />
@@ -413,10 +399,10 @@ export const RealmSettingsSessionsTab = ({
                     </FormGroup>
                     <ActionGroup>
                         <Button
-                            variant="primary"
+                            variant="default"
                             type="submit"
                             data-testid="sessions-tab-save"
-                            isDisabled={!formState.isDirty}
+                            disabled={!formState.isDirty}
                         >
                             {t("save")}
                         </Button>

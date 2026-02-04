@@ -1,20 +1,8 @@
-/**
- * WARNING: Before modifying this file, run the following command:
- *
- * $ npx keycloakify own --path "admin/authentication/FlowDetails.tsx"
- *
- * This file is provided by @keycloakify/keycloak-admin-ui version 260502.0.0.
- * It was copied into your repository by the postinstall script: `keycloakify sync-extensions`.
- */
-
-/* eslint-disable */
-
-// @ts-nocheck
-
 import AuthenticationFlowRepresentation from "@keycloak/keycloak-admin-client/lib/defs/authenticationFlowRepresentation";
 import type { AuthenticationProviderRepresentation } from "@keycloak/keycloak-admin-client/lib/defs/authenticatorConfigRepresentation";
 import AuthenticatorConfigRepresentation from "@keycloak/keycloak-admin-client/lib/defs/authenticatorConfigRepresentation";
-import { AlertVariant, useAlerts, useFetch } from "../../shared/keycloak-ui-shared";
+import { getErrorDescription, getErrorMessage, useFetch } from "../../shared/keycloak-ui-shared";
+import { toast } from "@merge/ui/components/sonner";
 import { Button } from "@merge/ui/components/button";
 import { Label } from "@merge/ui/components/label";
 import {
@@ -61,8 +49,7 @@ export default function FlowDetails() {
 
     const { t } = useTranslation();
     const { realm } = useRealm();
-    const { addAlert, addError } = useAlerts();
-    const { id, usedBy, builtIn } = useParams<FlowParams>();
+const { id, usedBy, builtIn } = useParams<FlowParams>();
     const navigate = useNavigate();
     const [key, setKey] = useState(0);
     const refresh = () => setKey(new Date().getTime());
@@ -70,7 +57,7 @@ export default function FlowDetails() {
     const [tableView, setTableView] = useState(true);
     const [flow, setFlow] = useState<AuthenticationFlowRepresentation>();
     const [executionList, setExecutionList] = useState<ExecutionList>();
-    const [liveText, setLiveText] = useState("");
+    const [liveText, _setLiveText] = useState("");
 
     const [showAddExecutionDialog, setShowAddExecutionDialog] = useState<boolean>();
     const [showAddSubFlowDialog, setShowSubFlowDialog] = useState<boolean>();
@@ -170,14 +157,13 @@ export default function FlowDetails() {
                 }
             }
             refresh();
-            addAlert(t("updateFlowSuccess"), AlertVariant.success);
+            toast.success(t("updateFlowSuccess"));
         } catch (error: any) {
-            addError("updateFlowError", error);
+            toast.error(t("updateFlowError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
         }
     };
 
     const update = async (execution: ExpandableExecution) => {
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         const { executionList, isCollapsed, ...ex } = execution;
         try {
             await adminClient.authenticationManagement.updateExecution(
@@ -185,9 +171,9 @@ export default function FlowDetails() {
                 ex
             );
             refresh();
-            addAlert(t("updateFlowSuccess"), AlertVariant.success);
+            toast.success(t("updateFlowSuccess"));
         } catch (error: any) {
-            addError("updateFlowError", error);
+            toast.error(t("updateFlowError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
         }
     };
 
@@ -201,9 +187,9 @@ export default function FlowDetails() {
                 provider: type.id!
             });
             refresh();
-            addAlert(t("updateFlowSuccess"), AlertVariant.success);
+            toast.success(t("updateFlowSuccess"));
         } catch (error) {
-            addError("updateFlowError", error);
+            toast.error(t("updateFlowError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
         }
     };
 
@@ -220,9 +206,9 @@ export default function FlowDetails() {
                 type
             });
             refresh();
-            addAlert(t("updateFlowSuccess"), AlertVariant.success);
+            toast.success(t("updateFlowSuccess"));
         } catch (error) {
-            addError("updateFlowError", error);
+            toast.error(t("updateFlowError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
         }
     };
 
@@ -243,10 +229,10 @@ export default function FlowDetails() {
                 await adminClient.authenticationManagement.delExecution({
                     id: selectedExecution?.id!
                 });
-                addAlert(t("deleteExecutionSuccess"), AlertVariant.success);
+                toast.success(t("deleteExecutionSuccess"));
                 refresh();
             } catch (error) {
-                addError("deleteExecutionError", error);
+                toast.error(t("deleteExecutionError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
             }
         }
     });
@@ -267,9 +253,9 @@ export default function FlowDetails() {
                     flowId: flow!.id!
                 });
                 navigate(toAuthentication({ realm }));
-                addAlert(t("deleteFlowSuccess"), AlertVariant.success);
+                toast.success(t("deleteFlowSuccess"));
             } catch (error) {
-                addError("deleteFlowError", error);
+                toast.error(t("deleteFlowError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
             }
         }
     });

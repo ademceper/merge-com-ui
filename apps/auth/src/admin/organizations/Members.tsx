@@ -1,22 +1,7 @@
-/**
- * WARNING: Before modifying this file, run the following command:
- *
- * $ npx keycloakify own --path "admin/organizations/Members.tsx"
- *
- * This file is provided by @keycloakify/keycloak-admin-ui version 260502.0.0.
- * It was copied into your repository by the postinstall script: `keycloakify sync-extensions`.
- */
-
-/* eslint-disable */
-
-// @ts-nocheck
-
 import UserRepresentation from "@keycloak/keycloak-admin-client/lib/defs/userRepresentation";
-import {
-    KeycloakDataTable,
-    ListEmptyState,
-    useAlerts
-} from "../../shared/keycloak-ui-shared";
+import { getErrorDescription, getErrorMessage, KeycloakDataTable,
+    ListEmptyState } from "../../shared/keycloak-ui-shared";
+import { toast } from "@merge/ui/components/sonner";
 import { Button } from "@merge/ui/components/button";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -47,8 +32,7 @@ export const Members = () => {
     const { t } = useTranslation();
     const { adminClient } = useAdminClient();
     const { id: orgId } = useParams<EditOrganizationParams>();
-    const { addAlert, addError } = useAlerts();
-    const [key, setKey] = useState(0);
+const [key, setKey] = useState(0);
     const refresh = () => setKey(key + 1);
     const [openAddMembers, toggleAddMembers] = useToggle();
     const [selectedMembers, setSelectedMembers] = useState<UserRepresentation[]>([]);
@@ -96,7 +80,7 @@ export const Members = () => {
 
             return memberships;
         } catch (error) {
-            addError("organizationsMembersListError", error);
+            toast.error(t("organizationsMembersListError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
             return [];
         }
     };
@@ -126,9 +110,9 @@ export const Members = () => {
                     })
                 )
             );
-            addAlert(t("organizationUsersLeft", { count: selectedMembers.length }));
+            toast.success(t("organizationUsersLeft", { count: selectedMembers.length }));
         } catch (error) {
-            addError("organizationUsersLeftError", error);
+            toast.error(t("organizationUsersLeftError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
         }
 
         refresh();
@@ -149,13 +133,11 @@ export const Members = () => {
                                     })
                                 )
                             );
-                            addAlert(
-                                t("organizationUsersAdded", {
+                            toast.success(t("organizationUsersAdded", {
                                     count: selectedRows.length
-                                })
-                            );
+                                }));
                         } catch (error) {
-                            addError("organizationUsersAddedError", error);
+                            toast.error(t("organizationUsersAddedError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
                         }
                     }}
                     onClose={() => {

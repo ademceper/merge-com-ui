@@ -7,8 +7,8 @@
     "dev": "bun next dev --turbopack",
     "build": "bun next build",
     "start": "bun next start",
-    "lint": "bun next lint",
-    "lint:fix": "bun next lint --fix",
+    "lint": "eslint . --max-warnings 0",
+    "lint:fix": "eslint . --fix",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {

@@ -1,22 +1,9 @@
-/**
- * WARNING: Before modifying this file, run the following command:
- *
- * $ npx keycloakify own --path "admin/user-federation/CreateUserFederationLdapSettings.tsx"
- *
- * This file is provided by @keycloakify/keycloak-admin-ui version 260502.0.0.
- * It was copied into your repository by the postinstall script: `keycloakify sync-extensions`.
- */
-
-/* eslint-disable */
-
-// @ts-nocheck
-
-import { AlertVariant } from "../../shared/keycloak-ui-shared";
 import { FormProvider, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 import { useAdminClient } from "../admin-client";
-import { useAlerts } from "../../shared/keycloak-ui-shared";
+import { getErrorDescription, getErrorMessage } from "../../shared/keycloak-ui-shared";
+import { toast } from "@merge/ui/components/sonner";
 import { useRealm } from "../context/realm-context/RealmContext";
 import {
     LdapComponentRepresentation,
@@ -33,15 +20,13 @@ export default function CreateUserFederationLdapSettings() {
     const form = useForm<LdapComponentRepresentation>({ mode: "onChange" });
     const navigate = useNavigate();
     const { realm } = useRealm();
-    const { addAlert, addError } = useAlerts();
-
-    const onSubmit = async (formData: LdapComponentRepresentation) => {
+const onSubmit = async (formData: LdapComponentRepresentation) => {
         try {
             await adminClient.components.create(serializeFormData(formData));
-            addAlert(t("createUserProviderSuccess"), AlertVariant.success);
+            toast.success(t("createUserProviderSuccess"));
             navigate(toUserFederation({ realm }));
         } catch (error) {
-            addError("createUserProviderError", error);
+            toast.error(t("createUserProviderError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
         }
     };
 

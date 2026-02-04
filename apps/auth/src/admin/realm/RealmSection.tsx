@@ -1,19 +1,7 @@
-/**
- * WARNING: Before modifying this file, run the following command:
- *
- * $ npx keycloakify own --path "admin/realm/RealmSection.tsx"
- *
- * This file is provided by @keycloakify/keycloak-admin-ui version 260502.0.0.
- * It was copied into your repository by the postinstall script: `keycloakify sync-extensions`.
- */
-
-/* eslint-disable */
-
-// @ts-nocheck
-
 import { NetworkError } from "@keycloak/keycloak-admin-client";
-import { KeycloakDataTable } from "../../shared/keycloak-ui-shared";
-import { useAlerts, AlertVariant } from "../../shared/keycloak-ui-shared";
+import { KeycloakDataTable, cellWidth } from "../../shared/keycloak-ui-shared";
+import { getErrorDescription, getErrorMessage } from "../../shared/keycloak-ui-shared";
+import { toast } from "@merge/ui/components/sonner";
 import { Badge } from "@merge/ui/components/badge";
 import { Button } from "@merge/ui/components/button";
 import {
@@ -24,7 +12,6 @@ import {
 } from "@merge/ui/components/dropdown-menu";
 import { Popover, PopoverContent, PopoverTrigger } from "@merge/ui/components/popover";
 import { DotsThreeVertical } from "@phosphor-icons/react";
-const cellWidth = (_width: number) => (value: any) => value;
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Link, useNavigate } from "react-router-dom";
@@ -107,9 +94,7 @@ export default function RealmSection() {
     const { whoAmI } = useWhoAmI();
     const { realm } = useRealm();
     const { adminClient } = useAdminClient();
-    const { addAlert, addError } = useAlerts();
-
-    const [selected, setSelected] = useState<RealmRow[]>([]);
+const [selected, setSelected] = useState<RealmRow[]>([]);
     const [openNewRealm, setOpenNewRealm] = useState(false);
     const [key, setKey] = useState(0);
     const refresh = () => setKey(key + 1);
@@ -141,7 +126,7 @@ export default function RealmSection() {
         onConfirm: async () => {
             try {
                 if (selected.filter(({ name }) => name === "master").length > 0) {
-                    addAlert(t("cantDeleteMasterRealm"), AlertVariant.warning);
+                    toast.warning(t("cantDeleteMasterRealm"));
                 }
                 const filtered = selected.filter(({ name }) => name !== "master");
                 if (filtered.length === 0) return;
@@ -150,14 +135,14 @@ export default function RealmSection() {
                         adminClient.realms.del({ realm: realmName })
                     )
                 );
-                addAlert(t("deletedSuccessRealmSetting"));
+                toast.success(t("deletedSuccessRealmSetting"));
                 if (selected.filter(({ name }) => name === realm).length > 0) {
                     navigate(toRealm({ realm: "master" }));
                 }
                 refresh();
                 setSelected([]);
             } catch (error) {
-                addError("deleteError", error);
+                toast.error(t("deleteError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
             }
         }
     });

@@ -1,16 +1,3 @@
-/**
- * WARNING: Before modifying this file, run the following command:
- *
- * $ npx keycloakify own --path "admin/components/users/UserDataTableToolbarItems.tsx"
- *
- * This file is provided by @keycloakify/keycloak-admin-ui version 260502.0.0.
- * It was copied into your repository by the postinstall script: `keycloakify sync-extensions`.
- */
-
-/* eslint-disable */
-
-// @ts-nocheck
-
 import type RealmRepresentation from "@keycloak/keycloak-admin-client/lib/defs/realmRepresentation";
 import type { UserProfileConfig } from "@keycloak/keycloak-admin-client/lib/defs/userProfileMetadata";
 import { Button } from "@merge/ui/components/button";
@@ -148,14 +135,15 @@ export function UserDataTableToolbarItems({
                     />
                 </DropdownPanel>
                 <Button
-                    icon={<ArrowRight className="size-4" />}
                     variant="outline"
                     onClick={() => {
                         searchUserWithAttributes();
                         setSearchDropdownOpen(false);
                     }}
                     aria-label={t("searchAttributes")}
-                />
+                >
+                    <ArrowRight className="size-4" />
+                </Button>
             </>
         );
     };

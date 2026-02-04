@@ -1,27 +1,11 @@
-/**
- * WARNING: Before modifying this file, run the following command:
- *
- * $ npx keycloakify own --path "admin/realm-settings/ExecutorForm.tsx"
- *
- * This file is provided by @keycloakify/keycloak-admin-ui version 260502.0.0.
- * It was copied into your repository by the postinstall script: `keycloakify sync-extensions`.
- */
-
-/* eslint-disable */
-
-// @ts-nocheck
-
 import type { ConfigPropertyRepresentation } from "@keycloak/keycloak-admin-client/lib/defs/authenticatorConfigInfoRepresentation";
 import type ClientProfileRepresentation from "@keycloak/keycloak-admin-client/lib/defs/clientProfileRepresentation";
 import type ComponentTypeRepresentation from "@keycloak/keycloak-admin-client/lib/defs/componentTypeRepresentation";
-import {
-    HelpItem,
+import { getErrorDescription, getErrorMessage, HelpItem,
     KeycloakSelect,
     SelectVariant,
-    useAlerts,
-    useFetch
-} from "../../shared/keycloak-ui-shared";
-import { AlertVariant } from "../../shared/keycloak-ui-shared";
+    useFetch } from "../../shared/keycloak-ui-shared";
+import { toast } from "@merge/ui/components/sonner";
 import { Button } from "@merge/ui/components/button";
 import { Label } from "@merge/ui/components/label";
 import { SelectOption } from "../../shared/keycloak-ui-shared";
@@ -55,8 +39,7 @@ export default function ExecutorForm() {
     const navigate = useNavigate();
     const { realm, profileName } = useParams<ClientProfileParams>();
     const { executorName } = useParams<ExecutorParams>();
-    const { addAlert, addError } = useAlerts();
-    const [selectExecutorTypeOpen, setSelectExecutorTypeOpen] = useState(false);
+const [selectExecutorTypeOpen, setSelectExecutorTypeOpen] = useState(false);
     const serverInfo = useServerInfo();
     const executorTypes =
         serverInfo.componentTypes?.[
@@ -129,14 +112,13 @@ export default function ExecutorForm() {
                 profiles: updatedProfiles,
                 globalProfiles: globalProfiles
             });
-            addAlert(
-                editMode ? t("updateExecutorSuccess") : t("addExecutorSuccess"),
-                AlertVariant.success
+            toast.success(
+                editMode ? t("updateExecutorSuccess") : t("addExecutorSuccess")
             );
 
             navigate(toClientProfile({ realm, profileName }));
         } catch (error) {
-            addError(editMode ? "updateExecutorError" : "addExecutorError", error);
+            toast.error(t(editMode ? "updateExecutorError" : "addExecutorError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
         }
     };
 
@@ -216,10 +198,8 @@ export default function ExecutorForm() {
                                     {executorTypes?.map(option => (
                                         <SelectOption
                                             data-testid={option.id}
-                                            selected={option.id === field.value}
                                             key={option.id}
                                             value={option.id}
-                                            description={option.helpText}
                                         >
                                             {option.id}
                                         </SelectOption>
