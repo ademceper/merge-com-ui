@@ -1,6 +1,5 @@
 import type RealmRepresentation from "@keycloak/keycloak-admin-client/lib/defs/realmRepresentation";
-import { getErrorDescription, getErrorMessage, FormSubmitButton,
-    TextControl } from "../../../shared/keycloak-ui-shared";
+import { getErrorDescription, getErrorMessage, TextControl } from "../../../shared/keycloak-ui-shared";
 import { toast } from "@merge/ui/components/sonner";
 import { Button } from "@merge/ui/components/button";
 import {
@@ -96,15 +95,14 @@ const [realm, setRealm] = useState<RealmRepresentation>();
                 </FormAccess>
             </FormProvider>
                 <DialogFooter>
-                    <FormSubmitButton
+                    <Button
+                        type="submit"
                         form="realm-form"
                         data-testid="create"
-                        formState={formState}
-                        allowInvalid
-                        allowNonDirty
+                        disabled={formState.isLoading || formState.isValidating || formState.isSubmitting}
                     >
                         {t("create")}
-                    </FormSubmitButton>
+                    </Button>
                     <Button variant="link" onClick={onClose} data-testid="cancel">
                         {t("cancel")}
                     </Button>

@@ -1,7 +1,5 @@
 import type GroupRepresentation from "@keycloak/keycloak-admin-client/lib/defs/groupRepresentation";
-import { getErrorDescription, getErrorMessage, FormSubmitButton,
-    TextControl,
-    useFetch } from "../../shared/keycloak-ui-shared";
+import { getErrorDescription, getErrorMessage, TextControl, useFetch } from "../../shared/keycloak-ui-shared";
 import { toast } from "@merge/ui/components/sonner";
 import { Button } from "@merge/ui/components/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@merge/ui/components/dialog";
@@ -275,16 +273,15 @@ const isFeatureEnabled = useIsFeatureEnabled();
                     </form>
                 </FormProvider>
                 <DialogFooter>
-                    <FormSubmitButton
-                        formState={formState}
+                    <Button
+                        type="submit"
+                        form="group-form"
                         data-testid={`${rename ? "rename" : duplicateId ? "duplicate" : "create"}Group`}
                         key="confirm"
-                        form="group-form"
-                        allowInvalid
-                        allowNonDirty
+                        disabled={formState.isLoading || formState.isValidating || formState.isSubmitting}
                     >
                         {t(rename ? "edit" : duplicateId ? "duplicate" : "create")}
-                    </FormSubmitButton>
+                    </Button>
                     <Button
                         id="modal-cancel"
                         data-testid="cancel"

@@ -1,5 +1,5 @@
 import type AuthenticationFlowRepresentation from "@keycloak/keycloak-admin-client/lib/defs/authenticationFlowRepresentation";
-import { FormSubmitButton, SelectControl } from "../../../shared/keycloak-ui-shared";
+import { SelectControl } from "../../../shared/keycloak-ui-shared";
 import { toast } from "@merge/ui/components/sonner";
 import { Button } from "@merge/ui/components/button";
 import { FormProvider, useForm } from "react-hook-form";
@@ -67,14 +67,13 @@ export default function CreateFlow() {
                             }))}
                         />
                         <div className="flex gap-2">
-                            <FormSubmitButton
-                                formState={formState}
+                            <Button
+                                type="submit"
                                 data-testid="create"
-                                allowInvalid
-                                allowNonDirty
+                                disabled={formState.isLoading || formState.isValidating || formState.isSubmitting}
                             >
                                 {t("create")}
-                            </FormSubmitButton>
+                            </Button>
                             <Button asChild data-testid="cancel" variant="link">
                                 <Link to={toAuthentication({ realm })}>{t("cancel")}</Link>
                             </Button>

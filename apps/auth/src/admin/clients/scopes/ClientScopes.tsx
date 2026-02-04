@@ -14,10 +14,13 @@ import {
     DropdownMenuTrigger,
 } from "@merge/ui/components/dropdown-menu";
 import { DotsThreeVertical } from "@phosphor-icons/react";
+import type { ComponentType } from "react";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
-import { Link } from "react-router-dom";
+import { Link, type LinkProps } from "react-router-dom";
 import { useAdminClient } from "../../admin-client";
+
+const RouterLink = Link as ComponentType<LinkProps>;
 import { ChangeTypeDropdown } from "../../client-scopes/ChangeTypeDropdown";
 import {
     AllClientScopeType,
@@ -228,12 +231,12 @@ const { realm } = useRealm();
             cell: ({ row }) => {
                 if (isDedicatedRow(row.original)) {
                     return (
-                        <Link
+                        <RouterLink
                             className="text-primary hover:underline"
                             to={toDedicatedScope({ realm, clientId })}
                         >
                             {row.original.name}
-                        </Link>
+                        </RouterLink>
                     );
                 }
                 return row.original.name!;

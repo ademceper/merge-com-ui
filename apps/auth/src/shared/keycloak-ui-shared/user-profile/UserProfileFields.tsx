@@ -3,6 +3,8 @@ import {
     UserProfileAttributeMetadata,
     UserProfileMetadata
 } from "@keycloak/keycloak-admin-client/lib/defs/userProfileMetadata";
+import { Input } from "@merge/ui/components/input";
+import { Textarea } from "@merge/ui/components/textarea";
 import { TFunction } from "i18next";
 import { ReactNode, useMemo, type JSX } from "react";
 import { FieldPath, UseFormReturn } from "react-hook-form";
@@ -12,9 +14,60 @@ import { LocaleSelector } from "./LocaleSelector";
 import { MultiInputComponent } from "./MultiInputComponent";
 import { OptionComponent } from "./OptionsComponent";
 import { SelectComponent } from "./SelectComponent";
-import { TextAreaComponent } from "./TextAreaComponent";
-import { TextComponent } from "./TextComponent";
-import { UserFormFields, fieldName, isRootAttribute, label } from "./utils";
+import { UserProfileGroup } from "./UserProfileGroup";
+import { UserFormFields, fieldName, isRootAttribute, isRequiredAttribute, label } from "./utils";
+
+type HtmlInputType = "text" | "email" | "tel" | "url" | "number" | "range" | "datetime-local" | "date" | "month" | "time";
+
+function TextFieldComponent(props: UserProfileFieldProps) {
+    const { form, inputType, attribute } = props;
+    const type: HtmlInputType = inputType.startsWith("html")
+        ? (inputType.substring("html".length + 2) as HtmlInputType)
+        : "text";
+
+    return (
+        <UserProfileGroup {...props}>
+            <Input
+                id={attribute.name}
+                data-testid={attribute.name}
+                type={type}
+                placeholder={
+                    attribute.readOnly
+                        ? ""
+                        : label(
+                              props.t,
+                              attribute.annotations?.["inputTypePlaceholder"] as string,
+                              "",
+                              attribute.annotations?.["inputOptionLabelsI18nPrefix"] as string
+                          )
+                }
+                disabled={attribute.readOnly}
+                defaultValue={attribute.defaultValue}
+                {...form.register(fieldName(attribute.name))}
+            />
+        </UserProfileGroup>
+    );
+}
+
+function TextAreaFieldComponent(props: UserProfileFieldProps) {
+    const { form, attribute } = props;
+    const isRequired = isRequiredAttribute(attribute);
+
+    return (
+        <UserProfileGroup {...props}>
+            <Textarea
+                id={attribute.name}
+                data-testid={attribute.name}
+                cols={attribute.annotations?.["inputTypeCols"] as number}
+                rows={attribute.annotations?.["inputTypeRows"] as number}
+                disabled={attribute.readOnly}
+                required={isRequired}
+                defaultValue={attribute.defaultValue}
+                {...form.register(fieldName(attribute.name))}
+            />
+        </UserProfileGroup>
+    );
+}
 
 export type UserProfileError = {
     responseData: { errors?: { errorMessage: string }[] };
@@ -55,21 +108,21 @@ export type OptionLabel = Record<string, string> | undefined;
 export const FIELDS: {
     [type in InputType]: (props: UserProfileFieldProps) => JSX.Element;
 } = {
-    text: TextComponent,
-    textarea: TextAreaComponent,
+    text: TextFieldComponent,
+    textarea: TextAreaFieldComponent,
     select: SelectComponent,
     "select-radiobuttons": OptionComponent,
     multiselect: SelectComponent,
     "multiselect-checkboxes": OptionComponent,
-    "html5-email": TextComponent,
-    "html5-tel": TextComponent,
-    "html5-url": TextComponent,
-    "html5-number": TextComponent,
-    "html5-range": TextComponent,
-    "html5-datetime-local": TextComponent,
-    "html5-date": TextComponent,
-    "html5-month": TextComponent,
-    "html5-time": TextComponent,
+    "html5-email": TextFieldComponent,
+    "html5-tel": TextFieldComponent,
+    "html5-url": TextFieldComponent,
+    "html5-number": TextFieldComponent,
+    "html5-range": TextFieldComponent,
+    "html5-datetime-local": TextFieldComponent,
+    "html5-date": TextFieldComponent,
+    "html5-month": TextFieldComponent,
+    "html5-time": TextFieldComponent,
     "multi-input": MultiInputComponent
 } as const;
 

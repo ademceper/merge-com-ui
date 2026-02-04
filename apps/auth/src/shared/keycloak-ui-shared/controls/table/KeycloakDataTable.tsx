@@ -19,6 +19,7 @@ import {
 } from "@merge/ui/components/table";
 import { cloneDeep, get, intersectionBy } from "lodash-es";
 import {
+    createElement,
     Fragment,
     ReactNode,
     isValidElement,
@@ -473,7 +474,7 @@ export function KeycloakDataTable<T>({
             }
             if (col.cellRenderer) {
                 const Component = col.cellRenderer;
-                return { title: Component(value) };
+                return { title: createElement(Component as ComponentType<T>, value) };
             }
             return get(value, col.name);
         });

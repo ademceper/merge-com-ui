@@ -1,4 +1,3 @@
-import { FormSubmitButton } from "../../shared/keycloak-ui-shared";
 import { Button } from "@merge/ui/components/button";
 import { FormProvider, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
@@ -40,9 +39,19 @@ const { t } = useTranslation();
                     <FormProvider {...form}>
                         <OrganizationForm />
                         <div className="flex gap-2">
-                            <FormSubmitButton formState={formState} data-testid="save">
+                            <Button
+                                type="submit"
+                                data-testid="save"
+                                disabled={
+                                    !formState.isValid ||
+                                    !formState.isDirty ||
+                                    formState.isLoading ||
+                                    formState.isValidating ||
+                                    formState.isSubmitting
+                                }
+                            >
                                 {t("save")}
-                            </FormSubmitButton>
+                            </Button>
                             <Button
                                 data-testid="cancel"
                                 variant="link"

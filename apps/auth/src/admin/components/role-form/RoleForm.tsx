@@ -4,11 +4,8 @@ import { useTranslation } from "react-i18next";
 import { Link, type LinkProps, type To } from "react-router-dom";
 
 const RouterLink = Link as ComponentType<LinkProps>;
-import {
-    FormSubmitButton,
-    TextAreaControl,
-    TextControl
-} from "../../../shared/keycloak-ui-shared";
+import { Button } from "@merge/ui/components/button";
+import { TextAreaControl, TextControl } from "../../../shared/keycloak-ui-shared";
 
 import { FormAccess } from "../form/FormAccess";
 import { AttributeForm } from "../key-value-form/AttributeForm";
@@ -74,14 +71,13 @@ export const RoleForm = ({
                         isDisabled={roleName?.includes("default-roles") ?? false}
                     />
                     <div className="flex gap-2">
-                        <FormSubmitButton
-                            formState={formState}
+                        <Button
+                            type="submit"
                             data-testid="save"
-                            allowInvalid
-                            allowNonDirty
+                            disabled={formState.isLoading || formState.isValidating || formState.isSubmitting}
                         >
                             {t("save")}
-                        </FormSubmitButton>
+                        </Button>
                         <RouterLink
                             to={cancelLink}
                             data-testid="cancel"

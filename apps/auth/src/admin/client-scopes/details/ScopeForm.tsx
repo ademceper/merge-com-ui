@@ -6,7 +6,6 @@ import { FormProvider, useForm, useWatch } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 import {
-    FormSubmitButton,
     SelectControl,
     TextAreaControl,
     TextControl,
@@ -426,13 +425,13 @@ export const ScopeForm = ({ clientScope, save }: ScopeFormProps) => {
                 )}
 
                 <div className="flex gap-2">
-                    <FormSubmitButton
+                    <Button
+                        type="submit"
                         data-testid="save"
-                        formState={formState}
-                        isDisabled={!isDirty || !isValid}
+                        disabled={!isDirty || !isValid || formState.isLoading || formState.isValidating || formState.isSubmitting}
                     >
                         {t("save")}
-                    </FormSubmitButton>
+                    </Button>
                     <Button
                         variant="link"
                         asChild

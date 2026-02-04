@@ -4,7 +4,7 @@
   "type": "module",
   "private": true,
   "scripts": {
-    "dev": "bun next dev --turbopack",
+    "dev": "rm -f .next/dev/lock && bun next dev --turbopack",
     "build": "bun next build",
     "start": "bun next start",
     "lint": "eslint . --max-warnings 0",

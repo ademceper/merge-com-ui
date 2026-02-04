@@ -30,10 +30,8 @@ export {
     FileUploadControl,
     type FileUploadControlProps
 } from "./controls/FileUploadControl";
-export { IconMapper } from "./icons/IconMapper";
 export { FormPanel } from "./scroll-form/FormPanel";
 export { ScrollForm, mainPageContentId } from "./scroll-form/ScrollForm";
-export { FormSubmitButton, type FormSubmitButtonProps } from "./buttons/FormSubmitButton";
 export { UserProfileFields } from "./user-profile/UserProfileFields";
 export {
     beerify,

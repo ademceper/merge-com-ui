@@ -5,9 +5,7 @@ import { useTranslation } from "react-i18next";
 import { Link, useNavigate } from "react-router-dom";
 import yaml from "yaml";
 import { useAdminClient } from "../admin-client";
-import { getErrorDescription, getErrorMessage, HelpItem,
-    FormSubmitButton,
-    useFetch } from "../../shared/keycloak-ui-shared";
+import { getErrorDescription, getErrorMessage, HelpItem, useFetch } from "../../shared/keycloak-ui-shared";
 import { toast } from "@merge/ui/components/sonner";
 import { useRealm } from "../context/realm-context/RealmContext";
 import { FormAccess } from "../components/form/FormAccess";
@@ -147,15 +145,18 @@ const { mode, id } = useParams<WorkflowDetailParams>();
                             />
                         </div>
                         <div className="flex gap-2">
-                            <FormSubmitButton
-                                formState={form.formState}
+                            <Button
+                                type="submit"
                                 data-testid="save"
-                                allowInvalid
-                                allowNonDirty
-                                isDisabled={mode === "create" && !form.formState.isDirty}
+                                disabled={
+                                    form.formState.isLoading ||
+                                    form.formState.isValidating ||
+                                    form.formState.isSubmitting ||
+                                    (mode === "create" && !form.formState.isDirty)
+                                }
                             >
                                 {mode === "update" ? t("save") : t("create")}
-                            </FormSubmitButton>
+                            </Button>
                             {mode === "update" && (
                                 <Button data-testid="copy" variant="link" asChild>
                                     <Link

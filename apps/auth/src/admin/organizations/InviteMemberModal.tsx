@@ -1,4 +1,4 @@
-import { FormSubmitButton, TextControl } from "../../shared/keycloak-ui-shared";
+import { TextControl } from "../../shared/keycloak-ui-shared";
 import { Button } from "@merge/ui/components/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@merge/ui/components/dialog";
 import { FormProvider, useForm } from "react-hook-form";
@@ -51,15 +51,14 @@ const { t } = useTranslation();
                     </form>
                 </FormProvider>
                 <DialogFooter>
-                    <FormSubmitButton
-                        formState={formState}
-                        data-testid="save"
+                    <Button
+                        type="submit"
                         form="form"
-                        allowInvalid
-                        allowNonDirty
+                        data-testid="save"
+                        disabled={formState.isLoading || formState.isValidating || formState.isSubmitting}
                     >
                         {t("send")}
-                    </FormSubmitButton>
+                    </Button>
                     <Button
                         id="modal-cancel"
                         data-testid="cancel"

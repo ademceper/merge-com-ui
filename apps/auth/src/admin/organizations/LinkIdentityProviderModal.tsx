@@ -1,5 +1,5 @@
 import IdentityProviderRepresentation from "@keycloak/keycloak-admin-client/lib/defs/identityProviderRepresentation";
-import { FormSubmitButton, SelectControl } from "../../shared/keycloak-ui-shared";
+import { SelectControl } from "../../shared/keycloak-ui-shared";
 import { Button } from "@merge/ui/components/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@merge/ui/components/dialog";
 import { useEffect } from "react";
@@ -132,15 +132,14 @@ const form = useForm<LinkRepresentation>({ mode: "onChange" });
                     </form>
                 </FormProvider>
                 <DialogFooter>
-                    <FormSubmitButton
-                        formState={formState}
-                        data-testid="confirm"
+                    <Button
+                        type="submit"
                         form="form"
-                        allowInvalid
-                        allowNonDirty
+                        data-testid="confirm"
+                        disabled={formState.isLoading || formState.isValidating || formState.isSubmitting}
                     >
                         {t("save")}
-                    </FormSubmitButton>
+                    </Button>
                     <Button
                         id="modal-cancel"
                         data-testid="cancel"

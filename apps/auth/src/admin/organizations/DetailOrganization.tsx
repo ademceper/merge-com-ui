@@ -1,4 +1,4 @@
-import { FormSubmitButton, getErrorDescription, getErrorMessage, useFetch } from "../../shared/keycloak-ui-shared";
+import { getErrorDescription, getErrorMessage, useFetch } from "../../shared/keycloak-ui-shared";
 import { toast } from "@merge/ui/components/sonner";
 import { Button } from "@merge/ui/components/button";
 import { FormProvider, useForm } from "react-hook-form";
@@ -117,12 +117,19 @@ export default function DetailOrganization() {
                         >
                             <OrganizationForm readOnly />
                             <div className="flex gap-2">
-                                <FormSubmitButton
-                                    formState={form.formState}
+                                <Button
+                                    type="submit"
                                     data-testid="save"
+                                    disabled={
+                                        !form.formState.isValid ||
+                                        !form.formState.isDirty ||
+                                        form.formState.isLoading ||
+                                        form.formState.isValidating ||
+                                        form.formState.isSubmitting
+                                    }
                                 >
                                     {t("save")}
-                                </FormSubmitButton>
+                                </Button>
                                 <Button
                                     onClick={() => form.reset()}
                                     data-testid="reset"

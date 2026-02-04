@@ -4,15 +4,19 @@ import type UserRepresentation from "@keycloak/keycloak-admin-client/lib/defs/us
 import { getErrorDescription, getErrorMessage, useFetch } from "../../../shared/keycloak-ui-shared";
 import { toast } from "@merge/ui/components/sonner";
 import { Info } from "@phosphor-icons/react";
+import type { ComponentType } from "react";
 import { useState } from "react";
 import { Trans, useTranslation } from "react-i18next";
-import { Link } from "react-router-dom";
+import { Link, type LinkProps } from "react-router-dom";
 import { useAdminClient } from "../../admin-client";
 import { KeycloakSpinner } from "../../../shared/keycloak-ui-shared";
 import { RoleMapping, Row } from "../../components/role-mapping/RoleMapping";
 import { useAccess } from "../../context/access/Access";
 import { useRealm } from "../../context/realm-context/RealmContext";
 import { toUser } from "../../user/routes/User";
+
+const TransComponent = Trans as ComponentType<Record<string, unknown>>;
+const RouterLink = Link as ComponentType<LinkProps>;
 
 type ServiceAccountProps = {
     client: ClientRepresentation;
@@ -67,11 +71,11 @@ const { realm } = useRealm();
     return serviceAccount ? (
         <>
             <div className="pb-0 flex items-center gap-2">
-                <Info className="size-4 shrink-0 keycloak--service-account--info-text" />
+                <Info className="size-4 shrink-0" />
                 <span>
-                    <Trans i18nKey="manageServiceAccountUser">
+                    <TransComponent i18nKey="manageServiceAccountUser">
                         {""}
-                        <Link
+                        <RouterLink
                             to={toUser({
                                 realm,
                                 id: serviceAccount.id!,
@@ -79,8 +83,8 @@ const { realm } = useRealm();
                             })}
                         >
                             {{ link: serviceAccount.username }}
-                        </Link>
-                    </Trans>
+                        </RouterLink>
+                    </TransComponent>
                 </span>
             </div>
             <RoleMapping

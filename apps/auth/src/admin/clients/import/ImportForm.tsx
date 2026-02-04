@@ -5,7 +5,7 @@ import { useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { Link, useNavigate } from "react-router-dom";
-import { FormSubmitButton, TextControl } from "../../../shared/keycloak-ui-shared";
+import { TextControl } from "../../../shared/keycloak-ui-shared";
 import { useAdminClient } from "../../admin-client";
 import { getErrorDescription, getErrorMessage } from "../../../shared/keycloak-ui-shared";
 import { toast } from "@merge/ui/components/sonner";
@@ -109,13 +109,12 @@ const handleFileChange = async (contents: string) => {
                         <TextControl name="protocol" label={t("type")} readOnly />
                         <CapabilityConfig unWrap={true} />
                         <div className="flex gap-2 mt-4">
-                            <FormSubmitButton
-                                formState={formState}
-                                allowInvalid
-                                allowNonDirty
+                            <Button
+                                type="submit"
+                                disabled={formState.isLoading || formState.isValidating || formState.isSubmitting}
                             >
                                 {t("save")}
-                            </FormSubmitButton>
+                            </Button>
                             <Button
                                 variant="link"
                                 asChild

@@ -1,7 +1,6 @@
 import type IdentityProviderRepresentation from "@keycloak/keycloak-admin-client/lib/defs/identityProviderRepresentation";
 import type { IdentityProvidersQuery } from "@keycloak/keycloak-admin-client/lib/resources/identityProviders";
 import { getErrorDescription, getErrorMessage, Action,
-    IconMapper,
     KeycloakDataTable,
     ListEmptyState,
     useFetch } from "../../shared/keycloak-ui-shared";
@@ -10,6 +9,18 @@ import { Button } from "@merge/ui/components/button";
 import { Badge } from "@merge/ui/components/badge";
 import { Checkbox } from "@merge/ui/components/checkbox";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger, DropdownMenuGroup, DropdownMenuLabel } from "@merge/ui/components/dropdown-menu";
+import {
+    Cube,
+    GithubLogo,
+    FacebookLogo,
+    GitlabLogo,
+    GoogleLogo,
+    InstagramLogo,
+    LinkedinLogo,
+    StackOverflowLogo,
+    TwitterLogo,
+    PaypalLogo
+} from "@phosphor-icons/react";
 import { CardTitle } from "@merge/ui/components/card";
 import { groupBy, sortBy } from "lodash-es";
 import { Fragment, useState } from "react";
@@ -27,6 +38,37 @@ import { upperCaseFormatter } from "../util";
 import { ManageOrderDialog } from "./ManageOrderDialog";
 import { toIdentityProvider } from "./routes/IdentityProvider";
 import { toIdentityProviderCreate } from "./routes/IdentityProviderCreate";
+
+function getIdpIcon(iconId: string) {
+    switch (iconId) {
+        case "github":
+            return GithubLogo;
+        case "facebook":
+            return FacebookLogo;
+        case "gitlab":
+            return GitlabLogo;
+        case "google":
+            return GoogleLogo;
+        case "linkedin":
+        case "linkedin-openid-connect":
+            return LinkedinLogo;
+        case "openshift-v4":
+            return Cube;
+        case "stackoverflow":
+            return StackOverflowLogo;
+        case "twitter":
+            return TwitterLogo;
+        case "microsoft":
+        case "bitbucket":
+            return Cube;
+        case "instagram":
+            return InstagramLogo;
+        case "paypal":
+            return PaypalLogo;
+        default:
+            return Cube;
+    }
+}
 
 const DetailLink = (identityProvider: IdentityProviderRepresentation) => {
     const { t } = useTranslation();
@@ -203,10 +245,11 @@ useFetch(
                                             >
                                                 <CardTitle>
                                                     <div className="flex items-center gap-2">
-                                                        <div>
-                                                            <IconMapper
-                                                                icon={provider.id}
-                                                            />
+                                                        <div className="inline-flex items-center justify-center [&_svg]:size-6" aria-hidden>
+                                                            {(() => {
+                                                                const Icon = getIdpIcon(provider.id ?? "");
+                                                                return <Icon size={24} />;
+                                                            })()}
                                                         </div>
                                                         <div className="flex-1">
                                                             {provider.name}
@@ -247,11 +290,13 @@ useFetch(
                                 <div>
                                     <DropdownMenu>
                                         <DropdownMenuTrigger asChild>
-                                            <Button
+                                            <button
+                                                type="button"
                                                 data-testid="addProviderDropdown"
+                                                className="inline-flex h-8 items-center justify-center gap-1.5 rounded-lg border border-transparent bg-primary px-2.5 text-sm font-medium text-primary-foreground outline-none transition-all hover:bg-primary/80 focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:pointer-events-none disabled:opacity-50"
                                             >
                                                 {t("addProvider")}
-                                            </Button>
+                                            </button>
                                         </DropdownMenuTrigger>
                                         <DropdownMenuContent>
                                             {identityProviderOptions()}

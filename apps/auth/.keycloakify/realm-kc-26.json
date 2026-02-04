@@ -1792,6 +1792,7 @@
                 "clientId": "YOUR_APPLE_SERVICE_ID",
                 "clientSecret": "YOUR_APPLE_CLIENT_SECRET",
                 "defaultScope": "openid name email",
+                "guiOrder": "2",
                 "issuer": "https://appleid.apple.com",
                 "tokenUrl": "https://appleid.apple.com/auth/token"
             },
@@ -1817,7 +1818,8 @@
             "config": {
                 "clientId": "YOUR_FACEBOOK_APP_ID",
                 "clientSecret": "YOUR_FACEBOOK_APP_SECRET",
-                "defaultScope": "email public_profile"
+                "defaultScope": "email public_profile",
+                "guiOrder": "0"
             },
             "types": []
         },
@@ -1836,7 +1838,20 @@
             "config": {
                 "clientId": "YOUR_GOOGLE_CLIENT_ID",
                 "clientSecret": "YOUR_GOOGLE_CLIENT_SECRET",
-                "defaultScope": "openid profile email"
+                "defaultScope": "openid profile email",
+                "guiOrder": "1"
+            },
+            "types": []
+        },
+        {
+            "alias": "linkedin-openid-connect",
+            "displayName": "LinkedIn",
+            "enabled": true,
+            "internalId": "3a2a1fa7-00bf-4563-bb12-27e8e7a8ae06",
+            "providerId": "linkedin-openid-connect",
+            "config": {
+                "clientId": "a",
+                "clientSecret": "a"
             },
             "types": []
         }
@@ -1862,14 +1877,14 @@
                 "subComponents": {},
                 "config": {
                     "allowed-protocol-mapper-types": [
-                        "saml-role-list-mapper",
+                        "saml-user-property-mapper",
+                        "oidc-address-mapper",
+                        "oidc-usermodel-property-mapper",
                         "saml-user-attribute-mapper",
                         "oidc-full-name-mapper",
                         "oidc-usermodel-attribute-mapper",
                         "oidc-sha256-pairwise-sub-mapper",
-                        "saml-user-property-mapper",
-                        "oidc-usermodel-property-mapper",
-                        "oidc-address-mapper"
+                        "saml-role-list-mapper"
                     ]
                 }
             },
@@ -1899,13 +1914,13 @@
                 "subComponents": {},
                 "config": {
                     "allowed-protocol-mapper-types": [
-                        "saml-user-attribute-mapper",
-                        "oidc-address-mapper",
-                        "oidc-usermodel-attribute-mapper",
                         "saml-role-list-mapper",
-                        "saml-user-property-mapper",
+                        "saml-user-attribute-mapper",
                         "oidc-full-name-mapper",
                         "oidc-sha256-pairwise-sub-mapper",
+                        "saml-user-property-mapper",
+                        "oidc-address-mapper",
+                        "oidc-usermodel-attribute-mapper",
                         "oidc-usermodel-property-mapper"
                     ]
                 }

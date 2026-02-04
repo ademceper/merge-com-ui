@@ -1,5 +1,5 @@
 import OrganizationRepresentation from "@keycloak/keycloak-admin-client/lib/defs/organizationRepresentation";
-import { FormSubmitButton, getErrorDescription, getErrorMessage, useFetch } from "../../shared/keycloak-ui-shared";
+import { getErrorDescription, getErrorMessage, useFetch } from "../../shared/keycloak-ui-shared";
 import { toast } from "@merge/ui/components/sonner";
 import { Button } from "@merge/ui/components/button";
 import {
@@ -199,13 +199,20 @@ export default function OrganizationSection() {
                                 >
                                     {t("cancel")}
                                 </Button>
-                                <FormSubmitButton
+                                <Button
+                                    type="submit"
                                     form="create-org-form"
-                                    formState={createForm.formState}
                                     data-testid="save"
+                                    disabled={
+                                        !createForm.formState.isValid ||
+                                        !createForm.formState.isDirty ||
+                                        createForm.formState.isLoading ||
+                                        createForm.formState.isValidating ||
+                                        createForm.formState.isSubmitting
+                                    }
                                 >
                                     {t("save")}
-                                </FormSubmitButton>
+                                </Button>
                             </DialogFooter>
                         </DialogContent>
                     </FormProvider>
@@ -233,13 +240,20 @@ export default function OrganizationSection() {
                                 >
                                     {t("cancel")}
                                 </Button>
-                                <FormSubmitButton
+                                <Button
+                                    type="submit"
                                     form="edit-org-form"
-                                    formState={editForm.formState}
                                     data-testid="save"
+                                    disabled={
+                                        !editForm.formState.isValid ||
+                                        !editForm.formState.isDirty ||
+                                        editForm.formState.isLoading ||
+                                        editForm.formState.isValidating ||
+                                        editForm.formState.isSubmitting
+                                    }
                                 >
                                     {t("save")}
-                                </FormSubmitButton>
+                                </Button>
                             </DialogFooter>
                         </DialogContent>
                     </FormProvider>
