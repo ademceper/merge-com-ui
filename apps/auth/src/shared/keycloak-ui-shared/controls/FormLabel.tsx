@@ -34,20 +34,14 @@ export const FormLabel = ({
     <Field className={hasNoPaddingTop ? "w-full pt-0" : "w-full"} {...rest}>
         <FieldLabel
             htmlFor={id || name}
-            className={cn("flex items-center gap-1.5", !showLabel && "sr-only")}
+            className={cn("flex items-center gap-1.5 flex-nowrap", !showLabel && "sr-only")}
         >
             {label || name}
             {isRequired && <span className="text-destructive">*</span>}
+            {labelIcon && <HelpItem helpText={labelIcon} fieldLabelId={id || name} />}
         </FieldLabel>
         <FieldContent>
-            {labelIcon ? (
-                <div className="flex items-center gap-2">
-                    <div className="flex-1 min-w-0">{children}</div>
-                    <HelpItem helpText={labelIcon} fieldLabelId={id || name} />
-                </div>
-            ) : (
-                children
-            )}
+            {children}
             {error?.message && (
                 <FormErrorText data-testid={`${name}-helper`} message={error.message} />
             )}

@@ -1,5 +1,7 @@
 import { useTranslation } from "react-i18next";
+import { useLocation } from "react-router-dom";
 import { SidebarTrigger } from "@merge/ui/components/sidebar";
+import { GroupBreadCrumbsForHeader } from "./bread-crumb/GroupBreadCrumbs";
 import { PageBreadCrumbs } from "./bread-crumb/PageBreadCrumbs";
 import { Separator } from "@merge/ui/components/separator";
 import { useEnvironment } from "../../shared/keycloak-ui-shared";
@@ -21,7 +23,9 @@ export type UserMenuInfo = {
 
 export function AdminHeader() {
     const { t } = useTranslation();
+    const { pathname } = useLocation();
     const { keycloak } = useEnvironment<Environment>();
+    const isGroupsSection = pathname.includes("/groups");
 
     const userMenuInfo: UserMenuInfo = {
         keycloak,
@@ -41,7 +45,7 @@ export function AdminHeader() {
                         className="h-4 w-px shrink-0"
                     />
                 </div>
-                <PageBreadCrumbs />
+                {isGroupsSection ? <GroupBreadCrumbsForHeader /> : <PageBreadCrumbs />}
             </div>
             <div className="flex-1 min-w-0" />
             <div className="flex items-center px-4">

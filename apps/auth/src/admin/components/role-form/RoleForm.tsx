@@ -7,6 +7,7 @@ const RouterLink = Link as ComponentType<LinkProps>;
 import { Button } from "@merge/ui/components/button";
 import { TextAreaControl, TextControl } from "../../../shared/keycloak-ui-shared";
 
+import { cn } from "@merge/ui/lib/utils";
 import { FormAccess } from "../form/FormAccess";
 import { AttributeForm } from "../key-value-form/AttributeForm";
 import { ViewHeader } from "../view-header/ViewHeader";
@@ -14,9 +15,12 @@ import { ViewHeader } from "../view-header/ViewHeader";
 export type RoleFormProps = {
     form: UseFormReturn<AttributeForm>;
     onSubmit: SubmitHandler<AttributeForm>;
-    cancelLink: To;
+    cancelLink?: To;
     role: "manage-realm" | "manage-clients";
     editMode: boolean;
+    /** Dialog içinde kullanıldığında: başlık ve iptal linki gizlenir, form id verilir. */
+    embedded?: boolean;
+    formId?: string;
 };
 
 export const RoleForm = ({
@@ -24,7 +28,9 @@ export const RoleForm = ({
     onSubmit,
     cancelLink,
     role,
-    editMode
+    editMode,
+    embedded,
+    formId
 }: RoleFormProps) => {
     const { t } = useTranslation();
     const { control, handleSubmit } = useFormContext<AttributeForm>();
@@ -37,18 +43,20 @@ export const RoleForm = ({
 
     return (
         <>
-            {!editMode && <ViewHeader titleKey={t("createRole")} />}
-            <div className="p-6">
+            {!embedded && !editMode && <ViewHeader titleKey={t("createRole")} />}
+            <div className={embedded ? "py-2" : "p-6"}>
                 <FormAccess
+                    id={formId}
                     isHorizontal
                     onSubmit={handleSubmit(onSubmit)}
                     role={role}
-                    className="pf-v5-u-mt-lg"
+                    className={cn("pf-v5-u-mt-lg", embedded && "flex flex-col gap-5")}
                     fineGrainedAccess={true}
                 >
                     <TextControl
                         name="name"
                         label={t("roleName")}
+                        showLabel={embedded}
                         rules={{
                             required: !editMode ? t("required") : undefined,
                             validate(value) {
@@ -62,6 +70,7 @@ export const RoleForm = ({
                     <TextAreaControl
                         name="description"
                         label={t("description")}
+                        showLabel={embedded}
                         rules={{
                             maxLength: {
                                 value: 255,
@@ -70,22 +79,26 @@ export const RoleForm = ({
                         }}
                         isDisabled={roleName?.includes("default-roles") ?? false}
                     />
-                    <div className="flex gap-2">
-                        <Button
-                            type="submit"
-                            data-testid="save"
-                            disabled={formState.isLoading || formState.isValidating || formState.isSubmitting}
-                        >
-                            {t("save")}
-                        </Button>
-                        <RouterLink
-                            to={cancelLink}
-                            data-testid="cancel"
-                            className="text-primary underline-offset-4 hover:underline"
-                        >
-                            {t("cancel")}
-                        </RouterLink>
-                    </div>
+                    {!embedded && (
+                        <div className="flex gap-2">
+                            <Button
+                                type="submit"
+                                data-testid="save"
+                                disabled={formState.isLoading || formState.isValidating || formState.isSubmitting}
+                            >
+                                {t("save")}
+                            </Button>
+                            {cancelLink && (
+                                <RouterLink
+                                    to={cancelLink}
+                                    data-testid="cancel"
+                                    className="text-primary underline-offset-4 hover:underline"
+                                >
+                                    {t("cancel")}
+                                </RouterLink>
+                            )}
+                        </div>
+                    )}
                 </FormAccess>
             </div>
         </>

@@ -1,5 +1,5 @@
 import type GroupRepresentation from "@keycloak/keycloak-admin-client/lib/defs/groupRepresentation";
-import { PropsWithChildren, useState } from "react";
+import { PropsWithChildren, useState, useCallback, useMemo } from "react";
 import { createNamedContext, useRequiredContext } from "../../shared/keycloak-ui-shared";
 
 type SubGroupsProps = {
@@ -18,14 +18,23 @@ const SubGroupsContext = createNamedContext<SubGroupsProps | undefined>(
 export const SubGroups = ({ children }: PropsWithChildren) => {
     const [subGroups, setSubGroups] = useState<GroupRepresentation[]>([]);
 
-    const clear = () => setSubGroups([]);
-    const remove = (group: GroupRepresentation) =>
-        setSubGroups(subGroups.slice(0, subGroups.findIndex(g => g.id === group.id) + 1));
-    const currentGroup = () => subGroups[subGroups.length - 1];
+    const clear = useCallback(() => setSubGroups([]), []);
+
+    const remove = useCallback((group: GroupRepresentation) => {
+        setSubGroups(current =>
+            current.slice(0, current.findIndex(g => g.id === group.id) + 1)
+        );
+    }, []);
+
+    const currentGroup = useCallback(() => subGroups[subGroups.length - 1], [subGroups]);
+
+    const value = useMemo(
+        () => ({ subGroups, setSubGroups, clear, remove, currentGroup }),
+        [subGroups, clear, remove, currentGroup]
+    );
+
     return (
-        <SubGroupsContext.Provider
-            value={{ subGroups, setSubGroups, clear, remove, currentGroup }}
-        >
+        <SubGroupsContext.Provider value={value}>
             {children}
         </SubGroupsContext.Provider>
     );

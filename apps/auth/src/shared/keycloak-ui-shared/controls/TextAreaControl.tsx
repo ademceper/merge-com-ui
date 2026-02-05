@@ -18,6 +18,7 @@ export type TextAreaControlProps<
     Omit<React.ComponentProps<typeof Textarea>, "name"> & {
         label: string;
         labelIcon?: string;
+        showLabel?: boolean;
         isDisabled?: boolean;
     };
 
@@ -42,7 +43,7 @@ export const TextAreaControl = <
             labelIcon={props.labelIcon}
             name={props.name}
             error={fieldState.error}
-            showLabel={false}
+            showLabel={props.showLabel ?? false}
         >
             <Textarea
                 {...props}

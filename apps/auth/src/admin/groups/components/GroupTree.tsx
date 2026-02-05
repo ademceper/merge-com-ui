@@ -1,9 +1,8 @@
 import type GroupRepresentation from "@keycloak/keycloak-admin-client/lib/defs/groupRepresentation";
-import { PaginatingTableToolbar,
-    useFetch } from "../../../shared/keycloak-ui-shared";
+import { useFetch } from "../../../shared/keycloak-ui-shared";
 import { toast } from "@merge/ui/components/sonner";
 import { Button } from "@merge/ui/components/button";
-import { Checkbox } from "@merge/ui/components/checkbox";
+import { Input } from "@merge/ui/components/input";
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -12,11 +11,11 @@ import {
 } from "@merge/ui/components/dropdown-menu";
 import { Separator } from "@merge/ui/components/separator";
 import { Spinner } from "@merge/ui/components/spinner";
-import { Tooltip, TooltipContent, TooltipTrigger } from "@merge/ui/components/tooltip";
-import { CaretRight, DotsThreeVertical } from "@phosphor-icons/react";
+import { cn } from "@merge/ui/lib/utils";
+import { CaretRight, DotsThreeVertical, MagnifyingGlass, XCircle } from "@phosphor-icons/react";
 import { unionBy } from "lodash-es";
 import type { ReactNode } from "react";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 export type TreeViewDataItem = {
     id?: string;
@@ -37,7 +36,7 @@ import { GroupsModal } from "../GroupsModal";
 import { useSubGroups } from "../SubGroupsContext";
 import { toGroups } from "../routes/Groups";
 import { DeleteGroup } from "./DeleteGroup";
-import { MoveDialog } from "./MoveDialog";
+import { MoveDialog } from "../MoveDialog";
 
 type ExtendedTreeViewDataItem = TreeViewDataItem & {
     access?: Record<string, boolean>;
@@ -101,13 +100,22 @@ const GroupTreeContextMenu = ({ group, refresh }: GroupTreeContextMenuProps) => 
                     refresh();
                 }}
             />
-            <DropdownMenu open={isOpen} onOpenChange={toggleOpen}>
+            <DropdownMenu open={isOpen} onOpenChange={toggleOpen} modal={false}>
                 <DropdownMenuTrigger asChild>
-                    <Button variant="ghost" size="icon" aria-label="Actions">
+                    <Button
+                        variant="ghost"
+                        size="icon"
+                        aria-label="Actions"
+                    >
                         <DotsThreeVertical className="size-4" />
                     </Button>
                 </DropdownMenuTrigger>
-                <DropdownMenuContent align="end">
+                <DropdownMenuContent
+                    align="end"
+                    className="z-[100]"
+                    sideOffset={5}
+                    collisionPadding={10}
+                >
                     <DropdownMenuItem onClick={toggleRenameOpen}>{t("edit")}</DropdownMenuItem>
                     <DropdownMenuItem onClick={toggleMoveOpen}>{t("moveTo")}</DropdownMenuItem>
                     <DropdownMenuItem onClick={toggleCreateOpen}>{t("createChildGroup")}</DropdownMenuItem>
@@ -132,12 +140,51 @@ type SimpleTreeViewProps = {
     activeItems?: ExtendedTreeViewDataItem[];
     onExpand: (_e: unknown, item: ExtendedTreeViewDataItem) => void;
     onSelect: (_e: unknown, item: ExtendedTreeViewDataItem) => void;
+    onCollapse?: (item: ExtendedTreeViewDataItem) => void;
 };
 
-function SimpleTreeView({ data, allExpanded, activeItems = [], onExpand, onSelect }: SimpleTreeViewProps) {
+/** Placeholder dışında en az bir child varsa düğümün gerçekten açılmış sayılır (yenilemede boş açık kalmasın). */
+function hasRealChildren(item: ExtendedTreeViewDataItem) {
+    return item.children?.some(c => c.id !== "__placeholder") ?? false;
+}
+
+/** Path'teki (defaultExpanded) ve gerçek children'ı olan düğüm id'lerini toplar (recursive). */
+function pathIdsToExpand(items: ExtendedTreeViewDataItem[]): Set<string> {
+    const ids = new Set<string>();
+    for (const item of items) {
+        if (item.id && item.defaultExpanded && hasRealChildren(item)) ids.add(item.id);
+        if (item.children?.length)
+            pathIdsToExpand(item.children as ExtendedTreeViewDataItem[]).forEach(id => ids.add(id));
+    }
+    return ids;
+}
+
+function SimpleTreeView({ data, allExpanded, activeItems = [], onExpand, onSelect, onCollapse }: SimpleTreeViewProps) {
     const [expanded, setExpanded] = useState<Set<string>>(() =>
-        new Set(data.filter(i => i.defaultExpanded && i.id).map(i => i.id!))
+        new Set(
+            data
+                .filter(i => i.defaultExpanded && i.id && hasRealChildren(i))
+                .map(i => i.id!)
+        )
     );
+
+    // Path restore: sadece henüz eklenmemiş path düğümlerini aç (kullanıcı kapattıysa tekrar açma)
+    const pathRestoredIdsRef = useRef<Set<string>>(new Set());
+    useEffect(() => {
+        const toExpand = pathIdsToExpand(data);
+        setExpanded(prev => {
+            let next = prev;
+            for (const id of toExpand) {
+                if (pathRestoredIdsRef.current.has(id)) continue;
+                pathRestoredIdsRef.current.add(id);
+                if (!next.has(id)) {
+                    next = next === prev ? new Set(prev) : next;
+                    next.add(id);
+                }
+            }
+            return next;
+        });
+    }, [data]);
     const isExpanded = (id: string | undefined) => id && (allExpanded || expanded.has(id));
     const toggle = (id: string | undefined) => {
         if (!id) return;
@@ -157,13 +204,23 @@ function SimpleTreeView({ data, allExpanded, activeItems = [], onExpand, onSelec
         return (
             <div key={item.id ?? `depth-${depth}`} className="keycloak_groups_treeview">
                 <div
-                    className={`flex items-center gap-1 py-1 px-2 border-l-2 border-transparent hover:bg-muted/50 cursor-pointer min-h-8 ${active ? "border-primary bg-muted/50" : ""}`}
+                    className={`flex items-center gap-1 py-2 px-2 border-l-2 border-transparent hover:bg-muted/50 cursor-pointer ${active ? "border-primary bg-muted/50" : ""}`}
                     style={{ paddingLeft: `${depth * 16 + 8}px` }}
-                    onClick={() => {
+                    onClick={e => {
+                        e.stopPropagation();
                         if (item.id === "next") return;
-                        if (hasChildren && item.id) toggle(item.id);
-                        onExpand(null as unknown, item);
-                        onSelect(null as unknown, item);
+                        const wasExpanded = expanded_;
+
+                        // Only collapse if the item is both expanded AND active
+                        // If it's expanded but not active, navigate to it instead
+                        if (hasChildren && wasExpanded && active) {
+                            if (item.id) toggle(item.id);
+                            onCollapse?.(item);
+                        } else {
+                            if (hasChildren && item.id) toggle(item.id);
+                            onExpand(null as unknown, item);
+                            onSelect(null as unknown, item);
+                        }
                     }}
                 >
                     <span className="w-5 flex items-center justify-center shrink-0">
@@ -173,7 +230,11 @@ function SimpleTreeView({ data, allExpanded, activeItems = [], onExpand, onSelec
                                 className="p-0 border-0 bg-transparent cursor-pointer inline-flex"
                                 onClick={e => {
                                     e.stopPropagation();
-                                    if (item.id) toggle(item.id);
+                                    if (item.id) {
+                                        const wasExpanded = expanded_;
+                                        toggle(item.id);
+                                        if (wasExpanded) onCollapse?.(item);
+                                    }
                                 }}
                                 aria-expanded={!!expanded_}
                             >
@@ -215,6 +276,11 @@ const LOADING_TREE = [
     }
 ];
 
+/** Chevron görünsün diye tek placeholder; tıklanınca yükleme tetiklenir, gerçek veriyle değişir. */
+const CHEVRON_PLACEHOLDER: ExtendedTreeViewDataItem[] = [
+    { id: "__placeholder", name: "\u00A0" }
+];
+
 export const GroupTree = ({ refresh: viewRefresh, canViewDetails }: GroupTreeProps) => {
     const { adminClient } = useAdminClient();
 
@@ -224,7 +290,7 @@ export const GroupTree = ({ refresh: viewRefresh, canViewDetails }: GroupTreePro
     const { hasAccess } = useAccess();
 
     const [data, setData] = useState<ExtendedTreeViewDataItem[]>();
-    const { subGroups, clear } = useSubGroups();
+    const { subGroups, clear, setSubGroups } = useSubGroups();
 
     const [search, setSearch] = useState("");
     const [max, setMax] = useState(20);
@@ -232,10 +298,15 @@ export const GroupTree = ({ refresh: viewRefresh, canViewDetails }: GroupTreePro
     const prefFirst = useRef(0);
     const prefMax = useRef(20);
     const [count, setCount] = useState(0);
-    const [exact, setExact] = useState(false);
     const [activeItem, setActiveItem] = useState<ExtendedTreeViewDataItem>();
+    const [loadingGroupId, setLoadingGroupId] = useState<string>();
+    const navigatingToRef = useRef<string>();
 
     const [firstSub, setFirstSub] = useState(0);
+
+    /** URL path'ini sırayla yüklerken hangi segmentte olduğumuz (restore path after refresh). */
+    const pathIndexRef = useRef(0);
+    const pathKeyRef = useRef<string>("");
 
     const [key, setKey] = useState(0);
     const refresh = () => {
@@ -243,30 +314,36 @@ export const GroupTree = ({ refresh: viewRefresh, canViewDetails }: GroupTreePro
         viewRefresh();
     };
 
+    const updateChildrenAtId = (
+        nodes: ExtendedTreeViewDataItem[],
+        id: string,
+        newChildren: ExtendedTreeViewDataItem[]
+    ): ExtendedTreeViewDataItem[] =>
+        nodes.map(node => {
+            if (node.id === id) return { ...node, children: newChildren };
+            if (node.children?.length)
+                return { ...node, children: updateChildrenAtId(node.children, id, newChildren) };
+            return node;
+        });
+
     const mapGroup = (
         group: GroupRepresentation,
         refresh: () => void
     ): ExtendedTreeViewDataItem => {
         const hasSubGroups = group.subGroupCount;
+        const isThisGroupLoading = loadingGroupId === group.id;
         return {
             id: group.id,
-            name: (
-                <Tooltip>
-                    <TooltipTrigger asChild>
-                        <span className="cursor-default">{group.name}</span>
-                    </TooltipTrigger>
-                    <TooltipContent>{group.name}</TooltipContent>
-                </Tooltip>
-            ),
+            name: <span className="cursor-default">{group.name}</span>,
             access: group.access || {},
             children: hasSubGroups
                 ? search.length === 0
-                    ? LOADING_TREE
+                    ? isThisGroupLoading
+                        ? LOADING_TREE
+                        : CHEVRON_PLACEHOLDER
                     : group.subGroups?.map(g => mapGroup(g, refresh))
                 : undefined,
-            action: (hasAccess("manage-users") || group.access?.manage) && (
-                <GroupTreeContextMenu group={group} refresh={refresh} />
-            ),
+            action: undefined,
             defaultExpanded: subGroups.map(g => g.id).includes(group.id)
         };
     };
@@ -280,7 +357,7 @@ export const GroupTree = ({ refresh: viewRefresh, canViewDetails }: GroupTreePro
                     {
                         first: `${first}`,
                         max: `${max + 1}`,
-                        exact: `${exact}`,
+                        exact: "false",
                         global: `${search !== ""}`
                     },
                     search === "" ? null : { search }
@@ -299,53 +376,72 @@ export const GroupTree = ({ refresh: viewRefresh, canViewDetails }: GroupTreePro
             }
             return { groups, subGroups };
         },
-        ({ groups, subGroups }) => {
-            if (activeItem) {
-                const found = findGroup(data || [], activeItem.id!, []);
-                if (found.length && subGroups.length) {
-                    const foundTreeItem = found.pop()!;
-                    foundTreeItem.children = [
-                        ...(unionBy(foundTreeItem.children || []).splice(
-                            0,
-                            SUBGROUP_COUNT
-                        ),
-                        subGroups.map(g => mapGroup(g, refresh), "id")),
-                        ...(subGroups.length === SUBGROUP_COUNT
-                            ? [
-                                  {
-                                      id: "next",
-                                      name: (
-                                          <Button
-                                              variant="ghost"
-                                              onClick={() =>
-                                                  setFirstSub(firstSub + SUBGROUP_COUNT)
-                                              }
-                                          >
-                                              <CaretRight className="size-4" />
-                                          </Button>
-                                      )
-                                  }
-                              ]
-                            : [])
-                    ];
-                }
-            }
+        ({ groups, subGroups: fetchedSubGroups }) => {
+            let newData: ExtendedTreeViewDataItem[];
             if (search || prefFirst.current !== first || prefMax.current !== max) {
-                setData(groups.map(g => mapGroup(g, refresh)));
+                newData = groups.map(g => mapGroup(g, refresh));
             } else {
-                setData(
-                    unionBy(
-                        data,
-                        groups.map(g => mapGroup(g, refresh)),
-                        "id"
-                    )
+                newData = unionBy(
+                    data || [],
+                    groups.map(g => mapGroup(g, refresh)),
+                    "id"
                 );
+            }
+            if (activeItem && fetchedSubGroups.length > 0) {
+                const path = findGroup(newData, activeItem.id!, []);
+                const foundTreeItem = path[path.length - 1];
+                const currentChildren = foundTreeItem?.children || [];
+                const existing = unionBy(currentChildren, "id")
+                    .filter((c: ExtendedTreeViewDataItem) => c.id !== "next" && c.id !== "__placeholder")
+                    .slice(0, SUBGROUP_COUNT);
+                const mapped = fetchedSubGroups.map(g => mapGroup(g, refresh));
+                const mergedChildren = unionBy(existing, mapped, "id");
+                const newChildren: ExtendedTreeViewDataItem[] = [
+                    ...mergedChildren,
+                    ...(fetchedSubGroups.length === SUBGROUP_COUNT
+                        ? [
+                              {
+                                  id: "next",
+                                  name: (
+                                      <Button
+                                          variant="ghost"
+                                          onClick={() =>
+                                              setFirstSub(firstSub + SUBGROUP_COUNT)
+                                          }
+                                      >
+                                          <CaretRight className="size-4" />
+                                      </Button>
+                                  )
+                              } as ExtendedTreeViewDataItem
+                          ]
+                        : [])
+                ];
+                newData = updateChildrenAtId(newData, activeItem.id!, newChildren);
+            }
+            // Clear loading state after data is loaded (whether subgroups exist or not)
+            if (activeItem && loadingGroupId === activeItem.id) {
+                setLoadingGroupId(undefined);
             }
             setCount(countGroups(groups));
             prefFirst.current = first;
             prefMax.current = max;
+            setData(newData);
+
+            // URL path restore: bu segment yüklendi, sıradaki varsa onu yükle
+            const pathFromUrl = subGroups;
+            if (
+                pathFromUrl.length > 0 &&
+                activeItem?.id === pathFromUrl[pathIndexRef.current]?.id &&
+                pathIndexRef.current < pathFromUrl.length - 1
+            ) {
+                pathIndexRef.current += 1;
+                setActiveItem({
+                    id: pathFromUrl[pathIndexRef.current].id,
+                    name: pathFromUrl[pathIndexRef.current].name
+                } as ExtendedTreeViewDataItem);
+            }
         },
-        [key, first, firstSub, max, search, exact, activeItem]
+        [key, first, firstSub, max, search, activeItem?.id]
     );
 
     const findGroup = (
@@ -372,16 +468,53 @@ export const GroupTree = ({ refresh: viewRefresh, canViewDetails }: GroupTreePro
     };
 
     const nav = (item: TreeViewDataItem, data: ExtendedTreeViewDataItem[]) => {
-        if (item.id === "next") return;
-        setActiveItem(item);
+        if (item.id === "next" || item.id === "__placeholder") return;
+
+        // Prevent duplicate navigation calls for the same item
+        if (navigatingToRef.current === item.id) {
+            return;
+        }
+        navigatingToRef.current = item.id;
+        // Clear the guard after a short delay
+        setTimeout(() => {
+            if (navigatingToRef.current === item.id) {
+                navigatingToRef.current = undefined;
+            }
+        }, 100);
 
         const path = findGroup(data, item.id!, []);
-        if (!subGroups.every(({ id }) => path.find(t => t.id === id))) clear();
-        if (
-            canViewDetails ||
-            path.at(-1)?.access?.view ||
-            subGroups.at(-1)?.access?.view
-        ) {
+
+        // If path is empty or invalid, don't navigate
+        if (path.length === 0 || !path.at(-1)?.id) {
+            return;
+        }
+
+        setActiveItem(item);
+        // Show loading state immediately for the clicked group
+        setLoadingGroupId(item.id);
+
+        // Optimistically update breadcrumb with new path instead of clearing (prevents flickering)
+        const newBreadcrumbPath = path.map(g => {
+            let name = g.id;
+            if (typeof g.name === 'string') {
+                name = g.name;
+            } else if (g.name && typeof g.name === 'object' && 'props' in g.name) {
+                // Extract from React element: <span>{name}</span>
+                name = (g.name as any).props?.children || g.id;
+            }
+            return {
+                id: g.id,
+                name: typeof name === 'string' ? name : String(name || g.id),
+                access: g.access
+            } as GroupRepresentation;
+        });
+        setSubGroups(newBreadcrumbPath);
+
+        // Check permission using path (target group), not subGroups (old state)
+        const targetGroup = path.at(-1);
+        const hasPermission = canViewDetails || targetGroup?.access?.view;
+
+        if (hasPermission) {
             navigate(
                 toGroups({
                     realm,
@@ -394,35 +527,93 @@ export const GroupTree = ({ refresh: viewRefresh, canViewDetails }: GroupTreePro
         }
     };
 
+    /** Kapatılan grubun üstüne navigate et; breadcrumb ve sayfa güncellenir. */
+    const handleCollapse = (item: TreeViewDataItem) => {
+        if (!item.id) return;
+        const idx = subGroups.findIndex(g => g.id === item.id);
+        if (idx <= 0) {
+            setActiveItem(undefined);
+            clear();
+            navigate(toGroups({ realm }));
+            return;
+        }
+        const newSubGroups = subGroups.slice(0, idx);
+        const parentPath = newSubGroups.map(g => g.id).join("/");
+        const parentGroup = newSubGroups[newSubGroups.length - 1];
+        setActiveItem({ id: parentGroup.id, name: parentGroup.name } as ExtendedTreeViewDataItem);
+        setSubGroups(newSubGroups);
+        navigate(toGroups({ realm, id: parentPath }));
+    };
+
+    const [searchInput, setSearchInput] = useState("");
+    const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+    const inputRef = useRef<HTMLInputElement>(null);
+
+    useEffect(() => {
+        if (debounceRef.current) clearTimeout(debounceRef.current);
+        debounceRef.current = setTimeout(() => {
+            setSearch(searchInput.trim());
+            debounceRef.current = null;
+        }, 250);
+        return () => {
+            if (debounceRef.current) clearTimeout(debounceRef.current);
+        };
+    }, [searchInput]);
+
+    // URL'de path varken sayfa yenilendiğinde path'i sırayla yükle; tıklayınca zaten nav() set ediyor, tekrar set etme (takılma önlenir)
+    const pathKey = subGroups.map(g => g.id).join("/");
+    useEffect(() => {
+        if (subGroups.length === 0) return;
+        if (pathKey === pathKeyRef.current) return;
+        if (activeItem?.id === subGroups[0].id) return;
+        pathKeyRef.current = pathKey;
+        pathIndexRef.current = 0;
+        setActiveItem({
+            id: subGroups[0].id,
+            name: subGroups[0].name
+        } as ExtendedTreeViewDataItem);
+    }, [pathKey, subGroups, activeItem?.id]);
+
+    const pageCount = Math.ceil(count / max) || 1;
+    const currentPage = Math.floor(first / max) + 1;
+    const from = count === 0 ? 0 : first + 1;
+    const to = Math.min(first + max, count);
+
     return data ? (
-        <PaginatingTableToolbar
-            count={count}
-            first={first}
-            max={max}
-            onNextClick={setFirst}
-            onPreviousClick={setFirst}
-            onPerPageSelect={(first, max) => {
-                setFirst(first);
-                setMax(max);
-            }}
-            inputGroupName="searchForGroups"
-            inputGroupPlaceholder={t("searchForGroups")}
-            inputGroupOnEnter={setSearch}
-            toolbarItem={
-                <div className="flex items-center gap-2 pt-2">
-                    <Checkbox
-                        id="exact"
-                        data-testid="exact-search"
-                        checked={exact}
-                        onCheckedChange={(checked) => setExact(checked === true)}
-                        className="mr-1"
-                    />
-                    <label htmlFor="exact" className="text-sm cursor-pointer pl-1">
-                        {t("exactSearch")}
-                    </label>
-                </div>
-            }
-        >
+        <div className="flex flex-col gap-3">
+            <div className="relative min-w-0 flex-1 sm:min-w-0 sm:flex-initial">
+                <Input
+                    ref={inputRef}
+                    data-testid="searchForGroups"
+                    aria-label={t("searchForGroups")}
+                    placeholder={t("searchForGroups")}
+                    type="text"
+                    value={searchInput}
+                    onChange={(e) => setSearchInput(e.target.value)}
+                    className={cn(
+                        "peer h-9 min-w-0 flex-1 ps-9 sm:min-w-60",
+                        searchInput && "pe-9"
+                    )}
+                />
+                <span className="pointer-events-none absolute inset-y-0 start-0 flex items-center justify-center ps-3 text-muted-foreground/80">
+                    <MagnifyingGlass size={16} />
+                </span>
+                {searchInput && (
+                    <button
+                        type="button"
+                        aria-label={t("clear")}
+                        className="absolute inset-y-0 end-0 flex h-full w-9 items-center justify-center rounded-e-md text-muted-foreground/80 outline-none hover:text-foreground focus-visible:ring-2"
+                        onClick={() => {
+                            setSearchInput("");
+                            setSearch("");
+                            inputRef.current?.focus();
+                        }}
+                    >
+                        <XCircle size={16} />
+                    </button>
+                )}
+            </div>
+            <Separator />
             {data.length > 0 && (
                 <SimpleTreeView
                     data={data.slice(0, max)}
@@ -430,9 +621,37 @@ export const GroupTree = ({ refresh: viewRefresh, canViewDetails }: GroupTreePro
                     activeItems={activeItem ? [activeItem] : undefined}
                     onExpand={(_, item) => nav(item, data)}
                     onSelect={(_, item) => nav(item, data)}
+                    onCollapse={handleCollapse}
                 />
             )}
-        </PaginatingTableToolbar>
+            {count > 0 && (
+                <div className="flex items-center justify-between gap-2 pt-2 text-muted-foreground text-xs">
+                    <span>
+                        {from}-{to} / {count}
+                    </span>
+                    <div className="flex gap-1">
+                        <Button
+                            variant="ghost"
+                            size="icon"
+                            className="h-7 w-7"
+                            disabled={currentPage <= 1}
+                            onClick={() => setFirst(Math.max(0, first - max))}
+                        >
+                            <CaretRight className="size-3 rotate-180" />
+                        </Button>
+                        <Button
+                            variant="ghost"
+                            size="icon"
+                            className="h-7 w-7"
+                            disabled={currentPage >= pageCount}
+                            onClick={() => setFirst(first + max)}
+                        >
+                            <CaretRight className="size-3" />
+                        </Button>
+                    </div>
+                </div>
+            )}
+        </div>
     ) : (
         <KeycloakSpinner />
     );

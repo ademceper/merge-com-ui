@@ -63,7 +63,10 @@ export type {
     DetailField,
     LoaderFunction
 } from "./controls/table/KeycloakDataTable";
-export { PaginatingTableToolbar } from "./controls/table/PaginatingTableToolbar";
+export {
+    KeycloakPagination,
+    PaginatingTableToolbar
+} from "./controls/table/PaginatingTableToolbar";
 export { TableToolbar } from "./controls/table/TableToolbar";
 export { ListEmptyState } from "./controls/table/ListEmptyState";
 export { KeycloakSpinner } from "./controls/KeycloakSpinner";

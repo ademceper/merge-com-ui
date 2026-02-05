@@ -51,7 +51,9 @@ export const SingleSelect = ({
     const items = collectSelectItems(children);
     const valueToStr = (v: unknown) =>
         v == null ? "" : typeof v === "object" ? (v as { id?: string })?.id ?? JSON.stringify(v) : String(v);
-    const value = selections != null ? valueToStr(selections) : "";
+    const resolvedSelection =
+        Array.isArray(selections) && selections.length === 1 ? selections[0] : selections;
+    const value = resolvedSelection != null ? valueToStr(resolvedSelection) : "";
     const valueMap = new Map<string, unknown>();
     items.forEach((item) => valueMap.set(valueToStr(item.value), item.value));
 

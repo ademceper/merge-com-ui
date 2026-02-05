@@ -1,15 +1,16 @@
 import type GroupRepresentation from "@keycloak/keycloak-admin-client/lib/defs/groupRepresentation";
 import { useFetch } from "../../shared/keycloak-ui-shared";
-import { Button } from "@merge/ui/components/button";
 import { DropdownMenuItem } from "@merge/ui/components/dropdown-menu";
+import { SidebarProvider, useSidebar } from "@merge/ui/components/sidebar";
+import { Button } from "@merge/ui/components/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@merge/ui/components/tabs";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@merge/ui/components/tooltip";
-import { CaretLeft, TreeStructure } from "@phosphor-icons/react";
-import { useState } from "react";
+import { CaretLeft, CaretRight, DotsThreeVertical, PencilSimple, Trash } from "@phosphor-icons/react";
+import type { ReactNode } from "react";
+import { useState, useCallback } from "react";
 import { useTranslation } from "react-i18next";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useAdminClient } from "../admin-client";
-import { GroupBreadCrumbs } from "../components/bread-crumb/GroupBreadCrumbs";
 import { PermissionsTab } from "../components/permission-tab/PermissionTab";
 import { ViewHeader } from "../components/view-header/ViewHeader";
 import { useAccess } from "../context/access/Access";
@@ -28,6 +29,52 @@ import { DeleteGroup } from "./components/DeleteGroup";
 import { GroupTree } from "./components/GroupTree";
 import { getId, getLastId } from "./groupIdUtils";
 import { toGroups } from "./routes/Groups";
+import { cn } from "@merge/ui/lib/utils";
+
+/** Sayfa akışında (fixed değil), ana sidebar gibi smooth açılıp kapanan grup paneli. */
+function GroupsSidebarPanel({ children }: { children: ReactNode }) {
+    const { state } = useSidebar();
+    const collapsed = state === "collapsed";
+    return (
+        <div
+            className={cn(
+                "flex shrink-0 flex-col border-sidebar-border min-h-0 overflow-hidden transition-[width] duration-200 ease-linear",
+                collapsed ? "w-0 min-w-0 border-r-0" : "w-64 border-r"
+            )}
+            aria-hidden={collapsed}
+        >
+            <div className="flex min-h-0 w-64 flex-col overflow-auto p-2">{children}</div>
+        </div>
+    );
+}
+
+function GroupsSidebarTrigger() {
+    const { state, toggleSidebar } = useSidebar();
+    const { t } = useTranslation();
+    const expanded = state === "expanded";
+    return (
+        <TooltipProvider>
+            <Tooltip>
+                <TooltipTrigger asChild>
+                    <Button
+                        variant="ghost"
+                        size="icon"
+                        aria-label={expanded ? t("hide") : t("show")}
+                        onClick={toggleSidebar}
+                        data-sidebar="trigger"
+                    >
+                        {expanded ? (
+                            <CaretLeft className="size-5" />
+                        ) : (
+                            <CaretRight className="size-5" />
+                        )}
+                    </Button>
+                </TooltipTrigger>
+                <TooltipContent>{expanded ? t("hide") : t("show")}</TooltipContent>
+            </Tooltip>
+        </TooltipProvider>
+    );
+}
 
 export default function GroupsSection() {
     const { adminClient } = useAdminClient();
@@ -45,9 +92,8 @@ export default function GroupsSection() {
     const location = useLocation();
     const id = getLastId(location.pathname);
 
-    const [open, toggle] = useToggle(true);
     const [key, setKey] = useState(0);
-    const refresh = () => setKey(key + 1);
+    const refresh = useCallback(() => setKey(prev => prev + 1), []);
 
     const { hasAccess, hasSomeAccess } = useAccess();
     const isFeatureEnabled = useIsFeatureEnabled();
@@ -122,40 +168,25 @@ export default function GroupsSection() {
                     handleModalToggle={() => setRename(undefined)}
                 />
             )}
-            <div className="p-0 bg-muted/30">
-                <div className="flex min-h-0" key={key}>
-                    {open && (
-                        <div className="flex shrink-0 border-r bg-background w-64 min-h-0 flex flex-col">
-                            <div className="p-2">
-                                <GroupTree
-                                    refresh={refresh}
-                                    canViewDetails={canViewDetails}
-                                />
-                            </div>
+            <div className="py-6 px-0">
+                <SidebarProvider defaultOpen={true} className="flex min-h-0 w-full">
+                    <GroupsSidebarPanel>
+                        <GroupTree
+                            key={key}
+                            refresh={refresh}
+                            canViewDetails={canViewDetails}
+                        />
+                    </GroupsSidebarPanel>
+                    <div className="flex min-w-0 flex-1 flex-col overflow-hidden pl-4">
+                        <div className="flex min-w-0 flex-wrap items-center gap-2">
+                            <GroupsSidebarTrigger />
                         </div>
-                    )}
-                    <div className="flex flex-1 flex-col min-w-0">
-                        <TooltipProvider>
-                            <Tooltip>
-                                <TooltipTrigger asChild>
-                                    <Button
-                                        variant="ghost"
-                                        size="icon"
-                                        aria-label={open ? t("hide") : t("show")}
-                                        onClick={toggle}
-                                    >
-                                        {open ? <CaretLeft className="size-5" /> : <TreeStructure className="size-5" />}
-                                    </Button>
-                                </TooltipTrigger>
-                                <TooltipContent>{open ? t("hide") : t("show")}</TooltipContent>
-                            </Tooltip>
-                        </TooltipProvider>
-                        <GroupBreadCrumbs />
                         <ViewHeader
                             titleKey={!id ? "groups" : currentGroup()?.name!}
                             subKey={!id ? "groupsDescription" : ""}
                             helpUrl={!id ? helpUrls.groupsUrl : ""}
-                            divider={!id}
+                            divider
+                            dropdownIcon={id && canManageGroup ? <DotsThreeVertical className="size-5" /> : undefined}
                             dropdownItems={
                                 id && canManageGroup
                                     ? [
@@ -166,13 +197,16 @@ export default function GroupsSection() {
                                                 setRename(currentGroup())
                                             }
                                         >
+                                            <PencilSimple className="size-4 shrink-0" />
                                             {t("edit")}
                                         </DropdownMenuItem>,
                                         <DropdownMenuItem
                                             data-testid="deleteGroup"
                                             key="deleteGroup"
                                             onClick={toggleDeleteOpen}
+                                            className="text-destructive focus:text-destructive"
                                         >
+                                            <Trash className="size-4 shrink-0" />
                                             {t("deleteGroup")}
                                         </DropdownMenuItem>
                                     ]
@@ -183,25 +217,28 @@ export default function GroupsSection() {
                             {currentGroup()?.description}
                         </div>
                         {subGroups.length > 0 && (
-                            <Tabs value={String(activeTab)} onValueChange={v => setActiveTab(Number(v))} className="w-full">
-                                <TabsList className="w-full flex-wrap">
-                                    <TabsTrigger value="0" data-testid="groups">{t("childGroups")}</TabsTrigger>
+                            <Tabs value={String(activeTab)} onValueChange={v => setActiveTab(Number(v))} className="w-full mt-6">
+                                <TabsList
+                                    variant="line"
+                                    className="mb-4 w-full flex-nowrap overflow-x-auto justify-start gap-0 h-auto p-0 pb-1.5 bg-transparent rounded-none [-webkit-overflow-scrolling:touch] [&>*]:flex-shrink-0"
+                                >
+                                    <TabsTrigger value="0" data-testid="groups" className="whitespace-nowrap">{t("childGroups")}</TabsTrigger>
                                     {canViewMembers && (
-                                        <TabsTrigger value="1" data-testid="members">{t("members")}</TabsTrigger>
+                                        <TabsTrigger value="1" data-testid="members" className="whitespace-nowrap">{t("members")}</TabsTrigger>
                                     )}
-                                    <TabsTrigger value="2" data-testid="attributesTab">{t("attributes")}</TabsTrigger>
+                                    <TabsTrigger value="2" data-testid="attributesTab" className="whitespace-nowrap">{t("attributes")}</TabsTrigger>
                                     {canViewRoles && (
-                                        <TabsTrigger value="3" data-testid="role-mapping-tab">{t("roleMapping")}</TabsTrigger>
+                                        <TabsTrigger value="3" data-testid="role-mapping-tab" className="whitespace-nowrap">{t("roleMapping")}</TabsTrigger>
                                     )}
                                     {canViewPermissions && (
-                                        <TabsTrigger value="4" data-testid="permissionsTab">{t("permissions")}</TabsTrigger>
+                                        <TabsTrigger value="4" data-testid="permissionsTab" className="whitespace-nowrap">{t("permissions")}</TabsTrigger>
                                     )}
                                     {hasAccess("view-events") && (
-                                        <TabsTrigger value="5" data-testid="admin-events-tab">{t("adminEvents")}</TabsTrigger>
+                                        <TabsTrigger value="5" data-testid="admin-events-tab" className="whitespace-nowrap">{t("adminEvents")}</TabsTrigger>
                                     )}
                                 </TabsList>
                                 <TabsContent value="0">
-                                    <GroupTable refresh={refresh} />
+                                    <GroupTable key={key} refresh={refresh} />
                                 </TabsContent>
                                 {canViewMembers && (
                                     <TabsContent value="1">
@@ -247,9 +284,9 @@ export default function GroupsSection() {
                                 )}
                             </Tabs>
                         )}
-                        {subGroups.length === 0 && <GroupTable refresh={refresh} />}
+                        {subGroups.length === 0 && <GroupTable key={key} refresh={refresh} />}
                     </div>
-                </div>
+                </SidebarProvider>
             </div>
         </div>
     );

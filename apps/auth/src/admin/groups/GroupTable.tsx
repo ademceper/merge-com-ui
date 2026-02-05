@@ -1,22 +1,31 @@
 import type GroupRepresentation from "@keycloak/keycloak-admin-client/lib/defs/groupRepresentation";
+import { Button } from "@merge/ui/components/button";
 import {
-    GroupQuery,
-    SubGroupQuery
-} from "@keycloak/keycloak-admin-client/lib/resources/groups";
-import { Input } from "@merge/ui/components/input";
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle
+} from "@merge/ui/components/alert-dialog";
+import {
+    DataTable,
+    DataTableRowActions,
+    type ColumnDef
+} from "@merge/ui/components/table";
+import { ArrowsDownUp, CopySimple, PencilSimple, Plus, Trash } from "@phosphor-icons/react";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Link, useLocation } from "react-router-dom";
 import { useAdminClient } from "../admin-client";
-import { ListEmptyState } from "../../shared/keycloak-ui-shared";
-import { KeycloakDataTable } from "../../shared/keycloak-ui-shared";
+import { getErrorDescription, getErrorMessage, useFetch } from "../../shared/keycloak-ui-shared";
+import { toast } from "@merge/ui/components/sonner";
 import { useAccess } from "../context/access/Access";
-import useToggle from "../utils/useToggle";
 import { GroupsModal } from "./GroupsModal";
 import { useSubGroups } from "./SubGroupsContext";
-import { DeleteGroup } from "./components/DeleteGroup";
-import { GroupToolbar } from "./components/GroupToolbar";
-import { MoveDialog } from "./components/MoveDialog";
+import { MoveDialog } from "./MoveDialog";
 import { getLastId } from "./groupIdUtils";
 
 type GroupTableProps = {
@@ -26,215 +35,240 @@ type GroupTableProps = {
 export const GroupTable = ({ refresh: viewRefresh }: GroupTableProps) => {
     const { adminClient } = useAdminClient();
     const { t } = useTranslation();
-    const [selectedRows, setSelectedRows] = useState<GroupRepresentation[]>([]);
-    const [rename, setRename] = useState<GroupRepresentation>();
-    const [isCreateModalOpen, toggleCreateOpen] = useToggle();
-    const [duplicateId, setDuplicateId] = useState<string>();
-    const [showDelete, toggleShowDelete] = useToggle();
-    const [move, setMove] = useState<GroupRepresentation>();
-    const { currentGroup } = useSubGroups();
-    const [key, setKey] = useState(0);
-    const refresh = () => setKey(key + 1);
-    const [search, setSearch] = useState<string>();
     const location = useLocation();
     const id = getLastId(location.pathname);
+    const { currentGroup } = useSubGroups();
     const { hasAccess } = useAccess();
     const isManager = hasAccess("manage-users") || currentGroup()?.access?.manage;
 
-    const loader = async (first?: number, max?: number) => {
-        let groupsData = undefined;
-        if (id) {
-            const args: SubGroupQuery = {
-                search: search || "",
-                first: first,
-                max: max,
-                parentId: id
-            };
-            groupsData = await adminClient.groups.listSubGroups(args);
-        } else {
-            const args: GroupQuery = {
-                search: search || "",
-                first: first || undefined,
-                max: max || undefined
-            };
-            groupsData = await adminClient.groups.find(args);
-        }
-
-        return groupsData;
+    const [key, setKey] = useState(0);
+    const refresh = () => {
+        setKey((k) => k + 1);
+        viewRefresh();
     };
+    const [groups, setGroups] = useState<GroupRepresentation[]>([]);
+    const [groupToDelete, setGroupToDelete] = useState<GroupRepresentation | undefined>();
+    const [editGroup, setEditGroup] = useState<GroupRepresentation | undefined>();
+    const [createOpen, setCreateOpen] = useState(false);
+    const [duplicateId, setDuplicateId] = useState<string | undefined>();
+    const [moveGroup, setMoveGroup] = useState<GroupRepresentation | undefined>();
+    const [parentIdForCreate, setParentIdForCreate] = useState<string | undefined>();
+
+    useFetch(
+        async () => {
+            if (id) {
+                return adminClient.groups.listSubGroups({
+                    parentId: id,
+                    first: 0,
+                    max: 1000
+                });
+            }
+            return adminClient.groups.find({ first: 0, max: 1000 });
+        },
+        (data) => setGroups(data),
+        [key, id]
+    );
+
+    const onDeleteConfirm = async () => {
+        if (!groupToDelete?.id) return;
+        try {
+            await adminClient.groups.del({ id: groupToDelete.id });
+            toast.success(t("groupDeleted", { count: 1 }));
+            setGroupToDelete(undefined);
+            refresh();
+        } catch (error) {
+            toast.error(t("groupDeleteError", { error: getErrorMessage(error) }), {
+                description: getErrorDescription(error)
+            });
+        }
+    };
+
+    const openCreate = (parentId?: string) => {
+        setParentIdForCreate(parentId ?? id);
+        setCreateOpen(true);
+    };
+
+    const columns: ColumnDef<GroupRepresentation>[] = [
+        {
+            accessorKey: "name",
+            header: t("groupName"),
+            enableHiding: false,
+            cell: ({ row }) => (
+                <Link
+                    to={`${location.pathname}/${row.original.id}`}
+                    className="text-primary hover:underline"
+                >
+                    {row.original.name}
+                </Link>
+            )
+        },
+        ...(isManager
+            ? [
+                  {
+                      id: "actions",
+                      header: "",
+                      size: 50,
+                      enableHiding: false,
+                      cell: ({ row }: { row: { original: GroupRepresentation } }) => (
+                          <DataTableRowActions row={row as { original: GroupRepresentation; id: string; getValue: (id: string) => unknown }}>
+                              <button
+                                  type="button"
+                                  className="flex w-full items-center gap-2 rounded-md px-1.5 py-1 text-left text-sm hover:bg-accent hover:text-accent-foreground"
+                                  onClick={() => setEditGroup(row.original)}
+                              >
+                                  <PencilSimple className="size-4 shrink-0" />
+                                  {t("edit")}
+                              </button>
+                              <button
+                                  type="button"
+                                  className="flex w-full items-center gap-2 rounded-md px-1.5 py-1 text-left text-sm hover:bg-accent hover:text-accent-foreground"
+                                  onClick={() => setMoveGroup(row.original)}
+                              >
+                                  <ArrowsDownUp className="size-4 shrink-0" />
+                                  {t("moveTo")}
+                              </button>
+                              <button
+                                  type="button"
+                                  className="flex w-full items-center gap-2 rounded-md px-1.5 py-1 text-left text-sm hover:bg-accent hover:text-accent-foreground"
+                                  onClick={() => openCreate(row.original.id)}
+                              >
+                                  <Plus className="size-4 shrink-0" />
+                                  {t("createChildGroup")}
+                              </button>
+                              {!id && (
+                                  <button
+                                      type="button"
+                                      className="flex w-full items-center gap-2 rounded-md px-1.5 py-1 text-left text-sm hover:bg-accent hover:text-accent-foreground"
+                                      onClick={() => setDuplicateId(row.original.id)}
+                                  >
+                                      <CopySimple className="size-4 shrink-0" />
+                                      {t("duplicate")}
+                                  </button>
+                              )}
+                              <div className="my-1 h-px bg-border" />
+                              <button
+                                  type="button"
+                                  className="flex w-full items-center gap-2 rounded-md px-1.5 py-1 text-left text-sm text-destructive hover:bg-destructive/10 hover:text-destructive"
+                                  onClick={() => setGroupToDelete(row.original)}
+                              >
+                                  <Trash className="size-4 shrink-0" />
+                                  {t("delete")}
+                              </button>
+                          </DataTableRowActions>
+                      )
+                  } as ColumnDef<GroupRepresentation>
+              ]
+            : [])
+    ];
+
+    const emptyMessageKey = id ? `noGroupsInThisSubGroup` : `noGroupsInThisRealm`;
 
     return (
         <>
-            <DeleteGroup
-                show={showDelete}
-                toggleDialog={toggleShowDelete}
-                selectedRows={selectedRows}
-                refresh={() => {
-                    refresh();
-                    viewRefresh();
-                    setSelectedRows([]);
-                }}
-            />
-            {rename && (
+            <AlertDialog
+                open={!!groupToDelete}
+                onOpenChange={(open) => !open && setGroupToDelete(undefined)}
+            >
+                <AlertDialogContent>
+                    <AlertDialogHeader>
+                        <AlertDialogTitle>{t("deleteConfirmTitle", { count: 1 })}</AlertDialogTitle>
+                        <AlertDialogDescription>
+                            {t("deleteConfirmGroup", {
+                                count: 1,
+                                groupName: groupToDelete?.name
+                            })}
+                        </AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter>
+                        <AlertDialogCancel>{t("cancel")}</AlertDialogCancel>
+                        <AlertDialogAction
+                            variant="destructive"
+                            data-testid="confirm"
+                            onClick={onDeleteConfirm}
+                        >
+                            {t("delete")}
+                        </AlertDialogAction>
+                    </AlertDialogFooter>
+                </AlertDialogContent>
+            </AlertDialog>
+
+            {editGroup && (
                 <GroupsModal
-                    id={rename.id}
-                    rename={rename}
+                    open={true}
+                    onOpenChange={(open) => !open && setEditGroup(undefined)}
+                    id={editGroup.id}
+                    rename={editGroup}
                     refresh={() => {
+                        setEditGroup(undefined);
                         refresh();
-                        viewRefresh();
                     }}
-                    handleModalToggle={() => setRename(undefined)}
+                    handleModalToggle={() => setEditGroup(undefined)}
                 />
             )}
-            {isCreateModalOpen && (
+
+            {createOpen && (
                 <GroupsModal
-                    id={selectedRows[0]?.id || id}
-                    handleModalToggle={toggleCreateOpen}
+                    open={true}
+                    onOpenChange={(open) => {
+                        if (!open) setCreateOpen(false);
+                    }}
+                    id={parentIdForCreate ?? id}
+                    handleModalToggle={() => setCreateOpen(false)}
                     refresh={() => {
-                        setSelectedRows([]);
+                        setCreateOpen(false);
                         refresh();
-                        viewRefresh();
                     }}
                 />
             )}
+
             {duplicateId && (
                 <GroupsModal
+                    open={true}
+                    onOpenChange={(open) => !open && setDuplicateId(undefined)}
                     id={duplicateId}
                     duplicateId={duplicateId}
                     refresh={() => {
+                        setDuplicateId(undefined);
                         refresh();
-                        viewRefresh();
                     }}
                     handleModalToggle={() => setDuplicateId(undefined)}
                 />
             )}
-            {move && (
+
+            {moveGroup && (
                 <MoveDialog
-                    source={move}
+                    source={moveGroup}
                     refresh={() => {
-                        setMove(undefined);
+                        setMoveGroup(undefined);
                         refresh();
-                        viewRefresh();
                     }}
-                    onClose={() => setMove(undefined)}
+                    onClose={() => setMoveGroup(undefined)}
                 />
             )}
-            <KeycloakDataTable
-                key={`${id}${key}`}
-                onSelect={rows => setSelectedRows([...rows])}
-                canSelectAll
-                loader={loader}
-                ariaLabelKey="groups"
-                isPaginated
-                isSearching={!!search}
-                toolbarItem={
-                    <>
-                        <div>
-                            <Input
-                                data-testid="group-search"
-                                placeholder={t("filterGroups")}
-                                value={search}
-                                onChange={(e) => {
-                                    const value = e.target.value;
-                                    setSearch(value);
-                                    if (value === "") {
-                                        refresh();
-                                    }
-                                }}
-                                onKeyDown={(e) => {
-                                    if (e.key === "Enter") {
-                                        refresh();
-                                    }
-                                }}
-                            />
-                        </div>
-                        <GroupToolbar
-                            toggleCreate={toggleCreateOpen}
-                            toggleDelete={toggleShowDelete}
-                            kebabDisabled={selectedRows!.length === 0}
-                        />
-                    </>
-                }
-                actions={
-                    !isManager
-                        ? []
-                        : [
-                              {
-                                  title: t("edit"),
-                                  onRowClick: async group => {
-                                      setRename(group);
-                                      return false;
-                                  }
-                              },
-                              {
-                                  title: t("moveTo"),
-                                  onRowClick: async group => {
-                                      setMove(group);
-                                      return false;
-                                  }
-                              },
-                              {
-                                  title: t("createChildGroup"),
-                                  onRowClick: async group => {
-                                      setSelectedRows([group]);
-                                      toggleCreateOpen();
-                                      return false;
-                                  }
-                              },
-                              ...(!id
-                                  ? [
-                                        {
-                                            title: t("duplicate"),
-                                            onRowClick: async (
-                                                group: GroupRepresentation
-                                            ) => {
-                                                setDuplicateId(group.id);
-                                                return false;
-                                            }
-                                        }
-                                    ]
-                                  : []),
-                              {
-                                  title: "",
-                                  isSeparator: true
-                              },
-                              {
-                                  title: t("delete"),
-                                  onRowClick: async (group: GroupRepresentation) => {
-                                      setSelectedRows([group]);
-                                      toggleShowDelete();
-                                      return true;
-                                  }
-                              }
-                          ]
-                }
-                columns={[
-                    {
-                        name: "name",
-                        displayKey: "groupName",
-                        cellRenderer: group =>
-                            group.access?.view ? (
-                                <Link
-                                    key={group.id}
-                                    to={`${location.pathname}/${group.id}`}
-                                >
-                                    {group.name}
-                                </Link>
-                            ) : (
-                                <span>{group.name}</span>
-                            )
-                    }
-                ]}
-                emptyState={
-                    <ListEmptyState
-                        hasIcon={true}
-                        message={t(`noGroupsInThis${id ? "SubGroup" : "Realm"}`)}
-                        instructions={t(
-                            `noGroupsInThis${id ? "SubGroup" : "Realm"}Instructions`
-                        )}
-                        primaryActionText={t("createGroup")}
-                        onPrimaryAction={toggleCreateOpen}
-                    />
+
+            <DataTable
+                key={`${id}-${key}`}
+                columns={columns}
+                data={groups}
+                searchColumnId="name"
+                searchPlaceholder={t("filterGroups")}
+                emptyMessage={t(emptyMessageKey)}
+                onRowClick={(row) => isManager && setEditGroup(row.original)}
+                enableColumnVisibility={false}
+                toolbar={
+                    isManager ? (
+                        <Button
+                            type="button"
+                            data-testid="createGroup"
+                            variant="default"
+                            className="flex h-9 w-9 shrink-0 items-center justify-center p-0 sm:h-9 sm:w-auto sm:gap-2 sm:px-4 sm:py-2"
+                            aria-label={t("createGroup")}
+                            onClick={() => openCreate()}
+                        >
+                            <Plus size={20} className="shrink-0 sm:hidden" />
+                            <span className="hidden sm:inline">{t("createGroup")}</span>
+                        </Button>
+                    ) : undefined
                 }
             />
         </>

@@ -2,7 +2,14 @@ import type GroupRepresentation from "@keycloak/keycloak-admin-client/lib/defs/g
 import { getErrorDescription, getErrorMessage, TextControl, useFetch } from "../../shared/keycloak-ui-shared";
 import { toast } from "@merge/ui/components/sonner";
 import { Button } from "@merge/ui/components/button";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@merge/ui/components/dialog";
+import {
+    Dialog,
+    DialogClose,
+    DialogContent,
+    DialogFooter,
+    DialogHeader,
+    DialogTitle
+} from "@merge/ui/components/dialog";
 import { Alert, AlertTitle } from "@merge/ui/components/alert";
 import { useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
@@ -16,6 +23,9 @@ type GroupsModalProps = {
     duplicateId?: string;
     handleModalToggle: () => void;
     refresh: (group?: GroupRepresentation) => void;
+    /** Controlled mode: dialog visibility */
+    open?: boolean;
+    onOpenChange?: (open: boolean) => void;
 };
 
 type RoleMappingPayload = {
@@ -34,7 +44,9 @@ export const GroupsModal = ({
     rename,
     duplicateId,
     handleModalToggle,
-    refresh
+    refresh,
+    open: controlledOpen,
+    onOpenChange: controlledOnOpenChange
 }: GroupsModalProps) => {
     const { adminClient } = useAdminClient();
     const { t } = useTranslation();
@@ -244,52 +256,67 @@ const isFeatureEnabled = useIsFeatureEnabled();
         }
     };
 
+    const isOpen = controlledOpen ?? true;
+    const handleOpenChange = (open: boolean) => {
+        if (!open) handleModalToggle();
+        controlledOnOpenChange?.(open);
+    };
+
     return (
-        <Dialog open onOpenChange={(open) => { if (!open) handleModalToggle(); }}>
-            <DialogContent>
-                <DialogHeader>
-                    <DialogTitle>
-                        {rename
-                            ? t("editGroup")
-                            : duplicateId
-                              ? t("duplicateAGroup")
-                              : t("createAGroup")}
-                    </DialogTitle>
+        <Dialog open={isOpen} onOpenChange={handleOpenChange}>
+            <DialogContent className="max-w-lg sm:max-w-lg">
+                <DialogHeader className="w-full">
+                    <div className="flex w-full flex-row items-center justify-between gap-2">
+                        <DialogTitle className="min-w-0 flex-1 truncate">
+                            {rename
+                                ? t("editGroup")
+                                : duplicateId
+                                  ? t("duplicateAGroup")
+                                  : t("createAGroup")}
+                        </DialogTitle>
+                    </div>
                 </DialogHeader>
-                <FormProvider {...form}>
-                    <form id="group-form" onSubmit={handleSubmit(submitForm)}>
-                        {duplicateId && (
-                            <Alert variant="destructive">
-                                <AlertTitle>{t("duplicateGroupWarning")}</AlertTitle>
-                            </Alert>
-                        )}
-                        <TextControl
-                            name="name"
-                            label={t("name")}
-                            rules={{ required: t("required") }}
-                            autoFocus
-                        />
-                        <TextControl name="description" label={t("description")} />
-                    </form>
-                </FormProvider>
-                <DialogFooter>
-                    <Button
-                        type="submit"
-                        form="group-form"
-                        data-testid={`${rename ? "rename" : duplicateId ? "duplicate" : "create"}Group`}
-                        key="confirm"
-                        disabled={formState.isLoading || formState.isValidating || formState.isSubmitting}
-                    >
-                        {t(rename ? "edit" : duplicateId ? "duplicate" : "create")}
-                    </Button>
-                    <Button
-                        id="modal-cancel"
-                        data-testid="cancel"
-                        variant="link"
-                        onClick={handleModalToggle}
-                    >
-                        {t("cancel")}
-                    </Button>
+                <div className="min-h-[120px]">
+                    <FormProvider {...form}>
+                        <form id="group-form" onSubmit={handleSubmit(submitForm)} className="flex flex-col gap-5 py-2">
+                            {duplicateId && (
+                                <Alert variant="destructive">
+                                    <AlertTitle>{t("duplicateGroupWarning")}</AlertTitle>
+                                </Alert>
+                            )}
+                            <TextControl
+                                name="name"
+                                label={t("name")}
+                                showLabel
+                                rules={{ required: t("required") }}
+                                autoFocus
+                            />
+                            <TextControl name="description" label={t("description")} showLabel />
+                        </form>
+                    </FormProvider>
+                </div>
+                <DialogFooter className="flex flex-col gap-2 sm:flex-row sm:flex-nowrap sm:items-center sm:justify-end sm:gap-4">
+                    <div className="flex w-full flex-col gap-2 sm:w-auto sm:flex-row sm:shrink-0 sm:items-center">
+                        <DialogClose asChild>
+                            <Button
+                                id="modal-cancel"
+                                data-testid="cancel"
+                                variant="ghost"
+                                className="h-9 min-h-9 w-full text-foreground sm:w-auto"
+                            >
+                                {t("cancel")}
+                            </Button>
+                        </DialogClose>
+                        <Button
+                            type="submit"
+                            form="group-form"
+                            data-testid={`${rename ? "rename" : duplicateId ? "duplicate" : "create"}Group`}
+                            disabled={formState.isLoading || formState.isValidating || formState.isSubmitting}
+                            className="h-9 min-h-9 w-full group sm:w-auto"
+                        >
+                            {t(rename ? "edit" : duplicateId ? "duplicate" : "create")}
+                        </Button>
+                    </div>
                 </DialogFooter>
             </DialogContent>
         </Dialog>

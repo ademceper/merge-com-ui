@@ -18,6 +18,7 @@ export type TextControlProps<
         id?: string;
         label: string;
         labelIcon?: string | ReactNode;
+        showLabel?: boolean;
         isDisabled?: boolean;
         readOnlyVariant?: string;
         validated?: string;
@@ -30,7 +31,7 @@ export type TextControlProps<
 export const TextControl = <T extends FieldValues, P extends FieldPath<T> = FieldPath<T>>(
     props: TextControlProps<T, P>
 ) => {
-    const { labelIcon, helperText, ...rest } = props;
+    const { labelIcon, helperText, showLabel = false, ...rest } = props;
     const required = !!getRuleValue(props.rules?.required);
     const defaultValue = props.defaultValue ?? ("" as PathValue<T, P>);
 
@@ -46,7 +47,7 @@ export const TextControl = <T extends FieldValues, P extends FieldPath<T> = Fiel
             labelIcon={labelIcon}
             isRequired={required}
             error={fieldState.error}
-            showLabel={false}
+            showLabel={showLabel}
         >
             <Input
                 {...rest}

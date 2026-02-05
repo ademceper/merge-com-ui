@@ -216,40 +216,7 @@ export function AdminAppSidebar({ ...props }: React.ComponentProps<typeof Sideba
                                 <LeftNav title="clientScopes" path="/client-scopes" />
                                 <LeftNav title="realmRoles" path="/roles" />
                                 {hasAccess("query-users") && (
-                                    <Collapsible
-                                        asChild
-                                        defaultOpen={location.pathname.includes("/users")}
-                                        className="group/collapsible"
-                                    >
-                                        <SidebarMenuItem>
-                                            <CollapsibleTrigger asChild>
-                                                <SidebarMenuButton
-                                                    tooltip={t("users")}
-                                                    isActive={location.pathname.includes("/users")}
-                                                >
-                                                    <span>{t("users")}</span>
-                                                    <CaretRightIcon className="ml-auto size-4 transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
-                                                </SidebarMenuButton>
-                                            </CollapsibleTrigger>
-                                            <CollapsibleContent>
-                                                <SidebarMenuSub>
-                                                    <SubNavLink
-                                                        to={`/${encodeURIComponent(realm)}/users/list`}
-                                                        title="userList"
-                                                        dataTestId="listTab"
-                                                    />
-                                                    {isFeatureEnabled(Feature.AdminFineGrainedAuthz) &&
-                                                        hasAccess("manage-authorization", "manage-users", "manage-clients") && (
-                                                        <SubNavLink
-                                                            to={`/${encodeURIComponent(realm)}/users/permissions`}
-                                                            title="permissions"
-                                                            dataTestId="permissionsTab"
-                                                        />
-                                                    )}
-                                                </SidebarMenuSub>
-                                            </CollapsibleContent>
-                                        </SidebarMenuItem>
-                                    </Collapsible>
+                                    <LeftNav title="titleUsers" path="/users" />
                                 )}
                                 <LeftNav title="groups" path="/groups" />
                                 <LeftNav title="sessions" path="/sessions" />

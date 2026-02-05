@@ -4,8 +4,8 @@ import { ViewHeader } from "../components/view-header/ViewHeader";
 import { useRealm } from "../context/realm-context/RealmContext";
 import helpUrls from "../help-urls";
 import { PermissionsTab } from "../components/permission-tab/PermissionTab";
-import { UserDataTable } from "../components/users/UserDataTable";
 import useIsFeatureEnabled, { Feature } from "../utils/useIsFeatureEnabled";
+import { UsersListSection } from "./UsersListSection";
 import { useAccess } from "../context/access/Access";
 
 export default function UsersSection() {
@@ -23,7 +23,7 @@ export default function UsersSection() {
         if (tab === "permissions" && canViewPermissions) {
             return <PermissionsTab type="users" />;
         }
-        return <UserDataTable />;
+        return <UsersListSection />;
     };
 
     return (
@@ -32,9 +32,9 @@ export default function UsersSection() {
                 titleKey="titleUsers"
                 subKey="usersExplain"
                 helpUrl={helpUrls.usersUrl}
-                divider={false}
+                divider
             />
-            <div data-testid="users-page" className="bg-muted/30 p-0">
+            <div data-testid="users-page" className="py-6 px-0">
                 {content()}
             </div>
         </>

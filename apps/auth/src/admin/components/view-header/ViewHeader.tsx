@@ -24,6 +24,7 @@ export type ViewHeaderProps = {
     actionsDropdownId?: string;
     helpUrl?: string | undefined;
     dropdownItems?: ReactElement[];
+    dropdownIcon?: ReactNode;
     lowerDropdownItems?: any;
     lowerDropdownMenuTitle?: any;
     lowerButton?: any;
@@ -49,6 +50,7 @@ export const ViewHeader = ({
     subKey,
     helpUrl,
     dropdownItems,
+    dropdownIcon,
     lowerDropdownMenuTitle,
     lowerDropdownItems,
     lowerButton,
@@ -122,9 +124,9 @@ export const ViewHeader = ({
                                     disabled={isDropdownDisabled}
                                     id={actionsDropdownId}
                                     data-testid="action-dropdown"
-                                    className={buttonVariants()}
+                                    className={dropdownIcon ? buttonVariants({ variant: "ghost", size: "icon" }) : buttonVariants()}
                                 >
-                                    {t("action")}
+                                    {dropdownIcon || t("action")}
                                 </DropdownMenuTrigger>
                                 <DropdownMenuContent align="end">
                                     {dropdownItems}

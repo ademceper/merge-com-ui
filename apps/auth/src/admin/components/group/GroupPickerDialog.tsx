@@ -4,6 +4,7 @@ import {
     SubGroupQuery
 } from "@keycloak/keycloak-admin-client/lib/resources/groups";
 import {
+    KeycloakPagination,
     ListEmptyState,
     PaginatingTableToolbar,
     useFetch
@@ -17,8 +18,10 @@ import {
     DialogFooter
 } from "@merge/ui/components/dialog";
 import { Checkbox } from "@merge/ui/components/checkbox";
-import { CaretRight } from "@phosphor-icons/react";
-import { useState } from "react";
+import { Input } from "@merge/ui/components/input";
+import { Separator } from "@merge/ui/components/separator";
+import { CaretRight, MagnifyingGlass } from "@phosphor-icons/react";
+import { KeyboardEvent, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useAdminClient } from "../../admin-client";
 import { GroupPath } from "./GroupPath";
@@ -63,8 +66,21 @@ export const GroupPickerDialog = ({
     const [first, setFirst] = useState(0);
 
     const [count, setCount] = useState(0);
+    const [moveSearchValue, setMoveSearchValue] = useState("");
 
     const currentGroup = () => navigation[navigation.length - 1];
+
+    const applyMoveSearch = () => {
+        setFilter(moveSearchValue.trim());
+        setFirst(0);
+        setMax(10);
+        setNavigation([]);
+        setGroupId(undefined);
+    };
+
+    const handleMoveSearchKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
+        if (e.key === "Enter") applyMoveSearch();
+    };
 
     useFetch(
         async () => {
@@ -130,6 +146,114 @@ export const GroupPickerDialog = ({
         ].some(group => group === row?.id);
     };
 
+    const paginationProps = {
+        count,
+        first,
+        max,
+        onNextClick: setFirst,
+        onPreviousClick: setFirst,
+        onPerPageSelect: (newMax: number, newFirst: number) => {
+            setMax(newMax);
+            setFirst(newFirst);
+        }
+    };
+
+    const listContent = (
+        <>
+            <nav aria-label="breadcrumb" className="flex items-center gap-1 text-sm mb-2">
+                {navigation.length > 0 && (
+                    <span key="home">
+                        <Button
+                            variant="link"
+                            onClick={() => {
+                                setGroupId(undefined);
+                                setNavigation([]);
+                                setFirst(0);
+                                setMax(10);
+                            }}
+                        >
+                            {t("groups")}
+                        </Button>
+                        <span className="mx-1">/</span>
+                    </span>
+                )}
+                {navigation.map((group, i) => (
+                    <span key={i}>
+                        {navigation.length - 1 !== i && (
+                            <>
+                                <Button
+                                    variant="link"
+                                    onClick={() => {
+                                        setGroupId(group.id);
+                                        setNavigation([...navigation].slice(0, i));
+                                        setFirst(0);
+                                        setMax(10);
+                                    }}
+                                >
+                                    {group.name}
+                                </Button>
+                                <span className="mx-1">/</span>
+                            </>
+                        )}
+                        {navigation.length - 1 === i && <span className="font-medium">{group.name}</span>}
+                    </span>
+                ))}
+            </nav>
+            <div aria-label={t("groups")} className="space-y-1">
+                {filter == ""
+                    ? groups.slice(0, max).map((group: SelectableGroup) => (
+                          <GroupRow
+                              key={group.id}
+                              group={group}
+                              isRowDisabled={isRowDisabled}
+                              onSelect={group => {
+                                  setGroupId(group.id);
+                                  setFirst(0);
+                              }}
+                              type={type}
+                              isSearching={filter !== ""}
+                              setIsSearching={boolean =>
+                                  setFilter(boolean ? "" : filter)
+                              }
+                              selectedRows={selectedRows}
+                              setSelectedRows={setSelectedRows}
+                              canBrowse={canBrowse}
+                          />
+                      ))
+                    : groups
+                          ?.map(g => deepGroup([g]))
+                          .flat()
+                          .map(g => (
+                              <GroupRow
+                                  key={g.id}
+                                  group={g}
+                                  isRowDisabled={isRowDisabled}
+                                  type={type}
+                                  isSearching
+                                  selectedRows={selectedRows}
+                                  setSelectedRows={setSelectedRows}
+                                  canBrowse={false}
+                              />
+                          ))}
+            </div>
+            {groups.length === 0 && filter === "" && (
+                <ListEmptyState
+                    hasIcon={false}
+                    message={t("moveGroupEmpty")}
+                    instructions={
+                        isMove ? t("moveGroupEmptyInstructions") : undefined
+                    }
+                />
+            )}
+            {groups.length === 0 && filter !== "" && (
+                <ListEmptyState
+                    message={t("noSearchResults")}
+                    instructions={t("noSearchResultsInstructions")}
+                />
+            )}
+        </>
+    );
+
     return (
         <Dialog open onOpenChange={(open) => { if (!open) onClose(); }}>
             <DialogContent className={filter !== "" ? "max-w-2xl" : "max-w-md"}>
@@ -139,137 +263,93 @@ export const GroupPickerDialog = ({
                         group2: navigation.length ? currentGroup().name : t("root")
                     })}</DialogTitle>
                 </DialogHeader>
-            <PaginatingTableToolbar
-                count={count}
-                first={first}
-                max={max}
-                onNextClick={setFirst}
-                onPreviousClick={setFirst}
-                onPerPageSelect={(first, max) => {
-                    setFirst(first);
-                    setMax(max);
-                }}
-                inputGroupName={"search"}
-                inputGroupOnEnter={search => {
-                    setFilter(search);
-                    setFirst(0);
-                    setMax(10);
-                    setNavigation([]);
-                    setGroupId(undefined);
-                }}
-                inputGroupPlaceholder={t("searchForGroups")}
-            >
-                <nav aria-label="breadcrumb" className="flex items-center gap-1 text-sm mb-2">
-                    {navigation.length > 0 && (
-                        <span key="home">
+                {isMove ? (
+                    <>
+                        <div className="flex flex-1 min-w-0 items-center gap-1 rounded-lg border border-input bg-transparent px-2 mb-3">
+                            <MagnifyingGlass className="text-muted-foreground size-4 shrink-0" />
+                            <Input
+                                data-testid="table-search-input"
+                                placeholder={t("searchForGroups")}
+                                aria-label={t("search")}
+                                value={moveSearchValue}
+                                onChange={e => setMoveSearchValue(e.target.value)}
+                                onKeyDown={handleMoveSearchKeyDown}
+                                className="border-0 bg-transparent shadow-none focus-visible:ring-0 flex-1 min-w-0"
+                            />
+                        </div>
+                        <div className="flex items-center gap-2 mb-2">
+                            <KeycloakPagination {...paginationProps} />
+                        </div>
+                        <Separator className="mb-3" />
+                        {listContent}
+                        {count !== 0 && (
+                            <div className="flex items-center gap-2 mt-3">
+                                <KeycloakPagination {...paginationProps} variant="bottom" />
+                            </div>
+                        )}
+                        <DialogFooter className="mt-4">
                             <Button
-                                variant="link"
+                                data-testid={`${text.ok}-button`}
                                 onClick={() => {
-                                    setGroupId(undefined);
-                                    setNavigation([]);
-                                    setFirst(0);
-                                    setMax(10);
+                                    onConfirm(
+                                        type === "selectMany"
+                                            ? selectedRows
+                                            : navigation.length
+                                              ? [currentGroup()]
+                                              : undefined
+                                    );
                                 }}
+                                disabled={type === "selectMany" && selectedRows.length === 0}
                             >
-                                {t("groups")}
+                                {t(text.ok)}
                             </Button>
-                            <span className="mx-1">/</span>
-                        </span>
-                    )}
-                    {navigation.map((group, i) => (
-                        <span key={i}>
-                            {navigation.length - 1 !== i && (
-                                <>
-                                    <Button
-                                        variant="link"
-                                        onClick={() => {
-                                            setGroupId(group.id);
-                                            setNavigation([...navigation].slice(0, i));
-                                            setFirst(0);
-                                            setMax(10);
-                                        }}
-                                    >
-                                        {group.name}
-                                    </Button>
-                                    <span className="mx-1">/</span>
-                                </>
-                            )}
-                            {navigation.length - 1 === i && <span className="font-medium">{group.name}</span>}
-                        </span>
-                    ))}
-                </nav>
-                <div aria-label={t("groups")} className="space-y-1">
-                    {filter == ""
-                        ? groups.slice(0, max).map((group: SelectableGroup) => (
-                              <GroupRow
-                                  key={group.id}
-                                  group={group}
-                                  isRowDisabled={isRowDisabled}
-                                  onSelect={group => {
-                                      setGroupId(group.id);
-                                      setFirst(0);
-                                  }}
-                                  type={type}
-                                  isSearching={filter !== ""}
-                                  setIsSearching={boolean =>
-                                      setFilter(boolean ? "" : filter)
-                                  }
-                                  selectedRows={selectedRows}
-                                  setSelectedRows={setSelectedRows}
-                                  canBrowse={canBrowse}
-                              />
-                          ))
-                        : groups
-                              ?.map(g => deepGroup([g]))
-                              .flat()
-                              .map(g => (
-                                  <GroupRow
-                                      key={g.id}
-                                      group={g}
-                                      isRowDisabled={isRowDisabled}
-                                      type={type}
-                                      isSearching
-                                      selectedRows={selectedRows}
-                                      setSelectedRows={setSelectedRows}
-                                      canBrowse={false}
-                                  />
-                              ))}
-                </div>
-                {groups.length === 0 && filter === "" && (
-                    <ListEmptyState
-                        hasIcon={false}
-                        message={t("moveGroupEmpty")}
-                        instructions={
-                            isMove ? t("moveGroupEmptyInstructions") : undefined
-                        }
-                    />
+                        </DialogFooter>
+                    </>
+                ) : (
+                    <>
+                        <PaginatingTableToolbar
+                            count={count}
+                            first={first}
+                            max={max}
+                            onNextClick={setFirst}
+                            onPreviousClick={setFirst}
+                            onPerPageSelect={(first, max) => {
+                                setFirst(first);
+                                setMax(max);
+                            }}
+                            inputGroupName={"search"}
+                            inputGroupOnEnter={search => {
+                                setFilter(search);
+                                setFirst(0);
+                                setMax(10);
+                                setNavigation([]);
+                                setGroupId(undefined);
+                            }}
+                            inputGroupPlaceholder={t("searchForGroups")}
+                        >
+                            {listContent}
+                        </PaginatingTableToolbar>
+                        <DialogFooter>
+                            <Button
+                                data-testid={`${text.ok}-button`}
+                                key="confirm"
+                                form="group-form"
+                                onClick={() => {
+                                    onConfirm(
+                                        type === "selectMany"
+                                            ? selectedRows
+                                            : navigation.length
+                                              ? [currentGroup()]
+                                              : undefined
+                                    );
+                                }}
+                                disabled={type === "selectMany" && selectedRows.length === 0}
+                            >
+                                {t(text.ok)}
+                            </Button>
+                        </DialogFooter>
+                    </>
                 )}
-                {groups.length === 0 && filter !== "" && (
-                    <ListEmptyState
-                        message={t("noSearchResults")}
-                        instructions={t("noSearchResultsInstructions")}
-                    />
-                )}
-            </PaginatingTableToolbar>
-                <DialogFooter>
-                    <Button
-                        data-testid={`${text.ok}-button`}
-                        key="confirm"
-                        form="group-form"
-                        onClick={() => {
-                            onConfirm(
-                                type === "selectMany"
-                                    ? selectedRows
-                                    : navigation.length
-                                      ? [currentGroup()]
-                                      : undefined
-                            );
-                        }}
-                        disabled={type === "selectMany" && selectedRows.length === 0}
-                    >
-                        {t(text.ok)}
-                    </Button>
-                </DialogFooter>
             </DialogContent>
         </Dialog>
     );

@@ -73,7 +73,7 @@ export const CellDropdown = ({
 
     return (
         <KeycloakSelect
-            key={clientScope.id}
+            key={`${clientScope.id}-${type}`}
             toggleId="cell-dropdown"
             className={classNameProp ?? `keycloak__client-scope__${type}`}
             variant={SelectVariant.single}

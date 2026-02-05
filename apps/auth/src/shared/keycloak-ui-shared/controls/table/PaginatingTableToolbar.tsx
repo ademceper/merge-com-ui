@@ -39,7 +39,7 @@ type TableToolbarProps = KeycloakPaginationProps & {
 
 const PER_PAGE_OPTIONS = [10, 20, 50, 100];
 
-const KeycloakPagination = ({
+export const KeycloakPagination = ({
     id,
     variant = "top",
     count,
