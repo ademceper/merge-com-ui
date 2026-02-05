@@ -31,6 +31,7 @@ import {
   MagnifyingGlass,
   Trash,
   DotsThreeVertical,
+  EyeSlash,
 } from "@phosphor-icons/react"
 import { useId, useMemo, useRef, useState } from "react"
 
@@ -51,13 +52,10 @@ import { Checkbox } from "@merge/ui/components/checkbox"
 import { Input } from "@merge/ui/components/input"
 import { Label } from "@merge/ui/components/label"
 import {
-  Pagination,
-  PaginationContent,
-  PaginationItem,
-} from "@merge/ui/components/pagination"
-import {
   DropdownMenu,
   DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@merge/ui/components/dropdown-menu"
 import {
@@ -80,7 +78,7 @@ export function Table({
   return (
     <div
       data-slot="table-container"
-      className="relative w-full overflow-x-auto"
+      className="relative w-full overflow-auto"
     >
       <table
         data-slot="table"
@@ -98,7 +96,7 @@ export function TableHeader({
   return (
     <thead
       data-slot="table-header"
-      className={cn("[&_tr]:border-b", className)}
+      className={cn("sticky top-0 z-10 [&_tr]:border-b", className)}
       {...props}
     />
   )
@@ -111,7 +109,7 @@ export function TableBody({
   return (
     <tbody
       data-slot="table-body"
-      className={cn("[&_tr:last-child]:border-0", className)}
+      className={cn("[&_tr:last-child]:border-0 [&_tr_td:first-child]:w-8", className)}
       {...props}
     />
   )
@@ -141,7 +139,7 @@ export function TableRow({
     <tr
       data-slot="table-row"
       className={cn(
-        "hover:bg-muted/50 data-[state=selected]:bg-muted border-b transition-colors",
+        "border-b transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted data-[dragging=true]:opacity-80 data-[dragging=true]:z-10 data-[dragging=true]:relative",
         className
       )}
       {...props}
@@ -157,7 +155,7 @@ export function TableHead({
     <th
       data-slot="table-head"
       className={cn(
-        "text-foreground h-10 px-2 text-left align-middle font-medium whitespace-nowrap [&:has([role=checkbox])]:pr-0",
+        "text-foreground h-12 min-h-12 px-2 text-left align-middle font-medium whitespace-nowrap [&:has([role=checkbox])]:pr-0 first:w-8",
         className
       )}
       {...props}
@@ -173,7 +171,7 @@ export function TableCell({
     <td
       data-slot="table-cell"
       className={cn(
-        "p-2 align-middle whitespace-nowrap [&:has([role=checkbox])]:pr-0",
+        "h-12 min-h-12 p-2 align-middle overflow-hidden text-ellipsis whitespace-nowrap [&:has([role=checkbox])]:pr-0",
         className
       )}
       {...props}
@@ -455,8 +453,8 @@ export function DataTable<TData>({
         </div>
       </div>
 
-      <div className="overflow-x-auto rounded-md border bg-background [-webkit-overflow-scrolling:touch]">
-        <Table className="table-fixed min-w-full">
+      <div className="overflow-hidden rounded-lg [-webkit-overflow-scrolling:touch]">
+        <Table className="min-w-full table-fixed">
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow
@@ -465,47 +463,68 @@ export function DataTable<TData>({
               >
                 {headerGroup.headers.map((header) => (
                   <TableHead
-                    className="h-11"
+                    className="h-12"
                     key={header.id}
                     style={{ width: header.getSize() }}
                   >
                     {header.isPlaceholder ? null : header.column.getCanSort() ? (
-                      <div
-                        className={cn(
-                          header.column.getCanSort() &&
-                            "flex h-full cursor-pointer select-none items-center justify-between gap-2"
-                        )}
-                        onClick={header.column.getToggleSortingHandler()}
-                        onKeyDown={(e) => {
-                          if (
-                            header.column.getCanSort() &&
-                            (e.key === "Enter" || e.key === " ")
-                          ) {
-                            e.preventDefault()
-                            header.column.getToggleSortingHandler()?.(e)
-                          }
-                        }}
-                        tabIndex={header.column.getCanSort() ? 0 : undefined}
-                      >
-                        {flexRender(
-                          header.column.columnDef.header,
-                          header.getContext()
-                        )}
-                        {{
-                          asc: (
-                            <CaretUp
-                              size={16}
-                              className="shrink-0 opacity-60"
-                            />
-                          ),
-                          desc: (
-                            <CaretDown
-                              size={16}
-                              className="shrink-0 opacity-60"
-                            />
-                          ),
-                        }[header.column.getIsSorted() as string] ?? null}
-                      </div>
+                      <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                          <button
+                            type="button"
+                            className="flex h-full w-full cursor-pointer select-none items-center gap-1.5 rounded-md px-0 text-left outline-none hover:opacity-80"
+                          >
+                            {flexRender(
+                              header.column.columnDef.header,
+                              header.getContext()
+                            )}
+                            {{
+                              asc: (
+                                <CaretUp
+                                  size={16}
+                                  className="shrink-0 text-muted-foreground"
+                                />
+                              ),
+                              desc: (
+                                <CaretDown
+                                  size={16}
+                                  className="shrink-0 text-muted-foreground"
+                                />
+                              ),
+                            }[header.column.getIsSorted() as string] ?? (
+                              <CaretDown
+                                size={16}
+                                className="shrink-0 text-muted-foreground opacity-50"
+                              />
+                            )}
+                          </button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent align="start">
+                          <DropdownMenuItem
+                            onClick={() => header.column.toggleSorting(false)}
+                          >
+                            <CaretUp size={16} className="mr-2" />
+                            Asc
+                          </DropdownMenuItem>
+                          <DropdownMenuItem
+                            onClick={() => header.column.toggleSorting(true)}
+                          >
+                            <CaretDown size={16} className="mr-2" />
+                            Desc
+                          </DropdownMenuItem>
+                          {header.column.getCanHide() && (
+                            <>
+                              <DropdownMenuSeparator />
+                              <DropdownMenuItem
+                                onClick={() => header.column.toggleVisibility(false)}
+                              >
+                                <EyeSlash size={16} className="mr-2" />
+                                Hide
+                              </DropdownMenuItem>
+                            </>
+                          )}
+                        </DropdownMenuContent>
+                      </DropdownMenu>
                     ) : (
                       flexRender(
                         header.column.columnDef.header,
@@ -558,97 +577,77 @@ export function DataTable<TData>({
         </Table>
       </div>
 
-      <div className="flex items-center justify-between gap-8">
-        <div className="flex items-center gap-3">
-          <Label className="max-sm:sr-only" htmlFor={id}>
-            Rows per page
-          </Label>
-          <Select
-            value={table.getState().pagination.pageSize.toString()}
-            onValueChange={(v) => table.setPageSize(Number(v))}
-          >
-            <SelectTrigger className="w-fit whitespace-nowrap" id={id}>
-              <SelectValue placeholder="Rows" />
-            </SelectTrigger>
-            <SelectContent>
-              {pageSizeOptions.map((size) => (
-                <SelectItem key={size} value={size.toString()}>
-                  {size}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
+      <div className="flex items-center justify-between px-4">
+        <div className="text-muted-foreground hidden flex-1 text-sm lg:flex">
+          {table.getFilteredSelectedRowModel().rows.length} of{" "}
+          {table.getFilteredRowModel().rows.length} row(s) selected.
         </div>
-        <div className="text-muted-foreground flex grow justify-end text-sm">
-          <span>
-            <span className="text-foreground">
-              {table.getState().pagination.pageIndex *
-                table.getState().pagination.pageSize +
-                1}
-              -
-              {Math.min(
-                table.getState().pagination.pageIndex *
-                  table.getState().pagination.pageSize +
-                  table.getState().pagination.pageSize,
-                table.getRowCount()
-              )}
-            </span>{" "}
-            of <span className="text-foreground">{table.getRowCount()}</span>
-          </span>
-        </div>
-        <div>
-          <Pagination>
-            <PaginationContent>
-              <PaginationItem>
-                <Button
-                  aria-label="First page"
-                  variant="outline"
-                  size="icon"
-                  disabled={!table.getCanPreviousPage()}
-                  onClick={() => table.firstPage()}
-                  className="disabled:pointer-events-none disabled:opacity-50"
-                >
-                  <CaretDoubleLeft size={16} />
-                </Button>
-              </PaginationItem>
-              <PaginationItem>
-                <Button
-                  aria-label="Previous page"
-                  variant="outline"
-                  size="icon"
-                  disabled={!table.getCanPreviousPage()}
-                  onClick={() => table.previousPage()}
-                  className="disabled:pointer-events-none disabled:opacity-50"
-                >
-                  <CaretLeft size={16} />
-                </Button>
-              </PaginationItem>
-              <PaginationItem>
-                <Button
-                  aria-label="Next page"
-                  variant="outline"
-                  size="icon"
-                  disabled={!table.getCanNextPage()}
-                  onClick={() => table.nextPage()}
-                  className="disabled:pointer-events-none disabled:opacity-50"
-                >
-                  <CaretRight size={16} />
-                </Button>
-              </PaginationItem>
-              <PaginationItem>
-                <Button
-                  aria-label="Last page"
-                  variant="outline"
-                  size="icon"
-                  disabled={!table.getCanNextPage()}
-                  onClick={() => table.lastPage()}
-                  className="disabled:pointer-events-none disabled:opacity-50"
-                >
-                  <CaretDoubleRight size={16} />
-                </Button>
-              </PaginationItem>
-            </PaginationContent>
-          </Pagination>
+        <div className="flex w-full items-center gap-8 lg:w-fit">
+          <div className="hidden items-center gap-2 lg:flex">
+            <Label htmlFor={id} className="text-sm font-medium">
+              Rows per page
+            </Label>
+            <Select
+              value={table.getState().pagination.pageSize.toString()}
+              onValueChange={(v) => table.setPageSize(Number(v))}
+            >
+              <SelectTrigger className="h-8 min-h-8 w-20" id={id}>
+                <SelectValue placeholder={table.getState().pagination.pageSize} />
+              </SelectTrigger>
+              <SelectContent side="top" className="**:data-[slot=select-item]:min-h-8 **:data-[slot=select-item]:py-1.5 **:data-[slot=select-item]:text-sm">
+                {pageSizeOptions.map((size) => (
+                  <SelectItem key={size} value={size.toString()}>
+                    {size}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+          <div className="flex w-fit items-center justify-center text-sm font-medium">
+            Page {table.getState().pagination.pageIndex + 1} of{" "}
+            {table.getPageCount()}
+          </div>
+          <div className="ml-auto flex items-center gap-2 lg:ml-0">
+            <Button
+              variant="outline"
+              className="hidden size-8 p-0 lg:flex"
+              onClick={() => table.setPageIndex(0)}
+              disabled={!table.getCanPreviousPage()}
+              aria-label="Go to first page"
+            >
+              <CaretDoubleLeft size={16} />
+            </Button>
+            <Button
+              variant="outline"
+              size="icon"
+              className="size-8"
+              onClick={() => table.previousPage()}
+              disabled={!table.getCanPreviousPage()}
+              aria-label="Go to previous page"
+            >
+              <CaretLeft size={16} />
+            </Button>
+            <Button
+              variant="outline"
+              size="icon"
+              className="size-8"
+              onClick={() => table.nextPage()}
+              disabled={!table.getCanNextPage()}
+              aria-label="Go to next page"
+            >
+              <CaretRight size={16} />
+            </Button>
+            <Button
+              variant="outline"
+              size="icon"
+              className="hidden size-8 lg:flex"
+              onClick={() => table.setPageIndex(table.getPageCount() - 1)}
+              disabled={!table.getCanNextPage()}
+              aria-label="Go to last page"
+            >
+              <CaretDoubleRight size={16} />
+            </Button>
+          </div>
         </div>
       </div>
     </div>

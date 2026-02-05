@@ -82,9 +82,7 @@ export const SamlSignature = () => {
                             defaultValue: SIGNATURE_ALGORITHMS[0]
                         }}
                         options={[...SIGNATURE_ALGORITHMS]}
-                        triggerClassName="py-1 dark:border-transparent"
-                        triggerStyle={{ height: "3rem", minHeight: "3rem" }}
-                    />
+                        />
                     <SelectControl
                         name={convertAttributeNameToForm<FormFields>(
                             "attributes.saml.server.signature.keyinfo.xmlSigKeyInfoKeyNameTransformer"
@@ -95,9 +93,7 @@ export const SamlSignature = () => {
                             defaultValue: KEYNAME_TRANSFORMER[0]
                         }}
                         options={[...KEYNAME_TRANSFORMER]}
-                        triggerClassName="py-1 dark:border-transparent"
-                        triggerStyle={{ height: "3rem", minHeight: "3rem" }}
-                    />
+                        />
                     <SelectControl
                         name="attributes.saml_signature_canonicalization_method"
                         label={t("canonicalization")}
@@ -109,9 +105,7 @@ export const SamlSignature = () => {
                             key: value,
                             value: name
                         }))}
-                        triggerClassName="py-1 dark:border-transparent"
-                        triggerStyle={{ height: "3rem", minHeight: "3rem" }}
-                    />
+                        />
                     <TextControl
                         name={convertAttributeNameToForm<FormFields>(
                             "attributes.saml.metadataDescriptorUrl"

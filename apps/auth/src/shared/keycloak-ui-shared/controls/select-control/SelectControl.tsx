@@ -43,9 +43,7 @@ export type SelectControlProps<
         value: string | string[],
         onChangeHandler: (value: string | string[]) => void
     ) => void;
-    /** Add client form gibi yerlerde select trigger'ı input ile aynı görünüm için (örn. dark:border-transparent) */
     triggerClassName?: string;
-    /** Trigger yüksekliğini input ile eşitlemek için (örn. formInputClassName h-12 = 3rem) */
     triggerStyle?: React.CSSProperties;
     /** Legacy PatternFly: scrollable menu; ignored in UI lib. */
     isScrollable?: boolean;

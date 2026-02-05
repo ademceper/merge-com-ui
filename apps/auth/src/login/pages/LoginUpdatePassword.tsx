@@ -10,10 +10,7 @@ import { cn } from "@merge/ui/lib/utils";
 
 const inputClassName =
     "h-12 rounded-lg bg-muted border-0 text-foreground placeholder:text-muted-foreground focus-visible:ring-2 focus-visible:ring-ring";
-const primaryButtonClassName =
-    "w-full h-12 rounded-lg bg-primary text-primary-foreground font-medium text-sm hover:bg-primary/90 transition-colors disabled:opacity-50";
-const secondaryButtonClassName =
-    "w-full h-12 rounded-lg bg-muted text-foreground font-medium text-sm hover:bg-muted/80 transition-colors border-0";
+const fullWidthClassName = "w-full";
 
 export default function LoginUpdatePassword(
     props: PageProps<Extract<KcContext, { pageId: "login-update-password.ftl" }>, I18n>
@@ -114,7 +111,8 @@ export default function LoginUpdatePassword(
                                 type="submit"
                                 name="cancel-aia"
                                 value="true"
-                                className={secondaryButtonClassName}
+                                variant="secondary"
+                                className={fullWidthClassName}
                             >
                                 {msgStr("doCancel")}
                             </Button>
@@ -122,7 +120,7 @@ export default function LoginUpdatePassword(
                         <Button
                             type="submit"
                             disabled={isSubmitting}
-                            className={primaryButtonClassName}
+                            className={fullWidthClassName}
                         >
                             {msgStr("doSubmit")}
                         </Button>

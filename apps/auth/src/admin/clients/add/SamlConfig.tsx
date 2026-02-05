@@ -40,8 +40,6 @@ export const SamlConfig = () => {
                     defaultValue: "username"
                 }}
                 options={["username", "email", "transient", "persistent"]}
-                triggerClassName="py-1 dark:border-transparent"
-                triggerStyle={{ height: "3rem", minHeight: "3rem" }}
             />
             <Toggle
                 name="attributes.saml_force_name_id_format"

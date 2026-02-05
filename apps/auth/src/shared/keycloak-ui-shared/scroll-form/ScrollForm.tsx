@@ -44,15 +44,11 @@ export const ScrollForm = ({
             <Tabs value={activeTab} onValueChange={setActiveTab}>
                 <TabsList
                     variant="line"
-                    className="w-full flex-wrap justify-start gap-0 h-auto p-0 bg-transparent border-b border-border rounded-none"
+                    className="mb-4 w-full flex-nowrap overflow-x-auto justify-start gap-0 h-auto p-0 pb-1.5 bg-transparent rounded-none [-webkit-overflow-scrolling:touch] [&>*]:flex-shrink-0"
                     aria-label={label}
                 >
                     {shownSections.map(({ title }) => (
-                        <TabsTrigger
-                            key={title}
-                            value={title}
-                            className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent px-4 py-2"
-                        >
+                        <TabsTrigger key={title} value={title} className="whitespace-nowrap">
                             {title}
                         </TabsTrigger>
                     ))}

@@ -114,7 +114,7 @@ export default function Login(props: PageProps<Extract<KcContext, { pageId: "log
                             tabIndex={7}
                             type="submit"
                             disabled={isLoginButtonDisabled}
-                            className="w-full h-12 rounded-lg bg-primary text-primary-foreground font-medium text-sm hover:bg-primary/90 transition-colors disabled:opacity-50"
+                            className="w-full"
                         >
                             {msgStr("doContinue") || msgStr("doLogIn")}
                         </Button>

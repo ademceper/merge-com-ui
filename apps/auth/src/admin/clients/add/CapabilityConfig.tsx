@@ -400,8 +400,6 @@ export const CapabilityConfig = ({ unWrap, protocol: type }: CapabilityConfigPro
                             { key: "S256", value: "S256" },
                             { key: "plain", value: "plain" }
                         ]}
-                        triggerClassName="py-1 dark:border-transparent"
-                        triggerStyle={{ height: "3rem", minHeight: "3rem" }}
                     />
                     {isFeatureEnabled(Feature.JWTAuthorizationGrant) &&
                         showIdentityProviders &&

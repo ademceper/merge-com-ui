@@ -3,6 +3,16 @@ import { getErrorDescription, getErrorMessage, useFetch } from "../../shared/key
 import { toast } from "@merge/ui/components/sonner";
 import { Button } from "@merge/ui/components/button";
 import {
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle
+} from "@merge/ui/components/alert-dialog";
+import {
     Dialog,
     DialogContent,
     DialogFooter,
@@ -20,7 +30,6 @@ import { PencilSimple, Plus, Trash } from "@phosphor-icons/react";
 import { useTranslation } from "react-i18next";
 import { useAdminClient } from "../admin-client";
 import { arrayToKeyValue } from "../components/key-value-form/key-value-convert";
-import { useConfirmDialog } from "../components/confirm-dialog/ConfirmDialog";
 import { FormAccess } from "../components/form/FormAccess";
 import { ViewHeader } from "../components/view-header/ViewHeader";
 import helpUrls from "../help-urls";
@@ -65,28 +74,22 @@ export default function OrganizationSection() {
     }, [editOrg]);
 
     useFetch(
-        () => adminClient.organizations.find({}),
+        () => adminClient.organizations.find({ first: 0, max: 1000 }),
         (orgs) => setOrganizations(orgs),
         [key]
     );
 
-    const [toggleDeleteDialog, DeleteConfirm] = useConfirmDialog({
-        titleKey: "organizationDelete",
-        messageKey: "organizationDeleteConfirm",
-        continueButtonLabel: "delete",
-        continueButtonVariant: "destructive",
-        onConfirm: async () => {
-            try {
-                await adminClient.organizations.delById({
-                    id: selectedOrg!.id!
-                });
-                toast.success(t("organizationDeletedSuccess"));
-                refresh();
-            } catch (error) {
-                toast.error(t("organizationDeleteError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
-            }
+    const onDeleteConfirm = async () => {
+        if (!selectedOrg?.id) return;
+        try {
+            await adminClient.organizations.delById({ id: selectedOrg.id });
+            toast.success(t("organizationDeletedSuccess"));
+            setSelectedOrg(undefined);
+            refresh();
+        } catch (error) {
+            toast.error(t("organizationDeleteError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
         }
-    });
+    };
 
     const onCreateSave = async (org: OrganizationFormType) => {
         try {
@@ -153,10 +156,7 @@ export default function OrganizationSection() {
                     <button
                         type="button"
                         className="flex w-full items-center gap-2 rounded-md px-1.5 py-1 text-left text-sm text-destructive hover:bg-destructive/10 hover:text-destructive"
-                        onClick={() => {
-                            setSelectedOrg(row.original);
-                            toggleDeleteDialog();
-                        }}
+                        onClick={() => setSelectedOrg(row.original)}
                     >
                         <Trash className="size-4 shrink-0" />
                         {t("delete")}
@@ -175,7 +175,24 @@ export default function OrganizationSection() {
                 divider
             />
             <div className="py-6 px-0">
-                <DeleteConfirm />
+                <AlertDialog open={!!selectedOrg} onOpenChange={(open) => !open && setSelectedOrg(undefined)}>
+                    <AlertDialogContent>
+                        <AlertDialogHeader>
+                            <AlertDialogTitle>{t("organizationDelete")}</AlertDialogTitle>
+                            <AlertDialogDescription>{t("organizationDeleteConfirm")}</AlertDialogDescription>
+                        </AlertDialogHeader>
+                        <AlertDialogFooter>
+                            <AlertDialogCancel>{t("cancel")}</AlertDialogCancel>
+                            <AlertDialogAction
+                                variant="destructive"
+                                data-testid="confirm"
+                                onClick={onDeleteConfirm}
+                            >
+                                {t("delete")}
+                            </AlertDialogAction>
+                        </AlertDialogFooter>
+                    </AlertDialogContent>
+                </AlertDialog>
 
                 <Dialog open={createDialogOpen} onOpenChange={setCreateDialogOpen}>
                     <FormProvider {...createForm}>

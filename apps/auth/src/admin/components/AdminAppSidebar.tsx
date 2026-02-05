@@ -204,36 +204,11 @@ export function AdminAppSidebar({ ...props }: React.ComponentProps<typeof Sideba
                                                     title="initialAccessToken"
                                                     dataTestId="initial-access-token-tab"
                                                 />
-                                                <Collapsible
-                                                    asChild
-                                                    defaultOpen={location.pathname.includes("/client-registration")}
-                                                    className="group/collapsible-nested"
-                                                >
-                                                    <SidebarMenuSubItem>
-                                                        <CollapsibleTrigger asChild>
-                                                            <SidebarMenuSubButton
-                                                                isActive={location.pathname.includes("/client-registration")}
-                                                            >
-                                                                <span>{t("clientRegistration")}</span>
-                                                                <CaretRightIcon className="ml-auto size-3 transition-transform duration-200 group-data-[state=open]/collapsible-nested:rotate-90" />
-                                                            </SidebarMenuSubButton>
-                                                        </CollapsibleTrigger>
-                                                        <CollapsibleContent>
-                                                            <SidebarMenuSub className="ml-2">
-                                                                <SubNavLink
-                                                                    to={`/${encodeURIComponent(realm)}/clients/client-registration/anonymous`}
-                                                                    title="anonymousAccessPolicies"
-                                                                    dataTestId="client-registration-anonymous-tab"
-                                                                />
-                                                                <SubNavLink
-                                                                    to={`/${encodeURIComponent(realm)}/clients/client-registration/authenticated`}
-                                                                    title="authenticatedAccessPolicies"
-                                                                    dataTestId="client-registration-authenticated-tab"
-                                                                />
-                                                            </SidebarMenuSub>
-                                                        </CollapsibleContent>
-                                                    </SidebarMenuSubItem>
-                                                </Collapsible>
+                                                <SubNavLink
+                                                    to={`/${encodeURIComponent(realm)}/clients/client-registration/anonymous`}
+                                                    title="clientRegistration"
+                                                    dataTestId="client-registration-tab"
+                                                />
                                             </SidebarMenuSub>
                                         </CollapsibleContent>
                                     </SidebarMenuItem>
@@ -340,143 +315,33 @@ export function AdminAppSidebar({ ...props }: React.ComponentProps<typeof Sideba
                                                     <SubNavLink to={`/${encodeURIComponent(realm)}/realm-settings/general`} title="general" dataTestId="rs-general-tab" />
                                                     <SubNavLink to={`/${encodeURIComponent(realm)}/realm-settings/login`} title="login" dataTestId="rs-login-tab" />
                                                     <SubNavLink to={`/${encodeURIComponent(realm)}/realm-settings/email`} title="email" dataTestId="rs-email-tab" />
-                                                    <Collapsible
-                                                        asChild
-                                                        defaultOpen={location.pathname.includes("/realm-settings/themes")}
-                                                        className="group/collapsible-themes"
-                                                    >
-                                                        <SidebarMenuSubItem>
-                                                            <CollapsibleTrigger asChild>
-                                                                <SidebarMenuSubButton
-                                                                    isActive={location.pathname.includes("/realm-settings/themes")}
-                                                                >
-                                                                    <span>{t("themes")}</span>
-                                                                    <CaretRightIcon className="ml-auto size-3 transition-transform duration-200 group-data-[state=open]/collapsible-themes:rotate-90" />
-                                                                </SidebarMenuSubButton>
-                                                            </CollapsibleTrigger>
-                                                            <CollapsibleContent>
-                                                                <SidebarMenuSub className="ml-2">
-                                                                    <SubNavLink
-                                                                        to={`/${encodeURIComponent(realm)}/realm-settings/themes/settings`}
-                                                                        title="themes"
-                                                                        dataTestId="rs-themes-settings-tab"
-                                                                    />
-                                                                    <SubNavLink
-                                                                        to={`/${encodeURIComponent(realm)}/realm-settings/themes/lightColors`}
-                                                                        title="themeColorsLight"
-                                                                        dataTestId="rs-themes-light-tab"
-                                                                    />
-                                                                    <SubNavLink
-                                                                        to={`/${encodeURIComponent(realm)}/realm-settings/themes/darkColors`}
-                                                                        title="themeColorsDark"
-                                                                        dataTestId="rs-themes-dark-tab"
-                                                                    />
-                                                                </SidebarMenuSub>
-                                                            </CollapsibleContent>
-                                                        </SidebarMenuSubItem>
-                                                    </Collapsible>
-                                                    <Collapsible
-                                                        asChild
-                                                        defaultOpen={location.pathname.includes("/realm-settings/keys")}
-                                                        className="group/collapsible-keys"
-                                                    >
-                                                        <SidebarMenuSubItem>
-                                                            <CollapsibleTrigger asChild>
-                                                                <SidebarMenuSubButton
-                                                                    isActive={location.pathname.includes("/realm-settings/keys")}
-                                                                >
-                                                                    <span>{t("keys")}</span>
-                                                                    <CaretRightIcon className="ml-auto size-3 transition-transform duration-200 group-data-[state=open]/collapsible-keys:rotate-90" />
-                                                                </SidebarMenuSubButton>
-                                                            </CollapsibleTrigger>
-                                                            <CollapsibleContent>
-                                                                <SidebarMenuSub className="ml-2">
-                                                                    <SubNavLink
-                                                                        to={`/${encodeURIComponent(realm)}/realm-settings/keys/list`}
-                                                                        title="keysList"
-                                                                        dataTestId="rs-keys-list-tab"
-                                                                    />
-                                                                    <SubNavLink
-                                                                        to={`/${encodeURIComponent(realm)}/realm-settings/keys/providers`}
-                                                                        title="providers"
-                                                                        dataTestId="rs-keys-providers-tab"
-                                                                    />
-                                                                </SidebarMenuSub>
-                                                            </CollapsibleContent>
-                                                        </SidebarMenuSubItem>
-                                                    </Collapsible>
+                                                    <SubNavLink
+                                                        to={`/${encodeURIComponent(realm)}/realm-settings/themes/settings`}
+                                                        title="themes"
+                                                        dataTestId="rs-themes-tab"
+                                                    />
+                                                    <SubNavLink
+                                                        to={`/${encodeURIComponent(realm)}/realm-settings/keys/list`}
+                                                        title="keys"
+                                                        dataTestId="rs-keys-tab"
+                                                    />
                                                     <SubNavLink to={`/${encodeURIComponent(realm)}/realm-settings/events`} title="events" dataTestId="rs-realm-events-tab" />
                                                     <SubNavLink to={`/${encodeURIComponent(realm)}/realm-settings/localization`} title="localization" dataTestId="rs-localization-tab" />
                                                     <SubNavLink to={`/${encodeURIComponent(realm)}/realm-settings/security-defenses`} title="securityDefences" dataTestId="rs-security-defenses-tab" />
                                                     <SubNavLink to={`/${encodeURIComponent(realm)}/realm-settings/sessions`} title="sessions" dataTestId="rs-sessions-tab" />
                                                     <SubNavLink to={`/${encodeURIComponent(realm)}/realm-settings/tokens`} title="tokens" dataTestId="rs-tokens-tab" />
                                                     {isFeatureEnabled(Feature.ClientPolicies) && (
-                                                        <Collapsible
-                                                            asChild
-                                                            defaultOpen={location.pathname.includes("/realm-settings/client-policies")}
-                                                            className="group/collapsible-client-policies"
-                                                        >
-                                                            <SidebarMenuSubItem>
-                                                                <CollapsibleTrigger asChild>
-                                                                    <SidebarMenuSubButton
-                                                                        isActive={location.pathname.includes("/realm-settings/client-policies")}
-                                                                    >
-                                                                        <span>{t("clientPolicies")}</span>
-                                                                        <CaretRightIcon className="ml-auto size-3 transition-transform duration-200 group-data-[state=open]/collapsible-client-policies:rotate-90" />
-                                                                    </SidebarMenuSubButton>
-                                                                </CollapsibleTrigger>
-                                                                <CollapsibleContent>
-                                                                    <SidebarMenuSub className="ml-2">
-                                                                        <SubNavLink
-                                                                            to={`/${encodeURIComponent(realm)}/realm-settings/client-policies/profiles`}
-                                                                            title="profiles"
-                                                                            dataTestId="rs-client-policies-profiles-tab"
-                                                                        />
-                                                                        <SubNavLink
-                                                                            to={`/${encodeURIComponent(realm)}/realm-settings/client-policies/policies`}
-                                                                            title="policies"
-                                                                            dataTestId="rs-client-policies-policies-tab"
-                                                                        />
-                                                                    </SidebarMenuSub>
-                                                                </CollapsibleContent>
-                                                            </SidebarMenuSubItem>
-                                                        </Collapsible>
+                                                        <SubNavLink
+                                                            to={`/${encodeURIComponent(realm)}/realm-settings/client-policies/profiles`}
+                                                            title="clientPolicies"
+                                                            dataTestId="rs-client-policies-tab"
+                                                        />
                                                     )}
-                                                    <Collapsible
-                                                        asChild
-                                                        defaultOpen={location.pathname.includes("/realm-settings/user-profile")}
-                                                        className="group/collapsible-user-profile"
-                                                    >
-                                                        <SidebarMenuSubItem>
-                                                            <CollapsibleTrigger asChild>
-                                                                <SidebarMenuSubButton
-                                                                    isActive={location.pathname.includes("/realm-settings/user-profile")}
-                                                                >
-                                                                    <span>{t("userProfile")}</span>
-                                                                    <CaretRightIcon className="ml-auto size-3 transition-transform duration-200 group-data-[state=open]/collapsible-user-profile:rotate-90" />
-                                                                </SidebarMenuSubButton>
-                                                            </CollapsibleTrigger>
-                                                            <CollapsibleContent>
-                                                                <SidebarMenuSub className="ml-2">
-                                                                    <SubNavLink
-                                                                        to={`/${encodeURIComponent(realm)}/realm-settings/user-profile/attributes`}
-                                                                        title="attributes"
-                                                                        dataTestId="rs-user-profile-attributes-tab"
-                                                                    />
-                                                                    <SubNavLink
-                                                                        to={`/${encodeURIComponent(realm)}/realm-settings/user-profile/attributes-group`}
-                                                                        title="attributesGroup"
-                                                                        dataTestId="rs-user-profile-attributes-group-tab"
-                                                                    />
-                                                                    <SubNavLink
-                                                                        to={`/${encodeURIComponent(realm)}/realm-settings/user-profile/json-editor`}
-                                                                        title="jsonEditor"
-                                                                        dataTestId="rs-user-profile-json-editor-tab"
-                                                                    />
-                                                                </SidebarMenuSub>
-                                                            </CollapsibleContent>
-                                                        </SidebarMenuSubItem>
-                                                    </Collapsible>
+                                                    <SubNavLink
+                                                        to={`/${encodeURIComponent(realm)}/realm-settings/user-profile/attributes`}
+                                                        title="userProfile"
+                                                        dataTestId="rs-user-profile-tab"
+                                                    />
                                                     <SubNavLink to={`/${encodeURIComponent(realm)}/realm-settings/user-registration`} title="userRegistration" dataTestId="rs-userRegistration-tab" />
                                                 </SidebarMenuSub>
                                             </CollapsibleContent>

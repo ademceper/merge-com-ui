@@ -143,23 +143,26 @@ export function AddClientDialog({ trigger, onSuccess }: AddClientDialogProps) {
         <Dialog open={open} onOpenChange={handleOpenChange}>
             <DialogTrigger asChild>{trigger}</DialogTrigger>
             <DialogContent className="max-w-lg sm:max-w-lg">
-                <DialogHeader>
-                    <div className="flex w-full flex-row items-center justify-between gap-2 md:block">
-                        <DialogTitle className="min-w-0 flex-1 md:flex-none">{steps[effectiveStep]?.name ?? t("createClient")}</DialogTitle>
-                        <div className="flex md:hidden shrink-0 items-center justify-end gap-1.5 text-muted-foreground">
-                            <span className="text-xs">
+                <DialogHeader className="w-full">
+                    <div className="flex w-full flex-row items-center justify-between gap-2">
+                        <DialogTitle className="min-w-0 flex-1 truncate">
+                            {steps[effectiveStep]?.name ?? t("createClient")}
+                        </DialogTitle>
+                        <div className="flex shrink-0 items-center gap-1.5 text-muted-foreground md:hidden">
+                            <span className="text-xs font-medium tabular-nums whitespace-nowrap">
                                 {effectiveStep + 1} / {totalSteps}
                             </span>
-                            <span className="text-xs">·</span>
-                            <span className="text-xs">{steps[effectiveStep]?.name}</span>
-                            <div className="ml-1 flex gap-1.5">
+                            <div className="flex shrink-0 gap-1">
                                 {[...Array(totalSteps)].map((_, index) => (
                                     <div
                                         key={String(index)}
                                         className={cn(
-                                            "size-1.5 rounded-full bg-primary",
-                                            index === effectiveStep ? "opacity-100" : "opacity-20",
+                                            "size-1.5 rounded-full",
+                                            index === effectiveStep
+                                                ? "bg-foreground"
+                                                : "bg-muted-foreground/30",
                                         )}
+                                        aria-hidden
                                     />
                                 ))}
                             </div>
@@ -169,28 +172,30 @@ export function AddClientDialog({ trigger, onSuccess }: AddClientDialogProps) {
                 <FormProvider {...form}>
                     <div className="min-h-[200px]">{steps[effectiveStep]?.component}</div>
                 </FormProvider>
-                <DialogFooter className="flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-                    <div className="hidden md:flex w-full items-center justify-center gap-1.5 text-muted-foreground sm:w-auto sm:justify-start">
-                        <span className="text-xs">
+                <DialogFooter className="flex flex-col gap-2 sm:flex-row sm:flex-nowrap sm:items-center sm:justify-between sm:gap-4">
+                    <div className="hidden min-w-0 shrink-0 items-center gap-2 text-muted-foreground md:flex">
+                        <span className="text-sm font-medium tabular-nums">
                             {effectiveStep + 1} / {totalSteps}
                         </span>
-                        <span className="text-xs">·</span>
-                        <span className="text-xs">{steps[effectiveStep]?.name}</span>
+                        <span className="text-sm">{steps[effectiveStep]?.name}</span>
                         <div className="ml-1 flex gap-1.5">
                             {[...Array(totalSteps)].map((_, index) => (
                                 <div
                                     key={String(index)}
                                     className={cn(
-                                        "size-1.5 rounded-full bg-primary",
-                                        index === effectiveStep ? "opacity-100" : "opacity-20",
+                                        "size-2 rounded-full transition-colors",
+                                        index === effectiveStep
+                                            ? "bg-foreground"
+                                            : "bg-muted-foreground/30",
                                     )}
+                                    aria-hidden
                                 />
                             ))}
                         </div>
                     </div>
-                    <div className="flex gap-2">
+                    <div className="flex w-full flex-col gap-2 sm:w-auto sm:flex-row sm:shrink-0 sm:items-center">
                         <DialogClose asChild>
-                            <Button type="button" variant="ghost">
+                            <Button type="button" variant="ghost" className="h-9 min-h-9 w-full text-foreground sm:w-auto">
                                 {t("cancel")}
                             </Button>
                         </DialogClose>
@@ -198,6 +203,7 @@ export function AddClientDialog({ trigger, onSuccess }: AddClientDialogProps) {
                             <Button
                                 type="button"
                                 variant="secondary"
+                                className="h-9 min-h-9 w-full sm:w-auto"
                                 onClick={() => setCurrentStep((s) => s - 1)}
                             >
                                 {t("back")}
@@ -205,15 +211,15 @@ export function AddClientDialog({ trigger, onSuccess }: AddClientDialogProps) {
                         )}
                         <Button
                             type="button"
+                            className="h-9 min-h-9 w-full group sm:w-auto"
                             onClick={handleContinue}
                             disabled={saving}
-                            className="group"
                         >
                             {isLastStep ? t("save") : t("next")}
                             {!isLastStep && (
                                 <ArrowRight
                                     aria-hidden
-                                    className="-me-1 size-4 opacity-60 transition-transform group-hover:translate-x-0.5"
+                                    className="-me-1 size-4 transition-transform group-hover:translate-x-0.5"
                                 />
                             )}
                         </Button>

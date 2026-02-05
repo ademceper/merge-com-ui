@@ -4,6 +4,7 @@ import { UserProfileConfig } from "@keycloak/keycloak-admin-client/lib/defs/user
 import { getErrorDescription, getErrorMessage, useEnvironment } from "../../shared/keycloak-ui-shared";
 import { toast } from "@merge/ui/components/sonner";
 import { Separator } from "@merge/ui/components/separator";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@merge/ui/components/tabs";
 import { useEffect, useState } from "react";
 import { Controller, FormProvider, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
@@ -36,6 +37,8 @@ import { UserRegistration } from "./UserRegistration";
 import { EventsTab } from "./event-config/EventsTab";
 import { KeysTab } from "./keys/KeysTab";
 import { LocalizationTab } from "./localization/LocalizationTab";
+import { toClientPolicies } from "./routes/ClientPolicies";
+import type { ClientPoliciesTab } from "./routes/ClientPolicies";
 import { toRealmSettings } from "./routes/RealmSettings";
 import { SecurityDefenses } from "./security-defences/SecurityDefenses";
 import { UserProfileTab } from "./user-profile/UserProfileTab";
@@ -292,7 +295,31 @@ const { realm: realmName, realmRepresentation: realm, refresh } = useRealm();
             return <UserProfileTab setTableData={setTableData as any} subTab={tab} />;
         }
         if (isClientPoliciesSubTab && isFeatureEnabled(Feature.ClientPolicies)) {
-            return <ClientPoliciesSubTabs realmName={realmName} subTab={tab} />;
+            const clientPoliciesTab: ClientPoliciesTab =
+                tab === "policies" ? "policies" : "profiles";
+            return (
+                <Tabs
+                    value={clientPoliciesTab}
+                    onValueChange={(value) =>
+                        navigate(toClientPolicies({ realm: realmName!, tab: value as ClientPoliciesTab }))
+                    }
+                >
+                    <TabsList variant="line" className="mb-4">
+                        <TabsTrigger value="profiles" data-testid="rs-client-policies-profiles-tab">
+                            {t("profiles")}
+                        </TabsTrigger>
+                        <TabsTrigger value="policies" data-testid="rs-client-policies-policies-tab">
+                            {t("policies")}
+                        </TabsTrigger>
+                    </TabsList>
+                    <TabsContent value="profiles">
+                        <ProfilesTab />
+                    </TabsContent>
+                    <TabsContent value="policies">
+                        <PoliciesTab />
+                    </TabsContent>
+                </Tabs>
+            );
         }
 
         switch (tab) {

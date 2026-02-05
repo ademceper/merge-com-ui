@@ -31,8 +31,6 @@ export const LoginSettingsPanel = ({ access }: { access?: boolean }) => {
                     { key: "", value: t("choose") },
                     ...loginThemes.map(({ name }) => ({ key: name, value: name }))
                 ]}
-                triggerClassName="py-1 dark:border-transparent"
-                triggerStyle={{ height: "3rem", minHeight: "3rem" }}
             />
             <DefaultSwitchControl
                 name="consentRequired"

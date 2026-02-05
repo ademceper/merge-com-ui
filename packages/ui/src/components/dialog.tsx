@@ -128,7 +128,7 @@ export function DialogContent({
       >
         {showCloseButton && (
           <DialogPrimitive.Close data-slot="dialog-close" asChild>
-            <Button variant="ghost" className="absolute top-2 right-2 z-10" size="icon-sm">
+            <Button variant="ghost" className="absolute top-2 right-2 z-10 size-7 rounded-full" size="icon-xs">
               <XIcon />
               <span className="sr-only">Close</span>
             </Button>
@@ -183,7 +183,7 @@ export function DialogFooter({
       <DrawerFooterBase
         data-slot="dialog-footer"
         className={cn(
-          "bg-muted/50 border-t border-border px-4 pt-3 pb-3 flex flex-col gap-2",
+          "bg-muted/50 border-t border-border px-4 pt-3 pb-3 flex flex-col gap-2 [&_[data-slot=button]]:h-8 [&_[data-slot=button]]:min-h-8",
           className
         )}
         {...props}
@@ -191,7 +191,7 @@ export function DialogFooter({
         {children}
         {showCloseButton && (
           <DrawerClosePrimitive asChild>
-            <Button variant="outline">Close</Button>
+            <Button variant="outline" size="sm">Close</Button>
           </DrawerClosePrimitive>
         )}
       </DrawerFooterBase>
@@ -201,7 +201,7 @@ export function DialogFooter({
     <div
       data-slot="dialog-footer"
       className={cn(
-        "bg-muted/50 rounded-b-xl border-t border-border px-4 pt-3 pb-3 flex flex-col-reverse gap-2 sm:flex-row sm:justify-end",
+        "bg-muted/50 rounded-b-xl border-t border-border px-4 pt-3 pb-3 flex flex-col-reverse gap-2 sm:flex-row sm:justify-between [&_[data-slot=button]]:h-8 [&_[data-slot=button]]:min-h-8",
         className
       )}
       {...props}
@@ -209,7 +209,7 @@ export function DialogFooter({
       {children}
       {showCloseButton && (
         <DialogPrimitive.Close asChild>
-          <Button variant="outline">Close</Button>
+          <Button variant="outline" size="sm">Close</Button>
         </DialogPrimitive.Close>
       )}
     </div>

@@ -11,8 +11,6 @@ import { cn } from "@merge/ui/lib/utils";
 
 const inputClassName =
     "h-12 rounded-lg bg-muted border-0 text-foreground placeholder:text-muted-foreground focus-visible:ring-2 focus-visible:ring-ring";
-const primaryButtonClassName =
-    "w-full h-12 rounded-lg bg-primary text-primary-foreground font-medium text-sm hover:bg-primary/90 transition-colors disabled:opacity-50";
 
 export default function LoginResetPassword(
     props: PageProps<Extract<KcContext, { pageId: "login-reset-password.ftl" }>, I18n>
@@ -78,7 +76,7 @@ export default function LoginResetPassword(
                     <Button
                         type="submit"
                         disabled={isSubmitting}
-                        className={primaryButtonClassName}
+                        className="w-full"
                     >
                         {msgStr("doSubmit")}
                     </Button>

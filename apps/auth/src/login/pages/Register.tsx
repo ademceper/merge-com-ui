@@ -11,8 +11,6 @@ import { cn } from "@merge/ui/lib/utils";
 
 const inputClassName =
     "h-12 rounded-lg bg-muted border-0 text-foreground placeholder:text-muted-foreground focus-visible:ring-2 focus-visible:ring-ring";
-const primaryButtonClassName =
-    "w-full h-12 rounded-lg bg-primary text-primary-foreground font-medium text-sm hover:bg-primary/90 transition-colors disabled:opacity-50";
 
 type RegisterWithSocial = Extract<KcContext, { pageId: "register.ftl" }> & {
     social?: { providers?: { loginUrl: string; alias: string; providerId: string; displayName: string; iconClasses?: string }[] };
@@ -178,7 +176,7 @@ export default function Register(props: PageProps<Extract<KcContext, { pageId: "
                         </div>
                     )}
 
-                    <Button type="submit" className={primaryButtonClassName}>
+                    <Button type="submit" className="w-full">
                         {msgStr("doRegister")}
                     </Button>
                 </form>

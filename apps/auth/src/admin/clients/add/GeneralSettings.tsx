@@ -23,9 +23,7 @@ export const GeneralSettings = () => {
                         key: option,
                         value: getProtocolName(t, option)
                     }))}
-                    triggerClassName="py-1 dark:border-transparent"
-                    triggerStyle={{ height: "3rem", minHeight: "3rem" }}
-                />
+                    />
                 <ClientDescription hasConfigureAccess />
             </div>
         </FormAccess>

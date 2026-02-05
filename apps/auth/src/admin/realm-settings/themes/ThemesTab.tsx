@@ -1,5 +1,11 @@
 import type RealmRepresentation from "@keycloak/keycloak-admin-client/lib/defs/realmRepresentation";
 import JSZip from "jszip";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@merge/ui/components/tabs";
+import { useTranslation } from "react-i18next";
+import { useNavigate } from "react-router-dom";
+import { useRealm } from "../../context/realm-context/RealmContext";
+import { toThemesTab } from "../routes/ThemesTab";
+import type { ThemesTabType } from "../routes/ThemesTab";
 import useIsFeatureEnabled, { Feature } from "../../utils/useIsFeatureEnabled";
 import { LogoContext } from "./LogoContext";
 import { ThemeColors } from "./ThemeColors";
@@ -19,7 +25,12 @@ export type ThemeRealmRepresentation = RealmRepresentation & {
 };
 
 export default function ThemesTab({ realm, save, subTab = "settings" }: ThemesTabProps) {
+    const { t } = useTranslation();
+    const navigate = useNavigate();
+    const { realm: realmName } = useRealm();
     const isFeatureEnabled = useIsFeatureEnabled();
+    const currentTab: ThemesTabType =
+        subTab === "lightColors" ? "lightColors" : subTab === "darkColors" ? "darkColors" : "settings";
 
     const saveTheme = async (realm: ThemeRealmRepresentation) => {
         const zip = new JSZip();
@@ -133,20 +144,37 @@ styles=css/login.css css/theme-styles.css
         return <ThemeSettingsTab realm={realm} save={save} />;
     }
 
-    switch (subTab) {
-        case "lightColors":
-            return (
+    return (
+        <Tabs
+            value={currentTab}
+            onValueChange={(value) =>
+                navigate(toThemesTab({ realm: realmName!, tab: value as ThemesTabType }))
+            }
+        >
+            <TabsList variant="line" className="mb-4">
+                <TabsTrigger value="settings" data-testid="rs-themes-settings-tab">
+                    {t("themes")}
+                </TabsTrigger>
+                <TabsTrigger value="lightColors" data-testid="rs-themes-light-tab">
+                    {t("themeColorsLight")}
+                </TabsTrigger>
+                <TabsTrigger value="darkColors" data-testid="rs-themes-dark-tab">
+                    {t("themeColorsDark")}
+                </TabsTrigger>
+            </TabsList>
+            <TabsContent value="settings">
+                <ThemeSettingsTab realm={realm} save={save} />
+            </TabsContent>
+            <TabsContent value="lightColors">
                 <LogoContext>
                     <ThemeColors realm={realm} save={saveTheme} theme="light" />
                 </LogoContext>
-            );
-        case "darkColors":
-            return (
+            </TabsContent>
+            <TabsContent value="darkColors">
                 <LogoContext>
                     <ThemeColors realm={realm} save={saveTheme} theme="dark" />
                 </LogoContext>
-            );
-        default:
-            return <ThemeSettingsTab realm={realm} save={save} />;
-    }
+            </TabsContent>
+        </Tabs>
+    );
 }

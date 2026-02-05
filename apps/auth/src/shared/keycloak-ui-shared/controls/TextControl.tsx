@@ -1,5 +1,4 @@
 import { Input } from "@merge/ui/components/input";
-import { cn } from "@merge/ui/lib/utils";
 import { ReactNode } from "react";
 import {
     FieldPath,
@@ -9,7 +8,6 @@ import {
     useController
 } from "react-hook-form";
 import { getRuleValue } from "../utils/getRuleValue";
-import { formInputClassName } from "./form-input-styles";
 import { FormLabel } from "./FormLabel";
 
 export type TextControlProps<
@@ -59,7 +57,7 @@ export const TextControl = <T extends FieldValues, P extends FieldPath<T> = Fiel
                 aria-invalid={!!fieldState.error}
                 disabled={props.isDisabled}
                 placeholder={rest.placeholder ?? props.label}
-                className={cn(formInputClassName, rest.className)}
+                className={rest.className}
             />
             {helperText && (
                 <p className="text-muted-foreground text-xs mt-1.5">{helperText}</p>

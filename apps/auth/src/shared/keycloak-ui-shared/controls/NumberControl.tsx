@@ -10,7 +10,6 @@ import {
 } from "react-hook-form";
 
 import { getRuleValue } from "../utils/getRuleValue";
-import { formInputClassName } from "./form-input-styles";
 import { FormLabel } from "./FormLabel";
 
 export type NumberControlOption = {
@@ -79,7 +78,7 @@ export const NumberControl = <
                             type="number"
                             id={name}
                             placeholder={rest.placeholder ?? label}
-                            className={cn(formInputClassName, rest.className)}
+                            className={rest.className}
                             value={value ?? ""}
                             aria-invalid={!!errors[name]}
                             required={required}

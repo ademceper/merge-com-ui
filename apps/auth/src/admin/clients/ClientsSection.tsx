@@ -8,6 +8,7 @@ import {
     DataTableRowActions,
     type ColumnDef
 } from "@merge/ui/components/table";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@merge/ui/components/tabs";
 import { DownloadSimple, PencilSimple, Plus, Trash } from "@phosphor-icons/react";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -24,6 +25,10 @@ import { translationFormatter } from "../utils/translationFormatter";
 import { InitialAccessTokenList } from "./initial-access/InitialAccessTokenList";
 import { ClientRegistration } from "./registration/ClientRegistration";
 import { toClient } from "./routes/Client";
+import {
+    toClientRegistration
+} from "./routes/client-registration-path";
+import type { ClientRegistrationTab } from "./routes/client-registration-path";
 import { getProtocolName, isRealmClient } from "./utils";
 
 export default function ClientsSection() {
@@ -149,18 +154,50 @@ export default function ClientsSection() {
         }
     ];
 
+    const isClientRegistration = Boolean(subTab);
+    const clientRegistrationTab: ClientRegistrationTab =
+        subTab === "authenticated" ? "authenticated" : "anonymous";
+
     return (
         <>
-            <ViewHeader
-                titleKey="clientList"
-                subKey="clientsExplain"
-                helpUrl={helpUrls.clientsUrl}
-                divider
-            />
+            {isClientRegistration ? (
+                <ViewHeader
+                    titleKey="clientRegistration"
+                    helpUrl={helpUrls.clientsUrl}
+                    divider
+                />
+            ) : (
+                <ViewHeader
+                    titleKey="clientList"
+                    subKey="clientsExplain"
+                    helpUrl={helpUrls.clientsUrl}
+                    divider
+                />
+            )}
             <div className="py-6 px-0">
                 <DeleteConfirm />
-                {subTab ? (
-                    <ClientRegistration key={subTab} subTab={subTab} />
+                {isClientRegistration ? (
+                    <Tabs
+                        value={clientRegistrationTab}
+                        onValueChange={(value) =>
+                            navigate(toClientRegistration({ realm, subTab: value as ClientRegistrationTab }))
+                        }
+                    >
+                        <TabsList variant="line" className="mb-4">
+                            <TabsTrigger value="anonymous" data-testid="client-registration-anonymous-tab">
+                                {t("anonymousAccessPolicies")}
+                            </TabsTrigger>
+                            <TabsTrigger value="authenticated" data-testid="client-registration-authenticated-tab">
+                                {t("authenticatedAccessPolicies")}
+                            </TabsTrigger>
+                        </TabsList>
+                        <TabsContent value="anonymous">
+                            <ClientRegistration subTab="anonymous" />
+                        </TabsContent>
+                        <TabsContent value="authenticated">
+                            <ClientRegistration subTab="authenticated" />
+                        </TabsContent>
+                    </Tabs>
                 ) : tab === "initial-access-token" ? (
                     <InitialAccessTokenList />
                 ) : tab === "client-registration" ? (

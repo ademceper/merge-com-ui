@@ -5,10 +5,7 @@ import AuthLayout from "../components/AuthLayout";
 import { Button } from "@merge/ui/components/button";
 import { Alert, AlertDescription } from "@merge/ui/components/alert";
 
-const primaryButtonClassName =
-    "w-full h-12 rounded-lg bg-primary text-primary-foreground font-medium text-sm hover:bg-primary/90 transition-colors disabled:opacity-50";
-const secondaryButtonClassName =
-    "w-full h-12 rounded-lg bg-muted text-foreground font-medium text-sm hover:bg-muted/80 transition-colors border-0";
+const fullWidthClassName = "w-full";
 
 export default function DeleteAccountConfirm(
     props: PageProps<Extract<KcContext, { pageId: "delete-account-confirm.ftl" }>, I18n>
@@ -44,12 +41,13 @@ export default function DeleteAccountConfirm(
                                 type="submit"
                                 name="cancel-aia"
                                 value="true"
-                                className={secondaryButtonClassName}
+                                variant="secondary"
+                                className={fullWidthClassName}
                             >
                                 {msgStr("doCancel")}
                             </Button>
                         )}
-                        <Button type="submit" className={primaryButtonClassName}>
+                        <Button type="submit" className={fullWidthClassName}>
                             {msgStr("doConfirmDelete")}
                         </Button>
                     </div>
