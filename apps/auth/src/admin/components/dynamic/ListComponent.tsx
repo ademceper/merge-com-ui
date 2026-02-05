@@ -18,7 +18,9 @@ export const ListComponent = ({
     options,
     required,
     isDisabled = false,
-    convertToName
+    convertToName,
+    hideLabel = false,
+    helpIconAfterControl = false
 }: ComponentProps) => {
     const { t } = useTranslation();
     const { control } = useFormContext();
@@ -26,38 +28,50 @@ export const ListComponent = ({
 
     return (
         <div className="space-y-2">
-            <div className="flex items-center gap-1">
-                <Label htmlFor={name!}>{t(label!)}{required && " *"}</Label>
-                <HelpItem helpText={t(helpText!)} fieldLabelId={`${label}`} />
-            </div>
+            {!(hideLabel && helpIconAfterControl) && (
+                <div className="flex items-center gap-1">
+                    {!hideLabel && (
+                        <Label htmlFor={name!}>{t(label!)}{required && " *"}</Label>
+                    )}
+                    {!helpIconAfterControl && helpText && (
+                        <HelpItem helpText={t(helpText!)} fieldLabelId={`${label}`} />
+                    )}
+                </div>
+            )}
             <Controller
                 name={convertToName(name!)}
                 data-testid={name}
                 defaultValue={defaultValue || options?.[0] || ""}
                 control={control}
                 render={({ field }) => (
-                    <KeycloakSelect
-                        toggleId={name}
-                        isDisabled={isDisabled}
-                        onToggle={toggle => setOpen(toggle)}
-                        onSelect={value => {
-                            field.onChange(value as string);
-                            setOpen(false);
-                        }}
-                        selections={field.value}
-                        variant={SelectVariant.single}
-                        aria-label={t(label!)}
-                        isOpen={open}
-                    >
-                        {options?.map(option => (
-                            <SelectOption
-                                key={option}
-                                value={option}
-                            >
-                                {option}
-                            </SelectOption>
-                        ))}
-                    </KeycloakSelect>
+                    <div className={helpIconAfterControl ? "flex w-full items-center gap-2" : undefined}>
+                        <KeycloakSelect
+                            toggleId={name}
+                            isDisabled={isDisabled}
+                            onToggle={toggle => setOpen(toggle)}
+                            onSelect={value => {
+                                field.onChange(value as string);
+                                setOpen(false);
+                            }}
+                            selections={field.value}
+                            variant={SelectVariant.single}
+                            aria-label={hideLabel ? t(label!) : undefined}
+                            isOpen={open}
+                            className={helpIconAfterControl ? "flex-1 min-w-0" : undefined}
+                        >
+                            {options?.map(option => (
+                                <SelectOption
+                                    key={option}
+                                    value={option}
+                                >
+                                    {option}
+                                </SelectOption>
+                            ))}
+                        </KeycloakSelect>
+                        {helpIconAfterControl && helpText && (
+                            <HelpItem helpText={t(helpText)} fieldLabelId={`${label}`} />
+                        )}
+                    </div>
                 )}
             />
         </div>

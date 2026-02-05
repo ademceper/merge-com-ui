@@ -7,12 +7,30 @@ import useLocaleSort, { mapByKey } from "../../utils/useLocaleSort";
 type AddProviderDialogProps = {
     onConfirm: (providerId: string) => void;
     toggleDialog: () => void;
+    /** When provided, dialog visibility is controlled by parent (e.g. open={isAddDialogOpen}). */
+    open?: boolean;
+    /** When provided, called when dialog open state changes (e.g. onOpenChange={(open) => !open && toggleAddDialog()}). */
+    onOpenChange?: (open: boolean) => void;
 };
 
 export const AddProviderDialog = ({
     onConfirm,
-    toggleDialog
+    toggleDialog,
+    open: controlledOpen,
+    onOpenChange
 }: AddProviderDialogProps) => {
+    const isControlled = controlledOpen !== undefined;
+    const open = isControlled ? controlledOpen : true;
+    const handleOpenChange = (next: boolean) => {
+        if (next) return;
+        if (onOpenChange) onOpenChange(false);
+        else toggleDialog();
+    };
+
+    const closeDialog = () => {
+        if (onOpenChange) onOpenChange(false);
+        else toggleDialog();
+    };
     const { t } = useTranslation();
     const serverInfo = useServerInfo();
     const providers = Object.keys(
@@ -34,7 +52,7 @@ export const AddProviderDialog = ({
         [providers, descriptions]
     );
     return (
-        <Dialog open onOpenChange={(open) => { if (!open) toggleDialog(); }}>
+        <Dialog open={open} onOpenChange={handleOpenChange}>
             <DialogContent className="max-w-lg">
                 <DialogHeader>
                     <DialogTitle>{t("chooseAPolicyProvider")}</DialogTitle>
@@ -51,7 +69,7 @@ export const AddProviderDialog = ({
                             className="grid grid-cols-[1fr_2fr] gap-2 p-2 hover:bg-muted cursor-pointer rounded text-sm"
                             onClick={() => {
                                 onConfirm(provider.id);
-                                toggleDialog();
+                                closeDialog();
                             }}
                         >
                             <span>{provider.id}</span>

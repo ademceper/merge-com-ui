@@ -4,7 +4,6 @@ import {
     SelectTrigger,
     SelectValue
 } from "@merge/ui/components/select";
-import { Button } from "@merge/ui/components/button";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useAdminClient } from "../admin-client";
@@ -61,15 +60,13 @@ return (
                 }
             }}
         >
-            <SelectTrigger asChild>
-                <Button
-                    id="change-type-dropdown"
-                    variant="outline"
-                    disabled={selectedRows.length === 0}
-                    aria-label="change-type-to"
-                >
-                    <SelectValue placeholder={t("changeTypeTo")} />
-                </Button>
+            <SelectTrigger
+                id="change-type-dropdown"
+                disabled={selectedRows.length === 0}
+                aria-label="change-type-to"
+                className="border border-input bg-background hover:bg-muted/50 w-auto min-w-[140px]"
+            >
+                <SelectValue placeholder={t("changeTypeTo")} />
             </SelectTrigger>
             <SelectContent>
                 {clientScopeTypesSelectOptions(

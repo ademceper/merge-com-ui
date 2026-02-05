@@ -163,6 +163,14 @@ export default function ClientsSection() {
             {isClientRegistration ? (
                 <ViewHeader
                     titleKey="clientRegistration"
+                    subKey="clientRegistrationExplain"
+                    helpUrl={helpUrls.clientsUrl}
+                    divider
+                />
+            ) : tab === "initial-access-token" ? (
+                <ViewHeader
+                    titleKey="initialAccessToken"
+                    subKey="initialAccessTokenExplain"
                     helpUrl={helpUrls.clientsUrl}
                     divider
                 />
@@ -174,7 +182,7 @@ export default function ClientsSection() {
                     divider
                 />
             )}
-            <div className="py-6 px-0">
+            <div className="py-6 px-0 min-w-0">
                 <DeleteConfirm />
                 {isClientRegistration ? (
                     <Tabs
@@ -183,18 +191,20 @@ export default function ClientsSection() {
                             navigate(toClientRegistration({ realm, subTab: value as ClientRegistrationTab }))
                         }
                     >
-                        <TabsList variant="line" className="mb-4">
-                            <TabsTrigger value="anonymous" data-testid="client-registration-anonymous-tab">
-                                {t("anonymousAccessPolicies")}
-                            </TabsTrigger>
-                            <TabsTrigger value="authenticated" data-testid="client-registration-authenticated-tab">
-                                {t("authenticatedAccessPolicies")}
-                            </TabsTrigger>
-                        </TabsList>
-                        <TabsContent value="anonymous">
+                        <div className="w-full min-w-0 overflow-x-auto overflow-y-hidden mb-4">
+                            <TabsList variant="line" className="mb-0 w-max min-w-0 **:data-[slot=tabs-trigger]:flex-none">
+                                <TabsTrigger value="anonymous" data-testid="client-registration-anonymous-tab">
+                                    {t("anonymousAccessPolicies")}
+                                </TabsTrigger>
+                                <TabsTrigger value="authenticated" data-testid="client-registration-authenticated-tab">
+                                    {t("authenticatedAccessPolicies")}
+                                </TabsTrigger>
+                            </TabsList>
+                        </div>
+                        <TabsContent value="anonymous" className="mt-0 pt-0 outline-none">
                             <ClientRegistration subTab="anonymous" />
                         </TabsContent>
-                        <TabsContent value="authenticated">
+                        <TabsContent value="authenticated" className="mt-0 pt-0 outline-none">
                             <ClientRegistration subTab="authenticated" />
                         </TabsContent>
                     </Tabs>

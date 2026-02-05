@@ -3,7 +3,7 @@ import {
     KeycloakSelectProps,
     SelectVariant
 } from "../../../shared/keycloak-ui-shared";
-import { Input } from "@merge/ui/components/input";
+import { NumberInput } from "@merge/ui/components/number-input";
 import { SelectOption } from "../../../shared/keycloak-ui-shared";
 import React, { useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -26,6 +26,8 @@ export type TimeSelectorProps = Omit<React.InputHTMLAttributes<HTMLInputElement>
         onChange?: (time: number | string) => void;
         className?: string;
         validated?: "success" | "warning" | "error" | "default";
+        /** Input + unit row takes full width, number input grows. */
+        fullWidth?: boolean;
     };
 
 const getTimeUnit = (units: TimeUnit[], value = 0) =>
@@ -53,6 +55,7 @@ export const TimeSelector = ({
     min,
     menuAppendTo,
     validated: _validated,
+    fullWidth = false,
     ...rest
 }: TimeSelectorProps) => {
     const { t } = useTranslation();
@@ -108,22 +111,18 @@ export const TimeSelector = ({
     };
 
     return (
-        <div className={`flex gap-4 ${className || ""}`}>
-            <div>
-                <Input
+        <div className={`flex gap-4 ${fullWidth ? "w-full" : ""} ${className || ""}`}>
+            <div className={fullWidth ? "flex-1 min-w-0" : ""}>
+                <NumberInput
                     {...rest}
-                    type="number"
                     aria-label="kc-time"
                     min={min || 0}
                     value={timeValue}
-                    className={`${className}-input`}
-                    onChange={(e) => {
-                        const value = e.target.value;
-                        updateTimeout("" === value ? value : parseInt(value));
-                    }}
+                    className={`${className || ""}-input ${fullWidth ? "w-full" : ""}`}
+                    onChange={(v) => updateTimeout(v)}
                 />
             </div>
-            <div id={`${className}-select-menu`}>
+            <div id={`${className || ""}-select-menu`} className={fullWidth ? "shrink-0" : ""}>
                 <KeycloakSelect
                     variant={SelectVariant.single}
                     aria-label={t("unitLabel")}

@@ -21,13 +21,23 @@ import { UserProfileAttributeListComponent } from "./UserProfileAttributeListCom
 import { IntComponent } from "./IntComponent";
 import { NumberComponent } from "./NumberComponent";
 
+/** Optional layout overrides for dynamic form fields (e.g. hide label, help after control). */
+export type ComponentLayoutOptions = {
+    /** Do not show the label (e.g. for select). */
+    hideLabel?: boolean;
+    /** Render help icon after the control instead of next to label. */
+    helpIconAfterControl?: boolean;
+    /** Boolean only: layout as [Label] [On/Off text] [Switch] [Help]. */
+    booleanLabelTextSwitchHelp?: boolean;
+};
+
 export type ComponentProps = Omit<ConfigPropertyRepresentation, "type"> & {
     isDisabled?: boolean;
     isNew?: boolean;
     stringify?: boolean;
     convertToName: (name: string) => string;
     onSearch?: (search: string) => void;
-};
+} & Partial<ComponentLayoutOptions>;
 
 export type NumberComponentProps = ComponentProps & {
     min?: number;

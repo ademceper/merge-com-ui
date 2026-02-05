@@ -1,9 +1,22 @@
 import { Button } from "@merge/ui/components/button";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@merge/ui/components/dropdown-menu";
-import { DotsThreeVertical } from "@phosphor-icons/react";
+import {
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle
+} from "@merge/ui/components/alert-dialog";
+import {
+    DataTable,
+    DataTableRowActions,
+    type ColumnDef
+} from "@merge/ui/components/table";
+import { PencilSimple, Plus, Trash } from "@phosphor-icons/react";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
-import { Link } from "react-router-dom";
 import { useAdminClient } from "../admin-client";
 import type { Row } from "../clients/scopes/ClientScopes";
 import { getProtocolName } from "../clients/utils";
@@ -18,283 +31,236 @@ import {
     changeScope,
     removeScope
 } from "../components/client-scope/ClientScopeTypes";
-import { useConfirmDialog } from "../components/confirm-dialog/ConfirmDialog";
-import { Action, KeycloakDataTable, cellWidth } from "../../shared/keycloak-ui-shared";
 import { ViewHeader } from "../components/view-header/ViewHeader";
-import { useRealm } from "../context/realm-context/RealmContext";
 import helpUrls from "../help-urls";
-import { emptyFormatter } from "../util";
 import useLocaleSort, { mapByKey } from "../utils/useLocaleSort";
-import { ChangeTypeDropdown } from "./ChangeTypeDropdown";
-import {
-    ProtocolType,
-    SearchDropdown,
-    SearchToolbar,
-    SearchType,
-    nameFilter,
-    protocolFilter,
-    typeFilter
-} from "./details/SearchFilter";
-import { toClientScope } from "./routes/ClientScope";
-import { toNewClientScope } from "./routes/NewClientScope";
+import { useFetch } from "../../shared/keycloak-ui-shared";
+import { AddClientScopeDialog } from "./AddClientScopeDialog";
+import { EditClientScopeDialog } from "./EditClientScopeDialog";
 
 type TypeSelectorProps = ClientScopeDefaultOptionalType & {
     refresh: () => void;
+    className?: string;
 };
 
-const TypeSelector = (scope: TypeSelectorProps) => {
+function TypeSelector(scope: TypeSelectorProps) {
     const { adminClient } = useAdminClient();
-
     const { t } = useTranslation();
-return (
+    return (
         <CellDropdown
             clientScope={scope}
             type={scope.type}
             all
-            onSelect={async value => {
+            className={scope.className}
+            onSelect={async (value) => {
                 try {
                     await changeScope(adminClient, scope, value as AllClientScopeType);
                     toast.success(t("clientScopeSuccess"));
                     scope.refresh();
                 } catch (error) {
-                    toast.error(t("clientScopeError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
+                    toast.error(t("clientScopeError", { error: getErrorMessage(error) }), {
+                        description: getErrorDescription(error)
+                    });
                 }
             }}
         />
     );
-};
-
-const ClientScopeDetailLink = ({ id, name }: ClientScopeDefaultOptionalType) => {
-    const { realm } = useRealm();
-    return (
-        <Link key={id} to={toClientScope({ realm, id: id!, tab: "settings" })}>
-            {name}
-        </Link>
-    );
-};
+}
 
 export default function ClientScopesSection() {
     const { adminClient } = useAdminClient();
-
-    const { realm } = useRealm();
     const { t } = useTranslation();
-const [_kebabOpen, setKebabOpen] = useState(false);
-    const [selectedScopes, setSelectedScopes] = useState<
-        ClientScopeDefaultOptionalType[]
-    >([]);
-
-    const [searchType, setSearchType] = useState<SearchType>("name");
-    const [searchTypeType, setSearchTypeType] = useState<AllClientScopes>(
-        AllClientScopes.none
-    );
-    const [searchProtocol, setSearchProtocol] = useState<ProtocolType>("all");
     const localeSort = useLocaleSort();
 
     const [key, setKey] = useState(0);
-    const refresh = () => {
-        setSelectedScopes([]);
-        setKey(key + 1);
-    };
+    const refresh = () => setKey(key + 1);
+    const [clientScopes, setClientScopes] = useState<Row[]>([]);
+    const [selectedScope, setSelectedScope] = useState<ClientScopeDefaultOptionalType>();
+    const [editScopeId, setEditScopeId] = useState<string | null>(null);
 
-    const loader = async (first?: number, max?: number, search?: string) => {
-        const defaultScopes = await adminClient.clientScopes.listDefaultClientScopes();
-        const optionalScopes =
-            await adminClient.clientScopes.listDefaultOptionalClientScopes();
-        const clientScopes = await adminClient.clientScopes.find();
+    useFetch(
+        async () => {
+            const [defaultScopes, optionalScopes, scopes] = await Promise.all([
+                adminClient.clientScopes.listDefaultClientScopes(),
+                adminClient.clientScopes.listDefaultOptionalClientScopes(),
+                adminClient.clientScopes.find()
+            ]);
+            const transformed: Row[] = scopes.map(scope => ({
+                ...scope,
+                type: defaultScopes.find(s => s.name === scope.name)
+                    ? ClientScope.default
+                    : optionalScopes.find(s => s.name === scope.name)
+                      ? ClientScope.optional
+                      : AllClientScopes.none
+            }));
+            return localeSort(transformed, mapByKey("name"));
+        },
+        (data) => setClientScopes(data),
+        [key]
+    );
 
-        const filter =
-            searchType === "name"
-                ? nameFilter(search)
-                : searchType === "type"
-                  ? typeFilter(searchTypeType)
-                  : protocolFilter(searchProtocol);
-
-        const transformed = clientScopes
-            .map(scope => {
-                const row: Row = {
-                    ...scope,
-                    type: defaultScopes.find(
-                        defaultScope => defaultScope.name === scope.name
-                    )
-                        ? ClientScope.default
-                        : optionalScopes.find(
-                                optionalScope => optionalScope.name === scope.name
-                            )
-                          ? ClientScope.optional
-                          : AllClientScopes.none
-                };
-                return row;
-            })
-            .filter(filter);
-
-        return localeSort(transformed, mapByKey("name")).slice(
-            first,
-            Number(first) + Number(max)
-        );
-    };
-
-    const [toggleDeleteDialog, DeleteConfirm] = useConfirmDialog({
-        titleKey: t("deleteClientScope", {
-            count: selectedScopes.length,
-            name: selectedScopes[0]?.name
-        }),
-        messageKey: "deleteConfirmClientScopes",
-        continueButtonLabel: "delete",
-        continueButtonVariant: "destructive",
-        onConfirm: async () => {
-            const clientScopes = await adminClient.clientScopes.find();
-            const clientScopeLength = Object.keys(clientScopes).length;
-            if (clientScopeLength - selectedScopes.length > 0) {
-                try {
-                    for (const scope of selectedScopes) {
-                        try {
-                            await removeScope(adminClient, scope);
-                        } catch (error: any) {
-                            console.warn(
-                                "could not remove scope",
-                                error.response?.data?.errorMessage || error
-                            );
-                        }
-                        await adminClient.clientScopes.del({ id: scope.id! });
-                    }
-                    toast.success(t("deletedSuccessClientScope"));
-                    refresh();
-                } catch (error) {
-                    toast.error(t("deleteErrorClientScope", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
-                }
-            } else {
-                toast.error(t("notAllowedToDeleteAllClientScopes"));
-            }
+    const onDeleteConfirm = async () => {
+        if (!selectedScope?.id) return;
+        const currentCount = clientScopes.length;
+        if (currentCount <= 1) {
+            toast.error(t("notAllowedToDeleteAllClientScopes"));
+            setSelectedScope(undefined);
+            return;
         }
-    });
+        try {
+            await removeScope(adminClient, selectedScope);
+            await adminClient.clientScopes.del({ id: selectedScope.id });
+            toast.success(t("deletedSuccessClientScope"));
+            setSelectedScope(undefined);
+            refresh();
+        } catch (error) {
+            toast.error(t("deleteErrorClientScope", { error: getErrorMessage(error) }), {
+                description: getErrorDescription(error)
+            });
+        }
+    };
+
+    const columns: ColumnDef<Row>[] = [
+        {
+            accessorKey: "name",
+            header: t("name"),
+            cell: ({ row }) => (
+                <button
+                    type="button"
+                    className="text-primary hover:underline text-left"
+                    onClick={() => setEditScopeId(row.original.id!)}
+                >
+                    {row.original.name}
+                </button>
+            )
+        },
+        {
+            accessorKey: "type",
+            header: t("assignedType"),
+            cell: ({ row }) => (
+                <TypeSelector
+                    {...row.original}
+                    refresh={refresh}
+                    className="h-8 min-h-8 w-auto min-w-[100px] border border-input bg-muted/50 py-1 px-2 text-sm"
+                />
+            )
+        },
+        {
+            accessorKey: "protocol",
+            header: t("protocol"),
+            cell: ({ row }) =>
+                getProtocolName(t, row.original.protocol ?? "openid-connect")
+        },
+        {
+            id: "displayOrder",
+            accessorFn: (row) => row.attributes?.["gui.order"],
+            header: t("displayOrder"),
+            cell: ({ row }) => row.original.attributes?.["gui.order"] ?? "-"
+        },
+        {
+            accessorKey: "description",
+            header: t("description"),
+            cell: ({ row }) => row.original.description || "-"
+        },
+        {
+            id: "actions",
+            header: "",
+            size: 50,
+            enableHiding: false,
+            cell: ({ row }) => (
+                <DataTableRowActions row={row}>
+                    <button
+                        type="button"
+                        className="flex w-full items-center gap-2 rounded-md px-1.5 py-1 text-left text-sm hover:bg-accent hover:text-accent-foreground"
+                        onClick={() => setEditScopeId(row.original.id!)}
+                    >
+                        <PencilSimple className="size-4 shrink-0" />
+                        {t("edit")}
+                    </button>
+                    <div className="my-1 h-px bg-border" />
+                    <button
+                        type="button"
+                        className="flex w-full items-center gap-2 rounded-md px-1.5 py-1 text-left text-sm text-destructive hover:bg-destructive/10 hover:text-destructive"
+                        onClick={() => setSelectedScope(row.original)}
+                    >
+                        <Trash className="size-4 shrink-0" />
+                        {t("delete")}
+                    </button>
+                </DataTableRowActions>
+            )
+        }
+    ];
 
     return (
         <>
-            <DeleteConfirm />
             <ViewHeader
                 titleKey="clientScopes"
                 subKey="clientScopeExplain"
                 helpUrl={helpUrls.clientScopesUrl}
+                divider
             />
-            <div className="p-0">
-                <KeycloakDataTable
+            <div className="py-6 px-0">
+                <AlertDialog
+                    open={!!selectedScope}
+                    onOpenChange={(open) => !open && setSelectedScope(undefined)}
+                >
+                    <AlertDialogContent>
+                        <AlertDialogHeader>
+                            <AlertDialogTitle>
+                                {t("deleteClientScope", {
+                                    count: 1,
+                                    name: selectedScope?.name
+                                })}
+                            </AlertDialogTitle>
+                            <AlertDialogDescription>
+                                {t("deleteConfirmClientScopes")}
+                            </AlertDialogDescription>
+                        </AlertDialogHeader>
+                        <AlertDialogFooter>
+                            <AlertDialogCancel>{t("cancel")}</AlertDialogCancel>
+                            <AlertDialogAction
+                                variant="destructive"
+                                data-testid="confirm"
+                                onClick={onDeleteConfirm}
+                            >
+                                {t("delete")}
+                            </AlertDialogAction>
+                        </AlertDialogFooter>
+                    </AlertDialogContent>
+                </AlertDialog>
+
+                <EditClientScopeDialog
+                    open={!!editScopeId}
+                    onOpenChange={(open) => !open && setEditScopeId(null)}
+                    scopeId={editScopeId}
+                    onSuccess={refresh}
+                />
+
+                <DataTable
                     key={key}
-                    loader={loader}
-                    ariaLabelKey="clientScopeList"
-                    searchPlaceholderKey={
-                        searchType === "name" ? "searchForClientScope" : undefined
-                    }
-                    isSearching={searchType !== "name"}
-                    searchTypeComponent={
-                        <SearchDropdown
-                            searchType={searchType}
-                            onSelect={searchType => setSearchType(searchType)}
-                            withProtocol
+                    columns={columns}
+                    data={clientScopes}
+                    searchColumnId="name"
+                    searchPlaceholder={t("searchForClientScope")}
+                    emptyMessage={t("emptyClientScopes")}
+                    onRowClick={(row) => setEditScopeId(row.original.id!)}
+                    toolbar={
+                        <AddClientScopeDialog
+                            trigger={
+                                <Button
+                                    type="button"
+                                    data-testid="createClientScope"
+                                    variant="default"
+                                    className="flex h-9 w-9 shrink-0 items-center justify-center p-0 sm:h-9 sm:w-auto sm:gap-2 sm:px-4 sm:py-2"
+                                    aria-label={t("createClientScope")}
+                                >
+                                    <Plus size={20} className="shrink-0 sm:hidden" />
+                                    <span className="hidden sm:inline">{t("createClientScope")}</span>
+                                </Button>
+                            }
+                            onSuccess={refresh}
                         />
                     }
-                    isPaginated
-                    onSelect={clientScopes => setSelectedScopes([...clientScopes])}
-                    canSelectAll
-                    toolbarItem={
-                        <>
-                            <SearchToolbar
-                                searchType={searchType}
-                                type={searchTypeType}
-                                onSelect={searchType => {
-                                    setSearchType(searchType);
-                                    setSearchProtocol("all");
-                                    setSearchTypeType(AllClientScopes.none);
-                                    refresh();
-                                }}
-                                onType={value => {
-                                    setSearchTypeType(value);
-                                    setSearchProtocol("all");
-                                    refresh();
-                                }}
-                                protocol={searchProtocol}
-                                onProtocol={protocol => {
-                                    setSearchProtocol(protocol);
-                                    setSearchTypeType(AllClientScopes.none);
-                                    refresh();
-                                }}
-                            />
-
-                            <div>
-                                <Button asChild>
-                                    <Link to={toNewClientScope({ realm })}>
-                                        {t("createClientScope")}
-                                    </Link>
-                                </Button>
-                            </div>
-                            <div>
-                                <ChangeTypeDropdown
-                                    selectedRows={selectedScopes}
-                                    refresh={refresh}
-                                />
-                            </div>
-                            <div>
-                                <DropdownMenu>
-                                    <DropdownMenuTrigger asChild>
-                                        <Button
-                                            variant="ghost"
-                                            data-testid="kebab"
-                                            aria-label="Kebab toggle"
-                                        >
-                                            <DotsThreeVertical className="size-4" />
-                                        </Button>
-                                    </DropdownMenuTrigger>
-                                    <DropdownMenuContent>
-                                        <DropdownMenuItem
-                                            data-testid="delete"
-                                            disabled={selectedScopes.length === 0}
-                                            onClick={() => {
-                                                toggleDeleteDialog();
-                                                setKebabOpen(false);
-                                            }}
-                                        >
-                                            {t("delete")}
-                                        </DropdownMenuItem>
-                                    </DropdownMenuContent>
-                                </DropdownMenu>
-                            </div>
-                        </>
-                    }
-                    actions={[
-                        {
-                            title: t("delete"),
-                            onRowClick: clientScope => {
-                                setSelectedScopes([clientScope]);
-                                toggleDeleteDialog();
-                            }
-                        } as Action<Row>
-                    ]}
-                    columns={[
-                        {
-                            name: "name",
-                            cellRenderer: ClientScopeDetailLink
-                        },
-                        {
-                            name: "type",
-                            displayKey: "assignedType",
-                            cellRenderer: row => (
-                                <TypeSelector {...row} refresh={refresh} />
-                            )
-                        },
-                        {
-                            name: "protocol",
-                            displayKey: "protocol",
-                            cellRenderer: client =>
-                                getProtocolName(t, client.protocol ?? "openid-connect"),
-                            transforms: [cellWidth(15)]
-                        },
-                        {
-                            name: "attributes['gui.order']",
-                            displayKey: "displayOrder",
-                            cellFormatters: [emptyFormatter()],
-                            transforms: [cellWidth(15)]
-                        },
-                        { name: "description", cellFormatters: [emptyFormatter()] }
-                    ]}
                 />
             </div>
         </>

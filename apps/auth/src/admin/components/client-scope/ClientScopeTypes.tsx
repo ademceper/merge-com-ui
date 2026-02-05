@@ -56,6 +56,8 @@ type CellDropdownProps = {
     all?: boolean;
     onSelect: (value: ClientScopeType | AllClientScopeType) => void;
     isDisabled?: boolean;
+    /** Küçük trigger için (tablo hücresi) */
+    className?: string;
 };
 
 export const CellDropdown = ({
@@ -63,7 +65,8 @@ export const CellDropdown = ({
     type,
     onSelect,
     all = false,
-    isDisabled
+    isDisabled,
+    className: classNameProp
 }: CellDropdownProps) => {
     const { t } = useTranslation();
     const [open, setOpen] = useState(false);
@@ -72,7 +75,7 @@ export const CellDropdown = ({
         <KeycloakSelect
             key={clientScope.id}
             toggleId="cell-dropdown"
-            className={`keycloak__client-scope__${type}`}
+            className={classNameProp ?? `keycloak__client-scope__${type}`}
             variant={SelectVariant.single}
             onToggle={() => setOpen(!open)}
             isOpen={open}

@@ -22,7 +22,13 @@ export const HelpItem = ({
 }: HelpItemProps) => {
     const { enabled } = useHelp();
     if (!enabled) return null;
-    const icon = <Question size={14} className={noVerticalAlign ? "inline-block align-middle" : ""} />;
+    const icon = (
+        <Question
+            size={14}
+            className={noVerticalAlign ? "shrink-0" : ""}
+            aria-hidden
+        />
+    );
     return (
         <Tooltip>
             {!unWrap ? (
@@ -31,7 +37,7 @@ export const HelpItem = ({
                         type="button"
                         data-testid={`help-label-${fieldLabelId}`}
                         aria-label={fieldLabelId}
-                        className="text-muted-foreground hover:text-foreground rounded p-0.5 outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                        className="flex size-6 shrink-0 items-center justify-center text-muted-foreground hover:text-foreground rounded outline-none focus-visible:ring-2 focus-visible:ring-ring"
                     >
                         {icon}
                     </button>

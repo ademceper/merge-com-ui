@@ -10,7 +10,6 @@ import { ClientRegistrationRoute } from "./routes/ClientRegistration";
 import { ClientRoleRoute } from "./routes/ClientRole";
 import { ClientsRoute, ClientsRouteWithTab } from "./routes/Clients";
 import { ClientScopesRoute } from "./routes/ClientScopeTab";
-import { CreateInitialAccessTokenRoute } from "./routes/CreateInitialAccessToken";
 import {
     DedicatedScopeDetailsRoute,
     DedicatedScopeDetailsWithTabRoute
@@ -41,7 +40,6 @@ const routes: AppRouteObject[] = [
     ImportClientRoute,
     ClientsRoute,
     ClientsRouteWithTab,
-    CreateInitialAccessTokenRoute,
     ClientRoute,
     MapperRoute,
     DedicatedScopeDetailsRoute,

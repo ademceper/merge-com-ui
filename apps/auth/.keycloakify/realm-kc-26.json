@@ -1700,7 +1700,9 @@
             "protocol": "openid-connect",
             "attributes": {
                 "include.in.token.scope": "false",
-                "display.on.consent.screen": "false"
+                "display.on.consent.screen": "false",
+                "gui.order": "",
+                "include.in.openid.provider.metadata": "true"
             },
             "protocolMappers": [
                 {
@@ -1719,20 +1721,17 @@
             ]
         }
     ],
-    "defaultDefaultClientScopes": [
-        "role_list",
-        "profile",
-        "email",
-        "roles",
-        "web-origins",
-        "acr",
-        "basic"
-    ],
+    "defaultDefaultClientScopes": ["web-origins", "acr"],
     "defaultOptionalClientScopes": [
-        "offline_access",
         "address",
+        "microprofile-jwt",
+        "offline_access",
+        "email",
         "phone",
-        "microprofile-jwt"
+        "basic",
+        "role_list",
+        "roles",
+        "profile"
     ],
     "browserSecurityHeaders": {
         "contentSecurityPolicyReportOnly": "",

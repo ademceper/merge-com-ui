@@ -16,27 +16,48 @@ export const MultiValuedStringComponent = ({
     stringify,
     required,
     isDisabled = false,
-    convertToName
+    convertToName,
+    hideLabel = false,
+    helpIconAfterControl = false,
 }: ComponentProps) => {
     const { t } = useTranslation();
     const fieldName = convertToName(name!);
 
     return (
         <div className="space-y-2">
-            <div className="flex items-center gap-1">
-                <Label htmlFor={name!}>{t(label!)}{required && " *"}</Label>
-                <HelpItem helpText={t(helpText!)} fieldLabelId={`${label}`} />
-            </div>
-            <MultiLineInput
-                aria-label={t(label!)}
-                name={fieldName}
-                isDisabled={isDisabled}
-                defaultValue={convertDefaultValue(defaultValue)}
-                addButtonLabel={t("addMultivaluedLabel", {
-                    fieldLabel: t(label!).toLowerCase()
-                })}
-                stringify={stringify}
-            />
+            {!hideLabel && (
+                <div className="flex items-center gap-1">
+                    <Label htmlFor={name!}>{t(label!)}{required && " *"}</Label>
+                    {!helpIconAfterControl && (
+                        <HelpItem helpText={t(helpText!)} fieldLabelId={`${label}`} />
+                    )}
+                </div>
+            )}
+            {helpIconAfterControl ? (
+                <MultiLineInput
+                    id={name}
+                    aria-label={t(label!)}
+                    name={fieldName}
+                    isDisabled={isDisabled}
+                    defaultValue={convertDefaultValue(defaultValue)}
+                    addButtonLabel={t("addMultivaluedLabel", {
+                        fieldLabel: t(label!).toLowerCase()
+                    })}
+                    stringify={stringify}
+                    labelIcon={helpText ? t(helpText) : undefined}
+                />
+            ) : (
+                <MultiLineInput
+                    aria-label={t(label!)}
+                    name={fieldName}
+                    isDisabled={isDisabled}
+                    defaultValue={convertDefaultValue(defaultValue)}
+                    addButtonLabel={t("addMultivaluedLabel", {
+                        fieldLabel: t(label!).toLowerCase()
+                    })}
+                    stringify={stringify}
+                />
+            )}
         </div>
     );
 };

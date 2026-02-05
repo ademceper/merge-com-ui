@@ -155,7 +155,7 @@ export function TableHead({
     <th
       data-slot="table-head"
       className={cn(
-        "text-foreground h-12 min-h-12 px-2 text-left align-middle font-medium whitespace-nowrap [&:has([role=checkbox])]:pr-0 first:w-8",
+        "text-foreground h-9 min-h-9 px-2 text-left align-middle font-medium whitespace-nowrap [&:has([role=checkbox])]:pr-0 first:w-8",
         className
       )}
       {...props}
@@ -171,7 +171,7 @@ export function TableCell({
     <td
       data-slot="table-cell"
       className={cn(
-        "h-12 min-h-12 p-2 align-middle overflow-hidden text-ellipsis whitespace-nowrap [&:has([role=checkbox])]:pr-0",
+        "h-9 min-h-9 py-1.5 px-2 align-middle overflow-hidden text-ellipsis whitespace-nowrap [&:has([role=checkbox])]:pr-0",
         className
       )}
       {...props}
@@ -463,7 +463,7 @@ export function DataTable<TData>({
               >
                 {headerGroup.headers.map((header) => (
                   <TableHead
-                    className="h-12"
+                    className="h-9"
                     key={header.id}
                     style={{ width: header.getSize() }}
                   >

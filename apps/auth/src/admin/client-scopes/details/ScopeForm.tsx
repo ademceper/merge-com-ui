@@ -1,11 +1,13 @@
 import type ClientScopeRepresentation from "@keycloak/keycloak-admin-client/lib/defs/clientScopeRepresentation";
 import type { KeyMetadataRepresentation } from "@keycloak/keycloak-admin-client/lib/defs/keyMetadataRepresentation";
 import { Button } from "@merge/ui/components/button";
+import { NumberInput } from "@merge/ui/components/number-input";
 import { useEffect, useMemo, useState } from "react";
-import { FormProvider, useForm, useWatch } from "react-hook-form";
+import { Controller, FormProvider, useForm, useFormContext, useWatch } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 import {
+    FormLabel,
     SelectControl,
     TextAreaControl,
     TextControl,
@@ -49,12 +51,54 @@ const validateCommaSeparatedList = (value: string | undefined) => {
     return true;
 };
 
+const GUI_ORDER_FIELD = convertAttributeNameToForm<ClientScopeDefaultOptionalType>(
+    "attributes.gui.order"
+);
+
+function GuiOrderField() {
+    const { t } = useTranslation();
+    const { control } = useFormContext<ClientScopeDefaultOptionalType>();
+    return (
+        <Controller
+            name={GUI_ORDER_FIELD}
+            control={control}
+            render={({ field, fieldState }) => {
+                const value = field.value === undefined || field.value === ""
+                    ? ""
+                    : Number(field.value);
+                return (
+                    <FormLabel
+                        name={GUI_ORDER_FIELD}
+                        label={t("guiOrder")}
+                        labelIcon={t("guiOrderHelp")}
+                        error={fieldState.error}
+                    >
+                        <NumberInput
+                            id={GUI_ORDER_FIELD}
+                            value={value}
+                            onChange={(v) => field.onChange(v === "" ? undefined : v)}
+                            onBlur={field.onBlur}
+                            ref={field.ref}
+                            min={0}
+                            aria-invalid={!!fieldState.error}
+                        />
+                    </FormLabel>
+                );
+            }}
+        />
+    );
+}
+
 type ScopeFormProps = {
     clientScope?: ClientScopeRepresentation;
     save: (clientScope: ClientScopeDefaultOptionalType) => void;
+    /** Dialog içinde kullanıldığında form dışarıdan submit edilebilir */
+    formId?: string;
+    /** true ise Save/Cancel butonları gösterilmez (dialog footer kullanılır) */
+    embedded?: boolean;
 };
 
-export const ScopeForm = ({ clientScope, save }: ScopeFormProps) => {
+export const ScopeForm = ({ clientScope, save, formId, embedded }: ScopeFormProps) => {
     const { t } = useTranslation();
     const { adminClient } = useAdminClient();
     const form = useForm<ClientScopeDefaultOptionalType>({ mode: "onChange" });
@@ -155,8 +199,14 @@ export const ScopeForm = ({ clientScope, save }: ScopeFormProps) => {
     }, [clientScope, setValue]);
 
     return (
-        <FormAccess role="manage-clients" onSubmit={handleSubmit(save)} isHorizontal>
+        <FormAccess
+            role="manage-clients"
+            onSubmit={handleSubmit(save)}
+            isHorizontal={!embedded}
+            id={formId}
+        >
             <FormProvider {...form}>
+                <div className={embedded ? "flex flex-col gap-5" : ""}>
                 <TextControl
                     name="name"
                     label={t("name")}
@@ -273,15 +323,7 @@ export const ScopeForm = ({ clientScope, save }: ScopeFormProps) => {
                         stringify
                     />
                 )}
-                <TextControl
-                    name={convertAttributeNameToForm<ClientScopeDefaultOptionalType>(
-                        "attributes.gui.order"
-                    )}
-                    label={t("guiOrder")}
-                    labelIcon={t("guiOrderHelp")}
-                    type="number"
-                    min={0}
-                />
+                <GuiOrderField />
 
                 {isOid4vcProtocol && isOid4vcEnabled && (
                     <>
@@ -424,20 +466,23 @@ export const ScopeForm = ({ clientScope, save }: ScopeFormProps) => {
                     </>
                 )}
 
-                <div className="flex gap-2">
-                    <Button
-                        type="submit"
-                        data-testid="save"
-                        disabled={!isDirty || !isValid || formState.isLoading || formState.isValidating || formState.isSubmitting}
-                    >
-                        {t("save")}
-                    </Button>
-                    <Button
-                        variant="link"
-                        asChild
-                    >
-                        <Link to={toClientScopes({ realm })}>{t("cancel")}</Link>
-                    </Button>
+                {!embedded && (
+                    <div className="flex gap-2">
+                        <Button
+                            type="submit"
+                            data-testid="save"
+                            disabled={!isDirty || !isValid || formState.isLoading || formState.isValidating || formState.isSubmitting}
+                        >
+                            {t("save")}
+                        </Button>
+                        <Button
+                            variant="link"
+                            asChild
+                        >
+                            <Link to={toClientScopes({ realm })}>{t("cancel")}</Link>
+                        </Button>
+                    </div>
+                )}
                 </div>
             </FormProvider>
         </FormAccess>

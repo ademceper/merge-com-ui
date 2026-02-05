@@ -137,7 +137,15 @@ const [provider, setProvider] = useState<ComponentTypeRepresentation>();
                             labelIcon={t("clientPolicyNameHelp")}
                             rules={{ required: t("required") }}
                         />
-                        <DynamicComponents properties={provider.properties} />
+                        <DynamicComponents
+                                properties={provider.properties}
+                                layoutOverridesByType={{
+                                    List: { hideLabel: true, helpIconAfterControl: true },
+                                    MultivaluedList: { hideLabel: true, helpIconAfterControl: true },
+                                    MultivaluedString: { hideLabel: true, helpIconAfterControl: true },
+                                    boolean: { booleanLabelTextSwitchHelp: true },
+                                }}
+                            />
                         <div className="flex gap-2 mt-4">
                             <Button data-testid="save" type="submit">
                                 {t("save")}

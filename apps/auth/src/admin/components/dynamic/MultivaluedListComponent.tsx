@@ -34,7 +34,9 @@ export const MultiValuedListComponent = ({
     required,
     convertToName,
     onSearch,
-    variant = SelectVariant.typeaheadMulti
+    variant = SelectVariant.typeaheadMulti,
+    hideLabel = false,
+    helpIconAfterControl = false
 }: MultiValuedListComponentProps) => {
     const { t } = useTranslation();
     const {
@@ -59,10 +61,16 @@ export const MultiValuedListComponent = ({
 
     return (
         <div className="space-y-2">
-            <div className="flex items-center gap-1">
-                <Label htmlFor={name!}>{t(label!)}{required && " *"}</Label>
-                <HelpItem helpText={t(helpText!)} fieldLabelId={`${label}`} />
-            </div>
+            {!(hideLabel && helpIconAfterControl) && (
+                <div className="flex items-center gap-1">
+                    {!hideLabel && (
+                        <Label htmlFor={name!}>{t(label!)}{required && " *"}</Label>
+                    )}
+                    {!helpIconAfterControl && helpText && (
+                        <HelpItem helpText={t(helpText!)} fieldLabelId={`${label}`} />
+                    )}
+                </div>
+            )}
             <Controller
                 name={convertedName}
                 control={control}
@@ -77,8 +85,9 @@ export const MultiValuedListComponent = ({
                     required: { value: required || false, message: t("required") }
                 }}
                 render={({ field }) => (
-                    <>
+                    <div className={helpIconAfterControl ? "flex w-full items-center gap-2" : undefined}>
                         <KeycloakSelect
+                            className={helpIconAfterControl ? "flex-1 min-w-0" : undefined}
                             toggleId={name}
                             data-testid={name}
                             isDisabled={isDisabled}
@@ -137,8 +146,11 @@ export const MultiValuedListComponent = ({
                                 </SelectOption>
                             ))}
                         </KeycloakSelect>
+                        {helpIconAfterControl && helpText && (
+                            <HelpItem helpText={t(helpText)} fieldLabelId={`${label}`} />
+                        )}
                         {getError() && <FormErrorText message={getError().message} />}
-                    </>
+                    </div>
                 )}
             />
         </div>
