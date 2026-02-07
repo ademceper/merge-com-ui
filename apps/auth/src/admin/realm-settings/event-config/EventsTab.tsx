@@ -6,9 +6,12 @@ import { isEqual } from "lodash-es";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@merge/ui/components/tabs";
 import { useAdminClient } from "../../admin-client";
 import { useConfirmDialog } from "../../components/confirm-dialog/ConfirmDialog";
 import { FormAccess } from "../../components/form/FormAccess";
+import { FixedButtonsGroup } from "../../components/form/FixedButtonGroup";
+import { FormPanel } from "../../../shared/keycloak-ui-shared";
 import { useRealm } from "../../context/realm-context/RealmContext";
 import { convertToFormValues } from "../../util";
 import { AddEventTypesDialog } from "./AddEventTypesDialog";
@@ -40,7 +43,7 @@ export const EventsTab = ({ realm }: EventsTabProps) => {
     const [events, setEvents] = useState<RealmEventsConfigRepresentation>();
     const [type, setType] = useState<EventsType>();
     const [addEventType, setAddEventType] = useState(false);
-const { realm: realmName, refresh: refreshRealm } = useRealm();
+    const { realm: realmName, refresh: refreshRealm } = useRealm();
 
     const setupForm = (eventConfig?: EventsConfigForm) => {
         setEvents(eventConfig);
@@ -161,94 +164,94 @@ const { realm: realmName, refresh: refreshRealm } = useRealm();
                     onClose={() => setAddEventType(false)}
                 />
             )}
-            <div>
-                <div className="flex border-b" role="tablist">
-                    <button
-                        role="tab"
-                        className={`px-4 py-2 text-sm font-medium ${activeTab === "event" ? "border-b-2 border-primary text-primary" : "text-muted-foreground"}`}
-                        aria-selected={activeTab === "event"}
-                        onClick={() => setActiveTab("event")}
-                        data-testid="rs-event-listeners-tab"
-                    >
-                        {t("eventListeners")}
-                    </button>
-                    <button
-                        role="tab"
-                        className={`px-4 py-2 text-sm font-medium ${activeTab === "user" ? "border-b-2 border-primary text-primary" : "text-muted-foreground"}`}
-                        aria-selected={activeTab === "user"}
-                        onClick={() => setActiveTab("user")}
-                        data-testid="rs-events-tab"
-                    >
-                        {t("userEventsSettings")}
-                    </button>
-                    <button
-                        role="tab"
-                        className={`px-4 py-2 text-sm font-medium ${activeTab === "admin" ? "border-b-2 border-primary text-primary" : "text-muted-foreground"}`}
-                        aria-selected={activeTab === "admin"}
-                        onClick={() => setActiveTab("admin")}
-                        data-testid="rs-admin-events-tab"
-                    >
-                        {t("adminEventsSettings")}
-                    </button>
+            <Tabs value={activeTab} onValueChange={(v) => setActiveTab(v)}>
+                <div className="w-full min-w-0 overflow-x-auto overflow-y-hidden mb-4">
+                    <TabsList variant="line" className="mb-0 w-max min-w-0 **:data-[slot=tabs-trigger]:flex-none">
+                        <TabsTrigger value="event" data-testid="rs-event-listeners-tab">
+                            {t("eventListeners")}
+                        </TabsTrigger>
+                        <TabsTrigger value="user" data-testid="rs-events-tab">
+                            {t("userEventsSettings")}
+                        </TabsTrigger>
+                        <TabsTrigger value="admin" data-testid="rs-admin-events-tab">
+                            {t("adminEventsSettings")}
+                        </TabsTrigger>
+                    </TabsList>
                 </div>
-                {activeTab === "event" && (
-                    <div className="p-6">
-                        <FormAccess
-                            role="manage-events"
-                            isHorizontal
-                            onSubmit={handleSubmit(save)}
-                        >
-                            <EventListenersForm
-                                form={form}
-                                reset={() => setupForm(events)}
-                            />
-                        </FormAccess>
-                    </div>
-                )}
-                {activeTab === "user" && (
-                    <>
-                        <div className="p-6">
-                            <FormAccess
-                                role="manage-events"
-                                isHorizontal
-                                onSubmit={handleSubmit(save)}
-                            >
-                                <EventConfigForm
-                                    type="user"
+                <TabsContent value="event" className="mt-0 pt-0 outline-none">
+                    <FormAccess
+                        role="manage-events"
+                        isHorizontal
+                        onSubmit={handleSubmit(save)}
+                    >
+                        <FormPanel title={t("eventListeners")} className="mt-6 space-y-6">
+                            <div className="space-y-4">
+                                <EventListenersForm
                                     form={form}
                                     reset={() => setupForm(events)}
-                                    clear={() => clear("user")}
                                 />
-                            </FormAccess>
-                        </div>
-                        <div className="p-6">
-                            <EventsTypeTable
-                                key={tableKey}
-                                addTypes={() => setAddEventType(true)}
-                                eventTypes={events?.enabledEventTypes || []}
-                                onDelete={value => removeEvents([value])}
-                                onDeleteAll={removeEvents}
-                            />
-                        </div>
-                    </>
-                )}
-                {activeTab === "admin" && (
-                    <div className="p-6">
+                            </div>
+                        </FormPanel>
+                        <FixedButtonsGroup
+                            name="eventListeners"
+                            reset={() => setupForm(events)}
+                            isSubmit
+                        />
+                    </FormAccess>
+                </TabsContent>
+                    <TabsContent value="user" className="mt-0 pt-0 outline-none space-y-6">
                         <FormAccess
                             role="manage-events"
                             isHorizontal
                             onSubmit={handleSubmit(save)}
                         >
-                            <EventConfigForm
-                                type="admin"
-                                form={form}
+                            <FormPanel title={t("userEventsSettings")} className="mt-6 space-y-6">
+                                <div className="space-y-4">
+                                    <EventConfigForm
+                                        type="user"
+                                        form={form}
+                                        reset={() => setupForm(events)}
+                                        clear={() => clear("user")}
+                                    />
+                                </div>
+                            </FormPanel>
+                            <FixedButtonsGroup
+                                name="userEvents"
                                 reset={() => setupForm(events)}
-                                clear={() => clear("admin")}
+                                isSubmit
                             />
                         </FormAccess>
-                    </div>
-                )}
-            </div>
+                        <EventsTypeTable
+                            key={tableKey}
+                            addTypes={() => setAddEventType(true)}
+                            eventTypes={events?.enabledEventTypes || []}
+                            onDelete={value => removeEvents([value])}
+                        />
+                    </TabsContent>
+                    <TabsContent value="admin" className="mt-0 pt-0 outline-none">
+                        <FormAccess
+                            role="manage-events"
+                            isHorizontal
+                            onSubmit={handleSubmit(save)}
+                        >
+                            <FormPanel title={t("adminEventsSettings")} className="mt-6 space-y-6">
+                                <div className="space-y-4">
+                                    <EventConfigForm
+                                        type="admin"
+                                        form={form}
+                                        reset={() => setupForm(events)}
+                                        clear={() => clear("admin")}
+                                    />
+                                </div>
+                            </FormPanel>
+                            <FixedButtonsGroup
+                                name="adminEvents"
+                                reset={() => setupForm(events)}
+                                isSubmit
+                            />
+                        </FormAccess>
+                    </TabsContent>
+                </Tabs>
         </>
     );
 };

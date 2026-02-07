@@ -3,10 +3,12 @@
 import * as React from "react"
 import {
   type ColumnDef,
+  type ExpandedState,
   type ColumnFiltersState,
   type FilterFn,
   flexRender,
   getCoreRowModel,
+  getExpandedRowModel,
   getFacetedUniqueValues,
   getFilteredRowModel,
   getPaginationRowModel,
@@ -208,6 +210,10 @@ export type DataTableProps<TData> = {
   onRowClick?: (row: Row<TData>) => void
   toolbar?: React.ReactNode
   className?: string
+  /** When provided, adds a leading chevron column to expand/collapse and show detail row */
+  getRowCanExpand?: (row: Row<TData>) => boolean
+  /** Renders the expanded detail content (e.g. details table). Only shown when row is expanded. */
+  renderSubRow?: (row: Row<TData>) => React.ReactNode
 }
 
 export function DataTable<TData>({
@@ -225,6 +231,8 @@ export function DataTable<TData>({
   onRowClick,
   toolbar,
   className,
+  getRowCanExpand,
+  renderSubRow,
 }: DataTableProps<TData>) {
   const id = useId()
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
@@ -235,21 +243,56 @@ export function DataTable<TData>({
     pageSize: defaultPageSize,
   })
   const [sorting, setSorting] = useState<SortingState>(defaultSorting)
+  const [expanded, setExpanded] = useState<ExpandedState>({})
   const inputRef = useRef<HTMLInputElement>(null)
+
+  const columnsWithExpand = useMemo(() => {
+    if (!renderSubRow || !getRowCanExpand) return columns
+    const expandColumn: ColumnDef<TData> = {
+      id: "expand",
+      header: "",
+      size: 40,
+      enableSorting: false,
+      enableHiding: false,
+      cell: ({ row }) =>
+        getRowCanExpand(row) ? (
+          <button
+            type="button"
+            aria-label={row.getIsExpanded() ? "Collapse" : "Expand"}
+            className="flex size-8 items-center justify-center rounded-md hover:bg-muted"
+            onClick={(e) => {
+              e.stopPropagation()
+              row.toggleExpanded()
+            }}
+          >
+            {row.getIsExpanded() ? (
+              <CaretDown size={16} className="text-muted-foreground" />
+            ) : (
+              <CaretRight size={16} className="text-muted-foreground" />
+            )}
+          </button>
+        ) : null,
+    }
+    return [expandColumn, ...columns]
+  }, [columns, renderSubRow, getRowCanExpand])
 
   const table = useReactTable({
     data,
-    columns,
+    columns: columnsWithExpand,
     state: {
       columnFilters,
       columnVisibility,
       pagination,
       sorting,
+      ...(renderSubRow && getRowCanExpand ? { expanded } : {}),
     },
     onColumnFiltersChange: setColumnFilters,
     onColumnVisibilityChange: setColumnVisibility,
     onPaginationChange: setPagination,
     onSortingChange: setSorting,
+    ...(renderSubRow && getRowCanExpand
+      ? { onExpandedChange: setExpanded, getRowCanExpand, getExpandedRowModel: getExpandedRowModel() }
+      : {}),
     getCoreRowModel: getCoreRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
@@ -539,35 +582,46 @@ export function DataTable<TData>({
           <TableBody>
             {table.getRowModel().rows?.length ? (
               table.getRowModel().rows.map((row) => (
-                <TableRow
-                  data-state={row.getIsSelected() && "selected"}
-                  key={row.id}
-                  className={onRowClick ? "cursor-pointer" : undefined}
-                  onClick={
-                    onRowClick
-                      ? (e) => {
-                          const target = e.target as HTMLElement
-                          if (!target.closest("button, a, [role='button'], [data-slot='dropdown-menu-trigger']"))
-                            onRowClick(row)
-                        }
-                      : undefined
-                  }
-                >
-                  {row.getVisibleCells().map((cell) => (
-                    <TableCell className="last:py-0" key={cell.id}>
-                      {flexRender(
-                        cell.column.columnDef.cell,
-                        cell.getContext()
-                      )}
-                    </TableCell>
-                  ))}
-                </TableRow>
+                <React.Fragment key={row.id}>
+                  <TableRow
+                    data-state={row.getIsSelected() && "selected"}
+                    className={onRowClick ? "cursor-pointer" : undefined}
+                    onClick={
+                      onRowClick
+                        ? (e) => {
+                            const target = e.target as HTMLElement
+                            if (!target.closest("button, a, [role='button'], [data-slot='dropdown-menu-trigger']"))
+                              onRowClick(row)
+                          }
+                        : undefined
+                    }
+                  >
+                    {row.getVisibleCells().map((cell) => (
+                      <TableCell className="last:py-0" key={cell.id}>
+                        {flexRender(
+                          cell.column.columnDef.cell,
+                          cell.getContext()
+                        )}
+                      </TableCell>
+                    ))}
+                  </TableRow>
+                  {renderSubRow && getRowCanExpand?.(row) && row.getIsExpanded() && (
+                    <TableRow className="hover:bg-transparent">
+                      <TableCell
+                        className="bg-muted/30 p-4 align-top"
+                        colSpan={row.getVisibleCells().length}
+                      >
+                        {renderSubRow(row)}
+                      </TableCell>
+                    </TableRow>
+                  )}
+                </React.Fragment>
               ))
             ) : (
               <TableRow>
                 <TableCell
                   className="h-24 text-center"
-                  colSpan={columns.length}
+                  colSpan={columnsWithExpand.length}
                 >
                   {emptyMessage}
                 </TableCell>

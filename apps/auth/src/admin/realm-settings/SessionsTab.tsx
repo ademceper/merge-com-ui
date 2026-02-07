@@ -1,11 +1,10 @@
 import type RealmRepresentation from "@keycloak/keycloak-admin-client/lib/defs/realmRepresentation";
-import { Button } from "@merge/ui/components/button";
 import { Label } from "@merge/ui/components/label";
 import { Switch } from "@merge/ui/components/switch";
 import { Controller, useFormContext, useWatch } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { FormPanel, HelpItem } from "../../shared/keycloak-ui-shared";
-import { ActionGroup } from "../components/form/ActionGroup";
+import { FixedButtonsGroup } from "../components/form/FixedButtonGroup";
 import { FormAccess } from "../components/form/FormAccess";
 import { FormGroup } from "../components/form/FormGroup";
 import { TimeSelector } from "../components/time-selector/TimeSelector";
@@ -30,16 +29,15 @@ export const RealmSettingsSessionsTab = ({
     });
 
     return (
-        <div className="bg-muted/30 p-4">
-            <FormPanel
-                title={t("SSOSessionSettings")}
-                className="kc-sso-session-template"
+        <div className="pt-0">
+            <FormAccess
+                isHorizontal
+                role="manage-realm"
+                className="mt-6 space-y-6"
+                onSubmit={handleSubmit(save)}
             >
-                <FormAccess
-                    isHorizontal
-                    role="manage-realm"
-                    onSubmit={handleSubmit(save)}
-                >
+                <FormPanel title={t("SSOSessionSettings")}>
+                    <div className="space-y-4">
                     <div className="space-y-2">
                         <Label htmlFor="SSOSessionIdle" className="flex items-center gap-1">
                             {t("SSOSessionIdle")}
@@ -132,18 +130,10 @@ export const RealmSettingsSessionsTab = ({
                             )}
                         />
                     </div>
-                </FormAccess>
-            </FormPanel>
-            <FormPanel
-                title={t("clientSessionSettings")}
-                className="kc-client-session-template"
-            >
-                <FormAccess
-                    isHorizontal
-                    role="manage-realm"
-                    className="pf-v5-u-mt-lg"
-                    onSubmit={handleSubmit(save)}
-                >
+                    </div>
+                </FormPanel>
+                <FormPanel title={t("clientSessionSettings")}>
+                    <div className="space-y-4">
                     <FormGroup
                         label={t("clientSessionIdle")}
                         fieldId="clientSessionIdle"
@@ -193,18 +183,10 @@ export const RealmSettingsSessionsTab = ({
                             )}
                         />
                     </FormGroup>
-                </FormAccess>
-            </FormPanel>
-            <FormPanel
-                title={t("offlineSessionSettings")}
-                className="kc-offline-session-template"
-            >
-                <FormAccess
-                    isHorizontal
-                    role="manage-realm"
-                    className="pf-v5-u-mt-lg"
-                    onSubmit={handleSubmit(save)}
-                >
+                    </div>
+                </FormPanel>
+                <FormPanel title={t("offlineSessionSettings")}>
+                    <div className="space-y-4">
                     <FormGroup
                         label={t("offlineSessionIdle")}
                         fieldId="offlineSessionIdle"
@@ -257,32 +239,36 @@ export const RealmSettingsSessionsTab = ({
                         />
                     </FormGroup>
 
-                    <FormGroup
-                        hasNoPaddingTop
-                        label={t("offlineSessionMaxLimited")}
-                        fieldId="kc-offlineSessionMaxLimited"
-                        labelIcon={
+                    <div className="flex w-full items-center justify-between gap-2">
+                        <div className="flex items-center gap-1.5">
+                            <Label htmlFor="kc-offline-session-max" className="text-sm font-medium">{t("offlineSessionMaxLimited")}</Label>
                             <HelpItem
                                 helpText={t("offlineSessionMaxLimitedHelp")}
                                 fieldLabelId="offlineSessionMaxLimited"
                             />
-                        }
-                    >
-                        <Controller
-                            name="offlineSessionMaxLifespanEnabled"
-                            control={control}
-                            defaultValue={false}
-                            render={({ field }) => (
-                                <Switch
-                                    id="kc-offline-session-max"
-                                    data-testid="offline-session-max-switch"
-                                    aria-label={t("offlineSessionMaxLimited")}
-                                    checked={field.value}
-                                    onCheckedChange={field.onChange}
-                                />
-                            )}
-                        />
-                    </FormGroup>
+                        </div>
+                        <div className="flex shrink-0 items-center gap-2">
+                            <Controller
+                                name="offlineSessionMaxLifespanEnabled"
+                                control={control}
+                                defaultValue={false}
+                                render={({ field }) => (
+                                    <>
+                                        <span className="text-sm text-muted-foreground">
+                                            {field.value ? t("on") : t("off")}
+                                        </span>
+                                        <Switch
+                                            id="kc-offline-session-max"
+                                            data-testid="offline-session-max-switch"
+                                            aria-label={t("offlineSessionMaxLimited")}
+                                            checked={field.value}
+                                            onCheckedChange={field.onChange}
+                                        />
+                                    </>
+                                )}
+                            />
+                        </div>
+                    </div>
                     {offlineSessionMaxEnabled && (
                         <FormGroup
                             label={t("offlineSessionMax")}
@@ -334,18 +320,13 @@ export const RealmSettingsSessionsTab = ({
                                         units={["minute", "hour", "day"]}
                                     />
                                 )}
-                            />
-                        </FormGroup>
+                        />
+                    </FormGroup>
                     )}
-                </FormAccess>
-            </FormPanel>
-            <FormPanel className="kc-login-settings-template" title={t("loginSettings")}>
-                <FormAccess
-                    isHorizontal
-                    role="manage-realm"
-                    className="pf-v5-u-mt-lg"
-                    onSubmit={handleSubmit(save)}
-                >
+                    </div>
+                </FormPanel>
+                <FormPanel title={t("loginSettings")}>
+                    <div className="space-y-4">
                     <FormGroup
                         label={t("loginTimeout")}
                         id="kc-login-timeout-label"
@@ -397,21 +378,17 @@ export const RealmSettingsSessionsTab = ({
                             )}
                         />
                     </FormGroup>
-                    <ActionGroup>
-                        <Button
-                            variant="default"
-                            type="submit"
-                            data-testid="sessions-tab-save"
-                            disabled={!formState.isDirty}
-                        >
-                            {t("save")}
-                        </Button>
-                        <Button variant="link" onClick={() => reset(realm)}>
-                            {t("revert")}
-                        </Button>
-                    </ActionGroup>
-                </FormAccess>
-            </FormPanel>
+                    </div>
+                </FormPanel>
+                <div className="flex gap-2 pt-2">
+                    <FixedButtonsGroup
+                        name="sessions-tab"
+                        reset={() => reset(realm)}
+                        isSubmit
+                        isDisabled={!formState.isDirty}
+                    />
+                </div>
+            </FormAccess>
         </div>
     );
 };

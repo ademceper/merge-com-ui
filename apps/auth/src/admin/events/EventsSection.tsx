@@ -29,9 +29,9 @@ export default function EventsSection() {
                     </Trans>
                 }
                 helpUrl={helpUrls.eventsUrl}
-                divider={false}
+                divider
             />
-            <div className="bg-muted/30 p-0">
+            <div className="py-6 px-0">
                 {content}
             </div>
         </>

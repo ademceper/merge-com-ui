@@ -25,7 +25,7 @@ export const RevocationModal = ({ handleModalToggle, save }: RevocationModalProp
     const { adminClient } = useAdminClient();
 
     const { t } = useTranslation();
-const { realm: realmName, realmRepresentation: realm, refresh } = useRealm();
+    const { realm: realmName, realmRepresentation: realm, refresh } = useRealm();
     const { register, handleSubmit } = useForm();
 
     const parseResult = (result: GlobalRequestResult, prefixKey: string) => {

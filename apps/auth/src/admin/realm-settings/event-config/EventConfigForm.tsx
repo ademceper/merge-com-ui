@@ -1,6 +1,5 @@
 import { Button } from "@merge/ui/components/button";
 import { Switch } from "@merge/ui/components/switch";
-import { Separator } from "@merge/ui/components/separator";
 import { Label } from "@merge/ui/components/label";
 import { Controller, FormProvider, UseFormReturn } from "react-hook-form";
 import { useTranslation } from "react-i18next";
@@ -39,37 +38,39 @@ export const EventConfigForm = ({ type, form, reset, clear }: EventConfigFormPro
     return (
         <FormProvider {...form}>
             <DisableConfirm />
-            <div className="space-y-2">
-                <div className="flex items-center gap-1">
-                    <Label htmlFor={eventKey}>{t("saveEvents")}</Label>
+            <div className="flex w-full items-center justify-between gap-2">
+                <div className="flex items-center gap-1.5">
+                    <Label htmlFor={`${eventKey}-switch`} className="text-sm font-medium">{t("saveEvents")}</Label>
                     <HelpItem
                         helpText={t(`save-${type}-eventsHelp`)}
                         fieldLabelId="saveEvents"
                     />
                 </div>
-                <Controller
-                    name={eventKey}
-                    defaultValue={false}
-                    control={control}
-                    render={({ field }) => (
-                        <div className="flex items-center gap-2">
-                            <Switch
-                                data-testid={eventKey}
-                                id={`${eventKey}-switch`}
-                                checked={field.value}
-                                onCheckedChange={(value) => {
-                                    if (!value) {
-                                        toggleDisableDialog();
-                                    } else {
-                                        field.onChange(value);
-                                    }
-                                }}
-                                aria-label={t("saveEvents")}
-                            />
-                            <span className="text-sm">{field.value ? t("on") : t("off")}</span>
-                        </div>
-                    )}
-                />
+                <div className="flex shrink-0 items-center gap-2">
+                    <Controller
+                        name={eventKey}
+                        defaultValue={false}
+                        control={control}
+                        render={({ field }) => (
+                            <>
+                                <span className="text-sm text-muted-foreground">{field.value ? t("on") : t("off")}</span>
+                                <Switch
+                                    data-testid={eventKey}
+                                    id={`${eventKey}-switch`}
+                                    checked={field.value}
+                                    onCheckedChange={(value) => {
+                                        if (!value) {
+                                            toggleDisableDialog();
+                                        } else {
+                                            field.onChange(value);
+                                        }
+                                    }}
+                                    aria-label={t("saveEvents")}
+                                />
+                            </>
+                        )}
+                    />
+                </div>
             </div>
             {type === "admin" && (
                 <DefaultSwitchControl
@@ -90,20 +91,6 @@ export const EventConfigForm = ({ type, form, reset, clear }: EventConfigFormPro
                     }}
                 />
             )}
-            <div className="flex gap-2">
-                <Button
-                    type="submit"
-                    id={`save-${type}`}
-                    data-testid={`save-${type}`}
-                    disabled={!isDirty}
-                >
-                    {t("save")}
-                </Button>
-                <Button variant="ghost" onClick={reset}>
-                    {t("revert")}
-                </Button>
-            </div>
-            <Separator />
             <div className="space-y-2">
                 <div className="flex items-center gap-1">
                     <Label htmlFor={`clear-${type}-events`}>{type === "user" ? t("clearUserEvents") : t("clearAdminEvents")}</Label>

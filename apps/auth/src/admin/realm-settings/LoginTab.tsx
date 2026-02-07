@@ -1,6 +1,5 @@
 import type RealmRepresentation from "@keycloak/keycloak-admin-client/lib/defs/realmRepresentation";
 import { Switch } from "@merge/ui/components/switch";
-import { FormLabel } from "../../shared/keycloak-ui-shared";
 import { useTranslation } from "react-i18next";
 import { FormPanel, HelpItem } from "../../shared/keycloak-ui-shared";
 import { useAdminClient } from "../admin-client";
@@ -20,7 +19,7 @@ export const RealmSettingsLoginTab = ({ realm, refresh }: RealmSettingsLoginTabP
     const { adminClient } = useAdminClient();
 
     const { t } = useTranslation();
-const { realm: realmName } = useRealm();
+    const { realm: realmName } = useRealm();
 
     const updateSwitchValue = async (switches: SwitchType | SwitchType[]) => {
         const name = Array.isArray(switches)
@@ -44,203 +43,219 @@ const { realm: realmName } = useRealm();
     };
 
     return (
-        <div className="bg-muted/30 p-4">
+        <div className="pt-0 space-y-6">
             <FormPanel className="kc-login-screen" title={t("loginScreenCustomization")}>
                 <FormAccess isHorizontal role="manage-realm">
-                    <FormLabel
-                        name="kc-user-reg"
-                        label={t("registrationAllowed")}
-                        labelIcon={
+                    <div className="flex w-full items-center justify-between gap-2">
+                        <div className="flex items-center gap-1.5">
+                            <span className="text-sm font-medium">{t("registrationAllowed")}</span>
                             <HelpItem
                                 helpText={t("userRegistrationHelpText")}
                                 fieldLabelId="registrationAllowed"
                             />
-                        }
-                        hasNoPaddingTop
-                    >
-                        <Switch
-                            id="kc-user-reg-switch"
-                            data-testid="user-reg-switch"
-                            checked={!!realm.registrationAllowed}
-                            onCheckedChange={async (value) => {
-                                await updateSwitchValue({ registrationAllowed: value });
-                            }}
-                            aria-label={t("registrationAllowed")}
-                        />
-                    </FormLabel>
-                    <FormLabel
-                        name="kc-forgot-pw"
-                        label={t("resetPasswordAllowed")}
-                        labelIcon={
+                        </div>
+                        <div className="flex shrink-0 items-center gap-2">
+                            <span className="text-sm text-muted-foreground">
+                                {realm.registrationAllowed ? t("on") : t("off")}
+                            </span>
+                            <Switch
+                                id="kc-user-reg-switch"
+                                data-testid="user-reg-switch"
+                                checked={!!realm.registrationAllowed}
+                                onCheckedChange={async (value) => {
+                                    await updateSwitchValue({ registrationAllowed: value });
+                                }}
+                                aria-label={t("registrationAllowed")}
+                            />
+                        </div>
+                    </div>
+                    <div className="flex w-full items-center justify-between gap-2">
+                        <div className="flex items-center gap-1.5">
+                            <span className="text-sm font-medium">{t("resetPasswordAllowed")}</span>
                             <HelpItem
                                 helpText={t("forgotPasswordHelpText")}
                                 fieldLabelId="resetPasswordAllowed"
                             />
-                        }
-                        hasNoPaddingTop
-                    >
-                        <Switch
-                            id="kc-forgot-pw-switch"
-                            data-testid="forgot-pw-switch"
-                            checked={!!realm.resetPasswordAllowed}
-                            onCheckedChange={async (value) => {
-                                await updateSwitchValue({ resetPasswordAllowed: value });
-                            }}
-                            aria-label={t("resetPasswordAllowed")}
-                        />
-                    </FormLabel>
-                    <FormLabel
-                        name="kc-remember-me"
-                        label={t("rememberMe")}
-                        labelIcon={
+                        </div>
+                        <div className="flex shrink-0 items-center gap-2">
+                            <span className="text-sm text-muted-foreground">
+                                {realm.resetPasswordAllowed ? t("on") : t("off")}
+                            </span>
+                            <Switch
+                                id="kc-forgot-pw-switch"
+                                data-testid="forgot-pw-switch"
+                                checked={!!realm.resetPasswordAllowed}
+                                onCheckedChange={async (value) => {
+                                    await updateSwitchValue({ resetPasswordAllowed: value });
+                                }}
+                                aria-label={t("resetPasswordAllowed")}
+                            />
+                        </div>
+                    </div>
+                    <div className="flex w-full items-center justify-between gap-2">
+                        <div className="flex items-center gap-1.5">
+                            <span className="text-sm font-medium">{t("rememberMe")}</span>
                             <HelpItem
                                 helpText={t("rememberMeHelpText")}
                                 fieldLabelId="rememberMe"
                             />
-                        }
-                        hasNoPaddingTop
-                    >
-                        <Switch
-                            id="kc-remember-me-switch"
-                            data-testid="remember-me-switch"
-                            checked={!!realm.rememberMe}
-                            onCheckedChange={async (value) => {
-                                await updateSwitchValue({ rememberMe: value });
-                            }}
-                            aria-label={t("rememberMe")}
-                        />
-                    </FormLabel>
+                        </div>
+                        <div className="flex shrink-0 items-center gap-2">
+                            <span className="text-sm text-muted-foreground">
+                                {realm.rememberMe ? t("on") : t("off")}
+                            </span>
+                            <Switch
+                                id="kc-remember-me-switch"
+                                data-testid="remember-me-switch"
+                                checked={!!realm.rememberMe}
+                                onCheckedChange={async (value) => {
+                                    await updateSwitchValue({ rememberMe: value });
+                                }}
+                                aria-label={t("rememberMe")}
+                            />
+                        </div>
+                    </div>
                 </FormAccess>
             </FormPanel>
             <FormPanel className="kc-email-settings" title={t("emailSettings")}>
                 <FormAccess isHorizontal role="manage-realm">
-                    <FormLabel
-                        name="kc-email-as-username"
-                        label={t("registrationEmailAsUsername")}
-                        labelIcon={
+                    <div className="flex w-full items-center justify-between gap-2">
+                        <div className="flex items-center gap-1.5">
+                            <span className="text-sm font-medium">{t("registrationEmailAsUsername")}</span>
                             <HelpItem
                                 helpText={t("emailAsUsernameHelpText")}
                                 fieldLabelId="registrationEmailAsUsername"
                             />
-                        }
-                        hasNoPaddingTop
-                    >
-                        <Switch
-                            id="kc-email-as-username-switch"
-                            data-testid="email-as-username-switch"
-                            checked={!!realm.registrationEmailAsUsername}
-                            onCheckedChange={async (value) => {
-                                await updateSwitchValue([
-                                    {
-                                        registrationEmailAsUsername: value
-                                    },
-                                    {
-                                        duplicateEmailsAllowed: false
-                                    }
-                                ]);
-                            }}
-                            aria-label={t("registrationEmailAsUsername")}
-                        />
-                    </FormLabel>
-                    <FormLabel
-                        name="kc-login-with-email"
-                        label={t("loginWithEmailAllowed")}
-                        labelIcon={
+                        </div>
+                        <div className="flex shrink-0 items-center gap-2">
+                            <span className="text-sm text-muted-foreground">
+                                {realm.registrationEmailAsUsername ? t("on") : t("off")}
+                            </span>
+                            <Switch
+                                id="kc-email-as-username-switch"
+                                data-testid="email-as-username-switch"
+                                checked={!!realm.registrationEmailAsUsername}
+                                onCheckedChange={async (value) => {
+                                    await updateSwitchValue([
+                                        {
+                                            registrationEmailAsUsername: value
+                                        },
+                                        {
+                                            duplicateEmailsAllowed: false
+                                        }
+                                    ]);
+                                }}
+                                aria-label={t("registrationEmailAsUsername")}
+                            />
+                        </div>
+                    </div>
+                    <div className="flex w-full items-center justify-between gap-2">
+                        <div className="flex items-center gap-1.5">
+                            <span className="text-sm font-medium">{t("loginWithEmailAllowed")}</span>
                             <HelpItem
                                 helpText={t("loginWithEmailHelpText")}
                                 fieldLabelId="loginWithEmailAllowed"
                             />
-                        }
-                        hasNoPaddingTop
-                    >
-                        <Switch
-                            id="kc-login-with-email-switch"
-                            data-testid="login-with-email-switch"
-                            checked={!!realm.loginWithEmailAllowed}
-                            onCheckedChange={async (value) => {
-                                await updateSwitchValue([
-                                    {
-                                        loginWithEmailAllowed: value
-                                    },
-                                    { duplicateEmailsAllowed: false }
-                                ]);
-                            }}
-                            aria-label={t("loginWithEmailAllowed")}
-                        />
-                    </FormLabel>
-                    <FormLabel
-                        name="kc-duplicate-emails"
-                        label={t("duplicateEmailsAllowed")}
-                        labelIcon={
+                        </div>
+                        <div className="flex shrink-0 items-center gap-2">
+                            <span className="text-sm text-muted-foreground">
+                                {realm.loginWithEmailAllowed ? t("on") : t("off")}
+                            </span>
+                            <Switch
+                                id="kc-login-with-email-switch"
+                                data-testid="login-with-email-switch"
+                                checked={!!realm.loginWithEmailAllowed}
+                                onCheckedChange={async (value) => {
+                                    await updateSwitchValue([
+                                        {
+                                            loginWithEmailAllowed: value
+                                        },
+                                        { duplicateEmailsAllowed: false }
+                                    ]);
+                                }}
+                                aria-label={t("loginWithEmailAllowed")}
+                            />
+                        </div>
+                    </div>
+                    <div className="flex w-full items-center justify-between gap-2">
+                        <div className="flex items-center gap-1.5">
+                            <span className="text-sm font-medium">{t("duplicateEmailsAllowed")}</span>
                             <HelpItem
                                 helpText={t("duplicateEmailsHelpText")}
                                 fieldLabelId="duplicateEmailsAllowed"
                             />
-                        }
-                        hasNoPaddingTop
-                    >
-                        <Switch
-                            id="kc-duplicate-emails-switch"
-                            data-testid="duplicate-emails-switch"
-                            checked={!!realm.duplicateEmailsAllowed}
-                            onCheckedChange={async (value) => {
-                                await updateSwitchValue({
-                                    duplicateEmailsAllowed: value
-                                });
-                            }}
-                            disabled={
-                                !!realm.loginWithEmailAllowed ||
-                                !!realm.registrationEmailAsUsername
-                            }
-                            aria-label={t("duplicateEmailsAllowed")}
-                        />
-                    </FormLabel>
-                    <FormLabel
-                        name="kc-verify-email"
-                        label={t("verifyEmail")}
-                        labelIcon={
+                        </div>
+                        <div className="flex shrink-0 items-center gap-2">
+                            <span className="text-sm text-muted-foreground">
+                                {realm.duplicateEmailsAllowed ? t("on") : t("off")}
+                            </span>
+                            <Switch
+                                id="kc-duplicate-emails-switch"
+                                data-testid="duplicate-emails-switch"
+                                checked={!!realm.duplicateEmailsAllowed}
+                                onCheckedChange={async (value) => {
+                                    await updateSwitchValue({
+                                        duplicateEmailsAllowed: value
+                                    });
+                                }}
+                                disabled={
+                                    !!realm.loginWithEmailAllowed ||
+                                    !!realm.registrationEmailAsUsername
+                                }
+                                aria-label={t("duplicateEmailsAllowed")}
+                            />
+                        </div>
+                    </div>
+                    <div className="flex w-full items-center justify-between gap-2">
+                        <div className="flex items-center gap-1.5">
+                            <span className="text-sm font-medium">{t("verifyEmail")}</span>
                             <HelpItem
                                 helpText={t("verifyEmailHelpText")}
                                 fieldLabelId="verifyEmail"
                             />
-                        }
-                        hasNoPaddingTop
-                    >
-                        <Switch
-                            id="kc-verify-email-switch"
-                            data-testid="verify-email-switch"
-                            checked={!!realm.verifyEmail}
-                            onCheckedChange={async (value) => {
-                                await updateSwitchValue({ verifyEmail: value });
-                            }}
-                            aria-label={t("verifyEmail")}
-                        />
-                    </FormLabel>
+                        </div>
+                        <div className="flex shrink-0 items-center gap-2">
+                            <span className="text-sm text-muted-foreground">
+                                {realm.verifyEmail ? t("on") : t("off")}
+                            </span>
+                            <Switch
+                                id="kc-verify-email-switch"
+                                data-testid="verify-email-switch"
+                                checked={!!realm.verifyEmail}
+                                onCheckedChange={async (value) => {
+                                    await updateSwitchValue({ verifyEmail: value });
+                                }}
+                                aria-label={t("verifyEmail")}
+                            />
+                        </div>
+                    </div>
                 </FormAccess>
             </FormPanel>
             <FormPanel className="kc-user-info-settings" title={t("userInfoSettings")}>
                 <FormAccess isHorizontal role="manage-realm">
-                    <FormLabel
-                        name="kc-edit-username"
-                        label={t("editUsernameAllowed")}
-                        labelIcon={
+                    <div className="flex w-full items-center justify-between gap-2">
+                        <div className="flex items-center gap-1.5">
+                            <span className="text-sm font-medium">{t("editUsernameAllowed")}</span>
                             <HelpItem
                                 helpText={t("editUsernameHelp")}
                                 fieldLabelId="editUsernameAllowed"
                             />
-                        }
-                        hasNoPaddingTop
-                    >
-                        <Switch
-                            id="kc-edit-username-switch"
-                            data-testid="edit-username-switch"
-                            checked={!!realm.editUsernameAllowed}
-                            onCheckedChange={async (value) => {
-                                await updateSwitchValue({ editUsernameAllowed: value });
-                            }}
-                            aria-label={t("editUsernameAllowed")}
-                        />
-                    </FormLabel>
+                        </div>
+                        <div className="flex shrink-0 items-center gap-2">
+                            <span className="text-sm text-muted-foreground">
+                                {realm.editUsernameAllowed ? t("on") : t("off")}
+                            </span>
+                            <Switch
+                                id="kc-edit-username-switch"
+                                data-testid="edit-username-switch"
+                                checked={!!realm.editUsernameAllowed}
+                                onCheckedChange={async (value) => {
+                                    await updateSwitchValue({ editUsernameAllowed: value });
+                                }}
+                                aria-label={t("editUsernameAllowed")}
+                            />
+                        </div>
+                    </div>
                 </FormAccess>
             </FormPanel>
         </div>

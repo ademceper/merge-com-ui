@@ -63,18 +63,20 @@ export const KeysTab = ({ subTab = "list" }: KeysTabProps) => {
                 navigate(toKeysTab({ realm: realmName!, tab: value as KeySubTab }))
             }
         >
-            <TabsList variant="line" className="mb-4">
-                <TabsTrigger value="list" data-testid="rs-keys-list-tab">
-                    {t("keysList")}
-                </TabsTrigger>
-                <TabsTrigger value="providers" data-testid="rs-keys-providers-tab">
-                    {t("providers")}
-                </TabsTrigger>
-            </TabsList>
-            <TabsContent value="list">
+            <div className="w-full min-w-0 overflow-x-auto overflow-y-hidden mb-4">
+                <TabsList variant="line" className="mb-0 w-max min-w-0 **:data-[slot=tabs-trigger]:flex-none">
+                    <TabsTrigger value="list" data-testid="rs-keys-list-tab">
+                        {t("keysList")}
+                    </TabsTrigger>
+                    <TabsTrigger value="providers" data-testid="rs-keys-providers-tab">
+                        {t("providers")}
+                    </TabsTrigger>
+                </TabsList>
+            </div>
+            <TabsContent value="list" className="mt-0 pt-0 outline-none">
                 <KeysListTab realmComponents={realmComponents} />
             </TabsContent>
-            <TabsContent value="providers">
+            <TabsContent value="providers" className="mt-0 pt-0 outline-none">
                 <KeysProvidersTab realmComponents={realmComponents} refresh={refresh} />
             </TabsContent>
         </Tabs>

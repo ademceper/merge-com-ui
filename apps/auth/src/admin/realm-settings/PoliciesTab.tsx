@@ -171,7 +171,7 @@ const { realm } = useRealm();
     return (
         <>
             <DeleteConfirm />
-            <div className="p-6">
+            <div className="pt-0">
                 <div className="flex gap-2 kc-policies-config-section items-center">
                     <div>
                         <h1 className="text-base font-medium">

@@ -3,8 +3,12 @@ import type RealmRepresentation from "@keycloak/keycloak-admin-client/lib/defs/r
 import { UserProfileConfig } from "@keycloak/keycloak-admin-client/lib/defs/userProfileMetadata";
 import { getErrorDescription, getErrorMessage, useEnvironment } from "../../shared/keycloak-ui-shared";
 import { toast } from "@merge/ui/components/sonner";
-import { Separator } from "@merge/ui/components/separator";
+import {
+    DropdownMenuItem,
+    DropdownMenuSeparator
+} from "@merge/ui/components/dropdown-menu";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@merge/ui/components/tabs";
+import { DotsThreeVertical, DownloadSimple, UploadSimple, Trash } from "@phosphor-icons/react";
 import { useEffect, useState } from "react";
 import { Controller, FormProvider, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
@@ -65,7 +69,7 @@ const RealmSettingsHeader = ({
     const { adminClient } = useAdminClient();
     const { environment } = useEnvironment<Environment>();
     const { t } = useTranslation();
-const navigate = useNavigate();
+    const navigate = useNavigate();
     const [partialImportOpen, setPartialImportOpen] = useState(false);
     const [partialExportOpen, setPartialExportOpen] = useState(false);
     const { hasAccess } = useAccess();
@@ -114,37 +118,37 @@ const navigate = useNavigate();
                 titleKey={realmName}
                 subKey="realmSettingsExplain"
                 helpUrl={helpUrls.realmSettingsUrl}
-                divider={false}
+                divider
+                dropdownIcon={<DotsThreeVertical className="size-5" />}
                 dropdownItems={[
-                    <button
+                    <DropdownMenuItem
                         key="import"
                         data-testid="openPartialImportModal"
                         disabled={!canManageRealm}
-                        onClick={() => {
-                            setPartialImportOpen(true);
-                        }}
-                        className="w-full text-left px-2 py-1.5 text-sm"
+                        onClick={() => setPartialImportOpen(true)}
                     >
+                        <DownloadSimple className="size-4 shrink-0" />
                         {t("partialImport")}
-                    </button>,
-                    <button
+                    </DropdownMenuItem>,
+                    <DropdownMenuItem
                         key="export"
                         data-testid="openPartialExportModal"
                         disabled={!canManageRealm}
                         onClick={() => setPartialExportOpen(true)}
-                        className="w-full text-left px-2 py-1.5 text-sm"
                     >
+                        <UploadSimple className="size-4 shrink-0" />
                         {t("partialExport")}
-                    </button>,
-                    <Separator key="separator" />,
-                    <button
+                    </DropdownMenuItem>,
+                    <DropdownMenuSeparator key="separator" />,
+                    <DropdownMenuItem
                         key="delete"
                         disabled={!canManageRealm}
                         onClick={toggleDeleteDialog}
-                        className="w-full text-left px-2 py-1.5 text-sm"
+                        className="text-destructive focus:text-destructive"
                     >
+                        <Trash className="size-4 shrink-0" />
                         {t("delete")}
-                    </button>
+                    </DropdownMenuItem>
                 ]}
                 isEnabled={value}
                 isReadOnly={!canManageRealm}
@@ -171,7 +175,7 @@ function ClientPoliciesSubTabs({ realmName: _realmName, subTab = "profiles" }: {
 export const RealmSettingsTabs = () => {
     const { adminClient } = useAdminClient();
     const { t } = useTranslation();
-const { realm: realmName, realmRepresentation: realm, refresh } = useRealm();
+    const { realm: realmName, realmRepresentation: realm, refresh } = useRealm();
     const combinedLocales = useLocale();
     const navigate = useNavigate();
     const isFeatureEnabled = useIsFeatureEnabled();
@@ -379,7 +383,7 @@ const { realm: realmName, realmRepresentation: realm, refresh } = useRealm();
                     />
                 )}
             />
-            <div className="p-0">
+            <div className="py-6 px-0 min-w-0">
                 {renderContent()}
             </div>
         </FormProvider>

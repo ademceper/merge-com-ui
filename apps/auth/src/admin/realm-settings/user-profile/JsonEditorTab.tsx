@@ -1,10 +1,14 @@
-import { getErrorDescription, getErrorMessage } from "../../../shared/keycloak-ui-shared";
+import {
+    getErrorDescription,
+    getErrorMessage,
+} from "../../../shared/keycloak-ui-shared";
 import { toast } from "@merge/ui/components/sonner";
-import { Button } from "@merge/ui/components/button";
 import CodeEditor from "../../components/form/CodeEditor";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { prettyPrintJSON } from "../../util";
+import { FormPanel } from "../../../shared/keycloak-ui-shared";
+import { FixedButtonsGroup } from "../../components/form/FixedButtonGroup";
 import { useUserProfile } from "./UserProfileContext";
 
 export const JsonEditorTab = () => {
@@ -26,31 +30,30 @@ export const JsonEditorTab = () => {
         try {
             await save(JSON.parse(value));
         } catch (error) {
-            toast.error(t("invalidJsonError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
+            toast.error(
+                t("invalidJsonError", { error: getErrorMessage(error) }),
+                { description: getErrorDescription(error) },
+            );
             return;
         }
     }
 
     return (
-        <section className="py-6 bg-muted/30">
-            <CodeEditor
-                language="json"
-                value={code}
-                onChange={value => setCode(value ?? "")}
-                height={480}
+        <div className="mt-6 space-y-6">
+            <FormPanel title={t("jsonEditor")} className="space-y-4">
+                <CodeEditor
+                    language="json"
+                    value={code}
+                    onChange={(value) => setCode(value ?? "")}
+                    height={480}
+                />
+            </FormPanel>
+            <FixedButtonsGroup
+                name="jsonEditor"
+                save={handleSave}
+                reset={resetCode}
+                isDisabled={isSaving}
             />
-            <div className="flex gap-2 mt-4">
-                <Button
-                    data-testid="save"
-                    onClick={handleSave}
-                    disabled={isSaving}
-                >
-                    {t("save")}
-                </Button>
-                <Button variant="ghost" onClick={resetCode} disabled={isSaving}>
-                    {t("revert")}
-                </Button>
-            </div>
-        </section>
+        </div>
     );
 };

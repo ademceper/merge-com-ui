@@ -1,18 +1,23 @@
 import UserSessionRepresentation from "@keycloak/keycloak-admin-client/lib/defs/userSessionRepresentation";
-import { KeycloakSelect } from "../../shared/keycloak-ui-shared";
-import { SelectOption } from "../../shared/keycloak-ui-shared";
-import { Funnel } from "@phosphor-icons/react";
+import { DropdownMenuItem } from "@merge/ui/components/dropdown-menu";
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue
+} from "@merge/ui/components/select";
+import { DotsThreeVertical, SignOut, ProhibitInset } from "@phosphor-icons/react";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useAdminClient } from "../admin-client";
-import { getErrorDescription, getErrorMessage } from "../../shared/keycloak-ui-shared";
+import { getErrorDescription, getErrorMessage, useFetch } from "../../shared/keycloak-ui-shared";
 import { toast } from "@merge/ui/components/sonner";
 import { useConfirmDialog } from "../components/confirm-dialog/ConfirmDialog";
 import { ViewHeader } from "../components/view-header/ViewHeader";
 import { fetchAdminUI } from "../context/auth/admin-ui-endpoint";
 import { useRealm } from "../context/realm-context/RealmContext";
 import helpUrls from "../help-urls";
-import useToggle from "../utils/useToggle";
 import { RevocationModal } from "./RevocationModal";
 import SessionsTable from "./SessionsTable";
 
@@ -26,65 +31,64 @@ type SessionFilterProps = {
 const SessionFilter = ({ filterType, onChange }: SessionFilterProps) => {
     const { t } = useTranslation();
 
-    const [open, toggle] = useToggle();
-
     return (
-        <KeycloakSelect
+        <Select
+            value={filterType}
+            onValueChange={value => onChange(value as FilterType)}
             data-testid="filter-session-type-select"
-            isOpen={open}
-            onToggle={toggle}
-            toggleIcon={<Funnel className="size-4" />}
-            onSelect={value => {
-                const filter = value as FilterType;
-                onChange(filter);
-                toggle();
-            }}
-            selections={filterType}
         >
-            <SelectOption data-testid="all-sessions-option" value="ALL">
-                {t("sessionsType.allSessions")}
-            </SelectOption>
-            <SelectOption data-testid="regular-sso-option" value="REGULAR">
-                {t("sessionsType.regularSSO")}
-            </SelectOption>
-            <SelectOption data-testid="offline-option" value="OFFLINE">
-                {t("sessionsType.offline")}
-            </SelectOption>
-        </KeycloakSelect>
+            <SelectTrigger className="h-9 min-h-9 w-[180px]">
+                <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+                <SelectItem data-testid="all-sessions-option" value="ALL">
+                    {t("sessionsType.allSessions")}
+                </SelectItem>
+                <SelectItem data-testid="regular-sso-option" value="REGULAR">
+                    {t("sessionsType.regularSSO")}
+                </SelectItem>
+                <SelectItem data-testid="offline-option" value="OFFLINE">
+                    {t("sessionsType.offline")}
+                </SelectItem>
+            </SelectContent>
+        </Select>
     );
 };
 
 export default function SessionsSection() {
     const { adminClient } = useAdminClient();
-
     const { t } = useTranslation();
-
-    const [key, setKey] = useState(0);
-    const refresh = () => setKey(key + 1);
     const { realm } = useRealm();
 
+    const [key, setKey] = useState(0);
+    const refresh = () => setKey((k) => k + 1);
     const [revocationModalOpen, setRevocationModalOpen] = useState(false);
     const [filterType, setFilterType] = useState<FilterType>("ALL");
+    const [sessions, setSessions] = useState<UserSessionRepresentation[]>([]);
     const [noSessions, setNoSessions] = useState(false);
 
     const handleRevocationModalToggle = () => {
         setRevocationModalOpen(!revocationModalOpen);
     };
 
-    const loader = async (first?: number, max?: number, search?: string) => {
-        const data = await fetchAdminUI<UserSessionRepresentation[]>(
-            adminClient,
-            "ui-ext/sessions",
-            {
-                first: `${first}`,
-                max: `${max}`,
-                type: filterType,
-                search: search || ""
-            }
-        );
-        setNoSessions(data.length === 0);
-        return data;
-    };
+    useFetch(
+        async () => {
+            const data = await fetchAdminUI<UserSessionRepresentation[]>(
+                adminClient,
+                "ui-ext/sessions",
+                {
+                    first: "0",
+                    max: "1000",
+                    type: filterType,
+                    search: ""
+                }
+            );
+            setNoSessions(data.length === 0);
+            return data;
+        },
+        (data) => setSessions(data),
+        [key, filterType]
+    );
 
     const [toggleLogoutDialog, LogoutConfirm] = useConfirmDialog({
         titleKey: "logoutAllSessions",
@@ -104,30 +108,32 @@ export default function SessionsSection() {
         <>
             <LogoutConfirm />
             <ViewHeader
-                dropdownItems={[
-                    <button
-                        key="toggle-modal"
-                        data-testid="revocation"
-                        type="button"
-                        onClick={() => handleRevocationModalToggle()}
-                    >
-                        {t("revocation")}
-                    </button>,
-                    <button
-                        key="delete-role"
-                        data-testid="logout-all"
-                        type="button"
-                        disabled={noSessions}
-                        onClick={toggleLogoutDialog}
-                    >
-                        {t("signOutAllActiveSessions")}
-                    </button>
-                ]}
                 titleKey="titleSessions"
                 subKey="sessionExplain"
                 helpUrl={helpUrls.sessionsUrl}
+                divider
+                dropdownIcon={<DotsThreeVertical className="size-5" />}
+                dropdownItems={[
+                    <DropdownMenuItem
+                        key="revocation"
+                        data-testid="revocation"
+                        onClick={handleRevocationModalToggle}
+                    >
+                        <ProhibitInset className="size-4 shrink-0" />
+                        {t("revocation")}
+                    </DropdownMenuItem>,
+                    <DropdownMenuItem
+                        key="logout-all"
+                        data-testid="logout-all"
+                        disabled={noSessions}
+                        onClick={toggleLogoutDialog}
+                    >
+                        <SignOut className="size-4 shrink-0" />
+                        {t("signOutAllActiveSessions")}
+                    </DropdownMenuItem>
+                ]}
             />
-            <div className="bg-muted/30 p-0">
+            <div className="py-6 px-0">
                 {revocationModalOpen && (
                     <RevocationModal
                         handleModalToggle={handleRevocationModalToggle}
@@ -138,10 +144,9 @@ export default function SessionsSection() {
                 )}
                 <SessionsTable
                     key={key}
-                    loader={loader}
-                    isSearching={filterType !== "ALL"}
-                    isPaginated
-                    filter={
+                    sessions={sessions}
+                    refresh={refresh}
+                    toolbar={
                         <SessionFilter
                             filterType={filterType}
                             onChange={type => {
@@ -150,6 +155,7 @@ export default function SessionsSection() {
                             }}
                         />
                     }
+                    emptyMessage={t("noSessions")}
                 />
             </div>
         </>

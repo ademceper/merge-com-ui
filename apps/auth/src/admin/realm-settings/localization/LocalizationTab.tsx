@@ -1,9 +1,11 @@
 import type RealmRepresentation from "@keycloak/keycloak-admin-client/lib/defs/realmRepresentation";
 import { SelectControl, SwitchControl } from "../../../shared/keycloak-ui-shared";
-import { Button } from "@merge/ui/components/button";
+import { FormPanel } from "../../../shared/keycloak-ui-shared/scroll-form/FormPanel";
 import { useMemo, useState } from "react";
 import { FormProvider, useFormContext, useWatch } from "react-hook-form";
 import { useTranslation } from "react-i18next";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@merge/ui/components/tabs";
+import { FixedButtonsGroup } from "../../components/form/FixedButtonGroup";
 import { FormAccess } from "../../components/form/FormAccess";
 import { useServerInfo } from "../../context/server-info/ServerInfoProvider";
 import { useWhoAmI } from "../../context/whoami/WhoAmI";
@@ -57,45 +59,31 @@ export const LocalizationTab = ({ save, realm, tableData }: LocalizationTabProps
     });
 
     return (
-        <div>
-            <div className="flex border-b" role="tablist">
-                <button
-                    role="tab"
-                    className={`px-4 py-2 text-sm font-medium ${activeTab === 0 ? "border-b-2 border-primary text-primary" : "text-muted-foreground"}`}
-                    aria-selected={activeTab === 0}
-                    onClick={() => setActiveTab(0)}
-                    data-testid="rs-localization-locales-tab"
-                >
-                    {t("locales")}
-                </button>
-                <button
-                    role="tab"
-                    className={`px-4 py-2 text-sm font-medium ${activeTab === 1 ? "border-b-2 border-primary text-primary" : "text-muted-foreground"}`}
-                    aria-selected={activeTab === 1}
-                    onClick={() => setActiveTab(1)}
-                    data-testid="rs-localization-realm-overrides-tab"
-                >
-                    {t("realmOverrides")}
-                </button>
-                <button
-                    role="tab"
-                    className={`px-4 py-2 text-sm font-medium ${activeTab === 2 ? "border-b-2 border-primary text-primary" : "text-muted-foreground"}`}
-                    aria-selected={activeTab === 2}
-                    onClick={() => setActiveTab(2)}
-                    data-testid="rs-localization-effective-message-bundles-tab"
-                >
-                    {t("effectiveMessageBundles")}
-                </button>
+        <Tabs value={String(activeTab)} onValueChange={(v) => setActiveTab(Number(v))}>
+            <div className="w-full min-w-0 overflow-x-auto overflow-y-hidden mb-4">
+                <TabsList variant="line" className="mb-0 w-max min-w-0 **:data-[slot=tabs-trigger]:flex-none">
+                    <TabsTrigger value="0" data-testid="rs-localization-locales-tab">
+                        {t("locales")}
+                    </TabsTrigger>
+                    <TabsTrigger value="1" data-testid="rs-localization-realm-overrides-tab">
+                        {t("realmOverrides")}
+                    </TabsTrigger>
+                    <TabsTrigger value="2" data-testid="rs-localization-effective-message-bundles-tab">
+                        {t("effectiveMessageBundles")}
+                    </TabsTrigger>
+                </TabsList>
             </div>
-            {activeTab === 0 && (
+            <TabsContent value="0" className="mt-0 pt-0 outline-none">
                 <FormAccess
                     isHorizontal
                     role="manage-realm"
-                    className="mt-6 ml-4"
+                    className="mt-6 space-y-6"
                     onSubmit={handleSubmit(save)}
                 >
-                    <FormProvider {...form}>
-                        <SwitchControl
+                    <FormPanel title={t("locales")}>
+                        <div className="space-y-4">
+                            <FormProvider {...form}>
+                                <SwitchControl
                             name="internationalizationEnabled"
                             label={t("internationalization")}
                             labelIcon={t("internationalizationHelp")}
@@ -148,35 +136,33 @@ export const LocalizationTab = ({ save, realm, tableData }: LocalizationTabProps
                                 />
                             </>
                         )}
-                    </FormProvider>
-                    <div className="flex gap-2">
-                        <Button
-                            disabled={!formState.isDirty}
-                            type="submit"
-                            data-testid="localization-tab-save"
-                        >
-                            {t("save")}
-                        </Button>
-                        <Button variant="ghost" onClick={() => reset(realm)}>
-                            {t("revert")}
-                        </Button>
+                            </FormProvider>
+                        </div>
+                    </FormPanel>
+                    <div className="flex gap-2 pt-2">
+                        <FixedButtonsGroup
+                            name="localization-tab"
+                            reset={() => reset(realm)}
+                            isSubmit
+                            isDisabled={!formState.isDirty}
+                        />
                     </div>
                 </FormAccess>
-            )}
-            {activeTab === 1 && (
+            </TabsContent>
+            <TabsContent value="1" className="mt-0 pt-0 outline-none">
                 <RealmOverrides
                     internationalizationEnabled={internationalizationEnabled || false}
                     watchSupportedLocales={watchSupportedLocales || []}
                     realm={realm}
                     tableData={tableData}
                 />
-            )}
-            {activeTab === 2 && (
+            </TabsContent>
+            <TabsContent value="2" className="mt-0 pt-0 outline-none">
                 <EffectiveMessageBundles
                     defaultSupportedLocales={defaultSupportedLocales}
                     defaultLocales={[defaultLocales!]}
                 />
-            )}
-        </div>
+            </TabsContent>
+        </Tabs>
     );
 };

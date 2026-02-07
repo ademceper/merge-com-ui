@@ -35,24 +35,26 @@ export const UserProfileTab = ({ setTableData, subTab = "attributes" }: UserProf
                     navigate(toUserProfile({ realm: realm!, tab: value as UserProfileTabType }))
                 }
             >
-                <TabsList variant="line" className="mb-4">
-                    <TabsTrigger value="attributes" data-testid="rs-user-profile-attributes-tab">
-                        {t("attributes")}
-                    </TabsTrigger>
-                    <TabsTrigger value="attributes-group" data-testid="rs-user-profile-attributes-group-tab">
-                        {t("attributesGroup")}
-                    </TabsTrigger>
-                    <TabsTrigger value="json-editor" data-testid="rs-user-profile-json-editor-tab">
-                        {t("jsonEditor")}
-                    </TabsTrigger>
-                </TabsList>
-                <TabsContent value="attributes">
+                <div className="w-full min-w-0 overflow-x-auto overflow-y-hidden mb-4">
+                    <TabsList variant="line" className="mb-0 w-max min-w-0 **:data-[slot=tabs-trigger]:flex-none">
+                        <TabsTrigger value="attributes" data-testid="rs-user-profile-attributes-tab">
+                            {t("attributes")}
+                        </TabsTrigger>
+                        <TabsTrigger value="attributes-group" data-testid="rs-user-profile-attributes-group-tab">
+                            {t("attributesGroup")}
+                        </TabsTrigger>
+                        <TabsTrigger value="json-editor" data-testid="rs-user-profile-json-editor-tab">
+                            {t("jsonEditor")}
+                        </TabsTrigger>
+                    </TabsList>
+                </div>
+                <TabsContent value="attributes" className="mt-0 pt-0 outline-none">
                     <AttributesTab setTableData={setTableData} />
                 </TabsContent>
-                <TabsContent value="attributes-group">
+                <TabsContent value="attributes-group" className="mt-0 pt-0 outline-none">
                     <AttributesGroupTab setTableData={setTableData} />
                 </TabsContent>
-                <TabsContent value="json-editor">
+                <TabsContent value="json-editor" className="mt-0 pt-0 outline-none">
                     <JsonEditorTab />
                 </TabsContent>
             </Tabs>

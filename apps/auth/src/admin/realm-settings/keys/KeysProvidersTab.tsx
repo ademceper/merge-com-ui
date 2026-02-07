@@ -1,16 +1,18 @@
 import type ComponentRepresentation from "@keycloak/keycloak-admin-client/lib/defs/componentRepresentation";
 import type ComponentTypeRepresentation from "@keycloak/keycloak-admin-client/lib/defs/componentTypeRepresentation";
-import type { KeyMetadataRepresentation } from "@keycloak/keycloak-admin-client/lib/defs/keyMetadataRepresentation";
 import { getErrorDescription, getErrorMessage } from "../../../shared/keycloak-ui-shared";
 import { toast } from "@merge/ui/components/sonner";
 import { Button } from "@merge/ui/components/button";
-import { Input } from "@merge/ui/components/input";
-import { MagnifyingGlass } from "@phosphor-icons/react";
-import { KeyboardEvent, useMemo, useState } from "react";
+import {
+    DataTable,
+    DataTableRowActions,
+    type ColumnDef
+} from "@merge/ui/components/table";
+import { Plus, Trash } from "@phosphor-icons/react";
+import { useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 import { useAdminClient } from "../../admin-client";
-import { DraggableTable } from "../../authentication/components/DraggableTable";
 import { useConfirmDialog } from "../../components/confirm-dialog/ConfirmDialog";
 import { useRealm } from "../../context/realm-context/RealmContext";
 import { useServerInfo } from "../../context/server-info/ServerInfoProvider";
@@ -20,13 +22,8 @@ import { ProviderType, toKeyProvider } from "../routes/KeyProvider";
 import { KeyProviderModal } from "./key-providers/KeyProviderModal";
 import { KeyProvidersPicker } from "./key-providers/KeyProvidersPicker";
 
-type ComponentData = KeyMetadataRepresentation & {
-    id?: string;
+type ComponentData = ComponentRepresentation & {
     providerDescription?: string;
-    name?: string;
-    toggleHidden?: boolean;
-    config?: any;
-    parentId?: string;
 };
 
 type KeysProvidersTabProps = {
@@ -36,12 +33,8 @@ type KeysProvidersTabProps = {
 
 export const KeysProvidersTab = ({ realmComponents, refresh }: KeysProvidersTabProps) => {
     const { adminClient } = useAdminClient();
-
     const { t } = useTranslation();
-const { realm } = useRealm();
-
-    const [searchVal, setSearchVal] = useState("");
-    const [filteredComponents, setFilteredComponents] = useState<ComponentData[]>([]);
+    const { realm } = useRealm();
 
     const [isCreateModalOpen, handleModalToggle] = useToggle();
     const serverInfo = useServerInfo();
@@ -50,23 +43,21 @@ const { realm } = useRealm();
 
     const [providerOpen, toggleProviderOpen] = useToggle();
     const [defaultUIDisplayName, setDefaultUIDisplayName] = useState<ProviderType>();
-
     const [selectedComponent, setSelectedComponent] = useState<ComponentRepresentation>();
 
-    const components = useMemo(
+    const data = useMemo(
         () =>
             realmComponents.map(component => {
                 const provider = keyProviderComponentTypes.find(
-                    (componentType: ComponentTypeRepresentation) =>
-                        component.providerId === componentType.id
+                    (ct: ComponentTypeRepresentation) =>
+                        component.providerId === ct.id
                 );
-
                 return {
                     ...component,
                     providerDescription: provider?.helpText
-                };
+                } as ComponentData;
             }),
-        [realmComponents]
+        [realmComponents, keyProviderComponentTypes]
     );
 
     const [toggleDeleteDialog, DeleteConfirm] = useConfirmDialog({
@@ -82,40 +73,66 @@ const { realm } = useRealm();
                     id: selectedComponent!.id!,
                     realm: realm
                 });
-
                 refresh();
-
                 toast.success(t("deleteProviderSuccess"));
             } catch (error) {
-                toast.error(t("deleteProviderError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
+                toast.error(t("deleteProviderError", { error: getErrorMessage(error) }), {
+                    description: getErrorDescription(error)
+                });
             }
         }
     });
 
-    const onSearch = () => {
-        if (searchVal !== "") {
-            setSearchVal(searchVal);
-            const filteredComponents = components.filter(
-                component =>
-                    component.name?.includes(searchVal) ||
-                    component.providerId?.includes(searchVal)
-            );
-            setFilteredComponents(filteredComponents);
-        } else {
-            setSearchVal("");
-            setFilteredComponents(components);
+    const columns: ColumnDef<ComponentData>[] = [
+        {
+            accessorKey: "name",
+            header: t("name"),
+            cell: ({ row }) => (
+                <Link
+                    to={toKeyProvider({
+                        realm,
+                        id: row.original.id!,
+                        providerType: row.original.providerId as ProviderType
+                    })}
+                    className="text-primary hover:underline"
+                    data-testid="provider-name-link"
+                >
+                    {row.original.name}
+                </Link>
+            )
+        },
+        {
+            accessorKey: "providerId",
+            header: t("provider"),
+            cell: ({ row }) => row.original.providerId ?? "-"
+        },
+        {
+            accessorKey: "providerDescription",
+            header: t("providerDescription"),
+            cell: ({ row }) => row.original.providerDescription ?? "-"
+        },
+        {
+            id: "actions",
+            header: "",
+            size: 50,
+            enableHiding: false,
+            cell: ({ row }) => (
+                <DataTableRowActions row={row}>
+                    <button
+                        type="button"
+                        className="flex w-full items-center gap-2 rounded-md px-1.5 py-1 text-left text-sm text-destructive hover:bg-destructive/10 hover:text-destructive"
+                        onClick={() => {
+                            setSelectedComponent(row.original);
+                            toggleDeleteDialog();
+                        }}
+                    >
+                        <Trash className="size-4 shrink-0" />
+                        {t("delete")}
+                    </button>
+                </DataTableRowActions>
+            )
         }
-    };
-
-    const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
-        if (e.key === "Enter") {
-            onSearch();
-        }
-    };
-
-    const handleInputChange = (value: string) => {
-        setSearchVal(value);
-    };
+    ];
 
     return (
         <>
@@ -139,117 +156,26 @@ const { realm } = useRealm();
                 />
             )}
             <DeleteConfirm />
-            <section className="py-6 bg-muted/30 p-0">
-                <div className="flex flex-wrap items-center gap-4 providers-toolbar mb-4">
-                    <div className="flex flex-1 min-w-[200px] gap-2">
-                        <Input
-                            name="inputGroupName"
-                            id="inputGroupName"
-                            data-testid="provider-search-input"
-                            type="search"
-                            aria-label={t("search")}
-                            placeholder={t("search")}
-                            value={searchVal}
-                            onChange={(e) => handleInputChange(e.target.value)}
-                            onKeyDown={handleKeyDown}
-                            className="flex-1"
-                        />
-                        <Button
-                            type="button"
-                            variant="secondary"
-                            size="icon"
-                            aria-label={t("search")}
-                            onClick={onSearch}
-                        >
-                            <MagnifyingGlass className="size-4" />
-                        </Button>
-                    </div>
+            <DataTable
+                columns={columns}
+                data={data}
+                searchColumnId="name"
+                searchPlaceholder={t("search")}
+                emptyMessage={t("noProviders")}
+                toolbar={
                     <Button
                         type="button"
                         data-testid="addProviderDropdown"
-                        className="add-provider-dropdown"
+                        variant="default"
+                        className="flex h-9 w-9 shrink-0 items-center justify-center p-0 sm:h-9 sm:w-auto sm:gap-2 sm:px-4 sm:py-2"
+                        aria-label={t("addProvider")}
                         onClick={() => toggleProviderOpen()}
                     >
-                        {t("addProvider")}
+                        <Plus size={20} className="shrink-0 sm:hidden" />
+                        <span className="hidden sm:inline">{t("addProvider")}</span>
                     </Button>
-                </div>
-                <DraggableTable
-                    variant="compact"
-                    className="kc-draggable-table"
-                    keyField="id"
-                    data={
-                        filteredComponents.length === 0 ? components : filteredComponents
-                    }
-                    onDragFinish={async (_, itemOrder) => {
-                        const updateAll = components.map((component: ComponentData) => {
-                            const componentToSave = { ...component };
-                            delete componentToSave.providerDescription;
-
-                            return adminClient.components.update(
-                                { id: component.id! },
-                                {
-                                    ...componentToSave,
-                                    config: {
-                                        priority: [
-                                            (
-                                                itemOrder.length -
-                                                itemOrder.indexOf(component.id!) +
-                                                100
-                                            ).toString()
-                                        ]
-                                    }
-                                }
-                            );
-                        });
-
-                        try {
-                            await Promise.all(updateAll);
-                            refresh();
-                            toast.success(t("saveProviderListSuccess"));
-                        } catch (error) {
-                            toast.error(t("saveProviderError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
-                        }
-                    }}
-                    columns={[
-                        {
-                            name: "name",
-                            displayKey: "name",
-                            cellRenderer: component => (
-                                <Link
-                                    key={component.name}
-                                    data-testid="provider-name-link"
-                                    to={toKeyProvider({
-                                        realm,
-                                        id: component.id!,
-                                        providerType: component.providerId as ProviderType
-                                    })}
-                                >
-                                    {component.name}
-                                </Link>
-                            )
-                        },
-                        {
-                            name: "providerId",
-                            displayKey: "provider"
-                        },
-                        {
-                            name: "providerDescription",
-                            displayKey: "providerDescription"
-                        }
-                    ]}
-                    actions={[
-                        {
-                            title: t("delete"),
-                            onClick: (_event, row) => {
-                                setSelectedComponent(
-                                    row as ComponentRepresentation
-                                );
-                                toggleDeleteDialog();
-                            }
-                        }
-                    ]}
-                />
-            </section>
+                }
+            />
         </>
     );
 };

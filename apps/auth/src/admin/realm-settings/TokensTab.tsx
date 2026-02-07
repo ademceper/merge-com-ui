@@ -247,31 +247,33 @@ export const RealmSettingsTokensTab = ({ realm, save }: RealmSettingsTokensTabPr
                     className="mt-4"
                     onSubmit={handleSubmit(save)}
                 >
-                    <div className="space-y-2">
-                        <div className="flex items-center gap-1">
-                            <label htmlFor="kc-revoke-refresh-token">{t("revokeRefreshToken")}</label>
+                    <div className="flex w-full items-center justify-between gap-2">
+                        <div className="flex items-center gap-1.5">
+                            <label htmlFor="kc-revoke-refresh-token" className="text-sm font-medium">{t("revokeRefreshToken")}</label>
                             <HelpItem
                                 helpText={t("revokeRefreshTokenHelp")}
                                 fieldLabelId="revokeRefreshToken"
                             />
                         </div>
-                        <Controller
-                            name="revokeRefreshToken"
-                            control={control}
-                            defaultValue={false}
-                            render={({ field }) => (
-                                <div className="flex items-center gap-2">
-                                    <Switch
-                                        id="kc-revoke-refresh-token"
-                                        data-testid="revoke-refresh-token-switch"
-                                        aria-label={t("revokeRefreshToken")}
-                                        checked={field.value}
-                                        onCheckedChange={field.onChange}
-                                    />
-                                    <span className="text-sm">{field.value ? t("enabled") : t("disabled")}</span>
-                                </div>
-                            )}
-                        />
+                        <div className="flex shrink-0 items-center gap-2">
+                            <Controller
+                                name="revokeRefreshToken"
+                                control={control}
+                                defaultValue={false}
+                                render={({ field }) => (
+                                    <>
+                                        <span className="text-sm text-muted-foreground">{field.value ? t("on") : t("off")}</span>
+                                        <Switch
+                                            id="kc-revoke-refresh-token"
+                                            data-testid="revoke-refresh-token-switch"
+                                            aria-label={t("revokeRefreshToken")}
+                                            checked={field.value}
+                                            onCheckedChange={field.onChange}
+                                        />
+                                    </>
+                                )}
+                            />
+                        </div>
                     </div>
                     {revokeRefreshToken && (
                         <div className="space-y-2">
@@ -822,7 +824,7 @@ export const RealmSettingsTokensTab = ({ realm, save }: RealmSettingsTokensTabPr
     return (
         <ScrollForm
             label={t("jumpToSection")}
-            className="px-4 pb-4"
+            className="pt-0 pb-4"
             sections={sections}
         />
     );

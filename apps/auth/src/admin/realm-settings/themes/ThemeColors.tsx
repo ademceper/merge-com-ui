@@ -136,7 +136,7 @@ export const ThemeColors = ({ realm, save, theme }: ThemeColorsProps) => {
                     onClose={toggle}
                 />
             )}
-            <div className="p-6">
+            <div className="px-4 pt-0">
                 <p className="mb-6 text-sm text-muted-foreground">{t("themeColorInfo")}</p>
                 {mediaQuery.matches && theme === "light" && (
                     <Alert>

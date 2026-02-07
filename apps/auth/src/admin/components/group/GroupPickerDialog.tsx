@@ -256,7 +256,7 @@ export const GroupPickerDialog = ({
 
     return (
         <Dialog open onOpenChange={(open) => { if (!open) onClose(); }}>
-            <DialogContent className={filter !== "" ? "max-w-2xl" : "max-w-md"}>
+            <DialogContent className="max-w-2xl">
                 <DialogHeader>
                     <DialogTitle>{t(text.title, {
                         group1: filterGroups?.[0]?.name,
@@ -288,6 +288,12 @@ export const GroupPickerDialog = ({
                             </div>
                         )}
                         <DialogFooter className="mt-4">
+                            <Button
+                                variant="outline"
+                                onClick={onClose}
+                            >
+                                {t("cancel")}
+                            </Button>
                             <Button
                                 data-testid={`${text.ok}-button`}
                                 onClick={() => {
@@ -330,6 +336,12 @@ export const GroupPickerDialog = ({
                             {listContent}
                         </PaginatingTableToolbar>
                         <DialogFooter>
+                            <Button
+                                variant="outline"
+                                onClick={onClose}
+                            >
+                                {t("cancel")}
+                            </Button>
                             <Button
                                 data-testid={`${text.ok}-button`}
                                 key="confirm"

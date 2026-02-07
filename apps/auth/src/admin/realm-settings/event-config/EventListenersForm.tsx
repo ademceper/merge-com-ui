@@ -1,4 +1,3 @@
-import { Button } from "@merge/ui/components/button";
 import { FormProvider, UseFormReturn } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import {
@@ -59,21 +58,6 @@ export const EventListenersForm = ({ form, reset }: EventListenersFormProps) => 
                 variant={SelectVariant.typeaheadMulti}
                 options={eventListeners.map(value => value.id)}
             />
-            <div className="flex gap-2">
-                <Button
-                    type="submit"
-                    data-testid={"saveEventListenerBtn"}
-                >
-                    {t("save")}
-                </Button>
-                <Button
-                    variant="ghost"
-                    data-testid={"revertEventListenerBtn"}
-                    onClick={reset}
-                >
-                    {t("revert")}
-                </Button>
-            </div>
         </FormProvider>
     );
 };

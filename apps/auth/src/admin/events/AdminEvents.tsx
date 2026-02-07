@@ -1,13 +1,9 @@
 import type AdminEventRepresentation from "@keycloak/keycloak-admin-client/lib/defs/adminEventRepresentation";
 import {
-    Action,
-    KeycloakDataTable,
-    KeycloakSelect,
-    ListEmptyState,
-    SelectVariant,
-    TextControl,
-    useFetch
-} from "../../shared/keycloak-ui-shared";
+    DataTable,
+    DataTableRowActions,
+    type ColumnDef
+} from "@merge/ui/components/table";
 import {
     Dialog,
     DialogContent,
@@ -22,16 +18,23 @@ import {
     TableHeader,
     TableRow
 } from "@merge/ui/components/table";
-import { SelectOption } from "../../shared/keycloak-ui-shared";
 import { Button } from "@merge/ui/components/button";
+import { Checkbox } from "@merge/ui/components/checkbox";
 import { Input } from "@merge/ui/components/input";
 import { Label } from "@merge/ui/components/label";
 import { Badge } from "@merge/ui/components/badge";
+import {
+    Popover,
+    PopoverContent,
+    PopoverTrigger,
+} from "@merge/ui/components/popover";
 import { pickBy } from "lodash-es";
-import { PropsWithChildren, useMemo, useState } from "react";
+import type { PropsWithChildren } from "react";
+import { useMemo, useState } from "react";
 import { Controller, FormProvider, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { useAdminClient } from "../admin-client";
+import { TextControl, useFetch } from "../../shared/keycloak-ui-shared";
 import { EventsBanners } from "../Banners";
 import DropdownPanel from "../components/dropdown-panel/DropdownPanel";
 import CodeEditor from "../components/form/CodeEditor";
@@ -67,7 +70,7 @@ const DisplayDialog = ({
 }: DisplayDialogProps) => {
     const { t } = useTranslation();
     return (
-        <Dialog open={true} onOpenChange={open => !open && onClose()}>
+        <Dialog open onOpenChange={(open) => !open && onClose()}>
             <DialogContent className="max-w-2xl" data-testid={dataTestId}>
                 <DialogHeader>
                     <DialogTitle>{t(titleKey)}</DialogTitle>
@@ -78,20 +81,20 @@ const DisplayDialog = ({
     );
 };
 
-const DetailCell = (event: AdminEventRepresentation) => (
+const DetailCell = ({ details, error }: { details?: Record<string, unknown>; error?: string }) => (
     <Table>
         <TableBody>
-            {event.details &&
-                Object.entries(event.details).map(([key, value]) => (
+            {details &&
+                Object.entries(details).map(([key, value]) => (
                     <TableRow key={key}>
                         <TableCell className="font-medium">{key}</TableCell>
                         <TableCell>{String(value)}</TableCell>
                     </TableRow>
                 ))}
-            {event.error && (
+            {error && (
                 <TableRow>
                     <TableCell className="font-medium">error</TableCell>
-                    <TableCell>{event.error}</TableCell>
+                    <TableCell>{error}</TableCell>
                 </TableRow>
             )}
         </TableBody>
@@ -104,24 +107,27 @@ type AdminEventsProps = {
 
 export const AdminEvents = ({ resourcePath }: AdminEventsProps) => {
     const { adminClient } = useAdminClient();
-
     const { t } = useTranslation();
     const { realm } = useRealm();
     const serverInfo = useServerInfo();
     const formatDate = useFormatDate();
-    const resourceTypes = serverInfo.enums?.["resourceType"];
-    const operationTypes = serverInfo.enums?.["operationType"];
+    const resourceTypes = serverInfo.enums?.["resourceType"] ?? [];
+    const operationTypes = serverInfo.enums?.["operationType"] ?? [];
 
     const [key, setKey] = useState(0);
     const [searchDropdownOpen, setSearchDropdownOpen] = useState(false);
     const [selectResourceTypesOpen, setSelectResourceTypesOpen] = useState(false);
     const [selectOperationTypesOpen, setSelectOperationTypesOpen] = useState(false);
     const [activeFilters, setActiveFilters] = useState<Partial<AdminEventSearchForm>>({});
+    const [eventList, setEventList] = useState<AdminEventRepresentation[]>([]);
+    const [authEvent, setAuthEvent] = useState<AdminEventRepresentation>();
+    const [adminEventsEnabled, setAdminEventsEnabled] = useState<boolean>(false);
+    const [representationEvent, setRepresentationEvent] = useState<AdminEventRepresentation>();
 
     const defaultValues: AdminEventSearchForm = {
         resourceTypes: [],
         operationTypes: [],
-        resourcePath: resourcePath ? resourcePath : "",
+        resourcePath: resourcePath ?? "",
         dateFrom: "",
         dateTo: "",
         authClient: "",
@@ -129,11 +135,6 @@ export const AdminEvents = ({ resourcePath }: AdminEventsProps) => {
         authRealm: "",
         authIpAddress: ""
     };
-
-    const [authEvent, setAuthEvent] = useState<AdminEventRepresentation>();
-    const [adminEventsEnabled, setAdminEventsEnabled] = useState<boolean>();
-    const [representationEvent, setRepresentationEvent] =
-        useState<AdminEventRepresentation>();
 
     const filterLabels: Record<keyof AdminEventSearchForm, string> = {
         resourceTypes: t("resourceTypes"),
@@ -147,35 +148,27 @@ export const AdminEvents = ({ resourcePath }: AdminEventsProps) => {
         authIpAddress: t("ipAddress")
     };
 
-    const form = useForm<AdminEventSearchForm>({
-        mode: "onChange",
-        defaultValues
-    });
-    const {
-        getValues,
-        reset,
-        formState: { isDirty },
-        control
-    } = form;
+    const form = useForm<AdminEventSearchForm>({ mode: "onChange", defaultValues });
+    const { getValues, reset, formState: { isDirty }, control } = form;
 
     useFetch(
         () => adminClient.realms.getConfigEvents({ realm }),
-        events => {
-            setAdminEventsEnabled(events?.adminEventsEnabled!);
-        },
+        (events) => setAdminEventsEnabled(events?.adminEventsEnabled ?? false),
         []
     );
 
-    function loader(first?: number, max?: number) {
-        return adminClient.realms.findAdminEvents({
-            resourcePath,
-            // The admin client wants 'dateFrom' and 'dateTo' to be Date objects, however it cannot actually handle them so we need to cast to any.
-            ...(activeFilters as any),
-            realm,
-            first,
-            max
-        });
-    }
+    useFetch(
+        () =>
+            adminClient.realms.findAdminEvents({
+                resourcePath,
+                ...(activeFilters as Record<string, unknown>),
+                realm,
+                first: 0,
+                max: 1000
+            }),
+        (data) => setEventList(data),
+        [key, activeFilters]
+    );
 
     function submitSearch() {
         setSearchDropdownOpen(false);
@@ -187,37 +180,31 @@ export const AdminEvents = ({ resourcePath }: AdminEventsProps) => {
         commitFilters();
     }
 
-    function removeFilter(key: keyof AdminEventSearchForm) {
-        const formValues: AdminEventSearchForm = { ...getValues() };
-        delete formValues[key];
-
+    function removeFilter(filterKey: keyof AdminEventSearchForm) {
+        const formValues = { ...getValues() };
+        delete formValues[filterKey];
         reset({ ...defaultValues, ...formValues });
         commitFilters();
     }
 
-    function removeFilterValue(key: keyof AdminEventSearchForm, valueToRemove: string) {
+    function removeFilterValue(filterKey: keyof AdminEventSearchForm, valueToRemove: string) {
         const formValues = getValues();
-        const fieldValue = formValues[key];
+        const fieldValue = formValues[filterKey];
         const newFieldValue = Array.isArray(fieldValue)
-            ? fieldValue.filter(val => val !== valueToRemove)
+            ? fieldValue.filter((val) => val !== valueToRemove)
             : fieldValue;
-
-        reset({ ...formValues, [key]: newFieldValue });
+        reset({ ...formValues, [filterKey]: newFieldValue });
         commitFilters();
     }
 
     function commitFilters() {
         const newFilters: Partial<AdminEventSearchForm> = pickBy(
             getValues(),
-            value => value !== "" || (Array.isArray(value) && value.length > 0)
+            (value) => value !== "" && (!Array.isArray(value) || value.length > 0)
         );
-
-        if (resourcePath) {
-            delete newFilters.resourcePath;
-        }
-
+        if (resourcePath) delete newFilters.resourcePath;
         setActiveFilters(newFilters);
-        setKey(key + 1);
+        setKey((k) => k + 1);
     }
 
     const code = useMemo(
@@ -226,6 +213,298 @@ export const AdminEvents = ({ resourcePath }: AdminEventsProps) => {
                 ? prettyPrintJSON(JSON.parse(representationEvent.representation))
                 : "",
         [representationEvent?.representation]
+    );
+
+    const columns: ColumnDef<AdminEventRepresentation>[] = [
+        {
+            accessorKey: "time",
+            header: t("time"),
+            cell: ({ row }) => formatDate(new Date(row.original.time!), FORMAT_DATE_AND_TIME)
+        },
+        {
+            accessorKey: "resourcePath",
+            header: t("resourcePath"),
+            cell: ({ row }) => <CellResourceLinkRenderer event={row.original} />
+        },
+        {
+            accessorKey: "resourceType",
+            header: t("resourceType")
+        },
+        {
+            accessorKey: "operationType",
+            header: t("operationType")
+        },
+        {
+            id: "user",
+            header: t("user"),
+            cell: ({ row }) => row.original.authDetails?.userId ?? ""
+        },
+        {
+            id: "actions",
+            header: "",
+            size: 50,
+            enableHiding: false,
+            cell: ({ row }) => (
+                <DataTableRowActions
+                    row={row as { original: AdminEventRepresentation; id: string; getValue: (id: string) => unknown }}
+                >
+                    <button
+                        type="button"
+                        className="flex w-full items-center gap-2 rounded-md px-1.5 py-1 text-left text-sm hover:bg-accent hover:text-accent-foreground"
+                        onClick={() => setAuthEvent(row.original)}
+                    >
+                        {t("auth")}
+                    </button>
+                    <button
+                        type="button"
+                        className="flex w-full items-center gap-2 rounded-md px-1.5 py-1 text-left text-sm hover:bg-accent hover:text-accent-foreground"
+                        onClick={() => setRepresentationEvent(row.original)}
+                    >
+                        {t("representation")}
+                    </button>
+                </DataTableRowActions>
+            )
+        }
+    ];
+
+    const searchToolbar = (
+        <FormProvider {...form}>
+            <div className="flex flex-col gap-0">
+                <div>
+                    <DropdownPanel
+                        buttonText={t("searchForAdminEvent")}
+                        setSearchDropdownOpen={setSearchDropdownOpen}
+                        searchDropdownOpen={searchDropdownOpen}
+                        marginRight="2.5rem"
+                        width="15vw"
+                    >
+                        <form className="keycloak__events_search__form space-y-4" data-testid="searchForm">
+                            <div className="space-y-2">
+                                <Label htmlFor="kc-resourceTypes">{t("resourceTypes")}</Label>
+                                <Controller
+                                    name="resourceTypes"
+                                    control={control}
+                                    render={({ field }) => (
+                                        <Popover
+                                            open={selectResourceTypesOpen}
+                                            onOpenChange={setSelectResourceTypesOpen}
+                                        >
+                                            <PopoverTrigger asChild>
+                                                <Button
+                                                    type="button"
+                                                    variant="outline"
+                                                    className="w-full justify-between h-9 min-h-9"
+                                                    data-testid="resource-types-searchField"
+                                                >
+                                                    {field.value.length === 0
+                                                        ? t("select")
+                                                        : field.value.length === 1
+                                                          ? field.value[0]
+                                                          : `${field.value.length} ${t("selected")}`}
+                                                </Button>
+                                            </PopoverTrigger>
+                                            <PopoverContent className="w-full min-w-[var(--radix-popover-trigger-width)] p-2" align="start">
+                                                <div className="max-h-60 overflow-auto space-y-2">
+                                                    {resourceTypes.map((option) => (
+                                                        <label
+                                                            key={option}
+                                                            className="flex items-center gap-2 cursor-pointer"
+                                                        >
+                                                            <Checkbox
+                                                                checked={field.value.includes(option)}
+                                                                onCheckedChange={(checked) => {
+                                                                    const next = checked
+                                                                        ? [...field.value, option]
+                                                                        : field.value.filter((v) => v !== option);
+                                                                    field.onChange(next);
+                                                                }}
+                                                            />
+                                                            {option}
+                                                        </label>
+                                                    ))}
+                                                </div>
+                                                <div className="flex flex-wrap gap-1 mt-2">
+                                                    {field.value.map((chip) => (
+                                                        <Badge
+                                                            key={chip}
+                                                            variant="secondary"
+                                                            className="cursor-pointer"
+                                                            onClick={() =>
+                                                                field.onChange(field.value.filter((v) => v !== chip))
+                                                            }
+                                                        >
+                                                            {chip} ×
+                                                        </Badge>
+                                                    ))}
+                                                </div>
+                                            </PopoverContent>
+                                        </Popover>
+                                    )}
+                                />
+                            </div>
+                            <div className="space-y-2">
+                                <Label htmlFor="kc-operationTypes">{t("operationTypes")}</Label>
+                                <Controller
+                                    name="operationTypes"
+                                    control={control}
+                                    render={({ field }) => (
+                                        <Popover
+                                            open={selectOperationTypesOpen}
+                                            onOpenChange={setSelectOperationTypesOpen}
+                                        >
+                                            <PopoverTrigger asChild>
+                                                <Button
+                                                    type="button"
+                                                    variant="outline"
+                                                    className="w-full justify-between h-9 min-h-9"
+                                                    data-testid="operation-types-searchField"
+                                                >
+                                                    {field.value.length === 0
+                                                        ? t("select")
+                                                        : field.value.length === 1
+                                                          ? field.value[0]
+                                                          : `${field.value.length} ${t("selected")}`}
+                                                </Button>
+                                            </PopoverTrigger>
+                                            <PopoverContent className="w-full min-w-[var(--radix-popover-trigger-width)] p-2" align="start">
+                                                <div className="max-h-60 overflow-auto space-y-2">
+                                                    {operationTypes.map((option) => (
+                                                        <label
+                                                            key={option}
+                                                            className="flex items-center gap-2 cursor-pointer"
+                                                        >
+                                                            <Checkbox
+                                                                checked={field.value.includes(option)}
+                                                                onCheckedChange={(checked) => {
+                                                                    const next = checked
+                                                                        ? [...field.value, option]
+                                                                        : field.value.filter((v) => v !== option);
+                                                                    field.onChange(next);
+                                                                }}
+                                                            />
+                                                            {option}
+                                                        </label>
+                                                    ))}
+                                                </div>
+                                                <div className="flex flex-wrap gap-1 mt-2">
+                                                    {field.value.map((chip) => (
+                                                        <Badge
+                                                            key={chip}
+                                                            variant="secondary"
+                                                            className="cursor-pointer"
+                                                            onClick={() =>
+                                                                field.onChange(field.value.filter((v) => v !== chip))
+                                                            }
+                                                        >
+                                                            {chip} ×
+                                                        </Badge>
+                                                    ))}
+                                                </div>
+                                            </PopoverContent>
+                                        </Popover>
+                                    )}
+                                />
+                            </div>
+                            {!resourcePath && (
+                                <TextControl name="resourcePath" label={t("resourcePath")} />
+                            )}
+                            <TextControl name="authRealm" label={t("realm")} />
+                            <TextControl name="authClient" label={t("client")} />
+                            <TextControl name="authUser" label={t("userId")} />
+                            <TextControl name="authIpAddress" label={t("ipAddress")} />
+                            <div className="space-y-2">
+                                <Label htmlFor="kc-dateFrom">{t("dateFrom")}</Label>
+                                <Controller
+                                    name="dateFrom"
+                                    control={control}
+                                    render={({ field }) => (
+                                        <Input
+                                            id="kc-dateFrom"
+                                            type="date"
+                                            className="w-full h-9"
+                                            value={field.value}
+                                            onChange={(e) => field.onChange(e.target.value)}
+                                        />
+                                    )}
+                                />
+                            </div>
+                            <div className="space-y-2">
+                                <Label htmlFor="kc-dateTo">{t("dateTo")}</Label>
+                                <Controller
+                                    name="dateTo"
+                                    control={control}
+                                    render={({ field }) => (
+                                        <Input
+                                            id="kc-dateTo"
+                                            type="date"
+                                            className="w-full h-9"
+                                            value={field.value}
+                                            onChange={(e) => field.onChange(e.target.value)}
+                                        />
+                                    )}
+                                />
+                            </div>
+                            <div className="flex gap-2">
+                                <Button
+                                    type="button"
+                                    onClick={submitSearch}
+                                    data-testid="search-events-btn"
+                                    disabled={!isDirty}
+                                >
+                                    {t("searchAdminEventsBtn")}
+                                </Button>
+                                <Button
+                                    type="button"
+                                    variant="secondary"
+                                    onClick={resetSearch}
+                                    disabled={!isDirty}
+                                >
+                                    {t("resetBtn")}
+                                </Button>
+                            </div>
+                        </form>
+                    </DropdownPanel>
+                </div>
+                {Object.entries(activeFilters).length > 0 && (
+                    <div className="keycloak__searchChips ml-4 mt-2 flex flex-wrap gap-2">
+                        {Object.entries(activeFilters).map((filter) => {
+                            const [filterKey, value] = filter as [keyof AdminEventSearchForm, string | string[]];
+                            if (filterKey === "resourcePath" && !!resourcePath) return null;
+                            return (
+                                <div className="flex flex-wrap items-center gap-1 mt-2 mr-2" key={filterKey}>
+                                    <span className="text-sm font-medium text-muted-foreground">
+                                        {filterLabels[filterKey]}:
+                                    </span>
+                                    {typeof value === "string" ? (
+                                        <Badge variant="secondary">{value}</Badge>
+                                    ) : (
+                                        value.map((entry) => (
+                                            <Badge
+                                                key={entry}
+                                                variant="secondary"
+                                                className="cursor-pointer"
+                                                onClick={() => removeFilterValue(filterKey, entry)}
+                                            >
+                                                {entry} ×
+                                            </Badge>
+                                        ))
+                                    )}
+                                    <Button
+                                        type="button"
+                                        variant="ghost"
+                                        size="sm"
+                                        onClick={() => removeFilter(filterKey)}
+                                        aria-label={t("removeFilter")}
+                                    >
+                                        ×
+                                    </Button>
+                                </div>
+                            );
+                        })}
+                    </div>
+                )}
+            </div>
+        </FormProvider>
     );
 
     return (
@@ -270,394 +549,18 @@ export const AdminEvents = ({ resourcePath }: AdminEventsProps) => {
                 </DisplayDialog>
             )}
             {!adminEventsEnabled && <EventsBanners type="adminEvents" />}
-            <KeycloakDataTable
+            <DataTable<AdminEventRepresentation>
                 key={key}
-                loader={loader}
-                detailColumns={[
-                    {
-                        name: "details",
-                        enabled: event => event.details !== undefined,
-                        cellRenderer: DetailCell
-                    }
-                ]}
-                isPaginated
-                ariaLabelKey="adminEvents"
-                toolbarItem={
-                    <FormProvider {...form}>
-                        <div className="flex flex-col gap-0">
-                            <div>
-                                <DropdownPanel
-                                    buttonText={t("searchForAdminEvent")}
-                                    setSearchDropdownOpen={setSearchDropdownOpen}
-                                    searchDropdownOpen={searchDropdownOpen}
-                                    marginRight="2.5rem"
-                                    width="15vw"
-                                >
-                                    <form
-                                        className="keycloak__events_search__form space-y-4"
-                                        data-testid="searchForm"
-                                    >
-                                        <div className="space-y-2 keycloak__events_search__form_label">
-                                            <Label htmlFor="kc-resourceTypes">{t("resourceTypes")}</Label>
-                                            <div>
-                                            <Controller
-                                                name="resourceTypes"
-                                                control={control}
-                                                render={({ field }) => (
-                                                    <KeycloakSelect
-                                                        className="keycloak__events_search__type_select"
-                                                        data-testid="resource-types-searchField"
-                                                        chipGroupProps={{
-                                                            numChips: 1,
-                                                            expandedText: t("hide"),
-                                                            collapsedText:
-                                                                t("showRemaining")
-                                                        }}
-                                                        variant={
-                                                            SelectVariant.typeaheadMulti
-                                                        }
-                                                        typeAheadAriaLabel="select-resourceTypes"
-                                                        onToggle={isOpen =>
-                                                            setSelectResourceTypesOpen(
-                                                                isOpen
-                                                            )
-                                                        }
-                                                        selections={field.value}
-                                                        onSelect={selectedValue => {
-                                                            const option =
-                                                                selectedValue.toString();
-                                                            const changedValue =
-                                                                field.value.includes(
-                                                                    option
-                                                                )
-                                                                    ? field.value.filter(
-                                                                          (
-                                                                              item: string
-                                                                          ) =>
-                                                                              item !==
-                                                                              option
-                                                                      )
-                                                                    : [
-                                                                          ...field.value,
-                                                                          option
-                                                                      ];
-
-                                                            field.onChange(changedValue);
-                                                        }}
-                                                        onClear={() => {
-                                                            field.onChange([]);
-                                                        }}
-                                                        isOpen={selectResourceTypesOpen}
-                                                        aria-labelledby={"resourceTypes"}
-                                                        chipGroupComponent={
-                                                            <div className="flex flex-wrap gap-1">
-                                                                {field.value.map(
-                                                                    (chip: string) => (
-                                                                        <Badge
-                                                                            key={chip}
-                                                                            variant="secondary"
-                                                                            className="cursor-pointer"
-                                                                            onClick={e => {
-                                                                                e.stopPropagation();
-                                                                                field.onChange(
-                                                                                    field.value.filter(
-                                                                                        (val: string) => val !== chip
-                                                                                    )
-                                                                                );
-                                                                            }}
-                                                                        >
-                                                                            {chip}
-                                                                        </Badge>
-                                                                    )
-                                                                )}
-                                                            </div>
-                                                        }
-                                                    >
-                                                        {resourceTypes?.map(option => (
-                                                            <SelectOption
-                                                                key={option}
-                                                                value={option}
-                                                            >
-                                                                {option}
-                                                            </SelectOption>
-                                                        ))}
-                                                    </KeycloakSelect>
-                                                )}
-                                            />
-                                            </div>
-                                        </div>
-                                        <div className="space-y-2 keycloak__events_search__form_label">
-                                            <Label htmlFor="kc-operationTypes">{t("operationTypes")}</Label>
-                                            <div>
-                                            <Controller
-                                                name="operationTypes"
-                                                control={control}
-                                                render={({ field }) => (
-                                                    <KeycloakSelect
-                                                        className="keycloak__events_search__type_select"
-                                                        data-testid="operation-types-searchField"
-                                                        chipGroupProps={{
-                                                            numChips: 1,
-                                                            expandedText: t("hide"),
-                                                            collapsedText:
-                                                                t("showRemaining")
-                                                        }}
-                                                        variant={
-                                                            SelectVariant.typeaheadMulti
-                                                        }
-                                                        typeAheadAriaLabel="select-operationTypes"
-                                                        onToggle={isOpen =>
-                                                            setSelectOperationTypesOpen(
-                                                                isOpen
-                                                            )
-                                                        }
-                                                        selections={field.value}
-                                                        onSelect={selectedValue => {
-                                                            const option =
-                                                                selectedValue.toString();
-                                                            const changedValue =
-                                                                field.value.includes(
-                                                                    option
-                                                                )
-                                                                    ? field.value.filter(
-                                                                          (
-                                                                              item: string
-                                                                          ) =>
-                                                                              item !==
-                                                                              option
-                                                                      )
-                                                                    : [
-                                                                          ...field.value,
-                                                                          option
-                                                                      ];
-
-                                                            field.onChange(changedValue);
-                                                        }}
-                                                        onClear={() => {
-                                                            field.onChange([]);
-                                                        }}
-                                                        isOpen={selectOperationTypesOpen}
-                                                        aria-labelledby={"operationTypes"}
-                                                        chipGroupComponent={
-                                                            <div className="flex flex-wrap gap-1">
-                                                                {field.value.map(
-                                                                    (chip: string) => (
-                                                                        <Badge
-                                                                            key={chip}
-                                                                            variant="secondary"
-                                                                            className="cursor-pointer"
-                                                                            onClick={e => {
-                                                                                e.stopPropagation();
-                                                                                field.onChange(
-                                                                                    field.value.filter(
-                                                                                        (val: string) => val !== chip
-                                                                                    )
-                                                                                );
-                                                                            }}
-                                                                        >
-                                                                            {chip}
-                                                                        </Badge>
-                                                                    )
-                                                                )}
-                                                            </div>
-                                                        }
-                                                    >
-                                                        {operationTypes?.map(option => (
-                                                            <SelectOption
-                                                                key={option}
-                                                                value={option}
-                                                            >
-                                                                {option}
-                                                            </SelectOption>
-                                                        ))}
-                                                    </KeycloakSelect>
-                                                )}
-                                            />
-                                            </div>
-                                        </div>
-                                        {!resourcePath && (
-                                            <TextControl
-                                                name="resourcePath"
-                                                label={t("resourcePath")}
-                                            />
-                                        )}
-                                        <TextControl
-                                            name="authRealm"
-                                            label={t("realm")}
-                                        />
-                                        <TextControl
-                                            name="authClient"
-                                            label={t("client")}
-                                        />
-                                        <TextControl
-                                            name="authUser"
-                                            label={t("userId")}
-                                        />
-                                        <TextControl
-                                            name="authIpAddress"
-                                            label={t("ipAddress")}
-                                        />
-                                        <div className="space-y-2 keycloak__events_search__form_label">
-                                            <Label htmlFor="kc-dateFrom">{t("dateFrom")}</Label>
-                                            <Controller
-                                                name="dateFrom"
-                                                control={control}
-                                                render={({ field }) => (
-                                                    <Input
-                                                        id="kc-dateFrom"
-                                                        type="date"
-                                                        className="w-full"
-                                                        value={field.value}
-                                                        onChange={e =>
-                                                            field.onChange(e.target.value)
-                                                        }
-                                                    />
-                                                )}
-                                            />
-                                        </div>
-                                        <div className="space-y-2 keycloak__events_search__form_label">
-                                            <Label htmlFor="kc-dateTo">{t("dateTo")}</Label>
-                                            <Controller
-                                                name="dateTo"
-                                                control={control}
-                                                render={({ field }) => (
-                                                    <Input
-                                                        id="kc-dateTo"
-                                                        type="date"
-                                                        className="w-full"
-                                                        value={field.value}
-                                                        onChange={e =>
-                                                            field.onChange(e.target.value)
-                                                        }
-                                                    />
-                                                )}
-                                            />
-                                        </div>
-                                        <div className="flex gap-2">
-                                            <Button
-                                                onClick={submitSearch}
-                                                data-testid="search-events-btn"
-                                                disabled={!isDirty}
-                                            >
-                                                {t("searchAdminEventsBtn")}
-                                            </Button>
-                                            <Button
-                                                variant="secondary"
-                                                onClick={resetSearch}
-                                                disabled={!isDirty}
-                                            >
-                                                {t("resetBtn")}
-                                            </Button>
-                                        </div>
-                                    </form>
-                                </DropdownPanel>
-                            </div>
-                            <div>
-                                {Object.entries(activeFilters).length > 0 && (
-                                    <div className="keycloak__searchChips ml-4">
-                                        {Object.entries(activeFilters).map(filter => {
-                                            const [key, value] = filter as [
-                                                keyof AdminEventSearchForm,
-                                                string | string[]
-                                            ];
-
-                                            if (
-                                                key === "resourcePath" &&
-                                                !!resourcePath
-                                            ) {
-                                                return null;
-                                            }
-
-                                            return (
-                                                <div
-                                                    className="flex flex-wrap items-center gap-1 mt-2 mr-2"
-                                                    key={key}
-                                                >
-                                                    <span className="text-sm font-medium">{filterLabels[key]}:</span>
-                                                    {typeof value === "string" ? (
-                                                        <Badge variant="secondary">{value}</Badge>
-                                                    ) : (
-                                                        value.map(entry => (
-                                                            <Badge
-                                                                key={entry}
-                                                                variant="secondary"
-                                                                className="cursor-pointer"
-                                                                onClick={() =>
-                                                                    removeFilterValue(
-                                                                        key,
-                                                                        entry
-                                                                    )
-                                                                }
-                                                            >
-                                                                {entry}
-                                                            </Badge>
-                                                        ))
-                                                    )}
-                                                    <Button
-                                                        type="button"
-                                                        variant="ghost"
-                                                        size="sm"
-                                                        onClick={() => removeFilter(key)}
-                                                        aria-label={t("removeFilter")}
-                                                    >
-                                                        ×
-                                                    </Button>
-                                                </div>
-                                            );
-                                        })}
-                                    </div>
-                                )}
-                            </div>
-                        </div>
-                    </FormProvider>
-                }
-                actions={
-                    [
-                        {
-                            title: t("auth"),
-                            onRowClick: event => setAuthEvent(event)
-                        },
-                        {
-                            title: t("representation"),
-                            onRowClick: event => setRepresentationEvent(event)
-                        }
-                    ] as Action<AdminEventRepresentation>[]
-                }
-                columns={[
-                    {
-                        name: "time",
-                        displayKey: "time",
-                        cellRenderer: row =>
-                            formatDate(new Date(row.time!), FORMAT_DATE_AND_TIME)
-                    },
-                    {
-                        name: "resourcePath",
-                        displayKey: "resourcePath",
-                        cellRenderer: CellResourceLinkRenderer
-                    },
-                    {
-                        name: "resourceType",
-                        displayKey: "resourceType"
-                    },
-                    {
-                        name: "operationType",
-                        displayKey: "operationType"
-                    },
-                    {
-                        name: "",
-                        displayKey: "user",
-                        cellRenderer: event => event.authDetails?.userId || ""
-                    }
-                ]}
-                emptyState={
-                    <ListEmptyState
-                        message={t("emptyAdminEvents")}
-                        instructions={t("emptyAdminEventsInstructions")}
-                        primaryActionText={t("refresh")}
-                        onPrimaryAction={() => setKey(key + 1)}
-                    />
-                }
-                isSearching={Object.keys(activeFilters).length > 0}
+                columns={columns}
+                data={eventList}
+                searchColumnId="resourcePath"
+                searchPlaceholder={t("resourcePath")}
+                emptyMessage={t("emptyAdminEvents")}
+                toolbar={searchToolbar}
+                getRowCanExpand={(row) => row.original.details !== undefined}
+                renderSubRow={(row) => (
+                    <DetailCell details={row.original.details} error={row.original.error} />
+                )}
             />
         </>
     );
