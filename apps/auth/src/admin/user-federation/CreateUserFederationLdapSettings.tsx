@@ -37,8 +37,8 @@ const onSubmit = async (formData: LdapComponentRepresentation) => {
                 noDivider
                 save={() => form.handleSubmit(onSubmit)()}
             />
-<div className="p-0">
-                    <div className="bg-muted/30 p-4">
+<div className="space-y-6 py-6">
+                <div className="rounded-lg bg-muted/30 p-6">
                     <UserFederationLdapForm onSubmit={onSubmit} />
                 </div>
             </div>

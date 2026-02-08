@@ -40,107 +40,120 @@ export const KerberosSettingsRequired = ({
                 />
             )}
 
-            {/* Required settings */}
             <FormAccess role="manage-realm" isHorizontal>
-                {/* These hidden fields are required so data object written back matches data retrieved */}
-                <input
-                    type="hidden"
-                    defaultValue="kerberos"
-                    {...form.register("providerId")}
-                />
-                <input
-                    type="hidden"
-                    defaultValue="org.keycloak.storage.UserStorageProvider"
-                    {...form.register("providerType")}
-                />
-                <input
-                    type="hidden"
-                    defaultValue={realm}
-                    {...form.register("parentId")}
-                />
-                <TextControl
-                    name="name"
-                    label={t("uiDisplayName")}
-                    labelIcon={t("uiDisplayNameHelp")}
-                    rules={{
-                        required: t("validateName")
-                    }}
-                />
-                <TextControl
-                    name="config.kerberosRealm.0"
-                    label={t("kerberosRealm")}
-                    labelIcon={t("kerberosRealmHelp")}
-                    rules={{
-                        required: t("validateRealm")
-                    }}
-                />
-                <TextControl
-                    name="config.serverPrincipal.0"
-                    label={t("serverPrincipal")}
-                    labelIcon={t("serverPrincipalHelp")}
-                    rules={{
-                        required: t("validateServerPrincipal")
-                    }}
-                />
-                <TextControl
-                    name="config.keyTab.0"
-                    label={t("keyTab")}
-                    labelIcon={t("keyTabHelp")}
-                    rules={{
-                        required: t("validateKeyTab")
-                    }}
-                />
-                <FormLabel
-                    name="kc-debug"
-                    label={t("debug")}
-                    labelIcon={
-                        <HelpItem helpText={t("debugHelp")} fieldLabelId="debug" />
-                    }
-                    hasNoPaddingTop
-                >
-                    <Controller
-                        name="config.debug"
-                        defaultValue={["false"]}
-                        control={form.control}
-                        render={({ field }) => (
-                            <Switch
-                                id="kc-debug"
-                                data-testid="debug"
-                                checked={field.value?.[0] === "true"}
-                                onCheckedChange={(value) => field.onChange([`${value}`])}
-                                aria-label={t("debug")}
-                            />
-                        )}
+                <div className="space-y-6">
+                
+                    <input
+                        type="hidden"
+                        defaultValue="kerberos"
+                        {...form.register("providerId")}
                     />
-                </FormLabel>
-                <FormLabel
-                    name="kc-allow-password-authentication"
-                    label={t("allowPasswordAuthentication")}
-                    labelIcon={
-                        <HelpItem
-                            helpText={t("allowPasswordAuthenticationHelp")}
-                            fieldLabelId="allowPasswordAuthentication"
+                    <input
+                        type="hidden"
+                        defaultValue="org.keycloak.storage.UserStorageProvider"
+                        {...form.register("providerType")}
+                    />
+                    <input
+                        type="hidden"
+                        defaultValue={realm}
+                        {...form.register("parentId")}
+                    />
+                    <div className="space-y-2">
+                        <TextControl
+                            name="name"
+                            label={t("uiDisplayName")}
+                            labelIcon={t("uiDisplayNameHelp")}
+                            rules={{
+                                required: t("validateName")
+                            }}
                         />
-                    }
-                    hasNoPaddingTop
-                >
-                    <Controller
-                        name="config.allowPasswordAuthentication"
-                        defaultValue={["false"]}
-                        control={form.control}
-                        render={({ field }) => (
-                            <Switch
-                                id="kc-allow-password-authentication"
-                                data-testid="allow-password-authentication"
-                                checked={field.value?.[0] === "true"}
-                                onCheckedChange={(value) => field.onChange([`${value}`])}
-                                aria-label={t("allowPasswordAuthentication")}
+                    </div>
+                    <div className="space-y-2">
+                        <TextControl
+                            name="config.kerberosRealm.0"
+                            label={t("kerberosRealm")}
+                            labelIcon={t("kerberosRealmHelp")}
+                            rules={{
+                                required: t("validateRealm")
+                            }}
+                        />
+                    </div>
+                    <div className="space-y-2">
+                        <TextControl
+                            name="config.serverPrincipal.0"
+                            label={t("serverPrincipal")}
+                            labelIcon={t("serverPrincipalHelp")}
+                            rules={{
+                                required: t("validateServerPrincipal")
+                            }}
+                        />
+                    </div>
+                    <div className="space-y-2">
+                        <TextControl
+                            name="config.keyTab.0"
+                            label={t("keyTab")}
+                            labelIcon={t("keyTabHelp")}
+                            rules={{
+                                required: t("validateKeyTab")
+                            }}
+                        />
+                    </div>
+                    <div className="space-y-2">
+                        <FormLabel
+                            name="kc-debug"
+                            label={t("debug")}
+                            labelIcon={
+                                <HelpItem helpText={t("debugHelp")} fieldLabelId="debug" />
+                            }
+                            hasNoPaddingTop
+                        >
+                            <Controller
+                                name="config.debug"
+                                defaultValue={["false"]}
+                                control={form.control}
+                                render={({ field }) => (
+                                    <Switch
+                                        id="kc-debug"
+                                        data-testid="debug"
+                                        checked={field.value?.[0] === "true"}
+                                        onCheckedChange={(value) => field.onChange([`${value}`])}
+                                        aria-label={t("debug")}
+                                    />
+                                )}
                             />
-                        )}
-                    />
-                </FormLabel>
-                {isEqual(allowPassAuth, ["true"]) ? (
-                    <SelectControl
+                        </FormLabel>
+                    </div>
+                    <div className="space-y-2">
+                        <FormLabel
+                            name="kc-allow-password-authentication"
+                            label={t("allowPasswordAuthentication")}
+                            labelIcon={
+                                <HelpItem
+                                    helpText={t("allowPasswordAuthenticationHelp")}
+                                    fieldLabelId="allowPasswordAuthentication"
+                                />
+                            }
+                            hasNoPaddingTop
+                        >
+                            <Controller
+                                name="config.allowPasswordAuthentication"
+                                defaultValue={["false"]}
+                                control={form.control}
+                                render={({ field }) => (
+                                    <Switch
+                                        id="kc-allow-password-authentication"
+                                        data-testid="allow-password-authentication"
+                                        checked={field.value?.[0] === "true"}
+                                        onCheckedChange={(value) => field.onChange([`${value}`])}
+                                        aria-label={t("allowPasswordAuthentication")}
+                                    />
+                                )}
+                            />
+                        </FormLabel>
+                    </div>
+                    {isEqual(allowPassAuth, ["true"]) ? (
+                        <div className="space-y-2">
+                            <SelectControl
                         name="config.editMode[0]"
                         label={t("editMode")}
                         labelIcon={t("editModeKerberosHelp")}
@@ -148,35 +161,39 @@ export const KerberosSettingsRequired = ({
                             rules: { required: t("required") },
                             defaultValue: "READ_ONLY"
                         }}
-                        options={["READ_ONLY", "UNSYNCED"]}
-                    />
-                ) : null}
-                <FormLabel
-                    name="kc-update-first-login"
-                    label={t("updateFirstLogin")}
-                    labelIcon={
-                        <HelpItem
-                            helpText={t("updateFirstLoginHelp")}
-                            fieldLabelId="updateFirstLogin"
-                        />
-                    }
-                    hasNoPaddingTop
-                >
-                    <Controller
-                        name="config.updateProfileFirstLogin"
-                        defaultValue={["false"]}
-                        control={form.control}
-                        render={({ field }) => (
-                            <Switch
-                                id="kc-update-first-login"
-                                data-testid="update-first-login"
-                                checked={field.value?.[0] === "true"}
-                                onCheckedChange={(value) => field.onChange([`${value}`])}
-                                aria-label={t("updateFirstLogin")}
+                                options={["READ_ONLY", "UNSYNCED"]}
                             />
-                        )}
-                    />
-                </FormLabel>
+                        </div>
+                    ) : null}
+                    <div className="space-y-2">
+                        <FormLabel
+                            name="kc-update-first-login"
+                            label={t("updateFirstLogin")}
+                            labelIcon={
+                                <HelpItem
+                                    helpText={t("updateFirstLoginHelp")}
+                                    fieldLabelId="updateFirstLogin"
+                                />
+                            }
+                            hasNoPaddingTop
+                        >
+                            <Controller
+                                name="config.updateProfileFirstLogin"
+                                defaultValue={["false"]}
+                                control={form.control}
+                                render={({ field }) => (
+                                    <Switch
+                                        id="kc-update-first-login"
+                                        data-testid="update-first-login"
+                                        checked={field.value?.[0] === "true"}
+                                        onCheckedChange={(value) => field.onChange([`${value}`])}
+                                        aria-label={t("updateFirstLogin")}
+                                    />
+                                )}
+                            />
+                        </FormLabel>
+                    </div>
+                </div>
             </FormAccess>
         </FormProvider>
     );

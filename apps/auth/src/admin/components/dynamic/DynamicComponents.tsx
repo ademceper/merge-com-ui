@@ -24,7 +24,7 @@ export const DynamicComponents = ({
     layoutOverridesByType,
     ...rest
 }: DynamicComponentProps) => (
-    <>
+    <div className="space-y-6">
         {properties.map(property => {
             const componentType = property.type!;
             if (isValidComponentType(componentType)) {
@@ -46,7 +46,7 @@ export const DynamicComponents = ({
                 console.warn(`There is no editor registered for ${componentType}`);
             }
         })}
-    </>
+    </div>
 );
 
 export const convertToName = (name: string): string =>

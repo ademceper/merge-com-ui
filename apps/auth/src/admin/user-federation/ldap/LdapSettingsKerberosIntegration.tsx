@@ -36,8 +36,10 @@ export const LdapSettingsKerberosIntegration = ({
             )}
 
             <FormAccess role="manage-realm" isHorizontal>
-                <FormLabel
-                    name="kc-allow-kerberos-authentication"
+                <div className="space-y-6">
+                    <div className="space-y-2">
+                        <FormLabel
+                            name="kc-allow-kerberos-authentication"
                     label={t("allowKerberosAuthentication")}
                     labelIcon={
                         <HelpItem
@@ -61,42 +63,52 @@ export const LdapSettingsKerberosIntegration = ({
                             />
                         )}
                     />
-                </FormLabel>
+                        </FormLabel>
+                    </div>
 
-                {allowKerberosAuth[0] === "true" && (
-                    <>
-                        <TextControl
-                            name="config.kerberosRealm.0"
-                            label={t("kerberosRealm")}
-                            labelIcon={t("kerberosRealmHelp")}
-                            rules={{
+                    {allowKerberosAuth[0] === "true" && (
+                        <div className="space-y-6">
+                            <div className="space-y-2">
+                                <TextControl
+                                    name="config.kerberosRealm.0"
+                                    label={t("kerberosRealm")}
+                                    labelIcon={t("kerberosRealmHelp")}
+                                    rules={{
                                 required: t("validateRealm")
                             }}
-                        />
-                        <TextControl
-                            name="config.serverPrincipal.0"
-                            label={t("serverPrincipal")}
-                            labelIcon={t("serverPrincipalHelp")}
-                            rules={{
+                                />
+                            </div>
+                            <div className="space-y-2">
+                                <TextControl
+                                    name="config.serverPrincipal.0"
+                                    label={t("serverPrincipal")}
+                                    labelIcon={t("serverPrincipalHelp")}
+                                    rules={{
                                 required: t("validateServerPrincipal")
                             }}
-                        />
-                        <TextControl
-                            name="config.keyTab.0"
-                            label={t("keyTab")}
-                            labelIcon={t("keyTabHelp")}
-                            rules={{
+                                />
+                            </div>
+                            <div className="space-y-2">
+                                <TextControl
+                                    name="config.keyTab.0"
+                                    label={t("keyTab")}
+                                    labelIcon={t("keyTabHelp")}
+                                    rules={{
                                 required: t("validateKeyTab")
                             }}
-                        />
-                        <TextControl
-                            name="config.krbPrincipalAttribute.0"
-                            label={t("krbPrincipalAttribute")}
-                            labelIcon={t("krbPrincipalAttributeHelp")}
-                        />
+                                />
+                            </div>
+                            <div className="space-y-2">
+                                <TextControl
+                                    name="config.krbPrincipalAttribute.0"
+                                    label={t("krbPrincipalAttribute")}
+                                    labelIcon={t("krbPrincipalAttributeHelp")}
+                                />
 
-                        <FormLabel
-                            name="kc-debug"
+                            </div>
+                            <div className="space-y-2">
+                                <FormLabel
+                                    name="kc-debug"
                             label={t("debug")}
                             labelIcon={
                                 <HelpItem
@@ -122,11 +134,13 @@ export const LdapSettingsKerberosIntegration = ({
                                     />
                                 )}
                             />
-                        </FormLabel>
-                    </>
-                )}
-                <FormLabel
-                    name="kc-use-kerberos-password-authentication"
+                                </FormLabel>
+                            </div>
+                        </div>
+                    )}
+                    <div className="space-y-2">
+                        <FormLabel
+                            name="kc-use-kerberos-password-authentication"
                     label={t("useKerberosForPasswordAuthentication")}
                     labelIcon={
                         <HelpItem
@@ -150,7 +164,9 @@ export const LdapSettingsKerberosIntegration = ({
                             />
                         )}
                     />
-                </FormLabel>
+                        </FormLabel>
+                    </div>
+                </div>
             </FormAccess>
         </FormProvider>
     );

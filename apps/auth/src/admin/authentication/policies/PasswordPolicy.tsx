@@ -3,7 +3,6 @@ import type RealmRepresentation from "@keycloak/keycloak-admin-client/lib/defs/r
 import { getErrorDescription, getErrorMessage } from "../../../shared/keycloak-ui-shared";
 import { toast } from "@merge/ui/components/sonner";
 import { Button } from "@merge/ui/components/button";
-import { Separator } from "@merge/ui/components/separator";
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -16,6 +15,8 @@ import { FormProvider, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { useAdminClient } from "../../admin-client";
 import { FormAccess } from "../../components/form/FormAccess";
+import { FixedButtonsGroup } from "../../components/form/FixedButtonGroup";
+import { FormPanel } from "../../../shared/keycloak-ui-shared";
 import { useRealm } from "../../context/realm-context/RealmContext";
 import { useServerInfo } from "../../context/server-info/ServerInfoProvider";
 import { PolicyRow } from "./PolicyRow";
@@ -123,65 +124,62 @@ const { realm: realmName, refresh } = useRealm();
         }
     };
 
-    return (
-        <div className="p-0">
-            {(rows.length !== 0 || realm.passwordPolicy) && (
-                <>
-                    <div className="flex items-center gap-2 p-4">
-                        <PolicySelect
-                            onSelect={onSelect}
-                            selectedPolicies={rows}
-                        />
-                    </div>
-                    <Separator />
-                    <div className="p-6">
-                        <FormProvider {...form}>
-                            <FormAccess
-                                className="keycloak__policies_authentication__form"
-                                role="manage-realm"
-                                isHorizontal
-                                onSubmit={handleSubmit(save)}
-                            >
-                                {rows.map((r, index) => (
-                                    <PolicyRow
-                                        key={`${r.id}-${index}`}
-                                        policy={r}
-                                        onRemove={id => {
-                                            setRows(rows.filter(r => r.id !== id));
-                                            setValue(r.id!, "", { shouldDirty: true });
-                                        }}
-                                    />
-                                ))}
-                                <div className="flex gap-2">
-                                    <Button
-                                        data-testid="save"
-                                        variant="default"
-                                        type="submit"
-                                        disabled={!isDirty}
-                                    >
-                                        {t("save")}
-                                    </Button>
-                                    <Button
-                                        data-testid="reload"
-                                        variant="link"
-                                        onClick={() => setupForm(realm)}
-                                    >
-                                        {t("reload")}
-                                    </Button>
-                                </div>
-                            </FormAccess>
-                        </FormProvider>
-                    </div>
-                </>
-            )}
-            {!rows.length && !realm.passwordPolicy && (
-                <div data-testid="empty-state" className="flex flex-col items-center justify-center py-16 gap-4">
+    if (!rows.length && !realm.passwordPolicy) {
+        return (
+            <FormPanel title={t("passwordPolicy")}>
+                <div
+                    data-testid="empty-state"
+                    className="flex flex-col items-center justify-center gap-4 py-16"
+                >
                     <PlusCircle className="size-10 text-muted-foreground" />
-                    <h1 className="text-xl font-semibold">{t("noPasswordPolicies")}</h1>
-                    <p className="text-muted-foreground">{t("noPasswordPoliciesInstructions")}</p>
+                    <h2 className="text-lg font-semibold">{t("noPasswordPolicies")}</h2>
+                    <p className="text-center text-muted-foreground text-sm">
+                        {t("noPasswordPoliciesInstructions")}
+                    </p>
                     <PolicySelect onSelect={onSelect} selectedPolicies={[]} />
                 </div>
-            )}
-        </div>
+            </FormPanel>
+        );
+    }
+
+    return (
+        <FormProvider {...form}>
+            <FormAccess
+                role="manage-realm"
+                isHorizontal
+                className="space-y-4"
+                onSubmit={handleSubmit(save)}
+            >
+                <FormPanel title={t("passwordPolicy")}>
+                    <div className="space-y-6">
+                        <div className="flex flex-wrap items-center justify-between gap-2">
+                            <PolicySelect
+                                onSelect={onSelect}
+                                selectedPolicies={rows}
+                            />
+                        </div>
+                        <div className="space-y-4">
+                            {rows.map((r, index) => (
+                                <PolicyRow
+                                    key={`${r.id}-${index}`}
+                                    policy={r}
+                                    onRemove={id => {
+                                        setRows(rows.filter(x => x.id !== id));
+                                        setValue(r.id!, "", { shouldDirty: true });
+                                    }}
+                                />
+                            ))}
+                        </div>
+                    </div>
+                </FormPanel>
+                <FixedButtonsGroup
+                    name="passwordPolicy"
+                    reset={() => setupForm(realm)}
+                    resetText={t("reload")}
+                    isSubmit
+                    isDisabled={!isDirty}
+                />
+            </FormAccess>
+        </FormProvider>
     );
 };

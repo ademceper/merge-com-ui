@@ -63,8 +63,10 @@ const testLdap = async () => {
             )}
 
             <FormAccess role="manage-realm" isHorizontal>
-                <FormLabel
-                    name="kc-enable-ldapv3-password"
+                <div className="space-y-6">
+                    <div className="space-y-2">
+                        <FormLabel
+                            name="kc-enable-ldapv3-password"
                     label={t("enableLdapv3Password")}
                     labelIcon={
                         <HelpItem
@@ -88,10 +90,11 @@ const testLdap = async () => {
                             />
                         )}
                     />
-                </FormLabel>
-
-                <FormLabel
-                    name="kc-validate-password-policy"
+                        </FormLabel>
+                    </div>
+                    <div className="space-y-2">
+                        <FormLabel
+                            name="kc-validate-password-policy"
                     label={t("validatePasswordPolicy")}
                     labelIcon={
                         <HelpItem
@@ -115,10 +118,11 @@ const testLdap = async () => {
                             />
                         )}
                     />
-                </FormLabel>
-
-                <FormLabel
-                    name="kc-trust-email"
+                        </FormLabel>
+                    </div>
+                    <div className="space-y-2">
+                        <FormLabel
+                            name="kc-trust-email"
                     label={t("trustEmail")}
                     labelIcon={
                         <HelpItem
@@ -142,9 +146,11 @@ const testLdap = async () => {
                             />
                         )}
                     />
-                </FormLabel>
-                <FormLabel
-                    name="kc-connection-trace"
+                        </FormLabel>
+                    </div>
+                    <div className="space-y-2">
+                        <FormLabel
+                            name="kc-connection-trace"
                     label={t("connectionTrace")}
                     labelIcon={
                         <HelpItem
@@ -168,16 +174,18 @@ const testLdap = async () => {
                             />
                         )}
                     />
-                </FormLabel>
-                <div>
-                    <Button
+                        </FormLabel>
+                    </div>
+                    <div>
+                        <Button
                         variant="outline"
                         id="query-extensions"
                         data-testid="query-extensions"
                         onClick={testLdap}
-                    >
-                        {t("queryExtensions")}
-                    </Button>
+                        >
+                            {t("queryExtensions")}
+                        </Button>
+                    </div>
                 </div>
             </FormAccess>
         </>

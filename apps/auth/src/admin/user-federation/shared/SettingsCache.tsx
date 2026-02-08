@@ -47,12 +47,13 @@ const CacheFields = ({ form }: { form: UseFormReturn }) => {
     }
 
     return (
-        <>
-            <SelectControl
-                id="kc-cache-policy"
-                name="config.cachePolicy"
-                label={t("cachePolicy")}
-                labelIcon={t("cachePolicyHelp")}
+        <div className="space-y-6">
+            <div className="space-y-2">
+                <SelectControl
+                    id="kc-cache-policy"
+                    name="config.cachePolicy"
+                    label={t("cachePolicy")}
+                    labelIcon={t("cachePolicyHelp")}
                 controller={{
                     defaultValue: ["DEFAULT"]
                 }}
@@ -64,32 +65,36 @@ const CacheFields = ({ form }: { form: UseFormReturn }) => {
                     "MAX_LIFESPAN",
                     "NO_CACHE"
                 ]}
-            />
-            {isEqual(cachePolicyType, ["EVICT_WEEKLY"]) ? (
-                <SelectControl
-                    id="kc-eviction-day"
-                    name="config.evictionDay[0]"
-                    label={t("evictionDay")}
-                    labelIcon={t("evictionDayHelp")}
-                    controller={{
-                        defaultValue: "1"
-                    }}
-                    aria-label={t("selectEvictionDay")}
-                    options={[
-                        { key: "1", value: t("Sunday") },
-                        { key: "2", value: t("Monday") },
-                        { key: "3", value: t("Tuesday") },
-                        { key: "4", value: t("Wednesday") },
-                        { key: "5", value: t("Thursday") },
-                        { key: "6", value: t("Friday") },
-                        { key: "7", value: t("Saturday") }
-                    ]}
                 />
+            </div>
+            {isEqual(cachePolicyType, ["EVICT_WEEKLY"]) ? (
+                <div className="space-y-2">
+                    <SelectControl
+                        id="kc-eviction-day"
+                        name="config.evictionDay[0]"
+                        label={t("evictionDay")}
+                        labelIcon={t("evictionDayHelp")}
+                        controller={{
+                            defaultValue: "1"
+                        }}
+                        aria-label={t("selectEvictionDay")}
+                        options={[
+                            { key: "1", value: t("Sunday") },
+                            { key: "2", value: t("Monday") },
+                            { key: "3", value: t("Tuesday") },
+                            { key: "4", value: t("Wednesday") },
+                            { key: "5", value: t("Thursday") },
+                            { key: "6", value: t("Friday") },
+                            { key: "7", value: t("Saturday") }
+                        ]}
+                    />
+                </div>
             ) : null}
             {isEqual(cachePolicyType, ["EVICT_DAILY"]) ||
             isEqual(cachePolicyType, ["EVICT_WEEKLY"]) ? (
-                <>
-                    <SelectControl
+                <div className="space-y-6">
+                    <div className="space-y-2">
+                        <SelectControl
                         id="kc-eviction-hour"
                         name="config.evictionHour"
                         label={t("evictionHour")}
@@ -99,9 +104,11 @@ const CacheFields = ({ form }: { form: UseFormReturn }) => {
                         }}
                         aria-label={t("selectEvictionHour")}
                         options={hourOptions}
-                    />
-                    <SelectControl
-                        id="kc-eviction-minute"
+                        />
+                    </div>
+                    <div className="space-y-2">
+                        <SelectControl
+                            id="kc-eviction-minute"
                         name="config.evictionMinute"
                         label={t("evictionMinute")}
                         labelIcon={t("evictionMinuteHelp")}
@@ -110,20 +117,23 @@ const CacheFields = ({ form }: { form: UseFormReturn }) => {
                         }}
                         aria-label={t("selectEvictionMinute")}
                         options={minuteOptions}
-                    />
-                </>
+                        />
+                    </div>
+                </div>
             ) : null}
             {isEqual(cachePolicyType, ["MAX_LIFESPAN"]) ? (
-                <NumberControl
+                <div className="space-y-2">
+                    <NumberControl
                     data-testid="kerberos-cache-lifespan"
                     name="config.maxLifespan[0]"
                     label={t("maxLifespan")}
                     labelIcon={t("maxLifespanHelp")}
                     unit={t("ms")}
                     controller={{ defaultValue: 0, rules: { min: 0 } }}
-                />
+                    />
+                </div>
             ) : null}
-        </>
+        </div>
     );
 };
 

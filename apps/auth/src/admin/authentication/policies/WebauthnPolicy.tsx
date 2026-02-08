@@ -1,27 +1,28 @@
 import type RealmRepresentation from "@keycloak/keycloak-admin-client/lib/defs/realmRepresentation";
-import { Button } from "@merge/ui/components/button";
 import { Popover, PopoverContent, PopoverTrigger } from "@merge/ui/components/popover";
 import { Question } from "@phosphor-icons/react";
 import { useEffect } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import {
+    getErrorDescription,
+    getErrorMessage,
     HelpItem,
     SelectControl,
     SwitchControl,
     TextControl,
-    useHelp
+    useHelp,
 } from "../../../shared/keycloak-ui-shared";
-import { getErrorDescription, getErrorMessage } from "../../../shared/keycloak-ui-shared";
 import { toast } from "@merge/ui/components/sonner";
+import { useAdminClient } from "../../admin-client";
 import { FormAccess } from "../../components/form/FormAccess";
+import { FixedButtonsGroup } from "../../components/form/FixedButtonGroup";
+import { FormPanel } from "../../../shared/keycloak-ui-shared";
 import { MultiLineInput } from "../../components/multi-line-input/MultiLineInput";
 import { TimeSelectorControl } from "../../components/time-selector/TimeSelectorControl";
 import { useRealm } from "../../context/realm-context/RealmContext";
 import { convertFormValuesToObject, convertToFormValues } from "../../util";
 import useIsFeatureEnabled, { Feature } from "../../utils/useIsFeatureEnabled";
-
-import { useAdminClient } from "../../admin-client";
 
 const SIGNATURE_ALGORITHMS = [
     "ES256",
@@ -118,152 +119,170 @@ const { realm: realmName } = useRealm();
 
     const isFeatureEnabled = useIsFeatureEnabled();
 
+    const panelTitle = isPasswordLess
+        ? t("webauthnPasswordlessPolicy")
+        : t("webauthnPolicy");
+
     return (
-        <div className="p-6">
+        <FormProvider {...form}>
             {enabled && (
                 <Popover>
                     <PopoverTrigger asChild>
-                        <p className="keycloak__section_intro__help cursor-pointer">
-                            <Question className="size-4 inline" /> {t("webauthnIntro")}
+                        <p className="mb-4 cursor-pointer text-sm text-muted-foreground">
+                            <Question className="inline size-4" /> {t("webauthnIntro")}
                         </p>
                     </PopoverTrigger>
                     <PopoverContent>{t(`${namePrefix}FormHelp`)}</PopoverContent>
                 </Popover>
             )}
-
             <FormAccess
                 role="manage-realm"
                 isHorizontal
+                className="space-y-4"
                 onSubmit={handleSubmit(onSubmit)}
-                className="keycloak__webauthn_policies_authentication__form"
             >
-                <FormProvider {...form}>
-                    <TextControl
-                        name={`${namePrefix}RpEntityName`}
-                        label={t("webAuthnPolicyRpEntityName")}
-                        labelIcon={t("webAuthnPolicyRpEntityNameHelp")}
-                        rules={{ required: t("required") }}
-                    />
-                    <WebauthnSelect
-                        name={`${namePrefix}SignatureAlgorithms`}
-                        label={t("webAuthnPolicySignatureAlgorithms")}
-                        labelIcon={t("webAuthnPolicySignatureAlgorithmsHelp")}
-                        options={SIGNATURE_ALGORITHMS}
-                        isMultiSelect
-                    />
-                    <TextControl
-                        name={`${namePrefix}RpId`}
-                        label={t("webAuthnPolicyRpId")}
-                        labelIcon={t("webAuthnPolicyRpIdHelp")}
-                    />
-                    <WebauthnSelect
-                        name={`${namePrefix}AttestationConveyancePreference`}
-                        label={t("webAuthnPolicyAttestationConveyancePreference")}
-                        labelIcon={t("webAuthnPolicyAttestationConveyancePreferenceHelp")}
-                        options={ATTESTATION_PREFERENCE}
-                        labelPrefix="attestationPreference"
-                    />
-                    <WebauthnSelect
-                        name={`${namePrefix}AuthenticatorAttachment`}
-                        label={t("webAuthnPolicyAuthenticatorAttachment")}
-                        labelIcon={t("webAuthnPolicyAuthenticatorAttachmentHelp")}
-                        options={AUTHENTICATOR_ATTACHMENT}
-                        labelPrefix="authenticatorAttachment"
-                    />
-                    <WebauthnSelect
-                        name={`${namePrefix}RequireResidentKey`}
-                        label={t("webAuthnPolicyRequireResidentKey")}
-                        labelIcon={t("webAuthnPolicyRequireResidentKeyHelp")}
-                        options={RESIDENT_KEY_OPTIONS}
-                        labelPrefix="residentKey"
-                    />
-                    <WebauthnSelect
-                        name={`${namePrefix}UserVerificationRequirement`}
-                        label={t("webAuthnPolicyUserVerificationRequirement")}
-                        labelIcon={t("webAuthnPolicyUserVerificationRequirementHelp")}
-                        options={USER_VERIFY}
-                        labelPrefix="userVerify"
-                    />
-                    <TimeSelectorControl
-                        name={`${namePrefix}CreateTimeout`}
-                        label={t("webAuthnPolicyCreateTimeout")}
-                        labelIcon={t("webAuthnPolicyCreateTimeoutHelp")}
-                        units={["second", "minute", "hour"]}
-                        controller={{
-                            defaultValue: 0,
-                            rules: {
-                                min: 0,
-                                max: {
-                                    value: 31536,
-                                    message: t("webAuthnPolicyCreateTimeoutHint")
-                                }
-                            }
-                        }}
-                    />
-                    <SwitchControl
-                        name={`${namePrefix}AvoidSameAuthenticatorRegister`}
-                        label={t("webAuthnPolicyAvoidSameAuthenticatorRegister")}
-                        labelIcon={t("webAuthnPolicyAvoidSameAuthenticatorRegisterHelp")}
-                        labelOn={t("on")}
-                        labelOff={t("off")}
-                    />
-                    <div className="space-y-2">
-                        <div className="flex items-center gap-2">
-                            <label htmlFor="webAuthnPolicyAcceptableAaguids">{t("webAuthnPolicyAcceptableAaguids")}</label>
-                            <HelpItem
-                                helpText={t("webAuthnPolicyAcceptableAaguidsHelp")}
-                                fieldLabelId="webAuthnPolicyAcceptableAaguids"
+                <FormPanel title={panelTitle}>
+                    <div className="space-y-6">
+                        <div className="space-y-2">
+                            <TextControl
+                                name={`${namePrefix}RpEntityName`}
+                                label={t("webAuthnPolicyRpEntityName")}
+                                labelIcon={t("webAuthnPolicyRpEntityNameHelp")}
+                                rules={{ required: t("required") }}
                             />
                         </div>
-                        <MultiLineInput
-                            name={`${namePrefix}AcceptableAaguids`}
-                            aria-label={t("webAuthnPolicyAcceptableAaguids")}
-                            addButtonLabel="addAaguids"
-                        />
-                    </div>
-                    <div className="space-y-2">
-                        <div className="flex items-center gap-2">
-                            <label htmlFor="webAuthnPolicyExtraOrigins">{t("webAuthnPolicyExtraOrigins")}</label>
-                            <HelpItem
-                                helpText={t("webAuthnPolicyExtraOriginsHelp")}
-                                fieldLabelId="webAuthnPolicyExtraOrigins"
+                        <div className="space-y-2">
+                            <WebauthnSelect
+                                name={`${namePrefix}SignatureAlgorithms`}
+                                label={t("webAuthnPolicySignatureAlgorithms")}
+                                labelIcon={t("webAuthnPolicySignatureAlgorithmsHelp")}
+                                options={SIGNATURE_ALGORITHMS}
+                                isMultiSelect
                             />
                         </div>
-                        <MultiLineInput
-                            name={`${namePrefix}ExtraOrigins`}
-                            aria-label={t("webAuthnPolicyExtraOrigins")}
-                            addButtonLabel="addOrigins"
-                        />
+                        <div className="space-y-2">
+                            <TextControl
+                                name={`${namePrefix}RpId`}
+                                label={t("webAuthnPolicyRpId")}
+                                labelIcon={t("webAuthnPolicyRpIdHelp")}
+                            />
+                        </div>
+                        <div className="space-y-2">
+                            <WebauthnSelect
+                                name={`${namePrefix}AttestationConveyancePreference`}
+                                label={t("webAuthnPolicyAttestationConveyancePreference")}
+                                labelIcon={t("webAuthnPolicyAttestationConveyancePreferenceHelp")}
+                                options={ATTESTATION_PREFERENCE}
+                                labelPrefix="attestationPreference"
+                            />
+                        </div>
+                        <div className="space-y-2">
+                            <WebauthnSelect
+                                name={`${namePrefix}AuthenticatorAttachment`}
+                                label={t("webAuthnPolicyAuthenticatorAttachment")}
+                                labelIcon={t("webAuthnPolicyAuthenticatorAttachmentHelp")}
+                                options={AUTHENTICATOR_ATTACHMENT}
+                                labelPrefix="authenticatorAttachment"
+                            />
+                        </div>
+                        <div className="space-y-2">
+                            <WebauthnSelect
+                                name={`${namePrefix}RequireResidentKey`}
+                                label={t("webAuthnPolicyRequireResidentKey")}
+                                labelIcon={t("webAuthnPolicyRequireResidentKeyHelp")}
+                                options={RESIDENT_KEY_OPTIONS}
+                                labelPrefix="residentKey"
+                            />
+                        </div>
+                        <div className="space-y-2">
+                            <WebauthnSelect
+                                name={`${namePrefix}UserVerificationRequirement`}
+                                label={t("webAuthnPolicyUserVerificationRequirement")}
+                                labelIcon={t("webAuthnPolicyUserVerificationRequirementHelp")}
+                                options={USER_VERIFY}
+                                labelPrefix="userVerify"
+                            />
+                        </div>
+                        <div className="space-y-2">
+                            <TimeSelectorControl
+                                name={`${namePrefix}CreateTimeout`}
+                                label={t("webAuthnPolicyCreateTimeout")}
+                                labelIcon={t("webAuthnPolicyCreateTimeoutHelp")}
+                                units={["second", "minute", "hour"]}
+                                controller={{
+                                    defaultValue: 0,
+                                    rules: {
+                                        min: 0,
+                                        max: {
+                                            value: 31536,
+                                            message: t("webAuthnPolicyCreateTimeoutHint")
+                                        }
+                                    }
+                                }}
+                            />
+                        </div>
+                        <div className="space-y-2">
+                            <SwitchControl
+                                name={`${namePrefix}AvoidSameAuthenticatorRegister`}
+                                label={t("webAuthnPolicyAvoidSameAuthenticatorRegister")}
+                                labelIcon={t("webAuthnPolicyAvoidSameAuthenticatorRegisterHelp")}
+                                labelOn={t("on")}
+                                labelOff={t("off")}
+                            />
+                        </div>
+                        <div className="space-y-2">
+                            <div className="flex items-center gap-2">
+                                <label htmlFor="webAuthnPolicyAcceptableAaguids" className="text-sm font-medium">
+                                    {t("webAuthnPolicyAcceptableAaguids")}
+                                </label>
+                                <HelpItem
+                                    helpText={t("webAuthnPolicyAcceptableAaguidsHelp")}
+                                    fieldLabelId="webAuthnPolicyAcceptableAaguids"
+                                />
+                            </div>
+                            <MultiLineInput
+                                name={`${namePrefix}AcceptableAaguids`}
+                                aria-label={t("webAuthnPolicyAcceptableAaguids")}
+                                addButtonLabel="addAaguids"
+                            />
+                        </div>
+                        <div className="space-y-2">
+                            <div className="flex items-center gap-2">
+                                <label htmlFor="webAuthnPolicyExtraOrigins" className="text-sm font-medium">
+                                    {t("webAuthnPolicyExtraOrigins")}
+                                </label>
+                                <HelpItem
+                                    helpText={t("webAuthnPolicyExtraOriginsHelp")}
+                                    fieldLabelId="webAuthnPolicyExtraOrigins"
+                                />
+                            </div>
+                            <MultiLineInput
+                                name={`${namePrefix}ExtraOrigins`}
+                                aria-label={t("webAuthnPolicyExtraOrigins")}
+                                addButtonLabel="addOrigins"
+                            />
+                        </div>
+                        {isPasswordLess && isFeatureEnabled(Feature.Passkeys) && (
+                            <div className="space-y-2">
+                                <SwitchControl
+                                    name={`${namePrefix}PasskeysEnabled`}
+                                    label={t("webAuthnPolicyPasskeysEnabled")}
+                                    labelIcon={t("webAuthnPolicyPasskeysEnabledHelp")}
+                                    labelOn={t("on")}
+                                    labelOff={t("off")}
+                                />
+                            </div>
+                        )}
                     </div>
-                    {isPasswordLess && isFeatureEnabled(Feature.Passkeys) && (
-                        <SwitchControl
-                            name={`${namePrefix}PasskeysEnabled`}
-                            label={t("webAuthnPolicyPasskeysEnabled")}
-                            labelIcon={t("webAuthnPolicyPasskeysEnabledHelp")}
-                            labelOn={t("on")}
-                            labelOff={t("off")}
-                        />
-                    )}
-                </FormProvider>
-
-                <div className="flex gap-2">
-                    <Button
-                        data-testid="save"
-                        variant="default"
-                        type="submit"
-                        disabled={!isDirty}
-                    >
-                        {t("save")}
-                    </Button>
-                    <Button
-                        data-testid="reload"
-                        variant="link"
-                        onClick={() => setupForm(realm)}
-                    >
-                        {t("reload")}
-                    </Button>
-                </div>
+                </FormPanel>
+                <FixedButtonsGroup
+                    name="webauthnPolicy"
+                    reset={() => setupForm(realm)}
+                    resetText={t("reload")}
+                    isSubmit
+                    isDisabled={!isDirty}
+                />
             </FormAccess>
-        </div>
+        </FormProvider>
     );
 };

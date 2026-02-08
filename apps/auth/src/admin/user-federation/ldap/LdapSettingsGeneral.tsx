@@ -100,39 +100,43 @@ export const LdapSettingsGeneral = ({
                 />
             )}
             <FormAccess role="manage-realm" isHorizontal>
-                {/* These hidden fields are required so data object written back matches data retrieved */}
-                <input
-                    type="hidden"
-                    defaultValue="ldap"
-                    {...form.register("providerId")}
-                />
-                <input
-                    type="hidden"
-                    defaultValue="org.keycloak.storage.UserStorageProvider"
-                    {...form.register("providerType")}
-                />
-                <input
-                    type="hidden"
-                    defaultValue={realm}
-                    {...form.register("parentId")}
-                />
-                <TextControl
-                    name="name"
-                    label={t("uiDisplayName")}
-                    labelIcon={t("uiDisplayNameHelp")}
-                    defaultValue="ldap"
-                    rules={{
-                        required: t("validateName")
-                    }}
-                />
-                <FormLabel
-                    name="kc-vendor"
-                    label={t("vendor")}
-                    labelIcon={
-                        <HelpItem helpText={t("vendorHelp")} fieldLabelId="vendor" />
-                    }
-                    isRequired
-                >
+                <div className="space-y-6">
+                    {/* These hidden fields are required so data object written back matches data retrieved */}
+                    <input
+                        type="hidden"
+                        defaultValue="ldap"
+                        {...form.register("providerId")}
+                    />
+                    <input
+                        type="hidden"
+                        defaultValue="org.keycloak.storage.UserStorageProvider"
+                        {...form.register("providerType")}
+                    />
+                    <input
+                        type="hidden"
+                        defaultValue={realm}
+                        {...form.register("parentId")}
+                    />
+                    <div className="space-y-2">
+                        <TextControl
+                            name="name"
+                            label={t("uiDisplayName")}
+                            labelIcon={t("uiDisplayNameHelp")}
+                            defaultValue="ldap"
+                            rules={{
+                                required: t("validateName")
+                            }}
+                        />
+                    </div>
+                    <div className="space-y-2">
+                        <FormLabel
+                            name="kc-vendor"
+                            label={t("vendor")}
+                            labelIcon={
+                                <HelpItem helpText={t("vendorHelp")} fieldLabelId="vendor" />
+                            }
+                            isRequired
+                        >
                     <Controller
                         name="config.vendor[0]"
                         defaultValue="ad"
@@ -173,6 +177,8 @@ export const LdapSettingsGeneral = ({
                         )}
                     />
                 </FormLabel>
+                    </div>
+                </div>
             </FormAccess>
         </FormProvider>
     );

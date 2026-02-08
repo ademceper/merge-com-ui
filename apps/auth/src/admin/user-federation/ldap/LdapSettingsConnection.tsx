@@ -95,23 +95,26 @@ const edit = !!id;
                 />
             )}
             <FormAccess role="manage-realm" isHorizontal>
-                <TextControl
-                    name="config.connectionUrl.0"
-                    label={t("connectionURL")}
-                    labelIcon={t("consoleDisplayConnectionUrlHelp")}
+                <div className="space-y-6">
+                    <div className="space-y-2">
+                        <TextControl
+                            name="config.connectionUrl.0"
+                            label={t("connectionURL")}
+                            labelIcon={t("consoleDisplayConnectionUrlHelp")}
                     type="url"
                     rules={{
                         required: t("validateConnectionUrl")
                     }}
-                />
-                <div className="space-y-2">
-                    <div className="flex items-center gap-1">
-                        <Label htmlFor="kc-enable-start-tls">{t("enableStartTls")}</Label>
-                        <HelpItem
-                            helpText={t("enableStartTlsHelp")}
-                            fieldLabelId="enableStartTls"
                         />
                     </div>
+                    <div className="space-y-2">
+                        <div className="flex items-center gap-1">
+                            <Label htmlFor="kc-enable-start-tls">{t("enableStartTls")}</Label>
+                            <HelpItem
+                                helpText={t("enableStartTlsHelp")}
+                                fieldLabelId="enableStartTls"
+                            />
+                        </div>
                     <Controller
                         name="config.startTls"
                         defaultValue={["false"]}
@@ -129,12 +132,13 @@ const edit = !!id;
                             </div>
                         )}
                     />
-                </div>
-                <SelectControl
-                    id="useTruststoreSpi"
-                    name="config.useTruststoreSpi[0]"
-                    label={t("useTruststoreSpi")}
-                    labelIcon={t("useTruststoreSpiHelp")}
+                    </div>
+                    <div className="space-y-2">
+                        <SelectControl
+                            id="useTruststoreSpi"
+                            name="config.useTruststoreSpi[0]"
+                            label={t("useTruststoreSpi")}
+                            labelIcon={t("useTruststoreSpiHelp")}
                     controller={{
                         defaultValue: "always"
                     }}
@@ -142,15 +146,16 @@ const edit = !!id;
                         { key: "always", value: t("always") },
                         { key: "never", value: t("never") }
                     ]}
-                />
-                <div className="space-y-2">
-                    <div className="flex items-center gap-1">
-                        <Label htmlFor="kc-connection-pooling">{t("connectionPooling")}</Label>
-                        <HelpItem
-                            helpText={t("connectionPoolingHelp")}
-                            fieldLabelId="connectionPooling"
                         />
                     </div>
+                    <div className="space-y-2">
+                        <div className="flex items-center gap-1">
+                            <Label htmlFor="kc-connection-pooling">{t("connectionPooling")}</Label>
+                            <HelpItem
+                                helpText={t("connectionPoolingHelp")}
+                                fieldLabelId="connectionPooling"
+                            />
+                        </div>
                     <Controller
                         name="config.connectionPooling"
                         defaultValue={["true"]}
@@ -168,29 +173,31 @@ const edit = !!id;
                             </div>
                         )}
                     />
-                </div>
-                <TextControl
-                    name="config.connectionTimeout.0"
-                    label={t("connectionTimeout")}
-                    labelIcon={t("connectionTimeoutHelp")}
+                    </div>
+                    <div className="space-y-2">
+                        <TextControl
+                            name="config.connectionTimeout.0"
+                            label={t("connectionTimeout")}
+                            labelIcon={t("connectionTimeoutHelp")}
                     type="number"
-                    min={0}
-                />
-                <div>
-                    <Button
-                        variant="secondary"
-                        id="kc-test-connection-button"
+                            min={0}
+                        />
+                    </div>
+                    <div>
+                        <Button
+                            variant="secondary"
+                            id="kc-test-connection-button"
                         data-testid="test-connection-button"
                         onClick={() => testLdap("testConnection")}
-                    >
-                        {t("testConnection")}
-                    </Button>
-                </div>
-                <div className="space-y-2">
-                    <div className="flex items-center gap-1">
-                        <Label htmlFor="kc-bind-type">{t("bindType")} *</Label>
-                        <HelpItem helpText={t("bindTypeHelp")} fieldLabelId="bindType" />
+                        >
+                            {t("testConnection")}
+                        </Button>
                     </div>
+                    <div className="space-y-2">
+                        <div className="flex items-center gap-1">
+                            <Label htmlFor="kc-bind-type">{t("bindType")} *</Label>
+                            <HelpItem helpText={t("bindTypeHelp")} fieldLabelId="bindType" />
+                        </div>
                     <Controller
                         name="config.authType[0]"
                         defaultValue="simple"
@@ -216,38 +223,43 @@ const edit = !!id;
                             </KeycloakSelect>
                         )}
                     />
-                </div>
+                    </div>
 
-                {isEqual(ldapBindType, ["simple"]) && (
-                    <>
-                        <TextControl
-                            name="config.bindDn.0"
-                            label={t("bindDn")}
-                            labelIcon={t("bindDnHelp")}
-                            rules={{
-                                required: t("validateBindDn")
-                            }}
-                        />
-                        <PasswordControl
-                            name="config.bindCredential.0"
-                            label={t("bindCredentials")}
-                            labelIcon={t("bindCredentialsHelp")}
-                            hasReveal={!edit}
-                            rules={{
-                                required: t("validateBindCredentials")
-                            }}
-                        />
-                    </>
-                )}
-                <div>
-                    <Button
-                        variant="secondary"
-                        id="kc-test-auth-button"
-                        data-testid="test-auth-button"
-                        onClick={() => testLdap("testAuthentication")}
-                    >
-                        {t("testAuthentication")}
-                    </Button>
+                    {isEqual(ldapBindType, ["simple"]) && (
+                        <div className="space-y-6">
+                            <div className="space-y-2">
+                                <TextControl
+                                    name="config.bindDn.0"
+                                    label={t("bindDn")}
+                                    labelIcon={t("bindDnHelp")}
+                                    rules={{
+                                        required: t("validateBindDn")
+                                    }}
+                                />
+                            </div>
+                            <div className="space-y-2">
+                                <PasswordControl
+                                    name="config.bindCredential.0"
+                                    label={t("bindCredentials")}
+                                    labelIcon={t("bindCredentialsHelp")}
+                                    hasReveal={!edit}
+                                    rules={{
+                                        required: t("validateBindCredentials")
+                                    }}
+                                />
+                            </div>
+                        </div>
+                    )}
+                    <div>
+                        <Button
+                            variant="secondary"
+                            id="kc-test-auth-button"
+                            data-testid="test-auth-button"
+                            onClick={() => testLdap("testAuthentication")}
+                        >
+                            {t("testAuthentication")}
+                        </Button>
+                    </div>
                 </div>
             </FormAccess>
         </FormProvider>

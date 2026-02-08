@@ -1,16 +1,21 @@
 import type RealmRepresentation from "@keycloak/keycloak-admin-client/lib/defs/realmRepresentation";
-import { getErrorDescription, getErrorMessage, HelpItem,
+import {
+    getErrorDescription,
+    getErrorMessage,
+    HelpItem,
     NumberControl,
     SelectControl,
-    SwitchControl } from "../../../shared/keycloak-ui-shared";
+    SwitchControl,
+} from "../../../shared/keycloak-ui-shared";
 import { toast } from "@merge/ui/components/sonner";
-import { Button } from "@merge/ui/components/button";
 import { Badge } from "@merge/ui/components/badge";
 import { useMemo } from "react";
 import { Controller, FormProvider, useForm, useWatch } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { useAdminClient } from "../../admin-client";
 import { FormAccess } from "../../components/form/FormAccess";
+import { FixedButtonsGroup } from "../../components/form/FixedButtonGroup";
+import { FormPanel } from "../../../shared/keycloak-ui-shared";
 import { TimeSelectorControl } from "../../components/time-selector/TimeSelectorControl";
 import { useRealm } from "../../context/realm-context/RealmContext";
 import useLocaleSort from "../../utils/useLocaleSort";
@@ -82,168 +87,166 @@ const localeSort = useLocaleSort();
     };
 
     return (
-        <div className="p-6">
+        <FormProvider {...form}>
             <FormAccess
                 role="manage-realm"
                 isHorizontal
+                className="space-y-4"
                 onSubmit={handleSubmit(onSubmit)}
-                className="keycloak__otp_policies_authentication__form"
             >
-                <FormProvider {...form}>
-                    <div className="space-y-2">
-                        <div className="flex items-center gap-2">
-                            <label>{t("otpType")}</label>
-                            <HelpItem
-                                helpText={t("otpTypeHelp")}
-                                fieldLabelId="otpType"
+                <FormPanel title={t("otpPolicy")}>
+                    <div className="space-y-6">
+                        <div className="space-y-2">
+                            <div className="flex items-center gap-2">
+                                <label className="text-sm font-medium">{t("otpType")}</label>
+                                <HelpItem
+                                    helpText={t("otpTypeHelp")}
+                                    fieldLabelId="otpType"
+                                />
+                            </div>
+                            <Controller
+                                name="otpPolicyType"
+                                data-testid="otpPolicyType"
+                                defaultValue={POLICY_TYPES[0]}
+                                control={control}
+                                render={({ field: { value, onChange } }) => (
+                                    <div className="flex flex-wrap gap-4">
+                                        {POLICY_TYPES.map(type => (
+                                            <label key={type} className="flex items-center gap-2 cursor-pointer">
+                                                <input
+                                                    type="radio"
+                                                    id={type}
+                                                    data-testid={type}
+                                                    checked={value === type}
+                                                    name="otpPolicyType"
+                                                    onChange={() => onChange(type)}
+                                                />
+                                                {t(`policyType.${type}`)}
+                                            </label>
+                                        ))}
+                                    </div>
+                                )}
                             />
                         </div>
-                        <Controller
-                            name="otpPolicyType"
-                            data-testid="otpPolicyType"
-                            defaultValue={POLICY_TYPES[0]}
-                            control={control}
-                            render={({ field: { value, onChange } }) => (
-                                <>
-                                    {POLICY_TYPES.map(type => (
-                                        <label key={type} className="flex items-center gap-2">
-                                            <input
-                                                type="radio"
-                                                id={type}
-                                                data-testid={type}
-                                                checked={value === type}
-                                                name="otpPolicyType"
-                                                onChange={() => onChange(type)}
-                                            />
-                                            {t(`policyType.${type}`)}
-                                        </label>
-                                    ))}
-                                </>
-                            )}
+                        <SelectControl
+                            name="otpPolicyAlgorithm"
+                            label={t("otpHashAlgorithm")}
+                            labelIcon={t("otpHashAlgorithmHelp")}
+                            options={OTP_HASH_ALGORITHMS.map(type => ({
+                                key: `Hmac${type}`,
+                                value: type
+                            }))}
+                            controller={{ defaultValue: `Hmac${OTP_HASH_ALGORITHMS[0]}` }}
                         />
-                    </div>
-                    <SelectControl
-                        name="otpPolicyAlgorithm"
-                        label={t("otpHashAlgorithm")}
-                        labelIcon={t("otpHashAlgorithmHelp")}
-                        options={OTP_HASH_ALGORITHMS.map(type => ({
-                            key: `Hmac${type}`,
-                            value: type
-                        }))}
-                        controller={{ defaultValue: `Hmac${OTP_HASH_ALGORITHMS[0]}` }}
-                    />
-                    <div className="space-y-2">
-                        <div className="flex items-center gap-2">
-                            <label>{t("otpPolicyDigits")}</label>
-                            <HelpItem
-                                helpText={t("otpPolicyDigitsHelp")}
-                                fieldLabelId="otpPolicyDigits"
+                        <div className="space-y-2">
+                            <div className="flex items-center gap-2">
+                                <label className="text-sm font-medium">{t("otpPolicyDigits")}</label>
+                                <HelpItem
+                                    helpText={t("otpPolicyDigitsHelp")}
+                                    fieldLabelId="otpPolicyDigits"
+                                />
+                            </div>
+                            <Controller
+                                name="otpPolicyDigits"
+                                data-testid="otpPolicyDigits"
+                                defaultValue={NUMBER_OF_DIGITS[0]}
+                                control={control}
+                                render={({ field }) => (
+                                    <div className="flex flex-wrap gap-4">
+                                        {NUMBER_OF_DIGITS.map(type => (
+                                            <label key={type} className="flex items-center gap-2 cursor-pointer">
+                                                <input
+                                                    type="radio"
+                                                    id={`digit-${type}`}
+                                                    data-testid={`digit-${type}`}
+                                                    checked={field.value === type}
+                                                    name="otpPolicyDigits"
+                                                    onChange={() => field.onChange(type)}
+                                                />
+                                                {type}
+                                            </label>
+                                        ))}
+                                    </div>
+                                )}
                             />
                         </div>
-                        <Controller
-                            name="otpPolicyDigits"
-                            data-testid="otpPolicyDigits"
-                            defaultValue={NUMBER_OF_DIGITS[0]}
-                            control={control}
-                            render={({ field }) => (
-                                <>
-                                    {NUMBER_OF_DIGITS.map(type => (
-                                        <label key={type} className="flex items-center gap-2">
-                                            <input
-                                                type="radio"
-                                                id={`digit-${type}`}
-                                                data-testid={`digit-${type}`}
-                                                checked={field.value === type}
-                                                name="otpPolicyDigits"
-                                                onChange={() => field.onChange(type)}
-                                            />
-                                            {type}
-                                        </label>
-                                    ))}
-                                </>
-                            )}
-                        />
-                    </div>
-                    <NumberControl
-                        name="otpPolicyLookAheadWindow"
-                        label={t("lookAround")}
-                        labelIcon={t("lookAroundHelp")}
-                        controller={{ defaultValue: 1, rules: { min: 0 } }}
-                    />
-                    {otpType === POLICY_TYPES[0] && (
-                        <TimeSelectorControl
-                            name="otpPolicyPeriod"
-                            label={t("otpPolicyPeriod")}
-                            labelIcon={t("otpPolicyPeriodHelp")}
-                            units={["second", "minute"]}
-                            controller={{
-                                defaultValue: 30,
-                                rules: {
-                                    min: 1,
-                                    max: {
-                                        value: 120,
-                                        message: t("maxLength", {
-                                            length: "2 " + t("minutes")
-                                        })
-                                    }
-                                }
-                            }}
-                        />
-                    )}
-                    {otpType === POLICY_TYPES[1] && (
-                        <NumberControl
-                            name="otpPolicyInitialCounter"
-                            label={t("initialCounter")}
-                            labelIcon={t("initialCounterHelp")}
-                            controller={{ defaultValue: 30, rules: { min: 1, max: 120 } }}
-                        />
-                    )}
-                    <div className="space-y-2">
-                        <div className="flex items-center gap-2">
-                            <label>{t("supportedApplications")}</label>
-                            <HelpItem
-                                helpText={t("supportedApplicationsHelp")}
-                                fieldLabelId="supportedApplications"
+                        <div className="space-y-2">
+                            <NumberControl
+                                name="otpPolicyLookAheadWindow"
+                                label={t("lookAround")}
+                                labelIcon={t("lookAroundHelp")}
+                                controller={{ defaultValue: 1, rules: { min: 0 } }}
                             />
                         </div>
-                        <span data-testid="supportedApplications" className="flex flex-wrap gap-1">
-                            {supportedApplications.map(label => (
-                                <Badge key={label} variant="secondary">
-                                    {label}
-                                </Badge>
-                            ))}
-                        </span>
+                        {otpType === POLICY_TYPES[0] && (
+                            <div className="space-y-2">
+                                <TimeSelectorControl
+                                    name="otpPolicyPeriod"
+                                    label={t("otpPolicyPeriod")}
+                                    labelIcon={t("otpPolicyPeriodHelp")}
+                                    units={["second", "minute"]}
+                                    controller={{
+                                        defaultValue: 30,
+                                        rules: {
+                                            min: 1,
+                                            max: {
+                                                value: 120,
+                                                message: t("maxLength", {
+                                                    length: "2 " + t("minutes")
+                                                })
+                                            }
+                                        }
+                                    }}
+                                />
+                            </div>
+                        )}
+                        {otpType === POLICY_TYPES[1] && (
+                            <div className="space-y-2">
+                                <NumberControl
+                                    name="otpPolicyInitialCounter"
+                                    label={t("initialCounter")}
+                                    labelIcon={t("initialCounterHelp")}
+                                    controller={{ defaultValue: 30, rules: { min: 1, max: 120 } }}
+                                />
+                            </div>
+                        )}
+                        <div className="space-y-2">
+                            <div className="flex items-center gap-2">
+                                <label className="text-sm font-medium">{t("supportedApplications")}</label>
+                                <HelpItem
+                                    helpText={t("supportedApplicationsHelp")}
+                                    fieldLabelId="supportedApplications"
+                                />
+                            </div>
+                            <span data-testid="supportedApplications" className="flex flex-wrap gap-1">
+                                {supportedApplications.map(label => (
+                                    <Badge key={label} variant="secondary">
+                                        {label}
+                                    </Badge>
+                                ))}
+                            </span>
+                        </div>
+                        {otpType === POLICY_TYPES[0] && (
+                            <div className="space-y-2">
+                                <SwitchControl
+                                    name="otpPolicyCodeReusable"
+                                    label={t("otpPolicyCodeReusable")}
+                                    labelIcon={t("otpPolicyCodeReusableHelp")}
+                                    labelOn={t("on")}
+                                    labelOff={t("off")}
+                                />
+                            </div>
+                        )}
                     </div>
-
-                    {otpType === POLICY_TYPES[0] && (
-                        <SwitchControl
-                            name="otpPolicyCodeReusable"
-                            label={t("otpPolicyCodeReusable")}
-                            labelIcon={t("otpPolicyCodeReusableHelp")}
-                            labelOn={t("on")}
-                            labelOff={t("off")}
-                        />
-                    )}
-
-                    <div className="flex gap-2">
-                        <Button
-                            data-testid="save"
-                            variant="default"
-                            type="submit"
-                            disabled={!isValid || !isDirty}
-                        >
-                            {t("save")}
-                        </Button>
-                        <Button
-                            data-testid="reload"
-                            variant="link"
-                            onClick={() => reset({ ...realm })}
-                        >
-                            {t("reload")}
-                        </Button>
-                    </div>
-                </FormProvider>
+                </FormPanel>
+                <FixedButtonsGroup
+                    name="otpPolicy"
+                    reset={() => reset({ ...realm })}
+                    resetText={t("reload")}
+                    isSubmit
+                    isDisabled={!isValid || !isDirty}
+                />
             </FormAccess>
-        </div>
+        </FormProvider>
     );
 };

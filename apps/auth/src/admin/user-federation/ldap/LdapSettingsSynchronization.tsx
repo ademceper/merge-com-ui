@@ -33,9 +33,11 @@ export const LdapSettingsSynchronization = ({
             )}
 
             <FormAccess role="manage-realm" isHorizontal>
-                <FormLabel
-                    hasNoPaddingTop
-                    name="kc-import-users"
+                <div className="space-y-6">
+                    <div className="space-y-2">
+                        <FormLabel
+                            hasNoPaddingTop
+                            name="kc-import-users"
                     label={t("importUsers")}
                     labelIcon={
                         <HelpItem
@@ -58,10 +60,12 @@ export const LdapSettingsSynchronization = ({
                             />
                         )}
                     />
-                </FormLabel>
-                <FormLabel
-                    hasNoPaddingTop
-                    name="syncRegistrations"
+                        </FormLabel>
+                    </div>
+                    <div className="space-y-2">
+                        <FormLabel
+                            hasNoPaddingTop
+                            name="syncRegistrations"
                     label={t("syncRegistrations")}
                     labelIcon={
                         <HelpItem
@@ -84,16 +88,20 @@ export const LdapSettingsSynchronization = ({
                             />
                         )}
                     />
-                </FormLabel>
-                <TextControl
-                    name="config.batchSizeForSync.0"
-                    type="number"
-                    min={0}
-                    label={t("batchSize")}
-                    labelIcon={t("batchSizeHelp")}
-                />
-                <FormLabel
-                    name="kc-periodic-full-sync"
+                        </FormLabel>
+                    </div>
+                    <div className="space-y-2">
+                        <TextControl
+                            name="config.batchSizeForSync.0"
+                            type="number"
+                            min={0}
+                            label={t("batchSize")}
+                            labelIcon={t("batchSizeHelp")}
+                        />
+                    </div>
+                    <div className="space-y-2">
+                        <FormLabel
+                            name="kc-periodic-full-sync"
                     label={t("periodicFullSync")}
                     labelIcon={
                         <HelpItem
@@ -117,19 +125,23 @@ export const LdapSettingsSynchronization = ({
                             />
                         )}
                     />
-                </FormLabel>
-                {watchPeriodicSync && (
-                    <TextControl
-                        name="config.fullSyncPeriod.0"
-                        label={t("fullSyncPeriod")}
-                        labelIcon={t("fullSyncPeriodHelp")}
-                        type="number"
-                        min={-1}
-                        defaultValue={604800}
-                    />
-                )}
-                <FormLabel
-                    name="kc-periodic-changed-users-sync"
+                        </FormLabel>
+                    </div>
+                    {watchPeriodicSync && (
+                    <div className="space-y-2">
+                        <TextControl
+                            name="config.fullSyncPeriod.0"
+                            label={t("fullSyncPeriod")}
+                            labelIcon={t("fullSyncPeriodHelp")}
+                            type="number"
+                            min={-1}
+                            defaultValue={604800}
+                        />
+                    </div>
+                    )}
+                    <div className="space-y-2">
+                        <FormLabel
+                            name="kc-periodic-changed-users-sync"
                     label={t("periodicChangedUsersSync")}
                     labelIcon={
                         <HelpItem
@@ -153,19 +165,23 @@ export const LdapSettingsSynchronization = ({
                             />
                         )}
                     />
-                </FormLabel>
-                {watchChangedSync && (
-                    <TextControl
-                        name="config.changedSyncPeriod.0"
-                        label={t("changedUsersSyncPeriod")}
-                        labelIcon={t("changedUsersSyncHelp")}
-                        type="number"
-                        min={-1}
-                        defaultValue={86400}
-                    />
-                )}
-                <FormLabel
-                    name="kc-remove-invalid-users"
+                        </FormLabel>
+                    </div>
+                    {watchChangedSync && (
+                    <div className="space-y-2">
+                        <TextControl
+                            name="config.changedSyncPeriod.0"
+                            label={t("changedUsersSyncPeriod")}
+                            labelIcon={t("changedUsersSyncHelp")}
+                            type="number"
+                            min={-1}
+                            defaultValue={86400}
+                        />
+                    </div>
+                    )}
+                    <div className="space-y-2">
+                        <FormLabel
+                            name="kc-remove-invalid-users"
                     label={t("removeInvalidUsers")}
                     labelIcon={
                         <HelpItem
@@ -189,7 +205,9 @@ export const LdapSettingsSynchronization = ({
                             />
                         )}
                     />
-                </FormLabel>
+                        </FormLabel>
+                    </div>
+                </div>
             </FormAccess>
         </FormProvider>
     );

@@ -1,6 +1,8 @@
 import { NetworkError } from "@keycloak/keycloak-admin-client";
-import { KeycloakDataTable, cellWidth } from "../../shared/keycloak-ui-shared";
-import { getErrorDescription, getErrorMessage } from "../../shared/keycloak-ui-shared";
+import {
+    getErrorDescription,
+    getErrorMessage,
+} from "../../shared/keycloak-ui-shared";
 import { toast } from "@merge/ui/components/sonner";
 import { Badge } from "@merge/ui/components/badge";
 import { Button } from "@merge/ui/components/button";
@@ -10,9 +12,18 @@ import {
     DropdownMenuItem,
     DropdownMenuTrigger,
 } from "@merge/ui/components/dropdown-menu";
-import { Popover, PopoverContent, PopoverTrigger } from "@merge/ui/components/popover";
-import { DotsThreeVertical } from "@phosphor-icons/react";
-import { useState } from "react";
+import {
+    DataTable,
+    DataTableRowActions,
+    type ColumnDef,
+} from "@merge/ui/components/table";
+import {
+    Popover,
+    PopoverContent,
+    PopoverTrigger,
+} from "@merge/ui/components/popover";
+import { Trash } from "@phosphor-icons/react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Link, useNavigate } from "react-router-dom";
 import { useAdminClient } from "../admin-client";
@@ -32,6 +43,8 @@ export type RealmNameRepresentation = {
     displayName?: string;
 };
 
+type RealmRow = RealmNameRepresentation & { id: string };
+
 const RecentRealmsDropdown = () => {
     const { t } = useTranslation();
     const recentRealms = useRecentRealms();
@@ -40,7 +53,12 @@ const RecentRealmsDropdown = () => {
     return (
         <DropdownMenu>
             <DropdownMenuTrigger asChild>
-                <Button variant="outline" data-testid="kebab" aria-label="Recent realms">
+                <Button
+                    variant="outline"
+                    size="sm"
+                    data-testid="kebab"
+                    aria-label="Recent realms"
+                >
                     {t("recentRealms")}
                 </Button>
             </DropdownMenuTrigger>
@@ -55,85 +73,71 @@ const RecentRealmsDropdown = () => {
     );
 };
 
-type KebabDropdownProps = {
-    onClick: () => void;
-    isDisabled?: boolean;
-};
-
-const KebabDropdown = ({ onClick, isDisabled }: KebabDropdownProps) => {
-    const { t } = useTranslation();
-    return (
-        <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-                <Button
-                    data-testid="kebab"
-                    aria-label="Kebab toggle"
-                    variant="ghost"
-                    disabled={isDisabled}
-                >
-                    <DotsThreeVertical className="size-4" />
-                </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent>
-                <DropdownMenuItem
-                    data-testid="delete"
-                    onClick={onClick}
-                >
-                    {t("delete")}
-                </DropdownMenuItem>
-            </DropdownMenuContent>
-        </DropdownMenu>
-    );
-};
-
-type RealmRow = RealmNameRepresentation & { id: string };
-
 export default function RealmSection() {
     const { t } = useTranslation();
     const navigate = useNavigate();
     const { whoAmI } = useWhoAmI();
     const { realm } = useRealm();
     const { adminClient } = useAdminClient();
-const [selected, setSelected] = useState<RealmRow[]>([]);
+
+    const [realms, setRealms] = useState<RealmRow[]>([]);
+    const [selected, setSelected] = useState<RealmRow[]>([]);
     const [openNewRealm, setOpenNewRealm] = useState(false);
     const [key, setKey] = useState(0);
-    const refresh = () => setKey(key + 1);
+    const refresh = useCallback(() => setKey((k) => k + 1), []);
 
-    const loader = async (first?: number, max?: number, search?: string) => {
-        try {
-            const result = await fetchAdminUI<RealmNameRepresentation[]>(
-                adminClient,
-                "ui-ext/realms/names",
-                { first: `${first}`, max: `${max}`, search: search || "" }
-            );
-            return result.map(r => ({ ...r, id: r.name }));
-        } catch (error) {
-            if (error instanceof NetworkError && error.response.status < 500) {
-                return [];
+    useEffect(() => {
+        let cancelled = false;
+        (async () => {
+            try {
+                const result = await fetchAdminUI<RealmNameRepresentation[]>(
+                    adminClient,
+                    "ui-ext/realms/names",
+                    { first: "0", max: "1000" },
+                );
+                if (cancelled) return;
+                setRealms(
+                    (result ?? []).map((r) => ({ ...r, id: r.name })),
+                );
+            } catch (error) {
+                if (
+                    error instanceof NetworkError &&
+                    error.response.status < 500
+                ) {
+                    if (!cancelled) setRealms([]);
+                } else if (!cancelled) {
+                    setRealms([]);
+                }
             }
-
-            throw error;
-        }
-    };
+        })();
+        return () => {
+            cancelled = true;
+        };
+    }, [key, adminClient]);
 
     const [toggleDeleteDialog, DeleteConfirm] = useConfirmDialog({
         titleKey: t("deleteConfirmRealm", {
             count: selected.length,
-            name: selected[0]?.name
+            name: selected[0]?.name,
         }),
         messageKey: "deleteConfirmRealmSetting",
         continueButtonLabel: "delete",
+        continueButtonVariant: "destructive",
         onConfirm: async () => {
             try {
-                if (selected.filter(({ name }) => name === "master").length > 0) {
+                if (
+                    selected.filter(({ name }) => name === "master").length > 0
+                ) {
                     toast.warning(t("cantDeleteMasterRealm"));
                 }
-                const filtered = selected.filter(({ name }) => name !== "master");
+                const filtered = selected.filter(
+                    ({ name }) => name !== "master",
+                );
                 if (filtered.length === 0) return;
                 await Promise.all(
                     filtered.map(({ name: realmName }) =>
-                        adminClient.realms.del({ realm: realmName })
-                    )
+                        adminClient.realms.del({ realm: realmName }),
+                    ),
                 );
                 toast.success(t("deletedSuccessRealmSetting"));
                 if (selected.filter(({ name }) => name === realm).length > 0) {
@@ -142,10 +146,84 @@ const [selected, setSelected] = useState<RealmRow[]>([]);
                 refresh();
                 setSelected([]);
             } catch (error) {
-                toast.error(t("deleteError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
+                toast.error(
+                    t("deleteError", { error: getErrorMessage(error) }),
+                    { description: getErrorDescription(error) },
+                );
             }
-        }
+        },
     });
+
+    const columns: ColumnDef<RealmRow>[] = useMemo(
+        () => [
+            {
+                accessorKey: "name",
+                header: t("realmName"),
+                cell: ({ row }) => {
+                    const name = row.original.name;
+                    if (name !== realm) {
+                        return (
+                            <Link
+                                to={toDashboard({ realm: name })}
+                                className="font-medium text-primary hover:underline"
+                            >
+                                {name}
+                            </Link>
+                        );
+                    }
+                    return (
+                        <Popover>
+                            <PopoverTrigger asChild>
+                                <span className="inline-flex cursor-help items-center gap-1">
+                                    {name}{" "}
+                                    <Badge variant="secondary">
+                                        {t("currentRealm")}
+                                    </Badge>
+                                </span>
+                            </PopoverTrigger>
+                            <PopoverContent className="max-w-xs">
+                                {t("currentRealmExplain")}
+                            </PopoverContent>
+                        </Popover>
+                    );
+                },
+            },
+            {
+                accessorKey: "displayName",
+                header: t("displayName"),
+                cell: ({ row }) =>
+                    (translationFormatter(t)(row.original.displayName) as string) ??
+                    "-",
+            },
+            {
+                id: "actions",
+                header: "",
+                size: 50,
+                enableHiding: false,
+                cell: ({ row }) => {
+                    const data = row.original;
+                    const isMaster = data.name === "master";
+                    return (
+                        <DataTableRowActions row={row}>
+                            <button
+                                type="button"
+                                className="flex w-full items-center gap-2 rounded-md px-1.5 py-1 text-left text-sm text-destructive hover:bg-destructive/10 hover:text-destructive disabled:opacity-50"
+                                disabled={isMaster}
+                                onClick={() => {
+                                    setSelected([data]);
+                                    toggleDeleteDialog();
+                                }}
+                            >
+                                <Trash className="size-4 shrink-0" />
+                                {t("delete")}
+                            </button>
+                        </DataTableRowActions>
+                    );
+                },
+            },
+        ],
+        [t, realm, toggleDeleteDialog],
+    );
 
     return (
         <>
@@ -159,72 +237,30 @@ const [selected, setSelected] = useState<RealmRow[]>([]);
                 />
             )}
             <ViewHeader titleKey="manageRealms" divider={false} />
-            <section className="py-6 bg-muted/30 p-0">
-                <KeycloakDataTable
-                    key={key}
-                    loader={loader}
-                    isPaginated
-                    onSelect={setSelected}
-                    canSelectAll
-                    ariaLabelKey="selectRealm"
-                    searchPlaceholderKey="search"
-                    actions={[
-                        {
-                            title: t("delete"),
-                            onRowClick: selected => {
-                                setSelected([selected]);
-                                toggleDeleteDialog();
-                            }
-                        }
-                    ]}
-                    toolbarItem={
-                        <>
-                            <div>
-                                {whoAmI.createRealm && (
-                                    <Button onClick={() => setOpenNewRealm(true)} data-testid="add-realm">
-                                        {t("createRealm")}
-                                    </Button>
-                                )}
-                            </div>
-                            <div>
-                                <RecentRealmsDropdown />
-                            </div>
-                            <div>
-                                <KebabDropdown
-                                    onClick={toggleDeleteDialog}
-                                    isDisabled={selected.length === 0}
-                                />
-                            </div>
-                        </>
+            <div className="space-y-4 py-6">
+                <DataTable<RealmRow>
+                    columns={columns}
+                    data={realms}
+                    searchColumnId="name"
+                    searchPlaceholder={t("search")}
+                    emptyMessage={t("emptyRealmList")}
+                    toolbar={
+                        <div className="flex flex-wrap items-center gap-2">
+                            {whoAmI.createRealm && (
+                                <Button
+                                    onClick={() => setOpenNewRealm(true)}
+                                    data-testid="add-realm"
+                                    variant="default"
+                                    size="sm"
+                                >
+                                    {t("createRealm")}
+                                </Button>
+                            )}
+                            <RecentRealmsDropdown />
+                        </div>
                     }
-                    columns={[
-                        {
-                            name: "name",
-                            transforms: [cellWidth(20)],
-                            cellRenderer: ({ name }) =>
-                                name !== realm ? (
-                                    <Link to={toDashboard({ realm: name })}>{name}</Link>
-                                ) : (
-                                    <Popover>
-                                        <PopoverTrigger asChild>
-                                            <span className="inline-flex items-center gap-1 cursor-help">
-                                                {name} <Badge variant="secondary">{t("currentRealm")}</Badge>
-                                            </span>
-                                        </PopoverTrigger>
-                                        <PopoverContent className="max-w-xs">
-                                            {t("currentRealmExplain")}
-                                        </PopoverContent>
-                                    </Popover>
-                                )
-                        },
-                        {
-                            name: "displayName",
-                            transforms: [cellWidth(80)],
-                            cellFormatters: [translationFormatter(t)]
-                        }
-                    ]}
                 />
-            </section>
+            </div>
         </>
     );
 }

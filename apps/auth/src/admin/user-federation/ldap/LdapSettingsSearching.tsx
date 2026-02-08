@@ -30,12 +30,14 @@ export const LdapSettingsSearching = ({
             )}
 
             <FormAccess role="manage-realm" isHorizontal>
-                <SelectControl
-                    id="editMode"
-                    name="config.editMode[0]"
-                    label={t("editMode")}
-                    labelIcon={t("editModeLdapHelp")}
-                    controller={{
+                <div className="space-y-6">
+                    <div className="space-y-2">
+                        <SelectControl
+                            id="editMode"
+                            name="config.editMode[0]"
+                            label={t("editMode")}
+                            labelIcon={t("editModeLdapHelp")}
+                            controller={{
                         defaultValue: "",
                         rules: {
                             required: {
@@ -44,90 +46,110 @@ export const LdapSettingsSearching = ({
                             }
                         }
                     }}
-                    options={["", "READ_ONLY", "WRITABLE", "UNSYNCED"]}
-                />
-                <TextControl
-                    name="config.usersDn.0"
-                    label={t("usersDN")}
-                    labelIcon={t("usersDNHelp")}
-                    rules={{
+                            options={["", "READ_ONLY", "WRITABLE", "UNSYNCED"]}
+                        />
+                    </div>
+                    <div className="space-y-2">
+                        <TextControl
+                            name="config.usersDn.0"
+                            label={t("usersDN")}
+                            labelIcon={t("usersDNHelp")}
+                            rules={{
                         required: t("validateUsersDn")
                     }}
-                />
-                <TextControl
-                    name="config.relativeCreateDn.0"
-                    label={t("relativeUserCreateDn")}
-                    labelIcon={t("relativeUserCreateDnHelp")}
-                />
-                <TextControl
-                    name="config.usernameLDAPAttribute.0"
-                    label={t("usernameLdapAttribute")}
-                    labelIcon={t("usernameLdapAttributeHelp")}
-                    defaultValue="cn"
+                        />
+                    </div>
+                    <div className="space-y-2">
+                        <TextControl
+                            name="config.relativeCreateDn.0"
+                            label={t("relativeUserCreateDn")}
+                            labelIcon={t("relativeUserCreateDnHelp")}
+                        />
+                    </div>
+                    <div className="space-y-2">
+                        <TextControl
+                            name="config.usernameLDAPAttribute.0"
+                            label={t("usernameLdapAttribute")}
+                            labelIcon={t("usernameLdapAttributeHelp")}
+                            defaultValue="cn"
                     rules={{
                         required: t("validateUsernameLDAPAttribute")
                     }}
-                />
-                <TextControl
-                    name="config.rdnLDAPAttribute.0"
-                    label={t("rdnLdapAttribute")}
-                    labelIcon={t("rdnLdapAttributeHelp")}
-                    defaultValue="cn"
+                        />
+                    </div>
+                    <div className="space-y-2">
+                        <TextControl
+                            name="config.rdnLDAPAttribute.0"
+                            label={t("rdnLdapAttribute")}
+                            labelIcon={t("rdnLdapAttributeHelp")}
+                            defaultValue="cn"
                     rules={{
                         required: t("validateRdnLdapAttribute")
                     }}
-                />
-                <TextControl
-                    name="config.uuidLDAPAttribute.0"
-                    label={t("uuidLdapAttribute")}
-                    labelIcon={t("uuidLdapAttributeHelp")}
-                    defaultValue="objectGUID"
+                        />
+                    </div>
+                    <div className="space-y-2">
+                        <TextControl
+                            name="config.uuidLDAPAttribute.0"
+                            label={t("uuidLdapAttribute")}
+                            labelIcon={t("uuidLdapAttributeHelp")}
+                            defaultValue="objectGUID"
                     rules={{
                         required: t("validateUuidLDAPAttribute")
                     }}
-                />
-                <TextControl
-                    name="config.userObjectClasses.0"
-                    label={t("userObjectClasses")}
-                    labelIcon={t("userObjectClassesHelp")}
-                    defaultValue="person, organizationalPerson, user"
+                        />
+                    </div>
+                    <div className="space-y-2">
+                        <TextControl
+                            name="config.userObjectClasses.0"
+                            label={t("userObjectClasses")}
+                            labelIcon={t("userObjectClassesHelp")}
+                            defaultValue="person, organizationalPerson, user"
                     rules={{
                         required: t("validateUserObjectClasses")
                     }}
-                />
-                <TextControl
-                    name="config.customUserSearchFilter.0"
-                    label={t("userLdapFilter")}
-                    labelIcon={t("userLdapFilterHelp")}
+                        />
+                    </div>
+                    <div className="space-y-2">
+                        <TextControl
+                            name="config.customUserSearchFilter.0"
+                            label={t("userLdapFilter")}
+                            labelIcon={t("userLdapFilterHelp")}
                     rules={{
                         pattern: {
                             value: /(\(.*\))$/,
                             message: t("validateCustomUserSearchFilter")
                         }
                     }}
-                />
-                <SelectControl
-                    id="kc-search-scope"
-                    name="config.searchScope[0]"
-                    label={t("searchScope")}
-                    labelIcon={t("searchScopeHelp")}
-                    controller={{
+                        />
+                    </div>
+                    <div className="space-y-2">
+                        <SelectControl
+                            id="kc-search-scope"
+                            name="config.searchScope[0]"
+                            label={t("searchScope")}
+                            labelIcon={t("searchScopeHelp")}
+                            controller={{
                         defaultValue: "1"
                     }}
                     options={[
                         { key: "1", value: t("oneLevel") },
                         { key: "2", value: t("subtree") }
                     ]}
-                />
-                <TextControl
-                    name="config.readTimeout.0"
-                    label={t("readTimeout")}
-                    labelIcon={t("readTimeoutHelp")}
-                    type="number"
-                    min={0}
-                />
-                <FormLabel
-                    name="kc-ui-pagination"
+                        />
+                    </div>
+                    <div className="space-y-2">
+                        <TextControl
+                            name="config.readTimeout.0"
+                            label={t("readTimeout")}
+                            labelIcon={t("readTimeoutHelp")}
+                            type="number"
+                            min={0}
+                        />
+                    </div>
+                    <div className="space-y-2">
+                        <FormLabel
+                            name="kc-ui-pagination"
                     label={t("pagination")}
                     labelIcon={
                         <HelpItem
@@ -151,16 +173,20 @@ export const LdapSettingsSearching = ({
                             />
                         )}
                     />
-                </FormLabel>
-                <SelectControl
-                    name="config.referral.0"
-                    label={t("referral")}
-                    labelIcon={t("referralHelp")}
-                    controller={{
+                        </FormLabel>
+                    </div>
+                    <div className="space-y-2">
+                        <SelectControl
+                            name="config.referral.0"
+                            label={t("referral")}
+                            labelIcon={t("referralHelp")}
+                            controller={{
                         defaultValue: ""
                     }}
-                    options={["ignore", "follow"]}
-                />
+                            options={["ignore", "follow"]}
+                        />
+                    </div>
+                </div>
             </FormAccess>
         </FormProvider>
     );
