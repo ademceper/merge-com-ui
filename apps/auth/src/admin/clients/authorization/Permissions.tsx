@@ -1,8 +1,7 @@
 import type PolicyProviderRepresentation from "@keycloak/keycloak-admin-client/lib/defs/policyProviderRepresentation";
 import type PolicyRepresentation from "@keycloak/keycloak-admin-client/lib/defs/policyRepresentation";
-import { getErrorDescription, getErrorMessage, ListEmptyState,
-    PaginatingTableToolbar,
-    useFetch } from "../../../shared/keycloak-ui-shared";
+import { getErrorDescription, getErrorMessage, useFetch } from "../../../shared/keycloak-ui-shared";
+import { Empty, EmptyContent, EmptyDescription, EmptyHeader, EmptyTitle } from "@merge/ui/components/empty";
 import { toast } from "@merge/ui/components/sonner";
 import { Alert, AlertTitle } from "@merge/ui/components/alert";
 import { Button } from "@merge/ui/components/button";
@@ -21,6 +20,7 @@ import {
     TableHeader,
     TableRow,
 } from "@merge/ui/components/table";
+import { TablePagination } from "@merge/ui/components/pagination";
 import { CaretDown, CaretRight, DotsThreeVertical } from "@phosphor-icons/react";
 import { Fragment, useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -65,7 +65,7 @@ export const AuthorizationPermissions = ({
 
     const { t } = useTranslation();
     const navigate = useNavigate();
-const { realm } = useRealm();
+    const { realm } = useRealm();
 
     const [permissions, setPermissions] = useState<ExpandablePolicyRepresentation[]>();
     const [selectedPermission, setSelectedPermission] = useState<PolicyRepresentation>();
@@ -173,18 +173,9 @@ const { realm } = useRealm();
         <div className="p-0 bg-muted/30">
             <DeleteConfirm />
             {(!noData || searching) && (
-                <PaginatingTableToolbar
-                    count={permissions.length}
-                    first={first}
-                    max={max}
-                    onNextClick={setFirst}
-                    onPreviousClick={setFirst}
-                    onPerPageSelect={(first, max) => {
-                        setFirst(first);
-                        setMax(max);
-                    }}
-                    toolbarItem={
-                        <>
+                <>
+                    <div className="space-y-2">
+                        <div className="flex flex-wrap items-center gap-2">
                             <SearchDropdown
                                 types={policyProviders}
                                 search={search}
@@ -245,9 +236,20 @@ const { realm } = useRealm();
                                     )}
                                 </DropdownMenuContent>
                             </DropdownMenu>
-                        </>
-                    }
-                >
+                        </div>
+                        <TablePagination
+                            count={permissions.length}
+                            first={first}
+                            max={max}
+                            onNextClick={setFirst}
+                            onPreviousClick={setFirst}
+                            onPerPageSelect={(_first, newMax) => {
+                                setMax(newMax);
+                                setFirst(0);
+                            }}
+                            t={t}
+                        />
+                    </div>
                     {!noData && (
                         <Table aria-label={t("resources")} className="text-sm">
                             <TableHeader>
@@ -275,11 +277,11 @@ const { realm } = useRealm();
                                                             (p, index) =>
                                                                 index === rowIndex
                                                                     ? {
-                                                                          ...p,
-                                                                          isExpanded:
-                                                                              !p.isExpanded
-                                                                  }
-                                                                : p
+                                                                        ...p,
+                                                                        isExpanded:
+                                                                            !p.isExpanded
+                                                                    }
+                                                                    : p
                                                         );
                                                         setPermissions(rows);
                                                     }}
@@ -379,7 +381,7 @@ const { realm } = useRealm();
                             </TableBody>
                         </Table>
                     )}
-                </PaginatingTableToolbar>
+                </>
             )}
             {noData && !searching && (
                 <EmptyPermissionsState
@@ -389,11 +391,10 @@ const { realm } = useRealm();
                 />
             )}
             {noData && searching && (
-                <ListEmptyState
-                    isSearchVariant
-                    message={t("noSearchResults")}
-                    instructions={t("noSearchResultsInstructions")}
-                />
+                <Empty className="py-12">
+                    <EmptyHeader><EmptyTitle>{t("noSearchResults")}</EmptyTitle></EmptyHeader>
+                    <EmptyContent><EmptyDescription>{t("noSearchResultsInstructions")}</EmptyDescription></EmptyContent>
+                </Empty>
             )}
         </div>
     );

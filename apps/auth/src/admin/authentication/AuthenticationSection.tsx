@@ -131,7 +131,7 @@ export default function AuthenticationSection() {
                         <>
                             <Link
                                 to={toFlow({
-                                    realm: realm!,
+                                    realm: realmName!,
                                     id: flow.id!,
                                     usedBy: flow.usedBy?.type || "notInUse",
                                     builtIn: flow.builtIn ? "builtIn" : undefined,

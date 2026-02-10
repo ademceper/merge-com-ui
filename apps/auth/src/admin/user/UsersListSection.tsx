@@ -97,8 +97,8 @@ export function UsersListSection() {
                       header: "",
                       size: 50,
                       enableHiding: false,
-                      cell: ({ row }: { row: { original: UserRepresentation } }) => (
-                          <DataTableRowActions row={row as { original: UserRepresentation; id: string; getValue: (id: string) => unknown }}>
+                      cell: ({ row }) => (
+                          <DataTableRowActions row={row}>
                               <button
                                   type="button"
                                   className="flex w-full items-center gap-2 rounded-md px-1.5 py-1 text-left text-sm hover:bg-accent hover:text-accent-foreground"

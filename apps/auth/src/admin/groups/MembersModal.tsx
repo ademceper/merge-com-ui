@@ -1,16 +1,23 @@
 import type UserRepresentation from "@keycloak/keycloak-admin-client/lib/defs/userRepresentation";
 import { Button } from "@merge/ui/components/button";
+import { Checkbox } from "@merge/ui/components/checkbox";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@merge/ui/components/dialog";
 import { Label } from "@merge/ui/components/label";
+import { DataTable, type ColumnDef } from "@merge/ui/components/table";
+import {
+    Empty,
+    EmptyContent,
+    EmptyDescription,
+    EmptyHeader,
+    EmptyTitle
+} from "@merge/ui/components/empty";
 import { Info } from "@phosphor-icons/react";
 import { differenceBy } from "lodash-es";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useAdminClient } from "../admin-client";
 import { getErrorDescription, getErrorMessage } from "../../shared/keycloak-ui-shared";
 import { toast } from "@merge/ui/components/sonner";
-import { ListEmptyState } from "../../shared/keycloak-ui-shared";
-import { KeycloakDataTable } from "../../shared/keycloak-ui-shared";
 import { emptyFormatter } from "../util";
 
 type MemberModalProps = {
@@ -19,42 +26,74 @@ type MemberModalProps = {
     onClose: () => void;
 };
 
-const UserDetail = (user: UserRepresentation) => {
-    const { t } = useTranslation();
-    return (
-        <>
-            {user.username}{" "}
-            {!user.enabled && (
-                <Label className="text-red-500"><Info className="size-4 inline mr-1" />
-                    {t("disabled")}
-                </Label>
-            )}
-        </>
-    );
-};
-
 export const MemberModal = ({ membersQuery, onAdd, onClose }: MemberModalProps) => {
     const { adminClient } = useAdminClient();
-
     const { t } = useTranslation();
     const [selectedRows, setSelectedRows] = useState<UserRepresentation[]>([]);
+    const [users, setUsers] = useState<UserRepresentation[]>([]);
 
-    const loader = async (first?: number, max?: number, search?: string) => {
-        const members = await membersQuery(first, max);
-        const params: { [name: string]: string | number } = {
-            first: first!,
-            max: max! + members.length,
-            search: search || ""
-        };
+    useEffect(() => {
+        let cancelled = false;
+        (async () => {
+            try {
+                const members = await membersQuery(0, 100);
+                const found = await adminClient.users.find({ first: 0, max: 500, search: "" });
+                const available = differenceBy(found, members, "id").slice(0, 100);
+                if (!cancelled) setUsers(available);
+            } catch (error) {
+                if (!cancelled) {
+                    toast.error(t("noUsersFoundError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
+                    setUsers([]);
+                }
+            }
+        })();
+        return () => { cancelled = true; };
+    }, []);
 
-        try {
-            const users = await adminClient.users.find({ ...params });
-            return differenceBy(users, members, "id").slice(0, max);
-        } catch (error) {
-            toast.error(t("noUsersFoundError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
-            return [];
-        }
+    const toggleSelect = (user: UserRepresentation) => {
+        setSelectedRows(prev =>
+            prev.some(u => u.id === user.id) ? prev.filter(u => u.id !== user.id) : [...prev, user]
+        );
     };
+
+    const columns: ColumnDef<UserRepresentation>[] = [
+        {
+            id: "select",
+            header: "",
+            size: 40,
+            cell: ({ row }) => (
+                <Checkbox
+                    checked={selectedRows.some(u => u.id === row.original.id)}
+                    onCheckedChange={() => toggleSelect(row.original)}
+                />
+            )
+        },
+        {
+            accessorKey: "username",
+            header: t("username"),
+            cell: ({ row }) => (
+                <>
+                    {row.original.username}{" "}
+                    {!row.original.enabled && (
+                        <Label className="text-red-500">
+                            <Info className="size-4 inline mr-1" />
+                            {t("disabled")}
+                        </Label>
+                    )}
+                </>
+            )
+        },
+        { accessorKey: "email", header: t("email"), cell: ({ row }) => emptyFormatter()(row.original.email) as string },
+        { accessorKey: "lastName", header: t("lastName"), cell: ({ row }) => emptyFormatter()(row.original.lastName) as string },
+        { accessorKey: "firstName", header: t("firstName"), cell: ({ row }) => emptyFormatter()(row.original.firstName) as string }
+    ];
+
+    const emptyContent = (
+        <Empty className="py-12">
+            <EmptyHeader><EmptyTitle>{t("noUsersFound")}</EmptyTitle></EmptyHeader>
+            <EmptyContent><EmptyDescription>{t("emptyInstructions")}</EmptyDescription></EmptyContent>
+        </Empty>
+    );
 
     return (
         <Dialog open onOpenChange={(open) => { if (!open) onClose(); }}>
@@ -62,58 +101,19 @@ export const MemberModal = ({ membersQuery, onAdd, onClose }: MemberModalProps) 
                 <DialogHeader>
                     <DialogTitle>{t("addMember")}</DialogTitle>
                 </DialogHeader>
-                <KeycloakDataTable
-                    loader={loader}
-                    isPaginated
-                    ariaLabelKey="titleUsers"
-                    searchPlaceholderKey="searchForUser"
-                    canSelectAll
-                    onSelect={rows => setSelectedRows([...rows])}
-                    emptyState={
-                        <ListEmptyState
-                            message={t("noUsersFound")}
-                            instructions={t("emptyInstructions")}
-                        />
-                    }
-                    columns={[
-                        {
-                            name: "username",
-                            displayKey: "username",
-                            cellRenderer: UserDetail
-                        },
-                        {
-                            name: "email",
-                            displayKey: "email",
-                            cellFormatters: [emptyFormatter()]
-                        },
-                        {
-                            name: "lastName",
-                            displayKey: "lastName",
-                            cellFormatters: [emptyFormatter()]
-                        },
-                        {
-                            name: "firstName",
-                            displayKey: "firstName",
-                            cellFormatters: [emptyFormatter()]
-                        }
-                    ]}
+                <DataTable<UserRepresentation>
+                    columns={columns}
+                    data={users}
+                    searchColumnId="username"
+                    searchPlaceholder={t("searchForUser")}
+                    emptyContent={emptyContent}
+                    emptyMessage={t("noUsersFound")}
                 />
                 <DialogFooter>
-                    <Button
-                        data-testid="add"
-                        variant="default"
-                        onClick={async () => {
-                            await onAdd(selectedRows);
-                            onClose();
-                        }}
-                    >
+                    <Button data-testid="add" variant="default" disabled={selectedRows.length === 0} onClick={async () => { await onAdd(selectedRows); onClose(); }}>
                         {t("add")}
                     </Button>
-                    <Button
-                        data-testid="cancel"
-                        variant="link"
-                        onClick={onClose}
-                    >
+                    <Button data-testid="cancel" variant="link" onClick={onClose}>
                         {t("cancel")}
                     </Button>
                 </DialogFooter>

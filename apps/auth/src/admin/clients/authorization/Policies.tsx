@@ -1,8 +1,7 @@
 import type PolicyProviderRepresentation from "@keycloak/keycloak-admin-client/lib/defs/policyProviderRepresentation";
 import type PolicyRepresentation from "@keycloak/keycloak-admin-client/lib/defs/policyRepresentation";
-import { getErrorDescription, getErrorMessage, ListEmptyState,
-    PaginatingTableToolbar,
-    useFetch } from "../../../shared/keycloak-ui-shared";
+import { getErrorDescription, getErrorMessage, useFetch } from "../../../shared/keycloak-ui-shared";
+import { Empty, EmptyContent, EmptyDescription, EmptyHeader, EmptyTitle } from "@merge/ui/components/empty";
 import { toast } from "@merge/ui/components/sonner";
 import { Alert, AlertTitle } from "@merge/ui/components/alert";
 import { Button } from "@merge/ui/components/button";
@@ -20,6 +19,7 @@ import {
     TableHeader,
     TableRow,
 } from "@merge/ui/components/table";
+import { TablePagination } from "@merge/ui/components/pagination";
 import { CaretDown, CaretRight, DotsThreeVertical } from "@phosphor-icons/react";
 import { Fragment, useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -187,36 +187,22 @@ const { realm } = useRealm();
                             toggleDialog={toggleDialog}
                         />
                     )}
-                    <PaginatingTableToolbar
-                        count={policies.length}
-                        first={first}
-                        max={max}
-                        onNextClick={setFirst}
-                        onPreviousClick={setFirst}
-                        onPerPageSelect={(first, max) => {
-                            setFirst(first);
-                            setMax(max);
-                        }}
-                        toolbarItem={
-                            <>
-                                <SearchDropdown
-                                    types={policyProviders}
-                                    search={search}
-                                    onSearch={setSearch}
-                                    type="policy"
-                                />
-                                <Button
-                                    data-testid="createPolicy"
-                                    onClick={() => toggleDialog()}
-                                    disabled={isDisabled}
-                                >
-                                    {isAdminPermissionsClient
-                                        ? t("createPermissionPolicy")
-                                        : t("createPolicy")}
-                                </Button>
-                            </>
-                        }
-                    >
+                    <div className="space-y-2">
+                        <div className="flex flex-wrap items-center gap-2">
+                            <SearchDropdown types={policyProviders} search={search} onSearch={setSearch} type="policy" />
+                            <TablePagination
+                                count={policies.length}
+                                first={first}
+                                max={max}
+                                onNextClick={setFirst}
+                                onPreviousClick={setFirst}
+                                onPerPageSelect={(_first, newMax) => { setMax(newMax); setFirst(0); }}
+                                t={t}
+                            />
+                            <Button data-testid="createPolicy" onClick={() => toggleDialog()} disabled={isDisabled}>
+                                {isAdminPermissionsClient ? t("createPermissionPolicy") : t("createPolicy")}
+                            </Button>
+                        </div>
                         {!noData && (
                             <Table aria-label={t("resources")} className="text-sm">
                                 <TableHeader>
@@ -385,57 +371,45 @@ const { realm } = useRealm();
                                 </TableBody>
                             </Table>
                         )}
-                    </PaginatingTableToolbar>
+                    </div>
                 </>
             )}
             {noData && searching && (
-                <ListEmptyState
-                    isSearchVariant
-                    isDisabled={isDisabled}
-                    message={t("noSearchResults")}
-                    instructions={t("noSearchResultsInstructions")}
-                />
+                <Empty className="py-12">
+                    <EmptyHeader><EmptyTitle>{t("noSearchResults")}</EmptyTitle></EmptyHeader>
+                    <EmptyContent><EmptyDescription>{t("noSearchResultsInstructions")}</EmptyDescription></EmptyContent>
+                </Empty>
             )}
             {noData && !searching && (
                 <>
                     {newDialog && (
                         <NewPolicyDialog
-                            policyProviders={policyProviders?.filter(
-                                p => p.type !== "aggregate"
-                            )}
+                            policyProviders={policyProviders?.filter(p => p.type !== "aggregate")}
                             onSelect={p =>
                                 navigate(
                                     isAdminPermissionsClient
-                                        ? toCreatePermissionPolicy({
-                                              realm,
-                                              permissionClientId: clientId,
-                                              policyType: p.type!
-                                          })
-                                        : toCreatePolicy({
-                                              id: clientId,
-                                              realm,
-                                              policyType: p.type!
-                                          })
+                                        ? toCreatePermissionPolicy({ realm, permissionClientId: clientId, policyType: p.type! })
+                                        : toCreatePolicy({ id: clientId, realm, policyType: p.type! })
                                 )
                             }
                             toggleDialog={toggleDialog}
                         />
                     )}
-                    <ListEmptyState
-                        message={t("emptyPolicies")}
-                        instructions={
-                            isAdminPermissionsClient
-                                ? t("emptyPermissionPoliciesInstructions")
-                                : t("emptyPoliciesInstructions")
-                        }
-                        isDisabled={isDisabled}
-                        primaryActionText={
-                            isAdminPermissionsClient
-                                ? t("createPermissionPolicy")
-                                : t("createPolicy")
-                        }
-                        onPrimaryAction={() => toggleDialog()}
-                    />
+                    <Empty className="py-12">
+                        <EmptyHeader><EmptyTitle>{t("emptyPolicies")}</EmptyTitle></EmptyHeader>
+                        <EmptyContent>
+                            <EmptyDescription>
+                                {isAdminPermissionsClient
+                                    ? t("emptyPermissionPoliciesInstructions")
+                                    : t("emptyPoliciesInstructions")}
+                            </EmptyDescription>
+                            {!isDisabled && (
+                                <Button className="mt-2" onClick={() => toggleDialog()}>
+                                    {isAdminPermissionsClient ? t("createPermissionPolicy") : t("createPolicy")}
+                                </Button>
+                            )}
+                        </EmptyContent>
+                    </Empty>
                 </>
             )}
         </div>

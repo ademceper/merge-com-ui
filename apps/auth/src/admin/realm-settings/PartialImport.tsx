@@ -29,7 +29,7 @@ import { useAdminClient } from "../admin-client";
 import { getErrorDescription, getErrorMessage } from "../../shared/keycloak-ui-shared";
 import { toast } from "@merge/ui/components/sonner";
 import { JsonFileUpload } from "../components/json-file-upload/JsonFileUpload";
-import { KeycloakDataTable } from "../../shared/keycloak-ui-shared";
+import { DataTable, type ColumnDef } from "@merge/ui/components/table";
 import { useRealm } from "../context/realm-context/RealmContext";
 
 export type PartialImportProps = {
@@ -370,53 +370,35 @@ export const PartialImportDialog = (props: PartialImportProps) => {
         })}`;
     };
 
-    const loader = async (first = 0, max = 15) => {
-        if (!importResponse) {
-            return [];
-        }
+    const typeMap = new Map([
+        ["CLIENT", t("clients")],
+        ["REALM_ROLE", t("realmRoles")],
+        ["USER", t("users")],
+        ["CLIENT_ROLE", t("clientRoles")],
+        ["IDP", t("identityProviders")],
+        ["GROUP", t("groups")]
+    ]);
 
-        const last = Math.min(first + max, importResponse.results.length);
-
-        return importResponse.results.slice(first, last);
-    };
-
-    const ActionLabel = (importRecord: PartialImportResult) => {
-        switch (importRecord.action) {
-            case "ADDED":
-                return (
-                    <Badge key={importRecord.id} variant="secondary" className="bg-green-500/20 text-green-700">
-                        {t("added")}
-                    </Badge>
-                );
-            case "SKIPPED":
-                return (
-                    <Badge key={importRecord.id} variant="secondary" className="bg-orange-500/20 text-orange-700">
-                        {t("skipped")}
-                    </Badge>
-                );
-            case "OVERWRITTEN":
-                return (
-                    <Badge key={importRecord.id} variant="secondary" className="bg-purple-500/20 text-purple-700">
-                        {t("overwritten")}
-                    </Badge>
-                );
-            default:
-                return "";
-        }
-    };
-
-    const TypeRenderer = (importRecord: PartialImportResult) => {
-        const typeMap = new Map([
-            ["CLIENT", t("clients")],
-            ["REALM_ROLE", t("realmRoles")],
-            ["USER", t("users")],
-            ["CLIENT_ROLE", t("clientRoles")],
-            ["IDP", t("identityProviders")],
-            ["GROUP", t("groups")]
-        ]);
-
-        return <span>{typeMap.get(importRecord.resourceType)}</span>;
-    };
+    const partialImportColumns: ColumnDef<PartialImportResult>[] = [
+        {
+            accessorKey: "action",
+            header: t("action"),
+            cell: ({ row }) => {
+                const action = row.original.action;
+                if (action === "ADDED") return <Badge variant="secondary" className="bg-green-500/20 text-green-700">{t("added")}</Badge>;
+                if (action === "SKIPPED") return <Badge variant="secondary" className="bg-orange-500/20 text-orange-700">{t("skipped")}</Badge>;
+                if (action === "OVERWRITTEN") return <Badge variant="secondary" className="bg-purple-500/20 text-purple-700">{t("overwritten")}</Badge>;
+                return null;
+            }
+        },
+        {
+            accessorKey: "resourceType",
+            header: t("type"),
+            cell: ({ row }) => <span>{typeMap.get(row.original.resourceType)}</span>
+        },
+        { accessorKey: "resourceName", header: t("name") },
+        { accessorKey: "id", header: t("id") }
+    ];
 
     const importCompletedModal = () => {
         return (
@@ -428,39 +410,13 @@ export const PartialImportDialog = (props: PartialImportProps) => {
                     <Alert>
                         <AlertTitle>{importCompleteMessage()}</AlertTitle>
                     </Alert>
-                    <KeycloakDataTable
-                        loader={loader}
-                        isPaginated
-                        ariaLabelKey="partialImport"
-                        columns={[
-                            {
-                                name: "action",
-                                displayKey: "action",
-                                cellRenderer: ActionLabel
-                            },
-                            {
-                                name: "resourceType",
-                                displayKey: "type",
-                                cellRenderer: TypeRenderer
-                            },
-                            {
-                                name: "resourceName",
-                                displayKey: "name"
-                            },
-                            {
-                                name: "id",
-                                displayKey: "id"
-                            }
-                        ]}
+                    <DataTable<PartialImportResult>
+                        columns={partialImportColumns}
+                        data={importResponse?.results ?? []}
+                        emptyMessage={t("noResults")}
                     />
                     <DialogFooter>
-                        <Button
-                            id="modal-close"
-                            data-testid="close-button"
-                            onClick={() => {
-                                props.toggleDialog();
-                            }}
-                        >
+                        <Button id="modal-close" data-testid="close-button" onClick={() => props.toggleDialog()}>
                             {t("close")}
                         </Button>
                     </DialogFooter>

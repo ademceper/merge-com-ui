@@ -22,7 +22,14 @@ import type EvaluationResultRepresentation from "@keycloak/keycloak-admin-client
 import type PolicyEvaluationResponse from "@keycloak/keycloak-admin-client/lib/defs/policyEvaluationResponse";
 import useToggle from "../../../utils/useToggle";
 import { FixedButtonsGroup } from "../../../components/form/FixedButtonGroup";
-import { ListEmptyState } from "../../../../shared/keycloak-ui-shared";
+import {
+    Empty,
+    EmptyContent,
+    EmptyDescription,
+    EmptyHeader,
+    EmptyMedia,
+    EmptyTitle
+} from "@merge/ui/components/empty";
 import { AuthorizationDataModal } from "../AuthorizationDataModal";
 import { AuthorizationEvaluateResource } from "../AuthorizationEvaluateResource";
 
@@ -162,11 +169,17 @@ export const Results = ({ evaluateResult, refresh, back }: ResultProps) => {
             {(noFilteredData || noEvaluatedData) && (
                 <>
                     <Separator />
-                    <ListEmptyState
-                        isSearchVariant
-                        message={t("noSearchResults")}
-                        instructions={t("noSearchResultsInstructions")}
-                    />
+                    <Empty className="py-12">
+                        <EmptyHeader>
+                            <EmptyMedia variant="icon">
+                                <MagnifyingGlass className="size-4" />
+                            </EmptyMedia>
+                            <EmptyTitle>{t("noSearchResults")}</EmptyTitle>
+                        </EmptyHeader>
+                        <EmptyContent>
+                            <EmptyDescription>{t("noSearchResultsInstructions")}</EmptyDescription>
+                        </EmptyContent>
+                    </Empty>
                 </>
             )}
             <form onSubmit={e => e.preventDefault()}>

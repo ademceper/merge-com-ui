@@ -20,7 +20,7 @@ export const BooleanComponent = ({
     const { control } = useFormContext();
 
     const isOn = (value: unknown) =>
-        value === "true" || value === true || value?.[0] === "true";
+        value === "true" || value === true || (Array.isArray(value) && value[0] === "true");
 
     return (
         <div className="space-y-2">

@@ -1,10 +1,15 @@
 import type GroupRepresentation from "@keycloak/keycloak-admin-client/lib/defs/groupRepresentation";
 import type UserRepresentation from "@keycloak/keycloak-admin-client/lib/defs/userRepresentation";
 import { SubGroupQuery } from "@keycloak/keycloak-admin-client/lib/resources/groups";
-import { getErrorDescription, getErrorMessage, Action,
-    KeycloakDataTable,
-    ListEmptyState,
-    useFetch } from "../../shared/keycloak-ui-shared";
+import { getErrorDescription, getErrorMessage, useFetch } from "../../shared/keycloak-ui-shared";
+import { DataTable, DataTableRowActions } from "@merge/ui/components/table";
+import {
+    Empty,
+    EmptyContent,
+    EmptyDescription,
+    EmptyHeader,
+    EmptyTitle
+} from "@merge/ui/components/empty";
 import { toast } from "@merge/ui/components/sonner";
 import { Button } from "@merge/ui/components/button";
 import { Checkbox } from "@merge/ui/components/checkbox";
@@ -52,7 +57,7 @@ const location = useLocation();
     const { currentGroup: group } = useSubGroups();
     const [currentGroup, setCurrentGroup] = useState<GroupRepresentation>();
     const [addMembers, setAddMembers] = useState(false);
-    const [_isKebabOpen, setIsKebabOpen] = useState(false);
+    const [_isKebabOpen, _setIsKebabOpen] = useState(false);
     const [selectedRows, setSelectedRows] = useState<UserRepresentation[]>([]);
     const [selectedUser, setSelectedUser] = useState<UserRepresentation>();
     const [showMemberships, toggleShowMemberships] = useToggle();
@@ -89,38 +94,23 @@ const location = useLocation();
         return nestedGroups;
     };
 
-    const loader = async (first?: number, max?: number) => {
-        if (!id) {
-            return [];
-        }
+    const [members, setMembers] = useState<UserRepresentation[]>([]);
 
-        let members = await adminClient.groups.listMembers({
-            id: id!,
-            briefRepresentation: true,
-            first,
-            max
-        });
-
-        if (includeSubGroup && currentGroup?.subGroupCount && currentGroup.id) {
-            const subGroups = await getSubGroups(
-                currentGroup.id,
-                currentGroup.subGroupCount
-            );
-            await Promise.all(
-                subGroups.map(g =>
-                    adminClient.groups.listMembers({
-                        id: g.id!,
-                        briefRepresentation: true
-                    })
-                )
-            ).then((values: UserRepresentation[][]) => {
-                values.forEach(users => (members = members.concat(users)));
-            });
-            members = uniqBy(members, member => member.username);
-        }
-
-        return members;
-    };
+    useFetch(
+        async () => {
+            if (!id) return [];
+            let list = await adminClient.groups.listMembers({ id: id!, briefRepresentation: true, first: 0, max: 500 });
+            if (includeSubGroup && currentGroup?.subGroupCount && currentGroup.id) {
+                const subGroups = await getSubGroups(currentGroup.id, currentGroup.subGroupCount);
+                const values = await Promise.all(subGroups.map(g => adminClient.groups.listMembers({ id: g.id!, briefRepresentation: true })));
+                values.forEach(users => (list = list.concat(users)));
+                list = uniqBy(list, member => member.username);
+            }
+            return list;
+        },
+        setMembers,
+        [id, key, includeSubGroup, currentGroup?.id, currentGroup?.subGroupCount]
+    );
 
     if (!currentGroup) {
         return <KeycloakSpinner />;
@@ -162,26 +152,75 @@ const location = useLocation();
                     user={selectedUser!}
                 />
             )}
-            <KeycloakDataTable
+            <DataTable<UserRepresentation>
                 data-testid="members-table"
                 key={`${id}${key}${includeSubGroup}`}
-                loader={loader}
-                ariaLabelKey="members"
-                isPaginated
-                canSelectAll
-                onSelect={rows => setSelectedRows([...rows])}
-                toolbarItem={
+                columns={[
+                    {
+                        id: "select",
+                        header: "",
+                        size: 40,
+                        cell: ({ row }) => (
+                            <Checkbox
+                                checked={selectedRows.some(s => s.id === row.original.id)}
+                                onCheckedChange={() =>
+                                    setSelectedRows(prev =>
+                                        prev.some(s => s.id === row.original.id)
+                                            ? prev.filter(s => s.id !== row.original.id)
+                                            : [...prev, row.original]
+                                    )
+                                }
+                            />
+                        )
+                    },
+                    { accessorKey: "username", header: t("name"), cell: ({ row }) => <UserDetailLink {...row.original} /> },
+                    { accessorKey: "email", header: t("email"), cell: ({ getValue }) => emptyFormatter()(getValue()) },
+                    { accessorKey: "firstName", header: t("firstName"), cell: ({ getValue }) => emptyFormatter()(getValue()) },
+                    { accessorKey: "lastName", header: t("lastName"), cell: ({ getValue }) => emptyFormatter()(getValue()) },
+                    {
+                        id: "actions",
+                        cell: ({ row }) => (
+                            <DataTableRowActions row={row}>
+                                {isManager && (
+                                    <DropdownMenuItem
+                                        onClick={async () => {
+                                            try {
+                                                await adminClient.users.delFromGroup({ id: row.original.id!, groupId: id! });
+                                                toast.success(t("usersLeft", { count: 1 }));
+                                            } catch (error) {
+                                                toast.error(t("usersLeftError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
+                                            }
+                                            refresh();
+                                        }}
+                                    >
+                                        {t("leave")}
+                                    </DropdownMenuItem>
+                                )}
+                                <DropdownMenuItem onClick={() => { setSelectedUser(row.original); toggleShowMemberships(); }}>
+                                    {t("showMemberships")}
+                                </DropdownMenuItem>
+                            </DataTableRowActions>
+                        )
+                    }
+                ]}
+                data={members}
+                searchColumnId="username"
+                searchPlaceholder={t("search")}
+                emptyContent={
+                    <Empty className="py-12">
+                        <EmptyHeader><EmptyTitle>{t("noUsersFound")}</EmptyTitle></EmptyHeader>
+                        <EmptyContent>
+                            <EmptyDescription>{isManager ? t("emptyInstructions") : undefined}</EmptyDescription>
+                            {isManager && <Button className="mt-2" onClick={() => setAddMembers(true)}>{t("addMember")}</Button>}
+                            <Button variant="outline" className="mt-2 ml-2" onClick={() => setIncludeSubGroup(true)}>{t("includeSubGroups")}</Button>
+                        </EmptyContent>
+                    </Empty>
+                }
+                emptyMessage={t("noUsersFound")}
+                toolbar={
                     isManager && (
                         <>
-                            <div>
-                                <Button
-                                    data-testid="addMember"
-                                    variant="default"
-                                    onClick={() => setAddMembers(true)}
-                                >
-                                    {t("addMember")}
-                                </Button>
-                            </div>
+                            <Button data-testid="addMember" variant="default" onClick={() => setAddMembers(true)}>{t("addMember")}</Button>
                             <div className="flex items-center gap-2">
                                 <Checkbox
                                     data-testid="includeSubGroupsCheck"
@@ -191,115 +230,30 @@ const location = useLocation();
                                 />
                                 <label htmlFor="kc-include-sub-groups">{t("includeSubGroups")}</label>
                             </div>
-                            <div>
-                                <DropdownMenu>
-                                    <DropdownMenuTrigger asChild>
-                                        <Button
-                                            data-testid="kebab"
-                                            variant="ghost"
-                                            disabled={selectedRows.length === 0}
-                                            aria-label="Actions"
-                                        >
-                                            <DotsThreeVertical className="size-4" />
-                                        </Button>
-                                    </DropdownMenuTrigger>
-                                    <DropdownMenuContent>
-                                        <DropdownMenuItem
-                                            key="action"
-                                            onClick={async () => {
-                                                try {
-                                                    await Promise.all(
-                                                        selectedRows.map(user =>
-                                                            adminClient.users.delFromGroup(
-                                                                {
-                                                                    id: user.id!,
-                                                                    groupId: id!
-                                                                }
-                                                            )
-                                                        )
-                                                    );
-                                                    setIsKebabOpen(false);
-                                                    toast.success(t("usersLeft", {
-                                                            count: selectedRows.length
-                                                        }));
-                                                } catch (error) {
-                                                    toast.error(t("usersLeftError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
-                                                }
-
-                                                refresh();
-                                            }}
-                                        >
-                                            {t("leave")}
-                                        </DropdownMenuItem>
-                                    </DropdownMenuContent>
-                                </DropdownMenu>
-                            </div>
+                            <DropdownMenu>
+                                <DropdownMenuTrigger asChild>
+                                    <Button data-testid="kebab" variant="ghost" disabled={selectedRows.length === 0} aria-label="Actions">
+                                        <DotsThreeVertical className="size-4" />
+                                    </Button>
+                                </DropdownMenuTrigger>
+                                <DropdownMenuContent>
+                                    <DropdownMenuItem
+                                        onClick={async () => {
+                                            try {
+                                                await Promise.all(selectedRows.map(user => adminClient.users.delFromGroup({ id: user.id!, groupId: id! })));
+                                                toast.success(t("usersLeft", { count: selectedRows.length }));
+                                            } catch (error) {
+                                                toast.error(t("usersLeftError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
+                                            }
+                                            refresh();
+                                        }}
+                                    >
+                                        {t("leave")}
+                                    </DropdownMenuItem>
+                                </DropdownMenuContent>
+                            </DropdownMenu>
                         </>
                     )
-                }
-                actions={[
-                    ...(isManager
-                        ? [
-                              {
-                                  title: t("leave"),
-                                  onRowClick: async user => {
-                                      try {
-                                          await adminClient.users.delFromGroup({
-                                              id: user.id!,
-                                              groupId: id!
-                                          });
-                                          toast.success(t("usersLeft", { count: 1 }));
-                                      } catch (error) {
-                                          toast.error(t("usersLeftError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
-                                      }
-                                      return true;
-                                  }
-                              } as Action<UserRepresentation>
-                          ]
-                        : []),
-                    {
-                        title: t("showMemberships"),
-                        onRowClick: user => {
-                            setSelectedUser(user);
-                            toggleShowMemberships();
-                        }
-                    } as Action<UserRepresentation>
-                ]}
-                columns={[
-                    {
-                        name: "username",
-                        displayKey: "name",
-                        cellRenderer: UserDetailLink
-                    },
-                    {
-                        name: "email",
-                        displayKey: "email",
-                        cellFormatters: [emptyFormatter()]
-                    },
-                    {
-                        name: "firstName",
-                        displayKey: "firstName",
-                        cellFormatters: [emptyFormatter()]
-                    },
-                    {
-                        name: "lastName",
-                        displayKey: "lastName",
-                        cellFormatters: [emptyFormatter()]
-                    }
-                ]}
-                emptyState={
-                    <ListEmptyState
-                        message={t("noUsersFound")}
-                        instructions={isManager ? t("emptyInstructions") : undefined}
-                        primaryActionText={isManager ? t("addMember") : undefined}
-                        onPrimaryAction={() => setAddMembers(true)}
-                        secondaryActions={[
-                            {
-                                text: t("includeSubGroups"),
-                                onClick: () => setIncludeSubGroup(true)
-                            }
-                        ]}
-                    />
                 }
             />
         </>

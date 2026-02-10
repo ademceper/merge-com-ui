@@ -8,13 +8,17 @@ import {
     DropdownMenuItem,
     DropdownMenuTrigger
 } from "@merge/ui/components/dropdown-menu";
-import { ArrowRight, DotsThreeVertical } from "@phosphor-icons/react";
+import {
+    Popover,
+    PopoverContent,
+    PopoverTrigger
+} from "@merge/ui/components/popover";
+import { ArrowRight, CaretDown, DotsThreeVertical } from "@phosphor-icons/react";
 import { ReactNode, useState } from "react";
 import { useTranslation } from "react-i18next";
 
 import { useAccess } from "../../context/access/Access";
 import { SearchDropdown, SearchType } from "../../user/details/SearchFilter";
-import DropdownPanel from "../dropdown-panel/DropdownPanel";
 import { UserFilter } from "./UserDataTable";
 import { UserDataTableAttributeSearchForm } from "./UserDataTableAttributeSearchForm";
 
@@ -115,25 +119,32 @@ export function UserDataTableToolbarItems({
     const attributeSearchInput = () => {
         return (
             <>
-                <DropdownPanel
-                    data-testid="select-attributes-dropdown"
-                    buttonText={t("selectAttributes")}
-                    setSearchDropdownOpen={setSearchDropdownOpen}
-                    searchDropdownOpen={searchDropdownOpen}
-                    width="15vw"
-                >
-                    <UserDataTableAttributeSearchForm
-                        activeFilters={activeFilters}
-                        setActiveFilters={setActiveFilters}
-                        profile={profile}
-                        createAttributeSearchChips={createAttributeSearchChips}
-                        clearAllFilters={clearAllFilters}
-                        searchUserWithAttributes={() => {
-                            searchUserWithAttributes();
-                            setSearchDropdownOpen(false);
-                        }}
-                    />
-                </DropdownPanel>
+                <Popover open={searchDropdownOpen} onOpenChange={setSearchDropdownOpen}>
+                    <PopoverTrigger asChild>
+                        <Button
+                            variant="outline"
+                            className="min-w-[15vw] justify-between"
+                            aria-label={t("selectAttributes")}
+                            data-testid="select-attributes-dropdown"
+                        >
+                            {t("selectAttributes")}
+                            <CaretDown className="size-4 opacity-50" />
+                        </Button>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-[min(90vw,400px)] max-h-[85vh] overflow-auto p-4" align="start">
+                        <UserDataTableAttributeSearchForm
+                            activeFilters={activeFilters}
+                            setActiveFilters={setActiveFilters}
+                            profile={profile}
+                            createAttributeSearchChips={createAttributeSearchChips}
+                            clearAllFilters={clearAllFilters}
+                            searchUserWithAttributes={() => {
+                                searchUserWithAttributes();
+                                setSearchDropdownOpen(false);
+                            }}
+                        />
+                    </PopoverContent>
+                </Popover>
                 <Button
                     variant="outline"
                     onClick={() => {

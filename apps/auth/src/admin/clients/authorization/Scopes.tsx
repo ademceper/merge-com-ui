@@ -1,10 +1,9 @@
 import type PolicyRepresentation from "@keycloak/keycloak-admin-client/lib/defs/policyRepresentation";
 import type ScopeRepresentation from "@keycloak/keycloak-admin-client/lib/defs/scopeRepresentation";
-import {
-    ListEmptyState,
-    PaginatingTableToolbar,
-    useFetch
-} from "../../../shared/keycloak-ui-shared";
+import { useFetch } from "../../../shared/keycloak-ui-shared";
+import { Empty, EmptyContent, EmptyDescription, EmptyHeader, EmptyTitle } from "@merge/ui/components/empty";
+import { Input } from "@merge/ui/components/input";
+import { MagnifyingGlass } from "@phosphor-icons/react";
 import { Button } from "@merge/ui/components/button";
 import {
     DropdownMenu,
@@ -20,10 +19,11 @@ import {
     TableHeader,
     TableRow,
 } from "@merge/ui/components/table";
+import { TablePagination } from "@merge/ui/components/pagination";
 import { CaretDown, CaretRight, DotsThreeVertical } from "@phosphor-icons/react";
 import { Fragment, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { useAdminClient } from "../../admin-client";
 import { KeycloakSpinner } from "../../../shared/keycloak-ui-shared";
 import { useRealm } from "../../context/realm-context/RealmContext";
@@ -55,7 +55,6 @@ export const AuthorizationScopes = ({ clientId, isDisabled = false }: ScopesProp
     const { adminClient } = useAdminClient();
 
     const { t } = useTranslation();
-    const navigate = useNavigate();
     const { realm } = useRealm();
 
     const [deleteDialog, toggleDeleteDialog] = useToggle();
@@ -155,30 +154,30 @@ export const AuthorizationScopes = ({ clientId, isDisabled = false }: ScopesProp
                 refresh={refresh}
             />
             {(!noData || searching) && (
-                <PaginatingTableToolbar
-                    count={scopes.length}
-                    first={first}
-                    max={max}
-                    onNextClick={setFirst}
-                    onPreviousClick={setFirst}
-                    onPerPageSelect={(first, max) => {
-                        setFirst(first);
-                        setMax(max);
-                    }}
-                    inputGroupName="search"
-                    inputGroupPlaceholder={t("searchByName")}
-                    inputGroupOnEnter={setSearch}
-                    toolbarItem={
-                        <Button
-                            data-testid="createAuthorizationScope"
-                            asChild
-                        >
-                            <Link to={toNewScope({ realm, id: clientId })}>
-                                {t("createAuthorizationScope")}
-                            </Link>
+                <div className="space-y-2">
+                    <div className="flex flex-wrap items-center gap-2">
+                        <div className="flex flex-1 min-w-0 items-center gap-1 rounded-lg border border-input bg-transparent px-2">
+                            <MagnifyingGlass className="text-muted-foreground size-4 shrink-0" />
+                            <Input
+                                placeholder={t("searchByName")}
+                                defaultValue={search}
+                                className="border-0 bg-transparent shadow-none focus-visible:ring-0 flex-1 min-w-0"
+                                onKeyDown={(e) => { if (e.key === "Enter") setSearch((e.target as HTMLInputElement).value); }}
+                            />
+                        </div>
+                        <TablePagination
+                            count={scopes.length}
+                            first={first}
+                            max={max}
+                            onNextClick={setFirst}
+                            onPreviousClick={setFirst}
+                            onPerPageSelect={(_first, newMax) => { setMax(newMax); setFirst(0); }}
+                            t={t}
+                        />
+                        <Button data-testid="createAuthorizationScope" asChild>
+                            <Link to={toNewScope({ realm, id: clientId })}>{t("createAuthorizationScope")}</Link>
                         </Button>
-                    }
-                >
+                    </div>
                     {!noData && (
                         <Table aria-label={t("scopes")} className="text-sm">
                             <TableHeader>
@@ -312,24 +311,20 @@ export const AuthorizationScopes = ({ clientId, isDisabled = false }: ScopesProp
                             </TableBody>
                         </Table>
                     )}
-                </PaginatingTableToolbar>
+                </div>
             )}
             {noData && !searching && (
-                <ListEmptyState
-                    message={t("emptyAuthorizationScopes")}
-                    instructions={t("emptyAuthorizationInstructions")}
-                    isDisabled={isDisabled}
-                    onPrimaryAction={() => navigate(toNewScope({ id: clientId, realm }))}
-                    primaryActionText={t("createAuthorizationScope")}
-                />
+                <Empty className="py-12">
+                    <EmptyHeader><EmptyTitle>{t("emptyAuthorizationScopes")}</EmptyTitle></EmptyHeader>
+                    <EmptyContent><EmptyDescription>{t("emptyAuthorizationInstructions")}</EmptyDescription></EmptyContent>
+                    {!isDisabled && <Button className="mt-2" asChild><Link to={toNewScope({ id: clientId, realm })}>{t("createAuthorizationScope")}</Link></Button>}
+                </Empty>
             )}
             {noData && searching && (
-                <ListEmptyState
-                    isSearchVariant
-                    isDisabled={isDisabled}
-                    message={t("noSearchResults")}
-                    instructions={t("noSearchResultsInstructions")}
-                />
+                <Empty className="py-12">
+                    <EmptyHeader><EmptyTitle>{t("noSearchResults")}</EmptyTitle></EmptyHeader>
+                    <EmptyContent><EmptyDescription>{t("noSearchResultsInstructions")}</EmptyDescription></EmptyContent>
+                </Empty>
             )}
         </div>
     );

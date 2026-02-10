@@ -53,9 +53,11 @@ export const TimeSelector = ({
     onChange,
     className,
     min,
+    max,
     menuAppendTo,
     validated: _validated,
     fullWidth = false,
+    children: _children,
     ...rest
 }: TimeSelectorProps) => {
     const { t } = useTranslation();
@@ -114,12 +116,15 @@ export const TimeSelector = ({
         <div className={`flex gap-4 ${fullWidth ? "w-full" : ""} ${className || ""}`}>
             <div className={fullWidth ? "flex-1 min-w-0" : ""}>
                 <NumberInput
-                    {...rest}
-                    aria-label="kc-time"
-                    min={min || 0}
-                    value={timeValue}
-                    className={`${className || ""}-input ${fullWidth ? "w-full" : ""}`}
-                    onChange={(v) => updateTimeout(v)}
+                    {...({
+                        ...rest,
+                        "aria-label": "kc-time",
+                        min: min !== undefined && min !== "" ? Number(min) : 0,
+                        max: max !== undefined && max !== "" ? Number(max) : undefined,
+                        value: timeValue,
+                        className: `${className || ""}-input ${fullWidth ? "w-full" : ""}`,
+                        onChange: (v: number | "") => updateTimeout(v)
+                    } as React.ComponentProps<typeof NumberInput>)}
                 />
             </div>
             <div id={`${className || ""}-select-menu`} className={fullWidth ? "shrink-0" : ""}>

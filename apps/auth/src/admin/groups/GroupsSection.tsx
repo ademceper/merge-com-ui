@@ -284,7 +284,11 @@ export default function GroupsSection() {
                                 )}
                             </Tabs>
                         )}
-                        {subGroups.length === 0 && <GroupTable key={key} refresh={refresh} />}
+                        {subGroups.length === 0 && (
+                            <div className="mt-4">
+                                <GroupTable key={key} refresh={refresh} />
+                            </div>
+                        )}
                     </div>
                 </SidebarProvider>
             </div>

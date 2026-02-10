@@ -1,10 +1,8 @@
 import type FederatedIdentityRepresentation from "@keycloak/keycloak-admin-client/lib/defs/federatedIdentityRepresentation";
 import type IdentityProviderRepresentation from "@keycloak/keycloak-admin-client/lib/defs/identityProviderRepresentation";
-import type { IdentityProvidersQuery } from "@keycloak/keycloak-admin-client/lib/resources/identityProviders";
 import { KeycloakSpinner } from "../../shared/keycloak-ui-shared";
 import { Button } from "@merge/ui/components/button";
 import { Badge } from "@merge/ui/components/badge";
-import { cellWidth } from "../../shared/keycloak-ui-shared";
 import { capitalize } from "lodash-es";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -14,7 +12,8 @@ import { useAdminClient } from "../admin-client";
 import { getErrorDescription, getErrorMessage, useFetch } from "../../shared/keycloak-ui-shared";
 import { toast } from "@merge/ui/components/sonner";
 import { useConfirmDialog } from "../components/confirm-dialog/ConfirmDialog";
-import { KeycloakDataTable } from "../../shared/keycloak-ui-shared";
+import { DataTable, type ColumnDef } from "@merge/ui/components/table";
+import { Empty, EmptyHeader, EmptyTitle } from "@merge/ui/components/empty";
 import { useRealm } from "../context/realm-context/RealmContext";
 import { useServerInfo } from "../context/server-info/ServerInfoProvider";
 import { toIdentityProvider } from "../identity-providers/routes/IdentityProvider";
@@ -77,23 +76,6 @@ const { t } = useTranslation();
         }
 
         return allFedIds;
-    };
-
-    const linkedIdPsLoader = async () => {
-        return getFederatedIdentities();
-    };
-
-    const availableIdPsLoader = async (first?: number, max?: number, search?: string) => {
-        const params: IdentityProvidersQuery = {
-            first: first!,
-            max: max!,
-            realmOnly: false,
-            capability: "USER_LINKING"
-        };
-        if (search) {
-            params.search = search;
-        }
-        return await adminClient.identityProviders.find(params);
     };
 
     const [toggleUnlinkDialog, UnlinkConfirm] = useConfirmDialog({
@@ -194,43 +176,25 @@ const { t } = useTranslation();
         );
     };
 
-    const linkedIdpColumns = () => {
-        const columns = [
-            {
-                name: "identityProvider",
-                displayKey: "name",
-                cellRenderer: idpLinkRenderer,
-                transforms: [cellWidth(20)]
-            },
-            {
-                name: "userId",
-                displayKey: "userID",
-                cellFormatters: [emptyFormatter()],
-                transforms: [cellWidth(30)]
-            },
-            {
-                name: "userName",
-                displayKey: "username",
-                cellFormatters: [emptyFormatter()],
-                transforms: [cellWidth(20)]
-            },
-            {
-                name: "",
-                cellRenderer: unlinkRenderer,
-                transforms: [cellWidth(20)]
-            }
-        ];
+    const [linkedIdPs, setLinkedIdPs] = useState<WithProviderId[]>([]);
+    useFetch(() => getFederatedIdentities(), setLinkedIdPs, [userId, key]);
 
-        if (canQueryIDPDetails)
-            columns.splice(1, 0, {
-                name: "type",
-                displayKey: "type",
-                cellRenderer: badgeRenderer1,
-                transforms: [cellWidth(10)]
-            });
+    const linkedColumns: ColumnDef<WithProviderId>[] = [
+        { accessorKey: "identityProvider", header: t("name"), cell: ({ row }) => idpLinkRenderer(row.original) },
+        ...(canQueryIDPDetails ? [{ accessorKey: "type", header: t("type"), cell: ({ row }) => badgeRenderer1(row.original) }] as ColumnDef<WithProviderId>[] : []),
+        { accessorKey: "userId", header: t("userID"), cell: ({ getValue }) => emptyFormatter()(getValue()) },
+        { accessorKey: "userName", header: t("username"), cell: ({ getValue }) => emptyFormatter()(getValue()) },
+        { id: "unlink", header: "", cell: ({ row }) => unlinkRenderer(row.original) }
+    ];
 
-        return columns;
-    };
+    const [availableIdPs, setAvailableIdPs] = useState<IdentityProviderRepresentation[]>([]);
+    useFetch(() => adminClient.identityProviders.find({ first: 0, max: 500, realmOnly: false, capability: "USER_LINKING" }), setAvailableIdPs, [key]);
+
+    const availableColumns: ColumnDef<IdentityProviderRepresentation>[] = [
+        { accessorKey: "alias", header: t("name"), cell: ({ getValue }) => upperCaseFormatter()(emptyFormatter()(getValue())) },
+        { accessorKey: "type", header: t("type"), cell: ({ row }) => badgeRenderer2(row.original) },
+        { id: "link", header: "", cell: ({ row }) => linkRenderer(row.original) }
+    ];
 
     return (
         <>
@@ -245,64 +209,39 @@ const { t } = useTranslation();
             <UnlinkConfirm />
             <div className="p-0">
                 <FormPanel title={t("linkedIdPs")} className="kc-linked-idps">
-                    <p className="kc-available-idps-text">
-                        {t("linkedIdPsText")}
-                    </p>
-                    <KeycloakDataTable
-                        loader={linkedIdPsLoader}
+                    <p className="kc-available-idps-text">{t("linkedIdPsText")}</p>
+                    <DataTable<WithProviderId>
                         key={key}
-                        isPaginated={false}
-                        ariaLabelKey="LinkedIdPs"
-                        className="kc-linked-IdPs-table"
-                        columns={linkedIdpColumns()}
-                        emptyState={
-                            <p className="kc-no-providers-text">
-                                {t("noProvidersLinked")}
-                            </p>
+                        columns={linkedColumns}
+                        data={linkedIdPs}
+                        emptyContent={
+                            <Empty className="py-8">
+                                <EmptyHeader><EmptyTitle>{t("noProvidersLinked")}</EmptyTitle></EmptyHeader>
+                            </Empty>
                         }
+                        emptyMessage={t("noProvidersLinked")}
+                        className="kc-linked-IdPs-table"
                     />
                 </FormPanel>
                 {hasAccess("manage-users") && canQueryIDPDetails && (
                     <FormPanel className="kc-available-idps" title={t("availableIdPs")}>
-                        <p className="kc-available-idps-text">
-                            {t("availableIdPsText")}
-                        </p>
+                        <p className="kc-available-idps-text">{t("availableIdPsText")}</p>
                         {isLoading ? (
                             <KeycloakSpinner />
                         ) : (
-                            <KeycloakDataTable
-                                loader={availableIdPsLoader}
+                            <DataTable<IdentityProviderRepresentation>
                                 key={key}
-                                isPaginated
-                                searchPlaceholderKey="searchForProvider"
-                                ariaLabelKey="LinkedIdPs"
-                                className="kc-linked-IdPs-table"
-                                columns={[
-                                    {
-                                        name: "alias",
-                                        displayKey: "name",
-                                        cellFormatters: [
-                                            emptyFormatter(),
-                                            upperCaseFormatter()
-                                        ],
-                                        transforms: [cellWidth(20)]
-                                    },
-                                    {
-                                        name: "type",
-                                        displayKey: "type",
-                                        cellRenderer: badgeRenderer2,
-                                        transforms: [cellWidth(60)]
-                                    },
-                                    {
-                                        name: "",
-                                        cellRenderer: linkRenderer
-                                    }
-                                ]}
-                                emptyState={
-                                    <p className="kc-no-providers-text">
-                                        {t("noAvailableIdentityProviders")}
-                                    </p>
+                                columns={availableColumns}
+                                data={availableIdPs}
+                                searchColumnId="alias"
+                                searchPlaceholder={t("searchForProvider")}
+                                emptyContent={
+                                    <Empty className="py-8">
+                                        <EmptyHeader><EmptyTitle>{t("noAvailableIdentityProviders")}</EmptyTitle></EmptyHeader>
+                                    </Empty>
                                 }
+                                emptyMessage={t("noAvailableIdentityProviders")}
+                                className="kc-linked-IdPs-table"
                             />
                         )}
                     </FormPanel>

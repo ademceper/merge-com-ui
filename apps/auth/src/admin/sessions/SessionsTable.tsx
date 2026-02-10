@@ -14,7 +14,7 @@ import {
 } from "@merge/ui/components/tooltip";
 import { Info, SignOut, ProhibitInset } from "@phosphor-icons/react";
 import type { ReactNode } from "react";
-import { useMemo, useState } from "react";
+import { useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { Link, useMatch, useNavigate } from "react-router-dom";
 import { useAdminClient } from "../admin-client";
@@ -182,9 +182,7 @@ export default function SessionsTable({
                     const session = row.original as UserSessionRepresentation & { type?: string };
                     const isOffline = session.type === "Offline" || session.type === "OFFLINE";
                     return (
-                        <DataTableRowActions
-                            row={row as { original: UserSessionRepresentation; id: string; getValue: (id: string) => unknown }}
-                        >
+                        <DataTableRowActions row={row}>
                             {isOffline ? (
                                 <button
                                     type="button"
@@ -210,7 +208,10 @@ export default function SessionsTable({
             }
         ];
         if (hiddenColumns.length === 0) return cols;
-        return cols.filter((col) => !col.accessorKey || !hiddenColumns.includes(col.accessorKey as ColumnName));
+        return cols.filter((col) => {
+        const key = (col as ColumnDef<UserSessionRepresentation> & { accessorKey?: string }).accessorKey;
+        return !key || !hiddenColumns.includes(key as ColumnName);
+    });
     }, [realm, hiddenColumns, t, formatDate]);
 
     return (

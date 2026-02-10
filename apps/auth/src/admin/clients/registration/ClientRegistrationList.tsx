@@ -35,7 +35,7 @@ export const ClientRegistrationList = ({ subType }: ClientRegistrationListProps)
     const { adminClient } = useAdminClient();
 
     const { t } = useTranslation();
-    const { subTab } = useParams<ClientRegistrationParams>();
+    const { subTab: _subTab } = useParams<ClientRegistrationParams>();
     const { realm } = useRealm();
     const [policies, setPolicies] = useState<ComponentRepresentation[]>([]);
     const [selectedPolicy, setSelectedPolicy] = useState<ComponentRepresentation>();

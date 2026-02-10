@@ -1,8 +1,7 @@
 import type ResourceRepresentation from "@keycloak/keycloak-admin-client/lib/defs/resourceRepresentation";
 import type ResourceServerRepresentation from "@keycloak/keycloak-admin-client/lib/defs/resourceServerRepresentation";
-import { getErrorDescription, getErrorMessage, ListEmptyState,
-    PaginatingTableToolbar,
-    useFetch } from "../../../shared/keycloak-ui-shared";
+import { getErrorDescription, getErrorMessage, useFetch } from "../../../shared/keycloak-ui-shared";
+import { Empty, EmptyContent, EmptyDescription, EmptyHeader, EmptyTitle } from "@merge/ui/components/empty";
 import { toast } from "@merge/ui/components/sonner";
 import { Alert, AlertTitle } from "@merge/ui/components/alert";
 import { Button } from "@merge/ui/components/button";
@@ -20,10 +19,11 @@ import {
     TableHeader,
     TableRow,
 } from "@merge/ui/components/table";
+import { TablePagination } from "@merge/ui/components/pagination";
 import { CaretDown, CaretRight, DotsThreeVertical } from "@phosphor-icons/react";
 import { Fragment, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { useAdminClient } from "../../admin-client";
 import { useConfirmDialog } from "../../components/confirm-dialog/ConfirmDialog";
 import { KeycloakSpinner } from "../../../shared/keycloak-ui-shared";
@@ -57,7 +57,6 @@ export const AuthorizationResources = ({
     const { adminClient } = useAdminClient();
 
     const { t } = useTranslation();
-    const navigate = useNavigate();
 const { realm } = useRealm();
 
     const [resources, setResources] = useState<ExpandableResourceRepresentation[]>();
@@ -140,35 +139,22 @@ const { realm } = useRealm();
         <div className="p-0 bg-muted/30">
             <DeleteConfirm />
             {(!noData || searching) && (
-                <PaginatingTableToolbar
-                    count={resources.length}
-                    first={first}
-                    max={max}
-                    onNextClick={setFirst}
-                    onPreviousClick={setFirst}
-                    onPerPageSelect={(first, max) => {
-                        setFirst(first);
-                        setMax(max);
-                    }}
-                    toolbarItem={
-                        <>
-                            <SearchDropdown
-                                search={search}
-                                onSearch={setSearch}
-                                type="resource"
-                            />
-                            <Button
-                                data-testid="createResource"
-                                disabled={isDisabled}
-                                asChild
-                            >
-                                <Link to={toCreateResource({ realm, id: clientId })}>
-                                    {t("createResource")}
-                                </Link>
-                            </Button>
-                        </>
-                    }
-                >
+                <div className="space-y-2">
+                    <div className="flex flex-wrap items-center gap-2">
+                        <SearchDropdown search={search} onSearch={setSearch} type="resource" />
+                        <TablePagination
+                            count={resources.length}
+                            first={first}
+                            max={max}
+                            onNextClick={setFirst}
+                            onPreviousClick={setFirst}
+                            onPerPageSelect={(_first, newMax) => { setMax(newMax); setFirst(0); }}
+                            t={t}
+                        />
+                        <Button data-testid="createResource" disabled={isDisabled} asChild>
+                            <Link to={toCreateResource({ realm, id: clientId })}>{t("createResource")}</Link>
+                        </Button>
+                    </div>
                     {!noData && (
                         <Table aria-label={t("resources")} className="text-sm">
                             <TableHeader>
@@ -318,25 +304,20 @@ const { realm } = useRealm();
                             </TableBody>
                         </Table>
                     )}
-                </PaginatingTableToolbar>
+                </div>
             )}
             {noData && searching && (
-                <ListEmptyState
-                    isSearchVariant
-                    message={t("noSearchResults")}
-                    instructions={t("noSearchResultsInstructions")}
-                />
+                <Empty className="py-12">
+                    <EmptyHeader><EmptyTitle>{t("noSearchResults")}</EmptyTitle></EmptyHeader>
+                    <EmptyContent><EmptyDescription>{t("noSearchResultsInstructions")}</EmptyDescription></EmptyContent>
+                </Empty>
             )}
             {noData && !searching && (
-                <ListEmptyState
-                    message={t("emptyResources")}
-                    instructions={t("emptyResourcesInstructions")}
-                    isDisabled={isDisabled}
-                    primaryActionText={t("createResource")}
-                    onPrimaryAction={() =>
-                        navigate(toCreateResource({ realm, id: clientId }))
-                    }
-                />
+                <Empty className="py-12">
+                    <EmptyHeader><EmptyTitle>{t("emptyResources")}</EmptyTitle></EmptyHeader>
+                    <EmptyContent><EmptyDescription>{t("emptyResourcesInstructions")}</EmptyDescription></EmptyContent>
+                    {!isDisabled && <Button className="mt-2" asChild><Link to={toCreateResource({ realm, id: clientId })}>{t("createResource")}</Link></Button>}
+                </Empty>
             )}
         </div>
     );

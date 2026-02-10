@@ -1,4 +1,4 @@
-import { KeycloakDataTable } from "../../../shared/keycloak-ui-shared";
+import { useFetch } from "../../../shared/keycloak-ui-shared";
 import { Button } from "@merge/ui/components/button";
 import {
     Dialog,
@@ -12,7 +12,9 @@ import {
     PopoverContent,
     PopoverTrigger,
 } from "@merge/ui/components/popover";
+import { DataTable, type ColumnDef } from "@merge/ui/components/table";
 import { CheckCircle } from "@phosphor-icons/react";
+import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useAdminClient } from "../../admin-client";
 import { fetchUsedBy } from "../../components/role-mapping/resource";
@@ -38,23 +40,24 @@ type UsedByModalProps = {
 
 const UsedByModal = ({ id, isSpecificClient, onClose }: UsedByModalProps) => {
     const { adminClient } = useAdminClient();
-
     const { t } = useTranslation();
+    const [list, setList] = useState<{ name: string }[]>([]);
+    useFetch(
+        () =>
+            fetchUsedBy(adminClient, {
+                id,
+                type: isSpecificClient ? "clients" : "idp",
+                first: 0,
+                max: 500,
+                search: undefined
+            }).then(names => names.map(name => ({ name }))),
+        setList,
+        [id, isSpecificClient]
+    );
 
-    const loader = async (
-        first?: number,
-        max?: number,
-        search?: string
-    ): Promise<{ name: string }[]> => {
-        const result = await fetchUsedBy(adminClient, {
-            id,
-            type: isSpecificClient ? "clients" : "idp",
-            first: first || 0,
-            max: max || 10,
-            search
-        });
-        return result.map(p => ({ name: p }));
-    };
+    const columns: ColumnDef<{ name: string }>[] = [
+        { accessorKey: "name", header: t("name") }
+    ];
 
     return (
         <Dialog open onOpenChange={open => !open && onClose()}>
@@ -67,16 +70,12 @@ const UsedByModal = ({ id, isSpecificClient, onClose }: UsedByModalProps) => {
                         })}
                     </p>
                 </DialogHeader>
-                <KeycloakDataTable
-                    loader={loader}
-                    isPaginated
-                    ariaLabelKey="usedBy"
-                    searchPlaceholderKey="search"
-                    columns={[
-                        {
-                            name: "name"
-                        }
-                    ]}
+                <DataTable
+                    columns={columns}
+                    data={list ?? []}
+                    searchColumnId="name"
+                    searchPlaceholder={t("search")}
+                    emptyMessage={t("noResults")}
                 />
                 <DialogFooter>
                     <Button

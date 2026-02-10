@@ -78,7 +78,7 @@ export function DialogContent({
 }) {
   const isMobile = useIsMobile()
   if (isMobile) {
-    const childArray = React.Children.toArray(children)
+    const childArray = React.Children.toArray(children as React.ReactNode)
     const hasHeader = childArray.length >= 2
     const hasFooter = childArray.length >= 3
     const headerChild = hasHeader ? childArray[0] : null
@@ -103,7 +103,7 @@ export function DialogContent({
       </DrawerContentBase>
     )
   }
-  const childArray = React.Children.toArray(children)
+  const childArray = React.Children.toArray(children as React.ReactNode)
   const hasHeader = childArray.length >= 2
   const hasFooter = childArray.length >= 3
   const headerChild = hasHeader ? childArray[0] : null
@@ -163,7 +163,7 @@ export function DialogHeader({ className, ...props }: React.ComponentProps<"div"
       className={cn("gap-2 flex flex-col", className)}
       {...props}
     >
-      {props.children}
+      {props.children as React.ReactNode}
       <Separator />
     </div>
   )
@@ -188,7 +188,7 @@ export function DialogFooter({
         )}
         {...props}
       >
-        {children}
+        {children as React.ReactNode}
         {showCloseButton && (
           <DrawerClosePrimitive asChild>
             <Button variant="outline" size="sm">Close</Button>
@@ -206,7 +206,7 @@ export function DialogFooter({
       )}
       {...props}
     >
-      {children}
+      {children as React.ReactNode}
       {showCloseButton && (
         <DialogPrimitive.Close asChild>
           <Button variant="outline" size="sm">Close</Button>

@@ -8,12 +8,12 @@ import {
 } from "../../../shared/keycloak-ui-shared";
 import { toast } from "@merge/ui/components/sonner";
 import { Badge } from "@merge/ui/components/badge";
-import { Button } from "@merge/ui/components/button";
 import { Checkbox } from "@merge/ui/components/checkbox";
 import {
     DataTable,
     DataTableRowActions,
     type ColumnDef,
+    type Row as TableRow,
 } from "@merge/ui/components/table";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -249,7 +249,7 @@ export const RoleMapping = ({
                           header: "",
                           size: 50,
                           enableHiding: false,
-                          cell: ({ row }: { row: { original: Row } }) => (
+                          cell: ({ row }: { row: TableRow<Row> }) => (
                               <DataTableRowActions row={row}>
                                   <button
                                       type="button"

@@ -3,12 +3,14 @@ import {
     GroupQuery,
     SubGroupQuery
 } from "@keycloak/keycloak-admin-client/lib/resources/groups";
+import { useFetch } from "../../../shared/keycloak-ui-shared";
 import {
-    KeycloakPagination,
-    ListEmptyState,
-    PaginatingTableToolbar,
-    useFetch
-} from "../../../shared/keycloak-ui-shared";
+    Empty,
+    EmptyContent,
+    EmptyDescription,
+    EmptyHeader,
+    EmptyTitle
+} from "@merge/ui/components/empty";
 import { Button } from "@merge/ui/components/button";
 import {
     Dialog,
@@ -17,6 +19,7 @@ import {
     DialogTitle,
     DialogFooter
 } from "@merge/ui/components/dialog";
+import { TablePagination } from "@merge/ui/components/pagination";
 import { Checkbox } from "@merge/ui/components/checkbox";
 import { Input } from "@merge/ui/components/input";
 import { Separator } from "@merge/ui/components/separator";
@@ -67,6 +70,7 @@ export const GroupPickerDialog = ({
 
     const [count, setCount] = useState(0);
     const [moveSearchValue, setMoveSearchValue] = useState("");
+    const [searchInputValue, setSearchInputValue] = useState("");
 
     const currentGroup = () => navigation[navigation.length - 1];
 
@@ -237,19 +241,16 @@ export const GroupPickerDialog = ({
                           ))}
             </div>
             {groups.length === 0 && filter === "" && (
-                <ListEmptyState
-                    hasIcon={false}
-                    message={t("moveGroupEmpty")}
-                    instructions={
-                        isMove ? t("moveGroupEmptyInstructions") : undefined
-                    }
-                />
+                <Empty className="py-8">
+                    <EmptyHeader><EmptyTitle>{t("moveGroupEmpty")}</EmptyTitle></EmptyHeader>
+                    {isMove && <EmptyContent><EmptyDescription>{t("moveGroupEmptyInstructions")}</EmptyDescription></EmptyContent>}
+                </Empty>
             )}
             {groups.length === 0 && filter !== "" && (
-                <ListEmptyState
-                    message={t("noSearchResults")}
-                    instructions={t("noSearchResultsInstructions")}
-                />
+                <Empty className="py-8">
+                    <EmptyHeader><EmptyTitle>{t("noSearchResults")}</EmptyTitle></EmptyHeader>
+                    <EmptyContent><EmptyDescription>{t("noSearchResultsInstructions")}</EmptyDescription></EmptyContent>
+                </Empty>
             )}
         </>
     );
@@ -278,13 +279,13 @@ export const GroupPickerDialog = ({
                             />
                         </div>
                         <div className="flex items-center gap-2 mb-2">
-                            <KeycloakPagination {...paginationProps} />
+                            <TablePagination {...paginationProps} t={t} />
                         </div>
                         <Separator className="mb-3" />
                         {listContent}
                         {count !== 0 && (
                             <div className="flex items-center gap-2 mt-3">
-                                <KeycloakPagination {...paginationProps} variant="bottom" />
+                                <TablePagination {...paginationProps} variant="bottom" t={t} />
                             </div>
                         )}
                         <DialogFooter className="mt-4">
@@ -313,28 +314,41 @@ export const GroupPickerDialog = ({
                     </>
                 ) : (
                     <>
-                        <PaginatingTableToolbar
-                            count={count}
-                            first={first}
-                            max={max}
-                            onNextClick={setFirst}
-                            onPreviousClick={setFirst}
-                            onPerPageSelect={(first, max) => {
-                                setFirst(first);
-                                setMax(max);
-                            }}
-                            inputGroupName={"search"}
-                            inputGroupOnEnter={search => {
-                                setFilter(search);
-                                setFirst(0);
-                                setMax(10);
-                                setNavigation([]);
-                                setGroupId(undefined);
-                            }}
-                            inputGroupPlaceholder={t("searchForGroups")}
-                        >
-                            {listContent}
-                        </PaginatingTableToolbar>
+                        <div className="flex flex-wrap items-center gap-2 mb-2">
+                            <div className="flex flex-1 min-w-0 items-center gap-1 rounded-lg border border-input bg-transparent px-2">
+                                <MagnifyingGlass className="text-muted-foreground size-4 shrink-0" />
+                                <Input
+                                    data-testid="table-search-input"
+                                    placeholder={t("searchForGroups")}
+                                    aria-label={t("search")}
+                                    value={searchInputValue}
+                                    onChange={(e) => setSearchInputValue(e.target.value)}
+                                    className="border-0 bg-transparent shadow-none focus-visible:ring-0 flex-1 min-w-0"
+                                    onKeyDown={(e) => {
+                                        if (e.key === "Enter") {
+                                            setFilter(searchInputValue);
+                                            setFirst(0);
+                                            setMax(10);
+                                            setNavigation([]);
+                                            setGroupId(undefined);
+                                        }
+                                    }}
+                                />
+                            </div>
+                            <TablePagination
+                                count={count}
+                                first={first}
+                                max={max}
+                                onNextClick={setFirst}
+                                onPreviousClick={setFirst}
+                                onPerPageSelect={(_first, newMax) => {
+                                    setMax(newMax);
+                                    setFirst(0);
+                                }}
+                                t={t}
+                            />
+                        </div>
+                        {listContent}
                         <DialogFooter>
                             <Button
                                 variant="outline"

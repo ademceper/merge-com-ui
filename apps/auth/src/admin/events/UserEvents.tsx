@@ -20,7 +20,7 @@ import {
     TooltipProvider,
     TooltipTrigger,
 } from "@merge/ui/components/tooltip";
-import { CheckCircle, Warning } from "@phosphor-icons/react";
+import { CheckCircle, Funnel, Warning } from "@phosphor-icons/react";
 import { pickBy } from "lodash-es";
 import { useState } from "react";
 import { Controller, FormProvider, useForm } from "react-hook-form";
@@ -29,7 +29,6 @@ import { Link } from "react-router-dom";
 import { useAdminClient } from "../admin-client";
 import { TextControl, useFetch } from "../../shared/keycloak-ui-shared";
 import { EventsBanners } from "../Banners";
-import DropdownPanel from "../components/dropdown-panel/DropdownPanel";
 import { useRealm } from "../context/realm-context/RealmContext";
 import { toUser } from "../user/routes/User";
 import useFormatDate, { FORMAT_DATE_AND_TIME } from "../utils/useFormatDate";
@@ -236,19 +235,28 @@ export const UserEvents = ({ user, client }: UserEventsProps) => {
     const searchToolbar = (
         <FormProvider {...form}>
             <div className="flex flex-col gap-0">
-                <div>
-                    <DropdownPanel
-                        buttonText={t("searchUserEventsBtn")}
-                        setSearchDropdownOpen={setSearchDropdownOpen}
-                        searchDropdownOpen={searchDropdownOpen}
-                        marginRight="2.5rem"
-                        width="15vw"
-                    >
-                        <form
-                            data-testid="searchForm"
-                            className="keycloak__events_search__form flex flex-col gap-4"
-                            onSubmit={handleSubmit(onSubmit)}
+                <div className="mr-10">
+                    <Popover open={searchDropdownOpen} onOpenChange={setSearchDropdownOpen}>
+                        <PopoverTrigger asChild>
+                            <button
+                                type="button"
+                                className="inline-flex size-9 shrink-0 items-center justify-center rounded-lg border border-border bg-background text-sm font-medium hover:bg-muted hover:text-foreground dark:border-input dark:hover:bg-input/50"
+                                aria-label={t("searchUserEventsBtn")}
+                                data-testid="dropdown-panel-btn"
+                            >
+                                <Funnel className="size-4" />
+                            </button>
+                        </PopoverTrigger>
+                        <PopoverContent
+                            className="w-[min(90vw,400px)] max-h-[85vh] overflow-auto p-4"
+                            align="start"
+                            style={{ zIndex: 2147483647 }}
                         >
+                            <form
+                                data-testid="searchForm"
+                                className="keycloak__events_search__form flex flex-col gap-4"
+                                onSubmit={handleSubmit(onSubmit)}
+                            >
                             {!user && (
                                 <TextControl
                                     name="user"
@@ -378,7 +386,8 @@ export const UserEvents = ({ user, client }: UserEventsProps) => {
                                 </Button>
                             </div>
                         </form>
-                    </DropdownPanel>
+                        </PopoverContent>
+                    </Popover>
                 </div>
                 {Object.entries(activeFilters).length > 0 && (
                     <div className="keycloak__searchChips ml-4 mt-2 flex flex-wrap gap-2">

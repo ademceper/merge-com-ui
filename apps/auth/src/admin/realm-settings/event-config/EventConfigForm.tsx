@@ -17,13 +17,13 @@ type EventConfigFormProps = {
     clear: () => void;
 };
 
-export const EventConfigForm = ({ type, form, reset, clear }: EventConfigFormProps) => {
+export const EventConfigForm = ({ type, form, reset: _reset, clear }: EventConfigFormProps) => {
     const { t } = useTranslation();
     const {
         control,
         watch,
         setValue,
-        formState: { isDirty }
+        formState: { isDirty: _isDirty }
     } = form;
     const eventKey = type === "admin" ? "adminEventsEnabled" : "eventsEnabled";
     const eventsEnabled: boolean = watch(eventKey);

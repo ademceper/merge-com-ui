@@ -1,4 +1,3 @@
-import { TableToolbar } from "../../shared/keycloak-ui-shared";
 import {
     Table,
     TableBody,
@@ -13,10 +12,12 @@ import {
     CollapsibleTrigger,
 } from "@merge/ui/components/collapsible";
 import { Button } from "@merge/ui/components/button";
+import { Input } from "@merge/ui/components/input";
 import { useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useServerInfo } from "../context/server-info/ServerInfoProvider";
-import { CaretDown, CaretRight } from "@phosphor-icons/react";
+import { CaretDown, CaretRight, MagnifyingGlass } from "@phosphor-icons/react";
+
 export const ProviderInfo = () => {
     const { t } = useTranslation();
     const serverInfo = useServerInfo();
@@ -33,11 +34,17 @@ export const ProviderInfo = () => {
 
     return (
         <div className="bg-muted/30 p-4">
-            <TableToolbar
-                inputGroupName="search"
-                inputGroupPlaceholder={t("search")}
-                inputGroupOnEnter={setFilter}
-            >
+            <div className="mb-4 flex flex-1 min-w-0 items-center gap-1 rounded-lg border border-input bg-transparent px-2">
+                <MagnifyingGlass className="text-muted-foreground size-4 shrink-0" />
+                <Input
+                    data-testid="table-search-input"
+                    placeholder={t("search")}
+                    aria-label={t("search")}
+                    value={filter}
+                    onChange={e => setFilter(e.target.value)}
+                    className="border-0 bg-transparent shadow-none focus-visible:ring-0"
+                />
+            </div>
                 <Table className="text-sm">
                     <TableHeader>
                         <TableRow>
@@ -112,7 +119,6 @@ export const ProviderInfo = () => {
                         ))}
                     </TableBody>
                 </Table>
-            </TableToolbar>
         </div>
     );
 };

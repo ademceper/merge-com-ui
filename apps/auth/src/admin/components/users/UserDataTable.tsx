@@ -1,16 +1,22 @@
 import type { UserProfileConfig } from "@keycloak/keycloak-admin-client/lib/defs/userProfileMetadata";
 import type UserRepresentation from "@keycloak/keycloak-admin-client/lib/defs/userRepresentation";
-import { getErrorDescription, getErrorMessage, KeycloakDataTable,
-    KeycloakSpinner,
-    ListEmptyState,
-    useFetch } from "../../../shared/keycloak-ui-shared";
+import { getErrorDescription, getErrorMessage, KeycloakSpinner, useFetch } from "../../../shared/keycloak-ui-shared";
+import { DataTable, DataTableRowActions, type ColumnDef } from "@merge/ui/components/table";
+import {
+    Empty,
+    EmptyContent,
+    EmptyDescription,
+    EmptyHeader,
+    EmptyTitle
+} from "@merge/ui/components/empty";
+import { DropdownMenuItem } from "@merge/ui/components/dropdown-menu";
 import { toast } from "@merge/ui/components/sonner";
 import { Button } from "@merge/ui/components/button";
 import { Badge } from "@merge/ui/components/badge";
 import { Label } from "@merge/ui/components/label";
+import { Checkbox } from "@merge/ui/components/checkbox";
 import { Tooltip, TooltipContent, TooltipTrigger, TooltipProvider } from "@merge/ui/components/tooltip";
 import { WarningCircle, Info, Warning } from "@phosphor-icons/react";
-import type { IRowData } from "../../../shared/keycloak-ui-shared";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Link, useNavigate } from "react-router-dom";
@@ -151,38 +157,33 @@ const { realm: realmName, realmRepresentation: realm } = useRealm();
         []
     );
 
-    const loader = async (first?: number, max?: number, search?: string) => {
-        const params: { [name: string]: string | number | boolean } = {
-            first: first!,
-            max: max!,
-            q: query!
-        };
+    const [users, setUsers] = useState<UserRepresentation[]>([]);
 
-        const searchParam = search || searchUser || "";
-        if (searchParam) {
-            params.search = searchParam;
-        }
-
-        if (activeFilters.exact) params.exact = true;
-
-        if (!listUsers && !(params.search || params.q)) {
-            return [];
-        }
-
-        try {
-            return await findUsers(adminClient, {
-                briefRepresentation: true,
-                ...params
-            });
-        } catch (error) {
-            if (uiRealmInfo.userProfileProvidersEnabled) {
-                toast.error(t("noUsersFoundErrorStorage", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
-            } else {
-                toast.error(t("noUsersFoundError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
+    useFetch(
+        async () => {
+            if (!listUsers && !searchUser && !query) return [];
+            const params: { [name: string]: string | number | boolean } = {
+                first: 0,
+                max: 500,
+                q: query,
+                briefRepresentation: true
+            };
+            if (searchUser) params.search = searchUser;
+            if (activeFilters.exact) params.exact = true;
+            try {
+                return await findUsers(adminClient, params);
+            } catch (error) {
+                if (uiRealmInfo.userProfileProvidersEnabled) {
+                    toast.error(t("noUsersFoundErrorStorage", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
+                } else {
+                    toast.error(t("noUsersFoundError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
+                }
+                return [];
             }
-            return [];
-        }
-    };
+        },
+        setUsers,
+        [key, query, searchUser, activeFilters.exact]
+    );
 
     const [toggleUnlockUsersDialog, UnlockUsersConfirm] = useConfirmDialog({
         titleKey: "unlockAllUsers",
@@ -329,75 +330,71 @@ const { realm: realmName, realmRepresentation: realm } = useRealm();
         );
     };
 
+    const columns: ColumnDef<UserRepresentation>[] = [
+        {
+            id: "select",
+            header: "",
+            size: 40,
+            cell: ({ row }) =>
+                row.original.access?.manage !== false ? (
+                    <Checkbox
+                        checked={selectedRows.some(s => s.id === row.original.id)}
+                        onCheckedChange={() =>
+                            setSelectedRows(prev =>
+                                prev.some(s => s.id === row.original.id)
+                                    ? prev.filter(s => s.id !== row.original.id)
+                                    : [...prev, row.original]
+                            )
+                        }
+                    />
+                ) : null
+        },
+        { accessorKey: "username", header: t("username"), cell: ({ row }) => <UserDetailLink {...row.original} /> },
+        { accessorKey: "email", header: t("email"), cell: ({ row }) => <ValidatedEmail {...row.original} /> },
+        { accessorKey: "lastName", header: t("lastName"), cell: ({ getValue }) => emptyFormatter()(getValue()) },
+        { accessorKey: "firstName", header: t("firstName"), cell: ({ getValue }) => emptyFormatter()(getValue()) },
+        {
+            id: "actions",
+            cell: ({ row }) =>
+                row.original.access?.manage ? (
+                    <DataTableRowActions row={row}>
+                        <DropdownMenuItem onClick={() => { setSelectedRows([row.original]); toggleDeleteDialog(); }} className="text-destructive">
+                            {t("delete")}
+                        </DropdownMenuItem>
+                    </DataTableRowActions>
+                ) : null
+        }
+    ];
+
+    const emptyContent = !listUsers ? (
+        <>
+            <div className="flex items-center gap-2 p-4">{toolbar()}</div>
+            <div data-testid="empty-state" className="p-8 text-center">
+                <div className="kc-search-users-text"><p>{t("searchForUserDescription")}</p></div>
+            </div>
+        </>
+    ) : (
+        <Empty className="py-12">
+            <EmptyHeader><EmptyTitle>{t("noUsersFound")}</EmptyTitle></EmptyHeader>
+            <EmptyContent><EmptyDescription>{t("emptyInstructions")}</EmptyDescription></EmptyContent>
+            <Button className="mt-2" onClick={goToCreate}>{t("createNewUser")}</Button>
+        </Empty>
+    );
+
     return (
         <>
             <DeleteConfirm />
             <UnlockUsersConfirm />
-            <KeycloakDataTable
-                isSearching={
-                    searchUser !== "" || activeFilters.userAttribute.length !== 0
-                }
+            {subtoolbar()}
+            <DataTable<UserRepresentation>
                 key={key}
-                loader={loader}
-                isPaginated
-                ariaLabelKey="titleUsers"
-                canSelectAll
-                onSelect={(rows: UserRepresentation[]) => setSelectedRows([...rows])}
-                emptyState={
-                    !listUsers ? (
-                        <>
-                            <div className="flex items-center gap-2 p-4">
-                                {toolbar()}
-                            </div>
-                            <div data-testid="empty-state" className="p-8 text-center">
-                                <div className="kc-search-users-text">
-                                    <p>{t("searchForUserDescription")}</p>
-                                </div>
-                            </div>
-                        </>
-                    ) : (
-                        <ListEmptyState
-                            message={t("noUsersFound")}
-                            instructions={t("emptyInstructions")}
-                            primaryActionText={t("createNewUser")}
-                            onPrimaryAction={goToCreate}
-                        />
-                    )
-                }
-                toolbarItem={toolbar()}
-                subToolbar={subtoolbar()}
-                actionResolver={(rowData: IRowData) => [
-                    {
-                        title: t("delete"),
-                        onClick: () => {
-                            setSelectedRows([rowData.data as UserRepresentation]);
-                            toggleDeleteDialog();
-                        }
-                    }
-                ]}
-                isRowDisabled={(user: UserRepresentation) => !user.access?.manage}
-                columns={[
-                    {
-                        name: "username",
-                        displayKey: "username",
-                        cellRenderer: UserDetailLink
-                    },
-                    {
-                        name: "email",
-                        displayKey: "email",
-                        cellRenderer: ValidatedEmail
-                    },
-                    {
-                        name: "lastName",
-                        displayKey: "lastName",
-                        cellFormatters: [emptyFormatter()]
-                    },
-                    {
-                        name: "firstName",
-                        displayKey: "firstName",
-                        cellFormatters: [emptyFormatter()]
-                    }
-                ]}
+                columns={columns}
+                data={users}
+                searchColumnId="username"
+                searchPlaceholder={t("searchUsers")}
+                emptyContent={emptyContent}
+                emptyMessage={t("noUsersFound")}
+                toolbar={toolbar()}
             />
         </>
     );

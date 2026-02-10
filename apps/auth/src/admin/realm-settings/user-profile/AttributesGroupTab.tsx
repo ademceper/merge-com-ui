@@ -8,7 +8,7 @@ import {
 import { Trash } from "@phosphor-icons/react";
 import { useEffect, useState } from "react";
 import { Trans, useTranslation } from "react-i18next";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import {
     AlertDialog,
     AlertDialogAction,
@@ -39,7 +39,6 @@ export const AttributesGroupTab = ({
     const { config, save } = useUserProfile();
     const { t } = useTranslation();
     const combinedLocales = useLocale();
-    const navigate = useNavigate();
     const { realm } = useRealm();
     const [key, setKey] = useState(0);
     const [groupToDelete, setGroupToDelete] = useState<UserProfileGroup>();

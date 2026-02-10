@@ -4,7 +4,13 @@ import { Button } from "@merge/ui/components/button";
 
 import type AuthenticationFlowRepresentation from "@keycloak/keycloak-admin-client/lib/defs/authenticationFlowRepresentation";
 import type { AuthenticationProviderRepresentation } from "@keycloak/keycloak-admin-client/lib/defs/authenticatorConfigRepresentation";
-import { ListEmptyState } from "../../shared/keycloak-ui-shared";
+import {
+    Empty,
+    EmptyContent,
+    EmptyDescription,
+    EmptyHeader,
+    EmptyTitle
+} from "@merge/ui/components/empty";
 import { AddStepModal } from "./components/modals/AddStepModal";
 import { AddSubFlowModal, Flow } from "./components/modals/AddSubFlowModal";
 
@@ -49,10 +55,14 @@ export const EmptyExecutionState = ({
                     }}
                 />
             )}
-            <ListEmptyState
-                message={t("emptyExecution")}
-                instructions={t("emptyExecutionInstructions")}
-            />
+            <Empty data-testid="empty-state" className="py-12">
+                <EmptyHeader>
+                    <EmptyTitle className="text-base font-medium">{t("emptyExecution")}</EmptyTitle>
+                </EmptyHeader>
+                <EmptyContent>
+                    <EmptyDescription>{t("emptyExecutionInstructions")}</EmptyDescription>
+                </EmptyContent>
+            </Empty>
 
             <div className="keycloak__empty-execution-state__block">
                 {SECTIONS.map(section => (

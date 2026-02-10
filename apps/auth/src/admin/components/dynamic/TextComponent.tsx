@@ -1,7 +1,8 @@
 import { Label } from "@merge/ui/components/label";
+import { Textarea } from "@merge/ui/components/textarea";
 import { useFormContext } from "react-hook-form";
 import { useTranslation } from "react-i18next";
-import { KeycloakTextArea, HelpItem } from "../../../shared/keycloak-ui-shared";
+import { HelpItem } from "../../../shared/keycloak-ui-shared";
 import type { ComponentProps } from "./components";
 
 export const TextComponent = ({
@@ -22,10 +23,10 @@ export const TextComponent = ({
                 <Label htmlFor={name!}>{t(label!)}{required && " *"}</Label>
                 <HelpItem helpText={t(helpText!)} fieldLabelId={`${label}`} />
             </div>
-            <KeycloakTextArea
+            <Textarea
                 id={name!}
                 data-testid={name}
-                isDisabled={isDisabled}
+                disabled={isDisabled}
                 defaultValue={defaultValue?.toString()}
                 {...register(convertToName(name!))}
             />

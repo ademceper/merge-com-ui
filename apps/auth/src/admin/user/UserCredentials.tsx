@@ -10,7 +10,13 @@ import { useTranslation } from "react-i18next";
 import { useAdminClient } from "../admin-client";
 import { useConfirmDialog } from "../components/confirm-dialog/ConfirmDialog";
 import { KeycloakSpinner } from "../../shared/keycloak-ui-shared";
-import { ListEmptyState } from "../../shared/keycloak-ui-shared";
+import {
+    Empty,
+    EmptyContent,
+    EmptyDescription,
+    EmptyHeader,
+    EmptyTitle
+} from "@merge/ui/components/empty";
 import { toUpperCase } from "../util";
 import { FederatedUserLink } from "./FederatedUserLink";
 import { CredentialRow } from "./user-credentials/CredentialRow";
@@ -596,24 +602,22 @@ const [key, setKey] = useState(0);
                 </div>
             )}
             {emptyState && (
-                <ListEmptyState
-                    hasIcon
-                    message={t("noCredentials")}
-                    instructions={t("noCredentialsText")}
-                    primaryActionText={t("setPassword")}
-                    onPrimaryAction={toggleModal}
-                    secondaryActions={
-                        user.email
-                            ? [
-                                  {
-                                      text: t("credentialResetBtn"),
-                                      onClick: toggleCredentialsResetModal,
-                                      type: "link"
-                                  }
-                              ]
-                            : undefined
-                    }
-                />
+                <Empty className="py-12">
+                    <EmptyHeader>
+                        <EmptyTitle>{t("noCredentials")}</EmptyTitle>
+                    </EmptyHeader>
+                    <EmptyContent>
+                        <EmptyDescription>{t("noCredentialsText")}</EmptyDescription>
+                        <Button variant="default" onClick={toggleModal}>
+                            {t("setPassword")}
+                        </Button>
+                        {user.email && (
+                            <Button variant="link" onClick={toggleCredentialsResetModal}>
+                                {t("credentialResetBtn")}
+                            </Button>
+                        )}
+                    </EmptyContent>
+                </Empty>
             )}
         </>
     );

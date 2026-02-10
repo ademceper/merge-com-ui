@@ -13,7 +13,8 @@ import {
 import {
     DataTable,
     DataTableRowActions,
-    type ColumnDef
+    type ColumnDef,
+    type Row
 } from "@merge/ui/components/table";
 import { ArrowsDownUp, CopySimple, PencilSimple, Plus, Trash } from "@phosphor-icons/react";
 import { useState } from "react";
@@ -109,8 +110,8 @@ export const GroupTable = ({ refresh: viewRefresh }: GroupTableProps) => {
                       header: "",
                       size: 50,
                       enableHiding: false,
-                      cell: ({ row }: { row: { original: GroupRepresentation } }) => (
-                          <DataTableRowActions row={row as { original: GroupRepresentation; id: string; getValue: (id: string) => unknown }}>
+                      cell: ({ row }: { row: Row<GroupRepresentation> }) => (
+                          <DataTableRowActions row={row}>
                               <button
                                   type="button"
                                   className="flex w-full items-center gap-2 rounded-md px-1.5 py-1 text-left text-sm hover:bg-accent hover:text-accent-foreground"
@@ -254,7 +255,6 @@ export const GroupTable = ({ refresh: viewRefresh }: GroupTableProps) => {
                 searchPlaceholder={t("filterGroups")}
                 emptyMessage={t(emptyMessageKey)}
                 onRowClick={(row) => isManager && setEditGroup(row.original)}
-                enableColumnVisibility={false}
                 toolbar={
                     isManager ? (
                         <Button

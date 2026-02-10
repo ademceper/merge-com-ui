@@ -198,6 +198,7 @@ export function TableCaption({
 export type DataTableProps<TData> = {
   columns: ColumnDef<TData>[]
   data: TData[]
+  emptyContent?: React.ReactNode
   emptyMessage?: string
   pageSizeOptions?: number[]
   defaultPageSize?: number
@@ -210,15 +211,14 @@ export type DataTableProps<TData> = {
   onRowClick?: (row: Row<TData>) => void
   toolbar?: React.ReactNode
   className?: string
-  /** When provided, adds a leading chevron column to expand/collapse and show detail row */
   getRowCanExpand?: (row: Row<TData>) => boolean
-  /** Renders the expanded detail content (e.g. details table). Only shown when row is expanded. */
   renderSubRow?: (row: Row<TData>) => React.ReactNode
 }
 
 export function DataTable<TData>({
   columns,
   data,
+  emptyContent,
   emptyMessage = "No results.",
   pageSizeOptions = [5, 10, 25, 50],
   defaultPageSize = 10,
@@ -341,13 +341,13 @@ export function DataTable<TData>({
   return (
     <div className={cn("space-y-4", className)}>
       <div className="flex flex-nowrap items-center justify-between gap-2 sm:flex-wrap sm:gap-3">
-        <div className="flex min-w-0 flex-1 items-center gap-2 sm:flex-initial sm:min-w-0 sm:gap-3">
+        <div className="flex min-w-0 flex-1 basis-0 items-center gap-2 sm:basis-auto sm:flex-initial sm:min-w-0 sm:gap-3">
           {searchColumnId && searchColumn && (
-            <div className="relative min-w-0 flex-1 sm:min-w-0 sm:flex-initial">
+            <div className="relative min-w-0 w-0 flex-1 sm:min-w-0 sm:w-auto sm:flex-initial">
               <Input
                 aria-label={searchPlaceholder}
                 className={cn(
-                  "peer h-9 min-w-0 flex-1 ps-9 sm:min-w-60",
+                  "peer h-9 w-full min-w-0 flex-1 ps-9 sm:min-w-60 sm:w-auto",
                   searchValue && "pe-9"
                 )}
                 id={`${id}-input`}
@@ -620,10 +620,10 @@ export function DataTable<TData>({
             ) : (
               <TableRow>
                 <TableCell
-                  className="h-24 text-center"
+                  className="h-24 py-0 align-top"
                   colSpan={columnsWithExpand.length}
                 >
-                  {emptyMessage}
+                  {emptyContent ?? emptyMessage}
                 </TableCell>
               </TableRow>
             )}

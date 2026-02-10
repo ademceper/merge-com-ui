@@ -2,7 +2,14 @@ import type ClientRepresentation from "@keycloak/keycloak-admin-client/lib/defs/
 import type EvaluationResultRepresentation from "@keycloak/keycloak-admin-client/lib/defs/evaluationResultRepresentation";
 import PolicyEvaluationResponse from "@keycloak/keycloak-admin-client/lib/defs/policyEvaluationResponse";
 import type ResourceEvaluation from "@keycloak/keycloak-admin-client/lib/defs/resourceEvaluation";
-import { getErrorDescription, getErrorMessage, ListEmptyState,
+import {
+    Empty,
+    EmptyContent,
+    EmptyDescription,
+    EmptyHeader,
+    EmptyTitle
+} from "@merge/ui/components/empty";
+import { getErrorDescription, getErrorMessage,
     SelectControl } from "../../../shared/keycloak-ui-shared";
 import { toast } from "@merge/ui/components/sonner";
 import { Button } from "@merge/ui/components/button";
@@ -231,12 +238,16 @@ const PermissionEvaluateContent = ({ client }: Props) => {
                         </div>
                         <div className="p-4">
                             {!isEvaluated ? (
-                                <ListEmptyState
-                                    message={t("noPermissionsEvaluationResults")}
-                                    instructions={t(
-                                        "noPermissionsEvaluationResultsInstructions"
-                                    )}
-                                />
+                                <Empty className="py-12">
+                                    <EmptyHeader>
+                                        <EmptyTitle>{t("noPermissionsEvaluationResults")}</EmptyTitle>
+                                    </EmptyHeader>
+                                    <EmptyContent>
+                                        <EmptyDescription>
+                                            {t("noPermissionsEvaluationResultsInstructions")}
+                                        </EmptyDescription>
+                                    </EmptyContent>
+                                </Empty>
                             ) : (
                                 <PermissionEvaluationResult
                                     evaluateResult={evaluateResult!}

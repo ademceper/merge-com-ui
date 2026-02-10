@@ -1,12 +1,13 @@
 import PolicyRepresentation from "@keycloak/keycloak-admin-client/lib/defs/policyRepresentation";
+import { FormErrorText, HelpItem, useFetch } from "../../../shared/keycloak-ui-shared";
+import { DataTable, DataTableRowActions } from "@merge/ui/components/table";
 import {
-    Action,
-    FormErrorText,
-    HelpItem,
-    KeycloakDataTable,
-    ListEmptyState,
-    useFetch
-} from "../../../shared/keycloak-ui-shared";
+    Empty,
+    EmptyContent,
+    EmptyDescription,
+    EmptyHeader,
+    EmptyTitle
+} from "@merge/ui/components/empty";
 import { Button } from "@merge/ui/components/button";
 import { Label } from "@merge/ui/components/label";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@merge/ui/components/dropdown-menu";
@@ -20,7 +21,6 @@ import { ExistingPoliciesDialog } from "./ExistingPoliciesDialog";
 import { Funnel, CaretDown } from "@phosphor-icons/react";
 import { capitalize, sortBy } from "lodash-es";
 import useToggle from "../../utils/useToggle";
-type IRowData = { data: any };
 
 type AssignedPoliciesProps = {
     permissionClientId: string;
@@ -183,62 +183,48 @@ export const AssignedPolicies = ({
                 )}
             />
             {selectedPolicies.length > 0 && (
-                <KeycloakDataTable
-                    loader={filteredPolicies}
-                    ariaLabelKey={t("policies")}
-                    searchPlaceholderKey={t("searchClientAuthorizationPolicy")}
-                    isSearching={true}
-                    searchTypeComponent={
+                <DataTable<PolicyRepresentation>
+                    columns={[
+                        { accessorKey: "name", header: t("name") },
+                        { accessorKey: "type", header: t("type"), cell: ({ getValue }) => capitalize(String(getValue() ?? "")) },
+                        { accessorKey: "description", header: t("description") },
+                        {
+                            id: "actions",
+                            cell: ({ row }) => (
+                                <DataTableRowActions row={row}>
+                                    <DropdownMenuItem onClick={() => unAssign(row.original)} className="text-destructive">
+                                        {t("unAssignPolicy")}
+                                    </DropdownMenuItem>
+                                </DataTableRowActions>
+                            )
+                        }
+                    ]}
+                    data={filteredPolicies}
+                    searchColumnId="name"
+                    searchPlaceholder={t("searchClientAuthorizationPolicy")}
+                    emptyContent={
+                        <Empty className="py-12">
+                            <EmptyHeader><EmptyTitle>{t("emptyAssignExistingPolicies")}</EmptyTitle></EmptyHeader>
+                            <EmptyContent><EmptyDescription>{t("emptyAssignExistingPoliciesInstructions")}</EmptyDescription></EmptyContent>
+                        </Empty>
+                    }
+                    emptyMessage={t("emptyAssignExistingPolicies")}
+                    toolbar={
                         <DropdownMenu>
                             <DropdownMenuTrigger asChild>
-                                <Button
-                                    variant="outline"
-                                    data-testid="filter-type-dropdown-existingPolicies"
-                                >
+                                <Button variant="outline" data-testid="filter-type-dropdown-existingPolicies">
                                     <Funnel className="size-4 mr-1" />
                                     {filterType ? capitalize(filterType) : t("allTypes")}
                                     <CaretDown className="size-4 ml-1" />
                                 </Button>
                             </DropdownMenuTrigger>
                             <DropdownMenuContent>
-                                <DropdownMenuItem
-                                    data-testid="filter-type-dropdown-existingPolicies-all"
-                                    onClick={() => setFilterType(undefined)}
-                                >
-                                    {t("allTypes")}
-                                </DropdownMenuItem>
+                                <DropdownMenuItem data-testid="filter-type-dropdown-existingPolicies-all" onClick={() => setFilterType(undefined)}>{t("allTypes")}</DropdownMenuItem>
                                 {sortedProviders.map(name => (
-                                    <DropdownMenuItem
-                                        data-testid={`filter-type-dropdown-existingPolicies-${name}`}
-                                        key={name}
-                                        onClick={() => setFilterType(name)}
-                                    >
-                                        {name}
-                                    </DropdownMenuItem>
+                                    <DropdownMenuItem data-testid={`filter-type-dropdown-existingPolicies-${name}`} key={name} onClick={() => setFilterType(name)}>{name}</DropdownMenuItem>
                                 ))}
                             </DropdownMenuContent>
                         </DropdownMenu>
-                    }
-                    actionResolver={(rowData: IRowData) => [
-                        {
-                            title: t("unAssignPolicy"),
-                            onClick: () => unAssign(rowData.data as PolicyRepresentation)
-                        } as Action<PolicyRepresentation>
-                    ]}
-                    columns={[
-                        { name: "name", displayKey: t("name") },
-                        {
-                            name: "type",
-                            displayKey: t("type"),
-                            cellFormatters: [value => capitalize(String(value || ""))]
-                        },
-                        { name: "description", displayKey: t("description") }
-                    ]}
-                    emptyState={
-                        <ListEmptyState
-                            message={t("emptyAssignExistingPolicies")}
-                            instructions={t("emptyAssignExistingPoliciesInstructions")}
-                        />
                     }
                 />
             )}

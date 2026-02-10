@@ -1,11 +1,16 @@
 import PolicyRepresentation from "@keycloak/keycloak-admin-client/lib/defs/policyRepresentation";
 import { PolicyQuery } from "@keycloak/keycloak-admin-client/lib/resources/clients";
+import { useFetch } from "../../../shared/keycloak-ui-shared";
+import { DataTable, type ColumnDef } from "@merge/ui/components/table";
 import {
-    KeycloakDataTable,
-    ListEmptyState,
-    useFetch
-} from "../../../shared/keycloak-ui-shared";
+    Empty,
+    EmptyContent,
+    EmptyDescription,
+    EmptyHeader,
+    EmptyTitle
+} from "@merge/ui/components/empty";
 import { Button } from "@merge/ui/components/button";
+import { Checkbox } from "@merge/ui/components/checkbox";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@merge/ui/components/dialog";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@merge/ui/components/dropdown-menu";
 import { Funnel, CaretDown } from "@phosphor-icons/react";
@@ -51,24 +56,52 @@ export const ExistingPoliciesDialog = ({
         [permissionClientId]
     );
 
-    const loader = async (first?: number, max?: number, search?: string) => {
-        const params: PolicyQuery = {
-            id: permissionClientId!,
-            permission: "false",
-            first,
-            max
-        };
+    const [policiesData, setPoliciesData] = useState<PolicyRepresentation[]>([]);
 
-        if (search) {
-            params.name = search;
-        }
+    useFetch(
+        async () => {
+            const params: PolicyQuery = {
+                id: permissionClientId!,
+                permission: "false",
+                first: 0,
+                max: 500
+            };
+            if (filterType) params.type = filterType;
+            return (await adminClient.clients.listPolicies(params)) || [];
+        },
+        setPoliciesData,
+        [permissionClientId, filterType]
+    );
 
-        if (filterType) {
-            params.type = filterType;
-        }
+    const columns: ColumnDef<PolicyRepresentation>[] = [
+        {
+            id: "select",
+            header: "",
+            size: 40,
+            cell: ({ row }) => (
+                <Checkbox
+                    checked={rows.some(r => r.id === row.original.id)}
+                    onCheckedChange={() => {
+                        setRows(prev =>
+                            prev.some(r => r.id === row.original.id)
+                                ? prev.filter(r => r.id !== row.original.id)
+                                : [...prev, row.original]
+                        );
+                    }}
+                />
+            )
+        },
+        { accessorKey: "name", header: t("name") },
+        { accessorKey: "type", header: t("type"), cell: ({ getValue }) => capitalizeFirstLetterFormatter()(getValue()) },
+        { accessorKey: "description", header: t("description") }
+    ];
 
-        return (await adminClient.clients.listPolicies(params)) || [];
-    };
+    const emptyContent = (
+        <Empty className="py-12">
+            <EmptyHeader><EmptyTitle>{t("emptyAssignExistingPolicies")}</EmptyTitle></EmptyHeader>
+            <EmptyContent><EmptyDescription>{t("emptyAssignExistingPoliciesInstructions")}</EmptyDescription></EmptyContent>
+        </Empty>
+    );
 
     return (
         <Dialog open={open} onOpenChange={toggleDialog}>
@@ -76,58 +109,30 @@ export const ExistingPoliciesDialog = ({
                 <DialogHeader>
                     <DialogTitle>{t("assignExistingPolicies")}</DialogTitle>
                 </DialogHeader>
-                <KeycloakDataTable
+                <DataTable<PolicyRepresentation>
                     key={filterType}
-                    loader={loader}
-                    ariaLabelKey={t("chooseAPolicyType")}
-                    searchPlaceholderKey={t("searchClientAuthorizationPolicy")}
-                    isSearching={true}
-                    searchTypeComponent={
+                    columns={columns}
+                    data={policiesData}
+                    searchColumnId="name"
+                    searchPlaceholder={t("searchClientAuthorizationPolicy")}
+                    emptyContent={emptyContent}
+                    emptyMessage={t("emptyAssignExistingPolicies")}
+                    toolbar={
                         <DropdownMenu>
                             <DropdownMenuTrigger asChild>
-                                <Button
-                                    variant="outline"
-                                    data-testid="filter-type-dropdown-existingPolicies"
-                                >
+                                <Button variant="outline" data-testid="filter-type-dropdown-existingPolicies">
                                     <Funnel className="size-4 mr-1" />
                                     {filterType ? filterType : t("allTypes")}
                                     <CaretDown className="size-4 ml-1" />
                                 </Button>
                             </DropdownMenuTrigger>
                             <DropdownMenuContent>
-                                <DropdownMenuItem
-                                    data-testid="filter-type-dropdown-existingPolicies-all"
-                                    onClick={() => setFilterType(undefined)}
-                                >
-                                    {t("allTypes")}
-                                </DropdownMenuItem>
+                                <DropdownMenuItem data-testid="filter-type-dropdown-existingPolicies-all" onClick={() => setFilterType(undefined)}>{t("allTypes")}</DropdownMenuItem>
                                 {providers.map(name => (
-                                    <DropdownMenuItem
-                                        data-testid={`filter-type-dropdown-existingPolicies-${name}`}
-                                        key={name}
-                                        onClick={() => setFilterType(name)}
-                                    >
-                                        {name}
-                                    </DropdownMenuItem>
+                                    <DropdownMenuItem data-testid={`filter-type-dropdown-existingPolicies-${name}`} key={name} onClick={() => setFilterType(name)}>{name}</DropdownMenuItem>
                                 ))}
                             </DropdownMenuContent>
                         </DropdownMenu>
-                    }
-                    canSelectAll
-                    onSelect={selectedRows => setRows(selectedRows)}
-                    columns={[
-                        { name: "name" },
-                        {
-                            name: "type",
-                            cellFormatters: [capitalizeFirstLetterFormatter()]
-                        },
-                        { name: "description" }
-                    ]}
-                    emptyState={
-                        <ListEmptyState
-                            message={t("emptyAssignExistingPolicies")}
-                            instructions={t("emptyAssignExistingPoliciesInstructions")}
-                        />
                     }
                 />
                 <DialogFooter>

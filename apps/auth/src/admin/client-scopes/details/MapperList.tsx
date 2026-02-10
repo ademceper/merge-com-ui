@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import type { Path } from "react-router-dom";
 import { Link } from "react-router-dom";
@@ -9,9 +9,15 @@ import type ProtocolMapperRepresentation from "@keycloak/keycloak-admin-client/l
 import type { ProtocolMapperTypeRepresentation } from "@keycloak/keycloak-admin-client/lib/defs/serverInfoRepesentation";
 import { useServerInfo } from "../../context/server-info/ServerInfoProvider";
 
-import { ListEmptyState } from "../../../shared/keycloak-ui-shared";
 import { AddMapperDialog } from "../add/MapperDialog";
-import { Action, KeycloakDataTable } from "../../../shared/keycloak-ui-shared";
+import { DataTable, DataTableRowActions, type ColumnDef } from "@merge/ui/components/table";
+import {
+    Empty,
+    EmptyContent,
+    EmptyDescription,
+    EmptyHeader,
+    EmptyTitle
+} from "@merge/ui/components/empty";
 import { Button } from "@merge/ui/components/button";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@merge/ui/components/dropdown-menu";
 
@@ -59,18 +65,11 @@ export const MapperList = ({ model, onAdd, onDelete, detailLink }: MapperListPro
         setAddMapperDialogOpen(!addMapperDialogOpen);
     };
 
-    const loader = async () => {
-        if (!mapperList) {
-            return [];
-        }
-
+    const rows = useMemo(() => {
+        if (!mapperList) return [];
         const list = mapperList.reduce<Row[]>((rows, mapper) => {
             const mapperType = mapperTypes.find(({ id }) => id === mapper.protocolMapper);
-
-            if (!mapperType) {
-                return rows;
-            }
-
+            if (!mapperType) return rows;
             return rows.concat({
                 ...mapper,
                 category: mapperType.category,
@@ -78,9 +77,42 @@ export const MapperList = ({ model, onAdd, onDelete, detailLink }: MapperListPro
                 priority: mapperType.priority
             });
         }, []);
-
         return list.sort((a, b) => a.priority - b.priority);
-    };
+    }, [mapperList, mapperTypes]);
+
+    const columns: ColumnDef<Row>[] = [
+        {
+            accessorKey: "name",
+            header: t("name"),
+            cell: ({ row }) => <MapperLink {...row.original} detailLink={detailLink} />
+        },
+        { accessorKey: "category", header: t("category") },
+        { accessorKey: "type", header: t("type") },
+        { accessorKey: "priority", header: t("priority") },
+        {
+            id: "actions",
+            cell: ({ row }) => (
+                <DataTableRowActions row={row}>
+                    <DropdownMenuItem onClick={() => onDelete(row.original)} className="text-destructive">
+                        {t("delete")}
+                    </DropdownMenuItem>
+                </DataTableRowActions>
+            )
+        }
+    ];
+
+    const emptyContent = (
+        <Empty className="py-12">
+            <EmptyHeader><EmptyTitle>{t("emptyMappers")}</EmptyTitle></EmptyHeader>
+            <EmptyContent>
+                <EmptyDescription>{t("emptyMappersInstructions")}</EmptyDescription>
+                <div className="flex gap-2 mt-2 justify-center">
+                    <Button variant="secondary" onClick={() => toggleAddMapperDialog(true)}>{t("emptyPrimaryAction")}</Button>
+                    <Button variant="outline" onClick={() => toggleAddMapperDialog(false)}>{t("emptySecondaryAction")}</Button>
+                </div>
+            </EmptyContent>
+        </Empty>
+    );
 
     return (
         <>
@@ -92,64 +124,24 @@ export const MapperList = ({ model, onAdd, onDelete, detailLink }: MapperListPro
                 toggleDialog={() => setAddMapperDialogOpen(!addMapperDialogOpen)}
             />
 
-            <KeycloakDataTable
+            <DataTable<Row>
                 key={key}
-                loader={loader}
-                ariaLabelKey="clientScopeList"
-                searchPlaceholderKey="searchForMapper"
-                toolbarItem={
+                columns={columns}
+                data={rows}
+                searchColumnId="name"
+                searchPlaceholder={t("searchForMapper")}
+                emptyContent={emptyContent}
+                emptyMessage={t("emptyMappers")}
+                toolbar={
                     <DropdownMenu>
                         <DropdownMenuTrigger asChild>
-                            <Button id="mapperAction">
-                                {t("addMapper")}
-                            </Button>
+                            <Button id="mapperAction">{t("addMapper")}</Button>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent>
-                            <DropdownMenuItem onClick={() => toggleAddMapperDialog(true)}>
-                                {t("fromPredefinedMapper")}
-                            </DropdownMenuItem>
-                            <DropdownMenuItem onClick={() => toggleAddMapperDialog(false)}>
-                                {t("byConfiguration")}
-                            </DropdownMenuItem>
+                            <DropdownMenuItem onClick={() => toggleAddMapperDialog(true)}>{t("fromPredefinedMapper")}</DropdownMenuItem>
+                            <DropdownMenuItem onClick={() => toggleAddMapperDialog(false)}>{t("byConfiguration")}</DropdownMenuItem>
                         </DropdownMenuContent>
                     </DropdownMenu>
-                }
-                actions={[
-                    {
-                        title: t("delete"),
-                        onRowClick: onDelete
-                    } as Action<Row>
-                ]}
-                columns={[
-                    {
-                        name: "name",
-                        cellRenderer: row => (
-                            <MapperLink {...row} detailLink={detailLink} />
-                        )
-                    },
-                    { name: "category" },
-                    {
-                        name: "type"
-                    },
-                    {
-                        name: "priority"
-                    }
-                ]}
-                emptyState={
-                    <ListEmptyState
-                        message={t("emptyMappers")}
-                        instructions={t("emptyMappersInstructions")}
-                        secondaryActions={[
-                            {
-                                text: t("emptyPrimaryAction"),
-                                onClick: () => toggleAddMapperDialog(true)
-                            },
-                            {
-                                text: t("emptySecondaryAction"),
-                                onClick: () => toggleAddMapperDialog(false)
-                            }
-                        ]}
-                    />
                 }
             />
         </>

@@ -1,9 +1,13 @@
-import {
-    ListEmptyState,
-    PaginatingTableToolbar,
-    useFetch
-} from "../../../../shared/keycloak-ui-shared";
+import { useFetch } from "../../../../shared/keycloak-ui-shared";
 import { MagnifyingGlass } from "@phosphor-icons/react";
+import {
+    Empty,
+    EmptyContent,
+    EmptyDescription,
+    EmptyHeader,
+    EmptyMedia,
+    EmptyTitle
+} from "@merge/ui/components/empty";
 import {
     Dialog,
     DialogContent,
@@ -23,6 +27,7 @@ import {
     TableHeader,
     TableRow
 } from "@merge/ui/components/table";
+import { TablePagination } from "@merge/ui/components/pagination";
 import { useState } from "react";
 import { useFormContext } from "react-hook-form";
 import { Trans, useTranslation } from "react-i18next";
@@ -144,36 +149,43 @@ export const AddTranslationsDialog = ({
                             <p className="text-sm font-semibold">
                                 {t("translationsTableHeading")}
                             </p>
-                            <PaginatingTableToolbar
-                                count={translations.length}
-                                first={first}
-                                max={max}
-                                onNextClick={setFirst}
-                                onPreviousClick={setFirst}
-                                onPerPageSelect={(first, max) => {
-                                    setFirst(first);
-                                    setMax(max);
-                                }}
-                                inputGroupName={"search"}
-                                inputGroupOnEnter={search => {
-                                    setFilter(search);
-                                    setFirst(0);
-                                    setMax(10);
-                                }}
-                                inputGroupPlaceholder={t("searchForLanguage")}
-                            >
-                                {translations.length === 0 && filter && (
-                                    <ListEmptyState
-                                        hasIcon
-                                        icon={MagnifyingGlass}
-                                        isSearchVariant
-                                        message={t("noSearchResults")}
-                                        instructions={t(
-                                            "noLanguagesSearchResultsInstructions"
-                                        )}
+                            <div className="flex flex-wrap items-center gap-2 mb-2">
+                                <div className="flex flex-1 min-w-0 items-center gap-1 rounded-lg border border-input bg-transparent px-2">
+                                    <MagnifyingGlass className="text-muted-foreground size-4 shrink-0" />
+                                    <Input
+                                        placeholder={t("searchForLanguage")}
+                                        aria-label={t("search")}
+                                        className="border-0 bg-transparent shadow-none focus-visible:ring-0 flex-1 min-w-0"
+                                        onKeyDown={(e) => {
+                                            if (e.key === "Enter") {
+                                                setFilter((e.target as HTMLInputElement).value);
+                                                setFirst(0);
+                                                setMax(10);
+                                            }
+                                        }}
                                     />
-                                )}
-                                {translations.length !== 0 && (
+                                </div>
+                                <TablePagination
+                                    count={translations.length}
+                                    first={first}
+                                    max={max}
+                                    onNextClick={setFirst}
+                                    onPreviousClick={setFirst}
+                                    onPerPageSelect={(_first, newMax) => {
+                                        setMax(newMax);
+                                        setFirst(0);
+                                    }}
+                                    t={t}
+                                />
+                            </div>
+                            {translations.length === 0 && filter && (
+                                <Empty className="py-8">
+                                    <EmptyMedia><MagnifyingGlass className="size-12 text-muted-foreground" /></EmptyMedia>
+                                    <EmptyHeader><EmptyTitle>{t("noSearchResults")}</EmptyTitle></EmptyHeader>
+                                    <EmptyContent><EmptyDescription>{t("noLanguagesSearchResultsInstructions")}</EmptyDescription></EmptyContent>
+                                </Empty>
+                            )}
+                            {translations.length !== 0 && (
                                     <Table
                                         aria-label={t("addTranslationsDialogRowsTable")}
                                         data-testid="add-translations-dialog-rows-table"
@@ -237,7 +249,6 @@ export const AddTranslationsDialog = ({
                                         </TableBody>
                                     </Table>
                                 )}
-                            </PaginatingTableToolbar>
                         </div>
                     </form>
                 </div>

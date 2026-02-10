@@ -23,10 +23,6 @@ export { SwitchControl, type SwitchControlProps } from "./controls/SwitchControl
 export { TextAreaControl } from "./controls/TextAreaControl";
 export { TextControl } from "./controls/TextControl";
 export {
-    KeycloakTextArea,
-    type KeycloakTextAreaProps
-} from "./controls/keycloak-text-area/KeycloakTextArea";
-export {
     FileUploadControl,
     type FileUploadControlProps
 } from "./controls/FileUploadControl";
@@ -56,19 +52,6 @@ export { generateId } from "./utils/generateId";
 export { KeycloakSelect } from "./select/KeycloakSelect";
 export type { Variant, KeycloakSelectProps } from "./select/KeycloakSelect";
 export { SelectItem as SelectOption } from "@merge/ui/components/select";
-export { KeycloakDataTable } from "./controls/table/KeycloakDataTable";
-export type {
-    Action,
-    Field,
-    DetailField,
-    LoaderFunction
-} from "./controls/table/KeycloakDataTable";
-export {
-    KeycloakPagination,
-    PaginatingTableToolbar
-} from "./controls/table/PaginatingTableToolbar";
-export { TableToolbar } from "./controls/table/TableToolbar";
-export { ListEmptyState } from "./controls/table/ListEmptyState";
 export { KeycloakSpinner } from "./controls/KeycloakSpinner";
 export { useFetch } from "./utils/useFetch";
 export {
@@ -77,6 +60,3 @@ export {
     ErrorBoundaryProvider
 } from "./utils/ErrorBoundary";
 export type { FallbackProps } from "./utils/ErrorBoundary";
-export { OrganizationTable } from "./controls/OrganizationTable";
-export { cellWidth } from "./controls/table/table-utils";
-export type { IRowData } from "./controls/table/table-utils";

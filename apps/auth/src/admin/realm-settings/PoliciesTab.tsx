@@ -1,9 +1,13 @@
 import type ClientPolicyRepresentation from "@keycloak/keycloak-admin-client/lib/defs/clientPolicyRepresentation";
-import { getErrorDescription, getErrorMessage, Action,
-    KeycloakDataTable,
-    KeycloakSpinner,
-    ListEmptyState,
-    useFetch } from "../../shared/keycloak-ui-shared";
+import { getErrorDescription, getErrorMessage, KeycloakSpinner, useFetch } from "../../shared/keycloak-ui-shared";
+import { DataTable, DataTableRowActions } from "@merge/ui/components/table";
+import {
+    Empty,
+    EmptyContent,
+    EmptyDescription,
+    EmptyHeader,
+    EmptyTitle
+} from "@merge/ui/components/empty";
 import { toast } from "@merge/ui/components/sonner";
 import { Button } from "@merge/ui/components/button";
 import { Switch } from "@merge/ui/components/switch";
@@ -26,6 +30,7 @@ import {
     AlertDialogHeader,
     AlertDialogTitle
 } from "@merge/ui/components/alert-dialog";
+import { useConfirmDialog } from "../components/confirm-dialog/ConfirmDialog";
 import CodeEditor from "../components/form/CodeEditor";
 import { useRealm } from "../context/realm-context/RealmContext";
 import { prettyPrintJSON } from "../util";
@@ -78,8 +83,6 @@ const { realm } = useRealm();
         },
         [key]
     );
-
-    const loader = async () => policies ?? [];
 
     const saveStatus = async () => {
         const switchValues = form.getValues();
@@ -220,72 +223,76 @@ const { realm } = useRealm();
             </div>
             <Separator />
             {!show ? (
-                <KeycloakDataTable
+                <DataTable<ClientPolicy>
                     key={policies.length}
-                    emptyState={
-                        <ListEmptyState
-                            message={t("noClientPolicies")}
-                            instructions={t("noClientPoliciesInstructions")}
-                            primaryActionText={t("createClientPolicy")}
-                            onPrimaryAction={() => navigate(toAddClientPolicy({ realm }))}
-                        />
-                    }
-                    ariaLabelKey="clientPolicies"
-                    searchPlaceholderKey="clientPolicySearch"
-                    loader={loader}
-                    toolbarItem={
-                        <div>
-                            <Button
-                                id="createPolicy"
-                                asChild
-                                data-testid="createPolicy"
-                            >
-                                <Link to={toAddClientPolicy({ realm })}>
-                                    {t("createClientPolicy")}
-                                </Link>
-                            </Button>
-                        </div>
-                    }
-                    isRowDisabled={value => !!value.global}
-                    actions={[
-                        {
-                            title: t("delete"),
-                            onRowClick: item => {
-                                setSelectedPolicy(item);
-                            }
-                        } as Action<ClientPolicy>
-                    ]}
                     columns={[
                         {
-                            name: "name",
-                            cellRenderer: ({ name }: ClientPolicyRepresentation) => (
-                                <Link
-                                    to={toEditClientPolicy({ realm, policyName: name! })}
-                                >
-                                    {name}
-                                </Link>
+                            accessorKey: "name",
+                            header: t("name"),
+                            cell: ({ row }) => (
+                                row.original.global ? (
+                                    row.original.name
+                                ) : (
+                                    <Link to={toEditClientPolicy({ realm, policyName: row.original.name! })}>
+                                        {row.original.name}
+                                    </Link>
+                                )
                             )
                         },
                         {
-                            name: "enabled",
-                            displayKey: "status",
-                            cellRenderer: clientPolicy => (
+                            accessorKey: "enabled",
+                            header: t("status"),
+                            cell: ({ row }) => (
                                 <SwitchRenderer
-                                    clientPolicy={clientPolicy}
+                                    clientPolicy={row.original}
                                     form={form}
                                     saveStatus={saveStatus}
                                     onConfirm={async () => {
-                                        form.setValue(clientPolicy.name!, false);
+                                        form.setValue(row.original.name!, false);
                                         await saveStatus();
                                     }}
                                 />
                             )
                         },
                         {
-                            name: "description",
-                            cellFormatters: [translationFormatter(t)]
+                            accessorKey: "description",
+                            header: t("description"),
+                            cell: ({ row }) => translationFormatter(t)(row.original.description)
+                        },
+                        {
+                            id: "actions",
+                            cell: ({ row }) =>
+                                row.original.global ? null : (
+                                    <DataTableRowActions row={row}>
+                                        <button
+                                            type="button"
+                                            className="rounded-md px-1.5 py-1 text-left text-sm text-destructive hover:bg-destructive/10"
+                                            onClick={() => setSelectedPolicy(row.original)}
+                                        >
+                                            {t("delete")}
+                                        </button>
+                                    </DataTableRowActions>
+                                )
                         }
                     ]}
+                    data={tablePolicies ?? []}
+                    searchColumnId="name"
+                    searchPlaceholder={t("clientPolicySearch")}
+                    emptyContent={
+                        <Empty className="py-12">
+                            <EmptyHeader><EmptyTitle>{t("noClientPolicies")}</EmptyTitle></EmptyHeader>
+                            <EmptyContent><EmptyDescription>{t("noClientPoliciesInstructions")}</EmptyDescription></EmptyContent>
+                            <Button asChild className="mt-2">
+                                <Link to={toAddClientPolicy({ realm })}>{t("createClientPolicy")}</Link>
+                            </Button>
+                        </Empty>
+                    }
+                    emptyMessage={t("noClientPolicies")}
+                    toolbar={
+                        <Button id="createPolicy" asChild data-testid="createPolicy">
+                            <Link to={toAddClientPolicy({ realm })}>{t("createClientPolicy")}</Link>
+                        </Button>
+                    }
                 />
             ) : (
                 <>

@@ -5,18 +5,23 @@ import { Button } from "@merge/ui/components/button";
 import { Checkbox } from "@merge/ui/components/checkbox";
 import { Popover, PopoverContent, PopoverTrigger } from "@merge/ui/components/popover";
 import { Question } from "@phosphor-icons/react";
-import { cellWidth } from "../../shared/keycloak-ui-shared";
 import { intersectionBy, sortBy, uniqBy } from "lodash-es";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useAdminClient } from "../admin-client";
-import { getErrorDescription, getErrorMessage } from "../../shared/keycloak-ui-shared";
+import { getErrorDescription, getErrorMessage, useFetch } from "../../shared/keycloak-ui-shared";
 import { toast } from "@merge/ui/components/sonner";
 import { useConfirmDialog } from "../components/confirm-dialog/ConfirmDialog";
 import { GroupPath } from "../components/group/GroupPath";
 import { GroupPickerDialog } from "../components/group/GroupPickerDialog";
-import { ListEmptyState } from "../../shared/keycloak-ui-shared";
-import { KeycloakDataTable } from "../../shared/keycloak-ui-shared";
+import { DataTable } from "@merge/ui/components/table";
+import {
+    Empty,
+    EmptyContent,
+    EmptyDescription,
+    EmptyHeader,
+    EmptyTitle
+} from "@merge/ui/components/empty";
 import { useAccess } from "../context/access/Access";
 
 type UserGroupsProps = {
@@ -43,46 +48,34 @@ const [key, setKey] = useState(0);
     const { hasAccess } = useAccess();
     const isManager = hasAccess("manage-users");
 
-    const alphabetize = (groupsList: GroupRepresentation[]) => {
-        return sortBy(groupsList, group => group.path?.toUpperCase());
-    };
+    const alphabetize = (groupsList: GroupRepresentation[]) =>
+        sortBy(groupsList, group => group.path?.toUpperCase());
 
-    const loader = async (first?: number, max?: number, search?: string) => {
-        const params: { [name: string]: string | number } = {
-            first: first!,
-            max: max!
-        };
-
-        const searchParam = search || "";
-        if (searchParam) {
-            params.search = searchParam;
-        }
-
-        const joinedUserGroups = await adminClient.users.listGroups({
-            ...params,
-            id: user.id!
-        });
-
-        setDirectMembershipList([...joinedUserGroups]);
-
-        const indirect: GroupRepresentation[] = [];
-        if (!isDirectMembership)
-            joinedUserGroups.forEach(g => {
-                const paths = (g.path?.substring(1).match(/((~\/)|[^/])+/g) || []).slice(
-                    0,
-                    -1
-                );
-
-                indirect.push(
-                    ...paths.map(p => ({
-                        name: p,
-                        path: g.path?.substring(0, g.path.indexOf(p) + p.length)
-                    }))
-                );
+    const [groups, setGroups] = useState<GroupRepresentation[]>([]);
+    useFetch(
+        async () => {
+            const joinedUserGroups = await adminClient.users.listGroups({
+                id: user.id!,
+                first: 0,
+                max: 500
             });
-
-        return alphabetize(uniqBy([...joinedUserGroups, ...indirect], "path"));
-    };
+            setDirectMembershipList([...joinedUserGroups]);
+            const indirect: GroupRepresentation[] = [];
+            if (!isDirectMembership)
+                joinedUserGroups.forEach(g => {
+                    const paths = (g.path?.substring(1).match(/((~\/)|[^/])+/g) || []).slice(0, -1);
+                    indirect.push(
+                        ...paths.map(p => ({
+                            name: p,
+                            path: g.path?.substring(0, g.path!.indexOf(p) + p.length)
+                        } as GroupRepresentation))
+                    );
+                });
+            return alphabetize(uniqBy([...joinedUserGroups, ...indirect], "path"));
+        },
+        setGroups,
+        [key, isDirectMembership]
+    );
 
     const toggleModal = () => {
         setOpen(!open);
@@ -162,26 +155,83 @@ const [key, setKey] = useState(0);
                     }}
                 />
             )}
-            <KeycloakDataTable
+            <DataTable<GroupRepresentation>
                 key={key}
-                loader={loader}
+                columns={[
+                    {
+                        id: "select",
+                        header: "",
+                        size: 40,
+                        cell: ({ row }) => {
+                            const disabled =
+                                !isDirectMembership &&
+                                directMembershipList.every(item => item.id !== row.original.id);
+                            return (
+                                <Checkbox
+                                    checked={selectedGroups.some(s => s.id === row.original.id)}
+                                    disabled={disabled}
+                                    onCheckedChange={() => {
+                                        if (disabled) return;
+                                        setSelectedGroups(prev =>
+                                            prev.some(s => s.id === row.original.id)
+                                                ? prev.filter(s => s.id !== row.original.id)
+                                                : isDirectMembership
+                                                  ? [...prev, row.original]
+                                                  : intersectionBy([...prev, row.original], directMembershipList, "id")
+                                        );
+                                    }}
+                                />
+                            );
+                        }
+                    },
+                    {
+                        accessorKey: "name",
+                        header: t("groupMembership"),
+                        cell: ({ row }) => row.original.name || "-"
+                    },
+                    {
+                        accessorKey: "path",
+                        header: t("path"),
+                        cell: ({ row }) => <GroupPath group={row.original} />
+                    },
+                    {
+                        id: "leave",
+                        header: "",
+                        cell: ({ row }) => {
+                            const canLeave =
+                                directMembershipList.some(item => item.id === row.original.id) ||
+                                directMembershipList.length === 0 ||
+                                isDirectMembership;
+                            return canLeave ? (
+                                <Button
+                                    data-testid={`leave-${row.original.name}`}
+                                    onClick={() => leave([row.original])}
+                                    variant="link"
+                                    disabled={!user.access?.manageGroupMembership}
+                                >
+                                    {t("leave")}
+                                </Button>
+                            ) : (
+                                "-"
+                            );
+                        }
+                    }
+                ]}
+                data={groups}
+                searchColumnId="name"
+                searchPlaceholder={t("searchGroup")}
+                emptyContent={
+                    <Empty className="py-12">
+                        <EmptyHeader><EmptyTitle>{t("noGroups")}</EmptyTitle></EmptyHeader>
+                        <EmptyContent><EmptyDescription>{t("noGroupsText")}</EmptyDescription></EmptyContent>
+                        <Button className="mt-2" onClick={toggleModal} disabled={!user.access?.manageGroupMembership}>
+                            {t("joinGroup")}
+                        </Button>
+                    </Empty>
+                }
+                emptyMessage={t("noGroups")}
                 className="keycloak_user-section_groups-table"
-                isPaginated
-                ariaLabelKey="roleList"
-                searchPlaceholderKey="searchGroup"
-                canSelectAll
-                onSelect={groups =>
-                    isDirectMembership
-                        ? setSelectedGroups(groups)
-                        : setSelectedGroups(
-                              intersectionBy(groups, directMembershipList, "id")
-                          )
-                }
-                isRowDisabled={group =>
-                    !isDirectMembership &&
-                    directMembershipList.every(item => item.id !== group.id)
-                }
-                toolbarItem={
+                toolbar={
                     <>
                         <Button
                             className="kc-join-group-button"
@@ -195,10 +245,7 @@ const [key, setKey] = useState(0);
                             <Checkbox
                                 id="kc-direct-membership-checkbox"
                                 checked={isDirectMembership}
-                                onCheckedChange={() => {
-                                    setDirectMembership(!isDirectMembership);
-                                    refresh();
-                                }}
+                                onCheckedChange={() => { setDirectMembership(!isDirectMembership); refresh(); }}
                             />
                             <label htmlFor="kc-direct-membership-checkbox" className="text-sm">
                                 {t("directMembership")}
@@ -213,15 +260,10 @@ const [key, setKey] = useState(0);
                         >
                             {t("leave")}
                         </Button>
-
                         {enabled && (
                             <Popover>
                                 <PopoverTrigger asChild>
-                                    <Button
-                                        variant="link"
-                                        className="kc-who-will-appear-button"
-                                        key="who-will-appear-button"
-                                    >
+                                    <Button variant="link" className="kc-who-will-appear-button" key="who-will-appear-button">
                                         <Question className="size-4" />
                                         {t("whoWillAppearLinkTextUsers")}
                                     </Button>
@@ -232,54 +274,6 @@ const [key, setKey] = useState(0);
                             </Popover>
                         )}
                     </>
-                }
-                columns={[
-                    {
-                        name: "groupMembership",
-                        displayKey: "groupMembership",
-                        cellRenderer: (group: GroupRepresentation) => group.name || "-",
-                        transforms: [cellWidth(40)]
-                    },
-                    {
-                        name: "path",
-                        displayKey: "path",
-                        cellRenderer: (group: GroupRepresentation) => (
-                            <GroupPath group={group} />
-                        ),
-                        transforms: [cellWidth(45)]
-                    },
-
-                    {
-                        name: "",
-                        cellRenderer: (group: GroupRepresentation) => {
-                            const canLeaveGroup =
-                                directMembershipList.some(item => item.id === group.id) ||
-                                directMembershipList.length === 0 ||
-                                isDirectMembership;
-                            return canLeaveGroup ? (
-                                <Button
-                                    data-testid={`leave-${group.name}`}
-                                    onClick={() => leave([group])}
-                                    variant="link"
-                                    disabled={!user.access?.manageGroupMembership}
-                                >
-                                    {t("leave")}
-                                </Button>
-                            ) : (
-                                "-"
-                            );
-                        },
-                        transforms: [cellWidth(20)]
-                    }
-                ]}
-                emptyState={
-                    <ListEmptyState
-                        hasIcon
-                        message={t("noGroups")}
-                        instructions={t("noGroupsText")}
-                        primaryActionText={t("joinGroup")}
-                        onPrimaryAction={toggleModal}
-                    />
                 }
             />
         </>

@@ -1,12 +1,18 @@
 import IdentityProviderRepresentation from "@keycloak/keycloak-admin-client/lib/defs/identityProviderRepresentation";
-import { getErrorDescription, getErrorMessage, KeycloakDataTable,
-    ListEmptyState,
-    useFetch } from "../../shared/keycloak-ui-shared";
+import { getErrorDescription, getErrorMessage, useFetch } from "../../shared/keycloak-ui-shared";
+import { DataTable, DataTableRowActions, type ColumnDef } from "@merge/ui/components/table";
+import {
+    Empty,
+    EmptyContent,
+    EmptyDescription,
+    EmptyHeader,
+    EmptyTitle
+} from "@merge/ui/components/empty";
+import { DropdownMenuItem } from "@merge/ui/components/dropdown-menu";
 import { toast } from "@merge/ui/components/sonner";
 import { Button } from "@merge/ui/components/button";
 import { Switch } from "@merge/ui/components/switch";
 import { sortBy } from "lodash-es";
-import { Bell } from "@phosphor-icons/react";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useParams } from "react-router-dom";
@@ -29,6 +35,89 @@ import { EditOrganizationParams } from "./routes/EditOrganization";
 type ShownOnLoginPageCheckProps = {
     row: IdentityProviderRepresentation;
     refresh: () => void;
+};
+
+type IdentityProvidersTableProps = {
+    refreshKey: number;
+    orgId: string;
+    refresh: () => void;
+    setSelectedRow: (row: IdentityProviderRepresentation | undefined) => void;
+    toggleOpen: () => void;
+    setManageDisplayDialog: (v: boolean) => void;
+    setIdpToUnlink: (row: IdentityProviderRepresentation | undefined) => void;
+};
+
+const IdentityProvidersTable = ({
+    orgId,
+    refreshKey,
+    refresh,
+    setSelectedRow,
+    toggleOpen,
+    setManageDisplayDialog,
+    setIdpToUnlink
+}: IdentityProvidersTableProps) => {
+    const { adminClient } = useAdminClient();
+    const { t } = useTranslation();
+    const [providers, setProviders] = useState<IdentityProviderRepresentation[]>([]);
+
+    useFetch(
+        async () => sortBy(await adminClient.organizations.listIdentityProviders({ orgId }), "alias"),
+        setProviders,
+        [orgId, refreshKey]
+    );
+
+    const columns: ColumnDef<IdentityProviderRepresentation>[] = [
+        { accessorKey: "alias", header: t("alias") },
+        { id: "domain", header: t("domain"), cell: ({ row }) => (row.original.config?.["kc.org.domain"] ?? "—") },
+        { accessorKey: "providerId", header: t("providerDetails") },
+        {
+            accessorKey: "hideOnLogin",
+            header: t("hideOnLoginPage"),
+            cell: ({ row }) => <ShownOnLoginPageCheck row={row.original} refresh={refresh} />
+        },
+        {
+            id: "actions",
+            cell: ({ row }) => (
+                <DataTableRowActions row={row}>
+                    <DropdownMenuItem onClick={() => { setSelectedRow(row.original); toggleOpen(); }}>
+                        {t("edit")}
+                    </DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => setIdpToUnlink(row.original)} className="text-destructive">
+                        {t("unLinkIdentityProvider")}
+                    </DropdownMenuItem>
+                </DataTableRowActions>
+            )
+        }
+    ];
+
+    const emptyContent = (
+        <Empty className="py-12">
+            <EmptyHeader><EmptyTitle>{t("emptyIdentityProviderLink")}</EmptyTitle></EmptyHeader>
+            <EmptyContent><EmptyDescription>{t("emptyIdentityProviderLinkInstructions")}</EmptyDescription></EmptyContent>
+            <Button className="mt-2" onClick={() => { setSelectedRow(undefined); toggleOpen(); }}>
+                {t("linkIdentityProvider")}
+            </Button>
+        </Empty>
+    );
+
+    return (
+        <DataTable<IdentityProviderRepresentation>
+            columns={columns}
+            data={providers}
+            searchColumnId="alias"
+            searchPlaceholder={t("searchProvider")}
+            emptyContent={emptyContent}
+            emptyMessage={t("emptyIdentityProviderLink")}
+            toolbar={
+                <>
+                    <Button onClick={() => { setSelectedRow(undefined); toggleOpen(); }}>{t("linkIdentityProvider")}</Button>
+                    <Button data-testid="manageDisplayOrder" variant="link" onClick={() => setManageDisplayDialog(true)}>
+                        {t("manageDisplayOrder")}
+                    </Button>
+                </>
+            }
+        />
+    );
 };
 
 const ShownOnLoginPageCheck = ({ row, refresh }: ShownOnLoginPageCheckProps) => {
@@ -80,13 +169,6 @@ const [key, setKey] = useState(0);
         },
         []
     );
-
-    const loader = async () => {
-        const providers = await adminClient.organizations.listIdentityProviders({
-            orgId: orgId!
-        });
-        return sortBy(providers, "alias");
-    };
 
     const onUnlinkConfirm = async () => {
         if (!idpToUnlink?.alias || !orgId) return;
@@ -140,81 +222,20 @@ const [key, setKey] = useState(0);
                     />
                 )}
                 {!hasProviders ? (
-                    <ListEmptyState
-                        icon={Bell}
-                        message={t("noIdentityProvider")}
-                        instructions={t("noIdentityProviderInstructions")}
-                    />
+                    <Empty className="py-12">
+                        <EmptyHeader><EmptyTitle>{t("noIdentityProvider")}</EmptyTitle></EmptyHeader>
+                        <EmptyContent><EmptyDescription>{t("noIdentityProviderInstructions")}</EmptyDescription></EmptyContent>
+                    </Empty>
                 ) : (
-                    <KeycloakDataTable
+                    <IdentityProvidersTable
                         key={key}
-                        loader={loader}
-                        ariaLabelKey="identityProviders"
-                        searchPlaceholderKey="searchProvider"
-                        toolbarItem={
-                            <>
-                                <div>
-                                    <Button
-                                        onClick={() => {
-                                            setSelectedRow(undefined);
-                                            toggleOpen();
-                                        }}
-                                    >
-                                        {t("linkIdentityProvider")}
-                                    </Button>
-                                </div>
-                                <div>
-                                    <Button
-                                        data-testid="manageDisplayOrder"
-                                        variant="link"
-                                        onClick={() => setManageDisplayDialog(true)}
-                                    >
-                                        {t("manageDisplayOrder")}
-                                    </Button>
-                                </div>
-                            </>
-                        }
-                        actions={[
-                            {
-                                title: t("edit"),
-                                onRowClick: row => {
-                                    setSelectedRow(row);
-                                    toggleOpen();
-                                }
-                            },
-                            {
-                                title: t("unLinkIdentityProvider"),
-                                onRowClick: row => setIdpToUnlink(row)
-                            }
-                        ]}
-                        columns={[
-                            {
-                                name: "alias"
-                            },
-                            {
-                                name: "config['kc.org.domain']",
-                                displayKey: "domain"
-                            },
-                            {
-                                name: "providerId",
-                                displayKey: "providerDetails"
-                            },
-                            {
-                                name: "hideOnLogin",
-                                displayKey: "hideOnLoginPage",
-                                cellRenderer: row => (
-                                    <ShownOnLoginPageCheck row={row} refresh={refresh} />
-                                )
-                            }
-                        ]}
-                        emptyState={
-                            <ListEmptyState
-                                message={t("emptyIdentityProviderLink")}
-                                instructions={t("emptyIdentityProviderLinkInstructions")}
-                                primaryActionText={t("linkIdentityProvider")}
-                                onPrimaryAction={toggleOpen}
-                            />
-                        }
+                        refreshKey={key}
+                        orgId={orgId!}
+                        refresh={refresh}
+                        setSelectedRow={setSelectedRow}
+                        toggleOpen={toggleOpen}
+                        setManageDisplayDialog={setManageDisplayDialog}
+                        setIdpToUnlink={setIdpToUnlink}
                     />
                 )}
             </div>

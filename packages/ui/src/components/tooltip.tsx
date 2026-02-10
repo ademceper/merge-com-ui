@@ -177,7 +177,7 @@ export function TooltipContent({
         )}
         {...props}
       >
-        {children}
+        {children as React.ReactNode}
         <TooltipPrimitive.Arrow 
           className="fill-foreground [transition:inherit]"
         />

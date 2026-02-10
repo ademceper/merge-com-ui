@@ -1,7 +1,7 @@
 import OrganizationRepresentation from "@keycloak/keycloak-admin-client/lib/defs/organizationRepresentation";
-import UserRepresentation from "@keycloak/keycloak-admin-client/lib/defs/userRepresentation";
-import { KeycloakDataTable } from "../../shared/keycloak-ui-shared";
+import { useFetch } from "../../shared/keycloak-ui-shared";
 import { Button } from "@merge/ui/components/button";
+import { Checkbox } from "@merge/ui/components/checkbox";
 import {
     Dialog,
     DialogContent,
@@ -9,6 +9,7 @@ import {
     DialogHeader,
     DialogTitle,
 } from "@merge/ui/components/dialog";
+import { DataTable, type ColumnDef } from "@merge/ui/components/table";
 import { differenceBy } from "lodash-es";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -29,19 +30,51 @@ export const OrganizationModal = ({
 }: OrganizationModalProps) => {
     const { adminClient } = useAdminClient();
     const { t } = useTranslation();
+    const [selectedRows, setSelectedRows] = useState<OrganizationRepresentation[]>([]);
+    const [orgs, setOrgs] = useState<OrganizationRepresentation[]>([]);
 
-    const [selectedRows, setSelectedRows] = useState<UserRepresentation[]>([]);
+    useFetch(
+        () =>
+            adminClient.organizations.find({ first: 0, max: 500 }).then(all =>
+                differenceBy(all, existingOrgs, "id")
+            ),
+        setOrgs,
+        [existingOrgs.length]
+    );
 
-    const loader = async (first?: number, max?: number, search?: string) => {
-        const params = {
-            first,
-            search,
-            max: max! + existingOrgs.length
-        };
-
-        const orgs = await adminClient.organizations.find(params);
-        return differenceBy(orgs, existingOrgs, "id");
+    const toggleSelect = (org: OrganizationRepresentation) => {
+        setSelectedRows(prev =>
+            prev.some(o => o.id === org.id)
+                ? prev.filter(o => o.id !== org.id)
+                : [...prev, org]
+        );
     };
+
+    const columns: ColumnDef<OrganizationRepresentation>[] = [
+        {
+            id: "select",
+            header: "",
+            size: 40,
+            cell: ({ row }) => (
+                <Checkbox
+                    checked={selectedRows.some(o => o.id === row.original.id)}
+                    onCheckedChange={() => toggleSelect(row.original)}
+                />
+            )
+        },
+        {
+            accessorKey: "name",
+            header: t("organizationName"),
+            cell: ({ row }) => row.original.name
+        },
+        {
+            accessorKey: "description",
+            header: t("description"),
+            cell: ({ row }) => (
+                <span className="truncate block">{row.original.description ?? ""}</span>
+            )
+        }
+    ];
 
     return (
         <Dialog open onOpenChange={open => !open && onClose()}>
@@ -51,27 +84,12 @@ export const OrganizationModal = ({
                         {isJoin ? t("joinOrganization") : t("sendInvitation")}
                     </DialogTitle>
                 </DialogHeader>
-                <KeycloakDataTable
-                    loader={loader}
-                    isPaginated
-                    ariaLabelKey="organizationsList"
-                    searchPlaceholderKey="searchOrganization"
-                    canSelectAll
-                    onSelect={rows => setSelectedRows([...rows])}
-                    columns={[
-                        {
-                            name: "name",
-                            displayKey: "organizationName"
-                        },
-                        {
-                            name: "description",
-                            cellRenderer: row => (
-                                <span className="truncate block">
-                                    {row.description}
-                                </span>
-                            )
-                        }
-                    ]}
+                <DataTable
+                    columns={columns}
+                    data={orgs}
+                    searchColumnId="name"
+                    searchPlaceholder={t("searchOrganization")}
+                    emptyMessage={t("noResults")}
                 />
                 <DialogFooter>
                     <Button
@@ -83,6 +101,7 @@ export const OrganizationModal = ({
                     </Button>
                     <Button
                         data-testid="join"
+                        disabled={selectedRows.length === 0}
                         onClick={async () => {
                             await onAdd(selectedRows);
                             onClose();

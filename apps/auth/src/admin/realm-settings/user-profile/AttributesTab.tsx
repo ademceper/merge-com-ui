@@ -118,8 +118,6 @@ export const AttributesTab = ({ setTableData }: AttributesTabProps) => {
     };
 
     const attributes = config?.attributes ?? [];
-    const groups = config?.groups ?? [];
-
     const filteredData = useMemo(() => {
         if (filter === "allGroups") return attributes;
         return attributes.filter((attr) => attr.group === filter);

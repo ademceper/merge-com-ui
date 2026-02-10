@@ -33,10 +33,10 @@ import type { PropsWithChildren } from "react";
 import { useMemo, useState } from "react";
 import { Controller, FormProvider, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
+import { Funnel } from "@phosphor-icons/react";
 import { useAdminClient } from "../admin-client";
 import { TextControl, useFetch } from "../../shared/keycloak-ui-shared";
 import { EventsBanners } from "../Banners";
-import DropdownPanel from "../components/dropdown-panel/DropdownPanel";
 import CodeEditor from "../components/form/CodeEditor";
 import { useRealm } from "../context/realm-context/RealmContext";
 import { useServerInfo } from "../context/server-info/ServerInfoProvider";
@@ -224,7 +224,7 @@ export const AdminEvents = ({ resourcePath }: AdminEventsProps) => {
         {
             accessorKey: "resourcePath",
             header: t("resourcePath"),
-            cell: ({ row }) => <CellResourceLinkRenderer event={row.original} />
+            cell: ({ row }) => <CellResourceLinkRenderer {...row.original} />
         },
         {
             accessorKey: "resourceType",
@@ -245,9 +245,7 @@ export const AdminEvents = ({ resourcePath }: AdminEventsProps) => {
             size: 50,
             enableHiding: false,
             cell: ({ row }) => (
-                <DataTableRowActions
-                    row={row as { original: AdminEventRepresentation; id: string; getValue: (id: string) => unknown }}
-                >
+                <DataTableRowActions row={row}>
                     <button
                         type="button"
                         className="flex w-full items-center gap-2 rounded-md px-1.5 py-1 text-left text-sm hover:bg-accent hover:text-accent-foreground"
@@ -270,15 +268,24 @@ export const AdminEvents = ({ resourcePath }: AdminEventsProps) => {
     const searchToolbar = (
         <FormProvider {...form}>
             <div className="flex flex-col gap-0">
-                <div>
-                    <DropdownPanel
-                        buttonText={t("searchForAdminEvent")}
-                        setSearchDropdownOpen={setSearchDropdownOpen}
-                        searchDropdownOpen={searchDropdownOpen}
-                        marginRight="2.5rem"
-                        width="15vw"
-                    >
-                        <form className="keycloak__events_search__form space-y-4" data-testid="searchForm">
+                <div className="mr-10">
+                    <Popover open={searchDropdownOpen} onOpenChange={setSearchDropdownOpen}>
+                        <PopoverTrigger asChild>
+                            <button
+                                type="button"
+                                className="inline-flex size-9 shrink-0 items-center justify-center rounded-lg border border-border bg-background text-sm font-medium hover:bg-muted hover:text-foreground dark:border-input dark:hover:bg-input/50"
+                                aria-label={t("searchForAdminEvent")}
+                                data-testid="dropdown-panel-btn"
+                            >
+                                <Funnel className="size-4" />
+                            </button>
+                        </PopoverTrigger>
+                        <PopoverContent
+                            className="w-[min(90vw,400px)] max-h-[85vh] overflow-auto p-4"
+                            align="start"
+                            style={{ zIndex: 2147483647 }}
+                        >
+                            <form className="keycloak__events_search__form space-y-4" data-testid="searchForm">
                             <div className="space-y-2">
                                 <Label htmlFor="kc-resourceTypes">{t("resourceTypes")}</Label>
                                 <Controller
@@ -463,7 +470,8 @@ export const AdminEvents = ({ resourcePath }: AdminEventsProps) => {
                                 </Button>
                             </div>
                         </form>
-                    </DropdownPanel>
+                        </PopoverContent>
+                    </Popover>
                 </div>
                 {Object.entries(activeFilters).length > 0 && (
                     <div className="keycloak__searchChips ml-4 mt-2 flex flex-wrap gap-2">

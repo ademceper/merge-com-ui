@@ -11,8 +11,15 @@ import {
 } from "@merge/ui/components/select";
 import { DataTable, type ColumnDef } from "@merge/ui/components/table";
 import { FormPanel } from "../../../shared/keycloak-ui-shared/scroll-form/FormPanel";
-import { ListEmptyState } from "../../../shared/keycloak-ui-shared";
-import { X } from "@phosphor-icons/react";
+import {
+    Empty,
+    EmptyContent,
+    EmptyDescription,
+    EmptyHeader,
+    EmptyMedia,
+    EmptyTitle
+} from "@merge/ui/components/empty";
+import { MagnifyingGlass, X } from "@phosphor-icons/react";
 import { pickBy } from "lodash-es";
 import { useMemo, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
@@ -124,11 +131,10 @@ export const EffectiveMessageBundles = ({
 
         adminClient.serverInfo
             .findEffectiveMessageBundles({
-                realm: realm.realm!,
+                realm,
                 theme: filter.theme,
                 themeType: filter.themeType,
                 locale: filter.locale || DEFAULT_LOCALE,
-                hasWords: filter.hasWords,
                 source: true,
             })
             .then((messages) => {
@@ -524,11 +530,17 @@ export const EffectiveMessageBundles = ({
             </FormPanel>
 
             {!searchPerformed && (
-                <ListEmptyState
-                    message={t("emptyEffectiveMessageBundles")}
-                    instructions={t("emptyEffectiveMessageBundlesInstructions")}
-                    isSearchVariant
-                />
+                <Empty className="py-12">
+                    <EmptyHeader>
+                        <EmptyMedia variant="icon">
+                            <MagnifyingGlass className="size-4" />
+                        </EmptyMedia>
+                        <EmptyTitle>{t("emptyEffectiveMessageBundles")}</EmptyTitle>
+                    </EmptyHeader>
+                    <EmptyContent>
+                        <EmptyDescription>{t("emptyEffectiveMessageBundlesInstructions")}</EmptyDescription>
+                    </EmptyContent>
+                </Empty>
             )}
 
             {searchPerformed && (

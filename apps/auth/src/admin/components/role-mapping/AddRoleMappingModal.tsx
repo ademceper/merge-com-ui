@@ -1,6 +1,15 @@
 import RoleRepresentation from "@keycloak/keycloak-admin-client/lib/defs/roleRepresentation";
-import { KeycloakDataTable, ListEmptyState, cellWidth } from "../../../shared/keycloak-ui-shared";
+import { useFetch } from "../../../shared/keycloak-ui-shared";
+import { DataTable, type ColumnDef } from "@merge/ui/components/table";
+import {
+    Empty,
+    EmptyContent,
+    EmptyDescription,
+    EmptyHeader,
+    EmptyTitle
+} from "@merge/ui/components/empty";
 import { Button } from "@merge/ui/components/button";
+import { Checkbox } from "@merge/ui/components/checkbox";
 import {
     Dialog,
     DialogContent,
@@ -120,77 +129,66 @@ export const AddRoleMappingModal = ({
 
     const { t } = useTranslation();
     const [selectedRows, setSelectedRows] = useState<Row[]>([]);
+    const [rolesData, setRolesData] = useState<Row[]>([]);
 
     const localeSort = useLocaleSort();
-    const compareRow = ({ role: { name } }: Row) => name?.toUpperCase();
+    const compareRow = ({ role: { name: n } }: Row) => n?.toUpperCase();
 
-    const loader = async (
-        first?: number,
-        max?: number,
-        search?: string
-    ): Promise<Row[]> => {
-        const params: Record<string, string | number> = {
-            first: first!,
-            max: max!
-        };
-
-        if (search) {
-            params.search = search;
-        }
-
-        const roles = await getAvailableRoles(adminClient, type, { ...params, id });
-        const sorted = localeSort(roles, compareRow);
-        return sorted.map(row => {
-            return {
-                role: row.role,
-                id: row.role.id
-            };
-        });
-    };
-
-    const clientRolesLoader = async (
-        first?: number,
-        max?: number,
-        search?: string
-    ): Promise<Row[]> => {
-        const roles = await getAvailableClientRoles(adminClient, {
-            id,
-            type,
-            first: first || 0,
-            max: max || 10,
-            search
-        });
-
-        return localeSort(
-            roles.map(e => ({
-                client: { clientId: e.client, id: e.clientId },
-                role: { id: e.id, name: e.role, description: e.description },
-                id: e.id
-            })),
-            ({ client: { clientId }, role: { name } }) => `${clientId}${name}`
-        );
-    };
-
-    const columns = [
-        {
-            name: "role.name",
-            displayKey: "name",
-            transforms: [cellWidth(30)]
+    useFetch(
+        async () => {
+            if (filterType === "roles") {
+                const roles = await getAvailableRoles(adminClient, type, { id, first: 0, max: 500 });
+                return localeSort(roles, compareRow).map(row => ({ role: row.role, id: row.role.id }));
+            }
+            const roles = await getAvailableClientRoles(adminClient, { id, type, first: 0, max: 500 });
+            return localeSort(
+                roles.map(e => ({
+                    client: { clientId: e.client, id: e.clientId },
+                    role: { id: e.id, name: e.role, description: e.description },
+                    id: e.id
+                })),
+                ({ client: { clientId }, role: { name: n } }) => `${clientId}${n}`
+            );
         },
+        setRolesData,
+        [id, type, filterType]
+    );
+
+    const columns: ColumnDef<Row>[] = [
         {
-            name: "client.clientId",
-            displayKey: "clientId"
+            id: "select",
+            header: "",
+            size: 40,
+            cell: ({ row }) => (
+                <Checkbox
+                    checked={selectedRows.some(s => s.id === row.original.id)}
+                    onCheckedChange={() => {
+                        if (isRadio) {
+                            setSelectedRows([row.original]);
+                        } else {
+                            setSelectedRows(prev =>
+                                prev.some(s => s.id === row.original.id)
+                                    ? prev.filter(s => s.id !== row.original.id)
+                                    : [...prev, row.original]
+                            );
+                        }
+                    }}
+                />
+            )
         },
-        {
-            name: "role.description",
-            displayKey: "description",
-            cellRenderer: RoleDescription
-        }
+        { accessorKey: "role.name", header: t("name"), cell: ({ row }) => row.original.role?.name ?? "—" },
+        ...(filterType === "clients"
+            ? [{ accessorKey: "client.clientId", header: t("clientId"), cell: ({ row }: { row: { original: Row } }) => row.original.client?.clientId ?? "—" } as ColumnDef<Row>]
+            : []),
+        { accessorKey: "role.description", header: t("description"), cell: ({ row }) => <RoleDescription role={row.original.role!} /> }
     ];
 
-    if (filterType === "roles") {
-        columns.splice(1, 1);
-    }
+    const emptyContent = (
+        <Empty className="py-12">
+            <EmptyHeader><EmptyTitle>{t("noRoles")}</EmptyTitle></EmptyHeader>
+            <EmptyContent><EmptyDescription>{t("noRealmRolesToAssign")}</EmptyDescription></EmptyContent>
+        </Empty>
+    );
 
     return (
         <Dialog open onOpenChange={open => !open && onClose()}>
@@ -204,24 +202,14 @@ export const AddRoleMappingModal = ({
                             })}
                     </DialogTitle>
                 </DialogHeader>
-                <KeycloakDataTable
-                onSelect={rows => setSelectedRows([...rows])}
-                searchPlaceholderKey={
-                    filterType === "roles" ? "searchByRoleName" : "search"
-                }
-                isPaginated={!(filterType === "roles" && type !== "roles")}
-                canSelectAll
-                isRadio={isRadio}
-                loader={filterType === "roles" ? loader : clientRolesLoader}
-                ariaLabelKey="associatedRolesText"
-                columns={columns}
-                emptyState={
-                    <ListEmptyState
-                        message={t("noRoles")}
-                        instructions={t("noRealmRolesToAssign")}
-                    />
-                }
-            />
+                <DataTable<Row>
+                    columns={columns}
+                    data={rolesData}
+                    searchColumnId={filterType === "roles" ? "role.name" : "role.name"}
+                    searchPlaceholder={filterType === "roles" ? t("searchByRoleName") : t("search")}
+                    emptyContent={emptyContent}
+                    emptyMessage={t("noRoles")}
+                />
                 <DialogFooter>
                     <Button
                         data-testid="assign"

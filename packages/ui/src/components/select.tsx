@@ -47,7 +47,7 @@ export function SelectTrigger({
       )}
       {...props}
     >
-      {children}
+      {children as React.ReactNode}
       <SelectPrimitive.Icon asChild>
         <CaretDownIcon className="text-muted-foreground size-4 pointer-events-none" />
       </SelectPrimitive.Icon>

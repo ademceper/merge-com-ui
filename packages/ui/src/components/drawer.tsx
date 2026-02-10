@@ -53,7 +53,7 @@ export function DrawerContent({
   hideHandle?: boolean
   contentClassName?: string
 }) {
-  const childArray = React.Children.toArray(children)
+  const childArray = React.Children.toArray(children as React.ReactNode)
   const hasHeader = childArray.length >= 2
   const hasFooter = childArray.length >= 3
   const headerChild = hasHeader ? childArray[0] : null

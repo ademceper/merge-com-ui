@@ -57,7 +57,7 @@ export function countGroups(groups: GroupRepresentation[]) {
     return count;
 }
 
-const GroupTreeContextMenu = ({ group, refresh }: GroupTreeContextMenuProps) => {
+export const GroupTreeContextMenu = ({ group, refresh }: GroupTreeContextMenuProps) => {
     const { t } = useTranslation();
 
     const [isOpen, toggleOpen] = useToggle();
@@ -287,20 +287,20 @@ export const GroupTree = ({ refresh: viewRefresh, canViewDetails }: GroupTreePro
     const { t } = useTranslation();
     const { realm } = useRealm();
     const navigate = useNavigate();
-    const { hasAccess } = useAccess();
+    const { hasAccess: _hasAccess } = useAccess();
 
     const [data, setData] = useState<ExtendedTreeViewDataItem[]>();
     const { subGroups, clear, setSubGroups } = useSubGroups();
 
     const [search, setSearch] = useState("");
-    const [max, setMax] = useState(20);
+    const [max, _setMax] = useState(20);
     const [first, setFirst] = useState(0);
     const prefFirst = useRef(0);
     const prefMax = useRef(20);
     const [count, setCount] = useState(0);
     const [activeItem, setActiveItem] = useState<ExtendedTreeViewDataItem>();
     const [loadingGroupId, setLoadingGroupId] = useState<string>();
-    const navigatingToRef = useRef<string>();
+    const navigatingToRef = useRef<string | undefined>(undefined);
 
     const [firstSub, setFirstSub] = useState(0);
 
@@ -491,7 +491,7 @@ export const GroupTree = ({ refresh: viewRefresh, canViewDetails }: GroupTreePro
 
         setActiveItem(item);
         // Show loading state immediately for the clicked group
-        setLoadingGroupId(item.id);
+        setLoadingGroupId(item.id ?? undefined);
 
         // Optimistically update breadcrumb with new path instead of clearing (prevents flickering)
         const newBreadcrumbPath = path.map(g => {

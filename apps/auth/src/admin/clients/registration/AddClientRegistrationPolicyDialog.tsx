@@ -14,7 +14,6 @@ import {
 } from "@merge/ui/components/dialog";
 import { FormProvider, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
-import { ArrowRight } from "@phosphor-icons/react";
 import { cn } from "@merge/ui/lib/utils";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useAdminClient } from "../../admin-client";
@@ -39,7 +38,7 @@ export function AddClientRegistrationPolicyDialog({
 }: AddClientRegistrationPolicyDialogProps) {
     const { adminClient } = useAdminClient();
     const { t } = useTranslation();
-    const { realm, realmRepresentation } = useRealm();
+    const { realmRepresentation } = useRealm();
     const serverInfo = useServerInfo();
     const [open, setOpen] = useState(false);
     const [currentStep, setCurrentStep] = useState(0);
@@ -73,7 +72,6 @@ export function AddClientRegistrationPolicyDialog({
     const { handleSubmit, reset } = form;
 
     const totalSteps = 2;
-    const isLastStep = currentStep === 1;
 
     const resetToStep0 = () => {
         setCurrentStep(0);

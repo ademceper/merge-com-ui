@@ -111,7 +111,7 @@ export function DropdownMenuCheckboxItem({
           />
         </DropdownMenuPrimitive.ItemIndicator>
       </span>
-      {children}
+      {children as React.ReactNode}
     </DropdownMenuPrimitive.CheckboxItem>
   )
 }
@@ -150,7 +150,7 @@ export function DropdownMenuRadioItem({
           />
         </DropdownMenuPrimitive.ItemIndicator>
       </span>
-      {children}
+      {children as React.ReactNode}
     </DropdownMenuPrimitive.RadioItem>
   )
 }
@@ -222,7 +222,7 @@ export function DropdownMenuSubTrigger({
       )}
       {...props}
     >
-      {children}
+      {children as React.ReactNode}
       <CaretRightIcon className="ml-auto" />
     </DropdownMenuPrimitive.SubTrigger>
   )

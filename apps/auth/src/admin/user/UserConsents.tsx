@@ -1,17 +1,23 @@
 import type UserConsentRepresentation from "@keycloak/keycloak-admin-client/lib/defs/userConsentRepresentation";
 import { Badge } from "@merge/ui/components/badge";
-import { Cube } from "@phosphor-icons/react";
-import { cellWidth } from "../../shared/keycloak-ui-shared";
+import { Cube, Trash } from "@phosphor-icons/react";
 import { sortBy } from "lodash-es";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useAdminClient } from "../admin-client";
-import { getErrorDescription, getErrorMessage } from "../../shared/keycloak-ui-shared";
+import { getErrorDescription, getErrorMessage, useFetch } from "../../shared/keycloak-ui-shared";
 import { toast } from "@merge/ui/components/sonner";
 import { useConfirmDialog } from "../components/confirm-dialog/ConfirmDialog";
-import { ListEmptyState } from "../../shared/keycloak-ui-shared";
-import { Action, KeycloakDataTable } from "../../shared/keycloak-ui-shared";
-import { emptyFormatter } from "../util";
+import { DataTable, DataTableRowActions, type ColumnDef } from "@merge/ui/components/table";
+import {
+    Empty,
+    EmptyContent,
+    EmptyDescription,
+    EmptyHeader,
+    EmptyMedia,
+    EmptyTitle
+} from "@merge/ui/components/empty";
+import { DropdownMenuItem } from "@merge/ui/components/dropdown-menu";
 import useFormatDate from "../utils/useFormatDate";
 import { useParams } from "../utils/useParams";
 
@@ -30,11 +36,12 @@ const formatDate = useFormatDate();
 
     const refresh = () => setKey(new Date().getTime());
 
-    const loader = async () => {
-        const getConsents = await adminClient.users.listConsents({ id });
-
-        return alphabetize(getConsents);
-    };
+    const [consents, setConsents] = useState<UserConsentRepresentation[]>([]);
+    useFetch(
+        async () => alphabetize(await adminClient.users.listConsents({ id })),
+        setConsents,
+        [key, id]
+    );
 
     const clientScopesRenderer = ({ grantedClientScopes }: UserConsentRepresentation) => {
         return (
@@ -71,59 +78,45 @@ const formatDate = useFormatDate();
         }
     });
 
+    const columns: ColumnDef<UserConsentRepresentation>[] = [
+        { accessorKey: "clientId", header: t("Client"), cell: ({ getValue }) => getValue() ?? "—" },
+        { accessorKey: "grantedClientScopes", header: t("grantedClientScopes"), cell: ({ row }) => clientScopesRenderer(row.original) },
+        { accessorKey: "createdDate", header: t("created"), cell: ({ row }) => row.original.createdDate ? formatDate(new Date(row.original.createdDate)) : "—" },
+        { accessorKey: "lastUpdatedDate", header: t("lastUpdated"), cell: ({ row }) => row.original.lastUpdatedDate ? formatDate(new Date(row.original.lastUpdatedDate)) : "—" },
+        {
+            id: "actions",
+            cell: ({ row }) => (
+                <DataTableRowActions row={row}>
+                    <DropdownMenuItem
+                        onClick={() => { setSelectedClient(row.original); toggleDeleteDialog(); }}
+                    >
+                        <Trash className="size-4" />
+                        {t("revoke")}
+                    </DropdownMenuItem>
+                </DataTableRowActions>
+            )
+        }
+    ];
+
+    const emptyContent = (
+        <Empty className="py-12">
+            <EmptyMedia><Cube className="size-12 text-muted-foreground" /></EmptyMedia>
+            <EmptyHeader><EmptyTitle>{t("noConsents")}</EmptyTitle></EmptyHeader>
+            <EmptyContent><EmptyDescription>{t("noConsentsText")}</EmptyDescription></EmptyContent>
+        </Empty>
+    );
+
     return (
         <>
             <DeleteConfirm />
-            <KeycloakDataTable
-                loader={loader}
+            <DataTable<UserConsentRepresentation>
                 key={key}
-                ariaLabelKey="roleList"
-                searchPlaceholderKey=" "
-                columns={[
-                    {
-                        name: "clientId",
-                        displayKey: "Client",
-                        cellFormatters: [emptyFormatter()],
-                        transforms: [cellWidth(20)]
-                    },
-                    {
-                        name: "grantedClientScopes",
-                        displayKey: "grantedClientScopes",
-                        cellRenderer: clientScopesRenderer,
-                        transforms: [cellWidth(30)]
-                    },
-                    {
-                        name: "createdDate",
-                        displayKey: "created",
-                        transforms: [cellWidth(20)],
-                        cellRenderer: ({ createdDate }) =>
-                            createdDate ? formatDate(new Date(createdDate)) : "—"
-                    },
-                    {
-                        name: "lastUpdatedDate",
-                        displayKey: "lastUpdated",
-                        transforms: [cellWidth(10)],
-                        cellRenderer: ({ lastUpdatedDate }) =>
-                            lastUpdatedDate ? formatDate(new Date(lastUpdatedDate)) : "—"
-                    }
-                ]}
-                actions={[
-                    {
-                        title: t("revoke"),
-                        onRowClick: client => {
-                            setSelectedClient(client);
-                            toggleDeleteDialog();
-                        }
-                    } as Action<UserConsentRepresentation>
-                ]}
-                emptyState={
-                    <ListEmptyState
-                        hasIcon={true}
-                        icon={Cube}
-                        message={t("noConsents")}
-                        instructions={t("noConsentsText")}
-                    />
-                }
+                columns={columns}
+                data={consents}
+                searchColumnId="clientId"
+                searchPlaceholder=" "
+                emptyContent={emptyContent}
+                emptyMessage={t("noConsents")}
             />
         </>
     );

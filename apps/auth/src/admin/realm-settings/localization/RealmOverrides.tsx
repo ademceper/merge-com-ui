@@ -76,7 +76,7 @@ export const RealmOverrides = ({
     const { whoAmI } = useWhoAmI();
 
     const [addTranslationModalOpen, setAddTranslationModalOpen] = useState(false);
-    const [translations, setTranslations] = useState<[string, string][]>([]);
+    const [_translations, setTranslations] = useState<[string, string][]>([]);
     const [selectMenuLocale, setSelectMenuLocale] = useState(DEFAULT_LOCALE);
     const [tableRows, setTableRows] = useState<TableRowData[]>([]);
     const [tableKey, setTableKey] = useState(0);

@@ -1,6 +1,15 @@
 import UserRepresentation from "@keycloak/keycloak-admin-client/lib/defs/userRepresentation";
-import { getErrorDescription, getErrorMessage, KeycloakDataTable,
-    ListEmptyState } from "../../shared/keycloak-ui-shared";
+import { getErrorDescription, getErrorMessage, useFetch } from "../../shared/keycloak-ui-shared";
+import { DataTable, DataTableRowActions } from "@merge/ui/components/table";
+import { DropdownMenuItem } from "@merge/ui/components/dropdown-menu";
+import {
+    Empty,
+    EmptyContent,
+    EmptyDescription,
+    EmptyHeader,
+    EmptyTitle
+} from "@merge/ui/components/empty";
+import { Checkbox } from "@merge/ui/components/checkbox";
 import { toast } from "@merge/ui/components/sonner";
 import { Button } from "@merge/ui/components/button";
 import { useState } from "react";
@@ -62,28 +71,27 @@ const [key, setKey] = useState(0);
         refresh();
     };
 
-    const loader = async (first?: number, max?: number) => {
-        try {
-            const membershipType =
-                filteredMembershipTypes.length === 1
-                    ? filteredMembershipTypes[0]
-                    : undefined;
+    const [members, setMembers] = useState<MembershipTypeRepresentation[]>([]);
 
-            const memberships: MembershipTypeRepresentation[] =
-                await adminClient.organizations.listMembers({
+    useFetch(
+        async () => {
+            try {
+                const membershipType = filteredMembershipTypes.length === 1 ? filteredMembershipTypes[0] : undefined;
+                return await adminClient.organizations.listMembers({
                     orgId,
-                    first,
-                    max,
+                    first: 0,
+                    max: 500,
                     search: searchTriggerText,
                     membershipType
                 });
-
-            return memberships;
-        } catch (error) {
-            toast.error(t("organizationsMembersListError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
-            return [];
-        }
-    };
+            } catch (error) {
+                toast.error(t("organizationsMembersListError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
+                return [];
+            }
+        },
+        setMembers,
+        [key, orgId, searchTriggerText, filteredMembershipTypes]
+    );
 
     const handleChange = (value: string) => {
         setSearchText(value);
@@ -146,14 +154,56 @@ const [key, setKey] = useState(0);
                     }}
                 />
             )}
-            <KeycloakDataTable
+            <DataTable<MembershipTypeRepresentation>
                 key={key}
-                loader={loader}
-                isPaginated
-                ariaLabelKey="membersList"
-                onSelect={members => setSelectedMembers([...members])}
-                canSelectAll
-                toolbarItem={
+                columns={[
+                    {
+                        id: "select",
+                        header: "",
+                        size: 40,
+                        cell: ({ row }) => (
+                            <Checkbox
+                                checked={selectedMembers.some(s => s.id === row.original.id)}
+                                onCheckedChange={() =>
+                                    setSelectedMembers(prev =>
+                                        prev.some(s => s.id === row.original.id)
+                                            ? prev.filter(s => s.id !== row.original.id)
+                                            : [...prev, row.original]
+                                    )
+                                }
+                            />
+                        )
+                    },
+                    { accessorKey: "username", header: t("name"), cell: ({ row }) => <UserDetailLink {...row.original} /> },
+                    { accessorKey: "email", header: t("email"), cell: ({ getValue }) => (getValue() ?? "—") as string },
+                    { accessorKey: "firstName", header: t("firstName"), cell: ({ getValue }) => (getValue() ?? "—") as string },
+                    { accessorKey: "lastName", header: t("lastName"), cell: ({ getValue }) => (getValue() ?? "—") as string },
+                    { accessorKey: "membershipType", header: t("membershipType"), cell: ({ row }) => translationFormatter(t)(row.original.membershipType) },
+                    {
+                        id: "actions",
+                        cell: ({ row }) => (
+                            <DataTableRowActions row={row}>
+                                <DropdownMenuItem onClick={() => removeMember([row.original])} className="text-destructive">
+                                    {t("remove")}
+                                </DropdownMenuItem>
+                            </DataTableRowActions>
+                        )
+                    }
+                ]}
+                data={members}
+                searchColumnId="username"
+                searchPlaceholder={t("search")}
+                emptyContent={
+                    <Empty className="py-12">
+                        <EmptyHeader><EmptyTitle>{t("emptyMembers")}</EmptyTitle></EmptyHeader>
+                        <EmptyContent>
+                            <EmptyDescription>{t("emptyMembersInstructions")}</EmptyDescription>
+                            <Button variant="outline" className="mt-2" onClick={toggleAddMembers}>{t("addRealmUser")}</Button>
+                        </EmptyContent>
+                    </Empty>
+                }
+                emptyMessage={t("emptyMembers")}
+                toolbar={
                     <>
                         <div>
                             <SearchInputComponent
@@ -192,48 +242,6 @@ const [key, setKey] = useState(0);
                             />
                         </div>
                     </>
-                }
-                actions={[
-                    {
-                        title: t("remove"),
-                        onRowClick: async member => {
-                            await removeMember([member]);
-                        }
-                    }
-                ]}
-                columns={[
-                    {
-                        name: "username",
-                        cellRenderer: UserDetailLink
-                    },
-                    {
-                        name: "email"
-                    },
-                    {
-                        name: "firstName"
-                    },
-                    {
-                        name: "lastName"
-                    },
-                    {
-                        name: "membershipType",
-                        cellFormatters: [translationFormatter(t)]
-                    }
-                ]}
-                emptyState={
-                    <ListEmptyState
-                        message={t("emptyMembers")}
-                        instructions={t("emptyMembersInstructions")}
-                        secondaryActions={[
-                            {
-                                text: t("addRealmUser"),
-                                onClick: toggleAddMembers
-                            }
-                        ]}
-                    />
-                }
-                isSearching={
-                    filteredMembershipTypes.length > 0 || searchTriggerText.length > 0
                 }
             />
         </>

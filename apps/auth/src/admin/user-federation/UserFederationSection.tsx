@@ -71,7 +71,7 @@ export default function UserFederationSection() {
         (async () => {
             try {
                 const list = await adminClient.components.find({
-                    parentId: realmRepresentation.id,
+                    parent: realmRepresentation.id,
                     type: "org.keycloak.storage.UserStorageProvider",
                 });
                 if (cancelled) return;

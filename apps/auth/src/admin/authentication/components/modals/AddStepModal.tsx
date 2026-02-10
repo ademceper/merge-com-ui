@@ -1,6 +1,8 @@
 import type { AuthenticationProviderRepresentation } from "@keycloak/keycloak-admin-client/lib/defs/authenticatorConfigRepresentation";
-import { PaginatingTableToolbar, useFetch } from "../../../../shared/keycloak-ui-shared";
+import { useFetch } from "../../../../shared/keycloak-ui-shared";
 import { Button } from "@merge/ui/components/button";
+import { Input } from "@merge/ui/components/input";
+import { MagnifyingGlass } from "@phosphor-icons/react";
 import {
     Dialog,
     DialogContent,
@@ -8,6 +10,7 @@ import {
     DialogTitle,
     DialogFooter
 } from "@merge/ui/components/dialog";
+import { TablePagination } from "@merge/ui/components/pagination";
 import { useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useAdminClient } from "../../../admin-client";
@@ -115,25 +118,41 @@ export const AddStepModal = ({ name, type, onSelect }: AddStepModalProps) => {
                     </DialogTitle>
                 </DialogHeader>
                 {providers && (
-                    <PaginatingTableToolbar
-                        count={page.length || 0}
-                        first={first}
-                        max={max}
-                        onNextClick={setFirst}
-                        onPreviousClick={setFirst}
-                        onPerPageSelect={(first, max) => {
-                            setFirst(first);
-                            setMax(max);
-                        }}
-                        inputGroupName="search"
-                        inputGroupPlaceholder={t("search")}
-                        inputGroupOnEnter={setSearch}
-                    >
+                    <>
+                        <div className="flex flex-wrap items-center gap-2 mb-2">
+                            <div className="flex flex-1 min-w-0 items-center gap-1 rounded-lg border border-input bg-transparent px-2">
+                                <MagnifyingGlass className="text-muted-foreground size-4 shrink-0" />
+                                <Input
+                                    placeholder={t("search")}
+                                    aria-label={t("search")}
+                                    value={search}
+                                    onChange={(e) => setSearch(e.target.value)}
+                                    className="border-0 bg-transparent shadow-none focus-visible:ring-0 flex-1 min-w-0"
+                                />
+                            </div>
+                            <TablePagination
+                                count={localeSort(providers ?? [], mapByKey("displayName")).filter(
+                                    ({ displayName, description }) => {
+                                        const n = search.trim().toLowerCase();
+                                        return displayName?.toLowerCase().includes(n) || description?.toLowerCase().includes(n);
+                                    }
+                                ).length}
+                                first={first}
+                                max={max}
+                                onNextClick={setFirst}
+                                onPreviousClick={setFirst}
+                                onPerPageSelect={(_first, newMax) => {
+                                    setMax(newMax);
+                                    setFirst(0);
+                                }}
+                                t={t}
+                            />
+                        </div>
                         <AuthenticationProviderList
                             list={page.slice(0, max)}
                             setValue={setValue}
                         />
-                    </PaginatingTableToolbar>
+                    </>
                 )}
                 <DialogFooter>
                     <Button

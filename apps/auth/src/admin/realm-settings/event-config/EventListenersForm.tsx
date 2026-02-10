@@ -19,7 +19,7 @@ type EventListenersFormProps = {
     reset: () => void;
 };
 
-export const EventListenersForm = ({ form, reset }: EventListenersFormProps) => {
+export const EventListenersForm = ({ form, reset: _reset }: EventListenersFormProps) => {
     const { t } = useTranslation();
 
     const [eventListeners, setEventListeners] = useState<EventListenerRepresentation[]>();

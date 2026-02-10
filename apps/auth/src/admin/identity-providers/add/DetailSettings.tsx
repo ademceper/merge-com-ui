@@ -2,12 +2,9 @@ import type IdentityProviderMapperRepresentation from "@keycloak/keycloak-admin-
 import IdentityProviderRepresentation, {
     IdentityProviderType
 } from "@keycloak/keycloak-admin-client/lib/defs/identityProviderRepresentation";
-import { getErrorDescription, getErrorMessage, Action,
-    KeycloakDataTable,
-    KeycloakSpinner,
-    ListEmptyState,
-    ScrollForm,
-    useFetch } from "../../../shared/keycloak-ui-shared";
+import { getErrorDescription, getErrorMessage, KeycloakSpinner, ScrollForm, useFetch } from "../../../shared/keycloak-ui-shared";
+import { DataTable, DataTableRowActions, type ColumnDef } from "@merge/ui/components/table";
+import { Empty, EmptyContent, EmptyDescription, EmptyHeader, EmptyTitle } from "@merge/ui/components/empty";
 import { toast } from "@merge/ui/components/sonner";
 import { Button } from "@merge/ui/components/button";
 import { Separator } from "@merge/ui/components/separator";
@@ -395,103 +392,75 @@ const navigate = useNavigate();
         !!provider?.types?.includes(IdentityProviderType.JWT_AUTHORIZATION_GRANT) &&
         isFeatureEnabled(Feature.JWTAuthorizationGrant);
 
-    const loader = async () => {
-        const [loaderMappers, loaderMapperTypes] = await Promise.all([
-            adminClient.identityProviders.findMappers({ alias }),
-            adminClient.identityProviders.findMapperTypes({ alias })
-        ]);
+    const [mappers, setMappers] = useState<IdPWithMapperAttributes[]>([]);
 
-        const components = loaderMappers.map(loaderMapper => {
-            const mapperType = Object.values(loaderMapperTypes).find(
-                loaderMapperType =>
-                    loaderMapper.identityProviderMapper! === loaderMapperType.id!
-            );
+    useFetch(
+        async () => {
+            const [loaderMappers, loaderMapperTypes] = await Promise.all([
+                adminClient.identityProviders.findMappers({ alias }),
+                adminClient.identityProviders.findMapperTypes({ alias })
+            ]);
+            return loaderMappers.map(loaderMapper => {
+                const mapperType = Object.values(loaderMapperTypes).find(
+                    mt => loaderMapper.identityProviderMapper! === mt.id!
+                );
+                return {
+                    ...mapperType,
+                    name: loaderMapper.name!,
+                    type: mapperType?.name!,
+                    mapperId: loaderMapper.id!
+                } as IdPWithMapperAttributes;
+            });
+        },
+        setMappers,
+        [key, alias]
+    );
 
-            const result: IdPWithMapperAttributes = {
-                ...mapperType,
-                name: loaderMapper.name!,
-                type: mapperType?.name!,
-                mapperId: loaderMapper.id!
-            };
-
-            return result;
-        });
-
-        return components;
-    };
+    const mapperColumns: ColumnDef<IdPWithMapperAttributes>[] = [
+        { accessorKey: "name", header: t("name"), cell: ({ row }) => <MapperLink {...row.original} provider={provider} /> },
+        { accessorKey: "category", header: t("category") },
+        { accessorKey: "type", header: t("type") },
+        {
+            id: "actions",
+            cell: ({ row }) => (
+                <DataTableRowActions row={row}>
+                    <DropdownMenuItem onClick={() => { setSelectedMapper(row.original); toggleDeleteMapperDialog(); }} className="text-destructive">
+                        {t("delete")}
+                    </DropdownMenuItem>
+                </DataTableRowActions>
+            )
+        }
+    ];
 
     const renderContent = () => {
         switch (tab) {
             case "mappers":
                 return (isSPIFFE || isKubernetes || isJWTAuthorizationGrant) ? null : (
-                    <KeycloakDataTable
-                        emptyState={
-                            <ListEmptyState
-                                message={t("noMappers")}
-                                instructions={t("noMappersInstructions")}
-                                primaryActionText={t("addMapper")}
-                                onPrimaryAction={() =>
-                                    navigate(
-                                        toIdentityProviderAddMapper({
-                                            realm,
-                                            alias: alias!,
-                                            providerId: provider.providerId!,
-                                            tab: "mappers"
-                                        })
-                                    )
-                                }
-                            />
-                        }
-                        loader={loader}
+                    <DataTable<IdPWithMapperAttributes>
                         key={key}
-                        ariaLabelKey="mappersList"
-                        searchPlaceholderKey="searchForMapper"
-                        toolbarItem={
-                            <div>
-                                <Button
-                                    id="add-mapper-button"
-                                    asChild
-                                    data-testid="addMapper"
-                                >
-                                    <Link
-                                        to={toIdentityProviderAddMapper({
-                                            realm,
-                                            alias: alias!,
-                                            providerId: provider.providerId!,
-                                            tab: "mappers"
-                                        })}
-                                    >
+                        columns={mapperColumns}
+                        data={mappers}
+                        searchColumnId="name"
+                        searchPlaceholder={t("searchForMapper")}
+                        emptyContent={
+                            <Empty className="py-12">
+                                <EmptyHeader><EmptyTitle>{t("noMappers")}</EmptyTitle></EmptyHeader>
+                                <EmptyContent><EmptyDescription>{t("noMappersInstructions")}</EmptyDescription></EmptyContent>
+                                <Button className="mt-2" asChild>
+                                    <Link to={toIdentityProviderAddMapper({ realm, alias: alias!, providerId: provider.providerId!, tab: "mappers" })}>
                                         {t("addMapper")}
                                     </Link>
                                 </Button>
-                            </div>
+                            </Empty>
                         }
-                        columns={[
-                            {
-                                name: "name",
-                                displayKey: "name",
-                                cellRenderer: row => (
-                                    <MapperLink {...row} provider={provider} />
-                                )
-                            },
-                            {
-                                name: "category",
-                                displayKey: "category"
-                            },
-                            {
-                                name: "type",
-                                displayKey: "type"
-                            }
-                        ]}
-                        actions={[
-                            {
-                                title: t("delete"),
-                                onRowClick: mapper => {
-                                    setSelectedMapper(mapper);
-                                    toggleDeleteMapperDialog();
-                                }
-                            } as Action<IdPWithMapperAttributes>
-                        ]}
+                        emptyMessage={t("noMappers")}
+                        toolbar={
+                            <Button id="add-mapper-button" asChild data-testid="addMapper">
+                                <Link to={toIdentityProviderAddMapper({ realm, alias: alias!, providerId: provider.providerId!, tab: "mappers" })}>
+                                    {t("addMapper")}
+                                </Link>
+                            </Button>
+                        }
                     />
                 );
             case "permissions":

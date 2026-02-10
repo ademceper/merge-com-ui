@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Button } from "@merge/ui/components/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@merge/ui/components/dialog";
@@ -7,9 +7,16 @@ import type ProtocolMapperRepresentation from "@keycloak/keycloak-admin-client/l
 import type { ProtocolMapperTypeRepresentation } from "@keycloak/keycloak-admin-client/lib/defs/serverInfoRepesentation";
 
 import { useServerInfo } from "../../context/server-info/ServerInfoProvider";
-import { ListEmptyState } from "../../../shared/keycloak-ui-shared";
-import { KeycloakDataTable } from "../../../shared/keycloak-ui-shared";
+import { DataTable } from "@merge/ui/components/table";
+import {
+    Empty,
+    EmptyContent,
+    EmptyDescription,
+    EmptyHeader,
+    EmptyTitle
+} from "@merge/ui/components/empty";
 import useLocaleSort, { mapByKey } from "../../utils/useLocaleSort";
+import { Checkbox } from "@merge/ui/components/checkbox";
 
 type Row = {
     id: string;
@@ -57,11 +64,13 @@ export const AddMapperDialog = (props: AddMapperDialogProps) => {
     );
     const [rows, setRows] = useState(allRows);
 
-    if (props.filter && props.filter.length !== filter.length) {
-        setFilter(props.filter);
-        const nameFilter = props.filter.map(f => f.name);
-        setRows([...allRows.filter(row => !nameFilter.includes(row.item.name))]);
-    }
+    useEffect(() => {
+        if (props.filter && props.filter.length !== filter.length) {
+            setFilter(props.filter);
+            const nameFilter = props.filter.map(f => f.name);
+            setRows([...allRows.filter(row => !nameFilter.includes(row.item.name))]);
+        }
+    }, [props.filter, filter.length, allRows]);
 
     const sortedProtocolMappers = useMemo(
         () => localeSort(protocolMappers, mapByKey("name")),
@@ -110,28 +119,38 @@ export const AddMapperDialog = (props: AddMapperDialogProps) => {
                     </div>
                 )}
                 {isBuiltIn && (
-                    <KeycloakDataTable
-                        loader={rows}
-                        onSelect={setSelectedRows}
-                        canSelectAll
-                        ariaLabelKey="addPredefinedMappers"
-                        searchPlaceholderKey="searchForMapper"
+                    <DataTable<Row>
                         columns={[
                             {
-                                name: "id",
-                                displayKey: "name"
+                                id: "select",
+                                header: "",
+                                size: 40,
+                                cell: ({ row }) => (
+                                    <Checkbox
+                                        checked={selectedRows.some(s => s.id === row.original.id)}
+                                        onCheckedChange={() => {
+                                            setSelectedRows(prev =>
+                                                prev.some(s => s.id === row.original.id)
+                                                    ? prev.filter(s => s.id !== row.original.id)
+                                                    : [...prev, row.original]
+                                            );
+                                        }}
+                                    />
+                                )
                             },
-                            {
-                                name: "description",
-                                displayKey: "description"
-                            }
+                            { accessorKey: "id", header: t("name") },
+                            { accessorKey: "description", header: t("description") }
                         ]}
-                        emptyState={
-                            <ListEmptyState
-                                message={t("emptyMappers")}
-                                instructions={t("emptyBuiltInMappersInstructions")}
-                            />
+                        data={rows}
+                        searchColumnId="id"
+                        searchPlaceholder={t("searchForMapper")}
+                        emptyContent={
+                            <Empty className="py-12">
+                                <EmptyHeader><EmptyTitle>{t("emptyMappers")}</EmptyTitle></EmptyHeader>
+                                <EmptyContent><EmptyDescription>{t("emptyBuiltInMappersInstructions")}</EmptyDescription></EmptyContent>
+                            </Empty>
                         }
+                        emptyMessage={t("emptyMappers")}
                     />
                 )}
                 {isBuiltIn && (

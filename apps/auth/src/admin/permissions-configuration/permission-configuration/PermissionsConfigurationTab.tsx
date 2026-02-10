@@ -1,10 +1,8 @@
 import type PolicyRepresentation from "@keycloak/keycloak-admin-client/lib/defs/policyRepresentation";
 import ResourceRepresentation from "@keycloak/keycloak-admin-client/lib/defs/resourceRepresentation";
 import ScopeRepresentation from "@keycloak/keycloak-admin-client/lib/defs/scopeRepresentation";
-import { getErrorDescription, getErrorMessage, KeycloakSpinner,
-    ListEmptyState,
-    PaginatingTableToolbar,
-    useFetch } from "../../../shared/keycloak-ui-shared";
+import { getErrorDescription, getErrorMessage, KeycloakSpinner, useFetch } from "../../../shared/keycloak-ui-shared";
+import { Empty, EmptyContent, EmptyDescription, EmptyHeader, EmptyTitle } from "@merge/ui/components/empty";
 import { toast } from "@merge/ui/components/sonner";
 import { Button } from "@merge/ui/components/button";
 import {
@@ -21,6 +19,7 @@ import {
     TableHeader,
     TableRow,
 } from "@merge/ui/components/table";
+import { TablePagination } from "@merge/ui/components/pagination";
 import { CaretDown, CaretRight, DotsThreeVertical } from "@phosphor-icons/react";
 import { Fragment, useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -156,34 +155,22 @@ const { realm } = useRealm();
                             toggleDialog={toggleDialog}
                         />
                     )}
-                    <PaginatingTableToolbar
-                        count={permissions.length}
-                        first={first}
-                        max={max}
-                        onNextClick={setFirst}
-                        onPreviousClick={setFirst}
-                        onPerPageSelect={(first, max) => {
-                            setFirst(first);
-                            setMax(max);
-                        }}
-                        toolbarItem={
-                            <>
-                                <SearchDropdown
-                                    types={resourceTypes}
-                                    search={search}
-                                    onSearch={setSearch}
-                                />
-                                <Button
-                                    data-testid="createScopeBasedPermissionBtn"
-                                    key="confirm"
-                                    variant="default"
-                                    onClick={toggleDialog}
-                                >
-                                    {t("createPermission")}
-                                </Button>
-                            </>
-                        }
-                    >
+                    <div className="space-y-2">
+                        <div className="flex flex-wrap items-center gap-2">
+                            <SearchDropdown types={resourceTypes} search={search} onSearch={setSearch} />
+                            <TablePagination
+                                count={permissions.length}
+                                first={first}
+                                max={max}
+                                onNextClick={setFirst}
+                                onPreviousClick={setFirst}
+                                onPerPageSelect={(_first, newMax) => { setMax(newMax); setFirst(0); }}
+                                t={t}
+                            />
+                            <Button data-testid="createScopeBasedPermissionBtn" key="confirm" variant="default" onClick={toggleDialog}>
+                                {t("createPermission")}
+                            </Button>
+                        </div>
                         {!noData && (
                             <Table
                                 aria-label={t("permissions")}
@@ -351,7 +338,7 @@ const { realm } = useRealm();
                                 </TableBody>
                             </Table>
                         )}
-                    </PaginatingTableToolbar>
+                    </div>
                 </>
             )}
             {noData && !searching && (
@@ -360,31 +347,23 @@ const { realm } = useRealm();
                         <NewPermissionConfigurationDialog
                             resourceTypes={resourceTypes}
                             onSelect={resourceType =>
-                                navigate(
-                                    toCreatePermissionConfiguration({
-                                        realm,
-                                        permissionClientId: clientId,
-                                        resourceType: resourceType.type!
-                                    })
-                                )
+                                navigate(toCreatePermissionConfiguration({ realm, permissionClientId: clientId, resourceType: resourceType.type! }))
                             }
                             toggleDialog={toggleDialog}
                         />
                     )}
-                    <ListEmptyState
-                        message={t("emptyPermissions")}
-                        instructions={t("emptyPermissionsInstructions")}
-                        primaryActionText={t("createPermission")}
-                        onPrimaryAction={toggleDialog}
-                    />
+                    <Empty className="py-12">
+                        <EmptyHeader><EmptyTitle>{t("emptyPermissions")}</EmptyTitle></EmptyHeader>
+                        <EmptyContent><EmptyDescription>{t("emptyPermissionsInstructions")}</EmptyDescription></EmptyContent>
+                        <Button className="mt-2" onClick={toggleDialog}>{t("createPermission")}</Button>
+                    </Empty>
                 </>
             )}
             {noData && searching && (
-                <ListEmptyState
-                    isSearchVariant
-                    message={t("noSearchResults")}
-                    instructions={t("noPermissionSearchResultsInstructions")}
-                />
+                <Empty className="py-12">
+                    <EmptyHeader><EmptyTitle>{t("noSearchResults")}</EmptyTitle></EmptyHeader>
+                    <EmptyContent><EmptyDescription>{t("noPermissionSearchResultsInstructions")}</EmptyDescription></EmptyContent>
+                </Empty>
             )}
         </div>
     );
