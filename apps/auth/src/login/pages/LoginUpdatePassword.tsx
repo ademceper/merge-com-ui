@@ -105,25 +105,31 @@ export default function LoginUpdatePassword(
                         )}
                     </div>
 
-                    <div className="flex gap-3 pt-2 justify-between">
-                        {isAppInitiatedAction && (
+                    <div className="flex flex-col gap-3 pt-2">
+                        <Button
+                            type="submit"
+                            disabled={isSubmitting}
+                            size="lg"
+                            className={fullWidthClassName}
+                        >
+                            {msgStr("doSubmit")}
+                        </Button>
+                        {isAppInitiatedAction ? (
                             <Button
                                 type="submit"
                                 name="cancel-aia"
                                 value="true"
                                 variant="secondary"
+                                size="lg"
                                 className={fullWidthClassName}
                             >
                                 {msgStr("doCancel")}
                             </Button>
+                        ) : (
+                            <Button variant="secondary" size="lg" className={fullWidthClassName} asChild>
+                                <a href={url.loginRestartFlowUrl}>{msgStr("doCancel")}</a>
+                            </Button>
                         )}
-                        <Button
-                            type="submit"
-                            disabled={isSubmitting}
-                            className={fullWidthClassName}
-                        >
-                            {msgStr("doSubmit")}
-                        </Button>
                     </div>
                 </form>
             </div>

@@ -15,7 +15,16 @@ import useToggle from "../utils/useToggle";
 import { InviteMemberModal } from "./InviteMemberModal";
 import { EditOrganizationParams } from "./routes/EditOrganization";
 import { SearchInputComponent } from "../components/dynamic/SearchInputComponent";
-import { useConfirmDialog } from "../components/confirm-dialog/ConfirmDialog";
+import {
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle
+} from "@merge/ui/components/alert-dialog";
 import useFormatDate from "../utils/useFormatDate";
 
 const InvitationStatusBadge = ({ status }: { status?: OrganizationInvitationStatus }) => {
@@ -126,12 +135,13 @@ const [key, setKey] = useState(0);
         }
     };
 
-    const [toggleDeleteDialog, DeleteConfirm] = useConfirmDialog({
-        titleKey: "organizationInvitationsDeleteConfirmTitle",
-        messageKey: "organizationInvitationsDeleteConfirm",
-        continueButtonLabel: "delete",
-        onConfirm: () => deleteInvitations(selectedInvitations)
-    });
+    const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+
+    const onDeleteConfirm = async () => {
+        await deleteInvitations(selectedInvitations);
+        setSelectedInvitations([]);
+        setDeleteDialogOpen(false);
+    };
 
     const onStatusFilterSelect = (
         _event: React.MouseEvent<HTMLButtonElement>,
@@ -148,7 +158,20 @@ const [key, setKey] = useState(0);
 
     return (
         <>
-            <DeleteConfirm />
+            <AlertDialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
+                <AlertDialogContent>
+                    <AlertDialogHeader>
+                        <AlertDialogTitle>{t("organizationInvitationsDeleteConfirmTitle")}</AlertDialogTitle>
+                        <AlertDialogDescription>{t("organizationInvitationsDeleteConfirm")}</AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter>
+                        <AlertDialogCancel>{t("cancel")}</AlertDialogCancel>
+                        <AlertDialogAction variant="destructive" data-testid="confirm" onClick={onDeleteConfirm}>
+                            {t("delete")}
+                        </AlertDialogAction>
+                    </AlertDialogFooter>
+                </AlertDialogContent>
+            </AlertDialog>
             {openInviteMembers && (
                 <InviteMemberModal
                     orgId={orgId}
@@ -186,7 +209,7 @@ const [key, setKey] = useState(0);
                             <Button
                                 variant="ghost"
                                 disabled={selectedInvitations.length === 0}
-                                onClick={toggleDeleteDialog}
+                                onClick={() => setDeleteDialogOpen(true)}
                             >
                                 {t("deleteInvitations")}
                             </Button>
@@ -218,7 +241,7 @@ const [key, setKey] = useState(0);
                             title: t("deleteInvitation"),
                             onClick: () => {
                                 setSelectedInvitations([invitation]);
-                                toggleDeleteDialog();
+                                setDeleteDialogOpen(true);
                             }
                         }
                     ];

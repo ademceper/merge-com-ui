@@ -13,7 +13,16 @@ import { useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 import { useAdminClient } from "../../admin-client";
-import { useConfirmDialog } from "../../components/confirm-dialog/ConfirmDialog";
+import {
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle
+} from "@merge/ui/components/alert-dialog";
 import { useRealm } from "../../context/realm-context/RealmContext";
 import { useServerInfo } from "../../context/server-info/ServerInfoProvider";
 import { KEY_PROVIDER_TYPE } from "../../util";
@@ -60,28 +69,22 @@ export const KeysProvidersTab = ({ realmComponents, refresh }: KeysProvidersTabP
         [realmComponents, keyProviderComponentTypes]
     );
 
-    const [toggleDeleteDialog, DeleteConfirm] = useConfirmDialog({
-        titleKey: "deleteProviderTitle",
-        messageKey: t("deleteProviderConfirm", {
-            provider: selectedComponent?.name
-        }),
-        continueButtonLabel: "delete",
-        continueButtonVariant: "destructive",
-        onConfirm: async () => {
-            try {
-                await adminClient.components.del({
-                    id: selectedComponent!.id!,
-                    realm: realm
-                });
-                refresh();
-                toast.success(t("deleteProviderSuccess"));
-            } catch (error) {
-                toast.error(t("deleteProviderError", { error: getErrorMessage(error) }), {
-                    description: getErrorDescription(error)
-                });
-            }
+    const onDeleteConfirm = async () => {
+        if (!selectedComponent?.id) return;
+        try {
+            await adminClient.components.del({
+                id: selectedComponent.id,
+                realm: realm
+            });
+            setSelectedComponent(undefined);
+            refresh();
+            toast.success(t("deleteProviderSuccess"));
+        } catch (error) {
+            toast.error(t("deleteProviderError", { error: getErrorMessage(error) }), {
+                description: getErrorDescription(error)
+            });
         }
-    });
+    };
 
     const columns: ColumnDef<ComponentData>[] = [
         {
@@ -121,10 +124,7 @@ export const KeysProvidersTab = ({ realmComponents, refresh }: KeysProvidersTabP
                     <button
                         type="button"
                         className="flex w-full items-center gap-2 rounded-md px-1.5 py-1 text-left text-sm text-destructive hover:bg-destructive/10 hover:text-destructive"
-                        onClick={() => {
-                            setSelectedComponent(row.original);
-                            toggleDeleteDialog();
-                        }}
+                        onClick={() => setSelectedComponent(row.original)}
                     >
                         <Trash className="size-4 shrink-0" />
                         {t("delete")}
@@ -155,7 +155,22 @@ export const KeysProvidersTab = ({ realmComponents, refresh }: KeysProvidersTabP
                     }}
                 />
             )}
-            <DeleteConfirm />
+            <AlertDialog open={!!selectedComponent} onOpenChange={(open) => !open && setSelectedComponent(undefined)}>
+                <AlertDialogContent>
+                    <AlertDialogHeader>
+                        <AlertDialogTitle>{t("deleteProviderTitle")}</AlertDialogTitle>
+                        <AlertDialogDescription>
+                            {t("deleteProviderConfirm", { provider: selectedComponent?.name })}
+                        </AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter>
+                        <AlertDialogCancel>{t("cancel")}</AlertDialogCancel>
+                        <AlertDialogAction variant="destructive" data-testid="confirm" onClick={onDeleteConfirm}>
+                            {t("delete")}
+                        </AlertDialogAction>
+                    </AlertDialogFooter>
+                </AlertDialogContent>
+            </AlertDialog>
             <DataTable
                 columns={columns}
                 data={data}

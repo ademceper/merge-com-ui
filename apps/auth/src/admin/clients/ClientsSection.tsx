@@ -15,7 +15,16 @@ import { useTranslation } from "react-i18next";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { useAdminClient } from "../admin-client";
 import { AddClientDialog } from "./add/AddClientDialog";
-import { useConfirmDialog } from "../components/confirm-dialog/ConfirmDialog";
+import {
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle
+} from "@merge/ui/components/alert-dialog";
 import { ViewHeader } from "../components/view-header/ViewHeader";
 import helpUrls from "../help-urls";
 import { useAccess } from "../context/access/Access";
@@ -53,23 +62,17 @@ export default function ClientsSection() {
         [key]
     );
 
-    const [toggleDeleteDialog, DeleteConfirm] = useConfirmDialog({
-        titleKey: t("clientDelete", { clientId: selectedClient?.clientId }),
-        messageKey: "clientDeleteConfirm",
-        continueButtonLabel: "delete",
-        continueButtonVariant: "destructive",
-        onConfirm: async () => {
-            try {
-                await adminClient.clients.del({
-                    id: selectedClient!.id!
-                });
-                toast.success(t("clientDeletedSuccess"));
-                refresh();
-            } catch (error) {
-                toast.error(t("clientDeleteError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
-            }
+    const onDeleteConfirm = async () => {
+        if (!selectedClient?.id) return;
+        try {
+            await adminClient.clients.del({ id: selectedClient.id });
+            setSelectedClient(undefined);
+            toast.success(t("clientDeletedSuccess"));
+            refresh();
+        } catch (error) {
+            toast.error(t("clientDeleteError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
         }
-    });
+    };
 
     const columns: ColumnDef<ClientRepresentation>[] = [
         {
@@ -138,10 +141,7 @@ export default function ClientsSection() {
                                 <button
                                     type="button"
                                     className="flex w-full items-center gap-2 rounded-md px-1.5 py-1 text-left text-sm text-destructive hover:bg-destructive/10 hover:text-destructive"
-                                    onClick={() => {
-                                        setSelectedClient(client);
-                                        toggleDeleteDialog();
-                                    }}
+                                    onClick={() => setSelectedClient(client)}
                                 >
                                     <Trash className="size-4 shrink-0" />
                                     {t("delete")}
@@ -183,7 +183,20 @@ export default function ClientsSection() {
                 />
             )}
             <div className="py-6 px-0 min-w-0">
-                <DeleteConfirm />
+                <AlertDialog open={!!selectedClient} onOpenChange={(open) => !open && setSelectedClient(undefined)}>
+                    <AlertDialogContent>
+                        <AlertDialogHeader>
+                            <AlertDialogTitle>{t("clientDelete", { clientId: selectedClient?.clientId })}</AlertDialogTitle>
+                            <AlertDialogDescription>{t("clientDeleteConfirm")}</AlertDialogDescription>
+                        </AlertDialogHeader>
+                        <AlertDialogFooter>
+                            <AlertDialogCancel>{t("cancel")}</AlertDialogCancel>
+                            <AlertDialogAction variant="destructive" data-testid="confirm" onClick={onDeleteConfirm}>
+                                {t("delete")}
+                            </AlertDialogAction>
+                        </AlertDialogFooter>
+                    </AlertDialogContent>
+                </AlertDialog>
                 {isClientRegistration ? (
                     <Tabs
                         value={clientRegistrationTab}

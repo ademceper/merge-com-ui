@@ -18,7 +18,16 @@ import { useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Link, useNavigate } from "react-router-dom";
 import { useAdminClient } from "../../admin-client";
-import { useConfirmDialog } from "../../components/confirm-dialog/ConfirmDialog";
+import {
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle
+} from "@merge/ui/components/alert-dialog";
 import { KeycloakSpinner } from "../../../shared/keycloak-ui-shared";
 import { useRealm } from "../../context/realm-context/RealmContext";
 import useLocale from "../../utils/useLocale";
@@ -44,77 +53,69 @@ export const AttributesTab = ({ setTableData }: AttributesTabProps) => {
     const [filter, setFilter] = useState("allGroups");
     const [attributeToDelete, setAttributeToDelete] = useState("");
 
-    const [toggleDeleteDialog, DeleteConfirm] = useConfirmDialog({
-        titleKey: t("deleteAttributeConfirmTitle"),
-        messageKey: t("deleteAttributeConfirm", {
-            attributeName: attributeToDelete,
-        }),
-        continueButtonLabel: t("delete"),
-        continueButtonVariant: "destructive",
-        onConfirm: async () => {
-            if (!config?.attributes) return;
+    const onDeleteConfirm = async () => {
+        if (!config?.attributes || !attributeToDelete) return;
 
-            const translationsToDelete = config.attributes.find(
-                (attribute) => attribute.name === attributeToDelete,
-            )?.displayName;
+        const translationsToDelete = config.attributes.find(
+            (attribute) => attribute.name === attributeToDelete,
+        )?.displayName;
 
-            const formattedTranslationsToDelete = translationsToDelete?.substring(
-                2,
-                translationsToDelete.length - 1,
+        const formattedTranslationsToDelete = translationsToDelete?.substring(
+            2,
+            translationsToDelete.length - 1,
+        );
+
+        try {
+            await Promise.all(
+                combinedLocales.map(async (locale) => {
+                    try {
+                        await adminClient.realms.getRealmLocalizationTexts({
+                            realm,
+                            selectedLocale: locale,
+                        });
+
+                        await adminClient.realms.deleteRealmLocalizationTexts({
+                            realm,
+                            selectedLocale: locale,
+                            key: formattedTranslationsToDelete,
+                        });
+
+                        const updatedData =
+                            await adminClient.realms.getRealmLocalizationTexts(
+                                {
+                                    realm,
+                                    selectedLocale: locale,
+                                },
+                            );
+                        setTableData([updatedData]);
+                    } catch {
+                        console.error(
+                            `Error removing translations for ${locale}`,
+                        );
+                    }
+                }),
             );
 
-            try {
-                await Promise.all(
-                    combinedLocales.map(async (locale) => {
-                        try {
-                            await adminClient.realms.getRealmLocalizationTexts({
-                                realm,
-                                selectedLocale: locale,
-                            });
+            const updatedAttributes = config.attributes.filter(
+                (attribute) => attribute.name !== attributeToDelete,
+            );
+            const groups = config.groups ?? [];
 
-                            await adminClient.realms.deleteRealmLocalizationTexts({
-                                realm,
-                                selectedLocale: locale,
-                                key: formattedTranslationsToDelete,
-                            });
+            await save(
+                { ...config, attributes: updatedAttributes, groups },
+                {
+                    successMessageKey: "deleteAttributeSuccess",
+                    errorMessageKey: "deleteAttributeError",
+                },
+            );
 
-                            const updatedData =
-                                await adminClient.realms.getRealmLocalizationTexts(
-                                    {
-                                        realm,
-                                        selectedLocale: locale,
-                                    },
-                                );
-                            setTableData([updatedData]);
-                        } catch {
-                            console.error(
-                                `Error removing translations for ${locale}`,
-                            );
-                        }
-                    }),
-                );
-
-                const updatedAttributes = config.attributes.filter(
-                    (attribute) => attribute.name !== attributeToDelete,
-                );
-                const groups = config.groups ?? [];
-
-                await save(
-                    { ...config, attributes: updatedAttributes, groups },
-                    {
-                        successMessageKey: "deleteAttributeSuccess",
-                        errorMessageKey: "deleteAttributeError",
-                    },
-                );
-
-                setAttributeToDelete("");
-            } catch (error) {
-                console.error(
-                    `Error removing translations or updating attributes: ${error}`,
-                );
-            }
-        },
-    });
+            setAttributeToDelete("");
+        } catch (error) {
+            console.error(
+                `Error removing translations or updating attributes: ${error}`,
+            );
+        }
+    };
 
     const attributes = config?.attributes ?? [];
     const groups = config?.groups ?? [];
@@ -188,10 +189,7 @@ export const AttributesTab = ({ setTableData }: AttributesTabProps) => {
                             <button
                                 type="button"
                                 className="flex w-full items-center gap-2 rounded-md px-1.5 py-1 text-left text-sm text-destructive hover:bg-destructive/10 hover:text-destructive"
-                                onClick={() => {
-                                    setAttributeToDelete(row.original.name ?? "");
-                                    toggleDeleteDialog();
-                                }}
+                                onClick={() => setAttributeToDelete(row.original.name ?? "")}
                             >
                                 <Trash className="size-4 shrink-0" />
                                 {t("delete")}
@@ -202,7 +200,7 @@ export const AttributesTab = ({ setTableData }: AttributesTabProps) => {
             ),
         },
     ],
-        [t, navigate, realm, toggleDeleteDialog],
+        [t, navigate, realm],
     );
 
     if (!config) {
@@ -211,7 +209,22 @@ export const AttributesTab = ({ setTableData }: AttributesTabProps) => {
 
     return (
         <>
-            <DeleteConfirm />
+            <AlertDialog open={!!attributeToDelete} onOpenChange={(open) => !open && setAttributeToDelete("")}>
+                <AlertDialogContent>
+                    <AlertDialogHeader>
+                        <AlertDialogTitle>{t("deleteAttributeConfirmTitle")}</AlertDialogTitle>
+                        <AlertDialogDescription>
+                            {t("deleteAttributeConfirm", { attributeName: attributeToDelete })}
+                        </AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter>
+                        <AlertDialogCancel>{t("cancel")}</AlertDialogCancel>
+                        <AlertDialogAction variant="destructive" data-testid="confirm" onClick={onDeleteConfirm}>
+                            {t("delete")}
+                        </AlertDialogAction>
+                    </AlertDialogFooter>
+                </AlertDialogContent>
+            </AlertDialog>
             <div className="space-y-4">
                 <div className="flex flex-wrap items-center gap-2 sm:gap-3">
                     <Select

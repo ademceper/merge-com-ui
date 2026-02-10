@@ -9,7 +9,16 @@ import { FormProvider, useForm, useWatch } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { Link, useNavigate } from "react-router-dom";
 import { useAdminClient } from "../../admin-client";
-import { useConfirmDialog } from "../../components/confirm-dialog/ConfirmDialog";
+import {
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle
+} from "@merge/ui/components/alert-dialog";
 import { DynamicComponents } from "../../components/dynamic/DynamicComponents";
 import { FormAccess } from "../../components/form/FormAccess";
 import { KeycloakSpinner } from "../../../shared/keycloak-ui-shared";
@@ -78,26 +87,22 @@ const [provider, setProvider] = useState<ComponentTypeRepresentation>();
         }
     };
 
-    const [toggleDeleteDialog, DeleteConfirm] = useConfirmDialog({
-        titleKey: "clientRegisterPolicyDeleteConfirmTitle",
-        messageKey: t("clientRegisterPolicyDeleteConfirm", {
-            name: providerName
-        }),
-        continueButtonLabel: "delete",
-        continueButtonVariant: "destructive",
-        onConfirm: async () => {
-            try {
-                await adminClient.components.del({
-                    realm,
-                    id: id!
-                });
-                toast.success(t("clientRegisterPolicyDeleteSuccess"));
-                navigate(toClientRegistration({ realm, subTab }));
-            } catch (error) {
-                toast.error(t("clientRegisterPolicyDeleteError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
-            }
+    const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+
+    const onDeleteConfirm = async () => {
+        if (!id) return;
+        try {
+            await adminClient.components.del({
+                realm,
+                id
+            });
+            setDeleteDialogOpen(false);
+            toast.success(t("clientRegisterPolicyDeleteSuccess"));
+            navigate(toClientRegistration({ realm, subTab }));
+        } catch (error) {
+            toast.error(t("clientRegisterPolicyDeleteError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
         }
-    });
+    };
 
     if (!provider) {
         return <KeycloakSpinner />;
@@ -114,7 +119,7 @@ const [provider, setProvider] = useState<ComponentTypeRepresentation>();
                               <DropdownMenuItem
                                   data-testid="delete"
                                   key="delete"
-                                  onClick={toggleDeleteDialog}
+                                  onClick={() => setDeleteDialogOpen(true)}
                               >
                                   {t("delete")}
                               </DropdownMenuItem>
@@ -122,7 +127,22 @@ const [provider, setProvider] = useState<ComponentTypeRepresentation>();
                         : undefined
                 }
             />
-            <DeleteConfirm />
+            <AlertDialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
+                <AlertDialogContent>
+                    <AlertDialogHeader>
+                        <AlertDialogTitle>{t("clientRegisterPolicyDeleteConfirmTitle")}</AlertDialogTitle>
+                        <AlertDialogDescription>
+                            {t("clientRegisterPolicyDeleteConfirm", { name: providerName })}
+                        </AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter>
+                        <AlertDialogCancel>{t("cancel")}</AlertDialogCancel>
+                        <AlertDialogAction variant="destructive" data-testid="confirm" onClick={onDeleteConfirm}>
+                            {t("delete")}
+                        </AlertDialogAction>
+                    </AlertDialogFooter>
+                </AlertDialogContent>
+            </AlertDialog>
             <div className="p-6">
                 <FormProvider {...form}>
                     <FormAccess

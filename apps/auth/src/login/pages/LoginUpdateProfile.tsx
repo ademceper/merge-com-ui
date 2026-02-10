@@ -10,7 +10,6 @@ import { cn } from "@merge/ui/lib/utils";
 
 const inputClassName =
     "h-12 rounded-lg bg-muted border-0 text-foreground placeholder:text-muted-foreground focus-visible:ring-2 focus-visible:ring-ring";
-const fullWidthClassName = "w-full";
 
 export default function LoginUpdateProfile(
     props: PageProps<Extract<KcContext, { pageId: "login-update-profile.ftl" }>, I18n>
@@ -137,25 +136,31 @@ export default function LoginUpdateProfile(
                         </div>
                     </div>
 
-                    <div className="flex gap-3 pt-2 justify-between">
-                        {isAppInitiatedAction && (
+                    <div className="flex flex-col gap-3 pt-2">
+                        <Button
+                            type="submit"
+                            disabled={isSubmitting}
+                            size="lg"
+                            className="w-full"
+                        >
+                            {msgStr("doSubmit")}
+                        </Button>
+                        {isAppInitiatedAction ? (
                             <Button
                                 type="submit"
                                 name="cancel-aia"
                                 value="true"
                                 variant="secondary"
-                                className={fullWidthClassName}
+                                size="lg"
+                                className="w-full"
                             >
                                 {msgStr("doCancel")}
                             </Button>
+                        ) : (
+                            <Button variant="secondary" size="lg" className="w-full" asChild>
+                                <a href={url.loginRestartFlowUrl}>{msgStr("doCancel")}</a>
+                            </Button>
                         )}
-                        <Button
-                            type="submit"
-                            disabled={isSubmitting}
-                            className={fullWidthClassName}
-                        >
-                            {msgStr("doSubmit")}
-                        </Button>
                     </div>
                 </form>
             </div>

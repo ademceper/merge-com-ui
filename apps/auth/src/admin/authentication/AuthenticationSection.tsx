@@ -18,7 +18,16 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import { Trans, useTranslation } from "react-i18next";
 import { Link, useParams } from "react-router-dom";
 import { useAdminClient } from "../admin-client";
-import { useConfirmDialog } from "../components/confirm-dialog/ConfirmDialog";
+import {
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle
+} from "@merge/ui/components/alert-dialog";
 import { ViewHeader } from "../components/view-header/ViewHeader";
 import { useRealm } from "../context/realm-context/RealmContext";
 import helpUrls from "../help-urls";
@@ -42,6 +51,7 @@ export default function AuthenticationSection() {
     const [key, setKey] = useState(0);
     const refresh = useCallback(() => setKey((k) => k + 1), []);
     const [selectedFlow, setSelectedFlow] = useState<AuthenticationType>();
+    const [flowToDelete, setFlowToDelete] = useState<AuthenticationType>();
     const [open, toggleOpen] = useToggle();
     const [bindFlowOpen, toggleBindFlow] = useToggle();
     const [flows, setFlows] = useState<AuthenticationType[]>([]);
@@ -92,34 +102,22 @@ export default function AuthenticationSection() {
         };
     }, [key, tab, realmName, adminClient]);
 
-    const [toggleDeleteDialog, DeleteConfirm] = useConfirmDialog({
-        titleKey: "deleteConfirmFlow",
-        children: (
-            <Trans i18nKey="deleteConfirmFlowMessage">
-                {" "}
-                <strong>
-                    {{ flow: selectedFlow ? selectedFlow.alias : "" }}
-                </strong>
-                .
-            </Trans>
-        ),
-        continueButtonLabel: "delete",
-        continueButtonVariant: "destructive",
-        onConfirm: async () => {
-            try {
-                await adminClient.authenticationManagement.deleteFlow({
-                    flowId: selectedFlow!.id!,
-                });
-                refresh();
-                toast.success(t("deleteFlowSuccess"));
-            } catch (error) {
-                toast.error(
-                    t("deleteFlowError", { error: getErrorMessage(error) }),
-                    { description: getErrorDescription(error) },
-                );
-            }
-        },
-    });
+    const onDeleteFlowConfirm = async () => {
+        if (!flowToDelete?.id) return;
+        try {
+            await adminClient.authenticationManagement.deleteFlow({
+                flowId: flowToDelete.id,
+            });
+            setFlowToDelete(undefined);
+            refresh();
+            toast.success(t("deleteFlowSuccess"));
+        } catch (error) {
+            toast.error(
+                t("deleteFlowError", { error: getErrorMessage(error) }),
+                { description: getErrorDescription(error) },
+            );
+        }
+    };
 
     const columns: ColumnDef<AuthenticationType>[] = useMemo(
         () => [
@@ -199,10 +197,7 @@ export default function AuthenticationSection() {
                                     <button
                                         type="button"
                                         className="flex w-full items-center gap-2 rounded-md px-1.5 py-1 text-left text-sm text-destructive hover:bg-destructive/10 hover:text-destructive"
-                                        onClick={() => {
-                                            setSelectedFlow(data);
-                                            toggleDeleteDialog();
-                                        }}
+                                        onClick={() => setFlowToDelete(data)}
                                     >
                                         <Trash className="size-4 shrink-0" />
                                         {t("delete")}
@@ -214,7 +209,7 @@ export default function AuthenticationSection() {
                 },
             },
         ],
-        [t, realm, toggleOpen, toggleBindFlow, toggleDeleteDialog],
+        [t, realm, toggleOpen, toggleBindFlow],
     );
 
     if (!realm) return <KeycloakSpinner />;
@@ -228,7 +223,25 @@ export default function AuthenticationSection() {
             default:
                 return (
                     <>
-                        <DeleteConfirm />
+                        <AlertDialog open={!!flowToDelete} onOpenChange={(open) => !open && setFlowToDelete(undefined)}>
+                            <AlertDialogContent>
+                                <AlertDialogHeader>
+                                    <AlertDialogTitle>{t("deleteConfirmFlow")}</AlertDialogTitle>
+                                    <AlertDialogDescription>
+                                        <Trans i18nKey="deleteConfirmFlowMessage">
+                                            {" "}
+                                            <strong>{{ flow: flowToDelete?.alias ?? "" }}</strong>.
+                                        </Trans>
+                                    </AlertDialogDescription>
+                                </AlertDialogHeader>
+                                <AlertDialogFooter>
+                                    <AlertDialogCancel>{t("cancel")}</AlertDialogCancel>
+                                    <AlertDialogAction variant="destructive" data-testid="confirm" onClick={onDeleteFlowConfirm}>
+                                        {t("delete")}
+                                    </AlertDialogAction>
+                                </AlertDialogFooter>
+                            </AlertDialogContent>
+                        </AlertDialog>
                         {open && selectedFlow && (
                             <DuplicateFlowModal
                                 name={selectedFlow.alias!}

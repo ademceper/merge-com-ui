@@ -9,7 +9,16 @@ import { Trash } from "@phosphor-icons/react";
 import { useEffect, useState } from "react";
 import { Trans, useTranslation } from "react-i18next";
 import { Link, useNavigate } from "react-router-dom";
-import { useConfirmDialog } from "../../components/confirm-dialog/ConfirmDialog";
+import {
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle
+} from "@merge/ui/components/alert-dialog";
 import { useRealm } from "../../context/realm-context/RealmContext";
 import { useAdminClient } from "../../admin-client";
 import useLocale from "../../utils/useLocale";
@@ -39,95 +48,80 @@ export const AttributesGroupTab = ({
 
     const data = config?.groups ?? [];
 
-    const [toggleDeleteDialog, DeleteConfirm] = useConfirmDialog({
-        titleKey: "deleteDialogTitle",
-        children: (
-            <Trans i18nKey="deleteDialogDescription">
-                {" "}
-                <strong>{{ group: groupToDelete?.name }}</strong>.
-            </Trans>
-        ),
-        continueButtonLabel: "delete",
-        continueButtonVariant: "destructive",
-        onConfirm: async () => {
-            if (!config || !groupToDelete) return;
-            const groups = (config.groups ?? []).filter(
-                (group) => group !== groupToDelete,
+    const onDeleteConfirm = async () => {
+        if (!config || !groupToDelete) return;
+        const groups = (config.groups ?? []).filter(
+            (group) => group !== groupToDelete,
+        );
+        const translationsForDisplayHeaderToDelete =
+            groupToDelete.displayHeader?.substring(
+                2,
+                groupToDelete.displayHeader.length - 1,
             );
-            const translationsForDisplayHeaderToDelete =
-                groupToDelete.displayHeader?.substring(
-                    2,
-                    groupToDelete.displayHeader.length - 1,
-                );
-            const translationsForDisplayDescriptionToDelete =
-                groupToDelete.displayDescription?.substring(
-                    2,
-                    groupToDelete.displayDescription.length - 1,
-                );
+        const translationsForDisplayDescriptionToDelete =
+            groupToDelete.displayDescription?.substring(
+                2,
+                groupToDelete.displayDescription.length - 1,
+            );
 
-            try {
-                await Promise.all(
-                    combinedLocales.map(async (locale) => {
-                        try {
-                            await adminClient.realms.getRealmLocalizationTexts({
-                                realm,
-                                selectedLocale: locale,
-                            });
+        try {
+            await Promise.all(
+                combinedLocales.map(async (locale) => {
+                    try {
+                        await adminClient.realms.getRealmLocalizationTexts({
+                            realm,
+                            selectedLocale: locale,
+                        });
 
-                            if (translationsForDisplayHeaderToDelete) {
-                                await adminClient.realms.deleteRealmLocalizationTexts(
-                                    {
-                                        realm,
-                                        selectedLocale: locale,
-                                        key: translationsForDisplayHeaderToDelete,
-                                    },
-                                );
-                            }
-                            if (translationsForDisplayDescriptionToDelete) {
-                                await adminClient.realms.deleteRealmLocalizationTexts(
-                                    {
-                                        realm,
-                                        selectedLocale: locale,
-                                        key: translationsForDisplayDescriptionToDelete,
-                                    },
-                                );
-                            }
-
-                            const updatedData =
-                                await adminClient.realms.getRealmLocalizationTexts(
-                                    {
-                                        realm,
-                                        selectedLocale: locale,
-                                    },
-                                );
-                            setTableData([updatedData]);
-                        } catch {
-                            console.error(
-                                `Error removing translations for ${locale}`,
+                        if (translationsForDisplayHeaderToDelete) {
+                            await adminClient.realms.deleteRealmLocalizationTexts(
+                                {
+                                    realm,
+                                    selectedLocale: locale,
+                                    key: translationsForDisplayHeaderToDelete,
+                                },
                             );
                         }
-                    }),
-                );
+                        if (translationsForDisplayDescriptionToDelete) {
+                            await adminClient.realms.deleteRealmLocalizationTexts(
+                                {
+                                    realm,
+                                    selectedLocale: locale,
+                                    key: translationsForDisplayDescriptionToDelete,
+                                },
+                            );
+                        }
 
-                await save(
-                    { ...config!, groups },
-                    {
-                        successMessageKey: "deleteSuccess",
-                        errorMessageKey: "deleteAttributeGroupError",
-                    },
-                );
-            } catch (error) {
-                console.error(
-                    `Error removing translations or updating attributes group: ${error}`,
-                );
-            }
-        },
-    });
+                        const updatedData =
+                            await adminClient.realms.getRealmLocalizationTexts(
+                                {
+                                    realm,
+                                    selectedLocale: locale,
+                                },
+                            );
+                        setTableData([updatedData]);
+                    } catch {
+                        console.error(
+                            `Error removing translations for ${locale}`,
+                        );
+                    }
+                }),
+            );
 
-    function deleteAttributeGroup(group: UserProfileGroup) {
-        setGroupToDelete(group);
-        toggleDeleteDialog();
-    }
+            await save(
+                { ...config!, groups },
+                {
+                    successMessageKey: "deleteSuccess",
+                    errorMessageKey: "deleteAttributeGroupError",
+                },
+            );
+            setGroupToDelete(undefined);
+        } catch (error) {
+            console.error(
+                `Error removing translations or updating attributes group: ${error}`,
+            );
+        }
+    };
 
     const columns: ColumnDef<UserProfileGroup>[] = [
         {
@@ -165,7 +159,7 @@ export const AttributesGroupTab = ({
                     <button
                         type="button"
                         className="flex w-full items-center gap-2 rounded-md px-1.5 py-1 text-left text-sm text-destructive hover:bg-destructive/10 hover:text-destructive"
-                        onClick={() => deleteAttributeGroup(row.original)}
+                        onClick={() => setGroupToDelete(row.original)}
                     >
                         <Trash className="size-4 shrink-0" />
                         {t("delete")}
@@ -177,7 +171,25 @@ export const AttributesGroupTab = ({
 
     return (
         <>
-            <DeleteConfirm />
+            <AlertDialog open={!!groupToDelete} onOpenChange={(open) => !open && setGroupToDelete(undefined)}>
+                <AlertDialogContent>
+                    <AlertDialogHeader>
+                        <AlertDialogTitle>{t("deleteDialogTitle")}</AlertDialogTitle>
+                        <AlertDialogDescription>
+                            <Trans i18nKey="deleteDialogDescription">
+                                {" "}
+                                <strong>{{ group: groupToDelete?.name }}</strong>.
+                            </Trans>
+                        </AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter>
+                        <AlertDialogCancel>{t("cancel")}</AlertDialogCancel>
+                        <AlertDialogAction variant="destructive" data-testid="confirm" onClick={onDeleteConfirm}>
+                            {t("delete")}
+                        </AlertDialogAction>
+                    </AlertDialogFooter>
+                </AlertDialogContent>
+            </AlertDialog>
             <div className="space-y-4">
                 <DataTable
                     key={key}

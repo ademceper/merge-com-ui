@@ -19,7 +19,16 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useAdminClient } from "../../admin-client";
 import { translationFormatter } from "../../utils/translationFormatter";
-import { useConfirmDialog } from "../confirm-dialog/ConfirmDialog";
+import {
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle
+} from "@merge/ui/components/alert-dialog";
 import { AddRoleButton, AddRoleMappingModal, FilterType } from "./AddRoleMappingModal";
 import { deleteMapping, getEffectiveRoles, getMapping } from "./queries";
 import { getEffectiveClientRoles } from "./resource";
@@ -162,31 +171,28 @@ export const RoleMapping = ({
         loadData();
     }, [loadData, key]);
 
-    const [toggleDeleteDialog, DeleteConfirm] = useConfirmDialog({
-        titleKey: "removeMappingTitle",
-        messageKey: t("removeMappingConfirm", { count: selected.length }),
-        continueButtonLabel: "remove",
-        continueButtonVariant: "destructive",
-        onCancel: () => {
+    const onDeleteConfirm = async () => {
+        try {
+            await Promise.all(deleteMapping(adminClient, type, id, selected));
+            toast.success(t("roleMappingUpdatedSuccess"));
             setSelected([]);
             refresh();
-        },
-        onConfirm: async () => {
-            try {
-                await Promise.all(deleteMapping(adminClient, type, id, selected));
-                toast.success(t("roleMappingUpdatedSuccess"));
-                setSelected([]);
-                refresh();
-            } catch (error) {
-                toast.error(
-                    t("roleMappingUpdatedError", {
-                        error: getErrorMessage(error),
-                    }),
-                    { description: getErrorDescription(error) },
-                );
-            }
-        },
-    });
+        } catch (error) {
+            toast.error(
+                t("roleMappingUpdatedError", {
+                    error: getErrorMessage(error),
+                }),
+                { description: getErrorDescription(error) },
+            );
+        }
+    };
+
+    const onRemoveDialogOpenChange = (open: boolean) => {
+        if (!open) {
+            setSelected([]);
+            refresh();
+        }
+    };
 
     const handleUnassignRows = useCallback(
         async (rowsToRemove: Row[]) => {
@@ -248,10 +254,7 @@ export const RoleMapping = ({
                                   <button
                                       type="button"
                                       className="flex w-full items-center gap-2 rounded-md px-1.5 py-1 text-left text-sm text-destructive hover:bg-destructive/10 hover:text-destructive"
-                                      onClick={() => {
-                                          setSelected([row.original]);
-                                          toggleDeleteDialog();
-                                      }}
+                                      onClick={() => setSelected([row.original])}
                                       disabled={
                                           (row.original.role as CompositeRole)
                                               .isInherited
@@ -265,7 +268,7 @@ export const RoleMapping = ({
                   ]
                 : []),
         ],
-        [t, isManager, toggleDeleteDialog],
+        [t, isManager],
     );
 
     if (loading) {
@@ -284,7 +287,22 @@ export const RoleMapping = ({
                     onClose={() => setShowAssign(false)}
                 />
             )}
-            <DeleteConfirm />
+            <AlertDialog open={selected.length > 0} onOpenChange={onRemoveDialogOpenChange}>
+                <AlertDialogContent>
+                    <AlertDialogHeader>
+                        <AlertDialogTitle>{t("removeMappingTitle")}</AlertDialogTitle>
+                        <AlertDialogDescription>
+                            {t("removeMappingConfirm", { count: selected.length })}
+                        </AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter>
+                        <AlertDialogCancel>{t("cancel")}</AlertDialogCancel>
+                        <AlertDialogAction variant="destructive" data-testid="confirm" onClick={onDeleteConfirm}>
+                            {t("remove")}
+                        </AlertDialogAction>
+                    </AlertDialogFooter>
+                </AlertDialogContent>
+            </AlertDialog>
             <div className="space-y-4">
                 <div className="flex flex-wrap items-center gap-2 sm:gap-3">
                     <div className="flex items-center gap-2">

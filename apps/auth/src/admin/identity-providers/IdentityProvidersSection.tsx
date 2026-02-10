@@ -36,7 +36,16 @@ import { Fragment, useCallback, useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Link, useNavigate } from "react-router-dom";
 import { useAdminClient } from "../admin-client";
-import { useConfirmDialog } from "../components/confirm-dialog/ConfirmDialog";
+import {
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle
+} from "@merge/ui/components/alert-dialog";
 import { ClickableCard } from "../components/keycloak-card/ClickableCard";
 import { ViewHeader } from "../components/view-header/ViewHeader";
 import { useRealm } from "../context/realm-context/RealmContext";
@@ -148,28 +157,24 @@ export default function IdentityProvidersSection() {
             </DropdownMenuGroup>
         ));
 
-    const [toggleDeleteDialog, DeleteConfirm] = useConfirmDialog({
-        titleKey: "deleteProvider",
-        messageKey: t("deleteConfirm", { provider: selectedProvider?.alias }),
-        continueButtonLabel: "delete",
-        continueButtonVariant: "destructive",
-        onConfirm: async () => {
-            try {
-                await adminClient.identityProviders.del({
-                    alias: selectedProvider!.alias!,
-                });
-                refresh();
-                toast.success(t("deletedSuccessIdentityProvider"));
-            } catch (error) {
-                toast.error(
-                    t("deleteErrorIdentityProvider", {
-                        error: getErrorMessage(error),
-                    }),
-                    { description: getErrorDescription(error) },
-                );
-            }
-        },
-    });
+    const onDeleteConfirm = async () => {
+        if (!selectedProvider?.alias) return;
+        try {
+            await adminClient.identityProviders.del({
+                alias: selectedProvider.alias,
+            });
+            setSelectedProvider(undefined);
+            refresh();
+            toast.success(t("deletedSuccessIdentityProvider"));
+        } catch (error) {
+            toast.error(
+                t("deleteErrorIdentityProvider", {
+                    error: getErrorMessage(error),
+                }),
+                { description: getErrorDescription(error) },
+            );
+        }
+    };
 
     const columns: ColumnDef<IdentityProviderRepresentation>[] = useMemo(
         () => [
@@ -237,10 +242,7 @@ export default function IdentityProvidersSection() {
                         <button
                             type="button"
                             className="flex w-full items-center gap-2 rounded-md px-1.5 py-1 text-left text-sm text-destructive hover:bg-destructive/10 hover:text-destructive"
-                            onClick={() => {
-                                setSelectedProvider(row.original);
-                                toggleDeleteDialog();
-                            }}
+                            onClick={() => setSelectedProvider(row.original)}
                         >
                             <Trash className="size-4 shrink-0" />
                             {t("delete")}
@@ -249,12 +251,27 @@ export default function IdentityProvidersSection() {
                 ),
             },
         ],
-        [t, realm, toggleDeleteDialog],
+        [t, realm],
     );
 
     return (
         <>
-            <DeleteConfirm />
+            <AlertDialog open={!!selectedProvider} onOpenChange={(open) => !open && setSelectedProvider(undefined)}>
+                <AlertDialogContent>
+                    <AlertDialogHeader>
+                        <AlertDialogTitle>{t("deleteProvider")}</AlertDialogTitle>
+                        <AlertDialogDescription>
+                            {t("deleteConfirm", { provider: selectedProvider?.alias })}
+                        </AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter>
+                        <AlertDialogCancel>{t("cancel")}</AlertDialogCancel>
+                        <AlertDialogAction variant="destructive" data-testid="confirm" onClick={onDeleteConfirm}>
+                            {t("delete")}
+                        </AlertDialogAction>
+                    </AlertDialogFooter>
+                </AlertDialogContent>
+            </AlertDialog>
             {manageDisplayDialog && (
                 <ManageOrderDialog
                     hideRealmBasedIdps={hide}

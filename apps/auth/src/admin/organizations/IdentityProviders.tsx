@@ -11,7 +11,16 @@ import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useParams } from "react-router-dom";
 import { useAdminClient } from "../admin-client";
-import { useConfirmDialog } from "../components/confirm-dialog/ConfirmDialog";
+import {
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle
+} from "@merge/ui/components/alert-dialog";
 import { ManageOrderDialog } from "../identity-providers/ManageOrderDialog";
 import useToggle from "../utils/useToggle";
 import { LinkIdentityProviderModal } from "./LinkIdentityProviderModal";
@@ -61,6 +70,7 @@ const [key, setKey] = useState(0);
     const [manageDisplayDialog, setManageDisplayDialog] = useState(false);
     const [hasProviders, setHasProviders] = useState(false);
     const [selectedRow, setSelectedRow] = useState<IdentityProviderRepresentation>();
+    const [idpToUnlink, setIdpToUnlink] = useState<IdentityProviderRepresentation>();
     const [open, toggleOpen] = useToggle();
 
     useFetch(
@@ -78,25 +88,20 @@ const [key, setKey] = useState(0);
         return sortBy(providers, "alias");
     };
 
-    const [toggleUnlinkDialog, UnlinkConfirm] = useConfirmDialog({
-        titleKey: "identityProviderUnlink",
-        messageKey: "identityProviderUnlinkConfirm",
-        continueButtonLabel: "unLinkIdentityProvider",
-        continueButtonVariant: "destructive",
-        onConfirm: async () => {
-            try {
-                await adminClient.organizations.unLinkIdp({
-                    orgId: orgId!,
-                    alias: selectedRow!.alias! as string
-                });
-                setSelectedRow(undefined);
-                toast.success(t("unLinkSuccessful"));
-                refresh();
-            } catch (error) {
-                toast.error(t("unLinkError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
-            }
+    const onUnlinkConfirm = async () => {
+        if (!idpToUnlink?.alias || !orgId) return;
+        try {
+            await adminClient.organizations.unLinkIdp({
+                orgId,
+                alias: idpToUnlink.alias as string
+            });
+            setIdpToUnlink(undefined);
+            toast.success(t("unLinkSuccessful"));
+            refresh();
+        } catch (error) {
+            toast.error(t("unLinkError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
         }
-    });
+    };
 
     return (
         <>
@@ -110,7 +115,20 @@ const [key, setKey] = useState(0);
                 />
             )}
             <div className="p-6">
-                <UnlinkConfirm />
+                <AlertDialog open={!!idpToUnlink} onOpenChange={(open) => !open && setIdpToUnlink(undefined)}>
+                    <AlertDialogContent>
+                        <AlertDialogHeader>
+                            <AlertDialogTitle>{t("identityProviderUnlink")}</AlertDialogTitle>
+                            <AlertDialogDescription>{t("identityProviderUnlinkConfirm")}</AlertDialogDescription>
+                        </AlertDialogHeader>
+                        <AlertDialogFooter>
+                            <AlertDialogCancel>{t("cancel")}</AlertDialogCancel>
+                            <AlertDialogAction variant="destructive" data-testid="confirm" onClick={onUnlinkConfirm}>
+                                {t("unLinkIdentityProvider")}
+                            </AlertDialogAction>
+                        </AlertDialogFooter>
+                    </AlertDialogContent>
+                </AlertDialog>
                 {open && (
                     <LinkIdentityProviderModal
                         orgId={orgId!}
@@ -166,10 +184,7 @@ const [key, setKey] = useState(0);
                             },
                             {
                                 title: t("unLinkIdentityProvider"),
-                                onRowClick: row => {
-                                    setSelectedRow(row);
-                                    toggleUnlinkDialog();
-                                }
+                                onRowClick: row => setIdpToUnlink(row)
                             }
                         ]}
                         columns={[

@@ -22,7 +22,16 @@ import { type FormEvent, useCallback, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { useAdminClient } from "../../admin-client";
-import { useConfirmDialog } from "../../components/confirm-dialog/ConfirmDialog";
+import {
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle
+} from "@merge/ui/components/alert-dialog";
 import { KeyValueType } from "../../components/key-value-form/key-value-convert";
 import { useRealm } from "../../context/realm-context/RealmContext";
 import { useWhoAmI } from "../../context/whoami/WhoAmI";
@@ -150,39 +159,30 @@ export const RealmOverrides = ({
         }
     };
 
-    const [toggleDeleteDialog, DeleteConfirm] = useConfirmDialog({
-        titleKey: "deleteConfirmTranslationTitle",
-        messageKey: t("translationDeleteConfirmDialog", {
-            count: keysToDelete.length,
-        }),
-        continueButtonLabel: "delete",
-        continueButtonVariant: "destructive",
-        onCancel: () => setKeysToDelete([]),
-        onConfirm: async () => {
-            try {
-                for (const key of keysToDelete) {
-                    const data = i18n.store.data[whoAmI.locale][currentRealm] as Record<
-                        string,
-                        string
-                    > | undefined;
-                    if (data && key in data) delete data[key];
-                    await adminClient.realms.deleteRealmLocalizationTexts({
-                        realm: currentRealm!,
-                        selectedLocale: selectMenuLocale,
-                        key,
-                    });
-                }
-                setKeysToDelete([]);
-                refreshTable();
-                toast.success(t("deleteAllTranslationsSuccess"));
-            } catch (error) {
-                toast.error(
-                    t("deleteAllTranslationsError", { error: getErrorMessage(error) }),
-                    { description: getErrorDescription(error) },
-                );
+    const onDeleteConfirm = async () => {
+        try {
+            for (const key of keysToDelete) {
+                const data = i18n.store.data[whoAmI.locale][currentRealm] as Record<
+                    string,
+                    string
+                > | undefined;
+                if (data && key in data) delete data[key];
+                await adminClient.realms.deleteRealmLocalizationTexts({
+                    realm: currentRealm!,
+                    selectedLocale: selectMenuLocale,
+                    key,
+                });
             }
-        },
-    });
+            setKeysToDelete([]);
+            refreshTable();
+            toast.success(t("deleteAllTranslationsSuccess"));
+        } catch (error) {
+            toast.error(
+                t("deleteAllTranslationsError", { error: getErrorMessage(error) }),
+                { description: getErrorDescription(error) },
+            );
+        }
+    };
 
     const handleSaveEdit = async (key: string, newValue: string) => {
         try {
@@ -291,10 +291,7 @@ export const RealmOverrides = ({
                     <button
                         type="button"
                         className="flex w-full items-center gap-2 rounded-md px-1.5 py-1 text-left text-sm text-destructive hover:bg-destructive/10 hover:text-destructive"
-                        onClick={() => {
-                            setKeysToDelete([row.original.key]);
-                            toggleDeleteDialog();
-                        }}
+                        onClick={() => setKeysToDelete([row.original.key])}
                     >
                         <Trash className="size-4 shrink-0" />
                         {t("delete")}
@@ -313,7 +310,22 @@ export const RealmOverrides = ({
 
     return (
         <>
-            <DeleteConfirm />
+            <AlertDialog open={keysToDelete.length > 0} onOpenChange={(open) => !open && setKeysToDelete([])}>
+                <AlertDialogContent>
+                    <AlertDialogHeader>
+                        <AlertDialogTitle>{t("deleteConfirmTranslationTitle")}</AlertDialogTitle>
+                        <AlertDialogDescription>
+                            {t("translationDeleteConfirmDialog", { count: keysToDelete.length })}
+                        </AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter>
+                        <AlertDialogCancel>{t("cancel")}</AlertDialogCancel>
+                        <AlertDialogAction variant="destructive" data-testid="confirm" onClick={onDeleteConfirm}>
+                            {t("delete")}
+                        </AlertDialogAction>
+                    </AlertDialogFooter>
+                </AlertDialogContent>
+            </AlertDialog>
             {addTranslationModalOpen && (
                 <AddTranslationModal
                     handleModalToggle={() => setAddTranslationModalOpen(false)}

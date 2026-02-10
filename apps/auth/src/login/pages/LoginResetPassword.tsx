@@ -76,6 +76,7 @@ export default function LoginResetPassword(
                     <Button
                         type="submit"
                         disabled={isSubmitting}
+                        size="lg"
                         className="w-full"
                     >
                         {msgStr("doSubmit")}

@@ -16,7 +16,16 @@ import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 import { useAdminClient } from "../admin-client";
-import { useConfirmDialog } from "../components/confirm-dialog/ConfirmDialog";
+import {
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle
+} from "@merge/ui/components/alert-dialog";
 import CodeEditor from "../components/form/CodeEditor";
 import { useRealm } from "../context/realm-context/RealmContext";
 import { prettyPrintJSON } from "../util";
@@ -68,32 +77,26 @@ export default function ProfilesTab() {
     const normalizeProfile = (profile: ClientProfile): ClientProfileRepresentation =>
         omit(profile, "global");
 
-    const [toggleDeleteDialog, DeleteConfirm] = useConfirmDialog({
-        titleKey: t("deleteClientProfileConfirmTitle"),
-        messageKey: t("deleteClientProfileConfirm", {
-            profileName: selectedProfile?.name
-        }),
-        continueButtonLabel: t("delete"),
-        continueButtonVariant: "destructive",
-        onConfirm: async () => {
-            const updatedProfiles = tableProfiles
-                ?.filter(
-                    profile => profile.name !== selectedProfile?.name && !profile.global
-                )
-                .map<ClientProfileRepresentation>(profile => normalizeProfile(profile));
+    const onDeleteConfirm = async () => {
+        if (!selectedProfile) return;
+        const updatedProfiles = tableProfiles
+            ?.filter(
+                profile => profile.name !== selectedProfile.name && !profile.global
+            )
+            .map<ClientProfileRepresentation>(profile => normalizeProfile(profile));
 
-            try {
-                await adminClient.clientPolicies.createProfiles({
-                    profiles: updatedProfiles,
-                    globalProfiles
-                });
-                toast.success(t("deleteClientSuccess"));
-                setKey(key + 1);
-            } catch (error) {
-                toast.error(t("deleteClientError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
-            }
+        try {
+            await adminClient.clientPolicies.createProfiles({
+                profiles: updatedProfiles ?? [],
+                globalProfiles
+            });
+            setSelectedProfile(undefined);
+            toast.success(t("deleteClientSuccess"));
+            setKey(key + 1);
+        } catch (error) {
+            toast.error(t("deleteClientError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
         }
-    });
+    };
 
     const columns: ColumnDef<ClientProfile>[] = [
         {
@@ -129,10 +132,7 @@ export default function ProfilesTab() {
                         <button
                             type="button"
                             className="flex w-full items-center gap-2 rounded-md px-1.5 py-1 text-left text-sm text-destructive hover:bg-destructive/10 hover:text-destructive"
-                            onClick={() => {
-                                setSelectedProfile(row.original);
-                                toggleDeleteDialog();
-                            }}
+                            onClick={() => setSelectedProfile(row.original)}
                         >
                             <Trash className="size-4 shrink-0" />
                             {t("delete")}
@@ -178,7 +178,22 @@ export default function ProfilesTab() {
 
     return (
         <>
-            <DeleteConfirm />
+            <AlertDialog open={!!selectedProfile} onOpenChange={(open) => !open && setSelectedProfile(undefined)}>
+                <AlertDialogContent>
+                    <AlertDialogHeader>
+                        <AlertDialogTitle>{t("deleteClientProfileConfirmTitle")}</AlertDialogTitle>
+                        <AlertDialogDescription>
+                            {t("deleteClientProfileConfirm", { profileName: selectedProfile?.name })}
+                        </AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter>
+                        <AlertDialogCancel>{t("cancel")}</AlertDialogCancel>
+                        <AlertDialogAction variant="destructive" data-testid="confirm" onClick={onDeleteConfirm}>
+                            {t("delete")}
+                        </AlertDialogAction>
+                    </AlertDialogFooter>
+                </AlertDialogContent>
+            </AlertDialog>
             <div className="flex flex-wrap items-center gap-4 mb-4">
                 <h2 className="text-base font-medium">{t("profilesConfigType")}</h2>
                 <RadioGroup value={show ? "json" : "form"} onValueChange={(v) => setShow(v === "json")} className="flex flex-wrap items-center gap-4">

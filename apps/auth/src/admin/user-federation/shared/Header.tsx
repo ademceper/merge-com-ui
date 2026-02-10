@@ -6,7 +6,18 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useAdminClient } from "../../admin-client";
 import { getErrorDescription, getErrorMessage } from "../../../shared/keycloak-ui-shared";
 import { toast } from "@merge/ui/components/sonner";
+import {
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle
+} from "@merge/ui/components/alert-dialog";
 import { useConfirmDialog } from "../../components/confirm-dialog/ConfirmDialog";
+import { useState } from "react";
 import { ViewHeader } from "../../components/view-header/ViewHeader";
 import { useRealm } from "../../context/realm-context/RealmContext";
 import { CustomUserFederationRouteParams } from "../routes/CustomUserFederation";
@@ -44,26 +55,37 @@ const { realm } = useRealm();
         }
     });
 
-    const [toggleDeleteDialog, DeleteConfirm] = useConfirmDialog({
-        titleKey: "userFedDeleteConfirmTitle",
-        messageKey: "userFedDeleteConfirm",
-        continueButtonLabel: "delete",
-        continueButtonVariant: "destructive",
-        onConfirm: async () => {
-            try {
-                await adminClient.components.del({ id: id! });
-                toast.success(t("userFedDeletedSuccess"));
-                navigate(toUserFederation({ realm }), { replace: true });
-            } catch (error) {
-                toast.error(t("userFedDeleteError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
-            }
+    const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+
+    const onDeleteConfirm = async () => {
+        if (!id) return;
+        try {
+            await adminClient.components.del({ id });
+            setDeleteDialogOpen(false);
+            toast.success(t("userFedDeletedSuccess"));
+            navigate(toUserFederation({ realm }), { replace: true });
+        } catch (error) {
+            toast.error(t("userFedDeleteError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
         }
-    });
+    };
 
     return (
         <>
             <DisableConfirm />
-            <DeleteConfirm />
+            <AlertDialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
+                <AlertDialogContent>
+                    <AlertDialogHeader>
+                        <AlertDialogTitle>{t("userFedDeleteConfirmTitle")}</AlertDialogTitle>
+                        <AlertDialogDescription>{t("userFedDeleteConfirm")}</AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter>
+                        <AlertDialogCancel>{t("cancel")}</AlertDialogCancel>
+                        <AlertDialogAction variant="destructive" data-testid="confirm" onClick={onDeleteConfirm}>
+                            {t("delete")}
+                        </AlertDialogAction>
+                    </AlertDialogFooter>
+                </AlertDialogContent>
+            </AlertDialog>
             <Controller
                 name="config.enabled"
                 defaultValue={["true"]}
@@ -84,7 +106,7 @@ const { realm } = useRealm();
                                 ...dropdownItems,
                                 <DropdownMenuItem
                                     key="delete"
-                                    onClick={() => toggleDeleteDialog()}
+                                    onClick={() => setDeleteDialogOpen(true)}
                                     data-testid="delete-cmd"
                                 >
                                     {t("deleteProvider")}

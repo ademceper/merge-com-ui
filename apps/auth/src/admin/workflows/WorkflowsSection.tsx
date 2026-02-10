@@ -13,7 +13,16 @@ import { useAdminClient } from "../admin-client";
 import { ViewHeader } from "../components/view-header/ViewHeader";
 import { useRealm } from "../context/realm-context/RealmContext";
 import helpUrls from "../help-urls";
-import { useConfirmDialog } from "../components/confirm-dialog/ConfirmDialog";
+import {
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle
+} from "@merge/ui/components/alert-dialog";
 import { toWorkflowDetail } from "./routes/WorkflowDetail";
 
 export default function WorkflowsSection() {
@@ -25,7 +34,7 @@ export default function WorkflowsSection() {
 const [key, setKey] = useState(0);
     const refresh = () => setKey(key + 1);
 
-    const [selectedWorkflow, setSelectedWorkflow] = useState<WorkflowRepresentation>();
+    const [workflowToDelete, setWorkflowToDelete] = useState<WorkflowRepresentation>();
 
     const loader = async () => {
         const workflows = await adminClient.workflows.find();
@@ -51,24 +60,17 @@ const [key, setKey] = useState(0);
         }
     };
 
-    const [toggleDeleteDialog, DeleteConfirm] = useConfirmDialog({
-        titleKey: "workflowDeleteConfirm",
-        messageKey: t("workflowDeleteConfirmDialog", {
-            selectedRoleName: selectedWorkflow ? selectedWorkflow!.name : ""
-        }),
-        continueButtonLabel: "delete",
-        continueButtonVariant: "destructive",
-        onConfirm: async () => {
-            try {
-                await adminClient.workflows.delById({ id: selectedWorkflow!.id! });
-                setSelectedWorkflow(undefined);
-                toast.success(t("workflowDeletedSuccess"));
-                refresh();
-            } catch (error) {
-                toast.error(t("workflowDeleteError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
-            }
+    const onDeleteConfirm = async () => {
+        if (!workflowToDelete?.id) return;
+        try {
+            await adminClient.workflows.delById({ id: workflowToDelete.id });
+            setWorkflowToDelete(undefined);
+            toast.success(t("workflowDeletedSuccess"));
+            refresh();
+        } catch (error) {
+            toast.error(t("workflowDeleteError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
         }
-    });
+    };
 
     return (
         <>
@@ -78,7 +80,22 @@ const [key, setKey] = useState(0);
                 helpUrl={helpUrls.workflowsUrl}
             />
             <div className="bg-muted/30 p-0">
-                <DeleteConfirm />
+                <AlertDialog open={!!workflowToDelete} onOpenChange={(open) => !open && setWorkflowToDelete(undefined)}>
+                    <AlertDialogContent>
+                        <AlertDialogHeader>
+                            <AlertDialogTitle>{t("workflowDeleteConfirm")}</AlertDialogTitle>
+                            <AlertDialogDescription>
+                                {t("workflowDeleteConfirmDialog", { selectedRoleName: workflowToDelete?.name ?? "" })}
+                            </AlertDialogDescription>
+                        </AlertDialogHeader>
+                        <AlertDialogFooter>
+                            <AlertDialogCancel>{t("cancel")}</AlertDialogCancel>
+                            <AlertDialogAction variant="destructive" data-testid="confirm" onClick={onDeleteConfirm}>
+                                {t("delete")}
+                            </AlertDialogAction>
+                        </AlertDialogFooter>
+                    </AlertDialogContent>
+                </AlertDialog>
                 <KeycloakDataTable
                     key={key}
                     toolbarItem={
@@ -132,15 +149,11 @@ const [key, setKey] = useState(0);
                     actions={[
                         {
                             title: t("delete"),
-                            onRowClick: workflow => {
-                                setSelectedWorkflow(workflow);
-                                toggleDeleteDialog();
-                            }
+                            onRowClick: workflow => setWorkflowToDelete(workflow)
                         } as Action<WorkflowRepresentation>,
                         {
                             title: t("copy"),
                             onRowClick: workflow => {
-                                setSelectedWorkflow(workflow);
                                 navigate(
                                     toWorkflowDetail({
                                         realm,

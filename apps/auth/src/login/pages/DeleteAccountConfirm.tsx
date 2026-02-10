@@ -35,21 +35,26 @@ export default function DeleteAccountConfirm(
                 <p className="text-sm text-muted-foreground">{msg("finalDeletionConfirmation")}</p>
 
                 <form action={url.loginAction} method="post" className="pt-2">
-                    <div className="flex gap-3 justify-between">
-                        {triggered_from_aia && (
+                    <div className="flex flex-col gap-3">
+                        <Button type="submit" size="lg" className={fullWidthClassName}>
+                            {msgStr("doConfirmDelete")}
+                        </Button>
+                        {triggered_from_aia ? (
                             <Button
                                 type="submit"
                                 name="cancel-aia"
                                 value="true"
                                 variant="secondary"
+                                size="lg"
                                 className={fullWidthClassName}
                             >
                                 {msgStr("doCancel")}
                             </Button>
+                        ) : (
+                            <Button variant="secondary" size="lg" className={fullWidthClassName} asChild>
+                                <a href={url.loginRestartFlowUrl}>{msgStr("doCancel")}</a>
+                            </Button>
                         )}
-                        <Button type="submit" className={fullWidthClassName}>
-                            {msgStr("doConfirmDelete")}
-                        </Button>
                     </div>
                 </form>
             </div>

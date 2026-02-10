@@ -176,7 +176,7 @@ export default function Register(props: PageProps<Extract<KcContext, { pageId: "
                         </div>
                     )}
 
-                    <Button type="submit" className="w-full">
+                    <Button type="submit" size="lg" className="w-full">
                         {msgStr("doRegister")}
                     </Button>
                 </form>

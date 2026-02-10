@@ -14,6 +14,16 @@ import { Controller, FormProvider, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { useAdminClient } from "../admin-client";
+import {
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle
+} from "@merge/ui/components/alert-dialog";
 import { useConfirmDialog } from "../components/confirm-dialog/ConfirmDialog";
 import type { KeyValueType } from "../components/key-value-form/key-value-convert";
 import { ViewHeader } from "../components/view-header/ViewHeader";
@@ -72,6 +82,7 @@ const RealmSettingsHeader = ({
     const navigate = useNavigate();
     const [partialImportOpen, setPartialImportOpen] = useState(false);
     const [partialExportOpen, setPartialExportOpen] = useState(false);
+    const [deleteRealmDialogOpen, setDeleteRealmDialogOpen] = useState(false);
     const { hasAccess } = useAccess();
     const canManageRealm = hasAccess("manage-realm");
 
@@ -85,27 +96,35 @@ const RealmSettingsHeader = ({
         }
     });
 
-    const [toggleDeleteDialog, DeleteConfirm] = useConfirmDialog({
-        titleKey: "deleteConfirmTitle",
-        messageKey: "deleteConfirmRealmSetting",
-        continueButtonLabel: "delete",
-        continueButtonVariant: "destructive",
-        onConfirm: async () => {
-            try {
-                await adminClient.realms.del({ realm: realmName });
-                toast.success(t("deletedSuccessRealmSetting"));
-                navigate(toDashboard({ realm: environment.masterRealm }));
-                refresh();
-            } catch (error) {
-                toast.error(t("deleteErrorRealmSetting", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
-            }
+    const onDeleteRealmConfirm = async () => {
+        try {
+            await adminClient.realms.del({ realm: realmName });
+            setDeleteRealmDialogOpen(false);
+            toast.success(t("deletedSuccessRealmSetting"));
+            navigate(toDashboard({ realm: environment.masterRealm }));
+            refresh();
+        } catch (error) {
+            toast.error(t("deleteErrorRealmSetting", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
         }
-    });
+    };
 
     return (
         <>
             <DisableConfirm />
-            <DeleteConfirm />
+            <AlertDialog open={deleteRealmDialogOpen} onOpenChange={setDeleteRealmDialogOpen}>
+                <AlertDialogContent>
+                    <AlertDialogHeader>
+                        <AlertDialogTitle>{t("deleteConfirmTitle")}</AlertDialogTitle>
+                        <AlertDialogDescription>{t("deleteConfirmRealmSetting")}</AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter>
+                        <AlertDialogCancel>{t("cancel")}</AlertDialogCancel>
+                        <AlertDialogAction variant="destructive" data-testid="confirm" onClick={onDeleteRealmConfirm}>
+                            {t("delete")}
+                        </AlertDialogAction>
+                    </AlertDialogFooter>
+                </AlertDialogContent>
+            </AlertDialog>
             <PartialImportDialog
                 open={partialImportOpen}
                 toggleDialog={() => setPartialImportOpen(!partialImportOpen)}
@@ -143,7 +162,7 @@ const RealmSettingsHeader = ({
                     <DropdownMenuItem
                         key="delete"
                         disabled={!canManageRealm}
-                        onClick={toggleDeleteDialog}
+                        onClick={() => setDeleteRealmDialogOpen(true)}
                         className="text-destructive focus:text-destructive"
                     >
                         <Trash className="size-4 shrink-0" />

@@ -27,7 +27,16 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Link, useNavigate } from "react-router-dom";
 import { useAdminClient } from "../admin-client";
-import { useConfirmDialog } from "../components/confirm-dialog/ConfirmDialog";
+import {
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle
+} from "@merge/ui/components/alert-dialog";
 import { ViewHeader } from "../components/view-header/ViewHeader";
 import { fetchAdminUI } from "../context/auth/admin-ui-endpoint";
 import { useRealm } from "../context/realm-context/RealmContext";
@@ -115,44 +124,38 @@ export default function RealmSection() {
         };
     }, [key, adminClient]);
 
-    const [toggleDeleteDialog, DeleteConfirm] = useConfirmDialog({
-        titleKey: t("deleteConfirmRealm", {
-            count: selected.length,
-            name: selected[0]?.name,
-        }),
-        messageKey: "deleteConfirmRealmSetting",
-        continueButtonLabel: "delete",
-        continueButtonVariant: "destructive",
-        onConfirm: async () => {
-            try {
-                if (
-                    selected.filter(({ name }) => name === "master").length > 0
-                ) {
-                    toast.warning(t("cantDeleteMasterRealm"));
-                }
-                const filtered = selected.filter(
-                    ({ name }) => name !== "master",
-                );
-                if (filtered.length === 0) return;
-                await Promise.all(
-                    filtered.map(({ name: realmName }) =>
-                        adminClient.realms.del({ realm: realmName }),
-                    ),
-                );
-                toast.success(t("deletedSuccessRealmSetting"));
-                if (selected.filter(({ name }) => name === realm).length > 0) {
-                    navigate(toRealm({ realm: "master" }));
-                }
-                refresh();
-                setSelected([]);
-            } catch (error) {
-                toast.error(
-                    t("deleteError", { error: getErrorMessage(error) }),
-                    { description: getErrorDescription(error) },
-                );
+    const onDeleteConfirm = async () => {
+        try {
+            if (
+                selected.filter(({ name }) => name === "master").length > 0
+            ) {
+                toast.warning(t("cantDeleteMasterRealm"));
             }
-        },
-    });
+            const filtered = selected.filter(
+                ({ name }) => name !== "master",
+            );
+            if (filtered.length === 0) {
+                setSelected([]);
+                return;
+            }
+            await Promise.all(
+                filtered.map(({ name: realmName }) =>
+                    adminClient.realms.del({ realm: realmName }),
+                ),
+            );
+            toast.success(t("deletedSuccessRealmSetting"));
+            if (selected.filter(({ name }) => name === realm).length > 0) {
+                navigate(toRealm({ realm: "master" }));
+            }
+            refresh();
+            setSelected([]);
+        } catch (error) {
+            toast.error(
+                t("deleteError", { error: getErrorMessage(error) }),
+                { description: getErrorDescription(error) },
+            );
+        }
+    };
 
     const columns: ColumnDef<RealmRow>[] = useMemo(
         () => [
@@ -209,10 +212,7 @@ export default function RealmSection() {
                                 type="button"
                                 className="flex w-full items-center gap-2 rounded-md px-1.5 py-1 text-left text-sm text-destructive hover:bg-destructive/10 hover:text-destructive disabled:opacity-50"
                                 disabled={isMaster}
-                                onClick={() => {
-                                    setSelected([data]);
-                                    toggleDeleteDialog();
-                                }}
+                                onClick={() => setSelected([data])}
                             >
                                 <Trash className="size-4 shrink-0" />
                                 {t("delete")}
@@ -222,12 +222,30 @@ export default function RealmSection() {
                 },
             },
         ],
-        [t, realm, toggleDeleteDialog],
+        [t, realm],
     );
 
     return (
         <>
-            <DeleteConfirm />
+            <AlertDialog open={selected.length > 0} onOpenChange={(open) => !open && setSelected([])}>
+                <AlertDialogContent>
+                    <AlertDialogHeader>
+                        <AlertDialogTitle>
+                            {t("deleteConfirmRealm", {
+                                count: selected.length,
+                                name: selected[0]?.name,
+                            })}
+                        </AlertDialogTitle>
+                        <AlertDialogDescription>{t("deleteConfirmRealmSetting")}</AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter>
+                        <AlertDialogCancel>{t("cancel")}</AlertDialogCancel>
+                        <AlertDialogAction variant="destructive" data-testid="confirm" onClick={onDeleteConfirm}>
+                            {t("delete")}
+                        </AlertDialogAction>
+                    </AlertDialogFooter>
+                </AlertDialogContent>
+            </AlertDialog>
             {openNewRealm && (
                 <NewRealmForm
                     onClose={() => {

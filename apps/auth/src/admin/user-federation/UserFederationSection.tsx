@@ -23,7 +23,16 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Link, useNavigate } from "react-router-dom";
 import { useAdminClient } from "../admin-client";
-import { useConfirmDialog } from "../components/confirm-dialog/ConfirmDialog";
+import {
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle
+} from "@merge/ui/components/alert-dialog";
 import { ClickableCard } from "../components/keycloak-card/ClickableCard";
 import { ViewHeader } from "../components/view-header/ViewHeader";
 import { useRealm } from "../context/realm-context/RealmContext";
@@ -90,27 +99,22 @@ export default function UserFederationSection() {
         [realm],
     );
 
-    const [toggleDeleteDialog, DeleteConfirm] = useConfirmDialog({
-        titleKey: t("userFedDeleteConfirmTitle"),
-        messageKey: t("userFedDeleteConfirm"),
-        continueButtonLabel: "delete",
-        continueButtonVariant: "destructive",
-        onConfirm: async () => {
-            if (!selectedComponent?.id) return;
-            try {
-                await adminClient.components.del({ id: selectedComponent.id });
-                refresh();
-                toast.success(t("userFedDeletedSuccess"));
-            } catch (error) {
-                toast.error(
-                    t("userFedDeleteError", {
-                        error: getErrorMessage(error),
-                    }),
-                    { description: getErrorDescription(error) },
-                );
-            }
-        },
-    });
+    const onDeleteConfirm = async () => {
+        if (!selectedComponent?.id) return;
+        try {
+            await adminClient.components.del({ id: selectedComponent.id });
+            setSelectedComponent(undefined);
+            refresh();
+            toast.success(t("userFedDeletedSuccess"));
+        } catch (error) {
+            toast.error(
+                t("userFedDeleteError", {
+                    error: getErrorMessage(error),
+                }),
+                { description: getErrorDescription(error) },
+            );
+        }
+    };
 
     const sortedFederations = useMemo(
         () =>
@@ -170,10 +174,7 @@ export default function UserFederationSection() {
                         <button
                             type="button"
                             className="flex w-full items-center gap-2 rounded-md px-1.5 py-1 text-left text-sm text-destructive hover:bg-destructive/10 hover:text-destructive"
-                            onClick={() => {
-                                setSelectedComponent(row.original);
-                                toggleDeleteDialog();
-                            }}
+                            onClick={() => setSelectedComponent(row.original)}
                         >
                             <Trash className="size-4 shrink-0" />
                             {t("delete")}
@@ -182,7 +183,7 @@ export default function UserFederationSection() {
                 ),
             },
         ],
-        [t, toDetails, toggleDeleteDialog],
+        [t, toDetails],
     );
 
     const addProviderDropdownItems = useMemo(
@@ -210,7 +211,20 @@ export default function UserFederationSection() {
 
     return (
         <>
-            <DeleteConfirm />
+            <AlertDialog open={!!selectedComponent} onOpenChange={(open) => !open && setSelectedComponent(undefined)}>
+                <AlertDialogContent>
+                    <AlertDialogHeader>
+                        <AlertDialogTitle>{t("userFedDeleteConfirmTitle")}</AlertDialogTitle>
+                        <AlertDialogDescription>{t("userFedDeleteConfirm")}</AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter>
+                        <AlertDialogCancel>{t("cancel")}</AlertDialogCancel>
+                        <AlertDialogAction variant="destructive" data-testid="confirm" onClick={onDeleteConfirm}>
+                            {t("delete")}
+                        </AlertDialogAction>
+                    </AlertDialogFooter>
+                </AlertDialogContent>
+            </AlertDialog>
             {manageDisplayDialog && userFederations.length > 0 && (
                 <ManagePriorityDialog
                     onClose={() => setManageDisplayDialog(false)}

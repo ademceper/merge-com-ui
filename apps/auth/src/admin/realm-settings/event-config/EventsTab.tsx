@@ -8,7 +8,16 @@ import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@merge/ui/components/tabs";
 import { useAdminClient } from "../../admin-client";
-import { useConfirmDialog } from "../../components/confirm-dialog/ConfirmDialog";
+import {
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle
+} from "@merge/ui/components/alert-dialog";
 import { FormAccess } from "../../components/form/FormAccess";
 import { FixedButtonsGroup } from "../../components/form/FixedButtonGroup";
 import { FormPanel } from "../../../shared/keycloak-ui-shared";
@@ -50,32 +59,27 @@ export const EventsTab = ({ realm }: EventsTabProps) => {
         convertToFormValues(eventConfig || {}, setValue);
     };
 
-    const clear = async (type: EventsType) => {
-        setType(type);
-        toggleDeleteDialog();
+    const clear = (eventType: EventsType) => {
+        setType(eventType);
     };
 
-    const [toggleDeleteDialog, DeleteConfirm] = useConfirmDialog({
-        titleKey: "deleteEvents",
-        messageKey: "deleteEventsConfirm",
-        continueButtonLabel: "clear",
-        continueButtonVariant: "destructive",
-        onConfirm: async () => {
-            try {
-                switch (type) {
-                    case "admin":
-                        await adminClient.realms.clearAdminEvents({ realm: realmName });
-                        break;
-                    case "user":
-                        await adminClient.realms.clearEvents({ realm: realmName });
-                        break;
-                }
-                toast.success(t(`${type}-events-cleared`));
-            } catch (error) {
-                toast.error(t(`${type}-events-cleared-error`, { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
+    const onDeleteConfirm = async () => {
+        if (!type) return;
+        try {
+            switch (type) {
+                case "admin":
+                    await adminClient.realms.clearAdminEvents({ realm: realmName });
+                    break;
+                case "user":
+                    await adminClient.realms.clearEvents({ realm: realmName });
+                    break;
             }
+            toast.success(t(`${type}-events-cleared`));
+            setType(undefined);
+        } catch (error) {
+            toast.error(t(`${type}-events-cleared-error`, { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
         }
-    });
+    };
 
     useFetch(
         () => adminClient.realms.getConfigEvents({ realm: realmName }),
@@ -156,7 +160,20 @@ export const EventsTab = ({ realm }: EventsTabProps) => {
 
     return (
         <>
-            <DeleteConfirm />
+            <AlertDialog open={!!type} onOpenChange={(open) => !open && setType(undefined)}>
+                <AlertDialogContent>
+                    <AlertDialogHeader>
+                        <AlertDialogTitle>{t("deleteEvents")}</AlertDialogTitle>
+                        <AlertDialogDescription>{t("deleteEventsConfirm")}</AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter>
+                        <AlertDialogCancel>{t("cancel")}</AlertDialogCancel>
+                        <AlertDialogAction variant="destructive" data-testid="confirm" onClick={onDeleteConfirm}>
+                            {t("clear")}
+                        </AlertDialogAction>
+                    </AlertDialogFooter>
+                </AlertDialogContent>
+            </AlertDialog>
             {addEventType && (
                 <AddEventTypesDialog
                     onConfirm={eventTypes => addEventTypes(eventTypes)}

@@ -1,7 +1,18 @@
 import { DropdownMenuItem } from "@merge/ui/components/dropdown-menu";
 import { ViewHeader } from "../components/view-header/ViewHeader";
 import { useTranslation } from "react-i18next";
+import {
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle
+} from "@merge/ui/components/alert-dialog";
 import { useConfirmDialog } from "../components/confirm-dialog/ConfirmDialog";
+import { useState } from "react";
 import { useAdminClient } from "../admin-client";
 import { useNavigate } from "react-router-dom";
 import { getErrorDescription, getErrorMessage } from "../../shared/keycloak-ui-shared";
@@ -35,28 +46,38 @@ const id = useWatch({ name: "id" });
         }
     });
 
-    const [toggleDeleteDialog, DeleteConfirm] = useConfirmDialog({
-        titleKey: "organizationDelete",
-        messageKey: "organizationDeleteConfirm",
-        continueButtonLabel: "delete",
-        continueButtonVariant: "destructive",
-        onConfirm: async () => {
-            try {
-                await adminClient.organizations.delById({ id });
-                toast.success(t("organizationDeletedSuccess"));
-                navigate(toOrganizations({ realm }));
-            } catch (error) {
-                toast.error(t("organizationDeleteError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
-            }
+    const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+
+    const onDeleteConfirm = async () => {
+        try {
+            await adminClient.organizations.delById({ id });
+            setDeleteDialogOpen(false);
+            toast.success(t("organizationDeletedSuccess"));
+            navigate(toOrganizations({ realm }));
+        } catch (error) {
+            toast.error(t("organizationDeleteError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
         }
-    });
+    };
 
     return (
         <Controller
             name="enabled"
             render={({ field: { value, onChange } }) => (
                 <>
-                    <DeleteConfirm />
+                    <AlertDialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
+                        <AlertDialogContent>
+                            <AlertDialogHeader>
+                                <AlertDialogTitle>{t("organizationDelete")}</AlertDialogTitle>
+                                <AlertDialogDescription>{t("organizationDeleteConfirm")}</AlertDialogDescription>
+                            </AlertDialogHeader>
+                            <AlertDialogFooter>
+                                <AlertDialogCancel>{t("cancel")}</AlertDialogCancel>
+                                <AlertDialogAction variant="destructive" data-testid="confirm" onClick={onDeleteConfirm}>
+                                    {t("delete")}
+                                </AlertDialogAction>
+                            </AlertDialogFooter>
+                        </AlertDialogContent>
+                    </AlertDialog>
                     <DisableConfirm />
                     <ViewHeader
                         titleKey={name || ""}
@@ -65,7 +86,7 @@ const id = useWatch({ name: "id" });
                             <DropdownMenuItem
                                 data-testid="delete-client"
                                 key="delete"
-                                onClick={toggleDeleteDialog}
+                                onClick={() => setDeleteDialogOpen(true)}
                             >
                                 {t("delete")}
                             </DropdownMenuItem>

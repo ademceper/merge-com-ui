@@ -17,6 +17,16 @@ import { FormProvider, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { useNavigate, useParams as useRouterParams } from "react-router-dom";
 import { useAdminClient } from "../admin-client";
+import {
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle
+} from "@merge/ui/components/alert-dialog";
 import { useConfirmDialog } from "../components/confirm-dialog/ConfirmDialog";
 import { KeyValueType } from "../components/key-value-form/key-value-convert";
 import { KeycloakSpinner } from "../../shared/keycloak-ui-shared";
@@ -196,25 +206,23 @@ const navigate = useNavigate();
         }
     });
 
-    const [toggleDeleteDialog, DeleteConfirm] = useConfirmDialog({
-        titleKey: "deleteConfirmUsers",
-        messageKey: "deleteConfirmCurrentUser",
-        continueButtonLabel: "delete",
-        continueButtonVariant: "destructive",
-        onConfirm: async () => {
-            try {
-                if (lightweightUser) {
-                    await adminClient.users.logout({ id: user!.id! });
-                } else {
-                    await adminClient.users.del({ id: user!.id! });
-                }
-                toast.success(t("userDeletedSuccess"));
-                navigate(toUsers({ realm: realmName }));
-            } catch (error) {
-                toast.error(t("userDeletedError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
+    const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+
+    const onDeleteConfirm = async () => {
+        if (!user?.id) return;
+        try {
+            if (lightweightUser) {
+                await adminClient.users.logout({ id: user.id });
+            } else {
+                await adminClient.users.del({ id: user.id });
             }
+            setDeleteDialogOpen(false);
+            toast.success(t("userDeletedSuccess"));
+            navigate(toUsers({ realm: realmName }));
+        } catch (error) {
+            toast.error(t("userDeletedError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
         }
-    });
+    };
 
     const [toggleImpersonateDialog, ImpersonateConfirm] = useConfirmDialog({
         titleKey: "impersonateConfirm",
@@ -314,7 +322,20 @@ const navigate = useNavigate();
     return (
         <>
             <ImpersonateConfirm />
-            <DeleteConfirm />
+            <AlertDialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
+                <AlertDialogContent>
+                    <AlertDialogHeader>
+                        <AlertDialogTitle>{t("deleteConfirmUsers", { count: 1, name: user?.username })}</AlertDialogTitle>
+                        <AlertDialogDescription>{t("deleteConfirmCurrentUser")}</AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter>
+                        <AlertDialogCancel>{t("cancel")}</AlertDialogCancel>
+                        <AlertDialogAction variant="destructive" data-testid="confirm" onClick={onDeleteConfirm}>
+                            {t("delete")}
+                        </AlertDialogAction>
+                    </AlertDialogFooter>
+                </AlertDialogContent>
+            </AlertDialog>
             <DisableConfirm />
             <ViewHeader
                 titleKey={user.username!}
@@ -355,7 +376,7 @@ const navigate = useNavigate();
                     <DropdownMenuItem
                         key="delete"
                         disabled={!user.access?.manage}
-                        onClick={() => toggleDeleteDialog()}
+                        onClick={() => setDeleteDialogOpen(true)}
                     >
                         {t("delete")}
                     </DropdownMenuItem>

@@ -16,7 +16,16 @@ import { Controller, useForm, type UseFormReturn } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { Link, useNavigate } from "react-router-dom";
 import { useAdminClient } from "../admin-client";
-import { useConfirmDialog } from "../components/confirm-dialog/ConfirmDialog";
+import {
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle
+} from "@merge/ui/components/alert-dialog";
 import CodeEditor from "../components/form/CodeEditor";
 import { useRealm } from "../context/realm-context/RealmContext";
 import { prettyPrintJSON } from "../util";
@@ -135,42 +144,51 @@ const { realm } = useRealm();
         }
     };
 
-    const [toggleDeleteDialog, DeleteConfirm] = useConfirmDialog({
-        titleKey: t("deleteClientPolicyConfirmTitle"),
-        messageKey: t("deleteClientPolicyConfirm", {
-            policyName: selectedPolicy?.name
-        }),
-        continueButtonLabel: t("delete"),
-        continueButtonVariant: "destructive",
-        onConfirm: async () => {
-            const updatedPolicies = policies
-                ?.filter(policy => {
-                    return !policy.global && policy.name !== selectedPolicy?.name;
-                })
-                .map<ClientPolicyRepresentation>(policy => {
-                    const newPolicy = { ...policy };
-                    delete newPolicy.global;
-                    return newPolicy;
-                });
+    const onDeleteConfirm = async () => {
+        if (!selectedPolicy) return;
+        const updatedPolicies = policies
+            ?.filter(policy => {
+                return !policy.global && policy.name !== selectedPolicy.name;
+            })
+            .map<ClientPolicyRepresentation>(policy => {
+                const newPolicy = { ...policy };
+                delete newPolicy.global;
+                return newPolicy;
+            });
 
-            try {
-                await adminClient.clientPolicies.updatePolicy({
-                    policies: updatedPolicies
-                });
-                toast.success(t("deleteClientPolicySuccess"));
-                refresh();
-            } catch (error) {
-                toast.error(t("deleteClientPolicyError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
-            }
+        try {
+            await adminClient.clientPolicies.updatePolicy({
+                policies: updatedPolicies ?? []
+            });
+            setSelectedPolicy(undefined);
+            toast.success(t("deleteClientPolicySuccess"));
+            refresh();
+        } catch (error) {
+            toast.error(t("deleteClientPolicyError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
         }
-    });
+    };
 
     if (!policies) {
         return <KeycloakSpinner />;
     }
     return (
         <>
-            <DeleteConfirm />
+            <AlertDialog open={!!selectedPolicy} onOpenChange={(open) => !open && setSelectedPolicy(undefined)}>
+                <AlertDialogContent>
+                    <AlertDialogHeader>
+                        <AlertDialogTitle>{t("deleteClientPolicyConfirmTitle")}</AlertDialogTitle>
+                        <AlertDialogDescription>
+                            {t("deleteClientPolicyConfirm", { policyName: selectedPolicy?.name })}
+                        </AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter>
+                        <AlertDialogCancel>{t("cancel")}</AlertDialogCancel>
+                        <AlertDialogAction variant="destructive" data-testid="confirm" onClick={onDeleteConfirm}>
+                            {t("delete")}
+                        </AlertDialogAction>
+                    </AlertDialogFooter>
+                </AlertDialogContent>
+            </AlertDialog>
             <div className="pt-0">
                 <div className="flex gap-2 kc-policies-config-section items-center">
                     <div>
@@ -233,7 +251,6 @@ const { realm } = useRealm();
                         {
                             title: t("delete"),
                             onRowClick: item => {
-                                toggleDeleteDialog();
                                 setSelectedPolicy(item);
                             }
                         } as Action<ClientPolicy>
