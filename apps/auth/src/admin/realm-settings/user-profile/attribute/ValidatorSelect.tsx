@@ -52,11 +52,13 @@ export const ValidatorSelect = ({
                     <SelectValue placeholder={t("choose")} />
                 </SelectTrigger>
                 <SelectContent>
-                    {validators.map(option => (
-                        <SelectItem key={option.id} value={option.id ?? ""}>
-                            {option.id}
-                        </SelectItem>
-                    ))}
+                    {validators
+                        .filter((option) => option.id != null && option.id !== "")
+                        .map((option) => (
+                            <SelectItem key={option.id!} value={option.id!}>
+                                {option.id}
+                            </SelectItem>
+                        ))}
                 </SelectContent>
             </Select>
         </div>

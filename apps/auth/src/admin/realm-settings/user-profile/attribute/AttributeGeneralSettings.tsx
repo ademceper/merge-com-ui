@@ -140,19 +140,21 @@ export const AttributeGeneralSettings = () => {
                         defaultValue=""
                         render={({ field }) => (
                             <Select
-                                value={field.value ?? ""}
-                                onValueChange={field.onChange}
+                                value={field.value === "" || field.value == null ? "__none__" : field.value}
+                                onValueChange={(v) => field.onChange(v === "__none__" ? "" : v)}
                             >
                                 <SelectTrigger id="attribute-group">
                                     <SelectValue placeholder={t("none")} />
                                 </SelectTrigger>
                                 <SelectContent>
-                                    <SelectItem value="">{t("none")}</SelectItem>
-                                    {(config?.groups ?? []).map((g) => (
-                                        <SelectItem key={g.name} value={g.name ?? ""}>
-                                            {g.name}
-                                        </SelectItem>
-                                    ))}
+                                    <SelectItem value="__none__">{t("none")}</SelectItem>
+                                    {(config?.groups ?? [])
+                                        .filter((g) => g.name != null && g.name !== "")
+                                        .map((g) => (
+                                            <SelectItem key={g.name!} value={g.name!}>
+                                                {g.name}
+                                            </SelectItem>
+                                        ))}
                                 </SelectContent>
                             </Select>
                         )}

@@ -11,6 +11,7 @@ import LoginUpdatePassword from "./pages/LoginUpdatePassword";
 import LoginUpdateProfile from "./pages/LoginUpdateProfile";
 import DeleteAccountConfirm from "./pages/DeleteAccountConfirm";
 import LoginPageExpired from "./pages/LoginPageExpired";
+import Terms from "./pages/Terms";
 
 const UserProfileFormFields = lazy(
     () => import("keycloakify/login/UserProfileFormFields")
@@ -90,6 +91,16 @@ export default function KcPage(props: { kcContext: KcContext }) {
                     case "login-page-expired.ftl":
                         return (
                             <LoginPageExpired
+                                kcContext={kcContext}
+                                i18n={i18n}
+                                classes={{}}
+                                Template={Template}
+                                doUseDefaultCss={false}
+                            />
+                        );
+                    case "terms.ftl":
+                        return (
+                            <Terms
                                 kcContext={kcContext}
                                 i18n={i18n}
                                 classes={{}}
