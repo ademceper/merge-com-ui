@@ -8,7 +8,7 @@ import {
     getErrorDescription,
     getErrorMessage,
     HelpItem,
-    SelectControl,
+    SelectField,
     SwitchControl,
     TextControl,
     useHelp,
@@ -61,12 +61,11 @@ const WebauthnSelect = ({
 }: WeauthnSelectProps) => {
     const { t } = useTranslation();
     return (
-        <SelectControl
+        <SelectField
             name={name}
             label={label}
             labelIcon={labelIcon}
-            variant={isMultiSelect ? "typeaheadMulti" : "single"}
-            controller={{ defaultValue: options[0] }}
+            defaultValue={options[0]}
             options={options.map(option => ({
                 key: option,
                 value: labelPrefix ? t(`${labelPrefix}.${option}`) : option

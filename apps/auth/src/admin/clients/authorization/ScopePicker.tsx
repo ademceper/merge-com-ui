@@ -1,18 +1,13 @@
 import type ScopeRepresentation from "@keycloak/keycloak-admin-client/lib/defs/scopeRepresentation";
-import {
-    FormErrorText,
-    HelpItem,
-    KeycloakSelect,
-    SelectVariant,
-    useFetch
-} from "../../../shared/keycloak-ui-shared";
+import { FormErrorText, HelpItem, KeycloakSpinner, useFetch } from "../../../shared/keycloak-ui-shared";
+import { Button } from "@merge/ui/components/button";
+import { Input } from "@merge/ui/components/input";
 import { Label } from "@merge/ui/components/label";
-const SelectOption = ({ value, children, ...props }: any) => <option value={value} {...props}>{children}</option>;
+import { Popover, PopoverContent, PopoverTrigger } from "@merge/ui/components/popover";
 import { useState } from "react";
 import { Controller, useFormContext } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { useAdminClient } from "../../admin-client";
-import { KeycloakSpinner } from "../../../shared/keycloak-ui-shared";
 import { useIsAdminPermissionsClient } from "../../utils/useIsAdminPermissionsClient";
 
 type Scope = {
@@ -52,19 +47,12 @@ export const ScopePicker = ({ clientId, resourceTypeScopes }: ScopePickerProps) 
         [search]
     );
 
-    const renderScopes = (scopes: ScopeRepresentation[] | string[]) =>
-        scopes.map((option, index) => (
-            <SelectOption key={index} value={option}>
-                {typeof option === "string" ? option : option.name}
-            </SelectOption>
-        ));
-
     if (!scopes && !resourceTypeScopes) return <KeycloakSpinner />;
 
-    const allScopes =
+    const allScopes: string[] =
         isAdminPermissionsClient && resourceTypeScopes
             ? resourceTypeScopes
-            : scopes?.map(scope => scope.name!);
+            : (scopes?.map((scope) => scope.name!) ?? []);
 
     return (
         <div className="space-y-2">
@@ -78,46 +66,77 @@ export const ScopePicker = ({ clientId, resourceTypeScopes }: ScopePickerProps) 
                 control={control}
                 rules={isAdminPermissionsClient ? { required: t("requiredField") } : {}}
                 render={({ field }) => {
-                    const selectedValues = field.value.map((o: Scope) => o.name);
+                    const selectedValues = (field.value ?? []).map((o: Scope) => o.name);
+                    const filteredScopes = search
+                        ? allScopes.filter((name) => name.toLowerCase().includes(search.toLowerCase()))
+                        : allScopes;
                     return (
                         <>
-                            <KeycloakSelect
-                                toggleId="scopes"
-                                variant={SelectVariant.typeaheadMulti}
-                                chipGroupProps={{
-                                    numChips: 3,
-                                    expandedText: t("hide"),
-                                    collapsedText: t("showRemaining")
-                                }}
-                                onToggle={val => setOpen(val)}
-                                isOpen={open}
-                                selections={selectedValues}
-                                onFilter={value => {
-                                    setSearch(value);
-                                    return renderScopes(allScopes || []);
-                                }}
-                                onSelect={selectedValue => {
-                                    const option =
-                                        typeof selectedValue === "string"
-                                            ? selectedValue
-                                            : (selectedValue as Scope).name;
-                                    const changedValue = field.value.find(
-                                        (o: Scope) => o.name === option
-                                    )
-                                        ? field.value.filter(
-                                              (item: Scope) => item.name !== option
-                                          )
-                                        : [...field.value, { name: option }];
-                                    field.onChange(changedValue);
-                                }}
-                                onClear={() => {
-                                    setSearch("");
-                                    field.onChange([]);
-                                }}
-                                typeAheadAriaLabel={t("authorizationScopes")}
-                            >
-                                {renderScopes(allScopes || [])}
-                            </KeycloakSelect>
+                            <Popover open={open} onOpenChange={setOpen}>
+                                <PopoverTrigger asChild>
+                                    <Button
+                                        id="scopes"
+                                        variant="outline"
+                                        role="combobox"
+                                        aria-expanded={open}
+                                        aria-invalid={!!errors.scopes}
+                                        className="min-h-9 w-full justify-between font-normal"
+                                    >
+                                        <span className="truncate">
+                                            {selectedValues.length > 0
+                                                ? selectedValues.join(", ")
+                                                : t("authorizationScopes")}
+                                        </span>
+                                    </Button>
+                                </PopoverTrigger>
+                                <PopoverContent className="w-(--radix-popover-trigger-width) p-0" align="start">
+                                    <Input
+                                        placeholder={t("filter")}
+                                        value={search}
+                                        onChange={(e) => setSearch(e.target.value)}
+                                        className="m-2 h-8"
+                                    />
+                                    <ul className="max-h-64 overflow-auto py-1">
+                                        {filteredScopes.map((name) => {
+                                            const isSelected = selectedValues.includes(name);
+                                            return (
+                                                <li
+                                                    key={name}
+                                                    role="option"
+                                                    aria-selected={isSelected}
+                                                    className="hover:bg-accent cursor-pointer px-2 py-1.5 text-sm"
+                                                    onMouseDown={(e) => e.preventDefault()}
+                                                    onClick={() => {
+                                                        const changedValue = isSelected
+                                                            ? field.value.filter((o: Scope) => o.name !== name)
+                                                            : [...(field.value ?? []), { name }];
+                                                        field.onChange(changedValue);
+                                                    }}
+                                                >
+                                                    {name}
+                                                </li>
+                                            );
+                                        })}
+                                    </ul>
+                                    {selectedValues.length > 0 && (
+                                        <div className="border-t px-2 py-1">
+                                            <Button
+                                                type="button"
+                                                variant="ghost"
+                                                size="sm"
+                                                className="h-7 w-full justify-center"
+                                                onClick={() => {
+                                                    setSearch("");
+                                                    field.onChange([]);
+                                                    setOpen(false);
+                                                }}
+                                            >
+                                                {t("clear")}
+                                            </Button>
+                                        </div>
+                                    )}
+                                </PopoverContent>
+                            </Popover>
                             {isAdminPermissionsClient && errors.scopes && (
                                 <FormErrorText message={t("required")} />
                             )}

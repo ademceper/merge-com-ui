@@ -3,8 +3,7 @@ import { useTranslation } from "react-i18next";
 import {
     KeycloakSpinner,
     useFetch,
-    SelectControl,
-    SelectVariant
+    MultiSelectField
 } from "../../../shared/keycloak-ui-shared";
 import { useState } from "react";
 import { fetchAdminUI } from "../../context/auth/admin-ui-endpoint";
@@ -42,20 +41,12 @@ export const EventListenersForm = ({ form, reset: _reset }: EventListenersFormPr
 
     return (
         <FormProvider {...form}>
-            <SelectControl
+            <MultiSelectField
                 name="eventsListeners"
                 label={t("eventListeners")}
                 labelIcon={t("eventListenersHelpTextHelp")}
-                controller={{
-                    defaultValue: ""
-                }}
+                defaultValue={[]}
                 className="kc_eventListeners_select"
-                chipGroupProps={{
-                    numChips: 3,
-                    expandedText: t("hide"),
-                    collapsedText: t("showRemaining")
-                }}
-                variant={SelectVariant.typeaheadMulti}
                 options={eventListeners.map(value => value.id)}
             />
         </FormProvider>

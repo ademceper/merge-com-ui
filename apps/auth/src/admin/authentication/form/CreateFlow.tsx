@@ -1,5 +1,5 @@
 import type AuthenticationFlowRepresentation from "@keycloak/keycloak-admin-client/lib/defs/authenticationFlowRepresentation";
-import { SelectControl } from "../../../shared/keycloak-ui-shared";
+import { SelectField } from "../../../shared/keycloak-ui-shared";
 import { toast } from "@merge/ui/components/sonner";
 import { Button } from "@merge/ui/components/button";
 import { FormProvider, useForm } from "react-hook-form";
@@ -55,12 +55,12 @@ export default function CreateFlow() {
                         onSubmit={handleSubmit(onSubmit)}
                     >
                         <NameDescription />
-                        <SelectControl
+                        <SelectField
                             name="providerId"
                             label={t("flowType")}
                             labelIcon={t("topLevelFlowTypeHelp")}
                             aria-label={t("selectFlowType")}
-                            controller={{ defaultValue: TYPES[0] }}
+                            defaultValue={TYPES[0]}
                             options={TYPES.map(type => ({
                                 key: type,
                                 value: t(`top-level-flow-type.${type}`)

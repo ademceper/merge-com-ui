@@ -1,8 +1,13 @@
 import type ResourceRepresentation from "@keycloak/keycloak-admin-client/lib/defs/resourceRepresentation";
-import { KeycloakSelect, SelectVariant } from "../../../shared/keycloak-ui-shared";
-const SelectOption = ({ value, children, selected, ...props }: any) => <option value={value} {...props}>{children}</option>;
 import { Button } from "@merge/ui/components/button";
 import { Input } from "@merge/ui/components/input";
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue
+} from "@merge/ui/components/select";
 import {
     Table,
     TableBody,
@@ -77,15 +82,15 @@ const ValueInput = ({
 
         if (attributeValues?.length && !resources) {
             return attributeValues.map(attr => (
-                <SelectOption key={attr.key} value={attr.key}>
+                <SelectItem key={attr.key} value={attr.key ?? ""}>
                     {attr.name}
-                </SelectOption>
+                </SelectItem>
             ));
         } else if (scopeValues?.length) {
             return scopeValues.map(scope => (
-                <SelectOption key={scope.name} value={scope.name}>
+                <SelectItem key={scope.name} value={scope.name ?? ""}>
                     {scope.name}
-                </SelectOption>
+                </SelectItem>
             ));
         }
     };
@@ -101,28 +106,26 @@ const ValueInput = ({
                     defaultValue={[]}
                     control={control}
                     render={({ field }) => (
-                        <KeycloakSelect
-                            toggleId={`${attribute.id}-value`}
-                            className="kc-attribute-value-selectable"
-                            chipGroupProps={{
-                                numChips: 1,
-                                expandedText: t("hide"),
-                                collapsedText: t("showRemaining")
-                            }}
-                            onToggle={open => toggleValueSelect(rowIndex, open)}
-                            isOpen={isValueOpenArray[rowIndex]}
-                            variant={SelectVariant.typeahead}
-                            typeAheadAriaLabel={t("selectOrTypeAKey")}
-                            placeholderText={t("selectOrTypeAKey")}
-                            selections={field.value}
-                            onSelect={v => {
+                        <Select
+                            open={isValueOpenArray[rowIndex]}
+                            onOpenChange={open => toggleValueSelect(rowIndex, open)}
+                            value={Array.isArray(field.value) ? field.value[0] : field.value}
+                            onValueChange={v => {
                                 field.onChange(v);
-
                                 toggleValueSelect(rowIndex, false);
                             }}
+                            aria-label={t("selectOrTypeAKey")}
                         >
-                            {renderSelectOptionType()}
-                        </KeycloakSelect>
+                            <SelectTrigger
+                                id={`${attribute.id}-value`}
+                                className="kc-attribute-value-selectable"
+                            >
+                                <SelectValue placeholder={t("selectOrTypeAKey")} />
+                            </SelectTrigger>
+                            <SelectContent>
+                                {renderSelectOptionType()}
+                            </SelectContent>
+                        </Select>
                     )}
                 />
             ) : (
@@ -187,35 +190,37 @@ export const KeyBasedAttributeInput = ({
                                 defaultValue=""
                                 control={control}
                                 render={({ field }) => (
-                                    <KeycloakSelect
-                                        toggleId={`${name}.${rowIndex}.key`}
-                                        className="kc-attribute-key-selectable"
-                                        onToggle={open => toggleKeySelect(rowIndex, open)}
-                                        isOpen={isKeyOpenArray[rowIndex]}
-                                        variant={SelectVariant.typeahead}
-                                        typeAheadAriaLabel={t("selectOrTypeAKey")}
-                                        placeholderText={t("selectOrTypeAKey")}
-                                        selections={field.value}
-                                        onSelect={v => {
-                                            field.onChange(v.toString());
-
+                                    <Select
+                                        open={isKeyOpenArray[rowIndex]}
+                                        onOpenChange={open => toggleKeySelect(rowIndex, open)}
+                                        value={field.value ?? ""}
+                                        onValueChange={v => {
+                                            field.onChange(v);
                                             toggleKeySelect(rowIndex, false);
                                         }}
+                                        aria-label={t("selectOrTypeAKey")}
                                     >
-                                        {selectableValues?.map(attribute => (
-                                            <SelectOption
-                                                selected={attribute.name === field.value}
-                                                key={attribute.key}
-                                                value={
-                                                    resources
-                                                        ? attribute.name
-                                                        : attribute.key
-                                                }
-                                            >
-                                                {attribute.name}
-                                            </SelectOption>
-                                        ))}
-                                    </KeycloakSelect>
+                                        <SelectTrigger
+                                            id={`${name}.${rowIndex}.key`}
+                                            className="kc-attribute-key-selectable"
+                                        >
+                                            <SelectValue placeholder={t("selectOrTypeAKey")} />
+                                        </SelectTrigger>
+                                        <SelectContent>
+                                            {selectableValues?.map(attr => (
+                                                <SelectItem
+                                                    key={attr.key}
+                                                    value={
+                                                        resources
+                                                            ? attr.name ?? ""
+                                                            : attr.key ?? ""
+                                                    }
+                                                >
+                                                    {attr.name}
+                                                </SelectItem>
+                                            ))}
+                                        </SelectContent>
+                                    </Select>
                                 )}
                             />
                         </TableCell>

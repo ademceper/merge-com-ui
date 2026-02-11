@@ -1,6 +1,6 @@
 import PolicyRepresentation from "@keycloak/keycloak-admin-client/lib/defs/policyRepresentation";
 import UserRepresentation from "@keycloak/keycloak-admin-client/lib/defs/userRepresentation";
-import { SelectControl, TextControl } from "../../../shared/keycloak-ui-shared";
+import { SelectField, TextControl } from "../../../shared/keycloak-ui-shared";
 import { Button } from "@merge/ui/components/button";
 import { Popover, PopoverContent, PopoverTrigger } from "@merge/ui/components/popover";
 import { useEffect, useRef, useState } from "react";
@@ -84,12 +84,10 @@ export const SearchDropdown = ({ types, search, onSearch }: SearchDropdownProps)
                     onSubmit={handleSubmit(submit)}
                 >
                     <TextControl name="name" label={t("name")} />
-                    <SelectControl
+                    <SelectField
                         name="resourceType"
                         label={t("type")}
-                        controller={{
-                            defaultValue: ""
-                        }}
+                        defaultValue=""
                         options={[
                             { key: "", value: t("choose") },
                             ...types.map(({ type, name }) => ({
@@ -111,12 +109,10 @@ export const SearchDropdown = ({ types, search, onSearch }: SearchDropdownProps)
                                 resourceType={selectedType || "clients"}
                                 withEnforceAccessTo={false}
                             />
-                            <SelectControl
+                            <SelectField
                                 name={"scope"}
                                 label={t("authorizationScope")}
-                                controller={{
-                                    defaultValue: ""
-                                }}
+                                defaultValue=""
                                 options={[
                                     ...(resourceScopes || []).map(resourceScope => ({
                                         key: resourceScope!,

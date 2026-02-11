@@ -1,5 +1,5 @@
 import type PolicyProviderRepresentation from "@keycloak/keycloak-admin-client/lib/defs/policyProviderRepresentation";
-import { SelectControl, TextControl } from "../../../shared/keycloak-ui-shared";
+import { SelectField, TextControl } from "../../../shared/keycloak-ui-shared";
 import { Button } from "@merge/ui/components/button";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger } from "@merge/ui/components/dropdown-menu";
 import { useEffect } from "react";
@@ -78,12 +78,10 @@ export const SearchDropdown = ({
                         )}
                         {type !== "policy" && <TextControl name="scope" label={t("scope")} />}
                         {type !== "resource" && (
-                            <SelectControl
+                            <SelectField
                                 name="type"
                                 label={t("type")}
-                                controller={{
-                                    defaultValue: ""
-                                }}
+                                defaultValue=""
                                 options={[
                                     { key: "", value: t("allTypes") },
                                     ...(types || []).map(({ type, name }) => ({

@@ -1,5 +1,5 @@
 import IdentityProviderRepresentation from "@keycloak/keycloak-admin-client/lib/defs/identityProviderRepresentation";
-import { SelectControl } from "../../shared/keycloak-ui-shared";
+import { SelectField } from "../../shared/keycloak-ui-shared";
 import { Button } from "@merge/ui/components/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@merge/ui/components/dialog";
 import { useEffect } from "react";
@@ -102,10 +102,10 @@ const form = useForm<LinkRepresentation>({ mode: "onChange" });
                             isRequired
                             isDisabled={!!identityProvider}
                         />
-                        <SelectControl
+                        <SelectField
                             name={convertAttributeNameToForm("config.kc.org.domain")}
                             label={t("domain")}
-                            controller={{ defaultValue: "" }}
+                            defaultValue=""
                             options={[
                                 { key: "", value: t("none") },
                                 { key: "ANY", value: t("any") },
@@ -113,7 +113,6 @@ const form = useForm<LinkRepresentation>({ mode: "onChange" });
                                     ? getValues("domains")!.map(d => ({ key: d, value: d }))
                                     : [])
                             ]}
-                            menuAppendTo="parent"
                         />
                         <DefaultSwitchControl
                             name="hideOnLogin"

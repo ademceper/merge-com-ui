@@ -1,7 +1,7 @@
 import type ClientRepresentation from "@keycloak/keycloak-admin-client/lib/defs/clientRepresentation";
 import type { ClientQuery } from "@keycloak/keycloak-admin-client/lib/resources/clients";
 import {
-    SelectControl,
+    SelectField,
     SelectControlOption,
     SelectVariant,
     useFetch
@@ -95,23 +95,17 @@ export const ClientSelect = ({
     );
 
     return (
-        <SelectControl
+        <SelectField
             name={name!}
             label={tab !== "evaluation" ? t(label!) : t("client")}
             labelIcon={tab !== "evaluation" ? t(helpText!) : t("selectClient")}
-            controller={{
-                defaultValue: defaultValue || "",
-                rules: {
-                    required: {
-                        value: isRequired || false,
-                        message: t("required")
-                    }
+            defaultValue={defaultValue || ""}
+            rules={{
+                required: {
+                    value: isRequired || false,
+                    message: t("required")
                 }
             }}
-            onFilter={value => setSearch(value)}
-            variant={variant}
-            isDisabled={isDisabled}
-            selectedOptions={selectedClients}
             options={clients.map(client => ({
                 key: client[clientKey] as string,
                 value: client.clientId!

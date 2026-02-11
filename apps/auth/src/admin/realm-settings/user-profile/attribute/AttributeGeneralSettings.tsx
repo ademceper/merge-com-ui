@@ -2,18 +2,23 @@ import type ClientScopeRepresentation from "@keycloak/keycloak-admin-client/lib/
 import type { UserProfileConfig } from "@keycloak/keycloak-admin-client/lib/defs/userProfileMetadata";
 import {
     HelpItem,
-    KeycloakSelect,
     KeycloakSpinner,
-    SelectControl,
-    SelectVariant,
     TextControl,
     useFetch
 } from "../../../../shared/keycloak-ui-shared";
+import { Button } from "@merge/ui/components/button";
 import { Label } from "@merge/ui/components/label";
+import { Popover, PopoverContent, PopoverTrigger } from "@merge/ui/components/popover";
 import { RadioGroup, RadioGroupItem } from "@merge/ui/components/radio-group";
 import { Separator } from "@merge/ui/components/separator";
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue
+} from "@merge/ui/components/select";
 import { Switch } from "@merge/ui/components/switch";
-import { SelectOption } from "../../../../shared/keycloak-ui-shared";
 import { isEqual } from "lodash-es";
 import { useState } from "react";
 import { Controller, FormProvider, useFormContext, useWatch } from "react-hook-form";
@@ -40,10 +45,6 @@ export const AttributeGeneralSettings = () => {
     const form = useFormContext();
     const [clientScopes, setClientScopes] = useState<ClientScopeRepresentation[]>();
     const [config, setConfig] = useState<UserProfileConfig>();
-    const [selectEnabledWhenOpen, setSelectEnabledWhenOpen] = useState(false);
-    const [selectRequiredForOpen, setSelectRequiredForOpen] = useState(false);
-
-    const [enabledWhenSearch, setEnableWhenSearch] = useState("");
     const localeSort = useLocaleSort();
 
     const { attributeName } = useParams<AttributeParams>();
@@ -80,14 +81,7 @@ export const AttributeGeneralSettings = () => {
         form.setValue("hasRequiredScopes", hasRequiredScopes);
     }
 
-    const items = () =>
-        localeSort(clientScopes, mapByKey("name"))
-            .filter(s => enabledWhenSearch === "" || s.name?.includes(enabledWhenSearch))
-            .map(option => (
-                <SelectOption key={option.name} value={option.name ?? ""}>
-                    {option.name}
-                </SelectOption>
-            ));
+    const scopeOptions = localeSort(clientScopes, mapByKey("name"));
 
     const ROOT_ATTRIBUTE = [...USERNAME_EMAIL, "firstName", "lastName"];
 
@@ -135,21 +129,35 @@ export const AttributeGeneralSettings = () => {
                         labelIcon={t("defaultValueHelp")}
                     />
                 )}
-                <SelectControl
-                    name="group"
-                    label={t("attributeGroup")}
-                    labelIcon={t("attributeGroupHelp")}
-                    controller={{
-                        defaultValue: ""
-                    }}
-                    options={[
-                        { key: "", value: t("none") },
-                        ...(config?.groups?.map(g => ({
-                            key: g.name!,
-                            value: g.name!
-                        })) || [])
-                    ]}
-                />
+                <div className="space-y-2">
+                    <div className="flex items-center gap-1">
+                        <Label htmlFor="attribute-group">{t("attributeGroup")}</Label>
+                        <HelpItem helpText={t("attributeGroupHelp")} fieldLabelId="attributeGroup" />
+                    </div>
+                    <Controller
+                        name="group"
+                        control={form.control}
+                        defaultValue=""
+                        render={({ field }) => (
+                            <Select
+                                value={field.value ?? ""}
+                                onValueChange={field.onChange}
+                            >
+                                <SelectTrigger id="attribute-group">
+                                    <SelectValue placeholder={t("none")} />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    <SelectItem value="">{t("none")}</SelectItem>
+                                    {(config?.groups ?? []).map((g) => (
+                                        <SelectItem key={g.name} value={g.name ?? ""}>
+                                            {g.name}
+                                        </SelectItem>
+                                    ))}
+                                </SelectContent>
+                            </Select>
+                        )}
+                    />
+                </div>
                 {!USERNAME_EMAIL.includes(attributeName) && (
                     <>
                         <Separator />
@@ -182,49 +190,64 @@ export const AttributeGeneralSettings = () => {
                                     control={form.control}
                                     defaultValue={[]}
                                     render={({ field }) => (
-                                        <KeycloakSelect
-                                            data-testid="enabled-when-scope-field"
-                                            variant={SelectVariant.typeaheadMulti}
-                                            onFilter={value => {
-                                                setEnableWhenSearch(value);
-                                                return items();
-                                            }}
-                                            typeAheadAriaLabel="Select"
-                                            chipGroupProps={{
-                                                numChips: 3,
-                                                expandedText: t("hide"),
-                                                collapsedText: t("showRemaining")
-                                            }}
-                                            onToggle={isOpen =>
-                                                setSelectEnabledWhenOpen(isOpen)
-                                            }
-                                            selections={field.value}
-                                            onSelect={selectedValue => {
-                                                const option = selectedValue.toString();
-                                                let changedValue = [""];
-                                                if (field.value) {
-                                                    changedValue = field.value.includes(
-                                                        option
-                                                    )
-                                                        ? field.value.filter(
-                                                              (item: string) =>
-                                                                  item !== option
-                                                          )
-                                                        : [...field.value, option];
-                                                } else {
-                                                    changedValue = [option];
-                                                }
-
-                                                field.onChange(changedValue);
-                                            }}
-                                            onClear={() => {
-                                                field.onChange([]);
-                                            }}
-                                            isOpen={selectEnabledWhenOpen}
-                                            aria-labelledby={"scope"}
-                                        >
-                                            {items()}
-                                        </KeycloakSelect>
+                                        <Popover>
+                                            <PopoverTrigger asChild>
+                                                <Button
+                                                    variant="outline"
+                                                    role="combobox"
+                                                    className="min-h-9 w-full justify-between font-normal"
+                                                    data-testid="enabled-when-scope-field"
+                                                >
+                                                    <span className="truncate">
+                                                        {Array.isArray(field.value) && field.value.length > 0
+                                                            ? field.value.join(", ")
+                                                            : t("selectScopes")}
+                                                    </span>
+                                                </Button>
+                                            </PopoverTrigger>
+                                            <PopoverContent
+                                                className="w-(--radix-popover-trigger-width) p-0"
+                                                align="start"
+                                            >
+                                                <ul className="max-h-64 overflow-auto py-1">
+                                                    {scopeOptions.map((s) => {
+                                                        const name = s.name ?? "";
+                                                        const selected = Array.isArray(field.value) && field.value.includes(name);
+                                                        return (
+                                                            <li
+                                                                key={name}
+                                                                role="option"
+                                                                aria-selected={selected}
+                                                                className="hover:bg-accent cursor-pointer px-2 py-1.5 text-sm"
+                                                                onMouseDown={(e) => e.preventDefault()}
+                                                                onClick={() => {
+                                                                    if (selected) {
+                                                                        field.onChange(field.value.filter((x: string) => x !== name));
+                                                                    } else {
+                                                                        field.onChange([...(field.value || []), name]);
+                                                                    }
+                                                                }}
+                                                            >
+                                                                {name}
+                                                            </li>
+                                                        );
+                                                    })}
+                                                </ul>
+                                                {Array.isArray(field.value) && field.value.length > 0 && (
+                                                    <div className="border-t px-2 py-1">
+                                                        <Button
+                                                            type="button"
+                                                            variant="ghost"
+                                                            size="sm"
+                                                            className="h-7 w-full justify-center"
+                                                            onClick={() => field.onChange([])}
+                                                        >
+                                                            {t("clear")}
+                                                        </Button>
+                                                    </div>
+                                                )}
+                                            </PopoverContent>
+                                        </Popover>
                                     )}
                                 />
                             </div>
@@ -319,59 +342,64 @@ export const AttributeGeneralSettings = () => {
                                             control={form.control}
                                             defaultValue={[]}
                                             render={({ field }) => (
-                                                <KeycloakSelect
-                                                    data-testid="required-when-scope-field"
-                                                    variant={SelectVariant.typeaheadMulti}
-                                                    typeAheadAriaLabel="Select"
-                                                    chipGroupProps={{
-                                                        numChips: 3,
-                                                        expandedText: t("hide"),
-                                                        collapsedText: t("showRemaining")
-                                                    }}
-                                                    onToggle={isOpen =>
-                                                        setSelectRequiredForOpen(isOpen)
-                                                    }
-                                                    selections={field.value}
-                                                    onSelect={selectedValue => {
-                                                        const option =
-                                                            selectedValue.toString();
-                                                        let changedValue = [""];
-                                                        if (field.value) {
-                                                            changedValue =
-                                                                field.value.includes(
-                                                                    option
-                                                                )
-                                                                    ? field.value.filter(
-                                                                          (
-                                                                              item: string
-                                                                          ) =>
-                                                                              item !==
-                                                                              option
-                                                                      )
-                                                                    : [
-                                                                          ...field.value,
-                                                                          option
-                                                                      ];
-                                                        } else {
-                                                            changedValue = [option];
-                                                        }
-                                                        field.onChange(changedValue);
-                                                    }}
-                                                    onClear={() => {
-                                                        field.onChange([]);
-                                                    }}
-                                                    isOpen={selectRequiredForOpen}
-                                                    aria-labelledby={"scope"}
-                                                >
-                                                    {clientScopes.map(option => (
-                                                        <SelectOption
-                                                            key={option.name}
-                                                            value={option.name ?? ""}
+                                                <Popover>
+                                                    <PopoverTrigger asChild>
+                                                        <Button
+                                                            variant="outline"
+                                                            role="combobox"
+                                                            className="min-h-9 w-full justify-between font-normal"
+                                                            data-testid="required-when-scope-field"
                                                         >
-                                                            {option.name}
-                                                        </SelectOption>
-                                                    ))}
-                                                </KeycloakSelect>
+                                                            <span className="truncate">
+                                                                {Array.isArray(field.value) && field.value.length > 0
+                                                                    ? field.value.join(", ")
+                                                                    : t("selectScopes")}
+                                                            </span>
+                                                        </Button>
+                                                    </PopoverTrigger>
+                                                    <PopoverContent
+                                                        className="w-(--radix-popover-trigger-width) p-0"
+                                                        align="start"
+                                                    >
+                                                        <ul className="max-h-64 overflow-auto py-1">
+                                                            {scopeOptions.map((s) => {
+                                                                const name = s.name ?? "";
+                                                                const selected = Array.isArray(field.value) && field.value.includes(name);
+                                                                return (
+                                                                    <li
+                                                                        key={name}
+                                                                        role="option"
+                                                                        aria-selected={selected}
+                                                                        className="hover:bg-accent cursor-pointer px-2 py-1.5 text-sm"
+                                                                        onMouseDown={(e) => e.preventDefault()}
+                                                                        onClick={() => {
+                                                                            if (selected) {
+                                                                                field.onChange(field.value.filter((x: string) => x !== name));
+                                                                            } else {
+                                                                                field.onChange([...(field.value || []), name]);
+                                                                            }
+                                                                        }}
+                                                                    >
+                                                                        {name}
+                                                                    </li>
+                                                                );
+                                                            })}
+                                                        </ul>
+                                                        {Array.isArray(field.value) && field.value.length > 0 && (
+                                                            <div className="border-t px-2 py-1">
+                                                                <Button
+                                                                    type="button"
+                                                                    variant="ghost"
+                                                                    size="sm"
+                                                                    className="h-7 w-full justify-center"
+                                                                    onClick={() => field.onChange([])}
+                                                                >
+                                                                    {t("clear")}
+                                                                </Button>
+                                                            </div>
+                                                        )}
+                                                    </PopoverContent>
+                                                </Popover>
                                             )}
                                         />
                                     </div>

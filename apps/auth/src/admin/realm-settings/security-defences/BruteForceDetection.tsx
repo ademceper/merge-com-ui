@@ -1,8 +1,8 @@
 import type RealmRepresentation from "@keycloak/keycloak-admin-client/lib/defs/realmRepresentation";
 import {
+    FormLabel,
     HelpItem,
     NumberControl,
-    SelectControl,
 } from "../../../shared/keycloak-ui-shared";
 import { Label } from "@merge/ui/components/label";
 import {
@@ -13,7 +13,7 @@ import {
     SelectValue,
 } from "@merge/ui/components/select";
 import { useEffect, useState } from "react";
-import { FormProvider, useForm } from "react-hook-form";
+import { Controller, FormProvider, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { FormPanel } from "../../../shared/keycloak-ui-shared";
 import { FormAccess } from "../../components/form/FormAccess";
@@ -165,23 +165,23 @@ export const BruteForceDetection = ({ realm, save }: BruteForceDetectionProps) =
                                     bruteForceMode ===
                                         BruteForceMode.PermanentAfterTemporaryLockout) && (
                                     <>
-                                        <SelectControl
-                                            name="bruteForceStrategy"
-                                            label={t("bruteForceStrategy")}
-                                            labelIcon={t("bruteForceStrategyHelp", {
-                                                failureFactor:
-                                                    getValues("failureFactor"),
-                                            })}
-                                            controller={{ defaultValue: "" }}
-                                            options={bruteForceStrategyTypes.map(
-                                                (key) => ({
-                                                    key,
-                                                    value: t(
-                                                        `bruteForceStrategy.${key}`,
-                                                    ),
-                                                }),
-                                            )}
-                                        />
+                                        <FormLabel name="bruteForceStrategy" label={t("bruteForceStrategy")} labelIcon={t("bruteForceStrategyHelp", { failureFactor: getValues("failureFactor") })} error={formState.errors.bruteForceStrategy}>
+                                            <Controller
+                                                name="bruteForceStrategy"
+                                                control={form.control}
+                                                defaultValue=""
+                                                render={({ field }) => (
+                                                    <Select value={field.value ?? ""} onValueChange={field.onChange}>
+                                                        <SelectTrigger id="bruteForceStrategy"><SelectValue /></SelectTrigger>
+                                                        <SelectContent>
+                                                            {bruteForceStrategyTypes.map((key) => (
+                                                                <SelectItem key={key} value={key}>{t(`bruteForceStrategy.${key}`)}</SelectItem>
+                                                            ))}
+                                                        </SelectContent>
+                                                    </Select>
+                                                )}
+                                            />
+                                        </FormLabel>
                                         <Time name="waitIncrementSeconds" min={0} />
                                         <Time name="maxFailureWaitSeconds" min={0} />
                                         <Time

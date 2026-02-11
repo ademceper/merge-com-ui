@@ -3,7 +3,7 @@ import { DefaultSwitchControl } from "../../components/SwitchControl";
 import { Label } from "@merge/ui/components/label";
 import { useFormContext, Controller } from "react-hook-form";
 import { TimeSelector } from "../../components/time-selector/TimeSelector";
-import { SelectControl, HelpItem } from "../../../shared/keycloak-ui-shared";
+import { SelectField, HelpItem } from "../../../shared/keycloak-ui-shared";
 import { sortProviders } from "../../util";
 import { useServerInfo } from "../../context/server-info/ServerInfoProvider";
 
@@ -44,7 +44,7 @@ export const JWTAuthorizationGrantAssertionSettings = () => {
                     )}
                 />
             </div>
-            <SelectControl
+            <SelectField
                 name="config.jwtAuthorizationGrantAssertionSignatureAlg"
                 label={t("jwtAuthorizationGrantAssertionSignatureAlg")}
                 labelIcon={t("jwtAuthorizationGrantAssertionSignatureAlgHelp")}
@@ -52,9 +52,7 @@ export const JWTAuthorizationGrantAssertionSettings = () => {
                     { key: "", value: t("algorithmNotSpecified") },
                     ...sortProviders(providers).map(p => ({ key: p, value: p }))
                 ]}
-                controller={{
-                    defaultValue: ""
-                }}
+                defaultValue=""
             />
             <DefaultSwitchControl
                 name="config.jwtAuthorizationGrantLimitAccessTokenExp"

@@ -8,7 +8,7 @@ import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 import {
     FormLabel,
-    SelectControl,
+    SelectField,
     TextAreaControl,
     TextControl,
     useFetch
@@ -258,24 +258,24 @@ export const ScopeForm = ({ clientScope, save, formId, embedded }: ScopeFormProp
                         }
                     }}
                 />
-                <SelectControl
+                <SelectField
                     id="kc-type"
                     name="type"
                     label={t("type")}
                     labelIcon={t("scopeTypeHelp")}
-                    controller={{ defaultValue: allClientScopeTypes[0] }}
+                    defaultValue={allClientScopeTypes[0]}
                     options={allClientScopeTypes.map(key => ({
                         key,
                         value: t(`clientScopeType.${key}`)
                     }))}
                 />
                 {!clientScope && (
-                    <SelectControl
+                    <SelectField
                         id="kc-protocol"
                         name="protocol"
                         label={t("protocol")}
                         labelIcon={t("protocolHelp")}
-                        controller={{ defaultValue: providers[0] }}
+                        defaultValue={providers[0]}
                         options={providers
                             .filter(option =>
                                 option === OID4VC_PROTOCOL ? isOid4vcEnabled : true
@@ -357,14 +357,14 @@ export const ScopeForm = ({ clientScope, save, formId, embedded }: ScopeFormProp
                             type="number"
                             min={1}
                         />
-                        <SelectControl
+                        <SelectField
                             id="kc-vc-format"
                             name={convertAttributeNameToForm<ClientScopeDefaultOptionalType>(
                                 "attributes.vc.format"
                             )}
                             label={t("supportedFormats")}
                             labelIcon={t("supportedFormatsHelp")}
-                            controller={{ defaultValue: VC_FORMAT_SD_JWT }}
+                            defaultValue={VC_FORMAT_SD_JWT}
                             options={[
                                 {
                                     key: VC_FORMAT_SD_JWT,
@@ -389,18 +389,16 @@ export const ScopeForm = ({ clientScope, save, formId, embedded }: ScopeFormProp
                             }
                         />
                         {realmKeys && realmKeys.length > 0 && (
-                            <SelectControl
+                            <SelectField
                                 id="kc-signing-key-id"
                                 name={convertAttributeNameToForm<ClientScopeDefaultOptionalType>(
                                     "attributes.vc.signing_key_id"
                                 )}
                                 label={t("signingKeyId")}
                                 labelIcon={t("signingKeyIdHelp")}
-                                controller={{
-                                    defaultValue:
-                                        clientScope?.attributes?.["vc.signing_key_id"] ??
-                                        ""
-                                }}
+                                defaultValue={
+                                    clientScope?.attributes?.["vc.signing_key_id"] ?? ""
+                                }
                                 options={keyOptions}
                             />
                         )}

@@ -1,12 +1,13 @@
 import ComponentRepresentation from "@keycloak/keycloak-admin-client/lib/defs/componentRepresentation";
-import {
-    HelpItem,
-    KeycloakSelect,
-    SelectVariant,
-    TextControl
-} from "../../../shared/keycloak-ui-shared";
-import { SelectOption } from "../../../shared/keycloak-ui-shared";
+import { HelpItem, TextControl } from "../../../shared/keycloak-ui-shared";
 import { FormLabel } from "../../../shared/keycloak-ui-shared";
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue
+} from "@merge/ui/components/select";
 import { useEffect, useState } from "react";
 import { Controller, FormProvider, UseFormReturn } from "react-hook-form";
 import { useTranslation } from "react-i18next";
@@ -142,38 +143,29 @@ export const LdapSettingsGeneral = ({
                         defaultValue="ad"
                         control={form.control}
                         render={({ field }) => (
-                            <KeycloakSelect
-                                isDisabled={vendorEdit}
-                                toggleId="kc-vendor"
-                                onToggle={() =>
-                                    setIsVendorDropdownOpen(!isVendorDropdownOpen)
-                                }
-                                isOpen={isVendorDropdownOpen}
-                                onSelect={value => {
-                                    field.onChange(value as string);
-                                    setIsVendorDropdownOpen(false);
+                            <Select
+                                open={isVendorDropdownOpen}
+                                onOpenChange={setIsVendorDropdownOpen}
+                                value={field.value ?? "ad"}
+                                onValueChange={(v) => {
+                                    field.onChange(v);
                                     setVendorDefaultValues();
+                                    setIsVendorDropdownOpen(false);
                                 }}
-                                selections={field.value}
-                                variant={SelectVariant.single}
+                                disabled={vendorEdit}
                                 aria-label={t("selectVendor")}
                             >
-                                <SelectOption key={0} value="ad">
-                                    Active Directory
-                                </SelectOption>
-                                <SelectOption key={1} value="rhds">
-                                    Red Hat Directory Server
-                                </SelectOption>
-                                <SelectOption key={2} value="tivoli">
-                                    Tivoli
-                                </SelectOption>
-                                <SelectOption key={3} value="edirectory">
-                                    Novell eDirectory
-                                </SelectOption>
-                                <SelectOption key={4} value="other">
-                                    Other
-                                </SelectOption>
-                            </KeycloakSelect>
+                                <SelectTrigger id="kc-vendor">
+                                    <SelectValue />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    <SelectItem value="ad">Active Directory</SelectItem>
+                                    <SelectItem value="rhds">Red Hat Directory Server</SelectItem>
+                                    <SelectItem value="tivoli">Tivoli</SelectItem>
+                                    <SelectItem value="edirectory">Novell eDirectory</SelectItem>
+                                    <SelectItem value="other">Other</SelectItem>
+                                </SelectContent>
+                            </Select>
                         )}
                     />
                 </FormLabel>

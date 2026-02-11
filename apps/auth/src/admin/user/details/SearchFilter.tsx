@@ -1,7 +1,12 @@
-import { KeycloakSelect } from "../../../shared/keycloak-ui-shared";
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue
+} from "@merge/ui/components/select";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@merge/ui/components/dropdown-menu";
 import { Button } from "@merge/ui/components/button";
-import { SelectOption } from "../../../shared/keycloak-ui-shared";
 import { Funnel } from "@phosphor-icons/react";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -62,16 +67,23 @@ export const SearchToolbar = ({ searchType, onSelect }: SearchToolbarProps) => {
                 <SearchDropdown searchType={searchType} onSelect={onSelect} />
             </div>
             <div>
-                <KeycloakSelect
-                    className="keycloak__users__searchtype"
-                    onToggle={val => setOpen(val)}
-                    isOpen={open}
-                    selections={[t("default"), t("attribute")]}
-                    onSelect={() => setOpen(false)}
+                <Select
+                    open={open}
+                    onOpenChange={setOpen}
+                    value={searchType}
+                    onValueChange={(val) => {
+                        onSelect(val as SearchType);
+                        setOpen(false);
+                    }}
                 >
-                    <SelectOption value={"default"}>{t("default")}</SelectOption>
-                    <SelectOption value={"attribute"}>{t("attribute")}</SelectOption>
-                </KeycloakSelect>
+                    <SelectTrigger className="keycloak__users__searchtype">
+                        <SelectValue placeholder={t("default")} />
+                    </SelectTrigger>
+                    <SelectContent>
+                        <SelectItem value="default">{t("default")}</SelectItem>
+                        <SelectItem value="attribute">{t("attribute")}</SelectItem>
+                    </SelectContent>
+                </Select>
             </div>
         </>
     );

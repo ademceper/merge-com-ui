@@ -1,11 +1,14 @@
+import { FormErrorText, HelpItem, SelectVariant } from "../../../shared/keycloak-ui-shared";
 import {
-    FormErrorText,
-    HelpItem,
-    KeycloakSelect,
-    SelectVariant
-} from "../../../shared/keycloak-ui-shared";
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue
+} from "@merge/ui/components/select";
+import { Button } from "@merge/ui/components/button";
 import { Label } from "@merge/ui/components/label";
-import { SelectOption } from "../../../shared/keycloak-ui-shared";
+import { Popover, PopoverContent, PopoverTrigger } from "@merge/ui/components/popover";
 import { useState } from "react";
 import { Controller, useFormContext } from "react-hook-form";
 import { useTranslation } from "react-i18next";
@@ -86,66 +89,94 @@ export const MultiValuedListComponent = ({
                 }}
                 render={({ field }) => (
                     <div className={helpIconAfterControl ? "flex w-full items-center gap-2" : undefined}>
-                        <KeycloakSelect
-                            className={helpIconAfterControl ? "flex-1 min-w-0" : undefined}
-                            toggleId={name}
-                            data-testid={name}
-                            isDisabled={isDisabled}
-                            chipGroupProps={{
-                                numChips: 3,
-                                expandedText: t("hide"),
-                                collapsedText: t("showRemaining")
-                            }}
-                            variant={variant}
-                            typeAheadAriaLabel={t("choose")}
-                            onToggle={setOpen}
-                            selections={
-                                stringify && variant === SelectVariant.typeaheadMulti
-                                    ? stringToMultiline(field.value)
-                                    : field.value
-                            }
-                            onSelect={v => {
-                                const option = v.toString();
-                                if (variant === SelectVariant.typeaheadMulti) {
-                                    const values = stringify
-                                        ? stringToMultiline(field.value)
-                                        : field.value;
-                                    let newValue;
-                                    if (values.includes(option)) {
-                                        newValue = values.filter(
-                                            (item: string) => item !== option
-                                        );
-                                    } else if (option !== "") {
-                                        newValue = [...values, option];
-                                    } else {
-                                        newValue = values;
-                                    }
-                                    field.onChange(
-                                        stringify &&
-                                            variant === SelectVariant.typeaheadMulti
-                                            ? toStringValue(newValue)
-                                            : newValue
-                                    );
-                                } else {
-                                    field.onChange(option);
-                                }
-                            }}
-                            onClear={() => {
-                                field.onChange(
-                                    stringify || variant !== SelectVariant.typeaheadMulti
-                                        ? ""
-                                        : []
-                                );
-                            }}
-                            onFilter={setSearch}
-                            isOpen={open}
-                        >
-                            {options?.map(option => (
-                                <SelectOption key={option} value={option}>
-                                    {option}
-                                </SelectOption>
-                            ))}
-                        </KeycloakSelect>
+                        {variant === SelectVariant.typeaheadMulti ? (
+                            <Popover open={open} onOpenChange={setOpen}>
+                                <PopoverTrigger asChild>
+                                    <Button
+                                        id={name}
+                                        variant="outline"
+                                        role="combobox"
+                                        aria-expanded={open}
+                                        disabled={isDisabled}
+                                        className={`min-h-9 w-full justify-between font-normal ${helpIconAfterControl ? "flex-1 min-w-0" : ""}`}
+                                        data-testid={name}
+                                    >
+                                        <span className="truncate">
+                                            {(stringify ? stringToMultiline(field.value) : field.value)?.length > 0
+                                                ? (stringify ? stringToMultiline(field.value) : field.value).join(", ")
+                                                : t("choose")}
+                                        </span>
+                                    </Button>
+                                </PopoverTrigger>
+                                <PopoverContent className="w-(--radix-popover-trigger-width) p-0" align="start">
+                                    <ul className="max-h-64 overflow-auto py-1">
+                                        {(options ?? []).map((option) => {
+                                            const values = stringify ? stringToMultiline(field.value) : (field.value ?? []);
+                                            const selected = values.includes(option);
+                                            return (
+                                                <li
+                                                    key={option}
+                                                    role="option"
+                                                    aria-selected={selected}
+                                                    className="hover:bg-accent cursor-pointer px-2 py-1.5 text-sm"
+                                                    onMouseDown={(e) => e.preventDefault()}
+                                                    onClick={() => {
+                                                        if (selected) {
+                                                            const newVal = values.filter((x: string) => x !== option);
+                                                            field.onChange(stringify ? toStringValue(newVal) : newVal);
+                                                        } else {
+                                                            const newVal = [...values, option];
+                                                            field.onChange(stringify ? toStringValue(newVal) : newVal);
+                                                        }
+                                                    }}
+                                                >
+                                                    {option}
+                                                </li>
+                                            );
+                                        })}
+                                    </ul>
+                                    {((stringify ? stringToMultiline(field.value) : field.value) ?? []).length > 0 && (
+                                        <div className="border-t px-2 py-1">
+                                            <Button
+                                                type="button"
+                                                variant="ghost"
+                                                size="sm"
+                                                className="h-7 w-full justify-center"
+                                                onClick={() => field.onChange(stringify ? "" : [])}
+                                            >
+                                                {t("clear")}
+                                            </Button>
+                                        </div>
+                                    )}
+                                </PopoverContent>
+                            </Popover>
+                        ) : (
+                            <Select
+                                open={open}
+                                onOpenChange={setOpen}
+                                value={(stringify ? (field.value ?? "") : (Array.isArray(field.value) ? field.value[0] : field.value)) ?? ""}
+                                onValueChange={(v) => {
+                                    field.onChange(v);
+                                    setOpen(false);
+                                }}
+                                disabled={isDisabled}
+                            >
+                                <SelectTrigger
+                                    id={name}
+                                    className={helpIconAfterControl ? "flex-1 min-w-0" : undefined}
+                                    data-testid={name}
+                                >
+                                    <SelectValue placeholder={t("choose")} />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    {(options ?? []).map((option) => (
+                                        <SelectItem key={option} value={option}>
+                                            {option}
+                                        </SelectItem>
+                                    ))}
+                                </SelectContent>
+                            </Select>
+                        )}
                         {helpIconAfterControl && helpText && (
                             <HelpItem helpText={t(helpText)} fieldLabelId={`${label}`} />
                         )}

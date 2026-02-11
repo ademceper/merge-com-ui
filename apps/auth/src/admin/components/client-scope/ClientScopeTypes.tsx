@@ -7,10 +7,12 @@ import { useTranslation } from "react-i18next";
 import { toUpperCase } from "../../util";
 import { DropdownMenuItem } from "@merge/ui/components/dropdown-menu";
 import {
-    KeycloakSelect,
-    SelectVariant
-} from "../../../shared/keycloak-ui-shared";
-import { SelectOption } from "../../../shared/keycloak-ui-shared";
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue
+} from "@merge/ui/components/select";
 
 export enum ClientScope {
     default = "default",
@@ -35,9 +37,9 @@ export const clientScopeTypesSelectOptions = (
     scopeTypes: string[] | undefined = clientScopeTypes
 ) =>
     scopeTypes.map(type => (
-        <SelectOption key={type} value={type}>
+        <SelectItem key={type} value={type}>
             {t(`clientScopeType.${type}`)}
-        </SelectOption>
+        </SelectItem>
     ));
 
 export const clientScopeTypesDropdown = (
@@ -72,27 +74,32 @@ export const CellDropdown = ({
     const [open, setOpen] = useState(false);
 
     return (
-        <KeycloakSelect
+        <Select
             key={`${clientScope.id}-${type}`}
-            toggleId="cell-dropdown"
-            className={classNameProp ?? `keycloak__client-scope__${type}`}
-            variant={SelectVariant.single}
-            onToggle={() => setOpen(!open)}
-            isOpen={open}
-            selections={[type]}
-            onSelect={value => {
+            open={open}
+            onOpenChange={setOpen}
+            value={type}
+            onValueChange={(value) => {
                 onSelect(
                     all ? (value as ClientScopeType) : (value as AllClientScopeType)
                 );
                 setOpen(false);
             }}
-            isDisabled={isDisabled}
+            disabled={isDisabled}
         >
-            {clientScopeTypesSelectOptions(
-                t,
-                all ? allClientScopeTypes : clientScopeTypes
-            )}
-        </KeycloakSelect>
+            <SelectTrigger
+                id="cell-dropdown"
+                className={classNameProp ?? `keycloak__client-scope__${type}`}
+            >
+                <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+                {clientScopeTypesSelectOptions(
+                    t,
+                    all ? allClientScopeTypes : clientScopeTypes
+                )}
+            </SelectContent>
+        </Select>
     );
 };
 

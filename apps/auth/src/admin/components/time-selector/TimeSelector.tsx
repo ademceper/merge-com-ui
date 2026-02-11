@@ -1,10 +1,11 @@
-import {
-    KeycloakSelect,
-    KeycloakSelectProps,
-    SelectVariant
-} from "../../../shared/keycloak-ui-shared";
 import { NumberInput } from "@merge/ui/components/number-input";
-import { SelectOption } from "../../../shared/keycloak-ui-shared";
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue
+} from "@merge/ui/components/select";
 import React, { useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 
@@ -19,8 +20,7 @@ const allTimes: TimeUnit[] = [
     { unit: "day", label: "times.days", multiplier: 86400 }
 ];
 
-export type TimeSelectorProps = Omit<React.InputHTMLAttributes<HTMLInputElement>, "onChange" | "defaultValue"> &
-    Pick<KeycloakSelectProps, "menuAppendTo"> & {
+export type TimeSelectorProps = Omit<React.InputHTMLAttributes<HTMLInputElement>, "onChange" | "defaultValue"> & {
         value?: number;
         units?: Unit[];
         onChange?: (time: number | string) => void;
@@ -54,7 +54,6 @@ export const TimeSelector = ({
     className,
     min,
     max,
-    menuAppendTo,
     validated: _validated,
     fullWidth = false,
     children: _children,
@@ -128,33 +127,33 @@ export const TimeSelector = ({
                 />
             </div>
             <div id={`${className || ""}-select-menu`} className={fullWidth ? "shrink-0" : ""}>
-                <KeycloakSelect
-                    variant={SelectVariant.single}
-                    aria-label={t("unitLabel")}
-                    className={`${className}-select`}
-                    onSelect={value => {
-                        setMultiplier(value as number);
-                        updateTimeout(timeValue, value as number);
+                <Select
+                    open={open}
+                    onOpenChange={setOpen}
+                    value={String(multiplier)}
+                    onValueChange={(v) => {
+                        const mult = Number(v);
+                        setMultiplier(mult);
+                        updateTimeout(timeValue, mult);
                         setOpen(false);
                     }}
-                    menuAppendTo={menuAppendTo}
-                    selections={multiplier}
-                    onToggle={() => {
-                        setOpen(!open);
-                    }}
-                    isOpen={open}
-                    isDisabled={rest.disabled}
+                    disabled={rest.disabled}
+                    aria-label={t("unitLabel")}
                 >
-                    {times.map(time => (
-                        <SelectOption
-                            id={time.label}
-                            key={time.label}
-                            value={String(time.multiplier)}
-                        >
-                            {t(time.label)}
-                        </SelectOption>
-                    ))}
-                </KeycloakSelect>
+                    <SelectTrigger className={`${className}-select`}>
+                        <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                        {times.map(time => (
+                            <SelectItem
+                                key={time.label}
+                                value={String(time.multiplier)}
+                            >
+                                {t(time.label)}
+                            </SelectItem>
+                        ))}
+                    </SelectContent>
+                </Select>
             </div>
         </div>
     );

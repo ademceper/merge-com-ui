@@ -1,6 +1,11 @@
 import ComponentTypeRepresentation from "@keycloak/keycloak-admin-client/lib/defs/componentTypeRepresentation";
-import { KeycloakSelect } from "../../../../shared/keycloak-ui-shared";
-import { SelectOption } from "../../../../shared/keycloak-ui-shared";
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue
+} from "@merge/ui/components/select";
 import { Label } from "@merge/ui/components/label";
 import { useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -29,32 +34,31 @@ export const ValidatorSelect = ({
     return (
         <div className="space-y-2">
             <Label htmlFor="validator">{t("validatorType")}</Label>
-            <KeycloakSelect
-                toggleId="validator"
-                onToggle={toggle}
-                onSelect={value => {
-                    const option = value as ComponentTypeRepresentation;
-                    onChange(option);
-                    setValue(option);
+            <Select
+                open={open}
+                onOpenChange={toggle}
+                value={value?.id ?? ""}
+                onValueChange={(id) => {
+                    const option = validators.find((v) => v.id === id);
+                    if (option) {
+                        onChange(option);
+                        setValue(option);
+                    }
                     toggle();
                 }}
-                selections={value?.id}
-                variant="single"
                 aria-label={t("selectOne")}
-                isOpen={open}
-                placeholderText={t("choose")}
-                menuAppendTo="parent"
-                maxHeight={300}
             >
-                {validators.map(option => (
-                    <SelectOption
-                        key={option.id}
-                        value={option.id ?? ""}
-                    >
-                        {option.id}
-                    </SelectOption>
-                ))}
-            </KeycloakSelect>
+                <SelectTrigger id="validator">
+                    <SelectValue placeholder={t("choose")} />
+                </SelectTrigger>
+                <SelectContent>
+                    {validators.map(option => (
+                        <SelectItem key={option.id} value={option.id ?? ""}>
+                            {option.id}
+                        </SelectItem>
+                    ))}
+                </SelectContent>
+            </Select>
         </div>
     );
 };

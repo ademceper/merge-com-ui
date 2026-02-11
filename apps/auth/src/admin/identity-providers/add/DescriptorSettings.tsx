@@ -10,7 +10,7 @@ import { FormProvider, useFormContext, useWatch } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import {
     NumberControl,
-    SelectControl,
+    SelectField,
     TextAreaControl,
     TextControl
 } from "../../../shared/keycloak-ui-shared";
@@ -107,14 +107,11 @@ const Fields = ({ readOnly }: DescriptorSettingsProps) => {
                     isDisabled={readOnly}
                     stringify
                 />
-                <SelectControl
+                <SelectField
                     name="config.nameIDPolicyFormat"
                     label={t("nameIdPolicyFormat")}
                     labelIcon={t("nameIdPolicyFormatHelp")}
-                    controller={{
-                        defaultValue:
-                            "urn:oasis:names:tc:SAML:2.0:nameid-format:persistent"
-                    }}
+                    defaultValue="urn:oasis:names:tc:SAML:2.0:nameid-format:persistent"
                     isDisabled={readOnly}
                     options={[
                         {
@@ -147,13 +144,11 @@ const Fields = ({ readOnly }: DescriptorSettingsProps) => {
                         }
                     ]}
                 />
-                <SelectControl
+                <SelectField
                     name="config.principalType"
                     label={t("principalType")}
                     labelIcon={t("principalTypeHelp")}
-                    controller={{
-                        defaultValue: "SUBJECT"
-                    }}
+                    defaultValue="SUBJECT"
                     isDisabled={readOnly}
                     options={[
                         { key: "SUBJECT", value: t("subjectNameId") },
@@ -214,14 +209,12 @@ const Fields = ({ readOnly }: DescriptorSettingsProps) => {
 
                 {wantAuthnSigned === "true" && (
                     <>
-                        <SelectControl
+                        <SelectField
                             name="config.signatureAlgorithm"
                             label={t("signatureAlgorithm")}
                             labelIcon={t("signatureAlgorithmHelp")}
                             isDisabled={readOnly}
-                            controller={{
-                                defaultValue: "RSA_SHA256"
-                            }}
+                            defaultValue="RSA_SHA256"
                             options={[
                                 "RSA_SHA1",
                                 "RSA_SHA256",
@@ -231,14 +224,12 @@ const Fields = ({ readOnly }: DescriptorSettingsProps) => {
                                 "DSA_SHA1"
                             ]}
                         />
-                        <SelectControl
+                        <SelectField
                             name="config.xmlSigKeyInfoKeyNameTransformer"
                             label={t("samlSignatureKeyName")}
                             labelIcon={t("samlSignatureKeyNameHelp")}
                             isDisabled={readOnly}
-                            controller={{
-                                defaultValue: t("keyID")
-                            }}
+                            defaultValue={t("keyID")}
                             options={["NONE", t("keyID"), t("certSubject")]}
                         />
                     </>
@@ -256,14 +247,12 @@ const Fields = ({ readOnly }: DescriptorSettingsProps) => {
                     stringify
                 />
                 {wantAssertionsEncrypted === "true" && (
-                    <SelectControl
+                    <SelectField
                         name="config.encryptionAlgorithm"
                         label={t("encryptionAlgorithm")}
                         labelIcon={t("encryptionAlgorithmHelp")}
                         isDisabled={readOnly}
-                        controller={{
-                            defaultValue: "RSA-OAEP"
-                        }}
+                        defaultValue="RSA-OAEP"
                         options={["RSA-OAEP", "RSA1_5"]}
                     />
                 )}

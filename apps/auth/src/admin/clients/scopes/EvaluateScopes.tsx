@@ -2,21 +2,12 @@ import type ClientScopeRepresentation from "@keycloak/keycloak-admin-client/lib/
 import type ProtocolMapperRepresentation from "@keycloak/keycloak-admin-client/lib/defs/protocolMapperRepresentation";
 import type RoleRepresentation from "@keycloak/keycloak-admin-client/lib/defs/roleRepresentation";
 import type { ProtocolMapperTypeRepresentation } from "@keycloak/keycloak-admin-client/lib/defs/serverInfoRepesentation";
-import {
-    HelpItem,
-    KeycloakSelect,
-    SelectVariant,
-    useFetch,
-    useHelp
-} from "../../../shared/keycloak-ui-shared";
-import {
-    DataTable,
-    type ColumnDef
-} from "@merge/ui/components/table";
-const SelectOption = ({ value, children, ...props }: any) => <option value={value} {...props}>{children}</option>;
+import { HelpItem, SelectVariant, useFetch, useHelp } from "../../../shared/keycloak-ui-shared";
+import { DataTable, type ColumnDef } from "@merge/ui/components/table";
 import { Button } from "@merge/ui/components/button";
 import { Input } from "@merge/ui/components/input";
 import { Label } from "@merge/ui/components/label";
+import { Popover, PopoverContent, PopoverTrigger } from "@merge/ui/components/popover";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@merge/ui/components/tabs";
 import { Question } from "@phosphor-icons/react";
 import { useEffect, useMemo, useState } from "react";
@@ -248,36 +239,65 @@ export const EvaluateScopes = ({ clientId, protocol }: EvaluateScopesProps) => {
                         </Label>
                         <div className="flex gap-2 items-center flex-wrap">
                             <div className="flex-1 min-w-[200px]">
-                                <KeycloakSelect
-                                    toggleId="scopeParameter"
-                                    variant={SelectVariant.typeaheadMulti}
-                                    typeAheadAriaLabel={t("scopeParameter")}
-                                    onToggle={() => setIsScopeOpen(!isScopeOpen)}
-                                    isOpen={isScopeOpen}
-                                    selections={selected}
-                                    onSelect={value => {
-                                        const option = value as string;
-                                        if (selected.includes(option)) {
-                                            if (option !== prefix) {
-                                                setSelected(
-                                                    selected.filter(
-                                                        item => item !== option
-                                                    )
+                                <Popover open={isScopeOpen} onOpenChange={setIsScopeOpen}>
+                                    <PopoverTrigger asChild>
+                                        <Button
+                                            id="scopeParameter"
+                                            variant="outline"
+                                            role="combobox"
+                                            aria-expanded={isScopeOpen}
+                                            aria-labelledby={t("scopeParameter")}
+                                            className="min-h-9 w-full justify-between font-normal"
+                                        >
+                                            <span className="truncate">
+                                                {selected.length > 0
+                                                    ? selected.join(", ")
+                                                    : t("scopeParameterPlaceholder")}
+                                            </span>
+                                        </Button>
+                                    </PopoverTrigger>
+                                    <PopoverContent className="w-(--radix-popover-trigger-width) p-0" align="start">
+                                        <ul className="max-h-64 overflow-auto py-1">
+                                            {selectableScopes.map((scope) => {
+                                                const option = scope.name ?? "";
+                                                const isSelected = selected.includes(option);
+                                                return (
+                                                    <li
+                                                        key={option}
+                                                        role="option"
+                                                        aria-selected={isSelected}
+                                                        className="hover:bg-accent cursor-pointer px-2 py-1.5 text-sm"
+                                                        onMouseDown={(e) => e.preventDefault()}
+                                                        onClick={() => {
+                                                            if (isSelected) {
+                                                                if (option !== prefix) {
+                                                                    setSelected(selected.filter((item) => item !== option));
+                                                                }
+                                                            } else {
+                                                                setSelected([...selected, option]);
+                                                            }
+                                                        }}
+                                                    >
+                                                        {option}
+                                                    </li>
                                                 );
-                                            }
-                                        } else {
-                                            setSelected([...selected, option]);
-                                        }
-                                    }}
-                                    aria-labelledby={t("scopeParameter")}
-                                    placeholderText={t("scopeParameterPlaceholder")}
-                                >
-                                    {selectableScopes.map((option, index) => (
-                                        <SelectOption key={index} value={option.name}>
-                                            {option.name}
-                                        </SelectOption>
-                                    ))}
-                                </KeycloakSelect>
+                                            })}
+                                        </ul>
+                                        {selected.length > 0 && (
+                                            <div className="border-t px-2 py-1">
+                                                <Button
+                                                    type="button"
+                                                    variant="ghost"
+                                                    size="sm"
+                                                    className="h-7 w-full justify-center"
+                                                    onClick={() => setSelected([])}
+                                                >
+                                                    {t("clear")}
+                                                </Button>
+                                            </div>
+                                        )}
+                                    </PopoverContent>
+                                </Popover>
                             </div>
                             <div className="flex gap-1 keycloak__scopes_evaluate__clipboard-copy">
                                 <Input

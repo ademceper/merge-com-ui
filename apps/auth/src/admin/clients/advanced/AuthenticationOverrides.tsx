@@ -1,5 +1,5 @@
 import AuthenticationFlowRepresentation from "@keycloak/keycloak-admin-client/lib/defs/authenticationFlowRepresentation";
-import { SelectControl, useFetch } from "../../../shared/keycloak-ui-shared";
+import { SelectField, useFetch } from "../../../shared/keycloak-ui-shared";
 import { Button } from "@merge/ui/components/button";
 import { sortBy } from "lodash-es";
 import { useState } from "react";
@@ -43,26 +43,22 @@ export const AuthenticationOverrides = ({
             fineGrainedAccess={hasConfigureAccess}
             isHorizontal
         >
-            <SelectControl
+            <SelectField
                 name="authenticationFlowBindingOverrides.browser"
                 label={t("browserFlow")}
                 labelIcon={t("browserFlowHelp")}
-                controller={{
-                    defaultValue: ""
-                }}
+                defaultValue=""
                 options={[
                     { key: "", value: t("choose") },
                     ...flows.map(({ id, alias }) => ({ key: id!, value: alias! }))
                 ]}
             />
             {protocol === "openid-connect" && (
-                <SelectControl
+                <SelectField
                     name="authenticationFlowBindingOverrides.direct_grant"
                     label={t("directGrant")}
                     labelIcon={t("directGrantHelp")}
-                    controller={{
-                        defaultValue: ""
-                    }}
+                    defaultValue=""
                     options={[
                         { key: "", value: t("choose") },
                         ...flows.map(({ id, alias }) => ({ key: id!, value: alias! }))

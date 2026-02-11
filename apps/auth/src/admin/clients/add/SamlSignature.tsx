@@ -1,6 +1,6 @@
 import { useFormContext } from "react-hook-form";
 import { useTranslation } from "react-i18next";
-import { SelectControl, TextControl } from "../../../shared/keycloak-ui-shared";
+import { SelectField, TextControl } from "../../../shared/keycloak-ui-shared";
 import { FormAccess } from "../../components/form/FormAccess";
 import { convertAttributeNameToForm } from "../../util";
 import { FormFields } from "../ClientDetails";
@@ -72,35 +72,29 @@ export const SamlSignature = () => {
             />
             {(signDocs === "true" || signAssertion === "true") && (
                 <>
-                    <SelectControl
+                    <SelectField
                         name={convertAttributeNameToForm<FormFields>(
                             "attributes.saml.signature.algorithm"
                         )}
                         label={t("signatureAlgorithm")}
                         labelIcon={t("signatureAlgorithmHelp")}
-                        controller={{
-                            defaultValue: SIGNATURE_ALGORITHMS[0]
-                        }}
+                        defaultValue={SIGNATURE_ALGORITHMS[0]}
                         options={[...SIGNATURE_ALGORITHMS]}
                         />
-                    <SelectControl
+                    <SelectField
                         name={convertAttributeNameToForm<FormFields>(
                             "attributes.saml.server.signature.keyinfo.xmlSigKeyInfoKeyNameTransformer"
                         )}
                         label={t("signatureKeyName")}
                         labelIcon={t("signatureKeyNameHelp")}
-                        controller={{
-                            defaultValue: KEYNAME_TRANSFORMER[0]
-                        }}
+                        defaultValue={KEYNAME_TRANSFORMER[0]}
                         options={[...KEYNAME_TRANSFORMER]}
                         />
-                    <SelectControl
+                    <SelectField
                         name="attributes.saml_signature_canonicalization_method"
                         label={t("canonicalization")}
                         labelIcon={t("canonicalizationHelp")}
-                        controller={{
-                            defaultValue: CANONICALIZATION[0].value
-                        }}
+                        defaultValue={CANONICALIZATION[0].value}
                         options={CANONICALIZATION.map(({ name, value }) => ({
                             key: value,
                             value: name

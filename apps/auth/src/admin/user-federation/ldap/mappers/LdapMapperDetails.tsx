@@ -2,16 +2,20 @@ import type ComponentRepresentation from "@keycloak/keycloak-admin-client/lib/de
 import type ComponentTypeRepresentation from "@keycloak/keycloak-admin-client/lib/defs/componentTypeRepresentation";
 import { DirectionType } from "@keycloak/keycloak-admin-client/lib/resources/userStorageProvider";
 import { getErrorDescription, getErrorMessage, HelpItem,
-    KeycloakSelect,
     KeycloakSpinner,
-    SelectVariant,
     TextControl,
     useFetch } from "../../../../shared/keycloak-ui-shared";
 import { toast } from "@merge/ui/components/sonner";
 import { Button } from "@merge/ui/components/button";
 import { DropdownMenuItem } from "@merge/ui/components/dropdown-menu";
 import { Label } from "@merge/ui/components/label";
-import { SelectOption } from "../../../../shared/keycloak-ui-shared";
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue
+} from "@merge/ui/components/select";
 import { useState } from "react";
 import { Controller, FormProvider, useForm, useWatch } from "react-hook-form";
 import { useTranslation } from "react-i18next";
@@ -42,7 +46,6 @@ export default function LdapMapperDetails() {
     const { realm } = useRealm();
     const { t } = useTranslation();
 const [isMapperDropdownOpen, setIsMapperDropdownOpen] = useState(false);
-    const [mapperTypeFilter, setMapperTypeFilter] = useState("");
     const [key, setKey] = useState(0);
     const refresh = () => setKey(key + 1);
 
@@ -145,14 +148,7 @@ const [isMapperDropdownOpen, setIsMapperDropdownOpen] = useState(false);
         name: "providerId"
     });
 
-    const selectItems = () =>
-        (components || [])
-            .filter(c => c.id.includes(mapperTypeFilter))
-            .map(c => (
-                <SelectOption key={c.id} value={c.id}>
-                    {c.id}
-                </SelectOption>
-            ));
+    const filteredComponents = components || [];
 
     if (!components) {
         return <KeycloakSpinner />;
@@ -257,21 +253,16 @@ const [isMapperDropdownOpen, setIsMapperDropdownOpen] = useState(false);
                                     control={form.control}
                                     data-testid="ldap-mapper-type-select"
                                     render={({ field }) => (
-                                        <KeycloakSelect
-                                            toggleId="kc-providerId"
-                                            typeAheadAriaLabel={t("mapperType")}
-                                            onToggle={setIsMapperDropdownOpen}
-                                            isOpen={isMapperDropdownOpen}
-                                            onFilter={search => {
-                                                setMapperTypeFilter(search);
-                                                return selectItems();
-                                            }}
-                                            onSelect={value => {
+                                        <Select
+                                            open={isMapperDropdownOpen}
+                                            onOpenChange={setIsMapperDropdownOpen}
+                                            value={field.value ?? ""}
+                                            onValueChange={(value) => {
                                                 setupForm({
-                                                    providerId: value as string,
+                                                    providerId: value,
                                                     ...Object.fromEntries(
                                                         components
-                                                            .find(c => c.id === value)
+                                                            ?.find(c => c.id === value)
                                                             ?.properties.filter(
                                                                 m => m.type === "List"
                                                             )
@@ -281,13 +272,22 @@ const [isMapperDropdownOpen, setIsMapperDropdownOpen] = useState(false);
                                                             ]) || []
                                                     )
                                                 });
+                                                field.onChange(value);
+                                                setIsMapperDropdownOpen(false);
                                             }}
-                                            selections={field.value}
-                                            variant={SelectVariant.typeahead}
                                             aria-label={t("selectMapperType")}
                                         >
-                                            {selectItems()}
-                                        </KeycloakSelect>
+                                            <SelectTrigger id="kc-providerId">
+                                                <SelectValue placeholder={t("mapperType")} />
+                                            </SelectTrigger>
+                                            <SelectContent>
+                                                {filteredComponents.map(c => (
+                                                    <SelectItem key={c.id} value={c.id}>
+                                                        {c.id}
+                                                    </SelectItem>
+                                                ))}
+                                            </SelectContent>
+                                        </Select>
                                     )}
                                 ></Controller>
                             </div>

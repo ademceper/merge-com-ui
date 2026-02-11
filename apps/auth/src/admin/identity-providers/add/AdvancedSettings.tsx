@@ -3,12 +3,16 @@ import type IdentityProviderRepresentation from "@keycloak/keycloak-admin-client
 import {
     FormErrorText,
     HelpItem,
-    KeycloakSelect,
-    SelectControl,
-    SelectOption,
-    SelectVariant,
+    SelectField,
     useFetch
 } from "../../../shared/keycloak-ui-shared";
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue
+} from "@merge/ui/components/select";
 import { Input } from "@merge/ui/components/input";
 import { Label } from "@merge/ui/components/label";
 import { Switch } from "@merge/ui/components/switch";
@@ -53,36 +57,33 @@ const LoginFlow = ({
                 defaultValue={defaultValue}
                 control={control}
                 render={({ field }) => (
-                    <KeycloakSelect
-                        toggleId={label}
-                        onToggle={() => setOpen(!open)}
-                        onSelect={value => {
-                            field.onChange(value as string);
+                    <Select
+                        open={open}
+                        onOpenChange={setOpen}
+                        value={field.value ?? ""}
+                        onValueChange={(v) => {
+                            field.onChange(v);
                             setOpen(false);
                         }}
-                        selections={field.value || t(labelForEmpty)}
-                        variant={SelectVariant.single}
                         aria-label={t(label)}
-                        isOpen={open}
                     >
-                        {[
-                            ...(defaultValue === ""
-                                ? [
-                                      <SelectOption key="empty" value="">
-                                          {t(labelForEmpty)}
-                                      </SelectOption>
-                                  ]
-                                : []),
-                            ...(flows?.map(option => (
-                                <SelectOption
+                        <SelectTrigger id={label}>
+                            <SelectValue placeholder={t(labelForEmpty)} />
+                        </SelectTrigger>
+                        <SelectContent>
+                            {defaultValue === "" && (
+                                <SelectItem value="">{t(labelForEmpty)}</SelectItem>
+                            )}
+                            {flows?.map(option => (
+                                <SelectItem
                                     key={option.id}
                                     value={option.alias ?? ""}
                                 >
                                     {option.alias}
-                                </SelectOption>
-                            )) || [])
-                        ]}
-                    </KeycloakSelect>
+                                </SelectItem>
+                            ))}
+                        </SelectContent>
+                    </Select>
                 )}
             />
         </div>
@@ -156,7 +157,7 @@ export const AdvancedSettings = ({ isOIDC, isSAML, isOAuth2 }: AdvancedSettingsP
                 label="hideOnLoginPage"
                 fieldType="boolean"
             />
-            <SelectControl
+            <SelectField
                 name="config.showInAccountConsole"
                 label={t("showInAccountConsole")}
                 labelIcon={t("showInAccountConsoleHelp")}
@@ -166,10 +167,8 @@ export const AdvancedSettings = ({ isOIDC, isSAML, isOAuth2 }: AdvancedSettingsP
                         `showInAccountConsole.${showInAccountConsole.toLocaleLowerCase()}`
                     )
                 }))}
-                controller={{
-                    defaultValue: SHOW_IN_ACCOUNT_CONSOLE_VALUES[0],
-                    rules: { required: t("required") }
-                }}
+                defaultValue={SHOW_IN_ACCOUNT_CONSOLE_VALUES[0]}
+                rules={{ required: t("required") }}
             />
 
             {((!isSAML && !isOAuth2) || isOIDC) && (
@@ -267,7 +266,7 @@ export const AdvancedSettings = ({ isOIDC, isSAML, isOAuth2 }: AdvancedSettingsP
                 </FormGroupField>
             )}
             {syncModeAvailable && (
-                <SelectControl
+                <SelectField
                     name="config.syncMode"
                     label={t("syncMode")}
                     labelIcon={t("syncModeHelp")}
@@ -275,10 +274,8 @@ export const AdvancedSettings = ({ isOIDC, isSAML, isOAuth2 }: AdvancedSettingsP
                         key: syncMode,
                         value: t(`syncModes.${syncMode.toLocaleLowerCase()}`)
                     }))}
-                    controller={{
-                        defaultValue: SYNC_MODES[0],
-                        rules: { required: t("required") }
-                    }}
+                    defaultValue={SYNC_MODES[0]}
+                    rules={{ required: t("required") }}
                 />
             )}
             <SwitchField

@@ -1,4 +1,4 @@
-import { SelectControl } from "../../../shared/keycloak-ui-shared";
+import { SelectField } from "../../../shared/keycloak-ui-shared";
 import { useEffect } from "react";
 import { useFormContext } from "react-hook-form";
 import { useTranslation } from "react-i18next";
@@ -37,15 +37,13 @@ export const SamlEncryption = () => {
 
     return (
         <>
-            <SelectControl
+            <SelectField
                 name={convertAttributeNameToForm<FormFields>(
                     "attributes.saml.encryption.algorithm"
                 )}
                 label={t("samlClientEncryptionAlgorithm")}
                 labelIcon={t("samlClientEncryptionAlgorithmHelp")}
-                controller={{
-                    defaultValue: ""
-                }}
+                defaultValue=""
                 options={[
                     { key: "", value: t("choose") },
                     {
@@ -75,15 +73,13 @@ export const SamlEncryption = () => {
                 ]}
             />
 
-            <SelectControl
+            <SelectField
                 name={convertAttributeNameToForm<FormFields>(
                     "attributes.saml.encryption.keyAlgorithm"
                 )}
                 label={t("samlClientKeyEncryptionAlgorithm")}
                 labelIcon={t("samlClientKeyEncryptionAlgorithmHelp")}
-                controller={{
-                    defaultValue: ""
-                }}
+                defaultValue=""
                 options={[
                     { key: "", value: t("choose") },
                     {
@@ -100,15 +96,13 @@ export const SamlEncryption = () => {
 
             {(keyEncryptionAlgorithm === ALGORITHM_RSA_OAEP ||
                 keyEncryptionAlgorithm === ALGORITHM_RSA_OAEP_MGF1P) && (
-                <SelectControl
+                <SelectField
                     name={convertAttributeNameToForm<FormFields>(
                         "attributes.saml.encryption.digestMethod"
                     )}
                     label={t("samlClientEncryptionDigestMethod")}
                     labelIcon={t("samlClientEncryptionDigestMethodHelp")}
-                    controller={{
-                        defaultValue: ""
-                    }}
+                    defaultValue=""
                     options={[
                         { key: "", value: t("choose") },
                         {
@@ -125,15 +119,13 @@ export const SamlEncryption = () => {
             )}
 
             {keyEncryptionAlgorithm === ALGORITHM_RSA_OAEP && (
-                <SelectControl
+                <SelectField
                     name={convertAttributeNameToForm<FormFields>(
                         "attributes.saml.encryption.maskGenerationFunction"
                     )}
                     label={t("samlClientEncryptionMaskGenerationFunction")}
                     labelIcon={t("samlClientEncryptionMaskGenerationFunctionHelp")}
-                    controller={{
-                        defaultValue: ""
-                    }}
+                    defaultValue=""
                     options={[
                         { key: "", value: t("choose") },
                         {

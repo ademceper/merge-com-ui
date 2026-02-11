@@ -2,7 +2,7 @@ import type RealmRepresentation from "@keycloak/keycloak-admin-client/lib/defs/r
 import {
     getErrorDescription,
     getErrorMessage,
-    SelectControl,
+    SelectField,
     TextControl,
 } from "../../../shared/keycloak-ui-shared";
 import { toast } from "@merge/ui/components/sonner";
@@ -70,7 +70,7 @@ const setupForm = (realm: RealmRepresentation) =>
                 <FormPanel title={t("cibaPolicy")}>
                     <div className="space-y-6">
                         <div className="space-y-2">
-                            <SelectControl
+                            <SelectField
                                 name="attributes.cibaBackchannelTokenDeliveryMode"
                                 label={t("cibaBackchannelTokenDeliveryMode")}
                                 labelIcon={t("cibaBackchannelTokenDeliveryModeHelp")}
@@ -78,7 +78,7 @@ const setupForm = (realm: RealmRepresentation) =>
                                     key: mode,
                                     value: t(`cibaBackhannelTokenDeliveryModes.${mode}`)
                                 }))}
-                                controller={{ defaultValue: "" }}
+                                defaultValue=""
                             />
                         </div>
                         <div className="space-y-2">
@@ -128,12 +128,12 @@ const setupForm = (realm: RealmRepresentation) =>
                             />
                         </div>
                         <div className="space-y-2">
-                            <SelectControl
+                            <SelectField
                                 name="attributes.cibaAuthRequestedUserHint"
                                 label={t("cibaAuthRequestedUserHint")}
                                 labelIcon={t("cibaAuthRequestedUserHintHelp")}
                                 options={["login_hint", "id_token_hint", "login_hint_token"]}
-                                controller={{ defaultValue: "" }}
+                                defaultValue=""
                                 isDisabled
                             />
                         </div>

@@ -7,7 +7,7 @@ import {
     FormErrorText,
     HelpItem,
     KeycloakSpinner,
-    SelectControl,
+    SelectField,
     TextControl,
     useEnvironment,
     useFetch
@@ -193,13 +193,11 @@ function RealmSettingsGeneralTabForm({
                                 label={t("frontendUrl")}
                                 labelIcon={t("frontendUrlHelp")}
                             />
-                            <SelectControl
+                            <SelectField
                                 name="sslRequired"
                                 label={t("requireSsl")}
                                 labelIcon={t("requireSslHelp")}
-                                controller={{
-                                    defaultValue: "none"
-                                }}
+                                defaultValue="none"
                                 options={REQUIRE_SSL_TYPES.map(sslType => ({
                                     key: sslType,
                                     value: t(`sslType.${sslType}`)
@@ -254,27 +252,23 @@ function RealmSettingsGeneralTabForm({
                                     labelIcon={t("verifiableCredentialsEnabledHelp")}
                                 />
                             )}
-                            <SelectControl
+                            <SelectField
                                 name="unmanagedAttributePolicy"
                                 label={t("unmanagedAttributes")}
                                 labelIcon={t("unmanagedAttributesHelpText")}
-                                controller={{
-                                    defaultValue: UNMANAGED_ATTRIBUTE_POLICIES[0]
-                                }}
+                                defaultValue={UNMANAGED_ATTRIBUTE_POLICIES[0]}
                                 options={UNMANAGED_ATTRIBUTE_POLICIES.map(policy => ({
                                     key: policy,
                                     value: t(`unmanagedAttributePolicy.${policy}`)
                                 }))}
                             />
-                            <SelectControl
+                            <SelectField
                                 name={convertAttributeNameToForm<FormFields>(
                                     "attributes.saml.signature.algorithm"
                                 )}
                                 label={t("signatureAlgorithmIdentityProviderMetadata")}
                                 labelIcon={t("signatureAlgorithmIdentityProviderMetadataHelp")}
-                                controller={{
-                                    defaultValue: ""
-                                }}
+                                defaultValue=""
                                 options={[
                                     { key: "", value: t("choose") },
                                     ...SIGNATURE_ALGORITHMS.map(v => ({ key: v, value: v }))

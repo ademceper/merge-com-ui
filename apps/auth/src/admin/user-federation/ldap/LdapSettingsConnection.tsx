@@ -1,16 +1,20 @@
 import type TestLdapConnectionRepresentation from "@keycloak/keycloak-admin-client/lib/defs/testLdapConnection";
 import {
+    FormLabel,
     HelpItem,
-    KeycloakSelect,
     PasswordControl,
-    SelectControl,
-    SelectVariant,
     TextControl
 } from "../../../shared/keycloak-ui-shared";
 import { Button } from "@merge/ui/components/button";
 import { Label } from "@merge/ui/components/label";
 import { Switch } from "@merge/ui/components/switch";
-import { SelectOption } from "../../../shared/keycloak-ui-shared";
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue
+} from "@merge/ui/components/select";
 import { get, isEqual } from "lodash-es";
 import { useState } from "react";
 import { Controller, FormProvider, UseFormReturn, useWatch } from "react-hook-form";
@@ -134,19 +138,22 @@ const edit = !!id;
                     />
                     </div>
                     <div className="space-y-2">
-                        <SelectControl
-                            id="useTruststoreSpi"
-                            name="config.useTruststoreSpi[0]"
-                            label={t("useTruststoreSpi")}
-                            labelIcon={t("useTruststoreSpiHelp")}
-                    controller={{
-                        defaultValue: "always"
-                    }}
-                    options={[
-                        { key: "always", value: t("always") },
-                        { key: "never", value: t("never") }
-                    ]}
-                        />
+                        <FormLabel id="useTruststoreSpi" name="config.useTruststoreSpi[0]" label={t("useTruststoreSpi")} labelIcon={t("useTruststoreSpiHelp")} error={get(form.formState.errors, "config.useTruststoreSpi.0")}>
+                            <Controller
+                                name="config.useTruststoreSpi[0]"
+                                control={form.control}
+                                defaultValue="always"
+                                render={({ field }) => (
+                                    <Select value={field.value ?? "always"} onValueChange={field.onChange}>
+                                        <SelectTrigger id="useTruststoreSpi"><SelectValue /></SelectTrigger>
+                                        <SelectContent>
+                                            <SelectItem value="always">{t("always")}</SelectItem>
+                                            <SelectItem value="never">{t("never")}</SelectItem>
+                                        </SelectContent>
+                                    </Select>
+                                )}
+                            />
+                        </FormLabel>
                     </div>
                     <div className="space-y-2">
                         <div className="flex items-center gap-1">
@@ -203,24 +210,25 @@ const edit = !!id;
                         defaultValue="simple"
                         control={form.control}
                         render={({ field }) => (
-                            <KeycloakSelect
-                                toggleId="kc-bind-type"
-                                onToggle={() =>
-                                    setIsBindTypeDropdownOpen(!isBindTypeDropdownOpen)
-                                }
-                                isOpen={isBindTypeDropdownOpen}
-                                onSelect={value => {
-                                    field.onChange(value as string);
+                            <Select
+                                open={isBindTypeDropdownOpen}
+                                onOpenChange={setIsBindTypeDropdownOpen}
+                                value={field.value ?? "simple"}
+                                onValueChange={(v) => {
+                                    field.onChange(v);
                                     setIsBindTypeDropdownOpen(false);
                                 }}
-                                selections={field.value}
-                                variant={SelectVariant.single}
                                 data-testid="ldap-bind-type"
                                 aria-label={t("selectBindType")}
                             >
-                                <SelectOption value="simple">simple</SelectOption>
-                                <SelectOption value="none">none</SelectOption>
-                            </KeycloakSelect>
+                                <SelectTrigger id="kc-bind-type">
+                                    <SelectValue />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    <SelectItem value="simple">simple</SelectItem>
+                                    <SelectItem value="none">none</SelectItem>
+                                </SelectContent>
+                            </Select>
                         )}
                     />
                     </div>

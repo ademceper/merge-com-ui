@@ -1,5 +1,10 @@
-import { KeycloakSelect } from "../../../../shared/keycloak-ui-shared";
-import { SelectOption } from "../../../../shared/keycloak-ui-shared";
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue
+} from "@merge/ui/components/select";
 import { useState } from "react";
 import { UseControllerProps, useController } from "react-hook-form";
 import { useTranslation } from "react-i18next";
@@ -14,21 +19,25 @@ export const ValueSelect = ({ selectItems, ...rest }: ValueSelectProps) => {
     const [open, setOpen] = useState(false);
 
     return (
-        <KeycloakSelect
-            onToggle={isOpen => setOpen(isOpen)}
-            isOpen={open}
-            onSelect={value => {
-                field.onChange(value);
+        <Select
+            open={open}
+            onOpenChange={setOpen}
+            value={field.value ?? ""}
+            onValueChange={(v) => {
+                field.onChange(v);
                 setOpen(false);
             }}
-            selections={field.value ? [field.value] : t("choose")}
-            placeholderText={t("valuePlaceholder")}
         >
-            {selectItems.map(item => (
-                <SelectOption key={item} value={item}>
-                    {item}
-                </SelectOption>
-            ))}
-        </KeycloakSelect>
+            <SelectTrigger>
+                <SelectValue placeholder={t("valuePlaceholder")} />
+            </SelectTrigger>
+            <SelectContent>
+                {selectItems.map(item => (
+                    <SelectItem key={item} value={item}>
+                        {item}
+                    </SelectItem>
+                ))}
+            </SelectContent>
+        </Select>
     );
 };

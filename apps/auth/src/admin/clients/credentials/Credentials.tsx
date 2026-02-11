@@ -2,7 +2,7 @@ import type { AuthenticationProviderRepresentation } from "@keycloak/keycloak-ad
 import type ClientRepresentation from "@keycloak/keycloak-admin-client/lib/defs/clientRepresentation";
 import type CredentialRepresentation from "@keycloak/keycloak-admin-client/lib/defs/credentialRepresentation";
 import { getErrorDescription, getErrorMessage, HelpItem,
-    SelectControl,
+    SelectField,
     useFetch } from "../../../shared/keycloak-ui-shared";
 import { toast } from "@merge/ui/components/sonner";
 import { Alert, AlertTitle } from "@merge/ui/components/alert";
@@ -146,13 +146,11 @@ const clientId = client.id!;
                 <AccessTokenConfirm />
                 <div className="border rounded-lg">
                     <div className="p-4">
-                        <SelectControl
+                        <SelectField
                             name="clientAuthenticatorType"
                             label={t("clientAuthenticator")}
                             labelIcon={t("clientAuthenticatorTypeHelp")}
-                            controller={{
-                                defaultValue: ""
-                            }}
+                            defaultValue=""
                             options={providers.map(({ id, displayName }) => ({
                                 key: id!,
                                 value: displayName || id!

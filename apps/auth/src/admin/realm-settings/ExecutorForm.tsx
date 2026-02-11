@@ -2,13 +2,17 @@ import type { ConfigPropertyRepresentation } from "@keycloak/keycloak-admin-clie
 import type ClientProfileRepresentation from "@keycloak/keycloak-admin-client/lib/defs/clientProfileRepresentation";
 import type ComponentTypeRepresentation from "@keycloak/keycloak-admin-client/lib/defs/componentTypeRepresentation";
 import { getErrorDescription, getErrorMessage, HelpItem,
-    KeycloakSelect,
-    SelectVariant,
     useFetch } from "../../shared/keycloak-ui-shared";
 import { toast } from "@merge/ui/components/sonner";
 import { Button } from "@merge/ui/components/button";
 import { Label } from "@merge/ui/components/label";
-import { SelectOption } from "../../shared/keycloak-ui-shared";
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue
+} from "@merge/ui/components/select";
 import { useState } from "react";
 import { Controller, FormProvider, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
@@ -169,14 +173,14 @@ const [selectExecutorTypeOpen, setSelectExecutorTypeOpen] = useState(false);
                             defaultValue=""
                             control={control}
                             render={({ field }) => (
-                                <KeycloakSelect
-                                    toggleId="kc-executor"
-                                    placeholderText="Select an executor"
-                                    onToggle={isOpen => setSelectExecutorTypeOpen(isOpen)}
-                                    onSelect={value => {
+                                <Select
+                                    open={selectExecutorTypeOpen}
+                                    onOpenChange={setSelectExecutorTypeOpen}
+                                    value={editMode ? executorName : (field.value ?? "")}
+                                    onValueChange={(value) => {
                                         reset({
                                             ...defaultValues,
-                                            executor: value.toString()
+                                            executor: value
                                         });
                                         const selectedExecutor = executorTypes?.filter(
                                             type => type.id === value
@@ -187,24 +191,25 @@ const [selectExecutorTypeOpen, setSelectExecutorTypeOpen] = useState(false);
                                         );
                                         setSelectExecutorTypeOpen(false);
                                     }}
-                                    selections={editMode ? executorName : field.value}
-                                    variant={SelectVariant.single}
                                     data-testid="executorType-select"
                                     aria-label={t("executorType")}
-                                    isOpen={selectExecutorTypeOpen}
-                                    maxHeight={580}
-                                    isDisabled={editMode}
+                                    disabled={editMode}
                                 >
-                                    {executorTypes?.map(option => (
-                                        <SelectOption
-                                            data-testid={option.id}
-                                            key={option.id}
-                                            value={option.id}
-                                        >
-                                            {option.id}
-                                        </SelectOption>
-                                    ))}
-                                </KeycloakSelect>
+                                    <SelectTrigger id="kc-executor">
+                                        <SelectValue placeholder="Select an executor" />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                        {executorTypes?.map(option => (
+                                            <SelectItem
+                                                data-testid={option.id}
+                                                key={option.id}
+                                                value={option.id ?? ""}
+                                            >
+                                                {option.id}
+                                            </SelectItem>
+                                        ))}
+                                    </SelectContent>
+                                </Select>
                             )}
                         />
                     </div>

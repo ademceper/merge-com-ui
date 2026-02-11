@@ -3,7 +3,7 @@ import { Button } from "@merge/ui/components/button";
 import { Switch } from "@merge/ui/components/switch";
 import { Label } from "@merge/ui/components/label";
 import { useTranslation } from "react-i18next";
-import { HelpItem, SelectControl } from "../../../shared/keycloak-ui-shared";
+import { HelpItem, SelectField } from "../../../shared/keycloak-ui-shared";
 import { FormAccess } from "../../components/form/FormAccess";
 import { MultiLineInput } from "../../components/multi-line-input/MultiLineInput";
 import { useServerInfo } from "../../context/server-info/ServerInfoProvider";
@@ -51,15 +51,13 @@ export const FineGrainOpenIdConnect = ({
             isHorizontal
         >
             <ApplicationUrls />
-            <SelectControl
+            <SelectField
                 name={convertAttributeNameToForm<FormFields>(
                     "attributes.access.token.signed.response.alg"
                 )}
                 label={t("accessTokenSignatureAlgorithm")}
                 labelIcon={t("accessTokenSignatureAlgorithmHelp")}
-                controller={{
-                    defaultValue: ""
-                }}
+                defaultValue=""
                 options={prependEmpty(clientSignatureProviders!)}
             />
             <div className="space-y-2">
@@ -86,37 +84,31 @@ export const FineGrainOpenIdConnect = ({
                     )}
                 />
             </div>
-            <SelectControl
+            <SelectField
                 name={convertAttributeNameToForm<FormFields>(
                     "attributes.id.token.signed.response.alg"
                 )}
                 label={t("idTokenSignatureAlgorithm")}
                 labelIcon={t("idTokenSignatureAlgorithmHelp")}
-                controller={{
-                    defaultValue: ""
-                }}
+                defaultValue=""
                 options={prependEmpty(clientSignatureProviders!)}
             />
-            <SelectControl
+            <SelectField
                 name={convertAttributeNameToForm<FormFields>(
                     "attributes.id.token.encrypted.response.alg"
                 )}
                 label={t("idTokenEncryptionKeyManagementAlgorithm")}
                 labelIcon={t("idTokenEncryptionKeyManagementAlgorithmHelp")}
-                controller={{
-                    defaultValue: ""
-                }}
+                defaultValue=""
                 options={prependEmpty(cekManagementProviders!)}
             />
-            <SelectControl
+            <SelectField
                 name={convertAttributeNameToForm<FormFields>(
                     "attributes.id.token.encrypted.response.enc"
                 )}
                 label={t("idTokenEncryptionContentEncryptionAlgorithm")}
                 labelIcon={t("idTokenEncryptionContentEncryptionAlgorithmHelp")}
-                controller={{
-                    defaultValue: ""
-                }}
+                defaultValue=""
                 options={prependEmpty(contentEncryptionProviders!)}
             />
             <div className="space-y-2">
@@ -143,81 +135,67 @@ export const FineGrainOpenIdConnect = ({
                     )}
                 />
             </div>
-            <SelectControl
+            <SelectField
                 name={convertAttributeNameToForm<FormFields>(
                     "attributes.user.info.response.signature.alg"
                 )}
                 label={t("userInfoSignedResponseAlgorithm")}
                 labelIcon={t("userInfoSignedResponseAlgorithmHelp")}
-                controller={{
-                    defaultValue: ""
-                }}
+                defaultValue=""
                 options={prependEmpty(signatureProviders!)}
             />
-            <SelectControl
+            <SelectField
                 name={convertAttributeNameToForm<FormFields>(
                     "attributes.user.info.encrypted.response.alg"
                 )}
                 label={t("userInfoResponseEncryptionKeyManagementAlgorithm")}
                 labelIcon={t("userInfoResponseEncryptionKeyManagementAlgorithmHelp")}
-                controller={{
-                    defaultValue: ""
-                }}
+                defaultValue=""
                 options={prependEmpty(cekManagementProviders!)}
             />
-            <SelectControl
+            <SelectField
                 name={convertAttributeNameToForm<FormFields>(
                     "attributes.user.info.encrypted.response.enc"
                 )}
                 label={t("userInfoResponseEncryptionContentEncryptionAlgorithm")}
                 labelIcon={t("userInfoResponseEncryptionContentEncryptionAlgorithmHelp")}
-                controller={{
-                    defaultValue: ""
-                }}
+                defaultValue=""
                 options={prependEmpty(contentEncryptionProviders!)}
             />
-            <SelectControl
+            <SelectField
                 name={convertAttributeNameToForm<FormFields>(
                     "attributes.request.object.signature.alg"
                 )}
                 label={t("requestObjectSignatureAlgorithm")}
                 labelIcon={t("requestObjectSignatureAlgorithmHelp")}
-                controller={{
-                    defaultValue: ""
-                }}
+                defaultValue=""
                 options={prependNone(clientSignatureProviders!)}
             />
-            <SelectControl
+            <SelectField
                 name={convertAttributeNameToForm<FormFields>(
                     "attributes.request.object.encryption.alg"
                 )}
                 label={t("requestObjectEncryption")}
                 labelIcon={t("requestObjectEncryptionHelp")}
-                controller={{
-                    defaultValue: ""
-                }}
+                defaultValue=""
                 options={prependEmpty(cekManagementProviders!)}
             />
-            <SelectControl
+            <SelectField
                 name={convertAttributeNameToForm<FormFields>(
                     "attributes.request.object.encryption.enc"
                 )}
                 label={t("requestObjectEncoding")}
                 labelIcon={t("requestObjectEncodingHelp")}
-                controller={{
-                    defaultValue: ""
-                }}
+                defaultValue=""
                 options={prependEmpty(contentEncryptionProviders!)}
             />
-            <SelectControl
+            <SelectField
                 name={convertAttributeNameToForm<FormFields>(
                     "attributes.request.object.required"
                 )}
                 label={t("requestObjectRequired")}
                 labelIcon={t("requestObjectRequiredHelp")}
-                controller={{
-                    defaultValue: "not required"
-                }}
+                defaultValue="not required"
                 options={[
                     "not required",
                     "request or request_uri",
@@ -243,37 +221,31 @@ export const FineGrainOpenIdConnect = ({
                     stringify
                 />
             </div>
-            <SelectControl
+            <SelectField
                 name={convertAttributeNameToForm<FormFields>(
                     "attributes.authorization.signed.response.alg"
                 )}
                 label={t("authorizationSignedResponseAlg")}
                 labelIcon={t("authorizationSignedResponseAlgHelp")}
-                controller={{
-                    defaultValue: ""
-                }}
+                defaultValue=""
                 options={prependEmpty(signatureProviders!)}
             />
-            <SelectControl
+            <SelectField
                 name={convertAttributeNameToForm<FormFields>(
                     "attributes.authorization.encrypted.response.alg"
                 )}
                 label={t("authorizationEncryptedResponseAlg")}
                 labelIcon={t("authorizationEncryptedResponseAlgHelp")}
-                controller={{
-                    defaultValue: ""
-                }}
+                defaultValue=""
                 options={prependEmpty(cekManagementProviders!)}
             />
-            <SelectControl
+            <SelectField
                 name={convertAttributeNameToForm<FormFields>(
                     "attributes.authorization.encrypted.response.enc"
                 )}
                 label={t("authorizationEncryptedResponseEnc")}
                 labelIcon={t("authorizationEncryptedResponseEncHelp")}
-                controller={{
-                    defaultValue: ""
-                }}
+                defaultValue=""
                 options={prependEmpty(contentEncryptionProviders!)}
             />
             <div className="flex gap-2">

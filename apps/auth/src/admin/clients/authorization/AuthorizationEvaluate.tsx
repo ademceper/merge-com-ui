@@ -6,7 +6,8 @@ import type ResourceRepresentation from "@keycloak/keycloak-admin-client/lib/def
 import type RoleRepresentation from "@keycloak/keycloak-admin-client/lib/defs/roleRepresentation";
 import type ScopeRepresentation from "@keycloak/keycloak-admin-client/lib/defs/scopeRepresentation";
 import { getErrorDescription, getErrorMessage, HelpItem,
-    SelectControl,
+    MultiSelectField,
+    SelectField,
     TextControl,
     useFetch } from "../../../shared/keycloak-ui-shared";
 import { toast } from "@merge/ui/components/sonner";
@@ -195,18 +196,13 @@ const AuthorizationEvaluateContent = ({ client }: Props) => {
                                 variant="typeahead"
                                 isRequired
                             />
-                            <SelectControl
+                            <MultiSelectField
                                 name="roleIds"
                                 label={t("roles")}
                                 labelIcon={t("rolesHelp")}
-                                variant="typeaheadMulti"
+                                defaultValue={[]}
+                                rules={{ required: true }}
                                 placeholderText={t("selectARole")}
-                                controller={{
-                                    defaultValue: [],
-                                    rules: {
-                                        required: true
-                                    }
-                                }}
                                 options={clientRoles.map(role => role.name!)}
                             />
                         </FormAccess>
@@ -261,14 +257,11 @@ const AuthorizationEvaluateContent = ({ client }: Props) => {
                                         labelIcon={t("resourceTypeHelp")}
                                         rules={{ required: t("required") }}
                                     />
-                                    <SelectControl
+                                    <MultiSelectField
                                         name="authScopes"
                                         label={t("authScopes")}
                                         labelIcon={t("scopesSelect")}
-                                        controller={{
-                                            defaultValue: []
-                                        }}
-                                        variant="typeaheadMulti"
+                                        defaultValue={[]}
                                         options={scopes.map(s => s.name!)}
                                     />
                                 </>

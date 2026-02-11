@@ -1,6 +1,6 @@
 import { useTranslation } from "react-i18next";
 import { Controller, useFormContext } from "react-hook-form";
-import { SelectControl } from "../../../shared/keycloak-ui-shared";
+import { SelectField } from "../../../shared/keycloak-ui-shared";
 import { useServerInfo } from "../../context/server-info/ServerInfoProvider";
 import { convertAttributeNameToForm } from "../../util";
 import { FormFields } from "../ClientDetails";
@@ -24,16 +24,13 @@ export const SignedJWT = ({ clientAuthenticatorType }: SignedJWTProps) => {
 
     return (
         <>
-            <SelectControl
+            <SelectField
                 name={convertAttributeNameToForm<FormFields>(
                     "attributes.token.endpoint.auth.signing.alg"
                 )}
                 label={t("signatureAlgorithm")}
                 labelIcon={t("signatureAlgorithmHelp")}
-                controller={{
-                    defaultValue: ""
-                }}
-                maxMenuHeight="200px"
+                defaultValue=""
                 options={[
                     { key: "", value: t("anyAlgorithm") },
                     ...providers.map(option => ({ key: option, value: option }))

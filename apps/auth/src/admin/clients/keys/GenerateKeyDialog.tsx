@@ -2,7 +2,7 @@ import type KeyStoreConfig from "@keycloak/keycloak-admin-client/lib/defs/keysto
 import {
     HelpItem,
     NumberControl,
-    SelectControl,
+    SelectField,
     FileUploadControl
 } from "../../../shared/keycloak-ui-shared";
 import { Button } from "@merge/ui/components/button";
@@ -57,14 +57,11 @@ export const KeyForm = ({
 
     return (
         <form className="pt-4 space-y-4">
-            <SelectControl
+            <SelectField
                 name="format"
                 label={t("archiveFormat")}
                 labelIcon={t("archiveFormatHelp")}
-                controller={{
-                    defaultValue: supportedKeystoreTypes[0]
-                }}
-                menuAppendTo="parent"
+                defaultValue={supportedKeystoreTypes[0]}
                 options={supportedKeystoreTypes}
             />
             {useFile && (
@@ -88,14 +85,11 @@ export const KeyForm = ({
             )}
             {!useFile && (
                 <>
-                    <SelectControl
+                    <SelectField
                         name="keySize"
                         label={t("keySize")}
                         labelIcon={t("keySizeHelp")}
-                        controller={{
-                            defaultValue: keySizes[0]
-                        }}
-                        menuAppendTo="parent"
+                        defaultValue={keySizes[0]}
                         options={keySizes}
                     />
                     <NumberControl

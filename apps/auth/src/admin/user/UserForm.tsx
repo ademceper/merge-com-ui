@@ -10,10 +10,16 @@ import {
     HelpItem,
     SwitchControl,
     TextControl,
-    UserProfileFields,
-    ContinueCancelModal
+    UserProfileFields
 } from "../../shared/keycloak-ui-shared";
 import { Alert, AlertDescription } from "@merge/ui/components/alert";
+import {
+    Dialog,
+    DialogContent,
+    DialogFooter,
+    DialogHeader,
+    DialogTitle
+} from "@merge/ui/components/dialog";
 import { Button } from "@merge/ui/components/button";
 import { Badge } from "@merge/ui/components/badge";
 import { Input } from "@merge/ui/components/input";
@@ -86,6 +92,7 @@ const { hasAccess } = useAccess();
     const [selectedGroups, setSelectedGroups] = useState<GroupRepresentation[]>([]);
     const [open, setOpen] = useState(false);
     const [locked, setLocked] = useState(isLocked);
+    const [emailVerificationDialogOpen, setEmailVerificationDialogOpen] = useState(false);
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -264,18 +271,44 @@ const { hasAccess } = useAccess();
                                     {t("userNotYetConfirmedNewEmail", {
                                         email: user.attributes!["kc.email.pending"]
                                     })}
-                                    <ContinueCancelModal
-                                        buttonTitle={t("emailPendingVerificationResetAction")}
-                                        modalTitle={t(
-                                            "confirmEmailPendingVerificationAction"
-                                        )}
-                                        continueLabel={t("confirm")}
-                                        cancelLabel={t("cancel")}
-                                        buttonVariant="link"
-                                        onContinue={handleEmailVerificationReset}
+                                    <Button
+                                        variant="link"
+                                        className="p-0 h-auto font-semibold"
+                                        onClick={() => setEmailVerificationDialogOpen(true)}
                                     >
-                                        {t("emailPendingVerificationActionMessage")}
-                                    </ContinueCancelModal>
+                                        {t("emailPendingVerificationResetAction")}
+                                    </Button>
+                                    <Dialog
+                                        open={emailVerificationDialogOpen}
+                                        onOpenChange={setEmailVerificationDialogOpen}
+                                    >
+                                        <DialogContent showCloseButton className="sm:max-w-sm">
+                                            <DialogHeader>
+                                                <DialogTitle>
+                                                    {t("confirmEmailPendingVerificationAction")}
+                                                </DialogTitle>
+                                            </DialogHeader>
+                                            {t("emailPendingVerificationActionMessage")}
+                                            <DialogFooter>
+                                                <Button
+                                                    id="modal-confirm"
+                                                    onClick={() => {
+                                                        setEmailVerificationDialogOpen(false);
+                                                        handleEmailVerificationReset();
+                                                    }}
+                                                >
+                                                    {t("confirm")}
+                                                </Button>
+                                                <Button
+                                                    id="modal-cancel"
+                                                    variant="outline"
+                                                    onClick={() => setEmailVerificationDialogOpen(false)}
+                                                >
+                                                    {t("cancel")}
+                                                </Button>
+                                            </DialogFooter>
+                                        </DialogContent>
+                                    </Dialog>
                                 </AlertDescription>
                             </Alert>
                         )}

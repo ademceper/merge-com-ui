@@ -5,15 +5,17 @@ import type {
     Clients,
     PolicyQuery
 } from "@keycloak/keycloak-admin-client/lib/resources/clients";
-import {
-    KeycloakSelect,
-    SelectVariant,
-    useFetch,
-    Variant
-} from "../../../shared/keycloak-ui-shared";
+import { SelectVariant, useFetch } from "../../../shared/keycloak-ui-shared";
 import { Button } from "@merge/ui/components/button";
 import { Badge } from "@merge/ui/components/badge";
-const SelectOption = ({ value, children, ...props }: any) => <option value={value} {...props}>{children}</option>;
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue
+} from "@merge/ui/components/select";
+import { Popover, PopoverContent, PopoverTrigger } from "@merge/ui/components/popover";
 import { useState } from "react";
 import {
     Controller,
@@ -34,6 +36,7 @@ import { NewPolicyDialog } from "./NewPolicyDialog";
 import { useIsAdminPermissionsClient } from "../../utils/useIsAdminPermissionsClient";
 
 type Type = "resources" | "policies";
+type Variant = "single" | "typeahead" | "typeaheadMulti";
 
 type ResourcesPolicySelectProps = {
     name: Type;
@@ -200,13 +203,6 @@ export const ResourcesPolicySelect = ({
                   resourceId: policy.id!
               });
 
-    const toSelectOptions = () =>
-        items.map(p => (
-            <SelectOption key={p.id} value={p.id}>
-                {p.name}
-            </SelectOption>
-        ));
-
     const toChipGroupItems = (
         field: ControllerRenderProps<PolicyRepresentation, Type>
     ) => {
@@ -268,69 +264,125 @@ export const ResourcesPolicySelect = ({
                 defaultValue={preSelected ? [preSelected] : []}
                 control={control}
                 rules={{ validate: value => !isRequired || value!.length > 0 }}
-                render={({ field }) => (
-                    <KeycloakSelect
-                        toggleId={name}
-                        variant={variant}
-                        onToggle={val => setOpen(val)}
-                        onFilter={filter => {
-                            setSearch(filter);
-                            return toSelectOptions();
-                        }}
-                        onClear={() => {
-                            field.onChange([]);
-                            setSearch("");
-                        }}
-                        selections={
-                            variant === SelectVariant.typeaheadMulti
-                                ? field.value
-                                : items.find(i => i.id === field.value?.[0])?.name
-                        }
-                        onSelect={selectedValue => {
-                            const option = selectedValue.toString();
-                            if (variant === SelectVariant.typeaheadMulti) {
-                                const changedValue = field.value?.find(
-                                    (p: string) => p === option
-                                )
-                                    ? field.value.filter((p: string) => p !== option)
-                                    : [...field.value!, option];
-                                field.onChange(changedValue);
-                            } else {
-                                field.onChange([option]);
-                            }
-
-                            setSearch("");
-                        }}
-                        isOpen={open}
-                        aria-label={t(name)}
-                        validated={errors[name] ? "error" : "default"}
-                        typeAheadAriaLabel={t(name)}
-                        chipGroupComponent={toChipGroupItems(field)}
-                        footer={
-                            name === "policies" && !isAdminPermissionsClient ? (
-                                <Button
-                                    variant="link"
-                                    className="inline"
-                                    onClick={() => {
-                                        if (isDirty) {
-                                            setOpen(false);
-                                            setOnUnsavedChangesConfirm(
-                                                () => toggleCreatePolicyDialog
-                                            );
-                                            toggleUnsavedChangesDialog();
-                                        } else {
-                                            toggleCreatePolicyDialog();
-                                        }
-                                    }}
+                render={({ field }) =>
+                    variant === SelectVariant.typeaheadMulti ? (
+                        <Popover open={open} onOpenChange={setOpen}>
+                            <PopoverTrigger asChild>
+                                <div
+                                    id={name}
+                                    role="combobox"
+                                    aria-expanded={open}
+                                    aria-invalid={!!errors[name]}
+                                    className="border-input focus-within:ring-ring flex min-h-9 w-full flex-wrap items-center gap-1 rounded-md border bg-transparent px-2 py-1.5 text-sm shadow-xs focus-within:ring-2"
                                 >
-                                    {t("createPolicy")}
-                                </Button>
-                            ) : undefined
-                        }
-                    >
-                        {toSelectOptions()}
-                    </KeycloakSelect>
-                )}
+                                    {toChipGroupItems(field)}
+                                    <Button
+                                        type="button"
+                                        variant="ghost"
+                                        size="sm"
+                                        className="h-7 shrink-0"
+                                        onClick={() => setOpen(true)}
+                                    >
+                                        {selected?.length ? t("addMore") : t(name)}
+                                    </Button>
+                                </div>
+                            </PopoverTrigger>
+                            <PopoverContent className="w-(--radix-popover-trigger-width) p-0" align="start">
+                                <div className="border-b p-2">
+                                    <input
+                                        type="text"
+                                        placeholder={t("filter")}
+                                        value={search}
+                                        onChange={(e) => setSearch(e.target.value)}
+                                        className="border-input bg-background flex h-8 w-full rounded-md border px-2 text-sm"
+                                    />
+                                </div>
+                                <ul className="max-h-64 overflow-auto py-1">
+                                    {items.map((p) => {
+                                        const id = p.id ?? "";
+                                        const isSelected = (field.value ?? []).includes(id);
+                                        return (
+                                            <li
+                                                key={p.id}
+                                                role="option"
+                                                aria-selected={isSelected}
+                                                className="hover:bg-accent cursor-pointer px-2 py-1.5 text-sm"
+                                                onMouseDown={(e) => e.preventDefault()}
+                                                onClick={() => {
+                                                    const changedValue = isSelected
+                                                        ? (field.value ?? []).filter((x: string) => x !== id)
+                                                        : [...(field.value ?? []), id];
+                                                    field.onChange(changedValue);
+                                                    setSearch("");
+                                                }}
+                                            >
+                                                {p.name}
+                                            </li>
+                                        );
+                                    })}
+                                </ul>
+                                {selected?.length > 0 && (
+                                    <div className="border-t px-2 py-1">
+                                        <Button
+                                            type="button"
+                                            variant="ghost"
+                                            size="sm"
+                                            className="h-7 w-full justify-center"
+                                            onClick={() => {
+                                                field.onChange([]);
+                                                setSearch("");
+                                                setOpen(false);
+                                            }}
+                                        >
+                                            {t("clear")}
+                                        </Button>
+                                    </div>
+                                )}
+                                {name === "policies" && !isAdminPermissionsClient && (
+                                    <div className="border-t px-2 py-1">
+                                        <Button
+                                            variant="link"
+                                            className="h-7 w-full justify-center"
+                                            onClick={() => {
+                                                if (isDirty) {
+                                                    setOpen(false);
+                                                    setOnUnsavedChangesConfirm(() => toggleCreatePolicyDialog);
+                                                    toggleUnsavedChangesDialog();
+                                                } else {
+                                                    toggleCreatePolicyDialog();
+                                                }
+                                            }}
+                                        >
+                                            {t("createPolicy")}
+                                        </Button>
+                                    </div>
+                                )}
+                            </PopoverContent>
+                        </Popover>
+                    ) : (
+                        <Select
+                            open={open}
+                            onOpenChange={setOpen}
+                            value={field.value?.[0] ?? ""}
+                            onValueChange={(v) => {
+                                field.onChange([v]);
+                                setSearch("");
+                            }}
+                            aria-invalid={!!errors[name]}
+                        >
+                            <SelectTrigger id={name}>
+                                <SelectValue placeholder={t(name)} />
+                            </SelectTrigger>
+                            <SelectContent>
+                                {items.map((p) => (
+                                    <SelectItem key={p.id} value={p.id ?? ""}>
+                                        {p.name}
+                                    </SelectItem>
+                                ))}
+                            </SelectContent>
+                        </Select>
+                    )
+                }
             />
         </>
     );

@@ -1,6 +1,6 @@
 import { useFormContext } from "react-hook-form";
 import { useTranslation } from "react-i18next";
-import { SelectControl, TextAreaControl } from "../../../shared/keycloak-ui-shared";
+import { SelectField, TextAreaControl } from "../../../shared/keycloak-ui-shared";
 import { DefaultSwitchControl } from "../../components/SwitchControl";
 import { FormAccess } from "../../components/form/FormAccess";
 import { useServerInfo } from "../../context/server-info/ServerInfoProvider";
@@ -20,13 +20,11 @@ export const LoginSettingsPanel = ({ access }: { access?: boolean }) => {
     return (
         <FormAccess fineGrainedAccess={access} role="manage-clients">
             <div className="flex flex-col gap-5">
-            <SelectControl
+            <SelectField
                 name="attributes.login_theme"
                 label={t("loginTheme")}
                 labelIcon={t("loginThemeHelp")}
-                controller={{
-                    defaultValue: ""
-                }}
+                defaultValue=""
                 options={[
                     { key: "", value: t("choose") },
                     ...loginThemes.map(({ name }) => ({ key: name, value: name }))

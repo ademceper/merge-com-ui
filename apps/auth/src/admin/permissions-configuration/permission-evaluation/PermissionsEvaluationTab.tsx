@@ -10,7 +10,7 @@ import {
     EmptyTitle
 } from "@merge/ui/components/empty";
 import { getErrorDescription, getErrorMessage,
-    SelectControl } from "../../../shared/keycloak-ui-shared";
+    SelectField } from "../../../shared/keycloak-ui-shared";
 import { toast } from "@merge/ui/components/sonner";
 import { Button } from "@merge/ui/components/button";
 import { Alert, AlertTitle } from "@merge/ui/components/alert";
@@ -166,17 +166,14 @@ const PermissionEvaluateContent = ({ client }: Props) => {
                                         variant="typeahead"
                                         isRequired
                                     />
-                                    <SelectControl
+                                    <SelectField
                                         name="resourceType"
                                         label={t("resourceType")}
                                         labelIcon={t("resourceTypeSelectHelp")}
-                                        variant="single"
-                                        controller={{
-                                            defaultValue: resourceTypes.length
-                                                ? resourceTypes[0]?.type
-                                                : "",
-                                            rules: { required: true }
-                                        }}
+                                        defaultValue={resourceTypes.length
+                                            ? resourceTypes[0]?.type ?? ""
+                                            : ""}
+                                        rules={{ required: true }}
                                         options={resourceTypes.map(
                                             resource => resource.type!
                                         )}
@@ -192,12 +189,11 @@ const PermissionEvaluateContent = ({ client }: Props) => {
                                             isRadio
                                         />
                                     )}
-                                    <SelectControl
+                                    <SelectField
                                         name="authScopes"
                                         label={t("authScope")}
                                         labelIcon={t("authScopeSelectHelp")}
-                                        controller={{ defaultValue: [] }}
-                                        variant="single"
+                                        defaultValue=""
                                         options={authScopes}
                                     />
                                 </FormAccess>

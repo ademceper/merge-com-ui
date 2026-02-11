@@ -1,9 +1,11 @@
+import { HelpItem } from "../../../shared/keycloak-ui-shared";
 import {
-    HelpItem,
-    KeycloakSelect,
-    SelectOption,
-    SelectVariant
-} from "../../../shared/keycloak-ui-shared";
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue
+} from "@merge/ui/components/select";
 import { Label } from "@merge/ui/components/label";
 import { useState } from "react";
 import { Controller, useFormContext } from "react-hook-form";
@@ -28,28 +30,27 @@ export const ReqAuthnConstraints = () => {
                     defaultValue={comparisonValues[0]}
                     control={control}
                     render={({ field }) => (
-                        <KeycloakSelect
-                            toggleId="comparison"
-                            direction="up"
-                            onToggle={isExpanded => setComparisonOpen(isExpanded)}
-                            onSelect={value => {
-                                field.onChange(value.toString());
+                        <Select
+                            open={comparisonOpen}
+                            onOpenChange={setComparisonOpen}
+                            value={field.value ?? comparisonValues[0]}
+                            onValueChange={(v) => {
+                                field.onChange(v);
                                 setComparisonOpen(false);
                             }}
-                            selections={field.value}
-                            variant={SelectVariant.single}
                             aria-label={t("comparison")}
-                            isOpen={comparisonOpen}
                         >
-                            {comparisonValues.map(option => (
-                                <SelectOption
-                                    key={option}
-                                    value={option}
-                                >
-                                    {t(option)}
-                                </SelectOption>
-                            ))}
-                        </KeycloakSelect>
+                            <SelectTrigger id="comparison">
+                                <SelectValue />
+                            </SelectTrigger>
+                            <SelectContent>
+                                {comparisonValues.map(option => (
+                                    <SelectItem key={option} value={option}>
+                                        {t(option)}
+                                    </SelectItem>
+                                ))}
+                            </SelectContent>
+                        </Select>
                     )}
                 />
             </div>

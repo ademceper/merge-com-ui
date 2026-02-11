@@ -4,7 +4,7 @@ import {
     getErrorMessage,
     HelpItem,
     NumberControl,
-    SelectControl,
+    SelectField,
     SwitchControl,
 } from "../../../shared/keycloak-ui-shared";
 import { toast } from "@merge/ui/components/sonner";
@@ -128,7 +128,7 @@ const localeSort = useLocaleSort();
                                 )}
                             />
                         </div>
-                        <SelectControl
+                        <SelectField
                             name="otpPolicyAlgorithm"
                             label={t("otpHashAlgorithm")}
                             labelIcon={t("otpHashAlgorithmHelp")}
@@ -136,7 +136,7 @@ const localeSort = useLocaleSort();
                                 key: `Hmac${type}`,
                                 value: type
                             }))}
-                            controller={{ defaultValue: `Hmac${OTP_HASH_ALGORITHMS[0]}` }}
+                            defaultValue={`Hmac${OTP_HASH_ALGORITHMS[0]}`}
                         />
                         <div className="space-y-2">
                             <div className="flex items-center gap-2">

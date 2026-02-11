@@ -1,6 +1,6 @@
 import type { AuthenticationProviderRepresentation } from "@keycloak/keycloak-admin-client/lib/defs/authenticatorConfigRepresentation";
 import {
-    SelectControl,
+    SelectField,
     TextControl,
     useFetch
 } from "../../../../shared/keycloak-ui-shared";
@@ -71,7 +71,7 @@ export const AddSubFlowModal = ({ name, onConfirm, onCancel }: AddSubFlowProps) 
                             label={t("description")}
                             labelIcon={t("flowNameDescriptionHelp")}
                         />
-                        <SelectControl
+                        <SelectField
                             name="type"
                             menuAppendTo="parent"
                             label={t("flowType")}
@@ -79,10 +79,10 @@ export const AddSubFlowModal = ({ name, onConfirm, onCancel }: AddSubFlowProps) 
                                 key: type,
                                 value: t(`flow-type.${type}`)
                             }))}
-                            controller={{ defaultValue: types[0] }}
+                            defaultValue={types[0]}
                         />
                         {formProviders && formProviders.length > 1 && (
-                            <SelectControl
+                            <SelectField
                                 name="provider"
                                 label={t("provider")}
                                 labelIcon={t("authenticationFlowTypeHelp")}
@@ -90,7 +90,7 @@ export const AddSubFlowModal = ({ name, onConfirm, onCancel }: AddSubFlowProps) 
                                     key: provider.id!,
                                     value: provider.displayName!
                                 }))}
-                                controller={{ defaultValue: "" }}
+                                defaultValue=""
                             />
                         )}
                     </FormProvider>

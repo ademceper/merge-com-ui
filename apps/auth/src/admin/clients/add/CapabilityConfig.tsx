@@ -1,5 +1,5 @@
 import type ClientRepresentation from "@keycloak/keycloak-admin-client/lib/defs/clientRepresentation";
-import { HelpItem, SelectControl } from "../../../shared/keycloak-ui-shared";
+import { HelpItem, SelectField } from "../../../shared/keycloak-ui-shared";
 import { Checkbox } from "@merge/ui/components/checkbox";
 import { Switch } from "@merge/ui/components/switch";
 import { Label } from "@merge/ui/components/label";
@@ -387,11 +387,11 @@ export const CapabilityConfig = ({ unWrap, protocol: type }: CapabilityConfigPro
                                 />
                             </div>
                         </div>
-                    <SelectControl
+                    <SelectField
                         id="keyForCodeExchange"
                         label={t("keyForCodeExchange")}
                         labelIcon={t("keyForCodeExchangeHelp")}
-                        controller={{ defaultValue: "" }}
+                        defaultValue=""
                         name={convertAttributeNameToForm<FormFields>(
                             "attributes.pkce.code.challenge.method"
                         )}

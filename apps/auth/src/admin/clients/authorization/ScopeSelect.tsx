@@ -1,10 +1,8 @@
 import type ScopeRepresentation from "@keycloak/keycloak-admin-client/lib/defs/scopeRepresentation";
-import {
-    KeycloakSelect,
-    SelectVariant,
-    useFetch
-} from "../../../shared/keycloak-ui-shared";
-const SelectOption = ({ value, children, ...props }: any) => <option value={value} {...props}>{children}</option>;
+import { useFetch } from "../../../shared/keycloak-ui-shared";
+import { Button } from "@merge/ui/components/button";
+import { Input } from "@merge/ui/components/input";
+import { Popover, PopoverContent, PopoverTrigger } from "@merge/ui/components/popover";
 import { useRef, useState } from "react";
 import { Controller, useFormContext } from "react-hook-form";
 import { useTranslation } from "react-i18next";
@@ -35,13 +33,6 @@ export const ScopeSelect = ({ clientId, resourceId, preSelected }: ScopeSelectPr
     const firstUpdate = useRef(true);
 
     const values: string[] | undefined = getValues("scopes");
-
-    const toSelectOptions = (scopes: ScopeRepresentation[]) =>
-        scopes.map(scope => (
-            <SelectOption key={scope.id} value={scope}>
-                {scope.name}
-            </SelectOption>
-        ));
 
     useFetch(
         async (): Promise<ScopeRepresentation[]> => {
@@ -81,40 +72,74 @@ export const ScopeSelect = ({ clientId, resourceId, preSelected }: ScopeSelectPr
             control={control}
             rules={{ validate: value => value.length > 0 }}
             render={({ field }) => (
-                <KeycloakSelect
-                    toggleId="scopes"
-                    variant={SelectVariant.typeaheadMulti}
-                    onToggle={val => setOpen(val)}
-                    onFilter={filter => {
-                        setSearch(filter);
-                        return toSelectOptions(scopes);
-                    }}
-                    onClear={() => {
-                        field.onChange([]);
-                        setSearch("");
-                    }}
-                    selections={selectedScopes.map(s => s.name!)}
-                    onSelect={selectedValue => {
-                        const option =
-                            typeof selectedValue === "string"
-                                ? selectedScopes.find(s => s.name === selectedValue)!
-                                : (selectedValue as ScopeRepresentation);
-                        const changedValue = selectedScopes.find(p => p.id === option.id)
-                            ? selectedScopes.filter(p => p.id !== option.id)
-                            : [...selectedScopes, option];
-
-                        field.onChange(changedValue.map(s => s.id));
-                        setSelectedScopes(changedValue);
-                        setSearch("");
-                    }}
-                    isOpen={open}
-                    aria-labelledby={t("scopes")}
-                    validated={errors.scopes ? "error" : "default"}
-                    isDisabled={!!preSelected}
-                    typeAheadAriaLabel={t("scopes")}
-                >
-                    {toSelectOptions(scopes)}
-                </KeycloakSelect>
+                <Popover open={open} onOpenChange={setOpen}>
+                    <PopoverTrigger asChild>
+                        <Button
+                            id="scopes"
+                            variant="outline"
+                            role="combobox"
+                            aria-expanded={open}
+                            aria-invalid={!!errors.scopes}
+                            disabled={!!preSelected}
+                            className="min-h-9 w-full justify-between font-normal"
+                        >
+                            <span className="truncate">
+                                {selectedScopes.length > 0
+                                    ? selectedScopes.map((s) => s.name).join(", ")
+                                    : t("scopes")}
+                            </span>
+                        </Button>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-(--radix-popover-trigger-width) p-0" align="start">
+                        <Input
+                            placeholder={t("filter")}
+                            value={search}
+                            onChange={(e) => setSearch(e.target.value)}
+                            className="m-2 h-8"
+                        />
+                        <ul className="max-h-64 overflow-auto py-1">
+                            {scopes.map((scope) => {
+                                const isSelected = selectedScopes.some((p) => p.id === scope.id);
+                                return (
+                                    <li
+                                        key={scope.id}
+                                        role="option"
+                                        aria-selected={isSelected}
+                                        className="hover:bg-accent cursor-pointer px-2 py-1.5 text-sm"
+                                        onMouseDown={(e) => e.preventDefault()}
+                                        onClick={() => {
+                                            const changedValue = isSelected
+                                                ? selectedScopes.filter((p) => p.id !== scope.id)
+                                                : [...selectedScopes, scope];
+                                            field.onChange(changedValue.map((s) => s.id));
+                                            setSelectedScopes(changedValue);
+                                        }}
+                                    >
+                                        {scope.name}
+                                    </li>
+                                );
+                            })}
+                        </ul>
+                        {selectedScopes.length > 0 && (
+                            <div className="border-t px-2 py-1">
+                                <Button
+                                    type="button"
+                                    variant="ghost"
+                                    size="sm"
+                                    className="h-7 w-full justify-center"
+                                    onClick={() => {
+                                        field.onChange([]);
+                                        setSelectedScopes([]);
+                                        setSearch("");
+                                        setOpen(false);
+                                    }}
+                                >
+                                    {t("clear")}
+                                </Button>
+                            </div>
+                        )}
+                    </PopoverContent>
+                </Popover>
             )}
         />
     );

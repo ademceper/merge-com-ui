@@ -1,10 +1,15 @@
 import type RealmRepresentation from "@keycloak/keycloak-admin-client/lib/defs/realmRepresentation";
 import { HelpItem,
-    KeycloakSelect,
-    SelectVariant,
     ScrollForm,
-    SelectControl,
+    SelectField,
     NumberControl } from "../../shared/keycloak-ui-shared";
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue
+} from "@merge/ui/components/select";
 import { toast } from "@merge/ui/components/sonner";
 import { Input } from "@merge/ui/components/input";
 import { Textarea } from "@merge/ui/components/textarea";
@@ -109,33 +114,31 @@ export const RealmSettingsTokensTab = ({ realm, save }: RealmSettingsTokensTabPr
                             defaultValue={"RS256"}
                             control={control}
                             render={({ field }) => (
-                                <KeycloakSelect
-                                    toggleId="kc-default-sig-alg"
-                                    onToggle={() =>
-                                        setDefaultSigAlgDrpdwnOpen(
-                                            !defaultSigAlgDrpdwnIsOpen
-                                        )
-                                    }
-                                    onSelect={value => {
-                                        field.onChange(value.toString());
+                                <Select
+                                    open={defaultSigAlgDrpdwnIsOpen}
+                                    onOpenChange={setDefaultSigAlgDrpdwnOpen}
+                                    value={field.value?.toString() ?? "RS256"}
+                                    onValueChange={(v) => {
+                                        field.onChange(v);
                                         setDefaultSigAlgDrpdwnOpen(false);
                                     }}
-                                    selections={field.value?.toString()}
-                                    variant={SelectVariant.single}
                                     aria-label={t("defaultSigAlg")}
-                                    isOpen={defaultSigAlgDrpdwnIsOpen}
                                     data-testid="select-default-sig-alg"
                                 >
-                                    {defaultSigAlgOptions!.map((p, idx) => (
-                                        <option
-                                            selected={p === field.value}
-                                            key={`default-sig-alg-${idx}`}
-                                            value={p}
-                                        >
-                                            {p}
-                                        </option>
-                                    ))}
-                                </KeycloakSelect>
+                                    <SelectTrigger id="kc-default-sig-alg">
+                                        <SelectValue />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                        {defaultSigAlgOptions!.map((p, idx) => (
+                                            <SelectItem
+                                                key={`default-sig-alg-${idx}`}
+                                                value={p}
+                                            >
+                                                {p}
+                                            </SelectItem>
+                                        ))}
+                                    </SelectContent>
+                                </Select>
                             )}
                         />
                     </div>
@@ -656,15 +659,13 @@ export const RealmSettingsTokensTab = ({ realm, save }: RealmSettingsTokensTabPr
                                 units={["second", "minute", "hour"]}
                                 data-testid="signed-metadata-lifespan"
                             />
-                            <SelectControl
+                            <SelectField
                                 name={convertAttributeNameToForm(
                                     "attributes.oid4vci.signed_metadata.alg"
                                 )}
                                 label={t("signedMetadataSigningAlgorithm")}
                                 labelIcon={t("signedMetadataSigningAlgorithmHelp")}
-                                controller={{
-                                    defaultValue: "RS256"
-                                }}
+                                defaultValue="RS256"
                                 options={asymmetricSigAlgOptions.map(p => ({
                                     key: p,
                                     value: p
@@ -759,15 +760,13 @@ export const RealmSettingsTokensTab = ({ realm, save }: RealmSettingsTokensTabPr
                     <h1 className="kc-override-action-tokens-subtitle text-xl font-semibold">
                         {t("timeClaimCorrelationMitigation")}
                     </h1>
-                    <SelectControl
+                    <SelectField
                         name={convertAttributeNameToForm(
                             "attributes.oid4vci.time.claims.strategy"
                         )}
                         label={t("timeClaimsStrategy")}
                         labelIcon={t("timeClaimsStrategyHelp")}
-                        controller={{
-                            defaultValue: "off"
-                        }}
+                        defaultValue="off"
                         options={[
                             { key: "off", value: t("off") },
                             { key: "randomize", value: t("randomize") },
@@ -792,15 +791,13 @@ export const RealmSettingsTokensTab = ({ realm, save }: RealmSettingsTokensTabPr
                         />
                     )}
                     {strategy === "round" && (
-                        <SelectControl
+                        <SelectField
                             name={convertAttributeNameToForm(
                                 "attributes.oid4vci.time.round.unit"
                             )}
                             label={t("roundUnit")}
                             labelIcon={t("roundUnitHelp")}
-                            controller={{
-                                defaultValue: "SECOND"
-                            }}
+                            defaultValue="SECOND"
                             options={[
                                 { key: "SECOND", value: t("times.seconds") },
                                 { key: "MINUTE", value: t("times.minutes") },

@@ -1,10 +1,12 @@
+import { HelpItem } from "../../../shared/keycloak-ui-shared";
 import {
-    HelpItem,
-    KeycloakSelect,
-    SelectVariant
-} from "../../../shared/keycloak-ui-shared";
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue
+} from "@merge/ui/components/select";
 import { Label } from "@merge/ui/components/label";
-import { SelectOption } from "../../../shared/keycloak-ui-shared";
 import { useState } from "react";
 import { Controller, useFormContext } from "react-hook-form";
 import { useTranslation } from "react-i18next";
@@ -45,29 +47,31 @@ export const ListComponent = ({
                 control={control}
                 render={({ field }) => (
                     <div className={helpIconAfterControl ? "flex w-full items-center gap-2" : undefined}>
-                        <KeycloakSelect
-                            toggleId={name}
-                            isDisabled={isDisabled}
-                            onToggle={toggle => setOpen(toggle)}
-                            onSelect={value => {
-                                field.onChange(value as string);
+                        <Select
+                            open={open}
+                            onOpenChange={setOpen}
+                            value={field.value ?? ""}
+                            onValueChange={(v) => {
+                                field.onChange(v);
                                 setOpen(false);
                             }}
-                            selections={field.value}
-                            variant={SelectVariant.single}
+                            disabled={isDisabled}
                             aria-label={hideLabel ? t(label!) : undefined}
-                            isOpen={open}
-                            className={helpIconAfterControl ? "flex-1 min-w-0" : undefined}
                         >
-                            {options?.map(option => (
-                                <SelectOption
-                                    key={option}
-                                    value={option}
-                                >
-                                    {option}
-                                </SelectOption>
-                            ))}
-                        </KeycloakSelect>
+                            <SelectTrigger
+                                id={name}
+                                className={helpIconAfterControl ? "flex-1 min-w-0" : undefined}
+                            >
+                                <SelectValue />
+                            </SelectTrigger>
+                            <SelectContent>
+                                {options?.map(option => (
+                                    <SelectItem key={option} value={option}>
+                                        {option}
+                                    </SelectItem>
+                                ))}
+                            </SelectContent>
+                        </Select>
                         {helpIconAfterControl && helpText && (
                             <HelpItem helpText={t(helpText)} fieldLabelId={`${label}`} />
                         )}

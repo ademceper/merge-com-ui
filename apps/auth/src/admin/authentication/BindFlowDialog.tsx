@@ -1,5 +1,5 @@
 import type RealmRepresentation from "@keycloak/keycloak-admin-client/lib/defs/realmRepresentation";
-import { getErrorDescription, getErrorMessage, SelectControl } from "../../shared/keycloak-ui-shared";
+import { getErrorDescription, getErrorMessage, SelectField } from "../../shared/keycloak-ui-shared";
 import { toast } from "@merge/ui/components/sonner";
 import { Button } from "@merge/ui/components/button";
 import {
@@ -56,7 +56,7 @@ const { realm, realmRepresentation: realmRep, refresh } = useRealm();
                 </DialogHeader>
                 <form id="bind-form" onSubmit={form.handleSubmit(onSubmit)}>
                     <FormProvider {...form}>
-                        <SelectControl
+                        <SelectField
                             id="chooseBindingType"
                             name="bindingType"
                             label={t("chooseBindingType")}
@@ -66,7 +66,7 @@ const { realm, realmRepresentation: realmRep, refresh } = useRealm();
                                     key,
                                     value: t(`flow.${REALM_FLOWS.get(key)}`)
                                 }))}
-                            controller={{ defaultValue: flowKeys[0] }}
+                            defaultValue={flowKeys[0]}
                             menuAppendTo="parent"
                             aria-label={t("chooseBindingType")}
                         />

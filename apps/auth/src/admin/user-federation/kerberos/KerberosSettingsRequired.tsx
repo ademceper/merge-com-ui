@@ -1,4 +1,4 @@
-import { HelpItem, SelectControl, TextControl } from "../../../shared/keycloak-ui-shared";
+import { HelpItem, SelectField, TextControl } from "../../../shared/keycloak-ui-shared";
 import { Switch } from "@merge/ui/components/switch";
 import { FormLabel } from "../../../shared/keycloak-ui-shared";
 import { isEqual } from "lodash-es";
@@ -153,14 +153,12 @@ export const KerberosSettingsRequired = ({
                     </div>
                     {isEqual(allowPassAuth, ["true"]) ? (
                         <div className="space-y-2">
-                            <SelectControl
+                            <SelectField
                         name="config.editMode[0]"
                         label={t("editMode")}
                         labelIcon={t("editModeKerberosHelp")}
-                        controller={{
-                            rules: { required: t("required") },
-                            defaultValue: "READ_ONLY"
-                        }}
+                        defaultValue="READ_ONLY"
+                        rules={{ required: t("required") }}
                                 options={["READ_ONLY", "UNSYNCED"]}
                             />
                         </div>

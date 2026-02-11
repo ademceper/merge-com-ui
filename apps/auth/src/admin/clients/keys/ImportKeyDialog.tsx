@@ -1,4 +1,4 @@
-import { SelectControl, FileUploadControl } from "../../../shared/keycloak-ui-shared";
+import { SelectField, FileUploadControl } from "../../../shared/keycloak-ui-shared";
 import { Button } from "@merge/ui/components/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@merge/ui/components/dialog";
 import { FormProvider, useForm, useWatch } from "react-hook-form";
@@ -53,13 +53,11 @@ export const ImportKeyDialog = ({
                 <p className="text-sm text-muted-foreground">{t(description)}</p>
                 <form className="pt-4 space-y-4">
                     <FormProvider {...form}>
-                        <SelectControl
+                        <SelectField
                             name="keystoreFormat"
                             label={t("archiveFormat")}
                             labelIcon={t("archiveFormatHelp")}
-                            controller={{
-                                defaultValue: formats[0]
-                            }}
+                            defaultValue={formats[0]}
                             options={formats}
                         />
                         <FileUploadControl

@@ -1,6 +1,6 @@
 import {
     NumberControl,
-    SelectControl,
+    SelectField,
     SelectControlOption
 } from "../../../shared/keycloak-ui-shared";
 import { isEqual } from "lodash-es";
@@ -49,15 +49,12 @@ const CacheFields = ({ form }: { form: UseFormReturn }) => {
     return (
         <div className="space-y-6">
             <div className="space-y-2">
-                <SelectControl
+                <SelectField
                     id="kc-cache-policy"
                     name="config.cachePolicy"
                     label={t("cachePolicy")}
                     labelIcon={t("cachePolicyHelp")}
-                controller={{
-                    defaultValue: ["DEFAULT"]
-                }}
-                aria-label={t("selectCacheType")}
+                defaultValue="DEFAULT"
                 options={[
                     "DEFAULT",
                     "EVICT_DAILY",
@@ -69,15 +66,12 @@ const CacheFields = ({ form }: { form: UseFormReturn }) => {
             </div>
             {isEqual(cachePolicyType, ["EVICT_WEEKLY"]) ? (
                 <div className="space-y-2">
-                    <SelectControl
+                    <SelectField
                         id="kc-eviction-day"
                         name="config.evictionDay[0]"
                         label={t("evictionDay")}
                         labelIcon={t("evictionDayHelp")}
-                        controller={{
-                            defaultValue: "1"
-                        }}
-                        aria-label={t("selectEvictionDay")}
+                        defaultValue="1"
                         options={[
                             { key: "1", value: t("Sunday") },
                             { key: "2", value: t("Monday") },
@@ -94,28 +88,22 @@ const CacheFields = ({ form }: { form: UseFormReturn }) => {
             isEqual(cachePolicyType, ["EVICT_WEEKLY"]) ? (
                 <div className="space-y-6">
                     <div className="space-y-2">
-                        <SelectControl
+                        <SelectField
                         id="kc-eviction-hour"
                         name="config.evictionHour"
                         label={t("evictionHour")}
                         labelIcon={t("evictionHourHelp")}
-                        controller={{
-                            defaultValue: ["0"]
-                        }}
-                        aria-label={t("selectEvictionHour")}
+                        defaultValue="0"
                         options={hourOptions}
                         />
                     </div>
                     <div className="space-y-2">
-                        <SelectControl
+                        <SelectField
                             id="kc-eviction-minute"
                         name="config.evictionMinute"
                         label={t("evictionMinute")}
                         labelIcon={t("evictionMinuteHelp")}
-                        controller={{
-                            defaultValue: ["0"]
-                        }}
-                        aria-label={t("selectEvictionMinute")}
+                        defaultValue="0"
                         options={minuteOptions}
                         />
                     </div>

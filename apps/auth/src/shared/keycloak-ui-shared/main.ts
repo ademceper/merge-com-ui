@@ -6,7 +6,6 @@ export {
     type KeycloakContext
 } from "./context/KeycloakContext";
 export { getInjectedEnvironment, type BaseEnvironment } from "./context/environment";
-export { ContinueCancelModal } from "./continue-cancel/ContinueCancelModal";
 export { FormErrorText, type FormErrorTextProps } from "./controls/FormErrorText";
 export { formInputClassName, formInputWrapperClassName } from "./controls/form-input-styles";
 export { FormLabel, type FieldProps } from "./controls/FormLabel";
@@ -14,11 +13,10 @@ export { HelpItem } from "./controls/HelpItem";
 export { NumberControl } from "./controls/NumberControl";
 export { PasswordControl } from "./controls/PasswordControl";
 export { PasswordInput } from "./controls/PasswordInput";
-export { SelectControl, SelectVariant } from "./controls/select-control/SelectControl";
-export type {
-    SelectControlOption,
-    SelectControlProps
-} from "./controls/select-control/SelectControl";
+export type SelectControlOption = { key: string; value: string };
+export const SelectVariant = { single: "single", typeahead: "typeahead", typeaheadMulti: "typeaheadMulti" } as const;
+export { SelectField } from "./controls/SelectField";
+export { MultiSelectField } from "./controls/MultiSelectField";
 export { SwitchControl, type SwitchControlProps } from "./controls/SwitchControl";
 export { TextAreaControl } from "./controls/TextAreaControl";
 export { TextControl } from "./controls/TextControl";
@@ -49,11 +47,10 @@ export { useRequiredContext } from "./utils/useRequiredContext";
 export { useStoredState } from "./utils/useStoredState";
 export { useSetTimeout } from "./utils/useSetTimeout";
 export { generateId } from "./utils/generateId";
-export { KeycloakSelect } from "./select/KeycloakSelect";
-export type { Variant, KeycloakSelectProps } from "./select/KeycloakSelect";
 export { SelectItem as SelectOption } from "@merge/ui/components/select";
 export { KeycloakSpinner } from "./controls/KeycloakSpinner";
 export { useFetch } from "./utils/useFetch";
+export { getRuleValue } from "./utils/getRuleValue";
 export {
     useErrorBoundary,
     ErrorBoundaryFallback,

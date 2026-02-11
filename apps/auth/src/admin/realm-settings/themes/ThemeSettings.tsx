@@ -1,5 +1,5 @@
 import type RealmRepresentation from "@keycloak/keycloak-admin-client/lib/defs/realmRepresentation";
-import { SelectControl } from "../../../shared/keycloak-ui-shared";
+import { SelectField } from "../../../shared/keycloak-ui-shared";
 import { FormPanel } from "../../../shared/keycloak-ui-shared/scroll-form/FormPanel";
 import { useEffect } from "react";
 import { FormProvider, useForm } from "react-hook-form";
@@ -50,12 +50,12 @@ export const ThemeSettingsTab = ({ realm, save }: ThemeSettingsTabProps) => {
                                 defaultValue="true"
                                 stringify
                             />
-                            <SelectControl
+                            <SelectField
                                 id="kc-login-theme"
                                 name="loginTheme"
                                 label={t("loginTheme")}
                                 labelIcon={t("loginThemeHelp")}
-                                controller={{ defaultValue: "" }}
+                                defaultValue=""
                                 options={appendEmptyChoice(
                                     themeTypes.login.map(theme => ({
                                         key: theme.name,
@@ -63,13 +63,13 @@ export const ThemeSettingsTab = ({ realm, save }: ThemeSettingsTabProps) => {
                                     }))
                                 )}
                             />
-                            <SelectControl
+                            <SelectField
                                 id="kc-account-theme"
                                 name="accountTheme"
                                 label={t("accountTheme")}
                                 labelIcon={t("accountThemeHelp")}
                                 placeholderText={t("selectATheme")}
-                                controller={{ defaultValue: "" }}
+                                defaultValue=""
                                 options={appendEmptyChoice(
                                     themeTypes.account.map(theme => ({
                                         key: theme.name,
@@ -77,13 +77,13 @@ export const ThemeSettingsTab = ({ realm, save }: ThemeSettingsTabProps) => {
                                     }))
                                 )}
                             />
-                            <SelectControl
+                            <SelectField
                                 id="kc-admin-theme"
                                 name="adminTheme"
                                 label={t("adminTheme")}
                                 labelIcon={t("adminThemeHelp")}
                                 placeholderText={t("selectATheme")}
-                                controller={{ defaultValue: "" }}
+                                defaultValue=""
                                 options={appendEmptyChoice(
                                     themeTypes.admin.map(theme => ({
                                         key: theme.name,
@@ -91,13 +91,13 @@ export const ThemeSettingsTab = ({ realm, save }: ThemeSettingsTabProps) => {
                                     }))
                                 )}
                             />
-                            <SelectControl
+                            <SelectField
                                 id="kc-email-theme"
                                 name="emailTheme"
                                 label={t("emailTheme")}
                                 labelIcon={t("emailThemeHelp")}
                                 placeholderText={t("selectATheme")}
-                                controller={{ defaultValue: "" }}
+                                defaultValue=""
                                 options={appendEmptyChoice(
                                     themeTypes.email.map(theme => ({
                                         key: theme.name,

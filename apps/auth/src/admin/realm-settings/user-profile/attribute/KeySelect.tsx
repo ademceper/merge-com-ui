@@ -1,9 +1,12 @@
+import { SelectControlOption } from "../../../../shared/keycloak-ui-shared";
 import {
-    KeycloakSelect,
-    SelectControlOption
-} from "../../../../shared/keycloak-ui-shared";
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue
+} from "@merge/ui/components/select";
 import { Input } from "@merge/ui/components/input";
-import { SelectOption } from "../../../../shared/keycloak-ui-shared";
 import { useState } from "react";
 import { UseControllerProps, useController } from "react-hook-form";
 import { useTranslation } from "react-i18next";
@@ -24,29 +27,30 @@ export const KeySelect = ({ selectItems, ...rest }: KeySelectProp) => {
     return (
         <div className="flex gap-2">
             <div className={custom ? "w-1/6" : "w-full"}>
-                <KeycloakSelect
-                    onToggle={() => toggle()}
-                    isOpen={open}
-                    onSelect={value => {
-                        if (value) {
-                            setCustom(false);
-                        }
-                        field.onChange(value);
+                <Select
+                    open={open}
+                    onOpenChange={() => toggle()}
+                    value={!custom ? field.value : ""}
+                    onValueChange={(v) => {
+                        if (v) setCustom(false);
+                        field.onChange(v);
                         toggle();
                     }}
-                    selections={!custom ? [field.value] : ""}
                 >
-                    {[
-                        <SelectOption key="custom" value="__custom__">
+                    <SelectTrigger>
+                        <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                        <SelectItem value="__custom__">
                             {t("customAttribute")}
-                        </SelectOption>,
-                        ...selectItems.map(item => (
-                            <SelectOption key={item.key} value={item.key}>
+                        </SelectItem>
+                        {selectItems.map(item => (
+                            <SelectItem key={item.key} value={item.key}>
                                 {item.value}
-                            </SelectOption>
-                        ))
-                    ]}
-                </KeycloakSelect>
+                            </SelectItem>
+                        ))}
+                    </SelectContent>
+                </Select>
             </div>
             {custom && (
                 <div className="flex-1">

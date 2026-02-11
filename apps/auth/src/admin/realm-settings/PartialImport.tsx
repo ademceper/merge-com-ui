@@ -5,7 +5,6 @@ import type {
     PartialImportResult
 } from "@keycloak/keycloak-admin-client/lib/defs/realmRepresentation";
 import type RoleRepresentation from "@keycloak/keycloak-admin-client/lib/defs/roleRepresentation";
-import { KeycloakSelect } from "../../shared/keycloak-ui-shared";
 import { Button } from "@merge/ui/components/button";
 import { Checkbox } from "@merge/ui/components/checkbox";
 import { Badge } from "@merge/ui/components/badge";
@@ -22,7 +21,13 @@ import {
     Alert,
     AlertTitle
 } from "@merge/ui/components/alert";
-import { SelectOption } from "../../shared/keycloak-ui-shared";
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue
+} from "@merge/ui/components/select";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useAdminClient } from "../admin-client";
@@ -113,34 +118,9 @@ export const PartialImportDialog = (props: PartialImportProps) => {
         resetResourcesToImport();
     };
 
-    const realmSelectOptions = (realms: RealmRepresentation[]) =>
-        realms.map(realm => (
-            <SelectOption
-                key={realm.id}
-                value={realm.realm ?? realm.id ?? ""}
-                data-testid={realm.id + "-select-option"}
-            >
-                {realm.realm || realm.id}
-            </SelectOption>
-        ));
-
-    const handleCollisionSelect = (option: string | number | object) => {
-        setCollisionOption(option as CollisionOption);
+    const handleCollisionSelect = (option: CollisionOption) => {
+        setCollisionOption(option);
         setIsCollisionSelectOpen(false);
-    };
-
-    const collisionOptions = () => {
-        return [
-            <SelectOption key="fail" value="FAIL">
-                {t("FAIL")}
-            </SelectOption>,
-            <SelectOption key="skip" value="SKIP">
-                {t("SKIP")}
-            </SelectOption>,
-            <SelectOption key="overwrite" value="OVERWRITE">
-                {t("OVERWRITE")}
-            </SelectOption>
-        ];
     };
 
     const targetHasResources = () => {
@@ -271,22 +251,37 @@ export const PartialImportDialog = (props: PartialImportProps) => {
                                 {Array.isArray(importedFile) && importedFile.length > 1 && (
                                     <div>
                                         <p className="text-sm font-medium">{t("selectRealm")}:</p>
-                                        <KeycloakSelect
-                                            toggleId="realm-selector"
-                                            isOpen={isRealmSelectOpen}
-                                            typeAheadAriaLabel={t("realmSelector")}
+                                        <Select
+                                            open={isRealmSelectOpen}
+                                            onOpenChange={setIsRealmSelectOpen}
+                                            value={targetRealm.realm ?? targetRealm.id ?? ""}
+                                            onValueChange={(v) => {
+                                                const realm = importedFile.find(
+                                                    r => (r.realm ?? r.id) === v
+                                                );
+                                                if (realm) handleRealmSelect(realm);
+                                            }}
                                             aria-label={t("realmSelector")}
-                                            onToggle={() =>
-                                                setIsRealmSelectOpen(!isRealmSelectOpen)
-                                            }
-                                            selections={targetRealm.id}
-                                            onSelect={value => handleRealmSelect(value)}
-                                            placeholderText={
-                                                targetRealm.realm || targetRealm.id
-                                            }
                                         >
-                                            {realmSelectOptions(importedFile)}
-                                        </KeycloakSelect>
+                                            <SelectTrigger id="realm-selector">
+                                                <SelectValue
+                                                    placeholder={
+                                                        targetRealm.realm || targetRealm.id
+                                                    }
+                                                />
+                                            </SelectTrigger>
+                                            <SelectContent>
+                                                {importedFile.map(realm => (
+                                                    <SelectItem
+                                                        key={realm.id}
+                                                        value={realm.realm ?? realm.id ?? ""}
+                                                        data-testid={realm.id + "-select-option"}
+                                                    >
+                                                        {realm.realm || realm.id}
+                                                    </SelectItem>
+                                                ))}
+                                            </SelectContent>
+                                        </Select>
                                     </div>
                                 )}
                                 <div>
@@ -317,18 +312,23 @@ export const PartialImportDialog = (props: PartialImportProps) => {
                                 </div>
                                 <div>
                                     <p className="text-sm font-medium">{t("selectIfResourceExists")}:</p>
-                                    <KeycloakSelect
-                                        isOpen={isCollisionSelectOpen}
-                                        direction="up"
-                                        onToggle={() => {
-                                            setIsCollisionSelectOpen(!isCollisionSelectOpen);
-                                        }}
-                                        selections={collisionOption}
-                                        onSelect={handleCollisionSelect}
-                                        placeholderText={t(collisionOption)}
+                                    <Select
+                                        open={isCollisionSelectOpen}
+                                        onOpenChange={setIsCollisionSelectOpen}
+                                        value={collisionOption}
+                                        onValueChange={(v) =>
+                                            handleCollisionSelect(v as CollisionOption)
+                                        }
                                     >
-                                        {collisionOptions()}
-                                    </KeycloakSelect>
+                                        <SelectTrigger>
+                                            <SelectValue placeholder={t(collisionOption)} />
+                                        </SelectTrigger>
+                                        <SelectContent>
+                                            <SelectItem value="FAIL">{t("FAIL")}</SelectItem>
+                                            <SelectItem value="SKIP">{t("SKIP")}</SelectItem>
+                                            <SelectItem value="OVERWRITE">{t("OVERWRITE")}</SelectItem>
+                                        </SelectContent>
+                                    </Select>
                                 </div>
                             </>
                         )}

@@ -1,5 +1,4 @@
 import type ClientScopeRepresentation from "@keycloak/keycloak-admin-client/lib/defs/clientScopeRepresentation";
-import { KeycloakSelect } from "../../../shared/keycloak-ui-shared";
 import { Button } from "@merge/ui/components/button";
 import {
     Dialog,
@@ -15,11 +14,17 @@ import {
     DropdownMenuTrigger,
 } from "@merge/ui/components/dropdown-menu";
 import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue
+} from "@merge/ui/components/select";
+import {
     DataTable,
     type ColumnDef
 } from "@merge/ui/components/table";
 import { Checkbox } from "@merge/ui/components/checkbox";
-const SelectOption = ({ value, children, ...props }: any) => <option value={value} {...props}>{children}</option>;
 import { CaretDown, CaretUp, Funnel } from "@phosphor-icons/react";
 import { useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -123,26 +128,26 @@ export const AddScopeDialog = ({
 
     const protocolTypeOptions = useMemo(() => {
         const options = [
-            <SelectOption key={1} value={ProtocolType.SAML}>
+            <SelectItem key={1} value={ProtocolType.SAML}>
                 {t("protocolTypes.saml")}
-            </SelectOption>,
-            <SelectOption key={2} value={ProtocolType.OpenIDConnect}>
+            </SelectItem>,
+            <SelectItem key={2} value={ProtocolType.OpenIDConnect}>
                 {t("protocolTypes.openid-connect")}
-            </SelectOption>
+            </SelectItem>
         ];
 
         if (isOid4vcEnabled) {
             options.push(
-                <SelectOption key={3} value={ProtocolType.OID4VC}>
+                <SelectItem key={3} value={ProtocolType.OID4VC}>
                     {t("protocolTypes.oid4vc")}
-                </SelectOption>
+                </SelectItem>
             );
         }
 
         options.push(
-            <SelectOption key={4} value={ProtocolType.All}>
+            <SelectItem key={4} value={ProtocolType.All}>
                 {t("protocolTypes.all")}
-            </SelectOption>
+            </SelectItem>
         );
 
         return options;
@@ -240,18 +245,22 @@ export const AddScopeDialog = ({
                                 </DropdownMenuContent>
                             </DropdownMenu>
                             {filterType === FilterType.Protocol && (
-                                <KeycloakSelect
-                                    className="kc-protocolType-select"
-                                    aria-label={t("selectOne")}
-                                    onToggle={toggleIsProtocolTypeDropdownOpen}
-                                    onSelect={value =>
-                                        onProtocolTypeDropdownSelect(value.toString())
+                                <Select
+                                    open={isProtocolTypeDropdownOpen}
+                                    onOpenChange={toggleIsProtocolTypeDropdownOpen}
+                                    value={protocolType}
+                                    onValueChange={(v) =>
+                                        onProtocolTypeDropdownSelect(v)
                                     }
-                                    selections={protocolType}
-                                    isOpen={isProtocolTypeDropdownOpen}
+                                    aria-label={t("selectOne")}
                                 >
-                                    {protocolTypeOptions}
-                                </KeycloakSelect>
+                                    <SelectTrigger className="kc-protocolType-select">
+                                        <SelectValue />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                        {protocolTypeOptions}
+                                    </SelectContent>
+                                </Select>
                             )}
                         </div>
                     }

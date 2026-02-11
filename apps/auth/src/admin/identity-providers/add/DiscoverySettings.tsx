@@ -8,7 +8,7 @@ import { Button } from "@merge/ui/components/button";
 import { useState } from "react";
 import { useFormContext, useWatch } from "react-hook-form";
 import { useTranslation } from "react-i18next";
-import { SelectControl, TextControl } from "../../../shared/keycloak-ui-shared";
+import { SelectField, TextControl } from "../../../shared/keycloak-ui-shared";
 import { DefaultSwitchControl } from "../../components/SwitchControl";
 import { JwksSettings } from "./JwksSettings";
 
@@ -111,13 +111,11 @@ const Fields = ({ readOnly, isOIDC }: DiscoverySettingsProps) => {
                 stringify
             />
             {isPkceEnabled === "true" && (
-                <SelectControl
+                <SelectField
                     name="config.pkceMethod"
                     label={t("pkceMethod")}
                     labelIcon={t("pkceMethodHelp")}
-                    controller={{
-                        defaultValue: PKCE_METHODS[0]
-                    }}
+                    defaultValue={PKCE_METHODS[0]}
                     options={PKCE_METHODS.map(option => ({
                         key: option,
                         value: t(option)

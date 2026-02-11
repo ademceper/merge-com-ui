@@ -1,5 +1,5 @@
 import type RealmRepresentation from "@keycloak/keycloak-admin-client/lib/defs/realmRepresentation";
-import { SelectControl, SwitchControl } from "../../../shared/keycloak-ui-shared";
+import { MultiSelectField, SelectField, SwitchControl } from "../../../shared/keycloak-ui-shared";
 import { FormPanel } from "../../../shared/keycloak-ui-shared/scroll-form/FormPanel";
 import { useMemo, useState } from "react";
 import { FormProvider, useFormContext, useWatch } from "react-hook-form";
@@ -93,42 +93,35 @@ export const LocalizationTab = ({ save, realm, tableData }: LocalizationTabProps
                         />
                         {internationalizationEnabled && (
                             <>
-                                <SelectControl
+                                <MultiSelectField
                                     name="supportedLocales"
-                                    isScrollable
                                     label={t("supportedLocales")}
                                     labelIcon={t("supportedLocalesHelp")}
-                                    controller={{
-                                        defaultValue: defaultSupportedLocales,
-                                        rules: {
-                                            required: t("required"),
-                                            validate: (value: string[]) =>
-                                                value.every(v =>
-                                                    allLocales.includes(v)
-                                                ) || t("invalidLocale")
-                                        }
+                                    defaultValue={defaultSupportedLocales}
+                                    rules={{
+                                        required: t("required"),
+                                        validate: (value: string[]) =>
+                                            value.every(v =>
+                                                allLocales.includes(v)
+                                            ) || t("invalidLocale")
                                     }}
-                                    variant="typeaheadMulti"
                                     placeholderText={t("selectLocales")}
                                     options={allLocales.map(l => ({
                                         key: l,
                                         value: localeToDisplayName(l, whoAmI.locale) || l
                                     }))}
                                 />
-                                <SelectControl
+                                <SelectField
                                     name="defaultLocale"
                                     label={t("defaultLocale")}
                                     labelIcon={t("defaultLocaleHelp")}
-                                    controller={{
-                                        defaultValue: DEFAULT_LOCALE,
-                                        rules: {
-                                            required: t("required"),
-                                            validate: (value: string) =>
-                                                watchSupportedLocales?.includes(value) ||
-                                                t("required")
-                                        }
+                                    defaultValue={DEFAULT_LOCALE}
+                                    rules={{
+                                        required: t("required"),
+                                        validate: (value: string) =>
+                                            watchSupportedLocales?.includes(value) ||
+                                            t("required")
                                     }}
-                                    data-testid="select-default-locale"
                                     options={watchSupportedLocales!.map(l => ({
                                         key: l,
                                         value: localeToDisplayName(l, whoAmI.locale) || l

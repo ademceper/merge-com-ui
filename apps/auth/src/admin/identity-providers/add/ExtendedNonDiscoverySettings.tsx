@@ -1,9 +1,11 @@
+import { HelpItem } from "../../../shared/keycloak-ui-shared";
 import {
-    HelpItem,
-    KeycloakSelect,
-    SelectOption,
-    SelectVariant
-} from "../../../shared/keycloak-ui-shared";
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue
+} from "@merge/ui/components/select";
 import { Input } from "@merge/ui/components/input";
 import { Label } from "@merge/ui/components/label";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@merge/ui/components/collapsible";
@@ -67,27 +69,27 @@ export const ExtendedNonDiscoverySettings = () => {
                         defaultValue=""
                         control={control}
                         render={({ field }) => (
-                            <KeycloakSelect
-                                toggleId="prompt"
-                                onToggle={() => setPromptOpen(!promptOpen)}
-                                onSelect={value => {
-                                    field.onChange(value as string);
+                            <Select
+                                open={promptOpen}
+                                onOpenChange={setPromptOpen}
+                                value={field.value ?? ""}
+                                onValueChange={(v) => {
+                                    field.onChange(v);
                                     setPromptOpen(false);
                                 }}
-                                selections={field.value || t(`prompts.unspecified`)}
-                                variant={SelectVariant.single}
                                 aria-label={t("prompt")}
-                                isOpen={promptOpen}
                             >
-                                {Object.entries(promptOptions).map(([key, val]) => (
-                                    <SelectOption
-                                        key={key}
-                                        value={val}
-                                    >
-                                        {t(`prompts.${key}`)}
-                                    </SelectOption>
-                                ))}
-                            </KeycloakSelect>
+                                <SelectTrigger id="prompt">
+                                    <SelectValue placeholder={t("prompts.unspecified")} />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    {Object.entries(promptOptions).map(([key, val]) => (
+                                        <SelectItem key={key} value={val}>
+                                            {t(`prompts.${key}`)}
+                                        </SelectItem>
+                                    ))}
+                                </SelectContent>
+                            </Select>
                         )}
                     />
                 </FormGroupField>

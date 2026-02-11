@@ -1,4 +1,4 @@
-import { HelpItem, SelectControl, TextControl } from "../../../shared/keycloak-ui-shared";
+import { HelpItem, SelectField, TextControl } from "../../../shared/keycloak-ui-shared";
 import { Controller, FormProvider, UseFormReturn } from "react-hook-form";
 import { Switch } from "@merge/ui/components/switch";
 import { FormLabel } from "../../../shared/keycloak-ui-shared";
@@ -32,20 +32,18 @@ export const LdapSettingsSearching = ({
             <FormAccess role="manage-realm" isHorizontal>
                 <div className="space-y-6">
                     <div className="space-y-2">
-                        <SelectControl
+                        <SelectField
                             id="editMode"
                             name="config.editMode[0]"
                             label={t("editMode")}
                             labelIcon={t("editModeLdapHelp")}
-                            controller={{
-                        defaultValue: "",
-                        rules: {
-                            required: {
-                                value: true,
-                                message: t("validateEditMode")
-                            }
-                        }
-                    }}
+                            defaultValue=""
+                            rules={{
+                                required: {
+                                    value: true,
+                                    message: t("validateEditMode")
+                                }
+                            }}
                             options={["", "READ_ONLY", "WRITABLE", "UNSYNCED"]}
                         />
                     </div>
@@ -124,15 +122,13 @@ export const LdapSettingsSearching = ({
                         />
                     </div>
                     <div className="space-y-2">
-                        <SelectControl
+                        <SelectField
                             id="kc-search-scope"
                             name="config.searchScope[0]"
                             label={t("searchScope")}
                             labelIcon={t("searchScopeHelp")}
-                            controller={{
-                        defaultValue: "1"
-                    }}
-                    options={[
+                            defaultValue="1"
+                            options={[
                         { key: "1", value: t("oneLevel") },
                         { key: "2", value: t("subtree") }
                     ]}
@@ -176,13 +172,11 @@ export const LdapSettingsSearching = ({
                         </FormLabel>
                     </div>
                     <div className="space-y-2">
-                        <SelectControl
+                        <SelectField
                             name="config.referral.0"
                             label={t("referral")}
                             labelIcon={t("referralHelp")}
-                            controller={{
-                        defaultValue: ""
-                    }}
+                            defaultValue=""
                             options={["ignore", "follow"]}
                         />
                     </div>

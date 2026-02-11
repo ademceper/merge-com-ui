@@ -5,7 +5,7 @@ import { Controller, useFormContext } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 
 import { FormAccess } from "../../components/form/FormAccess";
-import { HelpItem, SelectControl } from "../../../shared/keycloak-ui-shared";
+import { HelpItem, SelectField } from "../../../shared/keycloak-ui-shared";
 import { convertAttributeNameToForm } from "../../util";
 import { FormFields } from "../ClientDetails";
 import useIsFeatureEnabled, { Feature } from "../../utils/useIsFeatureEnabled";
@@ -163,15 +163,13 @@ export const OpenIdConnectCompatibilityModes = ({
             </div>
 
             {isFeatureEnabled(Feature.StandardTokenExchangeV2) && (
-                <SelectControl
+                <SelectField
                     name={convertAttributeNameToForm<FormFields>(
                         "attributes.standard.token.exchange.enableRefreshRequestedTokenType"
                     )}
                     label={t("enableRefreshRequestedTokenType")}
                     labelIcon={t("enableRefreshRequestedTokenTypeHelp")}
-                    controller={{
-                        defaultValue: ""
-                    }}
+                    defaultValue=""
                     isDisabled={
                         tokenExchangeEnabled?.toString() !== "true" ||
                         useRefreshTokens?.toString() !== "true"

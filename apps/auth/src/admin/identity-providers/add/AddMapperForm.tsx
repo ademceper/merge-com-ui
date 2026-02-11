@@ -1,14 +1,15 @@
 import type IdentityProviderMapperRepresentation from "@keycloak/keycloak-admin-client/lib/defs/identityProviderMapperRepresentation";
 import type { IdentityProviderMapperTypeRepresentation } from "@keycloak/keycloak-admin-client/lib/defs/identityProviderMapperTypeRepresentation";
+import { FormLabel, HelpItem, TextControl } from "../../../shared/keycloak-ui-shared";
 import {
-    HelpItem,
-    KeycloakSelect,
-    SelectControl,
-    SelectOption,
-    SelectVariant,
-    TextControl
-} from "../../../shared/keycloak-ui-shared";
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue
+} from "@merge/ui/components/select";
 import { Label } from "@merge/ui/components/label";
+import { get } from "lodash-es";
 import { useState } from "react";
 import { Controller, UseFormReturn } from "react-hook-form";
 import { useTranslation } from "react-i18next";
@@ -48,16 +49,32 @@ export const AddMapperForm = ({
                     required: t("required")
                 }}
             />
-            <SelectControl
+            <FormLabel
                 name="config.syncMode"
                 label={t("syncModeOverride")}
                 labelIcon={t("syncModeOverrideHelp")}
-                options={syncModes.map(option => ({
-                    key: option.toUpperCase(),
-                    value: t(`syncModes.${option}`)
-                }))}
-                controller={{ defaultValue: syncModes[0].toUpperCase() }}
-            />
+                error={get(form.formState.errors, "config.syncMode")}
+            >
+                <Controller
+                    name="config.syncMode"
+                    control={form.control}
+                    defaultValue={syncModes[0].toUpperCase()}
+                    render={({ field }) => (
+                        <Select value={field.value ?? ""} onValueChange={field.onChange}>
+                            <SelectTrigger id="config.syncMode">
+                                <SelectValue placeholder={t("syncModeOverride")} />
+                            </SelectTrigger>
+                            <SelectContent>
+                                {syncModes.map((option) => (
+                                    <SelectItem key={option} value={option.toUpperCase()}>
+                                        {t(`syncModes.${option}`)}
+                                    </SelectItem>
+                                ))}
+                            </SelectContent>
+                        </Select>
+                    )}
+                />
+            </FormLabel>
             <div className="space-y-2">
                 <div className="flex items-center gap-2">
                     <Label htmlFor="identityProviderMapper">{t("mapperType")}</Label>
@@ -68,33 +85,39 @@ export const AddMapperForm = ({
                     defaultValue={mapperTypes[0].id}
                     control={control}
                     render={({ field }) => (
-                        <KeycloakSelect
-                            toggleId="identityProviderMapper"
-                            data-testid="idp-mapper-select"
-                            isDisabled={!!id}
-                            onToggle={() => setMapperTypeOpen(!mapperTypeOpen)}
-                            onSelect={value => {
-                                const mapperType =
-                                    value as IdentityProviderMapperTypeRepresentation;
-                                updateMapperType(mapperType);
-                                field.onChange(mapperType.id);
+                        <Select
+                            open={mapperTypeOpen}
+                            onOpenChange={setMapperTypeOpen}
+                            value={mapperType.name ?? mapperType.id ?? ""}
+                            onValueChange={(v) => {
+                                const selected = mapperTypes.find(
+                                    m => (m.name ?? m.id) === v
+                                );
+                                if (selected) {
+                                    updateMapperType(selected);
+                                    field.onChange(selected.id);
+                                }
                                 setMapperTypeOpen(false);
                             }}
-                            selections={mapperType.name}
-                            variant={SelectVariant.single}
+                            disabled={!!id}
                             aria-label={t("mapperType")}
-                            isOpen={mapperTypeOpen}
+                            data-testid="idp-mapper-select"
                         >
-                            {mapperTypes.map(option => (
-                                <SelectOption
-                                    data-testid={option.id}
-                                    key={option.name}
-                                    value={option.name ?? option.id ?? ""}
-                                >
-                                    {option.name}
-                                </SelectOption>
-                            ))}
-                        </KeycloakSelect>
+                            <SelectTrigger id="identityProviderMapper">
+                                <SelectValue />
+                            </SelectTrigger>
+                            <SelectContent>
+                                {mapperTypes.map(option => (
+                                    <SelectItem
+                                        data-testid={option.id}
+                                        key={option.name}
+                                        value={option.name ?? option.id ?? ""}
+                                    >
+                                        {option.name}
+                                    </SelectItem>
+                                ))}
+                            </SelectContent>
+                        </Select>
                     )}
                 />
             </div>

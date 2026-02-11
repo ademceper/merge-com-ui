@@ -1,13 +1,17 @@
 import type { UserProfileConfig } from "@keycloak/keycloak-admin-client/lib/defs/userProfileMetadata";
-import { KeycloakSelect,
-    label,
-    SelectVariant } from "../../../shared/keycloak-ui-shared";
+import { label } from "../../../shared/keycloak-ui-shared";
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue
+} from "@merge/ui/components/select";
 import { toast } from "@merge/ui/components/sonner";
 import { Alert, AlertDescription } from "@merge/ui/components/alert";
 import { Button } from "@merge/ui/components/button";
 import { Checkbox } from "@merge/ui/components/checkbox";
 import { Input } from "@merge/ui/components/input";
-import { SelectOption } from "../../../shared/keycloak-ui-shared";
 import { Check } from "@phosphor-icons/react";
 import { ReactNode, useState } from "react";
 import { useForm } from "react-hook-form";
@@ -126,42 +130,41 @@ export function UserDataTableAttributeSearchForm({
     const createAttributeKeyInputField = () => {
         if (profile) {
             return (
-                <KeycloakSelect
-                    data-testid="search-attribute-name-select"
-                    variant={SelectVariant.typeahead}
-                    onToggle={isOpen => setSelectAttributeKeyOpen(isOpen)}
-                    selections={getValues().displayName}
-                    onSelect={selectedValue => {
-                        setValue("displayName", selectedValue.toString());
+                <Select
+                    open={selectAttributeKeyOpen}
+                    onOpenChange={setSelectAttributeKeyOpen}
+                    value={getValues().displayName ?? ""}
+                    onValueChange={(selectedValue) => {
+                        setValue("displayName", selectedValue);
+                        const opt = profile.attributes?.find(
+                            o => label(t, o.displayName!, o.name) === selectedValue
+                        );
+                        if (opt) setValue("name", opt.name!);
                         if (isAttributeKeyDuplicate()) {
                             setError("name", { type: "conflict" });
                         } else {
                             clearErrors("name");
                         }
                     }}
-                    isOpen={selectAttributeKeyOpen}
-                    placeholderText={t("selectAttribute")}
-                    validated={errors.name && "error"}
-                    maxHeight={300}
-                    {...register("displayName", {
-                        required: true,
-                        validate: isAttributeNameValid
-                    })}
+                    aria-invalid={!!errors.name}
                 >
-                    {profile.attributes?.map(option => (
-                        <SelectOption
-                            key={option.name}
-                            value={label(t, option.displayName!, option.name)}
-                            onClick={e => {
-                                e.stopPropagation();
-                                setSelectAttributeKeyOpen(false);
-                                setValue("name", option.name!);
-                            }}
-                        >
-                            {label(t, option.displayName!, option.name)}
-                        </SelectOption>
-                    ))}
-                </KeycloakSelect>
+                    <SelectTrigger
+                        data-testid="search-attribute-name-select"
+                        className={errors.name ? "border-destructive" : ""}
+                    >
+                        <SelectValue placeholder={t("selectAttribute")} />
+                    </SelectTrigger>
+                    <SelectContent>
+                        {profile.attributes?.map(option => (
+                            <SelectItem
+                                key={option.name}
+                                value={label(t, option.displayName!, option.name)}
+                            >
+                                {label(t, option.displayName!, option.name)}
+                            </SelectItem>
+                        ))}
+                    </SelectContent>
+                </Select>
             );
         } else {
             return (

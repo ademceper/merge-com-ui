@@ -6,7 +6,7 @@ import PolicyProviderRepresentation from "@keycloak/keycloak-admin-client/lib/de
 import { useTranslation } from "react-i18next";
 import { Button } from "@merge/ui/components/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@merge/ui/components/dialog";
-import { getErrorDescription, getErrorMessage, SelectControl,
+import { getErrorDescription, getErrorMessage, SelectField,
     TextControl } from "../../../shared/keycloak-ui-shared";
 import { toast } from "@merge/ui/components/sonner";
 import { FormProvider, useForm, useWatch } from "react-hook-form";
@@ -173,7 +173,7 @@ const { handleSubmit, reset } = form;
                     />
                     <TextControl name="description" label={t("description")} />
                     {providers && providers.length > 0 && (
-                        <SelectControl
+                        <SelectField
                             name="type"
                             label={t("policyType")}
                             labelIcon={t("policyTypeHelpText")}
@@ -181,7 +181,7 @@ const { handleSubmit, reset } = form;
                                 key: provider.type!,
                                 value: capitalize(provider.type!)
                             }))}
-                            controller={{ defaultValue: "" }}
+                            defaultValue=""
                         />
                     )}
                     <ComponentType

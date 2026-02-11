@@ -1,4 +1,4 @@
-import { NumberControl, SelectControl } from "../../../shared/keycloak-ui-shared";
+import { NumberControl, SelectField } from "../../../shared/keycloak-ui-shared";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@merge/ui/components/collapsible";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -18,7 +18,7 @@ export const ExtendedOAuth2Settings = () => {
             <CollapsibleContent>
             <form>
                 <TextField field="config.defaultScope" label="scopes" />
-                <SelectControl
+                <SelectField
                     name="config.prompt"
                     label={t("prompt")}
                     options={[
@@ -28,7 +28,7 @@ export const ExtendedOAuth2Settings = () => {
                         { key: t("prompts.login"), value: "login" },
                         { key: t("prompts.select_account"), value: "select_account" }
                     ]}
-                    controller={{ defaultValue: "" }}
+                    defaultValue=""
                 />
                 <SwitchField
                     field="config.acceptsPromptNoneForwardFromClient"

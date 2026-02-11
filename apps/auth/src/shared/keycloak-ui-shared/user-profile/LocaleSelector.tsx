@@ -1,6 +1,14 @@
+import { get } from "lodash-es";
 import { useMemo } from "react";
-import { FormProvider } from "react-hook-form";
-import { SelectControl } from "../controls/select-control/SelectControl";
+import { FormProvider, Controller, useFormContext } from "react-hook-form";
+import { FormLabel } from "../controls/FormLabel";
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue
+} from "@merge/ui/components/select";
 import { UserProfileFieldProps } from "./UserProfileFields";
 
 const localeToDisplayName = (locale: string) => {
@@ -36,16 +44,37 @@ export const LocaleSelector = ({
     if (!locales.length) {
         return null;
     }
+    const options = [{ key: "", value: t("defaultLocale") }, ...locales];
     return (
         <FormProvider {...form}>
-            <SelectControl
-                data-testid="locale-select"
-                name="attributes.locale"
-                label={t("selectALocale")}
-                controller={{ defaultValue: "" }}
-                options={[{ key: "", value: t("defaultLocale") }, ...locales]}
-                variant={locales.length >= 10 ? "typeahead" : "single"}
-            />
+            <LocaleSelectInner t={t} options={options} />
         </FormProvider>
     );
 };
+
+function LocaleSelectInner({ t, options }: { t: UserProfileFieldProps["t"]; options: { key: string; value: string }[] }) {
+    const { control, formState: { errors } } = useFormContext();
+    return (
+        <FormLabel name="attributes.locale" label={t("selectALocale")} error={get(errors, "attributes.locale")}>
+            <Controller
+                name="attributes.locale"
+                control={control}
+                defaultValue=""
+                render={({ field }) => (
+                    <Select value={field.value ?? ""} onValueChange={field.onChange}>
+                        <SelectTrigger id="attributes.locale" data-testid="locale-select">
+                            <SelectValue placeholder={t("selectALocale")} />
+                        </SelectTrigger>
+                        <SelectContent>
+                            {options.map((opt) => (
+                                <SelectItem key={opt.key} value={opt.key}>
+                                    {opt.value}
+                                </SelectItem>
+                            ))}
+                        </SelectContent>
+                    </Select>
+                )}
+            />
+        </FormLabel>
+    );
+}
