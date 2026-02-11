@@ -60,22 +60,25 @@ export const OptionComponent = (props: UserProfileFieldProps) => {
                         </div>
                     ) : (
                         <RadioGroup
-                            value={field.value}
-                            onValueChange={field.onChange}
+                            value={field.value || "__empty__"}
+                            onValueChange={(v) => field.onChange(v === "__empty__" ? "" : v)}
                             disabled={attribute.readOnly}
                             className="flex flex-col gap-2"
                         >
-                            {options.map(option => (
-                                <div key={option} className="flex items-center gap-2">
-                                    <RadioGroupItem value={option} id={option} data-testid={option} />
+                            {options.map(option => {
+                            const value = option || "__empty__";
+                            return (
+                                <div key={value} className="flex items-center gap-2">
+                                    <RadioGroupItem value={value} id={value} data-testid={value} />
                                     <Label
-                                        htmlFor={option}
+                                        htmlFor={value}
                                         className="cursor-pointer text-sm font-normal"
                                     >
                                         {optionLabelText(option)}
                                     </Label>
                                 </div>
-                            ))}
+                            );
+                        })}
                         </RadioGroup>
                     )
                 }

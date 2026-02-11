@@ -289,28 +289,25 @@ export const AttributeGeneralSettings = () => {
                                         data-testid="requiredFor"
                                         defaultValue={REQUIRED_FOR[0].value}
                                         control={form.control}
-                                        render={({ field }) => (
-                                            <div>
-                                                {REQUIRED_FOR.map(option => (
-                                                    <div key={option.label} className="flex items-center gap-2 mb-2">
-                                                        <input
-                                                            type="radio"
-                                                            id={option.label}
-                                                            data-testid={option.label}
-                                                            checked={isEqual(
-                                                                field.value,
-                                                                option.value
-                                                            )}
-                                                            name="roles"
-                                                            onChange={() => {
-                                                                field.onChange(option.value);
-                                                            }}
-                                                        />
-                                                        <Label htmlFor={option.label}>{t(option.label)}</Label>
-                                                    </div>
-                                                ))}
-                                            </div>
-                                        )}
+                                        render={({ field }) => {
+                                            const selectedLabel = REQUIRED_FOR.find(opt => isEqual(field.value, opt.value))?.label ?? REQUIRED_FOR[0].label;
+                                            return (
+                                                <RadioGroup
+                                                    value={selectedLabel}
+                                                    onValueChange={(label) => {
+                                                        const option = REQUIRED_FOR.find(o => o.label === label);
+                                                        if (option) field.onChange(option.value);
+                                                    }}
+                                                >
+                                                    {REQUIRED_FOR.map(option => (
+                                                        <div key={option.label} className="flex items-center gap-2 mb-2">
+                                                            <RadioGroupItem value={option.label} id={option.label} data-testid={option.label} />
+                                                            <Label htmlFor={option.label}>{t(option.label)}</Label>
+                                                        </div>
+                                                    ))}
+                                                </RadioGroup>
+                                            );
+                                        }}
                                     />
                                 </div>
                                 <div className="space-y-2">

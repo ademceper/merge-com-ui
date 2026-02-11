@@ -269,10 +269,8 @@ function RealmSettingsGeneralTabForm({
                                 label={t("signatureAlgorithmIdentityProviderMetadata")}
                                 labelIcon={t("signatureAlgorithmIdentityProviderMetadataHelp")}
                                 defaultValue=""
-                                options={[
-                                    { key: "", value: t("choose") },
-                                    ...SIGNATURE_ALGORITHMS.map(v => ({ key: v, value: v }))
-                                ]}
+                                placeholderText={t("choose")}
+                                options={SIGNATURE_ALGORITHMS.map(v => ({ key: v, value: v }))}
                             />
                         </div>
                     </FormPanel>

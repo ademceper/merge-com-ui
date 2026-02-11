@@ -27,11 +27,6 @@ export const ThemeSettingsTab = ({ realm, save }: ThemeSettingsTabProps) => {
     };
     useEffect(setupForm, []);
 
-    const appendEmptyChoice = (items: { key: string; value: string }[]) => [
-        { key: "", value: t("choose") },
-        ...items
-    ];
-
     return (
         <div className="pt-0">
             <FormProvider {...form}>
@@ -56,12 +51,11 @@ export const ThemeSettingsTab = ({ realm, save }: ThemeSettingsTabProps) => {
                                 label={t("loginTheme")}
                                 labelIcon={t("loginThemeHelp")}
                                 defaultValue=""
-                                options={appendEmptyChoice(
-                                    themeTypes.login.map(theme => ({
-                                        key: theme.name,
-                                        value: theme.name
-                                    }))
-                                )}
+                                placeholderText={t("choose")}
+                                options={themeTypes.login.map(theme => ({
+                                    key: theme.name,
+                                    value: theme.name
+                                }))}
                             />
                             <SelectField
                                 id="kc-account-theme"
@@ -70,12 +64,10 @@ export const ThemeSettingsTab = ({ realm, save }: ThemeSettingsTabProps) => {
                                 labelIcon={t("accountThemeHelp")}
                                 placeholderText={t("selectATheme")}
                                 defaultValue=""
-                                options={appendEmptyChoice(
-                                    themeTypes.account.map(theme => ({
-                                        key: theme.name,
-                                        value: theme.name
-                                    }))
-                                )}
+                                options={themeTypes.account.map(theme => ({
+                                    key: theme.name,
+                                    value: theme.name
+                                }))}
                             />
                             <SelectField
                                 id="kc-admin-theme"
@@ -84,12 +76,10 @@ export const ThemeSettingsTab = ({ realm, save }: ThemeSettingsTabProps) => {
                                 labelIcon={t("adminThemeHelp")}
                                 placeholderText={t("selectATheme")}
                                 defaultValue=""
-                                options={appendEmptyChoice(
-                                    themeTypes.admin.map(theme => ({
-                                        key: theme.name,
-                                        value: theme.name
-                                    }))
-                                )}
+                                options={themeTypes.admin.map(theme => ({
+                                    key: theme.name,
+                                    value: theme.name
+                                }))}
                             />
                             <SelectField
                                 id="kc-email-theme"
@@ -98,12 +88,10 @@ export const ThemeSettingsTab = ({ realm, save }: ThemeSettingsTabProps) => {
                                 labelIcon={t("emailThemeHelp")}
                                 placeholderText={t("selectATheme")}
                                 defaultValue=""
-                                options={appendEmptyChoice(
-                                    themeTypes.email.map(theme => ({
-                                        key: theme.name,
-                                        value: theme.name
-                                    }))
-                                )}
+                                options={themeTypes.email.map(theme => ({
+                                    key: theme.name,
+                                    value: theme.name
+                                }))}
                             />
                         </div>
                     </FormPanel>

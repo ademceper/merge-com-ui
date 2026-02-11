@@ -1,5 +1,6 @@
 import { useTranslation } from "react-i18next";
 import { Label } from "@merge/ui/components/label";
+import { RadioGroup, RadioGroupItem } from "@merge/ui/components/radio-group";
 import { HelpItem } from "../../../shared/keycloak-ui-shared";
 import { useFormContext } from "react-hook-form";
 import { useState, type JSX } from "react";
@@ -57,36 +58,23 @@ export const ResourceType = ({
                             fieldLabelId="enforce-access-to"
                         />
                     </div>
-                    <div className="flex flex-col gap-2">
-                        <label className="flex items-center gap-2 cursor-pointer">
-                            <input
-                                type="radio"
-                                id="allResources"
-                                data-testid="allResources"
-                                checked={!isSpecificResources}
-                                name="EnforceAccessTo"
-                                onChange={() => {
-                                    setIsSpecificResources(false);
-                                    form.setValue("resources", []);
-                                }}
-                            />
-                            {t(`allResourceType`, { resourceType })}
-                        </label>
-                        <label className="flex items-center gap-2 cursor-pointer">
-                            <input
-                                type="radio"
-                                id="specificResources"
-                                data-testid="specificResources"
-                                checked={isSpecificResources}
-                                name="EnforceAccessTo"
-                                onChange={() => {
-                                    setIsSpecificResources(true);
-                                    form.setValue("resources", []);
-                                }}
-                            />
-                            {t(`specificResourceType`, { resourceType })}
-                        </label>
-                    </div>
+                    <RadioGroup
+                        value={isSpecificResources ? "specificResources" : "allResources"}
+                        onValueChange={(v) => {
+                            setIsSpecificResources(v === "specificResources");
+                            form.setValue("resources", []);
+                        }}
+                        className="flex flex-col gap-2"
+                    >
+                        <div className="flex items-center gap-2">
+                            <RadioGroupItem value="allResources" id="allResources" data-testid="allResources" />
+                            <Label htmlFor="allResources" className="cursor-pointer">{t(`allResourceType`, { resourceType })}</Label>
+                        </div>
+                        <div className="flex items-center gap-2">
+                            <RadioGroupItem value="specificResources" id="specificResources" data-testid="specificResources" />
+                            <Label htmlFor="specificResources" className="cursor-pointer">{t(`specificResourceType`, { resourceType })}</Label>
+                        </div>
+                    </RadioGroup>
                 </div>
             )}
             {isSpecificResources && ComponentType && (

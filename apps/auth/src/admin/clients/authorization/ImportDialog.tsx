@@ -42,11 +42,11 @@ export const ImportDialog = ({ onConfirm, closeDialog }: ImportDialogProps) => {
                                         fieldLabelId="policyEnforcementMode"
                                     />
                                 </div>
-                                <RadioGroup value={imported.policyEnforcementMode} disabled>
+                                <RadioGroup value={imported.policyEnforcementMode ?? "__none__"} disabled>
                                     <div className="flex items-center gap-2">
-                                        <RadioGroupItem value={imported.policyEnforcementMode || ""} id="policyEnforcementMode" />
+                                        <RadioGroupItem value={imported.policyEnforcementMode ?? "__none__"} id="policyEnforcementMode" />
                                         <Label htmlFor="policyEnforcementMode">
-                                            {t(`policyEnforcementModes.${imported.policyEnforcementMode}`)}
+                                            {imported.policyEnforcementMode ? t(`policyEnforcementModes.${imported.policyEnforcementMode}`) : "—"}
                                         </Label>
                                     </div>
                                 </RadioGroup>
@@ -59,11 +59,11 @@ export const ImportDialog = ({ onConfirm, closeDialog }: ImportDialogProps) => {
                                         fieldLabelId="decisionStrategy"
                                     />
                                 </div>
-                                <RadioGroup value={imported.decisionStrategy} disabled>
+                                <RadioGroup value={imported.decisionStrategy ?? "__none__"} disabled>
                                     <div className="flex items-center gap-2">
-                                        <RadioGroupItem value={imported.decisionStrategy || ""} id="decisionStrategy" />
+                                        <RadioGroupItem value={imported.decisionStrategy ?? "__none__"} id="decisionStrategy" />
                                         <Label htmlFor="decisionStrategy">
-                                            {t(`decisionStrategies.${imported.decisionStrategy}`)}
+                                            {imported.decisionStrategy ? t(`decisionStrategies.${imported.decisionStrategy}`) : "—"}
                                         </Label>
                                     </div>
                                 </RadioGroup>

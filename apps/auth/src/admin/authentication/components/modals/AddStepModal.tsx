@@ -2,6 +2,8 @@ import type { AuthenticationProviderRepresentation } from "@keycloak/keycloak-ad
 import { useFetch } from "../../../../shared/keycloak-ui-shared";
 import { Button } from "@merge/ui/components/button";
 import { Input } from "@merge/ui/components/input";
+import { RadioGroup, RadioGroupItem } from "@merge/ui/components/radio-group";
+import { Label } from "@merge/ui/components/label";
 import { MagnifyingGlass } from "@phosphor-icons/react";
 import {
     Dialog,
@@ -24,29 +26,38 @@ type AuthenticationProviderListProps = {
 
 const AuthenticationProviderList = ({
     list,
-    setValue
-}: AuthenticationProviderListProps) => {
+    setValue,
+    selectedId
+}: AuthenticationProviderListProps & { selectedId?: string }) => {
     return (
         <div className="p-6">
             <form>
-                {list?.map(provider => (
-                    <label key={provider.id} className="flex items-start gap-2 py-1 cursor-pointer">
-                        <input
-                            type="radio"
-                            id={provider.id!}
-                            name="provider"
-                            data-testid={provider.id}
-                            onChange={() => {
-                                setValue(provider);
-                            }}
-                            className="mt-1"
-                        />
-                        <div>
-                            <div>{provider.displayName}</div>
-                            {provider.description && <div className="text-sm text-muted-foreground">{provider.description}</div>}
+                <RadioGroup
+                    value={selectedId ?? "__none__"}
+                    onValueChange={(id) => {
+                        const provider = list?.find(p => p.id === id);
+                        setValue(provider);
+                    }}
+                    className="flex flex-col gap-2"
+                >
+                    {list?.map(provider => (
+                        <div key={provider.id} className="flex items-start gap-2 py-1">
+                            <RadioGroupItem
+                                value={provider.id!}
+                                id={provider.id!}
+                                data-testid={provider.id}
+                                className="mt-1"
+                            />
+                            <Label
+                                htmlFor={provider.id!}
+                                className="cursor-pointer flex-1"
+                            >
+                                <div>{provider.displayName}</div>
+                                {provider.description && <div className="text-sm text-muted-foreground">{provider.description}</div>}
+                            </Label>
                         </div>
-                    </label>
-                ))}
+                    ))}
+                </RadioGroup>
             </form>
         </div>
     );
@@ -151,6 +162,7 @@ export const AddStepModal = ({ name, type, onSelect }: AddStepModalProps) => {
                         <AuthenticationProviderList
                             list={page.slice(0, max)}
                             setValue={setValue}
+                            selectedId={value?.id}
                         />
                     </>
                 )}

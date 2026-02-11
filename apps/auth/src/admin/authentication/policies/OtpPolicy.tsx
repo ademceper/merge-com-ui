@@ -7,6 +7,8 @@ import {
     SelectField,
     SwitchControl,
 } from "../../../shared/keycloak-ui-shared";
+import { RadioGroup, RadioGroupItem } from "@merge/ui/components/radio-group";
+import { Label } from "@merge/ui/components/label";
 import { toast } from "@merge/ui/components/sonner";
 import { Badge } from "@merge/ui/components/badge";
 import { useMemo } from "react";
@@ -110,21 +112,18 @@ const localeSort = useLocaleSort();
                                 defaultValue={POLICY_TYPES[0]}
                                 control={control}
                                 render={({ field: { value, onChange } }) => (
-                                    <div className="flex flex-wrap gap-4">
+                                    <RadioGroup
+                                        value={value}
+                                        onValueChange={onChange}
+                                        className="flex flex-wrap gap-4"
+                                    >
                                         {POLICY_TYPES.map(type => (
-                                            <label key={type} className="flex items-center gap-2 cursor-pointer">
-                                                <input
-                                                    type="radio"
-                                                    id={type}
-                                                    data-testid={type}
-                                                    checked={value === type}
-                                                    name="otpPolicyType"
-                                                    onChange={() => onChange(type)}
-                                                />
-                                                {t(`policyType.${type}`)}
-                                            </label>
+                                            <div key={type} className="flex items-center gap-2">
+                                                <RadioGroupItem value={type} id={type} data-testid={type} />
+                                                <Label htmlFor={type} className="cursor-pointer">{t(`policyType.${type}`)}</Label>
+                                            </div>
                                         ))}
-                                    </div>
+                                    </RadioGroup>
                                 )}
                             />
                         </div>
@@ -152,21 +151,18 @@ const localeSort = useLocaleSort();
                                 defaultValue={NUMBER_OF_DIGITS[0]}
                                 control={control}
                                 render={({ field }) => (
-                                    <div className="flex flex-wrap gap-4">
+                                    <RadioGroup
+                                        value={String(field.value)}
+                                        onValueChange={v => field.onChange(Number(v))}
+                                        className="flex flex-wrap gap-4"
+                                    >
                                         {NUMBER_OF_DIGITS.map(type => (
-                                            <label key={type} className="flex items-center gap-2 cursor-pointer">
-                                                <input
-                                                    type="radio"
-                                                    id={`digit-${type}`}
-                                                    data-testid={`digit-${type}`}
-                                                    checked={field.value === type}
-                                                    name="otpPolicyDigits"
-                                                    onChange={() => field.onChange(type)}
-                                                />
-                                                {type}
-                                            </label>
+                                            <div key={type} className="flex items-center gap-2">
+                                                <RadioGroupItem value={String(type)} id={`digit-${type}`} data-testid={`digit-${type}`} />
+                                                <Label htmlFor={`digit-${type}`} className="cursor-pointer">{type}</Label>
+                                            </div>
                                         ))}
-                                    </div>
+                                    </RadioGroup>
                                 )}
                             />
                         </div>
