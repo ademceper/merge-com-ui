@@ -1,13 +1,14 @@
 import type GroupRepresentation from "@keycloak/keycloak-admin-client/lib/defs/groupRepresentation";
 import { useFetch } from "../../shared/keycloak-ui-shared";
 import { DropdownMenuItem } from "@merge/ui/components/dropdown-menu";
+import { Sheet, SheetContent } from "@merge/ui/components/sheet";
 import { SidebarProvider, useSidebar } from "@merge/ui/components/sidebar";
 import { Button } from "@merge/ui/components/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@merge/ui/components/tabs";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@merge/ui/components/tooltip";
 import { CaretLeft, CaretRight, DotsThreeVertical, PencilSimple, Trash } from "@phosphor-icons/react";
 import type { ReactNode } from "react";
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useAdminClient } from "../admin-client";
@@ -31,9 +32,10 @@ import { getId, getLastId } from "./groupIdUtils";
 import { toGroups } from "./routes/Groups";
 import { cn } from "@merge/ui/lib/utils";
 
-/** Sayfa akışında (fixed değil), ana sidebar gibi smooth açılıp kapanan grup paneli. */
+/** Desktop: sayfa akışında açılıp kapanan panel. Mobil: render edilmez (yerine Sheet kullanılır). */
 function GroupsSidebarPanel({ children }: { children: ReactNode }) {
-    const { state } = useSidebar();
+    const { state, isMobile } = useSidebar();
+    if (isMobile) return null;
     const collapsed = state === "collapsed";
     return (
         <div
@@ -48,10 +50,35 @@ function GroupsSidebarPanel({ children }: { children: ReactNode }) {
     );
 }
 
+/** Mobilde gruplar paneli overlay Sheet olarak açılır; sayfa yapısı bozulmaz. */
+function GroupsMobileSheet({
+    children,
+    open,
+    onOpenChange
+}: {
+    children: ReactNode;
+    open: boolean;
+    onOpenChange: (open: boolean) => void;
+}) {
+    const { isMobile } = useSidebar();
+    if (!isMobile) return null;
+    return (
+        <Sheet open={open} onOpenChange={onOpenChange}>
+            <SheetContent
+                side="left"
+                className="w-64 max-w-[85vw] p-0 flex flex-col [&>button]:hidden"
+                showCloseButton={true}
+            >
+                <div className="flex flex-1 flex-col min-h-0 overflow-auto p-2 pt-12">{children}</div>
+            </SheetContent>
+        </Sheet>
+    );
+}
+
 function GroupsSidebarTrigger() {
-    const { state, toggleSidebar } = useSidebar();
+    const { state, toggleSidebar, isMobile, openMobile } = useSidebar();
     const { t } = useTranslation();
-    const expanded = state === "expanded";
+    const expanded = isMobile ? openMobile : state === "expanded";
     return (
         <TooltipProvider>
             <Tooltip>
@@ -73,6 +100,37 @@ function GroupsSidebarTrigger() {
                 <TooltipContent>{expanded ? t("hide") : t("show")}</TooltipContent>
             </Tooltip>
         </TooltipProvider>
+    );
+}
+
+/** SidebarProvider içinde useSidebar ile mobil/desktop ayrımı ve Sheet kullanımı. */
+function GroupsSectionLayout({
+    groupTree,
+    mainContent
+}: {
+    groupTree: ReactNode;
+    mainContent: ReactNode;
+}) {
+    const { isMobile, openMobile, setOpenMobile } = useSidebar();
+    const location = useLocation();
+    useEffect(() => {
+        if (isMobile) setOpenMobile(false);
+    }, [isMobile, location.pathname, setOpenMobile]);
+    return (
+        <>
+            <GroupsMobileSheet open={openMobile} onOpenChange={setOpenMobile}>
+                {groupTree}
+            </GroupsMobileSheet>
+            <GroupsSidebarPanel>{groupTree}</GroupsSidebarPanel>
+            <div
+                className={cn(
+                    "flex min-w-0 flex-1 flex-col overflow-hidden",
+                    !isMobile && "pl-4"
+                )}
+            >
+                {mainContent}
+            </div>
+        </>
     );
 }
 
@@ -170,18 +228,20 @@ export default function GroupsSection() {
             )}
             <div className="py-6 px-0">
                 <SidebarProvider defaultOpen={true} className="flex min-h-0 w-full">
-                    <GroupsSidebarPanel>
-                        <GroupTree
-                            key={key}
-                            refresh={refresh}
-                            canViewDetails={canViewDetails}
-                        />
-                    </GroupsSidebarPanel>
-                    <div className="flex min-w-0 flex-1 flex-col overflow-hidden pl-4">
-                        <div className="flex min-w-0 flex-wrap items-center gap-2">
-                            <GroupsSidebarTrigger />
-                        </div>
-                        <ViewHeader
+                    <GroupsSectionLayout
+                        groupTree={
+                            <GroupTree
+                                key={key}
+                                refresh={refresh}
+                                canViewDetails={canViewDetails}
+                            />
+                        }
+                        mainContent={
+                            <>
+                                <div className="flex min-w-0 flex-wrap items-center gap-2">
+                                    <GroupsSidebarTrigger />
+                                </div>
+                                <ViewHeader
                             titleKey={!id ? "groups" : currentGroup()?.name!}
                             subKey={!id ? "groupsDescription" : ""}
                             helpUrl={!id ? helpUrls.groupsUrl : ""}
@@ -289,7 +349,9 @@ export default function GroupsSection() {
                                 <GroupTable key={key} refresh={refresh} />
                             </div>
                         )}
-                    </div>
+                            </>
+                        }
+                    />
                 </SidebarProvider>
             </div>
         </div>

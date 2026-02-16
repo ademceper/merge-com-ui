@@ -3,7 +3,7 @@ import type { KcContext } from "../KcContext";
 import type { I18n } from "../i18n";
 import AuthLayout from "../components/AuthLayout";
 import { Link } from "@merge/ui/components/link";
-import { SocialLoginButtons, getFallbackSocialProviders } from "../components/SocialLoginButtons";
+import { SocialLoginButtons } from "../components/SocialLoginButtons";
 import { Input } from "@merge/ui/components/input";
 import { Button } from "@merge/ui/components/button";
 import { Alert, AlertDescription } from "@merge/ui/components/alert";
@@ -181,20 +181,15 @@ export default function Register(props: PageProps<Extract<KcContext, { pageId: "
                     </Button>
                 </form>
 
-                {(() => {
-                    const providers = socialProviders?.length
-                        ? socialProviders
-                        : getFallbackSocialProviders();
-                    return providers.length > 0 ? (
-                        <SocialLoginButtons
-                            providers={providers}
-                            dividerLabel={msgStr("orSeparator") || "Veya"}
-                            getButtonLabel={(displayName) =>
-                                msgStr("continueWithProvider")?.replace("{{provider}}", displayName) || `${displayName} ile devam edin`
-                            }
-                        />
-                    ) : null;
-                })()}
+                {socialProviders && socialProviders.length > 0 && (
+                    <SocialLoginButtons
+                        providers={socialProviders}
+                        dividerLabel={msgStr("orSeparator") || "Veya"}
+                        getButtonLabel={(displayName) =>
+                            msgStr("continueWithProvider")?.replace("{{provider}}", displayName) || `${displayName} ile devam edin`
+                        }
+                    />
+                )}
 
                 <p className="text-center text-sm text-muted-foreground pt-2">
                     {msg("backToLogin")}{" "}

@@ -4,7 +4,7 @@ import type { KcContext } from "../KcContext";
 import type { I18n } from "../i18n";
 import AuthLayout from "../components/AuthLayout";
 import { Link } from "@merge/ui/components/link";
-import { SocialLoginButtons, getFallbackSocialProviders } from "../components/SocialLoginButtons";
+import { SocialLoginButtons } from "../components/SocialLoginButtons";
 import { Input } from "@merge/ui/components/input";
 import { Button } from "@merge/ui/components/button";
 import { Alert, AlertDescription } from "@merge/ui/components/alert";
@@ -20,7 +20,7 @@ export default function Login(props: PageProps<Extract<KcContext, { pageId: "log
 
     const [isLoginButtonDisabled, setIsLoginButtonDisabled] = useState(false);
 
-    const providers = realm.password && (social?.providers?.length ? social.providers : getFallbackSocialProviders());
+    const providers = realm.password && social?.providers?.length ? social.providers : undefined;
 
     return (
         <AuthLayout>

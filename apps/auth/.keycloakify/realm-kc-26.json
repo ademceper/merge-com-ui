@@ -711,7 +711,7 @@
                 ]
             },
             "notBefore": 0,
-            "groups": []
+            "groups": ["/adadada/aaaaa/aaaaaaaaaaaaaaadem153535sadadada"]
         }
     ],
     "scopeMappings": [
@@ -1035,8 +1035,7 @@
             "adminUrl": "https://my-theme.keycloakify.dev",
             "baseUrl": "https://my-theme.keycloakify.dev",
             "description": "",
-            "rootUrl": "https://my-theme.keycloakify.dev",
-            "protocolMappers": []
+            "rootUrl": "https://my-theme.keycloakify.dev"
         },
         {
             "id": "e05cc68c-5e53-4796-ae3a-a1bfbf5c51bb",
@@ -1868,83 +1867,17 @@
     "adminEventsDetailsEnabled": true,
     "identityProviders": [
         {
-            "addReadTokenRoleOnCreate": false,
-            "alias": "apple",
-            "authenticateByDefault": false,
-            "displayName": "Apple",
-            "enabled": true,
-            "firstBrokerLoginFlowAlias": "first broker login",
-            "internalId": "32146295-0665-407c-b208-027898b986e3",
-            "linkOnly": false,
-            "providerId": "oidc",
-            "storeToken": false,
-            "trustEmail": true,
-            "config": {
-                "authorizationUrl": "https://appleid.apple.com/auth/authorize",
-                "clientId": "YOUR_APPLE_SERVICE_ID",
-                "clientSecret": "YOUR_APPLE_CLIENT_SECRET",
-                "defaultScope": "openid name email",
-                "guiOrder": "0",
-                "issuer": "https://appleid.apple.com",
-                "tokenUrl": "https://appleid.apple.com/auth/token"
-            },
-            "types": [
-                "USER_AUTHENTICATION",
-                "CLIENT_ASSERTION",
-                "EXCHANGE_EXTERNAL_TOKEN",
-                "JWT_AUTHORIZATION_GRANT"
-            ]
-        },
-        {
-            "addReadTokenRoleOnCreate": false,
-            "alias": "facebook",
-            "authenticateByDefault": false,
-            "displayName": "Facebook",
-            "enabled": true,
-            "firstBrokerLoginFlowAlias": "first broker login",
-            "internalId": "64fa0f6d-089d-4081-8694-b6eadbe9bd81",
-            "linkOnly": false,
-            "providerId": "facebook",
-            "storeToken": false,
-            "trustEmail": true,
-            "config": {
-                "clientId": "YOUR_FACEBOOK_APP_ID",
-                "clientSecret": "YOUR_FACEBOOK_APP_SECRET",
-                "defaultScope": "email public_profile",
-                "guiOrder": "2"
-            },
-            "types": []
-        },
-        {
-            "addReadTokenRoleOnCreate": false,
             "alias": "google",
-            "authenticateByDefault": false,
             "displayName": "Google",
             "enabled": true,
-            "firstBrokerLoginFlowAlias": "first broker login",
-            "internalId": "d77219f2-e739-4218-96f2-0df1c2bd6efa",
-            "linkOnly": false,
+            "internalId": "fe7b91df-87a3-4c32-8deb-a3ad1a834834",
             "providerId": "google",
-            "storeToken": false,
-            "trustEmail": true,
-            "config": {
-                "clientId": "YOUR_GOOGLE_CLIENT_ID",
-                "clientSecret": "YOUR_GOOGLE_CLIENT_SECRET",
-                "defaultScope": "openid profile email",
-                "guiOrder": "1"
-            },
-            "types": []
-        },
-        {
-            "alias": "linkedin-openid-connect",
-            "displayName": "LinkedIn",
-            "enabled": true,
-            "internalId": "3a2a1fa7-00bf-4563-bb12-27e8e7a8ae06",
-            "providerId": "linkedin-openid-connect",
             "config": {
                 "clientId": "a",
                 "clientSecret": "a",
-                "guiOrder": "3"
+                "guiOrder": "1",
+                "offlineAccess": "false",
+                "userIp": "false"
             },
             "types": []
         }
@@ -1970,14 +1903,14 @@
                 "subComponents": {},
                 "config": {
                     "allowed-protocol-mapper-types": [
-                        "oidc-address-mapper",
-                        "saml-user-attribute-mapper",
-                        "oidc-usermodel-property-mapper",
-                        "saml-role-list-mapper",
-                        "oidc-usermodel-attribute-mapper",
                         "saml-user-property-mapper",
                         "oidc-full-name-mapper",
-                        "oidc-sha256-pairwise-sub-mapper"
+                        "oidc-usermodel-attribute-mapper",
+                        "oidc-usermodel-property-mapper",
+                        "saml-role-list-mapper",
+                        "oidc-sha256-pairwise-sub-mapper",
+                        "oidc-address-mapper",
+                        "saml-user-attribute-mapper"
                     ]
                 }
             },
@@ -2007,14 +1940,14 @@
                 "subComponents": {},
                 "config": {
                     "allowed-protocol-mapper-types": [
-                        "saml-user-property-mapper",
-                        "oidc-address-mapper",
-                        "saml-role-list-mapper",
-                        "oidc-sha256-pairwise-sub-mapper",
-                        "oidc-full-name-mapper",
-                        "oidc-usermodel-property-mapper",
                         "oidc-usermodel-attribute-mapper",
-                        "saml-user-attribute-mapper"
+                        "oidc-address-mapper",
+                        "saml-user-attribute-mapper",
+                        "oidc-usermodel-property-mapper",
+                        "saml-role-list-mapper",
+                        "oidc-full-name-mapper",
+                        "saml-user-property-mapper",
+                        "oidc-sha256-pairwise-sub-mapper"
                     ]
                 }
             },
