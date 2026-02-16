@@ -14,10 +14,11 @@ import {
     DropdownMenuTrigger,
 } from "@merge/ui/components/dropdown-menu";
 import {
-    DataTable,
     DataTableRowActions,
     type ColumnDef,
 } from "@merge/ui/components/table";
+import { DraggableTableRows } from "@merge/ui/components/table-draggable-rows";
+import { Input } from "@merge/ui/components/input";
 import { CardTitle } from "@merge/ui/components/card";
 import {
     Cube,
@@ -32,6 +33,7 @@ import {
     TwitterLogo,
 } from "@phosphor-icons/react";
 import { groupBy, sortBy } from "lodash-es";
+import type { SetStateAction } from "react";
 import { Fragment, useCallback, useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Link, useNavigate } from "react-router-dom";
@@ -53,7 +55,6 @@ import { useServerInfo } from "../context/server-info/ServerInfoProvider";
 import helpUrls from "../help-urls";
 import { toEditOrganization } from "../organizations/routes/EditOrganization";
 import { upperCaseFormatter } from "../util";
-import { ManageOrderDialog } from "./ManageOrderDialog";
 import { toIdentityProvider } from "./routes/IdentityProvider";
 import { toIdentityProviderCreate } from "./routes/IdentityProviderCreate";
 import { Trash } from "@phosphor-icons/react";
@@ -99,9 +100,9 @@ export default function IdentityProvidersSection() {
     const [key, setKey] = useState(0);
     const refresh = useCallback(() => setKey((k) => k + 1), []);
     const [hide, setHide] = useState(false);
-    const [manageDisplayDialog, setManageDisplayDialog] = useState(false);
     const [hasProviders, setHasProviders] = useState(false);
     const [providers, setProviders] = useState<IdentityProviderRepresentation[]>([]);
+    const [search, setSearch] = useState("");
     const [selectedProvider, setSelectedProvider] = useState<IdentityProviderRepresentation>();
 
     useEffect(() => {
@@ -118,7 +119,12 @@ export default function IdentityProvidersSection() {
                 ]);
                 if (cancelled) return;
                 setHasProviders((firstPage?.length ?? 0) > 0);
-                setProviders(list ?? []);
+                setProviders(
+                    sortBy(list ?? [], [
+                        (p) => Number(p.config?.guiOrder ?? 0),
+                        "alias",
+                    ]),
+                );
             } catch {
                 if (!cancelled) {
                     setHasProviders(false);
@@ -130,6 +136,76 @@ export default function IdentityProvidersSection() {
             cancelled = true;
         };
     }, [key, hide, adminClient]);
+
+    const filteredProviders = useMemo(() => {
+        if (!search.trim()) return providers;
+        const q = search.trim().toLowerCase();
+        return providers.filter(
+            (p) =>
+                p.alias?.toLowerCase().includes(q) ||
+                p.displayName?.toLowerCase().includes(q) ||
+                p.providerId?.toLowerCase().includes(q),
+        );
+    }, [providers, search]);
+
+    const setTableData = useCallback(
+        (action: SetStateAction<IdentityProviderRepresentation[]>) => {
+            setProviders((current) => {
+                const next =
+                    typeof action === "function"
+                        ? action(filteredProviders)
+                        : action;
+                if (next.length === current.length && current.length > 0) {
+                    return next;
+                }
+                const filteredSet = new Set(next.map((p) => p.alias));
+                let j = 0;
+                return current.map((p) =>
+                    filteredSet.has(p.alias!) ? next[j++] : p,
+                );
+            });
+        },
+        [filteredProviders],
+    );
+
+    const handleOrderChange = useCallback(
+        async (reorderedData: IdentityProviderRepresentation[]) => {
+            const filteredSet = new Set(reorderedData.map((p) => p.alias));
+            const fullOrder =
+                filteredSet.size < providers.length
+                    ? (() => {
+                          let j = 0;
+                          return providers.map((p) =>
+                              filteredSet.has(p.alias!)
+                                  ? reorderedData[j++]
+                                  : p,
+                          );
+                      })()
+                    : reorderedData;
+
+            const updates = fullOrder.map((provider, index) => {
+                const updated = {
+                    ...provider,
+                    config: { ...provider.config, guiOrder: String(index) },
+                };
+                return adminClient.identityProviders.update(
+                    { alias: provider.alias! },
+                    updated,
+                );
+            });
+            try {
+                await Promise.all(updates);
+                toast.success(t("orderChangeSuccess"));
+                refresh();
+            } catch (error) {
+                toast.error(
+                    t("orderChangeError", { error: getErrorMessage(error) }),
+                    { description: getErrorDescription(error) },
+                );
+            }
+        },
+        [adminClient, t, refresh, providers],
+    );
 
     const navigateToCreate = (providerId: string) =>
         navigate(toIdentityProviderCreate({ realm, providerId }));
@@ -272,15 +348,6 @@ export default function IdentityProvidersSection() {
                     </AlertDialogFooter>
                 </AlertDialogContent>
             </AlertDialog>
-            {manageDisplayDialog && (
-                <ManageOrderDialog
-                    hideRealmBasedIdps={hide}
-                    onClose={() => {
-                        setManageDisplayDialog(false);
-                        refresh();
-                    }}
-                />
-            )}
             <ViewHeader
                 titleKey="identityProviders"
                 subKey="listExplain"
@@ -338,53 +405,49 @@ export default function IdentityProvidersSection() {
                     </div>
                 )}
                 {hasProviders && (
-                    <DataTable<IdentityProviderRepresentation>
-                        columns={columns}
-                        data={providers}
-                        searchColumnId="alias"
-                        searchPlaceholder={t("searchForProvider")}
-                        emptyMessage={t("emptyRealmBasedIdps")}
-                        toolbar={
-                            <div className="flex flex-wrap items-center gap-2">
-                                <label className="flex cursor-pointer items-center gap-2 text-sm">
-                                    <Checkbox
-                                        id="hideOrganizationLinkedIdps"
-                                        data-testid="hideOrganizationLinkedIdps"
-                                        checked={hide}
-                                        onCheckedChange={(checked) => {
-                                            setHide(!!checked);
-                                            refresh();
-                                        }}
-                                    />
-                                    {t("hideOrganizationLinkedIdps")}
-                                </label>
-                                <DropdownMenu>
-                                    <DropdownMenuTrigger asChild>
-                                        <Button
-                                            data-testid="addProviderDropdown"
-                                            variant="default"
-                                            size="sm"
-                                        >
-                                            {t("addProvider")}
-                                        </Button>
-                                    </DropdownMenuTrigger>
-                                    <DropdownMenuContent>
-                                        {identityProviderOptions()}
-                                    </DropdownMenuContent>
-                                </DropdownMenu>
-                                <Button
-                                    data-testid="manageDisplayOrder"
-                                    variant="ghost"
-                                    size="sm"
-                                    onClick={() =>
-                                        setManageDisplayDialog(true)
-                                    }
-                                >
-                                    {t("manageDisplayOrder")}
-                                </Button>
-                            </div>
-                        }
-                    />
+                    <div className="space-y-4">
+                        <div className="flex flex-wrap items-center gap-2">
+                            <Input
+                                placeholder={t("searchForProvider")}
+                                value={search}
+                                onChange={(e) => setSearch(e.target.value)}
+                                className="h-9 w-64"
+                            />
+                            <label className="flex cursor-pointer items-center gap-2 text-sm">
+                                <Checkbox
+                                    id="hideOrganizationLinkedIdps"
+                                    data-testid="hideOrganizationLinkedIdps"
+                                    checked={hide}
+                                    onCheckedChange={(checked) => {
+                                        setHide(!!checked);
+                                        refresh();
+                                    }}
+                                />
+                                {t("hideOrganizationLinkedIdps")}
+                            </label>
+                            <DropdownMenu>
+                                <DropdownMenuTrigger asChild>
+                                    <Button
+                                        data-testid="addProviderDropdown"
+                                        variant="default"
+                                        size="sm"
+                                    >
+                                        {t("addProvider")}
+                                    </Button>
+                                </DropdownMenuTrigger>
+                                <DropdownMenuContent>
+                                    {identityProviderOptions()}
+                                </DropdownMenuContent>
+                            </DropdownMenu>
+                        </div>
+                        <DraggableTableRows<IdentityProviderRepresentation>
+                            columns={columns}
+                            data={filteredProviders}
+                            setData={setTableData}
+                            getRowId={(row) => row.alias ?? row.providerId ?? ""}
+                            onOrderChange={handleOrderChange}
+                        />
+                    </div>
                 )}
             </div>
         </>

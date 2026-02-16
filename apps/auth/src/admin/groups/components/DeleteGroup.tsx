@@ -38,11 +38,10 @@ const multiDelete = async () => {
 
     return (
         <ConfirmDialogModal
-            titleKey={t("deleteConfirmTitle", { count: selectedRows.length })}
-            messageKey={t("deleteConfirmGroup", {
-                count: selectedRows.length,
-                groupName: selectedRows[0]?.name
-            })}
+            titleKey="deleteConfirmTitle"
+            titleKeyVariables={{ count: selectedRows.length }}
+            messageKey="deleteConfirmGroup"
+            messageKeyVariables={{ count: selectedRows.length, groupName: selectedRows[0]?.name }}
             continueButtonLabel="delete"
             continueButtonVariant={ButtonVariant.danger}
             onConfirm={multiDelete}

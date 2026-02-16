@@ -1867,6 +1867,19 @@
     "adminEventsDetailsEnabled": true,
     "identityProviders": [
         {
+            "alias": "facebook",
+            "displayName": "Facebook",
+            "enabled": true,
+            "internalId": "aa287d44-237e-499e-883a-498e607d8480",
+            "providerId": "facebook",
+            "config": {
+                "clientId": "sad",
+                "clientSecret": "asda",
+                "guiOrder": "0"
+            },
+            "types": []
+        },
+        {
             "alias": "google",
             "displayName": "Google",
             "enabled": true,

@@ -14,6 +14,7 @@ import {
 import { Button } from "@merge/ui/components/button";
 import {
     Dialog,
+    DialogClose,
     DialogContent,
     DialogHeader,
     DialogTitle,
@@ -257,7 +258,7 @@ export const GroupPickerDialog = ({
 
     return (
         <Dialog open onOpenChange={(open) => { if (!open) onClose(); }}>
-            <DialogContent className="max-w-2xl">
+            <DialogContent className="max-w-2xl" showCloseButton={true}>
                 <DialogHeader>
                     <DialogTitle>{t(text.title, {
                         group1: filterGroups?.[0]?.name,
@@ -288,28 +289,34 @@ export const GroupPickerDialog = ({
                                 <TablePagination {...paginationProps} variant="bottom" t={t} />
                             </div>
                         )}
-                        <DialogFooter className="mt-4">
-                            <Button
-                                variant="outline"
-                                onClick={onClose}
-                            >
-                                {t("cancel")}
-                            </Button>
-                            <Button
-                                data-testid={`${text.ok}-button`}
-                                onClick={() => {
-                                    onConfirm(
-                                        type === "selectMany"
-                                            ? selectedRows
-                                            : navigation.length
-                                              ? [currentGroup()]
-                                              : undefined
-                                    );
-                                }}
-                                disabled={type === "selectMany" && selectedRows.length === 0}
-                            >
-                                {t(text.ok)}
-                            </Button>
+                        <DialogFooter className="mt-4 flex flex-col gap-2 sm:flex-row sm:flex-nowrap sm:items-center sm:justify-end sm:gap-4">
+                            <div className="flex w-full flex-col gap-2 sm:w-auto sm:flex-row sm:shrink-0 sm:items-center">
+                                <DialogClose asChild>
+                                    <Button
+                                        variant="ghost"
+                                        className="h-9 min-h-9 w-full text-foreground sm:w-auto"
+                                        onClick={onClose}
+                                    >
+                                        {t("cancel")}
+                                    </Button>
+                                </DialogClose>
+                                <Button
+                                    data-testid={`${text.ok}-button`}
+                                    className="h-9 min-h-9 w-full sm:w-auto"
+                                    onClick={() => {
+                                        onConfirm(
+                                            type === "selectMany"
+                                                ? selectedRows
+                                                : navigation.length
+                                                  ? [currentGroup()]
+                                                  : undefined
+                                        );
+                                    }}
+                                    disabled={type === "selectMany" && selectedRows.length === 0}
+                                >
+                                    {t(text.ok)}
+                                </Button>
+                            </div>
                         </DialogFooter>
                     </>
                 ) : (
@@ -349,30 +356,36 @@ export const GroupPickerDialog = ({
                             />
                         </div>
                         {listContent}
-                        <DialogFooter>
-                            <Button
-                                variant="outline"
-                                onClick={onClose}
-                            >
-                                {t("cancel")}
-                            </Button>
-                            <Button
-                                data-testid={`${text.ok}-button`}
-                                key="confirm"
-                                form="group-form"
-                                onClick={() => {
-                                    onConfirm(
-                                        type === "selectMany"
-                                            ? selectedRows
-                                            : navigation.length
-                                              ? [currentGroup()]
-                                              : undefined
-                                    );
-                                }}
-                                disabled={type === "selectMany" && selectedRows.length === 0}
-                            >
-                                {t(text.ok)}
-                            </Button>
+                        <DialogFooter className="flex flex-col gap-2 sm:flex-row sm:flex-nowrap sm:items-center sm:justify-end sm:gap-4">
+                            <div className="flex w-full flex-col gap-2 sm:w-auto sm:flex-row sm:shrink-0 sm:items-center">
+                                <DialogClose asChild>
+                                    <Button
+                                        variant="ghost"
+                                        className="h-9 min-h-9 w-full text-foreground sm:w-auto"
+                                        onClick={onClose}
+                                    >
+                                        {t("cancel")}
+                                    </Button>
+                                </DialogClose>
+                                <Button
+                                    data-testid={`${text.ok}-button`}
+                                    key="confirm"
+                                    form="group-form"
+                                    className="h-9 min-h-9 w-full sm:w-auto"
+                                    onClick={() => {
+                                        onConfirm(
+                                            type === "selectMany"
+                                                ? selectedRows
+                                                : navigation.length
+                                                  ? [currentGroup()]
+                                                  : undefined
+                                        );
+                                    }}
+                                    disabled={type === "selectMany" && selectedRows.length === 0}
+                                >
+                                    {t(text.ok)}
+                                </Button>
+                            </div>
                         </DialogFooter>
                     </>
                 )}

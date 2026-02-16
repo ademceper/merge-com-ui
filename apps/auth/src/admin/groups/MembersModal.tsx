@@ -1,7 +1,14 @@
 import type UserRepresentation from "@keycloak/keycloak-admin-client/lib/defs/userRepresentation";
 import { Button } from "@merge/ui/components/button";
 import { Checkbox } from "@merge/ui/components/checkbox";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@merge/ui/components/dialog";
+import {
+    Dialog,
+    DialogClose,
+    DialogContent,
+    DialogHeader,
+    DialogTitle,
+    DialogFooter
+} from "@merge/ui/components/dialog";
 import { Label } from "@merge/ui/components/label";
 import { DataTable, type ColumnDef } from "@merge/ui/components/table";
 import {
@@ -97,7 +104,7 @@ export const MemberModal = ({ membersQuery, onAdd, onClose }: MemberModalProps) 
 
     return (
         <Dialog open onOpenChange={(open) => { if (!open) onClose(); }}>
-            <DialogContent className="max-w-4xl">
+            <DialogContent className="max-w-4xl" showCloseButton={true}>
                 <DialogHeader>
                     <DialogTitle>{t("addMember")}</DialogTitle>
                 </DialogHeader>
@@ -109,13 +116,31 @@ export const MemberModal = ({ membersQuery, onAdd, onClose }: MemberModalProps) 
                     emptyContent={emptyContent}
                     emptyMessage={t("noUsersFound")}
                 />
-                <DialogFooter>
-                    <Button data-testid="add" variant="default" disabled={selectedRows.length === 0} onClick={async () => { await onAdd(selectedRows); onClose(); }}>
-                        {t("add")}
-                    </Button>
-                    <Button data-testid="cancel" variant="link" onClick={onClose}>
-                        {t("cancel")}
-                    </Button>
+                <DialogFooter className="flex flex-col gap-2 sm:flex-row sm:flex-nowrap sm:items-center sm:justify-end sm:gap-4">
+                    <div className="flex w-full flex-col gap-2 sm:w-auto sm:flex-row sm:shrink-0 sm:items-center">
+                        <DialogClose asChild>
+                            <Button
+                                data-testid="cancel"
+                                variant="ghost"
+                                className="h-9 min-h-9 w-full text-foreground sm:w-auto"
+                                onClick={onClose}
+                            >
+                                {t("cancel")}
+                            </Button>
+                        </DialogClose>
+                        <Button
+                            data-testid="add"
+                            variant="default"
+                            disabled={selectedRows.length === 0}
+                            className="h-9 min-h-9 w-full sm:w-auto"
+                            onClick={async () => {
+                                await onAdd(selectedRows);
+                                onClose();
+                            }}
+                        >
+                            {t("add")}
+                        </Button>
+                    </div>
                 </DialogFooter>
             </DialogContent>
         </Dialog>

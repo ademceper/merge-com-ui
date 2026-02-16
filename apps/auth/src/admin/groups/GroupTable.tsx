@@ -170,7 +170,7 @@ export const GroupTable = ({ refresh: viewRefresh }: GroupTableProps) => {
                 open={!!groupToDelete}
                 onOpenChange={(open) => !open && setGroupToDelete(undefined)}
             >
-                <AlertDialogContent>
+                <AlertDialogContent className="max-w-lg sm:max-w-lg">
                     <AlertDialogHeader>
                         <AlertDialogTitle>{t("deleteConfirmTitle", { count: 1 })}</AlertDialogTitle>
                         <AlertDialogDescription>
@@ -180,11 +180,12 @@ export const GroupTable = ({ refresh: viewRefresh }: GroupTableProps) => {
                             })}
                         </AlertDialogDescription>
                     </AlertDialogHeader>
-                    <AlertDialogFooter>
-                        <AlertDialogCancel>{t("cancel")}</AlertDialogCancel>
+                    <AlertDialogFooter className="flex flex-col-reverse gap-2 sm:flex-row sm:justify-end sm:gap-4">
+                        <AlertDialogCancel className="h-9 min-h-9 w-full sm:w-auto">{t("cancel")}</AlertDialogCancel>
                         <AlertDialogAction
                             variant="destructive"
                             data-testid="confirm"
+                            className="h-9 min-h-9 w-full sm:w-auto"
                             onClick={onDeleteConfirm}
                         >
                             {t("delete")}

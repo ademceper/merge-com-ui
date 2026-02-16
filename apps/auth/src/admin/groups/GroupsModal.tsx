@@ -50,7 +50,7 @@ export const GroupsModal = ({
 }: GroupsModalProps) => {
     const { adminClient } = useAdminClient();
     const { t } = useTranslation();
-const isFeatureEnabled = useIsFeatureEnabled();
+    const isFeatureEnabled = useIsFeatureEnabled();
     const [duplicateGroupDetails, setDuplicateGroupDetails] =
         useState<GroupRepresentation | null>(null);
 
@@ -264,7 +264,7 @@ const isFeatureEnabled = useIsFeatureEnabled();
 
     return (
         <Dialog open={isOpen} onOpenChange={handleOpenChange}>
-            <DialogContent className="max-w-lg sm:max-w-lg">
+            <DialogContent className="max-w-lg sm:max-w-lg" showCloseButton={true}>
                 <DialogHeader className="w-full">
                     <div className="flex w-full flex-row items-center justify-between gap-2">
                         <DialogTitle className="min-w-0 flex-1 truncate">

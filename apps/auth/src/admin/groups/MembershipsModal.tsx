@@ -65,7 +65,7 @@ export const MembershipsModal = ({ user, onClose }: CredentialDataDialogProps) =
 
     return (
         <Dialog open onOpenChange={(open) => { if (!open) onClose(); }}>
-            <DialogContent className="max-w-4xl" data-testid="showMembershipsDialog">
+            <DialogContent className="max-w-4xl" data-testid="showMembershipsDialog" showCloseButton={true}>
                 <DialogHeader>
                     <DialogTitle>{t("showMembershipsTitle", { username: user.username })}</DialogTitle>
                 </DialogHeader>
@@ -104,15 +104,18 @@ export const MembershipsModal = ({ user, onClose }: CredentialDataDialogProps) =
                         </>
                     }
                 />
-                <DialogFooter>
-                    <Button
-                        id="modal-cancel"
-                        data-testid="cancel"
-                        variant="default"
-                        onClick={onClose}
-                    >
-                        {t("cancel")}
-                    </Button>
+                <DialogFooter className="flex flex-col gap-2 sm:flex-row sm:flex-nowrap sm:items-center sm:justify-end sm:gap-4">
+                    <div className="flex w-full flex-col gap-2 sm:w-auto sm:flex-row sm:shrink-0 sm:items-center">
+                        <Button
+                            id="modal-cancel"
+                            data-testid="cancel"
+                            variant="ghost"
+                            className="h-9 min-h-9 w-full text-foreground sm:w-auto"
+                            onClick={onClose}
+                        >
+                            {t("cancel")}
+                        </Button>
+                    </div>
                 </DialogFooter>
             </DialogContent>
         </Dialog>
