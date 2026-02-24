@@ -4,8 +4,10 @@ import { useFetch } from "../../../shared/keycloak-ui-shared";
 import { Button } from "@merge/ui/components/button";
 import {
     DataTable,
+    DataTableRowActions,
     type ColumnDef
 } from "@merge/ui/components/table";
+import { DropdownMenuItem } from "@merge/ui/components/dropdown-menu";
 import { Plus } from "@phosphor-icons/react";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -101,59 +103,40 @@ export const KeysListTab = ({ realmComponents }: KeysListTabProps) => {
             }
         },
         {
+            id: "publicKeyActions",
             accessorKey: "publicKey",
-            header: t("publicKeys"),
+            header: "",
+            size: 60,
+            enableHiding: false,
+            enableSorting: false,
+            enableColumnActions: false,
             cell: ({ row }) => {
                 const { publicKey: pk, certificate: cert } = row.original;
-                if (cert) {
-                    return (
-                        <div className="flex gap-2">
-                            <Button
-                                type="button"
-                                variant="secondary"
-                                size="sm"
-                                onClick={(e) => {
-                                    e.stopPropagation();
+                if (!pk && !cert) return null;
+                return (
+                    <DataTableRowActions row={row}>
+                        {pk && (
+                            <DropdownMenuItem
+                                onClick={() => {
                                     setPublicKey(pk!);
                                     togglePublicKeyDialog();
                                 }}
                             >
                                 {t("publicKey")}
-                            </Button>
-                            <Button
-                                type="button"
-                                variant="secondary"
-                                size="sm"
-                                className="kc-certificate"
-                                onClick={(e) => {
-                                    e.stopPropagation();
+                            </DropdownMenuItem>
+                        )}
+                        {cert && (
+                            <DropdownMenuItem
+                                onClick={() => {
                                     setCertificate(cert!);
                                     toggleCertificateDialog();
                                 }}
                             >
                                 {t("certificate")}
-                            </Button>
-                        </div>
-                    );
-                }
-                if (pk) {
-                    return (
-                        <Button
-                            type="button"
-                            variant="secondary"
-                            size="sm"
-                            id="kc-public-key"
-                            onClick={(e) => {
-                                e.stopPropagation();
-                                setPublicKey(pk!);
-                                togglePublicKeyDialog();
-                            }}
-                        >
-                            {t("publicKey")}
-                        </Button>
-                    );
-                }
-                return null;
+                            </DropdownMenuItem>
+                        )}
+                    </DataTableRowActions>
+                );
             }
         }
     ];

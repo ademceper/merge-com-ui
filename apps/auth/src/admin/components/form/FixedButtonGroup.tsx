@@ -25,7 +25,7 @@ export const FixedButtonsGroup = ({
 }: FixedButtonGroupProps) => {
     const { t } = useTranslation();
     return (
-        <div className="flex gap-2" {...rest}>
+        <div className="flex w-full justify-end gap-2" {...rest}>
             {(save || isSubmit) && (
                 <Button
                     disabled={isDisabled}

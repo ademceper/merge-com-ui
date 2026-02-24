@@ -70,11 +70,11 @@ export const ConfirmDialogModal = ({
     const { t } = useTranslation();
     return (
         <Dialog open={open} onOpenChange={(v) => { if (!v) toggleDialog(); }}>
-            <DialogContent className="max-w-lg sm:max-w-lg" showCloseButton={true}>
+            <DialogContent className="max-w-lg sm:max-w-lg max-h-[80vh] overflow-auto" showCloseButton={true}>
                 <DialogHeader>
                     <DialogTitle>{t(titleKey, titleKeyVariables as any)}</DialogTitle>
                 </DialogHeader>
-                <div className="py-2">
+                <div className="py-2 break-all whitespace-pre-wrap">
                     {!messageKey && children}
                     {messageKey && t(messageKey, messageKeyVariables as any)}
                 </div>
