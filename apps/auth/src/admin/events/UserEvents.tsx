@@ -15,6 +15,13 @@ import {
     PopoverTrigger,
 } from "@merge/ui/components/popover";
 import {
+    Dialog,
+    DialogContent,
+    DialogHeader,
+    DialogTitle,
+    DialogFooter
+} from "@merge/ui/components/dialog";
+import {
     Tooltip,
     TooltipContent,
     TooltipProvider,
@@ -22,7 +29,7 @@ import {
 } from "@merge/ui/components/tooltip";
 import { CheckCircle, Funnel, Warning } from "@phosphor-icons/react";
 import { pickBy } from "lodash-es";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Controller, FormProvider, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
@@ -104,6 +111,13 @@ export const UserEvents = ({ user, client }: UserEventsProps) => {
     });
 
     const { getValues, reset, formState: { isDirty }, control, handleSubmit } = form;
+
+const [isMobile, setIsMobile] = useState<boolean>(typeof window !== "undefined" ? window.innerWidth < 640 : false);
+useEffect(() => {
+    const onResize = () => setIsMobile(window.innerWidth < 640);
+    window.addEventListener("resize", onResize);
+    return () => window.removeEventListener("resize", onResize);
+}, []);
 
     useFetch(
         () => adminClient.realms.getConfigEvents({ realm }),
@@ -235,12 +249,12 @@ export const UserEvents = ({ user, client }: UserEventsProps) => {
     const searchToolbar = (
         <FormProvider {...form}>
             <div className="flex flex-col gap-0">
-                <div className="mr-10">
+                <div className="mr-0">
                     <Popover open={searchDropdownOpen} onOpenChange={setSearchDropdownOpen}>
-                        <PopoverTrigger asChild>
+                            <PopoverTrigger asChild>
                             <button
                                 type="button"
-                                className="inline-flex size-9 shrink-0 items-center justify-center rounded-lg border border-border bg-background text-sm font-medium hover:bg-muted hover:text-foreground dark:border-input dark:hover:bg-input/50"
+                                className="inline-flex size-9 shrink-0 items-center justify-center rounded-lg border border-border bg-background text-sm font-medium hover:bg-muted hover:text-foreground dark:border-input dark:hover:bg-input/50 ml-0"
                                 aria-label={t("searchUserEventsBtn")}
                                 data-testid="dropdown-panel-btn"
                             >

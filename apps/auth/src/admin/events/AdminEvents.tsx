@@ -8,7 +8,8 @@ import {
     Dialog,
     DialogContent,
     DialogHeader,
-    DialogTitle
+    DialogTitle,
+    DialogFooter
 } from "@merge/ui/components/dialog";
 import {
     Table,
@@ -30,12 +31,13 @@ import {
 } from "@merge/ui/components/popover";
 import { pickBy } from "lodash-es";
 import type { PropsWithChildren } from "react";
-import { useMemo, useState } from "react";
+import { useMemo, useState, useEffect } from "react";
 import { Controller, FormProvider, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { Funnel } from "@phosphor-icons/react";
 import { useAdminClient } from "../admin-client";
 import { TextControl, useFetch } from "../../shared/keycloak-ui-shared";
+import { MultiSelectField } from "../../shared/keycloak-ui-shared/controls/MultiSelectField";
 import { EventsBanners } from "../Banners";
 import CodeEditor from "../components/form/CodeEditor";
 import { useRealm } from "../context/realm-context/RealmContext";
@@ -265,221 +267,201 @@ export const AdminEvents = ({ resourcePath }: AdminEventsProps) => {
         }
     ];
 
+    const [isMobile, setIsMobile] = useState<boolean>(typeof window !== "undefined" ? window.innerWidth < 640 : false);
+    useEffect(() => {
+        const onResize = () => setIsMobile(window.innerWidth < 640);
+        window.addEventListener("resize", onResize);
+        return () => window.removeEventListener("resize", onResize);
+    }, []);
+
     const searchToolbar = (
         <FormProvider {...form}>
-            <div className="flex flex-col gap-0">
-                <div className="mr-10">
-                    <Popover open={searchDropdownOpen} onOpenChange={setSearchDropdownOpen}>
-                        <PopoverTrigger asChild>
+            <div className="flex items-center gap-2">
+                <div className="flex items-center">
+                    {!isMobile ? (
+                        <>
                             <button
                                 type="button"
                                 className="inline-flex size-9 shrink-0 items-center justify-center rounded-lg border border-border bg-background text-sm font-medium hover:bg-muted hover:text-foreground dark:border-input dark:hover:bg-input/50"
                                 aria-label={t("searchForAdminEvent")}
                                 data-testid="dropdown-panel-btn"
+                                onClick={() => setSearchDropdownOpen(true)}
                             >
                                 <Funnel className="size-4" />
                             </button>
-                        </PopoverTrigger>
-                        <PopoverContent
-                            className="w-[min(90vw,400px)] max-h-[85vh] overflow-auto p-4"
-                            align="start"
-                            style={{ zIndex: 2147483647 }}
-                        >
-                            <form className="keycloak__events_search__form space-y-4" data-testid="searchForm">
-                            <div className="space-y-2">
-                                <Label htmlFor="kc-resourceTypes">{t("resourceTypes")}</Label>
-                                <Controller
+                            {searchDropdownOpen && (
+                                <Dialog open onOpenChange={(open) => !open && setSearchDropdownOpen(false)}>
+                                    <DialogContent className="max-w-2xl" showCloseButton>
+                                        <DialogHeader>
+                                            <DialogTitle>{t("searchAdminEvents")}</DialogTitle>
+                                        </DialogHeader>
+                                        <form className="keycloak__events_search__form space-y-4" data-testid="searchForm">
+                                            <div className="space-y-2">
+                                <MultiSelectField
                                     name="resourceTypes"
-                                    control={control}
-                                    render={({ field }) => (
-                                        <Popover
-                                            open={selectResourceTypesOpen}
-                                            onOpenChange={setSelectResourceTypesOpen}
-                                        >
-                                            <PopoverTrigger asChild>
-                                                <Button
-                                                    type="button"
-                                                    variant="outline"
-                                                    className="w-full justify-between h-9 min-h-9"
-                                                    data-testid="resource-types-searchField"
-                                                >
-                                                    {field.value.length === 0
-                                                        ? t("select")
-                                                        : field.value.length === 1
-                                                          ? field.value[0]
-                                                          : `${field.value.length} ${t("selected")}`}
-                                                </Button>
-                                            </PopoverTrigger>
-                                            <PopoverContent className="w-full min-w-[var(--radix-popover-trigger-width)] p-2" align="start">
-                                                <div className="max-h-60 overflow-auto space-y-2">
-                                                    {resourceTypes.map((option) => (
-                                                        <label
-                                                            key={option}
-                                                            className="flex items-center gap-2 cursor-pointer"
-                                                        >
-                                                            <Checkbox
-                                                                checked={field.value.includes(option)}
-                                                                onCheckedChange={(checked) => {
-                                                                    const next = checked
-                                                                        ? [...field.value, option]
-                                                                        : field.value.filter((v) => v !== option);
-                                                                    field.onChange(next);
-                                                                }}
-                                                            />
-                                                            {option}
-                                                        </label>
-                                                    ))}
-                                                </div>
-                                                <div className="flex flex-wrap gap-1 mt-2">
-                                                    {field.value.map((chip) => (
-                                                        <Badge
-                                                            key={chip}
-                                                            variant="secondary"
-                                                            className="cursor-pointer"
-                                                            onClick={() =>
-                                                                field.onChange(field.value.filter((v) => v !== chip))
-                                                            }
-                                                        >
-                                                            {chip} ×
-                                                        </Badge>
-                                                    ))}
-                                                </div>
-                                            </PopoverContent>
-                                        </Popover>
-                                    )}
+                                    label={t("resourceTypes")}
+                                    options={resourceTypes}
+                                    placeholderText={t("select")}
                                 />
-                            </div>
-                            <div className="space-y-2">
-                                <Label htmlFor="kc-operationTypes">{t("operationTypes")}</Label>
-                                <Controller
+                                            </div>
+                                            <div className="space-y-2">
+                                <MultiSelectField
                                     name="operationTypes"
-                                    control={control}
-                                    render={({ field }) => (
-                                        <Popover
-                                            open={selectOperationTypesOpen}
-                                            onOpenChange={setSelectOperationTypesOpen}
-                                        >
-                                            <PopoverTrigger asChild>
-                                                <Button
-                                                    type="button"
-                                                    variant="outline"
-                                                    className="w-full justify-between h-9 min-h-9"
-                                                    data-testid="operation-types-searchField"
-                                                >
-                                                    {field.value.length === 0
-                                                        ? t("select")
-                                                        : field.value.length === 1
-                                                          ? field.value[0]
-                                                          : `${field.value.length} ${t("selected")}`}
-                                                </Button>
-                                            </PopoverTrigger>
-                                            <PopoverContent className="w-full min-w-[var(--radix-popover-trigger-width)] p-2" align="start">
-                                                <div className="max-h-60 overflow-auto space-y-2">
-                                                    {operationTypes.map((option) => (
-                                                        <label
-                                                            key={option}
-                                                            className="flex items-center gap-2 cursor-pointer"
-                                                        >
-                                                            <Checkbox
-                                                                checked={field.value.includes(option)}
-                                                                onCheckedChange={(checked) => {
-                                                                    const next = checked
-                                                                        ? [...field.value, option]
-                                                                        : field.value.filter((v) => v !== option);
-                                                                    field.onChange(next);
-                                                                }}
-                                                            />
-                                                            {option}
-                                                        </label>
-                                                    ))}
-                                                </div>
-                                                <div className="flex flex-wrap gap-1 mt-2">
-                                                    {field.value.map((chip) => (
-                                                        <Badge
-                                                            key={chip}
-                                                            variant="secondary"
-                                                            className="cursor-pointer"
-                                                            onClick={() =>
-                                                                field.onChange(field.value.filter((v) => v !== chip))
-                                                            }
-                                                        >
-                                                            {chip} ×
-                                                        </Badge>
-                                                    ))}
-                                                </div>
-                                            </PopoverContent>
-                                        </Popover>
-                                    )}
+                                    label={t("operationTypes")}
+                                    options={operationTypes}
+                                    placeholderText={t("select")}
                                 />
-                            </div>
-                            {!resourcePath && (
-                                <TextControl name="resourcePath" label={t("resourcePath")} />
+                                            </div>
+                                            {!resourcePath && (
+                                                <TextControl name="resourcePath" label={t("resourcePath")} />
+                                            )}
+                                            <TextControl name="authRealm" label={t("realm")} />
+                                            <TextControl name="authClient" label={t("client")} />
+                                            <TextControl name="authUser" label={t("userId")} />
+                                            <TextControl name="authIpAddress" label={t("ipAddress")} />
+                                            <div className="space-y-2">
+                                                <Label htmlFor="kc-dateFrom">{t("dateFrom")}</Label>
+                                                <Controller
+                                                    name="dateFrom"
+                                                    control={control}
+                                                    render={({ field }) => (
+                                                        <Input
+                                                            id="kc-dateFrom"
+                                                            type="date"
+                                                            className="w-full h-9"
+                                                            value={field.value}
+                                                            onChange={(e) => field.onChange(e.target.value)}
+                                                        />
+                                                    )}
+                                                />
+                                            </div>
+                                            <div className="space-y-2">
+                                                <Label htmlFor="kc-dateTo">{t("dateTo")}</Label>
+                                                <Controller
+                                                    name="dateTo"
+                                                    control={control}
+                                                    render={({ field }) => (
+                                                        <Input
+                                                            id="kc-dateTo"
+                                                            type="date"
+                                                            className="w-full h-9"
+                                                            value={field.value}
+                                                            onChange={(e) => field.onChange(e.target.value)}
+                                                        />
+                                                    )}
+                                                />
+                                            </div>
+                                        </form>
+                                        <DialogFooter>
+                                            <Button
+                                                data-testid="search-events-btn"
+                                                disabled={!isDirty}
+                                                onClick={() => {
+                                                    submitSearch();
+                                                }}
+                                            >
+                                                {t("searchAdminEventsBtn")}
+                                            </Button>
+                                            <Button variant="ghost" onClick={resetSearch}>
+                                                {t("resetBtn")}
+                                            </Button>
+                                        </DialogFooter>
+                                    </DialogContent>
+                                </Dialog>
                             )}
-                            <TextControl name="authRealm" label={t("realm")} />
-                            <TextControl name="authClient" label={t("client")} />
-                            <TextControl name="authUser" label={t("userId")} />
-                            <TextControl name="authIpAddress" label={t("ipAddress")} />
-                            <div className="space-y-2">
-                                <Label htmlFor="kc-dateFrom">{t("dateFrom")}</Label>
-                                <Controller
-                                    name="dateFrom"
-                                    control={control}
-                                    render={({ field }) => (
-                                        <Input
-                                            id="kc-dateFrom"
-                                            type="date"
-                                            className="w-full h-9"
-                                            value={field.value}
-                                            onChange={(e) => field.onChange(e.target.value)}
-                                        />
-                                    )}
-                                />
-                            </div>
-                            <div className="space-y-2">
-                                <Label htmlFor="kc-dateTo">{t("dateTo")}</Label>
-                                <Controller
-                                    name="dateTo"
-                                    control={control}
-                                    render={({ field }) => (
-                                        <Input
-                                            id="kc-dateTo"
-                                            type="date"
-                                            className="w-full h-9"
-                                            value={field.value}
-                                            onChange={(e) => field.onChange(e.target.value)}
-                                        />
-                                    )}
-                                />
-                            </div>
-                            <div className="flex gap-2">
-                                <Button
-                                    type="button"
-                                    onClick={submitSearch}
-                                    data-testid="search-events-btn"
-                                    disabled={!isDirty}
-                                >
-                                    {t("searchAdminEventsBtn")}
-                                </Button>
-                                <Button
-                                    type="button"
-                                    variant="secondary"
-                                    onClick={resetSearch}
-                                    disabled={!isDirty}
-                                >
-                                    {t("resetBtn")}
-                                </Button>
-                            </div>
-                        </form>
-                        </PopoverContent>
-                    </Popover>
+                        </>
+                    ) : (
+                        <>
+                            <button
+                                type="button"
+                                className="inline-flex size-9 shrink-0 items-center justify-center rounded-lg border border-border bg-background text-sm font-medium hover:bg-muted hover:text-foreground dark:border-input dark:hover:bg-input/50"
+                                aria-label={t("searchForAdminEvent")}
+                                data-testid="dropdown-panel-btn"
+                                onClick={() => setSearchDropdownOpen(true)}
+                            >
+                                <Funnel className="size-4" />
+                            </button>
+                            {searchDropdownOpen && (
+                                <Dialog open onOpenChange={(open) => !open && setSearchDropdownOpen(false)}>
+                                    <DialogContent className="max-w-none w-full h-[90vh]" showCloseButton>
+                                        <DialogHeader>
+                                            <DialogTitle>{t("searchAdminEvents")}</DialogTitle>
+                                        </DialogHeader>
+                                        <form className="keycloak__events_search__form space-y-4" data-testid="searchForm">
+                                            <div className="space-y-2">
+                                                <MultiSelectField
+                                                    name="resourceTypes"
+                                                    label={t("resourceTypes")}
+                                                    options={resourceTypes}
+                                                    placeholderText={t("select")}
+                                                />
+                                            </div>
+                                            <div className="space-y-2">
+                                                <MultiSelectField
+                                                    name="operationTypes"
+                                                    label={t("operationTypes")}
+                                                    options={operationTypes}
+                                                    placeholderText={t("select")}
+                                                />
+                                            </div>
+                                            {!resourcePath && (
+                                                <TextControl name="resourcePath" label={t("resourcePath")} />
+                                            )}
+                                            <TextControl name="authRealm" label={t("realm")} />
+                                            <TextControl name="authClient" label={t("client")} />
+                                            <TextControl name="authUser" label={t("userId")} />
+                                            <TextControl name="authIpAddress" label={t("ipAddress")} />
+                                            <div className="space-y-2">
+                                                <Label htmlFor="kc-dateFrom">{t("dateFrom")}</Label>
+                                                <Controller
+                                                    name="dateFrom"
+                                                    control={control}
+                                                    render={({ field }) => (
+                                                        <Input id="kc-dateFrom" type="date" className="w-full h-9" value={field.value} onChange={(e) => field.onChange(e.target.value)} />
+                                                    )}
+                                                />
+                                            </div>
+                                            <div className="space-y-2">
+                                                <Label htmlFor="kc-dateTo">{t("dateTo")}</Label>
+                                                <Controller
+                                                    name="dateTo"
+                                                    control={control}
+                                                    render={({ field }) => (
+                                                        <Input id="kc-dateTo" type="date" className="w-full h-9" value={field.value} onChange={(e) => field.onChange(e.target.value)} />
+                                                    )}
+                                                />
+                                            </div>
+                                        </form>
+                                        <DialogFooter>
+                                            <Button
+                                                data-testid="search-events-btn"
+                                                disabled={!isDirty}
+                                                onClick={() => {
+                                                    submitSearch();
+                                                    setSearchDropdownOpen(false);
+                                                }}
+                                            >
+                                                {t("searchAdminEventsBtn")}
+                                            </Button>
+                                            <Button variant="ghost" onClick={() => { resetSearch(); }}>
+                                                {t("resetBtn")}
+                                            </Button>
+                                        </DialogFooter>
+                                    </DialogContent>
+                                </Dialog>
+                            )}
+                        </>
+                    )}
                 </div>
                 {Object.entries(activeFilters).length > 0 && (
-                    <div className="keycloak__searchChips ml-4 mt-2 flex flex-wrap gap-2">
+                    <div className="keycloak__searchChips ml-0 flex flex-wrap gap-2 items-center">
                         {Object.entries(activeFilters).map((filter) => {
                             const [filterKey, value] = filter as [keyof AdminEventSearchForm, string | string[]];
+                            // don't show certain multi-select filters as chips
                             if (filterKey === "resourcePath" && !!resourcePath) return null;
+                            if (filterKey === "resourceTypes" || filterKey === "operationTypes") return null;
                             return (
-                                <div className="flex flex-wrap items-center gap-1 mt-2 mr-2" key={filterKey}>
+                                <div className="flex items-center gap-1 mr-2" key={filterKey}>
                                     <span className="text-sm font-medium text-muted-foreground">
                                         {filterLabels[filterKey]}:
                                     </span>
