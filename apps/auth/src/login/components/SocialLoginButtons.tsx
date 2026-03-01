@@ -8,7 +8,6 @@ export type SocialProvider = {
     iconClasses?: string;
 };
 
-/** Keycloak'tan sağlayıcı gelmezse kc_idp_hint ile fallback linkler oluşturur */
 export function getFallbackSocialProviders(): SocialProvider[] {
     if (typeof window === "undefined") return [];
     const providers: SocialProvider[] = [
@@ -76,7 +75,6 @@ function getProviderIcon(provider: SocialProvider) {
 interface SocialLoginButtonsProps {
     providers: SocialProvider[];
     dividerLabel: string;
-    /** Örn: (displayName) => `${displayName} ile devam edin` */
     getButtonLabel?: (displayName: string, alias: string) => string;
     className?: string;
 }

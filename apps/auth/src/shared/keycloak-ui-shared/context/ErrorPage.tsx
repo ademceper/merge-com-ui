@@ -8,6 +8,7 @@ import {
 } from "@merge/ui/components/dialog";
 import { WarningCircle } from "@phosphor-icons/react";
 import { useTranslation } from "react-i18next";
+import { useRouteError } from "react-router-dom";
 import { getNetworkErrorMessage } from "../utils/errors";
 
 type ErrorPageProps = {
@@ -16,10 +17,11 @@ type ErrorPageProps = {
 
 export const ErrorPage = (props: ErrorPageProps) => {
     const { t, i18n } = useTranslation();
-    const error = props.error;
+    const routeError = useRouteError();
+    const error = props.error ?? routeError;
     const errorMessage = getErrorMessage(error);
     const networkErrorMessage = getNetworkErrorMessage(error);
-    console.error(error);
+    console.error("ErrorPage caught:", error);
 
     function onRetry() {
         location.href = location.origin + location.pathname;
@@ -35,12 +37,16 @@ export const ErrorPage = (props: ErrorPageProps) => {
         <div className="min-h-screen flex items-center justify-center p-4 bg-muted/30">
             <Dialog open={true}>
                 <DialogContent showCloseButton={false} className="sm:max-w-sm">
-                    <DialogHeader className="flex flex-row items-center gap-2">
-                        <WarningCircle className="size-5 text-destructive shrink-0" aria-hidden />
-                        <DialogTitle>{t("somethingWentWrong")}</DialogTitle>
+                    <DialogHeader>
+                        <DialogTitle>
+                            <span className="inline-flex items-center gap-2">
+                                <WarningCircle className="size-5 text-destructive shrink-0" aria-hidden />
+                                {t("somethingWentWrong")}
+                            </span>
+                        </DialogTitle>
                     </DialogHeader>
                     <p className="text-sm text-muted-foreground">{message}</p>
-                    <DialogFooter>
+                    <DialogFooter className="sm:justify-end">
                         <Button variant="default" onClick={onRetry}>
                             {t("tryAgain")}
                         </Button>

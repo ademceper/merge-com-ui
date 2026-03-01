@@ -19,6 +19,7 @@
         "@dagrejs/dagre": "^1.1.8",
         "@hookform/resolvers": "^5.2.2",
         "@keycloak/keycloak-admin-client": "26.5.2",
+        "@keycloakify/keycloak-account-ui": "~260502.0.0",
         "@keycloakify/keycloak-admin-ui": "~260502.0.0",
         "@keycloakify/keycloak-ui-shared": "~260502.0.0",
         "@merge/ui": "workspace:*",
@@ -768,6 +769,8 @@
     "@jridgewell/trace-mapping": ["@jridgewell/trace-mapping@0.3.31", "", { "dependencies": { "@jridgewell/resolve-uri": "3.1.2", "@jridgewell/sourcemap-codec": "1.5.5" } }, "sha512-zzNR+SdQSDJzc8joaeP8QQoCQr8NuYx2dIIytl1QeBEZHJ9uW6hebsrYgbz8hJwUQao3TWCMtmfV8Nu1twOLAw=="],
 
     "@keycloak/keycloak-admin-client": ["@keycloak/keycloak-admin-client@26.5.2", "", { "dependencies": { "camelize-ts": "^3.0.0", "url-template": "^3.1.1" } }, "sha512-KAwSj/qzncpExWagW5vny3sD1jtynESjhHVZBtAbQRURm00EBbHS8YxdtcEsnY641bxAc0+MWU1SclOkCl8ftg=="],
+
+    "@keycloakify/keycloak-account-ui": ["@keycloakify/keycloak-account-ui@260502.0.2", "", { "dependencies": { "tsafe": "^1.8.5" }, "peerDependencies": { "@keycloakify/keycloak-ui-shared": "~260502.0.0", "@patternfly/patternfly": "^5.4.2", "@patternfly/react-core": "^5.4.14", "@patternfly/react-icons": "^5.4.2", "@patternfly/react-table": "^5.4.16", "@types/lodash-es": "^4.17.12", "@types/react": "^18.3.18", "i18next": "^25.7.3", "i18next-fetch-backend": "^6.0.0", "lodash-es": "^4.17.22", "react": "^18.3.1", "react-hook-form": "^7.70.0", "react-i18next": "^16.5.1", "react-router-dom": "^6.30.2" } }, "sha512-Iw+9o87UJapW7WWVSBUW0UCapYDfqZPNSEW1pWzBlWe8SnY1W4MfcJR3JlMrwjPt7VaXxZZCPdzNnXd7EpkCuQ=="],
 
     "@keycloakify/keycloak-admin-ui": ["@keycloakify/keycloak-admin-ui@260502.0.0", "", { "dependencies": { "tsafe": "^1.8.5" }, "peerDependencies": { "@dagrejs/dagre": "^1.1.8", "@keycloak/keycloak-admin-client": "26.5.2", "@keycloakify/keycloak-ui-shared": "~260502.0.0", "@patternfly/patternfly": "^5.4.2", "@patternfly/react-core": "^5.4.14", "@patternfly/react-icons": "^5.4.2", "@patternfly/react-styles": "^5.4.1", "@patternfly/react-table": "^5.4.16", "@types/file-saver": "^2.0.7", "@types/lodash-es": "^4.17.12", "@types/react": "^18.3.18", "@uiw/react-textarea-code-editor": "^3.1.1", "file-saver": "^2.0.5", "flat": "^6.0.1", "i18next": "^25.7.3", "i18next-fetch-backend": "^6.0.0", "jszip": "^3.10.1", "lodash-es": "^4.17.22", "p-debounce": "^5.1.0", "react": "^18.3.1", "react-hook-form": "^7.70.0", "react-i18next": "^16.5.1", "react-router-dom": "^6.30.2", "reactflow": "^11.11.4", "use-react-router-breadcrumbs": "^4.0.1", "yaml": "^2.8.2" } }, "sha512-wCw2K/O/1idFWuqQkspgy6P1OaG2o9xySKYp51S5J31RVmVD3kJzKEHXSlZmOluCNe1M4FLEunHVSo6BCNH9dQ=="],
 
@@ -3863,6 +3866,10 @@
 
     "@inquirer/core/mute-stream": ["mute-stream@2.0.0", "", {}, "sha512-WWdIxpyjEn+FhQJQQv9aQAYlHoNVdzIzUySNV1gHUPDSdZJ3yZn7pAAbQcV7B56Mvu881q9FZV+0Vx2xC44VWA=="],
 
+    "@keycloakify/keycloak-account-ui/react": ["react@18.3.1", "", { "dependencies": { "loose-envify": "^1.1.0" } }, "sha512-wS+hAgJShR0KhEvPJArfuPVN1+Hz1t0Y6n5jLrGQbkb4urgPE/0Rve+1kMB1v/oWgHgm4WIcV+i7F2pTVj+2iQ=="],
+
+    "@keycloakify/keycloak-account-ui/react-router-dom": ["react-router-dom@6.30.3", "", { "dependencies": { "@remix-run/router": "1.23.2", "react-router": "6.30.3" }, "peerDependencies": { "react": ">=16.8", "react-dom": ">=16.8" } }, "sha512-pxPcv1AczD4vso7G4Z3TKcvlxK7g7TNt3/FNGMhfqyntocvYKj+GCatfigGDjbLozC4baguJ0ReCigoDJXb0ag=="],
+
     "@keycloakify/keycloak-admin-ui/react": ["react@18.3.1", "", { "dependencies": { "loose-envify": "^1.1.0" } }, "sha512-wS+hAgJShR0KhEvPJArfuPVN1+Hz1t0Y6n5jLrGQbkb4urgPE/0Rve+1kMB1v/oWgHgm4WIcV+i7F2pTVj+2iQ=="],
 
     "@keycloakify/keycloak-admin-ui/react-router-dom": ["react-router-dom@6.30.3", "", { "dependencies": { "@remix-run/router": "1.23.2", "react-router": "6.30.3" }, "peerDependencies": { "react": ">=16.8", "react-dom": ">=16.8" } }, "sha512-pxPcv1AczD4vso7G4Z3TKcvlxK7g7TNt3/FNGMhfqyntocvYKj+GCatfigGDjbLozC4baguJ0ReCigoDJXb0ag=="],
@@ -4127,8 +4134,6 @@
 
     "merge/tailwind-merge": ["tailwind-merge@3.4.0", "", {}, "sha512-uSaO4gnW+b3Y2aWoWfFpX62vn2sR3skfhbjsEnaBI81WD1wBLlHZe5sWf0AqjksNdYTbGBEd0UasQMT3SNV15g=="],
 
-    "merge/tailwindcss": ["tailwindcss@4.1.18", "", {}, "sha512-4+Z+0yiYyEtUVCScyfHCxOYP06L5Ne+JiHhY2IjR2KWMIWhJOYZKLSGZaP5HkZ8+bY0cxfzwDE5uOmzFXyIwxw=="],
-
     "merge/typescript": ["typescript@5.9.3", "", { "bin": { "tsc": "bin/tsc", "tsserver": "bin/tsserver" } }, "sha512-jl1vZzPDinLr9eUt3J/t7V6FgNEw9QjvBPdysz9KfQDD41fQrC2Y4vKQdiaUpFT4bXlb1RHhLpp8wtm6M5TgSw=="],
 
     "mermaid/marked": ["marked@16.4.2", "", { "bin": { "marked": "bin/marked.js" } }, "sha512-TI3V8YYWvkVf3KJe1dRkpnjs68JUPyEa5vjKrp1XEEJUAOaQc+Qj+L1qWbPd0SJuAdQkFU0h73sXXqwDYxsiDA=="],
@@ -4370,6 +4375,8 @@
     "@inkeep/cxkit-primitives/@radix-ui/react-tooltip/@radix-ui/react-use-controllable-state": ["@radix-ui/react-use-controllable-state@1.1.0", "", { "dependencies": { "@radix-ui/react-use-callback-ref": "1.1.0" }, "peerDependencies": { "@types/react": "*", "react": "^16.8 || ^17.0 || ^18.0 || ^19.0 || ^19.0.0-rc" }, "optionalPeers": ["@types/react"] }, "sha512-MtfMVJiSr2NjzS0Aa90NPTnvTSg6C/JLCV7ma0W6+OMV78vd8OyRpID+Ng9LxzsPbLeuBnWBA1Nq30AtBIDChw=="],
 
     "@inkeep/cxkit-primitives/@radix-ui/react-tooltip/@radix-ui/react-visually-hidden": ["@radix-ui/react-visually-hidden@1.1.1", "", { "dependencies": { "@radix-ui/react-primitive": "2.0.1" }, "peerDependencies": { "@types/react": "*", "@types/react-dom": "*", "react": "^16.8 || ^17.0 || ^18.0 || ^19.0 || ^19.0.0-rc", "react-dom": "^16.8 || ^17.0 || ^18.0 || ^19.0 || ^19.0.0-rc" }, "optionalPeers": ["@types/react", "@types/react-dom"] }, "sha512-vVfA2IZ9q/J+gEamvj761Oq1FpWgCDaNOOIfbPVp2MVPLEomUr5+Vf7kJGwQ24YxZSlQVar7Bes8kyTo5Dshpg=="],
+
+    "@keycloakify/keycloak-account-ui/react-router-dom/react-router": ["react-router@6.30.3", "", { "dependencies": { "@remix-run/router": "1.23.2" }, "peerDependencies": { "react": ">=16.8" } }, "sha512-XRnlbKMTmktBkjCLE8/XcZFlnHvr2Ltdr1eJX4idL55/9BbORzyZEaIkBFDhFGCEWBBItsVrDxwx3gnisMitdw=="],
 
     "@keycloakify/keycloak-admin-ui/react-router-dom/react-router": ["react-router@6.30.3", "", { "dependencies": { "@remix-run/router": "1.23.2" }, "peerDependencies": { "react": ">=16.8" } }, "sha512-XRnlbKMTmktBkjCLE8/XcZFlnHvr2Ltdr1eJX4idL55/9BbORzyZEaIkBFDhFGCEWBBItsVrDxwx3gnisMitdw=="],
 

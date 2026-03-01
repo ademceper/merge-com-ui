@@ -9,7 +9,7 @@ export default defineConfig({
         react(),
         tailwindcss(),
         keycloakify({
-            accountThemeImplementation: "Multi-Page",
+            accountThemeImplementation: "Single-Page",
             themeName: "merge"
         })
     ],

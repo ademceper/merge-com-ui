@@ -1,6 +1,8 @@
 # This file is managed by Keycloakify, do not edit it manually.
 
 # === Owned files start ===
+# account/colorScheme.ts
+# account/KcAccountUi.tsx
 # admin/admin-client.ts
 # admin/App.tsx
 # admin/banners.module.css
@@ -23,6 +25,28 @@
 # admin/routes.tsx
 # admin/util.ts
 # shared/SessionExpirationWarningOverlay.tsx
+# account/account-security/AccountRow.tsx
+# account/account-security/DeviceActivity.tsx
+# account/account-security/LinkedAccounts.tsx
+# account/account-security/LinkedAccountsToolbar.tsx
+# account/account-security/SigningIn.tsx
+# account/applications/Applications.tsx
+# account/content/ContentComponent.tsx
+# account/groups/Groups.tsx
+# account/oid4vci/Oid4Vci.tsx
+# account/organizations/Organizations.tsx
+# account/personal-info/PersonalInfo.tsx
+# account/resources/EditTheResource.tsx
+# account/resources/PermissionRequest.tsx
+# account/resources/Resources.tsx
+# account/resources/ResourcesTab.tsx
+# account/resources/ResourceToolbar.tsx
+# account/resources/ShareTheResource.tsx
+# account/root/header.module.css
+# account/root/Header.tsx
+# account/root/PageNav.tsx
+# account/root/Root.tsx
+# account/utils/useAccountAlerts.ts
 # admin/assets/favicon.svg
 # admin/assets/icon.svg
 # admin/assets/img_avatar.svg
@@ -216,6 +240,8 @@
 # admin/workflows/WorkflowsSection.tsx
 # shared/keycloak-ui-shared/index.ts
 # shared/keycloak-ui-shared/main.ts
+# account/components/datalist/EmptyRow.tsx
+# account/components/page/Page.tsx
 # admin/assets/theme/login.css
 # admin/authentication/components/AddFlowDropdown.tsx
 # admin/authentication/components/AuthenticationProviderContext.tsx
@@ -623,10 +649,6 @@
 # admin/user-federation/shared/SettingsCache.tsx
 # admin/workflows/routes/WorkflowDetail.tsx
 # admin/workflows/routes/Workflows.tsx
-# shared/@patternfly/react-core/index.tsx
-# shared/@patternfly/react-icons/index.tsx
-# shared/@patternfly/react-styles/index.tsx
-# shared/@patternfly/react-table/index.tsx
 # shared/keycloak-ui-shared/alerts/AlertPanel.tsx
 # shared/keycloak-ui-shared/alerts/Alerts.tsx
 # shared/keycloak-ui-shared/buttons/FormSubmitButton.tsx
@@ -731,3 +753,68 @@
 # === @keycloakify/keycloak-admin-ui v260502.0.0 ===
 
 # === @keycloakify/keycloak-ui-shared v260502.0.0 ===
+/shared/@patternfly/react-core/index.tsx
+/shared/@patternfly/react-icons/index.tsx
+/shared/@patternfly/react-styles/index.tsx
+/shared/@patternfly/react-table/index.tsx
+
+# === @keycloakify/keycloak-account-ui v260502.0.2 ===
+/account/api.ts
+/account/environment.ts
+/account/i18next.d.ts
+/account/KcContext.ts
+/account/KcPage.tsx
+/account/routes.tsx
+/account/api/constants.ts
+/account/api/methods.ts
+/account/api/parse-links.ts
+/account/api/parse-response.ts
+/account/api/representations.ts
+/account/api/request.ts
+/account/assets/content.ts
+/account/assets/favicon.svg
+/account/assets/logo.svg
+/account/content/fetchContent.ts
+/account/i18n/i18n.ts
+/account/i18n/index.ts
+/account/i18n/messages_ar.properties
+/account/i18n/messages_az.properties
+/account/i18n/messages_ca.properties
+/account/i18n/messages_cs.properties
+/account/i18n/messages_da.properties
+/account/i18n/messages_de.properties
+/account/i18n/messages_el.properties
+/account/i18n/messages_en.properties
+/account/i18n/messages_es.properties
+/account/i18n/messages_eu.properties
+/account/i18n/messages_fa.properties
+/account/i18n/messages_fi.properties
+/account/i18n/messages_fr.properties
+/account/i18n/messages_hr.properties
+/account/i18n/messages_hu.properties
+/account/i18n/messages_it.properties
+/account/i18n/messages_ja.properties
+/account/i18n/messages_ka.properties
+/account/i18n/messages_kk.properties
+/account/i18n/messages_ky.properties
+/account/i18n/messages_lt.properties
+/account/i18n/messages_lv.properties
+/account/i18n/messages_nl.properties
+/account/i18n/messages_no.properties
+/account/i18n/messages_pl.properties
+/account/i18n/messages_pt_BR.properties
+/account/i18n/messages_pt.properties
+/account/i18n/messages_ro.properties
+/account/i18n/messages_ru.properties
+/account/i18n/messages_sk.properties
+/account/i18n/messages_sl.properties
+/account/i18n/messages_sv.properties
+/account/i18n/messages_th.properties
+/account/i18n/messages_tr.properties
+/account/i18n/messages_uk.properties
+/account/i18n/messages_zh_Hans.properties
+/account/i18n/messages_zh_Hant.properties
+/account/resources/SharedWith.tsx
+/account/utils/formatDate.ts
+/account/utils/joinPath.ts
+/account/utils/usePromise.ts
