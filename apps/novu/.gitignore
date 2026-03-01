@@ -1,0 +1,34 @@
+node_modules
+dist
+dist-ssr
+build
+*.local
+*.log
+
+# Editor
+.idea
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# TypeScript build info
+tsconfig.app.tsbuildinfo
+tsconfig.node.tsbuildinfo
+
+# Test
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/
+
+# Env
+.env
+.env.test
+.env.playwright
+
+# Misc
+coverage
+.vercel
