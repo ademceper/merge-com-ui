@@ -98,14 +98,14 @@ const MultiLineInput = ({
         <div id={id} className="flex flex-col gap-2">
             {fields.map((val, index) => (
                 <Fragment key={index}>
-                    <div className="flex w-full items-center gap-1 rounded-lg border border-input bg-transparent">
+                    <div className="flex w-full items-center gap-1 rounded-lg bg-muted">
                         <Input
                             data-testid={name + index}
                             onChange={e => updateValue(index, e.target.value)}
                             value={val}
                             disabled={isDisabled}
                             type={type}
-                            className="flex-1 border-0 shadow-none focus-visible:ring-0"
+                            className="h-12 flex-1 border-0 shadow-none bg-transparent focus-visible:ring-0"
                             {...rest}
                         />
                         <Button

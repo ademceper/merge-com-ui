@@ -11,6 +11,8 @@ import {
 } from "@merge/ui/components/select";
 import { UserProfileFieldProps } from "./UserProfileFields";
 
+const DEFAULT_LOCALE = "__default__";
+
 const localeToDisplayName = (locale: string) => {
     try {
         return new Intl.DisplayNames([locale], { type: "language" }).of(locale);
@@ -44,7 +46,7 @@ export const LocaleSelector = ({
     if (!locales.length) {
         return null;
     }
-    const options = [{ key: "", value: t("defaultLocale") }, ...locales];
+    const options = [{ key: DEFAULT_LOCALE, value: t("defaultLocale") }, ...locales];
     return (
         <FormProvider {...form}>
             <LocaleSelectInner t={t} options={options} />
@@ -61,8 +63,11 @@ function LocaleSelectInner({ t, options }: { t: UserProfileFieldProps["t"]; opti
                 control={control}
                 defaultValue=""
                 render={({ field }) => (
-                    <Select value={field.value ?? ""} onValueChange={field.onChange}>
-                        <SelectTrigger id="attributes.locale" data-testid="locale-select">
+                    <Select
+                        value={!field.value ? DEFAULT_LOCALE : field.value}
+                        onValueChange={(val) => field.onChange(val === DEFAULT_LOCALE ? "" : val)}
+                    >
+                        <SelectTrigger id="attributes.locale" data-testid="locale-select" className="h-12 rounded-lg bg-muted border-0">
                             <SelectValue placeholder={t("selectALocale")} />
                         </SelectTrigger>
                         <SelectContent>

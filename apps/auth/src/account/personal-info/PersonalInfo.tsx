@@ -29,7 +29,6 @@ import { TFuncKey, i18n } from "../i18n";
 import { useAccountAlerts } from "../utils/useAccountAlerts";
 import { usePromise } from "../utils/usePromise";
 import { Button } from "@merge/ui/components/button";
-import { Alert, AlertDescription } from "@merge/ui/components/alert";
 import { ArrowSquareOut } from "@phosphor-icons/react";
 
 export const PersonalInfo = () => {
@@ -40,7 +39,6 @@ export const PersonalInfo = () => {
     const form = useForm<UserRepresentation>({ mode: "onChange" });
     const { handleSubmit, reset, setValue, setError } = form;
     const { addAlert } = useAccountAlerts();
-    const [deleteOpen, setDeleteOpen] = useState(false);
 
     usePromise(
         signal =>
@@ -107,8 +105,21 @@ export const PersonalInfo = () => {
     } = context.environment.features;
 
     return (
-        <Page title={t("personalInfo")} description={t("personalInfoDescription")}>
-            <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+        <Page
+            title={t("personalInfo")}
+            description={t("personalInfoDescription")}
+            action={context.environment.features.deleteAccountAllowed ? (
+                <button
+                    type="button"
+                    data-testid="delete-account"
+                    onClick={() => context.keycloak.login({ action: "delete_account" })}
+                    className="text-sm font-medium text-destructive hover:underline shrink-0"
+                >
+                    {t("deleteAccount")}
+                </button>
+            ) : undefined}
+        >
+            <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
                 <UserProfileFields
                     form={form}
                     userProfileMetadata={userProfileMetadata}
@@ -142,55 +153,14 @@ export const PersonalInfo = () => {
                     }}
                 />
                 {!allFieldsReadOnly() && (
-                    <div className="flex gap-3 pt-2">
-                        <Button
-                            data-testid="save"
-                            type="submit"
-                            id="save-btn"
-                        >
-                            {t("save")}
-                        </Button>
-                        <Button
-                            data-testid="cancel"
-                            id="cancel-btn"
-                            variant="outline"
-                            type="button"
-                            onClick={() => reset()}
-                        >
-                            {t("cancel")}
-                        </Button>
-                    </div>
-                )}
-                {context.environment.features.deleteAccountAllowed && (
-                    <div className="pt-4 border-t">
-                        <button
-                            type="button"
-                            data-testid="delete-account"
-                            onClick={() => setDeleteOpen(!deleteOpen)}
-                            className="text-sm font-medium text-destructive hover:underline"
-                        >
-                            {t("deleteAccount")}
-                        </button>
-                        {deleteOpen && (
-                            <Alert variant="destructive" className="mt-4">
-                                <AlertDescription className="space-y-3">
-                                    <p>{t("deleteAccountWarning")}</p>
-                                    <Button
-                                        id="delete-account-btn"
-                                        variant="destructive"
-                                        type="button"
-                                        onClick={() =>
-                                            context.keycloak.login({
-                                                action: "delete_account"
-                                            })
-                                        }
-                                    >
-                                        {t("delete")}
-                                    </Button>
-                                </AlertDescription>
-                            </Alert>
-                        )}
-                    </div>
+                    <Button
+                        data-testid="save"
+                        type="submit"
+                        id="save-btn"
+                        className="w-full h-12 rounded-lg bg-primary text-primary-foreground font-medium text-sm hover:bg-primary/90 transition-colors disabled:opacity-50"
+                    >
+                        {t("save")}
+                    </Button>
                 )}
             </form>
         </Page>

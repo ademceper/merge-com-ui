@@ -9,6 +9,7 @@ export function Link({
     tabIndex,
     target,
     rel,
+    onClick,
 }: {
     children: React.ReactNode;
     href: string;
@@ -16,6 +17,7 @@ export function Link({
     tabIndex?: number;
     target?: string;
     rel?: string;
+    onClick?: React.MouseEventHandler<HTMLAnchorElement>;
 }) {
     return (
         <a
@@ -23,6 +25,7 @@ export function Link({
             tabIndex={tabIndex}
             target={target}
             rel={rel}
+            onClick={onClick}
             className={cn(
                 "group relative inline-flex items-center text-current",
                 "before:pointer-events-none before:absolute before:left-0 before:top-[1.5em] before:h-[0.05em] before:w-full before:bg-current before:content-['']",

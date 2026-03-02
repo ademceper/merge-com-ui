@@ -44,7 +44,7 @@ export const SelectComponent = (props: UserProfileFieldProps) => {
                                     role="combobox"
                                     aria-expanded={multiOpen}
                                     disabled={attribute.readOnly}
-                                    className="min-h-9 w-full justify-between font-normal"
+                                    className="h-12 w-full justify-between font-normal rounded-lg bg-muted border-0"
                                 >
                                     <span className="truncate">
                                         {Array.isArray(field.value) && field.value.length > 0
@@ -122,7 +122,7 @@ export const SelectComponent = (props: UserProfileFieldProps) => {
                         disabled={attribute.readOnly}
                         aria-label={t("selectOne")}
                     >
-                        <SelectTrigger id={attribute.name}>
+                        <SelectTrigger id={attribute.name} className="h-12 rounded-lg bg-muted border-0">
                             <SelectValue placeholder={t("selectOne")} />
                         </SelectTrigger>
                         <SelectContent>

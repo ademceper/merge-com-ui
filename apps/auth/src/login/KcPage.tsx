@@ -12,6 +12,11 @@ import LoginUpdateProfile from "./pages/LoginUpdateProfile";
 import DeleteAccountConfirm from "./pages/DeleteAccountConfirm";
 import LoginPageExpired from "./pages/LoginPageExpired";
 import Terms from "./pages/Terms";
+import LoginIdpLinkConfirm from "./pages/LoginIdpLinkConfirm";
+import LoginIdpLinkEmail from "./pages/LoginIdpLinkEmail";
+import LoginIdpLinkConfirmOverride from "./pages/LoginIdpLinkConfirmOverride";
+import IdpReviewUserProfile from "./pages/IdpReviewUserProfile";
+import LinkIdpAction from "./pages/LinkIdpAction";
 
 const UserProfileFormFields = lazy(
     () => import("keycloakify/login/UserProfileFormFields")
@@ -101,6 +106,56 @@ export default function KcPage(props: { kcContext: KcContext }) {
                     case "terms.ftl":
                         return (
                             <Terms
+                                kcContext={kcContext}
+                                i18n={i18n}
+                                classes={{}}
+                                Template={Template}
+                                doUseDefaultCss={false}
+                            />
+                        );
+                    case "login-idp-link-confirm.ftl":
+                        return (
+                            <LoginIdpLinkConfirm
+                                kcContext={kcContext}
+                                i18n={i18n}
+                                classes={{}}
+                                Template={Template}
+                                doUseDefaultCss={false}
+                            />
+                        );
+                    case "login-idp-link-email.ftl":
+                        return (
+                            <LoginIdpLinkEmail
+                                kcContext={kcContext}
+                                i18n={i18n}
+                                classes={{}}
+                                Template={Template}
+                                doUseDefaultCss={false}
+                            />
+                        );
+                    case "login-idp-link-confirm-override.ftl":
+                        return (
+                            <LoginIdpLinkConfirmOverride
+                                kcContext={kcContext}
+                                i18n={i18n}
+                                classes={{}}
+                                Template={Template}
+                                doUseDefaultCss={false}
+                            />
+                        );
+                    case "idp-review-user-profile.ftl":
+                        return (
+                            <IdpReviewUserProfile
+                                kcContext={kcContext}
+                                i18n={i18n}
+                                classes={{}}
+                                Template={Template}
+                                doUseDefaultCss={false}
+                            />
+                        );
+                    case "link-idp-action.ftl":
+                        return (
+                            <LinkIdpAction
                                 kcContext={kcContext}
                                 i18n={i18n}
                                 classes={{}}

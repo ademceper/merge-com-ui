@@ -39,6 +39,28 @@ export const ScrollForm = ({
 
     if (shownSections.length === 0) return null;
 
+    // Tek section varsa tab gösterme, direkt içeriği render et
+    if (shownSections.length === 1) {
+        const { title, panel } = shownSections[0];
+        return (
+            <div className={className ?? "space-y-4"}>
+                {borders ? (
+                    <FormPanel
+                        scrollId={spacesToHyphens(title.toLowerCase())}
+                        title={title}
+                    >
+                        {panel}
+                    </FormPanel>
+                ) : (
+                    <section id={spacesToHyphens(title.toLowerCase())}>
+                        {panel}
+                    </section>
+                )}
+                {actions && <div className="mt-6 flex shrink-0 justify-end">{actions}</div>}
+            </div>
+        );
+    }
+
     return (
         <div className={className ?? "space-y-4"}>
             <Tabs value={activeTab} onValueChange={setActiveTab}>

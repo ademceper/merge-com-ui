@@ -43,6 +43,7 @@ function TextFieldComponent(props: UserProfileFieldProps) {
                 }
                 disabled={attribute.readOnly}
                 defaultValue={attribute.defaultValue}
+                className="h-12 rounded-lg bg-muted border-0 text-foreground placeholder:text-muted-foreground focus-visible:ring-2 focus-visible:ring-ring"
                 {...form.register(fieldName(attribute.name))}
             />
         </UserProfileGroup>
@@ -63,6 +64,7 @@ function TextAreaFieldComponent(props: UserProfileFieldProps) {
                 disabled={attribute.readOnly}
                 required={isRequired}
                 defaultValue={attribute.defaultValue}
+                className="rounded-lg bg-muted border-0 text-foreground placeholder:text-muted-foreground focus-visible:ring-2 focus-visible:ring-ring"
                 {...form.register(fieldName(attribute.name))}
             />
         </UserProfileGroup>
@@ -184,7 +186,7 @@ export const UserProfileFields = ({
                 .map(({ group, attributes }) => ({
                     title: label(t, group.displayHeader, group.name) || t("general"),
                     panel: (
-                        <div className="pf-v5-c-form">
+                        <div className="space-y-6">
                             {group.displayDescription && (
                                 <p className="pb-4">
                                     {label(t, group.displayDescription, "")}

@@ -18,12 +18,12 @@ export const FormPanel = ({
 
     return (
         <Card id={id} className={className}>
-            <CardHeader className="kc-form-panel__header">
+            <CardHeader>
                 <CardTitle tabIndex={0}>
                     <FormTitle id={scrollId} title={title} />
                 </CardTitle>
             </CardHeader>
-            <CardContent className="kc-form-panel__body">{children}</CardContent>
+            <CardContent>{children}</CardContent>
         </Card>
     );
 };

@@ -22,7 +22,7 @@ export const Header = () => {
     return (
         <header className="grid grid-cols-1 lg:grid-cols-[16rem_1fr] lg:gap-x-12 items-center mb-6 gap-y-4">
             <div className="flex items-center justify-center lg:justify-start">
-                <img key={logoUrl} src={logoUrl} alt="Merge" className="h-11 w-auto max-w-[13rem] object-contain" />
+                <img key={logoUrl} src={logoUrl} alt="Merge" className="h-11 w-auto max-w-52 object-contain" />
             </div>
             <div className="flex flex-row items-center justify-between gap-4">
                 <div className="space-y-0.5 min-w-0">
@@ -31,7 +31,8 @@ export const Header = () => {
                 </div>
                 <div className="flex items-center gap-3 shrink-0">
                     <Link
-                        href={keycloak.logoutUrl}
+                        href="#"
+                        onClick={(e) => { e.preventDefault(); keycloak.logout(); }}
                         className="text-foreground hover:text-destructive text-sm font-medium"
                     >
                         {t("doSignOut")}

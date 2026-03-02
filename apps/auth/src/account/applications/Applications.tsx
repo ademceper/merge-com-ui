@@ -13,7 +13,17 @@ import {
     label,
     useEnvironment
 } from "../../shared/keycloak-ui-shared";
-import { ContinueCancelModal } from "../components/ContinueCancelModal";
+import {
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
+    AlertDialogTrigger
+} from "@merge/ui/components/alert-dialog";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 
@@ -223,20 +233,29 @@ export const Applications = () => {
                                 )}
                                 {(application.consent || application.offlineAccess) && (
                                     <div className="pt-4 border-t space-y-3">
-                                        <ContinueCancelModal
-                                            buttonTitle={t("removeAccess")}
-                                            modalTitle={t("removeAccess")}
-                                            continueLabel={t("confirm")}
-                                            cancelLabel={t("cancel")}
-                                            buttonVariant="secondary"
-                                            onContinue={() =>
-                                                removeConsent(application.clientId)
-                                            }
-                                        >
-                                            {t("removeModalMessage", {
-                                                name: application.clientId
-                                            })}
-                                        </ContinueCancelModal>
+                                        <AlertDialog>
+                                            <AlertDialogTrigger asChild>
+                                                <Button variant="secondary" size="sm">
+                                                    {t("removeAccess")}
+                                                </Button>
+                                            </AlertDialogTrigger>
+                                            <AlertDialogContent>
+                                                <AlertDialogHeader>
+                                                    <AlertDialogTitle>{t("removeAccess")}</AlertDialogTitle>
+                                                    <AlertDialogDescription>
+                                                        {t("removeModalMessage", {
+                                                            name: application.clientId
+                                                        })}
+                                                    </AlertDialogDescription>
+                                                </AlertDialogHeader>
+                                                <AlertDialogFooter>
+                                                    <AlertDialogCancel>{t("cancel")}</AlertDialogCancel>
+                                                    <AlertDialogAction variant="destructive" onClick={() => removeConsent(application.clientId)}>
+                                                        {t("confirm")}
+                                                    </AlertDialogAction>
+                                                </AlertDialogFooter>
+                                            </AlertDialogContent>
+                                        </AlertDialog>
                                         <p className="text-sm text-muted-foreground flex items-center gap-1">
                                             <Info className="h-4 w-4 shrink-0" />
                                             {t("infoMessage")}

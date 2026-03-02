@@ -13,7 +13,17 @@ import {
     useEnvironment,
     label
 } from "../../shared/keycloak-ui-shared";
-import { ContinueCancelModal } from "../components/ContinueCancelModal";
+import {
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
+    AlertDialogTrigger
+} from "@merge/ui/components/alert-dialog";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 
@@ -117,15 +127,25 @@ export const DeviceActivity = () => {
                     </Button>
 
                     {(devices.length > 1 || devices[0].sessions.length > 1) && (
-                        <ContinueCancelModal
-                            buttonTitle={t("signOutAllDevices")}
-                            modalTitle={t("signOutAllDevices")}
-                            continueLabel={t("confirm")}
-                            cancelLabel={t("cancel")}
-                            onContinue={() => signOutAll()}
-                        >
-                            {t("signOutAllDevicesWarning")}
-                        </ContinueCancelModal>
+                        <AlertDialog>
+                            <AlertDialogTrigger asChild>
+                                <Button variant="destructive" size="sm">
+                                    {t("signOutAllDevices")}
+                                </Button>
+                            </AlertDialogTrigger>
+                            <AlertDialogContent>
+                                <AlertDialogHeader>
+                                    <AlertDialogTitle>{t("signOutAllDevices")}</AlertDialogTitle>
+                                    <AlertDialogDescription>{t("signOutAllDevicesWarning")}</AlertDialogDescription>
+                                </AlertDialogHeader>
+                                <AlertDialogFooter>
+                                    <AlertDialogCancel>{t("cancel")}</AlertDialogCancel>
+                                    <AlertDialogAction variant="destructive" onClick={() => signOutAll()}>
+                                        {t("confirm")}
+                                    </AlertDialogAction>
+                                </AlertDialogFooter>
+                            </AlertDialogContent>
+                        </AlertDialog>
                     )}
                 </div>
             </div>
@@ -167,18 +187,25 @@ export const DeviceActivity = () => {
                                     </div>
                                 </div>
                                 {!session.current && (
-                                    <ContinueCancelModal
-                                        buttonTitle={t("signOut")}
-                                        modalTitle={t("signOut")}
-                                        continueLabel={t("confirm")}
-                                        cancelLabel={t("cancel")}
-                                        buttonVariant="secondary"
-                                        onContinue={() =>
-                                            signOutSession(session, device)
-                                        }
-                                    >
-                                        {t("signOutWarning")}
-                                    </ContinueCancelModal>
+                                    <AlertDialog>
+                                        <AlertDialogTrigger asChild>
+                                            <Button variant="secondary" size="sm">
+                                                {t("signOut")}
+                                            </Button>
+                                        </AlertDialogTrigger>
+                                        <AlertDialogContent>
+                                            <AlertDialogHeader>
+                                                <AlertDialogTitle>{t("signOut")}</AlertDialogTitle>
+                                                <AlertDialogDescription>{t("signOutWarning")}</AlertDialogDescription>
+                                            </AlertDialogHeader>
+                                            <AlertDialogFooter>
+                                                <AlertDialogCancel>{t("cancel")}</AlertDialogCancel>
+                                                <AlertDialogAction variant="destructive" onClick={() => signOutSession(session, device)}>
+                                                    {t("confirm")}
+                                                </AlertDialogAction>
+                                            </AlertDialogFooter>
+                                        </AlertDialogContent>
+                                    </AlertDialog>
                                 )}
                             </div>
 

@@ -15,14 +15,18 @@ import { Separator } from "@merge/ui/components/separator";
 type PageProps = {
     title: string;
     description: string;
+    action?: React.ReactNode;
 };
 
-export const Page = ({ title, description, children }: PropsWithChildren<PageProps>) => {
+export const Page = ({ title, description, action, children }: PropsWithChildren<PageProps>) => {
     return (
         <div className="space-y-6">
-            <div>
-                <h3 className="text-lg font-medium" data-testid="page-heading">{title}</h3>
-                <p className="text-sm text-muted-foreground">{description}</p>
+            <div className="flex items-start justify-between gap-4">
+                <div>
+                    <h3 className="text-lg font-medium" data-testid="page-heading">{title}</h3>
+                    <p className="text-sm text-muted-foreground">{description}</p>
+                </div>
+                {action}
             </div>
             <Separator />
             {children}
