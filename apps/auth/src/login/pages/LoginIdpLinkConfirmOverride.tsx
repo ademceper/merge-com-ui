@@ -4,9 +4,7 @@ import type { I18n } from "../i18n";
 import AuthLayout from "../components/AuthLayout";
 import { Button } from "@merge/ui/components/button";
 
-export default function LoginIdpLinkConfirmOverride(
-    props: PageProps<Extract<KcContext, { pageId: "login-idp-link-confirm-override.ftl" }>, I18n>
-) {
+export default function LoginIdpLinkConfirmOverride(props: PageProps<Extract<KcContext, { pageId: "login-idp-link-confirm-override.ftl" }>, I18n>) {
     const { kcContext, i18n } = props;
 
     const { url, idpDisplayName } = kcContext;
@@ -16,9 +14,7 @@ export default function LoginIdpLinkConfirmOverride(
     return (
         <AuthLayout>
             <div className="space-y-5">
-                <h1 className="text-xl font-semibold text-foreground tracking-tight">
-                    {msg("confirmOverrideIdpTitle")}
-                </h1>
+                <h1 className="text-xl font-semibold text-foreground tracking-tight">{msg("confirmOverrideIdpTitle")}</h1>
 
                 <div className="text-sm text-muted-foreground">
                     <p>
@@ -30,13 +26,7 @@ export default function LoginIdpLinkConfirmOverride(
                 </div>
 
                 <form id="kc-register-form" action={url.loginAction} method="post" className="pt-2">
-                    <Button
-                        type="submit"
-                        name="submitAction"
-                        value="confirmOverride"
-                        size="lg"
-                        className="w-full"
-                    >
+                    <Button type="submit" name="submitAction" value="confirmOverride" size="lg" className="w-full">
                         {msg("confirmOverrideIdpContinue", idpDisplayName)}
                     </Button>
                 </form>

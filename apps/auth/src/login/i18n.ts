@@ -61,6 +61,19 @@ const { useI18n, ofTypeI18n } = i18nBuilder
             finalDeletionConfirmation: "Are you sure you want to delete your account?",
             doConfirmDelete: "Yes, delete my account",
 
+            // Configure TOTP page
+            loginTotpTitle: "Set up two-factor authentication",
+            loginTotpConfigureDescription: "Configure an authenticator app to secure your account",
+            loginTotpStepInstall: "Supported apps:",
+            loginTotpDeviceName: "Device name",
+            logoutOtherSessions: "Sign out from other devices",
+            loginOtpTitle: "Two-factor authentication",
+            loginOtpOneTime: "Enter your verification code",
+
+            // Error page
+            errorTitle: "An error occurred",
+            backToApplication: "Back to application",
+
             // Login page expired
             pageExpiredTitle: "Page expired",
             pageExpiredMsg1: "The page you were trying to access has expired.",
@@ -123,6 +136,19 @@ const { useI18n, ofTypeI18n } = i18nBuilder
             errasingData: "Tüm verilerinizi silecek",
             finalDeletionConfirmation: "Hesabınızı silmek istediğinizden emin misiniz?",
             doConfirmDelete: "Evet, hesabımı sil",
+
+            // Configure TOTP page
+            loginTotpTitle: "İki faktörlü kimlik doğrulamayı ayarla",
+            loginTotpConfigureDescription: "Hesabınızı güvence altına almak için bir doğrulama uygulaması yapılandırın",
+            loginTotpStepInstall: "Desteklenen uygulamalar:",
+            loginTotpDeviceName: "Cihaz adı",
+            logoutOtherSessions: "Diğer cihazlardan çıkış yap",
+            loginOtpTitle: "İki faktörlü kimlik doğrulama",
+            loginOtpOneTime: "Doğrulama kodunuzu girin",
+
+            // Error page
+            errorTitle: "Bir hata oluştu",
+            backToApplication: "Uygulamaya dön",
 
             // Login page expired
             pageExpiredTitle: "Sayfa süresi doldu",

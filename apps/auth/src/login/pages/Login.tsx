@@ -9,7 +9,6 @@ import { Input } from "@merge/ui/components/input";
 import { Button } from "@merge/ui/components/button";
 import { Alert, AlertDescription } from "@merge/ui/components/alert";
 import { cn } from "@merge/ui/lib/utils";
-import { formInputClassName } from "../../shared/keycloak-ui-shared";
 
 export default function Login(props: PageProps<Extract<KcContext, { pageId: "login.ftl" }>, I18n>) {
     const { kcContext, i18n } = props;
@@ -25,9 +24,7 @@ export default function Login(props: PageProps<Extract<KcContext, { pageId: "log
     return (
         <AuthLayout>
             <div className="space-y-5">
-                <h1 className="text-xl font-semibold text-foreground tracking-tight">
-                    {msg("loginAccountTitle")}
-                </h1>
+                <h1 className="text-xl font-semibold text-foreground tracking-tight">{msg("loginAccountTitle")}</h1>
 
                 {message && (
                     <Alert variant={message.type === "error" ? "destructive" : "default"} className="rounded-lg">
@@ -58,15 +55,10 @@ export default function Login(props: PageProps<Extract<KcContext, { pageId: "log
                                     autoComplete="username"
                                     placeholder={msgStr("loginPlaceholder") || msgStr("usernameOrEmail")}
                                     aria-invalid={messagesPerField.existsError("username", "password")}
-                                    className={cn(
-                                        formInputClassName,
-                                        messagesPerField.existsError("username", "password") && "border border-destructive"
-                                    )}
+                                    className={cn(messagesPerField.existsError("username", "password") && "border border-destructive")}
                                 />
                                 {messagesPerField.existsError("username", "password") && (
-                                    <p className="text-sm text-destructive">
-                                        {messagesPerField.getFirstError("username", "password")}
-                                    </p>
+                                    <p className="text-sm text-destructive">{messagesPerField.getFirstError("username", "password")}</p>
                                 )}
                             </div>
                         )}
@@ -80,15 +72,10 @@ export default function Login(props: PageProps<Extract<KcContext, { pageId: "log
                                 autoComplete="current-password"
                                 placeholder={msgStr("password")}
                                 aria-invalid={messagesPerField.existsError("username", "password")}
-                                className={cn(
-                                    formInputClassName,
-                                    usernameHidden && messagesPerField.existsError("username", "password") && "border border-destructive"
-                                )}
+                                className={cn(usernameHidden && messagesPerField.existsError("username", "password") && "border border-destructive")}
                             />
                             {usernameHidden && messagesPerField.existsError("username", "password") && (
-                                <p className="text-sm text-destructive">
-                                    {messagesPerField.getFirstError("username", "password")}
-                                </p>
+                                <p className="text-sm text-destructive">{messagesPerField.getFirstError("username", "password")}</p>
                             )}
                             {realm.resetPasswordAllowed && (
                                 <div className="flex justify-end mt-1">
@@ -103,20 +90,9 @@ export default function Login(props: PageProps<Extract<KcContext, { pageId: "log
                             )}
                         </div>
 
-                        <input
-                            type="hidden"
-                            id="id-hidden-input"
-                            name="credentialId"
-                            value={auth.selectedCredential}
-                        />
+                        <input type="hidden" id="id-hidden-input" name="credentialId" value={auth.selectedCredential} />
 
-                        <Button
-                            tabIndex={7}
-                            type="submit"
-                            disabled={isLoginButtonDisabled}
-                            size="lg"
-                            className="w-full"
-                        >
+                        <Button tabIndex={7} type="submit" disabled={isLoginButtonDisabled} size="lg" className="w-full">
                             {msgStr("doContinue") || msgStr("doLogIn")}
                         </Button>
                     </form>
@@ -126,7 +102,7 @@ export default function Login(props: PageProps<Extract<KcContext, { pageId: "log
                     <SocialLoginButtons
                         providers={providers}
                         dividerLabel={msgStr("orSeparator") || "Veya"}
-                        getButtonLabel={(displayName) =>
+                        getButtonLabel={displayName =>
                             msgStr("continueWithProvider")?.replace("{{provider}}", displayName) || `${displayName} ile devam edin`
                         }
                     />
@@ -136,7 +112,7 @@ export default function Login(props: PageProps<Extract<KcContext, { pageId: "log
                     <p className="text-center text-sm text-muted-foreground pt-2">
                         {msg("noAccount")}{" "}
                         <Link tabIndex={8} href={url.registrationUrl} className="text-foreground font-medium">
-                                {msg("doRegister")}
+                            {msg("doRegister")}
                         </Link>
                     </p>
                 )}

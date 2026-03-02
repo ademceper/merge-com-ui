@@ -25,11 +25,11 @@ export default function AuthLayout({ children }: AuthLayoutProps) {
                         key={logoUrl}
                         src={logoUrl}
                         alt="Merge"
-                        className="h-11 w-auto max-w-[13rem] object-contain"
+                        className="h-11 w-auto max-w-52 object-contain"
                     />
                 </div>
             </div>
-            <div className="w-full max-w-[340px]">
+            <div className="w-full max-w-85">
                 {children}
             </div>
         </div>

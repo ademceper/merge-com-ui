@@ -8,12 +8,7 @@ import { Button } from "@merge/ui/components/button";
 import { Alert, AlertDescription } from "@merge/ui/components/alert";
 import { cn } from "@merge/ui/lib/utils";
 
-const inputClassName =
-    "h-12 rounded-lg bg-muted border-0 text-foreground placeholder:text-muted-foreground focus-visible:ring-2 focus-visible:ring-ring";
-
-export default function LoginUpdateProfile(
-    props: PageProps<Extract<KcContext, { pageId: "login-update-profile.ftl" }>, I18n>
-) {
+export default function LoginUpdateProfile(props: PageProps<Extract<KcContext, { pageId: "login-update-profile.ftl" }>, I18n>) {
     const { kcContext, i18n } = props;
 
     const { url, profile, messagesPerField, isAppInitiatedAction, message } = kcContext;
@@ -32,13 +27,9 @@ export default function LoginUpdateProfile(
     return (
         <AuthLayout>
             <div className="space-y-5">
-                <h1 className="text-xl font-semibold text-foreground tracking-tight">
-                    {msg("loginProfileTitle")}
-                </h1>
+                <h1 className="text-xl font-semibold text-foreground tracking-tight">{msg("loginProfileTitle")}</h1>
                 <p className="text-sm text-muted-foreground">
-                    {isAppInitiatedAction
-                        ? msg("loginProfileDescription")
-                        : msg("loginProfileRequiredDescription")}
+                    {isAppInitiatedAction ? msg("loginProfileDescription") : msg("loginProfileRequiredDescription")}
                 </p>
 
                 {message && (
@@ -67,10 +58,7 @@ export default function LoginUpdateProfile(
                                 placeholder={msgStr("username")}
                                 autoComplete="username"
                                 aria-invalid={messagesPerField.existsError("username")}
-                                className={cn(
-                                    inputClassName,
-                                    messagesPerField.existsError("username") && "border border-destructive"
-                                )}
+                                className={cn(messagesPerField.existsError("username") && "border border-destructive")}
                             />
                             {messagesPerField.existsError("username") && (
                                 <p className="text-sm text-destructive">{messagesPerField.get("username")}</p>
@@ -87,14 +75,9 @@ export default function LoginUpdateProfile(
                             placeholder={msgStr("email")}
                             autoComplete="email"
                             aria-invalid={messagesPerField.existsError("email")}
-                            className={cn(
-                                inputClassName,
-                                messagesPerField.existsError("email") && "border border-destructive"
-                            )}
+                            className={cn(messagesPerField.existsError("email") && "border border-destructive")}
                         />
-                        {messagesPerField.existsError("email") && (
-                            <p className="text-sm text-destructive">{messagesPerField.get("email")}</p>
-                        )}
+                        {messagesPerField.existsError("email") && <p className="text-sm text-destructive">{messagesPerField.get("email")}</p>}
                     </div>
 
                     <div className="grid grid-cols-2 gap-4">
@@ -107,10 +90,7 @@ export default function LoginUpdateProfile(
                                 placeholder={msgStr("firstName")}
                                 autoComplete="given-name"
                                 aria-invalid={messagesPerField.existsError("firstName")}
-                                className={cn(
-                                    inputClassName,
-                                    messagesPerField.existsError("firstName") && "border border-destructive"
-                                )}
+                                className={cn(messagesPerField.existsError("firstName") && "border border-destructive")}
                             />
                             {messagesPerField.existsError("firstName") && (
                                 <p className="text-sm text-destructive">{messagesPerField.get("firstName")}</p>
@@ -125,10 +105,7 @@ export default function LoginUpdateProfile(
                                 placeholder={msgStr("lastName")}
                                 autoComplete="family-name"
                                 aria-invalid={messagesPerField.existsError("lastName")}
-                                className={cn(
-                                    inputClassName,
-                                    messagesPerField.existsError("lastName") && "border border-destructive"
-                                )}
+                                className={cn(messagesPerField.existsError("lastName") && "border border-destructive")}
                             />
                             {messagesPerField.existsError("lastName") && (
                                 <p className="text-sm text-destructive">{messagesPerField.get("lastName")}</p>
@@ -137,23 +114,11 @@ export default function LoginUpdateProfile(
                     </div>
 
                     <div className="flex flex-col gap-3 pt-2">
-                        <Button
-                            type="submit"
-                            disabled={isSubmitting}
-                            size="lg"
-                            className="w-full"
-                        >
+                        <Button type="submit" disabled={isSubmitting} size="lg" className="w-full">
                             {msgStr("doSubmit")}
                         </Button>
                         {isAppInitiatedAction ? (
-                            <Button
-                                type="submit"
-                                name="cancel-aia"
-                                value="true"
-                                variant="secondary"
-                                size="lg"
-                                className="w-full"
-                            >
+                            <Button type="submit" name="cancel-aia" value="true" variant="secondary" size="lg" className="w-full">
                                 {msgStr("doCancel")}
                             </Button>
                         ) : (

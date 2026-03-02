@@ -17,6 +17,9 @@ import LoginIdpLinkEmail from "./pages/LoginIdpLinkEmail";
 import LoginIdpLinkConfirmOverride from "./pages/LoginIdpLinkConfirmOverride";
 import IdpReviewUserProfile from "./pages/IdpReviewUserProfile";
 import LinkIdpAction from "./pages/LinkIdpAction";
+import LoginConfigTotp from "./pages/LoginConfigTotp";
+import LoginOtp from "./pages/LoginOtp";
+import Error from "./pages/Error";
 
 const UserProfileFormFields = lazy(
     () => import("keycloakify/login/UserProfileFormFields")
@@ -156,6 +159,36 @@ export default function KcPage(props: { kcContext: KcContext }) {
                     case "link-idp-action.ftl":
                         return (
                             <LinkIdpAction
+                                kcContext={kcContext}
+                                i18n={i18n}
+                                classes={{}}
+                                Template={Template}
+                                doUseDefaultCss={false}
+                            />
+                        );
+                    case "login-config-totp.ftl":
+                        return (
+                            <LoginConfigTotp
+                                kcContext={kcContext}
+                                i18n={i18n}
+                                classes={{}}
+                                Template={Template}
+                                doUseDefaultCss={false}
+                            />
+                        );
+                    case "login-otp.ftl":
+                        return (
+                            <LoginOtp
+                                kcContext={kcContext}
+                                i18n={i18n}
+                                classes={{}}
+                                Template={Template}
+                                doUseDefaultCss={false}
+                            />
+                        );
+                    case "error.ftl":
+                        return (
+                            <Error
                                 kcContext={kcContext}
                                 i18n={i18n}
                                 classes={{}}

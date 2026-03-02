@@ -9,12 +9,7 @@ import { Button } from "@merge/ui/components/button";
 import { Alert, AlertDescription } from "@merge/ui/components/alert";
 import { cn } from "@merge/ui/lib/utils";
 
-const inputClassName =
-    "h-12 rounded-lg bg-muted border-0 text-foreground placeholder:text-muted-foreground focus-visible:ring-2 focus-visible:ring-ring";
-
-export default function LoginResetPassword(
-    props: PageProps<Extract<KcContext, { pageId: "login-reset-password.ftl" }>, I18n>
-) {
+export default function LoginResetPassword(props: PageProps<Extract<KcContext, { pageId: "login-reset-password.ftl" }>, I18n>) {
     const { kcContext, i18n } = props;
 
     const { url, realm, auth, messagesPerField, message } = kcContext;
@@ -26,9 +21,7 @@ export default function LoginResetPassword(
     return (
         <AuthLayout>
             <div className="space-y-5">
-                <h1 className="text-xl font-semibold text-foreground tracking-tight">
-                    {msg("emailForgotTitle")}
-                </h1>
+                <h1 className="text-xl font-semibold text-foreground tracking-tight">{msg("emailForgotTitle")}</h1>
                 <p className="text-sm text-muted-foreground">{msg("emailForgotDescription")}</p>
 
                 {message && (
@@ -63,22 +56,12 @@ export default function LoginResetPassword(
                             }
                             autoComplete="username"
                             aria-invalid={messagesPerField.existsError("username")}
-                            className={cn(
-                                inputClassName,
-                                messagesPerField.existsError("username") && "border border-destructive"
-                            )}
+                            className={cn(messagesPerField.existsError("username") && "border border-destructive")}
                         />
-                        {messagesPerField.existsError("username") && (
-                            <p className="text-sm text-destructive">{messagesPerField.get("username")}</p>
-                        )}
+                        {messagesPerField.existsError("username") && <p className="text-sm text-destructive">{messagesPerField.get("username")}</p>}
                     </div>
 
-                    <Button
-                        type="submit"
-                        disabled={isSubmitting}
-                        size="lg"
-                        className="w-full"
-                    >
+                    <Button type="submit" disabled={isSubmitting} size="lg" className="w-full">
                         {msgStr("doSubmit")}
                     </Button>
                 </form>

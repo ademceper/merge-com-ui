@@ -8,13 +8,7 @@ import { Button } from "@merge/ui/components/button";
 import { Alert, AlertDescription } from "@merge/ui/components/alert";
 import { cn } from "@merge/ui/lib/utils";
 
-const inputClassName =
-    "h-12 rounded-lg bg-muted border-0 text-foreground placeholder:text-muted-foreground focus-visible:ring-2 focus-visible:ring-ring";
-const fullWidthClassName = "w-full";
-
-export default function LoginUpdatePassword(
-    props: PageProps<Extract<KcContext, { pageId: "login-update-password.ftl" }>, I18n>
-) {
+export default function LoginUpdatePassword(props: PageProps<Extract<KcContext, { pageId: "login-update-password.ftl" }>, I18n>) {
     const { kcContext, i18n } = props;
 
     const { url, messagesPerField, isAppInitiatedAction, message } = kcContext;
@@ -26,13 +20,9 @@ export default function LoginUpdatePassword(
     return (
         <AuthLayout>
             <div className="space-y-5">
-                <h1 className="text-xl font-semibold text-black tracking-tight">
-                    {msg("updatePasswordTitle")}
-                </h1>
+                <h1 className="text-xl font-semibold text-black tracking-tight">{msg("updatePasswordTitle")}</h1>
                 <p className="text-sm text-gray-500">
-                    {isAppInitiatedAction
-                        ? msg("updatePasswordDescription")
-                        : msg("updatePasswordRequiredDescription")}
+                    {isAppInitiatedAction ? msg("updatePasswordDescription") : msg("updatePasswordRequiredDescription")}
                 </p>
 
                 {message && (
@@ -51,20 +41,8 @@ export default function LoginUpdatePassword(
                     }}
                     className="space-y-4"
                 >
-                    <input
-                        type="text"
-                        id="username"
-                        name="username"
-                        autoComplete="username"
-                        style={{ display: "none" }}
-                    />
-                    <input
-                        type="password"
-                        id="password"
-                        name="password"
-                        autoComplete="current-password"
-                        style={{ display: "none" }}
-                    />
+                    <input type="text" id="username" name="username" autoComplete="username" style={{ display: "none" }} />
+                    <input type="password" id="password" name="password" autoComplete="current-password" style={{ display: "none" }} />
 
                     <div className="space-y-2">
                         <Input
@@ -75,15 +53,10 @@ export default function LoginUpdatePassword(
                             placeholder={msgStr("passwordNew")}
                             autoComplete="new-password"
                             aria-invalid={messagesPerField.existsError("password", "password-confirm")}
-                            className={cn(
-                                inputClassName,
-                                messagesPerField.existsError("password", "password-confirm") && "border border-destructive"
-                            )}
+                            className={cn(messagesPerField.existsError("password", "password-confirm") && "border border-destructive")}
                         />
                         {messagesPerField.existsError("password", "password-confirm") && (
-                            <p className="text-sm text-red-600">
-                                {messagesPerField.getFirstError("password", "password-confirm")}
-                            </p>
+                            <p className="text-sm text-red-600">{messagesPerField.getFirstError("password", "password-confirm")}</p>
                         )}
                     </div>
 
@@ -95,10 +68,7 @@ export default function LoginUpdatePassword(
                             placeholder={msgStr("passwordConfirm")}
                             autoComplete="new-password"
                             aria-invalid={messagesPerField.existsError("password-confirm")}
-                            className={cn(
-                                inputClassName,
-                                messagesPerField.existsError("password-confirm") && "border border-destructive"
-                            )}
+                            className={cn(messagesPerField.existsError("password-confirm") && "border border-destructive")}
                         />
                         {messagesPerField.existsError("password-confirm") && (
                             <p className="text-sm text-destructive">{messagesPerField.get("password-confirm")}</p>
@@ -106,27 +76,15 @@ export default function LoginUpdatePassword(
                     </div>
 
                     <div className="flex flex-col gap-3 pt-2">
-                        <Button
-                            type="submit"
-                            disabled={isSubmitting}
-                            size="lg"
-                            className={fullWidthClassName}
-                        >
+                        <Button type="submit" disabled={isSubmitting} size="lg" className="w-full">
                             {msgStr("doSubmit")}
                         </Button>
                         {isAppInitiatedAction ? (
-                            <Button
-                                type="submit"
-                                name="cancel-aia"
-                                value="true"
-                                variant="secondary"
-                                size="lg"
-                                className={fullWidthClassName}
-                            >
+                            <Button type="submit" name="cancel-aia" value="true" variant="secondary" size="lg" className="w-full">
                                 {msgStr("doCancel")}
                             </Button>
                         ) : (
-                            <Button variant="secondary" size="lg" className={fullWidthClassName} asChild>
+                            <Button variant="secondary" size="lg" className="w-full" asChild>
                                 <a href={url.loginRestartFlowUrl}>{msgStr("doCancel")}</a>
                             </Button>
                         )}
