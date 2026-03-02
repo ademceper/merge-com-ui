@@ -177,7 +177,7 @@ export default function RealmRolesSection() {
                 helpUrl={helpUrls.realmRolesUrl}
                 divider
             />
-            <div className="py-6 px-0">
+            <div className="pt-4 pb-6 px-0">
                 <AlertDialog
                     open={!!selectedRole}
                     onOpenChange={(open) => !open && setSelectedRole(undefined)}

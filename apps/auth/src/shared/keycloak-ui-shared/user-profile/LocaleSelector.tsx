@@ -1,7 +1,5 @@
-import { get } from "lodash-es";
 import { useMemo } from "react";
 import { FormProvider, Controller, useFormContext } from "react-hook-form";
-import { FormLabel } from "../controls/FormLabel";
 import {
     Select,
     SelectContent,
@@ -10,8 +8,6 @@ import {
     SelectValue
 } from "@merge/ui/components/select";
 import { UserProfileFieldProps } from "./UserProfileFields";
-
-const DEFAULT_LOCALE = "__default__";
 
 const localeToDisplayName = (locale: string) => {
     try {
@@ -46,7 +42,7 @@ export const LocaleSelector = ({
     if (!locales.length) {
         return null;
     }
-    const options = [{ key: DEFAULT_LOCALE, value: t("defaultLocale") }, ...locales];
+    const options = locales;
     return (
         <FormProvider {...form}>
             <LocaleSelectInner t={t} options={options} />
@@ -55,31 +51,32 @@ export const LocaleSelector = ({
 };
 
 function LocaleSelectInner({ t, options }: { t: UserProfileFieldProps["t"]; options: { key: string; value: string }[] }) {
-    const { control, formState: { errors } } = useFormContext();
+    const { control } = useFormContext();
     return (
-        <FormLabel name="attributes.locale" label={t("selectALocale")} error={get(errors, "attributes.locale")}>
-            <Controller
-                name="attributes.locale"
-                control={control}
-                defaultValue=""
-                render={({ field }) => (
-                    <Select
-                        value={!field.value ? DEFAULT_LOCALE : field.value}
-                        onValueChange={(val) => field.onChange(val === DEFAULT_LOCALE ? "" : val)}
-                    >
-                        <SelectTrigger id="attributes.locale" data-testid="locale-select" className="h-12 rounded-lg bg-muted border-0">
-                            <SelectValue placeholder={t("selectALocale")} />
-                        </SelectTrigger>
-                        <SelectContent>
-                            {options.map((opt) => (
-                                <SelectItem key={opt.key} value={opt.key}>
-                                    {opt.value}
-                                </SelectItem>
-                            ))}
-                        </SelectContent>
-                    </Select>
-                )}
-            />
-        </FormLabel>
+        <Controller
+            name="attributes.locale"
+            control={control}
+            defaultValue=""
+            render={({ field }) => {
+                const val = Array.isArray(field.value) ? field.value[0] : field.value;
+                return (
+                <Select
+                    value={val || undefined}
+                    onValueChange={(v) => field.onChange(v)}
+                >
+                    <SelectTrigger id="attributes.locale" data-testid="locale-select" className="h-12 rounded-lg bg-muted border-0">
+                        <SelectValue placeholder={t("selectALocale")} />
+                    </SelectTrigger>
+                    <SelectContent>
+                        {options.map((opt) => (
+                            <SelectItem key={opt.key} value={opt.key}>
+                                {opt.value}
+                            </SelectItem>
+                        ))}
+                    </SelectContent>
+                </Select>
+                );
+            }}
+        />
     );
 }

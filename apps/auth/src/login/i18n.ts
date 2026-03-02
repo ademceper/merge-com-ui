@@ -70,6 +70,10 @@ const { useI18n, ofTypeI18n } = i18nBuilder
             loginOtpTitle: "Two-factor authentication",
             loginOtpOneTime: "Enter your verification code",
 
+            // Delete credential page
+            deleteCredentialTitle: "Remove {0}",
+            deleteCredentialMessage: "Are you sure you want to remove this credential? This action cannot be undone.",
+
             // Error page
             errorTitle: "An error occurred",
             backToApplication: "Back to application",
@@ -145,6 +149,10 @@ const { useI18n, ofTypeI18n } = i18nBuilder
             logoutOtherSessions: "Diğer cihazlardan çıkış yap",
             loginOtpTitle: "İki faktörlü kimlik doğrulama",
             loginOtpOneTime: "Doğrulama kodunuzu girin",
+
+            // Delete credential page
+            deleteCredentialTitle: "{0} kaldır",
+            deleteCredentialMessage: "Bu kimlik bilgisini kaldırmak istediğinizden emin misiniz? Bu işlem geri alınamaz.",
 
             // Error page
             errorTitle: "Bir hata oluştu",

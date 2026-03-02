@@ -40,13 +40,6 @@ export const UserProfileGroup = ({
 
     return (
         <Field key={attribute.name} className="w-full">
-            <FieldLabel htmlFor={attribute.name} className="flex items-center gap-1.5">
-                {labelAttribute(t, attribute) || ""}
-                {isRequiredAttribute(attribute) && <span className="text-destructive">*</span>}
-                {helpText && (
-                    <HelpItem helpText={helpText} fieldLabelId={attribute.name!} />
-                )}
-            </FieldLabel>
             <FieldContent>
                 {component ? (
                     <InputGroup>

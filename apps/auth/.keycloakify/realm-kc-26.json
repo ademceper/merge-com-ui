@@ -1814,7 +1814,7 @@
             ]
         }
     ],
-    "defaultDefaultClientScopes": ["web-origins", "acr", "roles"],
+    "defaultDefaultClientScopes": ["web-origins", "roles"],
     "defaultOptionalClientScopes": [
         "microprofile-jwt",
         "offline_access",
@@ -1916,14 +1916,14 @@
                 "subComponents": {},
                 "config": {
                     "allowed-protocol-mapper-types": [
-                        "saml-user-property-mapper",
-                        "oidc-full-name-mapper",
-                        "oidc-usermodel-attribute-mapper",
                         "oidc-usermodel-property-mapper",
+                        "saml-user-attribute-mapper",
+                        "oidc-usermodel-attribute-mapper",
+                        "saml-user-property-mapper",
                         "saml-role-list-mapper",
                         "oidc-sha256-pairwise-sub-mapper",
                         "oidc-address-mapper",
-                        "saml-user-attribute-mapper"
+                        "oidc-full-name-mapper"
                     ]
                 }
             },
@@ -1954,12 +1954,12 @@
                 "config": {
                     "allowed-protocol-mapper-types": [
                         "oidc-usermodel-attribute-mapper",
-                        "oidc-address-mapper",
-                        "saml-user-attribute-mapper",
                         "oidc-usermodel-property-mapper",
+                        "saml-user-attribute-mapper",
                         "saml-role-list-mapper",
-                        "oidc-full-name-mapper",
                         "saml-user-property-mapper",
+                        "oidc-address-mapper",
+                        "oidc-full-name-mapper",
                         "oidc-sha256-pairwise-sub-mapper"
                     ]
                 }

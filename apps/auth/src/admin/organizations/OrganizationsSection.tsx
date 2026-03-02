@@ -174,7 +174,7 @@ export default function OrganizationSection() {
                 helpUrl={helpUrls.organizationsUrl}
                 divider
             />
-            <div className="py-6 px-0">
+            <div className="pt-4 pb-6 px-0">
                 <AlertDialog open={!!selectedOrg} onOpenChange={(open) => !open && setSelectedOrg(undefined)}>
                     <AlertDialogContent>
                         <AlertDialogHeader>

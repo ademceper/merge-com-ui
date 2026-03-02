@@ -22,9 +22,8 @@ import { Page } from "../components/page/Page";
 import { TFuncKey } from "../i18n";
 import { formatDate } from "../utils/formatDate";
 import { usePromise } from "../utils/usePromise";
-import { Button } from "@merge/ui/components/button";
-import { Badge } from "@merge/ui/components/badge";
-import { Info, Warning } from "@phosphor-icons/react";
+import { Link } from "@merge/ui/components/link";
+import { Separator } from "@merge/ui/components/separator";
 
 export const SigningIn = () => {
     const { t } = useTranslation();
@@ -47,55 +46,33 @@ export const SigningIn = () => {
 
     return (
         <Page title={t("signingIn")} description={t("signingInDescription")}>
-            <div className="space-y-8">
+            <div className="space-y-6">
                 {credentialUniqueCategories.map(category => (
-                    <div key={category}>
-                        <h2 className="text-xl font-semibold mb-4" id={`${category}-categ-title`}>
-                            {t(category as TFuncKey)}
-                        </h2>
+                    <div key={category} className="space-y-4">
                         {credentials
                             .filter(cred => cred.category == category)
                             .map(container => (
-                                <Fragment key={container.type}>
-                                    <div className="flex items-start justify-between mb-4 mt-6">
-                                        <div>
-                                            <h3
-                                                className="text-base font-medium mb-1"
-                                                data-testid={`${container.type}/help`}
-                                            >
-                                                <span data-testid={`${container.type}/title`}>
-                                                    {t(container.displayName as TFuncKey)}
-                                                </span>
-                                            </h3>
-                                            <span
-                                                className="text-sm text-muted-foreground"
-                                                data-testid={`${container.type}/help-text`}
-                                            >
-                                                {t(container.helptext as TFuncKey)}
-                                            </span>
-                                        </div>
+                                <div key={container.type} className="space-y-3">
+                                    <div className="flex items-center justify-between">
+                                        <h2 className="text-base font-semibold" id={`${category}-categ-title`}>
+                                            {t(category as TFuncKey)}
+                                        </h2>
                                         {container.createAction && (
-                                            <Button
-                                                variant="outline"
-                                                size="sm"
-                                                onClick={() =>
-                                                    login({
-                                                        action: container.createAction
-                                                    })
-                                                }
+                                            <Link
+                                                href="#"
+                                                onClick={(e) => { e.preventDefault(); login({ action: container.createAction }); }}
+                                                className="text-foreground text-sm font-medium shrink-0"
                                                 data-testid={`${container.type}/create`}
                                             >
                                                 {t("setUpNew", {
-                                                    name: t(
-                                                        `${container.type}-display-name` as TFuncKey
-                                                    )
+                                                    name: t(`${container.type}-display-name` as TFuncKey)
                                                 })}
-                                            </Button>
+                                            </Link>
                                         )}
                                     </div>
 
                                     <div
-                                        className="space-y-3 mb-6"
+                                        className="space-y-2"
                                         data-testid={`${container.type}/credential-list`}
                                     >
                                         {container.userCredentialMetadatas.length === 0 && (
@@ -113,148 +90,61 @@ export const SigningIn = () => {
                                                 <div
                                                     key={credential.id}
                                                     id={`cred-${credential.id}`}
-                                                    className="rounded-md border p-4"
+                                                    className="flex items-center justify-between py-2"
                                                 >
-                                                    <div className="flex items-center justify-between gap-4">
-                                                        <div className="min-w-0 space-y-1">
-                                                            <div
-                                                                className="text-sm font-medium truncate max-w-[300px]"
-                                                                data-testrole="label"
+                                                    <div className="min-w-0 space-y-0.5">
+                                                        <p
+                                                            className="text-sm font-medium truncate max-w-75"
+                                                            data-testrole="label"
+                                                        >
+                                                            {container.type === "password"
+                                                                ? t(container.displayName as TFuncKey)
+                                                                : credential.userLabel || t(container.displayName as TFuncKey)}
+                                                        </p>
+                                                        {credential.createdDate && (
+                                                            <p
+                                                                className="text-xs text-muted-foreground"
+                                                                data-testrole="created-at"
                                                             >
-                                                                {t(credential.userLabel) ||
-                                                                    t(credential.type as TFuncKey)}
-                                                            </div>
-                                                            {credential.createdDate && (
-                                                                <div
-                                                                    className="text-xs text-muted-foreground"
-                                                                    data-testrole="created-at"
-                                                                >
-                                                                    <Trans i18nKey="credentialCreatedAt">
-                                                                        <strong className="mr-2"></strong>
-                                                                        {{
-                                                                            date: formatDate(
-                                                                                new Date(
-                                                                                    credential.createdDate
-                                                                                )
-                                                                            )
-                                                                        }}
-                                                                    </Trans>
-                                                                </div>
-                                                            )}
-                                                        </div>
-                                                        <div className="flex gap-2 shrink-0">
-                                                            {container.removeable && (
-                                                                <Button
-                                                                    variant="destructive"
-                                                                    size="sm"
-                                                                    data-testrole="remove"
-                                                                    onClick={async () => {
-                                                                        await login({
-                                                                            action:
-                                                                                "delete_credential:" +
-                                                                                credential.id
-                                                                        });
-                                                                    }}
-                                                                >
-                                                                    {t("delete")}
-                                                                </Button>
-                                                            )}
-                                                            {container.updateAction && (
-                                                                <Button
-                                                                    variant="outline"
-                                                                    size="sm"
-                                                                    onClick={async () => {
-                                                                        await login({
-                                                                            action: container.updateAction
-                                                                        });
-                                                                    }}
-                                                                    data-testrole="update"
-                                                                >
-                                                                    {t("update")}
-                                                                </Button>
-                                                            )}
-                                                        </div>
-                                                    </div>
-
-                                                    {(meta.infoMessage ||
-                                                        meta.infoProperties ||
-                                                        (meta.warningMessageTitle &&
-                                                            meta.warningMessageDescription)) && (
-                                                        <div className="mt-3 pt-3 border-t space-y-2">
-                                                            {meta.infoMessage && (
-                                                                <p className="text-sm text-muted-foreground flex items-center gap-1">
-                                                                    <Info className="h-4 w-4 shrink-0" />
-                                                                    {t(
-                                                                        meta.infoMessage.key,
-                                                                        meta.infoMessage.parameters?.reduce(
-                                                                            (acc, val, idx) => ({
-                                                                                ...acc,
-                                                                                [idx]: val
-                                                                            }),
-                                                                            {}
+                                                                <Trans i18nKey="credentialCreatedAt">
+                                                                    <strong className="mr-1"></strong>
+                                                                    {{
+                                                                        date: formatDate(
+                                                                            new Date(credential.createdDate)
                                                                         )
-                                                                    )}
-                                                                </p>
-                                                            )}
-                                                            {meta.infoProperties && (
-                                                                <div className="flex items-start gap-2">
-                                                                    <Info className="h-4 w-4 shrink-0 mt-0.5" />
-                                                                    <dl className="grid grid-cols-[auto_1fr] gap-x-4 gap-y-1 text-sm">
-                                                                        {meta.infoProperties.map(
-                                                                            prop => (
-                                                                                <Fragment key={prop.key}>
-                                                                                    <dt className="font-medium">
-                                                                                        {t(prop.key)}
-                                                                                    </dt>
-                                                                                    <dd className="text-muted-foreground">
-                                                                                        {prop.parameters
-                                                                                            ? prop.parameters[0]
-                                                                                            : ""}
-                                                                                    </dd>
-                                                                                </Fragment>
-                                                                            )
-                                                                        )}
-                                                                    </dl>
-                                                                </div>
-                                                            )}
-                                                            {meta.warningMessageTitle &&
-                                                                meta.warningMessageDescription && (
-                                                                    <div className="text-sm text-amber-600 dark:text-amber-400 space-y-1">
-                                                                        <p className="flex items-center gap-1">
-                                                                            <Warning className="h-4 w-4 shrink-0" />
-                                                                            {t(
-                                                                                meta.warningMessageTitle.key,
-                                                                                meta.warningMessageTitle.parameters?.reduce(
-                                                                                    (acc, val, idx) => ({
-                                                                                        ...acc,
-                                                                                        [idx]: val
-                                                                                    }),
-                                                                                    {}
-                                                                                )
-                                                                            )}
-                                                                        </p>
-                                                                        <p>
-                                                                            {t(
-                                                                                meta.warningMessageDescription
-                                                                                    .key,
-                                                                                meta.warningMessageDescription.parameters?.reduce(
-                                                                                    (acc, val, idx) => ({
-                                                                                        ...acc,
-                                                                                        [idx]: val
-                                                                                    }),
-                                                                                    {}
-                                                                                )
-                                                                            )}
-                                                                        </p>
-                                                                    </div>
-                                                                )}
-                                                        </div>
-                                                    )}
+                                                                    }}
+                                                                </Trans>
+                                                            </p>
+                                                        )}
+                                                    </div>
+                                                    <div className="flex gap-3 shrink-0">
+                                                        {container.updateAction && (
+                                                            <Link
+                                                                href="#"
+                                                                onClick={async (e) => { e.preventDefault(); await login({ action: container.updateAction }); }}
+                                                                className="text-foreground text-sm font-medium"
+                                                                data-testrole="update"
+                                                            >
+                                                                {t("update")}
+                                                            </Link>
+                                                        )}
+                                                        {container.removeable && (
+                                                            <Link
+                                                                href="#"
+                                                                onClick={async (e) => { e.preventDefault(); await login({ action: "delete_credential:" + credential.id }); }}
+                                                                className="text-destructive hover:text-destructive text-sm font-medium"
+                                                                data-testrole="remove"
+                                                            >
+                                                                {t("delete")}
+                                                            </Link>
+                                                        )}
+                                                    </div>
                                                 </div>
                                             );
                                         })}
                                     </div>
-                                </Fragment>
+                                    <Separator />
+                                </div>
                             ))}
                     </div>
                 ))}

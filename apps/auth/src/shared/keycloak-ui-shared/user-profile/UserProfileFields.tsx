@@ -15,7 +15,7 @@ import { MultiInputComponent } from "./MultiInputComponent";
 import { OptionComponent } from "./OptionsComponent";
 import { SelectComponent } from "./SelectComponent";
 import { UserProfileGroup } from "./UserProfileGroup";
-import { UserFormFields, fieldName, isRootAttribute, isRequiredAttribute, label } from "./utils";
+import { UserFormFields, fieldName, isRootAttribute, isRequiredAttribute, label, labelAttribute } from "./utils";
 
 type HtmlInputType = "text" | "email" | "tel" | "url" | "number" | "range" | "datetime-local" | "date" | "month" | "time";
 
@@ -39,7 +39,7 @@ function TextFieldComponent(props: UserProfileFieldProps) {
                               attribute.annotations?.["inputTypePlaceholder"] as string,
                               "",
                               attribute.annotations?.["inputOptionLabelsI18nPrefix"] as string
-                          )
+                          ) || labelAttribute(props.t, attribute) || ""
                 }
                 disabled={attribute.readOnly}
                 defaultValue={attribute.defaultValue}

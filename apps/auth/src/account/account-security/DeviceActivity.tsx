@@ -39,7 +39,7 @@ import { useAccountAlerts } from "../utils/useAccountAlerts";
 import { usePromise } from "../utils/usePromise";
 import { Button } from "@merge/ui/components/button";
 import { Badge } from "@merge/ui/components/badge";
-import { Monitor, DeviceMobile, ArrowsClockwise } from "@phosphor-icons/react";
+import { Monitor, DeviceMobile } from "@phosphor-icons/react";
 
 export const DeviceActivity = () => {
     const { t } = useTranslation();
@@ -112,43 +112,29 @@ export const DeviceActivity = () => {
 
     return (
         <Page title={t("deviceActivity")} description={t("signedInDevicesExplanation")}>
-            <div className="flex items-center justify-between mb-6">
-                <h2 className="text-xl font-semibold">{t("signedInDevices")}</h2>
-                <div className="flex items-center gap-2">
-                    <Button
-                        id="refresh-page"
-                        variant="ghost"
-                        size="sm"
-                        onClick={() => refresh()}
-                        className="inline-flex items-center gap-1"
-                    >
-                        <ArrowsClockwise className="h-4 w-4" />
-                        {t("refreshPage")}
-                    </Button>
-
-                    {(devices.length > 1 || devices[0].sessions.length > 1) && (
-                        <AlertDialog>
-                            <AlertDialogTrigger asChild>
-                                <Button variant="destructive" size="sm">
-                                    {t("signOutAllDevices")}
-                                </Button>
-                            </AlertDialogTrigger>
-                            <AlertDialogContent>
-                                <AlertDialogHeader>
-                                    <AlertDialogTitle>{t("signOutAllDevices")}</AlertDialogTitle>
-                                    <AlertDialogDescription>{t("signOutAllDevicesWarning")}</AlertDialogDescription>
-                                </AlertDialogHeader>
-                                <AlertDialogFooter>
-                                    <AlertDialogCancel>{t("cancel")}</AlertDialogCancel>
-                                    <AlertDialogAction variant="destructive" onClick={() => signOutAll()}>
-                                        {t("confirm")}
-                                    </AlertDialogAction>
-                                </AlertDialogFooter>
-                            </AlertDialogContent>
-                        </AlertDialog>
-                    )}
+            {(devices.length > 1 || devices[0].sessions.length > 1) && (
+                <div className="flex justify-end mb-6">
+                    <AlertDialog>
+                        <AlertDialogTrigger asChild>
+                            <Button variant="destructive" size="sm">
+                                {t("signOutAllDevices")}
+                            </Button>
+                        </AlertDialogTrigger>
+                        <AlertDialogContent>
+                            <AlertDialogHeader>
+                                <AlertDialogTitle>{t("signOutAllDevices")}</AlertDialogTitle>
+                                <AlertDialogDescription>{t("signOutAllDevicesWarning")}</AlertDialogDescription>
+                            </AlertDialogHeader>
+                            <AlertDialogFooter>
+                                <AlertDialogCancel>{t("cancel")}</AlertDialogCancel>
+                                <AlertDialogAction variant="destructive" onClick={() => signOutAll()}>
+                                    {t("confirm")}
+                                </AlertDialogAction>
+                            </AlertDialogFooter>
+                        </AlertDialogContent>
+                    </AlertDialog>
                 </div>
-            </div>
+            )}
             <div className="space-y-4">
                 {devices.map(device =>
                     device.sessions.map((session, index) => (
@@ -167,7 +153,7 @@ export const DeviceActivity = () => {
                                         )}
                                     </div>
                                     <div>
-                                        <div className="text-base font-medium flex items-center gap-2">
+                                        <div className="text-base font-medium">
                                             {device.os
                                                 .toLowerCase()
                                                 .includes("unknown")
@@ -178,14 +164,18 @@ export const DeviceActivity = () => {
                                                 .includes("unknown") &&
                                                 device.osVersion}{" "}
                                             / {session.browser}
-                                            {session.current && (
-                                                <Badge variant="default" className="text-xs">
-                                                    {t("currentSession")}
-                                                </Badge>
-                                            )}
                                         </div>
                                     </div>
                                 </div>
+                                <div className="flex items-center gap-2 shrink-0">
+                                    {session.current && (
+                                        <Badge variant="default" className="text-xs">
+                                            {t("currentSession")}
+                                        </Badge>
+                                    )}
+                                </div>
+                            </div>
+                            <div className="flex justify-end">
                                 {!session.current && (
                                     <AlertDialog>
                                         <AlertDialogTrigger asChild>
@@ -209,7 +199,7 @@ export const DeviceActivity = () => {
                                 )}
                             </div>
 
-                            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
+                            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
                                 <div>
                                     <div className="text-muted-foreground">{t("ipAddress")}</div>
                                     <div className="font-medium">{session.ipAddress}</div>

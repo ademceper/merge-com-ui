@@ -199,7 +199,7 @@ export default function ClientScopesSection() {
                 helpUrl={helpUrls.clientScopesUrl}
                 divider
             />
-            <div className="py-6 px-0">
+            <div className="pt-4 pb-6 px-0">
                 <AlertDialog
                     open={!!selectedScope}
                     onOpenChange={(open) => !open && setSelectedScope(undefined)}

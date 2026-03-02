@@ -182,7 +182,7 @@ export default function ClientsSection() {
                     divider
                 />
             )}
-            <div className="py-6 px-0 min-w-0">
+            <div className="pt-4 pb-6 px-0 min-w-0">
                 <AlertDialog open={!!selectedClient} onOpenChange={(open) => !open && setSelectedClient(undefined)}>
                     <AlertDialogContent>
                         <AlertDialogHeader>

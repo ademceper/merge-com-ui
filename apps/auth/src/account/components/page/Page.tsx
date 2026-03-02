@@ -21,7 +21,7 @@ type PageProps = {
 export const Page = ({ title, description, action, children }: PropsWithChildren<PageProps>) => {
     return (
         <div className="space-y-6">
-            <div className="flex items-start justify-between gap-4">
+            <div className="flex items-center justify-between gap-4">
                 <div>
                     <h3 className="text-lg font-medium" data-testid="page-heading">{title}</h3>
                     <p className="text-sm text-muted-foreground">{description}</p>

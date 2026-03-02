@@ -34,7 +34,7 @@ export default function UsersSection() {
                 helpUrl={helpUrls.usersUrl}
                 divider
             />
-            <div data-testid="users-page" className="py-6 px-0">
+            <div data-testid="users-page" className="pt-4 pb-6 px-0">
                 {content()}
             </div>
         </>

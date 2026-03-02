@@ -29,6 +29,7 @@ import { TFuncKey, i18n } from "../i18n";
 import { useAccountAlerts } from "../utils/useAccountAlerts";
 import { usePromise } from "../utils/usePromise";
 import { Button } from "@merge/ui/components/button";
+import { Link } from "@merge/ui/components/link";
 import { ArrowSquareOut } from "@phosphor-icons/react";
 
 export const PersonalInfo = () => {
@@ -109,14 +110,14 @@ export const PersonalInfo = () => {
             title={t("personalInfo")}
             description={t("personalInfoDescription")}
             action={context.environment.features.deleteAccountAllowed ? (
-                <button
-                    type="button"
+                <Link
+                    href="#"
                     data-testid="delete-account"
-                    onClick={() => context.keycloak.login({ action: "delete_account" })}
-                    className="text-sm font-medium text-destructive hover:underline shrink-0"
+                    onClick={(e) => { e.preventDefault(); context.keycloak.login({ action: "delete_account" }); }}
+                    className="text-destructive hover:text-destructive text-sm font-medium shrink-0"
                 >
                     {t("deleteAccount")}
-                </button>
+                </Link>
             ) : undefined}
         >
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">

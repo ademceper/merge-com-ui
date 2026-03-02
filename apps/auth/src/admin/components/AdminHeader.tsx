@@ -2,8 +2,7 @@ import { useTranslation } from "react-i18next";
 import { useLocation } from "react-router-dom";
 import { SidebarTrigger } from "@merge/ui/components/sidebar";
 import { GroupBreadCrumbsForHeader } from "./bread-crumb/GroupBreadCrumbs";
-import { PageBreadCrumbs } from "./bread-crumb/PageBreadCrumbs";
-import { Separator } from "@merge/ui/components/separator";
+import { PageBreadCrumbs, usePageTitle } from "./bread-crumb/PageBreadCrumbs";
 import { useEnvironment } from "../../shared/keycloak-ui-shared";
 import type { Environment } from "../environment";
 import { AdminNavUser } from "./AdminNavUser";
@@ -26,6 +25,7 @@ export function AdminHeader() {
     const { pathname } = useLocation();
     const { keycloak } = useEnvironment<Environment>();
     const isGroupsSection = pathname.includes("/groups");
+    const pageTitle = usePageTitle();
 
     const userMenuInfo: UserMenuInfo = {
         keycloak,
@@ -36,21 +36,15 @@ export function AdminHeader() {
     };
 
     return (
-        <header className="relative z-50 flex h-16 shrink-0 items-center gap-2 bg-background">
-            <div className="flex items-center gap-2 px-4">
-                <div className="flex h-4 items-center gap-2">
-                    <SidebarTrigger />
-                    <Separator
-                        orientation="vertical"
-                        className="h-4 w-px shrink-0"
-                    />
-                </div>
+        <header className="flex h-12 shrink-0 items-center px-4 bg-sidebar">
+            <SidebarTrigger className="md:hidden" />
+            <div className="ml-1 mr-3 h-4 w-px shrink-0 bg-border md:hidden" />
+            <span className="text-base font-semibold md:hidden">{pageTitle}</span>
+            <span className="hidden md:contents">
                 {isGroupsSection ? <GroupBreadCrumbsForHeader /> : <PageBreadCrumbs />}
-            </div>
+            </span>
             <div className="flex-1 min-w-0" />
-            <div className="flex items-center px-4">
-                <AdminNavUser userMenuInfo={userMenuInfo} avatarOnly />
-            </div>
+            <AdminNavUser userMenuInfo={userMenuInfo} avatarOnly />
         </header>
     );
 }

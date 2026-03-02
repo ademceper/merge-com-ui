@@ -18,7 +18,7 @@ import useBreadcrumbs, {
 import { useRealm } from "../../context/realm-context/RealmContext";
 import { routes } from "../../routes";
 
-export const PageBreadCrumbs = () => {
+function useCrumbs() {
     const { t } = useTranslation();
     const { realm } = useRealm();
     const elementText = (crumb: BreadcrumbData) =>
@@ -29,14 +29,29 @@ export const PageBreadCrumbs = () => {
         breadcrumb: route.breadcrumb?.(t)
     }));
 
-    const crumbs = uniqBy(
+    return uniqBy(
         useBreadcrumbs(routesWithCrumbs, {
             disableDefaults: true,
             excludePaths: ["/", `/${realm}`, `/${realm}/page-section`]
         }),
         elementText
     );
-    if (crumbs.length <= 1) return null;
+}
+
+export function usePageTitle() {
+    const crumbs = useCrumbs();
+    if (crumbs.length === 0) return null;
+    return crumbs[crumbs.length - 1].breadcrumb;
+}
+
+export const PageBreadCrumbs = () => {
+    const crumbs = useCrumbs();
+    if (crumbs.length === 0) return null;
+    if (crumbs.length === 1) {
+        return (
+            <h1 className="text-base font-semibold">{crumbs[0].breadcrumb}</h1>
+        );
+    }
     return (
         <Breadcrumb>
             <BreadcrumbList>

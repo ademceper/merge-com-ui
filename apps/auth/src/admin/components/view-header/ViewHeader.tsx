@@ -7,22 +7,22 @@ import {
     DropdownMenuTrigger,
 } from "@merge/ui/components/dropdown-menu";
 import { Label } from "@merge/ui/components/label";
-import { Separator } from "@merge/ui/components/separator";
 import { Switch } from "@merge/ui/components/switch";
 import { ReactElement, ReactNode, useState, isValidElement, Fragment } from "react";
 import { useTranslation } from "react-i18next";
-import { Link } from "@merge/ui/components/link";
-import { useHelp, HelpItem } from "../../../shared/keycloak-ui-shared";
-import "../../help-urls";
 
 export type ViewHeaderProps = {
     titleKey: string;
     className?: string;
     badges?: ViewHeaderBadge[];
     isDropdownDisabled?: boolean;
+    /** @deprecated No longer rendered */
     subKey?: string | ReactNode;
+    /** @deprecated No longer rendered */
+    helpUrl?: string;
+    /** @deprecated No longer rendered */
+    helpTextKey?: string;
     actionsDropdownId?: string;
-    helpUrl?: string | undefined;
     dropdownItems?: ReactElement[];
     dropdownIcon?: ReactNode;
     lowerDropdownItems?: any;
@@ -30,8 +30,8 @@ export type ViewHeaderProps = {
     lowerButton?: any;
     isEnabled?: boolean;
     onToggle?: (value: boolean) => void;
+    /** @deprecated No longer rendered */
     divider?: boolean;
-    helpTextKey?: string;
     isReadOnly?: boolean;
 };
 
@@ -47,8 +47,6 @@ export const ViewHeader = ({
     titleKey,
     badges,
     isDropdownDisabled,
-    subKey,
-    helpUrl,
     dropdownItems,
     dropdownIcon,
     lowerDropdownMenuTitle,
@@ -56,129 +54,87 @@ export const ViewHeader = ({
     lowerButton,
     isEnabled = true,
     onToggle,
-    divider = true,
-    helpTextKey,
     isReadOnly = false
 }: ViewHeaderProps) => {
-    const { t, i18n } = useTranslation();
-    const { enabled } = useHelp();
+    const { t } = useTranslation();
     const [isDropdownOpen, setDropdownOpen] = useState(false);
     const [isLowerDropdownOpen, setIsLowerDropdownOpen] = useState(false);
 
     const toKey = (value: string) => value.replace(/\s/g, "-");
 
+    const hasContent = badges || onToggle || (dropdownItems && dropdownItems.length > 0) || lowerDropdownItems || lowerButton;
+    if (!hasContent) return null;
+
     return (
-        <>
-            <div className="px-0 pt-4 pb-4">
-                <div className="flex flex-wrap items-center justify-between gap-4">
-                    <div className="flex flex-wrap items-center gap-2">
-                        <h1
-                            className={`text-2xl font-semibold ${className || ""}`}
-                            data-testid="view-header"
-                        >
-                            {i18n.exists(titleKey) ? t(titleKey) : titleKey}
-                        </h1>
-                        {badges && (
-                            <>
-                                {badges.map((badge, index) => (
-                                    <Fragment key={index}>
-                                        {!isValidElement(badge.text) && (
-                                            <Badge
-                                                data-testid={badge.id}
-                                                variant={badge.readonly ? "secondary" : "default"}
-                                            >
-                                                {badge.text}
-                                            </Badge>
-                                        )}
-                                        {isValidElement(badge.text) && badge.text}
-                                    </Fragment>
-                                ))}
-                            </>
+        <div className="flex flex-wrap items-center justify-between gap-2">
+            <div className="flex flex-wrap items-center gap-2">
+                {badges && badges.map((badge, index) => (
+                    <Fragment key={index}>
+                        {!isValidElement(badge.text) && (
+                            <Badge
+                                data-testid={badge.id}
+                                variant={badge.readonly ? "secondary" : "default"}
+                            >
+                                {badge.text}
+                            </Badge>
                         )}
+                        {isValidElement(badge.text) && badge.text}
+                    </Fragment>
+                ))}
+            </div>
+            <div className="flex items-center gap-2">
+                {onToggle && (
+                    <div className="flex items-center gap-2 mr-4">
+                        <Label htmlFor={`${toKey(titleKey)}-switch`} className="text-sm">
+                            {t("enabled")}
+                        </Label>
+                        <Switch
+                            id={`${toKey(titleKey)}-switch`}
+                            data-testid={`${titleKey}-switch`}
+                            disabled={isReadOnly}
+                            checked={isEnabled}
+                            aria-label={t("enabled")}
+                            onCheckedChange={onToggle}
+                        />
                     </div>
-                    <div className="flex items-center gap-2">
-                        {onToggle && (
-                            <div className="flex items-center gap-2 mr-4">
-                                <Label htmlFor={`${toKey(titleKey)}-switch`} className="text-sm">
-                                    {t("enabled")}
-                                </Label>
-                                <Switch
-                                    id={`${toKey(titleKey)}-switch`}
-                                    data-testid={`${titleKey}-switch`}
-                                    disabled={isReadOnly}
-                                    checked={isEnabled}
-                                    aria-label={t("enabled")}
-                                    onCheckedChange={onToggle}
-                                />
-                                {helpTextKey && (
-                                    <HelpItem
-                                        helpText={t(helpTextKey)}
-                                        fieldLabelId={`${toKey(titleKey)}-switch`}
-                                    />
-                                )}
-                            </div>
-                        )}
-                        {dropdownItems && dropdownItems.length > 0 && (
-                            <DropdownMenu open={isDropdownOpen} onOpenChange={setDropdownOpen}>
-                                <DropdownMenuTrigger
-                                    disabled={isDropdownDisabled}
-                                    id={actionsDropdownId}
-                                    data-testid="action-dropdown"
-                                    className={dropdownIcon ? buttonVariants({ variant: "ghost", size: "icon" }) : buttonVariants()}
-                                >
-                                    {dropdownIcon || t("action")}
-                                </DropdownMenuTrigger>
-                                <DropdownMenuContent align="end">
-                                    {dropdownItems}
-                                </DropdownMenuContent>
-                            </DropdownMenu>
-                        )}
-                    </div>
-                </div>
-                {enabled && (
-                    <p id="view-header-subkey" className="text-muted-foreground mt-1 pl-0">
-                        {isValidElement(subKey)
-                            ? subKey
-                            : subKey
-                              ? t(subKey as string)
-                              : ""}
-                        {helpUrl && (
-                            <span className="mt-1 block sm:inline sm:ml-4">
-                                <Link
-                                    href={helpUrl}
-                                    target="_blank"
-                                    rel="noreferrer noopener"
-                                    className="inline-flex items-center w-fit"
-                                >
-                                    {t("learnMore")}
-                                </Link>
-                            </span>
-                        )}
-                    </p>
                 )}
-                {lowerDropdownItems && (
-                    <DropdownMenu open={isLowerDropdownOpen} onOpenChange={setIsLowerDropdownOpen}>
-                        <DropdownMenuTrigger asChild>
-                            <Button id="ufToggleId">
-                                {t(lowerDropdownMenuTitle)}
-                            </Button>
+                {dropdownItems && dropdownItems.length > 0 && (
+                    <DropdownMenu open={isDropdownOpen} onOpenChange={setDropdownOpen}>
+                        <DropdownMenuTrigger
+                            disabled={isDropdownDisabled}
+                            id={actionsDropdownId}
+                            data-testid="action-dropdown"
+                            className={dropdownIcon ? buttonVariants({ variant: "ghost", size: "icon" }) : buttonVariants()}
+                        >
+                            {dropdownIcon || t("action")}
                         </DropdownMenuTrigger>
-                        <DropdownMenuContent align="start">
-                            {lowerDropdownItems}
+                        <DropdownMenuContent align="end">
+                            {dropdownItems}
                         </DropdownMenuContent>
                     </DropdownMenu>
                 )}
-                {lowerButton && (
-                    <Button
-                        variant={lowerButton.variant === "primary" ? "default" : (lowerButton.variant as "outline" | "secondary" | "ghost" | "link" | "destructive")}
-                        onClick={lowerButton.onClick}
-                        data-testid="viewHeader-lower-btn"
-                    >
-                        {lowerButton.lowerButtonTitle}
-                    </Button>
-                )}
             </div>
-            {divider && <Separator />}
-        </>
+            {lowerDropdownItems && (
+                <DropdownMenu open={isLowerDropdownOpen} onOpenChange={setIsLowerDropdownOpen}>
+                    <DropdownMenuTrigger asChild>
+                        <Button id="ufToggleId">
+                            {t(lowerDropdownMenuTitle)}
+                        </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="start">
+                        {lowerDropdownItems}
+                    </DropdownMenuContent>
+                </DropdownMenu>
+            )}
+            {lowerButton && (
+                <Button
+                    variant={lowerButton.variant === "primary" ? "default" : (lowerButton.variant as "outline" | "secondary" | "ghost" | "link" | "destructive")}
+                    onClick={lowerButton.onClick}
+                    data-testid="viewHeader-lower-btn"
+                >
+                    {lowerButton.lowerButtonTitle}
+                </Button>
+            )}
+        </div>
     );
 };

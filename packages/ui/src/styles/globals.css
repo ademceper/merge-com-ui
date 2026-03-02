@@ -129,8 +129,14 @@
   *::-webkit-scrollbar {
     display: none;
   }
+  html {
+    overflow: hidden;
+    overscroll-behavior: none;
+  }
   body {
     @apply bg-background text-foreground;
+    overflow: hidden;
+    overscroll-behavior: none;
   }
 }
 

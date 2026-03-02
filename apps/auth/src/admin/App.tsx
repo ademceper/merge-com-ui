@@ -87,13 +87,13 @@ export const App = () => {
         <AdminClientContext.Provider value={{ keycloak, adminClient }}>
             <AppContexts>
                 <Banners />
-                <SidebarProvider defaultOpen={true} className="min-h-svh">
+                <SidebarProvider defaultOpen={true} className="h-svh bg-sidebar overflow-hidden">
                     <AdminAppSidebar />
-                    <SidebarInset>
+                    <SidebarInset className="md:peer-data-[variant=inset]:bg-sidebar! md:peer-data-[variant=inset]:overflow-clip!">
                         <AdminHeader />
                         <div
                             id={mainPageContentId}
-                            className="flex flex-1 flex-col gap-4 px-4 py-4 pt-0"
+                            className="flex flex-1 flex-col px-4 pb-4 bg-background md:rounded-t-xl overflow-y-auto min-h-0"
                         >
                             <ErrorBoundaryFallback fallback={ErrorRenderer}>
                                 <Suspense fallback={<KeycloakSpinner />}>

@@ -402,7 +402,7 @@ export const RealmSettingsTabs = () => {
                     />
                 )}
             />
-            <div className="py-6 px-0 min-w-0">
+            <div className="pt-4 pb-6 px-0 min-w-0">
                 {renderContent()}
             </div>
         </FormProvider>

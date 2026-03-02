@@ -20,6 +20,8 @@ import LinkIdpAction from "./pages/LinkIdpAction";
 import LoginConfigTotp from "./pages/LoginConfigTotp";
 import LoginOtp from "./pages/LoginOtp";
 import Error from "./pages/Error";
+import DeleteCredential from "./pages/DeleteCredential";
+import Info from "./pages/Info";
 
 const UserProfileFormFields = lazy(
     () => import("keycloakify/login/UserProfileFormFields")
@@ -189,6 +191,26 @@ export default function KcPage(props: { kcContext: KcContext }) {
                     case "error.ftl":
                         return (
                             <Error
+                                kcContext={kcContext}
+                                i18n={i18n}
+                                classes={{}}
+                                Template={Template}
+                                doUseDefaultCss={false}
+                            />
+                        );
+                    case "delete-credential.ftl":
+                        return (
+                            <DeleteCredential
+                                kcContext={kcContext}
+                                i18n={i18n}
+                                classes={{}}
+                                Template={Template}
+                                doUseDefaultCss={false}
+                            />
+                        );
+                    case "info.ftl":
+                        return (
+                            <Info
                                 kcContext={kcContext}
                                 i18n={i18n}
                                 classes={{}}

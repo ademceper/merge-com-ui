@@ -11,7 +11,7 @@ import { useState } from "react";
 import { Controller } from "react-hook-form";
 import { OptionLabel, Options, UserProfileFieldProps } from "./UserProfileFields";
 import { UserProfileGroup } from "./UserProfileGroup";
-import { fieldName, label } from "./utils";
+import { fieldName, label, labelAttribute } from "./utils";
 
 export const SelectComponent = (props: UserProfileFieldProps) => {
     const { t, form, inputType, attribute } = props;
@@ -49,7 +49,7 @@ export const SelectComponent = (props: UserProfileFieldProps) => {
                                     <span className="truncate">
                                         {Array.isArray(field.value) && field.value.length > 0
                                             ? field.value.map((opt) => fetchLabel(opt)).join(", ")
-                                            : t("selectOne")}
+                                            : labelAttribute(t, attribute) || t("selectOne")}
                                     </span>
                                 </Button>
                             </PopoverTrigger>
@@ -123,7 +123,7 @@ export const SelectComponent = (props: UserProfileFieldProps) => {
                         aria-label={t("selectOne")}
                     >
                         <SelectTrigger id={attribute.name} className="h-12 rounded-lg bg-muted border-0">
-                            <SelectValue placeholder={t("selectOne")} />
+                            <SelectValue placeholder={labelAttribute(t, attribute) || t("selectOne")} />
                         </SelectTrigger>
                         <SelectContent>
                             {options.map((option) => (
