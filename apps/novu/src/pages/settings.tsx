@@ -17,7 +17,7 @@ import { useFeatureFlag } from '@/hooks/use-feature-flag';
 import { useHasPermission } from '@/hooks/use-has-permission';
 import { ROUTES } from '@/utils/routes';
 import { Plan } from '../components/billing/plan';
-import { DashboardLayout } from '../components/dashboard-layout';
+import { useSetPageHeader } from '@/context/page-header';
 import { useFetchSubscription } from '../hooks/use-fetch-subscription';
 
 const FADE_ANIMATION = {
@@ -28,6 +28,7 @@ const FADE_ANIMATION = {
 } as const;
 
 export function SettingsPage() {
+  useSetPageHeader(<h1 className="text-foreground-950">Settings</h1>);
   const navigate = useNavigate();
   const location = useLocation();
   const { subscription } = useFetchSubscription();
@@ -77,7 +78,7 @@ export function SettingsPage() {
   };
 
   return (
-    <DashboardLayout headerStartItems={<h1 className="text-foreground-950">Settings</h1>}>
+    <>
       <Tabs value={currentTab} onValueChange={handleTabChange} className="-mx-2 w-full">
         <TabsList align="center" variant="regular" className="border-t-transparent py-0!">
           <TabsTrigger variant="regular" value="account" size="xl">
@@ -166,6 +167,6 @@ export function SettingsPage() {
           )}
         </div>
       </Tabs>
-    </DashboardLayout>
+    </>
   );
 }

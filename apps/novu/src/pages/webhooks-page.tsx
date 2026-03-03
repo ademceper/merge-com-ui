@@ -18,8 +18,8 @@ import { useEnvironment } from '@/context/environment/hooks';
 import { useFeatureFlag } from '@/hooks/use-feature-flag';
 import { useFetchSubscription } from '@/hooks/use-fetch-subscription';
 import { buildRoute, ROUTES } from '@/utils/routes';
-import { DashboardLayout } from '../components/dashboard-layout';
 import { Badge } from '@/components/primitives/badge';
+import { useSetPageHeader } from '@/context/page-header';
 import { QueryKeys } from '../utils/query-keys';
 
 interface WebhookPortalTokenResponse {
@@ -33,6 +33,7 @@ interface CustomError extends Error {
 }
 
 export function WebhooksPage() {
+  useSetPageHeader(<h1 className="text-foreground-950">Webhooks</h1>);
   const isWebhooksManagementEnabled = useFeatureFlag(FeatureFlagsKeysEnum.IS_WEBHOOKS_MANAGEMENT_ENABLED);
   const { currentEnvironment } = useEnvironment();
   const queryClient = useQueryClient();
@@ -133,9 +134,10 @@ export function WebhooksPage() {
 
   if (!IS_SELF_HOSTED && !isTierEligibleForWebhooks && !isLoadingEligibility) {
     return (
-      <DashboardLayout headerStartItems={<h1 className="text-foreground-950">Webhooks</h1>}>
+      <>
+
         <WebhooksPaywallState />
-      </DashboardLayout>
+      </>
     );
   }
 
@@ -144,7 +146,8 @@ export function WebhooksPage() {
 
   if (currentEnvironment && !currentEnvironment?.webhookAppId) {
     return (
-      <DashboardLayout headerStartItems={<h1 className="text-foreground-950">Webhooks</h1>}>
+      <>
+
         <div className="flex h-full flex-col items-center justify-center gap-4 p-2 text-center">
           <div className="bg-muted mb-3 flex h-16 w-16 items-center justify-center rounded-full">
             <RiWebhookLine className="text-muted-foreground h-8 w-8" />
@@ -163,7 +166,7 @@ export function WebhooksPage() {
             </p>
           )}
         </div>
-      </DashboardLayout>
+      </>
     );
   }
 
@@ -183,7 +186,8 @@ export function WebhooksPage() {
   };
 
   return (
-    <DashboardLayout headerStartItems={<h1 className="text-foreground-950">Webhooks</h1>}>
+    <>
+      <h1 className="text-foreground-950 py-2">Webhooks</h1>
       <Tabs
         value={activeTabDefinition.value}
         onValueChange={(value) => {
@@ -262,6 +266,6 @@ export function WebhooksPage() {
           </>
         )}
       </Tabs>
-    </DashboardLayout>
+    </>
   );
 }

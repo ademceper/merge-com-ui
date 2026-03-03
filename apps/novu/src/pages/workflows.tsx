@@ -1,5 +1,6 @@
 import { DirectionEnum, EnvironmentTypeEnum, PermissionsEnum, WorkflowStatusEnum } from '@novu/shared';
 import { useCallback, useEffect, useMemo } from 'react';
+import { useSetPageHeader } from '@/context/page-header';
 import { useForm } from 'react-hook-form';
 import {
   RiArrowDownSLine,
@@ -10,7 +11,6 @@ import {
   RiRouteFill,
 } from 'react-icons/ri';
 import { Outlet, useNavigate, useParams, useSearchParams } from 'react-router-dom';
-import { DashboardLayout } from '@/components/dashboard-layout';
 import { PageMeta } from '@/components/page-meta';
 import { Button } from '@merge/ui/components/button';
 import { ButtonGroupItem, ButtonGroupRoot } from '@/components/primitives/button-group';
@@ -51,6 +51,7 @@ interface WorkflowFilters {
 const DEFAULT_PAGE_SIZE = getPersistedPageSize(WORKFLOWS_TABLE_ID, 10);
 
 export const WorkflowsPage = () => {
+  useSetPageHeader(<h1 className="text-foreground-950 flex items-center gap-1">Workflows</h1>);
   const { environmentSlug } = useParams();
   const track = useTelemetry();
   const navigate = useNavigate();
@@ -201,7 +202,6 @@ export const WorkflowsPage = () => {
   return (
     <>
       <PageMeta title="Workflows" />
-      <DashboardLayout headerStartItems={<h1 className="text-foreground-950 flex items-center gap-1">Workflows</h1>}>
         <div className="flex h-full w-full flex-col">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2 py-2.5">
@@ -338,7 +338,6 @@ export const WorkflowsPage = () => {
           />
         </div>
         <Outlet />
-      </DashboardLayout>
     </>
   );
 };

@@ -1,8 +1,8 @@
 import { motion } from 'motion/react';
 import { ReactElement, useEffect } from 'react';
 import { RiBookletFill, RiBookmark2Fill } from 'react-icons/ri';
-import { DashboardLayout } from '../components/dashboard-layout';
 import { PageMeta } from '../components/page-meta';
+import { useSetPageHeader } from '@/context/page-header';
 import { ProgressSection } from '../components/welcome/progress-section';
 import { Resource, ResourcesList } from '../components/welcome/resources-list';
 import { useTelemetry } from '../hooks/use-telemetry';
@@ -59,6 +59,7 @@ const learnResources: Resource[] = [
 ];
 
 export function WelcomePage(): ReactElement {
+  useSetPageHeader(<h1 className="text-foreground-950">Get Started</h1>);
   const telemetry = useTelemetry();
 
   useEffect(() => {
@@ -91,25 +92,23 @@ export function WelcomePage(): ReactElement {
   return (
     <>
       <PageMeta title="Get Started with Novu" />
-      <DashboardLayout>
-        <motion.div className="flex flex-col gap-8 p-9 pt-4" variants={pageVariants} initial="hidden" animate="show">
-          <motion.div variants={sectionVariants}>
-            <ProgressSection />
-          </motion.div>
-
-          <motion.div variants={sectionVariants}>
-            <ResourcesList
-              title="Helpful resources"
-              icon={<RiBookmark2Fill className="h-4 w-4" />}
-              resources={helpfulResources}
-            />
-          </motion.div>
-
-          <motion.div variants={sectionVariants}>
-            <ResourcesList title="Learn" icon={<RiBookletFill className="h-4 w-4" />} resources={learnResources} />
-          </motion.div>
+      <motion.div className="flex flex-col gap-8 p-9 pt-4" variants={pageVariants} initial="hidden" animate="show">
+        <motion.div variants={sectionVariants}>
+          <ProgressSection />
         </motion.div>
-      </DashboardLayout>
+
+        <motion.div variants={sectionVariants}>
+          <ResourcesList
+            title="Helpful resources"
+            icon={<RiBookmark2Fill className="h-4 w-4" />}
+            resources={helpfulResources}
+          />
+        </motion.div>
+
+        <motion.div variants={sectionVariants}>
+          <ResourcesList title="Learn" icon={<RiBookletFill className="h-4 w-4" />} resources={learnResources} />
+        </motion.div>
+      </motion.div>
     </>
   );
 }

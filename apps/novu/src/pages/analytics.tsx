@@ -22,9 +22,9 @@ import {
 import { ActiveSubscribersTrendChart } from '../components/analytics/charts/active-subscribers-trend-chart';
 import { ProvidersByVolume } from '../components/analytics/charts/providers-by-volume';
 import { WorkflowRunsTrendChart } from '../components/analytics/charts/workflow-runs-trend-chart';
-import { DashboardLayout } from '../components/dashboard-layout';
 import { PageMeta } from '../components/page-meta';
 import { Badge } from '@/components/primitives/badge';
+import { useSetPageHeader } from '@/context/page-header';
 import { FacetedFormFilter } from '../components/primitives/form/faceted-filter/facated-form-filter';
 import { InlineToast } from '../components/primitives/inline-toast';
 import { useEnvironment } from '../context/environment/hooks';
@@ -44,6 +44,17 @@ export function AnalyticsPage() {
   const isWorkflowFilterEnabled = useFeatureFlag(FeatureFlagsKeysEnum.IS_ANALYTICS_WORKFLOW_FILTER_ENABLED);
 
   const isDevMockMode = searchParams.get('dev_mock_date') === 'true';
+
+  useSetPageHeader(
+    <h1 className="text-foreground-950 flex items-center gap-1">
+      <span>Usage</span>
+      {isDevMockMode && (
+        <Badge variant="filled" color="orange" className="text-xs">
+          DEV MOCK DATA
+        </Badge>
+      )}
+    </h1>
+  );
 
   const { selectedDateRange, setSelectedDateRange, dateFilterOptions, chartsDateRange } = useAnalyticsDateFilter({
     organization,
@@ -124,19 +135,7 @@ export function AnalyticsPage() {
   return (
     <>
       <PageMeta title="Usage" />
-      <DashboardLayout
-        headerStartItems={
-          <h1 className="text-foreground-950 flex items-center gap-1">
-            <span>Usage</span>
-            {isDevMockMode && (
-              <Badge variant="filled" color="orange" className="text-xs">
-                DEV MOCK DATA
-              </Badge>
-            )}
-          </h1>
-        }
-      >
-        <motion.div className="flex flex-col gap-2" variants={ANIMATION_VARIANTS.page} initial="hidden" animate="show">
+      <motion.div className="flex flex-col gap-2" variants={ANIMATION_VARIANTS.page} initial="hidden" animate="show">
           <motion.div variants={ANIMATION_VARIANTS.section} className="flex justify-start gap-2">
             <FacetedFormFilter
               size="small"
@@ -226,7 +225,6 @@ export function AnalyticsPage() {
             />
           )}
         </motion.div>
-      </DashboardLayout>
     </>
   );
 }

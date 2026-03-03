@@ -51,6 +51,8 @@ import { TestWorkflowRouteHandler } from './pages/test-workflow-route-handler';
 import { TopicsPage } from './pages/topics';
 import { VercelIntegrationPage } from './pages/vercel-integration-page';
 import { CatchAllRoute, DashboardRoute, RootRoute } from './routes';
+import { DashboardLayoutRoute } from './routes/dashboard-layout-route';
+import { FullPageLayoutRoute } from './routes/full-page-layout-route';
 import { OnboardingParentRoute } from './routes/onboarding';
 import { ROUTES } from './utils/routes';
 import { initializeSentry } from './utils/sentry';
@@ -86,194 +88,200 @@ const router = createBrowserRouter([
         path: ROUTES.ROOT,
         element: <DashboardRoute />,
         children: [
+          // Sidebar layout pages
           {
-            index: true,
-            element: <CatchAllRoute />,
-          },
-          {
-            path: ROUTES.ENV,
+            element: <DashboardLayoutRoute />,
             children: [
               {
-                path: ROUTES.WELCOME,
-                element: <WelcomePage />,
+                index: true,
+                element: <CatchAllRoute />,
               },
               {
-                path: ROUTES.WORKFLOWS,
-                element: <WorkflowsPage />,
+                path: ROUTES.ENV,
                 children: [
                   {
-                    path: ROUTES.TEMPLATE_STORE,
-                    element: <TemplateModal />,
+                    path: ROUTES.WELCOME,
+                    element: <WelcomePage />,
                   },
                   {
-                    path: ROUTES.TEMPLATE_STORE_CREATE_WORKFLOW,
-                    element: <TemplateModal />,
+                    path: ROUTES.WORKFLOWS,
+                    element: <WorkflowsPage />,
+                    children: [
+                      {
+                        path: ROUTES.TEMPLATE_STORE,
+                        element: <TemplateModal />,
+                      },
+                      {
+                        path: ROUTES.TEMPLATE_STORE_CREATE_WORKFLOW,
+                        element: <TemplateModal />,
+                      },
+                      {
+                        path: ROUTES.WORKFLOWS_CREATE,
+                        element: <CreateWorkflowPage />,
+                      },
+                      {
+                        path: ROUTES.WORKFLOWS_DUPLICATE,
+                        element: <DuplicateWorkflowPage />,
+                      },
+                    ],
                   },
                   {
-                    path: ROUTES.WORKFLOWS_CREATE,
-                    element: <CreateWorkflowPage />,
+                    path: ROUTES.SUBSCRIBERS,
+                    element: <SubscribersPage />,
+                    children: [
+                      {
+                        path: ROUTES.EDIT_SUBSCRIBER,
+                        element: <EditSubscriberPage />,
+                      },
+                      {
+                        path: ROUTES.CREATE_SUBSCRIBER,
+                        element: <CreateSubscriberPage />,
+                      },
+                    ],
                   },
                   {
-                    path: ROUTES.WORKFLOWS_DUPLICATE,
-                    element: <DuplicateWorkflowPage />,
+                    path: ROUTES.TOPICS,
+                    element: <TopicsPage />,
+                    children: [
+                      {
+                        path: ROUTES.TOPICS_CREATE,
+                        element: <CreateTopicPage />,
+                      },
+                      {
+                        path: ROUTES.TOPICS_EDIT,
+                        element: <EditTopicPage />,
+                      },
+                    ],
+                  },
+                  {
+                    path: ROUTES.CONTEXTS,
+                    element: <ContextsPage />,
+                    children: [
+                      {
+                        path: ROUTES.CONTEXTS_CREATE,
+                        element: <CreateContextPage />,
+                      },
+                      {
+                        path: ROUTES.CONTEXTS_EDIT,
+                        element: <EditContextPage />,
+                      },
+                    ],
+                  },
+                  {
+                    path: ROUTES.LAYOUTS,
+                    element: <LayoutsPage />,
+                    children: [
+                      {
+                        path: ROUTES.LAYOUTS_CREATE,
+                        element: <CreateLayoutPage />,
+                      },
+                      {
+                        path: ROUTES.LAYOUTS_DUPLICATE,
+                        element: <DuplicateLayoutPage />,
+                      },
+                    ],
+                  },
+                  {
+                    path: ROUTES.TRANSLATIONS,
+                    element: <TranslationsPage />,
+                    children: [
+                      {
+                        path: ROUTES.TRANSLATION_SETTINGS,
+                        element: <TranslationSettingsPage />,
+                      },
+                      {
+                        path: ROUTES.TRANSLATIONS_EDIT,
+                        element: <EditTranslationPage />,
+                      },
+                    ],
+                  },
+                  {
+                    path: ROUTES.API_KEYS,
+                    element: <ApiKeysPage />,
+                  },
+                  {
+                    path: ROUTES.ENVIRONMENTS,
+                    element: <EnvironmentsPage />,
+                  },
+                  {
+                    path: ROUTES.ACTIVITY_FEED,
+                    element: <ActivityFeed />,
+                  },
+                  {
+                    path: ROUTES.ACTIVITY_WORKFLOW_RUNS,
+                    element: <ActivityFeed />,
+                  },
+                  {
+                    path: ROUTES.ACTIVITY_REQUESTS,
+                    element: <ActivityFeed />,
+                  },
+                  {
+                    path: ROUTES.ANALYTICS,
+                    element: <AnalyticsPage />,
+                  },
+                  {
+                    path: ROUTES.WEBHOOKS_ENDPOINTS,
+                    element: <WebhooksPage />,
+                  },
+                  {
+                    path: ROUTES.WEBHOOKS_EVENT_CATALOG,
+                    element: <WebhooksPage />,
+                  },
+                  {
+                    path: ROUTES.WEBHOOKS_LOGS,
+                    element: <WebhooksPage />,
+                  },
+                  {
+                    path: ROUTES.WEBHOOKS_ACTIVITY,
+                    element: <WebhooksPage />,
+                  },
+                  {
+                    path: ROUTES.WEBHOOKS,
+                    element: <Navigate to={ROUTES.WEBHOOKS_ENDPOINTS} replace />,
+                  },
+                  {
+                    path: '*',
+                    element: <CatchAllRoute />,
                   },
                 ],
               },
               {
-                path: ROUTES.SUBSCRIBERS,
-                element: <SubscribersPage />,
+                path: ROUTES.INTEGRATIONS,
+                element: <IntegrationsListPage />,
                 children: [
                   {
-                    path: ROUTES.EDIT_SUBSCRIBER,
-                    element: <EditSubscriberPage />,
+                    path: ROUTES.INTEGRATIONS_CONNECT,
+                    element: <CreateIntegrationSidebar isOpened />,
                   },
                   {
-                    path: ROUTES.CREATE_SUBSCRIBER,
-                    element: <CreateSubscriberPage />,
+                    path: ROUTES.INTEGRATIONS_CONNECT_PROVIDER,
+                    element: <CreateIntegrationSidebar isOpened />,
+                  },
+                  {
+                    path: ROUTES.INTEGRATIONS_UPDATE,
+                    element: <UpdateIntegrationSidebar isOpened />,
                   },
                 ],
               },
               {
-                path: ROUTES.TOPICS,
-                element: <TopicsPage />,
-                children: [
-                  {
-                    path: ROUTES.TOPICS_CREATE,
-                    element: <CreateTopicPage />,
-                  },
-                  {
-                    path: ROUTES.TOPICS_EDIT,
-                    element: <EditTopicPage />,
-                  },
-                ],
+                path: ROUTES.SETTINGS,
+                element: <SettingsPage />,
               },
               {
-                path: ROUTES.CONTEXTS,
-                element: <ContextsPage />,
-                children: [
-                  {
-                    path: ROUTES.CONTEXTS_CREATE,
-                    element: <CreateContextPage />,
-                  },
-                  {
-                    path: ROUTES.CONTEXTS_EDIT,
-                    element: <EditContextPage />,
-                  },
-                ],
+                path: ROUTES.SETTINGS_ACCOUNT,
+                element: <SettingsPage />,
               },
               {
-                path: ROUTES.LAYOUTS,
-                element: <LayoutsPage />,
-                children: [
-                  {
-                    path: ROUTES.LAYOUTS_CREATE,
-                    element: <CreateLayoutPage />,
-                  },
-                  {
-                    path: ROUTES.LAYOUTS_DUPLICATE,
-                    element: <DuplicateLayoutPage />,
-                  },
-                ],
+                path: ROUTES.SETTINGS_ORGANIZATION,
+                element: <SettingsPage />,
               },
               {
-                path: ROUTES.LAYOUTS_EDIT,
-                element: <EditLayoutPage />,
+                path: ROUTES.SETTINGS_TEAM,
+                element: <SettingsPage />,
               },
               {
-                path: ROUTES.TRANSLATIONS,
-                element: <TranslationsPage />,
-                children: [
-                  {
-                    path: ROUTES.TRANSLATION_SETTINGS,
-                    element: <TranslationSettingsPage />,
-                  },
-                  {
-                    path: ROUTES.TRANSLATIONS_EDIT,
-                    element: <EditTranslationPage />,
-                  },
-                ],
-              },
-              {
-                path: ROUTES.API_KEYS,
-                element: <ApiKeysPage />,
-              },
-              {
-                path: ROUTES.ENVIRONMENTS,
-                element: <EnvironmentsPage />,
-              },
-              {
-                path: ROUTES.ACTIVITY_FEED,
-                element: <ActivityFeed />,
-              },
-              {
-                path: ROUTES.ACTIVITY_WORKFLOW_RUNS,
-                element: <ActivityFeed />,
-              },
-              {
-                path: ROUTES.ACTIVITY_REQUESTS,
-                element: <ActivityFeed />,
-              },
-              {
-                path: ROUTES.ANALYTICS,
-                element: <AnalyticsPage />,
-              },
-              {
-                path: ROUTES.EDIT_WORKFLOW,
-                element: <EditWorkflowPage />,
-                children: [
-                  {
-                    element: <ConfigureWorkflow />,
-                    index: true,
-                  },
-                  {
-                    element: <ConfigureStep />,
-                    path: ROUTES.EDIT_STEP,
-                  },
-                  {
-                    element: <EditStepTemplateV2Page />,
-                    path: ROUTES.EDIT_STEP_TEMPLATE,
-                  },
-                  {
-                    element: <EditStepConditions />,
-                    path: ROUTES.EDIT_STEP_CONDITIONS,
-                  },
-                  {
-                    element: <ChannelPreferences />,
-                    path: ROUTES.EDIT_WORKFLOW_PREFERENCES,
-                  },
-                  {
-                    path: ROUTES.TRIGGER_WORKFLOW,
-                    element: <TestWorkflowDrawerPage />,
-                  },
-                ],
-              },
-              {
-                path: ROUTES.EDIT_WORKFLOW_ACTIVITY,
-                element: <EditWorkflowPage />,
-              },
-              {
-                path: ROUTES.TEST_WORKFLOW,
-                element: <TestWorkflowRouteHandler />,
-              },
-              {
-                path: ROUTES.WEBHOOKS_ENDPOINTS,
-                element: <WebhooksPage />,
-              },
-              {
-                path: ROUTES.WEBHOOKS_EVENT_CATALOG,
-                element: <WebhooksPage />,
-              },
-              {
-                path: ROUTES.WEBHOOKS_LOGS,
-                element: <WebhooksPage />,
-              },
-              {
-                path: ROUTES.WEBHOOKS_ACTIVITY,
-                element: <WebhooksPage />,
-              },
-              {
-                path: ROUTES.WEBHOOKS,
-                element: <Navigate to={ROUTES.WEBHOOKS_ENDPOINTS} replace />,
+                path: ROUTES.SETTINGS_BILLING,
+                element: <SettingsPage />,
               },
               {
                 path: '*',
@@ -281,51 +289,62 @@ const router = createBrowserRouter([
               },
             ],
           },
+          // Full-page layout (no sidebar)
           {
-            path: ROUTES.INTEGRATIONS,
-            element: <IntegrationsListPage />,
+            element: <FullPageLayoutRoute />,
             children: [
               {
-                path: ROUTES.INTEGRATIONS_CONNECT,
-                element: <CreateIntegrationSidebar isOpened />,
+                path: ROUTES.ENV,
+                children: [
+                  {
+                    path: ROUTES.EDIT_WORKFLOW,
+                    element: <EditWorkflowPage />,
+                    children: [
+                      {
+                        element: <ConfigureWorkflow />,
+                        index: true,
+                      },
+                      {
+                        element: <ConfigureStep />,
+                        path: ROUTES.EDIT_STEP,
+                      },
+                      {
+                        element: <EditStepTemplateV2Page />,
+                        path: ROUTES.EDIT_STEP_TEMPLATE,
+                      },
+                      {
+                        element: <EditStepConditions />,
+                        path: ROUTES.EDIT_STEP_CONDITIONS,
+                      },
+                      {
+                        element: <ChannelPreferences />,
+                        path: ROUTES.EDIT_WORKFLOW_PREFERENCES,
+                      },
+                      {
+                        path: ROUTES.TRIGGER_WORKFLOW,
+                        element: <TestWorkflowDrawerPage />,
+                      },
+                    ],
+                  },
+                  {
+                    path: ROUTES.EDIT_WORKFLOW_ACTIVITY,
+                    element: <EditWorkflowPage />,
+                  },
+                  {
+                    path: ROUTES.TEST_WORKFLOW,
+                    element: <TestWorkflowRouteHandler />,
+                  },
+                  {
+                    path: ROUTES.LAYOUTS_EDIT,
+                    element: <EditLayoutPage />,
+                  },
+                ],
               },
               {
-                path: ROUTES.INTEGRATIONS_CONNECT_PROVIDER,
-                element: <CreateIntegrationSidebar isOpened />,
-              },
-              {
-                path: ROUTES.INTEGRATIONS_UPDATE,
-                element: <UpdateIntegrationSidebar isOpened />,
+                path: ROUTES.PARTNER_INTEGRATIONS_VERCEL,
+                element: <VercelIntegrationPage />,
               },
             ],
-          },
-          {
-            path: ROUTES.PARTNER_INTEGRATIONS_VERCEL,
-            element: <VercelIntegrationPage />,
-          },
-          {
-            path: ROUTES.SETTINGS,
-            element: <SettingsPage />,
-          },
-          {
-            path: ROUTES.SETTINGS_ACCOUNT,
-            element: <SettingsPage />,
-          },
-          {
-            path: ROUTES.SETTINGS_ORGANIZATION,
-            element: <SettingsPage />,
-          },
-          {
-            path: ROUTES.SETTINGS_TEAM,
-            element: <SettingsPage />,
-          },
-          {
-            path: ROUTES.SETTINGS_BILLING,
-            element: <SettingsPage />,
-          },
-          {
-            path: '*',
-            element: <CatchAllRoute />,
           },
         ],
       },

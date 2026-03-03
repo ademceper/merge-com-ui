@@ -5,12 +5,13 @@ import { PermissionButton } from '@/components/primitives/permission-button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@merge/ui/components/tabs';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/primitives/tooltip';
 import { buildRoute, ROUTES } from '@/utils/routes';
-import { DashboardLayout } from '../components/dashboard-layout';
+import { useSetPageHeader } from '@/context/page-header';
 import { IntegrationsList } from '../components/integrations/components/integrations-list';
 import { TableIntegration } from '../components/integrations/types';
 import { Badge } from '@/components/primitives/badge';
 
 export function IntegrationsListPage() {
+  useSetPageHeader(<h1 className="text-foreground-950 flex items-center gap-1">Integration Store</h1>);
   const navigate = useNavigate();
 
   const onItemClick = (item: TableIntegration) => {
@@ -22,13 +23,7 @@ export function IntegrationsListPage() {
   }, [navigate]);
 
   return (
-    <DashboardLayout
-      headerStartItems={
-        <h1 className="text-foreground-950 flex items-center gap-1">
-          <span>Integration Store</span>
-        </h1>
-      }
-    >
+    <>
       <Tabs defaultValue="providers" className="-mx-2">
         <div className="border-neutral-alpha-200 flex items-center justify-between border-b">
           <TabsList variant="regular" className="border-b-0 border-transparent p-0 px-2!">
@@ -52,6 +47,6 @@ export function IntegrationsListPage() {
         </TabsContent>
       </Tabs>
       <Outlet />
-    </DashboardLayout>
+    </>
   );
 }

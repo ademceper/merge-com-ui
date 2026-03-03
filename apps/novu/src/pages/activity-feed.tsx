@@ -2,17 +2,18 @@ import { FeatureFlagsKeysEnum } from '@novu/shared';
 import { useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { ActivityFeedContent } from '@/components/activity/activity-feed-content';
-import { DashboardLayout } from '@/components/dashboard-layout';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@merge/ui/components/tabs';
 import { useEnvironment } from '@/context/environment/hooks';
 import { useFeatureFlag } from '@/hooks/use-feature-flag';
 import { useTelemetry } from '@/hooks/use-telemetry';
 import { buildRoute, ROUTES } from '@/utils/routes';
 import { TelemetryEvent } from '@/utils/telemetry';
+import { useSetPageHeader } from '@/context/page-header';
 import { RequestsTable } from '../components/http-logs/logs-table';
 import { PageMeta } from '../components/page-meta';
 
 export function ActivityFeed() {
+  useSetPageHeader(<h1 className="text-foreground-950 flex items-center gap-1">Activity Feed</h1>);
   const isHttpLogsPageEnabled = useFeatureFlag(FeatureFlagsKeysEnum.IS_HTTP_LOGS_PAGE_ENABLED, false);
   const { currentEnvironment } = useEnvironment();
   const location = useLocation();
@@ -70,32 +71,24 @@ export function ActivityFeed() {
   return (
     <>
       <PageMeta title="Activity Feed" />
-      <DashboardLayout
-        headerStartItems={
-          <h1 className="text-foreground-950 flex items-center gap-1">
-            <span>Activity Feed</span>
-          </h1>
-        }
-      >
-        <Tabs value={currentTab} onValueChange={handleTabChange} className="-mx-2">
-          <TabsList variant="regular" className="border-t-0">
-            <TabsTrigger value="workflow-runs" variant="regular" size="lg">
-              Workflow Runs
+      <Tabs value={currentTab} onValueChange={handleTabChange} className="-mx-2">
+        <TabsList variant="regular" className="border-t-0">
+          <TabsTrigger value="workflow-runs" variant="regular" size="lg">
+            Workflow Runs
+          </TabsTrigger>
+          {isHttpLogsPageEnabled && (
+            <TabsTrigger value="requests" variant="regular" size="lg">
+              Requests
             </TabsTrigger>
-            {isHttpLogsPageEnabled && (
-              <TabsTrigger value="requests" variant="regular" size="lg">
-                Requests
-              </TabsTrigger>
-            )}
-          </TabsList>
-          <TabsContent value="workflow-runs">
-            <ActivityFeedContent contentHeight="h-[calc(100vh-170px)]" />
-          </TabsContent>
-          <TabsContent value="requests" className="h-[calc(100vh-140px)]">
-            <RequestsTable />
-          </TabsContent>
-        </Tabs>
-      </DashboardLayout>
+          )}
+        </TabsList>
+        <TabsContent value="workflow-runs">
+          <ActivityFeedContent contentHeight="h-[calc(100vh-170px)]" />
+        </TabsContent>
+        <TabsContent value="requests" className="h-[calc(100vh-140px)]">
+          <RequestsTable />
+        </TabsContent>
+      </Tabs>
     </>
   );
 }

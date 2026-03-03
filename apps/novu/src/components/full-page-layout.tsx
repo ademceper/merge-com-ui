@@ -9,12 +9,9 @@ export const FullPageLayout = ({
   headerStartItems?: ReactNode;
 }) => {
   return (
-    <div className="relative flex h-full w-full">
-      <div className="flex flex-1 flex-col overflow-y-auto overflow-x-hidden">
-        <HeaderNavigation startItems={headerStartItems} hideBridgeUrl />
-
-        <div className="relative flex flex-1 flex-col overflow-y-auto overflow-x-hidden">{children}</div>
-      </div>
+    <div className="relative flex h-full w-full flex-col">
+      <HeaderNavigation startItems={headerStartItems} hideBridgeUrl />
+      <div className="relative flex flex-1 flex-col overflow-y-auto overflow-x-hidden">{children}</div>
     </div>
   );
 };

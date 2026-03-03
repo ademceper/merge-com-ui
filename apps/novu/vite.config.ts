@@ -40,6 +40,7 @@ export default defineConfig(({ mode }) => {
           './src/utils/no-auth/organization-dropdown.tsx'
         ),
         '@': path.resolve(__dirname, './src'),
+        'react-resizable-panels': path.resolve(__dirname, '../../packages/ui/node_modules/react-resizable-panels'),
         'prettier/standalone': path.resolve(__dirname, './node_modules/prettier/standalone.js'),
         'prettier/plugins/html': path.resolve(__dirname, './node_modules/prettier/plugins/html.js'),
         prettier: path.resolve(__dirname, './node_modules/prettier/standalone.js'),

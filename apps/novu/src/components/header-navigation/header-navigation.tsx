@@ -11,6 +11,7 @@ import { useEnvironment } from '../../context/environment/hooks';
 import { useHasPermission } from '../../hooks/use-has-permission';
 import { Button } from '@merge/ui/components/button';
 import { Kbd } from '@merge/ui/components/kbd';
+import { SidebarTrigger } from '@merge/ui/components/sidebar';
 import { CustomerSupportButton } from './customer-support-button';
 import { EditBridgeUrlButton } from './edit-bridge-url-button';
 import { PublishButton } from './publish-button';
@@ -28,35 +29,34 @@ export const HeaderNavigation = (props: HeaderNavigationProps) => {
   const { openCommandPalette } = useCommandPalette();
 
   return (
-    <div
-      className={cn(
-        'bg-background flex h-12 w-full items-center justify-between border-b border-b-neutral-200 px-2.5 py-1.5',
-        className
-      )}
+    <header
+      className={cn('flex h-12 shrink-0 items-center px-4 bg-sidebar', className)}
       {...rest}
     >
-      {startItems}
-      <div className="text-foreground-600 ml-auto flex items-center gap-2">
+      <SidebarTrigger className="md:hidden" />
+      <div className="ml-1 mr-3 h-4 w-px shrink-0 bg-border md:hidden" />
+      {startItems && <span className="hidden md:contents">{startItems}</span>}
+      <div className="flex-1 min-w-0" />
+      <div className="flex items-center gap-2">
         <Button
-          variant="secondary"
-          mode="outline"
-          className="h-[26px] px-[5px]"
-          size="2xs"
+          variant="ghost"
+          size="icon-sm"
+          className="h-6.5 w-auto gap-1 px-1.5"
           onClick={openCommandPalette}
         >
-          <RiSearchLine className="size-3 text-text-sub" />
-          <Kbd className="bg-bg-weak rounded-4 h-[16px]">⌘K</Kbd>
+          <RiSearchLine className="size-3.5" />
+          <Kbd className="text-[10px]">⌘K</Kbd>
         </Button>
         {currentEnvironment?.type === EnvironmentTypeEnum.DEV && canPublish && <PublishButton />}
         {!hideBridgeUrl ? <EditBridgeUrlButton /> : null}
         {!(IS_SELF_HOSTED && IS_ENTERPRISE) && <CustomerSupportButton />}
         <div className="flex items-center gap-2">
           <InboxButton />
-          <div className="h-4 w-px bg-neutral-200" />
+          <div className="h-4 w-px bg-border" />
           <RegionSelector />
         </div>
         <UserProfile />
       </div>
-    </div>
+    </header>
   );
 };

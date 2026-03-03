@@ -28,8 +28,8 @@ import { useEffect, useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { PencilSimple, Plus, Trash } from "@phosphor-icons/react";
 import { useTranslation } from "react-i18next";
+import { useNavigate } from "react-router-dom";
 import { useAdminClient } from "../admin-client";
-import { arrayToKeyValue } from "../components/key-value-form/key-value-convert";
 import { FormAccess } from "../components/form/FormAccess";
 import { ViewHeader } from "../components/view-header/ViewHeader";
 import helpUrls from "../help-urls";
@@ -37,14 +37,15 @@ import { useRealm } from "../context/realm-context/RealmContext";
 import {
     OrganizationForm,
     OrganizationFormType,
-    convertToOrg,
-    convertToOrgForUpdate
+    convertToOrg
 } from "./OrganizationForm";
+import { toEditOrganization } from "./routes/EditOrganization";
 
 export default function OrganizationSection() {
     const { adminClient } = useAdminClient();
-    useRealm();
+    const { realm } = useRealm();
     const { t } = useTranslation();
+    const navigate = useNavigate();
 
     const [key, setKey] = useState(0);
     const refresh = () => setKey(key + 1);
@@ -52,26 +53,13 @@ export default function OrganizationSection() {
     const [organizations, setOrganizations] = useState<OrganizationRepresentation[]>([]);
     const [selectedOrg, setSelectedOrg] = useState<OrganizationRepresentation>();
     const [createDialogOpen, setCreateDialogOpen] = useState(false);
-    const [editOrg, setEditOrg] = useState<OrganizationRepresentation | null>(null);
-
     const createForm = useForm<OrganizationFormType>({ mode: "onChange" });
-    const editForm = useForm<OrganizationFormType>({ mode: "onChange" });
 
     useEffect(() => {
         if (createDialogOpen) {
             createForm.reset({});
         }
     }, [createDialogOpen]);
-
-    useEffect(() => {
-        if (editOrg) {
-            editForm.reset({
-                ...editOrg,
-                domains: editOrg.domains?.map(d => d.name),
-                attributes: arrayToKeyValue(editOrg.attributes)
-            });
-        }
-    }, [editOrg]);
 
     useFetch(
         () => adminClient.organizations.find({ first: 0, max: 1000 }),
@@ -98,19 +86,6 @@ export default function OrganizationSection() {
             toast.success(t("organizationSaveSuccess"));
             setCreateDialogOpen(false);
             createForm.reset();
-            refresh();
-        } catch (error) {
-            toast.error(t("organizationSaveError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
-        }
-    };
-
-    const onEditSave = async (org: OrganizationFormType) => {
-        if (!editOrg?.id) return;
-        try {
-            const payload = { ...convertToOrgForUpdate(org), alias: editOrg.alias };
-            await adminClient.organizations.updateById({ id: editOrg.id }, payload);
-            toast.success(t("organizationSaveSuccess"));
-            setEditOrg(null);
             refresh();
         } catch (error) {
             toast.error(t("organizationSaveError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
@@ -147,7 +122,7 @@ export default function OrganizationSection() {
                     <button
                         type="button"
                         className="flex w-full items-center gap-2 rounded-md px-1.5 py-1 text-left text-sm hover:bg-accent hover:text-accent-foreground"
-                        onClick={() => setEditOrg(row.original)}
+                        onClick={() => navigate(toEditOrganization({ realm, id: row.original.id!, tab: "settings" }))}
                     >
                         <PencilSimple className="size-4 shrink-0" />
                         {t("edit")}
@@ -235,47 +210,6 @@ export default function OrganizationSection() {
                     </FormProvider>
                 </Dialog>
 
-                <Dialog open={!!editOrg} onOpenChange={(open) => !open && setEditOrg(null)}>
-                    <FormProvider {...editForm}>
-                        <DialogContent className="max-w-lg">
-                            <DialogHeader>
-                                <DialogTitle>{t("organizationDetails")}</DialogTitle>
-                            </DialogHeader>
-                            <FormAccess
-                                id="edit-org-form"
-                                role="anyone"
-                                onSubmit={editForm.handleSubmit(onEditSave)}
-                                isHorizontal
-                            >
-                                <OrganizationForm readOnly />
-                            </FormAccess>
-                            <DialogFooter>
-                                <Button
-                                    type="button"
-                                    variant="outline"
-                                    onClick={() => setEditOrg(null)}
-                                >
-                                    {t("cancel")}
-                                </Button>
-                                <Button
-                                    type="submit"
-                                    form="edit-org-form"
-                                    data-testid="save"
-                                    disabled={
-                                        !editForm.formState.isValid ||
-                                        !editForm.formState.isDirty ||
-                                        editForm.formState.isLoading ||
-                                        editForm.formState.isValidating ||
-                                        editForm.formState.isSubmitting
-                                    }
-                                >
-                                    {t("save")}
-                                </Button>
-                            </DialogFooter>
-                        </DialogContent>
-                    </FormProvider>
-                </Dialog>
-
                 <DataTable
                     key={key}
                     columns={columns}
@@ -283,7 +217,7 @@ export default function OrganizationSection() {
                     searchColumnId="name"
                     searchPlaceholder={t("searchOrganization")}
                     emptyMessage={t("emptyOrganizations")}
-                    onRowClick={(row) => setEditOrg(row.original)}
+                    onRowClick={(row) => navigate(toEditOrganization({ realm, id: row.original.id!, tab: "settings" }))}
                     toolbar={
                         <Button
                             type="button"

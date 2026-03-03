@@ -11,8 +11,8 @@ import { Skeleton } from '@merge/ui/components/skeleton';
 import { ExternalLink } from '@/components/shared/external-link';
 import { useEnvironment } from '@/context/environment/hooks';
 import { getRegionConfig, useRegion } from '@/context/region';
+import { useSetPageHeader } from '@/context/page-header';
 import { apiHostnameManager } from '@/utils/api-hostname-manager';
-import { DashboardLayout } from '../components/dashboard-layout';
 import { Button } from '@merge/ui/components/button';
 import { Container } from '../components/primitives/container';
 import { HelpTooltipIndicator } from '../components/primitives/help-tooltip-indicator';
@@ -36,6 +36,7 @@ interface ApiKeysFormData {
 }
 
 export function ApiKeysPage() {
+  useSetPageHeader(<h1 className="text-foreground-950">API Keys</h1>);
   const apiKeysQuery = useFetchApiKeys();
   const { currentEnvironment } = useEnvironment();
   const { selectedRegion } = useRegion();
@@ -75,7 +76,6 @@ export function ApiKeysPage() {
   return (
     <>
       <PageMeta title={`API Keys for ${currentEnvironment?.name} environment`} />
-      <DashboardLayout headerStartItems={<h1 className="text-foreground-950">API Keys</h1>}>
         <Container className="flex w-full max-w-[800px] flex-col gap-6">
           <Form {...form}>
             <Card className="w-full overflow-hidden shadow-none">
@@ -160,7 +160,6 @@ export function ApiKeysPage() {
             </Card>
           </Form>
         </Container>
-      </DashboardLayout>
       <RegenerateApiKeysDialog
         environment={currentEnvironment}
         open={isRegenerateDialogOpen}
