@@ -44,6 +44,19 @@ export function AdminHeader() {
                 {isGroupsSection ? <GroupBreadCrumbsForHeader /> : <PageBreadCrumbs />}
             </span>
             <div className="flex-1 min-w-0" />
+            <button
+                type="button"
+                className="inline-flex h-7 items-center rounded-md bg-neutral-100 px-2.5 text-xs font-medium text-neutral-600 hover:bg-neutral-200 transition-colors mr-2"
+                onClick={() => {
+                    const wrapper = document.querySelector("[data-scale-wrapper]");
+                    if (wrapper) {
+                        const isScaled = wrapper.getAttribute("data-scaled") === "true";
+                        wrapper.setAttribute("data-scaled", isScaled ? "false" : "true");
+                    }
+                }}
+            >
+                Scale
+            </button>
             <AdminNavUser userMenuInfo={userMenuInfo} avatarOnly />
         </header>
     );

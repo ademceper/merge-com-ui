@@ -1,4 +1,4 @@
-import { useClerk, useOrganization, useOrganizationList } from '@clerk/clerk-react';
+import { useOrganization, useOrganizationList } from '@merge/auth';
 import { useQueryClient } from '@tanstack/react-query';
 import { createContext, type ReactNode, useCallback, useContext, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -37,7 +37,6 @@ interface RegionProviderProps {
 
 export function RegionProvider({ children }: RegionProviderProps) {
   const queryClient = useQueryClient();
-  const clerk = useClerk();
   const navigate = useNavigate();
   const { organization: currentOrganization } = useOrganization();
   const { userMemberships } = useOrganizationList({
@@ -101,21 +100,13 @@ export function RegionProvider({ children }: RegionProviderProps) {
     // Find and switch to an organization in the target region
     const targetOrgMembership = findOrganizationForRegionCallback(region);
 
-    if (targetOrgMembership && clerk) {
-      try {
-        await clerk.setActive({
-          organization: targetOrgMembership.organization as Parameters<typeof clerk.setActive>[0]['organization'],
-        });
+    if (targetOrgMembership) {
+      const newUrl = `${targetDashboardUrl}${currentPath}`;
 
-        const newUrl = `${targetDashboardUrl}${currentPath}`;
-
-        if (targetDashboardUrl !== window.location.origin) {
-          window.location.href = newUrl;
-        } else {
-          window.location.reload();
-        }
-      } catch (error) {
-        setSelectedRegion(previousRegion);
+      if (targetDashboardUrl !== window.location.origin) {
+        window.location.href = newUrl;
+      } else {
+        window.location.reload();
       }
     } else {
       setOrgCreationModal({
@@ -158,7 +149,7 @@ export function RegionProvider({ children }: RegionProviderProps) {
         setSelectedRegion(detectedRegion);
       }
     }
-  }, [currentOrganization, detectRegionFromCurrentOrg, selectedRegion, findOrganizationForRegionCallback, clerk]);
+  }, [currentOrganization, detectRegionFromCurrentOrg, selectedRegion, findOrganizationForRegionCallback]);
 
   // Initialize API and WebSocket hostnames on region changes
   useEffect(() => {
@@ -173,7 +164,7 @@ export function RegionProvider({ children }: RegionProviderProps) {
     setOrgCreationModal({ open: false, targetRegion: DEFAULT_REGION, previousRegion: DEFAULT_REGION });
 
     const targetDashboardUrl = getDashboardUrlForRegion(orgCreationModal.targetRegion);
-    const orgCreationPath = ROUTES.SIGNUP_ORGANIZATION_LIST;
+    const orgCreationPath = ROUTES.ROOT;
     const newUrl = `${targetDashboardUrl}${orgCreationPath}`;
 
     if (targetDashboardUrl !== window.location.origin) {

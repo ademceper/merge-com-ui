@@ -1,4 +1,4 @@
-import { useOrganization, useUser } from '@clerk/clerk-react';
+import { useOrganization, useUser } from '@merge/auth';
 import {
   CompanySizeEnum,
   JobTitleEnum,
@@ -11,7 +11,6 @@ import { AnimatePresence, motion } from 'motion/react';
 import React from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
-import { updateClerkOrgMetadata } from '@/api/organization';
 import { identifyUser } from '@/api/telemetry';
 import { StepIndicator } from '@/components/auth/shared';
 import { Button } from '@merge/ui/components/button';
@@ -242,15 +241,6 @@ function useSubmitQuestionnaire() {
 
   return useMutation({
     mutationFn: async (data: SubmitQuestionnaireData) => {
-      await updateClerkOrgMetadata({
-        environment: currentEnvironment!,
-        data: {
-          companySize: data.companySize,
-          jobTitle: data.jobTitle,
-          organizationType: data.organizationType,
-        },
-      });
-
       const anonymousId = await segment.getAnonymousId();
 
       await identifyUser({

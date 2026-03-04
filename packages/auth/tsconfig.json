@@ -1,0 +1,11 @@
+{
+  "extends": "@merge/ts-cfg/react-lib.json",
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@merge/auth/*": ["./src/*"]
+    }
+  },
+  "include": ["."],
+  "exclude": ["node_modules"]
+}

@@ -1,6 +1,6 @@
 import { UseQueryOptions, useQuery } from '@tanstack/react-query';
 import { getSubscriberPreferences } from '@/api/subscribers';
-import { useAuth } from '@/context/auth/hooks';
+import { useOrganization } from '@merge/auth';
 import { useEnvironment } from '@/context/environment/hooks';
 import { QueryKeys } from '@/utils/query-keys';
 
@@ -13,13 +13,13 @@ type Props = {
 };
 
 export default function useFetchSubscriberPreferences({ subscriberId, contextKeys, options = {} }: Props) {
-  const { currentOrganization } = useAuth();
+  const { organization: currentOrganization } = useOrganization();
   const { currentEnvironment } = useEnvironment();
 
   const subscriberQuery = useQuery<GetSubscriberPreferencesResponse>({
     queryKey: [
       QueryKeys.fetchSubscriberPreferences,
-      currentOrganization?._id,
+      currentOrganization?.id,
       currentEnvironment?._id,
       subscriberId,
       contextKeys,

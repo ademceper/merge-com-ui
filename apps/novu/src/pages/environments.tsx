@@ -6,7 +6,7 @@ import { CreateEnvironmentButton } from '../components/environments/create-envir
 import { FreeTierState } from '../components/environments/environments-free-state';
 import { EnvironmentsList } from '../components/environments/environments-list';
 import { IS_ENTERPRISE, IS_SELF_HOSTED } from '../config';
-import { useAuth } from '../context/auth/hooks';
+import { useOrganization } from '@merge/auth';
 import { useFetchEnvironments } from '../context/environment/hooks';
 import { useFetchSubscription } from '../hooks/use-fetch-subscription';
 import { useTelemetry } from '../hooks/use-telemetry';
@@ -14,9 +14,9 @@ import { TelemetryEvent } from '../utils/telemetry';
 
 export function EnvironmentsPage() {
   useSetPageHeader(<h1 className="text-foreground-950">Environments</h1>);
-  const { currentOrganization } = useAuth();
+  const { organization: currentOrganization } = useOrganization();
   const { environments = [], areEnvironmentsInitialLoading } = useFetchEnvironments({
-    organizationId: currentOrganization?._id,
+    organizationId: currentOrganization?.id,
   });
   const track = useTelemetry();
   const { subscription } = useFetchSubscription();

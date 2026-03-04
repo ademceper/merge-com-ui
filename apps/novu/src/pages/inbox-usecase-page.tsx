@@ -1,11 +1,11 @@
-import { useOrganization, useUser } from '@clerk/clerk-react';
+import { useOrganization, useUser } from '@merge/auth';
 import type { IEnvironment } from '@novu/shared';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { AnimatedPage } from '@/components/onboarding/animated-page';
 import { AuthCard } from '../components/auth/auth-card';
 import { InboxPlayground } from '../components/auth/inbox-playground';
 import { PageMeta } from '../components/page-meta';
-import { useAuth } from '../context/auth/hooks';
+import { useOrganization, useUser } from '@merge/auth';
 import { useEnvironment, useFetchEnvironments } from '../context/environment/hooks';
 import { useTelemetry } from '../hooks/use-telemetry';
 import { TelemetryEvent } from '../utils/telemetry';
@@ -142,7 +142,8 @@ export function InboxUsecasePage() {
   const { user } = useUser();
   const { organization } = useOrganization();
   const telemetry = useTelemetry();
-  const { currentUser, currentOrganization } = useAuth();
+  const { user: currentUser } = useUser();
+  const { organization: currentOrganization } = useOrganization();
   const { currentEnvironment: envFromContext } = useEnvironment();
   const [envLoaded, setEnvLoaded] = useState(false);
   const { environments } = useFetchEnvironments({
@@ -151,9 +152,9 @@ export function InboxUsecasePage() {
     showError: false,
   });
 
-  const loadingPhase = useInboxLoading(currentOrganization?._id);
+  const loadingPhase = useInboxLoading(currentOrganization?.id);
   const environment = envFromContext;
-  const requiredData = getRequiredData(environment, currentUser?._id, currentOrganization?._id);
+  const requiredData = getRequiredData(environment, currentUser?.id, currentOrganization?.id);
 
   useEffect(() => {
     setTimeout(() => {

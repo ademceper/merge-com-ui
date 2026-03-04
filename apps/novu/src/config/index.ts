@@ -6,22 +6,9 @@ export const LAUNCH_DARKLY_CLIENT_SIDE_ID = import.meta.env.VITE_LAUNCH_DARKLY_C
 
 export const HUBSPOT_PORTAL_ID = import.meta.env.VITE_HUBSPOT_EMBED;
 
-export const EE_AUTH_PROVIDER = (window._env_?.VITE_EE_AUTH_PROVIDER ||
-  import.meta.env.VITE_EE_AUTH_PROVIDER ||
-  'clerk') as 'clerk' | 'better-auth';
-
-export const CLERK_PUBLISHABLE_KEY =
-  window._env_?.VITE_CLERK_PUBLISHABLE_KEY || import.meta.env.VITE_CLERK_PUBLISHABLE_KEY || '';
-
 export const APP_ID = import.meta.env.VITE_NOVU_APP_ID || '';
 
 export const API_HOSTNAME = window._env_?.VITE_API_HOSTNAME || import.meta.env.VITE_API_HOSTNAME;
-
-export const BETTER_AUTH_BASE_URL =
-  window._env_?.VITE_BETTER_AUTH_BASE_URL ||
-  import.meta.env.VITE_BETTER_AUTH_BASE_URL ||
-  API_HOSTNAME ||
-  'http://localhost:3000';
 
 export const IS_EU = API_HOSTNAME === 'https://eu.api.novu.co';
 

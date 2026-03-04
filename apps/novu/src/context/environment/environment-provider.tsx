@@ -1,7 +1,7 @@
 import { type IEnvironment, EnvironmentTypeEnum } from '@novu/shared';
 import { useCallback, useLayoutEffect, useMemo, useState } from 'react';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
-import { useAuth } from '@/context/auth/hooks';
+import { useOrganization } from '@merge/auth';
 import { EnvironmentContext } from '@/context/environment/environment-context';
 import { useFetchEnvironments } from '@/context/environment/hooks';
 import { loadFromStorage, saveToStorage } from '@/utils/local-storage';
@@ -72,8 +72,7 @@ function selectEnvironment(
 }
 
 export function EnvironmentProvider({ children }: { children: React.ReactNode }) {
-  const authResp = useAuth();
-  const currentOrganization = authResp.currentOrganization;
+  const { organization: currentOrganization } = useOrganization();
   const navigate = useNavigate();
   const { pathname } = useLocation();
   const { environmentSlug: paramsEnvironmentSlug } = useParams<{ environmentSlug?: string }>();
@@ -81,14 +80,14 @@ export function EnvironmentProvider({ children }: { children: React.ReactNode })
 
   const switchEnvironmentInternal = useCallback(
     (allEnvironments: IEnvironment[], environmentSlug?: string | null) => {
-      const selectedEnvironment = selectEnvironment(allEnvironments, environmentSlug, currentOrganization?._id);
+      const selectedEnvironment = selectEnvironment(allEnvironments, environmentSlug, currentOrganization?.id);
       setCurrentEnvironment(selectedEnvironment);
       const newEnvironmentSlug = selectedEnvironment.slug;
       const isNewEnvironmentDifferent = paramsEnvironmentSlug !== selectedEnvironment.slug;
 
-      if (currentOrganization?._id && newEnvironmentSlug) {
+      if (currentOrganization?.id && newEnvironmentSlug) {
         saveToStorage(
-          `${LAST_SELECTED_ENVIRONMENT_STORAGE_KEY}-${currentOrganization._id}`,
+          `${LAST_SELECTED_ENVIRONMENT_STORAGE_KEY}-${currentOrganization.id}`,
           newEnvironmentSlug,
           'environmentSlug'
         );
@@ -101,11 +100,11 @@ export function EnvironmentProvider({ children }: { children: React.ReactNode })
         navigate(newPath);
       }
     },
-    [navigate, pathname, paramsEnvironmentSlug, currentOrganization?._id]
+    [navigate, pathname, paramsEnvironmentSlug, currentOrganization?.id]
   );
 
   const { environments: fetchedEnvironments, areEnvironmentsInitialLoading } = useFetchEnvironments({
-    organizationId: currentOrganization?._id,
+    organizationId: currentOrganization?.id,
     showError: false,
   });
 

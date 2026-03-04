@@ -1,5 +1,5 @@
 import { RegionSelector, useRegion } from '@/context/region';
-import { OrganizationList as OrganizationListForm, useOrganization } from '@clerk/clerk-react';
+import { useOrganization } from '@merge/auth';
 import { useEffect, useRef, useState } from 'react';
 import { useTelemetry } from '../../hooks/use-telemetry';
 import { ROUTES } from '../../utils/routes';
@@ -91,7 +91,8 @@ function OrganizationForm() {
         </div>
       )}
 
-      <OrganizationListForm appearance={FORM_APPEARANCE} {...ORGANIZATION_FORM_CONFIG} />
+      {/* Organization form — placeholder for Keycloak-based org creation */}
+      <p className="text-sm text-neutral-500">Organization creation is managed by Keycloak.</p>
     </div>
   );
 }

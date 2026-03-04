@@ -20,7 +20,7 @@ function DashboardLayoutContent() {
 export function DashboardLayoutRoute() {
   return (
     <PageHeaderProvider>
-      <SidebarProvider defaultOpen={true} className="h-svh bg-sidebar overflow-hidden">
+      <SidebarProvider defaultOpen={true} className="h-svh bg-sidebar overflow-hidden" data-scale-wrapper>
         <NovuAppSidebar />
         <DashboardLayoutContent />
       </SidebarProvider>

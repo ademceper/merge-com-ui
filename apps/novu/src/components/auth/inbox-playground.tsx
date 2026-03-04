@@ -1,4 +1,4 @@
-import { useOrganization } from '@clerk/clerk-react';
+import { useOrganization } from '@merge/auth';
 import { useState } from 'react';
 import { RiArrowRightSLine } from 'react-icons/ri';
 

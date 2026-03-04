@@ -12,7 +12,7 @@ import {
 import { useCallback, useMemo, useState } from 'react';
 import { getChatStreamUrl } from '@/api/ai';
 import { useEnvironment } from '@/context/environment/hooks';
-import { getToken } from '@/utils/auth';
+import { getToken } from '@merge/auth';
 import { useDataRef } from './use-data-ref';
 
 type UseAiChatOptions<D extends UIDataTypes = UIDataTypes, T extends UITools = UITools> = {

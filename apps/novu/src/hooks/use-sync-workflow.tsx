@@ -11,15 +11,15 @@ import { ToastIcon } from '@/components/primitives/sonner';
 import { showToast } from '@/components/primitives/sonner-helpers';
 import { SuccessButtonToast } from '@/components/success-button-toast';
 import TruncatedText from '@/components/truncated-text';
-import { useAuth } from '@/context/auth/hooks';
+import { useOrganization } from '@merge/auth';
 import { useEnvironment, useFetchEnvironments } from '@/context/environment/hooks';
 import { buildRoute, ROUTES } from '@/utils/routes';
 
 export function useSyncWorkflow(workflow: WorkflowResponseDto | WorkflowListResponseDto) {
   const { currentEnvironment } = useEnvironment();
-  const { currentOrganization } = useAuth();
+  const { organization: currentOrganization } = useOrganization();
   const queryClient = useQueryClient();
-  const { environments = [] } = useFetchEnvironments({ organizationId: currentOrganization?._id });
+  const { environments = [] } = useFetchEnvironments({ organizationId: currentOrganization?.id });
   const [isLoading, setIsLoading] = useState(false);
   const [showConfirmModal, setShowConfirmModal] = useState(false);
   const [targetEnvironmentId, setTargetEnvironmentId] = useState<string>();

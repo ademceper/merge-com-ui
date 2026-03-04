@@ -120,6 +120,16 @@
   --sidebar-ring: oklch(0.556 0 0);
 }
 
+/* Vaul-style scale background effect */
+[data-scale-wrapper] {
+  transition: transform 0.4s cubic-bezier(0.32, 0.72, 0, 1), border-radius 0.4s cubic-bezier(0.32, 0.72, 0, 1);
+}
+[data-scale-wrapper][data-scaled="true"] {
+  transform: scale(0.96);
+  border-radius: 12px;
+  overflow: hidden;
+}
+
 @layer base {
   * {
     @apply border-border outline-ring/50;

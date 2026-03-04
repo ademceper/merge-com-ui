@@ -12,6 +12,7 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
+    "@merge/auth": "workspace:*",
     "@merge/ui": "workspace:*",
     "@phosphor-icons/react": "^2.1.10",
     "next": "16.1.6",

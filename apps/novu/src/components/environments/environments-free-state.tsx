@@ -1,7 +1,7 @@
 /** biome-ignore-all lint/correctness/useUniqueElementIds: working correctly */
 import { RiBookMarkedLine, RiSparkling2Line } from 'react-icons/ri';
 import { Link, useNavigate } from 'react-router-dom';
-import { useAuth } from '@/context/auth/hooks';
+import { useOrganization } from '@merge/auth';
 import { useEnvironment, useFetchEnvironments } from '@/context/environment/hooks';
 import { ROUTES } from '@/utils/routes';
 import { openInNewTab } from '@/utils/url';
@@ -20,9 +20,9 @@ import TruncatedText from '../truncated-text';
 export function FreeTierState() {
   const track = useTelemetry();
   const navigate = useNavigate();
-  const { currentOrganization } = useAuth();
+  const { organization: currentOrganization } = useOrganization();
   const { environments = [] } = useFetchEnvironments({
-    organizationId: currentOrganization?._id,
+    organizationId: currentOrganization?.id,
   });
   const { currentEnvironment } = useEnvironment();
 

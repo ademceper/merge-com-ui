@@ -1,1 +1,3 @@
-export { OrganizationDropdown } from '@/components/side-navigation/organization-dropdown-clerk';
+export function OrganizationDropdown() {
+  return null;
+}

@@ -7,7 +7,7 @@ import { RiArrowDownSLine } from 'react-icons/ri';
 import { useNavigate } from 'react-router-dom';
 import type { IEnvironmentDiffResponse, IEnvironmentPublishResponse, ResourceToPublish } from '@/api/environments';
 import { showErrorToast } from '@/components/primitives/sonner-helpers';
-import { useAuth } from '@/context/auth/hooks';
+import { useOrganization } from '@merge/auth';
 import { useEnvironment, useFetchEnvironments } from '@/context/environment/hooks';
 import { useDiffEnvironments, usePublishEnvironments } from '@/hooks/use-environments';
 import { QueryKeys } from '@/utils/query-keys';
@@ -36,9 +36,9 @@ export const PublishButton = () => {
 
   const navigate = useNavigate();
   const queryClient = useQueryClient();
-  const { currentOrganization } = useAuth();
+  const { organization: currentOrganization } = useOrganization();
   const { currentEnvironment, switchEnvironment } = useEnvironment();
-  const { environments = [] } = useFetchEnvironments({ organizationId: currentOrganization?._id });
+  const { environments = [] } = useFetchEnvironments({ organizationId: currentOrganization?.id });
   const publishMutation = usePublishEnvironments();
 
   // Filter out current environment and ensure we have valid environments

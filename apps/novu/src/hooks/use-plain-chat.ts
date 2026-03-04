@@ -2,7 +2,7 @@ import { FeatureFlagsKeysEnum } from '@novu/shared';
 import * as Sentry from '@sentry/react';
 import { useEffect } from 'react';
 import { PLAIN_SUPPORT_CHAT_APP_ID } from '@/config';
-import { useAuth } from '@/context/auth/hooks';
+import { useUser } from '@merge/auth';
 import { useFeatureFlag } from '@/hooks/use-feature-flag';
 
 // Add type declaration for Plain chat widget
@@ -18,10 +18,10 @@ declare global {
 let isPlainChatInitialized = false;
 
 export const usePlainChat = () => {
-  const { currentUser } = useAuth();
+  const { user } = useUser();
   const isContextualHelpEnabled = useFeatureFlag(FeatureFlagsKeysEnum.IS_CONTEXTUAL_HELP_DRAWER_ENABLED);
 
-  const isLiveChatVisible = currentUser?.servicesHashes?.plain && PLAIN_SUPPORT_CHAT_APP_ID !== undefined;
+  const isLiveChatVisible = PLAIN_SUPPORT_CHAT_APP_ID !== undefined;
 
   useEffect(() => {
     if (!isPlainChatInitialized && isLiveChatVisible) {
@@ -31,10 +31,9 @@ export const usePlainChat = () => {
           hideLauncher: true,
           hideBranding: true,
           customerDetails: {
-            fullName: `${currentUser.firstName} ${currentUser.lastName}`,
-            email: currentUser?.email,
-            emailHash: currentUser?.servicesHashes?.plain,
-            externalId: currentUser?._id,
+            fullName: `${user.firstName} ${user.lastName}`,
+            email: user.primaryEmailAddress?.emailAddress,
+            externalId: user.id,
           },
           links: [
             {
@@ -142,7 +141,7 @@ export const usePlainChat = () => {
     }
 
     isPlainChatInitialized = true;
-  }, [isLiveChatVisible, currentUser, isContextualHelpEnabled]);
+  }, [isLiveChatVisible, user, isContextualHelpEnabled]);
 
   const showPlainLiveChat = () => {
     if (isLiveChatVisible) {

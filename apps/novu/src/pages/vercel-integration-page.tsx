@@ -1,4 +1,4 @@
-import { useOrganization, useOrganizationList } from '@clerk/clerk-react';
+import { useOrganization, useOrganizationList } from '@merge/auth';
 import { useMemo } from 'react';
 
 import { Card, CardContent, CardHeader } from '@merge/ui/components/card';

@@ -1,5 +1,6 @@
-import { useAuth } from '@clerk/clerk-react';
-import type { CheckAuthorizationWithCustomPermissions } from '@clerk/types';
+import { useAuth } from '@merge/auth';
+
+type CheckAuthorizationWithCustomPermissions = (...args: any[]) => boolean;
 import {
   ApiServiceLevelEnum,
   FeatureFlagsKeysEnum,

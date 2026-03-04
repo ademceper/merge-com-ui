@@ -65,7 +65,7 @@ import { usePromotionalBanner } from '@/components/promotional/coming-soon-banne
 import { SidebarContent, SidebarHeader } from '@/components/side-navigation/sidebar';
 import { workflowSchema } from '@/components/workflow-editor/schema';
 import { UpdateWorkflowFn } from '@/components/workflow-editor/workflow-provider';
-import { useAuth } from '@/context/auth/hooks';
+import { useOrganization } from '@merge/auth';
 import { useEnvironment, useFetchEnvironments } from '@/context/environment/hooks';
 import { useDeleteWorkflow } from '@/hooks/use-delete-workflow';
 import { useFormAutosave } from '@/hooks/use-form-autosave';
@@ -100,8 +100,8 @@ export const ConfigureWorkflowForm = (props: ConfigureWorkflowFormProps) => {
 
   const { tags } = useTags();
   const { currentEnvironment } = useEnvironment();
-  const { currentOrganization } = useAuth();
-  const { environments = [] } = useFetchEnvironments({ organizationId: currentOrganization?._id });
+  const { organization: currentOrganization } = useOrganization();
+  const { environments = [] } = useFetchEnvironments({ organizationId: currentOrganization?.id });
   const { isSyncable, PromoteConfirmModal } = useSyncWorkflow(workflow);
 
   const { show: showComingSoonBanner } = usePromotionalBanner({

@@ -44,7 +44,7 @@ import { WorkflowStatus } from '@/components/workflow-status';
 import { WorkflowSteps } from '@/components/workflow-steps';
 import { WorkflowTags } from '@/components/workflow-tags';
 import { IS_SELF_HOSTED, LEGACY_DASHBOARD_URL, SELF_HOSTED_UPGRADE_REDIRECT_URL } from '@/config';
-import { useAuth } from '@/context/auth/hooks';
+import { useOrganization } from '@merge/auth';
 import { useEnvironment, useFetchEnvironments } from '@/context/environment/hooks';
 import { useDeleteWorkflow } from '@/hooks/use-delete-workflow';
 import { useFeatureFlag } from '@/hooks/use-feature-flag';
@@ -114,7 +114,6 @@ export const WorkflowRow = ({ workflow }: WorkflowRowProps) => {
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [isPauseModalOpen, setIsPauseModalOpen] = useState(false);
   const { currentEnvironment } = useEnvironment();
-  const { isUserLoaded } = useAuth();
   const has = useHasPermission();
   const navigate = useNavigate();
   const { safeSync, PromoteConfirmModal } = useSyncWorkflow(workflow);
@@ -243,10 +242,6 @@ export const WorkflowRow = ({ workflow }: WorkflowRowProps) => {
     // don't propagate the click event to the row
     e.stopPropagation();
   };
-
-  if (!isUserLoaded) {
-    return null;
-  }
 
   return (
     <>
@@ -543,8 +538,8 @@ const SyncWorkflowMenuItem = ({
   tooltipContent: string | undefined;
   onSync: (targetEnvironmentId: string) => void;
 }) => {
-  const { currentOrganization } = useAuth();
-  const { environments = [] } = useFetchEnvironments({ organizationId: currentOrganization?._id });
+  const { organization: currentOrganization } = useOrganization();
+  const { environments = [] } = useFetchEnvironments({ organizationId: currentOrganization?.id });
   const otherEnvironments = environments.filter((env: IEnvironment) => env._id !== currentEnvironment?._id);
 
   if (!isSyncable) {

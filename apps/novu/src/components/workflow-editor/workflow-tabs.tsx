@@ -11,7 +11,7 @@ import { RiArrowDownSLine, RiCodeSSlashLine, RiFileCopyLine, RiPlayCircleLine } 
 import { Link, useMatch, useNavigate, useParams } from 'react-router-dom';
 import { useWorkflow } from '@/components/workflow-editor/workflow-provider';
 
-import { useAuth } from '@/context/auth/hooks';
+import { useUser } from '@merge/auth';
 import { useEnvironment } from '@/context/environment/hooks';
 import { useDeleteWorkflow } from '@/hooks/use-delete-workflow';
 import { useFeatureFlag } from '@/hooks/use-feature-flag';
@@ -40,7 +40,7 @@ import { WorkflowCanvas } from './workflow-canvas';
 export const WorkflowTabs = () => {
   const { workflow, isPending: isWorkflowPending, refetch: refetchWorkflow } = useWorkflow();
   const { currentEnvironment, areEnvironmentsInitialLoading } = useEnvironment();
-  const { currentUser } = useAuth();
+  const { user: currentUser } = useUser();
   const navigate = useNavigate();
   const isAiWorkflowGenerationEnabled = useFeatureFlag(FeatureFlagsKeysEnum.IS_AI_WORKFLOW_GENERATION_ENABLED);
   const activityMatch = useMatch(ROUTES.EDIT_WORKFLOW_ACTIVITY);
@@ -51,10 +51,10 @@ export const WorkflowTabs = () => {
   const { triggerWorkflow, isPending } = useTriggerWorkflow();
   const isPayloadSchemaEnabled = useIsPayloadSchemaEnabled();
 
-  const userId = currentUser?._id;
+  const userId = currentUser?.id;
   const userFirstName = currentUser?.firstName;
   const userLastName = currentUser?.lastName;
-  const userEmail = currentUser?.email;
+  const userEmail = currentUser?.primaryEmailAddress?.emailAddress;
   const isDevEnvironment = currentEnvironment?.type === EnvironmentTypeEnum.DEV;
 
   // API key management

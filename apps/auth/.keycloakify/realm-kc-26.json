@@ -1916,14 +1916,14 @@
                 "subComponents": {},
                 "config": {
                     "allowed-protocol-mapper-types": [
-                        "oidc-usermodel-property-mapper",
+                        "oidc-address-mapper",
+                        "saml-role-list-mapper",
+                        "oidc-sha256-pairwise-sub-mapper",
                         "saml-user-attribute-mapper",
                         "oidc-usermodel-attribute-mapper",
                         "saml-user-property-mapper",
-                        "saml-role-list-mapper",
-                        "oidc-sha256-pairwise-sub-mapper",
-                        "oidc-address-mapper",
-                        "oidc-full-name-mapper"
+                        "oidc-full-name-mapper",
+                        "oidc-usermodel-property-mapper"
                     ]
                 }
             },
@@ -1953,14 +1953,14 @@
                 "subComponents": {},
                 "config": {
                     "allowed-protocol-mapper-types": [
-                        "oidc-usermodel-attribute-mapper",
-                        "oidc-usermodel-property-mapper",
                         "saml-user-attribute-mapper",
-                        "saml-role-list-mapper",
-                        "saml-user-property-mapper",
                         "oidc-address-mapper",
-                        "oidc-full-name-mapper",
-                        "oidc-sha256-pairwise-sub-mapper"
+                        "oidc-sha256-pairwise-sub-mapper",
+                        "saml-role-list-mapper",
+                        "oidc-usermodel-property-mapper",
+                        "saml-user-property-mapper",
+                        "oidc-usermodel-attribute-mapper",
+                        "oidc-full-name-mapper"
                     ]
                 }
             },
@@ -2759,7 +2759,13 @@
             "enabled": true,
             "id": "6707ef4a-9565-4c49-978b-0967cea9cb6b",
             "name": "a",
-            "attributes": {}
+            "attributes": {},
+            "members": [
+                {
+                    "membershipType": "UNMANAGED",
+                    "username": "testuser"
+                }
+            ]
         },
         {
             "alias": "aa",
@@ -2767,7 +2773,13 @@
             "enabled": true,
             "id": "d1f5a5e0-164a-4504-8295-e4486109916e",
             "name": "aa",
-            "attributes": {}
+            "attributes": {},
+            "members": [
+                {
+                    "membershipType": "UNMANAGED",
+                    "username": "testuser"
+                }
+            ]
         },
         {
             "alias": "aaa",

@@ -1,7 +1,7 @@
 import { apiHostnameManager } from '@/utils/api-hostname-manager';
-import { useUser } from '@clerk/clerk-react';
+import { useUser } from '@merge/auth';
 import { Inbox, InboxContent, InboxProps } from '@novu/react';
-import { useAuth } from '../../context/auth/hooks';
+import { useOrganization } from '@merge/auth';
 import { useFetchEnvironments } from '../../context/environment/hooks';
 
 const defaultTabs = [
@@ -20,9 +20,9 @@ const defaultTabs = [
 ];
 
 export function InboxPreviewContent() {
-  const auth = useAuth();
+  const { organization } = useOrganization();
   const { user } = useUser();
-  const { environments } = useFetchEnvironments({ organizationId: auth?.currentOrganization?._id });
+  const { environments } = useFetchEnvironments({ organizationId: organization?.id });
   const currentEnvironment = environments?.find((env) => !env._parentId);
 
   if (!currentEnvironment || !user) {

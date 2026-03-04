@@ -1,7 +1,7 @@
 import { GetSubscriberPreferencesDto, PatchPreferenceChannelsDto } from '@novu/api/models/components';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { patchSubscriberPreferences } from '@/api/subscribers';
-import { useAuth } from '@/context/auth/hooks';
+import { useOrganization } from '@merge/auth';
 import { requireEnvironment, useEnvironment } from '@/context/environment/hooks';
 import { convertContextKeysToPayload } from '@/utils/context-variable-utils';
 import { QueryKeys } from '@/utils/query-keys';
@@ -23,12 +23,12 @@ export const useOptimisticChannelPreferences = ({
   onError,
 }: UseOptimisticChannelPreferencesProps) => {
   const queryClient = useQueryClient();
-  const { currentOrganization } = useAuth();
+  const { organization: currentOrganization } = useOrganization();
   const { currentEnvironment } = useEnvironment();
 
   const queryKey = [
     QueryKeys.fetchSubscriberPreferences,
-    currentOrganization?._id,
+    currentOrganization?.id,
     currentEnvironment?._id,
     subscriberId,
     contextKeys,

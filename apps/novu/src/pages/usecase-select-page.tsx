@@ -1,17 +1,12 @@
-import { useOrganization } from '@clerk/clerk-react';
 import { ChannelTypeEnum } from '@novu/shared';
-import * as Sentry from '@sentry/react';
-import { useMutation } from '@tanstack/react-query';
 import { AnimatePresence, motion } from 'motion/react';
 import { useEffect, useState } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { useNavigate } from 'react-router-dom';
 import { getChannelOptions } from '@/components/auth/usecases-list.utils';
 import { AnimatedPage } from '@/components/onboarding/animated-page';
-import { useEnvironment } from '@/context/environment/hooks';
 import { useTelemetry } from '@/hooks/use-telemetry';
 import { TelemetryEvent } from '@/utils/telemetry';
-import { updateClerkOrgMetadata } from '../api/organization';
 import { AuthCard } from '../components/auth/auth-card';
 import { UsecaseSelectOnboarding } from '../components/auth/usecase-selector';
 import { OnboardingArrowLeft } from '../components/icons/onboarding-arrow-left';
@@ -38,8 +33,6 @@ const itemVariants = {
 };
 
 export function UsecaseSelectPage() {
-  const { organization } = useOrganization();
-  const { currentEnvironment } = useEnvironment();
   const navigate = useNavigate();
   const track = useTelemetry();
   const [selectedUseCases, setSelectedUseCases] = useState<ChannelTypeEnum[]>([]);
@@ -49,41 +42,8 @@ export function UsecaseSelectPage() {
     track(TelemetryEvent.USECASE_SELECT_PAGE_VIEWED);
   }, [track]);
 
-  useEffect(() => {
-    if (organization?.publicMetadata?.useCases) {
-      setSelectedUseCases(organization.publicMetadata.useCases as ChannelTypeEnum[]);
-    }
-  }, [organization]);
-
   const displayedUseCase =
     hoveredUseCase || (selectedUseCases.length > 0 ? selectedUseCases[selectedUseCases.length - 1] : null);
-
-  const { mutate: handleContinue, isPending } = useMutation({
-    mutationFn: async () => {
-      await updateClerkOrgMetadata({
-        environment: currentEnvironment!,
-        data: {
-          useCases: selectedUseCases,
-        },
-      });
-      await organization?.reload();
-    },
-    onSuccess: () => {
-      track(TelemetryEvent.USE_CASE_SELECTED, {
-        useCases: selectedUseCases,
-      });
-
-      if (selectedUseCases.includes(ChannelTypeEnum.IN_APP)) {
-        navigate(ROUTES.INBOX_USECASE);
-      } else {
-        navigate(ROUTES.WELCOME);
-      }
-    },
-    onError: (error) => {
-      console.error('Failed to update use cases:', error);
-      Sentry.captureException(error);
-    },
-  });
 
   function handleSkip() {
     track(TelemetryEvent.USE_CASE_SKIPPED);
@@ -100,9 +60,17 @@ export function UsecaseSelectPage() {
   function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
 
-    if (selectedUseCases.length === 0 || isPending) return;
+    if (selectedUseCases.length === 0) return;
 
-    handleContinue();
+    track(TelemetryEvent.USE_CASE_SELECTED, {
+      useCases: selectedUseCases,
+    });
+
+    if (selectedUseCases.includes(ChannelTypeEnum.IN_APP)) {
+      navigate(ROUTES.INBOX_USECASE);
+    } else {
+      navigate(ROUTES.WELCOME);
+    }
   }
 
   const channelOptions = getChannelOptions();
@@ -136,9 +104,7 @@ export function UsecaseSelectPage() {
                   <motion.div className="flex w-full flex-col items-center gap-3" variants={itemVariants}>
                     <Button
                       variant="secondary"
-                      mode="filled"
                       disabled={selectedUseCases.length === 0}
-                      isLoading={isPending}
                       className="w-full"
                       type="submit"
                     >

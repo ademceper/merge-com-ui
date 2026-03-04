@@ -1,24 +1,13 @@
-import { useUser } from '@clerk/clerk-react';
+import { useOrganization, useUser } from '@merge/auth';
 import { Bell, Inbox, InboxContent, useNovu } from '@novu/react';
 import { useEffect, useMemo, useState } from 'react';
 import { Popover, PopoverContent, PopoverPortal, PopoverTrigger } from '@/components/primitives/popover';
 import { APP_ID, IS_SELF_HOSTED } from '@/config';
-import { useAuth } from '@/context/auth/hooks';
 import { useEnvironment } from '@/context/environment/hooks';
 import { useWorkflowEditorPage } from '@/hooks/use-workflow-editor-page';
 import { apiHostnameManager } from '@/utils/api-hostname-manager';
 import { HeaderButton } from './header-navigation/header-button';
 import { InboxBellFilledDev } from './icons/inbox-bell-filled-dev';
-
-declare global {
-  interface Window {
-    Clerk: {
-      session: {
-        getToken: (options: { template: string }) => Promise<string>;
-      };
-    };
-  }
-}
 
 const InboxInner = () => {
   const [open, setOpen] = useState(false);
@@ -89,7 +78,7 @@ export const InboxButton = () => {
   const { user } = useUser();
   const { currentEnvironment } = useEnvironment();
   const { isWorkflowEditorPage: isTestPage } = useWorkflowEditorPage();
-  const { currentOrganization } = useAuth();
+  const { organization: currentOrganization } = useOrganization();
 
   const appId = isTestPage ? currentEnvironment?.identifier : APP_ID;
   const localizationTestSuffix = isTestPage ? ' (Test)' : '';
@@ -99,7 +88,7 @@ export const InboxButton = () => {
 
   const subscriber = useMemo(
     () => ({
-      subscriberId: isTestPage ? (user?.externalId ?? '') : `org_${currentOrganization?._id}:user_${user?.externalId}`,
+      subscriberId: isTestPage ? (user?.externalId ?? '') : `org_${currentOrganization?.id}:user_${user?.externalId}`,
       email: user?.primaryEmailAddress?.emailAddress ?? '',
       firstName: user?.firstName ?? '',
       lastName: user?.lastName ?? '',
@@ -110,7 +99,7 @@ export const InboxButton = () => {
       user?.primaryEmailAddress?.emailAddress,
       user?.firstName,
       user?.lastName,
-      currentOrganization?._id,
+      currentOrganization?.id,
     ]
   );
 

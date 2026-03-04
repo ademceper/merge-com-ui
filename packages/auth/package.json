@@ -1,0 +1,19 @@
+{
+  "name": "@merge/auth",
+  "version": "0.0.0",
+  "type": "module",
+  "private": true,
+  "dependencies": {
+    "oidc-spa": "~10.0.7",
+    "react": "^19.2.4"
+  },
+  "devDependencies": {
+    "@merge/ts-cfg": "workspace:*",
+    "@types/react": "^19.1.9",
+    "typescript": "^5.9.2"
+  },
+  "exports": {
+    ".": "./src/index.ts",
+    "./*": "./src/*.ts"
+  }
+}

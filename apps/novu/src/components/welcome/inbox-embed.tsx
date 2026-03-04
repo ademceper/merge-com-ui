@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import ReactConfetti from 'react-confetti';
 import { useLocation, useNavigate, useSearchParams } from 'react-router-dom';
 import { IS_EU, MODE } from '../../config';
-import { useAuth } from '../../context/auth/hooks';
+import { useUser } from '@merge/auth';
 import { useEnvironment } from '../../context/environment/hooks';
 import { useFetchIntegrations } from '../../hooks/use-fetch-integrations';
 import { ROUTES } from '../../utils/routes';
@@ -17,7 +17,7 @@ const LAYOUT_CONSTANTS = {
 
 export function InboxEmbed(): JSX.Element | null {
   const [showConfetti, setShowConfetti] = useState(false);
-  const { currentUser } = useAuth();
+  const { user: currentUser } = useUser();
   const { integrations } = useFetchIntegrations({ refetchInterval: 1000, refetchOnWindowFocus: true });
   const { environments, areEnvironmentsInitialLoading } = useEnvironment();
 
@@ -29,7 +29,7 @@ export function InboxEmbed(): JSX.Element | null {
   const selectedEnvironment = environments?.find((env) =>
     environmentHint ? env._id === environmentHint : !env._parentId
   );
-  const subscriberId = currentUser?._id;
+  const subscriberId = currentUser?.id;
 
   const foundIntegration = integrations?.find(
     (integration) =>

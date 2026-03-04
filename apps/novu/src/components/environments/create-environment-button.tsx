@@ -11,7 +11,7 @@ import { Form, FormRoot } from '@/components/primitives/form/form';
 import { PermissionButton } from '@/components/primitives/permission-button';
 import { Separator } from '@merge/ui/components/separator';
 import { Sheet, SheetContent, SheetFooter, SheetHeader, SheetMain, SheetTitle } from '@/components/primitives/sheet';
-import { useAuth } from '@/context/auth/hooks';
+import { useOrganization } from '@merge/auth';
 import { useFetchEnvironments } from '@/context/environment/hooks';
 import { useCreateEnvironment } from '@/hooks/use-environments';
 import { useTelemetry } from '../../hooks/use-telemetry';
@@ -46,8 +46,8 @@ function getRandomColor(existingEnvironments: IEnvironment[] = []) {
 type CreateEnvironmentButtonProps = ComponentProps<typeof Button>;
 
 export const CreateEnvironmentButton = (props: CreateEnvironmentButtonProps) => {
-  const { currentOrganization } = useAuth();
-  const { environments = [] } = useFetchEnvironments({ organizationId: currentOrganization?._id });
+  const { organization: currentOrganization } = useOrganization();
+  const { environments = [] } = useFetchEnvironments({ organizationId: currentOrganization?.id });
   const [isOpen, setIsOpen] = useState(false);
   const { mutateAsync, isPending } = useCreateEnvironment();
   const track = useTelemetry();

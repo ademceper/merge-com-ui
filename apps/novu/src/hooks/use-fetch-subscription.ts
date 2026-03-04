@@ -4,7 +4,7 @@ import { differenceInDays, isSameDay } from 'date-fns';
 import { useMemo } from 'react';
 import { getSubscription } from '@/api/billing';
 import { IS_ENTERPRISE, IS_SELF_HOSTED } from '@/config';
-import { useAuth } from '@/context/auth/hooks';
+import { useOrganization } from '@merge/auth';
 import { useEnvironment } from '@/context/environment/hooks';
 import { QueryKeys } from '@/utils/query-keys';
 
@@ -13,11 +13,11 @@ const today = new Date();
 export type UseSubscriptionType = GetSubscriptionDto & { daysLeft: number; isLoading: boolean };
 
 export const useFetchSubscription = () => {
-  const { currentOrganization } = useAuth();
+  const { organization: currentOrganization } = useOrganization();
   const { currentEnvironment } = useEnvironment();
 
   const { data: subscription, isLoading: isLoadingSubscription } = useQuery<GetSubscriptionDto>({
-    queryKey: [QueryKeys.billingSubscription, currentOrganization?._id],
+    queryKey: [QueryKeys.billingSubscription, currentOrganization?.id],
     queryFn: () => getSubscription({ environment: currentEnvironment! }),
     enabled: !!currentOrganization && (IS_ENTERPRISE || !IS_SELF_HOSTED),
     meta: {

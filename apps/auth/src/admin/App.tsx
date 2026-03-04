@@ -87,7 +87,7 @@ export const App = () => {
         <AdminClientContext.Provider value={{ keycloak, adminClient }}>
             <AppContexts>
                 <Banners />
-                <SidebarProvider defaultOpen={true} className="h-svh bg-sidebar overflow-hidden">
+                <SidebarProvider defaultOpen={true} className="h-svh bg-sidebar overflow-hidden" data-scale-wrapper>
                     <AdminAppSidebar />
                     <SidebarInset className="md:peer-data-[variant=inset]:bg-sidebar! md:peer-data-[variant=inset]:overflow-clip!">
                         <AdminHeader />

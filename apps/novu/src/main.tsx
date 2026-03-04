@@ -1,62 +1,206 @@
-import '@merge/ui/globals.css';
-import { StrictMode } from 'react';
-import { createRoot } from 'react-dom/client';
-import { createBrowserRouter, Navigate, RouterProvider } from 'react-router-dom';
-
-import { ConfigureWorkflow } from '@/components/workflow-editor/configure-workflow';
-import { EditStepConditions } from '@/components/workflow-editor/steps/conditions/edit-step-conditions';
-import { ConfigureStep } from '@/components/workflow-editor/steps/configure-step';
-
+import "@merge/ui/globals.css";
+import { lazy, StrictMode } from "react";
+import { createRoot } from "react-dom/client";
 import {
-  ActivityFeed,
-  AnalyticsPage,
-  ApiKeysPage,
-  CreateLayoutPage,
-  CreateWorkflowPage,
-  ErrorPage,
-  IntegrationsListPage,
-  LayoutsPage,
-  SettingsPage,
-  TemplateModal,
-  TranslationsPage,
-  WelcomePage,
-  WorkflowsPage,
-} from '@/pages';
-import { DuplicateWorkflowPage } from '@/pages/duplicate-workflow';
-import { EditStepTemplateV2Page } from '@/pages/edit-step-template-v2';
-import { SubscribersPage } from '@/pages/subscribers';
-import { TranslationSettingsPage } from '@/pages/translation-settings-page';
-import { WebhooksPage } from '@/pages/webhooks-page';
-import { CreateIntegrationSidebar } from './components/integrations/components/create-integration-sidebar';
-import { UpdateIntegrationSidebar } from './components/integrations/components/update-integration-sidebar';
-import { ChannelPreferences } from './components/workflow-editor/channel-preferences';
-import { FeatureFlagsProvider } from './context/feature-flags-provider';
-import { ContextsPage } from './pages/contexts';
-import { CreateContextPage } from './pages/create-context';
-import { CreateSubscriberPage } from './pages/create-subscriber';
-import { CreateTopicPage } from './pages/create-topic';
-import { DuplicateLayoutPage } from './pages/duplicate-layout-page';
-import { EditContextPage } from './pages/edit-context';
-import { EditLayoutPage } from './pages/edit-layout';
-import { EditSubscriberPage } from './pages/edit-subscriber-page';
-import { EditTopicPage } from './pages/edit-topic';
-import { EditTranslationPage } from './pages/edit-translation';
-import { EditWorkflowPage } from './pages/edit-workflow';
-import { EnvironmentsPage } from './pages/environments';
-import { InboxEmbedPage } from './pages/inbox-embed-page';
-import { InboxEmbedSuccessPage } from './pages/inbox-embed-success-page';
-import { InboxUsecasePage } from './pages/inbox-usecase-page';
-import { TestWorkflowDrawerPage } from './pages/test-workflow-drawer-page';
-import { TestWorkflowRouteHandler } from './pages/test-workflow-route-handler';
-import { TopicsPage } from './pages/topics';
-import { VercelIntegrationPage } from './pages/vercel-integration-page';
-import { CatchAllRoute, DashboardRoute, RootRoute } from './routes';
-import { DashboardLayoutRoute } from './routes/dashboard-layout-route';
-import { FullPageLayoutRoute } from './routes/full-page-layout-route';
-import { OnboardingParentRoute } from './routes/onboarding';
-import { ROUTES } from './utils/routes';
-import { initializeSentry } from './utils/sentry';
-import { overrideZodErrorMap } from './utils/validation';
+  createBrowserRouter,
+  Navigate,
+  RouterProvider,
+} from "react-router-dom";
+
+import { KeycloakProvider } from "@merge/auth";
+import { ErrorPage } from "@/pages/error-page";
+import { CatchAllRoute, DashboardRoute, RootRoute } from "./routes";
+import { DashboardLayoutRoute } from "./routes/dashboard-layout-route";
+import { FullPageLayoutRoute } from "./routes/full-page-layout-route";
+import { OnboardingParentRoute } from "./routes/onboarding";
+import { FeatureFlagsProvider } from "./context/feature-flags-provider";
+import { ROUTES } from "./utils/routes";
+import { initializeSentry } from "./utils/sentry";
+import { overrideZodErrorMap } from "./utils/validation";
+
+// Lazy-loaded pages
+const ActivityFeed = lazy(() =>
+  import("@/pages/activity-feed").then((m) => ({ default: m.ActivityFeed })),
+);
+const AnalyticsPage = lazy(() =>
+  import("@/pages/analytics").then((m) => ({ default: m.AnalyticsPage })),
+);
+const ApiKeysPage = lazy(() =>
+  import("@/pages/api-keys").then((m) => ({ default: m.ApiKeysPage })),
+);
+const CreateLayoutPage = lazy(() =>
+  import("@/pages/create-layout").then((m) => ({
+    default: m.CreateLayoutPage,
+  })),
+);
+const CreateWorkflowPage = lazy(() =>
+  import("@/pages/create-workflow").then((m) => ({
+    default: m.CreateWorkflowPage,
+  })),
+);
+const IntegrationsListPage = lazy(() =>
+  import("@/pages/integrations-list-page").then((m) => ({
+    default: m.IntegrationsListPage,
+  })),
+);
+const LayoutsPage = lazy(() =>
+  import("@/pages/layouts").then((m) => ({ default: m.LayoutsPage })),
+);
+const SettingsPage = lazy(() =>
+  import("@/pages/settings").then((m) => ({ default: m.SettingsPage })),
+);
+const TemplateModal = lazy(() =>
+  import("@/pages/workflows").then((m) => ({ default: m.TemplateModal })),
+);
+const TranslationsPage = lazy(() =>
+  import("@/pages/translations").then((m) => ({ default: m.TranslationsPage })),
+);
+const WelcomePage = lazy(() =>
+  import("@/pages/welcome-page").then((m) => ({ default: m.WelcomePage })),
+);
+const WorkflowsPage = lazy(() =>
+  import("@/pages/workflows").then((m) => ({ default: m.WorkflowsPage })),
+);
+const DuplicateWorkflowPage = lazy(() =>
+  import("@/pages/duplicate-workflow").then((m) => ({
+    default: m.DuplicateWorkflowPage,
+  })),
+);
+const EditStepTemplateV2Page = lazy(() =>
+  import("@/pages/edit-step-template-v2").then((m) => ({
+    default: m.EditStepTemplateV2Page,
+  })),
+);
+const SubscribersPage = lazy(() =>
+  import("@/pages/subscribers").then((m) => ({ default: m.SubscribersPage })),
+);
+const TranslationSettingsPage = lazy(() =>
+  import("@/pages/translation-settings-page").then((m) => ({
+    default: m.TranslationSettingsPage,
+  })),
+);
+const WebhooksPage = lazy(() =>
+  import("@/pages/webhooks-page").then((m) => ({ default: m.WebhooksPage })),
+);
+const ContextsPage = lazy(() =>
+  import("@/pages/contexts").then((m) => ({ default: m.ContextsPage })),
+);
+const CreateContextPage = lazy(() =>
+  import("@/pages/create-context").then((m) => ({
+    default: m.CreateContextPage,
+  })),
+);
+const CreateSubscriberPage = lazy(() =>
+  import("@/pages/create-subscriber").then((m) => ({
+    default: m.CreateSubscriberPage,
+  })),
+);
+const CreateTopicPage = lazy(() =>
+  import("@/pages/create-topic").then((m) => ({ default: m.CreateTopicPage })),
+);
+const DuplicateLayoutPage = lazy(() =>
+  import("@/pages/duplicate-layout-page").then((m) => ({
+    default: m.DuplicateLayoutPage,
+  })),
+);
+const EditContextPage = lazy(() =>
+  import("@/pages/edit-context").then((m) => ({ default: m.EditContextPage })),
+);
+const EditLayoutPage = lazy(() =>
+  import("@/pages/edit-layout").then((m) => ({ default: m.EditLayoutPage })),
+);
+const EditSubscriberPage = lazy(() =>
+  import("@/pages/edit-subscriber-page").then((m) => ({
+    default: m.EditSubscriberPage,
+  })),
+);
+const EditTopicPage = lazy(() =>
+  import("@/pages/edit-topic").then((m) => ({ default: m.EditTopicPage })),
+);
+const EditTranslationPage = lazy(() =>
+  import("@/pages/edit-translation").then((m) => ({
+    default: m.EditTranslationPage,
+  })),
+);
+const EditWorkflowPage = lazy(() =>
+  import("@/pages/edit-workflow").then((m) => ({
+    default: m.EditWorkflowPage,
+  })),
+);
+const EnvironmentsPage = lazy(() =>
+  import("@/pages/environments").then((m) => ({ default: m.EnvironmentsPage })),
+);
+const InboxEmbedPage = lazy(() =>
+  import("@/pages/inbox-embed-page").then((m) => ({
+    default: m.InboxEmbedPage,
+  })),
+);
+const InboxEmbedSuccessPage = lazy(() =>
+  import("@/pages/inbox-embed-success-page").then((m) => ({
+    default: m.InboxEmbedSuccessPage,
+  })),
+);
+const InboxUsecasePage = lazy(() =>
+  import("@/pages/inbox-usecase-page").then((m) => ({
+    default: m.InboxUsecasePage,
+  })),
+);
+const TestWorkflowDrawerPage = lazy(() =>
+  import("@/pages/test-workflow-drawer-page").then((m) => ({
+    default: m.TestWorkflowDrawerPage,
+  })),
+);
+const TestWorkflowRouteHandler = lazy(() =>
+  import("@/pages/test-workflow-route-handler").then((m) => ({
+    default: m.TestWorkflowRouteHandler,
+  })),
+);
+const TopicsPage = lazy(() =>
+  import("@/pages/topics").then((m) => ({ default: m.TopicsPage })),
+);
+const VercelIntegrationPage = lazy(() =>
+  import("@/pages/vercel-integration-page").then((m) => ({
+    default: m.VercelIntegrationPage,
+  })),
+);
+
+// Lazy-loaded components
+const ConfigureWorkflow = lazy(() =>
+  import("@/components/workflow-editor/configure-workflow").then((m) => ({
+    default: m.ConfigureWorkflow,
+  })),
+);
+const ConfigureStep = lazy(() =>
+  import("@/components/workflow-editor/steps/configure-step").then((m) => ({
+    default: m.ConfigureStep,
+  })),
+);
+const EditStepConditions = lazy(() =>
+  import(
+    "@/components/workflow-editor/steps/conditions/edit-step-conditions"
+  ).then((m) => ({
+    default: m.EditStepConditions,
+  })),
+);
+const ChannelPreferences = lazy(() =>
+  import("@/components/workflow-editor/channel-preferences").then((m) => ({
+    default: m.ChannelPreferences,
+  })),
+);
+const CreateIntegrationSidebar = lazy(() =>
+  import(
+    "@/components/integrations/components/create-integration-sidebar"
+  ).then((m) => ({
+    default: m.CreateIntegrationSidebar,
+  })),
+);
+const UpdateIntegrationSidebar = lazy(() =>
+  import(
+    "@/components/integrations/components/update-integration-sidebar"
+  ).then((m) => ({
+    default: m.UpdateIntegrationSidebar,
+  })),
+);
 
 initializeSentry();
 overrideZodErrorMap();
@@ -67,7 +211,7 @@ const router = createBrowserRouter([
     errorElement: <ErrorPage />,
     children: [
       {
-        path: '/onboarding',
+        path: "/onboarding",
         element: <OnboardingParentRoute />,
         children: [
           {
@@ -237,10 +381,12 @@ const router = createBrowserRouter([
                   },
                   {
                     path: ROUTES.WEBHOOKS,
-                    element: <Navigate to={ROUTES.WEBHOOKS_ENDPOINTS} replace />,
+                    element: (
+                      <Navigate to={ROUTES.WEBHOOKS_ENDPOINTS} replace />
+                    ),
                   },
                   {
-                    path: '*',
+                    path: "*",
                     element: <CatchAllRoute />,
                   },
                 ],
@@ -284,7 +430,7 @@ const router = createBrowserRouter([
                 element: <SettingsPage />,
               },
               {
-                path: '*',
+                path: "*",
                 element: <CatchAllRoute />,
               },
             ],
@@ -352,10 +498,18 @@ const router = createBrowserRouter([
   },
 ]);
 
-createRoot(document.getElementById('root')!).render(
+createRoot(document.getElementById("root")!).render(
   <StrictMode>
-    <FeatureFlagsProvider>
-      <RouterProvider router={router} />
-    </FeatureFlagsProvider>
-  </StrictMode>
+    <KeycloakProvider
+      issuerUri={import.meta.env.VITE_OIDC_ISSUER_URI}
+      clientId={import.meta.env.VITE_OIDC_CLIENT_ID}
+      fallback={
+        <div className="flex h-svh items-center justify-center">Loading...</div>
+      }
+    >
+      <FeatureFlagsProvider>
+        <RouterProvider router={router} />
+      </FeatureFlagsProvider>
+    </KeycloakProvider>
+  </StrictMode>,
 );

@@ -5,7 +5,6 @@ import { Outlet } from 'react-router-dom';
 import { ToastIcon } from '@/components/primitives/sonner';
 import { showToast } from '@/components/primitives/sonner-helpers';
 import { TooltipProvider } from '@/components/primitives/tooltip';
-import { AuthProvider } from '@/context/auth/auth-provider';
 import { EscapeKeyManagerProvider } from '@/context/escape-key-manager/escape-key-manager';
 import { SegmentProvider } from '@/context/segment';
 
@@ -58,17 +57,15 @@ const RootRouteInternal = () => {
       )}
     >
       <QueryClientProvider client={queryClient}>
-        <AuthProvider>
-          <SegmentProvider>
-            <HelmetProvider>
-              <TooltipProvider delayDuration={100}>
-                <EscapeKeyManagerProvider>
-                  <Outlet />
-                </EscapeKeyManagerProvider>
-              </TooltipProvider>
-            </HelmetProvider>
-          </SegmentProvider>
-        </AuthProvider>
+        <SegmentProvider>
+          <HelmetProvider>
+            <TooltipProvider delayDuration={100}>
+              <EscapeKeyManagerProvider>
+                <Outlet />
+              </EscapeKeyManagerProvider>
+            </TooltipProvider>
+          </HelmetProvider>
+        </SegmentProvider>
       </QueryClientProvider>
     </ErrorBoundary>
   );

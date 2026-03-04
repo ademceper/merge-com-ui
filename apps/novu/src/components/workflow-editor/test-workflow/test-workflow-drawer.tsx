@@ -23,7 +23,7 @@ import { PayloadData, PreviewSubscriberData } from '@/components/workflow-editor
 import { TestWorkflowActivityDrawer } from '@/components/workflow-editor/test-workflow/test-workflow-activity-drawer';
 import { TestWorkflowContent } from '@/components/workflow-editor/test-workflow/test-workflow-content';
 
-import { useAuth } from '@/context/auth/hooks';
+import { useUser } from '@merge/auth';
 import { useFetchApiKeys } from '@/hooks/use-fetch-api-keys';
 import { useFetchSubscriber } from '@/hooks/use-fetch-subscriber';
 import { useHasPermission } from '@/hooks/use-has-permission';
@@ -72,7 +72,7 @@ export const TestWorkflowDrawer = forwardRef<HTMLDivElement, TestWorkflowDrawerP
 
   const { currentEnvironment } = useEnvironment();
   const { workflow } = useWorkflow();
-  const { currentUser } = useAuth();
+  const { user: currentUser } = useUser();
   const { triggerWorkflow, isPending } = useTriggerWorkflow();
   const isPayloadSchemaEnabled = useIsPayloadSchemaEnabled();
 
@@ -103,10 +103,10 @@ export const TestWorkflowDrawer = forwardRef<HTMLDivElement, TestWorkflowDrawerP
 
     if (currentUser) {
       const initialSubscriber = getInitialSubscriber(workflow.workflowId, currentEnvironment._id, {
-        _id: currentUser._id,
+        _id: currentUser.id,
         firstName: currentUser.firstName ?? undefined,
         lastName: currentUser.lastName ?? undefined,
-        email: currentUser.email ?? undefined,
+        email: currentUser.primaryEmailAddress?.emailAddress ?? undefined,
       });
       if (initialSubscriber) {
         setSubscriberData(initialSubscriber);
@@ -158,7 +158,7 @@ export const TestWorkflowDrawer = forwardRef<HTMLDivElement, TestWorkflowDrawerP
     } else if (
       subscriberFetchError &&
       subscriberData?.subscriberId &&
-      subscriberData.subscriberId !== currentUser?._id &&
+      subscriberData.subscriberId !== currentUser?.id &&
       currentUser &&
       workflow?.workflowId &&
       currentEnvironment?._id
@@ -166,10 +166,10 @@ export const TestWorkflowDrawer = forwardRef<HTMLDivElement, TestWorkflowDrawerP
       clearSubscriberData(workflow.workflowId, currentEnvironment._id);
 
       setSubscriberData({
-        subscriberId: currentUser._id,
+        subscriberId: currentUser.id,
         firstName: currentUser.firstName ?? undefined,
         lastName: currentUser.lastName ?? undefined,
-        email: currentUser.email ?? undefined,
+        email: currentUser.primaryEmailAddress?.emailAddress ?? undefined,
       });
     }
   }, [
@@ -375,10 +375,10 @@ export const TestWorkflowDrawer = forwardRef<HTMLDivElement, TestWorkflowDrawerP
 
     if (currentUser) {
       setSubscriberData({
-        subscriberId: currentUser._id,
+        subscriberId: currentUser.id,
         firstName: currentUser.firstName ?? undefined,
         lastName: currentUser.lastName ?? undefined,
-        email: currentUser.email ?? undefined,
+        email: currentUser.primaryEmailAddress?.emailAddress ?? undefined,
       });
     }
   }, [workflow?.workflowId, currentEnvironment?._id, currentUser]);

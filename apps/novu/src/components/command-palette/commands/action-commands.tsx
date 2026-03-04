@@ -1,14 +1,14 @@
 import { LuBookUp2 } from 'react-icons/lu';
-import { useAuth } from '@/context/auth/hooks';
+import { useOrganization } from '@merge/auth';
 import { useEnvironment, useFetchEnvironments } from '@/context/environment/hooks';
 import { Command, CommandExecutionContext } from '../command-types';
 
 const DEVELOPMENT_ENVIRONMENT = 'Development';
 
 export function useActionCommands(_context: CommandExecutionContext): Command[] {
-  const { currentOrganization } = useAuth();
+  const { organization: currentOrganization } = useOrganization();
   const { currentEnvironment } = useEnvironment();
-  const { environments = [] } = useFetchEnvironments({ organizationId: currentOrganization?._id });
+  const { environments = [] } = useFetchEnvironments({ organizationId: currentOrganization?.id });
 
   const commands: Command[] = [];
 
