@@ -42,6 +42,8 @@ export default function LoginResetPassword(props: PageProps<Extract<KcContext, {
                 >
                     <div className="space-y-2">
                         <Input
+                            variant="secondary"
+                            size="xl"
                             type="text"
                             id="username"
                             name="username"

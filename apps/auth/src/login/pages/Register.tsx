@@ -43,6 +43,8 @@ export default function Register(props: PageProps<Extract<KcContext, { pageId: "
                     <div className="grid grid-cols-2 gap-4">
                         <div className="space-y-2">
                             <Input
+                                variant="secondary"
+                                size="xl"
                                 type="text"
                                 id="firstName"
                                 name="firstName"
@@ -56,6 +58,8 @@ export default function Register(props: PageProps<Extract<KcContext, { pageId: "
                         </div>
                         <div className="space-y-2">
                             <Input
+                                variant="secondary"
+                                size="xl"
                                 type="text"
                                 id="lastName"
                                 name="lastName"
@@ -71,6 +75,8 @@ export default function Register(props: PageProps<Extract<KcContext, { pageId: "
 
                     <div className="space-y-2">
                         <Input
+                            variant="secondary"
+                            size="xl"
                             type="email"
                             id="email"
                             name="email"
@@ -85,6 +91,8 @@ export default function Register(props: PageProps<Extract<KcContext, { pageId: "
                     {!realm.registrationEmailAsUsername && (
                         <div className="space-y-2">
                             <Input
+                                variant="secondary"
+                                size="xl"
                                 type="text"
                                 id="username"
                                 name="username"
@@ -103,6 +111,8 @@ export default function Register(props: PageProps<Extract<KcContext, { pageId: "
                         <>
                             <div className="space-y-2">
                                 <Input
+                                    variant="secondary"
+                                    size="xl"
                                     type="password"
                                     id="password"
                                     name="password"
@@ -117,6 +127,8 @@ export default function Register(props: PageProps<Extract<KcContext, { pageId: "
                             </div>
                             <div className="space-y-2">
                                 <Input
+                                    variant="secondary"
+                                    size="xl"
                                     type="password"
                                     id="password-confirm"
                                     name="password-confirm"

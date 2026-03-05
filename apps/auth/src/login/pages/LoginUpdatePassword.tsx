@@ -46,6 +46,8 @@ export default function LoginUpdatePassword(props: PageProps<Extract<KcContext, 
 
                     <div className="space-y-2">
                         <Input
+                            variant="secondary"
+                            size="xl"
                             type="password"
                             id="password-new"
                             name="password-new"
@@ -62,6 +64,8 @@ export default function LoginUpdatePassword(props: PageProps<Extract<KcContext, 
 
                     <div className="space-y-2">
                         <Input
+                            variant="secondary"
+                            size="xl"
                             type="password"
                             id="password-confirm"
                             name="password-confirm"

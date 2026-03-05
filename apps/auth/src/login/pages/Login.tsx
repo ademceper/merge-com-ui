@@ -21,6 +21,8 @@ export default function Login(props: PageProps<Extract<KcContext, { pageId: "log
 
     const providers = realm.password && social?.providers?.length ? social.providers : undefined;
 
+    console.log("provider : ", providers)
+
     return (
         <AuthLayout>
             <div className="space-y-5">
@@ -46,6 +48,8 @@ export default function Login(props: PageProps<Extract<KcContext, { pageId: "log
                         {!usernameHidden && (
                             <div className="space-y-2">
                                 <Input
+                                    variant="secondary"
+                                    size="xl"
                                     tabIndex={2}
                                     id="username"
                                     name="username"
@@ -65,6 +69,8 @@ export default function Login(props: PageProps<Extract<KcContext, { pageId: "log
 
                         <div className="space-y-2">
                             <Input
+                                variant="secondary"
+                                size="xl"
                                 tabIndex={3}
                                 id="password"
                                 name="password"

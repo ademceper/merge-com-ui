@@ -49,6 +49,8 @@ export default function IdpReviewUserProfile(props: PageProps<Extract<KcContext,
                     {editUsernameAllowed && (
                         <div className="space-y-2">
                             <Input
+                                variant="secondary"
+                                size="xl"
                                 type="text"
                                 id="username"
                                 name="username"
@@ -66,6 +68,8 @@ export default function IdpReviewUserProfile(props: PageProps<Extract<KcContext,
 
                     <div className="space-y-2">
                         <Input
+                            variant="secondary"
+                            size="xl"
                             type="email"
                             id="email"
                             name="email"
@@ -81,6 +85,8 @@ export default function IdpReviewUserProfile(props: PageProps<Extract<KcContext,
                     <div className="grid grid-cols-2 gap-4">
                         <div className="space-y-2">
                             <Input
+                                variant="secondary"
+                                size="xl"
                                 type="text"
                                 id="firstName"
                                 name="firstName"
@@ -96,6 +102,8 @@ export default function IdpReviewUserProfile(props: PageProps<Extract<KcContext,
                         </div>
                         <div className="space-y-2">
                             <Input
+                                variant="secondary"
+                                size="xl"
                                 type="text"
                                 id="lastName"
                                 name="lastName"

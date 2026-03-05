@@ -76,6 +76,8 @@ export default function LoginConfigTotp(props: PageProps<Extract<KcContext, { pa
                 >
                     <div className="space-y-2">
                         <Input
+                            variant="secondary"
+                            size="xl"
                             type="text"
                             id="totp"
                             name="totp"
@@ -90,6 +92,8 @@ export default function LoginConfigTotp(props: PageProps<Extract<KcContext, { pa
 
                     <div className="space-y-2">
                         <Input
+                            variant="secondary"
+                            size="xl"
                             type="text"
                             id="userLabel"
                             name="userLabel"
