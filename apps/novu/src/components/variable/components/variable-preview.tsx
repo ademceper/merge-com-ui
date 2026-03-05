@@ -1,4 +1,4 @@
-import { cn } from '@/utils/ui';
+import { cn } from '@merge/ui/lib/utils';
 
 type VariablePreviewProps = {
   children: React.ReactNode;

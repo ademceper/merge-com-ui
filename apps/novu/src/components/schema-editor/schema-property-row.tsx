@@ -3,7 +3,7 @@ import { type Control, Controller, Path, useFormContext, useWatch } from 'react-
 
 import { Checkbox } from '@merge/ui/components/checkbox';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/primitives/tooltip';
-import { cn } from '@/utils/ui';
+import { cn } from '@merge/ui/lib/utils';
 import { ArraySection } from './components/array-section';
 import { EnumSection } from './components/enum-section';
 import { ObjectSection } from './components/object-section';

@@ -14,7 +14,7 @@ import {
 import { useCombinedRefs } from '@/hooks/use-combined-refs';
 import { useFormProtection } from '@/hooks/use-form-protection';
 import { useOnElementUnmount } from '@/hooks/use-on-element-unmount';
-import { cn } from '@/utils/ui';
+import { cn } from '@merge/ui/lib/utils';
 import { ExternalLink } from '../shared/external-link';
 import { CreateContextForm } from './create-context-form';
 

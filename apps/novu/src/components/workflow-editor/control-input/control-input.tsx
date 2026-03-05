@@ -11,7 +11,7 @@ import { useEditorTranslationOverlay } from '@/hooks/use-editor-translation-over
 import { useEnhancedVariableValidation } from '@/hooks/use-enhanced-variable-validation';
 import { useFeatureFlag } from '@/hooks/use-feature-flag';
 import { IsAllowedVariable, LiquidVariable } from '@/utils/parseStepVariables';
-import { cn } from '@/utils/ui';
+import { cn } from '@merge/ui/lib/utils';
 import { LocalizationResourceEnum } from '../../../types/translations';
 
 const variants = cva('relative w-full', {

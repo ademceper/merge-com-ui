@@ -5,7 +5,7 @@ import { Command, CommandGroup, CommandItem, CommandList } from '@merge/ui/compo
 import { Popover, PopoverContent, PopoverPortal, PopoverTrigger } from '@/components/primitives/popover';
 import { selectTriggerVariants } from '@/components/primitives/select';
 import TruncatedText from '@/components/truncated-text';
-import { cn } from '@/utils/ui';
+import { cn } from '@merge/ui/lib/utils';
 
 export const MultiSelect = <T extends string | number>({
   values,

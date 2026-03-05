@@ -8,7 +8,7 @@ import { Skeleton } from '@merge/ui/components/skeleton';
 import { TopicDrawer } from '@/components/topics/topic-drawer';
 import TruncatedText from '@/components/truncated-text';
 import { fadeIn } from '@/utils/animation';
-import { cn } from '@/utils/ui';
+import { cn } from '@merge/ui/lib/utils';
 import { SubscriptionPreferenceRule } from './subscription-preference-rule';
 
 type SubscriptionPreferencesProps = {

@@ -20,7 +20,7 @@ import { useFetchTranslationGroup } from '@/hooks/use-fetch-translation-group';
 import { useFetchWorkflowTestData } from '@/hooks/use-fetch-workflow-test-data';
 import { useIsTranslationEnabled } from '@/hooks/use-is-translation-enabled';
 import { LocalizationResourceEnum } from '@/types/translations';
-import { cn } from '@/utils/ui';
+import { cn } from '@merge/ui/lib/utils';
 import { Protect } from '../../../utils/protect';
 
 type StepEditorLayoutProps = {

@@ -4,7 +4,7 @@ import { ActionType } from '@/components/billing/utils/action.button.constants.t
 import { useFetchSubscription } from '@/hooks/use-fetch-subscription';
 import { useTelemetry } from '../../hooks/use-telemetry';
 import { TelemetryEvent } from '../../utils/telemetry';
-import { cn } from '../../utils/ui';
+import { cn } from '@merge/ui/lib/utils';
 import { showErrorToast, showSuccessToast } from '../primitives/sonner-helpers';
 import { ActivePlanBanner } from './active-plan-banner';
 import { Features } from './features';

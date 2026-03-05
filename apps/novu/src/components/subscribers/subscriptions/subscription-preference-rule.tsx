@@ -8,7 +8,7 @@ import { RiContractUpDownLine, RiExpandUpDownLine } from 'react-icons/ri';
 import { TopicSubscriptionPreference } from '@/api/topics';
 import { Card, CardContent, CardHeader } from '@merge/ui/components/card';
 import { Checkbox } from '@merge/ui/components/checkbox';
-import { cn } from '@/utils/ui';
+import { cn } from '@merge/ui/lib/utils';
 
 loadLanguage('json');
 

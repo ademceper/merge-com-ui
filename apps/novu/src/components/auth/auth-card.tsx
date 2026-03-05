@@ -1,4 +1,4 @@
-import { cn } from '../../utils/ui';
+import { cn } from '@merge/ui/lib/utils';
 import { Card } from '@merge/ui/components/card';
 
 export function AuthCard({ children, className }: { children: React.ReactNode; className?: string }) {

@@ -3,7 +3,7 @@ import {
   bootstrapOidc,
   OidcInitializationGate,
   OidcInitializationErrorGate,
-} from "./keycloak";
+} from "./oidc";
 
 let bootstrapped = false;
 

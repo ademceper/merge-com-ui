@@ -4,7 +4,7 @@ import { RiAddLine } from 'react-icons/ri';
 import { v4 as uuidv4 } from 'uuid';
 
 import { Button } from '@merge/ui/components/button';
-import { cn } from '@/utils/ui';
+import { cn } from '@merge/ui/lib/utils';
 import { MAX_NESTING_DEPTH } from '../constants';
 import { SchemaPropertyRow } from '../schema-property-row';
 import type { VariableUsageInfo } from '../utils/check-variable-usage';

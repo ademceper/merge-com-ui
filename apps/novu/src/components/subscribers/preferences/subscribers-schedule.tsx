@@ -14,7 +14,7 @@ import { showErrorToast } from '@/components/primitives/sonner-helpers';
 import { Switch } from '@merge/ui/components/switch';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/primitives/tooltip';
 import { useOptimisticScheduleUpdate } from '@/hooks/use-optimistic-schedule-update';
-import { cn } from '@/utils/ui';
+import { cn } from '@merge/ui/lib/utils';
 import { ScheduleTable } from './schedule-table';
 
 const DEFAULT_HOURS = [{ start: '09:00 AM', end: '05:00 PM' }];

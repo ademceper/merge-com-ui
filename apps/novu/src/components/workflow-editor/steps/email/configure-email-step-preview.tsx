@@ -7,7 +7,7 @@ import { Skeleton } from '@merge/ui/components/skeleton';
 import { EmailPreviewHeader } from '@/components/workflow-editor/steps/email/email-preview';
 import { useWorkflow } from '@/components/workflow-editor/workflow-provider';
 import { usePreviewStep } from '@/hooks/use-preview-step';
-import { cn } from '@/utils/ui';
+import { cn } from '@merge/ui/lib/utils';
 
 type MiniEmailPreviewProps = HTMLAttributes<HTMLDivElement> & {
   previewFrom?: {

@@ -24,7 +24,7 @@ import { URLInput } from '@/components/workflow-editor/url-input';
 import { useWorkflow } from '@/components/workflow-editor/workflow-provider';
 import { useParseVariables } from '@/hooks/use-parse-variables';
 import { inboxButtonVariants } from '@/utils/inbox';
-import { cn } from '@/utils/ui';
+import { cn } from '@merge/ui/lib/utils';
 import { urlTargetTypes } from '@/utils/url';
 import { CompactButton } from './primitives/button-compact';
 import { InputRoot } from '@/components/primitives/input';

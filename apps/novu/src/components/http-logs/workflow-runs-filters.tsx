@@ -6,7 +6,7 @@ import { Button } from '@merge/ui/components/button';
 import { FacetedFormFilter } from '@/components/primitives/form/faceted-filter/facated-form-filter';
 import { Form, FormField, FormItem, FormRoot } from '@/components/primitives/form/form';
 import { useDebouncedForm } from '@/hooks/use-debounced-form';
-import { cn } from '@/utils/ui';
+import { cn } from '@merge/ui/lib/utils';
 import { defaultWorkflowRunsFilter } from './hooks/use-workflow-runs-url-state';
 
 export type WorkflowRunsFiltersProps = HTMLAttributes<HTMLDivElement> & {

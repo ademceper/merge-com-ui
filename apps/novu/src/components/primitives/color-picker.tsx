@@ -1,5 +1,5 @@
 import { HexColorPicker } from 'react-colorful';
-import { cn } from '../../utils/ui';
+import { cn } from '@merge/ui/lib/utils';
 import { Input, InputPure } from '@/components/primitives/input';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/primitives/popover';
 

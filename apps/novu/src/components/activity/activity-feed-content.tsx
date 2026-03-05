@@ -18,7 +18,7 @@ import { useActivityUrlState } from '@/hooks/use-activity-url-state';
 import { usePullActivity } from '@/hooks/use-pull-activity';
 import { ActivityFiltersData } from '@/types/activity';
 import { QueryKeys } from '@/utils/query-keys';
-import { cn } from '../../utils/ui';
+import { cn } from '@merge/ui/lib/utils';
 import { EmptyTopicsIllustration } from '../topics/empty-topics-illustration';
 
 type ActivityFeedContentProps = {

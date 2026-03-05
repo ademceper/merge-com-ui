@@ -1,7 +1,7 @@
 import { AnimatePresence, motion } from 'motion/react';
 import { useState } from 'react';
 import { RiCheckLine, RiFileCopyLine } from 'react-icons/ri';
-import { cn } from '../../utils/ui';
+import { cn } from '@merge/ui/lib/utils';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/primitives/tooltip';
 
 type CopyButtonProps = {

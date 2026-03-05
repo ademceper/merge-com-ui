@@ -1,6 +1,6 @@
 import { formatDistanceToNow } from 'date-fns';
 import { HoverCard, HoverCardContent, HoverCardPortal, HoverCardTrigger } from '@/components/primitives/hover-card';
-import { cn } from '@/utils/ui';
+import { cn } from '@merge/ui/lib/utils';
 
 interface TimeDisplayHoverCardProps {
   date: Date | string | undefined;

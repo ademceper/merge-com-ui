@@ -4,7 +4,7 @@ import { KeyboardEventHandler, useMemo, useRef, useState } from 'react';
 import { Button } from '@merge/ui/components/button';
 import { Popover, PopoverContent, PopoverPortal, PopoverTrigger } from '@/components/primitives/popover';
 import TruncatedText from '@/components/truncated-text';
-import { cn } from '@/utils/ui';
+import { cn } from '@merge/ui/lib/utils';
 
 const textClassName = 'text-foreground-600 text-xs font-medium px-2';
 

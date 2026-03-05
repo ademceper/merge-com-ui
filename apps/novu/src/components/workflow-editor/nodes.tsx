@@ -8,7 +8,7 @@ import { Link } from 'react-router-dom';
 import { useConditionsCount } from '@/hooks/use-conditions-count';
 import { STEP_TYPE_TO_COLOR } from '@/utils/color';
 import { StepTypeEnum } from '@/utils/enums';
-import { cn } from '@/utils/ui';
+import { cn } from '@merge/ui/lib/utils';
 import { STEP_TYPE_TO_ICON } from '../icons/utils';
 import { AddStepMenu } from './add-step-menu';
 import { AnimationStepWrapper } from './animation-step-wrapper';

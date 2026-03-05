@@ -13,7 +13,7 @@ import { ActivityFiltersData } from '@/types/activity';
 import { buildActivityDateFilters } from '@/utils/activityFilters';
 import { ROUTES } from '@/utils/routes';
 import { capitalize } from '@/utils/string';
-import { cn } from '@/utils/ui';
+import { cn } from '@merge/ui/lib/utils';
 import { IS_SELF_HOSTED } from '../../config';
 import { useFetchWorkflows } from '../../hooks/use-fetch-workflows';
 import { ContextFilter } from '../contexts/context-filter';

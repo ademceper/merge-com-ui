@@ -6,7 +6,7 @@ import { useWorkflow } from '@/components/workflow-editor/workflow-provider';
 import { useEnvironment } from '@/context/environment/hooks';
 import { useParseVariables } from '@/hooks/use-parse-variables';
 import { capitalize, containsHTMLEntities } from '@/utils/string';
-import { cn } from '@/utils/ui';
+import { cn } from '@merge/ui/lib/utils';
 
 const subjectKey = 'subject';
 

@@ -7,7 +7,7 @@ import { InboxEllipsis } from '@/components/icons/inbox-ellipsis';
 import { InboxSettings } from '@/components/icons/inbox-settings';
 import { Button, ButtonProps } from '@merge/ui/components/button';
 import { inboxButtonVariants } from '@/utils/inbox';
-import { cn } from '@/utils/ui';
+import { cn } from '@merge/ui/lib/utils';
 import { Skeleton } from '@merge/ui/components/skeleton';
 
 type InAppPreviewBellProps = HTMLAttributes<HTMLDivElement>;

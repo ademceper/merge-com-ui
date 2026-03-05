@@ -2,7 +2,7 @@ import { EnvironmentTypeEnum, IEnvironment } from '@novu/shared';
 import { useState } from 'react';
 import { RiExpandUpDownLine } from 'react-icons/ri';
 import TruncatedText from '../../components/truncated-text';
-import { cn } from '../../utils/ui';
+import { cn } from '@merge/ui/lib/utils';
 import { EnvironmentBranchIcon } from '../primitives/environment-branch-icon';
 import { Select, SelectContent, SelectIcon, SelectItem, SelectTrigger, SelectValue } from '@/components/primitives/select';
 import { Separator } from '@merge/ui/components/separator';

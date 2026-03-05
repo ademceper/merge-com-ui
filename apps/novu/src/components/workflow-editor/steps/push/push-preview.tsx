@@ -2,7 +2,7 @@ import { ChannelTypeEnum, GeneratePreviewResponseDto, PushRenderOutput } from '@
 import { HTMLMotionProps, motion } from 'motion/react';
 import { HTMLAttributes } from 'react';
 import { Skeleton } from '@merge/ui/components/skeleton';
-import { cn } from '@/utils/ui';
+import { cn } from '@merge/ui/lib/utils';
 
 export function PushPreview({
   isPreviewPending,

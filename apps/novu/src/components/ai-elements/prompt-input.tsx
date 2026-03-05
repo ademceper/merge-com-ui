@@ -41,7 +41,7 @@ import {
 import { HoverCard, HoverCardContent, HoverCardTrigger } from '@/components/primitives/hover-card';
 import { InputGroup, InputGroupAddon, InputGroupButton, InputGroupTextarea } from '@merge/ui/components/input-group';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/primitives/select';
-import { cn } from '@/utils/ui';
+import { cn } from '@merge/ui/lib/utils';
 
 // ============================================================================
 // Provider Context & Types

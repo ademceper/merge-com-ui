@@ -6,7 +6,7 @@ import { Button } from '@merge/ui/components/button';
 import { Checkbox } from '@merge/ui/components/checkbox';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/primitives/popover';
 import { capitalize } from '@/utils/string';
-import { cn } from '@/utils/ui';
+import { cn } from '@merge/ui/lib/utils';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/primitives/tooltip';
 import { weekDays } from './utils';
 

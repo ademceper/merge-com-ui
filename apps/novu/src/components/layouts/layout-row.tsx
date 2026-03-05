@@ -24,7 +24,7 @@ import { useDeleteLayout } from '@/hooks/use-delete-layout';
 import { formatDateSimple } from '@/utils/format-date';
 import { Protect } from '@/utils/protect';
 import { buildRoute, ROUTES } from '@/utils/routes';
-import { cn } from '@/utils/ui';
+import { cn } from '@merge/ui/lib/utils';
 import { TranslatedLayoutIcon } from '../icons/translated-layout-icon';
 import { Badge } from '@/components/primitives/badge';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/primitives/tooltip';

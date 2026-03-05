@@ -8,7 +8,7 @@ import { Dialog, DialogClose, DialogContent, DialogHeader, DialogTitle } from '@
 import { InlineToast } from '@/components/primitives/inline-toast';
 import { Popover, PopoverContent } from '@/components/primitives/popover';
 import { fadeIn } from '@/utils/animation';
-import { cn } from '@/utils/ui';
+import { cn } from '@merge/ui/lib/utils';
 import { CollapsibleSection } from '../http-logs/logs-detail-content';
 import { CompactButton } from '../primitives/button-compact';
 import { CopyToClipboard } from '../primitives/copy-to-clipboard';

@@ -13,7 +13,7 @@ import TruncatedText from '@/components/truncated-text';
 import { useFeatureFlag } from '@/hooks/use-feature-flag';
 import { useFormProtection } from '@/hooks/use-form-protection';
 import { itemVariants, listVariants } from '@/utils/animation';
-import { cn } from '../../utils/ui';
+import { cn } from '@merge/ui/lib/utils';
 import { AddSubscriberForm } from './add-subscriber-form';
 import { EmptyTopicsIllustration } from './empty-topics-illustration';
 import { useTopic } from './hooks/use-topic';

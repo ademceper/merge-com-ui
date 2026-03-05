@@ -2,7 +2,7 @@ import * as AccordionPrimitive from '@radix-ui/react-accordion';
 import { cva } from 'class-variance-authority';
 import { ChevronRight } from 'lucide-react';
 import React from 'react';
-import { cn } from '@/utils/ui';
+import { cn } from '@merge/ui/lib/utils';
 
 const treeVariants = cva(
   'group hover:bg-neutral-alpha-50 flex items-center gap-1 px-2 py-1.5 rounded-md cursor-pointer transition-colors'

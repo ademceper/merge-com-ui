@@ -9,7 +9,7 @@ import { Button } from '@merge/ui/components/button';
 import { useEnvironment } from '@/context/environment/hooks';
 import { Protect } from '@/utils/protect';
 import { buildRoute, ROUTES } from '@/utils/routes';
-import { cn } from '@/utils/ui';
+import { cn } from '@merge/ui/lib/utils';
 import { ExternalLink } from '../shared/external-link';
 
 interface ActivityEmptyStateProps {

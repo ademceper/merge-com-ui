@@ -12,7 +12,7 @@ import {
   EmailPreviewSubject,
 } from '@/components/workflow-editor/steps/email/email-preview';
 import { EmailTabsSection } from '@/components/workflow-editor/steps/email/email-tabs-section';
-import { cn } from '@/utils/ui';
+import { cn } from '@merge/ui/lib/utils';
 
 type EmailCorePreviewProps = {
   previewData: any;

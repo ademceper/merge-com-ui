@@ -1,7 +1,7 @@
 import { ChevronDown } from 'lucide-react';
 import { ReactNode, useState } from 'react';
 import { RiInformation2Line } from 'react-icons/ri';
-import { cn } from '@/utils/ui';
+import { cn } from '@merge/ui/lib/utils';
 
 interface ActivityDetailCardProps {
   title: ReactNode;

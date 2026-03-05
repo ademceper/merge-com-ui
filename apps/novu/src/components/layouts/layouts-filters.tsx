@@ -5,7 +5,7 @@ import { defaultLayoutsFilter, LayoutsFilter } from '@/components/layouts/hooks/
 import { Button } from '@merge/ui/components/button';
 import { FacetedFormFilter } from '@/components/primitives/form/faceted-filter/facated-form-filter';
 import { Form, FormField, FormItem, FormRoot } from '@/components/primitives/form/form';
-import { cn } from '@/utils/ui';
+import { cn } from '@merge/ui/lib/utils';
 
 export type LayoutsFiltersProps = HTMLAttributes<HTMLFormElement> & {
   onFiltersChange: (filter: LayoutsFilter) => void;

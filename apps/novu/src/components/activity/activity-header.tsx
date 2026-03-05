@@ -8,7 +8,7 @@ import { showErrorToast, showSuccessToast } from '@/components/primitives/sonner
 import { useEnvironment } from '@/context/environment/hooks';
 import { fadeIn } from '@/utils/animation';
 import { QueryKeys } from '@/utils/query-keys';
-import { cn } from '@/utils/ui';
+import { cn } from '@merge/ui/lib/utils';
 import { triggerWorkflow } from '../../api/workflows';
 import { RepeatPlay } from '../icons/repeat-play';
 

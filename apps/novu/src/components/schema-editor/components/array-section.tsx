@@ -5,7 +5,7 @@ import { v4 as uuidv4 } from 'uuid';
 
 import { Button } from '@merge/ui/components/button';
 import { Label } from '@merge/ui/components/label';
-import { cn } from '@/utils/ui';
+import { cn } from '@merge/ui/lib/utils';
 import { MAX_NESTING_DEPTH } from '../constants';
 import { useSchemaPropertyType } from '../hooks/use-schema-property-type';
 import type { JSONSchema7 } from '../json-schema';

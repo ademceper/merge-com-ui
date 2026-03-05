@@ -1,4 +1,4 @@
-import { cn } from '../../../../../utils/ui';
+import { cn } from '@merge/ui/lib/utils';
 import { Button } from '@merge/ui/components/button';
 import { STYLES } from '../styles';
 import { SizeType } from '../types';

@@ -75,7 +75,7 @@ import { LocalizationResourceEnum } from '@/types/translations';
 import { Protect } from '@/utils/protect';
 import { buildRoute, ROUTES } from '@/utils/routes';
 import { TelemetryEvent } from '@/utils/telemetry';
-import { cn } from '@/utils/ui';
+import { cn } from '@merge/ui/lib/utils';
 import { PayloadSchemaDrawer } from './payload-schema-drawer';
 import { TranslationToggleSection } from './translation-toggle-section';
 

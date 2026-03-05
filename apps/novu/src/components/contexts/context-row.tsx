@@ -21,7 +21,7 @@ import { useDeleteContext } from '@/hooks/use-delete-context';
 import { formatDateSimple } from '@/utils/format-date';
 import { Protect } from '@/utils/protect';
 import { buildRoute, ROUTES } from '@/utils/routes';
-import { cn } from '@/utils/ui';
+import { cn } from '@merge/ui/lib/utils';
 import { useContextsNavigate } from './hooks/use-contexts-navigate';
 
 type ContextRowProps = {

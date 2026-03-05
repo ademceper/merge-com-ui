@@ -3,7 +3,7 @@ import { OperatorSelectorProps } from 'react-querybuilder';
 
 import { toSelectOptions } from '@/components/conditions-editor/select-option-utils';
 import { Select, SelectContent, SelectTrigger, SelectValue } from '@/components/primitives/select';
-import { cn } from '@/utils/ui';
+import { cn } from '@merge/ui/lib/utils';
 
 export const OperatorSelector = React.memo(
   ({ disabled, value, options, handleOnChange, context }: OperatorSelectorProps) => {

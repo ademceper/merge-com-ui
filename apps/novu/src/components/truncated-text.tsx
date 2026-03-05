@@ -1,7 +1,7 @@
 import { Slot, SlotProps } from '@radix-ui/react-slot';
 import { useCallback, useLayoutEffect, useRef, useState } from 'react';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/primitives/tooltip';
-import { cn } from '@/utils/ui';
+import { cn } from '@merge/ui/lib/utils';
 
 type TruncatedTextProps = SlotProps & { asChild?: boolean };
 

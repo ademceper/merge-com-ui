@@ -19,7 +19,7 @@ import { useTelemetry } from '@/hooks/use-telemetry';
 import { formatDateSimple } from '@/utils/format-date';
 import { QueryKeys } from '@/utils/query-keys';
 import { TelemetryEvent } from '@/utils/telemetry';
-import { cn } from '@/utils/ui';
+import { cn } from '@merge/ui/lib/utils';
 import { ConfirmationModal } from '../confirmation-modal';
 import { Avatar, AvatarFallback, AvatarImage } from '@merge/ui/components/avatar';
 import { Button } from '@merge/ui/components/button';

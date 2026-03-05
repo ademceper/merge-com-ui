@@ -3,7 +3,7 @@ import { AnimatePresence, motion } from 'motion/react';
 import { RiErrorWarningFill, RiErrorWarningLine, RiInformation2Line } from 'react-icons/ri';
 import { HoverCard, HoverCardContent, HoverCardTrigger } from '@/components/primitives/hover-card';
 import { countIssues, getAllStepIssues, getFirstErrorMessage } from '@/components/workflow-editor/step-utils';
-import { cn } from '@/utils/ui';
+import { cn } from '@merge/ui/lib/utils';
 
 type IssuesPanelProps = {
   issues?: {

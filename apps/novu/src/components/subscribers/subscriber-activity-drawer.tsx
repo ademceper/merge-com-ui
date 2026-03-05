@@ -8,7 +8,7 @@ import { ActivitySkeleton } from '@/components/activity/activity-skeleton';
 import { ActivityOverview } from '@/components/activity/components/activity-overview';
 import { Sheet, SheetClose, SheetContent, SheetDescription, SheetTitle } from '@/components/primitives/sheet';
 import { usePullActivity } from '@/hooks/use-pull-activity';
-import { cn } from '@/utils/ui';
+import { cn } from '@merge/ui/lib/utils';
 
 type ActivityPanelDrawerProps = {
   onActivitySelect: (activityId: string) => void;

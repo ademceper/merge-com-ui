@@ -3,7 +3,7 @@ import { RiArrowRightUpLine, RiBookMarkedLine, RiQuestionLine } from 'react-icon
 import { LinkButton } from '@/components/primitives/button-link';
 import { useTelemetry } from '@/hooks/use-telemetry';
 import { TelemetryEvent } from '@/utils/telemetry';
-import { cn } from '@/utils/ui';
+import { cn } from '@merge/ui/lib/utils';
 
 interface ExternalLinkProps extends Omit<React.AnchorHTMLAttributes<HTMLAnchorElement>, 'onClick'> {
   children: React.ReactNode;

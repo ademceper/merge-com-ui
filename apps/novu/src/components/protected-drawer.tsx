@@ -3,7 +3,7 @@ import { Sheet, SheetContent, SheetDescription, SheetTitle } from '@/components/
 import { VisuallyHidden } from '@/components/primitives/visually-hidden';
 import { useCombinedRefs } from '@/hooks/use-combined-refs';
 import { useFormProtection } from '@/hooks/use-form-protection';
-import { cn } from '@/utils/ui';
+import { cn } from '@merge/ui/lib/utils';
 
 type ProtectedDrawerProps = {
   open: boolean;

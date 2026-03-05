@@ -1,6 +1,6 @@
 import { cva, type VariantProps } from 'class-variance-authority';
 import * as React from 'react';
-import { cn } from '@/utils/ui';
+import { cn } from '@merge/ui/lib/utils';
 import { Button } from '@merge/ui/components/button';
 
 const inlineToastVariants = cva('flex items-center justify-between gap-3 rounded-lg border px-2 py-1.5', {

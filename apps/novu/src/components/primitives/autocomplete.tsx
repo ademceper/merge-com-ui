@@ -1,7 +1,7 @@
 import { useCallback, useId, useRef, useState } from 'react';
 import { IconType } from 'react-icons';
 import { RiArrowDownLine, RiArrowUpLine, RiLoader4Line, RiSearchLine } from 'react-icons/ri';
-import { cn } from '@/utils/ui';
+import { cn } from '@merge/ui/lib/utils';
 import { EnterLineIcon } from '../icons/enter-line';
 import { Command, CommandEmpty, CommandGroup, CommandItem, CommandList } from '@merge/ui/components/command';
 import { Input } from '@/components/primitives/input';

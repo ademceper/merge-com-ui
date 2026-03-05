@@ -3,7 +3,7 @@ import { RiArrowRightSLine } from 'react-icons/ri';
 import { useBillingPortal } from '../../hooks/use-billing-portal';
 import { useCheckoutSession } from '../../hooks/use-checkout-session';
 import { useFetchSubscription } from '../../hooks/use-fetch-subscription';
-import { cn } from '../../utils/ui';
+import { cn } from '@merge/ui/lib/utils';
 import { PermissionButton } from '../primitives/permission-button';
 import { ContactSalesButton } from './contact-sales-button';
 

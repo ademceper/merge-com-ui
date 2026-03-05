@@ -12,7 +12,7 @@ import {
 } from '@/components/primitives/table';
 import { TablePaginationFooter } from '@/components/primitives/table-pagination-footer';
 import { useFetchContexts } from '@/hooks/use-fetch-contexts';
-import { cn } from '@/utils/ui';
+import { cn } from '@merge/ui/lib/utils';
 import { ListNoResults } from '../list-no-results';
 import { PermissionButton } from '../primitives/permission-button';
 import { ContextListBlank } from './context-list-blank';

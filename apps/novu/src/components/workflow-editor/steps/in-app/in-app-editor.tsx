@@ -6,7 +6,7 @@ import { getComponentByType } from '@/components/workflow-editor/steps/component
 import { InAppTabsSection } from '@/components/workflow-editor/steps/in-app/in-app-tabs-section';
 import { useEnvironment } from '@/context/environment/hooks';
 
-import { cn } from '../../../../utils/ui';
+import { cn } from '@merge/ui/lib/utils';
 import { StepEditorUnavailable } from '../step-editor-unavailable';
 
 const avatarKey = 'avatar';

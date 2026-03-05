@@ -5,7 +5,7 @@ import { Button } from '@merge/ui/components/button';
 import { FacetedFormFilter } from '@/components/primitives/form/faceted-filter/facated-form-filter';
 import { Form, FormField, FormItem, FormRoot } from '@/components/primitives/form/form';
 import { defaultSubscribersFilter, SubscribersFilter } from '@/components/subscribers/hooks/use-subscribers-url-state';
-import { cn } from '@/utils/ui';
+import { cn } from '@merge/ui/lib/utils';
 
 export type SubscribersFiltersProps = HTMLAttributes<HTMLFormElement> & {
   onFiltersChange: (filter: SubscribersFilter) => void;

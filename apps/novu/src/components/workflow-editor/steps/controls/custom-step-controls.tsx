@@ -15,7 +15,7 @@ import { updateStepInWorkflow } from '@/components/workflow-editor/step-utils';
 import { useSaveForm } from '@/components/workflow-editor/steps/save-form-context';
 import { ResourceOriginEnum } from '@/utils/enums';
 import { buildDefaultValuesOfDataSchema } from '@/utils/schema';
-import { cn } from '@/utils/ui';
+import { cn } from '@merge/ui/lib/utils';
 import { useWorkflow } from '../../workflow-provider';
 import { JsonForm } from './json-form';
 

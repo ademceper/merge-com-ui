@@ -3,7 +3,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { showErrorToast } from '@/components/primitives/sonner-helpers';
 import { Switch } from '@merge/ui/components/switch';
 import { capitalize } from '@/utils/string';
-import { cn } from '@/utils/ui';
+import { cn } from '@merge/ui/lib/utils';
 import { DayScheduleCopy } from './day-schedule-copy';
 import { weekDays } from './utils';
 

@@ -38,7 +38,7 @@ import { useDeleteLayout } from '@/hooks/use-delete-layout';
 import { useUpdateLayout } from '@/hooks/use-update-layout';
 import { LocalizationResourceEnum } from '@/types/translations';
 import { buildRoute, ROUTES } from '@/utils/routes';
-import { cn } from '@/utils/ui';
+import { cn } from '@merge/ui/lib/utils';
 import { CopyButton } from '../primitives/copy-button';
 import { PermissionButton } from '../primitives/permission-button';
 import { Separator } from '@merge/ui/components/separator';

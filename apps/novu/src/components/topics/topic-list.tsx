@@ -15,7 +15,7 @@ import {
 } from '@/components/primitives/table';
 import { TablePaginationFooter } from '@/components/primitives/table-pagination-footer';
 import { useFetchTopics } from '@/hooks/use-fetch-topics';
-import { cn } from '@/utils/ui';
+import { cn } from '@merge/ui/lib/utils';
 import { ListNoResults } from '../list-no-results';
 import { useTopicsNavigate } from './hooks/use-topics-navigate';
 import { TopicsFilter, TopicsSortableColumn, TopicsUrlState, useTopicsUrlState } from './hooks/use-topics-url-state';

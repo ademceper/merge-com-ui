@@ -2,7 +2,7 @@ import { ChevronDownIcon } from '@radix-ui/react-icons';
 import { RiArrowLeftSLine, RiArrowRightSLine } from 'react-icons/ri';
 import { Button } from '@merge/ui/components/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/primitives/select';
-import { cn } from '@/utils/ui';
+import { cn } from '@merge/ui/lib/utils';
 
 // Pagination group components
 type PaginationGroupProps = {

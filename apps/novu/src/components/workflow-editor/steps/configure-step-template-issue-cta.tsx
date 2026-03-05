@@ -6,7 +6,7 @@ import { Button } from '@merge/ui/components/button';
 import { SidebarContent } from '@/components/side-navigation/sidebar';
 import TruncatedText from '@/components/truncated-text';
 import { titleize } from '@/utils/titleize';
-import { cn } from '@/utils/ui';
+import { cn } from '@merge/ui/lib/utils';
 import { ExternalLink } from '../../shared/external-link';
 
 export const ConfigureStepTemplateIssuesContainer = (props: PropsWithChildren) => {

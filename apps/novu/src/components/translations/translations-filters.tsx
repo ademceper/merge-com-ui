@@ -23,7 +23,7 @@ import { useFetchOrganizationSettings } from '@/hooks/use-fetch-organization-set
 import { useHasPermission } from '@/hooks/use-has-permission';
 import { useUploadMasterJson } from '@/hooks/use-upload-master-json';
 import { buildRoute, ROUTES } from '@/utils/routes';
-import { cn } from '@/utils/ui';
+import { cn } from '@merge/ui/lib/utils';
 import { defaultTranslationsFilter } from './hooks/use-translations-url-state';
 
 type SearchFilterProps = {

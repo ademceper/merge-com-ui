@@ -1,6 +1,6 @@
 import { PlusCircle } from 'lucide-react';
 import * as React from 'react';
-import { cn } from '../../../../utils/ui';
+import { cn } from '@merge/ui/lib/utils';
 import { Button } from '@merge/ui/components/button';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/primitives/popover';
 import { FilterBadge } from './components/filter-badge';

@@ -11,7 +11,7 @@ import { ChevronDown, Info, Route } from 'lucide-react';
 import { useState } from 'react';
 import { Badge } from '@/components/primitives/badge';
 import { Button } from '@merge/ui/components/button';
-import { cn } from '@/utils/ui';
+import { cn } from '@merge/ui/lib/utils';
 import { STEP_TYPE_TO_COLOR } from '../../utils/color';
 import { formatJSONString } from '../../utils/string';
 import { STEP_TYPE_TO_ICON } from '../icons/utils';

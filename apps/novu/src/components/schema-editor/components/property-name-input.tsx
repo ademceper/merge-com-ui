@@ -4,7 +4,7 @@ import { RiErrorWarningLine } from 'react-icons/ri';
 
 import { InputPure, InputRoot, InputWrapper } from '@/components/primitives/input';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/primitives/tooltip';
-import { cn } from '@/utils/ui';
+import { cn } from '@merge/ui/lib/utils';
 import { Code2 } from '../../icons/code-2';
 import { SchemaEditorFormValues } from '../utils/validation-schema';
 

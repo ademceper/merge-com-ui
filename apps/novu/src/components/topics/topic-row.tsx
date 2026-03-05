@@ -21,7 +21,7 @@ import { Protect } from '@/utils/protect';
 import { QueryKeys } from '@/utils/query-keys';
 import { useEnvironment } from '../../context/environment/hooks';
 import { buildRoute, ROUTES } from '../../utils/routes';
-import { cn } from '../../utils/ui';
+import { cn } from '@merge/ui/lib/utils';
 import { showErrorToast } from '../primitives/sonner-helpers';
 import { useDeleteTopic } from './hooks/use-delete-topic';
 import { useTopicsNavigate } from './hooks/use-topics-navigate';

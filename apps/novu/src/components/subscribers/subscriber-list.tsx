@@ -23,7 +23,7 @@ import { SubscriberListBlank } from '@/components/subscribers/subscriber-list-bl
 import { SubscriberRow, SubscriberRowSkeleton } from '@/components/subscribers/subscriber-row';
 import { SubscribersFilters } from '@/components/subscribers/subscribers-filters';
 import { useFetchSubscribers } from '@/hooks/use-fetch-subscribers';
-import { cn } from '@/utils/ui';
+import { cn } from '@merge/ui/lib/utils';
 import { ListNoResults } from '../list-no-results';
 
 type SubscriberListFiltersProps = HTMLAttributes<HTMLDivElement> &

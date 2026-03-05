@@ -56,7 +56,7 @@ import { ResourceOriginEnum, WorkflowStatusEnum } from '@/utils/enums';
 import { formatDateSimple } from '@/utils/format-date';
 import { Protect } from '@/utils/protect';
 import { buildRoute, ROUTES } from '@/utils/routes';
-import { cn } from '@/utils/ui';
+import { cn } from '@merge/ui/lib/utils';
 import { ConfirmationModal } from './confirmation-modal';
 import { DeleteWorkflowDialog } from './delete-workflow-dialog';
 import { TranslatedWorkflowIcon } from './icons/translated-workflow';

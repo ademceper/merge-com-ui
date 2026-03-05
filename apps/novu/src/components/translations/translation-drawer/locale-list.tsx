@@ -8,7 +8,7 @@ import { Skeleton } from '@merge/ui/components/skeleton';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/primitives/tooltip';
 import { TimeDisplayHoverCard } from '@/components/time-display-hover-card';
 import { useFetchOrganizationSettings } from '@/hooks/use-fetch-organization-settings';
-import { cn } from '@/utils/ui';
+import { cn } from '@merge/ui/lib/utils';
 import { DATE_FORMAT_OPTIONS, TIME_FORMAT_OPTIONS } from '../constants';
 import { TranslationStatus } from '../translation-status';
 import { formatTranslationDate, formatTranslationTime, getLocaleDisplayName } from '../utils';

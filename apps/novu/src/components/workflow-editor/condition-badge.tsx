@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { Code2 } from '@/components/icons/code-2';
 import { parseJsonLogicOptions } from '@/utils/conditions';
 import { buildRoute, ROUTES } from '@/utils/routes';
-import { cn } from '@/utils/ui';
+import { cn } from '@merge/ui/lib/utils';
 
 interface ConditionBadgeProps {
   conditionsCount: number;

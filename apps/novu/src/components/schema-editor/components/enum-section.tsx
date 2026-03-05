@@ -5,7 +5,7 @@ import { RiAddLine, RiDeleteBin2Line, RiDeleteBinLine, RiErrorWarningLine } from
 import { Button } from '@merge/ui/components/button';
 import { InputPure, InputRoot } from '@/components/primitives/input';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/primitives/tooltip';
-import { cn } from '@/utils/ui';
+import { cn } from '@merge/ui/lib/utils';
 
 import { getMarginClassPx } from '../utils/ui-helpers';
 import type { SchemaEditorFormValues } from '../utils/validation-schema';

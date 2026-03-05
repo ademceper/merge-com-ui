@@ -8,7 +8,7 @@ import { IconType } from 'react-icons/lib';
 import { RiArrowDownSLine, RiArrowRightSLine } from 'react-icons/ri';
 import { Badge } from '@/components/primitives/badge';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@merge/ui/components/collapsible';
-import { cn } from '@/utils/ui';
+import { cn } from '@merge/ui/lib/utils';
 
 interface ChainOfThoughtContextValue {
   isOpen: boolean;

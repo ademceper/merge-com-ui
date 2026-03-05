@@ -29,7 +29,7 @@ import { formatDateSimple } from '@/utils/format-date';
 import { Protect } from '@/utils/protect';
 import { QueryKeys } from '@/utils/query-keys';
 import { buildRoute, ROUTES } from '@/utils/routes';
-import { cn } from '@/utils/ui';
+import { cn } from '@merge/ui/lib/utils';
 import { useSubscribersUrlState } from './hooks/use-subscribers-url-state';
 
 const toastOptions: ExternalToast = {

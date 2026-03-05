@@ -1,4 +1,4 @@
-import { getOidc } from "./keycloak";
+import { getOidc } from "./oidc";
 
 export async function getToken(): Promise<string> {
   const oidc = await getOidc();

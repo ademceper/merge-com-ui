@@ -7,7 +7,7 @@ import { RiDraggable, RiErrorWarningFill } from 'react-icons/ri';
 import { useFeatureFlag } from '@/hooks/use-feature-flag';
 import { STEP_TYPE_TO_COLOR } from '@/utils/color';
 import { StepTypeEnum } from '@/utils/enums';
-import { cn } from '@/utils/ui';
+import { cn } from '@merge/ui/lib/utils';
 import { HoverCard, HoverCardContent, HoverCardPortal, HoverCardTrigger } from '@/components/primitives/hover-card';
 import { Popover, PopoverArrow, PopoverContent, PopoverPortal, PopoverTrigger } from '@/components/primitives/popover';
 import { StepPreview } from '../step-preview-hover-card';

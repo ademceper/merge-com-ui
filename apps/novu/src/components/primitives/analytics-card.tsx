@@ -1,5 +1,5 @@
 import { ComponentType } from 'react';
-import { cn } from '@/utils/ui';
+import { cn } from '@merge/ui/lib/utils';
 import { useDelayedLoading } from '../../hooks/use-delayed-loading';
 import { TrendLineDown } from '../icons/trend-line-down';
 import { TrendLineUp } from '../icons/trend-line-up';

@@ -14,7 +14,7 @@ import { useFeatureFlag } from '@/hooks/use-feature-flag';
 import { fadeIn } from '@/utils/animation';
 import { buildRoute, ROUTES } from '@/utils/routes';
 import { capitalize } from '@/utils/string';
-import { cn } from '@/utils/ui';
+import { cn } from '@merge/ui/lib/utils';
 import { JOB_STATUS_CONFIG } from '../constants';
 import { getActivityStatus } from '../helpers';
 import { OverviewItem } from './overview-item';

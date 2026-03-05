@@ -5,7 +5,7 @@ import { useCommandPalette } from '@/components/command-palette/hooks/use-comman
 import { InboxButton } from '@/components/inbox-button';
 import { UserProfile } from '@/components/user-profile';
 import { RegionSelector } from '@/context/region';
-import { cn } from '@/utils/ui';
+import { cn } from '@merge/ui/lib/utils';
 import { IS_ENTERPRISE, IS_SELF_HOSTED } from '../../config';
 import { useEnvironment } from '../../context/environment/hooks';
 import { useHasPermission } from '../../hooks/use-has-permission';

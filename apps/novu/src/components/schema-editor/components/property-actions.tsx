@@ -3,7 +3,7 @@ import { RiDeleteBin2Line, RiSettings4Line } from 'react-icons/ri';
 
 import { Button } from '@merge/ui/components/button';
 import { Popover, PopoverTrigger } from '@/components/primitives/popover';
-import { cn } from '@/utils/ui';
+import { cn } from '@merge/ui/lib/utils';
 import { SchemaPropertySettingsPopover } from '../schema-property-settings-popover';
 import type { VariableUsageInfo } from '../utils/check-variable-usage';
 

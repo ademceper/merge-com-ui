@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from 'react';
 import { RiExpandUpDownLine, RiShapesLine } from 'react-icons/ri';
 import { STEP_TYPE_TO_COLOR } from '@/utils/color';
 import { StepTypeEnum } from '@/utils/enums';
-import { cn } from '@/utils/ui';
+import { cn } from '@merge/ui/lib/utils';
 import {
   ChainOfThought,
   ChainOfThoughtContent,

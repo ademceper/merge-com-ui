@@ -3,7 +3,7 @@ import { AnimatePresence, motion } from 'motion/react';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { IconType } from 'react-icons';
 import { RiSearchLine } from 'react-icons/ri';
-import { cn } from '@/utils/ui';
+import { cn } from '@merge/ui/lib/utils';
 import { Autocomplete, AutocompleteItem } from '../primitives/autocomplete';
 import { Avatar, AvatarFallback, AvatarImage } from '@merge/ui/components/avatar';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/primitives/select';

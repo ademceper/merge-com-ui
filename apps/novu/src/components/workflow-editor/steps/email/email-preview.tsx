@@ -6,7 +6,7 @@ import { MAILY_EMAIL_WIDTH } from '@/components/maily/maily-config';
 import { Avatar, AvatarImage } from '@merge/ui/components/avatar';
 import { Skeleton } from '@merge/ui/components/skeleton';
 import { usePrimaryEmailIntegration } from '@/hooks/use-primary-email-integration';
-import { cn } from '@/utils/ui';
+import { cn } from '@merge/ui/lib/utils';
 import { NovuBranding } from './novu-branding';
 
 type EmailPreviewHeaderProps = HTMLAttributes<HTMLDivElement> & {

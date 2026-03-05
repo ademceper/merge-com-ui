@@ -13,7 +13,7 @@ import { TimeDisplayHoverCard } from '@/components/time-display-hover-card';
 import TruncatedText from '@/components/truncated-text';
 import { itemVariants, listVariants } from '@/utils/animation';
 import { formatDateSimple } from '@/utils/format-date';
-import { cn } from '@/utils/ui';
+import { cn } from '@merge/ui/lib/utils';
 
 const statusToTooltipStyles: Record<string, string> = {
   completed: 'before:bg-success-lighter before:border before:border-success-lighter text-success-base',

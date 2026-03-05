@@ -5,7 +5,7 @@ import { InlineToast } from '@/components/primitives/inline-toast';
 import { Skeleton } from '@merge/ui/components/skeleton';
 import { TimeDisplayHoverCard } from '@/components/time-display-hover-card';
 import { TranslationWithPlaceholder } from '@/hooks/use-fetch-translation';
-import { cn } from '@/utils/ui';
+import { cn } from '@merge/ui/lib/utils';
 import { DATE_FORMAT_OPTIONS, TIME_FORMAT_OPTIONS } from '../constants';
 import { formatTranslationDate, formatTranslationTime } from '../utils';
 import { EditorActions } from './editor-actions';

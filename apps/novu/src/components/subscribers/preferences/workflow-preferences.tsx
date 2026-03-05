@@ -8,7 +8,7 @@ import { Card, CardContent, CardFooter, CardHeader } from '@merge/ui/components/
 import { Step } from '@/components/primitives/step';
 import { PreferencesItem } from '@/components/subscribers/preferences/preferences-item';
 import { formatDateSimple } from '@/utils/format-date';
-import { cn } from '@/utils/ui';
+import { cn } from '@merge/ui/lib/utils';
 import { STEP_TYPE_TO_COLOR } from '../../../utils/color';
 
 type WorkflowPreferencesProps = {

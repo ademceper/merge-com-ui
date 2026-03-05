@@ -1,7 +1,7 @@
 import { cva, type VariantProps } from 'class-variance-authority';
 import * as React from 'react';
 
-import { cn } from '@/utils/ui';
+import { cn } from '@merge/ui/lib/utils';
 
 const stepVariants = cva(
   'inline-flex items-center shadow-xs rounded-full border text-xs font-semibold transition-colors focus:outline-hidden focus:ring-2 focus:ring-ring focus:ring-offset-2 bg-neutral-50',

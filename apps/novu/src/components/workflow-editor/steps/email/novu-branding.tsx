@@ -9,7 +9,7 @@ import { useFetchOrganizationSettings } from '@/hooks/use-fetch-organization-set
 import { useFetchSubscription } from '@/hooks/use-fetch-subscription';
 import { useUpdateOrganizationSettings } from '@/hooks/use-update-organization-settings';
 import { ROUTES } from '@/utils/routes';
-import { cn } from '@/utils/ui';
+import { cn } from '@merge/ui/lib/utils';
 
 type NovuBrandingProps = HTMLAttributes<HTMLDivElement> & {
   resourceOrigin: ResourceOriginEnum;

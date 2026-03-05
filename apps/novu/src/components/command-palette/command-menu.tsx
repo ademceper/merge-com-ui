@@ -5,7 +5,7 @@ import { Command } from 'cmdk';
 import * as React from 'react';
 import { Dialog, DialogContent, DialogTitle } from '@merge/ui/components/dialog';
 import { VisuallyHidden } from '@/components/primitives/visually-hidden';
-import { cn } from '@/utils/ui';
+import { cn } from '@merge/ui/lib/utils';
 
 const CommandDialog = ({
   children,

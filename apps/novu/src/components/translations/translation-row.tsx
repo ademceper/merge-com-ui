@@ -22,7 +22,7 @@ import { useEnvironment } from '@/context/environment/hooks';
 import { useHasPermission } from '@/hooks/use-has-permission';
 import { formatDateSimple } from '@/utils/format-date';
 import { buildRoute, ROUTES } from '@/utils/routes';
-import { cn } from '@/utils/ui';
+import { cn } from '@merge/ui/lib/utils';
 import { LocalizationResourceEnum } from '../../types/translations';
 import { TranslationStatus } from './translation-status';
 

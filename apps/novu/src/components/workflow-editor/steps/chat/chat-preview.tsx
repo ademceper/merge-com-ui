@@ -3,7 +3,7 @@ import { RiSendPlane2Fill } from 'react-icons/ri';
 
 import { LogoCircle } from '@/components/icons';
 import { Skeleton } from '@merge/ui/components/skeleton';
-import { cn } from '@/utils/ui';
+import { cn } from '@merge/ui/lib/utils';
 
 export const ChatPreview = ({
   isPreviewPending,

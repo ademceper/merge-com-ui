@@ -2,7 +2,7 @@ import { cva, type VariantProps } from 'class-variance-authority';
 import { ReactNode } from 'react';
 import { RiCheckboxCircleFill, RiErrorWarningFill, RiInformation2Fill, RiLoader4Line } from 'react-icons/ri';
 import { Toaster as SonnerToaster, type ToasterProps } from 'sonner';
-import { cn } from '@/utils/ui';
+import { cn } from '@merge/ui/lib/utils';
 
 export const Toaster = (props: ToasterProps) => {
   return <SonnerToaster className="toaster group" {...props} />;

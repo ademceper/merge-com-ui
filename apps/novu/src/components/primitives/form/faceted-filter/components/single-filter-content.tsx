@@ -1,4 +1,4 @@
-import { cn } from '../../../../../utils/ui';
+import { cn } from '@merge/ui/lib/utils';
 import { Label } from '@merge/ui/components/label';
 import { RadioGroup, RadioGroupItem } from '@merge/ui/components/radio-group';
 import { useKeyboardNavigation } from '../hooks/use-keyboard-navigation';

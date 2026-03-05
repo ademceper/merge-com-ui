@@ -4,7 +4,7 @@ import { useFetchTranslationKeys } from '@/hooks/use-fetch-translation-keys';
 import { useTranslationValidation } from '@/hooks/use-translation-validation';
 import { LocalizationResourceEnum } from '@/types/translations';
 import { IsAllowedVariable, LiquidVariable } from '@/utils/parseStepVariables';
-import { cn } from '@/utils/ui';
+import { cn } from '@merge/ui/lib/utils';
 import {
   EditTranslationPopover,
   TranslationValueInputComponent,

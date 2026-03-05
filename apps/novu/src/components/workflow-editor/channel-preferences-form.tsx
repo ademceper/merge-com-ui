@@ -32,7 +32,7 @@ import { STEP_TYPE_TO_COLOR } from '@/utils/color';
 import { ResourceOriginEnum, StepTypeEnum } from '@/utils/enums';
 import { capitalize } from '@/utils/string';
 import { TelemetryEvent } from '@/utils/telemetry';
-import { cn } from '@/utils/ui';
+import { cn } from '@merge/ui/lib/utils';
 import { Badge } from '@/components/primitives/badge';
 import { Select, SelectContent, SelectTrigger, SelectValue } from '@/components/primitives/select';
 import { SeveritySelectItem } from './severity-select-item';

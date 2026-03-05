@@ -7,7 +7,7 @@ import { TooltipProvider } from '@/components/primitives/tooltip';
 import { VisuallyHidden } from '@/components/primitives/visually-hidden';
 import TruncatedText from '@/components/truncated-text';
 import { useFormProtection } from '@/hooks/use-form-protection';
-import { cn } from '@/utils/ui';
+import { cn } from '@merge/ui/lib/utils';
 import { ContextActivity } from './context-activity';
 import { ContextOverview } from './context-overview';
 

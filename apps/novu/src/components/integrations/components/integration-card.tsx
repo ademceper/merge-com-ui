@@ -19,7 +19,7 @@ import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/primitives
 import { UpgradeCTATooltip } from '@/components/upgrade-cta-tooltip';
 import { useFetchSubscription } from '../../../hooks/use-fetch-subscription';
 import { ROUTES } from '../../../utils/routes';
-import { cn } from '../../../utils/ui';
+import { cn } from '@merge/ui/lib/utils';
 import { EnvironmentBranchIcon } from '../../primitives/environment-branch-icon';
 import { StatusBadge, StatusBadgeIcon } from '../../primitives/status-badge';
 import { TableIntegration } from '../types';

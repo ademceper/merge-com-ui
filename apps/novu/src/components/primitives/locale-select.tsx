@@ -1,7 +1,7 @@
 import { getAllLocales, getCommonLocales, getLocaleByIso } from '@novu/shared';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { RiArrowDownSLine, RiCheckLine, RiErrorWarningFill } from 'react-icons/ri';
-import { cn } from '@/utils/ui';
+import { cn } from '@merge/ui/lib/utils';
 import { FlagCircle, StackedFlagCircles } from '../flag-circle';
 import TruncatedText from '../truncated-text';
 import { Button, ButtonProps } from '@merge/ui/components/button';

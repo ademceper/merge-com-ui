@@ -7,7 +7,7 @@ import { buttonVariants } from '@merge/ui/components/button';
 import { Input } from '@/components/primitives/input';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/primitives/tooltip';
 import { LiquidVariable } from '@/utils/parseStepVariables';
-import { cn } from '@/utils/ui';
+import { cn } from '@merge/ui/lib/utils';
 import { getFilters } from '../constants';
 import { FilterWithParam } from '../types';
 import { validateEnhancedDigestFilters } from '../utils';

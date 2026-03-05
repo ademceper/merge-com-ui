@@ -7,7 +7,7 @@ import { Input, InputPure, InputRoot, InputWrapper } from '@/components/primitiv
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/primitives/popover';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/primitives/select';
 import { Switch } from '@merge/ui/components/switch';
-import { cn } from '@/utils/ui';
+import { cn } from '@merge/ui/lib/utils';
 import { Code2 } from '../icons/code-2';
 import { Separator } from '@merge/ui/components/separator';
 import { useSchemaPropertyType } from './hooks/use-schema-property-type';

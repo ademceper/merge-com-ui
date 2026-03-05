@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react';
 import { VariableFrom } from '@/components/maily/types';
-import { cn } from '@/utils/ui';
+import { cn } from '@merge/ui/lib/utils';
 import { Tooltip, TooltipContent, TooltipPortal, TooltipTrigger } from '@/components/primitives/tooltip';
 import { VariableIcon } from './components/variable-icon';
 import { getFirstFilterAndItsArgs, validateEnhancedDigestFilters } from './utils';
