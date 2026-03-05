@@ -8,6 +8,7 @@ import {
 } from "react-router-dom";
 
 import { KeycloakProvider } from "@merge/auth";
+import { Providers } from "@merge/ui/components/providers";
 import { ErrorPage } from "@/pages/error-page";
 import { CatchAllRoute, DashboardRoute, RootRoute } from "./routes";
 import { DashboardLayoutRoute } from "./routes/dashboard-layout-route";
@@ -507,9 +508,11 @@ createRoot(document.getElementById("root")!).render(
         <div className="flex h-svh items-center justify-center">Loading...</div>
       }
     >
-      <FeatureFlagsProvider>
-        <RouterProvider router={router} />
-      </FeatureFlagsProvider>
+      <Providers>
+        <FeatureFlagsProvider>
+          <RouterProvider router={router} />
+        </FeatureFlagsProvider>
+      </Providers>
     </KeycloakProvider>
   </StrictMode>,
 );

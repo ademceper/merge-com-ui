@@ -9,9 +9,11 @@ export type DashboardParams = { realm?: string; tab?: DashboardTab };
 
 const Dashboard = lazy(() => import("../Dashboard"));
 
+const RedirectToOrganizations = lazy(() => import("../../organizations/RedirectToOrganizations"));
+
 export const DashboardRoute: AppRouteObject = {
     path: "/",
-    element: <Dashboard />,
+    element: <RedirectToOrganizations />,
     breadcrumb: t => t("home"),
     handle: {
         access: "anyone"
@@ -19,13 +21,21 @@ export const DashboardRoute: AppRouteObject = {
 };
 
 export const DashboardRouteWithRealm: AppRouteObject = {
-    ...DashboardRoute,
-    path: "/:realm"
+    path: "/:realm",
+    element: <RedirectToOrganizations />,
+    breadcrumb: t => t("home"),
+    handle: {
+        access: "anyone"
+    }
 };
 
 export const DashboardRouteWithTab: AppRouteObject = {
-    ...DashboardRoute,
-    path: "/:realm/:tab"
+    path: "/:realm/:tab",
+    element: <Dashboard />,
+    breadcrumb: t => t("home"),
+    handle: {
+        access: "anyone"
+    }
 };
 
 export const toDashboard = (params: DashboardParams): Partial<Path> => {

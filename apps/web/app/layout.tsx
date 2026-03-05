@@ -1,12 +1,12 @@
-import { Geist, Geist_Mono } from "next/font/google"
+import { Inter, Geist_Mono } from "next/font/google"
 import { Metadata } from "next"
 import "@merge/ui/globals.css"
 import { Providers } from "@merge/ui/components/providers"
 import { AuthProvider } from "@/components/auth-provider"
 
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const inter = Inter({
+  variable: "--font-sans",
   subsets: ["latin"],
 });
 
@@ -28,7 +28,7 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} font-sans antialiased `}
+        className={`${inter.variable} ${geistMono.variable} font-sans antialiased `}
       >
         <AuthProvider>
           <Providers>{children}</Providers>

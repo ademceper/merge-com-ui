@@ -1,6 +1,6 @@
 import { useTranslation } from "react-i18next";
 import { useLocation } from "react-router-dom";
-import { SidebarTrigger } from "@merge/ui/components/sidebar";
+import { SidebarPageHeader } from "@merge/ui/components/sidebar";
 import { GroupBreadCrumbsForHeader } from "./bread-crumb/GroupBreadCrumbs";
 import { PageBreadCrumbs, usePageTitle } from "./bread-crumb/PageBreadCrumbs";
 import { useEnvironment } from "../../shared/keycloak-ui-shared";
@@ -36,9 +36,7 @@ export function AdminHeader() {
     };
 
     return (
-        <header className="flex h-12 shrink-0 items-center px-4 bg-sidebar">
-            <SidebarTrigger className="md:hidden" />
-            <div className="ml-1 mr-3 h-4 w-px shrink-0 bg-border md:hidden" />
+        <SidebarPageHeader>
             <span className="text-base font-semibold md:hidden">{pageTitle}</span>
             <span className="hidden md:contents">
                 {isGroupsSection ? <GroupBreadCrumbsForHeader /> : <PageBreadCrumbs />}
@@ -58,6 +56,6 @@ export function AdminHeader() {
                 Scale
             </button>
             <AdminNavUser userMenuInfo={userMenuInfo} avatarOnly />
-        </header>
+        </SidebarPageHeader>
     );
 }

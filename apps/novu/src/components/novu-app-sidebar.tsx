@@ -35,7 +35,6 @@ import { Protect } from '@/utils/protect';
 import { buildRoute, ROUTES } from '@/utils/routes';
 import { IS_ENTERPRISE, IS_SELF_HOSTED } from '../config';
 import { useFetchSubscription } from '../hooks/use-fetch-subscription';
-import { ChangelogStack } from './side-navigation/changelog-cards';
 import { EnvironmentDropdown } from './side-navigation/environment-dropdown';
 import { FreeTrialCard } from './side-navigation/free-trial-card';
 import { HomeMenuItem } from './side-navigation/getting-started-menu-item';
@@ -96,7 +95,6 @@ function BottomSection() {
 
   return (
     <>
-      {!isTrialActive && !isLoadingSubscription && <ChangelogStack />}
       {isTrialActive && !isLoadingSubscription && daysLeft !== undefined && (
         <FreeTrialCard subscription={subscription} daysLeft={daysLeft} />
       )}

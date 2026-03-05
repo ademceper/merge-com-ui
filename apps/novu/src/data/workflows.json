@@ -1,0 +1,154 @@
+{
+  "data": {
+    "workflows": [
+      {
+        "_id": "wf_001",
+        "workflowId": "welcome-onboarding",
+        "slug": "welcome-onboarding_wf_001",
+        "name": "Welcome Onboarding",
+        "tags": ["onboarding", "welcome"],
+        "status": "ACTIVE",
+        "origin": "novu-cloud",
+        "updatedAt": "2026-03-05T14:30:00.000Z",
+        "createdAt": "2026-02-10T09:00:00.000Z",
+        "lastTriggeredAt": "2026-03-05T14:25:00.000Z",
+        "isTranslationEnabled": false,
+        "stepTypeOverviews": ["email", "in_app", "delay"],
+        "steps": [
+          { "_id": "s1", "name": "Welcome Email", "type": "email", "slug": "welcome-email_s1" },
+          { "_id": "s2", "name": "Wait 1 Day", "type": "delay", "slug": "wait-1-day_s2" },
+          { "_id": "s3", "name": "In-App Tip", "type": "in_app", "slug": "in-app-tip_s3" }
+        ]
+      },
+      {
+        "_id": "wf_002",
+        "workflowId": "order-confirmation",
+        "slug": "order-confirmation_wf_002",
+        "name": "Order Confirmation",
+        "tags": ["transactional", "orders"],
+        "status": "ACTIVE",
+        "origin": "novu-cloud",
+        "updatedAt": "2026-03-04T10:15:00.000Z",
+        "createdAt": "2026-01-20T11:00:00.000Z",
+        "lastTriggeredAt": "2026-03-05T16:42:00.000Z",
+        "isTranslationEnabled": true,
+        "stepTypeOverviews": ["email", "sms"],
+        "steps": [
+          { "_id": "s4", "name": "Confirmation Email", "type": "email", "slug": "confirmation-email_s4" },
+          { "_id": "s5", "name": "SMS Notification", "type": "sms", "slug": "sms-notification_s5" }
+        ]
+      },
+      {
+        "_id": "wf_003",
+        "workflowId": "payment-reminder",
+        "slug": "payment-reminder_wf_003",
+        "name": "Payment Reminder",
+        "tags": ["billing", "reminder"],
+        "status": "ACTIVE",
+        "origin": "novu-cloud",
+        "updatedAt": "2026-03-03T08:45:00.000Z",
+        "createdAt": "2026-01-15T14:30:00.000Z",
+        "lastTriggeredAt": "2026-03-04T09:00:00.000Z",
+        "isTranslationEnabled": false,
+        "stepTypeOverviews": ["email", "push", "digest"],
+        "steps": [
+          { "_id": "s6", "name": "Digest Payments", "type": "digest", "slug": "digest-payments_s6" },
+          { "_id": "s7", "name": "Reminder Email", "type": "email", "slug": "reminder-email_s7" },
+          { "_id": "s8", "name": "Push Alert", "type": "push", "slug": "push-alert_s8" }
+        ]
+      },
+      {
+        "_id": "wf_004",
+        "workflowId": "comment-notification",
+        "slug": "comment-notification_wf_004",
+        "name": "Comment Notification",
+        "tags": ["social", "engagement"],
+        "status": "ACTIVE",
+        "origin": "novu-cloud",
+        "updatedAt": "2026-03-02T16:20:00.000Z",
+        "createdAt": "2026-02-01T10:00:00.000Z",
+        "lastTriggeredAt": "2026-03-05T12:10:00.000Z",
+        "isTranslationEnabled": false,
+        "stepTypeOverviews": ["in_app", "email"],
+        "steps": [
+          { "_id": "s9", "name": "In-App Notification", "type": "in_app", "slug": "in-app-notif_s9" },
+          { "_id": "s10", "name": "Email Digest", "type": "email", "slug": "email-digest_s10" }
+        ]
+      },
+      {
+        "_id": "wf_005",
+        "workflowId": "security-alert",
+        "slug": "security-alert_wf_005",
+        "name": "Security Alert",
+        "tags": ["security", "critical"],
+        "status": "ACTIVE",
+        "origin": "novu-cloud",
+        "updatedAt": "2026-03-01T12:00:00.000Z",
+        "createdAt": "2026-01-05T08:00:00.000Z",
+        "lastTriggeredAt": "2026-03-05T18:30:00.000Z",
+        "isTranslationEnabled": false,
+        "stepTypeOverviews": ["email", "sms", "push"],
+        "steps": [
+          { "_id": "s11", "name": "Alert Email", "type": "email", "slug": "alert-email_s11" },
+          { "_id": "s12", "name": "Alert SMS", "type": "sms", "slug": "alert-sms_s12" },
+          { "_id": "s13", "name": "Alert Push", "type": "push", "slug": "alert-push_s13" }
+        ]
+      },
+      {
+        "_id": "wf_006",
+        "workflowId": "weekly-digest",
+        "slug": "weekly-digest_wf_006",
+        "name": "Weekly Digest",
+        "tags": ["digest", "engagement"],
+        "status": "INACTIVE",
+        "origin": "novu-cloud",
+        "updatedAt": "2026-02-28T09:30:00.000Z",
+        "createdAt": "2026-01-10T11:00:00.000Z",
+        "lastTriggeredAt": "2026-02-24T08:00:00.000Z",
+        "isTranslationEnabled": true,
+        "stepTypeOverviews": ["digest", "email"],
+        "steps": [
+          { "_id": "s14", "name": "Weekly Digest", "type": "digest", "slug": "weekly-digest_s14" },
+          { "_id": "s15", "name": "Digest Email", "type": "email", "slug": "digest-email_s15" }
+        ]
+      },
+      {
+        "_id": "wf_007",
+        "workflowId": "shipping-update",
+        "slug": "shipping-update_wf_007",
+        "name": "Shipping Update",
+        "tags": ["transactional", "orders"],
+        "status": "ERROR",
+        "origin": "novu-cloud",
+        "updatedAt": "2026-03-05T11:00:00.000Z",
+        "createdAt": "2026-02-15T13:00:00.000Z",
+        "lastTriggeredAt": "2026-03-05T10:55:00.000Z",
+        "isTranslationEnabled": false,
+        "stepTypeOverviews": ["email", "sms", "in_app"],
+        "steps": [
+          { "_id": "s16", "name": "Shipping Email", "type": "email", "slug": "shipping-email_s16" },
+          { "_id": "s17", "name": "SMS Update", "type": "sms", "slug": "sms-update_s17" },
+          { "_id": "s18", "name": "In-App Update", "type": "in_app", "slug": "in-app-update_s18" }
+        ]
+      },
+      {
+        "_id": "wf_008",
+        "workflowId": "password-reset",
+        "slug": "password-reset_wf_008",
+        "name": "Password Reset",
+        "tags": ["auth", "security"],
+        "status": "ACTIVE",
+        "origin": "novu-cloud",
+        "updatedAt": "2026-02-20T15:00:00.000Z",
+        "createdAt": "2026-01-02T10:00:00.000Z",
+        "lastTriggeredAt": "2026-03-05T17:20:00.000Z",
+        "isTranslationEnabled": true,
+        "stepTypeOverviews": ["email"],
+        "steps": [
+          { "_id": "s19", "name": "Reset Email", "type": "email", "slug": "reset-email_s19" }
+        ]
+      }
+    ],
+    "totalCount": 8
+  }
+}

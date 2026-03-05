@@ -5,13 +5,12 @@ import { useCommandPalette } from '@/components/command-palette/hooks/use-comman
 import { InboxButton } from '@/components/inbox-button';
 import { UserProfile } from '@/components/user-profile';
 import { RegionSelector } from '@/context/region';
-import { cn } from '@merge/ui/lib/utils';
 import { IS_ENTERPRISE, IS_SELF_HOSTED } from '../../config';
 import { useEnvironment } from '../../context/environment/hooks';
 import { useHasPermission } from '../../hooks/use-has-permission';
 import { Button } from '@merge/ui/components/button';
 import { Kbd } from '@merge/ui/components/kbd';
-import { SidebarTrigger } from '@merge/ui/components/sidebar';
+import { SidebarPageHeader } from '@merge/ui/components/sidebar';
 import { CustomerSupportButton } from './customer-support-button';
 import { EditBridgeUrlButton } from './edit-bridge-url-button';
 import { PublishButton } from './publish-button';
@@ -29,12 +28,7 @@ export const HeaderNavigation = (props: HeaderNavigationProps) => {
   const { openCommandPalette } = useCommandPalette();
 
   return (
-    <header
-      className={cn('flex h-12 shrink-0 items-center px-4 bg-sidebar', className)}
-      {...rest}
-    >
-      <SidebarTrigger className="md:hidden" />
-      <div className="ml-1 mr-3 h-4 w-px shrink-0 bg-border md:hidden" />
+    <SidebarPageHeader className={className} {...rest}>
       {startItems && <span className="hidden md:contents">{startItems}</span>}
       <div className="flex-1 min-w-0" />
       <button
@@ -70,6 +64,6 @@ export const HeaderNavigation = (props: HeaderNavigationProps) => {
         </div>
         <UserProfile />
       </div>
-    </header>
+    </SidebarPageHeader>
   );
 };

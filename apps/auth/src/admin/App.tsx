@@ -1,7 +1,7 @@
 import { SessionExpirationWarningOverlay } from "../shared/SessionExpirationWarningOverlay";
 import KeycloakAdminClient from "@keycloak/keycloak-admin-client";
 import { mainPageContentId, useEnvironment } from "../shared/keycloak-ui-shared";
-import { SidebarInset, SidebarProvider } from "@merge/ui/components/sidebar";
+import { SidebarInset, SidebarPage, SidebarProvider } from "@merge/ui/components/sidebar";
 import type { ComponentType } from "react";
 import { PropsWithChildren, Suspense, useEffect, useState } from "react";
 import { Outlet, useMatches } from "react-router-dom";
@@ -89,11 +89,11 @@ export const App = () => {
                 <Banners />
                 <SidebarProvider defaultOpen={true} className="h-svh bg-sidebar overflow-hidden" data-scale-wrapper>
                     <AdminAppSidebar />
-                    <SidebarInset className="md:peer-data-[variant=inset]:bg-sidebar! md:peer-data-[variant=inset]:overflow-clip!">
+                    <SidebarInset>
                         <AdminHeader />
-                        <div
+                        <SidebarPage
                             id={mainPageContentId}
-                            className="flex flex-1 flex-col px-4 pb-4 bg-background md:rounded-t-xl overflow-y-auto min-h-0"
+                            className="px-4 pb-4"
                         >
                             <ErrorBoundaryFallback fallback={ErrorRenderer}>
                                 <Suspense fallback={<KeycloakSpinner />}>
@@ -102,7 +102,7 @@ export const App = () => {
                                     </AuthWall>
                                 </Suspense>
                             </ErrorBoundaryFallback>
-                        </div>
+                        </SidebarPage>
                     </SidebarInset>
                 </SidebarProvider>
                 <SessionExpirationWarningOverlay warnUserSecondsBeforeAutoLogout={45} />

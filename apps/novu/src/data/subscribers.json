@@ -1,0 +1,88 @@
+{
+  "data": {
+    "data": [
+      {
+        "_id": "sub_001",
+        "subscriberId": "user_john_doe",
+        "firstName": "John",
+        "lastName": "Doe",
+        "email": "john.doe@example.com",
+        "phone": "+1234567890",
+        "locale": "en",
+        "timezone": "America/New_York",
+        "isOnline": true,
+        "lastOnlineAt": "2026-03-05T18:30:00.000Z",
+        "deleted": false,
+        "createdAt": "2026-01-10T09:00:00.000Z",
+        "updatedAt": "2026-03-05T18:30:00.000Z",
+        "data": { "plan": "pro", "company": "Acme Corp" }
+      },
+      {
+        "_id": "sub_002",
+        "subscriberId": "user_jane_smith",
+        "firstName": "Jane",
+        "lastName": "Smith",
+        "email": "jane.smith@example.com",
+        "phone": "+1987654321",
+        "locale": "en",
+        "timezone": "Europe/London",
+        "isOnline": false,
+        "lastOnlineAt": "2026-03-04T12:00:00.000Z",
+        "deleted": false,
+        "createdAt": "2026-01-15T11:00:00.000Z",
+        "updatedAt": "2026-03-04T12:00:00.000Z",
+        "data": { "plan": "enterprise", "company": "TechCo" }
+      },
+      {
+        "_id": "sub_003",
+        "subscriberId": "user_bob_wilson",
+        "firstName": "Bob",
+        "lastName": "Wilson",
+        "email": "bob.wilson@example.com",
+        "locale": "de",
+        "timezone": "Europe/Berlin",
+        "isOnline": true,
+        "lastOnlineAt": "2026-03-05T16:45:00.000Z",
+        "deleted": false,
+        "createdAt": "2026-02-01T08:00:00.000Z",
+        "updatedAt": "2026-03-05T16:45:00.000Z",
+        "data": { "plan": "free", "company": "StartupXYZ" }
+      },
+      {
+        "_id": "sub_004",
+        "subscriberId": "user_alice_johnson",
+        "firstName": "Alice",
+        "lastName": "Johnson",
+        "email": "alice.johnson@example.com",
+        "phone": "+4412345678",
+        "locale": "fr",
+        "timezone": "Europe/Paris",
+        "isOnline": false,
+        "lastOnlineAt": "2026-03-03T09:15:00.000Z",
+        "deleted": false,
+        "createdAt": "2026-02-10T14:00:00.000Z",
+        "updatedAt": "2026-03-03T09:15:00.000Z",
+        "data": { "plan": "pro", "company": "DesignHub" }
+      },
+      {
+        "_id": "sub_005",
+        "subscriberId": "user_carlos_garcia",
+        "firstName": "Carlos",
+        "lastName": "Garcia",
+        "email": "carlos.garcia@example.com",
+        "locale": "es",
+        "timezone": "America/Mexico_City",
+        "isOnline": true,
+        "lastOnlineAt": "2026-03-05T19:00:00.000Z",
+        "deleted": false,
+        "createdAt": "2026-02-20T10:30:00.000Z",
+        "updatedAt": "2026-03-05T19:00:00.000Z",
+        "data": { "plan": "enterprise", "company": "DataFlow" }
+      }
+    ],
+    "next": null,
+    "previous": null,
+    "totalCount": 5,
+    "totalCountCapped": false
+  }
+}
