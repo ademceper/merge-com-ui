@@ -1,6 +1,6 @@
 import type ClientPolicyRepresentation from "@keycloak/keycloak-admin-client/lib/defs/clientPolicyRepresentation";
 import { getErrorDescription, getErrorMessage, KeycloakSpinner, useFetch } from "../../shared/keycloak-ui-shared";
-import { DataTable, DataTableRowActions } from "@merge/ui/components/table";
+import { DataTable, DataTableRowActions } from "@/admin/components/data-table";
 import {
     Empty,
     EmptyContent,
@@ -8,7 +8,7 @@ import {
     EmptyHeader,
     EmptyTitle
 } from "@merge/ui/components/empty";
-import { toast } from "@merge/ui/components/sonner";
+import { toast } from "sonner";
 import { Button } from "@merge/ui/components/button";
 import { Switch } from "@merge/ui/components/switch";
 import { Separator } from "@merge/ui/components/separator";

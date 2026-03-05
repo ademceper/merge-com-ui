@@ -3,7 +3,7 @@ import type GroupRepresentation from "@keycloak/keycloak-admin-client/lib/defs/g
 import { useTranslation } from "react-i18next";
 import { useAdminClient } from "../admin-client";
 import { getErrorDescription, getErrorMessage } from "../../shared/keycloak-ui-shared";
-import { toast } from "@merge/ui/components/sonner";
+import { toast } from "sonner";
 import { GroupPickerDialog } from "../components/group/GroupPickerDialog";
 
 type MoveDialogProps = {

@@ -2,7 +2,7 @@ import type { ConfigPropertyRepresentation } from "@keycloak/keycloak-admin-clie
 import type ClientPolicyConditionRepresentation from "@keycloak/keycloak-admin-client/lib/defs/clientPolicyConditionRepresentation";
 import type ClientPolicyRepresentation from "@keycloak/keycloak-admin-client/lib/defs/clientPolicyRepresentation";
 import { getErrorDescription, getErrorMessage, HelpItem, useFetch } from "../../shared/keycloak-ui-shared";
-import { toast } from "@merge/ui/components/sonner";
+import { toast } from "sonner";
 import { Button } from "@merge/ui/components/button";
 import { Label } from "@merge/ui/components/label";
 import {

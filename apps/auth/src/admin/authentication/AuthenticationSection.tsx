@@ -4,14 +4,14 @@ import {
     getErrorMessage,
     KeycloakSpinner,
 } from "../../shared/keycloak-ui-shared";
-import { toast } from "@merge/ui/components/sonner";
+import { toast } from "sonner";
 import { Button } from "@merge/ui/components/button";
 import { Label } from "@merge/ui/components/label";
 import {
     DataTable,
     DataTableRowActions,
     type ColumnDef,
-} from "@merge/ui/components/table";
+} from "@/admin/components/data-table";
 import { Copy, Link as LinkIcon, Trash } from "@phosphor-icons/react";
 import { sortBy } from "lodash-es";
 import { useCallback, useEffect, useMemo, useState } from "react";

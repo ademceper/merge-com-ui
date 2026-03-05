@@ -5,7 +5,7 @@ import {
     SelectField,
     TextControl,
 } from "../../../shared/keycloak-ui-shared";
-import { toast } from "@merge/ui/components/sonner";
+import { toast } from "sonner";
 import { useEffect } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";

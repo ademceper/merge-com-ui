@@ -1,7 +1,7 @@
 import type { UserProfileConfig } from "@keycloak/keycloak-admin-client/lib/defs/userProfileMetadata";
 import type UserRepresentation from "@keycloak/keycloak-admin-client/lib/defs/userRepresentation";
 import { getErrorDescription, getErrorMessage, KeycloakSpinner, useFetch } from "../../../shared/keycloak-ui-shared";
-import { DataTable, DataTableRowActions, type ColumnDef } from "@merge/ui/components/table";
+import { DataTable, DataTableRowActions, type ColumnDef } from "@/admin/components/data-table";
 import {
     Empty,
     EmptyContent,
@@ -10,7 +10,7 @@ import {
     EmptyTitle
 } from "@merge/ui/components/empty";
 import { DropdownMenuItem } from "@merge/ui/components/dropdown-menu";
-import { toast } from "@merge/ui/components/sonner";
+import { toast } from "sonner";
 import { Button } from "@merge/ui/components/button";
 import { Badge } from "@merge/ui/components/badge";
 import { Label } from "@merge/ui/components/label";

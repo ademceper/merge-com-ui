@@ -10,7 +10,7 @@ import type { ProtocolMapperTypeRepresentation } from "@keycloak/keycloak-admin-
 import { useServerInfo } from "../../context/server-info/ServerInfoProvider";
 
 import { AddMapperDialog } from "../add/MapperDialog";
-import { DataTable, DataTableRowActions, type ColumnDef } from "@merge/ui/components/table";
+import { DataTable, DataTableRowActions, type ColumnDef } from "@/admin/components/data-table";
 import {
     Empty,
     EmptyContent,

@@ -8,7 +8,7 @@ import { useTranslation } from "react-i18next";
 import { HelpItem } from "../../../shared/keycloak-ui-shared";
 import { useAdminClient } from "../../admin-client";
 import { getErrorDescription, getErrorMessage } from "../../../shared/keycloak-ui-shared";
-import { toast } from "@merge/ui/components/sonner";
+import { toast } from "sonner";
 import { FormAccess } from "../../components/form/FormAccess";
 import { RoleMapping, Row } from "../../components/role-mapping/RoleMapping";
 import { useAccess } from "../../context/access/Access";

@@ -9,7 +9,7 @@ import { useHelp } from "../../shared/keycloak-ui-shared";
 import { useFetch } from "../../shared/keycloak-ui-shared";
 import { sortBy, uniqBy } from "lodash-es";
 import { useState } from "react";
-import { DataTable, type ColumnDef } from "@merge/ui/components/table";
+import { DataTable, type ColumnDef } from "@/admin/components/data-table";
 import {
     Empty,
     EmptyContent,

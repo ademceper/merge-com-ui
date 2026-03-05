@@ -10,7 +10,6 @@ export const LifespanField = () => {
             label={t("lifespan")}
             labelIcon={t("lifespanHelp")}
             units={["minute", "hour", "day"]}
-            menuAppendTo="parent"
             controller={{}}
         />
     );

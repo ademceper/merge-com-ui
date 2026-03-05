@@ -6,7 +6,7 @@ import {
     getErrorMessage,
     KeycloakSpinner,
 } from "../../../shared/keycloak-ui-shared";
-import { toast } from "@merge/ui/components/sonner";
+import { toast } from "sonner";
 import { Badge } from "@merge/ui/components/badge";
 import { Checkbox } from "@merge/ui/components/checkbox";
 import {
@@ -14,7 +14,7 @@ import {
     DataTableRowActions,
     type ColumnDef,
     type Row as TableRow,
-} from "@merge/ui/components/table";
+} from "@/admin/components/data-table";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useAdminClient } from "../../admin-client";

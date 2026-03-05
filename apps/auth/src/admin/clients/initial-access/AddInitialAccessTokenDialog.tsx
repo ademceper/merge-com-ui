@@ -1,6 +1,6 @@
 import type ClientInitialAccessPresentation from "@keycloak/keycloak-admin-client/lib/defs/clientInitialAccessPresentation";
 import { getErrorDescription, getErrorMessage } from "../../../shared/keycloak-ui-shared";
-import { toast } from "@merge/ui/components/sonner";
+import { toast } from "sonner";
 import { Button } from "@merge/ui/components/button";
 import {
     Dialog,
@@ -16,7 +16,7 @@ import { useState } from "react";
 import { useAdminClient } from "../../admin-client";
 import { FormAccess } from "../../components/form/FormAccess";
 import { useRealm } from "../../context/realm-context/RealmContext";
-import { NumberInput } from "@merge/ui/components/number-input";
+import { NumberInput } from "@/admin/components/number-input";
 import { TimeSelector } from "../../components/time-selector/TimeSelector";
 import { MultiLineInput } from "../../components/multi-line-input/MultiLineInput";
 import { FormErrorText, HelpItem } from "../../../shared/keycloak-ui-shared";

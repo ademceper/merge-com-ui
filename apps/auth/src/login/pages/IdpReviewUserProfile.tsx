@@ -112,7 +112,7 @@ export default function IdpReviewUserProfile(props: PageProps<Extract<KcContext,
                     </div>
 
                     <div className="pt-2">
-                        <Button type="submit" disabled={isSubmitting} size="lg" className="w-full">
+                        <Button type="submit" disabled={isSubmitting} size="xl" className="w-full">
                             {msgStr("doSubmit")}
                         </Button>
                     </div>

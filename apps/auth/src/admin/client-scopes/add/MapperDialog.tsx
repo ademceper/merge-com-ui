@@ -7,7 +7,7 @@ import type ProtocolMapperRepresentation from "@keycloak/keycloak-admin-client/l
 import type { ProtocolMapperTypeRepresentation } from "@keycloak/keycloak-admin-client/lib/defs/serverInfoRepesentation";
 
 import { useServerInfo } from "../../context/server-info/ServerInfoProvider";
-import { DataTable } from "@merge/ui/components/table";
+import { DataTable } from "@/admin/components/data-table";
 import {
     Empty,
     EmptyContent,

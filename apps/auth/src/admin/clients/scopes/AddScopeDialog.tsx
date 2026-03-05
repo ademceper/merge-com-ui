@@ -23,7 +23,7 @@ import {
 import {
     DataTable,
     type ColumnDef
-} from "@merge/ui/components/table";
+} from "@/admin/components/data-table";
 import { Checkbox } from "@merge/ui/components/checkbox";
 import { CaretDown, CaretUp, Funnel } from "@phosphor-icons/react";
 import { useMemo, useState } from "react";

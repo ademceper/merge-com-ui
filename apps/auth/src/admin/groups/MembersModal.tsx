@@ -10,7 +10,7 @@ import {
     DialogFooter
 } from "@merge/ui/components/dialog";
 import { Label } from "@merge/ui/components/label";
-import { DataTable, type ColumnDef } from "@merge/ui/components/table";
+import { DataTable, type ColumnDef } from "@/admin/components/data-table";
 import {
     Empty,
     EmptyContent,
@@ -24,7 +24,7 @@ import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useAdminClient } from "../admin-client";
 import { getErrorDescription, getErrorMessage } from "../../shared/keycloak-ui-shared";
-import { toast } from "@merge/ui/components/sonner";
+import { toast } from "sonner";
 import { emptyFormatter } from "../util";
 
 type MemberModalProps = {

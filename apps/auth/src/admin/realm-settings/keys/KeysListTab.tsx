@@ -6,7 +6,7 @@ import {
     DataTable,
     DataTableRowActions,
     type ColumnDef
-} from "@merge/ui/components/table";
+} from "@/admin/components/data-table";
 import { DropdownMenuItem } from "@merge/ui/components/dropdown-menu";
 import { Plus } from "@phosphor-icons/react";
 import { useState } from "react";
@@ -109,7 +109,6 @@ export const KeysListTab = ({ realmComponents }: KeysListTabProps) => {
             size: 60,
             enableHiding: false,
             enableSorting: false,
-            enableColumnActions: false,
             cell: ({ row }) => {
                 const { publicKey: pk, certificate: cert } = row.original;
                 if (!pk && !cert) return null;

@@ -1,13 +1,13 @@
 import type ClientRepresentation from "@keycloak/keycloak-admin-client/lib/defs/clientRepresentation";
 import { getErrorDescription, getErrorMessage, useFetch } from "../../shared/keycloak-ui-shared";
-import { toast } from "@merge/ui/components/sonner";
+import { toast } from "sonner";
 import { Badge } from "@merge/ui/components/badge";
 import { Button } from "@merge/ui/components/button";
 import {
     DataTable,
     DataTableRowActions,
     type ColumnDef
-} from "@merge/ui/components/table";
+} from "@/admin/components/data-table";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@merge/ui/components/tabs";
 import { DownloadSimple, PencilSimple, Plus, Trash } from "@phosphor-icons/react";
 import { useState } from "react";

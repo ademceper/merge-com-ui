@@ -9,7 +9,7 @@ import {
 } from "../../../shared/keycloak-ui-shared";
 import { RadioGroup, RadioGroupItem } from "@merge/ui/components/radio-group";
 import { Label } from "@merge/ui/components/label";
-import { toast } from "@merge/ui/components/sonner";
+import { toast } from "sonner";
 import { Badge } from "@merge/ui/components/badge";
 import { useMemo } from "react";
 import { Controller, FormProvider, useForm, useWatch } from "react-hook-form";

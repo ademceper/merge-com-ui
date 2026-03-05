@@ -73,7 +73,6 @@ export const AddSubFlowModal = ({ name, onConfirm, onCancel }: AddSubFlowProps) 
                         />
                         <SelectField
                             name="type"
-                            menuAppendTo="parent"
                             label={t("flowType")}
                             options={types.map(type => ({
                                 key: type,

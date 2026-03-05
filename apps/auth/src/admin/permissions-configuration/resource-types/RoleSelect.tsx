@@ -7,7 +7,7 @@ import {
     TableHead,
     TableHeader,
     TableRow,
-} from "@merge/ui/components/table";
+} from "@/admin/components/data-table";
 import { MinusCircle } from "@phosphor-icons/react";
 import { useState } from "react";
 import { useFormContext } from "react-hook-form";

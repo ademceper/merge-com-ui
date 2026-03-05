@@ -96,7 +96,7 @@ export default function LoginOtp(props: PageProps<Extract<KcContext, { pageId: "
                         )}
                     </div>
 
-                    <Button type="submit" disabled={isSubmitting || otpValue.length < 6} size="lg" className="w-full">
+                    <Button type="submit" disabled={isSubmitting || otpValue.length < 6} size="xl" className="w-full">
                         {msgStr("doLogIn")}
                     </Button>
                 </form>

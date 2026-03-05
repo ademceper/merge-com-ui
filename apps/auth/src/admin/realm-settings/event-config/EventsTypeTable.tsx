@@ -3,7 +3,7 @@ import {
     DataTable,
     DataTableRowActions,
     type ColumnDef
-} from "@merge/ui/components/table";
+} from "@/admin/components/data-table";
 import { Trash } from "@phosphor-icons/react";
 import { useTranslation } from "react-i18next";
 

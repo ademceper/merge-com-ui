@@ -11,7 +11,7 @@ import { FormPanel, HelpItem, PasswordControl, TextControl } from "../../shared/
 import { Switch } from "@merge/ui/components/switch";
 import { useAdminClient } from "../admin-client";
 import { getErrorDescription, getErrorMessage } from "../../shared/keycloak-ui-shared";
-import { toast } from "@merge/ui/components/sonner";
+import { toast } from "sonner";
 import { FixedButtonsGroup } from "../components/form/FixedButtonGroup";
 import { FormAccess } from "../components/form/FormAccess";
 import { toUser } from "../user/routes/User";

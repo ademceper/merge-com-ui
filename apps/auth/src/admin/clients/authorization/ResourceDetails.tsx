@@ -4,7 +4,7 @@ import type ResourceServerRepresentation from "@keycloak/keycloak-admin-client/l
 import { getErrorDescription, getErrorMessage, HelpItem,
     TextControl,
     useFetch } from "../../../shared/keycloak-ui-shared";
-import { toast } from "@merge/ui/components/sonner";
+import { toast } from "sonner";
 import { Alert, AlertDescription, AlertTitle } from "@merge/ui/components/alert";
 import { Button } from "@merge/ui/components/button";
 import { Label } from "@merge/ui/components/label";

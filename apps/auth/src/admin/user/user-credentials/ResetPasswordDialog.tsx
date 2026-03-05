@@ -7,7 +7,7 @@ import { FormErrorText, PasswordInput } from "../../../shared/keycloak-ui-shared
 import { useAdminClient } from "../../admin-client";
 import { DefaultSwitchControl } from "../../components/SwitchControl";
 import { getErrorDescription, getErrorMessage } from "../../../shared/keycloak-ui-shared";
-import { toast } from "@merge/ui/components/sonner";
+import { toast } from "sonner";
 import {
     ConfirmDialogModal,
     useConfirmDialog

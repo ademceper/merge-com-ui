@@ -9,7 +9,7 @@ import {
     SelectTrigger,
     SelectValue,
 } from "@merge/ui/components/select";
-import { DataTable, type ColumnDef } from "@merge/ui/components/table";
+import { DataTable, type ColumnDef } from "@/admin/components/data-table";
 import { FormPanel } from "../../../shared/keycloak-ui-shared/scroll-form/FormPanel";
 import {
     Empty,

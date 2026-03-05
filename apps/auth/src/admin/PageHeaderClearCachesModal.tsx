@@ -10,7 +10,7 @@ import { useRealm } from "./context/realm-context/RealmContext";
 import { useAdminClient } from "./admin-client";
 import { useTranslation } from "react-i18next";
 import { getErrorDescription, getErrorMessage, HelpItem } from "../shared/keycloak-ui-shared";
-import { toast } from "@merge/ui/components/sonner";
+import { toast } from "sonner";
 
 export type ClearCachesModalProps = {
     onClose: () => void;

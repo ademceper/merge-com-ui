@@ -1,4 +1,4 @@
-import { NumberInput } from "@merge/ui/components/number-input";
+import { NumberInput } from "@/admin/components/number-input";
 import {
     Select,
     SelectContent,

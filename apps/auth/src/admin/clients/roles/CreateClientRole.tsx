@@ -4,7 +4,7 @@ import { useTranslation } from "react-i18next";
 import { useNavigate, useParams } from "react-router-dom";
 import { useAdminClient } from "../../admin-client";
 import { getErrorDescription, getErrorMessage } from "../../../shared/keycloak-ui-shared";
-import { toast } from "@merge/ui/components/sonner";
+import { toast } from "sonner";
 import { AttributeForm } from "../../components/key-value-form/AttributeForm";
 import { RoleForm } from "../../components/role-form/RoleForm";
 import { useRealm } from "../../context/realm-context/RealmContext";

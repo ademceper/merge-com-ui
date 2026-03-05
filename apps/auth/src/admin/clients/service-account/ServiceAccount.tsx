@@ -2,7 +2,7 @@ import type ClientRepresentation from "@keycloak/keycloak-admin-client/lib/defs/
 import type { RoleMappingPayload } from "@keycloak/keycloak-admin-client/lib/defs/roleRepresentation";
 import type UserRepresentation from "@keycloak/keycloak-admin-client/lib/defs/userRepresentation";
 import { getErrorDescription, getErrorMessage, useFetch } from "../../../shared/keycloak-ui-shared";
-import { toast } from "@merge/ui/components/sonner";
+import { toast } from "sonner";
 import { Info } from "@phosphor-icons/react";
 import type { ComponentType } from "react";
 import { useState } from "react";

@@ -18,7 +18,7 @@ import {
     EmptyHeader,
     EmptyTitle
 } from "@merge/ui/components/empty";
-import { DataTable, type ColumnDef } from "@merge/ui/components/table";
+import { DataTable, type ColumnDef } from "@/admin/components/data-table";
 import { useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useAdminClient } from "../admin-client";

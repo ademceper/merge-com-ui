@@ -8,7 +8,7 @@ import { Button } from "@merge/ui/components/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@merge/ui/components/dialog";
 import { getErrorDescription, getErrorMessage, SelectField,
     TextControl } from "../../../shared/keycloak-ui-shared";
-import { toast } from "@merge/ui/components/sonner";
+import { toast } from "sonner";
 import { FormProvider, useForm, useWatch } from "react-hook-form";
 import { useAdminClient } from "../../admin-client";
 import { useRealm } from "../../context/realm-context/RealmContext";

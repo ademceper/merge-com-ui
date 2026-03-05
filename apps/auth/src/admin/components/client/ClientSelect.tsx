@@ -15,7 +15,7 @@ import { useParams } from "react-router-dom";
 import { useFormContext, useWatch } from "react-hook-form";
 
 type ClientSelectProps = Omit<ComponentProps, "convertToName"> & {
-    variant?: `${SelectVariant}`;
+    variant?: string;
     isRequired?: boolean;
     clientKey?: keyof ClientRepresentation;
     placeholderText?: string;

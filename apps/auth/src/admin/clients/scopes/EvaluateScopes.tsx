@@ -3,7 +3,7 @@ import type ProtocolMapperRepresentation from "@keycloak/keycloak-admin-client/l
 import type RoleRepresentation from "@keycloak/keycloak-admin-client/lib/defs/roleRepresentation";
 import type { ProtocolMapperTypeRepresentation } from "@keycloak/keycloak-admin-client/lib/defs/serverInfoRepesentation";
 import { HelpItem, SelectVariant, useFetch, useHelp } from "../../../shared/keycloak-ui-shared";
-import { DataTable, type ColumnDef } from "@merge/ui/components/table";
+import { DataTable, type ColumnDef } from "@/admin/components/data-table";
 import { Button } from "@merge/ui/components/button";
 import { Input } from "@merge/ui/components/input";
 import { Label } from "@merge/ui/components/label";

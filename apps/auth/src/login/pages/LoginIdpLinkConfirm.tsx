@@ -23,10 +23,10 @@ export default function LoginIdpLinkConfirm(props: PageProps<Extract<KcContext, 
 
                 <form id="kc-register-form" action={url.loginAction} method="post" className="pt-2">
                     <div className="flex flex-col gap-3">
-                        <Button type="submit" name="submitAction" value="updateProfile" size="lg" variant="secondary" className="w-full">
+                        <Button type="submit" name="submitAction" value="updateProfile" size="xl" variant="secondary" className="w-full">
                             {msgStr("confirmLinkIdpReviewProfile")}
                         </Button>
-                        <Button type="submit" name="submitAction" value="linkAccount" size="lg" className="w-full">
+                        <Button type="submit" name="submitAction" value="linkAccount" size="xl" className="w-full">
                             {msg("confirmLinkIdpContinue", idpAlias)}
                         </Button>
                     </div>

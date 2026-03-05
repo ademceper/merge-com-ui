@@ -1,6 +1,6 @@
 import ComponentRepresentation from "@keycloak/keycloak-admin-client/lib/defs/componentRepresentation";
 import { getErrorDescription, getErrorMessage, useFetch } from "../../shared/keycloak-ui-shared";
-import { toast } from "@merge/ui/components/sonner";
+import { toast } from "sonner";
 import { DropdownMenuItem } from "@merge/ui/components/dropdown-menu";
 import { get } from "lodash-es";
 import { useState } from "react";

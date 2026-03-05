@@ -11,7 +11,7 @@ import {
     DataTable,
     DataTableRowActions,
     type ColumnDef,
-} from "@merge/ui/components/table";
+} from "@/admin/components/data-table";
 import { Funnel, PencilSimple, Plus, Trash } from "@phosphor-icons/react";
 import { uniqBy } from "lodash-es";
 import { useMemo, useState } from "react";

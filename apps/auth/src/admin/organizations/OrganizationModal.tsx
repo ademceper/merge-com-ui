@@ -9,7 +9,7 @@ import {
     DialogHeader,
     DialogTitle,
 } from "@merge/ui/components/dialog";
-import { DataTable, type ColumnDef } from "@merge/ui/components/table";
+import { DataTable, type ColumnDef } from "@/admin/components/data-table";
 import { differenceBy } from "lodash-es";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";

@@ -2,7 +2,7 @@ import type CertificateRepresentation from "@keycloak/keycloak-admin-client/lib/
 import { getErrorDescription, getErrorMessage, FormPanel,
     HelpItem,
     useFetch } from "../../../shared/keycloak-ui-shared";
-import { toast } from "@merge/ui/components/sonner";
+import { toast } from "sonner";
 import { Button } from "@merge/ui/components/button";
 import { Label } from "@merge/ui/components/label";
 import { Switch } from "@merge/ui/components/switch";

@@ -1,6 +1,6 @@
 import OrganizationRepresentation from "@keycloak/keycloak-admin-client/lib/defs/organizationRepresentation";
 import { getErrorDescription, getErrorMessage, useFetch } from "../../shared/keycloak-ui-shared";
-import { toast } from "@merge/ui/components/sonner";
+import { toast } from "sonner";
 import { Button } from "@merge/ui/components/button";
 import {
     AlertDialog,
@@ -23,7 +23,7 @@ import {
     DataTable,
     DataTableRowActions,
     type ColumnDef
-} from "@merge/ui/components/table";
+} from "@/admin/components/data-table";
 import { useEffect, useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { PencilSimple, Plus, Trash } from "@phosphor-icons/react";

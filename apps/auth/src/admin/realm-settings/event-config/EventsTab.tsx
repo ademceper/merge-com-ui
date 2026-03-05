@@ -1,7 +1,7 @@
 import type { RealmEventsConfigRepresentation } from "@keycloak/keycloak-admin-client/lib/defs/realmEventsConfigRepresentation";
 import type RealmRepresentation from "@keycloak/keycloak-admin-client/lib/defs/realmRepresentation";
 import { getErrorDescription, getErrorMessage, useFetch } from "../../../shared/keycloak-ui-shared";
-import { toast } from "@merge/ui/components/sonner";
+import { toast } from "sonner";
 import { isEqual } from "lodash-es";
 import { useState } from "react";
 import { useForm } from "react-hook-form";

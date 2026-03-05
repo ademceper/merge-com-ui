@@ -7,7 +7,7 @@ import {
     DropdownMenuTrigger,
 } from "@merge/ui/components/dropdown-menu";
 import { Button } from "@merge/ui/components/button";
-import { TableCell } from "@merge/ui/components/table";
+import { TableCell } from "@/admin/components/data-table";
 import type CredentialRepresentation from "@keycloak/keycloak-admin-client/lib/defs/credentialRepresentation";
 import useToggle from "../../utils/useToggle";
 import useLocaleSort from "../../utils/useLocaleSort";

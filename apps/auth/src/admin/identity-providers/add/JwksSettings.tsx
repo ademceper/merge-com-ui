@@ -6,7 +6,7 @@ import { DefaultSwitchControl } from "../../components/SwitchControl";
 import { useTranslation } from "react-i18next";
 import { getErrorDescription, getErrorMessage, TextAreaControl,
     TextControl } from "../../../shared/keycloak-ui-shared";
-import { toast } from "@merge/ui/components/sonner";
+import { toast } from "sonner";
 import { ImportFile, ImportKeyDialog } from "../../clients/keys/ImportKeyDialog";
 import useToggle from "../../utils/useToggle";
 import { useAdminClient } from "../../admin-client";

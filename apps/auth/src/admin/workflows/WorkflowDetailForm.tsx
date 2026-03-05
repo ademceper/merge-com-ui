@@ -6,7 +6,7 @@ import { Link, useNavigate } from "react-router-dom";
 import yaml from "yaml";
 import { useAdminClient } from "../admin-client";
 import { getErrorDescription, getErrorMessage, HelpItem, useFetch } from "../../shared/keycloak-ui-shared";
-import { toast } from "@merge/ui/components/sonner";
+import { toast } from "sonner";
 import { useRealm } from "../context/realm-context/RealmContext";
 import { FormAccess } from "../components/form/FormAccess";
 import { toWorkflows } from "./routes/Workflows";

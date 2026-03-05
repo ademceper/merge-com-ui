@@ -3,7 +3,7 @@ const ButtonVariant = { danger: "destructive" as const };
 import { useTranslation } from "react-i18next";
 import { useAdminClient } from "../../admin-client";
 import { getErrorDescription, getErrorMessage } from "../../../shared/keycloak-ui-shared";
-import { toast } from "@merge/ui/components/sonner";
+import { toast } from "sonner";
 import { ConfirmDialogModal } from "../../components/confirm-dialog/ConfirmDialog";
 
 type DeleteConfirmProps = {

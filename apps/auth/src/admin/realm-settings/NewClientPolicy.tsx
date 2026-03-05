@@ -3,7 +3,7 @@ import type ClientProfileRepresentation from "@keycloak/keycloak-admin-client/li
 import { getErrorDescription, getErrorMessage, HelpItem,
     TextControl,
     useFetch } from "../../shared/keycloak-ui-shared";
-import { toast } from "@merge/ui/components/sonner";
+import { toast } from "sonner";
 import { Button } from "@merge/ui/components/button";
 import { DropdownMenuItem } from "@merge/ui/components/dropdown-menu";
 import { Label } from "@merge/ui/components/label";

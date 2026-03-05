@@ -1,6 +1,6 @@
 import type RoleRepresentation from "@keycloak/keycloak-admin-client/lib/defs/roleRepresentation";
 import { getErrorDescription, getErrorMessage, HelpItem } from "../../../shared/keycloak-ui-shared";
-import { toast } from "@merge/ui/components/sonner";
+import { toast } from "sonner";
 import { Button } from "@merge/ui/components/button";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -13,7 +13,7 @@ import { emptyFormatter, upperCaseFormatter } from "../../util";
 import { translationFormatter } from "../../utils/translationFormatter";
 import { useConfirmDialog } from "../confirm-dialog/ConfirmDialog";
 import { useFetch } from "../../../shared/keycloak-ui-shared";
-import { DataTable, DataTableRowActions, type ColumnDef } from "@merge/ui/components/table";
+import { DataTable, DataTableRowActions, type ColumnDef } from "@/admin/components/data-table";
 import {
     Empty,
     EmptyContent,

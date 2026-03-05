@@ -26,7 +26,7 @@ export default function LoginIdpLinkConfirmOverride(props: PageProps<Extract<KcC
                 </div>
 
                 <form id="kc-register-form" action={url.loginAction} method="post" className="pt-2">
-                    <Button type="submit" name="submitAction" value="confirmOverride" size="lg" className="w-full">
+                    <Button type="submit" name="submitAction" value="confirmOverride" size="xl" className="w-full">
                         {msg("confirmOverrideIdpContinue", idpDisplayName)}
                     </Button>
                 </form>

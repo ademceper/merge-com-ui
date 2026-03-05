@@ -2,7 +2,7 @@ import type PolicyProviderRepresentation from "@keycloak/keycloak-admin-client/l
 import type PolicyRepresentation from "@keycloak/keycloak-admin-client/lib/defs/policyRepresentation";
 import { getErrorDescription, getErrorMessage, useFetch } from "../../../shared/keycloak-ui-shared";
 import { Empty, EmptyContent, EmptyDescription, EmptyHeader, EmptyTitle } from "@merge/ui/components/empty";
-import { toast } from "@merge/ui/components/sonner";
+import { toast } from "sonner";
 import { Alert, AlertTitle } from "@merge/ui/components/alert";
 import { Button } from "@merge/ui/components/button";
 import {
@@ -19,8 +19,8 @@ import {
     TableHead,
     TableHeader,
     TableRow,
-} from "@merge/ui/components/table";
-import { TablePagination } from "@merge/ui/components/pagination";
+} from "@/admin/components/data-table";
+import { TablePagination } from "@/admin/components/table-pagination";
 import { CaretDown, CaretRight, DotsThreeVertical } from "@phosphor-icons/react";
 import { Fragment, useState } from "react";
 import { useTranslation } from "react-i18next";

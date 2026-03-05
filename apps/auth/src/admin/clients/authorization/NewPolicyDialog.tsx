@@ -12,7 +12,7 @@ import {
     TableHead,
     TableHeader,
     TableRow,
-} from "@merge/ui/components/table";
+} from "@/admin/components/data-table";
 import { cn } from "@merge/ui/lib/utils";
 
 import type PolicyProviderRepresentation from "@keycloak/keycloak-admin-client/lib/defs/policyProviderRepresentation";

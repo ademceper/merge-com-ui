@@ -23,7 +23,7 @@ function toStringValue(formValue: string[]): string {
 }
 
 type MultiValuedListComponentProps = ComponentProps & {
-    variant?: `${SelectVariant}`;
+    variant?: string;
 };
 
 export const MultiValuedListComponent = ({

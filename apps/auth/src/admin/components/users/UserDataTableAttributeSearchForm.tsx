@@ -7,7 +7,7 @@ import {
     SelectTrigger,
     SelectValue
 } from "@merge/ui/components/select";
-import { toast } from "@merge/ui/components/sonner";
+import { toast } from "sonner";
 import { Alert, AlertDescription } from "@merge/ui/components/alert";
 import { Button } from "@merge/ui/components/button";
 import { Checkbox } from "@merge/ui/components/checkbox";

@@ -1,7 +1,7 @@
 import type ClientScopeRepresentation from "@keycloak/keycloak-admin-client/lib/defs/clientScopeRepresentation";
 import type { KeyMetadataRepresentation } from "@keycloak/keycloak-admin-client/lib/defs/keyMetadataRepresentation";
 import { Button } from "@merge/ui/components/button";
-import { NumberInput } from "@merge/ui/components/number-input";
+import { NumberInput } from "@/admin/components/number-input";
 import { useEffect, useMemo, useState } from "react";
 import { Controller, FormProvider, useForm, useFormContext, useWatch } from "react-hook-form";
 import { useTranslation } from "react-i18next";

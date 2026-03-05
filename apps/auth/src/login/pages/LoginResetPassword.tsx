@@ -61,7 +61,7 @@ export default function LoginResetPassword(props: PageProps<Extract<KcContext, {
                         {messagesPerField.existsError("username") && <p className="text-sm text-destructive">{messagesPerField.get("username")}</p>}
                     </div>
 
-                    <Button type="submit" disabled={isSubmitting} size="lg" className="w-full">
+                    <Button type="submit" disabled={isSubmitting} size="xl" className="w-full">
                         {msgStr("doSubmit")}
                     </Button>
                 </form>

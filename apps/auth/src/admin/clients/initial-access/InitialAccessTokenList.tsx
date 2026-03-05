@@ -1,6 +1,6 @@
 import type ClientInitialAccessPresentation from "@keycloak/keycloak-admin-client/lib/defs/clientInitialAccessPresentation";
 import { useFetch, getErrorDescription, getErrorMessage } from "../../../shared/keycloak-ui-shared";
-import { toast } from "@merge/ui/components/sonner";
+import { toast } from "sonner";
 import { Button } from "@merge/ui/components/button";
 import {
     AlertDialog,
@@ -16,7 +16,7 @@ import {
     DataTable,
     DataTableRowActions,
     type ColumnDef
-} from "@merge/ui/components/table";
+} from "@/admin/components/data-table";
 import { Plus, Trash } from "@phosphor-icons/react";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";

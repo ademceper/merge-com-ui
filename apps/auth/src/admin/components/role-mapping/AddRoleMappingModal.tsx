@@ -1,6 +1,6 @@
 import RoleRepresentation from "@keycloak/keycloak-admin-client/lib/defs/roleRepresentation";
 import { useFetch } from "../../../shared/keycloak-ui-shared";
-import { DataTable, type ColumnDef } from "@merge/ui/components/table";
+import { DataTable, type ColumnDef } from "@/admin/components/data-table";
 import {
     Empty,
     EmptyContent,

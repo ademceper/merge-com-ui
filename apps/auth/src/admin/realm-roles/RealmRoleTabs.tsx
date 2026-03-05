@@ -1,6 +1,6 @@
 import type RoleRepresentation from "@keycloak/keycloak-admin-client/lib/defs/roleRepresentation";
 import { getErrorDescription, getErrorMessage, KeycloakSpinner, useFetch } from "../../shared/keycloak-ui-shared";
-import { toast } from "@merge/ui/components/sonner";
+import { toast } from "sonner";
 import { DropdownMenuItem } from "@merge/ui/components/dropdown-menu";
 import { useState } from "react";
 import { FormProvider, SubmitHandler, useForm, useWatch } from "react-hook-form";

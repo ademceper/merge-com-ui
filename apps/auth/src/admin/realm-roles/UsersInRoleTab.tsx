@@ -10,7 +10,7 @@ import type { ClientRoleParams } from "../clients/routes/ClientRole";
 import { useRealm } from "../context/realm-context/RealmContext";
 import { emptyFormatter, upperCaseFormatter } from "../util";
 import { useParams } from "../utils/useParams";
-import { DataTable, type ColumnDef } from "@merge/ui/components/table";
+import { DataTable, type ColumnDef } from "@/admin/components/data-table";
 import {
     Empty,
     EmptyContent,

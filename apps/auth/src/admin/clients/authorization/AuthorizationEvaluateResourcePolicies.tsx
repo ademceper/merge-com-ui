@@ -6,7 +6,7 @@ import { Button } from "@merge/ui/components/button";
 import {
     TableCell,
     TableRow
-} from "@merge/ui/components/table";
+} from "@/admin/components/data-table";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";

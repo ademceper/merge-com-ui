@@ -1,7 +1,7 @@
 import PolicyRepresentation from "@keycloak/keycloak-admin-client/lib/defs/policyRepresentation";
 import { PolicyQuery } from "@keycloak/keycloak-admin-client/lib/resources/clients";
 import { useFetch } from "../../../shared/keycloak-ui-shared";
-import { DataTable, type ColumnDef } from "@merge/ui/components/table";
+import { DataTable, type ColumnDef } from "@/admin/components/data-table";
 import {
     Empty,
     EmptyContent,

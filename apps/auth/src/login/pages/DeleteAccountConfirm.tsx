@@ -30,15 +30,15 @@ export default function DeleteAccountConfirm(props: PageProps<Extract<KcContext,
 
                 <form action={url.loginAction} method="post" className="pt-2">
                     <div className="flex flex-col gap-3">
-                        <Button type="submit" size="lg" className="w-full">
+                        <Button type="submit" size="xl" className="w-full">
                             {msgStr("doConfirmDelete")}
                         </Button>
                         {triggered_from_aia ? (
-                            <Button type="submit" name="cancel-aia" value="true" variant="secondary" size="lg" className="w-full">
+                            <Button type="submit" name="cancel-aia" value="true" variant="secondary" size="xl" className="w-full">
                                 {msgStr("doCancel")}
                             </Button>
                         ) : (
-                            <Button variant="secondary" size="lg" className="w-full" asChild>
+                            <Button variant="secondary" size="xl" className="w-full" asChild>
                                 <a href={url.loginRestartFlowUrl}>{msgStr("doCancel")}</a>
                             </Button>
                         )}

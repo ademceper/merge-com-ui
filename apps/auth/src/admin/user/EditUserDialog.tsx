@@ -1,7 +1,7 @@
 import type UserRepresentation from "@keycloak/keycloak-admin-client/lib/defs/userRepresentation";
 import { FormProvider, useForm } from "react-hook-form";
 import { getErrorDescription, getErrorMessage, KeycloakSpinner } from "../../shared/keycloak-ui-shared";
-import { toast } from "@merge/ui/components/sonner";
+import { toast } from "sonner";
 import { Button } from "@merge/ui/components/button";
 import {
     Dialog,

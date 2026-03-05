@@ -16,7 +16,7 @@ import {
     TableHead,
     TableHeader,
     TableRow,
-} from "@merge/ui/components/table";
+} from "@/admin/components/data-table";
 import { Button } from "@merge/ui/components/button";
 import { DotsThreeVertical } from "@phosphor-icons/react";
 import { useState } from "react";

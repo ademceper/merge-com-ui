@@ -114,15 +114,15 @@ export default function LoginUpdateProfile(props: PageProps<Extract<KcContext, {
                     </div>
 
                     <div className="flex flex-col gap-3 pt-2">
-                        <Button type="submit" disabled={isSubmitting} size="lg" className="w-full">
+                        <Button type="submit" disabled={isSubmitting} size="xl" className="w-full">
                             {msgStr("doSubmit")}
                         </Button>
                         {isAppInitiatedAction ? (
-                            <Button type="submit" name="cancel-aia" value="true" variant="secondary" size="lg" className="w-full">
+                            <Button type="submit" name="cancel-aia" value="true" variant="secondary" size="xl" className="w-full">
                                 {msgStr("doCancel")}
                             </Button>
                         ) : (
-                            <Button variant="secondary" size="lg" className="w-full" asChild>
+                            <Button variant="secondary" size="xl" className="w-full" asChild>
                                 <a href={url.loginRestartFlowUrl}>{msgStr("doCancel")}</a>
                             </Button>
                         )}

@@ -35,7 +35,7 @@ export default function LoginIdpLinkEmail(props: PageProps<Extract<KcContext, { 
                 </div>
 
                 <div className="pt-2">
-                    <Button variant="secondary" size="lg" className="w-full" asChild>
+                    <Button variant="secondary" size="xl" className="w-full" asChild>
                         <a href={url.loginRestartFlowUrl}>{msg("backToLogin")}</a>
                     </Button>
                 </div>

@@ -1,6 +1,6 @@
 import type ResourceServerRepresentation from "@keycloak/keycloak-admin-client/lib/defs/resourceServerRepresentation";
 import { getErrorDescription, getErrorMessage, KeycloakSpinner, useFetch } from "../../../shared/keycloak-ui-shared";
-import { toast } from "@merge/ui/components/sonner";
+import { toast } from "sonner";
 import { Button } from "@merge/ui/components/button";
 import CodeEditor from "@uiw/react-textarea-code-editor";
 import { saveAs } from "file-saver";

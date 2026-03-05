@@ -8,7 +8,7 @@ import { useTranslation } from "react-i18next";
 import { PasswordInput } from "../../../shared/keycloak-ui-shared";
 import { useAdminClient } from "../../admin-client";
 import { getErrorDescription, getErrorMessage } from "../../../shared/keycloak-ui-shared";
-import { toast } from "@merge/ui/components/sonner";
+import { toast } from "sonner";
 import { useConfirmDialog } from "../../components/confirm-dialog/ConfirmDialog";
 import { useAccess } from "../../context/access/Access";
 import useFormatDate from "../../utils/useFormatDate";

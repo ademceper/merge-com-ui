@@ -3,7 +3,7 @@ import {
     getErrorDescription,
     getErrorMessage,
 } from "../../shared/keycloak-ui-shared";
-import { toast } from "@merge/ui/components/sonner";
+import { toast } from "sonner";
 import { Badge } from "@merge/ui/components/badge";
 import { Button } from "@merge/ui/components/button";
 import {
@@ -16,7 +16,7 @@ import {
     DataTable,
     DataTableRowActions,
     type ColumnDef,
-} from "@merge/ui/components/table";
+} from "@/admin/components/data-table";
 import { CardTitle } from "@merge/ui/components/card";
 import { Database, Trash } from "@phosphor-icons/react";
 import { useCallback, useEffect, useMemo, useState } from "react";

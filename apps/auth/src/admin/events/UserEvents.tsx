@@ -3,7 +3,7 @@ import type EventType from "@keycloak/keycloak-admin-client/lib/defs/eventTypes"
 import {
     DataTable,
     type ColumnDef
-} from "@merge/ui/components/table";
+} from "@/admin/components/data-table";
 import { Badge } from "@merge/ui/components/badge";
 import { Button } from "@merge/ui/components/button";
 import { Checkbox } from "@merge/ui/components/checkbox";

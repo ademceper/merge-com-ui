@@ -3,7 +3,7 @@ import ResourceRepresentation from "@keycloak/keycloak-admin-client/lib/defs/res
 import ScopeRepresentation from "@keycloak/keycloak-admin-client/lib/defs/scopeRepresentation";
 import { getErrorDescription, getErrorMessage, KeycloakSpinner, useFetch } from "../../../shared/keycloak-ui-shared";
 import { Empty, EmptyContent, EmptyDescription, EmptyHeader, EmptyTitle } from "@merge/ui/components/empty";
-import { toast } from "@merge/ui/components/sonner";
+import { toast } from "sonner";
 import { Button } from "@merge/ui/components/button";
 import {
     DropdownMenu,
@@ -18,8 +18,8 @@ import {
     TableHead,
     TableHeader,
     TableRow,
-} from "@merge/ui/components/table";
-import { TablePagination } from "@merge/ui/components/pagination";
+} from "@/admin/components/data-table";
+import { TablePagination } from "@/admin/components/table-pagination";
 import { CaretDown, CaretRight, DotsThreeVertical } from "@phosphor-icons/react";
 import { Fragment, useState } from "react";
 import { useTranslation } from "react-i18next";

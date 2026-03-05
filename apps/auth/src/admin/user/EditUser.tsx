@@ -5,7 +5,7 @@ import type {
 import { getErrorDescription, getErrorMessage, isUserProfileError,
     setUserProfileServerError,
     useFetch } from "../../shared/keycloak-ui-shared";
-import { toast } from "@merge/ui/components/sonner";
+import { toast } from "sonner";
 import { Label } from "@merge/ui/components/label";
 import { Tooltip, TooltipContent, TooltipTrigger, TooltipProvider } from "@merge/ui/components/tooltip";
 import { DropdownMenuItem } from "@merge/ui/components/dropdown-menu";

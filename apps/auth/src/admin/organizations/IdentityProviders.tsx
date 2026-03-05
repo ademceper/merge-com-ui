@@ -1,6 +1,6 @@
 import IdentityProviderRepresentation from "@keycloak/keycloak-admin-client/lib/defs/identityProviderRepresentation";
 import { getErrorDescription, getErrorMessage, useFetch } from "../../shared/keycloak-ui-shared";
-import { DataTable, DataTableRowActions, type ColumnDef } from "@merge/ui/components/table";
+import { DataTable, DataTableRowActions, type ColumnDef } from "@/admin/components/data-table";
 import {
     Empty,
     EmptyContent,
@@ -9,7 +9,7 @@ import {
     EmptyTitle
 } from "@merge/ui/components/empty";
 import { DropdownMenuItem } from "@merge/ui/components/dropdown-menu";
-import { toast } from "@merge/ui/components/sonner";
+import { toast } from "sonner";
 import { Button } from "@merge/ui/components/button";
 import { Switch } from "@merge/ui/components/switch";
 import { sortBy } from "lodash-es";

@@ -4,7 +4,7 @@ import type { TFunction } from "i18next";
 import { useFormContext } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { ScrollForm } from "../../shared/keycloak-ui-shared";
-import { toast } from "@merge/ui/components/sonner";
+import { toast } from "sonner";
 import { convertAttributeNameToForm, toUpperCase } from "../util";
 import useIsFeatureEnabled, { Feature } from "../utils/useIsFeatureEnabled";
 import type { FormFields, SaveOptions } from "./ClientDetails";

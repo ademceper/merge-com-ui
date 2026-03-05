@@ -1,6 +1,6 @@
 import type RealmRepresentation from "@keycloak/keycloak-admin-client/lib/defs/realmRepresentation";
 import { getErrorDescription, getErrorMessage } from "../../../shared/keycloak-ui-shared";
-import { toast } from "@merge/ui/components/sonner";
+import { toast } from "sonner";
 import {
     Select,
     SelectContent,
@@ -16,7 +16,7 @@ import {
     DataTable,
     DataTableRowActions,
     type ColumnDef,
-} from "@merge/ui/components/table";
+} from "@/admin/components/data-table";
 import { Check, PencilSimple, Plus, Trash, X } from "@phosphor-icons/react";
 import { type FormEvent, useCallback, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";

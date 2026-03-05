@@ -20,7 +20,7 @@ import {
     DialogTitle,
     DialogFooter
 } from "@merge/ui/components/dialog";
-import { TablePagination } from "@merge/ui/components/pagination";
+import { TablePagination } from "@/admin/components/table-pagination";
 import { Checkbox } from "@merge/ui/components/checkbox";
 import { Input } from "@merge/ui/components/input";
 import { Separator } from "@merge/ui/components/separator";

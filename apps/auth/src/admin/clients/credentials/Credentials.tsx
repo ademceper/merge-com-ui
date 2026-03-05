@@ -4,7 +4,7 @@ import type CredentialRepresentation from "@keycloak/keycloak-admin-client/lib/d
 import { getErrorDescription, getErrorMessage, HelpItem,
     SelectField,
     useFetch } from "../../../shared/keycloak-ui-shared";
-import { toast } from "@merge/ui/components/sonner";
+import { toast } from "sonner";
 import { Alert, AlertTitle } from "@merge/ui/components/alert";
 import { Button } from "@merge/ui/components/button";
 import { Label } from "@merge/ui/components/label";

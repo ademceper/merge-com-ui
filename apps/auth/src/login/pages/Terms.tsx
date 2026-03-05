@@ -22,10 +22,10 @@ export default function Terms(props: PageProps<Extract<KcContext, { pageId: "ter
                 </div>
 
                 <form id="kc-terms-form" action={url.loginAction} method="post" className="flex flex-col gap-3">
-                    <Button type="submit" name="accept" id="kc-accept" size="lg" className="w-full">
+                    <Button type="submit" name="accept" id="kc-accept" size="xl" className="w-full">
                         {msgStr("doAccept")}
                     </Button>
-                    <Button type="submit" name="cancel" id="kc-decline" variant="outline" size="lg" className="w-full">
+                    <Button type="submit" name="cancel" id="kc-decline" variant="outline" size="xl" className="w-full">
                         {msgStr("doDecline")}
                     </Button>
                 </form>

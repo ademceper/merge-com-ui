@@ -4,7 +4,7 @@ import {
     DataTable,
     DataTableRowActions,
     type ColumnDef,
-} from "@merge/ui/components/table";
+} from "@/admin/components/data-table";
 import { Trash } from "@phosphor-icons/react";
 import { useEffect, useState } from "react";
 import { Trans, useTranslation } from "react-i18next";

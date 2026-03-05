@@ -12,7 +12,7 @@ import {
     PopoverContent,
     PopoverTrigger,
 } from "@merge/ui/components/popover";
-import { DataTable, type ColumnDef } from "@merge/ui/components/table";
+import { DataTable, type ColumnDef } from "@/admin/components/data-table";
 import { CheckCircle } from "@phosphor-icons/react";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";

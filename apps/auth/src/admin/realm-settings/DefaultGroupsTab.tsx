@@ -5,7 +5,7 @@ import {
     useFetch,
     useHelp,
 } from "../../shared/keycloak-ui-shared";
-import { toast } from "@merge/ui/components/sonner";
+import { toast } from "sonner";
 import { Button } from "@merge/ui/components/button";
 import {
     Popover,
@@ -16,7 +16,7 @@ import {
     DataTable,
     DataTableRowActions,
     type ColumnDef,
-} from "@merge/ui/components/table";
+} from "@/admin/components/data-table";
 import { Plus, Question, Trash } from "@phosphor-icons/react";
 import { useMemo, useState } from "react";
 import { Trans, useTranslation } from "react-i18next";

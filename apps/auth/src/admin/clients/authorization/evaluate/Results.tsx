@@ -14,7 +14,7 @@ import {
     TableHead,
     TableHeader,
     TableRow
-} from "@merge/ui/components/table";
+} from "@/admin/components/data-table";
 import { KeyboardEvent, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 

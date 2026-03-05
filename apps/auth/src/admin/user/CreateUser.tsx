@@ -3,7 +3,7 @@ import type { UserProfileMetadata } from "@keycloak/keycloak-admin-client/lib/de
 import { getErrorDescription, getErrorMessage, isUserProfileError,
     setUserProfileServerError,
     useFetch } from "../../shared/keycloak-ui-shared";
-import { toast } from "@merge/ui/components/sonner";
+import { toast } from "sonner";
 import { TFunction } from "i18next";
 import { useState } from "react";
 import { useForm } from "react-hook-form";

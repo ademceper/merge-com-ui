@@ -2,7 +2,7 @@ import {
     getErrorDescription,
     getErrorMessage,
 } from "../../../shared/keycloak-ui-shared";
-import { toast } from "@merge/ui/components/sonner";
+import { toast } from "sonner";
 import CodeEditor from "../../components/form/CodeEditor";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";

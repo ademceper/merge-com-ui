@@ -8,7 +8,7 @@ import {
     DataTable,
     DataTableRowActions,
     type ColumnDef
-} from "@merge/ui/components/table";
+} from "@/admin/components/data-table";
 import {
     Empty,
     EmptyContent,
@@ -17,7 +17,7 @@ import {
     EmptyTitle
 } from "@merge/ui/components/empty";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@merge/ui/components/dropdown-menu";
-import { toast } from "@merge/ui/components/sonner";
+import { toast } from "sonner";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Link, useNavigate, useParams } from "react-router-dom";

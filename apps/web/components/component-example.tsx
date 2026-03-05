@@ -7,7 +7,7 @@ import {
   Example,
   ExampleWrapper,
 } from "@/components/example"
-import { toast } from "@merge/ui/components/sonner"
+import { toast } from "sonner"
 import {
   AlertDialog,
   AlertDialogAction,

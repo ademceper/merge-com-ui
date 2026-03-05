@@ -8,7 +8,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { TextControl } from "../../../shared/keycloak-ui-shared";
 import { useAdminClient } from "../../admin-client";
 import { getErrorDescription, getErrorMessage } from "../../../shared/keycloak-ui-shared";
-import { toast } from "@merge/ui/components/sonner";
+import { toast } from "sonner";
 import { FormAccess } from "../../components/form/FormAccess";
 import { FileUploadForm } from "../../components/json-file-upload/FileUploadForm";
 import { ViewHeader } from "../../components/view-header/ViewHeader";

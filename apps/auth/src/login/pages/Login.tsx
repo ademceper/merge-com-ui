@@ -92,7 +92,7 @@ export default function Login(props: PageProps<Extract<KcContext, { pageId: "log
 
                         <input type="hidden" id="id-hidden-input" name="credentialId" value={auth.selectedCredential} />
 
-                        <Button tabIndex={7} type="submit" disabled={isLoginButtonDisabled} size="lg" className="w-full">
+                        <Button tabIndex={7} size="xl" type="submit" disabled={isLoginButtonDisabled} className="w-full">
                             {msgStr("doContinue") || msgStr("doLogIn")}
                         </Button>
                     </form>

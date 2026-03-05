@@ -28,11 +28,14 @@ type SelectFieldProps = {
     labelIcon?: string | React.ReactNode;
     options: SelectOption[];
     defaultValue?: string | number;
-    rules?: { required?: unknown };
+    rules?: Record<string, unknown>;
     placeholderText?: string;
     isDisabled?: boolean;
     className?: string;
+    onSelect?: (value: string, onChange: (v: string) => void) => void;
 };
+
+export type { SelectFieldProps };
 
 export function SelectField({
     id,
@@ -45,6 +48,7 @@ export function SelectField({
     placeholderText,
     isDisabled,
     className,
+    onSelect,
 }: SelectFieldProps) {
     const { control, formState: { errors } } = useFormContext();
     const required = getRuleValue(rules?.required) === true;
@@ -61,11 +65,14 @@ export function SelectField({
                 name={name}
                 control={control}
                 defaultValue={defaultValue}
-                rules={rules}
+                rules={rules as any}
                 render={({ field }) => (
                     <Select
                         value={field.value === "" || field.value == null ? "" : String(field.value)}
-                        onValueChange={field.onChange}
+                        onValueChange={(v) => {
+                            if (onSelect) onSelect(v, field.onChange);
+                            else field.onChange(v);
+                        }}
                         disabled={isDisabled}
                     >
                         <SelectTrigger id={id ?? name} className={className}>

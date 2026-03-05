@@ -1,6 +1,6 @@
 import UserRepresentation from "@keycloak/keycloak-admin-client/lib/defs/userRepresentation";
 import { getErrorDescription, getErrorMessage, useFetch } from "../../shared/keycloak-ui-shared";
-import { DataTable, DataTableRowActions } from "@merge/ui/components/table";
+import { DataTable, DataTableRowActions } from "@/admin/components/data-table";
 import { DropdownMenuItem } from "@merge/ui/components/dropdown-menu";
 import {
     Empty,
@@ -10,7 +10,7 @@ import {
     EmptyTitle
 } from "@merge/ui/components/empty";
 import { Checkbox } from "@merge/ui/components/checkbox";
-import { toast } from "@merge/ui/components/sonner";
+import { toast } from "sonner";
 import { Button } from "@merge/ui/components/button";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";

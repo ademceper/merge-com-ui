@@ -12,7 +12,7 @@ import {
     DialogTitle,
     DialogFooter
 } from "@merge/ui/components/dialog";
-import { TablePagination } from "@merge/ui/components/pagination";
+import { TablePagination } from "@/admin/components/table-pagination";
 import { useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useAdminClient } from "../../../admin-client";

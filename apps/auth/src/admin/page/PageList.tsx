@@ -1,7 +1,7 @@
 import ComponentRepresentation from "@keycloak/keycloak-admin-client/lib/defs/componentRepresentation";
 import type { ComponentQuery } from "@keycloak/keycloak-admin-client/lib/resources/components";
 import { getErrorDescription, getErrorMessage, useFetch } from "../../shared/keycloak-ui-shared";
-import { toast } from "@merge/ui/components/sonner";
+import { toast } from "sonner";
 import { Button } from "@merge/ui/components/button";
 import { get } from "lodash-es";
 import { useMemo, useState } from "react";
@@ -17,7 +17,7 @@ import {
     DataTableRowActions,
     type ColumnDef,
     type Row
-} from "@merge/ui/components/table";
+} from "@/admin/components/data-table";
 import {
     Empty,
     EmptyContent,

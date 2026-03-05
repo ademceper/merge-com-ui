@@ -20,10 +20,10 @@ export default function LinkIdpAction(props: PageProps<Extract<KcContext, { page
 
                 <form action={url.loginAction} method="post" className="pt-2">
                     <div className="flex flex-col gap-3">
-                        <Button type="submit" name="continue" id="kc-continue" size="lg" className="w-full">
+                        <Button type="submit" name="continue" id="kc-continue" size="xl" className="w-full">
                             {msgStr("doContinue")}
                         </Button>
-                        <Button type="submit" name="cancel-aia" id="kc-cancel" value="true" variant="secondary" size="lg" className="w-full">
+                        <Button type="submit" name="cancel-aia" id="kc-cancel" value="true" variant="secondary" size="xl" className="w-full">
                             {msgStr("doCancel")}
                         </Button>
                     </div>

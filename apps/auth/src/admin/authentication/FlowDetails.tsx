@@ -2,7 +2,7 @@ import AuthenticationFlowRepresentation from "@keycloak/keycloak-admin-client/li
 import type { AuthenticationProviderRepresentation } from "@keycloak/keycloak-admin-client/lib/defs/authenticatorConfigRepresentation";
 import AuthenticatorConfigRepresentation from "@keycloak/keycloak-admin-client/lib/defs/authenticatorConfigRepresentation";
 import { getErrorDescription, getErrorMessage, useFetch } from "../../shared/keycloak-ui-shared";
-import { toast } from "@merge/ui/components/sonner";
+import { toast } from "sonner";
 import { Button } from "@merge/ui/components/button";
 import { Label } from "@merge/ui/components/label";
 import {
@@ -11,7 +11,7 @@ import {
 import {
     Table,
     TableBody,
-} from "@merge/ui/components/table";
+} from "@/admin/components/data-table";
 import { Graph, Table as TableIconPhosphor } from "@phosphor-icons/react";
 import { useState } from "react";
 import { Trans, useTranslation } from "react-i18next";

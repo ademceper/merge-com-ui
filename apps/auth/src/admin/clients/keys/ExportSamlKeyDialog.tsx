@@ -6,7 +6,7 @@ import { FormProvider, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { useAdminClient } from "../../admin-client";
 import { getErrorDescription, getErrorMessage } from "../../../shared/keycloak-ui-shared";
-import { toast } from "@merge/ui/components/sonner";
+import { toast } from "sonner";
 import { useRealm } from "../../context/realm-context/RealmContext";
 import { KeyForm, getFileExtension } from "./GenerateKeyDialog";
 import { KeyTypes } from "./SamlKeys";

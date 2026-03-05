@@ -3,9 +3,9 @@ import IdentityProviderRepresentation, {
     IdentityProviderType
 } from "@keycloak/keycloak-admin-client/lib/defs/identityProviderRepresentation";
 import { getErrorDescription, getErrorMessage, KeycloakSpinner, ScrollForm, useFetch } from "../../../shared/keycloak-ui-shared";
-import { DataTable, DataTableRowActions, type ColumnDef } from "@merge/ui/components/table";
+import { DataTable, DataTableRowActions, type ColumnDef } from "@/admin/components/data-table";
 import { Empty, EmptyContent, EmptyDescription, EmptyHeader, EmptyTitle } from "@merge/ui/components/empty";
-import { toast } from "@merge/ui/components/sonner";
+import { toast } from "sonner";
 import { Button } from "@merge/ui/components/button";
 import { Separator } from "@merge/ui/components/separator";
 import { DropdownMenuItem } from "@merge/ui/components/dropdown-menu";

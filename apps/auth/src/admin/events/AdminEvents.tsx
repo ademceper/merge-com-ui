@@ -3,7 +3,7 @@ import {
     DataTable,
     DataTableRowActions,
     type ColumnDef
-} from "@merge/ui/components/table";
+} from "@/admin/components/data-table";
 import {
     Dialog,
     DialogContent,
@@ -18,7 +18,7 @@ import {
     TableHead,
     TableHeader,
     TableRow
-} from "@merge/ui/components/table";
+} from "@/admin/components/data-table";
 import { Button } from "@merge/ui/components/button";
 import { Checkbox } from "@merge/ui/components/checkbox";
 import { Input } from "@merge/ui/components/input";

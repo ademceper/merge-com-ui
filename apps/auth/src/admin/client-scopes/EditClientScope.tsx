@@ -5,7 +5,7 @@ import type { ProtocolMapperTypeRepresentation } from "@keycloak/keycloak-admin-
 import { getErrorDescription, getErrorMessage, KeycloakSpinner,
     useFetch,
     useHelp } from "../../shared/keycloak-ui-shared";
-import { toast } from "@merge/ui/components/sonner";
+import { toast } from "sonner";
 import { Alert, AlertTitle } from "@merge/ui/components/alert";
 import { DropdownMenuItem } from "@merge/ui/components/dropdown-menu";
 import { useState } from "react";

@@ -8,7 +8,7 @@ import type { ComponentProps } from "../dynamic/components";
 import { MultiValuedListComponent } from "../dynamic/MultivaluedListComponent";
 
 type IdentityProviderSelectProps = ComponentProps & {
-    variant?: `${SelectVariant}`;
+    variant?: string;
     identityProviderType?: IdentityProviderType;
     realmOnly?: boolean;
 };

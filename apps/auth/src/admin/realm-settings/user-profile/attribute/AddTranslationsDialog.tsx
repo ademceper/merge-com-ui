@@ -26,8 +26,8 @@ import {
     TableHead,
     TableHeader,
     TableRow
-} from "@merge/ui/components/table";
-import { TablePagination } from "@merge/ui/components/pagination";
+} from "@/admin/components/data-table";
+import { TablePagination } from "@/admin/components/table-pagination";
 import { useState } from "react";
 import { useFormContext } from "react-hook-form";
 import { Trans, useTranslation } from "react-i18next";

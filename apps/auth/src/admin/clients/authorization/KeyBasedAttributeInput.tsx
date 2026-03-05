@@ -15,7 +15,7 @@ import {
     TableHead,
     TableHeader,
     TableRow,
-} from "@merge/ui/components/table";
+} from "@/admin/components/data-table";
 import { MinusCircle, Plus } from "@phosphor-icons/react";
 import { camelCase } from "lodash-es";
 import { useEffect, useMemo, useState } from "react";

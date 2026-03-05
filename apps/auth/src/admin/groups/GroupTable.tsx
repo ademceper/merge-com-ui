@@ -15,14 +15,14 @@ import {
     DataTableRowActions,
     type ColumnDef,
     type Row
-} from "@merge/ui/components/table";
+} from "@/admin/components/data-table";
 import { ArrowsDownUp, CopySimple, PencilSimple, Plus, Trash } from "@phosphor-icons/react";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Link, useLocation } from "react-router-dom";
 import { useAdminClient } from "../admin-client";
 import { getErrorDescription, getErrorMessage, useFetch } from "../../shared/keycloak-ui-shared";
-import { toast } from "@merge/ui/components/sonner";
+import { toast } from "sonner";
 import { useAccess } from "../context/access/Access";
 import { GroupsModal } from "./GroupsModal";
 import { useSubGroups } from "./SubGroupsContext";

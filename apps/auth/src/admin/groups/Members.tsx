@@ -2,7 +2,7 @@ import type GroupRepresentation from "@keycloak/keycloak-admin-client/lib/defs/g
 import type UserRepresentation from "@keycloak/keycloak-admin-client/lib/defs/userRepresentation";
 import { SubGroupQuery } from "@keycloak/keycloak-admin-client/lib/resources/groups";
 import { getErrorDescription, getErrorMessage, useFetch } from "../../shared/keycloak-ui-shared";
-import { DataTable, DataTableRowActions } from "@merge/ui/components/table";
+import { DataTable, DataTableRowActions } from "@/admin/components/data-table";
 import {
     Empty,
     EmptyContent,
@@ -10,7 +10,7 @@ import {
     EmptyHeader,
     EmptyTitle
 } from "@merge/ui/components/empty";
-import { toast } from "@merge/ui/components/sonner";
+import { toast } from "sonner";
 import { Button } from "@merge/ui/components/button";
 import { Checkbox } from "@merge/ui/components/checkbox";
 import { Label } from "@merge/ui/components/label";

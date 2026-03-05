@@ -16,7 +16,7 @@ import { useState } from "react";
 import { useAdminClient } from "../admin-client";
 import { useNavigate } from "react-router-dom";
 import { getErrorDescription, getErrorMessage } from "../../shared/keycloak-ui-shared";
-import { toast } from "@merge/ui/components/sonner";
+import { toast } from "sonner";
 import { Controller, useFormContext, useWatch } from "react-hook-form";
 import { toOrganizations } from "./routes/Organizations";
 import { useRealm } from "../context/realm-context/RealmContext";

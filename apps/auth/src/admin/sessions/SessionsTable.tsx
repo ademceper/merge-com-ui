@@ -6,7 +6,7 @@ import {
     DataTable,
     DataTableRowActions,
     type ColumnDef
-} from "@merge/ui/components/table";
+} from "@/admin/components/data-table";
 import {
     Tooltip,
     TooltipContent,
@@ -19,7 +19,7 @@ import { useTranslation } from "react-i18next";
 import { Link, useMatch, useNavigate } from "react-router-dom";
 import { useAdminClient } from "../admin-client";
 import { getErrorDescription, getErrorMessage } from "../../shared/keycloak-ui-shared";
-import { toast } from "@merge/ui/components/sonner";
+import { toast } from "sonner";
 import { useConfirmDialog } from "../components/confirm-dialog/ConfirmDialog";
 import { useRealm } from "../context/realm-context/RealmContext";
 import { useWhoAmI } from "../context/whoami/WhoAmI";

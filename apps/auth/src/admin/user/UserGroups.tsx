@@ -10,11 +10,11 @@ import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useAdminClient } from "../admin-client";
 import { getErrorDescription, getErrorMessage, useFetch } from "../../shared/keycloak-ui-shared";
-import { toast } from "@merge/ui/components/sonner";
+import { toast } from "sonner";
 import { useConfirmDialog } from "../components/confirm-dialog/ConfirmDialog";
 import { GroupPath } from "../components/group/GroupPath";
 import { GroupPickerDialog } from "../components/group/GroupPickerDialog";
-import { DataTable } from "@merge/ui/components/table";
+import { DataTable } from "@/admin/components/data-table";
 import {
     Empty,
     EmptyContent,

@@ -24,10 +24,13 @@ type MultiSelectFieldProps = {
     labelIcon?: string | React.ReactNode;
     options: MultiSelectOption[];
     defaultValue?: string[];
-    rules?: { required?: unknown };
+    rules?: Record<string, unknown>;
     placeholderText?: string;
     isDisabled?: boolean;
+    className?: string;
 };
+
+export type { MultiSelectFieldProps };
 
 export function MultiSelectField({
     id,
@@ -56,7 +59,7 @@ export function MultiSelectField({
                 name={name}
                 control={control}
                 defaultValue={defaultValue}
-                rules={rules}
+                rules={rules as any}
                 render={({ field }) => (
                     <Popover open={open} onOpenChange={setOpen}>
                         <PopoverTrigger asChild>

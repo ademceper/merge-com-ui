@@ -2,7 +2,7 @@ import {
     TableHead,
     TableHeader,
     TableRow,
-} from "@merge/ui/components/table";
+} from "@/admin/components/data-table";
 import { DotsSixVertical } from "@phosphor-icons/react";
 import { useTranslation } from "react-i18next";
 

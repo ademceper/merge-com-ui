@@ -2,7 +2,7 @@ import type { UserProfileConfig } from "@keycloak/keycloak-admin-client/lib/defs
 import { getErrorDescription, getErrorMessage, createNamedContext,
     useFetch,
     useRequiredContext } from "../../../shared/keycloak-ui-shared";
-import { toast } from "@merge/ui/components/sonner";
+import { toast } from "sonner";
 import { PropsWithChildren, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useAdminClient } from "../../admin-client";

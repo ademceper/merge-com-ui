@@ -18,8 +18,8 @@ import {
     TableHead,
     TableHeader,
     TableRow,
-} from "@merge/ui/components/table";
-import { TablePagination } from "@merge/ui/components/pagination";
+} from "@/admin/components/data-table";
+import { TablePagination } from "@/admin/components/table-pagination";
 import { CaretDown, CaretRight, DotsThreeVertical } from "@phosphor-icons/react";
 import { Fragment, useState } from "react";
 import { useTranslation } from "react-i18next";

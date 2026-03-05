@@ -10,7 +10,7 @@ import {
     SelectTrigger,
     SelectValue
 } from "@merge/ui/components/select";
-import { toast } from "@merge/ui/components/sonner";
+import { toast } from "sonner";
 import { Input } from "@merge/ui/components/input";
 import { Textarea } from "@merge/ui/components/textarea";
 import { Switch } from "@merge/ui/components/switch";

@@ -6,7 +6,7 @@ import { getErrorDescription, getErrorMessage, FormErrorText,
     TextAreaControl,
     TextControl,
     useFetch } from "../../../shared/keycloak-ui-shared";
-import { toast } from "@merge/ui/components/sonner";
+import { toast } from "sonner";
 import { Button } from "@merge/ui/components/button";
 import { Switch } from "@merge/ui/components/switch";
 import { Label } from "@merge/ui/components/label";

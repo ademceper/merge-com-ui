@@ -1,7 +1,7 @@
 import type IdentityProviderRepresentation from "@keycloak/keycloak-admin-client/lib/defs/identityProviderRepresentation";
 import type { IdentityProvidersQuery } from "@keycloak/keycloak-admin-client/lib/resources/identityProviders";
 import { getErrorDescription, getErrorMessage } from "../../shared/keycloak-ui-shared";
-import { toast } from "@merge/ui/components/sonner";
+import { toast } from "sonner";
 import { Badge } from "@merge/ui/components/badge";
 import { Button } from "@merge/ui/components/button";
 import { Checkbox } from "@merge/ui/components/checkbox";
@@ -16,8 +16,8 @@ import {
 import {
     DataTableRowActions,
     type ColumnDef,
-} from "@merge/ui/components/table";
-import { DraggableTableRows } from "@merge/ui/components/table-draggable-rows";
+} from "@/admin/components/data-table";
+import { DraggableTableRows } from "@/admin/components/table-draggable-rows";
 import { Input } from "@merge/ui/components/input";
 import { CardTitle } from "@merge/ui/components/card";
 import {

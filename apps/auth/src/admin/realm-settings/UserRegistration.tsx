@@ -12,7 +12,7 @@ import {
     getErrorDescription,
     getErrorMessage,
 } from "../../shared/keycloak-ui-shared";
-import { toast } from "@merge/ui/components/sonner";
+import { toast } from "sonner";
 import { FormPanel } from "../../shared/keycloak-ui-shared";
 import { RoleMapping } from "../components/role-mapping/RoleMapping";
 import { useRealm } from "../context/realm-context/RealmContext";
