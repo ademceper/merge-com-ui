@@ -1,13 +1,10 @@
 "use client"
 
 import { useTheme } from "next-themes"
-import { Toaster as Sonner, toast, type ToasterProps } from "sonner"
-
+import { Toaster as Sonner, type ToasterProps } from "sonner"
 import { CheckCircleIcon, InfoIcon, WarningIcon, XCircleIcon, SpinnerIcon } from "@phosphor-icons/react"
 
-export { toast }
-
-export const Toaster = ({ ...props }: ToasterProps) => {
+const Toaster = ({ ...props }: ToasterProps) => {
   const { theme = "system" } = useTheme()
 
   return (
@@ -48,3 +45,5 @@ export const Toaster = ({ ...props }: ToasterProps) => {
     />
   )
 }
+
+export { Toaster }

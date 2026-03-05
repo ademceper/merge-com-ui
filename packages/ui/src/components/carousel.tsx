@@ -9,7 +9,7 @@ import { cn } from "@merge/ui/lib/utils"
 import { Button } from "@merge/ui/components/button"
 import { CaretLeftIcon, CaretRightIcon } from "@phosphor-icons/react"
 
-export type CarouselApi = UseEmblaCarouselType[1]
+type CarouselApi = UseEmblaCarouselType[1]
 type UseCarouselParameters = Parameters<typeof useEmblaCarousel>
 type CarouselOptions = UseCarouselParameters[0]
 type CarouselPlugin = UseCarouselParameters[1]
@@ -32,7 +32,7 @@ type CarouselContextProps = {
 
 const CarouselContext = React.createContext<CarouselContextProps | null>(null)
 
-export function useCarousel() {
+function useCarousel() {
   const context = React.useContext(CarouselContext)
 
   if (!context) {
@@ -42,7 +42,7 @@ export function useCarousel() {
   return context
 }
 
-export function Carousel({
+function Carousel({
   orientation = "horizontal",
   opts,
   setApi,
@@ -132,7 +132,7 @@ export function Carousel({
   )
 }
 
-export function CarouselContent({ className, ...props }: React.ComponentProps<"div">) {
+function CarouselContent({ className, ...props }: React.ComponentProps<"div">) {
   const { carouselRef, orientation } = useCarousel()
 
   return (
@@ -153,7 +153,7 @@ export function CarouselContent({ className, ...props }: React.ComponentProps<"d
   )
 }
 
-export function CarouselItem({ className, ...props }: React.ComponentProps<"div">) {
+function CarouselItem({ className, ...props }: React.ComponentProps<"div">) {
   const { orientation } = useCarousel()
 
   return (
@@ -171,7 +171,7 @@ export function CarouselItem({ className, ...props }: React.ComponentProps<"div"
   )
 }
 
-export function CarouselPrevious({
+function CarouselPrevious({
   className,
   variant = "outline",
   size = "icon-sm",
@@ -185,7 +185,7 @@ export function CarouselPrevious({
       variant={variant}
       size={size}
       className={cn(
-        "rounded-full absolute touch-manipulation",
+        "absolute touch-manipulation rounded-full",
         orientation === "horizontal"
           ? "top-1/2 -left-12 -translate-y-1/2"
           : "-top-12 left-1/2 -translate-x-1/2 rotate-90",
@@ -195,14 +195,13 @@ export function CarouselPrevious({
       onClick={scrollPrev}
       {...props}
     >
-      <CaretLeftIcon
-      />
+      <CaretLeftIcon />
       <span className="sr-only">Previous slide</span>
     </Button>
   )
 }
 
-export function CarouselNext({
+function CarouselNext({
   className,
   variant = "outline",
   size = "icon-sm",
@@ -216,7 +215,7 @@ export function CarouselNext({
       variant={variant}
       size={size}
       className={cn(
-        "rounded-full absolute touch-manipulation",
+        "absolute touch-manipulation rounded-full",
         orientation === "horizontal"
           ? "top-1/2 -right-12 -translate-y-1/2"
           : "-bottom-12 left-1/2 -translate-x-1/2 rotate-90",
@@ -226,9 +225,18 @@ export function CarouselNext({
       onClick={scrollNext}
       {...props}
     >
-      <CaretRightIcon
-      />
+      <CaretRightIcon />
       <span className="sr-only">Next slide</span>
     </Button>
   )
+}
+
+export {
+  type CarouselApi,
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselPrevious,
+  CarouselNext,
+  useCarousel,
 }

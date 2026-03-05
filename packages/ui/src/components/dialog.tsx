@@ -6,69 +6,48 @@ import { Dialog as DialogPrimitive } from "radix-ui"
 import { cn } from "@merge/ui/lib/utils"
 import { Button } from "@merge/ui/components/button"
 import { XIcon } from "@phosphor-icons/react"
-import { useIsMobile } from "@merge/ui/hooks/use-mobile"
-import {
-  Drawer as DrawerPrimitive,
-  DrawerClose as DrawerClosePrimitive,
-  DrawerContent as DrawerContentBase,
-  DrawerDescription as DrawerDescriptionBase,
-  DrawerFooter as DrawerFooterBase,
-  DrawerHeader as DrawerHeaderBase,
-  DrawerTitle as DrawerTitleBase,
-  DrawerTrigger as DrawerTriggerPrimitive,
-} from "@merge/ui/components/drawer"
-import { Separator } from "@merge/ui/components/separator"
 
-export function Dialog({
+function Dialog({
   ...props
 }: React.ComponentProps<typeof DialogPrimitive.Root>) {
-  const isMobile = useIsMobile()
-  if (isMobile) {
-    return <DrawerPrimitive data-slot="dialog" {...props} />
-  }
   return <DialogPrimitive.Root data-slot="dialog" {...props} />
 }
 
-export function DialogTrigger({
+function DialogTrigger({
   ...props
 }: React.ComponentProps<typeof DialogPrimitive.Trigger>) {
-  const isMobile = useIsMobile()
-  if (isMobile) {
-    return <DrawerTriggerPrimitive data-slot="dialog-trigger" {...props} />
-  }
   return <DialogPrimitive.Trigger data-slot="dialog-trigger" {...props} />
 }
 
-export function DialogPortal({
+function DialogPortal({
   ...props
 }: React.ComponentProps<typeof DialogPrimitive.Portal>) {
   return <DialogPrimitive.Portal data-slot="dialog-portal" {...props} />
 }
 
-export function DialogClose({
+function DialogClose({
   ...props
 }: React.ComponentProps<typeof DialogPrimitive.Close>) {
-  const isMobile = useIsMobile()
-  if (isMobile) {
-    return <DrawerClosePrimitive data-slot="dialog-close" {...props} />
-  }
   return <DialogPrimitive.Close data-slot="dialog-close" {...props} />
 }
 
-export function DialogOverlay({
+function DialogOverlay({
   className,
   ...props
 }: React.ComponentProps<typeof DialogPrimitive.Overlay>) {
   return (
     <DialogPrimitive.Overlay
       data-slot="dialog-overlay"
-      className={cn("data-open:animate-in data-closed:animate-out data-closed:fade-out-0 data-open:fade-in-0 bg-black/10 duration-100 supports-backdrop-filter:backdrop-blur-xs fixed inset-0 isolate z-50", className)}
+      className={cn(
+        "fixed inset-0 isolate z-50 bg-black/10 duration-100 supports-backdrop-filter:backdrop-blur-xs data-open:animate-in data-open:fade-in-0 data-closed:animate-out data-closed:fade-out-0",
+        className
+      )}
       {...props}
     />
   )
 }
 
-export function DialogContent({
+function DialogContent({
   className,
   children,
   showCloseButton = true,
@@ -76,100 +55,47 @@ export function DialogContent({
 }: React.ComponentProps<typeof DialogPrimitive.Content> & {
   showCloseButton?: boolean
 }) {
-  const isMobile = useIsMobile()
-  if (isMobile) {
-    const childArray = React.Children.toArray(children as React.ReactNode)
-    const hasHeader = childArray.length >= 2
-    const hasFooter = childArray.length >= 3
-    const headerChild = hasHeader ? childArray[0] : null
-    const footerChild = hasFooter ? childArray[childArray.length - 1] : null
-    const contentChildren =
-      childArray.length === 1
-        ? childArray
-        : childArray.length === 2
-          ? childArray.slice(1)
-          : childArray.slice(1, -1)
-
-    return (
-      <DrawerContentBase
-        data-slot="dialog-content"
-        contentClassName="px-4 pt-4 pb-4 border-b-0 [&_input]:focus-visible:ring-inset"
-        className={cn("gap-0 pt-4 pb-0", className)}
-        {...props}
-      >
-        {headerChild != null && headerChild}
-        {contentChildren}
-        {footerChild != null && footerChild}
-      </DrawerContentBase>
-    )
-  }
-  const childArray = React.Children.toArray(children as React.ReactNode)
-  const hasHeader = childArray.length >= 2
-  const hasFooter = childArray.length >= 3
-  const headerChild = hasHeader ? childArray[0] : null
-  const footerChild = hasFooter ? childArray[childArray.length - 1] : null
-  const contentChildren =
-    childArray.length === 1
-      ? childArray
-      : childArray.length === 2
-        ? childArray.slice(1)
-        : childArray.slice(1, -1)
-
   return (
     <DialogPortal>
       <DialogOverlay />
       <DialogPrimitive.Content
         data-slot="dialog-content"
         className={cn(
-          "bg-background data-open:animate-in data-closed:animate-out data-closed:fade-out-0 data-open:fade-in-0 data-closed:zoom-out-95 data-open:zoom-in-95 ring-foreground/10 flex min-h-0 max-h-[90vh] max-w-[calc(100%-2rem)] flex-col overflow-hidden rounded-xl text-sm ring-1 duration-100 sm:max-w-sm fixed top-1/2 left-1/2 z-50 w-full -translate-x-1/2 -translate-y-1/2",
+          "fixed top-1/2 left-1/2 z-50 grid w-full max-w-[calc(100%-2rem)] -translate-x-1/2 -translate-y-1/2 gap-4 rounded-xl bg-background p-4 text-sm ring-1 ring-foreground/10 duration-100 outline-none sm:max-w-sm data-open:animate-in data-open:fade-in-0 data-open:zoom-in-95 data-closed:animate-out data-closed:fade-out-0 data-closed:zoom-out-95",
           className
         )}
         {...props}
       >
+        {children}
         {showCloseButton && (
           <DialogPrimitive.Close data-slot="dialog-close" asChild>
-            <Button variant="ghost" className="absolute top-2 right-2 z-10 size-7 rounded-full" size="icon-xs">
-              <XIcon />
+            <Button
+              variant="ghost"
+              className="absolute top-2 right-2"
+              size="icon-sm"
+            >
+              <XIcon
+              />
               <span className="sr-only">Close</span>
             </Button>
           </DialogPrimitive.Close>
-        )}
-        {headerChild != null && <div className="shrink-0 px-4 pt-4">{headerChild}</div>}
-        <div className="min-h-0 flex-auto overflow-y-auto overflow-x-hidden px-4 pt-4 pb-4">
-          {contentChildren}
-        </div>
-        {footerChild != null && (
-          <div className="shrink-0 border-t border-border bg-background">{footerChild}</div>
         )}
       </DialogPrimitive.Content>
     </DialogPortal>
   )
 }
 
-export function DialogHeader({ className, ...props }: React.ComponentProps<"div">) {
-  const isMobile = useIsMobile()
-  if (isMobile) {
-    return (
-      <DrawerHeaderBase
-        data-slot="dialog-header"
-        className={cn("gap-2 flex flex-col px-4", className)}
-        {...props}
-      />
-    )
-  }
+function DialogHeader({ className, ...props }: React.ComponentProps<"div">) {
   return (
     <div
       data-slot="dialog-header"
-      className={cn("gap-2 flex flex-col", className)}
+      className={cn("flex flex-col gap-2", className)}
       {...props}
-    >
-      {props.children as React.ReactNode}
-      <Separator />
-    </div>
+    />
   )
 }
 
-export function DialogFooter({
+function DialogFooter({
   className,
   showCloseButton = false,
   children,
@@ -177,59 +103,29 @@ export function DialogFooter({
 }: React.ComponentProps<"div"> & {
   showCloseButton?: boolean
 }) {
-  const isMobile = useIsMobile()
-  if (isMobile) {
-    return (
-      <DrawerFooterBase
-        data-slot="dialog-footer"
-        className={cn(
-          "bg-muted/50 border-t border-border px-4 pt-3 pb-3 flex flex-col gap-2 [&_[data-slot=button]]:h-8 [&_[data-slot=button]]:min-h-8",
-          className
-        )}
-        {...props}
-      >
-        {children as React.ReactNode}
-        {showCloseButton && (
-          <DrawerClosePrimitive asChild>
-            <Button variant="outline" size="sm">Close</Button>
-          </DrawerClosePrimitive>
-        )}
-      </DrawerFooterBase>
-    )
-  }
   return (
     <div
       data-slot="dialog-footer"
       className={cn(
-        "bg-muted/50 rounded-b-xl border-t border-border px-4 pt-3 pb-3 flex flex-col-reverse gap-2 sm:flex-row sm:justify-between [&_[data-slot=button]]:h-8 [&_[data-slot=button]]:min-h-8",
+        "-mx-4 -mb-4 flex flex-col-reverse gap-2 rounded-b-xl border-t bg-muted/50 p-4 sm:flex-row sm:justify-end",
         className
       )}
       {...props}
     >
-      {children as React.ReactNode}
+      {children}
       {showCloseButton && (
         <DialogPrimitive.Close asChild>
-          <Button variant="outline" size="sm">Close</Button>
+          <Button variant="outline">Close</Button>
         </DialogPrimitive.Close>
       )}
     </div>
   )
 }
 
-export function DialogTitle({
+function DialogTitle({
   className,
   ...props
 }: React.ComponentProps<typeof DialogPrimitive.Title>) {
-  const isMobile = useIsMobile()
-  if (isMobile) {
-    return (
-      <DrawerTitleBase
-        data-slot="dialog-title"
-        className={cn("text-base leading-none font-medium", className)}
-        {...props}
-      />
-    )
-  }
   return (
     <DialogPrimitive.Title
       data-slot="dialog-title"
@@ -239,25 +135,31 @@ export function DialogTitle({
   )
 }
 
-export function DialogDescription({
+function DialogDescription({
   className,
   ...props
 }: React.ComponentProps<typeof DialogPrimitive.Description>) {
-  const isMobile = useIsMobile()
-  if (isMobile) {
-    return (
-      <DrawerDescriptionBase
-        data-slot="dialog-description"
-        className={cn("text-muted-foreground *:[a]:hover:text-foreground text-sm *:[a]:underline *:[a]:underline-offset-3", className)}
-        {...props}
-      />
-    )
-  }
   return (
     <DialogPrimitive.Description
       data-slot="dialog-description"
-      className={cn("text-muted-foreground *:[a]:hover:text-foreground text-sm *:[a]:underline *:[a]:underline-offset-3", className)}
+      className={cn(
+        "text-sm text-muted-foreground *:[a]:underline *:[a]:underline-offset-3 *:[a]:hover:text-foreground",
+        className
+      )}
       {...props}
     />
   )
+}
+
+export {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogOverlay,
+  DialogPortal,
+  DialogTitle,
+  DialogTrigger,
 }

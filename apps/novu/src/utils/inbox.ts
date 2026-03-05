@@ -1,5 +1,5 @@
 import { cva } from 'class-variance-authority';
-import { cn } from './ui';
+import { cn } from '@merge/ui/lib/utils';
 
 export const inboxButtonVariants = cva(
   cn(
