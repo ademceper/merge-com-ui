@@ -1,6 +1,6 @@
 import { UseQueryOptions, useQuery } from '@tanstack/react-query';
 import { getSubscriberPreferences } from '@/api/subscribers';
-import { useOrganization } from '@merge/auth';
+import { useOrganization } from '@merge-rd/auth';
 import { useEnvironment } from '@/context/environment/hooks';
 import { QueryKeys } from '@/utils/query-keys';
 

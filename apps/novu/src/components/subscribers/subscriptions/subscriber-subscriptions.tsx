@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { TopicSubscription } from '@/api/topics';
 import { ConfirmationModal } from '@/components/confirmation-modal';
 import { ContextFilter } from '@/components/contexts/context-filter';
-import { Skeleton } from '@merge/ui/components/skeleton';
+import { Skeleton } from '@merge-rd/ui/components/skeleton';
 import { showErrorToast, showSuccessToast } from '@/components/primitives/sonner-helpers';
 import { SidebarContent } from '@/components/side-navigation/sidebar';
 import { TopicDrawer } from '@/components/topics/topic-drawer';

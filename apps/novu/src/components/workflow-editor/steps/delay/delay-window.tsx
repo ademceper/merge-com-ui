@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import { FieldValues, useFormContext } from 'react-hook-form';
 
 import { FormLabel } from '@/components/primitives/form/form';
-import { TabsContent, TabsList, TabsTrigger } from '@merge/ui/components/tabs';
+import { TabsContent, TabsList, TabsTrigger } from '@merge-rd/ui/components/tabs';
 import { useSaveForm } from '@/components/workflow-editor/steps/save-form-context';
 import { useWorkflow } from '@/components/workflow-editor/workflow-provider';
 import { useEnvironment } from '@/context/environment/hooks';

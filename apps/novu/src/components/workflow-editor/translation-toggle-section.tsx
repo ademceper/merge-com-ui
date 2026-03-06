@@ -10,7 +10,7 @@ import { useFetchOrganizationSettings } from '@/hooks/use-fetch-organization-set
 import { LocalizationResourceEnum } from '@/types/translations';
 import { buildRoute, ROUTES } from '@/utils/routes';
 import { Badge } from '@/components/primitives/badge';
-import { Button } from '@merge/ui/components/button';
+import { Button } from '@merge-rd/ui/components/button';
 
 interface TranslationToggleSectionProps {
   value: boolean;

@@ -1,6 +1,6 @@
 import { HelpItem, SelectField, TextControl } from "../../../shared/keycloak-ui-shared";
 import { Controller, FormProvider, UseFormReturn } from "react-hook-form";
-import { Switch } from "@merge/ui/components/switch";
+import { Switch } from "@merge-rd/ui/components/switch";
 import { FormLabel } from "../../../shared/keycloak-ui-shared";
 import { useTranslation } from "react-i18next";
 import { FormAccess } from "../../components/form/FormAccess";

@@ -12,8 +12,8 @@ import {
   DropdownMenuGroup,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from '@merge/ui/components/dropdown-menu';
-import { Skeleton } from '@merge/ui/components/skeleton';
+} from '@merge-rd/ui/components/dropdown-menu';
+import { Skeleton } from '@merge-rd/ui/components/skeleton';
 import { TableCell, TableRow } from '@/components/primitives/table';
 import { Tooltip, TooltipContent, TooltipPortal, TooltipTrigger } from '@/components/primitives/tooltip';
 import { TimeDisplayHoverCard } from '@/components/time-display-hover-card';
@@ -22,7 +22,7 @@ import { useEnvironment } from '@/context/environment/hooks';
 import { useHasPermission } from '@/hooks/use-has-permission';
 import { formatDateSimple } from '@/utils/format-date';
 import { buildRoute, ROUTES } from '@/utils/routes';
-import { cn } from '@merge/ui/lib/utils';
+import { cn } from '@merge-rd/ui/lib/utils';
 import { LocalizationResourceEnum } from '../../types/translations';
 import { TranslationStatus } from './translation-status';
 

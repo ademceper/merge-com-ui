@@ -1,4 +1,4 @@
-import { useUser } from '@merge/auth';
+import { useUser } from '@merge-rd/auth';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { motion } from 'motion/react';
 import { RiCloseLine } from 'react-icons/ri';

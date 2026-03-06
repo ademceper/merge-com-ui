@@ -4,9 +4,9 @@ import {
     SelectItem,
     SelectTrigger,
     SelectValue
-} from "@merge/ui/components/select";
-import { Popover, PopoverContent, PopoverTrigger } from "@merge/ui/components/popover";
-import { Button } from "@merge/ui/components/button";
+} from "@merge-rd/ui/components/select";
+import { Popover, PopoverContent, PopoverTrigger } from "@merge-rd/ui/components/popover";
+import { Button } from "@merge-rd/ui/components/button";
 import { useState } from "react";
 import { Controller } from "react-hook-form";
 import { OptionLabel, Options, UserProfileFieldProps } from "./UserProfileFields";

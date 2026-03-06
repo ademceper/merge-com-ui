@@ -1,7 +1,7 @@
 import { StepTypeEnum } from '@novu/shared';
 import React from 'react';
 import { RiAddFill } from 'react-icons/ri';
-import { Card, CardContent } from '@merge/ui/components/card';
+import { Card, CardContent } from '@merge-rd/ui/components/card';
 import { StepType } from '../step-preview-hover-card';
 import { WorkflowStep } from '../workflow-step';
 

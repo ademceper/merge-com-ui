@@ -1,5 +1,5 @@
 import { Outlet } from 'react-router-dom';
-import { SidebarInset, SidebarPage, SidebarProvider } from '@merge/ui/components/sidebar';
+import { SidebarInset, SidebarPage, SidebarProvider } from '@merge-rd/ui/components/sidebar';
 import { HeaderNavigation } from '@/components/header-navigation/header-navigation';
 import { NovuAppSidebar } from '@/components/novu-app-sidebar';
 import { PageHeaderProvider, usePageHeaderContext } from '@/context/page-header';

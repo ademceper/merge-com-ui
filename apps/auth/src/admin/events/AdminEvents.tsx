@@ -10,7 +10,7 @@ import {
     DialogHeader,
     DialogTitle,
     DialogFooter
-} from "@merge/ui/components/dialog";
+} from "@merge-rd/ui/components/dialog";
 import {
     Table,
     TableBody,
@@ -19,16 +19,16 @@ import {
     TableHeader,
     TableRow
 } from "@/admin/components/data-table";
-import { Button } from "@merge/ui/components/button";
-import { Checkbox } from "@merge/ui/components/checkbox";
-import { Input } from "@merge/ui/components/input";
-import { Label } from "@merge/ui/components/label";
-import { Badge } from "@merge/ui/components/badge";
+import { Button } from "@merge-rd/ui/components/button";
+import { Checkbox } from "@merge-rd/ui/components/checkbox";
+import { Input } from "@merge-rd/ui/components/input";
+import { Label } from "@merge-rd/ui/components/label";
+import { Badge } from "@merge-rd/ui/components/badge";
 import {
     Popover,
     PopoverContent,
     PopoverTrigger,
-} from "@merge/ui/components/popover";
+} from "@merge-rd/ui/components/popover";
 import { pickBy } from "lodash-es";
 import type { PropsWithChildren } from "react";
 import { useMemo, useState, useEffect } from "react";

@@ -6,9 +6,9 @@ import { Controller, ControllerProps, FieldPath, FieldValues, FormProvider, useF
 import { IconType } from 'react-icons';
 import { RiErrorWarningFill, RiInformation2Line, RiQuestionLine } from 'react-icons/ri';
 import { Input } from '@/components/primitives/input';
-import { Label } from '@merge/ui/components/label';
+import { Label } from '@merge-rd/ui/components/label';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/primitives/tooltip';
-import { cn } from '@merge/ui/lib/utils';
+import { cn } from '@merge-rd/ui/lib/utils';
 import { Hint, HintIcon } from '../hint';
 import { FormFieldContext, FormItemContext, useFormField } from './form-context';
 

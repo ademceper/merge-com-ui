@@ -1,11 +1,11 @@
-import { Badge } from "@merge/ui/components/badge";
-import { Checkbox } from "@merge/ui/components/checkbox";
+import { Badge } from "@merge-rd/ui/components/badge";
+import { Checkbox } from "@merge-rd/ui/components/checkbox";
 import {
     Popover,
     PopoverContent,
     PopoverTrigger,
-} from "@merge/ui/components/popover";
-import { Button } from "@merge/ui/components/button";
+} from "@merge-rd/ui/components/popover";
+import { Button } from "@merge-rd/ui/components/button";
 
 type CheckboxFilterOptions = {
     value: string;

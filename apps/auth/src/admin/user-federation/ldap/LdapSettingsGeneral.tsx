@@ -7,7 +7,7 @@ import {
     SelectItem,
     SelectTrigger,
     SelectValue
-} from "@merge/ui/components/select";
+} from "@merge-rd/ui/components/select";
 import { useEffect, useState } from "react";
 import { Controller, FormProvider, UseFormReturn } from "react-hook-form";
 import { useTranslation } from "react-i18next";

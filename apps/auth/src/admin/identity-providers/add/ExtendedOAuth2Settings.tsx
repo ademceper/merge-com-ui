@@ -1,5 +1,5 @@
 import { NumberControl, SelectField } from "../../../shared/keycloak-ui-shared";
-import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@merge/ui/components/collapsible";
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@merge-rd/ui/components/collapsible";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { SwitchField } from "../component/SwitchField";

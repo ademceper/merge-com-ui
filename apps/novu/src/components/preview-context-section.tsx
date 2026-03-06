@@ -1,8 +1,8 @@
 import { RiInformation2Line, RiRefreshLine } from 'react-icons/ri';
-import { AccordionContent, AccordionItem, AccordionTrigger } from '@merge/ui/components/accordion';
+import { AccordionContent, AccordionItem, AccordionTrigger } from '@merge-rd/ui/components/accordion';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/primitives/tooltip';
 import { ContextSearchEditor } from './context-search-editor';
-import { Button } from '@merge/ui/components/button';
+import { Button } from '@merge-rd/ui/components/button';
 import { ExternalLink } from './shared/external-link';
 import { ACCORDION_STYLES } from './workflow-editor/steps/constants/preview-context.constants';
 import { ContextSectionProps } from './workflow-editor/steps/types/preview-context.types';

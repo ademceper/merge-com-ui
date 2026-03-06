@@ -4,7 +4,7 @@ import { type ProviderVolumeDataPoint } from '../../../api/activity';
 import { ProviderIcon } from '../../integrations/components/provider-icon';
 
 import { ChartConfig, ChartContainer, ChartTooltip, NovuTooltip } from '@/components/primitives/chart';
-import { Skeleton } from '@merge/ui/components/skeleton';
+import { Skeleton } from '@merge-rd/ui/components/skeleton';
 import { ANALYTICS_TOOLTIPS } from '../constants/analytics-tooltips';
 import { createVolumeBasedHasDataChecker } from '../utils/chart-validation';
 import { generateDummyProviderData } from './chart-dummy-data';

@@ -2,7 +2,7 @@ import { IActivityJob, JobStatusEnum, StepTypeEnum } from '@novu/shared';
 import { useEffect, useRef, useState } from 'react';
 import { STEP_TYPE_TO_ICON } from '@/components/icons/utils';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/primitives/popover';
-import { cn } from '@merge/ui/lib/utils';
+import { cn } from '@merge-rd/ui/lib/utils';
 import { STATUS_STYLES } from '../constants';
 import { StatusPreviewCard } from './status-preview-card';
 

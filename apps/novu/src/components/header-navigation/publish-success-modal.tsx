@@ -2,8 +2,8 @@ import type { IEnvironment } from '@novu/shared';
 import { RiArrowRightSLine, RiCheckboxCircleFill, RiCloseFill } from 'react-icons/ri';
 import type { IEnvironmentPublishResponse } from '@/api/environments';
 import { useEnvironment } from '@/context/environment/hooks';
-import { Button } from '@merge/ui/components/button';
-import { Dialog, DialogClose, DialogContent, DialogDescription, DialogTitle } from '@merge/ui/components/dialog';
+import { Button } from '@merge-rd/ui/components/button';
+import { Dialog, DialogClose, DialogContent, DialogDescription, DialogTitle } from '@merge-rd/ui/components/dialog';
 import { VisuallyHidden } from '../primitives/visually-hidden';
 
 type PublishSuccessModalProps = {

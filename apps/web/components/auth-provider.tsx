@@ -1,6 +1,6 @@
 "use client";
 
-import { KeycloakProvider } from "@merge/auth";
+import { KeycloakProvider } from "@merge-rd/auth";
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   return (

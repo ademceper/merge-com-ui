@@ -4,7 +4,7 @@
     "baseUrl": ".",
     "paths": {
       "@/*": ["./*"],
-      "@merge/ui/*": ["../../packages/ui/src/*"]
+      "@merge-rd/ui/*": ["../../packages/ui/src/*"]
     },
     "plugins": [
       {

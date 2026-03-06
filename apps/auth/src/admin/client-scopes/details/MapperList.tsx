@@ -17,9 +17,9 @@ import {
     EmptyDescription,
     EmptyHeader,
     EmptyTitle
-} from "@merge/ui/components/empty";
-import { Button } from "@merge/ui/components/button";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@merge/ui/components/dropdown-menu";
+} from "@merge-rd/ui/components/empty";
+import { Button } from "@merge-rd/ui/components/button";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@merge-rd/ui/components/dropdown-menu";
 
 type MapperListProps = {
     model: ClientScopeRepresentation | ClientRepresentation;

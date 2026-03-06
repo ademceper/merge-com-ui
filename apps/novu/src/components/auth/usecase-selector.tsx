@@ -1,5 +1,5 @@
 import { ChannelTypeEnum } from '@novu/shared';
-import { Card, CardContent } from '@merge/ui/components/card';
+import { Card, CardContent } from '@merge-rd/ui/components/card';
 import { StepIndicator } from './shared';
 import { Usecase } from './usecases-list.utils';
 

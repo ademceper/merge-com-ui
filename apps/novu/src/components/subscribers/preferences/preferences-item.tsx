@@ -1,7 +1,7 @@
 import { ChannelTypeEnum } from '@novu/shared';
 import { STEP_TYPE_TO_ICON } from '@/components/icons/utils';
 import { Step } from '@/components/primitives/step';
-import { Switch } from '@merge/ui/components/switch';
+import { Switch } from '@merge-rd/ui/components/switch';
 import { STEP_TYPE_TO_COLOR } from '@/utils/color';
 import { capitalize } from '@/utils/string';
 

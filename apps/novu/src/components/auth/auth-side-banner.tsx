@@ -1,4 +1,4 @@
-import { Button } from '@merge/ui/components/button';
+import { Button } from '@merge-rd/ui/components/button';
 import { openInNewTab } from '@/utils/url';
 import { IS_ENTERPRISE, IS_SELF_HOSTED, SELF_HOSTED_UPGRADE_REDIRECT_URL } from '../../config';
 import { CircleCheck } from '../icons/circle-check';

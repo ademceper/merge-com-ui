@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import ReactConfetti from 'react-confetti';
 import { useLocation, useNavigate, useSearchParams } from 'react-router-dom';
 import { IS_EU, MODE } from '../../config';
-import { useUser } from '@merge/auth';
+import { useUser } from '@merge-rd/auth';
 import { useEnvironment } from '../../context/environment/hooks';
 import { useFetchIntegrations } from '../../hooks/use-fetch-integrations';
 import { ROUTES } from '../../utils/routes';

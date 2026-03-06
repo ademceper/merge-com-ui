@@ -3,7 +3,7 @@ import { useFormContext, useWatch } from 'react-hook-form';
 import { RiCodeSSlashFill, RiDashboardLine } from 'react-icons/ri';
 import { ConfirmationModal } from '@/components/confirmation-modal';
 import { FormField } from '@/components/primitives/form/form';
-import { Tabs, TabsList, TabsTrigger } from '@merge/ui/components/tabs';
+import { Tabs, TabsList, TabsTrigger } from '@merge-rd/ui/components/tabs';
 import { isEmptyMailyJson } from './maily/maily-utils';
 
 export const EmailEditorSelect = ({

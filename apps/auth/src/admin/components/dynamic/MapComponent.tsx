@@ -1,7 +1,7 @@
 import { HelpItem, generateId } from "../../../shared/keycloak-ui-shared";
-import { Button } from "@merge/ui/components/button";
-import { Input } from "@merge/ui/components/input";
-import { Label } from "@merge/ui/components/label";
+import { Button } from "@merge-rd/ui/components/button";
+import { Input } from "@merge-rd/ui/components/input";
+import { Label } from "@merge-rd/ui/components/label";
 import { MinusCircle, PlusCircle } from "@phosphor-icons/react";
 import { useEffect, useState } from "react";
 import { useFormContext } from "react-hook-form";

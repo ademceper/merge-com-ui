@@ -47,7 +47,7 @@ export { useRequiredContext } from "./utils/useRequiredContext";
 export { useStoredState } from "./utils/useStoredState";
 export { useSetTimeout } from "./utils/useSetTimeout";
 export { generateId } from "./utils/generateId";
-export { SelectItem as SelectOption } from "@merge/ui/components/select";
+export { SelectItem as SelectOption } from "@merge-rd/ui/components/select";
 export { KeycloakSpinner } from "./controls/KeycloakSpinner";
 export { useFetch } from "./utils/useFetch";
 export { getRuleValue } from "./utils/getRuleValue";

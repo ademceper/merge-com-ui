@@ -1,14 +1,14 @@
 import OrganizationRepresentation from "@keycloak/keycloak-admin-client/lib/defs/organizationRepresentation";
 import { useFetch } from "../../shared/keycloak-ui-shared";
-import { Button } from "@merge/ui/components/button";
-import { Checkbox } from "@merge/ui/components/checkbox";
+import { Button } from "@merge-rd/ui/components/button";
+import { Checkbox } from "@merge-rd/ui/components/checkbox";
 import {
     Dialog,
     DialogContent,
     DialogFooter,
     DialogHeader,
     DialogTitle,
-} from "@merge/ui/components/dialog";
+} from "@merge-rd/ui/components/dialog";
 import { DataTable, type ColumnDef } from "@/admin/components/data-table";
 import { differenceBy } from "lodash-es";
 import { useState } from "react";

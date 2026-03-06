@@ -11,7 +11,7 @@ import { TelemetryEvent } from '@/utils/telemetry';
 import { ONBOARDING_DEMO_WORKFLOW_ID } from '../../config';
 import { useInitDemoWorkflow } from '../../hooks/use-init-demo-workflow';
 import { ROUTES } from '../../utils/routes';
-import { Button } from '@merge/ui/components/button';
+import { Button } from '@merge-rd/ui/components/button';
 import { CodeBlock } from '../primitives/code-block';
 import { ToastIcon } from '@/components/primitives/sonner';
 import { showErrorToast, showToast } from '../primitives/sonner-helpers';

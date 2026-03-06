@@ -7,8 +7,8 @@
 
 import { useEnvironment } from "../../shared/keycloak-ui-shared";
 import { useTranslation } from "react-i18next";
-import { Link } from "@merge/ui/components/link";
-import { useThemeToggle } from "@merge/ui/components/theme-toggle";
+import { Link } from "@merge-rd/ui/components/link";
+import { useThemeToggle } from "@merge-rd/ui/components/theme-toggle";
 import type { Environment } from "../environment";
 
 const baseUrl = import.meta.env.BASE_URL;

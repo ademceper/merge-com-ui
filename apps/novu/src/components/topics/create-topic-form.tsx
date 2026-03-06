@@ -17,7 +17,7 @@ import {
 } from '@/components/primitives/form/form';
 import { InlineToast } from '@/components/primitives/inline-toast';
 import { Input } from '@/components/primitives/input';
-import { Separator } from '@merge/ui/components/separator';
+import { Separator } from '@merge-rd/ui/components/separator';
 import { showErrorToast, showSuccessToast } from '@/components/primitives/sonner-helpers';
 import { useCreateTopic } from '@/hooks/use-create-topic';
 import { useTelemetry } from '@/hooks/use-telemetry';

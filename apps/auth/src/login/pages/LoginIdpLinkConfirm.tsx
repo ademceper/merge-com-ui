@@ -2,8 +2,8 @@ import type { PageProps } from "keycloakify/login/pages/PageProps";
 import type { KcContext } from "../KcContext";
 import type { I18n } from "../i18n";
 import AuthLayout from "../components/AuthLayout";
-import { Button } from "@merge/ui/components/button";
-import { Alert, AlertDescription } from "@merge/ui/components/alert";
+import { Button } from "@merge-rd/ui/components/button";
+import { Alert, AlertDescription } from "@merge-rd/ui/components/alert";
 
 export default function LoginIdpLinkConfirm(props: PageProps<Extract<KcContext, { pageId: "login-idp-link-confirm.ftl" }>, I18n>) {
     const { kcContext, i18n } = props;

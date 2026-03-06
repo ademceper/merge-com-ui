@@ -8,8 +8,8 @@ import {
   type Locale,
 } from "react-day-picker"
 
-import { cn } from "@merge/ui/lib/utils"
-import { Button, buttonVariants } from "@merge/ui/components/button"
+import { cn } from "@merge-rd/ui/lib/utils"
+import { Button, buttonVariants } from "@merge-rd/ui/components/button"
 import { CaretLeftIcon, CaretRightIcon, CaretDownIcon } from "@phosphor-icons/react"
 
 function Calendar({

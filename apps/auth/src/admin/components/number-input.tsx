@@ -1,8 +1,8 @@
 import * as React from "react";
 import { CaretDown, CaretUp } from "@phosphor-icons/react";
-import { cn } from "@merge/ui/lib/utils";
-import { Input } from "@merge/ui/components/input";
-import { Button } from "@merge/ui/components/button";
+import { cn } from "@merge-rd/ui/lib/utils";
+import { Input } from "@merge-rd/ui/components/input";
+import { Button } from "@merge-rd/ui/components/button";
 
 const numberInputBase =
   "h-12 rounded-lg bg-muted dark:bg-input/30 border-0 text-foreground placeholder:text-muted-foreground focus-visible:ring-2 focus-visible:ring-ring px-2.5 py-1 transition-colors w-full min-w-0 outline-none disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 disabled:bg-input/50 dark:disabled:bg-input/80 aria-invalid:ring-destructive/20 aria-invalid:ring-2 md:text-sm text-base";

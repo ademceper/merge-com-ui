@@ -16,7 +16,7 @@ import {
 import { useNavigate } from 'react-router-dom';
 import { z } from 'zod';
 import { Sparkling } from '@/components/icons/sparkling';
-import { Button } from '@merge/ui/components/button';
+import { Button } from '@merge-rd/ui/components/button';
 import { CompactButton } from '@/components/primitives/button-compact';
 import {
   Dialog,
@@ -25,14 +25,14 @@ import {
   DialogDescription,
   DialogOverlay,
   DialogTitle,
-} from '@merge/ui/components/dialog';
+} from '@merge-rd/ui/components/dialog';
 import {
   SegmentedControl,
   SegmentedControlList,
   SegmentedControlTrigger,
 } from '@/components/primitives/segmented-control';
-import { Separator } from '@merge/ui/components/separator';
-import { Skeleton } from '@merge/ui/components/skeleton';
+import { Separator } from '@merge-rd/ui/components/separator';
+import { Skeleton } from '@merge-rd/ui/components/skeleton';
 import { Tag } from '@/components/primitives/tag';
 import { Textarea } from '@/components/primitives/textarea';
 import { ExternalLink } from '@/components/shared/external-link';

@@ -2,12 +2,12 @@ import * as Sentry from '@sentry/react';
 import { HTMLAttributes, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 
-import { Separator } from '@merge/ui/components/separator';
-import { Skeleton } from '@merge/ui/components/skeleton';
+import { Separator } from '@merge-rd/ui/components/separator';
+import { Skeleton } from '@merge-rd/ui/components/skeleton';
 import { EmailPreviewHeader } from '@/components/workflow-editor/steps/email/email-preview';
 import { useWorkflow } from '@/components/workflow-editor/workflow-provider';
 import { usePreviewStep } from '@/hooks/use-preview-step';
-import { cn } from '@merge/ui/lib/utils';
+import { cn } from '@merge-rd/ui/lib/utils';
 
 type MiniEmailPreviewProps = HTMLAttributes<HTMLDivElement> & {
   previewFrom?: {

@@ -18,11 +18,11 @@ import {
 import { ResourceOriginEnum } from '@/utils/enums';
 import { capitalize } from '@/utils/string';
 import { Code2 } from '../../icons/code-2';
-import { Button } from '@merge/ui/components/button';
+import { Button } from '@merge-rd/ui/components/button';
 import { FormControl, FormField, FormItem, FormLabel, FormMessage } from '../../primitives/form/form';
 import { Input } from '@/components/primitives/input';
 import { Panel, PanelContent, PanelHeader } from '../../primitives/panel';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@merge/ui/components/tabs';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@merge-rd/ui/components/tabs';
 import { TestWorkflowFormType } from '../schema';
 import { EditableJsonViewer } from '../steps/shared/editable-json-viewer/editable-json-viewer';
 import { SnippetEditor } from './snippet-editor';

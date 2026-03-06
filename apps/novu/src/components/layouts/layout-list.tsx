@@ -26,7 +26,7 @@ import {
 import { TablePaginationFooter } from '@/components/primitives/table-pagination-footer';
 import { useFetchLayouts } from '@/hooks/use-fetch-layouts';
 import { useFetchSubscription } from '@/hooks/use-fetch-subscription';
-import { cn } from '@merge/ui/lib/utils';
+import { cn } from '@merge-rd/ui/lib/utils';
 import { CreateLayoutButton } from './create-layout-btn';
 import { LayoutsListUpgradeCta } from './layouts-list-upgrade-cta';
 

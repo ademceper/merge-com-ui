@@ -1,4 +1,4 @@
-import { useOrganization } from '@merge/auth';
+import { useOrganization } from '@merge-rd/auth';
 import { EnvironmentTypeEnum, FeatureFlagsKeysEnum } from '@novu/shared';
 import { CalendarIcon } from 'lucide-react';
 import { motion } from 'motion/react';

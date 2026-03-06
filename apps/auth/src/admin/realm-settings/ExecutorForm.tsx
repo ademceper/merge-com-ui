@@ -4,15 +4,15 @@ import type ComponentTypeRepresentation from "@keycloak/keycloak-admin-client/li
 import { getErrorDescription, getErrorMessage, HelpItem,
     useFetch } from "../../shared/keycloak-ui-shared";
 import { toast } from "sonner";
-import { Button } from "@merge/ui/components/button";
-import { Label } from "@merge/ui/components/label";
+import { Button } from "@merge-rd/ui/components/button";
+import { Label } from "@merge-rd/ui/components/label";
 import {
     Select,
     SelectContent,
     SelectItem,
     SelectTrigger,
     SelectValue
-} from "@merge/ui/components/select";
+} from "@merge-rd/ui/components/select";
 import { useState } from "react";
 import { Controller, FormProvider, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";

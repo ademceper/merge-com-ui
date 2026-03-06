@@ -3,9 +3,9 @@ import { getErrorDescription, getErrorMessage, FormPanel,
     HelpItem,
     useFetch } from "../../../shared/keycloak-ui-shared";
 import { toast } from "sonner";
-import { Button } from "@merge/ui/components/button";
-import { Label } from "@merge/ui/components/label";
-import { Switch } from "@merge/ui/components/switch";
+import { Button } from "@merge-rd/ui/components/button";
+import { Label } from "@merge-rd/ui/components/label";
+import { Switch } from "@merge-rd/ui/components/switch";
 import { saveAs } from "file-saver";
 import { Fragment, useState } from "react";
 import { Controller, useFormContext } from "react-hook-form";

@@ -1,5 +1,5 @@
-import { Button } from "@merge/ui/components/button";
-import { Input } from "@merge/ui/components/input";
+import { Button } from "@merge-rd/ui/components/button";
+import { Input } from "@merge-rd/ui/components/input";
 import { ArrowRight, MagnifyingGlass, X } from "@phosphor-icons/react";
 import { useTranslation } from "react-i18next";
 

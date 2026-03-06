@@ -10,7 +10,7 @@ import { useFetchSubscription } from '@/hooks/use-fetch-subscription';
 import { useTelemetry } from '@/hooks/use-telemetry';
 import { buildRoute, ROUTES } from '@/utils/routes';
 import { TelemetryEvent } from '@/utils/telemetry';
-import { Button } from '@merge/ui/components/button';
+import { Button } from '@merge-rd/ui/components/button';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/primitives/tooltip';
 import { useLayoutsUrlState } from './hooks/use-layouts-url-state';
 

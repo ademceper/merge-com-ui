@@ -2,7 +2,7 @@ import type ComponentRepresentation from "@keycloak/keycloak-admin-client/lib/de
 import type ComponentTypeRepresentation from "@keycloak/keycloak-admin-client/lib/defs/componentTypeRepresentation";
 import { getErrorDescription, getErrorMessage } from "../../../shared/keycloak-ui-shared";
 import { toast } from "sonner";
-import { Button } from "@merge/ui/components/button";
+import { Button } from "@merge-rd/ui/components/button";
 import {
     DataTable,
     DataTableRowActions,
@@ -22,7 +22,7 @@ import {
     AlertDialogFooter,
     AlertDialogHeader,
     AlertDialogTitle
-} from "@merge/ui/components/alert-dialog";
+} from "@merge-rd/ui/components/alert-dialog";
 import { useRealm } from "../../context/realm-context/RealmContext";
 import { useServerInfo } from "../../context/server-info/ServerInfoProvider";
 import { KEY_PROVIDER_TYPE } from "../../util";

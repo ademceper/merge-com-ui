@@ -12,7 +12,7 @@ import { CompletionRange, VariableEditor } from '@/components/primitives/variabl
 import { formatHtml } from '@/utils/formatter';
 import { CompletionOption } from '@/utils/liquid-autocomplete';
 import { LiquidVariable } from '@/utils/parseStepVariables';
-import { cn } from '@merge/ui/lib/utils';
+import { cn } from '@merge-rd/ui/lib/utils';
 
 type HtmlEditorProps = {
   viewRef: MutableRefObject<EditorView | null>;

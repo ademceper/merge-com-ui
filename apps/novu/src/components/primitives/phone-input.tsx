@@ -2,9 +2,9 @@ import * as React from 'react';
 import { RiArrowDownSLine, RiCheckLine, RiPhoneLine, RiSearchLine } from 'react-icons/ri';
 import * as RPNInput from 'react-phone-number-input';
 import flags from 'react-phone-number-input/flags';
-import { cn } from '@merge/ui/lib/utils';
-import { Button } from '@merge/ui/components/button';
-import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from '@merge/ui/components/command';
+import { cn } from '@merge-rd/ui/lib/utils';
+import { Button } from '@merge-rd/ui/components/button';
+import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from '@merge-rd/ui/components/command';
 import { InputPure, InputRoot, InputWrapper } from '@/components/primitives/input';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/primitives/popover';
 

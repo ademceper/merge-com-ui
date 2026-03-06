@@ -6,16 +6,16 @@ import type {
     PolicyQuery
 } from "@keycloak/keycloak-admin-client/lib/resources/clients";
 import { SelectVariant, useFetch } from "../../../shared/keycloak-ui-shared";
-import { Button } from "@merge/ui/components/button";
-import { Badge } from "@merge/ui/components/badge";
+import { Button } from "@merge-rd/ui/components/button";
+import { Badge } from "@merge-rd/ui/components/badge";
 import {
     Select,
     SelectContent,
     SelectItem,
     SelectTrigger,
     SelectValue
-} from "@merge/ui/components/select";
-import { Popover, PopoverContent, PopoverTrigger } from "@merge/ui/components/popover";
+} from "@merge-rd/ui/components/select";
+import { Popover, PopoverContent, PopoverTrigger } from "@merge-rd/ui/components/popover";
 import { useState } from "react";
 import {
     Controller,

@@ -1,4 +1,4 @@
-import { Switch } from "@merge/ui/components/switch";
+import { Switch } from "@merge-rd/ui/components/switch";
 import { Controller, useFormContext } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 

@@ -1,11 +1,11 @@
 import { HTMLAttributes, useEffect, useMemo } from 'react';
 import { useForm } from 'react-hook-form';
 import { RiLoader4Line } from 'react-icons/ri';
-import { Button } from '@merge/ui/components/button';
+import { Button } from '@merge-rd/ui/components/button';
 import { FacetedFormFilter } from '@/components/primitives/form/faceted-filter/facated-form-filter';
 import { Form, FormField, FormItem, FormRoot } from '@/components/primitives/form/form';
 import { defaultSubscribersFilter, SubscribersFilter } from '@/components/subscribers/hooks/use-subscribers-url-state';
-import { cn } from '@merge/ui/lib/utils';
+import { cn } from '@merge-rd/ui/lib/utils';
 
 export type SubscribersFiltersProps = HTMLAttributes<HTMLFormElement> & {
   onFiltersChange: (filter: SubscribersFilter) => void;

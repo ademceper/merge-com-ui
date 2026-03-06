@@ -1,10 +1,10 @@
 import type ClientRepresentation from "@keycloak/keycloak-admin-client/lib/defs/clientRepresentation";
 import { getErrorDescription, getErrorMessage, useFetch } from "../../shared/keycloak-ui-shared";
 import { toast } from "sonner";
-import { Badge } from "@merge/ui/components/badge";
-import { Tooltip, TooltipContent, TooltipTrigger, TooltipProvider } from "@merge/ui/components/tooltip";
-import { Separator } from "@merge/ui/components/separator";
-import { DropdownMenuItem } from "@merge/ui/components/dropdown-menu";
+import { Badge } from "@merge-rd/ui/components/badge";
+import { Tooltip, TooltipContent, TooltipTrigger, TooltipProvider } from "@merge-rd/ui/components/tooltip";
+import { Separator } from "@merge-rd/ui/components/separator";
+import { DropdownMenuItem } from "@merge-rd/ui/components/dropdown-menu";
 import { Info } from "@phosphor-icons/react";
 import { cloneDeep, sortBy } from "lodash-es";
 import { useMemo, useState } from "react";
@@ -21,7 +21,7 @@ import type { KeyValueType } from "../components/key-value-form/key-value-conver
 import { KeycloakSpinner } from "../../shared/keycloak-ui-shared";
 import { PermissionsTab } from "../components/permission-tab/PermissionTab";
 import { RolesList } from "../components/roles-list/RolesList";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@merge/ui/components/tabs";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@merge-rd/ui/components/tabs";
 import { ViewHeader, ViewHeaderBadge } from "../components/view-header/ViewHeader";
 import { useAccess } from "../context/access/Access";
 import { useRealm } from "../context/realm-context/RealmContext";

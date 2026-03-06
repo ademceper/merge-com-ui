@@ -12,19 +12,19 @@ import {
     TextControl,
     UserProfileFields
 } from "../../shared/keycloak-ui-shared";
-import { Alert, AlertDescription } from "@merge/ui/components/alert";
+import { Alert, AlertDescription } from "@merge-rd/ui/components/alert";
 import {
     Dialog,
     DialogContent,
     DialogFooter,
     DialogHeader,
     DialogTitle
-} from "@merge/ui/components/dialog";
-import { Button } from "@merge/ui/components/button";
-import { Badge } from "@merge/ui/components/badge";
-import { Input } from "@merge/ui/components/input";
-import { Label } from "@merge/ui/components/label";
-import { Switch } from "@merge/ui/components/switch";
+} from "@merge-rd/ui/components/dialog";
+import { Button } from "@merge-rd/ui/components/button";
+import { Badge } from "@merge-rd/ui/components/badge";
+import { Input } from "@merge-rd/ui/components/input";
+import { Label } from "@merge-rd/ui/components/label";
+import { Switch } from "@merge-rd/ui/components/switch";
 import { X } from "@phosphor-icons/react";
 import { TFunction } from "i18next";
 import { useEffect, useState } from "react";

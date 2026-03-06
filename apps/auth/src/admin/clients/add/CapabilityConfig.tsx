@@ -1,8 +1,8 @@
 import type ClientRepresentation from "@keycloak/keycloak-admin-client/lib/defs/clientRepresentation";
 import { HelpItem, SelectField } from "../../../shared/keycloak-ui-shared";
-import { Checkbox } from "@merge/ui/components/checkbox";
-import { Switch } from "@merge/ui/components/switch";
-import { Label } from "@merge/ui/components/label";
+import { Checkbox } from "@merge-rd/ui/components/checkbox";
+import { Switch } from "@merge-rd/ui/components/switch";
+import { Label } from "@merge-rd/ui/components/label";
 import { Controller, useFormContext } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { DefaultSwitchControl } from "../../components/SwitchControl";

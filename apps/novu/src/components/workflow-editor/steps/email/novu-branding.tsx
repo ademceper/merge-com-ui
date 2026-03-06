@@ -1,15 +1,15 @@
 import { ApiServiceLevelEnum, FeatureNameEnum, getFeatureForTierAsBoolean, ResourceOriginEnum } from '@novu/shared';
 import { HTMLAttributes } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Separator } from '@merge/ui/components/separator';
-import { Switch } from '@merge/ui/components/switch';
+import { Separator } from '@merge-rd/ui/components/separator';
+import { Switch } from '@merge-rd/ui/components/switch';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/primitives/tooltip';
 import { UpgradeCTATooltip } from '@/components/upgrade-cta-tooltip';
 import { useFetchOrganizationSettings } from '@/hooks/use-fetch-organization-settings';
 import { useFetchSubscription } from '@/hooks/use-fetch-subscription';
 import { useUpdateOrganizationSettings } from '@/hooks/use-update-organization-settings';
 import { ROUTES } from '@/utils/routes';
-import { cn } from '@merge/ui/lib/utils';
+import { cn } from '@merge-rd/ui/lib/utils';
 
 type NovuBrandingProps = HTMLAttributes<HTMLDivElement> & {
   resourceOrigin: ResourceOriginEnum;

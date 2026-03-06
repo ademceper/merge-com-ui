@@ -1,5 +1,5 @@
 import * as React from "react";
-import { cn } from "@merge/ui/lib/utils";
+import { cn } from "@merge-rd/ui/lib/utils";
 
 export {
   Sheet,
@@ -10,7 +10,7 @@ export {
   SheetHeader,
   SheetPortal,
   SheetTitle,
-} from "@merge/ui/components/sheet";
+} from "@merge-rd/ui/components/sheet";
 
 /**
  * SheetMain provides a scrollable main content area inside a Sheet.

@@ -11,7 +11,7 @@ import { RiArrowDownSLine, RiCodeSSlashLine, RiFileCopyLine, RiPlayCircleLine } 
 import { Link, useMatch, useNavigate, useParams } from 'react-router-dom';
 import { useWorkflow } from '@/components/workflow-editor/workflow-provider';
 
-import { useUser } from '@merge/auth';
+import { useUser } from '@merge-rd/auth';
 import { useEnvironment } from '@/context/environment/hooks';
 import { useDeleteWorkflow } from '@/hooks/use-delete-workflow';
 import { useFeatureFlag } from '@/hooks/use-feature-flag';
@@ -25,12 +25,12 @@ import { buildRoute, ROUTES } from '@/utils/routes';
 import { AiChatProvider, AiSidekickPanel, useAiChat } from '../ai-sidekick';
 import { SidekickToast } from '../ai-sidekick/sidekick-toast';
 import { DeleteWorkflowDialog } from '../delete-workflow-dialog';
-import { Button } from '@merge/ui/components/button';
+import { Button } from '@merge-rd/ui/components/button';
 import { ButtonGroupItem, ButtonGroupRoot } from '@/components/primitives/button-group';
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@merge/ui/components/dropdown-menu';
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@merge-rd/ui/components/dropdown-menu';
 import { ToastClose, ToastIcon } from '@/components/primitives/sonner';
 import { showErrorToast, showSuccessToast, showToast } from '../primitives/sonner-helpers';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@merge/ui/components/tabs';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@merge-rd/ui/components/tabs';
 import { ResizableLayout } from './steps/layout/resizable-layout';
 import { getInitialPayload, getInitialSubscriber } from './steps/utils/preview-context-storage.utils';
 import { TestWorkflowInstructions } from './test-workflow/test-workflow-instructions';

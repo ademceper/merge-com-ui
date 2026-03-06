@@ -4,14 +4,14 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@merge/ui/components/select";
+} from "@merge-rd/ui/components/select";
 import {
   Pagination,
   PaginationContent,
   PaginationItem,
   PaginationNext,
   PaginationPrevious,
-} from "@merge/ui/components/pagination";
+} from "@merge-rd/ui/components/pagination";
 
 const DEFAULT_PAGE_SIZE_OPTIONS = [10, 20, 50, 100];
 

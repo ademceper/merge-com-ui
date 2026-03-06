@@ -1,11 +1,11 @@
-import { Button } from "@merge/ui/components/button";
+import { Button } from "@merge-rd/ui/components/button";
 import {
     Dialog,
     DialogContent,
     DialogFooter,
     DialogHeader,
     DialogTitle
-} from "@merge/ui/components/dialog";
+} from "@merge-rd/ui/components/dialog";
 import { FormProvider, SubmitHandler, UseFormReturn } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { TextControl } from "../../shared/keycloak-ui-shared";

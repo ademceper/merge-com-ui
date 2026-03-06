@@ -10,7 +10,7 @@ import { RiDeleteBin2Line, RiInformation2Line, RiMore2Fill } from 'react-icons/r
 import { useEnvironment } from '@/context/environment/hooks';
 import { useDeleteEnvironment } from '@/hooks/use-environments';
 import { Protect } from '@/utils/protect';
-import { cn } from '@merge/ui/lib/utils';
+import { cn } from '@merge-rd/ui/lib/utils';
 import { Badge } from '@/components/primitives/badge';
 import { CompactButton } from '../primitives/button-compact';
 import { CopyButton } from '../primitives/copy-button';
@@ -21,9 +21,9 @@ import {
   DropdownMenuItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from '@merge/ui/components/dropdown-menu';
+} from '@merge-rd/ui/components/dropdown-menu';
 import { EnvironmentBranchIcon } from '../primitives/environment-branch-icon';
-import { Skeleton } from '@merge/ui/components/skeleton';
+import { Skeleton } from '@merge-rd/ui/components/skeleton';
 import { showErrorToast, showSuccessToast } from '../primitives/sonner-helpers';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '../primitives/table';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/primitives/tooltip';

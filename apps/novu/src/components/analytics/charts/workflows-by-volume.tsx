@@ -4,7 +4,7 @@ import { Bar, BarChart, Cell, XAxis, YAxis } from 'recharts';
 import { type WorkflowVolumeDataPoint } from '../../../api/activity';
 
 import { ChartConfig, ChartContainer, ChartTooltip, NovuTooltip } from '@/components/primitives/chart';
-import { Skeleton } from '@merge/ui/components/skeleton';
+import { Skeleton } from '@merge-rd/ui/components/skeleton';
 import { ANALYTICS_TOOLTIPS } from '../constants/analytics-tooltips';
 import { createVolumeBasedHasDataChecker } from '../utils/chart-validation';
 import { generateDummyWorkflowData } from './chart-dummy-data';

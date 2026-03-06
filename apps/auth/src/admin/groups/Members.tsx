@@ -9,12 +9,12 @@ import {
     EmptyDescription,
     EmptyHeader,
     EmptyTitle
-} from "@merge/ui/components/empty";
+} from "@merge-rd/ui/components/empty";
 import { toast } from "sonner";
-import { Button } from "@merge/ui/components/button";
-import { Checkbox } from "@merge/ui/components/checkbox";
-import { Label } from "@merge/ui/components/label";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@merge/ui/components/dropdown-menu";
+import { Button } from "@merge-rd/ui/components/button";
+import { Checkbox } from "@merge-rd/ui/components/checkbox";
+import { Label } from "@merge-rd/ui/components/label";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@merge-rd/ui/components/dropdown-menu";
 import { DotsThreeVertical, Info } from "@phosphor-icons/react";
 import { uniqBy } from "lodash-es";
 import { useState } from "react";

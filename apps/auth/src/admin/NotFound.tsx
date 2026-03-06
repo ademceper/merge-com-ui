@@ -1,4 +1,4 @@
-import { Button } from "@merge/ui/components/button";
+import { Button } from "@merge-rd/ui/components/button";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 

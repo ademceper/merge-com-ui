@@ -6,9 +6,9 @@ import { IEnvironment } from '@novu/shared';
 import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { RiArrowRightSLine } from 'react-icons/ri';
-import { Button } from '@merge/ui/components/button';
+import { Button } from '@merge-rd/ui/components/button';
 import { Form, FormRoot } from '@/components/primitives/form/form';
-import { Separator } from '@merge/ui/components/separator';
+import { Separator } from '@merge-rd/ui/components/separator';
 import {
   Sheet,
   SheetContent,

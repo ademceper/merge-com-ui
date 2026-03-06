@@ -2,10 +2,10 @@ import { memo, useCallback } from 'react';
 import { type Control, Controller, Path, useFieldArray } from 'react-hook-form';
 import { RiAddLine, RiDeleteBin2Line, RiDeleteBinLine, RiErrorWarningLine } from 'react-icons/ri';
 
-import { Button } from '@merge/ui/components/button';
+import { Button } from '@merge-rd/ui/components/button';
 import { InputPure, InputRoot } from '@/components/primitives/input';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/primitives/tooltip';
-import { cn } from '@merge/ui/lib/utils';
+import { cn } from '@merge-rd/ui/lib/utils';
 
 import { getMarginClassPx } from '../utils/ui-helpers';
 import type { SchemaEditorFormValues } from '../utils/validation-schema';

@@ -6,7 +6,7 @@ import { useTelemetry } from '@/hooks/use-telemetry';
 import { ROUTES } from '@/utils/routes';
 import { TelemetryEvent } from '@/utils/telemetry';
 import { openInNewTab } from '@/utils/url';
-import { Button } from '@merge/ui/components/button';
+import { Button } from '@merge-rd/ui/components/button';
 import { EmptyTranslationsIllustration } from './empty-translations-illustration';
 
 export const TranslationListUpgradeCta = () => {

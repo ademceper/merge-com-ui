@@ -3,9 +3,9 @@
 import { type DialogProps } from '@radix-ui/react-dialog';
 import { Command } from 'cmdk';
 import * as React from 'react';
-import { Dialog, DialogContent, DialogTitle } from '@merge/ui/components/dialog';
+import { Dialog, DialogContent, DialogTitle } from '@merge-rd/ui/components/dialog';
 import { VisuallyHidden } from '@/components/primitives/visually-hidden';
-import { cn } from '@merge/ui/lib/utils';
+import { cn } from '@merge-rd/ui/lib/utils';
 
 const CommandDialog = ({
   children,

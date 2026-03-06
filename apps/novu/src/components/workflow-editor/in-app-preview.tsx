@@ -5,10 +5,10 @@ import { InboxArrowDown } from '@/components/icons/inbox-arrow-down';
 import { InboxBell } from '@/components/icons/inbox-bell';
 import { InboxEllipsis } from '@/components/icons/inbox-ellipsis';
 import { InboxSettings } from '@/components/icons/inbox-settings';
-import { Button, ButtonProps } from '@merge/ui/components/button';
+import { Button, ButtonProps } from '@merge-rd/ui/components/button';
 import { inboxButtonVariants } from '@/utils/inbox';
-import { cn } from '@merge/ui/lib/utils';
-import { Skeleton } from '@merge/ui/components/skeleton';
+import { cn } from '@merge-rd/ui/lib/utils';
+import { Skeleton } from '@merge-rd/ui/components/skeleton';
 
 type InAppPreviewBellProps = HTMLAttributes<HTMLDivElement>;
 

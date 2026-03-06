@@ -1,12 +1,12 @@
 import { useCallback, useId, useRef, useState } from 'react';
 import { IconType } from 'react-icons';
 import { RiArrowDownLine, RiArrowUpLine, RiLoader4Line, RiSearchLine } from 'react-icons/ri';
-import { cn } from '@merge/ui/lib/utils';
+import { cn } from '@merge-rd/ui/lib/utils';
 import { EnterLineIcon } from '../icons/enter-line';
-import { Command, CommandEmpty, CommandGroup, CommandItem, CommandList } from '@merge/ui/components/command';
+import { Command, CommandEmpty, CommandGroup, CommandItem, CommandList } from '@merge-rd/ui/components/command';
 import { Input } from '@/components/primitives/input';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/primitives/popover';
-import { Separator } from '@merge/ui/components/separator';
+import { Separator } from '@merge-rd/ui/components/separator';
 
 export interface AutocompleteItem {
   id: string;

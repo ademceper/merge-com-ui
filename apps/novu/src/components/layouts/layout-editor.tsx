@@ -8,7 +8,7 @@ import { LocalizationResourceEnum } from '@/types/translations';
 import { buildRoute, ROUTES } from '@/utils/routes';
 import { useFetchTranslationGroup } from '../../hooks/use-fetch-translation-group';
 import { IssuesPanel } from '../issues-panel';
-import { Button } from '@merge/ui/components/button';
+import { Button } from '@merge-rd/ui/components/button';
 import { CompactButton } from '../primitives/button-compact';
 import { LocaleSelect } from '../primitives/locale-select';
 import { PanelHeader } from '../workflow-editor/steps/layout/panel-header';

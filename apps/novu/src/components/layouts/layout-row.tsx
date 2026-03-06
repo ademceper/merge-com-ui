@@ -12,8 +12,8 @@ import {
   DropdownMenuGroup,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from '@merge/ui/components/dropdown-menu';
-import { Skeleton } from '@merge/ui/components/skeleton';
+} from '@merge-rd/ui/components/dropdown-menu';
+import { Skeleton } from '@merge-rd/ui/components/skeleton';
 import { ToastIcon } from '@/components/primitives/sonner';
 import { showToast } from '@/components/primitives/sonner-helpers';
 import { TableCell, TableRow } from '@/components/primitives/table';
@@ -24,7 +24,7 @@ import { useDeleteLayout } from '@/hooks/use-delete-layout';
 import { formatDateSimple } from '@/utils/format-date';
 import { Protect } from '@/utils/protect';
 import { buildRoute, ROUTES } from '@/utils/routes';
-import { cn } from '@merge/ui/lib/utils';
+import { cn } from '@merge-rd/ui/lib/utils';
 import { TranslatedLayoutIcon } from '../icons/translated-layout-icon';
 import { Badge } from '@/components/primitives/badge';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/primitives/tooltip';

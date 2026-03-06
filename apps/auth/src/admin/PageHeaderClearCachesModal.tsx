@@ -1,11 +1,11 @@
-import { Button } from "@merge/ui/components/button";
+import { Button } from "@merge-rd/ui/components/button";
 import {
     Dialog,
     DialogContent,
     DialogHeader,
     DialogTitle
-} from "@merge/ui/components/dialog";
-import { Separator } from "@merge/ui/components/separator";
+} from "@merge-rd/ui/components/dialog";
+import { Separator } from "@merge-rd/ui/components/separator";
 import { useRealm } from "./context/realm-context/RealmContext";
 import { useAdminClient } from "./admin-client";
 import { useTranslation } from "react-i18next";

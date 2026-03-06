@@ -1,4 +1,4 @@
-import { useAuth } from '@merge/auth';
+import { useAuth } from '@merge-rd/auth';
 
 type CheckAuthorizationWithCustomPermissions = (...args: any[]) => boolean;
 import {

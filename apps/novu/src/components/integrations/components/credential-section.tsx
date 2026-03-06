@@ -5,7 +5,7 @@ import { CopyButton } from '@/components/primitives/copy-button';
 import { Input } from '@/components/primitives/input';
 import { SecretInput } from '@/components/primitives/secret-input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/primitives/select';
-import { Switch } from '@merge/ui/components/switch';
+import { Switch } from '@merge-rd/ui/components/switch';
 import { Textarea } from '@/components/primitives/textarea';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/primitives/tooltip';
 import { useEnvironment } from '../../../context/environment/hooks';

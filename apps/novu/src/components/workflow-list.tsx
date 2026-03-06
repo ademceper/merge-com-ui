@@ -1,7 +1,7 @@
 import { DirectionEnum, ListWorkflowResponse } from '@novu/shared';
 import { RiMore2Fill } from 'react-icons/ri';
 import { useSearchParams } from 'react-router-dom';
-import { Skeleton } from '@merge/ui/components/skeleton';
+import { Skeleton } from '@merge-rd/ui/components/skeleton';
 import {
   Table,
   TableBody,

@@ -1,5 +1,5 @@
 import { ReactNode, useMemo } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@merge/ui/components/card';
+import { Card, CardContent, CardHeader, CardTitle } from '@merge-rd/ui/components/card';
 import { HelpTooltipIndicator } from '../../primitives/help-tooltip-indicator';
 import { ChartEmptyState } from './chart-empty-state';
 

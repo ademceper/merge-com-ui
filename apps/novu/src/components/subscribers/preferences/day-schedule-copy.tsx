@@ -2,11 +2,11 @@ import { ScheduleDto } from '@novu/api/models/components';
 import { Schedule, WeeklySchedule } from '@novu/shared';
 import { useCallback, useMemo, useState } from 'react';
 import { RiFileCopyLine } from 'react-icons/ri';
-import { Button } from '@merge/ui/components/button';
-import { Checkbox } from '@merge/ui/components/checkbox';
+import { Button } from '@merge-rd/ui/components/button';
+import { Checkbox } from '@merge-rd/ui/components/checkbox';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/primitives/popover';
 import { capitalize } from '@/utils/string';
-import { cn } from '@merge/ui/lib/utils';
+import { cn } from '@merge-rd/ui/lib/utils';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/primitives/tooltip';
 import { weekDays } from './utils';
 

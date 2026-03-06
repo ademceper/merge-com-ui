@@ -4,7 +4,7 @@ import { RiCheckLine, RiCloseCircleLine, RiLoader4Line, RiPauseLine, RiStopLine 
 import { STEP_TYPE_TO_ICON } from '@/components/icons/utils';
 import { Badge } from '@/components/primitives/badge';
 import { STEP_TYPE_LABELS } from '@/utils/constants';
-import { cn } from '@merge/ui/lib/utils';
+import { cn } from '@merge-rd/ui/lib/utils';
 import { JOB_STATUS_CONFIG } from '../constants';
 
 function getStepIcon(type?: StepTypeEnum) {

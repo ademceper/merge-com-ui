@@ -3,7 +3,7 @@
 import * as React from "react"
 import { RadioGroup as RadioGroupPrimitive } from "radix-ui"
 
-import { cn } from "@merge/ui/lib/utils"
+import { cn } from "@merge-rd/ui/lib/utils"
 
 function RadioGroup({
   className,

@@ -3,7 +3,7 @@
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {
-      "@merge/auth/*": ["./src/*"]
+      "@merge-rd/auth/*": ["./src/*"]
     }
   },
   "include": ["."],

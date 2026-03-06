@@ -1,7 +1,7 @@
 import { ActionWithRulesAndAddersProps } from 'react-querybuilder';
 
 import { StackedPlusLine } from '@/components/icons/stacked-plus-line';
-import { Button } from '@merge/ui/components/button';
+import { Button } from '@merge-rd/ui/components/button';
 
 export const AddGroupAction = ({
   label,

@@ -3,7 +3,7 @@ import { useFetchRequestTraces } from '@/hooks/use-fetch-request-traces';
 import type { ApiTrace, RequestLog } from '../../types/logs';
 import { formatDateSimple } from '../../utils/format-date';
 import { HoverCard, HoverCardContent, HoverCardTrigger } from '@/components/primitives/hover-card';
-import { Skeleton } from '@merge/ui/components/skeleton';
+import { Skeleton } from '@merge-rd/ui/components/skeleton';
 import { StatusBadge, StatusBadgeIcon } from '../primitives/status-badge';
 import { TimeDisplayHoverCard } from '../time-display-hover-card';
 

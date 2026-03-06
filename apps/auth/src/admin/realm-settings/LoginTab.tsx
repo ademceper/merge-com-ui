@@ -1,5 +1,5 @@
 import type RealmRepresentation from "@keycloak/keycloak-admin-client/lib/defs/realmRepresentation";
-import { Switch } from "@merge/ui/components/switch";
+import { Switch } from "@merge-rd/ui/components/switch";
 import { useTranslation } from "react-i18next";
 import { FormPanel, HelpItem } from "../../shared/keycloak-ui-shared";
 import { useAdminClient } from "../admin-client";

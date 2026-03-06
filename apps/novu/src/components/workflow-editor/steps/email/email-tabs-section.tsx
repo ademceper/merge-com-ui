@@ -1,5 +1,5 @@
 import { HTMLAttributes } from 'react';
-import { cn } from '@merge/ui/lib/utils';
+import { cn } from '@merge-rd/ui/lib/utils';
 
 type EmailTabsSectionProps = HTMLAttributes<HTMLDivElement>;
 

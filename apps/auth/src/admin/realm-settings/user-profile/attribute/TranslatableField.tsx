@@ -1,9 +1,9 @@
 import KeycloakAdminClient from "@keycloak/keycloak-admin-client";
 import RealmRepresentation from "@keycloak/keycloak-admin-client/lib/defs/realmRepresentation";
 import { FormErrorText } from "../../../../shared/keycloak-ui-shared";
-import { Alert, AlertDescription } from "@merge/ui/components/alert";
-import { Button } from "@merge/ui/components/button";
-import { Input } from "@merge/ui/components/input";
+import { Alert, AlertDescription } from "@merge-rd/ui/components/alert";
+import { Button } from "@merge-rd/ui/components/button";
+import { Input } from "@merge-rd/ui/components/input";
 import { Globe } from "@phosphor-icons/react";
 import { TFunction } from "i18next";
 import { useEffect } from "react";

@@ -1,4 +1,4 @@
-import { useOrganization } from '@merge/auth';
+import { useOrganization } from '@merge-rd/auth';
 import { CalendarIcon } from 'lucide-react';
 import { useEffect, useMemo } from 'react';
 import { useForm } from 'react-hook-form';

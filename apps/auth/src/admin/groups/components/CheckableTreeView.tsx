@@ -1,4 +1,4 @@
-import { Checkbox } from "@merge/ui/components/checkbox";
+import { Checkbox } from "@merge-rd/ui/components/checkbox";
 import { CaretRight } from "@phosphor-icons/react";
 import type { ReactNode } from "react";
 import { useEffect, useState } from "react";

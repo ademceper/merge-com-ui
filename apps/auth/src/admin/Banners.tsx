@@ -1,8 +1,8 @@
-import { Alert, AlertDescription } from "@merge/ui/components/alert";
+import { Alert, AlertDescription } from "@merge-rd/ui/components/alert";
 import { Warning } from "@phosphor-icons/react";
 import { useWhoAmI } from "./context/whoami/WhoAmI";
 import { useTranslation } from "react-i18next";
-import { cn } from "@merge/ui/lib/utils";
+import { cn } from "@merge-rd/ui/lib/utils";
 
 type WarnBannerProps = {
     msg: string;

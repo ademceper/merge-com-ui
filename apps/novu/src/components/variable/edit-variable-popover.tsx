@@ -16,7 +16,7 @@ import {
   CommandItem,
   CommandList,
   CommandSeparator,
-} from '@merge/ui/components/command';
+} from '@merge-rd/ui/components/command';
 import { FormControl, FormItem, FormMessagePure } from '@/components/primitives/form/form';
 import { Input, InputPure, InputRoot, InputWrapper } from '@/components/primitives/input';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/primitives/popover';
@@ -28,8 +28,8 @@ import { useTelemetry } from '@/hooks/use-telemetry';
 import { IsAllowedVariable, LiquidVariable } from '@/utils/parseStepVariables';
 import { TelemetryEvent } from '@/utils/telemetry';
 import { Code2 } from '../icons/code-2';
-import { Button } from '@merge/ui/components/button';
-import { Separator } from '@merge/ui/components/separator';
+import { Button } from '@merge-rd/ui/components/button';
+import { Separator } from '@merge-rd/ui/components/separator';
 import { FilterItem } from './components/filter-item';
 import { ReorderFiltersGroup } from './components/reorder-filters-group';
 import { useFilterManager } from './hooks/use-filter-manager';

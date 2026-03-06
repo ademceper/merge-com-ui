@@ -3,7 +3,7 @@ import { useFormContext } from 'react-hook-form';
 import { RiCloseCircleLine, RiMailLine } from 'react-icons/ri';
 import { Link } from 'react-router-dom';
 import { z } from 'zod';
-import { Avatar, AvatarFallback, AvatarImage } from '@merge/ui/components/avatar';
+import { Avatar, AvatarFallback, AvatarImage } from '@merge-rd/ui/components/avatar';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/primitives/tooltip';
 import { CompactButton } from '../primitives/button-compact';
 import { Editor } from '../primitives/editor';
@@ -12,7 +12,7 @@ import { InlineToast } from '../primitives/inline-toast';
 import { Input, InputRoot } from '@/components/primitives/input';
 import { LocaleSelect } from '../primitives/locale-select';
 import { PhoneInput } from '../primitives/phone-input';
-import { Separator } from '@merge/ui/components/separator';
+import { Separator } from '@merge-rd/ui/components/separator';
 import { CreateSubscriberFormSchema } from './schema';
 import { TimezoneSelect } from './timezone-select';
 

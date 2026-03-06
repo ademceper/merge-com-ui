@@ -1,7 +1,7 @@
 import { forwardRef, useState } from 'react';
 import { RiArrowRightSLine, RiDiscussLine } from 'react-icons/ri';
-import { Button } from '@merge/ui/components/button';
-import { Separator } from '@merge/ui/components/separator';
+import { Button } from '@merge-rd/ui/components/button';
+import { Separator } from '@merge-rd/ui/components/separator';
 import {
   Sheet,
   SheetContent,
@@ -15,7 +15,7 @@ import TruncatedText from '@/components/truncated-text';
 import { useCombinedRefs } from '@/hooks/use-combined-refs';
 import { useFormProtection } from '@/hooks/use-form-protection';
 import { useOnElementUnmount } from '@/hooks/use-on-element-unmount';
-import { cn } from '@merge/ui/lib/utils';
+import { cn } from '@merge-rd/ui/lib/utils';
 import { CreateTopicForm } from './create-topic-form';
 
 type CreateTopicDrawerProps = {

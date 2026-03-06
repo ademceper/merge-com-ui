@@ -3,8 +3,8 @@ import {
     DropdownMenuContent,
     DropdownMenuItem,
     DropdownMenuTrigger
-} from "@merge/ui/components/dropdown-menu";
-import { Button } from "@merge/ui/components/button";
+} from "@merge-rd/ui/components/dropdown-menu";
+import { Button } from "@merge-rd/ui/components/button";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 

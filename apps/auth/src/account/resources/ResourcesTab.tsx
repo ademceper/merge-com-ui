@@ -12,14 +12,14 @@
 import { useEnvironment } from "../../shared/keycloak-ui-shared";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
-import { Button } from "@merge/ui/components/button";
-import { Badge } from "@merge/ui/components/badge";
+import { Button } from "@merge-rd/ui/components/button";
+import { Badge } from "@merge-rd/ui/components/badge";
 import {
     DropdownMenu,
     DropdownMenuContent,
     DropdownMenuItem,
     DropdownMenuTrigger
-} from "@merge/ui/components/dropdown-menu";
+} from "@merge-rd/ui/components/dropdown-menu";
 import {
     AlertDialog,
     AlertDialogAction,
@@ -30,7 +30,7 @@ import {
     AlertDialogHeader,
     AlertDialogTitle,
     AlertDialogTrigger
-} from "@merge/ui/components/alert-dialog";
+} from "@merge-rd/ui/components/alert-dialog";
 import {
     ArrowSquareOut,
     CaretDown,

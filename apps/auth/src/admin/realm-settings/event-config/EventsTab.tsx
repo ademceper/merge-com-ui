@@ -6,7 +6,7 @@ import { isEqual } from "lodash-es";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@merge/ui/components/tabs";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@merge-rd/ui/components/tabs";
 import { useAdminClient } from "../../admin-client";
 import {
     AlertDialog,
@@ -17,7 +17,7 @@ import {
     AlertDialogFooter,
     AlertDialogHeader,
     AlertDialogTitle
-} from "@merge/ui/components/alert-dialog";
+} from "@merge-rd/ui/components/alert-dialog";
 import { FormAccess } from "../../components/form/FormAccess";
 import { FixedButtonsGroup } from "../../components/form/FixedButtonGroup";
 import { FormPanel } from "../../../shared/keycloak-ui-shared";

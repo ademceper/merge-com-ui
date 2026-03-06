@@ -1,5 +1,5 @@
 import type UserConsentRepresentation from "@keycloak/keycloak-admin-client/lib/defs/userConsentRepresentation";
-import { Badge } from "@merge/ui/components/badge";
+import { Badge } from "@merge-rd/ui/components/badge";
 import { Cube, Trash } from "@phosphor-icons/react";
 import { sortBy } from "lodash-es";
 import { useState } from "react";
@@ -16,8 +16,8 @@ import {
     EmptyHeader,
     EmptyMedia,
     EmptyTitle
-} from "@merge/ui/components/empty";
-import { DropdownMenuItem } from "@merge/ui/components/dropdown-menu";
+} from "@merge-rd/ui/components/empty";
+import { DropdownMenuItem } from "@merge-rd/ui/components/dropdown-menu";
 import useFormatDate from "../utils/useFormatDate";
 import { useParams } from "../utils/useParams";
 

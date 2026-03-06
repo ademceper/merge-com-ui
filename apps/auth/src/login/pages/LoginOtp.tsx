@@ -3,10 +3,10 @@ import type { PageProps } from "keycloakify/login/pages/PageProps";
 import type { KcContext } from "../KcContext";
 import type { I18n } from "../i18n";
 import AuthLayout from "../components/AuthLayout";
-import { Button } from "@merge/ui/components/button";
-import { Alert, AlertDescription } from "@merge/ui/components/alert";
-import { InputOTP, InputOTPGroup, InputOTPSlot } from "@merge/ui/components/input-otp";
-import { cn } from "@merge/ui/lib/utils";
+import { Button } from "@merge-rd/ui/components/button";
+import { Alert, AlertDescription } from "@merge-rd/ui/components/alert";
+import { InputOTP, InputOTPGroup, InputOTPSlot } from "@merge-rd/ui/components/input-otp";
+import { cn } from "@merge-rd/ui/lib/utils";
 
 export default function LoginOtp(props: PageProps<Extract<KcContext, { pageId: "login-otp.ftl" }>, I18n>) {
     const { kcContext, i18n } = props;

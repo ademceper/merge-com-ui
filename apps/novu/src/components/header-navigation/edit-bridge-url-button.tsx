@@ -20,7 +20,7 @@ import { useHasPermission } from '@/hooks/use-has-permission';
 import { useUpdateBridgeUrl } from '@/hooks/use-update-bridge-url';
 import { useValidateBridgeUrl } from '@/hooks/use-validate-bridge-url';
 import { ConnectionStatus } from '@/utils/types';
-import { cn } from '@merge/ui/lib/utils';
+import { cn } from '@merge-rd/ui/lib/utils';
 import { Input } from '@/components/primitives/input';
 import { PermissionButton } from '../primitives/permission-button';
 import { Popover, PopoverContent, PopoverPortal, PopoverTrigger } from '@/components/primitives/popover';

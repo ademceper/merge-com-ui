@@ -1,6 +1,6 @@
 import { KeycloakSpinner } from "../../../shared/keycloak-ui-shared";
-import { Button } from "@merge/ui/components/button";
-import { Input } from "@merge/ui/components/input";
+import { Button } from "@merge-rd/ui/components/button";
+import { Input } from "@merge-rd/ui/components/input";
 import { useEffect, useState } from "react";
 import { Controller, useFormContext } from "react-hook-form";
 

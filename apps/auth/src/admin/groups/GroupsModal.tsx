@@ -1,7 +1,7 @@
 import type GroupRepresentation from "@keycloak/keycloak-admin-client/lib/defs/groupRepresentation";
 import { getErrorDescription, getErrorMessage, TextControl, useFetch } from "../../shared/keycloak-ui-shared";
 import { toast } from "sonner";
-import { Button } from "@merge/ui/components/button";
+import { Button } from "@merge-rd/ui/components/button";
 import {
     Dialog,
     DialogClose,
@@ -9,8 +9,8 @@ import {
     DialogFooter,
     DialogHeader,
     DialogTitle
-} from "@merge/ui/components/dialog";
-import { Alert, AlertTitle } from "@merge/ui/components/alert";
+} from "@merge-rd/ui/components/dialog";
+import { Alert, AlertTitle } from "@merge-rd/ui/components/alert";
 import { useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";

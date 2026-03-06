@@ -1,7 +1,7 @@
 import { useTranslation } from "react-i18next";
-import { Alert, AlertTitle } from "@merge/ui/components/alert";
-import { Label } from "@merge/ui/components/label";
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@merge/ui/components/dialog";
+import { Alert, AlertTitle } from "@merge-rd/ui/components/alert";
+import { Label } from "@merge-rd/ui/components/label";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@merge-rd/ui/components/dialog";
 
 type AccessTokenDialogProps = {
     token: string;

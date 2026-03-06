@@ -1,7 +1,7 @@
 import { Inter, Geist_Mono } from "next/font/google"
 import { Metadata } from "next"
-import "@merge/ui/globals.css"
-import { Providers } from "@merge/ui/components/providers"
+import "@merge-rd/ui/globals.css"
+import { Providers } from "@merge-rd/ui/components/providers"
 import { AuthProvider } from "@/components/auth-provider"
 
 

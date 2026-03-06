@@ -12,7 +12,7 @@ import {
 } from 'react-icons/ri';
 import { Outlet, useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import { PageMeta } from '@/components/page-meta';
-import { Button } from '@merge/ui/components/button';
+import { Button } from '@merge-rd/ui/components/button';
 import { ButtonGroupItem, ButtonGroupRoot } from '@/components/primitives/button-group';
 import { LinkButton } from '@/components/primitives/button-link';
 import {
@@ -20,10 +20,10 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from '@merge/ui/components/dropdown-menu';
+} from '@merge-rd/ui/components/dropdown-menu';
 import { FacetedFormFilter } from '@/components/primitives/form/faceted-filter/facated-form-filter';
-import { ScrollArea, ScrollBar } from '@merge/ui/components/scroll-area';
-import { Skeleton } from '@merge/ui/components/skeleton';
+import { ScrollArea, ScrollBar } from '@merge-rd/ui/components/scroll-area';
+import { Skeleton } from '@merge-rd/ui/components/skeleton';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/primitives/tooltip';
 import { selectPopularByIdStrict } from '@/components/template-store/featured';
 import { WorkflowCard } from '@/components/template-store/workflow-card';

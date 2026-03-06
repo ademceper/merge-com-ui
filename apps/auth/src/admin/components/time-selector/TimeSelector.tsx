@@ -5,7 +5,7 @@ import {
     SelectItem,
     SelectTrigger,
     SelectValue
-} from "@merge/ui/components/select";
+} from "@merge-rd/ui/components/select";
 import React, { useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 

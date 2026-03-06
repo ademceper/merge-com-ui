@@ -1,4 +1,4 @@
-import { Input } from "@merge/ui/components/input";
+import { Input } from "@merge-rd/ui/components/input";
 import { useFormContext } from "react-hook-form";
 
 import { FieldProps, FormGroupField } from "./FormGroupField";

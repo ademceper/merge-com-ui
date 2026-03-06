@@ -11,14 +11,14 @@ import { ActivitySkeleton } from '@/components/activity/activity-skeleton';
 import { ActivityTable } from '@/components/activity/activity-table';
 import { ActivityOverview } from '@/components/activity/components/activity-overview';
 import { defaultActivityFilters } from '@/components/activity/constants';
-import { ResizablePanel, ResizablePanelGroup } from '@merge/ui/components/resizable';
+import { ResizablePanel, ResizablePanelGroup } from '@merge-rd/ui/components/resizable';
 import { UpdatedAgo } from '@/components/updated-ago';
 import { useEnvironment } from '@/context/environment/hooks';
 import { useActivityUrlState } from '@/hooks/use-activity-url-state';
 import { usePullActivity } from '@/hooks/use-pull-activity';
 import { ActivityFiltersData } from '@/types/activity';
 import { QueryKeys } from '@/utils/query-keys';
-import { cn } from '@merge/ui/lib/utils';
+import { cn } from '@merge-rd/ui/lib/utils';
 import { EmptyTopicsIllustration } from '../topics/empty-topics-illustration';
 
 type ActivityFeedContentProps = {

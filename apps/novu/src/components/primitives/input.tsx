@@ -1,7 +1,7 @@
 import * as React from "react";
-import { cn } from "@merge/ui/lib/utils";
+import { cn } from "@merge-rd/ui/lib/utils";
 
-export { Input } from "@merge/ui/components/input";
+export { Input } from "@merge-rd/ui/components/input";
 
 export type InputProps = React.ComponentProps<"input">;
 

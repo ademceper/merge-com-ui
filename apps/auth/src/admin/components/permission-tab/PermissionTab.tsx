@@ -1,14 +1,14 @@
 import type { ManagementPermissionReference } from "@keycloak/keycloak-admin-client/lib/defs/managementPermissionReference";
 import { HelpItem, useFetch } from "../../../shared/keycloak-ui-shared";
-import { Card, CardContent, CardHeader, CardTitle } from "@merge/ui/components/card";
-import { Label } from "@merge/ui/components/label";
-import { Switch } from "@merge/ui/components/switch";
+import { Card, CardContent, CardHeader, CardTitle } from "@merge-rd/ui/components/card";
+import { Label } from "@merge-rd/ui/components/label";
+import { Switch } from "@merge-rd/ui/components/switch";
 import {
     DropdownMenu,
     DropdownMenuContent,
     DropdownMenuItem,
     DropdownMenuTrigger,
-} from "@merge/ui/components/dropdown-menu";
+} from "@merge-rd/ui/components/dropdown-menu";
 import {
     Table,
     TableBody,
@@ -17,7 +17,7 @@ import {
     TableHeader,
     TableRow,
 } from "@/admin/components/data-table";
-import { Button } from "@merge/ui/components/button";
+import { Button } from "@merge-rd/ui/components/button";
 import { DotsThreeVertical } from "@phosphor-icons/react";
 import { useState } from "react";
 import { Trans, useTranslation } from "react-i18next";

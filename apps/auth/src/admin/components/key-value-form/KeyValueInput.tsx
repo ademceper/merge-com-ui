@@ -1,5 +1,5 @@
-import { Button } from "@merge/ui/components/button";
-import { Input } from "@merge/ui/components/input";
+import { Button } from "@merge-rd/ui/components/button";
+import { Input } from "@merge-rd/ui/components/input";
 import { MinusCircle, PlusCircle } from "@phosphor-icons/react";
 import { Fragment, FunctionComponent, PropsWithChildren } from "react";
 import { FieldValues, useFieldArray, useFormContext, useWatch } from "react-hook-form";

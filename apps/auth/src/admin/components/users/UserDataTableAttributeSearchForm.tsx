@@ -6,12 +6,12 @@ import {
     SelectItem,
     SelectTrigger,
     SelectValue
-} from "@merge/ui/components/select";
+} from "@merge-rd/ui/components/select";
 import { toast } from "sonner";
-import { Alert, AlertDescription } from "@merge/ui/components/alert";
-import { Button } from "@merge/ui/components/button";
-import { Checkbox } from "@merge/ui/components/checkbox";
-import { Input } from "@merge/ui/components/input";
+import { Alert, AlertDescription } from "@merge-rd/ui/components/alert";
+import { Button } from "@merge-rd/ui/components/button";
+import { Checkbox } from "@merge-rd/ui/components/checkbox";
+import { Input } from "@merge-rd/ui/components/input";
 import { Check } from "@phosphor-icons/react";
 import { ReactNode, useState } from "react";
 import { useForm } from "react-hook-form";

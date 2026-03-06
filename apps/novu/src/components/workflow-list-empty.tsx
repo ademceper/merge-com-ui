@@ -3,7 +3,7 @@ import { RiBookMarkedLine, RiRouteFill } from 'react-icons/ri';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { VersionControlDev } from '@/components/icons/version-control-dev';
 import { VersionControlProd } from '@/components/icons/version-control-prod';
-import { Button } from '@merge/ui/components/button';
+import { Button } from '@merge-rd/ui/components/button';
 import { PermissionButton } from '@/components/primitives/permission-button';
 import { useEnvironment } from '@/context/environment/hooks';
 import { buildRoute, ROUTES } from '../utils/routes';

@@ -13,7 +13,7 @@ export {
   SelectScrollDownButton,
   SelectTrigger,
   SelectValue,
-} from "@merge/ui/components/select";
+} from "@merge-rd/ui/components/select";
 
 export const selectTriggerVariants = cva(
   "data-placeholder:text-muted-foreground gap-1.5 rounded-lg border-0 bg-muted py-1 pr-2 pl-2.5 text-sm transition-colors select-none w-full text-foreground placeholder:text-muted-foreground focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none dark:bg-input/30 flex items-center justify-between whitespace-nowrap disabled:cursor-not-allowed disabled:opacity-50",

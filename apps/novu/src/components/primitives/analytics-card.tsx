@@ -1,11 +1,11 @@
 import { ComponentType } from 'react';
-import { cn } from '@merge/ui/lib/utils';
+import { cn } from '@merge-rd/ui/lib/utils';
 import { useDelayedLoading } from '../../hooks/use-delayed-loading';
 import { TrendLineDown } from '../icons/trend-line-down';
 import { TrendLineUp } from '../icons/trend-line-up';
 import { AnimatedNumber } from './animated-number';
 import { HelpTooltipIndicator } from './help-tooltip-indicator';
-import { Skeleton } from '@merge/ui/components/skeleton';
+import { Skeleton } from '@merge-rd/ui/components/skeleton';
 
 type TrendDirection = 'up' | 'down' | 'neutral';
 

@@ -1,8 +1,8 @@
 import type ScopeRepresentation from "@keycloak/keycloak-admin-client/lib/defs/scopeRepresentation";
 import { useFetch } from "../../../shared/keycloak-ui-shared";
-import { Button } from "@merge/ui/components/button";
-import { Input } from "@merge/ui/components/input";
-import { Popover, PopoverContent, PopoverTrigger } from "@merge/ui/components/popover";
+import { Button } from "@merge-rd/ui/components/button";
+import { Input } from "@merge-rd/ui/components/input";
+import { Popover, PopoverContent, PopoverTrigger } from "@merge-rd/ui/components/popover";
 import { useRef, useState } from "react";
 import { Controller, useFormContext } from "react-hook-form";
 import { useTranslation } from "react-i18next";

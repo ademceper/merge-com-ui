@@ -1,5 +1,5 @@
-import { Label } from "@merge/ui/components/label";
-import { Switch } from "@merge/ui/components/switch";
+import { Label } from "@merge-rd/ui/components/label";
+import { Switch } from "@merge-rd/ui/components/switch";
 import { KeycloakSpinner as Spinner } from "../../../shared/keycloak-ui-shared";
 import debouncePromise from "p-debounce";
 import { ReactNode, useMemo, useState } from "react";

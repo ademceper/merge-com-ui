@@ -1,9 +1,9 @@
 import type GroupRepresentation from "@keycloak/keycloak-admin-client/lib/defs/groupRepresentation";
 import UserRepresentation from "@keycloak/keycloak-admin-client/lib/defs/userRepresentation";
-import { Button } from "@merge/ui/components/button";
-import { Checkbox } from "@merge/ui/components/checkbox";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@merge/ui/components/dialog";
-import { Popover, PopoverContent, PopoverTrigger } from "@merge/ui/components/popover";
+import { Button } from "@merge-rd/ui/components/button";
+import { Checkbox } from "@merge-rd/ui/components/checkbox";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@merge-rd/ui/components/dialog";
+import { Popover, PopoverContent, PopoverTrigger } from "@merge-rd/ui/components/popover";
 import { Question } from "@phosphor-icons/react";
 import { useHelp } from "../../shared/keycloak-ui-shared";
 import { useFetch } from "../../shared/keycloak-ui-shared";
@@ -16,7 +16,7 @@ import {
     EmptyDescription,
     EmptyHeader,
     EmptyTitle
-} from "@merge/ui/components/empty";
+} from "@merge-rd/ui/components/empty";
 import { useTranslation } from "react-i18next";
 import { useAdminClient } from "../admin-client";
 import { GroupPath } from "../components/group/GroupPath";

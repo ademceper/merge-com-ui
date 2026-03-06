@@ -1,19 +1,54 @@
 {
-  "name": "@merge/auth",
-  "version": "0.0.0",
+  "name": "@merge-rd/auth",
+  "version": "0.1.0",
   "type": "module",
-  "private": true,
+  "private": false,
+  "sideEffects": false,
+  "scripts": {
+    "build": "tsup"
+  },
+  "files": [
+    "dist"
+  ],
   "dependencies": {
-    "@merge/ui": "workspace:*",
-    "@phosphor-icons/react": "^2.1.10",
-    "next-themes": "^0.4.6",
-    "oidc-spa": "~10.0.7",
-    "react": "^19.2.4"
+    "oidc-spa": "~10.0.7"
+  },
+  "peerDependencies": {
+    "@merge-rd/ui": ">=0.1.0",
+    "@phosphor-icons/react": ">=2.0.0",
+    "next-themes": ">=0.4.0",
+    "react": ">=18.0.0"
+  },
+  "peerDependenciesMeta": {
+    "@merge-rd/ui": { "optional": true },
+    "@phosphor-icons/react": { "optional": true },
+    "next-themes": { "optional": true }
   },
   "devDependencies": {
     "@merge/ts-cfg": "workspace:*",
+    "@merge-rd/ui": "workspace:*",
+    "@phosphor-icons/react": "^2.1.10",
     "@types/react": "^19.1.9",
+    "next-themes": "^0.4.6",
+    "react": "^19.2.4",
+    "tsup": "^8.5.1",
     "typescript": "^5.9.2"
+  },
+  "publishConfig": {
+    "exports": {
+      ".": {
+        "import": "./dist/index.mjs",
+        "types": "./dist/index.d.mts"
+      },
+      "./*": {
+        "import": "./dist/*.mjs",
+        "types": "./dist/*.d.mts"
+      },
+      "./components/*": {
+        "import": "./dist/components/*.mjs",
+        "types": "./dist/components/*.d.mts"
+      }
+    }
   },
   "exports": {
     ".": "./src/index.ts",

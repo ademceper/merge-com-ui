@@ -3,7 +3,7 @@ import {
     DialogContent,
     DialogHeader,
     DialogTitle
-} from "@merge/ui/components/dialog";
+} from "@merge-rd/ui/components/dialog";
 import { useTranslation } from "react-i18next";
 import { useServerInfo } from "../../../context/server-info/ServerInfoProvider";
 import { KEY_PROVIDER_TYPE } from "../../../util";

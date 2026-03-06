@@ -5,7 +5,7 @@ import { getComponentByType } from '@/components/workflow-editor/steps/component
 import { TabsSection } from '@/components/workflow-editor/steps/tabs-section';
 import { useEnvironment } from '@/context/environment/hooks';
 
-import { cn } from '@merge/ui/lib/utils';
+import { cn } from '@merge-rd/ui/lib/utils';
 import { StepEditorUnavailable } from '../step-editor-unavailable';
 
 type SmsEditorProps = { uiSchema: UiSchema };

@@ -1,6 +1,6 @@
 /** biome-ignore-all lint/correctness/useUniqueElementIds: working correctly */
 import { ChangeEventHandler, KeyboardEventHandler, useRef } from 'react';
-import { cn } from '@merge/ui/lib/utils';
+import { cn } from '@merge-rd/ui/lib/utils';
 
 const dayContainerClassName =
   'flex h-full items-center justify-center border-r border-r-neutral-200 last:border-r-0 last:rounded-r-lg first:rounded-l-lg first:border-l-0 first:[&_label]:rounded-l-lg last:[&_label]:rounded-r-lg';

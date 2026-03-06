@@ -1,13 +1,13 @@
 import type ResourceRepresentation from "@keycloak/keycloak-admin-client/lib/defs/resourceRepresentation";
-import { Button } from "@merge/ui/components/button";
-import { Input } from "@merge/ui/components/input";
+import { Button } from "@merge-rd/ui/components/button";
+import { Input } from "@merge-rd/ui/components/input";
 import {
     Select,
     SelectContent,
     SelectItem,
     SelectTrigger,
     SelectValue
-} from "@merge/ui/components/select";
+} from "@merge-rd/ui/components/select";
 import {
     Table,
     TableBody,

@@ -3,14 +3,14 @@
 import * as React from "react"
 import { Combobox as ComboboxPrimitive } from "@base-ui/react"
 
-import { cn } from "@merge/ui/lib/utils"
-import { Button } from "@merge/ui/components/button"
+import { cn } from "@merge-rd/ui/lib/utils"
+import { Button } from "@merge-rd/ui/components/button"
 import {
   InputGroup,
   InputGroupAddon,
   InputGroupButton,
   InputGroupInput,
-} from "@merge/ui/components/input-group"
+} from "@merge-rd/ui/components/input-group"
 import { CaretDownIcon, XIcon, CheckIcon } from "@phosphor-icons/react"
 
 const Combobox = ComboboxPrimitive.Root

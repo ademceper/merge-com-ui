@@ -5,8 +5,8 @@ import useEmblaCarousel, {
   type UseEmblaCarouselType,
 } from "embla-carousel-react"
 
-import { cn } from "@merge/ui/lib/utils"
-import { Button } from "@merge/ui/components/button"
+import { cn } from "@merge-rd/ui/lib/utils"
+import { Button } from "@merge-rd/ui/components/button"
 import { CaretLeftIcon, CaretRightIcon } from "@phosphor-icons/react"
 
 type CarouselApi = UseEmblaCarouselType[1]

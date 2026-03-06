@@ -19,9 +19,9 @@ import {
 import { useAiDrawer } from '@/components/ai-drawer';
 import { useTelemetry } from '@/hooks/use-telemetry';
 import { TelemetryEvent } from '@/utils/telemetry';
-import { cn } from '@merge/ui/lib/utils';
-import { Button } from '@merge/ui/components/button';
-import { Kbd } from '@merge/ui/components/kbd';
+import { cn } from '@merge-rd/ui/lib/utils';
+import { Button } from '@merge-rd/ui/components/button';
+import { Kbd } from '@merge-rd/ui/components/kbd';
 import * as CommandMenu from './command-menu';
 import { CommandCategory, Command as CommandType } from './command-types';
 import { useCommandPalette } from './hooks/use-command-palette';

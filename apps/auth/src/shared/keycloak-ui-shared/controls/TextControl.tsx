@@ -1,4 +1,4 @@
-import { Input } from "@merge/ui/components/input";
+import { Input } from "@merge-rd/ui/components/input";
 import { ReactNode } from "react";
 import {
     FieldPath,

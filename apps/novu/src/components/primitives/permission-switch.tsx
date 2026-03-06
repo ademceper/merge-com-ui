@@ -1,5 +1,5 @@
 import { PermissionsEnum } from '@novu/shared';
-import { Switch } from '@merge/ui/components/switch';
+import { Switch } from '@merge-rd/ui/components/switch';
 import { useHasPermission } from '@/hooks/use-has-permission';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/primitives/tooltip';
 

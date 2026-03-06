@@ -3,9 +3,9 @@ import { type Control, Path, useFieldArray, useWatch } from 'react-hook-form';
 import { RiAddLine } from 'react-icons/ri';
 import { v4 as uuidv4 } from 'uuid';
 
-import { Button } from '@merge/ui/components/button';
-import { Label } from '@merge/ui/components/label';
-import { cn } from '@merge/ui/lib/utils';
+import { Button } from '@merge-rd/ui/components/button';
+import { Label } from '@merge-rd/ui/components/label';
+import { cn } from '@merge-rd/ui/lib/utils';
 import { MAX_NESTING_DEPTH } from '../constants';
 import { useSchemaPropertyType } from '../hooks/use-schema-property-type';
 import type { JSONSchema7 } from '../json-schema';

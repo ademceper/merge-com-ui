@@ -1,13 +1,13 @@
-import { Badge } from "@merge/ui/components/badge";
-import { buttonVariants } from "@merge/ui/components/button";
-import { Button } from "@merge/ui/components/button";
+import { Badge } from "@merge-rd/ui/components/badge";
+import { buttonVariants } from "@merge-rd/ui/components/button";
+import { Button } from "@merge-rd/ui/components/button";
 import {
     DropdownMenu,
     DropdownMenuContent,
     DropdownMenuTrigger,
-} from "@merge/ui/components/dropdown-menu";
-import { Label } from "@merge/ui/components/label";
-import { Switch } from "@merge/ui/components/switch";
+} from "@merge-rd/ui/components/dropdown-menu";
+import { Label } from "@merge-rd/ui/components/label";
+import { Switch } from "@merge-rd/ui/components/switch";
 import { ReactElement, ReactNode, useState, isValidElement, Fragment } from "react";
 import { useTranslation } from "react-i18next";
 

@@ -12,7 +12,7 @@ import { EmailPreviewHeader } from '@/components/workflow-editor/steps/email/ema
 import { SenderConfigDrawer } from '@/components/workflow-editor/steps/email/sender-config-drawer';
 import { useEnvironment } from '@/context/environment/hooks';
 import { useFeatureFlag } from '@/hooks/use-feature-flag';
-import { cn } from '@merge/ui/lib/utils';
+import { cn } from '@merge-rd/ui/lib/utils';
 import { StepEditorUnavailable } from '../step-editor-unavailable';
 
 type EmailEditorProps = { uiSchema: UiSchema; isEditorV2?: boolean };

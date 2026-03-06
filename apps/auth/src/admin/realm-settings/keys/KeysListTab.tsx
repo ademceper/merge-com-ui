@@ -1,13 +1,13 @@
 import type ComponentRepresentation from "@keycloak/keycloak-admin-client/lib/defs/componentRepresentation";
 import type { KeyMetadataRepresentation } from "@keycloak/keycloak-admin-client/lib/defs/keyMetadataRepresentation";
 import { useFetch } from "../../../shared/keycloak-ui-shared";
-import { Button } from "@merge/ui/components/button";
+import { Button } from "@merge-rd/ui/components/button";
 import {
     DataTable,
     DataTableRowActions,
     type ColumnDef
 } from "@/admin/components/data-table";
-import { DropdownMenuItem } from "@merge/ui/components/dropdown-menu";
+import { DropdownMenuItem } from "@merge-rd/ui/components/dropdown-menu";
 import { Plus } from "@phosphor-icons/react";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";

@@ -2,8 +2,8 @@ import ComponentRepresentation from "@keycloak/keycloak-admin-client/lib/defs/co
 import ComponentTypeRepresentation from "@keycloak/keycloak-admin-client/lib/defs/componentTypeRepresentation";
 import { getErrorDescription, getErrorMessage, TextControl, useFetch } from "../../../shared/keycloak-ui-shared";
 import { toast } from "sonner";
-import { Button } from "@merge/ui/components/button";
-import { DropdownMenuItem } from "@merge/ui/components/dropdown-menu";
+import { Button } from "@merge-rd/ui/components/button";
+import { DropdownMenuItem } from "@merge-rd/ui/components/dropdown-menu";
 import { useState } from "react";
 import { FormProvider, useForm, useWatch } from "react-hook-form";
 import { useTranslation } from "react-i18next";
@@ -18,7 +18,7 @@ import {
     AlertDialogFooter,
     AlertDialogHeader,
     AlertDialogTitle
-} from "@merge/ui/components/alert-dialog";
+} from "@merge-rd/ui/components/alert-dialog";
 import { DynamicComponents } from "../../components/dynamic/DynamicComponents";
 import { FormAccess } from "../../components/form/FormAccess";
 import { KeycloakSpinner } from "../../../shared/keycloak-ui-shared";

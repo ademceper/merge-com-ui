@@ -31,7 +31,7 @@ import { CaretDown, CaretUp, DotsSixVertical } from "@phosphor-icons/react";
 import * as React from "react";
 import type { CSSProperties } from "react";
 
-import { Button } from "@merge/ui/components/button";
+import { Button } from "@merge-rd/ui/components/button";
 import {
   Table,
   TableBody,
@@ -39,7 +39,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@merge/ui/components/table";
+} from "@merge-rd/ui/components/table";
 
 export type DraggableTableRowsProps<TData> = {
   columns: ColumnDef<TData>[];

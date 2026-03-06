@@ -1,6 +1,6 @@
 import type { UserProfileConfig } from "@keycloak/keycloak-admin-client/lib/defs/userProfileMetadata";
 import { FormErrorText, HelpItem, useFetch } from "../../../shared/keycloak-ui-shared";
-import { Label } from "@merge/ui/components/label";
+import { Label } from "@merge-rd/ui/components/label";
 import { useState } from "react";
 import { useFormContext } from "react-hook-form";
 import { useTranslation } from "react-i18next";

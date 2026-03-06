@@ -5,8 +5,8 @@ import { StepIdEnum, useOnboardingSteps } from '../../hooks/use-onboarding-steps
 import { useTelemetry } from '../../hooks/use-telemetry';
 import { buildRoute, ROUTES } from '../../utils/routes';
 import { TelemetryEvent } from '../../utils/telemetry';
-import { cn } from '@merge/ui/lib/utils';
-import { Card, CardContent } from '@merge/ui/components/card';
+import { cn } from '@merge-rd/ui/lib/utils';
+import { Card, CardContent } from '@merge-rd/ui/components/card';
 import { NovuLogo, PointingArrow } from './icons';
 import { leftSection, logo, mainCard, stepItem, stepsList, textItem } from './progress-section.animations';
 

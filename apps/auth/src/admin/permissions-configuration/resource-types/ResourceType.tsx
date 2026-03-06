@@ -1,6 +1,6 @@
 import { useTranslation } from "react-i18next";
-import { Label } from "@merge/ui/components/label";
-import { RadioGroup, RadioGroupItem } from "@merge/ui/components/radio-group";
+import { Label } from "@merge-rd/ui/components/label";
+import { RadioGroup, RadioGroupItem } from "@merge-rd/ui/components/radio-group";
 import { HelpItem } from "../../../shared/keycloak-ui-shared";
 import { useFormContext } from "react-hook-form";
 import { useState, type JSX } from "react";

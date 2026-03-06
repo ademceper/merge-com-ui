@@ -4,9 +4,9 @@ import {
     SelectItem,
     SelectTrigger,
     SelectValue
-} from "@merge/ui/components/select";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@merge/ui/components/dropdown-menu";
-import { Button } from "@merge/ui/components/button";
+} from "@merge-rd/ui/components/select";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@merge-rd/ui/components/dropdown-menu";
+import { Button } from "@merge-rd/ui/components/button";
 import { Funnel } from "@phosphor-icons/react";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";

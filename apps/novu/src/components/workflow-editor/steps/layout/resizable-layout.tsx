@@ -1,6 +1,6 @@
 import { ReactNode } from 'react';
-import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from '@merge/ui/components/resizable';
-import { cn } from '@merge/ui/lib/utils';
+import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from '@merge-rd/ui/components/resizable';
+import { cn } from '@merge-rd/ui/lib/utils';
 
 type ResizableLayoutProps = {
   children: ReactNode;

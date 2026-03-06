@@ -1,7 +1,7 @@
 /** biome-ignore-all lint/correctness/useUniqueElementIds: working correctly */
 import { RiSparkling2Line } from 'react-icons/ri';
 import { useNavigate } from 'react-router-dom';
-import { Button } from '@merge/ui/components/button';
+import { Button } from '@merge-rd/ui/components/button';
 import { ROUTES } from '@/utils/routes';
 import { openInNewTab } from '@/utils/url';
 import { IS_SELF_HOSTED, SELF_HOSTED_UPGRADE_REDIRECT_URL } from '../../config';

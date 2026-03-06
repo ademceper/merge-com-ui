@@ -1,5 +1,5 @@
 import { ArrayFieldTemplateItemType } from '@rjsf/utils';
-import { cn } from '@merge/ui/lib/utils';
+import { cn } from '@merge-rd/ui/lib/utils';
 import { RemoveButton } from './button-templates';
 
 export const ArrayFieldItemTemplate = (props: ArrayFieldTemplateItemType) => {

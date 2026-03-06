@@ -4,10 +4,10 @@ import { useTranslation } from "react-i18next";
 import { Link, type LinkProps, type To } from "react-router-dom";
 
 const RouterLink = Link as ComponentType<LinkProps>;
-import { Button } from "@merge/ui/components/button";
+import { Button } from "@merge-rd/ui/components/button";
 import { TextAreaControl, TextControl } from "../../../shared/keycloak-ui-shared";
 
-import { cn } from "@merge/ui/lib/utils";
+import { cn } from "@merge-rd/ui/lib/utils";
 import { FormAccess } from "../form/FormAccess";
 import { AttributeForm } from "../key-value-form/AttributeForm";
 import { ViewHeader } from "../view-header/ViewHeader";

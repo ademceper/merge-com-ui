@@ -2,7 +2,7 @@ import type { PageProps } from "keycloakify/login/pages/PageProps";
 import type { KcContext } from "../KcContext";
 import type { I18n } from "../i18n";
 import AuthLayout from "../components/AuthLayout";
-import { Link } from "@merge/ui/components/link";
+import { Link } from "@merge-rd/ui/components/link";
 
 export default function LoginPageExpired(props: PageProps<Extract<KcContext, { pageId: "login-page-expired.ftl" }>, I18n>) {
     const { kcContext, i18n } = props;

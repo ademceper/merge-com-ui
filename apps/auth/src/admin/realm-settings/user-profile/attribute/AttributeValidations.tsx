@@ -1,5 +1,5 @@
-import { Button } from "@merge/ui/components/button";
-import { Separator } from "@merge/ui/components/separator";
+import { Button } from "@merge-rd/ui/components/button";
+import { Separator } from "@merge-rd/ui/components/separator";
 import { PlusCircle } from "@phosphor-icons/react";
 import {
     Table,

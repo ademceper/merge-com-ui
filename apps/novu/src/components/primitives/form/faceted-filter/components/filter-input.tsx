@@ -1,4 +1,4 @@
-import { cn } from '@merge/ui/lib/utils';
+import { cn } from '@merge-rd/ui/lib/utils';
 import { EnterLineIcon } from '../../../../icons/enter-line';
 import { InputPure } from '@/components/primitives/input';
 import { STYLES } from '../styles';

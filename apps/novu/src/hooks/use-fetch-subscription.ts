@@ -4,7 +4,7 @@ import { differenceInDays, isSameDay } from 'date-fns';
 import { useMemo } from 'react';
 import { getSubscription } from '@/api/billing';
 import { IS_ENTERPRISE, IS_SELF_HOSTED } from '@/config';
-import { useOrganization } from '@merge/auth';
+import { useOrganization } from '@merge-rd/auth';
 import { useEnvironment } from '@/context/environment/hooks';
 import { QueryKeys } from '@/utils/query-keys';
 

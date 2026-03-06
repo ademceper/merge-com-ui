@@ -1,6 +1,6 @@
 import { UserProfileAttributeMetadata } from "@keycloak/keycloak-admin-client/lib/defs/userProfileMetadata";
-import { Field, FieldContent, FieldLabel } from "@merge/ui/components/field";
-import { InputGroup } from "@merge/ui/components/input-group";
+import { Field, FieldContent, FieldLabel } from "@merge-rd/ui/components/field";
+import { InputGroup } from "@merge-rd/ui/components/input-group";
 import { TFunction } from "i18next";
 import { get } from "lodash-es";
 import { PropsWithChildren, ReactNode } from "react";

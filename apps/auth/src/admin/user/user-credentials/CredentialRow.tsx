@@ -5,8 +5,8 @@ import {
     DropdownMenuContent,
     DropdownMenuItem,
     DropdownMenuTrigger,
-} from "@merge/ui/components/dropdown-menu";
-import { Button } from "@merge/ui/components/button";
+} from "@merge-rd/ui/components/dropdown-menu";
+import { Button } from "@merge-rd/ui/components/button";
 import { TableCell } from "@/admin/components/data-table";
 import type CredentialRepresentation from "@keycloak/keycloak-admin-client/lib/defs/credentialRepresentation";
 import useToggle from "../../utils/useToggle";

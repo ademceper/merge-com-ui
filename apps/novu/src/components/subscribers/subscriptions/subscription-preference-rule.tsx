@@ -6,9 +6,9 @@ import { motion } from 'motion/react';
 import { useState } from 'react';
 import { RiContractUpDownLine, RiExpandUpDownLine } from 'react-icons/ri';
 import { TopicSubscriptionPreference } from '@/api/topics';
-import { Card, CardContent, CardHeader } from '@merge/ui/components/card';
-import { Checkbox } from '@merge/ui/components/checkbox';
-import { cn } from '@merge/ui/lib/utils';
+import { Card, CardContent, CardHeader } from '@merge-rd/ui/components/card';
+import { Checkbox } from '@merge-rd/ui/components/checkbox';
+import { cn } from '@merge-rd/ui/lib/utils';
 
 loadLanguage('json');
 

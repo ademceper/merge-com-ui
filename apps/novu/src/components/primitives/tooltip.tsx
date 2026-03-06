@@ -5,7 +5,7 @@ export {
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-} from "@merge/ui/components/tooltip";
+} from "@merge-rd/ui/components/tooltip";
 
 /**
  * TooltipPortal is a passthrough since merge/ui's TooltipContent already handles portaling.

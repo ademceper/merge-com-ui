@@ -1,6 +1,6 @@
 import { ReactElement } from "react";
 import { Link } from "react-router-dom";
-import { Tooltip, TooltipContent, TooltipTrigger } from "@merge/ui/components/tooltip";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@merge-rd/ui/components/tooltip";
 
 import type AdminEventRepresentation from "@keycloak/keycloak-admin-client/lib/defs/adminEventRepresentation";
 import { useRealm } from "../context/realm-context/RealmContext";

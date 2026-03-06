@@ -6,7 +6,7 @@ import { useFetchIntegrations } from '@/hooks/use-fetch-integrations';
 import { showSuccessToast } from '../../../components/primitives/sonner-helpers';
 import { useSetPrimaryIntegration } from '../../../hooks/use-set-primary-integration';
 import { buildRoute, ROUTES } from '../../../utils/routes';
-import { Button } from '@merge/ui/components/button';
+import { Button } from '@merge-rd/ui/components/button';
 import { UnsavedChangesAlertDialog } from '../../unsaved-changes-alert-dialog';
 import { IntegrationFormData } from '../types';
 import { ChannelTabs } from './channel-tabs';

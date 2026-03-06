@@ -19,9 +19,9 @@ import {
   AlertDialogMedia,
   AlertDialogTitle,
   AlertDialogTrigger,
-} from "@merge/ui/components/alert-dialog"
-import { Badge } from "@merge/ui/components/badge"
-import { Button } from "@merge/ui/components/button"
+} from "@merge-rd/ui/components/alert-dialog"
+import { Badge } from "@merge-rd/ui/components/badge"
+import { Button } from "@merge-rd/ui/components/button"
 import {
   Card,
   CardAction,
@@ -30,7 +30,7 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@merge/ui/components/card"
+} from "@merge-rd/ui/components/card"
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
@@ -47,9 +47,9 @@ import {
   DropdownMenuSubContent,
   DropdownMenuSubTrigger,
   DropdownMenuTrigger,
-} from "@merge/ui/components/dropdown-menu"
-import { Field, FieldGroup, FieldLabel } from "@merge/ui/components/field"
-import { Input } from "@merge/ui/components/input"
+} from "@merge-rd/ui/components/dropdown-menu"
+import { Field, FieldGroup, FieldLabel } from "@merge-rd/ui/components/field"
+import { Input } from "@merge-rd/ui/components/input"
 import {
   Select,
   SelectContent,
@@ -57,11 +57,11 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@merge/ui/components/select"
-import { Textarea } from "@merge/ui/components/textarea"
+} from "@merge-rd/ui/components/select"
+import { Textarea } from "@merge-rd/ui/components/textarea"
 import { PlusIcon, BluetoothIcon, DotsThreeVerticalIcon, FileIcon, FolderIcon, FolderOpenIcon, CodeIcon, DotsThreeOutlineIcon, MagnifyingGlassIcon, FloppyDiskIcon, DownloadIcon, EyeIcon, LayoutIcon, PaletteIcon, SunIcon, MoonIcon, MonitorIcon, UserIcon, CreditCardIcon, GearIcon, KeyboardIcon, TranslateIcon, BellIcon, EnvelopeIcon, ShieldIcon, QuestionIcon, FileTextIcon, SignOutIcon } from "@phosphor-icons/react"
 
-import { ThemeToggleButton } from "@merge/ui/components/theme-toggle"
+import { ThemeToggleButton } from "@merge-rd/ui/components/theme-toggle"
 
 export function ComponentExample() {
   return (

@@ -1,7 +1,7 @@
 import { ChannelTypeEnum, providers as novuProviders, PermissionsEnum } from '@novu/shared';
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { Button } from '@merge/ui/components/button';
+import { Button } from '@merge-rd/ui/components/button';
 import { useFetchIntegrations } from '@/hooks/use-fetch-integrations';
 import { useHasPermission } from '@/hooks/use-has-permission';
 import { useSetPrimaryIntegration } from '@/hooks/use-set-primary-integration';

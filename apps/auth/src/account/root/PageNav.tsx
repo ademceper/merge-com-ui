@@ -24,8 +24,8 @@ import fetchContentJson from "../content/fetchContent";
 import { environment, type Environment, type Feature } from "../environment";
 import { TFuncKey } from "../i18n";
 import { usePromise } from "../utils/usePromise";
-import { buttonVariants } from "@merge/ui/components/button";
-import { cn } from "@merge/ui/lib/utils";
+import { buttonVariants } from "@merge-rd/ui/components/button";
+import { cn } from "@merge-rd/ui/lib/utils";
 
 type RootMenuItem = {
     id?: string;

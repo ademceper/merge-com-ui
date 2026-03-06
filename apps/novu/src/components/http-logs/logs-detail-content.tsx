@@ -4,7 +4,7 @@ import { TimeDisplayHoverCard } from '@/components/time-display-hover-card';
 import { formatDateSimple } from '@/utils/format-date';
 import { RequestLog } from '../../types/logs';
 import { CopyButton } from '../primitives/copy-button';
-import { Separator } from '@merge/ui/components/separator';
+import { Separator } from '@merge-rd/ui/components/separator';
 import { EditableJsonViewer } from '../workflow-editor/steps/shared/editable-json-viewer/editable-json-viewer';
 import { HttpStatusBadge } from './http-status-badge';
 import { TransactionIdDisplay } from './transaction-id-display';

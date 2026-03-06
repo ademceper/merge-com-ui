@@ -1,6 +1,6 @@
-import { Input } from "@merge/ui/components/input";
-import { Label } from "@merge/ui/components/label";
-import { RadioGroup, RadioGroupItem } from "@merge/ui/components/radio-group";
+import { Input } from "@merge-rd/ui/components/input";
+import { Label } from "@merge-rd/ui/components/label";
+import { RadioGroup, RadioGroupItem } from "@merge-rd/ui/components/radio-group";
 import { useState } from "react";
 import { FormErrorText, HelpItem } from "../../../../shared/keycloak-ui-shared";
 import { useTranslation } from "react-i18next";

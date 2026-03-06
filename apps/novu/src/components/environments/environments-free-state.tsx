@@ -1,7 +1,7 @@
 /** biome-ignore-all lint/correctness/useUniqueElementIds: working correctly */
 import { RiBookMarkedLine, RiSparkling2Line } from 'react-icons/ri';
 import { Link, useNavigate } from 'react-router-dom';
-import { useOrganization } from '@merge/auth';
+import { useOrganization } from '@merge-rd/auth';
 import { useEnvironment, useFetchEnvironments } from '@/context/environment/hooks';
 import { ROUTES } from '@/utils/routes';
 import { openInNewTab } from '@/utils/url';
@@ -9,11 +9,11 @@ import { IS_SELF_HOSTED, SELF_HOSTED_UPGRADE_REDIRECT_URL } from '../../config';
 import { useTelemetry } from '../../hooks/use-telemetry';
 import { TelemetryEvent } from '../../utils/telemetry';
 import { Badge } from '@/components/primitives/badge';
-import { Button } from '@merge/ui/components/button';
+import { Button } from '@merge-rd/ui/components/button';
 import { LinkButton } from '../primitives/button-link';
 import { CopyButton } from '../primitives/copy-button';
 import { EnvironmentBranchIcon } from '../primitives/environment-branch-icon';
-import { Separator } from '@merge/ui/components/separator';
+import { Separator } from '@merge-rd/ui/components/separator';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '../primitives/table';
 import TruncatedText from '../truncated-text';
 

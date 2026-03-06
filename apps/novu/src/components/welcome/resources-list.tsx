@@ -3,8 +3,8 @@ import { motion } from 'motion/react';
 import { Link } from 'react-router-dom';
 import { useTelemetry } from '@/hooks/use-telemetry';
 import { TelemetryEvent } from '@/utils/telemetry';
-import { Card, CardContent } from '@merge/ui/components/card';
-import { ScrollArea, ScrollBar } from '@merge/ui/components/scroll-area';
+import { Card, CardContent } from '@merge-rd/ui/components/card';
+import { ScrollArea, ScrollBar } from '@merge-rd/ui/components/scroll-area';
 
 export interface Resource {
   title: string;

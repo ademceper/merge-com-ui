@@ -1,6 +1,6 @@
 import { RiArrowDownLine, RiArrowUpLine } from 'react-icons/ri';
 import { EnterLineIcon } from '../../../../icons/enter-line';
-import { Separator } from '@merge/ui/components/separator';
+import { Separator } from '@merge-rd/ui/components/separator';
 import { SizeType } from '../types';
 import { ClearButton } from './clear-button';
 import { FilterInput } from './filter-input';

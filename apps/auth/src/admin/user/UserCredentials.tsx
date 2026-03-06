@@ -2,8 +2,8 @@ import type CredentialRepresentation from "@keycloak/keycloak-admin-client/lib/d
 import type UserRepresentation from "@keycloak/keycloak-admin-client/lib/defs/userRepresentation";
 import { getErrorDescription, getErrorMessage, HelpItem, useFetch } from "../../shared/keycloak-ui-shared";
 import { toast } from "sonner";
-import { Button } from "@merge/ui/components/button";
-import { Separator } from "@merge/ui/components/separator";
+import { Button } from "@merge-rd/ui/components/button";
+import { Separator } from "@merge-rd/ui/components/separator";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/admin/components/data-table";
 import { Fragment, DragEvent as ReactDragEvent, useMemo, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -16,7 +16,7 @@ import {
     EmptyDescription,
     EmptyHeader,
     EmptyTitle
-} from "@merge/ui/components/empty";
+} from "@merge-rd/ui/components/empty";
 import { toUpperCase } from "../util";
 import { FederatedUserLink } from "./FederatedUserLink";
 import { CredentialRow } from "./user-credentials/CredentialRow";

@@ -1,7 +1,7 @@
 import * as React from "react";
 import { Link } from "react-router-dom";
-import { cn } from "@merge/ui/lib/utils";
-import { Button } from "@merge/ui/components/button";
+import { cn } from "@merge-rd/ui/lib/utils";
+import { Button } from "@merge-rd/ui/components/button";
 import {
   ChevronLeft,
   ChevronRight,
@@ -14,7 +14,7 @@ export {
   PaginationContent,
   PaginationItem,
   PaginationEllipsis,
-} from "@merge/ui/components/pagination";
+} from "@merge-rd/ui/components/pagination";
 
 type PaginationLinkProps = {
   to: string;

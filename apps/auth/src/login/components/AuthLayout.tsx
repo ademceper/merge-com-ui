@@ -1,5 +1,5 @@
 import { ReactNode } from "react";
-import { useThemeToggle } from "@merge/ui/components/theme-toggle";
+import { useThemeToggle } from "@merge-rd/ui/components/theme-toggle";
 
 const baseUrl = import.meta.env.BASE_URL;
 

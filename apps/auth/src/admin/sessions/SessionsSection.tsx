@@ -1,12 +1,12 @@
 import UserSessionRepresentation from "@keycloak/keycloak-admin-client/lib/defs/userSessionRepresentation";
-import { DropdownMenuItem } from "@merge/ui/components/dropdown-menu";
+import { DropdownMenuItem } from "@merge-rd/ui/components/dropdown-menu";
 import {
     Select,
     SelectContent,
     SelectItem,
     SelectTrigger,
     SelectValue
-} from "@merge/ui/components/select";
+} from "@merge-rd/ui/components/select";
 import { DotsThreeVertical, SignOut, ProhibitInset } from "@phosphor-icons/react";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";

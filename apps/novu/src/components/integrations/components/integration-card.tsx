@@ -14,12 +14,12 @@ import {
 } from 'react-icons/ri';
 import { useNavigate } from 'react-router-dom';
 import { Badge } from '@/components/primitives/badge';
-import { Button } from '@merge/ui/components/button';
+import { Button } from '@merge-rd/ui/components/button';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/primitives/tooltip';
 import { UpgradeCTATooltip } from '@/components/upgrade-cta-tooltip';
 import { useFetchSubscription } from '../../../hooks/use-fetch-subscription';
 import { ROUTES } from '../../../utils/routes';
-import { cn } from '@merge/ui/lib/utils';
+import { cn } from '@merge-rd/ui/lib/utils';
 import { EnvironmentBranchIcon } from '../../primitives/environment-branch-icon';
 import { StatusBadge, StatusBadgeIcon } from '../../primitives/status-badge';
 import { TableIntegration } from '../types';

@@ -3,11 +3,11 @@ import { RiArrowDownSLine, RiArrowRightUpLine, RiLoader4Fill } from 'react-icons
 import { useNavigate } from 'react-router-dom';
 import type { ActivityFilters } from '@/api/activity';
 import { ActivityTableRow } from '@/components/activity/components/activity-table-row';
-import { Button } from '@merge/ui/components/button';
+import { Button } from '@merge-rd/ui/components/button';
 import { LinkButton } from '@/components/primitives/button-link';
-import { Skeleton } from '@merge/ui/components/skeleton';
+import { Skeleton } from '@merge-rd/ui/components/skeleton';
 import { Table, TableBody } from '@/components/primitives/table';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@merge/ui/components/tabs';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@merge-rd/ui/components/tabs';
 import { useEnvironment } from '@/context/environment/hooks';
 import { useFetchActivities } from '@/hooks/use-fetch-activities';
 import { useFetchWorkflowRunsCount } from '@/hooks/use-fetch-workflow-runs-count';

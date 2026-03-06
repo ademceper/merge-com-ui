@@ -1,6 +1,6 @@
 import { forwardRef, useCallback, useRef, useState } from 'react';
 import { Sheet, SheetContent, SheetDescription, SheetTitle } from '@/components/primitives/sheet';
-import { Skeleton } from '@merge/ui/components/skeleton';
+import { Skeleton } from '@merge-rd/ui/components/skeleton';
 import { VisuallyHidden } from '@/components/primitives/visually-hidden';
 import { UnsavedChangesAlertDialog } from '@/components/unsaved-changes-alert-dialog';
 import { useFetchTranslationGroup } from '@/hooks/use-fetch-translation-group';

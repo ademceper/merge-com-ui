@@ -6,16 +6,16 @@ import { getErrorDescription, getErrorMessage, HelpItem,
     TextControl,
     useFetch } from "../../../../shared/keycloak-ui-shared";
 import { toast } from "sonner";
-import { Button } from "@merge/ui/components/button";
-import { DropdownMenuItem } from "@merge/ui/components/dropdown-menu";
-import { Label } from "@merge/ui/components/label";
+import { Button } from "@merge-rd/ui/components/button";
+import { DropdownMenuItem } from "@merge-rd/ui/components/dropdown-menu";
+import { Label } from "@merge-rd/ui/components/label";
 import {
     Select,
     SelectContent,
     SelectItem,
     SelectTrigger,
     SelectValue
-} from "@merge/ui/components/select";
+} from "@merge-rd/ui/components/select";
 import { useState } from "react";
 import { Controller, FormProvider, useForm, useWatch } from "react-hook-form";
 import { useTranslation } from "react-i18next";

@@ -1,6 +1,6 @@
 import type UserRepresentation from "@keycloak/keycloak-admin-client/lib/defs/userRepresentation";
-import { Button } from "@merge/ui/components/button";
-import { Popover, PopoverContent, PopoverTrigger } from "@merge/ui/components/popover";
+import { Button } from "@merge-rd/ui/components/button";
+import { Popover, PopoverContent, PopoverTrigger } from "@merge-rd/ui/components/popover";
 import { Question } from "@phosphor-icons/react";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
@@ -17,7 +17,7 @@ import {
     EmptyDescription,
     EmptyHeader,
     EmptyTitle
-} from "@merge/ui/components/empty";
+} from "@merge-rd/ui/components/empty";
 import { useEffect, useState } from "react";
 
 export const UsersInRoleTab = () => {

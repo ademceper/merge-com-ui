@@ -7,18 +7,18 @@ import {
     EmptyHeader,
     EmptyMedia,
     EmptyTitle
-} from "@merge/ui/components/empty";
+} from "@merge-rd/ui/components/empty";
 import {
     Dialog,
     DialogContent,
     DialogFooter,
     DialogHeader,
     DialogTitle
-} from "@merge/ui/components/dialog";
-import { Badge } from "@merge/ui/components/badge";
-import { Button } from "@merge/ui/components/button";
-import { Input } from "@merge/ui/components/input";
-import { Label } from "@merge/ui/components/label";
+} from "@merge-rd/ui/components/dialog";
+import { Badge } from "@merge-rd/ui/components/badge";
+import { Button } from "@merge-rd/ui/components/button";
+import { Input } from "@merge-rd/ui/components/input";
+import { Label } from "@merge-rd/ui/components/label";
 import {
     Table,
     TableBody,

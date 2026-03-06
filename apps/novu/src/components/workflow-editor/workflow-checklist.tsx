@@ -1,4 +1,4 @@
-import { useUser } from '@merge/auth';
+import { useUser } from '@merge-rd/auth';
 import { ChannelTypeEnum, WorkflowResponseDto } from '@novu/shared';
 import { motion } from 'motion/react';
 import { useEffect, useMemo, useState } from 'react';
@@ -18,7 +18,7 @@ import { StepTypeEnum } from '@/utils/enums';
 import { buildRoute, ROUTES } from '@/utils/routes';
 import { TelemetryEvent } from '@/utils/telemetry';
 import { Step } from '@/utils/types';
-import { cn } from '@merge/ui/lib/utils';
+import { cn } from '@merge-rd/ui/lib/utils';
 import { Badge, BadgeIcon } from '@/components/primitives/badge';
 import { Popover, PopoverClose, PopoverContent, PopoverTrigger } from '@/components/primitives/popover';
 import { useWorkflow } from './workflow-provider';

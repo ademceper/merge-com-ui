@@ -3,8 +3,8 @@ import {
     UserProfileAttributeMetadata,
     UserProfileMetadata
 } from "@keycloak/keycloak-admin-client/lib/defs/userProfileMetadata";
-import { Input } from "@merge/ui/components/input";
-import { Textarea } from "@merge/ui/components/textarea";
+import { Input } from "@merge-rd/ui/components/input";
+import { Textarea } from "@merge-rd/ui/components/textarea";
 import { TFunction } from "i18next";
 import { ReactNode, useMemo, type JSX } from "react";
 import { FieldPath, UseFormReturn } from "react-hook-form";

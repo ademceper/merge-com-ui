@@ -4,7 +4,7 @@ import {
     DialogContent,
     DialogHeader,
     DialogTitle,
-} from "@merge/ui/components/dialog";
+} from "@merge-rd/ui/components/dialog";
 import {
     Table,
     TableBody,
@@ -13,7 +13,7 @@ import {
     TableHeader,
     TableRow,
 } from "@/admin/components/data-table";
-import { cn } from "@merge/ui/lib/utils";
+import { cn } from "@merge-rd/ui/lib/utils";
 
 import type PolicyProviderRepresentation from "@keycloak/keycloak-admin-client/lib/defs/policyProviderRepresentation";
 import { isValidComponentType } from "./policy/PolicyDetails";

@@ -11,14 +11,14 @@ import {
     DropdownMenuContent,
     DropdownMenuItem,
     DropdownMenuTrigger,
-} from "@merge/ui/components/dropdown-menu";
-import { Button } from "@merge/ui/components/button";
+} from "@merge-rd/ui/components/dropdown-menu";
+import { Button } from "@merge-rd/ui/components/button";
 import {
     Tooltip,
     TooltipContent,
     TooltipTrigger,
     TooltipProvider,
-} from "@merge/ui/components/tooltip";
+} from "@merge-rd/ui/components/tooltip";
 import { DotsSixVertical, DotsThreeVertical } from "@phosphor-icons/react";
 import { get } from "lodash-es";
 import {
@@ -29,7 +29,7 @@ import {
     useState,
 } from "react";
 import { useTranslation } from "react-i18next";
-import { cn } from "@merge/ui/lib/utils";
+import { cn } from "@merge-rd/ui/lib/utils";
 
 export type Field<T> = {
     name: string;
@@ -55,7 +55,7 @@ type DraggableTableProps<T> = Omit<
     data: T[];
     actions?: Action<T>[];
     onDragFinish: (dragged: string, newOrder: string[]) => void;
-    /** @deprecated PF-specific; ignored when using @merge/ui table */
+    /** @deprecated PF-specific; ignored when using @merge-rd/ui table */
     variant?: string;
 };
 

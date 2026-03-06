@@ -8,12 +8,12 @@ import {
     EmptyDescription,
     EmptyHeader,
     EmptyTitle
-} from "@merge/ui/components/empty";
+} from "@merge-rd/ui/components/empty";
 import { getErrorDescription, getErrorMessage,
     SelectField } from "../../../shared/keycloak-ui-shared";
 import { toast } from "sonner";
-import { Button } from "@merge/ui/components/button";
-import { Alert, AlertTitle } from "@merge/ui/components/alert";
+import { Button } from "@merge-rd/ui/components/button";
+import { Alert, AlertTitle } from "@merge-rd/ui/components/alert";
 import { X } from "@phosphor-icons/react";
 import { useMemo, useState } from "react";
 import { FormProvider, useForm, useWatch } from "react-hook-form";

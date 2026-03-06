@@ -1,6 +1,6 @@
 import IdentityProviderRepresentation from "@keycloak/keycloak-admin-client/lib/defs/identityProviderRepresentation";
-import { Button } from "@merge/ui/components/button";
-import { Field } from "@merge/ui/components/field";
+import { Button } from "@merge-rd/ui/components/button";
+import { Field } from "@merge-rd/ui/components/field";
 import { useFormContext, useWatch } from "react-hook-form";
 import { DefaultSwitchControl } from "../../components/SwitchControl";
 import { useTranslation } from "react-i18next";

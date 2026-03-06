@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { RiCodeBlock, RiEdit2Line, RiEyeLine, RiPlayCircleLine } from 'react-icons/ri';
 import { useParams } from 'react-router-dom';
 import { IssuesPanel } from '@/components/issues-panel';
-import { Button } from '@merge/ui/components/button';
+import { Button } from '@merge-rd/ui/components/button';
 import { LocaleSelect } from '@/components/primitives/locale-select';
 import { PreviewContextContainer } from '@/components/workflow-editor/steps/context/preview-context-container';
 import { StepEditorProvider, useStepEditor } from '@/components/workflow-editor/steps/context/step-editor-context';
@@ -20,7 +20,7 @@ import { useFetchTranslationGroup } from '@/hooks/use-fetch-translation-group';
 import { useFetchWorkflowTestData } from '@/hooks/use-fetch-workflow-test-data';
 import { useIsTranslationEnabled } from '@/hooks/use-is-translation-enabled';
 import { LocalizationResourceEnum } from '@/types/translations';
-import { cn } from '@merge/ui/lib/utils';
+import { cn } from '@merge-rd/ui/lib/utils';
 import { Protect } from '../../../utils/protect';
 
 type StepEditorLayoutProps = {

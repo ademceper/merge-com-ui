@@ -11,7 +11,7 @@ import { ToastIcon } from '@/components/primitives/sonner';
 import { showToast } from '@/components/primitives/sonner-helpers';
 import { SuccessButtonToast } from '@/components/success-button-toast';
 import TruncatedText from '@/components/truncated-text';
-import { useOrganization } from '@merge/auth';
+import { useOrganization } from '@merge-rd/auth';
 import { useEnvironment, useFetchEnvironments } from '@/context/environment/hooks';
 import { buildRoute, ROUTES } from '@/utils/routes';
 

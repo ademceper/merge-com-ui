@@ -5,8 +5,8 @@ import {
     SelectItem,
     SelectTrigger,
     SelectValue
-} from "@merge/ui/components/select";
-import { Label } from "@merge/ui/components/label";
+} from "@merge-rd/ui/components/select";
+import { Label } from "@merge-rd/ui/components/label";
 import { useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useServerInfo } from "../../../context/server-info/ServerInfoProvider";

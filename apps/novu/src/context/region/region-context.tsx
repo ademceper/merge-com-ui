@@ -1,4 +1,4 @@
-import { useOrganization, useOrganizationList } from '@merge/auth';
+import { useOrganization, useOrganizationList } from '@merge-rd/auth';
 import { useQueryClient } from '@tanstack/react-query';
 import { createContext, type ReactNode, useCallback, useContext, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';

@@ -3,7 +3,7 @@
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {
-      "@merge/ui/*": ["./src/*"]
+      "@merge-rd/ui/*": ["./src/*"]
     }
   },
   "include": ["."],

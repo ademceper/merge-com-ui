@@ -1,16 +1,16 @@
 import type ResourceRepresentation from "@keycloak/keycloak-admin-client/lib/defs/resourceRepresentation";
 import type ResourceServerRepresentation from "@keycloak/keycloak-admin-client/lib/defs/resourceServerRepresentation";
 import { getErrorDescription, getErrorMessage, useFetch } from "../../../shared/keycloak-ui-shared";
-import { Empty, EmptyContent, EmptyDescription, EmptyHeader, EmptyTitle } from "@merge/ui/components/empty";
+import { Empty, EmptyContent, EmptyDescription, EmptyHeader, EmptyTitle } from "@merge-rd/ui/components/empty";
 import { toast } from "sonner";
-import { Alert, AlertTitle } from "@merge/ui/components/alert";
-import { Button } from "@merge/ui/components/button";
+import { Alert, AlertTitle } from "@merge-rd/ui/components/alert";
+import { Button } from "@merge-rd/ui/components/button";
 import {
     DropdownMenu,
     DropdownMenuContent,
     DropdownMenuItem,
     DropdownMenuTrigger,
-} from "@merge/ui/components/dropdown-menu";
+} from "@merge-rd/ui/components/dropdown-menu";
 import {
     Table,
     TableBody,

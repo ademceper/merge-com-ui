@@ -6,8 +6,8 @@ import {
     getErrorMessage,
 } from "../../shared/keycloak-ui-shared";
 import { toast } from "sonner";
-import { Button } from "@merge/ui/components/button";
-import { Switch } from "@merge/ui/components/switch";
+import { Button } from "@merge-rd/ui/components/button";
+import { Switch } from "@merge-rd/ui/components/switch";
 import {
     DataTable,
     type ColumnDef,
@@ -17,7 +17,7 @@ import {
     TooltipContent,
     TooltipProvider,
     TooltipTrigger,
-} from "@merge/ui/components/tooltip";
+} from "@merge-rd/ui/components/tooltip";
 import { Gear } from "@phosphor-icons/react";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";

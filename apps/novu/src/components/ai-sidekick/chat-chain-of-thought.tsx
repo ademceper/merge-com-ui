@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from 'react';
 import { RiExpandUpDownLine, RiShapesLine } from 'react-icons/ri';
 import { STEP_TYPE_TO_COLOR } from '@/utils/color';
 import { StepTypeEnum } from '@/utils/enums';
-import { cn } from '@merge/ui/lib/utils';
+import { cn } from '@merge-rd/ui/lib/utils';
 import {
   ChainOfThought,
   ChainOfThoughtContent,
@@ -13,7 +13,7 @@ import {
 } from '../ai-elements/chain-of-thought';
 import { Shimmer } from '../ai-elements/shimmer';
 import { STEP_TYPE_TO_ICON } from '../icons/utils';
-import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@merge/ui/components/collapsible';
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@merge-rd/ui/components/collapsible';
 import { Tag } from '../primitives/tag';
 import { StyledMessageResponse } from './chat-message-response';
 

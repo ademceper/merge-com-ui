@@ -1,6 +1,6 @@
 import type { IEnvironment } from '@novu/shared';
-import { Button } from '@merge/ui/components/button';
-import { Dialog, DialogContent, DialogDescription, DialogTitle } from '@merge/ui/components/dialog';
+import { Button } from '@merge-rd/ui/components/button';
+import { Dialog, DialogContent, DialogDescription, DialogTitle } from '@merge-rd/ui/components/dialog';
 import { VisuallyHidden } from '../primitives/visually-hidden';
 
 type NoChangesModalProps = {

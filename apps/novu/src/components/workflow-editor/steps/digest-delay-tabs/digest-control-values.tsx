@@ -1,5 +1,5 @@
 import { FeatureFlagsKeysEnum, UiComponentEnum, UiSchemaGroupEnum } from '@novu/shared';
-import { Separator } from '@merge/ui/components/separator';
+import { Separator } from '@merge-rd/ui/components/separator';
 import { SidebarContent } from '@/components/side-navigation/sidebar';
 import { getComponentByType } from '@/components/workflow-editor/steps/component-utils';
 import { useWorkflow } from '@/components/workflow-editor/workflow-provider';

@@ -1,5 +1,5 @@
 import * as React from "react";
-import { cn } from "@merge/ui/lib/utils";
+import { cn } from "@merge-rd/ui/lib/utils";
 
 export {
   ChartContainer,
@@ -8,9 +8,9 @@ export {
   ChartTooltipContent,
   ChartLegend,
   ChartLegendContent,
-} from "@merge/ui/components/chart";
+} from "@merge-rd/ui/components/chart";
 
-export type { ChartConfig } from "@merge/ui/components/chart";
+export type { ChartConfig } from "@merge-rd/ui/components/chart";
 
 /**
  * NovuTooltip is a custom chart tooltip component for Novu analytics charts.

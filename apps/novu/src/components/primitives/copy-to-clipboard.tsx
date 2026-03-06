@@ -1,7 +1,7 @@
 import { Check } from 'lucide-react';
 import { useState } from 'react';
 import { RiFileCopyLine } from 'react-icons/ri';
-import { cn } from '@merge/ui/lib/utils';
+import { cn } from '@merge-rd/ui/lib/utils';
 
 interface CopyToClipboardProps {
   content: string;

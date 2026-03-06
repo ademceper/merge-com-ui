@@ -4,7 +4,7 @@ import mergeRefs from 'merge-refs';
 import * as React from 'react';
 
 import { useTabObserver } from '@/hooks/use-tab-observer';
-import { cn } from '@merge/ui/lib/utils';
+import { cn } from '@merge-rd/ui/lib/utils';
 
 const SegmentedControlRoot = TabsPrimitive.Root;
 SegmentedControlRoot.displayName = 'SegmentedControlRoot';

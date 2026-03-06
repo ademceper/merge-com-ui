@@ -1,4 +1,4 @@
-import { useOrganization, useUser } from '@merge/auth';
+import { useOrganization, useUser } from '@merge-rd/auth';
 import {
   CompanySizeEnum,
   JobTitleEnum,
@@ -13,8 +13,8 @@ import { Controller, useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import { identifyUser } from '@/api/telemetry';
 import { StepIndicator } from '@/components/auth/shared';
-import { Button } from '@merge/ui/components/button';
-import { CardDescription, CardTitle } from '@merge/ui/components/card';
+import { Button } from '@merge-rd/ui/components/button';
+import { CardDescription, CardTitle } from '@merge-rd/ui/components/card';
 import { Form, FormRoot } from '@/components/primitives/form/form';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/primitives/select';
 import { useEnvironment, useFetchEnvironments } from '@/context/environment/hooks';

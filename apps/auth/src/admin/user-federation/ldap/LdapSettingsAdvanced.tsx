@@ -1,6 +1,6 @@
 import { Controller, UseFormReturn } from "react-hook-form";
-import { Button } from "@merge/ui/components/button";
-import { Switch } from "@merge/ui/components/switch";
+import { Button } from "@merge-rd/ui/components/button";
+import { Switch } from "@merge-rd/ui/components/switch";
 import { FormLabel } from "../../../shared/keycloak-ui-shared";
 import { useTranslation } from "react-i18next";
 import { HelpItem } from "../../../shared/keycloak-ui-shared";

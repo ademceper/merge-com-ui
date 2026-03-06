@@ -2,7 +2,7 @@ import {
     InputGroup,
     InputGroupButton,
     InputGroupInput,
-} from "@merge/ui/components/input-group";
+} from "@merge-rd/ui/components/input-group";
 import { ReactNode, useRef, useState } from "react";
 import {
     FieldPath,
@@ -14,7 +14,7 @@ import {
 import { getRuleValue } from "../utils/getRuleValue";
 import { FormLabel } from "./FormLabel";
 import { useTranslation } from "react-i18next";
-import { cn } from "@merge/ui/lib/utils";
+import { cn } from "@merge-rd/ui/lib/utils";
 
 export type FileUploadControlProps<
     T extends FieldValues,

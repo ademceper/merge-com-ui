@@ -6,10 +6,10 @@ import { getErrorDescription, getErrorMessage, isUserProfileError,
     setUserProfileServerError,
     useFetch } from "../../shared/keycloak-ui-shared";
 import { toast } from "sonner";
-import { Label } from "@merge/ui/components/label";
-import { Tooltip, TooltipContent, TooltipTrigger, TooltipProvider } from "@merge/ui/components/tooltip";
-import { DropdownMenuItem } from "@merge/ui/components/dropdown-menu";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@merge/ui/components/tabs";
+import { Label } from "@merge-rd/ui/components/label";
+import { Tooltip, TooltipContent, TooltipTrigger, TooltipProvider } from "@merge-rd/ui/components/tooltip";
+import { DropdownMenuItem } from "@merge-rd/ui/components/dropdown-menu";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@merge-rd/ui/components/tabs";
 import { Info } from "@phosphor-icons/react";
 import { TFunction } from "i18next";
 import { useState } from "react";
@@ -26,7 +26,7 @@ import {
     AlertDialogFooter,
     AlertDialogHeader,
     AlertDialogTitle
-} from "@merge/ui/components/alert-dialog";
+} from "@merge-rd/ui/components/alert-dialog";
 import { useConfirmDialog } from "../components/confirm-dialog/ConfirmDialog";
 import { KeyValueType } from "../components/key-value-form/key-value-convert";
 import { KeycloakSpinner } from "../../shared/keycloak-ui-shared";

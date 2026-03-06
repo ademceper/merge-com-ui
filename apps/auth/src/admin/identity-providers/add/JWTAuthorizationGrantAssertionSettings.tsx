@@ -1,6 +1,6 @@
 import { useTranslation } from "react-i18next";
 import { DefaultSwitchControl } from "../../components/SwitchControl";
-import { Label } from "@merge/ui/components/label";
+import { Label } from "@merge-rd/ui/components/label";
 import { useFormContext, Controller } from "react-hook-form";
 import { TimeSelector } from "../../components/time-selector/TimeSelector";
 import { SelectField, HelpItem } from "../../../shared/keycloak-ui-shared";

@@ -3,8 +3,8 @@ import type { IdentityProviderMapperTypeRepresentation } from "@keycloak/keycloa
 import type RoleRepresentation from "@keycloak/keycloak-admin-client/lib/defs/roleRepresentation";
 import { getErrorDescription, getErrorMessage, TextControl, useFetch } from "../../../shared/keycloak-ui-shared";
 import { toast } from "sonner";
-import { Button } from "@merge/ui/components/button";
-import { DropdownMenuItem } from "@merge/ui/components/dropdown-menu";
+import { Button } from "@merge-rd/ui/components/button";
+import { DropdownMenuItem } from "@merge-rd/ui/components/dropdown-menu";
 import { useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";

@@ -1,6 +1,6 @@
 import type UserRepresentation from "@keycloak/keycloak-admin-client/lib/defs/userRepresentation";
-import { Button } from "@merge/ui/components/button";
-import { Checkbox } from "@merge/ui/components/checkbox";
+import { Button } from "@merge-rd/ui/components/button";
+import { Checkbox } from "@merge-rd/ui/components/checkbox";
 import {
     Dialog,
     DialogClose,
@@ -8,8 +8,8 @@ import {
     DialogHeader,
     DialogTitle,
     DialogFooter
-} from "@merge/ui/components/dialog";
-import { Label } from "@merge/ui/components/label";
+} from "@merge-rd/ui/components/dialog";
+import { Label } from "@merge-rd/ui/components/label";
 import { DataTable, type ColumnDef } from "@/admin/components/data-table";
 import {
     Empty,
@@ -17,7 +17,7 @@ import {
     EmptyDescription,
     EmptyHeader,
     EmptyTitle
-} from "@merge/ui/components/empty";
+} from "@merge-rd/ui/components/empty";
 import { Info } from "@phosphor-icons/react";
 import { differenceBy } from "lodash-es";
 import { useEffect, useState } from "react";

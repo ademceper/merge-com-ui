@@ -1,13 +1,13 @@
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
-import { Button } from "@merge/ui/components/button";
+import { Button } from "@merge-rd/ui/components/button";
 import {
     Dialog,
     DialogContent,
     DialogFooter,
     DialogHeader,
     DialogTitle
-} from "@merge/ui/components/dialog";
+} from "@merge-rd/ui/components/dialog";
 
 import { EventsTypeTable, EventType } from "./EventsTypeTable";
 import { useServerInfo } from "../../context/server-info/ServerInfoProvider";

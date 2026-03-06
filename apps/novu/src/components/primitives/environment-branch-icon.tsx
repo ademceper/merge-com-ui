@@ -1,7 +1,7 @@
 import { IEnvironment } from '@novu/shared';
 import { cva } from 'class-variance-authority';
 import { RiTerminalFill } from 'react-icons/ri';
-import { cn } from '@merge/ui/lib/utils';
+import { cn } from '@merge-rd/ui/lib/utils';
 
 const logoVariants = cva('', {
   variants: {

@@ -1,14 +1,14 @@
-import { Alert, AlertDescription, AlertTitle } from "@merge/ui/components/alert";
-import { Button } from "@merge/ui/components/button";
+import { Alert, AlertDescription, AlertTitle } from "@merge-rd/ui/components/alert";
+import { Button } from "@merge-rd/ui/components/button";
 import {
     Dialog,
     DialogContent,
     DialogFooter,
     DialogHeader,
     DialogTitle
-} from "@merge/ui/components/dialog";
-import { Label } from "@merge/ui/components/label";
-import { Switch } from "@merge/ui/components/switch";
+} from "@merge-rd/ui/components/dialog";
+import { Label } from "@merge-rd/ui/components/label";
+import { Switch } from "@merge-rd/ui/components/switch";
 import { saveAs } from "file-saver";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";

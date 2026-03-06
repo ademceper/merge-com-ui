@@ -1,6 +1,6 @@
 import { loadLanguage } from '@uiw/codemirror-extensions-langs';
 import { RiCloseLine, RiInformation2Line } from 'react-icons/ri';
-import { Button } from '@merge/ui/components/button';
+import { Button } from '@merge-rd/ui/components/button';
 import { Editor } from '@/components/primitives/editor';
 import { isValidJson } from '../utils/generate-schema';
 

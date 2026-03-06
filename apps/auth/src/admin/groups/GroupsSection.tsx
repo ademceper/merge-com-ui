@@ -1,11 +1,11 @@
 import type GroupRepresentation from "@keycloak/keycloak-admin-client/lib/defs/groupRepresentation";
 import { useFetch } from "../../shared/keycloak-ui-shared";
-import { DropdownMenuItem } from "@merge/ui/components/dropdown-menu";
-import { Sheet, SheetContent } from "@merge/ui/components/sheet";
-import { SidebarProvider, useSidebar } from "@merge/ui/components/sidebar";
-import { Button } from "@merge/ui/components/button";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@merge/ui/components/tabs";
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@merge/ui/components/tooltip";
+import { DropdownMenuItem } from "@merge-rd/ui/components/dropdown-menu";
+import { Sheet, SheetContent } from "@merge-rd/ui/components/sheet";
+import { SidebarProvider, useSidebar } from "@merge-rd/ui/components/sidebar";
+import { Button } from "@merge-rd/ui/components/button";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@merge-rd/ui/components/tabs";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@merge-rd/ui/components/tooltip";
 import { CaretLeft, CaretRight, DotsThreeVertical, PencilSimple, Trash } from "@phosphor-icons/react";
 import type { ReactNode } from "react";
 import { useState, useCallback, useEffect } from "react";
@@ -30,7 +30,7 @@ import { DeleteGroup } from "./components/DeleteGroup";
 import { GroupTree } from "./components/GroupTree";
 import { getId, getLastId } from "./groupIdUtils";
 import { toGroups } from "./routes/Groups";
-import { cn } from "@merge/ui/lib/utils";
+import { cn } from "@merge-rd/ui/lib/utils";
 
 /** Desktop: sayfa akışında açılıp kapanan panel. Mobil: render edilmez (yerine Sheet kullanılır). */
 function GroupsSidebarPanel({ children }: { children: ReactNode }) {

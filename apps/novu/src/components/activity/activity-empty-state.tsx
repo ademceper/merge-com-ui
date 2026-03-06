@@ -5,11 +5,11 @@ import { RiCloseCircleLine, RiPlayCircleLine } from 'react-icons/ri';
 import { useNavigate } from 'react-router-dom';
 import { ActivityFilters } from '@/api/activity';
 import { defaultActivityFilters } from '@/components/activity/constants';
-import { Button } from '@merge/ui/components/button';
+import { Button } from '@merge-rd/ui/components/button';
 import { useEnvironment } from '@/context/environment/hooks';
 import { Protect } from '@/utils/protect';
 import { buildRoute, ROUTES } from '@/utils/routes';
-import { cn } from '@merge/ui/lib/utils';
+import { cn } from '@merge-rd/ui/lib/utils';
 import { ExternalLink } from '../shared/external-link';
 
 interface ActivityEmptyStateProps {

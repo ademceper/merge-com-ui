@@ -1,7 +1,7 @@
 import { RiAddFill } from 'react-icons/ri';
 import { ActionWithRulesAndAddersProps } from 'react-querybuilder';
 
-import { Button } from '@merge/ui/components/button';
+import { Button } from '@merge-rd/ui/components/button';
 
 export const AddConditionAction = ({ label, title, rules, handleOnClick, context }: ActionWithRulesAndAddersProps) => {
   if (rules && rules.length >= 10) {

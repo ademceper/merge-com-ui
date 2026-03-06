@@ -6,7 +6,7 @@ import {
     TabsContent,
     TabsList,
     TabsTrigger,
-} from "@merge/ui/components/tabs";
+} from "@merge-rd/ui/components/tabs";
 import { useAdminClient } from "../admin-client";
 import {
     getErrorDescription,

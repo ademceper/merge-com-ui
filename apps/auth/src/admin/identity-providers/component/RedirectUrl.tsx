@@ -1,6 +1,6 @@
-import { Button } from "@merge/ui/components/button";
-import { Input } from "@merge/ui/components/input";
-import { Label } from "@merge/ui/components/label";
+import { Button } from "@merge-rd/ui/components/button";
+import { Input } from "@merge-rd/ui/components/input";
+import { Label } from "@merge-rd/ui/components/label";
 import { Copy } from "@phosphor-icons/react";
 import { useTranslation } from "react-i18next";
 import { HelpItem, useEnvironment } from "../../../shared/keycloak-ui-shared";

@@ -1,6 +1,6 @@
 import type CertificateRepresentation from "@keycloak/keycloak-admin-client/lib/defs/certificateRepresentation";
-import { Label } from "@merge/ui/components/label";
-import { Textarea } from "@merge/ui/components/textarea";
+import { Label } from "@merge-rd/ui/components/label";
+import { Textarea } from "@merge-rd/ui/components/textarea";
 import { useId } from "react";
 import { useTranslation } from "react-i18next";
 import { HelpItem } from "../../../shared/keycloak-ui-shared";

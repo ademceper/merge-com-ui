@@ -5,7 +5,7 @@ import { CompletionRange, VariableEditor } from '@/components/primitives/variabl
 import { useEditorTranslationOverlay } from '@/hooks/use-editor-translation-overlay';
 import { LocalizationResourceEnum } from '@/types/translations';
 import { IsAllowedVariable, LiquidVariable } from '@/utils/parseStepVariables';
-import { cn } from '@merge/ui/lib/utils';
+import { cn } from '@merge-rd/ui/lib/utils';
 import { EditTranslationPopover } from '../workflow-editor/steps/email/translations/edit-translation-popover/edit-translation-popover';
 import { useLayoutEditor } from './layout-editor-provider';
 

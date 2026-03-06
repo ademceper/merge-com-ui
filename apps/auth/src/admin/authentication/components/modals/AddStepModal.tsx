@@ -1,9 +1,9 @@
 import type { AuthenticationProviderRepresentation } from "@keycloak/keycloak-admin-client/lib/defs/authenticatorConfigRepresentation";
 import { useFetch } from "../../../../shared/keycloak-ui-shared";
-import { Button } from "@merge/ui/components/button";
-import { Input } from "@merge/ui/components/input";
-import { RadioGroup, RadioGroupItem } from "@merge/ui/components/radio-group";
-import { Label } from "@merge/ui/components/label";
+import { Button } from "@merge-rd/ui/components/button";
+import { Input } from "@merge-rd/ui/components/input";
+import { RadioGroup, RadioGroupItem } from "@merge-rd/ui/components/radio-group";
+import { Label } from "@merge-rd/ui/components/label";
 import { MagnifyingGlass } from "@phosphor-icons/react";
 import {
     Dialog,
@@ -11,7 +11,7 @@ import {
     DialogHeader,
     DialogTitle,
     DialogFooter
-} from "@merge/ui/components/dialog";
+} from "@merge-rd/ui/components/dialog";
 import { TablePagination } from "@/admin/components/table-pagination";
 import { useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";

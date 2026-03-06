@@ -1,5 +1,5 @@
-import { Textarea } from "@merge/ui/components/textarea";
-import { cn } from "@merge/ui/lib/utils";
+import { Textarea } from "@merge-rd/ui/components/textarea";
+import { cn } from "@merge-rd/ui/lib/utils";
 import {
     FieldPath,
     FieldValues,

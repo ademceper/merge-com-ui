@@ -6,7 +6,7 @@ export {
   PopoverContent,
   PopoverTrigger,
   PopoverAnchor,
-} from "@merge/ui/components/popover";
+} from "@merge-rd/ui/components/popover";
 
 export const DEFAULT_SIDE_OFFSET = 5;
 

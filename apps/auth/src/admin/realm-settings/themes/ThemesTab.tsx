@@ -1,6 +1,6 @@
 import type RealmRepresentation from "@keycloak/keycloak-admin-client/lib/defs/realmRepresentation";
 import JSZip from "jszip";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@merge/ui/components/tabs";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@merge-rd/ui/components/tabs";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 import { useRealm } from "../../context/realm-context/RealmContext";

@@ -4,7 +4,7 @@ import { InputPure, InputRoot, InputWrapper } from '@/components/primitives/inpu
 import { Popover, PopoverAnchor, PopoverContent } from '@/components/primitives/popover';
 import { VariableList, VariableListRef } from '@/components/variable/variable-list';
 import { AUTOCOMPLETE_PASSWORD_MANAGERS_OFF } from '@/utils/constants';
-import { cn } from '@merge/ui/lib/utils';
+import { cn } from '@merge-rd/ui/lib/utils';
 
 type VariableSelectProps = Omit<HTMLAttributes<HTMLDivElement>, 'onChange' | 'defaultValue'> & {
   disabled?: boolean;

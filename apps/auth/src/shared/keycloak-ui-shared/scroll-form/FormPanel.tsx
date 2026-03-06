@@ -1,4 +1,4 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@merge/ui/components/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@merge-rd/ui/components/card";
 import { PropsWithChildren, useId } from "react";
 import { FormTitle } from "./FormTitle";
 

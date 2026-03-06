@@ -7,10 +7,10 @@ import {
     EmptyDescription,
     EmptyHeader,
     EmptyTitle
-} from "@merge/ui/components/empty";
-import { DropdownMenuItem } from "@merge/ui/components/dropdown-menu";
+} from "@merge-rd/ui/components/empty";
+import { DropdownMenuItem } from "@merge-rd/ui/components/dropdown-menu";
 import { toast } from "sonner";
-import { Button } from "@merge/ui/components/button";
+import { Button } from "@merge-rd/ui/components/button";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Link, To, useParams } from "react-router-dom";

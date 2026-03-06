@@ -1,4 +1,4 @@
-import { cn } from '@merge/ui/lib/utils';
+import { cn } from '@merge-rd/ui/lib/utils';
 
 type LoadingIndicatorProps = {
   className?: string;

@@ -29,7 +29,7 @@ import { DeleteWorkflowDialog } from '@/components/delete-workflow-dialog';
 import { RouteFill } from '@/components/icons/route-fill';
 import { PageMeta } from '@/components/page-meta';
 import { PAUSE_MODAL_TITLE, PauseModalDescription } from '@/components/pause-workflow-dialog';
-import { Button } from '@merge/ui/components/button';
+import { Button } from '@merge-rd/ui/components/button';
 import { CompactButton } from '@/components/primitives/button-compact';
 import { CopyButton } from '@/components/primitives/copy-button';
 import {
@@ -43,7 +43,7 @@ import {
   DropdownMenuSubContent,
   DropdownMenuSubTrigger,
   DropdownMenuTrigger,
-} from '@merge/ui/components/dropdown-menu';
+} from '@merge-rd/ui/components/dropdown-menu';
 import {
   Form,
   FormControl,
@@ -54,10 +54,10 @@ import {
   FormRoot,
 } from '@/components/primitives/form/form';
 import { Input } from '@/components/primitives/input';
-import { Separator } from '@merge/ui/components/separator';
+import { Separator } from '@merge-rd/ui/components/separator';
 import { ToastIcon } from '@/components/primitives/sonner';
 import { showToast } from '@/components/primitives/sonner-helpers';
-import { Switch } from '@merge/ui/components/switch';
+import { Switch } from '@merge-rd/ui/components/switch';
 import { TagInput } from '@/components/primitives/tag-input';
 import { Textarea } from '@/components/primitives/textarea';
 import { Tooltip, TooltipContent, TooltipPortal, TooltipTrigger } from '@/components/primitives/tooltip';
@@ -65,7 +65,7 @@ import { usePromotionalBanner } from '@/components/promotional/coming-soon-banne
 import { SidebarContent, SidebarHeader } from '@/components/side-navigation/sidebar';
 import { workflowSchema } from '@/components/workflow-editor/schema';
 import { UpdateWorkflowFn } from '@/components/workflow-editor/workflow-provider';
-import { useOrganization } from '@merge/auth';
+import { useOrganization } from '@merge-rd/auth';
 import { useEnvironment, useFetchEnvironments } from '@/context/environment/hooks';
 import { useDeleteWorkflow } from '@/hooks/use-delete-workflow';
 import { useFormAutosave } from '@/hooks/use-form-autosave';
@@ -75,7 +75,7 @@ import { LocalizationResourceEnum } from '@/types/translations';
 import { Protect } from '@/utils/protect';
 import { buildRoute, ROUTES } from '@/utils/routes';
 import { TelemetryEvent } from '@/utils/telemetry';
-import { cn } from '@merge/ui/lib/utils';
+import { cn } from '@merge-rd/ui/lib/utils';
 import { PayloadSchemaDrawer } from './payload-schema-drawer';
 import { TranslationToggleSection } from './translation-toggle-section';
 

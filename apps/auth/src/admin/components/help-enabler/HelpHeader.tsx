@@ -1,14 +1,14 @@
 import { useHelp } from "../../../shared/keycloak-ui-shared";
-import { Button } from "@merge/ui/components/button";
+import { Button } from "@merge-rd/ui/components/button";
 import {
     DropdownMenu,
     DropdownMenuContent,
     DropdownMenuItem,
     DropdownMenuSeparator,
     DropdownMenuTrigger,
-} from "@merge/ui/components/dropdown-menu";
-import { Label } from "@merge/ui/components/label";
-import { Switch } from "@merge/ui/components/switch";
+} from "@merge-rd/ui/components/dropdown-menu";
+import { Label } from "@merge-rd/ui/components/label";
+import { Switch } from "@merge-rd/ui/components/switch";
 import { Question } from "@phosphor-icons/react";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";

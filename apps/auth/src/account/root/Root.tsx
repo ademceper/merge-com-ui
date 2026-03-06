@@ -27,7 +27,7 @@ import { usePromise } from "../utils/usePromise";
 import { Header } from "./Header";
 import { MenuItem, PageNav } from "./PageNav";
 import { routes } from "../routes";
-import { Separator } from "@merge/ui/components/separator";
+import { Separator } from "@merge-rd/ui/components/separator";
 
 function mapRoutes(
     context: KeycloakContext<Environment>,

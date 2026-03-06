@@ -1,9 +1,9 @@
 import { useRef, useState } from 'react';
 import { RiArrowDownSLine, RiCheckLine, RiSearchLine, RiTimeLine } from 'react-icons/ri';
 import { useTimezoneSelect } from 'react-timezone-select';
-import { cn } from '@merge/ui/lib/utils';
-import { Button, ButtonProps } from '@merge/ui/components/button';
-import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from '@merge/ui/components/command';
+import { cn } from '@merge-rd/ui/lib/utils';
+import { Button, ButtonProps } from '@merge-rd/ui/components/button';
+import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from '@merge-rd/ui/components/command';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/primitives/popover';
 import TruncatedText from '../truncated-text';
 

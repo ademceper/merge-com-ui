@@ -18,7 +18,7 @@ import { useTelemetry } from '@/hooks/use-telemetry';
 import { CompletionOption, createAutocompleteSource } from '@/utils/liquid-autocomplete';
 import { IsAllowedVariable, LiquidVariable } from '@/utils/parseStepVariables';
 import { TelemetryEvent } from '@/utils/telemetry';
-import { cn } from '@merge/ui/lib/utils';
+import { cn } from '@merge-rd/ui/lib/utils';
 import { useVariables } from '../../hooks/use-variables';
 import { DEFAULT_SIDE_OFFSET } from '@/components/primitives/popover';
 

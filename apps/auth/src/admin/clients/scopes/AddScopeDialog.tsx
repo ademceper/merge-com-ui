@@ -1,30 +1,30 @@
 import type ClientScopeRepresentation from "@keycloak/keycloak-admin-client/lib/defs/clientScopeRepresentation";
-import { Button } from "@merge/ui/components/button";
+import { Button } from "@merge-rd/ui/components/button";
 import {
     Dialog,
     DialogContent,
     DialogFooter,
     DialogHeader,
     DialogTitle,
-} from "@merge/ui/components/dialog";
+} from "@merge-rd/ui/components/dialog";
 import {
     DropdownMenu,
     DropdownMenuContent,
     DropdownMenuItem,
     DropdownMenuTrigger,
-} from "@merge/ui/components/dropdown-menu";
+} from "@merge-rd/ui/components/dropdown-menu";
 import {
     Select,
     SelectContent,
     SelectItem,
     SelectTrigger,
     SelectValue
-} from "@merge/ui/components/select";
+} from "@merge-rd/ui/components/select";
 import {
     DataTable,
     type ColumnDef
 } from "@/admin/components/data-table";
-import { Checkbox } from "@merge/ui/components/checkbox";
+import { Checkbox } from "@merge-rd/ui/components/checkbox";
 import { CaretDown, CaretUp, Funnel } from "@phosphor-icons/react";
 import { useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";

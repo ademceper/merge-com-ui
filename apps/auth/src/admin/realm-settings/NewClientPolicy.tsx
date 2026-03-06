@@ -4,11 +4,11 @@ import { getErrorDescription, getErrorMessage, HelpItem,
     TextControl,
     useFetch } from "../../shared/keycloak-ui-shared";
 import { toast } from "sonner";
-import { Button } from "@merge/ui/components/button";
-import { DropdownMenuItem } from "@merge/ui/components/dropdown-menu";
-import { Label } from "@merge/ui/components/label";
-import { Separator } from "@merge/ui/components/separator";
-import { Textarea } from "@merge/ui/components/textarea";
+import { Button } from "@merge-rd/ui/components/button";
+import { DropdownMenuItem } from "@merge-rd/ui/components/dropdown-menu";
+import { Label } from "@merge-rd/ui/components/label";
+import { Separator } from "@merge-rd/ui/components/separator";
+import { Textarea } from "@merge-rd/ui/components/textarea";
 import { Plus, Trash } from "@phosphor-icons/react";
 import { useState } from "react";
 import { Controller, FormProvider, useForm } from "react-hook-form";

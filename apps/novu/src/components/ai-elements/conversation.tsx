@@ -4,8 +4,8 @@ import { ArrowDownIcon } from 'lucide-react';
 import type { ComponentProps } from 'react';
 import { useCallback } from 'react';
 import { StickToBottom, useStickToBottomContext } from 'use-stick-to-bottom';
-import { Button } from '@merge/ui/components/button';
-import { cn } from '@merge/ui/lib/utils';
+import { Button } from '@merge-rd/ui/components/button';
+import { cn } from '@merge-rd/ui/lib/utils';
 
 export type ConversationProps = ComponentProps<typeof StickToBottom>;
 

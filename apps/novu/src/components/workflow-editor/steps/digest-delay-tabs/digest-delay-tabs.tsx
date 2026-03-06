@@ -4,8 +4,8 @@ import { useState } from 'react';
 import { FieldValues, useFormContext } from 'react-hook-form';
 
 import { FormField, FormLabel, FormMessagePure } from '@/components/primitives/form/form';
-import { Separator } from '@merge/ui/components/separator';
-import { TabsContent, TabsList, TabsTrigger } from '@merge/ui/components/tabs';
+import { Separator } from '@merge-rd/ui/components/separator';
+import { TabsContent, TabsList, TabsTrigger } from '@merge-rd/ui/components/tabs';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/primitives/tooltip';
 import { AMOUNT_KEY, CRON_KEY, TYPE_KEY, UNIT_KEY } from '@/components/workflow-editor/steps/digest-delay-tabs/keys';
 import { LookbackWindow } from '@/components/workflow-editor/steps/digest-delay-tabs/lookback-window';

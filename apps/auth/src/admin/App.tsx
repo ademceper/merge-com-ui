@@ -1,7 +1,7 @@
 import { SessionExpirationWarningOverlay } from "../shared/SessionExpirationWarningOverlay";
 import KeycloakAdminClient from "@keycloak/keycloak-admin-client";
 import { mainPageContentId, useEnvironment } from "../shared/keycloak-ui-shared";
-import { SidebarInset, SidebarPage, SidebarProvider } from "@merge/ui/components/sidebar";
+import { SidebarInset, SidebarPage, SidebarProvider } from "@merge-rd/ui/components/sidebar";
 import type { ComponentType } from "react";
 import { PropsWithChildren, Suspense, useEffect, useState } from "react";
 import { Outlet, useMatches } from "react-router-dom";

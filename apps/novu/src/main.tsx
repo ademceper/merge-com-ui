@@ -1,4 +1,4 @@
-import "@merge/ui/globals.css";
+import "@merge-rd/ui/globals.css";
 import { lazy, StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import {
@@ -7,8 +7,8 @@ import {
   RouterProvider,
 } from "react-router-dom";
 
-import { KeycloakProvider } from "@merge/auth";
-import { Providers } from "@merge/ui/components/providers";
+import { KeycloakProvider } from "@merge-rd/auth";
+import { Providers } from "@merge-rd/ui/components/providers";
 import { ErrorPage } from "@/pages/error-page";
 import { CatchAllRoute, DashboardRoute, RootRoute } from "./routes";
 import { DashboardLayoutRoute } from "./routes/dashboard-layout-route";

@@ -1,4 +1,4 @@
-import { Label } from "@merge/ui/components/label";
+import { Label } from "@merge-rd/ui/components/label";
 import { useTranslation } from "react-i18next";
 
 import { HelpItem } from "../../../shared/keycloak-ui-shared";

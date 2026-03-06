@@ -4,8 +4,8 @@ import { RiArrowRightSLine } from 'react-icons/ri';
 import { useNavigate } from 'react-router-dom';
 import { ExternalToast } from 'sonner';
 import { CreateLayoutForm } from '@/components/layouts/create-layout-form';
-import { Button } from '@merge/ui/components/button';
-import { Separator } from '@merge/ui/components/separator';
+import { Button } from '@merge-rd/ui/components/button';
+import { Separator } from '@merge-rd/ui/components/separator';
 import {
   Sheet,
   SheetContent,
@@ -15,7 +15,7 @@ import {
   SheetMain,
   SheetTitle,
 } from '@/components/primitives/sheet';
-import { Skeleton } from '@merge/ui/components/skeleton';
+import { Skeleton } from '@merge-rd/ui/components/skeleton';
 import { ToastIcon } from '@/components/primitives/sonner';
 import { showErrorToast, showSuccessToast, showToast } from '@/components/primitives/sonner-helpers';
 import { ExternalLink } from '@/components/shared/external-link';

@@ -10,8 +10,8 @@ import {
     EmptyDescription,
     EmptyHeader,
     EmptyTitle
-} from "@merge/ui/components/empty";
-import { Button } from "@merge/ui/components/button";
+} from "@merge-rd/ui/components/empty";
+import { Button } from "@merge-rd/ui/components/button";
 import {
     Dialog,
     DialogClose,
@@ -19,11 +19,11 @@ import {
     DialogHeader,
     DialogTitle,
     DialogFooter
-} from "@merge/ui/components/dialog";
+} from "@merge-rd/ui/components/dialog";
 import { TablePagination } from "@/admin/components/table-pagination";
-import { Checkbox } from "@merge/ui/components/checkbox";
-import { Input } from "@merge/ui/components/input";
-import { Separator } from "@merge/ui/components/separator";
+import { Checkbox } from "@merge-rd/ui/components/checkbox";
+import { Input } from "@merge-rd/ui/components/input";
+import { Separator } from "@merge-rd/ui/components/separator";
 import { CaretRight, MagnifyingGlass } from "@phosphor-icons/react";
 import { KeyboardEvent, useState } from "react";
 import { useTranslation } from "react-i18next";

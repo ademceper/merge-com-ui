@@ -1,4 +1,4 @@
-import { cn } from '@merge/ui/lib/utils';
+import { cn } from '@merge-rd/ui/lib/utils';
 import { MessageContent, MessageResponse } from '../ai-elements/message';
 
 export const StyledMessageResponse = ({ children, className }: { children: string; className?: string }) => {

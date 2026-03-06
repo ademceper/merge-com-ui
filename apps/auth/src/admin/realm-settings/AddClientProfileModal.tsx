@@ -1,23 +1,23 @@
 import type ClientProfileRepresentation from "@keycloak/keycloak-admin-client/lib/defs/clientProfileRepresentation";
 import type RoleRepresentation from "@keycloak/keycloak-admin-client/lib/defs/roleRepresentation";
 import { useFetch } from "../../shared/keycloak-ui-shared";
-import { Button } from "@merge/ui/components/button";
-import { Badge } from "@merge/ui/components/badge";
-import { Checkbox } from "@merge/ui/components/checkbox";
+import { Button } from "@merge-rd/ui/components/button";
+import { Badge } from "@merge-rd/ui/components/badge";
+import { Checkbox } from "@merge-rd/ui/components/checkbox";
 import {
     Dialog,
     DialogContent,
     DialogFooter,
     DialogHeader,
     DialogTitle
-} from "@merge/ui/components/dialog";
+} from "@merge-rd/ui/components/dialog";
 import {
     Empty,
     EmptyContent,
     EmptyDescription,
     EmptyHeader,
     EmptyTitle
-} from "@merge/ui/components/empty";
+} from "@merge-rd/ui/components/empty";
 import { DataTable, type ColumnDef } from "@/admin/components/data-table";
 import { useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";

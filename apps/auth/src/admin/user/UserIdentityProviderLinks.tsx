@@ -1,8 +1,8 @@
 import type FederatedIdentityRepresentation from "@keycloak/keycloak-admin-client/lib/defs/federatedIdentityRepresentation";
 import type IdentityProviderRepresentation from "@keycloak/keycloak-admin-client/lib/defs/identityProviderRepresentation";
 import { KeycloakSpinner } from "../../shared/keycloak-ui-shared";
-import { Button } from "@merge/ui/components/button";
-import { Badge } from "@merge/ui/components/badge";
+import { Button } from "@merge-rd/ui/components/button";
+import { Badge } from "@merge-rd/ui/components/badge";
 import { capitalize } from "lodash-es";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -13,7 +13,7 @@ import { getErrorDescription, getErrorMessage, useFetch } from "../../shared/key
 import { toast } from "sonner";
 import { useConfirmDialog } from "../components/confirm-dialog/ConfirmDialog";
 import { DataTable, type ColumnDef } from "@/admin/components/data-table";
-import { Empty, EmptyHeader, EmptyTitle } from "@merge/ui/components/empty";
+import { Empty, EmptyHeader, EmptyTitle } from "@merge-rd/ui/components/empty";
 import { useRealm } from "../context/realm-context/RealmContext";
 import { useServerInfo } from "../context/server-info/ServerInfoProvider";
 import { toIdentityProvider } from "../identity-providers/routes/IdentityProvider";

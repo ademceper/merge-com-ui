@@ -1,5 +1,5 @@
-import { Input } from "@merge/ui/components/input";
-import { Label } from "@merge/ui/components/label";
+import { Input } from "@merge-rd/ui/components/input";
+import { Label } from "@merge-rd/ui/components/label";
 import { useFormContext } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { FormAccess } from "../../../components/form/FormAccess";

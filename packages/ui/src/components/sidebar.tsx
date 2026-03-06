@@ -4,24 +4,24 @@ import * as React from "react"
 import { cva, type VariantProps } from "class-variance-authority"
 import { Slot } from "radix-ui"
 
-import { useIsMobile } from "@merge/ui/hooks/use-mobile"
-import { cn } from "@merge/ui/lib/utils"
-import { Button } from "@merge/ui/components/button"
-import { Input } from "@merge/ui/components/input"
-import { Separator } from "@merge/ui/components/separator"
+import { useIsMobile } from "@merge-rd/ui/hooks/use-mobile"
+import { cn } from "@merge-rd/ui/lib/utils"
+import { Button } from "@merge-rd/ui/components/button"
+import { Input } from "@merge-rd/ui/components/input"
+import { Separator } from "@merge-rd/ui/components/separator"
 import {
   Sheet,
   SheetContent,
   SheetDescription,
   SheetHeader,
   SheetTitle,
-} from "@merge/ui/components/sheet"
-import { Skeleton } from "@merge/ui/components/skeleton"
+} from "@merge-rd/ui/components/sheet"
+import { Skeleton } from "@merge-rd/ui/components/skeleton"
 import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
-} from "@merge/ui/components/tooltip"
+} from "@merge-rd/ui/components/tooltip"
 import { SidebarIcon } from "@phosphor-icons/react"
 
 const SIDEBAR_COOKIE_NAME = "sidebar_state"

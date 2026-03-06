@@ -5,7 +5,7 @@ import { type WorkflowRunsTrendDataPoint } from '../../../api/activity';
 import { useFeatureFlag } from '../../../hooks/use-feature-flag';
 
 import { ChartConfig, ChartContainer, ChartTooltip, NovuTooltip } from '@/components/primitives/chart';
-import { Skeleton } from '@merge/ui/components/skeleton';
+import { Skeleton } from '@merge-rd/ui/components/skeleton';
 import { ANALYTICS_TOOLTIPS } from '../constants/analytics-tooltips';
 import { createDateBasedHasDataChecker } from '../utils/chart-validation';
 import { generateDummyWorkflowRunsData } from './chart-dummy-data';

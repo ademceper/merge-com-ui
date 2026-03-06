@@ -1,5 +1,5 @@
 import { HelpItem, SelectField, TextControl } from "../../../shared/keycloak-ui-shared";
-import { Switch } from "@merge/ui/components/switch";
+import { Switch } from "@merge-rd/ui/components/switch";
 import { FormLabel } from "../../../shared/keycloak-ui-shared";
 import { isEqual } from "lodash-es";
 import { useEffect } from "react";

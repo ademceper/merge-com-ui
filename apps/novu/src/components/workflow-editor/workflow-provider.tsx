@@ -13,7 +13,7 @@ import {
   DialogOverlay,
   DialogPortal,
   DialogTitle,
-} from '@merge/ui/components/dialog';
+} from '@merge-rd/ui/components/dialog';
 import { useEnvironment } from '@/context/environment/hooks';
 import { useBeforeUnload } from '@/hooks/use-before-unload';
 import { useDataRef } from '@/hooks/use-data-ref';

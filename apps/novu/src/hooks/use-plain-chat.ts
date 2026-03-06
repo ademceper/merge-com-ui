@@ -2,7 +2,7 @@ import { FeatureFlagsKeysEnum } from '@novu/shared';
 import * as Sentry from '@sentry/react';
 import { useEffect } from 'react';
 import { PLAIN_SUPPORT_CHAT_APP_ID } from '@/config';
-import { useUser } from '@merge/auth';
+import { useUser } from '@merge-rd/auth';
 import { useFeatureFlag } from '@/hooks/use-feature-flag';
 
 // Add type declaration for Plain chat widget

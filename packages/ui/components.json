@@ -12,11 +12,11 @@
   },
   "iconLibrary": "phosphor",
   "aliases": {
-    "components": "@merge/ui/components",
-    "utils": "@merge/ui/lib/utils",
-    "hooks": "@merge/ui/hooks",
-    "lib": "@merge/ui/lib",
-    "ui": "@merge/ui/components"
+    "components": "@merge-rd/ui/components",
+    "utils": "@merge-rd/ui/lib/utils",
+    "hooks": "@merge-rd/ui/hooks",
+    "lib": "@merge-rd/ui/lib",
+    "ui": "@merge-rd/ui/components"
   },
   "menuColor": "default",
   "menuAccent": "subtle",

@@ -1,5 +1,5 @@
 import { Check } from 'lucide-react';
-import { cn } from '@merge/ui/lib/utils';
+import { cn } from '@merge-rd/ui/lib/utils';
 import { useKeyboardNavigation } from '../hooks/use-keyboard-navigation';
 import { FilterOption, SizeType } from '../types';
 import { BaseFilterContent } from './base-filter-content';

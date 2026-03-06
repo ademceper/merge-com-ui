@@ -4,14 +4,14 @@ import {
     HelpItem,
     NumberControl,
 } from "../../../shared/keycloak-ui-shared";
-import { Label } from "@merge/ui/components/label";
+import { Label } from "@merge-rd/ui/components/label";
 import {
     Select,
     SelectContent,
     SelectItem,
     SelectTrigger,
     SelectValue,
-} from "@merge/ui/components/select";
+} from "@merge-rd/ui/components/select";
 import { useEffect, useState } from "react";
 import { Controller, FormProvider, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";

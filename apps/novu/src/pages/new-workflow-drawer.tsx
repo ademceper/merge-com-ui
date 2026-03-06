@@ -2,8 +2,8 @@ import { DuplicateWorkflowDto } from '@novu/shared';
 import { useState } from 'react';
 import { RiArrowRightSLine } from 'react-icons/ri';
 import { useNavigate } from 'react-router-dom';
-import { Button } from '@merge/ui/components/button';
-import { Separator } from '@merge/ui/components/separator';
+import { Button } from '@merge-rd/ui/components/button';
+import { Separator } from '@merge-rd/ui/components/separator';
 import {
   Sheet,
   SheetContent,
@@ -13,7 +13,7 @@ import {
   SheetMain,
   SheetTitle,
 } from '@/components/primitives/sheet';
-import { Skeleton } from '@merge/ui/components/skeleton';
+import { Skeleton } from '@merge-rd/ui/components/skeleton';
 import { ExternalLink } from '@/components/shared/external-link';
 import { CreateWorkflowForm } from '@/components/workflow-editor/create-workflow-form';
 import { useEnvironment } from '@/context/environment/hooks';

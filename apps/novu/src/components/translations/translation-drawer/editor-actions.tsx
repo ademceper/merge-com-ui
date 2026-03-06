@@ -3,7 +3,7 @@ import { AnimatePresence, motion } from 'motion/react';
 import { useEffect, useState } from 'react';
 import { RiCheckLine, RiCloseLine, RiFileDownloadLine, RiUploadLine } from 'react-icons/ri';
 import { FlagCircle } from '@/components/flag-circle';
-import { Button } from '@merge/ui/components/button';
+import { Button } from '@merge-rd/ui/components/button';
 import { CopyButton } from '@/components/primitives/copy-button';
 import { PermissionButton } from '@/components/primitives/permission-button';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/primitives/tooltip';

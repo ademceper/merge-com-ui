@@ -2,7 +2,7 @@
 
 import { useTheme } from "next-themes";
 import { SignOutIcon, UserIcon, PaletteIcon, SunIcon, MoonIcon, MonitorIcon } from "@phosphor-icons/react";
-import { Avatar, AvatarFallback } from "@merge/ui/components/avatar";
+import { Avatar, AvatarFallback } from "@merge-rd/ui/components/avatar";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -16,7 +16,7 @@ import {
   DropdownMenuSubContent,
   DropdownMenuSubTrigger,
   DropdownMenuTrigger,
-} from "@merge/ui/components/dropdown-menu";
+} from "@merge-rd/ui/components/dropdown-menu";
 import { useAuth } from "../hooks/use-auth";
 import { useUser } from "../hooks/use-user";
 

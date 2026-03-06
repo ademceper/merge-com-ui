@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react';
 import { useFormContext } from 'react-hook-form';
 import { RiInformation2Line } from 'react-icons/ri';
-import { Button } from '@merge/ui/components/button';
+import { Button } from '@merge-rd/ui/components/button';
 import { FormControl, FormItem, FormLabel, FormMessage } from '@/components/primitives/form/form';
 import { InputRoot, InputWrapper } from '@/components/primitives/input';
-import { Separator } from '@merge/ui/components/separator';
+import { Separator } from '@merge-rd/ui/components/separator';
 import {
   Sheet,
   SheetContent,
@@ -14,7 +14,7 @@ import {
   SheetMain,
   SheetTitle,
 } from '@/components/primitives/sheet';
-import { Switch } from '@merge/ui/components/switch';
+import { Switch } from '@merge-rd/ui/components/switch';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/primitives/tooltip';
 import { ControlInput } from '@/components/workflow-editor/control-input';
 import { useSaveForm } from '@/components/workflow-editor/steps/save-form-context';

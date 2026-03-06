@@ -3,8 +3,8 @@
 import * as React from "react"
 import { ThemeProvider as NextThemesProvider } from "next-themes"
 
-import { Toaster } from "@merge/ui/components/sonner"
-import { TooltipProvider } from "@merge/ui/components/tooltip"
+import { Toaster } from "@merge-rd/ui/components/sonner"
+import { TooltipProvider } from "@merge-rd/ui/components/tooltip"
 
 export function Providers({ children }: { children: React.ReactNode }) {
   return (

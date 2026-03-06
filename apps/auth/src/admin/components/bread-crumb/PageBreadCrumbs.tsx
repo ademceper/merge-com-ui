@@ -5,7 +5,7 @@ import {
     BreadcrumbList,
     BreadcrumbPage,
     BreadcrumbSeparator
-} from "@merge/ui/components/breadcrumb";
+} from "@merge-rd/ui/components/breadcrumb";
 import { uniqBy } from "lodash-es";
 import React, { isValidElement } from "react";
 import { useTranslation } from "react-i18next";

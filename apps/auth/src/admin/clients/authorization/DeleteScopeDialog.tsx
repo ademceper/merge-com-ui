@@ -1,5 +1,5 @@
 import type ScopeRepresentation from "@keycloak/keycloak-admin-client/lib/defs/scopeRepresentation";
-import { Alert, AlertTitle, AlertDescription } from "@merge/ui/components/alert";
+import { Alert, AlertTitle, AlertDescription } from "@merge-rd/ui/components/alert";
 import { useTranslation } from "react-i18next";
 import { useAdminClient } from "../../admin-client";
 import { getErrorDescription, getErrorMessage } from "../../../shared/keycloak-ui-shared";

@@ -5,7 +5,7 @@ import { useTelemetry } from '../../hooks/use-telemetry';
 import { TelemetryEvent } from '../../utils/telemetry';
 import { CodeBlock, Language } from '../primitives/code-block';
 import { InlineToast } from '../primitives/inline-toast';
-import { Tabs, TabsList, TabsTrigger } from '@merge/ui/components/tabs';
+import { Tabs, TabsList, TabsTrigger } from '@merge-rd/ui/components/tabs';
 import { Framework, InstallationStep } from './framework-guides.instructions';
 
 type PackageManager = 'npm' | 'pnpm' | 'yarn';

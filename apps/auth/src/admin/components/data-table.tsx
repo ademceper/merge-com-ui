@@ -35,7 +35,7 @@ import {
 } from "@phosphor-icons/react";
 import { useId, useMemo, useRef, useState } from "react";
 
-import { cn } from "@merge/ui/lib/utils";
+import { cn } from "@merge-rd/ui/lib/utils";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -46,30 +46,30 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
   AlertDialogTrigger,
-} from "@merge/ui/components/alert-dialog";
-import { Button } from "@merge/ui/components/button";
-import { Checkbox } from "@merge/ui/components/checkbox";
-import { Input } from "@merge/ui/components/input";
-import { Label } from "@merge/ui/components/label";
+} from "@merge-rd/ui/components/alert-dialog";
+import { Button } from "@merge-rd/ui/components/button";
+import { Checkbox } from "@merge-rd/ui/components/checkbox";
+import { Input } from "@merge-rd/ui/components/input";
+import { Label } from "@merge-rd/ui/components/label";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@merge/ui/components/dropdown-menu";
+} from "@merge-rd/ui/components/dropdown-menu";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from "@merge/ui/components/popover";
+} from "@merge-rd/ui/components/popover";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@merge/ui/components/select";
+} from "@merge-rd/ui/components/select";
 import {
   Table,
   TableBody,
@@ -77,7 +77,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@merge/ui/components/table";
+} from "@merge-rd/ui/components/table";
 
 export type DataTableProps<TData> = {
   columns: ColumnDef<TData>[];
@@ -622,6 +622,6 @@ export {
   TableHead,
   TableHeader,
   TableRow,
-} from "@merge/ui/components/table";
+} from "@merge-rd/ui/components/table";
 
 export type { ColumnDef, FilterFn, Row, SortingState };

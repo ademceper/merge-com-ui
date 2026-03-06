@@ -1,8 +1,8 @@
 import PolicyRepresentation from "@keycloak/keycloak-admin-client/lib/defs/policyRepresentation";
 import UserRepresentation from "@keycloak/keycloak-admin-client/lib/defs/userRepresentation";
 import { SelectField, TextControl } from "../../../shared/keycloak-ui-shared";
-import { Button } from "@merge/ui/components/button";
-import { Popover, PopoverContent, PopoverTrigger } from "@merge/ui/components/popover";
+import { Button } from "@merge-rd/ui/components/button";
+import { Popover, PopoverContent, PopoverTrigger } from "@merge-rd/ui/components/popover";
 import { useEffect, useRef, useState } from "react";
 import { FormProvider, useForm, useWatch } from "react-hook-form";
 import { useTranslation } from "react-i18next";

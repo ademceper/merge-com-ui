@@ -1,5 +1,5 @@
 import { ApiServiceLevelEnum, PermissionsEnum } from '@novu/shared';
-import { Switch } from '@merge/ui/components/switch';
+import { Switch } from '@merge-rd/ui/components/switch';
 import { UpgradeCTATooltip } from '@/components/upgrade-cta-tooltip';
 import { useFetchSubscription } from '@/hooks/use-fetch-subscription';
 import { PermissionSwitch } from '../primitives/permission-switch';

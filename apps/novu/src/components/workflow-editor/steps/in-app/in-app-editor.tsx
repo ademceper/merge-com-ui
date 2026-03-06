@@ -1,12 +1,12 @@
 import { EnvironmentTypeEnum, type UiSchema, UiSchemaGroupEnum } from '@novu/shared';
 import { RiInstanceLine } from 'react-icons/ri';
 import { Notification5Fill } from '@/components/icons';
-import { Separator } from '@merge/ui/components/separator';
+import { Separator } from '@merge-rd/ui/components/separator';
 import { getComponentByType } from '@/components/workflow-editor/steps/component-utils';
 import { InAppTabsSection } from '@/components/workflow-editor/steps/in-app/in-app-tabs-section';
 import { useEnvironment } from '@/context/environment/hooks';
 
-import { cn } from '@merge/ui/lib/utils';
+import { cn } from '@merge-rd/ui/lib/utils';
 import { StepEditorUnavailable } from '../step-editor-unavailable';
 
 const avatarKey = 'avatar';

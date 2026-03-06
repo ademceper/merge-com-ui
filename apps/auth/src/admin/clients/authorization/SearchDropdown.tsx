@@ -1,7 +1,7 @@
 import type PolicyProviderRepresentation from "@keycloak/keycloak-admin-client/lib/defs/policyProviderRepresentation";
 import { SelectField, TextControl } from "../../../shared/keycloak-ui-shared";
-import { Button } from "@merge/ui/components/button";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger } from "@merge/ui/components/dropdown-menu";
+import { Button } from "@merge-rd/ui/components/button";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger } from "@merge-rd/ui/components/dropdown-menu";
 import { useEffect } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";

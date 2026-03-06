@@ -1,6 +1,6 @@
-import { Button } from "@merge/ui/components/button";
-import { Switch } from "@merge/ui/components/switch";
-import { Label } from "@merge/ui/components/label";
+import { Button } from "@merge-rd/ui/components/button";
+import { Switch } from "@merge-rd/ui/components/switch";
+import { Label } from "@merge-rd/ui/components/label";
 import { Controller, useFormContext } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 

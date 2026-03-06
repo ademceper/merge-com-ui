@@ -1,6 +1,6 @@
 import { motion } from 'motion/react';
 import { useEffect, useMemo, useState } from 'react';
-import { ResizablePanel, ResizablePanelGroup } from '@merge/ui/components/resizable';
+import { ResizablePanel, ResizablePanelGroup } from '@merge-rd/ui/components/resizable';
 import {
   Table,
   TableBody,

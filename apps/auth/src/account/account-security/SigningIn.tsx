@@ -22,8 +22,8 @@ import { Page } from "../components/page/Page";
 import { TFuncKey } from "../i18n";
 import { formatDate } from "../utils/formatDate";
 import { usePromise } from "../utils/usePromise";
-import { Link } from "@merge/ui/components/link";
-import { Separator } from "@merge/ui/components/separator";
+import { Link } from "@merge-rd/ui/components/link";
+import { Separator } from "@merge-rd/ui/components/separator";
 
 export const SigningIn = () => {
     const { t } = useTranslation();

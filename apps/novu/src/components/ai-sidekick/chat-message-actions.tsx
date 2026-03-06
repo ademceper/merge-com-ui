@@ -1,6 +1,6 @@
 import { AnimatePresence, motion } from 'motion/react';
 import { RiCheckLine, RiCloseLine, RiRefreshLine } from 'react-icons/ri';
-import { Button } from '@merge/ui/components/button';
+import { Button } from '@merge-rd/ui/components/button';
 
 type ChatMessageActionsProps = {
   lastUserMessageId: string;

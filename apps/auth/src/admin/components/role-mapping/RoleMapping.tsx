@@ -7,8 +7,8 @@ import {
     KeycloakSpinner,
 } from "../../../shared/keycloak-ui-shared";
 import { toast } from "sonner";
-import { Badge } from "@merge/ui/components/badge";
-import { Checkbox } from "@merge/ui/components/checkbox";
+import { Badge } from "@merge-rd/ui/components/badge";
+import { Checkbox } from "@merge-rd/ui/components/checkbox";
 import {
     DataTable,
     DataTableRowActions,
@@ -28,7 +28,7 @@ import {
     AlertDialogFooter,
     AlertDialogHeader,
     AlertDialogTitle
-} from "@merge/ui/components/alert-dialog";
+} from "@merge-rd/ui/components/alert-dialog";
 import { AddRoleButton, AddRoleMappingModal, FilterType } from "./AddRoleMappingModal";
 import { deleteMapping, getEffectiveRoles, getMapping } from "./queries";
 import { getEffectiveClientRoles } from "./resource";

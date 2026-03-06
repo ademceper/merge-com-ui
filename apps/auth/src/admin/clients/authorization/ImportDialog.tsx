@@ -1,12 +1,12 @@
 import { Fragment, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { Alert, AlertTitle } from "@merge/ui/components/alert";
-import { Button } from "@merge/ui/components/button";
-import { Separator } from "@merge/ui/components/separator";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@merge/ui/components/dialog";
-import { Switch } from "@merge/ui/components/switch";
-import { Label } from "@merge/ui/components/label";
-import { RadioGroup, RadioGroupItem } from "@merge/ui/components/radio-group";
+import { Alert, AlertTitle } from "@merge-rd/ui/components/alert";
+import { Button } from "@merge-rd/ui/components/button";
+import { Separator } from "@merge-rd/ui/components/separator";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@merge-rd/ui/components/dialog";
+import { Switch } from "@merge-rd/ui/components/switch";
+import { Label } from "@merge-rd/ui/components/label";
+import { RadioGroup, RadioGroupItem } from "@merge-rd/ui/components/radio-group";
 
 import type ResourceServerRepresentation from "@keycloak/keycloak-admin-client/lib/defs/resourceServerRepresentation";
 import { JsonFileUpload } from "../../components/json-file-upload/JsonFileUpload";

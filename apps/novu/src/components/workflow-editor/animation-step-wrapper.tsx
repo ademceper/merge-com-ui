@@ -1,5 +1,5 @@
 import { ReactNode } from 'react';
-import { cn } from '@merge/ui/lib/utils';
+import { cn } from '@merge-rd/ui/lib/utils';
 
 interface AnimationStepWrapperProps {
   children: ReactNode;

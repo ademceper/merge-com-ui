@@ -1,7 +1,7 @@
 import type ClientRepresentation from "@keycloak/keycloak-admin-client/lib/defs/clientRepresentation";
-import { Alert, AlertTitle } from "@merge/ui/components/alert";
-import { Button } from "@merge/ui/components/button";
-import { Label } from "@merge/ui/components/label";
+import { Alert, AlertTitle } from "@merge-rd/ui/components/alert";
+import { Button } from "@merge-rd/ui/components/button";
+import { Label } from "@merge-rd/ui/components/label";
 import { useEffect, useState } from "react";
 import { useFormContext } from "react-hook-form";
 import { useTranslation } from "react-i18next";

@@ -1,7 +1,7 @@
-import { Alert, AlertDescription, AlertTitle } from "@merge/ui/components/alert";
-import { Button } from "@merge/ui/components/button";
-import { Input } from "@merge/ui/components/input";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@merge/ui/components/tabs";
+import { Alert, AlertDescription, AlertTitle } from "@merge-rd/ui/components/alert";
+import { Button } from "@merge-rd/ui/components/button";
+import { Input } from "@merge-rd/ui/components/input";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@merge-rd/ui/components/tabs";
 
 function PreviewHeader() {
     return (

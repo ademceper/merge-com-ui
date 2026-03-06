@@ -1,6 +1,6 @@
 import { ChevronLeftIcon, ChevronRightIcon } from '@radix-ui/react-icons';
-import { Button } from '@merge/ui/components/button';
-import { cn } from '@merge/ui/lib/utils';
+import { Button } from '@merge-rd/ui/components/button';
+import { cn } from '@merge-rd/ui/lib/utils';
 
 interface CursorPaginationProps {
   hasMore: boolean;

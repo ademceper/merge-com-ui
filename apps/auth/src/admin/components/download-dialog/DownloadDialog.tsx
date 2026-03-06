@@ -1,14 +1,14 @@
 import { fetchWithError } from "@keycloak/keycloak-admin-client";
 import { HelpItem, useFetch, useHelp } from "../../../shared/keycloak-ui-shared";
-import { Textarea } from "@merge/ui/components/textarea";
-import { Label } from "@merge/ui/components/label";
+import { Textarea } from "@merge-rd/ui/components/textarea";
+import { Label } from "@merge-rd/ui/components/label";
 import {
     Select,
     SelectContent,
     SelectItem,
     SelectTrigger,
     SelectValue,
-} from "@merge/ui/components/select";
+} from "@merge-rd/ui/components/select";
 import { saveAs } from "file-saver";
 import { useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";

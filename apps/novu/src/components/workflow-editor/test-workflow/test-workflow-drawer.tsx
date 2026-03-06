@@ -6,14 +6,14 @@ import {
 } from '@novu/shared';
 import { forwardRef, useCallback, useEffect, useState } from 'react';
 import { RiArrowDownSLine, RiFileCopyLine } from 'react-icons/ri';
-import { Button } from '@merge/ui/components/button';
+import { Button } from '@merge-rd/ui/components/button';
 import { ButtonGroupItem, ButtonGroupRoot } from '@/components/primitives/button-group';
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from '@merge/ui/components/dropdown-menu';
+} from '@merge-rd/ui/components/dropdown-menu';
 import { Sheet, SheetContent, SheetDescription, SheetTitle } from '@/components/primitives/sheet';
 import { ToastClose, ToastIcon } from '@/components/primitives/sonner';
 import { showErrorToast, showToast } from '@/components/primitives/sonner-helpers';
@@ -23,7 +23,7 @@ import { PayloadData, PreviewSubscriberData } from '@/components/workflow-editor
 import { TestWorkflowActivityDrawer } from '@/components/workflow-editor/test-workflow/test-workflow-activity-drawer';
 import { TestWorkflowContent } from '@/components/workflow-editor/test-workflow/test-workflow-content';
 
-import { useUser } from '@merge/auth';
+import { useUser } from '@merge-rd/auth';
 import { useFetchApiKeys } from '@/hooks/use-fetch-api-keys';
 import { useFetchSubscriber } from '@/hooks/use-fetch-subscriber';
 import { useHasPermission } from '@/hooks/use-has-permission';

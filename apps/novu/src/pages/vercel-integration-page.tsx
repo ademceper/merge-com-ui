@@ -1,8 +1,8 @@
-import { useOrganization, useOrganizationList } from '@merge/auth';
+import { useOrganization, useOrganizationList } from '@merge-rd/auth';
 import { useMemo } from 'react';
 
-import { Card, CardContent, CardHeader } from '@merge/ui/components/card';
-import { Skeleton } from '@merge/ui/components/skeleton';
+import { Card, CardContent, CardHeader } from '@merge-rd/ui/components/card';
+import { Skeleton } from '@merge-rd/ui/components/skeleton';
 import { VercelIntegrationForm } from '@/components/vercel-integration-form';
 import { useEnvironment } from '@/context/environment/hooks';
 import { useCreateVercelIntegration } from '@/hooks/use-create-vercel-integration';

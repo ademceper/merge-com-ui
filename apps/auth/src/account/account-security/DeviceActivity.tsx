@@ -23,7 +23,7 @@ import {
     AlertDialogHeader,
     AlertDialogTitle,
     AlertDialogTrigger
-} from "@merge/ui/components/alert-dialog";
+} from "@merge-rd/ui/components/alert-dialog";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 
@@ -37,8 +37,8 @@ import { Page } from "../components/page/Page";
 import { formatDate } from "../utils/formatDate";
 import { useAccountAlerts } from "../utils/useAccountAlerts";
 import { usePromise } from "../utils/usePromise";
-import { Button } from "@merge/ui/components/button";
-import { Badge } from "@merge/ui/components/badge";
+import { Button } from "@merge-rd/ui/components/button";
+import { Badge } from "@merge-rd/ui/components/badge";
 import { Monitor, DeviceMobile } from "@phosphor-icons/react";
 
 export const DeviceActivity = () => {

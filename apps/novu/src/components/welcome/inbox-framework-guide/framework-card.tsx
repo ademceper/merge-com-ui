@@ -1,5 +1,5 @@
 import { motion } from 'motion/react';
-import { Card, CardContent } from '@merge/ui/components/card';
+import { Card, CardContent } from '@merge-rd/ui/components/card';
 import type { Framework } from '../framework-guides.instructions';
 
 const CARD_VARIANTS = {

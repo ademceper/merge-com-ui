@@ -1,5 +1,5 @@
 import React, { KeyboardEvent, useId } from "react";
-import { Card, CardHeader } from "@merge/ui/components/card";
+import { Card, CardHeader } from "@merge-rd/ui/components/card";
 
 type ClickableCardProps = React.HTMLAttributes<HTMLDivElement> & {
     onClick: () => void;

@@ -3,10 +3,10 @@
 import * as React from "react"
 import { cva, type VariantProps } from "class-variance-authority"
 
-import { cn } from "@merge/ui/lib/utils"
-import { Button } from "@merge/ui/components/button"
-import { Input } from "@merge/ui/components/input"
-import { Textarea } from "@merge/ui/components/textarea"
+import { cn } from "@merge-rd/ui/lib/utils"
+import { Button } from "@merge-rd/ui/components/button"
+import { Input } from "@merge-rd/ui/components/input"
+import { Textarea } from "@merge-rd/ui/components/textarea"
 
 function InputGroup({ className, ...props }: React.ComponentProps<"div">) {
   return (
@@ -117,7 +117,7 @@ function InputGroupText({ className, ...props }: React.ComponentProps<"span">) {
 function InputGroupInput({
   className,
   ...props
-}: React.ComponentProps<"input">) {
+}: Omit<React.ComponentProps<"input">, "size">) {
   return (
     <Input
       data-slot="input-group-control"

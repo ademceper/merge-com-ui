@@ -1,5 +1,5 @@
-import { Button } from "@merge/ui/components/button";
-import { Input } from "@merge/ui/components/input";
+import { Button } from "@merge-rd/ui/components/button";
+import { Input } from "@merge-rd/ui/components/input";
 import { MinusCircle, PlusCircle } from "@phosphor-icons/react";
 import { type TFunction } from "i18next";
 import { Fragment, useEffect, useMemo } from "react";

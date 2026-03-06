@@ -11,7 +11,7 @@ import { ActivityOverview } from '@/components/activity/components/activity-over
 import { usePullActivity } from '@/hooks/use-pull-activity';
 import { useFetchActivities } from '../../../hooks/use-fetch-activities.ts';
 import { WorkflowTriggerInboxIllustration } from '../../icons/workflow-trigger-inbox';
-import { Button } from '@merge/ui/components/button';
+import { Button } from '@merge-rd/ui/components/button';
 import { TestWorkflowFormType } from '../schema';
 import { TestWorkflowInstructions } from './test-workflow-instructions';
 

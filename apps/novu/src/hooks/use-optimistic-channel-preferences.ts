@@ -1,7 +1,7 @@
 import { GetSubscriberPreferencesDto, PatchPreferenceChannelsDto } from '@novu/api/models/components';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { patchSubscriberPreferences } from '@/api/subscribers';
-import { useOrganization } from '@merge/auth';
+import { useOrganization } from '@merge-rd/auth';
 import { requireEnvironment, useEnvironment } from '@/context/environment/hooks';
 import { convertContextKeysToPayload } from '@/utils/context-variable-utils';
 import { QueryKeys } from '@/utils/query-keys';

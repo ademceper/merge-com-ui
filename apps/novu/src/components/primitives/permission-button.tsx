@@ -1,6 +1,6 @@
 import { PermissionsEnum } from '@novu/shared';
 import { ReactNode } from 'react';
-import { Button, ButtonProps } from '@merge/ui/components/button';
+import { Button, ButtonProps } from '@merge-rd/ui/components/button';
 import { useHasPermission } from '@/hooks/use-has-permission';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/primitives/tooltip';
 

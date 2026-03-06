@@ -10,9 +10,9 @@ import {
     Collapsible,
     CollapsibleContent,
     CollapsibleTrigger,
-} from "@merge/ui/components/collapsible";
-import { Button } from "@merge/ui/components/button";
-import { Input } from "@merge/ui/components/input";
+} from "@merge-rd/ui/components/collapsible";
+import { Button } from "@merge-rd/ui/components/button";
+import { Input } from "@merge-rd/ui/components/input";
 import { useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useServerInfo } from "../context/server-info/ServerInfoProvider";

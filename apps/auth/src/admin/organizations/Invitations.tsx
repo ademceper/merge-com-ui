@@ -1,7 +1,7 @@
 import type { OrganizationInvitationRepresentation } from "@keycloak/keycloak-admin-client";
 import { OrganizationInvitationStatus } from "@keycloak/keycloak-admin-client";
-import { Button } from "@merge/ui/components/button";
-import { Badge } from "@merge/ui/components/badge";
+import { Button } from "@merge-rd/ui/components/button";
+import { Badge } from "@merge-rd/ui/components/badge";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useAdminClient } from "../admin-client";
@@ -9,7 +9,7 @@ import { CheckboxFilterComponent } from "../components/dynamic/CheckboxFilterCom
 import { getErrorDescription, getErrorMessage, useFetch } from "../../shared/keycloak-ui-shared";
 import { toast } from "sonner";
 import { useParams } from "../utils/useParams";
-import { Checkbox } from "@merge/ui/components/checkbox";
+import { Checkbox } from "@merge-rd/ui/components/checkbox";
 import { DataTable, DataTableRowActions } from "@/admin/components/data-table";
 import {
     Empty,
@@ -17,7 +17,7 @@ import {
     EmptyDescription,
     EmptyHeader,
     EmptyTitle
-} from "@merge/ui/components/empty";
+} from "@merge-rd/ui/components/empty";
 import useToggle from "../utils/useToggle";
 import { InviteMemberModal } from "./InviteMemberModal";
 import { EditOrganizationParams } from "./routes/EditOrganization";
@@ -31,7 +31,7 @@ import {
     AlertDialogFooter,
     AlertDialogHeader,
     AlertDialogTitle
-} from "@merge/ui/components/alert-dialog";
+} from "@merge-rd/ui/components/alert-dialog";
 import useFormatDate from "../utils/useFormatDate";
 
 const InvitationStatusBadge = ({ status }: { status?: OrganizationInvitationStatus }) => {

@@ -6,12 +6,12 @@ import {
     useHelp,
 } from "../../shared/keycloak-ui-shared";
 import { toast } from "sonner";
-import { Button } from "@merge/ui/components/button";
+import { Button } from "@merge-rd/ui/components/button";
 import {
     Popover,
     PopoverContent,
     PopoverTrigger,
-} from "@merge/ui/components/popover";
+} from "@merge-rd/ui/components/popover";
 import {
     DataTable,
     DataTableRowActions,

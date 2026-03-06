@@ -4,7 +4,7 @@ import { motion } from "framer-motion"
 import { useTheme } from "next-themes"
 import { useCallback, useEffect, useState } from "react"
 
-import { cn } from "@merge/ui/lib/utils"
+import { cn } from "@merge-rd/ui/lib/utils"
 
 export function useThemeToggle() {
   const { theme, setTheme, resolvedTheme } = useTheme()

@@ -1,6 +1,6 @@
 // See: https://github.com/i18next/react-i18next/issues/1543
 import { HTMLProps } from "react";
-import { cn } from "@merge/ui/lib/utils";
+import { cn } from "@merge-rd/ui/lib/utils";
 import { FormTitle } from "./FormTitle";
 
 type ScrollPanelProps = Omit<HTMLProps<HTMLFormElement>, "children"> & {

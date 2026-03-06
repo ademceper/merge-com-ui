@@ -1,6 +1,6 @@
 import { ReactEventHandler } from 'react';
 import { RiSearchLine } from 'react-icons/ri';
-import { Button } from '@merge/ui/components/button';
+import { Button } from '@merge-rd/ui/components/button';
 
 export const ListNoResults = ({
   title,

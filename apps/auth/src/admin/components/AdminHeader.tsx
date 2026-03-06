@@ -1,6 +1,6 @@
 import { useTranslation } from "react-i18next";
 import { useLocation } from "react-router-dom";
-import { SidebarPageHeader } from "@merge/ui/components/sidebar";
+import { SidebarPageHeader } from "@merge-rd/ui/components/sidebar";
 import { GroupBreadCrumbsForHeader } from "./bread-crumb/GroupBreadCrumbs";
 import { PageBreadCrumbs, usePageTitle } from "./bread-crumb/PageBreadCrumbs";
 import { useEnvironment } from "../../shared/keycloak-ui-shared";

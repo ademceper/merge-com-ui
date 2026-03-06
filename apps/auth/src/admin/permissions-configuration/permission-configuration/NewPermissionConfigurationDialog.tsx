@@ -5,8 +5,8 @@ import {
     DialogContent,
     DialogHeader,
     DialogTitle,
-} from "@merge/ui/components/dialog";
-import { Alert, AlertTitle } from "@merge/ui/components/alert";
+} from "@merge-rd/ui/components/dialog";
+import { Alert, AlertTitle } from "@merge-rd/ui/components/alert";
 import {
     Table,
     TableBody,
@@ -15,7 +15,7 @@ import {
     TableHeader,
     TableRow,
 } from "@/admin/components/data-table";
-import { cn } from "@merge/ui/lib/utils";
+import { cn } from "@merge-rd/ui/lib/utils";
 
 type NewPermissionConfigurationDialogProps = {
     resourceTypes?: ResourceTypesRepresentation[];

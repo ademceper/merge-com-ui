@@ -4,7 +4,7 @@ import type {
 } from "@keycloak/keycloak-admin-client/lib/defs/userProfileMetadata";
 import { getErrorDescription, getErrorMessage, ScrollForm, useFetch } from "../../shared/keycloak-ui-shared";
 import { toast } from "sonner";
-import { Button } from "@merge/ui/components/button";
+import { Button } from "@merge-rd/ui/components/button";
 import { flatten } from "flat";
 import { useState } from "react";
 import { FormProvider, useForm, useFormContext } from "react-hook-form";

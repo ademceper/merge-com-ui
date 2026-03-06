@@ -7,8 +7,8 @@ import { createContext, memo, useContext, useEffect, useMemo, useState } from 'r
 import { IconType } from 'react-icons/lib';
 import { RiArrowDownSLine, RiArrowRightSLine } from 'react-icons/ri';
 import { Badge } from '@/components/primitives/badge';
-import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@merge/ui/components/collapsible';
-import { cn } from '@merge/ui/lib/utils';
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@merge-rd/ui/components/collapsible';
+import { cn } from '@merge-rd/ui/lib/utils';
 
 interface ChainOfThoughtContextValue {
   isOpen: boolean;

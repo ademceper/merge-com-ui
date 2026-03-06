@@ -2,7 +2,7 @@ import { FeatureFlagsKeysEnum, ISubscriberResponseDto } from '@novu/shared';
 import { JSONSchema7 } from 'json-schema';
 
 import { useCallback, useEffect, useMemo, useRef } from 'react';
-import { Accordion } from '@merge/ui/components/accordion';
+import { Accordion } from '@merge-rd/ui/components/accordion';
 import { useCreateVariable } from '@/components/variable/hooks/use-create-variable';
 import { useEnvironment } from '@/context/environment/hooks';
 import { useDefaultSubscriberData } from '@/hooks/use-default-subscriber-data';

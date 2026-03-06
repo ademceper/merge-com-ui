@@ -18,7 +18,7 @@ import { useEnvironment } from '@/context/environment/hooks';
 import { useFetchOrganizationSettings } from '@/hooks/use-fetch-organization-settings';
 import { useFetchSubscription } from '@/hooks/use-fetch-subscription';
 import { buildRoute, ROUTES } from '@/utils/routes';
-import { cn } from '@merge/ui/lib/utils';
+import { cn } from '@merge-rd/ui/lib/utils';
 import { ListNoResults } from '../list-no-results';
 import { DEFAULT_TRANSLATIONS_LIMIT } from './constants';
 import { DeleteTranslationGroupDialog } from './delete-translation-modal';

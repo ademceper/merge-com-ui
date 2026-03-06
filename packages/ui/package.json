@@ -1,11 +1,17 @@
 {
-  "name": "@merge/ui",
-  "version": "0.0.0",
+  "name": "@merge-rd/ui",
+  "version": "0.1.0",
   "type": "module",
-  "private": true,
+  "private": false,
+  "sideEffects": false,
   "scripts": {
+    "build": "tsup",
     "lint": "eslint . --max-warnings 0"
   },
+  "files": [
+    "dist",
+    "src/styles"
+  ],
   "dependencies": {
     "@base-ui/react": "^1.2.0",
     "@dnd-kit/core": "^6.3.1",
@@ -22,30 +28,53 @@
     "embla-carousel-react": "^8.6.0",
     "framer-motion": "^12.0.0",
     "input-otp": "^1.4.2",
-    "next-themes": "^0.4.6",
     "radix-ui": "^1.4.3",
-    "react": "^19.2.4",
     "react-day-picker": "^9.14.0",
-    "react-dom": "^19.2.4",
     "react-resizable-panels": "^4.7.1",
     "recharts": "2.15.4",
-    "shadcn": "^3.7.0",
     "sonner": "^2.0.7",
     "tailwind-merge": "^3.4.0",
-    "tw-animate-css": "^1.4.0",
     "vaul": "^1.1.2"
   },
+  "peerDependencies": {
+    "next-themes": ">=0.4.0",
+    "react": ">=18.0.0",
+    "react-dom": ">=18.0.0",
+    "tailwindcss": ">=4.0.0"
+  },
+  "peerDependenciesMeta": {
+    "next-themes": { "optional": true }
+  },
   "devDependencies": {
+    "@merge/lint-cfg": "workspace:*",
+    "@merge/ts-cfg": "workspace:*",
     "@tailwindcss/postcss": "^4.1.11",
     "@turbo/gen": "^2.5.5",
     "@types/node": "^20.19.9",
     "@types/react": "^19.1.9",
     "@types/react-dom": "^19.1.7",
-    "@merge/lint-cfg": "workspace:*",
-    "@merge/ts-cfg": "workspace:*",
     "eslint": "^9.32.0",
     "tailwindcss": "^4.1.11",
+    "tsup": "^8.5.1",
     "typescript": "^5.9.2"
+  },
+  "publishConfig": {
+    "exports": {
+      "./globals.css": "./src/styles/globals.css",
+      "./postcss.config": "./postcss.config.mjs",
+      "./lib/*": {
+        "import": "./dist/lib/*.mjs",
+        "types": "./dist/lib/*.d.mts"
+      },
+      "./components/*": {
+        "import": "./dist/components/*.mjs",
+        "types": "./dist/components/*.d.mts"
+      },
+      "./hooks/*": {
+        "import": "./dist/hooks/*.mjs",
+        "types": "./dist/hooks/*.d.mts"
+      }
+    }
   },
   "exports": {
     "./globals.css": "./src/styles/globals.css",

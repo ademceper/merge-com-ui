@@ -2,8 +2,8 @@ import { ChannelTypeEnum, ChatRenderOutput, GeneratePreviewResponseDto } from '@
 import { RiSendPlane2Fill } from 'react-icons/ri';
 
 import { LogoCircle } from '@/components/icons';
-import { Skeleton } from '@merge/ui/components/skeleton';
-import { cn } from '@merge/ui/lib/utils';
+import { Skeleton } from '@merge-rd/ui/components/skeleton';
+import { cn } from '@merge-rd/ui/lib/utils';
 
 export const ChatPreview = ({
   isPreviewPending,

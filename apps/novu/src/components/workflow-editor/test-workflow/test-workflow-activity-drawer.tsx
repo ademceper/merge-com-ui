@@ -6,7 +6,7 @@ import { ActivityLogs } from '@/components/activity/activity-logs';
 import { ActivityPanel } from '@/components/activity/activity-panel';
 import { ActivitySkeleton } from '@/components/activity/activity-skeleton';
 import { ActivityOverview } from '@/components/activity/components/activity-overview';
-import { Button } from '@merge/ui/components/button';
+import { Button } from '@merge-rd/ui/components/button';
 import { Sheet, SheetContent, SheetTitle } from '@/components/primitives/sheet';
 import { useFetchActivities } from '@/hooks/use-fetch-activities';
 import { usePullActivity } from '@/hooks/use-pull-activity';

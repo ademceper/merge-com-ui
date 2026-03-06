@@ -1,5 +1,5 @@
 import { ApiServiceLevelEnum, FeatureNameEnum, getFeatureForTierAsBoolean, PermissionsEnum } from '@novu/shared';
-import { Switch } from '@merge/ui/components/switch';
+import { Switch } from '@merge-rd/ui/components/switch';
 import { UpgradeCTATooltip } from '@/components/upgrade-cta-tooltip';
 import { IS_ENTERPRISE, IS_SELF_HOSTED } from '@/config';
 import { useFetchSubscription } from '@/hooks/use-fetch-subscription';

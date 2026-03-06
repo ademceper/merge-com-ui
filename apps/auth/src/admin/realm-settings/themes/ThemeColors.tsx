@@ -3,8 +3,8 @@ import { TextControl } from "../../../shared/keycloak-ui-shared";
 import {
     Alert,
     AlertTitle
-} from "@merge/ui/components/alert";
-import { Label } from "@merge/ui/components/label";
+} from "@merge-rd/ui/components/alert";
+import { Label } from "@merge-rd/ui/components/label";
 import React, { useEffect, useMemo } from "react";
 import { FormProvider, useForm, useFormContext, useWatch } from "react-hook-form";
 import { useTranslation } from "react-i18next";

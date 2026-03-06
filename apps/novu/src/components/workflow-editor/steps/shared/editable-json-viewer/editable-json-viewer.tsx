@@ -4,7 +4,7 @@ import { CustomNodeDefinition, JsonEditor, UpdateFunctionProps } from 'json-edit
 import JSON5 from 'json5';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { InlineToast } from '@/components/primitives/inline-toast';
-import { cn } from '@merge/ui/lib/utils';
+import { cn } from '@merge-rd/ui/lib/utils';
 import { CUSTOM_THEME } from './constants';
 import { CustomTextEditor } from './custom-text-editor';
 import { JSON_EDITOR_ICONS } from './icons';

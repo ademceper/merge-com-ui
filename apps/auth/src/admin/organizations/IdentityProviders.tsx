@@ -7,11 +7,11 @@ import {
     EmptyDescription,
     EmptyHeader,
     EmptyTitle
-} from "@merge/ui/components/empty";
-import { DropdownMenuItem } from "@merge/ui/components/dropdown-menu";
+} from "@merge-rd/ui/components/empty";
+import { DropdownMenuItem } from "@merge-rd/ui/components/dropdown-menu";
 import { toast } from "sonner";
-import { Button } from "@merge/ui/components/button";
-import { Switch } from "@merge/ui/components/switch";
+import { Button } from "@merge-rd/ui/components/button";
+import { Switch } from "@merge-rd/ui/components/switch";
 import { sortBy } from "lodash-es";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -26,7 +26,7 @@ import {
     AlertDialogFooter,
     AlertDialogHeader,
     AlertDialogTitle
-} from "@merge/ui/components/alert-dialog";
+} from "@merge-rd/ui/components/alert-dialog";
 import { ManageOrderDialog } from "../identity-providers/ManageOrderDialog";
 import useToggle from "../utils/useToggle";
 import { LinkIdentityProviderModal } from "./LinkIdentityProviderModal";

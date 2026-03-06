@@ -8,7 +8,7 @@ import { VisuallyHidden } from '@/components/primitives/visually-hidden';
 import { useWorkflow } from '@/components/workflow-editor/workflow-provider';
 import { useEscapeKeyManager } from '@/context/escape-key-manager/hooks';
 import { EscapeKeyManagerPriority } from '@/context/escape-key-manager/priority';
-import { cn } from '@merge/ui/lib/utils';
+import { cn } from '@merge-rd/ui/lib/utils';
 
 const transitionSetting = { ease: [0.29, 0.83, 0.57, 0.99], duration: 0.4 };
 const stepTypeToClassname: Record<string, string | undefined> = {

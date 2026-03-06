@@ -4,8 +4,8 @@ import { motion } from 'motion/react';
 import { useState } from 'react';
 import { RiDeleteBinLine, RiMailLine } from 'react-icons/ri';
 import { TopicSubscription } from '@/api/topics';
-import { Avatar, AvatarFallback, AvatarImage } from '@merge/ui/components/avatar';
-import { Button } from '@merge/ui/components/button';
+import { Avatar, AvatarFallback, AvatarImage } from '@merge-rd/ui/components/avatar';
+import { Button } from '@merge-rd/ui/components/button';
 import {
   Dialog,
   DialogContent,
@@ -13,7 +13,7 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from '@merge/ui/components/dialog';
+} from '@merge-rd/ui/components/dialog';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/primitives/tooltip';
 import { itemVariants } from '@/utils/animation';
 import { ConfirmationModal } from '../confirmation-modal';

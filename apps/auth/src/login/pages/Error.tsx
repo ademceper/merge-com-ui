@@ -2,8 +2,8 @@ import type { PageProps } from "keycloakify/login/pages/PageProps";
 import type { KcContext } from "../KcContext";
 import type { I18n } from "../i18n";
 import AuthLayout from "../components/AuthLayout";
-import { Link } from "@merge/ui/components/link";
-import { Alert, AlertDescription } from "@merge/ui/components/alert";
+import { Link } from "@merge-rd/ui/components/link";
+import { Alert, AlertDescription } from "@merge-rd/ui/components/alert";
 
 export default function Error(props: PageProps<Extract<KcContext, { pageId: "error.ftl" }>, I18n>) {
     const { kcContext, i18n } = props;

@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { Button } from "@merge/ui/components/button";
-import { Tooltip, TooltipContent, TooltipTrigger, TooltipProvider } from "@merge/ui/components/tooltip";
+import { Button } from "@merge-rd/ui/components/button";
+import { Tooltip, TooltipContent, TooltipTrigger, TooltipProvider } from "@merge-rd/ui/components/tooltip";
 import { PlusCircle } from "@phosphor-icons/react";
 
 import { PermissionType, toNewPermission } from "../routes/NewPermission";

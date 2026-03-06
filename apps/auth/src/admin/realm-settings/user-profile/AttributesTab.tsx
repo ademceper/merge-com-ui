@@ -5,8 +5,8 @@ import {
     SelectItem,
     SelectTrigger,
     SelectValue,
-} from "@merge/ui/components/select";
-import { Button } from "@merge/ui/components/button";
+} from "@merge-rd/ui/components/select";
+import { Button } from "@merge-rd/ui/components/button";
 import {
     DataTable,
     DataTableRowActions,
@@ -27,7 +27,7 @@ import {
     AlertDialogFooter,
     AlertDialogHeader,
     AlertDialogTitle
-} from "@merge/ui/components/alert-dialog";
+} from "@merge-rd/ui/components/alert-dialog";
 import { KeycloakSpinner } from "../../../shared/keycloak-ui-shared";
 import { useRealm } from "../../context/realm-context/RealmContext";
 import useLocale from "../../utils/useLocale";

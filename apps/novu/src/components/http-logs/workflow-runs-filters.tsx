@@ -2,11 +2,11 @@ import { HTMLAttributes } from 'react';
 import { useForm } from 'react-hook-form';
 import { RiLoader4Line } from 'react-icons/ri';
 import { ActivityFilters } from '@/api/activity';
-import { Button } from '@merge/ui/components/button';
+import { Button } from '@merge-rd/ui/components/button';
 import { FacetedFormFilter } from '@/components/primitives/form/faceted-filter/facated-form-filter';
 import { Form, FormField, FormItem, FormRoot } from '@/components/primitives/form/form';
 import { useDebouncedForm } from '@/hooks/use-debounced-form';
-import { cn } from '@merge/ui/lib/utils';
+import { cn } from '@merge-rd/ui/lib/utils';
 import { defaultWorkflowRunsFilter } from './hooks/use-workflow-runs-url-state';
 
 export type WorkflowRunsFiltersProps = HTMLAttributes<HTMLDivElement> & {

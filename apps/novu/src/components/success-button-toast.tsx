@@ -1,6 +1,6 @@
 import { ReactNode } from 'react';
 import { RiArrowRightSLine } from 'react-icons/ri';
-import { Button } from '@merge/ui/components/button';
+import { Button } from '@merge-rd/ui/components/button';
 import { ToastClose, ToastIcon } from '@/components/primitives/sonner';
 
 interface SuccessToastProps {

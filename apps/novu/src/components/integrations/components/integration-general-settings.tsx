@@ -8,8 +8,8 @@ import {
 import { Control } from 'react-hook-form';
 import { FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/primitives/form/form';
 import { Input } from '@/components/primitives/input';
-import { Separator } from '@merge/ui/components/separator';
-import { Switch } from '@merge/ui/components/switch';
+import { Separator } from '@merge-rd/ui/components/separator';
+import { Switch } from '@merge-rd/ui/components/switch';
 import { useFeatureFlag } from '@/hooks/use-feature-flag';
 import { Protect } from '@/utils/protect';
 import { IntegrationFormData } from '../types';

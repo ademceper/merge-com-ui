@@ -1,5 +1,5 @@
 import type { UserProfileGroup } from "@keycloak/keycloak-admin-client/lib/defs/userProfileMetadata";
-import { Button } from "@merge/ui/components/button";
+import { Button } from "@merge-rd/ui/components/button";
 import {
     DataTable,
     DataTableRowActions,
@@ -18,7 +18,7 @@ import {
     AlertDialogFooter,
     AlertDialogHeader,
     AlertDialogTitle
-} from "@merge/ui/components/alert-dialog";
+} from "@merge-rd/ui/components/alert-dialog";
 import { useRealm } from "../../context/realm-context/RealmContext";
 import { useAdminClient } from "../../admin-client";
 import useLocale from "../../utils/useLocale";

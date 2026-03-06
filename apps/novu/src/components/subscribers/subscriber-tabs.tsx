@@ -1,8 +1,8 @@
 import { motion } from 'motion/react';
 import { useState } from 'react';
 import { RiGroup2Line } from 'react-icons/ri';
-import { Separator } from '@merge/ui/components/separator';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@merge/ui/components/tabs';
+import { Separator } from '@merge-rd/ui/components/separator';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@merge-rd/ui/components/tabs';
 import { Preferences } from '@/components/subscribers/preferences/preferences';
 import { PreferencesSkeleton } from '@/components/subscribers/preferences/preferences-skeleton';
 import { SubscriberActivity } from '@/components/subscribers/subscriber-activity';

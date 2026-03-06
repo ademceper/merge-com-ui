@@ -13,7 +13,7 @@ import {
 import { useNavigate, useParams } from 'react-router-dom';
 import { TranslationsFilter } from '@/api/translations';
 import { FlagCircle } from '@/components/flag-circle';
-import { Button } from '@merge/ui/components/button';
+import { Button } from '@merge-rd/ui/components/button';
 import { FacetedFormFilter } from '@/components/primitives/form/faceted-filter/facated-form-filter';
 import { Form, FormField, FormItem, FormRoot } from '@/components/primitives/form/form';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/primitives/tooltip';
@@ -23,7 +23,7 @@ import { useFetchOrganizationSettings } from '@/hooks/use-fetch-organization-set
 import { useHasPermission } from '@/hooks/use-has-permission';
 import { useUploadMasterJson } from '@/hooks/use-upload-master-json';
 import { buildRoute, ROUTES } from '@/utils/routes';
-import { cn } from '@merge/ui/lib/utils';
+import { cn } from '@merge-rd/ui/lib/utils';
 import { defaultTranslationsFilter } from './hooks/use-translations-url-state';
 
 type SearchFilterProps = {

@@ -1,6 +1,6 @@
-import { Button } from "@merge/ui/components/button";
-import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@merge/ui/components/collapsible";
-import { Label } from "@merge/ui/components/label";
+import { Button } from "@merge-rd/ui/components/button";
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@merge-rd/ui/components/collapsible";
+import { Label } from "@merge-rd/ui/components/label";
 import {
     DataTable,
     DataTableRowActions,

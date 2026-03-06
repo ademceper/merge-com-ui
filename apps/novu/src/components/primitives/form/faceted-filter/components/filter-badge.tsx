@@ -1,4 +1,4 @@
-import { cn } from '@merge/ui/lib/utils';
+import { cn } from '@merge-rd/ui/lib/utils';
 import { Badge } from '@/components/primitives/badge';
 import { STYLES } from '../styles';
 import { SizeType } from '../types';

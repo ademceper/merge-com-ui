@@ -1,7 +1,7 @@
 import { IEnvironment } from '@novu/shared';
 import { Cross2Icon } from '@radix-ui/react-icons';
 import { RiAlertFill } from 'react-icons/ri';
-import { Button } from '@merge/ui/components/button';
+import { Button } from '@merge-rd/ui/components/button';
 import {
   Dialog,
   DialogClose,
@@ -12,7 +12,7 @@ import {
   DialogOverlay,
   DialogPortal,
   DialogTitle,
-} from '@merge/ui/components/dialog';
+} from '@merge-rd/ui/components/dialog';
 
 interface DeleteEnvironmentDialogProps {
   environment?: IEnvironment;

@@ -4,7 +4,7 @@ import { FormProvider, useForm } from 'react-hook-form';
 import { RiFileMarkedLine, RiInformation2Line, RiShieldCheckLine } from 'react-icons/ri';
 import { Link } from 'react-router-dom';
 import { Badge } from '@/components/primitives/badge';
-import { Button } from '@merge/ui/components/button';
+import { Button } from '@merge-rd/ui/components/button';
 import { FormRoot } from '@/components/primitives/form/form';
 import {
   Sheet,
@@ -21,8 +21,8 @@ import { convertSchemaToPropertyList } from '@/components/schema-editor/utils';
 
 import { useFormProtection } from '../../hooks/use-form-protection';
 import { Hint, HintIcon } from '../primitives/hint';
-import { Separator } from '@merge/ui/components/separator';
-import { Switch } from '@merge/ui/components/switch';
+import { Separator } from '@merge-rd/ui/components/separator';
+import { Switch } from '@merge-rd/ui/components/switch';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/primitives/tooltip';
 import { checkVariableUsageInWorkflow } from '../schema-editor/utils/check-variable-usage';
 import { detectSchemaChanges, type SchemaChanges } from '../schema-editor/utils/schema-change-detection';

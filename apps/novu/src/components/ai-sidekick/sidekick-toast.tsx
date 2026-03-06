@@ -2,8 +2,8 @@ import { AnimatePresence, motion } from 'motion/react';
 import { useEffect } from 'react';
 import { RiCheckLine, RiCloseLine, RiEyeLine, RiLoader3Line } from 'react-icons/ri';
 import { Shimmer } from '../ai-elements/shimmer';
-import { Button } from '@merge/ui/components/button';
-import { Kbd } from '@merge/ui/components/kbd';
+import { Button } from '@merge-rd/ui/components/button';
+import { Kbd } from '@merge-rd/ui/components/kbd';
 
 type SidekickToastProps = {
   isVisible: boolean;

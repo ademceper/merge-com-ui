@@ -1,6 +1,6 @@
-import { Button } from "@merge/ui/components/button";
-import { Input } from "@merge/ui/components/input";
-import { cn } from "@merge/ui/lib/utils";
+import { Button } from "@merge-rd/ui/components/button";
+import { Input } from "@merge-rd/ui/components/input";
+import { cn } from "@merge-rd/ui/lib/utils";
 import { MinusCircle, Plus } from "@phosphor-icons/react";
 import React, { Fragment, useEffect, useMemo } from "react";
 import { useFormContext, useWatch } from "react-hook-form";

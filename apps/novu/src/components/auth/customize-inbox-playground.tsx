@@ -2,9 +2,9 @@ import { Info } from 'lucide-react';
 import { useId } from 'react';
 import { Controller, UseFormReturn } from 'react-hook-form';
 import { RiLayoutLine } from 'react-icons/ri';
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@merge/ui/components/accordion';
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@merge-rd/ui/components/accordion';
 import { ColorPicker } from '@/components/primitives/color-picker';
-import { Switch } from '@merge/ui/components/switch';
+import { Switch } from '@merge-rd/ui/components/switch';
 
 interface PreviewStyle {
   id: string;

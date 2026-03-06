@@ -1,6 +1,6 @@
 import { ChannelTypeEnum, providers as novuProviders } from '@novu/shared';
 import { useMemo } from 'react';
-import { Skeleton } from '@merge/ui/components/skeleton';
+import { Skeleton } from '@merge-rd/ui/components/skeleton';
 import { useEnvironment } from '@/context/environment/hooks';
 import { useFetchIntegrations } from '../../../hooks/use-fetch-integrations';
 import { TableIntegration } from '../types';

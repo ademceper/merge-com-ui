@@ -1,5 +1,5 @@
 import type UserRepresentation from "@keycloak/keycloak-admin-client/lib/defs/userRepresentation";
-import { Textarea } from "@merge/ui/components/textarea";
+import { Textarea } from "@merge-rd/ui/components/textarea";
 import { useTranslation } from "react-i18next";
 import { CopyToClipboardButton } from "../../components/copy-to-clipboard-button/CopyToClipboardButton";
 

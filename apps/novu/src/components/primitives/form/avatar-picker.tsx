@@ -1,12 +1,12 @@
 import { forwardRef, useState } from 'react';
 import { RiImageEditFill } from 'react-icons/ri';
 
-import { Avatar, AvatarImage } from '@merge/ui/components/avatar';
-import { Button } from '@merge/ui/components/button';
+import { Avatar, AvatarImage } from '@merge-rd/ui/components/avatar';
+import { Button } from '@merge-rd/ui/components/button';
 import { FormMessage } from '@/components/primitives/form/form';
-import { Label } from '@merge/ui/components/label';
+import { Label } from '@merge-rd/ui/components/label';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/primitives/popover';
-import { Separator } from '@merge/ui/components/separator';
+import { Separator } from '@merge-rd/ui/components/separator';
 import TextSeparator from '@/components/primitives/text-separator';
 import { ControlInput } from '@/components/workflow-editor/control-input';
 import { useWorkflow } from '@/components/workflow-editor/workflow-provider';

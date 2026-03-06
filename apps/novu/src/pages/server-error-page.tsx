@@ -1,6 +1,6 @@
 import { RiQuestionAnswerLine } from 'react-icons/ri';
 import { Plug } from '@/components/icons/plug';
-import { Button } from '@merge/ui/components/button';
+import { Button } from '@merge-rd/ui/components/button';
 import { usePlainChat } from '@/hooks/use-plain-chat';
 
 export function ServerErrorPage() {

@@ -5,10 +5,10 @@ import {
     SelectItem,
     SelectTrigger,
     SelectValue
-} from "@merge/ui/components/select";
-import { Button } from "@merge/ui/components/button";
-import { Label } from "@merge/ui/components/label";
-import { Popover, PopoverContent, PopoverTrigger } from "@merge/ui/components/popover";
+} from "@merge-rd/ui/components/select";
+import { Button } from "@merge-rd/ui/components/button";
+import { Label } from "@merge-rd/ui/components/label";
+import { Popover, PopoverContent, PopoverTrigger } from "@merge-rd/ui/components/popover";
 import { useState } from "react";
 import { Controller, useFormContext } from "react-hook-form";
 import { useTranslation } from "react-i18next";

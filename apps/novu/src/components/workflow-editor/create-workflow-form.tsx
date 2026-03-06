@@ -18,7 +18,7 @@ import {
   FormMessage,
   FormRoot,
 } from '@/components/primitives/form/form';
-import { Separator } from '@merge/ui/components/separator';
+import { Separator } from '@merge-rd/ui/components/separator';
 import { TagInput } from '@/components/primitives/tag-input';
 import { Textarea } from '@/components/primitives/textarea';
 import { workflowSchema } from '@/components/workflow-editor/schema';

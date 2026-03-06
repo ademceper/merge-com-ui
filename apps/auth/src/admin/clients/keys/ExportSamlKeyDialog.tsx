@@ -1,6 +1,6 @@
 import KeyStoreConfig from "@keycloak/keycloak-admin-client/lib/defs/keystoreConfig";
-import { Button } from "@merge/ui/components/button";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@merge/ui/components/dialog";
+import { Button } from "@merge-rd/ui/components/button";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@merge-rd/ui/components/dialog";
 import { saveAs } from "file-saver";
 import { FormProvider, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";

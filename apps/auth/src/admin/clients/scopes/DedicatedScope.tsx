@@ -1,8 +1,8 @@
 import type ClientRepresentation from "@keycloak/keycloak-admin-client/lib/defs/clientRepresentation";
 import type { RoleMappingPayload } from "@keycloak/keycloak-admin-client/lib/defs/roleRepresentation";
-import { Label } from "@merge/ui/components/label";
-import { Separator } from "@merge/ui/components/separator";
-import { Switch } from "@merge/ui/components/switch";
+import { Label } from "@merge-rd/ui/components/label";
+import { Separator } from "@merge-rd/ui/components/separator";
+import { Switch } from "@merge-rd/ui/components/switch";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { HelpItem } from "../../../shared/keycloak-ui-shared";

@@ -2,13 +2,13 @@ import { motion } from 'motion/react';
 import { useState } from 'react';
 import { RiDiscussLine, RiMindMap, RiPulseFill } from 'react-icons/ri';
 import { TopicSubscriptionDetailsResponse } from '@/api/topics';
-import { Button } from '@merge/ui/components/button';
+import { Button } from '@merge-rd/ui/components/button';
 import { CopyButton } from '@/components/primitives/copy-button';
-import { Skeleton } from '@merge/ui/components/skeleton';
+import { Skeleton } from '@merge-rd/ui/components/skeleton';
 import { TopicDrawer } from '@/components/topics/topic-drawer';
 import TruncatedText from '@/components/truncated-text';
 import { fadeIn } from '@/utils/animation';
-import { cn } from '@merge/ui/lib/utils';
+import { cn } from '@merge-rd/ui/lib/utils';
 import { SubscriptionPreferenceRule } from './subscription-preference-rule';
 
 type SubscriptionPreferencesProps = {

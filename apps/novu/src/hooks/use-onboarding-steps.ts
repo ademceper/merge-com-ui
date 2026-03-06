@@ -1,4 +1,4 @@
-import { useOrganization } from '@merge/auth';
+import { useOrganization } from '@merge-rd/auth';
 import { ChannelTypeEnum, IIntegration } from '@novu/shared';
 import { useMemo } from 'react';
 import { IS_SELF_HOSTED, ONBOARDING_DEMO_WORKFLOW_ID } from '../config';

@@ -1,4 +1,4 @@
-import { DropdownMenuItem } from "@merge/ui/components/dropdown-menu";
+import { DropdownMenuItem } from "@merge-rd/ui/components/dropdown-menu";
 import { ReactElement } from "react";
 import { Controller, useFormContext } from "react-hook-form";
 import { useTranslation } from "react-i18next";
@@ -15,7 +15,7 @@ import {
     AlertDialogFooter,
     AlertDialogHeader,
     AlertDialogTitle
-} from "@merge/ui/components/alert-dialog";
+} from "@merge-rd/ui/components/alert-dialog";
 import { useConfirmDialog } from "../../components/confirm-dialog/ConfirmDialog";
 import { useState } from "react";
 import { ViewHeader } from "../../components/view-header/ViewHeader";

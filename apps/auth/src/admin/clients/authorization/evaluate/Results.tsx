@@ -1,14 +1,14 @@
 import { MagnifyingGlass } from "@phosphor-icons/react";
-import { Button } from "@merge/ui/components/button";
-import { Input } from "@merge/ui/components/input";
+import { Button } from "@merge-rd/ui/components/button";
+import { Input } from "@merge-rd/ui/components/input";
 import {
     Select,
     SelectContent,
     SelectItem,
     SelectTrigger,
     SelectValue
-} from "@merge/ui/components/select";
-import { Separator } from "@merge/ui/components/separator";
+} from "@merge-rd/ui/components/select";
+import { Separator } from "@merge-rd/ui/components/separator";
 import {
     Table,
     TableHead,
@@ -29,7 +29,7 @@ import {
     EmptyHeader,
     EmptyMedia,
     EmptyTitle
-} from "@merge/ui/components/empty";
+} from "@merge-rd/ui/components/empty";
 import { AuthorizationDataModal } from "../AuthorizationDataModal";
 import { AuthorizationEvaluateResource } from "../AuthorizationEvaluateResource";
 

@@ -14,7 +14,7 @@ import {
   InAppPreviewSubject,
 } from '@/components/workflow-editor/in-app-preview';
 
-import { cn } from '@merge/ui/lib/utils';
+import { cn } from '@merge-rd/ui/lib/utils';
 
 const InboxPreviewContainer = ({ children, className }: { children: ReactNode; className?: string }) => {
   return (

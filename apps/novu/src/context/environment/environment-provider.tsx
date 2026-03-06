@@ -1,7 +1,7 @@
 import { type IEnvironment, EnvironmentTypeEnum } from '@novu/shared';
 import { useCallback, useLayoutEffect, useMemo, useState } from 'react';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
-import { useOrganization } from '@merge/auth';
+import { useOrganization } from '@merge-rd/auth';
 import { EnvironmentContext } from '@/context/environment/environment-context';
 import { useFetchEnvironments } from '@/context/environment/hooks';
 import { loadFromStorage, saveToStorage } from '@/utils/local-storage';

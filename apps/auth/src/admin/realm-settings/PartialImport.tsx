@@ -5,29 +5,29 @@ import type {
     PartialImportResult
 } from "@keycloak/keycloak-admin-client/lib/defs/realmRepresentation";
 import type RoleRepresentation from "@keycloak/keycloak-admin-client/lib/defs/roleRepresentation";
-import { Button } from "@merge/ui/components/button";
-import { Checkbox } from "@merge/ui/components/checkbox";
-import { Badge } from "@merge/ui/components/badge";
-import { Separator } from "@merge/ui/components/separator";
-import { Label } from "@merge/ui/components/label";
+import { Button } from "@merge-rd/ui/components/button";
+import { Checkbox } from "@merge-rd/ui/components/checkbox";
+import { Badge } from "@merge-rd/ui/components/badge";
+import { Separator } from "@merge-rd/ui/components/separator";
+import { Label } from "@merge-rd/ui/components/label";
 import {
     Dialog,
     DialogContent,
     DialogFooter,
     DialogHeader,
     DialogTitle
-} from "@merge/ui/components/dialog";
+} from "@merge-rd/ui/components/dialog";
 import {
     Alert,
     AlertTitle
-} from "@merge/ui/components/alert";
+} from "@merge-rd/ui/components/alert";
 import {
     Select,
     SelectContent,
     SelectItem,
     SelectTrigger,
     SelectValue
-} from "@merge/ui/components/select";
+} from "@merge-rd/ui/components/select";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useAdminClient } from "../admin-client";

@@ -1,13 +1,13 @@
 import type UserRepresentation from "@keycloak/keycloak-admin-client/lib/defs/userRepresentation";
 import { FormLabel, useFetch } from "../../../shared/keycloak-ui-shared";
-import { Button } from "@merge/ui/components/button";
-import { Input } from "@merge/ui/components/input";
-import { Badge } from "@merge/ui/components/badge";
+import { Button } from "@merge-rd/ui/components/button";
+import { Input } from "@merge-rd/ui/components/input";
+import { Badge } from "@merge-rd/ui/components/badge";
 import {
     Popover,
     PopoverContent,
     PopoverTrigger,
-} from "@merge/ui/components/popover";
+} from "@merge-rd/ui/components/popover";
 import { X } from "@phosphor-icons/react";
 import { debounce } from "lodash-es";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";

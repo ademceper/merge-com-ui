@@ -1,7 +1,7 @@
 import type RoleRepresentation from "@keycloak/keycloak-admin-client/lib/defs/roleRepresentation";
 import { getErrorDescription, getErrorMessage, HelpItem } from "../../../shared/keycloak-ui-shared";
 import { toast } from "sonner";
-import { Button } from "@merge/ui/components/button";
+import { Button } from "@merge-rd/ui/components/button";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Link, To } from "react-router-dom";
@@ -20,8 +20,8 @@ import {
     EmptyDescription,
     EmptyHeader,
     EmptyTitle
-} from "@merge/ui/components/empty";
-import { DropdownMenuItem } from "@merge/ui/components/dropdown-menu";
+} from "@merge-rd/ui/components/empty";
+import { DropdownMenuItem } from "@merge-rd/ui/components/dropdown-menu";
 
 type RoleDetailLinkProps = RoleRepresentation & {
     defaultRoleName?: string;

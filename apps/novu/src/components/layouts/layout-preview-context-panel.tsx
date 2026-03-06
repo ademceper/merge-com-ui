@@ -1,7 +1,7 @@
 import { FeatureFlagsKeysEnum, ISubscriberResponseDto } from '@novu/shared';
 import { useCallback } from 'react';
 
-import { Accordion } from '@merge/ui/components/accordion';
+import { Accordion } from '@merge-rd/ui/components/accordion';
 import { useEnvironment } from '@/context/environment/hooks';
 import { useDefaultSubscriberData } from '@/hooks/use-default-subscriber-data';
 import { useFeatureFlag } from '@/hooks/use-feature-flag';

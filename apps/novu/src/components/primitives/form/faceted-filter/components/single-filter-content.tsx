@@ -1,6 +1,6 @@
-import { cn } from '@merge/ui/lib/utils';
-import { Label } from '@merge/ui/components/label';
-import { RadioGroup, RadioGroupItem } from '@merge/ui/components/radio-group';
+import { cn } from '@merge-rd/ui/lib/utils';
+import { Label } from '@merge-rd/ui/components/label';
+import { RadioGroup, RadioGroupItem } from '@merge-rd/ui/components/radio-group';
 import { useKeyboardNavigation } from '../hooks/use-keyboard-navigation';
 import { FilterOption, SizeType } from '../types';
 import { BaseFilterContent } from './base-filter-content';

@@ -6,7 +6,7 @@ import { CreateEnvironmentButton } from '../components/environments/create-envir
 import { FreeTierState } from '../components/environments/environments-free-state';
 import { EnvironmentsList } from '../components/environments/environments-list';
 import { IS_ENTERPRISE, IS_SELF_HOSTED } from '../config';
-import { useOrganization } from '@merge/auth';
+import { useOrganization } from '@merge-rd/auth';
 import { useFetchEnvironments } from '../context/environment/hooks';
 import { useFetchSubscription } from '../hooks/use-fetch-subscription';
 import { useTelemetry } from '../hooks/use-telemetry';

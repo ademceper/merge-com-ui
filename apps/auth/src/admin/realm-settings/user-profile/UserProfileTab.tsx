@@ -1,6 +1,6 @@
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@merge/ui/components/tabs";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@merge-rd/ui/components/tabs";
 import { useRealm } from "../../context/realm-context/RealmContext";
 import { toUserProfile } from "../routes/UserProfile";
 import type { UserProfileTab as UserProfileTabType } from "../routes/UserProfile";

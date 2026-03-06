@@ -2,7 +2,7 @@ import {
     InputGroup,
     InputGroupButton,
     InputGroupInput,
-} from "@merge/ui/components/input-group";
+} from "@merge-rd/ui/components/input-group";
 import { Eye, EyeSlash } from "@phosphor-icons/react";
 import { MutableRefObject, Ref, forwardRef, useState } from "react";
 import { useTranslation } from "react-i18next";

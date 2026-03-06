@@ -2,14 +2,14 @@ import type AuthenticatorConfigInfoRepresentation from "@keycloak/keycloak-admin
 import type AuthenticatorConfigRepresentation from "@keycloak/keycloak-admin-client/lib/defs/authenticatorConfigRepresentation";
 import { getErrorDescription, getErrorMessage, TextControl, useFetch } from "../../../shared/keycloak-ui-shared";
 import { toast } from "sonner";
-import { Button } from "@merge/ui/components/button";
+import { Button } from "@merge-rd/ui/components/button";
 import {
     Dialog,
     DialogContent,
     DialogHeader,
     DialogTitle
-} from "@merge/ui/components/dialog";
-import { Tooltip, TooltipContent, TooltipTrigger, TooltipProvider } from "@merge/ui/components/tooltip";
+} from "@merge-rd/ui/components/dialog";
+import { Tooltip, TooltipContent, TooltipTrigger, TooltipProvider } from "@merge-rd/ui/components/tooltip";
 import { Gear, Trash } from "@phosphor-icons/react";
 import { useEffect, useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";

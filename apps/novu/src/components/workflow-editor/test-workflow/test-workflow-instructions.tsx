@@ -9,7 +9,7 @@ import {
   SheetMain,
   SheetTitle,
 } from '@/components/primitives/sheet';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@merge/ui/components/tabs';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@merge-rd/ui/components/tabs';
 import { useFetchApiKeys } from '@/hooks/use-fetch-api-keys';
 import { useHasPermission } from '@/hooks/use-has-permission';
 import { useTelemetry } from '@/hooks/use-telemetry';
@@ -26,7 +26,7 @@ import { TelemetryEvent } from '@/utils/telemetry';
 import { generateWorkflowTriggerAIPrompt, type PromptLanguage } from '@/utils/workflow-trigger-ai-prompt';
 import { CodeBlock, Language } from '../../primitives/code-block';
 import { InlineToast } from '../../primitives/inline-toast';
-import { Separator } from '@merge/ui/components/separator';
+import { Separator } from '@merge-rd/ui/components/separator';
 import { ToastClose, ToastIcon } from '@/components/primitives/sonner';
 import { showErrorToast, showToast } from '../../primitives/sonner-helpers';
 import { TimelineContainer, TimelineStep } from '../../primitives/timeline';

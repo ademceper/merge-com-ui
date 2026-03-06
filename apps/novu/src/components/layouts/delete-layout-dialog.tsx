@@ -3,8 +3,8 @@ import { RiArrowRightSLine, RiRouteFill } from 'react-icons/ri';
 import { useEnvironment } from '@/context/environment/hooks';
 import { useFetchLayoutUsage } from '@/hooks/use-fetch-layout-usage';
 import { ConfirmationModal } from '../confirmation-modal';
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@merge/ui/components/accordion';
-import { Skeleton } from '@merge/ui/components/skeleton';
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@merge-rd/ui/components/accordion';
+import { Skeleton } from '@merge-rd/ui/components/skeleton';
 import TruncatedText from '../truncated-text';
 
 type DeleteLayoutDialogProps = {

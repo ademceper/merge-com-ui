@@ -1,4 +1,4 @@
-import { Spinner } from "@merge/ui/components/spinner";
+import { Spinner } from "@merge-rd/ui/components/spinner";
 import { useTranslation } from "react-i18next";
 
 export const KeycloakSpinner = () => {

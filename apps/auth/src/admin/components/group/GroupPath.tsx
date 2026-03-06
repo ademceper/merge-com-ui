@@ -4,7 +4,7 @@ import {
     TooltipContent,
     TooltipProvider,
     TooltipTrigger,
-} from "@merge/ui/components/tooltip";
+} from "@merge-rd/ui/components/tooltip";
 
 import type GroupRepresentation from "@keycloak/keycloak-admin-client/lib/defs/groupRepresentation";
 

@@ -1,6 +1,6 @@
 import { IProviderConfig } from '@novu/shared';
 import { RiArrowRightSLine } from 'react-icons/ri';
-import { Button } from '@merge/ui/components/button';
+import { Button } from '@merge-rd/ui/components/button';
 import { ProviderIcon } from './provider-icon';
 
 type IntegrationListItemProps = {

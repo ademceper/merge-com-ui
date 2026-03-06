@@ -1,6 +1,6 @@
 import { Settings } from 'lucide-react';
 import { RiAddFill } from 'react-icons/ri';
-import { Button } from '@merge/ui/components/button';
+import { Button } from '@merge-rd/ui/components/button';
 
 type IntegrationsEmptyStateProps = {
   onAddIntegrationClick: () => void;

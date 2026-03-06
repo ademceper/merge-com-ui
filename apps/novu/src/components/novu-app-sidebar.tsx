@@ -24,7 +24,7 @@ import {
   SidebarMenu,
   SidebarMenuItem,
   SidebarMenuButton,
-} from '@merge/ui/components/sidebar';
+} from '@merge-rd/ui/components/sidebar';
 import { Badge } from '@/components/primitives/badge';
 import { useEnvironment } from '@/context/environment/hooks';
 import { useFeatureFlag } from '@/hooks/use-feature-flag';

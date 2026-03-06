@@ -10,7 +10,7 @@
 // @ts-nocheck
 
 import { PropsWithChildren } from "react";
-import { Separator } from "@merge/ui/components/separator";
+import { Separator } from "@merge-rd/ui/components/separator";
 
 type PageProps = {
     title: string;

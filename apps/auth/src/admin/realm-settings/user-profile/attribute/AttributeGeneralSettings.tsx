@@ -6,19 +6,19 @@ import {
     TextControl,
     useFetch
 } from "../../../../shared/keycloak-ui-shared";
-import { Button } from "@merge/ui/components/button";
-import { Label } from "@merge/ui/components/label";
-import { Popover, PopoverContent, PopoverTrigger } from "@merge/ui/components/popover";
-import { RadioGroup, RadioGroupItem } from "@merge/ui/components/radio-group";
-import { Separator } from "@merge/ui/components/separator";
+import { Button } from "@merge-rd/ui/components/button";
+import { Label } from "@merge-rd/ui/components/label";
+import { Popover, PopoverContent, PopoverTrigger } from "@merge-rd/ui/components/popover";
+import { RadioGroup, RadioGroupItem } from "@merge-rd/ui/components/radio-group";
+import { Separator } from "@merge-rd/ui/components/separator";
 import {
     Select,
     SelectContent,
     SelectItem,
     SelectTrigger,
     SelectValue
-} from "@merge/ui/components/select";
-import { Switch } from "@merge/ui/components/switch";
+} from "@merge-rd/ui/components/select";
+import { Switch } from "@merge-rd/ui/components/switch";
 import { isEqual } from "lodash-es";
 import { useState } from "react";
 import { Controller, FormProvider, useFormContext, useWatch } from "react-hook-form";

@@ -2,7 +2,7 @@ import { type WidgetProps } from '@rjsf/utils';
 import { useMemo } from 'react';
 import { useFormContext } from 'react-hook-form';
 import { FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/primitives/form/form';
-import { Switch } from '@merge/ui/components/switch';
+import { Switch } from '@merge-rd/ui/components/switch';
 import { useSaveForm } from '@/components/workflow-editor/steps/save-form-context';
 import { capitalize } from '@/utils/string';
 import { getFieldName } from './template-utils';

@@ -3,7 +3,7 @@ import { useFieldArray, useForm } from 'react-hook-form';
 import { RiAddLine } from 'react-icons/ri';
 
 import type { GetVercelConfigurationDetails } from '@/api/partner-integrations';
-import { Button } from '@merge/ui/components/button';
+import { Button } from '@merge-rd/ui/components/button';
 import { Form, FormRoot } from '@/components/primitives/form/form';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/primitives/select';
 import { useUpdateVercelIntegration } from '@/hooks/use-update-vercel-integration';

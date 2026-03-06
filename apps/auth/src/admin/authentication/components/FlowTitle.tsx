@@ -1,5 +1,5 @@
 import { HelpItem } from "../../../shared/keycloak-ui-shared";
-import { Badge } from "@merge/ui/components/badge";
+import { Badge } from "@merge-rd/ui/components/badge";
 import { GitBranch, MapPin, Robot, ListChecks } from "@phosphor-icons/react";
 import { useTranslation } from "react-i18next";
 import { useAuthenticationProvider } from "./AuthenticationProviderContext";

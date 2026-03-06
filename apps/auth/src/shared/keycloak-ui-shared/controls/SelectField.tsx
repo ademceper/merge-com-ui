@@ -6,7 +6,7 @@ import {
     SelectItem,
     SelectTrigger,
     SelectValue,
-} from "@merge/ui/components/select";
+} from "@merge-rd/ui/components/select";
 import { get } from "lodash-es";
 import { Controller, useFormContext } from "react-hook-form";
 import { getRuleValue } from "../utils/getRuleValue";

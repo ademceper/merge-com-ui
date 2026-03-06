@@ -1,7 +1,7 @@
 "use client";
 
-import { Button } from "@merge/ui/components/button";
-import { Popover, PopoverContent, PopoverTrigger } from "@merge/ui/components/popover";
+import { Button } from "@merge-rd/ui/components/button";
+import { Popover, PopoverContent, PopoverTrigger } from "@merge-rd/ui/components/popover";
 import { get } from "lodash-es";
 import { useState } from "react";
 import { Controller, useFormContext } from "react-hook-form";

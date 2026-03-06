@@ -12,7 +12,7 @@ import {
   BreadcrumbList,
   BreadcrumbPage,
   BreadcrumbSeparator,
-} from '@merge/ui/components/breadcrumb';
+} from '@merge-rd/ui/components/breadcrumb';
 import { CompactButton } from '../primitives/button-compact';
 import TruncatedText from '../truncated-text';
 

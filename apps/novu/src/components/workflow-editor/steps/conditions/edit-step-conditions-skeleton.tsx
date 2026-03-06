@@ -1,4 +1,4 @@
-import { Skeleton } from '@merge/ui/components/skeleton';
+import { Skeleton } from '@merge-rd/ui/components/skeleton';
 import { EditStepConditionsLayout } from './edit-step-conditions-layout';
 
 export const EditStepConditionsFormSkeleton = () => {

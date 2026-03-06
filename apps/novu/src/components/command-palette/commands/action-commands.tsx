@@ -1,5 +1,5 @@
 import { LuBookUp2 } from 'react-icons/lu';
-import { useOrganization } from '@merge/auth';
+import { useOrganization } from '@merge-rd/auth';
 import { useEnvironment, useFetchEnvironments } from '@/context/environment/hooks';
 import { Command, CommandExecutionContext } from '../command-types';
 

@@ -1,8 +1,8 @@
 import { ChannelTypeEnum, GeneratePreviewResponseDto, PushRenderOutput } from '@novu/shared';
 import { HTMLMotionProps, motion } from 'motion/react';
 import { HTMLAttributes } from 'react';
-import { Skeleton } from '@merge/ui/components/skeleton';
-import { cn } from '@merge/ui/lib/utils';
+import { Skeleton } from '@merge-rd/ui/components/skeleton';
+import { cn } from '@merge-rd/ui/lib/utils';
 
 export function PushPreview({
   isPreviewPending,

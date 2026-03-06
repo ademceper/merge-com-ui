@@ -1,7 +1,7 @@
 import { RiEarthLine } from 'react-icons/ri';
 import { type Country } from 'react-phone-number-input';
 import flags from 'react-phone-number-input/flags';
-import { cn } from '@merge/ui/lib/utils';
+import { cn } from '@merge-rd/ui/lib/utils';
 
 // Helper function to get flag for locale
 function getLocaleFlag(localeCode: string) {

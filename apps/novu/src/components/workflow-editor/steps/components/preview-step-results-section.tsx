@@ -1,6 +1,6 @@
 import { useCallback, useState } from 'react';
 import { RiContractUpDownLine, RiExpandUpDownLine, RiInformation2Line } from 'react-icons/ri';
-import { AccordionContent, AccordionItem, AccordionTrigger } from '@merge/ui/components/accordion';
+import { AccordionContent, AccordionItem, AccordionTrigger } from '@merge-rd/ui/components/accordion';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/primitives/tooltip';
 import { ACCORDION_STYLES } from '../constants/preview-context.constants';
 import { EditableJsonViewer } from '../shared/editable-json-viewer/editable-json-viewer';

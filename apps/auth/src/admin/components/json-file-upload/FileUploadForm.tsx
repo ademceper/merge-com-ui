@@ -1,13 +1,13 @@
-import { Button } from "@merge/ui/components/button";
+import { Button } from "@merge-rd/ui/components/button";
 import {
     Dialog,
     DialogContent,
     DialogHeader,
     DialogTitle,
     DialogFooter
-} from "@merge/ui/components/dialog";
-import { Label } from "@merge/ui/components/label";
-import { Input } from "@merge/ui/components/input";
+} from "@merge-rd/ui/components/dialog";
+import { Label } from "@merge-rd/ui/components/label";
+import { Input } from "@merge-rd/ui/components/input";
 /** Local type replacing PatternFly FileUploadProps; only used for Omit. */
 type FileUploadProps = {
     id?: string;

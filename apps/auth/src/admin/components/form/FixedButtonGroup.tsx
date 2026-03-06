@@ -1,5 +1,5 @@
 import { useTranslation } from "react-i18next";
-import { Button } from "@merge/ui/components/button";
+import { Button } from "@merge-rd/ui/components/button";
 
 type FixedButtonGroupProps = Omit<React.ComponentProps<"div">, "children"> & {
     name: string;

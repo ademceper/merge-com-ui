@@ -1,7 +1,7 @@
 import { RiAddCircleLine, RiBookMarkedLine } from 'react-icons/ri';
 import { Link, useNavigate } from 'react-router-dom';
 import { LinkButton } from '@/components/primitives/button-link';
-import { Button } from '@merge/ui/components/button';
+import { Button } from '@merge-rd/ui/components/button';
 import { EmptyTopicsIllustration } from '../topics/empty-topics-illustration';
 
 export const RequestLogsEmptyState = () => {

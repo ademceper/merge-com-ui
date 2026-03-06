@@ -1,14 +1,14 @@
-import { Button } from "@merge/ui/components/button";
-import { Badge } from "@merge/ui/components/badge";
-import { Input } from "@merge/ui/components/input";
-import { Label } from "@merge/ui/components/label";
+import { Button } from "@merge-rd/ui/components/button";
+import { Badge } from "@merge-rd/ui/components/badge";
+import { Input } from "@merge-rd/ui/components/input";
+import { Label } from "@merge-rd/ui/components/label";
 import {
     Select,
     SelectContent,
     SelectItem,
     SelectTrigger,
     SelectValue,
-} from "@merge/ui/components/select";
+} from "@merge-rd/ui/components/select";
 import { DataTable, type ColumnDef } from "@/admin/components/data-table";
 import { FormPanel } from "../../../shared/keycloak-ui-shared/scroll-form/FormPanel";
 import {
@@ -18,7 +18,7 @@ import {
     EmptyHeader,
     EmptyMedia,
     EmptyTitle
-} from "@merge/ui/components/empty";
+} from "@merge-rd/ui/components/empty";
 import { MagnifyingGlass, X } from "@phosphor-icons/react";
 import { pickBy } from "lodash-es";
 import { useMemo, useState } from "react";

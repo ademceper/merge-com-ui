@@ -1,7 +1,7 @@
 import { useFormContext } from 'react-hook-form';
 import { FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/primitives/form/form';
 import { HelpTooltipIndicator } from '@/components/primitives/help-tooltip-indicator';
-import { Switch } from '@merge/ui/components/switch';
+import { Switch } from '@merge-rd/ui/components/switch';
 import { useSaveForm } from '@/components/workflow-editor/steps/save-form-context';
 
 const fieldKey = 'disableOutputSanitization';

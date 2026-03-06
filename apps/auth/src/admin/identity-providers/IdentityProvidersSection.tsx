@@ -2,9 +2,9 @@ import type IdentityProviderRepresentation from "@keycloak/keycloak-admin-client
 import type { IdentityProvidersQuery } from "@keycloak/keycloak-admin-client/lib/resources/identityProviders";
 import { getErrorDescription, getErrorMessage } from "../../shared/keycloak-ui-shared";
 import { toast } from "sonner";
-import { Badge } from "@merge/ui/components/badge";
-import { Button } from "@merge/ui/components/button";
-import { Checkbox } from "@merge/ui/components/checkbox";
+import { Badge } from "@merge-rd/ui/components/badge";
+import { Button } from "@merge-rd/ui/components/button";
+import { Checkbox } from "@merge-rd/ui/components/checkbox";
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -12,14 +12,14 @@ import {
     DropdownMenuItem,
     DropdownMenuLabel,
     DropdownMenuTrigger,
-} from "@merge/ui/components/dropdown-menu";
+} from "@merge-rd/ui/components/dropdown-menu";
 import {
     DataTableRowActions,
     type ColumnDef,
 } from "@/admin/components/data-table";
 import { DraggableTableRows } from "@/admin/components/table-draggable-rows";
-import { Input } from "@merge/ui/components/input";
-import { CardTitle } from "@merge/ui/components/card";
+import { Input } from "@merge-rd/ui/components/input";
+import { CardTitle } from "@merge-rd/ui/components/card";
 import {
     Cube,
     FacebookLogo,
@@ -47,7 +47,7 @@ import {
     AlertDialogFooter,
     AlertDialogHeader,
     AlertDialogTitle
-} from "@merge/ui/components/alert-dialog";
+} from "@merge-rd/ui/components/alert-dialog";
 import { ClickableCard } from "../components/keycloak-card/ClickableCard";
 import { ViewHeader } from "../components/view-header/ViewHeader";
 import { useRealm } from "../context/realm-context/RealmContext";

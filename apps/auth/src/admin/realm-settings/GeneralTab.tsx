@@ -13,8 +13,8 @@ import {
     useFetch
 } from "../../shared/keycloak-ui-shared";
 import { FormPanel } from "../../shared/keycloak-ui-shared/scroll-form/FormPanel";
-import { Button } from "@merge/ui/components/button";
-import { Link } from "@merge/ui/components/link";
+import { Button } from "@merge-rd/ui/components/button";
+import { Link } from "@merge-rd/ui/components/link";
 import { Copy, ArrowSquareOut } from "@phosphor-icons/react";
 import { useEffect, useState } from "react";
 import { Controller, FormProvider, useForm } from "react-hook-form";

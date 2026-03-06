@@ -1,15 +1,15 @@
 import * as React from "react";
 import { Slot } from "@radix-ui/react-slot";
-import { cn } from "@merge/ui/lib/utils";
+import { cn } from "@merge-rd/ui/lib/utils";
 
 export {
   ButtonGroup,
   ButtonGroupText,
   ButtonGroupSeparator,
   buttonGroupVariants,
-} from "@merge/ui/components/button-group";
+} from "@merge-rd/ui/components/button-group";
 
-export { ButtonGroup as ButtonGroupRoot } from "@merge/ui/components/button-group";
+export { ButtonGroup as ButtonGroupRoot } from "@merge-rd/ui/components/button-group";
 
 export function ButtonGroupItem({
   className,

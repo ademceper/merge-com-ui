@@ -3,9 +3,9 @@
  * RoutableTabs ile aynı API: Tab children (eventKey, title, children).
  */
 
-import { Tabs, TabsContent } from "@merge/ui/components/tabs";
-import { Button } from "@merge/ui/components/button";
-import { Sheet, SheetContent, SheetTrigger } from "@merge/ui/components/sheet";
+import { Tabs, TabsContent } from "@merge-rd/ui/components/tabs";
+import { Button } from "@merge-rd/ui/components/button";
+import { Sheet, SheetContent, SheetTrigger } from "@merge-rd/ui/components/sheet";
 import {
     Children,
     JSXElementConstructor,
@@ -28,7 +28,7 @@ import { TAB_PROVIDER } from "../../page/constants";
 import useIsFeatureEnabled, { Feature } from "../../utils/useIsFeatureEnabled";
 import { useTranslation } from "react-i18next";
 import { ListIcon } from "@phosphor-icons/react";
-import { cn } from "@merge/ui/lib/utils";
+import { cn } from "@merge-rd/ui/lib/utils";
 
 type TabChildProps = {
     eventKey: string;

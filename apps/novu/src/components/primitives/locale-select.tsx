@@ -1,10 +1,10 @@
 import { getAllLocales, getCommonLocales, getLocaleByIso } from '@novu/shared';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { RiArrowDownSLine, RiCheckLine, RiErrorWarningFill } from 'react-icons/ri';
-import { cn } from '@merge/ui/lib/utils';
+import { cn } from '@merge-rd/ui/lib/utils';
 import { FlagCircle, StackedFlagCircles } from '../flag-circle';
 import TruncatedText from '../truncated-text';
-import { Button, ButtonProps } from '@merge/ui/components/button';
+import { Button, ButtonProps } from '@merge-rd/ui/components/button';
 import { Input } from '@/components/primitives/input';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/primitives/tooltip';
 

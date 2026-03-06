@@ -1,7 +1,7 @@
 import type AccessTokenRepresentation from "@keycloak/keycloak-admin-client/lib/defs/accessTokenRepresentation";
-import { Button } from "@merge/ui/components/button";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@merge/ui/components/dialog";
-import { Textarea } from "@merge/ui/components/textarea";
+import { Button } from "@merge-rd/ui/components/button";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@merge-rd/ui/components/dialog";
+import { Textarea } from "@merge-rd/ui/components/textarea";
 import { useTranslation } from "react-i18next";
 
 import { prettyPrintJSON } from "../../util";

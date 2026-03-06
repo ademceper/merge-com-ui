@@ -2,7 +2,7 @@ import type EvaluationResultRepresentation from "@keycloak/keycloak-admin-client
 import { DecisionEffect } from "@keycloak/keycloak-admin-client/lib/defs/policyRepresentation";
 import type PolicyResultRepresentation from "@keycloak/keycloak-admin-client/lib/defs/policyResultRepresentation";
 import { capitalize } from "lodash-es";
-import { Button } from "@merge/ui/components/button";
+import { Button } from "@merge-rd/ui/components/button";
 import {
     TableCell,
     TableRow

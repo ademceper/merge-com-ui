@@ -15,8 +15,8 @@ import { useTranslation } from "react-i18next";
 import { unLinkAccount } from "../api/methods";
 import { LinkedAccountRepresentation } from "../api/representations";
 import { useAccountAlerts } from "../utils/useAccountAlerts";
-import { Button } from "@merge/ui/components/button";
-import { Badge } from "@merge/ui/components/badge";
+import { Button } from "@merge-rd/ui/components/button";
+import { Badge } from "@merge-rd/ui/components/badge";
 import { Link as LinkIcon, LinkBreak, LinkSimple } from "@phosphor-icons/react";
 
 type AccountRowProps = {

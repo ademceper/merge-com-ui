@@ -3,12 +3,12 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { motion } from 'motion/react';
 import { RiCloseLine, RiRouteFill } from 'react-icons/ri';
 import { getActivityList } from '@/api/activity';
-import { Button } from '@merge/ui/components/button';
+import { Button } from '@merge-rd/ui/components/button';
 import { showErrorToast, showSuccessToast } from '@/components/primitives/sonner-helpers';
 import { useEnvironment } from '@/context/environment/hooks';
 import { fadeIn } from '@/utils/animation';
 import { QueryKeys } from '@/utils/query-keys';
-import { cn } from '@merge/ui/lib/utils';
+import { cn } from '@merge-rd/ui/lib/utils';
 import { triggerWorkflow } from '../../api/workflows';
 import { RepeatPlay } from '../icons/repeat-play';
 

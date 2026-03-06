@@ -9,9 +9,9 @@ import {
     SelectLabel,
     SelectTrigger,
     SelectValue,
-} from "@merge/ui/components/select";
-import { Button } from "@merge/ui/components/button";
-import { Input } from "@merge/ui/components/input";
+} from "@merge-rd/ui/components/select";
+import { Button } from "@merge-rd/ui/components/button";
+import { Input } from "@merge-rd/ui/components/input";
 import {
     DataTable,
     DataTableRowActions,
@@ -31,14 +31,14 @@ import {
     AlertDialogFooter,
     AlertDialogHeader,
     AlertDialogTitle
-} from "@merge/ui/components/alert-dialog";
+} from "@merge-rd/ui/components/alert-dialog";
 import { KeyValueType } from "../../components/key-value-form/key-value-convert";
 import { useRealm } from "../../context/realm-context/RealmContext";
 import { useWhoAmI } from "../../context/whoami/WhoAmI";
 import { DEFAULT_LOCALE, i18n } from "../../i18n/i18n";
 import { localeToDisplayName } from "../../util";
 import { AddTranslationModal } from "../AddTranslationModal";
-import { Separator } from "@merge/ui/components/separator";
+import { Separator } from "@merge-rd/ui/components/separator";
 
 type RealmOverridesProps = {
     internationalizationEnabled: boolean;

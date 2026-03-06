@@ -3,10 +3,10 @@ import FeatureRepresentation, {
     FeatureType
 } from "@keycloak/keycloak-admin-client/lib/defs/featureRepresentation";
 import { HelpItem, label } from "../../shared/keycloak-ui-shared";
-import { Button } from "@merge/ui/components/button";
-import { Card, CardContent, CardTitle } from "@merge/ui/components/card";
-import { Badge } from "@merge/ui/components/badge";
-import { Empty, EmptyHeader, EmptyTitle, EmptyDescription } from "@merge/ui/components/empty";
+import { Button } from "@merge-rd/ui/components/button";
+import { Card, CardContent, CardTitle } from "@merge-rd/ui/components/card";
+import { Badge } from "@merge-rd/ui/components/badge";
+import { Empty, EmptyHeader, EmptyTitle, EmptyDescription } from "@merge-rd/ui/components/empty";
 import { useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { useParams } from "react-router-dom";

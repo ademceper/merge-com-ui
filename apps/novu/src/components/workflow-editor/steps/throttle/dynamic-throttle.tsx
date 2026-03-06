@@ -3,7 +3,7 @@ import { useMemo } from 'react';
 import { useFormContext } from 'react-hook-form';
 
 import { Code2 } from '@/components/icons/code-2';
-import { Button } from '@merge/ui/components/button';
+import { Button } from '@merge-rd/ui/components/button';
 import { FormField, FormItem, FormLabel, FormMessage } from '@/components/primitives/form/form';
 import { useSaveForm } from '@/components/workflow-editor/steps/save-form-context';
 import { useWorkflow } from '@/components/workflow-editor/workflow-provider';

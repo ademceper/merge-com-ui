@@ -1,5 +1,5 @@
 import { RegionSelector, useRegion } from '@/context/region';
-import { useOrganization } from '@merge/auth';
+import { useOrganization } from '@merge-rd/auth';
 import { useEffect, useRef, useState } from 'react';
 import { useTelemetry } from '../../hooks/use-telemetry';
 import { ROUTES } from '../../utils/routes';

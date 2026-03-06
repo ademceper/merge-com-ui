@@ -4,8 +4,8 @@ import {
     TooltipContent,
     TooltipTrigger,
     TooltipProvider,
-} from "@merge/ui/components/tooltip";
-import { Button } from "@merge/ui/components/button";
+} from "@merge-rd/ui/components/tooltip";
+import { Button } from "@merge-rd/ui/components/button";
 import {
     TableCell,
     TableRow,

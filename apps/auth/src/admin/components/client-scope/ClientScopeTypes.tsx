@@ -5,14 +5,14 @@ import type { TFunction } from "i18next";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { toUpperCase } from "../../util";
-import { DropdownMenuItem } from "@merge/ui/components/dropdown-menu";
+import { DropdownMenuItem } from "@merge-rd/ui/components/dropdown-menu";
 import {
     Select,
     SelectContent,
     SelectItem,
     SelectTrigger,
     SelectValue
-} from "@merge/ui/components/select";
+} from "@merge-rd/ui/components/select";
 
 export enum ClientScope {
     default = "default",

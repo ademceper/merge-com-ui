@@ -1,4 +1,4 @@
-import { Label } from "@merge/ui/components/label";
+import { Label } from "@merge-rd/ui/components/label";
 import {
     Controller,
     ControllerProps,

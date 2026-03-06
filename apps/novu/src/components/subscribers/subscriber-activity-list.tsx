@@ -6,14 +6,14 @@ import { ActivityEmptyState } from '@/components/activity/activity-empty-state';
 import { JOB_STATUS_CONFIG } from '@/components/activity/constants';
 import { getActivityStatus } from '@/components/activity/helpers';
 import { RouteFill } from '@/components/icons/route-fill';
-import { Skeleton } from '@merge/ui/components/skeleton';
+import { Skeleton } from '@merge-rd/ui/components/skeleton';
 import { StatusBadge, StatusBadgeIcon } from '@/components/primitives/status-badge';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/primitives/tooltip';
 import { TimeDisplayHoverCard } from '@/components/time-display-hover-card';
 import TruncatedText from '@/components/truncated-text';
 import { itemVariants, listVariants } from '@/utils/animation';
 import { formatDateSimple } from '@/utils/format-date';
-import { cn } from '@merge/ui/lib/utils';
+import { cn } from '@merge-rd/ui/lib/utils';
 
 const statusToTooltipStyles: Record<string, string> = {
   completed: 'before:bg-success-lighter before:border before:border-success-lighter text-success-base',

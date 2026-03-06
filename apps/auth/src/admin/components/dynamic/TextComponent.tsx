@@ -1,5 +1,5 @@
-import { Label } from "@merge/ui/components/label";
-import { Textarea } from "@merge/ui/components/textarea";
+import { Label } from "@merge-rd/ui/components/label";
+import { Textarea } from "@merge-rd/ui/components/textarea";
 import { useFormContext } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { HelpItem } from "../../../shared/keycloak-ui-shared";

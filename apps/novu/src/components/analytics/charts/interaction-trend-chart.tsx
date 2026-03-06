@@ -3,7 +3,7 @@ import { Line, LineChart, XAxis } from 'recharts';
 import { type InteractionTrendDataPoint } from '../../../api/activity';
 
 import { ChartConfig, ChartContainer, ChartTooltip, NovuTooltip } from '@/components/primitives/chart';
-import { Skeleton } from '@merge/ui/components/skeleton';
+import { Skeleton } from '@merge-rd/ui/components/skeleton';
 import { ANALYTICS_TOOLTIPS } from '../constants/analytics-tooltips';
 import { createDateBasedHasDataChecker } from '../utils/chart-validation';
 import { generateDummyInteractionData } from './chart-dummy-data';

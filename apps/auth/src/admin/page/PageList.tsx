@@ -2,7 +2,7 @@ import ComponentRepresentation from "@keycloak/keycloak-admin-client/lib/defs/co
 import type { ComponentQuery } from "@keycloak/keycloak-admin-client/lib/resources/components";
 import { getErrorDescription, getErrorMessage, useFetch } from "../../shared/keycloak-ui-shared";
 import { toast } from "sonner";
-import { Button } from "@merge/ui/components/button";
+import { Button } from "@merge-rd/ui/components/button";
 import { get } from "lodash-es";
 import { useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -24,7 +24,7 @@ import {
     EmptyDescription,
     EmptyHeader,
     EmptyTitle
-} from "@merge/ui/components/empty";
+} from "@merge-rd/ui/components/empty";
 import { PAGE_PROVIDER } from "./constants";
 import { addDetailPage, PageListParams, toDetailPage } from "./routes";
 

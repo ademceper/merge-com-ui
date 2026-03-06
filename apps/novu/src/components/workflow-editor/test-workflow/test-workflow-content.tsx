@@ -7,7 +7,7 @@ import {
 import { useState } from 'react';
 import { PreviewContextSection } from '@/components/preview-context-section';
 import { PreviewSubscriberSection } from '@/components/preview-subscriber-section';
-import { Accordion } from '@merge/ui/components/accordion';
+import { Accordion } from '@merge-rd/ui/components/accordion';
 import { PreviewPayloadSection } from '@/components/workflow-editor/steps/components/preview-payload-section';
 import { PayloadData, PreviewSubscriberData } from '@/components/workflow-editor/steps/types/preview-context.types';
 import { useFeatureFlag } from '@/hooks/use-feature-flag';

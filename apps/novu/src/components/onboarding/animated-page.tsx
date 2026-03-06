@@ -1,6 +1,6 @@
 import { motion } from 'motion/react';
 import { ReactNode } from 'react';
-import { cn } from '@merge/ui/lib/utils';
+import { cn } from '@merge-rd/ui/lib/utils';
 
 interface AnimatedPageProps {
   children: ReactNode;

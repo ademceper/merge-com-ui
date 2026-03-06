@@ -3,18 +3,18 @@
 import * as React from "react"
 import { Command as CommandPrimitive } from "cmdk"
 
-import { cn } from "@merge/ui/lib/utils"
+import { cn } from "@merge-rd/ui/lib/utils"
 import {
   Dialog,
   DialogContent,
   DialogDescription,
   DialogHeader,
   DialogTitle,
-} from "@merge/ui/components/dialog"
+} from "@merge-rd/ui/components/dialog"
 import {
   InputGroup,
   InputGroupAddon,
-} from "@merge/ui/components/input-group"
+} from "@merge-rd/ui/components/input-group"
 import { MagnifyingGlassIcon, CheckIcon } from "@phosphor-icons/react"
 
 function Command({

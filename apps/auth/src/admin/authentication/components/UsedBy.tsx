@@ -1,17 +1,17 @@
 import { useFetch } from "../../../shared/keycloak-ui-shared";
-import { Button } from "@merge/ui/components/button";
+import { Button } from "@merge-rd/ui/components/button";
 import {
     Dialog,
     DialogContent,
     DialogFooter,
     DialogHeader,
     DialogTitle,
-} from "@merge/ui/components/dialog";
+} from "@merge-rd/ui/components/dialog";
 import {
     Popover,
     PopoverContent,
     PopoverTrigger,
-} from "@merge/ui/components/popover";
+} from "@merge-rd/ui/components/popover";
 import { DataTable, type ColumnDef } from "@/admin/components/data-table";
 import { CheckCircle } from "@phosphor-icons/react";
 import { useState } from "react";

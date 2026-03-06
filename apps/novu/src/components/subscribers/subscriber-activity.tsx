@@ -1,4 +1,4 @@
-import { useOrganization } from '@merge/auth';
+import { useOrganization } from '@merge-rd/auth';
 import { FeatureFlagsKeysEnum } from '@novu/shared';
 import { AnimatePresence } from 'motion/react';
 import { useMemo, useState } from 'react';

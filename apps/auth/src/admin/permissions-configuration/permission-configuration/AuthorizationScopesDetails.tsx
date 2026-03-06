@@ -1,7 +1,7 @@
 import { useTranslation } from "react-i18next";
 import { capitalize } from "lodash-es";
-import { Badge } from "@merge/ui/components/badge";
-import { Popover, PopoverContent, PopoverTrigger } from "@merge/ui/components/popover";
+import { Badge } from "@merge-rd/ui/components/badge";
+import { Popover, PopoverContent, PopoverTrigger } from "@merge-rd/ui/components/popover";
 
 type AuthorizationScopesDetailsProps = {
     row: {

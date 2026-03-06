@@ -11,12 +11,12 @@ import {
   BreadcrumbList,
   BreadcrumbPage,
   BreadcrumbSeparator,
-} from '@merge/ui/components/breadcrumb';
-import { Button } from '@merge/ui/components/button';
+} from '@merge-rd/ui/components/breadcrumb';
+import { Button } from '@merge-rd/ui/components/button';
 import { CompactButton } from '@/components/primitives/button-compact';
-import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from '@merge/ui/components/dialog';
-import { ScrollArea, ScrollBar } from '@merge/ui/components/scroll-area';
-import { Skeleton } from '@merge/ui/components/skeleton';
+import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from '@merge-rd/ui/components/dialog';
+import { ScrollArea, ScrollBar } from '@merge-rd/ui/components/scroll-area';
+import { Skeleton } from '@merge-rd/ui/components/skeleton';
 import { WorkflowResults } from '@/components/template-store/components/workflow-results';
 import { IWorkflowSuggestion } from '@/components/template-store/types';
 import { WorkflowSidebar } from '@/components/template-store/workflow-sidebar';

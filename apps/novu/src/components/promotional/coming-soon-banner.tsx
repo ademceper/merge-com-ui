@@ -2,11 +2,11 @@ import { AnimatePresence, motion } from 'motion/react';
 import { useCallback, useRef, useState } from 'react';
 import { RiCloseFill } from 'react-icons/ri';
 import { toast } from 'sonner';
-import { ToggleGroup, ToggleGroupItem } from '@merge/ui/components/toggle-group';
+import { ToggleGroup, ToggleGroupItem } from '@merge-rd/ui/components/toggle-group';
 import { useTelemetry } from '@/hooks/use-telemetry';
 import { TelemetryEvent } from '@/utils/telemetry';
 import { CompactButton } from '../primitives/button-compact';
-import { Card, CardContent } from '@merge/ui/components/card';
+import { Card, CardContent } from '@merge-rd/ui/components/card';
 
 interface PromotionalBannerContent {
   emoji?: string;

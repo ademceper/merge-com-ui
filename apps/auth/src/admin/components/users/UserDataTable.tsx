@@ -8,14 +8,14 @@ import {
     EmptyDescription,
     EmptyHeader,
     EmptyTitle
-} from "@merge/ui/components/empty";
-import { DropdownMenuItem } from "@merge/ui/components/dropdown-menu";
+} from "@merge-rd/ui/components/empty";
+import { DropdownMenuItem } from "@merge-rd/ui/components/dropdown-menu";
 import { toast } from "sonner";
-import { Button } from "@merge/ui/components/button";
-import { Badge } from "@merge/ui/components/badge";
-import { Label } from "@merge/ui/components/label";
-import { Checkbox } from "@merge/ui/components/checkbox";
-import { Tooltip, TooltipContent, TooltipTrigger, TooltipProvider } from "@merge/ui/components/tooltip";
+import { Button } from "@merge-rd/ui/components/button";
+import { Badge } from "@merge-rd/ui/components/badge";
+import { Label } from "@merge-rd/ui/components/label";
+import { Checkbox } from "@merge-rd/ui/components/checkbox";
+import { Tooltip, TooltipContent, TooltipTrigger, TooltipProvider } from "@merge-rd/ui/components/tooltip";
 import { WarningCircle, Info, Warning } from "@phosphor-icons/react";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";

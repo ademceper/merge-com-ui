@@ -11,8 +11,8 @@ import {
 } from '../ai-elements/prompt-input';
 import { Shimmer } from '../ai-elements/shimmer';
 import { BroomSparkle } from '../icons/broom-sparkle';
-import { Button } from '@merge/ui/components/button';
-import { Skeleton } from '@merge/ui/components/skeleton';
+import { Button } from '@merge-rd/ui/components/button';
+import { Skeleton } from '@merge-rd/ui/components/skeleton';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/primitives/tooltip';
 import { ChatChainOfThoughtReasoning, ChatChainOfThoughtToolCalls } from './chat-chain-of-thought';
 import { ChatMessageActions } from './chat-message-actions';

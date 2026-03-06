@@ -3,7 +3,7 @@ import { RiArrowRightSLine, RiGuideFill } from 'react-icons/ri';
 import { RQBJsonLogic } from 'react-querybuilder';
 import { Link } from 'react-router-dom';
 
-import { Button } from '@merge/ui/components/button';
+import { Button } from '@merge-rd/ui/components/button';
 import { useConditionsCount } from '@/hooks/use-conditions-count';
 
 export function SkipConditionsButton({ origin, step }: { origin: ResourceOriginEnum; step: StepResponseDto }) {

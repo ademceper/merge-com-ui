@@ -8,7 +8,7 @@ import { useDataRef } from '@/hooks/use-data-ref';
 import { useRemoveGrammarly } from '@/hooks/use-remove-grammarly';
 import { LocalizationResourceEnum, TranslationKey } from '@/types/translations';
 import { EnhancedParsedVariables, IsAllowedVariable, LiquidVariable } from '@/utils/parseStepVariables';
-import { cn } from '@merge/ui/lib/utils';
+import { cn } from '@merge-rd/ui/lib/utils';
 import { TranslationValueInputComponent } from '../workflow-editor/steps/email/translations/edit-translation-popover/edit-translation-popover';
 import { DEFAULT_EDITOR_CONFIG, MAILY_EMAIL_WIDTH, useCreateExtensions } from './maily-config';
 import { RepeatMenuDescription } from './repeat-menu-description';

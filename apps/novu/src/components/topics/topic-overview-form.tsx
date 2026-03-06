@@ -7,8 +7,8 @@ import { Link } from 'react-router-dom';
 import { ExternalToast } from 'sonner';
 import { z } from 'zod';
 import { deleteTopic, updateTopic } from '@/api/topics';
-import { Button } from '@merge/ui/components/button';
-import { Card, CardContent } from '@merge/ui/components/card';
+import { Button } from '@merge-rd/ui/components/button';
+import { Card, CardContent } from '@merge-rd/ui/components/card';
 import { CopyButton } from '@/components/primitives/copy-button';
 import {
   Form,
@@ -20,8 +20,8 @@ import {
   FormRoot,
 } from '@/components/primitives/form/form';
 import { Input } from '@/components/primitives/input';
-import { Separator } from '@merge/ui/components/separator';
-import { Skeleton } from '@merge/ui/components/skeleton';
+import { Separator } from '@merge-rd/ui/components/separator';
+import { Skeleton } from '@merge-rd/ui/components/skeleton';
 import { showErrorToast, showSuccessToast } from '@/components/primitives/sonner-helpers';
 import { TimeDisplayHoverCard } from '@/components/time-display-hover-card';
 import { useTopicsNavigate } from '@/components/topics/hooks/use-topics-navigate';
@@ -30,7 +30,7 @@ import { useTelemetry } from '@/hooks/use-telemetry';
 import { formatDateSimple } from '@/utils/format-date';
 import { QueryKeys } from '@/utils/query-keys';
 import { TelemetryEvent } from '@/utils/telemetry';
-import { cn } from '@merge/ui/lib/utils';
+import { cn } from '@merge-rd/ui/lib/utils';
 import { ConfirmationModal } from '../confirmation-modal';
 import { Topic } from './types';
 

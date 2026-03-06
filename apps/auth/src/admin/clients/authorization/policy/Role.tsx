@@ -1,6 +1,6 @@
 import { HelpItem, useFetch, FormLabel } from "../../../../shared/keycloak-ui-shared";
-import { Button } from "@merge/ui/components/button";
-import { Checkbox } from "@merge/ui/components/checkbox";
+import { Button } from "@merge-rd/ui/components/button";
+import { Checkbox } from "@merge-rd/ui/components/checkbox";
 import {
     Table,
     TableBody,

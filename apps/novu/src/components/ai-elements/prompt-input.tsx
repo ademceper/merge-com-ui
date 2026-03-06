@@ -31,17 +31,17 @@ import {
   CommandItem,
   CommandList,
   CommandSeparator,
-} from '@merge/ui/components/command';
+} from '@merge-rd/ui/components/command';
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from '@merge/ui/components/dropdown-menu';
+} from '@merge-rd/ui/components/dropdown-menu';
 import { HoverCard, HoverCardContent, HoverCardTrigger } from '@/components/primitives/hover-card';
-import { InputGroup, InputGroupAddon, InputGroupButton, InputGroupTextarea } from '@merge/ui/components/input-group';
+import { InputGroup, InputGroupAddon, InputGroupButton, InputGroupTextarea } from '@merge-rd/ui/components/input-group';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/primitives/select';
-import { cn } from '@merge/ui/lib/utils';
+import { cn } from '@merge-rd/ui/lib/utils';
 
 // ============================================================================
 // Provider Context & Types

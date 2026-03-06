@@ -6,7 +6,7 @@ import {
     TextControl,
     useEnvironment
 } from "../../../shared/keycloak-ui-shared";
-import { Label } from "@merge/ui/components/label";
+import { Label } from "@merge-rd/ui/components/label";
 import { useFormContext } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 

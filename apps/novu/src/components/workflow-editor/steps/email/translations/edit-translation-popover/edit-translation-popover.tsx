@@ -2,7 +2,7 @@ import { DEFAULT_LOCALE } from '@novu/shared';
 import React, { ComponentType, useCallback, useId, useState } from 'react';
 import { RiDeleteBin2Line, RiErrorWarningLine, RiListView, RiQuestionLine } from 'react-icons/ri';
 import { TranslateVariableIcon } from '@/components/icons/translate-variable';
-import { Button } from '@merge/ui/components/button';
+import { Button } from '@merge-rd/ui/components/button';
 import { LinkButton } from '@/components/primitives/button-link';
 import { FormControl, FormItem, FormMessagePure } from '@/components/primitives/form/form';
 import { InputPure, InputRoot, InputWrapper } from '@/components/primitives/input';

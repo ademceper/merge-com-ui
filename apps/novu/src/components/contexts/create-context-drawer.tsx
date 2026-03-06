@@ -1,7 +1,7 @@
 import { forwardRef, useId, useState } from 'react';
 import { RiArrowRightSLine } from 'react-icons/ri';
-import { Button } from '@merge/ui/components/button';
-import { Separator } from '@merge/ui/components/separator';
+import { Button } from '@merge-rd/ui/components/button';
+import { Separator } from '@merge-rd/ui/components/separator';
 import {
   Sheet,
   SheetContent,
@@ -14,7 +14,7 @@ import {
 import { useCombinedRefs } from '@/hooks/use-combined-refs';
 import { useFormProtection } from '@/hooks/use-form-protection';
 import { useOnElementUnmount } from '@/hooks/use-on-element-unmount';
-import { cn } from '@merge/ui/lib/utils';
+import { cn } from '@merge-rd/ui/lib/utils';
 import { ExternalLink } from '../shared/external-link';
 import { CreateContextForm } from './create-context-form';
 

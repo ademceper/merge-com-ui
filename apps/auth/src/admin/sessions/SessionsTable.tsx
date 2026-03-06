@@ -1,7 +1,7 @@
 import type UserSessionRepresentation from "@keycloak/keycloak-admin-client/lib/defs/userSessionRepresentation";
 import { useEnvironment } from "../../shared/keycloak-ui-shared";
-import { Badge } from "@merge/ui/components/badge";
-import { Button } from "@merge/ui/components/button";
+import { Badge } from "@merge-rd/ui/components/badge";
+import { Button } from "@merge-rd/ui/components/button";
 import {
     DataTable,
     DataTableRowActions,
@@ -11,7 +11,7 @@ import {
     Tooltip,
     TooltipContent,
     TooltipTrigger
-} from "@merge/ui/components/tooltip";
+} from "@merge-rd/ui/components/tooltip";
 import { Info, SignOut, ProhibitInset } from "@phosphor-icons/react";
 import type { ReactNode } from "react";
 import { useMemo } from "react";

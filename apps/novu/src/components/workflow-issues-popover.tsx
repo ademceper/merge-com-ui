@@ -1,7 +1,7 @@
 import { PropsWithChildren, useState } from 'react';
 import { RiErrorWarningFill } from 'react-icons/ri';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/primitives/popover';
-import { Separator } from '@merge/ui/components/separator';
+import { Separator } from '@merge-rd/ui/components/separator';
 import TruncatedText from '@/components/truncated-text';
 import { countIssues, getAllStepIssues } from '@/components/workflow-editor/step-utils';
 

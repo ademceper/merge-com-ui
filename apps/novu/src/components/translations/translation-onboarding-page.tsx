@@ -3,7 +3,7 @@ import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { RiBookMarkedLine, RiRouteFill } from 'react-icons/ri';
 import { Link, useNavigate, useParams } from 'react-router-dom';
-import { Button } from '@merge/ui/components/button';
+import { Button } from '@merge-rd/ui/components/button';
 import { LinkButton } from '@/components/primitives/button-link';
 import { Form, FormControl, FormField, FormItem } from '@/components/primitives/form/form';
 import { InlineToast } from '@/components/primitives/inline-toast';

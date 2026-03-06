@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Badge as MergeBadge, badgeVariants } from "@merge/ui/components/badge";
+import { Badge as MergeBadge, badgeVariants } from "@merge-rd/ui/components/badge";
 import type { VariantProps } from "class-variance-authority";
 
 export { badgeVariants };

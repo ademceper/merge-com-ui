@@ -1,7 +1,7 @@
 import { EnvironmentTypeEnum } from '@novu/shared';
 import { useFormContext } from 'react-hook-form';
 import { FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/primitives/form/form';
-import { Switch } from '@merge/ui/components/switch';
+import { Switch } from '@merge-rd/ui/components/switch';
 import { useEnvironment } from '@/context/environment/hooks';
 import { useParseVariables } from '@/hooks/use-parse-variables';
 import { ResourceOriginEnum } from '@/utils/enums';

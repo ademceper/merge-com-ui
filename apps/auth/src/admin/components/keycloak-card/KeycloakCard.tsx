@@ -1,4 +1,4 @@
-import { Button } from "@merge/ui/components/button";
+import { Button } from "@merge-rd/ui/components/button";
 import {
     Card,
     CardAction,
@@ -6,13 +6,13 @@ import {
     CardFooter,
     CardHeader,
     CardTitle,
-} from "@merge/ui/components/card";
+} from "@merge-rd/ui/components/card";
 import {
     DropdownMenu,
     DropdownMenuContent,
     DropdownMenuTrigger,
-} from "@merge/ui/components/dropdown-menu";
-import { Label } from "@merge/ui/components/label";
+} from "@merge-rd/ui/components/dropdown-menu";
+import { Label } from "@merge-rd/ui/components/label";
 import { DotsThreeVertical } from "@phosphor-icons/react";
 import { ReactElement, useState } from "react";
 import { Link, To } from "react-router-dom";

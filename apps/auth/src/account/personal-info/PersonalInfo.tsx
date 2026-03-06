@@ -28,8 +28,8 @@ import type { Environment } from "../environment";
 import { TFuncKey, i18n } from "../i18n";
 import { useAccountAlerts } from "../utils/useAccountAlerts";
 import { usePromise } from "../utils/usePromise";
-import { Button } from "@merge/ui/components/button";
-import { Link } from "@merge/ui/components/link";
+import { Button } from "@merge-rd/ui/components/button";
+import { Link } from "@merge-rd/ui/components/link";
 import { ArrowSquareOut } from "@phosphor-icons/react";
 
 export const PersonalInfo = () => {

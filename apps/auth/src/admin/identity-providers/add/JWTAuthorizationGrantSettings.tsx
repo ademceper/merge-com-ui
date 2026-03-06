@@ -1,7 +1,7 @@
 import { useTranslation } from "react-i18next";
 import { TextControl, NumberControl } from "../../../shared/keycloak-ui-shared";
 import { JWTAuthorizationGrantAssertionSettings } from "./JWTAuthorizationGrantAssertionSettings";
-import { Separator } from "@merge/ui/components/separator";
+import { Separator } from "@merge-rd/ui/components/separator";
 import { JwksSettings } from "./JwksSettings";
 import { useParams } from "react-router-dom";
 import type { IdentityProviderParams } from "../routes/IdentityProvider";

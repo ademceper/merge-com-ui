@@ -3,12 +3,12 @@ import type { PageProps } from "keycloakify/login/pages/PageProps";
 import type { KcContext } from "../KcContext";
 import type { I18n } from "../i18n";
 import AuthLayout from "../components/AuthLayout";
-import { Link } from "@merge/ui/components/link";
+import { Link } from "@merge-rd/ui/components/link";
 import { SocialLoginButtons } from "../components/SocialLoginButtons";
-import { Input } from "@merge/ui/components/input";
-import { Button } from "@merge/ui/components/button";
-import { Alert, AlertDescription } from "@merge/ui/components/alert";
-import { cn } from "@merge/ui/lib/utils";
+import { Input } from "@merge-rd/ui/components/input";
+import { Button } from "@merge-rd/ui/components/button";
+import { Alert, AlertDescription } from "@merge-rd/ui/components/alert";
+import { cn } from "@merge-rd/ui/lib/utils";
 
 export default function Login(props: PageProps<Extract<KcContext, { pageId: "login.ftl" }>, I18n>) {
     const { kcContext, i18n } = props;

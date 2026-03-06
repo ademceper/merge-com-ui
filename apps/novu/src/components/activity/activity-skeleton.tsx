@@ -1,8 +1,8 @@
 import { motion } from 'motion/react';
 
-import { Skeleton } from '@merge/ui/components/skeleton';
+import { Skeleton } from '@merge-rd/ui/components/skeleton';
 import { fadeIn } from '@/utils/animation';
-import { cn } from '@merge/ui/lib/utils';
+import { cn } from '@merge-rd/ui/lib/utils';
 
 export function ActivitySkeleton({ headerClassName }: { headerClassName?: string }) {
   return (

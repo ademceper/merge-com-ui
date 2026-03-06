@@ -1,4 +1,4 @@
-import { useOrganization } from '@merge/auth';
+import { useOrganization } from '@merge-rd/auth';
 import { useCallback, useMemo } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { useFetchSubscription } from '@/hooks/use-fetch-subscription';

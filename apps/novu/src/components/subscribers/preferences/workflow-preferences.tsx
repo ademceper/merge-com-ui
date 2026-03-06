@@ -4,11 +4,11 @@ import { motion } from 'motion/react';
 import { useState } from 'react';
 import { RiContractUpDownLine, RiExpandUpDownLine } from 'react-icons/ri';
 import { STEP_TYPE_TO_ICON } from '@/components/icons/utils';
-import { Card, CardContent, CardFooter, CardHeader } from '@merge/ui/components/card';
+import { Card, CardContent, CardFooter, CardHeader } from '@merge-rd/ui/components/card';
 import { Step } from '@/components/primitives/step';
 import { PreferencesItem } from '@/components/subscribers/preferences/preferences-item';
 import { formatDateSimple } from '@/utils/format-date';
-import { cn } from '@merge/ui/lib/utils';
+import { cn } from '@merge-rd/ui/lib/utils';
 import { STEP_TYPE_TO_COLOR } from '../../../utils/color';
 
 type WorkflowPreferencesProps = {

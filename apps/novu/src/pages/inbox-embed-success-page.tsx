@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { AnimatedPage } from '@/components/onboarding/animated-page';
 import { AuthCard } from '../components/auth/auth-card';
-import { Button } from '@merge/ui/components/button';
+import { Button } from '@merge-rd/ui/components/button';
 import { useTelemetry } from '../hooks/use-telemetry';
 import { ROUTES } from '../utils/routes';
 import { TelemetryEvent } from '../utils/telemetry';

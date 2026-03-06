@@ -3,10 +3,10 @@ import React from 'react';
 import { RiEdit2Line, RiPencilRuler2Line } from 'react-icons/ri';
 
 import { Notification5Fill } from '@/components/icons';
-import { Button } from '@merge/ui/components/button';
-import { Separator } from '@merge/ui/components/separator';
-import { Skeleton } from '@merge/ui/components/skeleton';
-import { Tabs, TabsList, TabsTrigger } from '@merge/ui/components/tabs';
+import { Button } from '@merge-rd/ui/components/button';
+import { Separator } from '@merge-rd/ui/components/separator';
+import { Skeleton } from '@merge-rd/ui/components/skeleton';
+import { Tabs, TabsList, TabsTrigger } from '@merge-rd/ui/components/tabs';
 import { ResourceOriginEnum } from '@/utils/enums';
 
 const SingleLineSkeleton = () => {

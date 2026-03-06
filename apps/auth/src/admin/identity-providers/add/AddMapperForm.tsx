@@ -7,8 +7,8 @@ import {
     SelectItem,
     SelectTrigger,
     SelectValue
-} from "@merge/ui/components/select";
-import { Label } from "@merge/ui/components/label";
+} from "@merge-rd/ui/components/select";
+import { Label } from "@merge-rd/ui/components/label";
 import { get } from "lodash-es";
 import { useState } from "react";
 import { Controller, UseFormReturn } from "react-hook-form";

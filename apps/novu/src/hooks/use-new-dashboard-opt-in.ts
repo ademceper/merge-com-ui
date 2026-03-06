@@ -1,4 +1,4 @@
-import { useUser } from '@merge/auth';
+import { useUser } from '@merge-rd/auth';
 import { NewDashboardOptInStatusEnum } from '@novu/shared';
 import { LEGACY_DASHBOARD_URL } from '@/config';
 import { useTelemetry } from '@/hooks/use-telemetry';

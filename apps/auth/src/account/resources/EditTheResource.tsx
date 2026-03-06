@@ -24,8 +24,8 @@ import {
     DialogTitle,
     DialogFooter,
     DialogDescription
-} from "@merge/ui/components/dialog";
-import { Button } from "@merge/ui/components/button";
+} from "@merge-rd/ui/components/dialog";
+import { Button } from "@merge-rd/ui/components/button";
 
 import { updatePermissions } from "../api";
 import type { Permission, Resource } from "../api/representations";

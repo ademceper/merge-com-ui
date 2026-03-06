@@ -2,7 +2,7 @@ import { useId } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 import { RiBookMarkedLine, RiInputField } from 'react-icons/ri';
 import { Link } from 'react-router-dom';
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@merge/ui/components/accordion';
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@merge-rd/ui/components/accordion';
 import { useReactEmailPolling } from '@/hooks/use-react-email-polling';
 import { useWorkflow } from '../../workflow-provider';
 import { ReactEmailNotPublished } from './react-email-not-published';

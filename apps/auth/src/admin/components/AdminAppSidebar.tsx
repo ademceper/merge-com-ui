@@ -13,12 +13,12 @@ import {
     SidebarMenuSub,
     SidebarMenuSubItem,
     SidebarMenuSubButton
-} from "@merge/ui/components/sidebar";
+} from "@merge-rd/ui/components/sidebar";
 import {
     Collapsible,
     CollapsibleContent,
     CollapsibleTrigger
-} from "@merge/ui/components/collapsible";
+} from "@merge-rd/ui/components/collapsible";
 import { useTranslation } from "react-i18next";
 import { NavLink, useLocation } from "react-router-dom";
 import { useAccess } from "../context/access/Access";
@@ -28,7 +28,7 @@ import type { Environment } from "../environment";
 import { toPage } from "../page/routes";
 import { routes } from "../routes";
 import useIsFeatureEnabled, { Feature } from "../utils/useIsFeatureEnabled";
-import { Badge } from "@merge/ui/components/badge";
+import { Badge } from "@merge-rd/ui/components/badge";
 import { CaretRightIcon } from "@phosphor-icons/react";
 
 const baseUrl = import.meta.env.BASE_URL;

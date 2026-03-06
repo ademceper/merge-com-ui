@@ -6,7 +6,7 @@ import {
     PathValue,
     useFormContext
 } from "react-hook-form";
-import { Switch } from "@merge/ui/components/switch";
+import { Switch } from "@merge-rd/ui/components/switch";
 import { FormLabel } from "./FormLabel";
 import { debeerify } from "../user-profile/utils";
 

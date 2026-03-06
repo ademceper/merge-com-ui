@@ -1,7 +1,7 @@
 import { AnimatePresence, motion } from 'motion/react';
 import { useTelemetry } from '../../../hooks/use-telemetry';
 import { TelemetryEvent } from '../../../utils/telemetry';
-import { Tabs, TabsList, TabsTrigger } from '@merge/ui/components/tabs';
+import { Tabs, TabsList, TabsTrigger } from '@merge-rd/ui/components/tabs';
 import { FrameworkCliInstructions, FrameworkInstructions } from '../framework-guides';
 import type { Framework } from '../framework-guides.instructions';
 import type { InstallationMethod } from './types';

@@ -3,7 +3,7 @@ import {
     Tooltip,
     TooltipContent,
     TooltipTrigger,
-} from "@merge/ui/components/tooltip";
+} from "@merge-rd/ui/components/tooltip";
 import { ReactNode } from "react";
 import { useHelp } from "../context/HelpContext";
 

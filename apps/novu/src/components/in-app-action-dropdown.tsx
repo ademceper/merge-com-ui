@@ -2,13 +2,13 @@ import merge from 'lodash.merge';
 import { ComponentProps } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 import { RiEdit2Line, RiExpandUpDownLine, RiForbid2Line } from 'react-icons/ri';
-import { Button } from '@merge/ui/components/button';
+import { Button } from '@merge-rd/ui/components/button';
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from '@merge/ui/components/dropdown-menu';
+} from '@merge-rd/ui/components/dropdown-menu';
 import {
   FormControl,
   FormField,
@@ -18,13 +18,13 @@ import {
   FormMessagePure,
 } from '@/components/primitives/form/form';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/primitives/popover';
-import { Separator } from '@merge/ui/components/separator';
+import { Separator } from '@merge-rd/ui/components/separator';
 import { ControlInput } from '@/components/workflow-editor/control-input';
 import { URLInput } from '@/components/workflow-editor/url-input';
 import { useWorkflow } from '@/components/workflow-editor/workflow-provider';
 import { useParseVariables } from '@/hooks/use-parse-variables';
 import { inboxButtonVariants } from '@/utils/inbox';
-import { cn } from '@merge/ui/lib/utils';
+import { cn } from '@merge-rd/ui/lib/utils';
 import { urlTargetTypes } from '@/utils/url';
 import { CompactButton } from './primitives/button-compact';
 import { InputRoot } from '@/components/primitives/input';

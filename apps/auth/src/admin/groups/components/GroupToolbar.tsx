@@ -1,5 +1,5 @@
-import { Button } from "@merge/ui/components/button";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@merge/ui/components/dropdown-menu";
+import { Button } from "@merge-rd/ui/components/button";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@merge-rd/ui/components/dropdown-menu";
 import { DotsThreeVertical } from "@phosphor-icons/react";
 import { useTranslation } from "react-i18next";
 import { useAccess } from "../../context/access/Access";

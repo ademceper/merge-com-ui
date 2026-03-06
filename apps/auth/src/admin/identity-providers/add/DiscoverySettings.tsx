@@ -3,8 +3,8 @@ import {
     Collapsible,
     CollapsibleContent,
     CollapsibleTrigger,
-} from "@merge/ui/components/collapsible";
-import { Button } from "@merge/ui/components/button";
+} from "@merge-rd/ui/components/collapsible";
+import { Button } from "@merge-rd/ui/components/button";
 import { useState } from "react";
 import { useFormContext, useWatch } from "react-hook-form";
 import { useTranslation } from "react-i18next";

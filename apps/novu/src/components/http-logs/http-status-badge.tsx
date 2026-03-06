@@ -1,5 +1,5 @@
 import { StatusBadge } from '@/components/primitives/status-badge';
-import { cn } from '@merge/ui/lib/utils';
+import { cn } from '@merge-rd/ui/lib/utils';
 
 type HttpStatusBadgeProps = {
   statusCode: number;

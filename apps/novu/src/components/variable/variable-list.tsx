@@ -1,7 +1,7 @@
 import { CheckIcon } from '@radix-ui/react-icons';
 import React, { useCallback, useImperativeHandle, useRef, useState } from 'react';
 import TruncatedText from '@/components/truncated-text';
-import { cn } from '@merge/ui/lib/utils';
+import { cn } from '@merge-rd/ui/lib/utils';
 import { Tooltip, TooltipContent, TooltipPortal, TooltipTrigger } from '@/components/primitives/tooltip';
 import { VariableIcon } from './components/variable-icon';
 

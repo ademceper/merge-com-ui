@@ -1,5 +1,5 @@
 import { ArrowLeft } from 'lucide-react';
-import { Button } from '@merge/ui/components/button';
+import { Button } from '@merge-rd/ui/components/button';
 
 export function AccessDeniedPage() {
   return (

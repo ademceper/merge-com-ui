@@ -2,8 +2,8 @@ import { ChannelTypeEnum, ResourceOriginEnum } from '@novu/shared';
 import { AnimatePresence, motion } from 'motion/react';
 import { useMemo, useState } from 'react';
 import { RiMacLine, RiSmartphoneFill } from 'react-icons/ri';
-import { Skeleton } from '@merge/ui/components/skeleton';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@merge/ui/components/tabs';
+import { Skeleton } from '@merge-rd/ui/components/skeleton';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@merge-rd/ui/components/tabs';
 import {
   EmailPreviewBody,
   EmailPreviewBodyMobile,
@@ -12,7 +12,7 @@ import {
   EmailPreviewSubject,
 } from '@/components/workflow-editor/steps/email/email-preview';
 import { EmailTabsSection } from '@/components/workflow-editor/steps/email/email-tabs-section';
-import { cn } from '@merge/ui/lib/utils';
+import { cn } from '@merge-rd/ui/lib/utils';
 
 type EmailCorePreviewProps = {
   previewData: any;

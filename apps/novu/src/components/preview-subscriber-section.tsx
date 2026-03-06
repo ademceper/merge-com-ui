@@ -1,9 +1,9 @@
 import { useState } from 'react';
 import { RiEdit2Line, RiInformation2Line, RiRefreshLine } from 'react-icons/ri';
-import { AccordionContent, AccordionItem, AccordionTrigger } from '@merge/ui/components/accordion';
+import { AccordionContent, AccordionItem, AccordionTrigger } from '@merge-rd/ui/components/accordion';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/primitives/tooltip';
 import { SubscriberAutocomplete } from '@/components/subscribers/subscriber-autocomplete';
-import { Button } from '@merge/ui/components/button';
+import { Button } from '@merge-rd/ui/components/button';
 import { ACCORDION_STYLES } from './workflow-editor/steps/constants/preview-context.constants';
 import { EditableJsonViewer } from './workflow-editor/steps/shared/editable-json-viewer/editable-json-viewer';
 import { SubscriberSectionProps } from './workflow-editor/steps/types/preview-context.types';

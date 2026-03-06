@@ -4,11 +4,11 @@ import type RoleRepresentation from "@keycloak/keycloak-admin-client/lib/defs/ro
 import type { ProtocolMapperTypeRepresentation } from "@keycloak/keycloak-admin-client/lib/defs/serverInfoRepesentation";
 import { HelpItem, SelectVariant, useFetch, useHelp } from "../../../shared/keycloak-ui-shared";
 import { DataTable, type ColumnDef } from "@/admin/components/data-table";
-import { Button } from "@merge/ui/components/button";
-import { Input } from "@merge/ui/components/input";
-import { Label } from "@merge/ui/components/label";
-import { Popover, PopoverContent, PopoverTrigger } from "@merge/ui/components/popover";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@merge/ui/components/tabs";
+import { Button } from "@merge-rd/ui/components/button";
+import { Input } from "@merge-rd/ui/components/input";
+import { Label } from "@merge-rd/ui/components/label";
+import { Popover, PopoverContent, PopoverTrigger } from "@merge-rd/ui/components/popover";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@merge-rd/ui/components/tabs";
 import { Question } from "@phosphor-icons/react";
 import { useEffect, useMemo, useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";

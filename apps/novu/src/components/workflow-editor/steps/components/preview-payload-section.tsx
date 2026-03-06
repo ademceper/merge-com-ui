@@ -1,8 +1,8 @@
 import { ResourceOriginEnum } from '@novu/shared';
 import { RiInformation2Line, RiRefreshLine, RiSettings3Line } from 'react-icons/ri';
-import { AccordionContent, AccordionItem, AccordionTrigger } from '@merge/ui/components/accordion';
+import { AccordionContent, AccordionItem, AccordionTrigger } from '@merge-rd/ui/components/accordion';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/primitives/tooltip';
-import { Button } from '@merge/ui/components/button';
+import { Button } from '@merge-rd/ui/components/button';
 import { Hint, HintIcon } from '../../../primitives/hint';
 import { ACCORDION_STYLES } from '../constants/preview-context.constants';
 import { EditableJsonViewer } from '../shared/editable-json-viewer/editable-json-viewer';

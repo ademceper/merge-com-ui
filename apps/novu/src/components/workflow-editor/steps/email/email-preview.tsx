@@ -3,10 +3,10 @@ import { HTMLAttributes, useCallback, useEffect, useRef } from 'react';
 import { useFormContext } from 'react-hook-form';
 import { RiArrowDownSFill, RiEdit2Line } from 'react-icons/ri';
 import { MAILY_EMAIL_WIDTH } from '@/components/maily/maily-config';
-import { Avatar, AvatarImage } from '@merge/ui/components/avatar';
-import { Skeleton } from '@merge/ui/components/skeleton';
+import { Avatar, AvatarImage } from '@merge-rd/ui/components/avatar';
+import { Skeleton } from '@merge-rd/ui/components/skeleton';
 import { usePrimaryEmailIntegration } from '@/hooks/use-primary-email-integration';
-import { cn } from '@merge/ui/lib/utils';
+import { cn } from '@merge-rd/ui/lib/utils';
 import { NovuBranding } from './novu-branding';
 
 type EmailPreviewHeaderProps = HTMLAttributes<HTMLDivElement> & {

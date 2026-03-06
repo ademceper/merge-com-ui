@@ -4,14 +4,14 @@ import {
     TextControl,
     useFetch
 } from "../../../../shared/keycloak-ui-shared";
-import { Button } from "@merge/ui/components/button";
+import { Button } from "@merge-rd/ui/components/button";
 import {
     Dialog,
     DialogContent,
     DialogHeader,
     DialogTitle,
     DialogFooter
-} from "@merge/ui/components/dialog";
+} from "@merge-rd/ui/components/dialog";
 import { useEffect, useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";

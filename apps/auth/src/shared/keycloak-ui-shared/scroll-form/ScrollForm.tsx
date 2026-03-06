@@ -1,5 +1,5 @@
 import { ReactNode, useMemo, useState } from "react";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@merge/ui/components/tabs";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@merge-rd/ui/components/tabs";
 import { FormPanel } from "./FormPanel";
 
 export const mainPageContentId = "kc-main-content-page-container";

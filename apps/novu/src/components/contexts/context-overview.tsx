@@ -9,7 +9,7 @@ import { ExternalToast } from 'sonner';
 import { z } from 'zod';
 import { useContextsNavigate } from '@/components/contexts/hooks/use-contexts-navigate';
 import { EditContextFormSchema } from '@/components/contexts/schema';
-import { Button } from '@merge/ui/components/button';
+import { Button } from '@merge-rd/ui/components/button';
 import { CopyButton } from '@/components/primitives/copy-button';
 import {
   Form,
@@ -21,8 +21,8 @@ import {
   FormRoot,
 } from '@/components/primitives/form/form';
 import { Input, InputRoot } from '@/components/primitives/input';
-import { Separator } from '@merge/ui/components/separator';
-import { Skeleton } from '@merge/ui/components/skeleton';
+import { Separator } from '@merge-rd/ui/components/separator';
+import { Skeleton } from '@merge-rd/ui/components/skeleton';
 import { showErrorToast, showSuccessToast } from '@/components/primitives/sonner-helpers';
 import { TimeDisplayHoverCard } from '@/components/time-display-hover-card';
 import { useDeleteContext } from '@/hooks/use-delete-context';

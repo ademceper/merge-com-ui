@@ -1,5 +1,5 @@
 import { useTranslation } from "react-i18next";
-import { Badge } from "@merge/ui/components/badge";
+import { Badge } from "@merge-rd/ui/components/badge";
 
 type MoreLabelProps = {
     array: unknown[] | undefined;

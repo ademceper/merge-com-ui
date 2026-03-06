@@ -2,7 +2,7 @@ import { PermissionsEnum } from '@novu/shared';
 import { useCallback } from 'react';
 import { Outlet, useNavigate } from 'react-router-dom';
 import { PermissionButton } from '@/components/primitives/permission-button';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@merge/ui/components/tabs';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@merge-rd/ui/components/tabs';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/primitives/tooltip';
 import { buildRoute, ROUTES } from '@/utils/routes';
 import { useSetPageHeader } from '@/context/page-header';

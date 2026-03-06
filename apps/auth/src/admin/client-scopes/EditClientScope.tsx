@@ -6,8 +6,8 @@ import { getErrorDescription, getErrorMessage, KeycloakSpinner,
     useFetch,
     useHelp } from "../../shared/keycloak-ui-shared";
 import { toast } from "sonner";
-import { Alert, AlertTitle } from "@merge/ui/components/alert";
-import { DropdownMenuItem } from "@merge/ui/components/dropdown-menu";
+import { Alert, AlertTitle } from "@merge-rd/ui/components/alert";
+import { DropdownMenuItem } from "@merge-rd/ui/components/dropdown-menu";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useNavigate, useParams as useRouterParams } from "react-router-dom";

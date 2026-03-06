@@ -11,10 +11,10 @@ import { getErrorDescription, getErrorMessage, HelpItem,
     TextControl,
     useFetch } from "../../../shared/keycloak-ui-shared";
 import { toast } from "sonner";
-import { Button } from "@merge/ui/components/button";
-import { Switch } from "@merge/ui/components/switch";
-import { Label } from "@merge/ui/components/label";
-import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@merge/ui/components/collapsible";
+import { Button } from "@merge-rd/ui/components/button";
+import { Switch } from "@merge-rd/ui/components/switch";
+import { Label } from "@merge-rd/ui/components/label";
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@merge-rd/ui/components/collapsible";
 import { useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";

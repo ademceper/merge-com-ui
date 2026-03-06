@@ -1,6 +1,6 @@
 import { RiArrowRightSLine, RiLockLine } from 'react-icons/ri';
 import { useNavigate } from 'react-router-dom';
-import { Button } from '@merge/ui/components/button';
+import { Button } from '@merge-rd/ui/components/button';
 import { useEnvironment } from '@/context/environment/hooks';
 import { buildRoute, ROUTES } from '@/utils/routes';
 import { useStepEditor } from './context/step-editor-context';

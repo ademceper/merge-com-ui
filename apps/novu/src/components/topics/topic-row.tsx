@@ -12,8 +12,8 @@ import {
   DropdownMenuGroup,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from '@merge/ui/components/dropdown-menu';
-import { Skeleton } from '@merge/ui/components/skeleton';
+} from '@merge-rd/ui/components/dropdown-menu';
+import { Skeleton } from '@merge-rd/ui/components/skeleton';
 import { TableCell, TableRow } from '@/components/primitives/table';
 import { TimeDisplayHoverCard } from '@/components/time-display-hover-card';
 import { formatDateSimple } from '@/utils/format-date';
@@ -21,7 +21,7 @@ import { Protect } from '@/utils/protect';
 import { QueryKeys } from '@/utils/query-keys';
 import { useEnvironment } from '../../context/environment/hooks';
 import { buildRoute, ROUTES } from '../../utils/routes';
-import { cn } from '@merge/ui/lib/utils';
+import { cn } from '@merge-rd/ui/lib/utils';
 import { showErrorToast } from '../primitives/sonner-helpers';
 import { useDeleteTopic } from './hooks/use-delete-topic';
 import { useTopicsNavigate } from './hooks/use-topics-navigate';

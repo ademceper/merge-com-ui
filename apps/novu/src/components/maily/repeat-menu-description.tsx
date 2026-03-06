@@ -2,7 +2,7 @@ import { Editor } from '@tiptap/react';
 import { Lightbulb } from 'lucide-react';
 import { AnimatePresence, motion } from 'motion/react';
 import { useEffect, useState } from 'react';
-import { Separator } from '@merge/ui/components/separator';
+import { Separator } from '@merge-rd/ui/components/separator';
 import { REPEAT_BLOCK_ITERABLE_ALIAS } from './repeat-block-aliases';
 
 export function RepeatMenuDescription({ editor }: { editor: Editor }) {

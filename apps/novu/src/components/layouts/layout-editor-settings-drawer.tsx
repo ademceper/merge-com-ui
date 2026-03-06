@@ -10,7 +10,7 @@ import { RiDeleteBin2Line, RiSettings4Line } from 'react-icons/ri';
 import { useBlocker, useNavigate } from 'react-router-dom';
 import { ExternalToast } from 'sonner';
 import { z } from 'zod';
-import { Button } from '@merge/ui/components/button';
+import { Button } from '@merge-rd/ui/components/button';
 import {
   Form,
   FormControl,
@@ -38,10 +38,10 @@ import { useDeleteLayout } from '@/hooks/use-delete-layout';
 import { useUpdateLayout } from '@/hooks/use-update-layout';
 import { LocalizationResourceEnum } from '@/types/translations';
 import { buildRoute, ROUTES } from '@/utils/routes';
-import { cn } from '@merge/ui/lib/utils';
+import { cn } from '@merge-rd/ui/lib/utils';
 import { CopyButton } from '../primitives/copy-button';
 import { PermissionButton } from '../primitives/permission-button';
-import { Separator } from '@merge/ui/components/separator';
+import { Separator } from '@merge-rd/ui/components/separator';
 import { ToastIcon } from '@/components/primitives/sonner';
 import TruncatedText from '../truncated-text';
 import { TranslationToggleSection } from '../workflow-editor/translation-toggle-section';

@@ -1,5 +1,5 @@
-import { Field, FieldContent, FieldLabel } from "@merge/ui/components/field";
-import { cn } from "@merge/ui/lib/utils";
+import { Field, FieldContent, FieldLabel } from "@merge-rd/ui/components/field";
+import { cn } from "@merge-rd/ui/lib/utils";
 import { PropsWithChildren, ReactNode } from "react";
 import { FieldError as RHFError, FieldValues, Merge } from "react-hook-form";
 import { FormErrorText } from "./FormErrorText";

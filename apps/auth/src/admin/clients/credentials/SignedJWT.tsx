@@ -5,7 +5,7 @@ import { useServerInfo } from "../../context/server-info/ServerInfoProvider";
 import { convertAttributeNameToForm } from "../../util";
 import { FormFields } from "../ClientDetails";
 import { TimeSelector } from "../../components/time-selector/TimeSelector";
-import { Label } from "@merge/ui/components/label";
+import { Label } from "@merge-rd/ui/components/label";
 import { HelpItem } from "../../../shared/keycloak-ui-shared";
 
 type SignedJWTProps = {

@@ -11,7 +11,7 @@ import { AuthCard } from '../components/auth/auth-card';
 import { UsecaseSelectOnboarding } from '../components/auth/usecase-selector';
 import { OnboardingArrowLeft } from '../components/icons/onboarding-arrow-left';
 import { PageMeta } from '../components/page-meta';
-import { Button } from '@merge/ui/components/button';
+import { Button } from '@merge-rd/ui/components/button';
 import { LinkButton } from '../components/primitives/button-link';
 import { ROUTES } from '../utils/routes';
 

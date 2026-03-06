@@ -1,5 +1,5 @@
 import { RiQuestionLine } from 'react-icons/ri';
-import { cn } from '@merge/ui/lib/utils';
+import { cn } from '@merge-rd/ui/lib/utils';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/primitives/tooltip';
 
 interface HelpTooltipIndicatorProps {

@@ -2,12 +2,12 @@ import { ContextId, ContextType, createContextKey } from '@novu/shared';
 import React, { forwardRef, useState } from 'react';
 import { RiBuildingLine } from 'react-icons/ri';
 import { Sheet, SheetContent, SheetDescription, SheetTitle } from '@/components/primitives/sheet';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@merge/ui/components/tabs';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@merge-rd/ui/components/tabs';
 import { TooltipProvider } from '@/components/primitives/tooltip';
 import { VisuallyHidden } from '@/components/primitives/visually-hidden';
 import TruncatedText from '@/components/truncated-text';
 import { useFormProtection } from '@/hooks/use-form-protection';
-import { cn } from '@merge/ui/lib/utils';
+import { cn } from '@merge-rd/ui/lib/utils';
 import { ContextActivity } from './context-activity';
 import { ContextOverview } from './context-overview';
 

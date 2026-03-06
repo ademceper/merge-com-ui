@@ -1,7 +1,7 @@
 import { forwardRef, useRef } from 'react';
 import { Sheet, SheetContent, SheetDescription, SheetTitle } from '@/components/primitives/sheet';
 import { VisuallyHidden } from '@/components/primitives/visually-hidden';
-import { cn } from '@merge/ui/lib/utils';
+import { cn } from '@merge-rd/ui/lib/utils';
 import { useGetSubscription } from '../hooks/use-get-subscription';
 import { SubscriptionPreferences } from './subscription-preferences';
 

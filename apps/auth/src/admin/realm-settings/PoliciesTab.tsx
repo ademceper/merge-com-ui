@@ -7,13 +7,13 @@ import {
     EmptyDescription,
     EmptyHeader,
     EmptyTitle
-} from "@merge/ui/components/empty";
+} from "@merge-rd/ui/components/empty";
 import { toast } from "sonner";
-import { Button } from "@merge/ui/components/button";
-import { Switch } from "@merge/ui/components/switch";
-import { Separator } from "@merge/ui/components/separator";
-import { RadioGroup, RadioGroupItem } from "@merge/ui/components/radio-group";
-import { Label } from "@merge/ui/components/label";
+import { Button } from "@merge-rd/ui/components/button";
+import { Switch } from "@merge-rd/ui/components/switch";
+import { Separator } from "@merge-rd/ui/components/separator";
+import { RadioGroup, RadioGroupItem } from "@merge-rd/ui/components/radio-group";
+import { Label } from "@merge-rd/ui/components/label";
 import { omit } from "lodash-es";
 import { useState } from "react";
 import { Controller, useForm, type UseFormReturn } from "react-hook-form";
@@ -29,7 +29,7 @@ import {
     AlertDialogFooter,
     AlertDialogHeader,
     AlertDialogTitle
-} from "@merge/ui/components/alert-dialog";
+} from "@merge-rd/ui/components/alert-dialog";
 import { useConfirmDialog } from "../components/confirm-dialog/ConfirmDialog";
 import CodeEditor from "../components/form/CodeEditor";
 import { useRealm } from "../context/realm-context/RealmContext";

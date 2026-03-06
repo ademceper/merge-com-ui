@@ -1,4 +1,4 @@
-import { useOrganization } from '@merge/auth';
+import { useOrganization } from '@merge-rd/auth';
 import { useState } from 'react';
 import { RiArrowRightSLine } from 'react-icons/ri';
 
@@ -12,7 +12,7 @@ import { ONBOARDING_DEMO_WORKFLOW_ID } from '../../config';
 import { useTelemetry } from '../../hooks/use-telemetry';
 import { ROUTES } from '../../utils/routes';
 import { TelemetryEvent } from '../../utils/telemetry';
-import { Button } from '@merge/ui/components/button';
+import { Button } from '@merge-rd/ui/components/button';
 import { ToastIcon } from '@/components/primitives/sonner';
 import { showToast } from '../primitives/sonner-helpers';
 import { UsecasePlaygroundHeader } from '../usecase-playground-header';

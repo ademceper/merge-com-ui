@@ -5,10 +5,10 @@ import { getErrorDescription, getErrorMessage, HelpItem,
     SelectField,
     useFetch } from "../../../shared/keycloak-ui-shared";
 import { toast } from "sonner";
-import { Alert, AlertTitle } from "@merge/ui/components/alert";
-import { Button } from "@merge/ui/components/button";
-import { Label } from "@merge/ui/components/label";
-import { Separator } from "@merge/ui/components/separator";
+import { Alert, AlertTitle } from "@merge-rd/ui/components/alert";
+import { Button } from "@merge-rd/ui/components/button";
+import { Label } from "@merge-rd/ui/components/label";
+import { Separator } from "@merge-rd/ui/components/separator";
 import { useMemo, useState } from "react";
 import { useFormContext, useWatch } from "react-hook-form";
 import { useTranslation } from "react-i18next";
