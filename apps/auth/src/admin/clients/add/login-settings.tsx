@@ -3,9 +3,9 @@ import { useFormContext } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { HelpItem, TextControl } from "../../../shared/keycloak-ui-shared";
 
-import { MultiLineInput } from "../../components/multi-line-input/MultiLineInput";
+import { MultiLineInput } from "../../components/multi-line-input/multi-line-input";
 import { convertAttributeNameToForm } from "../../util";
-import { FormFields } from "../ClientDetails";
+import { FormFields } from "../client-details";
 
 type LoginSettingsProps = {
     protocol?: string;

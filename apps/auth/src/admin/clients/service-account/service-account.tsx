@@ -10,10 +10,10 @@ import { Trans, useTranslation } from "react-i18next";
 import { Link, type LinkProps } from "react-router-dom";
 import { useAdminClient } from "../../admin-client";
 import { KeycloakSpinner } from "../../../shared/keycloak-ui-shared";
-import { RoleMapping, Row } from "../../components/role-mapping/RoleMapping";
-import { useAccess } from "../../context/access/Access";
-import { useRealm } from "../../context/realm-context/RealmContext";
-import { toUser } from "../../user/routes/User";
+import { RoleMapping, Row } from "../../components/role-mapping/role-mapping";
+import { useAccess } from "../../context/access/access";
+import { useRealm } from "../../context/realm-context/realm-context";
+import { toUser } from "../../user/routes/user";
 
 const TransComponent = Trans as ComponentType<Record<string, unknown>>;
 const RouterLink = Link as ComponentType<LinkProps>;

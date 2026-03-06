@@ -1,7 +1,7 @@
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@merge-rd/ui/components/dialog";
 import { useMemo } from "react";
 import { useTranslation } from "react-i18next";
-import { useServerInfo } from "../../context/server-info/ServerInfoProvider";
+import { useServerInfo } from "../../context/server-info/server-info-provider";
 import useLocaleSort, { mapByKey } from "../../utils/useLocaleSort";
 
 type AddProviderDialogProps = {

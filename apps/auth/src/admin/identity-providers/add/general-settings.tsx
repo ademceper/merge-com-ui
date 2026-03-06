@@ -1,11 +1,11 @@
-import { ClientIdSecret } from "../component/ClientIdSecret";
-import { DisplayOrder } from "../component/DisplayOrder";
-import { RedirectUrl } from "../component/RedirectUrl";
+import { ClientIdSecret } from "../component/client-id-secret";
+import { DisplayOrder } from "../component/display-order";
+import { RedirectUrl } from "../component/redirect-url";
 import { TextControl } from "../../../shared/keycloak-ui-shared";
 import { useTranslation } from "react-i18next";
 import { useFormContext, useWatch } from "react-hook-form";
 import { useParams } from "react-router-dom";
-import type { IdentityProviderParams } from "../routes/IdentityProvider";
+import type { IdentityProviderParams } from "../routes/identity-provider";
 
 type GeneralSettingsProps = {
     id: string;

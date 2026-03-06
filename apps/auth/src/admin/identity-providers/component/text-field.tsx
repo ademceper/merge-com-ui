@@ -1,7 +1,7 @@
 import { Input } from "@merge-rd/ui/components/input";
 import { useFormContext } from "react-hook-form";
 
-import { FieldProps, FormGroupField } from "./FormGroupField";
+import { FieldProps, FormGroupField } from "./form-group-field";
 
 export const TextField = ({ label, field, isReadOnly = false }: FieldProps) => {
     const { register } = useFormContext();

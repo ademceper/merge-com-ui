@@ -7,7 +7,7 @@ export type AuthenticationTab = "flows" | "required-actions" | "policies";
 
 export type AuthenticationParams = { realm: string; tab?: AuthenticationTab };
 
-const AuthenticationSection = lazy(() => import("../AuthenticationSection"));
+const AuthenticationSection = lazy(() => import("../authentication-section"));
 
 export const AuthenticationRoute: AppRouteObject = {
     path: "/:realm/authentication",

@@ -5,7 +5,7 @@ import type { AppRouteObject } from "../../routes";
 
 export type NewClientScopeParams = { realm: string };
 
-const CreateClientScope = lazy(() => import("../CreateClientScope"));
+const CreateClientScope = lazy(() => import("../create-client-scope"));
 
 export const NewClientScopeRoute: AppRouteObject = {
     path: "/:realm/client-scopes/new",

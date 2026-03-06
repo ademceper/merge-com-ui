@@ -18,21 +18,21 @@ import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@merge-rd/u
 import { useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
-import { ForbiddenSection } from "../../ForbiddenSection";
+import { ForbiddenSection } from "../../forbidden-section";
 import { useAdminClient } from "../../admin-client";
-import { ClientSelect } from "../../components/client/ClientSelect";
-import { FormAccess } from "../../components/form/FormAccess";
+import { ClientSelect } from "../../components/client/client-select";
+import { FormAccess } from "../../components/form/form-access";
 import {
     KeyValueType,
     keyValueToArray
 } from "../../components/key-value-form/key-value-convert";
-import { UserSelect } from "../../components/users/UserSelect";
-import { useAccess } from "../../context/access/Access";
-import { useRealm } from "../../context/realm-context/RealmContext";
-import { FormFields } from "../ClientDetails";
+import { UserSelect } from "../../components/users/user-select";
+import { useAccess } from "../../context/access/access";
+import { useRealm } from "../../context/realm-context/realm-context";
+import { FormFields } from "../client-details";
 import { defaultContextAttributes } from "../utils";
-import { KeyBasedAttributeInput } from "./KeyBasedAttributeInput";
-import { Results } from "./evaluate/Results";
+import { KeyBasedAttributeInput } from "./key-based-attribute-input";
+import { Results } from "./evaluate/results";
 
 interface EvaluateFormInputs extends Omit<ResourceEvaluation, "context" | "resources"> {
     alias: string;

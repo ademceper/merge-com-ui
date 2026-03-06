@@ -9,10 +9,10 @@ import { PasswordInput } from "../../../shared/keycloak-ui-shared";
 import { useAdminClient } from "../../admin-client";
 import { getErrorDescription, getErrorMessage } from "../../../shared/keycloak-ui-shared";
 import { toast } from "sonner";
-import { useConfirmDialog } from "../../components/confirm-dialog/ConfirmDialog";
-import { useAccess } from "../../context/access/Access";
+import { useConfirmDialog } from "../../components/confirm-dialog/confirm-dialog";
+import { useAccess } from "../../context/access/access";
 import useFormatDate from "../../utils/useFormatDate";
-import { CopyToClipboardButton } from "../../components/copy-to-clipboard-button/CopyToClipboardButton";
+import { CopyToClipboardButton } from "../../components/copy-to-clipboard-button/copy-to-clipboard-button";
 
 export type ClientSecretProps = {
     client: ClientRepresentation;

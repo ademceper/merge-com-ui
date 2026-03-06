@@ -12,7 +12,7 @@ export type IdentityProviderParams = {
     tab: IdentityProviderTab;
 };
 
-const DetailSettings = lazy(() => import("../add/DetailSettings"));
+const DetailSettings = lazy(() => import("../add/detail-settings"));
 
 export const IdentityProviderRoute: AppRouteObject = {
     path: "/:realm/identity-providers/:providerId/:alias/:tab",

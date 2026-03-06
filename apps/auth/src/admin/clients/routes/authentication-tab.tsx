@@ -18,7 +18,7 @@ export type AuthorizationParams = {
     tab: AuthorizationTab;
 };
 
-const ClientDetails = lazy(() => import("../ClientDetails"));
+const ClientDetails = lazy(() => import("../client-details"));
 
 export const AuthorizationRoute: AppRouteObject = {
     path: "/:realm/clients/:clientId/authorization/:tab",

@@ -19,7 +19,7 @@ export type KeyProviderParams = {
     realm: string;
 };
 
-const KeyProviderForm = lazy(() => import("../keys/key-providers/KeyProviderForm"));
+const KeyProviderForm = lazy(() => import("../keys/key-providers/key-provider-form"));
 
 export const KeyProviderFormRoute: AppRouteObject = {
     path: "/:realm/realm-settings/keys/providers/:id/:providerType/settings",

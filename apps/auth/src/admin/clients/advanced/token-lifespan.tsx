@@ -5,7 +5,7 @@ import { Controller, useFormContext } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 
 import { HelpItem } from "../../../shared/keycloak-ui-shared";
-import { TimeSelector, Unit } from "../../components/time-selector/TimeSelector";
+import { TimeSelector, Unit } from "../../components/time-selector/time-selector";
 
 type TokenLifespanProps = {
     id: string;

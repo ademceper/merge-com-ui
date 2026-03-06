@@ -9,12 +9,12 @@ import { TFunction } from "i18next";
 import { ReactNode, useMemo, type JSX } from "react";
 import { FieldPath, UseFormReturn } from "react-hook-form";
 
-import { ScrollForm } from "../scroll-form/ScrollForm";
-import { LocaleSelector } from "./LocaleSelector";
-import { MultiInputComponent } from "./MultiInputComponent";
-import { OptionComponent } from "./OptionsComponent";
-import { SelectComponent } from "./SelectComponent";
-import { UserProfileGroup } from "./UserProfileGroup";
+import { ScrollForm } from "../scroll-form/scroll-form";
+import { LocaleSelector } from "./locale-selector";
+import { MultiInputComponent } from "./multi-input-component";
+import { OptionComponent } from "./options-component";
+import { SelectComponent } from "./select-component";
+import { UserProfileGroup } from "./user-profile-group";
 import { UserFormFields, fieldName, isRootAttribute, isRequiredAttribute, label, labelAttribute } from "./utils";
 
 type HtmlInputType = "text" | "email" | "tel" | "url" | "number" | "range" | "datetime-local" | "date" | "month" | "time";

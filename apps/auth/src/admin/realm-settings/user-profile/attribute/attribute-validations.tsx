@@ -13,11 +13,11 @@ import { useEffect, useState } from "react";
 import { useFormContext, useWatch } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 
-import { useConfirmDialog } from "../../../components/confirm-dialog/ConfirmDialog";
-import { DefaultValue } from "../../../components/key-value-form/KeyValueInput";
+import { useConfirmDialog } from "../../../components/confirm-dialog/confirm-dialog";
+import { DefaultValue } from "../../../components/key-value-form/key-value-input";
 import useToggle from "../../../utils/useToggle";
-import type { IndexedValidations } from "../../NewAttributeSettings";
-import { AddValidatorDialog } from "../attribute/AddValidatorDialog";
+import type { IndexedValidations } from "../../new-attribute-settings";
+import { AddValidatorDialog } from "../attribute/add-validator-dialog";
 
 export const AttributeValidations = () => {
     const { t } = useTranslation();

@@ -8,14 +8,14 @@ import { useState } from "react";
 import { useFormContext, useWatch } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { useAdminClient } from "../../admin-client";
-import { FormAccess } from "../../components/form/FormAccess";
-import { DefaultSwitchControl } from "../../components/SwitchControl";
+import { FormAccess } from "../../components/form/form-access";
+import { DefaultSwitchControl } from "../../components/switch-control";
 import { convertAttributeNameToForm } from "../../util";
 import useToggle from "../../utils/useToggle";
-import { FormFields } from "../ClientDetails";
-import { Certificate } from "./Certificate";
-import { GenerateKeyDialog, getFileExtension } from "./GenerateKeyDialog";
-import { ImportFile, ImportKeyDialog } from "./ImportKeyDialog";
+import { FormFields } from "../client-details";
+import { Certificate } from "./certificate";
+import { GenerateKeyDialog, getFileExtension } from "./generate-key-dialog";
+import { ImportFile, ImportKeyDialog } from "./import-key-dialog";
 
 type KeysProps = {
     save: () => void;

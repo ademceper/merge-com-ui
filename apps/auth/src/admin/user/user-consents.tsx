@@ -7,7 +7,7 @@ import { useTranslation } from "react-i18next";
 import { useAdminClient } from "../admin-client";
 import { getErrorDescription, getErrorMessage, useFetch } from "../../shared/keycloak-ui-shared";
 import { toast } from "sonner";
-import { useConfirmDialog } from "../components/confirm-dialog/ConfirmDialog";
+import { useConfirmDialog } from "../components/confirm-dialog/confirm-dialog";
 import { DataTable, DataTableRowActions, type ColumnDef } from "@/admin/components/data-table";
 import {
     Empty,

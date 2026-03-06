@@ -10,9 +10,9 @@ import {
   TableHead,
   TableHeader,
   TableHeadSortDirection,
+  TablePaginationFooter,
   TableRow,
-} from '@/components/primitives/table';
-import { TablePaginationFooter } from '@/components/primitives/table-pagination-footer';
+} from '@merge-rd/ui/components/table';
 import { WorkflowListEmpty } from '@/components/workflow-list-empty';
 import { WorkflowRow } from '@/components/workflow-row';
 import { ServerErrorPage } from '@/pages/server-error-page';

@@ -23,7 +23,7 @@ export type ClientParams = {
     tab: ClientTab;
 };
 
-const ClientDetails = lazy(() => import("../ClientDetails"));
+const ClientDetails = lazy(() => import("../client-details"));
 
 export const ClientRoute: AppRouteObject = {
     path: "/:realm/clients/:clientId/:tab",

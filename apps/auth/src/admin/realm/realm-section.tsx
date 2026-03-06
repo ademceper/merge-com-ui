@@ -37,15 +37,15 @@ import {
     AlertDialogHeader,
     AlertDialogTitle
 } from "@merge-rd/ui/components/alert-dialog";
-import { ViewHeader } from "../components/view-header/ViewHeader";
+import { ViewHeader } from "../components/view-header/view-header";
 import { fetchAdminUI } from "../context/auth/admin-ui-endpoint";
-import { useRealm } from "../context/realm-context/RealmContext";
-import { useRecentRealms } from "../context/RecentRealms";
-import { useWhoAmI } from "../context/whoami/WhoAmI";
+import { useRealm } from "../context/realm-context/realm-context";
+import { useRecentRealms } from "../context/recent-realms";
+import { useWhoAmI } from "../context/whoami/who-am-i";
 import { translationFormatter } from "../utils/translationFormatter";
-import NewRealmForm from "./add/NewRealmForm";
-import { toRealm } from "./RealmRoutes";
-import { toDashboard } from "../dashboard/routes/Dashboard";
+import NewRealmForm from "./add/new-realm-form";
+import { toRealm } from "./realm-routes";
+import { toDashboard } from "../dashboard/routes/dashboard";
 
 export type RealmNameRepresentation = {
     name: string;

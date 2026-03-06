@@ -7,13 +7,13 @@ import yaml from "yaml";
 import { useAdminClient } from "../admin-client";
 import { getErrorDescription, getErrorMessage, HelpItem, useFetch } from "../../shared/keycloak-ui-shared";
 import { toast } from "sonner";
-import { useRealm } from "../context/realm-context/RealmContext";
-import { FormAccess } from "../components/form/FormAccess";
-import { toWorkflows } from "./routes/Workflows";
-import CodeEditor from "../components/form/CodeEditor";
+import { useRealm } from "../context/realm-context/realm-context";
+import { FormAccess } from "../components/form/form-access";
+import { toWorkflows } from "./routes/workflows";
+import CodeEditor from "../components/form/code-editor";
 import { useParams } from "../utils/useParams";
-import { WorkflowDetailParams, toWorkflowDetail } from "./routes/WorkflowDetail";
-import { ViewHeader } from "../components/view-header/ViewHeader";
+import { WorkflowDetailParams, toWorkflowDetail } from "./routes/workflow-detail";
+import { ViewHeader } from "../components/view-header/view-header";
 import type WorkflowRepresentation from "@keycloak/keycloak-admin-client/lib/defs/workflowRepresentation";
 
 type AttributeForm = {

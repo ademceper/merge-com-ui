@@ -6,8 +6,8 @@ import { get } from "lodash-es";
 import { PropsWithChildren, ReactNode } from "react";
 import { UseFormReturn, type FieldError } from "react-hook-form";
 
-import { FormErrorText } from "../controls/FormErrorText";
-import { HelpItem } from "../controls/HelpItem";
+import { FormErrorText } from "../controls/form-error-text";
+import { HelpItem } from "../controls/help-item";
 import {
     UserFormFields,
     fieldName,

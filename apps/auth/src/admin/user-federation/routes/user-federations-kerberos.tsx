@@ -5,7 +5,7 @@ import type { AppRouteObject } from "../../routes";
 
 export type UserFederationsKerberosParams = { realm: string };
 
-const UserFederationSection = lazy(() => import("../UserFederationSection"));
+const UserFederationSection = lazy(() => import("../user-federation-section"));
 
 export const UserFederationsKerberosRoute: AppRouteObject = {
     path: "/:realm/user-federation/kerberos",

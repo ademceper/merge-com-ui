@@ -9,7 +9,7 @@ import {
 import { PropsWithChildren, useEffect, useState } from "react";
 import { useAdminClient } from "../../admin-client";
 import { DEFAULT_LOCALE, i18n } from "../../i18n/i18n";
-import { useRealm } from "../realm-context/RealmContext";
+import { useRealm } from "../realm-context/realm-context";
 
 // can be replaced with https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/Locale/getTextInfo
 const RTL_LOCALES = [

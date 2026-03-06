@@ -8,7 +8,7 @@ export type AddClientProfileParams = {
     tab: string;
 };
 
-const ClientProfileForm = lazy(() => import("../ClientProfileForm"));
+const ClientProfileForm = lazy(() => import("../client-profile-form"));
 
 export const AddClientProfileRoute: AppRouteObject = {
     path: "/:realm/realm-settings/client-policies/:tab/add-profile",

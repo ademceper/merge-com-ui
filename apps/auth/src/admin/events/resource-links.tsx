@@ -3,14 +3,14 @@ import { Link } from "react-router-dom";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@merge-rd/ui/components/tooltip";
 
 import type AdminEventRepresentation from "@keycloak/keycloak-admin-client/lib/defs/adminEventRepresentation";
-import { useRealm } from "../context/realm-context/RealmContext";
-import { toClient } from "../clients/routes/Client";
-import { toGroups } from "../groups/routes/Groups";
-import { toClientScope } from "../client-scopes/routes/ClientScope";
-import { toUser } from "../user/routes/User";
-import { toRealmRole } from "../realm-roles/routes/RealmRole";
-import { toFlow } from "../authentication/routes/Flow";
-import { toEditOrganization } from "../organizations/routes/EditOrganization";
+import { useRealm } from "../context/realm-context/realm-context";
+import { toClient } from "../clients/routes/client";
+import { toGroups } from "../groups/routes/groups";
+import { toClientScope } from "../client-scopes/routes/client-scope";
+import { toUser } from "../user/routes/user";
+import { toRealmRole } from "../realm-roles/routes/realm-role";
+import { toFlow } from "../authentication/routes/flow";
+import { toEditOrganization } from "../organizations/routes/edit-organization";
 
 type ResourceLinkProps = {
     event: AdminEventRepresentation;

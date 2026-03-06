@@ -13,8 +13,8 @@ import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useAdminClient } from "../../admin-client";
 import type { ExpandableExecution } from "../execution-model";
-import { AddStepModal, FlowType } from "./modals/AddStepModal";
-import { AddSubFlowModal, Flow } from "./modals/AddSubFlowModal";
+import { AddStepModal, FlowType } from "./modals/add-step-modal";
+import { AddSubFlowModal, Flow } from "./modals/add-sub-flow-modal";
 
 type AddFlowDropdownProps = {
     execution: ExpandableExecution;

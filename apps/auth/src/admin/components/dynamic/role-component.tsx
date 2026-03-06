@@ -9,8 +9,8 @@ import {
     AddRoleButton,
     AddRoleMappingModal,
     FilterType
-} from "../role-mapping/AddRoleMappingModal";
-import { Row, ServiceRole } from "../role-mapping/RoleMapping";
+} from "../role-mapping/add-role-mapping-modal";
+import { Row, ServiceRole } from "../role-mapping/role-mapping";
 import type { ComponentProps } from "./components";
 
 const parseValue = (value: any) =>

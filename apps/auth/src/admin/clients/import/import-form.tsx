@@ -9,21 +9,21 @@ import { TextControl } from "../../../shared/keycloak-ui-shared";
 import { useAdminClient } from "../../admin-client";
 import { getErrorDescription, getErrorMessage } from "../../../shared/keycloak-ui-shared";
 import { toast } from "sonner";
-import { FormAccess } from "../../components/form/FormAccess";
-import { FileUploadForm } from "../../components/json-file-upload/FileUploadForm";
-import { ViewHeader } from "../../components/view-header/ViewHeader";
-import { useRealm } from "../../context/realm-context/RealmContext";
+import { FormAccess } from "../../components/form/form-access";
+import { FileUploadForm } from "../../components/json-file-upload/file-upload-form";
+import { ViewHeader } from "../../components/view-header/view-header";
+import { useRealm } from "../../context/realm-context/realm-context";
 import {
     addTrailingSlash,
     convertFormValuesToObject,
     convertToFormValues
 } from "../../util";
 import { getAuthorizationHeaders } from "../../utils/getAuthorizationHeaders";
-import { ClientDescription } from "../ClientDescription";
-import { FormFields } from "../ClientDetails";
-import { CapabilityConfig } from "../add/CapabilityConfig";
-import { toClient } from "../routes/Client";
-import { toClients } from "../routes/Clients";
+import { ClientDescription } from "../client-description";
+import { FormFields } from "../client-details";
+import { CapabilityConfig } from "../add/capability-config";
+import { toClient } from "../routes/client";
+import { toClients } from "../routes/clients";
 
 const isXml = (text: string) => text.match(/(<.[^(><.)]+>)/g);
 

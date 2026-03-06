@@ -4,9 +4,9 @@ import { Label } from "@merge-rd/ui/components/label";
 import { Controller, FormProvider, UseFormReturn } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { HelpItem } from "../../../shared/keycloak-ui-shared";
-import { DefaultSwitchControl } from "../../components/SwitchControl";
-import { useConfirmDialog } from "../../components/confirm-dialog/ConfirmDialog";
-import { TimeSelectorControl } from "../../components/time-selector/TimeSelectorControl";
+import { DefaultSwitchControl } from "../../components/switch-control";
+import { useConfirmDialog } from "../../components/confirm-dialog/confirm-dialog";
+import { TimeSelectorControl } from "../../components/time-selector/time-selector-control";
 
 export type EventsType = "admin" | "user";
 

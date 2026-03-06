@@ -9,7 +9,7 @@ import {
 import { Label } from "@merge-rd/ui/components/label";
 import { useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { useServerInfo } from "../../../context/server-info/ServerInfoProvider";
+import { useServerInfo } from "../../../context/server-info/server-info-provider";
 import useToggle from "../../../utils/useToggle";
 
 type ValidatorSelectProps = {

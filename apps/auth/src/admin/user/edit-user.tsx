@@ -27,25 +27,25 @@ import {
     AlertDialogHeader,
     AlertDialogTitle
 } from "@merge-rd/ui/components/alert-dialog";
-import { useConfirmDialog } from "../components/confirm-dialog/ConfirmDialog";
+import { useConfirmDialog } from "../components/confirm-dialog/confirm-dialog";
 import { KeyValueType } from "../components/key-value-form/key-value-convert";
 import { KeycloakSpinner } from "../../shared/keycloak-ui-shared";
-import { ViewHeader } from "../components/view-header/ViewHeader";
-import { useAccess } from "../context/access/Access";
-import { useRealm } from "../context/realm-context/RealmContext";
-import { UserProfileProvider } from "../realm-settings/user-profile/UserProfileContext";
+import { ViewHeader } from "../components/view-header/view-header";
+import { useAccess } from "../context/access/access";
+import { useRealm } from "../context/realm-context/realm-context";
+import { UserProfileProvider } from "../realm-settings/user-profile/user-profile-context";
 import useIsFeatureEnabled, { Feature } from "../utils/useIsFeatureEnabled";
 import { useParams } from "../utils/useParams";
-import { Organizations } from "./Organizations";
-import { UserAttributes } from "./UserAttributes";
-import { UserConsents } from "./UserConsents";
-import { UserCredentials } from "./UserCredentials";
-import { BruteForced, UserForm } from "./UserForm";
-import { UserGroups } from "./UserGroups";
-import { UserIdentityProviderLinks } from "./UserIdentityProviderLinks";
-import { UserRoleMapping } from "./UserRoleMapping";
-import { UserSessions } from "./UserSessions";
-import { UserEvents } from "../events/UserEvents";
+import { Organizations } from "./organizations";
+import { UserAttributes } from "./user-attributes";
+import { UserConsents } from "./user-consents";
+import { UserCredentials } from "./user-credentials";
+import { BruteForced, UserForm } from "./user-form";
+import { UserGroups } from "./user-groups";
+import { UserIdentityProviderLinks } from "./user-identity-provider-links";
+import { UserRoleMapping } from "./user-role-mapping";
+import { UserSessions } from "./user-sessions";
+import { UserEvents } from "../events/user-events";
 import {
     UIUserRepresentation,
     UserFormFields,
@@ -53,11 +53,11 @@ import {
     toUserFormFields,
     toUserRepresentation
 } from "./form-state";
-import { UserParams } from "./routes/User";
-import { toUsers } from "./routes/Users";
+import { UserParams } from "./routes/user";
+import { toUsers } from "./routes/users";
 import { isLightweightUser } from "./utils";
 
-import { AdminEvents } from "../events/AdminEvents";
+import { AdminEvents } from "../events/admin-events";
 
 export default function EditUser() {
     const { adminClient } = useAdminClient();

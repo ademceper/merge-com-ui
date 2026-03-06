@@ -6,7 +6,7 @@ import {
     DialogTitle
 } from "@merge-rd/ui/components/dialog";
 import { Separator } from "@merge-rd/ui/components/separator";
-import { useRealm } from "./context/realm-context/RealmContext";
+import { useRealm } from "./context/realm-context/realm-context";
 import { useAdminClient } from "./admin-client";
 import { useTranslation } from "react-i18next";
 import { getErrorDescription, getErrorMessage, HelpItem } from "../shared/keycloak-ui-shared";

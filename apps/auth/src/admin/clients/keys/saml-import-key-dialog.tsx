@@ -3,10 +3,10 @@ import { toast } from "sonner";
 import { FormProvider, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { useAdminClient } from "../../admin-client";
-import { ConfirmDialogModal } from "../../components/confirm-dialog/ConfirmDialog";
-import { KeyForm } from "./GenerateKeyDialog";
-import type { KeyTypes } from "./SamlKeys";
-import { SamlKeysDialogForm, submitForm } from "./SamlKeysDialog";
+import { ConfirmDialogModal } from "../../components/confirm-dialog/confirm-dialog";
+import { KeyForm } from "./generate-key-dialog";
+import type { KeyTypes } from "./saml-keys";
+import { SamlKeysDialogForm, submitForm } from "./saml-keys-dialog";
 
 type SamlImportKeyDialogProps = {
     id: string;

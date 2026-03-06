@@ -12,9 +12,9 @@ import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@merge-rd/u
 import { useState } from "react";
 import { Controller, useFormContext } from "react-hook-form";
 import { useTranslation } from "react-i18next";
-import { FormGroupField } from "../component/FormGroupField";
-import { SwitchField } from "../component/SwitchField";
-import { TextField } from "../component/TextField";
+import { FormGroupField } from "../component/form-group-field";
+import { SwitchField } from "../component/switch-field";
+import { TextField } from "../component/text-field";
 
 const promptOptions = {
     unspecified: "",

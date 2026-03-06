@@ -22,10 +22,10 @@ import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useParams } from "react-router-dom";
 import { useAdminClient } from "../../admin-client";
-import { useRealm } from "../../context/realm-context/RealmContext";
+import { useRealm } from "../../context/realm-context/realm-context";
 import { ClientRegistrationParams } from "../routes/client-registration-path";
-import { AddClientRegistrationPolicyDialog } from "./AddClientRegistrationPolicyDialog";
-import { EditClientRegistrationPolicyDialog } from "./EditClientRegistrationPolicyDialog";
+import { AddClientRegistrationPolicyDialog } from "./add-client-registration-policy-dialog";
+import { EditClientRegistrationPolicyDialog } from "./edit-client-registration-policy-dialog";
 
 type ClientRegistrationListProps = {
     subType: "anonymous" | "authenticated";

@@ -7,7 +7,7 @@ import {
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useAdminClient } from "../admin-client";
-import type { Row } from "../clients/scopes/ClientScopes";
+import type { Row } from "../clients/scopes/client-scopes";
 import { getErrorDescription, getErrorMessage } from "../../shared/keycloak-ui-shared";
 import { toast } from "sonner";
 import {
@@ -16,7 +16,7 @@ import {
     changeClientScope,
     changeScope,
     clientScopeTypesSelectOptions
-} from "../components/client-scope/ClientScopeTypes";
+} from "../components/client-scope/client-scope-types";
 
 type ChangeTypeDropdownProps = {
     clientId?: string;

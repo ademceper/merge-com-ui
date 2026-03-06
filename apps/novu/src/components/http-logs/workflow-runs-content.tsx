@@ -6,7 +6,7 @@ import { ActivityTableRow } from '@/components/activity/components/activity-tabl
 import { Button } from '@merge-rd/ui/components/button';
 import { LinkButton } from '@/components/primitives/button-link';
 import { Skeleton } from '@merge-rd/ui/components/skeleton';
-import { Table, TableBody } from '@/components/primitives/table';
+import { Table, TableBody } from '@merge-rd/ui/components/table';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@merge-rd/ui/components/tabs';
 import { useEnvironment } from '@/context/environment/hooks';
 import { useFetchActivities } from '@/hooks/use-fetch-activities';

@@ -1,4 +1,4 @@
-import { TableCell, TableRow } from '@/components/primitives/table';
+import { TableCell, TableRow } from '@merge-rd/ui/components/table';
 import { TimeDisplayHoverCard } from '@/components/time-display-hover-card';
 import { formatDateSimple } from '@/utils/format-date';
 import { RequestLog } from '../../types/logs';

@@ -15,7 +15,7 @@ import { Controller, useFormContext } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { useAdminClient } from "../../admin-client";
 import type { ComponentProps } from "../../components/dynamic/components";
-import { GroupPickerDialog } from "../../components/group/GroupPickerDialog";
+import { GroupPickerDialog } from "../../components/group/group-picker-dialog";
 
 type GroupSelectProps = Omit<ComponentProps, "convertToName"> & {
     variant?: "typeahead" | "typeaheadMulti";

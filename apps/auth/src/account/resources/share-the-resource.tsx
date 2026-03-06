@@ -33,7 +33,7 @@ import { X } from "@phosphor-icons/react";
 import { updateRequest } from "../api";
 import { Permission, Resource } from "../api/representations";
 import { useAccountAlerts } from "../utils/useAccountAlerts";
-import { SharedWith } from "./SharedWith";
+import { SharedWith } from "./shared-with";
 
 type ShareTheResourceProps = {
     resource: Resource;

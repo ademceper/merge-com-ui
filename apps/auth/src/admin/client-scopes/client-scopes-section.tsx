@@ -18,7 +18,7 @@ import { PencilSimple, Plus, Trash } from "@phosphor-icons/react";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useAdminClient } from "../admin-client";
-import type { Row } from "../clients/scopes/ClientScopes";
+import type { Row } from "../clients/scopes/client-scopes";
 import { getProtocolName } from "../clients/utils";
 import { getErrorDescription, getErrorMessage } from "../../shared/keycloak-ui-shared";
 import { toast } from "sonner";
@@ -30,13 +30,13 @@ import {
     ClientScopeDefaultOptionalType,
     changeScope,
     removeScope
-} from "../components/client-scope/ClientScopeTypes";
-import { ViewHeader } from "../components/view-header/ViewHeader";
+} from "../components/client-scope/client-scope-types";
+import { ViewHeader } from "../components/view-header/view-header";
 import helpUrls from "../help-urls";
 import useLocaleSort, { mapByKey } from "../utils/useLocaleSort";
 import { useFetch } from "../../shared/keycloak-ui-shared";
-import { AddClientScopeDialog } from "./AddClientScopeDialog";
-import { EditClientScopeDialog } from "./EditClientScopeDialog";
+import { AddClientScopeDialog } from "./add-client-scope-dialog";
+import { EditClientScopeDialog } from "./edit-client-scope-dialog";
 
 type TypeSelectorProps = ClientScopeDefaultOptionalType & {
     refresh: () => void;

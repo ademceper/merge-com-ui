@@ -1,5 +1,5 @@
 import type { ISubscriber } from '@novu/shared';
-import { TableCell, TableRow } from '@/components/primitives/table';
+import { TableCell, TableRow } from '@merge-rd/ui/components/table';
 import { formatDateSimple } from '@/utils/format-date';
 import { cn } from '@merge-rd/ui/lib/utils';
 import { ActivityStatusBadge } from './status-badge';

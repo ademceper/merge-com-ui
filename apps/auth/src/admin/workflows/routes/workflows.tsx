@@ -5,7 +5,7 @@ import type { AppRouteObject } from "../../routes";
 
 export type WorkflowsParams = { realm: string };
 
-const WorkflowsSection = lazy(() => import("../WorkflowsSection"));
+const WorkflowsSection = lazy(() => import("../workflows-section"));
 
 export const WorkflowsRoute: AppRouteObject = {
     path: "/:realm/workflows",

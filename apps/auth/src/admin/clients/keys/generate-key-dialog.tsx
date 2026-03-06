@@ -9,8 +9,8 @@ import { Button } from "@merge-rd/ui/components/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@merge-rd/ui/components/dialog";
 import { FormProvider, useForm, useFormContext } from "react-hook-form";
 import { useTranslation } from "react-i18next";
-import { useServerInfo } from "../../context/server-info/ServerInfoProvider";
-import { StoreSettings } from "./StoreSettings";
+import { useServerInfo } from "../../context/server-info/server-info-provider";
+import { StoreSettings } from "./store-settings";
 
 type GenerateKeyDialogProps = {
     clientId: string;

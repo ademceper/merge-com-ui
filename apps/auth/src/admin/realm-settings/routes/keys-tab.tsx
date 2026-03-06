@@ -10,7 +10,7 @@ export type KeysParams = {
     tab: KeySubTab;
 };
 
-const RealmSettingsSection = lazy(() => import("../RealmSettingsSection"));
+const RealmSettingsSection = lazy(() => import("../realm-settings-section"));
 
 export const KeysRoute: AppRouteObject = {
     path: "/:realm/realm-settings/keys/:tab",

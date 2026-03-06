@@ -13,18 +13,18 @@ import {
 import { Switcher, type SwitcherItem } from "@merge-rd/ui/components/switcher";
 import { useTranslation } from "react-i18next";
 import { NavLink, useLocation, useNavigate } from "react-router-dom";
-import { useAccess } from "../context/access/Access";
-import { useRealm } from "../context/realm-context/RealmContext";
-import { useServerInfo } from "../context/server-info/ServerInfoProvider";
+import { useAccess } from "../context/access/access";
+import { useRealm } from "../context/realm-context/realm-context";
+import { useServerInfo } from "../context/server-info/server-info-provider";
 import type { Environment } from "../environment";
 import { toPage } from "../page/routes";
 import { routes } from "../routes";
 import useIsFeatureEnabled, { Feature } from "../utils/useIsFeatureEnabled";
 import { useAdminClient } from "../admin-client";
 import { fetchAdminUI } from "../context/auth/admin-ui-endpoint";
-import { toDashboard } from "../dashboard/routes/Dashboard";
+import { toDashboard } from "../dashboard/routes/dashboard";
 import { useEffect, useState } from "react";
-import type { RealmNameRepresentation } from "../context/RecentRealms";
+import type { RealmNameRepresentation } from "../context/recent-realms";
 import {
     BuildingsIcon,
     BrowserIcon,

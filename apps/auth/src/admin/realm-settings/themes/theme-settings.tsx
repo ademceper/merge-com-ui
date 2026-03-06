@@ -1,13 +1,13 @@
 import type RealmRepresentation from "@keycloak/keycloak-admin-client/lib/defs/realmRepresentation";
 import { SelectField } from "../../../shared/keycloak-ui-shared";
-import { FormPanel } from "../../../shared/keycloak-ui-shared/scroll-form/FormPanel";
+import { FormPanel } from "../../../shared/keycloak-ui-shared/scroll-form/form-panel";
 import { useEffect } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
-import { FixedButtonsGroup } from "../../components/form/FixedButtonGroup";
-import { FormAccess } from "../../components/form/FormAccess";
-import { DefaultSwitchControl } from "../../components/SwitchControl";
-import { useServerInfo } from "../../context/server-info/ServerInfoProvider";
+import { FixedButtonsGroup } from "../../components/form/fixed-button-group";
+import { FormAccess } from "../../components/form/form-access";
+import { DefaultSwitchControl } from "../../components/switch-control";
+import { useServerInfo } from "../../context/server-info/server-info-provider";
 import { convertToFormValues } from "../../util";
 
 type ThemeSettingsTabProps = {

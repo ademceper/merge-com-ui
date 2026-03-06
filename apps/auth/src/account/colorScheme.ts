@@ -11,7 +11,7 @@
  * This scrip is ran before this to avoid white flashes
  */
 
-import { getKcContext } from "./KcContext";
+import { getKcContext } from "./kc-context";
 
 const DARK_THEME_CLASS = "dark";
 

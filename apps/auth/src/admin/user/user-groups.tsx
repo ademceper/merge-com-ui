@@ -11,9 +11,9 @@ import { useTranslation } from "react-i18next";
 import { useAdminClient } from "../admin-client";
 import { getErrorDescription, getErrorMessage, useFetch } from "../../shared/keycloak-ui-shared";
 import { toast } from "sonner";
-import { useConfirmDialog } from "../components/confirm-dialog/ConfirmDialog";
-import { GroupPath } from "../components/group/GroupPath";
-import { GroupPickerDialog } from "../components/group/GroupPickerDialog";
+import { useConfirmDialog } from "../components/confirm-dialog/confirm-dialog";
+import { GroupPath } from "../components/group/group-path";
+import { GroupPickerDialog } from "../components/group/group-picker-dialog";
 import { DataTable } from "@/admin/components/data-table";
 import {
     Empty,
@@ -22,7 +22,7 @@ import {
     EmptyHeader,
     EmptyTitle
 } from "@merge-rd/ui/components/empty";
-import { useAccess } from "../context/access/Access";
+import { useAccess } from "../context/access/access";
 
 type UserGroupsProps = {
     user: UserRepresentation;

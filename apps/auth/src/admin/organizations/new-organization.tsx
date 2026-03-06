@@ -5,12 +5,12 @@ import { Link, useNavigate } from "react-router-dom";
 import { useAdminClient } from "../admin-client";
 import { getErrorDescription, getErrorMessage } from "../../shared/keycloak-ui-shared";
 import { toast } from "sonner";
-import { FormAccess } from "../components/form/FormAccess";
-import { ViewHeader } from "../components/view-header/ViewHeader";
-import { useRealm } from "../context/realm-context/RealmContext";
-import { OrganizationForm, OrganizationFormType, convertToOrg } from "./OrganizationForm";
-import { toEditOrganization } from "./routes/EditOrganization";
-import { toOrganizations } from "./routes/Organizations";
+import { FormAccess } from "../components/form/form-access";
+import { ViewHeader } from "../components/view-header/view-header";
+import { useRealm } from "../context/realm-context/realm-context";
+import { OrganizationForm, OrganizationFormType, convertToOrg } from "./organization-form";
+import { toEditOrganization } from "./routes/edit-organization";
+import { toOrganizations } from "./routes/organizations";
 
 export default function NewOrganization() {
     const { adminClient } = useAdminClient();

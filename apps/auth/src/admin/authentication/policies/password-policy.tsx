@@ -14,12 +14,12 @@ import { useEffect, useMemo, useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { useAdminClient } from "../../admin-client";
-import { FormAccess } from "../../components/form/FormAccess";
-import { FixedButtonsGroup } from "../../components/form/FixedButtonGroup";
+import { FormAccess } from "../../components/form/form-access";
+import { FixedButtonsGroup } from "../../components/form/fixed-button-group";
 import { FormPanel } from "../../../shared/keycloak-ui-shared";
-import { useRealm } from "../../context/realm-context/RealmContext";
-import { useServerInfo } from "../../context/server-info/ServerInfoProvider";
-import { PolicyRow } from "./PolicyRow";
+import { useRealm } from "../../context/realm-context/realm-context";
+import { useServerInfo } from "../../context/server-info/server-info-provider";
+import { PolicyRow } from "./policy-row";
 import { SubmittedValues, parsePolicy, serializePolicy } from "./util";
 
 type PolicySelectProps = {

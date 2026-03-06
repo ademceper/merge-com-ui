@@ -5,8 +5,8 @@ import {
     DialogTitle,
 } from "@merge-rd/ui/components/dialog";
 import { useTranslation } from "react-i18next";
-import { KeyProviderForm } from "./KeyProviderForm";
-import type { ProviderType } from "../../routes/KeyProvider";
+import { KeyProviderForm } from "./key-provider-form";
+import type { ProviderType } from "../../routes/key-provider";
 
 type KeyProviderModalProps = {
     providerType: ProviderType;

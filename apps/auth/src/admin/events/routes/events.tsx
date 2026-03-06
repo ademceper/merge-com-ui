@@ -10,7 +10,7 @@ export type EventsParams = {
     tab?: EventsTab;
 };
 
-const EventsSection = lazy(() => import("../EventsSection"));
+const EventsSection = lazy(() => import("../events-section"));
 
 export const EventsRoute: AppRouteObject = {
     path: "/:realm/events",

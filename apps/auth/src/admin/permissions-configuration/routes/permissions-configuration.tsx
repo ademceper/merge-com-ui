@@ -6,7 +6,7 @@ import type { AppRouteObject } from "../../routes";
 export type PermissionsConfigurationParams = { realm: string };
 
 const PermissionsConfigurationSection = lazy(
-    () => import("../PermissionsConfigurationSection")
+    () => import("../permissions-configuration-section")
 );
 
 export const PermissionsConfigurationRoute: AppRouteObject = {

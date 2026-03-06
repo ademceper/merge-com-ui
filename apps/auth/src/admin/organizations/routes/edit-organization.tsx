@@ -16,7 +16,7 @@ export type EditOrganizationParams = {
     tab: OrganizationTab;
 };
 
-const DetailOrganization = lazy(() => import("../DetailOrganization"));
+const DetailOrganization = lazy(() => import("../detail-organization"));
 
 export const EditOrganizationRoute: AppRouteObject = {
     path: "/:realm/organizations/:id/:tab",

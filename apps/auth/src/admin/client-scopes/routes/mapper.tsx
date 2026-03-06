@@ -10,7 +10,7 @@ export type MapperParams = {
     viewMode: "edit" | "new";
 };
 
-const MappingDetails = lazy(() => import("../details/MappingDetails"));
+const MappingDetails = lazy(() => import("../details/mapping-details"));
 
 export const MapperRoute: AppRouteObject = {
     path: "/:realm/client-scopes/:id/mappers/:mapperId/:viewMode",

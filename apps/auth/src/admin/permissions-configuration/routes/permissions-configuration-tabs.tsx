@@ -12,7 +12,7 @@ export type PermissionsConfigurationTabsParams = {
 };
 
 const PermissionsConfigurationSection = lazy(
-    () => import("../PermissionsConfigurationSection")
+    () => import("../permissions-configuration-section")
 );
 
 export const PermissionsConfigurationTabsRoute: AppRouteObject = {

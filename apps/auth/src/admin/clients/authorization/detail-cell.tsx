@@ -3,10 +3,10 @@ import { useFetch } from "../../../shared/keycloak-ui-shared";
 import { useState } from "react";
 import { useAdminClient } from "../../admin-client";
 import { KeycloakSpinner } from "../../../shared/keycloak-ui-shared";
-import { useRealm } from "../../context/realm-context/RealmContext";
-import { toPermissionDetails } from "../routes/PermissionDetails";
-import { toScopeDetails } from "../routes/Scope";
-import { DetailDescription, DetailDescriptionLink } from "./DetailDescription";
+import { useRealm } from "../../context/realm-context/realm-context";
+import { toPermissionDetails } from "../routes/permission-details";
+import { toScopeDetails } from "../routes/scope";
+import { DetailDescription, DetailDescriptionLink } from "./detail-description";
 
 type Scope = { id: string; name: string }[];
 

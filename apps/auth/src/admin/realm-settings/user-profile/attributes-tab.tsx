@@ -29,11 +29,11 @@ import {
     AlertDialogTitle
 } from "@merge-rd/ui/components/alert-dialog";
 import { KeycloakSpinner } from "../../../shared/keycloak-ui-shared";
-import { useRealm } from "../../context/realm-context/RealmContext";
+import { useRealm } from "../../context/realm-context/realm-context";
 import useLocale from "../../utils/useLocale";
-import { toAddAttribute } from "../routes/AddAttribute";
-import { toAttribute } from "../routes/Attribute";
-import { useUserProfile } from "./UserProfileContext";
+import { toAddAttribute } from "../routes/add-attribute";
+import { toAttribute } from "../routes/attribute";
+import { useUserProfile } from "./user-profile-context";
 
 const RESTRICTED_ATTRIBUTES = ["username", "email"];
 

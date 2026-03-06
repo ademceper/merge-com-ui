@@ -13,8 +13,8 @@ import {
 } from "react";
 import { Controller } from "react-hook-form";
 
-import { useAccess } from "../../context/access/Access";
-import { FixedButtonsGroup } from "./FixedButtonGroup";
+import { useAccess } from "../../context/access/access";
+import { FixedButtonsGroup } from "./fixed-button-group";
 
 export type FormAccessProps = FormProps & {
     /**

@@ -8,9 +8,9 @@ import {
   TableFooter,
   TableHead,
   TableHeader,
+  TablePaginationFooter,
   TableRow,
-} from '@/components/primitives/table';
-import { TablePaginationFooter } from '@/components/primitives/table-pagination-footer';
+} from '@merge-rd/ui/components/table';
 import { UpdatedAgo } from '@/components/updated-ago';
 import { useFetchRequestLogs } from '@/hooks/use-fetch-request-logs';
 import { useLogsUrlState } from '@/hooks/use-logs-url-state';

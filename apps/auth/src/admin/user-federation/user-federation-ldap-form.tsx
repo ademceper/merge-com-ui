@@ -5,17 +5,17 @@ import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 import { ScrollForm } from "../../shared/keycloak-ui-shared";
 
-import { FixedButtonsGroup } from "../components/form/FixedButtonGroup";
-import { useRealm } from "../context/realm-context/RealmContext";
+import { FixedButtonsGroup } from "../components/form/fixed-button-group";
+import { useRealm } from "../context/realm-context/realm-context";
 import useIsFeatureEnabled, { Feature } from "../utils/useIsFeatureEnabled";
-import { LdapSettingsAdvanced } from "./ldap/LdapSettingsAdvanced";
-import { LdapSettingsConnection } from "./ldap/LdapSettingsConnection";
-import { LdapSettingsGeneral } from "./ldap/LdapSettingsGeneral";
-import { LdapSettingsKerberosIntegration } from "./ldap/LdapSettingsKerberosIntegration";
-import { LdapSettingsSearching } from "./ldap/LdapSettingsSearching";
-import { LdapSettingsSynchronization } from "./ldap/LdapSettingsSynchronization";
-import { toUserFederation } from "./routes/UserFederation";
-import { SettingsCache } from "./shared/SettingsCache";
+import { LdapSettingsAdvanced } from "./ldap/ldap-settings-advanced";
+import { LdapSettingsConnection } from "./ldap/ldap-settings-connection";
+import { LdapSettingsGeneral } from "./ldap/ldap-settings-general";
+import { LdapSettingsKerberosIntegration } from "./ldap/ldap-settings-kerberos-integration";
+import { LdapSettingsSearching } from "./ldap/ldap-settings-searching";
+import { LdapSettingsSynchronization } from "./ldap/ldap-settings-synchronization";
+import { toUserFederation } from "./routes/user-federation";
+import { SettingsCache } from "./shared/settings-cache";
 
 export type LdapComponentRepresentation = ComponentRepresentation & {
     config?: {

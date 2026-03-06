@@ -33,17 +33,17 @@ import {
     AlertDialogHeader,
     AlertDialogTitle
 } from "@merge-rd/ui/components/alert-dialog";
-import { ClickableCard } from "../components/keycloak-card/ClickableCard";
-import { ViewHeader } from "../components/view-header/ViewHeader";
-import { useRealm } from "../context/realm-context/RealmContext";
-import { useServerInfo } from "../context/server-info/ServerInfoProvider";
+import { ClickableCard } from "../components/keycloak-card/clickable-card";
+import { ViewHeader } from "../components/view-header/view-header";
+import { useRealm } from "../context/realm-context/realm-context";
+import { useServerInfo } from "../context/server-info/server-info-provider";
 import helpUrls from "../help-urls";
 import { toUpperCase } from "../util";
-import { ManagePriorityDialog } from "./ManagePriorityDialog";
-import { toCustomUserFederation } from "./routes/CustomUserFederation";
-import { toNewCustomUserFederation } from "./routes/NewCustomUserFederation";
-import { toUserFederationKerberos } from "./routes/UserFederationKerberos";
-import { toUserFederationLdap } from "./routes/UserFederationLdap";
+import { ManagePriorityDialog } from "./manage-priority-dialog";
+import { toCustomUserFederation } from "./routes/custom-user-federation";
+import { toNewCustomUserFederation } from "./routes/new-custom-user-federation";
+import { toUserFederationKerberos } from "./routes/user-federation-kerberos";
+import { toUserFederationLdap } from "./routes/user-federation-ldap";
 
 export default function UserFederationSection() {
     const { adminClient } = useAdminClient();

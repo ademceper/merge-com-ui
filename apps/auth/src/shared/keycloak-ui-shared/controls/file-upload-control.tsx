@@ -12,7 +12,7 @@ import {
     useController
 } from "react-hook-form";
 import { getRuleValue } from "../utils/getRuleValue";
-import { FormLabel } from "./FormLabel";
+import { FormLabel } from "./form-label";
 import { useTranslation } from "react-i18next";
 import { cn } from "@merge-rd/ui/lib/utils";
 

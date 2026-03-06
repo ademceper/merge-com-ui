@@ -8,7 +8,7 @@ export type AddExecutorParams = {
     profileName: string;
 };
 
-const ExecutorForm = lazy(() => import("../ExecutorForm"));
+const ExecutorForm = lazy(() => import("../executor-form"));
 
 export const AddExecutorRoute: AppRouteObject = {
     path: "/:realm/realm-settings/client-policies/:profileName/add-executor",

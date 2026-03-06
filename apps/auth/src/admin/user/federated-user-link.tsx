@@ -5,9 +5,9 @@ import { Button } from "@merge-rd/ui/components/button";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { useAdminClient } from "../admin-client";
-import { useAccess } from "../context/access/Access";
-import { useRealm } from "../context/realm-context/RealmContext";
-import { toCustomUserFederation } from "../user-federation/routes/CustomUserFederation";
+import { useAccess } from "../context/access/access";
+import { useRealm } from "../context/realm-context/realm-context";
+import { toCustomUserFederation } from "../user-federation/routes/custom-user-federation";
 
 type FederatedUserLinkProps = {
     user: UserRepresentation;

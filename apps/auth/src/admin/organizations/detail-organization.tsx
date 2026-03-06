@@ -6,18 +6,18 @@ import { FormProvider, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { useNavigate, useParams as useRouterParams } from "react-router-dom";
 import { useAdminClient } from "../admin-client";
-import { FormAccess } from "../components/form/FormAccess";
-import { AttributesForm } from "../components/key-value-form/AttributeForm";
+import { FormAccess } from "../components/form/form-access";
+import { AttributesForm } from "../components/key-value-form/attribute-form";
 import { arrayToKeyValue } from "../components/key-value-form/key-value-convert";
-import { useRealm } from "../context/realm-context/RealmContext";
+import { useRealm } from "../context/realm-context/realm-context";
 import { useParams } from "../utils/useParams";
-import { DetailOrganizationHeader } from "./DetailOrganizationHeader";
-import { IdentityProviders } from "./IdentityProviders";
-import { MembersSection } from "./MembersSection";
-import { OrganizationForm, OrganizationFormType, convertToOrgForUpdate } from "./OrganizationForm";
-import { EditOrganizationParams, toEditOrganization } from "./routes/EditOrganization";
-import { useAccess } from "../context/access/Access";
-import { AdminEvents } from "../events/AdminEvents";
+import { DetailOrganizationHeader } from "./detail-organization-header";
+import { IdentityProviders } from "./identity-providers";
+import { MembersSection } from "./members-section";
+import { OrganizationForm, OrganizationFormType, convertToOrgForUpdate } from "./organization-form";
+import { EditOrganizationParams, toEditOrganization } from "./routes/edit-organization";
+import { useAccess } from "../context/access/access";
+import { AdminEvents } from "../events/admin-events";
 import { useState } from "react";
 
 export default function DetailOrganization() {

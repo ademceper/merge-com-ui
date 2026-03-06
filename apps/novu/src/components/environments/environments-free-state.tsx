@@ -14,7 +14,7 @@ import { LinkButton } from '../primitives/button-link';
 import { CopyButton } from '../primitives/copy-button';
 import { EnvironmentBranchIcon } from '../primitives/environment-branch-icon';
 import { Separator } from '@merge-rd/ui/components/separator';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '../primitives/table';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@merge-rd/ui/components/table';
 import TruncatedText from '../truncated-text';
 import { BookBookmark, Sparkle } from '@phosphor-icons/react';
 

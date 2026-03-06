@@ -10,7 +10,7 @@ import {
     SelectValue,
 } from "@merge-rd/ui/components/select";
 import { DataTable, type ColumnDef } from "@/admin/components/data-table";
-import { FormPanel } from "../../../shared/keycloak-ui-shared/scroll-form/FormPanel";
+import { FormPanel } from "../../../shared/keycloak-ui-shared/scroll-form/form-panel";
 import {
     Empty,
     EmptyContent,
@@ -25,9 +25,9 @@ import { useMemo, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { useAdminClient } from "../../admin-client";
-import { useRealm } from "../../context/realm-context/RealmContext";
-import { useServerInfo } from "../../context/server-info/ServerInfoProvider";
-import { useWhoAmI } from "../../context/whoami/WhoAmI";
+import { useRealm } from "../../context/realm-context/realm-context";
+import { useServerInfo } from "../../context/server-info/server-info-provider";
+import { useWhoAmI } from "../../context/whoami/who-am-i";
 import { DEFAULT_LOCALE } from "../../i18n/i18n";
 import { localeToDisplayName } from "../../util";
 import useLocaleSort, { mapByKey } from "../../utils/useLocaleSort";

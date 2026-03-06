@@ -5,7 +5,7 @@ import type { AppRouteObject } from "../../routes";
 
 export type SessionsParams = { realm: string };
 
-const SessionsSection = lazy(() => import("../SessionsSection"));
+const SessionsSection = lazy(() => import("../sessions-section"));
 
 export const SessionsRoute: AppRouteObject = {
     path: "/:realm/sessions",

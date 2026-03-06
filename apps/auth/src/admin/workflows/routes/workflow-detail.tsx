@@ -9,7 +9,7 @@ export type WorkflowDetailParams = {
     mode: "update" | "copy" | "create";
 };
 
-const WorkflowDetailForm = lazy(() => import("../WorkflowDetailForm"));
+const WorkflowDetailForm = lazy(() => import("../workflow-detail-form"));
 
 export const WorkflowDetailRoute: AppRouteObject = {
     path: "/:realm/workflows/:mode/:id",

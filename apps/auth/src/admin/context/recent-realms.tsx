@@ -7,7 +7,7 @@ import {
 } from "../../shared/keycloak-ui-shared";
 import { PropsWithChildren, useEffect } from "react";
 import { useAdminClient } from "../admin-client";
-import { useRealm } from "./realm-context/RealmContext";
+import { useRealm } from "./realm-context/realm-context";
 import { fetchAdminUI } from "./auth/admin-ui-endpoint";
 
 const MAX_REALMS = 3;

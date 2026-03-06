@@ -19,16 +19,16 @@ import {
     AlertDialogHeader,
     AlertDialogTitle
 } from "@merge-rd/ui/components/alert-dialog";
-import { DynamicComponents } from "../../components/dynamic/DynamicComponents";
-import { FormAccess } from "../../components/form/FormAccess";
+import { DynamicComponents } from "../../components/dynamic/dynamic-components";
+import { FormAccess } from "../../components/form/form-access";
 import { KeycloakSpinner } from "../../../shared/keycloak-ui-shared";
-import { ViewHeader } from "../../components/view-header/ViewHeader";
-import { useRealm } from "../../context/realm-context/RealmContext";
+import { ViewHeader } from "../../components/view-header/view-header";
+import { useRealm } from "../../context/realm-context/realm-context";
 import { useParams } from "../../utils/useParams";
 import {
     RegistrationProviderParams,
     toRegistrationProvider
-} from "../routes/AddRegistrationProvider";
+} from "../routes/add-registration-provider";
 import { toClientRegistration } from "../routes/client-registration-path";
 
 export default function DetailProvider() {

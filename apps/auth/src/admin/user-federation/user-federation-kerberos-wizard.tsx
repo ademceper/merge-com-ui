@@ -2,8 +2,8 @@ import { Button } from "@merge-rd/ui/components/button";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 
-import { KerberosSettingsRequired } from "./kerberos/KerberosSettingsRequired";
-import { SettingsCache } from "./shared/SettingsCache";
+import { KerberosSettingsRequired } from "./kerberos/kerberos-settings-required";
+import { SettingsCache } from "./shared/settings-cache";
 import type ComponentRepresentation from "@keycloak/keycloak-admin-client/lib/defs/componentRepresentation";
 import { useForm } from "react-hook-form";
 

@@ -1,13 +1,13 @@
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@merge-rd/ui/components/tabs";
-import { useRealm } from "../../context/realm-context/RealmContext";
-import { toUserProfile } from "../routes/UserProfile";
-import type { UserProfileTab as UserProfileTabType } from "../routes/UserProfile";
-import { AttributesGroupTab } from "./AttributesGroupTab";
-import { AttributesTab } from "./AttributesTab";
-import { JsonEditorTab } from "./JsonEditorTab";
-import { UserProfileProvider } from "./UserProfileContext";
+import { useRealm } from "../../context/realm-context/realm-context";
+import { toUserProfile } from "../routes/user-profile";
+import type { UserProfileTab as UserProfileTabType } from "../routes/user-profile";
+import { AttributesGroupTab } from "./attributes-group-tab";
+import { AttributesTab } from "./attributes-tab";
+import { JsonEditorTab } from "./json-editor-tab";
+import { UserProfileProvider } from "./user-profile-context";
 
 type UserProfileTabProps = {
     setTableData: React.Dispatch<

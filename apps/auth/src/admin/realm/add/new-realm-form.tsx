@@ -15,12 +15,12 @@ import { FormProvider, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 import { useAdminClient } from "../../admin-client";
-import { FormAccess } from "../../components/form/FormAccess";
-import { JsonFileUpload } from "../../components/json-file-upload/JsonFileUpload";
-import { DefaultSwitchControl } from "../../components/SwitchControl";
-import { useWhoAmI } from "../../context/whoami/WhoAmI";
+import { FormAccess } from "../../components/form/form-access";
+import { JsonFileUpload } from "../../components/json-file-upload/json-file-upload";
+import { DefaultSwitchControl } from "../../components/switch-control";
+import { useWhoAmI } from "../../context/whoami/who-am-i";
 import { convertFormValuesToObject, convertToFormValues } from "../../util";
-import { toRealm } from "../RealmRoutes";
+import { toRealm } from "../realm-routes";
 
 type NewRealmFormProps = {
     onClose: () => void;

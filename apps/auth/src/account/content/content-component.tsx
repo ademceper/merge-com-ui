@@ -8,7 +8,7 @@
 import { Suspense, lazy, useMemo, useState } from "react";
 import { useParams } from "react-router-dom";
 import { useEnvironment } from "../../shared/keycloak-ui-shared";
-import { MenuItem } from "../root/PageNav";
+import { MenuItem } from "../root/page-nav";
 import { ContentComponentParams } from "../routes";
 import { joinPath } from "../utils/joinPath";
 import { usePromise } from "../utils/usePromise";

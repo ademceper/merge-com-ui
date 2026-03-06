@@ -1,5 +1,5 @@
 import { Navigate } from "react-router-dom";
-import { useRealm } from "../context/realm-context/RealmContext";
+import { useRealm } from "../context/realm-context/realm-context";
 
 export default function RedirectToOrganizations() {
     const { realm } = useRealm();

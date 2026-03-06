@@ -1,7 +1,7 @@
 import { useContext } from "react";
 import { KeycloakSpinner } from "../../shared/keycloak-ui-shared";
 import { AdminClientContext } from "../admin-client";
-import { RealmSettingsTabs } from "./RealmSettingsTabs";
+import { RealmSettingsTabs } from "./realm-settings-tabs";
 
 export default function RealmSettingsSection() {
     const adminClientValue = useContext(AdminClientContext);

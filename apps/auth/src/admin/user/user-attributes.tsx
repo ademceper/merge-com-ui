@@ -4,7 +4,7 @@ import { UseFormReturn, useFormContext } from "react-hook-form";
 import {
     AttributeForm,
     AttributesForm
-} from "../components/key-value-form/AttributeForm";
+} from "../components/key-value-form/attribute-form";
 import { UserFormFields, toUserFormFields } from "./form-state";
 import {
     UnmanagedAttributePolicy,

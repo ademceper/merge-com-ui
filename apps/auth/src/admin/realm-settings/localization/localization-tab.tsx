@@ -1,18 +1,18 @@
 import type RealmRepresentation from "@keycloak/keycloak-admin-client/lib/defs/realmRepresentation";
 import { MultiSelectField, SelectField, SwitchControl } from "../../../shared/keycloak-ui-shared";
-import { FormPanel } from "../../../shared/keycloak-ui-shared/scroll-form/FormPanel";
+import { FormPanel } from "../../../shared/keycloak-ui-shared/scroll-form/form-panel";
 import { useMemo, useState } from "react";
 import { FormProvider, useFormContext, useWatch } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@merge-rd/ui/components/tabs";
-import { FixedButtonsGroup } from "../../components/form/FixedButtonGroup";
-import { FormAccess } from "../../components/form/FormAccess";
-import { useServerInfo } from "../../context/server-info/ServerInfoProvider";
-import { useWhoAmI } from "../../context/whoami/WhoAmI";
+import { FixedButtonsGroup } from "../../components/form/fixed-button-group";
+import { FormAccess } from "../../components/form/form-access";
+import { useServerInfo } from "../../context/server-info/server-info-provider";
+import { useWhoAmI } from "../../context/whoami/who-am-i";
 import { DEFAULT_LOCALE } from "../../i18n/i18n";
 import { localeToDisplayName } from "../../util";
-import { EffectiveMessageBundles } from "./EffectiveMessageBundles";
-import { RealmOverrides } from "./RealmOverrides";
+import { EffectiveMessageBundles } from "./effective-message-bundles";
+import { RealmOverrides } from "./realm-overrides";
 
 type LocalizationTabProps = {
     save: (realm: RealmRepresentation) => void;

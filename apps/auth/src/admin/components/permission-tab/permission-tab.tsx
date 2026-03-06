@@ -23,11 +23,11 @@ import { useState } from "react";
 import { Trans, useTranslation } from "react-i18next";
 import { Link, useNavigate } from "react-router-dom";
 import { useAdminClient } from "../../admin-client";
-import { toPermissionDetails } from "../../clients/routes/PermissionDetails";
+import { toPermissionDetails } from "../../clients/routes/permission-details";
 import { KeycloakSpinner } from "../../../shared/keycloak-ui-shared";
-import { useRealm } from "../../context/realm-context/RealmContext";
+import { useRealm } from "../../context/realm-context/realm-context";
 import useLocaleSort from "../../utils/useLocaleSort";
-import { useConfirmDialog } from "../confirm-dialog/ConfirmDialog";
+import { useConfirmDialog } from "../confirm-dialog/confirm-dialog";
 
 type PermissionScreenType =
     | "clients"

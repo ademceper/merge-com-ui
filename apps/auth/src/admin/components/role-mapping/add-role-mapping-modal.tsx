@@ -26,10 +26,10 @@ import {
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useAdminClient } from "../../admin-client";
-import { useAccess } from "../../context/access/Access";
+import { useAccess } from "../../context/access/access";
 import { translationFormatter } from "../../utils/translationFormatter";
 import useLocaleSort from "../../utils/useLocaleSort";
-import { ResourcesKey, Row } from "./RoleMapping";
+import { ResourcesKey, Row } from "./role-mapping";
 import { getAvailableRoles } from "./queries";
 import { getAvailableClientRoles } from "./resource";
 

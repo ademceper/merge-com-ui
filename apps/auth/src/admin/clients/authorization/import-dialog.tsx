@@ -9,7 +9,7 @@ import { Label } from "@merge-rd/ui/components/label";
 import { RadioGroup, RadioGroupItem } from "@merge-rd/ui/components/radio-group";
 
 import type ResourceServerRepresentation from "@keycloak/keycloak-admin-client/lib/defs/resourceServerRepresentation";
-import { JsonFileUpload } from "../../components/json-file-upload/JsonFileUpload";
+import { JsonFileUpload } from "../../components/json-file-upload/json-file-upload";
 import { HelpItem } from "../../../shared/keycloak-ui-shared";
 
 type ImportDialogProps = {

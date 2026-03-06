@@ -27,10 +27,10 @@ import {
     AlertDialogHeader,
     AlertDialogTitle
 } from "@merge-rd/ui/components/alert-dialog";
-import { ManageOrderDialog } from "../identity-providers/ManageOrderDialog";
+import { ManageOrderDialog } from "../identity-providers/manage-order-dialog";
 import useToggle from "../utils/useToggle";
-import { LinkIdentityProviderModal } from "./LinkIdentityProviderModal";
-import { EditOrganizationParams } from "./routes/EditOrganization";
+import { LinkIdentityProviderModal } from "./link-identity-provider-modal";
+import { EditOrganizationParams } from "./routes/edit-organization";
 
 type ShownOnLoginPageCheckProps = {
     row: IdentityProviderRepresentation;

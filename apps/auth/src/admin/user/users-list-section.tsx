@@ -22,12 +22,12 @@ import { Link } from "react-router-dom";
 import { useAdminClient } from "../admin-client";
 import { getErrorDescription, getErrorMessage, useFetch } from "../../shared/keycloak-ui-shared";
 import { toast } from "sonner";
-import { useAccess } from "../context/access/Access";
-import { useRealm } from "../context/realm-context/RealmContext";
+import { useAccess } from "../context/access/access";
+import { useRealm } from "../context/realm-context/realm-context";
 import { emptyFormatter } from "../util";
-import { toUser } from "./routes/User";
-import { AddUserDialog } from "./AddUserDialog";
-import { EditUserDialog } from "./EditUserDialog";
+import { toUser } from "./routes/user";
+import { AddUserDialog } from "./add-user-dialog";
+import { EditUserDialog } from "./edit-user-dialog";
 
 export function UsersListSection() {
     const { adminClient } = useAdminClient();

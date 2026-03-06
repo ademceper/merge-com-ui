@@ -8,16 +8,16 @@ import { FormProvider, SubmitHandler, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { useAdminClient } from "../../admin-client";
-import { FormAccess } from "../../components/form/FormAccess";
-import { KeyValueInput } from "../../components/key-value-form/KeyValueInput";
+import { FormAccess } from "../../components/form/form-access";
+import { KeyValueInput } from "../../components/key-value-form/key-value-input";
 import type { KeyValueType } from "../../components/key-value-form/key-value-convert";
-import { ViewHeader } from "../../components/view-header/ViewHeader";
-import { useRealm } from "../../context/realm-context/RealmContext";
-import type { EditAttributesGroupParams } from "../routes/EditAttributesGroup";
-import { toUserProfile } from "../routes/UserProfile";
-import { useUserProfile } from "./UserProfileContext";
-import { saveTranslations, Translations } from "./attribute/TranslatableField";
-import { TranslatableField } from "./attribute/TranslatableField";
+import { ViewHeader } from "../../components/view-header/view-header";
+import { useRealm } from "../../context/realm-context/realm-context";
+import type { EditAttributesGroupParams } from "../routes/edit-attributes-group";
+import { toUserProfile } from "../routes/user-profile";
+import { useUserProfile } from "./user-profile-context";
+import { saveTranslations, Translations } from "./attribute/translatable-field";
+import { TranslatableField } from "./attribute/translatable-field";
 
 function parseAnnotations(input: Record<string, unknown>): KeyValueType[] {
     return Object.entries(input).reduce((p, [key, value]) => {

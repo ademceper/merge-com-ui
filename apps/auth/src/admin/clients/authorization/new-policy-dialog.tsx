@@ -16,7 +16,7 @@ import {
 import { cn } from "@merge-rd/ui/lib/utils";
 
 import type PolicyProviderRepresentation from "@keycloak/keycloak-admin-client/lib/defs/policyProviderRepresentation";
-import { isValidComponentType } from "./policy/PolicyDetails";
+import { isValidComponentType } from "./policy/policy-details";
 import { useMemo } from "react";
 import useLocaleSort, { mapByKey } from "../../utils/useLocaleSort";
 

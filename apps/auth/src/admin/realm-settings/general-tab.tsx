@@ -12,7 +12,7 @@ import {
     useEnvironment,
     useFetch
 } from "../../shared/keycloak-ui-shared";
-import { FormPanel } from "../../shared/keycloak-ui-shared/scroll-form/FormPanel";
+import { FormPanel } from "../../shared/keycloak-ui-shared/scroll-form/form-panel";
 import { Button } from "@merge-rd/ui/components/button";
 import { Link } from "@merge-rd/ui/components/link";
 import { Copy, ArrowSquareOut } from "@phosphor-icons/react";
@@ -20,19 +20,19 @@ import { useEffect, useState } from "react";
 import { Controller, FormProvider, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { useAdminClient } from "../admin-client";
-import { DefaultSwitchControl } from "../components/SwitchControl";
-import { FixedButtonsGroup } from "../components/form/FixedButtonGroup";
-import { FormAccess } from "../components/form/FormAccess";
-import { KeyValueInput } from "../components/key-value-form/KeyValueInput";
-import { useRealm } from "../context/realm-context/RealmContext";
+import { DefaultSwitchControl } from "../components/switch-control";
+import { FixedButtonsGroup } from "../components/form/fixed-button-group";
+import { FormAccess } from "../components/form/form-access";
+import { KeyValueInput } from "../components/key-value-form/key-value-input";
+import { useRealm } from "../context/realm-context/realm-context";
 import {
     addTrailingSlash,
     convertAttributeNameToForm,
     convertToFormValues
 } from "../util";
 import useIsFeatureEnabled, { Feature } from "../utils/useIsFeatureEnabled";
-import { UIRealmRepresentation } from "./RealmSettingsTabs";
-import { SIGNATURE_ALGORITHMS } from "../clients/add/SamlSignature";
+import { UIRealmRepresentation } from "./realm-settings-tabs";
+import { SIGNATURE_ALGORITHMS } from "../clients/add/saml-signature";
 
 type RealmSettingsGeneralTabProps = {
     realm: UIRealmRepresentation;

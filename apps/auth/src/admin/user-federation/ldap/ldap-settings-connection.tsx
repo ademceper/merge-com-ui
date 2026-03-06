@@ -22,9 +22,9 @@ import { useTranslation } from "react-i18next";
 import { useAdminClient } from "../../admin-client";
 import { getErrorDescription, getErrorMessage } from "../../../shared/keycloak-ui-shared";
 import { toast } from "sonner";
-import { FormAccess } from "../../components/form/FormAccess";
-import { WizardSectionHeader } from "../../components/wizard-section-header/WizardSectionHeader";
-import { useRealm } from "../../context/realm-context/RealmContext";
+import { FormAccess } from "../../components/form/form-access";
+import { WizardSectionHeader } from "../../components/wizard-section-header/wizard-section-header";
+import { useRealm } from "../../context/realm-context/realm-context";
 
 export type LdapSettingsConnectionProps = {
     form: UseFormReturn;

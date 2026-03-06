@@ -6,7 +6,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, Di
 import type ProtocolMapperRepresentation from "@keycloak/keycloak-admin-client/lib/defs/protocolMapperRepresentation";
 import type { ProtocolMapperTypeRepresentation } from "@keycloak/keycloak-admin-client/lib/defs/serverInfoRepesentation";
 
-import { useServerInfo } from "../../context/server-info/ServerInfoProvider";
+import { useServerInfo } from "../../context/server-info/server-info-provider";
 import { DataTable } from "@/admin/components/data-table";
 import {
     Empty,

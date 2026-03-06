@@ -4,7 +4,7 @@ import type { AppRouteObject } from "../../routes";
 
 export type GroupsParams = { realm: string; id?: string; lazy?: string };
 
-const GroupsSection = lazy(() => import("../GroupsSection"));
+const GroupsSection = lazy(() => import("../groups-section"));
 
 export const GroupsRoute: AppRouteObject = {
     path: "/:realm/groups/*",

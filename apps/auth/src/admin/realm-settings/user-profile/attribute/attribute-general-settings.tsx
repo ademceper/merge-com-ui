@@ -24,12 +24,12 @@ import { useState } from "react";
 import { Controller, FormProvider, useFormContext, useWatch } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { useAdminClient } from "../../../admin-client";
-import { FormAccess } from "../../../components/form/FormAccess";
-import { DefaultSwitchControl } from "../../../components/SwitchControl";
+import { FormAccess } from "../../../components/form/form-access";
+import { DefaultSwitchControl } from "../../../components/switch-control";
 import { useParams } from "../../../utils/useParams";
-import { USERNAME_EMAIL } from "../../NewAttributeSettings";
-import { AttributeParams } from "../../routes/Attribute";
-import { TranslatableField } from "./TranslatableField";
+import { USERNAME_EMAIL } from "../../new-attribute-settings";
+import { AttributeParams } from "../../routes/attribute";
+import { TranslatableField } from "./translatable-field";
 
 import useLocaleSort, { mapByKey } from "../../../utils/useLocaleSort";
 

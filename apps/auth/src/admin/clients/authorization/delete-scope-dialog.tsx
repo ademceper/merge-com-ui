@@ -4,8 +4,8 @@ import { useTranslation } from "react-i18next";
 import { useAdminClient } from "../../admin-client";
 import { getErrorDescription, getErrorMessage } from "../../../shared/keycloak-ui-shared";
 import { toast } from "sonner";
-import { ConfirmDialogModal } from "../../components/confirm-dialog/ConfirmDialog";
-import type { PermissionScopeRepresentation } from "./Scopes";
+import { ConfirmDialogModal } from "../../components/confirm-dialog/confirm-dialog";
+import type { PermissionScopeRepresentation } from "./scopes";
 
 type DeleteScopeDialogProps = {
     clientId: string;

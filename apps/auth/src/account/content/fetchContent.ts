@@ -12,7 +12,7 @@
 // @ts-nocheck
 
 import type { CallOptions } from "../api/methods";
-import type { MenuItem } from "../root/PageNav";
+import type { MenuItem } from "../root/page-nav";
 
 export default async function fetchContentJson(opts: CallOptions): Promise<MenuItem[]> {
     const { content } = await import("../assets/content");

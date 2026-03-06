@@ -1,7 +1,7 @@
 import type { AppRouteObject } from "../routes";
-import { AddOrganizationRoute } from "./routes/AddOrganization";
-import { EditOrganizationRoute } from "./routes/EditOrganization";
-import { OrganizationsRoute } from "./routes/Organizations";
+import { AddOrganizationRoute } from "./routes/add-organization";
+import { EditOrganizationRoute } from "./routes/edit-organization";
+import { OrganizationsRoute } from "./routes/organizations";
 
 const routes: AppRouteObject[] = [
     OrganizationsRoute,

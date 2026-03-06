@@ -8,7 +8,7 @@ export type NewClientPolicyConditionParams = {
     policyName: string;
 };
 
-const NewClientPolicyCondition = lazy(() => import("../NewClientPolicyCondition"));
+const NewClientPolicyCondition = lazy(() => import("../new-client-policy-condition"));
 
 export const NewClientPolicyConditionRoute: AppRouteObject = {
     path: "/:realm/realm-settings/client-policies/:policyName/edit-policy/create-condition",

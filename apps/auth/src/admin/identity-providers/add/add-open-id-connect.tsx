@@ -6,14 +6,14 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useAdminClient } from "../../admin-client";
 import { getErrorDescription, getErrorMessage } from "../../../shared/keycloak-ui-shared";
 import { toast } from "sonner";
-import { FormAccess } from "../../components/form/FormAccess";
-import { ViewHeader } from "../../components/view-header/ViewHeader";
-import { useRealm } from "../../context/realm-context/RealmContext";
-import { toIdentityProvider } from "../routes/IdentityProvider";
-import { toIdentityProviders } from "../routes/IdentityProviders";
-import { OIDCAuthentication } from "./OIDCAuthentication";
-import { OIDCGeneralSettings } from "./OIDCGeneralSettings";
-import { OpenIdConnectSettings } from "./OpenIdConnectSettings";
+import { FormAccess } from "../../components/form/form-access";
+import { ViewHeader } from "../../components/view-header/view-header";
+import { useRealm } from "../../context/realm-context/realm-context";
+import { toIdentityProvider } from "../routes/identity-provider";
+import { toIdentityProviders } from "../routes/identity-providers";
+import { OIDCAuthentication } from "./oidc-authentication";
+import { OIDCGeneralSettings } from "./oidc-general-settings";
+import { OpenIdConnectSettings } from "./open-id-connect-settings";
 
 type DiscoveryIdentity = IdentityProviderRepresentation & {
     discoveryEndpoint?: string;

@@ -13,12 +13,12 @@ import {
 import { Trash } from "@phosphor-icons/react";
 import { useTranslation } from "react-i18next";
 import type { ExpandableExecution } from "../execution-model";
-import { AddFlowDropdown } from "./AddFlowDropdown";
-import { EditFlow } from "./EditFlow";
-import { ExecutionConfigModal } from "./ExecutionConfigModal";
-import { FlowRequirementDropdown } from "./FlowRequirementDropdown";
-import { FlowTitle } from "./FlowTitle";
-import type { Flow } from "./modals/AddSubFlowModal";
+import { AddFlowDropdown } from "./add-flow-dropdown";
+import { EditFlow } from "./edit-flow";
+import { ExecutionConfigModal } from "./execution-config-modal";
+import { FlowRequirementDropdown } from "./flow-requirement-dropdown";
+import { FlowTitle } from "./flow-title";
+import type { Flow } from "./modals/add-sub-flow-modal";
 
 type FlowRowProps = {
     builtIn: boolean;

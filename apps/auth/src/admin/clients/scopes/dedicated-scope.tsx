@@ -9,9 +9,9 @@ import { HelpItem } from "../../../shared/keycloak-ui-shared";
 import { useAdminClient } from "../../admin-client";
 import { getErrorDescription, getErrorMessage } from "../../../shared/keycloak-ui-shared";
 import { toast } from "sonner";
-import { FormAccess } from "../../components/form/FormAccess";
-import { RoleMapping, Row } from "../../components/role-mapping/RoleMapping";
-import { useAccess } from "../../context/access/Access";
+import { FormAccess } from "../../components/form/form-access";
+import { RoleMapping, Row } from "../../components/role-mapping/role-mapping";
+import { useAccess } from "../../context/access/access";
 
 type DedicatedScopeProps = {
     client: ClientRepresentation;

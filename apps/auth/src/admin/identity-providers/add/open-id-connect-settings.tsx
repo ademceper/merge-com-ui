@@ -3,9 +3,9 @@ import { useFormContext } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { FormErrorText, HelpItem } from "../../../shared/keycloak-ui-shared";
 import { useAdminClient } from "../../admin-client";
-import { JsonFileUpload } from "../../components/json-file-upload/JsonFileUpload";
-import { DiscoveryEndpointField } from "../component/DiscoveryEndpointField";
-import { DiscoverySettings } from "./DiscoverySettings";
+import { JsonFileUpload } from "../../components/json-file-upload/json-file-upload";
+import { DiscoveryEndpointField } from "../component/discovery-endpoint-field";
+import { DiscoverySettings } from "./discovery-settings";
 
 type OpenIdConnectSettingsProps = {
     isOIDC: boolean;

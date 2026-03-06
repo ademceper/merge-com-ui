@@ -14,14 +14,14 @@ import { useState } from "react";
 import { Controller, useFormContext } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { useAdminClient } from "../../../admin-client";
-import { DefaultSwitchControl } from "../../../components/SwitchControl";
+import { DefaultSwitchControl } from "../../../components/switch-control";
 import {
     AddRoleButton,
     AddRoleMappingModal,
     FilterType
-} from "../../../components/role-mapping/AddRoleMappingModal";
-import { Row, ServiceRole } from "../../../components/role-mapping/RoleMapping";
-import type { RequiredIdValue } from "./ClientScope";
+} from "../../../components/role-mapping/add-role-mapping-modal";
+import { Row, ServiceRole } from "../../../components/role-mapping/role-mapping";
+import type { RequiredIdValue } from "./client-scope";
 
 export const Role = () => {
     const { adminClient } = useAdminClient();

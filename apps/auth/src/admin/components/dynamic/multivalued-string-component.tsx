@@ -1,7 +1,7 @@
 import { HelpItem } from "../../../shared/keycloak-ui-shared";
 import { Label } from "@merge-rd/ui/components/label";
 import { useTranslation } from "react-i18next";
-import { MultiLineInput } from "../multi-line-input/MultiLineInput";
+import { MultiLineInput } from "../multi-line-input/multi-line-input";
 import type { ComponentProps } from "./components";
 
 function convertDefaultValue(formValue?: any): string[] {

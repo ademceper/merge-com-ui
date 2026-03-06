@@ -1,8 +1,8 @@
 import { useTranslation } from "react-i18next";
 import { TextControl, TextAreaControl } from "../../shared/keycloak-ui-shared";
 
-import { FormAccess } from "../components/form/FormAccess";
-import { DefaultSwitchControl } from "../components/SwitchControl";
+import { FormAccess } from "../components/form/form-access";
+import { DefaultSwitchControl } from "../components/switch-control";
 
 type ClientDescriptionProps = {
     protocol?: string;

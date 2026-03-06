@@ -7,14 +7,14 @@ import { ScrollForm } from "../../shared/keycloak-ui-shared";
 import { toast } from "sonner";
 import { convertAttributeNameToForm, toUpperCase } from "../util";
 import useIsFeatureEnabled, { Feature } from "../utils/useIsFeatureEnabled";
-import type { FormFields, SaveOptions } from "./ClientDetails";
-import { AdvancedSettings } from "./advanced/AdvancedSettings";
-import { AuthenticationOverrides } from "./advanced/AuthenticationOverrides";
-import { ClusteringPanel } from "./advanced/ClusteringPanel";
-import { FineGrainOpenIdConnect } from "./advanced/FineGrainOpenIdConnect";
-import { FineGrainSamlEndpointConfig } from "./advanced/FineGrainSamlEndpointConfig";
-import { OpenIdConnectCompatibilityModes } from "./advanced/OpenIdConnectCompatibilityModes";
-import { OpenIdVerifiableCredentials } from "./advanced/OpenIdVerifiableCredentials";
+import type { FormFields, SaveOptions } from "./client-details";
+import { AdvancedSettings } from "./advanced/advanced-settings";
+import { AuthenticationOverrides } from "./advanced/authentication-overrides";
+import { ClusteringPanel } from "./advanced/clustering-panel";
+import { FineGrainOpenIdConnect } from "./advanced/fine-grain-open-id-connect";
+import { FineGrainSamlEndpointConfig } from "./advanced/fine-grain-saml-endpoint-config";
+import { OpenIdConnectCompatibilityModes } from "./advanced/open-id-connect-compatibility-modes";
+import { OpenIdVerifiableCredentials } from "./advanced/open-id-verifiable-credentials";
 import { PROTOCOL_OIDC, PROTOCOL_OID4VC } from "./constants";
 
 export const parseResult = (

@@ -5,7 +5,7 @@ import { Badge } from "@merge-rd/ui/components/badge";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useAdminClient } from "../admin-client";
-import { CheckboxFilterComponent } from "../components/dynamic/CheckboxFilterComponent";
+import { CheckboxFilterComponent } from "../components/dynamic/checkbox-filter-component";
 import { getErrorDescription, getErrorMessage, useFetch } from "../../shared/keycloak-ui-shared";
 import { toast } from "sonner";
 import { useParams } from "../utils/useParams";
@@ -19,9 +19,9 @@ import {
     EmptyTitle
 } from "@merge-rd/ui/components/empty";
 import useToggle from "../utils/useToggle";
-import { InviteMemberModal } from "./InviteMemberModal";
-import { EditOrganizationParams } from "./routes/EditOrganization";
-import { SearchInputComponent } from "../components/dynamic/SearchInputComponent";
+import { InviteMemberModal } from "./invite-member-modal";
+import { EditOrganizationParams } from "./routes/edit-organization";
+import { SearchInputComponent } from "../components/dynamic/search-input-component";
 import {
     AlertDialog,
     AlertDialogAction,

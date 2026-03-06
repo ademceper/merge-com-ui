@@ -1,0 +1,231 @@
+"use client"
+
+import * as React from "react"
+import { cn } from "@merge-rd/ui/lib/utils"
+import { Button } from "@merge-rd/ui/components/button"
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@merge-rd/ui/components/popover"
+import { FilterBadge } from "./components/filter-badge"
+import { MultiFilterContent } from "./components/multi-filter-content"
+import { SingleFilterContent } from "./components/single-filter-content"
+import { TextFilterContent } from "./components/text-filter-content"
+import { STYLES } from "./styles"
+import { FacetedFilterProps } from "./types"
+import { PlusCircle } from "@phosphor-icons/react"
+
+export function FacetedFormFilter({
+  title,
+  type = "multi",
+  size = "default",
+  options = [],
+  selected = [],
+  onSelect,
+  value = "",
+  onChange,
+  placeholder,
+  open,
+  onOpenChange,
+  icon: Icon,
+  hideTitle = false,
+  hidePlusIcon = false,
+  hideSearch = false,
+  hideClear = false,
+  className,
+  trailingNode,
+  disabled,
+  searchQuery: controlledSearchQuery,
+  onSearchQueryChange,
+  isLoading = false,
+}: FacetedFilterProps) {
+  const [internalSearchQuery, setInternalSearchQuery] = React.useState("")
+  const inputRef = React.useRef<HTMLInputElement | null>(null)
+
+  const isSearchControlled =
+    controlledSearchQuery !== undefined && onSearchQueryChange !== undefined
+  const searchQuery = isSearchControlled
+    ? controlledSearchQuery
+    : internalSearchQuery
+  const setSearchQuery = isSearchControlled
+    ? onSearchQueryChange
+    : setInternalSearchQuery
+
+  const selectedValues = React.useMemo(() => new Set(selected), [selected])
+  const currentValue = React.useMemo(() => value, [value])
+  const sizes = STYLES.size[size]
+
+  const filteredOptions = React.useMemo(() => {
+    if (!searchQuery) return options
+    return options.filter((option) =>
+      option.label.toLowerCase().includes(searchQuery.toLowerCase())
+    )
+  }, [options, searchQuery])
+
+  React.useEffect(() => {
+    if (open && inputRef.current) {
+      inputRef.current.focus()
+    }
+  }, [open])
+
+  const handleSelect = (selectedValue: string) => {
+    if (type === "single") {
+      onSelect?.([selectedValue])
+      return
+    }
+
+    const newSelectedValues = new Set(selectedValues)
+
+    if (newSelectedValues.has(selectedValue)) {
+      newSelectedValues.delete(selectedValue)
+    } else {
+      newSelectedValues.add(selectedValue)
+    }
+
+    onSelect?.(Array.from(newSelectedValues))
+  }
+
+  const handleClear = () => {
+    if (type === "text") {
+      onChange?.("")
+    } else {
+      onSelect?.([])
+    }
+
+    setSearchQuery("")
+  }
+
+  const renderTriggerContent = () => {
+    if (type === "text" && currentValue) {
+      return <FilterBadge content={currentValue} size={size} />
+    }
+
+    if (selectedValues.size === 0) return null
+
+    const selectedCount = selectedValues.size
+    const selectedItems = options.filter((option) =>
+      selectedValues.has(option.value)
+    )
+
+    return (
+      <>
+        <div className="lg:hidden">
+          <FilterBadge content={selectedCount} size={size} />
+        </div>
+        <div className="hidden space-x-1 lg:flex">
+          {selectedCount > 2 && type === "multi" ? (
+            <FilterBadge content={`${selectedCount} selected`} size={size} />
+          ) : (
+            selectedItems.map((option) => (
+              <FilterBadge
+                key={option.value}
+                content={option.label}
+                size={size}
+              />
+            ))
+          )}
+        </div>
+      </>
+    )
+  }
+
+  const isEmpty =
+    type === "text" ? !currentValue : selectedValues.size === 0
+
+  const shouldShowClear = React.useMemo(() => {
+    if (hideClear) return false
+    if (type === "text") return Boolean(currentValue)
+    if (type === "multi" || type === "single") return !isEmpty
+
+    return false
+  }, [hideClear, type, currentValue, isEmpty])
+
+  const renderContent = () => {
+    const commonProps = {
+      inputRef,
+      title,
+      size,
+      onClear: handleClear,
+      hideSearch,
+      hideClear: !shouldShowClear,
+    }
+
+    if (type === "text") {
+      return (
+        <TextFilterContent
+          {...commonProps}
+          value={currentValue}
+          onChange={(e) => onChange?.(e.target.value)}
+          placeholder={placeholder}
+        />
+      )
+    }
+
+    const filterProps = {
+      ...commonProps,
+      options: filteredOptions,
+      selectedValues,
+      onSelect: handleSelect,
+      searchQuery,
+      onSearchChange: (value: string) => setSearchQuery(value),
+      isLoading,
+    }
+
+    return type === "single" ? (
+      <SingleFilterContent {...filterProps} />
+    ) : (
+      <MultiFilterContent {...filterProps} />
+    )
+  }
+
+  return (
+    <Popover open={open} onOpenChange={onOpenChange}>
+      <PopoverTrigger asChild>
+        <Button
+          variant="outline"
+          size="sm"
+          className={cn(
+            "h-10 border-neutral-300 bg-white px-3 text-neutral-600 dark:border-neutral-700 dark:bg-neutral-900 dark:text-neutral-300",
+            "hover:border-neutral-300 hover:bg-neutral-50/30 hover:text-neutral-700 dark:hover:border-neutral-600 dark:hover:bg-neutral-800/50 dark:hover:text-neutral-200",
+            "rounded-lg border-neutral-200 ring-0 ring-offset-0 transition-colors duration-200 ease-out dark:border-neutral-700",
+            sizes.trigger,
+            isEmpty &&
+              "border border-dashed px-1.5 hover:border-neutral-300 dark:hover:border-neutral-600",
+            !isEmpty && "border bg-white dark:bg-neutral-900",
+            className
+          )}
+          disabled={disabled}
+        >
+          <div className="flex items-center gap-1">
+            {Icon && (
+              <Icon className="h-4 w-4 text-neutral-600 dark:text-neutral-400" />
+            )}
+            {isEmpty && !hidePlusIcon && (
+              <PlusCircle className="h-4 w-4 text-neutral-300 dark:text-neutral-600" />
+            )}
+            {(isEmpty || !hideTitle) && (
+              <span
+                className={cn(
+                  "text-xs font-normal",
+                  isEmpty
+                    ? "text-neutral-400 dark:text-neutral-500"
+                    : "text-neutral-600 dark:text-neutral-300"
+                )}
+              >
+                {title}
+              </span>
+            )}
+            {!isEmpty && renderTriggerContent()}
+            {trailingNode}
+          </div>
+        </Button>
+      </PopoverTrigger>
+      <PopoverContent className="min-w-[245px] p-0" align="start">
+        {renderContent()}
+      </PopoverContent>
+    </Popover>
+  )
+}
+
+export * from "./types"

@@ -22,13 +22,13 @@ import { useMemo, useState } from "react";
 import { Trans, useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 import { useAdminClient } from "../admin-client";
-import { useConfirmDialog } from "../components/confirm-dialog/ConfirmDialog";
-import { GroupPickerDialog } from "../components/group/GroupPickerDialog";
+import { useConfirmDialog } from "../components/confirm-dialog/confirm-dialog";
+import { GroupPickerDialog } from "../components/group/group-picker-dialog";
 import { KeycloakSpinner } from "../../shared/keycloak-ui-shared";
-import { useRealm } from "../context/realm-context/RealmContext";
-import { toUserFederation } from "../user-federation/routes/UserFederation";
+import { useRealm } from "../context/realm-context/realm-context";
+import { toUserFederation } from "../user-federation/routes/user-federation";
 import useToggle from "../utils/useToggle";
-import { useAccess } from "../context/access/Access";
+import { useAccess } from "../context/access/access";
 
 export const DefaultGroupsTab = () => {
     const { adminClient } = useAdminClient();

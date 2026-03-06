@@ -9,7 +9,7 @@ import {
     TableRow
 } from "@/admin/components/data-table";
 import { useTranslation } from "react-i18next";
-import { AuthorizationEvaluateResourcePolicies } from "./AuthorizationEvaluateResourcePolicies";
+import { AuthorizationEvaluateResourcePolicies } from "./authorization-evaluate-resource-policies";
 import type EvaluationResultRepresentation from "@keycloak/keycloak-admin-client/lib/defs/evaluationResultRepresentation";
 import type PolicyResultRepresentation from "@keycloak/keycloak-admin-client/lib/defs/policyResultRepresentation";
 

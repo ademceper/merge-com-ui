@@ -3,15 +3,15 @@ import { Button } from "@merge-rd/ui/components/button";
 import { Label } from "@merge-rd/ui/components/label";
 import { Controller, useFormContext } from "react-hook-form";
 import { useTranslation } from "react-i18next";
-import { DefaultSwitchControl } from "../../components/SwitchControl";
-import { FormAccess } from "../../components/form/FormAccess";
-import { KeyValueInput } from "../../components/key-value-form/KeyValueInput";
-import { MultiLineInput } from "../../components/multi-line-input/MultiLineInput";
-import { TimeSelector } from "../../components/time-selector/TimeSelector";
-import { useRealm } from "../../context/realm-context/RealmContext";
+import { DefaultSwitchControl } from "../../components/switch-control";
+import { FormAccess } from "../../components/form/form-access";
+import { KeyValueInput } from "../../components/key-value-form/key-value-input";
+import { MultiLineInput } from "../../components/multi-line-input/multi-line-input";
+import { TimeSelector } from "../../components/time-selector/time-selector";
+import { useRealm } from "../../context/realm-context/realm-context";
 import { convertAttributeNameToForm } from "../../util";
-import { FormFields } from "../ClientDetails";
-import { TokenLifespan } from "./TokenLifespan";
+import { FormFields } from "../client-details";
+import { TokenLifespan } from "./token-lifespan";
 
 type AdvancedSettingsProps = {
     save: () => void;

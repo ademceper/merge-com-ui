@@ -14,7 +14,7 @@ import {
   DropdownMenuTrigger,
 } from '@merge-rd/ui/components/dropdown-menu';
 import { Skeleton } from '@merge-rd/ui/components/skeleton';
-import { TableCell, TableRow } from '@/components/primitives/table';
+import { TableCell, TableRow } from '@merge-rd/ui/components/table';
 import { TimeDisplayHoverCard } from '@/components/time-display-hover-card';
 import { useEnvironment } from '@/context/environment/hooks';
 import { useDeleteContext } from '@/hooks/use-delete-context';

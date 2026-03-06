@@ -14,7 +14,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@merge-rd/ui/components/dropdown-menu';
-import { FacetedFormFilter } from '@/components/primitives/form/faceted-filter/facated-form-filter';
+import { FacetedFormFilter } from '@merge-rd/ui/components/faceted-filter/faceted-form-filter';
 import { ScrollArea, ScrollBar } from '@merge-rd/ui/components/scroll-area';
 import { Skeleton } from '@merge-rd/ui/components/skeleton';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/primitives/tooltip';

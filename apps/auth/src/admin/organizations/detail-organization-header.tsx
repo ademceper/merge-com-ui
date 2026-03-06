@@ -1,5 +1,5 @@
 import { DropdownMenuItem } from "@merge-rd/ui/components/dropdown-menu";
-import { ViewHeader } from "../components/view-header/ViewHeader";
+import { ViewHeader } from "../components/view-header/view-header";
 import { useTranslation } from "react-i18next";
 import {
     AlertDialog,
@@ -11,15 +11,15 @@ import {
     AlertDialogHeader,
     AlertDialogTitle
 } from "@merge-rd/ui/components/alert-dialog";
-import { useConfirmDialog } from "../components/confirm-dialog/ConfirmDialog";
+import { useConfirmDialog } from "../components/confirm-dialog/confirm-dialog";
 import { useState } from "react";
 import { useAdminClient } from "../admin-client";
 import { useNavigate } from "react-router-dom";
 import { getErrorDescription, getErrorMessage } from "../../shared/keycloak-ui-shared";
 import { toast } from "sonner";
 import { Controller, useFormContext, useWatch } from "react-hook-form";
-import { toOrganizations } from "./routes/Organizations";
-import { useRealm } from "../context/realm-context/RealmContext";
+import { toOrganizations } from "./routes/organizations";
+import { useRealm } from "../context/realm-context/realm-context";
 
 type DetailOrganizationHeaderProps = {
     save: () => void;

@@ -28,15 +28,15 @@ import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 import { useAdminClient } from "../../admin-client";
 import { KeycloakSpinner } from "../../../shared/keycloak-ui-shared";
-import { useAccess } from "../../context/access/Access";
+import { useAccess } from "../../context/access/access";
 import { fetchAdminUI } from "../../context/auth/admin-ui-endpoint";
-import { useRealm } from "../../context/realm-context/RealmContext";
+import { useRealm } from "../../context/realm-context/realm-context";
 import useToggle from "../../utils/useToggle";
-import { GroupsModal } from "../GroupsModal";
-import { useSubGroups } from "../SubGroupsContext";
-import { toGroups } from "../routes/Groups";
-import { DeleteGroup } from "./DeleteGroup";
-import { MoveDialog } from "../MoveDialog";
+import { GroupsModal } from "../groups-modal";
+import { useSubGroups } from "../sub-groups-context";
+import { toGroups } from "../routes/groups";
+import { DeleteGroup } from "./delete-group";
+import { MoveDialog } from "../move-dialog";
 
 type ExtendedTreeViewDataItem = TreeViewDataItem & {
     access?: Record<string, boolean>;

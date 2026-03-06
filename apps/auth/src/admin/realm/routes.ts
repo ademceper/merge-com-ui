@@ -1,5 +1,5 @@
 import type { AppRouteObject } from "../routes";
-import { RealmRoute } from "./RealmRoutes";
+import { RealmRoute } from "./realm-routes";
 
 const routes: AppRouteObject[] = [RealmRoute];
 

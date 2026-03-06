@@ -5,7 +5,7 @@ import type { AppRouteObject } from "../../routes";
 
 export type IdentityProviderKubernetesParams = { realm: string };
 
-const AddKubernetesConnect = lazy(() => import("../add/AddKubernetesConnect"));
+const AddKubernetesConnect = lazy(() => import("../add/add-kubernetes-connect"));
 
 export const IdentityProviderKubernetesRoute: AppRouteObject = {
     path: "/:realm/identity-providers/kubernetes/add",

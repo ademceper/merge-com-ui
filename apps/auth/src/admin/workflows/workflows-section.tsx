@@ -8,8 +8,8 @@ import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Link, useNavigate } from "react-router-dom";
 import { useAdminClient } from "../admin-client";
-import { ViewHeader } from "../components/view-header/ViewHeader";
-import { useRealm } from "../context/realm-context/RealmContext";
+import { ViewHeader } from "../components/view-header/view-header";
+import { useRealm } from "../context/realm-context/realm-context";
 import helpUrls from "../help-urls";
 import {
     AlertDialog,
@@ -33,7 +33,7 @@ import {
     EmptyHeader,
     EmptyTitle
 } from "@merge-rd/ui/components/empty";
-import { toWorkflowDetail } from "./routes/WorkflowDetail";
+import { toWorkflowDetail } from "./routes/workflow-detail";
 
 export default function WorkflowsSection() {
     const { adminClient } = useAdminClient();

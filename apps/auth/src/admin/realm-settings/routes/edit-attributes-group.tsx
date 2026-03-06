@@ -9,7 +9,7 @@ export type EditAttributesGroupParams = {
 };
 
 const AttributesGroupDetails = lazy(
-    () => import("../user-profile/AttributesGroupDetails")
+    () => import("../user-profile/attributes-group-details")
 );
 
 export const EditAttributesGroupRoute: AppRouteObject = {

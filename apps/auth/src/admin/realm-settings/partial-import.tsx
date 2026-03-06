@@ -33,9 +33,9 @@ import { useTranslation } from "react-i18next";
 import { useAdminClient } from "../admin-client";
 import { getErrorDescription, getErrorMessage } from "../../shared/keycloak-ui-shared";
 import { toast } from "sonner";
-import { JsonFileUpload } from "../components/json-file-upload/JsonFileUpload";
+import { JsonFileUpload } from "../components/json-file-upload/json-file-upload";
 import { DataTable, type ColumnDef } from "@/admin/components/data-table";
-import { useRealm } from "../context/realm-context/RealmContext";
+import { useRealm } from "../context/realm-context/realm-context";
 
 export type PartialImportProps = {
     open: boolean;

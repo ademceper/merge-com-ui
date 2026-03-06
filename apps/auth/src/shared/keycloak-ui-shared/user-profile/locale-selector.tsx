@@ -7,7 +7,7 @@ import {
     SelectTrigger,
     SelectValue
 } from "@merge-rd/ui/components/select";
-import { UserProfileFieldProps } from "./UserProfileFields";
+import { UserProfileFieldProps } from "./user-profile-fields";
 
 const localeToDisplayName = (locale: string) => {
     try {

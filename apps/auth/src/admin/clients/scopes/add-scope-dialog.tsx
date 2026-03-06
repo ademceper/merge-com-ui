@@ -31,7 +31,7 @@ import { useTranslation } from "react-i18next";
 import {
     ClientScopeType,
     clientScopeTypesDropdown
-} from "../../components/client-scope/ClientScopeTypes";
+} from "../../components/client-scope/client-scope-types";
 import useToggle from "../../utils/useToggle";
 import { getProtocolName } from "../utils";
 import useIsFeatureEnabled, { Feature } from "../../utils/useIsFeatureEnabled";

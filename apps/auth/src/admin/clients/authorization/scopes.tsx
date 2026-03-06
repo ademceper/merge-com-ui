@@ -26,15 +26,15 @@ import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 import { useAdminClient } from "../../admin-client";
 import { KeycloakSpinner } from "../../../shared/keycloak-ui-shared";
-import { useRealm } from "../../context/realm-context/RealmContext";
+import { useRealm } from "../../context/realm-context/realm-context";
 import useToggle from "../../utils/useToggle";
-import { toNewPermission } from "../routes/NewPermission";
-import { toNewScope } from "../routes/NewScope";
-import { toPermissionDetails } from "../routes/PermissionDetails";
-import { toResourceDetails } from "../routes/Resource";
-import { toScopeDetails } from "../routes/Scope";
-import { DeleteScopeDialog } from "./DeleteScopeDialog";
-import { DetailDescriptionLink } from "./DetailDescription";
+import { toNewPermission } from "../routes/new-permission";
+import { toNewScope } from "../routes/new-scope";
+import { toPermissionDetails } from "../routes/permission-details";
+import { toResourceDetails } from "../routes/resource";
+import { toScopeDetails } from "../routes/scope";
+import { DeleteScopeDialog } from "./delete-scope-dialog";
+import { DetailDescriptionLink } from "./detail-description";
 
 type ScopesProps = {
     clientId: string;

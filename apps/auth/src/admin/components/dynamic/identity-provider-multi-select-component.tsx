@@ -1,5 +1,5 @@
 import type { ComponentProps } from "./components";
-import { IdentityProviderSelect } from "../identity-provider/IdentityProviderSelect";
+import { IdentityProviderSelect } from "../identity-provider/identity-provider-select";
 
 export const IdentityProviderMultiSelectComponent = (props: ComponentProps) => (
     <IdentityProviderSelect

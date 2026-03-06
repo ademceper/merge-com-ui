@@ -1,8 +1,8 @@
 import { AccessType } from "@keycloak/keycloak-admin-client/lib/defs/whoAmIRepresentation";
 import { useMatches } from "react-router-dom";
 
-import { ForbiddenSection } from "../ForbiddenSection";
-import { useAccess } from "../context/access/Access";
+import { ForbiddenSection } from "../forbidden-section";
+import { useAccess } from "../context/access/access";
 
 function hasProp<K extends PropertyKey>(
     data: object,

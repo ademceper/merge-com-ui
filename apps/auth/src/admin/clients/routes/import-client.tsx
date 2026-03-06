@@ -5,7 +5,7 @@ import type { AppRouteObject } from "../../routes";
 
 export type ImportClientParams = { realm: string };
 
-const ImportForm = lazy(() => import("../import/ImportForm"));
+const ImportForm = lazy(() => import("../import/import-form"));
 
 export const ImportClientRoute: AppRouteObject = {
     path: "/:realm/clients/import-client",

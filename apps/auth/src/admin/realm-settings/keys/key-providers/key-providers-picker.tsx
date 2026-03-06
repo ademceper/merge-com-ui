@@ -5,7 +5,7 @@ import {
     DialogTitle
 } from "@merge-rd/ui/components/dialog";
 import { useTranslation } from "react-i18next";
-import { useServerInfo } from "../../../context/server-info/ServerInfoProvider";
+import { useServerInfo } from "../../../context/server-info/server-info-provider";
 import { KEY_PROVIDER_TYPE } from "../../../util";
 
 type KeyProvidersPickerProps = {

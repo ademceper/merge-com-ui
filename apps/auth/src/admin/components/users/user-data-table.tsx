@@ -23,14 +23,14 @@ import { Link, useNavigate } from "react-router-dom";
 import { useAdminClient } from "../../admin-client";
 import { fetchRealmInfo } from "../../context/auth/admin-ui-endpoint";
 import { UiRealmInfo } from "../../context/auth/uiRealmInfo";
-import { useRealm } from "../../context/realm-context/RealmContext";
-import { SearchType } from "../../user/details/SearchFilter";
-import { toAddUser } from "../../user/routes/AddUser";
-import { toUser } from "../../user/routes/User";
+import { useRealm } from "../../context/realm-context/realm-context";
+import { SearchType } from "../../user/details/search-filter";
+import { toAddUser } from "../../user/routes/add-user";
+import { toUser } from "../../user/routes/user";
 import { emptyFormatter } from "../../util";
-import { useConfirmDialog } from "../confirm-dialog/ConfirmDialog";
+import { useConfirmDialog } from "../confirm-dialog/confirm-dialog";
 import { BruteUser, findUsers } from "../role-mapping/resource";
-import { UserDataTableToolbarItems } from "./UserDataTableToolbarItems";
+import { UserDataTableToolbarItems } from "./user-data-table-toolbar-items";
 import { NetworkError } from "@keycloak/keycloak-admin-client";
 
 export type UserFilter = {

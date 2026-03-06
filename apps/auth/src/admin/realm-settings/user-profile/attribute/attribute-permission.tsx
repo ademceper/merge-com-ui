@@ -3,7 +3,7 @@ import { Label } from "@merge-rd/ui/components/label";
 import { Controller, useFormContext } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 
-import { FormAccess } from "../../../components/form/FormAccess";
+import { FormAccess } from "../../../components/form/form-access";
 import { HelpItem } from "../../../../shared/keycloak-ui-shared";
 
 const Permissions = ({ name }: { name: string }) => {

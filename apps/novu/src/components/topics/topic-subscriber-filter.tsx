@@ -3,7 +3,7 @@ import { useQueryClient } from '@tanstack/react-query';
 import { useEffect, useRef, useState } from 'react';
 import { ContextFilter } from '@/components/contexts/context-filter';
 import { Button } from '@merge-rd/ui/components/button';
-import { FacetedFormFilter } from '@/components/primitives/form/faceted-filter/facated-form-filter';
+import { FacetedFormFilter } from '@merge-rd/ui/components/faceted-filter/faceted-form-filter';
 import { useEnvironment } from '@/context/environment/hooks';
 import { useFeatureFlag } from '@/hooks/use-feature-flag';
 import { cn } from '@merge-rd/ui/lib/utils';

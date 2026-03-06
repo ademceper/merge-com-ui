@@ -10,7 +10,7 @@ import {
 import { get } from "lodash-es";
 import { Controller, useFormContext } from "react-hook-form";
 import { getRuleValue } from "../utils/getRuleValue";
-import { FormLabel } from "./FormLabel";
+import { FormLabel } from "./form-label";
 
 export type SelectOption = { key: string; value: string } | string;
 

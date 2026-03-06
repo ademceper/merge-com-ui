@@ -5,7 +5,7 @@ import type { AppRouteObject } from "../../routes";
 
 export type IdentityProviderSamlParams = { realm: string };
 
-const AddSamlConnect = lazy(() => import("../add/AddSamlConnect"));
+const AddSamlConnect = lazy(() => import("../add/add-saml-connect"));
 
 export const IdentityProviderSamlRoute: AppRouteObject = {
     path: "/:realm/identity-providers/saml/add",

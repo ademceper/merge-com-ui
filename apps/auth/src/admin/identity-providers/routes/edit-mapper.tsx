@@ -10,7 +10,7 @@ export type IdentityProviderEditMapperParams = {
     id: string;
 };
 
-const AddMapper = lazy(() => import("../add/AddMapper"));
+const AddMapper = lazy(() => import("../add/add-mapper"));
 
 export const IdentityProviderEditMapperRoute: AppRouteObject = {
     path: "/:realm/identity-providers/:providerId/:alias/mappers/:id",

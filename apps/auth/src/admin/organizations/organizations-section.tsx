@@ -20,26 +20,38 @@ import {
     DrawerTitle
 } from "@merge-rd/ui/components/drawer";
 import {
-    DataTable,
-    DataTableRowActions,
-    type ColumnDef
-} from "@/admin/components/data-table";
-import { useEffect, useState } from "react";
+    Table,
+    TableBody,
+    TableCell,
+    TableFooter,
+    TableHead,
+    TableHeader,
+    TableRow,
+    TablePaginationFooter,
+    type TableSortDirection
+} from "@merge-rd/ui/components/table";
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuSeparator,
+    DropdownMenuTrigger
+} from "@merge-rd/ui/components/dropdown-menu";
+import { FacetedFormFilter } from "@merge-rd/ui/components/faceted-filter/faceted-form-filter";
+import { useEffect, useMemo, useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
-import { PencilSimple, Plus, Trash } from "@phosphor-icons/react";
+import { DotsThree, PencilSimple, Plus, Trash } from "@phosphor-icons/react";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 import { useAdminClient } from "../admin-client";
-import { FormAccess } from "../components/form/FormAccess";
-import { ViewHeader } from "../components/view-header/ViewHeader";
-import helpUrls from "../help-urls";
-import { useRealm } from "../context/realm-context/RealmContext";
+import { FormAccess } from "../components/form/form-access";
+import { useRealm } from "../context/realm-context/realm-context";
 import {
     OrganizationForm,
     OrganizationFormType,
     convertToOrg
-} from "./OrganizationForm";
-import { toEditOrganization } from "./routes/EditOrganization";
+} from "./organization-form";
+import { toEditOrganization } from "./routes/edit-organization";
 
 export default function OrganizationSection() {
     const { adminClient } = useAdminClient();
@@ -53,7 +65,24 @@ export default function OrganizationSection() {
     const [organizations, setOrganizations] = useState<OrganizationRepresentation[]>([]);
     const [selectedOrg, setSelectedOrg] = useState<OrganizationRepresentation>();
     const [createDialogOpen, setCreateDialogOpen] = useState(false);
+    const [search, setSearch] = useState("");
+    const [pageSize, setPageSize] = useState(10);
+    const [currentPage, setCurrentPage] = useState(0);
+    const [sortBy, setSortBy] = useState<"name" | "description" | null>(null);
+    const [sortDirection, setSortDirection] = useState<TableSortDirection>(false);
     const createForm = useForm<OrganizationFormType>({ mode: "onChange" });
+
+    const toggleSort = (column: "name" | "description") => {
+        if (sortBy === column) {
+            setSortDirection((prev) =>
+                prev === "asc" ? "desc" : prev === "desc" ? false : "asc"
+            );
+            if (sortDirection === "desc") setSortBy(null);
+        } else {
+            setSortBy(column);
+            setSortDirection("asc");
+        }
+    };
 
     useEffect(() => {
         if (createDialogOpen) {
@@ -66,6 +95,36 @@ export default function OrganizationSection() {
         (orgs) => setOrganizations(orgs),
         [key]
     );
+
+    const filteredOrganizations = useMemo(() => {
+        let result = organizations;
+        if (search) {
+            const lower = search.toLowerCase();
+            result = result.filter((org) =>
+                org.name?.toLowerCase().includes(lower)
+            );
+        }
+        if (sortBy && sortDirection) {
+            const dir = sortDirection === "asc" ? 1 : -1;
+            result = [...result].sort((a, b) => {
+                const aVal = (a[sortBy] ?? "").toLowerCase();
+                const bVal = (b[sortBy] ?? "").toLowerCase();
+                return aVal < bVal ? -dir : aVal > bVal ? dir : 0;
+            });
+        }
+        return result;
+    }, [organizations, search, sortBy, sortDirection]);
+
+    const totalCount = filteredOrganizations.length;
+    const totalPages = Math.ceil(totalCount / pageSize);
+    const paginatedOrganizations = useMemo(() => {
+        const start = currentPage * pageSize;
+        return filteredOrganizations.slice(start, start + pageSize);
+    }, [filteredOrganizations, currentPage, pageSize]);
+
+    useEffect(() => {
+        setCurrentPage(0);
+    }, [search, pageSize]);
 
     const onDeleteConfirm = async () => {
         if (!selectedOrg?.id) return;
@@ -92,148 +151,181 @@ export default function OrganizationSection() {
         }
     };
 
-    const columns: ColumnDef<OrganizationRepresentation>[] = [
-        {
-            accessorKey: "name",
-            header: t("name"),
-            cell: ({ row }) => row.original.name
-        },
-        {
-            accessorKey: "domains",
-            header: t("domains"),
-            cell: ({ row }) => {
-                const domains = row.original.domains;
-                if (!domains || domains.length === 0) return "-";
-                return domains.map(d => d.name).join(", ");
-            }
-        },
-        {
-            accessorKey: "description",
-            header: t("description"),
-            cell: ({ row }) => row.original.description || "-"
-        },
-        {
-            id: "actions",
-            header: "",
-            size: 50,
-            enableHiding: false,
-            cell: ({ row }) => (
-                <DataTableRowActions row={row}>
-                    <button
-                        type="button"
-                        className="flex w-full items-center gap-2 rounded-md px-1.5 py-1 text-left text-sm hover:bg-accent hover:text-accent-foreground"
-                        onClick={() => navigate(toEditOrganization({ realm, id: row.original.id!, tab: "settings" }))}
-                    >
-                        <PencilSimple className="size-4 shrink-0" />
-                        {t("edit")}
-                    </button>
-                    <div className="my-1 h-px bg-border" />
-                    <button
-                        type="button"
-                        className="flex w-full items-center gap-2 rounded-md px-1.5 py-1 text-left text-sm text-destructive hover:bg-destructive/10 hover:text-destructive"
-                        onClick={() => setSelectedOrg(row.original)}
-                    >
-                        <Trash className="size-4 shrink-0" />
-                        {t("delete")}
-                    </button>
-                </DataTableRowActions>
-            )
-        }
-    ];
-
     return (
         <>
-            <ViewHeader
-                titleKey="organizationsList"
-                subKey="organizationsExplain"
-                helpUrl={helpUrls.organizationsUrl}
-                divider
-            />
-            <div className="pt-4 pb-6 px-0">
-                <AlertDialog open={!!selectedOrg} onOpenChange={(open) => !open && setSelectedOrg(undefined)}>
-                    <AlertDialogContent>
-                        <AlertDialogHeader>
-                            <AlertDialogTitle>{t("organizationDelete")}</AlertDialogTitle>
-                            <AlertDialogDescription>{t("organizationDeleteConfirm")}</AlertDialogDescription>
-                        </AlertDialogHeader>
-                        <AlertDialogFooter>
-                            <AlertDialogCancel>{t("cancel")}</AlertDialogCancel>
-                            <AlertDialogAction
-                                variant="destructive"
-                                data-testid="confirm"
-                                onClick={onDeleteConfirm}
-                            >
-                                {t("delete")}
-                            </AlertDialogAction>
-                        </AlertDialogFooter>
-                    </AlertDialogContent>
-                </AlertDialog>
-
-                <Drawer open={createDialogOpen} onOpenChange={setCreateDialogOpen}>
-                    <DrawerContent>
-                        <FormProvider {...createForm}>
-                            <DrawerHeader>
-                                <DrawerTitle>{t("createOrganization")}</DrawerTitle>
-                            </DrawerHeader>
-                            <div className="flex-1 overflow-y-auto px-4">
-                                <FormAccess
-                                    id="create-org-form"
-                                    role="anyone"
-                                    onSubmit={createForm.handleSubmit(onCreateSave)}
-                                    isHorizontal
-                                >
-                                    <OrganizationForm />
-                                </FormAccess>
-                            </div>
-                            <DrawerFooter>
-                                <Button
-                                    type="submit"
-                                    form="create-org-form"
-                                    data-testid="save"
-                                    disabled={
-                                        !createForm.formState.isValid ||
-                                        !createForm.formState.isDirty ||
-                                        createForm.formState.isLoading ||
-                                        createForm.formState.isValidating ||
-                                        createForm.formState.isSubmitting
-                                    }
-                                >
-                                    {t("save")}
-                                </Button>
-                                <Button
-                                    type="button"
-                                    variant="outline"
-                                    onClick={() => setCreateDialogOpen(false)}
-                                >
-                                    {t("cancel")}
-                                </Button>
-                            </DrawerFooter>
-                        </FormProvider>
-                    </DrawerContent>
-                </Drawer>
-
-                <DataTable
-                    key={key}
-                    columns={columns}
-                    data={organizations}
-                    searchColumnId="name"
-                    searchPlaceholder={t("searchOrganization")}
-                    emptyMessage={t("emptyOrganizations")}
-                    onRowClick={(row) => navigate(toEditOrganization({ realm, id: row.original.id!, tab: "settings" }))}
-                    toolbar={
-                        <Button
-                            type="button"
-                            data-testid="addOrganization"
-                            variant="default"
-                            className="flex h-9 w-9 shrink-0 items-center justify-center p-0 sm:h-9 sm:w-auto sm:gap-2 sm:px-4 sm:py-2"
-                            onClick={() => setCreateDialogOpen(true)}
-                            aria-label={t("createOrganization")}
+            <AlertDialog open={!!selectedOrg} onOpenChange={(open) => !open && setSelectedOrg(undefined)}>
+                <AlertDialogContent>
+                    <AlertDialogHeader>
+                        <AlertDialogTitle>{t("organizationDelete")}</AlertDialogTitle>
+                        <AlertDialogDescription>{t("organizationDeleteConfirm")}</AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter>
+                        <AlertDialogCancel>{t("cancel")}</AlertDialogCancel>
+                        <AlertDialogAction
+                            variant="destructive"
+                            data-testid="confirm"
+                            onClick={onDeleteConfirm}
                         >
-                            <Plus size={20} className="shrink-0 sm:hidden" />
-                            <span className="hidden sm:inline">{t("createOrganization")}</span>
-                        </Button>
-                    }
-                />
+                            {t("delete")}
+                        </AlertDialogAction>
+                    </AlertDialogFooter>
+                </AlertDialogContent>
+            </AlertDialog>
+
+            <Drawer open={createDialogOpen} onOpenChange={setCreateDialogOpen}>
+                <DrawerContent>
+                    <FormProvider {...createForm}>
+                        <DrawerHeader>
+                            <DrawerTitle>{t("createOrganization")}</DrawerTitle>
+                        </DrawerHeader>
+                        <div className="flex-1 overflow-y-auto px-4">
+                            <FormAccess
+                                id="create-org-form"
+                                role="anyone"
+                                onSubmit={createForm.handleSubmit(onCreateSave)}
+                                isHorizontal
+                            >
+                                <OrganizationForm />
+                            </FormAccess>
+                        </div>
+                        <DrawerFooter>
+                            <Button
+                                type="submit"
+                                form="create-org-form"
+                                data-testid="save"
+                                disabled={
+                                    !createForm.formState.isValid ||
+                                    !createForm.formState.isDirty ||
+                                    createForm.formState.isLoading ||
+                                    createForm.formState.isValidating ||
+                                    createForm.formState.isSubmitting
+                                }
+                            >
+                                {t("save")}
+                            </Button>
+                            <Button
+                                type="button"
+                                variant="outline"
+                                onClick={() => setCreateDialogOpen(false)}
+                            >
+                                {t("cancel")}
+                            </Button>
+                        </DrawerFooter>
+                    </FormProvider>
+                </DrawerContent>
+            </Drawer>
+
+            <div className="flex h-full w-full flex-col">
+                <div className="flex items-center justify-between gap-2 py-2.5">
+                    <FacetedFormFilter
+                        type="text"
+                        size="small"
+                        title={t("search")}
+                        value={search}
+                        onChange={(value) => setSearch(value)}
+                        placeholder={t("searchOrganization")}
+                    />
+                    <Button
+                        type="button"
+                        data-testid="addOrganization"
+                        variant="default"
+                        size="sm"
+                        onClick={() => setCreateDialogOpen(true)}
+                    >
+                        <Plus className="size-4" />
+                        <span>{t("createOrganization")}</span>
+                    </Button>
+                </div>
+
+                <Table className="table-fixed">
+                    <TableHeader>
+                        <TableRow>
+                            <TableHead
+                                className="w-[30%]"
+                                sortable
+                                sortDirection={sortBy === "name" ? sortDirection : false}
+                                onSort={() => toggleSort("name")}
+                            >
+                                {t("name")}
+                            </TableHead>
+                            <TableHead className="w-[25%]">{t("domains")}</TableHead>
+                            <TableHead
+                                className="w-[35%]"
+                                sortable
+                                sortDirection={sortBy === "description" ? sortDirection : false}
+                                onSort={() => toggleSort("description")}
+                            >
+                                {t("description")}
+                            </TableHead>
+                            <TableHead className="w-[10%]" />
+                        </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                        {paginatedOrganizations.length === 0 ? (
+                            <TableRow>
+                                <TableCell colSpan={4} className="text-center text-muted-foreground">
+                                    {t("emptyOrganizations")}
+                                </TableCell>
+                            </TableRow>
+                        ) : (
+                            paginatedOrganizations.map((org) => (
+                                <TableRow
+                                    key={org.id}
+                                    className="cursor-pointer"
+                                    onClick={() => navigate(toEditOrganization({ realm, id: org.id!, tab: "settings" }))}
+                                >
+                                    <TableCell className="truncate">{org.name}</TableCell>
+                                    <TableCell className="truncate">
+                                        {org.domains && org.domains.length > 0
+                                            ? org.domains.map(d => d.name).join(", ")
+                                            : "-"}
+                                    </TableCell>
+                                    <TableCell className="truncate">{org.description || "-"}</TableCell>
+                                    <TableCell onClick={(e) => e.stopPropagation()}>
+                                        <DropdownMenu>
+                                            <DropdownMenuTrigger asChild>
+                                                <Button variant="ghost" size="icon-sm">
+                                                    <DotsThree weight="bold" className="size-4" />
+                                                </Button>
+                                            </DropdownMenuTrigger>
+                                            <DropdownMenuContent align="end">
+                                                <DropdownMenuItem
+                                                    onClick={() => navigate(toEditOrganization({ realm, id: org.id!, tab: "settings" }))}
+                                                >
+                                                    <PencilSimple className="size-4" />
+                                                    {t("edit")}
+                                                </DropdownMenuItem>
+                                                <DropdownMenuSeparator />
+                                                <DropdownMenuItem
+                                                    className="text-destructive focus:text-destructive"
+                                                    onClick={() => setSelectedOrg(org)}
+                                                >
+                                                    <Trash className="size-4" />
+                                                    {t("delete")}
+                                                </DropdownMenuItem>
+                                            </DropdownMenuContent>
+                                        </DropdownMenu>
+                                    </TableCell>
+                                </TableRow>
+                            ))
+                        )}
+                    </TableBody>
+                    <TableFooter>
+                        <TableRow>
+                            <TableCell colSpan={4} className="p-0">
+                                <TablePaginationFooter
+                                    pageSize={pageSize}
+                                    onPageSizeChange={setPageSize}
+                                    onPreviousPage={() => setCurrentPage((p) => Math.max(0, p - 1))}
+                                    onNextPage={() => setCurrentPage((p) => Math.min(totalPages - 1, p + 1))}
+                                    hasPreviousPage={currentPage > 0}
+                                    hasNextPage={currentPage < totalPages - 1}
+                                    totalCount={totalCount}
+                                />
+                            </TableCell>
+                        </TableRow>
+                    </TableFooter>
+                </Table>
             </div>
         </>
     );

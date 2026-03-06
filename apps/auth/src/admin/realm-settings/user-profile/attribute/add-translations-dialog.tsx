@@ -32,11 +32,11 @@ import { useState } from "react";
 import { useFormContext } from "react-hook-form";
 import { Trans, useTranslation } from "react-i18next";
 import { useAdminClient } from "../../../admin-client";
-import { useRealm } from "../../../context/realm-context/RealmContext";
-import { useWhoAmI } from "../../../context/whoami/WhoAmI";
+import { useRealm } from "../../../context/realm-context/realm-context";
+import { useWhoAmI } from "../../../context/whoami/who-am-i";
 import { beerify, localeToDisplayName } from "../../../util";
 import useLocale from "../../../utils/useLocale";
-import { Translation, TranslationForm } from "./TranslatableField";
+import { Translation, TranslationForm } from "./translatable-field";
 
 type AddTranslationsDialogProps = {
     orgKey: string;

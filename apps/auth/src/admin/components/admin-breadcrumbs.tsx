@@ -15,7 +15,7 @@ import {
     BreadcrumbPage,
     BreadcrumbSeparator
 } from "@merge-rd/ui/components/breadcrumb";
-import { useRealm } from "../context/realm-context/RealmContext";
+import { useRealm } from "../context/realm-context/realm-context";
 import { routes, type AppRouteObject } from "../routes";
 
 export function AdminBreadcrumbs() {

@@ -12,7 +12,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from '@/components/primitives/table';
+} from '@merge-rd/ui/components/table';
 import { IS_ENTERPRISE, IS_SELF_HOSTED } from '@/config';
 import { useEnvironment } from '@/context/environment/hooks';
 import { useFetchOrganizationSettings } from '@/hooks/use-fetch-organization-settings';

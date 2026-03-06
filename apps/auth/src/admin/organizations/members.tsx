@@ -16,15 +16,15 @@ import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 import { useAdminClient } from "../admin-client";
-import { CheckboxFilterComponent } from "../components/dynamic/CheckboxFilterComponent";
-import { SearchInputComponent } from "../components/dynamic/SearchInputComponent";
-import { useRealm } from "../context/realm-context/RealmContext";
-import { MemberModal } from "../groups/MembersModal";
-import { toUser } from "../user/routes/User";
+import { CheckboxFilterComponent } from "../components/dynamic/checkbox-filter-component";
+import { SearchInputComponent } from "../components/dynamic/search-input-component";
+import { useRealm } from "../context/realm-context/realm-context";
+import { MemberModal } from "../groups/members-modal";
+import { toUser } from "../user/routes/user";
 import { translationFormatter } from "../utils/translationFormatter";
 import { useParams } from "../utils/useParams";
 import useToggle from "../utils/useToggle";
-import { EditOrganizationParams } from "./routes/EditOrganization";
+import { EditOrganizationParams } from "./routes/edit-organization";
 
 type MembershipTypeRepresentation = UserRepresentation & {
     membershipType?: string;

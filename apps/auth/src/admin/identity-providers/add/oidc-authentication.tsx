@@ -9,11 +9,11 @@ import {
 import { get } from "lodash-es";
 import { Controller, useFormContext, useWatch } from "react-hook-form";
 import { useTranslation } from "react-i18next";
-import { useServerInfo } from "../../context/server-info/ServerInfoProvider";
+import { useServerInfo } from "../../context/server-info/server-info-provider";
 import { sortProviders } from "../../util";
-import { ClientIdSecret } from "../component/ClientIdSecret";
-import { SwitchField } from "../component/SwitchField";
-import { TextField } from "../component/TextField";
+import { ClientIdSecret } from "../component/client-id-secret";
+import { SwitchField } from "../component/switch-field";
+import { TextField } from "../component/text-field";
 
 const clientAuthentications = [
     "client_secret_post",

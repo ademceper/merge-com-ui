@@ -21,7 +21,7 @@ import { Link, type LinkProps } from "react-router-dom";
 import { useAdminClient } from "../../admin-client";
 
 const RouterLink = Link as ComponentType<LinkProps>;
-import { ChangeTypeDropdown } from "../../client-scopes/ChangeTypeDropdown";
+import { ChangeTypeDropdown } from "../../client-scopes/change-type-dropdown";
 import {
     AllClientScopeType,
     AllClientScopes,
@@ -30,14 +30,14 @@ import {
     addClientScope,
     changeClientScope,
     removeClientScope
-} from "../../components/client-scope/ClientScopeTypes";
-import { useConfirmDialog } from "../../components/confirm-dialog/ConfirmDialog";
-import { useAccess } from "../../context/access/Access";
-import { useRealm } from "../../context/realm-context/RealmContext";
+} from "../../components/client-scope/client-scope-types";
+import { useConfirmDialog } from "../../components/confirm-dialog/confirm-dialog";
+import { useAccess } from "../../context/access/access";
+import { useRealm } from "../../context/realm-context/realm-context";
 import { translationFormatter } from "../../utils/translationFormatter";
 import useLocaleSort, { mapByKey } from "../../utils/useLocaleSort";
-import { toDedicatedScope } from "../routes/DedicatedScopeDetails";
-import { AddScopeDialog } from "./AddScopeDialog";
+import { toDedicatedScope } from "../routes/dedicated-scope-details";
+import { AddScopeDialog } from "./add-scope-dialog";
 import useIsFeatureEnabled, { Feature } from "../../utils/useIsFeatureEnabled";
 import { PROTOCOL_OIDC, PROTOCOL_OID4VC } from "../constants";
 

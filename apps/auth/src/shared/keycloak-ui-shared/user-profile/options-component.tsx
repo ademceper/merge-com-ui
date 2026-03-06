@@ -2,8 +2,8 @@ import { Checkbox } from "@merge-rd/ui/components/checkbox";
 import { RadioGroup, RadioGroupItem } from "@merge-rd/ui/components/radio-group";
 import { Label } from "@merge-rd/ui/components/label";
 import { Controller } from "react-hook-form";
-import { OptionLabel, Options, UserProfileFieldProps } from "./UserProfileFields";
-import { UserProfileGroup } from "./UserProfileGroup";
+import { OptionLabel, Options, UserProfileFieldProps } from "./user-profile-fields";
+import { UserProfileGroup } from "./user-profile-group";
 import { fieldName, label } from "./utils";
 
 export const OptionComponent = (props: UserProfileFieldProps) => {

@@ -17,21 +17,21 @@ import { Controller, FormProvider, useForm, useWatch } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { Link, useNavigate } from "react-router-dom";
 import { useAdminClient } from "../../admin-client";
-import { useConfirmDialog } from "../../components/confirm-dialog/ConfirmDialog";
-import { FormAccess } from "../../components/form/FormAccess";
+import { useConfirmDialog } from "../../components/confirm-dialog/confirm-dialog";
+import { FormAccess } from "../../components/form/form-access";
 import { KeycloakSpinner } from "../../../shared/keycloak-ui-shared";
-import { ViewHeader } from "../../components/view-header/ViewHeader";
-import { useAccess } from "../../context/access/Access";
+import { ViewHeader } from "../../components/view-header/view-header";
+import { useAccess } from "../../context/access/access";
 import { toUpperCase } from "../../util";
 import { useParams } from "../../utils/useParams";
-import { toAuthorizationTab } from "../routes/AuthenticationTab";
-import type { NewPermissionParams } from "../routes/NewPermission";
+import { toAuthorizationTab } from "../routes/authentication-tab";
+import type { NewPermissionParams } from "../routes/new-permission";
 import {
     PermissionDetailsParams,
     toPermissionDetails
-} from "../routes/PermissionDetails";
-import { ResourcesPolicySelect } from "./ResourcesPolicySelect";
-import { ScopeSelect } from "./ScopeSelect";
+} from "../routes/permission-details";
+import { ResourcesPolicySelect } from "./resources-policy-select";
+import { ScopeSelect } from "./scope-select";
 
 type FormFields = PolicyRepresentation & {
     resourceType: string;

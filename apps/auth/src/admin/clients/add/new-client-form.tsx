@@ -5,16 +5,16 @@ import { FormProvider, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 import { useAdminClient } from "../../admin-client";
-import { FormAccess } from "../../components/form/FormAccess";
-import { ViewHeader } from "../../components/view-header/ViewHeader";
-import { useRealm } from "../../context/realm-context/RealmContext";
+import { FormAccess } from "../../components/form/form-access";
+import { ViewHeader } from "../../components/view-header/view-header";
+import { useRealm } from "../../context/realm-context/realm-context";
 import { convertFormValuesToObject } from "../../util";
-import { FormFields } from "../ClientDetails";
-import { toClient } from "../routes/Client";
-import { toClients } from "../routes/Clients";
-import { CapabilityConfig } from "./CapabilityConfig";
-import { GeneralSettings } from "./GeneralSettings";
-import { LoginSettings } from "./LoginSettings";
+import { FormFields } from "../client-details";
+import { toClient } from "../routes/client";
+import { toClients } from "../routes/clients";
+import { CapabilityConfig } from "./capability-config";
+import { GeneralSettings } from "./general-settings";
+import { LoginSettings } from "./login-settings";
 import { useState } from "react";
 
 type WizardStep = {

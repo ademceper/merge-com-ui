@@ -19,9 +19,9 @@ import {
     ClientScope,
     ClientScopeDefaultOptionalType,
     changeScope
-} from "../components/client-scope/ClientScopeTypes";
+} from "../components/client-scope/client-scope-types";
 import { convertFormValuesToObject } from "../util";
-import { ScopeForm } from "./details/ScopeForm";
+import { ScopeForm } from "./details/scope-form";
 
 type EditClientScopeDialogProps = {
     open: boolean;

@@ -1,27 +1,27 @@
 import { Suspense, lazy } from "react";
 import type { ClassKey } from "keycloakify/login";
-import type { KcContext } from "./KcContext";
+import type { KcContext } from "./kc-context";
 import { useI18n } from "./i18n";
 import DefaultPage from "keycloakify/login/DefaultPage";
 import Template from "keycloakify/login/Template";
-import Login from "./pages/Login";
-import Register from "./pages/Register";
-import LoginResetPassword from "./pages/LoginResetPassword";
-import LoginUpdatePassword from "./pages/LoginUpdatePassword";
-import LoginUpdateProfile from "./pages/LoginUpdateProfile";
-import DeleteAccountConfirm from "./pages/DeleteAccountConfirm";
-import LoginPageExpired from "./pages/LoginPageExpired";
-import Terms from "./pages/Terms";
-import LoginIdpLinkConfirm from "./pages/LoginIdpLinkConfirm";
-import LoginIdpLinkEmail from "./pages/LoginIdpLinkEmail";
-import LoginIdpLinkConfirmOverride from "./pages/LoginIdpLinkConfirmOverride";
-import IdpReviewUserProfile from "./pages/IdpReviewUserProfile";
-import LinkIdpAction from "./pages/LinkIdpAction";
-import LoginConfigTotp from "./pages/LoginConfigTotp";
-import LoginOtp from "./pages/LoginOtp";
-import Error from "./pages/Error";
-import DeleteCredential from "./pages/DeleteCredential";
-import Info from "./pages/Info";
+import Login from "./pages/login";
+import Register from "./pages/register";
+import LoginResetPassword from "./pages/login-reset-password";
+import LoginUpdatePassword from "./pages/login-update-password";
+import LoginUpdateProfile from "./pages/login-update-profile";
+import DeleteAccountConfirm from "./pages/delete-account-confirm";
+import LoginPageExpired from "./pages/login-page-expired";
+import Terms from "./pages/terms";
+import LoginIdpLinkConfirm from "./pages/login-idp-link-confirm";
+import LoginIdpLinkEmail from "./pages/login-idp-link-email";
+import LoginIdpLinkConfirmOverride from "./pages/login-idp-link-confirm-override";
+import IdpReviewUserProfile from "./pages/idp-review-user-profile";
+import LinkIdpAction from "./pages/link-idp-action";
+import LoginConfigTotp from "./pages/login-config-totp";
+import LoginOtp from "./pages/login-otp";
+import Error from "./pages/error";
+import DeleteCredential from "./pages/delete-credential";
+import Info from "./pages/info";
 
 const UserProfileFormFields = lazy(
     () => import("keycloakify/login/UserProfileFormFields")

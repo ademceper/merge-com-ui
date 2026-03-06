@@ -4,7 +4,7 @@ import { useTranslation } from "react-i18next";
 import { useAdminClient } from "../admin-client";
 import { getErrorDescription, getErrorMessage } from "../../shared/keycloak-ui-shared";
 import { toast } from "sonner";
-import { GroupPickerDialog } from "../components/group/GroupPickerDialog";
+import { GroupPickerDialog } from "../components/group/group-picker-dialog";
 
 type MoveDialogProps = {
     source: GroupRepresentation;

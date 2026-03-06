@@ -15,8 +15,8 @@ import {
     AllClientScopes,
     AllClientScopeType,
     clientScopeTypesSelectOptions
-} from "../../components/client-scope/ClientScopeTypes";
-import type { Row } from "../../clients/scopes/ClientScopes";
+} from "../../components/client-scope/client-scope-types";
+import type { Row } from "../../clients/scopes/client-scopes";
 import useIsFeatureEnabled, { Feature } from "../../utils/useIsFeatureEnabled";
 import { useMemo } from "react";
 

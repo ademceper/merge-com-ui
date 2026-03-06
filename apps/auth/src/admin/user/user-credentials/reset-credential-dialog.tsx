@@ -5,10 +5,10 @@ import { useTranslation } from "react-i18next";
 import { useAdminClient } from "../../admin-client";
 import { getErrorDescription, getErrorMessage } from "../../../shared/keycloak-ui-shared";
 import { toast } from "sonner";
-import { ConfirmDialogModal } from "../../components/confirm-dialog/ConfirmDialog";
-import { LifespanField } from "./LifespanField";
-import { RequiredActionMultiSelect } from "./RequiredActionMultiSelect";
-import { useRealm } from "../../context/realm-context/RealmContext";
+import { ConfirmDialogModal } from "../../components/confirm-dialog/confirm-dialog";
+import { LifespanField } from "./lifespan-field";
+import { RequiredActionMultiSelect } from "./required-action-multi-select";
+import { useRealm } from "../../context/realm-context/realm-context";
 
 type ResetCredentialDialogProps = {
     userId: string;

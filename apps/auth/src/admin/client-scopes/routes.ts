@@ -1,8 +1,8 @@
 import type { AppRouteObject } from "../routes";
-import { ClientScopeRoute } from "./routes/ClientScope";
-import { ClientScopesRoute } from "./routes/ClientScopes";
-import { MapperRoute } from "./routes/Mapper";
-import { NewClientScopeRoute } from "./routes/NewClientScope";
+import { ClientScopeRoute } from "./routes/client-scope";
+import { ClientScopesRoute } from "./routes/client-scopes";
+import { MapperRoute } from "./routes/mapper";
+import { NewClientScopeRoute } from "./routes/new-client-scope";
 
 const routes: AppRouteObject[] = [
     NewClientScopeRoute,

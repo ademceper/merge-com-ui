@@ -16,7 +16,7 @@ import { CaretDown } from "@phosphor-icons/react";
 
 import { getIssuer, requestVCOffer } from "../api";
 import { CredentialsIssuer } from "../api/representations";
-import { Page } from "../components/page/Page";
+import { Page } from "../components/page/page";
 import { usePromise } from "../utils/usePromise";
 
 export const Oid4Vci = () => {

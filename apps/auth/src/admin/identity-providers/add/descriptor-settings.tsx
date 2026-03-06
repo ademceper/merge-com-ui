@@ -14,7 +14,7 @@ import {
     TextAreaControl,
     TextControl
 } from "../../../shared/keycloak-ui-shared";
-import { DefaultSwitchControl } from "../../components/SwitchControl";
+import { DefaultSwitchControl } from "../../components/switch-control";
 
 type DescriptorSettingsProps = {
     readOnly: boolean;

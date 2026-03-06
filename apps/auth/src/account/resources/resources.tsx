@@ -9,8 +9,8 @@ import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { cn } from "@merge-rd/ui/lib/utils";
 
-import { ResourcesTab } from "./ResourcesTab";
-import { Page } from "../components/page/Page";
+import { ResourcesTab } from "./resources-tab";
+import { Page } from "../components/page/page";
 
 export const Resources = () => {
     const { t } = useTranslation();

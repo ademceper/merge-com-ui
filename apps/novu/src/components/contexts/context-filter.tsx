@@ -2,7 +2,7 @@ import { useMemo, useState } from 'react';
 import { useDebouncedValue } from '@/hooks/use-debounced-value';
 import { useFetchContexts } from '@/hooks/use-fetch-contexts';
 import { DEFAULT_CONTEXT_LABEL, DEFAULT_CONTEXT_VALUE } from '@/utils/context-variable-utils';
-import { FacetedFormFilter } from '../primitives/form/faceted-filter/facated-form-filter';
+import { FacetedFormFilter } from '@merge-rd/ui/components/faceted-filter/faceted-form-filter';
 
 type ContextFilterProps = {
   contextKeys: string[];

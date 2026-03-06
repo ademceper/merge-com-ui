@@ -1,10 +1,10 @@
 import { Path, PathValue } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { SelectField } from "../../../shared/keycloak-ui-shared";
-import { DefaultSwitchControl } from "../../components/SwitchControl";
-import { FormAccess } from "../../components/form/FormAccess";
+import { DefaultSwitchControl } from "../../components/switch-control";
+import { FormAccess } from "../../components/form/form-access";
 import { convertAttributeNameToForm } from "../../util";
-import { FormFields } from "../ClientDetails";
+import { FormFields } from "../client-details";
 
 type ToggleProps = {
     name: PathValue<FormFields, Path<FormFields>>;

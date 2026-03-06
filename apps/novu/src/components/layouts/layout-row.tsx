@@ -16,7 +16,7 @@ import {
 import { Skeleton } from '@merge-rd/ui/components/skeleton';
 import { ToastIcon } from '@/components/primitives/sonner';
 import { showToast } from '@/components/primitives/sonner-helpers';
-import { TableCell, TableRow } from '@/components/primitives/table';
+import { TableCell, TableRow } from '@merge-rd/ui/components/table';
 import { TimeDisplayHoverCard } from '@/components/time-display-hover-card';
 import TruncatedText from '@/components/truncated-text';
 import { useEnvironment } from '@/context/environment/hooks';

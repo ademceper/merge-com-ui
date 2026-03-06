@@ -10,7 +10,7 @@ import { Label } from "@merge-rd/ui/components/label";
 import { useState } from "react";
 import { Controller, useFormContext } from "react-hook-form";
 import { useTranslation } from "react-i18next";
-import { MultiLineInput } from "../../components/multi-line-input/MultiLineInput";
+import { MultiLineInput } from "../../components/multi-line-input/multi-line-input";
 
 const comparisonValues = ["exact", "minimum", "maximum", "better"];
 

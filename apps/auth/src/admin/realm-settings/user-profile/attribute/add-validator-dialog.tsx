@@ -12,10 +12,10 @@ import { useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 
-import { DynamicComponents } from "../../../components/dynamic/DynamicComponents";
-import { useServerInfo } from "../../../context/server-info/ServerInfoProvider";
-import type { IndexedValidations } from "../../NewAttributeSettings";
-import { ValidatorSelect } from "./ValidatorSelect";
+import { DynamicComponents } from "../../../components/dynamic/dynamic-components";
+import { useServerInfo } from "../../../context/server-info/server-info-provider";
+import type { IndexedValidations } from "../../new-attribute-settings";
+import { ValidatorSelect } from "./validator-select";
 
 export type AddValidatorDialogProps = {
     selectedValidators: IndexedValidations[];

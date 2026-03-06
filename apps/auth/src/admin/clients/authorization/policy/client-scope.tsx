@@ -17,7 +17,7 @@ import { Controller, useFormContext } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { useAdminClient } from "../../../admin-client";
 import useLocaleSort, { mapByKey } from "../../../utils/useLocaleSort";
-import { AddScopeDialog } from "../../scopes/AddScopeDialog";
+import { AddScopeDialog } from "../../scopes/add-scope-dialog";
 
 export type RequiredIdValue = {
     id: string;

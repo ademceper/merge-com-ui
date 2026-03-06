@@ -8,7 +8,7 @@ import {
     useFormContext
 } from "react-hook-form";
 import { FormErrorText, HelpItem } from "../../../shared/keycloak-ui-shared";
-import { TimeSelector, TimeSelectorProps } from "./TimeSelector";
+import { TimeSelector, TimeSelectorProps } from "./time-selector";
 
 export type NumberControlOption = {
     key: string;

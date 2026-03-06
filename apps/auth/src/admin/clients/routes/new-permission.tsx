@@ -12,7 +12,7 @@ export type NewPermissionParams = {
     selectedId?: string;
 };
 
-const PermissionDetails = lazy(() => import("../authorization/PermissionDetails"));
+const PermissionDetails = lazy(() => import("../authorization/permission-details"));
 
 export const NewPermissionRoute: AppRouteObject = {
     path: "/:realm/clients/:id/authorization/permission/new/:permissionType",

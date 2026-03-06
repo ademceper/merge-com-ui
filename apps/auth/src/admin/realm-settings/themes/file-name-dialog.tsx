@@ -1,5 +1,5 @@
 import { TextControl } from "../../../shared/keycloak-ui-shared";
-import { ConfirmDialogModal } from "../../components/confirm-dialog/ConfirmDialog";
+import { ConfirmDialogModal } from "../../components/confirm-dialog/confirm-dialog";
 import { useTranslation } from "react-i18next";
 import { FormProvider, useForm } from "react-hook-form";
 

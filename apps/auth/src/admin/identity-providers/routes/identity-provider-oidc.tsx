@@ -5,7 +5,7 @@ import type { AppRouteObject } from "../../routes";
 
 export type IdentityProviderOidcParams = { realm: string };
 
-const AddOpenIdConnect = lazy(() => import("../add/AddOpenIdConnect"));
+const AddOpenIdConnect = lazy(() => import("../add/add-open-id-connect"));
 
 export const IdentityProviderOidcRoute: AppRouteObject = {
     path: "/:realm/identity-providers/oidc/add",

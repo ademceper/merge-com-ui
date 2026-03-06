@@ -16,9 +16,9 @@ import { useAdminClient } from "../admin-client";
 import {
     ClientScopeDefaultOptionalType,
     changeScope
-} from "../components/client-scope/ClientScopeTypes";
+} from "../components/client-scope/client-scope-types";
 import { convertFormValuesToObject } from "../util";
-import { ScopeForm } from "./details/ScopeForm";
+import { ScopeForm } from "./details/scope-form";
 
 type AddClientScopeDialogProps = {
     trigger: React.ReactNode;

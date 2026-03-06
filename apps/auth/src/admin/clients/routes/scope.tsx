@@ -9,7 +9,7 @@ export type ScopeDetailsParams = {
     scopeId?: string;
 };
 
-const ScopeDetails = lazy(() => import("../authorization/ScopeDetails"));
+const ScopeDetails = lazy(() => import("../authorization/scope-details"));
 
 export const ScopeDetailsRoute: AppRouteObject = {
     path: "/:realm/clients/:id/authorization/scope",

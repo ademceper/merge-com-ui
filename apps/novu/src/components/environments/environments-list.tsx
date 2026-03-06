@@ -25,7 +25,7 @@ import {
 import { EnvironmentBranchIcon } from '../primitives/environment-branch-icon';
 import { Skeleton } from '@merge-rd/ui/components/skeleton';
 import { showErrorToast, showSuccessToast } from '../primitives/sonner-helpers';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '../primitives/table';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@merge-rd/ui/components/table';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/primitives/tooltip';
 import { TimeDisplayHoverCard } from '../time-display-hover-card';
 import TruncatedText from '../truncated-text';

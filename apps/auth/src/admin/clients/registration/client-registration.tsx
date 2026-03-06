@@ -1,4 +1,4 @@
-import { ClientRegistrationList } from "./ClientRegistrationList";
+import { ClientRegistrationList } from "./client-registration-list";
 
 type ClientRegistrationProps = {
     subTab?: string;

@@ -1,12 +1,12 @@
 import { useTranslation } from "react-i18next";
 import { useParams } from "react-router-dom";
-import { ViewHeader } from "../components/view-header/ViewHeader";
-import { useRealm } from "../context/realm-context/RealmContext";
+import { ViewHeader } from "../components/view-header/view-header";
+import { useRealm } from "../context/realm-context/realm-context";
 import helpUrls from "../help-urls";
-import { PermissionsTab } from "../components/permission-tab/PermissionTab";
+import { PermissionsTab } from "../components/permission-tab/permission-tab";
 import useIsFeatureEnabled, { Feature } from "../utils/useIsFeatureEnabled";
-import { UsersListSection } from "./UsersListSection";
-import { useAccess } from "../context/access/Access";
+import { UsersListSection } from "./users-list-section";
+import { useAccess } from "../context/access/access";
 
 export default function UsersSection() {
     useTranslation();

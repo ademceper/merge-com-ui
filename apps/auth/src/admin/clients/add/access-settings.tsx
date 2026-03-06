@@ -2,11 +2,11 @@ import { useFormContext } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { TextControl } from "../../../shared/keycloak-ui-shared";
 
-import { FormAccess } from "../../components/form/FormAccess";
-import { useAccess } from "../../context/access/Access";
-import { FormFields } from "../ClientDetails";
-import type { ClientSettingsProps } from "../ClientSettings";
-import { LoginSettings } from "./LoginSettings";
+import { FormAccess } from "../../components/form/form-access";
+import { useAccess } from "../../context/access/access";
+import { FormFields } from "../client-details";
+import type { ClientSettingsProps } from "../client-settings";
+import { LoginSettings } from "./login-settings";
 
 export const AccessSettings = ({ client }: ClientSettingsProps) => {
     const { t } = useTranslation();

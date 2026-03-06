@@ -7,7 +7,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { TranslationsFilter } from '@/api/translations';
 import { FlagCircle } from '@/components/flag-circle';
 import { Button } from '@merge-rd/ui/components/button';
-import { FacetedFormFilter } from '@/components/primitives/form/faceted-filter/facated-form-filter';
+import { FacetedFormFilter } from '@merge-rd/ui/components/faceted-filter/faceted-form-filter';
 import { Form, FormField, FormItem, FormRoot } from '@/components/primitives/form/form';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/primitives/tooltip';
 import { useEnvironment } from '@/context/environment/hooks';

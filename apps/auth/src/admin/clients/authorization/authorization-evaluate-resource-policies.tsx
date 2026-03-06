@@ -11,11 +11,11 @@ import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 
-import { useRealm } from "../../context/realm-context/RealmContext";
+import { useRealm } from "../../context/realm-context/realm-context";
 import { useParams } from "../../utils/useParams";
-import type { ClientParams } from "../routes/Client";
-import { toPermissionDetails } from "../routes/PermissionDetails";
-import { toPolicyDetails } from "../routes/PolicyDetails";
+import type { ClientParams } from "../routes/client";
+import { toPermissionDetails } from "../routes/permission-details";
+import { toPolicyDetails } from "../routes/policy-details";
 
 type Props = {
     idx: number;

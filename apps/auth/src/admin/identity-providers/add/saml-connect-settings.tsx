@@ -11,13 +11,13 @@ import { useFormContext } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 
 import { useAdminClient } from "../../admin-client";
-import { FileUploadForm } from "../../components/json-file-upload/FileUploadForm";
-import { useRealm } from "../../context/realm-context/RealmContext";
+import { FileUploadForm } from "../../components/json-file-upload/file-upload-form";
+import { useRealm } from "../../context/realm-context/realm-context";
 import type { Environment } from "../../environment";
 import { addTrailingSlash } from "../../util";
 import { getAuthorizationHeaders } from "../../utils/getAuthorizationHeaders";
-import { DiscoveryEndpointField } from "../component/DiscoveryEndpointField";
-import { DescriptorSettings } from "./DescriptorSettings";
+import { DiscoveryEndpointField } from "../component/discovery-endpoint-field";
+import { DescriptorSettings } from "./descriptor-settings";
 
 type FormFields = IdentityProviderRepresentation & {
     discoveryError: string;

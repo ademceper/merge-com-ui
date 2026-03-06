@@ -10,7 +10,7 @@ export type NewPermissionConfigurationParams = {
 };
 
 const PermissionConfigurationDetails = lazy(
-    () => import("../permission-configuration/PermissionConfigurationDetails")
+    () => import("../permission-configuration/permission-configuration-details")
 );
 
 export const NewPermissionConfigurationRoute: AppRouteObject = {

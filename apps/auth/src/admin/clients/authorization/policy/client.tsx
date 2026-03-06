@@ -1,5 +1,5 @@
 import { useTranslation } from "react-i18next";
-import { ClientSelect } from "../../../components/client/ClientSelect";
+import { ClientSelect } from "../../../components/client/client-select";
 
 export const Client = () => {
     const { t } = useTranslation();

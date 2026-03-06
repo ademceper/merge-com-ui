@@ -4,12 +4,12 @@ import { Switch } from "@merge-rd/ui/components/switch";
 import { Label } from "@merge-rd/ui/components/label";
 import { useTranslation } from "react-i18next";
 import { HelpItem, SelectField } from "../../../shared/keycloak-ui-shared";
-import { FormAccess } from "../../components/form/FormAccess";
-import { MultiLineInput } from "../../components/multi-line-input/MultiLineInput";
-import { useServerInfo } from "../../context/server-info/ServerInfoProvider";
+import { FormAccess } from "../../components/form/form-access";
+import { MultiLineInput } from "../../components/multi-line-input/multi-line-input";
+import { useServerInfo } from "../../context/server-info/server-info-provider";
 import { convertAttributeNameToForm, sortProviders } from "../../util";
-import { FormFields } from "../ClientDetails";
-import { ApplicationUrls } from "./ApplicationUrls";
+import { FormFields } from "../client-details";
+import { ApplicationUrls } from "./application-urls";
 import { Controller, useFormContext } from "react-hook-form";
 
 type FineGrainOpenIdConnectProps = {

@@ -19,14 +19,14 @@ import { useMemo, useState } from "react";
 import { FormProvider, useForm, useWatch } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { useAdminClient } from "../../admin-client";
-import { FormAccess } from "../../components/form/FormAccess";
-import { UserSelect } from "../../components/users/UserSelect";
-import { useAccess } from "../../context/access/Access";
-import { useRealm } from "../../context/realm-context/RealmContext";
-import { ForbiddenSection } from "../../ForbiddenSection";
+import { FormAccess } from "../../components/form/form-access";
+import { UserSelect } from "../../components/users/user-select";
+import { useAccess } from "../../context/access/access";
+import { useRealm } from "../../context/realm-context/realm-context";
+import { ForbiddenSection } from "../../forbidden-section";
 import useSortedResourceTypes from "../../utils/useSortedResourceTypes";
-import { PermissionEvaluationResult } from "./PermissionEvaluationResult";
-import { COMPONENTS } from "../resource-types/ResourceType";
+import { PermissionEvaluationResult } from "./permission-evaluation-result";
+import { COMPONENTS } from "../resource-types/resource-type";
 
 interface EvaluateFormInputs extends Omit<ResourceEvaluation, "context" | "resources"> {
     authScopes: string[];

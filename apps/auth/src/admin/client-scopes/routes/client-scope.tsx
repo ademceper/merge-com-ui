@@ -11,7 +11,7 @@ export type ClientScopeParams = {
     tab: ClientScopeTab;
 };
 
-const EditClientScope = lazy(() => import("../EditClientScope"));
+const EditClientScope = lazy(() => import("../edit-client-scope"));
 
 export const ClientScopeRoute: AppRouteObject = {
     path: "/:realm/client-scopes/:id/:tab",

@@ -23,7 +23,7 @@ import { useTranslation } from "react-i18next";
 
 import { getPersonalInfo, getSupportedLocales, savePersonalInfo } from "../api/methods";
 import { UserProfileMetadata, UserRepresentation } from "../api/representations";
-import { Page } from "../components/page/Page";
+import { Page } from "../components/page/page";
 import type { Environment } from "../environment";
 import { TFuncKey, i18n } from "../i18n";
 import { useAccountAlerts } from "../utils/useAccountAlerts";

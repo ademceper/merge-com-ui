@@ -29,7 +29,7 @@ import {
     AlertDialogHeader,
     AlertDialogTitle
 } from "@merge-rd/ui/components/alert-dialog";
-import { AddRoleButton, AddRoleMappingModal, FilterType } from "./AddRoleMappingModal";
+import { AddRoleButton, AddRoleMappingModal, FilterType } from "./add-role-mapping-modal";
 import { deleteMapping, getEffectiveRoles, getMapping } from "./queries";
 import { getEffectiveClientRoles } from "./resource";
 

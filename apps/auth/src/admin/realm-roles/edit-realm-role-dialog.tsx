@@ -14,8 +14,8 @@ import {
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useAdminClient } from "../admin-client";
-import { AttributeForm } from "../components/key-value-form/AttributeForm";
-import { RoleForm } from "../components/role-form/RoleForm";
+import { AttributeForm } from "../components/key-value-form/attribute-form";
+import { RoleForm } from "../components/role-form/role-form";
 
 const FORM_ID = "edit-realm-role-form";
 

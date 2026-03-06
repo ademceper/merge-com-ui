@@ -13,7 +13,7 @@ import { Question } from "@phosphor-icons/react";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import helpUrls from "../../help-urls";
-import { FormattedLink } from "../external-link/FormattedLink";
+import { FormattedLink } from "../external-link/formatted-link";
 
 export const HelpHeader = () => {
     const [open, setOpen] = useState(false);

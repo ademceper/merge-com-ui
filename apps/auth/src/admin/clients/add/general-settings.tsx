@@ -1,8 +1,8 @@
 import { useTranslation } from "react-i18next";
 import { SelectField } from "../../../shared/keycloak-ui-shared";
-import { FormAccess } from "../../components/form/FormAccess";
-import { useLoginProviders } from "../../context/server-info/ServerInfoProvider";
-import { ClientDescription } from "../ClientDescription";
+import { FormAccess } from "../../components/form/form-access";
+import { useLoginProviders } from "../../context/server-info/server-info-provider";
+import { ClientDescription } from "../client-description";
 import { getProtocolName } from "../utils";
 
 export const GeneralSettings = () => {

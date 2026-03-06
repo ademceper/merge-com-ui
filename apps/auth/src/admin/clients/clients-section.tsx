@@ -14,7 +14,7 @@ import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { useAdminClient } from "../admin-client";
-import { AddClientDialog } from "./add/AddClientDialog";
+import { AddClientDialog } from "./add/add-client-dialog";
 import {
     AlertDialog,
     AlertDialogAction,
@@ -25,15 +25,15 @@ import {
     AlertDialogHeader,
     AlertDialogTitle
 } from "@merge-rd/ui/components/alert-dialog";
-import { ViewHeader } from "../components/view-header/ViewHeader";
+import { ViewHeader } from "../components/view-header/view-header";
 import helpUrls from "../help-urls";
-import { useAccess } from "../context/access/Access";
-import { useRealm } from "../context/realm-context/RealmContext";
+import { useAccess } from "../context/access/access";
+import { useRealm } from "../context/realm-context/realm-context";
 import { exportClient } from "../util";
 import { translationFormatter } from "../utils/translationFormatter";
-import { InitialAccessTokenList } from "./initial-access/InitialAccessTokenList";
-import { ClientRegistration } from "./registration/ClientRegistration";
-import { toClient } from "./routes/Client";
+import { InitialAccessTokenList } from "./initial-access/initial-access-token-list";
+import { ClientRegistration } from "./registration/client-registration";
+import { toClient } from "./routes/client";
 import { toClients } from "./routes/clients-path";
 import type { ClientsTab } from "./routes/clients-path";
 import {

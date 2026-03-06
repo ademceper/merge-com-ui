@@ -4,7 +4,7 @@ import { useTranslation } from "react-i18next";
 import { HelpItem } from "../../../shared/keycloak-ui-shared";
 import { useFormContext, useWatch } from "react-hook-form";
 import type { ComponentProps } from "./components";
-import { FormattedLink } from "../external-link/FormattedLink";
+import { FormattedLink } from "../external-link/formatted-link";
 
 export const UrlComponent = ({ name, label, helpText }: ComponentProps) => {
     const { t } = useTranslation();

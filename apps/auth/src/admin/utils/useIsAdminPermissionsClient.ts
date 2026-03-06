@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useRealm } from "../context/realm-context/RealmContext";
+import { useRealm } from "../context/realm-context/realm-context";
 
 export function useIsAdminPermissionsClient(selectedClientId: string) {
     const { realmRepresentation } = useRealm();

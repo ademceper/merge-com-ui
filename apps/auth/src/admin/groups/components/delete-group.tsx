@@ -4,7 +4,7 @@ import { useTranslation } from "react-i18next";
 import { useAdminClient } from "../../admin-client";
 import { getErrorDescription, getErrorMessage } from "../../../shared/keycloak-ui-shared";
 import { toast } from "sonner";
-import { ConfirmDialogModal } from "../../components/confirm-dialog/ConfirmDialog";
+import { ConfirmDialogModal } from "../../components/confirm-dialog/confirm-dialog";
 
 type DeleteConfirmProps = {
     selectedRows: GroupRepresentation[];

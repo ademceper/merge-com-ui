@@ -22,14 +22,14 @@ import { useTranslation } from "react-i18next";
 import { Link, useLocation } from "react-router-dom";
 import { useAdminClient } from "../admin-client";
 import { KeycloakSpinner } from "../../shared/keycloak-ui-shared";
-import { useAccess } from "../context/access/Access";
-import { useRealm } from "../context/realm-context/RealmContext";
-import { toUser } from "../user/routes/User";
+import { useAccess } from "../context/access/access";
+import { useRealm } from "../context/realm-context/realm-context";
+import { toUser } from "../user/routes/user";
 import { emptyFormatter } from "../util";
-import { MemberModal } from "./MembersModal";
-import { useSubGroups } from "./SubGroupsContext";
+import { MemberModal } from "./members-modal";
+import { useSubGroups } from "./sub-groups-context";
 import { getLastId } from "./groupIdUtils";
-import { MembershipsModal } from "./MembershipsModal";
+import { MembershipsModal } from "./memberships-modal";
 import useToggle from "../utils/useToggle";
 
 const UserDetailLink = (user: UserRepresentation) => {

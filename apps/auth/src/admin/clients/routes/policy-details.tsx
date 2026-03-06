@@ -10,7 +10,7 @@ export type PolicyDetailsParams = {
     policyType: string;
 };
 
-const PolicyDetails = lazy(() => import("../authorization/policy/PolicyDetails"));
+const PolicyDetails = lazy(() => import("../authorization/policy/policy-details"));
 
 export const PolicyDetailsRoute: AppRouteObject = {
     path: "/:realm/clients/:id/authorization/policy/:policyId/:policyType",

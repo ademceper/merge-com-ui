@@ -1,17 +1,17 @@
 import type { AppRouteObject } from "../routes";
-import { CustomUserFederationRoute } from "./routes/CustomUserFederation";
-import { NewCustomUserFederationRoute } from "./routes/NewCustomUserFederation";
-import { NewKerberosUserFederationRoute } from "./routes/NewKerberosUserFederation";
-import { NewLdapUserFederationRoute } from "./routes/NewLdapUserFederation";
-import { UserFederationRoute } from "./routes/UserFederation";
-import { UserFederationKerberosRoute } from "./routes/UserFederationKerberos";
+import { CustomUserFederationRoute } from "./routes/custom-user-federation";
+import { NewCustomUserFederationRoute } from "./routes/new-custom-user-federation";
+import { NewKerberosUserFederationRoute } from "./routes/new-kerberos-user-federation";
+import { NewLdapUserFederationRoute } from "./routes/new-ldap-user-federation";
+import { UserFederationRoute } from "./routes/user-federation";
+import { UserFederationKerberosRoute } from "./routes/user-federation-kerberos";
 import {
     UserFederationLdapRoute,
     UserFederationLdapWithTabRoute
-} from "./routes/UserFederationLdap";
-import { UserFederationLdapMapperRoute } from "./routes/UserFederationLdapMapper";
-import { UserFederationsKerberosRoute } from "./routes/UserFederationsKerberos";
-import { UserFederationsLdapRoute } from "./routes/UserFederationsLdap";
+} from "./routes/user-federation-ldap";
+import { UserFederationLdapMapperRoute } from "./routes/user-federation-ldap-mapper";
+import { UserFederationsKerberosRoute } from "./routes/user-federations-kerberos";
+import { UserFederationsLdapRoute } from "./routes/user-federations-ldap";
 
 const routes: AppRouteObject[] = [
     UserFederationRoute,

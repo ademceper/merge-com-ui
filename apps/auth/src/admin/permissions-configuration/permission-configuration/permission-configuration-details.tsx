@@ -8,22 +8,22 @@ import { FormProvider, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { Link, useNavigate } from "react-router-dom";
 import { useAdminClient } from "../../admin-client";
-import { useConfirmDialog } from "../../components/confirm-dialog/ConfirmDialog";
-import { FormAccess } from "../../components/form/FormAccess";
+import { useConfirmDialog } from "../../components/confirm-dialog/confirm-dialog";
+import { FormAccess } from "../../components/form/form-access";
 import { KeycloakSpinner } from "../../../shared/keycloak-ui-shared";
-import { ViewHeader } from "../../components/view-header/ViewHeader";
+import { ViewHeader } from "../../components/view-header/view-header";
 import { useParams } from "../../utils/useParams";
 import {
     PermissionConfigurationDetailsParams,
     toPermissionConfigurationDetails
-} from "../routes/PermissionConfigurationDetails";
-import { toPermissionsConfigurationTabs } from "../routes/PermissionsConfigurationTabs";
+} from "../routes/permission-configuration-details";
+import { toPermissionsConfigurationTabs } from "../routes/permissions-configuration-tabs";
 import PolicyRepresentation from "@keycloak/keycloak-admin-client/lib/defs/policyRepresentation";
-import { AssignedPolicies } from "./AssignedPolicies";
-import { ScopePicker } from "../../clients/authorization/ScopePicker";
-import { ResourceType } from "../resource-types/ResourceType";
+import { AssignedPolicies } from "./assigned-policies";
+import { ScopePicker } from "../../clients/authorization/scope-picker";
+import { ResourceType } from "../resource-types/resource-type";
 import { sortBy } from "lodash-es";
-import { NameDescription } from "../../clients/authorization/policy/NameDescription";
+import { NameDescription } from "../../clients/authorization/policy/name-description";
 import useSortedResourceTypes from "../../utils/useSortedResourceTypes";
 
 export default function PermissionConfigurationDetails() {

@@ -8,7 +8,7 @@ export type EditClientPolicyParams = {
     policyName: string;
 };
 
-const NewClientPolicy = lazy(() => import("../NewClientPolicy"));
+const NewClientPolicy = lazy(() => import("../new-client-policy"));
 
 export const EditClientPolicyRoute: AppRouteObject = {
     path: "/:realm/realm-settings/client-policies/:policyName/edit-policy",

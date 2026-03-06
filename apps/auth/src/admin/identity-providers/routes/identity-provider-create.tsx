@@ -8,7 +8,7 @@ export type IdentityProviderCreateParams = {
     providerId: string;
 };
 
-const AddIdentityProvider = lazy(() => import("../add/AddIdentityProvider"));
+const AddIdentityProvider = lazy(() => import("../add/add-identity-provider"));
 
 export const IdentityProviderCreateRoute: AppRouteObject = {
     path: "/:realm/identity-providers/:providerId/add",

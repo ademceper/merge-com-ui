@@ -14,7 +14,7 @@ import { FormProvider, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 
 import { useAdminClient } from "../admin-client";
-import { NameDescription } from "./form/NameDescription";
+import { NameDescription } from "./form/name-description";
 
 type EditFlowModalProps = {
     flow: AuthenticationFlowRepresentation;

@@ -10,7 +10,7 @@ export type ClientPoliciesParams = {
     tab: ClientPoliciesTab;
 };
 
-const RealmSettingsSection = lazy(() => import("../RealmSettingsSection"));
+const RealmSettingsSection = lazy(() => import("../realm-settings-section"));
 
 export const ClientPoliciesRoute: AppRouteObject = {
     path: "/:realm/realm-settings/client-policies/:tab",

@@ -8,17 +8,17 @@ import { FormProvider, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { Link, useNavigate } from "react-router-dom";
 import { useAdminClient } from "../../admin-client";
-import { DynamicComponents } from "../../components/dynamic/DynamicComponents";
-import { FormAccess } from "../../components/form/FormAccess";
-import { useRealm } from "../../context/realm-context/RealmContext";
-import { useServerInfo } from "../../context/server-info/ServerInfoProvider";
+import { DynamicComponents } from "../../components/dynamic/dynamic-components";
+import { FormAccess } from "../../components/form/form-access";
+import { useRealm } from "../../context/realm-context/realm-context";
+import { useServerInfo } from "../../context/server-info/server-info-provider";
 import { convertFormValuesToObject, convertToFormValues } from "../../util";
 import { useParams } from "../../utils/useParams";
-import type { CustomUserFederationRouteParams } from "../routes/CustomUserFederation";
-import { toUserFederation } from "../routes/UserFederation";
-import { ExtendedHeader } from "../shared/ExtendedHeader";
-import { SettingsCache } from "../shared/SettingsCache";
-import { SyncSettings } from "./SyncSettings";
+import type { CustomUserFederationRouteParams } from "../routes/custom-user-federation";
+import { toUserFederation } from "../routes/user-federation";
+import { ExtendedHeader } from "../shared/extended-header";
+import { SettingsCache } from "../shared/settings-cache";
+import { SyncSettings } from "./sync-settings";
 
 import { useState } from "react";
 

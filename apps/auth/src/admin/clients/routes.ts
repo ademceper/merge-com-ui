@@ -1,36 +1,36 @@
 import type { AppRouteObject } from "../routes";
-import { AddClientRoute } from "./routes/AddClient";
+import { AddClientRoute } from "./routes/add-client";
 import {
     AddRegistrationProviderRoute,
     EditRegistrationProviderRoute
-} from "./routes/AddRegistrationProvider";
-import { AuthorizationRoute } from "./routes/AuthenticationTab";
-import { ClientRoute } from "./routes/Client";
-import { ClientRegistrationRoute } from "./routes/ClientRegistration";
-import { ClientRoleRoute } from "./routes/ClientRole";
-import { ClientsRoute, ClientsRouteWithTab } from "./routes/Clients";
-import { ClientScopesRoute } from "./routes/ClientScopeTab";
+} from "./routes/add-registration-provider";
+import { AuthorizationRoute } from "./routes/authentication-tab";
+import { ClientRoute } from "./routes/client";
+import { ClientRegistrationRoute } from "./routes/client-registration";
+import { ClientRoleRoute } from "./routes/client-role";
+import { ClientsRoute, ClientsRouteWithTab } from "./routes/clients";
+import { ClientScopesRoute } from "./routes/client-scope-tab";
 import {
     DedicatedScopeDetailsRoute,
     DedicatedScopeDetailsWithTabRoute
-} from "./routes/DedicatedScopeDetails";
-import { ImportClientRoute } from "./routes/ImportClient";
-import { MapperRoute } from "./routes/Mapper";
+} from "./routes/dedicated-scope-details";
+import { ImportClientRoute } from "./routes/import-client";
+import { MapperRoute } from "./routes/mapper";
 import {
     NewPermissionRoute,
     NewPermissionWithSelectedIdRoute
-} from "./routes/NewPermission";
-import { NewPolicyRoute } from "./routes/NewPolicy";
-import { NewResourceRoute } from "./routes/NewResource";
-import { NewRoleRoute } from "./routes/NewRole";
-import { NewScopeRoute } from "./routes/NewScope";
-import { PermissionDetailsRoute } from "./routes/PermissionDetails";
-import { PolicyDetailsRoute } from "./routes/PolicyDetails";
+} from "./routes/new-permission";
+import { NewPolicyRoute } from "./routes/new-policy";
+import { NewResourceRoute } from "./routes/new-resource";
+import { NewRoleRoute } from "./routes/new-role";
+import { NewScopeRoute } from "./routes/new-scope";
+import { PermissionDetailsRoute } from "./routes/permission-details";
+import { PolicyDetailsRoute } from "./routes/policy-details";
 import {
     ResourceDetailsRoute,
     ResourceDetailsWithResourceIdRoute
-} from "./routes/Resource";
-import { ScopeDetailsRoute, ScopeDetailsWithScopeIdRoute } from "./routes/Scope";
+} from "./routes/resource";
+import { ScopeDetailsRoute, ScopeDetailsWithScopeIdRoute } from "./routes/scope";
 
 const routes: AppRouteObject[] = [
     ClientRegistrationRoute,

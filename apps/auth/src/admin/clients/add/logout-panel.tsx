@@ -4,12 +4,12 @@ import { Controller, useFormContext } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { HelpItem, TextControl } from "../../../shared/keycloak-ui-shared";
 
-import { DefaultSwitchControl } from "../../components/SwitchControl";
-import { FormAccess } from "../../components/form/FormAccess";
-import { useAccess } from "../../context/access/Access";
+import { DefaultSwitchControl } from "../../components/switch-control";
+import { FormAccess } from "../../components/form/form-access";
+import { useAccess } from "../../context/access/access";
 import { convertAttributeNameToForm } from "../../util";
-import { FormFields } from "../ClientDetails";
-import type { ClientSettingsProps } from "../ClientSettings";
+import { FormFields } from "../client-details";
+import type { ClientSettingsProps } from "../client-settings";
 
 const validateUrl = (uri: string | undefined, error: string) =>
     ((uri?.startsWith("https://") || uri?.startsWith("http://")) && !uri.includes("*")) ||

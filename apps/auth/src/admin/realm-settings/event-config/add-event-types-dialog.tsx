@@ -9,8 +9,8 @@ import {
     DialogTitle
 } from "@merge-rd/ui/components/dialog";
 
-import { EventsTypeTable, EventType } from "./EventsTypeTable";
-import { useServerInfo } from "../../context/server-info/ServerInfoProvider";
+import { EventsTypeTable, EventType } from "./events-type-table";
+import { useServerInfo } from "../../context/server-info/server-info-provider";
 
 type AddEventTypesDialogProps = {
     onConfirm: (selected: EventType[]) => void;

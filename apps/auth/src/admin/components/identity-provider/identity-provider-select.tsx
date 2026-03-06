@@ -5,7 +5,7 @@ import { SelectVariant, useFetch } from "../../../shared/keycloak-ui-shared";
 import { useState } from "react";
 import { useAdminClient } from "../../admin-client";
 import type { ComponentProps } from "../dynamic/components";
-import { MultiValuedListComponent } from "../dynamic/MultivaluedListComponent";
+import { MultiValuedListComponent } from "../dynamic/multivalued-list-component";
 
 type IdentityProviderSelectProps = ComponentProps & {
     variant?: string;

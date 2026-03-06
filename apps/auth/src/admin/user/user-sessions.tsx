@@ -2,11 +2,11 @@ import type UserSessionRepresentation from "@keycloak/keycloak-admin-client/lib/
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useAdminClient } from "../admin-client";
-import { useRealm } from "../context/realm-context/RealmContext";
+import { useRealm } from "../context/realm-context/realm-context";
 import { useFetch } from "../../shared/keycloak-ui-shared";
-import SessionsTable from "../sessions/SessionsTable";
+import SessionsTable from "../sessions/sessions-table";
 import { useParams } from "../utils/useParams";
-import type { UserParams } from "./routes/User";
+import type { UserParams } from "./routes/user";
 
 export const UserSessions = () => {
     const { adminClient } = useAdminClient();

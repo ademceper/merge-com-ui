@@ -13,13 +13,13 @@ import { useTranslation } from "react-i18next";
 import { useAdminClient } from "../admin-client";
 import { getErrorDescription, getErrorMessage, useFetch } from "../../shared/keycloak-ui-shared";
 import { toast } from "sonner";
-import { useConfirmDialog } from "../components/confirm-dialog/ConfirmDialog";
-import { ViewHeader } from "../components/view-header/ViewHeader";
+import { useConfirmDialog } from "../components/confirm-dialog/confirm-dialog";
+import { ViewHeader } from "../components/view-header/view-header";
 import { fetchAdminUI } from "../context/auth/admin-ui-endpoint";
-import { useRealm } from "../context/realm-context/RealmContext";
+import { useRealm } from "../context/realm-context/realm-context";
 import helpUrls from "../help-urls";
-import { RevocationModal } from "./RevocationModal";
-import SessionsTable from "./SessionsTable";
+import { RevocationModal } from "./revocation-modal";
+import SessionsTable from "./sessions-table";
 
 type FilterType = "ALL" | "REGULAR" | "OFFLINE";
 

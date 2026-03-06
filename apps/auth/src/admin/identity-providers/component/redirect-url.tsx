@@ -4,7 +4,7 @@ import { Label } from "@merge-rd/ui/components/label";
 import { Copy } from "@phosphor-icons/react";
 import { useTranslation } from "react-i18next";
 import { HelpItem, useEnvironment } from "../../../shared/keycloak-ui-shared";
-import { useRealm } from "../../context/realm-context/RealmContext";
+import { useRealm } from "../../context/realm-context/realm-context";
 import { addTrailingSlash } from "../../util";
 
 export const RedirectUrl = ({ id }: { id: string }) => {

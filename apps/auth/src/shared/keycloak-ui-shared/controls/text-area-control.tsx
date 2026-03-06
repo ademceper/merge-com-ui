@@ -9,7 +9,7 @@ import {
 } from "react-hook-form";
 
 import { formTextareaClassName } from "./form-input-styles";
-import { FormLabel } from "./FormLabel";
+import { FormLabel } from "./form-label";
 
 export type TextAreaControlProps<
     T extends FieldValues,

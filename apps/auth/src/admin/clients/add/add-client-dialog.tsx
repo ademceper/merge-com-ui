@@ -17,14 +17,14 @@ import { useNavigate } from "react-router-dom";
 import { ArrowRight } from "@phosphor-icons/react";
 import { cn } from "@merge-rd/ui/lib/utils";
 import { useAdminClient } from "../../admin-client";
-import { FormAccess } from "../../components/form/FormAccess";
-import { useRealm } from "../../context/realm-context/RealmContext";
+import { FormAccess } from "../../components/form/form-access";
+import { useRealm } from "../../context/realm-context/realm-context";
 import { convertFormValuesToObject } from "../../util";
-import { FormFields } from "../ClientDetails";
-import { toClient } from "../routes/Client";
-import { CapabilityConfig } from "./CapabilityConfig";
-import { GeneralSettings } from "./GeneralSettings";
-import { LoginSettings } from "./LoginSettings";
+import { FormFields } from "../client-details";
+import { toClient } from "../routes/client";
+import { CapabilityConfig } from "./capability-config";
+import { GeneralSettings } from "./general-settings";
+import { LoginSettings } from "./login-settings";
 import { useState } from "react";
 
 type WizardStep = {

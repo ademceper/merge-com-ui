@@ -1,4 +1,4 @@
-import { KeycloakSpinner } from "../controls/KeycloakSpinner";
+import { KeycloakSpinner } from "../controls/keycloak-spinner";
 import { Keycloak } from "oidc-spa/keycloak-js";
 import {
     PropsWithChildren,
@@ -9,8 +9,8 @@ import {
     useRef,
     useState
 } from "react";
-import { ErrorPage } from "./ErrorPage";
-import { Help } from "./HelpContext";
+import { ErrorPage } from "./error-page";
+import { Help } from "./help-context";
 import { BaseEnvironment } from "./environment";
 
 export type KeycloakContext<T extends BaseEnvironment = BaseEnvironment> =

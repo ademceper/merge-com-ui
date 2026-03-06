@@ -1,11 +1,11 @@
 import { useFormContext } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { SelectField, TextControl } from "../../../shared/keycloak-ui-shared";
-import { FormAccess } from "../../components/form/FormAccess";
+import { FormAccess } from "../../components/form/form-access";
 import { convertAttributeNameToForm } from "../../util";
-import { FormFields } from "../ClientDetails";
-import { Toggle } from "./SamlConfig";
-import { SamlEncryption } from "./SamlEncryption";
+import { FormFields } from "../client-details";
+import { Toggle } from "./saml-config";
+import { SamlEncryption } from "./saml-encryption";
 
 export const SIGNATURE_ALGORITHMS = [
     "RSA_SHA1",

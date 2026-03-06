@@ -6,12 +6,12 @@ import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Link, To } from "react-router-dom";
 import { useAdminClient } from "../../admin-client";
-import { useAccess } from "../../context/access/Access";
-import { useRealm } from "../../context/realm-context/RealmContext";
-import { toRealmSettings } from "../../realm-settings/routes/RealmSettings";
+import { useAccess } from "../../context/access/access";
+import { useRealm } from "../../context/realm-context/realm-context";
+import { toRealmSettings } from "../../realm-settings/routes/realm-settings";
 import { emptyFormatter, upperCaseFormatter } from "../../util";
 import { translationFormatter } from "../../utils/translationFormatter";
-import { useConfirmDialog } from "../confirm-dialog/ConfirmDialog";
+import { useConfirmDialog } from "../confirm-dialog/confirm-dialog";
 import { useFetch } from "../../../shared/keycloak-ui-shared";
 import { DataTable, DataTableRowActions, type ColumnDef } from "@/admin/components/data-table";
 import {

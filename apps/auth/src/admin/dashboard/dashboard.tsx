@@ -11,11 +11,11 @@ import { useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { useParams } from "react-router-dom";
 import { KeycloakSpinner } from "../../shared/keycloak-ui-shared";
-import { useRealm } from "../context/realm-context/RealmContext";
-import { useServerInfo } from "../context/server-info/ServerInfoProvider";
+import { useRealm } from "../context/realm-context/realm-context";
+import { useServerInfo } from "../context/server-info/server-info-provider";
 import helpUrls from "../help-urls";
 import useLocaleSort, { mapByKey } from "../utils/useLocaleSort";
-import { ProviderInfo } from "./ProviderInfo";
+import { ProviderInfo } from "./provider-info";
 
 const EmptyDashboard = () => {
     const { t } = useTranslation();

@@ -9,7 +9,7 @@ import { useAdminClient } from "../admin-client";
 import {
     AttributeForm,
     AttributesForm
-} from "../components/key-value-form/AttributeForm";
+} from "../components/key-value-form/attribute-form";
 import { arrayToKeyValue } from "../components/key-value-form/key-value-convert";
 import { convertFormValuesToObject } from "../util";
 import { getLastId } from "./groupIdUtils";

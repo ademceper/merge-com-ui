@@ -73,10 +73,15 @@ import {
 import {
   Table,
   TableBody,
+  TableCaption,
   TableCell,
+  TableFooter,
   TableHead,
   TableHeader,
   TableRow,
+  tableCellVariants,
+  type TableHeadSortDirection,
+  type TableSortDirection,
 } from "@merge-rd/ui/components/table";
 
 export type DataTableProps<TData> = {
@@ -622,6 +627,12 @@ export {
   TableHead,
   TableHeader,
   TableRow,
+  tableCellVariants,
+} from "@merge-rd/ui/components/table";
+
+export type {
+  TableHeadSortDirection,
+  TableSortDirection,
 } from "@merge-rd/ui/components/table";
 
 export type { ColumnDef, FilterFn, Row, SortingState };

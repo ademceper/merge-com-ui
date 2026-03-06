@@ -5,7 +5,7 @@ import type { AppRouteObject } from "../../routes";
 
 export type NewResourceParams = { realm: string; id: string };
 
-const ResourceDetails = lazy(() => import("../authorization/ResourceDetails"));
+const ResourceDetails = lazy(() => import("../authorization/resource-details"));
 
 export const NewResourceRoute: AppRouteObject = {
     path: "/:realm/clients/:id/authorization/resource/new",

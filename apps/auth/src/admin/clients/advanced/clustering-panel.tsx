@@ -12,12 +12,12 @@ import { HelpItem } from "../../../shared/keycloak-ui-shared";
 import { useAdminClient } from "../../admin-client";
 import { getErrorDescription, getErrorMessage } from "../../../shared/keycloak-ui-shared";
 import { toast } from "sonner";
-import { useConfirmDialog } from "../../components/confirm-dialog/ConfirmDialog";
-import { FormAccess } from "../../components/form/FormAccess";
-import { TimeSelectorForm } from "../../components/time-selector/TimeSelectorForm";
+import { useConfirmDialog } from "../../components/confirm-dialog/confirm-dialog";
+import { FormAccess } from "../../components/form/form-access";
+import { TimeSelectorForm } from "../../components/time-selector/time-selector-form";
 import useFormatDate, { FORMAT_DATE_AND_TIME } from "../../utils/useFormatDate";
-import { AddHostDialog } from ".././advanced/AddHostDialog";
-import { AdvancedProps, parseResult } from "../AdvancedTab";
+import { AddHostDialog } from ".././advanced/add-host-dialog";
+import { AdvancedProps, parseResult } from "../advanced-tab";
 
 type Node = {
     host: string;

@@ -10,7 +10,7 @@ export type FlowParams = {
     builtIn?: string;
 };
 
-const FlowDetails = lazy(() => import("../FlowDetails"));
+const FlowDetails = lazy(() => import("../flow-details"));
 
 export const FlowRoute: AppRouteObject = {
     path: "/:realm/authentication/:id/:usedBy",

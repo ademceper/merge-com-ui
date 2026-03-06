@@ -1,6 +1,6 @@
 import { Alert, AlertDescription } from "@merge-rd/ui/components/alert";
 import { Warning } from "@phosphor-icons/react";
-import { useWhoAmI } from "./context/whoami/WhoAmI";
+import { useWhoAmI } from "./context/whoami/who-am-i";
 import { useTranslation } from "react-i18next";
 import { cn } from "@merge-rd/ui/lib/utils";
 

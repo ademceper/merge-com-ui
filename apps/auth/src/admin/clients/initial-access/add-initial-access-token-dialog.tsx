@@ -14,13 +14,13 @@ import { Controller, FormProvider, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { useState } from "react";
 import { useAdminClient } from "../../admin-client";
-import { FormAccess } from "../../components/form/FormAccess";
-import { useRealm } from "../../context/realm-context/RealmContext";
+import { FormAccess } from "../../components/form/form-access";
+import { useRealm } from "../../context/realm-context/realm-context";
 import { NumberInput } from "@/admin/components/number-input";
-import { TimeSelector } from "../../components/time-selector/TimeSelector";
-import { MultiLineInput } from "../../components/multi-line-input/MultiLineInput";
+import { TimeSelector } from "../../components/time-selector/time-selector";
+import { MultiLineInput } from "../../components/multi-line-input/multi-line-input";
 import { FormErrorText, HelpItem } from "../../../shared/keycloak-ui-shared";
-import { AccessTokenDialog } from "./AccessTokenDialog";
+import { AccessTokenDialog } from "./access-token-dialog";
 
 type AddInitialAccessTokenDialogProps = {
     trigger: React.ReactNode;

@@ -18,7 +18,7 @@ import { IS_SELF_HOSTED } from '../../config';
 import { useFetchWorkflows } from '../../hooks/use-fetch-workflows';
 import { ContextFilter } from '../contexts/context-filter';
 import { Button } from '@merge-rd/ui/components/button';
-import { FacetedFormFilter } from '../primitives/form/faceted-filter/facated-form-filter';
+import { FacetedFormFilter } from '@merge-rd/ui/components/faceted-filter/faceted-form-filter';
 import { Form, FormField, FormItem, FormRoot } from '../primitives/form/form';
 import { CHANNEL_OPTIONS } from './constants';
 import { Calendar } from '@phosphor-icons/react';

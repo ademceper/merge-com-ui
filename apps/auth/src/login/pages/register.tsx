@@ -1,9 +1,9 @@
 import type { PageProps } from "keycloakify/login/pages/PageProps";
-import type { KcContext } from "../KcContext";
+import type { KcContext } from "../kc-context";
 import type { I18n } from "../i18n";
-import AuthLayout from "../components/AuthLayout";
+import AuthLayout from "../components/auth-layout";
 import { Link } from "@merge-rd/ui/components/link";
-import { SocialLoginButtons } from "../components/SocialLoginButtons";
+import { SocialLoginButtons } from "../components/social-login-buttons";
 import { Input } from "@merge-rd/ui/components/input";
 import { Button } from "@merge-rd/ui/components/button";
 import { Alert, AlertDescription } from "@merge-rd/ui/components/alert";

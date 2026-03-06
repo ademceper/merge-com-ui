@@ -2,12 +2,12 @@ import IdentityProviderRepresentation from "@keycloak/keycloak-admin-client/lib/
 import { Button } from "@merge-rd/ui/components/button";
 import { Field } from "@merge-rd/ui/components/field";
 import { useFormContext, useWatch } from "react-hook-form";
-import { DefaultSwitchControl } from "../../components/SwitchControl";
+import { DefaultSwitchControl } from "../../components/switch-control";
 import { useTranslation } from "react-i18next";
 import { getErrorDescription, getErrorMessage, TextAreaControl,
     TextControl } from "../../../shared/keycloak-ui-shared";
 import { toast } from "sonner";
-import { ImportFile, ImportKeyDialog } from "../../clients/keys/ImportKeyDialog";
+import { ImportFile, ImportKeyDialog } from "../../clients/keys/import-key-dialog";
 import useToggle from "../../utils/useToggle";
 import { useAdminClient } from "../../admin-client";
 

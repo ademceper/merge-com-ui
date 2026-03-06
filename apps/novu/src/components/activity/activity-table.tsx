@@ -12,9 +12,9 @@ import {
   TableFooter,
   TableHead,
   TableHeader,
+  TablePaginationFooter,
   TableRow,
-} from '@/components/primitives/table';
-import { TablePaginationFooter } from '@/components/primitives/table-pagination-footer';
+} from '@merge-rd/ui/components/table';
 import { useFeatureFlag } from '@/hooks/use-feature-flag';
 import { usePersistedPageSize } from '@/hooks/use-persisted-page-size';
 import { parsePageParam } from '@/utils/parse-page-param';

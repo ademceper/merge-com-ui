@@ -6,12 +6,12 @@ import { toast } from "sonner";
 import {
     ClientScopeDefaultOptionalType,
     changeScope
-} from "../components/client-scope/ClientScopeTypes";
-import { ViewHeader } from "../components/view-header/ViewHeader";
-import { useRealm } from "../context/realm-context/RealmContext";
+} from "../components/client-scope/client-scope-types";
+import { ViewHeader } from "../components/view-header/view-header";
+import { useRealm } from "../context/realm-context/realm-context";
 import { convertFormValuesToObject } from "../util";
-import { ScopeForm } from "./details/ScopeForm";
-import { toClientScope } from "./routes/ClientScope";
+import { ScopeForm } from "./details/scope-form";
+import { toClientScope } from "./routes/client-scope";
 
 export default function CreateClientScope() {
     const { adminClient } = useAdminClient();

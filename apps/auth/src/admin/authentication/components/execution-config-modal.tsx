@@ -15,7 +15,7 @@ import { useEffect, useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { useAdminClient } from "../../admin-client";
-import { DynamicComponents } from "../../components/dynamic/DynamicComponents";
+import { DynamicComponents } from "../../components/dynamic/dynamic-components";
 import { convertFormValuesToObject, convertToFormValues } from "../../util";
 import type { ExpandableExecution } from "../execution-model";
 

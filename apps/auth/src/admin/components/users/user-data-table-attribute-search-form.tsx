@@ -17,7 +17,7 @@ import { ReactNode, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { Form } from "react-router-dom";
-import { UserAttribute, UserFilter } from "./UserDataTable";
+import { UserAttribute, UserFilter } from "./user-data-table";
 
 type UserDataTableAttributeSearchFormProps = {
     activeFilters: UserFilter;

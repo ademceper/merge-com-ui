@@ -15,7 +15,7 @@ import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Link, To, useParams } from "react-router-dom";
 import { useAdminClient } from "../../../admin-client";
-import { useConfirmDialog } from "../../../components/confirm-dialog/ConfirmDialog";
+import { useConfirmDialog } from "../../../components/confirm-dialog/confirm-dialog";
 import useLocaleSort, { mapByKey } from "../../../utils/useLocaleSort";
 
 export type LdapMapperListProps = {

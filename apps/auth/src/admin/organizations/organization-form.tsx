@@ -3,9 +3,9 @@ import { FormErrorText, TextAreaControl, TextControl } from "../../shared/keyclo
 import { useEffect } from "react";
 import { useFormContext, useWatch } from "react-hook-form";
 import { useTranslation } from "react-i18next";
-import { AttributeForm } from "../components/key-value-form/AttributeForm";
+import { AttributeForm } from "../components/key-value-form/attribute-form";
 import { keyValueToArray } from "../components/key-value-form/key-value-convert";
-import { MultiLineInput } from "../components/multi-line-input/MultiLineInput";
+import { MultiLineInput } from "../components/multi-line-input/multi-line-input";
 
 export type OrganizationFormType = AttributeForm &
     Omit<OrganizationRepresentation, "domains" | "attributes"> & {

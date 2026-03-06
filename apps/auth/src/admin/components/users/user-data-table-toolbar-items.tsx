@@ -17,10 +17,10 @@ import { ArrowRight, CaretDown, DotsThreeVertical } from "@phosphor-icons/react"
 import { ReactNode, useState } from "react";
 import { useTranslation } from "react-i18next";
 
-import { useAccess } from "../../context/access/Access";
-import { SearchDropdown, SearchType } from "../../user/details/SearchFilter";
-import { UserFilter } from "./UserDataTable";
-import { UserDataTableAttributeSearchForm } from "./UserDataTableAttributeSearchForm";
+import { useAccess } from "../../context/access/access";
+import { SearchDropdown, SearchType } from "../../user/details/search-filter";
+import { UserFilter } from "./user-data-table";
+import { UserDataTableAttributeSearchForm } from "./user-data-table-attribute-search-form";
 
 type UserDataTableToolbarItemsProps = {
     searchDropdownOpen: boolean;

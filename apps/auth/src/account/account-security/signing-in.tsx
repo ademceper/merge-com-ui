@@ -17,8 +17,8 @@ import {
     CredentialContainer,
     CredentialMetadataRepresentation
 } from "../api/representations";
-import { EmptyRow } from "../components/datalist/EmptyRow";
-import { Page } from "../components/page/Page";
+import { EmptyRow } from "../components/datalist/empty-row";
+import { Page } from "../components/page/page";
 import { TFuncKey } from "../i18n";
 import { formatDate } from "../utils/formatDate";
 import { usePromise } from "../utils/usePromise";

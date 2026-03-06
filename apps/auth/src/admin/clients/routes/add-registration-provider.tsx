@@ -11,7 +11,7 @@ export type RegistrationProviderParams = {
     providerId: string;
 };
 
-const DetailProvider = lazy(() => import("../registration/DetailProvider"));
+const DetailProvider = lazy(() => import("../registration/detail-provider"));
 
 export const AddRegistrationProviderRoute: AppRouteObject = {
     path: "/:realm/clients/client-registration/:subTab/:providerId",

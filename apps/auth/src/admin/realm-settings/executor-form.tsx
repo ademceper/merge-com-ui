@@ -18,13 +18,13 @@ import { Controller, FormProvider, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { Link, useNavigate } from "react-router-dom";
 import { useAdminClient } from "../admin-client";
-import { DynamicComponents } from "../components/dynamic/DynamicComponents";
-import { FormAccess } from "../components/form/FormAccess";
-import { ViewHeader } from "../components/view-header/ViewHeader";
-import { useServerInfo } from "../context/server-info/ServerInfoProvider";
+import { DynamicComponents } from "../components/dynamic/dynamic-components";
+import { FormAccess } from "../components/form/form-access";
+import { ViewHeader } from "../components/view-header/view-header";
+import { useServerInfo } from "../context/server-info/server-info-provider";
 import { useParams } from "../utils/useParams";
-import { ClientProfileParams, toClientProfile } from "./routes/ClientProfile";
-import type { ExecutorParams } from "./routes/Executor";
+import { ClientProfileParams, toClientProfile } from "./routes/client-profile";
+import type { ExecutorParams } from "./routes/executor";
 
 type ExecutorForm = {
     config?: object;

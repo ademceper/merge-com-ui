@@ -19,12 +19,12 @@ import {
     AlertDialogHeader,
     AlertDialogTitle
 } from "@merge-rd/ui/components/alert-dialog";
-import { useRealm } from "../../context/realm-context/RealmContext";
+import { useRealm } from "../../context/realm-context/realm-context";
 import { useAdminClient } from "../../admin-client";
 import useLocale from "../../utils/useLocale";
-import { toEditAttributesGroup } from "../routes/EditAttributesGroup";
-import { toNewAttributesGroup } from "../routes/NewAttributesGroup";
-import { useUserProfile } from "./UserProfileContext";
+import { toEditAttributesGroup } from "../routes/edit-attributes-group";
+import { toNewAttributesGroup } from "../routes/new-attributes-group";
+import { useUserProfile } from "./user-profile-context";
 
 type AttributesGroupTabProps = {
     setTableData: React.Dispatch<

@@ -4,10 +4,10 @@ import { Switch } from "@merge-rd/ui/components/switch";
 import { Controller, useFormContext, useWatch } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { FormPanel, HelpItem } from "../../shared/keycloak-ui-shared";
-import { FixedButtonsGroup } from "../components/form/FixedButtonGroup";
-import { FormAccess } from "../components/form/FormAccess";
-import { FormGroup } from "../components/form/FormGroup";
-import { TimeSelector } from "../components/time-selector/TimeSelector";
+import { FixedButtonsGroup } from "../components/form/fixed-button-group";
+import { FormAccess } from "../components/form/form-access";
+import { FormGroup } from "../components/form/form-group";
+import { TimeSelector } from "../components/time-selector/time-selector";
 
 type RealmSettingsSessionsTabProps = {
     realm: RealmRepresentation;

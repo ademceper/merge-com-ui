@@ -6,12 +6,12 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@merge-rd/ui/component
 import { useFetch } from "../../../shared/keycloak-ui-shared";
 import { useAdminClient } from "../../admin-client";
 import { KeycloakSpinner } from "../../../shared/keycloak-ui-shared";
-import { useRealm } from "../../context/realm-context/RealmContext";
-import { toKeysTab } from "../routes/KeysTab";
-import type { KeySubTab } from "../routes/KeysTab";
+import { useRealm } from "../../context/realm-context/realm-context";
+import { toKeysTab } from "../routes/keys-tab";
+import type { KeySubTab } from "../routes/keys-tab";
 import { KEY_PROVIDER_TYPE } from "../../util";
-import { KeysListTab } from "./KeysListTab";
-import { KeysProvidersTab } from "./KeysProvidersTab";
+import { KeysListTab } from "./keys-list-tab";
+import { KeysProvidersTab } from "./keys-providers-tab";
 
 const sortByPriority = (components: ComponentRepresentation[]) => {
     const sortedComponents = [...components].sort((a, b) => {

@@ -3,7 +3,7 @@ import {
     DashboardRoute,
     DashboardRouteWithRealm,
     DashboardRouteWithTab
-} from "./routes/Dashboard";
+} from "./routes/dashboard";
 
 const routes: AppRouteObject[] = [
     DashboardRoute,

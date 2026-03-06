@@ -7,7 +7,7 @@ import {
     useFormContext
 } from "react-hook-form";
 import { Switch } from "@merge-rd/ui/components/switch";
-import { FormLabel } from "./FormLabel";
+import { FormLabel } from "./form-label";
 import { debeerify } from "../user-profile/utils";
 
 export type SwitchControlProps<

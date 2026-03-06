@@ -7,13 +7,13 @@ import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useNavigate, useParams as useRouterParams } from "react-router-dom";
 import { useAdminClient } from "../../admin-client";
-import { MapperList } from "../../client-scopes/details/MapperList";
+import { MapperList } from "../../client-scopes/details/mapper-list";
 import { KeycloakSpinner } from "../../../shared/keycloak-ui-shared";
-import { ViewHeader } from "../../components/view-header/ViewHeader";
+import { ViewHeader } from "../../components/view-header/view-header";
 import { useParams } from "../../utils/useParams";
-import { DedicatedScopeDetailsParams } from "../routes/DedicatedScopeDetails";
-import { toMapper } from "../routes/Mapper";
-import { DedicatedScope } from "./DedicatedScope";
+import { DedicatedScopeDetailsParams } from "../routes/dedicated-scope-details";
+import { toMapper } from "../routes/mapper";
+import { DedicatedScope } from "./dedicated-scope";
 
 export default function DedicatedScopes() {
     const { adminClient } = useAdminClient();

@@ -4,7 +4,7 @@ import { useEffect, useMemo } from 'react';
 import { useForm } from 'react-hook-form';
 import { Link } from 'react-router-dom';
 import { Badge } from '@/components/primitives/badge';
-import { FacetedFormFilter } from '@/components/primitives/form/faceted-filter/facated-form-filter';
+import { FacetedFormFilter } from '@merge-rd/ui/components/faceted-filter/faceted-form-filter';
 import { Tooltip, TooltipContent, TooltipPortal, TooltipTrigger } from '@/components/primitives/tooltip';
 import { useFetchSubscription } from '@/hooks/use-fetch-subscription';
 import type { LogsFilters } from '@/hooks/use-logs-url-state';

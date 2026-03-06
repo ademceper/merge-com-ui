@@ -5,7 +5,7 @@ import type { AppRouteObject } from "../../routes";
 
 export type UserFederationsLdapParams = { realm: string };
 
-const UserFederationSection = lazy(() => import("../UserFederationSection"));
+const UserFederationSection = lazy(() => import("../user-federation-section"));
 
 export const UserFederationsLdapRoute: AppRouteObject = {
     path: "/:realm/user-federation/ldap",

@@ -17,8 +17,8 @@ import {
     AddRoleButton,
     AddRoleMappingModal,
     FilterType
-} from "../../components/role-mapping/AddRoleMappingModal";
-import { Row, ServiceRole } from "../../components/role-mapping/RoleMapping";
+} from "../../components/role-mapping/add-role-mapping-modal";
+import { Row, ServiceRole } from "../../components/role-mapping/role-mapping";
 
 type RoleSelectorProps = {
     name: string;

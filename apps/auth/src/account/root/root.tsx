@@ -24,8 +24,8 @@ import {
 import fetchContentJson from "../content/fetchContent";
 import { Environment, environment } from "../environment";
 import { usePromise } from "../utils/usePromise";
-import { Header } from "./Header";
-import { MenuItem, PageNav } from "./PageNav";
+import { Header } from "./header";
+import { MenuItem, PageNav } from "./page-nav";
 import { routes } from "../routes";
 import { Separator } from "@merge-rd/ui/components/separator";
 

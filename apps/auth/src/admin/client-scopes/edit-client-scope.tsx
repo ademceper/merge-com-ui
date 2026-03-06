@@ -17,20 +17,20 @@ import {
     ClientScope,
     ClientScopeDefaultOptionalType,
     changeScope
-} from "../components/client-scope/ClientScopeTypes";
-import { useConfirmDialog } from "../components/confirm-dialog/ConfirmDialog";
-import { RoleMapping, Row } from "../components/role-mapping/RoleMapping";
-import { ViewHeader } from "../components/view-header/ViewHeader";
-import { useRealm } from "../context/realm-context/RealmContext";
+} from "../components/client-scope/client-scope-types";
+import { useConfirmDialog } from "../components/confirm-dialog/confirm-dialog";
+import { RoleMapping, Row } from "../components/role-mapping/role-mapping";
+import { ViewHeader } from "../components/view-header/view-header";
+import { useRealm } from "../context/realm-context/realm-context";
 import { convertFormValuesToObject } from "../util";
 import { useParams } from "../utils/useParams";
-import { MapperList } from "./details/MapperList";
-import { ScopeForm } from "./details/ScopeForm";
-import { ClientScopeParams } from "./routes/ClientScope";
-import { toClientScopes } from "./routes/ClientScopes";
-import { toMapper } from "./routes/Mapper";
-import { useAccess } from "../context/access/Access";
-import { AdminEvents } from "../events/AdminEvents";
+import { MapperList } from "./details/mapper-list";
+import { ScopeForm } from "./details/scope-form";
+import { ClientScopeParams } from "./routes/client-scope";
+import { toClientScopes } from "./routes/client-scopes";
+import { toMapper } from "./routes/mapper";
+import { useAccess } from "../context/access/access";
+import { AdminEvents } from "../events/admin-events";
 
 export default function EditClientScope() {
     const { adminClient } = useAdminClient();

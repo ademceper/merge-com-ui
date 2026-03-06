@@ -20,12 +20,12 @@ import { Link, useMatch, useNavigate } from "react-router-dom";
 import { useAdminClient } from "../admin-client";
 import { getErrorDescription, getErrorMessage } from "../../shared/keycloak-ui-shared";
 import { toast } from "sonner";
-import { useConfirmDialog } from "../components/confirm-dialog/ConfirmDialog";
-import { useRealm } from "../context/realm-context/RealmContext";
-import { useWhoAmI } from "../context/whoami/WhoAmI";
-import { toClient } from "../clients/routes/Client";
-import { UserRoute, toUser } from "../user/routes/User";
-import { toUsers } from "../user/routes/Users";
+import { useConfirmDialog } from "../components/confirm-dialog/confirm-dialog";
+import { useRealm } from "../context/realm-context/realm-context";
+import { useWhoAmI } from "../context/whoami/who-am-i";
+import { toClient } from "../clients/routes/client";
+import { UserRoute, toUser } from "../user/routes/user";
+import { toUsers } from "../user/routes/users";
 import { isLightweightUser } from "../user/utils";
 import useFormatDate from "../utils/useFormatDate";
 

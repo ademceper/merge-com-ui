@@ -9,8 +9,8 @@ import { useState } from "react";
 import { useFormContext, useWatch } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { SelectField, TextControl } from "../../../shared/keycloak-ui-shared";
-import { DefaultSwitchControl } from "../../components/SwitchControl";
-import { JwksSettings } from "./JwksSettings";
+import { DefaultSwitchControl } from "../../components/switch-control";
+import { JwksSettings } from "./jwks-settings";
 
 const PKCE_METHODS = ["plain", "S256"] as const;
 

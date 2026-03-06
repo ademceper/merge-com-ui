@@ -11,15 +11,15 @@ import { FormPanel } from "../../shared/keycloak-ui-shared";
 import { useAdminClient } from "../admin-client";
 import { getErrorDescription, getErrorMessage, useFetch } from "../../shared/keycloak-ui-shared";
 import { toast } from "sonner";
-import { useConfirmDialog } from "../components/confirm-dialog/ConfirmDialog";
+import { useConfirmDialog } from "../components/confirm-dialog/confirm-dialog";
 import { DataTable, type ColumnDef } from "@/admin/components/data-table";
 import { Empty, EmptyHeader, EmptyTitle } from "@merge-rd/ui/components/empty";
-import { useRealm } from "../context/realm-context/RealmContext";
-import { useServerInfo } from "../context/server-info/ServerInfoProvider";
-import { toIdentityProvider } from "../identity-providers/routes/IdentityProvider";
+import { useRealm } from "../context/realm-context/realm-context";
+import { useServerInfo } from "../context/server-info/server-info-provider";
+import { toIdentityProvider } from "../identity-providers/routes/identity-provider";
 import { emptyFormatter, upperCaseFormatter } from "../util";
-import { UserIdpModal } from "./UserIdPModal";
-import { useAccess } from "../context/access/Access";
+import { UserIdpModal } from "./user-id-p-modal";
+import { useAccess } from "../context/access/access";
 
 type UserIdentityProviderLinksProps = {
     userId: string;

@@ -1,10 +1,10 @@
 import { Button } from "@merge-rd/ui/components/button";
 import { useTranslation } from "react-i18next";
-import { FormAccess } from "../../components/form/FormAccess";
+import { FormAccess } from "../../components/form/form-access";
 import { convertAttributeNameToForm } from "../../util";
-import { FormFields, SaveOptions } from "../ClientDetails";
+import { FormFields, SaveOptions } from "../client-details";
 import ClientRepresentation from "@keycloak/keycloak-admin-client/lib/defs/clientRepresentation";
-import { DefaultSwitchControl } from "../../components/SwitchControl";
+import { DefaultSwitchControl } from "../../components/switch-control";
 
 type OpenIdVerifiableCredentialsProps = {
     client: ClientRepresentation;

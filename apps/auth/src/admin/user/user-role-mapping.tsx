@@ -3,7 +3,7 @@ import { useTranslation } from "react-i18next";
 import { useAdminClient } from "../admin-client";
 import { getErrorDescription, getErrorMessage } from "../../shared/keycloak-ui-shared";
 import { toast } from "sonner";
-import { RoleMapping, Row } from "../components/role-mapping/RoleMapping";
+import { RoleMapping, Row } from "../components/role-mapping/role-mapping";
 
 type UserRoleMappingProps = {
     id: string;

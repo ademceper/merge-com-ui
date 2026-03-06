@@ -16,12 +16,12 @@ import {
     AlertDialogHeader,
     AlertDialogTitle
 } from "@merge-rd/ui/components/alert-dialog";
-import { useConfirmDialog } from "../../components/confirm-dialog/ConfirmDialog";
+import { useConfirmDialog } from "../../components/confirm-dialog/confirm-dialog";
 import { useState } from "react";
-import { ViewHeader } from "../../components/view-header/ViewHeader";
-import { useRealm } from "../../context/realm-context/RealmContext";
-import { CustomUserFederationRouteParams } from "../routes/CustomUserFederation";
-import { toUserFederation } from "../routes/UserFederation";
+import { ViewHeader } from "../../components/view-header/view-header";
+import { useRealm } from "../../context/realm-context/realm-context";
+import { CustomUserFederationRouteParams } from "../routes/custom-user-federation";
+import { toUserFederation } from "../routes/user-federation";
 
 type HeaderProps = {
     provider: string;

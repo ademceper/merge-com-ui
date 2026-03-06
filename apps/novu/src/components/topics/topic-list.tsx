@@ -11,9 +11,9 @@ import {
   TableFooter,
   TableHead,
   TableHeader,
+  TablePaginationFooter,
   TableRow,
-} from '@/components/primitives/table';
-import { TablePaginationFooter } from '@/components/primitives/table-pagination-footer';
+} from '@merge-rd/ui/components/table';
 import { useFetchTopics } from '@/hooks/use-fetch-topics';
 import { cn } from '@merge-rd/ui/lib/utils';
 import { ListNoResults } from '../list-no-results';

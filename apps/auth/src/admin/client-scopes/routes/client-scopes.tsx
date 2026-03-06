@@ -5,7 +5,7 @@ import type { AppRouteObject } from "../../routes";
 
 export type ClientScopesParams = { realm: string };
 
-const ClientScopesSection = lazy(() => import("../ClientScopesSection"));
+const ClientScopesSection = lazy(() => import("../client-scopes-section"));
 
 export const ClientScopesRoute: AppRouteObject = {
     path: "/:realm/client-scopes",

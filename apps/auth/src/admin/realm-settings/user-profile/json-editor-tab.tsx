@@ -3,13 +3,13 @@ import {
     getErrorMessage,
 } from "../../../shared/keycloak-ui-shared";
 import { toast } from "sonner";
-import CodeEditor from "../../components/form/CodeEditor";
+import CodeEditor from "../../components/form/code-editor";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { prettyPrintJSON } from "../../util";
 import { FormPanel } from "../../../shared/keycloak-ui-shared";
-import { FixedButtonsGroup } from "../../components/form/FixedButtonGroup";
-import { useUserProfile } from "./UserProfileContext";
+import { FixedButtonsGroup } from "../../components/form/fixed-button-group";
+import { useUserProfile } from "./user-profile-context";
 
 export const JsonEditorTab = () => {
     const { config, save, isSaving } = useUserProfile();

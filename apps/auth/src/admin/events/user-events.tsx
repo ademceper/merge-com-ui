@@ -35,9 +35,9 @@ import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 import { useAdminClient } from "../admin-client";
 import { TextControl, useFetch } from "../../shared/keycloak-ui-shared";
-import { EventsBanners } from "../Banners";
-import { useRealm } from "../context/realm-context/RealmContext";
-import { toUser } from "../user/routes/User";
+import { EventsBanners } from "../banners";
+import { useRealm } from "../context/realm-context/realm-context";
+import { toUser } from "../user/routes/user";
 import useFormatDate, { FORMAT_DATE_AND_TIME } from "../utils/useFormatDate";
 import useLocaleSort from "../utils/useLocaleSort";
 

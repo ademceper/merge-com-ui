@@ -18,13 +18,13 @@ import { Controller, FormProvider, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { useAdminClient } from "../admin-client";
-import { DynamicComponents } from "../components/dynamic/DynamicComponents";
-import { FormAccess } from "../components/form/FormAccess";
-import { ViewHeader } from "../components/view-header/ViewHeader";
-import { useRealm } from "../context/realm-context/RealmContext";
-import { useServerInfo } from "../context/server-info/ServerInfoProvider";
-import { toEditClientPolicy } from "./routes/EditClientPolicy";
-import type { EditClientPolicyConditionParams } from "./routes/EditCondition";
+import { DynamicComponents } from "../components/dynamic/dynamic-components";
+import { FormAccess } from "../components/form/form-access";
+import { ViewHeader } from "../components/view-header/view-header";
+import { useRealm } from "../context/realm-context/realm-context";
+import { useServerInfo } from "../context/server-info/server-info-provider";
+import { toEditClientPolicy } from "./routes/edit-client-policy";
+import type { EditClientPolicyConditionParams } from "./routes/edit-condition";
 
 export type ItemType = { value: string };
 

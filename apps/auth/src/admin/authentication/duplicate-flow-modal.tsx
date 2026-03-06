@@ -13,9 +13,9 @@ import { FormProvider, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 import { useAdminClient } from "../admin-client";
-import { useRealm } from "../context/realm-context/RealmContext";
-import { NameDescription } from "./form/NameDescription";
-import { toFlow } from "./routes/Flow";
+import { useRealm } from "../context/realm-context/realm-context";
+import { NameDescription } from "./form/name-description";
+import { toFlow } from "./routes/flow";
 
 type DuplicateFlowModalProps = {
     name: string;

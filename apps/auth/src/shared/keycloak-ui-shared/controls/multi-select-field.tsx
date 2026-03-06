@@ -6,7 +6,7 @@ import { get } from "lodash-es";
 import { useState } from "react";
 import { Controller, useFormContext } from "react-hook-form";
 import { getRuleValue } from "../utils/getRuleValue";
-import { FormLabel } from "./FormLabel";
+import { FormLabel } from "./form-label";
 
 export type MultiSelectOption = { key: string; value: string } | string;
 

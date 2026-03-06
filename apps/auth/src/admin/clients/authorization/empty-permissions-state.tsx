@@ -4,8 +4,8 @@ import { Button } from "@merge-rd/ui/components/button";
 import { Tooltip, TooltipContent, TooltipTrigger, TooltipProvider } from "@merge-rd/ui/components/tooltip";
 import { PlusCircle } from "@phosphor-icons/react";
 
-import { PermissionType, toNewPermission } from "../routes/NewPermission";
-import { useRealm } from "../../context/realm-context/RealmContext";
+import { PermissionType, toNewPermission } from "../routes/new-permission";
+import { useRealm } from "../../context/realm-context/realm-context";
 import { toUpperCase } from "../../util";
 
 type EmptyButtonProps = {

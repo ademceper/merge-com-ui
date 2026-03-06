@@ -23,10 +23,10 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useAdminClient } from "../admin-client";
 import { KeycloakSpinner } from "../../shared/keycloak-ui-shared";
-import { useRealm } from "../context/realm-context/RealmContext";
+import { useRealm } from "../context/realm-context/realm-context";
 import { addTrailingSlash, toKey } from "../util";
 import { getAuthorizationHeaders } from "../utils/getAuthorizationHeaders";
-import { RequiredActionConfigModal } from "./components/RequiredActionConfigModal";
+import { RequiredActionConfigModal } from "./components/required-action-config-modal";
 
 type DataType = RequiredActionProviderRepresentation &
     RequiredActionProviderSimpleRepresentation & {

@@ -23,10 +23,10 @@ import { Link, useLocation } from "react-router-dom";
 import { useAdminClient } from "../admin-client";
 import { getErrorDescription, getErrorMessage, useFetch } from "../../shared/keycloak-ui-shared";
 import { toast } from "sonner";
-import { useAccess } from "../context/access/Access";
-import { GroupsModal } from "./GroupsModal";
-import { useSubGroups } from "./SubGroupsContext";
-import { MoveDialog } from "./MoveDialog";
+import { useAccess } from "../context/access/access";
+import { GroupsModal } from "./groups-modal";
+import { useSubGroups } from "./sub-groups-context";
+import { MoveDialog } from "./move-dialog";
 import { getLastId } from "./groupIdUtils";
 
 type GroupTableProps = {

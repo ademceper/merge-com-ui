@@ -5,7 +5,7 @@ import type { AppRouteObject } from "../../routes";
 
 export type CreateFlowParams = { realm: string };
 
-const CreateFlow = lazy(() => import("../form/CreateFlow"));
+const CreateFlow = lazy(() => import("../form/create-flow"));
 
 export const CreateFlowRoute: AppRouteObject = {
     path: "/:realm/authentication/flows/create",

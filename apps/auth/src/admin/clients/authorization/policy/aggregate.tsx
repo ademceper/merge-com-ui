@@ -2,10 +2,10 @@ import { Label } from "@merge-rd/ui/components/label";
 import { useTranslation } from "react-i18next";
 import { HelpItem } from "../../../../shared/keycloak-ui-shared";
 import { useParams } from "../../../utils/useParams";
-import type { PolicyDetailsParams } from "../../routes/PolicyDetails";
-import { DecisionStrategySelect } from "../DecisionStrategySelect";
-import { ResourcesPolicySelect } from "../ResourcesPolicySelect";
-import { NewPermissionPolicyDetailsParams } from "../../../permissions-configuration/routes/NewPermissionPolicy";
+import type { PolicyDetailsParams } from "../../routes/policy-details";
+import { DecisionStrategySelect } from "../decision-strategy-select";
+import { ResourcesPolicySelect } from "../resources-policy-select";
+import { NewPermissionPolicyDetailsParams } from "../../../permissions-configuration/routes/new-permission-policy";
 
 export const Aggregate = () => {
     const { t } = useTranslation();

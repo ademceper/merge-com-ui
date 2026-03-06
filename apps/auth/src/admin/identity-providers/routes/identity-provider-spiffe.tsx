@@ -5,7 +5,7 @@ import type { AppRouteObject } from "../../routes";
 
 export type IdentityProviderSpiffeParams = { realm: string };
 
-const AddSpiffeConnect = lazy(() => import("../add/AddSpiffeConnect"));
+const AddSpiffeConnect = lazy(() => import("../add/add-spiffe-connect"));
 
 export const IdentityProviderSpiffeRoute: AppRouteObject = {
     path: "/:realm/identity-providers/spiffe/add",

@@ -26,11 +26,11 @@ import {
     AlertDialogHeader,
     AlertDialogTitle
 } from "@merge-rd/ui/components/alert-dialog";
-import CodeEditor from "../components/form/CodeEditor";
-import { useRealm } from "../context/realm-context/RealmContext";
+import CodeEditor from "../components/form/code-editor";
+import { useRealm } from "../context/realm-context/realm-context";
 import { prettyPrintJSON } from "../util";
-import { toAddClientProfile } from "./routes/AddClientProfile";
-import { toClientProfile } from "./routes/ClientProfile";
+import { toAddClientProfile } from "./routes/add-client-profile";
+import { toClientProfile } from "./routes/client-profile";
 import { KeycloakSpinner } from "../../shared/keycloak-ui-shared";
 
 type ClientProfile = ClientProfileRepresentation & {

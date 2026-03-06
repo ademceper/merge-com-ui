@@ -37,14 +37,14 @@ import { useTranslation } from "react-i18next";
 import { Funnel } from "@phosphor-icons/react";
 import { useAdminClient } from "../admin-client";
 import { TextControl, useFetch } from "../../shared/keycloak-ui-shared";
-import { MultiSelectField } from "../../shared/keycloak-ui-shared/controls/MultiSelectField";
-import { EventsBanners } from "../Banners";
-import CodeEditor from "../components/form/CodeEditor";
-import { useRealm } from "../context/realm-context/RealmContext";
-import { useServerInfo } from "../context/server-info/ServerInfoProvider";
+import { MultiSelectField } from "../../shared/keycloak-ui-shared/controls/multi-select-field";
+import { EventsBanners } from "../banners";
+import CodeEditor from "../components/form/code-editor";
+import { useRealm } from "../context/realm-context/realm-context";
+import { useServerInfo } from "../context/server-info/server-info-provider";
 import { prettyPrintJSON } from "../util";
 import useFormatDate, { FORMAT_DATE_AND_TIME } from "../utils/useFormatDate";
-import { CellResourceLinkRenderer } from "./ResourceLinks";
+import { CellResourceLinkRenderer } from "./resource-links";
 
 type DisplayDialogProps = PropsWithChildren<{
     titleKey: string;

@@ -3,7 +3,7 @@ import { useEffect } from "react";
 import { useFormContext } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { convertAttributeNameToForm } from "../../util";
-import { FormFields } from "../ClientDetails";
+import { FormFields } from "../client-details";
 
 export const SamlEncryption = () => {
     const { t } = useTranslation();

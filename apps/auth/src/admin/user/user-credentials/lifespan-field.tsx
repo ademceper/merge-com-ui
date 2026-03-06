@@ -1,5 +1,5 @@
 import { useTranslation } from "react-i18next";
-import { TimeSelectorControl } from "../../components/time-selector/TimeSelectorControl";
+import { TimeSelectorControl } from "../../components/time-selector/time-selector-control";
 
 export const LifespanField = () => {
     const { t } = useTranslation();

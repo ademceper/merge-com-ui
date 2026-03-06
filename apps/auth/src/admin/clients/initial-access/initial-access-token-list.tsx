@@ -21,9 +21,9 @@ import { Plus, Trash } from "@phosphor-icons/react";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useAdminClient } from "../../admin-client";
-import { useRealm } from "../../context/realm-context/RealmContext";
+import { useRealm } from "../../context/realm-context/realm-context";
 import useFormatDate, { FORMAT_DATE_AND_TIME } from "../../utils/useFormatDate";
-import { AddInitialAccessTokenDialog } from "./AddInitialAccessTokenDialog";
+import { AddInitialAccessTokenDialog } from "./add-initial-access-token-dialog";
 
 export const InitialAccessTokenList = () => {
     const { adminClient } = useAdminClient();

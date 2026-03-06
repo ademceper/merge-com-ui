@@ -6,12 +6,12 @@ import { FormProvider, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { Link, useNavigate } from "react-router-dom";
 import { useAdminClient } from "../../admin-client";
-import { FormAccess } from "../../components/form/FormAccess";
-import { ViewHeader } from "../../components/view-header/ViewHeader";
-import { useRealm } from "../../context/realm-context/RealmContext";
-import { toAuthentication } from "../routes/Authentication";
-import { toFlow } from "../routes/Flow";
-import { NameDescription } from "./NameDescription";
+import { FormAccess } from "../../components/form/form-access";
+import { ViewHeader } from "../../components/view-header/view-header";
+import { useRealm } from "../../context/realm-context/realm-context";
+import { toAuthentication } from "../routes/authentication";
+import { toFlow } from "../routes/flow";
+import { NameDescription } from "./name-description";
 
 const TYPES = ["basic-flow", "client-flow"] as const;
 

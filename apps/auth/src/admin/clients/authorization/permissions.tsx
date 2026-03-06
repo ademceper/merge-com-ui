@@ -26,17 +26,17 @@ import { Fragment, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Link, useNavigate } from "react-router-dom";
 import { useAdminClient } from "../../admin-client";
-import { useConfirmDialog } from "../../components/confirm-dialog/ConfirmDialog";
+import { useConfirmDialog } from "../../components/confirm-dialog/confirm-dialog";
 import { KeycloakSpinner } from "../../../shared/keycloak-ui-shared";
-import { useRealm } from "../../context/realm-context/RealmContext";
+import { useRealm } from "../../context/realm-context/realm-context";
 import useToggle from "../../utils/useToggle";
-import { toNewPermission } from "../routes/NewPermission";
-import { toPermissionDetails } from "../routes/PermissionDetails";
-import { toPolicyDetails } from "../routes/PolicyDetails";
-import { DetailDescriptionLink } from "./DetailDescription";
-import { EmptyPermissionsState } from "./EmptyPermissionsState";
-import { MoreLabel } from "./MoreLabel";
-import { SearchDropdown, SearchForm } from "./SearchDropdown";
+import { toNewPermission } from "../routes/new-permission";
+import { toPermissionDetails } from "../routes/permission-details";
+import { toPolicyDetails } from "../routes/policy-details";
+import { DetailDescriptionLink } from "./detail-description";
+import { EmptyPermissionsState } from "./empty-permissions-state";
+import { MoreLabel } from "./more-label";
+import { SearchDropdown, SearchForm } from "./search-dropdown";
 
 type PermissionsProps = {
     clientId: string;

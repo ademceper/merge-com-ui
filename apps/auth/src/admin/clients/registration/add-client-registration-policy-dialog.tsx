@@ -17,10 +17,10 @@ import { useTranslation } from "react-i18next";
 import { cn } from "@merge-rd/ui/lib/utils";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useAdminClient } from "../../admin-client";
-import { DynamicComponents } from "../../components/dynamic/DynamicComponents";
-import { FormAccess } from "../../components/form/FormAccess";
-import { useRealm } from "../../context/realm-context/RealmContext";
-import { useServerInfo } from "../../context/server-info/ServerInfoProvider";
+import { DynamicComponents } from "../../components/dynamic/dynamic-components";
+import { FormAccess } from "../../components/form/form-access";
+import { useRealm } from "../../context/realm-context/realm-context";
+import { useServerInfo } from "../../context/server-info/server-info-provider";
 import useLocaleSort, { mapByKey } from "../../utils/useLocaleSort";
 
 const POLICY_TYPE = "org.keycloak.services.clientregistration.policy.ClientRegistrationPolicy";

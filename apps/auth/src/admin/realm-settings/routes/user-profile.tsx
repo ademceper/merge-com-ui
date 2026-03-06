@@ -14,7 +14,7 @@ export type UserProfileParams = {
     tab: UserProfileTab;
 };
 
-const RealmSettingsSection = lazy(() => import("../RealmSettingsSection"));
+const RealmSettingsSection = lazy(() => import("../realm-settings-section"));
 
 export const UserProfileRoute: AppRouteObject = {
     path: "/:realm/realm-settings/user-profile/:tab",

@@ -28,7 +28,7 @@ import { CaretRight, MagnifyingGlass } from "@phosphor-icons/react";
 import { KeyboardEvent, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useAdminClient } from "../../admin-client";
-import { GroupPath } from "./GroupPath";
+import { GroupPath } from "./group-path";
 
 export type GroupPickerDialogProps = {
     id?: string;

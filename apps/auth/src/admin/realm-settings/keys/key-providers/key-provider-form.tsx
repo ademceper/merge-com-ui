@@ -6,14 +6,14 @@ import { FormProvider, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 import { useAdminClient } from "../../../admin-client";
-import { DynamicComponents } from "../../../components/dynamic/DynamicComponents";
-import { FormAccess } from "../../../components/form/FormAccess";
-import { ViewHeader } from "../../../components/view-header/ViewHeader";
-import { useServerInfo } from "../../../context/server-info/ServerInfoProvider";
+import { DynamicComponents } from "../../../components/dynamic/dynamic-components";
+import { FormAccess } from "../../../components/form/form-access";
+import { ViewHeader } from "../../../components/view-header/view-header";
+import { useServerInfo } from "../../../context/server-info/server-info-provider";
 import { KEY_PROVIDER_TYPE } from "../../../util";
 import { useParams } from "../../../utils/useParams";
-import { KeyProviderParams, ProviderType } from "../../routes/KeyProvider";
-import { toKeysTab } from "../../routes/KeysTab";
+import { KeyProviderParams, ProviderType } from "../../routes/key-provider";
+import { toKeysTab } from "../../routes/keys-tab";
 
 type KeyProviderFormProps = {
     id?: string;

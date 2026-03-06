@@ -2,10 +2,10 @@ import { Input } from "@merge-rd/ui/components/input";
 import { Label } from "@merge-rd/ui/components/label";
 import { useFormContext } from "react-hook-form";
 import { useTranslation } from "react-i18next";
-import { FormAccess } from "../../../components/form/FormAccess";
-import { KeyValueInput } from "../../../components/key-value-form/KeyValueInput";
-import { KeySelect } from "./KeySelect";
-import { ValueSelect } from "./ValueSelect";
+import { FormAccess } from "../../../components/form/form-access";
+import { KeyValueInput } from "../../../components/key-value-form/key-value-input";
+import { KeySelect } from "./key-select";
+import { ValueSelect } from "./value-select";
 
 export const AttributeAnnotations = () => {
     const { t } = useTranslation();

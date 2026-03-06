@@ -11,15 +11,15 @@ import { Fragment, useState } from "react";
 import { Controller, useFormContext } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { useAdminClient } from "../../admin-client";
-import { useConfirmDialog } from "../../components/confirm-dialog/ConfirmDialog";
-import { FormAccess } from "../../components/form/FormAccess";
+import { useConfirmDialog } from "../../components/confirm-dialog/confirm-dialog";
+import { FormAccess } from "../../components/form/form-access";
 import { convertAttributeNameToForm } from "../../util";
 import useToggle from "../../utils/useToggle";
-import { FormFields } from "../ClientDetails";
-import { Certificate } from "./Certificate";
-import { ExportSamlKeyDialog } from "./ExportSamlKeyDialog";
-import { SamlImportKeyDialog } from "./SamlImportKeyDialog";
-import { SamlKeysDialog } from "./SamlKeysDialog";
+import { FormFields } from "../client-details";
+import { Certificate } from "./certificate";
+import { ExportSamlKeyDialog } from "./export-saml-key-dialog";
+import { SamlImportKeyDialog } from "./saml-import-key-dialog";
+import { SamlKeysDialog } from "./saml-keys-dialog";
 
 type SamlKeysProps = {
     clientId: string;

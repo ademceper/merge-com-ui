@@ -8,7 +8,7 @@ export type ClientProfileParams = {
     profileName: string;
 };
 
-const ClientProfileForm = lazy(() => import("../ClientProfileForm"));
+const ClientProfileForm = lazy(() => import("../client-profile-form"));
 
 export const ClientProfileRoute: AppRouteObject = {
     path: "/:realm/realm-settings/client-policies/:profileName/edit-profile",

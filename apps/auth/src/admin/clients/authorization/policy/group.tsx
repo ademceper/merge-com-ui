@@ -16,7 +16,7 @@ import { useState } from "react";
 import { Controller, useFormContext } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { useAdminClient } from "../../../admin-client";
-import { GroupPickerDialog } from "../../../components/group/GroupPickerDialog";
+import { GroupPickerDialog } from "../../../components/group/group-picker-dialog";
 
 type GroupForm = {
     groups?: GroupValue[];

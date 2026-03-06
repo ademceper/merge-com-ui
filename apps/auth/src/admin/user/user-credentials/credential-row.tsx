@@ -11,7 +11,7 @@ import { TableCell } from "@/admin/components/data-table";
 import type CredentialRepresentation from "@keycloak/keycloak-admin-client/lib/defs/credentialRepresentation";
 import useToggle from "../../utils/useToggle";
 import useLocaleSort from "../../utils/useLocaleSort";
-import { CredentialDataDialog } from "./CredentialDataDialog";
+import { CredentialDataDialog } from "./credential-data-dialog";
 import useFormatDate from "../../utils/useFormatDate";
 import { DotsThreeVertical } from "@phosphor-icons/react";
 

@@ -8,13 +8,13 @@ import { FormProvider, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { Link, useNavigate } from "react-router-dom";
 import { useAdminClient } from "../../admin-client";
-import { FormAccess } from "../../components/form/FormAccess";
-import { ViewHeader } from "../../components/view-header/ViewHeader";
+import { FormAccess } from "../../components/form/form-access";
+import { ViewHeader } from "../../components/view-header/view-header";
 import { useParams } from "../../utils/useParams";
 import useToggle from "../../utils/useToggle";
-import { toAuthorizationTab } from "../routes/AuthenticationTab";
-import type { ScopeDetailsParams } from "../routes/Scope";
-import { DeleteScopeDialog } from "./DeleteScopeDialog";
+import { toAuthorizationTab } from "../routes/authentication-tab";
+import type { ScopeDetailsParams } from "../routes/scope";
+import { DeleteScopeDialog } from "./delete-scope-dialog";
 
 type FormFields = Omit<ScopeRepresentation, "resources">;
 

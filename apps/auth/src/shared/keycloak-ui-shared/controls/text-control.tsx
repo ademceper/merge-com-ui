@@ -8,7 +8,7 @@ import {
     useController
 } from "react-hook-form";
 import { getRuleValue } from "../utils/getRuleValue";
-import { FormLabel } from "./FormLabel";
+import { FormLabel } from "./form-label";
 
 export type TextControlProps<
     T extends FieldValues,

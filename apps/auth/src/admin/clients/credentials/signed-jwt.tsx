@@ -1,10 +1,10 @@
 import { useTranslation } from "react-i18next";
 import { Controller, useFormContext } from "react-hook-form";
 import { SelectField } from "../../../shared/keycloak-ui-shared";
-import { useServerInfo } from "../../context/server-info/ServerInfoProvider";
+import { useServerInfo } from "../../context/server-info/server-info-provider";
 import { convertAttributeNameToForm } from "../../util";
-import { FormFields } from "../ClientDetails";
-import { TimeSelector } from "../../components/time-selector/TimeSelector";
+import { FormFields } from "../client-details";
+import { TimeSelector } from "../../components/time-selector/time-selector";
 import { Label } from "@merge-rd/ui/components/label";
 import { HelpItem } from "../../../shared/keycloak-ui-shared";
 

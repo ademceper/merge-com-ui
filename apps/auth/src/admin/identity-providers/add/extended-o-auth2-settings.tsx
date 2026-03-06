@@ -2,8 +2,8 @@ import { NumberControl, SelectField } from "../../../shared/keycloak-ui-shared";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@merge-rd/ui/components/collapsible";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
-import { SwitchField } from "../component/SwitchField";
-import { TextField } from "../component/TextField";
+import { SwitchField } from "../component/switch-field";
+import { TextField } from "../component/text-field";
 
 export const ExtendedOAuth2Settings = () => {
     const { t } = useTranslation();

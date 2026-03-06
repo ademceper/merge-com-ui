@@ -5,11 +5,11 @@ import { useNavigate } from "react-router-dom";
 import { useAdminClient } from "../admin-client";
 import { getErrorDescription, getErrorMessage } from "../../shared/keycloak-ui-shared";
 import { toast } from "sonner";
-import { AttributeForm } from "../components/key-value-form/AttributeForm";
-import { RoleForm } from "../components/role-form/RoleForm";
-import { useRealm } from "../context/realm-context/RealmContext";
-import { toRealmRole } from "./routes/RealmRole";
-import { toRealmRoles } from "./routes/RealmRoles";
+import { AttributeForm } from "../components/key-value-form/attribute-form";
+import { RoleForm } from "../components/role-form/role-form";
+import { useRealm } from "../context/realm-context/realm-context";
+import { toRealmRole } from "./routes/realm-role";
+import { toRealmRoles } from "./routes/realm-roles";
 
 export default function CreateRealmRole() {
     const { adminClient } = useAdminClient();

@@ -15,7 +15,7 @@ import { Button } from "@merge-rd/ui/components/button";
 import { Input } from "@merge-rd/ui/components/input";
 import { useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { useServerInfo } from "../context/server-info/ServerInfoProvider";
+import { useServerInfo } from "../context/server-info/server-info-provider";
 import { CaretDown, CaretRight, MagnifyingGlass } from "@phosphor-icons/react";
 
 export const ProviderInfo = () => {

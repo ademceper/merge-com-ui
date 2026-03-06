@@ -8,16 +8,16 @@ import { Label } from "@merge-rd/ui/components/label";
 import React, { useEffect, useMemo } from "react";
 import { FormProvider, useForm, useFormContext, useWatch } from "react-hook-form";
 import { useTranslation } from "react-i18next";
-import { FixedButtonsGroup } from "../../components/form/FixedButtonGroup";
-import { FormAccess } from "../../components/form/FormAccess";
+import { FixedButtonsGroup } from "../../components/form/fixed-button-group";
+import { FormAccess } from "../../components/form/form-access";
 import useToggle from "../../utils/useToggle";
-import { FileNameDialog } from "./FileNameDialog";
-import { ImageUpload } from "./ImageUpload";
-import { usePreviewLogo } from "./LogoContext";
-import { darkTheme, lightTheme } from "./PatternflyVars";
-import { PreviewWindow } from "./PreviewWindow";
-import { ThemeRealmRepresentation } from "./ThemesTab";
-import { UploadJar } from "./UploadJar";
+import { FileNameDialog } from "./file-name-dialog";
+import { ImageUpload } from "./image-upload";
+import { usePreviewLogo } from "./logo-context";
+import { darkTheme, lightTheme } from "./patternfly-vars";
+import { PreviewWindow } from "./preview-window";
+import { ThemeRealmRepresentation } from "./themes-tab";
+import { UploadJar } from "./upload-jar";
 
 type ThemeType = "light" | "dark";
 

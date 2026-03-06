@@ -1,4 +1,4 @@
-import { SessionExpirationWarningOverlay } from "../shared/SessionExpirationWarningOverlay";
+import { SessionExpirationWarningOverlay } from "../shared/session-expiration-warning-overlay";
 import KeycloakAdminClient from "@keycloak/keycloak-admin-client";
 import { mainPageContentId, useEnvironment } from "../shared/keycloak-ui-shared";
 import { SidebarInset, SidebarPage, SidebarProvider } from "@merge-rd/ui/components/sidebar";
@@ -12,18 +12,18 @@ import {
     KeycloakSpinner
 } from "../shared/keycloak-ui-shared";
 import { AdminClientContext, initAdminClient } from "./admin-client";
-import { AdminAppSidebar } from "./components/AdminAppSidebar";
-import { ErrorRenderer } from "./components/error/ErrorRenderer";
-import { RecentRealmsProvider } from "./context/RecentRealms";
-import { AccessContextProvider } from "./context/access/Access";
-import { RealmContextProvider } from "./context/realm-context/RealmContext";
-import { ServerInfoProvider } from "./context/server-info/ServerInfoProvider";
-import { WhoAmIContextProvider } from "./context/whoami/WhoAmI";
+import { AdminAppSidebar } from "./components/admin-app-sidebar";
+import { ErrorRenderer } from "./components/error/error-renderer";
+import { RecentRealmsProvider } from "./context/recent-realms";
+import { AccessContextProvider } from "./context/access/access";
+import { RealmContextProvider } from "./context/realm-context/realm-context";
+import { ServerInfoProvider } from "./context/server-info/server-info-provider";
+import { WhoAmIContextProvider } from "./context/whoami/who-am-i";
 import type { Environment } from "./environment";
-import { SubGroups } from "./groups/SubGroupsContext";
-import { AuthWall } from "./root/AuthWall";
-import { Banners } from "./Banners";
-import { AdminHeader } from "./components/AdminHeader";
+import { SubGroups } from "./groups/sub-groups-context";
+import { AuthWall } from "./root/auth-wall";
+import { Banners } from "./banners";
+import { AdminHeader } from "./components/admin-header";
 
 const OutletComponent = Outlet as ComponentType;
 
@@ -93,7 +93,6 @@ export const App = () => {
                         <AdminHeader />
                         <SidebarPage
                             id={mainPageContentId}
-                            className="px-4 pb-4"
                         >
                             <ErrorBoundaryFallback fallback={ErrorRenderer}>
                                 <Suspense fallback={<KeycloakSpinner />}>

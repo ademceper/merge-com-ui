@@ -15,11 +15,11 @@ import { useMemo } from "react";
 import { Controller, FormProvider, useForm, useWatch } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { useAdminClient } from "../../admin-client";
-import { FormAccess } from "../../components/form/FormAccess";
-import { FixedButtonsGroup } from "../../components/form/FixedButtonGroup";
+import { FormAccess } from "../../components/form/form-access";
+import { FixedButtonsGroup } from "../../components/form/fixed-button-group";
 import { FormPanel } from "../../../shared/keycloak-ui-shared";
-import { TimeSelectorControl } from "../../components/time-selector/TimeSelectorControl";
-import { useRealm } from "../../context/realm-context/RealmContext";
+import { TimeSelectorControl } from "../../components/time-selector/time-selector-control";
+import { useRealm } from "../../context/realm-context/realm-context";
 import useLocaleSort from "../../utils/useLocaleSort";
 
 const POLICY_TYPES = ["totp", "hotp"] as const;

@@ -9,14 +9,14 @@ import { useState } from "react";
 import { Controller, FormProvider, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { useAdminClient } from "../../admin-client";
-import { FixedButtonsGroup } from "../../components/form/FixedButtonGroup";
-import { FormAccess } from "../../components/form/FormAccess";
+import { FixedButtonsGroup } from "../../components/form/fixed-button-group";
+import { FormAccess } from "../../components/form/form-access";
 import { KeycloakSpinner } from "../../../shared/keycloak-ui-shared";
-import { DefaultSwitchControl } from "../../components/SwitchControl";
-import { useAccess } from "../../context/access/Access";
+import { DefaultSwitchControl } from "../../components/switch-control";
+import { useAccess } from "../../context/access/access";
 import useToggle from "../../utils/useToggle";
-import { DecisionStrategySelect } from "./DecisionStrategySelect";
-import { ImportDialog } from "./ImportDialog";
+import { DecisionStrategySelect } from "./decision-strategy-select";
+import { ImportDialog } from "./import-dialog";
 
 const POLICY_ENFORCEMENT_MODES = ["ENFORCING", "PERMISSIVE", "DISABLED"] as const;
 

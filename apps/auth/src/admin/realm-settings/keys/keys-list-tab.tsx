@@ -13,10 +13,10 @@ import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 import { useAdminClient } from "../../admin-client";
-import { useConfirmDialog } from "../../components/confirm-dialog/ConfirmDialog";
-import { useRealm } from "../../context/realm-context/RealmContext";
+import { useConfirmDialog } from "../../components/confirm-dialog/confirm-dialog";
+import { useRealm } from "../../context/realm-context/realm-context";
 import useFormatDate from "../../utils/useFormatDate";
-import { toKeysTab } from "../routes/KeysTab";
+import { toKeysTab } from "../routes/keys-tab";
 
 type KeyData = KeyMetadataRepresentation & {
     provider?: string;

@@ -11,7 +11,7 @@ export type DedicatedScopeDetailsParams = {
     tab?: DedicatedScopeTab;
 };
 
-const DedicatedScopes = lazy(() => import("../scopes/DedicatedScopes"));
+const DedicatedScopes = lazy(() => import("../scopes/dedicated-scopes"));
 
 export const DedicatedScopeDetailsRoute: AppRouteObject = {
     path: "/:realm/clients/:clientId/clientScopes/dedicated",

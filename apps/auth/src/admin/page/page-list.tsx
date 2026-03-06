@@ -8,10 +8,10 @@ import { useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { useAdminClient } from "../admin-client";
-import { useConfirmDialog } from "../components/confirm-dialog/ConfirmDialog";
-import { ViewHeader } from "../components/view-header/ViewHeader";
-import { useRealm } from "../context/realm-context/RealmContext";
-import { useServerInfo } from "../context/server-info/ServerInfoProvider";
+import { useConfirmDialog } from "../components/confirm-dialog/confirm-dialog";
+import { ViewHeader } from "../components/view-header/view-header";
+import { useRealm } from "../context/realm-context/realm-context";
+import { useServerInfo } from "../context/server-info/server-info-provider";
 import {
     DataTable,
     DataTableRowActions,

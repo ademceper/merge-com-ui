@@ -15,12 +15,12 @@ import {
 } from "../../../shared/keycloak-ui-shared";
 import { toast } from "sonner";
 import { useAdminClient } from "../../admin-client";
-import { FormAccess } from "../../components/form/FormAccess";
-import { FixedButtonsGroup } from "../../components/form/FixedButtonGroup";
+import { FormAccess } from "../../components/form/form-access";
+import { FixedButtonsGroup } from "../../components/form/fixed-button-group";
 import { FormPanel } from "../../../shared/keycloak-ui-shared";
-import { MultiLineInput } from "../../components/multi-line-input/MultiLineInput";
-import { TimeSelectorControl } from "../../components/time-selector/TimeSelectorControl";
-import { useRealm } from "../../context/realm-context/RealmContext";
+import { MultiLineInput } from "../../components/multi-line-input/multi-line-input";
+import { TimeSelectorControl } from "../../components/time-selector/time-selector-control";
+import { useRealm } from "../../context/realm-context/realm-context";
 import { convertFormValuesToObject, convertToFormValues } from "../../util";
 import useIsFeatureEnabled, { Feature } from "../../utils/useIsFeatureEnabled";
 

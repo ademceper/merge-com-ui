@@ -18,15 +18,15 @@ import {
     AlertDialogHeader,
     AlertDialogTitle
 } from "@merge-rd/ui/components/alert-dialog";
-import { FormAccess } from "../../components/form/FormAccess";
-import { FixedButtonsGroup } from "../../components/form/FixedButtonGroup";
+import { FormAccess } from "../../components/form/form-access";
+import { FixedButtonsGroup } from "../../components/form/fixed-button-group";
 import { FormPanel } from "../../../shared/keycloak-ui-shared";
-import { useRealm } from "../../context/realm-context/RealmContext";
+import { useRealm } from "../../context/realm-context/realm-context";
 import { convertToFormValues } from "../../util";
-import { AddEventTypesDialog } from "./AddEventTypesDialog";
-import { EventConfigForm, EventsType } from "./EventConfigForm";
-import { EventListenersForm } from "./EventListenersForm";
-import { EventsTypeTable, EventType } from "./EventsTypeTable";
+import { AddEventTypesDialog } from "./add-event-types-dialog";
+import { EventConfigForm, EventsType } from "./event-config-form";
+import { EventListenersForm } from "./event-listeners-form";
+import { EventsTypeTable, EventType } from "./events-type-table";
 
 type EventsTabProps = {
     realm: RealmRepresentation;

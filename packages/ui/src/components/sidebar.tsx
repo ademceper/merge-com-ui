@@ -341,11 +341,11 @@ function SidebarPage({ className, ...props }: React.ComponentProps<"div">) {
   return (
     <div
       data-slot="sidebar-page"
-      className="flex flex-1 flex-col bg-background rounded-t-3xl shadow-sm overflow-clip min-h-0"
+      className="flex flex-1 flex-col bg-background rounded-t-3xl shadow-sm overflow-clip min-h-0 pt-1.5"
     >
       <div
         className={cn(
-          "flex flex-1 flex-col overflow-y-auto min-h-0 mask-[linear-gradient(to_bottom,transparent,black_1rem,black_calc(100%-1rem),transparent)]",
+          "flex flex-1 flex-col px-4 overflow-y-auto min-h-0 mask-[linear-gradient(to_bottom,transparent,black_0.75rem,black_calc(100%-0.75rem),transparent)]",
           className
         )}
         {...props}

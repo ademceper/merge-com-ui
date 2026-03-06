@@ -11,11 +11,11 @@ import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 import { useAdminClient } from "../admin-client";
 import { KeycloakSpinner } from "../../shared/keycloak-ui-shared";
-import { ViewHeader } from "../components/view-header/ViewHeader";
-import { useRealm } from "../context/realm-context/RealmContext";
-import { UserForm } from "./UserForm";
+import { ViewHeader } from "../components/view-header/view-header";
+import { useRealm } from "../context/realm-context/realm-context";
+import { UserForm } from "./user-form";
 import { UserFormFields, toUserRepresentation } from "./form-state";
-import { toUser } from "./routes/User";
+import { toUser } from "./routes/user";
 
 export default function CreateUser() {
     const { adminClient } = useAdminClient();

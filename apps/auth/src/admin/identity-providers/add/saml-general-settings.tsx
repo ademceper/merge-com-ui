@@ -7,11 +7,11 @@ import { Label } from "@merge-rd/ui/components/label";
 import { useFormContext, useWatch } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 
-import { FormattedLink } from "../../components/external-link/FormattedLink";
-import { useRealm } from "../../context/realm-context/RealmContext";
+import { FormattedLink } from "../../components/external-link/formatted-link";
+import { useRealm } from "../../context/realm-context/realm-context";
 import type { Environment } from "../../environment";
-import { DisplayOrder } from "../component/DisplayOrder";
-import { RedirectUrl } from "../component/RedirectUrl";
+import { DisplayOrder } from "../component/display-order";
+import { RedirectUrl } from "../component/redirect-url";
 
 type SamlGeneralSettingsProps = {
     isAliasReadonly?: boolean;

@@ -1,8 +1,8 @@
 import { Fragment, useRef, useState } from "react";
 import type { PageProps } from "keycloakify/login/pages/PageProps";
-import type { KcContext } from "../KcContext";
+import type { KcContext } from "../kc-context";
 import type { I18n } from "../i18n";
-import AuthLayout from "../components/AuthLayout";
+import AuthLayout from "../components/auth-layout";
 import { Button } from "@merge-rd/ui/components/button";
 import { Alert, AlertDescription } from "@merge-rd/ui/components/alert";
 import { InputOTP, InputOTPGroup, InputOTPSlot } from "@merge-rd/ui/components/input-otp";

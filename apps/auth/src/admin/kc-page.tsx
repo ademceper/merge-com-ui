@@ -1,6 +1,6 @@
 import { lazy } from "react";
 import { KcAdminUiLoader } from "@keycloakify/keycloak-admin-ui";
-import type { KcContext } from "./KcContext";
+import type { KcContext } from "./kc-context";
 import { oidcEarlyInit } from "oidc-spa/entrypoint";
 import { browserRuntimeFreeze } from "oidc-spa/browser-runtime-freeze";
 import { DPoP } from "oidc-spa/DPoP";
@@ -14,7 +14,7 @@ const { shouldLoadApp } = oidcEarlyInit({
     }
 });
 
-const KcAdminUi = lazy(() => import("./KcAdminUi"));
+const KcAdminUi = lazy(() => import("./kc-admin-ui"));
 
 export default function KcPage(props: { kcContext: KcContext }) {
     const { kcContext } = props;

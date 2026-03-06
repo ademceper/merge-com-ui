@@ -1,8 +1,8 @@
 import { useTranslation } from "react-i18next";
 import { TextControl } from "../../../shared/keycloak-ui-shared";
-import { DefaultSwitchControl } from "../../components/SwitchControl";
+import { DefaultSwitchControl } from "../../components/switch-control";
 import { convertAttributeNameToForm } from "../../util";
-import { FormFields } from "../ClientDetails";
+import { FormFields } from "../client-details";
 
 export const X509 = () => {
     const { t } = useTranslation();

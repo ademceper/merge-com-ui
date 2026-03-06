@@ -5,8 +5,8 @@ import { type TFunction } from "i18next";
 import { Fragment, useEffect, useMemo } from "react";
 import { FieldPath, UseFormReturn, useWatch } from "react-hook-form";
 
-import { InputType, UserProfileFieldProps } from "./UserProfileFields";
-import { UserProfileGroup } from "./UserProfileGroup";
+import { InputType, UserProfileFieldProps } from "./user-profile-fields";
+import { UserProfileGroup } from "./user-profile-group";
 import { UserFormFields, fieldName, labelAttribute } from "./utils";
 
 export const MultiInputComponent = ({

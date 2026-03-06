@@ -5,7 +5,7 @@ import type { AppRouteObject } from "../../routes";
 
 export type AddOrganizationParams = { realm: string };
 
-const NewOrganization = lazy(() => import("../NewOrganization"));
+const NewOrganization = lazy(() => import("../new-organization"));
 
 export const AddOrganizationRoute: AppRouteObject = {
     path: "/:realm/organizations/new",

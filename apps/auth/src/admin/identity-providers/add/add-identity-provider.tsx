@@ -7,17 +7,17 @@ import { Link, useNavigate } from "react-router-dom";
 import { useAdminClient } from "../../admin-client";
 import { getErrorDescription, getErrorMessage } from "../../../shared/keycloak-ui-shared";
 import { toast } from "sonner";
-import { DynamicComponents } from "../../components/dynamic/DynamicComponents";
-import { FormAccess } from "../../components/form/FormAccess";
-import { ViewHeader } from "../../components/view-header/ViewHeader";
-import { useRealm } from "../../context/realm-context/RealmContext";
-import { useServerInfo } from "../../context/server-info/ServerInfoProvider";
+import { DynamicComponents } from "../../components/dynamic/dynamic-components";
+import { FormAccess } from "../../components/form/form-access";
+import { ViewHeader } from "../../components/view-header/view-header";
+import { useRealm } from "../../context/realm-context/realm-context";
+import { useServerInfo } from "../../context/server-info/server-info-provider";
 import { toUpperCase } from "../../util";
 import { useParams } from "../../utils/useParams";
-import { toIdentityProvider } from "../routes/IdentityProvider";
-import type { IdentityProviderCreateParams } from "../routes/IdentityProviderCreate";
-import { toIdentityProviders } from "../routes/IdentityProviders";
-import { GeneralSettings } from "./GeneralSettings";
+import { toIdentityProvider } from "../routes/identity-provider";
+import type { IdentityProviderCreateParams } from "../routes/identity-provider-create";
+import { toIdentityProviders } from "../routes/identity-providers";
+import { GeneralSettings } from "./general-settings";
 
 export default function AddIdentityProvider() {
     const { adminClient } = useAdminClient();

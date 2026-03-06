@@ -26,13 +26,13 @@ import {
 import { useTranslation } from "react-i18next";
 import { Link, useNavigate } from "react-router-dom";
 import { useAdminClient } from "../../admin-client";
-import { useConfirmDialog } from "../../components/confirm-dialog/ConfirmDialog";
-import { useRealm } from "../../context/realm-context/RealmContext";
+import { useConfirmDialog } from "../../components/confirm-dialog/confirm-dialog";
+import { useRealm } from "../../context/realm-context/realm-context";
 import useToggle from "../../utils/useToggle";
-import { toCreatePolicy } from "../routes/NewPolicy";
-import { toPolicyDetails } from "../routes/PolicyDetails";
-import { toResourceDetails } from "../routes/Resource";
-import { NewPolicyDialog } from "./NewPolicyDialog";
+import { toCreatePolicy } from "../routes/new-policy";
+import { toPolicyDetails } from "../routes/policy-details";
+import { toResourceDetails } from "../routes/resource";
+import { NewPolicyDialog } from "./new-policy-dialog";
 import { useIsAdminPermissionsClient } from "../../utils/useIsAdminPermissionsClient";
 
 type Type = "resources" | "policies";

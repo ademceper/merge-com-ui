@@ -7,7 +7,7 @@ export type AddAttributeParams = {
     realm: string;
 };
 
-const NewAttributeSettings = lazy(() => import("../NewAttributeSettings"));
+const NewAttributeSettings = lazy(() => import("../new-attribute-settings"));
 
 export const AddAttributeRoute: AppRouteObject = {
     path: "/:realm/realm-settings/user-profile/attributes/add-attribute",

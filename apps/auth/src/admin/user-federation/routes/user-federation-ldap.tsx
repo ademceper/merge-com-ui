@@ -11,7 +11,7 @@ export type UserFederationLdapParams = {
     tab?: UserFederationLdapTab;
 };
 
-const UserFederationLdapSettings = lazy(() => import("../UserFederationLdapSettings"));
+const UserFederationLdapSettings = lazy(() => import("../user-federation-ldap-settings"));
 
 export const UserFederationLdapRoute: AppRouteObject = {
     path: "/:realm/user-federation/ldap/:id",

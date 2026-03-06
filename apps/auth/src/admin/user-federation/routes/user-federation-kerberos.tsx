@@ -9,7 +9,7 @@ export type UserFederationKerberosParams = {
 };
 
 const UserFederationKerberosSettings = lazy(
-    () => import("../UserFederationKerberosSettings")
+    () => import("../user-federation-kerberos-settings")
 );
 
 export const UserFederationKerberosRoute: AppRouteObject = {

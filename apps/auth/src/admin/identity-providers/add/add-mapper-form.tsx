@@ -13,7 +13,7 @@ import { get } from "lodash-es";
 import { useState } from "react";
 import { Controller, UseFormReturn } from "react-hook-form";
 import { useTranslation } from "react-i18next";
-import type { IdPMapperRepresentationWithAttributes } from "./AddMapper";
+import type { IdPMapperRepresentationWithAttributes } from "./add-mapper";
 
 type AddMapperFormProps = {
     mapperTypes: IdentityProviderMapperRepresentation[];

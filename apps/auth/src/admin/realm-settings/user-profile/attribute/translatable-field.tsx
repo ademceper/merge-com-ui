@@ -9,11 +9,11 @@ import { TFunction } from "i18next";
 import { useEffect } from "react";
 import { useFormContext, useWatch } from "react-hook-form";
 import { Trans, useTranslation } from "react-i18next";
-import { useRealm } from "../../../context/realm-context/RealmContext";
+import { useRealm } from "../../../context/realm-context/realm-context";
 import { i18n } from "../../../i18n/i18n";
 import { beerify, debeerify } from "../../../util";
 import useToggle from "../../../utils/useToggle";
-import { AddTranslationsDialog } from "./AddTranslationsDialog";
+import { AddTranslationsDialog } from "./add-translations-dialog";
 
 export type TranslationForm = {
     locale: string;

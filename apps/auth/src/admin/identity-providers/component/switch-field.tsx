@@ -2,7 +2,7 @@ import { Switch } from "@merge-rd/ui/components/switch";
 import { Controller, useFormContext } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 
-import { FieldProps, FormGroupField } from "./FormGroupField";
+import { FieldProps, FormGroupField } from "./form-group-field";
 
 type FieldType = "boolean" | "string";
 

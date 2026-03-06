@@ -14,17 +14,17 @@
 import { lazy } from "react";
 import type { IndexRouteObject, RouteObject } from "react-router-dom";
 import { environment } from "./environment";
-import { Organizations } from "./organizations/Organizations";
+import { Organizations } from "./organizations/organizations";
 
-const DeviceActivity = lazy(() => import("./account-security/DeviceActivity"));
-const LinkedAccounts = lazy(() => import("./account-security/LinkedAccounts"));
-const SigningIn = lazy(() => import("./account-security/SigningIn"));
-const Applications = lazy(() => import("./applications/Applications"));
-const Groups = lazy(() => import("./groups/Groups"));
-const PersonalInfo = lazy(() => import("./personal-info/PersonalInfo"));
-const Resources = lazy(() => import("./resources/Resources"));
-const ContentComponent = lazy(() => import("./content/ContentComponent"));
-const Oid4Vci = lazy(() => import("./oid4vci/Oid4Vci"));
+const DeviceActivity = lazy(() => import("./account-security/device-activity"));
+const LinkedAccounts = lazy(() => import("./account-security/linked-accounts"));
+const SigningIn = lazy(() => import("./account-security/signing-in"));
+const Applications = lazy(() => import("./applications/applications"));
+const Groups = lazy(() => import("./groups/groups"));
+const PersonalInfo = lazy(() => import("./personal-info/personal-info"));
+const Resources = lazy(() => import("./resources/resources"));
+const ContentComponent = lazy(() => import("./content/content-component"));
+const Oid4Vci = lazy(() => import("./oid4vci/oid4-vci"));
 
 export const DeviceActivityRoute: RouteObject = {
     path: "account-security/device-activity",

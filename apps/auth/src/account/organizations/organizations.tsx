@@ -13,7 +13,7 @@ import { useEnvironment } from "../../shared/keycloak-ui-shared";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { getUserOrganizations } from "../api/methods";
-import { Page } from "../components/page/Page";
+import { Page } from "../components/page/page";
 import { Environment } from "../environment";
 import { usePromise } from "../utils/usePromise";
 import { Buildings } from "@phosphor-icons/react";

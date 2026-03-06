@@ -14,7 +14,7 @@ import {
   DropdownMenuTrigger,
 } from '@merge-rd/ui/components/dropdown-menu';
 import { Skeleton } from '@merge-rd/ui/components/skeleton';
-import { TableCell, TableRow } from '@/components/primitives/table';
+import { TableCell, TableRow } from '@merge-rd/ui/components/table';
 import { Tooltip, TooltipContent, TooltipPortal, TooltipTrigger } from '@/components/primitives/tooltip';
 import { TimeDisplayHoverCard } from '@/components/time-display-hover-card';
 import TruncatedText from '@/components/truncated-text';

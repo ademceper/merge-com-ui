@@ -11,7 +11,7 @@ export type ClientScopesParams = {
     tab: ClientScopesTab;
 };
 
-const ClientDetails = lazy(() => import("../ClientDetails"));
+const ClientDetails = lazy(() => import("../client-details"));
 
 export const ClientScopesRoute: AppRouteObject = {
     path: "/:realm/clients/:clientId/clientScopes/:tab",

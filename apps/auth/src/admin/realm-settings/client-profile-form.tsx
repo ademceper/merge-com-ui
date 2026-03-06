@@ -15,16 +15,16 @@ import { FormProvider, useFieldArray, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { Link, useNavigate } from "react-router-dom";
 import { useAdminClient } from "../admin-client";
-import { useConfirmDialog } from "../components/confirm-dialog/ConfirmDialog";
-import { FormAccess } from "../components/form/FormAccess";
+import { useConfirmDialog } from "../components/confirm-dialog/confirm-dialog";
+import { FormAccess } from "../components/form/form-access";
 import { KeycloakSpinner } from "../../shared/keycloak-ui-shared";
-import { ViewHeader } from "../components/view-header/ViewHeader";
-import { useServerInfo } from "../context/server-info/ServerInfoProvider";
+import { ViewHeader } from "../components/view-header/view-header";
+import { useServerInfo } from "../context/server-info/server-info-provider";
 import { useParams } from "../utils/useParams";
-import { toAddExecutor } from "./routes/AddExecutor";
-import { toClientPolicies } from "./routes/ClientPolicies";
-import { ClientProfileParams, toClientProfile } from "./routes/ClientProfile";
-import { toExecutor } from "./routes/Executor";
+import { toAddExecutor } from "./routes/add-executor";
+import { toClientPolicies } from "./routes/client-policies";
+import { ClientProfileParams, toClientProfile } from "./routes/client-profile";
+import { toExecutor } from "./routes/executor";
 
 type ClientProfileForm = Required<ClientProfileRepresentation>;
 

@@ -5,7 +5,7 @@ import {
     TooltipTrigger,
 } from "@merge-rd/ui/components/tooltip";
 import { ReactNode } from "react";
-import { useHelp } from "../context/HelpContext";
+import { useHelp } from "../context/help-context";
 
 type HelpItemProps = {
     helpText: string | ReactNode;

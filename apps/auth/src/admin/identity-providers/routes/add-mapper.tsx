@@ -10,7 +10,7 @@ export type IdentityProviderAddMapperParams = {
     tab: string;
 };
 
-const AddMapper = lazy(() => import("../add/AddMapper"));
+const AddMapper = lazy(() => import("../add/add-mapper"));
 
 export const IdentityProviderAddMapperRoute: AppRouteObject = {
     path: "/:realm/identity-providers/:providerId/:alias/:tab/create",

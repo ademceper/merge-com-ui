@@ -1,11 +1,11 @@
 import { useFormContext } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { SelectField, TextAreaControl } from "../../../shared/keycloak-ui-shared";
-import { DefaultSwitchControl } from "../../components/SwitchControl";
-import { FormAccess } from "../../components/form/FormAccess";
-import { useServerInfo } from "../../context/server-info/ServerInfoProvider";
+import { DefaultSwitchControl } from "../../components/switch-control";
+import { FormAccess } from "../../components/form/form-access";
+import { useServerInfo } from "../../context/server-info/server-info-provider";
 import { convertAttributeNameToForm } from "../../util";
-import { FormFields } from "../ClientDetails";
+import { FormFields } from "../client-details";
 
 export const LoginSettingsPanel = ({ access }: { access?: boolean }) => {
     const { t } = useTranslation();

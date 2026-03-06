@@ -11,17 +11,17 @@ import { FormProvider, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { Link, useMatch, useNavigate } from "react-router-dom";
 import { useAdminClient } from "../../admin-client";
-import { toDedicatedScope } from "../../clients/routes/DedicatedScopeDetails";
-import { useConfirmDialog } from "../../components/confirm-dialog/ConfirmDialog";
-import { DynamicComponents } from "../../components/dynamic/DynamicComponents";
-import { FormAccess } from "../../components/form/FormAccess";
-import { ViewHeader } from "../../components/view-header/ViewHeader";
-import { useRealm } from "../../context/realm-context/RealmContext";
-import { useServerInfo } from "../../context/server-info/ServerInfoProvider";
+import { toDedicatedScope } from "../../clients/routes/dedicated-scope-details";
+import { useConfirmDialog } from "../../components/confirm-dialog/confirm-dialog";
+import { DynamicComponents } from "../../components/dynamic/dynamic-components";
+import { FormAccess } from "../../components/form/form-access";
+import { ViewHeader } from "../../components/view-header/view-header";
+import { useRealm } from "../../context/realm-context/realm-context";
+import { useServerInfo } from "../../context/server-info/server-info-provider";
 import { convertFormValuesToObject, convertToFormValues } from "../../util";
 import { useParams } from "../../utils/useParams";
-import { toClientScope } from "../routes/ClientScope";
-import { MapperParams, MapperRoute } from "../routes/Mapper";
+import { toClientScope } from "../routes/client-scope";
+import { MapperParams, MapperRoute } from "../routes/mapper";
 
 export default function MappingDetails() {
     const { adminClient } = useAdminClient();

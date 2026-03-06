@@ -21,7 +21,7 @@ import { useTranslation } from "react-i18next";
 import type EvaluationResultRepresentation from "@keycloak/keycloak-admin-client/lib/defs/evaluationResultRepresentation";
 import type PolicyEvaluationResponse from "@keycloak/keycloak-admin-client/lib/defs/policyEvaluationResponse";
 import useToggle from "../../../utils/useToggle";
-import { FixedButtonsGroup } from "../../../components/form/FixedButtonGroup";
+import { FixedButtonsGroup } from "../../../components/form/fixed-button-group";
 import {
     Empty,
     EmptyContent,
@@ -30,8 +30,8 @@ import {
     EmptyMedia,
     EmptyTitle
 } from "@merge-rd/ui/components/empty";
-import { AuthorizationDataModal } from "../AuthorizationDataModal";
-import { AuthorizationEvaluateResource } from "../AuthorizationEvaluateResource";
+import { AuthorizationDataModal } from "../authorization-data-modal";
+import { AuthorizationEvaluateResource } from "../authorization-evaluate-resource";
 
 type ResultProps = {
     evaluateResult: PolicyEvaluationResponse;

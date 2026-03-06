@@ -16,11 +16,11 @@ import {
 import { useUpdateEffect } from "../../utils/useUpdateEffect";
 
 import type { ExecutionList, ExpandableExecution } from "../execution-model";
-import { providerConditionFilter } from "../FlowDetails";
+import { providerConditionFilter } from "../flow-details";
 import { getLayoutedEdges, getLayoutedNodes } from "./diagram/auto-layout";
-import { ButtonEdge, ButtonEdges } from "./diagram/ButtonEdge";
-import { ConditionalNode } from "./diagram/ConditionalNode";
-import { EndSubFlowNode, StartSubFlowNode } from "./diagram/SubFlowNode";
+import { ButtonEdge, ButtonEdges } from "./diagram/button-edge";
+import { ConditionalNode } from "./diagram/conditional-node";
+import { EndSubFlowNode, StartSubFlowNode } from "./diagram/sub-flow-node";
 
 import "reactflow/dist/style.css";
 

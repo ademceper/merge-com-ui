@@ -16,20 +16,20 @@ import {
 
 import { useAdminClient } from "../../admin-client";
 import { getProtocolName } from "../../clients/utils";
-import { DefaultSwitchControl } from "../../components/SwitchControl";
+import { DefaultSwitchControl } from "../../components/switch-control";
 import {
     ClientScopeDefaultOptionalType,
     allClientScopeTypes
-} from "../../components/client-scope/ClientScopeTypes";
-import { FormAccess } from "../../components/form/FormAccess";
-import { useRealm } from "../../context/realm-context/RealmContext";
+} from "../../components/client-scope/client-scope-types";
+import { FormAccess } from "../../components/form/form-access";
+import { useRealm } from "../../context/realm-context/realm-context";
 import {
     useLoginProviders,
     useServerInfo
-} from "../../context/server-info/ServerInfoProvider";
+} from "../../context/server-info/server-info-provider";
 import { convertAttributeNameToForm, convertToFormValues } from "../../util";
 import useIsFeatureEnabled, { Feature } from "../../utils/useIsFeatureEnabled";
-import { toClientScopes } from "../routes/ClientScopes";
+import { toClientScopes } from "../routes/client-scopes";
 
 const OID4VC_PROTOCOL = "oid4vc";
 const VC_FORMAT_JWT_VC = "jwt_vc";

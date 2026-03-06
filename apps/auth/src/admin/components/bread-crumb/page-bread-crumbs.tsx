@@ -15,7 +15,7 @@ import useBreadcrumbs, {
     BreadcrumbsRoute
 } from "use-react-router-breadcrumbs";
 
-import { useRealm } from "../../context/realm-context/RealmContext";
+import { useRealm } from "../../context/realm-context/realm-context";
 import { routes } from "../../routes";
 
 function useCrumbs() {

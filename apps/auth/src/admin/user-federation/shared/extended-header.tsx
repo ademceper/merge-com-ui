@@ -8,8 +8,8 @@ import { useParams } from "react-router-dom";
 import { useAdminClient } from "../../admin-client";
 import { getErrorDescription, getErrorMessage } from "../../../shared/keycloak-ui-shared";
 import { toast } from "sonner";
-import { useConfirmDialog } from "../../components/confirm-dialog/ConfirmDialog";
-import { Header } from "./Header";
+import { useConfirmDialog } from "../../components/confirm-dialog/confirm-dialog";
+import { Header } from "./header";
 
 type ExtendedHeaderProps = {
     provider: string;

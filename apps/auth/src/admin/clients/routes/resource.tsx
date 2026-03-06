@@ -9,7 +9,7 @@ export type ResourceDetailsParams = {
     resourceId?: string;
 };
 
-const ResourceDetails = lazy(() => import("../authorization/ResourceDetails"));
+const ResourceDetails = lazy(() => import("../authorization/resource-details"));
 
 export const ResourceDetailsRoute: AppRouteObject = {
     path: "/:realm/clients/:id/authorization/resource",

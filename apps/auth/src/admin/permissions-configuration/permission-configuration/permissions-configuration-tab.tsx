@@ -25,15 +25,15 @@ import { Fragment, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Link, useNavigate } from "react-router-dom";
 import { useAdminClient } from "../../admin-client";
-import { useConfirmDialog } from "../../components/confirm-dialog/ConfirmDialog";
-import { useRealm } from "../../context/realm-context/RealmContext";
+import { useConfirmDialog } from "../../components/confirm-dialog/confirm-dialog";
+import { useRealm } from "../../context/realm-context/realm-context";
 import useSortedResourceTypes from "../../utils/useSortedResourceTypes";
 import useToggle from "../../utils/useToggle";
-import { AuthorizationScopesDetails } from "../permission-configuration/AuthorizationScopesDetails";
-import { SearchDropdown, SearchForm } from "../resource-types/SearchDropdown";
-import { toCreatePermissionConfiguration } from "../routes/NewPermissionConfiguration";
-import { toPermissionConfigurationDetails } from "../routes/PermissionConfigurationDetails";
-import { NewPermissionConfigurationDialog } from "./NewPermissionConfigurationDialog";
+import { AuthorizationScopesDetails } from "../permission-configuration/authorization-scopes-details";
+import { SearchDropdown, SearchForm } from "../resource-types/search-dropdown";
+import { toCreatePermissionConfiguration } from "../routes/new-permission-configuration";
+import { toPermissionConfigurationDetails } from "../routes/permission-configuration-details";
+import { NewPermissionConfigurationDialog } from "./new-permission-configuration-dialog";
 
 type PermissionsConfigurationProps = {
     clientId: string;

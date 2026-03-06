@@ -19,7 +19,7 @@ import {
 } from "@merge-rd/ui/components/empty";
 import { useTranslation } from "react-i18next";
 import { useAdminClient } from "../admin-client";
-import { GroupPath } from "../components/group/GroupPath";
+import { GroupPath } from "../components/group/group-path";
 
 type CredentialDataDialogProps = {
     user: UserRepresentation;

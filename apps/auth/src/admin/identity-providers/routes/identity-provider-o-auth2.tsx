@@ -1,7 +1,7 @@
 import { lazy } from "react";
 import type { AppRouteObject } from "../../routes";
 
-const AddOAuth2 = lazy(() => import("../add/AddOAuth2"));
+const AddOAuth2 = lazy(() => import("../add/add-o-auth2"));
 
 export const IdentityProviderOAuth2Route: AppRouteObject = {
     path: "/:realm/identity-providers/oauth2/add",

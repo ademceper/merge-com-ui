@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
-import { Invitations } from "./Invitations";
-import { Members } from "./Members";
+import { Invitations } from "./invitations";
+import { Members } from "./members";
 
 export const MembersSection = () => {
     const { t } = useTranslation();

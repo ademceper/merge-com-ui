@@ -2,9 +2,9 @@ import { Button } from "@merge-rd/ui/components/button";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@merge-rd/ui/components/dropdown-menu";
 import { DotsThreeVertical } from "@phosphor-icons/react";
 import { useTranslation } from "react-i18next";
-import { useAccess } from "../../context/access/Access";
+import { useAccess } from "../../context/access/access";
 import useToggle from "../../utils/useToggle";
-import { useSubGroups } from "../SubGroupsContext";
+import { useSubGroups } from "../sub-groups-context";
 
 type GroupToolbarProps = {
     toggleCreate: () => void;

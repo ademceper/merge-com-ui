@@ -13,14 +13,14 @@ import { useMemo, useState } from "react";
 import { useFormContext, useWatch } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { useAdminClient } from "../../admin-client";
-import { useConfirmDialog } from "../../components/confirm-dialog/ConfirmDialog";
-import { DynamicComponents } from "../../components/dynamic/DynamicComponents";
-import { FormAccess } from "../../components/form/FormAccess";
-import { useServerInfo } from "../../context/server-info/ServerInfoProvider";
-import { FormFields } from "../ClientDetails";
-import { ClientSecret } from "./ClientSecret";
-import { SignedJWT } from "./SignedJWT";
-import { X509 } from "./X509";
+import { useConfirmDialog } from "../../components/confirm-dialog/confirm-dialog";
+import { DynamicComponents } from "../../components/dynamic/dynamic-components";
+import { FormAccess } from "../../components/form/form-access";
+import { useServerInfo } from "../../context/server-info/server-info-provider";
+import { FormFields } from "../client-details";
+import { ClientSecret } from "./client-secret";
+import { SignedJWT } from "./signed-jwt";
+import { X509 } from "./x509";
 import { convertAttributeNameToForm } from "../../util";
 
 type AccessToken = {

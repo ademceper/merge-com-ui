@@ -3,8 +3,8 @@ import { Switch } from "@merge-rd/ui/components/switch";
 import { FormLabel } from "../../../shared/keycloak-ui-shared";
 import { useTranslation } from "react-i18next";
 import { HelpItem, TextControl } from "../../../shared/keycloak-ui-shared";
-import { FormAccess } from "../../components/form/FormAccess";
-import { WizardSectionHeader } from "../../components/wizard-section-header/WizardSectionHeader";
+import { FormAccess } from "../../components/form/form-access";
+import { WizardSectionHeader } from "../../components/wizard-section-header/wizard-section-header";
 
 export type LdapSettingsKerberosIntegrationProps = {
     form: UseFormReturn;

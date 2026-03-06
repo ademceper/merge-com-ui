@@ -23,13 +23,13 @@ import {
     AlertDialogHeader,
     AlertDialogTitle
 } from "@merge-rd/ui/components/alert-dialog";
-import { useRealm } from "../../context/realm-context/RealmContext";
-import { useServerInfo } from "../../context/server-info/ServerInfoProvider";
+import { useRealm } from "../../context/realm-context/realm-context";
+import { useServerInfo } from "../../context/server-info/server-info-provider";
 import { KEY_PROVIDER_TYPE } from "../../util";
 import useToggle from "../../utils/useToggle";
-import { ProviderType, toKeyProvider } from "../routes/KeyProvider";
-import { KeyProviderModal } from "./key-providers/KeyProviderModal";
-import { KeyProvidersPicker } from "./key-providers/KeyProvidersPicker";
+import { ProviderType, toKeyProvider } from "../routes/key-provider";
+import { KeyProviderModal } from "./key-providers/key-provider-modal";
+import { KeyProvidersPicker } from "./key-providers/key-providers-picker";
 
 type ComponentData = ComponentRepresentation & {
     providerDescription?: string;

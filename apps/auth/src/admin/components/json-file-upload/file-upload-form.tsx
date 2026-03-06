@@ -26,7 +26,7 @@ import {
     useState
 } from "react";
 import { useTranslation } from "react-i18next";
-import CodeEditor from "../form/CodeEditor";
+import CodeEditor from "../form/code-editor";
 
 type FileUploadType = {
     value: string;

@@ -5,7 +5,7 @@ import type { AppRouteObject } from "../../routes";
 
 export type RealmRolesParams = { realm: string };
 
-const RealmRolesSection = lazy(() => import("../RealmRolesSection"));
+const RealmRolesSection = lazy(() => import("../realm-roles-section"));
 
 export const RealmRolesRoute: AppRouteObject = {
     path: "/:realm/roles",

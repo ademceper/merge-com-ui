@@ -7,35 +7,35 @@ import { FormProvider, SubmitHandler, useForm, useWatch } from "react-hook-form"
 import { useTranslation } from "react-i18next";
 import { useMatch, useNavigate, useParams as useRouterParams } from "react-router-dom";
 import { useAdminClient } from "../admin-client";
-import { toClient } from "../clients/routes/Client";
+import { toClient } from "../clients/routes/client";
 import {
     ClientRoleParams,
     ClientRoleRoute,
     ClientRoleTab,
     toClientRole
-} from "../clients/routes/ClientRole";
-import { useConfirmDialog } from "../components/confirm-dialog/ConfirmDialog";
+} from "../clients/routes/client-role";
+import { useConfirmDialog } from "../components/confirm-dialog/confirm-dialog";
 import {
     AttributeForm,
     AttributesForm
-} from "../components/key-value-form/AttributeForm";
+} from "../components/key-value-form/attribute-form";
 import {
     KeyValueType,
     arrayToKeyValue,
     keyValueToArray
 } from "../components/key-value-form/key-value-convert";
-import { PermissionsTab } from "../components/permission-tab/PermissionTab";
-import { RoleForm } from "../components/role-form/RoleForm";
-import { RoleMapping } from "../components/role-mapping/RoleMapping";
-import { ViewHeader } from "../components/view-header/ViewHeader";
-import { useAccess } from "../context/access/Access";
-import { useRealm } from "../context/realm-context/RealmContext";
-import { AdminEvents } from "../events/AdminEvents";
+import { PermissionsTab } from "../components/permission-tab/permission-tab";
+import { RoleForm } from "../components/role-form/role-form";
+import { RoleMapping } from "../components/role-mapping/role-mapping";
+import { ViewHeader } from "../components/view-header/view-header";
+import { useAccess } from "../context/access/access";
+import { useRealm } from "../context/realm-context/realm-context";
+import { AdminEvents } from "../events/admin-events";
 import useIsFeatureEnabled, { Feature } from "../utils/useIsFeatureEnabled";
 import { useParams } from "../utils/useParams";
-import { UsersInRoleTab } from "./UsersInRoleTab";
-import { RealmRoleRoute, RealmRoleTab, toRealmRole } from "./routes/RealmRole";
-import { toRealmRoles } from "./routes/RealmRoles";
+import { UsersInRoleTab } from "./users-in-role-tab";
+import { RealmRoleRoute, RealmRoleTab, toRealmRole } from "./routes/realm-role";
+import { toRealmRoles } from "./routes/realm-roles";
 
 export default function RealmRoleTabs() {
     const { adminClient } = useAdminClient();

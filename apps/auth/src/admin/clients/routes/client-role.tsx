@@ -16,7 +16,7 @@ export type ClientRoleParams = {
     tab: ClientRoleTab;
 };
 
-const RealmRoleTabs = lazy(() => import("../../realm-roles/RealmRoleTabs"));
+const RealmRoleTabs = lazy(() => import("../../realm-roles/realm-role-tabs"));
 
 export const ClientRoleRoute: AppRouteObject = {
     path: "/:realm/clients/:clientId/roles/:id/:tab" as const,

@@ -13,7 +13,7 @@ import { Button } from '@merge-rd/ui/components/button';
 import { LinkButton } from '../primitives/button-link';
 import { CopyButton } from '../primitives/copy-button';
 import { Separator } from '@merge-rd/ui/components/separator';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '../primitives/table';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@merge-rd/ui/components/table';
 import { TimeDisplayHoverCard } from '../time-display-hover-card';
 import TruncatedText from '../truncated-text';
 import { EmptyLayoutsIllustration } from './empty-layouts-illustration';

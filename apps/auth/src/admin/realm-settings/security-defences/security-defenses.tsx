@@ -1,8 +1,8 @@
 import { useTranslation } from "react-i18next";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@merge-rd/ui/components/tabs";
 import type RealmRepresentation from "@keycloak/keycloak-admin-client/lib/defs/realmRepresentation";
-import { HeadersForm } from "./HeadersForm";
-import { BruteForceDetection } from "./BruteForceDetection";
+import { HeadersForm } from "./headers-form";
+import { BruteForceDetection } from "./brute-force-detection";
 
 type SecurityDefensesProps = {
     realm: RealmRepresentation;

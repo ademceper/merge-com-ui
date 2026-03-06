@@ -5,14 +5,14 @@ import { Switch } from "@merge-rd/ui/components/switch";
 import { Label } from "@merge-rd/ui/components/label";
 import { Controller, useFormContext } from "react-hook-form";
 import { useTranslation } from "react-i18next";
-import { DefaultSwitchControl } from "../../components/SwitchControl";
-import { FormAccess } from "../../components/form/FormAccess";
+import { DefaultSwitchControl } from "../../components/switch-control";
+import { FormAccess } from "../../components/form/form-access";
 import { convertAttributeNameToForm } from "../../util";
 import useIsFeatureEnabled, { Feature } from "../../utils/useIsFeatureEnabled";
-import { FormFields } from "../ClientDetails";
-import { IdentityProviderSelect } from "../../components/identity-provider/IdentityProviderSelect";
+import { FormFields } from "../client-details";
+import { IdentityProviderSelect } from "../../components/identity-provider/identity-provider-select";
 import { IdentityProviderType } from "@keycloak/keycloak-admin-client/lib/defs/identityProviderRepresentation";
-import { useAccess } from "../../context/access/Access";
+import { useAccess } from "../../context/access/access";
 
 type CapabilityConfigProps = {
     unWrap?: boolean;

@@ -17,29 +17,29 @@ import { useState } from "react";
 import { Trans, useTranslation } from "react-i18next";
 import { useNavigate, useParams } from "react-router-dom";
 import { useAdminClient } from "../admin-client";
-import { useConfirmDialog } from "../components/confirm-dialog/ConfirmDialog";
-import { ViewHeader } from "../components/view-header/ViewHeader";
-import { useRealm } from "../context/realm-context/RealmContext";
+import { useConfirmDialog } from "../components/confirm-dialog/confirm-dialog";
+import { ViewHeader } from "../components/view-header/view-header";
+import { useRealm } from "../context/realm-context/realm-context";
 import useToggle from "../utils/useToggle";
-import { BindFlowDialog } from "./BindFlowDialog";
-import { BuildInLabel } from "./BuildInLabel";
-import { DuplicateFlowModal } from "./DuplicateFlowModal";
-import { EditFlowModal } from "./EditFlowModal";
-import { EmptyExecutionState } from "./EmptyExecutionState";
-import { AuthenticationProviderContextProvider } from "./components/AuthenticationProviderContext";
-import { FlowDiagram } from "./components/FlowDiagram";
-import { FlowHeader } from "./components/FlowHeader";
-import { FlowRow } from "./components/FlowRow";
-import { AddStepModal } from "./components/modals/AddStepModal";
-import { AddSubFlowModal, Flow } from "./components/modals/AddSubFlowModal";
+import { BindFlowDialog } from "./bind-flow-dialog";
+import { BuildInLabel } from "./build-in-label";
+import { DuplicateFlowModal } from "./duplicate-flow-modal";
+import { EditFlowModal } from "./edit-flow-modal";
+import { EmptyExecutionState } from "./empty-execution-state";
+import { AuthenticationProviderContextProvider } from "./components/authentication-provider-context";
+import { FlowDiagram } from "./components/flow-diagram";
+import { FlowHeader } from "./components/flow-header";
+import { FlowRow } from "./components/flow-row";
+import { AddStepModal } from "./components/modals/add-step-modal";
+import { AddSubFlowModal, Flow } from "./components/modals/add-sub-flow-modal";
 import {
     ExecutionList,
     ExpandableExecution,
     IndexChange,
     LevelChange
 } from "./execution-model";
-import { toAuthentication } from "./routes/Authentication";
-import { toFlow, type FlowParams } from "./routes/Flow";
+import { toAuthentication } from "./routes/authentication";
+import { toFlow, type FlowParams } from "./routes/flow";
 
 export const providerConditionFilter = (value: AuthenticationProviderRepresentation) =>
     value.displayName?.startsWith("Condition ");

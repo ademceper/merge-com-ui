@@ -5,7 +5,7 @@ import {
     type ClientRegistrationTab,
     toClientRegistration
 } from "./client-registration-path";
-import ClientsSection from "../ClientsSection";
+import ClientsSection from "../clients-section";
 
 export type { ClientRegistrationParams, ClientRegistrationTab };
 export { toClientRegistration };

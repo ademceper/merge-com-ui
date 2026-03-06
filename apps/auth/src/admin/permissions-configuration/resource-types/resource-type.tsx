@@ -4,10 +4,10 @@ import { RadioGroup, RadioGroupItem } from "@merge-rd/ui/components/radio-group"
 import { HelpItem } from "../../../shared/keycloak-ui-shared";
 import { useFormContext } from "react-hook-form";
 import { useState, type JSX } from "react";
-import { GroupSelect } from "./GroupSelect";
-import { UserSelect } from "../../components/users/UserSelect";
-import { RoleSelect } from "./RoleSelect";
-import { ClientSelectComponent } from "./ClientSelectComponent";
+import { GroupSelect } from "./group-select";
+import { UserSelect } from "../../components/users/user-select";
+import { RoleSelect } from "./role-select";
+import { ClientSelectComponent } from "./client-select-component";
 
 type ResourceTypeProps = {
     withEnforceAccessTo?: boolean;

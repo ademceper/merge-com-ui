@@ -1,5 +1,5 @@
-import AttributesGroupForm from "./AttributesGroupForm";
-import { UserProfileProvider } from "./UserProfileContext";
+import AttributesGroupForm from "./attributes-group-form";
+import { UserProfileProvider } from "./user-profile-context";
 
 const AttributesGroupDetails = () => (
     <UserProfileProvider>

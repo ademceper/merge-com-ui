@@ -9,7 +9,7 @@ export type NewCustomUserFederationRouteParams = {
     providerId: string;
 };
 
-const CustomProviderSettings = lazy(() => import("../custom/CustomProviderSettings"));
+const CustomProviderSettings = lazy(() => import("../custom/custom-provider-settings"));
 
 export const NewCustomUserFederationRoute: AppRouteObject = {
     path: "/:realm/user-federation/:providerId/new",

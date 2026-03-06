@@ -11,22 +11,22 @@ import { FormProvider, useForm, useFormContext } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { Link, useNavigate } from "react-router-dom";
 import { useAdminClient } from "../admin-client";
-import { FixedButtonsGroup } from "../components/form/FixedButtonGroup";
-import { ViewHeader } from "../components/view-header/ViewHeader";
+import { FixedButtonsGroup } from "../components/form/fixed-button-group";
+import { ViewHeader } from "../components/view-header/view-header";
 import { convertToFormValues } from "../util";
 import { useParams } from "../utils/useParams";
-import { TranslationForm } from "./AddTranslationModal";
-import type { AttributeParams } from "./routes/Attribute";
-import { toUserProfile } from "./routes/UserProfile";
-import { UserProfileProvider } from "./user-profile/UserProfileContext";
+import { TranslationForm } from "./add-translation-modal";
+import type { AttributeParams } from "./routes/attribute";
+import { toUserProfile } from "./routes/user-profile";
+import { UserProfileProvider } from "./user-profile/user-profile-context";
 import {
     saveTranslations,
     Translations
-} from "./user-profile/attribute/TranslatableField";
-import { AttributeAnnotations } from "./user-profile/attribute/AttributeAnnotations";
-import { AttributeGeneralSettings } from "./user-profile/attribute/AttributeGeneralSettings";
-import { AttributePermission } from "./user-profile/attribute/AttributePermission";
-import { AttributeValidations } from "./user-profile/attribute/AttributeValidations";
+} from "./user-profile/attribute/translatable-field";
+import { AttributeAnnotations } from "./user-profile/attribute/attribute-annotations";
+import { AttributeGeneralSettings } from "./user-profile/attribute/attribute-general-settings";
+import { AttributePermission } from "./user-profile/attribute/attribute-permission";
+import { AttributeValidations } from "./user-profile/attribute/attribute-validations";
 
 type IndexedAnnotations = {
     key: string;

@@ -14,9 +14,9 @@ import {
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useAdminClient } from "../admin-client";
-import { TextControl } from "../../shared/keycloak-ui-shared/controls/TextControl";
+import { TextControl } from "../../shared/keycloak-ui-shared/controls/text-control";
 import { emailRegexPattern } from "../util";
-import { FormAccess } from "../components/form/FormAccess";
+import { FormAccess } from "../components/form/form-access";
 
 const FORM_ID = "edit-user-form";
 

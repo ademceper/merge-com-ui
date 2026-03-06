@@ -10,7 +10,7 @@ export type ThemesParams = {
     tab: ThemesTabType;
 };
 
-const RealmSettingsSection = lazy(() => import("../RealmSettingsSection"));
+const RealmSettingsSection = lazy(() => import("../realm-settings-section"));
 
 export const ThemeTabRoute: AppRouteObject = {
     path: "/:realm/realm-settings/themes/:tab",

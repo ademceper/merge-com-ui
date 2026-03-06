@@ -6,8 +6,8 @@ import {
     useController
 } from "react-hook-form";
 import { getRuleValue } from "../utils/getRuleValue";
-import { FormLabel } from "./FormLabel";
-import { PasswordInput, PasswordInputProps } from "./PasswordInput";
+import { FormLabel } from "./form-label";
+import { PasswordInput, PasswordInputProps } from "./password-input";
 
 export type PasswordControlProps<
     T extends FieldValues,

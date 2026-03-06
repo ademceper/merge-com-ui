@@ -1,6 +1,6 @@
 import type { AppRouteObject } from "../routes";
-import { WorkflowsRoute } from "./routes/Workflows";
-import { WorkflowDetailRoute } from "./routes/WorkflowDetail";
+import { WorkflowsRoute } from "./routes/workflows";
+import { WorkflowDetailRoute } from "./routes/workflow-detail";
 
 const routes: AppRouteObject[] = [WorkflowsRoute, WorkflowDetailRoute];
 

@@ -25,15 +25,15 @@ import { Fragment, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 import { useAdminClient } from "../../admin-client";
-import { useConfirmDialog } from "../../components/confirm-dialog/ConfirmDialog";
+import { useConfirmDialog } from "../../components/confirm-dialog/confirm-dialog";
 import { KeycloakSpinner } from "../../../shared/keycloak-ui-shared";
-import { useRealm } from "../../context/realm-context/RealmContext";
-import { toNewPermission } from "../routes/NewPermission";
-import { toCreateResource } from "../routes/NewResource";
-import { toResourceDetails } from "../routes/Resource";
-import { DetailCell } from "./DetailCell";
-import { MoreLabel } from "./MoreLabel";
-import { SearchDropdown, SearchForm } from "./SearchDropdown";
+import { useRealm } from "../../context/realm-context/realm-context";
+import { toNewPermission } from "../routes/new-permission";
+import { toCreateResource } from "../routes/new-resource";
+import { toResourceDetails } from "../routes/resource";
+import { DetailCell } from "./detail-cell";
+import { MoreLabel } from "./more-label";
+import { SearchDropdown, SearchForm } from "./search-dropdown";
 
 type ResourcesProps = {
     clientId: string;

@@ -6,16 +6,16 @@ import { FormProvider, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { useParams } from "react-router-dom";
 import { useAdminClient } from "../admin-client";
-import { useRealm } from "../context/realm-context/RealmContext";
+import { useRealm } from "../context/realm-context/realm-context";
 import {
     LdapComponentRepresentation,
     UserFederationLdapForm,
     serializeFormData
-} from "./UserFederationLdapForm";
-import { LdapMapperList } from "./ldap/mappers/LdapMapperList";
-import { UserFederationLdapParams } from "./routes/UserFederationLdap";
-import { toUserFederationLdapMapper } from "./routes/UserFederationLdapMapper";
-import { ExtendedHeader } from "./shared/ExtendedHeader";
+} from "./user-federation-ldap-form";
+import { LdapMapperList } from "./ldap/mappers/ldap-mapper-list";
+import { UserFederationLdapParams } from "./routes/user-federation-ldap";
+import { toUserFederationLdapMapper } from "./routes/user-federation-ldap-mapper";
+import { ExtendedHeader } from "./shared/extended-header";
 
 export default function UserFederationLdapSettings() {
     const { adminClient } = useAdminClient();

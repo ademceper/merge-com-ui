@@ -39,6 +39,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
+  type TableSortDirection,
 } from "@merge-rd/ui/components/table";
 
 export type DraggableTableRowsProps<TData> = {

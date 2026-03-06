@@ -22,8 +22,8 @@ import {
     useLocation,
     useParams
 } from "react-router-dom";
-import { useServerInfo } from "../../context/server-info/ServerInfoProvider";
-import { PageHandler } from "../../page/PageHandler";
+import { useServerInfo } from "../../context/server-info/server-info-provider";
+import { PageHandler } from "../../page/page-handler";
 import { TAB_PROVIDER } from "../../page/constants";
 import useIsFeatureEnabled, { Feature } from "../../utils/useIsFeatureEnabled";
 import { useTranslation } from "react-i18next";

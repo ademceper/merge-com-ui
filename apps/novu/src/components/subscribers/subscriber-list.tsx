@@ -9,9 +9,9 @@ import {
   TableFooter,
   TableHead,
   TableHeader,
+  TablePaginationFooter,
   TableRow,
-} from '@/components/primitives/table';
-import { TablePaginationFooter } from '@/components/primitives/table-pagination-footer';
+} from '@merge-rd/ui/components/table';
 import { useSubscribersNavigate } from '@/components/subscribers/hooks/use-subscribers-navigate';
 import {
   SubscribersFilter,

@@ -6,7 +6,7 @@ import { useState } from "react";
 import { Controller, useFormContext } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 
-import { GroupPickerDialog } from "../group/GroupPickerDialog";
+import { GroupPickerDialog } from "../group/group-picker-dialog";
 import { HelpItem } from "../../../shared/keycloak-ui-shared";
 import type { ComponentProps } from "./components";
 

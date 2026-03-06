@@ -7,7 +7,7 @@ import { useEffect, useRef, useState } from "react";
 import { FormProvider, useForm, useWatch } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import useToggle from "../../utils/useToggle";
-import { ResourceType } from "./ResourceType";
+import { ResourceType } from "./resource-type";
 
 export type SearchForm = {
     name?: string;

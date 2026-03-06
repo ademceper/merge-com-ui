@@ -5,7 +5,7 @@ import type { AppRouteObject } from "../../routes";
 
 export type IdentityProvidersParams = { realm: string };
 
-const IdentityProvidersSection = lazy(() => import("../IdentityProvidersSection"));
+const IdentityProvidersSection = lazy(() => import("../identity-providers-section"));
 
 export const IdentityProvidersRoute: AppRouteObject = {
     path: "/:realm/identity-providers",

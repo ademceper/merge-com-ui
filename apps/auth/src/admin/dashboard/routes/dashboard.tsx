@@ -7,9 +7,9 @@ export type DashboardTab = "info" | "providers" | "welcome";
 
 export type DashboardParams = { realm?: string; tab?: DashboardTab };
 
-const Dashboard = lazy(() => import("../Dashboard"));
+const Dashboard = lazy(() => import("../dashboard"));
 
-const RedirectToOrganizations = lazy(() => import("../../organizations/RedirectToOrganizations"));
+const RedirectToOrganizations = lazy(() => import("../../organizations/redirect-to-organizations"));
 
 export const DashboardRoute: AppRouteObject = {
     path: "/",

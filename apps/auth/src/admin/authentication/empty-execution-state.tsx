@@ -11,8 +11,8 @@ import {
     EmptyHeader,
     EmptyTitle
 } from "@merge-rd/ui/components/empty";
-import { AddStepModal } from "./components/modals/AddStepModal";
-import { AddSubFlowModal, Flow } from "./components/modals/AddSubFlowModal";
+import { AddStepModal } from "./components/modals/add-step-modal";
+import { AddSubFlowModal, Flow } from "./components/modals/add-sub-flow-modal";
 
 const SECTIONS = ["addExecution", "addSubFlow"] as const;
 type SectionType = (typeof SECTIONS)[number] | undefined;

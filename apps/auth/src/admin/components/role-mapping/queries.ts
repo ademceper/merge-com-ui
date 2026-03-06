@@ -6,7 +6,7 @@ import type { Clients } from "@keycloak/keycloak-admin-client/lib/resources/clie
 import type { Groups } from "@keycloak/keycloak-admin-client/lib/resources/groups";
 import type { Roles } from "@keycloak/keycloak-admin-client/lib/resources/roles";
 import type { Users } from "@keycloak/keycloak-admin-client/lib/resources/users";
-import { Row } from "./RoleMapping";
+import { Row } from "./role-mapping";
 
 export type ResourcesKey = keyof KeycloakAdminClient;
 

@@ -23,7 +23,7 @@ export type RealmSettingsParams = {
     tab?: RealmSettingsTab;
 };
 
-const RealmSettingsSection = lazy(() => import("../RealmSettingsSection"));
+const RealmSettingsSection = lazy(() => import("../realm-settings-section"));
 
 export const RealmSettingsRoute: AppRouteObject = {
     path: "/:realm/realm-settings",

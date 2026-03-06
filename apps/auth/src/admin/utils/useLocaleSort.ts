@@ -1,4 +1,4 @@
-import { useWhoAmI } from "../context/whoami/WhoAmI";
+import { useWhoAmI } from "../context/whoami/who-am-i";
 
 export type ValueMapperFn<T> = (item: T) => string | undefined;
 

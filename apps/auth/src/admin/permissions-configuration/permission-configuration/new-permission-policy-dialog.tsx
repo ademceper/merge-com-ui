@@ -11,20 +11,20 @@ import { getErrorDescription, getErrorMessage, SelectField,
 import { toast } from "sonner";
 import { FormProvider, useForm, useWatch } from "react-hook-form";
 import { useAdminClient } from "../../admin-client";
-import { useRealm } from "../../context/realm-context/RealmContext";
-import { Client } from "../../clients/authorization/policy/Client";
-import { User } from "../../clients/authorization/policy/User";
+import { useRealm } from "../../context/realm-context/realm-context";
+import { Client } from "../../clients/authorization/policy/client";
+import { User } from "../../clients/authorization/policy/user";
 import {
     ClientScope,
     RequiredIdValue
-} from "../../clients/authorization/policy/ClientScope";
-import { Group, GroupValue } from "../../clients/authorization/policy/Group";
-import { Regex } from "../../clients/authorization/policy/Regex";
-import { Role } from "../../clients/authorization/policy/Role";
-import { Time } from "../../clients/authorization/policy/Time";
-import { JavaScript } from "../../clients/authorization/policy/JavaScript";
-import { LogicSelector } from "../../clients/authorization/policy/LogicSelector";
-import { Aggregate } from "../../clients/authorization/policy/Aggregate";
+} from "../../clients/authorization/policy/client-scope";
+import { Group, GroupValue } from "../../clients/authorization/policy/group";
+import { Regex } from "../../clients/authorization/policy/regex";
+import { Role } from "../../clients/authorization/policy/role";
+import { Time } from "../../clients/authorization/policy/time";
+import { JavaScript } from "../../clients/authorization/policy/java-script";
+import { LogicSelector } from "../../clients/authorization/policy/logic-selector";
+import { Aggregate } from "../../clients/authorization/policy/aggregate";
 import { capitalize } from "lodash-es";
 import { useEffect, type JSX } from "react";
 

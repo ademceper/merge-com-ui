@@ -7,10 +7,10 @@ import { saveAs } from "file-saver";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useAdminClient } from "../../admin-client";
-import { FormAccess } from "../../components/form/FormAccess";
+import { FormAccess } from "../../components/form/form-access";
 import { prettyPrintJSON } from "../../util";
 import { useParams } from "../../utils/useParams";
-import type { ClientParams } from "../routes/Client";
+import type { ClientParams } from "../routes/client";
 
 export const AuthorizationExport = () => {
     const { adminClient } = useAdminClient();

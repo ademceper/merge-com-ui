@@ -10,8 +10,8 @@ import React, { useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 
-import { useSubGroups } from "../../groups/SubGroupsContext";
-import { useRealm } from "../../context/realm-context/RealmContext";
+import { useSubGroups } from "../../groups/sub-groups-context";
+import { useRealm } from "../../context/realm-context/realm-context";
 
 /** Header'da kullanılmak üzere merge UI Breadcrumb bileşenleriyle aynı grup yolunu gösterir. */
 export function GroupBreadCrumbsForHeader() {

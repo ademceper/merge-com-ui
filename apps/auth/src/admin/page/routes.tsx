@@ -5,8 +5,8 @@ import { lazy } from "react";
 export type PageListParams = { realm?: string; providerId: string };
 export type PageParams = { realm: string; providerId: string; id: string };
 
-const PageList = lazy(() => import("./PageList"));
-const Page = lazy(() => import("./Page"));
+const PageList = lazy(() => import("./page-list"));
+const Page = lazy(() => import("./page"));
 
 const PageListRoute: AppRouteObject = {
     path: "/:realm?/page-section/:providerId",

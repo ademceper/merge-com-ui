@@ -8,7 +8,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Fragment, DragEvent as ReactDragEvent, useMemo, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useAdminClient } from "../admin-client";
-import { useConfirmDialog } from "../components/confirm-dialog/ConfirmDialog";
+import { useConfirmDialog } from "../components/confirm-dialog/confirm-dialog";
 import { KeycloakSpinner } from "../../shared/keycloak-ui-shared";
 import {
     Empty,
@@ -18,11 +18,11 @@ import {
     EmptyTitle
 } from "@merge-rd/ui/components/empty";
 import { toUpperCase } from "../util";
-import { FederatedUserLink } from "./FederatedUserLink";
-import { CredentialRow } from "./user-credentials/CredentialRow";
-import { InlineLabelEdit } from "./user-credentials/InlineLabelEdit";
-import { ResetCredentialDialog } from "./user-credentials/ResetCredentialDialog";
-import { ResetPasswordDialog } from "./user-credentials/ResetPasswordDialog";
+import { FederatedUserLink } from "./federated-user-link";
+import { CredentialRow } from "./user-credentials/credential-row";
+import { InlineLabelEdit } from "./user-credentials/inline-label-edit";
+import { ResetCredentialDialog } from "./user-credentials/reset-credential-dialog";
+import { ResetPasswordDialog } from "./user-credentials/reset-password-dialog";
 import useFormatDate from "../utils/useFormatDate";
 
 type UserCredentialsProps = {

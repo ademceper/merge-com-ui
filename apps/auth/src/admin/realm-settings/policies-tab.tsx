@@ -30,14 +30,14 @@ import {
     AlertDialogHeader,
     AlertDialogTitle
 } from "@merge-rd/ui/components/alert-dialog";
-import { useConfirmDialog } from "../components/confirm-dialog/ConfirmDialog";
-import CodeEditor from "../components/form/CodeEditor";
-import { useRealm } from "../context/realm-context/RealmContext";
+import { useConfirmDialog } from "../components/confirm-dialog/confirm-dialog";
+import CodeEditor from "../components/form/code-editor";
+import { useRealm } from "../context/realm-context/realm-context";
 import { prettyPrintJSON } from "../util";
 import { translationFormatter } from "../utils/translationFormatter";
-import { toAddClientPolicy } from "./routes/AddClientPolicy";
-import { toClientPolicies } from "./routes/ClientPolicies";
-import { toEditClientPolicy } from "./routes/EditClientPolicy";
+import { toAddClientPolicy } from "./routes/add-client-policy";
+import { toClientPolicies } from "./routes/client-policies";
+import { toEditClientPolicy } from "./routes/edit-client-policy";
 
 type ClientPolicy = ClientPolicyRepresentation & {
     global?: boolean;

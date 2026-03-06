@@ -18,7 +18,7 @@ import {
     DropdownMenuSubTrigger,
     DropdownMenuTrigger
 } from "@merge-rd/ui/components/dropdown-menu";
-import type { UserMenuInfo } from "./AdminHeader";
+import type { UserMenuInfo } from "./admin-header";
 
 export function AdminNavUser({ userMenuInfo }: { userMenuInfo: UserMenuInfo }) {
     const { t } = useTranslation();
@@ -36,7 +36,7 @@ export function AdminNavUser({ userMenuInfo }: { userMenuInfo: UserMenuInfo }) {
     return (
         <DropdownMenu>
             <DropdownMenuTrigger asChild>
-                <button type="button" className="cursor-pointer">
+                <button type="button" className="cursor-pointer outline-none">
                     <Avatar size="sm">
                         <AvatarFallback>{initials}</AvatarFallback>
                     </Avatar>

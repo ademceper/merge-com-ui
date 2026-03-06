@@ -1,11 +1,11 @@
 import { useTranslation } from "react-i18next";
 import { useLocation } from "react-router-dom";
 import { SidebarPageHeader } from "@merge-rd/ui/components/sidebar";
-import { GroupBreadCrumbsForHeader } from "./bread-crumb/GroupBreadCrumbs";
-import { PageBreadCrumbs, usePageTitle } from "./bread-crumb/PageBreadCrumbs";
+import { GroupBreadCrumbsForHeader } from "./bread-crumb/group-bread-crumbs";
+import { PageBreadCrumbs, usePageTitle } from "./bread-crumb/page-bread-crumbs";
 import { useEnvironment } from "../../shared/keycloak-ui-shared";
 import type { Environment } from "../environment";
-import { AdminNavUser } from "./AdminNavUser";
+import { AdminNavUser } from "./admin-nav-user";
 import { loggedInUserName, avatarInitials, userEmailFromToken } from "../utils/userMenuUtils";
 
 export type UserMenuInfo = {

@@ -22,16 +22,16 @@ import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { useAdminClient } from "../admin-client";
-import { useConfirmDialog } from "../components/confirm-dialog/ConfirmDialog";
-import { useRealm } from "../context/realm-context/RealmContext";
-import { OrganizationModal } from "../organizations/OrganizationModal";
-import { toEditOrganization } from "../organizations/routes/EditOrganization";
+import { useConfirmDialog } from "../components/confirm-dialog/confirm-dialog";
+import { useRealm } from "../context/realm-context/realm-context";
+import { OrganizationModal } from "../organizations/organization-modal";
+import { toEditOrganization } from "../organizations/routes/edit-organization";
 import useToggle from "../utils/useToggle";
-import { UserParams } from "./routes/User";
-import { toUsers } from "./routes/Users";
-import { CheckboxFilterComponent } from "../components/dynamic/CheckboxFilterComponent";
+import { UserParams } from "./routes/user";
+import { toUsers } from "./routes/users";
+import { CheckboxFilterComponent } from "../components/dynamic/checkbox-filter-component";
 import { capitalizeFirstLetterFormatter } from "../util";
-import { SearchInputComponent } from "../components/dynamic/SearchInputComponent";
+import { SearchInputComponent } from "../components/dynamic/search-input-component";
 
 type OrganizationProps = {
     user: UserRepresentation;

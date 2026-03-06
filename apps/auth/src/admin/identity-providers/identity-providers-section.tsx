@@ -48,15 +48,15 @@ import {
     AlertDialogHeader,
     AlertDialogTitle
 } from "@merge-rd/ui/components/alert-dialog";
-import { ClickableCard } from "../components/keycloak-card/ClickableCard";
-import { ViewHeader } from "../components/view-header/ViewHeader";
-import { useRealm } from "../context/realm-context/RealmContext";
-import { useServerInfo } from "../context/server-info/ServerInfoProvider";
+import { ClickableCard } from "../components/keycloak-card/clickable-card";
+import { ViewHeader } from "../components/view-header/view-header";
+import { useRealm } from "../context/realm-context/realm-context";
+import { useServerInfo } from "../context/server-info/server-info-provider";
 import helpUrls from "../help-urls";
-import { toEditOrganization } from "../organizations/routes/EditOrganization";
+import { toEditOrganization } from "../organizations/routes/edit-organization";
 import { upperCaseFormatter } from "../util";
-import { toIdentityProvider } from "./routes/IdentityProvider";
-import { toIdentityProviderCreate } from "./routes/IdentityProviderCreate";
+import { toIdentityProvider } from "./routes/identity-provider";
+import { toIdentityProviderCreate } from "./routes/identity-provider-create";
 import { Trash } from "@phosphor-icons/react";
 
 function getIdpIcon(iconId: string) {

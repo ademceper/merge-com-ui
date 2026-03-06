@@ -38,7 +38,7 @@ export function UserProfile() {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <button type="button" className="cursor-pointer">
+        <button type="button" className="cursor-pointer outline-none">
           <Avatar size="sm">
             <AvatarFallback>{initials}</AvatarFallback>
           </Avatar>

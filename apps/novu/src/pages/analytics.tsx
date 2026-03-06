@@ -25,7 +25,7 @@ import { WorkflowRunsTrendChart } from '../components/analytics/charts/workflow-
 import { PageMeta } from '../components/page-meta';
 import { Badge } from '@/components/primitives/badge';
 import { useSetPageHeader } from '@/context/page-header';
-import { FacetedFormFilter } from '../components/primitives/form/faceted-filter/facated-form-filter';
+import { FacetedFormFilter } from '@merge-rd/ui/components/faceted-filter/faceted-form-filter';
 import { InlineToast } from '../components/primitives/inline-toast';
 import { useEnvironment } from '../context/environment/hooks';
 import { useFeatureFlag } from '../hooks/use-feature-flag';

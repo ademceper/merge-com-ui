@@ -5,7 +5,7 @@ import { useTranslation } from "react-i18next";
 import { useAdminClient } from "../admin-client";
 import { useFetch } from "../../shared/keycloak-ui-shared";
 import { fetchAdminUI } from "../context/auth/admin-ui-endpoint";
-import SessionsTable from "../sessions/SessionsTable";
+import SessionsTable from "../sessions/sessions-table";
 
 type ClientSessionsProps = {
     client: ClientRepresentation;

@@ -10,18 +10,18 @@ import { useCallback, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 import { useAdminClient } from "../admin-client";
-import { FormAccess } from "../components/form/FormAccess";
-import { FixedButtonsGroup } from "../components/form/FixedButtonGroup";
+import { FormAccess } from "../components/form/form-access";
+import { FixedButtonsGroup } from "../components/form/fixed-button-group";
 import {
     FormPanel,
     KeycloakSpinner,
 } from "../../shared/keycloak-ui-shared";
-import { useRealm } from "../context/realm-context/RealmContext";
+import { useRealm } from "../context/realm-context/realm-context";
 import { useParams } from "../utils/useParams";
-import { KerberosSettingsRequired } from "./kerberos/KerberosSettingsRequired";
-import { toUserFederation } from "./routes/UserFederation";
-import { Header } from "./shared/Header";
-import { SettingsCache } from "./shared/SettingsCache";
+import { KerberosSettingsRequired } from "./kerberos/kerberos-settings-required";
+import { toUserFederation } from "./routes/user-federation";
+import { Header } from "./shared/header";
+import { SettingsCache } from "./shared/settings-cache";
 
 export default function UserFederationKerberosSettings() {
     const { adminClient } = useAdminClient();

@@ -6,7 +6,7 @@ import {
     type ClientsTab,
     toClients
 } from "./clients-path";
-import ClientsSection from "../ClientsSection";
+import ClientsSection from "../clients-section";
 
 export type { ClientsParams, ClientsTab };
 export { toClients };

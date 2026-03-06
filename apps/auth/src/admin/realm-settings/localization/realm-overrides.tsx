@@ -33,11 +33,11 @@ import {
     AlertDialogTitle
 } from "@merge-rd/ui/components/alert-dialog";
 import { KeyValueType } from "../../components/key-value-form/key-value-convert";
-import { useRealm } from "../../context/realm-context/RealmContext";
-import { useWhoAmI } from "../../context/whoami/WhoAmI";
+import { useRealm } from "../../context/realm-context/realm-context";
+import { useWhoAmI } from "../../context/whoami/who-am-i";
 import { DEFAULT_LOCALE, i18n } from "../../i18n/i18n";
 import { localeToDisplayName } from "../../util";
-import { AddTranslationModal } from "../AddTranslationModal";
+import { AddTranslationModal } from "../add-translation-modal";
 import { Separator } from "@merge-rd/ui/components/separator";
 
 type RealmOverridesProps = {

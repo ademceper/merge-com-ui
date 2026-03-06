@@ -1,5 +1,5 @@
 import { Skeleton } from '@merge-rd/ui/components/skeleton';
-import { TableCell, TableRow } from '@/components/primitives/table';
+import { TableCell, TableRow } from '@merge-rd/ui/components/table';
 
 export function LogsTableSkeletonRow() {
   return (

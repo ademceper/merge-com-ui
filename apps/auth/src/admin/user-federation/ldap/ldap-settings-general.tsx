@@ -11,9 +11,9 @@ import {
 import { useEffect, useState } from "react";
 import { Controller, FormProvider, UseFormReturn } from "react-hook-form";
 import { useTranslation } from "react-i18next";
-import { FormAccess } from "../../components/form/FormAccess";
-import { WizardSectionHeader } from "../../components/wizard-section-header/WizardSectionHeader";
-import { useRealm } from "../../context/realm-context/RealmContext";
+import { FormAccess } from "../../components/form/form-access";
+import { WizardSectionHeader } from "../../components/wizard-section-header/wizard-section-header";
+import { useRealm } from "../../context/realm-context/realm-context";
 
 export type LdapSettingsGeneralProps = {
     form: UseFormReturn<ComponentRepresentation>;

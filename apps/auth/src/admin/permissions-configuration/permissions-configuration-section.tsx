@@ -6,16 +6,16 @@ import { FormProvider, useForm, useWatch } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { useParams } from "react-router-dom";
 import { useAdminClient } from "../admin-client";
-import { AuthorizationPolicies } from "../clients/authorization/Policies";
-import { FormFields, SaveOptions } from "../clients/ClientDetails";
-import { ConfirmDialogModal } from "../components/confirm-dialog/ConfirmDialog";
-import { ViewHeader } from "../components/view-header/ViewHeader";
-import { useAccess } from "../context/access/Access";
-import { useRealm } from "../context/realm-context/RealmContext";
+import { AuthorizationPolicies } from "../clients/authorization/policies";
+import { FormFields, SaveOptions } from "../clients/client-details";
+import { ConfirmDialogModal } from "../components/confirm-dialog/confirm-dialog";
+import { ViewHeader } from "../components/view-header/view-header";
+import { useAccess } from "../context/access/access";
+import { useRealm } from "../context/realm-context/realm-context";
 import { convertFormValuesToObject, convertToFormValues } from "../util";
 import useToggle from "../utils/useToggle";
-import { PermissionsConfigurationTab } from "./permission-configuration/PermissionsConfigurationTab";
-import { PermissionsEvaluationTab } from "./permission-evaluation/PermissionsEvaluationTab";
+import { PermissionsConfigurationTab } from "./permission-configuration/permissions-configuration-tab";
+import { PermissionsEvaluationTab } from "./permission-evaluation/permissions-evaluation-tab";
 
 export default function PermissionsConfigurationSection() {
     const { adminClient } = useAdminClient();

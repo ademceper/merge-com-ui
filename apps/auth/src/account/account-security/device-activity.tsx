@@ -33,7 +33,7 @@ import {
     DeviceRepresentation,
     SessionRepresentation
 } from "../api/representations";
-import { Page } from "../components/page/Page";
+import { Page } from "../components/page/page";
 import { formatDate } from "../utils/formatDate";
 import { useAccountAlerts } from "../utils/useAccountAlerts";
 import { usePromise } from "../utils/usePromise";

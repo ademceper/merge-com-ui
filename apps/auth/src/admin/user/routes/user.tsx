@@ -21,7 +21,7 @@ export type UserParams = {
     tab: UserTab;
 };
 
-const EditUser = lazy(() => import("../EditUser"));
+const EditUser = lazy(() => import("../edit-user"));
 
 export const UserRoute: AppRouteObject = {
     path: "/:realm/users/:id/:tab",

@@ -1,14 +1,14 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@merge-rd/ui/components/tabs";
 import { Trans, useTranslation } from "react-i18next";
 import { Link, useNavigate, useParams } from "react-router-dom";
-import { ViewHeader } from "../components/view-header/ViewHeader";
-import { useRealm } from "../context/realm-context/RealmContext";
+import { ViewHeader } from "../components/view-header/view-header";
+import { useRealm } from "../context/realm-context/realm-context";
 import helpUrls from "../help-urls";
-import { toRealmSettings } from "../realm-settings/routes/RealmSettings";
-import { AdminEvents } from "./AdminEvents";
-import { toEvents } from "./routes/Events";
-import type { EventsTab } from "./routes/Events";
-import { UserEvents } from "./UserEvents";
+import { toRealmSettings } from "../realm-settings/routes/realm-settings";
+import { AdminEvents } from "./admin-events";
+import { toEvents } from "./routes/events";
+import type { EventsTab } from "./routes/events";
+import { UserEvents } from "./user-events";
 
 export default function EventsSection() {
     const { t } = useTranslation();

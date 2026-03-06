@@ -3,13 +3,13 @@ import JSZip from "jszip";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@merge-rd/ui/components/tabs";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
-import { useRealm } from "../../context/realm-context/RealmContext";
-import { toThemesTab } from "../routes/ThemesTab";
-import type { ThemesTabType } from "../routes/ThemesTab";
+import { useRealm } from "../../context/realm-context/realm-context";
+import { toThemesTab } from "../routes/themes-tab";
+import type { ThemesTabType } from "../routes/themes-tab";
 import useIsFeatureEnabled, { Feature } from "../../utils/useIsFeatureEnabled";
-import { LogoContext } from "./LogoContext";
-import { ThemeColors } from "./ThemeColors";
-import { ThemeSettingsTab } from "./ThemeSettings";
+import { LogoContext } from "./logo-context";
+import { ThemeColors } from "./theme-colors";
+import { ThemeSettingsTab } from "./theme-settings";
 
 type ThemesTabProps = {
     realm: RealmRepresentation;

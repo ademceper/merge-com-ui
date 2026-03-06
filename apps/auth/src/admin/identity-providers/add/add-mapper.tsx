@@ -10,22 +10,22 @@ import { FormProvider, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { Link, useNavigate } from "react-router-dom";
 import { useAdminClient } from "../../admin-client";
-import { useConfirmDialog } from "../../components/confirm-dialog/ConfirmDialog";
-import { DynamicComponents } from "../../components/dynamic/DynamicComponents";
-import { FormAccess } from "../../components/form/FormAccess";
-import type { AttributeForm } from "../../components/key-value-form/AttributeForm";
+import { useConfirmDialog } from "../../components/confirm-dialog/confirm-dialog";
+import { DynamicComponents } from "../../components/dynamic/dynamic-components";
+import { FormAccess } from "../../components/form/form-access";
+import type { AttributeForm } from "../../components/key-value-form/attribute-form";
 import { KeycloakSpinner } from "../../../shared/keycloak-ui-shared";
-import { ViewHeader } from "../../components/view-header/ViewHeader";
-import { useRealm } from "../../context/realm-context/RealmContext";
+import { ViewHeader } from "../../components/view-header/view-header";
+import { useRealm } from "../../context/realm-context/realm-context";
 import { convertFormValuesToObject, convertToFormValues } from "../../util";
 import useLocaleSort, { mapByKey } from "../../utils/useLocaleSort";
 import { useParams } from "../../utils/useParams";
 import {
     IdentityProviderEditMapperParams,
     toIdentityProviderEditMapper
-} from "../routes/EditMapper";
-import { toIdentityProvider } from "../routes/IdentityProvider";
-import { AddMapperForm } from "./AddMapperForm";
+} from "../routes/edit-mapper";
+import { toIdentityProvider } from "../routes/identity-provider";
+import { AddMapperForm } from "./add-mapper-form";
 
 export type IdPMapperRepresentationWithAttributes = IdentityProviderMapperRepresentation &
     AttributeForm;

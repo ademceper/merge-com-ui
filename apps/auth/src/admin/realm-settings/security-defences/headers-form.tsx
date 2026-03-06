@@ -2,9 +2,9 @@ import type RealmRepresentation from "@keycloak/keycloak-admin-client/lib/defs/r
 import { useFormContext } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { FormPanel } from "../../../shared/keycloak-ui-shared";
-import { FormAccess } from "../../components/form/FormAccess";
-import { FixedButtonsGroup } from "../../components/form/FixedButtonGroup";
-import { HelpLinkTextInput } from "./HelpLinkTextInput";
+import { FormAccess } from "../../components/form/form-access";
+import { FixedButtonsGroup } from "../../components/form/fixed-button-group";
+import { HelpLinkTextInput } from "./help-link-text-input";
 
 type HeadersFormProps = {
     realm: RealmRepresentation;

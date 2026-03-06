@@ -14,13 +14,13 @@ import { useEffect, useMemo, useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { useAdminClient } from "../../admin-client";
-import { ClientSelect } from "../../components/client/ClientSelect";
-import { UserSelect } from "../../components/users/UserSelect";
-import { useAccess } from "../../context/access/Access";
-import { useRealm } from "../../context/realm-context/RealmContext";
-import { useServerInfo } from "../../context/server-info/ServerInfoProvider";
+import { ClientSelect } from "../../components/client/client-select";
+import { UserSelect } from "../../components/users/user-select";
+import { useAccess } from "../../context/access/access";
+import { useRealm } from "../../context/realm-context/realm-context";
+import { useServerInfo } from "../../context/server-info/server-info-provider";
 import { prettyPrintJSON } from "../../util";
-import { GeneratedCodeTab } from "./GeneratedCodeTab";
+import { GeneratedCodeTab } from "./generated-code-tab";
 
 export type EvaluateScopesProps = {
     clientId: string;

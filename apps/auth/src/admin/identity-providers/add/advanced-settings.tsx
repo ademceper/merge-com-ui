@@ -21,10 +21,10 @@ import { Controller, useFormContext, useWatch } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { useAdminClient } from "../../admin-client";
 import useIsFeatureEnabled, { Feature } from "../../utils/useIsFeatureEnabled";
-import type { FieldProps } from "../component/FormGroupField";
-import { FormGroupField } from "../component/FormGroupField";
-import { SwitchField } from "../component/SwitchField";
-import { TextField } from "../component/TextField";
+import type { FieldProps } from "../component/form-group-field";
+import { FormGroupField } from "../component/form-group-field";
+import { SwitchField } from "../component/switch-field";
+import { TextField } from "../component/text-field";
 
 const LoginFlow = ({
     field,

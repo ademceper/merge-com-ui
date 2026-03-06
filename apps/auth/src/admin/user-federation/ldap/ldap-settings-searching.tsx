@@ -3,8 +3,8 @@ import { Controller, FormProvider, UseFormReturn } from "react-hook-form";
 import { Switch } from "@merge-rd/ui/components/switch";
 import { FormLabel } from "../../../shared/keycloak-ui-shared";
 import { useTranslation } from "react-i18next";
-import { FormAccess } from "../../components/form/FormAccess";
-import { WizardSectionHeader } from "../../components/wizard-section-header/WizardSectionHeader";
+import { FormAccess } from "../../components/form/form-access";
+import { WizardSectionHeader } from "../../components/wizard-section-header/wizard-section-header";
 
 export type LdapSettingsSearchingProps = {
     form: UseFormReturn;

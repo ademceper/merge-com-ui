@@ -16,10 +16,10 @@ import { useEffect, useState } from "react";
 import { Controller, FormProvider, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { FormPanel } from "../../../shared/keycloak-ui-shared";
-import { FormAccess } from "../../components/form/FormAccess";
-import { FixedButtonsGroup } from "../../components/form/FixedButtonGroup";
+import { FormAccess } from "../../components/form/form-access";
+import { FixedButtonsGroup } from "../../components/form/fixed-button-group";
 import { convertToFormValues } from "../../util";
-import { Time } from "./Time";
+import { Time } from "./time";
 
 type BruteForceDetectionProps = {
     realm: RealmRepresentation;

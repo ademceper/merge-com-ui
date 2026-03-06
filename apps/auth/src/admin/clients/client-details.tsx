@@ -15,16 +15,16 @@ import { useAdminClient } from "../admin-client";
 import {
     ConfirmDialogModal,
     useConfirmDialog
-} from "../components/confirm-dialog/ConfirmDialog";
-import { DownloadDialog } from "../components/download-dialog/DownloadDialog";
+} from "../components/confirm-dialog/confirm-dialog";
+import { DownloadDialog } from "../components/download-dialog/download-dialog";
 import type { KeyValueType } from "../components/key-value-form/key-value-convert";
 import { KeycloakSpinner } from "../../shared/keycloak-ui-shared";
-import { PermissionsTab } from "../components/permission-tab/PermissionTab";
-import { RolesList } from "../components/roles-list/RolesList";
+import { PermissionsTab } from "../components/permission-tab/permission-tab";
+import { RolesList } from "../components/roles-list/roles-list";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@merge-rd/ui/components/tabs";
-import { ViewHeader, ViewHeaderBadge } from "../components/view-header/ViewHeader";
-import { useAccess } from "../context/access/Access";
-import { useRealm } from "../context/realm-context/RealmContext";
+import { ViewHeader, ViewHeaderBadge } from "../components/view-header/view-header";
+import { useAccess } from "../context/access/access";
+import { useRealm } from "../context/realm-context/realm-context";
 import {
     convertAttributeNameToForm,
     convertFormValuesToObject,
@@ -34,30 +34,30 @@ import {
 import useIsFeatureEnabled, { Feature } from "../utils/useIsFeatureEnabled";
 import { useParams } from "../utils/useParams";
 import useToggle from "../utils/useToggle";
-import { AdvancedTab } from "./AdvancedTab";
-import { ClientSessions } from "./ClientSessions";
-import { ClientSettings } from "./ClientSettings";
-import { AuthorizationEvaluate } from "./authorization/AuthorizationEvaluate";
-import { AuthorizationExport } from "./authorization/AuthorizationExport";
-import { AuthorizationPermissions } from "./authorization/Permissions";
-import { AuthorizationPolicies } from "./authorization/Policies";
-import { AuthorizationResources } from "./authorization/Resources";
-import { AuthorizationScopes } from "./authorization/Scopes";
-import { AuthorizationSettings } from "./authorization/Settings";
-import { Credentials } from "./credentials/Credentials";
-import { Keys } from "./keys/Keys";
-import { SamlKeys } from "./keys/SamlKeys";
-import { ClientParams } from "./routes/Client";
-import { toClientRole } from "./routes/ClientRole";
-import { toClients } from "./routes/Clients";
-import { toCreateRole } from "./routes/NewRole";
-import { ClientScopes } from "./scopes/ClientScopes";
-import { EvaluateScopes } from "./scopes/EvaluateScopes";
-import { ServiceAccount } from "./service-account/ServiceAccount";
+import { AdvancedTab } from "./advanced-tab";
+import { ClientSessions } from "./client-sessions";
+import { ClientSettings } from "./client-settings";
+import { AuthorizationEvaluate } from "./authorization/authorization-evaluate";
+import { AuthorizationExport } from "./authorization/authorization-export";
+import { AuthorizationPermissions } from "./authorization/permissions";
+import { AuthorizationPolicies } from "./authorization/policies";
+import { AuthorizationResources } from "./authorization/resources";
+import { AuthorizationScopes } from "./authorization/scopes";
+import { AuthorizationSettings } from "./authorization/settings";
+import { Credentials } from "./credentials/credentials";
+import { Keys } from "./keys/keys";
+import { SamlKeys } from "./keys/saml-keys";
+import { ClientParams } from "./routes/client";
+import { toClientRole } from "./routes/client-role";
+import { toClients } from "./routes/clients";
+import { toCreateRole } from "./routes/new-role";
+import { ClientScopes } from "./scopes/client-scopes";
+import { EvaluateScopes } from "./scopes/evaluate-scopes";
+import { ServiceAccount } from "./service-account/service-account";
 import { isRealmClient } from "./utils";
-import { UserEvents } from "../events/UserEvents";
+import { UserEvents } from "../events/user-events";
 import { useIsAdminPermissionsClient } from "../utils/useIsAdminPermissionsClient";
-import { AdminEvents } from "../events/AdminEvents";
+import { AdminEvents } from "../events/admin-events";
 
 type ClientDetailHeaderProps = {
     onChange: (value: boolean) => void;

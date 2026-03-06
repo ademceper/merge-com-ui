@@ -9,7 +9,7 @@ export type PermissionsPoliciesParams = {
 };
 
 const PermissionsPoliciesSection = lazy(
-    () => import("../PermissionsConfigurationSection")
+    () => import("../permissions-configuration-section")
 );
 
 export const PermissionsPoliciesRoute: AppRouteObject = {

@@ -7,10 +7,10 @@ import { HelpItem } from "../../../shared/keycloak-ui-shared";
 import { useAdminClient } from "../../admin-client";
 import { getErrorDescription, getErrorMessage } from "../../../shared/keycloak-ui-shared";
 import { toast } from "sonner";
-import { FormAccess } from "../../components/form/FormAccess";
-import { WizardSectionHeader } from "../../components/wizard-section-header/WizardSectionHeader";
-import { useRealm } from "../../context/realm-context/RealmContext";
-import { convertFormToSettings } from "./LdapSettingsConnection";
+import { FormAccess } from "../../components/form/form-access";
+import { WizardSectionHeader } from "../../components/wizard-section-header/wizard-section-header";
+import { useRealm } from "../../context/realm-context/realm-context";
+import { convertFormToSettings } from "./ldap-settings-connection";
 
 export type LdapSettingsAdvancedProps = {
     id?: string;

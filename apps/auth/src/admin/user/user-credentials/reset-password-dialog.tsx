@@ -5,13 +5,13 @@ import { FormProvider, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { FormErrorText, PasswordInput } from "../../../shared/keycloak-ui-shared";
 import { useAdminClient } from "../../admin-client";
-import { DefaultSwitchControl } from "../../components/SwitchControl";
+import { DefaultSwitchControl } from "../../components/switch-control";
 import { getErrorDescription, getErrorMessage } from "../../../shared/keycloak-ui-shared";
 import { toast } from "sonner";
 import {
     ConfirmDialogModal,
     useConfirmDialog
-} from "../../components/confirm-dialog/ConfirmDialog";
+} from "../../components/confirm-dialog/confirm-dialog";
 import useToggle from "../../utils/useToggle";
 
 type ResetPasswordDialogProps = {

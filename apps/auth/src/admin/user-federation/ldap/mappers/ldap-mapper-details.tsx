@@ -21,18 +21,18 @@ import { Controller, FormProvider, useForm, useWatch } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 import { useAdminClient } from "../../../admin-client";
-import { useConfirmDialog } from "../../../components/confirm-dialog/ConfirmDialog";
+import { useConfirmDialog } from "../../../components/confirm-dialog/confirm-dialog";
 import {
     convertToName,
     DynamicComponents
-} from "../../../components/dynamic/DynamicComponents";
-import { FormAccess } from "../../../components/form/FormAccess";
-import { ViewHeader } from "../../../components/view-header/ViewHeader";
-import { useRealm } from "../../../context/realm-context/RealmContext";
+} from "../../../components/dynamic/dynamic-components";
+import { FormAccess } from "../../../components/form/form-access";
+import { ViewHeader } from "../../../components/view-header/view-header";
+import { useRealm } from "../../../context/realm-context/realm-context";
 import { convertFormValuesToObject, convertToFormValues } from "../../../util";
 import { useParams } from "../../../utils/useParams";
-import { toUserFederationLdap } from "../../routes/UserFederationLdap";
-import { UserFederationLdapMapperParams } from "../../routes/UserFederationLdapMapper";
+import { toUserFederationLdap } from "../../routes/user-federation-ldap";
+import { UserFederationLdapMapperParams } from "../../routes/user-federation-ldap-mapper";
 
 export default function LdapMapperDetails() {
     const { adminClient } = useAdminClient();

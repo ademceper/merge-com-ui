@@ -6,7 +6,7 @@ import type { AppRouteObject } from "../../routes";
 
 export type AddUserParams = { realm: string };
 
-const CreateUser = lazy(() => import("../CreateUser"));
+const CreateUser = lazy(() => import("../create-user"));
 
 export const AddUserRoute: AppRouteObject = {
     path: "/:realm/users/add-user",

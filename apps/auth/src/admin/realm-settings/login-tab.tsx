@@ -5,8 +5,8 @@ import { FormPanel, HelpItem } from "../../shared/keycloak-ui-shared";
 import { useAdminClient } from "../admin-client";
 import { getErrorDescription, getErrorMessage } from "../../shared/keycloak-ui-shared";
 import { toast } from "sonner";
-import { FormAccess } from "../components/form/FormAccess";
-import { useRealm } from "../context/realm-context/RealmContext";
+import { FormAccess } from "../components/form/form-access";
+import { useRealm } from "../context/realm-context/realm-context";
 
 type RealmSettingsLoginTabProps = {
     realm: RealmRepresentation;

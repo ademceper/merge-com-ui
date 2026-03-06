@@ -5,10 +5,10 @@ import {
     KeycloakSpinner,
     ErrorBoundaryFallback
 } from "../../shared/keycloak-ui-shared";
-import { ErrorRenderer } from "./error/ErrorRenderer";
-import { AuthWall } from "../root/AuthWall";
-import { AdminHeader } from "./AdminHeader";
-import { AdminSidebar } from "./AdminSidebar";
+import { ErrorRenderer } from "./error/error-renderer";
+import { AuthWall } from "../root/auth-wall";
+import { AdminHeader } from "./admin-header";
+import { AdminSidebar } from "./admin-sidebar";
 
 export function AdminLayout() {
     return (

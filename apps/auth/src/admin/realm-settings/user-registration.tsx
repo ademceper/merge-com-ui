@@ -14,9 +14,9 @@ import {
 } from "../../shared/keycloak-ui-shared";
 import { toast } from "sonner";
 import { FormPanel } from "../../shared/keycloak-ui-shared";
-import { RoleMapping } from "../components/role-mapping/RoleMapping";
-import { useRealm } from "../context/realm-context/RealmContext";
-import { DefaultGroupsTab } from "./DefaultGroupsTab";
+import { RoleMapping } from "../components/role-mapping/role-mapping";
+import { useRealm } from "../context/realm-context/realm-context";
+import { DefaultGroupsTab } from "./default-groups-tab";
 
 export const UserRegistration = () => {
     const { adminClient } = useAdminClient();

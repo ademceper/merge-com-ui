@@ -17,7 +17,7 @@ import { useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useAdminClient } from "../../../admin-client";
 import useLocaleSort, { mapByKey } from "../../../utils/useLocaleSort";
-import { providerConditionFilter } from "../../FlowDetails";
+import { providerConditionFilter } from "../../flow-details";
 
 type AuthenticationProviderListProps = {
     list?: AuthenticationProviderRepresentation[];

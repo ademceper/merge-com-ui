@@ -1,9 +1,9 @@
 import { Button } from "@merge-rd/ui/components/button";
 import { useTranslation } from "react-i18next";
 
-import { FormAccess } from "../../components/form/FormAccess";
+import { FormAccess } from "../../components/form/form-access";
 import { TextControl } from "../../../shared/keycloak-ui-shared";
-import { ApplicationUrls } from "./ApplicationUrls";
+import { ApplicationUrls } from "./application-urls";
 
 type FineGrainSamlEndpointConfigProps = {
     save: () => void;

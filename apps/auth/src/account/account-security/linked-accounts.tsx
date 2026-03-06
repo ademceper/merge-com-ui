@@ -14,11 +14,11 @@ import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { getLinkedAccounts, LinkedAccountQueryParams } from "../api/methods";
 import { LinkedAccountRepresentation } from "../api/representations";
-import { EmptyRow } from "../components/datalist/EmptyRow";
-import { Page } from "../components/page/Page";
+import { EmptyRow } from "../components/datalist/empty-row";
+import { Page } from "../components/page/page";
 import { usePromise } from "../utils/usePromise";
-import { AccountRow } from "./AccountRow";
-import { LinkedAccountsToolbar } from "./LinkedAccountsToolbar";
+import { AccountRow } from "./account-row";
+import { LinkedAccountsToolbar } from "./linked-accounts-toolbar";
 
 export const LinkedAccounts = () => {
     const { t } = useTranslation();

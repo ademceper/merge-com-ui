@@ -1,6 +1,6 @@
 import { Trans, useTranslation } from "react-i18next";
 import { TextControl } from "../../../shared/keycloak-ui-shared";
-import { FormattedLink } from "../../components/external-link/FormattedLink";
+import { FormattedLink } from "../../components/external-link/formatted-link";
 
 type HelpLinkTextInputProps = {
     fieldName: string;

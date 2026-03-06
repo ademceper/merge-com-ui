@@ -1,5 +1,5 @@
 import { useTranslation } from "react-i18next";
-import { UserSelect } from "../../../components/users/UserSelect";
+import { UserSelect } from "../../../components/users/user-select";
 
 export const User = () => {
     const { t } = useTranslation();

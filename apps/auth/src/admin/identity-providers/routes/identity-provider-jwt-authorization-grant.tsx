@@ -5,7 +5,7 @@ import type { AppRouteObject } from "../../routes";
 
 export type IdentityProviderJWTAuthorizationGrantParams = { realm: string };
 
-const AddJWTAuthorizationGrant = lazy(() => import("../add/AddJWTAuthorizationGrant"));
+const AddJWTAuthorizationGrant = lazy(() => import("../add/add-jwt-authorization-grant"));
 
 export const IdentityProviderJWTAuthorizationGrantRoute: AppRouteObject = {
     path: "/:realm/identity-providers/jwt-authorization-grant/add",

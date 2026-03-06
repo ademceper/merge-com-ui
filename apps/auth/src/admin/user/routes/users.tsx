@@ -7,7 +7,7 @@ export type UserTab = "list" | "permissions";
 
 export type UsersParams = { realm: string; tab?: UserTab };
 
-const UsersSection = lazy(() => import("../UsersSection"));
+const UsersSection = lazy(() => import("../users-section"));
 
 export const UsersRoute: AppRouteObject = {
     path: "/:realm/users",

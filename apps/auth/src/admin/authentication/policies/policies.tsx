@@ -1,11 +1,11 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@merge-rd/ui/components/tabs";
 import { useTranslation } from "react-i18next";
 import { KeycloakSpinner } from "../../../shared/keycloak-ui-shared";
-import { useRealm } from "../../context/realm-context/RealmContext";
-import { CibaPolicy } from "./CibaPolicy";
-import { OtpPolicy } from "./OtpPolicy";
-import { PasswordPolicy } from "./PasswordPolicy";
-import { WebauthnPolicy } from "./WebauthnPolicy";
+import { useRealm } from "../../context/realm-context/realm-context";
+import { CibaPolicy } from "./ciba-policy";
+import { OtpPolicy } from "./otp-policy";
+import { PasswordPolicy } from "./password-policy";
+import { WebauthnPolicy } from "./webauthn-policy";
 
 export const Policies = () => {
     const { t } = useTranslation();

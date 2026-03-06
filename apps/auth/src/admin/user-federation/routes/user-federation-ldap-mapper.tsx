@@ -9,7 +9,7 @@ export type UserFederationLdapMapperParams = {
     mapperId: string;
 };
 
-const LdapMapperDetails = lazy(() => import("../ldap/mappers/LdapMapperDetails"));
+const LdapMapperDetails = lazy(() => import("../ldap/mappers/ldap-mapper-details"));
 
 export const UserFederationLdapMapperRoute: AppRouteObject = {
     path: "/:realm/user-federation/ldap/:id/mappers/:mapperId",

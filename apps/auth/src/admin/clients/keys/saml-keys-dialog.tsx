@@ -13,9 +13,9 @@ import { HelpItem } from "../../../shared/keycloak-ui-shared";
 import { useAdminClient } from "../../admin-client";
 import { getErrorDescription, getErrorMessage } from "../../../shared/keycloak-ui-shared";
 import { toast } from "sonner";
-import { Certificate } from "./Certificate";
-import { KeyForm } from "./GenerateKeyDialog";
-import type { KeyTypes } from "./SamlKeys";
+import { Certificate } from "./certificate";
+import { KeyForm } from "./generate-key-dialog";
+import type { KeyTypes } from "./saml-keys";
 
 type SamlKeysDialogProps = {
     id: string;

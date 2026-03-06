@@ -29,22 +29,22 @@ import {
     AlertDialogHeader,
     AlertDialogTitle
 } from "@merge-rd/ui/components/alert-dialog";
-import { ViewHeader } from "../components/view-header/ViewHeader";
-import { useRealm } from "../context/realm-context/RealmContext";
+import { ViewHeader } from "../components/view-header/view-header";
+import { useRealm } from "../context/realm-context/realm-context";
 import helpUrls from "../help-urls";
 import { addTrailingSlash } from "../util";
 import { getAuthorizationHeaders } from "../utils/getAuthorizationHeaders";
 import useToggle from "../utils/useToggle";
-import { BindFlowDialog } from "./BindFlowDialog";
-import { DuplicateFlowModal } from "./DuplicateFlowModal";
-import { RequiredActions } from "./RequiredActions";
-import { UsedBy } from "./components/UsedBy";
+import { BindFlowDialog } from "./bind-flow-dialog";
+import { DuplicateFlowModal } from "./duplicate-flow-modal";
+import { RequiredActions } from "./required-actions";
+import { UsedBy } from "./components/used-by";
 import { AuthenticationType } from "./constants";
-import { Policies } from "./policies/Policies";
-import { toAuthentication } from "./routes/Authentication";
-import type { AuthenticationTab } from "./routes/Authentication";
-import { toCreateFlow } from "./routes/CreateFlow";
-import { toFlow } from "./routes/Flow";
+import { Policies } from "./policies/policies";
+import { toAuthentication } from "./routes/authentication";
+import type { AuthenticationTab } from "./routes/authentication";
+import { toCreateFlow } from "./routes/create-flow";
+import { toFlow } from "./routes/flow";
 
 export default function AuthenticationSection() {
     const { adminClient } = useAdminClient();

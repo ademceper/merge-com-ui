@@ -6,7 +6,7 @@ import { useEffect } from "react";
 import { FormProvider, useForm, useFormContext } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { useAdminClient } from "../admin-client";
-import { DefaultSwitchControl } from "../components/SwitchControl";
+import { DefaultSwitchControl } from "../components/switch-control";
 import { getErrorDescription, getErrorMessage } from "../../shared/keycloak-ui-shared";
 import { toast } from "sonner";
 import {
@@ -14,8 +14,8 @@ import {
     convertFormValuesToObject,
     convertToFormValues
 } from "../util";
-import { IdentityProviderSelect } from "./IdentityProviderSelect";
-import { OrganizationFormType } from "./OrganizationForm";
+import { IdentityProviderSelect } from "./identity-provider-select";
+import { OrganizationFormType } from "./organization-form";
 
 type LinkIdentityProviderModalProps = {
     orgId: string;
