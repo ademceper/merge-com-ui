@@ -31,7 +31,6 @@ import {
     CirclesThreeIcon,
     ClockCounterClockwiseIcon,
     GearSixIcon,
-    GlobeSimple,
     GlobeIcon,
     LockKeyIcon,
     ShieldCheckIcon,
@@ -123,12 +122,9 @@ export function AdminAppSidebar({ ...props }: React.ComponentProps<typeof Sideba
         };
     }, [adminClient]);
 
-    const realmColors = ["#6366f1", "#f59e0b", "#10b981", "#ef4444", "#8b5cf6", "#06b6d4", "#ec4899", "#14b8a6"];
-
-    const realmItems: SwitcherItem[] = realms.map((r, i) => ({
+    const realmItems: SwitcherItem[] = realms.map((r) => ({
         value: r.name,
         label: label(t, r.displayName, r.name) as string,
-        icon: <GlobeSimple weight="fill" className="size-5 rounded-md" style={{ color: realmColors[i % realmColors.length] }} />,
     }));
 
     const onRealmChange = (value: string) => {
@@ -169,7 +165,7 @@ export function AdminAppSidebar({ ...props }: React.ComponentProps<typeof Sideba
                         className="hidden h-8 w-auto max-w-full object-contain object-left dark:block"
                     />
                 </div>
-                <Switcher value={realm} items={realmItems} onChange={onRealmChange} />
+                <Switcher value={realm} items={realmItems} onChange={onRealmChange} singleBadge={t("currentRealm")} />
             </SidebarHeader>
             <SidebarContent>
                 {showManage && (

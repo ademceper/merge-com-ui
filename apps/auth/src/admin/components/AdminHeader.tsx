@@ -37,7 +37,7 @@ export function AdminHeader() {
 
     return (
         <SidebarPageHeader>
-            <span className="text-base font-semibold md:hidden">{pageTitle}</span>
+            <span className="text-base md:hidden">{pageTitle}</span>
             <span className="hidden md:contents">
                 {isGroupsSection ? <GroupBreadCrumbsForHeader /> : <PageBreadCrumbs />}
             </span>

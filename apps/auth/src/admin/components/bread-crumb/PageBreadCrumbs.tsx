@@ -49,7 +49,7 @@ export const PageBreadCrumbs = () => {
     if (crumbs.length === 0) return null;
     if (crumbs.length === 1) {
         return (
-            <h1 className="text-base font-semibold">{crumbs[0].breadcrumb}</h1>
+            <h1 className="text-base">{crumbs[0].breadcrumb}</h1>
         );
     }
     return (

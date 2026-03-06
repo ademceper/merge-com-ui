@@ -23,6 +23,7 @@ export interface SwitcherProps {
   onChange?: (value: string) => void
   className?: string
   disabled?: boolean
+  singleBadge?: string
 }
 
 function ColorDot({ color, className }: { color: string; className?: string }) {
@@ -40,6 +41,7 @@ function Switcher({
   onChange,
   className,
   disabled,
+  singleBadge,
 }: SwitcherProps) {
   const [isOpen, setIsOpen] = React.useState(false)
 
@@ -68,8 +70,24 @@ function Switcher({
     return sections
   }, [items])
 
+  if (isSingle) {
+    return (
+      <div className={cn("flex h-10 w-full items-center gap-2 px-2", className)}>
+        {current?.icon ?? (current?.color ? <ColorDot color={current.color} /> : null)}
+        <span className="truncate text-sm font-medium text-foreground">
+          {current?.label}
+        </span>
+        {singleBadge && (
+          <span className="ml-auto shrink-0 rounded-sm bg-indigo-500/15 px-1.5 py-0.5 text-[11px] font-medium text-indigo-700 dark:bg-indigo-400/20 dark:text-indigo-300">
+            {singleBadge}
+          </span>
+        )}
+      </div>
+    )
+  }
+
   return (
-    <Popover open={isSingle ? false : isOpen} onOpenChange={isSingle ? undefined : setIsOpen}>
+    <Popover open={isOpen} onOpenChange={setIsOpen}>
       <PopoverTrigger
         disabled={disabled}
         className={cn(
@@ -83,9 +101,7 @@ function Switcher({
             {current?.label}
           </span>
         </div>
-        {!isSingle && (
-          <ArrowsDownUp className="ml-auto size-4 shrink-0 text-muted-foreground opacity-0 transition duration-300 ease-out group-focus-within:opacity-100 group-hover:opacity-100" />
-        )}
+        <ArrowsDownUp className="ml-auto size-4 shrink-0 text-muted-foreground opacity-0 transition duration-300 ease-out group-focus-within:opacity-100 group-hover:opacity-100" />
       </PopoverTrigger>
       <PopoverContent
         align="start"
