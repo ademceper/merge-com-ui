@@ -6,7 +6,6 @@ import { useActionCommands } from '../commands/action-commands';
 import { useEnvironmentCommands } from '../commands/environment-commands';
 import { useHelpCommands } from '../commands/help-commands';
 import { useNavigationCommands } from '../commands/navigation-commands';
-import { useSettingsCommands } from '../commands/settings-commands';
 import { useSubscriberCommands } from '../commands/subscriber-commands';
 import { useWorkflowCommands } from '../commands/workflow-commands';
 import { useWorkflowEditorCommands } from '../commands/workflow-editor-commands';
@@ -31,7 +30,6 @@ export function useCommandRegistry(searchQuery = ''): CommandGroup[] {
   const workflowEditorCommands = useWorkflowEditorCommands(context);
   const subscriberCommands = useSubscriberCommands(context);
   const environmentCommands = useEnvironmentCommands(context);
-  const settingsCommands = useSettingsCommands(context);
   const helpCommands = useHelpCommands(context);
 
   const commandGroups = useMemo(() => {
@@ -42,7 +40,6 @@ export function useCommandRegistry(searchQuery = ''): CommandGroup[] {
       ...navigationCommands,
       ...subscriberCommands,
       ...environmentCommands,
-      ...settingsCommands,
       ...helpCommands,
     ];
 
@@ -104,7 +101,6 @@ export function useCommandRegistry(searchQuery = ''): CommandGroup[] {
     workflowEditorCommands,
     subscriberCommands,
     environmentCommands,
-    settingsCommands,
     helpCommands,
     searchQuery,
   ]);

@@ -1,4 +1,4 @@
-import { ApiServiceLevelEnum, FeatureFlagsKeysEnum, PermissionsEnum } from '@novu/shared';
+import { FeatureFlagsKeysEnum, PermissionsEnum } from '@novu/shared';
 import { NavLink, useLocation } from 'react-router-dom';
 import {
   RiBarChartBoxLine,
@@ -10,16 +10,13 @@ import {
   RiLayout5Line,
   RiLineChartLine,
   RiRouteFill,
-  RiSettings4Line,
   RiSignalTowerLine,
   RiStore3Line,
   RiTranslate2,
-  RiUserAddLine,
 } from 'react-icons/ri';
 import {
   Sidebar,
   SidebarContent,
-  SidebarFooter,
   SidebarGroup,
   SidebarGroupContent,
   SidebarGroupLabel,
@@ -33,13 +30,8 @@ import { useEnvironment } from '@/context/environment/hooks';
 import { useFeatureFlag } from '@/hooks/use-feature-flag';
 import { Protect } from '@/utils/protect';
 import { buildRoute, ROUTES } from '@/utils/routes';
-import { IS_ENTERPRISE, IS_SELF_HOSTED } from '../config';
-import { useFetchSubscription } from '../hooks/use-fetch-subscription';
 import { EnvironmentDropdown } from './side-navigation/environment-dropdown';
-import { FreeTrialCard } from './side-navigation/free-trial-card';
-import { HomeMenuItem } from './side-navigation/getting-started-menu-item';
 import { OrganizationDropdown } from './side-navigation/organization-dropdown';
-import { UsageCard } from './side-navigation/usage-card';
 
 function NovuNavLink({
   to,
@@ -81,29 +73,6 @@ function NovuNavLink({
         )}
       </SidebarMenuButton>
     </SidebarMenuItem>
-  );
-}
-
-function BottomSection() {
-  const { subscription, daysLeft, isLoading: isLoadingSubscription } = useFetchSubscription();
-  const isTrialActive = subscription?.trial.isActive;
-  const isFreeTier = subscription?.apiServiceLevel === ApiServiceLevelEnum.FREE;
-
-  if (IS_SELF_HOSTED) {
-    return <HomeMenuItem />;
-  }
-
-  return (
-    <>
-      {isTrialActive && !isLoadingSubscription && daysLeft !== undefined && (
-        <FreeTrialCard subscription={subscription} daysLeft={daysLeft} />
-      )}
-      {!isTrialActive && isFreeTier && !isLoadingSubscription && <UsageCard subscription={subscription} />}
-      <SidebarMenu>
-        <NovuNavLink to={ROUTES.SETTINGS_TEAM} icon={RiUserAddLine} label="Invite teammates" />
-      </SidebarMenu>
-      <HomeMenuItem />
-    </>
   );
 }
 
@@ -272,22 +241,7 @@ export function NovuAppSidebar(props: React.ComponentProps<typeof Sidebar>) {
           </SidebarGroup>
         </Protect>
 
-        {/* Application */}
-        {(!IS_SELF_HOSTED || IS_ENTERPRISE) && (
-          <SidebarGroup>
-            <SidebarGroupLabel>Application</SidebarGroupLabel>
-            <SidebarGroupContent>
-              <SidebarMenu>
-                <NovuNavLink to={ROUTES.SETTINGS} icon={RiSettings4Line} label="Settings" />
-              </SidebarMenu>
-            </SidebarGroupContent>
-          </SidebarGroup>
-        )}
       </SidebarContent>
-
-      <SidebarFooter>
-        <BottomSection />
-      </SidebarFooter>
     </Sidebar>
   );
 }

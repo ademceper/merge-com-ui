@@ -58,11 +58,11 @@ export function MultiFilterContent({
       <div className={cn('flex flex-col gap-1 p-1')}>
         {isLoading ? (
           <div className="flex items-center justify-center p-4">
-            <span className="text-xs text-neutral-400">Loading...</span>
+            <span className="text-xs text-neutral-400 dark:text-neutral-500">Loading...</span>
           </div>
         ) : options.length === 0 && searchQuery ? (
           <div className="flex items-center justify-center p-4">
-            <span className="text-xs text-neutral-400">No results found</span>
+            <span className="text-xs text-neutral-400 dark:text-neutral-500">No results found</span>
           </div>
         ) : (
           options.map((option, index) => {
@@ -75,16 +75,16 @@ export function MultiFilterContent({
                 onClick={() => onSelect(option.value)}
                 onMouseEnter={() => setFocusedIndex(index)}
                 className={cn(
-                  'flex cursor-pointer items-center rounded-[6px] p-1 hover:bg-[#F8F8F8]',
-                  isSelected && 'bg-[#F8F8F8]',
-                  isFocused && 'ring-1 ring-neutral-200'
+                  'flex cursor-pointer items-center rounded-[6px] p-1 hover:bg-neutral-50 dark:hover:bg-neutral-800',
+                  isSelected && 'bg-neutral-50 dark:bg-neutral-800',
+                  isFocused && 'ring-1 ring-neutral-200 dark:ring-neutral-700'
                 )}
               >
-                {option.icon && <option.icon className="mr-2 h-4 w-4 text-[#737373]" />}
-                <span className="text-xs font-normal text-[#404040]">{option.label}</span>
+                {option.icon && <option.icon className="mr-2 h-4 w-4 text-neutral-500 dark:text-neutral-400" />}
+                <span className="text-xs font-normal text-neutral-700 dark:text-neutral-300">{option.label}</span>
                 {isSelected && (
                   <div className={'ml-auto'}>
-                    <Check className="h-2.5 w-2.5 text-neutral-600" />
+                    <Check className="h-2.5 w-2.5 text-neutral-600 dark:text-neutral-300" />
                   </div>
                 )}
               </div>

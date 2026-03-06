@@ -8,7 +8,6 @@ import {
   RiKey2Line,
   RiLayout5Line,
   RiRouteFill,
-  RiSettings4Line,
   RiSignalTowerLine,
   RiTranslate2,
 } from 'react-icons/ri';
@@ -84,9 +83,6 @@ export function useNavigationCommands(context: CommandExecutionContext): Command
 
   // API Keys
   commands.push(createNavigationCommand('nav-api-keys', 'API Keys', ROUTES.API_KEYS, <RiKey2Line />));
-
-  // Settings
-  commands.push(createNavigationCommand('nav-settings', 'Settings', ROUTES.SETTINGS, <RiSettings4Line />));
 
   // Topics
   commands.push(createNavigationCommand('nav-topics', 'Topics', ROUTES.TOPICS, <RiDiscussLine />));

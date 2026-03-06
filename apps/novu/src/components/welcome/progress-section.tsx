@@ -160,7 +160,7 @@ function getStepRoute(stepId: StepIdEnum, environmentSlug: string = '') {
       };
     case StepIdEnum.INVITE_TEAM_MEMBER:
       return {
-        path: ROUTES.SETTINGS_TEAM,
+        path: '#',
         isLegacy: false,
       };
     default:

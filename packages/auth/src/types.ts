@@ -13,6 +13,7 @@ export type AuthState = {
   signOut: (params: LogoutParams) => Promise<never>;
   getToken: () => Promise<string>;
   has: () => boolean;
+  accountManagement: () => void;
 };
 
 export type EmailAddress = {

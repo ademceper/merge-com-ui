@@ -27,7 +27,7 @@ type TableCellProps = React.TdHTMLAttributes<HTMLTableCellElement>;
 const LoadingRow = () => (
   <TableRow>
     <TableCell className="animate-pulse" colSpan={100}>
-      <div className="h-8 w-full rounded-md bg-neutral-100" />
+      <div className="h-8 w-full rounded-md bg-neutral-100 dark:bg-neutral-800" />
     </TableCell>
   </TableRow>
 );
@@ -62,7 +62,7 @@ Table.displayName = 'Table';
 const TableHeader = React.forwardRef<HTMLTableSectionElement, TableHeaderProps>(({ className, ...props }, ref) => (
   <thead
     ref={ref}
-    className={cn('sticky top-0 z-10 bg-neutral-50 shadow-[0_0_0_1px_hsl(var(--neutral-alpha-200))]', className)}
+    className={cn('sticky top-0 z-10 bg-neutral-50 shadow-[0_0_0_1px_hsl(var(--neutral-alpha-200))] dark:bg-neutral-900', className)}
     {...props}
   />
 ));

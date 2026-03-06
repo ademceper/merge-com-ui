@@ -161,21 +161,21 @@ export function FacetedFormFilter({
           mode="outline"
           size="sm"
           className={cn(
-            'h-10 border-neutral-300 bg-white px-3 text-neutral-600',
-            'hover:border-neutral-300 hover:bg-neutral-50/30 hover:text-neutral-700',
-            'rounded-lg border-neutral-200 ring-0 ring-offset-0 transition-colors duration-200 ease-out',
+            'h-10 border-neutral-300 bg-white px-3 text-neutral-600 dark:border-neutral-700 dark:bg-neutral-900 dark:text-neutral-300',
+            'hover:border-neutral-300 hover:bg-neutral-50/30 hover:text-neutral-700 dark:hover:border-neutral-600 dark:hover:bg-neutral-800/50 dark:hover:text-neutral-200',
+            'rounded-lg border-neutral-200 ring-0 ring-offset-0 transition-colors duration-200 ease-out dark:border-neutral-700',
             sizes.trigger,
-            isEmpty && 'border border-dashed px-1.5 hover:border-neutral-300',
-            !isEmpty && 'border bg-white',
+            isEmpty && 'border border-dashed px-1.5 hover:border-neutral-300 dark:hover:border-neutral-600',
+            !isEmpty && 'border bg-white dark:bg-neutral-900',
             className
           )}
           disabled={disabled}
         >
           <div className="flex items-center gap-1">
-            {Icon && <Icon className="h-4 w-4 text-neutral-600" />}
-            {isEmpty && !hidePlusIcon && <PlusCircle className="h-4 w-4 text-neutral-300" />}
+            {Icon && <Icon className="h-4 w-4 text-neutral-600 dark:text-neutral-400" />}
+            {isEmpty && !hidePlusIcon && <PlusCircle className="h-4 w-4 text-neutral-300 dark:text-neutral-600" />}
             {(isEmpty || !hideTitle) && (
-              <span className={cn('text-xs font-normal', isEmpty ? 'text-neutral-400' : 'text-neutral-600')}>
+              <span className={cn('text-xs font-normal', isEmpty ? 'text-neutral-400 dark:text-neutral-500' : 'text-neutral-600 dark:text-neutral-300')}>
                 {title}
               </span>
             )}

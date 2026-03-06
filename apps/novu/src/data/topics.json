@@ -1,46 +1,44 @@
 {
-  "data": {
-    "data": [
-      {
-        "_id": "topic_001",
-        "_environmentId": "env_dev",
-        "_organizationId": "org_001",
-        "key": "product-updates",
-        "name": "Product Updates",
-        "createdAt": "2026-01-10T09:00:00.000Z",
-        "updatedAt": "2026-03-05T14:00:00.000Z"
-      },
-      {
-        "_id": "topic_002",
-        "_environmentId": "env_dev",
-        "_organizationId": "org_001",
-        "key": "billing-alerts",
-        "name": "Billing Alerts",
-        "createdAt": "2026-01-15T11:00:00.000Z",
-        "updatedAt": "2026-03-04T10:00:00.000Z"
-      },
-      {
-        "_id": "topic_003",
-        "_environmentId": "env_dev",
-        "_organizationId": "org_001",
-        "key": "security-notifications",
-        "name": "Security Notifications",
-        "createdAt": "2026-02-01T08:30:00.000Z",
-        "updatedAt": "2026-03-03T16:00:00.000Z"
-      },
-      {
-        "_id": "topic_004",
-        "_environmentId": "env_dev",
-        "_organizationId": "org_001",
-        "key": "marketing-campaigns",
-        "name": "Marketing Campaigns",
-        "createdAt": "2026-02-15T13:00:00.000Z",
-        "updatedAt": "2026-03-02T11:00:00.000Z"
-      }
-    ],
-    "next": null,
-    "previous": null,
-    "totalCount": 4,
-    "totalCountCapped": false
-  }
+  "data": [
+    {
+      "_id": "topic_001",
+      "_environmentId": "env_dev",
+      "_organizationId": "org_001",
+      "key": "product-updates",
+      "name": "Product Updates",
+      "createdAt": "2026-01-10T09:00:00.000Z",
+      "updatedAt": "2026-03-05T14:00:00.000Z"
+    },
+    {
+      "_id": "topic_002",
+      "_environmentId": "env_dev",
+      "_organizationId": "org_001",
+      "key": "billing-alerts",
+      "name": "Billing Alerts",
+      "createdAt": "2026-01-15T11:00:00.000Z",
+      "updatedAt": "2026-03-04T10:00:00.000Z"
+    },
+    {
+      "_id": "topic_003",
+      "_environmentId": "env_dev",
+      "_organizationId": "org_001",
+      "key": "security-notifications",
+      "name": "Security Notifications",
+      "createdAt": "2026-02-01T08:30:00.000Z",
+      "updatedAt": "2026-03-03T16:00:00.000Z"
+    },
+    {
+      "_id": "topic_004",
+      "_environmentId": "env_dev",
+      "_organizationId": "org_001",
+      "key": "marketing-campaigns",
+      "name": "Marketing Campaigns",
+      "createdAt": "2026-02-15T13:00:00.000Z",
+      "updatedAt": "2026-03-02T11:00:00.000Z"
+    }
+  ],
+  "next": null,
+  "previous": null,
+  "totalCount": 4,
+  "totalCountCapped": false
 }

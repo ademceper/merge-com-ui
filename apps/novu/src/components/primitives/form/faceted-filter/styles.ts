@@ -18,8 +18,8 @@ export const STYLES = {
     },
   },
   input: {
-    base: 'border-neutral-200 placeholder:text-neutral-400 focus:border-stroke-soft focus:ring-stroke-soft/50 focus:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive',
-    text: 'text-neutral-600',
+    base: 'border-neutral-200 dark:border-neutral-700 placeholder:text-neutral-400 dark:placeholder:text-neutral-500 focus:border-stroke-soft focus:ring-stroke-soft/50 focus:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive',
+    text: 'text-neutral-600 dark:text-neutral-300',
   },
-  clearButton: 'justify-center px-0 text-xs text-foreground-500 hover:bg-neutral-50 hover:text-foreground-800',
+  clearButton: 'justify-center px-0 text-xs text-foreground-500 hover:bg-neutral-50 dark:hover:bg-neutral-800 hover:text-foreground-800',
 } as const;

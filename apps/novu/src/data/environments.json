@@ -1,0 +1,28 @@
+{
+  "data": [
+    {
+      "_id": "env_dev_001",
+      "name": "Development",
+      "slug": "development",
+      "color": "#4ADE80",
+      "type": "dev",
+      "_organizationId": "org_001",
+      "_parentId": null,
+      "bridge": { "url": "" },
+      "createdAt": "2026-01-01T00:00:00.000Z",
+      "updatedAt": "2026-03-05T00:00:00.000Z"
+    },
+    {
+      "_id": "env_prod_001",
+      "name": "Production",
+      "slug": "production",
+      "color": "#F97316",
+      "type": "prod",
+      "_organizationId": "org_001",
+      "_parentId": "env_dev_001",
+      "bridge": { "url": "" },
+      "createdAt": "2026-01-01T00:00:00.000Z",
+      "updatedAt": "2026-03-05T00:00:00.000Z"
+    }
+  ]
+}

@@ -66,7 +66,7 @@ export function SingleFilterContent({
               key={option.value}
               className={cn(
                 'flex items-center justify-between rounded-[4px] p-1.5',
-                isFocused && 'bg-neutral-50 ring-1 ring-neutral-200',
+                isFocused && 'bg-neutral-50 ring-1 ring-neutral-200 dark:bg-neutral-800 dark:ring-neutral-700',
                 isDisabled && 'cursor-default'
               )}
               onMouseEnter={() => setFocusedIndex(index)}

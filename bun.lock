@@ -264,6 +264,9 @@
       "name": "@merge/auth",
       "version": "0.0.0",
       "dependencies": {
+        "@merge/ui": "workspace:*",
+        "@phosphor-icons/react": "^2.1.10",
+        "next-themes": "^0.4.6",
         "oidc-spa": "~10.0.7",
         "react": "^19.2.4",
       },

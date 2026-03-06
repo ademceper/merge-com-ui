@@ -47,9 +47,6 @@ const IntegrationsListPage = lazy(() =>
 const LayoutsPage = lazy(() =>
   import("@/pages/layouts").then((m) => ({ default: m.LayoutsPage })),
 );
-const SettingsPage = lazy(() =>
-  import("@/pages/settings").then((m) => ({ default: m.SettingsPage })),
-);
 const TemplateModal = lazy(() =>
   import("@/pages/workflows").then((m) => ({ default: m.TemplateModal })),
 );
@@ -409,26 +406,6 @@ const router = createBrowserRouter([
                     element: <UpdateIntegrationSidebar isOpened />,
                   },
                 ],
-              },
-              {
-                path: ROUTES.SETTINGS,
-                element: <SettingsPage />,
-              },
-              {
-                path: ROUTES.SETTINGS_ACCOUNT,
-                element: <SettingsPage />,
-              },
-              {
-                path: ROUTES.SETTINGS_ORGANIZATION,
-                element: <SettingsPage />,
-              },
-              {
-                path: ROUTES.SETTINGS_TEAM,
-                element: <SettingsPage />,
-              },
-              {
-                path: ROUTES.SETTINGS_BILLING,
-                element: <SettingsPage />,
               },
               {
                 path: "*",

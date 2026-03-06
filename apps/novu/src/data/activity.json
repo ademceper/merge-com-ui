@@ -1,0 +1,139 @@
+{
+  "data": [
+    {
+      "_id": "act_001",
+      "_templateId": "wf_001",
+      "_environmentId": "env_dev",
+      "_organizationId": "org_001",
+      "_subscriberId": "sub_001",
+      "transactionId": "txn_abc123",
+      "channels": ["email", "in_app"],
+      "to": { "subscriberId": "user_john_doe" },
+      "payload": { "firstName": "John", "action": "signed_up" },
+      "tags": ["onboarding", "welcome"],
+      "createdAt": "2026-03-05T14:25:00.000Z",
+      "updatedAt": "2026-03-05T14:25:30.000Z",
+      "template": { "_id": "wf_001", "name": "Welcome Onboarding", "origin": "novu-cloud" },
+      "subscriber": { "_id": "sub_001", "subscriberId": "user_john_doe", "firstName": "John", "lastName": "Doe" },
+      "jobs": [
+        {
+          "_id": "job_001",
+          "type": "email",
+          "status": "completed",
+          "providerId": "sendgrid",
+          "executionDetails": [
+            { "_id": "ed_001", "status": "Success", "detail": "Message sent", "createdAt": "2026-03-05T14:25:15.000Z" }
+          ]
+        },
+        {
+          "_id": "job_002",
+          "type": "in_app",
+          "status": "completed",
+          "executionDetails": [
+            { "_id": "ed_002", "status": "Success", "detail": "Notification delivered", "createdAt": "2026-03-05T14:25:20.000Z" }
+          ]
+        }
+      ]
+    },
+    {
+      "_id": "act_002",
+      "_templateId": "wf_002",
+      "_environmentId": "env_dev",
+      "_organizationId": "org_001",
+      "_subscriberId": "sub_002",
+      "transactionId": "txn_def456",
+      "channels": ["email", "sms"],
+      "to": { "subscriberId": "user_jane_smith" },
+      "payload": { "orderId": "ORD-2024-001", "amount": 149.99 },
+      "tags": ["transactional", "orders"],
+      "createdAt": "2026-03-05T16:42:00.000Z",
+      "updatedAt": "2026-03-05T16:42:30.000Z",
+      "template": { "_id": "wf_002", "name": "Order Confirmation", "origin": "novu-cloud" },
+      "subscriber": { "_id": "sub_002", "subscriberId": "user_jane_smith", "firstName": "Jane", "lastName": "Smith" },
+      "jobs": [
+        {
+          "_id": "job_003",
+          "type": "email",
+          "status": "completed",
+          "providerId": "sendgrid",
+          "executionDetails": [
+            { "_id": "ed_003", "status": "Success", "detail": "Message sent", "createdAt": "2026-03-05T16:42:10.000Z" }
+          ]
+        },
+        {
+          "_id": "job_004",
+          "type": "sms",
+          "status": "completed",
+          "providerId": "twilio",
+          "executionDetails": [
+            { "_id": "ed_004", "status": "Success", "detail": "SMS delivered", "createdAt": "2026-03-05T16:42:15.000Z" }
+          ]
+        }
+      ]
+    },
+    {
+      "_id": "act_003",
+      "_templateId": "wf_005",
+      "_environmentId": "env_dev",
+      "_organizationId": "org_001",
+      "_subscriberId": "sub_003",
+      "transactionId": "txn_ghi789",
+      "channels": ["email", "sms", "push"],
+      "to": { "subscriberId": "user_bob_wilson" },
+      "payload": { "alertType": "login_from_new_device", "ip": "192.168.1.1" },
+      "tags": ["security", "critical"],
+      "createdAt": "2026-03-05T18:30:00.000Z",
+      "updatedAt": "2026-03-05T18:30:45.000Z",
+      "template": { "_id": "wf_005", "name": "Security Alert", "origin": "novu-cloud" },
+      "subscriber": { "_id": "sub_003", "subscriberId": "user_bob_wilson", "firstName": "Bob", "lastName": "Wilson" },
+      "jobs": [
+        {
+          "_id": "job_005",
+          "type": "email",
+          "status": "completed",
+          "providerId": "sendgrid",
+          "executionDetails": [
+            { "_id": "ed_005", "status": "Success", "detail": "Message sent", "createdAt": "2026-03-05T18:30:10.000Z" }
+          ]
+        },
+        {
+          "_id": "job_006",
+          "type": "sms",
+          "status": "failed",
+          "providerId": "twilio",
+          "executionDetails": [
+            { "_id": "ed_006", "status": "Failed", "detail": "Phone number not verified", "createdAt": "2026-03-05T18:30:20.000Z" }
+          ]
+        }
+      ]
+    },
+    {
+      "_id": "act_004",
+      "_templateId": "wf_004",
+      "_environmentId": "env_dev",
+      "_organizationId": "org_001",
+      "_subscriberId": "sub_005",
+      "transactionId": "txn_jkl012",
+      "channels": ["in_app", "email"],
+      "to": { "subscriberId": "user_carlos_garcia" },
+      "payload": { "commentAuthor": "Jane Smith", "postTitle": "Q1 Review" },
+      "tags": ["social", "engagement"],
+      "createdAt": "2026-03-05T12:10:00.000Z",
+      "updatedAt": "2026-03-05T12:10:20.000Z",
+      "template": { "_id": "wf_004", "name": "Comment Notification", "origin": "novu-cloud" },
+      "subscriber": { "_id": "sub_005", "subscriberId": "user_carlos_garcia", "firstName": "Carlos", "lastName": "Garcia" },
+      "jobs": [
+        {
+          "_id": "job_007",
+          "type": "in_app",
+          "status": "completed",
+          "executionDetails": [
+            { "_id": "ed_007", "status": "Success", "detail": "Notification delivered", "createdAt": "2026-03-05T12:10:05.000Z" }
+          ]
+        }
+      ]
+    }
+  ],
+  "hasMore": false,
+  "pageSize": 10
+}

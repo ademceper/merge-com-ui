@@ -37,7 +37,7 @@ export function BaseFilterContent({
   return (
     <div className="flex h-full flex-col">
       <Separator variant="solid-text" className="px-1.5 py-1">
-        <div className="flex w-full justify-between rounded-t-md bg-neutral-50">
+        <div className="flex w-full justify-between rounded-t-md bg-neutral-50 dark:bg-neutral-800">
           {title && <div className="uppercase leading-[16px]">{title}</div>}
           {!hideClear && <ClearButton onClick={onClear} size={size} className="h-[16px]" label="Reset" />}
         </div>
@@ -57,18 +57,18 @@ export function BaseFilterContent({
       <div className="max-h-[160px] overflow-y-auto">{children}</div>
 
       {showNavigationFooter && (
-        <div className="flex justify-between rounded-b-md border-t border-neutral-100 bg-white p-1">
+        <div className="flex justify-between rounded-b-md border-t border-neutral-100 bg-white p-1 dark:border-neutral-700 dark:bg-neutral-900">
           <div className="flex items-center gap-0.5">
-            <div className="pointer-events-none shrink-0 rounded-[6px] border border-neutral-200 bg-white p-1 shadow-[0px_0px_0px_1px_rgba(14,18,27,0.02)_inset,0px_1px_4px_0px_rgba(14,18,27,0.12)]">
-              <RiArrowUpLine className="h-3 w-3 text-neutral-400" />
+            <div className="pointer-events-none shrink-0 rounded-[6px] border border-neutral-200 bg-white p-1 shadow-[0px_0px_0px_1px_rgba(14,18,27,0.02)_inset,0px_1px_4px_0px_rgba(14,18,27,0.12)] dark:border-neutral-700 dark:bg-neutral-800">
+              <RiArrowUpLine className="h-3 w-3 text-neutral-400 dark:text-neutral-500" />
             </div>
-            <div className="pointer-events-none shrink-0 rounded-[6px] border border-neutral-200 bg-white p-1 shadow-[0px_0px_0px_1px_rgba(14,18,27,0.02)_inset,0px_1px_4px_0px_rgba(14,18,27,0.12)]">
-              <RiArrowDownLine className="h-3 w-3 text-neutral-400" />
+            <div className="pointer-events-none shrink-0 rounded-[6px] border border-neutral-200 bg-white p-1 shadow-[0px_0px_0px_1px_rgba(14,18,27,0.02)_inset,0px_1px_4px_0px_rgba(14,18,27,0.12)] dark:border-neutral-700 dark:bg-neutral-800">
+              <RiArrowDownLine className="h-3 w-3 text-neutral-400 dark:text-neutral-500" />
             </div>
             <span className="text-foreground-500 ml-1.5 text-xs font-normal">Navigate</span>
           </div>
-          <div className="pointer-events-none shrink-0 rounded-[6px] border border-neutral-200 bg-white p-1 shadow-[0px_0px_0px_1px_rgba(14,18,27,0.02)_inset,0px_1px_4px_0px_rgba(14,18,27,0.12)]">
-            <EnterLineIcon className="h-3 w-3 text-neutral-400" />
+          <div className="pointer-events-none shrink-0 rounded-[6px] border border-neutral-200 bg-white p-1 shadow-[0px_0px_0px_1px_rgba(14,18,27,0.02)_inset,0px_1px_4px_0px_rgba(14,18,27,0.12)] dark:border-neutral-700 dark:bg-neutral-800">
+            <EnterLineIcon className="h-3 w-3 text-neutral-400 dark:text-neutral-500" />
           </div>
         </div>
       )}

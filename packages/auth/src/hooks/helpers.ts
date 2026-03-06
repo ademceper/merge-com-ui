@@ -13,5 +13,6 @@ export function useDecodedToken() {
     picture: (token.picture as string) ?? "",
     orgId: (token.org_id as string) ?? "default-org",
     orgName: (token.org_name as string) ?? "Organization",
+    issuer: (token.iss as string) ?? "",
   };
 }

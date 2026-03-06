@@ -55,7 +55,7 @@ export function AdminHeader() {
             >
                 Scale
             </button>
-            <AdminNavUser userMenuInfo={userMenuInfo} avatarOnly />
+            <AdminNavUser userMenuInfo={userMenuInfo} />
         </SidebarPageHeader>
     );
 }

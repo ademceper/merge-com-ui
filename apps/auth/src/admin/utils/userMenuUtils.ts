@@ -12,11 +12,8 @@ export function loggedInUserName(token: KeycloakTokenParsed | undefined, t: TFun
 
 export function avatarInitials(token: KeycloakTokenParsed | undefined): string {
     if (!token) return "?";
-    const given = token.given_name?.[0] ?? "";
-    const family = token.family_name?.[0] ?? "";
-    if (given || family) return `${given}${family}`.toUpperCase();
-    const preferred = token.preferred_username?.[0];
-    return preferred ? preferred.toUpperCase() : "?";
+    const initial = token.given_name?.[0] ?? token.family_name?.[0] ?? token.preferred_username?.[0];
+    return initial ? initial.toUpperCase() : "?";
 }
 
 export function userEmailFromToken(token: KeycloakTokenParsed | undefined): string {
