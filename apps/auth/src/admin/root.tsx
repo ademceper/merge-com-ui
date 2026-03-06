@@ -1,6 +1,6 @@
 import { KeycloakProvider } from "../shared/keycloak-ui-shared";
 
-import { App } from "./App";
+import { App } from "./app";
 import { environment } from "./environment";
 
 export const Root = () => (

@@ -6,7 +6,6 @@ import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 import { useAdminClient } from "../../admin-client";
 import { FormAccess } from "../../components/form/form-access";
-import { ViewHeader } from "../../components/view-header/view-header";
 import { useRealm } from "../../context/realm-context/realm-context";
 import { convertFormValuesToObject } from "../../util";
 import { FormFields } from "../client-details";
@@ -107,8 +106,7 @@ const form = useForm<FormFields>({
 
     return (
         <>
-            <ViewHeader titleKey="createClient" subKey="clientsExplain" />
-            <div className="p-6">
+                        <div className="p-6">
                 <FormProvider {...form}>
                     <nav aria-label={`${t("createClient")} steps`} className="mb-6">
                         <ol className="flex gap-4">

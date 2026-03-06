@@ -1,8 +1,6 @@
 import { useTranslation } from "react-i18next";
 import { useParams } from "react-router-dom";
-import { ViewHeader } from "../components/view-header/view-header";
 import { useRealm } from "../context/realm-context/realm-context";
-import helpUrls from "../help-urls";
 import { PermissionsTab } from "../components/permission-tab/permission-tab";
 import useIsFeatureEnabled, { Feature } from "../utils/useIsFeatureEnabled";
 import { UsersListSection } from "./users-list-section";
@@ -28,13 +26,7 @@ export default function UsersSection() {
 
     return (
         <>
-            <ViewHeader
-                titleKey="titleUsers"
-                subKey="usersExplain"
-                helpUrl={helpUrls.usersUrl}
-                divider
-            />
-            <div data-testid="users-page" className="pt-4 pb-6 px-0">
+                        <div data-testid="users-page" className="pt-4 pb-6 px-0">
                 {content()}
             </div>
         </>

@@ -1,14 +1,15 @@
 import ComponentRepresentation from "@keycloak/keycloak-admin-client/lib/defs/componentRepresentation";
 import { getErrorDescription, getErrorMessage, useFetch } from "../../shared/keycloak-ui-shared";
 import { toast } from "sonner";
-import { DropdownMenuItem } from "@merge-rd/ui/components/dropdown-menu";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@merge-rd/ui/components/dropdown-menu";
+import { buttonVariants } from "@merge-rd/ui/components/button";
 import { get } from "lodash-es";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useNavigate, useParams } from "react-router-dom";
 import { useAdminClient } from "../admin-client";
 import { useConfirmDialog } from "../components/confirm-dialog/confirm-dialog";
-import { ViewHeader } from "../components/view-header/view-header";
+
 import { useRealm } from "../context/realm-context/realm-context";
 import { useServerInfo } from "../context/server-info/server-info-provider";
 import { PageHandler } from "./page-handler";
@@ -53,27 +54,27 @@ const [pageData, setPageData] = useState<ComponentRepresentation>();
     return (
         <>
             <DeleteConfirm />
-            <ViewHeader
-                titleKey={
-                    get(
-                        pageData,
-                        `config.${page.metadata.displayFields?.[0] || page.properties[0].name}`
-                    )?.[0] || t("createItem")
-                }
-                dropdownItems={
-                    id
-                        ? [
-                              <DropdownMenuItem
-                                  data-testid="delete-item"
-                                  key="delete"
-                                  onClick={() => toggleDeleteDialog()}
-                              >
-                                  {t("delete")}
-                              </DropdownMenuItem>
-                          ]
-                        : undefined
-                }
-            />
+            {id && (
+                <div className="flex flex-wrap items-center justify-between gap-2">
+                    <div className="flex flex-wrap items-center gap-2" />
+                    <div className="flex items-center gap-2">
+                        <DropdownMenu>
+                            <DropdownMenuTrigger data-testid="action-dropdown" className={buttonVariants()}>
+                                {t("action")}
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent align="end">
+                                <DropdownMenuItem
+                                    data-testid="delete-item"
+                                    key="delete"
+                                    onClick={() => toggleDeleteDialog()}
+                                >
+                                    {t("delete")}
+                                </DropdownMenuItem>
+                            </DropdownMenuContent>
+                        </DropdownMenu>
+                    </div>
+                </div>
+            )}
             <PageHandler providerType={PAGE_PROVIDER} id={id} page={page} />
         </>
     );

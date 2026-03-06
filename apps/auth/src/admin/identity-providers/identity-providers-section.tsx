@@ -49,10 +49,8 @@ import {
     AlertDialogTitle
 } from "@merge-rd/ui/components/alert-dialog";
 import { ClickableCard } from "../components/keycloak-card/clickable-card";
-import { ViewHeader } from "../components/view-header/view-header";
 import { useRealm } from "../context/realm-context/realm-context";
 import { useServerInfo } from "../context/server-info/server-info-provider";
-import helpUrls from "../help-urls";
 import { toEditOrganization } from "../organizations/routes/edit-organization";
 import { upperCaseFormatter } from "../util";
 import { toIdentityProvider } from "./routes/identity-provider";
@@ -348,12 +346,7 @@ export default function IdentityProvidersSection() {
                     </AlertDialogFooter>
                 </AlertDialogContent>
             </AlertDialog>
-            <ViewHeader
-                titleKey="identityProviders"
-                subKey="listExplain"
-                helpUrl={helpUrls.identityProvidersUrl}
-            />
-            <div className="space-y-4 py-6">
+                        <div className="space-y-4 py-6">
                 {!hasProviders && (
                     <div className="p-6">
                         <p className="text-muted-foreground">{t("getStarted")}</p>

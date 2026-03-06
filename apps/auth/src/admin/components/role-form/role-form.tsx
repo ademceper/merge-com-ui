@@ -10,7 +10,6 @@ import { TextAreaControl, TextControl } from "../../../shared/keycloak-ui-shared
 import { cn } from "@merge-rd/ui/lib/utils";
 import { FormAccess } from "../form/form-access";
 import { AttributeForm } from "../key-value-form/attribute-form";
-import { ViewHeader } from "../view-header/view-header";
 
 export type RoleFormProps = {
     form: UseFormReturn<AttributeForm>;
@@ -43,7 +42,7 @@ export const RoleForm = ({
 
     return (
         <>
-            {!embedded && !editMode && <ViewHeader titleKey={t("createRole")} />}
+            {!embedded && !editMode && }
             <div className={embedded ? "py-2" : "p-6"}>
                 <FormAccess
                     id={formId}

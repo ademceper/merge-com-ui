@@ -1,5 +1,6 @@
 import UserSessionRepresentation from "@keycloak/keycloak-admin-client/lib/defs/userSessionRepresentation";
-import { DropdownMenuItem } from "@merge-rd/ui/components/dropdown-menu";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@merge-rd/ui/components/dropdown-menu";
+import { buttonVariants } from "@merge-rd/ui/components/button";
 import {
     Select,
     SelectContent,
@@ -14,10 +15,9 @@ import { useAdminClient } from "../admin-client";
 import { getErrorDescription, getErrorMessage, useFetch } from "../../shared/keycloak-ui-shared";
 import { toast } from "sonner";
 import { useConfirmDialog } from "../components/confirm-dialog/confirm-dialog";
-import { ViewHeader } from "../components/view-header/view-header";
+
 import { fetchAdminUI } from "../context/auth/admin-ui-endpoint";
 import { useRealm } from "../context/realm-context/realm-context";
-import helpUrls from "../help-urls";
 import { RevocationModal } from "./revocation-modal";
 import SessionsTable from "./sessions-table";
 
@@ -107,32 +107,35 @@ export default function SessionsSection() {
     return (
         <>
             <LogoutConfirm />
-            <ViewHeader
-                titleKey="titleSessions"
-                subKey="sessionExplain"
-                helpUrl={helpUrls.sessionsUrl}
-                divider
-                dropdownIcon={<DotsThreeVertical className="size-5" />}
-                dropdownItems={[
-                    <DropdownMenuItem
-                        key="revocation"
-                        data-testid="revocation"
-                        onClick={handleRevocationModalToggle}
-                    >
-                        <ProhibitInset className="size-4 shrink-0" />
-                        {t("revocation")}
-                    </DropdownMenuItem>,
-                    <DropdownMenuItem
-                        key="logout-all"
-                        data-testid="logout-all"
-                        disabled={noSessions}
-                        onClick={toggleLogoutDialog}
-                    >
-                        <SignOut className="size-4 shrink-0" />
-                        {t("signOutAllActiveSessions")}
-                    </DropdownMenuItem>
-                ]}
-            />
+            <div className="flex flex-wrap items-center justify-between gap-2">
+                <div className="flex flex-wrap items-center gap-2" />
+                <div className="flex items-center gap-2">
+                    <DropdownMenu>
+                        <DropdownMenuTrigger data-testid="action-dropdown" className={buttonVariants({ variant: "ghost", size: "icon" })}>
+                            <DotsThreeVertical className="size-5" />
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent align="end">
+                            <DropdownMenuItem
+                                key="revocation"
+                                data-testid="revocation"
+                                onClick={handleRevocationModalToggle}
+                            >
+                                <ProhibitInset className="size-4 shrink-0" />
+                                {t("revocation")}
+                            </DropdownMenuItem>
+                            <DropdownMenuItem
+                                key="logout-all"
+                                data-testid="logout-all"
+                                disabled={noSessions}
+                                onClick={toggleLogoutDialog}
+                            >
+                                <SignOut className="size-4 shrink-0" />
+                                {t("signOutAllActiveSessions")}
+                            </DropdownMenuItem>
+                        </DropdownMenuContent>
+                    </DropdownMenu>
+                </div>
+            </div>
             <div className="pt-4 pb-6 px-0">
                 {revocationModalOpen && (
                     <RevocationModal

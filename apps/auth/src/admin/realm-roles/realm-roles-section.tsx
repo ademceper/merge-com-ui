@@ -22,10 +22,8 @@ import { Link } from "react-router-dom";
 import { useAdminClient } from "../admin-client";
 import { getErrorDescription, getErrorMessage, HelpItem, useFetch } from "../../shared/keycloak-ui-shared";
 import { toast } from "sonner";
-import { ViewHeader } from "../components/view-header/view-header";
 import { useAccess } from "../context/access/access";
 import { useRealm } from "../context/realm-context/realm-context";
-import helpUrls from "../help-urls";
 import { toRealmSettings } from "../realm-settings/routes/realm-settings";
 import { emptyFormatter, upperCaseFormatter } from "../util";
 import { translationFormatter } from "../utils/translationFormatter";
@@ -171,13 +169,7 @@ export default function RealmRolesSection() {
 
     return (
         <>
-            <ViewHeader
-                titleKey="titleRoles"
-                subKey="roleExplain"
-                helpUrl={helpUrls.realmRolesUrl}
-                divider
-            />
-            <div className="pt-4 pb-6 px-0">
+                        <div className="pt-4 pb-6 px-0">
                 <AlertDialog
                     open={!!selectedRole}
                     onOpenChange={(open) => !open && setSelectedRole(undefined)}

@@ -4,10 +4,13 @@ import { toast } from "sonner";
 import { Badge } from "@merge-rd/ui/components/badge";
 import { Tooltip, TooltipContent, TooltipTrigger, TooltipProvider } from "@merge-rd/ui/components/tooltip";
 import { Separator } from "@merge-rd/ui/components/separator";
-import { DropdownMenuItem } from "@merge-rd/ui/components/dropdown-menu";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@merge-rd/ui/components/dropdown-menu";
+import { buttonVariants } from "@merge-rd/ui/components/button";
+import { Label } from "@merge-rd/ui/components/label";
+import { Switch } from "@merge-rd/ui/components/switch";
 import { Info } from "@phosphor-icons/react";
 import { cloneDeep, sortBy } from "lodash-es";
-import { useMemo, useState } from "react";
+import { Fragment, isValidElement, useMemo, useState } from "react";
 import { Controller, FormProvider, useForm, useWatch } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { useNavigate, useLocation, useParams as useRouterParams } from "react-router-dom";
@@ -22,7 +25,6 @@ import { KeycloakSpinner } from "../../shared/keycloak-ui-shared";
 import { PermissionsTab } from "../components/permission-tab/permission-tab";
 import { RolesList } from "../components/roles-list/roles-list";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@merge-rd/ui/components/tabs";
-import { ViewHeader, ViewHeaderBadge } from "../components/view-header/view-header";
 import { useAccess } from "../context/access/access";
 import { useRealm } from "../context/realm-context/realm-context";
 import {
@@ -87,7 +89,7 @@ const ClientDetailHeader = ({
         }
     });
 
-    const badges = useMemo<ViewHeaderBadge[]>(() => {
+    const badges = useMemo<{ id?: string; text?: string | React.ReactNode; readonly?: boolean }[]>(() => {
         const protocol = client.protocol ?? "openid-connect";
         const label =
             protocol === "openid-connect" ? "OIDC" : protocol === "saml" ? "SAML" : protocol === "oid4vc" ? "OID4VC" : protocol ?? "";
@@ -147,24 +149,50 @@ const ClientDetailHeader = ({
     return (
         <>
             <DisableConfirm />
-            <ViewHeader
-                titleKey={client.clientId!}
-                subKey="clientsExplain"
-                badges={badges}
-                divider
-                isReadOnly={!isManager}
-                helpTextKey="enableDisable"
-                dropdownItems={dropdownItems}
-                isEnabled={value}
-                onToggle={value => {
-                    if (!value) {
-                        toggleDisableDialog();
-                    } else {
-                        onChange(value);
-                        save();
-                    }
-                }}
-            />
+            <div className="flex flex-wrap items-center justify-between gap-2">
+                <div className="flex flex-wrap items-center gap-2">
+                    {badges.map((badge, index) => (
+                        <Fragment key={index}>
+                            {!isValidElement(badge.text) && (
+                                <Badge data-testid={badge.id} variant={badge.readonly ? "secondary" : "default"}>
+                                    {badge.text}
+                                </Badge>
+                            )}
+                            {isValidElement(badge.text) && badge.text}
+                        </Fragment>
+                    ))}
+                </div>
+                <div className="flex items-center gap-2">
+                    <div className="flex items-center gap-2 mr-4">
+                        <Label htmlFor={`${client.clientId!.replace(/\s/g, "-")}-switch`} className="text-sm">
+                            {t("enabled")}
+                        </Label>
+                        <Switch
+                            id={`${client.clientId!.replace(/\s/g, "-")}-switch`}
+                            data-testid={`${client.clientId!}-switch`}
+                            disabled={!isManager}
+                            checked={value}
+                            aria-label={t("enabled")}
+                            onCheckedChange={value => {
+                                if (!value) {
+                                    toggleDisableDialog();
+                                } else {
+                                    onChange(value);
+                                    save();
+                                }
+                            }}
+                        />
+                    </div>
+                    {dropdownItems.length > 0 && (
+                        <DropdownMenu>
+                            <DropdownMenuTrigger data-testid="action-dropdown" className={buttonVariants()}>
+                                {t("action")}
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent align="end">{dropdownItems}</DropdownMenuContent>
+                        </DropdownMenu>
+                    )}
+                </div>
+            </div>
         </>
     );
 };

@@ -8,9 +8,7 @@ import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Link, useNavigate } from "react-router-dom";
 import { useAdminClient } from "../admin-client";
-import { ViewHeader } from "../components/view-header/view-header";
 import { useRealm } from "../context/realm-context/realm-context";
-import helpUrls from "../help-urls";
 import {
     AlertDialog,
     AlertDialogAction,
@@ -144,8 +142,7 @@ export default function WorkflowsSection() {
 
     return (
         <>
-            <ViewHeader titleKey="titleWorkflows" subKey="workflowsExplain" helpUrl={helpUrls.workflowsUrl} />
-            <div className="bg-muted/30 p-0">
+                        <div className="bg-muted/30 p-0">
                 <AlertDialog open={!!workflowToDelete} onOpenChange={(open) => !open && setWorkflowToDelete(undefined)}>
                     <AlertDialogContent>
                         <AlertDialogHeader>

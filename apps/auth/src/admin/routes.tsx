@@ -3,7 +3,7 @@ import type { TFunction } from "i18next";
 import type { ComponentType } from "react";
 import type { NonIndexRouteObject, RouteObject } from "react-router-dom";
 import { NotFound } from "./not-found";
-import { Root } from "./Root";
+import { Root } from "./root";
 import authenticationRoutes from "./authentication/routes";
 import clientScopesRoutes from "./client-scopes/routes";
 import clientRoutes from "./clients/routes";

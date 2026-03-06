@@ -4,9 +4,15 @@ import { UserProfileConfig } from "@keycloak/keycloak-admin-client/lib/defs/user
 import { getErrorDescription, getErrorMessage, useEnvironment } from "../../shared/keycloak-ui-shared";
 import { toast } from "sonner";
 import {
+    DropdownMenu,
+    DropdownMenuContent,
     DropdownMenuItem,
-    DropdownMenuSeparator
+    DropdownMenuSeparator,
+    DropdownMenuTrigger
 } from "@merge-rd/ui/components/dropdown-menu";
+import { Label } from "@merge-rd/ui/components/label";
+import { Switch } from "@merge-rd/ui/components/switch";
+import { buttonVariants } from "@merge-rd/ui/components/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@merge-rd/ui/components/tabs";
 import { DotsThreeVertical, DownloadSimple, UploadSimple, Trash } from "@phosphor-icons/react";
 import { useEffect, useState } from "react";
@@ -26,12 +32,11 @@ import {
 } from "@merge-rd/ui/components/alert-dialog";
 import { useConfirmDialog } from "../components/confirm-dialog/confirm-dialog";
 import type { KeyValueType } from "../components/key-value-form/key-value-convert";
-import { ViewHeader } from "../components/view-header/view-header";
+
 import { useAccess } from "../context/access/access";
 import { useRealm } from "../context/realm-context/realm-context";
 import { toDashboard } from "../dashboard/routes/dashboard";
 import type { Environment } from "../environment";
-import helpUrls from "../help-urls";
 import { convertFormValuesToObject, convertToFormValues } from "../util";
 import { getAuthorizationHeaders } from "../utils/getAuthorizationHeaders";
 import { joinPath } from "../utils/joinPath";
@@ -134,53 +139,57 @@ const RealmSettingsHeader = ({
                 isOpen={partialExportOpen}
                 onClose={() => setPartialExportOpen(false)}
             />
-            <ViewHeader
-                titleKey={realmName}
-                subKey="realmSettingsExplain"
-                helpUrl={helpUrls.realmSettingsUrl}
-                divider
-                dropdownIcon={<DotsThreeVertical className="size-5" />}
-                dropdownItems={[
-                    <DropdownMenuItem
-                        key="import"
-                        data-testid="openPartialImportModal"
-                        disabled={!canManageRealm}
-                        onClick={() => setPartialImportOpen(true)}
-                    >
-                        <DownloadSimple className="size-4 shrink-0" />
-                        {t("partialImport")}
-                    </DropdownMenuItem>,
-                    <DropdownMenuItem
-                        key="export"
-                        data-testid="openPartialExportModal"
-                        disabled={!canManageRealm}
-                        onClick={() => setPartialExportOpen(true)}
-                    >
-                        <UploadSimple className="size-4 shrink-0" />
-                        {t("partialExport")}
-                    </DropdownMenuItem>,
-                    <DropdownMenuSeparator key="separator" />,
-                    <DropdownMenuItem
-                        key="delete"
-                        disabled={!canManageRealm}
-                        onClick={() => setDeleteRealmDialogOpen(true)}
-                        className="text-destructive focus:text-destructive"
-                    >
-                        <Trash className="size-4 shrink-0" />
-                        {t("delete")}
-                    </DropdownMenuItem>
-                ]}
-                isEnabled={value}
-                isReadOnly={!canManageRealm}
-                onToggle={value => {
-                    if (!value) {
-                        toggleDisableDialog();
-                    } else {
-                        onChange(value);
-                        save();
-                    }
-                }}
-            />
+            <div className="flex flex-wrap items-center justify-between gap-2">
+                <div className="flex flex-wrap items-center gap-2" />
+                <div className="flex items-center gap-2">
+                    <div className="flex items-center gap-2 mr-4">
+                        <Label htmlFor="realm-settings-switch" className="text-sm">{t("enabled")}</Label>
+                        <Switch id="realm-settings-switch" data-testid="realm-settings-switch" disabled={!canManageRealm} checked={value} aria-label={t("enabled")} onCheckedChange={val => {
+                            if (!val) {
+                                toggleDisableDialog();
+                            } else {
+                                onChange(val);
+                                save();
+                            }
+                        }} />
+                    </div>
+                    <DropdownMenu>
+                        <DropdownMenuTrigger data-testid="action-dropdown" className={buttonVariants({ variant: "ghost", size: "icon" })}>
+                            <DotsThreeVertical className="size-5" />
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent align="end">
+                            <DropdownMenuItem
+                                key="import"
+                                data-testid="openPartialImportModal"
+                                disabled={!canManageRealm}
+                                onClick={() => setPartialImportOpen(true)}
+                            >
+                                <DownloadSimple className="size-4 shrink-0" />
+                                {t("partialImport")}
+                            </DropdownMenuItem>
+                            <DropdownMenuItem
+                                key="export"
+                                data-testid="openPartialExportModal"
+                                disabled={!canManageRealm}
+                                onClick={() => setPartialExportOpen(true)}
+                            >
+                                <UploadSimple className="size-4 shrink-0" />
+                                {t("partialExport")}
+                            </DropdownMenuItem>
+                            <DropdownMenuSeparator key="separator" />
+                            <DropdownMenuItem
+                                key="delete"
+                                disabled={!canManageRealm}
+                                onClick={() => setDeleteRealmDialogOpen(true)}
+                                className="text-destructive focus:text-destructive"
+                            >
+                                <Trash className="size-4 shrink-0" />
+                                {t("delete")}
+                            </DropdownMenuItem>
+                        </DropdownMenuContent>
+                    </DropdownMenu>
+                </div>
+            </div>
         </>
     );
 };

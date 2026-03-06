@@ -11,7 +11,6 @@ import { useAdminClient } from "../../admin-client";
 import { FormAccess } from "../../components/form/form-access";
 import { KeyValueInput } from "../../components/key-value-form/key-value-input";
 import type { KeyValueType } from "../../components/key-value-form/key-value-convert";
-import { ViewHeader } from "../../components/view-header/view-header";
 import { useRealm } from "../../context/realm-context/realm-context";
 import type { EditAttributesGroupParams } from "../routes/edit-attributes-group";
 import { toUserProfile } from "../routes/user-profile";
@@ -116,11 +115,7 @@ export default function AttributesGroupForm() {
 
     return (
         <FormProvider {...form}>
-            <ViewHeader
-                titleKey={matchingGroup ? "editGroupText" : "createGroupText"}
-                divider
-            />
-            <div className="p-6" onSubmit={form.handleSubmit(onSubmit)}>
+                        <div className="p-6" onSubmit={form.handleSubmit(onSubmit)}>
                 <FormAccess isHorizontal role="manage-realm">
                     <TextControl
                         name="name"

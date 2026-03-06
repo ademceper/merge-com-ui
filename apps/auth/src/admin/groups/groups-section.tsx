@@ -1,9 +1,9 @@
 import type GroupRepresentation from "@keycloak/keycloak-admin-client/lib/defs/groupRepresentation";
 import { useFetch } from "../../shared/keycloak-ui-shared";
-import { DropdownMenuItem } from "@merge-rd/ui/components/dropdown-menu";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@merge-rd/ui/components/dropdown-menu";
 import { Sheet, SheetContent } from "@merge-rd/ui/components/sheet";
 import { SidebarProvider, useSidebar } from "@merge-rd/ui/components/sidebar";
-import { Button } from "@merge-rd/ui/components/button";
+import { Button, buttonVariants } from "@merge-rd/ui/components/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@merge-rd/ui/components/tabs";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@merge-rd/ui/components/tooltip";
 import { CaretLeft, CaretRight, DotsThreeVertical, PencilSimple, Trash } from "@phosphor-icons/react";
@@ -13,11 +13,9 @@ import { useTranslation } from "react-i18next";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useAdminClient } from "../admin-client";
 import { PermissionsTab } from "../components/permission-tab/permission-tab";
-import { ViewHeader } from "../components/view-header/view-header";
 import { useAccess } from "../context/access/access";
 import { useRealm } from "../context/realm-context/realm-context";
 import { AdminEvents } from "../events/admin-events";
-import helpUrls from "../help-urls";
 import useIsFeatureEnabled, { Feature } from "../utils/useIsFeatureEnabled";
 import useToggle from "../utils/useToggle";
 import { GroupAttributes } from "./group-attributes";
@@ -241,38 +239,37 @@ export default function GroupsSection() {
                                 <div className="flex min-w-0 flex-wrap items-center gap-2">
                                     <GroupsSidebarTrigger />
                                 </div>
-                                <ViewHeader
-                            titleKey={!id ? "groups" : currentGroup()?.name!}
-                            subKey={!id ? "groupsDescription" : ""}
-                            helpUrl={!id ? helpUrls.groupsUrl : ""}
-                            divider
-                            dropdownIcon={id && canManageGroup ? <DotsThreeVertical className="size-5" /> : undefined}
-                            dropdownItems={
-                                id && canManageGroup
-                                    ? [
-                                        <DropdownMenuItem
-                                            data-testid="renameGroupAction"
-                                            key="renameGroup"
-                                            onClick={() =>
-                                                setRename(currentGroup())
-                                            }
-                                        >
-                                            <PencilSimple className="size-4 shrink-0" />
-                                            {t("edit")}
-                                        </DropdownMenuItem>,
-                                        <DropdownMenuItem
-                                            data-testid="deleteGroup"
-                                            key="deleteGroup"
-                                            onClick={toggleDeleteOpen}
-                                            className="text-destructive focus:text-destructive"
-                                        >
-                                            <Trash className="size-4 shrink-0" />
-                                            {t("deleteGroup")}
-                                        </DropdownMenuItem>
-                                    ]
-                                    : undefined
-                            }
-                        />
+                                {id && canManageGroup && (
+                                    <div className="flex flex-wrap items-center justify-between gap-2">
+                                        <div className="flex flex-wrap items-center gap-2" />
+                                        <div className="flex items-center gap-2">
+                                            <DropdownMenu>
+                                                <DropdownMenuTrigger data-testid="action-dropdown" className={buttonVariants({ variant: "ghost", size: "icon" })}>
+                                                    <DotsThreeVertical className="size-5" />
+                                                </DropdownMenuTrigger>
+                                                <DropdownMenuContent align="end">
+                                                    <DropdownMenuItem
+                                                        data-testid="renameGroupAction"
+                                                        key="renameGroup"
+                                                        onClick={() => setRename(currentGroup())}
+                                                    >
+                                                        <PencilSimple className="size-4 shrink-0" />
+                                                        {t("edit")}
+                                                    </DropdownMenuItem>
+                                                    <DropdownMenuItem
+                                                        data-testid="deleteGroup"
+                                                        key="deleteGroup"
+                                                        onClick={toggleDeleteOpen}
+                                                        className="text-destructive focus:text-destructive"
+                                                    >
+                                                        <Trash className="size-4 shrink-0" />
+                                                        {t("deleteGroup")}
+                                                    </DropdownMenuItem>
+                                                </DropdownMenuContent>
+                                            </DropdownMenu>
+                                        </div>
+                                    </div>
+                                )}
                         <div className="pt-0">
                             {currentGroup()?.description}
                         </div>

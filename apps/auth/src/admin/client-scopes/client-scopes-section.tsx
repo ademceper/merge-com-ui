@@ -31,8 +31,6 @@ import {
     changeScope,
     removeScope
 } from "../components/client-scope/client-scope-types";
-import { ViewHeader } from "../components/view-header/view-header";
-import helpUrls from "../help-urls";
 import useLocaleSort, { mapByKey } from "../utils/useLocaleSort";
 import { useFetch } from "../../shared/keycloak-ui-shared";
 import { AddClientScopeDialog } from "./add-client-scope-dialog";
@@ -193,13 +191,7 @@ export default function ClientScopesSection() {
 
     return (
         <>
-            <ViewHeader
-                titleKey="clientScopes"
-                subKey="clientScopeExplain"
-                helpUrl={helpUrls.clientScopesUrl}
-                divider
-            />
-            <div className="pt-4 pb-6 px-0">
+                        <div className="pt-4 pb-6 px-0">
                 <AlertDialog
                     open={!!selectedScope}
                     onOpenChange={(open) => !open && setSelectedScope(undefined)}

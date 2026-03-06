@@ -3,8 +3,8 @@ import type { IdentityProviderMapperTypeRepresentation } from "@keycloak/keycloa
 import type RoleRepresentation from "@keycloak/keycloak-admin-client/lib/defs/roleRepresentation";
 import { getErrorDescription, getErrorMessage, TextControl, useFetch } from "../../../shared/keycloak-ui-shared";
 import { toast } from "sonner";
-import { Button } from "@merge-rd/ui/components/button";
-import { DropdownMenuItem } from "@merge-rd/ui/components/dropdown-menu";
+import { Button, buttonVariants } from "@merge-rd/ui/components/button";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@merge-rd/ui/components/dropdown-menu";
 import { useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
@@ -15,7 +15,6 @@ import { DynamicComponents } from "../../components/dynamic/dynamic-components";
 import { FormAccess } from "../../components/form/form-access";
 import type { AttributeForm } from "../../components/key-value-form/attribute-form";
 import { KeycloakSpinner } from "../../../shared/keycloak-ui-shared";
-import { ViewHeader } from "../../components/view-header/view-header";
 import { useRealm } from "../../context/realm-context/realm-context";
 import { convertFormValuesToObject, convertToFormValues } from "../../util";
 import useLocaleSort, { mapByKey } from "../../utils/useLocaleSort";
@@ -158,33 +157,23 @@ const navigate = useNavigate();
     return (
         <div className="p-6">
             <DeleteMapperConfirm />
-            <ViewHeader
-                className="kc-add-mapper-title"
-                titleKey={
-                    id
-                        ? t("editIdPMapper", {
-                              providerId:
-                                  providerId[0].toUpperCase() + providerId.substring(1)
-                          })
-                        : t("addIdPMapper", {
-                              providerId:
-                                  providerId[0].toUpperCase() + providerId.substring(1)
-                          })
-                }
-                dropdownItems={
-                    id
-                        ? [
-                              <DropdownMenuItem
-                                  key="delete"
-                                  onClick={toggleDeleteMapperDialog}
-                              >
-                                  {t("delete")}
-                              </DropdownMenuItem>
-                          ]
-                        : undefined
-                }
-                divider
-            />
+            {id && (
+                <div className="flex flex-wrap items-center justify-between gap-2">
+                    <div className="flex flex-wrap items-center gap-2" />
+                    <div className="flex items-center gap-2">
+                        <DropdownMenu>
+                            <DropdownMenuTrigger data-testid="action-dropdown" className={buttonVariants()}>
+                                {t("action")}
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent align="end">
+                                <DropdownMenuItem key="delete" onClick={toggleDeleteMapperDialog}>
+                                    {t("delete")}
+                                </DropdownMenuItem>
+                            </DropdownMenuContent>
+                        </DropdownMenu>
+                    </div>
+                </div>
+            )}
             <FormAccess
                 role="manage-identity-providers"
                 isHorizontal

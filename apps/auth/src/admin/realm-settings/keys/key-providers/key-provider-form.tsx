@@ -8,7 +8,6 @@ import { useNavigate } from "react-router-dom";
 import { useAdminClient } from "../../../admin-client";
 import { DynamicComponents } from "../../../components/dynamic/dynamic-components";
 import { FormAccess } from "../../../components/form/form-access";
-import { ViewHeader } from "../../../components/view-header/view-header";
 import { useServerInfo } from "../../../context/server-info/server-info-provider";
 import { KEY_PROVIDER_TYPE } from "../../../util";
 import { useParams } from "../../../utils/useParams";
@@ -128,8 +127,7 @@ export default function KeyProviderFormPage() {
 
     return (
         <>
-            <ViewHeader titleKey={t("editProvider")} subKey={params.providerType} />
-            <div className="p-6">
+                        <div className="p-6">
                 <KeyProviderForm
                     {...params}
                     onClose={() =>

@@ -1,15 +1,14 @@
 import type ScopeRepresentation from "@keycloak/keycloak-admin-client/lib/defs/scopeRepresentation";
 import { getErrorDescription, getErrorMessage, TextControl, useFetch } from "../../../shared/keycloak-ui-shared";
 import { toast } from "sonner";
-import { Button } from "@merge-rd/ui/components/button";
-import { DropdownMenuItem } from "@merge-rd/ui/components/dropdown-menu";
+import { Button, buttonVariants } from "@merge-rd/ui/components/button";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@merge-rd/ui/components/dropdown-menu";
 import { useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { Link, useNavigate } from "react-router-dom";
 import { useAdminClient } from "../../admin-client";
 import { FormAccess } from "../../components/form/form-access";
-import { ViewHeader } from "../../components/view-header/view-header";
 import { useParams } from "../../utils/useParams";
 import useToggle from "../../utils/useToggle";
 import { toAuthorizationTab } from "../routes/authentication-tab";
@@ -89,22 +88,27 @@ const [deleteDialog, toggleDeleteDialog] = useToggle();
                     navigate(toAuthorizationTab({ realm, clientId: id, tab: "scopes" }))
                 }
             />
-            <ViewHeader
-                titleKey={scopeId ? scope?.name! : t("createAuthorizationScope")}
-                dropdownItems={
-                    scopeId
-                        ? [
-                              <DropdownMenuItem
-                                  key="delete"
-                                  data-testid="delete-resource"
-                                  onClick={() => toggleDeleteDialog()}
-                              >
-                                  {t("delete")}
-                              </DropdownMenuItem>
-                          ]
-                        : undefined
-                }
-            />
+            {scopeId && (
+                <div className="flex flex-wrap items-center justify-between gap-2">
+                    <div className="flex flex-wrap items-center gap-2" />
+                    <div className="flex items-center gap-2">
+                        <DropdownMenu>
+                            <DropdownMenuTrigger data-testid="action-dropdown" className={buttonVariants()}>
+                                {t("action")}
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent align="end">
+                                <DropdownMenuItem
+                                    key="delete"
+                                    data-testid="delete-resource"
+                                    onClick={() => toggleDeleteDialog()}
+                                >
+                                    {t("delete")}
+                                </DropdownMenuItem>
+                            </DropdownMenuContent>
+                        </DropdownMenu>
+                    </div>
+                </div>
+            )}
             <div className="p-6">
                 <FormProvider {...form}>
                     <FormAccess

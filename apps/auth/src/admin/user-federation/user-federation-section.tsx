@@ -34,10 +34,8 @@ import {
     AlertDialogTitle
 } from "@merge-rd/ui/components/alert-dialog";
 import { ClickableCard } from "../components/keycloak-card/clickable-card";
-import { ViewHeader } from "../components/view-header/view-header";
 import { useRealm } from "../context/realm-context/realm-context";
 import { useServerInfo } from "../context/server-info/server-info-provider";
-import helpUrls from "../help-urls";
 import { toUpperCase } from "../util";
 import { ManagePriorityDialog } from "./manage-priority-dialog";
 import { toCustomUserFederation } from "./routes/custom-user-federation";
@@ -233,12 +231,7 @@ export default function UserFederationSection() {
                     )}
                 />
             )}
-            <ViewHeader
-                titleKey="userFederation"
-                subKey="userFederationExplain"
-                helpUrl={helpUrls.userFederationUrl}
-            />
-            <div className="space-y-4 py-6">
+                        <div className="space-y-4 py-6">
                 {userFederations.length > 0 ? (
                     <DataTable<ComponentRepresentation>
                         columns={columns}

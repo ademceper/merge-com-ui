@@ -12,7 +12,6 @@ import { useTranslation } from "react-i18next";
 import { Link, useNavigate } from "react-router-dom";
 import { useAdminClient } from "../admin-client";
 import { FixedButtonsGroup } from "../components/form/fixed-button-group";
-import { ViewHeader } from "../components/view-header/view-header";
 import { convertToFormValues } from "../util";
 import { useParams } from "../utils/useParams";
 import { TranslationForm } from "./add-translation-modal";
@@ -283,11 +282,7 @@ const [config, setConfig] = useState<UserProfileConfig | null>(null);
 
     return (
         <FormProvider {...form}>
-            <ViewHeader
-                titleKey={editMode ? attributeName : t("createAttribute")}
-                subKey={editMode ? "" : t("createAttributeSubTitle")}
-            />
-            <div className="p-6">
+                        <div className="p-6">
                 <CreateAttributeFormContent save={() => form.handleSubmit(save)()} />
             </div>
         </FormProvider>

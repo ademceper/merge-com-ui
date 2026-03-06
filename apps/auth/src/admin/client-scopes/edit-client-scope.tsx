@@ -7,7 +7,9 @@ import { getErrorDescription, getErrorMessage, KeycloakSpinner,
     useHelp } from "../../shared/keycloak-ui-shared";
 import { toast } from "sonner";
 import { Alert, AlertTitle } from "@merge-rd/ui/components/alert";
-import { DropdownMenuItem } from "@merge-rd/ui/components/dropdown-menu";
+import { Badge } from "@merge-rd/ui/components/badge";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@merge-rd/ui/components/dropdown-menu";
+import { buttonVariants } from "@merge-rd/ui/components/button";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useNavigate, useParams as useRouterParams } from "react-router-dom";
@@ -20,7 +22,6 @@ import {
 } from "../components/client-scope/client-scope-types";
 import { useConfirmDialog } from "../components/confirm-dialog/confirm-dialog";
 import { RoleMapping, Row } from "../components/role-mapping/role-mapping";
-import { ViewHeader } from "../components/view-header/view-header";
 import { useRealm } from "../context/realm-context/realm-context";
 import { convertFormValuesToObject } from "../util";
 import { useParams } from "../utils/useParams";
@@ -247,16 +248,23 @@ const { enabled } = useHelp();
     return (
         <>
             <DeleteConfirm />
-            <ViewHeader
-                titleKey={clientScope.name!}
-                dropdownItems={[
-                    <DropdownMenuItem key="delete" onClick={toggleDeleteDialog}>
-                        {t("delete")}
-                    </DropdownMenuItem>
-                ]}
-                badges={[{ text: clientScope.protocol }]}
-                divider={false}
-            />
+            <div className="flex flex-wrap items-center justify-between gap-2">
+                <div className="flex flex-wrap items-center gap-2">
+                    <Badge>{clientScope.protocol}</Badge>
+                </div>
+                <div className="flex items-center gap-2">
+                    <DropdownMenu>
+                        <DropdownMenuTrigger data-testid="action-dropdown" className={buttonVariants()}>
+                            {t("action")}
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent align="end">
+                            <DropdownMenuItem key="delete" onClick={toggleDeleteDialog}>
+                                {t("delete")}
+                            </DropdownMenuItem>
+                        </DropdownMenuContent>
+                    </DropdownMenu>
+                </div>
+            </div>
 
             <div className="p-0">
                 <div className="bg-muted/30">

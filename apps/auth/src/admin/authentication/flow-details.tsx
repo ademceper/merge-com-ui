@@ -3,10 +3,13 @@ import type { AuthenticationProviderRepresentation } from "@keycloak/keycloak-ad
 import AuthenticatorConfigRepresentation from "@keycloak/keycloak-admin-client/lib/defs/authenticatorConfigRepresentation";
 import { getErrorDescription, getErrorMessage, useFetch } from "../../shared/keycloak-ui-shared";
 import { toast } from "sonner";
-import { Button } from "@merge-rd/ui/components/button";
+import { Button, buttonVariants } from "@merge-rd/ui/components/button";
 import { Label } from "@merge-rd/ui/components/label";
 import {
+    DropdownMenu,
+    DropdownMenuContent,
     DropdownMenuItem,
+    DropdownMenuTrigger,
 } from "@merge-rd/ui/components/dropdown-menu";
 import {
     Table,
@@ -18,7 +21,6 @@ import { Trans, useTranslation } from "react-i18next";
 import { useNavigate, useParams } from "react-router-dom";
 import { useAdminClient } from "../admin-client";
 import { useConfirmDialog } from "../components/confirm-dialog/confirm-dialog";
-import { ViewHeader } from "../components/view-header/view-header";
 import { useRealm } from "../context/realm-context/realm-context";
 import useToggle from "../utils/useToggle";
 import { BindFlowDialog } from "./bind-flow-dialog";
@@ -341,19 +343,22 @@ const { id, usedBy, builtIn } = useParams<FlowParams>();
             )}
             <DeleteFlowConfirm />
 
-            <ViewHeader
-                titleKey={flow?.alias || ""}
-                badges={[
-                    { text: <Label>{t(`used.${usedBy}`)}</Label> },
-                    builtIn
-                        ? {
-                              text: <BuildInLabel />,
-                              id: "builtIn"
-                          }
-                        : {}
-                ]}
-                dropdownItems={dropdownItems}
-            />
+            <div className="flex flex-wrap items-center justify-between gap-2">
+                <div className="flex flex-wrap items-center gap-2">
+                    <Label>{t(`used.${usedBy}`)}</Label>
+                    {builtIn && <BuildInLabel />}
+                </div>
+                <div className="flex items-center gap-2">
+                    {dropdownItems.length > 0 && (
+                        <DropdownMenu>
+                            <DropdownMenuTrigger data-testid="action-dropdown" className={buttonVariants()}>
+                                {t("action")}
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent align="end">{dropdownItems}</DropdownMenuContent>
+                        </DropdownMenu>
+                    )}
+                </div>
+            </div>
             <div className="bg-muted/30 p-4">
                 {executionList && hasExecutions && (
                     <>

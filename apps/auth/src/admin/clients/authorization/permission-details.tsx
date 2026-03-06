@@ -7,11 +7,11 @@ import { getErrorDescription, getErrorMessage, FormErrorText,
     TextControl,
     useFetch } from "../../../shared/keycloak-ui-shared";
 import { toast } from "sonner";
-import { Button } from "@merge-rd/ui/components/button";
+import { Button, buttonVariants } from "@merge-rd/ui/components/button";
 import { Switch } from "@merge-rd/ui/components/switch";
 import { Label } from "@merge-rd/ui/components/label";
 import { RadioGroup, RadioGroupItem } from "@merge-rd/ui/components/radio-group";
-import { DropdownMenuItem } from "@merge-rd/ui/components/dropdown-menu";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@merge-rd/ui/components/dropdown-menu";
 import { useState } from "react";
 import { Controller, FormProvider, useForm, useWatch } from "react-hook-form";
 import { useTranslation } from "react-i18next";
@@ -20,7 +20,6 @@ import { useAdminClient } from "../../admin-client";
 import { useConfirmDialog } from "../../components/confirm-dialog/confirm-dialog";
 import { FormAccess } from "../../components/form/form-access";
 import { KeycloakSpinner } from "../../../shared/keycloak-ui-shared";
-import { ViewHeader } from "../../components/view-header/view-header";
 import { useAccess } from "../../context/access/access";
 import { toUpperCase } from "../../util";
 import { useParams } from "../../utils/useParams";
@@ -175,27 +174,28 @@ const [permission, setPermission] = useState<PolicyRepresentation>();
     return (
         <>
             <DeleteConfirm />
-            <ViewHeader
-                titleKey={
-                    permissionId
-                        ? permission.name!
-                        : `create${toUpperCase(permissionType)}BasedPermission`
-                }
-                dropdownItems={
-                    permissionId
-                        ? [
-                              <DropdownMenuItem
-                                  key="delete"
-                                  data-testid="delete-resource"
-                                  disabled={isDisabled}
-                                  onClick={() => toggleDeleteDialog()}
-                              >
-                                  {t("delete")}
-                              </DropdownMenuItem>
-                          ]
-                        : undefined
-                }
-            />
+            {permissionId && (
+                <div className="flex flex-wrap items-center justify-between gap-2">
+                    <div className="flex flex-wrap items-center gap-2" />
+                    <div className="flex items-center gap-2">
+                        <DropdownMenu>
+                            <DropdownMenuTrigger data-testid="action-dropdown" className={buttonVariants()}>
+                                {t("action")}
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent align="end">
+                                <DropdownMenuItem
+                                    key="delete"
+                                    data-testid="delete-resource"
+                                    disabled={isDisabled}
+                                    onClick={() => toggleDeleteDialog()}
+                                >
+                                    {t("delete")}
+                                </DropdownMenuItem>
+                            </DropdownMenuContent>
+                        </DropdownMenu>
+                    </div>
+                </div>
+            )}
             <div className="p-6">
                 <FormAccess
                     isHorizontal

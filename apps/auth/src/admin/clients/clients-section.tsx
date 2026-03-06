@@ -25,8 +25,6 @@ import {
     AlertDialogHeader,
     AlertDialogTitle
 } from "@merge-rd/ui/components/alert-dialog";
-import { ViewHeader } from "../components/view-header/view-header";
-import helpUrls from "../help-urls";
 import { useAccess } from "../context/access/access";
 import { useRealm } from "../context/realm-context/realm-context";
 import { exportClient } from "../util";
@@ -231,13 +229,7 @@ export default function ClientsSection() {
 
     return (
         <>
-            <ViewHeader
-                titleKey="clientList"
-                subKey="clientsExplain"
-                helpUrl={helpUrls.clientsUrl}
-                divider
-            />
-            <div className="pt-4 pb-6 px-0 min-w-0">
+                        <div className="pt-4 pb-6 px-0 min-w-0">
                 <AlertDialog open={!!selectedClient} onOpenChange={(open) => !open && setSelectedClient(undefined)}>
                     <AlertDialogContent>
                         <AlertDialogHeader>

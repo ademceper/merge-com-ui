@@ -13,7 +13,6 @@ import { toWorkflows } from "./routes/workflows";
 import CodeEditor from "../components/form/code-editor";
 import { useParams } from "../utils/useParams";
 import { WorkflowDetailParams, toWorkflowDetail } from "./routes/workflow-detail";
-import { ViewHeader } from "../components/view-header/view-header";
 import type WorkflowRepresentation from "@keycloak/keycloak-admin-client/lib/defs/workflowRepresentation";
 
 type AttributeForm = {
@@ -106,8 +105,7 @@ const { mode, id } = useParams<WorkflowDetailParams>();
 
     return (
         <>
-            <ViewHeader titleKey={titlekeyMap[mode]} subKey={subkeyMap[mode]} />
-
+            
             <FormProvider {...form}>
                 <div className="bg-muted/30 p-4">
                     <FormAccess

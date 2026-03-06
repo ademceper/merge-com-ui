@@ -5,8 +5,8 @@ import { getErrorDescription, getErrorMessage, HelpItem,
     TextControl,
     useFetch } from "../../shared/keycloak-ui-shared";
 import { toast } from "sonner";
-import { Button } from "@merge-rd/ui/components/button";
-import { DropdownMenuItem } from "@merge-rd/ui/components/dropdown-menu";
+import { Button, buttonVariants } from "@merge-rd/ui/components/button";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@merge-rd/ui/components/dropdown-menu";
 import { Label } from "@merge-rd/ui/components/label";
 import { Separator } from "@merge-rd/ui/components/separator";
 import { Plus, Trash } from "@phosphor-icons/react";
@@ -18,7 +18,7 @@ import { useAdminClient } from "../admin-client";
 import { useConfirmDialog } from "../components/confirm-dialog/confirm-dialog";
 import { FormAccess } from "../components/form/form-access";
 import { KeycloakSpinner } from "../../shared/keycloak-ui-shared";
-import { ViewHeader } from "../components/view-header/view-header";
+
 import { useServerInfo } from "../context/server-info/server-info-provider";
 import { useParams } from "../utils/useParams";
 import { toAddExecutor } from "./routes/add-executor";
@@ -167,33 +167,33 @@ const [profiles, setProfiles] = useState<ClientProfilesRepresentation>();
     return (
         <>
             <DeleteConfirm />
-            <ViewHeader
-                titleKey={editMode ? profileName : t("newClientProfile")}
-                badges={[
-                    {
-                        id: "global-client-profile-badge",
-                        text: isGlobalProfile ? (
+            {(isGlobalProfile || (editMode && !isGlobalProfile)) && (
+                <div className="flex flex-wrap items-center justify-between gap-2">
+                    <div className="flex flex-wrap items-center gap-2">
+                        {isGlobalProfile && (
                             <Label color="blue">{t("global")}</Label>
-                        ) : (
-                            ""
-                        )
-                    }
-                ]}
-                divider
-                dropdownItems={
-                    editMode && !isGlobalProfile
-                        ? [
-                              <DropdownMenuItem
-                                  key="delete"
-                                  data-testid="deleteClientProfileDropdown"
-                                  onClick={toggleDeleteDialog}
-                              >
-                                  {t("deleteClientProfile")}
-                              </DropdownMenuItem>
-                          ]
-                        : undefined
-                }
-            />
+                        )}
+                    </div>
+                    <div className="flex items-center gap-2">
+                        {editMode && !isGlobalProfile && (
+                            <DropdownMenu>
+                                <DropdownMenuTrigger data-testid="action-dropdown" className={buttonVariants()}>
+                                    {t("action")}
+                                </DropdownMenuTrigger>
+                                <DropdownMenuContent align="end">
+                                    <DropdownMenuItem
+                                        key="delete"
+                                        data-testid="deleteClientProfileDropdown"
+                                        onClick={toggleDeleteDialog}
+                                    >
+                                        {t("deleteClientProfile")}
+                                    </DropdownMenuItem>
+                                </DropdownMenuContent>
+                            </DropdownMenu>
+                        )}
+                    </div>
+                </div>
+            )}
             <section className="py-6 bg-muted/30">
                 <FormProvider {...form}>
                     <FormAccess isHorizontal role="view-realm" className="mt-6">

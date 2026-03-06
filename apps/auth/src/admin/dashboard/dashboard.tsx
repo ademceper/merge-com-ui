@@ -13,7 +13,6 @@ import { useParams } from "react-router-dom";
 import { KeycloakSpinner } from "../../shared/keycloak-ui-shared";
 import { useRealm } from "../context/realm-context/realm-context";
 import { useServerInfo } from "../context/server-info/server-info-provider";
-import helpUrls from "../help-urls";
 import useLocaleSort, { mapByKey } from "../utils/useLocaleSort";
 import { ProviderInfo } from "./provider-info";
 
@@ -207,24 +206,24 @@ const Dashboard = () => {
                             </div>
                             <div className="mt-4">
                                 <Button asChild>
-                                    <a href={helpUrls.documentation} target="_blank" rel="noreferrer">
+                                    <a href="https://www.keycloak.org/documentation" target="_blank" rel="noreferrer">
                                         {t("viewDocumentation")}
                                     </a>
                                 </Button>
                             </div>
                             <div className="flex flex-wrap gap-2 mt-2">
                                 <Button variant="ghost" asChild>
-                                    <a href={helpUrls.guides} target="_blank" rel="noreferrer">
+                                    <a href="https://www.keycloak.org/guides" target="_blank" rel="noreferrer">
                                         {t("viewGuides")}
                                     </a>
                                 </Button>
                                 <Button variant="ghost" asChild>
-                                    <a href={helpUrls.community} target="_blank" rel="noreferrer">
+                                    <a href="https://www.keycloak.org/community" target="_blank" rel="noreferrer">
                                         {t("joinCommunity")}
                                     </a>
                                 </Button>
                                 <Button variant="ghost" asChild>
-                                    <a href={helpUrls.blog} target="_blank" rel="noreferrer">
+                                    <a href="https://www.keycloak.org/blog" target="_blank" rel="noreferrer">
                                         {t("readBlog")}
                                     </a>
                                 </Button>

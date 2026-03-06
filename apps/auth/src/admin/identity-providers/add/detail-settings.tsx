@@ -6,9 +6,11 @@ import { getErrorDescription, getErrorMessage, KeycloakSpinner, ScrollForm, useF
 import { DataTable, DataTableRowActions, type ColumnDef } from "@/admin/components/data-table";
 import { Empty, EmptyContent, EmptyDescription, EmptyHeader, EmptyTitle } from "@merge-rd/ui/components/empty";
 import { toast } from "sonner";
-import { Button } from "@merge-rd/ui/components/button";
+import { Button, buttonVariants } from "@merge-rd/ui/components/button";
+import { Label } from "@merge-rd/ui/components/label";
+import { Switch } from "@merge-rd/ui/components/switch";
 import { Separator } from "@merge-rd/ui/components/separator";
-import { DropdownMenuItem } from "@merge-rd/ui/components/dropdown-menu";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@merge-rd/ui/components/dropdown-menu";
 import { useMemo, useState } from "react";
 import {
     Controller,
@@ -25,7 +27,6 @@ import { DynamicComponents } from "../../components/dynamic/dynamic-components";
 import { FixedButtonsGroup } from "../../components/form/fixed-button-group";
 import { FormAccess } from "../../components/form/form-access";
 import { PermissionsTab } from "../../components/permission-tab/permission-tab";
-import { ViewHeader } from "../../components/view-header/view-header";
 import { useAccess } from "../../context/access/access";
 import { useRealm } from "../../context/realm-context/realm-context";
 import { useServerInfo } from "../../context/server-info/server-info-provider";
@@ -148,67 +149,89 @@ const { setValue, formState, control } = useFormContext();
         }
     };
 
+    const headerTitleKey = toUpperCase(
+        provider
+            ? provider.displayName
+                ? provider.displayName
+                : provider.providerId!
+            : ""
+    );
+
+    const dropdownItems = [
+        ...(provider?.providerId?.includes("saml") &&
+        validateSignature === "true" &&
+        useMetadataDescriptorUrl === "true" &&
+        metadataDescriptorUrl &&
+        !formState.isDirty &&
+        value
+            ? [
+                  <DropdownMenuItem
+                      key="reloadKeys"
+                      onClick={() => reloadSamlKeys(provider.alias!)}
+                  >
+                      {t("reloadKeys")}
+                  </DropdownMenuItem>
+              ]
+            : provider?.providerId?.includes("saml") &&
+                validateSignature === "true" &&
+                useMetadataDescriptorUrl !== "true" &&
+                metadataDescriptorUrl &&
+                !formState.isDirty
+              ? [
+                    <DropdownMenuItem
+                        key="importKeys"
+                        onClick={() =>
+                            importSamlKeys(
+                                provider.providerId!,
+                                metadataDescriptorUrl
+                            )
+                        }
+                    >
+                        {t("importKeys")}
+                    </DropdownMenuItem>
+                ]
+              : []),
+        <Separator key="separator" />,
+        <DropdownMenuItem key="delete" onClick={() => toggleDeleteDialog()}>
+            {t("delete")}
+        </DropdownMenuItem>
+    ];
+
     return (
         <>
             <DisableConfirm />
-            <ViewHeader
-                titleKey={toUpperCase(
-                    provider
-                        ? provider.displayName
-                            ? provider.displayName
-                            : provider.providerId!
-                        : ""
-                )}
-                divider={false}
-                dropdownItems={[
-                    ...(provider?.providerId?.includes("saml") &&
-                    validateSignature === "true" &&
-                    useMetadataDescriptorUrl === "true" &&
-                    metadataDescriptorUrl &&
-                    !formState.isDirty &&
-                    value
-                        ? [
-                              <DropdownMenuItem
-                                  key="reloadKeys"
-                                  onClick={() => reloadSamlKeys(provider.alias!)}
-                              >
-                                  {t("reloadKeys")}
-                              </DropdownMenuItem>
-                          ]
-                        : provider?.providerId?.includes("saml") &&
-                            validateSignature === "true" &&
-                            useMetadataDescriptorUrl !== "true" &&
-                            metadataDescriptorUrl &&
-                            !formState.isDirty
-                          ? [
-                                <DropdownMenuItem
-                                    key="importKeys"
-                                    onClick={() =>
-                                        importSamlKeys(
-                                            provider.providerId!,
-                                            metadataDescriptorUrl
-                                        )
-                                    }
-                                >
-                                    {t("importKeys")}
-                                </DropdownMenuItem>
-                            ]
-                          : []),
-                    <Separator key="separator" />,
-                    <DropdownMenuItem key="delete" onClick={() => toggleDeleteDialog()}>
-                        {t("delete")}
-                    </DropdownMenuItem>
-                ]}
-                isEnabled={value}
-                onToggle={value => {
-                    if (!value) {
-                        toggleDisableDialog();
-                    } else {
-                        onChange(value);
-                        save();
-                    }
-                }}
-            />
+            <div className="flex flex-wrap items-center justify-between gap-2">
+                <div className="flex flex-wrap items-center gap-2" />
+                <div className="flex items-center gap-2">
+                    <div className="flex items-center gap-2 mr-4">
+                        <Label htmlFor={`${headerTitleKey.replace(/\s/g, "-")}-switch`} className="text-sm">
+                            {t("enabled")}
+                        </Label>
+                        <Switch
+                            id={`${headerTitleKey.replace(/\s/g, "-")}-switch`}
+                            data-testid={`${headerTitleKey}-switch`}
+                            checked={value}
+                            aria-label={t("enabled")}
+                            onCheckedChange={val => {
+                                if (!val) {
+                                    toggleDisableDialog();
+                                } else {
+                                    onChange(val);
+                                    save();
+                                }
+                            }}
+                        />
+                    </div>
+                    {dropdownItems.length > 0 && (
+                        <DropdownMenu>
+                            <DropdownMenuTrigger data-testid="action-dropdown" className={buttonVariants()}>
+                                {t("action")}
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent align="end">{dropdownItems}</DropdownMenuContent>
+                        </DropdownMenu>
+                    )}
+                </div>
+            </div>
         </>
     );
 };

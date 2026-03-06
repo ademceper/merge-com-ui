@@ -1,8 +1,8 @@
 import type PolicyRepresentation from "@keycloak/keycloak-admin-client/lib/defs/policyRepresentation";
 import { getErrorDescription, getErrorMessage, useFetch } from "../../../../shared/keycloak-ui-shared";
 import { toast } from "sonner";
-import { Button } from "@merge-rd/ui/components/button";
-import { DropdownMenuItem } from "@merge-rd/ui/components/dropdown-menu";
+import { Button, buttonVariants } from "@merge-rd/ui/components/button";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@merge-rd/ui/components/dropdown-menu";
 import type { ComponentType } from "react";
 import { useState, type JSX } from "react";
 import { FormProvider, useForm } from "react-hook-form";
@@ -14,7 +14,6 @@ import { useAdminClient } from "../../../admin-client";
 import { useConfirmDialog } from "../../../components/confirm-dialog/confirm-dialog";
 import { FormAccess } from "../../../components/form/form-access";
 import { KeycloakSpinner } from "../../../../shared/keycloak-ui-shared";
-import { ViewHeader } from "../../../components/view-header/view-header";
 import { useParams } from "../../../utils/useParams";
 import { toAuthorizationTab } from "../../routes/authentication-tab";
 import { PolicyDetailsParams, toPolicyDetails } from "../../routes/policy-details";
@@ -184,24 +183,27 @@ const [policy, setPolicy] = useState<PolicyRepresentation>();
     return (
         <>
             <DeleteConfirm />
-            <ViewHeader
-                titleKey={
-                    policyId ? policy?.name! : t("createPolicyOfType", { policyType })
-                }
-                dropdownItems={
-                    policyId
-                        ? [
-                              <DropdownMenuItem
-                                  key="delete"
-                                  data-testid="delete-policy"
-                                  onClick={() => toggleDeleteDialog()}
-                              >
-                                  {t("delete")}
-                              </DropdownMenuItem>
-                          ]
-                        : undefined
-                }
-            />
+            {policyId && (
+                <div className="flex flex-wrap items-center justify-between gap-2">
+                    <div className="flex flex-wrap items-center gap-2" />
+                    <div className="flex items-center gap-2">
+                        <DropdownMenu>
+                            <DropdownMenuTrigger data-testid="action-dropdown" className={buttonVariants()}>
+                                {t("action")}
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent align="end">
+                                <DropdownMenuItem
+                                    key="delete"
+                                    data-testid="delete-policy"
+                                    onClick={() => toggleDeleteDialog()}
+                                >
+                                    {t("delete")}
+                                </DropdownMenuItem>
+                            </DropdownMenuContent>
+                        </DropdownMenu>
+                    </div>
+                </div>
+            )}
             <section className="py-6 bg-muted/30">
                 <FormAccess
                     isHorizontal

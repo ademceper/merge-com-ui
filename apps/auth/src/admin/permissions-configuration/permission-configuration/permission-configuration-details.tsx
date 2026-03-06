@@ -1,8 +1,8 @@
 import PolicyProviderRepresentation from "@keycloak/keycloak-admin-client/lib/defs/policyProviderRepresentation";
 import { getErrorDescription, getErrorMessage, useFetch } from "../../../shared/keycloak-ui-shared";
 import { toast } from "sonner";
-import { Button } from "@merge-rd/ui/components/button";
-import { DropdownMenuItem } from "@merge-rd/ui/components/dropdown-menu";
+import { Button, buttonVariants } from "@merge-rd/ui/components/button";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@merge-rd/ui/components/dropdown-menu";
 import { useMemo, useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
@@ -11,7 +11,7 @@ import { useAdminClient } from "../../admin-client";
 import { useConfirmDialog } from "../../components/confirm-dialog/confirm-dialog";
 import { FormAccess } from "../../components/form/form-access";
 import { KeycloakSpinner } from "../../../shared/keycloak-ui-shared";
-import { ViewHeader } from "../../components/view-header/view-header";
+
 import { useParams } from "../../utils/useParams";
 import {
     PermissionConfigurationDetailsParams,
@@ -211,27 +211,27 @@ const [permission, setPermission] = useState<PolicyRepresentation>();
     return (
         <>
             <DeleteConfirm />
-            <ViewHeader
-                titleKey={permissionId ? permission?.name! : t("createPermission")}
-                subKey={
-                    permissionId
-                        ? permission?.description!
-                        : t("createPermissionOfType", { resourceType })
-                }
-                dropdownItems={
-                    permissionId
-                        ? [
-                              <DropdownMenuItem
-                                  key="delete"
-                                  data-testid="delete-permission"
-                                  onClick={() => toggleDeleteDialog()}
-                              >
-                                  {t("delete")}
-                              </DropdownMenuItem>
-                          ]
-                        : undefined
-                }
-            />
+            {permissionId && (
+                <div className="flex flex-wrap items-center justify-between gap-2">
+                    <div className="flex flex-wrap items-center gap-2" />
+                    <div className="flex items-center gap-2">
+                        <DropdownMenu>
+                            <DropdownMenuTrigger data-testid="action-dropdown" className={buttonVariants()}>
+                                {t("action")}
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent align="end">
+                                <DropdownMenuItem
+                                    key="delete"
+                                    data-testid="delete-permission"
+                                    onClick={() => toggleDeleteDialog()}
+                                >
+                                    {t("delete")}
+                                </DropdownMenuItem>
+                            </DropdownMenuContent>
+                        </DropdownMenu>
+                    </div>
+                </div>
+            )}
             <div className="p-6">
                 <FormAccess isHorizontal onSubmit={handleSubmit(save)} role="anyone">
                     <FormProvider {...form}>

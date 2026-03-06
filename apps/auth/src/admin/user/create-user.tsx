@@ -11,7 +11,6 @@ import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 import { useAdminClient } from "../admin-client";
 import { KeycloakSpinner } from "../../shared/keycloak-ui-shared";
-import { ViewHeader } from "../components/view-header/view-header";
 import { useRealm } from "../context/realm-context/realm-context";
 import { UserForm } from "./user-form";
 import { UserFormFields, toUserRepresentation } from "./form-state";
@@ -65,8 +64,7 @@ const navigate = useNavigate();
 
     return (
         <>
-            <ViewHeader titleKey={t("createUser")} className="kc-username-view-header" />
-            <div className="bg-muted/30 p-4">
+                        <div className="bg-muted/30 p-4">
                 <UserForm
                     form={form}
                     realm={realm}

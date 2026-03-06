@@ -37,7 +37,6 @@ import {
     AlertDialogHeader,
     AlertDialogTitle
 } from "@merge-rd/ui/components/alert-dialog";
-import { ViewHeader } from "../components/view-header/view-header";
 import { fetchAdminUI } from "../context/auth/admin-ui-endpoint";
 import { useRealm } from "../context/realm-context/realm-context";
 import { useRecentRealms } from "../context/recent-realms";
@@ -254,8 +253,7 @@ export default function RealmSection() {
                     }}
                 />
             )}
-            <ViewHeader titleKey="manageRealms" divider={false} />
-            <div className="space-y-4 py-6">
+                        <div className="space-y-4 py-6">
                 <DataTable<RealmRow>
                     columns={columns}
                     data={realms}

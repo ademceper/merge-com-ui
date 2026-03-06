@@ -29,9 +29,7 @@ import {
     AlertDialogHeader,
     AlertDialogTitle
 } from "@merge-rd/ui/components/alert-dialog";
-import { ViewHeader } from "../components/view-header/view-header";
 import { useRealm } from "../context/realm-context/realm-context";
-import helpUrls from "../help-urls";
 import { addTrailingSlash } from "../util";
 import { getAuthorizationHeaders } from "../utils/getAuthorizationHeaders";
 import useToggle from "../utils/useToggle";
@@ -304,13 +302,7 @@ export default function AuthenticationSection() {
 
     return (
         <>
-            <ViewHeader
-                titleKey="titleAuthentication"
-                subKey="authenticationExplain"
-                helpUrl={helpUrls.authenticationUrl}
-                divider={false}
-            />
-            <div className="p-0">
+                        <div className="p-0">
                 <Tabs
                     value={currentTab}
                     onValueChange={(value) =>

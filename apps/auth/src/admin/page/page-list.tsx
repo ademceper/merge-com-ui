@@ -9,7 +9,6 @@ import { useTranslation } from "react-i18next";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { useAdminClient } from "../admin-client";
 import { useConfirmDialog } from "../components/confirm-dialog/confirm-dialog";
-import { ViewHeader } from "../components/view-header/view-header";
 import { useRealm } from "../context/realm-context/realm-context";
 import { useServerInfo } from "../context/server-info/server-info-provider";
 import {
@@ -121,8 +120,7 @@ export default function PageList() {
     return (
         <div className="p-0">
             <DeleteConfirm />
-            <ViewHeader titleKey={page.id} subKey={page.helpText} divider={false} />
-            <DataTable<ComponentRepresentation>
+                        <DataTable<ComponentRepresentation>
                 key={key}
                 columns={columns}
                 data={components}

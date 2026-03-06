@@ -7,7 +7,6 @@ import { useAdminClient } from "../../admin-client";
 import { getErrorDescription, getErrorMessage } from "../../../shared/keycloak-ui-shared";
 import { toast } from "sonner";
 import { FormAccess } from "../../components/form/form-access";
-import { ViewHeader } from "../../components/view-header/view-header";
 import { useRealm } from "../../context/realm-context/realm-context";
 import { toIdentityProvider } from "../routes/identity-provider";
 import { toIdentityProviders } from "../routes/identity-providers";
@@ -56,8 +55,7 @@ const { realm } = useRealm();
 
     return (
         <>
-            <ViewHeader titleKey={t("addJWTAuthorizationGrantProvider")} />
-            <div className="p-6">
+                        <div className="p-6">
                 <FormProvider {...form}>
                     <FormAccess
                         role="manage-identity-providers"

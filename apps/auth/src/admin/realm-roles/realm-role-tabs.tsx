@@ -1,7 +1,9 @@
 import type RoleRepresentation from "@keycloak/keycloak-admin-client/lib/defs/roleRepresentation";
 import { getErrorDescription, getErrorMessage, KeycloakSpinner, useFetch } from "../../shared/keycloak-ui-shared";
 import { toast } from "sonner";
-import { DropdownMenuItem } from "@merge-rd/ui/components/dropdown-menu";
+import { Badge } from "@merge-rd/ui/components/badge";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@merge-rd/ui/components/dropdown-menu";
+import { buttonVariants } from "@merge-rd/ui/components/button";
 import { useState } from "react";
 import { FormProvider, SubmitHandler, useForm, useWatch } from "react-hook-form";
 import { useTranslation } from "react-i18next";
@@ -27,7 +29,7 @@ import {
 import { PermissionsTab } from "../components/permission-tab/permission-tab";
 import { RoleForm } from "../components/role-form/role-form";
 import { RoleMapping } from "../components/role-mapping/role-mapping";
-import { ViewHeader } from "../components/view-header/view-header";
+
 import { useAccess } from "../context/access/access";
 import { useRealm } from "../context/realm-context/realm-context";
 import { AdminEvents } from "../events/admin-events";
@@ -274,28 +276,32 @@ const { hasAccess } = useAccess();
     return (
         <>
             <DeleteConfirm />
-            <ViewHeader
-                titleKey={roleName!}
-                badges={[
-                    {
-                        id: "composite-role-badge",
-                        text: composites ? t("composite") : "",
-                        readonly: true
-                    }
-                ]}
-                actionsDropdownId="roles-actions-dropdown"
-                dropdownItems={[
-                    <DropdownMenuItem
-                        key="delete-role"
-                        onClick={() => {
-                            toggleDeleteDialog();
-                        }}
-                    >
-                        {t("deleteRole")}
-                    </DropdownMenuItem>
-                ]}
-                divider={false}
-            />
+            <div className="flex flex-wrap items-center justify-between gap-2">
+                <div className="flex flex-wrap items-center gap-2">
+                    {composites && (
+                        <Badge data-testid="composite-role-badge" variant="secondary">
+                            {t("composite")}
+                        </Badge>
+                    )}
+                </div>
+                <div className="flex items-center gap-2">
+                    <DropdownMenu>
+                        <DropdownMenuTrigger id="roles-actions-dropdown" data-testid="action-dropdown" className={buttonVariants()}>
+                            {t("action")}
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent align="end">
+                            <DropdownMenuItem
+                                key="delete-role"
+                                onClick={() => {
+                                    toggleDeleteDialog();
+                                }}
+                            >
+                                {t("deleteRole")}
+                            </DropdownMenuItem>
+                        </DropdownMenuContent>
+                    </DropdownMenu>
+                </div>
+            </div>
             <section className="py-6 bg-muted/30 p-0">
                 <FormProvider {...form}>
                     <div className="bg-muted/30">

@@ -6,7 +6,6 @@ import { useAdminClient } from "../admin-client";
 import { getErrorDescription, getErrorMessage } from "../../shared/keycloak-ui-shared";
 import { toast } from "sonner";
 import { FormAccess } from "../components/form/form-access";
-import { ViewHeader } from "../components/view-header/view-header";
 import { useRealm } from "../context/realm-context/realm-context";
 import { OrganizationForm, OrganizationFormType, convertToOrg } from "./organization-form";
 import { toEditOrganization } from "./routes/edit-organization";
@@ -33,8 +32,7 @@ const { t } = useTranslation();
 
     return (
         <>
-            <ViewHeader titleKey="createOrganization" />
-            <div className="p-6">
+                        <div className="p-6">
                 <FormAccess role="anyone" onSubmit={handleSubmit(save)} isHorizontal>
                     <FormProvider {...form}>
                         <OrganizationForm />

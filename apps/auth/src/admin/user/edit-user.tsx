@@ -8,7 +8,9 @@ import { getErrorDescription, getErrorMessage, isUserProfileError,
 import { toast } from "sonner";
 import { Label } from "@merge-rd/ui/components/label";
 import { Tooltip, TooltipContent, TooltipTrigger, TooltipProvider } from "@merge-rd/ui/components/tooltip";
-import { DropdownMenuItem } from "@merge-rd/ui/components/dropdown-menu";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@merge-rd/ui/components/dropdown-menu";
+import { Switch } from "@merge-rd/ui/components/switch";
+import { buttonVariants } from "@merge-rd/ui/components/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@merge-rd/ui/components/tabs";
 import { Info } from "@phosphor-icons/react";
 import { TFunction } from "i18next";
@@ -30,7 +32,7 @@ import {
 import { useConfirmDialog } from "../components/confirm-dialog/confirm-dialog";
 import { KeyValueType } from "../components/key-value-form/key-value-convert";
 import { KeycloakSpinner } from "../../shared/keycloak-ui-shared";
-import { ViewHeader } from "../components/view-header/view-header";
+
 import { useAccess } from "../context/access/access";
 import { useRealm } from "../context/realm-context/realm-context";
 import { UserProfileProvider } from "../realm-settings/user-profile/user-profile-context";
@@ -337,62 +339,62 @@ const navigate = useNavigate();
                 </AlertDialogContent>
             </AlertDialog>
             <DisableConfirm />
-            <ViewHeader
-                titleKey={user.username!}
-                className="kc-username-view-header"
-                divider={false}
-                badges={
-                    lightweightUser
-                        ? [
-                              {
-                                  text: (
-                                      <TooltipProvider>
-                                          <Tooltip>
-                                              <TooltipTrigger asChild>
-                                                  <Label
-                                                      data-testid="user-details-label-transient-user"
-                                                      className="inline-flex items-center gap-1"
-                                                  >
-                                                      <Info className="size-4" />
-                                                      {t("transientUser")}
-                                                  </Label>
-                                              </TooltipTrigger>
-                                              <TooltipContent>{t("transientUserTooltip")}</TooltipContent>
-                                          </Tooltip>
-                                      </TooltipProvider>
-                                  )
-                              }
-                          ]
-                        : []
-                }
-                dropdownItems={[
-                    <DropdownMenuItem
-                        key="impersonate"
-                        disabled={!user.access?.impersonate}
-                        onClick={() => toggleImpersonateDialog()}
-                    >
-                        {t("impersonate")}
-                    </DropdownMenuItem>,
-                    <DropdownMenuItem
-                        key="delete"
-                        disabled={!user.access?.manage}
-                        onClick={() => setDeleteDialogOpen(true)}
-                    >
-                        {t("delete")}
-                    </DropdownMenuItem>
-                ]}
-                onToggle={async value => {
-                    if (!value) {
-                        toggleDisableDialog();
-                    } else {
-                        await save({
-                            ...toUserFormFields(user),
-                            enabled: value
-                        });
-                    }
-                }}
-                isEnabled={user.enabled}
-            />
+            <div className="flex flex-wrap items-center justify-between gap-2 kc-username-view-header">
+                <div className="flex flex-wrap items-center gap-2">
+                    {lightweightUser && (
+                        <TooltipProvider>
+                            <Tooltip>
+                                <TooltipTrigger asChild>
+                                    <Label
+                                        data-testid="user-details-label-transient-user"
+                                        className="inline-flex items-center gap-1"
+                                    >
+                                        <Info className="size-4" />
+                                        {t("transientUser")}
+                                    </Label>
+                                </TooltipTrigger>
+                                <TooltipContent>{t("transientUserTooltip")}</TooltipContent>
+                            </Tooltip>
+                        </TooltipProvider>
+                    )}
+                </div>
+                <div className="flex items-center gap-2">
+                    <div className="flex items-center gap-2 mr-4">
+                        <Label htmlFor="user-switch" className="text-sm">{t("enabled")}</Label>
+                        <Switch id="user-switch" data-testid="user-switch" checked={user.enabled} aria-label={t("enabled")} onCheckedChange={async value => {
+                            if (!value) {
+                                toggleDisableDialog();
+                            } else {
+                                await save({
+                                    ...toUserFormFields(user),
+                                    enabled: value
+                                });
+                            }
+                        }} />
+                    </div>
+                    <DropdownMenu>
+                        <DropdownMenuTrigger data-testid="action-dropdown" className={buttonVariants()}>
+                            {t("action")}
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent align="end">
+                            <DropdownMenuItem
+                                key="impersonate"
+                                disabled={!user.access?.impersonate}
+                                onClick={() => toggleImpersonateDialog()}
+                            >
+                                {t("impersonate")}
+                            </DropdownMenuItem>
+                            <DropdownMenuItem
+                                key="delete"
+                                disabled={!user.access?.manage}
+                                onClick={() => setDeleteDialogOpen(true)}
+                            >
+                                {t("delete")}
+                            </DropdownMenuItem>
+                        </DropdownMenuContent>
+                    </DropdownMenu>
+                </div>
+            </div>
 
             <div className="p-0">
                 <UserProfileProvider>

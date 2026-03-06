@@ -9,7 +9,6 @@ import { useAdminClient } from "../admin-client";
 import { AuthorizationPolicies } from "../clients/authorization/policies";
 import { FormFields, SaveOptions } from "../clients/client-details";
 import { ConfirmDialogModal } from "../components/confirm-dialog/confirm-dialog";
-import { ViewHeader } from "../components/view-header/view-header";
 import { useAccess } from "../context/access/access";
 import { useRealm } from "../context/realm-context/realm-context";
 import { convertFormValuesToObject, convertToFormValues } from "../util";
@@ -147,11 +146,7 @@ const { tab } = useParams<{ tab?: string }>();
                 </ConfirmDialogModal>
                 <div className="p-0">
                     <FormProvider {...form}>
-                        <ViewHeader
-                            titleKey={t("permissions")}
-                            subKey={t("permissionsSubTitle")}
-                        />
-                        <div className="bg-muted/30">
+                                                <div className="bg-muted/30">
                             {renderContent()}
                         </div>
                     </FormProvider>

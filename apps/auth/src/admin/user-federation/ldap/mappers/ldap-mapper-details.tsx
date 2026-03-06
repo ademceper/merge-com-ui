@@ -6,8 +6,8 @@ import { getErrorDescription, getErrorMessage, HelpItem,
     TextControl,
     useFetch } from "../../../../shared/keycloak-ui-shared";
 import { toast } from "sonner";
-import { Button } from "@merge-rd/ui/components/button";
-import { DropdownMenuItem } from "@merge-rd/ui/components/dropdown-menu";
+import { Button, buttonVariants } from "@merge-rd/ui/components/button";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@merge-rd/ui/components/dropdown-menu";
 import { Label } from "@merge-rd/ui/components/label";
 import {
     Select,
@@ -27,7 +27,7 @@ import {
     DynamicComponents
 } from "../../../components/dynamic/dynamic-components";
 import { FormAccess } from "../../../components/form/form-access";
-import { ViewHeader } from "../../../components/view-header/view-header";
+
 import { useRealm } from "../../../context/realm-context/realm-context";
 import { convertFormValuesToObject, convertToFormValues } from "../../../util";
 import { useParams } from "../../../utils/useParams";
@@ -160,41 +160,41 @@ const [isMapperDropdownOpen, setIsMapperDropdownOpen] = useState(false);
     return (
         <>
             <DeleteConfirm />
-            <ViewHeader
-                key={key}
-                titleKey={mapping ? mapping.name! : t("createNewMapper")}
-                dropdownItems={
-                    isNew
-                        ? undefined
-                        : [
-                              <DropdownMenuItem key="delete" onClick={toggleDeleteDialog}>
-                                  {t("delete")}
-                              </DropdownMenuItem>,
-                              ...(mapper?.metadata.fedToKeycloakSyncSupported
-                                  ? [
-                                        <DropdownMenuItem
-                                            key="fedSync"
-                                            onClick={() => sync("fedToKeycloak")}
-                                        >
-                                            {t(mapper.metadata.fedToKeycloakSyncMessage)}
-                                        </DropdownMenuItem>
-                                    ]
-                                  : []),
-                              ...(mapper?.metadata.keycloakToFedSyncSupported
-                                  ? [
-                                        <DropdownMenuItem
-                                            key="ldapSync"
-                                            onClick={async () => {
-                                                await sync("keycloakToFed");
-                                            }}
-                                        >
-                                            {t(mapper.metadata.keycloakToFedSyncMessage)}
-                                        </DropdownMenuItem>
-                                    ]
-                                  : [])
-                          ]
-                }
-            />
+            {!isNew && (
+                <div key={key} className="flex flex-wrap items-center justify-between gap-2">
+                    <div className="flex flex-wrap items-center gap-2" />
+                    <div className="flex items-center gap-2">
+                        <DropdownMenu>
+                            <DropdownMenuTrigger data-testid="action-dropdown" className={buttonVariants()}>
+                                {t("action")}
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent align="end">
+                                <DropdownMenuItem key="delete" onClick={toggleDeleteDialog}>
+                                    {t("delete")}
+                                </DropdownMenuItem>
+                                {mapper?.metadata.fedToKeycloakSyncSupported && (
+                                    <DropdownMenuItem
+                                        key="fedSync"
+                                        onClick={() => sync("fedToKeycloak")}
+                                    >
+                                        {t(mapper.metadata.fedToKeycloakSyncMessage)}
+                                    </DropdownMenuItem>
+                                )}
+                                {mapper?.metadata.keycloakToFedSyncSupported && (
+                                    <DropdownMenuItem
+                                        key="ldapSync"
+                                        onClick={async () => {
+                                            await sync("keycloakToFed");
+                                        }}
+                                    >
+                                        {t(mapper.metadata.keycloakToFedSyncMessage)}
+                                    </DropdownMenuItem>
+                                )}
+                            </DropdownMenuContent>
+                        </DropdownMenu>
+                    </div>
+                </div>
+            )}
             <div className="p-6 flex-1">
                 <FormProvider {...form}>
                     <FormAccess

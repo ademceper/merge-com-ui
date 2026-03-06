@@ -11,7 +11,6 @@ import { getErrorDescription, getErrorMessage } from "../../../shared/keycloak-u
 import { toast } from "sonner";
 import { FormAccess } from "../../components/form/form-access";
 import { FileUploadForm } from "../../components/json-file-upload/file-upload-form";
-import { ViewHeader } from "../../components/view-header/view-header";
 import { useRealm } from "../../context/realm-context/realm-context";
 import {
     addTrailingSlash,
@@ -90,8 +89,7 @@ const handleFileChange = async (contents: string) => {
 
     return (
         <>
-            <ViewHeader titleKey="importClient" subKey="clientsExplain" />
-            <div className="p-6">
+                        <div className="p-6">
                 <FormAccess
                     isHorizontal
                     onSubmit={handleSubmit(save)}

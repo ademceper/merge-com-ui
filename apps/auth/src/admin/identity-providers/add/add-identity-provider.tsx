@@ -9,7 +9,6 @@ import { getErrorDescription, getErrorMessage } from "../../../shared/keycloak-u
 import { toast } from "sonner";
 import { DynamicComponents } from "../../components/dynamic/dynamic-components";
 import { FormAccess } from "../../components/form/form-access";
-import { ViewHeader } from "../../components/view-header/view-header";
 import { useRealm } from "../../context/realm-context/realm-context";
 import { useServerInfo } from "../../context/server-info/server-info-provider";
 import { toUpperCase } from "../../util";
@@ -80,12 +79,7 @@ const navigate = useNavigate();
 
     return (
         <>
-            <ViewHeader
-                titleKey={t("addIdentityProvider", {
-                    provider: toUpperCase(providerId)
-                })}
-            />
-            <div className="p-6">
+                        <div className="p-6">
                 <FormAccess
                     role="manage-identity-providers"
                     isHorizontal

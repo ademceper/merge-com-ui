@@ -6,9 +6,9 @@ import { getErrorDescription, getErrorMessage, HelpItem,
     useFetch } from "../../../shared/keycloak-ui-shared";
 import { toast } from "sonner";
 import { Alert, AlertDescription, AlertTitle } from "@merge-rd/ui/components/alert";
-import { Button } from "@merge-rd/ui/components/button";
+import { Button, buttonVariants } from "@merge-rd/ui/components/button";
 import { Label } from "@merge-rd/ui/components/label";
-import { DropdownMenuItem } from "@merge-rd/ui/components/dropdown-menu";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@merge-rd/ui/components/dropdown-menu";
 import { useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
@@ -21,7 +21,6 @@ import { KeyValueInput } from "../../components/key-value-form/key-value-input";
 import type { KeyValueType } from "../../components/key-value-form/key-value-convert";
 import { KeycloakSpinner } from "../../../shared/keycloak-ui-shared";
 import { MultiLineInput } from "../../components/multi-line-input/multi-line-input";
-import { ViewHeader } from "../../components/view-header/view-header";
 import { useAccess } from "../../context/access/access";
 import { convertFormValuesToObject, convertToFormValues } from "../../util";
 import { useParams } from "../../utils/useParams";
@@ -145,23 +144,28 @@ const form = useForm<SubmittedResource>({
     return (
         <>
             <DeleteConfirm />
-            <ViewHeader
-                titleKey={resourceId ? resource?.name! : "createResource"}
-                dropdownItems={
-                    resourceId
-                        ? [
-                              <DropdownMenuItem
-                                  key="delete"
-                                  data-testid="delete-resource"
-                                  disabled={isDisabled}
-                                  onClick={() => toggleDeleteDialog()}
-                              >
-                                  {t("delete")}
-                              </DropdownMenuItem>
-                          ]
-                        : undefined
-                }
-            />
+            {resourceId && (
+                <div className="flex flex-wrap items-center justify-between gap-2">
+                    <div className="flex flex-wrap items-center gap-2" />
+                    <div className="flex items-center gap-2">
+                        <DropdownMenu>
+                            <DropdownMenuTrigger data-testid="action-dropdown" className={buttonVariants()}>
+                                {t("action")}
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent align="end">
+                                <DropdownMenuItem
+                                    key="delete"
+                                    data-testid="delete-resource"
+                                    disabled={isDisabled}
+                                    onClick={() => toggleDeleteDialog()}
+                                >
+                                    {t("delete")}
+                                </DropdownMenuItem>
+                            </DropdownMenuContent>
+                        </DropdownMenu>
+                    </div>
+                </div>
+            )}
             <div className="p-6">
                 <FormProvider {...form}>
                     <FormAccess

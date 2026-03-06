@@ -1,4 +1,7 @@
-import { DropdownMenuItem } from "@merge-rd/ui/components/dropdown-menu";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@merge-rd/ui/components/dropdown-menu";
+import { Label } from "@merge-rd/ui/components/label";
+import { Switch } from "@merge-rd/ui/components/switch";
+import { buttonVariants } from "@merge-rd/ui/components/button";
 import { ReactElement } from "react";
 import { Controller, useFormContext } from "react-hook-form";
 import { useTranslation } from "react-i18next";
@@ -18,7 +21,7 @@ import {
 } from "@merge-rd/ui/components/alert-dialog";
 import { useConfirmDialog } from "../../components/confirm-dialog/confirm-dialog";
 import { useState } from "react";
-import { ViewHeader } from "../../components/view-header/view-header";
+
 import { useRealm } from "../../context/realm-context/realm-context";
 import { CustomUserFederationRouteParams } from "../routes/custom-user-federation";
 import { toUserFederation } from "../routes/user-federation";
@@ -91,39 +94,38 @@ const { realm } = useRealm();
                 defaultValue={["true"]}
                 control={control}
                 render={({ field }) =>
-                    !id ? (
-                        <ViewHeader
-                            titleKey={t("addProvider", {
-                                provider: provider,
-                                count: 1
-                            })}
-                        />
-                    ) : (
-                        <ViewHeader
-                            divider={!noDivider}
-                            titleKey={provider}
-                            dropdownItems={[
-                                ...dropdownItems,
-                                <DropdownMenuItem
-                                    key="delete"
-                                    onClick={() => setDeleteDialogOpen(true)}
-                                    data-testid="delete-cmd"
-                                >
-                                    {t("deleteProvider")}
-                                </DropdownMenuItem>
-                            ]}
-                            isEnabled={
-                                field.value?.[0] === "true" || field.value === "true"
-                            }
-                            onToggle={value => {
-                                if (!value) {
-                                    toggleDisableDialog();
-                                } else {
-                                    field.onChange([value.toString()]);
-                                    save();
-                                }
-                            }}
-                        />
+                    !id ? null : (
+                        <div className="flex flex-wrap items-center justify-between gap-2">
+                            <div className="flex flex-wrap items-center gap-2" />
+                            <div className="flex items-center gap-2">
+                                <div className="flex items-center gap-2 mr-4">
+                                    <Label htmlFor="user-federation-switch" className="text-sm">{t("enabled")}</Label>
+                                    <Switch id="user-federation-switch" data-testid="user-federation-switch" checked={field.value?.[0] === "true" || field.value === "true"} aria-label={t("enabled")} onCheckedChange={value => {
+                                        if (!value) {
+                                            toggleDisableDialog();
+                                        } else {
+                                            field.onChange([value.toString()]);
+                                            save();
+                                        }
+                                    }} />
+                                </div>
+                                <DropdownMenu>
+                                    <DropdownMenuTrigger data-testid="action-dropdown" className={buttonVariants()}>
+                                        {t("action")}
+                                    </DropdownMenuTrigger>
+                                    <DropdownMenuContent align="end">
+                                        {dropdownItems}
+                                        <DropdownMenuItem
+                                            key="delete"
+                                            onClick={() => setDeleteDialogOpen(true)}
+                                            data-testid="delete-cmd"
+                                        >
+                                            {t("deleteProvider")}
+                                        </DropdownMenuItem>
+                                    </DropdownMenuContent>
+                                </DropdownMenu>
+                            </div>
+                        </div>
                     )
                 }
             />

@@ -1,9 +1,7 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@merge-rd/ui/components/tabs";
 import { Trans, useTranslation } from "react-i18next";
 import { Link, useNavigate, useParams } from "react-router-dom";
-import { ViewHeader } from "../components/view-header/view-header";
 import { useRealm } from "../context/realm-context/realm-context";
-import helpUrls from "../help-urls";
 import { toRealmSettings } from "../realm-settings/routes/realm-settings";
 import { AdminEvents } from "./admin-events";
 import { toEvents } from "./routes/events";
@@ -20,22 +18,7 @@ export default function EventsSection() {
 
     return (
         <>
-            <ViewHeader
-                titleKey="titleEvents"
-                subKey={
-                    <Trans i18nKey="eventExplain">
-                        If you want to configure user events, Admin events or Event
-                        listeners, please enter
-                        <Link to={toRealmSettings({ realm, tab: "events" })}>
-                            {t("eventConfig")}
-                        </Link>
-                        page realm settings to configure.
-                    </Trans>
-                }
-                helpUrl={helpUrls.eventsUrl}
-                divider
-            />
-            <div className="pt-4 pb-6 px-0">
+                        <div className="pt-4 pb-6 px-0">
                 <Tabs
                     value={currentTab}
                     onValueChange={(value) =>

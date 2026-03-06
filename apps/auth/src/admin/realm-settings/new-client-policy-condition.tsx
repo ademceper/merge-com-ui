@@ -20,7 +20,6 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import { useAdminClient } from "../admin-client";
 import { DynamicComponents } from "../components/dynamic/dynamic-components";
 import { FormAccess } from "../components/form/form-access";
-import { ViewHeader } from "../components/view-header/view-header";
 import { useRealm } from "../context/realm-context/realm-context";
 import { useServerInfo } from "../context/server-info/server-info-provider";
 import { toEditClientPolicy } from "./routes/edit-client-policy";
@@ -174,17 +173,7 @@ const navigate = useNavigate();
 
     return (
         <>
-            <ViewHeader
-                titleKey={
-                    conditionName
-                        ? isGlobalPolicy
-                            ? t("viewCondition")
-                            : t("editCondition")
-                        : t("addCondition")
-                }
-                divider
-            />
-            <div className="p-6">
+                        <div className="p-6">
                 <FormAccess
                     isHorizontal
                     role="manage-realm"

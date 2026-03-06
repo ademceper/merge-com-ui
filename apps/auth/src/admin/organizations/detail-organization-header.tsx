@@ -1,5 +1,7 @@
-import { DropdownMenuItem } from "@merge-rd/ui/components/dropdown-menu";
-import { ViewHeader } from "../components/view-header/view-header";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@merge-rd/ui/components/dropdown-menu";
+import { Label } from "@merge-rd/ui/components/label";
+import { Switch } from "@merge-rd/ui/components/switch";
+import { buttonVariants } from "@merge-rd/ui/components/button";
 import { useTranslation } from "react-i18next";
 import {
     AlertDialog,
@@ -79,28 +81,36 @@ const id = useWatch({ name: "id" });
                         </AlertDialogContent>
                     </AlertDialog>
                     <DisableConfirm />
-                    <ViewHeader
-                        titleKey={name || ""}
-                        divider={false}
-                        dropdownItems={[
-                            <DropdownMenuItem
-                                data-testid="delete-client"
-                                key="delete"
-                                onClick={() => setDeleteDialogOpen(true)}
-                            >
-                                {t("delete")}
-                            </DropdownMenuItem>
-                        ]}
-                        isEnabled={value}
-                        onToggle={value => {
-                            if (!value) {
-                                toggleDisableDialog();
-                            } else {
-                                onChange(value);
-                                save();
-                            }
-                        }}
-                    />
+                    <div className="flex flex-wrap items-center justify-between gap-2">
+                        <div className="flex flex-wrap items-center gap-2" />
+                        <div className="flex items-center gap-2">
+                            <div className="flex items-center gap-2 mr-4">
+                                <Label htmlFor="organization-switch" className="text-sm">{t("enabled")}</Label>
+                                <Switch id="organization-switch" data-testid="organization-switch" checked={value} aria-label={t("enabled")} onCheckedChange={val => {
+                                    if (!val) {
+                                        toggleDisableDialog();
+                                    } else {
+                                        onChange(val);
+                                        save();
+                                    }
+                                }} />
+                            </div>
+                            <DropdownMenu>
+                                <DropdownMenuTrigger data-testid="action-dropdown" className={buttonVariants()}>
+                                    {t("action")}
+                                </DropdownMenuTrigger>
+                                <DropdownMenuContent align="end">
+                                    <DropdownMenuItem
+                                        data-testid="delete-client"
+                                        key="delete"
+                                        onClick={() => setDeleteDialogOpen(true)}
+                                    >
+                                        {t("delete")}
+                                    </DropdownMenuItem>
+                                </DropdownMenuContent>
+                            </DropdownMenu>
+                        </div>
+                    </div>
                 </>
             )}
         />

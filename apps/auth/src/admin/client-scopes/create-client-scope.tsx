@@ -7,7 +7,6 @@ import {
     ClientScopeDefaultOptionalType,
     changeScope
 } from "../components/client-scope/client-scope-types";
-import { ViewHeader } from "../components/view-header/view-header";
 import { useRealm } from "../context/realm-context/realm-context";
 import { convertFormValuesToObject } from "../util";
 import { ScopeForm } from "./details/scope-form";
@@ -58,8 +57,7 @@ const onSubmit = async (formData: ClientScopeDefaultOptionalType) => {
 
     return (
         <>
-            <ViewHeader titleKey="createClientScope" />
-            <div className="p-0">
+                        <div className="p-0">
                 <div className="bg-muted/30 p-4">
                     <ScopeForm save={onSubmit} />
                 </div>

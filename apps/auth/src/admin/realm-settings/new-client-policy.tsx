@@ -4,8 +4,9 @@ import { getErrorDescription, getErrorMessage, HelpItem,
     TextControl,
     useFetch } from "../../shared/keycloak-ui-shared";
 import { toast } from "sonner";
-import { Button } from "@merge-rd/ui/components/button";
-import { DropdownMenuItem } from "@merge-rd/ui/components/dropdown-menu";
+import { Button, buttonVariants } from "@merge-rd/ui/components/button";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@merge-rd/ui/components/dropdown-menu";
+import { Switch } from "@merge-rd/ui/components/switch";
 import { Label } from "@merge-rd/ui/components/label";
 import { Separator } from "@merge-rd/ui/components/separator";
 import { Textarea } from "@merge-rd/ui/components/textarea";
@@ -18,7 +19,7 @@ import { useAdminClient } from "../admin-client";
 import { useConfirmDialog } from "../components/confirm-dialog/confirm-dialog";
 import { FormAccess } from "../components/form/form-access";
 import { KeycloakSpinner } from "../../shared/keycloak-ui-shared";
-import { ViewHeader } from "../components/view-header/view-header";
+
 import { useRealm } from "../context/realm-context/realm-context";
 import { useServerInfo } from "../context/server-info/server-info-provider";
 import { useParams } from "../utils/useParams";
@@ -375,48 +376,42 @@ const [isGlobalPolicy, setIsGlobalPolicy] = useState(false);
                     <>
                         <DisableConfirm />
                         <DeleteConfirm />
-                        <ViewHeader
-                            titleKey={
-                                showAddConditionsAndProfilesForm || policyName
-                                    ? policyName
-                                    : "createPolicy"
-                            }
-                            badges={[
-                                {
-                                    id: "global-client-policy-badge",
-                                    text: isGlobalPolicy ? (
-                                        <Label color="blue">{t("global")}</Label>
-                                    ) : (
-                                        ""
-                                    )
-                                }
-                            ]}
-                            divider
-                            dropdownItems={
-                                (showAddConditionsAndProfilesForm || policyName) &&
-                                !isGlobalPolicy
-                                    ? [
+                        <div className="flex flex-wrap items-center justify-between gap-2">
+                            <div className="flex flex-wrap items-center gap-2">
+                                {isGlobalPolicy && (
+                                    <Label color="blue">{t("global")}</Label>
+                                )}
+                            </div>
+                            <div className="flex items-center gap-2">
+                                <div className="flex items-center gap-2 mr-4">
+                                    <Label htmlFor="client-policy-switch" className="text-sm">{t("enabled")}</Label>
+                                    <Switch id="client-policy-switch" data-testid="client-policy-switch" disabled={isGlobalPolicy} checked={field.value} aria-label={t("enabled")} onCheckedChange={async value => {
+                                        if (!value) {
+                                            toggleDisableDialog();
+                                        } else {
+                                            field.onChange(value);
+                                            await save();
+                                        }
+                                    }} />
+                                </div>
+                                {(showAddConditionsAndProfilesForm || policyName) && !isGlobalPolicy && (
+                                    <DropdownMenu>
+                                        <DropdownMenuTrigger data-testid="action-dropdown" className={buttonVariants()}>
+                                            {t("action")}
+                                        </DropdownMenuTrigger>
+                                        <DropdownMenuContent align="end">
                                             <DropdownMenuItem
-                                              key="delete"
-                                              data-testid="deleteClientPolicyDropdown"
-                                              onClick={() => toggleDeleteDialog()}
-                                          >
-                                              {t("deleteClientPolicy")}
-                                          </DropdownMenuItem>
-                                      ]
-                                    : undefined
-                            }
-                            isReadOnly={isGlobalPolicy}
-                            isEnabled={field.value}
-                            onToggle={async value => {
-                                if (!value) {
-                                    toggleDisableDialog();
-                                } else {
-                                    field.onChange(value);
-                                    await save();
-                                }
-                            }}
-                        />
+                                                key="delete"
+                                                data-testid="deleteClientPolicyDropdown"
+                                                onClick={() => toggleDeleteDialog()}
+                                            >
+                                                {t("deleteClientPolicy")}
+                                            </DropdownMenuItem>
+                                        </DropdownMenuContent>
+                                    </DropdownMenu>
+                                )}
+                            </div>
+                        </div>
                     </>
                 )}
             />

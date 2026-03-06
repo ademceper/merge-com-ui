@@ -9,7 +9,6 @@ import { useNavigate, useParams as useRouterParams } from "react-router-dom";
 import { useAdminClient } from "../../admin-client";
 import { MapperList } from "../../client-scopes/details/mapper-list";
 import { KeycloakSpinner } from "../../../shared/keycloak-ui-shared";
-import { ViewHeader } from "../../components/view-header/view-header";
 import { useParams } from "../../utils/useParams";
 import { DedicatedScopeDetailsParams } from "../routes/dedicated-scope-details";
 import { toMapper } from "../routes/mapper";
@@ -99,12 +98,7 @@ const [client, setClient] = useState<ClientRepresentation>();
 
     return (
         <>
-            <ViewHeader
-                titleKey={client.clientId! + "-dedicated"}
-                subKey="dedicatedScopeExplain"
-                divider={false}
-            />
-            <div className="p-0">
+                        <div className="p-0">
                 <div className="bg-muted/30">
                     {renderContent()}
                 </div>
