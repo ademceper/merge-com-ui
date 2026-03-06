@@ -52,6 +52,8 @@ export const TextControl = <T extends FieldValues, P extends FieldPath<T> = Fiel
             <Input
                 {...rest}
                 {...field}
+                variant={"secondary"}
+                size={"xl"}
                 required={required}
                 id={props.name}
                 data-testid={props["data-testid"] || props.name}

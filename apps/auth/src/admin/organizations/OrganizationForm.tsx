@@ -80,9 +80,10 @@ export const OrganizationForm = ({ readOnly = false }: OrganizationFormProps) =>
             <TextControl
                 label={t("redirectUrl")}
                 name="redirectUrl"
+                variant="secondary"
                 labelIcon={t("organizationRedirectUrlHelp")}
             />
-            <TextAreaControl name="description" label={t("description")} />
+            <TextAreaControl name="description" label={t("description")} variant="secondary" />
         </div>
     );
 };

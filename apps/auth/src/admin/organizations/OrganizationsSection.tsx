@@ -13,12 +13,12 @@ import {
     AlertDialogTitle
 } from "@merge-rd/ui/components/alert-dialog";
 import {
-    Dialog,
-    DialogContent,
-    DialogFooter,
-    DialogHeader,
-    DialogTitle
-} from "@merge-rd/ui/components/dialog";
+    Drawer,
+    DrawerContent,
+    DrawerFooter,
+    DrawerHeader,
+    DrawerTitle
+} from "@merge-rd/ui/components/drawer";
 import {
     DataTable,
     DataTableRowActions,
@@ -169,28 +169,23 @@ export default function OrganizationSection() {
                     </AlertDialogContent>
                 </AlertDialog>
 
-                <Dialog open={createDialogOpen} onOpenChange={setCreateDialogOpen}>
-                    <FormProvider {...createForm}>
-                        <DialogContent className="max-w-lg">
-                            <DialogHeader>
-                                <DialogTitle>{t("createOrganization")}</DialogTitle>
-                            </DialogHeader>
-                            <FormAccess
-                                id="create-org-form"
-                                role="anyone"
-                                onSubmit={createForm.handleSubmit(onCreateSave)}
-                                isHorizontal
-                            >
-                                <OrganizationForm />
-                            </FormAccess>
-                            <DialogFooter>
-                                <Button
-                                    type="button"
-                                    variant="outline"
-                                    onClick={() => setCreateDialogOpen(false)}
+                <Drawer open={createDialogOpen} onOpenChange={setCreateDialogOpen}>
+                    <DrawerContent>
+                        <FormProvider {...createForm}>
+                            <DrawerHeader>
+                                <DrawerTitle>{t("createOrganization")}</DrawerTitle>
+                            </DrawerHeader>
+                            <div className="flex-1 overflow-y-auto px-4">
+                                <FormAccess
+                                    id="create-org-form"
+                                    role="anyone"
+                                    onSubmit={createForm.handleSubmit(onCreateSave)}
+                                    isHorizontal
                                 >
-                                    {t("cancel")}
-                                </Button>
+                                    <OrganizationForm />
+                                </FormAccess>
+                            </div>
+                            <DrawerFooter>
                                 <Button
                                     type="submit"
                                     form="create-org-form"
@@ -205,10 +200,17 @@ export default function OrganizationSection() {
                                 >
                                     {t("save")}
                                 </Button>
-                            </DialogFooter>
-                        </DialogContent>
-                    </FormProvider>
-                </Dialog>
+                                <Button
+                                    type="button"
+                                    variant="outline"
+                                    onClick={() => setCreateDialogOpen(false)}
+                                >
+                                    {t("cancel")}
+                                </Button>
+                            </DrawerFooter>
+                        </FormProvider>
+                    </DrawerContent>
+                </Drawer>
 
                 <DataTable
                     key={key}
