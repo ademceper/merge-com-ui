@@ -1,5 +1,5 @@
 import { Editor } from '@tiptap/core';
-import { Link, LinkIcon, LucideIcon } from 'lucide-react';
+
 import { useMemo, useRef, useState } from 'react';
 import { DEFAULT_VARIABLE_TRIGGER_CHAR } from '../../nodes/variable/variable';
 import { DEFAULT_PLACEHOLDER_URL, useMailyContext } from '../../provider';
@@ -9,6 +9,8 @@ import { BaseButton } from '../base-button';
 import { Popover, PopoverContent, PopoverTrigger } from '../popover';
 import { InputAutocomplete } from './input-autocomplete';
 import { Tooltip, TooltipContent, TooltipTrigger } from './tooltip';
+import { Link } from '@phosphor-icons/react'
+import type { Icon as LucideIcon } from '@phosphor-icons/react';;
 
 type LinkInputPopoverProps = {
   defaultValue?: string;
@@ -129,7 +131,7 @@ export function LinkInputPopover(props: LinkInputPopoverProps) {
             {isEditing && (
               <div className="mly-relative">
                 <div className="mly-absolute mly-inset-y-0 mly-left-1.5 mly-z-10 mly-flex mly-items-center">
-                  <LinkIcon className="mly-h-3 mly-w-3 mly-stroke-[2.5] mly-text-midnight-gray" />
+                  <Link className="mly-h-3 mly-w-3 mly-stroke-[2.5] mly-text-midnight-gray" />
                 </div>
 
                 <InputAutocomplete

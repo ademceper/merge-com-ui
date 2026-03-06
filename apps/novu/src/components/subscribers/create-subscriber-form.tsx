@@ -1,6 +1,6 @@
 import { loadLanguage } from '@uiw/codemirror-extensions-langs';
 import { useFormContext } from 'react-hook-form';
-import { RiCloseCircleLine, RiMailLine } from 'react-icons/ri';
+
 import { Link } from 'react-router-dom';
 import { z } from 'zod';
 import { Avatar, AvatarFallback, AvatarImage } from '@merge-rd/ui/components/avatar';
@@ -15,6 +15,7 @@ import { PhoneInput } from '../primitives/phone-input';
 import { Separator } from '@merge-rd/ui/components/separator';
 import { CreateSubscriberFormSchema } from './schema';
 import { TimezoneSelect } from './timezone-select';
+import { Envelope, XCircle } from '@phosphor-icons/react';
 
 const extensions = [loadLanguage('json')?.extension ?? []];
 const basicSetup = { lineNumbers: true, defaultKeymap: true };
@@ -126,7 +127,7 @@ export const CreateSubscriberForm = () => {
                     inlineTrailingNode={
                       <div className="flex items-center">
                         <CompactButton
-                          icon={RiCloseCircleLine}
+                          icon={XCircle}
                           variant="ghost"
                           onClick={() => {
                             form.setValue('subscriberId', '', {
@@ -163,7 +164,7 @@ export const CreateSubscriberForm = () => {
                     value={field.value}
                     onChange={field.onChange}
                     hasError={!!fieldState.error}
-                    leadingIcon={RiMailLine}
+                    leadingIcon={Envelope}
                     size="xs"
                   />
                 </FormControl>

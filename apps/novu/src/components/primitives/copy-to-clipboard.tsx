@@ -1,7 +1,8 @@
-import { Check } from 'lucide-react';
+
 import { useState } from 'react';
-import { RiFileCopyLine } from 'react-icons/ri';
+
 import { cn } from '@merge-rd/ui/lib/utils';
+import { Check, Copy } from '@phosphor-icons/react';
 
 interface CopyToClipboardProps {
   content: string;
@@ -40,7 +41,7 @@ export function CopyToClipboard({
       )}
       title={title}
     >
-      {isCopied ? <Check className="h-4 w-4" /> : <RiFileCopyLine className="h-4 w-4" />}
+      {isCopied ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
     </button>
   );
 }

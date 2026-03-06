@@ -1,6 +1,5 @@
 import { memo, useCallback } from 'react';
 import { type Control, Controller, Path, useFieldArray } from 'react-hook-form';
-import { RiAddLine, RiDeleteBin2Line, RiDeleteBinLine, RiErrorWarningLine } from 'react-icons/ri';
 
 import { Button } from '@merge-rd/ui/components/button';
 import { InputPure, InputRoot } from '@/components/primitives/input';
@@ -9,6 +8,12 @@ import { cn } from '@merge-rd/ui/lib/utils';
 
 import { getMarginClassPx } from '../utils/ui-helpers';
 import type { SchemaEditorFormValues } from '../utils/validation-schema';
+import {
+  Plus,
+  Trash,
+  TrashSimple,
+  WarningCircle,
+} from '@phosphor-icons/react';
 
 interface EnumChoiceProps {
   enumChoicePath: string;
@@ -31,7 +36,7 @@ const EnumChoice = memo<EnumChoiceProps>(function EnumChoice({ enumChoicePath, e
                 <Tooltip>
                   <TooltipTrigger asChild>
                     <span className="inline-flex cursor-default items-center justify-center pl-1 pr-1">
-                      <RiErrorWarningLine className={cn('text-destructive h-4 w-4 shrink-0')} />
+                      <WarningCircle className={cn('text-destructive h-4 w-4 shrink-0')} />
                     </span>
                   </TooltipTrigger>
                   <TooltipContent side="top" sideOffset={5}>
@@ -48,7 +53,7 @@ const EnumChoice = memo<EnumChoiceProps>(function EnumChoice({ enumChoicePath, e
         variant="error"
         mode="ghost"
         size="2xs"
-        leadingIcon={RiDeleteBin2Line}
+        leadingIcon={Trash}
         onClick={onRemove}
         aria-label="Delete property"
         className={cn('border ml-1.5! h-7 w-7 border-neutral-200')}
@@ -90,7 +95,7 @@ export const EnumSection = memo<EnumSectionProps>(function EnumSection({ enumArr
         variant="secondary"
         mode="lighter"
         onClick={handleAddChoice}
-        leadingIcon={RiAddLine}
+        leadingIcon={Plus}
         className="mt-1"
       >
         Add Choice

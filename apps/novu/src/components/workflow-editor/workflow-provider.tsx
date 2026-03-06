@@ -1,9 +1,9 @@
 import { PatchWorkflowDto, StepCreateDto, StepResponseDto, UpdateWorkflowDto, WorkflowResponseDto } from '@novu/shared';
-import { Cross2Icon } from '@radix-ui/react-icons';
+
 import { QueryObserverResult, RefetchOptions } from '@tanstack/react-query';
-import { CheckCircleIcon } from 'lucide-react';
+
 import { createContext, ReactNode, useCallback, useEffect, useLayoutEffect, useMemo, useState } from 'react';
-import { RiAlertFill } from 'react-icons/ri';
+
 import { useBlocker, useNavigate, useParams } from 'react-router-dom';
 import {
   Dialog,
@@ -26,6 +26,7 @@ import { getIdFromSlug, STEP_DIVIDER } from '@/utils/id-utils';
 import { buildRoute, ROUTES } from '@/utils/routes';
 import { showErrorToast } from './toasts';
 import { WorkflowSchemaProvider } from './workflow-schema-provider';
+import { CheckCircle, Warning, X } from '@phosphor-icons/react';
 
 export type DraftStep = StepCreateDto & {
   stepId: string;
@@ -273,15 +274,15 @@ const SavingChangesDialog = ({
             >
               <div className="transition-opacity duration-300">
                 {isUpdatePatchPending ? (
-                  <RiAlertFill className="text-warning animate-in fade-in size-6" />
+                  <Warning weight="fill" className="text-warning animate-in fade-in size-6" />
                 ) : (
-                  <CheckCircleIcon className="text-success animate-in fade-in size-6" />
+                  <CheckCircle className="text-success animate-in fade-in size-6" />
                 )}
               </div>
             </div>
             {isUpdatePatchPending && (
               <DialogClose>
-                <Cross2Icon className="size-4" />
+                <X className="size-4" />
                 <span className="sr-only">Close</span>
               </DialogClose>
             )}

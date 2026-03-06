@@ -3,7 +3,7 @@ import { standardSchemaResolver } from '@hookform/resolvers/standard-schema';
 import { PermissionsEnum } from '@novu/shared';
 import { useLayoutEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { RiLinkM } from 'react-icons/ri';
+
 import * as z from 'zod';
 import {
   Form,
@@ -25,6 +25,7 @@ import { Input } from '@/components/primitives/input';
 import { PermissionButton } from '../primitives/permission-button';
 import { Popover, PopoverContent, PopoverPortal, PopoverTrigger } from '@/components/primitives/popover';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/primitives/tooltip';
+import { Link } from '@phosphor-icons/react';
 
 const formSchema = z.object({ bridgeUrl: z.url() });
 
@@ -139,7 +140,7 @@ export const EditBridgeUrlButton = () => {
                     <FormItem>
                       <FormLabel required>Bridge Endpoint URL</FormLabel>
                       <FormControl>
-                        <Input leadingIcon={RiLinkM} id={`bridgeUrl-${field.name}`} {...field} readOnly={isReadOnly} />
+                        <Input leadingIcon={Link} id={`bridgeUrl-${field.name}`} {...field} readOnly={isReadOnly} />
                       </FormControl>
                       <FormMessage>URL (e.g., https://your.api.com/api/novu)</FormMessage>
                     </FormItem>

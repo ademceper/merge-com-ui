@@ -1,12 +1,13 @@
 import { motion } from 'motion/react';
 import { useState } from 'react';
-import { RiSparklingLine } from 'react-icons/ri';
+
 import { useTelemetry } from '../../hooks/use-telemetry';
 import { TelemetryEvent } from '../../utils/telemetry';
 import { CodeBlock, Language } from '../primitives/code-block';
 import { InlineToast } from '../primitives/inline-toast';
 import { Tabs, TabsList, TabsTrigger } from '@merge-rd/ui/components/tabs';
 import { Framework, InstallationStep } from './framework-guides.instructions';
+import { Sparkle } from '@phosphor-icons/react';
 
 type PackageManager = 'npm' | 'pnpm' | 'yarn';
 
@@ -240,7 +241,7 @@ function StepButton({
             className={`${copied ? 'opacity-0' : 'opacity-100'} flex flex-row items-center gap-1 transition-opacity`}
             aria-hidden={copied}
           >
-            <RiSparklingLine className="w-3.5 h-3.5 flex-none order-0" />
+            <Sparkle className="w-3.5 h-3.5 flex-none order-0" />
             <span className="px-1 w-[98px] h-4 flex flex-row justify-center items-center flex-none order-1">
               <span className="w-[90px] h-4 flex items-center flex-none order-0">{buttonText}</span>
             </span>

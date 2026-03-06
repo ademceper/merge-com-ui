@@ -1,6 +1,6 @@
 import { NodeViewProps } from '@tiptap/core';
 import { NodeViewWrapper } from '@tiptap/react';
-import { AlertTriangle, Braces, Pencil } from 'lucide-react';
+
 import { useMemo } from 'react';
 import { Popover, PopoverContent, PopoverTrigger } from '../../components/popover';
 import { Divider } from '../../components/ui/divider';
@@ -9,6 +9,7 @@ import { cn } from '../../utils/classname';
 import { AUTOCOMPLETE_PASSWORD_MANAGERS_OFF } from '../../utils/constants';
 import { getNodeOptions } from '../../utils/node-options';
 import { DEFAULT_RENDER_VARIABLE_FUNCTION, type RenderVariableFunction, VariableOptions } from './variable';
+import { BracketsCurly, Pencil, WarningCircle } from '@phosphor-icons/react';
 
 export function VariableView(props: NodeViewProps) {
   const { node, updateAttributes, editor } = props;
@@ -95,7 +96,7 @@ export const DefaultRenderVariable: RenderVariableFunction = (props) => {
   if (from === 'button-variable') {
     return (
       <div className="mly-inline-grid mly-h-7 mly-max-w-xs mly-grid-cols-[12px_1fr] mly-items-center mly-gap-1.5 mly-rounded-md mly-border mly-border-[var(--button-var-border-color)] mly-px-2 mly-font-mono mly-text-sm">
-        <Braces className="mly-h-3 mly-w-3 mly-shrink-0 mly-stroke-[2.5]" />
+        <BracketsCurly className="mly-h-3 mly-w-3 mly-shrink-0 mly-stroke-[2.5]" />
         <span className="mly-min-w-0 mly-truncate mly-text-left">{name}</span>
       </div>
     );
@@ -109,7 +110,7 @@ export const DefaultRenderVariable: RenderVariableFunction = (props) => {
           !valid && 'mly-border-rose-400 mly-bg-rose-50 mly-text-rose-600 hover:mly-bg-rose-100'
         )}
       >
-        <Braces className="mly-h-3 mly-w-3 mly-shrink-0 mly-stroke-[2.5] mly-text-rose-600" />
+        <BracketsCurly className="mly-h-3 mly-w-3 mly-shrink-0 mly-stroke-[2.5] mly-text-rose-600" />
         <span className="mly-min-w-0 mly-truncate mly-text-left">{name}</span>
       </div>
     );
@@ -120,10 +121,10 @@ export const DefaultRenderVariable: RenderVariableFunction = (props) => {
       tabIndex={-1}
       className="mly-inline-flex mly-items-center mly-gap-[var(--variable-icon-gap)] mly-rounded-full mly-border mly-border-gray-200 mly-px-1.5 mly-py-0.5 mly-leading-none"
     >
-      <Braces className="mly-size-[var(--variable-icon-size)] mly-shrink-0 mly-stroke-[2.5] mly-text-rose-600" />
+      <BracketsCurly className="mly-size-[var(--variable-icon-size)] mly-shrink-0 mly-stroke-[2.5] mly-text-rose-600" />
       {name}
       {required && !fallback && (
-        <AlertTriangle className="mly-size-[var(--variable-icon-size)] mly-shrink-0 mly-stroke-[2.5]" />
+        <WarningCircle className="mly-size-[var(--variable-icon-size)] mly-shrink-0 mly-stroke-[2.5]" />
       )}
     </span>
   );

@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { RiCheckLine, RiFileCopyLine, RiLoaderLine } from 'react-icons/ri';
+import { Check, Copy, Spinner } from '@phosphor-icons/react';
 
 function CodeBlock({ command }: { command: string }) {
   const [copied, setCopied] = useState(false);
@@ -31,9 +31,9 @@ function CodeBlock({ command }: { command: string }) {
           className="flex size-6 items-center justify-center rounded p-1.5 transition-colors hover:bg-white/10"
         >
           {copied ? (
-            <RiCheckLine className="size-3.5 text-[#99a0ae]" />
+            <Check className="size-3.5 text-[#99a0ae]" />
           ) : (
-            <RiFileCopyLine className="size-3.5 text-[#99a0ae]" />
+            <Copy className="size-3.5 text-[#99a0ae]" />
           )}
         </button>
       </div>
@@ -114,7 +114,7 @@ export const ReactEmailNotPublished = ({ workflowId, stepId }: ReactEmailNotPubl
         {/* Status footer */}
         <div className="flex flex-col gap-2 py-4">
           <div className="flex items-center gap-1.5">
-            <RiLoaderLine className="size-5 animate-spin text-pink-500" />
+            <Spinner className="size-5 animate-spin text-pink-500" />
             <span className="text-label-sm bg-gradient-to-r from-[#dd2476] to-[#ff512f] bg-clip-text text-transparent">
               Waiting for React.Email template...
             </span>

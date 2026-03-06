@@ -1,5 +1,5 @@
 /** biome-ignore-all lint/correctness/useHookAtTopLevel: needs to be fixed */
-import { Space, Trash } from 'lucide-react';
+
 import { addColumnByIndex, removeColumnByIndex, updateColumnWidth } from '../../utils/columns';
 import { deleteNode } from '../../utils/delete-node';
 import { spacing } from '../../utils/spacing';
@@ -12,6 +12,7 @@ import { TooltipProvider } from '../ui/tooltip';
 import { VerticalAlignmentSwitch } from '../vertical-alignment-switch';
 import { ColumnsWidthConfig } from './columns-width-config';
 import { useColumnsState } from './use-columns-state';
+import { ArrowsHorizontal, Trash } from '@phosphor-icons/react';
 
 type ColumnsBubbleMenuProps = {
   editor: EditorBubbleMenuProps['editor'];
@@ -63,7 +64,7 @@ export function ColumnsBubbleMenuContent(props: ColumnsBubbleMenuProps) {
         <Divider />
 
         <Select
-          icon={Space}
+          icon={ArrowsHorizontal}
           label="Columns Gap"
           value={state.currentColumnsGap}
           options={[

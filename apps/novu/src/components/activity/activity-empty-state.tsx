@@ -1,7 +1,7 @@
 import { PermissionsEnum } from '@novu/shared';
 import { AnimatePresence, motion } from 'motion/react';
 import { useMemo } from 'react';
-import { RiCloseCircleLine, RiPlayCircleLine } from 'react-icons/ri';
+
 import { useNavigate } from 'react-router-dom';
 import { ActivityFilters } from '@/api/activity';
 import { defaultActivityFilters } from '@/components/activity/constants';
@@ -11,6 +11,7 @@ import { Protect } from '@/utils/protect';
 import { buildRoute, ROUTES } from '@/utils/routes';
 import { cn } from '@merge-rd/ui/lib/utils';
 import { ExternalLink } from '../shared/external-link';
+import { PlayCircle, XCircle } from '@phosphor-icons/react';
 
 interface ActivityEmptyStateProps {
   className?: string;
@@ -110,7 +111,7 @@ export function ActivityEmptyState({
               className="flex gap-6"
             >
               <Button variant="secondary" mode="outline" className="gap-2" onClick={onClearFilters}>
-                <RiCloseCircleLine className="h-4 w-4" />
+                <XCircle className="h-4 w-4" />
                 Clear Filters
               </Button>
             </motion.div>
@@ -131,7 +132,7 @@ export function ActivityEmptyState({
               </ExternalLink>
               <Protect permission={PermissionsEnum.EVENT_WRITE}>
                 <Button
-                  leadingIcon={RiPlayCircleLine}
+                  leadingIcon={PlayCircle}
                   variant="primary"
                   className="gap-2"
                   onClick={handleTriggerWorkflow}

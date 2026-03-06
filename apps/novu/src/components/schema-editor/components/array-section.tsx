@@ -1,6 +1,6 @@
 import { memo, useCallback, useMemo } from 'react';
 import { type Control, Path, useFieldArray, useWatch } from 'react-hook-form';
-import { RiAddLine } from 'react-icons/ri';
+
 import { v4 as uuidv4 } from 'uuid';
 
 import { Button } from '@merge-rd/ui/components/button';
@@ -15,6 +15,7 @@ import { newProperty } from '../utils/json-helpers';
 import { getMarginClassPx } from '../utils/ui-helpers';
 import type { PropertyListItem, SchemaEditorFormValues } from '../utils/validation-schema';
 import { PropertyTypeSelector } from './property-type-selector';
+import { Plus } from '@phosphor-icons/react';
 
 interface ArrayItemPropertyProps {
   className?: string;
@@ -161,7 +162,7 @@ export const ArraySection = memo<ArraySectionProps>(function ArraySection({
               variant="secondary"
               mode="lighter"
               onClick={handleAddArrayItemObjectProperty}
-              leadingIcon={RiAddLine}
+              leadingIcon={Plus}
               className="mt-1"
               disabled={isAtMaxDepth || readOnly}
             >

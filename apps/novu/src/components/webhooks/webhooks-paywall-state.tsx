@@ -1,5 +1,5 @@
 /** biome-ignore-all lint/correctness/useUniqueElementIds: working correctly */
-import { RiSparkling2Line } from 'react-icons/ri';
+
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@merge-rd/ui/components/button';
 import { ROUTES } from '@/utils/routes';
@@ -7,6 +7,7 @@ import { openInNewTab } from '@/utils/url';
 import { IS_SELF_HOSTED, SELF_HOSTED_UPGRADE_REDIRECT_URL } from '../../config';
 import { useTelemetry } from '../../hooks/use-telemetry';
 import { TelemetryEvent } from '../../utils/telemetry';
+import { Sparkle } from '@phosphor-icons/react';
 
 export function WebhooksPaywallState() {
   const track = useTelemetry();
@@ -46,7 +47,7 @@ export function WebhooksPaywallState() {
                 navigate(ROUTES.SETTINGS_BILLING);
               }
             }}
-            leadingIcon={RiSparkling2Line}
+            leadingIcon={Sparkle}
           >
             {IS_SELF_HOSTED ? 'Contact Sales' : 'Upgrade to Team Tier'}
           </Button>

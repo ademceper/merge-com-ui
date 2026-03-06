@@ -1,6 +1,7 @@
-import { ChevronLeftIcon, ChevronRightIcon } from '@radix-ui/react-icons';
+
 import { Button } from '@merge-rd/ui/components/button';
 import { cn } from '@merge-rd/ui/lib/utils';
+import { CaretLeft, CaretRight } from '@phosphor-icons/react';
 
 interface ArrowPaginationProps {
   page: number;
@@ -22,8 +23,8 @@ export function ArrowPagination({ page, hasMore, onPageChange, className }: Arro
             className="rounded-r-none border-0"
           >
             <div className="flex items-center">
-              <ChevronLeftIcon className="size-3" />
-              <ChevronLeftIcon className="-ml-2 size-3" />
+              <CaretLeft className="size-3" />
+              <CaretLeft className="-ml-2 size-3" />
             </div>
           </Button>
           <Button
@@ -33,7 +34,7 @@ export function ArrowPagination({ page, hasMore, onPageChange, className }: Arro
             onClick={() => onPageChange(Math.max(0, page - 1))}
             className="border-l-input rounded-none border-0 border-l"
           >
-            <ChevronLeftIcon className="size-3" />
+            <CaretLeft className="size-3" />
           </Button>
           <Button
             variant="secondary"
@@ -42,7 +43,7 @@ export function ArrowPagination({ page, hasMore, onPageChange, className }: Arro
             onClick={() => onPageChange(page + 1)}
             className="border-l-input rounded-none border-0 border-l"
           >
-            <ChevronRightIcon className="size-3" />
+            <CaretRight className="size-3" />
           </Button>
           <Button
             variant="secondary"
@@ -52,8 +53,8 @@ export function ArrowPagination({ page, hasMore, onPageChange, className }: Arro
             className="border-l-input rounded-l-none border-0 border-l"
           >
             <div className="flex items-center">
-              <ChevronRightIcon className="size-3" />
-              <ChevronRightIcon className="-ml-2 size-3" />
+              <CaretRight className="size-3" />
+              <CaretRight className="-ml-2 size-3" />
             </div>
           </Button>
         </div>

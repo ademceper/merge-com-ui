@@ -1,7 +1,8 @@
 import { AnimatePresence, motion } from 'motion/react';
 import { useEffect, useState } from 'react';
-import { RiArrowLeftLine, RiExternalLinkLine, RiLoaderLine } from 'react-icons/ri';
+
 import { SuggestionItem, toEmbedUrl } from './support-drawer-constants';
+import { ArrowLeft, ArrowSquareOut, Spinner } from '@phosphor-icons/react';
 
 type SuggestionCardProps = {
   item: SuggestionItem;
@@ -77,7 +78,7 @@ export function DocsIframeView({ url, onBack, onTrackBack, onTrackExternal }: Do
           }}
           className="hover:bg-neutral-100 -ml-1.5 flex size-5 items-center justify-center rounded transition-colors"
         >
-          <RiArrowLeftLine className="text-foreground-600 size-3.5" />
+          <ArrowLeft className="text-foreground-600 size-3.5" />
         </button>
         <span className="text-foreground-600 flex-1 text-sm font-medium leading-5 tracking-[-0.084px]">
           Documentation
@@ -90,7 +91,7 @@ export function DocsIframeView({ url, onBack, onTrackBack, onTrackExternal }: Do
           className="hover:bg-neutral-100 flex size-5 items-center justify-center rounded transition-colors"
           title="Open in new tab"
         >
-          <RiExternalLinkLine className="text-foreground-600 size-3.5" />
+          <ArrowSquareOut className="text-foreground-600 size-3.5" />
         </button>
       </div>
       <div className="relative flex-1 overflow-hidden rounded-b-xl">
@@ -102,7 +103,7 @@ export function DocsIframeView({ url, onBack, onTrackBack, onTrackExternal }: Do
               transition={{ duration: 0.25, ease: [0.25, 0.1, 0.25, 1] }}
               className="absolute inset-0 flex items-center justify-center bg-neutral-50"
             >
-              <RiLoaderLine className="text-foreground-400 size-6 animate-spin" />
+              <Spinner className="text-foreground-400 size-6 animate-spin" />
             </motion.div>
           )}
         </AnimatePresence>

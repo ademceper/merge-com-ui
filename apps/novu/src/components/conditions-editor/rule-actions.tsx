@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import { RiMore2Fill } from 'react-icons/ri';
+
 import { ActionWithRulesProps, getParentPath, isRuleGroup } from 'react-querybuilder';
 
 import { Delete } from '@/components/icons/delete';
@@ -14,6 +14,7 @@ import {
 } from '@merge-rd/ui/components/dropdown-menu';
 import { Tooltip, TooltipContent, TooltipPortal, TooltipTrigger } from '@/components/primitives/tooltip';
 import { useConditionsEditorContext } from './conditions-editor-context';
+import { DotsThree } from '@phosphor-icons/react';
 
 export const RuleActions = React.memo(
   ({ path, ruleOrGroup, context }: ActionWithRulesProps) => {
@@ -26,7 +27,7 @@ export const RuleActions = React.memo(
       <DropdownMenu modal={false}>
         <DropdownMenuTrigger asChild>
           <CompactButton
-            icon={RiMore2Fill}
+            icon={DotsThree}
             variant="ghost"
             size="lg"
             className="ml-auto size-7 [&_svg]:size-4"

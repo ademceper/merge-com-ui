@@ -1,11 +1,12 @@
 /* cspell:ignore Pilcrow */
-import { ChevronDownIcon, PilcrowIcon } from 'lucide-react';
+
 import { useMemo } from 'react';
 import { cn } from '../../utils/classname';
 import { BaseButton } from '../base-button';
 import { Popover, PopoverContent, PopoverTrigger } from '../popover';
 import { Tooltip, TooltipContent, TooltipTrigger } from '../ui/tooltip';
 import { TurnIntoBlockCategory, TurnIntoBlockOptions, TurnIntoOptions } from './use-turn-into-block-options';
+import { CaretDown, Paragraph } from '@phosphor-icons/react';
 
 type TurnIntoBlockProps = {
   options: TurnIntoOptions;
@@ -21,7 +22,7 @@ export function TurnIntoBlock(props: TurnIntoBlockProps) {
     () => options.find((option) => option.type === 'option' && option.isActive()),
     [options]
   ) as TurnIntoBlockOptions | undefined;
-  const { icon: ActiveIcon = PilcrowIcon } = activeItem || {};
+  const { icon: ActiveIcon = Paragraph } = activeItem || {};
 
   return (
     <Popover>
@@ -33,7 +34,7 @@ export function TurnIntoBlock(props: TurnIntoBlockProps) {
             )}
           >
             <ActiveIcon className="mly-h-3 mly-w-3 mly-shrink-0 mly-stroke-[2.5]" />
-            <ChevronDownIcon className="mly-h-3 mly-w-3 mly-shrink-0 mly-stroke-[2.5]" />
+            <CaretDown className="mly-h-3 mly-w-3 mly-shrink-0 mly-stroke-[2.5]" />
           </PopoverTrigger>
         </TooltipTrigger>
         <TooltipContent sideOffset={8}>Turn into</TooltipContent>

@@ -1,4 +1,4 @@
-import { RiArrowRightSLine, RiBookMarkedLine, RiSparkling2Line } from 'react-icons/ri';
+
 import { Link, useNavigate } from 'react-router-dom';
 import { useEnvironment } from '@/context/environment/hooks';
 import { useFetchLayouts } from '@/hooks/use-fetch-layouts';
@@ -18,6 +18,7 @@ import { TimeDisplayHoverCard } from '../time-display-hover-card';
 import TruncatedText from '../truncated-text';
 import { EmptyLayoutsIllustration } from './empty-layouts-illustration';
 import { useLayoutsUrlState } from './hooks/use-layouts-url-state';
+import { BookBookmark, CaretRight, Sparkle } from '@phosphor-icons/react';
 
 export const LayoutsListUpgradeCta = () => {
   const track = useTelemetry();
@@ -97,7 +98,7 @@ export const LayoutsListUpgradeCta = () => {
                         variant="secondary"
                         mode="ghost"
                         size="sm"
-                        leadingIcon={RiArrowRightSLine}
+                        leadingIcon={CaretRight}
                         onClick={() => {
                           navigate(
                             buildRoute(ROUTES.LAYOUTS_EDIT, {
@@ -130,7 +131,7 @@ export const LayoutsListUpgradeCta = () => {
                   navigate(ROUTES.SETTINGS_BILLING);
                 }
               }}
-              leadingIcon={RiSparkling2Line}
+              leadingIcon={Sparkle}
             >
               {IS_SELF_HOSTED ? 'Contact Sales' : 'Upgrade plan'}
             </Button>
@@ -140,7 +141,7 @@ export const LayoutsListUpgradeCta = () => {
               rel="noreferrer noopener"
               aria-label="Learn more about layouts"
             >
-              <LinkButton size="sm" leadingIcon={RiBookMarkedLine}>
+              <LinkButton size="sm" leadingIcon={BookBookmark}>
                 <span className="underline">How does this help?</span>
               </LinkButton>
             </Link>

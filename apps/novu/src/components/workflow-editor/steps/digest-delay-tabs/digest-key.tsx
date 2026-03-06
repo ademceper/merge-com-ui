@@ -1,5 +1,5 @@
 import { EnvironmentTypeEnum, ResourceOriginEnum } from '@novu/shared';
-import { X } from 'lucide-react';
+
 import { useMemo } from 'react';
 import { useFormContext } from 'react-hook-form';
 import { Code2 } from '@/components/icons/code-2';
@@ -10,6 +10,7 @@ import { useWorkflow } from '@/components/workflow-editor/workflow-provider';
 import { useEnvironment } from '@/context/environment/hooks';
 import { useParseVariables } from '../../../../hooks/use-parse-variables';
 import { VariableSelect } from '../../../conditions-editor/variable-select';
+import { X } from '@phosphor-icons/react';
 
 function parseLiquidVariables(value: string | undefined): string {
   const matches = value?.match(/{{(.*?)}}/g) || [];

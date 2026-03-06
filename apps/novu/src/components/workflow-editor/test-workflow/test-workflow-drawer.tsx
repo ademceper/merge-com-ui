@@ -5,7 +5,7 @@ import {
   type WorkflowTestDataResponseDto,
 } from '@novu/shared';
 import { forwardRef, useCallback, useEffect, useState } from 'react';
-import { RiArrowDownSLine, RiFileCopyLine } from 'react-icons/ri';
+
 import { Button } from '@merge-rd/ui/components/button';
 import { ButtonGroupItem, ButtonGroupRoot } from '@/components/primitives/button-group';
 import {
@@ -43,6 +43,7 @@ import {
   saveSubscriberData,
 } from '../steps/utils/preview-context-storage.utils';
 import { useWorkflow } from '../workflow-provider';
+import { CaretDown, Copy } from '@phosphor-icons/react';
 
 type TestWorkflowDrawerProps = {
   isOpen: boolean;
@@ -448,16 +449,16 @@ export const TestWorkflowDrawer = forwardRef<HTMLDivElement, TestWorkflowDrawerP
                         className="rounded-l-none rounded-r-lg border-none text-white"
                         variant="secondary"
                         size="xs"
-                        leadingIcon={RiArrowDownSLine}
+                        leadingIcon={CaretDown}
                       ></Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end" withPortal={false}>
                       <DropdownMenuItem onClick={handleCopyCurl} className="cursor-pointer">
-                        <RiFileCopyLine />
+                        <Copy />
                         Copy cURL
                       </DropdownMenuItem>
                       <DropdownMenuItem onClick={handleOpenInPostman} className="cursor-pointer">
-                        <RiFileCopyLine />
+                        <Copy />
                         Copy Postman Collection
                       </DropdownMenuItem>
                     </DropdownMenuContent>

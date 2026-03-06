@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import { useFieldArray, useForm } from 'react-hook-form';
-import { RiAddLine } from 'react-icons/ri';
 
 import type { GetVercelConfigurationDetails } from '@/api/partner-integrations';
 import { Button } from '@merge-rd/ui/components/button';
@@ -9,6 +8,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { useUpdateVercelIntegration } from '@/hooks/use-update-vercel-integration';
 import { Delete } from './icons/delete';
 import { MultiSelect } from './primitives/multi-select';
+import { Plus } from '@phosphor-icons/react';
 
 export type ProjectLinkFormValues = {
   projectLinkState: GetVercelConfigurationDetails[];
@@ -166,7 +166,7 @@ export const VercelIntegrationForm = ({
             className="flex items-center gap-2 self-start"
             disabled={isDisabledLinkMore}
           >
-            <RiAddLine className="h-4 w-4" />
+            <Plus className="h-4 w-4" />
             {fields.length === 0 ? 'Link Organization' : 'Link Another Organization'}
           </Button>
         </div>

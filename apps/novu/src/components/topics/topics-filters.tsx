@@ -1,13 +1,14 @@
 import { useQueryClient } from '@tanstack/react-query';
 import { HTMLAttributes, useCallback, useEffect, useMemo, useRef } from 'react';
 import { useForm } from 'react-hook-form';
-import { RiLoader4Line } from 'react-icons/ri';
+
 import { Button } from '@merge-rd/ui/components/button';
 import { FacetedFormFilter } from '@/components/primitives/form/faceted-filter/facated-form-filter';
 import { Form, FormField, FormItem, FormRoot } from '@/components/primitives/form/form';
 import { QueryKeys } from '@/utils/query-keys';
 import { cn } from '@merge-rd/ui/lib/utils';
 import { TopicsFilter } from './hooks/use-topics-url-state';
+import { SpinnerGap } from '@phosphor-icons/react';
 
 type FilterFormValues = {
   key: string;
@@ -151,7 +152,7 @@ export const TopicsFilters = (props: TopicsFiltersProps) => {
               <Button variant="secondary" mode="ghost" size="2xs" onClick={handleReset} disabled={isFiltersLoading}>
                 Reset
               </Button>
-              {isFetching && !isFiltersLoading && <RiLoader4Line className="h-3 w-3 animate-spin text-neutral-400" />}
+              {isFetching && !isFiltersLoading && <SpinnerGap className="h-3 w-3 animate-spin text-neutral-400" />}
             </div>
           )}
         </FormRoot>

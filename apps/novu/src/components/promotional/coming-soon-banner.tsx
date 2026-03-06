@@ -1,12 +1,13 @@
 import { AnimatePresence, motion } from 'motion/react';
 import { useCallback, useRef, useState } from 'react';
-import { RiCloseFill } from 'react-icons/ri';
+
 import { toast } from 'sonner';
 import { ToggleGroup, ToggleGroupItem } from '@merge-rd/ui/components/toggle-group';
 import { useTelemetry } from '@/hooks/use-telemetry';
 import { TelemetryEvent } from '@/utils/telemetry';
 import { CompactButton } from '../primitives/button-compact';
 import { Card, CardContent } from '@merge-rd/ui/components/card';
+import { X } from '@phosphor-icons/react';
 
 interface PromotionalBannerContent {
   emoji?: string;
@@ -169,7 +170,7 @@ function BannerHeader({
         <CompactButton
           variant="ghost"
           size="md"
-          icon={RiCloseFill}
+          icon={X}
           className="absolute right-2.5 top-3 mt-[-3px] h-6 w-6 p-0 hover:bg-neutral-100"
           onClick={onDismiss}
         >

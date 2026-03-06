@@ -1,8 +1,9 @@
-import { ChevronDownIcon } from '@radix-ui/react-icons';
-import { RiArrowLeftSLine, RiArrowRightSLine } from 'react-icons/ri';
+
+
 import { Button } from '@merge-rd/ui/components/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/primitives/select';
 import { cn } from '@merge-rd/ui/lib/utils';
+import { CaretDown, CaretLeft, CaretRight } from '@phosphor-icons/react';
 
 // Pagination group components
 type PaginationGroupProps = {
@@ -84,10 +85,10 @@ export function TablePaginationFooter({
       <div className="flex items-center justify-center flex-1">
         <PaginationGroup>
           <PaginationNavButton disabled={!hasPreviousPage} onClick={onPreviousPage} aria-label="Go to previous page">
-            <RiArrowLeftSLine className="size-5" />
+            <CaretLeft className="size-5" />
           </PaginationNavButton>
           <PaginationNavButton disabled={!hasNextPage} onClick={onNextPage} aria-label="Go to next page">
-            <RiArrowRightSLine className="size-5" />
+            <CaretRight className="size-5" />
           </PaginationNavButton>
         </PaginationGroup>
       </div>
@@ -97,7 +98,7 @@ export function TablePaginationFooter({
         <Select value={pageSize.toString()} onValueChange={(value) => onPageSizeChange(Number(value))}>
           <SelectTrigger
             size="2xs"
-            rightIcon={<ChevronDownIcon className="size-5 text-icon-sub" />}
+            rightIcon={<CaretDown className="size-5 text-icon-sub" />}
             className="w-auto min-w-[80px] rounded-8 border-stroke-soft bg-bg-white px-2.5 py-1.5 shadow-xs"
           >
             <SelectValue>

@@ -1,6 +1,6 @@
 import { useOrganization } from '@merge-rd/auth';
 import { EnvironmentTypeEnum, FeatureFlagsKeysEnum } from '@novu/shared';
-import { CalendarIcon } from 'lucide-react';
+
 import { motion } from 'motion/react';
 import { useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
@@ -34,6 +34,7 @@ import { useFetchSubscription } from '../hooks/use-fetch-subscription';
 import { useFetchWorkflows } from '../hooks/use-fetch-workflows';
 import { useTelemetry } from '../hooks/use-telemetry';
 import { TelemetryEvent } from '../utils/telemetry';
+import { Calendar } from '@phosphor-icons/react';
 
 export function AnalyticsPage() {
   const telemetry = useTelemetry();
@@ -147,7 +148,7 @@ export function AnalyticsPage() {
               options={dateFilterOptions}
               selected={[selectedDateRange]}
               onSelect={(values) => setSelectedDateRange(values[0])}
-              icon={CalendarIcon}
+              icon={Calendar}
             />
             {isWorkflowFilterEnabled && (
               <FacetedFormFilter

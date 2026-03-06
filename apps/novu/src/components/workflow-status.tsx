@@ -1,9 +1,10 @@
 import { ComponentProps } from 'react';
 import { type IconType } from 'react-icons/lib';
-import { RiCheckboxCircleFill, RiErrorWarningFill, RiForbidFill } from 'react-icons/ri';
+
 import { WorkflowStatusEnum } from '@/utils/enums';
 import { StatusBadge, StatusBadgeIcon } from './primitives/status-badge';
 import { WorkflowIssuesPopover } from './workflow-issues-popover';
+import { CheckCircle, Prohibit, WarningCircle } from '@phosphor-icons/react';
 
 // Local type definition for step issues until the shared types are updated
 type RuntimeIssue = {
@@ -39,17 +40,17 @@ const statusRenderData: Record<
   [WorkflowStatusEnum.ACTIVE]: {
     badgeVariant: 'completed',
     text: 'Active',
-    icon: RiCheckboxCircleFill,
+    icon: CheckCircle,
   },
   [WorkflowStatusEnum.INACTIVE]: {
     badgeVariant: 'disabled',
     text: 'Inactive',
-    icon: RiForbidFill,
+    icon: Prohibit,
   },
   [WorkflowStatusEnum.ERROR]: {
     badgeVariant: 'failed',
     text: 'Action required',
-    icon: RiErrorWarningFill,
+    icon: WarningCircle,
   },
 };
 

@@ -1,7 +1,7 @@
 import { type WorkflowResponseDto } from '@novu/shared';
 import { useCallback, useEffect, useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
-import { RiFileMarkedLine, RiInformation2Line, RiShieldCheckLine } from 'react-icons/ri';
+
 import { Link } from 'react-router-dom';
 import { Badge } from '@/components/primitives/badge';
 import { Button } from '@merge-rd/ui/components/button';
@@ -31,6 +31,7 @@ import { PayloadImportEditor, PayloadSchemaEmptyState } from './payload-schema/c
 import { useImportSchema } from './payload-schema/hooks';
 import { SchemaChangeConfirmationModal } from './schema-change-confirmation-modal';
 import { useWorkflowSchema } from './workflow-schema-provider';
+import { FileText, Info, ShieldCheck } from '@phosphor-icons/react';
 
 type PayloadSchemaDrawerProps = {
   isOpen: boolean;
@@ -229,11 +230,11 @@ export function PayloadSchemaDrawer({
                       </div>
                       <div className="rounded-4 border mb-2 flex items-center justify-between border-neutral-100 bg-white p-1.5">
                         <div className="text-text-strong text-label-xs flex items-center gap-1">
-                          <RiShieldCheckLine className="text-text-strong size-3" />
+                          <ShieldCheck className="text-text-strong size-3" />
                           Enforce schema validation
                           <Tooltip>
                             <TooltipTrigger className="flex cursor-default flex-row items-center gap-1">
-                              <RiInformation2Line className="size-3 text-neutral-400" />
+                              <Info className="size-3 text-neutral-400" />
                             </TooltipTrigger>
                             <TooltipContent>
                               <p>
@@ -295,7 +296,7 @@ export function PayloadSchemaDrawer({
                   <>
                     <Separator />
                     <Hint className="text-text-soft p-2 px-3">
-                      <HintIcon as={RiInformation2Line} />
+                      <HintIcon as={Info} />
                       Modifying a variable&apos;s type can break step behavior if the variable is used in logic or
                       expressions.
                     </Hint>
@@ -308,7 +309,7 @@ export function PayloadSchemaDrawer({
                     to="https://docs.novu.co/platform/workflow/build-a-workflow#manage-payload-schema"
                     target="_blank"
                   >
-                    <Button variant="secondary" mode="ghost" size="xs" leadingIcon={RiFileMarkedLine}>
+                    <Button variant="secondary" mode="ghost" size="xs" leadingIcon={FileText}>
                       View Docs
                     </Button>
                   </Link>

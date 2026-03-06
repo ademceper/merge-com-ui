@@ -1,6 +1,7 @@
-import { RiAddLine } from 'react-icons/ri';
+
 import { Button } from '@merge-rd/ui/components/button';
 import { LinkButton } from '@/components/primitives/button-link';
+import { Plus } from '@phosphor-icons/react';
 
 type PayloadSchemaEmptyStateProps = {
   onAddProperty: () => void;
@@ -47,7 +48,7 @@ export function PayloadSchemaEmptyState({
             variant="secondary"
             mode="outline"
             size="2xs"
-            leadingIcon={RiAddLine}
+            leadingIcon={Plus}
             onClick={onAddProperty}
             disabled={disabled}
           >

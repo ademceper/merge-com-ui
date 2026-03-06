@@ -1,7 +1,8 @@
 import { AnimatePresence, motion } from 'motion/react';
 import React, { useEffect, useState } from 'react';
-import { RiCheckboxCircleFill } from 'react-icons/ri';
+
 import { LoadingIndicator } from '@/components/primitives/loading-indicator';
+import { CheckCircle } from '@phosphor-icons/react';
 
 type SavingState = 'saving' | 'badge' | 'checkbox' | 'hidden';
 
@@ -88,7 +89,7 @@ export function SavingStatusIndicator({ isSaving, hasError }: { isSaving: boolea
               animate={{ scale: 1 }}
               transition={{ delay: 0.1, duration: 0.2, type: 'spring', stiffness: 200, damping: 15 }}
             >
-              <RiCheckboxCircleFill className="size-3.5 shrink-0 text-success" />
+              <CheckCircle weight="fill" className="size-3.5 shrink-0 text-success" />
             </motion.div>
             <motion.span
               initial={{ opacity: 0, x: -4 }}
@@ -111,7 +112,7 @@ export function SavingStatusIndicator({ isSaving, hasError }: { isSaving: boolea
             className="flex items-center"
           >
             <motion.div animate={{ scale: [1, 1.1, 1] }} transition={{ duration: 0.3, ease: 'easeOut' }}>
-              <RiCheckboxCircleFill className="size-3.5 text-success" />
+              <CheckCircle weight="fill" className="size-3.5 text-success" />
             </motion.div>
           </motion.div>
         )}

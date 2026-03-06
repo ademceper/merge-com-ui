@@ -1,8 +1,9 @@
-import { RiAddCircleLine, RiBookMarkedLine } from 'react-icons/ri';
+
 import { Link, useNavigate } from 'react-router-dom';
 import { LinkButton } from '@/components/primitives/button-link';
 import { Button } from '@merge-rd/ui/components/button';
 import { EmptyTopicsIllustration } from '../topics/empty-topics-illustration';
+import { BookBookmark, PlusCircle } from '@phosphor-icons/react';
 
 export const RequestLogsEmptyState = () => {
   const navigate = useNavigate();
@@ -24,7 +25,7 @@ export const RequestLogsEmptyState = () => {
 
       <div className="flex items-center justify-center gap-6">
         <Link to="https://docs.novu.co/platform/concepts/workflows" target="_blank">
-          <LinkButton variant="gray" trailingIcon={RiBookMarkedLine}>
+          <LinkButton variant="gray" trailingIcon={BookBookmark}>
             View Docs
           </LinkButton>
         </Link>
@@ -33,7 +34,7 @@ export const RequestLogsEmptyState = () => {
           variant="primary"
           mode="gradient"
           size="xs"
-          leadingIcon={RiAddCircleLine}
+          leadingIcon={PlusCircle}
           onClick={handleCreateWorkflow}
         >
           Trigger workflow

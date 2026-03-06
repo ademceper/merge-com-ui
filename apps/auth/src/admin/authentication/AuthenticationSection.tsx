@@ -7,6 +7,7 @@ import {
 import { toast } from "sonner";
 import { Button } from "@merge-rd/ui/components/button";
 import { Label } from "@merge-rd/ui/components/label";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@merge-rd/ui/components/tabs";
 import {
     DataTable,
     DataTableRowActions,
@@ -16,7 +17,7 @@ import { Copy, Link as LinkIcon, Trash } from "@phosphor-icons/react";
 import { sortBy } from "lodash-es";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { Trans, useTranslation } from "react-i18next";
-import { Link, useParams } from "react-router-dom";
+import { Link, useParams, useNavigate } from "react-router-dom";
 import { useAdminClient } from "../admin-client";
 import {
     AlertDialog,
@@ -40,6 +41,8 @@ import { RequiredActions } from "./RequiredActions";
 import { UsedBy } from "./components/UsedBy";
 import { AuthenticationType } from "./constants";
 import { Policies } from "./policies/Policies";
+import { toAuthentication } from "./routes/Authentication";
+import type { AuthenticationTab } from "./routes/Authentication";
 import { toCreateFlow } from "./routes/CreateFlow";
 import { toFlow } from "./routes/Flow";
 
@@ -48,6 +51,7 @@ export default function AuthenticationSection() {
     const { t } = useTranslation();
     const { realm: realmName, realmRepresentation: realm } = useRealm();
     const { tab } = useParams<{ tab?: string }>();
+    const navigate = useNavigate();
     const [key, setKey] = useState(0);
     const refresh = useCallback(() => setKey((k) => k + 1), []);
     const [selectedFlow, setSelectedFlow] = useState<AuthenticationType>();
@@ -296,6 +300,8 @@ export default function AuthenticationSection() {
         }
     };
 
+    const currentTab: AuthenticationTab = tab === "required-actions" || tab === "policies" ? tab : "flows";
+
     return (
         <>
             <ViewHeader
@@ -305,7 +311,35 @@ export default function AuthenticationSection() {
                 divider={false}
             />
             <div className="p-0">
-                {renderContent()}
+                <Tabs
+                    value={currentTab}
+                    onValueChange={(value) =>
+                        navigate(toAuthentication({ realm: realmName, tab: value === "flows" ? undefined : value as AuthenticationTab }))
+                    }
+                >
+                    <div className="w-full min-w-0 overflow-x-auto overflow-y-hidden mb-4">
+                        <TabsList variant="line" className="mb-0 w-max min-w-0 **:data-[slot=tabs-trigger]:flex-none">
+                            <TabsTrigger value="flows" data-testid="authentication-flows-tab">
+                                {t("flows")}
+                            </TabsTrigger>
+                            <TabsTrigger value="required-actions" data-testid="authentication-required-actions-tab">
+                                {t("requiredActions")}
+                            </TabsTrigger>
+                            <TabsTrigger value="policies" data-testid="authentication-policies-tab">
+                                {t("policies")}
+                            </TabsTrigger>
+                        </TabsList>
+                    </div>
+                    <TabsContent value="flows" className="mt-0 pt-0 outline-none">
+                        {renderContent()}
+                    </TabsContent>
+                    <TabsContent value="required-actions" className="mt-0 pt-0 outline-none">
+                        {renderContent()}
+                    </TabsContent>
+                    <TabsContent value="policies" className="mt-0 pt-0 outline-none">
+                        {renderContent()}
+                    </TabsContent>
+                </Tabs>
             </div>
         </>
     );

@@ -1,5 +1,5 @@
 import { forwardRef, useState } from 'react';
-import { RiArrowRightSLine, RiDiscussLine } from 'react-icons/ri';
+
 import { Button } from '@merge-rd/ui/components/button';
 import { Separator } from '@merge-rd/ui/components/separator';
 import {
@@ -17,6 +17,7 @@ import { useFormProtection } from '@/hooks/use-form-protection';
 import { useOnElementUnmount } from '@/hooks/use-on-element-unmount';
 import { cn } from '@merge-rd/ui/lib/utils';
 import { CreateTopicForm } from './create-topic-form';
+import { CaretRight, ChatTeardropDots } from '@phosphor-icons/react';
 
 type CreateTopicDrawerProps = {
   isOpen: boolean;
@@ -70,7 +71,7 @@ export const CreateTopicDrawer = forwardRef<HTMLDivElement, CreateTopicDrawerPro
             <SheetTitle className="sr-only">Add topic</SheetTitle>
             <header className="border-bg-soft flex h-12 w-full flex-row items-center gap-3 border-b p-3.5">
               <div className="flex flex-1 items-center gap-1 overflow-hidden text-sm font-medium">
-                <RiDiscussLine className="size-5 p-0.5" />
+                <ChatTeardropDots className="size-5 p-0.5" />
                 <TruncatedText className="flex-1">Add topic</TruncatedText>
               </div>
             </header>
@@ -95,7 +96,7 @@ export const CreateTopicDrawer = forwardRef<HTMLDivElement, CreateTopicDrawerPro
                 type="submit"
                 disabled={isSubmitting}
                 isLoading={isSubmitting}
-                trailingIcon={RiArrowRightSLine}
+                trailingIcon={CaretRight}
                 form="create-topic-form"
               >
                 Create topic

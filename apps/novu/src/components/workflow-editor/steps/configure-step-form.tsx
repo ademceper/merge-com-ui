@@ -11,7 +11,7 @@ import {
 import { AnimatePresence, motion } from 'motion/react';
 import { HTMLAttributes, ReactNode, useCallback, useEffect, useMemo, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { RiArrowLeftSLine, RiArrowRightSLine, RiCloseFill, RiDeleteBin2Line, RiEdit2Line } from 'react-icons/ri';
+
 import { Link, useNavigate } from 'react-router-dom';
 import { z } from 'zod';
 
@@ -55,6 +55,13 @@ import { useFormAutosave } from '@/hooks/use-form-autosave';
 import { INLINE_CONFIGURABLE_STEP_TYPES, STEP_TYPE_LABELS, TEMPLATE_CONFIGURABLE_STEP_TYPES } from '@/utils/constants';
 import { getControlsDefaultValues } from '@/utils/default-values';
 import { buildRoute, ROUTES } from '@/utils/routes';
+import {
+  CaretLeft,
+  CaretRight,
+  PencilSimple,
+  Trash,
+  X,
+} from '@phosphor-icons/react';
 
 const STEP_TYPE_TO_INLINE_CONTROL_VALUES: Record<StepTypeEnum, () => React.JSX.Element | null> = {
   [StepTypeEnum.DELAY]: DelayControlValues,
@@ -232,7 +239,7 @@ export const ConfigureStepForm = (props: ConfigureStepFormProps) => {
               })}
               className="flex items-center"
             >
-              <CompactButton size="lg" variant="ghost" icon={RiArrowLeftSLine} className="size-4" type="button">
+              <CompactButton size="lg" variant="ghost" icon={CaretLeft} className="size-4" type="button">
                 <span className="sr-only">Back</span>
               </CompactButton>
             </Link>
@@ -247,7 +254,7 @@ export const ConfigureStepForm = (props: ConfigureStepFormProps) => {
               <CompactButton
                 size="lg"
                 variant="ghost"
-                icon={RiCloseFill}
+                icon={X}
                 className="size-4"
                 type="button"
                 data-testid="configure-step-form-close"
@@ -315,9 +322,9 @@ export const ConfigureStepForm = (props: ConfigureStepFormProps) => {
                     mode="outline"
                     className="flex w-full justify-start gap-1.5 text-xs font-medium"
                   >
-                    <RiEdit2Line className="h-4 w-4 text-neutral-600" />
+                    <PencilSimple className="h-4 w-4 text-neutral-600" />
                     Edit {STEP_TYPE_LABELS[step.type]} Step content{' '}
-                    <RiArrowRightSLine className="ml-auto h-4 w-4 text-neutral-600" />
+                    <CaretRight className="ml-auto h-4 w-4 text-neutral-600" />
                   </Button>
                 </Link>
 
@@ -390,7 +397,7 @@ export const ConfigureStepForm = (props: ConfigureStepFormProps) => {
                 className="gap-1.5"
                 type="button"
                 onClick={() => setIsDeleteModalOpen(true)}
-                leadingIcon={RiDeleteBin2Line}
+                leadingIcon={Trash}
               >
                 Delete step
               </Button>

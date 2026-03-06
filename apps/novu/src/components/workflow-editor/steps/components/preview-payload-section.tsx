@@ -1,5 +1,5 @@
 import { ResourceOriginEnum } from '@novu/shared';
-import { RiInformation2Line, RiRefreshLine, RiSettings3Line } from 'react-icons/ri';
+
 import { AccordionContent, AccordionItem, AccordionTrigger } from '@merge-rd/ui/components/accordion';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/primitives/tooltip';
 import { Button } from '@merge-rd/ui/components/button';
@@ -7,6 +7,7 @@ import { Hint, HintIcon } from '../../../primitives/hint';
 import { ACCORDION_STYLES } from '../constants/preview-context.constants';
 import { EditableJsonViewer } from '../shared/editable-json-viewer/editable-json-viewer';
 import { PayloadSectionProps } from '../types/preview-context.types';
+import { ArrowsClockwise, GearSix, Info } from '@phosphor-icons/react';
 
 export function PreviewPayloadSection({
   errors,
@@ -28,7 +29,7 @@ export function PreviewPayloadSection({
               <Tooltip>
                 <TooltipTrigger asChild>
                   <span className="text-foreground-400 inline-block hover:cursor-help">
-                    <RiInformation2Line className="size-3" />
+                    <Info className="size-3" />
                   </span>
                 </TooltipTrigger>
                 <TooltipContent className="max-w-xs">
@@ -53,7 +54,7 @@ export function PreviewPayloadSection({
                 size="2xs"
                 className="text-foreground-600 gap-1"
               >
-                <RiRefreshLine className="h-3 w-3" />
+                <ArrowsClockwise className="h-3 w-3" />
                 Reset defaults
               </Button>
             </div>
@@ -72,7 +73,7 @@ export function PreviewPayloadSection({
         </div>
         {onManageSchema && workflow?.origin === ResourceOriginEnum.NOVU_CLOUD && (
           <div className="text-text-soft flex items-center gap-1.5 text-[10px] font-normal leading-[13px]">
-            <RiInformation2Line className="h-3 w-3 shrink-0" />
+            <Info className="h-3 w-3 shrink-0" />
             <span>
               Manage required fields and validations with{' '}
               <b

@@ -1,10 +1,11 @@
-import { RiGroup2Fill } from 'react-icons/ri';
+
 import type { MetricData } from '../../../hooks/use-metric-data';
 import { InboxBellFilled } from '../../icons/inbox-bell-filled';
 import { StackedDots } from '../../icons/stacked-dots';
 import { TargetArrow } from '../../icons/target-arrow';
 import { AnalyticsCard } from '../../primitives/analytics-card';
 import { ANALYTICS_TOOLTIPS } from '../constants/analytics-tooltips';
+import { UsersThree } from '@phosphor-icons/react';
 
 type AnalyticsSectionProps = {
   messagesDeliveredData: MetricData;
@@ -35,7 +36,7 @@ export function AnalyticsSection({
       />
 
       <AnalyticsCard
-        icon={RiGroup2Fill}
+        icon={UsersThree}
         value={activeSubscribersData.value}
         title="Active subscribers"
         description={activeSubscribersData.description}

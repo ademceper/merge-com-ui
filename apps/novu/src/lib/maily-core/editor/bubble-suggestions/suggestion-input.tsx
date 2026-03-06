@@ -1,5 +1,5 @@
 import { Editor } from '@tiptap/core';
-import { CornerDownLeft } from 'lucide-react';
+
 import { forwardRef, HTMLAttributes, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { VariableSuggestionsPopoverRef } from '../nodes/variable/variable-suggestions-popover';
 import { cn } from '../utils/classname';
@@ -8,6 +8,7 @@ import { useInlineDecoratorOptions, useVariableOptions } from '../utils/node-opt
 import { useOutsideClick } from '../utils/use-outside-click';
 import { SuggestionItem, SuggestionProvider } from './suggestion-provider';
 import { useActiveSuggestion, useSuggestionProviders } from './use-suggestion-providers';
+import { ArrowElbowDownLeft } from '@phosphor-icons/react';
 
 type SuggestionInputProps = HTMLAttributes<HTMLInputElement> & {
   value: string;
@@ -140,7 +141,7 @@ export const SuggestionInput = forwardRef<HTMLInputElement, SuggestionInputProps
           spellCheck={false}
         />
         <div className="mly-absolute mly-inset-y-0 mly-right-1 mly-flex mly-items-center">
-          <CornerDownLeft className="mly-h-3 mly-w-3 mly-stroke-[2.5] mly-text-midnight-gray" />
+          <ArrowElbowDownLeft className="mly-h-3 mly-w-3 mly-stroke-[2.5] mly-text-midnight-gray" />
         </div>
       </label>
 

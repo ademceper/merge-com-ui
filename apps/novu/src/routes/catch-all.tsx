@@ -1,9 +1,10 @@
 import { FeatureFlagsKeysEnum } from '@novu/shared';
-import { RiLoader4Line } from 'react-icons/ri';
+
 import { Navigate, useLocation } from 'react-router-dom';
 import { buildRoute, ROUTES } from '@/utils/routes';
 import { useEnvironment } from '../context/environment/hooks';
 import { useFeatureFlag } from '../hooks/use-feature-flag';
+import { SpinnerGap } from '@phosphor-icons/react';
 
 export const CatchAllRoute = () => {
   const { currentEnvironment, areEnvironmentsInitialLoading } = useEnvironment();
@@ -14,7 +15,7 @@ export const CatchAllRoute = () => {
     return (
       <div className="flex h-screen items-center justify-center">
         <div className="flex flex-col items-center gap-3">
-          <RiLoader4Line className="text-primary-base size-8 animate-spin" />
+          <SpinnerGap className="text-primary-base size-8 animate-spin" />
           <div className="text-text-sub text-label-sm">Loading environment...</div>
         </div>
       </div>

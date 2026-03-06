@@ -1,6 +1,6 @@
 import { DEFAULT_LOCALE } from '@novu/shared';
 import React, { ComponentType, useCallback, useId, useState } from 'react';
-import { RiDeleteBin2Line, RiErrorWarningLine, RiListView, RiQuestionLine } from 'react-icons/ri';
+
 import { TranslateVariableIcon } from '@/components/icons/translate-variable';
 import { Button } from '@merge-rd/ui/components/button';
 import { LinkButton } from '@/components/primitives/button-link';
@@ -18,6 +18,12 @@ import { IsAllowedVariable, LiquidVariable } from '@/utils/parseStepVariables';
 import { useTranslationEditor } from './use-translation-editor';
 import { useTranslationForm } from './use-translation-form';
 import { useVirtualAnchor } from './use-virtual-anchor';
+import {
+  ListBullets,
+  Question,
+  Trash,
+  WarningCircle,
+} from '@phosphor-icons/react';
 
 export type TranslationValueInputComponent = ComponentType<{
   value: string;
@@ -50,7 +56,7 @@ const PopoverHeader = ({ onDelete }: { onDelete: () => void }) => (
     <div className="flex items-center justify-between">
       <span className="text-subheading-2xs text-text-soft">CONFIGURE TRANSLATION</span>
       <Button variant="secondary" mode="ghost" className="h-5 p-1" onClick={onDelete}>
-        <RiDeleteBin2Line className="size-3.5 text-neutral-400" />
+        <Trash className="size-3.5 text-neutral-400" />
       </Button>
     </div>
   </div>
@@ -99,7 +105,7 @@ const TranslationKeyInput = ({
               </span>
               <Tooltip>
                 <TooltipTrigger className="relative cursor-pointer">
-                  <RiQuestionLine className="text-text-soft size-4" />
+                  <Question className="text-text-soft size-4" />
                 </TooltipTrigger>
                 <TooltipContent side="top" className="max-w-xs">
                   <p className="text-label-xs">
@@ -113,7 +119,7 @@ const TranslationKeyInput = ({
               variant="gray"
               size="sm"
               className="text-label-2xs text-xs"
-              leadingIcon={RiListView}
+              leadingIcon={ListBullets}
               onClick={handleManageTranslationsClick}
             >
               View & manage translations ↗
@@ -134,7 +140,7 @@ const TranslationKeyInput = ({
           </InputRoot>
           {hasError && !isLoading && (
             <FormMessagePure hasError={true} className="text-label-2xs mb-0.5 mt-0.5">
-              <RiErrorWarningLine className="h-3 w-3" />
+              <WarningCircle className="h-3 w-3" />
               {errorMessage}{' '}
               <LinkButton
                 variant="modifiable"
@@ -183,7 +189,7 @@ const TranslationValueInput = ({
             Value
             <Tooltip>
               <TooltipTrigger className="relative cursor-pointer">
-                <RiQuestionLine className="text-text-soft size-4" />
+                <Question className="text-text-soft size-4" />
               </TooltipTrigger>
               <TooltipContent side="top" className="max-w-xs">
                 <p className="text-label-xs">

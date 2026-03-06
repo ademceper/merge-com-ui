@@ -1,7 +1,7 @@
 import { ScheduleDto } from '@novu/api/models/components';
 import { Schedule, WeeklySchedule } from '@novu/shared';
 import { useCallback, useMemo, useState } from 'react';
-import { RiFileCopyLine } from 'react-icons/ri';
+
 import { Button } from '@merge-rd/ui/components/button';
 import { Checkbox } from '@merge-rd/ui/components/checkbox';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/primitives/popover';
@@ -9,6 +9,7 @@ import { capitalize } from '@/utils/string';
 import { cn } from '@merge-rd/ui/lib/utils';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/primitives/tooltip';
 import { weekDays } from './utils';
+import { Copy } from '@phosphor-icons/react';
 
 type DayScheduleCopyProps = {
   onScheduleUpdate: (schedule: ScheduleDto) => Promise<void>;
@@ -43,7 +44,7 @@ export const DayScheduleCopy = ({ day, schedule, disabled, onScheduleUpdate }: D
       <TooltipTrigger disabled={disabled}>
         <Popover modal open={isOpen} onOpenChange={onOpenChange}>
           <PopoverTrigger disabled={disabled} className="w-full flex items-center justify-center">
-            <RiFileCopyLine
+            <Copy
               className={cn(
                 'text-foreground-alpha-600 size-3.5 group-hover:opacity-100 opacity-0 transition-opacity duration-200',
                 {

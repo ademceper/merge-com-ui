@@ -1,9 +1,10 @@
 import { useUser } from '@merge-rd/auth';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { motion } from 'motion/react';
-import { RiCloseLine } from 'react-icons/ri';
+
 import { useTelemetry } from '@/hooks/use-telemetry';
 import { TelemetryEvent } from '@/utils/telemetry';
+import { X } from '@phosphor-icons/react';
 
 type SanityAsset = {
   _ref: string;
@@ -240,7 +241,7 @@ function ChangelogCard({
             onClick={(e) => onDismiss(e, changelog)}
             className="absolute right-[-8px] top-[-8px] p-1 text-neutral-500 opacity-0 transition-opacity duration-200 hover:text-neutral-900 group-hover:opacity-100 dark:hover:text-white"
           >
-            <RiCloseLine size={16} />
+            <X size={16} />
           </button>
           <div className="mb-2 flex items-center justify-between">
             <h5 className="text-label-sm text-text-strong mt-0 line-clamp-1 dark:text-white">{changelog.title}</h5>

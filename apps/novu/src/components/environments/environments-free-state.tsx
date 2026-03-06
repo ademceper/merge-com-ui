@@ -1,5 +1,5 @@
 /** biome-ignore-all lint/correctness/useUniqueElementIds: working correctly */
-import { RiBookMarkedLine, RiSparkling2Line } from 'react-icons/ri';
+
 import { Link, useNavigate } from 'react-router-dom';
 import { useOrganization } from '@merge-rd/auth';
 import { useEnvironment, useFetchEnvironments } from '@/context/environment/hooks';
@@ -16,6 +16,7 @@ import { EnvironmentBranchIcon } from '../primitives/environment-branch-icon';
 import { Separator } from '@merge-rd/ui/components/separator';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '../primitives/table';
 import TruncatedText from '../truncated-text';
+import { BookBookmark, Sparkle } from '@phosphor-icons/react';
 
 export function FreeTierState() {
   const track = useTelemetry();
@@ -103,12 +104,12 @@ export function FreeTierState() {
                 navigate(ROUTES.SETTINGS_BILLING);
               }
             }}
-            leadingIcon={RiSparkling2Line}
+            leadingIcon={Sparkle}
           >
             {IS_SELF_HOSTED ? 'Contact Sales' : 'Upgrade to Team Tier'}
           </Button>
           <Link to={'https://docs.novu.co/platform/developer/environments'} target="_blank">
-            <LinkButton size="sm" leadingIcon={RiBookMarkedLine}>
+            <LinkButton size="sm" leadingIcon={BookBookmark}>
               How does this help?
             </LinkButton>
           </Link>

@@ -1,6 +1,6 @@
 import { motion } from 'motion/react';
 import { useState } from 'react';
-import { RiArrowRightSLine, RiInformation2Line } from 'react-icons/ri';
+
 import { useNavigate } from 'react-router-dom';
 import { Tooltip, TooltipContent, TooltipPortal, TooltipTrigger } from '@/components/primitives/tooltip';
 import { TranslationDrawer } from '@/components/translations/translation-drawer/translation-drawer';
@@ -11,6 +11,7 @@ import { LocalizationResourceEnum } from '@/types/translations';
 import { buildRoute, ROUTES } from '@/utils/routes';
 import { Badge } from '@/components/primitives/badge';
 import { Button } from '@merge-rd/ui/components/button';
+import { CaretRight, Info } from '@phosphor-icons/react';
 
 interface TranslationToggleSectionProps {
   value: boolean;
@@ -67,7 +68,7 @@ export function TranslationToggleSection({
 
             <Tooltip>
               <TooltipTrigger asChild>
-                <RiInformation2Line className="size-4 text-text-soft cursor-help" />
+                <Info className="size-4 text-text-soft cursor-help" />
               </TooltipTrigger>
               <TooltipPortal>
                 <TooltipContent side="left" hideWhenDetached>
@@ -86,7 +87,7 @@ export function TranslationToggleSection({
             mode="ghost"
             size="xs"
             onClick={() => navigate(translationsUrl)}
-            trailingIcon={RiArrowRightSLine}
+            trailingIcon={CaretRight}
           >
             Setup
           </Button>
@@ -107,7 +108,7 @@ export function TranslationToggleSection({
           </span>
           <Tooltip>
             <TooltipTrigger asChild>
-              <RiInformation2Line className="size-4 text-text-soft cursor-help" />
+              <Info className="size-4 text-text-soft cursor-help" />
             </TooltipTrigger>
             <TooltipPortal>
               <TooltipContent side="left" hideWhenDetached>

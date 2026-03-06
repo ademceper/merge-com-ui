@@ -1,6 +1,6 @@
 import { motion } from 'motion/react';
 import { useEffect, useMemo, useState } from 'react';
-import { RiLoopRightLine, RiRefreshLine, RiRepeatOneLine } from 'react-icons/ri';
+import { ArrowClockwise, ArrowsClockwise, Repeat } from '@phosphor-icons/react';
 
 type UpdatedAgoProps = {
   lastUpdated: Date;
@@ -63,7 +63,7 @@ export function UpdatedAgo({ lastUpdated, onRefresh }: UpdatedAgoProps) {
               ease: 'linear',
             }}
           >
-            <RiLoopRightLine className="h-full w-full" />
+            <ArrowClockwise className="h-full w-full" />
           </motion.div>
         </div>
       </button>

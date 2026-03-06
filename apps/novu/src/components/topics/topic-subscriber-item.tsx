@@ -2,7 +2,7 @@ import { ISubscriber } from '@novu/shared';
 import { format } from 'date-fns';
 import { motion } from 'motion/react';
 import { useState } from 'react';
-import { RiDeleteBinLine, RiMailLine } from 'react-icons/ri';
+
 import { TopicSubscription } from '@/api/topics';
 import { Avatar, AvatarFallback, AvatarImage } from '@merge-rd/ui/components/avatar';
 import { Button } from '@merge-rd/ui/components/button';
@@ -21,6 +21,7 @@ import { SubscriberDrawerButton } from '../subscribers/subscriber-drawer';
 import { TimeDisplayHoverCard } from '../time-display-hover-card';
 import TruncatedText from '../truncated-text';
 import { useRemoveTopicSubscriber } from './hooks/use-topic-subscribers';
+import { Envelope, TrashSimple } from '@phosphor-icons/react';
 
 interface TopicSubscriberItemProps {
   topicKey: string;
@@ -109,7 +110,7 @@ export function TopicSubscriberItem({ topicKey, subscription, readOnly = false }
                       onClick={handleRemove}
                       className="h-6 w-6 p-0"
                     >
-                      <RiDeleteBinLine className="size-3.5 text-red-500" />
+                      <TrashSimple className="size-3.5 text-red-500" />
                     </Button>
                   </TooltipTrigger>
                   <TooltipContent>Remove subscriber</TooltipContent>

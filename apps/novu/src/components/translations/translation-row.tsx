@@ -1,7 +1,7 @@
 import { TranslationGroupDto } from '@novu/api/models/components';
 import { EnvironmentTypeEnum, PermissionsEnum } from '@novu/shared';
 import { ComponentProps, useCallback } from 'react';
-import { RiDeleteBin2Line, RiLayout5Line, RiMore2Fill, RiRouteFill } from 'react-icons/ri';
+
 import { useNavigate, useParams } from 'react-router-dom';
 import { StackedFlagCircles } from '@/components/flag-circle';
 import { CompactButton } from '@/components/primitives/button-compact';
@@ -25,6 +25,12 @@ import { buildRoute, ROUTES } from '@/utils/routes';
 import { cn } from '@merge-rd/ui/lib/utils';
 import { LocalizationResourceEnum } from '../../types/translations';
 import { TranslationStatus } from './translation-status';
+import {
+  DotsThree,
+  Layout,
+  Path,
+  Trash,
+} from '@phosphor-icons/react';
 
 type TranslationTableCellProps = ComponentProps<typeof TableCell>;
 
@@ -49,9 +55,9 @@ function ResourceInfo({ resourceId, resourceType, resourceName }: ResourceInfoPr
       <Tooltip delayDuration={300}>
         <TooltipTrigger>
           {resourceType === LocalizationResourceEnum.WORKFLOW ? (
-            <RiRouteFill className="text-feature size-4" />
+            <Path weight="fill" className="text-feature size-4" />
           ) : (
-            <RiLayout5Line className="text-feature size-4" />
+            <Layout className="text-feature size-4" />
           )}
         </TooltipTrigger>
         <TooltipPortal>
@@ -101,12 +107,12 @@ function TranslationActionsMenu({
   return (
     <DropdownMenu modal={false}>
       <DropdownMenuTrigger asChild onClick={onStopPropagation}>
-        <CompactButton variant="ghost" icon={RiMore2Fill} className="z-10 h-8 w-8 p-0" />
+        <CompactButton variant="ghost" icon={DotsThree} className="z-10 h-8 w-8 p-0" />
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="w-64">
         <DropdownMenuGroup>
           <DropdownMenuItem onClick={onGoToWorkflow} className="flex cursor-pointer items-center gap-2">
-            <RiRouteFill className="h-4 w-4" />
+            <Path weight="fill" className="h-4 w-4" />
             <span>Go to workflow</span>
           </DropdownMenuItem>
           <Tooltip>
@@ -119,7 +125,7 @@ function TranslationActionsMenu({
                 )}
                 disabled={!canDelete}
               >
-                <RiDeleteBin2Line className="h-4 w-4" />
+                <Trash className="h-4 w-4" />
                 <span>Disable & delete translation</span>
               </DropdownMenuItem>
             </TooltipTrigger>

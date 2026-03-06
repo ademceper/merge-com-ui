@@ -5,7 +5,7 @@ import { tags as t } from '@lezer/highlight';
 import { EditorView, Extension } from '@uiw/react-codemirror';
 import { JSONSchema7 } from 'json-schema';
 import { MutableRefObject, useCallback, useMemo, useRef } from 'react';
-import { RiCodeSSlashFill } from 'react-icons/ri';
+
 import { showErrorToast } from '@/components/primitives/sonner-helpers';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/primitives/tooltip';
 import { CompletionRange, VariableEditor } from '@/components/primitives/variable-editor';
@@ -13,6 +13,7 @@ import { formatHtml } from '@/utils/formatter';
 import { CompletionOption } from '@/utils/liquid-autocomplete';
 import { LiquidVariable } from '@/utils/parseStepVariables';
 import { cn } from '@merge-rd/ui/lib/utils';
+import { Code } from '@phosphor-icons/react';
 
 type HtmlEditorProps = {
   viewRef: MutableRefObject<EditorView | null>;
@@ -189,7 +190,7 @@ export function HtmlEditor({
             e.preventDefault();
           }}
         >
-          <RiCodeSSlashFill className="size-3.5 fill-neutral-500" />
+          <Code weight="fill" className="size-3.5 fill-neutral-500" />
         </TooltipTrigger>
         <TooltipContent side="right">Format code</TooltipContent>
       </Tooltip>

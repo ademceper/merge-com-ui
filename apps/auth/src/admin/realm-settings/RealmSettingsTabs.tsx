@@ -54,6 +54,7 @@ import { LocalizationTab } from "./localization/LocalizationTab";
 import { toClientPolicies } from "./routes/ClientPolicies";
 import type { ClientPoliciesTab } from "./routes/ClientPolicies";
 import { toRealmSettings } from "./routes/RealmSettings";
+import type { RealmSettingsTab } from "./routes/RealmSettings";
 import { SecurityDefenses } from "./security-defences/SecurityDefenses";
 import { UserProfileTab } from "./user-profile/UserProfileTab";
 
@@ -386,6 +387,14 @@ export const RealmSettingsTabs = () => {
         }
     };
 
+    const currentTab: RealmSettingsTab = (() => {
+        if (isThemesSubTab) return "themes";
+        if (isKeysSubTab) return "keys";
+        if (isUserProfileSubTab) return "user-profile";
+        if (isClientPoliciesSubTab) return "client-policies";
+        return (tab as RealmSettingsTab) || "general";
+    })();
+
     return (
         <FormProvider {...form}>
             <Controller
@@ -403,7 +412,65 @@ export const RealmSettingsTabs = () => {
                 )}
             />
             <div className="pt-4 pb-6 px-0 min-w-0">
-                {renderContent()}
+                <Tabs
+                    value={currentTab}
+                    onValueChange={(value) =>
+                        navigate(toRealmSettings({ realm: realmName, tab: value as RealmSettingsTab }))
+                    }
+                >
+                    <div className="w-full min-w-0 overflow-x-auto overflow-y-hidden mb-4">
+                        <TabsList variant="line" className="mb-0 w-max min-w-0 **:data-[slot=tabs-trigger]:flex-none">
+                            <TabsTrigger value="general" data-testid="rs-general-tab">
+                                {t("general")}
+                            </TabsTrigger>
+                            <TabsTrigger value="login" data-testid="rs-login-tab">
+                                {t("login")}
+                            </TabsTrigger>
+                            <TabsTrigger value="email" data-testid="rs-email-tab">
+                                {t("email")}
+                            </TabsTrigger>
+                            <TabsTrigger value="themes" data-testid="rs-themes-tab">
+                                {t("themes")}
+                            </TabsTrigger>
+                            <TabsTrigger value="keys" data-testid="rs-keys-tab">
+                                {t("keys")}
+                            </TabsTrigger>
+                            {canViewOrManageEvents && (
+                                <TabsTrigger value="events" data-testid="rs-events-tab">
+                                    {t("events")}
+                                </TabsTrigger>
+                            )}
+                            <TabsTrigger value="localization" data-testid="rs-localization-tab">
+                                {t("localization")}
+                            </TabsTrigger>
+                            <TabsTrigger value="security-defenses" data-testid="rs-security-defenses-tab">
+                                {t("securityDefences")}
+                            </TabsTrigger>
+                            <TabsTrigger value="sessions" data-testid="rs-sessions-tab">
+                                {t("sessions")}
+                            </TabsTrigger>
+                            <TabsTrigger value="tokens" data-testid="rs-tokens-tab">
+                                {t("tokens")}
+                            </TabsTrigger>
+                            {isFeatureEnabled(Feature.ClientPolicies) && (
+                                <TabsTrigger value="client-policies" data-testid="rs-client-policies-tab">
+                                    {t("clientPolicies")}
+                                </TabsTrigger>
+                            )}
+                            <TabsTrigger value="user-profile" data-testid="rs-user-profile-tab">
+                                {t("attributes")}
+                            </TabsTrigger>
+                            {canViewUserRegistration && (
+                                <TabsTrigger value="user-registration" data-testid="rs-user-registration-tab">
+                                    {t("registration")}
+                                </TabsTrigger>
+                            )}
+                        </TabsList>
+                    </div>
+                    <TabsContent value={currentTab} className="mt-0 pt-0 outline-none">
+                        {renderContent()}
+                    </TabsContent>
+                </Tabs>
             </div>
         </FormProvider>
     );

@@ -1,20 +1,21 @@
 import { useMemo } from 'react';
-import {
-  RiBuildingLine,
-  RiCodeLine,
-  RiGlobalLine,
-  RiHashtag,
-  RiKey2Line,
-  RiLayoutGridLine,
-  RiMailLine,
-  RiRouteFill,
-  RiSettings3Line,
-  RiStore3Line,
-  RiTranslate2,
-  RiUserLine,
-} from 'react-icons/ri';
+
 import { useLocation } from 'react-router-dom';
 import { Bell, NovuIcon } from '@/components/icons';
+import {
+  Buildings,
+  Envelope,
+  GearSix,
+  GlobeSimple,
+  Key,
+  Path,
+  Code,
+  Hash,
+  GridFour,
+  Storefront,
+  Translate,
+  User,
+} from '@phosphor-icons/react';
 
 export const DRAWER_WIDTH_DEFAULT = 350;
 export const DRAWER_WIDTH_EXPANDED = 700;
@@ -49,13 +50,13 @@ export type SuggestionItem = {
 
 const DEFAULT_SUGGESTIONS: SuggestionItem[] = [
   {
-    icon: RiRouteFill,
+    icon: Path,
     title: 'Understand Novu',
     description: 'Learn what Novu is and how it simplifies notification delivery across channels.',
     url: docsUrl('platform/what-is-novu'),
   },
   {
-    icon: RiCodeLine,
+    icon: Code,
     title: 'Introduction to Inbox',
     description: 'Build an in-app notification center that keeps your users engaged.',
     url: docsUrl('/platform/inbox/overview'),
@@ -82,13 +83,13 @@ type RouteContext =
 const CONTEXTUAL_SUGGESTIONS: Record<RouteContext, SuggestionItem[]> = {
   workflows: [
     {
-      icon: RiRouteFill,
+      icon: Path,
       title: 'Creating workflows',
       description: 'Learn how to create and configure notification workflows.',
       url: docsUrl('/platform/workflow/overview'),
     },
     {
-      icon: RiCodeLine,
+      icon: Code,
       title: 'Using variables',
       description: 'Say hello with {{firstName}}. Personal, but scalable.',
       url: docsUrl('/framework/controls#using-variables'),
@@ -96,13 +97,13 @@ const CONTEXTUAL_SUGGESTIONS: Record<RouteContext, SuggestionItem[]> = {
   ],
   workflowEditor: [
     {
-      icon: RiRouteFill,
+      icon: Path,
       title: 'Understand workflow editor',
       description: 'What the workflow editor does—like Delay, Digest, Email, and when to use them.',
       url: docsUrl('/platform/workflow/overview'),
     },
     {
-      icon: RiCodeLine,
+      icon: Code,
       title: 'Using variables',
       description: 'Say hello with {{firstName}}. Personal, but scalable.',
       url: docsUrl('/framework/controls#using-variables'),
@@ -110,13 +111,13 @@ const CONTEXTUAL_SUGGESTIONS: Record<RouteContext, SuggestionItem[]> = {
   ],
   subscribers: [
     {
-      icon: RiUserLine,
+      icon: User,
       title: 'Managing subscribers',
       description: 'Learn how to create, update, and manage your notification subscribers.',
       url: docsUrl('/platform/concepts/subscribers'),
     },
     {
-      icon: RiSettings3Line,
+      icon: GearSix,
       title: 'Subscriber preferences',
       description: 'Let users control what notifications they receive.',
       url: docsUrl('/platform/concepts/preferences'),
@@ -124,13 +125,13 @@ const CONTEXTUAL_SUGGESTIONS: Record<RouteContext, SuggestionItem[]> = {
   ],
   integrations: [
     {
-      icon: RiStore3Line,
+      icon: Storefront,
       title: 'Connect providers',
       description: 'Email, SMS, chat—whatever you need to reach users.',
       url: docsUrl('/integrations/overview'),
     },
     {
-      icon: RiSettings3Line,
+      icon: GearSix,
       title: 'Try demo providers',
       description: 'Test notifications without configuring a provider.',
       url: docsUrl('/platform/integrations/demo-providers'),
@@ -138,7 +139,7 @@ const CONTEXTUAL_SUGGESTIONS: Record<RouteContext, SuggestionItem[]> = {
   ],
   apiKeys: [
     {
-      icon: RiCodeLine,
+      icon: Code,
       title: 'REST API reference',
       description: "Learn how to authenticate and work with Novu's API endpoints.",
       url: docsUrl('/api-reference/overview'),
@@ -148,13 +149,13 @@ const CONTEXTUAL_SUGGESTIONS: Record<RouteContext, SuggestionItem[]> = {
   analytics: DEFAULT_SUGGESTIONS,
   topics: [
     {
-      icon: RiHashtag,
+      icon: Hash,
       title: 'Working with topics',
       description: 'Group subscribers and send bulk notifications efficiently.',
       url: docsUrl('/platform/concepts/topics'),
     },
     {
-      icon: RiUserLine,
+      icon: User,
       title: 'Topic subscriptions',
       description: 'Manage who receives notifications for each topic.',
       url: docsUrl('/concepts/topics#dynamic-and-decoupled-grouping'),
@@ -162,13 +163,13 @@ const CONTEXTUAL_SUGGESTIONS: Record<RouteContext, SuggestionItem[]> = {
   ],
   webhooks: [
     {
-      icon: RiGlobalLine,
+      icon: GlobeSimple,
       title: 'Webhook setup',
       description: 'Receive real-time updates about notification events.',
       url: docsUrl('/platform/additional-resources/webhooks'),
     },
     {
-      icon: RiCodeLine,
+      icon: Code,
       title: 'Webhook events',
       description: 'Learn about the events you can subscribe to.',
       url: docsUrl('/platform/additional-resources/webhooks#supported-event-types'),
@@ -176,13 +177,13 @@ const CONTEXTUAL_SUGGESTIONS: Record<RouteContext, SuggestionItem[]> = {
   ],
   layouts: [
     {
-      icon: RiLayoutGridLine,
+      icon: GridFour,
       title: 'Creating layouts',
       description: 'Design reusable templates for consistent notifications.',
       url: docsUrl('/platform/workflow/layouts'),
     },
     {
-      icon: RiMailLine,
+      icon: Envelope,
       title: 'Using layouts in workflows',
       description: 'Apply layouts to email steps for consistent branding across notifications.',
       url: docsUrl('/platform/workflow/layouts#using-a-layout-in-workflow-email-step'),
@@ -190,13 +191,13 @@ const CONTEXTUAL_SUGGESTIONS: Record<RouteContext, SuggestionItem[]> = {
   ],
   translations: [
     {
-      icon: RiTranslate2,
+      icon: Translate,
       title: 'Translations',
       description: 'Learn how to translate your workflow step content into multiple languages',
       url: docsUrl('/platform/workflow/translations'),
     },
     {
-      icon: RiSettings3Line,
+      icon: GearSix,
       title: 'Managing translations',
       description: 'Upload and manage translation files for your content.',
       url: docsUrl('/api-reference/translations/create-a-translation'),
@@ -204,19 +205,19 @@ const CONTEXTUAL_SUGGESTIONS: Record<RouteContext, SuggestionItem[]> = {
   ],
   environments: [
     {
-      icon: RiSettings3Line,
+      icon: GearSix,
       title: 'Understanding environments',
       description: 'Learn how Novu uses environments to separate development and production workflows.',
       url: docsUrl('/platform/concepts/environments'),
     },
     {
-      icon: RiKey2Line,
+      icon: Key,
       title: 'Environment credentials',
       description: 'Understand Application Identifier and API Secret Key for each environment.',
       url: docsUrl('/platform/concepts/environments#environment-credentials'),
     },
     {
-      icon: RiRouteFill,
+      icon: Path,
       title: 'Publishing changes',
       description: 'Promote workflows, layouts, and translations from Development to other environments.',
       url: docsUrl('/platform/concepts/environments#publishing-changes-to-other-environments'),
@@ -224,19 +225,19 @@ const CONTEXTUAL_SUGGESTIONS: Record<RouteContext, SuggestionItem[]> = {
   ],
   contexts: [
     {
-      icon: RiBuildingLine,
+      icon: Buildings,
       title: 'Understanding contexts',
       description: 'Learn how to create, update, and delete contexts to manage reusable metadata.',
       url: docsUrl('/platform/workflow/contexts/manage-contexts'),
     },
     {
-      icon: RiCodeLine,
+      icon: Code,
       title: 'Context object schema',
       description: 'Learn about context types, IDs, and data formats for storing metadata.',
       url: docsUrl('/platform/workflow/contexts/manage-contexts#context-object-schema'),
     },
     {
-      icon: RiSettings3Line,
+      icon: GearSix,
       title: 'Managing contexts',
       description: 'Create, update, and delete contexts via dashboard or API.',
       url: docsUrl('/platform/workflow/contexts/manage-contexts#create-a-context'),
@@ -289,7 +290,7 @@ export const GETTING_STARTED: SuggestionItem[] = [
     url: docsUrl('/platform/inbox/overview'),
   },
   {
-    icon: RiStore3Line,
+    icon: Storefront,
     title: 'Connect providers',
     description: 'Email, SMS, chat—whatever you need to reach users.',
     url: docsUrl('/integrations/overview'),

@@ -3,7 +3,7 @@ import { RJSFSchema } from '@rjsf/utils';
 import { motion } from 'motion/react';
 import { useState } from 'react';
 import { useFormContext } from 'react-hook-form';
-import { RiBookMarkedLine, RiInputField, RiQuestionLine } from 'react-icons/ri';
+
 import { Link } from 'react-router-dom';
 import { ConfirmationModal } from '@/components/confirmation-modal';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@merge-rd/ui/components/accordion';
@@ -18,6 +18,7 @@ import { buildDefaultValuesOfDataSchema } from '@/utils/schema';
 import { cn } from '@merge-rd/ui/lib/utils';
 import { useWorkflow } from '../../workflow-provider';
 import { JsonForm } from './json-form';
+import { BookBookmark, Question, Textbox } from '@phosphor-icons/react';
 
 type CustomStepControlsProps = {
   dataSchema: Controls['dataSchema'];
@@ -50,7 +51,7 @@ export const CustomStepControls = (props: CustomStepControlsProps) => {
           <AccordionItem value="controls">
             <AccordionTrigger className="flex w-full items-center justify-between text-sm">
               <div className="flex items-center gap-1">
-                <RiInputField className="text-feature size-5" />
+                <Textbox className="text-feature size-5" />
                 <span className="text-sm font-medium">Code-defined step controls</span>
               </div>
             </AccordionTrigger>
@@ -80,7 +81,7 @@ export const CustomStepControls = (props: CustomStepControlsProps) => {
                       target="_blank"
                       className="flex items-center gap-1.5 text-xs text-neutral-600 underline"
                     >
-                      <RiBookMarkedLine className="size-4" />
+                      <BookBookmark className="size-4" />
                       View docs
                     </Link>
                   </div>
@@ -146,7 +147,7 @@ export const CustomStepControls = (props: CustomStepControlsProps) => {
         <AccordionItem value="controls">
           <AccordionTrigger className="flex w-full items-center justify-between text-sm">
             <div className="flex items-center gap-1">
-              <RiInputField className="text-feature size-5" />
+              <Textbox className="text-feature size-5" />
               <span className="text-sm font-medium">Code-defined step controls</span>
             </div>
           </AccordionTrigger>
@@ -189,7 +190,7 @@ const OverrideMessage = ({ isOverridden }: { isOverridden: boolean }) => {
           to={CONTROLS_DOCS_LINK}
           className="mt-2 flex items-center gap-1 text-xs text-neutral-600 hover:underline"
         >
-          <RiQuestionLine className="size-4" /> Learn more about code-defined controls.
+          <Question className="size-4" /> Learn more about code-defined controls.
         </Link>
       )}
     </motion.div>

@@ -1,8 +1,14 @@
 import { cva, type VariantProps } from 'class-variance-authority';
 import { ReactNode } from 'react';
-import { RiCheckboxCircleFill, RiErrorWarningFill, RiInformation2Fill, RiLoader4Line } from 'react-icons/ri';
+
 import { Toaster as SonnerToaster, type ToasterProps } from 'sonner';
 import { cn } from '@merge-rd/ui/lib/utils';
+import {
+  CheckCircle,
+  Info,
+  SpinnerGap,
+  WarningCircle,
+} from '@phosphor-icons/react';
 
 export const Toaster = (props: ToasterProps) => {
   return <SonnerToaster className="toaster group" {...props} />;
@@ -26,15 +32,15 @@ const toastIconVariants = cva('size-5 shrink-0', {
 type ToastIconVariants = VariantProps<typeof toastIconVariants>;
 
 const icons: Record<string, React.ElementType> = {
-  default: RiLoader4Line,
-  success: RiCheckboxCircleFill,
-  error: RiErrorWarningFill,
-  warning: RiErrorWarningFill,
-  info: RiInformation2Fill,
+  default: SpinnerGap,
+  success: CheckCircle,
+  error: WarningCircle,
+  warning: WarningCircle,
+  info: Info,
 };
 
 export const ToastIcon = ({ variant = 'default', className }: ToastIconVariants & { className?: string }) => {
-  const Icon = icons[variant ?? 'default'] ?? RiLoader4Line;
+  const Icon = icons[variant ?? 'default'] ?? SpinnerGap;
   return <Icon className={cn(toastIconVariants({ variant }), className)} />;
 };
 

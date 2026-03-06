@@ -6,7 +6,7 @@ import {
   PROTECTED_ENVIRONMENTS,
 } from '@novu/shared';
 import { useMemo, useState } from 'react';
-import { RiDeleteBin2Line, RiInformation2Line, RiMore2Fill } from 'react-icons/ri';
+
 import { useEnvironment } from '@/context/environment/hooks';
 import { useDeleteEnvironment } from '@/hooks/use-environments';
 import { Protect } from '@/utils/protect';
@@ -31,6 +31,7 @@ import { TimeDisplayHoverCard } from '../time-display-hover-card';
 import TruncatedText from '../truncated-text';
 import { DeleteEnvironmentDialog } from './delete-environment-dialog';
 import { EditEnvironmentSheet } from './edit-environment-sheet';
+import { DotsThree, Info, Trash } from '@phosphor-icons/react';
 
 const EnvironmentRowSkeleton = () => (
   <TableRow>
@@ -63,7 +64,7 @@ const EnvironmentSectionHeader = () => (
         <Tooltip>
           <TooltipTrigger asChild>
             <span className="inline-block cursor-help">
-              <RiInformation2Line className="size-3 text-foreground-400" />
+              <Info className="size-3 text-foreground-400" />
             </span>
           </TooltipTrigger>
           <TooltipContent className="max-w-xs">
@@ -148,7 +149,7 @@ export function EnvironmentsList({ environments, isLoading }: { environments: IE
           {!PROTECTED_ENVIRONMENTS.includes(environment.name as EnvironmentEnum) && (
             <DropdownMenu modal={false}>
               <DropdownMenuTrigger asChild>
-                <CompactButton icon={RiMore2Fill} variant="ghost" className="z-10 h-8 w-8 p-0"></CompactButton>
+                <CompactButton icon={DotsThree} variant="ghost" className="z-10 h-8 w-8 p-0"></CompactButton>
               </DropdownMenuTrigger>
               <DropdownMenuContent alignOffset={5} align="end">
                 <DropdownMenuGroup>
@@ -167,7 +168,7 @@ export function EnvironmentsList({ environments, isLoading }: { environments: IE
                         PROTECTED_ENVIRONMENTS.includes(environment.name as EnvironmentEnum)
                       }
                     >
-                      <RiDeleteBin2Line />
+                      <Trash />
                       Delete environment
                     </DropdownMenuItem>
                   </Protect>

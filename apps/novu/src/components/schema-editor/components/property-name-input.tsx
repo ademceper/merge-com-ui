@@ -1,12 +1,12 @@
 import { memo } from 'react';
 import { type Control, Controller, type Path } from 'react-hook-form';
-import { RiErrorWarningLine } from 'react-icons/ri';
 
 import { InputPure, InputRoot, InputWrapper } from '@/components/primitives/input';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/primitives/tooltip';
 import { cn } from '@merge-rd/ui/lib/utils';
 import { Code2 } from '../../icons/code-2';
 import { SchemaEditorFormValues } from '../utils/validation-schema';
+import { WarningCircle } from '@phosphor-icons/react';
 
 // path: the direct RHF path to the keyName field, e.g., "propertyList.0.keyName"
 type PropertyNameInputProps = {
@@ -50,7 +50,7 @@ export const PropertyNameInput = memo(function PropertyNameInput({
                     <Tooltip>
                       <TooltipTrigger asChild>
                         <span className="inline-flex cursor-default items-center justify-center pl-1 pr-1">
-                          <RiErrorWarningLine className={cn('text-destructive h-4 w-4 shrink-0')} />
+                          <WarningCircle className={cn('text-destructive h-4 w-4 shrink-0')} />
                         </span>
                       </TooltipTrigger>
                       <TooltipContent side="top" sideOffset={5}>

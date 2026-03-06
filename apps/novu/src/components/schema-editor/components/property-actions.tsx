@@ -1,11 +1,11 @@
 import { useState } from 'react';
-import { RiDeleteBin2Line, RiSettings4Line } from 'react-icons/ri';
 
 import { Button } from '@merge-rd/ui/components/button';
 import { Popover, PopoverTrigger } from '@/components/primitives/popover';
 import { cn } from '@merge-rd/ui/lib/utils';
 import { SchemaPropertySettingsPopover } from '../schema-property-settings-popover';
 import type { VariableUsageInfo } from '../utils/check-variable-usage';
+import { Gear, Trash } from '@phosphor-icons/react';
 
 type PropertyActionsProps = {
   definitionPath: string;
@@ -37,7 +37,7 @@ export function PropertyActions({
             mode="ghost"
             size="2xs"
             className={cn('border ml-0! h-7 w-7 border-neutral-200')}
-            leadingIcon={RiSettings4Line}
+            leadingIcon={Gear}
             disabled={isDisabled || !propertyKeyForDisplay || propertyKeyForDisplay.trim() === ''}
             aria-label="Property settings"
           />
@@ -57,7 +57,7 @@ export function PropertyActions({
         variant="error"
         mode="ghost"
         size="2xs"
-        leadingIcon={RiDeleteBin2Line}
+        leadingIcon={Trash}
         onClick={isDisabled ? undefined : onDeleteProperty}
         aria-label="Delete property"
         className={cn('border ml-0! h-7 w-7 border-neutral-200')}

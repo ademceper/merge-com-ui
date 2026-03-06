@@ -1,11 +1,12 @@
 /** biome-ignore-all lint/correctness/useUniqueElementIds: expected */
 import { PermissionsEnum } from '@novu/shared';
-import { RiInformation2Line } from 'react-icons/ri';
+
 import { Tooltip, TooltipContent, TooltipPortal, TooltipTrigger } from '@/components/primitives/tooltip';
 import { useFetchOrganizationSettings } from '@/hooks/use-fetch-organization-settings';
 import { useUpdateOrganizationSettings } from '@/hooks/use-update-organization-settings';
 import { Protect } from '@/utils/protect';
 import { NovuBrandingSwitch } from './novu-branding-switch';
+import { Info } from '@phosphor-icons/react';
 
 export function OrganizationSettings() {
   const { data: organizationSettings, isLoading: isLoadingSettings } = useFetchOrganizationSettings();
@@ -32,7 +33,7 @@ export function OrganizationSettings() {
                   <span className="text-label-sm text-text-strong">Remove Novu branding</span>
                   <Tooltip>
                     <TooltipTrigger asChild>
-                      <RiInformation2Line className="size-4 text-text-soft cursor-help" />
+                      <Info className="size-4 text-text-soft cursor-help" />
                     </TooltipTrigger>
                     <TooltipPortal>
                       <TooltipContent

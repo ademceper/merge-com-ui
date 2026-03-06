@@ -1,6 +1,6 @@
 import { memo, useCallback, useMemo } from 'react';
 import { type Control, Path, useFieldArray, useWatch } from 'react-hook-form';
-import { RiAddLine } from 'react-icons/ri';
+
 import { v4 as uuidv4 } from 'uuid';
 
 import { Button } from '@merge-rd/ui/components/button';
@@ -11,6 +11,7 @@ import type { VariableUsageInfo } from '../utils/check-variable-usage';
 import { newProperty } from '../utils/json-helpers';
 import { getMarginClassPx } from '../utils/ui-helpers';
 import type { PropertyListItem, SchemaEditorFormValues } from '../utils/validation-schema';
+import { Plus } from '@phosphor-icons/react';
 
 interface NestedPropertyProps {
   nestedField: any;
@@ -128,7 +129,7 @@ export const ObjectSection = memo<ObjectSectionProps>(function ObjectSection({
           variant="secondary"
           mode="lighter"
           onClick={handleAddNestedProperty}
-          leadingIcon={RiAddLine}
+          leadingIcon={Plus}
           disabled={isAtMaxDepth || readOnly}
         >
           Add Nested Property

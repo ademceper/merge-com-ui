@@ -1,6 +1,6 @@
 import { motion } from 'motion/react';
 import { useState } from 'react';
-import { RiDiscussLine, RiMindMap, RiPulseFill } from 'react-icons/ri';
+
 import { TopicSubscriptionDetailsResponse } from '@/api/topics';
 import { Button } from '@merge-rd/ui/components/button';
 import { CopyButton } from '@/components/primitives/copy-button';
@@ -10,6 +10,7 @@ import TruncatedText from '@/components/truncated-text';
 import { fadeIn } from '@/utils/animation';
 import { cn } from '@merge-rd/ui/lib/utils';
 import { SubscriptionPreferenceRule } from './subscription-preference-rule';
+import { ChatTeardropDots, Pulse, TreeStructure } from '@phosphor-icons/react';
 
 type SubscriptionPreferencesProps = {
   isLoading: boolean;
@@ -53,7 +54,7 @@ export const SubscriptionPreferences = ({
       <div className="flex h-full flex-col">
         <header className="border-bg-soft flex h-12 w-full shrink-0 flex-row items-center gap-3 border-b px-3 py-4">
           <div className="flex flex-1 items-center gap-1 overflow-hidden text-sm font-medium">
-            <RiMindMap className="size-5 p-0.5" />
+            <TreeStructure className="size-5 p-0.5" />
             <TruncatedText className="flex-1 pr-10">Subscription preferences</TruncatedText>
           </div>
         </header>
@@ -98,10 +99,10 @@ export const SubscriptionPreferences = ({
         <div className="flex shrink-0 flex-col gap-2 border-t border-bg-soft p-3">
           <span className="text-xs font-medium text-text-soft">Quick actions</span>
           <div className="flex gap-2">
-            <Button variant="secondary" size="2xs" mode="outline" leadingIcon={RiDiscussLine} disabled>
+            <Button variant="secondary" size="2xs" mode="outline" leadingIcon={ChatTeardropDots} disabled>
               View topic
             </Button>
-            <Button variant="secondary" size="2xs" mode="outline" leadingIcon={RiPulseFill} disabled>
+            <Button variant="secondary" size="2xs" mode="outline" leadingIcon={Pulse} disabled>
               View subscription activity
             </Button>
           </div>
@@ -115,7 +116,7 @@ export const SubscriptionPreferences = ({
       <div className="flex h-full flex-col">
         <header className="border-bg-soft flex h-12 w-full shrink-0 flex-row items-center gap-3 border-b px-3 py-4">
           <div className="flex flex-1 items-center gap-1 overflow-hidden text-sm font-medium">
-            <RiMindMap className="size-5 p-0.5" />
+            <TreeStructure className="size-5 p-0.5" />
             <TruncatedText className="flex-1 pr-10">Subscription preferences</TruncatedText>
           </div>
         </header>
@@ -149,13 +150,13 @@ export const SubscriptionPreferences = ({
               variant="secondary"
               size="2xs"
               mode="outline"
-              leadingIcon={RiDiscussLine}
+              leadingIcon={ChatTeardropDots}
               onClick={() => setOpenTopicDrawer(true)}
             >
               View topic
             </Button>
             {/** TODO: implement subscription activity button */}
-            <Button variant="secondary" size="2xs" mode="outline" leadingIcon={RiPulseFill}>
+            <Button variant="secondary" size="2xs" mode="outline" leadingIcon={Pulse}>
               View subscription activity
             </Button>
           </div>

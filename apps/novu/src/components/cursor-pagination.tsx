@@ -1,5 +1,6 @@
-import { ChevronLeftIcon, ChevronRightIcon } from '@radix-ui/react-icons';
+
 import { Button } from '@merge-rd/ui/components/button';
+import { CaretLeft, CaretRight } from '@phosphor-icons/react';
 
 interface CursorPaginationProps {
   hasNext: boolean;
@@ -21,8 +22,8 @@ export function CursorPagination({ hasNext, hasPrevious, onNext, onPrevious, onF
           className="rounded-r-none border-0"
         >
           <div className="flex items-center">
-            <ChevronLeftIcon className="size-3" />
-            <ChevronLeftIcon className="-ml-2 size-3" />
+            <CaretLeft className="size-3" />
+            <CaretLeft className="-ml-2 size-3" />
           </div>
         </Button>
         <Button
@@ -32,7 +33,7 @@ export function CursorPagination({ hasNext, hasPrevious, onNext, onPrevious, onF
           onClick={onPrevious}
           className="border-l-input rounded-none border-0 border-l"
         >
-          <ChevronLeftIcon className="size-3" />
+          <CaretLeft className="size-3" />
         </Button>
         <Button
           variant="secondary"
@@ -41,7 +42,7 @@ export function CursorPagination({ hasNext, hasPrevious, onNext, onPrevious, onF
           onClick={onNext}
           className="border-l-input rounded-l-none border-0 border-l"
         >
-          <ChevronRightIcon className="size-3" />
+          <CaretRight className="size-3" />
         </Button>
       </div>
     </div>

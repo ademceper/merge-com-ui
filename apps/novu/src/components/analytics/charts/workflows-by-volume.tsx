@@ -1,5 +1,5 @@
 import { useCallback, useMemo } from 'react';
-import { RiRouteFill } from 'react-icons/ri';
+
 import { Bar, BarChart, Cell, XAxis, YAxis } from 'recharts';
 import { type WorkflowVolumeDataPoint } from '../../../api/activity';
 
@@ -10,6 +10,7 @@ import { createVolumeBasedHasDataChecker } from '../utils/chart-validation';
 import { generateDummyWorkflowData } from './chart-dummy-data';
 import { type WorkflowChartData } from './chart-types';
 import { ChartWrapper } from './chart-wrapper';
+import { Path } from '@phosphor-icons/react';
 
 // Color palette for workflow charts
 const colorPalette = ['#8b5cf6', '#06b6d4', '#facc15', '#f97316', '#ef4444'];
@@ -79,7 +80,7 @@ function CustomTick({ x, y, payload }: { x: number; y: number; payload: { value:
 
   return (
     <g transform={`translate(${x},${y})`}>
-      <RiRouteFill x={-16} y={-6} width={12} height={12} fill="#525866" />
+      <Path weight="fill" x={-16} y={-6} width={12} height={12} fill="#525866" />
       <text x={-2} y={0} dy={4} textAnchor="start" fill="#525866" fontSize={12}>
         {text}
       </text>

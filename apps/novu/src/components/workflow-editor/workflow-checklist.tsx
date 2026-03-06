@@ -2,13 +2,7 @@ import { useUser } from '@merge-rd/auth';
 import { ChannelTypeEnum, WorkflowResponseDto } from '@novu/shared';
 import { motion } from 'motion/react';
 import { useEffect, useMemo, useState } from 'react';
-import {
-  RiArrowRightDoubleFill,
-  RiCheckboxCircleFill,
-  RiCloseLine,
-  RiLoader3Line,
-  RiSparkling2Fill,
-} from 'react-icons/ri';
+
 import { useNavigate } from 'react-router-dom';
 import { useEnvironment, useFetchEnvironments } from '@/context/environment/hooks';
 import { useFeatureFlag } from '@/hooks/use-feature-flag';
@@ -22,6 +16,13 @@ import { cn } from '@merge-rd/ui/lib/utils';
 import { Badge, BadgeIcon } from '@/components/primitives/badge';
 import { Popover, PopoverClose, PopoverContent, PopoverTrigger } from '@/components/primitives/popover';
 import { useWorkflow } from './workflow-provider';
+import {
+  CaretDoubleRight,
+  CheckCircle,
+  CircleNotch,
+  Sparkle,
+  X,
+} from '@phosphor-icons/react';
 
 interface WorkflowChecklistProps {
   steps: Step[];
@@ -112,7 +113,7 @@ export function WorkflowChecklist({ steps, workflow }: WorkflowChecklistProps) {
                 },
               }}
             >
-              <BadgeIcon as={RiSparkling2Fill} />
+              <BadgeIcon as={Sparkle} />
             </motion.div>
             <span className="text-xs">
               {checklistItems.filter((item) => item.isCompleted(steps)).length}/{checklistItems.length}
@@ -140,7 +141,7 @@ export function WorkflowChecklist({ steps, workflow }: WorkflowChecklistProps) {
               type="button"
               className="text-text-soft hover:text-text-sub -mr-1 -mt-1 rounded-sm p-1 transition-colors"
             >
-              <RiCloseLine className="h-4 w-4" />
+              <X className="h-4 w-4" />
             </button>
           </PopoverClose>
         </div>
@@ -274,9 +275,9 @@ function ChecklistItemButton({ item, steps }: { item: ChecklistItem; steps: Step
       <div className="flex h-6 w-6 items-center justify-center rounded-full bg-white shadow-xs">
         <div className="flex items-center justify-center">
           {item.isCompleted(steps) ? (
-            <RiCheckboxCircleFill className="text-success h-4 w-4" />
+            <CheckCircle weight="fill" className="text-success h-4 w-4" />
           ) : (
-            <RiLoader3Line className="text-text-soft h-4 w-4" />
+            <CircleNotch className="text-text-soft h-4 w-4" />
           )}
         </div>
       </div>
@@ -284,7 +285,7 @@ function ChecklistItemButton({ item, steps }: { item: ChecklistItem; steps: Step
         <span className={cn(item.isCompleted(steps) && 'line-through')}>{item.title}</span>
       </div>
 
-      <RiArrowRightDoubleFill className="text-text-soft ml-auto h-4 w-4 opacity-0 transition-opacity duration-200 group-hover:opacity-100" />
+      <CaretDoubleRight weight="fill" className="text-text-soft ml-auto h-4 w-4 opacity-0 transition-opacity duration-200 group-hover:opacity-100" />
     </button>
   );
 }

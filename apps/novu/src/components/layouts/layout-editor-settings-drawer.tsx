@@ -6,7 +6,7 @@ import { VisuallyHidden } from '@radix-ui/react-visually-hidden';
 import { formatDistanceToNow } from 'date-fns';
 import { forwardRef, useCallback, useEffect, useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { RiDeleteBin2Line, RiSettings4Line } from 'react-icons/ri';
+
 import { useBlocker, useNavigate } from 'react-router-dom';
 import { ExternalToast } from 'sonner';
 import { z } from 'zod';
@@ -48,6 +48,7 @@ import { TranslationToggleSection } from '../workflow-editor/translation-toggle-
 import { DeleteLayoutDialog } from './delete-layout-dialog';
 import { useLayoutEditor } from './layout-editor-provider';
 import { layoutSchema } from './schema';
+import { Gear, Trash } from '@phosphor-icons/react';
 
 type LayoutSettingsFormData = z.infer<typeof layoutSchema>;
 
@@ -265,7 +266,7 @@ export const LayoutEditorSettingsDrawer = forwardRef<HTMLDivElement, LayoutEdito
                 <SheetHeader className="p-0">
                   <header className="border-bg-soft flex h-12 w-full flex-row items-center gap-3 border-b p-3.5">
                     <div className="flex flex-1 items-center gap-1 overflow-hidden text-sm font-medium">
-                      <RiSettings4Line className="size-5 p-0.5" />
+                      <Gear className="size-5 p-0.5" />
                       <TruncatedText className="flex-1">Manage layout</TruncatedText>
                     </div>
                   </header>
@@ -331,7 +332,7 @@ export const LayoutEditorSettingsDrawer = forwardRef<HTMLDivElement, LayoutEdito
                       permission={PermissionsEnum.WORKFLOW_WRITE}
                       variant="primary"
                       mode="ghost"
-                      leadingIcon={RiDeleteBin2Line}
+                      leadingIcon={Trash}
                       onClick={() => {
                         setIsDeleteDialogOpen(true);
                       }}

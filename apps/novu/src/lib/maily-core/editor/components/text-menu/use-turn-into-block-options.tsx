@@ -1,15 +1,7 @@
 /* cspell:ignore Pilcrow */
 import { Editor, useEditorState } from '@tiptap/react';
-import {
-  FootprintsIcon,
-  Heading1Icon,
-  Heading2Icon,
-  Heading3Icon,
-  ListIcon,
-  ListOrderedIcon,
-  LucideIcon,
-  PilcrowIcon,
-} from 'lucide-react';
+import { Footprints, TextH, TextHTwo, TextHThree, List, ListNumbers, Paragraph } from '@phosphor-icons/react'
+import type { Icon as LucideIcon } from '@phosphor-icons/react';;
 
 export type TurnIntoBlockOptions = {
   label: string;
@@ -39,7 +31,7 @@ export function useTurnIntoBlockOptions(editor: Editor) {
         id: 'hierarchy',
       },
       {
-        icon: PilcrowIcon,
+        icon: Paragraph,
         onClick: () => editor.chain().focus().liftListItem('listItem').setParagraph().run(),
         id: 'paragraph',
         disabled: () => !editor.can().setParagraph(),
@@ -52,7 +44,7 @@ export function useTurnIntoBlockOptions(editor: Editor) {
         type: 'option',
       },
       {
-        icon: Heading1Icon,
+        icon: TextH,
         onClick: () => editor.chain().focus().liftListItem('listItem').setHeading({ level: 1 }).run(),
         id: 'heading1',
         disabled: () => !editor.can().setHeading({ level: 1 }),
@@ -61,7 +53,7 @@ export function useTurnIntoBlockOptions(editor: Editor) {
         type: 'option',
       },
       {
-        icon: Heading2Icon,
+        icon: TextHTwo,
         onClick: () => editor.chain().focus().liftListItem('listItem').setHeading({ level: 2 }).run(),
         id: 'heading2',
         disabled: () => !editor.can().setHeading({ level: 2 }),
@@ -70,7 +62,7 @@ export function useTurnIntoBlockOptions(editor: Editor) {
         type: 'option',
       },
       {
-        icon: Heading3Icon,
+        icon: TextHThree,
         onClick: () => editor.chain().focus().liftListItem('listItem').setHeading({ level: 3 }).run(),
         id: 'heading3',
         disabled: () => !editor.can().setHeading({ level: 3 }),
@@ -82,7 +74,7 @@ export function useTurnIntoBlockOptions(editor: Editor) {
         id: 'footer',
         type: 'option',
         label: 'Footer',
-        icon: FootprintsIcon,
+        icon: Footprints,
         onClick: () => {
           editor.chain().focus().liftListItem('listItem').setFooter().run();
         },
@@ -95,7 +87,7 @@ export function useTurnIntoBlockOptions(editor: Editor) {
         id: 'lists',
       },
       {
-        icon: ListIcon,
+        icon: List,
         onClick: () => editor.chain().focus().toggleBulletList().run(),
         id: 'bulletList',
         disabled: () => !editor.can().toggleBulletList(),
@@ -104,7 +96,7 @@ export function useTurnIntoBlockOptions(editor: Editor) {
         type: 'option',
       },
       {
-        icon: ListOrderedIcon,
+        icon: ListNumbers,
         onClick: () => editor.chain().focus().toggleOrderedList().run(),
         id: 'orderedList',
         disabled: () => !editor.can().toggleOrderedList(),

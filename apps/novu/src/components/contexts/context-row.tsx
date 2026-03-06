@@ -1,7 +1,7 @@
 import { GetContextResponseDto } from '@novu/api/models/components';
 import { PermissionsEnum } from '@novu/shared';
 import { ComponentProps, useState } from 'react';
-import { RiDeleteBin2Line, RiMore2Fill, RiPulseFill } from 'react-icons/ri';
+
 import { Link } from 'react-router-dom';
 import { ConfirmationModal } from '@/components/confirmation-modal';
 import { CompactButton } from '@/components/primitives/button-compact';
@@ -23,6 +23,7 @@ import { Protect } from '@/utils/protect';
 import { buildRoute, ROUTES } from '@/utils/routes';
 import { cn } from '@merge-rd/ui/lib/utils';
 import { useContextsNavigate } from './hooks/use-contexts-navigate';
+import { DotsThree, Pulse, Trash } from '@phosphor-icons/react';
 
 type ContextRowProps = {
   context: GetContextResponseDto;
@@ -97,7 +98,7 @@ export const ContextRow = ({ context }: ContextRowProps) => {
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <CompactButton
-                icon={RiMore2Fill}
+                icon={DotsThree}
                 variant="ghost"
                 className="z-10 h-8 w-8 p-0"
                 onClick={stopPropagation}
@@ -116,7 +117,7 @@ export const ContextRow = ({ context }: ContextRowProps) => {
                         new URLSearchParams({ contextKeys: `${context.type}:${context.id}` }).toString()
                       }
                     >
-                      <RiPulseFill />
+                      <Pulse weight="fill" />
                       View activity
                     </Link>
                   </DropdownMenuItem>
@@ -128,7 +129,7 @@ export const ContextRow = ({ context }: ContextRowProps) => {
                       setTimeout(() => setIsDeleteModalOpen(true), 0);
                     }}
                   >
-                    <RiDeleteBin2Line />
+                    <Trash />
                     Delete context
                   </DropdownMenuItem>
                 </Protect>
@@ -171,7 +172,7 @@ export const ContextRowSkeleton = () => {
         <Skeleton className="h-6 w-32" />
       </TableCell>
       <TableCell className="w-1">
-        <RiMore2Fill className="size-4 opacity-50" />
+        <DotsThree weight="fill" className="size-4 opacity-50" />
       </TableCell>
     </TableRow>
   );

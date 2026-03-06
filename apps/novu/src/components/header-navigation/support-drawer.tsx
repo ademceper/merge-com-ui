@@ -1,7 +1,7 @@
 import { InkeepEmbeddedSearch, InkeepEmbeddedSearchProps } from '@inkeep/cxkit-react';
 import { AnimatePresence, motion } from 'motion/react';
 import { cloneElement, isValidElement, useRef, useState } from 'react';
-import { RiBook2Line, RiCalendarEventLine, RiMessage3Line, RiNewspaperLine, RiRouteFill } from 'react-icons/ri';
+
 import { Sheet, SheetContent, SheetDescription, SheetTitle } from '@/components/primitives/sheet';
 import { VisuallyHidden } from '@/components/primitives/visually-hidden';
 import { usePlainChat } from '@/hooks/use-plain-chat';
@@ -18,6 +18,13 @@ import {
   ROADMAP_URL,
   useContextualSuggestions,
 } from './support-drawer-constants';
+import {
+  Book,
+  CalendarBlank,
+  ChatDots,
+  Newspaper,
+  Path,
+} from '@phosphor-icons/react';
 
 type SupportDrawerContentProps = {
   onClose: () => void;
@@ -197,7 +204,7 @@ function SupportDrawerContent({
 
       <div className="flex flex-col gap-0.5 p-1.5">
         <FooterLink
-          icon={RiBook2Line}
+          icon={Book}
           onClick={() => {
             telemetry(TelemetryEvent.SUPPORT_DRAWER_DOCUMENTATION_CLICKED);
             handleOpenExternalLink(docsUrl());
@@ -206,7 +213,7 @@ function SupportDrawerContent({
           Documentation
         </FooterLink>
         <FooterLink
-          icon={RiNewspaperLine}
+          icon={Newspaper}
           onClick={() => {
             telemetry(TelemetryEvent.SUPPORT_DRAWER_CHANGELOG_CLICKED);
             handleOpenExternalLink(CHANGELOG_URL);
@@ -215,7 +222,7 @@ function SupportDrawerContent({
           What's new
         </FooterLink>
         <FooterLink
-          icon={RiRouteFill}
+          icon={Path}
           onClick={() => {
             telemetry(TelemetryEvent.SUPPORT_DRAWER_ROADMAP_CLICKED);
             handleOpenExternalLink(ROADMAP_URL);
@@ -224,7 +231,7 @@ function SupportDrawerContent({
           Roadmap
         </FooterLink>
         <FooterLink
-          icon={RiMessage3Line}
+          icon={ChatDots}
           onClick={() => {
             telemetry(TelemetryEvent.SUPPORT_DRAWER_CHAT_CLICKED);
             handleShareFeedback();
@@ -233,7 +240,7 @@ function SupportDrawerContent({
           Chat with us
         </FooterLink>
         <FooterLink
-          icon={RiCalendarEventLine}
+          icon={CalendarBlank}
           onClick={() => {
             telemetry(TelemetryEvent.SUPPORT_DRAWER_BOOK_DEMO_CLICKED);
             handleOpenExternalLink(BOOK_DEMO_URL);

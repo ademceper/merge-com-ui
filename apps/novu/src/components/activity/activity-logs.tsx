@@ -1,7 +1,7 @@
 import { IActivity } from '@novu/shared';
 import { motion } from 'motion/react';
 import { useRef, useState } from 'react';
-import { RiCloseFill, RiFullscreenLine } from 'react-icons/ri';
+
 import { ActivityJobItem } from '@/components/activity/activity-job-item';
 import { CodeBlock } from '@/components/primitives/code-block';
 import { Dialog, DialogClose, DialogContent, DialogHeader, DialogTitle } from '@merge-rd/ui/components/dialog';
@@ -12,6 +12,7 @@ import { cn } from '@merge-rd/ui/lib/utils';
 import { CollapsibleSection } from '../http-logs/logs-detail-content';
 import { CompactButton } from '../primitives/button-compact';
 import { CopyToClipboard } from '../primitives/copy-to-clipboard';
+import { ArrowsOut, X } from '@phosphor-icons/react';
 
 export function ActivityLogs({
   activity,
@@ -107,7 +108,7 @@ export function ActivityLogs({
             <div className="flex items-center justify-between">
               <DialogTitle className="text-foreground-950 text-sm font-medium">Request payload</DialogTitle>
               <DialogClose asChild>
-                <CompactButton size="md" variant="ghost" icon={RiCloseFill} type="button">
+                <CompactButton size="md" variant="ghost" icon={X} type="button">
                   <span className="sr-only">Close</span>
                 </CompactButton>
               </DialogClose>

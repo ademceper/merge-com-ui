@@ -1,9 +1,10 @@
 import { IconType } from 'react-icons';
-import { RiArrowRightUpLine, RiBookMarkedLine, RiQuestionLine } from 'react-icons/ri';
+
 import { LinkButton } from '@/components/primitives/button-link';
 import { useTelemetry } from '@/hooks/use-telemetry';
 import { TelemetryEvent } from '@/utils/telemetry';
 import { cn } from '@merge-rd/ui/lib/utils';
+import { ArrowUpRight, BookBookmark, Question } from '@phosphor-icons/react';
 
 interface ExternalLinkProps extends Omit<React.AnchorHTMLAttributes<HTMLAnchorElement>, 'onClick'> {
   children: React.ReactNode;
@@ -41,10 +42,10 @@ export function ExternalLink({
 
   const getTrailingIcon = (): IconType | undefined => {
     if (variant === 'text') return undefined;
-    if (variant === 'documentation') return RiBookMarkedLine;
-    if (variant === 'tip') return RiQuestionLine;
+    if (variant === 'documentation') return BookBookmark;
+    if (variant === 'tip') return Question;
 
-    return RiArrowRightUpLine;
+    return ArrowUpRight;
   };
 
   return (

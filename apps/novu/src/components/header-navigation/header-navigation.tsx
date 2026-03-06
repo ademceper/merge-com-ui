@@ -1,6 +1,6 @@
 import { EnvironmentTypeEnum, PermissionsEnum } from '@novu/shared';
 import { HTMLAttributes, ReactNode } from 'react';
-import { RiSearchLine } from 'react-icons/ri';
+
 import { useCommandPalette } from '@/components/command-palette/hooks/use-command-palette';
 import { InboxButton } from '@/components/inbox-button';
 import { UserProfile } from '@/components/user-profile';
@@ -14,6 +14,7 @@ import { SidebarPageHeader } from '@merge-rd/ui/components/sidebar';
 import { CustomerSupportButton } from './customer-support-button';
 import { EditBridgeUrlButton } from './edit-bridge-url-button';
 import { PublishButton } from './publish-button';
+import { MagnifyingGlass } from '@phosphor-icons/react';
 
 type HeaderNavigationProps = HTMLAttributes<HTMLDivElement> & {
   startItems?: ReactNode;
@@ -51,7 +52,7 @@ export const HeaderNavigation = (props: HeaderNavigationProps) => {
           className="h-6.5 w-auto gap-1 px-1.5"
           onClick={openCommandPalette}
         >
-          <RiSearchLine className="size-3.5" />
+          <MagnifyingGlass className="size-3.5" />
           <Kbd className="text-[10px]">⌘K</Kbd>
         </Button>
         {currentEnvironment?.type === EnvironmentTypeEnum.DEV && canPublish && <PublishButton />}

@@ -9,7 +9,7 @@ import {
 import { motion } from 'motion/react';
 import { useMemo } from 'react';
 import { useForm, useWatch } from 'react-hook-form';
-import { RiArrowLeftSLine, RiCloseFill, RiInformationFill } from 'react-icons/ri';
+
 import { Link } from 'react-router-dom';
 import { z } from 'zod';
 
@@ -36,6 +36,7 @@ import { cn } from '@merge-rd/ui/lib/utils';
 import { Badge } from '@/components/primitives/badge';
 import { Select, SelectContent, SelectTrigger, SelectValue } from '@/components/primitives/select';
 import { SeveritySelectItem } from './severity-select-item';
+import { CaretLeft, Info, X } from '@phosphor-icons/react';
 
 type ConfigureWorkflowFormProps = {
   workflow: WorkflowResponseDto;
@@ -198,14 +199,14 @@ export const ChannelPreferencesForm = (props: ConfigureWorkflowFormProps) => {
       >
         <SidebarHeader className="items-center border-b py-3 text-sm font-medium">
           <Link to="../" className="flex items-center">
-            <CompactButton icon={RiArrowLeftSLine} variant="ghost" size="md" type="button">
+            <CompactButton icon={CaretLeft} variant="ghost" size="md" type="button">
               <span className="sr-only">Back</span>
             </CompactButton>
           </Link>
           <span>Channel Preferences</span>
 
           <Link to="../" className="ml-auto flex items-center">
-            <CompactButton icon={RiCloseFill} variant="ghost" type="button">
+            <CompactButton icon={X} variant="ghost" type="button">
               <span className="sr-only">Close</span>
             </CompactButton>
           </Link>
@@ -460,7 +461,7 @@ export const ChannelPreferencesForm = (props: ConfigureWorkflowFormProps) => {
             <Card className="bg-information/10 border-information/40 border px-2.5 py-2">
               <CardContent className="flex flex-nowrap items-center gap-2 p-0">
                 <div className="size-5">
-                  <RiInformationFill className="text-information m-0.5 size-4" />
+                  <Info weight="fill" className="text-information m-0.5 size-4" />
                 </div>
                 <span className="text-2xs">
                   Preferences defined in code have been overridden. Disable overrides to restore original.

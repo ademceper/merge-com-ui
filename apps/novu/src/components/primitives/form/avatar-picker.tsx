@@ -1,5 +1,4 @@
 import { forwardRef, useState } from 'react';
-import { RiImageEditFill } from 'react-icons/ri';
 
 import { Avatar, AvatarImage } from '@merge-rd/ui/components/avatar';
 import { Button } from '@merge-rd/ui/components/button';
@@ -14,6 +13,7 @@ import { useParseVariables } from '@/hooks/use-parse-variables';
 import { DEFAULT_AVATARS } from '@/utils/avatars';
 import { InputRoot } from '@/components/primitives/input';
 import { useFormField } from './form-context';
+import { ImageSquare } from '@phosphor-icons/react';
 
 type AvatarPickerProps = {
   name: string;
@@ -47,7 +47,7 @@ export const AvatarPicker = forwardRef<HTMLInputElement, AvatarPickerProps>((pro
                 <AvatarImage src={value as string} />
               </Avatar>
             ) : (
-              <RiImageEditFill className="size-5" />
+              <ImageSquare weight="fill" className="size-5" />
             )}
           </Button>
         </PopoverTrigger>

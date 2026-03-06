@@ -1,6 +1,6 @@
 import { motion } from 'motion/react';
 import { useState } from 'react';
-import { RiGroup2Line } from 'react-icons/ri';
+
 import { Separator } from '@merge-rd/ui/components/separator';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@merge-rd/ui/components/tabs';
 import { Preferences } from '@/components/subscribers/preferences/preferences';
@@ -12,6 +12,7 @@ import { SubscriberSubscriptions } from '@/components/subscribers/subscriptions/
 import TruncatedText from '@/components/truncated-text';
 import { useFetchSubscriber } from '@/hooks/use-fetch-subscriber';
 import useFetchSubscriberPreferences from '@/hooks/use-fetch-subscriber-preferences';
+import { UsersThree } from '@phosphor-icons/react';
 
 type SubscriberOverviewProps = {
   subscriberId: string;
@@ -87,7 +88,7 @@ export function SubscriberTabs(props: SubscriberTabsProps) {
     <Tabs className="flex h-full w-full flex-col" value={tab} onValueChange={setTab}>
       <header className="border-bg-soft flex h-12 w-full flex-row items-center gap-3 border-b px-3 py-4">
         <div className="flex flex-1 items-center gap-1 overflow-hidden text-sm font-medium">
-          <RiGroup2Line className="size-5 p-0.5" />
+          <UsersThree className="size-5 p-0.5" />
           <TruncatedText className="flex-1">Subscriber Profile - {subscriberId}</TruncatedText>
         </div>
       </header>

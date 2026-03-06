@@ -1,5 +1,6 @@
-import { ArrowLeft } from 'lucide-react';
+
 import { Button } from '@merge-rd/ui/components/button';
+import { ArrowLeft } from '@phosphor-icons/react';
 
 export function AccessDeniedPage() {
   return (

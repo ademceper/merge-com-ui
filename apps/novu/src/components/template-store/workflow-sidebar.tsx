@@ -1,19 +1,4 @@
-import {
-  Bell,
-  Calendar,
-  Code2,
-  CreditCard,
-  ExternalLink,
-  FileCode2,
-  FileText,
-  KeyRound,
-  LayoutGrid,
-  MessageSquare,
-  Settings,
-  Shield,
-  Star,
-  Users,
-} from 'lucide-react';
+
 import { motion } from 'motion/react';
 import { ReactNode, useMemo } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -22,6 +7,22 @@ import { useTemplateStore } from '@/hooks/use-template-store';
 import { TelemetryEvent } from '@/utils/telemetry';
 import { buildRoute, ROUTES } from '../../utils/routes';
 import { TemplateCategory } from './types';
+import {
+  Bell,
+  Calendar,
+  Code,
+  CreditCard,
+  ArrowSquareOut,
+  FileCode,
+  FileText,
+  Gear,
+  Key,
+  GridFour,
+  ChatCenteredText,
+  Shield,
+  Star,
+  Users,
+} from '@phosphor-icons/react';
 
 interface WorkflowSidebarProps {
   selectedCategory: string;
@@ -64,7 +65,7 @@ function SidebarButton({
       <span className="text-label-sm text-strong">{label}</span>
       {hasExternalLink && (
         <motion.div whileHover={{ x: 2 }} transition={{ type: 'spring', stiffness: 300 }} className="ml-auto">
-          <ExternalLink className="text-foreground-600 h-3 w-3" />
+          <ArrowSquareOut className="text-foreground-600 h-3 w-3" />
         </motion.div>
       )}
     </div>
@@ -100,14 +101,14 @@ function getTagCategoryConfig(tag: string): TemplateCategory {
     authentication: {
       id: 'authentication',
       label: 'Authentication',
-      icon: <KeyRound className="h-3 w-3 text-green-700" />,
+      icon: <Key className="h-3 w-3 text-green-700" />,
       bgColor: 'bg-green-50',
       tag: 'authentication',
     },
     auth: {
       id: 'auth',
       label: 'Auth',
-      icon: <KeyRound className="h-3 w-3 text-green-700" />,
+      icon: <Key className="h-3 w-3 text-green-700" />,
       bgColor: 'bg-green-50',
       tag: 'auth',
     },
@@ -135,7 +136,7 @@ function getTagCategoryConfig(tag: string): TemplateCategory {
     usage: {
       id: 'usage',
       label: 'Usage',
-      icon: <FileCode2 className="h-3 w-3 text-sky-700" />,
+      icon: <FileCode className="h-3 w-3 text-sky-700" />,
       bgColor: 'bg-sky-50',
       tag: 'usage',
     },
@@ -149,14 +150,14 @@ function getTagCategoryConfig(tag: string): TemplateCategory {
     operational: {
       id: 'operational',
       label: 'Operational',
-      icon: <Settings className="h-3 w-3 text-blue-700" />,
+      icon: <Gear className="h-3 w-3 text-blue-700" />,
       bgColor: 'bg-blue-50',
       tag: 'operational',
     },
     social: {
       id: 'social',
       label: 'Social',
-      icon: <MessageSquare className="h-3 w-3 text-indigo-700" />,
+      icon: <ChatCenteredText className="h-3 w-3 text-indigo-700" />,
       bgColor: 'bg-indigo-50',
       tag: 'social',
     },
@@ -174,7 +175,7 @@ function getTagCategoryConfig(tag: string): TemplateCategory {
     tagConfigs[tag] || {
       id: tag,
       label: tag.charAt(0).toUpperCase() + tag.slice(1),
-      icon: <LayoutGrid className="h-3 w-3 text-gray-700" />,
+      icon: <GridFour className="h-3 w-3 text-gray-700" />,
       bgColor: 'bg-gray-50',
       tag: tag,
     }
@@ -220,7 +221,7 @@ export function WorkflowSidebar({ selectedCategory, onCategorySelect }: Workflow
     },
     {
       key: 'code-based',
-      icon: <Code2 className="h-3 w-3 text-gray-700" />,
+      icon: <Code className="h-3 w-3 text-gray-700" />,
       label: 'Code-based workflow',
       hasExternalLink: true,
       bgColor: 'bg-blue-50',
@@ -286,7 +287,7 @@ export function WorkflowSidebar({ selectedCategory, onCategorySelect }: Workflow
         >
           <div className="mb-1 flex items-center gap-1.5">
             <motion.div variants={iconVariants} className="rounded-lg bg-gray-50 p-1.5">
-              <FileCode2 className="h-3 w-3 text-gray-700" />
+              <FileCode className="h-3 w-3 text-gray-700" />
             </motion.div>
             <span className="text-label-sm text-strong">Documentation</span>
           </div>

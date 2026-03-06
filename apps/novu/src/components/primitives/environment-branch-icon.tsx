@@ -1,7 +1,8 @@
 import { IEnvironment } from '@novu/shared';
 import { cva } from 'class-variance-authority';
-import { RiTerminalFill } from 'react-icons/ri';
+
 import { cn } from '@merge-rd/ui/lib/utils';
+import { Terminal } from '@phosphor-icons/react';
 
 const logoVariants = cva('', {
   variants: {
@@ -73,7 +74,7 @@ export function EnvironmentBranchIcon({
         mode === 'ghost' ? 'bg-transparent' : ''
       )}
     >
-      <RiTerminalFill className={icon} />
+      <Terminal weight="fill" className={icon} />
     </div>
   );
 }

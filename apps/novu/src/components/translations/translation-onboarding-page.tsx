@@ -1,7 +1,7 @@
 import { DEFAULT_LOCALE, PermissionsEnum } from '@novu/shared';
 import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
-import { RiBookMarkedLine, RiRouteFill } from 'react-icons/ri';
+
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { Button } from '@merge-rd/ui/components/button';
 import { LinkButton } from '@/components/primitives/button-link';
@@ -14,6 +14,7 @@ import { useHasPermission } from '@/hooks/use-has-permission';
 import { useUpdateOrganizationSettings } from '@/hooks/use-update-organization-settings';
 import { buildRoute, ROUTES } from '@/utils/routes';
 import { EmptyTranslationsIllustration } from './empty-translations-illustration';
+import { BookBookmark, Path } from '@phosphor-icons/react';
 
 type TranslationOnboardingFormData = {
   defaultLocale: string;
@@ -199,13 +200,13 @@ export const TranslationOnboardingPage = () => {
               mode="gradient"
               type="submit"
               onClick={handleViewWorkflows}
-              leadingIcon={RiRouteFill}
+              leadingIcon={Path}
             >
               View workflows
             </Button>
 
             <Link to="https://docs.novu.co/platform/workflow/advanced-features/translations" target="_blank">
-              <LinkButton variant="gray" leadingIcon={RiBookMarkedLine} size="sm">
+              <LinkButton variant="gray" leadingIcon={BookBookmark} size="sm">
                 Learn more in docs
               </LinkButton>
             </Link>

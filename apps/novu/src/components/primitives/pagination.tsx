@@ -3,11 +3,11 @@ import { Link } from "react-router-dom";
 import { cn } from "@merge-rd/ui/lib/utils";
 import { Button } from "@merge-rd/ui/components/button";
 import {
-  ChevronLeft,
-  ChevronRight,
-  ChevronsLeft,
-  ChevronsRight,
-} from "lucide-react";
+  CaretLeft,
+  CaretRight,
+  CaretDoubleLeft,
+  CaretDoubleRight,
+} from '@phosphor-icons/react';
 
 export {
   Pagination,
@@ -66,7 +66,7 @@ export function PaginationPrevious({
       className={cn(className)}
       {...props}
     >
-      <ChevronLeft className="size-4" />
+      <CaretLeft className="size-4" />
     </PaginationLink>
   );
 }
@@ -84,7 +84,7 @@ export function PaginationNext({
       className={cn(className)}
       {...props}
     >
-      <ChevronRight className="size-4" />
+      <CaretRight className="size-4" />
     </PaginationLink>
   );
 }
@@ -102,7 +102,7 @@ export function PaginationStart({
       className={cn(className)}
       {...props}
     >
-      <ChevronsLeft className="size-4" />
+      <CaretDoubleLeft className="size-4" />
     </PaginationLink>
   );
 }
@@ -120,7 +120,7 @@ export function PaginationEnd({
       className={cn(className)}
       {...props}
     >
-      <ChevronsRight className="size-4" />
+      <CaretDoubleRight className="size-4" />
     </PaginationLink>
   );
 }

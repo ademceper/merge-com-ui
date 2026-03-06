@@ -2,7 +2,7 @@
 import { Editor, Range } from '@tiptap/core';
 import { ReactRenderer } from '@tiptap/react';
 import { SuggestionOptions } from '@tiptap/suggestion';
-import { ArrowDown, ArrowUp, CornerDownLeft } from 'lucide-react';
+
 import {
   Fragment,
   forwardRef,
@@ -21,6 +21,7 @@ import { cn } from '../../utils/classname';
 import { DEFAULT_SLASH_COMMANDS } from './default-slash-commands';
 import { SlashCommandItem } from './slash-command-item';
 import { searchSlashCommands } from './slash-command-search';
+import { ArrowDown, ArrowElbowDownLeft, ArrowUp } from '@phosphor-icons/react';
 
 type CommandListProps = {
   items: BlockGroupItem[];
@@ -227,7 +228,7 @@ const CommandList = forwardRef(function CommandList(props: CommandListProps, ref
             <span className="mly-ml-1.5 mly-text-xs mly-font-normal mly-text-gray-500">Navigate</span>
           </div>
           <div className="mly-pointer-events-none mly-flex mly-h-5 mly-w-5 mly-items-center mly-justify-center mly-rounded-[6px] mly-border mly-border-gray-200 mly-bg-white mly-shadow-[0px_0px_0px_1px_rgba(14,18,27,0.02)_inset,_0px_1px_4px_0px_rgba(14,18,27,0.12)]">
-            <CornerDownLeft className="mly-h-3 mly-w-3 mly-text-gray-400" />
+            <ArrowElbowDownLeft className="mly-h-3 mly-w-3 mly-text-gray-400" />
           </div>
         </div>
       </div>

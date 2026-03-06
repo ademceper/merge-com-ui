@@ -1,7 +1,7 @@
 import { ChannelTypeEnum, ResourceOriginEnum } from '@novu/shared';
 import { AnimatePresence, motion } from 'motion/react';
 import { useMemo, useState } from 'react';
-import { RiMacLine, RiSmartphoneFill } from 'react-icons/ri';
+
 import { Skeleton } from '@merge-rd/ui/components/skeleton';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@merge-rd/ui/components/tabs';
 import {
@@ -13,6 +13,7 @@ import {
 } from '@/components/workflow-editor/steps/email/email-preview';
 import { EmailTabsSection } from '@/components/workflow-editor/steps/email/email-tabs-section';
 import { cn } from '@merge-rd/ui/lib/utils';
+import { Desktop, DeviceMobile } from '@phosphor-icons/react';
 
 type EmailCorePreviewProps = {
   previewData: any;
@@ -83,10 +84,10 @@ export function EmailCorePreview({
             <div>
               <TabsList>
                 <TabsTrigger value="mobile">
-                  <RiSmartphoneFill className="size-4" />
+                  <DeviceMobile weight="fill" className="size-4" />
                 </TabsTrigger>
                 <TabsTrigger value="desktop">
-                  <RiMacLine className="size-4" />
+                  <Desktop className="size-4" />
                 </TabsTrigger>
               </TabsList>
             </div>

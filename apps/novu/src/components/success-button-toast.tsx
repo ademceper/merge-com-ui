@@ -1,7 +1,8 @@
 import { ReactNode } from 'react';
-import { RiArrowRightSLine } from 'react-icons/ri';
+
 import { Button } from '@merge-rd/ui/components/button';
 import { ToastClose, ToastIcon } from '@/components/primitives/sonner';
+import { CaretRight } from '@phosphor-icons/react';
 
 interface SuccessToastProps {
   title: string;
@@ -22,7 +23,7 @@ export function SuccessButtonToast({ title, description, actionLabel, onAction, 
         </div>
         <div className="flex items-center justify-end gap-2 self-stretch">
           <Button
-            trailingIcon={RiArrowRightSLine}
+            trailingIcon={CaretRight}
             variant="secondary"
             mode="ghost"
             size="xs"

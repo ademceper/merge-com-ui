@@ -1,6 +1,6 @@
 import { useOrganization } from '@merge-rd/auth';
 import { ChannelTypeEnum, FeatureFlagsKeysEnum, SeverityLevelEnum } from '@novu/shared';
-import { CalendarIcon } from 'lucide-react';
+
 import { useMemo } from 'react';
 import { useForm } from 'react-hook-form';
 import { Link } from 'react-router-dom';
@@ -21,6 +21,7 @@ import { Button } from '@merge-rd/ui/components/button';
 import { FacetedFormFilter } from '../primitives/form/faceted-filter/facated-form-filter';
 import { Form, FormField, FormItem, FormRoot } from '../primitives/form/form';
 import { CHANNEL_OPTIONS } from './constants';
+import { Calendar } from '@phosphor-icons/react';
 
 type Fields =
   | 'dateRange'
@@ -129,7 +130,7 @@ export function ActivityFilters({
                   options={maxActivityFeedRetentionOptions}
                   selected={[field.value]}
                   onSelect={(values) => setValue('dateRange', values[0])}
-                  icon={CalendarIcon}
+                  icon={Calendar}
                 />
               </FormItem>
             )}

@@ -1,9 +1,10 @@
-import { CheckIcon } from '@radix-ui/react-icons';
+
 import React, { useCallback, useImperativeHandle, useRef, useState } from 'react';
 import TruncatedText from '@/components/truncated-text';
 import { cn } from '@merge-rd/ui/lib/utils';
 import { Tooltip, TooltipContent, TooltipPortal, TooltipTrigger } from '@/components/primitives/tooltip';
 import { VariableIcon } from './components/variable-icon';
+import { Check } from '@phosphor-icons/react';
 
 const KeyboardItem = ({ children, className }: { children: React.ReactNode; className?: string }) => {
   return (
@@ -204,7 +205,7 @@ const VariableListItem = ({
           <div className="min-w-0 flex-1">
             <TruncatedText>{option.label}</TruncatedText>
           </div>
-          <CheckIcon className={cn('ml-auto size-4', selectedValue === option.value ? 'opacity-50' : 'opacity-0')} />
+          <Check className={cn('ml-auto size-4', selectedValue === option.value ? 'opacity-50' : 'opacity-0')} />
         </li>
       </TooltipTrigger>
       <TooltipPortal>

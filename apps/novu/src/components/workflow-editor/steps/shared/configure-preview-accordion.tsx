@@ -2,7 +2,7 @@ import { type WorkflowResponseDto } from '@novu/shared';
 import { loadLanguage } from '@uiw/codemirror-extensions-langs';
 import { JSONSchema7 } from 'json-schema';
 import { CSSProperties, useCallback, useEffect, useRef, useState } from 'react';
-import { RiListView } from 'react-icons/ri';
+
 import { Code2 } from '@/components/icons/code-2';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@merge-rd/ui/components/accordion';
 import { Button } from '@merge-rd/ui/components/button';
@@ -12,6 +12,7 @@ import { PayloadSchemaDrawer } from '@/components/workflow-editor/payload-schema
 import { useIsPayloadSchemaEnabled } from '@/hooks/use-is-payload-schema-enabled';
 import { parse, stringify } from '@/utils/json';
 import { EditableJsonViewer } from './editable-json-viewer/editable-json-viewer';
+import { ListBullets } from '@phosphor-icons/react';
 
 const extensions = [loadLanguage('json')?.extension ?? []];
 
@@ -123,7 +124,7 @@ export const ConfigurePreviewAccordion = ({
               {isPayloadSchemaEnabled && (
                 <Button
                   size="2xs"
-                  leadingIcon={RiListView}
+                  leadingIcon={ListBullets}
                   variant="secondary"
                   mode="ghost"
                   className="ml-auto"

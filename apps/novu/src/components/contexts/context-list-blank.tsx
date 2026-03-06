@@ -1,8 +1,9 @@
-import { RiBookMarkedLine } from 'react-icons/ri';
+
 import { Link } from 'react-router-dom';
 import { LinkButton } from '@/components/primitives/button-link';
 import { CreateContextButton } from './context-list';
 import { EmptyContextsIllustration } from './empty-contexts-illustration';
+import { BookBookmark } from '@phosphor-icons/react';
 
 export const ContextListBlank = () => {
   return (
@@ -18,7 +19,7 @@ export const ContextListBlank = () => {
 
       <div className="flex items-center justify-center gap-6">
         <Link to="https://docs.novu.co/platform/workflow/advanced-features/contexts" target="_blank">
-          <LinkButton variant="gray" trailingIcon={RiBookMarkedLine}>
+          <LinkButton variant="gray" trailingIcon={BookBookmark}>
             View Docs
           </LinkButton>
         </Link>

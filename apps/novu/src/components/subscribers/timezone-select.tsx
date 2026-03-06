@@ -1,11 +1,17 @@
 import { useRef, useState } from 'react';
-import { RiArrowDownSLine, RiCheckLine, RiSearchLine, RiTimeLine } from 'react-icons/ri';
+
 import { useTimezoneSelect } from 'react-timezone-select';
 import { cn } from '@merge-rd/ui/lib/utils';
 import { Button, ButtonProps } from '@merge-rd/ui/components/button';
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from '@merge-rd/ui/components/command';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/primitives/popover';
 import TruncatedText from '../truncated-text';
+import {
+  CaretDown,
+  Check,
+  Clock,
+  MagnifyingGlass,
+} from '@phosphor-icons/react';
 
 type TimezoneSelectProps = ButtonProps & {
   value?: string;
@@ -36,7 +42,7 @@ export function TimezoneSelect(props: TimezoneSelectProps) {
         >
           <div className="flex max-w-full flex-1 items-center gap-1 overflow-hidden">
             <div>
-              <RiTimeLine className="size-4 text-neutral-400" />
+              <Clock className="size-4 text-neutral-400" />
             </div>
             {value ? (
               <TruncatedText className="text-foreground w-full min-w-0 flex-1 text-xs font-normal text-neutral-950">
@@ -47,7 +53,7 @@ export function TimezoneSelect(props: TimezoneSelectProps) {
                 Search timezone...
               </TruncatedText>
             )}
-            <RiArrowDownSLine
+            <CaretDown
               className={cn('ml-auto size-4 opacity-50', disabled || readOnly ? 'hidden' : 'opacity-100')}
             />
           </div>
@@ -58,7 +64,7 @@ export function TimezoneSelect(props: TimezoneSelectProps) {
           <CommandInput
             placeholder="Search timezone..."
             inputRootClassName="rounded-b-none before:ring-0 before:border-b before:border-gray-200 has-[input:focus]:shadow-none focus-within:shadow-none"
-            inlineLeadingNode={<RiSearchLine className="size-4 text-neutral-400" />}
+            inlineLeadingNode={<MagnifyingGlass className="size-4 text-neutral-400" />}
             autoComplete="off"
             /**
              * Scroll to top bug workaround: https://github.com/pacocoursey/cmdk/issues/233#issuecomment-2015998940
@@ -96,7 +102,7 @@ export function TimezoneSelect(props: TimezoneSelectProps) {
                   key={item.value}
                 >
                   {item.label}
-                  <RiCheckLine className={`ml-auto size-4 ${value === item.value ? 'opacity-100' : 'opacity-0'}`} />
+                  <Check className={`ml-auto size-4 ${value === item.value ? 'opacity-100' : 'opacity-0'}`} />
                 </CommandItem>
               ))}
             </CommandGroup>

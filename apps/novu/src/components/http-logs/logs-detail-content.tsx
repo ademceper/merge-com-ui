@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { RiArrowDownSLine, RiArrowUpSLine } from 'react-icons/ri';
+
 import { TimeDisplayHoverCard } from '@/components/time-display-hover-card';
 import { formatDateSimple } from '@/utils/format-date';
 import { RequestLog } from '../../types/logs';
@@ -8,6 +8,7 @@ import { Separator } from '@merge-rd/ui/components/separator';
 import { EditableJsonViewer } from '../workflow-editor/steps/shared/editable-json-viewer/editable-json-viewer';
 import { HttpStatusBadge } from './http-status-badge';
 import { TransactionIdDisplay } from './transaction-id-display';
+import { CaretDown, CaretUp } from '@phosphor-icons/react';
 
 type LogsDetailContentProps = {
   log: RequestLog;
@@ -83,7 +84,7 @@ export function CollapsibleSection({
         <div className="flex items-center gap-0.5">
           <CopyButton valueToCopy={textToCopy} className="text-text-soft size-7 p-1" size="2xs" />
           <button className="rounded p-1 hover:bg-neutral-100">
-            <RiArrowUpSLine
+            <CaretUp
               className={`size-3.5 text-neutral-400 transition-transform ${!isExpanded ? 'rotate-180' : ''}`}
             />
           </button>
@@ -109,7 +110,7 @@ export function CollapsibleSection({
                   className="group flex items-center gap-1 rounded px-2 text-[11px] font-medium text-neutral-600 transition-all duration-200 hover:bg-white/20 hover:text-neutral-600"
                 >
                   <span>Show More</span>
-                  <RiArrowDownSLine className="size-3 transition-transform" />
+                  <CaretDown className="size-3 transition-transform" />
                 </button>
               </div>
             </div>
@@ -122,7 +123,7 @@ export function CollapsibleSection({
                 className="group flex items-center gap-1 rounded px-2 text-[11px] font-medium text-neutral-600 transition-all duration-200 hover:bg-white/20 hover:text-neutral-600"
               >
                 <span>Show Less</span>
-                <RiArrowUpSLine className="size-3 transition-transform" />
+                <CaretUp className="size-3 transition-transform" />
               </button>
             </div>
           )}

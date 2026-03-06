@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react';
-import { RiArrowDownSLine, RiArrowRightUpLine, RiLoader4Fill } from 'react-icons/ri';
+
 import { useNavigate } from 'react-router-dom';
 import type { ActivityFilters } from '@/api/activity';
 import { ActivityTableRow } from '@/components/activity/components/activity-table-row';
@@ -17,6 +17,7 @@ import { ApiTracesContent } from './api-traces-content';
 import { useWorkflowRunsUrlState } from './hooks/use-workflow-runs-url-state';
 import { WorkflowRunActivityDrawer } from './workflow-run-activity-drawer';
 import { WorkflowRunsFilters } from './workflow-runs-filters';
+import { ArrowUpRight, CaretDown, SpinnerGap } from '@phosphor-icons/react';
 
 type WorkflowRunsContentProps = {
   log: RequestLog;
@@ -171,7 +172,7 @@ export function WorkflowRunsContent({ log }: WorkflowRunsContentProps) {
                 variant="gray"
                 size="sm"
                 onClick={handleNavigateToRuns}
-                trailingIcon={RiArrowRightUpLine}
+                trailingIcon={ArrowUpRight}
                 className="text-text-subtext-xs font-medium"
               >
                 Workflow runs
@@ -247,12 +248,12 @@ export function WorkflowRunsContent({ log }: WorkflowRunsContentProps) {
                         >
                           {isLoadingMore ? (
                             <>
-                              <RiLoader4Fill className="h-4 w-4 animate-spin" />
+                              <SpinnerGap weight="fill" className="h-4 w-4 animate-spin" />
                               Loading...
                             </>
                           ) : (
                             <>
-                              <RiArrowDownSLine className="h-4 w-4" />
+                              <CaretDown className="h-4 w-4" />
                               Load more ({activities.length - displayedItemsCount} remaining)
                             </>
                           )}

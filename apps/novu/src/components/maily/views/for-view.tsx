@@ -1,5 +1,5 @@
 import { NodeViewContent, NodeViewProps, NodeViewWrapper } from '@tiptap/react';
-import { Repeat2 } from 'lucide-react';
+import { Repeat } from '@phosphor-icons/react';
 
 /**
  * @see https://github.com/arikchakma/maily.to/blob/d7ea26e6b28201fc66c241200adaebc689018b03/packages/core/src/editor/nodes/for/for-view.tsx
@@ -24,7 +24,7 @@ export function ForView(props: NodeViewProps) {
         }}
         className="border-soft-100 absolute right-[-2px] top-[-3px] flex cursor-grab items-center justify-center gap-[2px] rounded border bg-white px-1 py-[2px]"
       >
-        <Repeat2 className="size-3 shrink-0" />
+        <Repeat className="size-3 shrink-0" />
         <span className="text-2xs font-medium leading-none">repeat</span>
       </div>
     </NodeViewWrapper>

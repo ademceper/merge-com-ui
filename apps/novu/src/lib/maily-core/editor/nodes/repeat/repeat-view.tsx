@@ -1,5 +1,5 @@
 import { NodeViewContent, NodeViewProps, NodeViewWrapper } from '@tiptap/react';
-import { Repeat2 } from 'lucide-react';
+import { Repeat } from '@phosphor-icons/react';
 
 export function RepeatView(props: NodeViewProps) {
   const { editor, getPos } = props;
@@ -22,7 +22,7 @@ export function RepeatView(props: NodeViewProps) {
           editor.commands.setNodeSelection(getPos());
         }}
       >
-        <Repeat2 className="mly-size-3 mly-stroke-[2.5] mly-text-midnight-gray" />
+        <Repeat className="mly-size-3 mly-stroke-[2.5] mly-text-midnight-gray" />
         <div className="mly-w-[1.5px] mly-grow mly-rounded-full mly-bg-rose-300" />
       </div>
     </NodeViewWrapper>

@@ -1,7 +1,8 @@
 import { IProviderConfig } from '@novu/shared';
-import { RiArrowRightSLine } from 'react-icons/ri';
+
 import { Button } from '@merge-rd/ui/components/button';
 import { ProviderIcon } from './provider-icon';
+import { CaretRight } from '@phosphor-icons/react';
 
 type IntegrationListItemProps = {
   integration: IProviderConfig;
@@ -26,7 +27,7 @@ export function IntegrationListItem({ integration, onClick }: IntegrationListIte
           mode="outline"
           size="2xs"
           onClick={onClick}
-          trailingIcon={RiArrowRightSLine}
+          trailingIcon={CaretRight}
           className="ml-auto flex h-[24px] min-w-[82px] flex-row opacity-0 transition-opacity group-hover:opacity-100"
         >
           Connect

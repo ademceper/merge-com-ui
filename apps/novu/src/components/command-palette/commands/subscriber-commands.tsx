@@ -1,9 +1,10 @@
 import { PermissionsEnum } from '@novu/shared';
-import { RiDiscussLine, RiUserAddLine } from 'react-icons/ri';
+
 import { useNavigate } from 'react-router-dom';
 import { useHasPermission } from '@/hooks/use-has-permission';
 import { buildRoute, ROUTES } from '@/utils/routes';
 import { Command, CommandExecutionContext } from '../command-types';
+import { ChatTeardropDots, UserPlus } from '@phosphor-icons/react';
 
 export function useSubscriberCommands(context: CommandExecutionContext): Command[] {
   const navigate = useNavigate();
@@ -19,7 +20,7 @@ export function useSubscriberCommands(context: CommandExecutionContext): Command
       label: 'Create New Subscriber',
       description: 'Add a new subscriber to your environment',
       category: 'data',
-      icon: <RiUserAddLine />,
+      icon: <UserPlus />,
       priority: 'high',
       keywords: ['create', 'new', 'subscriber', 'add', 'user'],
       execute: () => {
@@ -36,7 +37,7 @@ export function useSubscriberCommands(context: CommandExecutionContext): Command
       label: 'Create New Topic',
       description: 'Create a new topic for subscriber management',
       category: 'data',
-      icon: <RiDiscussLine />,
+      icon: <ChatTeardropDots />,
       priority: 'medium',
       keywords: ['create', 'new', 'topic', 'add'],
       execute: () => {

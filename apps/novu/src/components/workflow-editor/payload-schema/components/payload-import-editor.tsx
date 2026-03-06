@@ -1,8 +1,9 @@
 import { loadLanguage } from '@uiw/codemirror-extensions-langs';
-import { RiCloseLine, RiInformation2Line } from 'react-icons/ri';
+
 import { Button } from '@merge-rd/ui/components/button';
 import { Editor } from '@/components/primitives/editor';
 import { isValidJson } from '../utils/generate-schema';
+import { Info, X } from '@phosphor-icons/react';
 
 type PayloadImportEditorProps = {
   isLoadingActivity: boolean;
@@ -54,7 +55,7 @@ export function PayloadImportEditor({
     <div className="flex h-full flex-col">
       <div className="mb-2 flex flex-row items-center justify-between gap-2">
         <h3 className="text-label-xs w-full">Import schema from JSON object</h3>
-        <Button variant="secondary" mode="ghost" size="2xs" leadingIcon={RiCloseLine} onClick={onBack}>
+        <Button variant="secondary" mode="ghost" size="2xs" leadingIcon={X} onClick={onBack}>
           Discard
         </Button>
       </div>
@@ -76,7 +77,7 @@ export function PayloadImportEditor({
       {/* Footer */}
       <div className="flex items-center justify-between pt-1">
         <div className="flex items-center gap-2 text-xs text-neutral-500">
-          <RiInformation2Line className="size-3" />
+          <Info className="size-3" />
           {getInfoMessage()}
         </div>
         <Button variant="secondary" mode="outline" size="2xs" onClick={onGenerateSchema} disabled={!isJsonValid}>

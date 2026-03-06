@@ -1,22 +1,23 @@
 import { Editor as EditorType } from '@tiptap/core';
-import {
-  AlignCenter,
-  AlignLeft,
-  AlignRight,
-  BoldIcon,
-  EraserIcon,
-  ItalicIcon,
-  LinkIcon,
-  SeparatorHorizontal,
-  StrikethroughIcon,
-  UnderlineIcon,
-} from 'lucide-react';
+
 import { useMemo } from 'react';
 
 import { EditorProps } from '..';
 
 import { BubbleMenuButton } from './bubble-menu-button';
 import { BubbleMenuItem } from './text-menu/text-bubble-menu';
+import {
+  TextB,
+  Eraser,
+  TextItalic,
+  Link,
+  Minus,
+  TextStrikethrough,
+  TextAlignCenter,
+  TextAlignLeft,
+  TextAlignRight,
+  TextUnderline,
+} from '@phosphor-icons/react';
 
 interface EditorMenuItem extends BubbleMenuItem {
   group: 'alignment' | 'image' | 'mark' | 'custom' | 'email';
@@ -37,42 +38,42 @@ export const EditorMenuBar = (props: EditorMenuBarProps) => {
         command: () => editor.chain().focus().toggleBold().run(),
         isActive: () => editor.isActive('bold'),
         group: 'mark',
-        icon: BoldIcon,
+        icon: TextB,
       },
       {
         name: 'italic',
         command: () => editor.chain().focus().toggleItalic().run(),
         isActive: () => editor.isActive('italic'),
         group: 'mark',
-        icon: ItalicIcon,
+        icon: TextItalic,
       },
       {
         name: 'underline',
         command: () => editor.chain().focus().toggleUnderline().run(),
         isActive: () => editor.isActive('underline'),
         group: 'mark',
-        icon: UnderlineIcon,
+        icon: TextUnderline,
       },
       {
         name: 'strike',
         command: () => editor.chain().focus().toggleStrike().run(),
         isActive: () => editor.isActive('strike'),
         group: 'mark',
-        icon: StrikethroughIcon,
+        icon: TextStrikethrough,
       },
       {
         name: 'delete-line',
         command: () => editor.chain().focus().selectParentNode().deleteSelection().run(),
         isActive: () => false,
         group: 'mark',
-        icon: EraserIcon,
+        icon: Eraser,
       },
       {
         name: 'divider',
         command: () => editor.chain().focus().setHorizontalRule().run(),
         isActive: () => editor.isActive('horizontalRule'),
         group: 'custom',
-        icon: SeparatorHorizontal,
+        icon: Minus,
       },
       {
         name: 'link',
@@ -92,28 +93,28 @@ export const EditorMenuBar = (props: EditorMenuBarProps) => {
         },
         isActive: () => editor.isActive('link'),
         group: 'custom',
-        icon: LinkIcon,
+        icon: Link,
       },
       {
         name: 'left',
         command: () => editor.chain().focus().setTextAlign('left').run(),
         isActive: () => editor.isActive({ textAlign: 'left' }),
         group: 'alignment',
-        icon: AlignLeft,
+        icon: TextAlignLeft,
       },
       {
         name: 'center',
         command: () => editor.chain().focus().setTextAlign('center').run(),
         isActive: () => editor.isActive({ textAlign: 'center' }),
         group: 'alignment',
-        icon: AlignCenter,
+        icon: TextAlignCenter,
       },
       {
         name: 'right',
         command: () => editor.chain().focus().setTextAlign('right').run(),
         isActive: () => editor.isActive({ textAlign: 'right' }),
         group: 'alignment',
-        icon: AlignRight,
+        icon: TextAlignRight,
       },
     ],
     [editor]

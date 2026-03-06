@@ -1,7 +1,8 @@
 import { ConfirmationModal } from '@/components/confirmation-modal';
-import { RiAddLine } from 'react-icons/ri';
+
 import { getRegionConfig } from './region-config';
 import { type OrgCreationModalState } from './region-types';
+import { Plus } from '@phosphor-icons/react';
 
 interface RegionModalsProps {
   orgCreationModal: OrgCreationModalState;
@@ -28,7 +29,7 @@ export function RegionModals({ orgCreationModal, onCancelOrgCreation, onConfirmO
         </>
       }
       confirmButtonText="Create Organization"
-      confirmTrailingIcon={RiAddLine}
+      confirmTrailingIcon={Plus}
     />
   );
 }

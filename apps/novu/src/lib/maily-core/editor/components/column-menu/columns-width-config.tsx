@@ -1,7 +1,8 @@
-import { Columns2, Columns3, SlidersVertical } from 'lucide-react';
+
 import { cn } from '../../utils/classname';
 import { AUTOCOMPLETE_PASSWORD_MANAGERS_OFF } from '../../utils/constants';
 import { Popover, PopoverContent, PopoverTrigger } from '../popover';
+import { Columns, Sliders } from '@phosphor-icons/react';
 
 type ColumnsWidthConfigProps = {
   columnsCount: number;
@@ -17,7 +18,7 @@ export function ColumnsWidthConfig(props: ColumnsWidthConfigProps) {
   return (
     <Popover>
       <PopoverTrigger className="mly-flex mly-size-7 mly-items-center mly-justify-center mly-gap-1 mly-rounded-md mly-text-sm data-[state=open]:mly-bg-soft-gray hover:mly-bg-soft-gray">
-        <SlidersVertical className="mly-h-3 mly-w-3 mly-stroke-[2.5]" />
+        <Sliders className="mly-h-3 mly-w-3 mly-stroke-[2.5]" />
       </PopoverTrigger>
       <PopoverContent
         className="mly-w-[300px] mly-rounded-lg !mly-p-0.5"
@@ -33,11 +34,11 @@ export function ColumnsWidthConfig(props: ColumnsWidthConfigProps) {
       >
         <div className="mly-grid mly-grid-cols-2 mly-gap-1">
           <SwitchButton onClick={() => onColumnsCountChange(2)} isActive={columnsCount === 2}>
-            <Columns2 className="mly-h-4 mly-w-4 mly-stroke-[2.5]" />
+            <Columns className="mly-h-4 mly-w-4 mly-stroke-[2.5]" />
             <span>2 Columns</span>
           </SwitchButton>
           <SwitchButton onClick={() => onColumnsCountChange(3)} isActive={columnsCount === 3}>
-            <Columns3 className="mly-h-4 mly-w-4 mly-stroke-[2.5]" />
+            <Columns className="mly-h-4 mly-w-4 mly-stroke-[2.5]" />
             <span>3 Columns</span>
           </SwitchButton>
         </div>

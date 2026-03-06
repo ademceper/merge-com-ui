@@ -1,11 +1,12 @@
 import { PermissionsEnum, EnvironmentTypeEnum } from '@novu/shared';
-import { RiFileAddLine, RiRouteFill } from 'react-icons/ri';
+
 import { useNavigate } from 'react-router-dom';
 import { useFetchWorkflows } from '@/hooks/use-fetch-workflows';
 import { useHasPermission } from '@/hooks/use-has-permission';
 import { useEnvironment } from '@/context/environment/hooks';
 import { buildRoute, ROUTES } from '@/utils/routes';
 import { Command, CommandExecutionContext } from '../command-types';
+import { FilePlus, Path } from '@phosphor-icons/react';
 
 export function useWorkflowCommands(context: CommandExecutionContext): Command[] {
   const navigate = useNavigate();
@@ -30,7 +31,7 @@ export function useWorkflowCommands(context: CommandExecutionContext): Command[]
       label: 'Create New Workflow',
       description: 'Create a new workflow from scratch',
       category: 'workflow',
-      icon: <RiFileAddLine />,
+      icon: <FilePlus />,
       priority: 'high',
       keywords: ['create', 'new', 'workflow', 'add'],
       execute: () => {
@@ -53,7 +54,7 @@ export function useWorkflowCommands(context: CommandExecutionContext): Command[]
         label: workflow.name,
         description: `Open ${workflow.name} workflow for editing`,
         category: 'workflow',
-        icon: <RiRouteFill />,
+        icon: <Path weight="fill" />,
         priority: 'low', // Lower priority so main workflow commands appear first
         keywords: ['edit', 'workflow', workflow.name, workflow.workflowId, 'open'],
         metadata: {

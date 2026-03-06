@@ -1,7 +1,8 @@
-import { RiQuestionAnswerLine } from 'react-icons/ri';
+
 import { Plug } from '@/components/icons/plug';
 import { Button } from '@merge-rd/ui/components/button';
 import { usePlainChat } from '@/hooks/use-plain-chat';
+import { Question } from '@phosphor-icons/react';
 
 export function ServerErrorPage() {
   const { showPlainLiveChat } = usePlainChat();
@@ -28,7 +29,7 @@ export function ServerErrorPage() {
           </div>
 
           <Button
-            leadingIcon={RiQuestionAnswerLine}
+            leadingIcon={Question}
             size="sm"
             variant="secondary"
             mode="outline"

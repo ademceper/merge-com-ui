@@ -1,9 +1,10 @@
 import { RuntimeIssue } from '@novu/shared';
 import { AnimatePresence, motion } from 'motion/react';
-import { RiErrorWarningFill, RiErrorWarningLine, RiInformation2Line } from 'react-icons/ri';
+
 import { HoverCard, HoverCardContent, HoverCardTrigger } from '@/components/primitives/hover-card';
 import { countIssues, getAllStepIssues, getFirstErrorMessage } from '@/components/workflow-editor/step-utils';
 import { cn } from '@merge-rd/ui/lib/utils';
+import { Info, WarningCircle } from '@phosphor-icons/react';
 
 type IssuesPanelProps = {
   issues?: {
@@ -60,7 +61,7 @@ export function IssuesPanel({
           <HoverCard openDelay={200} closeDelay={100}>
             <HoverCardTrigger asChild>
               <div className="flex cursor-pointer items-center gap-2 transition-colors hover:text-red-700">
-                <RiErrorWarningFill className="size-4 text-red-600" />
+                <WarningCircle weight="fill" className="size-4 text-red-600" />
                 <span className="text-paragraph-xs font-medium text-red-600">{displayText}</span>
               </div>
             </HoverCardTrigger>
@@ -71,7 +72,7 @@ export function IssuesPanel({
               sideOffset={8}
             >
               <div className="flex items-center gap-2 pl-1.5">
-                <RiErrorWarningLine className="size-4 text-red-600" />
+                <WarningCircle className="size-4 text-red-600" />
                 <span className="text-label-xs font-medium text-red-600">Action required</span>
               </div>
               <div className="bg-bg-white max-h-60 overflow-y-auto rounded-[6px] border border-neutral-100 p-2">
@@ -88,7 +89,7 @@ export function IssuesPanel({
           </HoverCard>
         ) : (
           <div className="flex items-center gap-2">
-            <RiInformation2Line className="size-4 text-neutral-500" />
+            <Info className="size-4 text-neutral-500" />
             <span className="text-paragraph-xs text-neutral-600">{displayHintMessage}</span>
           </div>
         )}

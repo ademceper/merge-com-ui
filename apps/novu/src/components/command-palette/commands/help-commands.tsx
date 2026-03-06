@@ -1,8 +1,14 @@
-import { RiBookOpenLine, RiChat1Line, RiQuestionLine, RiSparklingLine } from 'react-icons/ri';
+
 import { useAiDrawer } from '@/components/ai-drawer';
 import { useTelemetry } from '@/hooks/use-telemetry';
 import { TelemetryEvent } from '@/utils/telemetry';
 import { Command, CommandExecutionContext } from '../command-types';
+import {
+  BookOpen,
+  ChatCircle,
+  Question,
+  Sparkle,
+} from '@phosphor-icons/react';
 
 export function useHelpCommands(_context: CommandExecutionContext): Command[] {
   const track = useTelemetry();
@@ -14,7 +20,7 @@ export function useHelpCommands(_context: CommandExecutionContext): Command[] {
       label: 'Open Documentation',
       description: 'View the Novu documentation',
       category: 'help',
-      icon: <RiBookOpenLine />,
+      icon: <BookOpen />,
       priority: 'medium',
       keywords: ['docs', 'documentation', 'help', 'guide'],
       execute: () => {
@@ -26,7 +32,7 @@ export function useHelpCommands(_context: CommandExecutionContext): Command[] {
       label: 'Share Feedback',
       description: 'Send feedback or get help from our team',
       category: 'help',
-      icon: <RiChat1Line />,
+      icon: <ChatCircle />,
       priority: 'medium',
       keywords: ['feedback', 'support', 'help', 'chat'],
       execute: () => {
@@ -47,7 +53,7 @@ export function useHelpCommands(_context: CommandExecutionContext): Command[] {
       label: 'Ask Novu AI',
       description: 'Get instant answers powered by AI',
       category: 'help',
-      icon: <RiSparklingLine />,
+      icon: <Sparkle />,
       priority: 'high',
       keywords: ['ai', 'ask', 'search', 'help', 'question', 'assistant', 'inkeep'],
       execute: () => {

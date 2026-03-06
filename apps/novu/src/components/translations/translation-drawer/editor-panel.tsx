@@ -1,5 +1,5 @@
 import { loadLanguage } from '@uiw/codemirror-extensions-langs';
-import { RiFileTextLine } from 'react-icons/ri';
+
 import { Editor } from '@/components/primitives/editor';
 import { InlineToast } from '@/components/primitives/inline-toast';
 import { Skeleton } from '@merge-rd/ui/components/skeleton';
@@ -9,6 +9,7 @@ import { cn } from '@merge-rd/ui/lib/utils';
 import { DATE_FORMAT_OPTIONS, TIME_FORMAT_OPTIONS } from '../constants';
 import { formatTranslationDate, formatTranslationTime } from '../utils';
 import { EditorActions } from './editor-actions';
+import { FileText } from '@phosphor-icons/react';
 
 export function EditorPanelSkeleton() {
   return (
@@ -160,7 +161,7 @@ export function EditorPanel({
     return (
       <div className="flex flex-1 items-center justify-center">
         <div className="text-center">
-          <RiFileTextLine className="mx-auto mb-4 h-12 w-12 text-neutral-400" />
+          <FileText className="mx-auto mb-4 h-12 w-12 text-neutral-400" />
           <p className="text-sm text-neutral-500">Select a locale to view and edit translations</p>
         </div>
       </div>

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { FieldError, FieldValues, useFormContext } from 'react-hook-form';
-import { RiAddLine, RiDeleteBin2Line, RiInputField } from 'react-icons/ri';
+
 import { Link } from 'react-router-dom';
 import { Button } from '@merge-rd/ui/components/button';
 import { Card, CardContent } from '@merge-rd/ui/components/card';
@@ -14,6 +14,7 @@ import { useWorkflow } from '@/components/workflow-editor/workflow-provider';
 import { useParseVariables } from '@/hooks/use-parse-variables';
 import { useTelemetry } from '@/hooks/use-telemetry';
 import { TelemetryEvent } from '@/utils/telemetry';
+import { Plus, Textbox, Trash } from '@phosphor-icons/react';
 
 const dataObjectKey = 'data';
 
@@ -99,7 +100,7 @@ const InnerDataObject = ({ field }: { field: FieldValues }) => {
   return (
     <FormItem className="bg-bg-weak flex flex-col gap-1 rounded-lg border border-neutral-100 p-2">
       <div className="flex items-center gap-2">
-        <RiInputField className="text-feature size-4" />
+        <Textbox className="text-feature size-4" />
         <span className="text-xs">Data object</span>
         <HelpTooltipIndicator
           text={
@@ -154,7 +155,7 @@ const InnerDataObject = ({ field }: { field: FieldValues }) => {
                       className="w-7.5 h-8 px-0"
                       onClick={() => handleRemovePair(index)}
                     >
-                      <RiDeleteBin2Line className="size-4" />
+                      <Trash className="size-4" />
                     </Button>
                   </div>
                   <FormMessage keyName={isDuplicate ? '' : pair.key}>
@@ -175,7 +176,7 @@ const InnerDataObject = ({ field }: { field: FieldValues }) => {
                 track(TelemetryEvent.INBOX_DATA_OBJECT_PROPERTY_ADDED);
               }}
             >
-              <RiAddLine className="size-4" />
+              <Plus className="size-4" />
               Add property
             </Button>
           )}

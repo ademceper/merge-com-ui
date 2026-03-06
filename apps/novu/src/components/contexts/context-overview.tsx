@@ -4,7 +4,7 @@ import { ContextId, ContextType } from '@novu/shared';
 import { loadLanguage } from '@uiw/codemirror-extensions-langs';
 import { useId, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { RiDeleteBin2Line } from 'react-icons/ri';
+
 import { ExternalToast } from 'sonner';
 import { z } from 'zod';
 import { useContextsNavigate } from '@/components/contexts/hooks/use-contexts-navigate';
@@ -33,6 +33,7 @@ import { formatDateSimple } from '@/utils/format-date';
 import { TelemetryEvent } from '@/utils/telemetry';
 import { ConfirmationModal } from '../confirmation-modal';
 import { Editor } from '../primitives/editor';
+import { Trash } from '@phosphor-icons/react';
 
 const toastOptions: ExternalToast = {
   position: 'bottom-right',
@@ -246,7 +247,7 @@ const ContextOverviewForm = ({ context, readOnly }: { context: GetContextRespons
             <Button
               variant="primary"
               mode="ghost"
-              leadingIcon={RiDeleteBin2Line}
+              leadingIcon={Trash}
               onClick={() => setIsDeleteModalOpen(true)}
             >
               Delete context

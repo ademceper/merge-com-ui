@@ -1,5 +1,5 @@
-import { Cross2Icon } from '@radix-ui/react-icons';
-import { RiAlertLine, RiDeleteBinLine, RiEditLine, RiToggleLine } from 'react-icons/ri';
+
+
 import { Button } from '@merge-rd/ui/components/button';
 import {
   Dialog,
@@ -12,6 +12,13 @@ import {
   DialogTitle,
 } from '@merge-rd/ui/components/dialog';
 import type { SchemaChange, SchemaChanges } from '../schema-editor/utils/schema-change-detection';
+import {
+  Pencil,
+  ToggleLeft,
+  TrashSimple,
+  Warning,
+  X,
+} from '@phosphor-icons/react';
 
 interface SchemaChangeConfirmationModalProps {
   isOpen: boolean;
@@ -83,7 +90,7 @@ function VariableChangeSection({ title, changes, icon }: VariableChangeSectionPr
 
               {change.usageInfo.isUsed && (
                 <div className="text-warning-base flex items-center gap-1.5 text-xs">
-                  <RiAlertLine className="h-3.5 w-3.5" />
+                  <Warning className="h-3.5 w-3.5" />
                   {change.usageInfo.usedInSteps.length === 1 ? (
                     <span>{change.usageInfo.usedInSteps[0].stepName}</span>
                   ) : (
@@ -124,10 +131,10 @@ export function SchemaChangeConfirmationModal({
         <DialogContent className="min-w-[512px] max-w-[640px] gap-4 rounded-lg p-4 overflow-hidden" hideCloseButton>
           <div className="flex items-start justify-between">
             <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-warning/10">
-              <RiAlertLine className="size-6 text-warning" />
+              <Warning className="size-6 text-warning" />
             </div>
             <DialogClose>
-              <Cross2Icon className="size-4" />
+              <X className="size-4" />
               <span className="sr-only">Close</span>
             </DialogClose>
           </div>
@@ -144,28 +151,28 @@ export function SchemaChangeConfirmationModal({
             <VariableChangeSection
               title="Deleted"
               changes={changes.deleted}
-              icon={<RiDeleteBinLine className="text-error-base h-4 w-4" />}
+              icon={<TrashSimple className="text-error-base h-4 w-4" />}
               variant="red"
             />
 
             <VariableChangeSection
               title="Added"
               changes={changes.added}
-              icon={<RiEditLine className="text-success-base h-4 w-4" />}
+              icon={<Pencil className="text-success-base h-4 w-4" />}
               variant="blue"
             />
 
             <VariableChangeSection
               title="Type Changed"
               changes={changes.typeChanged}
-              icon={<RiToggleLine className="text-warning-base h-4 w-4" />}
+              icon={<ToggleLeft className="text-warning-base h-4 w-4" />}
               variant="orange"
             />
 
             <VariableChangeSection
               title="Required Changed"
               changes={changes.requiredChanged}
-              icon={<RiToggleLine className="text-feature-base h-4 w-4" />}
+              icon={<ToggleLeft className="text-feature-base h-4 w-4" />}
               variant="purple"
             />
           </div>

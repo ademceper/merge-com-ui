@@ -1,8 +1,9 @@
 import { DirectionEnum } from '@novu/shared';
 import { cva } from 'class-variance-authority';
 import * as React from 'react';
-import { RiArrowDownSFill, RiArrowUpSFill, RiExpandUpDownFill } from 'react-icons/ri';
+
 import { cn } from '@merge-rd/ui/lib/utils';
+import { ArrowsDownUp, CaretDown, CaretUp } from '@phosphor-icons/react';
 
 interface TableProps extends React.HTMLAttributes<HTMLTableElement> {
   containerClassname?: string;
@@ -75,9 +76,9 @@ const TableHead = React.forwardRef<HTMLTableCellElement, TableHeadProps>(
         {children}
         {sortable && (
           <>
-            {sortDirection === DirectionEnum.ASC && <RiArrowUpSFill className="text-text-sub-600 size-4" />}
-            {sortDirection === DirectionEnum.DESC && <RiArrowDownSFill className="text-text-sub-600 size-4" />}
-            {!sortDirection && <RiExpandUpDownFill className="text-text-sub-600 size-4" />}
+            {sortDirection === DirectionEnum.ASC && <CaretUp weight="fill" className="text-text-sub-600 size-4" />}
+            {sortDirection === DirectionEnum.DESC && <CaretDown weight="fill" className="text-text-sub-600 size-4" />}
+            {!sortDirection && <ArrowsDownUp weight="fill" className="text-text-sub-600 size-4" />}
           </>
         )}
       </div>

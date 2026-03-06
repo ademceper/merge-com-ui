@@ -1,7 +1,7 @@
 import { PermissionsEnum } from '@novu/shared';
 import { useQueryClient } from '@tanstack/react-query';
 import { ComponentProps, useState } from 'react';
-import { RiDeleteBin2Line, RiFileCopyLine, RiMore2Fill, RiPulseFill } from 'react-icons/ri';
+
 import { Link } from 'react-router-dom';
 import { ConfirmationModal } from '@/components/confirmation-modal';
 import { CompactButton } from '@/components/primitives/button-compact';
@@ -26,6 +26,12 @@ import { showErrorToast } from '../primitives/sonner-helpers';
 import { useDeleteTopic } from './hooks/use-delete-topic';
 import { useTopicsNavigate } from './hooks/use-topics-navigate';
 import { Topic } from './types';
+import {
+  Copy,
+  DotsThree,
+  Pulse,
+  Trash,
+} from '@phosphor-icons/react';
 
 type TopicRowProps = {
   topic: Topic;
@@ -108,7 +114,7 @@ export const TopicRow = ({ topic }: TopicRowProps) => {
         <TopicTableCell className="w-1">
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <CompactButton icon={RiMore2Fill} variant="ghost" className="z-10 h-8 w-8 p-0" />
+              <CompactButton icon={DotsThree} variant="ghost" className="z-10 h-8 w-8 p-0" />
             </DropdownMenuTrigger>
             <DropdownMenuContent className="w-44" onClick={stopPropagation}>
               <DropdownMenuGroup>
@@ -118,7 +124,7 @@ export const TopicRow = ({ topic }: TopicRowProps) => {
                     navigator.clipboard.writeText(topic.key);
                   }}
                 >
-                  <RiFileCopyLine />
+                  <Copy />
                   Copy identifier
                 </DropdownMenuItem>
                 <Protect permission={PermissionsEnum.NOTIFICATION_READ}>
@@ -132,7 +138,7 @@ export const TopicRow = ({ topic }: TopicRowProps) => {
                         new URLSearchParams({ topicKey: topic.key }).toString()
                       }
                     >
-                      <RiPulseFill />
+                      <Pulse weight="fill" />
                       View activity
                     </Link>
                   </DropdownMenuItem>
@@ -144,7 +150,7 @@ export const TopicRow = ({ topic }: TopicRowProps) => {
                       setTimeout(() => setIsDeleteModalOpen(true), 0);
                     }}
                   >
-                    <RiDeleteBin2Line />
+                    <Trash />
                     Delete topic
                   </DropdownMenuItem>
                 </Protect>
@@ -187,7 +193,7 @@ export const TopicRowSkeleton = () => {
         <Skeleton className="h-6 w-32" />
       </TableCell>
       <TableCell className="w-1">
-        <RiMore2Fill className="size-4 opacity-50" />
+        <DotsThree weight="fill" className="size-4 opacity-50" />
       </TableCell>
     </TableRow>
   );

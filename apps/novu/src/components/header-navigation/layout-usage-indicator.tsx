@@ -1,7 +1,8 @@
 import { useMemo } from 'react';
-import { RiRouteFill } from 'react-icons/ri';
+
 import type { IResourceDependency, IResourceDiffResult } from '@/api/environments';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/primitives/tooltip';
+import { Path } from '@phosphor-icons/react';
 
 type LayoutUsageIndicatorProps = {
   layoutResource: IResourceDiffResult;
@@ -53,7 +54,7 @@ export function LayoutUsageIndicator({ layoutResource, allWorkflows, dependencie
 
   const UsageDisplay = () => (
     <div className="flex items-center gap-px">
-      <RiRouteFill className="text-icon-sub h-3.5 w-3.5" />
+      <Path weight="fill" className="text-icon-sub h-3.5 w-3.5" />
       <span className="text-label-2xs text-text-soft">{usageCount}</span>
     </div>
   );
@@ -71,7 +72,7 @@ export function LayoutUsageIndicator({ layoutResource, allWorkflows, dependencie
           <div className="mb-1 text-xs font-medium leading-3 text-gray-400">Used in</div>
           {workflowsUsingLayout.map((workflow, index) => (
             <div key={index} className="flex min-w-[175px] items-center gap-1.5 rounded bg-gray-50 px-1 py-0.5">
-              <RiRouteFill className="text-icon-sub h-3.5 w-3.5" />
+              <Path weight="fill" className="text-icon-sub h-3.5 w-3.5" />
               <div className="flex flex-col text-left leading-tight">
                 <div className="text-xs font-medium leading-[14px] text-gray-600">{workflow.name}</div>
                 <div

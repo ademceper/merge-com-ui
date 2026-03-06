@@ -1,6 +1,5 @@
 import React, { useCallback, useMemo } from 'react';
 import { type Control, type FieldArrayWithId, FormProvider, type UseFormReturn } from 'react-hook-form';
-import { RiAddLine } from 'react-icons/ri';
 
 import { Button } from '@merge-rd/ui/components/button';
 import { FormRoot } from '@/components/primitives/form/form';
@@ -8,6 +7,7 @@ import { useWorkflow } from '@/components/workflow-editor/workflow-provider';
 import { SchemaPropertyRow } from './schema-property-row';
 import { checkVariableUsageInWorkflow, type VariableUsageInfo } from './utils/check-variable-usage';
 import type { PropertyListItem, SchemaEditorFormValues } from './utils/validation-schema';
+import { Plus } from '@phosphor-icons/react';
 
 interface SchemaEditorProps {
   control: Control<SchemaEditorFormValues>;
@@ -93,7 +93,7 @@ export function SchemaEditor({
             mode="lighter"
             size="2xs"
             onClick={() => addProperty()}
-            leadingIcon={RiAddLine}
+            leadingIcon={Plus}
             disabled={readOnly || (!formState.isValid && fields.length > 0)}
           >
             Add property

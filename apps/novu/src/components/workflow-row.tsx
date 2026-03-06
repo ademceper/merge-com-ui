@@ -6,21 +6,11 @@ import {
   PermissionsEnum,
   WorkflowListResponseDto,
 } from '@novu/shared';
-import { FilesIcon } from 'lucide-react';
+
 import { ComponentProps, useState } from 'react';
 import { CgBolt } from 'react-icons/cg';
 import { FaCode } from 'react-icons/fa6';
 import { LuBookUp2 } from 'react-icons/lu';
-import {
-  RiDeleteBin2Line,
-  RiFlashlightLine,
-  RiMore2Fill,
-  RiPauseCircleLine,
-  RiPlayCircleLine,
-  RiPulseFill,
-  RiRouteFill,
-  RiTranslate2,
-} from 'react-icons/ri';
 
 import { Link, useNavigate } from 'react-router-dom';
 import { type ExternalToast } from 'sonner';
@@ -65,6 +55,17 @@ import { CopyButton } from './primitives/copy-button';
 import { ToastIcon } from '@/components/primitives/sonner';
 import { showToast } from './primitives/sonner-helpers';
 import { TimeDisplayHoverCard } from './time-display-hover-card';
+import {
+  DotsThree,
+  Files,
+  Path,
+  PauseCircle,
+  PlayCircle,
+  Pulse,
+  Lightning,
+  Translate,
+  Trash,
+} from '@phosphor-icons/react';
 
 // Local type definition for step issues until the shared types are updated
 type RuntimeIssue = {
@@ -307,7 +308,7 @@ export const WorkflowRow = ({ workflow }: WorkflowRowProps) => {
                 {workflow.isTranslationEnabled ? (
                   <TranslatedWorkflowIcon className="text-feature size-4" />
                 ) : (
-                  <RiRouteFill className="text-feature size-4" />
+                  <Path weight="fill" className="text-feature size-4" />
                 )}
               </TooltipTrigger>
               <TooltipPortal>
@@ -367,7 +368,7 @@ export const WorkflowRow = ({ workflow }: WorkflowRowProps) => {
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <CompactButton
-                icon={RiMore2Fill}
+                icon={DotsThree}
                 disabled={
                   !has({ permission: PermissionsEnum.EVENT_WRITE }) &&
                   !has({ permission: PermissionsEnum.WORKFLOW_WRITE }) &&
@@ -392,7 +393,7 @@ export const WorkflowRow = ({ workflow }: WorkflowRowProps) => {
                   <Protect permission={PermissionsEnum.EVENT_WRITE}>
                     <Link to={triggerWorkflowLink} reloadDocument={isV0Workflow}>
                       <DropdownMenuItem className="cursor-pointer">
-                        <RiPlayCircleLine />
+                        <PlayCircle />
                         Trigger workflow
                       </DropdownMenuItem>
                     </Link>
@@ -416,7 +417,7 @@ export const WorkflowRow = ({ workflow }: WorkflowRowProps) => {
                       }
                     >
                       <DropdownMenuItem className="cursor-pointer">
-                        <RiPulseFill />
+                        <Pulse weight="fill" />
                         View activity
                       </DropdownMenuItem>
                     </Link>
@@ -424,7 +425,7 @@ export const WorkflowRow = ({ workflow }: WorkflowRowProps) => {
                   {workflow.isTranslationEnabled && (
                     <Link to={translationsUrl}>
                       <DropdownMenuItem className="cursor-pointer">
-                        <RiTranslate2 />
+                        <Translate />
                         View translations
                       </DropdownMenuItem>
                     </Link>
@@ -439,7 +440,7 @@ export const WorkflowRow = ({ workflow }: WorkflowRowProps) => {
                           })}
                         >
                           <DropdownMenuItem className="cursor-pointer">
-                            <FilesIcon />
+                            <Files />
                             Duplicate workflow
                           </DropdownMenuItem>
                         </Link>
@@ -447,7 +448,7 @@ export const WorkflowRow = ({ workflow }: WorkflowRowProps) => {
                         <Tooltip>
                           <TooltipTrigger>
                             <DropdownMenuItem className="cursor-not-allowed opacity-60">
-                              <FilesIcon />
+                              <Files />
                               Duplicate workflow
                             </DropdownMenuItem>
                           </TooltipTrigger>
@@ -474,12 +475,12 @@ export const WorkflowRow = ({ workflow }: WorkflowRowProps) => {
                   >
                     {workflow.status === WorkflowStatusEnum.ACTIVE ? (
                       <>
-                        <RiPauseCircleLine />
+                        <PauseCircle />
                         Pause workflow
                       </>
                     ) : (
                       <>
-                        <RiFlashlightLine />
+                        <Lightning />
                         Enable workflow
                       </>
                     )}
@@ -493,7 +494,7 @@ export const WorkflowRow = ({ workflow }: WorkflowRowProps) => {
                       }}
                       data-testid="delete-workflow"
                     >
-                      <RiDeleteBin2Line />
+                      <Trash />
                       Delete workflow
                     </DropdownMenuItem>
                   )}

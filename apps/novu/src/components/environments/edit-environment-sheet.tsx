@@ -5,7 +5,7 @@ import { standardSchemaResolver } from '@hookform/resolvers/standard-schema';
 import { IEnvironment } from '@novu/shared';
 import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
-import { RiArrowRightSLine } from 'react-icons/ri';
+
 import { Button } from '@merge-rd/ui/components/button';
 import { Form, FormRoot } from '@/components/primitives/form/form';
 import { Separator } from '@merge-rd/ui/components/separator';
@@ -22,6 +22,7 @@ import { ExternalLink } from '@/components/shared/external-link';
 import { useUpdateEnvironment } from '@/hooks/use-environments';
 import { showErrorToast, showSuccessToast } from '../primitives/sonner-helpers';
 import { EnvironmentFormData, EnvironmentFormFields, environmentFormSchema } from './environment-form';
+import { CaretRight } from '@phosphor-icons/react';
 
 interface EditEnvironmentSheetProps {
   environment?: IEnvironment;
@@ -97,7 +98,7 @@ export const EditEnvironmentSheet = ({ environment, isOpen, onOpenChange }: Edit
         <SheetFooter>
           <Button
             isLoading={isPending}
-            trailingIcon={RiArrowRightSLine}
+            trailingIcon={CaretRight}
             variant="secondary"
             mode="gradient"
             type="submit"

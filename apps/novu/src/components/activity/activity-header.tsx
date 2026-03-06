@@ -1,7 +1,7 @@
 import { IActivity, IEnvironment } from '@novu/shared';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { motion } from 'motion/react';
-import { RiCloseLine, RiRouteFill } from 'react-icons/ri';
+
 import { getActivityList } from '@/api/activity';
 import { Button } from '@merge-rd/ui/components/button';
 import { showErrorToast, showSuccessToast } from '@/components/primitives/sonner-helpers';
@@ -11,6 +11,7 @@ import { QueryKeys } from '@/utils/query-keys';
 import { cn } from '@merge-rd/ui/lib/utils';
 import { triggerWorkflow } from '../../api/workflows';
 import { RepeatPlay } from '../icons/repeat-play';
+import { Path, X } from '@phosphor-icons/react';
 
 type ActivityHeaderProps = {
   className?: string;
@@ -99,7 +100,7 @@ export const ActivityHeader = ({ className, activity, onTransactionIdChange, onC
       )}
     >
       <div className="flex items-center gap-1.5">
-        <RiRouteFill className="h-3 w-3" />
+        <Path weight="fill" className="h-3 w-3" />
         <span className="text-foreground-950 text-sm font-medium">Workflow run</span>
       </div>
 
@@ -126,7 +127,7 @@ export const ActivityHeader = ({ className, activity, onTransactionIdChange, onC
             onClick={onClose}
             className="h-[20px]"
             type="button"
-            trailingIcon={RiCloseLine}
+            trailingIcon={X}
           ></Button>
         )}
       </div>

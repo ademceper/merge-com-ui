@@ -1,7 +1,7 @@
 import { ChannelTypeEnum, ConfigConfigurationGroup, IIntegration, IProviderConfig } from '@novu/shared';
 import { useEffect, useRef, useState } from 'react';
 import { Control, useWatch } from 'react-hook-form';
-import { RiCheckLine, RiCloseLine } from 'react-icons/ri';
+
 import { LoadingIndicator } from '@/components/primitives/loading-indicator';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/primitives/tooltip';
 import { useAutoConfigureIntegration } from '../../../hooks/use-auto-configure-integration';
@@ -9,6 +9,7 @@ import { IntegrationFormData } from '../types';
 import { CredentialSection } from './credential-section';
 import { InboundWebhookUrl } from './inbound-webhook-url';
 import { configurationToCredential } from './utils/helpers';
+import { Check, X } from '@phosphor-icons/react';
 
 type InboundWebhookGroupProps = {
   integrationId?: string;
@@ -37,7 +38,7 @@ function AutoConfigureStatus({ state, message }: { state: 'idle' | 'loading' | '
         <div className="flex items-center gap-2">
           <Tooltip>
             <TooltipTrigger>
-              <RiCheckLine className="size-3 text-green-600" />
+              <Check className="size-3 text-green-600" />
             </TooltipTrigger>
             <TooltipContent>
               <p>{message}</p>
@@ -50,7 +51,7 @@ function AutoConfigureStatus({ state, message }: { state: 'idle' | 'loading' | '
         <div className="flex items-center gap-2">
           <Tooltip>
             <TooltipTrigger>
-              <RiCloseLine className="size-3 text-red-600" />
+              <X className="size-3 text-red-600" />
             </TooltipTrigger>
             <TooltipContent>
               <p>{message}</p>

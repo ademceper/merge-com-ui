@@ -1,7 +1,7 @@
 'use client';
 
 import type { ChatStatus, FileUIPart, SourceDocumentUIPart } from 'ai';
-import { CornerDownLeftIcon, ImageIcon, Loader2Icon, PlusIcon, SquareIcon, XIcon } from 'lucide-react';
+
 import { nanoid } from 'nanoid';
 import {
   type ChangeEvent,
@@ -42,6 +42,14 @@ import { HoverCard, HoverCardContent, HoverCardTrigger } from '@/components/prim
 import { InputGroup, InputGroupAddon, InputGroupButton, InputGroupTextarea } from '@merge-rd/ui/components/input-group';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/primitives/select';
 import { cn } from '@merge-rd/ui/lib/utils';
+import {
+  ArrowElbowDownLeft,
+  Image,
+  Plus,
+  SpinnerGap,
+  Square,
+  X,
+} from '@phosphor-icons/react';
 
 // ============================================================================
 // Provider Context & Types
@@ -264,7 +272,7 @@ export const PromptInputActionAddAttachments = ({
         attachments.openFileDialog();
       }}
     >
-      <ImageIcon className="mr-2 size-4" /> {label}
+      <Image className="mr-2 size-4" /> {label}
     </DropdownMenuItem>
   );
 };
@@ -852,7 +860,7 @@ export type PromptInputActionMenuTriggerProps = PromptInputButtonProps;
 export const PromptInputActionMenuTrigger = ({ className, children, ...props }: PromptInputActionMenuTriggerProps) => (
   <DropdownMenuTrigger asChild>
     <PromptInputButton className={className} {...props}>
-      {children ?? <PlusIcon className="size-4" />}
+      {children ?? <Plus className="size-4" />}
     </PromptInputButton>
   </DropdownMenuTrigger>
 );
@@ -888,14 +896,14 @@ export const PromptInputSubmit = ({
 }: PromptInputSubmitProps) => {
   const isGenerating = status === 'submitted' || status === 'streaming';
 
-  let Icon = <CornerDownLeftIcon className="size-4" />;
+  let Icon = <ArrowElbowDownLeft className="size-4" />;
 
   if (status === 'submitted') {
-    Icon = <Loader2Icon className="size-4 animate-spin" />;
+    Icon = <SpinnerGap className="size-4 animate-spin" />;
   } else if (status === 'streaming') {
-    Icon = <SquareIcon className="size-4" />;
+    Icon = <Square className="size-4" />;
   } else if (status === 'error') {
-    Icon = <XIcon className="size-4" />;
+    Icon = <X className="size-4" />;
   }
 
   const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {

@@ -4,7 +4,7 @@ import { useQueryClient } from '@tanstack/react-query';
 import { loadLanguage } from '@uiw/codemirror-extensions-langs';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { RiDeleteBin2Line, RiMailLine } from 'react-icons/ri';
+
 import { Link } from 'react-router-dom';
 import { ExternalToast } from 'sonner';
 import { z } from 'zod';
@@ -33,6 +33,7 @@ import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/primitives
 import { SubscriberFormSchema } from './schema';
 import { TimezoneSelect } from './timezone-select';
 import { getSubscriberTitle } from './utils';
+import { Envelope, Trash } from '@phosphor-icons/react';
 
 const extensions = [loadLanguage('json')?.extension ?? []];
 const basicSetup = { lineNumbers: true, defaultKeymap: true };
@@ -308,7 +309,7 @@ export function SubscriberOverviewForm(props: SubscriberOverviewFormProps) {
                           }}
                           hasError={!!fieldState.error}
                           size="xs"
-                          leadingIcon={RiMailLine}
+                          leadingIcon={Envelope}
                         />
                       </FormControl>
                       <FormMessage />
@@ -438,7 +439,7 @@ export function SubscriberOverviewForm(props: SubscriberOverviewFormProps) {
                 <Button
                   variant="primary"
                   mode="ghost"
-                  leadingIcon={RiDeleteBin2Line}
+                  leadingIcon={Trash}
                   onClick={() => setIsDeleteModalOpen(true)}
                 >
                   Delete subscriber

@@ -1,7 +1,7 @@
 import { FeatureFlagsKeysEnum, PermissionsEnum } from '@novu/shared';
 import { format } from 'date-fns';
 import { motion } from 'motion/react';
-import { RiDeleteBin2Line, RiDiscussLine, RiMindMap, RiMore2Fill, RiPulseFill } from 'react-icons/ri';
+
 import { Link } from 'react-router-dom';
 import { TopicSubscription } from '@/api/topics';
 import { CompactButton } from '@/components/primitives/button-compact';
@@ -19,6 +19,13 @@ import { useFeatureFlag } from '@/hooks/use-feature-flag';
 import { Protect } from '@/utils/protect';
 import { buildRoute, ROUTES } from '@/utils/routes';
 import { cn } from '@merge-rd/ui/lib/utils';
+import {
+  ChatTeardropDots,
+  DotsThree,
+  Pulse,
+  Trash,
+  TreeStructure,
+} from '@phosphor-icons/react';
 
 type SubscriptionItemProps = {
   subscription: TopicSubscription;
@@ -73,13 +80,13 @@ export function SubscriptionItem({
       {isSubscriptionPreferencesEnabled && (
         <DropdownMenu modal={false}>
           <DropdownMenuTrigger asChild>
-            <CompactButton icon={RiMore2Fill} variant="ghost" className="z-10 h-8 w-8 p-0" />
+            <CompactButton icon={DotsThree} variant="ghost" className="z-10 h-8 w-8 p-0" />
           </DropdownMenuTrigger>
           <DropdownMenuContent className="w-64" onClick={stopPropagation}>
             <DropdownMenuGroup>
               <Protect permission={PermissionsEnum.TOPIC_READ}>
                 <DropdownMenuItem className="cursor-pointer" onClick={() => onViewTopic(subscription)}>
-                  <RiDiscussLine />
+                  <ChatTeardropDots />
                   View Topic
                 </DropdownMenuItem>
               </Protect>
@@ -88,7 +95,7 @@ export function SubscriptionItem({
                   className="cursor-pointer"
                   onClick={() => onViewSubscriptionPreferences(subscription)}
                 >
-                  <RiMindMap />
+                  <TreeStructure />
                   View subscription preferences
                 </DropdownMenuItem>
               </Protect>
@@ -104,7 +111,7 @@ export function SubscriptionItem({
                       new URLSearchParams({ subscriberId: subscription.subscriber.subscriberId }).toString()
                     }
                   >
-                    <RiPulseFill />
+                    <Pulse weight="fill" />
                     View subscription activity
                   </Link>
                 </DropdownMenuItem>
@@ -114,7 +121,7 @@ export function SubscriptionItem({
                   className="text-destructive cursor-pointer"
                   onClick={() => onDeleteSubscription(subscription)}
                 >
-                  <RiDeleteBin2Line />
+                  <Trash />
                   Remove subscription
                 </DropdownMenuItem>
               </Protect>

@@ -3,7 +3,7 @@ import { loadLanguage } from '@uiw/codemirror-extensions-langs';
 import { useCallback, useMemo, useState } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 import { FaCode } from 'react-icons/fa6';
-import { RiSendPlaneFill } from 'react-icons/ri';
+
 import { Editor } from '@/components/primitives/editor';
 import { useIsPayloadSchemaEnabled } from '@/hooks/use-is-payload-schema-enabled';
 import {
@@ -28,6 +28,7 @@ import { EditableJsonViewer } from '../steps/shared/editable-json-viewer/editabl
 import { SnippetEditor } from './snippet-editor';
 import { TestWorkflowInstructions } from './test-workflow-instructions';
 import { SnippetLanguage } from './types';
+import { PaperPlaneRight } from '@phosphor-icons/react';
 
 const tabsTriggerClassName = 'pt-1';
 const codePanelClassName = 'h-full';
@@ -94,7 +95,7 @@ export const TestWorkflowForm = ({ workflow }: { workflow?: WorkflowResponseDto 
         <div className="grid max-h-[50%] min-h-[50%] flex-1 grid-cols-1 gap-3 xl:grid-cols-[1fr_2fr]">
           <Panel className="h-full">
             <PanelHeader>
-              <RiSendPlaneFill className="size-4" />
+              <PaperPlaneRight weight="fill" className="size-4" />
               <span className="text-neutral-950">Send to</span>
             </PanelHeader>
             <PanelContent className="flex flex-col gap-2">

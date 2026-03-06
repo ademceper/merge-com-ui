@@ -1,6 +1,6 @@
 /** biome-ignore-all lint/correctness/useHookAtTopLevel: needs to be fixed */
 import { BubbleMenu } from '@tiptap/react';
-import { CodeXmlIcon, ViewIcon } from 'lucide-react';
+
 import { useCallback } from 'react';
 import { sticky } from 'tippy.js';
 import { cn } from '../../utils/classname';
@@ -10,6 +10,7 @@ import { EditorBubbleMenuProps } from '../text-menu/text-bubble-menu';
 import { Divider } from '../ui/divider';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '../ui/tooltip';
 import { useHtmlState } from './use-html-state';
+import { Code, Eye } from '@phosphor-icons/react';
 
 export function HTMLBubbleMenu(props: EditorBubbleMenuProps) {
   const { appendTo, editor } = props;
@@ -73,7 +74,7 @@ export function HTMLBubbleMenu(props: EditorBubbleMenuProps) {
                   });
                 }}
               >
-                <CodeXmlIcon className="mly-size-3 mly-shrink-0 mly-stroke-[2.5]" />
+                <Code className="mly-size-3 mly-shrink-0 mly-stroke-[2.5]" />
               </button>
             </TooltipTrigger>
             <TooltipContent sideOffset={8}>HTML Code</TooltipContent>
@@ -92,7 +93,7 @@ export function HTMLBubbleMenu(props: EditorBubbleMenuProps) {
                   });
                 }}
               >
-                <ViewIcon className="mly-size-3 mly-shrink-0 mly-stroke-[2.5]" />
+                <Eye className="mly-size-3 mly-shrink-0 mly-stroke-[2.5]" />
               </button>
             </TooltipTrigger>
             <TooltipContent sideOffset={8}>Preview</TooltipContent>

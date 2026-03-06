@@ -1,11 +1,18 @@
 import { IActivityJob, JobStatusEnum, StepTypeEnum } from '@novu/shared';
 import { format } from 'date-fns';
-import { RiCheckLine, RiCloseCircleLine, RiLoader4Line, RiPauseLine, RiStopLine } from 'react-icons/ri';
+
 import { STEP_TYPE_TO_ICON } from '@/components/icons/utils';
 import { Badge } from '@/components/primitives/badge';
 import { STEP_TYPE_LABELS } from '@/utils/constants';
 import { cn } from '@merge-rd/ui/lib/utils';
 import { JOB_STATUS_CONFIG } from '../constants';
+import {
+  Check,
+  Pause,
+  SpinnerGap,
+  Stop,
+  XCircle,
+} from '@phosphor-icons/react';
 
 function getStepIcon(type?: StepTypeEnum) {
   const Icon = STEP_TYPE_TO_ICON[type as keyof typeof STEP_TYPE_TO_ICON];
@@ -15,17 +22,17 @@ function getStepIcon(type?: StepTypeEnum) {
 function getStatusIcon(status: JobStatusEnum) {
   switch (status) {
     case JobStatusEnum.COMPLETED:
-      return <RiCheckLine className="h-3 w-3" />;
+      return <Check className="h-3 w-3" />;
     case JobStatusEnum.FAILED:
-      return <RiCloseCircleLine className="h-3 w-3" />;
+      return <XCircle className="h-3 w-3" />;
     case JobStatusEnum.PENDING:
     case JobStatusEnum.QUEUED:
-      return <RiLoader4Line className="h-3 w-3 animate-spin" />;
+      return <SpinnerGap className="h-3 w-3 animate-spin" />;
     case JobStatusEnum.CANCELED:
     case JobStatusEnum.SKIPPED:
-      return <RiStopLine className="h-3 w-3" />;
+      return <Stop className="h-3 w-3" />;
     default:
-      return <RiPauseLine className="h-3 w-3" />;
+      return <Pause className="h-3 w-3" />;
   }
 }
 

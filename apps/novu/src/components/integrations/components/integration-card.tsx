@@ -5,13 +5,7 @@ import {
   type IIntegration,
   type IProviderConfig,
 } from '@novu/shared';
-import {
-  RiCheckboxCircleFill,
-  RiCloseCircleFill,
-  RiLockStarLine,
-  RiSettings4Line,
-  RiStarSmileLine,
-} from 'react-icons/ri';
+
 import { useNavigate } from 'react-router-dom';
 import { Badge } from '@/components/primitives/badge';
 import { Button } from '@merge-rd/ui/components/button';
@@ -25,6 +19,13 @@ import { StatusBadge, StatusBadgeIcon } from '../../primitives/status-badge';
 import { TableIntegration } from '../types';
 import { ProviderIcon } from './provider-icon';
 import { isDemoIntegration } from './utils/helpers';
+import {
+  CheckCircle,
+  Gear,
+  LockKey,
+  Star,
+  XCircle,
+} from '@phosphor-icons/react';
 
 type IntegrationCardProps = {
   integration: IIntegration;
@@ -82,7 +83,7 @@ export function IntegrationCard({ integration, provider, environment, onClick }:
           {integration.primary && (
             <Tooltip>
               <TooltipTrigger>
-                <RiStarSmileLine className="text-feature h-4 w-4" />
+                <Star className="text-feature h-4 w-4" />
               </TooltipTrigger>
               <TooltipContent>This is your primary integration for the {provider.channel} channel.</TooltipContent>
             </Tooltip>
@@ -94,7 +95,7 @@ export function IntegrationCard({ integration, provider, environment, onClick }:
               side="right"
               align="center"
             >
-              <RiLockStarLine className="text-warning h-4 w-4" />
+              <LockKey className="text-warning h-4 w-4" />
             </UpgradeCTATooltip>
           )}
         </div>
@@ -123,7 +124,7 @@ export function IntegrationCard({ integration, provider, environment, onClick }:
         {integration.channel === ChannelTypeEnum.IN_APP && !integration.connected ? (
           <Button
             size="xs"
-            leadingIcon={RiSettings4Line}
+            leadingIcon={Gear}
             className="h-[26px]"
             variant="secondary"
             mode="outline"
@@ -133,7 +134,7 @@ export function IntegrationCard({ integration, provider, environment, onClick }:
           </Button>
         ) : (
           <StatusBadge variant="light" status={integration.active ? 'completed' : 'disabled'}>
-            <StatusBadgeIcon as={integration.active ? RiCheckboxCircleFill : RiCloseCircleFill} />
+            <StatusBadgeIcon as={integration.active ? CheckCircle : XCircle} />
             {integration.active ? 'Active' : 'Inactive'}
           </StatusBadge>
         )}

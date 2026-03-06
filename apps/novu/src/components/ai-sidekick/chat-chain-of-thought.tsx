@@ -1,7 +1,7 @@
 import { AiWorkflowToolsEnum } from '@novu/shared';
 import { DynamicToolUIPart, UIMessage } from 'ai';
 import { useEffect, useRef, useState } from 'react';
-import { RiExpandUpDownLine, RiShapesLine } from 'react-icons/ri';
+
 import { STEP_TYPE_TO_COLOR } from '@/utils/color';
 import { StepTypeEnum } from '@/utils/enums';
 import { cn } from '@merge-rd/ui/lib/utils';
@@ -16,6 +16,7 @@ import { STEP_TYPE_TO_ICON } from '../icons/utils';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@merge-rd/ui/components/collapsible';
 import { Tag } from '../primitives/tag';
 import { StyledMessageResponse } from './chat-message-response';
+import { ArrowsDownUp, Shapes } from '@phosphor-icons/react';
 
 type MessagePart = UIMessage['parts'][number];
 
@@ -105,7 +106,7 @@ function WorkflowInitializedSection({ output }: { output: WorkflowMetadataOutput
             <div className="flex flex-col gap-1 py-0.5 pl-1 pr-1.5">
               <CollapsibleTrigger className="flex w-full items-center justify-between gap-5 text-left transition-opacity hover:opacity-80">
                 <span className="font-mono text-label-xs font-medium text-text-sub">Description</span>
-                <RiExpandUpDownLine
+                <ArrowsDownUp
                   className="size-4 shrink-0 text-text-soft transition-transform group-data-[state=open]:rotate-180"
                   aria-hidden
                 />
@@ -131,7 +132,7 @@ function WorkflowInitializedSection({ output }: { output: WorkflowMetadataOutput
             <div className="flex flex-col gap-1 py-0.5 pl-1 pr-1.5">
               <CollapsibleTrigger className="flex w-full items-center justify-between gap-5 text-left transition-opacity hover:opacity-80">
                 <span className="font-mono text-label-xs font-medium text-text-sub">Tags</span>
-                <RiExpandUpDownLine
+                <ArrowsDownUp
                   className="size-4 shrink-0 text-text-soft transition-transform group-data-[state=open]:rotate-180"
                   aria-hidden
                 />
@@ -407,7 +408,7 @@ export function ChatChainOfThoughtToolCalls({
 
   return (
     <ChainOfThought open={isExpanded} onOpenChange={setIsExpanded} className="text-text-soft">
-      <ChainOfThoughtHeader className="text-label-xs" icon={RiShapesLine}>
+      <ChainOfThoughtHeader className="text-label-xs" icon={Shapes}>
         {isStreaming ? <Shimmer>{headerText}</Shimmer> : headerText}
       </ChainOfThoughtHeader>
       <ChainOfThoughtContent>

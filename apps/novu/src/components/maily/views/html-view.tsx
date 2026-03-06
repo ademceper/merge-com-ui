@@ -1,8 +1,9 @@
 import { NodeViewProps, NodeViewRendererProps } from '@tiptap/core';
 import { NodeViewContent, NodeViewWrapper } from '@tiptap/react';
 import { useEffect, useMemo, useRef } from 'react';
-import { RiCodeBlock } from 'react-icons/ri';
+
 import { cn } from '@merge-rd/ui/lib/utils';
+import { CodeBlock } from '@phosphor-icons/react';
 
 type HtmlCodeBlockAttributes = {
   activeTab: string;
@@ -105,7 +106,7 @@ function PreviewView(props: { node: NodeViewRendererProps['node']; onClick: () =
         }}
       />
       <div className="border-soft-100 absolute right-[-10px] top-[-3px] hidden cursor-grab items-center justify-center gap-[2px] rounded border bg-white px-1 py-[2px] group-hover:flex">
-        <RiCodeBlock className="size-2.5 shrink-0" />
+        <CodeBlock className="size-2.5 shrink-0" />
         <span className="text-2xs font-medium leading-none">html</span>
       </div>
     </div>

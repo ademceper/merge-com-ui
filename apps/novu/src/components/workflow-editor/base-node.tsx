@@ -3,7 +3,7 @@ import { cva, VariantProps } from 'class-variance-authority';
 import { motion } from 'motion/react';
 import { ReactNode, useCallback, useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
-import { RiDraggable, RiErrorWarningFill } from 'react-icons/ri';
+
 import { useFeatureFlag } from '@/hooks/use-feature-flag';
 import { STEP_TYPE_TO_COLOR } from '@/utils/color';
 import { StepTypeEnum } from '@/utils/enums';
@@ -11,6 +11,7 @@ import { cn } from '@merge-rd/ui/lib/utils';
 import { HoverCard, HoverCardContent, HoverCardPortal, HoverCardTrigger } from '@/components/primitives/hover-card';
 import { Popover, PopoverArrow, PopoverContent, PopoverPortal, PopoverTrigger } from '@/components/primitives/popover';
 import { StepPreview } from '../step-preview-hover-card';
+import { DotsSixVertical, WarningCircle } from '@phosphor-icons/react';
 
 const nodeBadgeVariants = cva(
   'min-w-5 text-xs h-5 border rounded-full opacity-40 flex items-center justify-center p-1',
@@ -114,7 +115,7 @@ export const NodeError = ({ children }: { children: ReactNode }) => {
           onMouseEnter={() => setIsPopoverOpen(true)}
           onMouseLeave={() => setIsPopoverOpen(false)}
         >
-          <RiErrorWarningFill className="border-destructive fill-destructive bg-foreground-0 rounded-full border p-px" />
+          <WarningCircle weight="fill" className="border-destructive fill-destructive bg-foreground-0 rounded-full border p-px" />
         </span>
       </PopoverTrigger>
       <PopoverPortal>
@@ -240,7 +241,7 @@ const DraggedNode = ({
         className="absolute top-2 -left-6 bg-background rounded-4 shadow-md size-4 flex items-center justify-center cursor-grab!"
         data-draggable-node-id={nodeId}
       >
-        <RiDraggable className="size-3 text-text-soft" />
+        <DotsSixVertical className="size-3 text-text-soft" />
       </div>
       <span>{children}</span>
     </div>,
@@ -383,7 +384,7 @@ export const Node = (props: BaseNodeProps) => {
             style={{ cursor: isDragging ? 'grabbing' : 'grab' }}
           >
             <div className="bg-background rounded-4 shadow-md size-4 flex items-center justify-center cursor-grab border border-neutral-200">
-              <RiDraggable className="size-3 text-text-soft" />
+              <DotsSixVertical className="size-3 text-text-soft" />
             </div>
           </motion.div>
         )}

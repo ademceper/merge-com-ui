@@ -13,7 +13,7 @@ export const NotFound = () => {
                 <img src="/merge-white-text.svg" alt="Merge" className="hidden h-8 w-auto dark:block" />
             </div>
             <div className="absolute top-1/2 left-1/2 mb-16 flex -translate-x-1/2 -translate-y-1/2 flex-col items-center justify-center text-center">
-                <span className="bg-gradient-to-b from-foreground to-transparent bg-clip-text text-[10rem] font-extrabold leading-none text-transparent">
+                <span className="bg-linear-to-b from-foreground to-transparent bg-clip-text text-[10rem] font-extrabold leading-none text-transparent">
                 404
                 </span>
                 <h2 className="font-heading my-2 text-2xl font-bold">{t("notFoundTitle")}</h2>

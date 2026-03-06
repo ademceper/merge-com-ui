@@ -1,6 +1,6 @@
 import { DuplicateWorkflowDto } from '@novu/shared';
 import { useState } from 'react';
-import { RiArrowRightSLine } from 'react-icons/ri';
+
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@merge-rd/ui/components/button';
 import { Separator } from '@merge-rd/ui/components/separator';
@@ -22,6 +22,7 @@ import { useDuplicateWorkflow } from '@/hooks/use-duplicate-workflow';
 import { useFetchWorkflow } from '@/hooks/use-fetch-workflow';
 import { useOnElementUnmount } from '@/hooks/use-on-element-unmount';
 import { buildRoute, ROUTES } from '@/utils/routes';
+import { CaretRight } from '@phosphor-icons/react';
 
 type NewWorkflowDrawerProps = {
   mode: 'create' | 'duplicate';
@@ -90,7 +91,7 @@ export function NewWorkflowDrawer({ mode, workflowId }: NewWorkflowDrawerProps) 
         <SheetFooter>
           <Button
             isLoading={isSubmitting}
-            trailingIcon={RiArrowRightSLine}
+            trailingIcon={CaretRight}
             variant="secondary"
             mode="gradient"
             type="submit"

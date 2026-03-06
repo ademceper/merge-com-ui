@@ -1,6 +1,6 @@
 /** biome-ignore-all lint/correctness/useHookAtTopLevel: needs to be fixed */
 import { BubbleMenu, findChildren } from '@tiptap/react';
-import { ChevronUp, Trash } from 'lucide-react';
+
 import { useCallback } from 'react';
 import { sticky } from 'tippy.js';
 import { getClosestNodeByName } from '../../utils/columns';
@@ -23,6 +23,7 @@ import { Divider } from '../ui/divider';
 import { Select } from '../ui/select';
 import { TooltipProvider } from '../ui/tooltip';
 import { useSectionState } from './use-section-state';
+import { CaretUp, Trash } from '@phosphor-icons/react';
 
 export function SectionBubbleMenu(props: EditorBubbleMenuProps) {
   const { appendTo, editor } = props;
@@ -259,7 +260,7 @@ export function SectionBubbleMenu(props: EditorBubbleMenuProps) {
             <Popover>
               <PopoverTrigger className="mly-flex mly-items-center mly-gap-1 mly-rounded-md mly-px-1.5 mly-text-sm data-[state=open]:mly-bg-soft-gray hover:mly-bg-soft-gray">
                 Column
-                <ChevronUp className="mly-h-3 mly-w-3" />
+                <CaretUp className="mly-h-3 mly-w-3" />
               </PopoverTrigger>
               <PopoverContent
                 className="mly-w-max mly-rounded-lg !mly-p-0.5"

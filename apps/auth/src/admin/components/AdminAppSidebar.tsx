@@ -1,4 +1,3 @@
-
 import { label, useEnvironment } from "../../shared/keycloak-ui-shared";
 import {
     Sidebar,
@@ -9,18 +8,11 @@ import {
     SidebarHeader,
     SidebarMenu,
     SidebarMenuButton,
-    SidebarMenuItem,
-    SidebarMenuSub,
-    SidebarMenuSubItem,
-    SidebarMenuSubButton
+    SidebarMenuItem
 } from "@merge-rd/ui/components/sidebar";
-import {
-    Collapsible,
-    CollapsibleContent,
-    CollapsibleTrigger
-} from "@merge-rd/ui/components/collapsible";
+import { Switcher, type SwitcherItem } from "@merge-rd/ui/components/switcher";
 import { useTranslation } from "react-i18next";
-import { NavLink, useLocation } from "react-router-dom";
+import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import { useAccess } from "../context/access/Access";
 import { useRealm } from "../context/realm-context/RealmContext";
 import { useServerInfo } from "../context/server-info/ServerInfoProvider";
@@ -28,26 +20,47 @@ import type { Environment } from "../environment";
 import { toPage } from "../page/routes";
 import { routes } from "../routes";
 import useIsFeatureEnabled, { Feature } from "../utils/useIsFeatureEnabled";
-import { Badge } from "@merge-rd/ui/components/badge";
-import { CaretRightIcon } from "@phosphor-icons/react";
+import { useAdminClient } from "../admin-client";
+import { fetchAdminUI } from "../context/auth/admin-ui-endpoint";
+import { toDashboard } from "../dashboard/routes/Dashboard";
+import { useEffect, useState } from "react";
+import type { RealmNameRepresentation } from "../context/RecentRealms";
+import {
+    BuildingsIcon,
+    BrowserIcon,
+    CirclesThreeIcon,
+    ClockCounterClockwiseIcon,
+    GearSixIcon,
+    GlobeSimple,
+    GlobeIcon,
+    LockKeyIcon,
+    ShieldCheckIcon,
+    StackIcon,
+    TreeStructureIcon,
+    UsersIcon,
+    UsersThreeIcon,
+    KeyIcon,
+    ArrowsClockwiseIcon,
+    ListBulletsIcon
+} from "@phosphor-icons/react";
 
 const baseUrl = import.meta.env.BASE_URL;
 
 type LeftNavProps = {
     title: string;
     path: string;
+    icon: React.ComponentType<{ className?: string }>;
     id?: string;
 };
 
-function LeftNav({ title, path, id }: LeftNavProps) {
+function LeftNav({ title, path, icon: Icon, id }: LeftNavProps) {
     const { t } = useTranslation();
     const { hasAccess } = useAccess();
     const { realm } = useRealm();
     const location = useLocation();
     const encodedRealm = encodeURIComponent(realm);
     const route = routes.find(
-        (route) =>
-            route.path.replace(/\/:.+?(\?|(?:(?!\/).)*|$)/g, "") === (id || path)
+        route => route.path.replace(/\/:.+?(\?|(?:(?!\/).)*|$)/g, "") === (id || path)
     );
 
     const accessAllowed =
@@ -64,44 +77,63 @@ function LeftNav({ title, path, id }: LeftNavProps) {
     const isActive = location.pathname === to || location.pathname.startsWith(to + "/");
     return (
         <SidebarMenuItem>
-            <SidebarMenuButton asChild isActive={isActive}>
+            <SidebarMenuButton asChild isActive={isActive} tooltip={t(title)}>
                 <NavLink
                     to={to}
                     data-testid={"nav-item" + path.replace("/", "-")}
                     end={false}
                 >
-                    {t(title)}
+                    <Icon className="size-4" />
+                    <span>{t(title)}</span>
                 </NavLink>
             </SidebarMenuButton>
         </SidebarMenuItem>
     );
 }
 
-type SubNavLinkProps = { to: string; title: string; dataTestId?: string };
-function SubNavLink({ to, title, dataTestId }: SubNavLinkProps) {
-    const { t } = useTranslation();
-    const location = useLocation();
-    const isActive = location.pathname === to || location.pathname.startsWith(to + "/");
-    return (
-        <SidebarMenuSubItem>
-            <SidebarMenuSubButton asChild isActive={isActive}>
-                <NavLink to={to} data-testid={dataTestId} end={to === location.pathname}>
-                    <span>{t(title)}</span>
-                </NavLink>
-            </SidebarMenuSubButton>
-        </SidebarMenuSubItem>
-    );
-}
-
 export function AdminAppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
     const { t } = useTranslation();
-    const location = useLocation();
+    const navigate = useNavigate();
     const { environment } = useEnvironment<Environment>();
     const { hasAccess, hasSomeAccess } = useAccess();
     const { componentTypes } = useServerInfo();
     const isFeatureEnabled = useIsFeatureEnabled();
     const pages = componentTypes?.["org.keycloak.services.ui.extend.UiPageProvider"];
     const { realm, realmRepresentation } = useRealm();
+    const { adminClient } = useAdminClient();
+
+    const [realms, setRealms] = useState<RealmNameRepresentation[]>([]);
+
+    useEffect(() => {
+        let cancelled = false;
+        (async () => {
+            try {
+                const result = await fetchAdminUI<RealmNameRepresentation[]>(
+                    adminClient,
+                    "ui-ext/realms/names",
+                    { first: "0", max: "1000" }
+                );
+                if (!cancelled) setRealms(result ?? []);
+            } catch {
+                if (!cancelled) setRealms([]);
+            }
+        })();
+        return () => {
+            cancelled = true;
+        };
+    }, [adminClient]);
+
+    const realmColors = ["#6366f1", "#f59e0b", "#10b981", "#ef4444", "#8b5cf6", "#06b6d4", "#ec4899", "#14b8a6"];
+
+    const realmItems: SwitcherItem[] = realms.map((r, i) => ({
+        value: r.name,
+        label: label(t, r.displayName, r.name) as string,
+        icon: <GlobeSimple weight="fill" className="size-5 rounded-md" style={{ color: realmColors[i % realmColors.length] }} />,
+    }));
+
+    const onRealmChange = (value: string) => {
+        navigate(toDashboard({ realm: value }));
+    };
 
     const showManage = hasSomeAccess(
         "view-realm",
@@ -125,7 +157,7 @@ export function AdminAppSidebar({ ...props }: React.ComponentProps<typeof Sideba
     return (
         <Sidebar variant="inset" collapsible="offcanvas" {...props}>
             <SidebarHeader>
-                <div className="flex w-full items-center justify-start px-2 pb-2 group-data-[collapsible=icon]:hidden">
+                <div className="flex w-full items-center justify-start px-2 pb-4 group-data-[collapsible=icon]:hidden">
                     <img
                         src={`${baseUrl}merge-black-text.svg`}
                         alt="Merge"
@@ -137,238 +169,149 @@ export function AdminAppSidebar({ ...props }: React.ComponentProps<typeof Sideba
                         className="hidden h-8 w-auto max-w-full object-contain object-left dark:block"
                     />
                 </div>
-                <SidebarMenu>
-                    <SidebarMenuItem>
-                        <SidebarMenuButton size="lg" asChild>
-                            <a
-                                href={environment.logoUrl || "#"}
-                                className="flex min-w-0 items-center gap-2 rounded-sm px-2 py-1.5 text-left text-sm leading-tight transition-colors hover:bg-white dark:hover:bg-white/3"
-                            >
-                                <span className="shrink-0 text-muted-foreground">
-                                    {t("currentRealm")}
-                                </span>
-                                <span className="flex min-w-0 flex-1 justify-center">
-                                    <Badge variant="secondary" className="max-w-full truncate font-medium rounded-sm bg-indigo-500/15 text-indigo-700 dark:bg-indigo-400/20 dark:text-indigo-300 border-0 h-auto py-1 px-2">
-                                        {label(t, realmRepresentation?.displayName, realm)}
-                                    </Badge>
-                                </span>
-                            </a>
-                        </SidebarMenuButton>
-                    </SidebarMenuItem>
-                </SidebarMenu>
+                <Switcher value={realm} items={realmItems} onChange={onRealmChange} />
             </SidebarHeader>
             <SidebarContent>
-                {showManageRealm && (
-                    <SidebarGroup>
-                        <SidebarGroupLabel>{t("manageRealms")}</SidebarGroupLabel>
-                        <SidebarGroupContent>
-                            <SidebarMenu>
-                                <LeftNav title={t("manageRealms")} path="/realms" />
-                            </SidebarMenu>
-                        </SidebarGroupContent>
-                    </SidebarGroup>
-                )}
                 {showManage && (
                     <SidebarGroup>
-                        <SidebarGroupLabel>{t("manage")}</SidebarGroupLabel>
                         <SidebarGroupContent>
                             <SidebarMenu>
                                 {isFeatureEnabled(Feature.Organizations) &&
                                     realmRepresentation?.organizationsEnabled && (
-                                        <LeftNav title="organizations" path="/organizations" />
+                                        <LeftNav
+                                            title="organizations"
+                                            path="/organizations"
+                                            icon={BuildingsIcon}
+                                        />
                                     )}
-                                <Collapsible
-                                    asChild
-                                    defaultOpen={location.pathname.includes("/clients")}
-                                    className="group/collapsible"
-                                >
-                                    <SidebarMenuItem>
-                                        <CollapsibleTrigger asChild>
-                                            <SidebarMenuButton
-                                                tooltip={t("clients")}
-                                                isActive={location.pathname.includes("/clients")}
-                                            >
-                                                <span>{t("clients")}</span>
-                                                <CaretRightIcon className="ml-auto size-4 transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
-                                            </SidebarMenuButton>
-                                        </CollapsibleTrigger>
-                                        <CollapsibleContent>
-                                            <SidebarMenuSub>
-                                                <SubNavLink
-                                                    to={`/${encodeURIComponent(realm)}/clients/list`}
-                                                    title="clientsList"
-                                                    dataTestId="clients-list-tab"
-                                                />
-                                                <SubNavLink
-                                                    to={`/${encodeURIComponent(realm)}/clients/initial-access-token`}
-                                                    title="initialAccessToken"
-                                                    dataTestId="initial-access-token-tab"
-                                                />
-                                                <SubNavLink
-                                                    to={`/${encodeURIComponent(realm)}/clients/client-registration/anonymous`}
-                                                    title="clientRegistration"
-                                                    dataTestId="client-registration-tab"
-                                                />
-                                            </SidebarMenuSub>
-                                        </CollapsibleContent>
-                                    </SidebarMenuItem>
-                                </Collapsible>
-                                <LeftNav title="clientScopes" path="/client-scopes" />
-                                <LeftNav title="realmRoles" path="/roles" />
+                                <LeftNav
+                                    title="clients"
+                                    path="/clients"
+                                    icon={BrowserIcon}
+                                />
+                                <LeftNav
+                                    title="clientScopes"
+                                    path="/client-scopes"
+                                    icon={StackIcon}
+                                />
+                                <LeftNav
+                                    title="realmRoles"
+                                    path="/roles"
+                                    icon={KeyIcon}
+                                />
+                            </SidebarMenu>
+                        </SidebarGroupContent>
+                    </SidebarGroup>
+                )}
+
+                {showManage && (
+                    <SidebarGroup>
+                        <SidebarGroupLabel>{t("usersAndAccess")}</SidebarGroupLabel>
+                        <SidebarGroupContent>
+                            <SidebarMenu>
                                 {hasAccess("query-users") && (
-                                    <LeftNav title="titleUsers" path="/users" />
+                                    <LeftNav
+                                        title="titleUsers"
+                                        path="/users"
+                                        icon={UsersIcon}
+                                    />
                                 )}
-                                <LeftNav title="groups" path="/groups" />
-                                <LeftNav title="sessions" path="/sessions" />
+                                <LeftNav
+                                    title="groups"
+                                    path="/groups"
+                                    icon={UsersThreeIcon}
+                                />
+                                {isFeatureEnabled(Feature.AdminFineGrainedAuthzV2) &&
+                                    realmRepresentation?.adminPermissionsEnabled && (
+                                        <LeftNav
+                                            title="permissions"
+                                            path="/permissions"
+                                            icon={ShieldCheckIcon}
+                                        />
+                                    )}
+                            </SidebarMenu>
+                        </SidebarGroupContent>
+                    </SidebarGroup>
+                )}
+
+                {showConfigure && (
+                    <SidebarGroup>
+                        <SidebarGroupLabel>{t("security")}</SidebarGroupLabel>
+                        <SidebarGroupContent>
+                            <SidebarMenu>
+                                <LeftNav
+                                    title="authentication"
+                                    path="/authentication"
+                                    icon={LockKeyIcon}
+                                />
+                                <LeftNav
+                                    title="identityProviders"
+                                    path="/identity-providers"
+                                    icon={GlobeIcon}
+                                />
+                                <LeftNav
+                                    title="userFederation"
+                                    path="/user-federation"
+                                    icon={TreeStructureIcon}
+                                />
+                            </SidebarMenu>
+                        </SidebarGroupContent>
+                    </SidebarGroup>
+                )}
+
+                {showManage && (
+                    <SidebarGroup>
+                        <SidebarGroupLabel>{t("monitor")}</SidebarGroupLabel>
+                        <SidebarGroupContent>
+                            <SidebarMenu>
+                                <LeftNav
+                                    title="sessions"
+                                    path="/sessions"
+                                    icon={ClockCounterClockwiseIcon}
+                                />
                                 {hasAccess("view-events") && (
-                                    <Collapsible
-                                        asChild
-                                        defaultOpen={location.pathname.includes("/events")}
-                                        className="group/collapsible"
-                                    >
-                                        <SidebarMenuItem>
-                                            <CollapsibleTrigger asChild>
-                                                <SidebarMenuButton
-                                                    tooltip={t("titleEvents")}
-                                                    isActive={location.pathname.includes("/events")}
-                                                >
-                                                    <span>{t("titleEvents")}</span>
-                                                    <CaretRightIcon className="ml-auto size-4 transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
-                                                </SidebarMenuButton>
-                                            </CollapsibleTrigger>
-                                            <CollapsibleContent>
-                                                <SidebarMenuSub>
-                                                    <SubNavLink
-                                                        to={`/${encodeURIComponent(realm)}/events/user-events`}
-                                                        title="userEvents"
-                                                    />
-                                                    <SubNavLink
-                                                        to={`/${encodeURIComponent(realm)}/events/admin-events`}
-                                                        title="adminEvents"
-                                                        dataTestId="admin-events-tab"
-                                                    />
-                                                </SidebarMenuSub>
-                                            </CollapsibleContent>
-                                        </SidebarMenuItem>
-                                    </Collapsible>
+                                    <LeftNav
+                                        title="titleEvents"
+                                        path="/events"
+                                        icon={ListBulletsIcon}
+                                    />
                                 )}
                             </SidebarMenu>
                         </SidebarGroupContent>
                     </SidebarGroup>
                 )}
-                {showConfigure && (
+
+                {showConfigure && hasAccess("view-realm") && (
                     <SidebarGroup>
-                        <SidebarGroupLabel>{t("configure")}</SidebarGroupLabel>
+                        <SidebarGroupLabel>{t("settings")}</SidebarGroupLabel>
                         <SidebarGroupContent>
                             <SidebarMenu>
-                                {hasAccess("view-realm") && (
-                                    <Collapsible
-                                        asChild
-                                        defaultOpen={location.pathname.includes("/realm-settings")}
-                                        className="group/collapsible"
-                                    >
-                                        <SidebarMenuItem>
-                                            <CollapsibleTrigger asChild>
-                                                <SidebarMenuButton
-                                                    tooltip={t("realmSettings")}
-                                                    isActive={location.pathname.includes("/realm-settings")}
-                                                >
-                                                    <span>{t("realmSettings")}</span>
-                                                    <CaretRightIcon className="ml-auto size-4 transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
-                                                </SidebarMenuButton>
-                                            </CollapsibleTrigger>
-                                            <CollapsibleContent>
-                                                <SidebarMenuSub>
-                                                    <SubNavLink to={`/${encodeURIComponent(realm)}/realm-settings/general`} title="general" dataTestId="rs-general-tab" />
-                                                    <SubNavLink to={`/${encodeURIComponent(realm)}/realm-settings/login`} title="login" dataTestId="rs-login-tab" />
-                                                    <SubNavLink to={`/${encodeURIComponent(realm)}/realm-settings/email`} title="email" dataTestId="rs-email-tab" />
-                                                    <SubNavLink
-                                                        to={`/${encodeURIComponent(realm)}/realm-settings/themes/settings`}
-                                                        title="themes"
-                                                        dataTestId="rs-themes-tab"
-                                                    />
-                                                    <SubNavLink
-                                                        to={`/${encodeURIComponent(realm)}/realm-settings/keys/list`}
-                                                        title="keys"
-                                                        dataTestId="rs-keys-tab"
-                                                    />
-                                                    <SubNavLink to={`/${encodeURIComponent(realm)}/realm-settings/events`} title="events" dataTestId="rs-realm-events-tab" />
-                                                    <SubNavLink to={`/${encodeURIComponent(realm)}/realm-settings/localization`} title="localization" dataTestId="rs-localization-tab" />
-                                                    <SubNavLink to={`/${encodeURIComponent(realm)}/realm-settings/security-defenses`} title="securityDefences" dataTestId="rs-security-defenses-tab" />
-                                                    <SubNavLink to={`/${encodeURIComponent(realm)}/realm-settings/sessions`} title="sessions" dataTestId="rs-sessions-tab" />
-                                                    <SubNavLink to={`/${encodeURIComponent(realm)}/realm-settings/tokens`} title="tokens" dataTestId="rs-tokens-tab" />
-                                                    {isFeatureEnabled(Feature.ClientPolicies) && (
-                                                        <SubNavLink
-                                                            to={`/${encodeURIComponent(realm)}/realm-settings/client-policies/profiles`}
-                                                            title="clientPolicies"
-                                                            dataTestId="rs-client-policies-tab"
-                                                        />
-                                                    )}
-                                                    <SubNavLink
-                                                        to={`/${encodeURIComponent(realm)}/realm-settings/user-profile/attributes`}
-                                                        title="userProfile"
-                                                        dataTestId="rs-user-profile-tab"
-                                                    />
-                                                    <SubNavLink to={`/${encodeURIComponent(realm)}/realm-settings/user-registration`} title="userRegistration" dataTestId="rs-userRegistration-tab" />
-                                                </SidebarMenuSub>
-                                            </CollapsibleContent>
-                                        </SidebarMenuItem>
-                                    </Collapsible>
-                                )}
-                                <Collapsible
-                                    asChild
-                                    defaultOpen={location.pathname.includes("/authentication")}
-                                    className="group/collapsible"
-                                >
-                                    <SidebarMenuItem>
-                                        <CollapsibleTrigger asChild>
-                                            <SidebarMenuButton
-                                                tooltip={t("authentication")}
-                                                isActive={location.pathname.includes("/authentication")}
-                                            >
-                                                <span>{t("authentication")}</span>
-                                                <CaretRightIcon className="ml-auto size-4 transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
-                                            </SidebarMenuButton>
-                                        </CollapsibleTrigger>
-                                        <CollapsibleContent>
-                                            <SidebarMenuSub>
-                                                <SubNavLink
-                                                    to={`/${encodeURIComponent(realm)}/authentication/flows`}
-                                                    title="flows"
-                                                    dataTestId="authentication-flows-tab"
-                                                />
-                                                <SubNavLink
-                                                    to={`/${encodeURIComponent(realm)}/authentication/required-actions`}
-                                                    title="requiredActions"
-                                                    dataTestId="authentication-required-actions-tab"
-                                                />
-                                                <SubNavLink
-                                                    to={`/${encodeURIComponent(realm)}/authentication/policies`}
-                                                    title="policies"
-                                                    dataTestId="authentication-policies-tab"
-                                                />
-                                            </SidebarMenuSub>
-                                        </CollapsibleContent>
-                                    </SidebarMenuItem>
-                                </Collapsible>
-                                {isFeatureEnabled(Feature.AdminFineGrainedAuthzV2) &&
-                                    realmRepresentation?.adminPermissionsEnabled && (
-                                        <LeftNav title="permissions" path="/permissions" />
-                                    )}
                                 <LeftNav
-                                    title="identityProviders"
-                                    path="/identity-providers"
+                                    title="realmSettings"
+                                    path="/realm-settings"
+                                    icon={GearSixIcon}
                                 />
-                                <LeftNav title="userFederation" path="/user-federation" />
+                                {showManageRealm && (
+                                    <LeftNav
+                                        title="manageRealms"
+                                        path="/realms"
+                                        icon={CirclesThreeIcon}
+                                    />
+                                )}
                                 {showWorkflows && (
-                                    <LeftNav title="workflows" path="/workflows" />
+                                    <LeftNav
+                                        title="workflows"
+                                        path="/workflows"
+                                        icon={ArrowsClockwiseIcon}
+                                    />
                                 )}
                                 {isFeatureEnabled(Feature.DeclarativeUI) &&
-                                    pages?.map((p) => (
+                                    pages?.map(p => (
                                         <LeftNav
                                             key={p.id}
                                             title={p.id}
                                             path={toPage({ providerId: p.id }).pathname!}
+                                            icon={ListBulletsIcon}
                                             id="/page-section"
                                         />
                                     ))}

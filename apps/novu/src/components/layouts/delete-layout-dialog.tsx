@@ -1,11 +1,12 @@
 import { LayoutResponseDto } from '@novu/shared';
-import { RiArrowRightSLine, RiRouteFill } from 'react-icons/ri';
+
 import { useEnvironment } from '@/context/environment/hooks';
 import { useFetchLayoutUsage } from '@/hooks/use-fetch-layout-usage';
 import { ConfirmationModal } from '../confirmation-modal';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@merge-rd/ui/components/accordion';
 import { Skeleton } from '@merge-rd/ui/components/skeleton';
 import TruncatedText from '../truncated-text';
+import { CaretRight, Path } from '@phosphor-icons/react';
 
 type DeleteLayoutDialogProps = {
   layout: LayoutResponseDto;
@@ -76,7 +77,7 @@ export const DeleteLayoutDialog = ({ layout, open, onOpenChange, onConfirm, isLo
                     className={`flex items-center gap-1 p-1 ${index > 0 ? 'border-t border-neutral-100' : ''}`}
                   >
                     <div className="flex h-5 w-5 items-center justify-center">
-                      <RiRouteFill className="text-feature h-3.5 w-3.5" />
+                      <Path weight="fill" className="text-feature h-3.5 w-3.5" />
                     </div>
                     <div className="min-w-0 flex-1">
                       <div className="flex items-center gap-1">
@@ -106,7 +107,7 @@ export const DeleteLayoutDialog = ({ layout, open, onOpenChange, onConfirm, isLo
       title="Are you sure?"
       description={getDescription()}
       confirmButtonText={usage?.workflows.length === 0 || isUsagePending ? 'Delete layout' : 'Proceed'}
-      confirmTrailingIcon={RiArrowRightSLine}
+      confirmTrailingIcon={CaretRight}
       isLoading={isLoading}
       isConfirmDisabled={isUsagePending}
     />

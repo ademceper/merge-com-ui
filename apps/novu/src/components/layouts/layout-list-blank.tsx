@@ -1,10 +1,11 @@
 import { ApiServiceLevelEnum } from '@novu/shared';
-import { RiAddCircleLine, RiInformation2Line } from 'react-icons/ri';
+
 import { Link } from 'react-router-dom';
 import { useFetchSubscription } from '@/hooks/use-fetch-subscription';
 import { ROUTES } from '@/utils/routes';
 import { CreateLayoutButton } from './create-layout-btn';
 import { EmptyLayoutsIllustration } from './empty-layouts-illustration';
+import { Info, PlusCircle } from '@phosphor-icons/react';
 
 export const LayoutListBlank = () => {
   const { subscription } = useFetchSubscription();
@@ -34,10 +35,10 @@ export const LayoutListBlank = () => {
       </div>
 
       <div className="flex flex-col items-center gap-1">
-        <CreateLayoutButton text="Create your first layout" icon={RiAddCircleLine} />
+        <CreateLayoutButton text="Create your first layout" icon={PlusCircle} />
         {tier === ApiServiceLevelEnum.FREE && (
           <p className="text-text-soft text-paragraph-xs mt-2 flex items-center gap-1">
-            <RiInformation2Line />
+            <Info />
             One layout is included in your plan,{' '}
             <Link relative={'route'} to={ROUTES.SETTINGS_BILLING} className="text-text-sub underline">
               upgrade now

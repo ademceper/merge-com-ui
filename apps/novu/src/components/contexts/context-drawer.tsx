@@ -1,6 +1,6 @@
 import { ContextId, ContextType, createContextKey } from '@novu/shared';
 import React, { forwardRef, useState } from 'react';
-import { RiBuildingLine } from 'react-icons/ri';
+
 import { Sheet, SheetContent, SheetDescription, SheetTitle } from '@/components/primitives/sheet';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@merge-rd/ui/components/tabs';
 import { TooltipProvider } from '@/components/primitives/tooltip';
@@ -10,6 +10,7 @@ import { useFormProtection } from '@/hooks/use-form-protection';
 import { cn } from '@merge-rd/ui/lib/utils';
 import { ContextActivity } from './context-activity';
 import { ContextOverview } from './context-overview';
+import { Buildings } from '@phosphor-icons/react';
 
 const tabTriggerClasses =
   'hover:data-[state=inactive]:text-foreground-950 h-11 py-3 rounded-none [&>span]:h-5 px-0 relative';
@@ -43,7 +44,7 @@ function ContextTabs(props: ContextTabsProps) {
       >
         <header className="border-bg-soft flex h-12 w-full flex-row items-center gap-3 border-b px-5 py-5">
           <div className="flex flex-1 items-center gap-1 overflow-hidden text-sm font-medium">
-            <RiBuildingLine className="size-5 p-0.5" />
+            <Buildings className="size-5 p-0.5" />
             <TruncatedText className="flex-1 pr-10">Context - {contextKey}</TruncatedText>
           </div>
         </header>

@@ -1,5 +1,5 @@
 import { DirectionEnum, ListWorkflowResponse } from '@novu/shared';
-import { RiMore2Fill } from 'react-icons/ri';
+
 import { useSearchParams } from 'react-router-dom';
 import { Skeleton } from '@merge-rd/ui/components/skeleton';
 import {
@@ -16,6 +16,7 @@ import { TablePaginationFooter } from '@/components/primitives/table-pagination-
 import { WorkflowListEmpty } from '@/components/workflow-list-empty';
 import { WorkflowRow } from '@/components/workflow-row';
 import { ServerErrorPage } from '@/pages/server-error-page';
+import { DotsThree } from '@phosphor-icons/react';
 
 export type SortableColumn = 'name' | 'updatedAt' | 'lastTriggeredAt';
 
@@ -60,7 +61,7 @@ function WorkflowListSkeleton({ limit }: WorkflowListSkeletonProps) {
             <Skeleton className="h-5 w-[14ch] rounded-full" />
           </TableCell>
           <TableCell className="text-foreground-600 text-sm font-medium">
-            <RiMore2Fill className="size-4 opacity-50" />
+            <DotsThree weight="fill" className="size-4 opacity-50" />
           </TableCell>
         </TableRow>
       ))}

@@ -1,10 +1,11 @@
 import type { IEnvironment } from '@novu/shared';
-import { RiArrowRightSLine, RiCheckboxCircleFill, RiCloseFill } from 'react-icons/ri';
+
 import type { IEnvironmentPublishResponse } from '@/api/environments';
 import { useEnvironment } from '@/context/environment/hooks';
 import { Button } from '@merge-rd/ui/components/button';
 import { Dialog, DialogClose, DialogContent, DialogDescription, DialogTitle } from '@merge-rd/ui/components/dialog';
 import { VisuallyHidden } from '../primitives/visually-hidden';
+import { CaretRight, CheckCircle, X } from '@phosphor-icons/react';
 
 type PublishSuccessModalProps = {
   isOpen: boolean;
@@ -61,11 +62,11 @@ export function PublishSuccessModal({
         </VisuallyHidden>
         <div className="flex items-start justify-between">
           <div className="bg-success-lighter rounded-full p-2">
-            <RiCheckboxCircleFill className="text-success-base size-6" />
+            <CheckCircle weight="fill" className="text-success-base size-6" />
           </div>
           <DialogClose asChild>
             <button className="opacity-70 transition-opacity hover:opacity-100">
-              <RiCloseFill className="size-4" />
+              <X weight="fill" className="size-4" />
             </button>
           </DialogClose>
         </div>
@@ -85,7 +86,7 @@ export function PublishSuccessModal({
             mode="filled"
             size="2xs"
             onClick={onSwitchEnvironment}
-            trailingIcon={RiArrowRightSLine}
+            trailingIcon={CaretRight}
           >
             Switch to {environment?.name}
           </Button>

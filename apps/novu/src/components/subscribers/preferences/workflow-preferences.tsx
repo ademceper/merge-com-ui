@@ -2,7 +2,7 @@ import { PatchPreferenceChannelsDto, SubscriberWorkflowPreferenceDto } from '@no
 import { ChannelTypeEnum } from '@novu/shared';
 import { motion } from 'motion/react';
 import { useState } from 'react';
-import { RiContractUpDownLine, RiExpandUpDownLine } from 'react-icons/ri';
+
 import { STEP_TYPE_TO_ICON } from '@/components/icons/utils';
 import { Card, CardContent, CardFooter, CardHeader } from '@merge-rd/ui/components/card';
 import { Step } from '@/components/primitives/step';
@@ -10,6 +10,7 @@ import { PreferencesItem } from '@/components/subscribers/preferences/preference
 import { formatDateSimple } from '@/utils/format-date';
 import { cn } from '@merge-rd/ui/lib/utils';
 import { STEP_TYPE_TO_COLOR } from '../../../utils/color';
+import { ArrowsDownUp, ArrowsIn } from '@phosphor-icons/react';
 
 type WorkflowPreferencesProps = {
   workflowPreferences: SubscriberWorkflowPreferenceDto;
@@ -34,9 +35,9 @@ export function WorkflowPreferences(props: WorkflowPreferencesProps) {
           <StepIcons steps={Object.keys(channels) as ChannelTypeEnum[]} />
 
           {isExpanded ? (
-            <RiContractUpDownLine className="text-foreground-400 h-3 w-3" />
+            <ArrowsIn className="text-foreground-400 h-3 w-3" />
           ) : (
-            <RiExpandUpDownLine className="text-foreground-400 h-3 w-3" />
+            <ArrowsDownUp className="text-foreground-400 h-3 w-3" />
           )}
         </div>
       </CardHeader>

@@ -1,12 +1,13 @@
-import { RiEarthLine } from 'react-icons/ri';
+
 import { type Country } from 'react-phone-number-input';
 import flags from 'react-phone-number-input/flags';
 import { cn } from '@merge-rd/ui/lib/utils';
+import { Globe } from '@phosphor-icons/react';
 
 // Helper function to get flag for locale
 function getLocaleFlag(localeCode: string) {
   const countryCode = localeCode.split('_')?.[1] as Country;
-  return (countryCode && flags[countryCode]) || RiEarthLine;
+  return (countryCode && flags[countryCode]) || Globe;
 }
 
 type FlagCircleProps = {

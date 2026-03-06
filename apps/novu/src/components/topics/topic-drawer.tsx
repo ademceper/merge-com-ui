@@ -1,7 +1,7 @@
 import { FeatureFlagsKeysEnum } from '@novu/shared';
 import { motion } from 'motion/react';
 import { forwardRef, useEffect, useRef, useState } from 'react';
-import { RiDiscussLine } from 'react-icons/ri';
+
 import { ListTopicSubscriptionsResponse, TopicSubscription } from '@/api/topics';
 import { Separator } from '@merge-rd/ui/components/separator';
 import { Sheet, SheetContent, SheetDescription, SheetTitle } from '@/components/primitives/sheet';
@@ -23,6 +23,7 @@ import { TopicActivity } from './topic-activity';
 import { TopicOverviewForm, TopicOverviewSkeleton } from './topic-overview-form';
 import { TopicSubscriberFilter } from './topic-subscriber-filter';
 import { TopicSubscriberItem } from './topic-subscriber-item';
+import { ChatTeardropDots } from '@phosphor-icons/react';
 
 const tabTriggerClasses =
   'hover:data-[state=inactive]:text-foreground-950 h-11 py-3 rounded-none [&>span]:h-5 px-0 relative';
@@ -242,7 +243,7 @@ function TopicTabs(props: TopicTabsProps) {
       >
         <header className="border-bg-soft flex h-12 w-full flex-row items-center gap-3 border-b px-3 py-4">
           <div className="flex flex-1 items-center gap-1 overflow-hidden text-sm font-medium">
-            <RiDiscussLine className="size-5 p-0.5" />
+            <ChatTeardropDots className="size-5 p-0.5" />
             <TruncatedText className="flex-1 pr-10">Topic - {topicKey}</TruncatedText>
           </div>
         </header>

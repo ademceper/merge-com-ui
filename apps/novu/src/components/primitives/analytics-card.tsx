@@ -6,6 +6,7 @@ import { TrendLineUp } from '../icons/trend-line-up';
 import { AnimatedNumber } from './animated-number';
 import { HelpTooltipIndicator } from './help-tooltip-indicator';
 import { Skeleton } from '@merge-rd/ui/components/skeleton';
+import { User } from '@phosphor-icons/react';
 
 type TrendDirection = 'up' | 'down' | 'neutral';
 
@@ -61,7 +62,7 @@ function formatPercentage(percentage: number): string {
  *
  * @example
  * ```tsx
- * import { RiUserLine } from 'react-icons/ri';
+ * 
  *
  * <AnalyticsCard
  *   value={1718}
@@ -69,7 +70,7 @@ function formatPercentage(percentage: number): string {
  *   description="+400 compared to prior 30 days"
  *   percentageChange={3}
  *   trendDirection="up"
- *   icon={RiUserLine}
+ *   icon={User}
  *   isLoading={false}
  * />
  * ```

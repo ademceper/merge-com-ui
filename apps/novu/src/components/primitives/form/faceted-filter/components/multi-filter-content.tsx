@@ -1,8 +1,9 @@
-import { Check } from 'lucide-react';
+
 import { cn } from '@merge-rd/ui/lib/utils';
 import { useKeyboardNavigation } from '../hooks/use-keyboard-navigation';
 import { FilterOption, SizeType } from '../types';
 import { BaseFilterContent } from './base-filter-content';
+import { Check } from '@phosphor-icons/react';
 
 type MultiFilterContentProps = {
   inputRef: React.RefObject<HTMLInputElement | null>;

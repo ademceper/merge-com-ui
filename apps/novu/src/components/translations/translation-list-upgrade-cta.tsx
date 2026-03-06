@@ -1,4 +1,4 @@
-import { RiBookMarkedLine, RiSparkling2Line } from 'react-icons/ri';
+
 import { Link, useNavigate } from 'react-router-dom';
 import { LinkButton } from '@/components/primitives/button-link';
 import { IS_SELF_HOSTED, SELF_HOSTED_UPGRADE_REDIRECT_URL } from '@/config';
@@ -8,6 +8,7 @@ import { TelemetryEvent } from '@/utils/telemetry';
 import { openInNewTab } from '@/utils/url';
 import { Button } from '@merge-rd/ui/components/button';
 import { EmptyTranslationsIllustration } from './empty-translations-illustration';
+import { BookBookmark, Sparkle } from '@phosphor-icons/react';
 
 export const TranslationListUpgradeCta = () => {
   const track = useTelemetry();
@@ -43,12 +44,12 @@ export const TranslationListUpgradeCta = () => {
               navigate(ROUTES.SETTINGS_BILLING);
             }
           }}
-          leadingIcon={RiSparkling2Line}
+          leadingIcon={Sparkle}
         >
           {IS_SELF_HOSTED ? 'Contact Sales' : 'Upgrade now'}
         </Button>
         <Link to={'https://docs.novu.co/platform/workflow/advanced-features/translations'} target="_blank">
-          <LinkButton size="sm" leadingIcon={RiBookMarkedLine}>
+          <LinkButton size="sm" leadingIcon={BookBookmark}>
             How does this help?
           </LinkButton>
         </Link>

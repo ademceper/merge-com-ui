@@ -1,6 +1,6 @@
 import { HTMLAttributes } from 'react';
 import { useForm } from 'react-hook-form';
-import { RiLoader4Line } from 'react-icons/ri';
+
 import { ActivityFilters } from '@/api/activity';
 import { Button } from '@merge-rd/ui/components/button';
 import { FacetedFormFilter } from '@/components/primitives/form/faceted-filter/facated-form-filter';
@@ -8,6 +8,7 @@ import { Form, FormField, FormItem, FormRoot } from '@/components/primitives/for
 import { useDebouncedForm } from '@/hooks/use-debounced-form';
 import { cn } from '@merge-rd/ui/lib/utils';
 import { defaultWorkflowRunsFilter } from './hooks/use-workflow-runs-url-state';
+import { SpinnerGap } from '@phosphor-icons/react';
 
 export type WorkflowRunsFiltersProps = HTMLAttributes<HTMLDivElement> & {
   onFiltersChange: (filter: ActivityFilters) => void;
@@ -86,7 +87,7 @@ export function WorkflowRunsFilters(props: WorkflowRunsFiltersProps) {
               <Button variant="secondary" mode="ghost" size="2xs" onClick={handleReset}>
                 Reset
               </Button>
-              {isFetching && <RiLoader4Line className="h-3 w-3 animate-spin text-neutral-400" />}
+              {isFetching && <SpinnerGap className="h-3 w-3 animate-spin text-neutral-400" />}
             </div>
           )}
         </FormRoot>

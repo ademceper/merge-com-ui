@@ -1,6 +1,6 @@
 import { ApiServiceLevelEnum, EnvironmentTypeEnum, PermissionsEnum } from '@novu/shared';
 import { IconType } from 'react-icons/lib';
-import { RiAddCircleLine } from 'react-icons/ri';
+
 import { useLocation, useNavigate } from 'react-router-dom';
 
 import { PermissionButton } from '@/components/primitives/permission-button';
@@ -13,9 +13,10 @@ import { TelemetryEvent } from '@/utils/telemetry';
 import { Button } from '@merge-rd/ui/components/button';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/primitives/tooltip';
 import { useLayoutsUrlState } from './hooks/use-layouts-url-state';
+import { PlusCircle } from '@phosphor-icons/react';
 
 export const CreateLayoutButton = ({
-  icon = RiAddCircleLine,
+  icon = PlusCircle,
   text = 'Create layout',
   disabled = false,
 }: {

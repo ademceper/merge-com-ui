@@ -4,15 +4,7 @@ import { ChatOnDataCallback, generateId, UIMessage } from 'ai';
 import { motion } from 'motion/react';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import {
-  RiArrowRightSLine,
-  RiCheckboxCircleFill,
-  RiCloseLine,
-  RiLoader3Line,
-  RiLoader4Fill,
-  RiLoopLeftLine,
-  RiRouteFill,
-} from 'react-icons/ri';
+
 import { useNavigate } from 'react-router-dom';
 import { z } from 'zod';
 import { Sparkling } from '@/components/icons/sparkling';
@@ -47,6 +39,15 @@ import { useFormProtection } from '@/hooks/use-form-protection';
 import { buildRoute, ROUTES } from '@/utils/routes';
 import { Form, FormControl, FormField, FormItem, FormMessage, FormRoot } from './primitives/form/form';
 import { showErrorToast } from './primitives/sonner-helpers';
+import {
+  ArrowUUpLeft,
+  CaretRight,
+  CheckCircle,
+  CircleNotch,
+  Path,
+  SpinnerGap,
+  X,
+} from '@phosphor-icons/react';
 
 export type WorkflowCreatedEvent = {
   type: 'workflow-created';
@@ -195,7 +196,7 @@ export function CreateWorkflowModal({ mode, workflowId }: { mode: 'create' | 'du
                 </DialogDescription>
               </div>
               <DialogClose asChild>
-                <CompactButton size="md" variant="ghost" icon={RiCloseLine}>
+                <CompactButton size="md" variant="ghost" icon={X}>
                   <span className="sr-only">Close</span>
                 </CompactButton>
               </DialogClose>
@@ -236,7 +237,7 @@ export function CreateWorkflowModal({ mode, workflowId }: { mode: 'create' | 'du
                 mode="gradient"
                 size="xs"
                 className="cursor-pointer"
-                trailingIcon={RiArrowRightSLine}
+                trailingIcon={CaretRight}
                 type="submit"
                 form="generate-workflow"
                 disabled={isLoading}
@@ -250,7 +251,7 @@ export function CreateWorkflowModal({ mode, workflowId }: { mode: 'create' | 'du
                 mode="gradient"
                 size="xs"
                 className="cursor-pointer"
-                trailingIcon={RiArrowRightSLine}
+                trailingIcon={CaretRight}
                 type="submit"
                 form="create-workflow"
                 disabled={isLoading || isLoadingTemplate}
@@ -390,17 +391,17 @@ function GuidedModeContent({ onSubmit, isGenerating }: GuidedModeContentProps) {
                 >
                   {step.status === 'success' && (
                     <div className="flex size-4 shrink-0 items-center justify-center rounded-full shadow-xs">
-                      <RiCheckboxCircleFill className="size-3 text-success" />
+                      <CheckCircle weight="fill" className="size-3 text-success" />
                     </div>
                   )}
                   {step.status === 'progress' && (
                     <div className="flex size-4 shrink-0 items-center justify-center rounded-full shadow-xs">
-                      <RiLoader4Fill className="size-3 animate-spin text-text-sub" />
+                      <SpinnerGap weight="fill" className="size-3 animate-spin text-text-sub" />
                     </div>
                   )}
                   {step.status === 'pending' && (
                     <div className="flex size-4 shrink-0 items-center justify-center rounded-full shadow-xs">
-                      <RiLoader3Line className="size-3 text-text-sub" />
+                      <CircleNotch className="size-3 text-text-sub" />
                     </div>
                   )}
                   <span className="text-label-xs text-text-sub">{step.text}</span>
@@ -425,7 +426,7 @@ function GuidedModeContent({ onSubmit, isGenerating }: GuidedModeContentProps) {
             className="cursor-pointer"
             onClick={() => handleSuggestionClick(suggestion)}
           >
-            <Tag className="rounded-full" variant="stroke" icon={<RiRouteFill className="text-feature" />}>
+            <Tag className="rounded-full" variant="stroke" icon={<Path weight="fill" className="text-feature" />}>
               {suggestion}
             </Tag>
           </button>
@@ -435,7 +436,7 @@ function GuidedModeContent({ onSubmit, isGenerating }: GuidedModeContentProps) {
           variant="secondary"
           mode="ghost"
           size="2xs"
-          trailingIcon={RiLoopLeftLine}
+          trailingIcon={ArrowUUpLeft}
         /> */}
       </div>
       <Form {...form}>

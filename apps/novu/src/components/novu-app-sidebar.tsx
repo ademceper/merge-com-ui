@@ -1,19 +1,6 @@
 import { FeatureFlagsKeysEnum, PermissionsEnum } from '@novu/shared';
 import { NavLink, useLocation } from 'react-router-dom';
-import {
-  RiBarChartBoxLine,
-  RiBuildingLine,
-  RiDatabase2Line,
-  RiDiscussLine,
-  RiGroup2Line,
-  RiKey2Line,
-  RiLayout5Line,
-  RiLineChartLine,
-  RiRouteFill,
-  RiSignalTowerLine,
-  RiStore3Line,
-  RiTranslate2,
-} from 'react-icons/ri';
+
 import {
   Sidebar,
   SidebarContent,
@@ -30,8 +17,23 @@ import { useEnvironment } from '@/context/environment/hooks';
 import { useFeatureFlag } from '@/hooks/use-feature-flag';
 import { Protect } from '@/utils/protect';
 import { buildRoute, ROUTES } from '@/utils/routes';
-import { EnvironmentDropdown } from './side-navigation/environment-dropdown';
+import { Switcher, type SwitcherItem } from '@merge-rd/ui/components/switcher';
 import { OrganizationDropdown } from './side-navigation/organization-dropdown';
+import {
+  Broadcast,
+  Buildings,
+  ChartLine,
+  ChatTeardropDots,
+  Database,
+  Key,
+  Layout,
+  Path,
+  ChartBar,
+  Storefront,
+  Translate,
+  Terminal,
+  UsersThree,
+} from '@phosphor-icons/react';
 
 function NovuNavLink({
   to,
@@ -85,6 +87,13 @@ export function NovuAppSidebar(props: React.ComponentProps<typeof Sidebar>) {
 
   const slug = currentEnvironment?.slug ?? '';
 
+  const envItems: SwitcherItem[] = (environments ?? []).map((env) => ({
+    value: env.name,
+    label: env.name,
+    icon: <Terminal weight="fill" className="size-5 rounded-md" style={{ color: env.color }} />,
+    group: env._parentId ? 'production' : undefined,
+  }));
+
   const onEnvironmentChange = (value: string) => {
     const environment = environments?.find((env) => env.name === value);
     switchEnvironment(environment?.slug);
@@ -93,8 +102,20 @@ export function NovuAppSidebar(props: React.ComponentProps<typeof Sidebar>) {
   return (
     <Sidebar variant="inset" collapsible="offcanvas" {...props}>
       <SidebarHeader>
+        <div className="flex w-full items-center justify-start px-2 pb-4 group-data-[collapsible=icon]:hidden">
+          <img
+            src="/merge-black-text.svg"
+            alt="Merge"
+            className="h-8 w-auto max-w-full object-contain object-left dark:hidden"
+          />
+          <img
+            src="/merge-white-text.svg"
+            alt="Merge"
+            className="hidden h-8 w-auto max-w-full object-contain object-left dark:block"
+          />
+        </div>
         <OrganizationDropdown />
-        <EnvironmentDropdown currentEnvironment={currentEnvironment} data={environments} onChange={onEnvironmentChange} />
+        <Switcher value={currentEnvironment?.name} items={envItems} onChange={onEnvironmentChange} />
       </SidebarHeader>
 
       <SidebarContent>
@@ -105,20 +126,20 @@ export function NovuAppSidebar(props: React.ComponentProps<typeof Sidebar>) {
               <Protect permission={PermissionsEnum.WORKFLOW_READ}>
                 <NovuNavLink
                   to={slug ? buildRoute(ROUTES.WORKFLOWS, { environmentSlug: slug }) : undefined}
-                  icon={RiRouteFill}
+                  icon={Path}
                   label="Workflows"
                 />
               </Protect>
               <Protect permission={PermissionsEnum.WORKFLOW_READ}>
                 <NovuNavLink
                   to={slug ? buildRoute(ROUTES.LAYOUTS, { environmentSlug: slug }) : undefined}
-                  icon={RiLayout5Line}
+                  icon={Layout}
                   label="Email Layouts"
                 />
               </Protect>
               <NovuNavLink
                 to={slug ? buildRoute(ROUTES.TRANSLATIONS, { environmentSlug: slug }) : undefined}
-                icon={RiTranslate2}
+                icon={Translate}
                 label="Translations"
                 badge="BETA"
               />
@@ -134,21 +155,21 @@ export function NovuAppSidebar(props: React.ComponentProps<typeof Sidebar>) {
               <Protect permission={PermissionsEnum.SUBSCRIBER_READ}>
                 <NovuNavLink
                   to={slug ? buildRoute(ROUTES.SUBSCRIBERS, { environmentSlug: slug }) : undefined}
-                  icon={RiGroup2Line}
+                  icon={UsersThree}
                   label="Subscribers"
                 />
               </Protect>
               <Protect permission={PermissionsEnum.TOPIC_READ}>
                 <NovuNavLink
                   to={slug ? buildRoute(ROUTES.TOPICS, { environmentSlug: slug }) : undefined}
-                  icon={RiDiscussLine}
+                  icon={ChatTeardropDots}
                   label="Topics"
                 />
               </Protect>
               <Protect permission={PermissionsEnum.WORKFLOW_READ}>
                 <NovuNavLink
                   to={slug ? buildRoute(ROUTES.CONTEXTS, { environmentSlug: slug }) : undefined}
-                  icon={RiBuildingLine}
+                  icon={Buildings}
                   label="Contexts"
                   badge="BETA"
                 />
@@ -172,7 +193,7 @@ export function NovuAppSidebar(props: React.ComponentProps<typeof Sidebar>) {
                           })
                         : undefined
                     }
-                    icon={RiBarChartBoxLine}
+                    icon={ChartBar}
                     label="Activity Feed"
                   />
                 </Protect>
@@ -180,7 +201,7 @@ export function NovuAppSidebar(props: React.ComponentProps<typeof Sidebar>) {
                   <Protect permission={PermissionsEnum.NOTIFICATION_READ}>
                     <NovuNavLink
                       to={slug ? buildRoute(ROUTES.ANALYTICS, { environmentSlug: slug }) : undefined}
-                      icon={RiLineChartLine}
+                      icon={ChartLine}
                       label="Usage"
                     />
                   </Protect>
@@ -206,7 +227,7 @@ export function NovuAppSidebar(props: React.ComponentProps<typeof Sidebar>) {
                 <Protect permission={PermissionsEnum.API_KEY_READ}>
                   <NovuNavLink
                     to={slug ? buildRoute(ROUTES.API_KEYS, { environmentSlug: slug }) : undefined}
-                    icon={RiKey2Line}
+                    icon={Key}
                     label="API Keys"
                   />
                 </Protect>
@@ -219,20 +240,20 @@ export function NovuAppSidebar(props: React.ComponentProps<typeof Sidebar>) {
                   >
                     <NovuNavLink
                       to={slug ? buildRoute(ROUTES.WEBHOOKS, { environmentSlug: slug }) : undefined}
-                      icon={RiSignalTowerLine}
+                      icon={Broadcast}
                       label="Webhooks"
                     />
                   </Protect>
                 )}
                 <NovuNavLink
                   to={slug ? buildRoute(ROUTES.ENVIRONMENTS, { environmentSlug: slug }) : undefined}
-                  icon={RiDatabase2Line}
+                  icon={Database}
                   label="Environments"
                 />
                 <Protect permission={PermissionsEnum.INTEGRATION_READ}>
                   <NovuNavLink
                     to={slug ? buildRoute(ROUTES.INTEGRATIONS, { environmentSlug: slug }) : undefined}
-                    icon={RiStore3Line}
+                    icon={Storefront}
                     label="Integration Store"
                   />
                 </Protect>

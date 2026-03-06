@@ -5,7 +5,7 @@ import { standardSchemaResolver } from '@hookform/resolvers/standard-schema';
 import { type IEnvironment, PermissionsEnum } from '@novu/shared';
 import { type ComponentProps, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { RiAddLine, RiArrowRightSLine, RiDatabase2Line } from 'react-icons/ri';
+
 import { Button } from '@merge-rd/ui/components/button';
 import { Form, FormRoot } from '@/components/primitives/form/form';
 import { PermissionButton } from '@/components/primitives/permission-button';
@@ -19,6 +19,7 @@ import { TelemetryEvent } from '../../utils/telemetry';
 import { InlineToast } from '../primitives/inline-toast';
 import { showErrorToast, showSuccessToast } from '../primitives/sonner-helpers';
 import { EnvironmentFormData, EnvironmentFormFields, environmentFormSchema } from './environment-form';
+import { CaretRight, Database, Plus } from '@phosphor-icons/react';
 
 const ENVIRONMENT_COLORS = [
   '#FF6B6B', // Vibrant Coral
@@ -93,7 +94,7 @@ export const CreateEnvironmentButton = (props: CreateEnvironmentButtonProps) => 
         mode="gradient"
         variant="primary"
         size="xs"
-        leadingIcon={RiAddLine}
+        leadingIcon={Plus}
         onClick={handleClick}
         {...props}
       >
@@ -103,7 +104,7 @@ export const CreateEnvironmentButton = (props: CreateEnvironmentButtonProps) => 
       <SheetContent onOpenAutoFocus={(e) => e.preventDefault()}>
         <SheetHeader className="py-3.5 px-3">
           <SheetTitle className="text-label-sm font-medium flex items-center gap-2">
-            <RiDatabase2Line /> Create live environment
+            <Database /> Create live environment
           </SheetTitle>
         </SheetHeader>
         <Separator />
@@ -138,7 +139,7 @@ export const CreateEnvironmentButton = (props: CreateEnvironmentButtonProps) => 
           <Button
             size="xs"
             isLoading={isPending}
-            trailingIcon={RiArrowRightSLine}
+            trailingIcon={CaretRight}
             variant="secondary"
             mode="gradient"
             type="submit"

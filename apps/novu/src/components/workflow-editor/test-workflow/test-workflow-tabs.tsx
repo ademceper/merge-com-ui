@@ -2,7 +2,7 @@ import { standardSchemaResolver } from '@hookform/resolvers/standard-schema';
 import { createMockObjectFromSchema, type WorkflowTestDataResponseDto } from '@novu/shared';
 import { useMemo, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { RiPlayCircleLine } from 'react-icons/ri';
+
 import { Link, useParams } from 'react-router-dom';
 import { Button } from '@merge-rd/ui/components/button';
 import { Form, FormRoot } from '@/components/primitives/form/form';
@@ -17,6 +17,7 @@ import { useIsPayloadSchemaEnabled } from '@/hooks/use-is-payload-schema-enabled
 import { useTriggerWorkflow } from '@/hooks/use-trigger-workflow';
 import { buildRoute, ROUTES } from '@/utils/routes';
 import { useWorkflow } from '../workflow-provider';
+import { PlayCircle } from '@phosphor-icons/react';
 
 export const TestWorkflowTabs = ({ testData }: { testData?: WorkflowTestDataResponseDto }) => {
   const { environmentSlug = '', workflowSlug = '' } = useParams<{ environmentSlug: string; workflowSlug: string }>();
@@ -118,7 +119,7 @@ export const TestWorkflowTabs = ({ testData }: { testData?: WorkflowTestDataResp
                       size="xs"
                       mode="gradient"
                       isLoading={isPending}
-                      leadingIcon={RiPlayCircleLine}
+                      leadingIcon={PlayCircle}
                     >
                       Test workflow
                     </Button>

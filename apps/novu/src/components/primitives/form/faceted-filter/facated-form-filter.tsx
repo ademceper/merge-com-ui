@@ -1,4 +1,4 @@
-import { PlusCircle } from 'lucide-react';
+
 import * as React from 'react';
 import { cn } from '@merge-rd/ui/lib/utils';
 import { Button } from '@merge-rd/ui/components/button';
@@ -9,6 +9,7 @@ import { SingleFilterContent } from './components/single-filter-content';
 import { TextFilterContent } from './components/text-filter-content';
 import { STYLES } from './styles';
 import { FacetedFilterProps } from './types';
+import { PlusCircle } from '@phosphor-icons/react';
 
 export function FacetedFormFilter({
   title,

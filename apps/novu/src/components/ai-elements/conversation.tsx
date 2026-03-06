@@ -1,11 +1,11 @@
 'use client';
 
-import { ArrowDownIcon } from 'lucide-react';
 import type { ComponentProps } from 'react';
 import { useCallback } from 'react';
 import { StickToBottom, useStickToBottomContext } from 'use-stick-to-bottom';
 import { Button } from '@merge-rd/ui/components/button';
 import { cn } from '@merge-rd/ui/lib/utils';
+import { ArrowDown } from '@phosphor-icons/react';
 
 export type ConversationProps = ComponentProps<typeof StickToBottom>;
 
@@ -78,7 +78,7 @@ export const ConversationScrollButton = ({ className, ...props }: ConversationSc
         mode="ghost"
         {...props}
       >
-        <ArrowDownIcon className="size-4" />
+        <ArrowDown className="size-4" />
       </Button>
     )
   );

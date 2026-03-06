@@ -1,6 +1,6 @@
 import { WorkflowResponseDto } from '@novu/shared';
 import React, { forwardRef, useCallback, useEffect, useState } from 'react';
-import { RiCheckboxCircleFill } from 'react-icons/ri';
+
 import { ActivityError } from '@/components/activity/activity-error';
 import { ActivityLogs } from '@/components/activity/activity-logs';
 import { ActivityPanel } from '@/components/activity/activity-panel';
@@ -11,6 +11,7 @@ import { Sheet, SheetContent, SheetTitle } from '@/components/primitives/sheet';
 import { useFetchActivities } from '@/hooks/use-fetch-activities';
 import { usePullActivity } from '@/hooks/use-pull-activity';
 import { TestWorkflowInstructions } from './test-workflow-instructions';
+import { CheckCircle } from '@phosphor-icons/react';
 
 type TestWorkflowActivityDrawerProps = {
   isOpen: boolean;
@@ -99,7 +100,7 @@ export const TestWorkflowActivityDrawer = forwardRef<HTMLDivElement, TestWorkflo
                       <div className="border-stroke-soft bg-bg-weak rounded-8 flex items-center justify-between gap-3 border p-3 py-2">
                         <div className="flex items-center gap-3">
                           <div className="bg-success-100 flex size-6 items-center justify-center rounded-full">
-                            <RiCheckboxCircleFill className="text-success size-5" />
+                            <CheckCircle weight="fill" className="text-success size-5" />
                           </div>
                           <div>
                             <div className="text-success text-label-xs">You have triggered the workflow!</div>

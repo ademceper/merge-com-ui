@@ -1,7 +1,13 @@
-import { ArrowDownIcon, ArrowUpIcon, Braces, CornerDownLeftIcon } from 'lucide-react';
+
 import { forwardRef, useEffect, useImperativeHandle, useRef, useState } from 'react';
 import { cn } from '../../utils/classname';
 import { Variable } from './variable';
+import {
+  ArrowDown,
+  ArrowElbowDownLeft,
+  ArrowUp,
+  BracketsCurly,
+} from '@phosphor-icons/react';
 
 export type VariableSuggestionsPopoverProps = {
   items: Variable[];
@@ -78,7 +84,7 @@ export const VariableSuggestionsPopover: VariableSuggestionsPopoverType = forwar
       <div className="mly-flex mly-items-center mly-justify-between mly-gap-2 mly-border-b mly-border-gray-200 mly-bg-soft-gray/40 mly-px-1 mly-py-1.5 mly-text-gray-500">
         <span className="mly-text-xs mly-uppercase">Variables</span>
         <VariableIcon>
-          <Braces className="mly-size-3 mly-stroke-[2.5]" />
+          <BracketsCurly className="mly-size-3 mly-stroke-[2.5]" />
         </VariableIcon>
       </div>
 
@@ -100,7 +106,7 @@ export const VariableSuggestionsPopover: VariableSuggestionsPopoverType = forwar
                   index === selectedIndex ? 'mly-bg-soft-gray' : 'mly-bg-white'
                 )}
               >
-                <Braces className="mly-size-3 mly-stroke-[2.5] mly-text-rose-600" />
+                <BracketsCurly className="mly-size-3 mly-stroke-[2.5] mly-text-rose-600" />
                 {item.name}
               </button>
             ))
@@ -115,15 +121,15 @@ export const VariableSuggestionsPopover: VariableSuggestionsPopoverType = forwar
       <div className="mly-flex mly-items-center mly-justify-between mly-gap-2 mly-border-t mly-border-gray-200 mly-px-1 mly-py-1.5 mly-text-gray-500">
         <div className="mly-flex mly-items-center mly-gap-1">
           <VariableIcon>
-            <ArrowDownIcon className="mly-size-3 mly-stroke-[2.5]" />
+            <ArrowDown className="mly-size-3 mly-stroke-[2.5]" />
           </VariableIcon>
           <VariableIcon>
-            <ArrowUpIcon className="mly-size-3 mly-stroke-[2.5]" />
+            <ArrowUp className="mly-size-3 mly-stroke-[2.5]" />
           </VariableIcon>
           <span className="mly-text-xs mly-text-gray-500">Navigate</span>
         </div>
         <VariableIcon>
-          <CornerDownLeftIcon className="mly-size-3 mly-stroke-[2.5]" />
+          <ArrowElbowDownLeft className="mly-size-3 mly-stroke-[2.5]" />
         </VariableIcon>
       </div>
     </div>

@@ -1,6 +1,6 @@
 import { EnvironmentTypeEnum } from '@novu/shared';
 import { useState } from 'react';
-import { RiArrowRightSLine, RiCodeBlock, RiEdit2Line, RiEyeLine, RiLockLine, RiSettings4Line } from 'react-icons/ri';
+
 import { useNavigate } from 'react-router-dom';
 import { useEnvironment } from '@/context/environment/hooks';
 import { useIsTranslationEnabled } from '@/hooks/use-is-translation-enabled';
@@ -19,6 +19,14 @@ import { useLayoutEditor } from './layout-editor-provider';
 import { LayoutEditorSettingsDrawer } from './layout-editor-settings-drawer';
 import { LayoutPreviewContextPanel } from './layout-preview-context-panel';
 import { LayoutPreviewFactory } from './layout-preview-factory';
+import {
+  CaretRight,
+  CodeBlock,
+  Eye,
+  Gear,
+  Lock,
+  PencilSimple,
+} from '@phosphor-icons/react';
 
 export const LayoutEditor = () => {
   const navigate = useNavigate();
@@ -59,7 +67,7 @@ export const LayoutEditor = () => {
     <div className="flex h-full w-full">
       <ResizableLayout autoSaveId="layout-editor-page-layout">
         <ResizableLayout.ContextPanel>
-          <PanelHeader icon={RiCodeBlock} title="Preview sandbox" className="p-3" />
+          <PanelHeader icon={CodeBlock} title="Preview sandbox" className="p-3" />
           <div className="bg-bg-weak flex-1 overflow-hidden">
             <div className="h-full overflow-y-auto">
               <LayoutPreviewContextPanel />
@@ -74,7 +82,7 @@ export const LayoutEditor = () => {
             <ResizableLayout autoSaveId="step-editor-content-layout">
               <ResizableLayout.EditorPanel>
                 <div className="flex items-center justify-between">
-                  <PanelHeader icon={() => <RiEdit2Line />} title="Layout Editor" className="flex-1">
+                  <PanelHeader icon={() => <PencilSimple />} title="Layout Editor" className="flex-1">
                     <TranslationStatus
                       resourceId={layout?.layoutId ?? ''}
                       resourceType={LocalizationResourceEnum.LAYOUT}
@@ -85,7 +93,7 @@ export const LayoutEditor = () => {
                       size="md"
                       variant="ghost"
                       type="button"
-                      icon={RiSettings4Line}
+                      icon={Gear}
                       onClick={() => setIsSettingsDrawerOpen(true)}
                       className="ml-2 [&>svg]:size-4"
                     />
@@ -100,7 +108,7 @@ export const LayoutEditor = () => {
                         <div className="max-w-md space-y-4 text-center">
                           <div className="flex justify-center">
                             <div className="bg-neutral-alpha-50 rounded-full p-3">
-                              <RiLockLine className="text-neutral-alpha-400 h-8 w-8" />
+                              <Lock className="text-neutral-alpha-400 h-8 w-8" />
                             </div>
                           </div>
                           <div className="space-y-2">
@@ -117,7 +125,7 @@ export const LayoutEditor = () => {
                                 size="xs"
                                 mode="gradient"
                                 onClick={handleSwitchToDevelopment}
-                                trailingIcon={RiArrowRightSLine}
+                                trailingIcon={CaretRight}
                               >
                                 Switch to {developmentEnvironment.name}
                               </Button>
@@ -133,7 +141,7 @@ export const LayoutEditor = () => {
               <ResizableLayout.Handle />
 
               <ResizableLayout.PreviewPanel>
-                <PanelHeader icon={RiEyeLine} title="Preview" isLoading={isPreviewPending}>
+                <PanelHeader icon={Eye} title="Preview" isLoading={isPreviewPending}>
                   {isTranslationsEnabled && availableLocales.length > 0 && (
                     <LocaleSelect
                       value={selectedLocale}

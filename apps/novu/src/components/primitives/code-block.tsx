@@ -2,10 +2,11 @@ import { tags as t } from '@lezer/highlight';
 import { langs, loadLanguage } from '@uiw/codemirror-extensions-langs';
 import { createTheme } from '@uiw/codemirror-themes';
 import CodeMirror from '@uiw/react-codemirror';
-import { Eye, EyeOff } from 'lucide-react';
+
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { cn } from '@merge-rd/ui/lib/utils';
 import { CopyToClipboard } from './copy-to-clipboard';
+import { Eye, EyeSlash } from '@phosphor-icons/react';
 
 loadLanguage('tsx');
 loadLanguage('json');
@@ -248,7 +249,7 @@ export function CodeBlock({
                   )}
                   title={showSecrets ? 'Hide secrets' : 'Reveal secrets'}
                 >
-                  {showSecrets ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                  {showSecrets ? <EyeSlash className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
                 </button>
               )}
               {actionButtons ?? (
@@ -292,7 +293,7 @@ export function CodeBlock({
                 )}
                 title={showSecrets ? 'Hide secrets' : 'Reveal secrets'}
               >
-                {showSecrets ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                {showSecrets ? <EyeSlash className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
               </button>
             )}
             {actionButtons ?? <CopyToClipboard content={code} theme={theme} title="Copy code" />}

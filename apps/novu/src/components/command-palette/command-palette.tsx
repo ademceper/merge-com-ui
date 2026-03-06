@@ -1,21 +1,6 @@
 import { useCommandState } from 'cmdk';
 import { useCallback, useEffect, useState } from 'react';
-import {
-  RiArrowDownLine,
-  RiArrowUpLine,
-  RiCloseLine,
-  RiCornerDownLeftLine,
-  RiFileLine,
-  RiFlashlightLine,
-  RiPlayFill,
-  RiQuestionLine,
-  RiRouteFill,
-  RiSearch2Line,
-  RiSearchLine,
-  RiSettings4Line,
-  RiSparklingLine,
-  RiUserLine,
-} from 'react-icons/ri';
+
 import { useAiDrawer } from '@/components/ai-drawer';
 import { useTelemetry } from '@/hooks/use-telemetry';
 import { TelemetryEvent } from '@/utils/telemetry';
@@ -26,6 +11,21 @@ import * as CommandMenu from './command-menu';
 import { CommandCategory, Command as CommandType } from './command-types';
 import { useCommandPalette } from './hooks/use-command-palette';
 import { useCommandRegistry } from './hooks/use-command-registry';
+import {
+  ArrowDown,
+  ArrowUp,
+  Gear,
+  MagnifyingGlass,
+  Path,
+  Play,
+  Question,
+  ArrowElbowDownLeft,
+  File,
+  Lightning,
+  Sparkle,
+  User,
+  X,
+} from '@phosphor-icons/react';
 
 const CategoryIconWrapper = ({ children }: { children: React.ReactNode }) => {
   return (
@@ -39,14 +39,14 @@ const CategoryIconWrapper = ({ children }: { children: React.ReactNode }) => {
 
 const getDefaultIcon = (category: CommandCategory): React.ReactNode => {
   const defaultIcons: Record<CommandCategory, React.ReactNode> = {
-    'current-workflow': <RiPlayFill />,
-    workflow: <RiRouteFill />,
-    navigation: <RiFileLine />,
-    data: <RiUserLine />,
-    action: <RiFlashlightLine />,
-    search: <RiSearch2Line />,
-    settings: <RiSettings4Line />,
-    help: <RiQuestionLine />,
+    'current-workflow': <Play weight="fill" />,
+    workflow: <Path weight="fill" />,
+    navigation: <File />,
+    data: <User />,
+    action: <Lightning />,
+    search: <MagnifyingGlass />,
+    settings: <Gear />,
+    help: <Question />,
   };
   return defaultIcons[category];
 };
@@ -83,10 +83,10 @@ function CommandFooter({ commands }: { commands: CommandType[] }) {
         <div className="flex items-center gap-1.5">
           <div className="flex items-center gap-0.5">
             <CommandMenu.FooterKeyBox className="border-stroke-soft bg-bg-white">
-              <RiArrowUpLine className="size-3 text-icon-sub" />
+              <ArrowUp className="size-3 text-icon-sub" />
             </CommandMenu.FooterKeyBox>
             <CommandMenu.FooterKeyBox className="border-stroke-soft bg-bg-white">
-              <RiArrowDownLine className="size-3 text-icon-sub" />
+              <ArrowDown className="size-3 text-icon-sub" />
             </CommandMenu.FooterKeyBox>
           </div>
           <span className="text-paragraph-xs text-text-soft">Navigate</span>
@@ -94,7 +94,7 @@ function CommandFooter({ commands }: { commands: CommandType[] }) {
         <Button variant="primary" size="2xs" mode="gradient">
           <span>{getCategoryActionLabel(selectedCommand?.category, selectedValue)}</span>
           <Kbd className="border border-white/30 bg-transparent ring-transparent px-0 size-4 justify-center items-center">
-            <RiCornerDownLeftLine className="size-2.5 text-white" />
+            <ArrowElbowDownLeft className="size-2.5 text-white" />
           </Kbd>
         </Button>
       </div>
@@ -156,7 +156,7 @@ export function CommandPalette() {
   return (
     <CommandMenu.Dialog open={isOpen} onOpenChange={closeCommandPalette}>
       <div className="group/cmd-input flex items-center gap-2 p-3 bg-bg-weak">
-        <RiSearchLine className={cn('size-5 text-text-soft')} />
+        <MagnifyingGlass className={cn('size-5 text-text-soft')} />
         <CommandMenu.Input
           value={search}
           onValueChange={setSearch}
@@ -168,7 +168,7 @@ export function CommandPalette() {
           onClick={closeCommandPalette}
           className="size-4 items-center justify-center rounded-6 text-text-soft hover:text-icon-sub transition-colors"
         >
-          <RiCloseLine className="size-4" />
+          <X className="size-4" />
         </button>
       </div>
 
@@ -213,7 +213,7 @@ export function CommandPalette() {
             >
               <div className="flex items-center gap-1.5 flex-1">
                 <CategoryIconWrapper>
-                  <RiSparklingLine />
+                  <Sparkle />
                 </CategoryIconWrapper>
                 <span className="text-text-sub text-label-sm flex-1 truncate">Ask AI "{search}"</span>
               </div>

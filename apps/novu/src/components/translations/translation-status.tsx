@@ -1,6 +1,7 @@
-import { RiAlertFill, RiCheckboxCircleFill } from 'react-icons/ri';
+
 import { StatusBadge, StatusBadgeIcon } from '@/components/primitives/status-badge';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/primitives/tooltip';
+import { CheckCircle, Warning } from '@phosphor-icons/react';
 
 type TranslationStatusProps = {
   outdatedLocales?: string[];
@@ -12,7 +13,7 @@ export function TranslationStatus({ outdatedLocales, className }: TranslationSta
 
   const statusBadge = (
     <StatusBadge variant="light" status={isOutdated ? 'pending' : 'completed'} className={className}>
-      <StatusBadgeIcon as={isOutdated ? RiAlertFill : RiCheckboxCircleFill} />
+      <StatusBadgeIcon as={isOutdated ? Warning : CheckCircle} />
       {isOutdated ? 'Outdated, needs update' : 'Up-to-date'}
     </StatusBadge>
   );

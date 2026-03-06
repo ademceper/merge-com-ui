@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useFormContext } from 'react-hook-form';
-import { RiInformation2Line } from 'react-icons/ri';
+
 import { Button } from '@merge-rd/ui/components/button';
 import { FormControl, FormItem, FormLabel, FormMessage } from '@/components/primitives/form/form';
 import { InputRoot, InputWrapper } from '@/components/primitives/input';
@@ -21,6 +21,7 @@ import { useSaveForm } from '@/components/workflow-editor/steps/save-form-contex
 import { useWorkflow } from '@/components/workflow-editor/workflow-provider';
 import { useParseVariables } from '@/hooks/use-parse-variables';
 import { usePrimaryEmailIntegration } from '@/hooks/use-primary-email-integration';
+import { Info } from '@phosphor-icons/react';
 
 type SenderConfigDrawerProps = {
   open: boolean;
@@ -107,7 +108,7 @@ export function SenderConfigDrawer({ open, onOpenChange }: SenderConfigDrawerPro
               Use provider defaults
               <Tooltip>
                 <TooltipTrigger className="flex cursor-default flex-row items-center gap-1">
-                  <RiInformation2Line className="size-3 text-neutral-400" />
+                  <Info className="size-3 text-neutral-400" />
                 </TooltipTrigger>
                 <TooltipContent>
                   <p>
@@ -126,7 +127,7 @@ export function SenderConfigDrawer({ open, onOpenChange }: SenderConfigDrawerPro
                 Sender name
                 <Tooltip>
                   <TooltipTrigger className="flex cursor-default flex-row items-center gap-1">
-                    <RiInformation2Line className="size-3 text-neutral-400" />
+                    <Info className="size-3 text-neutral-400" />
                   </TooltipTrigger>
                   <TooltipContent>
                     <p>The display name shown in the recipient's inbox.</p>
@@ -158,7 +159,7 @@ export function SenderConfigDrawer({ open, onOpenChange }: SenderConfigDrawerPro
                 Sender email
                 <Tooltip>
                   <TooltipTrigger className="flex cursor-default flex-row items-center gap-1">
-                    <RiInformation2Line className="size-3 text-neutral-400" />
+                    <Info className="size-3 text-neutral-400" />
                   </TooltipTrigger>
                   <TooltipContent className="max-w-[280px]">
                     <p>

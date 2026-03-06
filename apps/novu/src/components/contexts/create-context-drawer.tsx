@@ -1,5 +1,5 @@
 import { forwardRef, useId, useState } from 'react';
-import { RiArrowRightSLine } from 'react-icons/ri';
+
 import { Button } from '@merge-rd/ui/components/button';
 import { Separator } from '@merge-rd/ui/components/separator';
 import {
@@ -17,6 +17,7 @@ import { useOnElementUnmount } from '@/hooks/use-on-element-unmount';
 import { cn } from '@merge-rd/ui/lib/utils';
 import { ExternalLink } from '../shared/external-link';
 import { CreateContextForm } from './create-context-form';
+import { CaretRight } from '@phosphor-icons/react';
 
 type CreateContextDrawerProps = {
   isOpen: boolean;
@@ -92,7 +93,7 @@ export const CreateContextDrawer = forwardRef<HTMLDivElement, CreateContextDrawe
               type="submit"
               disabled={isSubmitting}
               isLoading={isSubmitting}
-              trailingIcon={RiArrowRightSLine}
+              trailingIcon={CaretRight}
               form={formId}
             >
               Create context

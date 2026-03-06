@@ -1,7 +1,7 @@
 import { ResourceOriginEnum, StepResponseDto, WorkflowResponseDto } from '@novu/shared';
 import React from 'react';
 import { FaCode } from 'react-icons/fa6';
-import { RiArrowLeftSLine } from 'react-icons/ri';
+
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 
 import { RouteFill } from '@/components/icons';
@@ -23,6 +23,7 @@ import { buildRoute, ROUTES } from '@/utils/routes';
 import { SavingStatusIndicator } from './saving-status-indicator';
 import { getStepTypeIcon } from './steps/utils/preview-context.utils';
 import { useWorkflow } from './workflow-provider';
+import { CaretLeft } from '@phosphor-icons/react';
 
 type BreadcrumbData = {
   label: string;
@@ -88,7 +89,7 @@ export function EditorBreadcrumbs() {
         size="lg"
         className="mr-1"
         variant="ghost"
-        icon={RiArrowLeftSLine}
+        icon={CaretLeft}
         onClick={handleBackNavigation}
       />
       {currentEnvironment && (

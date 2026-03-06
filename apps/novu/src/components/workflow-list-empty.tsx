@@ -1,5 +1,5 @@
 import { PermissionsEnum } from '@novu/shared';
-import { RiBookMarkedLine, RiRouteFill } from 'react-icons/ri';
+
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { VersionControlDev } from '@/components/icons/version-control-dev';
 import { VersionControlProd } from '@/components/icons/version-control-prod';
@@ -9,6 +9,7 @@ import { useEnvironment } from '@/context/environment/hooks';
 import { buildRoute, ROUTES } from '../utils/routes';
 import { ListNoResults } from './list-no-results';
 import { LinkButton } from './primitives/button-link';
+import { BookBookmark, Path } from '@phosphor-icons/react';
 
 interface WorkflowListEmptyProps {
   emptySearchResults?: boolean;
@@ -50,7 +51,7 @@ const WorkflowListEmptyProd = ({ switchToDev }: { switchToDev: () => void }) => 
 
     <div className="flex items-center justify-center gap-6">
       <Link to={'https://docs.novu.co/platform/concepts/workflows'} target="_blank">
-        <LinkButton trailingIcon={RiBookMarkedLine}>View docs</LinkButton>
+        <LinkButton trailingIcon={BookBookmark}>View docs</LinkButton>
       </Link>
 
       <Button variant="secondary" className="gap-2" onClick={switchToDev}>
@@ -77,7 +78,7 @@ const WorkflowListEmptyDev = () => {
 
       <div className="flex items-center justify-center gap-6">
         <Link to={'https://docs.novu.co/platform/concepts/workflows'} target="_blank">
-          <LinkButton variant="gray" trailingIcon={RiBookMarkedLine}>
+          <LinkButton variant="gray" trailingIcon={BookBookmark}>
             View docs
           </LinkButton>
         </Link>
@@ -85,7 +86,7 @@ const WorkflowListEmptyDev = () => {
         <PermissionButton
           permission={PermissionsEnum.WORKFLOW_WRITE}
           variant="primary"
-          leadingIcon={RiRouteFill}
+          leadingIcon={Path}
           className="gap-2"
           onClick={() => {
             navigate(buildRoute(ROUTES.WORKFLOWS_CREATE, { environmentSlug: environmentSlug || '' }));

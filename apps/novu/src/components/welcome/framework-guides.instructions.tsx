@@ -1,6 +1,7 @@
 import { API_HOSTNAME, IS_EU } from '@/config';
 import { apiHostnameManager } from '@/utils/api-hostname-manager';
-import { RiAngularjsFill, RiJavascriptFill, RiNextjsFill, RiReactjsFill, RiRemixRunFill } from 'react-icons/ri';
+
+import { Atom, FileCode, FileJs, Globe, Terminal } from '@phosphor-icons/react';
 import { Language } from '../primitives/code-block';
 import { getFrameworkPrompt } from './ai-prompts/simple-prompt-getter';
 
@@ -122,7 +123,7 @@ export const getFrameworks = (
 ): Framework[] => [
   {
     name: 'Next.js',
-    icon: <RiNextjsFill className="h-8 w-8 text-black" />,
+    icon: <Globe weight="fill" className="h-8 w-8 text-black" />,
     selected: true,
     installSteps: stepsByMethod(
       installationMethod,
@@ -159,7 +160,7 @@ function Novu() {
   },
   {
     name: 'React',
-    icon: <RiReactjsFill className="h-8 w-8 text-[#61DAFB]" />,
+    icon: <Atom weight="fill" className="h-8 w-8 text-[#61DAFB]" />,
     installSteps: stepsByMethod(
       installationMethod,
       [
@@ -200,7 +201,7 @@ function Novu() {
   },
   {
     name: 'Remix',
-    icon: <RiRemixRunFill className="h-8 w-8 text-black" />,
+    icon: <Terminal weight="fill" className="h-8 w-8 text-black" />,
     installSteps: stepsByMethod(
       installationMethod,
       [
@@ -240,7 +241,7 @@ function Novu() {
   },
   {
     name: 'Native',
-    icon: <RiReactjsFill className="h-8 w-8 text-black" />,
+    icon: <Atom weight="fill" className="h-8 w-8 text-black" />,
     installSteps: stepsByMethod(
       installationMethod,
       [
@@ -340,7 +341,7 @@ export function YourCustomInbox() {
   },
   {
     name: 'Angular',
-    icon: <RiAngularjsFill className="h-8 w-8 text-[#DD0031]" />,
+    icon: <FileCode weight="fill" className="h-8 w-8 text-[#DD0031]" />,
     installSteps: stepsByMethod(
       installationMethod,
       [
@@ -351,6 +352,13 @@ export function YourCustomInbox() {
           code: `import { Component, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { NovuUI } from '@novu/js/ui';
+import {
+  Atom,
+  FileCode,
+  FileJs,
+  Globe,
+  Terminal,
+} from '@phosphor-icons/react';
 
 @Component({
   selector: 'app-root',
@@ -390,7 +398,7 @@ export class AppComponent implements AfterViewInit {
   },
   {
     name: 'JavaScript',
-    icon: <RiJavascriptFill className="h-8 w-8 text-[#F7DF1E]" />,
+    icon: <FileJs weight="fill" className="h-8 w-8 text-[#F7DF1E]" />,
     installSteps: stepsByMethod(
       installationMethod,
       [

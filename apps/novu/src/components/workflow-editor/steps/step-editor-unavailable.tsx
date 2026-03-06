@@ -1,9 +1,10 @@
-import { RiArrowRightSLine, RiLockLine } from 'react-icons/ri';
+
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@merge-rd/ui/components/button';
 import { useEnvironment } from '@/context/environment/hooks';
 import { buildRoute, ROUTES } from '@/utils/routes';
 import { useStepEditor } from './context/step-editor-context';
+import { CaretRight, Lock } from '@phosphor-icons/react';
 
 export const StepEditorUnavailable = () => {
   const navigate = useNavigate();
@@ -31,7 +32,7 @@ export const StepEditorUnavailable = () => {
       <div className="max-w-md space-y-4 text-center">
         <div className="flex justify-center">
           <div className="bg-neutral-alpha-50 rounded-full p-3">
-            <RiLockLine className="text-neutral-alpha-400 h-8 w-8" />
+            <Lock className="text-neutral-alpha-400 h-8 w-8" />
           </div>
         </div>
         <div className="space-y-2">
@@ -48,7 +49,7 @@ export const StepEditorUnavailable = () => {
               size="xs"
               mode="gradient"
               onClick={handleSwitchToDevelopment}
-              trailingIcon={RiArrowRightSLine}
+              trailingIcon={CaretRight}
             >
               Switch to {developmentEnvironment.name}
             </Button>

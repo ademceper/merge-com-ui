@@ -1,9 +1,10 @@
 import { PropsWithChildren, useState } from 'react';
-import { RiErrorWarningFill } from 'react-icons/ri';
+
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/primitives/popover';
 import { Separator } from '@merge-rd/ui/components/separator';
 import TruncatedText from '@/components/truncated-text';
 import { countIssues, getAllStepIssues } from '@/components/workflow-editor/step-utils';
+import { WarningCircle } from '@phosphor-icons/react';
 
 // Local type definition for step issues until the shared types are updated
 type RuntimeIssue = {
@@ -70,7 +71,7 @@ export const WorkflowIssuesPopover = ({ children, steps, className }: WorkflowIs
       >
         <div className="p-3">
           <div className="flex items-center gap-2 mb-2">
-            <RiErrorWarningFill className="text-destructive size-3.5" />
+            <WarningCircle weight="fill" className="text-destructive size-3.5" />
             <span className="font-medium text-xs">
               {totalIssues} issue{totalIssues !== 1 ? 's' : ''} in {stepsWithIssues.length} step
               {stepsWithIssues.length !== 1 ? 's' : ''}

@@ -1,5 +1,5 @@
 import { useCallback, useState } from 'react';
-import { RiContractUpDownLine, RiExpandUpDownLine, RiInformation2Line } from 'react-icons/ri';
+
 import { AccordionContent, AccordionItem, AccordionTrigger } from '@merge-rd/ui/components/accordion';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/primitives/tooltip';
 import { ACCORDION_STYLES } from '../constants/preview-context.constants';
@@ -7,6 +7,7 @@ import { EditableJsonViewer } from '../shared/editable-json-viewer/editable-json
 import { StepResultsSectionProps } from '../types/preview-context.types';
 import { synchronizeDigestStepData } from '../utils/digest-sync.utils';
 import { getStepName, getStepType, getStepTypeIcon } from '../utils/preview-context.utils';
+import { ArrowsDownUp, ArrowsIn, Info } from '@phosphor-icons/react';
 
 export function PreviewStepResultsSection({
   localParsedData,
@@ -66,7 +67,7 @@ export function PreviewStepResultsSection({
           <Tooltip>
             <TooltipTrigger asChild>
               <span className="text-foreground-400 inline-block hover:cursor-help">
-                <RiInformation2Line className="size-3" />
+                <Info className="size-3" />
               </span>
             </TooltipTrigger>
             <TooltipContent className="max-w-xs">
@@ -102,9 +103,9 @@ export function PreviewStepResultsSection({
                       </div>
                       <div className="flex h-4 w-4 shrink-0 items-center justify-center">
                         {isOpen ? (
-                          <RiContractUpDownLine className="h-3 w-3 text-neutral-400" />
+                          <ArrowsIn className="h-3 w-3 text-neutral-400" />
                         ) : (
-                          <RiExpandUpDownLine className="h-3 w-3 text-neutral-400" />
+                          <ArrowsDownUp className="h-3 w-3 text-neutral-400" />
                         )}
                       </div>
                     </button>
@@ -120,7 +121,7 @@ export function PreviewStepResultsSection({
                           {stepType === 'digest' && (
                             <div className="pt-2">
                               <div className="text-text-soft flex items-center gap-1.5 text-[10px] font-normal leading-[13px]">
-                                <RiInformation2Line className="h-3 w-3 shrink-0" />
+                                <Info className="h-3 w-3 shrink-0" />
                                 <span>
                                   Event count and events array are synchronized automatically. The event payload is
                                   originating from the workflow trigger payload.

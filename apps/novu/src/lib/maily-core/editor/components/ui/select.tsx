@@ -1,8 +1,10 @@
-import { ChevronDownIcon, LucideIcon } from 'lucide-react';
+
 import { useId } from 'react';
 import { cn } from '../../utils/classname';
 import { SVGIcon } from '../icons/grid-lines';
 import { Tooltip, TooltipContent, TooltipTrigger } from './tooltip';
+import { CaretDown } from '@phosphor-icons/react'
+import type { Icon as LucideIcon } from '@phosphor-icons/react';;
 
 type SelectProps = {
   label: string;
@@ -56,7 +58,7 @@ export function Select(props: SelectProps) {
       </select>
 
       <span className="mly-pointer-events-none mly-absolute mly-inset-y-0 mly-right-0 mly-z-10 mly-flex mly-h-full mly-w-7 mly-items-center mly-justify-center mly-text-gray-600 peer-disabled:mly-opacity-50">
-        <ChevronDownIcon size={16} strokeWidth={2} aria-hidden="true" role="img" />
+        <CaretDown size={16} strokeWidth={2} aria-hidden="true" role="img" />
       </span>
     </div>
   );

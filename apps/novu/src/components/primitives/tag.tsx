@@ -2,10 +2,11 @@
 
 import { Slot } from '@radix-ui/react-slot';
 import * as React from 'react';
-import { RiCloseFill } from 'react-icons/ri';
+
 import { PolymorphicComponentProps } from '@/utils/polymorphic';
 import { recursiveCloneChildren } from '@/utils/recursive-clone-children';
 import { tv, type VariantProps } from '@/utils/tv';
+import { X } from '@phosphor-icons/react';
 
 const TAG_ROOT_NAME = 'TagRoot';
 const TAG_ICON_NAME = 'TagIcon';
@@ -135,7 +136,7 @@ const TagDismissButton = React.forwardRef<HTMLButtonElement, TagDismissButtonPro
 
     return (
       <Component ref={forwardedRef} className={dismissButton({ class: className })} {...rest}>
-        {children ?? <TagDismissIcon variant={variant} disabled={disabled} as={RiCloseFill} />}
+        {children ?? <TagDismissIcon variant={variant} disabled={disabled} as={X} />}
       </Component>
     );
   }

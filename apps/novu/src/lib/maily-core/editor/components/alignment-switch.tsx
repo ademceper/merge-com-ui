@@ -1,9 +1,10 @@
-import { AlignCenter, AlignLeft, AlignRight } from 'lucide-react';
+
 import { AllowedLogoAlignment, allowedLogoAlignment } from '../nodes/logo/logo';
 import { cn } from '../utils/classname';
 import { BubbleMenuButton } from './bubble-menu-button';
 import { Popover, PopoverContent, PopoverTrigger } from './popover';
 import { Tooltip, TooltipContent, TooltipTrigger } from './ui/tooltip';
+import { TextAlignCenter, TextAlignLeft, TextAlignRight } from '@phosphor-icons/react';
 
 type AlignmentSwitchProps = {
   alignment: AllowedLogoAlignment;
@@ -16,21 +17,21 @@ export function AlignmentSwitch(props: AlignmentSwitchProps) {
 
   const alignments = {
     left: {
-      icon: AlignLeft,
+      icon: TextAlignLeft,
       tooltip: 'Align Left',
       onClick: () => {
         onAlignmentChange('left');
       },
     },
     center: {
-      icon: AlignCenter,
+      icon: TextAlignCenter,
       tooltip: 'Align Center',
       onClick: () => {
         onAlignmentChange('center');
       },
     },
     right: {
-      icon: AlignRight,
+      icon: TextAlignRight,
       tooltip: 'Align Right',
       onClick: () => {
         onAlignmentChange('right');

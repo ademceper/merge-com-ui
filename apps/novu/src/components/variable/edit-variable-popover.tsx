@@ -1,12 +1,5 @@
 import { ReactNode, useCallback, useEffect, useId, useMemo, useRef, useState } from 'react';
-import {
-  RiArrowRightUpLine,
-  RiDeleteBin2Line,
-  RiErrorWarningLine,
-  RiListView,
-  RiQuestionLine,
-  RiSearchLine,
-} from 'react-icons/ri';
+
 import { LinkButton } from '@/components/primitives/button-link';
 import {
   Command,
@@ -38,6 +31,14 @@ import { useVariableParser } from './hooks/use-variable-parser';
 import { useVariableValidation } from './hooks/use-variable-validation';
 import type { Filters, FilterWithParam } from './types';
 import { formatLiquidVariable } from './utils';
+import {
+  ArrowUpRight,
+  ListBullets,
+  MagnifyingGlass,
+  Question,
+  Trash,
+  WarningCircle,
+} from '@phosphor-icons/react';
 
 // Helper functions
 const calculateAliasFor = (name: string, parsedAliasRoot: string): string => {
@@ -201,7 +202,7 @@ export const EditVariablePopover = ({
               <div className="flex w-full items-center justify-between gap-1">
                 <span className="text-subheading-2xs text-text-soft">CONFIGURE VARIABLE</span>
                 <Button variant="secondary" mode="ghost" className="h-5 p-1" onClick={onDeleteClick}>
-                  <RiDeleteBin2Line className="size-3.5 text-neutral-400" />
+                  <Trash className="size-3.5 text-neutral-400" />
                 </Button>
               </div>
             </div>
@@ -218,7 +219,7 @@ export const EditVariablePopover = ({
                           variant="gray"
                           size="sm"
                           className="text-label-2xs text-xs"
-                          leadingIcon={RiListView}
+                          leadingIcon={ListBullets}
                           onClick={handleManageSchema}
                         >
                           Manage schema ↗
@@ -245,7 +246,7 @@ export const EditVariablePopover = ({
 
                     {validation.hasError && showAddToSchemaButton && (
                       <FormMessagePure hasError={true} className="text-label-2xs mb-0.5 mt-0.5">
-                        <RiErrorWarningLine className="h-3 w-3" />
+                        <WarningCircle className="h-3 w-3" />
                         Variable missing from Schema{' '}
                         <LinkButton
                           variant="modifiable"
@@ -291,7 +292,7 @@ export const EditVariablePopover = ({
                     size="sm"
                     className="text-text-sub text-label-2xs font-medium"
                     onClick={handleManageSchema}
-                    trailingIcon={RiArrowRightUpLine}
+                    trailingIcon={ArrowUpRight}
                   >
                     Manage schema
                   </LinkButton>
@@ -309,7 +310,7 @@ export const EditVariablePopover = ({
                       LiquidJS Filters
                       <Tooltip>
                         <TooltipTrigger className="relative cursor-pointer">
-                          <RiQuestionLine className="text-text-soft size-4" />
+                          <Question className="text-text-soft size-4" />
                         </TooltipTrigger>
                         <TooltipContent side="top" className="max-w-xs">
                           <p className="text-label-xs">
@@ -324,7 +325,7 @@ export const EditVariablePopover = ({
                       <PopoverTrigger asChild>
                         <button className="text-text-soft bg-background flex h-[30px] w-full items-center justify-between rounded-md border px-2 text-xs">
                           <span>Add a filter</span>
-                          <RiSearchLine className="h-3 w-3" />
+                          <MagnifyingGlass className="h-3 w-3" />
                         </button>
                       </PopoverTrigger>
                       <PopoverContent className="min-w-[calc(275px-1rem)] max-w-[calc(275px-1rem)] p-0" align="start">

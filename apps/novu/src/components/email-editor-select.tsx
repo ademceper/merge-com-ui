@@ -1,10 +1,11 @@
 import { useState } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
-import { RiCodeSSlashFill, RiDashboardLine } from 'react-icons/ri';
+
 import { ConfirmationModal } from '@/components/confirmation-modal';
 import { FormField } from '@/components/primitives/form/form';
 import { Tabs, TabsList, TabsTrigger } from '@merge-rd/ui/components/tabs';
 import { isEmptyMailyJson } from './maily/maily-utils';
+import { Code, SquaresFour } from '@phosphor-icons/react';
 
 export const EmailEditorSelect = ({
   isLoading,
@@ -52,11 +53,11 @@ export const EmailEditorSelect = ({
             >
               <TabsList className="w-min">
                 <TabsTrigger value="block" className="gap-1.5" size="xs" disabled={disabled}>
-                  <RiDashboardLine className="size-3.5" />
+                  <SquaresFour className="size-3.5" />
                   <span>Block editor</span>
                 </TabsTrigger>
                 <TabsTrigger value="html" className="gap-1.5" size="xs" disabled={disabled}>
-                  <RiCodeSSlashFill className="size-3.5" />
+                  <Code weight="fill" className="size-3.5" />
                   <span>Code editor</span>
                 </TabsTrigger>
               </TabsList>

@@ -1,7 +1,8 @@
-import { ChevronDown } from 'lucide-react';
+
 import { ReactNode, useState } from 'react';
-import { RiInformation2Line } from 'react-icons/ri';
+
 import { cn } from '@merge-rd/ui/lib/utils';
+import { CaretDown, Info } from '@phosphor-icons/react';
 
 interface ActivityDetailCardProps {
   title: ReactNode;
@@ -37,7 +38,7 @@ export function ActivityDetailCard({
             </span>
           )}
           {expandable && (
-            <ChevronDown className={cn('h-4 w-4 text-[#717784] transition-transform', isExpanded && 'rotate-180')} />
+            <CaretDown className={cn('h-4 w-4 text-[#717784] transition-transform', isExpanded && 'rotate-180')} />
           )}
         </div>
       </div>
@@ -50,7 +51,7 @@ export function ActivityDetailCard({
           </div>
           {footer && (
             <div className="flex gap-2 items-center border-t border-neutral-200 bg-transparent py-1 px-2">
-              <RiInformation2Line className="size-4 text-text-soft" />
+              <Info className="size-4 text-text-soft" />
               <span className="text-label-xs text-text-soft truncate" title={footer}>
                 {footer}
               </span>

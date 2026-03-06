@@ -1,32 +1,33 @@
 import { StepTypeEnum } from '@novu/shared';
 import { IconType } from 'react-icons';
-import {
-  RiBracesFill,
-  RiChat1Line,
-  RiCodeLine,
-  RiMailLine,
-  RiNotificationLine,
-  RiPlayCircleLine,
-  RiSmartphoneLine,
-  RiSpeedFill,
-  RiTimeLine,
-} from 'react-icons/ri';
+
 import { InboxBell } from '../../../icons';
+import {
+  Bell,
+  ChatCircle,
+  Clock,
+  DeviceMobile,
+  Envelope,
+  Gauge,
+  PlayCircle,
+  BracketsCurly,
+  Code,
+} from '@phosphor-icons/react';
 
 export const STEP_TYPE_ICONS: Record<StepTypeEnum, IconType> = {
-  [StepTypeEnum.EMAIL]: RiMailLine,
-  [StepTypeEnum.SMS]: RiSmartphoneLine,
-  [StepTypeEnum.PUSH]: RiNotificationLine,
+  [StepTypeEnum.EMAIL]: Envelope,
+  [StepTypeEnum.SMS]: DeviceMobile,
+  [StepTypeEnum.PUSH]: Bell,
   [StepTypeEnum.IN_APP]: InboxBell as IconType,
-  [StepTypeEnum.CHAT]: RiChat1Line,
-  [StepTypeEnum.DIGEST]: RiTimeLine,
-  [StepTypeEnum.DELAY]: RiTimeLine,
-  [StepTypeEnum.THROTTLE]: RiSpeedFill,
-  [StepTypeEnum.CUSTOM]: RiBracesFill,
-  [StepTypeEnum.TRIGGER]: RiPlayCircleLine,
+  [StepTypeEnum.CHAT]: ChatCircle,
+  [StepTypeEnum.DIGEST]: Clock,
+  [StepTypeEnum.DELAY]: Clock,
+  [StepTypeEnum.THROTTLE]: Gauge,
+  [StepTypeEnum.CUSTOM]: BracketsCurly,
+  [StepTypeEnum.TRIGGER]: PlayCircle,
 } as const;
 
-export const DEFAULT_STEP_ICON = RiCodeLine;
+export const DEFAULT_STEP_ICON = Code;
 
 export const ACCORDION_STYLES = {
   item: 'border-b border-b-neutral-200 bg-transparent border-t-0 border-l-0 border-r-0 rounded-none p-3',

@@ -1,10 +1,11 @@
 import { getTemplate, getUiOptions, ObjectFieldTemplateProps } from '@rjsf/utils';
 import { useMemo, useState } from 'react';
 import { useFormContext } from 'react-hook-form';
-import { RiExpandUpDownLine } from 'react-icons/ri';
+
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@merge-rd/ui/components/collapsible';
 import { FormControl, FormField, FormItem, FormMessage } from '@/components/primitives/form/form';
 import { getFieldName, ROOT_DELIMITER } from './template-utils';
+import { ArrowsDownUp } from '@phosphor-icons/react';
 
 export function ObjectFieldTemplate(props: ObjectFieldTemplateProps) {
   const { idSchema, uiSchema, registry, required, title, schema, properties } = props;
@@ -55,7 +56,7 @@ export function ObjectFieldTemplate(props: ObjectFieldTemplateProps) {
                       className="hover:bg-accent flex size-4 items-center justify-center rounded-sm p-0.5"
                       title="Collapse section"
                     >
-                      <RiExpandUpDownLine className="text-foreground-600 size-3" />
+                      <ArrowsDownUp className="text-foreground-600 size-3" />
                     </CollapsibleTrigger>
                   </div>
                 </div>

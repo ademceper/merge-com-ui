@@ -1,6 +1,6 @@
 import { IEnvironment } from '@novu/shared';
 import { useEffect, useMemo } from 'react';
-import { RiCheckboxCircleFill, RiLoader3Line } from 'react-icons/ri';
+
 import { useNavigate } from 'react-router-dom';
 import { useFetchApiKeys } from '@/hooks/use-fetch-api-keys';
 import { useFirstTriggerDetection } from '@/hooks/use-first-trigger-detection';
@@ -15,6 +15,7 @@ import { Button } from '@merge-rd/ui/components/button';
 import { CodeBlock } from '../primitives/code-block';
 import { ToastIcon } from '@/components/primitives/sonner';
 import { showErrorToast, showToast } from '../primitives/sonner-helpers';
+import { CheckCircle, CircleNotch } from '@phosphor-icons/react';
 
 type InboxConnectedGuideProps = {
   subscriberId: string;
@@ -157,7 +158,7 @@ export function InboxConnectedGuide({ subscriberId, environment }: InboxConnecte
             {/* First section - Inbox connected */}
             <div className="relative flex gap-8">
               <div className="absolute -left-[38px] flex h-5 w-5 items-center justify-center rounded-full bg-white">
-                <RiCheckboxCircleFill className="text-success h-4 w-4" />
+                <CheckCircle weight="fill" className="text-success h-4 w-4" />
               </div>
               <div className="flex flex-col gap-3">
                 <div className="flex items-center gap-2">
@@ -173,15 +174,15 @@ export function InboxConnectedGuide({ subscriberId, environment }: InboxConnecte
             <div className="relative flex gap-8">
               <div className="absolute -left-[38px] flex h-5 w-5 items-center justify-center rounded-full bg-white">
                 {isTriggerDetectionLoading ? (
-                  <RiLoader3Line className="h-4 w-4 text-primary animate-spin" />
+                  <CircleNotch className="h-4 w-4 text-primary animate-spin" />
                 ) : isTriggerDetectionError || isWorkflowsError ? (
                   <div className="h-4 w-4 rounded-full bg-red-100 flex items-center justify-center">
                     <span className="text-red-600 text-xs">!</span>
                   </div>
                 ) : hasDetectedFirstTrigger ? (
-                  <RiCheckboxCircleFill className="text-success h-4 w-4" />
+                  <CheckCircle weight="fill" className="text-success h-4 w-4" />
                 ) : (
-                  <RiLoader3Line className="h-4 w-4 text-primary animate-spin" />
+                  <CircleNotch className="h-4 w-4 text-primary animate-spin" />
                 )}
               </div>
               <div className="flex flex-col gap-3">
@@ -219,7 +220,7 @@ export function InboxConnectedGuide({ subscriberId, environment }: InboxConnecte
                     variant="primary"
                     mode="gradient"
                   >
-                    <RiCheckboxCircleFill className="mr-1 h-4 w-4" />
+                    <CheckCircle weight="fill" className="mr-1 h-4 w-4" />
                     Complete Onboarding
                   </Button>
                 </div>
@@ -232,7 +233,7 @@ export function InboxConnectedGuide({ subscriberId, environment }: InboxConnecte
             {apiKeysQuery.isLoading ? (
               <div className="rounded-lg border border-gray-200 bg-white shadow-sm p-8">
                 <div className="flex items-center justify-center gap-3 text-gray-600">
-                  <RiLoader3Line className="h-5 w-5 animate-spin" />
+                  <CircleNotch className="h-5 w-5 animate-spin" />
                   <span>Loading API key...</span>
                 </div>
               </div>

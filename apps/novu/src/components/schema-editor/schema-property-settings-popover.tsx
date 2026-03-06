@@ -1,6 +1,6 @@
 import { forwardRef, useState } from 'react';
 import { Controller, type Path, useFormContext } from 'react-hook-form';
-import { RiDeleteBin2Line } from 'react-icons/ri';
+
 import { Button } from '@merge-rd/ui/components/button';
 import { FormControl, FormItem, FormLabel, FormMessage } from '@/components/primitives/form/form';
 import { Input, InputPure, InputRoot, InputWrapper } from '@/components/primitives/input';
@@ -14,6 +14,7 @@ import { useSchemaPropertyType } from './hooks/use-schema-property-type';
 import type { JSONSchema7, JSONSchema7TypeName } from './json-schema';
 import type { VariableUsageInfo } from './utils/check-variable-usage';
 import type { SchemaEditorFormValues } from './utils/validation-schema';
+import { Trash } from '@phosphor-icons/react';
 
 interface SchemaPropertySettingsPopoverProps {
   definitionPath: string;
@@ -157,7 +158,7 @@ export const SchemaPropertySettingsPopover = forwardRef<HTMLDivElement, SchemaPr
         onMouseLeave={handleMouseLeave}
         aria-disabled={isVariableInUse}
       >
-        <RiDeleteBin2Line className="size-3.5 text-neutral-400" />
+        <Trash className="size-3.5 text-neutral-400" />
       </Button>
     );
 

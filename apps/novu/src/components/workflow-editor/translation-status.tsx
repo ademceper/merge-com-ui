@@ -1,11 +1,17 @@
 import { useState } from 'react';
-import { RiAlertFill, RiArrowRightSLine, RiSidebarUnfoldLine, RiTranslate2 } from 'react-icons/ri';
+
 import { Dot, StatusBadge } from '@/components/primitives/status-badge';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/primitives/tooltip';
 import { TranslationDrawer } from '@/components/translations/translation-drawer/translation-drawer';
 import { useFetchTranslationGroup } from '@/hooks/use-fetch-translation-group';
 import { useIsTranslationEnabled } from '@/hooks/use-is-translation-enabled';
 import { LocalizationResourceEnum } from '@/types/translations';
+import {
+  CaretRight,
+  SidebarSimple,
+  Translate,
+  Warning,
+} from '@phosphor-icons/react';
 
 type WorkflowTranslationStatusProps = {
   resourceId: string;
@@ -52,19 +58,19 @@ export function TranslationStatus({
     >
       {hasOutdatedLocales ? (
         <>
-          <RiAlertFill className="size-3.5" />
-          <RiTranslate2 className="size-3.5" />
+          <Warning weight="fill" className="size-3.5" />
+          <Translate className="size-3.5" />
         </>
       ) : (
         <>
           <Dot />
-          <RiTranslate2 className="size-3.5" />
+          <Translate className="size-3.5" />
         </>
       )}
       {hasOutdatedLocales ? 'Locales out of sync' : 'All locales in sync'}
       <div className="relative size-3.5 overflow-hidden">
-        <RiArrowRightSLine className="absolute size-3.5 opacity-60 transition-all duration-200 group-hover:-translate-x-1 group-hover:opacity-0" />
-        <RiSidebarUnfoldLine className="absolute size-3.5 translate-x-1 opacity-0 transition-all duration-200 group-hover:translate-x-0 group-hover:opacity-60" />
+        <CaretRight className="absolute size-3.5 opacity-60 transition-all duration-200 group-hover:-translate-x-1 group-hover:opacity-0" />
+        <SidebarSimple className="absolute size-3.5 translate-x-1 opacity-0 transition-all duration-200 group-hover:translate-x-0 group-hover:opacity-60" />
       </div>
     </StatusBadge>
   );

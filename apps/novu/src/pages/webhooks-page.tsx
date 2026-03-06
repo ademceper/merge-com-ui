@@ -6,7 +6,7 @@ import {
   IEnvironment,
 } from '@novu/shared';
 import { UseMutationResult, UseQueryResult, useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { RiLoaderLine, RiWebhookLine } from 'react-icons/ri';
+
 import { Navigate, useLocation, useNavigate, useParams } from 'react-router-dom';
 import { AppPortal, SvixProvider } from 'svix-react';
 import { createWebhookPortalToken, getWebhookPortalToken } from '@/api/webhooks';
@@ -21,6 +21,7 @@ import { buildRoute, ROUTES } from '@/utils/routes';
 import { Badge } from '@/components/primitives/badge';
 import { useSetPageHeader } from '@/context/page-header';
 import { QueryKeys } from '../utils/query-keys';
+import { Spinner, WebhooksLogo } from '@phosphor-icons/react';
 
 interface WebhookPortalTokenResponse {
   url: string;
@@ -150,7 +151,7 @@ export function WebhooksPage() {
 
         <div className="flex h-full flex-col items-center justify-center gap-4 p-2 text-center">
           <div className="bg-muted mb-3 flex h-16 w-16 items-center justify-center rounded-full">
-            <RiWebhookLine className="text-muted-foreground h-8 w-8" />
+            <WebhooksLogo className="text-muted-foreground h-8 w-8" />
           </div>
           <h2 className="text-foreground-900 text-xl font-semibold">Enable Webhooks for This Environment</h2>
           <p className="text-muted-foreground max-w-md text-sm">
@@ -228,7 +229,7 @@ export function WebhooksPage() {
                   <div className="flex h-full min-h-[calc(100vh-250px)] items-center justify-center p-4 text-center">
                     {isInitialLoading ? (
                       <div className="flex flex-col items-center gap-2">
-                        <RiLoaderLine className="text-foreground-low h-6 w-6 animate-spin" />
+                        <Spinner className="text-foreground-low h-6 w-6 animate-spin" />
                         <span className="text-muted-foreground">
                           {tab.value === 'endpoints' ? 'Loading webhooks configuration...' : 'Loading...'}
                         </span>

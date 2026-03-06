@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { RiEdit2Line, RiInformation2Line, RiRefreshLine } from 'react-icons/ri';
+
 import { AccordionContent, AccordionItem, AccordionTrigger } from '@merge-rd/ui/components/accordion';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/primitives/tooltip';
 import { SubscriberAutocomplete } from '@/components/subscribers/subscriber-autocomplete';
@@ -7,6 +7,7 @@ import { Button } from '@merge-rd/ui/components/button';
 import { ACCORDION_STYLES } from './workflow-editor/steps/constants/preview-context.constants';
 import { EditableJsonViewer } from './workflow-editor/steps/shared/editable-json-viewer/editable-json-viewer';
 import { SubscriberSectionProps } from './workflow-editor/steps/types/preview-context.types';
+import { ArrowsClockwise, Info, PencilSimple } from '@phosphor-icons/react';
 
 export function PreviewSubscriberSection({
   error,
@@ -29,7 +30,7 @@ export function PreviewSubscriberSection({
               <Tooltip>
                 <TooltipTrigger asChild>
                   <span className="text-foreground-400 inline-block hover:cursor-help">
-                    <RiInformation2Line className="size-3" />
+                    <Info className="size-3" />
                   </span>
                 </TooltipTrigger>
                 <TooltipContent className="max-w-xs">
@@ -53,7 +54,7 @@ export function PreviewSubscriberSection({
                 size="2xs"
                 className="text-foreground-600 gap-1"
               >
-                <RiEdit2Line className="h-3 w-3" />
+                <PencilSimple className="h-3 w-3" />
                 Edit subscriber
               </Button>
             </div>
@@ -72,7 +73,7 @@ export function PreviewSubscriberSection({
                 size="2xs"
                 className="text-foreground-600 gap-1"
               >
-                <RiRefreshLine className="h-3 w-3" />
+                <ArrowsClockwise className="h-3 w-3" />
                 Reset defaults
               </Button>
             </div>
@@ -102,7 +103,7 @@ export function PreviewSubscriberSection({
         </div>
         {onEditSubscriber && (
           <div className="text-text-soft flex items-center gap-1.5 text-[10px] font-normal leading-[13px]">
-            <RiInformation2Line className="h-3 w-3 shrink-0" />
+            <Info className="h-3 w-3 shrink-0" />
             <span>Click "Edit subscriber" above to modify subscriber details.</span>
           </div>
         )}

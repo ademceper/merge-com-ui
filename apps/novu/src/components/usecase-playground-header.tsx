@@ -1,8 +1,9 @@
-import { RiArrowLeftSLine } from 'react-icons/ri';
+
 import { useNavigate } from 'react-router-dom';
 import { Stepper } from './onboarding/stepper';
 import { CompactButton } from './primitives/button-compact';
 import { LinkButton } from './primitives/button-link';
+import { CaretLeft } from '@phosphor-icons/react';
 
 interface UsecasePlaygroundHeaderProps {
   title: string;
@@ -52,7 +53,7 @@ export function UsecasePlaygroundHeader({
       <div className="flex pl-3">
         {showBackButton && (
           <CompactButton
-            icon={RiArrowLeftSLine}
+            icon={CaretLeft}
             variant="ghost"
             className="mt-[16px] h-5 w-5"
             onClick={() => navigate(-1)}

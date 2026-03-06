@@ -1,11 +1,18 @@
-import { ColumnsIcon, Minus, MoveVertical, RectangleHorizontal, Repeat2 } from 'lucide-react';
+
 import type { BlockItem } from './types';
+import {
+  ArrowsVertical,
+  Columns,
+  Minus,
+  Rectangle,
+  Repeat,
+} from '@phosphor-icons/react';
 
 export const columns: BlockItem = {
   title: 'Columns',
   description: 'Add columns to email.',
   searchTerms: ['layout', 'columns'],
-  icon: <ColumnsIcon className="mly-h-4 mly-w-4" />,
+  icon: <Columns className="mly-h-4 mly-w-4" />,
   command: ({ editor, range }) => {
     editor
       .chain()
@@ -21,7 +28,7 @@ export const section: BlockItem = {
   title: 'Section',
   description: 'Add a section to email.',
   searchTerms: ['layout', 'section'],
-  icon: <RectangleHorizontal className="mly-h-4 mly-w-4" />,
+  icon: <Rectangle className="mly-h-4 mly-w-4" />,
   command: ({ editor, range }) => {
     editor.chain().focus().deleteRange(range).setSection().run();
   },
@@ -31,7 +38,7 @@ export const repeat: BlockItem = {
   title: 'Repeat',
   description: 'Loop over an array of items.',
   searchTerms: ['repeat', 'for', 'loop'],
-  icon: <Repeat2 className="mly-h-4 mly-w-4" />,
+  icon: <Repeat className="mly-h-4 mly-w-4" />,
   command: ({ editor, range }) => {
     editor.chain().focus().deleteRange(range).setRepeat().run();
   },
@@ -41,7 +48,7 @@ export const spacer: BlockItem = {
   title: 'Spacer',
   description: 'Add space between blocks.',
   searchTerms: ['space', 'gap', 'divider'],
-  icon: <MoveVertical className="mly-h-4 mly-w-4" />,
+  icon: <ArrowsVertical className="mly-h-4 mly-w-4" />,
   command: ({ editor, range }) => {
     editor
       .chain()

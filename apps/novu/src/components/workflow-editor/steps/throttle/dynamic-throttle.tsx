@@ -1,4 +1,4 @@
-import { X } from 'lucide-react';
+
 import { useMemo } from 'react';
 import { useFormContext } from 'react-hook-form';
 
@@ -9,6 +9,7 @@ import { useSaveForm } from '@/components/workflow-editor/steps/save-form-contex
 import { useWorkflow } from '@/components/workflow-editor/workflow-provider';
 import { useParseVariables } from '../../../../hooks/use-parse-variables';
 import { VariableSelect } from '../../../conditions-editor/variable-select';
+import { X } from '@phosphor-icons/react';
 
 function parseLiquidVariables(value: string | undefined): string {
   if (!value) return '';

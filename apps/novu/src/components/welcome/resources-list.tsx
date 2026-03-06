@@ -1,10 +1,11 @@
-import { BookOpen } from 'lucide-react';
+
 import { motion } from 'motion/react';
 import { Link } from 'react-router-dom';
 import { useTelemetry } from '@/hooks/use-telemetry';
 import { TelemetryEvent } from '@/utils/telemetry';
 import { Card, CardContent } from '@merge-rd/ui/components/card';
 import { ScrollArea, ScrollBar } from '@merge-rd/ui/components/scroll-area';
+import { BookOpen } from '@phosphor-icons/react';
 
 export interface Resource {
   title: string;

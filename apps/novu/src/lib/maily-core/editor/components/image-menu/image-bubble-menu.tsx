@@ -1,6 +1,6 @@
 /** biome-ignore-all lint/correctness/useHookAtTopLevel: needs to be fixed */
 import { BubbleMenu } from '@tiptap/react';
-import { ImageDown, LockIcon, LockOpenIcon } from 'lucide-react';
+
 import { sticky } from 'tippy.js';
 import { IMAGE_MAX_WIDTH } from '../../nodes/image/image-view';
 import { AllowedLogoSize, allowedLogoSize } from '../../nodes/logo/logo';
@@ -16,6 +16,7 @@ import { Select } from '../ui/select';
 import { TooltipProvider } from '../ui/tooltip';
 import { ImageSize } from './image-size';
 import { useImageState } from './use-image-state';
+import { ImageSquare, Lock, LockOpen } from '@phosphor-icons/react';
 
 export function ImageBubbleMenu(props: EditorBubbleMenuProps) {
   const { editor, appendTo } = props;
@@ -111,7 +112,7 @@ export function ImageBubbleMenu(props: EditorBubbleMenuProps) {
               }
             }}
             tooltip="Source URL"
-            icon={ImageDown}
+            icon={ImageSquare}
             editor={editor}
             isVariable={state.isSrcVariable}
           />
@@ -219,7 +220,7 @@ export function ImageBubbleMenu(props: EditorBubbleMenuProps) {
                     })
                     .run();
                 }}
-                icon={lockAspectRatio ? LockIcon : LockOpenIcon}
+                icon={lockAspectRatio ? Lock : LockOpen}
                 tooltip="Lock Aspect Ratio"
               />
             </div>

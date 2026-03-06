@@ -1,7 +1,8 @@
-import { Smartphone } from 'lucide-react';
+
 import { useEffect } from 'react';
 import { post } from '@/api/api.client';
 import { showErrorToast } from '../primitives/sonner-helpers';
+import { DeviceMobile } from '@phosphor-icons/react';
 
 const MOBILE_WIDTH_THRESHOLD = 768;
 const ONE_HOUR_MS = 60 * 60 * 1000;
@@ -33,7 +34,7 @@ export function MobileMessage() {
   return (
     <div className="flex min-h-[400px] flex-col items-center justify-center space-y-6 px-4 text-center">
       <div className="rounded-full bg-gray-100 p-4 dark:bg-gray-800">
-        <Smartphone className="h-8 w-8 text-gray-500" />
+        <DeviceMobile className="h-8 w-8 text-gray-500" />
       </div>
       <div className="space-y-3">
         <h1 className="text-xl font-semibold">Desktop Setup Required</h1>

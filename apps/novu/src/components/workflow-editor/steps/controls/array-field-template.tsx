@@ -2,9 +2,10 @@ import { Collapsible } from '@radix-ui/react-collapsible';
 import { ArrayFieldTemplateProps, getTemplate, getUiOptions } from '@rjsf/utils';
 import { useMemo, useState } from 'react';
 import { useFieldArray, useFormContext } from 'react-hook-form';
-import { RiExpandUpDownLine } from 'react-icons/ri';
+
 import { CollapsibleContent, CollapsibleTrigger } from '@merge-rd/ui/components/collapsible';
 import { getFieldName } from './template-utils';
+import { ArrowsDownUp } from '@phosphor-icons/react';
 
 export function ArrayFieldTemplate(props: ArrayFieldTemplateProps) {
   const { disabled, idSchema, uiSchema, items, onAddClick, readonly, registry, required, title, schema, canAdd } =
@@ -67,7 +68,7 @@ export function ArrayFieldTemplate(props: ArrayFieldTemplateProps) {
           <div className="bg-background text-foreground-600 -mt-px ml-auto mr-4 flex items-center gap-1">
             {canAdd && <AddButton onClick={handleAddClick} disabled={disabled || readonly} registry={registry} />}
             <CollapsibleTrigger className="hover:bg-accent size-4 rounded-sm p-0.5">
-              <RiExpandUpDownLine className="text-foreground-600 size-3" />
+              <ArrowsDownUp className="text-foreground-600 size-3" />
             </CollapsibleTrigger>
           </div>
         </div>

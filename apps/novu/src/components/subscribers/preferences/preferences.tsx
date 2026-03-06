@@ -2,7 +2,7 @@ import { GetSubscriberPreferencesDto } from '@novu/api/models/components';
 import { ChannelTypeEnum, FeatureFlagsKeysEnum } from '@novu/shared';
 import { motion } from 'motion/react';
 import { useMemo } from 'react';
-import { RiLoader4Line, RiQuestionLine } from 'react-icons/ri';
+
 import { ContextFilter } from '@/components/contexts/context-filter';
 import { showErrorToast, showSuccessToast } from '@/components/primitives/sonner-helpers';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/primitives/tooltip';
@@ -16,6 +16,7 @@ import { itemVariants, sectionVariants } from '@/utils/animation';
 import { TelemetryEvent } from '@/utils/telemetry';
 import { PreferencesBlank } from './preferences-blank';
 import { SubscribersSchedule } from './subscribers-schedule';
+import { Question, SpinnerGap } from '@phosphor-icons/react';
 
 type PreferencesProps = {
   subscriberPreferences: GetSubscriberPreferencesDto;
@@ -84,7 +85,7 @@ export const Preferences = (props: PreferencesProps) => {
           <span className="text-2xs line-height uppercase text-neutral-400">Global preferences</span>
           <Tooltip>
             <TooltipTrigger className="cursor-pointer">
-              <RiQuestionLine className="size-3 text-neutral-400" />
+              <Question className="size-3 text-neutral-400" />
             </TooltipTrigger>
             <TooltipContent side="right" className="max-w-sm">
               <p>
@@ -93,7 +94,7 @@ export const Preferences = (props: PreferencesProps) => {
               </p>
             </TooltipContent>
           </Tooltip>
-          {isPending && <RiLoader4Line className="size-3 animate-spin text-neutral-400" />}
+          {isPending && <SpinnerGap className="size-3 animate-spin text-neutral-400" />}
         </div>
 
         <SidebarContent size="md">
@@ -133,7 +134,7 @@ export const Preferences = (props: PreferencesProps) => {
           <span className="text-2xs line-height uppercase text-neutral-400">Workflow Preferences</span>
           <Tooltip>
             <TooltipTrigger className="cursor-pointer">
-              <RiQuestionLine className="size-3 text-neutral-400" />
+              <Question className="size-3 text-neutral-400" />
             </TooltipTrigger>
             <TooltipContent side="right" className="max-w-sm">
               <p>
@@ -142,7 +143,7 @@ export const Preferences = (props: PreferencesProps) => {
               </p>
             </TooltipContent>
           </Tooltip>
-          {isPending && <RiLoader4Line className="size-3 animate-spin text-neutral-400" />}
+          {isPending && <SpinnerGap className="size-3 animate-spin text-neutral-400" />}
         </div>
 
         <SidebarContent size="md">

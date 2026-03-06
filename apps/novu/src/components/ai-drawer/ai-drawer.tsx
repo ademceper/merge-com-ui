@@ -1,9 +1,10 @@
 import { InkeepEmbeddedSearchAndChat, InkeepEmbeddedSearchAndChatProps } from '@inkeep/cxkit-react';
 import { forwardRef, useEffect, useRef } from 'react';
-import { RiCloseLine } from 'react-icons/ri';
+
 import { CompactButton } from '@/components/primitives/button-compact';
 import { Sheet, SheetContent, SheetDescription, SheetTitle } from '@/components/primitives/sheet';
 import { VisuallyHidden } from '@/components/primitives/visually-hidden';
+import { X } from '@phosphor-icons/react';
 
 type AiDrawerProps = {
   isOpen: boolean;

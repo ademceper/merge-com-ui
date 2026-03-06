@@ -1,11 +1,12 @@
 import { AnimatePresence, motion } from 'motion/react';
 import { useState } from 'react';
-import { RiDeleteBin2Line, RiEdit2Line, RiFileCopyLine } from 'react-icons/ri';
+
 import { ConfirmationModal } from '@/components/confirmation-modal';
 import { Button } from '@merge-rd/ui/components/button';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/primitives/tooltip';
 import TruncatedText from '@/components/truncated-text';
 import { StepTypeEnum } from '@/utils/enums';
+import { Copy, PencilSimple, Trash } from '@phosphor-icons/react';
 
 const CHANNEL_STEP_TYPES = [
   StepTypeEnum.EMAIL,
@@ -138,7 +139,7 @@ export const WorkflowNodeActionBar = ({
                       onEditContentClick();
                     }}
                   >
-                    <RiEdit2Line className="h-3.5 w-3.5" />
+                    <PencilSimple className="h-3.5 w-3.5" />
                     {isReadOnly ? 'View content' : 'Edit content'}
                   </Button>
                   <div className="h-6 w-px bg-neutral-100" />
@@ -159,7 +160,7 @@ export const WorkflowNodeActionBar = ({
                           setIsCopyModalOpen(true);
                         }}
                       >
-                        <RiFileCopyLine className="h-3.5 w-3.5" />
+                        <Copy className="h-3.5 w-3.5" />
                       </Button>
                     </TooltipTrigger>
                     <TooltipContent>Duplicate the current step</TooltipContent>
@@ -179,7 +180,7 @@ export const WorkflowNodeActionBar = ({
                           setIsDeleteModalOpen(true);
                         }}
                       >
-                        <RiDeleteBin2Line className="text-error-base h-3.5 w-3.5" />
+                        <Trash className="text-error-base h-3.5 w-3.5" />
                       </Button>
                     </TooltipTrigger>
                     <TooltipContent>Delete step</TooltipContent>

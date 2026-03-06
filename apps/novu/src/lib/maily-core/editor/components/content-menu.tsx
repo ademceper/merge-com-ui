@@ -2,7 +2,7 @@ import type { Editor } from '@tiptap/core';
 import type { Node } from '@tiptap/pm/model';
 
 import type { NodeSelection } from '@tiptap/pm/state';
-import { Copy, GripVertical, Plus, Trash2 } from 'lucide-react';
+
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { DragHandle } from '../plugins/drag-handle/drag-handle';
 import { cn } from '../utils/classname';
@@ -10,6 +10,12 @@ import { BaseButton } from './base-button';
 import { Popover, PopoverContent, PopoverTrigger } from './popover';
 import { Divider } from './ui/divider';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from './ui/tooltip';
+import {
+  Copy,
+  DotsSixVertical,
+  Plus,
+  Trash,
+} from '@phosphor-icons/react';
 
 export type ContentMenuProps = {
   editor: Editor;
@@ -143,7 +149,7 @@ export function ContentMenu(props: ContentMenuProps) {
                     }}
                     type="button"
                   >
-                    <GripVertical className="mly-size-3.5 mly-shrink-0" />
+                    <DotsSixVertical className="mly-size-3.5 mly-shrink-0" />
                   </BaseButton>
                 </TooltipTrigger>
                 <TooltipContent sideOffset={8}>Node actions</TooltipContent>
@@ -170,7 +176,7 @@ export function ContentMenu(props: ContentMenuProps) {
                 onClick={deleteCurrentNode}
                 className="mly-h-auto mly-justify-start mly-gap-2 !mly-rounded mly-bg-red-100 mly-px-2 mly-py-1 mly-text-sm mly-font-normal mly-text-red-600 hover:mly-bg-red-200 focus:mly-bg-red-200"
               >
-                <Trash2 className="mly-size-[15px] mly-shrink-0" />
+                <Trash className="mly-size-[15px] mly-shrink-0" />
                 Delete
               </BaseButton>
             </PopoverContent>

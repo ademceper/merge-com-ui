@@ -4,13 +4,14 @@ import { AnimatePresence, motion } from 'motion/react';
 import * as React from 'react';
 import { Controller, ControllerProps, FieldPath, FieldValues, FormProvider, useFormContext } from 'react-hook-form';
 import { IconType } from 'react-icons';
-import { RiErrorWarningFill, RiInformation2Line, RiQuestionLine } from 'react-icons/ri';
+
 import { Input } from '@/components/primitives/input';
 import { Label } from '@merge-rd/ui/components/label';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/primitives/tooltip';
 import { cn } from '@merge-rd/ui/lib/utils';
 import { Hint, HintIcon } from '../hint';
 import { FormFieldContext, FormItemContext, useFormField } from './form-context';
+import { Info, Question, WarningCircle } from '@phosphor-icons/react';
 
 const Form = FormProvider;
 
@@ -93,7 +94,7 @@ const FormLabel = React.forwardRef<
                 e.stopPropagation();
               }}
             >
-              <RiQuestionLine className="text-foreground-400 inline size-4" />
+              <Question className="text-foreground-400 inline size-4" />
             </TooltipTrigger>
             <TooltipContent className={cn('max-w-56 whitespace-pre-wrap', tooltipContentClassName)} side={tooltipSide}>
               {tooltip}
@@ -155,7 +156,7 @@ const FormMessage = React.forwardRef<
 >(({ children, suppressError, ...rest }, ref) => {
   const { error, formMessageId } = useFormField();
   const content = !suppressError && error ? String(error.message) : children;
-  const icon = error ? RiErrorWarningFill : RiInformation2Line;
+  const icon = error ? WarningCircle : Info;
 
   return (
     <FormMessagePure ref={ref} id={formMessageId} hasError={!!error} icon={icon} {...rest}>

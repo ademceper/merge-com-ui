@@ -1,6 +1,6 @@
 import { LayoutResponseDto } from '@novu/shared';
 import React from 'react';
-import { RiArrowLeftSLine, RiLayout5Line } from 'react-icons/ri';
+
 import { useNavigate } from 'react-router-dom';
 import { useEnvironment } from '@/context/environment/hooks';
 import { buildRoute, ROUTES } from '@/utils/routes';
@@ -15,6 +15,7 @@ import {
 } from '@merge-rd/ui/components/breadcrumb';
 import { CompactButton } from '../primitives/button-compact';
 import TruncatedText from '../truncated-text';
+import { CaretLeft, Layout } from '@phosphor-icons/react';
 
 type BreadcrumbData = {
   label: string;
@@ -51,7 +52,7 @@ export const LayoutBreadcrumbs = ({ layout }: { layout?: LayoutResponseDto }) =>
         size="lg"
         className="mr-1"
         variant="ghost"
-        icon={RiArrowLeftSLine}
+        icon={CaretLeft}
         onClick={handleBackNavigation}
       />
       <Breadcrumb>
@@ -65,7 +66,7 @@ export const LayoutBreadcrumbs = ({ layout }: { layout?: LayoutResponseDto }) =>
                   {isLastItem ? (
                     <BreadcrumbPage className="flex items-center gap-1">
                       <div className="flex items-center gap-1">
-                        <RiLayout5Line className="size-4" />
+                        <Layout className="size-4" />
                         <div className="flex max-w-[32ch]">
                           <TruncatedText>{label}</TruncatedText>
                         </div>

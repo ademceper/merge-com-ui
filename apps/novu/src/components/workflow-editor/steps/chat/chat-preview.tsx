@@ -1,9 +1,9 @@
 import { ChannelTypeEnum, ChatRenderOutput, GeneratePreviewResponseDto } from '@novu/shared';
-import { RiSendPlane2Fill } from 'react-icons/ri';
 
 import { LogoCircle } from '@/components/icons';
 import { Skeleton } from '@merge-rd/ui/components/skeleton';
 import { cn } from '@merge-rd/ui/lib/utils';
+import { PaperPlaneTilt } from '@phosphor-icons/react';
 
 export const ChatPreview = ({
   isPreviewPending,
@@ -54,7 +54,7 @@ export const ChatPreview = ({
         >
           <div className="flex w-full items-center justify-between">
             <span className="text-foreground-300 text-xs font-normal">Jot something down</span>
-            <RiSendPlane2Fill className="text-foreground-300 size-3" />
+            <PaperPlaneTilt weight="fill" className="text-foreground-300 size-3" />
           </div>
         </div>
       </div>

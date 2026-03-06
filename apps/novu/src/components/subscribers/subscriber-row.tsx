@@ -1,7 +1,7 @@
 import { ISubscriberResponseDto, PermissionsEnum } from '@novu/shared';
 import { useQueryClient } from '@tanstack/react-query';
 import { ComponentProps, useState } from 'react';
-import { RiDeleteBin2Line, RiFileCopyLine, RiMore2Fill, RiPulseFill } from 'react-icons/ri';
+
 import { Link } from 'react-router-dom';
 import { ExternalToast } from 'sonner';
 import { ConfirmationModal } from '@/components/confirmation-modal';
@@ -31,6 +31,12 @@ import { QueryKeys } from '@/utils/query-keys';
 import { buildRoute, ROUTES } from '@/utils/routes';
 import { cn } from '@merge-rd/ui/lib/utils';
 import { useSubscribersUrlState } from './hooks/use-subscribers-url-state';
+import {
+  Copy,
+  DotsThree,
+  Pulse,
+  Trash,
+} from '@phosphor-icons/react';
 
 const toastOptions: ExternalToast = {
   position: 'bottom-right',
@@ -178,7 +184,7 @@ export const SubscriberRow = ({ subscriber, subscribersCount, firstTwoSubscriber
         <SubscriberTableCell className="w-1">
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <CompactButton icon={RiMore2Fill} variant="ghost" className="z-10 h-8 w-8 p-0" />
+              <CompactButton icon={DotsThree} variant="ghost" className="z-10 h-8 w-8 p-0" />
             </DropdownMenuTrigger>
             <DropdownMenuContent className="w-56" onClick={stopPropagation}>
               <DropdownMenuGroup>
@@ -188,7 +194,7 @@ export const SubscriberRow = ({ subscriber, subscribersCount, firstTwoSubscriber
                     navigator.clipboard.writeText(subscriber.subscriberId);
                   }}
                 >
-                  <RiFileCopyLine />
+                  <Copy />
                   Copy identifier
                 </DropdownMenuItem>
                 <Protect permission={PermissionsEnum.NOTIFICATION_READ}>
@@ -202,7 +208,7 @@ export const SubscriberRow = ({ subscriber, subscribersCount, firstTwoSubscriber
                         new URLSearchParams({ subscriberId: subscriber.subscriberId }).toString()
                       }
                     >
-                      <RiPulseFill />
+                      <Pulse weight="fill" />
                       View activity
                     </Link>
                   </DropdownMenuItem>
@@ -214,7 +220,7 @@ export const SubscriberRow = ({ subscriber, subscribersCount, firstTwoSubscriber
                       setTimeout(() => setIsDeleteModalOpen(true), 0);
                     }}
                   >
-                    <RiDeleteBin2Line />
+                    <Trash />
                     Delete subscriber
                   </DropdownMenuItem>
                 </Protect>
@@ -265,7 +271,7 @@ export const SubscriberRowSkeleton = () => {
         <Skeleton className="h-5 w-[14ch] rounded-full" />
       </TableCell>
       <TableCell className="w-1">
-        <RiMore2Fill className="size-4 opacity-50" />
+        <DotsThree weight="fill" className="size-4 opacity-50" />
       </TableCell>
     </TableRow>
   );

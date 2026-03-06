@@ -1,5 +1,5 @@
 import { useOrganization } from '@merge-rd/auth';
-import { CalendarIcon } from 'lucide-react';
+
 import { useEffect, useMemo } from 'react';
 import { useForm } from 'react-hook-form';
 import { Link } from 'react-router-dom';
@@ -11,6 +11,7 @@ import type { LogsFilters } from '@/hooks/use-logs-url-state';
 import { buildLogsDateFilters } from '@/utils/logs-filters.utils';
 import { ROUTES } from '@/utils/routes';
 import { IS_SELF_HOSTED } from '../../config';
+import { Calendar } from '@phosphor-icons/react';
 
 interface RequestsFiltersProps {
   filters: LogsFilters;
@@ -142,7 +143,7 @@ export function RequestsFilters({ filters, onFiltersChange, onClearFilters, hasA
         options={maxLogsRetentionOptions}
         selected={filters.createdGte ? [filters.createdGte] : []}
         onSelect={handleCreatedChange}
-        icon={CalendarIcon}
+        icon={Calendar}
       />
       <FacetedFormFilter
         type="text"

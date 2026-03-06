@@ -1,9 +1,10 @@
 /* cspell:ignore nums */
-import { type LucideIcon } from 'lucide-react';
+
 import { forwardRef } from 'react';
 import { AUTOCOMPLETE_PASSWORD_MANAGERS_OFF } from '../../utils/constants';
 import { SVGIcon } from '../icons/grid-lines';
 import { Tooltip, TooltipContent, TooltipTrigger } from './tooltip';
+import type { Icon as LucideIcon } from '@phosphor-icons/react';
 
 type NumberInputProps = {
   value: number;

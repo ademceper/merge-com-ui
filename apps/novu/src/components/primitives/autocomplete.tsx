@@ -1,12 +1,18 @@
 import { useCallback, useId, useRef, useState } from 'react';
 import { IconType } from 'react-icons';
-import { RiArrowDownLine, RiArrowUpLine, RiLoader4Line, RiSearchLine } from 'react-icons/ri';
+
 import { cn } from '@merge-rd/ui/lib/utils';
 import { EnterLineIcon } from '../icons/enter-line';
 import { Command, CommandEmpty, CommandGroup, CommandItem, CommandList } from '@merge-rd/ui/components/command';
 import { Input } from '@/components/primitives/input';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/primitives/popover';
 import { Separator } from '@merge-rd/ui/components/separator';
+import {
+  ArrowDown,
+  ArrowUp,
+  MagnifyingGlass,
+  SpinnerGap,
+} from '@phosphor-icons/react';
 
 export interface AutocompleteItem {
   id: string;
@@ -45,7 +51,7 @@ export function Autocomplete<T extends AutocompleteItem>({
   disabled,
   className,
   placeholder = 'Search...',
-  trailingIcon = RiSearchLine,
+  trailingIcon = MagnifyingGlass,
   leadingNode,
   minSearchLength = 2,
   emptyStateTitle = 'No results found',
@@ -203,7 +209,7 @@ export function Autocomplete<T extends AutocompleteItem>({
                 <Separator variant="solid-text" className="px-1.5 py-1">
                   <div className="flex w-full justify-between rounded-t-md bg-neutral-50">
                     <div className="text-[11px] text-xs uppercase leading-[16px]">{sectionTitle}</div>
-                    {isLoading && <RiLoader4Line className="h-3 w-3 animate-spin text-neutral-400" />}
+                    {isLoading && <SpinnerGap className="h-3 w-3 animate-spin text-neutral-400" />}
                   </div>
                 </Separator>
 
@@ -243,10 +249,10 @@ export function Autocomplete<T extends AutocompleteItem>({
                 <div className="flex justify-between rounded-b-md border-t border-neutral-100 bg-white p-1">
                   <div className="flex items-center gap-0.5">
                     <div className="pointer-events-none shrink-0 rounded-[6px] border border-neutral-200 bg-white p-1 shadow-[0px_0px_0px_1px_rgba(14,18,27,0.02)_inset,0px_1px_4px_0px_rgba(14,18,27,0.12)]">
-                      <RiArrowUpLine className="h-3 w-3 text-neutral-400" />
+                      <ArrowUp className="h-3 w-3 text-neutral-400" />
                     </div>
                     <div className="pointer-events-none shrink-0 rounded-[6px] border border-neutral-200 bg-white p-1 shadow-[0px_0px_0px_1px_rgba(14,18,27,0.02)_inset,0px_1px_4px_0px_rgba(14,18,27,0.12)]">
-                      <RiArrowDownLine className="h-3 w-3 text-neutral-400" />
+                      <ArrowDown className="h-3 w-3 text-neutral-400" />
                     </div>
                     <span className="text-foreground-500 ml-1.5 text-xs font-normal">Navigate</span>
                   </div>

@@ -1,8 +1,9 @@
 import { IProviderConfig } from '@novu/shared';
-import { RiArrowLeftSLine } from 'react-icons/ri';
+
 import { SheetHeader, SheetTitle } from '@/components/primitives/sheet';
 import { CompactButton } from '../../primitives/button-compact';
 import { ProviderIcon } from './provider-icon';
+import { CaretLeft } from '@phosphor-icons/react';
 
 type IntegrationSheetHeaderProps = {
   provider?: IProviderConfig;
@@ -39,7 +40,7 @@ export function IntegrationSheetHeader({ provider, mode, onBack, step }: Integra
         <div className="flex items-center gap-2">
           {mode === 'create' && onBack && (
             <CompactButton
-              icon={RiArrowLeftSLine}
+              icon={CaretLeft}
               variant="ghost"
               size="md"
               className="text-foreground-950 h-5 p-0.5 leading-none"

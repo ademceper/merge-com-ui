@@ -1,8 +1,9 @@
 import { useMemo } from 'react';
-import { RiAddBoxLine, RiDeleteBin2Line, RiGitCommitFill } from 'react-icons/ri';
+
 import type { IResourceDiffResult } from '@/api/environments';
 import { Badge, BadgeIcon } from '@/components/primitives/badge';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/primitives/tooltip';
+import { GitCommit, PlusSquare, Trash } from '@phosphor-icons/react';
 
 type WorkflowChangeType = {
   type: 'configuration' | 'steps' | 'translations';
@@ -107,13 +108,13 @@ export function WorkflowHoverCard({ workflowResource, children }: WorkflowHoverC
   const getChangeIcon = (action: 'added' | 'modified' | 'deleted') => {
     switch (action) {
       case 'added':
-        return RiAddBoxLine;
+        return PlusSquare;
       case 'modified':
-        return RiGitCommitFill;
+        return GitCommit;
       case 'deleted':
-        return RiDeleteBin2Line;
+        return Trash;
       default:
-        return RiGitCommitFill;
+        return GitCommit;
     }
   };
 

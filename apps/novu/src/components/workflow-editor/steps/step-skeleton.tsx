@@ -1,6 +1,5 @@
 import { StepTypeEnum } from '@novu/shared';
 import React from 'react';
-import { RiEdit2Line, RiPencilRuler2Line } from 'react-icons/ri';
 
 import { Notification5Fill } from '@/components/icons';
 import { Button } from '@merge-rd/ui/components/button';
@@ -8,6 +7,7 @@ import { Separator } from '@merge-rd/ui/components/separator';
 import { Skeleton } from '@merge-rd/ui/components/skeleton';
 import { Tabs, TabsList, TabsTrigger } from '@merge-rd/ui/components/tabs';
 import { ResourceOriginEnum } from '@/utils/enums';
+import { PencilSimple, Ruler } from '@phosphor-icons/react';
 
 const SingleLineSkeleton = () => {
   return (
@@ -66,13 +66,13 @@ export const StepSkeleton = ({
     <div className="flex h-full flex-1 flex-col">
       <header className="flex flex-row items-center justify-between gap-3 py-1.5 pl-3 pr-12">
         <div className="flex items-center gap-2.5 text-sm font-medium">
-          <RiEdit2Line className="size-4" />
+          <PencilSimple className="size-4" />
           <span>Configure Template</span>
         </div>
         <Tabs defaultValue="editor" className="ml-auto">
           <TabsList className="w-min">
             <TabsTrigger value="editor" className="gap-1.5" disabled>
-              <RiPencilRuler2Line className="size-5 p-0.5" />
+              <Ruler className="size-5 p-0.5" />
               <span>Editor</span>
             </TabsTrigger>
             <TabsTrigger value="preview" className="gap-1.5" disabled>

@@ -1,7 +1,7 @@
 /** biome-ignore-all lint/correctness/useUniqueElementIds: expected */
 import { standardSchemaResolver } from '@hookform/resolvers/standard-schema';
 import { useForm } from 'react-hook-form';
-import { RiGroup2Line, RiInformationFill } from 'react-icons/ri';
+
 import { Link } from 'react-router-dom';
 import { ExternalToast } from 'sonner';
 import { z } from 'zod';
@@ -19,6 +19,7 @@ import { useCreateSubscriber } from '@/hooks/use-create-subscriber';
 import { useTelemetry } from '@/hooks/use-telemetry';
 import { TelemetryEvent } from '@/utils/telemetry';
 import { generateUUID } from '@/utils/uuid';
+import { Info, UsersThree } from '@phosphor-icons/react';
 
 const toastOptions: ExternalToast = {
   position: 'bottom-right',
@@ -95,7 +96,7 @@ export function CreateSubscriberPage() {
       <SheetHeader className="p-0">
         <header className="border-bg-soft flex h-12 w-full flex-row items-center gap-3 border-b p-3.5">
           <div className="flex flex-1 items-center gap-1 overflow-hidden text-sm font-medium">
-            <RiGroup2Line className="size-5 p-0.5" />
+            <UsersThree className="size-5 p-0.5" />
             <TruncatedText className="flex-1">Add subscriber</TruncatedText>
           </div>
         </header>
@@ -117,7 +118,7 @@ export function CreateSubscriberPage() {
       <SheetFooter className="p-0">
         <div className="flex w-full items-center justify-between gap-3 p-3">
           <div className="text-2xs flex items-center gap-1 text-neutral-600">
-            <RiInformationFill className="size-4" />
+            <Info weight="fill" className="size-4" />
             <span>
               Looking for no-PII handling?{' '}
               <Link

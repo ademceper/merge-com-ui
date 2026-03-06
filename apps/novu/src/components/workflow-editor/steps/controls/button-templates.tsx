@@ -1,11 +1,12 @@
 import { Registry, RJSFSchema } from '@rjsf/utils';
-import { RiAddLine, RiSubtractFill } from 'react-icons/ri';
+
 import { CompactButton } from '../../../primitives/button-compact';
+import { Minus, Plus } from '@phosphor-icons/react';
 
 export const AddButton = (props: React.ButtonHTMLAttributes<HTMLButtonElement>) => {
   return (
     <CompactButton
-      icon={RiAddLine}
+      icon={Plus}
       variant="ghost"
       className="size-4 rounded-sm p-0.5"
       type="button"
@@ -20,7 +21,7 @@ export const RemoveButton = (
 ) => {
   return (
     <CompactButton
-      icon={RiSubtractFill}
+      icon={Minus}
       variant="ghost"
       className="size-4 rounded-sm p-0.5"
       type="button"

@@ -1,15 +1,21 @@
-import { RiCodeBlock, RiEdit2Line, RiEyeLine, RiSettings4Line } from 'react-icons/ri';
+
 import { CompactButton } from '@/components/primitives/button-compact';
 import { Skeleton } from '@merge-rd/ui/components/skeleton';
 import { PanelHeader } from '@/components/workflow-editor/steps/layout/panel-header';
 import { ResizableLayout } from '@/components/workflow-editor/steps/layout/resizable-layout';
+import {
+  CodeBlock,
+  Eye,
+  Gear,
+  PencilSimple,
+} from '@phosphor-icons/react';
 
 export const LayoutEditorSkeleton = () => {
   return (
     <div className="flex h-full w-full">
       <ResizableLayout autoSaveId="layout-editor-page-layout">
         <ResizableLayout.ContextPanel>
-          <PanelHeader icon={RiCodeBlock} title="Preview sandbox" className="p-3" />
+          <PanelHeader icon={CodeBlock} title="Preview sandbox" className="p-3" />
           <div className="bg-bg-weak flex-1 overflow-hidden">
             <div className="h-full overflow-y-auto p-3">
               <Skeleton className="h-full w-full" />
@@ -24,12 +30,12 @@ export const LayoutEditorSkeleton = () => {
             <ResizableLayout autoSaveId="step-editor-content-layout">
               <ResizableLayout.EditorPanel>
                 <div className="flex items-center justify-between">
-                  <PanelHeader icon={() => <RiEdit2Line />} title="Layout Editor" className="flex-1">
+                  <PanelHeader icon={() => <PencilSimple />} title="Layout Editor" className="flex-1">
                     <CompactButton
                       size="md"
                       variant="ghost"
                       type="button"
-                      icon={RiSettings4Line}
+                      icon={Gear}
                       className="[&>svg]:size-4"
                     />
                   </PanelHeader>
@@ -44,7 +50,7 @@ export const LayoutEditorSkeleton = () => {
               <ResizableLayout.Handle />
 
               <ResizableLayout.PreviewPanel>
-                <PanelHeader icon={RiEyeLine} title="Preview" isLoading />
+                <PanelHeader icon={Eye} title="Preview" isLoading />
                 <div className="flex-1 overflow-hidden">
                   <div
                     className="bg-bg-weak relative h-full overflow-y-auto p-3"

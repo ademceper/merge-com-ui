@@ -1,7 +1,7 @@
-import { Code2, GripVertical } from 'lucide-react';
+
 import { Reorder, useDragControls, useMotionValue } from 'motion/react';
 import { ComponentProps, useMemo, useRef } from 'react';
-import { RiCloseLine, RiQuestionLine } from 'react-icons/ri';
+
 import { VariableSelect } from '@/components/conditions-editor/variable-select';
 import { buttonVariants } from '@merge-rd/ui/components/button';
 import { Input } from '@/components/primitives/input';
@@ -11,6 +11,12 @@ import { cn } from '@merge-rd/ui/lib/utils';
 import { getFilters } from '../constants';
 import { FilterWithParam } from '../types';
 import { validateEnhancedDigestFilters } from '../utils';
+import {
+  Code,
+  DotsSixVertical,
+  Question,
+  X,
+} from '@phosphor-icons/react';
 
 const preventClick = (e: React.MouseEvent) => {
   e.stopPropagation();
@@ -105,7 +111,7 @@ export const ReorderFilterItem = (props: ReorderFilterItemProps) => {
         })}
       >
         <div className="flex items-center gap-1">
-          <GripVertical
+          <DotsSixVertical
             className="reorder-handle text-text-soft h-3.5 w-3.5"
             onPointerDown={(e) => controls.start(e)}
             onClick={preventClick}
@@ -115,7 +121,7 @@ export const ReorderFilterItem = (props: ReorderFilterItemProps) => {
           <Tooltip>
             <TooltipTrigger className="cursor-pointer" asChild>
               <span>
-                <RiQuestionLine className="text-text-soft size-4" onClick={preventClick} />
+                <Question className="text-text-soft size-4" onClick={preventClick} />
               </span>
             </TooltipTrigger>
             <TooltipContent side="top" align="center" className="max-w-xs">
@@ -131,7 +137,7 @@ export const ReorderFilterItem = (props: ReorderFilterItemProps) => {
             onRemove(value.value);
           }}
         >
-          <RiCloseLine className="size-3.5 text-neutral-400" />
+          <X className="size-3.5 text-neutral-400" />
         </span>
       </div>
       {hasParams && (
@@ -150,7 +156,7 @@ export const ReorderFilterItem = (props: ReorderFilterItemProps) => {
                   {param.tip && (
                     <Tooltip>
                       <TooltipTrigger className="relative cursor-pointer">
-                        <RiQuestionLine className="text-text-soft size-4" />
+                        <Question className="text-text-soft size-4" />
                       </TooltipTrigger>
                       <TooltipContent side="top" className="max-w-xs">
                         <p className="text-label-xs">{param.tip}</p>
@@ -161,7 +167,7 @@ export const ReorderFilterItem = (props: ReorderFilterItemProps) => {
 
                 {param.type === 'variable' ? (
                   <VariableSelect
-                    leftIcon={<Code2 className="text-feature size-3 min-w-3" />}
+                    leftIcon={<Code className="text-feature size-3 min-w-3" />}
                     onChange={paramInputChangeHandler}
                     onInputChange={paramInputChangeHandler}
                     options={options}

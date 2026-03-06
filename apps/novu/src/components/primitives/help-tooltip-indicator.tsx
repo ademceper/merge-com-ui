@@ -1,6 +1,7 @@
-import { RiQuestionLine } from 'react-icons/ri';
+
 import { cn } from '@merge-rd/ui/lib/utils';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/primitives/tooltip';
+import { Question } from '@phosphor-icons/react';
 
 interface HelpTooltipIndicatorProps {
   text: React.ReactNode;
@@ -13,7 +14,7 @@ export function HelpTooltipIndicator({ text, className, size = '4' }: HelpToolti
     <Tooltip>
       <TooltipTrigger asChild>
         <span className={cn('text-foreground-400 hover:cursor inline-block', `size-${size}`, className)}>
-          <RiQuestionLine className={`size-${size}`} />
+          <Question className={`size-${size}`} />
         </span>
       </TooltipTrigger>
       <TooltipContent className="max-w-xs whitespace-pre-line">{text}</TooltipContent>

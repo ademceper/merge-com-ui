@@ -1,7 +1,7 @@
 import merge from 'lodash.merge';
 import { ComponentProps } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
-import { RiEdit2Line, RiExpandUpDownLine, RiForbid2Line } from 'react-icons/ri';
+
 import { Button } from '@merge-rd/ui/components/button';
 import {
   DropdownMenu,
@@ -28,6 +28,7 @@ import { cn } from '@merge-rd/ui/lib/utils';
 import { urlTargetTypes } from '@/utils/url';
 import { CompactButton } from './primitives/button-compact';
 import { InputRoot } from '@/components/primitives/input';
+import { ArrowsDownUp, PencilSimple, Prohibit } from '@phosphor-icons/react';
 
 const primaryActionKey = 'primaryAction';
 const secondaryActionKey = 'secondaryAction';
@@ -61,7 +62,7 @@ export const InAppActionDropdown = ({ onMenuItemClick }: { onMenuItemClick?: () 
                   variant: 'secondary',
                   className: 'border border-dashed shadow-none ring-0',
                 })}
-                trailingIcon={RiForbid2Line}
+                trailingIcon={Prohibit}
                 tabIndex={-1}
               >
                 No action
@@ -95,7 +96,7 @@ export const InAppActionDropdown = ({ onMenuItemClick }: { onMenuItemClick?: () 
           </div>
           <DropdownMenuTrigger asChild>
             <CompactButton
-              icon={RiExpandUpDownLine}
+              icon={ArrowsDownUp}
               size="lg"
               variant="ghost"
               data-testid="in-app-action-dropdown-trigger"
@@ -129,7 +130,7 @@ export const InAppActionDropdown = ({ onMenuItemClick }: { onMenuItemClick?: () 
                 variant: 'secondary',
                 className: 'h-6 border border-dashed shadow-none ring-0',
               })}
-              trailingIcon={RiForbid2Line}
+              trailingIcon={Prohibit}
             >
               No action
             </Button>
@@ -215,7 +216,7 @@ const ConfigureActionPopover = (
       <PopoverContent className="max-w-72 overflow-visible" side="bottom" align="end">
         <div className="flex flex-col gap-3">
           <div className="flex items-center gap-2 text-sm font-medium leading-none">
-            <RiEdit2Line className="size-4" /> {title}
+            <PencilSimple className="size-4" /> {title}
           </div>
           <Separator />
           <FormField

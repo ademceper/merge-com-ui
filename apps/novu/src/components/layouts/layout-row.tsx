@@ -1,6 +1,6 @@
 import { EnvironmentTypeEnum, LayoutResponseDto, PermissionsEnum, ResourceOriginEnum } from '@novu/shared';
 import { ComponentProps, useState } from 'react';
-import { RiDeleteBin2Line, RiFileCopyLine, RiLayout5Line, RiMore2Fill } from 'react-icons/ri';
+
 import { useNavigate } from 'react-router-dom';
 import { type ExternalToast } from 'sonner';
 import { DeleteLayoutDialog } from '@/components/layouts/delete-layout-dialog';
@@ -28,6 +28,12 @@ import { cn } from '@merge-rd/ui/lib/utils';
 import { TranslatedLayoutIcon } from '../icons/translated-layout-icon';
 import { Badge } from '@/components/primitives/badge';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/primitives/tooltip';
+import {
+  Copy,
+  DotsThree,
+  Layout,
+  Trash,
+} from '@phosphor-icons/react';
 
 const toastOptions: ExternalToast = {
   position: 'bottom-right',
@@ -136,7 +142,7 @@ export const LayoutRow = ({ layout }: LayoutRowProps) => {
             {layout.isTranslationEnabled ? (
               <TranslatedLayoutIcon className="text-feature size-4" />
             ) : (
-              <RiLayout5Line className="text-feature size-4" />
+              <Layout className="text-feature size-4" />
             )}
             <div className="flex flex-col">
               <div className="flex items-center gap-2">
@@ -175,7 +181,7 @@ export const LayoutRow = ({ layout }: LayoutRowProps) => {
             {currentEnvironment?.type === EnvironmentTypeEnum.DEV && (
               <DropdownMenu modal={false}>
                 <DropdownMenuTrigger asChild onClick={stopPropagation}>
-                  <CompactButton variant="ghost" icon={RiMore2Fill} className="z-10 h-8 w-8 p-0" />
+                  <CompactButton variant="ghost" icon={DotsThree} className="z-10 h-8 w-8 p-0" />
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end" className="w-56" onClick={stopPropagation}>
                   <DropdownMenuGroup>
@@ -191,7 +197,7 @@ export const LayoutRow = ({ layout }: LayoutRowProps) => {
                         }}
                         className="flex cursor-pointer items-center gap-2"
                       >
-                        <RiFileCopyLine className="h-4 w-4" />
+                        <Copy className="h-4 w-4" />
                         <span>Duplicate layout</span>
                       </DropdownMenuItem>
                     )}
@@ -204,7 +210,7 @@ export const LayoutRow = ({ layout }: LayoutRowProps) => {
                           className="text-destructive flex cursor-pointer items-center gap-2"
                           disabled={layout.isDefault}
                         >
-                          <RiDeleteBin2Line className="h-4 w-4" />
+                          <Trash className="h-4 w-4" />
                           <span>Delete layout</span>
                         </DropdownMenuItem>
                       </TooltipTrigger>

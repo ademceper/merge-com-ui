@@ -9,7 +9,7 @@ import {
 } from '@novu/shared';
 import { useEffect, useMemo } from 'react';
 import { useForm, useWatch } from 'react-hook-form';
-import { RiInputField } from 'react-icons/ri';
+
 import { useNavigate } from 'react-router-dom';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@merge-rd/ui/components/accordion';
 import { Form, FormRoot } from '@/components/primitives/form/form';
@@ -24,6 +24,7 @@ import { EnvironmentDropdown } from '../../side-navigation/environment-dropdown'
 import { CredentialSection } from './credential-section';
 import { GeneralSettings } from './integration-general-settings';
 import { isDemoIntegration } from './utils/helpers';
+import { Textbox } from '@phosphor-icons/react';
 
 type IntegrationFormData = {
   name: string;
@@ -172,7 +173,7 @@ export function IntegrationSettings({
           <AccordionItem value="layout">
             <AccordionTrigger>
               <div className="flex items-center gap-1 text-xs">
-                <RiInputField className="text-feature size-5" />
+                <Textbox className="text-feature size-5" />
                 General Settings
               </div>
             </AccordionTrigger>
@@ -223,7 +224,7 @@ export function IntegrationSettings({
                 <AccordionItem value="credentials">
                   <AccordionTrigger>
                     <div className="flex items-center gap-1 text-xs">
-                      <RiInputField className="text-feature size-5" />
+                      <Textbox className="text-feature size-5" />
                       Delivery Provider Credentials
                     </div>
                   </AccordionTrigger>

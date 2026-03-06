@@ -1,5 +1,6 @@
-import { List, ListOrdered } from 'lucide-react';
+
 import type { BlockItem } from './types';
+import { List, ListNumbers } from '@phosphor-icons/react';
 
 export const bulletList: BlockItem = {
   title: 'Bullet List',
@@ -15,7 +16,7 @@ export const orderedList: BlockItem = {
   title: 'Numbered List',
   description: 'Create a list with numbering.',
   searchTerms: ['ordered'],
-  icon: <ListOrdered className="mly-h-4 mly-w-4" />,
+  icon: <ListNumbers className="mly-h-4 mly-w-4" />,
   command: ({ editor, range }) => {
     editor.chain().focus().deleteRange(range).toggleOrderedList().run();
   },

@@ -2,14 +2,7 @@ import { DirectionEnum, EnvironmentTypeEnum, PermissionsEnum, WorkflowStatusEnum
 import { useCallback, useEffect, useMemo } from 'react';
 import { useSetPageHeader } from '@/context/page-header';
 import { useForm } from 'react-hook-form';
-import {
-  RiArrowDownSLine,
-  RiArrowRightSLine,
-  RiFileAddLine,
-  RiFileMarkedLine,
-  RiLoader4Line,
-  RiRouteFill,
-} from 'react-icons/ri';
+
 import { Outlet, useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import { PageMeta } from '@/components/page-meta';
 import { Button } from '@merge-rd/ui/components/button';
@@ -39,6 +32,14 @@ import { useTelemetry } from '@/hooks/use-telemetry';
 import { QuickTemplate, useTemplateStore } from '@/hooks/use-template-store';
 import { buildRoute, ROUTES } from '@/utils/routes';
 import { TelemetryEvent } from '@/utils/telemetry';
+import {
+  CaretDown,
+  CaretRight,
+  FilePlus,
+  FileText,
+  Path,
+  SpinnerGap,
+} from '@phosphor-icons/react';
 
 const WORKFLOWS_TABLE_ID = 'workflows-list';
 
@@ -247,7 +248,7 @@ export const WorkflowsPage = () => {
                   <Button variant="secondary" mode="ghost" size="2xs" onClick={clearFilters}>
                     Reset
                   </Button>
-                  {isFetching && !isPending && <RiLoader4Line className="h-3 w-3 animate-spin text-neutral-400" />}
+                  {isFetching && !isPending && <SpinnerGap className="h-3 w-3 animate-spin text-neutral-400" />}
                 </div>
               )}
             </div>
@@ -267,7 +268,7 @@ export const WorkflowsPage = () => {
                       })}?source=start-with`
                     )
                   }
-                  trailingIcon={RiArrowRightSLine}
+                  trailingIcon={CaretRight}
                 >
                   Explore templates
                 </LinkButton>
@@ -377,7 +378,7 @@ const CreateWorkflowButton = () => {
             variant="primary"
             disabled
             size="xs"
-            leadingIcon={RiRouteFill}
+            leadingIcon={Path}
           >
             Create workflow
           </Button>
@@ -409,7 +410,7 @@ const CreateWorkflowButton = () => {
           className="text-label-xs rounded-l-lg rounded-r-none border-none p-2 text-white"
           variant="primary"
           size="xs"
-          leadingIcon={RiRouteFill}
+          leadingIcon={Path}
           onClick={handleCreateWorkflow}
         >
           Create workflow
@@ -423,16 +424,16 @@ const CreateWorkflowButton = () => {
               className="rounded-l-none rounded-r-lg border-none px-1.5 text-white"
               variant="primary"
               size="xs"
-              leadingIcon={RiArrowDownSLine}
+              leadingIcon={CaretDown}
             ></Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent className="w-56">
             <DropdownMenuItem className="cursor-pointer" onSelect={handleCreateWorkflow}>
-              <RiFileAddLine />
+              <FilePlus />
               From Blank
             </DropdownMenuItem>
             <DropdownMenuItem className="cursor-pointer" onSelect={navigateToTemplateStore}>
-              <RiFileMarkedLine />
+              <FileText />
               From Template
             </DropdownMenuItem>
           </DropdownMenuContent>

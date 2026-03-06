@@ -1,4 +1,4 @@
-import { RiInformation2Line, RiRefreshLine } from 'react-icons/ri';
+
 import { AccordionContent, AccordionItem, AccordionTrigger } from '@merge-rd/ui/components/accordion';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/primitives/tooltip';
 import { ContextSearchEditor } from './context-search-editor';
@@ -6,6 +6,7 @@ import { Button } from '@merge-rd/ui/components/button';
 import { ExternalLink } from './shared/external-link';
 import { ACCORDION_STYLES } from './workflow-editor/steps/constants/preview-context.constants';
 import { ContextSectionProps } from './workflow-editor/steps/types/preview-context.types';
+import { ArrowsClockwise, Info } from '@phosphor-icons/react';
 
 export function PreviewContextSection({ error, context, schema, onUpdate, onClearPersisted }: ContextSectionProps) {
   return (
@@ -18,7 +19,7 @@ export function PreviewContextSection({ error, context, schema, onUpdate, onClea
               <Tooltip>
                 <TooltipTrigger asChild>
                   <span className="text-foreground-400 inline-block hover:cursor-help">
-                    <RiInformation2Line className="size-3" />
+                    <Info className="size-3" />
                   </span>
                 </TooltipTrigger>
                 <TooltipContent className="max-w-xs">
@@ -48,7 +49,7 @@ export function PreviewContextSection({ error, context, schema, onUpdate, onClea
                 size="2xs"
                 className="text-foreground-600 gap-1"
               >
-                <RiRefreshLine className="h-3 w-3" />
+                <ArrowsClockwise className="h-3 w-3" />
                 Reset defaults
               </Button>
             </div>
@@ -63,7 +64,7 @@ export function PreviewContextSection({ error, context, schema, onUpdate, onClea
           error={error ?? undefined}
         />
         <div className="text-text-soft flex items-center gap-1.5 text-[10px] font-normal leading-[13px]">
-          <RiInformation2Line className="h-3 w-3 shrink-0" />
+          <Info className="h-3 w-3 shrink-0" />
           <span>Changes here only affect the preview and won't be saved to the context.</span>
         </div>
       </AccordionContent>

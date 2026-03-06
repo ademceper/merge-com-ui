@@ -4,11 +4,12 @@ import { createTheme } from '@uiw/codemirror-themes';
 import CodeMirror from '@uiw/react-codemirror';
 import { motion } from 'motion/react';
 import { useState } from 'react';
-import { RiContractUpDownLine, RiExpandUpDownLine } from 'react-icons/ri';
+
 import { TopicSubscriptionPreference } from '@/api/topics';
 import { Card, CardContent, CardHeader } from '@merge-rd/ui/components/card';
 import { Checkbox } from '@merge-rd/ui/components/checkbox';
 import { cn } from '@merge-rd/ui/lib/utils';
+import { ArrowsDownUp, ArrowsIn } from '@phosphor-icons/react';
 
 loadLanguage('json');
 
@@ -56,9 +57,9 @@ export const SubscriptionPreferenceRule = ({ preference }: { preference: TopicSu
           <span className="text-label-xs truncate">{preference.workflow.name}</span>
           <div className="mt-0! flex items-center gap-1.5">
             {isExpanded ? (
-              <RiContractUpDownLine className="text-foreground-400 h-3 w-3" />
+              <ArrowsIn className="text-foreground-400 h-3 w-3" />
             ) : (
-              <RiExpandUpDownLine className="text-foreground-400 h-3 w-3" />
+              <ArrowsDownUp className="text-foreground-400 h-3 w-3" />
             )}
           </div>
         </CardHeader>

@@ -1,16 +1,6 @@
 import type { IEnvironment } from '@novu/shared';
 import { useEffect, useState } from 'react';
-import {
-  RiAddBoxLine,
-  RiAlertFill,
-  RiContractUpDownLine,
-  RiDashboardLine,
-  RiDeleteBin2Line,
-  RiExpandUpDownLine,
-  RiGitCommitFill,
-  RiLinkUnlinkM,
-  RiRouteFill,
-} from 'react-icons/ri';
+
 import type { IResourceDependency, IResourceDiffResult, ResourceToPublish } from '@/api/environments';
 import { useDiffEnvironments } from '@/hooks/use-environments';
 import { useResourceDependencies } from '@/hooks/use-resource-dependencies';
@@ -23,6 +13,17 @@ import { Dialog, DialogContent, DialogDescription, DialogTitle } from '@merge-rd
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/primitives/tooltip';
 import { LayoutUsageIndicator } from './layout-usage-indicator';
 import { WorkflowHoverCard } from './workflow-hover-card';
+import {
+  ArrowsDownUp,
+  ArrowsIn,
+  GitCommit,
+  LinkBreak,
+  Path,
+  PlusSquare,
+  SquaresFour,
+  Trash,
+  Warning,
+} from '@phosphor-icons/react';
 
 type PublishModalProps = {
   isOpen: boolean;
@@ -156,7 +157,7 @@ export function PublishModal({
               isExpanded={workflowsExpanded}
               onToggle={() => setWorkflowsExpanded(!workflowsExpanded)}
               onGroupToggle={() => handleGroupToggle('workflow')}
-              icon={RiRouteFill}
+              icon={Path}
             >
               {workflows.map((workflow) => {
                 const id = workflow.sourceResource?.id || workflow.targetResource?.id;
@@ -186,7 +187,7 @@ export function PublishModal({
               isExpanded={layoutsExpanded}
               onToggle={() => setLayoutsExpanded(!layoutsExpanded)}
               onGroupToggle={() => handleGroupToggle('layout')}
-              icon={RiDashboardLine}
+              icon={SquaresFour}
             >
               {layouts.map((layout) => {
                 const id = layout.sourceResource?.id || layout.targetResource?.id;
@@ -265,7 +266,7 @@ function ResourceGroupCompact({
             {...(hasPartialSelection && { 'data-state': 'indeterminate' })}
           />
           <button onClick={onToggle} className="flex h-4 w-4 items-center justify-center rounded-lg p-0.5">
-            {isExpanded ? <RiContractUpDownLine className="h-3 w-3" /> : <RiExpandUpDownLine className="h-3 w-3" />}
+            {isExpanded ? <ArrowsIn className="h-3 w-3" /> : <ArrowsDownUp className="h-3 w-3" />}
           </button>
         </div>
       </div>
@@ -334,7 +335,7 @@ function CompactResourceRow({
             {hasDependencies && (
               <Tooltip>
                 <TooltipTrigger>
-                  <RiLinkUnlinkM className="h-3 w-3 shrink-0 text-orange-500" />
+                  <LinkBreak className="h-3 w-3 shrink-0 text-orange-500" />
                 </TooltipTrigger>
                 <TooltipContent>
                   {dependencies && dependencies.length > 0 && (
@@ -358,7 +359,7 @@ function CompactResourceRow({
               {hasDependencies && (
                 <Tooltip>
                   <TooltipTrigger>
-                    <RiLinkUnlinkM className="h-3 w-3 shrink-0 text-orange-500" />
+                    <LinkBreak className="h-3 w-3 shrink-0 text-orange-500" />
                   </TooltipTrigger>
                   <TooltipContent>
                     {dependencies && dependencies.length > 0 && (
@@ -402,7 +403,7 @@ function ResourceStatusBadge({ resource }: { resource: IResourceDiffResult }) {
   if (summary.added > 0) {
     return (
       <Badge variant="lighter" size="sm" color="green" className="text-label-2xs">
-        <BadgeIcon as={RiAddBoxLine} />
+        <BadgeIcon as={PlusSquare} />
         Added
       </Badge>
     );
@@ -411,7 +412,7 @@ function ResourceStatusBadge({ resource }: { resource: IResourceDiffResult }) {
   if (summary.modified > 0) {
     const badge = (
       <Badge variant="lighter" size="sm" color="orange" className="text-label-2xs">
-        <BadgeIcon as={RiGitCommitFill} />
+        <BadgeIcon as={GitCommit} />
         Modified
       </Badge>
     );
@@ -426,7 +427,7 @@ function ResourceStatusBadge({ resource }: { resource: IResourceDiffResult }) {
   if (summary.deleted > 0) {
     return (
       <Badge variant="lighter" size="sm" color="red" className="text-label-2xs">
-        <BadgeIcon as={RiDeleteBin2Line} />
+        <BadgeIcon as={Trash} />
         Deleted
       </Badge>
     );
@@ -439,7 +440,7 @@ function PublishModalHeader() {
   return (
     <div className="flex items-start justify-between">
       <div className="flex h-8 w-8 items-center justify-center rounded-[10px] bg-orange-50">
-        <RiAlertFill className="h-6 w-6 text-orange-500" />
+        <Warning weight="fill" className="h-6 w-6 text-orange-500" />
       </div>
     </div>
   );

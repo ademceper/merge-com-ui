@@ -1,7 +1,7 @@
 import { EnvironmentTypeEnum, PermissionsEnum, ResourceOriginEnum } from '@novu/shared';
 import { Edge, EdgeLabelRenderer, EdgeProps, getBezierPath } from '@xyflow/react';
 import { AnimatePresence, motion } from 'motion/react';
-import { RiInsertRowTop } from 'react-icons/ri';
+
 import { useWorkflow } from '@/components/workflow-editor/workflow-provider';
 import { useEnvironment } from '@/context/environment/hooks';
 import { useHasPermission } from '@/hooks/use-has-permission';
@@ -9,6 +9,7 @@ import { fadeIn } from '@/utils/animation';
 import { AddStepMenu } from './add-step-menu';
 import { NODE_WIDTH } from './base-node';
 import { useCanvasContext } from './drag-context';
+import { Rows } from '@phosphor-icons/react';
 
 export type AddNodeEdgeType = Edge<{ isLast: boolean; addStepIndex: number }>;
 
@@ -86,7 +87,7 @@ export function AddNodeEdge({
             }}
             data-droppable-edge-id={id}
           >
-            <RiInsertRowTop className="size-3.5 text-text-soft" />
+            <Rows className="size-3.5 text-text-soft" />
             <span className="text-label-xs text-text-soft">Drop here</span>
           </div>
           <div

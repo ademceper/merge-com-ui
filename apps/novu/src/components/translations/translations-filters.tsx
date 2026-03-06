@@ -2,14 +2,7 @@ import { DEFAULT_LOCALE, EnvironmentTypeEnum, PermissionsEnum } from '@novu/shar
 import { AnimatePresence, motion } from 'motion/react';
 import { HTMLAttributes, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import {
-  RiCheckLine,
-  RiCloseLine,
-  RiDownload2Line,
-  RiLoader4Line,
-  RiSettingsLine,
-  RiUpload2Line,
-} from 'react-icons/ri';
+
 import { useNavigate, useParams } from 'react-router-dom';
 import { TranslationsFilter } from '@/api/translations';
 import { FlagCircle } from '@/components/flag-circle';
@@ -25,6 +18,14 @@ import { useUploadMasterJson } from '@/hooks/use-upload-master-json';
 import { buildRoute, ROUTES } from '@/utils/routes';
 import { cn } from '@merge-rd/ui/lib/utils';
 import { defaultTranslationsFilter } from './hooks/use-translations-url-state';
+import {
+  Check,
+  DownloadSimple,
+  Gear,
+  SpinnerGap,
+  UploadSimple,
+  X,
+} from '@phosphor-icons/react';
 
 type SearchFilterProps = {
   value: string;
@@ -58,7 +59,7 @@ function FilterResetButton({ isVisible, isFetching, onReset }: FilterResetButton
       <Button variant="secondary" mode="ghost" size="2xs" onClick={onReset}>
         Reset
       </Button>
-      {isFetching && <RiLoader4Line className="h-3 w-3 animate-spin text-neutral-400" />}
+      {isFetching && <SpinnerGap className="h-3 w-3 animate-spin text-neutral-400" />}
     </div>
   );
 }
@@ -129,9 +130,9 @@ function AnimatedImportButton({
           className="flex items-center gap-2"
         >
           {isPending ? (
-            <RiLoader4Line className="h-3.5 w-3.5 animate-spin" />
+            <SpinnerGap className="h-3.5 w-3.5 animate-spin" />
           ) : (
-            <RiDownload2Line className="h-3.5 w-3.5" />
+            <DownloadSimple className="h-3.5 w-3.5" />
           )}
           Import
         </motion.div>
@@ -151,12 +152,12 @@ function AnimatedImportButton({
             >
               {isSuccess ? (
                 <div className="flex items-center gap-1">
-                  <RiCheckLine className="size-4 text-green-600" />
+                  <Check className="size-4 text-green-600" />
                   <span className="text-xs text-green-600">Success!</span>
                 </div>
               ) : (
                 <div className="flex items-center gap-1">
-                  <RiCloseLine className="size-4 text-red-600" />
+                  <X className="size-4 text-red-600" />
                   <span className="text-xs text-red-600">Failed</span>
                 </div>
               )}
@@ -209,9 +210,9 @@ function ActionButtons() {
             disabled={exportMutation.isPending}
           >
             {exportMutation.isPending ? (
-              <RiLoader4Line className="h-3.5 w-3.5 animate-spin" />
+              <SpinnerGap className="h-3.5 w-3.5 animate-spin" />
             ) : (
-              <RiUpload2Line className="h-3.5 w-3.5" />
+              <UploadSimple className="h-3.5 w-3.5" />
             )}
             Export
           </Button>
@@ -256,7 +257,7 @@ function ActionButtons() {
             variant="secondary"
             mode="lighter"
             onClick={handleConfigure}
-            leadingIcon={RiSettingsLine}
+            leadingIcon={Gear}
             disabled={!canEdit}
           >
             Configure translations

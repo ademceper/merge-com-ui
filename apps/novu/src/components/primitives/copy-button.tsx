@@ -1,8 +1,9 @@
 import { AnimatePresence, motion } from 'motion/react';
 import { useState } from 'react';
-import { RiCheckLine, RiFileCopyLine } from 'react-icons/ri';
+
 import { cn } from '@merge-rd/ui/lib/utils';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/primitives/tooltip';
+import { Check, Copy } from '@phosphor-icons/react';
 
 type CopyButtonProps = {
   className?: string;
@@ -58,7 +59,7 @@ export const CopyButton = (props: CopyButtonProps) => {
                 exit={{ scale: 0.5, opacity: 0 }}
                 transition={{ type: 'spring', duration: 0.1, bounce: 0.5 }}
               >
-                <RiCheckLine className={`${sizeClass} text-success`} aria-hidden="true" />
+                <Check className={`${sizeClass} text-success`} aria-hidden="true" />
               </motion.div>
             ) : (
               <motion.div
@@ -68,7 +69,7 @@ export const CopyButton = (props: CopyButtonProps) => {
                 exit={{ scale: 0.5, opacity: 0 }}
                 transition={{ type: 'spring', duration: 0.15, bounce: 0.5 }}
               >
-                <RiFileCopyLine className={`${sizeClass}`} />
+                <Copy className={`${sizeClass}`} />
               </motion.div>
             )}
           </AnimatePresence>

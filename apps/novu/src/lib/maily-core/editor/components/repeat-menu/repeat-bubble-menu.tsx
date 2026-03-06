@@ -1,6 +1,6 @@
 /** biome-ignore-all lint/correctness/useHookAtTopLevel: needs to be fixed */
 import { BubbleMenu, findChildren, Editor as TiptapEditor } from '@tiptap/react';
-import { InfoIcon, Repeat2 } from 'lucide-react';
+
 import { useCallback, useMemo, useRef, useState } from 'react';
 import { sticky } from 'tippy.js';
 import { cn } from '../../utils/classname';
@@ -16,6 +16,7 @@ import { InputAutocomplete } from '../ui/input-autocomplete';
 import { NumberInput } from '../ui/number-input';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '../ui/tooltip';
 import { useRepeatState } from './use-repeat-state';
+import { Info, Repeat } from '@phosphor-icons/react';
 
 export function RepeatBubbleMenu(
   props: EditorBubbleMenuProps & {
@@ -100,7 +101,7 @@ export function RepeatBubbleMenu(
             Repeat for
             <Tooltip>
               <TooltipTrigger>
-                <InfoIcon className={cn('mly-size-3 mly-stroke-[2.5] mly-text-gray-400')} />
+                <Info className={cn('mly-size-3 mly-stroke-[2.5] mly-text-gray-400')} />
               </TooltipTrigger>
               <TooltipContent sideOffset={14} className="mly-max-w-[260px]" align="start">
                 Loops through each item in the selected iterable variable.
@@ -176,7 +177,7 @@ export function RepeatBubbleMenu(
                   iterations: value,
                 });
               }}
-              icon={Repeat2}
+              icon={Repeat}
               tooltip="Limit the number of items shown (0 or empty shows all items)"
               max={99}
             />

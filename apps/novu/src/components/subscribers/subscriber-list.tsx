@@ -1,6 +1,6 @@
 import { DirectionEnum, PermissionsEnum } from '@novu/shared';
 import { HTMLAttributes, useEffect, useState } from 'react';
-import { RiUserSharedLine } from 'react-icons/ri';
+
 import { PermissionButton } from '@/components/primitives/permission-button';
 import {
   Table,
@@ -25,6 +25,7 @@ import { SubscribersFilters } from '@/components/subscribers/subscribers-filters
 import { useFetchSubscribers } from '@/hooks/use-fetch-subscribers';
 import { cn } from '@merge-rd/ui/lib/utils';
 import { ListNoResults } from '../list-no-results';
+import { UserCircle } from '@phosphor-icons/react';
 
 type SubscriberListFiltersProps = HTMLAttributes<HTMLDivElement> &
   Pick<SubscribersUrlState, 'filterValues' | 'handleFiltersChange' | 'resetFilters'> & {
@@ -51,7 +52,7 @@ const SubscriberListWrapper = (props: SubscriberListFiltersProps) => {
           className="rounded-l-lg border-none text-white"
           variant="primary"
           size="xs"
-          leadingIcon={RiUserSharedLine}
+          leadingIcon={UserCircle}
           onClick={navigateToCreateSubscriberPage}
         >
           Add subscriber

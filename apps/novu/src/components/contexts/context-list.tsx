@@ -1,6 +1,6 @@
 import { DirectionEnum, PermissionsEnum } from '@novu/shared';
 import { HTMLAttributes, useEffect } from 'react';
-import { RiAddCircleLine } from 'react-icons/ri';
+
 import {
   Table,
   TableBody,
@@ -20,6 +20,7 @@ import { ContextRow, ContextRowSkeleton } from './context-row';
 import { ContextsFilters } from './contexts-filters';
 import { useContextsNavigate } from './hooks/use-contexts-navigate';
 import { ContextsSortableColumn, ContextsUrlState, useContextsUrlState } from './hooks/use-contexts-url-state';
+import { PlusCircle } from '@phosphor-icons/react';
 
 type ContextListProps = HTMLAttributes<HTMLDivElement>;
 
@@ -291,7 +292,7 @@ export const CreateContextButton = () => {
       variant="primary"
       mode="gradient"
       size="xs"
-      leadingIcon={RiAddCircleLine}
+      leadingIcon={PlusCircle}
       onClick={navigateToCreateContextPage}
     >
       Create context

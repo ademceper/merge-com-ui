@@ -1,10 +1,11 @@
-import { Info } from 'lucide-react';
+
 import { useId } from 'react';
 import { Controller, UseFormReturn } from 'react-hook-form';
-import { RiLayoutLine } from 'react-icons/ri';
+
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@merge-rd/ui/components/accordion';
 import { ColorPicker } from '@/components/primitives/color-picker';
 import { Switch } from '@merge-rd/ui/components/switch';
+import { Info, Layout } from '@phosphor-icons/react';
 
 interface PreviewStyle {
   id: string;
@@ -43,7 +44,7 @@ export function CustomizeInbox({ form }: CustomizeInboxProps) {
           >
             <div className="flex w-full items-center justify-between">
               <div className="flex items-center gap-1 text-xs">
-                <RiLayoutLine className="text-feature size-5" />
+                <Layout className="text-feature size-5" />
                 Customize Inbox
               </div>
               <div className="flex items-center gap-2">

@@ -1,4 +1,4 @@
-import { RiCheckboxCircleFill, RiErrorWarningFill, RiLoader4Fill, RiTimeFill } from 'react-icons/ri';
+
 import { useFetchRequestTraces } from '@/hooks/use-fetch-request-traces';
 import type { ApiTrace, RequestLog } from '../../types/logs';
 import { formatDateSimple } from '../../utils/format-date';
@@ -6,6 +6,12 @@ import { HoverCard, HoverCardContent, HoverCardTrigger } from '@/components/prim
 import { Skeleton } from '@merge-rd/ui/components/skeleton';
 import { StatusBadge, StatusBadgeIcon } from '../primitives/status-badge';
 import { TimeDisplayHoverCard } from '../time-display-hover-card';
+import {
+  CheckCircle,
+  Clock,
+  SpinnerGap,
+  WarningCircle,
+} from '@phosphor-icons/react';
 
 type ApiTracesContentProps = {
   log: RequestLog;
@@ -29,15 +35,15 @@ function mapTraceStatusToBadgeStatus(traceStatus: ApiTrace['status']) {
 function getStatusIcon(status: ApiTrace['status']) {
   switch (status) {
     case 'success':
-      return RiCheckboxCircleFill;
+      return CheckCircle;
     case 'error':
-      return RiErrorWarningFill;
+      return WarningCircle;
     case 'warning':
-      return RiTimeFill;
+      return Clock;
     case 'pending':
-      return RiLoader4Fill;
+      return SpinnerGap;
     default:
-      return RiCheckboxCircleFill;
+      return CheckCircle;
   }
 }
 

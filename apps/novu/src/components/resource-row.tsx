@@ -1,17 +1,18 @@
-import { RiLayout5Line, RiRouteFill, RiTranslate2 } from 'react-icons/ri';
+
 import type { IResourceDiffResult } from '@/api/environments';
 import { formatDateSimple } from '@/utils/format-date';
+import { Layout, Path, Translate } from '@phosphor-icons/react';
 
 type ResourceRowProps = {
   resource: IResourceDiffResult;
 };
 
 const RESOURCE_ICONS = {
-  workflow: RiRouteFill,
-  layout: RiLayout5Line,
-  translation: RiTranslate2,
+  workflow: Path,
+  layout: Layout,
+  translation: Translate,
 } as const;
-const DEFAULT_RESOURCE_ICON = RiRouteFill;
+const DEFAULT_RESOURCE_ICON = Path;
 const DEFAULT_RESOURCE_NAME = 'Unnamed Resource';
 const DEFAULT_ICON_COLOR = 'text-feature';
 

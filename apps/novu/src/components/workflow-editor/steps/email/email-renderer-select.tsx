@@ -1,11 +1,12 @@
 import { useState } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
-import { RiGitCommitFill, RiHtml5Fill, RiReactjsFill } from 'react-icons/ri';
+
 import { ConfirmationModal } from '@/components/confirmation-modal';
 import { Badge, BadgeIcon } from '@/components/primitives/badge';
 import { FormField } from '@/components/primitives/form/form';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/primitives/select';
 import { useSaveForm } from '../save-form-context';
+import { Atom, FileHtml, GitCommit } from '@phosphor-icons/react';
 
 export const EmailRendererSelect = () => {
   const { control, setValue } = useFormContext();
@@ -49,13 +50,13 @@ export const EmailRendererSelect = () => {
               <SelectContent>
                 <SelectItem value="html" className="text-paragraph-xs">
                   <div className="flex items-center gap-1.5">
-                    <RiHtml5Fill className="size-3.5 text-[#E34F26]" />
+                    <FileHtml weight="fill" className="size-3.5 text-[#E34F26]" />
                     HTML
                   </div>
                 </SelectItem>
                 <SelectItem value="react-email" className="text-paragraph-xs">
                   <div className="flex items-center gap-1.5">
-                    <RiReactjsFill className="size-3.5 text-[#61DAFB]" />
+                    <Atom weight="fill" className="size-3.5 text-[#61DAFB]" />
                     React.email
                   </div>
                 </SelectItem>
@@ -83,7 +84,7 @@ export const EmailRendererSelect = () => {
       />
       {rendererType === 'react-email' && stepResolverHash && (
         <Badge variant="lighter" color="gray" size="md" className="ml-auto font-mono tracking-wide">
-          <BadgeIcon as={RiGitCommitFill} className="rotate-90" />
+          <BadgeIcon as={GitCommit} className="rotate-90" />
           {stepResolverHash}
         </Badge>
       )}

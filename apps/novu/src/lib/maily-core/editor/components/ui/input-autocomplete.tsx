@@ -1,11 +1,12 @@
 import { Editor } from '@tiptap/core';
-import { CornerDownLeft } from 'lucide-react';
+
 import { forwardRef, HTMLAttributes, useCallback, useRef } from 'react';
 import { VariableSuggestionsPopoverRef } from '../../nodes/variable/variable-suggestions-popover';
 import { cn } from '../../utils/classname';
 import { AUTOCOMPLETE_PASSWORD_MANAGERS_OFF } from '../../utils/constants';
 import { useVariableOptions } from '../../utils/node-options';
 import { useOutsideClick } from '../../utils/use-outside-click';
+import { ArrowElbowDownLeft } from '@phosphor-icons/react';
 
 type InputAutocompleteProps = HTMLAttributes<HTMLInputElement> & {
   value: string;
@@ -84,7 +85,7 @@ export const InputAutocomplete = forwardRef<HTMLInputElement, InputAutocompleteP
           spellCheck={false}
         />
         <div className="mly-absolute mly-inset-y-0 mly-right-1 mly-flex mly-items-center">
-          <CornerDownLeft className="mly-h-3 mly-w-3 mly-stroke-[2.5] mly-text-midnight-gray" />
+          <ArrowElbowDownLeft className="mly-h-3 mly-w-3 mly-stroke-[2.5] mly-text-midnight-gray" />
         </div>
       </label>
 

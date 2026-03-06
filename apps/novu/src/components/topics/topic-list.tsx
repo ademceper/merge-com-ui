@@ -2,7 +2,7 @@
 
 import { DirectionEnum, PermissionsEnum } from '@novu/shared';
 import { HTMLAttributes, useEffect } from 'react';
-import { RiAddCircleLine } from 'react-icons/ri';
+
 import { PermissionButton } from '@/components/primitives/permission-button';
 import {
   Table,
@@ -22,6 +22,7 @@ import { TopicsFilter, TopicsSortableColumn, TopicsUrlState, useTopicsUrlState }
 import { TopicListBlank } from './topic-list-blank';
 import { TopicRow, TopicRowSkeleton } from './topic-row';
 import { TopicsFilters } from './topics-filters';
+import { PlusCircle } from '@phosphor-icons/react';
 
 // Use type alias instead of interface for component props
 type TopicListProps = HTMLAttributes<HTMLDivElement>;
@@ -74,7 +75,7 @@ export const CreateTopicButton = () => {
       variant="primary"
       mode="gradient"
       size="xs"
-      leadingIcon={RiAddCircleLine}
+      leadingIcon={PlusCircle}
       onClick={navigateToCreateTopicPage}
     >
       Create Topic

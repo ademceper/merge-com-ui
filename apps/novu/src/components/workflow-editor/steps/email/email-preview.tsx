@@ -1,13 +1,14 @@
 import { ResourceOriginEnum } from '@novu/shared';
 import { HTMLAttributes, useCallback, useEffect, useRef } from 'react';
 import { useFormContext } from 'react-hook-form';
-import { RiArrowDownSFill, RiEdit2Line } from 'react-icons/ri';
+
 import { MAILY_EMAIL_WIDTH } from '@/components/maily/maily-config';
 import { Avatar, AvatarImage } from '@merge-rd/ui/components/avatar';
 import { Skeleton } from '@merge-rd/ui/components/skeleton';
 import { usePrimaryEmailIntegration } from '@/hooks/use-primary-email-integration';
 import { cn } from '@merge-rd/ui/lib/utils';
 import { NovuBranding } from './novu-branding';
+import { CaretDown, PencilSimple } from '@phosphor-icons/react';
 
 type EmailPreviewHeaderProps = HTMLAttributes<HTMLDivElement> & {
   minimalHeader?: boolean;
@@ -53,13 +54,13 @@ export const EmailPreviewHeader = (props: EmailPreviewHeaderProps) => {
                   {'>'}
                 </span>
 
-                {onEditSenderClick && <RiEdit2Line className="text-foreground-600 size-3.5" />}
+                {onEditSenderClick && <PencilSimple className="text-foreground-600 size-3.5" />}
               </button>
             )}
           </div>
           {!minimalHeader && (
             <div className="text-foreground-600 flex items-center gap-1 text-xs">
-              to me <RiArrowDownSFill />
+              to me <CaretDown weight="fill" />
             </div>
           )}
         </div>

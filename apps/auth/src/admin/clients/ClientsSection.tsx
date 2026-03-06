@@ -34,6 +34,8 @@ import { translationFormatter } from "../utils/translationFormatter";
 import { InitialAccessTokenList } from "./initial-access/InitialAccessTokenList";
 import { ClientRegistration } from "./registration/ClientRegistration";
 import { toClient } from "./routes/Client";
+import { toClients } from "./routes/clients-path";
+import type { ClientsTab } from "./routes/clients-path";
 import {
     toClientRegistration
 } from "./routes/client-registration-path";
@@ -158,74 +160,44 @@ export default function ClientsSection() {
     const clientRegistrationTab: ClientRegistrationTab =
         subTab === "authenticated" ? "authenticated" : "anonymous";
 
-    return (
-        <>
-            {isClientRegistration ? (
-                <ViewHeader
-                    titleKey="clientRegistration"
-                    subKey="clientRegistrationExplain"
-                    helpUrl={helpUrls.clientsUrl}
-                    divider
-                />
-            ) : tab === "initial-access-token" ? (
-                <ViewHeader
-                    titleKey="initialAccessToken"
-                    subKey="initialAccessTokenExplain"
-                    helpUrl={helpUrls.clientsUrl}
-                    divider
-                />
-            ) : (
-                <ViewHeader
-                    titleKey="clientList"
-                    subKey="clientsExplain"
-                    helpUrl={helpUrls.clientsUrl}
-                    divider
-                />
-            )}
-            <div className="pt-4 pb-6 px-0 min-w-0">
-                <AlertDialog open={!!selectedClient} onOpenChange={(open) => !open && setSelectedClient(undefined)}>
-                    <AlertDialogContent>
-                        <AlertDialogHeader>
-                            <AlertDialogTitle>{t("clientDelete", { clientId: selectedClient?.clientId })}</AlertDialogTitle>
-                            <AlertDialogDescription>{t("clientDeleteConfirm")}</AlertDialogDescription>
-                        </AlertDialogHeader>
-                        <AlertDialogFooter>
-                            <AlertDialogCancel>{t("cancel")}</AlertDialogCancel>
-                            <AlertDialogAction variant="destructive" data-testid="confirm" onClick={onDeleteConfirm}>
-                                {t("delete")}
-                            </AlertDialogAction>
-                        </AlertDialogFooter>
-                    </AlertDialogContent>
-                </AlertDialog>
-                {isClientRegistration ? (
-                    <Tabs
-                        value={clientRegistrationTab}
-                        onValueChange={(value) =>
-                            navigate(toClientRegistration({ realm, subTab: value as ClientRegistrationTab }))
-                        }
-                    >
-                        <div className="w-full min-w-0 overflow-x-auto overflow-y-hidden mb-4">
-                            <TabsList variant="line" className="mb-0 w-max min-w-0 **:data-[slot=tabs-trigger]:flex-none">
-                                <TabsTrigger value="anonymous" data-testid="client-registration-anonymous-tab">
-                                    {t("anonymousAccessPolicies")}
-                                </TabsTrigger>
-                                <TabsTrigger value="authenticated" data-testid="client-registration-authenticated-tab">
-                                    {t("authenticatedAccessPolicies")}
-                                </TabsTrigger>
-                            </TabsList>
-                        </div>
-                        <TabsContent value="anonymous" className="mt-0 pt-0 outline-none">
-                            <ClientRegistration subTab="anonymous" />
-                        </TabsContent>
-                        <TabsContent value="authenticated" className="mt-0 pt-0 outline-none">
-                            <ClientRegistration subTab="authenticated" />
-                        </TabsContent>
-                    </Tabs>
-                ) : tab === "initial-access-token" ? (
-                    <InitialAccessTokenList />
-                ) : tab === "client-registration" ? (
-                    <ClientRegistration key="anonymous" subTab="anonymous" />
-                ) : (
+    const currentTab: ClientsTab = tab === "initial-access-token" || tab === "client-registration" ? tab : "list";
+
+    const renderMainContent = () => {
+        if (isClientRegistration) {
+            return (
+                <Tabs
+                    value={clientRegistrationTab}
+                    onValueChange={(value) =>
+                        navigate(toClientRegistration({ realm, subTab: value as ClientRegistrationTab }))
+                    }
+                >
+                    <div className="w-full min-w-0 overflow-x-auto overflow-y-hidden mb-4">
+                        <TabsList variant="line" className="mb-0 w-max min-w-0 **:data-[slot=tabs-trigger]:flex-none">
+                            <TabsTrigger value="anonymous" data-testid="client-registration-anonymous-tab">
+                                {t("anonymousAccessPolicies")}
+                            </TabsTrigger>
+                            <TabsTrigger value="authenticated" data-testid="client-registration-authenticated-tab">
+                                {t("authenticatedAccessPolicies")}
+                            </TabsTrigger>
+                        </TabsList>
+                    </div>
+                    <TabsContent value="anonymous" className="mt-0 pt-0 outline-none">
+                        <ClientRegistration subTab="anonymous" />
+                    </TabsContent>
+                    <TabsContent value="authenticated" className="mt-0 pt-0 outline-none">
+                        <ClientRegistration subTab="authenticated" />
+                    </TabsContent>
+                </Tabs>
+            );
+        }
+
+        switch (currentTab) {
+            case "initial-access-token":
+                return <InitialAccessTokenList />;
+            case "client-registration":
+                return <ClientRegistration key="anonymous" subTab="anonymous" />;
+            default:
+                return (
                     <DataTable
                         key={key}
                         columns={columns}
@@ -253,7 +225,56 @@ export default function ClientsSection() {
                             />
                         }
                     />
-                )}
+                );
+        }
+    };
+
+    return (
+        <>
+            <ViewHeader
+                titleKey="clientList"
+                subKey="clientsExplain"
+                helpUrl={helpUrls.clientsUrl}
+                divider
+            />
+            <div className="pt-4 pb-6 px-0 min-w-0">
+                <AlertDialog open={!!selectedClient} onOpenChange={(open) => !open && setSelectedClient(undefined)}>
+                    <AlertDialogContent>
+                        <AlertDialogHeader>
+                            <AlertDialogTitle>{t("clientDelete", { clientId: selectedClient?.clientId })}</AlertDialogTitle>
+                            <AlertDialogDescription>{t("clientDeleteConfirm")}</AlertDialogDescription>
+                        </AlertDialogHeader>
+                        <AlertDialogFooter>
+                            <AlertDialogCancel>{t("cancel")}</AlertDialogCancel>
+                            <AlertDialogAction variant="destructive" data-testid="confirm" onClick={onDeleteConfirm}>
+                                {t("delete")}
+                            </AlertDialogAction>
+                        </AlertDialogFooter>
+                    </AlertDialogContent>
+                </AlertDialog>
+                <Tabs
+                    value={currentTab}
+                    onValueChange={(value) =>
+                        navigate(toClients({ realm, tab: value === "list" ? undefined : value as ClientsTab }))
+                    }
+                >
+                    <div className="w-full min-w-0 overflow-x-auto overflow-y-hidden mb-4">
+                        <TabsList variant="line" className="mb-0 w-max min-w-0 **:data-[slot=tabs-trigger]:flex-none">
+                            <TabsTrigger value="list" data-testid="clients-list-tab">
+                                {t("clientList")}
+                            </TabsTrigger>
+                            <TabsTrigger value="initial-access-token" data-testid="clients-initial-access-tab">
+                                {t("initialAccessToken")}
+                            </TabsTrigger>
+                            <TabsTrigger value="client-registration" data-testid="clients-registration-tab">
+                                {t("clientRegistration")}
+                            </TabsTrigger>
+                        </TabsList>
+                    </div>
+                    <TabsContent value={currentTab} className="mt-0 pt-0 outline-none">
+                        {renderMainContent()}
+                    </TabsContent>
+                </Tabs>
             </div>
         </>
     );

@@ -1,9 +1,10 @@
 import { WidgetType } from '@uiw/react-codemirror';
 import { CSSProperties, createElement } from 'react';
 import { createRoot } from 'react-dom/client';
-import { RiErrorWarningLine } from 'react-icons/ri';
+
 import { TranslateVariableIcon } from '@/components/icons/translate-variable';
 import { formatDisplayKey } from './utils';
+import { WarningCircle } from '@phosphor-icons/react';
 
 export const TRANSLATION_PILL_HEIGHT = 18;
 
@@ -113,7 +114,7 @@ export class TranslationPillWidget extends WidgetType {
 
     if (this.hasError) {
       root.render(
-        createElement(RiErrorWarningLine, {
+        createElement(WarningCircle, {
           className: 'text-error-base size-3.5 min-w-3.5',
         })
       );

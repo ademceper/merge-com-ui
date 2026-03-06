@@ -1,6 +1,6 @@
 import { PermissionsEnum, StepResponseDto, WorkflowResponseDto } from '@novu/shared';
 import { useState } from 'react';
-import { RiCodeBlock, RiEdit2Line, RiEyeLine, RiPlayCircleLine } from 'react-icons/ri';
+
 import { useParams } from 'react-router-dom';
 import { IssuesPanel } from '@/components/issues-panel';
 import { Button } from '@merge-rd/ui/components/button';
@@ -22,6 +22,12 @@ import { useIsTranslationEnabled } from '@/hooks/use-is-translation-enabled';
 import { LocalizationResourceEnum } from '@/types/translations';
 import { cn } from '@merge-rd/ui/lib/utils';
 import { Protect } from '../../../utils/protect';
+import {
+  CodeBlock,
+  Eye,
+  PencilSimple,
+  PlayCircle,
+} from '@phosphor-icons/react';
 
 type StepEditorLayoutProps = {
   workflow: WorkflowResponseDto;
@@ -59,13 +65,13 @@ function StepEditorContent() {
   return (
     <ResizableLayout autoSaveId="step-editor-main-layout">
       <ResizableLayout.ContextPanel>
-        <PanelHeader icon={RiCodeBlock} title="Preview sandbox" className="py-2">
+        <PanelHeader icon={CodeBlock} title="Preview sandbox" className="py-2">
           <Protect permission={PermissionsEnum.EVENT_WRITE}>
             <Button
               variant="secondary"
               size="2xs"
               mode="gradient"
-              leadingIcon={RiPlayCircleLine}
+              leadingIcon={PlayCircle}
               onClick={handleTestWorkflowClick}
             >
               Test workflow
@@ -85,7 +91,7 @@ function StepEditorContent() {
         <div className="flex min-h-0 flex-1 flex-col">
           <ResizableLayout autoSaveId="step-editor-content-layout">
             <ResizableLayout.EditorPanel>
-              <PanelHeader icon={() => <RiEdit2Line />} title={editorTitle} className="min-h-[45px] py-2">
+              <PanelHeader icon={() => <PencilSimple />} title={editorTitle} className="min-h-[45px] py-2">
                 <TranslationStatus
                   resourceId={workflow.workflowId}
                   resourceType={LocalizationResourceEnum.WORKFLOW}
@@ -103,7 +109,7 @@ function StepEditorContent() {
             <ResizableLayout.Handle />
 
             <ResizableLayout.PreviewPanel>
-              <PanelHeader icon={RiEyeLine} title="Preview" isLoading={isSubsequentLoad} className="min-h-[45px] py-2">
+              <PanelHeader icon={Eye} title="Preview" isLoading={isSubsequentLoad} className="min-h-[45px] py-2">
                 {isTranslationsEnabled && availableLocales.length > 0 && (
                   <LocaleSelect
                     value={selectedLocale}

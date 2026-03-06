@@ -1,11 +1,12 @@
 import { useId } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
-import { RiBookMarkedLine, RiInputField } from 'react-icons/ri';
+
 import { Link } from 'react-router-dom';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@merge-rd/ui/components/accordion';
 import { useReactEmailPolling } from '@/hooks/use-react-email-polling';
 import { useWorkflow } from '../../workflow-provider';
 import { ReactEmailNotPublished } from './react-email-not-published';
+import { BookBookmark, Textbox } from '@phosphor-icons/react';
 
 const REACT_EMAIL_CONTROLS_DOCS_LINK = 'https://docs.novu.co/framework/content/react-email#controlschema';
 
@@ -61,7 +62,7 @@ function ReactEmailNoControlsEmptyState() {
           rel="noreferrer noopener"
           className="flex items-center gap-1.5 text-xs text-neutral-600 underline"
         >
-          <RiBookMarkedLine className="size-4" />
+          <BookBookmark className="size-4" />
           View docs
         </Link>
       </div>
@@ -92,7 +93,7 @@ export const EmailBodyReactEmail = () => {
           <AccordionItem value="controls">
             <AccordionTrigger className="flex w-full items-center justify-between text-sm">
               <div className="flex items-center gap-1">
-                <RiInputField className="text-feature size-5" />
+                <Textbox className="text-feature size-5" />
                 <span className="text-sm font-medium">Custom step controls</span>
               </div>
             </AccordionTrigger>

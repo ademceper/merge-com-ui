@@ -1,11 +1,12 @@
-import { CaretSortIcon } from '@radix-ui/react-icons';
+
 import { useMemo, useState } from 'react';
-import { RiCheckLine } from 'react-icons/ri';
+
 import { Command, CommandGroup, CommandItem, CommandList } from '@merge-rd/ui/components/command';
 import { Popover, PopoverContent, PopoverPortal, PopoverTrigger } from '@/components/primitives/popover';
 import { selectTriggerVariants } from '@/components/primitives/select';
 import TruncatedText from '@/components/truncated-text';
 import { cn } from '@merge-rd/ui/lib/utils';
+import { CaretUpDown, Check } from '@phosphor-icons/react';
 
 export const MultiSelect = <T extends string | number>({
   values,
@@ -66,7 +67,7 @@ export const MultiSelect = <T extends string | number>({
               : selectedValues.length > 2 && `${selectedValues.length} ${placeholderSelected ?? 'selected'}`}
             {}
           </TruncatedText>
-          <CaretSortIcon className="h-4 w-4 opacity-50" />
+          <CaretUpDown className="h-4 w-4 opacity-50" />
         </button>
       </PopoverTrigger>
       <PopoverPortal>
@@ -84,7 +85,7 @@ export const MultiSelect = <T extends string | number>({
                       onSelect={() => onSelectValue(value)}
                     >
                       <span className="flex-1">{label}</span>
-                      <RiCheckLine className={cn('h-4 w-4', isActive ? 'opacity-100' : 'opacity-0')} />
+                      <Check className={cn('h-4 w-4', isActive ? 'opacity-100' : 'opacity-0')} />
                     </CommandItem>
                   );
                 })}

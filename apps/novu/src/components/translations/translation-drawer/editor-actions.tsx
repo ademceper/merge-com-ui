@@ -1,7 +1,7 @@
 import { PermissionsEnum } from '@novu/shared';
 import { AnimatePresence, motion } from 'motion/react';
 import { useEffect, useState } from 'react';
-import { RiCheckLine, RiCloseLine, RiFileDownloadLine, RiUploadLine } from 'react-icons/ri';
+
 import { FlagCircle } from '@/components/flag-circle';
 import { Button } from '@merge-rd/ui/components/button';
 import { CopyButton } from '@/components/primitives/copy-button';
@@ -11,6 +11,12 @@ import { TranslationWithPlaceholder } from '@/hooks/use-fetch-translation';
 import { TranslationImportTrigger } from '../translation-import-trigger';
 import { getLocaleDisplayName } from '../utils';
 import { useTranslationFileOperations } from './hooks';
+import {
+  Check,
+  FileArrowDown,
+  Upload,
+  X,
+} from '@phosphor-icons/react';
 
 function UploadButton({
   isUploading,
@@ -43,7 +49,7 @@ function UploadButton({
       variant="secondary"
       mode="outline"
       size="xs"
-      leadingIcon={showResult ? undefined : RiFileDownloadLine}
+      leadingIcon={showResult ? undefined : FileArrowDown}
       disabled={disabled || isUploading}
       onClick={onClick}
       className="relative min-w-[120px]" // Fixed width to prevent resizing
@@ -78,12 +84,12 @@ function UploadButton({
             >
               {uploadSuccess ? (
                 <div className="flex items-center gap-1">
-                  <RiCheckLine className="size-4 text-green-600" />
+                  <Check className="size-4 text-green-600" />
                   <span className="text-xs text-green-600">Success!</span>
                 </div>
               ) : (
                 <div className="flex items-center gap-1">
-                  <RiCloseLine className="size-4 text-red-600" />
+                  <X className="size-4 text-red-600" />
                   <span className="text-xs text-red-600">Failed</span>
                 </div>
               )}
@@ -151,7 +157,7 @@ export function EditorActions({ selectedTranslation, modifiedContent, isReadOnly
                   className="px-2 py-1.5"
                   onClick={() => handleDownload(selectedLocale, content)}
                 >
-                  <RiUploadLine className="h-4 w-4" />
+                  <Upload className="h-4 w-4" />
                 </Button>
               </TooltipTrigger>
               <TooltipContent>Export translation JSON</TooltipContent>

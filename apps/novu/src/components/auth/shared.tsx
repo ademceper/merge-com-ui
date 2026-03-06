@@ -1,6 +1,7 @@
-import { RiArrowLeftSLine } from 'react-icons/ri';
+
 import { useNavigate } from 'react-router-dom';
 import { cn } from '@merge-rd/ui/lib/utils';
+import { CaretLeft } from '@phosphor-icons/react';
 
 interface StepIndicatorProps {
   step: number;
@@ -24,7 +25,7 @@ export function StepIndicator({ step, className, hideBackButton }: StepIndicator
           type="button"
           aria-label="Go back to previous step"
         >
-          <RiArrowLeftSLine className="h-4 w-4" />
+          <CaretLeft className="h-4 w-4" />
         </button>
       )}
       <span className="font-label-x-small text-xs">{step}/3</span>

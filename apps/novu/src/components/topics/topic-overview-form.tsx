@@ -2,7 +2,7 @@ import { standardSchemaResolver } from '@hookform/resolvers/standard-schema';
 import { useQueryClient } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { RiDeleteBin2Line } from 'react-icons/ri';
+
 import { Link } from 'react-router-dom';
 import { ExternalToast } from 'sonner';
 import { z } from 'zod';
@@ -33,6 +33,7 @@ import { TelemetryEvent } from '@/utils/telemetry';
 import { cn } from '@merge-rd/ui/lib/utils';
 import { ConfirmationModal } from '../confirmation-modal';
 import { Topic } from './types';
+import { Trash } from '@phosphor-icons/react';
 
 const TopicFormSchema = z.object({
   name: z.string().min(1, 'Name is required'),
@@ -226,7 +227,7 @@ export function TopicOverviewForm({ topic, readOnly = false }: TopicOverviewForm
                 <Button
                   variant="primary"
                   mode="ghost"
-                  leadingIcon={RiDeleteBin2Line}
+                  leadingIcon={Trash}
                   onClick={() => setIsDeleteModalOpen(true)}
                 >
                   Delete topic

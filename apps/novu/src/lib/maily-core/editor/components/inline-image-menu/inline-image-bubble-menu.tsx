@@ -1,6 +1,6 @@
 /** biome-ignore-all lint/correctness/useHookAtTopLevel: needs to be fixed */
 import { BubbleMenu } from '@tiptap/react';
-import { ImageDownIcon } from 'lucide-react';
+
 import { sticky } from 'tippy.js';
 import { DEFAULT_INLINE_IMAGE_HEIGHT, DEFAULT_INLINE_IMAGE_WIDTH } from '../../nodes/inline-image/inline-image';
 import { ImageSize } from '../image-menu/image-size';
@@ -8,6 +8,7 @@ import { EditorBubbleMenuProps } from '../text-menu/text-bubble-menu';
 import { LinkInputPopover } from '../ui/link-input-popover';
 import { TooltipProvider } from '../ui/tooltip';
 import { useInlineImageState } from './use-inline-image-state';
+import { ImageSquare } from '@phosphor-icons/react';
 
 export function InlineImageBubbleMenu(props: EditorBubbleMenuProps) {
   const { editor, appendTo } = props;
@@ -56,7 +57,7 @@ export function InlineImageBubbleMenu(props: EditorBubbleMenuProps) {
                 .run();
             }}
             tooltip="Source URL"
-            icon={ImageDownIcon}
+            icon={ImageSquare}
             editor={editor}
             isVariable={state.isSrcVariable}
           />

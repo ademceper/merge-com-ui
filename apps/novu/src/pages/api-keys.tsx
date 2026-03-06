@@ -1,7 +1,7 @@
 import { PermissionsEnum } from '@novu/shared';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { RiEyeLine, RiEyeOffLine, RiLoopRightFill } from 'react-icons/ri';
+
 import { PageMeta } from '@/components/page-meta';
 import { Card, CardContent, CardHeader } from '@merge-rd/ui/components/card';
 import { CopyButton } from '@/components/primitives/copy-button';
@@ -22,6 +22,7 @@ import { RegenerateApiKeysDialog } from '../components/regenerate-api-keys-dialo
 import { IS_SELF_HOSTED } from '../config';
 import { useFetchApiKeys, useRegenerateApiKeys } from '../hooks/use-fetch-api-keys';
 import { useHasPermission } from '../hooks/use-has-permission';
+import { ArrowClockwise, Eye, EyeSlash } from '@phosphor-icons/react';
 
 // Convert https:// to wss:// for WebSocket URLs
 const getWebSocketUrl = (url: string) => {
@@ -228,9 +229,9 @@ function SettingField({
                 secret && (
                   <button type="button" onClick={toggleSecretVisibility}>
                     {showSecret ? (
-                      <RiEyeOffLine className="text-text-sub group-has-[disabled]:text-text-disabled" />
+                      <EyeSlash className="text-text-sub group-has-[disabled]:text-text-disabled" />
                     ) : (
-                      <RiEyeLine className="text-text-sub group-has-[disabled]:text-text-disabled" />
+                      <Eye className="text-text-sub group-has-[disabled]:text-text-disabled" />
                     )}
                   </button>
                 )
@@ -247,7 +248,7 @@ function SettingField({
                     disabled={isRegenerateLoading}
                     className="h-[38px] min-w-[38px] p-0"
                   >
-                    <RiLoopRightFill className="h-4 w-4" />
+                    <ArrowClockwise weight="fill" className="h-4 w-4" />
                   </Button>
                 </TooltipTrigger>
                 <TooltipContent>Regenerate API Key</TooltipContent>

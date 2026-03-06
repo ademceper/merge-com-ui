@@ -3,7 +3,7 @@ import { useQueryClient } from '@tanstack/react-query';
 import { AnimatePresence, motion } from 'motion/react';
 import { useCallback, useEffect, useState } from 'react';
 import { LuBookUp2 } from 'react-icons/lu';
-import { RiArrowDownSLine } from 'react-icons/ri';
+
 import { useNavigate } from 'react-router-dom';
 import type { IEnvironmentDiffResponse, IEnvironmentPublishResponse, ResourceToPublish } from '@/api/environments';
 import { showErrorToast } from '@/components/primitives/sonner-helpers';
@@ -21,6 +21,7 @@ import TruncatedText from '../truncated-text';
 import { NoChangesModal } from './no-changes-modal';
 import { PublishModal } from './publish-modal';
 import { PublishSuccessModal } from './publish-success-modal';
+import { CaretDown } from '@phosphor-icons/react';
 
 type ModalState = 'closed' | 'publish' | 'success' | 'no-changes';
 
@@ -184,7 +185,7 @@ export const PublishButton = () => {
             mode="outline"
             size="2xs"
             leadingIcon={LuBookUp2}
-            trailingIcon={RiArrowDownSLine}
+            trailingIcon={CaretDown}
             disabled={otherEnvironments.length === 0}
           >
             Publish changes

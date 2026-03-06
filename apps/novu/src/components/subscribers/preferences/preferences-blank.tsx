@@ -1,11 +1,12 @@
 import { PermissionsEnum } from '@novu/shared';
 import { IconType } from 'react-icons';
-import { RiBookMarkedLine } from 'react-icons/ri';
+
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { RouteFill } from '@/components/icons';
 import { PreferencesBlankIllustration } from '@/components/icons/preferences-blank-illustration';
 import { PermissionButton } from '@/components/primitives/permission-button';
 import { buildRoute, ROUTES } from '@/utils/routes';
+import { BookBookmark } from '@phosphor-icons/react';
 
 export function PreferencesBlank() {
   const navigate = useNavigate();
@@ -34,7 +35,7 @@ export function PreferencesBlank() {
         </PermissionButton>
 
         <span className="flex items-center gap-1 p-1.5">
-          <RiBookMarkedLine className="size-4 text-neutral-600" />
+          <BookBookmark className="size-4 text-neutral-600" />
           <Link
             className="text-label-sm text-neutral-600 underline"
             to="https://docs.novu.co/platform/concepts/preferences"

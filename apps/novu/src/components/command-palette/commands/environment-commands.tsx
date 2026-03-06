@@ -1,8 +1,9 @@
-import { RiDatabase2Line, RiGlobalLine } from 'react-icons/ri';
+
 import { useNavigate } from 'react-router-dom';
 import { useEnvironment } from '@/context/environment/hooks';
 import { buildRoute, ROUTES } from '@/utils/routes';
 import { Command, CommandExecutionContext } from '../command-types';
+import { Database, GlobeSimple } from '@phosphor-icons/react';
 
 export function useEnvironmentCommands(_context: CommandExecutionContext): Command[] {
   const { currentEnvironment, environments, switchEnvironment } = useEnvironment();
@@ -22,7 +23,7 @@ export function useEnvironmentCommands(_context: CommandExecutionContext): Comma
         label: `Switch to ${environment.name}`,
         description: `Switch to the ${environment.name} environment`,
         category: 'action',
-        icon: environment.name === 'Production' ? <RiGlobalLine /> : <RiDatabase2Line />,
+        icon: environment.name === 'Production' ? <GlobeSimple /> : <Database />,
         priority: 'high',
         keywords: ['environment', 'switch', environment.name.toLowerCase(), 'env'],
         execute: () => {

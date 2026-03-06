@@ -1,8 +1,9 @@
-import { RiBookMarkedLine } from 'react-icons/ri';
+
 import { Link } from 'react-router-dom';
 import { LinkButton } from '@/components/primitives/button-link';
 import { EmptyTopicsIllustration } from './empty-topics-illustration';
 import { CreateTopicButton } from './topic-list';
+import { BookBookmark } from '@phosphor-icons/react';
 
 export const TopicListBlank = () => {
   return (
@@ -18,7 +19,7 @@ export const TopicListBlank = () => {
 
       <div className="flex items-center justify-center gap-6">
         <Link to="https://docs.novu.co/platform/concepts/topics" target="_blank">
-          <LinkButton variant="gray" trailingIcon={RiBookMarkedLine}>
+          <LinkButton variant="gray" trailingIcon={BookBookmark}>
             View Docs
           </LinkButton>
         </Link>

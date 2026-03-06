@@ -7,7 +7,7 @@ import {
   ResourceOriginEnum,
 } from '@novu/shared';
 import { useCallback, useMemo, useState } from 'react';
-import { RiArrowDownSLine, RiCodeSSlashLine, RiFileCopyLine, RiPlayCircleLine } from 'react-icons/ri';
+
 import { Link, useMatch, useNavigate, useParams } from 'react-router-dom';
 import { useWorkflow } from '@/components/workflow-editor/workflow-provider';
 
@@ -36,6 +36,12 @@ import { getInitialPayload, getInitialSubscriber } from './steps/utils/preview-c
 import { TestWorkflowInstructions } from './test-workflow/test-workflow-instructions';
 import { WorkflowActivity } from './workflow-activity';
 import { WorkflowCanvas } from './workflow-canvas';
+import {
+  CaretDown,
+  Code,
+  Copy,
+  PlayCircle,
+} from '@phosphor-icons/react';
 
 export const WorkflowTabs = () => {
   const { workflow, isPending: isWorkflowPending, refetch: refetchWorkflow } = useWorkflow();
@@ -259,7 +265,7 @@ export const WorkflowTabs = () => {
                     }}
                     title="Copy transaction ID"
                   >
-                    <RiFileCopyLine className="h-3 w-3" />
+                    <Copy className="h-3 w-3" />
                   </Button>
                 </div>
               </div>
@@ -410,7 +416,7 @@ export const WorkflowTabs = () => {
                 variant="secondary"
                 size="2xs"
                 mode="ghost"
-                leadingIcon={RiCodeSSlashLine}
+                leadingIcon={Code}
                 onClick={handleIntegrateWorkflowClick}
               >
                 Integrate workflow
@@ -442,20 +448,20 @@ export const WorkflowTabs = () => {
                         size="xs"
                         mode="gradient"
                         className="rounded-l-none px-1.5 rounded-r-lg border-none text-white"
-                        leadingIcon={RiArrowDownSLine}
+                        leadingIcon={CaretDown}
                       />
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end">
                       <DropdownMenuItem onClick={handleFireAndForget} className="cursor-pointer" disabled={isPending}>
-                        <RiPlayCircleLine />
+                        <PlayCircle />
                         Quick Trigger
                       </DropdownMenuItem>
                       <DropdownMenuItem onClick={handleCopyCurl} className="cursor-pointer">
-                        <RiFileCopyLine />
+                        <Copy />
                         Copy cURL
                       </DropdownMenuItem>
                       <DropdownMenuItem onClick={handleCopyPostmanCollection} className="cursor-pointer">
-                        <RiFileCopyLine />
+                        <Copy />
                         Copy postman collection
                       </DropdownMenuItem>
                     </DropdownMenuContent>

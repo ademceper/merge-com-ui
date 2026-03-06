@@ -1,14 +1,5 @@
 import { Editor } from '@tiptap/core';
-import {
-  BoldIcon,
-  CodeIcon,
-  ItalicIcon,
-  List,
-  ListOrdered,
-  LucideIcon,
-  StrikethroughIcon,
-  UnderlineIcon,
-} from 'lucide-react';
+
 import { AlignmentSwitch } from '../alignment-switch';
 import { BaseButton } from '../base-button';
 import { BubbleMenuButton } from '../bubble-menu-button';
@@ -17,6 +8,8 @@ import { Divider } from '../ui/divider';
 import { LinkInputPopover } from '../ui/link-input-popover';
 import { BubbleMenuItem } from './text-bubble-menu';
 import { useTextMenuState } from './use-text-menu-state';
+import { TextB, Code, TextItalic, List, ListNumbers, TextStrikethrough, TextUnderline } from '@phosphor-icons/react'
+import type { Icon as LucideIcon } from '@phosphor-icons/react';;
 
 type TextBubbleContentProps = {
   editor: Editor;
@@ -35,35 +28,35 @@ export function TextBubbleContent(props: TextBubbleContentProps) {
       name: 'bold',
       isActive: () => editor?.isActive('bold')!,
       command: () => editor?.chain().focus().toggleBold().run()!,
-      icon: BoldIcon,
+      icon: TextB,
       tooltip: 'Bold',
     },
     {
       name: 'italic',
       isActive: () => editor?.isActive('italic')!,
       command: () => editor?.chain().focus().toggleItalic().run()!,
-      icon: ItalicIcon,
+      icon: TextItalic,
       tooltip: 'Italic',
     },
     {
       name: 'underline',
       isActive: () => editor?.isActive('underline')!,
       command: () => editor?.chain().focus().toggleUnderline().run()!,
-      icon: UnderlineIcon,
+      icon: TextUnderline,
       tooltip: 'Underline',
     },
     {
       name: 'strike',
       isActive: () => editor?.isActive('strike')!,
       command: () => editor?.chain().focus().toggleStrike().run()!,
-      icon: StrikethroughIcon,
+      icon: TextStrikethrough,
       tooltip: 'Strikethrough',
     },
     {
       name: 'code',
       isActive: () => editor?.isActive('code')!,
       command: () => editor?.chain().focus().toggleCode().run()!,
-      icon: CodeIcon,
+      icon: Code,
       tooltip: 'Code',
     },
   ];
@@ -91,7 +84,7 @@ export function TextBubbleContent(props: TextBubbleContentProps) {
             tooltip="Bullet List"
           />
           <BubbleMenuButton
-            icon={ListOrdered}
+            icon={ListNumbers}
             command={() => {
               editor.chain().focus().toggleOrderedList().run();
             }}

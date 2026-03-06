@@ -1,7 +1,8 @@
-import { RiAddFill } from 'react-icons/ri';
+
 import { ActionWithRulesAndAddersProps } from 'react-querybuilder';
 
 import { Button } from '@merge-rd/ui/components/button';
+import { Plus } from '@phosphor-icons/react';
 
 export const AddConditionAction = ({ label, title, rules, handleOnClick, context }: ActionWithRulesAndAddersProps) => {
   if (rules && rules.length >= 10) {
@@ -18,7 +19,7 @@ export const AddConditionAction = ({ label, title, rules, handleOnClick, context
         handleOnClick(e);
         context?.saveForm();
       }}
-      leadingIcon={RiAddFill}
+      leadingIcon={Plus}
       title={title}
     >
       {label}

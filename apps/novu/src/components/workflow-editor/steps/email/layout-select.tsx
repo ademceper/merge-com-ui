@@ -1,13 +1,14 @@
 import { EnvironmentTypeEnum } from '@novu/shared';
 import { useMemo } from 'react';
 import { useFormContext } from 'react-hook-form';
-import { RiLayout5Line } from 'react-icons/ri';
+
 import { FormControl, FormField, FormItem, FormMessage } from '@/components/primitives/form/form';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/primitives/select';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/primitives/tooltip';
 import { useEnvironment } from '@/context/environment/hooks';
 import { useFetchLayouts } from '@/hooks/use-fetch-layouts';
 import { useSaveForm } from '../save-form-context';
+import { Layout } from '@phosphor-icons/react';
 
 export const LayoutSelect = () => {
   const { currentEnvironment } = useEnvironment();
@@ -59,7 +60,7 @@ export const LayoutSelect = () => {
                       size="2xs"
                       className="bg-bg-weak border-transparent hover:border-transparent hover:bg-neutral-100 [&_span]:text-neutral-600"
                     >
-                      <RiLayout5Line className="text-text-soft mr-2 size-4" />
+                      <Layout className="text-text-soft mr-2 size-4" />
                       <SelectValue placeholder="Select layout" />
                     </SelectTrigger>
                     <SelectContent>

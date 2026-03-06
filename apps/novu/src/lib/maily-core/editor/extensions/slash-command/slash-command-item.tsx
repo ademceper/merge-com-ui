@@ -1,9 +1,10 @@
 import type { Editor } from '@tiptap/core';
-import { ChevronRightIcon } from 'lucide-react';
+
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { BlockItem } from '../../../blocks';
 import { Tooltip, TooltipContent, TooltipTrigger } from '../../components/ui/tooltip';
 import { cn } from '../../utils/classname';
+import { CaretRight } from '@phosphor-icons/react';
 
 type SlashCommandItemProps = {
   item: BlockItem;
@@ -56,7 +57,7 @@ export function SlashCommandItem(props: SlashCommandItemProps) {
 
       {isSubCommand && (
         <span className="mly-block mly-px-1 mly-text-gray-400">
-          <ChevronRightIcon className="mly-size-3.5 mly-stroke-[2.5]" />
+          <CaretRight className="mly-size-3.5 mly-stroke-[2.5]" />
         </span>
       )}
     </>

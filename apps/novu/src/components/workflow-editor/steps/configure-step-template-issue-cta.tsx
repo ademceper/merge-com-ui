@@ -1,6 +1,6 @@
 import { RuntimeIssue, StepResponseDto } from '@novu/shared';
 import { PropsWithChildren } from 'react';
-import { RiArrowRightUpLine } from 'react-icons/ri';
+
 import { Link } from 'react-router-dom';
 import { Button } from '@merge-rd/ui/components/button';
 import { SidebarContent } from '@/components/side-navigation/sidebar';
@@ -8,6 +8,7 @@ import TruncatedText from '@/components/truncated-text';
 import { titleize } from '@/utils/titleize';
 import { cn } from '@merge-rd/ui/lib/utils';
 import { ExternalLink } from '../../shared/external-link';
+import { ArrowUpRight } from '@phosphor-icons/react';
 
 export const ConfigureStepTemplateIssuesContainer = (props: PropsWithChildren) => {
   const { children } = props;
@@ -60,7 +61,7 @@ export const ConfigureStepTemplateIssueCta = (props: ConfigureStepTemplateIssueC
           <TruncatedText className="w-full text-left font-medium">{truncatedTextContent}</TruncatedText>
           <p className="text-text-soft text-left text-wrap">{issue.message}</p>
         </div>
-        <RiArrowRightUpLine
+        <ArrowUpRight
           className={cn(`mb-auto ml-auto size-4 shrink-0`, {
             'text-destructive': isError,
             'text-text-sub': !isError,

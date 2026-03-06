@@ -1,4 +1,4 @@
-import { FootprintsIcon, Heading1 } from 'lucide-react';
+
 import { button, linkCard } from '../../../blocks/button';
 import { htmlCodeBlock } from '../../../blocks/code';
 import { footerCommunityFeedbackCta, footerCompanySignature, footerCopyrightText } from '../../../blocks/footers';
@@ -8,6 +8,7 @@ import { columns, divider, repeat, section, spacer } from '../../../blocks/layou
 import { bulletList, orderedList } from '../../../blocks/list';
 import { BlockGroupItem } from '../../../blocks/types';
 import { blockquote, clearLine, footer, hardBreak, heading1, heading2, heading3, text } from '../../../blocks/typography';
+import { Footprints, TextH } from '@phosphor-icons/react';
 
 export const DEFAULT_SLASH_COMMANDS: BlockGroupItem[] = [
   {
@@ -43,7 +44,7 @@ export const DEFAULT_SLASH_COMMANDS: BlockGroupItem[] = [
         title: 'Headers',
         description: 'Add pre-designed headers block',
         searchTerms: ['header', 'headers'],
-        icon: <Heading1 className="mly-h-4 mly-w-4" />,
+        icon: <TextH className="mly-h-4 mly-w-4" />,
         preview: 'https://cdn.usemaily.com/previews/header-preview-xyz.png',
         commands: [headerLogoWithTextVertical, headerLogoWithTextHorizontal, headerLogoWithCoverImage],
       },
@@ -52,7 +53,7 @@ export const DEFAULT_SLASH_COMMANDS: BlockGroupItem[] = [
         title: 'Footers',
         description: 'Add pre-designed footers block',
         searchTerms: ['footers'],
-        icon: <FootprintsIcon className="mly-h-4 mly-w-4" />,
+        icon: <Footprints className="mly-h-4 mly-w-4" />,
         commands: [footerCopyrightText, footerCommunityFeedbackCta, footerCompanySignature],
       },
       htmlCodeBlock,

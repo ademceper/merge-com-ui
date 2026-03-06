@@ -1,7 +1,7 @@
-import { Cross2Icon } from '@radix-ui/react-icons';
+
 import { ReactNode } from 'react';
 import { IconType } from 'react-icons';
-import { RiAlertFill } from 'react-icons/ri';
+
 import { Button } from '@merge-rd/ui/components/button';
 import {
   Dialog,
@@ -13,6 +13,7 @@ import {
   DialogPortal,
   DialogTitle,
 } from '@merge-rd/ui/components/dialog';
+import { Warning, X } from '@phosphor-icons/react';
 
 type ConfirmationModalProps = {
   open: boolean;
@@ -46,10 +47,10 @@ export const ConfirmationModal = ({
         <DialogContent className="max-w-[440px] gap-4 rounded-xl! p-4 overflow-hidden" hideCloseButton>
           <div className="flex items-start justify-between">
             <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-warning/10">
-              <RiAlertFill className="size-6 text-warning" />
+              <Warning weight="fill" className="size-6 text-warning" />
             </div>
             <DialogClose>
-              <Cross2Icon className="size-4" />
+              <X className="size-4" />
               <span className="sr-only">Close</span>
             </DialogClose>
           </div>

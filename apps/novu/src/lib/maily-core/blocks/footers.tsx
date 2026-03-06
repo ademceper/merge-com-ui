@@ -1,11 +1,12 @@
-import { CopyrightIcon, LayoutTemplateIcon, RectangleHorizontalIcon } from 'lucide-react';
+
 import { BlockItem } from './types';
+import { Copyright, Layout, Rectangle } from '@phosphor-icons/react';
 
 export const footerCopyrightText: BlockItem = {
   title: 'Footer Copyright',
   description: 'Copyright text for the footer.',
   searchTerms: ['footer', 'copyright'],
-  icon: <CopyrightIcon className="mly-h-4 mly-w-4" />,
+  icon: <Copyright className="mly-h-4 mly-w-4" />,
   command: ({ editor, range }) => {
     const currentYear = new Date().getFullYear();
 
@@ -32,7 +33,7 @@ export const footerCommunityFeedbackCta: BlockItem = {
   title: 'Footer Community Feedback CTA',
   description: 'Community feedback CTA for the footer.',
   searchTerms: ['footer', 'community', 'feedback', 'cta'],
-  icon: <RectangleHorizontalIcon className="mly-h-4 mly-w-4" />,
+  icon: <Rectangle className="mly-h-4 mly-w-4" />,
   command: ({ editor, range }) => {
     editor
       .chain()
@@ -81,7 +82,7 @@ export const footerCompanySignature: BlockItem = {
   title: 'Footer Company Signature',
   description: 'Company signature for the footer.',
   searchTerms: ['footer', 'company', 'signature'],
-  icon: <LayoutTemplateIcon className="mly-h-4 mly-w-4" />,
+  icon: <Layout className="mly-h-4 mly-w-4" />,
   command: ({ editor, range }) => {
     editor
       .chain()

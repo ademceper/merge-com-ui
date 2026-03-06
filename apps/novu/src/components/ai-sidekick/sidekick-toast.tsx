@@ -1,9 +1,15 @@
 import { AnimatePresence, motion } from 'motion/react';
 import { useEffect } from 'react';
-import { RiCheckLine, RiCloseLine, RiEyeLine, RiLoader3Line } from 'react-icons/ri';
+
 import { Shimmer } from '../ai-elements/shimmer';
 import { Button } from '@merge-rd/ui/components/button';
 import { Kbd } from '@merge-rd/ui/components/kbd';
+import {
+  Check,
+  CircleNotch,
+  Eye,
+  X,
+} from '@phosphor-icons/react';
 
 type SidekickToastProps = {
   isVisible: boolean;
@@ -51,7 +57,7 @@ export function SidekickToast({
             {variant === 'generating' ? (
               <>
                 <div className="flex flex-1 items-center gap-1.5">
-                  <RiLoader3Line className="size-5 shrink-0 animate-spin text-[#99A0AE]" />
+                  <CircleNotch className="size-5 shrink-0 animate-spin text-[#99A0AE]" />
                   <Shimmer className="text-label-xs">Drafting the best practices.</Shimmer>
                 </div>
                 {onCancel && (
@@ -68,7 +74,7 @@ export function SidekickToast({
             ) : (
               <>
                 <div className="flex items-center gap-2">
-                  <RiEyeLine className="size-3.5 shrink-0 text-[#99A0AE]" />
+                  <Eye className="size-3.5 shrink-0 text-[#99A0AE]" />
                   <span className="text-label-xs whitespace-nowrap text-[#525866]">
                     Reviewing changes. Discard will revert them.
                   </span>
@@ -79,7 +85,7 @@ export function SidekickToast({
                       variant="secondary"
                       size="2xs"
                       mode="outline"
-                      trailingIcon={RiCloseLine}
+                      trailingIcon={X}
                       onClick={onDiscard}
                       disabled={isActionPending}
                     >
@@ -91,7 +97,7 @@ export function SidekickToast({
                       variant="primary"
                       size="2xs"
                       mode="gradient"
-                      trailingIcon={RiCheckLine}
+                      trailingIcon={Check}
                       onClick={onKeepAll}
                       disabled={isActionPending}
                     >

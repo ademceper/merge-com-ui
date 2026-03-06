@@ -1,12 +1,13 @@
 import { getAllLocales, getCommonLocales, getLocaleByIso } from '@novu/shared';
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { RiArrowDownSLine, RiCheckLine, RiErrorWarningFill } from 'react-icons/ri';
+
 import { cn } from '@merge-rd/ui/lib/utils';
 import { FlagCircle, StackedFlagCircles } from '../flag-circle';
 import TruncatedText from '../truncated-text';
 import { Button, ButtonProps } from '@merge-rd/ui/components/button';
 import { Input } from '@/components/primitives/input';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/primitives/tooltip';
+import { CaretDown, Check, WarningCircle } from '@phosphor-icons/react';
 
 type BaseLocaleSelectProps = {
   disabled?: boolean;
@@ -246,7 +247,7 @@ export function LocaleSelect(props: LocaleSelectProps) {
             <SingleSelectTrigger value={value as string} placeholder={placeholder} />
           )}
 
-          <RiArrowDownSLine
+          <CaretDown
             className={cn('ml-auto size-4 opacity-50', disabled || readOnly ? 'hidden' : 'opacity-100')}
           />
         </Button>
@@ -298,7 +299,7 @@ export function LocaleSelect(props: LocaleSelectProps) {
                             <span className="text-muted-foreground"> - {locale.langName}</span>
                           </TruncatedText>
                         </div>
-                        <RiCheckLine className={cn('size-4 shrink-0', isSelected ? 'opacity-100' : 'opacity-0')} />
+                        <Check className={cn('size-4 shrink-0', isSelected ? 'opacity-100' : 'opacity-0')} />
                       </button>
                     );
                   })}
@@ -317,7 +318,7 @@ export function LocaleSelect(props: LocaleSelectProps) {
       {showCimodeWarning && (
         <Tooltip>
           <TooltipTrigger type="button">
-            <RiErrorWarningFill className="size-4 shrink-0 text-warning" />
+            <WarningCircle weight="fill" className="size-4 shrink-0 text-warning" />
           </TooltipTrigger>
           <TooltipContent className="max-w-[260px]">
             <p className="text-xs">

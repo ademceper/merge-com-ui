@@ -1,9 +1,10 @@
 import type { StepResponseDto } from '@novu/shared';
-import { RiEditLine, RiPlayFill, RiSettings4Line } from 'react-icons/ri';
+
 import { useNavigate } from 'react-router-dom';
 import { StepTypeEnum } from '@/utils/enums';
 import { buildRoute, ROUTES } from '@/utils/routes';
 import { Command, CommandExecutionContext } from '../command-types';
+import { Gear, Pencil, Play } from '@phosphor-icons/react';
 
 const DELIVERY_CHANNEL_STEPS = [
   StepTypeEnum.EMAIL,
@@ -34,7 +35,7 @@ export function useWorkflowEditorCommands(context: CommandExecutionContext): Com
     label: `Trigger current workflow`,
     description: `Test and trigger the ${workflow.name} workflow`,
     category: 'current-workflow',
-    icon: <RiPlayFill />,
+    icon: <Play weight="fill" />,
     priority: 'high',
     keywords: ['trigger', 'test', 'run', workflow.name, 'workflow'],
     execute: () => {
@@ -55,7 +56,7 @@ export function useWorkflowEditorCommands(context: CommandExecutionContext): Com
     label: `Edit workflow preferences`,
     description: `Configure preferences for the workflow`,
     category: 'current-workflow',
-    icon: <RiSettings4Line />,
+    icon: <Gear />,
     priority: 'medium',
     keywords: ['preferences', 'settings', 'configure', workflow.name],
     execute: () => {
@@ -85,7 +86,7 @@ export function useWorkflowEditorCommands(context: CommandExecutionContext): Com
         label: `Edit ${stepName}`,
         description: `Edit the ${stepName} configuration`,
         category: 'current-workflow',
-        icon: <RiEditLine />,
+        icon: <Pencil />,
         priority: 'medium',
         keywords: ['edit', 'step', stepName, workflowStep.type],
         metadata: {

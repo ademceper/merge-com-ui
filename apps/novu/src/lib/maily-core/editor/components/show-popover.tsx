@@ -1,5 +1,5 @@
 import { Editor } from '@tiptap/core';
-import { Eye, InfoIcon } from 'lucide-react';
+
 import { memo, useMemo, useRef, useState } from 'react';
 import { cn } from '../utils/classname';
 import { useVariableOptions } from '../utils/node-options';
@@ -7,6 +7,7 @@ import { processVariables } from '../utils/variable';
 import { Popover, PopoverContent, PopoverTrigger } from './popover';
 import { InputAutocomplete } from './ui/input-autocomplete';
 import { Tooltip, TooltipContent, TooltipTrigger } from './ui/tooltip';
+import { Eye, Info } from '@phosphor-icons/react';
 
 type ShowPopoverProps = {
   showIfKey?: string;
@@ -73,7 +74,7 @@ function _ShowPopover(props: ShowPopoverProps) {
           Show if
           <Tooltip>
             <TooltipTrigger>
-              <InfoIcon className={cn('mly-size-3 mly-stroke-[2.5] mly-text-gray-500')} />
+              <Info className={cn('mly-size-3 mly-stroke-[2.5] mly-text-gray-500')} />
             </TooltipTrigger>
             <TooltipContent sideOffset={14} className="mly-max-w-[285px]" align="start">
               Show the block if the selected variable is true.

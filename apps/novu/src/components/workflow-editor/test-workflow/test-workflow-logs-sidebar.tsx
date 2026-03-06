@@ -1,7 +1,7 @@
 import { WorkflowResponseDto } from '@novu/shared';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
-import { RiCheckboxCircleFill } from 'react-icons/ri';
+
 import { ActivityError } from '@/components/activity/activity-error';
 import { ActivityHeader } from '@/components/activity/activity-header';
 import { ActivityLogs } from '@/components/activity/activity-logs';
@@ -14,6 +14,7 @@ import { WorkflowTriggerInboxIllustration } from '../../icons/workflow-trigger-i
 import { Button } from '@merge-rd/ui/components/button';
 import { TestWorkflowFormType } from '../schema';
 import { TestWorkflowInstructions } from './test-workflow-instructions';
+import { CheckCircle } from '@phosphor-icons/react';
 
 type TestWorkflowLogsSidebarProps = {
   transactionId?: string;
@@ -94,7 +95,7 @@ export const TestWorkflowLogsSidebar = (props: TestWorkflowLogsSidebarProps) => 
                 <div className="border-stroke-soft bg-bg-weak rounded-8 flex items-center justify-between gap-3 border p-3 py-2">
                   <div className="flex items-center gap-3">
                     <div className="bg-success-100 flex size-6 items-center justify-center rounded-full">
-                      <RiCheckboxCircleFill className="text-success size-5" />
+                      <CheckCircle weight="fill" className="text-success size-5" />
                     </div>
                     <div>
                       <div className="text-success text-label-xs">You have triggered the workflow!</div>

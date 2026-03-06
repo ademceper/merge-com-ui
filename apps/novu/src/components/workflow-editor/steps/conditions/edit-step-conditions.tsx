@@ -1,5 +1,5 @@
 import { ResourceOriginEnum } from '@novu/shared';
-import { RiCloseLine, RiGuideFill } from 'react-icons/ri';
+
 import { useNavigate } from 'react-router-dom';
 
 import { CompactButton } from '@/components/primitives/button-compact';
@@ -7,6 +7,7 @@ import { EditStepConditionsForm } from '@/components/workflow-editor/steps/condi
 import { EditStepConditionsFormSkeleton } from '@/components/workflow-editor/steps/conditions/edit-step-conditions-skeleton';
 import { StepDrawer } from '@/components/workflow-editor/steps/step-drawer';
 import { useWorkflow } from '@/components/workflow-editor/workflow-provider';
+import { Compass, X } from '@phosphor-icons/react';
 
 export const EditStepConditions = () => {
   const navigate = useNavigate();
@@ -28,12 +29,12 @@ export const EditStepConditions = () => {
     <StepDrawer title={`Edit ${step?.name} Conditions`} maxWidth="sm:max-w-[800px]">
       <header className="flex h-12 w-full flex-row items-center justify-between gap-3 border-b py-4 pl-3 pr-3">
         <div className="mr-auto flex items-center gap-2.5 py-2 text-sm font-medium">
-          <RiGuideFill className="size-4" />
+          <Compass weight="fill" className="size-4" />
           <span>Step Conditions</span>
         </div>
 
         <CompactButton
-          icon={RiCloseLine}
+          icon={X}
           variant="ghost"
           className="size-6"
           onClick={(e) => {

@@ -1,6 +1,5 @@
 import { useOrganization } from '@merge-rd/auth';
 import { useState } from 'react';
-import { RiArrowRightSLine } from 'react-icons/ri';
 
 import { useNavigate } from 'react-router-dom';
 import { Notification5Fill } from '@/components/icons';
@@ -17,6 +16,7 @@ import { ToastIcon } from '@/components/primitives/sonner';
 import { showToast } from '../primitives/sonner-helpers';
 import { UsecasePlaygroundHeader } from '../usecase-playground-header';
 import { InboxPreviewContent } from './inbox-preview-content';
+import { CaretRight } from '@phosphor-icons/react';
 
 const PLAYGROUND_CONFIG = {
   title: 'The <Inbox/> your app deserves',
@@ -161,7 +161,7 @@ export function InboxPlayground({ appId, subscriberId }: { appId: string; subscr
               onClick={handleNextStepClick}
               disabled={!appId}
               size="xs"
-              trailingIcon={RiArrowRightSLine}
+              trailingIcon={CaretRight}
               className="px-2.5 text-white disabled:opacity-50"
               style={{
                 background:

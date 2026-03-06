@@ -1,10 +1,11 @@
 import { ReactNode } from 'react';
-import { RiExternalLinkLine, RiLockStarLine } from 'react-icons/ri';
+
 import { useNavigate } from 'react-router-dom';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/primitives/tooltip';
 import { IS_SELF_HOSTED, SELF_HOSTED_UPGRADE_REDIRECT_URL } from '@/config';
 import { ROUTES } from '@/utils/routes';
 import { openInNewTab } from '@/utils/url';
+import { ArrowSquareOut, LockKey } from '@phosphor-icons/react';
 
 type UpgradeCTATooltipProps = {
   children: ReactNode;
@@ -55,7 +56,7 @@ export function UpgradeCTATooltip({
       >
         {/* Badge */}
         <div className="flex items-center gap-1 rounded bg-red-50 px-2 py-1">
-          <RiLockStarLine className="h-3 w-3 text-pink-600" />
+          <LockKey className="h-3 w-3 text-pink-600" />
           <span
             className="text-[10px] font-medium uppercase leading-normal"
             style={{
@@ -80,7 +81,7 @@ export function UpgradeCTATooltip({
               }}
               className="flex items-center gap-1 text-xs font-medium text-neutral-900 hover:underline"
             >
-              Upgrade plan <RiExternalLinkLine className="h-3 w-3" />
+              Upgrade plan <ArrowSquareOut className="h-3 w-3" />
             </button>
           </div>
         </div>

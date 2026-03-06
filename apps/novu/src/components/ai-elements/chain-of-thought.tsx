@@ -1,14 +1,21 @@
 'use client';
 
 import { useControllableState } from '@radix-ui/react-use-controllable-state';
-import { BrainIcon, DotIcon, type LucideIcon } from 'lucide-react';
+
 import type { ComponentProps, ReactNode } from 'react';
 import { createContext, memo, useContext, useEffect, useMemo, useState } from 'react';
 import { IconType } from 'react-icons/lib';
-import { RiArrowDownSLine, RiArrowRightSLine } from 'react-icons/ri';
+
 import { Badge } from '@/components/primitives/badge';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@merge-rd/ui/components/collapsible';
 import { cn } from '@merge-rd/ui/lib/utils';
+import {
+  Brain,
+  CaretDown,
+  CaretRight,
+  DotOutline,
+} from '@phosphor-icons/react';
+import type { Icon as LucideIcon } from '@phosphor-icons/react';
 
 interface ChainOfThoughtContextValue {
   isOpen: boolean;
@@ -56,7 +63,7 @@ export type ChainOfThoughtHeaderProps = ComponentProps<typeof CollapsibleTrigger
 };
 
 export const ChainOfThoughtHeader = memo(
-  ({ className, children, icon: Icon = BrainIcon, ...props }: ChainOfThoughtHeaderProps) => {
+  ({ className, children, icon: Icon = Brain, ...props }: ChainOfThoughtHeaderProps) => {
     const { isOpen, setIsOpen } = useChainOfThought();
 
     return (
@@ -70,7 +77,7 @@ export const ChainOfThoughtHeader = memo(
         >
           <Icon className="size-4" />
           <span className="flex-1 text-left">{children ?? 'Chain of Thought'}</span>
-          <RiArrowDownSLine
+          <CaretDown
             className={cn('size-4 transition-transform text-text-soft ', isOpen ? 'rotate-180' : 'rotate-0')}
           />
         </CollapsibleTrigger>
@@ -93,7 +100,7 @@ export type ChainOfThoughtStepProps = ComponentProps<'div'> & {
 export const ChainOfThoughtStep = memo(
   ({
     className,
-    icon: Icon = DotIcon,
+    icon: Icon = DotOutline,
     label,
     description,
     status = 'complete',
@@ -132,7 +139,7 @@ export const ChainOfThoughtStep = memo(
           <Collapsible className="group flex flex-1 gap-2 w-full" open={isOpen} onOpenChange={setIsOpen}>
             <div className="relative shrink-0 self-stretch">
               <CollapsibleTrigger className="block p-0 transition-opacity hover:opacity-80 h-5">
-                <RiArrowRightSLine className="size-4 transition-transform group-data-[state=open]:rotate-90 text-text-soft" />
+                <CaretRight className="size-4 transition-transform group-data-[state=open]:rotate-90 text-text-soft" />
               </CollapsibleTrigger>
               <div className="absolute top-7 bottom-0 left-1/2 -mx-px w-px bg-neutral-alpha-100" />
             </div>

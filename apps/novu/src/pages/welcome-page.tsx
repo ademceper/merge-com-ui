@@ -1,12 +1,13 @@
 import { motion } from 'motion/react';
 import { ReactElement, useEffect } from 'react';
-import { RiBookletFill, RiBookmark2Fill } from 'react-icons/ri';
+
 import { PageMeta } from '../components/page-meta';
 import { useSetPageHeader } from '@/context/page-header';
 import { ProgressSection } from '../components/welcome/progress-section';
 import { Resource, ResourcesList } from '../components/welcome/resources-list';
 import { useTelemetry } from '../hooks/use-telemetry';
 import { TelemetryEvent } from '../utils/telemetry';
+import { BookmarkSimple, Notebook } from '@phosphor-icons/react';
 
 const helpfulResources: Resource[] = [
   {
@@ -100,13 +101,13 @@ export function WelcomePage(): ReactElement {
         <motion.div variants={sectionVariants}>
           <ResourcesList
             title="Helpful resources"
-            icon={<RiBookmark2Fill className="h-4 w-4" />}
+            icon={<BookmarkSimple weight="fill" className="h-4 w-4" />}
             resources={helpfulResources}
           />
         </motion.div>
 
         <motion.div variants={sectionVariants}>
-          <ResourcesList title="Learn" icon={<RiBookletFill className="h-4 w-4" />} resources={learnResources} />
+          <ResourcesList title="Learn" icon={<Notebook weight="fill" className="h-4 w-4" />} resources={learnResources} />
         </motion.div>
       </motion.div>
     </>

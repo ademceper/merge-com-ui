@@ -1,6 +1,7 @@
-import { AlignVerticalDistributeCenter, AlignVerticalDistributeEnd, AlignVerticalDistributeStart } from 'lucide-react';
+
 import { AllowedColumnVerticalAlign } from '../nodes/columns/column';
 import { BubbleMenuButton } from './bubble-menu-button';
+import { AlignBottom, AlignCenterVertical, AlignTop } from '@phosphor-icons/react';
 
 type VerticalAlignmentSwitchProps = {
   alignment: AllowedColumnVerticalAlign;
@@ -12,21 +13,21 @@ export function VerticalAlignmentSwitch(props: VerticalAlignmentSwitchProps) {
 
   const activeAlignment = {
     top: {
-      icon: AlignVerticalDistributeStart,
+      icon: AlignTop,
       tooltip: 'Align Top',
       onClick: () => {
         onAlignmentChange('middle');
       },
     },
     middle: {
-      icon: AlignVerticalDistributeCenter,
+      icon: AlignCenterVertical,
       tooltip: 'Align Center',
       onClick: () => {
         onAlignmentChange('bottom');
       },
     },
     bottom: {
-      icon: AlignVerticalDistributeEnd,
+      icon: AlignBottom,
       tooltip: 'Align Bottom',
       onClick: () => {
         onAlignmentChange('top');

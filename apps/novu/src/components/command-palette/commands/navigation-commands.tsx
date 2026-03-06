@@ -1,21 +1,22 @@
 import { PermissionsEnum } from '@novu/shared';
 import { useCallback } from 'react';
-import {
-  RiBarChartBoxLine,
-  RiDatabase2Line,
-  RiDiscussLine,
-  RiGroup2Line,
-  RiKey2Line,
-  RiLayout5Line,
-  RiRouteFill,
-  RiSignalTowerLine,
-  RiTranslate2,
-} from 'react-icons/ri';
+
 import { useNavigate } from 'react-router-dom';
 import { IS_ENTERPRISE, IS_SELF_HOSTED } from '@/config';
 import { useHasPermission } from '@/hooks/use-has-permission';
 import { buildRoute, ROUTES } from '@/utils/routes';
 import { Command, CommandExecutionContext } from '../command-types';
+import {
+  Broadcast,
+  ChatTeardropDots,
+  Database,
+  Key,
+  Layout,
+  Path,
+  ChartBar,
+  Translate,
+  UsersThree,
+} from '@phosphor-icons/react';
 
 export function useNavigationCommands(context: CommandExecutionContext): Command[] {
   const navigate = useNavigate();
@@ -53,7 +54,7 @@ export function useNavigationCommands(context: CommandExecutionContext): Command
         'nav-workflows',
         'Workflows',
         ROUTES.WORKFLOWS,
-        <RiRouteFill />,
+        <Path weight="fill" />,
         () => hasWorkflowPermission
       )
     );
@@ -65,7 +66,7 @@ export function useNavigationCommands(context: CommandExecutionContext): Command
         'nav-subscribers',
         'Subscribers',
         ROUTES.SUBSCRIBERS,
-        <RiGroup2Line />,
+        <UsersThree />,
         () => hasSubscriberPermission
       )
     );
@@ -73,25 +74,25 @@ export function useNavigationCommands(context: CommandExecutionContext): Command
 
   // Activity navigation
   commands.push(
-    createNavigationCommand('nav-activity', 'Activity', ROUTES.ACTIVITY_WORKFLOW_RUNS, <RiBarChartBoxLine />)
+    createNavigationCommand('nav-activity', 'Activity', ROUTES.ACTIVITY_WORKFLOW_RUNS, <ChartBar />)
   );
 
   // Integrations
   commands.push(
-    createNavigationCommand('nav-integrations', 'Integrations', ROUTES.INTEGRATIONS, <RiSignalTowerLine />)
+    createNavigationCommand('nav-integrations', 'Integrations', ROUTES.INTEGRATIONS, <Broadcast />)
   );
 
   // API Keys
-  commands.push(createNavigationCommand('nav-api-keys', 'API Keys', ROUTES.API_KEYS, <RiKey2Line />));
+  commands.push(createNavigationCommand('nav-api-keys', 'API Keys', ROUTES.API_KEYS, <Key />));
 
   // Topics
-  commands.push(createNavigationCommand('nav-topics', 'Topics', ROUTES.TOPICS, <RiDiscussLine />));
+  commands.push(createNavigationCommand('nav-topics', 'Topics', ROUTES.TOPICS, <ChatTeardropDots />));
 
   // Environments
-  commands.push(createNavigationCommand('nav-environments', 'Environments', ROUTES.ENVIRONMENTS, <RiDatabase2Line />));
+  commands.push(createNavigationCommand('nav-environments', 'Environments', ROUTES.ENVIRONMENTS, <Database />));
 
   // Layouts
-  commands.push(createNavigationCommand('nav-layouts', 'Email Layouts', ROUTES.LAYOUTS, <RiLayout5Line />));
+  commands.push(createNavigationCommand('nav-layouts', 'Email Layouts', ROUTES.LAYOUTS, <Layout />));
 
   if (isEnterprise) {
     commands.push(
@@ -99,7 +100,7 @@ export function useNavigationCommands(context: CommandExecutionContext): Command
         'nav-translations',
         'Translations',
         ROUTES.TRANSLATIONS,
-        <RiTranslate2 />,
+        <Translate />,
         () => isEnterprise
       )
     );

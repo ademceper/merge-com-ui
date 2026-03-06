@@ -1,7 +1,8 @@
 import { useState } from 'react';
-import { RiEyeLine, RiEyeOffLine } from 'react-icons/ri';
+
 import { CopyButton } from './copy-button';
 import { Input, InputProps } from '@/components/primitives/input';
+import { Eye, EyeSlash } from '@phosphor-icons/react';
 
 interface SecretInputProps extends Omit<InputProps, 'onChange'> {
   value: string;
@@ -21,9 +22,9 @@ export function SecretInput({ className, value, onChange, copyButton = false, ..
       inlineTrailingNode={
         <button type="button" onClick={() => setRevealed(!revealed)}>
           {revealed ? (
-            <RiEyeOffLine className="text-text-soft group-has-[disabled]:text-text-disabled size-5" />
+            <EyeSlash className="text-text-soft group-has-[disabled]:text-text-disabled size-5" />
           ) : (
-            <RiEyeLine className="text-text-soft group-has-[disabled]:text-text-disabled size-5" />
+            <Eye className="text-text-soft group-has-[disabled]:text-text-disabled size-5" />
           )}
         </button>
       }

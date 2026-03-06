@@ -1,5 +1,5 @@
 import { motion } from 'motion/react';
-import { RiArrowRightDoubleFill, RiCheckLine, RiLoader3Line } from 'react-icons/ri';
+
 import { Link, useParams } from 'react-router-dom';
 import { StepIdEnum, useOnboardingSteps } from '../../hooks/use-onboarding-steps';
 import { useTelemetry } from '../../hooks/use-telemetry';
@@ -9,6 +9,7 @@ import { cn } from '@merge-rd/ui/lib/utils';
 import { Card, CardContent } from '@merge-rd/ui/components/card';
 import { NovuLogo, PointingArrow } from './icons';
 import { leftSection, logo, mainCard, stepItem, stepsList, textItem } from './progress-section.animations';
+import { CaretDoubleRight, Check, CircleNotch } from '@phosphor-icons/react';
 
 interface StepItemProps {
   step: {
@@ -79,9 +80,9 @@ function StepItem({ step, environmentSlug }: StepItemProps) {
         className={`${step.status === 'completed' ? 'bg-success' : 'shadow-xs'} flex h-6 w-6 min-w-6 items-center justify-center rounded-full`}
       >
         {step.status === 'completed' ? (
-          <RiCheckLine className="h-4 w-4 text-[#ffffff]" />
+          <Check className="h-4 w-4 text-[#ffffff]" />
         ) : (
-          <RiLoader3Line className="text-foreground-400 h-4 w-4" />
+          <CircleNotch className="text-foreground-400 h-4 w-4" />
         )}
       </div>
 
@@ -101,7 +102,7 @@ function StepItem({ step, environmentSlug }: StepItemProps) {
               >
                 {step.title}
               </span>
-              <RiArrowRightDoubleFill className="text-foreground-400 h-4 w-4" />
+              <CaretDoubleRight weight="fill" className="text-foreground-400 h-4 w-4" />
             </div>
             <p className="text-foreground-400 text-[10px] leading-[14px]">{step.description}</p>
           </CardContent>

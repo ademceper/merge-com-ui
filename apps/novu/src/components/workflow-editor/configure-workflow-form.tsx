@@ -7,19 +7,11 @@ import {
   UpdateWorkflowDto,
   WorkflowResponseDto,
 } from '@novu/shared';
-import { FilesIcon } from 'lucide-react';
+
 import { motion } from 'motion/react';
 import { useCallback, useMemo, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { LuBookUp2 } from 'react-icons/lu';
-import {
-  RiArrowRightSLine,
-  RiCodeSSlashLine,
-  RiDeleteBin2Line,
-  RiListView,
-  RiMore2Fill,
-  RiSettingsLine,
-} from 'react-icons/ri';
 
 import { Link, useNavigate } from 'react-router-dom';
 import type { ExternalToast } from 'sonner';
@@ -78,6 +70,15 @@ import { TelemetryEvent } from '@/utils/telemetry';
 import { cn } from '@merge-rd/ui/lib/utils';
 import { PayloadSchemaDrawer } from './payload-schema-drawer';
 import { TranslationToggleSection } from './translation-toggle-section';
+import {
+  CaretRight,
+  Code,
+  DotsThree,
+  Files,
+  Gear,
+  ListBullets,
+  Trash,
+} from '@phosphor-icons/react';
 
 interface ConfigureWorkflowFormProps {
   workflow: WorkflowResponseDto;
@@ -244,7 +245,7 @@ export const ConfigureWorkflowForm = (props: ConfigureWorkflowFormProps) => {
           <Protect permission={PermissionsEnum.WORKFLOW_WRITE}>
             <DropdownMenu modal={false}>
               <DropdownMenuTrigger asChild>
-                <CompactButton size="md" icon={RiMore2Fill} variant="ghost" className="ml-auto">
+                <CompactButton size="md" icon={DotsThree} variant="ghost" className="ml-auto">
                   <span className="sr-only">More</span>
                 </CompactButton>
               </DropdownMenuTrigger>
@@ -252,7 +253,7 @@ export const ConfigureWorkflowForm = (props: ConfigureWorkflowFormProps) => {
                 <DropdownMenuGroup>
                   {isSyncable && (
                     <DropdownMenuItem onClick={handleExportToCode}>
-                      <RiCodeSSlashLine />
+                      <Code />
                       Export to Code
                     </DropdownMenuItem>
                   )}
@@ -264,7 +265,7 @@ export const ConfigureWorkflowForm = (props: ConfigureWorkflowFormProps) => {
                       })}
                     >
                       <DropdownMenuItem className="cursor-pointer">
-                        <FilesIcon />
+                        <Files />
                         Duplicate workflow
                       </DropdownMenuItem>
                     </Link>
@@ -281,7 +282,7 @@ export const ConfigureWorkflowForm = (props: ConfigureWorkflowFormProps) => {
                           setIsDeleteModalOpen(true);
                         }}
                       >
-                        <RiDeleteBin2Line />
+                        <Trash />
                         Delete workflow
                       </DropdownMenuItem>
                     </DropdownMenuGroup>
@@ -420,10 +421,10 @@ export const ConfigureWorkflowForm = (props: ConfigureWorkflowFormProps) => {
             <Button
               variant="secondary"
               mode="outline"
-              leadingIcon={RiSettingsLine}
+              leadingIcon={Gear}
               className="flex w-full justify-start gap-1.5 p-1.5 text-xs font-medium"
               type="button"
-              trailingIcon={RiArrowRightSLine}
+              trailingIcon={CaretRight}
             >
               Configure channel preferences
               <span className="ml-auto" />
@@ -433,11 +434,11 @@ export const ConfigureWorkflowForm = (props: ConfigureWorkflowFormProps) => {
             <Button
               variant="secondary"
               mode="outline"
-              leadingIcon={RiListView}
+              leadingIcon={ListBullets}
               className="flex w-full justify-start gap-1.5 p-1.5 text-xs font-medium"
               type="button"
               onClick={() => setIsPayloadSchemaDrawerOpen(true)}
-              trailingIcon={RiArrowRightSLine}
+              trailingIcon={CaretRight}
             >
               Manage payload schema
               <span className="ml-auto" />

@@ -1,6 +1,6 @@
 import { DEFAULT_LOCALE } from '@novu/shared';
 import { useMemo } from 'react';
-import { RiAlertFill, RiArrowRightSLine } from 'react-icons/ri';
+
 import { FlagCircle } from '@/components/flag-circle';
 import { Badge } from '@/components/primitives/badge';
 import { Button } from '@merge-rd/ui/components/button';
@@ -12,6 +12,7 @@ import { cn } from '@merge-rd/ui/lib/utils';
 import { DATE_FORMAT_OPTIONS, TIME_FORMAT_OPTIONS } from '../constants';
 import { TranslationStatus } from '../translation-status';
 import { formatTranslationDate, formatTranslationTime, getLocaleDisplayName } from '../utils';
+import { CaretRight, Warning } from '@phosphor-icons/react';
 
 export function LocaleListSkeleton() {
   return (
@@ -97,7 +98,7 @@ function LocaleButton({ locale, isSelected, isDefault, isOutdated, onClick }: Lo
         isSelected ? 'border-neutral-200 bg-neutral-50' : 'border-neutral-100'
       )}
       onClick={onClick}
-      trailingIcon={RiArrowRightSLine}
+      trailingIcon={CaretRight}
     >
       <FlagCircle locale={locale} size="md" />
       <div className="flex min-w-0 flex-1 items-center gap-1">
@@ -112,7 +113,7 @@ function LocaleButton({ locale, isSelected, isDefault, isOutdated, onClick }: Lo
                 className="inline-flex cursor-help items-center justify-center"
                 onClick={(e) => e.stopPropagation()}
               >
-                <RiAlertFill className="text-warning-base size-4" />
+                <Warning weight="fill" className="text-warning-base size-4" />
               </span>
             </TooltipTrigger>
             <TooltipContent>

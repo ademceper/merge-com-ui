@@ -1,9 +1,10 @@
-import { RiArrowDownLine, RiArrowUpLine } from 'react-icons/ri';
+
 import { EnterLineIcon } from '../../../../icons/enter-line';
 import { Separator } from '@merge-rd/ui/components/separator';
 import { SizeType } from '../types';
 import { ClearButton } from './clear-button';
 import { FilterInput } from './filter-input';
+import { ArrowDown, ArrowUp } from '@phosphor-icons/react';
 
 interface BaseFilterContentProps {
   inputRef: React.RefObject<HTMLInputElement | null>;
@@ -60,10 +61,10 @@ export function BaseFilterContent({
         <div className="flex justify-between rounded-b-md border-t border-neutral-100 bg-white p-1 dark:border-neutral-700 dark:bg-neutral-900">
           <div className="flex items-center gap-0.5">
             <div className="pointer-events-none shrink-0 rounded-[6px] border border-neutral-200 bg-white p-1 shadow-[0px_0px_0px_1px_rgba(14,18,27,0.02)_inset,0px_1px_4px_0px_rgba(14,18,27,0.12)] dark:border-neutral-700 dark:bg-neutral-800">
-              <RiArrowUpLine className="h-3 w-3 text-neutral-400 dark:text-neutral-500" />
+              <ArrowUp className="h-3 w-3 text-neutral-400 dark:text-neutral-500" />
             </div>
             <div className="pointer-events-none shrink-0 rounded-[6px] border border-neutral-200 bg-white p-1 shadow-[0px_0px_0px_1px_rgba(14,18,27,0.02)_inset,0px_1px_4px_0px_rgba(14,18,27,0.12)] dark:border-neutral-700 dark:bg-neutral-800">
-              <RiArrowDownLine className="h-3 w-3 text-neutral-400 dark:text-neutral-500" />
+              <ArrowDown className="h-3 w-3 text-neutral-400 dark:text-neutral-500" />
             </div>
             <span className="text-foreground-500 ml-1.5 text-xs font-normal">Navigate</span>
           </div>

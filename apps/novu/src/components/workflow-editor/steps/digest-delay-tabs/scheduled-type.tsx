@@ -1,6 +1,6 @@
 import cronParser from 'cron-parser';
 import { useMemo } from 'react';
-import { RiInformation2Line } from 'react-icons/ri';
+
 import { Hint, HintIcon } from '@/components/primitives/hint';
 import { DaysOfWeek } from '@/components/workflow-editor/steps/digest-delay-tabs/days-of-week';
 import { NumbersPicker } from '@/components/workflow-editor/steps/digest-delay-tabs/numbers-picker';
@@ -14,6 +14,7 @@ import {
   toUiFields,
   UiCronFields,
 } from '@/components/workflow-editor/steps/digest-delay-tabs/utils';
+import { Info } from '@phosphor-icons/react';
 
 export const ScheduledType = ({
   value,
@@ -140,7 +141,7 @@ export const ScheduledType = ({
         )}
       </div>
       <Hint className="text-text-soft text-2xs">
-        <HintIcon as={RiInformation2Line} />
+        <HintIcon as={Info} />
         Delivered in subscriber's timezone
       </Hint>
     </div>

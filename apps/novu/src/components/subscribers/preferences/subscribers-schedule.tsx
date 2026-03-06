@@ -2,13 +2,7 @@ import { SubscriberGlobalPreferenceDto } from '@novu/api/models/components';
 import { WeeklySchedule } from '@novu/shared';
 import { motion } from 'motion/react';
 import { useState } from 'react';
-import {
-  RiCalendarScheduleLine,
-  RiContractUpDownLine,
-  RiExpandUpDownLine,
-  RiInformation2Line,
-  RiLoader4Line,
-} from 'react-icons/ri';
+
 import { Card, CardContent, CardHeader } from '@merge-rd/ui/components/card';
 import { showErrorToast } from '@/components/primitives/sonner-helpers';
 import { Switch } from '@merge-rd/ui/components/switch';
@@ -16,6 +10,13 @@ import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/primitives
 import { useOptimisticScheduleUpdate } from '@/hooks/use-optimistic-schedule-update';
 import { cn } from '@merge-rd/ui/lib/utils';
 import { ScheduleTable } from './schedule-table';
+import {
+  ArrowsDownUp,
+  ArrowsIn,
+  CalendarCheck,
+  Info,
+  SpinnerGap,
+} from '@phosphor-icons/react';
 
 const DEFAULT_HOURS = [{ start: '09:00 AM', end: '05:00 PM' }];
 const DEFAULT_WEEKLY_SCHEDULE: WeeklySchedule = {
@@ -67,12 +68,12 @@ export const SubscribersSchedule = (props: SubscribersScheduleProps) => {
         onClick={() => setIsExpanded(!isExpanded)}
       >
         <div className="flex items-center gap-1">
-          <RiCalendarScheduleLine className="text-foreground-400 size-3" />
+          <CalendarCheck className="text-foreground-400 size-3" />
           <span className="text-foreground-600 text-xs">Subscriber's schedule</span>
           <Tooltip>
             <TooltipTrigger asChild>
               <span className="text-foreground-400 inline-block hover:cursor-help">
-                <RiInformation2Line className="size-3" />
+                <Info className="size-3" />
               </span>
             </TooltipTrigger>
             <TooltipContent className="max-w-xs">
@@ -80,7 +81,7 @@ export const SubscribersSchedule = (props: SubscribersScheduleProps) => {
               critical notifications are always delivered.
             </TooltipContent>
           </Tooltip>
-          {isPending && <RiLoader4Line className="size-3 animate-spin text-neutral-400" />}
+          {isPending && <SpinnerGap className="size-3 animate-spin text-neutral-400" />}
         </div>
         <div className="mt-0! flex items-center gap-1.5">
           <Switch
@@ -107,9 +108,9 @@ export const SubscribersSchedule = (props: SubscribersScheduleProps) => {
           />
 
           {isExpanded ? (
-            <RiContractUpDownLine className="text-foreground-400 h-3 w-3" />
+            <ArrowsIn className="text-foreground-400 h-3 w-3" />
           ) : (
-            <RiExpandUpDownLine className="text-foreground-400 h-3 w-3" />
+            <ArrowsDownUp className="text-foreground-400 h-3 w-3" />
           )}
         </div>
       </CardHeader>
@@ -137,7 +138,7 @@ export const SubscribersSchedule = (props: SubscribersScheduleProps) => {
             }}
           />
           <div className="flex items-center gap-1 text-text-soft pt-2">
-            <RiInformation2Line className="size-3" />
+            <Info className="size-3" />
             <span className="text-xs">Critical and In-app notifications still reach you outside your schedule.</span>
           </div>
         </CardContent>

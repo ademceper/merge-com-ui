@@ -1,9 +1,10 @@
 import { BlockItem } from '@/lib/maily-core/blocks';
 import { StepResponseDto } from '@novu/shared';
-import { RiShadowLine } from 'react-icons/ri';
+
 import { Badge } from '@/components/primitives/badge';
 import { useTelemetry } from '@/hooks/use-telemetry';
 import { TelemetryEvent } from '@/utils/telemetry';
+import { Circle } from '@phosphor-icons/react';
 
 export const createDigestBlock = (props: {
   track: ReturnType<typeof useTelemetry>;
@@ -17,13 +18,13 @@ export const createDigestBlock = (props: {
     title: 'Digest',
     description: 'Display digested notifications in list.',
     searchTerms: ['digest', 'notification'],
-    icon: <RiShadowLine className="h-4 w-4" />,
+    icon: <Circle className="h-4 w-4" />,
     preview: '/images/email-editor/digest-block-preview.webp',
     render: () => {
       return (
         <>
           <div className="flex h-6 w-6 shrink-0 items-center justify-center">
-            <RiShadowLine className="h-4 w-4" />
+            <Circle className="h-4 w-4" />
           </div>
           <div className="grow">
             <p className="flex items-center gap-1 font-medium">

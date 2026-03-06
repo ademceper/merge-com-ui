@@ -2,7 +2,7 @@ import { Slug } from '@novu/shared';
 import { Node as FlowNode, Handle, NodeProps, Position } from '@xyflow/react';
 import { AnimatePresence, motion } from 'motion/react';
 import { ComponentProps, KeyboardEventHandler, useCallback, useState } from 'react';
-import { RiInsertRowTop, RiPlayCircleLine } from 'react-icons/ri';
+
 import { RQBJsonLogic } from 'react-querybuilder';
 import { Link } from 'react-router-dom';
 import { useConditionsCount } from '@/hooks/use-conditions-count';
@@ -16,6 +16,7 @@ import { NODE_WIDTH, Node, NodeBody, NodeError, NodeHeader, NodeIcon, NodeName }
 import { ConditionBadge } from './condition-badge';
 import { useCanvasContext } from './drag-context';
 import { WorkflowNodeActionBar } from './workflow-node-action-bar';
+import { PlayCircle, Rows } from '@phosphor-icons/react';
 
 export type NodeData = {
   index: number;
@@ -41,7 +42,7 @@ export const TriggerNode = ({ data }: NodeProps<FlowNode<{ triggerLink?: string 
       className="relative rounded-tl-none [&>span]:rounded-tl-none"
       pill={
         <>
-          <RiPlayCircleLine className="size-3" />
+          <PlayCircle className="size-3" />
           <span>TRIGGER</span>
         </>
       }
@@ -508,7 +509,7 @@ export const AddNode = (props: NodeProps<NodeType>) => {
             opacity: isIntersecting ? 1 : 0,
           }}
         >
-          <RiInsertRowTop className="size-3.5 text-text-soft" />
+          <Rows className="size-3.5 text-text-soft" />
           <span className="text-label-xs text-text-soft">Drop here</span>
         </div>
         {!isIntersecting && (

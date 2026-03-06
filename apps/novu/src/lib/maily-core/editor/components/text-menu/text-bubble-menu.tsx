@@ -1,6 +1,6 @@
 /** biome-ignore-all lint/correctness/useHookAtTopLevel: needs to be fixed */
 import { BubbleMenu, BubbleMenuProps } from '@tiptap/react';
-import { LucideIcon } from 'lucide-react';
+
 import { sticky } from 'tippy.js';
 import { ColumnExtension } from '../../nodes/columns/column';
 import { ColumnsExtension } from '../../nodes/columns/columns';
@@ -14,6 +14,8 @@ import { TooltipProvider } from '../ui/tooltip';
 import { TextBubbleContent } from './text-bubble-content';
 import { TurnIntoBlock } from './turn-into-block';
 import { useTurnIntoBlockOptions } from './use-turn-into-block-options';
+import type { Icon as LucideIcon } from '@phosphor-icons/react';
+;
 
 export interface BubbleMenuItem {
   name?: string;

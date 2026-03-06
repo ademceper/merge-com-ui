@@ -1,5 +1,5 @@
 import { ChatStatus, UIMessage } from 'ai';
-import { RiArrowGoBackLine, RiRefreshLine } from 'react-icons/ri';
+
 import { Conversation, ConversationContent, ConversationScrollButton } from '../ai-elements/conversation';
 import { Message } from '../ai-elements/message';
 import {
@@ -17,6 +17,7 @@ import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/primitives
 import { ChatChainOfThoughtReasoning, ChatChainOfThoughtToolCalls } from './chat-chain-of-thought';
 import { ChatMessageActions } from './chat-message-actions';
 import { StyledMessageResponse } from './chat-message-response';
+import { ArrowCounterClockwise, ArrowsClockwise } from '@phosphor-icons/react';
 
 function extractMessageContent(message: UIMessage): { text: string } {
   let text = '';
@@ -153,7 +154,7 @@ export const ChatBody = ({
                             className="p-1 h-auto hover:bg-transparent [&:disabled:not(.loading)]:bg-transparent [&>svg]:size-3"
                             onClick={() => onRevertMessage(chatMessage.id)}
                             disabled={isGenerating || isActionPending}
-                            trailingIcon={RiArrowGoBackLine}
+                            trailingIcon={ArrowCounterClockwise}
                           />
                         </TooltipTrigger>
                         <TooltipContent>
@@ -169,7 +170,7 @@ export const ChatBody = ({
                             className="p-1 h-auto hover:bg-transparent [&:disabled:not(.loading)]:bg-transparent [&>svg]:size-3"
                             onClick={() => onTryAgain(chatMessage.id)}
                             disabled={isGenerating || isActionPending}
-                            trailingIcon={RiRefreshLine}
+                            trailingIcon={ArrowsClockwise}
                           />
                         </TooltipTrigger>
                         <TooltipContent>

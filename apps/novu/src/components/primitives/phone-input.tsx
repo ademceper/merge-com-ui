@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { RiArrowDownSLine, RiCheckLine, RiPhoneLine, RiSearchLine } from 'react-icons/ri';
+
 import * as RPNInput from 'react-phone-number-input';
 import flags from 'react-phone-number-input/flags';
 import { cn } from '@merge-rd/ui/lib/utils';
@@ -7,6 +7,12 @@ import { Button } from '@merge-rd/ui/components/button';
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from '@merge-rd/ui/components/command';
 import { InputPure, InputRoot, InputWrapper } from '@/components/primitives/input';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/primitives/popover';
+import {
+  CaretDown,
+  Check,
+  MagnifyingGlass,
+  Phone,
+} from '@phosphor-icons/react';
 
 type PhoneInputProps = Omit<React.ComponentProps<'input'>, 'onChange' | 'value' | 'ref'> &
   Omit<RPNInput.Props<typeof RPNInput.default>, 'onChange'> & {
@@ -65,7 +71,7 @@ const CountrySelect = ({ disabled, value: selectedCountry, options: countryList,
           disabled={disabled}
         >
           <FlagComponent country={selectedCountry} countryName={selectedCountry} />
-          <RiArrowDownSLine className={cn('-mr-2 size-4 opacity-50', disabled ? 'hidden' : 'opacity-100')} />
+          <CaretDown className={cn('-mr-2 size-4 opacity-50', disabled ? 'hidden' : 'opacity-100')} />
         </Button>
       </PopoverTrigger>
       <PopoverContent portal={false} className="w-[300px] rounded-lg p-0" side="bottom" align="start">
@@ -73,7 +79,7 @@ const CountrySelect = ({ disabled, value: selectedCountry, options: countryList,
           <CommandInput
             placeholder="Search country..."
             inputRootClassName="rounded-b-none before:ring-0 before:border-b has-[input:focus]:shadow-none focus-within:shadow-none"
-            inlineLeadingNode={<RiSearchLine className="size-4 text-neutral-400" />}
+            inlineLeadingNode={<MagnifyingGlass className="size-4 text-neutral-400" />}
             /**
              * Scroll to top bug workaround: https://github.com/pacocoursey/cmdk/issues/233#issuecomment-2015998940
              */
@@ -138,7 +144,7 @@ const CountrySelectOption = ({ country, countryName, selectedCountry, onChange }
       <FlagComponent country={country} countryName={countryName} />
       <span className="flex-1 text-sm">{countryName}</span>
       <span className="text-foreground/50 text-sm">{`+${RPNInput.getCountryCallingCode(country)}`}</span>
-      <RiCheckLine className={`ml-auto size-4 ${country === selectedCountry ? 'opacity-100' : 'opacity-0'}`} />
+      <Check className={`ml-auto size-4 ${country === selectedCountry ? 'opacity-100' : 'opacity-0'}`} />
     </CommandItem>
   );
 };
@@ -151,7 +157,7 @@ const FlagComponent = ({ country, countryName }: RPNInput.FlagProps) => {
       className="bg-foreground/20 flex h-4 w-6 overflow-hidden rounded-sm drop-shadow-md [&_svg]:size-full"
       key={country}
     >
-      {Flag ? <Flag title={countryName} /> : <RiPhoneLine className="size-4 text-neutral-400" />}
+      {Flag ? <Flag title={countryName} /> : <Phone className="size-4 text-neutral-400" />}
     </span>
   );
 };

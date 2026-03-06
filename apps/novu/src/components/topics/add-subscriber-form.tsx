@@ -1,8 +1,9 @@
 import { ISubscriberResponseDto } from '@novu/shared';
 import { useState } from 'react';
-import { RiAddFill } from 'react-icons/ri';
+
 import { SubscriberAutocomplete } from '../subscribers/subscriber-autocomplete';
 import { useAddTopicSubscribers } from './hooks/use-topic-subscribers';
+import { Plus } from '@phosphor-icons/react';
 
 type AddSubscriberFormProps = {
   topicKey: string;
@@ -42,7 +43,7 @@ export function AddSubscriberForm({ topicKey, contextKeys, onSuccess }: AddSubsc
         className="w-full"
         isLoading={isPending}
         placeholder="Add subscriber to this topic"
-        trailingIcon={RiAddFill}
+        trailingIcon={Plus}
       />
     </div>
   );

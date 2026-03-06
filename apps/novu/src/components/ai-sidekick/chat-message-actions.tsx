@@ -1,6 +1,7 @@
 import { AnimatePresence, motion } from 'motion/react';
-import { RiCheckLine, RiCloseLine, RiRefreshLine } from 'react-icons/ri';
+
 import { Button } from '@merge-rd/ui/components/button';
+import { ArrowsClockwise, Check, X } from '@phosphor-icons/react';
 
 type ChatMessageActionsProps = {
   lastUserMessageId: string;
@@ -35,7 +36,7 @@ export function ChatMessageActions({
             className="px-0 hover:bg-transparent [&:disabled:not(.loading)]:bg-transparent"
             onClick={onKeepAll}
             disabled={isActionPending}
-            trailingIcon={RiCheckLine}
+            trailingIcon={Check}
           >
             Keep all
           </Button>
@@ -47,7 +48,7 @@ export function ChatMessageActions({
             className="px-0 hover:bg-transparent [&:disabled:not(.loading)]:bg-transparent"
             onClick={() => onDiscard(lastUserMessageId)}
             disabled={isActionPending}
-            trailingIcon={RiCloseLine}
+            trailingIcon={X}
           >
             Discard
           </Button>
@@ -59,7 +60,7 @@ export function ChatMessageActions({
             className="px-0 hover:bg-transparent [&:disabled:not(.loading)]:bg-transparent [&>svg]:size-3"
             onClick={() => onTryAgain(lastUserMessageId)}
             disabled={isActionPending}
-            trailingIcon={RiRefreshLine}
+            trailingIcon={ArrowsClockwise}
           >
             Try again
           </Button>

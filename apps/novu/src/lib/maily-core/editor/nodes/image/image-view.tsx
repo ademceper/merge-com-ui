@@ -1,10 +1,17 @@
 import { type NodeViewProps, NodeViewWrapper } from '@tiptap/react';
-import { Ban, BracesIcon, GrabIcon, ImageOffIcon, Loader2 } from 'lucide-react';
+
 import { type CSSProperties, useCallback, useEffect, useRef, useState } from 'react';
 import { useImageUploadOptions } from '../../extensions/image-upload/image-upload';
 import { getAspectRatio, getNewHeight } from '../../utils/aspect-ratio';
 import { cn } from '../../utils/classname';
 import { useEvent } from '../../utils/use-event';
+import {
+  BracketsCurly,
+  Hand,
+  ImageBroken,
+  Prohibit,
+  SpinnerGap,
+} from '@phosphor-icons/react';
 
 const MIN_WIDTH = 20;
 export const IMAGE_MAX_WIDTH = 600;
@@ -398,33 +405,33 @@ export function ImageStatusLabel(props: ImageStatusLabelProps) {
     >
       {status === 'idle' && !isDropZone && (
         <>
-          <ImageOffIcon className="mly-size-4 mly-stroke-[2.5]" />
+          <ImageBroken className="mly-size-4 mly-stroke-[2.5]" />
           <span>No image selected</span>
         </>
       )}
 
       {status === 'idle' && isDropZone && (
         <>
-          <GrabIcon className="mly-size-4 mly-stroke-[2.5]" />
+          <Hand className="mly-size-4 mly-stroke-[2.5]" />
           <span>Click or Drop image here</span>
         </>
       )}
 
       {status === 'loading' && (
         <>
-          <Loader2 className="mly-size-4 mly-animate-spin mly-stroke-[2.5]" />
+          <SpinnerGap className="mly-size-4 mly-animate-spin mly-stroke-[2.5]" />
           <span>Loading image...</span>
         </>
       )}
       {status === 'error' && (
         <>
-          <Ban className="mly-size-4 mly-stroke-[2.5]" />
+          <Prohibit className="mly-size-4 mly-stroke-[2.5]" />
           <span>Error loading image</span>
         </>
       )}
       {status === 'variable' && (
         <>
-          <BracesIcon className="mly-size-4 mly-stroke-[2.5]" />
+          <BracketsCurly className="mly-size-4 mly-stroke-[2.5]" />
           <span>Variable Image URL</span>
         </>
       )}

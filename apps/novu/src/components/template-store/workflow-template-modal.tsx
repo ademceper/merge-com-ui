@@ -1,7 +1,7 @@
 import { StepCreateDto } from '@novu/shared';
 import { AnimatePresence, motion } from 'motion/react';
 import { useEffect, useMemo, useState } from 'react';
-import { RiArrowLeftSLine } from 'react-icons/ri';
+
 import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import { z } from 'zod';
 import { RouteFill } from '@/components/icons/route-fill';
@@ -31,6 +31,7 @@ import { useTemplateStore } from '@/hooks/use-template-store';
 import { buildRoute, ROUTES } from '@/utils/routes';
 import { TelemetryEvent } from '@/utils/telemetry';
 import { Step } from '@/utils/types';
+import { CaretLeft } from '@phosphor-icons/react';
 
 function mapTemplateStepsToSteps(templateSteps: StepCreateDto[]): Step[] {
   return templateSteps.map((step, index) => {
@@ -168,7 +169,7 @@ export function WorkflowTemplateModal(props: WorkflowTemplateModalProps) {
         <DialogHeader className="border-stroke-soft flex flex-row items-center gap-1 border-b p-3">
           <DialogTitle className="sr-only">Workflow Templates</DialogTitle>
           {selectedTemplate ? (
-            <CompactButton size="md" variant="ghost" onClick={handleBackClick} icon={RiArrowLeftSLine}></CompactButton>
+            <CompactButton size="md" variant="ghost" onClick={handleBackClick} icon={CaretLeft}></CompactButton>
           ) : null}
           <Breadcrumb className="mt-0!">
             <BreadcrumbList>

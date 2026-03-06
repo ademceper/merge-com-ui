@@ -1,6 +1,7 @@
-import { RiLoader4Line } from 'react-icons/ri';
+
 import { toast } from 'sonner';
 import { Toast, ToastIcon } from '@/components/primitives/sonner';
+import { SpinnerGap } from '@phosphor-icons/react';
 
 const DETAILED_ERROR_MESSAGES = [
   'Workflow steps limit exceeded',
@@ -23,7 +24,7 @@ export const showSavingToast = (setToastId: (toastId: string | number) => void) 
   const id = toast.custom(
     () => (
       <Toast variant="default">
-        <RiLoader4Line className="min-w-5 size-5 p-[2px] animate-spin text-icon-soft" />
+        <SpinnerGap className="min-w-5 size-5 p-[2px] animate-spin text-icon-soft" />
         <span className="text-sm">Saving</span>
       </Toast>
     ),

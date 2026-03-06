@@ -1,6 +1,6 @@
 import { DuplicateLayoutDto, LayoutCreationSourceEnum } from '@novu/shared';
 import { useState } from 'react';
-import { RiArrowRightSLine } from 'react-icons/ri';
+
 import { useNavigate } from 'react-router-dom';
 import { ExternalToast } from 'sonner';
 import { CreateLayoutForm } from '@/components/layouts/create-layout-form';
@@ -27,6 +27,7 @@ import { useOnElementUnmount } from '@/hooks/use-on-element-unmount';
 import { useTelemetry } from '@/hooks/use-telemetry';
 import { buildRoute, ROUTES } from '@/utils/routes';
 import { TelemetryEvent } from '@/utils/telemetry';
+import { CaretRight } from '@phosphor-icons/react';
 
 type NewLayoutDrawerProps = {
   mode: 'create' | 'duplicate';
@@ -171,7 +172,7 @@ export const NewLayoutDrawer = (props: NewLayoutDrawerProps) => {
         <SheetFooter>
           <Button
             isLoading={isDuplicateLayoutPending || isCreateLayoutPending}
-            trailingIcon={RiArrowRightSLine}
+            trailingIcon={CaretRight}
             variant="secondary"
             mode="gradient"
             type="submit"

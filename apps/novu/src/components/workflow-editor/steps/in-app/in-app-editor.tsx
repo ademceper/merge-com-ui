@@ -1,5 +1,5 @@
 import { EnvironmentTypeEnum, type UiSchema, UiSchemaGroupEnum } from '@novu/shared';
-import { RiInstanceLine } from 'react-icons/ri';
+
 import { Notification5Fill } from '@/components/icons';
 import { Separator } from '@merge-rd/ui/components/separator';
 import { getComponentByType } from '@/components/workflow-editor/steps/component-utils';
@@ -8,6 +8,7 @@ import { useEnvironment } from '@/context/environment/hooks';
 
 import { cn } from '@merge-rd/ui/lib/utils';
 import { StepEditorUnavailable } from '../step-editor-unavailable';
+import { Stack } from '@phosphor-icons/react';
 
 const avatarKey = 'avatar';
 const subjectKey = 'subject';
@@ -78,7 +79,7 @@ export const InAppEditor = ({ uiSchema }: { uiSchema: UiSchema }) => {
           <Separator />
           <InAppTabsSection className="px-0 pb-0">
             <div className="flex items-center gap-2 text-sm mb-3">
-              <RiInstanceLine className="size-4" />
+              <Stack className="size-4" />
               <span>Developers</span>
             </div>
             {getComponentByType({
