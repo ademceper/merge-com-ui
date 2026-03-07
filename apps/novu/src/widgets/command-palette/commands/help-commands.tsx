@@ -1,12 +1,10 @@
-import { BookOpen, ChatCircle, Sparkle } from "@phosphor-icons/react";
-import { useAiDrawer } from "@/widgets/ai-drawer";
+import { BookOpen, ChatCircle } from "@phosphor-icons/react";
 import { useTelemetry } from "@/shared/lib/hooks/use-telemetry";
 import { TelemetryEvent } from "@/shared/lib/telemetry";
 import type { Command, CommandExecutionContext } from "../command-types";
 
 export function useHelpCommands(_context: CommandExecutionContext): Command[] {
 	const track = useTelemetry();
-	const { openAiDrawer } = useAiDrawer();
 
 	const commands: Command[] = [
 		{
@@ -40,27 +38,5 @@ export function useHelpCommands(_context: CommandExecutionContext): Command[] {
 		},
 	];
 
-	if (import.meta.env.VITE_INKEEP_API_KEY) {
-		commands.push({
-			id: "help-ai-search",
-			label: "Ask Novu AI",
-			description: "Get instant answers powered by AI",
-			category: "help",
-			icon: <Sparkle />,
-			priority: "high",
-			keywords: [
-				"ai",
-				"ask",
-				"search",
-				"help",
-				"question",
-				"assistant",
-				"inkeep",
-			],
-			execute: () => {
-				openAiDrawer();
-			},
-		});
-	}
 	return commands;
 }

@@ -1,0 +1,123 @@
+import IdentityProviderRepresentation from "@keycloak/keycloak-admin-client/lib/defs/identityProviderRepresentation";
+import { Button } from "@merge-rd/ui/components/button";
+import { Field } from "@merge-rd/ui/components/field";
+import { useFormContext, useWatch } from "react-hook-form";
+import { DefaultSwitchControl } from "../../../shared/ui/switch-control";
+import { useTranslation } from "react-i18next";
+import { getErrorDescription, getErrorMessage, TextAreaControl,
+    TextControl } from "../../../../shared/keycloak-ui-shared";
+import { toast } from "sonner";
+import { ImportFile, ImportKeyDialog } from "../../clients/keys/import-key-dialog";
+import useToggle from "../../../shared/lib/useToggle";
+import { useAdminClient } from "../../../app/admin-client";
+
+type JwksSettingsProps = {
+    readOnly?: boolean;
+};
+
+export const JwksSettings = ({ readOnly = false }: JwksSettingsProps) => {
+    const { t } = useTranslation();
+    const { control, setValue } = useFormContext<IdentityProviderRepresentation>();
+    const { adminClient } = useAdminClient();
+const [openImportKeys, toggleOpenImportKeys, setOpenImportKeys] = useToggle();
+    const useJwks = useWatch({
+        control,
+        name: "config.useJwksUrl",
+        defaultValue: "true"
+    });
+    const publicKeySignatureVerifier = useWatch({
+        control,
+        name: "config.publicKeySignatureVerifier"
+    });
+
+    const importKey = async (importFile: ImportFile) => {
+        try {
+            const formData = new FormData();
+            const { file, ...rest } = importFile;
+
+            for (const [key, value] of Object.entries(rest)) {
+                formData.append(key, value);
+            }
+
+            formData.append("file", file);
+            const info = await adminClient.identityProviders.uploadCertificate(
+                {},
+                formData
+            );
+            if (info.jwks) {
+                setValue("config.publicKeySignatureVerifier", info.jwks);
+                setValue("config.publicKeySignatureVerifierKeyId", "");
+                toast.success(t("importSuccess"));
+            } else if (info.publicKey) {
+                setValue("config.publicKeySignatureVerifier", info.publicKey);
+                toast.success(t("importSuccess"));
+            } else {
+                toast.error(t("importError", { error: t("emptyResources") }));
+            }
+        } catch (error) {
+            toast.error(t("importError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
+        }
+    };
+
+    return (
+        <>
+            <DefaultSwitchControl
+                name="config.useJwksUrl"
+                label={t("useJwksUrl")}
+                labelIcon={t("useJwksUrlHelp")}
+                isDisabled={readOnly}
+                defaultValue={"true"}
+                stringify
+            />
+            {useJwks === "true" ? (
+                <TextControl
+                    name="config.jwksUrl"
+                    label={t("jwksUrl")}
+                    labelIcon={t("jwksUrlHelp")}
+                    type="url"
+                    readOnly={readOnly}
+                    rules={{
+                        required: t("required")
+                    }}
+                />
+            ) : (
+                <>
+                    {openImportKeys && (
+                        <ImportKeyDialog
+                            toggleDialog={toggleOpenImportKeys}
+                            save={importKey}
+                            title="importKey"
+                            description="importKeysDescription"
+                        />
+                    )}
+                    {!publicKeySignatureVerifier?.trim().startsWith("{") && (
+                        <TextControl
+                            name="config.publicKeySignatureVerifierKeyId"
+                            label={t("validatingPublicKeyId")}
+                            labelIcon={t("validatingPublicKeyIdHelp")}
+                            readOnly={readOnly}
+                        />
+                    )}
+                    <TextAreaControl
+                        name="config.publicKeySignatureVerifier"
+                        label={t("validatingPublicKey")}
+                        labelIcon={t("validatingPublicKeyHelp")}
+                        rules={{ required: t("required") }}
+                        readOnly={readOnly}
+                    />
+                    {!readOnly && (
+                        <Field className="pt-2">
+                            <Button
+                                variant="outline"
+                                data-testid="import-certificate-button"
+                                onClick={() => setOpenImportKeys(true)}
+                            >
+                                {t("import")}
+                            </Button>
+                        </Field>
+                    )}
+                </>
+            )}
+        </>
+    );
+};

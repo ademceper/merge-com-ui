@@ -1,0 +1,37 @@
+import { lazy } from "react";
+import type { Path } from "react-router-dom";
+import { generateEncodedPath } from "../../../shared/lib/generateEncodedPath";
+import type { AppRouteObject } from "../../../app/routes";
+
+export type UserTab =
+    | "settings"
+    | "groups"
+    | "organizations"
+    | "consents"
+    | "attributes"
+    | "sessions"
+    | "credentials"
+    | "role-mapping"
+    | "identity-provider-links"
+    | "events";
+
+export type UserParams = {
+    realm: string;
+    id: string;
+    tab: UserTab;
+};
+
+const EditUser = lazy(() => import("../edit-user"));
+
+export const UserRoute: AppRouteObject = {
+    path: "/:realm/users/:id/:tab",
+    element: <EditUser />,
+    breadcrumb: t => t("userDetails"),
+    handle: {
+        access: "query-users"
+    }
+};
+
+export const toUser = (params: UserParams): Partial<Path> => ({
+    pathname: generateEncodedPath(UserRoute.path, params)
+});

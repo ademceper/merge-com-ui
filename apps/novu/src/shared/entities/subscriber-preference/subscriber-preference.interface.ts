@@ -1,12 +1,3 @@
-import type { SeverityLevelEnum } from "../../consts";
-import {
-	type ChannelTypeEnum,
-	PreferenceOverrideSourceEnum,
-	type PreferencesTypeEnum,
-	type Schedule,
-} from "../../model";
-import type { INotificationTrigger } from "../notification-trigger";
-
 export interface IPreferenceChannels {
 	email?: boolean;
 	sms?: boolean;
@@ -15,43 +6,3 @@ export interface IPreferenceChannels {
 	push?: boolean;
 }
 
-export interface IPreferenceOverride {
-	channel: ChannelTypeEnum;
-	source: PreferenceOverrideSourceEnum;
-}
-
-export interface ISubscriberPreferenceResponse {
-	template: ITemplateConfiguration;
-	preference: IPreferenceResponse;
-	type: PreferencesTypeEnum;
-}
-
-interface IPreferenceResponse {
-	enabled: boolean;
-	channels: IPreferenceChannels;
-	overrides: IPreferenceOverride[];
-	schedule?: Schedule;
-	updatedAt?: string;
-}
-
-export interface ITemplateConfiguration {
-	_id: string;
-	name: string;
-	critical: boolean;
-	tags?: string[];
-	triggers: INotificationTrigger[];
-	updatedAt?: string;
-	createdAt?: string;
-	severity?: SeverityLevelEnum;
-}
-
-export enum PreferenceLevelEnum {
-	GLOBAL = "global",
-	TEMPLATE = "template",
-}
-
-export interface IOverridePreferencesSources {
-	[PreferenceOverrideSourceEnum.TEMPLATE]: IPreferenceChannels;
-	[PreferenceOverrideSourceEnum.SUBSCRIBER]: IPreferenceChannels;
-	[PreferenceOverrideSourceEnum.WORKFLOW_OVERRIDE]?: IPreferenceChannels;
-}

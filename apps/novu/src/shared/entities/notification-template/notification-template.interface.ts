@@ -9,7 +9,6 @@ import type {
 } from "../../model";
 import type { RuntimeIssue } from "../../utils/issues";
 import type { ControlSchemas, IMessageTemplate } from "../message-template";
-import type { INotificationGroup } from "../notification-group";
 import type {
 	INotificationBridgeTrigger,
 	INotificationTrigger,
@@ -41,15 +40,6 @@ export interface INotificationTemplate {
 	data?: CustomDataType;
 	origin?: ResourceOriginEnum;
 	isTranslationEnabled?: boolean;
-}
-
-export class IGroupedBlueprint {
-	name: string;
-	blueprints: IBlueprint[];
-}
-
-export interface IBlueprint extends INotificationTemplate {
-	notificationGroup: INotificationGroup;
 }
 
 export class StepIssues {

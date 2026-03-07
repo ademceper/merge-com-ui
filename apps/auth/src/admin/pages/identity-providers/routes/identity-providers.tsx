@@ -1,0 +1,21 @@
+import { lazy } from "react";
+import type { Path } from "react-router-dom";
+import { generateEncodedPath } from "../../../shared/lib/generateEncodedPath";
+import type { AppRouteObject } from "../../../app/routes";
+
+export type IdentityProvidersParams = { realm: string };
+
+const IdentityProvidersSection = lazy(() => import("../identity-providers-section"));
+
+export const IdentityProvidersRoute: AppRouteObject = {
+    path: "/:realm/identity-providers",
+    element: <IdentityProvidersSection />,
+    breadcrumb: t => t("identityProviders"),
+    handle: {
+        access: "view-identity-providers"
+    }
+};
+
+export const toIdentityProviders = (params: IdentityProvidersParams): Partial<Path> => ({
+    pathname: generateEncodedPath(IdentityProvidersRoute.path, params)
+});

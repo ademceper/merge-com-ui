@@ -1,0 +1,20 @@
+import type { AppRouteObject } from "../../../app/routes";
+import {
+    CLIENT_REGISTRATION_PATH,
+    type ClientRegistrationParams,
+    type ClientRegistrationTab,
+    toClientRegistration
+} from "./client-registration-path";
+import ClientsSection from "../clients-section";
+
+export type { ClientRegistrationParams, ClientRegistrationTab };
+export { toClientRegistration };
+
+export const ClientRegistrationRoute: AppRouteObject = {
+    path: CLIENT_REGISTRATION_PATH,
+    element: <ClientsSection />,
+    breadcrumb: t => t("clientRegistration"),
+    handle: {
+        access: "view-clients"
+    }
+};

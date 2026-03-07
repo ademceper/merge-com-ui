@@ -1,0 +1,130 @@
+import { fetchWithError } from "@keycloak/keycloak-admin-client";
+import type ClientRepresentation from "@keycloak/keycloak-admin-client/lib/defs/clientRepresentation";
+import { Button } from "@merge-rd/ui/components/button";
+import { useState } from "react";
+import { FormProvider, useForm } from "react-hook-form";
+import { useTranslation } from "react-i18next";
+import { Link, useNavigate } from "react-router-dom";
+import { TextControl } from "../../../../shared/keycloak-ui-shared";
+import { useAdminClient } from "../../../app/admin-client";
+import { getErrorDescription, getErrorMessage } from "../../../../shared/keycloak-ui-shared";
+import { toast } from "sonner";
+import { FormAccess } from "../../../shared/ui/form/form-access";
+import { FileUploadForm } from "../../../shared/ui/json-file-upload/file-upload-form";
+import { useRealm } from "../../../app/providers/realm-context/realm-context";
+import {
+    addTrailingSlash,
+    convertFormValuesToObject,
+    convertToFormValues
+} from "../../../shared/lib/util";
+import { getAuthorizationHeaders } from "../../../shared/lib/getAuthorizationHeaders";
+import { ClientDescription } from "../client-description";
+import { FormFields } from "../client-details";
+import { CapabilityConfig } from "../add/capability-config";
+import { toClient } from "../routes/client";
+import { toClients } from "../routes/clients";
+
+const isXml = (text: string) => text.match(/(<.[^(><.)]+>)/g);
+
+export default function ImportForm() {
+    const { adminClient } = useAdminClient();
+
+    const { t } = useTranslation();
+    const navigate = useNavigate();
+    const { realm } = useRealm();
+    const form = useForm<FormFields>();
+    const { handleSubmit, setValue, formState } = form;
+    const [imported, setImported] = useState<ClientRepresentation>({});
+const handleFileChange = async (contents: string) => {
+        try {
+            const parsed = await parseFileContents(contents);
+
+            convertToFormValues(parsed, setValue);
+            setImported(parsed);
+        } catch (error) {
+            toast.error(t("importParseError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
+        }
+    };
+
+    async function parseFileContents(contents: string): Promise<ClientRepresentation> {
+        if (!isXml(contents)) {
+            return JSON.parse(contents);
+        }
+
+        const response = await fetchWithError(
+            `${addTrailingSlash(
+                adminClient.baseUrl
+            )}admin/realms/${realm}/client-description-converter`,
+            {
+                method: "POST",
+                body: contents,
+                headers: getAuthorizationHeaders(await adminClient.getAccessToken())
+            }
+        );
+
+        if (!response.ok) {
+            throw new Error(
+                `Server responded with invalid status: ${response.statusText}`
+            );
+        }
+
+        return response.json();
+    }
+
+    const save = async (client: ClientRepresentation) => {
+        try {
+            const newClient = await adminClient.clients.create({
+                ...imported,
+                ...convertFormValuesToObject({
+                    ...client,
+                    attributes: client.attributes || {}
+                })
+            });
+            toast.success(t("clientImportSuccess"));
+            navigate(toClient({ realm, clientId: newClient.id, tab: "settings" }));
+        } catch (error) {
+            toast.error(t("clientImportError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
+        }
+    };
+
+    return (
+        <>
+                        <div className="p-6">
+                <FormAccess
+                    isHorizontal
+                    onSubmit={handleSubmit(save)}
+                    role="manage-clients"
+                >
+                    <FormProvider {...form}>
+                        <FileUploadForm
+                            id="realm-file"
+                            language="json"
+                            extension=".json,.xml"
+                            helpText={t("helpFileUploadClient")}
+                            onChange={handleFileChange}
+                        />
+                        <ClientDescription hasConfigureAccess />
+                        <TextControl name="protocol" label={t("type")} readOnly />
+                        <CapabilityConfig unWrap={true} />
+                        <div className="flex gap-2 mt-4">
+                            <Button
+                                type="submit"
+                                disabled={formState.isLoading || formState.isValidating || formState.isSubmitting}
+                            >
+                                {t("save")}
+                            </Button>
+                            <Button
+                                variant="link"
+                                asChild
+                            >
+                                <Link to={toClients({ realm })}>
+                                    {t("cancel")}
+                                </Link>
+                            </Button>
+                        </div>
+                    </FormProvider>
+                </FormAccess>
+            </div>
+        </>
+    );
+}

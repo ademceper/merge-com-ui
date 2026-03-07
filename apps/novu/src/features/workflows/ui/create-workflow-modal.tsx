@@ -9,70 +9,21 @@ import {
 	DialogOverlay,
 	DialogTitle,
 } from "@merge-rd/ui/components/dialog";
-import { Separator } from "@merge-rd/ui/components/separator";
 import { Skeleton } from "@merge-rd/ui/components/skeleton";
-import {
-	AiAgentTypeEnum,
-	AiResourceTypeEnum,
-	type DuplicateWorkflowDto,
-} from "@/shared";
-import {
-	CaretRight,
-	CheckCircle,
-	CircleNotch,
-	Path,
-	SpinnerGap,
-	X,
-} from "@phosphor-icons/react";
-import { type ChatOnDataCallback, generateId, type UIMessage } from "ai";
-import { motion } from "motion/react";
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { useForm } from "react-hook-form";
+import { Separator } from "@merge-rd/ui/components/separator";
+import { type DuplicateWorkflowDto } from "@/shared";
+import { CaretRight, X } from "@phosphor-icons/react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { z } from "zod";
-import { Sparkling } from "@/shared/ui/icons/sparkling";
 import { CompactButton } from "@/shared/ui/primitives/button-compact";
-import {
-	Form,
-	FormControl,
-	FormField,
-	FormItem,
-	FormMessage,
-	FormRoot,
-} from "@/shared/ui/primitives/form/form";
-import {
-	SegmentedControl,
-	SegmentedControlList,
-	SegmentedControlTrigger,
-} from "@/shared/ui/primitives/segmented-control";
-import { showErrorToast } from "@/shared/ui/primitives/sonner-helpers";
-import { Tag } from "@/shared/ui/primitives/tag";
-import { Textarea } from "@/shared/ui/primitives/textarea";
 import { ExternalLink } from "@/shared/ui/shared/external-link";
 import { useEnvironment } from "@/app/context/environment/hooks";
 import { CreateWorkflowForm } from "@/features/workflows/ui/workflow-editor/create-workflow-form";
 import { useCreateWorkflow } from "@/features/workflows/lib/use-create-workflow";
 import { useDuplicateWorkflow } from "@/features/workflows/lib/use-duplicate-workflow";
 import { useFetchWorkflow } from "@/features/workflows/lib/use-fetch-workflow";
-import { useAiChatStream } from "@/shared/lib/hooks/use-ai-chat-stream";
-import { useCreateAiChat } from "@/shared/lib/hooks/use-create-ai-chat";
 import { useFormProtection } from "@/shared/lib/hooks/use-form-protection";
 import { buildRoute, ROUTES } from "@/shared/lib/routes";
-
-export type WorkflowCreatedEvent = {
-	type: "workflow-created";
-	workflowSlug: string;
-	chatId: string;
-};
-
-type CreateWorkflowTab = "guided" | "manual";
-
-const WORKFLOW_SUGGESTIONS = [
-	"Welcome email workflow",
-	"Order confirmation workflow",
-	"Payment failed",
-	"Password reset workflow",
-];
 
 export function CreateWorkflowModal({
 	mode,
@@ -84,12 +35,19 @@ export function CreateWorkflowModal({
 	const navigate = useNavigate();
 	const { currentEnvironment } = useEnvironment();
 	const [open, setOpen] = useState(true);
-	const createdWorkflowSlugRef = useRef<string | null>(null);
-	const [tab, setTab] = useState<CreateWorkflowTab>("guided");
 
 	const { workflow, isPending: isLoadingWorkflow } = useFetchWorkflow({
 		workflowSlug: mode === "duplicate" ? workflowId : undefined,
 	});
+
+	const duplicateWorkflow = useDuplicateWorkflow({
+		workflowSlug: workflowId || "",
+	});
+	const createWorkflowHook = useCreateWorkflow();
+	const { submit: submitWorkflow, isLoading } =
+		mode === "duplicate" ? duplicateWorkflow : createWorkflowHook;
+
+	const isLoadingTemplate = mode === "duplicate" && isLoadingWorkflow;
 
 	const handleClose = (isOpen: boolean) => {
 		if (isLoading) return;
@@ -111,53 +69,6 @@ export function CreateWorkflowModal({
 		onValueChange: handleClose,
 	});
 
-	const handleData = useCallback<ChatOnDataCallback<UIMessage>>(
-		(data) => {
-			if (
-				data &&
-				typeof data === "object" &&
-				"type" in data &&
-				(data as { type: string }).type === "data-workflow-created"
-			) {
-				const workflowCreatedEvent =
-					data.data as unknown as WorkflowCreatedEvent;
-				createdWorkflowSlugRef.current = workflowCreatedEvent.workflowSlug;
-				navigate(
-					buildRoute(ROUTES.EDIT_WORKFLOW, {
-						environmentSlug: currentEnvironment?.slug ?? "",
-						workflowSlug: createdWorkflowSlugRef.current ?? "",
-					}),
-					{ state: { chatId: workflowCreatedEvent.chatId } },
-				);
-			}
-		},
-		[currentEnvironment?.slug, navigate],
-	);
-
-	const chatId = useMemo(() => generateId(), []);
-	const { sendPrompt, stop, isGenerating } = useAiChatStream({
-		id: chatId,
-		agentType: AiAgentTypeEnum.GENERATE_WORKFLOW,
-		onData: handleData,
-	});
-
-	useEffect(() => {
-		return () => {
-			stop();
-		};
-	}, [stop]);
-
-	const duplicateWorkflow = useDuplicateWorkflow({
-		workflowSlug: workflowId || "",
-	});
-	const createWorkflowHook = useCreateWorkflow();
-	const { submit: submitWorkflow, isLoading: isSubmitting } =
-		mode === "duplicate" ? duplicateWorkflow : createWorkflowHook;
-	const { createAiChat, isPending: isCreatingAiChat } = useCreateAiChat();
-
-	const isLoading = isSubmitting || isGenerating || isCreatingAiChat;
-	const isLoadingTemplate = mode === "duplicate" && isLoadingWorkflow;
-
 	const template: DuplicateWorkflowDto | undefined =
 		mode === "duplicate" && workflow
 			? {
@@ -168,34 +79,9 @@ export function CreateWorkflowModal({
 				}
 			: undefined;
 
-	async function handleGuidedSubmit({ prompt }: { prompt: string }) {
-		await createAiChat(
-			{ resourceType: AiResourceTypeEnum.WORKFLOW },
-			{
-				onError: (error) => {
-					showErrorToast(
-						error.message || "There was an error creating the chat.",
-						"Failed to create chat",
-					);
-				},
-				onSuccess: async (chat) => {
-					sendPrompt({ chatId: chat._id, prompt });
-				},
-			},
-		);
-	}
-
 	const isDuplicateMode = mode === "duplicate";
-	const showTabs = !isDuplicateMode;
-	const showGuidedContent = !isDuplicateMode && tab === "guided";
-	const showManualContent = isDuplicateMode || tab === "manual";
-
 	const title = isDuplicateMode ? "Duplicate workflow" : "Create workflow";
-	const buttonText = showGuidedContent
-		? "Generate workflow"
-		: isDuplicateMode
-			? "Duplicate workflow"
-			: "Create workflow";
+	const buttonText = isDuplicateMode ? "Duplicate workflow" : "Create workflow";
 
 	return (
 		<>
@@ -230,316 +116,38 @@ export function CreateWorkflowModal({
 						</div>
 					</div>
 
-					<div className={`flex flex-col ${showGuidedContent ? "flex-1" : ""}`}>
+					<div className="flex flex-col">
 						<Separator />
 
-						{showTabs && (
-							<>
-								<div className="flex flex-col gap-2 p-3">
-									<SegmentedControl
-										value={tab}
-										onValueChange={(value) =>
-											setTab(value as CreateWorkflowTab)
-										}
-									>
-										<SegmentedControlList>
-											<SegmentedControlTrigger value="guided">
-												Guided
-											</SegmentedControlTrigger>
-											<SegmentedControlTrigger value="manual">
-												Manual
-											</SegmentedControlTrigger>
-										</SegmentedControlList>
-									</SegmentedControl>
-								</div>
-								<Separator className="mx-3 w-[calc(100%-24px)]" />
-							</>
-						)}
-
-						{showGuidedContent && (
-							<GuidedModeContent
-								onSubmit={handleGuidedSubmit}
-								isGenerating={isGenerating}
+						{isLoadingTemplate ? (
+							<ManualModeContentSkeleton />
+						) : (
+							<ManualModeContent
+								onSubmit={submitWorkflow}
+								template={template}
 							/>
 						)}
-
-						{showManualContent &&
-							(isLoadingTemplate ? (
-								<ManualModeContentSkeleton />
-							) : (
-								<ManualModeContent
-									onSubmit={submitWorkflow}
-									template={template}
-								/>
-							))}
 					</div>
 
 					<div className="border-stroke-soft flex items-center justify-end border-t p-3">
-						{showGuidedContent ? (
-							<Button
-								variant="secondary"
-								mode="gradient"
-								size="xs"
-								className="cursor-pointer"
-								trailingIcon={CaretRight}
-								type="submit"
-								form="generate-workflow"
-								disabled={isLoading}
-								isLoading={isLoading}
-							>
-								{buttonText}
-							</Button>
-						) : (
-							<Button
-								variant="secondary"
-								mode="gradient"
-								size="xs"
-								className="cursor-pointer"
-								trailingIcon={CaretRight}
-								type="submit"
-								form="create-workflow"
-								disabled={isLoading || isLoadingTemplate}
-								isLoading={isLoading}
-							>
-								{buttonText}
-							</Button>
-						)}
+						<Button
+							variant="secondary"
+							mode="gradient"
+							size="xs"
+							className="cursor-pointer"
+							trailingIcon={CaretRight}
+							type="submit"
+							form="create-workflow"
+							disabled={isLoading || isLoadingTemplate}
+							isLoading={isLoading}
+						>
+							{buttonText}
+						</Button>
 					</div>
 				</DialogContent>
 			</Dialog>
 			{ProtectionAlert}
 		</>
-	);
-}
-
-const schema = z.object({
-	prompt: z.string().max(2000),
-});
-
-type GuidedModeContentProps = {
-	onSubmit: (values: z.infer<typeof schema>) => void;
-	isGenerating: boolean;
-};
-
-const STEP_DELAY_MS = 2000;
-
-const GENERATION_STEPS = [
-	{ id: "spinning", text: "Spinning up a fresh workflow" },
-	{ id: "coffee", text: "Sipping a little bit of coffee" },
-	{
-		id: "workflow-id",
-		text: "Generating a unique workflow ID",
-	},
-	{
-		id: "tags",
-		text: "Setting up tags",
-	},
-	{ id: "canvas", text: "Laying out the workflow canvas" },
-	{ id: "moment", text: "One moment while we set this up" },
-] as const;
-
-type GenerationStepStatus = "success" | "progress" | "pending";
-
-type GenerationStep = {
-	id: string;
-	text: string;
-	status: GenerationStepStatus;
-};
-
-function GuidedModeContent({ onSubmit, isGenerating }: GuidedModeContentProps) {
-	const form = useForm<z.infer<typeof schema>>({
-		defaultValues: {
-			prompt: "",
-		},
-	});
-
-	const [animatedStepIndex, setAnimatedStepIndex] = useState(-1);
-
-	useEffect(() => {
-		if (!isGenerating) return;
-
-		setAnimatedStepIndex(0);
-
-		const interval = setInterval(() => {
-			setAnimatedStepIndex((prev) => {
-				if (prev >= GENERATION_STEPS.length - 1) {
-					return prev;
-				}
-				return prev + 1;
-			});
-		}, STEP_DELAY_MS);
-
-		return () => clearInterval(interval);
-	}, [isGenerating]);
-
-	function handleSuggestionClick(suggestion: string) {
-		form.setValue("prompt", suggestion);
-	}
-
-	const header = useMemo(
-		() => (
-			<div className="flex flex-col items-start gap-2 pt-8 pb-0">
-				<Sparkling className="size-8" />
-				<div className="flex flex-col gap-1">
-					<span className="text-label-md text-text-strong font-medium">
-						Create a workflow that works out of the box
-					</span>
-					<span className="text-label-xs text-text-soft">
-						Describe a product activity and how you want to reach users. Novu
-						designs a complete workflow with best practices.
-					</span>
-				</div>
-			</div>
-		),
-		[],
-	);
-
-	if (isGenerating || animatedStepIndex >= 0) {
-		const effectiveStepIndex =
-			animatedStepIndex === -1 && isGenerating ? 0 : animatedStepIndex;
-
-		const steps: GenerationStep[] = GENERATION_STEPS.map((step, index) => {
-			const status: GenerationStepStatus =
-				index < effectiveStepIndex
-					? "success"
-					: index === effectiveStepIndex
-						? "progress"
-						: "pending";
-
-			return { id: step.id, text: step.text, status };
-		});
-
-		const ITEM_HEIGHT = 16;
-		const GAP = 8;
-		const CONTAINER_HEIGHT = 190;
-		const activeIndex = effectiveStepIndex;
-
-		return (
-			<div className="flex flex-col gap-2 p-3 pb-6">
-				{header}
-				<div
-					className="relative flex flex-1 flex-col overflow-hidden"
-					style={{ minHeight: CONTAINER_HEIGHT }}
-				>
-					<div
-						className="absolute inset-0 overflow-hidden"
-						style={{
-							maskImage:
-								"linear-gradient(to bottom, transparent 0%, black 50%, black 60%, transparent 100%)",
-							WebkitMaskImage:
-								"linear-gradient(to bottom, transparent 0%, black 50%, black 60%, transparent 100%)",
-						}}
-					>
-						<motion.div
-							className="absolute left-0 right-0 flex flex-col gap-2 px-3"
-							initial={false}
-							animate={{
-								y:
-									CONTAINER_HEIGHT / 2 -
-									ITEM_HEIGHT / 2 -
-									activeIndex * (ITEM_HEIGHT + GAP),
-							}}
-							transition={{ type: "tween", ease: "easeInOut" }}
-						>
-							{steps.map((step, index) => (
-								<motion.div
-									key={step.id}
-									className="flex items-center gap-2 shrink-0"
-									animate={{ opacity: index === activeIndex ? 1 : 0.4 }}
-									transition={{ duration: 0.2 }}
-								>
-									{step.status === "success" && (
-										<div className="flex size-4 shrink-0 items-center justify-center rounded-full shadow-xs">
-											<CheckCircle
-												weight="fill"
-												className="size-3 text-success"
-											/>
-										</div>
-									)}
-									{step.status === "progress" && (
-										<div className="flex size-4 shrink-0 items-center justify-center rounded-full shadow-xs">
-											<SpinnerGap
-												weight="fill"
-												className="size-3 animate-spin text-text-sub"
-											/>
-										</div>
-									)}
-									{step.status === "pending" && (
-										<div className="flex size-4 shrink-0 items-center justify-center rounded-full shadow-xs">
-											<CircleNotch className="size-3 text-text-sub" />
-										</div>
-									)}
-									<span className="text-label-xs text-text-sub">
-										{step.text}
-									</span>
-								</motion.div>
-							))}
-						</motion.div>
-					</div>
-				</div>
-			</div>
-		);
-	}
-
-	return (
-		<div className="flex flex-col gap-2 p-3 pb-6">
-			{header}
-
-			<div className="flex flex-wrap items-center gap-2 mt-8">
-				{WORKFLOW_SUGGESTIONS.map((suggestion) => (
-					<button
-						key={suggestion}
-						type="button"
-						className="cursor-pointer"
-						onClick={() => handleSuggestionClick(suggestion)}
-					>
-						<Tag
-							className="rounded-full"
-							variant="stroke"
-							icon={<Path weight="fill" className="text-feature" />}
-						>
-							{suggestion}
-						</Tag>
-					</button>
-				))}
-				{/* <Button
-          className="cursor-pointer h-6 [&_svg]:size-2.5"
-          variant="secondary"
-          mode="ghost"
-          size="2xs"
-          trailingIcon={ArrowUUpLeft}
-        /> */}
-			</div>
-			<Form {...form}>
-				<FormRoot
-					id="generate-workflow"
-					autoComplete="off"
-					noValidate
-					onSubmit={form.handleSubmit(onSubmit)}
-					className="flex flex-col gap-4"
-				>
-					<FormField
-						control={form.control}
-						name="prompt"
-						render={({ field }) => (
-							<FormItem>
-								<FormControl>
-									<Textarea
-										showCounter
-										maxLength={2000}
-										value={field.value}
-										onChange={field.onChange}
-										placeholder="When a user signs up, send a welcome email and an in-app tip. If they don't activate in 24h, send a reminder."
-										className="min-h-[100px] resize-none rounded-lg"
-									/>
-								</FormControl>
-								<FormMessage />
-							</FormItem>
-						)}
-					/>
-				</FormRoot>
-			</Form>
-		</div>
 	);
 }
 

@@ -35,14 +35,11 @@ function InstallationMethodSelector({
 					Installation method
 				</span>
 				<Tabs
-					defaultValue="ai-assist"
+					defaultValue="cli"
 					value={installationMethod}
 					onValueChange={handleMethodChange}
 				>
 					<TabsList className="h-7 w-[240px] gap-1 rounded-md bg-[#FBFBFB] p-1 shadow-none">
-						<TabsTrigger value="ai-assist" className={TABS_TRIGGER_CLASSES}>
-							AI Assist
-						</TabsTrigger>
 						<TabsTrigger value="cli" className={TABS_TRIGGER_CLASSES}>
 							CLI Installation
 						</TabsTrigger>

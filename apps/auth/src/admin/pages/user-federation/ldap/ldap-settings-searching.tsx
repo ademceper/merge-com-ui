@@ -1,0 +1,187 @@
+import { HelpItem, SelectField, TextControl } from "../../../../shared/keycloak-ui-shared";
+import { Controller, FormProvider, UseFormReturn } from "react-hook-form";
+import { Switch } from "@merge-rd/ui/components/switch";
+import { FormLabel } from "../../../../shared/keycloak-ui-shared";
+import { useTranslation } from "react-i18next";
+import { FormAccess } from "../../../shared/ui/form/form-access";
+import { WizardSectionHeader } from "../../../shared/ui/wizard-section-header/wizard-section-header";
+
+export type LdapSettingsSearchingProps = {
+    form: UseFormReturn;
+    showSectionHeading?: boolean;
+    showSectionDescription?: boolean;
+};
+
+export const LdapSettingsSearching = ({
+    form,
+    showSectionHeading = false,
+    showSectionDescription = false
+}: LdapSettingsSearchingProps) => {
+    const { t } = useTranslation();
+
+    return (
+        <FormProvider {...form}>
+            {showSectionHeading && (
+                <WizardSectionHeader
+                    title={t("ldapSearchingAndUpdatingSettings")}
+                    description={t("ldapSearchingAndUpdatingSettingsDescription")}
+                    showDescription={showSectionDescription}
+                />
+            )}
+
+            <FormAccess role="manage-realm" isHorizontal>
+                <div className="space-y-6">
+                    <div className="space-y-2">
+                        <SelectField
+                            id="editMode"
+                            name="config.editMode[0]"
+                            label={t("editMode")}
+                            labelIcon={t("editModeLdapHelp")}
+                            defaultValue=""
+                            rules={{
+                                required: {
+                                    value: true,
+                                    message: t("validateEditMode")
+                                }
+                            }}
+                            options={["", "READ_ONLY", "WRITABLE", "UNSYNCED"]}
+                        />
+                    </div>
+                    <div className="space-y-2">
+                        <TextControl
+                            name="config.usersDn.0"
+                            label={t("usersDN")}
+                            labelIcon={t("usersDNHelp")}
+                            rules={{
+                        required: t("validateUsersDn")
+                    }}
+                        />
+                    </div>
+                    <div className="space-y-2">
+                        <TextControl
+                            name="config.relativeCreateDn.0"
+                            label={t("relativeUserCreateDn")}
+                            labelIcon={t("relativeUserCreateDnHelp")}
+                        />
+                    </div>
+                    <div className="space-y-2">
+                        <TextControl
+                            name="config.usernameLDAPAttribute.0"
+                            label={t("usernameLdapAttribute")}
+                            labelIcon={t("usernameLdapAttributeHelp")}
+                            defaultValue="cn"
+                    rules={{
+                        required: t("validateUsernameLDAPAttribute")
+                    }}
+                        />
+                    </div>
+                    <div className="space-y-2">
+                        <TextControl
+                            name="config.rdnLDAPAttribute.0"
+                            label={t("rdnLdapAttribute")}
+                            labelIcon={t("rdnLdapAttributeHelp")}
+                            defaultValue="cn"
+                    rules={{
+                        required: t("validateRdnLdapAttribute")
+                    }}
+                        />
+                    </div>
+                    <div className="space-y-2">
+                        <TextControl
+                            name="config.uuidLDAPAttribute.0"
+                            label={t("uuidLdapAttribute")}
+                            labelIcon={t("uuidLdapAttributeHelp")}
+                            defaultValue="objectGUID"
+                    rules={{
+                        required: t("validateUuidLDAPAttribute")
+                    }}
+                        />
+                    </div>
+                    <div className="space-y-2">
+                        <TextControl
+                            name="config.userObjectClasses.0"
+                            label={t("userObjectClasses")}
+                            labelIcon={t("userObjectClassesHelp")}
+                            defaultValue="person, organizationalPerson, user"
+                    rules={{
+                        required: t("validateUserObjectClasses")
+                    }}
+                        />
+                    </div>
+                    <div className="space-y-2">
+                        <TextControl
+                            name="config.customUserSearchFilter.0"
+                            label={t("userLdapFilter")}
+                            labelIcon={t("userLdapFilterHelp")}
+                    rules={{
+                        pattern: {
+                            value: /(\(.*\))$/,
+                            message: t("validateCustomUserSearchFilter")
+                        }
+                    }}
+                        />
+                    </div>
+                    <div className="space-y-2">
+                        <SelectField
+                            id="kc-search-scope"
+                            name="config.searchScope[0]"
+                            label={t("searchScope")}
+                            labelIcon={t("searchScopeHelp")}
+                            defaultValue="1"
+                            options={[
+                        { key: "1", value: t("oneLevel") },
+                        { key: "2", value: t("subtree") }
+                    ]}
+                        />
+                    </div>
+                    <div className="space-y-2">
+                        <TextControl
+                            name="config.readTimeout.0"
+                            label={t("readTimeout")}
+                            labelIcon={t("readTimeoutHelp")}
+                            type="number"
+                            min={0}
+                        />
+                    </div>
+                    <div className="space-y-2">
+                        <FormLabel
+                            name="kc-ui-pagination"
+                    label={t("pagination")}
+                    labelIcon={
+                        <HelpItem
+                            helpText={t("paginationHelp")}
+                            fieldLabelId="pagination"
+                        />
+                    }
+                    hasNoPaddingTop
+                >
+                    <Controller
+                        name="config.pagination"
+                        defaultValue={["true"]}
+                        control={form.control}
+                        render={({ field }) => (
+                            <Switch
+                                id="kc-ui-pagination"
+                                data-testid="ui-pagination"
+                                checked={field.value[0] === "true"}
+                                onCheckedChange={(value) => field.onChange([`${value}`])}
+                                aria-label={t("pagination")}
+                            />
+                        )}
+                    />
+                        </FormLabel>
+                    </div>
+                    <div className="space-y-2">
+                        <SelectField
+                            name="config.referral.0"
+                            label={t("referral")}
+                            labelIcon={t("referralHelp")}
+                            defaultValue=""
+                            options={["ignore", "follow"]}
+                        />
+                    </div>
+                </div>
+            </FormAccess>
+        </FormProvider>
+    );
+};

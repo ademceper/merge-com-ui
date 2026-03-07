@@ -3,7 +3,6 @@ import { MemberRoleEnum } from "../entities/organization/member.enum";
 export enum SignUpOriginEnum {
 	WEB = "web",
 	CLI = "cli",
-	VERCEL = "vercel",
 }
 
 export type UserSessionData = {
@@ -54,8 +53,6 @@ export enum PermissionsEnum {
 	INTEGRATION_WRITE = "org:integration:write",
 	MESSAGE_READ = "org:message:read",
 	MESSAGE_WRITE = "org:message:write",
-	PARTNER_INTEGRATION_READ = "org:partnerintegration:read",
-	PARTNER_INTEGRATION_WRITE = "org:partnerintegration:write",
 	SUBSCRIBER_READ = "org:subscriber:read",
 	SUBSCRIBER_WRITE = "org:subscriber:write",
 	TOPIC_READ = "org:topic:read",
@@ -84,8 +81,6 @@ export const ROLE_PERMISSIONS: Record<MemberRoleEnum, PermissionsEnum[]> = {
 		PermissionsEnum.INTEGRATION_WRITE,
 		PermissionsEnum.MESSAGE_READ,
 		PermissionsEnum.MESSAGE_WRITE,
-		PermissionsEnum.PARTNER_INTEGRATION_READ,
-		PermissionsEnum.PARTNER_INTEGRATION_WRITE,
 		PermissionsEnum.SUBSCRIBER_READ,
 		PermissionsEnum.SUBSCRIBER_WRITE,
 		PermissionsEnum.TOPIC_READ,
@@ -110,8 +105,6 @@ export const ROLE_PERMISSIONS: Record<MemberRoleEnum, PermissionsEnum[]> = {
 		PermissionsEnum.INTEGRATION_WRITE,
 		PermissionsEnum.MESSAGE_READ,
 		PermissionsEnum.MESSAGE_WRITE,
-		PermissionsEnum.PARTNER_INTEGRATION_READ,
-		PermissionsEnum.PARTNER_INTEGRATION_WRITE,
 		PermissionsEnum.SUBSCRIBER_READ,
 		PermissionsEnum.SUBSCRIBER_WRITE,
 		PermissionsEnum.TOPIC_READ,

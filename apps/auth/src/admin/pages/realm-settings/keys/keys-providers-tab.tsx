@@ -1,0 +1,196 @@
+import type ComponentRepresentation from "@keycloak/keycloak-admin-client/lib/defs/componentRepresentation";
+import type ComponentTypeRepresentation from "@keycloak/keycloak-admin-client/lib/defs/componentTypeRepresentation";
+import { getErrorDescription, getErrorMessage } from "../../../../shared/keycloak-ui-shared";
+import { toast } from "sonner";
+import { Button } from "@merge-rd/ui/components/button";
+import {
+    DataTable,
+    DataTableRowActions,
+    type ColumnDef
+} from "@/admin/shared/ui/data-table";
+import { Plus, Trash } from "@phosphor-icons/react";
+import { useMemo, useState } from "react";
+import { useTranslation } from "react-i18next";
+import { Link } from "react-router-dom";
+import { useAdminClient } from "../../../app/admin-client";
+import {
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle
+} from "@merge-rd/ui/components/alert-dialog";
+import { useRealm } from "../../../app/providers/realm-context/realm-context";
+import { useServerInfo } from "../../../app/providers/server-info/server-info-provider";
+import { KEY_PROVIDER_TYPE } from "../../../shared/lib/util";
+import useToggle from "../../../shared/lib/useToggle";
+import { ProviderType, toKeyProvider } from "../routes/key-provider";
+import { KeyProviderModal } from "./key-providers/key-provider-modal";
+import { KeyProvidersPicker } from "./key-providers/key-providers-picker";
+
+type ComponentData = ComponentRepresentation & {
+    providerDescription?: string;
+};
+
+type KeysProvidersTabProps = {
+    realmComponents: ComponentRepresentation[];
+    refresh: () => void;
+};
+
+export const KeysProvidersTab = ({ realmComponents, refresh }: KeysProvidersTabProps) => {
+    const { adminClient } = useAdminClient();
+    const { t } = useTranslation();
+    const { realm } = useRealm();
+
+    const [isCreateModalOpen, handleModalToggle] = useToggle();
+    const serverInfo = useServerInfo();
+    const keyProviderComponentTypes =
+        serverInfo.componentTypes?.[KEY_PROVIDER_TYPE] ?? [];
+
+    const [providerOpen, toggleProviderOpen] = useToggle();
+    const [defaultUIDisplayName, setDefaultUIDisplayName] = useState<ProviderType>();
+    const [selectedComponent, setSelectedComponent] = useState<ComponentRepresentation>();
+
+    const data = useMemo(
+        () =>
+            realmComponents.map(component => {
+                const provider = keyProviderComponentTypes.find(
+                    (ct: ComponentTypeRepresentation) =>
+                        component.providerId === ct.id
+                );
+                return {
+                    ...component,
+                    providerDescription: provider?.helpText
+                } as ComponentData;
+            }),
+        [realmComponents, keyProviderComponentTypes]
+    );
+
+    const onDeleteConfirm = async () => {
+        if (!selectedComponent?.id) return;
+        try {
+            await adminClient.components.del({
+                id: selectedComponent.id,
+                realm: realm
+            });
+            setSelectedComponent(undefined);
+            refresh();
+            toast.success(t("deleteProviderSuccess"));
+        } catch (error) {
+            toast.error(t("deleteProviderError", { error: getErrorMessage(error) }), {
+                description: getErrorDescription(error)
+            });
+        }
+    };
+
+    const columns: ColumnDef<ComponentData>[] = [
+        {
+            accessorKey: "name",
+            header: t("name"),
+            cell: ({ row }) => (
+                <Link
+                    to={toKeyProvider({
+                        realm,
+                        id: row.original.id!,
+                        providerType: row.original.providerId as ProviderType
+                    })}
+                    className="text-primary hover:underline"
+                    data-testid="provider-name-link"
+                >
+                    {row.original.name}
+                </Link>
+            )
+        },
+        {
+            accessorKey: "providerId",
+            header: t("provider"),
+            cell: ({ row }) => row.original.providerId ?? "-"
+        },
+        {
+            accessorKey: "providerDescription",
+            header: t("providerDescription"),
+            cell: ({ row }) => row.original.providerDescription ?? "-"
+        },
+        {
+            id: "actions",
+            header: "",
+            size: 50,
+            enableHiding: false,
+            cell: ({ row }) => (
+                <DataTableRowActions row={row}>
+                    <button
+                        type="button"
+                        className="flex w-full items-center gap-2 rounded-md px-1.5 py-1 text-left text-sm text-destructive hover:bg-destructive/10 hover:text-destructive"
+                        onClick={() => setSelectedComponent(row.original)}
+                    >
+                        <Trash className="size-4 shrink-0" />
+                        {t("delete")}
+                    </button>
+                </DataTableRowActions>
+            )
+        }
+    ];
+
+    return (
+        <>
+            {providerOpen && (
+                <KeyProvidersPicker
+                    onClose={() => toggleProviderOpen()}
+                    onConfirm={provider => {
+                        handleModalToggle();
+                        setDefaultUIDisplayName(provider as ProviderType);
+                        toggleProviderOpen();
+                    }}
+                />
+            )}
+            {isCreateModalOpen && defaultUIDisplayName && (
+                <KeyProviderModal
+                    providerType={defaultUIDisplayName}
+                    onClose={() => {
+                        handleModalToggle();
+                        refresh();
+                    }}
+                />
+            )}
+            <AlertDialog open={!!selectedComponent} onOpenChange={(open) => !open && setSelectedComponent(undefined)}>
+                <AlertDialogContent>
+                    <AlertDialogHeader>
+                        <AlertDialogTitle>{t("deleteProviderTitle")}</AlertDialogTitle>
+                        <AlertDialogDescription>
+                            {t("deleteProviderConfirm", { provider: selectedComponent?.name })}
+                        </AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter>
+                        <AlertDialogCancel>{t("cancel")}</AlertDialogCancel>
+                        <AlertDialogAction variant="destructive" data-testid="confirm" onClick={onDeleteConfirm}>
+                            {t("delete")}
+                        </AlertDialogAction>
+                    </AlertDialogFooter>
+                </AlertDialogContent>
+            </AlertDialog>
+            <DataTable
+                columns={columns}
+                data={data}
+                searchColumnId="name"
+                searchPlaceholder={t("search")}
+                emptyMessage={t("noProviders")}
+                toolbar={
+                    <Button
+                        type="button"
+                        data-testid="addProviderDropdown"
+                        variant="default"
+                        className="flex h-9 w-9 shrink-0 items-center justify-center p-0 sm:h-9 sm:w-auto sm:gap-2 sm:px-4 sm:py-2"
+                        aria-label={t("addProvider")}
+                        onClick={() => toggleProviderOpen()}
+                    >
+                        <Plus size={20} className="shrink-0 sm:hidden" />
+                        <span className="hidden sm:inline">{t("addProvider")}</span>
+                    </Button>
+                }
+            />
+        </>
+    );
+};

@@ -1,1 +1,1 @@
-export type InstallationMethod = "cli" | "manual" | "ai-assist";
+export type InstallationMethod = "cli" | "manual";

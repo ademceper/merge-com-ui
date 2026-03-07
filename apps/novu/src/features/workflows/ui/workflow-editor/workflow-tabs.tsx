@@ -13,22 +13,13 @@ import {
 	TabsTrigger,
 } from "@merge-rd/ui/components/tabs";
 import {
-	AiAgentTypeEnum,
-	AiResourceTypeEnum,
 	EnvironmentTypeEnum,
-	FeatureFlagsKeysEnum,
 	PermissionsEnum,
 	ResourceOriginEnum,
 } from "@/shared";
 import { CaretDown, Code, Copy, PlayCircle } from "@phosphor-icons/react";
 import { useCallback, useMemo, useState } from "react";
 import { Link, useMatch, useNavigate, useParams } from "react-router-dom";
-import {
-	AiChatProvider,
-	AiSidekickPanel,
-	useAiChat,
-} from "@/widgets/ai-sidekick";
-import { SidekickToast } from "@/widgets/ai-sidekick/sidekick-toast";
 import {
 	ButtonGroupItem,
 	ButtonGroupRoot,
@@ -45,7 +36,6 @@ import { DeleteWorkflowDialog } from "@/features/workflows/ui/delete-workflow-di
 import { useWorkflow } from "@/features/workflows/ui/workflow-editor/workflow-provider";
 import { useDeleteWorkflow } from "@/features/workflows/lib/use-delete-workflow";
 import { useTriggerWorkflow } from "@/features/workflows/lib/use-trigger-workflow";
-import { useFeatureFlag } from "@/shared/lib/hooks/use-feature-flag";
 import { useHasPermission } from "@/shared/lib/hooks/use-has-permission";
 import { useIsPayloadSchemaEnabled } from "@/features/workflows/lib/use-is-payload-schema-enabled";
 import {
@@ -54,7 +44,6 @@ import {
 } from "@/shared/lib/code-snippets";
 import { Protect } from "@/shared/lib/protect";
 import { buildRoute, ROUTES } from "@/shared/lib/routes";
-import { ResizableLayout } from "./steps/layout/resizable-layout";
 import {
 	getInitialPayload,
 	getInitialSubscriber,
@@ -67,15 +56,11 @@ export const WorkflowTabs = () => {
 	const {
 		workflow,
 		isPending: isWorkflowPending,
-		refetch: refetchWorkflow,
 	} = useWorkflow();
 	const { currentEnvironment, areEnvironmentsInitialLoading } =
 		useEnvironment();
 	const { user: currentUser } = useUser();
 	const navigate = useNavigate();
-	const isAiWorkflowGenerationEnabled = useFeatureFlag(
-		FeatureFlagsKeysEnum.IS_AI_WORKFLOW_GENERATION_ENABLED,
-	);
 	const activityMatch = useMatch(ROUTES.EDIT_WORKFLOW_ACTIVITY);
 	const [isIntegrateDrawerOpen, setIsIntegrateDrawerOpen] = useState(false);
 	const { workflowSlug = "" } = useParams<{
@@ -401,67 +386,7 @@ export const WorkflowTabs = () => {
 	// Determine current tab based on URL
 	const currentTab = activityMatch ? "activity" : "workflow";
 
-	const { deleteWorkflow, isPending: isDeletePending } = useDeleteWorkflow();
-
-	const aiChatConfig = useMemo(
-		() => ({
-			resourceType: AiResourceTypeEnum.WORKFLOW,
-			resourceId: workflow?._id,
-			agentType: AiAgentTypeEnum.GENERATE_WORKFLOW,
-			isResourceLoading: isWorkflowPending,
-			onRefetchResource: () => refetchWorkflow({ cancelRefetch: true }),
-			onData: (data: { type: string }) => {
-				if (
-					data.type === "data-step-added" ||
-					data.type === "data-workflow-completed" ||
-					data.type === "data-step-updated" ||
-					data.type === "data-step-removed" ||
-					data.type === "data-step-moved" ||
-					data.type === "data-workflow-metadata-updated"
-				) {
-					refetchWorkflow({ cancelRefetch: true });
-				}
-			},
-			onKeepSuccess: () => showSuccessToast("Changes are successfully applied"),
-			onKeepError: () => showErrorToast("Failed to apply changes"),
-			firstMessageRevert: workflow
-				? {
-						renderDialog: (props: {
-							open: boolean;
-							onOpenChange: (open: boolean) => void;
-							onConfirm: () => Promise<void>;
-						}) => (
-							<DeleteWorkflowDialog
-								workflow={workflow}
-								open={props.open}
-								onOpenChange={props.onOpenChange}
-								onConfirm={props.onConfirm}
-								isLoading={isDeletePending}
-							/>
-						),
-						onConfirm: async () => {
-							await deleteWorkflow({ workflowSlug: workflow.slug });
-							navigate(
-								buildRoute(ROUTES.WORKFLOWS, {
-									environmentSlug: currentEnvironment?.slug ?? "",
-								}),
-							);
-						},
-					}
-				: undefined,
-		}),
-		[
-			workflow,
-			isWorkflowPending,
-			refetchWorkflow,
-			deleteWorkflow,
-			isDeletePending,
-			navigate,
-			currentEnvironment?.slug,
-		],
-	);
-
-	const content = (
+	return (
 		<div className="flex h-full w-full flex-1 flex-nowrap">
 			<Tabs
 				defaultValue="workflow"
@@ -584,37 +509,12 @@ export const WorkflowTabs = () => {
 					value="workflow"
 					className="flex mt-0 h-full max-w-full overflow-hidden"
 				>
-					{isAiWorkflowGenerationEnabled && isDevEnvironment ? (
-						<ResizableLayout
-							autoSaveId="workflow-editor-ai-sidekick-layout"
-							className="flex-1 min-w-0"
-						>
-							<ResizableLayout.ContextPanel
-								defaultSize={26}
-								minSize={20}
-								maxSize={80}
-							>
-								<AiSidekickPanel />
-							</ResizableLayout.ContextPanel>
-							<ResizableLayout.Handle />
-							<ResizableLayout.MainContentPanel>
-								<div className="relative flex-1">
-									<WorkflowCanvas
-										isReadOnly={isReadOnly}
-										steps={workflow?.steps || []}
-									/>
-									<WorkflowCanvasToast />
-								</div>
-							</ResizableLayout.MainContentPanel>
-						</ResizableLayout>
-					) : (
-						<div className="relative flex-1">
-							<WorkflowCanvas
-								isReadOnly={isReadOnly}
-								steps={workflow?.steps || []}
-							/>
-						</div>
-					)}
+					<div className="relative flex-1">
+						<WorkflowCanvas
+							isReadOnly={isReadOnly}
+							steps={workflow?.steps || []}
+						/>
+					</div>
 				</TabsContent>
 				<TabsContent value="activity" className="mt-0 h-full max-w-full">
 					<WorkflowActivity />
@@ -630,36 +530,4 @@ export const WorkflowTabs = () => {
 			/>
 		</div>
 	);
-
-	return isAiWorkflowGenerationEnabled ? (
-		<AiChatProvider config={aiChatConfig}>{content}</AiChatProvider>
-	) : (
-		content
-	);
 };
-
-function WorkflowCanvasToast() {
-	const {
-		isGenerating,
-		isReviewingChanges,
-		isActionPending,
-		lastUserMessageId,
-		handleStop,
-		handleKeepAll,
-		handleDiscard,
-	} = useAiChat();
-
-	const isVisible = isGenerating || isReviewingChanges;
-	const variant = isGenerating ? "generating" : "reviewing";
-
-	return (
-		<SidekickToast
-			isVisible={isVisible}
-			variant={variant}
-			isActionPending={isActionPending}
-			onCancel={handleStop}
-			onKeepAll={handleKeepAll}
-			onDiscard={() => lastUserMessageId && handleDiscard(lastUserMessageId)}
-		/>
-	);
-}

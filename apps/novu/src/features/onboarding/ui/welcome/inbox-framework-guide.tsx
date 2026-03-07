@@ -46,7 +46,7 @@ export function InboxFrameworkGuide({
 	const track = useTelemetry();
 
 	const frameworks =
-		getFrameworks("ai-assist", currentEnvironment?.identifier, subscriberId) ||
+		getFrameworks("cli", currentEnvironment?.identifier, subscriberId) ||
 		[];
 
 	const [selectedFrameworkName, setSelectedFrameworkName] = useState<string>(
@@ -57,7 +57,7 @@ export function InboxFrameworkGuide({
 		},
 	);
 	const [installationMethod, setInstallationMethod] =
-		useState<InstallationMethod>("ai-assist");
+		useState<InstallationMethod>("cli");
 
 	const effectiveInstallationMethod = useMemo<InstallationMethod>(
 		() =>
@@ -113,7 +113,7 @@ export function InboxFrameworkGuide({
 			if (FRAMEWORKS_WITH_MANUAL_ONLY.includes(framework.name)) {
 				setInstallationMethod("manual");
 			} else if (FRAMEWORKS_WITH_INSTALLATION_TABS.includes(framework.name)) {
-				setInstallationMethod("ai-assist");
+				setInstallationMethod("cli");
 			}
 		},
 		[track],

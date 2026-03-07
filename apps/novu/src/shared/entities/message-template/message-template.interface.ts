@@ -1,14 +1,12 @@
 import type { JSONSchemaDto, UiSchema } from "../../dto";
-import {
-	type ChannelCTATypeEnum,
-	type EnvironmentId,
-	type IEmailBlock,
-	type ITemplateVariable,
-	type MessageTemplateContentType,
-	type OrganizationId,
-	type StepTypeEnum,
-	TemplateVariableTypeEnum,
-	TriggerContextTypeEnum,
+import type {
+	ChannelCTATypeEnum,
+	EnvironmentId,
+	IEmailBlock,
+	ITemplateVariable,
+	MessageTemplateContentType,
+	OrganizationId,
+	StepTypeEnum,
 } from "../../model";
 import type { IActor } from "../actor";
 
@@ -51,56 +49,3 @@ export class ControlSchemas {
 	schema: JSONSchemaDto;
 	uiSchema?: UiSchema;
 }
-export const TemplateSystemVariables = [
-	"subscriber",
-	"step",
-	"branding",
-	"tenant",
-	"preheader",
-	"actor",
-];
-
-export const SystemVariablesWithTypes = {
-	subscriber: {
-		firstName: "string",
-		lastName: "string",
-		email: "string",
-		phone: "string",
-		avatar: "string",
-		locale: "string",
-		subscriberId: "string",
-	},
-	actor: {
-		firstName: "string",
-		lastName: "string",
-		email: "string",
-		phone: "string",
-		avatar: "string",
-		locale: "string",
-		subscriberId: "string",
-	},
-	step: {
-		digest: "boolean",
-		events: "array",
-		total_count: "number",
-	},
-	branding: {
-		logo: "string",
-		color: "string",
-	},
-	tenant: {
-		name: "string",
-		data: "object",
-	},
-};
-
-export const TriggerReservedVariables = ["tenant", "actor"];
-
-export const ReservedVariablesMap = {
-	[TriggerContextTypeEnum.TENANT]: [
-		{ name: "identifier", type: TemplateVariableTypeEnum.STRING },
-	],
-	[TriggerContextTypeEnum.ACTOR]: [
-		{ name: "subscriberId", type: TemplateVariableTypeEnum.STRING },
-	],
-};

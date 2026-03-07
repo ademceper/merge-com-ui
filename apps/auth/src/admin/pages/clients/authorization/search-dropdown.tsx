@@ -1,0 +1,115 @@
+import type PolicyProviderRepresentation from "@keycloak/keycloak-admin-client/lib/defs/policyProviderRepresentation";
+import { SelectField, TextControl } from "../../../../shared/keycloak-ui-shared";
+import { Button } from "@merge-rd/ui/components/button";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger } from "@merge-rd/ui/components/dropdown-menu";
+import { useEffect } from "react";
+import { FormProvider, useForm } from "react-hook-form";
+import { useTranslation } from "react-i18next";
+import useToggle from "../../../shared/lib/useToggle";
+
+export type SearchForm = {
+    name?: string;
+    resource?: string;
+    scope?: string;
+    type?: string;
+    uri?: string;
+    owner?: string;
+};
+
+type SearchDropdownProps = {
+    types?: PolicyProviderRepresentation[] | PolicyProviderRepresentation[];
+    search: SearchForm;
+    onSearch: (form: SearchForm) => void;
+    type: "resource" | "policy" | "permission";
+};
+
+export const SearchDropdown = ({
+    types,
+    search,
+    onSearch,
+    type
+}: SearchDropdownProps) => {
+    const { t } = useTranslation();
+    const form = useForm<SearchForm>({ mode: "onChange" });
+    const {
+        reset,
+        formState: { isDirty },
+        handleSubmit
+    } = form;
+
+    const [open, toggle] = useToggle();
+
+    const submit = (form: SearchForm) => {
+        toggle();
+        onSearch(form);
+    };
+
+    useEffect(() => reset(search), [search]);
+
+    return (
+        <DropdownMenu open={open} onOpenChange={toggle}>
+            <DropdownMenuTrigger asChild>
+                <Button
+                    data-testid="searchdropdown_dorpdown"
+                    variant="outline"
+                    className="keycloak__client_authentication__searchdropdown"
+                >
+                    {type === "resource" && t("searchClientAuthorizationResource")}
+                    {type === "policy" && t("searchClientAuthorizationPolicy")}
+                    {type === "permission" && t("searchClientAuthorizationPermission")}
+                </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent className="p-4 w-80">
+                <FormProvider {...form}>
+                    <form
+                        className="space-y-4"
+                        onSubmit={handleSubmit(submit)}
+                    >
+                        <TextControl name="name" label={t("name")} />
+                        {type === "resource" && (
+                            <>
+                                <TextControl name="type" label={t("type")} />
+                                <TextControl name="uris" label={t("uris")} />
+                                <TextControl name="owner" label={t("owner")} />
+                            </>
+                        )}
+                        {type !== "resource" && type !== "policy" && (
+                            <TextControl name="resource" label={t("resource")} />
+                        )}
+                        {type !== "policy" && <TextControl name="scope" label={t("scope")} />}
+                        {type !== "resource" && (
+                            <SelectField
+                                name="type"
+                                label={t("type")}
+                                defaultValue=""
+                                options={[
+                                    { key: "", value: t("allTypes") },
+                                    ...(types || []).map(({ type, name }) => ({
+                                        key: type!,
+                                        value: name!
+                                    }))
+                                ]}
+                            />
+                        )}
+                        <div className="flex gap-2">
+                            <Button
+                                type="submit"
+                                data-testid="search-btn"
+                                disabled={!isDirty}
+                            >
+                                {t("search")}
+                            </Button>
+                            <Button
+                                variant="link"
+                                data-testid="revert-btn"
+                                onClick={() => onSearch({})}
+                            >
+                                {t("clear")}
+                            </Button>
+                        </div>
+                    </form>
+                </FormProvider>
+            </DropdownMenuContent>
+        </DropdownMenu>
+    );
+};

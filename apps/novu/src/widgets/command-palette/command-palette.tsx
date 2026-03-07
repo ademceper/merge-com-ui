@@ -12,13 +12,11 @@ import {
 	Path,
 	Play,
 	Question,
-	Sparkle,
 	User,
 	X,
 } from "@phosphor-icons/react";
 import { useCommandState } from "cmdk";
 import { useCallback, useEffect, useState } from "react";
-import { useAiDrawer } from "@/widgets/ai-drawer";
 import { useTelemetry } from "@/shared/lib/hooks/use-telemetry";
 import { TelemetryEvent } from "@/shared/lib/telemetry";
 import * as CommandMenu from "./command-menu";
@@ -56,7 +54,6 @@ const getDefaultIcon = (category: CommandCategory): React.ReactNode => {
 
 const getCategoryActionLabel = (
 	category: CommandCategory | undefined,
-	value: string,
 ): string => {
 	const actionLabels: Record<CommandCategory, string> = {
 		"current-workflow": "Execute action",
@@ -69,9 +66,7 @@ const getCategoryActionLabel = (
 		help: "Get help",
 	};
 
-	if (value.includes("Ask AI")) {
-		return "Ask AI";
-	} else if (!category) {
+	if (!category) {
 		return "Open Command";
 	}
 
@@ -101,7 +96,7 @@ function CommandFooter({ commands }: { commands: CommandType[] }) {
 				</div>
 				<Button variant="primary" size="2xs" mode="gradient">
 					<span>
-						{getCategoryActionLabel(selectedCommand?.category, selectedValue)}
+						{getCategoryActionLabel(selectedCommand?.category)}
 					</span>
 					<Kbd className="border border-white/30 bg-transparent ring-transparent px-0 size-4 justify-center items-center">
 						<ArrowElbowDownLeft className="size-2.5 text-white" />
@@ -114,14 +109,12 @@ function CommandFooter({ commands }: { commands: CommandType[] }) {
 
 export function CommandPalette() {
 	const { isOpen, closeCommandPalette } = useCommandPalette();
-	const { openAiDrawer } = useAiDrawer();
 	const track = useTelemetry();
 	const [search, setSearch] = useState("");
 	const commandGroups = useCommandRegistry(search);
 
 	// Create a flat list of all commands for easy lookup
 	const allCommands = commandGroups.flatMap((group) => group.commands);
-	const hasInkeep = !!import.meta.env.VITE_INKEEP_API_KEY;
 
 	// Reset search when dialog closes
 	useEffect(() => {
@@ -129,17 +122,6 @@ export function CommandPalette() {
 			setSearch("");
 		}
 	}, [isOpen]);
-
-	const openAiDrawerWithQuery = useCallback(() => {
-		track(TelemetryEvent.COMMAND_PALETTE_COMMAND_SELECTED, {
-			commandId: "help-ai-search",
-			commandLabel: `Ask AI "${search}"`,
-			commandCategory: "help",
-		});
-
-		openAiDrawer(search);
-		closeCommandPalette();
-	}, [search, openAiDrawer, closeCommandPalette, track]);
 
 	const executeCommand = useCallback(
 		async (command: CommandType) => {
@@ -170,7 +152,7 @@ export function CommandPalette() {
 				<CommandMenu.Input
 					value={search}
 					onValueChange={setSearch}
-					placeholder="Type a command, search or ask Novu AI..."
+					placeholder="Type a command or search..."
 					autoFocus
 					className="text-label-md text-text-sub placeholder:text-text-soft"
 				/>
@@ -221,25 +203,6 @@ export function CommandPalette() {
 						})}
 					</CommandMenu.Group>
 				))}
-
-				{hasInkeep && search.trim() && (
-					<CommandMenu.Group heading="AI Assistant" className="px-2.5">
-						<CommandMenu.Item
-							value={`Ask AI ${search} ai assistant help question`}
-							onSelect={openAiDrawerWithQuery}
-							className="px-1.5 rounded-8"
-						>
-							<div className="flex items-center gap-1.5 flex-1">
-								<CategoryIconWrapper>
-									<Sparkle />
-								</CategoryIconWrapper>
-								<span className="text-text-sub text-label-sm flex-1 truncate">
-									Ask AI "{search}"
-								</span>
-							</div>
-						</CommandMenu.Item>
-					</CommandMenu.Group>
-				)}
 			</CommandMenu.List>
 
 			<CommandFooter commands={allCommands} />

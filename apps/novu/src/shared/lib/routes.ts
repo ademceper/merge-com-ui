@@ -41,7 +41,6 @@ export const ROUTES = {
 	SUBSCRIBERS: "/env/:environmentSlug/subscribers",
 	EDIT_SUBSCRIBER: "/env/:environmentSlug/subscribers/:subscriberId",
 	CREATE_SUBSCRIBER: "/env/:environmentSlug/subscribers/create",
-	PARTNER_INTEGRATIONS_VERCEL: "/partner-integrations/vercel",
 	WEBHOOKS: "/env/:environmentSlug/webhooks",
 	WEBHOOKS_ENDPOINTS: "/env/:environmentSlug/webhooks/endpoints",
 	WEBHOOKS_EVENT_CATALOG: "/env/:environmentSlug/webhooks/event-catalog",

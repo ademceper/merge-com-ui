@@ -2,7 +2,7 @@ import "@merge-rd/ui/globals.css";
 
 import { KeycloakProvider } from "@merge-rd/auth";
 import { Providers } from "@merge-rd/ui/components/providers";
-import { lazy, StrictMode } from "react";
+import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { ErrorPage } from "@/pages/error-page";
@@ -35,12 +35,6 @@ import { OnboardingParentRoute } from "./routes/onboarding";
 import { ROUTES } from "@/shared/lib/routes";
 import { initializeSentry } from "@/shared/lib/sentry";
 import { overrideZodErrorMap } from "@/shared/lib/validation";
-
-const VercelIntegrationPage = lazy(() =>
-	import("@/pages/vercel-integration-page").then((m) => ({
-		default: m.VercelIntegrationPage,
-	})),
-);
 
 initializeSentry();
 overrideZodErrorMap();
@@ -102,10 +96,6 @@ const router = createBrowserRouter([
 									...workflowsFullPageRoutes,
 									...layoutsFullPageRoutes,
 								],
-							},
-							{
-								path: ROUTES.PARTNER_INTEGRATIONS_VERCEL,
-								element: <VercelIntegrationPage />,
 							},
 						],
 					},

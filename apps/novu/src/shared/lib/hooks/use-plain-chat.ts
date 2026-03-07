@@ -1,5 +1,5 @@
 import { useUser } from "@merge-rd/auth";
-import { FeatureFlagsKeysEnum } from "@/shared";
+import { FeatureFlagsKeysEnum } from "@/shared/model/feature-flags";
 import * as Sentry from "@sentry/react";
 import { useEffect } from "react";
 import { PLAIN_SUPPORT_CHAT_APP_ID } from "@/shared/config";

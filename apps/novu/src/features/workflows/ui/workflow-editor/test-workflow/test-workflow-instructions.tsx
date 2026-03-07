@@ -18,11 +18,6 @@ import {
 	SheetMain,
 	SheetTitle,
 } from "@/shared/ui/primitives/sheet";
-import { ToastClose, ToastIcon } from "@/shared/ui/primitives/sonner";
-import {
-	showErrorToast,
-	showToast,
-} from "@/shared/ui/primitives/sonner-helpers";
 import {
 	TimelineContainer,
 	TimelineStep,
@@ -41,10 +36,6 @@ import {
 	createPythonSnippet,
 } from "@/shared/lib/code-snippets";
 import { TelemetryEvent } from "@/shared/lib/telemetry";
-import {
-	generateWorkflowTriggerAIPrompt,
-	type PromptLanguage,
-} from "@/shared/lib/workflow-trigger-ai-prompt";
 import type { SnippetLanguage } from "./types";
 
 interface TestWorkflowInstructionsProps {
@@ -74,15 +65,6 @@ const SNIPPET_TO_CODE_LANGUAGE: Record<SnippetLanguage, Language> = {
 	go: "go",
 	python: "python",
 	framework: "typescript",
-};
-
-const SNIPPET_TO_PROMPT_LANGUAGE: Record<SnippetLanguage, PromptLanguage> = {
-	shell: "shell",
-	typescript: "nodejs",
-	php: "php",
-	go: "go",
-	python: "python",
-	framework: "nodejs",
 };
 
 const PLACEHOLDER_API_KEY = "API_KEY";
@@ -152,25 +134,6 @@ function InstructionStep({
 	);
 }
 
-interface AIPromptTipProps {
-	onCopy: () => void;
-	isCopied: boolean;
-}
-
-function AIPromptTip({ onCopy, isCopied }: AIPromptTipProps) {
-	return (
-		<InlineToast
-			variant="tip"
-			title="Tip:"
-			description="Use this pre-built prompt to get started faster."
-			ctaLabel={isCopied ? "Copied!" : "Copy AI prompt"}
-			onCtaClick={onCopy}
-			ctaClassName="border-neutral-200 bg-white text-foreground-950 h-auto rounded border px-3 py-1.5 hover:bg-neutral-50"
-			className="-mt-4 mb-3"
-		/>
-	);
-}
-
 export function TestWorkflowInstructions({
 	isOpen,
 	onClose,
@@ -190,7 +153,6 @@ export function TestWorkflowInstructions({
 		: PLACEHOLDER_API_KEY;
 	const track = useTelemetry();
 
-	const [isAIPromptCopied, setIsAIPromptCopied] = useState(false);
 	const [activeTab, setActiveTab] = useState<SnippetLanguage>("typescript");
 
 	useEffect(() => {
@@ -198,13 +160,6 @@ export function TestWorkflowInstructions({
 			track(TelemetryEvent.WORKFLOW_INSTRUCTIONS_OPENED);
 		}
 	}, [isOpen, track]);
-
-	useEffect(() => {
-		if (isAIPromptCopied) {
-			const timer = setTimeout(() => setIsAIPromptCopied(false), 2000);
-			return () => clearTimeout(timer);
-		}
-	}, [isAIPromptCopied]);
 
 	const getSnippetForLanguage = (language: SnippetLanguage) => {
 		const snippetUtil = LANGUAGE_TO_SNIPPET_UTIL[language];
@@ -233,55 +188,6 @@ export function TestWorkflowInstructions({
 	};
 
 	const { maskStart, maskEnd } = getApiKeyMaskPositions(apiKey);
-
-	const handleCopyAIPrompt = async () => {
-		try {
-			let parsedPayload: Record<string, unknown> = {};
-			try {
-				if (typeof payload === "string") {
-					parsedPayload = payload ? JSON.parse(payload) : {};
-				} else {
-					parsedPayload = payload ?? {};
-				}
-			} catch {
-				parsedPayload = {};
-			}
-
-			const aiPrompt = generateWorkflowTriggerAIPrompt({
-				workflowId: identifier,
-				workflowName: workflow?.name ?? identifier,
-				subscriberData: to ?? {},
-				payload: parsedPayload,
-				language: SNIPPET_TO_PROMPT_LANGUAGE[activeTab],
-			});
-
-			await navigator.clipboard.writeText(aiPrompt);
-			setIsAIPromptCopied(true);
-
-			track(TelemetryEvent.AI_PROMPT_COPIED, {
-				workflowId: identifier,
-				workflowName: workflow?.name,
-				framework: activeTab,
-				language: SNIPPET_TO_PROMPT_LANGUAGE[activeTab],
-				context: "workflow_instructions",
-			});
-
-			showToast({
-				children: ({ close }) => (
-					<>
-						<ToastIcon variant="success" />
-						<span>AI prompt copied to clipboard</span>
-						<ToastClose onClick={close} />
-					</>
-				),
-				options: {
-					position: "bottom-right",
-				},
-			});
-		} catch {
-			showErrorToast("Failed to copy AI prompt");
-		}
-	};
 
 	return (
 		<Sheet open={isOpen} onOpenChange={onClose}>
@@ -327,10 +233,6 @@ export function TestWorkflowInstructions({
 
 						<div className="min-h-0 flex-1 overflow-y-auto px-6 py-8">
 							<TabsContent value="typescript" className="mt-0 min-w-0">
-								<AIPromptTip
-									onCopy={handleCopyAIPrompt}
-									isCopied={isAIPromptCopied}
-								/>
 								<TimelineContainer>
 									<InstructionStep
 										index={0}
@@ -369,10 +271,6 @@ export function TestWorkflowInstructions({
 							</TabsContent>
 
 							<TabsContent value="shell" className="mt-0 min-w-0">
-								<AIPromptTip
-									onCopy={handleCopyAIPrompt}
-									isCopied={isAIPromptCopied}
-								/>
 								<TimelineContainer>
 									<InstructionStep
 										index={0}
@@ -409,10 +307,6 @@ export function TestWorkflowInstructions({
 							</TabsContent>
 
 							<TabsContent value="php" className="mt-0 min-w-0">
-								<AIPromptTip
-									onCopy={handleCopyAIPrompt}
-									isCopied={isAIPromptCopied}
-								/>
 								<TimelineContainer>
 									<InstructionStep
 										index={0}
@@ -451,10 +345,6 @@ export function TestWorkflowInstructions({
 							</TabsContent>
 
 							<TabsContent value="python" className="mt-0 min-w-0">
-								<AIPromptTip
-									onCopy={handleCopyAIPrompt}
-									isCopied={isAIPromptCopied}
-								/>
 								<TimelineContainer>
 									<InstructionStep
 										index={0}
@@ -493,10 +383,6 @@ export function TestWorkflowInstructions({
 							</TabsContent>
 
 							<TabsContent value="go" className="mt-0 min-w-0">
-								<AIPromptTip
-									onCopy={handleCopyAIPrompt}
-									isCopied={isAIPromptCopied}
-								/>
 								<TimelineContainer>
 									<InstructionStep
 										index={0}

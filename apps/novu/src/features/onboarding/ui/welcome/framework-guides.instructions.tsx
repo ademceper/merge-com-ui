@@ -2,8 +2,6 @@ import { Atom, FileCode, FileJs, Globe, Terminal } from "@phosphor-icons/react";
 import type { Language } from "@/shared/ui/primitives/code-block";
 import { API_HOSTNAME, IS_EU } from "@/shared/config";
 import { apiHostnameManager } from "@/shared/lib/api-hostname-manager";
-import { getFrameworkPrompt } from "./ai-prompts/simple-prompt-getter";
-
 export interface Framework {
 	name: string;
 	icon: JSX.Element;
@@ -50,22 +48,13 @@ function optionalObjectProps(indent: string): string {
 }
 
 function stepsByMethod(
-	installationMethod: "cli" | "manual" | "ai-assist",
+	installationMethod: "cli" | "manual",
 	manualSteps: InstallationStep[],
-	frameworkName?: string,
-	applicationIdentifier?: string,
-	subscriberId?: string,
+	_frameworkName?: string,
+	_applicationIdentifier?: string,
+	_subscriberId?: string,
 ): InstallationStep[] {
 	if (installationMethod === "cli") return [commonCLIInstallStep()];
-	if (installationMethod === "ai-assist") {
-		return [
-			commonAIAssistInstallStep(
-				frameworkName || "",
-				applicationIdentifier || "YOUR_APPLICATION_IDENTIFIER",
-				subscriberId || "YOUR_SUBSCRIBER_ID",
-			),
-		];
-	}
 	return manualSteps;
 }
 
@@ -103,25 +92,8 @@ export const commonCLIInstallStep = (): InstallationStep => ({
 	codeTitle: "Terminal",
 });
 
-export const commonAIAssistInstallStep = (
-	frameworkName: string,
-	applicationIdentifier: string,
-	subscriberId: string,
-): InstallationStep => ({
-	title: "Let your AI do the setup",
-	description: `Copy this quick-start guide as a prompt for LLMs inside your IDE to implement Novu in your application.`,
-	buttonText: "Copy AI prompt",
-	copyText: getFrameworkPrompt(
-		frameworkName,
-		applicationIdentifier,
-		IS_EU ? "eu" : "us",
-		subscriberId,
-	),
-	codeLanguage: "shell",
-});
-
 export const getFrameworks = (
-	installationMethod: "cli" | "manual" | "ai-assist",
+	installationMethod: "cli" | "manual",
 	applicationIdentifier?: string,
 	subscriberId?: string,
 ): Framework[] => [
