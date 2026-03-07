@@ -1,5 +1,5 @@
 import type { SubscriberResponseDto } from "@novu/api/models/components";
-import type { ISubscriberResponseDto } from "@novu/shared";
+import type { ISubscriberResponseDto } from "@/shared";
 
 export const getSubscriberTitle = (
 	subscriber: ISubscriberResponseDto | SubscriberResponseDto,

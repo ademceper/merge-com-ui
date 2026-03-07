@@ -1,11 +1,11 @@
 import type { TranslationGroupDto } from "@novu/api/models/components";
-import { EnvironmentTypeEnum, PermissionsEnum } from "@novu/shared";
+import { EnvironmentTypeEnum, PermissionsEnum } from "@/shared";
 import { forwardRef, useCallback, useImperativeHandle, useState } from "react";
-import { InlineToast } from "@/components/primitives/inline-toast";
-import { PermissionButton } from "@/components/primitives/permission-button";
-import { UnsavedChangesAlertDialog } from "@/components/unsaved-changes-alert-dialog";
-import { useEnvironment } from "@/context/environment/hooks";
-import { useHasPermission } from "@/hooks/use-has-permission";
+import { InlineToast } from "@/shared/ui/primitives/inline-toast";
+import { PermissionButton } from "@/shared/ui/primitives/permission-button";
+import { UnsavedChangesAlertDialog } from "@/shared/ui/unsaved-changes-alert-dialog";
+import { useEnvironment } from "@/app/context/environment/hooks";
+import { useHasPermission } from "@/shared/lib/hooks/use-has-permission";
 import { EditorPanel } from "./editor-panel";
 import { LocaleList } from "./locale-list";
 import { TranslationHeader } from "./translation-header";

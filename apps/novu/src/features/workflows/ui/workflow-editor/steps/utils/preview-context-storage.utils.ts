@@ -1,9 +1,9 @@
-import type { ContextPayload, WorkflowResponseDto } from "@novu/shared";
+import type { ContextPayload, WorkflowResponseDto } from "@/shared";
 import {
 	clearFromStorage,
 	loadFromStorage,
 	saveToStorage,
-} from "@/utils/local-storage";
+} from "@/shared/lib/local-storage";
 import type {
 	ParsedData,
 	PayloadData,

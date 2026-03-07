@@ -1,4 +1,4 @@
-import { ChannelTypeEnum } from "@novu/shared";
+import { ChannelTypeEnum } from "@/shared";
 import * as Sentry from "@sentry/react";
 import { type HTMLAttributes, useEffect } from "react";
 import { useParams } from "react-router-dom";
@@ -10,9 +10,9 @@ import {
 	InAppPreviewNotification,
 	InAppPreviewNotificationContent,
 	InAppPreviewSubject,
-} from "@/features/workflows/components/workflow-editor/in-app-preview";
-import { useWorkflow } from "@/features/workflows/components/workflow-editor/workflow-provider";
-import { usePreviewStep } from "@/hooks/use-preview-step";
+} from "@/features/workflows/ui/workflow-editor/in-app-preview";
+import { useWorkflow } from "@/features/workflows/ui/workflow-editor/workflow-provider";
+import { usePreviewStep } from "@/shared/lib/hooks/use-preview-step";
 
 type ConfigureInAppStepPreviewProps = HTMLAttributes<HTMLDivElement>;
 

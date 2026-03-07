@@ -9,12 +9,12 @@ import {
 	HoverCard,
 	HoverCardContent,
 	HoverCardTrigger,
-} from "@/components/primitives/hover-card";
-import { useFetchRequestTraces } from "@/features/activity/hooks/use-fetch-request-traces";
-import type { ApiTrace, RequestLog } from "../../types/logs";
-import { formatDateSimple } from "../../utils/format-date";
-import { StatusBadge, StatusBadgeIcon } from "../primitives/status-badge";
-import { TimeDisplayHoverCard } from "../time-display-hover-card";
+} from "@/shared/ui/primitives/hover-card";
+import { useFetchRequestTraces } from "@/features/activity/lib/use-fetch-request-traces";
+import type { ApiTrace, RequestLog } from "@/shared/model/logs";
+import { formatDateSimple } from "@/shared/lib/format-date";
+import { StatusBadge, StatusBadgeIcon } from "@/shared/ui/primitives/status-badge";
+import { TimeDisplayHoverCard } from "@/shared/ui/time-display-hover-card";
 
 type ApiTracesContentProps = {
 	log: RequestLog;

@@ -16,9 +16,9 @@ import {
 	FormField,
 	FormItem,
 	FormRoot,
-} from "@/components/primitives/form/form";
-import type { ContextsFilter } from "@/features/contexts/hooks/use-contexts-url-state";
-import { QueryKeys } from "@/utils/query-keys";
+} from "@/shared/ui/primitives/form/form";
+import type { ContextsFilter } from "@/features/contexts/lib/use-contexts-url-state";
+import { QueryKeys } from "@/shared/lib/query-keys";
 
 type FilterFormValues = {
 	search: string;

@@ -1,5 +1,5 @@
 import { cn } from "@merge-rd/ui/lib/utils";
-import { StatusBadge } from "@/components/primitives/status-badge";
+import { StatusBadge } from "@/shared/ui/primitives/status-badge";
 
 type HttpStatusBadgeProps = {
 	statusCode: number;

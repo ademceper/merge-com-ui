@@ -1,5 +1,5 @@
 import type { Editor, Editor as TiptapEditor } from "@tiptap/core";
-import { parseVariable } from "@/utils/liquid";
+import { parseVariable } from "@/shared/lib/liquid";
 
 export const REPEAT_BLOCK_ITERABLE_ALIAS = "current";
 export const ALLOWED_ALIASES = [REPEAT_BLOCK_ITERABLE_ALIAS];

@@ -5,14 +5,14 @@ import {
 	UiComponentEnum,
 	type UiSchema,
 	UiSchemaGroupEnum,
-} from "@novu/shared";
+} from "@/shared";
 import { useState } from "react";
 import { useFormContext, useWatch } from "react-hook-form";
-import { useEnvironment } from "@/context/environment/hooks";
-import { getComponentByType } from "@/features/workflows/components/workflow-editor/steps/component-utils";
-import { EmailPreviewHeader } from "@/features/workflows/components/workflow-editor/steps/email/email-preview";
-import { SenderConfigDrawer } from "@/features/workflows/components/workflow-editor/steps/email/sender-config-drawer";
-import { useFeatureFlag } from "@/hooks/use-feature-flag";
+import { useEnvironment } from "@/app/context/environment/hooks";
+import { getComponentByType } from "@/features/workflows/ui/workflow-editor/steps/component-utils";
+import { EmailPreviewHeader } from "@/features/workflows/ui/workflow-editor/steps/email/email-preview";
+import { SenderConfigDrawer } from "@/features/workflows/ui/workflow-editor/steps/email/sender-config-drawer";
+import { useFeatureFlag } from "@/shared/lib/hooks/use-feature-flag";
 import { StepEditorUnavailable } from "../step-editor-unavailable";
 
 type EmailEditorProps = { uiSchema: UiSchema; isEditorV2?: boolean };

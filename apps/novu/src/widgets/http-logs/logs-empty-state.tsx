@@ -1,8 +1,8 @@
 import { Button } from "@merge-rd/ui/components/button";
 import { BookBookmark, PlusCircle } from "@phosphor-icons/react";
 import { Link, useNavigate } from "react-router-dom";
-import { LinkButton } from "@/components/primitives/button-link";
-import { EmptyTopicsIllustration } from "@/features/topics/components/empty-topics-illustration";
+import { LinkButton } from "@/shared/ui/primitives/button-link";
+import { EmptyTopicsIllustration } from "@/features/topics/ui/empty-topics-illustration";
 
 export const RequestLogsEmptyState = () => {
 	const navigate = useNavigate();

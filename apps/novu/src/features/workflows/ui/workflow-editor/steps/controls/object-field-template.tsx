@@ -16,7 +16,7 @@ import {
 	FormField,
 	FormItem,
 	FormMessage,
-} from "@/components/primitives/form/form";
+} from "@/shared/ui/primitives/form/form";
 import { getFieldName, ROOT_DELIMITER } from "./template-utils";
 
 export function ObjectFieldTemplate(props: ObjectFieldTemplateProps) {

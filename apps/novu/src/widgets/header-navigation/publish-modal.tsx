@@ -10,7 +10,7 @@ import {
 	DialogDescription,
 	DialogTitle,
 } from "@merge-rd/ui/components/dialog";
-import type { IEnvironment } from "@novu/shared";
+import type { IEnvironment } from "@/shared";
 import {
 	ArrowsDownUp,
 	ArrowsIn,
@@ -27,16 +27,16 @@ import type {
 	IResourceDependency,
 	IResourceDiffResult,
 	ResourceToPublish,
-} from "@/api/environments";
-import { Badge, BadgeIcon } from "@/components/primitives/badge";
+} from "@/entities/environment/api/environments";
+import { Badge, BadgeIcon } from "@/shared/ui/primitives/badge";
 import {
 	Tooltip,
 	TooltipContent,
 	TooltipTrigger,
-} from "@/components/primitives/tooltip";
-import { useDiffEnvironments } from "@/features/settings/hooks/use-environments";
-import { useResourceDependencies } from "@/hooks/use-resource-dependencies";
-import { formatDateSimple } from "@/utils/format-date";
+} from "@/shared/ui/primitives/tooltip";
+import { useDiffEnvironments } from "@/features/settings/lib/use-environments";
+import { useResourceDependencies } from "@/shared/lib/hooks/use-resource-dependencies";
+import { formatDateSimple } from "@/shared/lib/format-date";
 import { LayoutUsageIndicator } from "./layout-usage-indicator";
 import { WorkflowHoverCard } from "./workflow-hover-card";
 

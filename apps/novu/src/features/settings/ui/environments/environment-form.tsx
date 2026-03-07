@@ -1,6 +1,6 @@
 import type { UseFormReturn } from "react-hook-form";
 import { z } from "zod";
-import { ColorPicker } from "@/components/primitives/color-picker";
+import { ColorPicker } from "@/shared/ui/primitives/color-picker";
 import {
 	FormControl,
 	FormField,
@@ -8,7 +8,7 @@ import {
 	FormItem,
 	FormLabel,
 	FormMessage,
-} from "@/components/primitives/form/form";
+} from "@/shared/ui/primitives/form/form";
 
 export const environmentFormSchema = z.object({
 	name: z.string().min(1, "Name is required"),

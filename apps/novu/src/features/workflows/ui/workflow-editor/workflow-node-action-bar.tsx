@@ -2,14 +2,14 @@ import { Button } from "@merge-rd/ui/components/button";
 import { Copy, PencilSimple, Trash } from "@phosphor-icons/react";
 import { AnimatePresence, motion } from "motion/react";
 import { useState } from "react";
-import { ConfirmationModal } from "@/components/confirmation-modal";
+import { ConfirmationModal } from "@/shared/ui/confirmation-modal";
 import {
 	Tooltip,
 	TooltipContent,
 	TooltipTrigger,
-} from "@/components/primitives/tooltip";
-import TruncatedText from "@/components/truncated-text";
-import { StepTypeEnum } from "@/utils/enums";
+} from "@/shared/ui/primitives/tooltip";
+import TruncatedText from "@/shared/ui/truncated-text";
+import { StepTypeEnum } from "@/shared/lib/enums";
 
 const CHANNEL_STEP_TYPES = [
 	StepTypeEnum.EMAIL,

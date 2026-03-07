@@ -10,7 +10,7 @@ import {
 	ResourceOriginEnum,
 	type RuntimeIssue,
 	type SubscriberDto,
-} from "@novu/shared";
+} from "@/shared";
 import {
 	createContext,
 	useCallback,
@@ -22,32 +22,32 @@ import {
 import { useForm } from "react-hook-form";
 import { useBlocker, useLocation } from "react-router-dom";
 import type { ExternalToast } from "sonner";
-import { NovuApiError } from "@/api/api.client";
-import { Form, FormRoot } from "@/components/primitives/form/form";
+import { NovuApiError } from "@/shared/api/api.client";
+import { Form, FormRoot } from "@/shared/ui/primitives/form/form";
 import {
 	showErrorToast,
 	showSuccessToast,
-} from "@/components/primitives/sonner-helpers";
-import { UnsavedChangesAlertDialog } from "@/components/unsaved-changes-alert-dialog";
-import { useEnvironment } from "@/context/environment/hooks";
-import { useLayoutPreview } from "@/features/layouts/hooks/use-layout-preview";
+} from "@/shared/ui/primitives/sonner-helpers";
+import { UnsavedChangesAlertDialog } from "@/shared/ui/unsaved-changes-alert-dialog";
+import { useEnvironment } from "@/app/context/environment/hooks";
+import { useLayoutPreview } from "@/features/layouts/lib/use-layout-preview";
 import {
 	type UpdateLayoutParameters,
 	useUpdateLayout,
-} from "@/features/layouts/hooks/use-update-layout";
-import { useFetchOrganizationSettings } from "@/features/settings/hooks/use-fetch-organization-settings";
-import { useDefaultSubscriberData } from "@/features/subscribers/hooks/use-default-subscriber-data";
+} from "@/features/layouts/lib/use-update-layout";
+import { useFetchOrganizationSettings } from "@/features/settings/lib/use-fetch-organization-settings";
+import { useDefaultSubscriberData } from "@/features/subscribers/lib/use-default-subscriber-data";
 import {
 	flattenIssues,
 	getFirstErrorMessage,
-} from "@/features/workflows/components/workflow-editor/step-utils";
-import { usePersistedPreviewContext } from "@/features/workflows/components/workflow-editor/steps/hooks/use-persisted-preview-context";
-import { useBeforeUnload } from "@/hooks/use-before-unload";
-import { useDebounce } from "@/hooks/use-debounce";
-import { usePreviewContext } from "@/hooks/use-preview-context";
-import { createContextHook } from "@/utils/context";
-import { getLayoutControlsDefaultValues } from "@/utils/default-values";
-import { parse } from "@/utils/json";
+} from "@/features/workflows/ui/workflow-editor/step-utils";
+import { usePersistedPreviewContext } from "@/features/workflows/ui/workflow-editor/steps/hooks/use-persisted-preview-context";
+import { useBeforeUnload } from "@/shared/lib/hooks/use-before-unload";
+import { useDebounce } from "@/shared/lib/hooks/use-debounce";
+import { usePreviewContext } from "@/shared/lib/hooks/use-preview-context";
+import { createContextHook } from "@/shared/lib/context";
+import { getLayoutControlsDefaultValues } from "@/shared/lib/default-values";
+import { parse } from "@/shared/lib/json";
 
 type ParsedData = {
 	subscriber: Partial<SubscriberDto>;

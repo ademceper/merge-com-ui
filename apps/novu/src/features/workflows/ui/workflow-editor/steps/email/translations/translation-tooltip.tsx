@@ -4,7 +4,7 @@ import {
 	TooltipContent,
 	TooltipPortal,
 	TooltipTrigger,
-} from "@/components/primitives/tooltip";
+} from "@/shared/ui/primitives/tooltip";
 
 type Props = PropsWithChildren<{
 	hasError?: boolean;

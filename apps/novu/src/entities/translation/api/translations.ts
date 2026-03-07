@@ -6,8 +6,8 @@ import type {
 	TranslationResponseDto,
 	UploadTranslationsResponseDto,
 } from "@novu/api/models/components";
-import type { IEnvironment } from "@novu/shared";
-import { delV2, getV2, postV2 } from "./api.client";
+import type { IEnvironment } from "@/shared";
+import { delV2, getV2, postV2 } from "@/shared/api/api.client";
 
 // Shared resource type from SDK
 type ResourceType = TranslationGroupDto["resourceType"];

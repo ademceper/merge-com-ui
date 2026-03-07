@@ -1,15 +1,15 @@
 import { Button } from "@merge-rd/ui/components/button";
-import type { WorkflowResponseDto } from "@novu/shared";
+import type { WorkflowResponseDto } from "@/shared";
 import { CheckCircle } from "@phosphor-icons/react";
 import React, { forwardRef, useCallback, useEffect, useState } from "react";
-import { Sheet, SheetContent, SheetTitle } from "@/components/primitives/sheet";
-import { ActivityError } from "@/features/activity/components/activity-error";
-import { ActivityLogs } from "@/features/activity/components/activity-logs";
-import { ActivityOverview } from "@/features/activity/components/activity-overview";
-import { ActivityPanel } from "@/features/activity/components/activity-panel";
-import { ActivitySkeleton } from "@/features/activity/components/activity-skeleton";
-import { useFetchActivities } from "@/features/activity/hooks/use-fetch-activities";
-import { usePullActivity } from "@/features/activity/hooks/use-pull-activity";
+import { Sheet, SheetContent, SheetTitle } from "@/shared/ui/primitives/sheet";
+import { ActivityError } from "@/features/activity/ui/activity-error";
+import { ActivityLogs } from "@/features/activity/ui/activity-logs";
+import { ActivityOverview } from "@/features/activity/ui/activity-overview";
+import { ActivityPanel } from "@/features/activity/ui/activity-panel";
+import { ActivitySkeleton } from "@/features/activity/ui/activity-skeleton";
+import { useFetchActivities } from "@/features/activity/lib/use-fetch-activities";
+import { usePullActivity } from "@/features/activity/lib/use-pull-activity";
 import { TestWorkflowInstructions } from "./test-workflow-instructions";
 
 type TestWorkflowActivityDrawerProps = {

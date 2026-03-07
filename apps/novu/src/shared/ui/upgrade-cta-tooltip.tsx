@@ -5,10 +5,10 @@ import {
 	Tooltip,
 	TooltipContent,
 	TooltipTrigger,
-} from "@/components/primitives/tooltip";
-import { IS_SELF_HOSTED, SELF_HOSTED_UPGRADE_REDIRECT_URL } from "@/config";
-import { ROUTES } from "@/utils/routes";
-import { openInNewTab } from "@/utils/url";
+} from "@/shared/ui/primitives/tooltip";
+import { IS_SELF_HOSTED, SELF_HOSTED_UPGRADE_REDIRECT_URL } from "@/shared/config";
+import { ROUTES } from "@/shared/lib/routes";
+import { openInNewTab } from "@/shared/lib/url";
 
 type UpgradeCTATooltipProps = {
 	children: ReactNode;

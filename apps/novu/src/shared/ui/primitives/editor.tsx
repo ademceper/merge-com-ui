@@ -17,8 +17,8 @@ import {
 	digestIcon,
 	functionIcon,
 	keyIcon,
-} from "@/components/primitives/constants";
-import { useDataRef } from "@/hooks/use-data-ref";
+} from "@/shared/ui/primitives/constants";
+import { useDataRef } from "@/shared/lib/hooks/use-data-ref";
 
 const variants = cva("h-full w-full flex-1 [&>.cm-focused]:outline-hidden!", {
 	variants: {

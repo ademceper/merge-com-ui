@@ -2,10 +2,10 @@ import {
 	type StepCreateDto,
 	StepTypeEnum,
 	WorkflowCreationSourceEnum,
-} from "@novu/shared";
+} from "@/shared";
 import { useEffect, useMemo, useState } from "react";
-import type { IWorkflowSuggestion } from "@/features/workflows/components/template-store/types";
-import { extractApiItems } from "@/utils/api-response-normalizer";
+import type { IWorkflowSuggestion } from "@/features/workflows/ui/template-store/types";
+import { extractApiItems } from "@/shared/lib/api-response-normalizer";
 
 export type QuickTemplate = {
 	workflowId: string;

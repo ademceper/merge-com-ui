@@ -1,11 +1,11 @@
 import { useParams } from "react-router-dom";
-import { FullPageLayout } from "@/components/full-page-layout";
-import { PageMeta } from "@/components/page-meta";
-import { LayoutBreadcrumbs } from "@/features/layouts/components/layout-breadcrumbs";
-import { LayoutEditor } from "@/features/layouts/components/layout-editor";
-import { LayoutEditorProvider } from "@/features/layouts/components/layout-editor-provider";
-import { LayoutEditorSkeleton } from "@/features/layouts/components/layout-editor-skeleton";
-import { useFetchLayout } from "@/features/layouts/hooks/use-fetch-layout";
+import { FullPageLayout } from "@/widgets/full-page-layout";
+import { PageMeta } from "@/shared/ui/page-meta";
+import { LayoutBreadcrumbs } from "@/features/layouts/ui/layout-breadcrumbs";
+import { LayoutEditor } from "@/features/layouts/ui/layout-editor";
+import { LayoutEditorProvider } from "@/features/layouts/ui/layout-editor-provider";
+import { LayoutEditorSkeleton } from "@/features/layouts/ui/layout-editor-skeleton";
+import { useFetchLayout } from "@/features/layouts/lib/use-fetch-layout";
 
 export const EditLayoutPage = () => {
 	const { layoutSlug = "" } = useParams<{

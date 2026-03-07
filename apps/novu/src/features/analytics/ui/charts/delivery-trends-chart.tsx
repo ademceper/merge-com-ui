@@ -1,15 +1,15 @@
 import { Skeleton } from "@merge-rd/ui/components/skeleton";
-import { StepTypeEnum } from "@novu/shared";
+import { StepTypeEnum } from "@/shared";
 import { useCallback, useMemo } from "react";
 import { Bar, BarChart, XAxis } from "recharts";
-import type { ChartDataPoint } from "@/api/activity";
-import { STEP_TYPE_TO_ICON } from "@/components/icons/utils";
+import type { ChartDataPoint } from "@/entities/activity/api/activity";
+import { STEP_TYPE_TO_ICON } from "@/shared/ui/icons/utils";
 import {
 	type ChartConfig,
 	ChartContainer,
 	ChartTooltip,
 	NovuTooltip,
-} from "@/components/primitives/chart";
+} from "@/shared/ui/primitives/chart";
 import { ANALYTICS_TOOLTIPS } from "../constants/analytics-tooltips";
 import { createDateBasedHasDataChecker } from "../utils/chart-validation";
 import { generateDummyDeliveryData } from "./chart-dummy-data";

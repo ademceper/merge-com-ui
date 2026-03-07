@@ -1,26 +1,26 @@
 import type { GetSubscriberPreferencesDto } from "@novu/api/models/components";
-import { type ChannelTypeEnum, FeatureFlagsKeysEnum } from "@novu/shared";
+import { type ChannelTypeEnum, FeatureFlagsKeysEnum } from "@/shared";
 import { Question, SpinnerGap } from "@phosphor-icons/react";
 import { motion } from "motion/react";
 import { useMemo } from "react";
 import {
 	showErrorToast,
 	showSuccessToast,
-} from "@/components/primitives/sonner-helpers";
+} from "@/shared/ui/primitives/sonner-helpers";
 import {
 	Tooltip,
 	TooltipContent,
 	TooltipTrigger,
-} from "@/components/primitives/tooltip";
-import { SidebarContent } from "@/components/side-navigation/sidebar";
-import { ContextFilter } from "@/features/contexts/components/context-filter";
-import { PreferencesItem } from "@/features/subscribers/components/preferences/preferences-item";
-import { WorkflowPreferences } from "@/features/subscribers/components/preferences/workflow-preferences";
-import { useFeatureFlag } from "@/hooks/use-feature-flag";
-import { useOptimisticChannelPreferences } from "@/hooks/use-optimistic-channel-preferences";
-import { useTelemetry } from "@/hooks/use-telemetry";
-import { itemVariants, sectionVariants } from "@/utils/animation";
-import { TelemetryEvent } from "@/utils/telemetry";
+} from "@/shared/ui/primitives/tooltip";
+import { SidebarContent } from "@/widgets/side-navigation/sidebar";
+import { ContextFilter } from "@/features/contexts/ui/context-filter";
+import { PreferencesItem } from "@/features/subscribers/ui/preferences/preferences-item";
+import { WorkflowPreferences } from "@/features/subscribers/ui/preferences/workflow-preferences";
+import { useFeatureFlag } from "@/shared/lib/hooks/use-feature-flag";
+import { useOptimisticChannelPreferences } from "@/shared/lib/hooks/use-optimistic-channel-preferences";
+import { useTelemetry } from "@/shared/lib/hooks/use-telemetry";
+import { itemVariants, sectionVariants } from "@/shared/lib/animation";
+import { TelemetryEvent } from "@/shared/lib/telemetry";
 import { PreferencesBlank } from "./preferences-blank";
 import { SubscribersSchedule } from "./subscribers-schedule";
 

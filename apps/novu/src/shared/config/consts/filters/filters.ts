@@ -1,4 +1,4 @@
-import { FilterPartTypeEnum } from "../../types";
+import { FilterPartTypeEnum } from "@/shared/model";
 
 export const FILTER_TO_LABEL = {
 	[FilterPartTypeEnum.PAYLOAD]: "Payload",

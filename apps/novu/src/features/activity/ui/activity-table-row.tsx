@@ -1,7 +1,7 @@
 import { TableCell, TableRow } from "@merge-rd/ui/components/table";
 import { cn } from "@merge-rd/ui/lib/utils";
-import type { ISubscriber } from "@novu/shared";
-import { formatDateSimple } from "@/utils/format-date";
+import type { ISubscriber } from "@/shared";
+import { formatDateSimple } from "@/shared/lib/format-date";
 import { ActivityStatusBadge } from "./status-badge";
 import { StepIndicators } from "./step-indicators";
 

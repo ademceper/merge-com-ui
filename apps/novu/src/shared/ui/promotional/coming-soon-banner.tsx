@@ -7,8 +7,8 @@ import { X } from "@phosphor-icons/react";
 import { AnimatePresence, motion } from "motion/react";
 import { useCallback, useRef, useState } from "react";
 import { toast } from "sonner";
-import { useTelemetry } from "@/hooks/use-telemetry";
-import type { TelemetryEvent } from "@/utils/telemetry";
+import { useTelemetry } from "@/shared/lib/hooks/use-telemetry";
+import type { TelemetryEvent } from "@/shared/lib/telemetry";
 import { CompactButton } from "../primitives/button-compact";
 
 interface PromotionalBannerContent {

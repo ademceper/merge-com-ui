@@ -4,26 +4,26 @@ import {
 	type IActivity,
 	JobStatusEnum,
 	ResourceOriginEnum,
-} from "@novu/shared";
+} from "@/shared";
 import { motion } from "motion/react";
 import { FaCode } from "react-icons/fa6";
-import { RouteFill } from "@/components/icons/route-fill";
+import { RouteFill } from "@/shared/ui/icons/route-fill";
 import {
 	StatusBadge,
 	StatusBadgeIcon,
-} from "@/components/primitives/status-badge";
+} from "@/shared/ui/primitives/status-badge";
 import {
 	Tooltip,
 	TooltipContent,
 	TooltipTrigger,
-} from "@/components/primitives/tooltip";
-import { TimeDisplayHoverCard } from "@/components/time-display-hover-card";
-import TruncatedText from "@/components/truncated-text";
-import { ActivityEmptyState } from "@/features/activity/components/activity-empty-state";
-import { JOB_STATUS_CONFIG } from "@/features/activity/components/constants";
-import { getActivityStatus } from "@/features/activity/components/helpers";
-import { itemVariants, listVariants } from "@/utils/animation";
-import { formatDateSimple } from "@/utils/format-date";
+} from "@/shared/ui/primitives/tooltip";
+import { TimeDisplayHoverCard } from "@/shared/ui/time-display-hover-card";
+import TruncatedText from "@/shared/ui/truncated-text";
+import { ActivityEmptyState } from "@/features/activity/ui/activity-empty-state";
+import { JOB_STATUS_CONFIG } from "@/features/activity/ui/constants";
+import { getActivityStatus } from "@/features/activity/ui/helpers";
+import { itemVariants, listVariants } from "@/shared/lib/animation";
+import { formatDateSimple } from "@/shared/lib/format-date";
 
 const statusToTooltipStyles: Record<string, string> = {
 	completed:

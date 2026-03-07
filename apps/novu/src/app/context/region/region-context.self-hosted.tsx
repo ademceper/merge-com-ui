@@ -6,7 +6,7 @@ import {
 	useEffect,
 	useState,
 } from "react";
-import { apiHostnameManager } from "@/utils/api-hostname-manager";
+import { apiHostnameManager } from "@/shared/lib/api-hostname-manager";
 import { DEFAULT_REGION } from "./region-config";
 import type { Region, RegionContextType } from "./region-types";
 import {

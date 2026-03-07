@@ -3,17 +3,17 @@ import { Button } from "@merge-rd/ui/components/button";
 import { CaretRight } from "@phosphor-icons/react";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Notification5Fill } from "@/components/icons";
-import { ToastIcon } from "@/components/primitives/sonner";
-import { useEnvironment } from "@/context/environment/hooks";
-import { useInitDemoWorkflow } from "@/features/workflows/hooks/use-init-demo-workflow";
-import { useTriggerWorkflow } from "@/features/workflows/hooks/use-trigger-workflow";
-import { ONBOARDING_DEMO_WORKFLOW_ID } from "../../config";
-import { useTelemetry } from "../../hooks/use-telemetry";
-import { ROUTES } from "../../utils/routes";
-import { TelemetryEvent } from "../../utils/telemetry";
-import { showToast } from "../primitives/sonner-helpers";
-import { UsecasePlaygroundHeader } from "../usecase-playground-header";
+import { Notification5Fill } from "@/shared/ui/icons";
+import { ToastIcon } from "@/shared/ui/primitives/sonner";
+import { useEnvironment } from "@/app/context/environment/hooks";
+import { useInitDemoWorkflow } from "@/features/workflows/lib/use-init-demo-workflow";
+import { useTriggerWorkflow } from "@/features/workflows/lib/use-trigger-workflow";
+import { ONBOARDING_DEMO_WORKFLOW_ID } from "@/shared/config";
+import { useTelemetry } from "@/shared/lib/hooks/use-telemetry";
+import { ROUTES } from "@/shared/lib/routes";
+import { TelemetryEvent } from "@/shared/lib/telemetry";
+import { showToast } from "@/shared/ui/primitives/sonner-helpers";
+import { UsecasePlaygroundHeader } from "@/widgets/usecase-playground-header";
 import { InboxPreviewContent } from "./inbox-preview-content";
 
 const PLAYGROUND_CONFIG = {

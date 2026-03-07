@@ -1,7 +1,7 @@
 /** biome-ignore-all lint/correctness/useUniqueElementIds: working correctly */
 
 import { standardSchemaResolver } from "@hookform/resolvers/standard-schema";
-import { slugify } from "@novu/shared";
+import { slugify } from "@/shared";
 import { useForm } from "react-hook-form";
 import type { z } from "zod";
 import {
@@ -13,9 +13,9 @@ import {
 	FormLabel,
 	FormMessage,
 	FormRoot,
-} from "@/components/primitives/form/form";
-import { layoutSchema } from "@/features/layouts/components/schema";
-import { TranslationToggleSection } from "@/features/workflows/components/workflow-editor/translation-toggle-section";
+} from "@/shared/ui/primitives/form/form";
+import { layoutSchema } from "@/features/layouts/ui/schema";
+import { TranslationToggleSection } from "@/features/workflows/ui/workflow-editor/translation-toggle-section";
 
 interface CreateLayoutFormProps {
 	onSubmit: (formData: z.infer<typeof layoutSchema>) => void;

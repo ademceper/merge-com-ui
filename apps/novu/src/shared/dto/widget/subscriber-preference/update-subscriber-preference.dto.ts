@@ -1,4 +1,4 @@
-import type { ChannelTypeEnum } from "../../../types";
+import type { ChannelTypeEnum } from "@/shared/model";
 
 export interface IUpdateSubscriberPreferenceDto {
 	channel?: IChannelPreference;

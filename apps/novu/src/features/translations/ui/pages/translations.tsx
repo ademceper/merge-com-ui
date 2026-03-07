@@ -1,15 +1,15 @@
-import { EnvironmentTypeEnum } from "@novu/shared";
-import { AnimatedOutlet } from "@/components/animated-outlet";
-import { PageMeta } from "@/components/page-meta";
-import { Badge } from "@/components/primitives/badge";
+import { EnvironmentTypeEnum } from "@/shared";
+import { AnimatedOutlet } from "@/shared/ui/animated-outlet";
+import { PageMeta } from "@/shared/ui/page-meta";
+import { Badge } from "@/shared/ui/primitives/badge";
 import {
 	Tooltip,
 	TooltipContent,
 	TooltipTrigger,
-} from "@/components/primitives/tooltip";
-import { useEnvironment } from "@/context/environment/hooks";
-import { useSetPageHeader } from "@/context/page-header";
-import { TranslationList } from "@/features/translations/components/translation-list";
+} from "@/shared/ui/primitives/tooltip";
+import { useEnvironment } from "@/app/context/environment/hooks";
+import { useSetPageHeader } from "@/app/context/page-header";
+import { TranslationList } from "@/features/translations/ui/translation-list";
 
 export const TranslationsPage = () => {
 	const { currentEnvironment } = useEnvironment();

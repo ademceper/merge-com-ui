@@ -1,15 +1,15 @@
 import { Accordion } from "@merge-rd/ui/components/accordion";
-import type { ISubscriberResponseDto } from "@novu/shared";
+import type { ISubscriberResponseDto } from "@/shared";
 import type { JSONSchema7 } from "json-schema";
 import { useCallback, useEffect, useMemo, useRef } from "react";
-import { useCreateVariable } from "@/components/variable/hooks/use-create-variable";
-import { useEnvironment } from "@/context/environment/hooks";
-import { useFetchOrganizationSettings } from "@/features/settings/hooks/use-fetch-organization-settings";
-import { useDefaultSubscriberData } from "@/features/subscribers/hooks/use-default-subscriber-data";
-import { useDynamicPreviewSchema } from "@/hooks/use-dynamic-preview-schema";
-import { useIsPayloadSchemaEnabled } from "@/hooks/use-is-payload-schema-enabled";
-import { usePreviewContext } from "@/hooks/use-preview-context";
-import { StepTypeEnum } from "@/utils/enums";
+import { useCreateVariable } from "@/shared/ui/variable/hooks/use-create-variable";
+import { useEnvironment } from "@/app/context/environment/hooks";
+import { useFetchOrganizationSettings } from "@/features/settings/lib/use-fetch-organization-settings";
+import { useDefaultSubscriberData } from "@/features/subscribers/lib/use-default-subscriber-data";
+import { useDynamicPreviewSchema } from "@/widgets/lib/use-dynamic-preview-schema";
+import { useIsPayloadSchemaEnabled } from "@/features/workflows/lib/use-is-payload-schema-enabled";
+import { usePreviewContext } from "@/shared/lib/hooks/use-preview-context";
+import { StepTypeEnum } from "@/shared/lib/enums";
 import { PayloadSchemaDrawer } from "../payload-schema-drawer";
 import {
 	PreviewContextSection,

@@ -1,15 +1,15 @@
-import { DirectionEnum } from "@novu/shared";
+import { DirectionEnum } from "@/shared";
 import { useQueryClient } from "@tanstack/react-query";
 import { useCallback, useMemo } from "react";
 import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
-import { useEnvironment } from "@/context/environment/hooks";
-import { useDebounce } from "@/hooks/use-debounce";
+import { useEnvironment } from "@/app/context/environment/hooks";
+import { useDebounce } from "@/shared/lib/hooks/use-debounce";
 import {
 	getPersistedPageSize,
 	usePersistedPageSize,
-} from "@/hooks/use-persisted-page-size";
-import { QueryKeys } from "@/utils/query-keys";
-import { buildRoute, ROUTES } from "@/utils/routes";
+} from "@/shared/lib/hooks/use-persisted-page-size";
+import { QueryKeys } from "@/shared/lib/query-keys";
+import { buildRoute, ROUTES } from "@/shared/lib/routes";
 
 const SUBSCRIBERS_TABLE_ID = "subscribers-list";
 

@@ -1,4 +1,4 @@
-import { BroomSparkle } from "../icons/broom-sparkle";
+import { BroomSparkle } from "@/shared/ui/icons/broom-sparkle";
 import { useAiChat } from "./ai-chat-context";
 import { ChatBody, ChatBodySkeleton } from "./chat-body";
 

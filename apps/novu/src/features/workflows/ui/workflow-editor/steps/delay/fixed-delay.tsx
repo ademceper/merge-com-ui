@@ -1,10 +1,10 @@
-import { TimeUnitEnum } from "@novu/shared";
+import { TimeUnitEnum } from "@/shared";
 import { useMemo } from "react";
 
-import { AmountInput } from "@/components/amount-input";
-import { useSaveForm } from "@/features/workflows/components/workflow-editor/steps/save-form-context";
-import { TIME_UNIT_OPTIONS } from "@/features/workflows/components/workflow-editor/steps/time-units";
-import { useWorkflow } from "@/features/workflows/components/workflow-editor/workflow-provider";
+import { AmountInput } from "@/shared/ui/amount-input";
+import { useSaveForm } from "@/features/workflows/ui/workflow-editor/steps/save-form-context";
+import { TIME_UNIT_OPTIONS } from "@/features/workflows/ui/workflow-editor/steps/time-units";
+import { useWorkflow } from "@/features/workflows/ui/workflow-editor/workflow-provider";
 
 const AMOUNT_KEY = "controlValues.amount";
 const UNIT_KEY = "controlValues.unit";

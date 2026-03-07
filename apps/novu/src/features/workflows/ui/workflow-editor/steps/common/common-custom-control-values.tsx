@@ -1,7 +1,7 @@
 import { PencilSimple, X } from "@phosphor-icons/react";
 import { useNavigate } from "react-router-dom";
-import { CompactButton } from "@/components/primitives/button-compact";
-import { useWorkflow } from "@/features/workflows/components/workflow-editor/workflow-provider";
+import { CompactButton } from "@/shared/ui/primitives/button-compact";
+import { useWorkflow } from "@/features/workflows/ui/workflow-editor/workflow-provider";
 import { CustomStepControls } from "../controls/custom-step-controls";
 
 export const CommonCustomControlValues = () => {

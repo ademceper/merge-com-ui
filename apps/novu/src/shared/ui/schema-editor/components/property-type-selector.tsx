@@ -12,7 +12,7 @@ import {
 	SelectItem,
 	SelectTrigger,
 	SelectValue,
-} from "@/components/primitives/select";
+} from "@/shared/ui/primitives/select";
 import { SCHEMA_TYPE_OPTIONS } from "../constants";
 import { useSchemaPropertyType } from "../hooks/use-schema-property-type";
 import type { JSONSchema7, JSONSchema7TypeName } from "../json-schema";

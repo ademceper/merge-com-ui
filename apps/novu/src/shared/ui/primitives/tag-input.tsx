@@ -11,7 +11,7 @@ import {
 	Popover,
 	PopoverAnchor,
 	PopoverContent,
-} from "@/components/primitives/popover";
+} from "@/shared/ui/primitives/popover";
 import { Tag } from "./tag";
 
 type TagInputProps = Omit<

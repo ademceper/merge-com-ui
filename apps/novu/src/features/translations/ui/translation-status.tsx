@@ -2,12 +2,12 @@ import { CheckCircle, Warning } from "@phosphor-icons/react";
 import {
 	StatusBadge,
 	StatusBadgeIcon,
-} from "@/components/primitives/status-badge";
+} from "@/shared/ui/primitives/status-badge";
 import {
 	Tooltip,
 	TooltipContent,
 	TooltipTrigger,
-} from "@/components/primitives/tooltip";
+} from "@/shared/ui/primitives/tooltip";
 
 type TranslationStatusProps = {
 	outdatedLocales?: string[];

@@ -1,5 +1,5 @@
 import { Plus } from "@phosphor-icons/react";
-import { ConfirmationModal } from "@/components/confirmation-modal";
+import { ConfirmationModal } from "@/shared/ui/confirmation-modal";
 import { getRegionConfig } from "./region-config";
 import type { OrgCreationModalState } from "./region-types";
 

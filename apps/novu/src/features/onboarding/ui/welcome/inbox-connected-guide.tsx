@@ -1,23 +1,23 @@
 import { Button } from "@merge-rd/ui/components/button";
-import type { IEnvironment } from "@novu/shared";
+import type { IEnvironment } from "@/shared";
 import { CheckCircle, CircleNotch } from "@phosphor-icons/react";
 import { useEffect, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
-import { CodeBlock } from "@/components/primitives/code-block";
-import { ToastIcon } from "@/components/primitives/sonner";
+import { CodeBlock } from "@/shared/ui/primitives/code-block";
+import { ToastIcon } from "@/shared/ui/primitives/sonner";
 import {
 	showErrorToast,
 	showToast,
-} from "@/components/primitives/sonner-helpers";
-import { ONBOARDING_DEMO_WORKFLOW_ID } from "@/config";
-import { useFetchApiKeys } from "@/features/settings/hooks/use-fetch-api-keys";
-import { useFirstTriggerDetection } from "@/features/workflows/hooks/use-first-trigger-detection";
-import { useInitDemoWorkflow } from "@/features/workflows/hooks/use-init-demo-workflow";
-import { usePageVisitTimestamp } from "@/hooks/use-page-visit-timestamp";
-import { useTelemetry } from "@/hooks/use-telemetry";
-import { type CodeSnippet, createCurlSnippet } from "@/utils/code-snippets";
-import { ROUTES } from "@/utils/routes";
-import { TelemetryEvent } from "@/utils/telemetry";
+} from "@/shared/ui/primitives/sonner-helpers";
+import { ONBOARDING_DEMO_WORKFLOW_ID } from "@/shared/config";
+import { useFetchApiKeys } from "@/features/settings/lib/use-fetch-api-keys";
+import { useFirstTriggerDetection } from "@/features/workflows/lib/use-first-trigger-detection";
+import { useInitDemoWorkflow } from "@/features/workflows/lib/use-init-demo-workflow";
+import { usePageVisitTimestamp } from "@/shared/lib/hooks/use-page-visit-timestamp";
+import { useTelemetry } from "@/shared/lib/hooks/use-telemetry";
+import { type CodeSnippet, createCurlSnippet } from "@/shared/lib/code-snippets";
+import { ROUTES } from "@/shared/lib/routes";
+import { TelemetryEvent } from "@/shared/lib/telemetry";
 
 type InboxConnectedGuideProps = {
 	subscriberId: string;

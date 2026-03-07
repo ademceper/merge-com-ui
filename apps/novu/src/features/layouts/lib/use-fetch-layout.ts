@@ -1,9 +1,9 @@
 import { useQuery } from "@tanstack/react-query";
 import { useMemo } from "react";
-import { getLayout } from "@/api/layouts";
-import { useEnvironment } from "@/context/environment/hooks";
-import { getIdFromSlug, LAYOUT_DIVIDER } from "@/utils/id-utils";
-import { QueryKeys } from "@/utils/query-keys";
+import { getLayout } from "@/entities/layout/api/layouts";
+import { useEnvironment } from "@/app/context/environment/hooks";
+import { getIdFromSlug, LAYOUT_DIVIDER } from "@/shared/lib/id-utils";
+import { QueryKeys } from "@/shared/lib/query-keys";
 
 export const useFetchLayout = ({ layoutSlug }: { layoutSlug?: string }) => {
 	const { currentEnvironment } = useEnvironment();

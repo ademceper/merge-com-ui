@@ -1,7 +1,7 @@
-import { ChannelTypeEnum, StepTypeEnum } from "@novu/shared";
+import { ChannelTypeEnum, StepTypeEnum } from "@/shared";
 import type { IconType } from "react-icons/lib";
-import { STEP_TYPE_TO_COLOR } from "../../utils/color";
-import { STEP_TYPE_TO_ICON } from "../icons/utils";
+import { STEP_TYPE_TO_COLOR } from "@/shared/lib/color";
+import { STEP_TYPE_TO_ICON } from "@/shared/ui/icons/utils";
 
 export interface Usecase {
 	icon: IconType;

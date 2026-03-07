@@ -1,8 +1,8 @@
-import type { ISubscriberResponseDto } from "@novu/shared";
+import type { ISubscriberResponseDto } from "@/shared";
 import { Plus } from "@phosphor-icons/react";
 import { useState } from "react";
-import { SubscriberAutocomplete } from "@/features/subscribers/components/subscriber-autocomplete";
-import { useAddTopicSubscribers } from "@/features/topics/hooks/use-topic-subscribers";
+import { SubscriberAutocomplete } from "@/features/subscribers/ui/subscriber-autocomplete";
+import { useAddTopicSubscribers } from "@/features/topics/lib/use-topic-subscribers";
 
 type AddSubscriberFormProps = {
 	topicKey: string;

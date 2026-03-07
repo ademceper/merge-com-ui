@@ -1,6 +1,6 @@
 import type { TranslationGroupDto } from "@novu/api/models/components";
 import { useCallback, useState } from "react";
-import { useDeleteTranslationGroup } from "@/features/translations/hooks/use-delete-translation-group";
+import { useDeleteTranslationGroup } from "@/features/translations/lib/use-delete-translation-group";
 
 export function useDeleteTranslationModal() {
 	const [deleteModalTranslation, setDeleteModalTranslation] =

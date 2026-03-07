@@ -1,10 +1,10 @@
-import type { WorkflowResponseDto } from "@novu/shared";
+import type { WorkflowResponseDto } from "@/shared";
 import { useQuery } from "@tanstack/react-query";
 import { useMemo } from "react";
-import { getWorkflow } from "@/api/workflows";
-import { useEnvironment } from "@/context/environment/hooks";
-import { getIdFromSlug, WORKFLOW_DIVIDER } from "@/utils/id-utils";
-import { QueryKeys } from "@/utils/query-keys";
+import { getWorkflow } from "@/entities/workflow/api/workflows";
+import { useEnvironment } from "@/app/context/environment/hooks";
+import { getIdFromSlug, WORKFLOW_DIVIDER } from "@/shared/lib/id-utils";
+import { QueryKeys } from "@/shared/lib/query-keys";
 
 export const useFetchWorkflow = ({
 	workflowSlug,

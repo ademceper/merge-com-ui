@@ -8,15 +8,15 @@ import {
 import { UsersThree } from "@phosphor-icons/react";
 import { motion } from "motion/react";
 import { useState } from "react";
-import TruncatedText from "@/components/truncated-text";
-import { Preferences } from "@/features/subscribers/components/preferences/preferences";
-import { PreferencesSkeleton } from "@/features/subscribers/components/preferences/preferences-skeleton";
-import { SubscriberActivity } from "@/features/subscribers/components/subscriber-activity";
-import { SubscriberOverviewForm } from "@/features/subscribers/components/subscriber-overview-form";
-import { SubscriberOverviewSkeleton } from "@/features/subscribers/components/subscriber-overview-skeleton";
-import { SubscriberSubscriptions } from "@/features/subscribers/components/subscriptions/subscriber-subscriptions";
-import { useFetchSubscriber } from "@/features/subscribers/hooks/use-fetch-subscriber";
-import useFetchSubscriberPreferences from "@/features/subscribers/hooks/use-fetch-subscriber-preferences";
+import TruncatedText from "@/shared/ui/truncated-text";
+import { Preferences } from "@/features/subscribers/ui/preferences/preferences";
+import { PreferencesSkeleton } from "@/features/subscribers/ui/preferences/preferences-skeleton";
+import { SubscriberActivity } from "@/features/subscribers/ui/subscriber-activity";
+import { SubscriberOverviewForm } from "@/features/subscribers/ui/subscriber-overview-form";
+import { SubscriberOverviewSkeleton } from "@/features/subscribers/ui/subscriber-overview-skeleton";
+import { SubscriberSubscriptions } from "@/features/subscribers/ui/subscriptions/subscriber-subscriptions";
+import { useFetchSubscriber } from "@/features/subscribers/lib/use-fetch-subscriber";
+import useFetchSubscriberPreferences from "@/features/subscribers/lib/use-fetch-subscriber-preferences";
 
 type SubscriberOverviewProps = {
 	subscriberId: string;

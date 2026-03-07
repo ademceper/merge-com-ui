@@ -1,6 +1,6 @@
-import { Step } from "@/components/primitives/step";
-import { WorkflowStep } from "@/features/workflows/components/workflow-step";
-import type { StepTypeEnum } from "@/utils/enums";
+import { Step } from "@/shared/ui/primitives/step";
+import { WorkflowStep } from "@/features/workflows/ui/workflow-step";
+import type { StepTypeEnum } from "@/shared/lib/enums";
 
 type WorkflowStepsProps = {
 	steps: StepTypeEnum[];

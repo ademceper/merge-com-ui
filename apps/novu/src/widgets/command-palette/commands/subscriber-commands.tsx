@@ -1,8 +1,8 @@
-import { PermissionsEnum } from "@novu/shared";
+import { PermissionsEnum } from "@/shared";
 import { ChatTeardropDots, UserPlus } from "@phosphor-icons/react";
 import { useNavigate } from "react-router-dom";
-import { useHasPermission } from "@/hooks/use-has-permission";
-import { buildRoute, ROUTES } from "@/utils/routes";
+import { useHasPermission } from "@/shared/lib/hooks/use-has-permission";
+import { buildRoute, ROUTES } from "@/shared/lib/routes";
 import type { Command, CommandExecutionContext } from "../command-types";
 
 export function useSubscriberCommands(

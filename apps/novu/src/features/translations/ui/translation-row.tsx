@@ -9,26 +9,26 @@ import { Skeleton } from "@merge-rd/ui/components/skeleton";
 import { TableCell, TableRow } from "@merge-rd/ui/components/table";
 import { cn } from "@merge-rd/ui/lib/utils";
 import type { TranslationGroupDto } from "@novu/api/models/components";
-import { EnvironmentTypeEnum, PermissionsEnum } from "@novu/shared";
+import { EnvironmentTypeEnum, PermissionsEnum } from "@/shared";
 import { DotsThree, Layout, Path, Trash } from "@phosphor-icons/react";
 import { type ComponentProps, useCallback } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { StackedFlagCircles } from "@/components/flag-circle";
-import { CompactButton } from "@/components/primitives/button-compact";
-import { CopyButton } from "@/components/primitives/copy-button";
+import { StackedFlagCircles } from "@/shared/ui/flag-circle";
+import { CompactButton } from "@/shared/ui/primitives/button-compact";
+import { CopyButton } from "@/shared/ui/primitives/copy-button";
 import {
 	Tooltip,
 	TooltipContent,
 	TooltipPortal,
 	TooltipTrigger,
-} from "@/components/primitives/tooltip";
-import { TimeDisplayHoverCard } from "@/components/time-display-hover-card";
-import TruncatedText from "@/components/truncated-text";
-import { useEnvironment } from "@/context/environment/hooks";
-import { useHasPermission } from "@/hooks/use-has-permission";
-import { LocalizationResourceEnum } from "@/types/translations";
-import { formatDateSimple } from "@/utils/format-date";
-import { buildRoute, ROUTES } from "@/utils/routes";
+} from "@/shared/ui/primitives/tooltip";
+import { TimeDisplayHoverCard } from "@/shared/ui/time-display-hover-card";
+import TruncatedText from "@/shared/ui/truncated-text";
+import { useEnvironment } from "@/app/context/environment/hooks";
+import { useHasPermission } from "@/shared/lib/hooks/use-has-permission";
+import { LocalizationResourceEnum } from "@/shared/model/translations";
+import { formatDateSimple } from "@/shared/lib/format-date";
+import { buildRoute, ROUTES } from "@/shared/lib/routes";
 import { TranslationStatus } from "./translation-status";
 
 type TranslationTableCellProps = ComponentProps<typeof TableCell>;

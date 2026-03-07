@@ -6,14 +6,14 @@ import {
 	SheetContent,
 	SheetDescription,
 	SheetTitle,
-} from "@/components/primitives/sheet";
-import { ActivityError } from "@/features/activity/components/activity-error";
-import { ActivityHeader } from "@/features/activity/components/activity-header";
-import { ActivityLogs } from "@/features/activity/components/activity-logs";
-import { ActivityOverview } from "@/features/activity/components/activity-overview";
-import { ActivityPanel } from "@/features/activity/components/activity-panel";
-import { ActivitySkeleton } from "@/features/activity/components/activity-skeleton";
-import { usePullActivity } from "@/features/activity/hooks/use-pull-activity";
+} from "@/shared/ui/primitives/sheet";
+import { ActivityError } from "@/features/activity/ui/activity-error";
+import { ActivityHeader } from "@/features/activity/ui/activity-header";
+import { ActivityLogs } from "@/features/activity/ui/activity-logs";
+import { ActivityOverview } from "@/features/activity/ui/activity-overview";
+import { ActivityPanel } from "@/features/activity/ui/activity-panel";
+import { ActivitySkeleton } from "@/features/activity/ui/activity-skeleton";
+import { usePullActivity } from "@/features/activity/lib/use-pull-activity";
 
 type ActivityPanelDrawerProps = {
 	onActivitySelect: (activityId: string) => void;

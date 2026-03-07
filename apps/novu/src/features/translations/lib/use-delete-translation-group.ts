@@ -1,13 +1,13 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { deleteTranslationGroup } from "@/api/translations";
+import { deleteTranslationGroup } from "@/entities/translation/api/translations";
 import {
 	showErrorToast,
 	showSuccessToast,
-} from "@/components/primitives/sonner-helpers";
-import { useEnvironment } from "@/context/environment/hooks";
-import { LocalizationResourceEnum } from "@/types/translations";
-import { QueryKeys } from "@/utils/query-keys";
-import type { OmitEnvironmentFromParameters } from "@/utils/types";
+} from "@/shared/ui/primitives/sonner-helpers";
+import { useEnvironment } from "@/app/context/environment/hooks";
+import { LocalizationResourceEnum } from "@/shared/model/translations";
+import { QueryKeys } from "@/shared/lib/query-keys";
+import type { OmitEnvironmentFromParameters } from "@/shared/lib/types";
 
 type DeleteTranslationGroupParameters = OmitEnvironmentFromParameters<
 	typeof deleteTranslationGroup

@@ -1,5 +1,5 @@
 import { cn } from "@merge-rd/ui/lib/utils";
-import { InputPure } from "@/components/primitives/input";
+import { InputPure } from "@/shared/ui/primitives/input";
 import { EnterLineIcon } from "../../../../icons/enter-line";
 import { STYLES } from "../styles";
 import type { SizeType } from "../types";

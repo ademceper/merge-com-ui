@@ -1,6 +1,6 @@
 import * as Sentry from "@sentry/react";
-import { CheckIntegrationResponseEnum } from "@/api/integrations";
-import { showErrorToast } from "@/components/primitives/sonner-helpers";
+import { CheckIntegrationResponseEnum } from "@/entities/integration/api/integrations";
+import { showErrorToast } from "@/shared/ui/primitives/sonner-helpers";
 
 export function handleIntegrationError(
 	error: any,

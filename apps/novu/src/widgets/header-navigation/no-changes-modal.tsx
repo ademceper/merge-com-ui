@@ -5,8 +5,8 @@ import {
 	DialogDescription,
 	DialogTitle,
 } from "@merge-rd/ui/components/dialog";
-import type { IEnvironment } from "@novu/shared";
-import { VisuallyHidden } from "../primitives/visually-hidden";
+import type { IEnvironment } from "@/shared";
+import { VisuallyHidden } from "@/shared/ui/primitives/visually-hidden";
 
 type NoChangesModalProps = {
 	isOpen: boolean;

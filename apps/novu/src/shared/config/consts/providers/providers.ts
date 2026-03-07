@@ -5,7 +5,7 @@ import {
 	InAppProviderIdEnum,
 	type ProvidersIdEnum,
 	SmsProviderIdEnum,
-} from "../../types";
+} from "@/shared/model";
 import {
 	chatProviders,
 	emailProviders,

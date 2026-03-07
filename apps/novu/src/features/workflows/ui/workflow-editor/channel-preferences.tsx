@@ -1,6 +1,6 @@
-import { EnvironmentTypeEnum } from "@novu/shared";
-import { useEnvironment } from "@/context/environment/hooks";
-import { useWorkflow } from "@/features/workflows/components/workflow-editor/workflow-provider";
+import { EnvironmentTypeEnum } from "@/shared";
+import { useEnvironment } from "@/app/context/environment/hooks";
+import { useWorkflow } from "@/features/workflows/ui/workflow-editor/workflow-provider";
 import { ChannelPreferencesForm } from "./channel-preferences-form";
 
 export function ChannelPreferences() {

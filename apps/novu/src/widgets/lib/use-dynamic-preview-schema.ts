@@ -1,7 +1,7 @@
 import type { JSONSchema7 } from "json-schema";
 import { useContext, useMemo } from "react";
-import { LayoutEditorContext } from "@/features/layouts/components/layout-editor-provider";
-import { StepEditorContext } from "@/features/workflows/components/workflow-editor/steps/context/step-editor-context";
+import { LayoutEditorContext } from "@/features/layouts/ui/layout-editor-provider";
+import { StepEditorContext } from "@/features/workflows/ui/workflow-editor/steps/context/step-editor-context";
 
 /**
  * Hook to get the dynamic schema from preview API response

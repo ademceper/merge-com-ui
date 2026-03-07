@@ -9,24 +9,24 @@ import { loadLanguage } from "@uiw/codemirror-extensions-langs";
 import { useFormContext } from "react-hook-form";
 import { Link } from "react-router-dom";
 import type { z } from "zod";
-import { CompactButton } from "@/components/primitives/button-compact";
-import { Editor } from "@/components/primitives/editor";
+import { CompactButton } from "@/shared/ui/primitives/button-compact";
+import { Editor } from "@/shared/ui/primitives/editor";
 import {
 	FormControl,
 	FormField,
 	FormItem,
 	FormLabel,
 	FormMessage,
-} from "@/components/primitives/form/form";
-import { InlineToast } from "@/components/primitives/inline-toast";
-import { Input, InputRoot } from "@/components/primitives/input";
-import { LocaleSelect } from "@/components/primitives/locale-select";
-import { PhoneInput } from "@/components/primitives/phone-input";
+} from "@/shared/ui/primitives/form/form";
+import { InlineToast } from "@/shared/ui/primitives/inline-toast";
+import { Input, InputRoot } from "@/shared/ui/primitives/input";
+import { LocaleSelect } from "@/shared/ui/primitives/locale-select";
+import { PhoneInput } from "@/shared/ui/primitives/phone-input";
 import {
 	Tooltip,
 	TooltipContent,
 	TooltipTrigger,
-} from "@/components/primitives/tooltip";
+} from "@/shared/ui/primitives/tooltip";
 import type { CreateSubscriberFormSchema } from "./schema";
 import { TimezoneSelect } from "./timezone-select";
 

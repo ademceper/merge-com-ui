@@ -6,8 +6,8 @@ import {
 import {
 	getTopicSubscription,
 	type TopicSubscriptionDetailsResponse,
-} from "@/api/topics";
-import { useEnvironment } from "@/context/environment/hooks";
+} from "@/entities/topic/api/topics";
+import { useEnvironment } from "@/app/context/environment/hooks";
 
 export const useGetSubscription = ({
 	topicKey,

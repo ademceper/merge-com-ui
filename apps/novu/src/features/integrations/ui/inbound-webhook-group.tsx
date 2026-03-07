@@ -3,17 +3,17 @@ import {
 	type ConfigConfigurationGroup,
 	type IIntegration,
 	type IProviderConfig,
-} from "@novu/shared";
+} from "@/shared";
 import { Check, X } from "@phosphor-icons/react";
 import { useEffect, useRef, useState } from "react";
 import { type Control, useWatch } from "react-hook-form";
-import { LoadingIndicator } from "@/components/primitives/loading-indicator";
+import { LoadingIndicator } from "@/shared/ui/primitives/loading-indicator";
 import {
 	Tooltip,
 	TooltipContent,
 	TooltipTrigger,
-} from "@/components/primitives/tooltip";
-import { useAutoConfigureIntegration } from "@/features/integrations/hooks/use-auto-configure-integration";
+} from "@/shared/ui/primitives/tooltip";
+import { useAutoConfigureIntegration } from "@/features/integrations/lib/use-auto-configure-integration";
 import { CredentialSection } from "./credential-section";
 import { InboundWebhookUrl } from "./inbound-webhook-url";
 import type { IntegrationFormData } from "./types";

@@ -3,7 +3,7 @@ import {
 	type StepResponseDto,
 	TRANSLATION_NAMESPACE_SEPARATOR,
 	TRANSLATION_TRIGGER_CHARACTER,
-} from "@novu/shared";
+} from "@/shared";
 import type {
 	AnyExtension,
 	Editor,
@@ -12,17 +12,17 @@ import type {
 } from "@tiptap/core";
 import { ReactNodeViewRenderer } from "@tiptap/react";
 import { type ForwardRefExoticComponent, useMemo } from "react";
-import { createCards } from "@/components/maily//blocks/cards";
-import { createDigestBlock } from "@/components/maily//blocks/digest";
-import { createFooters } from "@/components/maily/blocks/footers";
-import { createHeaders } from "@/components/maily/blocks/headers";
-import { createHtmlCodeBlock } from "@/components/maily/blocks/html";
-import { ForView } from "@/components/maily/views/for-view";
-import { HTMLCodeBlockView } from "@/components/maily/views/html-view";
-import { useCreateTranslationExtension } from "@/features/workflows/components/workflow-editor/steps/email/translations";
-import type { TranslationValueInputComponent } from "@/features/workflows/components/workflow-editor/steps/email/translations/edit-translation-popover/edit-translation-popover";
-import { useDataRef } from "@/hooks/use-data-ref";
-import type { useTelemetry } from "@/hooks/use-telemetry";
+import { createCards } from "@/shared/ui/maily//blocks/cards";
+import { createDigestBlock } from "@/shared/ui/maily//blocks/digest";
+import { createFooters } from "@/shared/ui/maily/blocks/footers";
+import { createHeaders } from "@/shared/ui/maily/blocks/headers";
+import { createHtmlCodeBlock } from "@/shared/ui/maily/blocks/html";
+import { ForView } from "@/shared/ui/maily/views/for-view";
+import { HTMLCodeBlockView } from "@/shared/ui/maily/views/html-view";
+import { useCreateTranslationExtension } from "@/features/workflows/ui/workflow-editor/steps/email/translations";
+import type { TranslationValueInputComponent } from "@/features/workflows/ui/workflow-editor/steps/email/translations/edit-translation-popover/edit-translation-popover";
+import { useDataRef } from "@/shared/lib/hooks/use-data-ref";
+import type { useTelemetry } from "@/shared/lib/hooks/use-telemetry";
 import {
 	type BlockGroupItem,
 	type BlockItem,
@@ -42,7 +42,7 @@ import {
 	section,
 	spacer,
 	text,
-} from "@/lib/maily-core/blocks";
+} from "@/shared/lib/externals/maily-core/blocks";
 import {
 	ButtonExtension,
 	getSlashCommandSuggestions,
@@ -62,16 +62,16 @@ import {
 	type Variable,
 	VariableExtension,
 	type Variables,
-} from "@/lib/maily-core/extensions";
+} from "@/shared/lib/externals/maily-core/extensions";
 import type {
 	LocalizationResourceEnum,
 	TranslationKey,
-} from "@/types/translations";
+} from "@/shared/model/translations";
 import type {
 	IsAllowedVariable,
 	LiquidVariable,
 	ParsedVariables,
-} from "@/utils/parseStepVariables";
+} from "@/shared/lib/parseStepVariables";
 import {
 	isInsideRepeatBlock,
 	resolveRepeatBlockAlias,

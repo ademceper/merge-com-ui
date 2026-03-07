@@ -6,16 +6,16 @@ import {
 	FormField,
 	FormItem,
 	FormMessagePure,
-} from "@/components/primitives/form/form";
-import { InputPure } from "@/components/primitives/input";
+} from "@/shared/ui/primitives/form/form";
+import { InputPure } from "@/shared/ui/primitives/input";
 import {
 	Select,
 	SelectContent,
 	SelectItem,
 	SelectTrigger,
 	SelectValue,
-} from "@/components/primitives/select";
-import { AUTOCOMPLETE_PASSWORD_MANAGERS_OFF } from "@/utils/constants";
+} from "@/shared/ui/primitives/select";
+import { AUTOCOMPLETE_PASSWORD_MANAGERS_OFF } from "@/shared/lib/constants";
 
 const HEIGHT = {
 	sm: {

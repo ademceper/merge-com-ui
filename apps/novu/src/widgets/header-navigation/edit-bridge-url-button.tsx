@@ -1,7 +1,7 @@
 /** biome-ignore-all lint/correctness/useUniqueElementIds: working correctly */
 import { standardSchemaResolver } from "@hookform/resolvers/standard-schema";
 import { cn } from "@merge-rd/ui/lib/utils";
-import { PermissionsEnum } from "@novu/shared";
+import { PermissionsEnum } from "@/shared";
 import { Link } from "@phosphor-icons/react";
 import { useLayoutEffect, useState } from "react";
 import { useForm } from "react-hook-form";
@@ -14,26 +14,26 @@ import {
 	FormLabel,
 	FormMessage,
 	FormRoot,
-} from "@/components/primitives/form/form";
-import { Input } from "@/components/primitives/input";
+} from "@/shared/ui/primitives/form/form";
+import { Input } from "@/shared/ui/primitives/input";
 import {
 	Popover,
 	PopoverContent,
 	PopoverPortal,
 	PopoverTrigger,
-} from "@/components/primitives/popover";
+} from "@/shared/ui/primitives/popover";
 import {
 	Tooltip,
 	TooltipContent,
 	TooltipTrigger,
-} from "@/components/primitives/tooltip";
-import { useEnvironment } from "@/context/environment/hooks";
-import { useFetchBridgeHealthCheck } from "@/hooks/use-fetch-bridge-health-check";
-import { useHasPermission } from "@/hooks/use-has-permission";
-import { useUpdateBridgeUrl } from "@/hooks/use-update-bridge-url";
-import { useValidateBridgeUrl } from "@/hooks/use-validate-bridge-url";
-import { ConnectionStatus } from "@/utils/types";
-import { PermissionButton } from "../primitives/permission-button";
+} from "@/shared/ui/primitives/tooltip";
+import { useEnvironment } from "@/app/context/environment/hooks";
+import { useFetchBridgeHealthCheck } from "@/shared/lib/hooks/use-fetch-bridge-health-check";
+import { useHasPermission } from "@/shared/lib/hooks/use-has-permission";
+import { useUpdateBridgeUrl } from "@/shared/lib/hooks/use-update-bridge-url";
+import { useValidateBridgeUrl } from "@/shared/lib/hooks/use-validate-bridge-url";
+import { ConnectionStatus } from "@/shared/lib/types";
+import { PermissionButton } from "@/shared/ui/primitives/permission-button";
 
 const formSchema = z.object({ bridgeUrl: z.url() });
 

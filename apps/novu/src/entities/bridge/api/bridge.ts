@@ -1,6 +1,6 @@
 import type { HealthCheck } from "@novu/framework/internal";
-import type { IEnvironment, IValidateBridgeUrlResponse } from "@novu/shared";
-import { get, post } from "./api.client";
+import type { IEnvironment, IValidateBridgeUrlResponse } from "@/shared";
+import { get, post } from "@/shared/api/api.client";
 
 export const getBridgeHealthCheck = async ({
 	environment,

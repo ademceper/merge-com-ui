@@ -1,6 +1,6 @@
 import { useOrganization } from "@merge-rd/auth";
 import { FacetedFormFilter } from "@merge-rd/ui/components/faceted-filter/faceted-form-filter";
-import { EnvironmentTypeEnum, FeatureFlagsKeysEnum } from "@novu/shared";
+import { EnvironmentTypeEnum, FeatureFlagsKeysEnum } from "@/shared";
 import { Calendar } from "@phosphor-icons/react";
 import { motion } from "motion/react";
 import { useEffect, useState } from "react";
@@ -10,12 +10,12 @@ import {
 	type ProviderVolumeDataPoint,
 	ReportTypeEnum,
 	type WorkflowRunsTrendDataPoint,
-} from "@/api/activity";
-import { PageMeta } from "@/components/page-meta";
-import { Badge } from "@/components/primitives/badge";
-import { InlineToast } from "@/components/primitives/inline-toast";
-import { useEnvironment } from "@/context/environment/hooks";
-import { useSetPageHeader } from "@/context/page-header";
+} from "@/entities/activity/api/activity";
+import { PageMeta } from "@/shared/ui/page-meta";
+import { Badge } from "@/shared/ui/primitives/badge";
+import { InlineToast } from "@/shared/ui/primitives/inline-toast";
+import { useEnvironment } from "@/app/context/environment/hooks";
+import { useSetPageHeader } from "@/app/context/page-header";
 import {
 	ANIMATION_VARIANTS,
 	AnalyticsSection,
@@ -24,16 +24,16 @@ import {
 	ChartsSection,
 	useAnalyticsDateFilter,
 	useMetricData,
-} from "@/features/analytics/components";
-import { ActiveSubscribersTrendChart } from "@/features/analytics/components/charts/active-subscribers-trend-chart";
-import { ProvidersByVolume } from "@/features/analytics/components/charts/providers-by-volume";
-import { WorkflowRunsTrendChart } from "@/features/analytics/components/charts/workflow-runs-trend-chart";
-import { useFetchCharts } from "@/features/analytics/hooks/use-fetch-charts";
-import { useFetchWorkflows } from "@/features/workflows/hooks/use-fetch-workflows";
-import { useFeatureFlag } from "@/hooks/use-feature-flag";
-import { useFetchSubscription } from "@/hooks/use-fetch-subscription";
-import { useTelemetry } from "@/hooks/use-telemetry";
-import { TelemetryEvent } from "@/utils/telemetry";
+} from "@/features/analytics/ui";
+import { ActiveSubscribersTrendChart } from "@/features/analytics/ui/charts/active-subscribers-trend-chart";
+import { ProvidersByVolume } from "@/features/analytics/ui/charts/providers-by-volume";
+import { WorkflowRunsTrendChart } from "@/features/analytics/ui/charts/workflow-runs-trend-chart";
+import { useFetchCharts } from "@/features/analytics/lib/use-fetch-charts";
+import { useFetchWorkflows } from "@/features/workflows/lib/use-fetch-workflows";
+import { useFeatureFlag } from "@/shared/lib/hooks/use-feature-flag";
+import { useFetchSubscription } from "@/shared/lib/hooks/use-fetch-subscription";
+import { useTelemetry } from "@/shared/lib/hooks/use-telemetry";
+import { TelemetryEvent } from "@/shared/lib/telemetry";
 
 export function AnalyticsPage() {
 	const telemetry = useTelemetry();

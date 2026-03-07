@@ -8,7 +8,7 @@ import {
 } from "json-edit-react";
 import JSON5 from "json5";
 import { useEffect, useMemo, useRef, useState } from "react";
-import { InlineToast } from "@/components/primitives/inline-toast";
+import { InlineToast } from "@/shared/ui/primitives/inline-toast";
 import { CUSTOM_THEME } from "./constants";
 import { CustomTextEditor } from "./custom-text-editor";
 import { JSON_EDITOR_ICONS } from "./icons";

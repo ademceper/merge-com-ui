@@ -1,12 +1,12 @@
 import { useOrganization } from "@merge-rd/auth";
 import { useCallback, useMemo } from "react";
 import { useSearchParams } from "react-router-dom";
-import { useFetchSubscription } from "@/hooks/use-fetch-subscription";
+import { useFetchSubscription } from "@/shared/lib/hooks/use-fetch-subscription";
 import {
 	getPersistedPageSize,
 	usePersistedPageSize,
-} from "@/hooks/use-persisted-page-size";
-import { getMaxAvailableLogsDateRange } from "@/utils/logs-filters.utils";
+} from "@/shared/lib/hooks/use-persisted-page-size";
+import { getMaxAvailableLogsDateRange } from "@/shared/lib/logs-filters.utils";
 
 const LOGS_TABLE_ID = "logs-table";
 

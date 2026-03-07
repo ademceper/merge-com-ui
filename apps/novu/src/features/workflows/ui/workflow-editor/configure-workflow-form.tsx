@@ -19,7 +19,7 @@ import {
 	ResourceOriginEnum,
 	type UpdateWorkflowDto,
 	type WorkflowResponseDto,
-} from "@novu/shared";
+} from "@/shared";
 import {
 	CaretRight,
 	Code,
@@ -34,11 +34,11 @@ import { useCallback, useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
 import type { ExternalToast } from "sonner";
-import { ConfirmationModal } from "@/components/confirmation-modal";
-import { RouteFill } from "@/components/icons/route-fill";
-import { PageMeta } from "@/components/page-meta";
-import { CompactButton } from "@/components/primitives/button-compact";
-import { CopyButton } from "@/components/primitives/copy-button";
+import { ConfirmationModal } from "@/shared/ui/confirmation-modal";
+import { RouteFill } from "@/shared/ui/icons/route-fill";
+import { PageMeta } from "@/shared/ui/page-meta";
+import { CompactButton } from "@/shared/ui/primitives/button-compact";
+import { CopyButton } from "@/shared/ui/primitives/copy-button";
 import {
 	Form,
 	FormControl,
@@ -47,36 +47,36 @@ import {
 	FormLabel,
 	FormMessage,
 	FormRoot,
-} from "@/components/primitives/form/form";
-import { Input } from "@/components/primitives/input";
-import { ToastIcon } from "@/components/primitives/sonner";
-import { showToast } from "@/components/primitives/sonner-helpers";
-import { TagInput } from "@/components/primitives/tag-input";
-import { Textarea } from "@/components/primitives/textarea";
-import { usePromotionalBanner } from "@/components/promotional/coming-soon-banner";
+} from "@/shared/ui/primitives/form/form";
+import { Input } from "@/shared/ui/primitives/input";
+import { ToastIcon } from "@/shared/ui/primitives/sonner";
+import { showToast } from "@/shared/ui/primitives/sonner-helpers";
+import { TagInput } from "@/shared/ui/primitives/tag-input";
+import { Textarea } from "@/shared/ui/primitives/textarea";
+import { usePromotionalBanner } from "@/shared/ui/promotional/coming-soon-banner";
 import {
 	SidebarContent,
 	SidebarHeader,
-} from "@/components/side-navigation/sidebar";
+} from "@/widgets/side-navigation/sidebar";
 import {
 	useEnvironment,
 	useFetchEnvironments,
-} from "@/context/environment/hooks";
-import { DeleteWorkflowDialog } from "@/features/workflows/components/delete-workflow-dialog";
+} from "@/app/context/environment/hooks";
+import { DeleteWorkflowDialog } from "@/features/workflows/ui/delete-workflow-dialog";
 import {
 	PAUSE_MODAL_TITLE,
 	PauseModalDescription,
-} from "@/features/workflows/components/pause-workflow-dialog";
-import { workflowSchema } from "@/features/workflows/components/workflow-editor/schema";
-import type { UpdateWorkflowFn } from "@/features/workflows/components/workflow-editor/workflow-provider";
-import { useDeleteWorkflow } from "@/features/workflows/hooks/use-delete-workflow";
-import { useSyncWorkflow } from "@/features/workflows/hooks/use-sync-workflow";
-import { useFormAutosave } from "@/hooks/use-form-autosave";
-import { useTags } from "@/hooks/use-tags";
-import { LocalizationResourceEnum } from "@/types/translations";
-import { Protect } from "@/utils/protect";
-import { buildRoute, ROUTES } from "@/utils/routes";
-import { TelemetryEvent } from "@/utils/telemetry";
+} from "@/features/workflows/ui/pause-workflow-dialog";
+import { workflowSchema } from "@/features/workflows/ui/workflow-editor/schema";
+import type { UpdateWorkflowFn } from "@/features/workflows/ui/workflow-editor/workflow-provider";
+import { useDeleteWorkflow } from "@/features/workflows/lib/use-delete-workflow";
+import { useSyncWorkflow } from "@/features/workflows/lib/use-sync-workflow";
+import { useFormAutosave } from "@/shared/lib/hooks/use-form-autosave";
+import { useTags } from "@/shared/lib/hooks/use-tags";
+import { LocalizationResourceEnum } from "@/shared/model/translations";
+import { Protect } from "@/shared/lib/protect";
+import { buildRoute, ROUTES } from "@/shared/lib/routes";
+import { TelemetryEvent } from "@/shared/lib/telemetry";
 import { PayloadSchemaDrawer } from "./payload-schema-drawer";
 import { TranslationToggleSection } from "./translation-toggle-section";
 

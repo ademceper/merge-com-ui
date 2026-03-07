@@ -1,10 +1,10 @@
 import { cn } from "@merge-rd/ui/lib/utils";
-import { CopyButton } from "@/components/primitives/copy-button";
+import { CopyButton } from "@/shared/ui/primitives/copy-button";
 import {
 	HoverCard,
 	HoverCardContent,
 	HoverCardTrigger,
-} from "@/components/primitives/hover-card";
+} from "@/shared/ui/primitives/hover-card";
 
 type TransactionIdDisplayProps = {
 	transactionId: string | null;

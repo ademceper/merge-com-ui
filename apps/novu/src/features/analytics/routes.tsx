@@ -1,9 +1,9 @@
 import type { RouteObject } from "react-router-dom";
 import { lazy } from "react";
-import { ROUTES } from "@/utils/routes";
+import { ROUTES } from "@/shared/lib/routes";
 
 const AnalyticsPage = lazy(() =>
-	import("@/features/analytics/pages/analytics").then((m) => ({
+	import("@/features/analytics/ui/pages/analytics").then((m) => ({
 		default: m.AnalyticsPage,
 	})),
 );

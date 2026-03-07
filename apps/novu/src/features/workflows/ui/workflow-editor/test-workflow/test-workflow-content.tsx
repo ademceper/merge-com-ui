@@ -3,16 +3,16 @@ import type {
 	ContextPayload,
 	ISubscriberResponseDto,
 	WorkflowResponseDto,
-} from "@novu/shared";
+} from "@/shared";
 import { useState } from "react";
-import { PreviewContextSection } from "@/components/preview-context-section";
-import { PreviewSubscriberSection } from "@/components/preview-subscriber-section";
-import { PreviewPayloadSection } from "@/features/workflows/components/workflow-editor/steps/components/preview-payload-section";
+import { PreviewContextSection } from "@/widgets/preview-context-section";
+import { PreviewSubscriberSection } from "@/widgets/preview-subscriber-section";
+import { PreviewPayloadSection } from "@/features/workflows/ui/workflow-editor/steps/components/preview-payload-section";
 import type {
 	PayloadData,
 	PreviewSubscriberData,
-} from "@/features/workflows/components/workflow-editor/steps/types/preview-context.types";
-import { useIsPayloadSchemaEnabled } from "@/hooks/use-is-payload-schema-enabled";
+} from "@/features/workflows/ui/workflow-editor/steps/types/preview-context.types";
+import { useIsPayloadSchemaEnabled } from "@/features/workflows/lib/use-is-payload-schema-enabled";
 
 type TestWorkflowContentProps = {
 	workflow?: WorkflowResponseDto;

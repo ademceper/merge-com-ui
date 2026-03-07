@@ -8,7 +8,7 @@ import cronParser, {
 } from "cron-parser";
 import isEqual from "lodash.isequal";
 
-import { dedup, range, sort } from "@/utils/arrays";
+import { dedup, range, sort } from "@/shared/lib/arrays";
 
 export enum PeriodValues {
 	MINUTE = "minute",

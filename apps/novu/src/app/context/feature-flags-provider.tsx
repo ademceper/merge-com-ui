@@ -3,8 +3,8 @@ import {
 	asyncWithLDProvider,
 } from "launchdarkly-react-client-sdk";
 import { lazy, Suspense } from "react";
-import { LAUNCH_DARKLY_CLIENT_SIDE_ID } from "@/config";
-import { detectRegionFromURL, getRegionConfig } from "@/context/region";
+import { LAUNCH_DARKLY_CLIENT_SIDE_ID } from "@/shared/config";
+import { detectRegionFromURL, getRegionConfig } from "@/app/context/region";
 
 function getAwsRegion(): string {
 	const currentRegion = detectRegionFromURL();

@@ -8,7 +8,7 @@ import {
 	Lightning,
 } from "@phosphor-icons/react";
 import type { IconType } from "react-icons/lib";
-import { StepTypeEnum } from "@/utils/enums";
+import { StepTypeEnum } from "@/shared/lib/enums";
 import { Mail3Fill } from "./mail-3-fill";
 import { Notification5Fill } from "./notification-5-fill";
 import { Sms } from "./sms";

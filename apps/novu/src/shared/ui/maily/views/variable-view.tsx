@@ -2,20 +2,20 @@ import type { NodeViewProps, Editor as TiptapEditor } from "@tiptap/core";
 import { NodeViewWrapper } from "@tiptap/react";
 import type { JSONSchema7 } from "json-schema";
 import { useCallback, useMemo, useState } from "react";
-import { VariableFrom } from "@/components/maily/types";
-import { EditVariablePopover } from "@/components/variable/edit-variable-popover";
-import { useVariableValidation } from "@/components/variable/hooks/use-variable-validation";
-import { validateEnhancedDigestFilters } from "@/components/variable/utils";
+import { VariableFrom } from "@/shared/ui/maily/types";
+import { EditVariablePopover } from "@/shared/ui/variable/edit-variable-popover";
+import { useVariableValidation } from "@/shared/ui/variable/hooks/use-variable-validation";
+import { validateEnhancedDigestFilters } from "@/shared/ui/variable/utils";
 import {
 	DIGEST_VARIABLES_ENUM,
 	getDynamicDigestVariable,
-} from "@/components/variable/utils/digest-variables";
-import { VariablePill } from "@/components/variable/variable-pill";
-import { parseVariable } from "@/utils/liquid";
+} from "@/shared/ui/variable/utils/digest-variables";
+import { VariablePill } from "@/shared/ui/variable/variable-pill";
+import { parseVariable } from "@/shared/lib/liquid";
 import type {
 	IsAllowedVariable,
 	LiquidVariable,
-} from "@/utils/parseStepVariables";
+} from "@/shared/lib/parseStepVariables";
 import { resolveRepeatBlockAlias } from "../repeat-block-aliases";
 
 interface ParsedVariableData {

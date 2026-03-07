@@ -14,18 +14,18 @@ import {
 	type IProviderConfig,
 	PermissionsEnum,
 	slackConfig,
-} from "@novu/shared";
+} from "@/shared";
 import { Textbox } from "@phosphor-icons/react";
 import { useEffect, useMemo } from "react";
 import { useForm, useWatch } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
-import { Form, FormRoot } from "@/components/primitives/form/form";
-import { InlineToast } from "@/components/primitives/inline-toast";
-import { EnvironmentDropdown } from "@/components/side-navigation/environment-dropdown";
-import { useEnvironment } from "@/context/environment/hooks";
-import { useFeatureFlag } from "@/hooks/use-feature-flag";
-import { Protect } from "@/utils/protect";
-import { ROUTES } from "@/utils/routes";
+import { Form, FormRoot } from "@/shared/ui/primitives/form/form";
+import { InlineToast } from "@/shared/ui/primitives/inline-toast";
+import { EnvironmentDropdown } from "@/widgets/side-navigation/environment-dropdown";
+import { useEnvironment } from "@/app/context/environment/hooks";
+import { useFeatureFlag } from "@/shared/lib/hooks/use-feature-flag";
+import { Protect } from "@/shared/lib/protect";
+import { ROUTES } from "@/shared/lib/routes";
 import { CredentialSection } from "./credential-section";
 import { GeneralSettings } from "./integration-general-settings";
 import { isDemoIntegration } from "./utils/helpers";

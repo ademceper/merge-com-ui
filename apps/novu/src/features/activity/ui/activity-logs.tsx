@@ -6,18 +6,18 @@ import {
 	DialogTitle,
 } from "@merge-rd/ui/components/dialog";
 import { cn } from "@merge-rd/ui/lib/utils";
-import type { IActivity } from "@novu/shared";
+import type { IActivity } from "@/shared";
 import { X } from "@phosphor-icons/react";
 import { motion } from "motion/react";
 import { useRef, useState } from "react";
-import { CollapsibleSection } from "@/components/http-logs/logs-detail-content";
-import { CompactButton } from "@/components/primitives/button-compact";
-import { CodeBlock } from "@/components/primitives/code-block";
-import { CopyToClipboard } from "@/components/primitives/copy-to-clipboard";
-import { InlineToast } from "@/components/primitives/inline-toast";
-import { Popover, PopoverContent } from "@/components/primitives/popover";
-import { ActivityJobItem } from "@/features/activity/components/activity-job-item";
-import { fadeIn } from "@/utils/animation";
+import { CollapsibleSection } from "@/widgets/http-logs/logs-detail-content";
+import { CompactButton } from "@/shared/ui/primitives/button-compact";
+import { CodeBlock } from "@/shared/ui/primitives/code-block";
+import { CopyToClipboard } from "@/shared/ui/primitives/copy-to-clipboard";
+import { InlineToast } from "@/shared/ui/primitives/inline-toast";
+import { Popover, PopoverContent } from "@/shared/ui/primitives/popover";
+import { ActivityJobItem } from "@/features/activity/ui/activity-job-item";
+import { fadeIn } from "@/shared/lib/animation";
 
 export function ActivityLogs({
 	activity,

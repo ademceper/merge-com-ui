@@ -35,7 +35,6 @@ export default defineConfig(({ mode }) => {
     ],
     resolve: {
       alias: {
-        '@novu/shared': path.resolve(__dirname, './src/shared/src/index.ts'),
         '@': path.resolve(__dirname, './src'),
         'react-resizable-panels': path.resolve(__dirname, '../../packages/ui/node_modules/react-resizable-panels'),
         'prettier/standalone': path.resolve(__dirname, './node_modules/prettier/standalone.js'),

@@ -1,7 +1,7 @@
 import { type UseQueryOptions, useQuery } from "@tanstack/react-query";
-import { type GetRequestTracesParams, getRequestTraces } from "@/api/logs";
-import { useEnvironment } from "@/context/environment/hooks";
-import type { RequestTraces } from "@/types/logs";
+import { type GetRequestTracesParams, getRequestTraces } from "@/entities/log/api/logs";
+import { useEnvironment } from "@/app/context/environment/hooks";
+import type { RequestTraces } from "@/shared/model/logs";
 
 interface UseFetchRequestTracesParams
 	extends Omit<GetRequestTracesParams, "environment"> {

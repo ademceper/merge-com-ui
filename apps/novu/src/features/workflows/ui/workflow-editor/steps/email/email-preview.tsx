@@ -1,12 +1,12 @@
 import { Avatar, AvatarImage } from "@merge-rd/ui/components/avatar";
 import { Skeleton } from "@merge-rd/ui/components/skeleton";
 import { cn } from "@merge-rd/ui/lib/utils";
-import type { ResourceOriginEnum } from "@novu/shared";
+import type { ResourceOriginEnum } from "@/shared";
 import { CaretDown, PencilSimple } from "@phosphor-icons/react";
 import { type HTMLAttributes, useCallback, useEffect, useRef } from "react";
 import { useFormContext } from "react-hook-form";
-import { MAILY_EMAIL_WIDTH } from "@/components/maily/maily-config";
-import { usePrimaryEmailIntegration } from "@/features/integrations/hooks/use-primary-email-integration";
+import { MAILY_EMAIL_WIDTH } from "@/shared/ui/maily/maily-config";
+import { usePrimaryEmailIntegration } from "@/features/integrations/lib/use-primary-email-integration";
 import { NovuBranding } from "./novu-branding";
 
 type EmailPreviewHeaderProps = HTMLAttributes<HTMLDivElement> & {

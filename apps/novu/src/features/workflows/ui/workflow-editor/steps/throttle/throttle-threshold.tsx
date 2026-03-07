@@ -6,10 +6,10 @@ import {
 	FormItem,
 	FormLabel,
 	FormMessage,
-} from "@/components/primitives/form/form";
-import { Input } from "@/components/primitives/input";
-import { useSaveForm } from "@/features/workflows/components/workflow-editor/steps/save-form-context";
-import { useWorkflow } from "@/features/workflows/components/workflow-editor/workflow-provider";
+} from "@/shared/ui/primitives/form/form";
+import { Input } from "@/shared/ui/primitives/input";
+import { useSaveForm } from "@/features/workflows/ui/workflow-editor/steps/save-form-context";
+import { useWorkflow } from "@/features/workflows/ui/workflow-editor/workflow-provider";
 
 const thresholdKey = "threshold";
 

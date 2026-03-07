@@ -1,7 +1,7 @@
 import { BookOpen, ChatCircle, Sparkle } from "@phosphor-icons/react";
-import { useAiDrawer } from "@/components/ai-drawer";
-import { useTelemetry } from "@/hooks/use-telemetry";
-import { TelemetryEvent } from "@/utils/telemetry";
+import { useAiDrawer } from "@/widgets/ai-drawer";
+import { useTelemetry } from "@/shared/lib/hooks/use-telemetry";
+import { TelemetryEvent } from "@/shared/lib/telemetry";
 import type { Command, CommandExecutionContext } from "../command-types";
 
 export function useHelpCommands(_context: CommandExecutionContext): Command[] {

@@ -3,7 +3,7 @@ import {
 	EnvironmentTypeEnum,
 	PermissionsEnum,
 	ResourceOriginEnum,
-} from "@novu/shared";
+} from "@/shared";
 import {
 	Background,
 	BackgroundVariant,
@@ -15,12 +15,12 @@ import "@xyflow/react/dist/style.css";
 import { useUser } from "@merge-rd/auth";
 import { useEffect, useMemo, useRef } from "react";
 import { useNavigate } from "react-router-dom";
-import { InlineToast } from "@/components/primitives/inline-toast";
-import { useEnvironment } from "@/context/environment/hooks";
-import { useWorkflow } from "@/features/workflows/components/workflow-editor/workflow-provider";
-import { useHasPermission } from "@/hooks/use-has-permission";
-import { buildRoute, ROUTES } from "@/utils/routes";
-import type { Step } from "@/utils/types";
+import { InlineToast } from "@/shared/ui/primitives/inline-toast";
+import { useEnvironment } from "@/app/context/environment/hooks";
+import { useWorkflow } from "@/features/workflows/ui/workflow-editor/workflow-provider";
+import { useHasPermission } from "@/shared/lib/hooks/use-has-permission";
+import { buildRoute, ROUTES } from "@/shared/lib/routes";
+import type { Step } from "@/shared/lib/types";
 import { CanvasContext } from "./drag-context";
 import { edgeTypes, nodeTypes } from "./node-utils";
 import { useCanvasNodesEdges } from "./use-canvas-nodes-edges";

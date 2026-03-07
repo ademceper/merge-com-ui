@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 
-import { fetchVercelIntegrationProjects } from "@/api/partner-integrations";
-import { useEnvironment } from "@/context/environment/hooks";
+import { fetchVercelIntegrationProjects } from "@/entities/integration/api/partner-integrations";
+import { useEnvironment } from "@/app/context/environment/hooks";
 
 export function useFetchVercelIntegrationProjects({
 	configurationId,

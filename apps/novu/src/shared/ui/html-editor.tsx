@@ -11,19 +11,19 @@ import { Code } from "@phosphor-icons/react";
 import type { EditorView, Extension } from "@uiw/react-codemirror";
 import type { JSONSchema7 } from "json-schema";
 import { type MutableRefObject, useCallback, useMemo, useRef } from "react";
-import { showErrorToast } from "@/components/primitives/sonner-helpers";
+import { showErrorToast } from "@/shared/ui/primitives/sonner-helpers";
 import {
 	Tooltip,
 	TooltipContent,
 	TooltipTrigger,
-} from "@/components/primitives/tooltip";
+} from "@/shared/ui/primitives/tooltip";
 import {
 	type CompletionRange,
 	VariableEditor,
-} from "@/components/primitives/variable-editor";
-import { formatHtml } from "@/utils/formatter";
-import type { CompletionOption } from "@/utils/liquid-autocomplete";
-import type { LiquidVariable } from "@/utils/parseStepVariables";
+} from "@/shared/ui/primitives/variable-editor";
+import { formatHtml } from "@/shared/lib/formatter";
+import type { CompletionOption } from "@/shared/lib/liquid-autocomplete";
+import type { LiquidVariable } from "@/shared/lib/parseStepVariables";
 
 type HtmlEditorProps = {
 	viewRef: MutableRefObject<EditorView | null>;

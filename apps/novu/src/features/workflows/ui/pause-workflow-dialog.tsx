@@ -1,4 +1,4 @@
-import TruncatedText from "@/components/truncated-text";
+import TruncatedText from "@/shared/ui/truncated-text";
 
 export const PauseModalDescription = ({
 	workflowName,

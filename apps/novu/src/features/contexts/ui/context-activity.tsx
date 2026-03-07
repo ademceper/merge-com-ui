@@ -3,19 +3,19 @@ import {
 	type ContextType,
 	createContextKey,
 	FeatureFlagsKeysEnum,
-} from "@novu/shared";
+} from "@/shared";
 import { AnimatePresence } from "motion/react";
 import { useMemo, useState } from "react";
 import { Link } from "react-router-dom";
-import { useEnvironment } from "@/context/environment/hooks";
-import { ActivityFilters } from "@/features/activity/components/activity-filters";
-import { defaultActivityFilters } from "@/features/activity/components/constants";
-import { useFetchActivities } from "@/features/activity/hooks/use-fetch-activities";
-import { ActivityDetailsDrawer } from "@/features/subscribers/components/subscriber-activity-drawer";
-import { SubscriberActivityList } from "@/features/subscribers/components/subscriber-activity-list";
-import { useFeatureFlag } from "@/hooks/use-feature-flag";
-import type { ActivityFiltersData } from "@/types/activity";
-import { buildRoute, ROUTES } from "@/utils/routes";
+import { useEnvironment } from "@/app/context/environment/hooks";
+import { ActivityFilters } from "@/features/activity/ui/activity-filters";
+import { defaultActivityFilters } from "@/features/activity/ui/constants";
+import { useFetchActivities } from "@/features/activity/lib/use-fetch-activities";
+import { ActivityDetailsDrawer } from "@/features/subscribers/ui/subscriber-activity-drawer";
+import { SubscriberActivityList } from "@/features/subscribers/ui/subscriber-activity-list";
+import { useFeatureFlag } from "@/shared/lib/hooks/use-feature-flag";
+import type { ActivityFiltersData } from "@/shared/model/activity";
+import { buildRoute, ROUTES } from "@/shared/lib/routes";
 
 const getInitialFilters = (
 	contextKey: string,

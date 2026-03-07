@@ -1,5 +1,5 @@
 import { cn } from "@merge-rd/ui/lib/utils";
-import type { IEnvironment } from "@novu/shared";
+import type { IEnvironment } from "@/shared";
 import { Terminal } from "@phosphor-icons/react";
 import { cva } from "class-variance-authority";
 

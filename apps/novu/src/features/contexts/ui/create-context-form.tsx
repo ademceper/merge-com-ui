@@ -5,8 +5,8 @@ import { useForm } from "react-hook-form";
 import { Link } from "react-router-dom";
 import type { ExternalToast } from "sonner";
 import type { z } from "zod";
-import { NovuApiError } from "@/api/api.client";
-import { Editor } from "@/components/primitives/editor";
+import { NovuApiError } from "@/shared/api/api.client";
+import { Editor } from "@/shared/ui/primitives/editor";
 import {
 	Form,
 	FormControl,
@@ -15,16 +15,16 @@ import {
 	FormLabel,
 	FormMessage,
 	FormRoot,
-} from "@/components/primitives/form/form";
-import { InlineToast } from "@/components/primitives/inline-toast";
-import { Input, InputRoot } from "@/components/primitives/input";
+} from "@/shared/ui/primitives/form/form";
+import { InlineToast } from "@/shared/ui/primitives/inline-toast";
+import { Input, InputRoot } from "@/shared/ui/primitives/input";
 import {
 	showErrorToast,
 	showSuccessToast,
-} from "@/components/primitives/sonner-helpers";
-import { useCreateContext } from "@/features/contexts/hooks/use-create-context";
-import { useTelemetry } from "@/hooks/use-telemetry";
-import { TelemetryEvent } from "@/utils/telemetry";
+} from "@/shared/ui/primitives/sonner-helpers";
+import { useCreateContext } from "@/features/contexts/lib/use-create-context";
+import { useTelemetry } from "@/shared/lib/hooks/use-telemetry";
+import { TelemetryEvent } from "@/shared/lib/telemetry";
 import { CreateContextFormSchema } from "./schema";
 
 const toastOptions: ExternalToast = {

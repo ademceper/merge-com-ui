@@ -5,9 +5,9 @@ import type {
 	MessagesDeliveredDataPoint,
 	TotalInteractionsDataPoint,
 	WorkflowRunsMetricDataPoint,
-} from "@/api/activity";
-import { ReportTypeEnum } from "@/api/activity";
-import { getCompactFormat } from "@/utils/number-formatting";
+} from "@/entities/activity/api/activity";
+import { ReportTypeEnum } from "@/entities/activity/api/activity";
+import { getCompactFormat } from "@/shared/lib/number-formatting";
 
 export type MetricData = {
 	value: string;

@@ -1,5 +1,5 @@
 import { cn } from "@merge-rd/ui/lib/utils";
-import { ChannelTypeEnum, type GeneratePreviewResponseDto } from "@novu/shared";
+import { ChannelTypeEnum, type GeneratePreviewResponseDto } from "@/shared";
 import type { ReactNode } from "react";
 import {
 	InAppPreview,
@@ -13,7 +13,7 @@ import {
 	InAppPreviewPrimaryAction,
 	InAppPreviewSecondaryAction,
 	InAppPreviewSubject,
-} from "@/features/workflows/components/workflow-editor/in-app-preview";
+} from "@/features/workflows/ui/workflow-editor/in-app-preview";
 
 const InboxPreviewContainer = ({
 	children,

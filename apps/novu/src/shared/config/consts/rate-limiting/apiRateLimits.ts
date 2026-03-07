@@ -4,7 +4,7 @@ import {
 	ApiRateLimitCostEnum,
 	type IApiRateLimitAlgorithm,
 	type IApiRateLimitCost,
-} from "../../types";
+} from "@/shared/model";
 import { FeatureNameEnum } from "../feature-tiers-constants";
 
 export const ApiRateLimitCategoryToFeatureName: Record<

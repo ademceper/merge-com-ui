@@ -1,5 +1,5 @@
 import { cn } from "@merge-rd/ui/lib/utils";
-import { DirectionEnum } from "@novu/shared";
+import { DirectionEnum } from "@/shared";
 import { ArrowsDownUp, CaretDown, CaretUp } from "@phosphor-icons/react";
 import { cva } from "class-variance-authority";
 import * as React from "react";

@@ -1,4 +1,4 @@
-import { useFetchTranslationList } from "@/features/translations/hooks/use-fetch-translation-list";
+import { useFetchTranslationList } from "@/features/translations/lib/use-fetch-translation-list";
 import { useTranslationsUrlState } from "./use-translations-url-state";
 
 interface UseTranslationListLogicOptions {

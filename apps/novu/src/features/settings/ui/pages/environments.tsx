@@ -3,18 +3,18 @@ import {
 	ApiServiceLevelEnum,
 	FeatureNameEnum,
 	getFeatureForTierAsBoolean,
-} from "@novu/shared";
+} from "@/shared";
 import { useEffect } from "react";
-import { PageMeta } from "@/components/page-meta";
-import { IS_ENTERPRISE, IS_SELF_HOSTED } from "@/config";
-import { useFetchEnvironments } from "@/context/environment/hooks";
-import { useSetPageHeader } from "@/context/page-header";
-import { CreateEnvironmentButton } from "@/features/settings/components/environments/create-environment-button";
-import { FreeTierState } from "@/features/settings/components/environments/environments-free-state";
-import { EnvironmentsList } from "@/features/settings/components/environments/environments-list";
-import { useFetchSubscription } from "@/hooks/use-fetch-subscription";
-import { useTelemetry } from "@/hooks/use-telemetry";
-import { TelemetryEvent } from "@/utils/telemetry";
+import { PageMeta } from "@/shared/ui/page-meta";
+import { IS_ENTERPRISE, IS_SELF_HOSTED } from "@/shared/config";
+import { useFetchEnvironments } from "@/app/context/environment/hooks";
+import { useSetPageHeader } from "@/app/context/page-header";
+import { CreateEnvironmentButton } from "@/features/settings/ui/environments/create-environment-button";
+import { FreeTierState } from "@/features/settings/ui/environments/environments-free-state";
+import { EnvironmentsList } from "@/features/settings/ui/environments/environments-list";
+import { useFetchSubscription } from "@/shared/lib/hooks/use-fetch-subscription";
+import { useTelemetry } from "@/shared/lib/hooks/use-telemetry";
+import { TelemetryEvent } from "@/shared/lib/telemetry";
 
 export function EnvironmentsPage() {
 	useSetPageHeader(<h1 className="text-foreground-950">Environments</h1>);

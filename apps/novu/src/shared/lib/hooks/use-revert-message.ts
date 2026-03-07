@@ -1,6 +1,6 @@
 import { useMutation } from "@tanstack/react-query";
-import { revertMessage } from "@/api/ai";
-import { useEnvironment } from "@/context/environment/hooks";
+import { revertMessage } from "@/entities/ai/api/ai";
+import { useEnvironment } from "@/app/context/environment/hooks";
 
 export function useRevertMessage() {
 	const { currentEnvironment } = useEnvironment();

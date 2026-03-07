@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
-import { loadFromStorage, saveToStorage } from "@/utils/local-storage";
+import { loadFromStorage, saveToStorage } from "@/shared/lib/local-storage";
 
 const STORAGE_KEY = "novu-page-sizes";
 const DATA_KEY = "pageSizeMap";

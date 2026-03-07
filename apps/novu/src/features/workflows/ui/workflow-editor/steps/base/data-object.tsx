@@ -12,16 +12,16 @@ import {
 	FormField,
 	FormItem,
 	FormMessagePure,
-} from "@/components/primitives/form/form";
-import { useFormField } from "@/components/primitives/form/form-context";
-import { HelpTooltipIndicator } from "@/components/primitives/help-tooltip-indicator";
-import { Input, InputRoot } from "@/components/primitives/input";
-import { ControlInput } from "@/features/workflows/components/workflow-editor/control-input";
-import { useSaveForm } from "@/features/workflows/components/workflow-editor/steps/save-form-context";
-import { useWorkflow } from "@/features/workflows/components/workflow-editor/workflow-provider";
-import { useParseVariables } from "@/hooks/use-parse-variables";
-import { useTelemetry } from "@/hooks/use-telemetry";
-import { TelemetryEvent } from "@/utils/telemetry";
+} from "@/shared/ui/primitives/form/form";
+import { useFormField } from "@/shared/ui/primitives/form/form-context";
+import { HelpTooltipIndicator } from "@/shared/ui/primitives/help-tooltip-indicator";
+import { Input, InputRoot } from "@/shared/ui/primitives/input";
+import { ControlInput } from "@/features/workflows/ui/workflow-editor/control-input";
+import { useSaveForm } from "@/features/workflows/ui/workflow-editor/steps/save-form-context";
+import { useWorkflow } from "@/features/workflows/ui/workflow-editor/workflow-provider";
+import { useParseVariables } from "@/shared/lib/hooks/use-parse-variables";
+import { useTelemetry } from "@/shared/lib/hooks/use-telemetry";
+import { TelemetryEvent } from "@/shared/lib/telemetry";
 
 const dataObjectKey = "data";
 

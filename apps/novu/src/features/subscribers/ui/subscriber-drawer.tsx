@@ -5,11 +5,11 @@ import {
 	SheetContent,
 	SheetDescription,
 	SheetTitle,
-} from "@/components/primitives/sheet";
-import { VisuallyHidden } from "@/components/primitives/visually-hidden";
-import { SubscriberTabs } from "@/features/subscribers/components/subscriber-tabs";
-import { useCombinedRefs } from "@/hooks/use-combined-refs";
-import { useFormProtection } from "@/hooks/use-form-protection";
+} from "@/shared/ui/primitives/sheet";
+import { VisuallyHidden } from "@/shared/ui/primitives/visually-hidden";
+import { SubscriberTabs } from "@/features/subscribers/ui/subscriber-tabs";
+import { useCombinedRefs } from "@/shared/lib/hooks/use-combined-refs";
+import { useFormProtection } from "@/shared/lib/hooks/use-form-protection";
 
 type SubscriberDrawerProps = {
 	modal?: boolean;

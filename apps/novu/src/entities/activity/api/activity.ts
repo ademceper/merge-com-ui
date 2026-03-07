@@ -3,8 +3,8 @@ import {
 	type IActivity,
 	type IEnvironment,
 	type SeverityLevelEnum,
-} from "@novu/shared";
-import { get } from "./api.client";
+} from "@/shared";
+import { get } from "@/shared/api/api.client";
 
 export type ActivityFilters = {
 	channels?: string[];

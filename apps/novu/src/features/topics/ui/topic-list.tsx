@@ -11,19 +11,19 @@ import {
 	TableRow,
 } from "@merge-rd/ui/components/table";
 import { cn } from "@merge-rd/ui/lib/utils";
-import { type DirectionEnum, PermissionsEnum } from "@novu/shared";
+import { type DirectionEnum, PermissionsEnum } from "@/shared";
 import { PlusCircle } from "@phosphor-icons/react";
 import { type HTMLAttributes, useEffect } from "react";
-import { ListNoResults } from "@/components/list-no-results";
-import { PermissionButton } from "@/components/primitives/permission-button";
-import { useFetchTopics } from "@/features/topics/hooks/use-fetch-topics";
-import { useTopicsNavigate } from "@/features/topics/hooks/use-topics-navigate";
+import { ListNoResults } from "@/shared/ui/list-no-results";
+import { PermissionButton } from "@/shared/ui/primitives/permission-button";
+import { useFetchTopics } from "@/features/topics/lib/use-fetch-topics";
+import { useTopicsNavigate } from "@/features/topics/lib/use-topics-navigate";
 import {
 	type TopicsFilter,
 	type TopicsSortableColumn,
 	type TopicsUrlState,
 	useTopicsUrlState,
-} from "@/features/topics/hooks/use-topics-url-state";
+} from "@/features/topics/lib/use-topics-url-state";
 import { TopicListBlank } from "./topic-list-blank";
 import { TopicRow, TopicRowSkeleton } from "./topic-row";
 import { TopicsFilters } from "./topics-filters";

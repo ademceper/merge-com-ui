@@ -3,8 +3,8 @@ import { type UseQueryOptions, useQuery } from "@tanstack/react-query";
 import {
 	fetchVercelIntegration,
 	type GetVercelConfigurationDetails,
-} from "@/api/partner-integrations";
-import { useEnvironment } from "@/context/environment/hooks";
+} from "@/entities/integration/api/partner-integrations";
+import { useEnvironment } from "@/app/context/environment/hooks";
 
 export function useFetchVercelIntegration({
 	configurationId,

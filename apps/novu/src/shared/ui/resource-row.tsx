@@ -1,6 +1,6 @@
 import { Layout, Path, Translate } from "@phosphor-icons/react";
-import type { IResourceDiffResult } from "@/api/environments";
-import { formatDateSimple } from "@/utils/format-date";
+import type { IResourceDiffResult } from "@/entities/environment/api/environments";
+import { formatDateSimple } from "@/shared/lib/format-date";
 
 type ResourceRowProps = {
 	resource: IResourceDiffResult;

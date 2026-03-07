@@ -1,11 +1,11 @@
 import { Separator } from "@merge-rd/ui/components/separator";
 import { CaretDown, CaretUp } from "@phosphor-icons/react";
 import { useState } from "react";
-import { TimeDisplayHoverCard } from "@/components/time-display-hover-card";
-import { EditableJsonViewer } from "@/features/workflows/components/workflow-editor/steps/shared/editable-json-viewer/editable-json-viewer";
-import { formatDateSimple } from "@/utils/format-date";
-import type { RequestLog } from "../../types/logs";
-import { CopyButton } from "../primitives/copy-button";
+import { TimeDisplayHoverCard } from "@/shared/ui/time-display-hover-card";
+import { EditableJsonViewer } from "@/features/workflows/ui/workflow-editor/steps/shared/editable-json-viewer/editable-json-viewer";
+import { formatDateSimple } from "@/shared/lib/format-date";
+import type { RequestLog } from "@/shared/model/logs";
+import { CopyButton } from "@/shared/ui/primitives/copy-button";
 import { HttpStatusBadge } from "./http-status-badge";
 import { TransactionIdDisplay } from "./transaction-id-display";
 

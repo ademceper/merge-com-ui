@@ -1,10 +1,10 @@
 import { Outlet } from "react-router-dom";
-import { AiDrawerProvider } from "@/components/ai-drawer";
-import { CommandPalette } from "@/components/command-palette";
-import { CommandPaletteProvider } from "@/components/command-palette/command-palette-provider";
-import { Toaster } from "@/components/primitives/sonner";
-import { EnvironmentProvider } from "@/context/environment/environment-provider";
-import { OptInProvider } from "@/context/opt-in-provider";
+import { AiDrawerProvider } from "@/widgets/ai-drawer";
+import { CommandPalette } from "@/widgets/command-palette";
+import { CommandPaletteProvider } from "@/widgets/command-palette/command-palette-provider";
+import { Toaster } from "@/shared/ui/primitives/sonner";
+import { EnvironmentProvider } from "@/app/context/environment/environment-provider";
+import { OptInProvider } from "@/app/context/opt-in-provider";
 
 export const DashboardRoute = () => {
 	return (

@@ -1,7 +1,7 @@
 import { useCallback } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import { useEnvironment } from "@/context/environment/hooks";
-import { buildRoute, ROUTES } from "@/utils/routes";
+import { useEnvironment } from "@/app/context/environment/hooks";
+import { buildRoute, ROUTES } from "@/shared/lib/routes";
 
 export const useTopicsNavigate = () => {
 	const { currentEnvironment } = useEnvironment();

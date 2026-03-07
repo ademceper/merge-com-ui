@@ -2,13 +2,13 @@ import {
 	CHANNELS_WITH_PRIMARY,
 	ChannelTypeEnum,
 	type IIntegration,
-} from "@novu/shared";
+} from "@/shared";
 import type { UseMutateAsyncFunction } from "@tanstack/react-query";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { ROUTES } from "@/utils/routes";
-import type { IntegrationFormData } from "../components/types";
-import { handleIntegrationError } from "../components/utils/handle-integration-error";
+import { ROUTES } from "@/shared/lib/routes";
+import type { IntegrationFormData } from "../ui/types";
+import { handleIntegrationError } from "../ui/utils/handle-integration-error";
 
 type SetPrimaryIntegrationParams = {
 	integrationId: string;

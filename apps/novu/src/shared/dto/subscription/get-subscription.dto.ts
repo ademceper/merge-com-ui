@@ -1,4 +1,4 @@
-import type { ApiServiceLevelEnum } from "../../types";
+import type { ApiServiceLevelEnum } from "../../model";
 
 export type GetSubscriptionDto = {
 	/**

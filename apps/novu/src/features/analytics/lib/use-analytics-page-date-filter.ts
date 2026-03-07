@@ -4,10 +4,10 @@ import {
 	FeatureNameEnum,
 	type GetSubscriptionDto,
 	getFeatureForTierAsNumber,
-} from "@novu/shared";
+} from "@/shared";
 import { useEffect, useMemo, useState } from "react";
-import { IS_SELF_HOSTED } from "@/config";
-import { useNumericFeatureFlag } from "@/hooks/use-feature-flag";
+import { IS_SELF_HOSTED } from "@/shared/config";
+import { useNumericFeatureFlag } from "@/shared/lib/hooks/use-feature-flag";
 
 type OrganizationLike = { createdAt: Date };
 

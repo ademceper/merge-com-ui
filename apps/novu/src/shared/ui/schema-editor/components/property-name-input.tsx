@@ -6,13 +6,13 @@ import {
 	InputPure,
 	InputRoot,
 	InputWrapper,
-} from "@/components/primitives/input";
+} from "@/shared/ui/primitives/input";
 import {
 	Tooltip,
 	TooltipContent,
 	TooltipProvider,
 	TooltipTrigger,
-} from "@/components/primitives/tooltip";
+} from "@/shared/ui/primitives/tooltip";
 import { Code2 } from "../../icons/code-2";
 import type { SchemaEditorFormValues } from "../utils/validation-schema";
 

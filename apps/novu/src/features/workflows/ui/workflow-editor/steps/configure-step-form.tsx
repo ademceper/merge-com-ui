@@ -9,7 +9,7 @@ import {
 	StepTypeEnum,
 	type StepUpdateDto,
 	type WorkflowResponseDto,
-} from "@novu/shared";
+} from "@/shared";
 import {
 	CaretLeft,
 	CaretRight,
@@ -28,10 +28,10 @@ import {
 } from "react";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
-import { ConfirmationModal } from "@/components/confirmation-modal";
-import { PageMeta } from "@/components/page-meta";
-import { CompactButton } from "@/components/primitives/button-compact";
-import { CopyButton } from "@/components/primitives/copy-button";
+import { ConfirmationModal } from "@/shared/ui/confirmation-modal";
+import { PageMeta } from "@/shared/ui/page-meta";
+import { CompactButton } from "@/shared/ui/primitives/button-compact";
+import { CopyButton } from "@/shared/ui/primitives/copy-button";
 import {
 	Form,
 	FormControl,
@@ -40,44 +40,44 @@ import {
 	FormLabel,
 	FormMessage,
 	FormRoot,
-} from "@/components/primitives/form/form";
-import { Input } from "@/components/primitives/input";
+} from "@/shared/ui/primitives/form/form";
+import { Input } from "@/shared/ui/primitives/input";
 import {
 	SidebarContent,
 	SidebarFooter,
 	SidebarHeader,
-} from "@/components/side-navigation/sidebar";
-import TruncatedText from "@/components/truncated-text";
-import { stepSchema } from "@/features/workflows/components/workflow-editor/schema";
+} from "@/widgets/side-navigation/sidebar";
+import TruncatedText from "@/shared/ui/truncated-text";
+import { stepSchema } from "@/features/workflows/ui/workflow-editor/schema";
 import {
 	flattenIssues,
 	getFirstErrorMessage,
 	updateStepInWorkflow,
-} from "@/features/workflows/components/workflow-editor/step-utils";
-import { ConfigureChatStepPreview } from "@/features/workflows/components/workflow-editor/steps/chat/configure-chat-step-preview";
+} from "@/features/workflows/ui/workflow-editor/step-utils";
+import { ConfigureChatStepPreview } from "@/features/workflows/ui/workflow-editor/steps/chat/configure-chat-step-preview";
 import {
 	ConfigureStepTemplateIssueCta,
 	ConfigureStepTemplateIssuesContainer,
-} from "@/features/workflows/components/workflow-editor/steps/configure-step-template-issue-cta";
-import { DelayControlValues } from "@/features/workflows/components/workflow-editor/steps/delay/delay-control-values";
-import { DigestControlValues } from "@/features/workflows/components/workflow-editor/steps/digest-delay-tabs/digest-control-values";
-import { ConfigureEmailStepPreview } from "@/features/workflows/components/workflow-editor/steps/email/configure-email-step-preview";
-import { ConfigureInAppStepPreview } from "@/features/workflows/components/workflow-editor/steps/in-app/configure-in-app-step-preview";
-import { ConfigurePushStepPreview } from "@/features/workflows/components/workflow-editor/steps/push/configure-push-step-preview";
-import { SaveFormContext } from "@/features/workflows/components/workflow-editor/steps/save-form-context";
-import { SdkBanner } from "@/features/workflows/components/workflow-editor/steps/sdk-banner";
-import { SkipConditionsButton } from "@/features/workflows/components/workflow-editor/steps/skip-conditions-button";
-import { ConfigureSmsStepPreview } from "@/features/workflows/components/workflow-editor/steps/sms/configure-sms-step-preview";
-import { ThrottleControlValues } from "@/features/workflows/components/workflow-editor/steps/throttle/throttle-control-values";
-import type { UpdateWorkflowFn } from "@/features/workflows/components/workflow-editor/workflow-provider";
-import { useFormAutosave } from "@/hooks/use-form-autosave";
+} from "@/features/workflows/ui/workflow-editor/steps/configure-step-template-issue-cta";
+import { DelayControlValues } from "@/features/workflows/ui/workflow-editor/steps/delay/delay-control-values";
+import { DigestControlValues } from "@/features/workflows/ui/workflow-editor/steps/digest-delay-tabs/digest-control-values";
+import { ConfigureEmailStepPreview } from "@/features/workflows/ui/workflow-editor/steps/email/configure-email-step-preview";
+import { ConfigureInAppStepPreview } from "@/features/workflows/ui/workflow-editor/steps/in-app/configure-in-app-step-preview";
+import { ConfigurePushStepPreview } from "@/features/workflows/ui/workflow-editor/steps/push/configure-push-step-preview";
+import { SaveFormContext } from "@/features/workflows/ui/workflow-editor/steps/save-form-context";
+import { SdkBanner } from "@/features/workflows/ui/workflow-editor/steps/sdk-banner";
+import { SkipConditionsButton } from "@/features/workflows/ui/workflow-editor/steps/skip-conditions-button";
+import { ConfigureSmsStepPreview } from "@/features/workflows/ui/workflow-editor/steps/sms/configure-sms-step-preview";
+import { ThrottleControlValues } from "@/features/workflows/ui/workflow-editor/steps/throttle/throttle-control-values";
+import type { UpdateWorkflowFn } from "@/features/workflows/ui/workflow-editor/workflow-provider";
+import { useFormAutosave } from "@/shared/lib/hooks/use-form-autosave";
 import {
 	INLINE_CONFIGURABLE_STEP_TYPES,
 	STEP_TYPE_LABELS,
 	TEMPLATE_CONFIGURABLE_STEP_TYPES,
-} from "@/utils/constants";
-import { getControlsDefaultValues } from "@/utils/default-values";
-import { buildRoute, ROUTES } from "@/utils/routes";
+} from "@/shared/lib/constants";
+import { getControlsDefaultValues } from "@/shared/lib/default-values";
+import { buildRoute, ROUTES } from "@/shared/lib/routes";
 
 const STEP_TYPE_TO_INLINE_CONTROL_VALUES: Record<
 	StepTypeEnum,

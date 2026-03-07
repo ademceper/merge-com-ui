@@ -3,7 +3,7 @@ import type {
 	IEnvironmentDiffResponse,
 	IResourceDependency,
 	IResourceDiffResult,
-} from "@/api/environments";
+} from "@/entities/environment/api/environments";
 
 type ResourceSelection = {
 	[resourceId: string]: {

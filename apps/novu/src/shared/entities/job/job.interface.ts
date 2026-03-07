@@ -3,7 +3,7 @@ import type {
 	ITenantDefine,
 	OrganizationId,
 	StepTypeEnum,
-} from "../../types";
+} from "../../model";
 import type { INotificationTemplateStep } from "../notification-template";
 import type { IWorkflowStepMetadata } from "../step";
 import type { JobStatusEnum } from "./status.enum";

@@ -1,8 +1,8 @@
 import { Code } from "@phosphor-icons/react";
 
-import type { useTelemetry } from "@/hooks/use-telemetry";
-import type { BlockItem } from "@/lib/maily-core/blocks";
-import { TelemetryEvent } from "@/utils/telemetry";
+import type { useTelemetry } from "@/shared/lib/hooks/use-telemetry";
+import type { BlockItem } from "@/shared/lib/externals/maily-core/blocks";
+import { TelemetryEvent } from "@/shared/lib/telemetry";
 
 export const createHtmlCodeBlock = (props: {
 	track: ReturnType<typeof useTelemetry>;

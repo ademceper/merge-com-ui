@@ -1,10 +1,10 @@
-import type { StepResponseDto } from "@novu/shared";
+import type { StepResponseDto } from "@/shared";
 import { Circle } from "@phosphor-icons/react";
 
-import { Badge } from "@/components/primitives/badge";
-import type { useTelemetry } from "@/hooks/use-telemetry";
-import type { BlockItem } from "@/lib/maily-core/blocks";
-import { TelemetryEvent } from "@/utils/telemetry";
+import { Badge } from "@/shared/ui/primitives/badge";
+import type { useTelemetry } from "@/shared/lib/hooks/use-telemetry";
+import type { BlockItem } from "@/shared/lib/externals/maily-core/blocks";
+import { TelemetryEvent } from "@/shared/lib/telemetry";
 
 export const createDigestBlock = (props: {
 	track: ReturnType<typeof useTelemetry>;

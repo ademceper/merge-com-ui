@@ -16,11 +16,11 @@ import {
 	SheetContent,
 	SheetDescription,
 	SheetTitle,
-} from "@/components/primitives/sheet";
-import { VisuallyHidden } from "@/components/primitives/visually-hidden";
-import { usePlainChat } from "@/hooks/use-plain-chat";
-import { useTelemetry } from "@/hooks/use-telemetry";
-import { TelemetryEvent } from "@/utils/telemetry";
+} from "@/shared/ui/primitives/sheet";
+import { VisuallyHidden } from "@/shared/ui/primitives/visually-hidden";
+import { usePlainChat } from "@/shared/lib/hooks/use-plain-chat";
+import { useTelemetry } from "@/shared/lib/hooks/use-telemetry";
+import { TelemetryEvent } from "@/shared/lib/telemetry";
 import {
 	DocsIframeView,
 	FooterLink,

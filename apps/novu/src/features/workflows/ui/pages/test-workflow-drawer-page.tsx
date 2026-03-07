@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { TestWorkflowDrawer } from "@/features/workflows/components/workflow-editor/test-workflow/test-workflow-drawer";
-import { useFetchWorkflowTestData } from "@/features/workflows/hooks/use-fetch-workflow-test-data";
+import { TestWorkflowDrawer } from "@/features/workflows/ui/workflow-editor/test-workflow/test-workflow-drawer";
+import { useFetchWorkflowTestData } from "@/features/workflows/lib/use-fetch-workflow-test-data";
 
 export function TestWorkflowDrawerPage() {
 	const [open, setOpen] = useState(true);

@@ -1,12 +1,12 @@
 import { Accordion } from "@merge-rd/ui/components/accordion";
-import type { ISubscriberResponseDto } from "@novu/shared";
+import type { ISubscriberResponseDto } from "@/shared";
 import { useCallback } from "react";
-import { PreviewContextSection } from "@/components/preview-context-section";
-import { PreviewSubscriberSection } from "@/components/preview-subscriber-section";
-import { useEnvironment } from "@/context/environment/hooks";
-import { useFetchOrganizationSettings } from "@/features/settings/hooks/use-fetch-organization-settings";
-import { useDefaultSubscriberData } from "@/features/subscribers/hooks/use-default-subscriber-data";
-import { createSubscriberData } from "@/features/workflows/components/workflow-editor/steps/utils/preview-context.utils";
+import { PreviewContextSection } from "@/widgets/preview-context-section";
+import { PreviewSubscriberSection } from "@/widgets/preview-subscriber-section";
+import { useEnvironment } from "@/app/context/environment/hooks";
+import { useFetchOrganizationSettings } from "@/features/settings/lib/use-fetch-organization-settings";
+import { useDefaultSubscriberData } from "@/features/subscribers/lib/use-default-subscriber-data";
+import { createSubscriberData } from "@/features/workflows/ui/workflow-editor/steps/utils/preview-context.utils";
 import { useLayoutEditor } from "./layout-editor-provider";
 
 export const LayoutPreviewContextPanel = () => {

@@ -1,8 +1,8 @@
-import type { ApiServiceLevelEnum } from "@novu/shared";
+import type { ApiServiceLevelEnum } from "@/shared";
 import { useMutation } from "@tanstack/react-query";
-import { showErrorToast } from "@/components/primitives/sonner-helpers";
-import { post } from "../api/api.client";
-import { TelemetryEvent } from "../utils/telemetry";
+import { showErrorToast } from "@/shared/ui/primitives/sonner-helpers";
+import { post } from "@/shared/api/api.client";
+import { TelemetryEvent } from "@/shared/lib/telemetry";
 import { useTelemetry } from "./use-telemetry";
 
 interface CheckoutResponse {

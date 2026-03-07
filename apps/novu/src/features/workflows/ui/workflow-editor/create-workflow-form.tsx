@@ -6,7 +6,7 @@ import {
 	MAX_DESCRIPTION_LENGTH,
 	MAX_TAG_ELEMENTS,
 	slugify,
-} from "@novu/shared";
+} from "@/shared";
 import { useForm } from "react-hook-form";
 import type { z } from "zod";
 import {
@@ -18,12 +18,12 @@ import {
 	FormLabel,
 	FormMessage,
 	FormRoot,
-} from "@/components/primitives/form/form";
-import { TagInput } from "@/components/primitives/tag-input";
-import { Textarea } from "@/components/primitives/textarea";
-import { workflowSchema } from "@/features/workflows/components/workflow-editor/schema";
-import { TranslationToggleSection } from "@/features/workflows/components/workflow-editor/translation-toggle-section";
-import { useTags } from "@/hooks/use-tags";
+} from "@/shared/ui/primitives/form/form";
+import { TagInput } from "@/shared/ui/primitives/tag-input";
+import { Textarea } from "@/shared/ui/primitives/textarea";
+import { workflowSchema } from "@/features/workflows/ui/workflow-editor/schema";
+import { TranslationToggleSection } from "@/features/workflows/ui/workflow-editor/translation-toggle-section";
+import { useTags } from "@/shared/lib/hooks/use-tags";
 
 interface CreateWorkflowFormProps {
 	onSubmit: (values: z.infer<typeof workflowSchema>) => void;

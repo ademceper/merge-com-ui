@@ -2,11 +2,11 @@ import { Button } from "@merge-rd/ui/components/button";
 import { Separator } from "@merge-rd/ui/components/separator";
 import { Skeleton } from "@merge-rd/ui/components/skeleton";
 import { Tabs, TabsList, TabsTrigger } from "@merge-rd/ui/components/tabs";
-import { StepTypeEnum } from "@novu/shared";
+import { StepTypeEnum } from "@/shared";
 import { PencilSimple, Ruler } from "@phosphor-icons/react";
 import type React from "react";
-import { Notification5Fill } from "@/components/icons";
-import { ResourceOriginEnum } from "@/utils/enums";
+import { Notification5Fill } from "@/shared/ui/icons";
+import { ResourceOriginEnum } from "@/shared/lib/enums";
 
 const SingleLineSkeleton = () => {
 	return (

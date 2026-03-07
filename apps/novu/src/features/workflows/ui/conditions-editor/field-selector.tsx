@@ -1,8 +1,8 @@
 import React, { useMemo } from "react";
 import { useFormContext } from "react-hook-form";
 import type { FieldSelectorProps } from "react-querybuilder";
-import { Code2 } from "@/components/icons/code-2";
-import { VariableSelect } from "@/features/workflows/components/conditions-editor/variable-select";
+import { Code2 } from "@/shared/ui/icons/code-2";
+import { VariableSelect } from "@/features/workflows/ui/conditions-editor/variable-select";
 
 export const FieldSelector = React.memo(
 	({

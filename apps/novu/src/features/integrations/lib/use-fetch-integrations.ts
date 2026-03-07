@@ -1,8 +1,8 @@
-import type { IIntegration } from "@novu/shared";
+import type { IIntegration } from "@/shared";
 import { useQuery } from "@tanstack/react-query";
-import { getIntegrations } from "@/api/integrations";
-import { useEnvironment } from "@/context/environment/hooks";
-import { QueryKeys } from "@/utils/query-keys";
+import { getIntegrations } from "@/entities/integration/api/integrations";
+import { useEnvironment } from "@/app/context/environment/hooks";
+import { QueryKeys } from "@/shared/lib/query-keys";
 
 export function useFetchIntegrations({
 	refetchInterval,

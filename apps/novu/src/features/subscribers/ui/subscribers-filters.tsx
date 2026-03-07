@@ -9,11 +9,11 @@ import {
 	FormField,
 	FormItem,
 	FormRoot,
-} from "@/components/primitives/form/form";
+} from "@/shared/ui/primitives/form/form";
 import {
 	defaultSubscribersFilter,
 	type SubscribersFilter,
-} from "@/features/subscribers/hooks/use-subscribers-url-state";
+} from "@/features/subscribers/lib/use-subscribers-url-state";
 
 export type SubscribersFiltersProps = HTMLAttributes<HTMLFormElement> & {
 	onFiltersChange: (filter: SubscribersFilter) => void;

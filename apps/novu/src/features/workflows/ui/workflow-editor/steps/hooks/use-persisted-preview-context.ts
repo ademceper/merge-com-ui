@@ -1,4 +1,4 @@
-import type { ContextPayload } from "@novu/shared";
+import type { ContextPayload } from "@/shared";
 import { useEffect } from "react";
 import type {
 	PayloadData,

@@ -6,34 +6,34 @@ import {
 	type ChannelTypeEnum,
 	FeatureFlagsKeysEnum,
 	SeverityLevelEnum,
-} from "@novu/shared";
+} from "@/shared";
 import { Calendar } from "@phosphor-icons/react";
 import { useMemo } from "react";
 import { useForm } from "react-hook-form";
 import { Link } from "react-router-dom";
-import { Badge } from "@/components/primitives/badge";
+import { Badge } from "@/shared/ui/primitives/badge";
 import {
 	Form,
 	FormField,
 	FormItem,
 	FormRoot,
-} from "@/components/primitives/form/form";
+} from "@/shared/ui/primitives/form/form";
 import {
 	Tooltip,
 	TooltipContent,
 	TooltipPortal,
 	TooltipTrigger,
-} from "@/components/primitives/tooltip";
-import { IS_SELF_HOSTED } from "@/config";
-import { ContextFilter } from "@/features/contexts/components/context-filter";
-import { useFetchWorkflows } from "@/features/workflows/hooks/use-fetch-workflows";
-import { useDebouncedForm } from "@/hooks/use-debounced-form";
-import { useFeatureFlag } from "@/hooks/use-feature-flag";
-import { useFetchSubscription } from "@/hooks/use-fetch-subscription";
-import type { ActivityFiltersData } from "@/types/activity";
-import { buildActivityDateFilters } from "@/utils/activityFilters";
-import { ROUTES } from "@/utils/routes";
-import { capitalize } from "@/utils/string";
+} from "@/shared/ui/primitives/tooltip";
+import { IS_SELF_HOSTED } from "@/shared/config";
+import { ContextFilter } from "@/features/contexts/ui/context-filter";
+import { useFetchWorkflows } from "@/features/workflows/lib/use-fetch-workflows";
+import { useDebouncedForm } from "@/shared/lib/hooks/use-debounced-form";
+import { useFeatureFlag } from "@/shared/lib/hooks/use-feature-flag";
+import { useFetchSubscription } from "@/shared/lib/hooks/use-fetch-subscription";
+import type { ActivityFiltersData } from "@/shared/model/activity";
+import { buildActivityDateFilters } from "@/shared/lib/activityFilters";
+import { ROUTES } from "@/shared/lib/routes";
+import { capitalize } from "@/shared/lib/string";
 import { CHANNEL_OPTIONS } from "./constants";
 
 type Fields =

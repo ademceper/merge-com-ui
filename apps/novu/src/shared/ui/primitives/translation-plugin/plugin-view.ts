@@ -1,4 +1,4 @@
-import { TRANSLATION_KEY_SINGLE_REGEX } from "@novu/shared";
+import { TRANSLATION_KEY_SINGLE_REGEX } from "@/shared";
 import {
 	Decoration,
 	type DecorationSet,
@@ -6,8 +6,8 @@ import {
 	type Range,
 } from "@uiw/react-codemirror";
 import type { MutableRefObject } from "react";
-import { validateTranslationKey } from "@/features/translations/hooks/use-translation-validation";
-import type { TranslationKey } from "@/types/translations";
+import { validateTranslationKey } from "@/features/translations/lib/use-translation-validation";
+import type { TranslationKey } from "@/shared/model/translations";
 import { TranslationPillWidget } from "./pill-widget";
 import { isTypingTranslation, parseTranslation } from "./utils";
 

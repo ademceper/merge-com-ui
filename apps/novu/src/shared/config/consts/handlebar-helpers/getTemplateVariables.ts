@@ -1,6 +1,6 @@
 // @ts-nocheck
 
-import { TemplateVariableTypeEnum } from "../../types";
+import { TemplateVariableTypeEnum } from "@/shared/model";
 import { HandlebarHelpersEnum } from "./handlebarHelpers";
 
 export interface IMustacheVariable {

@@ -1,4 +1,4 @@
-import type { JobTitleEnum } from "../../types";
+import type { JobTitleEnum } from "../../model";
 
 export interface ICreateOrganizationDto {
 	name: string;

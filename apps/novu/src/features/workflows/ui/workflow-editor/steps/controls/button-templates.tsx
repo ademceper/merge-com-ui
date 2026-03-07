@@ -1,6 +1,6 @@
 import { Minus, Plus } from "@phosphor-icons/react";
 import type { Registry, RJSFSchema } from "@rjsf/utils";
-import { CompactButton } from "@/components/primitives/button-compact";
+import { CompactButton } from "@/shared/ui/primitives/button-compact";
 
 export const AddButton = (
 	props: React.ButtonHTMLAttributes<HTMLButtonElement>,

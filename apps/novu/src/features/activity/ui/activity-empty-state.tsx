@@ -1,16 +1,16 @@
 import { Button } from "@merge-rd/ui/components/button";
 import { cn } from "@merge-rd/ui/lib/utils";
-import { PermissionsEnum } from "@novu/shared";
+import { PermissionsEnum } from "@/shared";
 import { PlayCircle, XCircle } from "@phosphor-icons/react";
 import { AnimatePresence, motion } from "motion/react";
 import { useMemo } from "react";
 import { useNavigate } from "react-router-dom";
-import type { ActivityFilters } from "@/api/activity";
-import { ExternalLink } from "@/components/shared/external-link";
-import { useEnvironment } from "@/context/environment/hooks";
-import { defaultActivityFilters } from "@/features/activity/components/constants";
-import { Protect } from "@/utils/protect";
-import { buildRoute, ROUTES } from "@/utils/routes";
+import type { ActivityFilters } from "@/entities/activity/api/activity";
+import { ExternalLink } from "@/shared/ui/shared/external-link";
+import { useEnvironment } from "@/app/context/environment/hooks";
+import { defaultActivityFilters } from "@/features/activity/ui/constants";
+import { Protect } from "@/shared/lib/protect";
+import { buildRoute, ROUTES } from "@/shared/lib/routes";
 
 interface ActivityEmptyStateProps {
 	className?: string;

@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import {
 	getCompactFormat,
 	parseFormattedNumber,
-} from "../../utils/number-formatting";
+} from "@/shared/lib/number-formatting";
 
 type AnimatedNumberProps = {
 	value: string | number;

@@ -1,10 +1,10 @@
-import { Badge } from "@/components/primitives/badge";
+import { Badge } from "@/shared/ui/primitives/badge";
 import {
 	Tooltip,
 	TooltipContent,
 	TooltipTrigger,
-} from "@/components/primitives/tooltip";
-import { formatCount, formatCountForTooltip } from "@/utils/format-count";
+} from "@/shared/ui/primitives/tooltip";
+import { formatCount, formatCountForTooltip } from "@/shared/lib/format-count";
 
 type SubscriptionCountBadgeProps = {
 	count: number;

@@ -1,36 +1,36 @@
 import { Switch } from "@merge-rd/ui/components/switch";
-import { CredentialsKeyEnum, type IConfigCredential } from "@novu/shared";
+import { CredentialsKeyEnum, type IConfigCredential } from "@/shared";
 import type { ReactNode } from "react";
 import type {
 	Control,
 	ControllerFieldState,
 	ControllerRenderProps,
 } from "react-hook-form";
-import { CopyButton } from "@/components/primitives/copy-button";
+import { CopyButton } from "@/shared/ui/primitives/copy-button";
 import {
 	FormControl,
 	FormField,
 	FormItem,
 	FormMessage,
 	FormLabel as PrimitiveFormLabel,
-} from "@/components/primitives/form/form";
-import { InlineToast } from "@/components/primitives/inline-toast";
-import { Input } from "@/components/primitives/input";
-import { SecretInput } from "@/components/primitives/secret-input";
+} from "@/shared/ui/primitives/form/form";
+import { InlineToast } from "@/shared/ui/primitives/inline-toast";
+import { Input } from "@/shared/ui/primitives/input";
+import { SecretInput } from "@/shared/ui/primitives/secret-input";
 import {
 	Select,
 	SelectContent,
 	SelectItem,
 	SelectTrigger,
 	SelectValue,
-} from "@/components/primitives/select";
-import { Textarea } from "@/components/primitives/textarea";
+} from "@/shared/ui/primitives/select";
+import { Textarea } from "@/shared/ui/primitives/textarea";
 import {
 	Tooltip,
 	TooltipContent,
 	TooltipTrigger,
-} from "@/components/primitives/tooltip";
-import { useEnvironment } from "@/context/environment/hooks";
+} from "@/shared/ui/primitives/tooltip";
+import { useEnvironment } from "@/app/context/environment/hooks";
 import { DescriptionWithLinks } from "./description-with-links";
 import type { IntegrationFormData } from "./types";
 

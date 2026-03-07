@@ -6,7 +6,7 @@ import {
 	type IIntegration,
 	type IProviderConfig,
 	PermissionsEnum,
-} from "@novu/shared";
+} from "@/shared";
 import type { Control } from "react-hook-form";
 import {
 	FormControl,
@@ -14,10 +14,10 @@ import {
 	FormItem,
 	FormLabel,
 	FormMessage,
-} from "@/components/primitives/form/form";
-import { Input } from "@/components/primitives/input";
-import { useFeatureFlag } from "@/hooks/use-feature-flag";
-import { Protect } from "@/utils/protect";
+} from "@/shared/ui/primitives/form/form";
+import { Input } from "@/shared/ui/primitives/input";
+import { useFeatureFlag } from "@/shared/lib/hooks/use-feature-flag";
+import { Protect } from "@/shared/lib/protect";
 import { ConfigurationGroup } from "./configuration-group";
 import type { IntegrationFormData } from "./types";
 

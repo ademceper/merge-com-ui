@@ -1,10 +1,10 @@
-import { PermissionsEnum } from "@novu/shared";
+import { PermissionsEnum } from "@/shared";
 import { useState } from "react";
 import { useParams } from "react-router-dom";
-import { ContextDrawer } from "@/features/contexts/components/context-drawer";
-import { useContextsNavigate } from "@/features/contexts/hooks/use-contexts-navigate";
-import { useHasPermission } from "@/hooks/use-has-permission";
-import { useOnElementUnmount } from "@/hooks/use-on-element-unmount";
+import { ContextDrawer } from "@/features/contexts/ui/context-drawer";
+import { useContextsNavigate } from "@/features/contexts/lib/use-contexts-navigate";
+import { useHasPermission } from "@/shared/lib/hooks/use-has-permission";
+import { useOnElementUnmount } from "@/shared/lib/hooks/use-on-element-unmount";
 
 export const EditContextPage = () => {
 	const { type, id } = useParams<{ type: string; id: string }>();

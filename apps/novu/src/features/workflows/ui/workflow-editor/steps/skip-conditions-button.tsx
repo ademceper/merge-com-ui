@@ -1,9 +1,9 @@
 import { Button } from "@merge-rd/ui/components/button";
-import { ResourceOriginEnum, type StepResponseDto } from "@novu/shared";
+import { ResourceOriginEnum, type StepResponseDto } from "@/shared";
 import { CaretRight, Compass } from "@phosphor-icons/react";
 import type { RQBJsonLogic } from "react-querybuilder";
 import { Link } from "react-router-dom";
-import { useConditionsCount } from "@/features/workflows/hooks/use-conditions-count";
+import { useConditionsCount } from "@/features/workflows/lib/use-conditions-count";
 
 export function SkipConditionsButton({
 	origin,

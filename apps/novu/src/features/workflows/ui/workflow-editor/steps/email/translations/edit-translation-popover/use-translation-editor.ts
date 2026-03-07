@@ -1,8 +1,8 @@
 import type { TranslationResponseDto } from "@novu/api/models/components";
 import type { UseMutationResult } from "@tanstack/react-query";
 import { useEffect, useMemo, useRef, useState } from "react";
-import type { UpdateTranslationValueParams } from "@/features/translations/hooks/use-update-translation-value";
-import type { LocalizationResourceEnum } from "@/types/translations";
+import type { UpdateTranslationValueParams } from "@/features/translations/lib/use-update-translation-value";
+import type { LocalizationResourceEnum } from "@/shared/model/translations";
 
 const getTranslationValue = (
 	content: Record<string, unknown> | undefined,

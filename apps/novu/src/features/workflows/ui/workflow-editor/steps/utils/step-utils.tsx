@@ -3,8 +3,8 @@ import {
 	type StepResponseDto,
 	type StepTypeEnum,
 	type WorkflowResponseDto,
-} from "@novu/shared";
-import { STEP_TYPE_LABELS } from "@/utils/constants";
+} from "@/shared";
+import { STEP_TYPE_LABELS } from "@/shared/lib/constants";
 import { getStepTypeIcon } from "./preview-context.utils";
 
 export function StepIcon({ stepType }: { stepType: StepTypeEnum }) {

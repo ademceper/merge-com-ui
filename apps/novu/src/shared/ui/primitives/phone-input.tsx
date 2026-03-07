@@ -21,12 +21,12 @@ import {
 	InputPure,
 	InputRoot,
 	InputWrapper,
-} from "@/components/primitives/input";
+} from "@/shared/ui/primitives/input";
 import {
 	Popover,
 	PopoverContent,
 	PopoverTrigger,
-} from "@/components/primitives/popover";
+} from "@/shared/ui/primitives/popover";
 
 type PhoneInputProps = Omit<
 	React.ComponentProps<"input">,

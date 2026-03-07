@@ -1,4 +1,4 @@
-import { EmptyTopicsIllustration } from "@/features/topics/components/empty-topics-illustration";
+import { EmptyTopicsIllustration } from "@/features/topics/ui/empty-topics-illustration";
 
 export function RequestLogDetailEmptyState2() {
 	return (

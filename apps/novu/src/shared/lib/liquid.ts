@@ -1,5 +1,5 @@
-import { LAYOUT_CONTENT_VARIABLE } from "@novu/shared";
-import { isAllowedAlias } from "@/components/maily/repeat-block-aliases";
+import { LAYOUT_CONTENT_VARIABLE } from "@/shared";
+import { isAllowedAlias } from "@/shared/ui/maily/repeat-block-aliases";
 
 export type VariableMatch = {
 	fullLiquidExpression: string;

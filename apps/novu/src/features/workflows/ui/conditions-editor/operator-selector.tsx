@@ -6,8 +6,8 @@ import {
 	SelectContent,
 	SelectTrigger,
 	SelectValue,
-} from "@/components/primitives/select";
-import { toSelectOptions } from "@/features/workflows/components/conditions-editor/select-option-utils";
+} from "@/shared/ui/primitives/select";
+import { toSelectOptions } from "@/features/workflows/ui/conditions-editor/select-option-utils";
 
 export const OperatorSelector = React.memo(
 	({

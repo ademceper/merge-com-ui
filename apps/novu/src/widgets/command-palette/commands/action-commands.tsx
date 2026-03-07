@@ -3,7 +3,7 @@ import { LuBookUp2 } from "react-icons/lu";
 import {
 	useEnvironment,
 	useFetchEnvironments,
-} from "@/context/environment/hooks";
+} from "@/app/context/environment/hooks";
 import type { Command, CommandExecutionContext } from "../command-types";
 
 const DEVELOPMENT_ENVIRONMENT = "Development";

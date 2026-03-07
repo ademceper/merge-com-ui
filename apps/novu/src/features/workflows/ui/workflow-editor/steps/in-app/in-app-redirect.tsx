@@ -1,7 +1,7 @@
-import { FormLabel, FormMessage } from "@/components/primitives/form/form";
-import { useWorkflow } from "@/features/workflows/components/workflow-editor/workflow-provider";
-import { useParseVariables } from "@/hooks/use-parse-variables";
-import { urlTargetTypes } from "@/utils/url";
+import { FormLabel, FormMessage } from "@/shared/ui/primitives/form/form";
+import { useWorkflow } from "@/features/workflows/ui/workflow-editor/workflow-provider";
+import { useParseVariables } from "@/shared/lib/hooks/use-parse-variables";
+import { urlTargetTypes } from "@/shared/lib/url";
 import { URLInput } from "../../url-input";
 
 export const InAppRedirect = () => {

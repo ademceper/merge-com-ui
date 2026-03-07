@@ -1,6 +1,6 @@
 import { motion } from "motion/react";
 
-import { fadeIn } from "@/utils/animation";
+import { fadeIn } from "@/shared/lib/animation";
 
 export const ActivityError = () => {
 	return (

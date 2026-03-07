@@ -1,14 +1,14 @@
 import { cn } from "@merge-rd/ui/lib/utils";
 import type React from "react";
 import { useMemo, useRef, useState } from "react";
-import { VariableIcon } from "@/components/variable/components/variable-icon";
-import { useFetchTranslationKeys } from "@/features/translations/hooks/use-fetch-translation-keys";
-import { useTranslationValidation } from "@/features/translations/hooks/use-translation-validation";
-import type { LocalizationResourceEnum } from "@/types/translations";
+import { VariableIcon } from "@/shared/ui/variable/components/variable-icon";
+import { useFetchTranslationKeys } from "@/features/translations/lib/use-fetch-translation-keys";
+import { useTranslationValidation } from "@/features/translations/lib/use-translation-validation";
+import type { LocalizationResourceEnum } from "@/shared/model/translations";
 import type {
 	IsAllowedVariable,
 	LiquidVariable,
-} from "@/utils/parseStepVariables";
+} from "@/shared/lib/parseStepVariables";
 import {
 	EditTranslationPopover,
 	type TranslationValueInputComponent,

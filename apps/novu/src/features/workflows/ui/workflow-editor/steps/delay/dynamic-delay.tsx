@@ -2,17 +2,17 @@ import { Button } from "@merge-rd/ui/components/button";
 import { X } from "@phosphor-icons/react";
 import { useMemo } from "react";
 import { useFormContext } from "react-hook-form";
-import { Code2 } from "@/components/icons/code-2";
+import { Code2 } from "@/shared/ui/icons/code-2";
 import {
 	FormField,
 	FormItem,
 	FormLabel,
 	FormMessage,
-} from "@/components/primitives/form/form";
-import { VariableSelect } from "@/features/workflows/components/conditions-editor/variable-select";
-import { useSaveForm } from "@/features/workflows/components/workflow-editor/steps/save-form-context";
-import { useWorkflow } from "@/features/workflows/components/workflow-editor/workflow-provider";
-import { useParseVariables } from "@/hooks/use-parse-variables";
+} from "@/shared/ui/primitives/form/form";
+import { VariableSelect } from "@/features/workflows/ui/conditions-editor/variable-select";
+import { useSaveForm } from "@/features/workflows/ui/workflow-editor/steps/save-form-context";
+import { useWorkflow } from "@/features/workflows/ui/workflow-editor/workflow-provider";
+import { useParseVariables } from "@/shared/lib/hooks/use-parse-variables";
 
 function parseLiquidVariables(value: string | undefined): string {
 	if (!value) return "";

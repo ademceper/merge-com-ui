@@ -1,9 +1,9 @@
 import { cn } from "@merge-rd/ui/lib/utils";
 import { ArrowUpRight, BookBookmark, Question } from "@phosphor-icons/react";
 import type { IconType } from "react-icons";
-import { LinkButton } from "@/components/primitives/button-link";
-import { useTelemetry } from "@/hooks/use-telemetry";
-import { TelemetryEvent } from "@/utils/telemetry";
+import { LinkButton } from "@/shared/ui/primitives/button-link";
+import { useTelemetry } from "@/shared/lib/hooks/use-telemetry";
+import { TelemetryEvent } from "@/shared/lib/telemetry";
 
 interface ExternalLinkProps
 	extends Omit<React.AnchorHTMLAttributes<HTMLAnchorElement>, "onClick"> {

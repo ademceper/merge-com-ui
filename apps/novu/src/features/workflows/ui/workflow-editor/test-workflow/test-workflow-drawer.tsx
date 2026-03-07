@@ -11,42 +11,42 @@ import {
 	type ISubscriberResponseDto,
 	PermissionsEnum,
 	type WorkflowTestDataResponseDto,
-} from "@novu/shared";
+} from "@/shared";
 import { CaretDown, Copy } from "@phosphor-icons/react";
 import { forwardRef, useCallback, useEffect, useState } from "react";
 import {
 	ButtonGroupItem,
 	ButtonGroupRoot,
-} from "@/components/primitives/button-group";
+} from "@/shared/ui/primitives/button-group";
 import {
 	Sheet,
 	SheetContent,
 	SheetDescription,
 	SheetTitle,
-} from "@/components/primitives/sheet";
-import { ToastClose, ToastIcon } from "@/components/primitives/sonner";
+} from "@/shared/ui/primitives/sheet";
+import { ToastClose, ToastIcon } from "@/shared/ui/primitives/sonner";
 import {
 	showErrorToast,
 	showToast,
-} from "@/components/primitives/sonner-helpers";
-import { VisuallyHidden } from "@/components/primitives/visually-hidden";
-import { useEnvironment } from "@/context/environment/hooks";
-import { useFetchApiKeys } from "@/features/settings/hooks/use-fetch-api-keys";
-import { SubscriberDrawer } from "@/features/subscribers/components/subscriber-drawer";
-import { useFetchSubscriber } from "@/features/subscribers/hooks/use-fetch-subscriber";
+} from "@/shared/ui/primitives/sonner-helpers";
+import { VisuallyHidden } from "@/shared/ui/primitives/visually-hidden";
+import { useEnvironment } from "@/app/context/environment/hooks";
+import { useFetchApiKeys } from "@/features/settings/lib/use-fetch-api-keys";
+import { SubscriberDrawer } from "@/features/subscribers/ui/subscriber-drawer";
+import { useFetchSubscriber } from "@/features/subscribers/lib/use-fetch-subscriber";
 import type {
 	PayloadData,
 	PreviewSubscriberData,
-} from "@/features/workflows/components/workflow-editor/steps/types/preview-context.types";
-import { TestWorkflowActivityDrawer } from "@/features/workflows/components/workflow-editor/test-workflow/test-workflow-activity-drawer";
-import { TestWorkflowContent } from "@/features/workflows/components/workflow-editor/test-workflow/test-workflow-content";
-import { useTriggerWorkflow } from "@/features/workflows/hooks/use-trigger-workflow";
-import { useHasPermission } from "@/hooks/use-has-permission";
-import { useIsPayloadSchemaEnabled } from "@/hooks/use-is-payload-schema-enabled";
+} from "@/features/workflows/ui/workflow-editor/steps/types/preview-context.types";
+import { TestWorkflowActivityDrawer } from "@/features/workflows/ui/workflow-editor/test-workflow/test-workflow-activity-drawer";
+import { TestWorkflowContent } from "@/features/workflows/ui/workflow-editor/test-workflow/test-workflow-content";
+import { useTriggerWorkflow } from "@/features/workflows/lib/use-trigger-workflow";
+import { useHasPermission } from "@/shared/lib/hooks/use-has-permission";
+import { useIsPayloadSchemaEnabled } from "@/features/workflows/lib/use-is-payload-schema-enabled";
 import {
 	generatePostmanCollection,
 	generateTriggerCurlCommand,
-} from "@/utils/code-snippets";
+} from "@/shared/lib/code-snippets";
 import {
 	cleanupExpiredPreviewData,
 	clearContextData,

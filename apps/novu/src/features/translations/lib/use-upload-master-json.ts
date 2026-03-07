@@ -1,15 +1,15 @@
 import type { ImportMasterJsonResponseDto } from "@novu/api/models/components";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { uploadMasterJson } from "@/api/translations";
+import { uploadMasterJson } from "@/entities/translation/api/translations";
 import {
 	showErrorToast,
 	showSuccessToast,
-} from "@/components/primitives/sonner-helpers";
+} from "@/shared/ui/primitives/sonner-helpers";
 import {
 	requireEnvironment,
 	useEnvironment,
-} from "@/context/environment/hooks";
-import { QueryKeys } from "@/utils/query-keys";
+} from "@/app/context/environment/hooks";
+import { QueryKeys } from "@/shared/lib/query-keys";
 
 type UseUploadMasterJsonProps = {
 	onSuccess?: (result: ImportMasterJsonResponseDto) => void;

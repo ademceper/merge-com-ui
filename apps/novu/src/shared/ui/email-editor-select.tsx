@@ -2,8 +2,8 @@ import { Tabs, TabsList, TabsTrigger } from "@merge-rd/ui/components/tabs";
 import { Code, SquaresFour } from "@phosphor-icons/react";
 import { useState } from "react";
 import { useFormContext, useWatch } from "react-hook-form";
-import { ConfirmationModal } from "@/components/confirmation-modal";
-import { FormField } from "@/components/primitives/form/form";
+import { ConfirmationModal } from "@/shared/ui/confirmation-modal";
+import { FormField } from "@/shared/ui/primitives/form/form";
 import { isEmptyMailyJson } from "./maily/maily-utils";
 
 export const EmailEditorSelect = ({

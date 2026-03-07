@@ -2,7 +2,7 @@ import type {
 	ChannelPreference,
 	WorkflowPreference,
 	WorkflowPreferences,
-} from "../../types";
+} from "@/shared/model";
 
 export const PREFERENCE_DEFAULT_VALUE: WorkflowPreference["enabled"] = true;
 export const PREFERENCE_DEFAULT_READ_ONLY: WorkflowPreference["readOnly"] = false;

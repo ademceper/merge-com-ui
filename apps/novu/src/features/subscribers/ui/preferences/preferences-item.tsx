@@ -1,9 +1,9 @@
 import { Switch } from "@merge-rd/ui/components/switch";
-import { ChannelTypeEnum } from "@novu/shared";
-import { STEP_TYPE_TO_ICON } from "@/components/icons/utils";
-import { Step } from "@/components/primitives/step";
-import { STEP_TYPE_TO_COLOR } from "@/utils/color";
-import { capitalize } from "@/utils/string";
+import { ChannelTypeEnum } from "@/shared";
+import { STEP_TYPE_TO_ICON } from "@/shared/ui/icons/utils";
+import { Step } from "@/shared/ui/primitives/step";
+import { STEP_TYPE_TO_COLOR } from "@/shared/lib/color";
+import { capitalize } from "@/shared/lib/string";
 
 const CHANNEL_LABELS_LOOKUP: Record<`${ChannelTypeEnum}`, string> = {
 	[ChannelTypeEnum.IN_APP]: "In-App",

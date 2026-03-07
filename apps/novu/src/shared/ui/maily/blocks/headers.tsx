@@ -1,10 +1,10 @@
-import { EmailHeader } from "@/components/icons/email-header";
-import { EmailHeaderCenteredLogoWithBorder } from "@/components/icons/email-header-centered-logo-with-border";
-import { EmailHeaderLogoWithCoverImage } from "@/components/icons/email-header-logo-with-cover-image";
-import { EmailHeaderLogoWithText } from "@/components/icons/email-header-logo-with-text";
-import type { useTelemetry } from "@/hooks/use-telemetry";
-import type { BlockItem } from "@/lib/maily-core/blocks";
-import { TelemetryEvent } from "@/utils/telemetry";
+import { EmailHeader } from "@/shared/ui/icons/email-header";
+import { EmailHeaderCenteredLogoWithBorder } from "@/shared/ui/icons/email-header-centered-logo-with-border";
+import { EmailHeaderLogoWithCoverImage } from "@/shared/ui/icons/email-header-logo-with-cover-image";
+import { EmailHeaderLogoWithText } from "@/shared/ui/icons/email-header-logo-with-text";
+import type { useTelemetry } from "@/shared/lib/hooks/use-telemetry";
+import type { BlockItem } from "@/shared/lib/externals/maily-core/blocks";
+import { TelemetryEvent } from "@/shared/lib/telemetry";
 
 export const createHeaderCenteredLogoWithBorder: (props: {
 	track: ReturnType<typeof useTelemetry>;

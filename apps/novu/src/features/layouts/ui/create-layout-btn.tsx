@@ -3,23 +3,23 @@ import {
 	ApiServiceLevelEnum,
 	EnvironmentTypeEnum,
 	PermissionsEnum,
-} from "@novu/shared";
+} from "@/shared";
 import { PlusCircle } from "@phosphor-icons/react";
 import type { IconType } from "react-icons/lib";
 import { useLocation, useNavigate } from "react-router-dom";
-import { PermissionButton } from "@/components/primitives/permission-button";
+import { PermissionButton } from "@/shared/ui/primitives/permission-button";
 import {
 	Tooltip,
 	TooltipContent,
 	TooltipTrigger,
-} from "@/components/primitives/tooltip";
-import { useEnvironment } from "@/context/environment/hooks";
-import { useFetchLayouts } from "@/features/layouts/hooks/use-fetch-layouts";
-import { useLayoutsUrlState } from "@/features/layouts/hooks/use-layouts-url-state";
-import { useFetchSubscription } from "@/hooks/use-fetch-subscription";
-import { useTelemetry } from "@/hooks/use-telemetry";
-import { buildRoute, ROUTES } from "@/utils/routes";
-import { TelemetryEvent } from "@/utils/telemetry";
+} from "@/shared/ui/primitives/tooltip";
+import { useEnvironment } from "@/app/context/environment/hooks";
+import { useFetchLayouts } from "@/features/layouts/lib/use-fetch-layouts";
+import { useLayoutsUrlState } from "@/features/layouts/lib/use-layouts-url-state";
+import { useFetchSubscription } from "@/shared/lib/hooks/use-fetch-subscription";
+import { useTelemetry } from "@/shared/lib/hooks/use-telemetry";
+import { buildRoute, ROUTES } from "@/shared/lib/routes";
+import { TelemetryEvent } from "@/shared/lib/telemetry";
 
 export const CreateLayoutButton = ({
 	icon = PlusCircle,

@@ -1,8 +1,8 @@
 import { CaretLeft } from "@phosphor-icons/react";
 import { useNavigate } from "react-router-dom";
-import { Stepper } from "@/features/onboarding/components/stepper";
-import { CompactButton } from "./primitives/button-compact";
-import { LinkButton } from "./primitives/button-link";
+import { Stepper } from "@/features/onboarding/ui/stepper";
+import { CompactButton } from "@/shared/ui/primitives/button-compact";
+import { LinkButton } from "@/shared/ui/primitives/button-link";
 
 interface UsecasePlaygroundHeaderProps {
 	title: string;

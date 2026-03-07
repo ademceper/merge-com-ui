@@ -3,12 +3,12 @@ import { useMemo } from "react";
 import type {
 	IResourceDependency,
 	IResourceDiffResult,
-} from "@/api/environments";
+} from "@/entities/environment/api/environments";
 import {
 	Tooltip,
 	TooltipContent,
 	TooltipTrigger,
-} from "@/components/primitives/tooltip";
+} from "@/shared/ui/primitives/tooltip";
 
 type LayoutUsageIndicatorProps = {
 	layoutResource: IResourceDiffResult;

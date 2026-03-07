@@ -1,6 +1,6 @@
 import { useUser } from "@merge-rd/auth";
 import { cn } from "@merge-rd/ui/lib/utils";
-import { ChannelTypeEnum, type WorkflowResponseDto } from "@novu/shared";
+import { ChannelTypeEnum, type WorkflowResponseDto } from "@/shared";
 import {
 	CaretDoubleRight,
 	CheckCircle,
@@ -11,23 +11,23 @@ import {
 import { motion } from "motion/react";
 import { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Badge, BadgeIcon } from "@/components/primitives/badge";
+import { Badge, BadgeIcon } from "@/shared/ui/primitives/badge";
 import {
 	Popover,
 	PopoverClose,
 	PopoverContent,
 	PopoverTrigger,
-} from "@/components/primitives/popover";
+} from "@/shared/ui/primitives/popover";
 import {
 	useEnvironment,
 	useFetchEnvironments,
-} from "@/context/environment/hooks";
-import { useFetchIntegrations } from "@/features/integrations/hooks/use-fetch-integrations";
-import { useTelemetry } from "@/hooks/use-telemetry";
-import { StepTypeEnum } from "@/utils/enums";
-import { buildRoute, ROUTES } from "@/utils/routes";
-import { TelemetryEvent } from "@/utils/telemetry";
-import type { Step } from "@/utils/types";
+} from "@/app/context/environment/hooks";
+import { useFetchIntegrations } from "@/features/integrations/lib/use-fetch-integrations";
+import { useTelemetry } from "@/shared/lib/hooks/use-telemetry";
+import { StepTypeEnum } from "@/shared/lib/enums";
+import { buildRoute, ROUTES } from "@/shared/lib/routes";
+import { TelemetryEvent } from "@/shared/lib/telemetry";
+import type { Step } from "@/shared/lib/types";
 import { useWorkflow } from "./workflow-provider";
 
 interface WorkflowChecklistProps {

@@ -1,7 +1,7 @@
 import { useQueryClient } from "@tanstack/react-query";
 import { useEffect } from "react";
 import { useFormContext, useWatch } from "react-hook-form";
-import { QueryKeys } from "@/utils/query-keys";
+import { QueryKeys } from "@/shared/lib/query-keys";
 
 const POLL_INTERVAL_MS = 3_000;
 

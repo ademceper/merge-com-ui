@@ -1,6 +1,6 @@
 import { useMemo } from "react";
 import { useLocation } from "react-router-dom";
-import { useEnvironment } from "@/context/environment/hooks";
+import { useEnvironment } from "@/app/context/environment/hooks";
 import type {
 	Command,
 	CommandCategory,

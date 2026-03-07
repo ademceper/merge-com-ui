@@ -1,7 +1,7 @@
-import type { IProviderConfig } from "@novu/shared";
+import type { IProviderConfig } from "@/shared";
 import { CaretLeft } from "@phosphor-icons/react";
-import { CompactButton } from "@/components/primitives/button-compact";
-import { SheetHeader, SheetTitle } from "@/components/primitives/sheet";
+import { CompactButton } from "@/shared/ui/primitives/button-compact";
+import { SheetHeader, SheetTitle } from "@/shared/ui/primitives/sheet";
 import { ProviderIcon } from "./provider-icon";
 
 type IntegrationSheetHeaderProps = {

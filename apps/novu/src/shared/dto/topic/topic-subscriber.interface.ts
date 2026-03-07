@@ -5,7 +5,7 @@ import type {
 	SubscriberId,
 	TopicId,
 	TopicKey,
-} from "../../types";
+} from "../../model";
 
 export interface ITopicSubscriber {
 	_organizationId: OrganizationId;

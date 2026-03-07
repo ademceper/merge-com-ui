@@ -2,7 +2,7 @@ import type {
 	ChatProviderIdEnum,
 	ISubscriberChannel,
 	PushProviderIdEnum,
-} from "../../types";
+} from "../../model";
 
 interface IChannelCredentials {
 	webhookUrl?: string;

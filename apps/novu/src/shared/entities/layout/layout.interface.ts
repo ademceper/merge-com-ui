@@ -8,7 +8,7 @@ import type {
 	LayoutName,
 	OrganizationId,
 	UserId,
-} from "../../types";
+} from "../../model";
 
 export interface ILayoutEntity {
 	_id?: LayoutId;

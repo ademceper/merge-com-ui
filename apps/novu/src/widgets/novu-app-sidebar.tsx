@@ -10,7 +10,7 @@ import {
 	SidebarMenuItem,
 } from "@merge-rd/ui/components/sidebar";
 import { Switcher, type SwitcherItem } from "@merge-rd/ui/components/switcher";
-import { FeatureFlagsKeysEnum, PermissionsEnum } from "@novu/shared";
+import { FeatureFlagsKeysEnum, PermissionsEnum } from "@/shared";
 import {
 	Broadcast,
 	Buildings,
@@ -27,11 +27,11 @@ import {
 	UsersThree,
 } from "@phosphor-icons/react";
 import { NavLink, useLocation } from "react-router-dom";
-import { Badge } from "@/components/primitives/badge";
-import { useEnvironment } from "@/context/environment/hooks";
-import { useFeatureFlag } from "@/hooks/use-feature-flag";
-import { Protect } from "@/utils/protect";
-import { buildRoute, ROUTES } from "@/utils/routes";
+import { Badge } from "@/shared/ui/primitives/badge";
+import { useEnvironment } from "@/app/context/environment/hooks";
+import { useFeatureFlag } from "@/shared/lib/hooks/use-feature-flag";
+import { Protect } from "@/shared/lib/protect";
+import { buildRoute, ROUTES } from "@/shared/lib/routes";
 import { OrganizationDropdown } from "./side-navigation/organization-dropdown";
 
 function NovuNavLink({

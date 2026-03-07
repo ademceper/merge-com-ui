@@ -10,11 +10,11 @@ import {
 	TablePaginationFooter,
 	TableRow,
 } from "@merge-rd/ui/components/table";
-import { DirectionEnum, type ListWorkflowResponse } from "@novu/shared";
+import { DirectionEnum, type ListWorkflowResponse } from "@/shared";
 import { DotsThree } from "@phosphor-icons/react";
 import { useSearchParams } from "react-router-dom";
-import { WorkflowListEmpty } from "@/features/workflows/components/workflow-list-empty";
-import { WorkflowRow } from "@/features/workflows/components/workflow-row";
+import { WorkflowListEmpty } from "@/features/workflows/ui/workflow-list-empty";
+import { WorkflowRow } from "@/features/workflows/ui/workflow-row";
 import { ServerErrorPage } from "@/pages/server-error-page";
 
 export type SortableColumn = "name" | "updatedAt" | "lastTriggeredAt";

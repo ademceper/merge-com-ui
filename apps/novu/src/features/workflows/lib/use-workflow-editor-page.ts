@@ -1,5 +1,5 @@
 import { useLocation, useMatch } from "react-router-dom";
-import { ROUTES } from "@/utils/routes";
+import { ROUTES } from "@/shared/lib/routes";
 
 export const useWorkflowEditorPage = () => {
 	const testMatch = useMatch(ROUTES.TEST_WORKFLOW);

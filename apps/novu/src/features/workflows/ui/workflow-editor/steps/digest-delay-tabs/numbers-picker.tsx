@@ -7,8 +7,8 @@ import {
 	PopoverContent,
 	PopoverPortal,
 	PopoverTrigger,
-} from "@/components/primitives/popover";
-import TruncatedText from "@/components/truncated-text";
+} from "@/shared/ui/primitives/popover";
+import TruncatedText from "@/shared/ui/truncated-text";
 
 const textClassName = "text-foreground-600 text-xs font-medium px-2";
 

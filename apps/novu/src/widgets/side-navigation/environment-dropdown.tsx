@@ -1,6 +1,6 @@
 import { Separator } from "@merge-rd/ui/components/separator";
 import { cn } from "@merge-rd/ui/lib/utils";
-import { EnvironmentTypeEnum, type IEnvironment } from "@novu/shared";
+import { EnvironmentTypeEnum, type IEnvironment } from "@/shared";
 import { ArrowsDownUp } from "@phosphor-icons/react";
 import { useState } from "react";
 import {
@@ -10,9 +10,9 @@ import {
 	SelectItem,
 	SelectTrigger,
 	SelectValue,
-} from "@/components/primitives/select";
-import TruncatedText from "../../components/truncated-text";
-import { EnvironmentBranchIcon } from "../primitives/environment-branch-icon";
+} from "@/shared/ui/primitives/select";
+import TruncatedText from "@/shared/ui/truncated-text";
+import { EnvironmentBranchIcon } from "@/shared/ui/primitives/environment-branch-icon";
 
 type EnvironmentDropdownProps = {
 	currentEnvironment?: IEnvironment;

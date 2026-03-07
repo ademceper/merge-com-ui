@@ -26,37 +26,37 @@ import {
 	useRef,
 	useState,
 } from "react";
-import { LinkButton } from "@/components/primitives/button-link";
+import { LinkButton } from "@/shared/ui/primitives/button-link";
 import {
 	FormControl,
 	FormItem,
 	FormMessagePure,
-} from "@/components/primitives/form/form";
+} from "@/shared/ui/primitives/form/form";
 import {
 	Input,
 	InputPure,
 	InputRoot,
 	InputWrapper,
-} from "@/components/primitives/input";
+} from "@/shared/ui/primitives/input";
 import {
 	Popover,
 	PopoverContent,
 	PopoverTrigger,
-} from "@/components/primitives/popover";
+} from "@/shared/ui/primitives/popover";
 import {
 	Tooltip,
 	TooltipContent,
 	TooltipTrigger,
-} from "@/components/primitives/tooltip";
-import type { JSONSchema7 } from "@/components/schema-editor/json-schema";
-import { useEscapeKeyManager } from "@/context/escape-key-manager/hooks";
-import { EscapeKeyManagerPriority } from "@/context/escape-key-manager/priority";
-import { useTelemetry } from "@/hooks/use-telemetry";
+} from "@/shared/ui/primitives/tooltip";
+import type { JSONSchema7 } from "@/shared/ui/schema-editor/json-schema";
+import { useEscapeKeyManager } from "@/app/context/escape-key-manager/hooks";
+import { EscapeKeyManagerPriority } from "@/app/context/escape-key-manager/priority";
+import { useTelemetry } from "@/shared/lib/hooks/use-telemetry";
 import type {
 	IsAllowedVariable,
 	LiquidVariable,
-} from "@/utils/parseStepVariables";
-import { TelemetryEvent } from "@/utils/telemetry";
+} from "@/shared/lib/parseStepVariables";
+import { TelemetryEvent } from "@/shared/lib/telemetry";
 import { Code2 } from "../icons/code-2";
 import { FilterItem } from "./components/filter-item";
 import { ReorderFiltersGroup } from "./components/reorder-filters-group";

@@ -8,14 +8,14 @@ import {
 	EnvironmentTypeEnum,
 	ResourceOriginEnum,
 	TimeUnitEnum,
-} from "@novu/shared";
+} from "@/shared";
 import { Tabs } from "@radix-ui/react-tabs";
 import React, { useState } from "react";
 import { type FieldValues, useFormContext } from "react-hook-form";
-import { FormLabel } from "@/components/primitives/form/form";
-import { useEnvironment } from "@/context/environment/hooks";
-import { useSaveForm } from "@/features/workflows/components/workflow-editor/steps/save-form-context";
-import { useWorkflow } from "@/features/workflows/components/workflow-editor/workflow-provider";
+import { FormLabel } from "@/shared/ui/primitives/form/form";
+import { useEnvironment } from "@/app/context/environment/hooks";
+import { useSaveForm } from "@/features/workflows/ui/workflow-editor/steps/save-form-context";
+import { useWorkflow } from "@/features/workflows/ui/workflow-editor/workflow-provider";
 import { ScheduledType } from "../digest-delay-tabs/scheduled-type";
 import { EVERY_MINUTE_CRON } from "../digest-delay-tabs/utils";
 import { DynamicDelay } from "./dynamic-delay";

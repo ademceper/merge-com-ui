@@ -1,9 +1,9 @@
-import type { ChannelTypeEnum, SeverityLevelEnum } from "@novu/shared";
+import type { ChannelTypeEnum, SeverityLevelEnum } from "@/shared";
 import { useCallback, useMemo } from "react";
 import { useSearchParams } from "react-router-dom";
-import type { ActivityFilters } from "@/api/activity";
-import { DEFAULT_DATE_RANGE } from "@/features/activity/components/constants";
-import type { ActivityFiltersData, ActivityUrlState } from "@/types/activity";
+import type { ActivityFilters } from "@/entities/activity/api/activity";
+import { DEFAULT_DATE_RANGE } from "@/features/activity/ui/constants";
+import type { ActivityFiltersData, ActivityUrlState } from "@/shared/model/activity";
 
 function parseFilters(searchParams: URLSearchParams): ActivityFilters {
 	const result: ActivityFilters = {};

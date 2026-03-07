@@ -1,16 +1,16 @@
 import type { ListContextsResponseDto } from "@novu/api/models/components";
-import { type ContextId, type ContextType, DirectionEnum } from "@novu/shared";
+import { type ContextId, type ContextType, DirectionEnum } from "@/shared";
 import {
 	keepPreviousData,
 	type UseQueryOptions,
 	useQuery,
 } from "@tanstack/react-query";
-import { getContexts } from "@/api/contexts";
+import { getContexts } from "@/entities/context/api/contexts";
 import {
 	requireEnvironment,
 	useEnvironment,
-} from "@/context/environment/hooks";
-import { QueryKeys } from "@/utils/query-keys";
+} from "@/app/context/environment/hooks";
+import { QueryKeys } from "@/shared/lib/query-keys";
 
 interface UseFetchContextsParams {
 	limit?: number;

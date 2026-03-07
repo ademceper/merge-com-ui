@@ -1,12 +1,12 @@
 import { useUser } from "@merge-rd/auth";
-import { ChannelTypeEnum } from "@novu/shared";
+import { ChannelTypeEnum } from "@/shared";
 import { useEffect, useState } from "react";
 import ReactConfetti from "react-confetti";
 import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
-import { IS_EU, MODE } from "@/config";
-import { useEnvironment } from "@/context/environment/hooks";
-import { useFetchIntegrations } from "@/features/integrations/hooks/use-fetch-integrations";
-import { ROUTES } from "@/utils/routes";
+import { IS_EU, MODE } from "@/shared/config";
+import { useEnvironment } from "@/app/context/environment/hooks";
+import { useFetchIntegrations } from "@/features/integrations/lib/use-fetch-integrations";
+import { ROUTES } from "@/shared/lib/routes";
 import { InboxConnectedGuide } from "./inbox-connected-guide";
 import { InboxFrameworkGuide } from "./inbox-framework-guide";
 

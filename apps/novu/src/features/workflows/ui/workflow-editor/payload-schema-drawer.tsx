@@ -1,13 +1,13 @@
 import { Button } from "@merge-rd/ui/components/button";
 import { Separator } from "@merge-rd/ui/components/separator";
 import { Switch } from "@merge-rd/ui/components/switch";
-import type { WorkflowResponseDto } from "@novu/shared";
+import type { WorkflowResponseDto } from "@/shared";
 import { FileText, Info, ShieldCheck } from "@phosphor-icons/react";
 import { useCallback, useEffect, useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { Link } from "react-router-dom";
-import { FormRoot } from "@/components/primitives/form/form";
-import { Hint, HintIcon } from "@/components/primitives/hint";
+import { FormRoot } from "@/shared/ui/primitives/form/form";
+import { Hint, HintIcon } from "@/shared/ui/primitives/hint";
 import {
 	Sheet,
 	SheetContent,
@@ -16,22 +16,22 @@ import {
 	SheetHeader,
 	SheetMain,
 	SheetTitle,
-} from "@/components/primitives/sheet";
+} from "@/shared/ui/primitives/sheet";
 import {
 	Tooltip,
 	TooltipContent,
 	TooltipTrigger,
-} from "@/components/primitives/tooltip";
-import type { JSONSchema7 } from "@/components/schema-editor/json-schema";
-import { SchemaEditor } from "@/components/schema-editor/schema-editor";
-import { convertSchemaToPropertyList } from "@/components/schema-editor/utils";
-import { checkVariableUsageInWorkflow } from "@/components/schema-editor/utils/check-variable-usage";
+} from "@/shared/ui/primitives/tooltip";
+import type { JSONSchema7 } from "@/shared/ui/schema-editor/json-schema";
+import { SchemaEditor } from "@/shared/ui/schema-editor/schema-editor";
+import { convertSchemaToPropertyList } from "@/shared/ui/schema-editor/utils";
+import { checkVariableUsageInWorkflow } from "@/shared/ui/schema-editor/utils/check-variable-usage";
 import {
 	detectSchemaChanges,
 	type SchemaChanges,
-} from "@/components/schema-editor/utils/schema-change-detection";
-import { ExternalLink } from "@/components/shared/external-link";
-import { useFormProtection } from "@/hooks/use-form-protection";
+} from "@/shared/ui/schema-editor/utils/schema-change-detection";
+import { ExternalLink } from "@/shared/ui/shared/external-link";
+import { useFormProtection } from "@/shared/lib/hooks/use-form-protection";
 import {
 	PayloadImportEditor,
 	PayloadSchemaEmptyState,

@@ -2,9 +2,9 @@ import * as Sentry from "@sentry/react";
 import { useEffect } from "react";
 import { useParams } from "react-router-dom";
 
-import { SmsPreview } from "@/features/workflows/components/workflow-editor/steps/sms/sms-preview";
-import { useWorkflow } from "@/features/workflows/components/workflow-editor/workflow-provider";
-import { usePreviewStep } from "@/hooks/use-preview-step";
+import { SmsPreview } from "@/features/workflows/ui/workflow-editor/steps/sms/sms-preview";
+import { useWorkflow } from "@/features/workflows/ui/workflow-editor/workflow-provider";
+import { usePreviewStep } from "@/shared/lib/hooks/use-preview-step";
 
 export const ConfigureSmsStepPreview = () => {
 	const {

@@ -6,9 +6,9 @@ import {
 import {
 	type DeleteTopicSubscriptionsResponseDto,
 	deleteTopicSubscription,
-} from "@/api/topics";
-import { useEnvironment } from "@/context/environment/hooks";
-import { QueryKeys } from "@/utils/query-keys";
+} from "@/entities/topic/api/topics";
+import { useEnvironment } from "@/app/context/environment/hooks";
+import { QueryKeys } from "@/shared/lib/query-keys";
 
 export const useDeleteSubscription = (
 	options?: UseMutationOptions<

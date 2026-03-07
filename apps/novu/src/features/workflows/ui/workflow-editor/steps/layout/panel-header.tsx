@@ -1,6 +1,6 @@
 import { cn } from "@merge-rd/ui/lib/utils";
 import type { ReactNode } from "react";
-import { LoadingIndicator } from "@/components/primitives/loading-indicator";
+import { LoadingIndicator } from "@/shared/ui/primitives/loading-indicator";
 
 type PanelHeaderProps = {
 	icon?: React.ComponentType<{ className?: string }>;

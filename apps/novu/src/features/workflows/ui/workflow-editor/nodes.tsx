@@ -1,5 +1,5 @@
 import { cn } from "@merge-rd/ui/lib/utils";
-import type { Slug } from "@novu/shared";
+import type { Slug } from "@/shared";
 import { PlayCircle, Rows } from "@phosphor-icons/react";
 import {
 	type Node as FlowNode,
@@ -16,10 +16,10 @@ import {
 } from "react";
 import type { RQBJsonLogic } from "react-querybuilder";
 import { Link } from "react-router-dom";
-import { STEP_TYPE_TO_ICON } from "@/components/icons/utils";
-import { useConditionsCount } from "@/features/workflows/hooks/use-conditions-count";
-import { STEP_TYPE_TO_COLOR } from "@/utils/color";
-import { StepTypeEnum } from "@/utils/enums";
+import { STEP_TYPE_TO_ICON } from "@/shared/ui/icons/utils";
+import { useConditionsCount } from "@/features/workflows/lib/use-conditions-count";
+import { STEP_TYPE_TO_COLOR } from "@/shared/lib/color";
+import { StepTypeEnum } from "@/shared/lib/enums";
 import { AddStepMenu } from "./add-step-menu";
 import { AnimationStepWrapper } from "./animation-step-wrapper";
 import {

@@ -1,16 +1,16 @@
 import { Button } from "@merge-rd/ui/components/button";
-import { openInNewTab } from "@/utils/url";
+import { openInNewTab } from "@/shared/lib/url";
 import {
 	IS_ENTERPRISE,
 	IS_SELF_HOSTED,
 	SELF_HOSTED_UPGRADE_REDIRECT_URL,
 } from "../../config";
-import { CircleCheck } from "../icons/circle-check";
-import { Plug } from "../icons/plug";
-import { ShieldZap } from "../icons/shield-zap";
-import { Sparkling } from "../icons/sparkling";
-import { AuthFeatureRow } from "./auth-feature-row";
-import { TrustedCompanies } from "./trusted-companies";
+import { CircleCheck } from "@/shared/ui/icons/circle-check";
+import { Plug } from "@/shared/ui/icons/plug";
+import { ShieldZap } from "@/shared/ui/icons/shield-zap";
+import { Sparkling } from "@/shared/ui/icons/sparkling";
+import { AuthFeatureRow } from "@/shared/ui/auth/auth-feature-row";
+import { TrustedCompanies } from "@/shared/ui/auth/trusted-companies";
 
 export function AuthSideBanner() {
 	return (

@@ -1,10 +1,10 @@
 import { Info } from "@phosphor-icons/react";
 import cronParser from "cron-parser";
 import { useMemo } from "react";
-import { Hint, HintIcon } from "@/components/primitives/hint";
-import { DaysOfWeek } from "@/features/workflows/components/workflow-editor/steps/digest-delay-tabs/days-of-week";
-import { NumbersPicker } from "@/features/workflows/components/workflow-editor/steps/digest-delay-tabs/numbers-picker";
-import { Period } from "@/features/workflows/components/workflow-editor/steps/digest-delay-tabs/period";
+import { Hint, HintIcon } from "@/shared/ui/primitives/hint";
+import { DaysOfWeek } from "@/features/workflows/ui/workflow-editor/steps/digest-delay-tabs/days-of-week";
+import { NumbersPicker } from "@/features/workflows/ui/workflow-editor/steps/digest-delay-tabs/numbers-picker";
+import { Period } from "@/features/workflows/ui/workflow-editor/steps/digest-delay-tabs/period";
 import {
 	getCronBasedOnPeriod,
 	getPeriodFromCronParts,
@@ -13,7 +13,7 @@ import {
 	toCronFields,
 	toUiFields,
 	type UiCronFields,
-} from "@/features/workflows/components/workflow-editor/steps/digest-delay-tabs/utils";
+} from "@/features/workflows/ui/workflow-editor/steps/digest-delay-tabs/utils";
 
 export const ScheduledType = ({
 	value,

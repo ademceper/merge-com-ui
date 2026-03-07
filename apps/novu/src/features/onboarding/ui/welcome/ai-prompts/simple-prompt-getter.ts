@@ -1,5 +1,5 @@
-import { API_HOSTNAME } from "@/config";
-import { apiHostnameManager } from "@/utils/api-hostname-manager";
+import { API_HOSTNAME } from "@/shared/config";
+import { apiHostnameManager } from "@/shared/lib/api-hostname-manager";
 import {
 	getAngularPromptString,
 	getJavaScriptPromptString,

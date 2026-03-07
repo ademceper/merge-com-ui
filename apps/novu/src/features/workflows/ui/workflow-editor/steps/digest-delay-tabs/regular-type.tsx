@@ -1,14 +1,14 @@
-import { TimeUnitEnum } from "@novu/shared";
+import { TimeUnitEnum } from "@/shared";
 import { useMemo } from "react";
 
-import { AmountInput } from "@/components/amount-input";
+import { AmountInput } from "@/shared/ui/amount-input";
 import {
 	AMOUNT_KEY,
 	UNIT_KEY,
-} from "@/features/workflows/components/workflow-editor/steps/digest-delay-tabs/keys";
-import { useSaveForm } from "@/features/workflows/components/workflow-editor/steps/save-form-context";
-import { TIME_UNIT_OPTIONS } from "@/features/workflows/components/workflow-editor/steps/time-units";
-import { useWorkflow } from "@/features/workflows/components/workflow-editor/workflow-provider";
+} from "@/features/workflows/ui/workflow-editor/steps/digest-delay-tabs/keys";
+import { useSaveForm } from "@/features/workflows/ui/workflow-editor/steps/save-form-context";
+import { TIME_UNIT_OPTIONS } from "@/features/workflows/ui/workflow-editor/steps/time-units";
+import { useWorkflow } from "@/features/workflows/ui/workflow-editor/workflow-provider";
 
 export const RegularType = ({
 	isReadOnly,

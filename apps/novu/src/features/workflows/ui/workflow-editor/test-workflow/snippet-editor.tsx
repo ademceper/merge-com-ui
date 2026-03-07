@@ -1,4 +1,4 @@
-import { CodeBlock, type Language } from "@/components/primitives/code-block";
+import { CodeBlock, type Language } from "@/shared/ui/primitives/code-block";
 
 export const SnippetEditor = ({
 	language,

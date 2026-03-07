@@ -1,6 +1,6 @@
-import type { IEnvironment } from "@novu/shared";
+import type { IEnvironment } from "@/shared";
 
-import { get, post, put } from "./api.client";
+import { get, post, put } from "@/shared/api/api.client";
 
 const partnerIntegrationBaseUrl = "/partner-integrations";
 

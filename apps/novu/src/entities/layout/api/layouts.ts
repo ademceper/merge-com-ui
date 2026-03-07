@@ -5,8 +5,8 @@ import type {
 	LayoutResponseDto,
 	ListLayoutsResponse,
 	UpdateLayoutDto,
-} from "@novu/shared";
-import { delV2, getV2, postV2, putV2 } from "./api.client";
+} from "@/shared";
+import { delV2, getV2, postV2, putV2 } from "@/shared/api/api.client";
 
 export type WorkflowInfo = {
 	name: string;

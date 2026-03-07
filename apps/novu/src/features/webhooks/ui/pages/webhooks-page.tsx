@@ -11,7 +11,7 @@ import {
 	FeatureNameEnum,
 	getFeatureForTierAsBoolean,
 	type IEnvironment,
-} from "@novu/shared";
+} from "@/shared";
 import { Spinner, WebhooksLogo } from "@phosphor-icons/react";
 import {
 	type UseMutationResult,
@@ -30,15 +30,15 @@ import { AppPortal, SvixProvider } from "svix-react";
 import {
 	createWebhookPortalToken,
 	getWebhookPortalToken,
-} from "@/api/webhooks";
-import { IS_SELF_HOSTED } from "@/config";
-import { useEnvironment } from "@/context/environment/hooks";
-import { useSetPageHeader } from "@/context/page-header";
-import { WebhooksPaywallState } from "@/features/webhooks/components/webhooks-paywall-state";
-import { useFeatureFlag } from "@/hooks/use-feature-flag";
-import { useFetchSubscription } from "@/hooks/use-fetch-subscription";
-import { QueryKeys } from "@/utils/query-keys";
-import { buildRoute, ROUTES } from "@/utils/routes";
+} from "@/entities/webhook/api/webhooks";
+import { IS_SELF_HOSTED } from "@/shared/config";
+import { useEnvironment } from "@/app/context/environment/hooks";
+import { useSetPageHeader } from "@/app/context/page-header";
+import { WebhooksPaywallState } from "@/features/webhooks/ui/webhooks-paywall-state";
+import { useFeatureFlag } from "@/shared/lib/hooks/use-feature-flag";
+import { useFetchSubscription } from "@/shared/lib/hooks/use-fetch-subscription";
+import { QueryKeys } from "@/shared/lib/query-keys";
+import { buildRoute, ROUTES } from "@/shared/lib/routes";
 
 interface WebhookPortalTokenResponse {
 	url: string;

@@ -1,9 +1,9 @@
 import { UsersThree } from "@phosphor-icons/react";
-import { InboxBellFilled } from "@/components/icons/inbox-bell-filled";
-import { StackedDots } from "@/components/icons/stacked-dots";
-import { TargetArrow } from "@/components/icons/target-arrow";
-import { AnalyticsCard } from "@/components/primitives/analytics-card";
-import type { MetricData } from "@/features/analytics/hooks/use-metric-data";
+import { InboxBellFilled } from "@/shared/ui/icons/inbox-bell-filled";
+import { StackedDots } from "@/shared/ui/icons/stacked-dots";
+import { TargetArrow } from "@/shared/ui/icons/target-arrow";
+import { AnalyticsCard } from "@/shared/ui/primitives/analytics-card";
+import type { MetricData } from "@/features/analytics/lib/use-metric-data";
 import { ANALYTICS_TOOLTIPS } from "./constants/analytics-tooltips";
 
 type AnalyticsSectionProps = {

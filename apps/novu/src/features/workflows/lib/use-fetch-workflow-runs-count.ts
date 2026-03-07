@@ -1,10 +1,10 @@
 import { useQuery } from "@tanstack/react-query";
-import { type ActivityFilters, getWorkflowRunsCount } from "@/api/activity";
+import { type ActivityFilters, getWorkflowRunsCount } from "@/entities/activity/api/activity";
 import {
 	requireEnvironment,
 	useEnvironment,
-} from "@/context/environment/hooks";
-import { QueryKeys } from "@/utils/query-keys";
+} from "@/app/context/environment/hooks";
+import { QueryKeys } from "@/shared/lib/query-keys";
 
 interface UseWorkflowRunsCountOptions {
 	filters?: ActivityFilters;

@@ -2,7 +2,7 @@ import {
 	EnvironmentTypeEnum,
 	PermissionsEnum,
 	ResourceOriginEnum,
-} from "@novu/shared";
+} from "@/shared";
 import { Rows } from "@phosphor-icons/react";
 import {
 	type Edge,
@@ -11,10 +11,10 @@ import {
 	getBezierPath,
 } from "@xyflow/react";
 import { AnimatePresence, motion } from "motion/react";
-import { useEnvironment } from "@/context/environment/hooks";
-import { useWorkflow } from "@/features/workflows/components/workflow-editor/workflow-provider";
-import { useHasPermission } from "@/hooks/use-has-permission";
-import { fadeIn } from "@/utils/animation";
+import { useEnvironment } from "@/app/context/environment/hooks";
+import { useWorkflow } from "@/features/workflows/ui/workflow-editor/workflow-provider";
+import { useHasPermission } from "@/shared/lib/hooks/use-has-permission";
+import { fadeIn } from "@/shared/lib/animation";
 import { AddStepMenu } from "./add-step-menu";
 import { NODE_WIDTH } from "./base-node";
 import { useCanvasContext } from "./drag-context";

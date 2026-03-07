@@ -1,6 +1,6 @@
-import { ResourceOriginEnum } from "@novu/shared";
+import { ResourceOriginEnum } from "@/shared";
 import { useFormContext } from "react-hook-form";
-import { EmailCorePreview } from "@/features/workflows/components/workflow-editor/steps/preview/previews/email-preview-wrapper";
+import { EmailCorePreview } from "@/features/workflows/ui/workflow-editor/steps/preview/previews/email-preview-wrapper";
 import { useLayoutEditor } from "./layout-editor-provider";
 
 export const LayoutPreviewFactory = () => {

@@ -6,11 +6,11 @@ import {
 } from "@tanstack/react-query";
 import { HelmetProvider } from "react-helmet-async";
 import { Outlet } from "react-router-dom";
-import { ToastIcon } from "@/components/primitives/sonner";
-import { showToast } from "@/components/primitives/sonner-helpers";
-import { TooltipProvider } from "@/components/primitives/tooltip";
-import { EscapeKeyManagerProvider } from "@/context/escape-key-manager/escape-key-manager";
-import { SegmentProvider } from "@/context/segment";
+import { ToastIcon } from "@/shared/ui/primitives/sonner";
+import { showToast } from "@/shared/ui/primitives/sonner-helpers";
+import { TooltipProvider } from "@/shared/ui/primitives/tooltip";
+import { EscapeKeyManagerProvider } from "@/app/context/escape-key-manager/escape-key-manager";
+import { SegmentProvider } from "@/app/context/segment";
 
 const queryClient = new QueryClient({
 	defaultOptions: {

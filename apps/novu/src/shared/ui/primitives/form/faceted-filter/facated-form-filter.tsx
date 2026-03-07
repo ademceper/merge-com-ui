@@ -6,7 +6,7 @@ import {
 	Popover,
 	PopoverContent,
 	PopoverTrigger,
-} from "@/components/primitives/popover";
+} from "@/shared/ui/primitives/popover";
 import { FilterBadge } from "./components/filter-badge";
 import { MultiFilterContent } from "./components/multi-filter-content";
 import { SingleFilterContent } from "./components/single-filter-content";

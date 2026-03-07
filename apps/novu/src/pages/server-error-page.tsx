@@ -1,7 +1,7 @@
 import { Button } from "@merge-rd/ui/components/button";
 import { Question } from "@phosphor-icons/react";
-import { Plug } from "@/components/icons/plug";
-import { usePlainChat } from "@/hooks/use-plain-chat";
+import { Plug } from "@/shared/ui/icons/plug";
+import { usePlainChat } from "@/shared/lib/hooks/use-plain-chat";
 
 export function ServerErrorPage() {
 	const { showPlainLiveChat } = usePlainChat();

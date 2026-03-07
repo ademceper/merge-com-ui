@@ -8,7 +8,7 @@ import { Switch } from "@merge-rd/ui/components/switch";
 import { Info, Layout } from "@phosphor-icons/react";
 import { useId } from "react";
 import { Controller, type UseFormReturn } from "react-hook-form";
-import { ColorPicker } from "@/components/primitives/color-picker";
+import { ColorPicker } from "@/shared/ui/primitives/color-picker";
 
 interface PreviewStyle {
 	id: string;

@@ -1,4 +1,4 @@
-import type { IResponseError } from "../types";
+import type { IResponseError } from "@/shared/model";
 
 /**
  * Validate (type-guard) that an error response matches our IResponseError interface.

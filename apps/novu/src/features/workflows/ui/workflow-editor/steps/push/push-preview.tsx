@@ -4,7 +4,7 @@ import {
 	ChannelTypeEnum,
 	type GeneratePreviewResponseDto,
 	type PushRenderOutput,
-} from "@novu/shared";
+} from "@/shared";
 import { type HTMLMotionProps, motion } from "motion/react";
 import type { HTMLAttributes } from "react";
 

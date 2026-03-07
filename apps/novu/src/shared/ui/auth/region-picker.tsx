@@ -6,13 +6,13 @@ import {
 	SelectItem,
 	SelectTrigger,
 	SelectValue,
-} from "@/components/primitives/select";
+} from "@/shared/ui/primitives/select";
 import {
 	Tooltip,
 	TooltipContent,
 	TooltipProvider,
 	TooltipTrigger,
-} from "@/components/primitives/tooltip";
+} from "@/shared/ui/primitives/tooltip";
 import { EuFlag } from "../icons/flags/eu";
 import { USFlag } from "../icons/flags/us";
 

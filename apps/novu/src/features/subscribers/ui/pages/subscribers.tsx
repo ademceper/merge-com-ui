@@ -1,14 +1,14 @@
 import { AnimatePresence } from "motion/react";
 import { useEffect } from "react";
 import { useMatch, useOutlet } from "react-router-dom";
-import { PageMeta } from "@/components/page-meta";
-import { ProtectedDrawer } from "@/components/protected-drawer";
-import { useSetPageHeader } from "@/context/page-header";
-import { SubscriberList } from "@/features/subscribers/components/subscriber-list";
-import { useSubscribersNavigate } from "@/features/subscribers/hooks/use-subscribers-navigate";
-import { useTelemetry } from "@/hooks/use-telemetry";
-import { ROUTES } from "@/utils/routes";
-import { TelemetryEvent } from "@/utils/telemetry";
+import { PageMeta } from "@/shared/ui/page-meta";
+import { ProtectedDrawer } from "@/shared/ui/protected-drawer";
+import { useSetPageHeader } from "@/app/context/page-header";
+import { SubscriberList } from "@/features/subscribers/ui/subscriber-list";
+import { useSubscribersNavigate } from "@/features/subscribers/lib/use-subscribers-navigate";
+import { useTelemetry } from "@/shared/lib/hooks/use-telemetry";
+import { ROUTES } from "@/shared/lib/routes";
+import { TelemetryEvent } from "@/shared/lib/telemetry";
 
 export const SubscribersPage = () => {
 	useSetPageHeader(

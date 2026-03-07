@@ -4,10 +4,10 @@ import type {
 	StepUpdateDto,
 	UpdateWorkflowDto,
 	WorkflowResponseDto,
-} from "@novu/shared";
-import { SeverityLevelEnum, StepTypeEnum } from "@novu/shared";
+} from "@/shared";
+import { SeverityLevelEnum, StepTypeEnum } from "@/shared";
 import { flatten } from "flat";
-import { ERROR_AVATAR, INFO_AVATAR, WARNING_AVATAR } from "@/utils/avatars";
+import { ERROR_AVATAR, INFO_AVATAR, WARNING_AVATAR } from "@/shared/lib/avatars";
 import {
 	DEFAULT_CONTROL_DELAY_AMOUNT,
 	DEFAULT_CONTROL_DELAY_CRON,
@@ -23,7 +23,7 @@ import {
 	DEFAULT_CONTROL_THROTTLE_UNIT,
 	DEFAULT_CONTROL_THROTTLE_WINDOW,
 	STEP_TYPE_LABELS,
-} from "@/utils/constants";
+} from "@/shared/lib/constants";
 
 export const getFirstErrorMessage = (
 	issues?: {

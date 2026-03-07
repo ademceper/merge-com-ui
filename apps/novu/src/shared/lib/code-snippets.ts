@@ -1,5 +1,5 @@
-import { API_HOSTNAME, IS_EU, IS_SELF_HOSTED } from "@/config";
-import { apiHostnameManager } from "@/utils/api-hostname-manager";
+import { API_HOSTNAME, IS_EU, IS_SELF_HOSTED } from "@/shared/config";
+import { apiHostnameManager } from "@/shared/lib/api-hostname-manager";
 
 export type CodeSnippet = {
 	identifier: string;

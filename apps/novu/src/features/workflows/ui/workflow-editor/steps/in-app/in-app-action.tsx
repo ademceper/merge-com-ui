@@ -1,5 +1,5 @@
-import { InAppActionDropdown } from "@/components/in-app-action-dropdown";
-import { useSaveForm } from "@/features/workflows/components/workflow-editor/steps/save-form-context";
+import { InAppActionDropdown } from "@/features/workflows/ui/in-app-action-dropdown";
+import { useSaveForm } from "@/features/workflows/ui/workflow-editor/steps/save-form-context";
 
 export const InAppAction = () => {
 	const { saveForm } = useSaveForm();

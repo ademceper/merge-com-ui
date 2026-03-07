@@ -1,8 +1,8 @@
 import { Skeleton } from "@merge-rd/ui/components/skeleton";
 import { CodeBlock, Eye, Gear, PencilSimple } from "@phosphor-icons/react";
-import { CompactButton } from "@/components/primitives/button-compact";
-import { PanelHeader } from "@/features/workflows/components/workflow-editor/steps/layout/panel-header";
-import { ResizableLayout } from "@/features/workflows/components/workflow-editor/steps/layout/resizable-layout";
+import { CompactButton } from "@/shared/ui/primitives/button-compact";
+import { PanelHeader } from "@/features/workflows/ui/workflow-editor/steps/layout/panel-header";
+import { ResizableLayout } from "@/features/workflows/ui/workflow-editor/steps/layout/resizable-layout";
 
 export const LayoutEditorSkeleton = () => {
 	return (

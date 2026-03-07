@@ -1,12 +1,12 @@
-import type { JSONSchemaDefinition } from "@novu/shared";
+import type { JSONSchemaDefinition } from "@/shared";
 import type { JSONSchema7 } from "json-schema";
 import merge from "lodash.merge";
 import { useMemo } from "react";
-import { useDynamicPreviewSchema } from "@/hooks/use-dynamic-preview-schema";
+import { useDynamicPreviewSchema } from "@/widgets/lib/use-dynamic-preview-schema";
 import {
 	type EnhancedParsedVariables,
 	parseStepVariables,
-} from "@/utils/parseStepVariables";
+} from "@/shared/lib/parseStepVariables";
 
 export function useParseVariables(
 	schema?: JSONSchemaDefinition | JSONSchema7,

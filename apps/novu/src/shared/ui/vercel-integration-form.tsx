@@ -2,16 +2,16 @@ import { Button } from "@merge-rd/ui/components/button";
 import { Plus } from "@phosphor-icons/react";
 import { useState } from "react";
 import { useFieldArray, useForm } from "react-hook-form";
-import type { GetVercelConfigurationDetails } from "@/api/partner-integrations";
-import { Form, FormRoot } from "@/components/primitives/form/form";
+import type { GetVercelConfigurationDetails } from "@/entities/integration/api/partner-integrations";
+import { Form, FormRoot } from "@/shared/ui/primitives/form/form";
 import {
 	Select,
 	SelectContent,
 	SelectItem,
 	SelectTrigger,
 	SelectValue,
-} from "@/components/primitives/select";
-import { useUpdateVercelIntegration } from "@/hooks/use-update-vercel-integration";
+} from "@/shared/ui/primitives/select";
+import { useUpdateVercelIntegration } from "@/shared/lib/hooks/use-update-vercel-integration";
 import { Delete } from "./icons/delete";
 import { MultiSelect } from "./primitives/multi-select";
 

@@ -1,5 +1,5 @@
 import { useLocation, useParams } from "react-router-dom";
-import { useFetchWorkflow } from "@/features/workflows/hooks/use-fetch-workflow";
+import { useFetchWorkflow } from "@/features/workflows/lib/use-fetch-workflow";
 
 export function useWorkflowEditorContext() {
 	const location = useLocation();

@@ -1,11 +1,11 @@
-import type { SeverityLevelEnum } from "../../consts";
+import type { SeverityLevelEnum } from "../../config/consts";
 import type {
 	ResourceOriginEnum,
 	StepTypeEnum,
 	WorkflowCreationSourceEnum,
 	WorkflowPreferences,
-} from "../../types";
-import type { Slug } from "../../types/utils";
+} from "../../model";
+import type { Slug } from "../../model/utils";
 import type { RuntimeIssue } from "../../utils/issues";
 import type { JSONSchemaDto } from "./json-schema-dto";
 import type {

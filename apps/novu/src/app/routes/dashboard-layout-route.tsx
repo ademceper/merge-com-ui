@@ -4,12 +4,12 @@ import {
 	SidebarProvider,
 } from "@merge-rd/ui/components/sidebar";
 import { Outlet } from "react-router-dom";
-import { HeaderNavigation } from "@/components/header-navigation/header-navigation";
-import { NovuAppSidebar } from "@/components/novu-app-sidebar";
+import { HeaderNavigation } from "@/widgets/header-navigation/header-navigation";
+import { NovuAppSidebar } from "@/widgets/novu-app-sidebar";
 import {
 	PageHeaderProvider,
 	usePageHeaderContext,
-} from "@/context/page-header";
+} from "@/app/context/page-header";
 
 function DashboardLayoutContent() {
 	const { startItems } = usePageHeaderContext();

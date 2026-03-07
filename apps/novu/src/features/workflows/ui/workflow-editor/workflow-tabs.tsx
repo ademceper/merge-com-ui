@@ -19,7 +19,7 @@ import {
 	FeatureFlagsKeysEnum,
 	PermissionsEnum,
 	ResourceOriginEnum,
-} from "@novu/shared";
+} from "@/shared";
 import { CaretDown, Code, Copy, PlayCircle } from "@phosphor-icons/react";
 import { useCallback, useMemo, useState } from "react";
 import { Link, useMatch, useNavigate, useParams } from "react-router-dom";
@@ -27,33 +27,33 @@ import {
 	AiChatProvider,
 	AiSidekickPanel,
 	useAiChat,
-} from "@/components/ai-sidekick";
-import { SidekickToast } from "@/components/ai-sidekick/sidekick-toast";
+} from "@/widgets/ai-sidekick";
+import { SidekickToast } from "@/widgets/ai-sidekick/sidekick-toast";
 import {
 	ButtonGroupItem,
 	ButtonGroupRoot,
-} from "@/components/primitives/button-group";
-import { ToastClose, ToastIcon } from "@/components/primitives/sonner";
+} from "@/shared/ui/primitives/button-group";
+import { ToastClose, ToastIcon } from "@/shared/ui/primitives/sonner";
 import {
 	showErrorToast,
 	showSuccessToast,
 	showToast,
-} from "@/components/primitives/sonner-helpers";
-import { useEnvironment } from "@/context/environment/hooks";
-import { useFetchApiKeys } from "@/features/settings/hooks/use-fetch-api-keys";
-import { DeleteWorkflowDialog } from "@/features/workflows/components/delete-workflow-dialog";
-import { useWorkflow } from "@/features/workflows/components/workflow-editor/workflow-provider";
-import { useDeleteWorkflow } from "@/features/workflows/hooks/use-delete-workflow";
-import { useTriggerWorkflow } from "@/features/workflows/hooks/use-trigger-workflow";
-import { useFeatureFlag } from "@/hooks/use-feature-flag";
-import { useHasPermission } from "@/hooks/use-has-permission";
-import { useIsPayloadSchemaEnabled } from "@/hooks/use-is-payload-schema-enabled";
+} from "@/shared/ui/primitives/sonner-helpers";
+import { useEnvironment } from "@/app/context/environment/hooks";
+import { useFetchApiKeys } from "@/features/settings/lib/use-fetch-api-keys";
+import { DeleteWorkflowDialog } from "@/features/workflows/ui/delete-workflow-dialog";
+import { useWorkflow } from "@/features/workflows/ui/workflow-editor/workflow-provider";
+import { useDeleteWorkflow } from "@/features/workflows/lib/use-delete-workflow";
+import { useTriggerWorkflow } from "@/features/workflows/lib/use-trigger-workflow";
+import { useFeatureFlag } from "@/shared/lib/hooks/use-feature-flag";
+import { useHasPermission } from "@/shared/lib/hooks/use-has-permission";
+import { useIsPayloadSchemaEnabled } from "@/features/workflows/lib/use-is-payload-schema-enabled";
 import {
 	generatePostmanCollection,
 	generateTriggerCurlCommand,
-} from "@/utils/code-snippets";
-import { Protect } from "@/utils/protect";
-import { buildRoute, ROUTES } from "@/utils/routes";
+} from "@/shared/lib/code-snippets";
+import { Protect } from "@/shared/lib/protect";
+import { buildRoute, ROUTES } from "@/shared/lib/routes";
 import { ResizableLayout } from "./steps/layout/resizable-layout";
 import {
 	getInitialPayload,

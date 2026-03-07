@@ -8,7 +8,7 @@ import {
 	EnvironmentTypeEnum,
 	PermissionsEnum,
 	ResourceOriginEnum,
-} from "@novu/shared";
+} from "@/shared";
 import { Gear, Trash } from "@phosphor-icons/react";
 import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
 import { formatDistanceToNow } from "date-fns";
@@ -17,7 +17,7 @@ import { useForm } from "react-hook-form";
 import { useBlocker, useNavigate } from "react-router-dom";
 import type { ExternalToast } from "sonner";
 import type { z } from "zod";
-import { CopyButton } from "@/components/primitives/copy-button";
+import { CopyButton } from "@/shared/ui/primitives/copy-button";
 import {
 	Form,
 	FormControl,
@@ -26,9 +26,9 @@ import {
 	FormLabel,
 	FormMessage,
 	FormRoot,
-} from "@/components/primitives/form/form";
-import { Input } from "@/components/primitives/input";
-import { PermissionButton } from "@/components/primitives/permission-button";
+} from "@/shared/ui/primitives/form/form";
+import { Input } from "@/shared/ui/primitives/input";
+import { PermissionButton } from "@/shared/ui/primitives/permission-button";
 import {
 	Sheet,
 	SheetContent,
@@ -37,22 +37,22 @@ import {
 	SheetHeader,
 	SheetMain,
 	SheetTitle,
-} from "@/components/primitives/sheet";
-import { ToastIcon } from "@/components/primitives/sonner";
+} from "@/shared/ui/primitives/sheet";
+import { ToastIcon } from "@/shared/ui/primitives/sonner";
 import {
 	showErrorToast,
 	showSuccessToast,
 	showToast,
-} from "@/components/primitives/sonner-helpers";
-import TruncatedText from "@/components/truncated-text";
-import { UnsavedChangesAlertDialog } from "@/components/unsaved-changes-alert-dialog";
-import { useEnvironment } from "@/context/environment/hooks";
-import { useDeleteLayout } from "@/features/layouts/hooks/use-delete-layout";
-import { useUpdateLayout } from "@/features/layouts/hooks/use-update-layout";
-import { TranslationToggleSection } from "@/features/workflows/components/workflow-editor/translation-toggle-section";
-import { useBeforeUnload } from "@/hooks/use-before-unload";
-import { LocalizationResourceEnum } from "@/types/translations";
-import { buildRoute, ROUTES } from "@/utils/routes";
+} from "@/shared/ui/primitives/sonner-helpers";
+import TruncatedText from "@/shared/ui/truncated-text";
+import { UnsavedChangesAlertDialog } from "@/shared/ui/unsaved-changes-alert-dialog";
+import { useEnvironment } from "@/app/context/environment/hooks";
+import { useDeleteLayout } from "@/features/layouts/lib/use-delete-layout";
+import { useUpdateLayout } from "@/features/layouts/lib/use-update-layout";
+import { TranslationToggleSection } from "@/features/workflows/ui/workflow-editor/translation-toggle-section";
+import { useBeforeUnload } from "@/shared/lib/hooks/use-before-unload";
+import { LocalizationResourceEnum } from "@/shared/model/translations";
+import { buildRoute, ROUTES } from "@/shared/lib/routes";
 import { DeleteLayoutDialog } from "./delete-layout-dialog";
 import { useLayoutEditor } from "./layout-editor-provider";
 import { layoutSchema } from "./schema";

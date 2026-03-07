@@ -20,7 +20,7 @@ import {
 	type IEnvironment,
 	PermissionsEnum,
 	type WorkflowListResponseDto,
-} from "@novu/shared";
+} from "@/shared";
 import {
 	DotsThree,
 	Files,
@@ -38,47 +38,47 @@ import { FaCode } from "react-icons/fa6";
 import { LuBookUp2 } from "react-icons/lu";
 import { Link, useNavigate } from "react-router-dom";
 import type { ExternalToast } from "sonner";
-import { ConfirmationModal } from "@/components/confirmation-modal";
-import { TranslatedWorkflowIcon } from "@/components/icons/translated-workflow";
-import { CompactButton } from "@/components/primitives/button-compact";
-import { CopyButton } from "@/components/primitives/copy-button";
-import { ToastIcon } from "@/components/primitives/sonner";
-import { showToast } from "@/components/primitives/sonner-helpers";
+import { ConfirmationModal } from "@/shared/ui/confirmation-modal";
+import { TranslatedWorkflowIcon } from "@/shared/ui/icons/translated-workflow";
+import { CompactButton } from "@/shared/ui/primitives/button-compact";
+import { CopyButton } from "@/shared/ui/primitives/copy-button";
+import { ToastIcon } from "@/shared/ui/primitives/sonner";
+import { showToast } from "@/shared/ui/primitives/sonner-helpers";
 import {
 	Tooltip,
 	TooltipContent,
 	TooltipPortal,
 	TooltipTrigger,
-} from "@/components/primitives/tooltip";
-import { TimeDisplayHoverCard } from "@/components/time-display-hover-card";
-import TruncatedText from "@/components/truncated-text";
+} from "@/shared/ui/primitives/tooltip";
+import { TimeDisplayHoverCard } from "@/shared/ui/time-display-hover-card";
+import TruncatedText from "@/shared/ui/truncated-text";
 import {
 	IS_SELF_HOSTED,
 	LEGACY_DASHBOARD_URL,
 	SELF_HOSTED_UPGRADE_REDIRECT_URL,
-} from "@/config";
+} from "@/shared/config";
 import {
 	useEnvironment,
 	useFetchEnvironments,
-} from "@/context/environment/hooks";
-import { DeleteWorkflowDialog } from "@/features/workflows/components/delete-workflow-dialog";
+} from "@/app/context/environment/hooks";
+import { DeleteWorkflowDialog } from "@/features/workflows/ui/delete-workflow-dialog";
 import {
 	PAUSE_MODAL_TITLE,
 	PauseModalDescription,
-} from "@/features/workflows/components/pause-workflow-dialog";
-import { WorkflowStatus } from "@/features/workflows/components/workflow-status";
-import { WorkflowSteps } from "@/features/workflows/components/workflow-steps";
-import { WorkflowTags } from "@/features/workflows/components/workflow-tags";
-import { useDeleteWorkflow } from "@/features/workflows/hooks/use-delete-workflow";
-import { usePatchWorkflow } from "@/features/workflows/hooks/use-patch-workflow";
-import { useSyncWorkflow } from "@/features/workflows/hooks/use-sync-workflow";
-import { useFeatureFlag } from "@/hooks/use-feature-flag";
-import { useHasPermission } from "@/hooks/use-has-permission";
-import { LocalizationResourceEnum } from "@/types/translations";
-import { ResourceOriginEnum, WorkflowStatusEnum } from "@/utils/enums";
-import { formatDateSimple } from "@/utils/format-date";
-import { Protect } from "@/utils/protect";
-import { buildRoute, ROUTES } from "@/utils/routes";
+} from "@/features/workflows/ui/pause-workflow-dialog";
+import { WorkflowStatus } from "@/features/workflows/ui/workflow-status";
+import { WorkflowSteps } from "@/features/workflows/ui/workflow-steps";
+import { WorkflowTags } from "@/features/workflows/ui/workflow-tags";
+import { useDeleteWorkflow } from "@/features/workflows/lib/use-delete-workflow";
+import { usePatchWorkflow } from "@/features/workflows/lib/use-patch-workflow";
+import { useSyncWorkflow } from "@/features/workflows/lib/use-sync-workflow";
+import { useFeatureFlag } from "@/shared/lib/hooks/use-feature-flag";
+import { useHasPermission } from "@/shared/lib/hooks/use-has-permission";
+import { LocalizationResourceEnum } from "@/shared/model/translations";
+import { ResourceOriginEnum, WorkflowStatusEnum } from "@/shared/lib/enums";
+import { formatDateSimple } from "@/shared/lib/format-date";
+import { Protect } from "@/shared/lib/protect";
+import { buildRoute, ROUTES } from "@/shared/lib/routes";
 
 // Local type definition for step issues until the shared types are updated
 type RuntimeIssue = {

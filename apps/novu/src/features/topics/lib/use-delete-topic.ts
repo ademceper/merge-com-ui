@@ -1,15 +1,15 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import type { ExternalToast } from "sonner";
-import { deleteTopic } from "@/api/topics";
+import { deleteTopic } from "@/entities/topic/api/topics";
 import {
 	showErrorToast,
 	showSuccessToast,
-} from "@/components/primitives/sonner-helpers";
+} from "@/shared/ui/primitives/sonner-helpers";
 import {
 	requireEnvironment,
 	useEnvironment,
-} from "@/context/environment/hooks";
-import { QueryKeys } from "@/utils/query-keys";
+} from "@/app/context/environment/hooks";
+import { QueryKeys } from "@/shared/lib/query-keys";
 
 const toastOptions: ExternalToast = {
 	position: "bottom-right",

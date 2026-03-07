@@ -2,8 +2,8 @@ import {
 	UiComponentEnum,
 	type UiSchema,
 	UiSchemaGroupEnum,
-} from "@novu/shared";
-import { EmailPreviewHeader } from "@/features/workflows/components/workflow-editor/steps/email/email-preview";
+} from "@/shared";
+import { EmailPreviewHeader } from "@/features/workflows/ui/workflow-editor/steps/email/email-preview";
 import { getLayoutComponentByType } from "./component-utils";
 
 type EmailEditorProps = { uiSchema: UiSchema };

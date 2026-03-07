@@ -5,11 +5,11 @@ import {
 	SheetContent,
 	SheetDescription,
 	SheetTitle,
-} from "@/components/primitives/sheet";
-import { VisuallyHidden } from "@/components/primitives/visually-hidden";
-import { UnsavedChangesAlertDialog } from "@/components/unsaved-changes-alert-dialog";
-import { useFetchTranslationGroup } from "@/features/translations/hooks/use-fetch-translation-group";
-import type { LocalizationResourceEnum } from "@/types/translations";
+} from "@/shared/ui/primitives/sheet";
+import { VisuallyHidden } from "@/shared/ui/primitives/visually-hidden";
+import { UnsavedChangesAlertDialog } from "@/shared/ui/unsaved-changes-alert-dialog";
+import { useFetchTranslationGroup } from "@/features/translations/lib/use-fetch-translation-group";
+import type { LocalizationResourceEnum } from "@/shared/model/translations";
 import { EditorPanelSkeleton } from "./editor-panel";
 import { LocaleListSkeleton } from "./locale-list";
 import {

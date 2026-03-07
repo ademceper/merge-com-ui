@@ -1,6 +1,6 @@
 import { type UIMessage, useChat as useChatStream } from "@ai-sdk/react";
 import { getToken } from "@merge-rd/auth";
-import type { AiAgentTypeEnum } from "@novu/shared";
+import type { AiAgentTypeEnum } from "@/shared";
 import {
 	type ChatOnDataCallback,
 	type ChatOnFinishCallback,
@@ -11,8 +11,8 @@ import {
 	type UITools,
 } from "ai";
 import { useCallback, useMemo, useState } from "react";
-import { getChatStreamUrl } from "@/api/ai";
-import { useEnvironment } from "@/context/environment/hooks";
+import { getChatStreamUrl } from "@/entities/ai/api/ai";
+import { useEnvironment } from "@/app/context/environment/hooks";
 import { useDataRef } from "./use-data-ref";
 
 type UseAiChatOptions<

@@ -1,4 +1,4 @@
-import type { CreateLayoutDto, LayoutResponseDto } from "@novu/shared";
+import type { CreateLayoutDto, LayoutResponseDto } from "@/shared";
 import {
 	type UseMutationOptions,
 	useMutation,
@@ -6,10 +6,10 @@ import {
 } from "@tanstack/react-query";
 import { useState } from "react";
 
-import { createLayout } from "@/api/layouts";
-import { useEnvironment } from "@/context/environment/hooks";
-import { showErrorToast } from "@/features/workflows/components/workflow-editor/toasts";
-import { QueryKeys } from "@/utils/query-keys";
+import { createLayout } from "@/entities/layout/api/layouts";
+import { useEnvironment } from "@/app/context/environment/hooks";
+import { showErrorToast } from "@/features/workflows/ui/workflow-editor/toasts";
+import { QueryKeys } from "@/shared/lib/query-keys";
 
 export function useCreateLayout(
 	options?: UseMutationOptions<LayoutResponseDto, unknown, CreateLayoutDto>,

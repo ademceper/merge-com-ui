@@ -4,7 +4,7 @@ import {
 	ResourceOriginEnum,
 	type StepResponseDto,
 	type WorkflowResponseDto,
-} from "@novu/shared";
+} from "@/shared";
 import {
 	createContext,
 	type ReactNode,
@@ -14,8 +14,8 @@ import {
 	useState,
 } from "react";
 import { useFormContext } from "react-hook-form";
-import { useFetchOrganizationSettings } from "@/features/settings/hooks/use-fetch-organization-settings";
-import { useEditorPreview } from "@/features/workflows/components/workflow-editor/steps/use-editor-preview";
+import { useFetchOrganizationSettings } from "@/features/settings/lib/use-fetch-organization-settings";
+import { useEditorPreview } from "@/features/workflows/ui/workflow-editor/steps/use-editor-preview";
 
 type StepEditorContextType = {
 	workflow: WorkflowResponseDto;

@@ -1,7 +1,7 @@
 import { Tabs, TabsList, TabsTrigger } from "@merge-rd/ui/components/tabs";
 import { AnimatePresence, motion } from "motion/react";
-import { useTelemetry } from "@/hooks/use-telemetry";
-import { TelemetryEvent } from "@/utils/telemetry";
+import { useTelemetry } from "@/shared/lib/hooks/use-telemetry";
+import { TelemetryEvent } from "@/shared/lib/telemetry";
 import {
 	FrameworkCliInstructions,
 	FrameworkInstructions,

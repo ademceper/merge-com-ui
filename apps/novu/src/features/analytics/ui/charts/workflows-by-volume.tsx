@@ -2,13 +2,13 @@ import { Skeleton } from "@merge-rd/ui/components/skeleton";
 import { Path } from "@phosphor-icons/react";
 import { useCallback, useMemo } from "react";
 import { Bar, BarChart, Cell, XAxis, YAxis } from "recharts";
-import type { WorkflowVolumeDataPoint } from "@/api/activity";
+import type { WorkflowVolumeDataPoint } from "@/entities/activity/api/activity";
 import {
 	type ChartConfig,
 	ChartContainer,
 	ChartTooltip,
 	NovuTooltip,
-} from "@/components/primitives/chart";
+} from "@/shared/ui/primitives/chart";
 import { ANALYTICS_TOOLTIPS } from "../constants/analytics-tooltips";
 import { createVolumeBasedHasDataChecker } from "../utils/chart-validation";
 import { generateDummyWorkflowData } from "./chart-dummy-data";

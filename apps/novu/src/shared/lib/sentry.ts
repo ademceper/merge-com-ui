@@ -6,7 +6,7 @@ import {
 	useLocation,
 	useNavigationType,
 } from "react-router-dom";
-import { MODE, SENTRY_DSN } from "@/config";
+import { MODE, SENTRY_DSN } from "@/shared/config";
 
 export const initializeSentry = () => {
 	if (SENTRY_DSN) {

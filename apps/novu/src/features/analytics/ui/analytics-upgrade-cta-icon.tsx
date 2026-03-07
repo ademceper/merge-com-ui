@@ -1,12 +1,12 @@
 import { Link } from "react-router-dom";
-import { Badge } from "@/components/primitives/badge";
+import { Badge } from "@/shared/ui/primitives/badge";
 import {
 	Tooltip,
 	TooltipContent,
 	TooltipPortal,
 	TooltipTrigger,
-} from "@/components/primitives/tooltip";
-import { ROUTES } from "@/utils/routes";
+} from "@/shared/ui/primitives/tooltip";
+import { ROUTES } from "@/shared/lib/routes";
 
 export function AnalyticsUpgradeCtaIcon() {
 	return (

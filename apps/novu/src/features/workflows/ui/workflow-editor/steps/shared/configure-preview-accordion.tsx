@@ -5,7 +5,7 @@ import {
 	AccordionTrigger,
 } from "@merge-rd/ui/components/accordion";
 import { Button } from "@merge-rd/ui/components/button";
-import type { WorkflowResponseDto } from "@novu/shared";
+import type { WorkflowResponseDto } from "@/shared";
 import { ListBullets } from "@phosphor-icons/react";
 import { loadLanguage } from "@uiw/codemirror-extensions-langs";
 import type { JSONSchema7 } from "json-schema";
@@ -16,12 +16,12 @@ import {
 	useRef,
 	useState,
 } from "react";
-import { Code2 } from "@/components/icons/code-2";
-import { Editor } from "@/components/primitives/editor";
-import { useCreateVariable } from "@/components/variable/hooks/use-create-variable";
-import { PayloadSchemaDrawer } from "@/features/workflows/components/workflow-editor/payload-schema-drawer";
-import { useIsPayloadSchemaEnabled } from "@/hooks/use-is-payload-schema-enabled";
-import { parse, stringify } from "@/utils/json";
+import { Code2 } from "@/shared/ui/icons/code-2";
+import { Editor } from "@/shared/ui/primitives/editor";
+import { useCreateVariable } from "@/shared/ui/variable/hooks/use-create-variable";
+import { PayloadSchemaDrawer } from "@/features/workflows/ui/workflow-editor/payload-schema-drawer";
+import { useIsPayloadSchemaEnabled } from "@/features/workflows/lib/use-is-payload-schema-enabled";
+import { parse, stringify } from "@/shared/lib/json";
 import { EditableJsonViewer } from "./editable-json-viewer/editable-json-viewer";
 
 const extensions = [loadLanguage("json")?.extension ?? []];

@@ -1,9 +1,9 @@
 import { useMutation } from "@tanstack/react-query";
 import mixpanel from "mixpanel-browser";
 import { useCallback } from "react";
-import { measure } from "@/api/telemetry";
-import { IS_SELF_HOSTED, MIXPANEL_KEY } from "@/config";
-import type { TelemetryEvent } from "@/utils/telemetry";
+import { measure } from "@/shared/api/telemetry";
+import { IS_SELF_HOSTED, MIXPANEL_KEY } from "@/shared/config";
+import type { TelemetryEvent } from "@/shared/lib/telemetry";
 
 export const useTelemetry = () => {
 	const { mutate } = useMutation<

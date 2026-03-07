@@ -2,7 +2,7 @@ import {
 	ResourceOriginEnum,
 	type StepCreateDto,
 	type WorkflowResponseDto,
-} from "@novu/shared";
+} from "@/shared";
 import {
 	type Node,
 	type ReactFlowInstance,
@@ -11,18 +11,18 @@ import {
 } from "@xyflow/react";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useEnvironment } from "@/context/environment/hooks";
-import { useFetchLayouts } from "@/features/layouts/hooks/use-fetch-layouts";
-import { useDataRef } from "@/hooks/use-data-ref";
+import { useEnvironment } from "@/app/context/environment/hooks";
+import { useFetchLayouts } from "@/features/layouts/lib/use-fetch-layouts";
+import { useDataRef } from "@/shared/lib/hooks/use-data-ref";
 import {
 	INLINE_CONFIGURABLE_STEP_TYPES,
 	STEP_TYPE_LABELS,
 	TEMPLATE_CONFIGURABLE_STEP_TYPES,
-} from "@/utils/constants";
-import { getIdFromSlug, STEP_DIVIDER } from "@/utils/id-utils";
-import { buildRoute, ROUTES } from "@/utils/routes";
-import type { Step } from "@/utils/types";
-import { generateUUID } from "@/utils/uuid";
+} from "@/shared/lib/constants";
+import { getIdFromSlug, STEP_DIVIDER } from "@/shared/lib/id-utils";
+import { buildRoute, ROUTES } from "@/shared/lib/routes";
+import type { Step } from "@/shared/lib/types";
+import { generateUUID } from "@/shared/lib/uuid";
 import type { AddNodeEdgeType } from "./edges";
 import {
 	createAddNode,

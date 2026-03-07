@@ -2,20 +2,20 @@ import { Button } from "@merge-rd/ui/components/button";
 import { Checkbox } from "@merge-rd/ui/components/checkbox";
 import { cn } from "@merge-rd/ui/lib/utils";
 import type { ScheduleDto } from "@novu/api/models/components";
-import type { Schedule, WeeklySchedule } from "@novu/shared";
+import type { Schedule, WeeklySchedule } from "@/shared";
 import { Copy } from "@phosphor-icons/react";
 import { useCallback, useMemo, useState } from "react";
 import {
 	Popover,
 	PopoverContent,
 	PopoverTrigger,
-} from "@/components/primitives/popover";
+} from "@/shared/ui/primitives/popover";
 import {
 	Tooltip,
 	TooltipContent,
 	TooltipTrigger,
-} from "@/components/primitives/tooltip";
-import { capitalize } from "@/utils/string";
+} from "@/shared/ui/primitives/tooltip";
+import { capitalize } from "@/shared/lib/string";
 import { weekDays } from "./utils";
 
 type DayScheduleCopyProps = {

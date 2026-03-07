@@ -1,11 +1,11 @@
 import { useOrganization } from "@merge-rd/auth";
 import { useEffect, useRef, useState } from "react";
-import { RegionSelector, useRegion } from "@/context/region";
-import { useTelemetry } from "../../hooks/use-telemetry";
-import { ROUTES } from "../../utils/routes";
-import { TelemetryEvent } from "../../utils/telemetry";
-import { UsecasePlaygroundHeader } from "../usecase-playground-header";
-import { AuthCard } from "./auth-card";
+import { RegionSelector, useRegion } from "@/app/context/region";
+import { useTelemetry } from "@/shared/lib/hooks/use-telemetry";
+import { ROUTES } from "@/shared/lib/routes";
+import { TelemetryEvent } from "@/shared/lib/telemetry";
+import { UsecasePlaygroundHeader } from "@/widgets/usecase-playground-header";
+import { AuthCard } from "@/shared/ui/auth/auth-card";
 
 // Constants
 const HEADER_CONFIG = {

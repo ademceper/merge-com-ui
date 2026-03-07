@@ -9,7 +9,7 @@ import {
 	Tooltip,
 	TooltipContent,
 	TooltipTrigger,
-} from "@/components/primitives/tooltip";
+} from "@/shared/ui/primitives/tooltip";
 import { ACCORDION_STYLES } from "../constants/preview-context.constants";
 import { EditableJsonViewer } from "../shared/editable-json-viewer/editable-json-viewer";
 import type { StepResultsSectionProps } from "../types/preview-context.types";

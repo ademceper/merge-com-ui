@@ -1,8 +1,8 @@
-import type { IApiKey } from "@novu/shared";
+import type { IApiKey } from "@/shared";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { getApiKeys, regenerateApiKeys } from "@/api/environments";
-import { useEnvironment } from "@/context/environment/hooks";
-import { QueryKeys } from "@/utils/query-keys";
+import { getApiKeys, regenerateApiKeys } from "@/entities/environment/api/environments";
+import { useEnvironment } from "@/app/context/environment/hooks";
+import { QueryKeys } from "@/shared/lib/query-keys";
 
 export const useFetchApiKeys = ({
 	enabled = true,

@@ -7,7 +7,7 @@ import {
 	DialogHeader,
 	DialogTitle,
 } from "@merge-rd/ui/components/dialog";
-import type { IEnvironment } from "@novu/shared";
+import type { IEnvironment } from "@/shared";
 
 interface DeleteEnvironmentDialogProps {
 	environment?: IEnvironment;

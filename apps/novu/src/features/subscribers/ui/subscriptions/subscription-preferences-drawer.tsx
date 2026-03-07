@@ -5,9 +5,9 @@ import {
 	SheetContent,
 	SheetDescription,
 	SheetTitle,
-} from "@/components/primitives/sheet";
-import { VisuallyHidden } from "@/components/primitives/visually-hidden";
-import { useGetSubscription } from "@/features/subscribers/hooks/use-get-subscription";
+} from "@/shared/ui/primitives/sheet";
+import { VisuallyHidden } from "@/shared/ui/primitives/visually-hidden";
+import { useGetSubscription } from "@/features/subscribers/lib/use-get-subscription";
 import { SubscriptionPreferences } from "./subscription-preferences";
 
 type SubscriptionPreferencesDrawerProps = {

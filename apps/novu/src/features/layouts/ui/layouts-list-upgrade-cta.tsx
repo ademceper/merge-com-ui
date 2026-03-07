@@ -10,20 +10,20 @@ import {
 } from "@merge-rd/ui/components/table";
 import { BookBookmark, CaretRight, Sparkle } from "@phosphor-icons/react";
 import { Link, useNavigate } from "react-router-dom";
-import { Badge } from "@/components/primitives/badge";
-import { LinkButton } from "@/components/primitives/button-link";
-import { CopyButton } from "@/components/primitives/copy-button";
-import { TimeDisplayHoverCard } from "@/components/time-display-hover-card";
-import TruncatedText from "@/components/truncated-text";
-import { IS_SELF_HOSTED, SELF_HOSTED_UPGRADE_REDIRECT_URL } from "@/config";
-import { useEnvironment } from "@/context/environment/hooks";
-import { useFetchLayouts } from "@/features/layouts/hooks/use-fetch-layouts";
-import { useLayoutsUrlState } from "@/features/layouts/hooks/use-layouts-url-state";
-import { useTelemetry } from "@/hooks/use-telemetry";
-import { formatDateSimple } from "@/utils/format-date";
-import { buildRoute, ROUTES } from "@/utils/routes";
-import { TelemetryEvent } from "@/utils/telemetry";
-import { openInNewTab } from "@/utils/url";
+import { Badge } from "@/shared/ui/primitives/badge";
+import { LinkButton } from "@/shared/ui/primitives/button-link";
+import { CopyButton } from "@/shared/ui/primitives/copy-button";
+import { TimeDisplayHoverCard } from "@/shared/ui/time-display-hover-card";
+import TruncatedText from "@/shared/ui/truncated-text";
+import { IS_SELF_HOSTED, SELF_HOSTED_UPGRADE_REDIRECT_URL } from "@/shared/config";
+import { useEnvironment } from "@/app/context/environment/hooks";
+import { useFetchLayouts } from "@/features/layouts/lib/use-fetch-layouts";
+import { useLayoutsUrlState } from "@/features/layouts/lib/use-layouts-url-state";
+import { useTelemetry } from "@/shared/lib/hooks/use-telemetry";
+import { formatDateSimple } from "@/shared/lib/format-date";
+import { buildRoute, ROUTES } from "@/shared/lib/routes";
+import { TelemetryEvent } from "@/shared/lib/telemetry";
+import { openInNewTab } from "@/shared/lib/url";
 import { EmptyLayoutsIllustration } from "./empty-layouts-illustration";
 
 export const LayoutsListUpgradeCta = () => {

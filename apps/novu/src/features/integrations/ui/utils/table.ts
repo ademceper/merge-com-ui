@@ -1,4 +1,4 @@
-import type { IEnvironment, IIntegration } from "@novu/shared";
+import type { IEnvironment, IIntegration } from "@/shared";
 import type { TableIntegration } from "../types";
 
 export function mapToTableIntegration(

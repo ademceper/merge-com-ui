@@ -6,9 +6,9 @@ import {
 	FormItem,
 	FormLabel,
 	FormMessage,
-} from "@/components/primitives/form/form";
-import { HelpTooltipIndicator } from "@/components/primitives/help-tooltip-indicator";
-import { useSaveForm } from "@/features/workflows/components/workflow-editor/steps/save-form-context";
+} from "@/shared/ui/primitives/form/form";
+import { HelpTooltipIndicator } from "@/shared/ui/primitives/help-tooltip-indicator";
+import { useSaveForm } from "@/features/workflows/ui/workflow-editor/steps/save-form-context";
 
 const fieldKey = "disableOutputSanitization";
 

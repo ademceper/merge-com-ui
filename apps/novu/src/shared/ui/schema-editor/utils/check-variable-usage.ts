@@ -1,5 +1,5 @@
-import type { StepResponseDto } from "@novu/shared";
-import { parseVariable } from "@/utils/liquid";
+import type { StepResponseDto } from "@/shared";
+import { parseVariable } from "@/shared/lib/liquid";
 
 /**
  * Extracts all variables from a string content by finding liquid template syntax

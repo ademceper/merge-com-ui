@@ -1,16 +1,16 @@
-import { DEFAULT_LOCALE } from "@novu/shared";
+import { DEFAULT_LOCALE } from "@/shared";
 import React, { useImperativeHandle, useMemo, useRef } from "react";
 import { useParams } from "react-router-dom";
 import {
 	VariableList,
 	type VariableListRef,
-} from "@/components/variable/variable-list";
-import { useFetchOrganizationSettings } from "@/features/settings/hooks/use-fetch-organization-settings";
+} from "@/shared/ui/variable/variable-list";
+import { useFetchOrganizationSettings } from "@/features/settings/lib/use-fetch-organization-settings";
 import type {
 	LocalizationResourceEnum,
 	TranslationKey,
-} from "@/types/translations";
-import { buildRoute, ROUTES } from "@/utils/routes";
+} from "@/shared/model/translations";
+import { buildRoute, ROUTES } from "@/shared/lib/routes";
 import { NewTranslationKeyPreview } from "./new-translation-key-preview";
 
 export type TranslationKeyItem = {

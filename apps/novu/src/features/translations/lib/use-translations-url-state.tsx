@@ -1,10 +1,10 @@
 import { useCallback, useMemo } from "react";
 import { useSearchParams } from "react-router-dom";
-import type { TranslationsFilter } from "@/api/translations";
+import type { TranslationsFilter } from "@/entities/translation/api/translations";
 import {
 	DEFAULT_TRANSLATIONS_LIMIT,
 	DEFAULT_TRANSLATIONS_OFFSET,
-} from "../components/constants";
+} from "../ui/constants";
 
 export const defaultTranslationsFilter: TranslationsFilter = {
 	query: "",

@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams, useSearchParams } from "react-router-dom";
-import { useEnvironment } from "@/context/environment/hooks";
-import { TranslationDrawer } from "@/features/translations/components/translation-drawer/translation-drawer";
-import { useOnElementUnmount } from "@/hooks/use-on-element-unmount";
-import type { LocalizationResourceEnum } from "@/types/translations";
-import { buildRoute, ROUTES } from "@/utils/routes";
+import { useEnvironment } from "@/app/context/environment/hooks";
+import { TranslationDrawer } from "@/features/translations/ui/translation-drawer/translation-drawer";
+import { useOnElementUnmount } from "@/shared/lib/hooks/use-on-element-unmount";
+import type { LocalizationResourceEnum } from "@/shared/model/translations";
+import { buildRoute, ROUTES } from "@/shared/lib/routes";
 
 export const EditTranslationPage = () => {
 	const { resourceType, resourceId, locale } = useParams<{

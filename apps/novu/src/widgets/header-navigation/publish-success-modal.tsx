@@ -6,11 +6,11 @@ import {
 	DialogDescription,
 	DialogTitle,
 } from "@merge-rd/ui/components/dialog";
-import type { IEnvironment } from "@novu/shared";
+import type { IEnvironment } from "@/shared";
 import { CaretRight, CheckCircle, X } from "@phosphor-icons/react";
-import type { IEnvironmentPublishResponse } from "@/api/environments";
-import { useEnvironment } from "@/context/environment/hooks";
-import { VisuallyHidden } from "../primitives/visually-hidden";
+import type { IEnvironmentPublishResponse } from "@/entities/environment/api/environments";
+import { useEnvironment } from "@/app/context/environment/hooks";
+import { VisuallyHidden } from "@/shared/ui/primitives/visually-hidden";
 
 type PublishSuccessModalProps = {
 	isOpen: boolean;

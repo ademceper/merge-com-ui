@@ -8,9 +8,9 @@ import {
 	FormItem,
 	FormLabel,
 	FormMessage,
-} from "@/components/primitives/form/form";
-import { useSaveForm } from "@/features/workflows/components/workflow-editor/steps/save-form-context";
-import { capitalize } from "@/utils/string";
+} from "@/shared/ui/primitives/form/form";
+import { useSaveForm } from "@/features/workflows/ui/workflow-editor/steps/save-form-context";
+import { capitalize } from "@/shared/lib/string";
 import { getFieldName } from "./template-utils";
 
 export function SwitchWidget(props: WidgetProps) {

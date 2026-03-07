@@ -1,4 +1,4 @@
-import { API_HOSTNAME, WEBSOCKET_HOSTNAME } from "@/config";
+import { API_HOSTNAME, WEBSOCKET_HOSTNAME } from "@/shared/config";
 
 // Global hostname manager for both API and WebSocket endpoints
 class HostnameManager {

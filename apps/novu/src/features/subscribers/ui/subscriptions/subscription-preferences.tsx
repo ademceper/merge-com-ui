@@ -4,11 +4,11 @@ import { cn } from "@merge-rd/ui/lib/utils";
 import { ChatTeardropDots, Pulse, TreeStructure } from "@phosphor-icons/react";
 import { motion } from "motion/react";
 import { useState } from "react";
-import type { TopicSubscriptionDetailsResponse } from "@/api/topics";
-import { CopyButton } from "@/components/primitives/copy-button";
-import TruncatedText from "@/components/truncated-text";
-import { TopicDrawer } from "@/features/topics/components/topic-drawer";
-import { fadeIn } from "@/utils/animation";
+import type { TopicSubscriptionDetailsResponse } from "@/entities/topic/api/topics";
+import { CopyButton } from "@/shared/ui/primitives/copy-button";
+import TruncatedText from "@/shared/ui/truncated-text";
+import { TopicDrawer } from "@/features/topics/ui/topic-drawer";
+import { fadeIn } from "@/shared/lib/animation";
 import { SubscriptionPreferenceRule } from "./subscription-preference-rule";
 
 type SubscriptionPreferencesProps = {

@@ -3,14 +3,14 @@ import { cn } from "@merge-rd/ui/lib/utils";
 import { Code, DotsSixVertical, Question, X } from "@phosphor-icons/react";
 import { Reorder, useDragControls, useMotionValue } from "motion/react";
 import { type ComponentProps, useMemo, useRef } from "react";
-import { Input } from "@/components/primitives/input";
+import { Input } from "@/shared/ui/primitives/input";
 import {
 	Tooltip,
 	TooltipContent,
 	TooltipTrigger,
-} from "@/components/primitives/tooltip";
-import { VariableSelect } from "@/features/workflows/components/conditions-editor/variable-select";
-import type { LiquidVariable } from "@/utils/parseStepVariables";
+} from "@/shared/ui/primitives/tooltip";
+import { VariableSelect } from "@/features/workflows/ui/conditions-editor/variable-select";
+import type { LiquidVariable } from "@/shared/lib/parseStepVariables";
 import { getFilters } from "../constants";
 import type { FilterWithParam } from "../types";
 import { validateEnhancedDigestFilters } from "../utils";

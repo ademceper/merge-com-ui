@@ -3,7 +3,7 @@ import type { CSSProperties } from "react";
 import {
 	getFirstFilterAndItsArgs,
 	validateEnhancedDigestFilters,
-} from "@/components/variable/utils";
+} from "@/shared/ui/variable/utils";
 
 export const DEFAULT_VARIABLE_PILL_HEIGHT = 18;
 

@@ -4,7 +4,7 @@ import {
 	TooltipContent,
 	TooltipPortal,
 	TooltipTrigger,
-} from "@/components/primitives/tooltip";
+} from "@/shared/ui/primitives/tooltip";
 import type { validateEnhancedDigestFilters } from "./utils";
 
 type Props = PropsWithChildren<{

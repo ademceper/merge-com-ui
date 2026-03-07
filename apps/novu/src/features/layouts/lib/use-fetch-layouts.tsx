@@ -1,8 +1,8 @@
-import { DirectionEnum } from "@novu/shared";
+import { DirectionEnum } from "@/shared";
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
-import { getLayouts } from "@/api/layouts";
-import { useEnvironment } from "@/context/environment/hooks";
-import { QueryKeys } from "@/utils/query-keys";
+import { getLayouts } from "@/entities/layout/api/layouts";
+import { useEnvironment } from "@/app/context/environment/hooks";
+import { QueryKeys } from "@/shared/lib/query-keys";
 
 interface UseLayoutsParams {
 	limit?: number;

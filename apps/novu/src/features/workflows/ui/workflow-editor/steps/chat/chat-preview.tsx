@@ -4,9 +4,9 @@ import {
 	ChannelTypeEnum,
 	type ChatRenderOutput,
 	type GeneratePreviewResponseDto,
-} from "@novu/shared";
+} from "@/shared";
 import { PaperPlaneTilt } from "@phosphor-icons/react";
-import { LogoCircle } from "@/components/icons";
+import { LogoCircle } from "@/shared/ui/icons";
 
 export const ChatPreview = ({
 	isPreviewPending,

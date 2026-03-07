@@ -1,7 +1,7 @@
-import { FeatureFlagsKeysEnum } from "@novu/shared";
-import { ExternalLink } from "@/components/shared/external-link";
-import { useStepEditor } from "@/features/workflows/components/workflow-editor/steps/context/step-editor-context";
-import { useFeatureFlag } from "@/hooks/use-feature-flag";
+import { FeatureFlagsKeysEnum } from "@/shared";
+import { ExternalLink } from "@/shared/ui/shared/external-link";
+import { useStepEditor } from "@/features/workflows/ui/workflow-editor/steps/context/step-editor-context";
+import { useFeatureFlag } from "@/shared/lib/hooks/use-feature-flag";
 
 const REACT_EMAIL_DOCS_LINK =
 	"https://docs.novu.co/framework/content/react-email";

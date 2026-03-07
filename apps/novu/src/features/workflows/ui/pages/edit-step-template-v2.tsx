@@ -1,18 +1,18 @@
-import type { StepUpdateDto } from "@novu/shared";
+import type { StepUpdateDto } from "@/shared";
 import { useCallback, useEffect, useMemo } from "react";
 import { useForm } from "react-hook-form";
-import { PageMeta } from "@/components/page-meta";
-import { Form, FormRoot } from "@/components/primitives/form/form";
+import { PageMeta } from "@/shared/ui/page-meta";
+import { Form, FormRoot } from "@/shared/ui/primitives/form/form";
 import {
 	flattenIssues,
 	updateStepInWorkflow,
-} from "@/features/workflows/components/workflow-editor/step-utils";
-import { SaveFormContext } from "@/features/workflows/components/workflow-editor/steps/save-form-context";
-import { StepEditorLayout } from "@/features/workflows/components/workflow-editor/steps/step-editor-layout";
-import { useWorkflow } from "@/features/workflows/components/workflow-editor/workflow-provider";
-import { useDataRef } from "@/hooks/use-data-ref";
-import { useFormAutosave } from "@/hooks/use-form-autosave";
-import { getControlsDefaultValues } from "@/utils/default-values";
+} from "@/features/workflows/ui/workflow-editor/step-utils";
+import { SaveFormContext } from "@/features/workflows/ui/workflow-editor/steps/save-form-context";
+import { StepEditorLayout } from "@/features/workflows/ui/workflow-editor/steps/step-editor-layout";
+import { useWorkflow } from "@/features/workflows/ui/workflow-editor/workflow-provider";
+import { useDataRef } from "@/shared/lib/hooks/use-data-ref";
+import { useFormAutosave } from "@/shared/lib/hooks/use-form-autosave";
+import { getControlsDefaultValues } from "@/shared/lib/default-values";
 
 export function EditStepTemplateV2Page() {
 	const { workflow, update, step } = useWorkflow();

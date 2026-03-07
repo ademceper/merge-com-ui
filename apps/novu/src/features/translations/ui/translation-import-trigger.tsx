@@ -1,6 +1,6 @@
 import { cloneElement, type ReactElement, useCallback, useRef } from "react";
-import { useUploadTranslations } from "@/features/translations/hooks/use-upload-translations";
-import type { TranslationResource } from "@/types/translations";
+import { useUploadTranslations } from "@/features/translations/lib/use-upload-translations";
+import type { TranslationResource } from "@/shared/model/translations";
 import { ACCEPTED_FILE_EXTENSION } from "./constants";
 
 type TranslationImportTriggerProps = {

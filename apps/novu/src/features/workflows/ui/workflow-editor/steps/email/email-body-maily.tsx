@@ -2,38 +2,38 @@ import type { Editor, NodeViewProps } from "@tiptap/core";
 import type { EditorView } from "@uiw/react-codemirror";
 import React, { useCallback, useMemo, useRef } from "react";
 import { useFormContext } from "react-hook-form";
-import { EditorOverlays } from "@/components/editor-overlays";
-import { Maily } from "@/components/maily/maily";
+import { EditorOverlays } from "@/widgets/editor-overlays";
+import { Maily } from "@/shared/ui/maily/maily";
 import {
 	createEditorBlocks,
 	DEFAULT_BLOCK_CONFIG,
-} from "@/components/maily/maily-config";
-import { isMailyJson } from "@/components/maily/maily-utils";
-import type { VariableFrom } from "@/components/maily/types";
+} from "@/shared/ui/maily/maily-config";
+import { isMailyJson } from "@/shared/ui/maily/maily-utils";
+import type { VariableFrom } from "@/shared/ui/maily/types";
 import {
 	MailyVariablesListView,
 	type VariableSuggestionsPopoverRef,
-} from "@/components/maily/views/maily-variables-list-view";
+} from "@/shared/ui/maily/views/maily-variables-list-view";
 import {
 	BubbleMenuVariablePill,
 	NodeVariablePill,
-} from "@/components/maily/views/variable-view";
-import { FormField } from "@/components/primitives/form/form";
-import type { CompletionRange } from "@/components/primitives/variable-editor";
-import { useCreateVariable } from "@/components/variable/hooks/use-create-variable";
-import { useCreateTranslationKey } from "@/features/translations/hooks/use-create-translation-key";
-import { useEditorTranslationOverlay } from "@/features/translations/hooks/use-editor-translation-overlay";
-import { useFetchTranslationKeys } from "@/features/translations/hooks/use-fetch-translation-keys";
-import { useEnhancedVariableValidation } from "@/hooks/use-enhanced-variable-validation";
-import { useParseVariables } from "@/hooks/use-parse-variables";
-import { useTelemetry } from "@/hooks/use-telemetry";
-import type { Variable } from "@/lib/maily-core/extensions";
-import { LocalizationResourceEnum } from "@/types/translations";
+} from "@/shared/ui/maily/views/variable-view";
+import { FormField } from "@/shared/ui/primitives/form/form";
+import type { CompletionRange } from "@/shared/ui/primitives/variable-editor";
+import { useCreateVariable } from "@/shared/ui/variable/hooks/use-create-variable";
+import { useCreateTranslationKey } from "@/features/translations/lib/use-create-translation-key";
+import { useEditorTranslationOverlay } from "@/features/translations/lib/use-editor-translation-overlay";
+import { useFetchTranslationKeys } from "@/features/translations/lib/use-fetch-translation-keys";
+import { useEnhancedVariableValidation } from "@/shared/lib/hooks/use-enhanced-variable-validation";
+import { useParseVariables } from "@/shared/lib/hooks/use-parse-variables";
+import { useTelemetry } from "@/shared/lib/hooks/use-telemetry";
+import type { Variable } from "@/shared/lib/externals/maily-core/extensions";
+import { LocalizationResourceEnum } from "@/shared/model/translations";
 import type {
 	EnhancedParsedVariables,
 	IsAllowedVariable,
 	LiquidVariable,
-} from "@/utils/parseStepVariables";
+} from "@/shared/lib/parseStepVariables";
 import { ControlInput } from "../../control-input";
 import { useWorkflow } from "../../workflow-provider";
 import { useWorkflowSchema } from "../../workflow-schema-provider";

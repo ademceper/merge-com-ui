@@ -16,9 +16,9 @@ import { useForm } from "react-hook-form";
 import { Link } from "react-router-dom";
 import type { ExternalToast } from "sonner";
 import type { z } from "zod";
-import { ConfirmationModal } from "@/components/confirmation-modal";
-import { CopyButton } from "@/components/primitives/copy-button";
-import { Editor } from "@/components/primitives/editor";
+import { ConfirmationModal } from "@/shared/ui/confirmation-modal";
+import { CopyButton } from "@/shared/ui/primitives/copy-button";
+import { Editor } from "@/shared/ui/primitives/editor";
 import {
 	Form,
 	FormControl,
@@ -27,28 +27,28 @@ import {
 	FormLabel,
 	FormMessage,
 	FormRoot,
-} from "@/components/primitives/form/form";
-import { Input, InputRoot } from "@/components/primitives/input";
-import { LocaleSelect } from "@/components/primitives/locale-select";
-import { PhoneInput } from "@/components/primitives/phone-input";
+} from "@/shared/ui/primitives/form/form";
+import { Input, InputRoot } from "@/shared/ui/primitives/input";
+import { LocaleSelect } from "@/shared/ui/primitives/locale-select";
+import { PhoneInput } from "@/shared/ui/primitives/phone-input";
 import {
 	showErrorToast,
 	showSuccessToast,
-} from "@/components/primitives/sonner-helpers";
+} from "@/shared/ui/primitives/sonner-helpers";
 import {
 	Tooltip,
 	TooltipContent,
 	TooltipTrigger,
-} from "@/components/primitives/tooltip";
-import { useDeleteSubscriber } from "@/features/subscribers/hooks/use-delete-subscriber";
-import { useFetchSubscribers } from "@/features/subscribers/hooks/use-fetch-subscribers";
-import { usePatchSubscriber } from "@/features/subscribers/hooks/use-patch-subscriber";
-import { useSubscribersNavigate } from "@/features/subscribers/hooks/use-subscribers-navigate";
-import { useSubscribersUrlState } from "@/features/subscribers/hooks/use-subscribers-url-state";
-import { useTelemetry } from "@/hooks/use-telemetry";
-import { formatDateSimple } from "@/utils/format-date";
-import { QueryKeys } from "@/utils/query-keys";
-import { TelemetryEvent } from "@/utils/telemetry";
+} from "@/shared/ui/primitives/tooltip";
+import { useDeleteSubscriber } from "@/features/subscribers/lib/use-delete-subscriber";
+import { useFetchSubscribers } from "@/features/subscribers/lib/use-fetch-subscribers";
+import { usePatchSubscriber } from "@/features/subscribers/lib/use-patch-subscriber";
+import { useSubscribersNavigate } from "@/features/subscribers/lib/use-subscribers-navigate";
+import { useSubscribersUrlState } from "@/features/subscribers/lib/use-subscribers-url-state";
+import { useTelemetry } from "@/shared/lib/hooks/use-telemetry";
+import { formatDateSimple } from "@/shared/lib/format-date";
+import { QueryKeys } from "@/shared/lib/query-keys";
+import { TelemetryEvent } from "@/shared/lib/telemetry";
 import { SubscriberFormSchema } from "./schema";
 import { TimezoneSelect } from "./timezone-select";
 import { getSubscriberTitle } from "./utils";

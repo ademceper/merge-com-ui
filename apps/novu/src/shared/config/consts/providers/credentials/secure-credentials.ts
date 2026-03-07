@@ -1,4 +1,4 @@
-import { CredentialsKeyEnum } from "../../../types";
+import { CredentialsKeyEnum } from "@/shared/model";
 
 export const secureCredentials: CredentialsKeyEnum[] = [
 	CredentialsKeyEnum.ApiKey,

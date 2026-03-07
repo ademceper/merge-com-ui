@@ -1,4 +1,4 @@
-import { NewLayoutDrawer } from "@/features/layouts/pages/new-layout-drawer";
+import { NewLayoutDrawer } from "@/features/layouts/ui/pages/new-layout-drawer";
 
 export function CreateLayoutPage() {
 	return <NewLayoutDrawer mode="create" />;

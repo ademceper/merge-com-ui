@@ -8,8 +8,8 @@ import {
 	SelectGroup,
 	SelectItem,
 	SelectLabel,
-} from "@/components/primitives/select";
-import { capitalize } from "@/utils/string";
+} from "@/shared/ui/primitives/select";
+import { capitalize } from "@/shared/lib/string";
 
 export const toSelectOptions = (
 	arr: OptionList,

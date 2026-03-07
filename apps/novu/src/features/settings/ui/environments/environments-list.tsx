@@ -22,27 +22,27 @@ import {
 	type IEnvironment,
 	PermissionsEnum,
 	PROTECTED_ENVIRONMENTS,
-} from "@novu/shared";
+} from "@/shared";
 import { DotsThree, Info, Trash } from "@phosphor-icons/react";
 import { useMemo, useState } from "react";
-import { Badge } from "@/components/primitives/badge";
-import { CompactButton } from "@/components/primitives/button-compact";
-import { CopyButton } from "@/components/primitives/copy-button";
-import { EnvironmentBranchIcon } from "@/components/primitives/environment-branch-icon";
+import { Badge } from "@/shared/ui/primitives/badge";
+import { CompactButton } from "@/shared/ui/primitives/button-compact";
+import { CopyButton } from "@/shared/ui/primitives/copy-button";
+import { EnvironmentBranchIcon } from "@/shared/ui/primitives/environment-branch-icon";
 import {
 	showErrorToast,
 	showSuccessToast,
-} from "@/components/primitives/sonner-helpers";
+} from "@/shared/ui/primitives/sonner-helpers";
 import {
 	Tooltip,
 	TooltipContent,
 	TooltipTrigger,
-} from "@/components/primitives/tooltip";
-import { TimeDisplayHoverCard } from "@/components/time-display-hover-card";
-import TruncatedText from "@/components/truncated-text";
-import { useEnvironment } from "@/context/environment/hooks";
-import { useDeleteEnvironment } from "@/features/settings/hooks/use-environments";
-import { Protect } from "@/utils/protect";
+} from "@/shared/ui/primitives/tooltip";
+import { TimeDisplayHoverCard } from "@/shared/ui/time-display-hover-card";
+import TruncatedText from "@/shared/ui/truncated-text";
+import { useEnvironment } from "@/app/context/environment/hooks";
+import { useDeleteEnvironment } from "@/features/settings/lib/use-environments";
+import { Protect } from "@/shared/lib/protect";
 import { DeleteEnvironmentDialog } from "./delete-environment-dialog";
 import { EditEnvironmentSheet } from "./edit-environment-sheet";
 

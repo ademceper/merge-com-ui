@@ -2,7 +2,7 @@ import { Card, CardContent, CardHeader } from "@merge-rd/ui/components/card";
 import { Switch } from "@merge-rd/ui/components/switch";
 import { cn } from "@merge-rd/ui/lib/utils";
 import type { SubscriberGlobalPreferenceDto } from "@novu/api/models/components";
-import type { WeeklySchedule } from "@novu/shared";
+import type { WeeklySchedule } from "@/shared";
 import {
 	ArrowsDownUp,
 	ArrowsIn,
@@ -12,13 +12,13 @@ import {
 } from "@phosphor-icons/react";
 import { motion } from "motion/react";
 import { useState } from "react";
-import { showErrorToast } from "@/components/primitives/sonner-helpers";
+import { showErrorToast } from "@/shared/ui/primitives/sonner-helpers";
 import {
 	Tooltip,
 	TooltipContent,
 	TooltipTrigger,
-} from "@/components/primitives/tooltip";
-import { useOptimisticScheduleUpdate } from "@/hooks/use-optimistic-schedule-update";
+} from "@/shared/ui/primitives/tooltip";
+import { useOptimisticScheduleUpdate } from "@/shared/lib/hooks/use-optimistic-schedule-update";
 import { ScheduleTable } from "./schedule-table";
 
 const DEFAULT_HOURS = [{ start: "09:00 AM", end: "05:00 PM" }];

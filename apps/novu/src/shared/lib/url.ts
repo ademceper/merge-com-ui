@@ -1,4 +1,4 @@
-import { RedirectTargetEnum } from "@novu/shared";
+import { RedirectTargetEnum } from "@/shared";
 
 export const urlTargetTypes = [
 	RedirectTargetEnum.SELF,

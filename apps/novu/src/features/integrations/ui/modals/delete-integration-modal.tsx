@@ -1,6 +1,6 @@
-import type { IIntegration } from "@novu/shared";
+import type { IIntegration } from "@/shared";
 import { useState } from "react";
-import { ConfirmationModal } from "@/components/confirmation-modal";
+import { ConfirmationModal } from "@/shared/ui/confirmation-modal";
 import { SelectPrimaryIntegrationModal } from "./select-primary-integration-modal";
 
 export type DeleteIntegrationModalProps = {

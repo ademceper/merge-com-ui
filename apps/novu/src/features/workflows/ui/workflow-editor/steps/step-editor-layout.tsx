@@ -4,7 +4,7 @@ import {
 	PermissionsEnum,
 	type StepResponseDto,
 	type WorkflowResponseDto,
-} from "@novu/shared";
+} from "@/shared";
 import {
 	CodeBlock,
 	Eye,
@@ -13,27 +13,27 @@ import {
 } from "@phosphor-icons/react";
 import { useState } from "react";
 import { useParams } from "react-router-dom";
-import { IssuesPanel } from "@/components/issues-panel";
-import { LocaleSelect } from "@/components/primitives/locale-select";
-import { useFetchTranslationGroup } from "@/features/translations/hooks/use-fetch-translation-group";
-import { useIsTranslationEnabled } from "@/features/translations/hooks/use-is-translation-enabled";
-import { PreviewContextContainer } from "@/features/workflows/components/workflow-editor/steps/context/preview-context-container";
+import { IssuesPanel } from "@/widgets/issues-panel";
+import { LocaleSelect } from "@/shared/ui/primitives/locale-select";
+import { useFetchTranslationGroup } from "@/features/translations/lib/use-fetch-translation-group";
+import { useIsTranslationEnabled } from "@/features/translations/lib/use-is-translation-enabled";
+import { PreviewContextContainer } from "@/features/workflows/ui/workflow-editor/steps/context/preview-context-container";
 import {
 	StepEditorProvider,
 	useStepEditor,
-} from "@/features/workflows/components/workflow-editor/steps/context/step-editor-context";
-import { StepEditorFactory } from "@/features/workflows/components/workflow-editor/steps/editor/step-editor-factory";
-import { useReactEmailStepHint } from "@/features/workflows/components/workflow-editor/steps/email/use-react-email-step-hint";
-import { PanelHeader } from "@/features/workflows/components/workflow-editor/steps/layout/panel-header";
-import { ResizableLayout } from "@/features/workflows/components/workflow-editor/steps/layout/resizable-layout";
-import { StepPreviewFactory } from "@/features/workflows/components/workflow-editor/steps/preview/step-preview-factory";
-import { parseJsonValue } from "@/features/workflows/components/workflow-editor/steps/utils/preview-context.utils";
-import { getEditorTitle } from "@/features/workflows/components/workflow-editor/steps/utils/step-utils";
-import { TestWorkflowDrawer } from "@/features/workflows/components/workflow-editor/test-workflow/test-workflow-drawer";
-import { TranslationStatus } from "@/features/workflows/components/workflow-editor/translation-status";
-import { useFetchWorkflowTestData } from "@/features/workflows/hooks/use-fetch-workflow-test-data";
-import { LocalizationResourceEnum } from "@/types/translations";
-import { Protect } from "@/utils/protect";
+} from "@/features/workflows/ui/workflow-editor/steps/context/step-editor-context";
+import { StepEditorFactory } from "@/features/workflows/ui/workflow-editor/steps/editor/step-editor-factory";
+import { useReactEmailStepHint } from "@/features/workflows/ui/workflow-editor/steps/email/use-react-email-step-hint";
+import { PanelHeader } from "@/features/workflows/ui/workflow-editor/steps/layout/panel-header";
+import { ResizableLayout } from "@/features/workflows/ui/workflow-editor/steps/layout/resizable-layout";
+import { StepPreviewFactory } from "@/features/workflows/ui/workflow-editor/steps/preview/step-preview-factory";
+import { parseJsonValue } from "@/features/workflows/ui/workflow-editor/steps/utils/preview-context.utils";
+import { getEditorTitle } from "@/features/workflows/ui/workflow-editor/steps/utils/step-utils";
+import { TestWorkflowDrawer } from "@/features/workflows/ui/workflow-editor/test-workflow/test-workflow-drawer";
+import { TranslationStatus } from "@/features/workflows/ui/workflow-editor/translation-status";
+import { useFetchWorkflowTestData } from "@/features/workflows/lib/use-fetch-workflow-test-data";
+import { LocalizationResourceEnum } from "@/shared/model/translations";
+import { Protect } from "@/shared/lib/protect";
 
 type StepEditorLayoutProps = {
 	workflow: WorkflowResponseDto;

@@ -1,8 +1,8 @@
 import { Separator } from "@merge-rd/ui/components/separator";
-import { UiSchemaGroupEnum } from "@novu/shared";
-import { SidebarContent } from "@/components/side-navigation/sidebar";
-import { getComponentByType } from "@/features/workflows/components/workflow-editor/steps/component-utils";
-import { useWorkflow } from "@/features/workflows/components/workflow-editor/workflow-provider";
+import { UiSchemaGroupEnum } from "@/shared";
+import { SidebarContent } from "@/widgets/side-navigation/sidebar";
+import { getComponentByType } from "@/features/workflows/ui/workflow-editor/steps/component-utils";
+import { useWorkflow } from "@/features/workflows/ui/workflow-editor/workflow-provider";
 
 export const ThrottleEditor = () => {
 	const { step } = useWorkflow();

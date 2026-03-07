@@ -1,4 +1,4 @@
-import { isNamespaceOnlyVariable } from "@/utils/liquid";
+import { isNamespaceOnlyVariable } from "@/shared/lib/liquid";
 
 export type VariableErrorContext = {
 	variableName: string;

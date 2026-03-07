@@ -3,7 +3,7 @@ import type {
 	ISubscriberResponseDto,
 	SubscriberDto,
 	WorkflowResponseDto,
-} from "@novu/shared";
+} from "@/shared";
 import type { JSONSchema7 } from "json-schema";
 
 export type PayloadData = Record<string, unknown>;

@@ -8,7 +8,7 @@ import {
 	PaginationNext,
 	PaginationPrevious,
 	PaginationStart,
-} from "@/components/primitives/pagination";
+} from "@/shared/ui/primitives/pagination";
 
 type DefaultPaginationProps = {
 	offset: number;

@@ -1,4 +1,4 @@
-import { Editor } from "@/components/primitives/editor";
+import { Editor } from "@/shared/ui/primitives/editor";
 import { BASIC_SETUP, JSON_EXTENSIONS } from "./constants";
 import type { CustomTextEditorProps } from "./types";
 

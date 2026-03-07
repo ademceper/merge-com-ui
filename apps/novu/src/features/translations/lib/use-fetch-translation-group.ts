@@ -1,11 +1,11 @@
 import { useQuery } from "@tanstack/react-query";
-import { getTranslationGroup } from "@/api/translations";
+import { getTranslationGroup } from "@/entities/translation/api/translations";
 import {
 	requireEnvironment,
 	useEnvironment,
-} from "@/context/environment/hooks";
-import type { LocalizationResourceEnum } from "@/types/translations";
-import { QueryKeys } from "@/utils/query-keys";
+} from "@/app/context/environment/hooks";
+import type { LocalizationResourceEnum } from "@/shared/model/translations";
+import { QueryKeys } from "@/shared/lib/query-keys";
 
 export const useFetchTranslationGroup = ({
 	resourceId,

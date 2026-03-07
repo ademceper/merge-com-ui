@@ -1,11 +1,11 @@
-import { PermissionsEnum } from "@novu/shared";
+import { PermissionsEnum } from "@/shared";
 import { BookBookmark } from "@phosphor-icons/react";
 import type { IconType } from "react-icons";
 import { Link, useNavigate, useParams } from "react-router-dom";
-import { RouteFill } from "@/components/icons";
-import { PreferencesBlankIllustration } from "@/components/icons/preferences-blank-illustration";
-import { PermissionButton } from "@/components/primitives/permission-button";
-import { buildRoute, ROUTES } from "@/utils/routes";
+import { RouteFill } from "@/shared/ui/icons";
+import { PreferencesBlankIllustration } from "@/shared/ui/icons/preferences-blank-illustration";
+import { PermissionButton } from "@/shared/ui/primitives/permission-button";
+import { buildRoute, ROUTES } from "@/shared/lib/routes";
 
 export function PreferencesBlank() {
 	const navigate = useNavigate();

@@ -10,7 +10,7 @@ import {
 	EnvironmentTypeEnum,
 	ResourceOriginEnum,
 	TimeUnitEnum,
-} from "@novu/shared";
+} from "@/shared";
 import { Tabs } from "@radix-ui/react-tabs";
 import { useState } from "react";
 import { type FieldValues, useFormContext } from "react-hook-form";
@@ -18,28 +18,28 @@ import {
 	FormField,
 	FormLabel,
 	FormMessagePure,
-} from "@/components/primitives/form/form";
+} from "@/shared/ui/primitives/form/form";
 import {
 	Tooltip,
 	TooltipContent,
 	TooltipTrigger,
-} from "@/components/primitives/tooltip";
-import { useEnvironment } from "@/context/environment/hooks";
+} from "@/shared/ui/primitives/tooltip";
+import { useEnvironment } from "@/app/context/environment/hooks";
 import {
 	AMOUNT_KEY,
 	CRON_KEY,
 	TYPE_KEY,
 	UNIT_KEY,
-} from "@/features/workflows/components/workflow-editor/steps/digest-delay-tabs/keys";
-import { LookbackWindow } from "@/features/workflows/components/workflow-editor/steps/digest-delay-tabs/lookback-window";
-import { RegularType } from "@/features/workflows/components/workflow-editor/steps/digest-delay-tabs/regular-type";
-import { ScheduledType } from "@/features/workflows/components/workflow-editor/steps/digest-delay-tabs/scheduled-type";
-import { EVERY_MINUTE_CRON } from "@/features/workflows/components/workflow-editor/steps/digest-delay-tabs/utils";
-import { useSaveForm } from "@/features/workflows/components/workflow-editor/steps/save-form-context";
+} from "@/features/workflows/ui/workflow-editor/steps/digest-delay-tabs/keys";
+import { LookbackWindow } from "@/features/workflows/ui/workflow-editor/steps/digest-delay-tabs/lookback-window";
+import { RegularType } from "@/features/workflows/ui/workflow-editor/steps/digest-delay-tabs/regular-type";
+import { ScheduledType } from "@/features/workflows/ui/workflow-editor/steps/digest-delay-tabs/scheduled-type";
+import { EVERY_MINUTE_CRON } from "@/features/workflows/ui/workflow-editor/steps/digest-delay-tabs/utils";
+import { useSaveForm } from "@/features/workflows/ui/workflow-editor/steps/save-form-context";
 import {
 	DEFAULT_CONTROL_DELAY_AMOUNT,
 	DEFAULT_CONTROL_DIGEST_AMOUNT,
-} from "@/utils/constants";
+} from "@/shared/lib/constants";
 import { useWorkflow } from "../../workflow-provider";
 
 const REGULAR_TYPE = "regular";

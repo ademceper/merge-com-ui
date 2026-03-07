@@ -3,12 +3,12 @@ import {
 	TabsList,
 	TabsTrigger,
 } from "@merge-rd/ui/components/tabs";
-import { TimeUnitEnum } from "@novu/shared";
+import { TimeUnitEnum } from "@/shared";
 import { Tabs } from "@radix-ui/react-tabs";
 import React, { useState } from "react";
 import { type FieldValues, useFormContext } from "react-hook-form";
-import { FormLabel } from "@/components/primitives/form/form";
-import { useSaveForm } from "@/features/workflows/components/workflow-editor/steps/save-form-context";
+import { FormLabel } from "@/shared/ui/primitives/form/form";
+import { useSaveForm } from "@/features/workflows/ui/workflow-editor/steps/save-form-context";
 import { DynamicThrottle } from "./dynamic-throttle";
 import { FixedThrottle } from "./fixed-throttle";
 

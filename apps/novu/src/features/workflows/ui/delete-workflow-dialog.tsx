@@ -1,9 +1,9 @@
 import type {
 	WorkflowListResponseDto,
 	WorkflowResponseDto,
-} from "@novu/shared";
-import { ConfirmationModal } from "@/components/confirmation-modal";
-import TruncatedText from "@/components/truncated-text";
+} from "@/shared";
+import { ConfirmationModal } from "@/shared/ui/confirmation-modal";
+import TruncatedText from "@/shared/ui/truncated-text";
 
 type DeleteWorkflowDialogProps = {
 	workflow: WorkflowResponseDto | WorkflowListResponseDto;

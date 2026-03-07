@@ -1,9 +1,9 @@
 import { useMemo } from "react";
-import type { JSONSchema7 } from "@/components/schema-editor/json-schema";
+import type { JSONSchema7 } from "@/shared/ui/schema-editor/json-schema";
 import type {
 	IsAllowedVariable,
 	LiquidVariable,
-} from "@/utils/parseStepVariables";
+} from "@/shared/lib/parseStepVariables";
 import { getVariableErrorMessage } from "../utils/get-variable-error-message";
 
 export const extractVariableKey = (variableName: string): string => {

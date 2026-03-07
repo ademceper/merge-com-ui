@@ -1,4 +1,4 @@
-import { FeatureFlagsKeysEnum } from "@novu/shared";
+import { FeatureFlagsKeysEnum } from "@/shared";
 import { useLDClient } from "launchdarkly-react-client-sdk";
 import { useEffect, useState } from "react";
 import {
@@ -7,10 +7,10 @@ import {
 	SelectItem,
 	SelectTrigger,
 	SelectValue,
-} from "@/components/primitives/select";
-import { IS_EU } from "@/config";
-import { useRegion } from "@/context/region";
-import { useFeatureFlag } from "@/hooks/use-feature-flag";
+} from "@/shared/ui/primitives/select";
+import { IS_EU } from "@/shared/config";
+import { useRegion } from "@/app/context/region";
+import { useFeatureFlag } from "@/shared/lib/hooks/use-feature-flag";
 import { REGIONS } from "./region-config";
 
 const REGION_OPTIONS = REGIONS.map((region) => ({

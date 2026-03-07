@@ -4,7 +4,7 @@ import {
 	type IUserEntity,
 	type StepTypeEnum,
 	type WorkflowResponseDto,
-} from "@novu/shared";
+} from "@/shared";
 import {
 	DEFAULT_STEP_ICON,
 	STEP_TYPE_ICONS,

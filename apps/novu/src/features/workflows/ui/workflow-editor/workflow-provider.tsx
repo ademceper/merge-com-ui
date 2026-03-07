@@ -13,7 +13,7 @@ import type {
 	StepResponseDto,
 	UpdateWorkflowDto,
 	WorkflowResponseDto,
-} from "@novu/shared";
+} from "@/shared";
 import { CheckCircle, Warning, X } from "@phosphor-icons/react";
 import type {
 	QueryObserverResult,
@@ -29,16 +29,16 @@ import {
 	useState,
 } from "react";
 import { useBlocker, useNavigate, useParams } from "react-router-dom";
-import { useEnvironment } from "@/context/environment/hooks";
-import { useFetchWorkflow } from "@/features/workflows/hooks/use-fetch-workflow";
-import { usePatchWorkflow } from "@/features/workflows/hooks/use-patch-workflow";
-import { useUpdateWorkflow } from "@/features/workflows/hooks/use-update-workflow";
-import { useBeforeUnload } from "@/hooks/use-before-unload";
-import { useDataRef } from "@/hooks/use-data-ref";
-import { useInvocationQueue } from "@/hooks/use-invocation-queue";
-import { createContextHook } from "@/utils/context";
-import { getIdFromSlug, STEP_DIVIDER } from "@/utils/id-utils";
-import { buildRoute, ROUTES } from "@/utils/routes";
+import { useEnvironment } from "@/app/context/environment/hooks";
+import { useFetchWorkflow } from "@/features/workflows/lib/use-fetch-workflow";
+import { usePatchWorkflow } from "@/features/workflows/lib/use-patch-workflow";
+import { useUpdateWorkflow } from "@/features/workflows/lib/use-update-workflow";
+import { useBeforeUnload } from "@/shared/lib/hooks/use-before-unload";
+import { useDataRef } from "@/shared/lib/hooks/use-data-ref";
+import { useInvocationQueue } from "@/shared/lib/hooks/use-invocation-queue";
+import { createContextHook } from "@/shared/lib/context";
+import { getIdFromSlug, STEP_DIVIDER } from "@/shared/lib/id-utils";
+import { buildRoute, ROUTES } from "@/shared/lib/routes";
 import { showErrorToast } from "./toasts";
 import { WorkflowSchemaProvider } from "./workflow-schema-provider";
 

@@ -5,7 +5,7 @@ import {
 	SelectItem,
 	SelectTrigger,
 	SelectValue,
-} from "@/components/primitives/select";
+} from "@/shared/ui/primitives/select";
 import { PeriodValues } from "./utils";
 
 const PERIOD_OPTIONS = [

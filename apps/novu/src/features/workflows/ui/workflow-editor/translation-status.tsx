@@ -5,16 +5,16 @@ import {
 	Warning,
 } from "@phosphor-icons/react";
 import { useState } from "react";
-import { Dot, StatusBadge } from "@/components/primitives/status-badge";
+import { Dot, StatusBadge } from "@/shared/ui/primitives/status-badge";
 import {
 	Tooltip,
 	TooltipContent,
 	TooltipTrigger,
-} from "@/components/primitives/tooltip";
-import { TranslationDrawer } from "@/features/translations/components/translation-drawer/translation-drawer";
-import { useFetchTranslationGroup } from "@/features/translations/hooks/use-fetch-translation-group";
-import { useIsTranslationEnabled } from "@/features/translations/hooks/use-is-translation-enabled";
-import type { LocalizationResourceEnum } from "@/types/translations";
+} from "@/shared/ui/primitives/tooltip";
+import { TranslationDrawer } from "@/features/translations/ui/translation-drawer/translation-drawer";
+import { useFetchTranslationGroup } from "@/features/translations/lib/use-fetch-translation-group";
+import { useIsTranslationEnabled } from "@/features/translations/lib/use-is-translation-enabled";
+import type { LocalizationResourceEnum } from "@/shared/model/translations";
 
 type WorkflowTranslationStatusProps = {
 	resourceId: string;

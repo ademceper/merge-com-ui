@@ -4,18 +4,18 @@ import {
 	TabsList,
 	TabsTrigger,
 } from "@merge-rd/ui/components/tabs";
-import { FeatureFlagsKeysEnum } from "@novu/shared";
+import { FeatureFlagsKeysEnum } from "@/shared";
 import { useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { RequestsTable } from "@/components/http-logs/logs-table";
-import { PageMeta } from "@/components/page-meta";
-import { useEnvironment } from "@/context/environment/hooks";
-import { useSetPageHeader } from "@/context/page-header";
-import { ActivityFeedContent } from "@/features/activity/components/activity-feed-content";
-import { useFeatureFlag } from "@/hooks/use-feature-flag";
-import { useTelemetry } from "@/hooks/use-telemetry";
-import { buildRoute, ROUTES } from "@/utils/routes";
-import { TelemetryEvent } from "@/utils/telemetry";
+import { RequestsTable } from "@/widgets/http-logs/logs-table";
+import { PageMeta } from "@/shared/ui/page-meta";
+import { useEnvironment } from "@/app/context/environment/hooks";
+import { useSetPageHeader } from "@/app/context/page-header";
+import { ActivityFeedContent } from "@/features/activity/ui/activity-feed-content";
+import { useFeatureFlag } from "@/shared/lib/hooks/use-feature-flag";
+import { useTelemetry } from "@/shared/lib/hooks/use-telemetry";
+import { buildRoute, ROUTES } from "@/shared/lib/routes";
+import { TelemetryEvent } from "@/shared/lib/telemetry";
 
 export function ActivityFeed() {
 	useSetPageHeader(

@@ -1,4 +1,4 @@
-import { EnvironmentTypeEnum } from "@novu/shared";
+import { EnvironmentTypeEnum } from "@/shared";
 import { Layout } from "@phosphor-icons/react";
 import { useMemo } from "react";
 import { useFormContext } from "react-hook-form";
@@ -7,21 +7,21 @@ import {
 	FormField,
 	FormItem,
 	FormMessage,
-} from "@/components/primitives/form/form";
+} from "@/shared/ui/primitives/form/form";
 import {
 	Select,
 	SelectContent,
 	SelectItem,
 	SelectTrigger,
 	SelectValue,
-} from "@/components/primitives/select";
+} from "@/shared/ui/primitives/select";
 import {
 	Tooltip,
 	TooltipContent,
 	TooltipTrigger,
-} from "@/components/primitives/tooltip";
-import { useEnvironment } from "@/context/environment/hooks";
-import { useFetchLayouts } from "@/features/layouts/hooks/use-fetch-layouts";
+} from "@/shared/ui/primitives/tooltip";
+import { useEnvironment } from "@/app/context/environment/hooks";
+import { useFetchLayouts } from "@/features/layouts/lib/use-fetch-layouts";
 import { useSaveForm } from "../save-form-context";
 
 export const LayoutSelect = () => {

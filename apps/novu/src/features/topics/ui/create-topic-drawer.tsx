@@ -11,11 +11,11 @@ import {
 	SheetHeader,
 	SheetMain,
 	SheetTitle,
-} from "@/components/primitives/sheet";
-import TruncatedText from "@/components/truncated-text";
-import { useCombinedRefs } from "@/hooks/use-combined-refs";
-import { useFormProtection } from "@/hooks/use-form-protection";
-import { useOnElementUnmount } from "@/hooks/use-on-element-unmount";
+} from "@/shared/ui/primitives/sheet";
+import TruncatedText from "@/shared/ui/truncated-text";
+import { useCombinedRefs } from "@/shared/lib/hooks/use-combined-refs";
+import { useFormProtection } from "@/shared/lib/hooks/use-form-protection";
+import { useOnElementUnmount } from "@/shared/lib/hooks/use-on-element-unmount";
 import { CreateTopicForm } from "./create-topic-form";
 
 type CreateTopicDrawerProps = {

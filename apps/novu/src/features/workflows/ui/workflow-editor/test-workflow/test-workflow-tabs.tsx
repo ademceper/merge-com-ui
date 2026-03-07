@@ -14,26 +14,26 @@ import {
 import {
 	createMockObjectFromSchema,
 	type WorkflowTestDataResponseDto,
-} from "@novu/shared";
+} from "@/shared";
 import { PlayCircle } from "@phosphor-icons/react";
 import { useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
 import { Link, useParams } from "react-router-dom";
-import { Form, FormRoot } from "@/components/primitives/form/form";
-import { ToastClose, ToastIcon } from "@/components/primitives/sonner";
+import { Form, FormRoot } from "@/shared/ui/primitives/form/form";
+import { ToastClose, ToastIcon } from "@/shared/ui/primitives/sonner";
 import {
 	showErrorToast,
 	showToast,
-} from "@/components/primitives/sonner-helpers";
+} from "@/shared/ui/primitives/sonner-helpers";
 import {
 	buildDynamicFormSchema,
 	type TestWorkflowFormType,
-} from "@/features/workflows/components/workflow-editor/schema";
-import { TestWorkflowForm } from "@/features/workflows/components/workflow-editor/test-workflow/test-workflow-form";
-import { TestWorkflowLogsSidebar } from "@/features/workflows/components/workflow-editor/test-workflow/test-workflow-logs-sidebar";
-import { useTriggerWorkflow } from "@/features/workflows/hooks/use-trigger-workflow";
-import { useIsPayloadSchemaEnabled } from "@/hooks/use-is-payload-schema-enabled";
-import { buildRoute, ROUTES } from "@/utils/routes";
+} from "@/features/workflows/ui/workflow-editor/schema";
+import { TestWorkflowForm } from "@/features/workflows/ui/workflow-editor/test-workflow/test-workflow-form";
+import { TestWorkflowLogsSidebar } from "@/features/workflows/ui/workflow-editor/test-workflow/test-workflow-logs-sidebar";
+import { useTriggerWorkflow } from "@/features/workflows/lib/use-trigger-workflow";
+import { useIsPayloadSchemaEnabled } from "@/features/workflows/lib/use-is-payload-schema-enabled";
+import { buildRoute, ROUTES } from "@/shared/lib/routes";
 import { useWorkflow } from "../workflow-provider";
 
 export const TestWorkflowTabs = ({

@@ -1,12 +1,12 @@
 import { Question, Textbox } from "@phosphor-icons/react";
 import type { ComponentProps } from "react";
 import { Link } from "react-router-dom";
-import { FormRoot } from "@/components/primitives/form/form";
+import { FormRoot } from "@/shared/ui/primitives/form/form";
 import {
 	Panel,
 	PanelContent,
 	PanelHeader,
-} from "@/components/primitives/panel";
+} from "@/shared/ui/primitives/panel";
 
 type EditStepConditionsLayoutProps = ComponentProps<typeof FormRoot> & {
 	stepName?: string;

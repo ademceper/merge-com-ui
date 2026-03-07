@@ -4,7 +4,7 @@ import type {
 	BuilderGroupValues,
 	EnvironmentId,
 	FilterParts,
-} from "../../types";
+} from "../../model";
 
 export type ICredentialsDto = ICredentials;
 

@@ -1,4 +1,4 @@
-import { StepTypeEnum } from "@novu/shared";
+import { StepTypeEnum } from "@/shared";
 import {
 	Bell,
 	BracketsCurly,
@@ -11,7 +11,7 @@ import {
 	PlayCircle,
 } from "@phosphor-icons/react";
 import type { IconType } from "react-icons";
-import { InboxBell } from "@/components/icons";
+import { InboxBell } from "@/shared/ui/icons";
 
 export const STEP_TYPE_ICONS: Record<StepTypeEnum, IconType> = {
 	[StepTypeEnum.EMAIL]: Envelope,

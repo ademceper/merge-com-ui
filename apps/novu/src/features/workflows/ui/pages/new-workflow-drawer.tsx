@@ -1,7 +1,7 @@
 import { Button } from "@merge-rd/ui/components/button";
 import { Separator } from "@merge-rd/ui/components/separator";
 import { Skeleton } from "@merge-rd/ui/components/skeleton";
-import type { DuplicateWorkflowDto } from "@novu/shared";
+import type { DuplicateWorkflowDto } from "@/shared";
 import { CaretRight } from "@phosphor-icons/react";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -13,15 +13,15 @@ import {
 	SheetHeader,
 	SheetMain,
 	SheetTitle,
-} from "@/components/primitives/sheet";
-import { ExternalLink } from "@/components/shared/external-link";
-import { useEnvironment } from "@/context/environment/hooks";
-import { CreateWorkflowForm } from "@/features/workflows/components/workflow-editor/create-workflow-form";
-import { useCreateWorkflow } from "@/features/workflows/hooks/use-create-workflow";
-import { useDuplicateWorkflow } from "@/features/workflows/hooks/use-duplicate-workflow";
-import { useFetchWorkflow } from "@/features/workflows/hooks/use-fetch-workflow";
-import { useOnElementUnmount } from "@/hooks/use-on-element-unmount";
-import { buildRoute, ROUTES } from "@/utils/routes";
+} from "@/shared/ui/primitives/sheet";
+import { ExternalLink } from "@/shared/ui/shared/external-link";
+import { useEnvironment } from "@/app/context/environment/hooks";
+import { CreateWorkflowForm } from "@/features/workflows/ui/workflow-editor/create-workflow-form";
+import { useCreateWorkflow } from "@/features/workflows/lib/use-create-workflow";
+import { useDuplicateWorkflow } from "@/features/workflows/lib/use-duplicate-workflow";
+import { useFetchWorkflow } from "@/features/workflows/lib/use-fetch-workflow";
+import { useOnElementUnmount } from "@/shared/lib/hooks/use-on-element-unmount";
+import { buildRoute, ROUTES } from "@/shared/lib/routes";
 
 type NewWorkflowDrawerProps = {
 	mode: "create" | "duplicate";

@@ -4,18 +4,18 @@ import { Calendar } from "@phosphor-icons/react";
 import { useEffect, useMemo } from "react";
 import { useForm } from "react-hook-form";
 import { Link } from "react-router-dom";
-import { Badge } from "@/components/primitives/badge";
+import { Badge } from "@/shared/ui/primitives/badge";
 import {
 	Tooltip,
 	TooltipContent,
 	TooltipPortal,
 	TooltipTrigger,
-} from "@/components/primitives/tooltip";
-import type { LogsFilters } from "@/features/activity/hooks/use-logs-url-state";
-import { useFetchSubscription } from "@/hooks/use-fetch-subscription";
-import { buildLogsDateFilters } from "@/utils/logs-filters.utils";
-import { ROUTES } from "@/utils/routes";
-import { IS_SELF_HOSTED } from "../../config";
+} from "@/shared/ui/primitives/tooltip";
+import type { LogsFilters } from "@/features/activity/lib/use-logs-url-state";
+import { useFetchSubscription } from "@/shared/lib/hooks/use-fetch-subscription";
+import { buildLogsDateFilters } from "@/shared/lib/logs-filters.utils";
+import { ROUTES } from "@/shared/lib/routes";
+import { IS_SELF_HOSTED } from "@/shared/config";
 
 interface RequestsFiltersProps {
 	filters: LogsFilters;

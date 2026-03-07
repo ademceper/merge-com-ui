@@ -1,7 +1,7 @@
-import { PermissionsEnum } from "@novu/shared";
+import { PermissionsEnum } from "@/shared";
 import { useParams } from "react-router-dom";
-import { SubscriberTabs } from "@/features/subscribers/components/subscriber-tabs";
-import { useHasPermission } from "@/hooks/use-has-permission";
+import { SubscriberTabs } from "@/features/subscribers/ui/subscriber-tabs";
+import { useHasPermission } from "@/shared/lib/hooks/use-has-permission";
 
 export function EditSubscriberPage() {
 	const { subscriberId } = useParams<{ subscriberId: string }>();

@@ -1,14 +1,14 @@
 import { Button, type ButtonProps } from "@merge-rd/ui/components/button";
 import { cn } from "@merge-rd/ui/lib/utils";
-import { getAllLocales, getCommonLocales, getLocaleByIso } from "@novu/shared";
+import { getAllLocales, getCommonLocales, getLocaleByIso } from "@/shared";
 import { CaretDown, Check, WarningCircle } from "@phosphor-icons/react";
 import { useEffect, useMemo, useRef, useState } from "react";
-import { Input } from "@/components/primitives/input";
+import { Input } from "@/shared/ui/primitives/input";
 import {
 	Tooltip,
 	TooltipContent,
 	TooltipTrigger,
-} from "@/components/primitives/tooltip";
+} from "@/shared/ui/primitives/tooltip";
 import { FlagCircle, StackedFlagCircles } from "../flag-circle";
 import TruncatedText from "../truncated-text";
 

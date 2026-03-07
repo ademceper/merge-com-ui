@@ -1,12 +1,12 @@
 import { standardSchemaResolver } from "@hookform/resolvers/standard-schema";
 import { Separator } from "@merge-rd/ui/components/separator";
-import { slugify } from "@novu/shared";
+import { slugify } from "@/shared";
 import { useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { Link } from "react-router-dom";
 import type { ExternalToast } from "sonner";
 import { z } from "zod";
-import { NovuApiError } from "@/api/api.client";
+import { NovuApiError } from "@/shared/api/api.client";
 import {
 	Form,
 	FormControl,
@@ -15,16 +15,16 @@ import {
 	FormLabel,
 	FormMessage,
 	FormRoot,
-} from "@/components/primitives/form/form";
-import { InlineToast } from "@/components/primitives/inline-toast";
-import { Input } from "@/components/primitives/input";
+} from "@/shared/ui/primitives/form/form";
+import { InlineToast } from "@/shared/ui/primitives/inline-toast";
+import { Input } from "@/shared/ui/primitives/input";
 import {
 	showErrorToast,
 	showSuccessToast,
-} from "@/components/primitives/sonner-helpers";
-import { useCreateTopic } from "@/features/topics/hooks/use-create-topic";
-import { useTelemetry } from "@/hooks/use-telemetry";
-import { TelemetryEvent } from "@/utils/telemetry";
+} from "@/shared/ui/primitives/sonner-helpers";
+import { useCreateTopic } from "@/features/topics/lib/use-create-topic";
+import { useTelemetry } from "@/shared/lib/hooks/use-telemetry";
+import { TelemetryEvent } from "@/shared/lib/telemetry";
 
 const toastOptions: ExternalToast = {
 	position: "bottom-right",

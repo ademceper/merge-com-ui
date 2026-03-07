@@ -1,6 +1,6 @@
 import { Eye, EyeSlash } from "@phosphor-icons/react";
 import { useState } from "react";
-import { Input, type InputProps } from "@/components/primitives/input";
+import { Input, type InputProps } from "@/shared/ui/primitives/input";
 import { CopyButton } from "./copy-button";
 
 interface SecretInputProps extends Omit<InputProps, "onChange"> {

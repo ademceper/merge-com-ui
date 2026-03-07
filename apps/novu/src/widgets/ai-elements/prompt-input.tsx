@@ -56,14 +56,14 @@ import {
 	HoverCard,
 	HoverCardContent,
 	HoverCardTrigger,
-} from "@/components/primitives/hover-card";
+} from "@/shared/ui/primitives/hover-card";
 import {
 	Select,
 	SelectContent,
 	SelectItem,
 	SelectTrigger,
 	SelectValue,
-} from "@/components/primitives/select";
+} from "@/shared/ui/primitives/select";
 
 // ============================================================================
 // Provider Context & Types

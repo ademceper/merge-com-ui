@@ -1,8 +1,8 @@
 import { useUser } from "@merge-rd/auth";
-import { NewDashboardOptInStatusEnum } from "@novu/shared";
-import { LEGACY_DASHBOARD_URL } from "@/config";
-import { useTelemetry } from "@/hooks/use-telemetry";
-import { TelemetryEvent } from "@/utils/telemetry";
+import { NewDashboardOptInStatusEnum } from "@/shared";
+import { LEGACY_DASHBOARD_URL } from "@/shared/config";
+import { useTelemetry } from "@/shared/lib/hooks/use-telemetry";
+import { TelemetryEvent } from "@/shared/lib/telemetry";
 
 export function useNewDashboardOptIn() {
 	const { user, isLoaded } = useUser();

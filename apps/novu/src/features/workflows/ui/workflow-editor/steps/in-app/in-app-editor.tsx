@@ -3,11 +3,11 @@ import {
 	EnvironmentTypeEnum,
 	type UiSchema,
 	UiSchemaGroupEnum,
-} from "@novu/shared";
+} from "@/shared";
 import { Stack } from "@phosphor-icons/react";
-import { useEnvironment } from "@/context/environment/hooks";
-import { getComponentByType } from "@/features/workflows/components/workflow-editor/steps/component-utils";
-import { InAppTabsSection } from "@/features/workflows/components/workflow-editor/steps/in-app/in-app-tabs-section";
+import { useEnvironment } from "@/app/context/environment/hooks";
+import { getComponentByType } from "@/features/workflows/ui/workflow-editor/steps/component-utils";
+import { InAppTabsSection } from "@/features/workflows/ui/workflow-editor/steps/in-app/in-app-tabs-section";
 import { StepEditorUnavailable } from "../step-editor-unavailable";
 
 const avatarKey = "avatar";

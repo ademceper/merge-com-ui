@@ -1,7 +1,7 @@
 import * as Sentry from "@sentry/react";
 import { useEffect } from "react";
 import { useParams } from "react-router-dom";
-import { usePreviewStep } from "@/hooks/use-preview-step";
+import { usePreviewStep } from "@/shared/lib/hooks/use-preview-step";
 import { useWorkflow } from "../../workflow-provider";
 import { PushPreview } from "./push-preview";
 

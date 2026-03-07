@@ -1,18 +1,18 @@
 import React, { useImperativeHandle, useMemo, useRef } from "react";
-import { NewVariablePreview } from "@/components/variable/components/new-variable-preview";
+import { NewVariablePreview } from "@/shared/ui/variable/components/new-variable-preview";
 import {
 	DIGEST_PREVIEW_MAP,
 	type DIGEST_VARIABLES_ENUM,
 	DIGEST_VARIABLES_FILTER_MAP,
 	getDynamicDigestVariable,
-} from "@/components/variable/utils/digest-variables";
+} from "@/shared/ui/variable/utils/digest-variables";
 import {
 	VariableList,
 	type VariableListRef,
-} from "@/components/variable/variable-list";
-import { useTelemetry } from "@/hooks/use-telemetry";
-import type { Variable } from "@/lib/maily-core/extensions";
-import { TelemetryEvent } from "@/utils/telemetry";
+} from "@/shared/ui/variable/variable-list";
+import { useTelemetry } from "@/shared/lib/hooks/use-telemetry";
+import type { Variable } from "@/shared/lib/externals/maily-core/extensions";
+import { TelemetryEvent } from "@/shared/lib/telemetry";
 
 interface ExtendedVariable extends Variable {
 	type?: string;

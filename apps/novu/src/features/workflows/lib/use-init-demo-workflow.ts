@@ -2,11 +2,11 @@ import {
 	type IEnvironment,
 	StepTypeEnum,
 	WorkflowCreationSourceEnum,
-} from "@novu/shared";
+} from "@/shared";
 import { useEffect, useRef } from "react";
-import { createWorkflow } from "@/api/workflows";
-import { ONBOARDING_DEMO_WORKFLOW_ID } from "@/config";
-import { useFetchWorkflows } from "@/features/workflows/hooks/use-fetch-workflows";
+import { createWorkflow } from "@/entities/workflow/api/workflows";
+import { ONBOARDING_DEMO_WORKFLOW_ID } from "@/shared/config";
+import { useFetchWorkflows } from "@/features/workflows/lib/use-fetch-workflows";
 
 // Environment-scoped state to prevent multiple simultaneous creations per environment
 const creationStateMap = new Map<

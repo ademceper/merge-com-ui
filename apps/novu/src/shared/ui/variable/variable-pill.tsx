@@ -1,12 +1,12 @@
 import { cn } from "@merge-rd/ui/lib/utils";
 import React, { useMemo } from "react";
-import type { VariableFrom } from "@/components/maily/types";
+import type { VariableFrom } from "@/shared/ui/maily/types";
 import {
 	Tooltip,
 	TooltipContent,
 	TooltipPortal,
 	TooltipTrigger,
-} from "@/components/primitives/tooltip";
+} from "@/shared/ui/primitives/tooltip";
 import { VariableIcon } from "./components/variable-icon";
 import {
 	getFirstFilterAndItsArgs,

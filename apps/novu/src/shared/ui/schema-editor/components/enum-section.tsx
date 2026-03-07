@@ -8,13 +8,13 @@ import {
 	type Path,
 	useFieldArray,
 } from "react-hook-form";
-import { InputPure, InputRoot } from "@/components/primitives/input";
+import { InputPure, InputRoot } from "@/shared/ui/primitives/input";
 import {
 	Tooltip,
 	TooltipContent,
 	TooltipProvider,
 	TooltipTrigger,
-} from "@/components/primitives/tooltip";
+} from "@/shared/ui/primitives/tooltip";
 import { getMarginClassPx } from "../utils/ui-helpers";
 import type { SchemaEditorFormValues } from "../utils/validation-schema";
 

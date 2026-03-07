@@ -1,19 +1,19 @@
 import { cn } from "@merge-rd/ui/lib/utils";
-import { FeatureFlagsKeysEnum } from "@novu/shared";
+import { FeatureFlagsKeysEnum } from "@/shared";
 import { Plus } from "@phosphor-icons/react";
 import { PopoverPortal } from "@radix-ui/react-popover";
 import type React from "react";
 import { type ReactNode, useState } from "react";
-import { STEP_TYPE_TO_ICON } from "@/components/icons/utils";
-import { Badge } from "@/components/primitives/badge";
+import { STEP_TYPE_TO_ICON } from "@/shared/ui/icons/utils";
+import { Badge } from "@/shared/ui/primitives/badge";
 import {
 	Popover,
 	PopoverContent,
 	PopoverTrigger,
-} from "@/components/primitives/popover";
-import { useFeatureFlag } from "@/hooks/use-feature-flag";
-import { STEP_TYPE_TO_COLOR } from "@/utils/color";
-import { StepTypeEnum } from "@/utils/enums";
+} from "@/shared/ui/primitives/popover";
+import { useFeatureFlag } from "@/shared/lib/hooks/use-feature-flag";
+import { STEP_TYPE_TO_COLOR } from "@/shared/lib/color";
+import { StepTypeEnum } from "@/shared/lib/enums";
 import { Node } from "./base-node";
 
 const noop = () => {};

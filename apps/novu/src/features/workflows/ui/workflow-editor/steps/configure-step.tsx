@@ -1,6 +1,6 @@
-import { useEnvironment } from "@/context/environment/hooks";
-import { ConfigureStepForm } from "@/features/workflows/components/workflow-editor/steps/configure-step-form";
-import { useWorkflow } from "@/features/workflows/components/workflow-editor/workflow-provider";
+import { useEnvironment } from "@/app/context/environment/hooks";
+import { ConfigureStepForm } from "@/features/workflows/ui/workflow-editor/steps/configure-step-form";
+import { useWorkflow } from "@/features/workflows/ui/workflow-editor/workflow-provider";
 
 export const ConfigureStep = () => {
 	const { workflow, step, update } = useWorkflow();

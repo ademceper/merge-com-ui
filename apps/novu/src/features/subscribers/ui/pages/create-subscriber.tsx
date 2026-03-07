@@ -7,25 +7,25 @@ import { useForm } from "react-hook-form";
 import { Link } from "react-router-dom";
 import type { ExternalToast } from "sonner";
 import type { z } from "zod";
-import { NovuApiError } from "@/api/api.client";
-import { Form, FormRoot } from "@/components/primitives/form/form";
+import { NovuApiError } from "@/shared/api/api.client";
+import { Form, FormRoot } from "@/shared/ui/primitives/form/form";
 import {
 	SheetFooter,
 	SheetHeader,
 	SheetMain,
-} from "@/components/primitives/sheet";
+} from "@/shared/ui/primitives/sheet";
 import {
 	showErrorToast,
 	showSuccessToast,
-} from "@/components/primitives/sonner-helpers";
-import TruncatedText from "@/components/truncated-text";
-import { CreateSubscriberForm } from "@/features/subscribers/components/create-subscriber-form";
-import { CreateSubscriberFormSchema } from "@/features/subscribers/components/schema";
-import { useCreateSubscriber } from "@/features/subscribers/hooks/use-create-subscriber";
-import { useSubscribersNavigate } from "@/features/subscribers/hooks/use-subscribers-navigate";
-import { useTelemetry } from "@/hooks/use-telemetry";
-import { TelemetryEvent } from "@/utils/telemetry";
-import { generateUUID } from "@/utils/uuid";
+} from "@/shared/ui/primitives/sonner-helpers";
+import TruncatedText from "@/shared/ui/truncated-text";
+import { CreateSubscriberForm } from "@/features/subscribers/ui/create-subscriber-form";
+import { CreateSubscriberFormSchema } from "@/features/subscribers/ui/schema";
+import { useCreateSubscriber } from "@/features/subscribers/lib/use-create-subscriber";
+import { useSubscribersNavigate } from "@/features/subscribers/lib/use-subscribers-navigate";
+import { useTelemetry } from "@/shared/lib/hooks/use-telemetry";
+import { TelemetryEvent } from "@/shared/lib/telemetry";
+import { generateUUID } from "@/shared/lib/uuid";
 
 const toastOptions: ExternalToast = {
 	position: "bottom-right",

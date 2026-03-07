@@ -2,12 +2,12 @@ import {
 	ChannelTypeEnum,
 	LAYOUT_CONTENT_VARIABLE,
 	UiComponentEnum,
-} from "@novu/shared";
+} from "@/shared";
 import { useMemo } from "react";
 import { useFormContext } from "react-hook-form";
 
-import { EmailEditorSelect } from "@/components/email-editor-select";
-import { formatHtml } from "@/utils/formatter";
+import { EmailEditorSelect } from "@/shared/ui/email-editor-select";
+import { formatHtml } from "@/shared/lib/formatter";
 import { useLayoutEditor } from "./layout-editor-provider";
 import { LayoutEmailBody } from "./layout-email-body";
 

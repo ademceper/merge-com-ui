@@ -1,14 +1,14 @@
 import type { GetMasterJsonResponseDto } from "@novu/api/models/components";
 import { useMutation } from "@tanstack/react-query";
-import { getMasterJson } from "@/api/translations";
+import { getMasterJson } from "@/entities/translation/api/translations";
 import {
 	showErrorToast,
 	showSuccessToast,
-} from "@/components/primitives/sonner-helpers";
+} from "@/shared/ui/primitives/sonner-helpers";
 import {
 	requireEnvironment,
 	useEnvironment,
-} from "@/context/environment/hooks";
+} from "@/app/context/environment/hooks";
 
 function countExportedResources(data: GetMasterJsonResponseDto): number {
 	let total = 0;

@@ -1,5 +1,5 @@
 import type { ValueEditorType } from "react-querybuilder";
-import type { EnhancedField } from "@/features/workflows/components/conditions-editor/conditions-editor";
+import type { EnhancedField } from "@/features/workflows/ui/conditions-editor/conditions-editor";
 import { isRelativeDateOperator } from "./field-type-operators";
 
 export function getValueEditorTypeForField(

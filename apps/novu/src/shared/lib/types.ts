@@ -1,4 +1,4 @@
-import type { StepResponseDto } from "@novu/shared";
+import type { StepResponseDto } from "@/shared";
 
 export enum ConnectionStatus {
 	CONNECTED = "connected",

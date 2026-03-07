@@ -1,5 +1,5 @@
-import type { IEnvironment } from "@novu/shared";
-import { get, patch } from "./api.client";
+import type { IEnvironment } from "@/shared";
+import { get, patch } from "@/shared/api/api.client";
 
 export type GetOrganizationSettingsDto = {
 	removeNovuBranding: boolean;

@@ -1,5 +1,5 @@
-import type { ChannelTypeEnum, SeverityLevelEnum } from "@novu/shared";
-import type { ActivityFilters } from "@/api/activity";
+import type { ChannelTypeEnum, SeverityLevelEnum } from "@/shared";
+import type { ActivityFilters } from "@/entities/activity/api/activity";
 
 export type ActivityFiltersData = {
 	dateRange: string;

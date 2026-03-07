@@ -5,7 +5,7 @@ import {
 	ChannelCTATypeEnum,
 	type Redirect,
 	ResourceTypeEnum,
-} from "../types";
+} from "@/shared/model";
 
 export const isBridgeWorkflow = (workflowType?: ResourceTypeEnum): boolean => {
 	return (

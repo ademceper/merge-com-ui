@@ -7,26 +7,26 @@ import {
 } from "react-querybuilder";
 import "react-querybuilder/dist/query-builder.css";
 
-import { AddConditionAction } from "@/features/workflows/components/conditions-editor/add-condition-action";
-import { AddGroupAction } from "@/features/workflows/components/conditions-editor/add-group-action";
-import { CombinatorSelector } from "@/features/workflows/components/conditions-editor/combinator-selector";
-import { ConditionsEditorProvider } from "@/features/workflows/components/conditions-editor/conditions-editor-context";
-import { FieldSelector } from "@/features/workflows/components/conditions-editor/field-selector";
+import { AddConditionAction } from "@/features/workflows/ui/conditions-editor/add-condition-action";
+import { AddGroupAction } from "@/features/workflows/ui/conditions-editor/add-group-action";
+import { CombinatorSelector } from "@/features/workflows/ui/conditions-editor/combinator-selector";
+import { ConditionsEditorProvider } from "@/features/workflows/ui/conditions-editor/conditions-editor-context";
+import { FieldSelector } from "@/features/workflows/ui/conditions-editor/field-selector";
 import {
 	getHelpTextForField,
 	getPlaceholderForField,
 	getValueEditorTypeForField,
-} from "@/features/workflows/components/conditions-editor/field-type-editors";
-import { getOperatorsForFieldType } from "@/features/workflows/components/conditions-editor/field-type-operators";
-import { OperatorSelector } from "@/features/workflows/components/conditions-editor/operator-selector";
-import { RuleActions } from "@/features/workflows/components/conditions-editor/rule-actions";
-import { ValueEditor } from "@/features/workflows/components/conditions-editor/value-editor";
+} from "@/features/workflows/ui/conditions-editor/field-type-editors";
+import { getOperatorsForFieldType } from "@/features/workflows/ui/conditions-editor/field-type-operators";
+import { OperatorSelector } from "@/features/workflows/ui/conditions-editor/operator-selector";
+import { RuleActions } from "@/features/workflows/ui/conditions-editor/rule-actions";
+import { ValueEditor } from "@/features/workflows/ui/conditions-editor/value-editor";
 import type {
 	EnhancedLiquidVariable,
 	FieldDataType,
 	IsAllowedVariable,
 	LiquidVariable,
-} from "@/utils/parseStepVariables";
+} from "@/shared/lib/parseStepVariables";
 
 export interface EnhancedField extends Field {
 	dataType: FieldDataType;

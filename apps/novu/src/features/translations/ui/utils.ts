@@ -1,4 +1,4 @@
-import { getLocaleByIso } from "@novu/shared";
+import { getLocaleByIso } from "@/shared";
 
 /**
  * Get a human-readable display name for a locale code

@@ -30,7 +30,7 @@ interface Options {
 	 *@default '-'
 	 *@example
 	 *```
-	 *import slugify from '@novu/shared';
+	 *import slugify from '@/shared';
 	 *slugify('BAR and baz');
 	 * //=> 'bar-and-baz'
 	 *slugify('BAR and baz', {separator: '_'});
@@ -46,7 +46,7 @@ interface Options {
 	 *@default true
 	 *@example
 	 *```
-	 *import slugify from '@novu/shared';
+	 *import slugify from '@/shared';
 	 *slugify('Déjà Vu!');
 	 * //=> 'deja-vu'
 	 *slugify('Déjà Vu!', {lowercase: false});
@@ -60,7 +60,7 @@ interface Options {
 	 *@default true
 	 *@example
 	 *```
-	 *import slugify from '@novu/shared';
+	 *import slugify from '@/shared';
 	 *slugify('fooBar');
 	 * //=> 'foo-bar'
 	 *slugify('fooBar', {decamelize: false});
@@ -77,7 +77,7 @@ interface Options {
 	 *@default [ ['&', ' and '], ['🦄', ' unicorn '], ['♥', ' love '] ]
 	 *@example
 	 *```
-	 *import slugify from '@novu/shared';
+	 *import slugify from '@/shared';
 	 *slugify('Foo@unicorn', {
 	 *customReplacements: [
 	 *['@', 'at']
@@ -106,7 +106,7 @@ interface Options {
 	 *@default false
 	 *@example
 	 *```
-	 *import slugify from '@novu/shared';
+	 *import slugify from '@/shared';
 	 *slugify('_foo_bar');
 	 * //=> 'foo-bar'
 	 *slugify('_foo_bar', {preserveLeadingUnderscore: true});
@@ -121,7 +121,7 @@ interface Options {
 	 *@default false
 	 *@example
 	 *```
-	 *import slugify from '@novu/shared';
+	 *import slugify from '@/shared';
 	 *slugify('foo-bar-');
 	 * //=> 'foo-bar'
 	 *slugify('foo-bar-', {preserveTrailingDash: true});
@@ -169,56 +169,56 @@ const removeMootSeparators = (string: string, separator: string) => {
  *
  * @example
  * ```
- * import { slugify } from '@novu/shared';
+ * import { slugify } from '@/shared';
  * slugify('Hello World');
  * //=> 'hello-world'
  * ```
  *
  * @example
  * ```
- * import { slugify } from '@novu/shared';
+ * import { slugify } from '@/shared';
  * slugify('Hello World', { separator: '_' });
  * //=> 'hello_world'
  * ```
  *
  * @example
  * ```
- * import { slugify } from '@novu/shared';
+ * import { slugify } from '@/shared';
  * slugify('αβγ');
  * //=> 'avg'
  * ```
  *
  * @example
  * ```
- * import { slugify } from '@novu/shared';
+ * import { slugify } from '@/shared';
  * slugify('💯-1️⃣-2️⃣-3️⃣');
  * //=> '100-1-2-3'
  * ```
  *
  * @example
  * ```
- * import { slugify } from '@novu/shared';
+ * import { slugify } from '@/shared';
  * slugify('camelCase', { decamelize: true });
  * //=> 'camel-case'
  * ```
  *
  * @example
  * ```
- * import { slugify } from '@novu/shared';
+ * import { slugify } from '@/shared';
  * slugify('Hello World', { lowercase: false });
  * //=> 'Hello-World'
  * ```
  *
  * @example
  * ```
- * import { slugify } from '@novu/shared';
+ * import { slugify } from '@/shared';
  * slugify('foo@unicorn', { preserveLeadingUnderscore: true });
  * //=> '_foo-at-unicorn'
  * ```
  *
  * @example
  * ```
- * import { slugify } from '@novu/shared';
+ * import { slugify } from '@/shared';
  * slugify('foo-bar-', { preserveTrailingDash: true });
  * //=> 'foo-bar-'
  * ```

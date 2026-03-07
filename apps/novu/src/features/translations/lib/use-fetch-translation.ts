@@ -1,12 +1,12 @@
 import type { TranslationResponseDto } from "@novu/api/models/components";
 import { useQuery } from "@tanstack/react-query";
-import { getTranslation } from "@/api/translations";
+import { getTranslation } from "@/entities/translation/api/translations";
 import {
 	requireEnvironment,
 	useEnvironment,
-} from "@/context/environment/hooks";
-import type { LocalizationResourceEnum } from "@/types/translations";
-import { QueryKeys } from "@/utils/query-keys";
+} from "@/app/context/environment/hooks";
+import type { LocalizationResourceEnum } from "@/shared/model/translations";
+import { QueryKeys } from "@/shared/lib/query-keys";
 
 type FetchTranslationParams = {
 	resourceId: string;

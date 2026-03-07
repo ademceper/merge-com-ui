@@ -13,7 +13,7 @@ import {
 	type WorkflowRunsMetricDataPoint,
 	type WorkflowRunsTrendDataPoint,
 	type WorkflowVolumeDataPoint,
-} from "../api/activity";
+} from "@/entities/activity/api/activity";
 
 function generateTimestamps(days: number): string[] {
 	const timestamps: string[] = [];

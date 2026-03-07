@@ -4,10 +4,10 @@ import type {
 	DirectionEnum,
 	IEnvironment,
 	SeverityLevelEnum,
-} from "@novu/shared";
-import type { Topic } from "@/features/topics/components/types";
-import { convertContextKeysToPayload } from "@/utils/context-variable-utils";
-import { delV2, getV2, patchV2, postV2 } from "./api.client";
+} from "@/shared";
+import type { Topic } from "@/features/topics/ui/types";
+import { convertContextKeysToPayload } from "@/shared/lib/context-variable-utils";
+import { delV2, getV2, patchV2, postV2 } from "@/shared/api/api.client";
 
 export type ListTopicsResponse = {
 	data: Array<Topic>;

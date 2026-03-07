@@ -1,13 +1,13 @@
-import type { WorkflowResponseDto } from "@novu/shared";
+import type { WorkflowResponseDto } from "@/shared";
 import { useState } from "react";
 import { toast } from "sonner";
-import { getActivityList } from "@/api/activity";
+import { getActivityList } from "@/entities/activity/api/activity";
 import {
 	showErrorToast,
 	showSuccessToast,
-} from "@/components/primitives/sonner-helpers";
-import { convertSchemaToPropertyList } from "@/components/schema-editor/utils/schema-converter";
-import { useEnvironment } from "@/context/environment/hooks";
+} from "@/shared/ui/primitives/sonner-helpers";
+import { convertSchemaToPropertyList } from "@/shared/ui/schema-editor/utils/schema-converter";
+import { useEnvironment } from "@/app/context/environment/hooks";
 import {
 	cleanPayloadData,
 	generateSchemaFromJson,

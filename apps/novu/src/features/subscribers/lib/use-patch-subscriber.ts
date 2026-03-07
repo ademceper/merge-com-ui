@@ -4,10 +4,10 @@ import {
 	useMutation,
 	useQueryClient,
 } from "@tanstack/react-query";
-import { patchSubscriber } from "@/api/subscribers";
-import { useEnvironment } from "@/context/environment/hooks";
-import { QueryKeys } from "@/utils/query-keys";
-import type { OmitEnvironmentFromParameters } from "@/utils/types";
+import { patchSubscriber } from "@/entities/subscriber/api/subscribers";
+import { useEnvironment } from "@/app/context/environment/hooks";
+import { QueryKeys } from "@/shared/lib/query-keys";
+import type { OmitEnvironmentFromParameters } from "@/shared/lib/types";
 
 type PatchSubscriberParameters = OmitEnvironmentFromParameters<
 	typeof patchSubscriber

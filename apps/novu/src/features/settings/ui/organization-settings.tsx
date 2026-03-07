@@ -1,15 +1,15 @@
 /** biome-ignore-all lint/correctness/useUniqueElementIds: expected */
-import { PermissionsEnum } from "@novu/shared";
+import { PermissionsEnum } from "@/shared";
 import { Info } from "@phosphor-icons/react";
 import {
 	Tooltip,
 	TooltipContent,
 	TooltipPortal,
 	TooltipTrigger,
-} from "@/components/primitives/tooltip";
-import { useFetchOrganizationSettings } from "@/features/settings/hooks/use-fetch-organization-settings";
-import { useUpdateOrganizationSettings } from "@/features/settings/hooks/use-update-organization-settings";
-import { Protect } from "@/utils/protect";
+} from "@/shared/ui/primitives/tooltip";
+import { useFetchOrganizationSettings } from "@/features/settings/lib/use-fetch-organization-settings";
+import { useUpdateOrganizationSettings } from "@/features/settings/lib/use-update-organization-settings";
+import { Protect } from "@/shared/lib/protect";
 import { NovuBrandingSwitch } from "./novu-branding-switch";
 
 export function OrganizationSettings() {

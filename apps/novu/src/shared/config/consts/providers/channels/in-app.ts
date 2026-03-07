@@ -1,5 +1,5 @@
-import { ChannelTypeEnum, InAppProviderIdEnum } from "../../../types";
-import { UTM_CAMPAIGN_QUERY_PARAM } from "../../../ui";
+import { ChannelTypeEnum, InAppProviderIdEnum } from "@/shared/model";
+import { UTM_CAMPAIGN_QUERY_PARAM } from "@/shared/ui";
 import { novuInAppConfig } from "../credentials";
 import type { IProviderConfig } from "../provider.interface";
 

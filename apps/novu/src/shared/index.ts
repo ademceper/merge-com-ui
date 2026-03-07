@@ -1,5 +1,5 @@
 export * from "./config";
-export * from "./consts";
+export * from "./config/consts";
 export * from "./dto";
 export * from "./entities/activity-feed";
 export * from "./entities/actor";
@@ -26,7 +26,7 @@ export * from "./entities/user";
 export * from "./entities/workflow-override";
 export * from "./entities/workflow-run";
 export * from "./services";
-export * from "./types";
+export * from "./model";
 export * from "./ui";
-export * from "./utils";
+export * from "./lib/utils";
 export * from "./webhooks";

@@ -18,9 +18,9 @@ import {
 } from "@phosphor-icons/react";
 import { useCommandState } from "cmdk";
 import { useCallback, useEffect, useState } from "react";
-import { useAiDrawer } from "@/components/ai-drawer";
-import { useTelemetry } from "@/hooks/use-telemetry";
-import { TelemetryEvent } from "@/utils/telemetry";
+import { useAiDrawer } from "@/widgets/ai-drawer";
+import { useTelemetry } from "@/shared/lib/hooks/use-telemetry";
+import { TelemetryEvent } from "@/shared/lib/telemetry";
 import * as CommandMenu from "./command-menu";
 import type { CommandCategory, Command as CommandType } from "./command-types";
 import { useCommandPalette } from "./hooks/use-command-palette";

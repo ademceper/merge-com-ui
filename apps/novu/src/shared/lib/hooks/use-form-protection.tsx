@@ -1,6 +1,6 @@
 import { useCallback, useMemo, useState } from "react";
-import { UnsavedChangesAlertDialog } from "@/components/unsaved-changes-alert-dialog";
-import { useBeforeUnload } from "@/hooks/use-before-unload";
+import { UnsavedChangesAlertDialog } from "@/shared/ui/unsaved-changes-alert-dialog";
+import { useBeforeUnload } from "@/shared/lib/hooks/use-before-unload";
 import { useFindDirtyForm } from "./use-find-dirty-form";
 
 type UseFormProtectionProps<T> = {

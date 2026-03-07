@@ -1,5 +1,5 @@
 import { standardSchemaResolver } from "@hookform/resolvers/standard-schema";
-import { ContentIssueEnum, type StepUpdateDto } from "@novu/shared";
+import { ContentIssueEnum, type StepUpdateDto } from "@/shared";
 import { useEffect, useMemo } from "react";
 import { useForm } from "react-hook-form";
 import {
@@ -12,23 +12,23 @@ import {
 } from "react-querybuilder";
 import { parseJsonLogic } from "react-querybuilder/parseJsonLogic";
 import { z } from "zod";
-import { Form, FormField } from "@/components/primitives/form/form";
-import { ConditionsEditor } from "@/features/workflows/components/conditions-editor/conditions-editor";
-import { isRelativeDateOperator } from "@/features/workflows/components/conditions-editor/field-type-operators";
-import { updateStepInWorkflow } from "@/features/workflows/components/workflow-editor/step-utils";
-import { useWorkflow } from "@/features/workflows/components/workflow-editor/workflow-provider";
-import { useDataRef } from "@/hooks/use-data-ref";
-import { useFormAutosave } from "@/hooks/use-form-autosave";
-import { useParseVariables } from "@/hooks/use-parse-variables";
-import { useTelemetry } from "@/hooks/use-telemetry";
+import { Form, FormField } from "@/shared/ui/primitives/form/form";
+import { ConditionsEditor } from "@/features/workflows/ui/conditions-editor/conditions-editor";
+import { isRelativeDateOperator } from "@/features/workflows/ui/conditions-editor/field-type-operators";
+import { updateStepInWorkflow } from "@/features/workflows/ui/workflow-editor/step-utils";
+import { useWorkflow } from "@/features/workflows/ui/workflow-editor/workflow-provider";
+import { useDataRef } from "@/shared/lib/hooks/use-data-ref";
+import { useFormAutosave } from "@/shared/lib/hooks/use-form-autosave";
+import { useParseVariables } from "@/shared/lib/hooks/use-parse-variables";
+import { useTelemetry } from "@/shared/lib/hooks/use-telemetry";
 import {
 	countConditions,
 	getUniqueFieldNamespaces,
 	getUniqueOperators,
 	parseJsonLogicOptions,
-} from "@/utils/conditions";
-import type { EnhancedLiquidVariable } from "@/utils/parseStepVariables";
-import { TelemetryEvent } from "@/utils/telemetry";
+} from "@/shared/lib/conditions";
+import type { EnhancedLiquidVariable } from "@/shared/lib/parseStepVariables";
+import { TelemetryEvent } from "@/shared/lib/telemetry";
 import { EditStepConditionsLayout } from "./edit-step-conditions-layout";
 
 const PAYLOAD_FIELD_PREFIX = "payload.";

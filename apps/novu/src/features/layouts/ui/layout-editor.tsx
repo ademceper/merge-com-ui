@@ -1,5 +1,5 @@
 import { Button } from "@merge-rd/ui/components/button";
-import { EnvironmentTypeEnum } from "@novu/shared";
+import { EnvironmentTypeEnum } from "@/shared";
 import {
 	CaretRight,
 	CodeBlock,
@@ -10,17 +10,17 @@ import {
 } from "@phosphor-icons/react";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { IssuesPanel } from "@/components/issues-panel";
-import { CompactButton } from "@/components/primitives/button-compact";
-import { LocaleSelect } from "@/components/primitives/locale-select";
-import { useEnvironment } from "@/context/environment/hooks";
-import { useFetchTranslationGroup } from "@/features/translations/hooks/use-fetch-translation-group";
-import { useIsTranslationEnabled } from "@/features/translations/hooks/use-is-translation-enabled";
-import { PanelHeader } from "@/features/workflows/components/workflow-editor/steps/layout/panel-header";
-import { ResizableLayout } from "@/features/workflows/components/workflow-editor/steps/layout/resizable-layout";
-import { TranslationStatus } from "@/features/workflows/components/workflow-editor/translation-status";
-import { LocalizationResourceEnum } from "@/types/translations";
-import { buildRoute, ROUTES } from "@/utils/routes";
+import { IssuesPanel } from "@/widgets/issues-panel";
+import { CompactButton } from "@/shared/ui/primitives/button-compact";
+import { LocaleSelect } from "@/shared/ui/primitives/locale-select";
+import { useEnvironment } from "@/app/context/environment/hooks";
+import { useFetchTranslationGroup } from "@/features/translations/lib/use-fetch-translation-group";
+import { useIsTranslationEnabled } from "@/features/translations/lib/use-is-translation-enabled";
+import { PanelHeader } from "@/features/workflows/ui/workflow-editor/steps/layout/panel-header";
+import { ResizableLayout } from "@/features/workflows/ui/workflow-editor/steps/layout/resizable-layout";
+import { TranslationStatus } from "@/features/workflows/ui/workflow-editor/translation-status";
+import { LocalizationResourceEnum } from "@/shared/model/translations";
+import { buildRoute, ROUTES } from "@/shared/lib/routes";
 import { LayoutEditorFactory } from "./layout-editor-factory";
 import { useLayoutEditor } from "./layout-editor-provider";
 import { LayoutEditorSettingsDrawer } from "./layout-editor-settings-drawer";

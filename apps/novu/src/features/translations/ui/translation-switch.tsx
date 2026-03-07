@@ -4,11 +4,11 @@ import {
 	FeatureNameEnum,
 	getFeatureForTierAsBoolean,
 	PermissionsEnum,
-} from "@novu/shared";
-import { PermissionSwitch } from "@/components/primitives/permission-switch";
-import { UpgradeCTATooltip } from "@/components/upgrade-cta-tooltip";
-import { IS_ENTERPRISE, IS_SELF_HOSTED } from "@/config";
-import { useFetchSubscription } from "@/hooks/use-fetch-subscription";
+} from "@/shared";
+import { PermissionSwitch } from "@/shared/ui/primitives/permission-switch";
+import { UpgradeCTATooltip } from "@/shared/ui/upgrade-cta-tooltip";
+import { IS_ENTERPRISE, IS_SELF_HOSTED } from "@/shared/config";
+import { useFetchSubscription } from "@/shared/lib/hooks/use-fetch-subscription";
 
 type TranslationSwitchProps = {
 	id: string;

@@ -4,7 +4,7 @@ import type {
 	ITenantDefine,
 	ITopic,
 	ProvidersIdEnum,
-} from "../../types";
+} from "../../model";
 
 export type TriggerRecipientSubscriber = string | ISubscribersDefine;
 

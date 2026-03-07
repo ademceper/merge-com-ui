@@ -1,9 +1,9 @@
 import type { RouteObject } from "react-router-dom";
 import { lazy } from "react";
-import { ROUTES } from "@/utils/routes";
+import { ROUTES } from "@/shared/lib/routes";
 
 const IntegrationsListPage = lazy(() =>
-	import("@/features/integrations/pages/integrations-list-page").then(
+	import("@/features/integrations/ui/pages/integrations-list-page").then(
 		(m) => ({
 			default: m.IntegrationsListPage,
 		}),
@@ -11,14 +11,14 @@ const IntegrationsListPage = lazy(() =>
 );
 const CreateIntegrationSidebar = lazy(() =>
 	import(
-		"@/features/integrations/components/create-integration-sidebar"
+		"@/features/integrations/ui/create-integration-sidebar"
 	).then((m) => ({
 		default: m.CreateIntegrationSidebar,
 	})),
 );
 const UpdateIntegrationSidebar = lazy(() =>
 	import(
-		"@/features/integrations/components/update-integration-sidebar"
+		"@/features/integrations/ui/update-integration-sidebar"
 	).then((m) => ({
 		default: m.UpdateIntegrationSidebar,
 	})),

@@ -13,7 +13,7 @@ import {
 	EnvironmentTypeEnum,
 	PermissionsEnum,
 	WorkflowStatusEnum,
-} from "@novu/shared";
+} from "@/shared";
 import {
 	CaretDown,
 	CaretRight,
@@ -30,41 +30,41 @@ import {
 	useParams,
 	useSearchParams,
 } from "react-router-dom";
-import { PageMeta } from "@/components/page-meta";
+import { PageMeta } from "@/shared/ui/page-meta";
 import {
 	ButtonGroupItem,
 	ButtonGroupRoot,
-} from "@/components/primitives/button-group";
-import { LinkButton } from "@/components/primitives/button-link";
+} from "@/shared/ui/primitives/button-group";
+import { LinkButton } from "@/shared/ui/primitives/button-link";
 import {
 	Tooltip,
 	TooltipContent,
 	TooltipTrigger,
-} from "@/components/primitives/tooltip";
-import { useEnvironment } from "@/context/environment/hooks";
-import { useSetPageHeader } from "@/context/page-header";
-import { selectPopularByIdStrict } from "@/features/workflows/components/template-store/featured";
-import { WorkflowCard } from "@/features/workflows/components/template-store/workflow-card";
-import { WorkflowTemplateModal } from "@/features/workflows/components/template-store/workflow-template-modal";
+} from "@/shared/ui/primitives/tooltip";
+import { useEnvironment } from "@/app/context/environment/hooks";
+import { useSetPageHeader } from "@/app/context/page-header";
+import { selectPopularByIdStrict } from "@/features/workflows/ui/template-store/featured";
+import { WorkflowCard } from "@/features/workflows/ui/template-store/workflow-card";
+import { WorkflowTemplateModal } from "@/features/workflows/ui/template-store/workflow-template-modal";
 import {
 	type SortableColumn,
 	WorkflowList,
-} from "@/features/workflows/components/workflow-list";
-import { useFetchWorkflows } from "@/features/workflows/hooks/use-fetch-workflows";
+} from "@/features/workflows/ui/workflow-list";
+import { useFetchWorkflows } from "@/features/workflows/lib/use-fetch-workflows";
 import {
 	type QuickTemplate,
 	useTemplateStore,
-} from "@/features/workflows/hooks/use-template-store";
-import { useDebounce } from "@/hooks/use-debounce";
-import { useHasPermission } from "@/hooks/use-has-permission";
+} from "@/features/workflows/lib/use-template-store";
+import { useDebounce } from "@/shared/lib/hooks/use-debounce";
+import { useHasPermission } from "@/shared/lib/hooks/use-has-permission";
 import {
 	getPersistedPageSize,
 	usePersistedPageSize,
-} from "@/hooks/use-persisted-page-size";
-import { useTags } from "@/hooks/use-tags";
-import { useTelemetry } from "@/hooks/use-telemetry";
-import { buildRoute, ROUTES } from "@/utils/routes";
-import { TelemetryEvent } from "@/utils/telemetry";
+} from "@/shared/lib/hooks/use-persisted-page-size";
+import { useTags } from "@/shared/lib/hooks/use-tags";
+import { useTelemetry } from "@/shared/lib/hooks/use-telemetry";
+import { buildRoute, ROUTES } from "@/shared/lib/routes";
+import { TelemetryEvent } from "@/shared/lib/telemetry";
 
 const WORKFLOWS_TABLE_ID = "workflows-list";
 

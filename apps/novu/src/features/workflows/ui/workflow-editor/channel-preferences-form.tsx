@@ -10,16 +10,16 @@ import {
 	SeverityLevelEnum,
 	type WorkflowPreferences,
 	type WorkflowResponseDto,
-} from "@novu/shared";
+} from "@/shared";
 import { CaretLeft, Info, X } from "@phosphor-icons/react";
 import { motion } from "motion/react";
 import { useMemo } from "react";
 import { useForm, useWatch } from "react-hook-form";
 import { Link } from "react-router-dom";
-import { STEP_TYPE_TO_ICON } from "@/components/icons/utils";
-import { PageMeta } from "@/components/page-meta";
-import { Badge } from "@/components/primitives/badge";
-import { CompactButton } from "@/components/primitives/button-compact";
+import { STEP_TYPE_TO_ICON } from "@/shared/ui/icons/utils";
+import { PageMeta } from "@/shared/ui/page-meta";
+import { Badge } from "@/shared/ui/primitives/badge";
+import { CompactButton } from "@/shared/ui/primitives/button-compact";
 import {
 	Form,
 	FormControl,
@@ -27,31 +27,31 @@ import {
 	FormItem,
 	FormLabel,
 	FormRoot,
-} from "@/components/primitives/form/form";
+} from "@/shared/ui/primitives/form/form";
 import {
 	Select,
 	SelectContent,
 	SelectTrigger,
 	SelectValue,
-} from "@/components/primitives/select";
-import { Step } from "@/components/primitives/step";
+} from "@/shared/ui/primitives/select";
+import { Step } from "@/shared/ui/primitives/step";
 import {
 	Tooltip,
 	TooltipContent,
 	TooltipTrigger,
-} from "@/components/primitives/tooltip";
+} from "@/shared/ui/primitives/tooltip";
 import {
 	SidebarContent,
 	SidebarHeader,
-} from "@/components/side-navigation/sidebar";
-import { UserPreferencesFormSchema } from "@/features/workflows/components/workflow-editor/schema";
-import type { UpdateWorkflowFn } from "@/features/workflows/components/workflow-editor/workflow-provider";
-import { useHasPermission } from "@/hooks/use-has-permission";
-import { useTelemetry } from "@/hooks/use-telemetry";
-import { STEP_TYPE_TO_COLOR } from "@/utils/color";
-import { ResourceOriginEnum, type StepTypeEnum } from "@/utils/enums";
-import { capitalize } from "@/utils/string";
-import { TelemetryEvent } from "@/utils/telemetry";
+} from "@/widgets/side-navigation/sidebar";
+import { UserPreferencesFormSchema } from "@/features/workflows/ui/workflow-editor/schema";
+import type { UpdateWorkflowFn } from "@/features/workflows/ui/workflow-editor/workflow-provider";
+import { useHasPermission } from "@/shared/lib/hooks/use-has-permission";
+import { useTelemetry } from "@/shared/lib/hooks/use-telemetry";
+import { STEP_TYPE_TO_COLOR } from "@/shared/lib/color";
+import { ResourceOriginEnum, type StepTypeEnum } from "@/shared/lib/enums";
+import { capitalize } from "@/shared/lib/string";
+import { TelemetryEvent } from "@/shared/lib/telemetry";
 import { SeveritySelectItem } from "./severity-select-item";
 
 type ConfigureWorkflowFormProps = {

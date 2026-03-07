@@ -1,5 +1,5 @@
 import { cn } from "@merge-rd/ui/lib/utils";
-import type { IActivity } from "@novu/shared";
+import type { IActivity } from "@/shared";
 import { format } from "date-fns";
 import { motion } from "motion/react";
 import React from "react";
@@ -8,20 +8,20 @@ import {
 	Popover,
 	PopoverContent,
 	PopoverTrigger,
-} from "@/components/primitives/popover";
+} from "@/shared/ui/primitives/popover";
 import {
 	Tooltip,
 	TooltipContent,
 	TooltipTrigger,
-} from "@/components/primitives/tooltip";
-import { TimeDisplayHoverCard } from "@/components/time-display-hover-card";
-import { useEnvironment } from "@/context/environment/hooks";
-import { ContextDrawerButton } from "@/features/contexts/components";
-import { SubscriberDrawerButton } from "@/features/subscribers/components/subscriber-drawer";
-import { TopicDrawerButton } from "@/features/topics/components/topic-drawer";
-import { fadeIn } from "@/utils/animation";
-import { buildRoute, ROUTES } from "@/utils/routes";
-import { capitalize } from "@/utils/string";
+} from "@/shared/ui/primitives/tooltip";
+import { TimeDisplayHoverCard } from "@/shared/ui/time-display-hover-card";
+import { useEnvironment } from "@/app/context/environment/hooks";
+import { ContextDrawerButton } from "@/features/contexts/ui";
+import { SubscriberDrawerButton } from "@/features/subscribers/ui/subscriber-drawer";
+import { TopicDrawerButton } from "@/features/topics/ui/topic-drawer";
+import { fadeIn } from "@/shared/lib/animation";
+import { buildRoute, ROUTES } from "@/shared/lib/routes";
+import { capitalize } from "@/shared/lib/string";
 import { JOB_STATUS_CONFIG } from "./constants";
 import { getActivityStatus } from "./helpers";
 import { OverviewItem } from "./overview-item";

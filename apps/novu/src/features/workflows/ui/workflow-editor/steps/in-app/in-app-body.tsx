@@ -4,12 +4,12 @@ import {
 	FormField,
 	FormItem,
 	FormMessage,
-} from "@/components/primitives/form/form";
-import { InputRoot } from "@/components/primitives/input";
-import { ControlInput } from "@/features/workflows/components/workflow-editor/control-input";
-import { useWorkflow } from "@/features/workflows/components/workflow-editor/workflow-provider";
-import { useParseVariables } from "@/hooks/use-parse-variables";
-import { capitalize, containsHTMLEntities } from "@/utils/string";
+} from "@/shared/ui/primitives/form/form";
+import { InputRoot } from "@/shared/ui/primitives/input";
+import { ControlInput } from "@/features/workflows/ui/workflow-editor/control-input";
+import { useWorkflow } from "@/features/workflows/ui/workflow-editor/workflow-provider";
+import { useParseVariables } from "@/shared/lib/hooks/use-parse-variables";
+import { capitalize, containsHTMLEntities } from "@/shared/lib/string";
 
 const bodyKey = "body";
 

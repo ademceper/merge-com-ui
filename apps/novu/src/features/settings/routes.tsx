@@ -1,14 +1,14 @@
 import type { RouteObject } from "react-router-dom";
 import { lazy } from "react";
-import { ROUTES } from "@/utils/routes";
+import { ROUTES } from "@/shared/lib/routes";
 
 const ApiKeysPage = lazy(() =>
-	import("@/features/settings/pages/api-keys").then((m) => ({
+	import("@/features/settings/ui/pages/api-keys").then((m) => ({
 		default: m.ApiKeysPage,
 	})),
 );
 const EnvironmentsPage = lazy(() =>
-	import("@/features/settings/pages/environments").then((m) => ({
+	import("@/features/settings/ui/pages/environments").then((m) => ({
 		default: m.EnvironmentsPage,
 	})),
 );

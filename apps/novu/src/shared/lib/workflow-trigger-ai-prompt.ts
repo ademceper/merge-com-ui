@@ -1,4 +1,4 @@
-import { API_HOSTNAME } from "@/config";
+import { API_HOSTNAME } from "@/shared/config";
 import {
 	createCurlSnippet,
 	createGoSnippet,

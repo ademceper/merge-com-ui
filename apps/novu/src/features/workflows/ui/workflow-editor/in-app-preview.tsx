@@ -3,11 +3,11 @@ import { Skeleton } from "@merge-rd/ui/components/skeleton";
 import { cn } from "@merge-rd/ui/lib/utils";
 import { parseMarkdownIntoTokens } from "@novu/js/internal";
 import { type HTMLAttributes, type ReactNode, useMemo } from "react";
-import { InboxArrowDown } from "@/components/icons/inbox-arrow-down";
-import { InboxBell } from "@/components/icons/inbox-bell";
-import { InboxEllipsis } from "@/components/icons/inbox-ellipsis";
-import { InboxSettings } from "@/components/icons/inbox-settings";
-import { inboxButtonVariants } from "@/utils/inbox";
+import { InboxArrowDown } from "@/shared/ui/icons/inbox-arrow-down";
+import { InboxBell } from "@/shared/ui/icons/inbox-bell";
+import { InboxEllipsis } from "@/shared/ui/icons/inbox-ellipsis";
+import { InboxSettings } from "@/shared/ui/icons/inbox-settings";
+import { inboxButtonVariants } from "@/shared/lib/inbox";
 
 type InAppPreviewBellProps = HTMLAttributes<HTMLDivElement>;
 

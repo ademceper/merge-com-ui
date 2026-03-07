@@ -1,25 +1,25 @@
-import { RedirectTargetEnum } from "@novu/shared";
+import { RedirectTargetEnum } from "@/shared";
 import { useFormContext } from "react-hook-form";
 import {
 	FormControl,
 	FormField,
 	FormItem,
 	FormMessage,
-} from "@/components/primitives/form/form";
-import { type InputProps, InputRoot } from "@/components/primitives/input";
+} from "@/shared/ui/primitives/form/form";
+import { type InputProps, InputRoot } from "@/shared/ui/primitives/input";
 import {
 	Select,
 	SelectContent,
 	SelectItem,
 	SelectTrigger,
 	SelectValue,
-} from "@/components/primitives/select";
-import { ControlInput } from "@/features/workflows/components/workflow-editor/control-input";
-import { useSaveForm } from "@/features/workflows/components/workflow-editor/steps/save-form-context";
+} from "@/shared/ui/primitives/select";
+import { ControlInput } from "@/features/workflows/ui/workflow-editor/control-input";
+import { useSaveForm } from "@/features/workflows/ui/workflow-editor/steps/save-form-context";
 import type {
 	IsAllowedVariable,
 	LiquidVariable,
-} from "@/utils/parseStepVariables";
+} from "@/shared/lib/parseStepVariables";
 
 type URLInputProps = Omit<InputProps, "value" | "onChange"> & {
 	options: string[];

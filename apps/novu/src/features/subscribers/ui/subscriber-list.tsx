@@ -9,25 +9,25 @@ import {
 	TableRow,
 } from "@merge-rd/ui/components/table";
 import { cn } from "@merge-rd/ui/lib/utils";
-import { type DirectionEnum, PermissionsEnum } from "@novu/shared";
+import { type DirectionEnum, PermissionsEnum } from "@/shared";
 import { UserCircle } from "@phosphor-icons/react";
 import { type HTMLAttributes, useEffect, useState } from "react";
-import { ListNoResults } from "@/components/list-no-results";
-import { PermissionButton } from "@/components/primitives/permission-button";
-import { SubscriberListBlank } from "@/features/subscribers/components/subscriber-list-blank";
+import { ListNoResults } from "@/shared/ui/list-no-results";
+import { PermissionButton } from "@/shared/ui/primitives/permission-button";
+import { SubscriberListBlank } from "@/features/subscribers/ui/subscriber-list-blank";
 import {
 	SubscriberRow,
 	SubscriberRowSkeleton,
-} from "@/features/subscribers/components/subscriber-row";
-import { SubscribersFilters } from "@/features/subscribers/components/subscribers-filters";
-import { useFetchSubscribers } from "@/features/subscribers/hooks/use-fetch-subscribers";
-import { useSubscribersNavigate } from "@/features/subscribers/hooks/use-subscribers-navigate";
+} from "@/features/subscribers/ui/subscriber-row";
+import { SubscribersFilters } from "@/features/subscribers/ui/subscribers-filters";
+import { useFetchSubscribers } from "@/features/subscribers/lib/use-fetch-subscribers";
+import { useSubscribersNavigate } from "@/features/subscribers/lib/use-subscribers-navigate";
 import {
 	type SubscribersFilter,
 	type SubscribersSortableColumn,
 	type SubscribersUrlState,
 	useSubscribersUrlState,
-} from "@/features/subscribers/hooks/use-subscribers-url-state";
+} from "@/features/subscribers/lib/use-subscribers-url-state";
 
 type SubscriberListFiltersProps = HTMLAttributes<HTMLDivElement> &
 	Pick<

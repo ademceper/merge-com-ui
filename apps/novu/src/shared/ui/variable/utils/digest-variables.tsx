@@ -1,7 +1,7 @@
 import { createRoot } from "react-dom/client";
-import { DigestCountSummaryPreview } from "@/components/variable/components/digest-count-summary-preview";
-import { DigestSentenceSummaryPreview } from "@/components/variable/components/digest-sentence-summary-preview";
-import type { LiquidVariable } from "../../../utils/parseStepVariables";
+import { DigestCountSummaryPreview } from "@/shared/ui/variable/components/digest-count-summary-preview";
+import { DigestSentenceSummaryPreview } from "@/shared/ui/variable/components/digest-sentence-summary-preview";
+import type { LiquidVariable } from "@/shared/lib/parseStepVariables";
 
 export enum DIGEST_VARIABLES_ENUM {
 	COUNT_SUMMARY = "countSummary",

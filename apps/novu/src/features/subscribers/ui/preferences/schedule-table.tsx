@@ -10,9 +10,9 @@ import {
 	SelectItem,
 	SelectTrigger,
 	SelectValue,
-} from "@/components/primitives/select";
-import { showErrorToast } from "@/components/primitives/sonner-helpers";
-import { capitalize } from "@/utils/string";
+} from "@/shared/ui/primitives/select";
+import { showErrorToast } from "@/shared/ui/primitives/sonner-helpers";
+import { capitalize } from "@/shared/lib/string";
 import { DayScheduleCopy } from "./day-schedule-copy";
 import { weekDays } from "./utils";
 

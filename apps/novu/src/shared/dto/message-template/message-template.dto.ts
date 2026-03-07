@@ -8,7 +8,7 @@ import type {
 	MessageTemplateContentType,
 	StepTypeEnum,
 	UrlTarget,
-} from "../../types";
+} from "../../model";
 
 export class ChannelCTADto {
 	type: ChannelCTATypeEnum;

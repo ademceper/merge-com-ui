@@ -1,19 +1,19 @@
 import { Button } from "@merge-rd/ui/components/button";
 import { cn } from "@merge-rd/ui/lib/utils";
-import type { IActivity } from "@novu/shared";
+import type { IActivity } from "@/shared";
 import { Path, X } from "@phosphor-icons/react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { motion } from "motion/react";
-import { getActivityList } from "@/api/activity";
-import { triggerWorkflow } from "@/api/workflows";
-import { RepeatPlay } from "@/components/icons/repeat-play";
+import { getActivityList } from "@/entities/activity/api/activity";
+import { triggerWorkflow } from "@/entities/workflow/api/workflows";
+import { RepeatPlay } from "@/shared/ui/icons/repeat-play";
 import {
 	showErrorToast,
 	showSuccessToast,
-} from "@/components/primitives/sonner-helpers";
-import { useEnvironment } from "@/context/environment/hooks";
-import { fadeIn } from "@/utils/animation";
-import { QueryKeys } from "@/utils/query-keys";
+} from "@/shared/ui/primitives/sonner-helpers";
+import { useEnvironment } from "@/app/context/environment/hooks";
+import { fadeIn } from "@/shared/lib/animation";
+import { QueryKeys } from "@/shared/lib/query-keys";
 
 type ActivityHeaderProps = {
 	className?: string;

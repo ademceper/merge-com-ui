@@ -15,7 +15,7 @@ import {
 	AiAgentTypeEnum,
 	AiResourceTypeEnum,
 	type DuplicateWorkflowDto,
-} from "@novu/shared";
+} from "@/shared";
 import {
 	CaretRight,
 	CheckCircle,
@@ -30,8 +30,8 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { z } from "zod";
-import { Sparkling } from "@/components/icons/sparkling";
-import { CompactButton } from "@/components/primitives/button-compact";
+import { Sparkling } from "@/shared/ui/icons/sparkling";
+import { CompactButton } from "@/shared/ui/primitives/button-compact";
 import {
 	Form,
 	FormControl,
@@ -39,25 +39,25 @@ import {
 	FormItem,
 	FormMessage,
 	FormRoot,
-} from "@/components/primitives/form/form";
+} from "@/shared/ui/primitives/form/form";
 import {
 	SegmentedControl,
 	SegmentedControlList,
 	SegmentedControlTrigger,
-} from "@/components/primitives/segmented-control";
-import { showErrorToast } from "@/components/primitives/sonner-helpers";
-import { Tag } from "@/components/primitives/tag";
-import { Textarea } from "@/components/primitives/textarea";
-import { ExternalLink } from "@/components/shared/external-link";
-import { useEnvironment } from "@/context/environment/hooks";
-import { CreateWorkflowForm } from "@/features/workflows/components/workflow-editor/create-workflow-form";
-import { useCreateWorkflow } from "@/features/workflows/hooks/use-create-workflow";
-import { useDuplicateWorkflow } from "@/features/workflows/hooks/use-duplicate-workflow";
-import { useFetchWorkflow } from "@/features/workflows/hooks/use-fetch-workflow";
-import { useAiChatStream } from "@/hooks/use-ai-chat-stream";
-import { useCreateAiChat } from "@/hooks/use-create-ai-chat";
-import { useFormProtection } from "@/hooks/use-form-protection";
-import { buildRoute, ROUTES } from "@/utils/routes";
+} from "@/shared/ui/primitives/segmented-control";
+import { showErrorToast } from "@/shared/ui/primitives/sonner-helpers";
+import { Tag } from "@/shared/ui/primitives/tag";
+import { Textarea } from "@/shared/ui/primitives/textarea";
+import { ExternalLink } from "@/shared/ui/shared/external-link";
+import { useEnvironment } from "@/app/context/environment/hooks";
+import { CreateWorkflowForm } from "@/features/workflows/ui/workflow-editor/create-workflow-form";
+import { useCreateWorkflow } from "@/features/workflows/lib/use-create-workflow";
+import { useDuplicateWorkflow } from "@/features/workflows/lib/use-duplicate-workflow";
+import { useFetchWorkflow } from "@/features/workflows/lib/use-fetch-workflow";
+import { useAiChatStream } from "@/shared/lib/hooks/use-ai-chat-stream";
+import { useCreateAiChat } from "@/shared/lib/hooks/use-create-ai-chat";
+import { useFormProtection } from "@/shared/lib/hooks/use-form-protection";
+import { buildRoute, ROUTES } from "@/shared/lib/routes";
 
 export type WorkflowCreatedEvent = {
 	type: "workflow-created";

@@ -5,11 +5,11 @@ import {
 	Popover,
 	PopoverContent,
 	PopoverTrigger,
-} from "@/components/primitives/popover";
+} from "@/shared/ui/primitives/popover";
 import {
 	countIssues,
 	getAllStepIssues,
-} from "@/features/workflows/components/workflow-editor/step-utils";
+} from "@/features/workflows/ui/workflow-editor/step-utils";
 
 // Local type definition for step issues until the shared types are updated
 type RuntimeIssue = {

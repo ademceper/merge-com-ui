@@ -1,4 +1,4 @@
-import { InboxCountTypeEnum } from "../../../entities/integration/configuration.interface";
+import { InboxCountTypeEnum } from "@/shared/entities/integration/configuration.interface";
 import type {
 	ConfigConfiguration,
 	ConfigConfigurationGroup,

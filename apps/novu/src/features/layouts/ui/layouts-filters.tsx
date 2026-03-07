@@ -9,11 +9,11 @@ import {
 	FormField,
 	FormItem,
 	FormRoot,
-} from "@/components/primitives/form/form";
+} from "@/shared/ui/primitives/form/form";
 import {
 	defaultLayoutsFilter,
 	type LayoutsFilter,
-} from "@/features/layouts/hooks/use-layouts-url-state";
+} from "@/features/layouts/lib/use-layouts-url-state";
 
 export type LayoutsFiltersProps = HTMLAttributes<HTMLFormElement> & {
 	onFiltersChange: (filter: LayoutsFilter) => void;

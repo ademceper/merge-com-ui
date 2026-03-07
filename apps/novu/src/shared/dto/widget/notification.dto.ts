@@ -1,4 +1,4 @@
-import type { ChannelTypeEnum } from "../../types";
+import type { ChannelTypeEnum } from "../../model";
 import type { IActorDto, IMessageCTADto } from "../message-template";
 import type { ISubscriberFeedResponseDto } from "../subscriber";
 

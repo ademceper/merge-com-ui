@@ -16,12 +16,12 @@ import {
 } from "@phosphor-icons/react";
 import { useCallback, useId, useRef, useState } from "react";
 import type { IconType } from "react-icons";
-import { Input } from "@/components/primitives/input";
+import { Input } from "@/shared/ui/primitives/input";
 import {
 	Popover,
 	PopoverContent,
 	PopoverTrigger,
-} from "@/components/primitives/popover";
+} from "@/shared/ui/primitives/popover";
 import { EnterLineIcon } from "../icons/enter-line";
 
 export interface AutocompleteItem {

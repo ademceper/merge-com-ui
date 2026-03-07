@@ -2,7 +2,7 @@ import { Button } from "@merge-rd/ui/components/button";
 import { cn } from "@merge-rd/ui/lib/utils";
 import { Gear, Trash } from "@phosphor-icons/react";
 import { useState } from "react";
-import { Popover, PopoverTrigger } from "@/components/primitives/popover";
+import { Popover, PopoverTrigger } from "@/shared/ui/primitives/popover";
 import { SchemaPropertySettingsPopover } from "../schema-property-settings-popover";
 import type { VariableUsageInfo } from "../utils/check-variable-usage";
 

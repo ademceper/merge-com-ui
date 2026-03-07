@@ -1,8 +1,8 @@
-import type { AiResourceTypeEnum } from "@novu/shared";
+import type { AiResourceTypeEnum } from "@/shared";
 import { useQuery } from "@tanstack/react-query";
-import { useEnvironment } from "@/context/environment/hooks";
-import { QueryKeys } from "@/utils/query-keys";
-import { fetchLatestChat } from "../api/ai";
+import { useEnvironment } from "@/app/context/environment/hooks";
+import { QueryKeys } from "@/shared/lib/query-keys";
+import { fetchLatestChat } from "@/entities/ai/api/ai";
 
 export const useFetchLatestAiChat = ({
 	resourceType,

@@ -1,12 +1,12 @@
 import { Button } from "@merge-rd/ui/components/button";
 import { FacetedFormFilter } from "@merge-rd/ui/components/faceted-filter/faceted-form-filter";
 import { cn } from "@merge-rd/ui/lib/utils";
-import { FeatureFlagsKeysEnum } from "@novu/shared";
+import { FeatureFlagsKeysEnum } from "@/shared";
 import { useQueryClient } from "@tanstack/react-query";
 import { useEffect, useRef, useState } from "react";
-import { useEnvironment } from "@/context/environment/hooks";
-import { ContextFilter } from "@/features/contexts/components/context-filter";
-import { useFeatureFlag } from "@/hooks/use-feature-flag";
+import { useEnvironment } from "@/app/context/environment/hooks";
+import { ContextFilter } from "@/features/contexts/ui/context-filter";
+import { useFeatureFlag } from "@/shared/lib/hooks/use-feature-flag";
 
 type TopicSubscriberFilterProps = {
 	topicKey: string;

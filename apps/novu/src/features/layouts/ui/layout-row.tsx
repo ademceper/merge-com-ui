@@ -13,30 +13,30 @@ import {
 	type LayoutResponseDto,
 	PermissionsEnum,
 	ResourceOriginEnum,
-} from "@novu/shared";
+} from "@/shared";
 import { Copy, DotsThree, Layout, Trash } from "@phosphor-icons/react";
 import { type ComponentProps, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import type { ExternalToast } from "sonner";
-import { TranslatedLayoutIcon } from "@/components/icons/translated-layout-icon";
-import { Badge } from "@/components/primitives/badge";
-import { CompactButton } from "@/components/primitives/button-compact";
-import { CopyButton } from "@/components/primitives/copy-button";
-import { ToastIcon } from "@/components/primitives/sonner";
-import { showToast } from "@/components/primitives/sonner-helpers";
+import { TranslatedLayoutIcon } from "@/shared/ui/icons/translated-layout-icon";
+import { Badge } from "@/shared/ui/primitives/badge";
+import { CompactButton } from "@/shared/ui/primitives/button-compact";
+import { CopyButton } from "@/shared/ui/primitives/copy-button";
+import { ToastIcon } from "@/shared/ui/primitives/sonner";
+import { showToast } from "@/shared/ui/primitives/sonner-helpers";
 import {
 	Tooltip,
 	TooltipContent,
 	TooltipTrigger,
-} from "@/components/primitives/tooltip";
-import { TimeDisplayHoverCard } from "@/components/time-display-hover-card";
-import TruncatedText from "@/components/truncated-text";
-import { useEnvironment } from "@/context/environment/hooks";
-import { DeleteLayoutDialog } from "@/features/layouts/components/delete-layout-dialog";
-import { useDeleteLayout } from "@/features/layouts/hooks/use-delete-layout";
-import { formatDateSimple } from "@/utils/format-date";
-import { Protect } from "@/utils/protect";
-import { buildRoute, ROUTES } from "@/utils/routes";
+} from "@/shared/ui/primitives/tooltip";
+import { TimeDisplayHoverCard } from "@/shared/ui/time-display-hover-card";
+import TruncatedText from "@/shared/ui/truncated-text";
+import { useEnvironment } from "@/app/context/environment/hooks";
+import { DeleteLayoutDialog } from "@/features/layouts/ui/delete-layout-dialog";
+import { useDeleteLayout } from "@/features/layouts/lib/use-delete-layout";
+import { formatDateSimple } from "@/shared/lib/format-date";
+import { Protect } from "@/shared/lib/protect";
+import { buildRoute, ROUTES } from "@/shared/lib/routes";
 
 const toastOptions: ExternalToast = {
 	position: "bottom-right",

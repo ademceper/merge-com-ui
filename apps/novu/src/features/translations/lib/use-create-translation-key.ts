@@ -1,17 +1,17 @@
-import { DEFAULT_LOCALE } from "@novu/shared";
+import { DEFAULT_LOCALE } from "@/shared";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { getTranslation, saveTranslation } from "@/api/translations";
+import { getTranslation, saveTranslation } from "@/entities/translation/api/translations";
 import {
 	showErrorToast,
 	showSuccessToast,
-} from "@/components/primitives/sonner-helpers";
+} from "@/shared/ui/primitives/sonner-helpers";
 import {
 	requireEnvironment,
 	useEnvironment,
-} from "@/context/environment/hooks";
-import { useFetchOrganizationSettings } from "@/features/settings/hooks/use-fetch-organization-settings";
-import type { LocalizationResourceEnum } from "@/types/translations";
-import { QueryKeys } from "@/utils/query-keys";
+} from "@/app/context/environment/hooks";
+import { useFetchOrganizationSettings } from "@/features/settings/lib/use-fetch-organization-settings";
+import type { LocalizationResourceEnum } from "@/shared/model/translations";
+import { QueryKeys } from "@/shared/lib/query-keys";
 
 type CreateTranslationKeyParams = {
 	resourceId: string;

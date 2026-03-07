@@ -1,8 +1,8 @@
 import type { ComponentProps } from "react";
 import type { IconType } from "react-icons/lib";
-import { STEP_TYPE_TO_ICON } from "@/components/icons/utils";
-import { Step, type StepProps } from "@/components/primitives/step";
-import { StepTypeEnum } from "@/utils/enums";
+import { STEP_TYPE_TO_ICON } from "@/shared/ui/icons/utils";
+import { Step, type StepProps } from "@/shared/ui/primitives/step";
+import { StepTypeEnum } from "@/shared/lib/enums";
 
 type WorkflowStepProps = StepProps & {
 	step: StepTypeEnum;

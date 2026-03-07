@@ -2,7 +2,7 @@ import {
 	ChannelTypeEnum,
 	type JSONSchemaDefinition,
 	SeverityLevelEnum,
-} from "@novu/shared";
+} from "@/shared";
 import * as z from "zod";
 
 const MAX_NAME_LENGTH = 64;

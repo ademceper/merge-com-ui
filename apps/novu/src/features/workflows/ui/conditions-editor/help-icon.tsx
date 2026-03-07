@@ -1,11 +1,11 @@
 import { Info, WarningCircle } from "@phosphor-icons/react";
-import { Badge } from "@/components/primitives/badge";
+import { Badge } from "@/shared/ui/primitives/badge";
 import {
 	HoverCard,
 	HoverCardContent,
 	HoverCardTrigger,
-} from "@/components/primitives/hover-card";
-import type { HelpTextInfo } from "@/features/workflows/components/conditions-editor/field-type-editors";
+} from "@/shared/ui/primitives/hover-card";
+import type { HelpTextInfo } from "@/features/workflows/ui/conditions-editor/field-type-editors";
 
 type HelpIconProps = {
 	hasError: boolean;

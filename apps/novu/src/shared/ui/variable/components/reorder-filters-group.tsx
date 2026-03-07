@@ -1,5 +1,5 @@
 import { Reorder } from "motion/react";
-import type { LiquidVariable } from "@/utils/parseStepVariables";
+import type { LiquidVariable } from "@/shared/lib/parseStepVariables";
 import type { FilterWithParam } from "../types";
 import { ReorderFilterItem } from "./reorder-filter-item";
 

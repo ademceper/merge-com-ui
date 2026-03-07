@@ -2,7 +2,7 @@ import {
 	Tooltip,
 	TooltipContent,
 	TooltipTrigger,
-} from "@/components/primitives/tooltip";
+} from "@/shared/ui/primitives/tooltip";
 import type { Filters } from "../types";
 
 type FilterItemProps = {

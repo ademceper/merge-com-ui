@@ -4,7 +4,7 @@ import { useCallback } from "react";
 import type {
 	IsAllowedVariable,
 	LiquidVariable,
-} from "@/utils/parseStepVariables";
+} from "@/shared/lib/parseStepVariables";
 
 type UseEnhancedVariableValidationProps = {
 	isAllowedVariable: IsAllowedVariable;

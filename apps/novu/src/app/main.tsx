@@ -32,9 +32,9 @@ import { CatchAllRoute, DashboardRoute, RootRoute } from "./routes";
 import { DashboardLayoutRoute } from "./routes/dashboard-layout-route";
 import { FullPageLayoutRoute } from "./routes/full-page-layout-route";
 import { OnboardingParentRoute } from "./routes/onboarding";
-import { ROUTES } from "./utils/routes";
-import { initializeSentry } from "./utils/sentry";
-import { overrideZodErrorMap } from "./utils/validation";
+import { ROUTES } from "@/shared/lib/routes";
+import { initializeSentry } from "@/shared/lib/sentry";
+import { overrideZodErrorMap } from "@/shared/lib/validation";
 
 const VercelIntegrationPage = lazy(() =>
 	import("@/pages/vercel-integration-page").then((m) => ({

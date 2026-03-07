@@ -8,21 +8,21 @@ import {
 	type IDigestTimedMetadata,
 	JobStatusEnum,
 	StepTypeEnum,
-} from "@novu/shared";
+} from "@/shared";
 import { CaretDown, Info, Path } from "@phosphor-icons/react";
 import { format } from "date-fns";
 import { useState } from "react";
-import { STEP_TYPE_TO_ICON } from "@/components/icons/utils";
-import { Badge } from "@/components/primitives/badge";
+import { STEP_TYPE_TO_ICON } from "@/shared/ui/icons/utils";
+import { Badge } from "@/shared/ui/primitives/badge";
 import {
 	Tooltip,
 	TooltipContent,
 	TooltipTrigger,
-} from "@/components/primitives/tooltip";
-import { TimeDisplayHoverCard } from "@/components/time-display-hover-card";
-import TruncatedText from "@/components/truncated-text";
-import { STEP_TYPE_TO_COLOR } from "@/utils/color";
-import { formatJSONString } from "@/utils/string";
+} from "@/shared/ui/primitives/tooltip";
+import { TimeDisplayHoverCard } from "@/shared/ui/time-display-hover-card";
+import TruncatedText from "@/shared/ui/truncated-text";
+import { STEP_TYPE_TO_COLOR } from "@/shared/lib/color";
+import { formatJSONString } from "@/shared/lib/string";
 import { JOB_STATUS_CONFIG } from "./constants";
 import { ExecutionDetailItem } from "./execution-detail-item";
 

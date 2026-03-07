@@ -1,5 +1,5 @@
 import type { IMessageActionDto, IMessageCTADto } from "../../dto";
-import type { ChannelTypeEnum, IEmailBlock } from "../../types";
+import type { ChannelTypeEnum, IEmailBlock } from "../../model";
 import type { IActor } from "../actor";
 import type { INotificationTemplate } from "../notification-template";
 

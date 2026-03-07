@@ -5,17 +5,17 @@ import {
 	InputPure,
 	InputRoot,
 	InputWrapper,
-} from "@/components/primitives/input";
+} from "@/shared/ui/primitives/input";
 import {
 	Popover,
 	PopoverAnchor,
 	PopoverContent,
-} from "@/components/primitives/popover";
+} from "@/shared/ui/primitives/popover";
 import {
 	VariableList,
 	type VariableListRef,
-} from "@/components/variable/variable-list";
-import { AUTOCOMPLETE_PASSWORD_MANAGERS_OFF } from "@/utils/constants";
+} from "@/shared/ui/variable/variable-list";
+import { AUTOCOMPLETE_PASSWORD_MANAGERS_OFF } from "@/shared/lib/constants";
 
 type VariableSelectProps = Omit<
 	HTMLAttributes<HTMLDivElement>,

@@ -1,6 +1,6 @@
 import { Navigate, useParams } from "react-router-dom";
-import { TestWorkflowPage } from "@/features/workflows/pages/test-workflow";
-import { buildRoute, ROUTES } from "@/utils/routes";
+import { TestWorkflowPage } from "@/features/workflows/ui/pages/test-workflow";
+import { buildRoute, ROUTES } from "@/shared/lib/routes";
 
 export const TestWorkflowRouteHandler = () => {
 	const { environmentSlug, workflowSlug } = useParams<{

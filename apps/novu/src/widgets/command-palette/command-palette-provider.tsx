@@ -5,10 +5,10 @@ import {
 	useEffect,
 	useState,
 } from "react";
-import { useEscapeKeyManager } from "@/context/escape-key-manager/hooks";
-import { EscapeKeyManagerPriority } from "@/context/escape-key-manager/priority";
-import { useTelemetry } from "@/hooks/use-telemetry";
-import { TelemetryEvent } from "@/utils/telemetry";
+import { useEscapeKeyManager } from "@/app/context/escape-key-manager/hooks";
+import { EscapeKeyManagerPriority } from "@/app/context/escape-key-manager/priority";
+import { useTelemetry } from "@/shared/lib/hooks/use-telemetry";
+import { TelemetryEvent } from "@/shared/lib/telemetry";
 
 type CommandPaletteContextType = {
 	isOpen: boolean;

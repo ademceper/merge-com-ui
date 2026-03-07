@@ -16,9 +16,9 @@ import {
 	FormField,
 	FormItem,
 	FormRoot,
-} from "@/components/primitives/form/form";
-import type { TopicsFilter } from "@/features/topics/hooks/use-topics-url-state";
-import { QueryKeys } from "@/utils/query-keys";
+} from "@/shared/ui/primitives/form/form";
+import type { TopicsFilter } from "@/features/topics/lib/use-topics-url-state";
+import { QueryKeys } from "@/shared/lib/query-keys";
 
 type FilterFormValues = {
 	key: string;

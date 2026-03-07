@@ -3,24 +3,24 @@ import type {
 	IEnvironment,
 	WorkflowListResponseDto,
 	WorkflowResponseDto,
-} from "@novu/shared";
-import { ResourceOriginEnum, WorkflowStatusEnum } from "@novu/shared";
+} from "@/shared";
+import { ResourceOriginEnum, WorkflowStatusEnum } from "@/shared";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
-import { getV2, NovuApiError } from "@/api/api.client";
-import { syncWorkflow } from "@/api/workflows";
-import { ConfirmationModal } from "@/components/confirmation-modal";
-import { ToastIcon } from "@/components/primitives/sonner";
-import { showToast } from "@/components/primitives/sonner-helpers";
-import { SuccessButtonToast } from "@/components/success-button-toast";
-import TruncatedText from "@/components/truncated-text";
+import { getV2, NovuApiError } from "@/shared/api/api.client";
+import { syncWorkflow } from "@/entities/workflow/api/workflows";
+import { ConfirmationModal } from "@/shared/ui/confirmation-modal";
+import { ToastIcon } from "@/shared/ui/primitives/sonner";
+import { showToast } from "@/shared/ui/primitives/sonner-helpers";
+import { SuccessButtonToast } from "@/shared/ui/success-button-toast";
+import TruncatedText from "@/shared/ui/truncated-text";
 import {
 	useEnvironment,
 	useFetchEnvironments,
-} from "@/context/environment/hooks";
-import { buildRoute, ROUTES } from "@/utils/routes";
+} from "@/app/context/environment/hooks";
+import { buildRoute, ROUTES } from "@/shared/lib/routes";
 
 export function useSyncWorkflow(
 	workflow: WorkflowResponseDto | WorkflowListResponseDto,

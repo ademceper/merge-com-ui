@@ -4,12 +4,12 @@ import {
 	CollapsibleTrigger,
 } from "@merge-rd/ui/components/collapsible";
 import { cn } from "@merge-rd/ui/lib/utils";
-import { AiWorkflowToolsEnum } from "@novu/shared";
+import { AiWorkflowToolsEnum } from "@/shared";
 import { ArrowsDownUp, Shapes } from "@phosphor-icons/react";
 import type { DynamicToolUIPart, UIMessage } from "ai";
 import { useEffect, useRef, useState } from "react";
-import { STEP_TYPE_TO_COLOR } from "@/utils/color";
-import { StepTypeEnum } from "@/utils/enums";
+import { STEP_TYPE_TO_COLOR } from "@/shared/lib/color";
+import { StepTypeEnum } from "@/shared/lib/enums";
 import {
 	ChainOfThought,
 	ChainOfThoughtContent,
@@ -17,8 +17,8 @@ import {
 	ChainOfThoughtStep,
 } from "../ai-elements/chain-of-thought";
 import { Shimmer } from "../ai-elements/shimmer";
-import { STEP_TYPE_TO_ICON } from "../icons/utils";
-import { Tag } from "../primitives/tag";
+import { STEP_TYPE_TO_ICON } from "@/shared/ui/icons/utils";
+import { Tag } from "@/shared/ui/primitives/tag";
 import { StyledMessageResponse } from "./chat-message-response";
 
 type MessagePart = UIMessage["parts"][number];

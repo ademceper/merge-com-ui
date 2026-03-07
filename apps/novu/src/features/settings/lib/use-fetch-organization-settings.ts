@@ -2,10 +2,10 @@ import { useQuery } from "@tanstack/react-query";
 import {
 	type GetOrganizationSettingsDto,
 	getOrganizationSettings,
-} from "@/api/organization";
-import { IS_SELF_HOSTED } from "@/config";
-import { useEnvironment } from "@/context/environment/hooks";
-import { QueryKeys } from "@/utils/query-keys";
+} from "@/entities/organization/api/organization";
+import { IS_SELF_HOSTED } from "@/shared/config";
+import { useEnvironment } from "@/app/context/environment/hooks";
+import { QueryKeys } from "@/shared/lib/query-keys";
 
 export const useFetchOrganizationSettings = () => {
 	const { currentEnvironment } = useEnvironment();

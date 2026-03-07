@@ -1,7 +1,7 @@
 import { useMutation } from "@tanstack/react-query";
-import { showErrorToast } from "@/components/primitives/sonner-helpers";
-import { get } from "../api/api.client";
-import { TelemetryEvent } from "../utils/telemetry";
+import { showErrorToast } from "@/shared/ui/primitives/sonner-helpers";
+import { get } from "@/shared/api/api.client";
+import { TelemetryEvent } from "@/shared/lib/telemetry";
 import { useTelemetry } from "./use-telemetry";
 
 export function useBillingPortal(billingInterval?: "month" | "year") {

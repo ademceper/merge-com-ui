@@ -1,10 +1,10 @@
-import { PermissionsEnum } from "@novu/shared";
+import { PermissionsEnum } from "@/shared";
 import { useState } from "react";
 import { useParams } from "react-router-dom";
-import { TopicDrawer } from "@/features/topics/components/topic-drawer";
-import { useTopicsNavigate } from "@/features/topics/hooks/use-topics-navigate";
-import { useHasPermission } from "@/hooks/use-has-permission";
-import { useOnElementUnmount } from "@/hooks/use-on-element-unmount";
+import { TopicDrawer } from "@/features/topics/ui/topic-drawer";
+import { useTopicsNavigate } from "@/features/topics/lib/use-topics-navigate";
+import { useHasPermission } from "@/shared/lib/hooks/use-has-permission";
+import { useOnElementUnmount } from "@/shared/lib/hooks/use-on-element-unmount";
 
 export const EditTopicPage = () => {
 	const { topicKey } = useParams<{ topicKey: string }>();

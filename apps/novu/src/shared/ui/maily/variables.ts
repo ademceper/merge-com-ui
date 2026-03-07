@@ -1,13 +1,13 @@
-import { TRANSLATION_NAMESPACE_SEPARATOR } from "@novu/shared";
+import { TRANSLATION_NAMESPACE_SEPARATOR } from "@/shared";
 import type { Editor, Range, Editor as TiptapEditor } from "@tiptap/core";
-import { VariableFrom } from "@/components/maily/types";
-import { DIGEST_VARIABLES } from "@/components/variable/utils/digest-variables";
-import type { Variable } from "@/lib/maily-core/extensions";
-import { isValidContextVariable } from "@/utils/context-variable-utils";
+import { VariableFrom } from "@/shared/ui/maily/types";
+import { DIGEST_VARIABLES } from "@/shared/ui/variable/utils/digest-variables";
+import type { Variable } from "@/shared/lib/externals/maily-core/extensions";
+import { isValidContextVariable } from "@/shared/lib/context-variable-utils";
 import type {
 	IsAllowedVariable,
 	LiquidVariable,
-} from "@/utils/parseStepVariables";
+} from "@/shared/lib/parseStepVariables";
 import {
 	isInsideRepeatBlock,
 	REPEAT_BLOCK_ITERABLE_ALIAS,

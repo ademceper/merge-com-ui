@@ -3,11 +3,11 @@
 import { Button } from "@merge-rd/ui/components/button";
 import { Sparkle } from "@phosphor-icons/react";
 import { useNavigate } from "react-router-dom";
-import { IS_SELF_HOSTED, SELF_HOSTED_UPGRADE_REDIRECT_URL } from "@/config";
-import { useTelemetry } from "@/hooks/use-telemetry";
-import { ROUTES } from "@/utils/routes";
-import { TelemetryEvent } from "@/utils/telemetry";
-import { openInNewTab } from "@/utils/url";
+import { IS_SELF_HOSTED, SELF_HOSTED_UPGRADE_REDIRECT_URL } from "@/shared/config";
+import { useTelemetry } from "@/shared/lib/hooks/use-telemetry";
+import { ROUTES } from "@/shared/lib/routes";
+import { TelemetryEvent } from "@/shared/lib/telemetry";
+import { openInNewTab } from "@/shared/lib/url";
 
 export function WebhooksPaywallState() {
 	const track = useTelemetry();

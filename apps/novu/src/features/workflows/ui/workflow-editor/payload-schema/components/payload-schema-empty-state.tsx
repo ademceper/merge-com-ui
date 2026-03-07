@@ -1,6 +1,6 @@
 import { Button } from "@merge-rd/ui/components/button";
 import { Plus } from "@phosphor-icons/react";
-import { LinkButton } from "@/components/primitives/button-link";
+import { LinkButton } from "@/shared/ui/primitives/button-link";
 
 type PayloadSchemaEmptyStateProps = {
 	onAddProperty: () => void;

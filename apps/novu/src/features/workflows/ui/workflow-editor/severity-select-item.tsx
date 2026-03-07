@@ -1,13 +1,13 @@
-import { SeverityLevelEnum } from "@novu/shared";
+import { SeverityLevelEnum } from "@/shared";
 import React from "react";
-import { Badge, type BadgeRootProps } from "@/components/primitives/badge";
-import { SelectItem } from "@/components/primitives/select";
+import { Badge, type BadgeRootProps } from "@/shared/ui/primitives/badge";
+import { SelectItem } from "@/shared/ui/primitives/select";
 import {
 	Tooltip,
 	TooltipContent,
 	TooltipTrigger,
-} from "@/components/primitives/tooltip";
-import { capitalize } from "@/utils/string";
+} from "@/shared/ui/primitives/tooltip";
+import { capitalize } from "@/shared/lib/string";
 
 const TOOLTIP_CONTENT_LOOKUP: Record<SeverityLevelEnum, string> = {
 	[SeverityLevelEnum.HIGH]:

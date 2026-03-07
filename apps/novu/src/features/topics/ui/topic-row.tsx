@@ -8,23 +8,23 @@ import {
 import { Skeleton } from "@merge-rd/ui/components/skeleton";
 import { TableCell, TableRow } from "@merge-rd/ui/components/table";
 import { cn } from "@merge-rd/ui/lib/utils";
-import { PermissionsEnum } from "@novu/shared";
+import { PermissionsEnum } from "@/shared";
 import { Copy, DotsThree, Pulse, Trash } from "@phosphor-icons/react";
 import { useQueryClient } from "@tanstack/react-query";
 import { type ComponentProps, useState } from "react";
 import { Link } from "react-router-dom";
-import { ConfirmationModal } from "@/components/confirmation-modal";
-import { CompactButton } from "@/components/primitives/button-compact";
-import { CopyButton } from "@/components/primitives/copy-button";
-import { showErrorToast } from "@/components/primitives/sonner-helpers";
-import { TimeDisplayHoverCard } from "@/components/time-display-hover-card";
-import { useEnvironment } from "@/context/environment/hooks";
-import { useDeleteTopic } from "@/features/topics/hooks/use-delete-topic";
-import { useTopicsNavigate } from "@/features/topics/hooks/use-topics-navigate";
-import { formatDateSimple } from "@/utils/format-date";
-import { Protect } from "@/utils/protect";
-import { QueryKeys } from "@/utils/query-keys";
-import { buildRoute, ROUTES } from "@/utils/routes";
+import { ConfirmationModal } from "@/shared/ui/confirmation-modal";
+import { CompactButton } from "@/shared/ui/primitives/button-compact";
+import { CopyButton } from "@/shared/ui/primitives/copy-button";
+import { showErrorToast } from "@/shared/ui/primitives/sonner-helpers";
+import { TimeDisplayHoverCard } from "@/shared/ui/time-display-hover-card";
+import { useEnvironment } from "@/app/context/environment/hooks";
+import { useDeleteTopic } from "@/features/topics/lib/use-delete-topic";
+import { useTopicsNavigate } from "@/features/topics/lib/use-topics-navigate";
+import { formatDateSimple } from "@/shared/lib/format-date";
+import { Protect } from "@/shared/lib/protect";
+import { QueryKeys } from "@/shared/lib/query-keys";
+import { buildRoute, ROUTES } from "@/shared/lib/routes";
 import type { Topic } from "./types";
 
 type TopicRowProps = {

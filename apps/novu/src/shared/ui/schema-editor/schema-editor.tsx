@@ -7,8 +7,8 @@ import {
 	FormProvider,
 	type UseFormReturn,
 } from "react-hook-form";
-import { FormRoot } from "@/components/primitives/form/form";
-import { useWorkflow } from "@/features/workflows/components/workflow-editor/workflow-provider";
+import { FormRoot } from "@/shared/ui/primitives/form/form";
+import { useWorkflow } from "@/features/workflows/ui/workflow-editor/workflow-provider";
 import { SchemaPropertyRow } from "./schema-property-row";
 import {
 	checkVariableUsageInWorkflow,

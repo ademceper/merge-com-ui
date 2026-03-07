@@ -1,8 +1,8 @@
 import { Button } from "@merge-rd/ui/components/button";
 import { CaretRight, Lock } from "@phosphor-icons/react";
 import { useNavigate } from "react-router-dom";
-import { useEnvironment } from "@/context/environment/hooks";
-import { buildRoute, ROUTES } from "@/utils/routes";
+import { useEnvironment } from "@/app/context/environment/hooks";
+import { buildRoute, ROUTES } from "@/shared/lib/routes";
 import { useStepEditor } from "./context/step-editor-context";
 
 export const StepEditorUnavailable = () => {

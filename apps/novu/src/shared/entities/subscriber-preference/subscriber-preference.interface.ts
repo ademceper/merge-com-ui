@@ -4,7 +4,7 @@ import {
 	PreferenceOverrideSourceEnum,
 	type PreferencesTypeEnum,
 	type Schedule,
-} from "../../types";
+} from "../../model";
 import type { INotificationTrigger } from "../notification-trigger";
 
 export interface IPreferenceChannels {

@@ -20,8 +20,8 @@ import {
 	Popover,
 	PopoverContent,
 	PopoverTrigger,
-} from "@/components/primitives/popover";
-import TruncatedText from "@/components/truncated-text";
+} from "@/shared/ui/primitives/popover";
+import TruncatedText from "@/shared/ui/truncated-text";
 
 type TimezoneSelectProps = ButtonProps & {
 	value?: string;

@@ -1,11 +1,11 @@
 import { useOrganization } from "@merge-rd/auth";
-import { EnvironmentTypeEnum, type IEnvironment } from "@novu/shared";
+import { EnvironmentTypeEnum, type IEnvironment } from "@/shared";
 import { useCallback, useLayoutEffect, useMemo, useState } from "react";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
-import { EnvironmentContext } from "@/context/environment/environment-context";
-import { useFetchEnvironments } from "@/context/environment/hooks";
-import { loadFromStorage, saveToStorage } from "@/utils/local-storage";
-import { buildRoute, ROUTES } from "@/utils/routes";
+import { EnvironmentContext } from "@/app/context/environment/environment-context";
+import { useFetchEnvironments } from "@/app/context/environment/hooks";
+import { loadFromStorage, saveToStorage } from "@/shared/lib/local-storage";
+import { buildRoute, ROUTES } from "@/shared/lib/routes";
 
 const PRODUCTION_ENVIRONMENT = "Production";
 const DEVELOPMENT_ENVIRONMENT = "Development";

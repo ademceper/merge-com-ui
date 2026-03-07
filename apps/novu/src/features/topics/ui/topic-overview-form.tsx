@@ -11,9 +11,9 @@ import { useForm } from "react-hook-form";
 import { Link } from "react-router-dom";
 import type { ExternalToast } from "sonner";
 import { z } from "zod";
-import { deleteTopic, updateTopic } from "@/api/topics";
-import { ConfirmationModal } from "@/components/confirmation-modal";
-import { CopyButton } from "@/components/primitives/copy-button";
+import { deleteTopic, updateTopic } from "@/entities/topic/api/topics";
+import { ConfirmationModal } from "@/shared/ui/confirmation-modal";
+import { CopyButton } from "@/shared/ui/primitives/copy-button";
 import {
 	Form,
 	FormControl,
@@ -22,19 +22,19 @@ import {
 	FormLabel,
 	FormMessage,
 	FormRoot,
-} from "@/components/primitives/form/form";
-import { Input } from "@/components/primitives/input";
+} from "@/shared/ui/primitives/form/form";
+import { Input } from "@/shared/ui/primitives/input";
 import {
 	showErrorToast,
 	showSuccessToast,
-} from "@/components/primitives/sonner-helpers";
-import { TimeDisplayHoverCard } from "@/components/time-display-hover-card";
-import { useEnvironment } from "@/context/environment/hooks";
-import { useTopicsNavigate } from "@/features/topics/hooks/use-topics-navigate";
-import { useTelemetry } from "@/hooks/use-telemetry";
-import { formatDateSimple } from "@/utils/format-date";
-import { QueryKeys } from "@/utils/query-keys";
-import { TelemetryEvent } from "@/utils/telemetry";
+} from "@/shared/ui/primitives/sonner-helpers";
+import { TimeDisplayHoverCard } from "@/shared/ui/time-display-hover-card";
+import { useEnvironment } from "@/app/context/environment/hooks";
+import { useTopicsNavigate } from "@/features/topics/lib/use-topics-navigate";
+import { useTelemetry } from "@/shared/lib/hooks/use-telemetry";
+import { formatDateSimple } from "@/shared/lib/format-date";
+import { QueryKeys } from "@/shared/lib/query-keys";
+import { TelemetryEvent } from "@/shared/lib/telemetry";
 import type { Topic } from "./types";
 
 const TopicFormSchema = z.object({

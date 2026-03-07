@@ -3,18 +3,18 @@ import {
 	ChannelTypeEnum,
 	providers as novuProviders,
 	PermissionsEnum,
-} from "@novu/shared";
+} from "@/shared";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { showSuccessToast } from "@/components/primitives/sonner-helpers";
-import { UnsavedChangesAlertDialog } from "@/components/unsaved-changes-alert-dialog";
-import { useDeleteIntegration } from "@/features/integrations/hooks/use-delete-integration";
-import { useFetchIntegrations } from "@/features/integrations/hooks/use-fetch-integrations";
-import { useIntegrationPrimaryModal } from "@/features/integrations/hooks/use-integration-primary-modal";
-import { useSetPrimaryIntegration } from "@/features/integrations/hooks/use-set-primary-integration";
-import { useUpdateIntegration } from "@/features/integrations/hooks/use-update-integration";
-import { useHasPermission } from "@/hooks/use-has-permission";
-import { ROUTES } from "@/utils/routes";
+import { showSuccessToast } from "@/shared/ui/primitives/sonner-helpers";
+import { UnsavedChangesAlertDialog } from "@/shared/ui/unsaved-changes-alert-dialog";
+import { useDeleteIntegration } from "@/features/integrations/lib/use-delete-integration";
+import { useFetchIntegrations } from "@/features/integrations/lib/use-fetch-integrations";
+import { useIntegrationPrimaryModal } from "@/features/integrations/lib/use-integration-primary-modal";
+import { useSetPrimaryIntegration } from "@/features/integrations/lib/use-set-primary-integration";
+import { useUpdateIntegration } from "@/features/integrations/lib/use-update-integration";
+import { useHasPermission } from "@/shared/lib/hooks/use-has-permission";
+import { ROUTES } from "@/shared/lib/routes";
 import { IntegrationSettings } from "./integration-settings";
 import { IntegrationSheet } from "./integration-sheet";
 import { DeleteIntegrationModal } from "./modals/delete-integration-modal";

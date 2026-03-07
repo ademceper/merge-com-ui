@@ -1,16 +1,16 @@
 import { Skeleton } from "@merge-rd/ui/components/skeleton";
-import { FeatureFlagsKeysEnum } from "@novu/shared";
+import { FeatureFlagsKeysEnum } from "@/shared";
 import { useCallback, useMemo } from "react";
 import { Line, LineChart, XAxis } from "recharts";
-import type { WorkflowRunsTrendDataPoint } from "@/api/activity";
+import type { WorkflowRunsTrendDataPoint } from "@/entities/activity/api/activity";
 
 import {
 	type ChartConfig,
 	ChartContainer,
 	ChartTooltip,
 	NovuTooltip,
-} from "@/components/primitives/chart";
-import { useFeatureFlag } from "@/hooks/use-feature-flag";
+} from "@/shared/ui/primitives/chart";
+import { useFeatureFlag } from "@/shared/lib/hooks/use-feature-flag";
 import { ANALYTICS_TOOLTIPS } from "../constants/analytics-tooltips";
 import { createDateBasedHasDataChecker } from "../utils/chart-validation";
 import { generateDummyWorkflowRunsData } from "./chart-dummy-data";

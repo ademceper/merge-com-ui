@@ -5,9 +5,9 @@ import {
 	type Range,
 } from "@uiw/react-codemirror";
 import type { MutableRefObject } from "react";
-import { parseVariable, VARIABLE_REGEX_STRING } from "@/utils/liquid";
-import { isVariableInLocalContext } from "@/utils/liquid-scope-analyzer";
-import type { IsAllowedVariable } from "@/utils/parseStepVariables";
+import { parseVariable, VARIABLE_REGEX_STRING } from "@/shared/lib/liquid";
+import { isVariableInLocalContext } from "@/shared/lib/liquid-scope-analyzer";
+import type { IsAllowedVariable } from "@/shared/lib/parseStepVariables";
 import { isTypingVariable } from "./utils";
 import { VariablePillWidget } from "./variable-pill-widget";
 

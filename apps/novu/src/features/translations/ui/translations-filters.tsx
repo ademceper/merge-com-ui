@@ -5,7 +5,7 @@ import {
 	DEFAULT_LOCALE,
 	EnvironmentTypeEnum,
 	PermissionsEnum,
-} from "@novu/shared";
+} from "@/shared";
 import {
 	Check,
 	DownloadSimple,
@@ -18,26 +18,26 @@ import { AnimatePresence, motion } from "motion/react";
 import { type HTMLAttributes, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate, useParams } from "react-router-dom";
-import type { TranslationsFilter } from "@/api/translations";
-import { FlagCircle } from "@/components/flag-circle";
+import type { TranslationsFilter } from "@/entities/translation/api/translations";
+import { FlagCircle } from "@/shared/ui/flag-circle";
 import {
 	Form,
 	FormField,
 	FormItem,
 	FormRoot,
-} from "@/components/primitives/form/form";
+} from "@/shared/ui/primitives/form/form";
 import {
 	Tooltip,
 	TooltipContent,
 	TooltipTrigger,
-} from "@/components/primitives/tooltip";
-import { useEnvironment } from "@/context/environment/hooks";
-import { useFetchOrganizationSettings } from "@/features/settings/hooks/use-fetch-organization-settings";
-import { useExportMasterJson } from "@/features/translations/hooks/use-export-master-json";
-import { defaultTranslationsFilter } from "@/features/translations/hooks/use-translations-url-state";
-import { useUploadMasterJson } from "@/features/translations/hooks/use-upload-master-json";
-import { useHasPermission } from "@/hooks/use-has-permission";
-import { buildRoute, ROUTES } from "@/utils/routes";
+} from "@/shared/ui/primitives/tooltip";
+import { useEnvironment } from "@/app/context/environment/hooks";
+import { useFetchOrganizationSettings } from "@/features/settings/lib/use-fetch-organization-settings";
+import { useExportMasterJson } from "@/features/translations/lib/use-export-master-json";
+import { defaultTranslationsFilter } from "@/features/translations/lib/use-translations-url-state";
+import { useUploadMasterJson } from "@/features/translations/lib/use-upload-master-json";
+import { useHasPermission } from "@/shared/lib/hooks/use-has-permission";
+import { buildRoute, ROUTES } from "@/shared/lib/routes";
 
 type SearchFilterProps = {
 	value: string;

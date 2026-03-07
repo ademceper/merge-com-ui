@@ -3,9 +3,9 @@ import {
 	type GetRequestLogsParams,
 	type GetRequestLogsResponse,
 	getRequestLogs,
-} from "@/api/logs";
-import { useEnvironment } from "@/context/environment/hooks";
-import { QueryKeys } from "@/utils/query-keys";
+} from "@/entities/log/api/logs";
+import { useEnvironment } from "@/app/context/environment/hooks";
+import { QueryKeys } from "@/shared/lib/query-keys";
 
 interface UseFetchRequestLogsParams
 	extends Omit<GetRequestLogsParams, "environment"> {

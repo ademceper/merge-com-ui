@@ -1,7 +1,7 @@
-import type { IExecutionDetail } from "@novu/shared";
+import type { IExecutionDetail } from "@/shared";
 import { format } from "date-fns";
 import { useMemo } from "react";
-import { formatJSONString } from "@/utils/string";
+import { formatJSONString } from "@/shared/lib/string";
 import { ActivityDetailCard } from "./activity-detail-card";
 
 interface ExecutionDetailItemProps {

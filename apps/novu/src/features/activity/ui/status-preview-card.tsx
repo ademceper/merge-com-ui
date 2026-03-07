@@ -3,12 +3,12 @@ import {
 	type IActivityJob,
 	JobStatusEnum,
 	type StepTypeEnum,
-} from "@novu/shared";
+} from "@/shared";
 import { Check, Pause, SpinnerGap, Stop, XCircle } from "@phosphor-icons/react";
 import { format } from "date-fns";
-import { STEP_TYPE_TO_ICON } from "@/components/icons/utils";
-import { Badge } from "@/components/primitives/badge";
-import { STEP_TYPE_LABELS } from "@/utils/constants";
+import { STEP_TYPE_TO_ICON } from "@/shared/ui/icons/utils";
+import { Badge } from "@/shared/ui/primitives/badge";
+import { STEP_TYPE_LABELS } from "@/shared/lib/constants";
 import { JOB_STATUS_CONFIG } from "./constants";
 
 function getStepIcon(type?: StepTypeEnum) {

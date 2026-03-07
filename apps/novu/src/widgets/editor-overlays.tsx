@@ -1,14 +1,14 @@
-import type { WorkflowResponseDto } from "@novu/shared";
-import { PayloadSchemaDrawer } from "@/features/workflows/components/workflow-editor/payload-schema-drawer";
+import type { WorkflowResponseDto } from "@/shared";
+import { PayloadSchemaDrawer } from "@/features/workflows/ui/workflow-editor/payload-schema-drawer";
 import {
 	EditTranslationPopover,
 	type TranslationValueInputComponent,
-} from "@/features/workflows/components/workflow-editor/steps/email/translations/edit-translation-popover/edit-translation-popover";
-import type { LocalizationResourceEnum } from "@/types/translations";
+} from "@/features/workflows/ui/workflow-editor/steps/email/translations/edit-translation-popover/edit-translation-popover";
+import type { LocalizationResourceEnum } from "@/shared/ui/shared/model/translations";
 import type {
 	IsAllowedVariable,
 	LiquidVariable,
-} from "@/utils/parseStepVariables";
+} from "@/shared/ui/shared/lib/parseStepVariables";
 
 type EditorOverlaysProps = {
 	// Translation-related props

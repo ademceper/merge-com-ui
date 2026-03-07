@@ -4,8 +4,8 @@ import type {
 	ITemplateVariable,
 	ResourceOriginEnum,
 	ResourceTypeEnum,
-} from "../../types";
-import type { RuntimeIssue } from "../../utils/issues";
+} from "../../model";
+import type { RuntimeIssue } from "../../lib/utils/issues";
 import type { Controls, JSONSchemaDto } from "../workflows";
 
 export class LayoutDto {

@@ -1,11 +1,11 @@
 import { Switch } from "@merge-rd/ui/components/switch";
-import type { PermissionsEnum } from "@novu/shared";
+import type { PermissionsEnum } from "@/shared";
 import {
 	Tooltip,
 	TooltipContent,
 	TooltipTrigger,
-} from "@/components/primitives/tooltip";
-import { useHasPermission } from "@/hooks/use-has-permission";
+} from "@/shared/ui/primitives/tooltip";
+import { useHasPermission } from "@/shared/lib/hooks/use-has-permission";
 
 export interface PermissionSwitchProps {
 	/** The permission required to access this switch functionality */

@@ -9,8 +9,8 @@ import {
 	useState,
 } from "react";
 import { useNavigate } from "react-router-dom";
-import { apiHostnameManager } from "@/utils/api-hostname-manager";
-import { ROUTES } from "@/utils/routes";
+import { apiHostnameManager } from "@/shared/lib/api-hostname-manager";
+import { ROUTES } from "@/shared/lib/routes";
 import { DEFAULT_REGION } from "./region-config";
 import { RegionModals } from "./region-modals";
 import type {

@@ -1,8 +1,8 @@
-import { FeatureFlagsKeysEnum } from "@novu/shared";
+import { FeatureFlagsKeysEnum } from "@/shared";
 import { useParams } from "react-router-dom";
-import { CreateWorkflowModal } from "@/features/workflows/components/create-workflow-modal";
-import { NewWorkflowDrawer } from "@/features/workflows/pages/new-workflow-drawer";
-import { useFeatureFlag } from "@/hooks/use-feature-flag";
+import { CreateWorkflowModal } from "@/features/workflows/ui/create-workflow-modal";
+import { NewWorkflowDrawer } from "@/features/workflows/ui/pages/new-workflow-drawer";
+import { useFeatureFlag } from "@/shared/lib/hooks/use-feature-flag";
 
 export function DuplicateWorkflowPage() {
 	const { workflowId } = useParams<{

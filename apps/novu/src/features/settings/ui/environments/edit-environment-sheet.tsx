@@ -4,11 +4,11 @@
 import { standardSchemaResolver } from "@hookform/resolvers/standard-schema";
 import { Button } from "@merge-rd/ui/components/button";
 import { Separator } from "@merge-rd/ui/components/separator";
-import type { IEnvironment } from "@novu/shared";
+import type { IEnvironment } from "@/shared";
 import { CaretRight } from "@phosphor-icons/react";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
-import { Form, FormRoot } from "@/components/primitives/form/form";
+import { Form, FormRoot } from "@/shared/ui/primitives/form/form";
 import {
 	Sheet,
 	SheetContent,
@@ -17,13 +17,13 @@ import {
 	SheetHeader,
 	SheetMain,
 	SheetTitle,
-} from "@/components/primitives/sheet";
+} from "@/shared/ui/primitives/sheet";
 import {
 	showErrorToast,
 	showSuccessToast,
-} from "@/components/primitives/sonner-helpers";
-import { ExternalLink } from "@/components/shared/external-link";
-import { useUpdateEnvironment } from "@/features/settings/hooks/use-environments";
+} from "@/shared/ui/primitives/sonner-helpers";
+import { ExternalLink } from "@/shared/ui/shared/external-link";
+import { useUpdateEnvironment } from "@/features/settings/lib/use-environments";
 import {
 	type EnvironmentFormData,
 	EnvironmentFormFields,

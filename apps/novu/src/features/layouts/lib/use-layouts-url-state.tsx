@@ -1,7 +1,7 @@
-import { DirectionEnum } from "@novu/shared";
+import { DirectionEnum } from "@/shared";
 import { useCallback, useMemo } from "react";
 import { createSearchParams, useSearchParams } from "react-router-dom";
-import { getPersistedPageSize } from "@/hooks/use-persisted-page-size";
+import { getPersistedPageSize } from "@/shared/lib/hooks/use-persisted-page-size";
 
 const LAYOUTS_TABLE_ID = "layouts-list";
 

@@ -6,7 +6,7 @@ import {
 	type IEnvironment,
 	type IIntegration,
 	type IProviderConfig,
-} from "@novu/shared";
+} from "@/shared";
 import {
 	CheckCircle,
 	Gear,
@@ -15,20 +15,20 @@ import {
 	XCircle,
 } from "@phosphor-icons/react";
 import { useNavigate } from "react-router-dom";
-import { Badge } from "@/components/primitives/badge";
-import { EnvironmentBranchIcon } from "@/components/primitives/environment-branch-icon";
+import { Badge } from "@/shared/ui/primitives/badge";
+import { EnvironmentBranchIcon } from "@/shared/ui/primitives/environment-branch-icon";
 import {
 	StatusBadge,
 	StatusBadgeIcon,
-} from "@/components/primitives/status-badge";
+} from "@/shared/ui/primitives/status-badge";
 import {
 	Tooltip,
 	TooltipContent,
 	TooltipTrigger,
-} from "@/components/primitives/tooltip";
-import { UpgradeCTATooltip } from "@/components/upgrade-cta-tooltip";
-import { useFetchSubscription } from "@/hooks/use-fetch-subscription";
-import { ROUTES } from "@/utils/routes";
+} from "@/shared/ui/primitives/tooltip";
+import { UpgradeCTATooltip } from "@/shared/ui/upgrade-cta-tooltip";
+import { useFetchSubscription } from "@/shared/lib/hooks/use-fetch-subscription";
+import { ROUTES } from "@/shared/lib/routes";
 import { ProviderIcon } from "./provider-icon";
 import type { TableIntegration } from "./types";
 import { isDemoIntegration } from "./utils/helpers";

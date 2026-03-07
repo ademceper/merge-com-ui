@@ -1,7 +1,7 @@
 import { useState } from "react";
-import { CreateContextDrawer } from "@/features/contexts/components/create-context-drawer";
-import { useContextsNavigate } from "@/features/contexts/hooks/use-contexts-navigate";
-import { useOnElementUnmount } from "@/hooks/use-on-element-unmount";
+import { CreateContextDrawer } from "@/features/contexts/ui/create-context-drawer";
+import { useContextsNavigate } from "@/features/contexts/lib/use-contexts-navigate";
+import { useOnElementUnmount } from "@/shared/lib/hooks/use-on-element-unmount";
 
 export const CreateContextPage = () => {
 	const [isOpen, setIsOpen] = useState(true);

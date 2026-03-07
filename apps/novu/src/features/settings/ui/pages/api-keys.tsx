@@ -1,37 +1,37 @@
 import { Button } from "@merge-rd/ui/components/button";
 import { Card, CardContent, CardHeader } from "@merge-rd/ui/components/card";
 import { Skeleton } from "@merge-rd/ui/components/skeleton";
-import { PermissionsEnum } from "@novu/shared";
+import { PermissionsEnum } from "@/shared";
 import { ArrowClockwise, Eye, EyeSlash } from "@phosphor-icons/react";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { PageMeta } from "@/components/page-meta";
-import { Container } from "@/components/primitives/container";
-import { CopyButton } from "@/components/primitives/copy-button";
-import { Form } from "@/components/primitives/form/form";
-import { HelpTooltipIndicator } from "@/components/primitives/help-tooltip-indicator";
-import { Input } from "@/components/primitives/input";
+import { PageMeta } from "@/shared/ui/page-meta";
+import { Container } from "@/shared/ui/primitives/container";
+import { CopyButton } from "@/shared/ui/primitives/copy-button";
+import { Form } from "@/shared/ui/primitives/form/form";
+import { HelpTooltipIndicator } from "@/shared/ui/primitives/help-tooltip-indicator";
+import { Input } from "@/shared/ui/primitives/input";
 import {
 	showErrorToast,
 	showSuccessToast,
-} from "@/components/primitives/sonner-helpers";
+} from "@/shared/ui/primitives/sonner-helpers";
 import {
 	Tooltip,
 	TooltipContent,
 	TooltipTrigger,
-} from "@/components/primitives/tooltip";
-import { RegenerateApiKeysDialog } from "@/components/regenerate-api-keys-dialog";
-import { ExternalLink } from "@/components/shared/external-link";
-import { IS_SELF_HOSTED } from "@/config";
-import { useEnvironment } from "@/context/environment/hooks";
-import { useSetPageHeader } from "@/context/page-header";
-import { getRegionConfig, useRegion } from "@/context/region";
+} from "@/shared/ui/primitives/tooltip";
+import { RegenerateApiKeysDialog } from "@/shared/ui/regenerate-api-keys-dialog";
+import { ExternalLink } from "@/shared/ui/shared/external-link";
+import { IS_SELF_HOSTED } from "@/shared/config";
+import { useEnvironment } from "@/app/context/environment/hooks";
+import { useSetPageHeader } from "@/app/context/page-header";
+import { getRegionConfig, useRegion } from "@/app/context/region";
 import {
 	useFetchApiKeys,
 	useRegenerateApiKeys,
-} from "@/features/settings/hooks/use-fetch-api-keys";
-import { useHasPermission } from "@/hooks/use-has-permission";
-import { apiHostnameManager } from "@/utils/api-hostname-manager";
+} from "@/features/settings/lib/use-fetch-api-keys";
+import { useHasPermission } from "@/shared/lib/hooks/use-has-permission";
+import { apiHostnameManager } from "@/shared/lib/api-hostname-manager";
 
 // Convert https:// to wss:// for WebSocket URLs
 const getWebSocketUrl = (url: string) => {

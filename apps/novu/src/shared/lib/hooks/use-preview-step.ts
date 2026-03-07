@@ -1,8 +1,8 @@
-import type { GeneratePreviewResponseDto } from "@novu/shared";
+import type { GeneratePreviewResponseDto } from "@/shared";
 import { useMutation } from "@tanstack/react-query";
-import { previewStep } from "@/api/steps";
-import { useEnvironment } from "@/context/environment/hooks";
-import type { OmitEnvironmentFromParameters } from "@/utils/types";
+import { previewStep } from "@/entities/step/api/steps";
+import { useEnvironment } from "@/app/context/environment/hooks";
+import type { OmitEnvironmentFromParameters } from "@/shared/lib/types";
 
 type PreviewStepParameters = OmitEnvironmentFromParameters<typeof previewStep>;
 

@@ -9,15 +9,15 @@ import type {
 	PatchPreferenceChannelsDto,
 	SubscriberWorkflowPreferenceDto,
 } from "@novu/api/models/components";
-import type { ChannelTypeEnum } from "@novu/shared";
+import type { ChannelTypeEnum } from "@/shared";
 import { ArrowsDownUp, ArrowsIn } from "@phosphor-icons/react";
 import { motion } from "motion/react";
 import { useState } from "react";
-import { STEP_TYPE_TO_ICON } from "@/components/icons/utils";
-import { Step } from "@/components/primitives/step";
-import { PreferencesItem } from "@/features/subscribers/components/preferences/preferences-item";
-import { STEP_TYPE_TO_COLOR } from "@/utils/color";
-import { formatDateSimple } from "@/utils/format-date";
+import { STEP_TYPE_TO_ICON } from "@/shared/ui/icons/utils";
+import { Step } from "@/shared/ui/primitives/step";
+import { PreferencesItem } from "@/features/subscribers/ui/preferences/preferences-item";
+import { STEP_TYPE_TO_COLOR } from "@/shared/lib/color";
+import { formatDateSimple } from "@/shared/lib/format-date";
 
 type WorkflowPreferencesProps = {
 	workflowPreferences: SubscriberWorkflowPreferenceDto;

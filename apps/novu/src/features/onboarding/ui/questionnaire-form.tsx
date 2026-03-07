@@ -7,30 +7,30 @@ import {
 	jobTitleToLabelMapper,
 	NewDashboardOptInStatusEnum,
 	OrganizationTypeEnum,
-} from "@novu/shared";
+} from "@/shared";
 import { useMutation } from "@tanstack/react-query";
 import { AnimatePresence, motion } from "motion/react";
 import React from "react";
 import { Controller, useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
-import { identifyUser } from "@/api/telemetry";
-import { StepIndicator } from "@/components/auth/shared";
-import { Form, FormRoot } from "@/components/primitives/form/form";
+import { identifyUser } from "@/shared/api/telemetry";
+import { StepIndicator } from "@/features/onboarding/ui/shared";
+import { Form, FormRoot } from "@/shared/ui/primitives/form/form";
 import {
 	Select,
 	SelectContent,
 	SelectItem,
 	SelectTrigger,
 	SelectValue,
-} from "@/components/primitives/select";
+} from "@/shared/ui/primitives/select";
 import {
 	useEnvironment,
 	useFetchEnvironments,
-} from "@/context/environment/hooks";
-import { useSegment } from "@/context/segment/hooks";
-import { useTelemetry } from "@/hooks/use-telemetry";
-import { ROUTES } from "@/utils/routes";
-import { TelemetryEvent } from "@/utils/telemetry";
+} from "@/app/context/environment/hooks";
+import { useSegment } from "@/app/context/segment/hooks";
+import { useTelemetry } from "@/shared/lib/hooks/use-telemetry";
+import { ROUTES } from "@/shared/lib/routes";
+import { TelemetryEvent } from "@/shared/lib/telemetry";
 
 interface QuestionnaireFormData {
 	jobTitle: JobTitleEnum;

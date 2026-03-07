@@ -6,15 +6,15 @@ import {
 	BreadcrumbPage,
 	BreadcrumbSeparator,
 } from "@merge-rd/ui/components/breadcrumb";
-import type { LayoutResponseDto } from "@novu/shared";
+import type { LayoutResponseDto } from "@/shared";
 import { CaretLeft, Layout } from "@phosphor-icons/react";
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import { Badge } from "@/components/primitives/badge";
-import { CompactButton } from "@/components/primitives/button-compact";
-import TruncatedText from "@/components/truncated-text";
-import { useEnvironment } from "@/context/environment/hooks";
-import { buildRoute, ROUTES } from "@/utils/routes";
+import { Badge } from "@/shared/ui/primitives/badge";
+import { CompactButton } from "@/shared/ui/primitives/button-compact";
+import TruncatedText from "@/shared/ui/truncated-text";
+import { useEnvironment } from "@/app/context/environment/hooks";
+import { buildRoute, ROUTES } from "@/shared/lib/routes";
 
 type BreadcrumbData = {
 	label: string;

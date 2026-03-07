@@ -4,14 +4,14 @@ import type {
 	PatchPreferenceChannelsDto,
 } from "@novu/api/models/components";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { patchSubscriberPreferences } from "@/api/subscribers";
+import { patchSubscriberPreferences } from "@/entities/subscriber/api/subscribers";
 import {
 	requireEnvironment,
 	useEnvironment,
-} from "@/context/environment/hooks";
-import { convertContextKeysToPayload } from "@/utils/context-variable-utils";
-import { QueryKeys } from "@/utils/query-keys";
-import type { OmitEnvironmentFromParameters } from "@/utils/types";
+} from "@/app/context/environment/hooks";
+import { convertContextKeysToPayload } from "@/shared/lib/context-variable-utils";
+import { QueryKeys } from "@/shared/lib/query-keys";
+import type { OmitEnvironmentFromParameters } from "@/shared/lib/types";
 
 type PatchSubscriberPreferencesParameters = OmitEnvironmentFromParameters<
 	typeof patchSubscriberPreferences

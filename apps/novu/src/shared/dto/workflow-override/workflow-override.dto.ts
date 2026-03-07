@@ -2,7 +2,7 @@ import type {
 	EnvironmentId,
 	OrganizationId,
 	WorkflowOverrideId,
-} from "../../types";
+} from "../../model";
 import type { IPreferenceChannelsDto } from "../notification-templates";
 import type { ITenantDto } from "../tenant";
 /*

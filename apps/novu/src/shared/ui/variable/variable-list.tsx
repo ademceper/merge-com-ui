@@ -11,8 +11,8 @@ import {
 	TooltipContent,
 	TooltipPortal,
 	TooltipTrigger,
-} from "@/components/primitives/tooltip";
-import TruncatedText from "@/components/truncated-text";
+} from "@/shared/ui/primitives/tooltip";
+import TruncatedText from "@/shared/ui/truncated-text";
 import { VariableIcon } from "./components/variable-icon";
 
 const KeyboardItem = ({

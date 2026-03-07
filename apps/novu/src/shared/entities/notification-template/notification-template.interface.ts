@@ -6,7 +6,7 @@ import type {
 	FilterParts,
 	ResourceOriginEnum,
 	ResourceTypeEnum,
-} from "../../types";
+} from "../../model";
 import type { RuntimeIssue } from "../../utils/issues";
 import type { ControlSchemas, IMessageTemplate } from "../message-template";
 import type { INotificationGroup } from "../notification-group";

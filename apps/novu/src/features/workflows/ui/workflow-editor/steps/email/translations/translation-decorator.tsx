@@ -4,21 +4,21 @@ import {
 	TRANSLATION_DELIMITER_OPEN,
 	TRANSLATION_KEY_SINGLE_REGEX,
 	TRANSLATION_TRIGGER_CHARACTER,
-} from "@novu/shared";
+} from "@/shared";
 import { forwardRef, useMemo } from "react";
-import { useDataRef } from "@/hooks/use-data-ref";
+import { useDataRef } from "@/shared/lib/hooks/use-data-ref";
 import {
 	getInlineDecoratorSuggestionsReact,
 	InlineDecoratorExtension,
-} from "@/lib/maily-core/extensions";
+} from "@/shared/lib/externals/maily-core/extensions";
 import type {
 	LocalizationResourceEnum,
 	TranslationKey,
-} from "@/types/translations";
+} from "@/shared/model/translations";
 import type {
 	IsAllowedVariable,
 	LiquidVariable,
-} from "@/utils/parseStepVariables";
+} from "@/shared/lib/parseStepVariables";
 import type { TranslationValueInputComponent } from "./edit-translation-popover/edit-translation-popover";
 import { TranslationPill } from "./translation-pill";
 import {

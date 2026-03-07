@@ -4,7 +4,7 @@ import type {
 	WorkflowPreference,
 	WorkflowPreferences,
 	WorkflowPreferencesPartial,
-} from "../types";
+} from "@/shared/model";
 import { buildWorkflowPreferences } from "./buildWorkflowPreferences";
 
 const WORKFLOW_CHANNEL_PREFERENCE_DEFAULT_VALUE = true;

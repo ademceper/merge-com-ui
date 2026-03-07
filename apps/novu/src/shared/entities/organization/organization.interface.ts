@@ -1,4 +1,4 @@
-import type { ApiServiceLevelEnum, ProductUseCases } from "../../types";
+import type { ApiServiceLevelEnum, ProductUseCases } from "../../model";
 
 export interface IOrganizationEntity {
 	_id: string;

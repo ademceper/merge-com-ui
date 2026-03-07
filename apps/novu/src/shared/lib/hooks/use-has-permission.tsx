@@ -8,10 +8,10 @@ import {
 	FeatureNameEnum,
 	type GetSubscriptionDto,
 	getFeatureForTierAsBoolean,
-} from "@novu/shared";
+} from "@/shared";
 import { useMemo } from "react";
-import { useFeatureFlag } from "@/hooks/use-feature-flag";
-import { useFetchSubscription } from "@/hooks/use-fetch-subscription";
+import { useFeatureFlag } from "@/shared/lib/hooks/use-feature-flag";
+import { useFetchSubscription } from "@/shared/lib/hooks/use-fetch-subscription";
 
 function isRbacEnabled(
 	isRbacFlagEnabled: boolean,

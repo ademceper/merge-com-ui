@@ -1,19 +1,19 @@
 import { Button } from "@merge-rd/ui/components/button";
-import { ChannelTypeEnum } from "@novu/shared";
+import { ChannelTypeEnum } from "@/shared";
 import { AnimatePresence, motion } from "motion/react";
 import { useEffect, useState } from "react";
 import { Helmet } from "react-helmet-async";
 import { useNavigate } from "react-router-dom";
-import { AuthCard } from "@/components/auth/auth-card";
-import { UsecaseSelectOnboarding } from "@/components/auth/usecase-selector";
-import { getChannelOptions } from "@/components/auth/usecases-list.utils";
-import { OnboardingArrowLeft } from "@/components/icons/onboarding-arrow-left";
-import { PageMeta } from "@/components/page-meta";
-import { LinkButton } from "@/components/primitives/button-link";
-import { AnimatedPage } from "@/features/onboarding/components/animated-page";
-import { useTelemetry } from "@/hooks/use-telemetry";
-import { ROUTES } from "@/utils/routes";
-import { TelemetryEvent } from "@/utils/telemetry";
+import { AuthCard } from "@/shared/ui/auth/auth-card";
+import { UsecaseSelectOnboarding } from "@/shared/ui/auth/usecase-selector";
+import { getChannelOptions } from "@/features/onboarding/ui/usecases-list.utils";
+import { OnboardingArrowLeft } from "@/shared/ui/icons/onboarding-arrow-left";
+import { PageMeta } from "@/shared/ui/page-meta";
+import { LinkButton } from "@/shared/ui/primitives/button-link";
+import { AnimatedPage } from "@/features/onboarding/ui/animated-page";
+import { useTelemetry } from "@/shared/lib/hooks/use-telemetry";
+import { ROUTES } from "@/shared/lib/routes";
+import { TelemetryEvent } from "@/shared/lib/telemetry";
 
 const containerVariants = {
 	hidden: { opacity: 0 },

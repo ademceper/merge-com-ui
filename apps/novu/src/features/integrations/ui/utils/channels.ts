@@ -1,4 +1,4 @@
-import { ChannelTypeEnum } from "@novu/shared";
+import { ChannelTypeEnum } from "@/shared";
 
 export const INTEGRATION_CHANNELS = [
 	ChannelTypeEnum.EMAIL,

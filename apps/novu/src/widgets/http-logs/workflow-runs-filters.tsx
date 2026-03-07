@@ -4,14 +4,14 @@ import { cn } from "@merge-rd/ui/lib/utils";
 import { SpinnerGap } from "@phosphor-icons/react";
 import type { HTMLAttributes } from "react";
 import { useForm } from "react-hook-form";
-import type { ActivityFilters } from "@/api/activity";
+import type { ActivityFilters } from "@/entities/activity/api/activity";
 import {
 	Form,
 	FormField,
 	FormItem,
 	FormRoot,
-} from "@/components/primitives/form/form";
-import { useDebouncedForm } from "@/hooks/use-debounced-form";
+} from "@/shared/ui/primitives/form/form";
+import { useDebouncedForm } from "@/shared/lib/hooks/use-debounced-form";
 import { defaultWorkflowRunsFilter } from "./hooks/use-workflow-runs-url-state";
 
 export type WorkflowRunsFiltersProps = HTMLAttributes<HTMLDivElement> & {

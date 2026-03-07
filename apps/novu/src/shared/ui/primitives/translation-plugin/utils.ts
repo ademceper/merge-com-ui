@@ -4,7 +4,7 @@ import {
 	TRANSLATION_DELIMITER_OPEN,
 	TRANSLATION_KEY_SINGLE_REGEX,
 	TRANSLATION_NAMESPACE_SEPARATOR,
-} from "@novu/shared";
+} from "@/shared";
 
 /**
  * Checks if user is currently typing a translation pattern (e.g., {{t.some...)

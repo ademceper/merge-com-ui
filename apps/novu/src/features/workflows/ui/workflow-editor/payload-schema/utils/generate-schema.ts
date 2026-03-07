@@ -1,4 +1,4 @@
-import type { JSONSchema7 } from "@/components/schema-editor/json-schema";
+import type { JSONSchema7 } from "@/shared/ui/schema-editor/json-schema";
 
 export type RequiredFieldStrategy = "none" | "all" | "heuristic" | "custom";
 

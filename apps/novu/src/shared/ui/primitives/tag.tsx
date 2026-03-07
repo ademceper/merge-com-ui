@@ -3,9 +3,9 @@
 import { X } from "@phosphor-icons/react";
 import { Slot } from "@radix-ui/react-slot";
 import * as React from "react";
-import type { PolymorphicComponentProps } from "@/utils/polymorphic";
-import { recursiveCloneChildren } from "@/utils/recursive-clone-children";
-import { tv, type VariantProps } from "@/utils/tv";
+import type { PolymorphicComponentProps } from "@/shared/lib/polymorphic";
+import { recursiveCloneChildren } from "@/shared/lib/recursive-clone-children";
+import { tv, type VariantProps } from "@/shared/lib/tv";
 
 const TAG_ROOT_NAME = "TagRoot";
 const TAG_ICON_NAME = "TagIcon";

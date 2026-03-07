@@ -4,18 +4,18 @@ import { Label } from "@merge-rd/ui/components/label";
 import { Separator } from "@merge-rd/ui/components/separator";
 import { ImageSquare } from "@phosphor-icons/react";
 import { forwardRef, useState } from "react";
-import { FormMessage } from "@/components/primitives/form/form";
-import { InputRoot } from "@/components/primitives/input";
+import { FormMessage } from "@/shared/ui/primitives/form/form";
+import { InputRoot } from "@/shared/ui/primitives/input";
 import {
 	Popover,
 	PopoverContent,
 	PopoverTrigger,
-} from "@/components/primitives/popover";
-import TextSeparator from "@/components/primitives/text-separator";
-import { ControlInput } from "@/features/workflows/components/workflow-editor/control-input";
-import { useWorkflow } from "@/features/workflows/components/workflow-editor/workflow-provider";
-import { useParseVariables } from "@/hooks/use-parse-variables";
-import { DEFAULT_AVATARS } from "@/utils/avatars";
+} from "@/shared/ui/primitives/popover";
+import TextSeparator from "@/shared/ui/primitives/text-separator";
+import { ControlInput } from "@/features/workflows/ui/workflow-editor/control-input";
+import { useWorkflow } from "@/features/workflows/ui/workflow-editor/workflow-provider";
+import { useParseVariables } from "@/shared/lib/hooks/use-parse-variables";
+import { DEFAULT_AVATARS } from "@/shared/lib/avatars";
 import { useFormField } from "./form-context";
 
 type AvatarPickerProps = {

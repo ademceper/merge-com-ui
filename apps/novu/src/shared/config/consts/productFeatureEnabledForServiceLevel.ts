@@ -1,4 +1,4 @@
-import { ApiServiceLevelEnum, ProductFeatureKeyEnum } from "../types";
+import { ApiServiceLevelEnum, ProductFeatureKeyEnum } from "@/shared/model";
 import {
 	FeatureNameEnum,
 	getFeatureForTierAsBoolean,

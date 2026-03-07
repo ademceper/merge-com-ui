@@ -1,11 +1,11 @@
-import { ResourceOriginEnum } from "@novu/shared";
+import { ResourceOriginEnum } from "@/shared";
 import { Compass, X } from "@phosphor-icons/react";
 import { useNavigate } from "react-router-dom";
-import { CompactButton } from "@/components/primitives/button-compact";
-import { EditStepConditionsForm } from "@/features/workflows/components/workflow-editor/steps/conditions/edit-step-conditions-form";
-import { EditStepConditionsFormSkeleton } from "@/features/workflows/components/workflow-editor/steps/conditions/edit-step-conditions-skeleton";
-import { StepDrawer } from "@/features/workflows/components/workflow-editor/steps/step-drawer";
-import { useWorkflow } from "@/features/workflows/components/workflow-editor/workflow-provider";
+import { CompactButton } from "@/shared/ui/primitives/button-compact";
+import { EditStepConditionsForm } from "@/features/workflows/ui/workflow-editor/steps/conditions/edit-step-conditions-form";
+import { EditStepConditionsFormSkeleton } from "@/features/workflows/ui/workflow-editor/steps/conditions/edit-step-conditions-skeleton";
+import { StepDrawer } from "@/features/workflows/ui/workflow-editor/steps/step-drawer";
+import { useWorkflow } from "@/features/workflows/ui/workflow-editor/workflow-provider";
 
 export const EditStepConditions = () => {
 	const navigate = useNavigate();

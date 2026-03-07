@@ -14,13 +14,13 @@ import { Streamdown } from "streamdown";
 import {
 	ButtonGroupRoot,
 	ButtonGroupText,
-} from "@/components/primitives/button-group";
+} from "@/shared/ui/primitives/button-group";
 import {
 	Tooltip,
 	TooltipContent,
 	TooltipProvider,
 	TooltipTrigger,
-} from "@/components/primitives/tooltip";
+} from "@/shared/ui/primitives/tooltip";
 
 export type MessageProps = HTMLAttributes<HTMLDivElement> & {
 	from: UIMessage["role"];

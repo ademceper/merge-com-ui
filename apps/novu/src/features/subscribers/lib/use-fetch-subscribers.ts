@@ -1,12 +1,12 @@
-import { DirectionEnum } from "@novu/shared";
+import { DirectionEnum } from "@/shared";
 import {
 	keepPreviousData,
 	type UseQueryOptions,
 	useQuery,
 } from "@tanstack/react-query";
-import { getSubscribers } from "@/api/subscribers";
-import { useEnvironment } from "@/context/environment/hooks";
-import { QueryKeys } from "@/utils/query-keys";
+import { getSubscribers } from "@/entities/subscriber/api/subscribers";
+import { useEnvironment } from "@/app/context/environment/hooks";
+import { QueryKeys } from "@/shared/lib/query-keys";
 
 interface UseSubscribersParams {
 	after?: string;

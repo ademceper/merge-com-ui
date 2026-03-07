@@ -1,7 +1,7 @@
 import { Skeleton } from "@merge-rd/ui/components/skeleton";
 import { cn } from "@merge-rd/ui/lib/utils";
 import type { ComponentType } from "react";
-import { useDelayedLoading } from "../../hooks/use-delayed-loading";
+import { useDelayedLoading } from "../../lib/hooks/use-delayed-loading";
 import { TrendLineDown } from "../icons/trend-line-down";
 import { TrendLineUp } from "../icons/trend-line-up";
 import { AnimatedNumber } from "./animated-number";

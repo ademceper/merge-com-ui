@@ -1,4 +1,4 @@
-import type { ContextPayload, WorkflowResponseDto } from "@novu/shared";
+import type { ContextPayload, WorkflowResponseDto } from "@/shared";
 import { useCallback, useEffect, useRef } from "react";
 import type {
 	PayloadData,

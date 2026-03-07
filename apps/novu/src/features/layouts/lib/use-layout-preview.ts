@@ -1,8 +1,8 @@
 import { useQuery } from "@tanstack/react-query";
-import { previewLayout } from "@/api/layouts";
-import { useEnvironment } from "@/context/environment/hooks";
-import { parse } from "@/utils/json";
-import { QueryKeys } from "@/utils/query-keys";
+import { previewLayout } from "@/entities/layout/api/layouts";
+import { useEnvironment } from "@/app/context/environment/hooks";
+import { parse } from "@/shared/lib/json";
+import { QueryKeys } from "@/shared/lib/query-keys";
 
 export const useLayoutPreview = ({
 	layoutSlug,

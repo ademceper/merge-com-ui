@@ -1,12 +1,12 @@
-import type { ConfigConfigurationGroup, IProviderConfig } from "@novu/shared";
+import type { ConfigConfigurationGroup, IProviderConfig } from "@/shared";
 import { AnimatePresence, motion } from "motion/react";
-import { CopyButton } from "@/components/primitives/copy-button";
-import { FormLabel } from "@/components/primitives/form/form";
-import { InlineToast } from "@/components/primitives/inline-toast";
-import { Input } from "@/components/primitives/input";
-import { API_HOSTNAME } from "@/config";
-import { useEnvironment } from "@/context/environment/hooks";
-import { fadeIn } from "@/utils/animation";
+import { CopyButton } from "@/shared/ui/primitives/copy-button";
+import { FormLabel } from "@/shared/ui/primitives/form/form";
+import { InlineToast } from "@/shared/ui/primitives/inline-toast";
+import { Input } from "@/shared/ui/primitives/input";
+import { API_HOSTNAME } from "@/shared/config";
+import { useEnvironment } from "@/app/context/environment/hooks";
+import { fadeIn } from "@/shared/lib/animation";
 
 function generateInboundWebhookUrl(
 	environmentId: string,

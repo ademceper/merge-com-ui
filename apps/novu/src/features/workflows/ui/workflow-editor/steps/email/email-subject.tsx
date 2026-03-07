@@ -1,17 +1,17 @@
 import { cn } from "@merge-rd/ui/lib/utils";
-import { EnvironmentTypeEnum } from "@novu/shared";
+import { EnvironmentTypeEnum } from "@/shared";
 import { useFormContext } from "react-hook-form";
 import {
 	FormControl,
 	FormField,
 	FormItem,
 	FormMessage,
-} from "@/components/primitives/form/form";
-import { useEnvironment } from "@/context/environment/hooks";
-import { ControlInput } from "@/features/workflows/components/workflow-editor/control-input";
-import { useWorkflow } from "@/features/workflows/components/workflow-editor/workflow-provider";
-import { useParseVariables } from "@/hooks/use-parse-variables";
-import { capitalize, containsHTMLEntities } from "@/utils/string";
+} from "@/shared/ui/primitives/form/form";
+import { useEnvironment } from "@/app/context/environment/hooks";
+import { ControlInput } from "@/features/workflows/ui/workflow-editor/control-input";
+import { useWorkflow } from "@/features/workflows/ui/workflow-editor/workflow-provider";
+import { useParseVariables } from "@/shared/lib/hooks/use-parse-variables";
+import { capitalize, containsHTMLEntities } from "@/shared/lib/string";
 
 const subjectKey = "subject";
 

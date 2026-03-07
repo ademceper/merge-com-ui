@@ -4,9 +4,9 @@ import type { IconType } from "react-icons/lib";
 import {
 	StatusBadge,
 	StatusBadgeIcon,
-} from "@/components/primitives/status-badge";
-import { WorkflowIssuesPopover } from "@/features/workflows/components/workflow-issues-popover";
-import { WorkflowStatusEnum } from "@/utils/enums";
+} from "@/shared/ui/primitives/status-badge";
+import { WorkflowIssuesPopover } from "@/features/workflows/ui/workflow-issues-popover";
+import { WorkflowStatusEnum } from "@/shared/lib/enums";
 
 // Local type definition for step issues until the shared types are updated
 type RuntimeIssue = {

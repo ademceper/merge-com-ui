@@ -9,7 +9,7 @@ import {
 	type StepTypeEnum,
 	TemplateVariableTypeEnum,
 	TriggerContextTypeEnum,
-} from "../../types";
+} from "../../model";
 import type { IActor } from "../actor";
 
 export interface IMessageTemplate {

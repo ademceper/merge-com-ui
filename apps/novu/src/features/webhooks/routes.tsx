@@ -1,10 +1,10 @@
 import type { RouteObject } from "react-router-dom";
 import { lazy } from "react";
 import { Navigate } from "react-router-dom";
-import { ROUTES } from "@/utils/routes";
+import { ROUTES } from "@/shared/lib/routes";
 
 const WebhooksPage = lazy(() =>
-	import("@/features/webhooks/pages/webhooks-page").then((m) => ({
+	import("@/features/webhooks/ui/pages/webhooks-page").then((m) => ({
 		default: m.WebhooksPage,
 	})),
 );

@@ -1,4 +1,4 @@
-import type { CreateWorkflowDto } from "@novu/shared";
+import type { CreateWorkflowDto } from "@/shared";
 
 export type IWorkflowSuggestion = {
 	id: string;

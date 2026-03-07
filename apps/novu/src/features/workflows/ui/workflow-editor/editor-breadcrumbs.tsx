@@ -10,19 +10,19 @@ import {
 	ResourceOriginEnum,
 	type StepResponseDto,
 	type WorkflowResponseDto,
-} from "@novu/shared";
+} from "@/shared";
 import { CaretLeft } from "@phosphor-icons/react";
 import React from "react";
 import { FaCode } from "react-icons/fa6";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
-import { RouteFill } from "@/components/icons";
-import { Badge } from "@/components/primitives/badge";
-import { CompactButton } from "@/components/primitives/button-compact";
-import TruncatedText from "@/components/truncated-text";
-import { useEnvironment } from "@/context/environment/hooks";
-import { useFetchWorkflow } from "@/features/workflows/hooks/use-fetch-workflow";
-import { STEP_TYPE_LABELS } from "@/utils/constants";
-import { buildRoute, ROUTES } from "@/utils/routes";
+import { RouteFill } from "@/shared/ui/icons";
+import { Badge } from "@/shared/ui/primitives/badge";
+import { CompactButton } from "@/shared/ui/primitives/button-compact";
+import TruncatedText from "@/shared/ui/truncated-text";
+import { useEnvironment } from "@/app/context/environment/hooks";
+import { useFetchWorkflow } from "@/features/workflows/lib/use-fetch-workflow";
+import { STEP_TYPE_LABELS } from "@/shared/lib/constants";
+import { buildRoute, ROUTES } from "@/shared/lib/routes";
 import { SavingStatusIndicator } from "./saving-status-indicator";
 import { getStepTypeIcon } from "./steps/utils/preview-context.utils";
 import { useWorkflow } from "./workflow-provider";

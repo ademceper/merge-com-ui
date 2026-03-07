@@ -1,11 +1,11 @@
 import { cn } from "@merge-rd/ui/lib/utils";
 import type { ReactNode } from "react";
-import { CopyButton } from "@/components/primitives/copy-button";
+import { CopyButton } from "@/shared/ui/primitives/copy-button";
 import {
 	Tooltip,
 	TooltipContent,
 	TooltipTrigger,
-} from "@/components/primitives/tooltip";
+} from "@/shared/ui/primitives/tooltip";
 
 interface OverviewItemProps {
 	children?: ReactNode;

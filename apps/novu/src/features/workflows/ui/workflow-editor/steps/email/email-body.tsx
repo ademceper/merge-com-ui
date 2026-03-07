@@ -1,6 +1,6 @@
-import { FeatureFlagsKeysEnum } from "@novu/shared";
+import { FeatureFlagsKeysEnum } from "@/shared";
 import { useFormContext, useWatch } from "react-hook-form";
-import { useFeatureFlag } from "@/hooks/use-feature-flag";
+import { useFeatureFlag } from "@/shared/lib/hooks/use-feature-flag";
 import { EmailBodyHtml } from "./email-body-html";
 import { EmailBodyMaily } from "./email-body-maily";
 import { EmailBodyReactEmail } from "./email-body-react-email";

@@ -3,9 +3,9 @@ import { useMemo } from "react";
 import type { RQBJsonLogic } from "react-querybuilder";
 import { parseJsonLogic } from "react-querybuilder/parseJsonLogic";
 import { useNavigate } from "react-router-dom";
-import { Code2 } from "@/components/icons/code-2";
-import { parseJsonLogicOptions } from "@/utils/conditions";
-import { buildRoute, ROUTES } from "@/utils/routes";
+import { Code2 } from "@/shared/ui/icons/code-2";
+import { parseJsonLogicOptions } from "@/shared/lib/conditions";
+import { buildRoute, ROUTES } from "@/shared/lib/routes";
 
 interface ConditionBadgeProps {
 	conditionsCount: number;

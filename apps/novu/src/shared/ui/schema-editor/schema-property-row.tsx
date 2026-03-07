@@ -12,7 +12,7 @@ import {
 	Tooltip,
 	TooltipContent,
 	TooltipTrigger,
-} from "@/components/primitives/tooltip";
+} from "@/shared/ui/primitives/tooltip";
 import { ArraySection } from "./components/array-section";
 import { EnumSection } from "./components/enum-section";
 import { ObjectSection } from "./components/object-section";

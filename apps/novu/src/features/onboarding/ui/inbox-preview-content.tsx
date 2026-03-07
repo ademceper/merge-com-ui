@@ -1,7 +1,7 @@
 import { useOrganization, useUser } from "@merge-rd/auth";
 import { Inbox, InboxContent, type InboxProps } from "@novu/react";
-import { apiHostnameManager } from "@/utils/api-hostname-manager";
-import { useFetchEnvironments } from "../../context/environment/hooks";
+import { apiHostnameManager } from "@/shared/lib/api-hostname-manager";
+import { useFetchEnvironments } from "@/app/context/environment/hooks";
 
 const defaultTabs = [
 	{

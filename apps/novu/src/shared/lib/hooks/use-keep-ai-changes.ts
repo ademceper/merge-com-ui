@@ -1,6 +1,6 @@
 import { useMutation } from "@tanstack/react-query";
-import { keepAiChanges } from "@/api/ai";
-import { useEnvironment } from "@/context/environment/hooks";
+import { keepAiChanges } from "@/entities/ai/api/ai";
+import { useEnvironment } from "@/app/context/environment/hooks";
 
 export function useKeepAiChanges() {
 	const { currentEnvironment } = useEnvironment();

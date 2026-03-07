@@ -4,13 +4,13 @@ import {
 	AccordionTrigger,
 } from "@merge-rd/ui/components/accordion";
 import { Button } from "@merge-rd/ui/components/button";
-import { ResourceOriginEnum } from "@novu/shared";
+import { ResourceOriginEnum } from "@/shared";
 import { ArrowsClockwise, Info } from "@phosphor-icons/react";
 import {
 	Tooltip,
 	TooltipContent,
 	TooltipTrigger,
-} from "@/components/primitives/tooltip";
+} from "@/shared/ui/primitives/tooltip";
 import { ACCORDION_STYLES } from "../constants/preview-context.constants";
 import { EditableJsonViewer } from "../shared/editable-json-viewer/editable-json-viewer";
 import type { PayloadSectionProps } from "../types/preview-context.types";

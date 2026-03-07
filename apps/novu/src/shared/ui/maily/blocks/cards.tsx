@@ -1,11 +1,11 @@
-import { CardBlocks } from "@/components/icons/cards-blocks";
-import { HorizontalCardWithImage } from "@/components/icons/horizontal-card-with-image";
-import { InformationCardWithLogo } from "@/components/icons/information-card-with-logo";
-import { ParagraphWithImage } from "@/components/icons/paragraph-with-image";
-import { Badge } from "@/components/primitives/badge";
-import type { useTelemetry } from "@/hooks/use-telemetry";
-import type { BlockItem } from "@/lib/maily-core/blocks";
-import { TelemetryEvent } from "@/utils/telemetry";
+import { CardBlocks } from "@/shared/ui/icons/cards-blocks";
+import { HorizontalCardWithImage } from "@/shared/ui/icons/horizontal-card-with-image";
+import { InformationCardWithLogo } from "@/shared/ui/icons/information-card-with-logo";
+import { ParagraphWithImage } from "@/shared/ui/icons/paragraph-with-image";
+import { Badge } from "@/shared/ui/primitives/badge";
+import type { useTelemetry } from "@/shared/lib/hooks/use-telemetry";
+import type { BlockItem } from "@/shared/lib/externals/maily-core/blocks";
+import { TelemetryEvent } from "@/shared/lib/telemetry";
 import { BlockCustomPreview } from "./block-custom-preview";
 
 const createHorizontalCardWithCta: (props: {

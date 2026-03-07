@@ -14,12 +14,12 @@ import {
 	useFormContext,
 } from "react-hook-form";
 import type { IconType } from "react-icons";
-import { Input } from "@/components/primitives/input";
+import { Input } from "@/shared/ui/primitives/input";
 import {
 	Tooltip,
 	TooltipContent,
 	TooltipTrigger,
-} from "@/components/primitives/tooltip";
+} from "@/shared/ui/primitives/tooltip";
 import { Hint, HintIcon } from "../hint";
 import {
 	FormFieldContext,

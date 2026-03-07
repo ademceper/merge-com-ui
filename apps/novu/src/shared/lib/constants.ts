@@ -3,7 +3,7 @@ import {
 	DigestTypeEnum,
 	StepTypeEnum,
 	TimeUnitEnum,
-} from "@novu/shared";
+} from "@/shared";
 
 export const AUTOCOMPLETE_PASSWORD_MANAGERS_OFF = {
 	autoComplete: "off",

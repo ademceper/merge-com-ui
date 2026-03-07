@@ -14,12 +14,12 @@ import {
 } from "@merge-rd/ui/components/table";
 import { motion } from "motion/react";
 import { useEffect, useMemo, useState } from "react";
-import { UpdatedAgo } from "@/components/updated-ago";
-import { useFetchRequestLogs } from "@/features/activity/hooks/use-fetch-request-logs";
-import { useLogsUrlState } from "@/features/activity/hooks/use-logs-url-state";
-import { useTelemetry } from "@/hooks/use-telemetry";
-import { TelemetryEvent } from "@/utils/telemetry";
-import type { RequestLog } from "../../types/logs";
+import { UpdatedAgo } from "@/shared/ui/updated-ago";
+import { useFetchRequestLogs } from "@/features/activity/lib/use-fetch-request-logs";
+import { useLogsUrlState } from "@/features/activity/lib/use-logs-url-state";
+import { useTelemetry } from "@/shared/lib/hooks/use-telemetry";
+import { TelemetryEvent } from "@/shared/lib/telemetry";
+import type { RequestLog } from "@/shared/model/logs";
 import { LogsDetailPanel } from "./logs-detail-panel";
 import { RequestLogsEmptyState } from "./logs-empty-state";
 import { RequestsFilters } from "./logs-filters";

@@ -1,5 +1,5 @@
-import { Badge } from "@/components/primitives/badge";
-import TruncatedText from "@/components/truncated-text";
+import { Badge } from "@/shared/ui/primitives/badge";
+import TruncatedText from "@/shared/ui/truncated-text";
 
 type WorkflowTagsProps = {
 	tags: string[];

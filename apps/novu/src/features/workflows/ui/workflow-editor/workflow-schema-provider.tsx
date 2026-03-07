@@ -1,8 +1,8 @@
-import type { IEnvironment, WorkflowResponseDto } from "@novu/shared";
+import type { IEnvironment, WorkflowResponseDto } from "@/shared";
 import { createContext, type ReactNode, useContext } from "react";
 import { useParams } from "react-router-dom";
-import { useEnvironment } from "@/context/environment/hooks";
-import { useIsPayloadSchemaEnabled } from "@/hooks/use-is-payload-schema-enabled";
+import { useEnvironment } from "@/app/context/environment/hooks";
+import { useIsPayloadSchemaEnabled } from "@/features/workflows/lib/use-is-payload-schema-enabled";
 import {
 	type UseWorkflowSchemaManagerReturn,
 	useWorkflowSchemaManager,

@@ -9,7 +9,7 @@ import { cn } from "@merge-rd/ui/lib/utils";
 import type { DialogProps } from "@radix-ui/react-dialog";
 import { Command } from "cmdk";
 import * as React from "react";
-import { VisuallyHidden } from "@/components/primitives/visually-hidden";
+import { VisuallyHidden } from "@/shared/ui/primitives/visually-hidden";
 
 const CommandDialog = ({
 	children,

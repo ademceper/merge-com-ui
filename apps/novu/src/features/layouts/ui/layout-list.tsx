@@ -1,12 +1,12 @@
-import { ApiServiceLevelEnum, type DirectionEnum } from "@novu/shared";
+import { ApiServiceLevelEnum, type DirectionEnum } from "@/shared";
 import type { HTMLAttributes } from "react";
 import {
 	type LayoutsFilter,
 	type LayoutsSortableColumn,
 	type LayoutsUrlState,
 	useLayoutsUrlState,
-} from "@/features/layouts/hooks/use-layouts-url-state";
-import { usePersistedPageSize } from "@/hooks/use-persisted-page-size";
+} from "@/features/layouts/lib/use-layouts-url-state";
+import { usePersistedPageSize } from "@/shared/lib/hooks/use-persisted-page-size";
 
 const LAYOUTS_TABLE_ID = "layouts-list";
 
@@ -21,15 +21,15 @@ import {
 	TableRow,
 } from "@merge-rd/ui/components/table";
 import { cn } from "@merge-rd/ui/lib/utils";
-import { ListNoResults } from "@/components/list-no-results";
-import { LayoutListBlank } from "@/features/layouts/components/layout-list-blank";
+import { ListNoResults } from "@/shared/ui/list-no-results";
+import { LayoutListBlank } from "@/features/layouts/ui/layout-list-blank";
 import {
 	LayoutRow,
 	LayoutRowSkeleton,
-} from "@/features/layouts/components/layout-row";
-import { LayoutsFilters } from "@/features/layouts/components/layouts-filters";
-import { useFetchLayouts } from "@/features/layouts/hooks/use-fetch-layouts";
-import { useFetchSubscription } from "@/hooks/use-fetch-subscription";
+} from "@/features/layouts/ui/layout-row";
+import { LayoutsFilters } from "@/features/layouts/ui/layouts-filters";
+import { useFetchLayouts } from "@/features/layouts/lib/use-fetch-layouts";
+import { useFetchSubscription } from "@/shared/lib/hooks/use-fetch-subscription";
 import { CreateLayoutButton } from "./create-layout-btn";
 import { LayoutsListUpgradeCta } from "./layouts-list-upgrade-cta";
 

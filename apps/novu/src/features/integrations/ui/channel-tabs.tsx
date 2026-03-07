@@ -4,8 +4,8 @@ import {
 	TabsList,
 	TabsTrigger,
 } from "@merge-rd/ui/components/tabs";
-import type { IProviderConfig } from "@novu/shared";
-import { CHANNEL_TYPE_TO_STRING } from "@/utils/channels";
+import type { IProviderConfig } from "@/shared";
+import { CHANNEL_TYPE_TO_STRING } from "@/shared/lib/channels";
 import { IntegrationListItem } from "./integration-list-item";
 import { INTEGRATION_CHANNELS } from "./utils/channels";
 

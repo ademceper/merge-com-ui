@@ -3,8 +3,8 @@ import type {
 	GeneratePreviewResponseDto,
 	IEnvironment,
 	StepResponseDto,
-} from "@novu/shared";
-import { getV2, postV2 } from "./api.client";
+} from "@/shared";
+import { getV2, postV2 } from "@/shared/api/api.client";
 
 export const getStep = async ({
 	environment,

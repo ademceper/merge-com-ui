@@ -1,15 +1,15 @@
 import { BookmarkSimple, Notebook } from "@phosphor-icons/react";
 import { motion } from "motion/react";
 import { type ReactElement, useEffect } from "react";
-import { PageMeta } from "@/components/page-meta";
-import { useSetPageHeader } from "@/context/page-header";
-import { ProgressSection } from "@/features/onboarding/components/welcome/progress-section";
+import { PageMeta } from "@/shared/ui/page-meta";
+import { useSetPageHeader } from "@/app/context/page-header";
+import { ProgressSection } from "@/features/onboarding/ui/welcome/progress-section";
 import {
 	type Resource,
 	ResourcesList,
-} from "@/features/onboarding/components/welcome/resources-list";
-import { useTelemetry } from "@/hooks/use-telemetry";
-import { TelemetryEvent } from "@/utils/telemetry";
+} from "@/features/onboarding/ui/welcome/resources-list";
+import { useTelemetry } from "@/shared/lib/hooks/use-telemetry";
+import { TelemetryEvent } from "@/shared/lib/telemetry";
 
 const helpfulResources: Resource[] = [
 	{

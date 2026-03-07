@@ -5,14 +5,14 @@ import { useMemo, useRef } from "react";
 import {
 	type CompletionRange,
 	VariableEditor,
-} from "@/components/primitives/variable-editor";
-import { useEditorTranslationOverlay } from "@/features/translations/hooks/use-editor-translation-overlay";
-import { EditTranslationPopover } from "@/features/workflows/components/workflow-editor/steps/email/translations/edit-translation-popover/edit-translation-popover";
-import { LocalizationResourceEnum } from "@/types/translations";
+} from "@/shared/ui/primitives/variable-editor";
+import { useEditorTranslationOverlay } from "@/features/translations/lib/use-editor-translation-overlay";
+import { EditTranslationPopover } from "@/features/workflows/ui/workflow-editor/steps/email/translations/edit-translation-popover/edit-translation-popover";
+import { LocalizationResourceEnum } from "@/shared/model/translations";
 import type {
 	IsAllowedVariable,
 	LiquidVariable,
-} from "@/utils/parseStepVariables";
+} from "@/shared/lib/parseStepVariables";
 import { useLayoutEditor } from "./layout-editor-provider";
 
 const variants = cva("relative w-full", {

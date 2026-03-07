@@ -1,8 +1,8 @@
-import { ApiServiceLevelEnum } from "@novu/shared";
+import { ApiServiceLevelEnum } from "@/shared";
 import { Info, PlusCircle } from "@phosphor-icons/react";
 import { Link } from "react-router-dom";
-import { useFetchSubscription } from "@/hooks/use-fetch-subscription";
-import { ROUTES } from "@/utils/routes";
+import { useFetchSubscription } from "@/shared/lib/hooks/use-fetch-subscription";
+import { ROUTES } from "@/shared/lib/routes";
 import { CreateLayoutButton } from "./create-layout-btn";
 import { EmptyLayoutsIllustration } from "./empty-layouts-illustration";
 

@@ -1,5 +1,5 @@
 import { cn } from "@merge-rd/ui/lib/utils";
-import { FeatureFlagsKeysEnum } from "@novu/shared";
+import { FeatureFlagsKeysEnum } from "@/shared";
 import { DotsSixVertical, WarningCircle } from "@phosphor-icons/react";
 import { cva, type VariantProps } from "class-variance-authority";
 import { motion } from "motion/react";
@@ -16,18 +16,18 @@ import {
 	HoverCardContent,
 	HoverCardPortal,
 	HoverCardTrigger,
-} from "@/components/primitives/hover-card";
+} from "@/shared/ui/primitives/hover-card";
 import {
 	Popover,
 	PopoverArrow,
 	PopoverContent,
 	PopoverPortal,
 	PopoverTrigger,
-} from "@/components/primitives/popover";
-import { StepPreview } from "@/components/step-preview-hover-card";
-import { useFeatureFlag } from "@/hooks/use-feature-flag";
-import { STEP_TYPE_TO_COLOR } from "@/utils/color";
-import { StepTypeEnum } from "@/utils/enums";
+} from "@/shared/ui/primitives/popover";
+import { StepPreview } from "@/features/workflows/ui/step-preview-hover-card";
+import { useFeatureFlag } from "@/shared/lib/hooks/use-feature-flag";
+import { STEP_TYPE_TO_COLOR } from "@/shared/lib/color";
+import { StepTypeEnum } from "@/shared/lib/enums";
 
 const nodeBadgeVariants = cva(
 	"min-w-5 text-xs h-5 border rounded-full opacity-40 flex items-center justify-center p-1",

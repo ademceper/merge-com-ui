@@ -1,11 +1,11 @@
 import { useFormContext } from "react-hook-form";
-import { AvatarPicker } from "@/components/primitives/form/avatar-picker";
+import { AvatarPicker } from "@/shared/ui/primitives/form/avatar-picker";
 import {
 	FormControl,
 	FormField,
 	FormItem,
-} from "@/components/primitives/form/form";
-import { useSaveForm } from "@/features/workflows/components/workflow-editor/steps/save-form-context";
+} from "@/shared/ui/primitives/form/form";
+import { useSaveForm } from "@/features/workflows/ui/workflow-editor/steps/save-form-context";
 
 const avatarKey = "avatar";
 

@@ -2,10 +2,10 @@ import { Tabs, TabsList, TabsTrigger } from "@merge-rd/ui/components/tabs";
 import { Sparkle } from "@phosphor-icons/react";
 import { motion } from "motion/react";
 import { useState } from "react";
-import { CodeBlock, type Language } from "@/components/primitives/code-block";
-import { InlineToast } from "@/components/primitives/inline-toast";
-import { useTelemetry } from "@/hooks/use-telemetry";
-import { TelemetryEvent } from "@/utils/telemetry";
+import { CodeBlock, type Language } from "@/shared/ui/primitives/code-block";
+import { InlineToast } from "@/shared/ui/primitives/inline-toast";
+import { useTelemetry } from "@/shared/lib/hooks/use-telemetry";
+import { TelemetryEvent } from "@/shared/lib/telemetry";
 import type {
 	Framework,
 	InstallationStep,

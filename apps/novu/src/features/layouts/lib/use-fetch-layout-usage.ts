@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
-import { getLayoutUsage } from "@/api/layouts";
-import { useEnvironment } from "@/context/environment/hooks";
-import { QueryKeys } from "@/utils/query-keys";
+import { getLayoutUsage } from "@/entities/layout/api/layouts";
+import { useEnvironment } from "@/app/context/environment/hooks";
+import { QueryKeys } from "@/shared/lib/query-keys";
 
 export const useFetchLayoutUsage = ({
 	layoutSlug,

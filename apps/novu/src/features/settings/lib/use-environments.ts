@@ -1,4 +1,4 @@
-import type { IEnvironment } from "@novu/shared";
+import type { IEnvironment } from "@/shared";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
 	createEnvironment,
@@ -9,8 +9,8 @@ import {
 	publishEnvironments,
 	type ResourceToPublish,
 	updateEnvironment,
-} from "@/api/environments";
-import { QueryKeys } from "@/utils/query-keys";
+} from "@/entities/environment/api/environments";
+import { QueryKeys } from "@/shared/lib/query-keys";
 
 export function useCreateEnvironment() {
 	const queryClient = useQueryClient();

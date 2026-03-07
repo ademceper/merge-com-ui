@@ -12,15 +12,15 @@ import {
 	getParentPath,
 	isRuleGroup,
 } from "react-querybuilder";
-import { Delete } from "@/components/icons/delete";
-import { SquareTwoStack } from "@/components/icons/square-two-stack";
-import { CompactButton } from "@/components/primitives/button-compact";
+import { Delete } from "@/shared/ui/icons/delete";
+import { SquareTwoStack } from "@/shared/ui/icons/square-two-stack";
+import { CompactButton } from "@/shared/ui/primitives/button-compact";
 import {
 	Tooltip,
 	TooltipContent,
 	TooltipPortal,
 	TooltipTrigger,
-} from "@/components/primitives/tooltip";
+} from "@/shared/ui/primitives/tooltip";
 import { useConditionsEditorContext } from "./conditions-editor-context";
 
 export const RuleActions = React.memo(

@@ -1,21 +1,21 @@
 import type { RouteObject } from "react-router-dom";
 import { lazy } from "react";
-import { ROUTES } from "@/utils/routes";
+import { ROUTES } from "@/shared/lib/routes";
 
 const TranslationsPage = lazy(() =>
-	import("@/features/translations/pages/translations").then((m) => ({
+	import("@/features/translations/ui/pages/translations").then((m) => ({
 		default: m.TranslationsPage,
 	})),
 );
 const TranslationSettingsPage = lazy(() =>
-	import("@/features/translations/pages/translation-settings-page").then(
+	import("@/features/translations/ui/pages/translation-settings-page").then(
 		(m) => ({
 			default: m.TranslationSettingsPage,
 		}),
 	),
 );
 const EditTranslationPage = lazy(() =>
-	import("@/features/translations/pages/edit-translation").then((m) => ({
+	import("@/features/translations/ui/pages/edit-translation").then((m) => ({
 		default: m.EditTranslationPage,
 	})),
 );

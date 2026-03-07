@@ -14,20 +14,20 @@ import {
 	DEFAULT_LOCALE,
 	FeatureNameEnum,
 	getFeatureForTierAsBoolean,
-} from "@novu/shared";
+} from "@/shared";
 import type { HTMLAttributes } from "react";
 import { useNavigate } from "react-router-dom";
-import type { TranslationsFilter } from "@/api/translations";
-import { DefaultPagination } from "@/components/default-pagination";
-import { ListNoResults } from "@/components/list-no-results";
-import { IS_ENTERPRISE, IS_SELF_HOSTED } from "@/config";
-import { useEnvironment } from "@/context/environment/hooks";
-import { useFetchOrganizationSettings } from "@/features/settings/hooks/use-fetch-organization-settings";
-import { useDeleteTranslationModal } from "@/features/translations/hooks/use-delete-translation-modal";
-import { useTranslationListLogic } from "@/features/translations/hooks/use-translation-list-logic";
-import type { TranslationsUrlState } from "@/features/translations/hooks/use-translations-url-state";
-import { useFetchSubscription } from "@/hooks/use-fetch-subscription";
-import { buildRoute, ROUTES } from "@/utils/routes";
+import type { TranslationsFilter } from "@/entities/translation/api/translations";
+import { DefaultPagination } from "@/shared/ui/default-pagination";
+import { ListNoResults } from "@/shared/ui/list-no-results";
+import { IS_ENTERPRISE, IS_SELF_HOSTED } from "@/shared/config";
+import { useEnvironment } from "@/app/context/environment/hooks";
+import { useFetchOrganizationSettings } from "@/features/settings/lib/use-fetch-organization-settings";
+import { useDeleteTranslationModal } from "@/features/translations/lib/use-delete-translation-modal";
+import { useTranslationListLogic } from "@/features/translations/lib/use-translation-list-logic";
+import type { TranslationsUrlState } from "@/features/translations/lib/use-translations-url-state";
+import { useFetchSubscription } from "@/shared/lib/hooks/use-fetch-subscription";
+import { buildRoute, ROUTES } from "@/shared/lib/routes";
 import { DEFAULT_TRANSLATIONS_LIMIT } from "./constants";
 import { DeleteTranslationGroupDialog } from "./delete-translation-modal";
 import { TranslationListUpgradeCta } from "./translation-list-upgrade-cta";

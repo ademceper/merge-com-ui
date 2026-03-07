@@ -1,8 +1,8 @@
 import { Skeleton } from "@merge-rd/ui/components/skeleton";
-import { type ChannelTypeEnum, providers as novuProviders } from "@novu/shared";
+import { type ChannelTypeEnum, providers as novuProviders } from "@/shared";
 import { useMemo } from "react";
-import { useEnvironment } from "@/context/environment/hooks";
-import { useFetchIntegrations } from "@/features/integrations/hooks/use-fetch-integrations";
+import { useEnvironment } from "@/app/context/environment/hooks";
+import { useFetchIntegrations } from "@/features/integrations/lib/use-fetch-integrations";
 import { IntegrationChannelGroup } from "./integration-channel-group";
 import type { TableIntegration } from "./types";
 

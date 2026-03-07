@@ -1,7 +1,7 @@
 import { Skeleton } from "@merge-rd/ui/components/skeleton";
 import { cn } from "@merge-rd/ui/lib/utils";
 import { motion } from "motion/react";
-import { fadeIn } from "@/utils/animation";
+import { fadeIn } from "@/shared/lib/animation";
 
 export function ActivitySkeleton({
 	headerClassName,

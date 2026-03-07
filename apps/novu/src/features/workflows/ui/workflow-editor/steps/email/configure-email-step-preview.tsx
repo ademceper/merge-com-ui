@@ -4,9 +4,9 @@ import { cn } from "@merge-rd/ui/lib/utils";
 import * as Sentry from "@sentry/react";
 import { type HTMLAttributes, useEffect } from "react";
 import { useParams } from "react-router-dom";
-import { EmailPreviewHeader } from "@/features/workflows/components/workflow-editor/steps/email/email-preview";
-import { useWorkflow } from "@/features/workflows/components/workflow-editor/workflow-provider";
-import { usePreviewStep } from "@/hooks/use-preview-step";
+import { EmailPreviewHeader } from "@/features/workflows/ui/workflow-editor/steps/email/email-preview";
+import { useWorkflow } from "@/features/workflows/ui/workflow-editor/workflow-provider";
+import { usePreviewStep } from "@/shared/lib/hooks/use-preview-step";
 
 type MiniEmailPreviewProps = HTMLAttributes<HTMLDivElement> & {
 	previewFrom?: {

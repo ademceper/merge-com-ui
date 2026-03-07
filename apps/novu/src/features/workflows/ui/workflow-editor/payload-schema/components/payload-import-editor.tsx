@@ -1,7 +1,7 @@
 import { Button } from "@merge-rd/ui/components/button";
 import { Info, X } from "@phosphor-icons/react";
 import { loadLanguage } from "@uiw/codemirror-extensions-langs";
-import { Editor } from "@/components/primitives/editor";
+import { Editor } from "@/shared/ui/primitives/editor";
 import { isValidJson } from "../utils/generate-schema";
 
 type PayloadImportEditorProps = {

@@ -1,4 +1,4 @@
-import { Badge } from "@/components/primitives/badge";
+import { Badge } from "@/shared/ui/primitives/badge";
 import { VariablePreview } from "./variable-preview";
 
 interface INewVariablePreviewProps {

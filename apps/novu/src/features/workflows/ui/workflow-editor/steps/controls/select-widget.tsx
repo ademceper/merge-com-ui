@@ -7,16 +7,16 @@ import {
 	FormItem,
 	FormLabel,
 	FormMessage,
-} from "@/components/primitives/form/form";
+} from "@/shared/ui/primitives/form/form";
 import {
 	Select,
 	SelectContent,
 	SelectItem,
 	SelectTrigger,
 	SelectValue,
-} from "@/components/primitives/select";
-import { useSaveForm } from "@/features/workflows/components/workflow-editor/steps/save-form-context";
-import { capitalize } from "@/utils/string";
+} from "@/shared/ui/primitives/select";
+import { useSaveForm } from "@/features/workflows/ui/workflow-editor/steps/save-form-context";
+import { capitalize } from "@/shared/lib/string";
 import { getFieldName } from "./template-utils";
 
 export function SelectWidget(props: WidgetProps) {

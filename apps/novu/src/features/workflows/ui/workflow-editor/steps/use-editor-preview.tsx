@@ -1,14 +1,14 @@
-import type { PreviewPayload } from "@novu/shared";
+import type { PreviewPayload } from "@/shared";
 import * as Sentry from "@sentry/react";
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import { useCallback, useEffect, useRef, useState } from "react";
 
-import { previewStep } from "@/api/steps";
-import { useEnvironment } from "@/context/environment/hooks";
-import { useDataRef } from "@/hooks/use-data-ref";
-import { usePreviewStep } from "@/hooks/use-preview-step";
-import { parse, stringify } from "@/utils/json";
-import { QueryKeys } from "@/utils/query-keys";
+import { previewStep } from "@/entities/step/api/steps";
+import { useEnvironment } from "@/app/context/environment/hooks";
+import { useDataRef } from "@/shared/lib/hooks/use-data-ref";
+import { usePreviewStep } from "@/shared/lib/hooks/use-preview-step";
+import { parse, stringify } from "@/shared/lib/json";
+import { QueryKeys } from "@/shared/lib/query-keys";
 
 type UseEditorPreviewProps = {
 	workflowSlug: string;

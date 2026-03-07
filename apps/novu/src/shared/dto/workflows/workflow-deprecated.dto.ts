@@ -3,7 +3,7 @@ import type {
 	BuilderFieldType,
 	BuilderGroupValues,
 	FilterParts,
-} from "../../types";
+} from "../../model";
 import type { MessageTemplateDto } from "../message-template";
 
 /**

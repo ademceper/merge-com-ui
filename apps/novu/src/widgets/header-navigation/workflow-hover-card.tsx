@@ -1,12 +1,12 @@
 import { GitCommit, PlusSquare, Trash } from "@phosphor-icons/react";
 import { useMemo } from "react";
-import type { IResourceDiffResult } from "@/api/environments";
-import { Badge, BadgeIcon } from "@/components/primitives/badge";
+import type { IResourceDiffResult } from "@/entities/environment/api/environments";
+import { Badge, BadgeIcon } from "@/shared/ui/primitives/badge";
 import {
 	Tooltip,
 	TooltipContent,
 	TooltipTrigger,
-} from "@/components/primitives/tooltip";
+} from "@/shared/ui/primitives/tooltip";
 
 type WorkflowChangeType = {
 	type: "configuration" | "steps" | "translations";

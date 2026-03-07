@@ -2,7 +2,7 @@ import type {
 	ActionTypeEnum,
 	ChannelTypeEnum,
 	ContextPayload,
-} from "../../types";
+} from "../../model";
 import type { SubscriberDto } from "../subscriber";
 import type { JSONSchemaDto } from "./json-schema-dto";
 

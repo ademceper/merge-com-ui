@@ -1,5 +1,5 @@
 import { Switch } from "@merge-rd/ui/components/switch";
-import { EnvironmentTypeEnum } from "@novu/shared";
+import { EnvironmentTypeEnum } from "@/shared";
 import { useFormContext } from "react-hook-form";
 import {
 	FormControl,
@@ -7,9 +7,9 @@ import {
 	FormItem,
 	FormLabel,
 	FormMessage,
-} from "@/components/primitives/form/form";
-import { useEnvironment } from "@/context/environment/hooks";
-import { ResourceOriginEnum } from "@/utils/enums";
+} from "@/shared/ui/primitives/form/form";
+import { useEnvironment } from "@/app/context/environment/hooks";
+import { ResourceOriginEnum } from "@/shared/lib/enums";
 import { useWorkflow } from "../../workflow-provider";
 import { useSaveForm } from "../save-form-context";
 

@@ -1,11 +1,11 @@
 import type { EditorView } from "@uiw/react-codemirror";
 import { useCallback, useEffect, useState } from "react";
-import { TRANSLATION_PILL_HEIGHT } from "@/components/primitives/translation-plugin/pill-widget";
-import type { CompletionRange } from "@/components/primitives/variable-editor";
-import { useIsTranslationEnabled } from "@/features/translations/hooks/use-is-translation-enabled";
-import { useTranslationCompletionSource } from "@/features/translations/hooks/use-translation-completion-source";
-import { useTranslationPluginExtension } from "@/features/translations/hooks/use-translation-plugin-extension";
-import type { LocalizationResourceEnum } from "@/types/translations";
+import { TRANSLATION_PILL_HEIGHT } from "@/shared/ui/primitives/translation-plugin/pill-widget";
+import type { CompletionRange } from "@/shared/ui/primitives/variable-editor";
+import { useIsTranslationEnabled } from "@/features/translations/lib/use-is-translation-enabled";
+import { useTranslationCompletionSource } from "@/features/translations/lib/use-translation-completion-source";
+import { useTranslationPluginExtension } from "@/features/translations/lib/use-translation-plugin-extension";
+import type { LocalizationResourceEnum } from "@/shared/model/translations";
 
 type UseTranslationEditorProps = {
 	viewRef: React.MutableRefObject<EditorView | null>;

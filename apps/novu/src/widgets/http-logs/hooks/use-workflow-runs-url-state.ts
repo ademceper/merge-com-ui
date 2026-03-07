@@ -1,6 +1,6 @@
 import { useCallback, useMemo } from "react";
 import { useSearchParams } from "react-router-dom";
-import type { ActivityFilters } from "@/api/activity";
+import type { ActivityFilters } from "@/entities/activity/api/activity";
 
 export const defaultWorkflowRunsFilter: ActivityFilters = {
 	channels: [],

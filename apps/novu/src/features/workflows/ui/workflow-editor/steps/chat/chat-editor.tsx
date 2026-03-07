@@ -1,7 +1,7 @@
-import { EnvironmentTypeEnum, type UiSchema } from "@novu/shared";
-import { useEnvironment } from "@/context/environment/hooks";
-import { getComponentByType } from "@/features/workflows/components/workflow-editor/steps/component-utils";
-import { TabsSection } from "@/features/workflows/components/workflow-editor/steps/tabs-section";
+import { EnvironmentTypeEnum, type UiSchema } from "@/shared";
+import { useEnvironment } from "@/app/context/environment/hooks";
+import { getComponentByType } from "@/features/workflows/ui/workflow-editor/steps/component-utils";
+import { TabsSection } from "@/features/workflows/ui/workflow-editor/steps/tabs-section";
 import { StepEditorUnavailable } from "../step-editor-unavailable";
 
 type ChatEditorProps = { uiSchema: UiSchema };

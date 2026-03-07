@@ -1,9 +1,9 @@
 import { Card, CardContent } from "@merge-rd/ui/components/card";
-import { StepTypeEnum } from "@novu/shared";
+import { StepTypeEnum } from "@/shared";
 import { Plus } from "@phosphor-icons/react";
 import React from "react";
-import type { StepType } from "@/components/step-preview-hover-card";
-import { WorkflowStep } from "@/features/workflows/components/workflow-step";
+import type { StepType } from "@/features/workflows/ui/step-preview-hover-card";
+import { WorkflowStep } from "@/features/workflows/ui/workflow-step";
 
 type WorkflowCardProps = {
 	name: string;

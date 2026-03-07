@@ -16,7 +16,7 @@ import {
 	DASHBOARD_URL,
 	getEnvVar,
 	WEBSOCKET_HOSTNAME,
-} from "@/config";
+} from "@/shared/config";
 
 export interface RegionConfig {
 	code: string;

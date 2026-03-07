@@ -1,4 +1,4 @@
-import { TimeUnitEnum } from "@novu/shared";
+import { TimeUnitEnum } from "@/shared";
 
 export const TIME_UNIT_OPTIONS: Array<{ label: string; value: TimeUnitEnum }> =
 	[

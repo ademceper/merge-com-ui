@@ -15,28 +15,28 @@ import {
 } from "@merge-rd/ui/components/dialog";
 import { ScrollArea, ScrollBar } from "@merge-rd/ui/components/scroll-area";
 import { Skeleton } from "@merge-rd/ui/components/skeleton";
-import type { StepCreateDto } from "@novu/shared";
+import type { StepCreateDto } from "@/shared";
 import { CaretLeft } from "@phosphor-icons/react";
 import { AnimatePresence, motion } from "motion/react";
 import { useEffect, useMemo, useState } from "react";
 import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import type { z } from "zod";
-import { RouteFill } from "@/components/icons/route-fill";
-import { CompactButton } from "@/components/primitives/button-compact";
-import TruncatedText from "@/components/truncated-text";
-import { WorkflowResults } from "@/features/workflows/components/template-store/components/workflow-results";
-import type { IWorkflowSuggestion } from "@/features/workflows/components/template-store/types";
-import { WorkflowSidebar } from "@/features/workflows/components/template-store/workflow-sidebar";
-import { CreateWorkflowForm } from "@/features/workflows/components/workflow-editor/create-workflow-form";
-import type { workflowSchema } from "@/features/workflows/components/workflow-editor/schema";
-import { showErrorToast } from "@/features/workflows/components/workflow-editor/toasts";
-import { WorkflowCanvas } from "@/features/workflows/components/workflow-editor/workflow-canvas";
-import { useCreateWorkflow } from "@/features/workflows/hooks/use-create-workflow";
-import { useTemplateStore } from "@/features/workflows/hooks/use-template-store";
-import { useTelemetry } from "@/hooks/use-telemetry";
-import { buildRoute, ROUTES } from "@/utils/routes";
-import { TelemetryEvent } from "@/utils/telemetry";
-import type { Step } from "@/utils/types";
+import { RouteFill } from "@/shared/ui/icons/route-fill";
+import { CompactButton } from "@/shared/ui/primitives/button-compact";
+import TruncatedText from "@/shared/ui/truncated-text";
+import { WorkflowResults } from "@/features/workflows/ui/template-store/components/workflow-results";
+import type { IWorkflowSuggestion } from "@/features/workflows/ui/template-store/types";
+import { WorkflowSidebar } from "@/features/workflows/ui/template-store/workflow-sidebar";
+import { CreateWorkflowForm } from "@/features/workflows/ui/workflow-editor/create-workflow-form";
+import type { workflowSchema } from "@/features/workflows/ui/workflow-editor/schema";
+import { showErrorToast } from "@/features/workflows/ui/workflow-editor/toasts";
+import { WorkflowCanvas } from "@/features/workflows/ui/workflow-editor/workflow-canvas";
+import { useCreateWorkflow } from "@/features/workflows/lib/use-create-workflow";
+import { useTemplateStore } from "@/features/workflows/lib/use-template-store";
+import { useTelemetry } from "@/shared/lib/hooks/use-telemetry";
+import { buildRoute, ROUTES } from "@/shared/lib/routes";
+import { TelemetryEvent } from "@/shared/lib/telemetry";
+import type { Step } from "@/shared/lib/types";
 
 function mapTemplateStepsToSteps(templateSteps: StepCreateDto[]): Step[] {
 	return templateSteps.map((step, index) => {

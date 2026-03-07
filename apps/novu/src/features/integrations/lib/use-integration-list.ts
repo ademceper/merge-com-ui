@@ -8,7 +8,7 @@ import {
 	PushProviderIdEnum,
 	providers,
 	SmsProviderIdEnum,
-} from "@novu/shared";
+} from "@/shared";
 import { useMemo } from "react";
 
 export function useIntegrationList(searchQuery: string = "") {

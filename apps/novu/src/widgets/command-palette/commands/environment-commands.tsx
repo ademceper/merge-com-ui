@@ -1,7 +1,7 @@
 import { Database, GlobeSimple } from "@phosphor-icons/react";
 import { useNavigate } from "react-router-dom";
-import { useEnvironment } from "@/context/environment/hooks";
-import { buildRoute, ROUTES } from "@/utils/routes";
+import { useEnvironment } from "@/app/context/environment/hooks";
+import { buildRoute, ROUTES } from "@/shared/lib/routes";
 import type { Command, CommandExecutionContext } from "../command-types";
 
 export function useEnvironmentCommands(

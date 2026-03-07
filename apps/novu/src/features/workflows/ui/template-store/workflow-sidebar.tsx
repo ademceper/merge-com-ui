@@ -17,10 +17,10 @@ import {
 import { motion } from "motion/react";
 import { type ReactNode, useMemo } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { useTemplateStore } from "@/features/workflows/hooks/use-template-store";
-import { useTelemetry } from "@/hooks/use-telemetry";
-import { buildRoute, ROUTES } from "@/utils/routes";
-import { TelemetryEvent } from "@/utils/telemetry";
+import { useTemplateStore } from "@/features/workflows/lib/use-template-store";
+import { useTelemetry } from "@/shared/lib/hooks/use-telemetry";
+import { buildRoute, ROUTES } from "@/shared/lib/routes";
+import { TelemetryEvent } from "@/shared/lib/telemetry";
 import type { TemplateCategory } from "./types";
 
 interface WorkflowSidebarProps {

@@ -1,11 +1,11 @@
 import { useMutation } from "@tanstack/react-query";
 
-import { updateVercelIntegration } from "@/api/partner-integrations";
+import { updateVercelIntegration } from "@/entities/integration/api/partner-integrations";
 import {
 	showErrorToast,
 	showSuccessToast,
-} from "@/components/primitives/sonner-helpers";
-import { useEnvironment } from "@/context/environment/hooks";
+} from "@/shared/ui/primitives/sonner-helpers";
+import { useEnvironment } from "@/app/context/environment/hooks";
 
 export const useUpdateVercelIntegration = ({
 	next,

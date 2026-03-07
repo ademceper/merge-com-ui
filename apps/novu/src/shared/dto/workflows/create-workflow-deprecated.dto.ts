@@ -1,4 +1,4 @@
-import type { CustomDataType } from "../../types";
+import type { CustomDataType } from "../../model";
 import type { NotificationStepDto } from "./workflow-deprecated.dto";
 
 interface IPreferenceChannelsDto {

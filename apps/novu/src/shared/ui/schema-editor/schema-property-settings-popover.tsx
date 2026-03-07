@@ -10,25 +10,25 @@ import {
 	FormItem,
 	FormLabel,
 	FormMessage,
-} from "@/components/primitives/form/form";
+} from "@/shared/ui/primitives/form/form";
 import {
 	Input,
 	InputPure,
 	InputRoot,
 	InputWrapper,
-} from "@/components/primitives/input";
+} from "@/shared/ui/primitives/input";
 import {
 	Popover,
 	PopoverContent,
 	PopoverTrigger,
-} from "@/components/primitives/popover";
+} from "@/shared/ui/primitives/popover";
 import {
 	Select,
 	SelectContent,
 	SelectItem,
 	SelectTrigger,
 	SelectValue,
-} from "@/components/primitives/select";
+} from "@/shared/ui/primitives/select";
 import { Code2 } from "../icons/code-2";
 import { useSchemaPropertyType } from "./hooks/use-schema-property-type";
 import type { JSONSchema7, JSONSchema7TypeName } from "./json-schema";

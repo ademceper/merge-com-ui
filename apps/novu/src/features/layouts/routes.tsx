@@ -1,24 +1,24 @@
 import type { RouteObject } from "react-router-dom";
 import { lazy } from "react";
-import { ROUTES } from "@/utils/routes";
+import { ROUTES } from "@/shared/lib/routes";
 
 const LayoutsPage = lazy(() =>
-	import("@/features/layouts/pages/layouts").then((m) => ({
+	import("@/features/layouts/ui/pages/layouts").then((m) => ({
 		default: m.LayoutsPage,
 	})),
 );
 const CreateLayoutPage = lazy(() =>
-	import("@/features/layouts/pages/create-layout").then((m) => ({
+	import("@/features/layouts/ui/pages/create-layout").then((m) => ({
 		default: m.CreateLayoutPage,
 	})),
 );
 const DuplicateLayoutPage = lazy(() =>
-	import("@/features/layouts/pages/duplicate-layout-page").then((m) => ({
+	import("@/features/layouts/ui/pages/duplicate-layout-page").then((m) => ({
 		default: m.DuplicateLayoutPage,
 	})),
 );
 const EditLayoutPage = lazy(() =>
-	import("@/features/layouts/pages/edit-layout").then((m) => ({
+	import("@/features/layouts/ui/pages/edit-layout").then((m) => ({
 		default: m.EditLayoutPage,
 	})),
 );

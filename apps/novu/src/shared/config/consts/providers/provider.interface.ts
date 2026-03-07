@@ -3,7 +3,7 @@ import type {
 	ConfigurationKey,
 	CredentialsKeyEnum,
 	ProvidersIdEnum,
-} from "../../types";
+} from "@/shared/model";
 
 export type ConfigConfiguration = {
 	key: ConfigurationKey;

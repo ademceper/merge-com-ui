@@ -1,15 +1,15 @@
-import { ChannelTypeEnum } from "@novu/shared";
+import { ChannelTypeEnum } from "@/shared";
 import { useEffect, useMemo } from "react";
 import { useSearchParams } from "react-router-dom";
-import { AuthCard } from "@/components/auth/auth-card";
-import { UsecasePlaygroundHeader } from "@/components/usecase-playground-header";
-import { useEnvironment } from "@/context/environment/hooks";
-import { useFetchIntegrations } from "@/features/integrations/hooks/use-fetch-integrations";
-import { AnimatedPage } from "@/features/onboarding/components/animated-page";
-import { InboxEmbed } from "@/features/onboarding/components/welcome/inbox-embed";
-import { useTelemetry } from "@/hooks/use-telemetry";
-import { ROUTES } from "@/utils/routes";
-import { TelemetryEvent } from "@/utils/telemetry";
+import { AuthCard } from "@/shared/ui/auth/auth-card";
+import { UsecasePlaygroundHeader } from "@/widgets/usecase-playground-header";
+import { useEnvironment } from "@/app/context/environment/hooks";
+import { useFetchIntegrations } from "@/features/integrations/lib/use-fetch-integrations";
+import { AnimatedPage } from "@/features/onboarding/ui/animated-page";
+import { InboxEmbed } from "@/features/onboarding/ui/welcome/inbox-embed";
+import { useTelemetry } from "@/shared/lib/hooks/use-telemetry";
+import { ROUTES } from "@/shared/lib/routes";
+import { TelemetryEvent } from "@/shared/lib/telemetry";
 
 export function InboxEmbedPage() {
 	const telemetry = useTelemetry();

@@ -13,20 +13,20 @@ import {
 } from "@merge-rd/ui/components/table";
 import { BookBookmark, Sparkle } from "@phosphor-icons/react";
 import { Link, useNavigate } from "react-router-dom";
-import { Badge } from "@/components/primitives/badge";
-import { LinkButton } from "@/components/primitives/button-link";
-import { CopyButton } from "@/components/primitives/copy-button";
-import { EnvironmentBranchIcon } from "@/components/primitives/environment-branch-icon";
-import TruncatedText from "@/components/truncated-text";
-import { IS_SELF_HOSTED, SELF_HOSTED_UPGRADE_REDIRECT_URL } from "@/config";
+import { Badge } from "@/shared/ui/primitives/badge";
+import { LinkButton } from "@/shared/ui/primitives/button-link";
+import { CopyButton } from "@/shared/ui/primitives/copy-button";
+import { EnvironmentBranchIcon } from "@/shared/ui/primitives/environment-branch-icon";
+import TruncatedText from "@/shared/ui/truncated-text";
+import { IS_SELF_HOSTED, SELF_HOSTED_UPGRADE_REDIRECT_URL } from "@/shared/config";
 import {
 	useEnvironment,
 	useFetchEnvironments,
-} from "@/context/environment/hooks";
-import { useTelemetry } from "@/hooks/use-telemetry";
-import { ROUTES } from "@/utils/routes";
-import { TelemetryEvent } from "@/utils/telemetry";
-import { openInNewTab } from "@/utils/url";
+} from "@/app/context/environment/hooks";
+import { useTelemetry } from "@/shared/lib/hooks/use-telemetry";
+import { ROUTES } from "@/shared/lib/routes";
+import { TelemetryEvent } from "@/shared/lib/telemetry";
+import { openInNewTab } from "@/shared/lib/url";
 
 export function FreeTierState() {
 	const track = useTelemetry();

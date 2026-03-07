@@ -1,4 +1,4 @@
-import type { WeeklySchedule } from "@novu/shared";
+import type { WeeklySchedule } from "@/shared";
 
 export const weekDays: Array<keyof WeeklySchedule> = [
 	"monday",

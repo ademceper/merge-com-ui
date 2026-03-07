@@ -1,21 +1,21 @@
 import { useFormContext } from "react-hook-form";
 import { useValueEditor, type ValueEditorProps } from "react-querybuilder";
-import { InputRoot, InputWrapper } from "@/components/primitives/input";
+import { InputRoot, InputWrapper } from "@/shared/ui/primitives/input";
 import {
 	Select,
 	SelectContent,
 	SelectItem,
 	SelectTrigger,
 	SelectValue,
-} from "@/components/primitives/select";
-import type { HelpTextInfo } from "@/features/workflows/components/conditions-editor/field-type-editors";
-import { shouldUseRelativeDateEditor } from "@/features/workflows/components/conditions-editor/field-type-editors";
-import { HelpIcon } from "@/features/workflows/components/conditions-editor/help-icon";
-import { ControlInput } from "@/features/workflows/components/workflow-editor/control-input";
+} from "@/shared/ui/primitives/select";
+import type { HelpTextInfo } from "@/features/workflows/ui/conditions-editor/field-type-editors";
+import { shouldUseRelativeDateEditor } from "@/features/workflows/ui/conditions-editor/field-type-editors";
+import { HelpIcon } from "@/features/workflows/ui/conditions-editor/help-icon";
+import { ControlInput } from "@/features/workflows/ui/workflow-editor/control-input";
 import type {
 	IsAllowedVariable,
 	LiquidVariable,
-} from "@/utils/parseStepVariables";
+} from "@/shared/lib/parseStepVariables";
 
 type RelativeDateValue = {
 	amount: number | string;

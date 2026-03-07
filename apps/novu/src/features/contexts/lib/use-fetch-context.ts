@@ -1,12 +1,12 @@
 import type { GetContextResponseDto } from "@novu/api/models/components";
-import type { ContextId, ContextType } from "@novu/shared";
+import type { ContextId, ContextType } from "@/shared";
 import { type UseQueryOptions, useQuery } from "@tanstack/react-query";
-import { getContext } from "@/api/contexts";
+import { getContext } from "@/entities/context/api/contexts";
 import {
 	requireEnvironment,
 	useEnvironment,
-} from "@/context/environment/hooks";
-import { QueryKeys } from "@/utils/query-keys";
+} from "@/app/context/environment/hooks";
+import { QueryKeys } from "@/shared/lib/query-keys";
 
 interface UseFetchContextParams {
 	type: ContextType;

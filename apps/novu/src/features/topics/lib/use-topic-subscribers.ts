@@ -4,17 +4,17 @@ import {
 	useQuery,
 	useQueryClient,
 } from "@tanstack/react-query";
-import type { NovuApiError } from "@/api/api.client";
+import type { NovuApiError } from "@/shared/api/api.client";
 import {
 	addSubscribersToTopic,
 	getTopicSubscriptions,
 	removeSubscribersFromTopic,
-} from "@/api/topics";
+} from "@/entities/topic/api/topics";
 import {
 	showErrorToast,
 	showSuccessToast,
-} from "@/components/primitives/sonner-helpers";
-import { useEnvironment } from "@/context/environment/hooks";
+} from "@/shared/ui/primitives/sonner-helpers";
+import { useEnvironment } from "@/app/context/environment/hooks";
 
 export function useTopicSubscriptions(
 	topicKey: string,

@@ -1,7 +1,7 @@
 import { Button } from "@merge-rd/ui/components/button";
 import { CaretRight } from "@phosphor-icons/react";
 import type { ReactNode } from "react";
-import { ToastClose, ToastIcon } from "@/components/primitives/sonner";
+import { ToastClose, ToastIcon } from "@/shared/ui/primitives/sonner";
 
 interface SuccessToastProps {
 	title: string;

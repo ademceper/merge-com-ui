@@ -1,5 +1,5 @@
 import { Button } from "@merge-rd/ui/components/button";
-import { DEFAULT_LOCALE } from "@novu/shared";
+import { DEFAULT_LOCALE } from "@/shared";
 import {
 	ListBullets,
 	Question,
@@ -8,38 +8,38 @@ import {
 } from "@phosphor-icons/react";
 import type React from "react";
 import { type ComponentType, useCallback, useId, useState } from "react";
-import { TranslateVariableIcon } from "@/components/icons/translate-variable";
-import { LinkButton } from "@/components/primitives/button-link";
+import { TranslateVariableIcon } from "@/shared/ui/icons/translate-variable";
+import { LinkButton } from "@/shared/ui/primitives/button-link";
 import {
 	FormControl,
 	FormItem,
 	FormMessagePure,
-} from "@/components/primitives/form/form";
+} from "@/shared/ui/primitives/form/form";
 import {
 	InputPure,
 	InputRoot,
 	InputWrapper,
-} from "@/components/primitives/input";
+} from "@/shared/ui/primitives/input";
 import {
 	Popover,
 	PopoverAnchor,
 	PopoverContent,
-} from "@/components/primitives/popover";
+} from "@/shared/ui/primitives/popover";
 import {
 	Tooltip,
 	TooltipContent,
 	TooltipTrigger,
-} from "@/components/primitives/tooltip";
-import { useEscapeKeyManager } from "@/context/escape-key-manager/hooks";
-import { EscapeKeyManagerPriority } from "@/context/escape-key-manager/priority";
-import { TranslationDrawer } from "@/features/translations/components/translation-drawer/translation-drawer";
-import { useFetchTranslationKeys } from "@/features/translations/hooks/use-fetch-translation-keys";
-import { useUpdateTranslationValue } from "@/features/translations/hooks/use-update-translation-value";
-import type { LocalizationResourceEnum } from "@/types/translations";
+} from "@/shared/ui/primitives/tooltip";
+import { useEscapeKeyManager } from "@/app/context/escape-key-manager/hooks";
+import { EscapeKeyManagerPriority } from "@/app/context/escape-key-manager/priority";
+import { TranslationDrawer } from "@/features/translations/ui/translation-drawer/translation-drawer";
+import { useFetchTranslationKeys } from "@/features/translations/lib/use-fetch-translation-keys";
+import { useUpdateTranslationValue } from "@/features/translations/lib/use-update-translation-value";
+import type { LocalizationResourceEnum } from "@/shared/model/translations";
 import type {
 	IsAllowedVariable,
 	LiquidVariable,
-} from "@/utils/parseStepVariables";
+} from "@/shared/lib/parseStepVariables";
 import { useTranslationEditor } from "./use-translation-editor";
 import { useTranslationForm } from "./use-translation-form";
 import { useVirtualAnchor } from "./use-virtual-anchor";

@@ -1,6 +1,6 @@
-import type { IProviderConfig } from "@novu/shared";
+import type { IProviderConfig } from "@/shared";
 import type { ReactNode } from "react";
-import { Sheet, SheetContent } from "@/components/primitives/sheet";
+import { Sheet, SheetContent } from "@/shared/ui/primitives/sheet";
 import { IntegrationSheetHeader } from "./integration-sheet-header";
 
 type IntegrationSheetProps = {

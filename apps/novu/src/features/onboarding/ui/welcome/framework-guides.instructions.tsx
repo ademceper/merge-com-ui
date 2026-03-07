@@ -1,7 +1,7 @@
 import { Atom, FileCode, FileJs, Globe, Terminal } from "@phosphor-icons/react";
-import type { Language } from "@/components/primitives/code-block";
-import { API_HOSTNAME, IS_EU } from "@/config";
-import { apiHostnameManager } from "@/utils/api-hostname-manager";
+import type { Language } from "@/shared/ui/primitives/code-block";
+import { API_HOSTNAME, IS_EU } from "@/shared/config";
+import { apiHostnameManager } from "@/shared/lib/api-hostname-manager";
 import { getFrameworkPrompt } from "./ai-prompts/simple-prompt-getter";
 
 export interface Framework {

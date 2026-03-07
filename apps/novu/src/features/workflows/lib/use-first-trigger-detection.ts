@@ -1,12 +1,12 @@
 import { useQuery } from "@tanstack/react-query";
 import { useCallback, useEffect, useState } from "react";
-import { getWorkflow, getWorkflows } from "@/api/workflows";
-import { ONBOARDING_DEMO_WORKFLOW_ID } from "@/config";
+import { getWorkflow, getWorkflows } from "@/entities/workflow/api/workflows";
+import { ONBOARDING_DEMO_WORKFLOW_ID } from "@/shared/config";
 import {
 	requireEnvironment,
 	useEnvironment,
-} from "@/context/environment/hooks";
-import { QueryKeys } from "@/utils/query-keys";
+} from "@/app/context/environment/hooks";
+import { QueryKeys } from "@/shared/lib/query-keys";
 
 type FirstTriggerDetectionOptions = {
 	enabled?: boolean;

@@ -1,6 +1,6 @@
 import { DeviceMobile } from "@phosphor-icons/react";
 import { useEffect } from "react";
-import { post } from "@/api/api.client";
+import { post } from "@/shared/api/api.client";
 import { showErrorToast } from "../primitives/sonner-helpers";
 
 const MOBILE_WIDTH_THRESHOLD = 768;

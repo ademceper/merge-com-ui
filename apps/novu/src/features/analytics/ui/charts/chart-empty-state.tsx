@@ -1,5 +1,5 @@
 import type { ReactNode } from "react";
-import { HelpTooltipIndicator } from "@/components/primitives/help-tooltip-indicator";
+import { HelpTooltipIndicator } from "@/shared/ui/primitives/help-tooltip-indicator";
 
 type ChartEmptyStateProps = {
 	title?: string;

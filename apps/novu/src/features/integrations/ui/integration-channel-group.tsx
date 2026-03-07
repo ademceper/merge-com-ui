@@ -3,8 +3,8 @@ import type {
 	IEnvironment,
 	IIntegration,
 	IProviderConfig,
-} from "@novu/shared";
-import { CHANNEL_TYPE_TO_STRING } from "@/utils/channels";
+} from "@/shared";
+import { CHANNEL_TYPE_TO_STRING } from "@/shared/lib/channels";
 import { IntegrationCard } from "./integration-card";
 import type { TableIntegration } from "./types";
 

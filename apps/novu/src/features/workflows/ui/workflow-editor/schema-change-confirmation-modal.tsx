@@ -19,7 +19,7 @@ import {
 import type {
 	SchemaChange,
 	SchemaChanges,
-} from "@/components/schema-editor/utils/schema-change-detection";
+} from "@/shared/ui/schema-editor/utils/schema-change-detection";
 
 interface SchemaChangeConfirmationModalProps {
 	isOpen: boolean;

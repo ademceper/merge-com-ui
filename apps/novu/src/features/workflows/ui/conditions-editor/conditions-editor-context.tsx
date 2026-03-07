@@ -8,8 +8,8 @@ import {
 	type RuleType,
 	remove,
 } from "react-querybuilder";
-import { useDataRef } from "@/hooks/use-data-ref";
-import { generateUUID } from "@/utils/uuid";
+import { useDataRef } from "@/shared/lib/hooks/use-data-ref";
+import { generateUUID } from "@/shared/lib/uuid";
 import type { ConditionsEditorContextType } from "./types";
 
 export const ConditionsEditorContext =

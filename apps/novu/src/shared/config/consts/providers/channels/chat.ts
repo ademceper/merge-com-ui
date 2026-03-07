@@ -1,5 +1,5 @@
-import { ChannelTypeEnum, ChatProviderIdEnum } from "../../../types";
-import { UTM_CAMPAIGN_QUERY_PARAM } from "../../../ui";
+import { ChannelTypeEnum, ChatProviderIdEnum } from "@/shared/model";
+import { UTM_CAMPAIGN_QUERY_PARAM } from "@/shared/ui";
 import {
 	chatWebhookConfig,
 	getstreamConfig,

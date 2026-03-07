@@ -1,4 +1,4 @@
-import type { ConfigConfigurationGroup } from "@novu/shared";
+import type { ConfigConfigurationGroup } from "@/shared";
 import type { Control } from "react-hook-form";
 import { CredentialSection } from "./credential-section";
 import type { IntegrationFormData } from "./types";

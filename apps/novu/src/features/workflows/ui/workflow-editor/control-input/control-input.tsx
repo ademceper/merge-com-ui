@@ -2,21 +2,21 @@ import { cn } from "@merge-rd/ui/lib/utils";
 import type { EditorView } from "@uiw/react-codemirror";
 import { cva } from "class-variance-authority";
 import { useMemo, useRef } from "react";
-import { EditorOverlays } from "@/components/editor-overlays";
+import { EditorOverlays } from "@/widgets/editor-overlays";
 import {
 	type CompletionRange,
 	VariableEditor,
-} from "@/components/primitives/variable-editor";
-import { useCreateVariable } from "@/components/variable/hooks/use-create-variable";
-import { useEditorTranslationOverlay } from "@/features/translations/hooks/use-editor-translation-overlay";
-import { useWorkflow } from "@/features/workflows/components/workflow-editor/workflow-provider";
-import { useWorkflowSchema } from "@/features/workflows/components/workflow-editor/workflow-schema-provider";
-import { useEnhancedVariableValidation } from "@/hooks/use-enhanced-variable-validation";
-import { LocalizationResourceEnum } from "@/types/translations";
+} from "@/shared/ui/primitives/variable-editor";
+import { useCreateVariable } from "@/shared/ui/variable/hooks/use-create-variable";
+import { useEditorTranslationOverlay } from "@/features/translations/lib/use-editor-translation-overlay";
+import { useWorkflow } from "@/features/workflows/ui/workflow-editor/workflow-provider";
+import { useWorkflowSchema } from "@/features/workflows/ui/workflow-editor/workflow-schema-provider";
+import { useEnhancedVariableValidation } from "@/shared/lib/hooks/use-enhanced-variable-validation";
+import { LocalizationResourceEnum } from "@/shared/model/translations";
 import type {
 	IsAllowedVariable,
 	LiquidVariable,
-} from "@/utils/parseStepVariables";
+} from "@/shared/lib/parseStepVariables";
 
 const variants = cva("relative w-full", {
 	variants: {

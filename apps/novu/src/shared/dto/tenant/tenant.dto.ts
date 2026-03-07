@@ -3,7 +3,7 @@ import type {
 	EnvironmentId,
 	OrganizationId,
 	TenantId,
-} from "../../types";
+} from "../../model";
 
 export interface ITenantDto {
 	_id?: TenantId;

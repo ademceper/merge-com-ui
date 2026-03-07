@@ -1,4 +1,4 @@
-import { CredentialsKeyEnum } from "../../../types";
+import { CredentialsKeyEnum } from "@/shared/model";
 import type { IConfigCredential } from "../provider.interface";
 
 const mailConfigBase: IConfigCredential[] = [

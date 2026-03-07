@@ -8,8 +8,8 @@ import {
 	SheetContent,
 	SheetDescription,
 	SheetTitle,
-} from "@/components/primitives/sheet";
-import { VisuallyHidden } from "@/components/primitives/visually-hidden";
+} from "@/shared/ui/primitives/sheet";
+import { VisuallyHidden } from "@/shared/ui/primitives/visually-hidden";
 
 type AiDrawerProps = {
 	isOpen: boolean;

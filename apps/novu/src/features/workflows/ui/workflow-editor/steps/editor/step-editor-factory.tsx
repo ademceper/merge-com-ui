@@ -1,13 +1,13 @@
-import { ResourceOriginEnum, StepTypeEnum } from "@novu/shared";
-import { ChatEditor } from "@/features/workflows/components/workflow-editor/steps/chat/chat-editor";
-import { useStepEditor } from "@/features/workflows/components/workflow-editor/steps/context/step-editor-context";
-import { CustomStepControls } from "@/features/workflows/components/workflow-editor/steps/controls/custom-step-controls";
-import { EmailEditor } from "@/features/workflows/components/workflow-editor/steps/email/email-editor";
-import { InAppEditor } from "@/features/workflows/components/workflow-editor/steps/in-app/in-app-editor";
-import { PushEditor } from "@/features/workflows/components/workflow-editor/steps/push/push-editor";
-import { SmsEditor } from "@/features/workflows/components/workflow-editor/steps/sms/sms-editor";
-import { ThrottleEditor } from "@/features/workflows/components/workflow-editor/steps/throttle/throttle-editor";
-import { STEP_TYPE_LABELS } from "@/utils/constants";
+import { ResourceOriginEnum, StepTypeEnum } from "@/shared";
+import { ChatEditor } from "@/features/workflows/ui/workflow-editor/steps/chat/chat-editor";
+import { useStepEditor } from "@/features/workflows/ui/workflow-editor/steps/context/step-editor-context";
+import { CustomStepControls } from "@/features/workflows/ui/workflow-editor/steps/controls/custom-step-controls";
+import { EmailEditor } from "@/features/workflows/ui/workflow-editor/steps/email/email-editor";
+import { InAppEditor } from "@/features/workflows/ui/workflow-editor/steps/in-app/in-app-editor";
+import { PushEditor } from "@/features/workflows/ui/workflow-editor/steps/push/push-editor";
+import { SmsEditor } from "@/features/workflows/ui/workflow-editor/steps/sms/sms-editor";
+import { ThrottleEditor } from "@/features/workflows/ui/workflow-editor/steps/throttle/throttle-editor";
+import { STEP_TYPE_LABELS } from "@/shared/lib/constants";
 
 function NoEditorAvailable({ message }: { message: string }) {
 	return (

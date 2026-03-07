@@ -1,4 +1,4 @@
-import type { CustomDataType } from "../../types";
+import type { CustomDataType } from "../../model";
 
 export interface IConstructTenantDto {
 	data?: CustomDataType;

@@ -5,7 +5,7 @@ import {
 	CardTitle,
 } from "@merge-rd/ui/components/card";
 import { type ReactNode, useMemo } from "react";
-import { HelpTooltipIndicator } from "@/components/primitives/help-tooltip-indicator";
+import { HelpTooltipIndicator } from "@/shared/ui/primitives/help-tooltip-indicator";
 import { ChartEmptyState } from "./chart-empty-state";
 
 type ChartDataPoint = Record<string, unknown>;

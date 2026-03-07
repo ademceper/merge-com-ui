@@ -1,5 +1,5 @@
 import { useParams } from "react-router-dom";
-import { NewLayoutDrawer } from "@/features/layouts/pages/new-layout-drawer";
+import { NewLayoutDrawer } from "@/features/layouts/ui/pages/new-layout-drawer";
 
 export function DuplicateLayoutPage() {
 	const { layoutId } = useParams<{

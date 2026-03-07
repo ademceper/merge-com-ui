@@ -1,9 +1,9 @@
 import type { RouteObject } from "react-router-dom";
 import { lazy } from "react";
-import { ROUTES } from "@/utils/routes";
+import { ROUTES } from "@/shared/lib/routes";
 
 const ActivityFeed = lazy(() =>
-	import("@/features/activity/pages/activity-feed").then((m) => ({
+	import("@/features/activity/ui/pages/activity-feed").then((m) => ({
 		default: m.ActivityFeed,
 	})),
 );

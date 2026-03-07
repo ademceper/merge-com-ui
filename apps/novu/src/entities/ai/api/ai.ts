@@ -4,9 +4,9 @@ import type {
 	AiResourceTypeEnum,
 	IEnvironment,
 	WorkflowResponseDto,
-} from "@novu/shared";
+} from "@/shared";
 import type { UIMessage } from "ai";
-import { getApiBaseUrl, getV2, postV2 } from "./api.client";
+import { getApiBaseUrl, getV2, postV2 } from "@/shared/api/api.client";
 
 export type GenerateWorkflowRequest = {
 	prompt: string;

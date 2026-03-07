@@ -1,11 +1,11 @@
 import { useEffect } from "react";
-import { AnimatedOutlet } from "@/components/animated-outlet";
-import { PageMeta } from "@/components/page-meta";
-import { Badge } from "@/components/primitives/badge";
-import { useSetPageHeader } from "@/context/page-header";
-import { ContextList } from "@/features/contexts/components";
-import { useTelemetry } from "@/hooks/use-telemetry";
-import { TelemetryEvent } from "@/utils/telemetry";
+import { AnimatedOutlet } from "@/shared/ui/animated-outlet";
+import { PageMeta } from "@/shared/ui/page-meta";
+import { Badge } from "@/shared/ui/primitives/badge";
+import { useSetPageHeader } from "@/app/context/page-header";
+import { ContextList } from "@/features/contexts/ui";
+import { useTelemetry } from "@/shared/lib/hooks/use-telemetry";
+import { TelemetryEvent } from "@/shared/lib/telemetry";
 
 export const ContextsPage = () => {
 	useSetPageHeader(

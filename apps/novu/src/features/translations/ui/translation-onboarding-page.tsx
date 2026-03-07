@@ -1,26 +1,26 @@
 import { Button } from "@merge-rd/ui/components/button";
-import { DEFAULT_LOCALE, PermissionsEnum } from "@novu/shared";
+import { DEFAULT_LOCALE, PermissionsEnum } from "@/shared";
 import { BookBookmark, Path } from "@phosphor-icons/react";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate, useParams } from "react-router-dom";
-import { LinkButton } from "@/components/primitives/button-link";
+import { LinkButton } from "@/shared/ui/primitives/button-link";
 import {
 	Form,
 	FormControl,
 	FormField,
 	FormItem,
-} from "@/components/primitives/form/form";
-import { InlineToast } from "@/components/primitives/inline-toast";
-import { LocaleSelect } from "@/components/primitives/locale-select";
+} from "@/shared/ui/primitives/form/form";
+import { InlineToast } from "@/shared/ui/primitives/inline-toast";
+import { LocaleSelect } from "@/shared/ui/primitives/locale-select";
 import {
 	TimelineContainer,
 	TimelineStep,
-} from "@/components/primitives/timeline";
-import { useFetchOrganizationSettings } from "@/features/settings/hooks/use-fetch-organization-settings";
-import { useUpdateOrganizationSettings } from "@/features/settings/hooks/use-update-organization-settings";
-import { useHasPermission } from "@/hooks/use-has-permission";
-import { buildRoute, ROUTES } from "@/utils/routes";
+} from "@/shared/ui/primitives/timeline";
+import { useFetchOrganizationSettings } from "@/features/settings/lib/use-fetch-organization-settings";
+import { useUpdateOrganizationSettings } from "@/features/settings/lib/use-update-organization-settings";
+import { useHasPermission } from "@/shared/lib/hooks/use-has-permission";
+import { buildRoute, ROUTES } from "@/shared/lib/routes";
 import { EmptyTranslationsIllustration } from "./empty-translations-illustration";
 
 type TranslationOnboardingFormData = {

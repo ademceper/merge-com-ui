@@ -1,4 +1,4 @@
-import type { NewDashboardOptInStatusEnum } from "@novu/shared";
+import type { NewDashboardOptInStatusEnum } from "@/shared";
 
 declare global {
 	interface UserUnsafeMetadata {

@@ -7,20 +7,20 @@ import {
 import { Separator } from "@merge-rd/ui/components/separator";
 import { Switch } from "@merge-rd/ui/components/switch";
 import { cn } from "@merge-rd/ui/lib/utils";
-import type { Controls } from "@novu/shared";
+import type { Controls } from "@/shared";
 import { BookBookmark, Question, Textbox } from "@phosphor-icons/react";
 import type { RJSFSchema } from "@rjsf/utils";
 import { motion } from "motion/react";
 import { useState } from "react";
 import { useFormContext } from "react-hook-form";
 import { Link } from "react-router-dom";
-import { ConfirmationModal } from "@/components/confirmation-modal";
-import { InlineToast } from "@/components/primitives/inline-toast";
-import { SidebarContent } from "@/components/side-navigation/sidebar";
-import { updateStepInWorkflow } from "@/features/workflows/components/workflow-editor/step-utils";
-import { useSaveForm } from "@/features/workflows/components/workflow-editor/steps/save-form-context";
-import { ResourceOriginEnum } from "@/utils/enums";
-import { buildDefaultValuesOfDataSchema } from "@/utils/schema";
+import { ConfirmationModal } from "@/shared/ui/confirmation-modal";
+import { InlineToast } from "@/shared/ui/primitives/inline-toast";
+import { SidebarContent } from "@/widgets/side-navigation/sidebar";
+import { updateStepInWorkflow } from "@/features/workflows/ui/workflow-editor/step-utils";
+import { useSaveForm } from "@/features/workflows/ui/workflow-editor/steps/save-form-context";
+import { ResourceOriginEnum } from "@/shared/lib/enums";
+import { buildDefaultValuesOfDataSchema } from "@/shared/lib/schema";
 import { useWorkflow } from "../../workflow-provider";
 import { JsonForm } from "./json-form";
 

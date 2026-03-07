@@ -5,13 +5,13 @@ import {
 	type CompletionSource,
 	startCompletion,
 } from "@codemirror/autocomplete";
-import { TRANSLATION_NAMESPACE_SEPARATOR } from "@novu/shared";
+import { TRANSLATION_NAMESPACE_SEPARATOR } from "@/shared";
 import type { EditorView } from "@uiw/react-codemirror";
 import type React from "react";
 import { createRoot } from "react-dom/client";
-import { NewVariablePreview } from "@/components/variable/components/new-variable-preview";
-import { getFilters } from "@/components/variable/constants";
-import type { LiquidVariable } from "@/utils/parseStepVariables";
+import { NewVariablePreview } from "@/shared/ui/variable/components/new-variable-preview";
+import { getFilters } from "@/shared/ui/variable/constants";
+import type { LiquidVariable } from "@/shared/lib/parseStepVariables";
 import { isValidContextVariable } from "./context-variable-utils";
 import { getVariablesAtPositionWithLoopProperties } from "./liquid-scope-analyzer";
 

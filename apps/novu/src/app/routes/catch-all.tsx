@@ -1,6 +1,6 @@
 import { SpinnerGap } from "@phosphor-icons/react";
 import { Navigate, useLocation } from "react-router-dom";
-import { buildRoute, ROUTES } from "@/utils/routes";
+import { buildRoute, ROUTES } from "@/shared/lib/routes";
 import { useEnvironment } from "../context/environment/hooks";
 
 export const CatchAllRoute = () => {

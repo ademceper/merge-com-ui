@@ -8,8 +8,8 @@ import type {
 	UpdateWorkflowDto,
 	WorkflowResponseDto,
 	WorkflowTestDataResponseDto,
-} from "@novu/shared";
-import { delV2, getV2, patchV2, post, postV2, putV2 } from "./api.client";
+} from "@/shared";
+import { delV2, getV2, patchV2, post, postV2, putV2 } from "@/shared/api/api.client";
 
 export const getWorkflow = async ({
 	environment,

@@ -3,11 +3,11 @@ import {
 	useMutation,
 	useQueryClient,
 } from "@tanstack/react-query";
-import { createTopic } from "@/api/topics";
-import { useEnvironment } from "@/context/environment/hooks";
-import type { Topic } from "@/features/topics/components/types";
-import { QueryKeys } from "@/utils/query-keys";
-import type { OmitEnvironmentFromParameters } from "@/utils/types";
+import { createTopic } from "@/entities/topic/api/topics";
+import { useEnvironment } from "@/app/context/environment/hooks";
+import type { Topic } from "@/features/topics/ui/types";
+import { QueryKeys } from "@/shared/lib/query-keys";
+import type { OmitEnvironmentFromParameters } from "@/shared/lib/types";
 
 export type CreateTopicParameters = OmitEnvironmentFromParameters<
 	typeof createTopic

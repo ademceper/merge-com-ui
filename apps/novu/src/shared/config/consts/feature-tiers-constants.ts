@@ -1,4 +1,4 @@
-import { ApiServiceLevelEnum } from "../types";
+import { ApiServiceLevelEnum } from "@/shared/model";
 
 // This is a large value on purpose that should surpass any realistic system limits
 export const UNLIMITED_VALUE = 9999;

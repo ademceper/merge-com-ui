@@ -12,9 +12,9 @@ import {
 	PopoverContent,
 	PopoverPortal,
 	PopoverTrigger,
-} from "@/components/primitives/popover";
-import { selectTriggerVariants } from "@/components/primitives/select";
-import TruncatedText from "@/components/truncated-text";
+} from "@/shared/ui/primitives/popover";
+import { selectTriggerVariants } from "@/shared/ui/primitives/select";
+import TruncatedText from "@/shared/ui/truncated-text";
 
 export const MultiSelect = <T extends string | number>({
 	values,

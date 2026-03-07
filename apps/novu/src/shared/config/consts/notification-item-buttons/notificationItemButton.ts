@@ -1,4 +1,4 @@
-import { ButtonTypeEnum } from "../../types";
+import { ButtonTypeEnum } from "@/shared/model";
 
 export interface INotificationButtonConfig {
 	key: ButtonTypeEnum;

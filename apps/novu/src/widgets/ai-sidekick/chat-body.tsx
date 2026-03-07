@@ -6,7 +6,7 @@ import {
 	Tooltip,
 	TooltipContent,
 	TooltipTrigger,
-} from "@/components/primitives/tooltip";
+} from "@/shared/ui/primitives/tooltip";
 import {
 	Conversation,
 	ConversationContent,
@@ -21,7 +21,7 @@ import {
 	PromptInputTextarea,
 } from "../ai-elements/prompt-input";
 import { Shimmer } from "../ai-elements/shimmer";
-import { BroomSparkle } from "../icons/broom-sparkle";
+import { BroomSparkle } from "@/shared/ui/icons/broom-sparkle";
 import {
 	ChatChainOfThoughtReasoning,
 	ChatChainOfThoughtToolCalls,

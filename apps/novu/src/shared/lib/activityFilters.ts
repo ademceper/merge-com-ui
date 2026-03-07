@@ -3,7 +3,7 @@ import {
 	FeatureNameEnum,
 	type GetSubscriptionDto,
 	getFeatureForTierAsNumber,
-} from "@novu/shared";
+} from "@/shared";
 import { IS_SELF_HOSTED } from "../config";
 
 type OrganizationLike = { createdAt: Date };

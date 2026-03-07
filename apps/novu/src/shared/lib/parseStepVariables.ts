@@ -1,12 +1,12 @@
 import type { Completion } from "@codemirror/autocomplete";
-import type { JSONSchemaDefinition } from "@novu/shared";
+import type { JSONSchemaDefinition } from "@/shared";
 import type { JSONSchema7 } from "json-schema";
-import { isAllowedAlias } from "@/components/maily/repeat-block-aliases";
+import { isAllowedAlias } from "@/shared/ui/maily/repeat-block-aliases";
 import {
 	DIGEST_VARIABLES,
 	type DIGEST_VARIABLES_ENUM,
 	getDynamicDigestVariable,
-} from "../components/variable/utils/digest-variables";
+} from "@/shared/ui/variable/utils/digest-variables";
 import { isNamespaceOnlyVariable } from "./liquid";
 
 function normalizeArrayNotation(path: string): string {

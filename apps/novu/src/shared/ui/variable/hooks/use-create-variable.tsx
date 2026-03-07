@@ -1,17 +1,17 @@
 import merge from "lodash.merge";
 import { useCallback, useContext, useState } from "react";
-import { ToastIcon } from "@/components/primitives/sonner";
+import { ToastIcon } from "@/shared/ui/primitives/sonner";
 import {
 	showErrorToast,
 	showToast,
-} from "@/components/primitives/sonner-helpers";
-import type { JSONSchema7TypeName } from "@/components/schema-editor/json-schema";
-import { useEnvironment } from "@/context/environment/hooks";
-import { StepEditorContext } from "@/features/workflows/components/workflow-editor/steps/context/step-editor-context";
-import { usePersistedPreviewContext } from "@/features/workflows/components/workflow-editor/steps/hooks/use-persisted-preview-context";
-import { parseJsonValue } from "@/features/workflows/components/workflow-editor/steps/utils/preview-context.utils";
-import { useWorkflow } from "@/features/workflows/components/workflow-editor/workflow-provider";
-import { useWorkflowSchema } from "@/features/workflows/components/workflow-editor/workflow-schema-provider";
+} from "@/shared/ui/primitives/sonner-helpers";
+import type { JSONSchema7TypeName } from "@/shared/ui/schema-editor/json-schema";
+import { useEnvironment } from "@/app/context/environment/hooks";
+import { StepEditorContext } from "@/features/workflows/ui/workflow-editor/steps/context/step-editor-context";
+import { usePersistedPreviewContext } from "@/features/workflows/ui/workflow-editor/steps/hooks/use-persisted-preview-context";
+import { parseJsonValue } from "@/features/workflows/ui/workflow-editor/steps/utils/preview-context.utils";
+import { useWorkflow } from "@/features/workflows/ui/workflow-editor/workflow-provider";
+import { useWorkflowSchema } from "@/features/workflows/ui/workflow-editor/workflow-schema-provider";
 
 type VariableType = "payload" | "subscriber" | "context";
 

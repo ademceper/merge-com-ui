@@ -1,7 +1,7 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { deleteIntegration as deleteIntegrationApi } from "@/api/integrations";
-import { useEnvironment } from "@/context/environment/hooks";
-import { QueryKeys } from "@/utils/query-keys";
+import { deleteIntegration as deleteIntegrationApi } from "@/entities/integration/api/integrations";
+import { useEnvironment } from "@/app/context/environment/hooks";
+import { QueryKeys } from "@/shared/lib/query-keys";
 
 interface DeleteIntegrationResponse {
 	acknowledged: boolean;

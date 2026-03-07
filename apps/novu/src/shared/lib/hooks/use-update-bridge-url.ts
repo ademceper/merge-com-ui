@@ -1,6 +1,6 @@
 import { useMutation } from "@tanstack/react-query";
-import { updateBridgeUrl } from "@/api/environments";
-import { useEnvironment } from "@/context/environment/hooks";
+import { updateBridgeUrl } from "@/entities/environment/api/environments";
+import { useEnvironment } from "@/app/context/environment/hooks";
 
 export const useUpdateBridgeUrl = () => {
 	const { currentEnvironment } = useEnvironment();

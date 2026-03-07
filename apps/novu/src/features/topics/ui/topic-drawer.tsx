@@ -7,28 +7,28 @@ import {
 	TabsTrigger,
 } from "@merge-rd/ui/components/tabs";
 import { cn } from "@merge-rd/ui/lib/utils";
-import { FeatureFlagsKeysEnum } from "@novu/shared";
+import { FeatureFlagsKeysEnum } from "@/shared";
 import { ChatTeardropDots } from "@phosphor-icons/react";
 import { motion } from "motion/react";
 import { forwardRef, useEffect, useRef, useState } from "react";
 import type {
 	ListTopicSubscriptionsResponse,
 	TopicSubscription,
-} from "@/api/topics";
+} from "@/entities/topic/api/topics";
 import {
 	Sheet,
 	SheetContent,
 	SheetDescription,
 	SheetTitle,
-} from "@/components/primitives/sheet";
-import { TooltipProvider } from "@/components/primitives/tooltip";
-import { VisuallyHidden } from "@/components/primitives/visually-hidden";
-import TruncatedText from "@/components/truncated-text";
-import { useTopic } from "@/features/topics/hooks/use-topic";
-import { useTopicSubscriptions } from "@/features/topics/hooks/use-topic-subscribers";
-import { useFeatureFlag } from "@/hooks/use-feature-flag";
-import { useFormProtection } from "@/hooks/use-form-protection";
-import { itemVariants, listVariants } from "@/utils/animation";
+} from "@/shared/ui/primitives/sheet";
+import { TooltipProvider } from "@/shared/ui/primitives/tooltip";
+import { VisuallyHidden } from "@/shared/ui/primitives/visually-hidden";
+import TruncatedText from "@/shared/ui/truncated-text";
+import { useTopic } from "@/features/topics/lib/use-topic";
+import { useTopicSubscriptions } from "@/features/topics/lib/use-topic-subscribers";
+import { useFeatureFlag } from "@/shared/lib/hooks/use-feature-flag";
+import { useFormProtection } from "@/shared/lib/hooks/use-form-protection";
+import { itemVariants, listVariants } from "@/shared/lib/animation";
 import { AddSubscriberForm } from "./add-subscriber-form";
 import { EmptyTopicsIllustration } from "./empty-topics-illustration";
 import { SubscriptionCountBadge } from "./subscription-count-badge";

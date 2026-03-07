@@ -1,13 +1,13 @@
 import { Skeleton } from "@merge-rd/ui/components/skeleton";
 import { useCallback, useMemo } from "react";
 import { Line, LineChart, XAxis } from "recharts";
-import type { ActiveSubscribersTrendDataPoint } from "@/api/activity";
+import type { ActiveSubscribersTrendDataPoint } from "@/entities/activity/api/activity";
 import {
 	type ChartConfig,
 	ChartContainer,
 	ChartTooltip,
 	NovuTooltip,
-} from "@/components/primitives/chart";
+} from "@/shared/ui/primitives/chart";
 import { ANALYTICS_TOOLTIPS } from "../constants/analytics-tooltips";
 import { createDateBasedHasDataChecker } from "../utils/chart-validation";
 import { generateDummyActiveSubscribersData } from "./chart-dummy-data";

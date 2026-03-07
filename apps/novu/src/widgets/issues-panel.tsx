@@ -1,17 +1,17 @@
 import { cn } from "@merge-rd/ui/lib/utils";
-import type { RuntimeIssue } from "@novu/shared";
+import type { RuntimeIssue } from "@/shared";
 import { Info, WarningCircle } from "@phosphor-icons/react";
 import { AnimatePresence, motion } from "motion/react";
 import {
 	HoverCard,
 	HoverCardContent,
 	HoverCardTrigger,
-} from "@/components/primitives/hover-card";
+} from "@/shared/ui/primitives/hover-card";
 import {
 	countIssues,
 	getAllStepIssues,
 	getFirstErrorMessage,
-} from "@/features/workflows/components/workflow-editor/step-utils";
+} from "@/features/workflows/ui/workflow-editor/step-utils";
 
 type IssuesPanelProps = {
 	issues?: {

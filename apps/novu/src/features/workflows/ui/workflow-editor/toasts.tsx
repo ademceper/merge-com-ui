@@ -1,6 +1,6 @@
 import { SpinnerGap } from "@phosphor-icons/react";
 import { toast } from "sonner";
-import { Toast, ToastIcon } from "@/components/primitives/sonner";
+import { Toast, ToastIcon } from "@/shared/ui/primitives/sonner";
 
 const DETAILED_ERROR_MESSAGES = [
 	"Workflow steps limit exceeded",

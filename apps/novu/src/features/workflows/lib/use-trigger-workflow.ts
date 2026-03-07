@@ -1,7 +1,7 @@
-import type { IEnvironment } from "@novu/shared";
+import type { IEnvironment } from "@/shared";
 import { useMutation } from "@tanstack/react-query";
-import { triggerWorkflow } from "@/api/workflows";
-import { useEnvironment } from "@/context/environment/hooks";
+import { triggerWorkflow } from "@/entities/workflow/api/workflows";
+import { useEnvironment } from "@/app/context/environment/hooks";
 
 export const useTriggerWorkflow = (environmentHint?: IEnvironment) => {
 	const { currentEnvironment } = useEnvironment();

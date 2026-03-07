@@ -1,27 +1,27 @@
-import { TimeUnitEnum } from "@novu/shared";
+import { TimeUnitEnum } from "@/shared";
 import { useMemo } from "react";
 import { useFormContext } from "react-hook-form";
 
-import { AmountInput } from "@/components/amount-input";
+import { AmountInput } from "@/shared/ui/amount-input";
 import {
 	FormControl,
 	FormField,
 	FormItem,
 	FormLabel,
-} from "@/components/primitives/form/form";
+} from "@/shared/ui/primitives/form/form";
 import {
 	Select,
 	SelectContent,
 	SelectItem,
 	SelectTrigger,
 	SelectValue,
-} from "@/components/primitives/select";
+} from "@/shared/ui/primitives/select";
 import {
 	LOOKBACK_AMOUNT_KEY,
 	LOOKBACK_UNIT_KEY,
-} from "@/features/workflows/components/workflow-editor/steps/digest-delay-tabs/keys";
-import { useSaveForm } from "@/features/workflows/components/workflow-editor/steps/save-form-context";
-import { TIME_UNIT_OPTIONS } from "@/features/workflows/components/workflow-editor/steps/time-units";
+} from "@/features/workflows/ui/workflow-editor/steps/digest-delay-tabs/keys";
+import { useSaveForm } from "@/features/workflows/ui/workflow-editor/steps/save-form-context";
+import { TIME_UNIT_OPTIONS } from "@/features/workflows/ui/workflow-editor/steps/time-units";
 
 type LookbackType = "immediately" | "5min" | "30min" | "custom";
 

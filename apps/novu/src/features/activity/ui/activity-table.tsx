@@ -9,7 +9,7 @@ import {
 	TablePaginationFooter,
 	TableRow,
 } from "@merge-rd/ui/components/table";
-import { FeatureFlagsKeysEnum } from "@novu/shared";
+import { FeatureFlagsKeysEnum } from "@/shared";
 import { AnimatePresence, motion } from "motion/react";
 import { useEffect } from "react";
 import {
@@ -18,12 +18,12 @@ import {
 	useNavigate,
 	useSearchParams,
 } from "react-router-dom";
-import type { ActivityFilters } from "@/api/activity";
-import { showErrorToast } from "@/components/primitives/sonner-helpers";
-import { useFetchActivities } from "@/features/activity/hooks/use-fetch-activities";
-import { useFeatureFlag } from "@/hooks/use-feature-flag";
-import { usePersistedPageSize } from "@/hooks/use-persisted-page-size";
-import { parsePageParam } from "@/utils/parse-page-param";
+import type { ActivityFilters } from "@/entities/activity/api/activity";
+import { showErrorToast } from "@/shared/ui/primitives/sonner-helpers";
+import { useFetchActivities } from "@/features/activity/lib/use-fetch-activities";
+import { useFeatureFlag } from "@/shared/lib/hooks/use-feature-flag";
+import { usePersistedPageSize } from "@/shared/lib/hooks/use-persisted-page-size";
+import { parsePageParam } from "@/shared/lib/parse-page-param";
 import { ActivityEmptyState } from "./activity-empty-state";
 import { ActivityTableRow } from "./activity-table-row";
 

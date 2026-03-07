@@ -2,7 +2,7 @@ import type {
 	ChannelTypeEnum,
 	JobTitleEnum,
 	OrganizationTypeEnum,
-} from "../../types";
+} from "../../model";
 
 export type UpdateExternalOrganizationDto = {
 	jobTitle?: JobTitleEnum;

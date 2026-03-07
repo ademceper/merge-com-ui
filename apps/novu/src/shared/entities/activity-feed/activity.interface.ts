@@ -1,5 +1,5 @@
 import type { SeverityLevelEnum } from "../../consts";
-import type { ChannelTypeEnum, ISubscriber } from "../../types";
+import type { ChannelTypeEnum, ISubscriber } from "../../model";
 import type { IExecutionDetail } from "../execution-details";
 import type { IJob as IJobBase } from "../job";
 import type { INotificationTemplate } from "../notification-template";

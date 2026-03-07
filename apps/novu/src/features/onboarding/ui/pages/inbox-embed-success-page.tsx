@@ -1,11 +1,11 @@
 import { Button } from "@merge-rd/ui/components/button";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { AuthCard } from "@/components/auth/auth-card";
-import { AnimatedPage } from "@/features/onboarding/components/animated-page";
-import { useTelemetry } from "@/hooks/use-telemetry";
-import { ROUTES } from "@/utils/routes";
-import { TelemetryEvent } from "@/utils/telemetry";
+import { AuthCard } from "@/shared/ui/auth/auth-card";
+import { AnimatedPage } from "@/features/onboarding/ui/animated-page";
+import { useTelemetry } from "@/shared/lib/hooks/use-telemetry";
+import { ROUTES } from "@/shared/lib/routes";
+import { TelemetryEvent } from "@/shared/lib/telemetry";
 
 export function InboxEmbedSuccessPage() {
 	const navigate = useNavigate();

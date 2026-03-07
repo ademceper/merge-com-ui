@@ -10,8 +10,8 @@ import type {
 	DirectionEnum,
 	IEnvironment,
 	ISubscriberResponseDto,
-} from "@novu/shared";
-import { delV2, getV2, patchV2, postV2 } from "./api.client";
+} from "@/shared";
+import { delV2, getV2, patchV2, postV2 } from "@/shared/api/api.client";
 import type { ListTopicSubscriptionsResponse } from "./topics";
 
 export type ListSubscribersResponse = {

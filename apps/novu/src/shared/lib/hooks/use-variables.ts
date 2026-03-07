@@ -1,7 +1,7 @@
 import type { EditorView } from "@uiw/react-codemirror";
 import { useCallback, useRef, useState } from "react";
-import { useDataRef } from "@/hooks/use-data-ref";
-import { parseVariable } from "@/utils/liquid";
+import { useDataRef } from "@/shared/lib/hooks/use-data-ref";
+import { parseVariable } from "@/shared/lib/liquid";
 
 type SelectedVariable = {
 	value: string;

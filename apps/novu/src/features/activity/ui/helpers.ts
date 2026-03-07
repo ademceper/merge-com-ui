@@ -1,4 +1,4 @@
-import { type IActivityJob, JobStatusEnum } from "@novu/shared";
+import { type IActivityJob, JobStatusEnum } from "@/shared";
 
 export const getActivityStatus = (jobs: IActivityJob[]) => {
 	if (!jobs.length) return JobStatusEnum.PENDING;

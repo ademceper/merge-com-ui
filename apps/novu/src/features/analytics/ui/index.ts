@@ -1,9 +1,9 @@
 // Components
 
 // Hooks
-export { useHomepageDateFilter as useAnalyticsDateFilter } from "@/features/analytics/hooks/use-analytics-page-date-filter";
-export type { MetricData } from "@/features/analytics/hooks/use-metric-data";
-export { useMetricData } from "@/features/analytics/hooks/use-metric-data";
+export { useHomepageDateFilter as useAnalyticsDateFilter } from "@/features/analytics/lib/use-analytics-page-date-filter";
+export type { MetricData } from "@/features/analytics/lib/use-metric-data";
+export { useMetricData } from "@/features/analytics/lib/use-metric-data";
 export { AnalyticsSection } from "./analytics-section";
 export { AnalyticsUpgradeCtaIcon } from "./analytics-upgrade-cta-icon";
 // Charts

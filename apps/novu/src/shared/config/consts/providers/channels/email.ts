@@ -1,5 +1,5 @@
-import { ChannelTypeEnum, EmailProviderIdEnum } from "../../../types";
-import { UTM_CAMPAIGN_QUERY_PARAM } from "../../../ui";
+import { ChannelTypeEnum, EmailProviderIdEnum } from "@/shared/model";
+import { UTM_CAMPAIGN_QUERY_PARAM } from "@/shared/ui";
 import {
 	mailgunGroupConfigurations,
 	resendGroupConfigurations,

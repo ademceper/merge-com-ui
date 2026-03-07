@@ -8,7 +8,7 @@ import { BookBookmark, Textbox } from "@phosphor-icons/react";
 import { useId } from "react";
 import { useFormContext, useWatch } from "react-hook-form";
 import { Link } from "react-router-dom";
-import { useReactEmailPolling } from "@/hooks/use-react-email-polling";
+import { useReactEmailPolling } from "@/shared/lib/hooks/use-react-email-polling";
 import { useWorkflow } from "../../workflow-provider";
 import { ReactEmailNotPublished } from "./react-email-not-published";
 

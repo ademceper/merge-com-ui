@@ -2,12 +2,12 @@ import { useOrganization, useOrganizationList } from "@merge-rd/auth";
 import { Card, CardContent, CardHeader } from "@merge-rd/ui/components/card";
 import { Skeleton } from "@merge-rd/ui/components/skeleton";
 import { useMemo } from "react";
-import { VercelIntegrationForm } from "@/components/vercel-integration-form";
-import { useEnvironment } from "@/context/environment/hooks";
-import { useCreateVercelIntegration } from "@/hooks/use-create-vercel-integration";
-import { useFetchVercelIntegration } from "@/hooks/use-fetch-vercel-integration";
-import { useFetchVercelIntegrationProjects } from "@/hooks/use-fetch-vercel-integration-projects";
-import { useVercelParams } from "@/hooks/use-vercel-params";
+import { VercelIntegrationForm } from "@/shared/ui/vercel-integration-form";
+import { useEnvironment } from "@/app/context/environment/hooks";
+import { useCreateVercelIntegration } from "@/shared/lib/hooks/use-create-vercel-integration";
+import { useFetchVercelIntegration } from "@/shared/lib/hooks/use-fetch-vercel-integration";
+import { useFetchVercelIntegrationProjects } from "@/shared/lib/hooks/use-fetch-vercel-integration-projects";
+import { useVercelParams } from "@/shared/lib/hooks/use-vercel-params";
 
 export const VercelIntegrationPage = () => {
 	const { currentEnvironment } = useEnvironment();

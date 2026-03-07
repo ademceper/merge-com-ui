@@ -1,14 +1,14 @@
 import { Button } from "@merge-rd/ui/components/button";
-import { PermissionsEnum } from "@novu/shared";
+import { PermissionsEnum } from "@/shared";
 import { BookBookmark, Path } from "@phosphor-icons/react";
 import { Link, useNavigate, useParams } from "react-router-dom";
-import { VersionControlDev } from "@/components/icons/version-control-dev";
-import { VersionControlProd } from "@/components/icons/version-control-prod";
-import { ListNoResults } from "@/components/list-no-results";
-import { LinkButton } from "@/components/primitives/button-link";
-import { PermissionButton } from "@/components/primitives/permission-button";
-import { useEnvironment } from "@/context/environment/hooks";
-import { buildRoute, ROUTES } from "@/utils/routes";
+import { VersionControlDev } from "@/shared/ui/icons/version-control-dev";
+import { VersionControlProd } from "@/shared/ui/icons/version-control-prod";
+import { ListNoResults } from "@/shared/ui/list-no-results";
+import { LinkButton } from "@/shared/ui/primitives/button-link";
+import { PermissionButton } from "@/shared/ui/primitives/permission-button";
+import { useEnvironment } from "@/app/context/environment/hooks";
+import { buildRoute, ROUTES } from "@/shared/lib/routes";
 
 interface WorkflowListEmptyProps {
 	emptySearchResults?: boolean;

@@ -5,7 +5,7 @@ import {
 	HoverCardContent,
 	HoverCardPortal,
 	HoverCardTrigger,
-} from "@/components/primitives/hover-card";
+} from "@/shared/ui/primitives/hover-card";
 
 interface TimeDisplayHoverCardProps {
 	date: Date | string | undefined;

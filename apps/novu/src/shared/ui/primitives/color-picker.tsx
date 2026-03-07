@@ -1,11 +1,11 @@
 import { cn } from "@merge-rd/ui/lib/utils";
 import { HexColorPicker } from "react-colorful";
-import { Input, InputPure } from "@/components/primitives/input";
+import { Input, InputPure } from "@/shared/ui/primitives/input";
 import {
 	Popover,
 	PopoverContent,
 	PopoverTrigger,
-} from "@/components/primitives/popover";
+} from "@/shared/ui/primitives/popover";
 
 interface ColorPickerProps {
 	value: string;

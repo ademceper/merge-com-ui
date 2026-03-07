@@ -1,4 +1,4 @@
-import { PermissionsEnum } from "@novu/shared";
+import { PermissionsEnum } from "@/shared";
 import {
 	Broadcast,
 	ChartBar,
@@ -12,9 +12,9 @@ import {
 } from "@phosphor-icons/react";
 import { useCallback } from "react";
 import { useNavigate } from "react-router-dom";
-import { IS_ENTERPRISE, IS_SELF_HOSTED } from "@/config";
-import { useHasPermission } from "@/hooks/use-has-permission";
-import { buildRoute, ROUTES } from "@/utils/routes";
+import { IS_ENTERPRISE, IS_SELF_HOSTED } from "@/shared/config";
+import { useHasPermission } from "@/shared/lib/hooks/use-has-permission";
+import { buildRoute, ROUTES } from "@/shared/lib/routes";
 import type { Command, CommandExecutionContext } from "../command-types";
 
 export function useNavigationCommands(

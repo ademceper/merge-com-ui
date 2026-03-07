@@ -1,10 +1,10 @@
-export { useContextsNavigate } from "@/features/contexts/hooks/use-contexts-navigate";
+export { useContextsNavigate } from "@/features/contexts/lib/use-contexts-navigate";
 export type {
 	ContextsFilter,
 	ContextsSortableColumn,
 	ContextsUrlState,
-} from "@/features/contexts/hooks/use-contexts-url-state";
-export { useContextsUrlState } from "@/features/contexts/hooks/use-contexts-url-state";
+} from "@/features/contexts/lib/use-contexts-url-state";
+export { useContextsUrlState } from "@/features/contexts/lib/use-contexts-url-state";
 export { ContextDrawer, ContextDrawerButton } from "./context-drawer";
 export { ContextList } from "./context-list";
 export { ContextListBlank } from "./context-list-blank";

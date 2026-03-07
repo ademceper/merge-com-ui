@@ -6,7 +6,7 @@ import {
 	TabsTrigger,
 } from "@merge-rd/ui/components/tabs";
 import { cn } from "@merge-rd/ui/lib/utils";
-import { ChannelTypeEnum, type ResourceOriginEnum } from "@novu/shared";
+import { ChannelTypeEnum, type ResourceOriginEnum } from "@/shared";
 import { Desktop, DeviceMobile } from "@phosphor-icons/react";
 import { AnimatePresence, motion } from "motion/react";
 import { useMemo, useState } from "react";
@@ -16,8 +16,8 @@ import {
 	EmailPreviewContentMobile,
 	EmailPreviewHeader,
 	EmailPreviewSubject,
-} from "@/features/workflows/components/workflow-editor/steps/email/email-preview";
-import { EmailTabsSection } from "@/features/workflows/components/workflow-editor/steps/email/email-tabs-section";
+} from "@/features/workflows/ui/workflow-editor/steps/email/email-preview";
+import { EmailTabsSection } from "@/features/workflows/ui/workflow-editor/steps/email/email-tabs-section";
 
 type EmailCorePreviewProps = {
 	previewData: any;

@@ -3,7 +3,7 @@ import {
 	FeatureNameEnum,
 	type GetSubscriptionDto,
 	getFeatureForTierAsNumber,
-} from "@novu/shared";
+} from "@/shared";
 import { subMilliseconds } from "date-fns";
 import { IS_SELF_HOSTED } from "../config";
 

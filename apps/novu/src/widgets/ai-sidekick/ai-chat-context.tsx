@@ -2,7 +2,7 @@ import {
 	type AiAgentTypeEnum,
 	AiMessageRoleEnum,
 	type AiResourceTypeEnum,
-} from "@novu/shared";
+} from "@/shared";
 import {
 	type ChatStatus,
 	type DataUIPart,
@@ -19,16 +19,16 @@ import {
 	useState,
 } from "react";
 import { useLocation } from "react-router-dom";
-import { type AiChatResponseDto, cancelStream } from "@/api/ai";
-import { ConfirmationModal } from "@/components/confirmation-modal";
-import { useEnvironment } from "@/context/environment/hooks";
-import { useAiChatStream } from "@/hooks/use-ai-chat-stream";
-import { useCreateAiChat } from "@/hooks/use-create-ai-chat";
-import { useDataRef } from "@/hooks/use-data-ref";
-import { useFetchLatestAiChat } from "@/hooks/use-fetch-latest-ai-chat";
-import { useKeepAiChanges } from "@/hooks/use-keep-ai-changes";
-import { useRevertMessage } from "@/hooks/use-revert-message";
-import { showErrorToast } from "../primitives/sonner-helpers";
+import { type AiChatResponseDto, cancelStream } from "@/entities/ai/api/ai";
+import { ConfirmationModal } from "@/shared/ui/confirmation-modal";
+import { useEnvironment } from "@/app/context/environment/hooks";
+import { useAiChatStream } from "@/shared/lib/hooks/use-ai-chat-stream";
+import { useCreateAiChat } from "@/shared/lib/hooks/use-create-ai-chat";
+import { useDataRef } from "@/shared/lib/hooks/use-data-ref";
+import { useFetchLatestAiChat } from "@/shared/lib/hooks/use-fetch-latest-ai-chat";
+import { useKeepAiChanges } from "@/shared/lib/hooks/use-keep-ai-changes";
+import { useRevertMessage } from "@/shared/lib/hooks/use-revert-message";
+import { showErrorToast } from "@/shared/ui/primitives/sonner-helpers";
 
 export type ReasoningDataPart = DataUIPart<{
 	reasoning: { toolCallId: string; text: string };

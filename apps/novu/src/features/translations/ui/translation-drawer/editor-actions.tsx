@@ -1,17 +1,17 @@
 import { Button } from "@merge-rd/ui/components/button";
-import { PermissionsEnum } from "@novu/shared";
+import { PermissionsEnum } from "@/shared";
 import { Check, FileArrowDown, Upload, X } from "@phosphor-icons/react";
 import { AnimatePresence, motion } from "motion/react";
 import { useEffect, useState } from "react";
-import { FlagCircle } from "@/components/flag-circle";
-import { CopyButton } from "@/components/primitives/copy-button";
-import { PermissionButton } from "@/components/primitives/permission-button";
+import { FlagCircle } from "@/shared/ui/flag-circle";
+import { CopyButton } from "@/shared/ui/primitives/copy-button";
+import { PermissionButton } from "@/shared/ui/primitives/permission-button";
 import {
 	Tooltip,
 	TooltipContent,
 	TooltipTrigger,
-} from "@/components/primitives/tooltip";
-import type { TranslationWithPlaceholder } from "@/features/translations/hooks/use-fetch-translation";
+} from "@/shared/ui/primitives/tooltip";
+import type { TranslationWithPlaceholder } from "@/features/translations/lib/use-fetch-translation";
 import { TranslationImportTrigger } from "../translation-import-trigger";
 import { getLocaleDisplayName } from "../utils";
 import { useTranslationFileOperations } from "./hooks";

@@ -1,20 +1,20 @@
 import { Skeleton } from "@merge-rd/ui/components/skeleton";
-import { FeatureFlagsKeysEnum } from "@novu/shared";
+import { FeatureFlagsKeysEnum } from "@/shared";
 import { motion } from "motion/react";
 import { useState } from "react";
-import type { TopicSubscription } from "@/api/topics";
-import { ConfirmationModal } from "@/components/confirmation-modal";
+import type { TopicSubscription } from "@/entities/topic/api/topics";
+import { ConfirmationModal } from "@/shared/ui/confirmation-modal";
 import {
 	showErrorToast,
 	showSuccessToast,
-} from "@/components/primitives/sonner-helpers";
-import { SidebarContent } from "@/components/side-navigation/sidebar";
-import { ContextFilter } from "@/features/contexts/components/context-filter";
-import { useDeleteSubscription } from "@/features/subscribers/hooks/use-delete-subscription";
-import { useFetchSubscriberSubscriptions } from "@/features/subscribers/hooks/use-fetch-subscriber-subscriptions";
-import { TopicDrawer } from "@/features/topics/components/topic-drawer";
-import { useFeatureFlag } from "@/hooks/use-feature-flag";
-import { itemVariants, listVariants } from "@/utils/animation";
+} from "@/shared/ui/primitives/sonner-helpers";
+import { SidebarContent } from "@/widgets/side-navigation/sidebar";
+import { ContextFilter } from "@/features/contexts/ui/context-filter";
+import { useDeleteSubscription } from "@/features/subscribers/lib/use-delete-subscription";
+import { useFetchSubscriberSubscriptions } from "@/features/subscribers/lib/use-fetch-subscriber-subscriptions";
+import { TopicDrawer } from "@/features/topics/ui/topic-drawer";
+import { useFeatureFlag } from "@/shared/lib/hooks/use-feature-flag";
+import { itemVariants, listVariants } from "@/shared/lib/animation";
 import { SubscriptionItem } from "./subscription-item";
 import { SubscriptionPreferencesDrawer } from "./subscription-preferences-drawer";
 import { SubscriptionsEmptyState } from "./subscriptions-empty-state";

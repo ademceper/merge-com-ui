@@ -3,7 +3,7 @@ import {
 	type InteractionTrendDataPoint,
 	ReportTypeEnum,
 	type WorkflowVolumeDataPoint,
-} from "@/api/activity";
+} from "@/entities/activity/api/activity";
 import { DeliveryTrendsChart } from "./charts/delivery-trends-chart";
 import { InteractionTrendChart } from "./charts/interaction-trend-chart";
 import { WorkflowsByVolume } from "./charts/workflows-by-volume";

@@ -1,4 +1,4 @@
-import { ChannelTypeEnum, JobStatusEnum } from "@novu/shared";
+import { ChannelTypeEnum, JobStatusEnum } from "@/shared";
 import {
 	CheckCircle,
 	CircleNotch,
@@ -7,8 +7,8 @@ import {
 	WarningCircle,
 } from "@phosphor-icons/react";
 import type { IconType } from "react-icons/lib";
-import type { StatusBadgeProps } from "@/components/primitives/status-badge";
-import type { ActivityFiltersData } from "@/types/activity";
+import type { StatusBadgeProps } from "@/shared/ui/primitives/status-badge";
+import type { ActivityFiltersData } from "@/shared/model/activity";
 
 export const STATUS_STYLES = {
 	completed: "border-[#99e3bb] bg-[#e9faf0] text-[#99e3bb]",

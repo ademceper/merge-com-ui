@@ -1,11 +1,11 @@
 import { useMutation } from "@tanstack/react-query";
 import { useCallback, useEffect } from "react";
-import { showErrorToast } from "@/components/primitives/sonner-helpers";
+import { showErrorToast } from "@/shared/ui/primitives/sonner-helpers";
 import {
 	requireEnvironment,
 	useEnvironment,
-} from "@/context/environment/hooks";
-import { createVercelIntegration } from "../api/partner-integrations";
+} from "@/app/context/environment/hooks";
+import { createVercelIntegration } from "@/entities/integration/api/partner-integrations";
 import { useDataRef } from "./use-data-ref";
 import { useVercelParams } from "./use-vercel-params";
 

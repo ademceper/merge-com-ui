@@ -1,7 +1,7 @@
 import { TableCell, TableRow } from "@merge-rd/ui/components/table";
-import { TimeDisplayHoverCard } from "@/components/time-display-hover-card";
-import { formatDateSimple } from "@/utils/format-date";
-import type { RequestLog } from "../../types/logs";
+import { TimeDisplayHoverCard } from "@/shared/ui/time-display-hover-card";
+import { formatDateSimple } from "@/shared/lib/format-date";
+import type { RequestLog } from "@/shared/model/logs";
 import { HttpStatusBadge } from "./http-status-badge";
 import { MethodBadge } from "./method-badge";
 

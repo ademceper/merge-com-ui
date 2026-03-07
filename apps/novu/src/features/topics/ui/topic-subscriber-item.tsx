@@ -8,18 +8,18 @@ import { TrashSimple } from "@phosphor-icons/react";
 import { format } from "date-fns";
 import { motion } from "motion/react";
 import { useState } from "react";
-import type { TopicSubscription } from "@/api/topics";
-import { ConfirmationModal } from "@/components/confirmation-modal";
+import type { TopicSubscription } from "@/entities/topic/api/topics";
+import { ConfirmationModal } from "@/shared/ui/confirmation-modal";
 import {
 	Tooltip,
 	TooltipContent,
 	TooltipTrigger,
-} from "@/components/primitives/tooltip";
-import { TimeDisplayHoverCard } from "@/components/time-display-hover-card";
-import TruncatedText from "@/components/truncated-text";
-import { SubscriberDrawerButton } from "@/features/subscribers/components/subscriber-drawer";
-import { useRemoveTopicSubscriber } from "@/features/topics/hooks/use-topic-subscribers";
-import { itemVariants } from "@/utils/animation";
+} from "@/shared/ui/primitives/tooltip";
+import { TimeDisplayHoverCard } from "@/shared/ui/time-display-hover-card";
+import TruncatedText from "@/shared/ui/truncated-text";
+import { SubscriberDrawerButton } from "@/features/subscribers/ui/subscriber-drawer";
+import { useRemoveTopicSubscriber } from "@/features/topics/lib/use-topic-subscribers";
+import { itemVariants } from "@/shared/lib/animation";
 
 interface TopicSubscriberItemProps {
 	topicKey: string;

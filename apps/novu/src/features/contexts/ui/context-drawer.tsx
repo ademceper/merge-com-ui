@@ -9,7 +9,7 @@ import {
 	type ContextId,
 	type ContextType,
 	createContextKey,
-} from "@novu/shared";
+} from "@/shared";
 import { Buildings } from "@phosphor-icons/react";
 import type React from "react";
 import { forwardRef, useState } from "react";
@@ -18,11 +18,11 @@ import {
 	SheetContent,
 	SheetDescription,
 	SheetTitle,
-} from "@/components/primitives/sheet";
-import { TooltipProvider } from "@/components/primitives/tooltip";
-import { VisuallyHidden } from "@/components/primitives/visually-hidden";
-import TruncatedText from "@/components/truncated-text";
-import { useFormProtection } from "@/hooks/use-form-protection";
+} from "@/shared/ui/primitives/sheet";
+import { TooltipProvider } from "@/shared/ui/primitives/tooltip";
+import { VisuallyHidden } from "@/shared/ui/primitives/visually-hidden";
+import TruncatedText from "@/shared/ui/truncated-text";
+import { useFormProtection } from "@/shared/lib/hooks/use-form-protection";
 import { ContextActivity } from "./context-activity";
 import { ContextOverview } from "./context-overview";
 

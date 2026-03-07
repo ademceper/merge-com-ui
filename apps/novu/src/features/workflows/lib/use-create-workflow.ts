@@ -2,23 +2,23 @@ import {
 	type CreateWorkflowDto,
 	StepTypeEnum,
 	WorkflowCreationSourceEnum,
-} from "@novu/shared";
+} from "@/shared";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
 import type { z } from "zod";
-import { getLayouts } from "@/api/layouts";
-import { createWorkflow } from "@/api/workflows";
+import { getLayouts } from "@/entities/layout/api/layouts";
+import { createWorkflow } from "@/entities/workflow/api/workflows";
 import {
 	requireEnvironment,
 	useEnvironment,
-} from "@/context/environment/hooks";
-import type { workflowSchema } from "@/features/workflows/components/workflow-editor/schema";
+} from "@/app/context/environment/hooks";
+import type { workflowSchema } from "@/features/workflows/ui/workflow-editor/schema";
 import {
 	showErrorToast,
 	showSuccessToast,
-} from "@/features/workflows/components/workflow-editor/toasts";
-import { QueryKeys } from "@/utils/query-keys";
-import { buildRoute, ROUTES } from "@/utils/routes";
+} from "@/features/workflows/ui/workflow-editor/toasts";
+import { QueryKeys } from "@/shared/lib/query-keys";
+import { buildRoute, ROUTES } from "@/shared/lib/routes";
 
 interface UseCreateWorkflowOptions {
 	onSuccess?: () => void;

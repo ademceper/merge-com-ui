@@ -1,8 +1,8 @@
-import type { IEnvironment } from "@novu/shared";
+import type { IEnvironment } from "@/shared";
 import { motion } from "motion/react";
 import { useCallback, useMemo, useState } from "react";
-import { useTelemetry } from "@/hooks/use-telemetry";
-import { TelemetryEvent } from "@/utils/telemetry";
+import { useTelemetry } from "@/shared/lib/hooks/use-telemetry";
+import { TelemetryEvent } from "@/shared/lib/telemetry";
 import { type Framework, getFrameworks } from "./framework-guides.instructions";
 import { FrameworkGrid } from "./inbox-framework-guide/framework-grid";
 import { HeaderSection } from "./inbox-framework-guide/header-section";

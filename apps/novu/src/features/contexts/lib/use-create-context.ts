@@ -4,13 +4,13 @@ import {
 	useMutation,
 	useQueryClient,
 } from "@tanstack/react-query";
-import { createContext } from "@/api/contexts";
+import { createContext } from "@/entities/context/api/contexts";
 import {
 	requireEnvironment,
 	useEnvironment,
-} from "@/context/environment/hooks";
-import { QueryKeys } from "@/utils/query-keys";
-import type { OmitEnvironmentFromParameters } from "@/utils/types";
+} from "@/app/context/environment/hooks";
+import { QueryKeys } from "@/shared/lib/query-keys";
+import type { OmitEnvironmentFromParameters } from "@/shared/lib/types";
 
 export type CreateContextParameters = OmitEnvironmentFromParameters<
 	typeof createContext

@@ -1,26 +1,26 @@
 import type { RouteObject } from "react-router-dom";
 import { lazy } from "react";
-import { ROUTES } from "@/utils/routes";
+import { ROUTES } from "@/shared/lib/routes";
 
 const InboxUsecasePage = lazy(() =>
-	import("@/features/onboarding/pages/inbox-usecase-page").then((m) => ({
+	import("@/features/onboarding/ui/pages/inbox-usecase-page").then((m) => ({
 		default: m.InboxUsecasePage,
 	})),
 );
 const InboxEmbedPage = lazy(() =>
-	import("@/features/onboarding/pages/inbox-embed-page").then((m) => ({
+	import("@/features/onboarding/ui/pages/inbox-embed-page").then((m) => ({
 		default: m.InboxEmbedPage,
 	})),
 );
 const InboxEmbedSuccessPage = lazy(() =>
-	import("@/features/onboarding/pages/inbox-embed-success-page").then(
+	import("@/features/onboarding/ui/pages/inbox-embed-success-page").then(
 		(m) => ({
 			default: m.InboxEmbedSuccessPage,
 		}),
 	),
 );
 const WelcomePage = lazy(() =>
-	import("@/features/onboarding/pages/welcome-page").then((m) => ({
+	import("@/features/onboarding/ui/pages/welcome-page").then((m) => ({
 		default: m.WelcomePage,
 	})),
 );

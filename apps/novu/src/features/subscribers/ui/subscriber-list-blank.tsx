@@ -1,10 +1,10 @@
-import { PermissionsEnum } from "@novu/shared";
+import { PermissionsEnum } from "@/shared";
 import { BookBookmark, Path } from "@phosphor-icons/react";
 import { Link } from "react-router-dom";
-import { AddSubscriberIllustration } from "@/components/icons/add-subscriber-illustration";
-import { LinkButton } from "@/components/primitives/button-link";
-import { PermissionButton } from "@/components/primitives/permission-button";
-import { useSubscribersNavigate } from "@/features/subscribers/hooks/use-subscribers-navigate";
+import { AddSubscriberIllustration } from "@/shared/ui/icons/add-subscriber-illustration";
+import { LinkButton } from "@/shared/ui/primitives/button-link";
+import { PermissionButton } from "@/shared/ui/primitives/permission-button";
+import { useSubscribersNavigate } from "@/features/subscribers/lib/use-subscribers-navigate";
 
 export const SubscriberListBlank = () => {
 	const { navigateToCreateSubscriberPage } = useSubscribersNavigate();

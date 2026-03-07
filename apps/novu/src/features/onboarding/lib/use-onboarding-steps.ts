@@ -1,9 +1,9 @@
 import { useOrganization } from "@merge-rd/auth";
-import { ChannelTypeEnum, type IIntegration } from "@novu/shared";
+import { ChannelTypeEnum, type IIntegration } from "@/shared";
 import { useMemo } from "react";
-import { IS_SELF_HOSTED, ONBOARDING_DEMO_WORKFLOW_ID } from "@/config";
-import { useFetchIntegrations } from "@/features/integrations/hooks/use-fetch-integrations";
-import { useFetchWorkflows } from "@/features/workflows/hooks/use-fetch-workflows";
+import { IS_SELF_HOSTED, ONBOARDING_DEMO_WORKFLOW_ID } from "@/shared/config";
+import { useFetchIntegrations } from "@/features/integrations/lib/use-fetch-integrations";
+import { useFetchWorkflows } from "@/features/workflows/lib/use-fetch-workflows";
 
 export enum StepIdEnum {
 	ACCOUNT_CREATION = "account-creation",

@@ -4,14 +4,14 @@ import {
 	TabsList,
 	TabsTrigger,
 } from "@merge-rd/ui/components/tabs";
-import { PermissionsEnum } from "@novu/shared";
+import { PermissionsEnum } from "@/shared";
 import { useCallback } from "react";
 import { Outlet, useNavigate } from "react-router-dom";
-import { PermissionButton } from "@/components/primitives/permission-button";
-import { useSetPageHeader } from "@/context/page-header";
-import { IntegrationsList } from "@/features/integrations/components/integrations-list";
-import type { TableIntegration } from "@/features/integrations/components/types";
-import { buildRoute, ROUTES } from "@/utils/routes";
+import { PermissionButton } from "@/shared/ui/primitives/permission-button";
+import { useSetPageHeader } from "@/app/context/page-header";
+import { IntegrationsList } from "@/features/integrations/ui/integrations-list";
+import type { TableIntegration } from "@/features/integrations/ui/types";
+import { buildRoute, ROUTES } from "@/shared/lib/routes";
 
 export function IntegrationsListPage() {
 	useSetPageHeader(

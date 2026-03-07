@@ -1,7 +1,7 @@
 import type { TranslationGroupDto } from "@novu/api/models/components";
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { useFetchTranslation } from "@/features/translations/hooks/use-fetch-translation";
-import { useSaveTranslation } from "@/features/translations/hooks/use-save-translation";
+import { useFetchTranslation } from "@/features/translations/lib/use-fetch-translation";
+import { useSaveTranslation } from "@/features/translations/lib/use-save-translation";
 import { useTranslationEditor } from "./hooks";
 
 export function useTranslationDrawerLogic(

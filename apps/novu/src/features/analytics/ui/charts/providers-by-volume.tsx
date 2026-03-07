@@ -1,15 +1,15 @@
 import { Skeleton } from "@merge-rd/ui/components/skeleton";
 import { useCallback, useMemo } from "react";
 import { Bar, BarChart, Cell, XAxis, YAxis } from "recharts";
-import type { ProviderVolumeDataPoint } from "@/api/activity";
+import type { ProviderVolumeDataPoint } from "@/entities/activity/api/activity";
 
 import {
 	type ChartConfig,
 	ChartContainer,
 	ChartTooltip,
 	NovuTooltip,
-} from "@/components/primitives/chart";
-import { ProviderIcon } from "@/features/integrations/components/provider-icon";
+} from "@/shared/ui/primitives/chart";
+import { ProviderIcon } from "@/features/integrations/ui/provider-icon";
 import { ANALYTICS_TOOLTIPS } from "../constants/analytics-tooltips";
 import { createVolumeBasedHasDataChecker } from "../utils/chart-validation";
 import { generateDummyProviderData } from "./chart-dummy-data";

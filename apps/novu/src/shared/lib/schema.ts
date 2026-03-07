@@ -2,7 +2,7 @@ import type {
 	JSONSchemaDefinition,
 	JSONSchemaDto,
 	UiSchema,
-} from "@novu/shared";
+} from "@/shared";
 import * as z from "zod";
 import { capitalize } from "./string";
 

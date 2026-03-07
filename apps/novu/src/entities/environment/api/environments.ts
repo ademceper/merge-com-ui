@@ -1,5 +1,5 @@
-import type { IApiKey, IEnvironment, ITagsResponse } from "@novu/shared";
-import { del, get, getV2, post, postV2, put } from "./api.client";
+import type { IApiKey, IEnvironment, ITagsResponse } from "@/shared";
+import { del, get, getV2, post, postV2, put } from "@/shared/api/api.client";
 
 export interface IDiffSummary {
 	added: number;

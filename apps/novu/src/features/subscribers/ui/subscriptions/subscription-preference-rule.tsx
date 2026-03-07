@@ -8,7 +8,7 @@ import { createTheme } from "@uiw/codemirror-themes";
 import CodeMirror from "@uiw/react-codemirror";
 import { motion } from "motion/react";
 import { useState } from "react";
-import type { TopicSubscriptionPreference } from "@/api/topics";
+import type { TopicSubscriptionPreference } from "@/entities/topic/api/topics";
 
 loadLanguage("json");
 

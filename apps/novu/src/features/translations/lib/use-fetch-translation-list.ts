@@ -2,12 +2,12 @@ import { useQuery } from "@tanstack/react-query";
 import {
 	getTranslationsList,
 	type TranslationsFilter,
-} from "@/api/translations";
+} from "@/entities/translation/api/translations";
 import {
 	requireEnvironment,
 	useEnvironment,
-} from "@/context/environment/hooks";
-import { QueryKeys } from "@/utils/query-keys";
+} from "@/app/context/environment/hooks";
+import { QueryKeys } from "@/shared/lib/query-keys";
 
 interface UseFetchTranslationListOptions {
 	enabled?: boolean;

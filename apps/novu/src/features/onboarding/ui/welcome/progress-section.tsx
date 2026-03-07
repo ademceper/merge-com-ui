@@ -6,10 +6,10 @@ import { Link, useParams } from "react-router-dom";
 import {
 	StepIdEnum,
 	useOnboardingSteps,
-} from "@/features/onboarding/hooks/use-onboarding-steps";
-import { useTelemetry } from "@/hooks/use-telemetry";
-import { buildRoute, ROUTES } from "@/utils/routes";
-import { TelemetryEvent } from "@/utils/telemetry";
+} from "@/features/onboarding/lib/use-onboarding-steps";
+import { useTelemetry } from "@/shared/lib/hooks/use-telemetry";
+import { buildRoute, ROUTES } from "@/shared/lib/routes";
+import { TelemetryEvent } from "@/shared/lib/telemetry";
 import { NovuLogo, PointingArrow } from "./icons";
 import {
 	leftSection,

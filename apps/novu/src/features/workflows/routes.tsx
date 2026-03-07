@@ -1,46 +1,46 @@
 import type { RouteObject } from "react-router-dom";
 import { lazy } from "react";
-import { ROUTES } from "@/utils/routes";
+import { ROUTES } from "@/shared/lib/routes";
 
 const WorkflowsPage = lazy(() =>
-	import("@/features/workflows/pages/workflows").then((m) => ({
+	import("@/features/workflows/ui/pages/workflows").then((m) => ({
 		default: m.WorkflowsPage,
 	})),
 );
 const TemplateModal = lazy(() =>
-	import("@/features/workflows/pages/workflows").then((m) => ({
+	import("@/features/workflows/ui/pages/workflows").then((m) => ({
 		default: m.TemplateModal,
 	})),
 );
 const CreateWorkflowPage = lazy(() =>
-	import("@/features/workflows/pages/create-workflow").then((m) => ({
+	import("@/features/workflows/ui/pages/create-workflow").then((m) => ({
 		default: m.CreateWorkflowPage,
 	})),
 );
 const DuplicateWorkflowPage = lazy(() =>
-	import("@/features/workflows/pages/duplicate-workflow").then((m) => ({
+	import("@/features/workflows/ui/pages/duplicate-workflow").then((m) => ({
 		default: m.DuplicateWorkflowPage,
 	})),
 );
 const EditWorkflowPage = lazy(() =>
-	import("@/features/workflows/pages/edit-workflow").then((m) => ({
+	import("@/features/workflows/ui/pages/edit-workflow").then((m) => ({
 		default: m.EditWorkflowPage,
 	})),
 );
 const EditStepTemplateV2Page = lazy(() =>
-	import("@/features/workflows/pages/edit-step-template-v2").then((m) => ({
+	import("@/features/workflows/ui/pages/edit-step-template-v2").then((m) => ({
 		default: m.EditStepTemplateV2Page,
 	})),
 );
 const TestWorkflowDrawerPage = lazy(() =>
-	import("@/features/workflows/pages/test-workflow-drawer-page").then(
+	import("@/features/workflows/ui/pages/test-workflow-drawer-page").then(
 		(m) => ({
 			default: m.TestWorkflowDrawerPage,
 		}),
 	),
 );
 const TestWorkflowRouteHandler = lazy(() =>
-	import("@/features/workflows/pages/test-workflow-route-handler").then(
+	import("@/features/workflows/ui/pages/test-workflow-route-handler").then(
 		(m) => ({
 			default: m.TestWorkflowRouteHandler,
 		}),
@@ -48,28 +48,28 @@ const TestWorkflowRouteHandler = lazy(() =>
 );
 const ConfigureWorkflow = lazy(() =>
 	import(
-		"@/features/workflows/components/workflow-editor/configure-workflow"
+		"@/features/workflows/ui/workflow-editor/configure-workflow"
 	).then((m) => ({
 		default: m.ConfigureWorkflow,
 	})),
 );
 const ConfigureStep = lazy(() =>
 	import(
-		"@/features/workflows/components/workflow-editor/steps/configure-step"
+		"@/features/workflows/ui/workflow-editor/steps/configure-step"
 	).then((m) => ({
 		default: m.ConfigureStep,
 	})),
 );
 const EditStepConditions = lazy(() =>
 	import(
-		"@/features/workflows/components/workflow-editor/steps/conditions/edit-step-conditions"
+		"@/features/workflows/ui/workflow-editor/steps/conditions/edit-step-conditions"
 	).then((m) => ({
 		default: m.EditStepConditions,
 	})),
 );
 const ChannelPreferences = lazy(() =>
 	import(
-		"@/features/workflows/components/workflow-editor/channel-preferences"
+		"@/features/workflows/ui/workflow-editor/channel-preferences"
 	).then((m) => ({
 		default: m.ChannelPreferences,
 	})),

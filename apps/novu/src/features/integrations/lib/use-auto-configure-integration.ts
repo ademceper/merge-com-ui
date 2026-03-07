@@ -1,18 +1,18 @@
-import type { IIntegration } from "@novu/shared";
+import type { IIntegration } from "@/shared";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import {
 	type AutoConfigureIntegrationResponse,
 	autoConfigureIntegration,
-} from "@/api/integrations";
+} from "@/entities/integration/api/integrations";
 import {
 	showErrorToast,
 	showSuccessToast,
-} from "@/components/primitives/sonner-helpers";
+} from "@/shared/ui/primitives/sonner-helpers";
 import {
 	requireEnvironment,
 	useEnvironment,
-} from "@/context/environment/hooks";
-import { QueryKeys } from "@/utils/query-keys";
+} from "@/app/context/environment/hooks";
+import { QueryKeys } from "@/shared/lib/query-keys";
 
 type AutoConfigureIntegrationVariables = {
 	integrationId: string;

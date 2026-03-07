@@ -4,7 +4,7 @@ import {
 	AvatarImage,
 } from "@merge-rd/ui/components/avatar";
 import { cn } from "@merge-rd/ui/lib/utils";
-import type { ISubscriberResponseDto } from "@novu/shared";
+import type { ISubscriberResponseDto } from "@/shared";
 import { MagnifyingGlass } from "@phosphor-icons/react";
 import { AnimatePresence, motion } from "motion/react";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
@@ -12,18 +12,18 @@ import type { IconType } from "react-icons";
 import {
 	Autocomplete,
 	type AutocompleteItem,
-} from "@/components/primitives/autocomplete";
+} from "@/shared/ui/primitives/autocomplete";
 import {
 	Select,
 	SelectContent,
 	SelectItem,
 	SelectTrigger,
 	SelectValue,
-} from "@/components/primitives/select";
+} from "@/shared/ui/primitives/select";
 import {
 	type SearchField,
 	useSubscriberSearch,
-} from "@/features/subscribers/hooks/use-subscriber-search";
+} from "@/features/subscribers/lib/use-subscriber-search";
 
 interface SubscriberAutocompleteItem
 	extends AutocompleteItem,

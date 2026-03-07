@@ -3,7 +3,7 @@ import type {
 	EnvironmentId,
 	IPreviousStepFilterPart,
 	OrganizationId,
-} from "../../types";
+} from "../../model";
 import type { IConfigurations } from "./configuration.interface";
 import type { ICredentials } from "./credential.interface";
 

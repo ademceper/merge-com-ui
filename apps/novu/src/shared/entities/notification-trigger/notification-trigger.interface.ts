@@ -1,7 +1,7 @@
 import type {
 	TemplateVariableTypeEnum,
 	TriggerContextTypeEnum,
-} from "../../types";
+} from "../../model";
 
 // TODO: Move to a const, it's not an enum if it has only one element
 export enum TriggerTypeEnum {

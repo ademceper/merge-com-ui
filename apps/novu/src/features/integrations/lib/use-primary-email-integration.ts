@@ -1,6 +1,6 @@
-import { ChannelTypeEnum, type IIntegration } from "@novu/shared";
+import { ChannelTypeEnum, type IIntegration } from "@/shared";
 import { useMemo } from "react";
-import { useFetchIntegrations } from "@/features/integrations/hooks/use-fetch-integrations";
+import { useFetchIntegrations } from "@/features/integrations/lib/use-fetch-integrations";
 
 type PrimaryEmailIntegrationResult = {
 	senderEmail?: string;

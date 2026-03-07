@@ -1,10 +1,10 @@
 import { useCallback } from "react";
-import { useCreateTranslationKey } from "@/features/translations/hooks/use-create-translation-key";
-import { useTranslationValidation } from "@/features/translations/hooks/use-translation-validation";
+import { useCreateTranslationKey } from "@/features/translations/lib/use-create-translation-key";
+import { useTranslationValidation } from "@/features/translations/lib/use-translation-validation";
 import type {
 	LocalizationResourceEnum,
 	TranslationKey,
-} from "@/types/translations";
+} from "@/shared/model/translations";
 
 export const useTranslationForm = (
 	editKey: string,

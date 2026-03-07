@@ -1,7 +1,7 @@
 import {
 	TRANSLATION_DEFAULT_TEMPLATE,
 	TRANSLATION_DELIMITER_CLOSE,
-} from "@novu/shared";
+} from "@/shared";
 import type { EditorView } from "@uiw/react-codemirror";
 import { type MutableRefObject, useCallback, useState } from "react";
 

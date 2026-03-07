@@ -2,7 +2,7 @@ import type {
 	CompanySizeEnum,
 	JobTitleEnum,
 	OrganizationTypeEnum,
-} from "@novu/shared";
+} from "@/shared";
 import * as Sentry from "@sentry/react";
 import { post } from "./api.client";
 

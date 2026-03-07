@@ -1,10 +1,10 @@
-import { DirectionEnum } from "@novu/shared";
+import { DirectionEnum } from "@/shared";
 import { useCallback, useMemo, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import {
 	getPersistedPageSize,
 	usePersistedPageSize,
-} from "@/hooks/use-persisted-page-size";
+} from "@/shared/lib/hooks/use-persisted-page-size";
 
 const CONTEXTS_TABLE_ID = "contexts-list";
 

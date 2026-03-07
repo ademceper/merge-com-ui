@@ -1,8 +1,8 @@
-import type { StepResponseDto } from "@novu/shared";
+import type { StepResponseDto } from "@/shared";
 import { Gear, Pencil, Play } from "@phosphor-icons/react";
 import { useNavigate } from "react-router-dom";
-import { StepTypeEnum } from "@/utils/enums";
-import { buildRoute, ROUTES } from "@/utils/routes";
+import { StepTypeEnum } from "@/shared/lib/enums";
+import { buildRoute, ROUTES } from "@/shared/lib/routes";
 import type { Command, CommandExecutionContext } from "../command-types";
 
 const DELIVERY_CHANNEL_STEPS = [

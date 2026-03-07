@@ -3,10 +3,10 @@ import {
 	type GetOrganizationSettingsDto,
 	type UpdateOrganizationSettingsDto,
 	updateOrganizationSettings,
-} from "@/api/organization";
-import { showErrorToast } from "@/components/primitives/sonner-helpers";
-import { useEnvironment } from "@/context/environment/hooks";
-import { QueryKeys } from "@/utils/query-keys";
+} from "@/entities/organization/api/organization";
+import { showErrorToast } from "@/shared/ui/primitives/sonner-helpers";
+import { useEnvironment } from "@/app/context/environment/hooks";
+import { QueryKeys } from "@/shared/lib/query-keys";
 
 export function useUpdateOrganizationSettings() {
 	const { currentEnvironment } = useEnvironment();

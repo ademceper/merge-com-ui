@@ -1,6 +1,6 @@
 import { BookBookmark } from "@phosphor-icons/react";
 import { Link } from "react-router-dom";
-import { LinkButton } from "@/components/primitives/button-link";
+import { LinkButton } from "@/shared/ui/primitives/button-link";
 import { EmptyTopicsIllustration } from "./empty-topics-illustration";
 import { CreateTopicButton } from "./topic-list";
 

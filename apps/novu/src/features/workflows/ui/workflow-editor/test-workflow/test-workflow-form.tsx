@@ -5,28 +5,28 @@ import {
 	TabsList,
 	TabsTrigger,
 } from "@merge-rd/ui/components/tabs";
-import type { WorkflowResponseDto } from "@novu/shared";
+import type { WorkflowResponseDto } from "@/shared";
 import { PaperPlaneRight } from "@phosphor-icons/react";
 import { loadLanguage } from "@uiw/codemirror-extensions-langs";
 import { useCallback, useMemo, useState } from "react";
 import { useFormContext, useWatch } from "react-hook-form";
 import { FaCode } from "react-icons/fa6";
-import { Code2 } from "@/components/icons/code-2";
-import { Editor } from "@/components/primitives/editor";
+import { Code2 } from "@/shared/ui/icons/code-2";
+import { Editor } from "@/shared/ui/primitives/editor";
 import {
 	FormControl,
 	FormField,
 	FormItem,
 	FormLabel,
 	FormMessage,
-} from "@/components/primitives/form/form";
-import { Input } from "@/components/primitives/input";
+} from "@/shared/ui/primitives/form/form";
+import { Input } from "@/shared/ui/primitives/input";
 import {
 	Panel,
 	PanelContent,
 	PanelHeader,
-} from "@/components/primitives/panel";
-import { useIsPayloadSchemaEnabled } from "@/hooks/use-is-payload-schema-enabled";
+} from "@/shared/ui/primitives/panel";
+import { useIsPayloadSchemaEnabled } from "@/features/workflows/lib/use-is-payload-schema-enabled";
 import {
 	type CodeSnippet,
 	createCurlSnippet,
@@ -35,9 +35,9 @@ import {
 	createNodeJsSnippet,
 	createPhpSnippet,
 	createPythonSnippet,
-} from "@/utils/code-snippets";
-import { ResourceOriginEnum } from "@/utils/enums";
-import { capitalize } from "@/utils/string";
+} from "@/shared/lib/code-snippets";
+import { ResourceOriginEnum } from "@/shared/lib/enums";
+import { capitalize } from "@/shared/lib/string";
 import type { TestWorkflowFormType } from "../schema";
 import { EditableJsonViewer } from "../steps/shared/editable-json-viewer/editable-json-viewer";
 import { SnippetEditor } from "./snippet-editor";

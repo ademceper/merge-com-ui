@@ -1,10 +1,10 @@
 import type { EditorView } from "@uiw/react-codemirror";
 import { type MutableRefObject, useMemo } from "react";
-import { createTranslationExtension } from "@/components/primitives/translation-plugin";
-import type { CompletionRange } from "@/components/primitives/variable-editor";
-import { useFetchTranslationKeys } from "@/features/translations/hooks/use-fetch-translation-keys";
-import { useTranslations } from "@/features/translations/hooks/use-translations";
-import type { LocalizationResourceEnum } from "@/types/translations";
+import { createTranslationExtension } from "@/shared/ui/primitives/translation-plugin";
+import type { CompletionRange } from "@/shared/ui/primitives/variable-editor";
+import { useFetchTranslationKeys } from "@/features/translations/lib/use-fetch-translation-keys";
+import { useTranslations } from "@/features/translations/lib/use-translations";
+import type { LocalizationResourceEnum } from "@/shared/model/translations";
 
 export const useTranslationPluginExtension = ({
 	viewRef,

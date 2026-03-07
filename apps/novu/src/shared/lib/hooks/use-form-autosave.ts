@@ -2,8 +2,8 @@
 
 import { useCallback, useEffect } from "react";
 import type { FieldValues, UseFormReturn } from "react-hook-form";
-import { useDataRef } from "@/hooks/use-data-ref";
-import { useDebounce } from "@/hooks/use-debounce";
+import { useDataRef } from "@/shared/lib/hooks/use-data-ref";
+import { useDebounce } from "@/shared/lib/hooks/use-debounce";
 
 const TEN_SECONDS = 10 * 1000;
 

@@ -1,4 +1,4 @@
-import type { LiquidVariable } from "@/utils/parseStepVariables";
+import type { LiquidVariable } from "@/shared/lib/parseStepVariables";
 
 export type Filters = {
 	label: string;

@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import type { IResponseError } from "../types";
+import type { IResponseError } from "@/shared/model";
 import { checkIsResponseError } from "./checkIsResponseError";
 
 describe("checkIsResponseError", () => {

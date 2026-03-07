@@ -24,7 +24,7 @@ import {
 	useState,
 } from "react";
 import type { IconType } from "react-icons/lib";
-import { Badge } from "@/components/primitives/badge";
+import { Badge } from "@/shared/ui/primitives/badge";
 
 interface ChainOfThoughtContextValue {
 	isOpen: boolean;

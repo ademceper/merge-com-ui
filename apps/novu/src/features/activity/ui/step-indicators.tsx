@@ -3,14 +3,14 @@ import {
 	type IActivityJob,
 	JobStatusEnum,
 	type StepTypeEnum,
-} from "@novu/shared";
+} from "@/shared";
 import { useEffect, useRef, useState } from "react";
-import { STEP_TYPE_TO_ICON } from "@/components/icons/utils";
+import { STEP_TYPE_TO_ICON } from "@/shared/ui/icons/utils";
 import {
 	Popover,
 	PopoverContent,
 	PopoverTrigger,
-} from "@/components/primitives/popover";
+} from "@/shared/ui/primitives/popover";
 import { STATUS_STYLES } from "./constants";
 import { StatusPreviewCard } from "./status-preview-card";
 

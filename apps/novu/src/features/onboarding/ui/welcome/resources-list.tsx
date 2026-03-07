@@ -3,8 +3,8 @@ import { ScrollArea, ScrollBar } from "@merge-rd/ui/components/scroll-area";
 import { BookOpen } from "@phosphor-icons/react";
 import { motion } from "motion/react";
 import { Link } from "react-router-dom";
-import { useTelemetry } from "@/hooks/use-telemetry";
-import { TelemetryEvent } from "@/utils/telemetry";
+import { useTelemetry } from "@/shared/lib/hooks/use-telemetry";
+import { TelemetryEvent } from "@/shared/lib/telemetry";
 
 export interface Resource {
 	title: string;

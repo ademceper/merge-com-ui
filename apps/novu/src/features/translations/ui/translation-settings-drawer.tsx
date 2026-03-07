@@ -4,7 +4,7 @@ import {
 	DEFAULT_LOCALE,
 	EnvironmentTypeEnum,
 	PermissionsEnum,
-} from "@novu/shared";
+} from "@/shared";
 import { Gear } from "@phosphor-icons/react";
 import { forwardRef, useCallback, useEffect } from "react";
 import { useForm } from "react-hook-form";
@@ -15,18 +15,18 @@ import {
 	FormItem,
 	FormLabel,
 	FormRoot,
-} from "@/components/primitives/form/form";
-import { InlineToast } from "@/components/primitives/inline-toast";
-import { LocaleSelect } from "@/components/primitives/locale-select";
-import { PermissionButton } from "@/components/primitives/permission-button";
-import { Sheet, SheetContent, SheetTitle } from "@/components/primitives/sheet";
-import { showSuccessToast } from "@/components/primitives/sonner-helpers";
-import { useEnvironment } from "@/context/environment/hooks";
-import { useFetchOrganizationSettings } from "@/features/settings/hooks/use-fetch-organization-settings";
-import { useUpdateOrganizationSettings } from "@/features/settings/hooks/use-update-organization-settings";
-import { useCombinedRefs } from "@/hooks/use-combined-refs";
-import { useFormProtection } from "@/hooks/use-form-protection";
-import { useHasPermission } from "@/hooks/use-has-permission";
+} from "@/shared/ui/primitives/form/form";
+import { InlineToast } from "@/shared/ui/primitives/inline-toast";
+import { LocaleSelect } from "@/shared/ui/primitives/locale-select";
+import { PermissionButton } from "@/shared/ui/primitives/permission-button";
+import { Sheet, SheetContent, SheetTitle } from "@/shared/ui/primitives/sheet";
+import { showSuccessToast } from "@/shared/ui/primitives/sonner-helpers";
+import { useEnvironment } from "@/app/context/environment/hooks";
+import { useFetchOrganizationSettings } from "@/features/settings/lib/use-fetch-organization-settings";
+import { useUpdateOrganizationSettings } from "@/features/settings/lib/use-update-organization-settings";
+import { useCombinedRefs } from "@/shared/lib/hooks/use-combined-refs";
+import { useFormProtection } from "@/shared/lib/hooks/use-form-protection";
+import { useHasPermission } from "@/shared/lib/hooks/use-has-permission";
 
 interface TranslationSettingsFormData {
 	defaultLocale: string;

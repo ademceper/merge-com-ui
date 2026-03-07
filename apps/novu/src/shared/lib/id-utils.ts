@@ -1,4 +1,4 @@
-import { ShortIsPrefixEnum } from "@novu/shared";
+import { ShortIsPrefixEnum } from "@/shared";
 
 export const WORKFLOW_DIVIDER = `_${ShortIsPrefixEnum.WORKFLOW}`;
 export const STEP_DIVIDER = `_${ShortIsPrefixEnum.STEP}`;

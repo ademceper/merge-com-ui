@@ -1,18 +1,18 @@
 import { Button } from "@merge-rd/ui/components/button";
 import { Skeleton } from "@merge-rd/ui/components/skeleton";
 import { cn } from "@merge-rd/ui/lib/utils";
-import { DEFAULT_LOCALE } from "@novu/shared";
+import { DEFAULT_LOCALE } from "@/shared";
 import { CaretRight, Warning } from "@phosphor-icons/react";
 import { useMemo } from "react";
-import { FlagCircle } from "@/components/flag-circle";
-import { Badge } from "@/components/primitives/badge";
+import { FlagCircle } from "@/shared/ui/flag-circle";
+import { Badge } from "@/shared/ui/primitives/badge";
 import {
 	Tooltip,
 	TooltipContent,
 	TooltipTrigger,
-} from "@/components/primitives/tooltip";
-import { TimeDisplayHoverCard } from "@/components/time-display-hover-card";
-import { useFetchOrganizationSettings } from "@/features/settings/hooks/use-fetch-organization-settings";
+} from "@/shared/ui/primitives/tooltip";
+import { TimeDisplayHoverCard } from "@/shared/ui/time-display-hover-card";
+import { useFetchOrganizationSettings } from "@/features/settings/lib/use-fetch-organization-settings";
 import { DATE_FORMAT_OPTIONS, TIME_FORMAT_OPTIONS } from "../constants";
 import { TranslationStatus } from "../translation-status";
 import {

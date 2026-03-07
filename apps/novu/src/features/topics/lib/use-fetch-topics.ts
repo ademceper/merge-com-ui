@@ -1,12 +1,12 @@
-import { DirectionEnum } from "@novu/shared";
+import { DirectionEnum } from "@/shared";
 import {
 	keepPreviousData,
 	type UseQueryOptions,
 	useQuery,
 } from "@tanstack/react-query";
-import { getTopics, type ListTopicsResponse } from "@/api/topics";
-import { useEnvironment } from "@/context/environment/hooks";
-import { QueryKeys } from "@/utils/query-keys";
+import { getTopics, type ListTopicsResponse } from "@/entities/topic/api/topics";
+import { useEnvironment } from "@/app/context/environment/hooks";
+import { QueryKeys } from "@/shared/lib/query-keys";
 
 interface UseTopicsParams {
 	after?: string;

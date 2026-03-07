@@ -11,21 +11,21 @@ import {
 	useCallback,
 	useMemo,
 } from "react";
-import type { TranslationValueInputComponent } from "@/features/workflows/components/workflow-editor/steps/email/translations/edit-translation-popover/edit-translation-popover";
-import { useDataRef } from "@/hooks/use-data-ref";
-import { useRemoveGrammarly } from "@/hooks/use-remove-grammarly";
-import { Editor as MailyEditor } from "@/lib/maily-core";
-import type { BlockGroupItem } from "@/lib/maily-core/blocks";
-import type { Variable } from "@/lib/maily-core/extensions";
+import type { TranslationValueInputComponent } from "@/features/workflows/ui/workflow-editor/steps/email/translations/edit-translation-popover/edit-translation-popover";
+import { useDataRef } from "@/shared/lib/hooks/use-data-ref";
+import { useRemoveGrammarly } from "@/shared/lib/hooks/use-remove-grammarly";
+import { Editor as MailyEditor } from "@/shared/lib/externals/maily-core";
+import type { BlockGroupItem } from "@/shared/lib/externals/maily-core/blocks";
+import type { Variable } from "@/shared/lib/externals/maily-core/extensions";
 import {
 	LocalizationResourceEnum,
 	type TranslationKey,
-} from "@/types/translations";
+} from "@/shared/model/translations";
 import type {
 	EnhancedParsedVariables,
 	IsAllowedVariable,
 	LiquidVariable,
-} from "@/utils/parseStepVariables";
+} from "@/shared/lib/parseStepVariables";
 import {
 	DEFAULT_EDITOR_CONFIG,
 	MAILY_EMAIL_WIDTH,

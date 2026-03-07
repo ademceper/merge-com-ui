@@ -9,18 +9,18 @@ import {
 	TableRow,
 } from "@merge-rd/ui/components/table";
 import { cn } from "@merge-rd/ui/lib/utils";
-import { type DirectionEnum, PermissionsEnum } from "@novu/shared";
+import { type DirectionEnum, PermissionsEnum } from "@/shared";
 import { PlusCircle } from "@phosphor-icons/react";
 import { type HTMLAttributes, useEffect } from "react";
-import { ListNoResults } from "@/components/list-no-results";
-import { PermissionButton } from "@/components/primitives/permission-button";
-import { useContextsNavigate } from "@/features/contexts/hooks/use-contexts-navigate";
+import { ListNoResults } from "@/shared/ui/list-no-results";
+import { PermissionButton } from "@/shared/ui/primitives/permission-button";
+import { useContextsNavigate } from "@/features/contexts/lib/use-contexts-navigate";
 import {
 	type ContextsSortableColumn,
 	type ContextsUrlState,
 	useContextsUrlState,
-} from "@/features/contexts/hooks/use-contexts-url-state";
-import { useFetchContexts } from "@/features/contexts/hooks/use-fetch-contexts";
+} from "@/features/contexts/lib/use-contexts-url-state";
+import { useFetchContexts } from "@/features/contexts/lib/use-fetch-contexts";
 import { ContextListBlank } from "./context-list-blank";
 import { ContextRow, ContextRowSkeleton } from "./context-row";
 import { ContextsFilters } from "./contexts-filters";

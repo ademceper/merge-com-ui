@@ -3,7 +3,7 @@ import { Slottable } from "@radix-ui/react-slot";
 import * as TabsPrimitive from "@radix-ui/react-tabs";
 import mergeRefs from "merge-refs";
 import * as React from "react";
-import { useTabObserver } from "@/hooks/use-tab-observer";
+import { useTabObserver } from "@/shared/lib/hooks/use-tab-observer";
 
 const SegmentedControlRoot = TabsPrimitive.Root;
 SegmentedControlRoot.displayName = "SegmentedControlRoot";

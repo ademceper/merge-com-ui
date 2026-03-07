@@ -3,16 +3,16 @@ import { Button } from "@merge-rd/ui/components/button";
 import { Separator } from "@merge-rd/ui/components/separator";
 import { Skeleton } from "@merge-rd/ui/components/skeleton";
 import type { GetContextResponseDto } from "@novu/api/models/components";
-import type { ContextId, ContextType } from "@novu/shared";
+import type { ContextId, ContextType } from "@/shared";
 import { Trash } from "@phosphor-icons/react";
 import { loadLanguage } from "@uiw/codemirror-extensions-langs";
 import { useId, useState } from "react";
 import { useForm } from "react-hook-form";
 import type { ExternalToast } from "sonner";
 import type { z } from "zod";
-import { ConfirmationModal } from "@/components/confirmation-modal";
-import { CopyButton } from "@/components/primitives/copy-button";
-import { Editor } from "@/components/primitives/editor";
+import { ConfirmationModal } from "@/shared/ui/confirmation-modal";
+import { CopyButton } from "@/shared/ui/primitives/copy-button";
+import { Editor } from "@/shared/ui/primitives/editor";
 import {
 	Form,
 	FormControl,
@@ -21,21 +21,21 @@ import {
 	FormLabel,
 	FormMessage,
 	FormRoot,
-} from "@/components/primitives/form/form";
-import { Input, InputRoot } from "@/components/primitives/input";
+} from "@/shared/ui/primitives/form/form";
+import { Input, InputRoot } from "@/shared/ui/primitives/input";
 import {
 	showErrorToast,
 	showSuccessToast,
-} from "@/components/primitives/sonner-helpers";
-import { TimeDisplayHoverCard } from "@/components/time-display-hover-card";
-import { EditContextFormSchema } from "@/features/contexts/components/schema";
-import { useContextsNavigate } from "@/features/contexts/hooks/use-contexts-navigate";
-import { useDeleteContext } from "@/features/contexts/hooks/use-delete-context";
-import { useFetchContext } from "@/features/contexts/hooks/use-fetch-context";
-import { useUpdateContext } from "@/features/contexts/hooks/use-update-context";
-import { useTelemetry } from "@/hooks/use-telemetry";
-import { formatDateSimple } from "@/utils/format-date";
-import { TelemetryEvent } from "@/utils/telemetry";
+} from "@/shared/ui/primitives/sonner-helpers";
+import { TimeDisplayHoverCard } from "@/shared/ui/time-display-hover-card";
+import { EditContextFormSchema } from "@/features/contexts/ui/schema";
+import { useContextsNavigate } from "@/features/contexts/lib/use-contexts-navigate";
+import { useDeleteContext } from "@/features/contexts/lib/use-delete-context";
+import { useFetchContext } from "@/features/contexts/lib/use-fetch-context";
+import { useUpdateContext } from "@/features/contexts/lib/use-update-context";
+import { useTelemetry } from "@/shared/lib/hooks/use-telemetry";
+import { formatDateSimple } from "@/shared/lib/format-date";
+import { TelemetryEvent } from "@/shared/lib/telemetry";
 
 const toastOptions: ExternalToast = {
 	position: "bottom-right",

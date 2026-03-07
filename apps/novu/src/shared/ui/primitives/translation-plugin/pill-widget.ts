@@ -2,7 +2,7 @@ import { WarningCircle } from "@phosphor-icons/react";
 import { WidgetType } from "@uiw/react-codemirror";
 import { type CSSProperties, createElement } from "react";
 import { createRoot } from "react-dom/client";
-import { TranslateVariableIcon } from "@/components/icons/translate-variable";
+import { TranslateVariableIcon } from "@/shared/ui/icons/translate-variable";
 import { formatDisplayKey } from "./utils";
 
 export const TRANSLATION_PILL_HEIGHT = 18;

@@ -5,12 +5,12 @@ import {
 	AccordionTrigger,
 } from "@merge-rd/ui/components/accordion";
 import { Skeleton } from "@merge-rd/ui/components/skeleton";
-import type { LayoutResponseDto } from "@novu/shared";
+import type { LayoutResponseDto } from "@/shared";
 import { CaretRight, Path } from "@phosphor-icons/react";
-import { ConfirmationModal } from "@/components/confirmation-modal";
-import TruncatedText from "@/components/truncated-text";
-import { useEnvironment } from "@/context/environment/hooks";
-import { useFetchLayoutUsage } from "@/features/layouts/hooks/use-fetch-layout-usage";
+import { ConfirmationModal } from "@/shared/ui/confirmation-modal";
+import TruncatedText from "@/shared/ui/truncated-text";
+import { useEnvironment } from "@/app/context/environment/hooks";
+import { useFetchLayoutUsage } from "@/features/layouts/lib/use-fetch-layout-usage";
 
 type DeleteLayoutDialogProps = {
 	layout: LayoutResponseDto;

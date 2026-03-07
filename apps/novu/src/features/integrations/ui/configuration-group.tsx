@@ -3,9 +3,9 @@ import {
 	FeatureFlagsKeysEnum,
 	type IIntegration,
 	type IProviderConfig,
-} from "@novu/shared";
+} from "@/shared";
 import type { Control } from "react-hook-form";
-import { useFeatureFlag } from "@/hooks/use-feature-flag";
+import { useFeatureFlag } from "@/shared/lib/hooks/use-feature-flag";
 import { CrossChannelConfigsGroup } from "./cross-channel-configs-group";
 import { InboundWebhookGroup } from "./inbound-webhook-group";
 import type { IntegrationFormData } from "./types";

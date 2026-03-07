@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { TranslationSettingsDrawer } from "@/features/translations/components/translation-settings-drawer";
-import { useOnElementUnmount } from "@/hooks/use-on-element-unmount";
+import { TranslationSettingsDrawer } from "@/features/translations/ui/translation-settings-drawer";
+import { useOnElementUnmount } from "@/shared/lib/hooks/use-on-element-unmount";
 
 export function TranslationSettingsPage() {
 	const [open, setOpen] = useState(true);

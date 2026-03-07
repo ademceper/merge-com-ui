@@ -1,5 +1,5 @@
-import { ChannelTypeEnum, PushProviderIdEnum } from "../../../types";
-import { UTM_CAMPAIGN_QUERY_PARAM } from "../../../ui";
+import { ChannelTypeEnum, PushProviderIdEnum } from "@/shared/model";
+import { UTM_CAMPAIGN_QUERY_PARAM } from "@/shared/ui";
 import {
 	apnsGroupConfigurations,
 	expoGroupConfigurations,

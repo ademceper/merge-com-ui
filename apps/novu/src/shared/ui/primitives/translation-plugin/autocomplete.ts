@@ -6,16 +6,16 @@ import type {
 import {
 	TRANSLATION_DELIMITER_CLOSE,
 	TRANSLATION_TRIGGER_CHARACTER,
-} from "@novu/shared";
+} from "@/shared";
 import type { EditorView } from "@uiw/react-codemirror";
 import React from "react";
 import { createRoot } from "react-dom/client";
-import { NewTranslationKeyPreview } from "@/features/workflows/components/workflow-editor/steps/email/translations/new-translation-key-preview";
+import { NewTranslationKeyPreview } from "@/features/workflows/ui/workflow-editor/steps/email/translations/new-translation-key-preview";
 import type {
 	TranslationAutocompleteConfig,
 	TranslationCompletionOption,
 	TranslationKey,
-} from "@/types/translations";
+} from "@/shared/model/translations";
 import { isInsideVariableContext } from "./utils";
 
 /**

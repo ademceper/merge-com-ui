@@ -1,8 +1,8 @@
 import { useOrganization } from "@merge-rd/auth";
 import { type UseQueryOptions, useQuery } from "@tanstack/react-query";
-import { getSubscriberPreferences } from "@/api/subscribers";
-import { useEnvironment } from "@/context/environment/hooks";
-import { QueryKeys } from "@/utils/query-keys";
+import { getSubscriberPreferences } from "@/entities/subscriber/api/subscribers";
+import { useEnvironment } from "@/app/context/environment/hooks";
+import { QueryKeys } from "@/shared/lib/query-keys";
 
 export type GetSubscriberPreferencesResponse = Awaited<
 	ReturnType<typeof getSubscriberPreferences>

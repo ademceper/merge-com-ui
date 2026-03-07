@@ -1,5 +1,5 @@
-import type { ResourceOriginEnum, Slug, StepTypeEnum } from "../../types";
-import type { RuntimeIssue } from "../../utils/issues";
+import type { ResourceOriginEnum, Slug, StepTypeEnum } from "../../model";
+import type { RuntimeIssue } from "../../lib/utils/issues";
 import type { JSONSchemaDto } from "./json-schema-dto";
 
 export type StepResponseDto = {

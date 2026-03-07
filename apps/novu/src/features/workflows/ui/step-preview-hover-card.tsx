@@ -5,16 +5,16 @@ import {
 	type InAppRenderOutput,
 	type PushRenderOutput,
 	StepTypeEnum,
-} from "@novu/shared";
-import { ChatPreview } from "@/features/workflows/components/workflow-editor/steps/chat/chat-preview";
+} from "@/shared";
+import { ChatPreview } from "@/features/workflows/ui/workflow-editor/steps/chat/chat-preview";
 import {
 	EmailPreviewHeader,
 	EmailPreviewSubject,
-} from "@/features/workflows/components/workflow-editor/steps/email/email-preview";
-import { InboxPreview } from "@/features/workflows/components/workflow-editor/steps/in-app/inbox-preview";
-import { PushPreview } from "@/features/workflows/components/workflow-editor/steps/push/push-preview";
-import { SmsPhone } from "@/features/workflows/components/workflow-editor/steps/sms/sms-phone";
-import { Maily } from "./maily/maily";
+} from "@/features/workflows/ui/workflow-editor/steps/email/email-preview";
+import { InboxPreview } from "@/features/workflows/ui/workflow-editor/steps/in-app/inbox-preview";
+import { PushPreview } from "@/features/workflows/ui/workflow-editor/steps/push/push-preview";
+import { SmsPhone } from "@/features/workflows/ui/workflow-editor/steps/sms/sms-phone";
+import { Maily } from "@/shared/ui/maily/maily";
 
 export type StepType = StepTypeEnum;
 

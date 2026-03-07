@@ -5,13 +5,13 @@ import { standardSchemaResolver } from "@hookform/resolvers/standard-schema";
 import { useOrganization } from "@merge-rd/auth";
 import { Button } from "@merge-rd/ui/components/button";
 import { Separator } from "@merge-rd/ui/components/separator";
-import { type IEnvironment, PermissionsEnum } from "@novu/shared";
+import { type IEnvironment, PermissionsEnum } from "@/shared";
 import { CaretRight, Database, Plus } from "@phosphor-icons/react";
 import { type ComponentProps, useState } from "react";
 import { useForm } from "react-hook-form";
-import { Form, FormRoot } from "@/components/primitives/form/form";
-import { InlineToast } from "@/components/primitives/inline-toast";
-import { PermissionButton } from "@/components/primitives/permission-button";
+import { Form, FormRoot } from "@/shared/ui/primitives/form/form";
+import { InlineToast } from "@/shared/ui/primitives/inline-toast";
+import { PermissionButton } from "@/shared/ui/primitives/permission-button";
 import {
 	Sheet,
 	SheetContent,
@@ -19,15 +19,15 @@ import {
 	SheetHeader,
 	SheetMain,
 	SheetTitle,
-} from "@/components/primitives/sheet";
+} from "@/shared/ui/primitives/sheet";
 import {
 	showErrorToast,
 	showSuccessToast,
-} from "@/components/primitives/sonner-helpers";
-import { useFetchEnvironments } from "@/context/environment/hooks";
-import { useCreateEnvironment } from "@/features/settings/hooks/use-environments";
-import { useTelemetry } from "@/hooks/use-telemetry";
-import { TelemetryEvent } from "@/utils/telemetry";
+} from "@/shared/ui/primitives/sonner-helpers";
+import { useFetchEnvironments } from "@/app/context/environment/hooks";
+import { useCreateEnvironment } from "@/features/settings/lib/use-environments";
+import { useTelemetry } from "@/shared/lib/hooks/use-telemetry";
+import { TelemetryEvent } from "@/shared/lib/telemetry";
 import {
 	type EnvironmentFormData,
 	EnvironmentFormFields,

@@ -1,5 +1,5 @@
 import { Button } from "@merge-rd/ui/components/button";
-import type { IProviderConfig } from "@novu/shared";
+import type { IProviderConfig } from "@/shared";
 import { CaretRight } from "@phosphor-icons/react";
 import { ProviderIcon } from "./provider-icon";
 

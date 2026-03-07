@@ -1,13 +1,13 @@
-import type { LayoutResponseDto } from "@novu/shared";
+import type { LayoutResponseDto } from "@/shared";
 import {
 	type UseMutationOptions,
 	useMutation,
 	useQueryClient,
 } from "@tanstack/react-query";
-import { updateLayout } from "@/api/layouts";
-import { useEnvironment } from "@/context/environment/hooks";
-import { QueryKeys } from "@/utils/query-keys";
-import type { OmitEnvironmentFromParameters } from "@/utils/types";
+import { updateLayout } from "@/entities/layout/api/layouts";
+import { useEnvironment } from "@/app/context/environment/hooks";
+import { QueryKeys } from "@/shared/lib/query-keys";
+import type { OmitEnvironmentFromParameters } from "@/shared/lib/types";
 
 export type UpdateLayoutParameters = OmitEnvironmentFromParameters<
 	typeof updateLayout

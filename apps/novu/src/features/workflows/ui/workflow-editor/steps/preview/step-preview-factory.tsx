@@ -1,12 +1,12 @@
-import { ResourceOriginEnum, StepTypeEnum } from "@novu/shared";
+import { ResourceOriginEnum, StepTypeEnum } from "@/shared";
 import { memo } from "react";
-import { InlineToast } from "@/components/primitives/inline-toast";
-import { ChatPreview } from "@/features/workflows/components/workflow-editor/steps/chat/chat-preview";
-import { useStepEditor } from "@/features/workflows/components/workflow-editor/steps/context/step-editor-context";
-import { InboxPreview } from "@/features/workflows/components/workflow-editor/steps/in-app/inbox-preview";
-import { PushPreview } from "@/features/workflows/components/workflow-editor/steps/push/push-preview";
-import { SmsPreview } from "@/features/workflows/components/workflow-editor/steps/sms/sms-preview";
-import { STEP_TYPE_LABELS } from "@/utils/constants";
+import { InlineToast } from "@/shared/ui/primitives/inline-toast";
+import { ChatPreview } from "@/features/workflows/ui/workflow-editor/steps/chat/chat-preview";
+import { useStepEditor } from "@/features/workflows/ui/workflow-editor/steps/context/step-editor-context";
+import { InboxPreview } from "@/features/workflows/ui/workflow-editor/steps/in-app/inbox-preview";
+import { PushPreview } from "@/features/workflows/ui/workflow-editor/steps/push/push-preview";
+import { SmsPreview } from "@/features/workflows/ui/workflow-editor/steps/sms/sms-preview";
+import { STEP_TYPE_LABELS } from "@/shared/lib/constants";
 import { EmailCorePreview } from "./previews/email-preview-wrapper";
 
 const NoPreviewAvailable = memo(({ stepType }: { stepType: StepTypeEnum }) => {

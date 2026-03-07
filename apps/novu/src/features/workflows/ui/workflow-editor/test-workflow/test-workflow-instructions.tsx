@@ -5,11 +5,11 @@ import {
 	TabsList,
 	TabsTrigger,
 } from "@merge-rd/ui/components/tabs";
-import type { WorkflowResponseDto } from "@novu/shared";
-import { PermissionsEnum } from "@novu/shared";
+import type { WorkflowResponseDto } from "@/shared";
+import { PermissionsEnum } from "@/shared";
 import { useEffect, useState } from "react";
-import { CodeBlock, type Language } from "@/components/primitives/code-block";
-import { InlineToast } from "@/components/primitives/inline-toast";
+import { CodeBlock, type Language } from "@/shared/ui/primitives/code-block";
+import { InlineToast } from "@/shared/ui/primitives/inline-toast";
 import {
 	Sheet,
 	SheetContent,
@@ -17,20 +17,20 @@ import {
 	SheetHeader,
 	SheetMain,
 	SheetTitle,
-} from "@/components/primitives/sheet";
-import { ToastClose, ToastIcon } from "@/components/primitives/sonner";
+} from "@/shared/ui/primitives/sheet";
+import { ToastClose, ToastIcon } from "@/shared/ui/primitives/sonner";
 import {
 	showErrorToast,
 	showToast,
-} from "@/components/primitives/sonner-helpers";
+} from "@/shared/ui/primitives/sonner-helpers";
 import {
 	TimelineContainer,
 	TimelineStep,
-} from "@/components/primitives/timeline";
-import { ExternalLink } from "@/components/shared/external-link";
-import { useFetchApiKeys } from "@/features/settings/hooks/use-fetch-api-keys";
-import { useHasPermission } from "@/hooks/use-has-permission";
-import { useTelemetry } from "@/hooks/use-telemetry";
+} from "@/shared/ui/primitives/timeline";
+import { ExternalLink } from "@/shared/ui/shared/external-link";
+import { useFetchApiKeys } from "@/features/settings/lib/use-fetch-api-keys";
+import { useHasPermission } from "@/shared/lib/hooks/use-has-permission";
+import { useTelemetry } from "@/shared/lib/hooks/use-telemetry";
 import {
 	type CodeSnippet,
 	createCurlSnippet,
@@ -39,12 +39,12 @@ import {
 	createNodeJsSnippet,
 	createPhpSnippet,
 	createPythonSnippet,
-} from "@/utils/code-snippets";
-import { TelemetryEvent } from "@/utils/telemetry";
+} from "@/shared/lib/code-snippets";
+import { TelemetryEvent } from "@/shared/lib/telemetry";
 import {
 	generateWorkflowTriggerAIPrompt,
 	type PromptLanguage,
-} from "@/utils/workflow-trigger-ai-prompt";
+} from "@/shared/lib/workflow-trigger-ai-prompt";
 import type { SnippetLanguage } from "./types";
 
 interface TestWorkflowInstructionsProps {

@@ -3,14 +3,14 @@ import {
 	ResourceOriginEnum,
 	type Slug,
 	type WorkflowResponseDto,
-} from "@novu/shared";
+} from "@/shared";
 import type { Node } from "@xyflow/react";
 import "@xyflow/react/dist/style.css";
-import { getFirstErrorMessage } from "@/features/workflows/components/workflow-editor/step-utils";
-import { StepTypeEnum } from "@/utils/enums";
-import { buildRoute, ROUTES } from "@/utils/routes";
-import type { Step } from "@/utils/types";
-import { generateUUID } from "@/utils/uuid";
+import { getFirstErrorMessage } from "@/features/workflows/ui/workflow-editor/step-utils";
+import { StepTypeEnum } from "@/shared/lib/enums";
+import { buildRoute, ROUTES } from "@/shared/lib/routes";
+import type { Step } from "@/shared/lib/types";
+import { generateUUID } from "@/shared/lib/uuid";
 import { NODE_HEIGHT, NODE_WIDTH } from "./base-node";
 import { AddNodeEdge, type AddNodeEdgeType, DefaultEdge } from "./edges";
 import {

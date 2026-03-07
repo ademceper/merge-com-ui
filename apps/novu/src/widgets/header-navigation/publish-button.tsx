@@ -7,7 +7,7 @@ import {
 	DropdownMenuTrigger,
 } from "@merge-rd/ui/components/dropdown-menu";
 import { Skeleton } from "@merge-rd/ui/components/skeleton";
-import type { IEnvironment } from "@novu/shared";
+import type { IEnvironment } from "@/shared";
 import { CaretDown } from "@phosphor-icons/react";
 import { useQueryClient } from "@tanstack/react-query";
 import { AnimatePresence, motion } from "motion/react";
@@ -18,21 +18,21 @@ import type {
 	IEnvironmentDiffResponse,
 	IEnvironmentPublishResponse,
 	ResourceToPublish,
-} from "@/api/environments";
-import { Badge } from "@/components/primitives/badge";
-import { showErrorToast } from "@/components/primitives/sonner-helpers";
+} from "@/entities/environment/api/environments";
+import { Badge } from "@/shared/ui/primitives/badge";
+import { showErrorToast } from "@/shared/ui/primitives/sonner-helpers";
 import {
 	useEnvironment,
 	useFetchEnvironments,
-} from "@/context/environment/hooks";
+} from "@/app/context/environment/hooks";
 import {
 	useDiffEnvironments,
 	usePublishEnvironments,
-} from "@/features/settings/hooks/use-environments";
-import { QueryKeys } from "@/utils/query-keys";
-import { buildRoute, ROUTES } from "@/utils/routes";
-import { EnvironmentBranchIcon } from "../primitives/environment-branch-icon";
-import TruncatedText from "../truncated-text";
+} from "@/features/settings/lib/use-environments";
+import { QueryKeys } from "@/shared/lib/query-keys";
+import { buildRoute, ROUTES } from "@/shared/lib/routes";
+import { EnvironmentBranchIcon } from "@/shared/ui/primitives/environment-branch-icon";
+import TruncatedText from "@/shared/ui/truncated-text";
 import { NoChangesModal } from "./no-changes-modal";
 import { PublishModal } from "./publish-modal";
 import { PublishSuccessModal } from "./publish-success-modal";

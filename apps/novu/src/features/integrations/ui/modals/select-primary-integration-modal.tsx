@@ -1,13 +1,13 @@
-import type { IIntegration } from "@novu/shared";
+import type { IIntegration } from "@/shared";
 import { useState } from "react";
-import { ConfirmationModal } from "@/components/confirmation-modal";
+import { ConfirmationModal } from "@/shared/ui/confirmation-modal";
 import {
 	Select,
 	SelectContent,
 	SelectItem,
 	SelectTrigger,
 	SelectValue,
-} from "@/components/primitives/select";
+} from "@/shared/ui/primitives/select";
 
 export type SelectPrimaryIntegrationModalProps = {
 	isOpen: boolean;

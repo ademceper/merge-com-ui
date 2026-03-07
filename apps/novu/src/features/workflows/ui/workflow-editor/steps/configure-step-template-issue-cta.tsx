@@ -1,13 +1,13 @@
 import { Button } from "@merge-rd/ui/components/button";
 import { cn } from "@merge-rd/ui/lib/utils";
-import type { RuntimeIssue, StepResponseDto } from "@novu/shared";
+import type { RuntimeIssue, StepResponseDto } from "@/shared";
 import { ArrowUpRight } from "@phosphor-icons/react";
 import type { PropsWithChildren } from "react";
 import { Link } from "react-router-dom";
-import { ExternalLink } from "@/components/shared/external-link";
-import { SidebarContent } from "@/components/side-navigation/sidebar";
-import TruncatedText from "@/components/truncated-text";
-import { titleize } from "@/utils/titleize";
+import { ExternalLink } from "@/shared/ui/shared/external-link";
+import { SidebarContent } from "@/widgets/side-navigation/sidebar";
+import TruncatedText from "@/shared/ui/truncated-text";
+import { titleize } from "@/shared/lib/titleize";
 
 export const ConfigureStepTemplateIssuesContainer = (
 	props: PropsWithChildren,

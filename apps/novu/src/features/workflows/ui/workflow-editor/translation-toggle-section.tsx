@@ -3,19 +3,19 @@ import { CaretRight, Info } from "@phosphor-icons/react";
 import { motion } from "motion/react";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Badge } from "@/components/primitives/badge";
+import { Badge } from "@/shared/ui/primitives/badge";
 import {
 	Tooltip,
 	TooltipContent,
 	TooltipPortal,
 	TooltipTrigger,
-} from "@/components/primitives/tooltip";
-import { useEnvironment } from "@/context/environment/hooks";
-import { useFetchOrganizationSettings } from "@/features/settings/hooks/use-fetch-organization-settings";
-import { TranslationDrawer } from "@/features/translations/components/translation-drawer/translation-drawer";
-import { TranslationSwitch } from "@/features/translations/components/translation-switch";
-import { LocalizationResourceEnum } from "@/types/translations";
-import { buildRoute, ROUTES } from "@/utils/routes";
+} from "@/shared/ui/primitives/tooltip";
+import { useEnvironment } from "@/app/context/environment/hooks";
+import { useFetchOrganizationSettings } from "@/features/settings/lib/use-fetch-organization-settings";
+import { TranslationDrawer } from "@/features/translations/ui/translation-drawer/translation-drawer";
+import { TranslationSwitch } from "@/features/translations/ui/translation-switch";
+import { LocalizationResourceEnum } from "@/shared/model/translations";
+import { buildRoute, ROUTES } from "@/shared/lib/routes";
 
 interface TranslationToggleSectionProps {
 	value: boolean;

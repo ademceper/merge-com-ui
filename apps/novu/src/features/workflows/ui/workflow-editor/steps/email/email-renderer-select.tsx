@@ -1,16 +1,16 @@
 import { Atom, FileHtml, GitCommit } from "@phosphor-icons/react";
 import { useState } from "react";
 import { useFormContext, useWatch } from "react-hook-form";
-import { ConfirmationModal } from "@/components/confirmation-modal";
-import { Badge, BadgeIcon } from "@/components/primitives/badge";
-import { FormField } from "@/components/primitives/form/form";
+import { ConfirmationModal } from "@/shared/ui/confirmation-modal";
+import { Badge, BadgeIcon } from "@/shared/ui/primitives/badge";
+import { FormField } from "@/shared/ui/primitives/form/form";
 import {
 	Select,
 	SelectContent,
 	SelectItem,
 	SelectTrigger,
 	SelectValue,
-} from "@/components/primitives/select";
+} from "@/shared/ui/primitives/select";
 import { useSaveForm } from "../save-form-context";
 
 export const EmailRendererSelect = () => {

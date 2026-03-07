@@ -6,7 +6,7 @@ import {
 	DropdownMenuTrigger,
 } from "@merge-rd/ui/components/dropdown-menu";
 import { cn } from "@merge-rd/ui/lib/utils";
-import { FeatureFlagsKeysEnum, PermissionsEnum } from "@novu/shared";
+import { FeatureFlagsKeysEnum, PermissionsEnum } from "@/shared";
 import {
 	ChatTeardropDots,
 	DotsThree,
@@ -17,14 +17,14 @@ import {
 import { format } from "date-fns";
 import { motion } from "motion/react";
 import { Link } from "react-router-dom";
-import type { TopicSubscription } from "@/api/topics";
-import { CompactButton } from "@/components/primitives/button-compact";
-import { TimeDisplayHoverCard } from "@/components/time-display-hover-card";
-import TruncatedText from "@/components/truncated-text";
-import { useEnvironment } from "@/context/environment/hooks";
-import { useFeatureFlag } from "@/hooks/use-feature-flag";
-import { Protect } from "@/utils/protect";
-import { buildRoute, ROUTES } from "@/utils/routes";
+import type { TopicSubscription } from "@/entities/topic/api/topics";
+import { CompactButton } from "@/shared/ui/primitives/button-compact";
+import { TimeDisplayHoverCard } from "@/shared/ui/time-display-hover-card";
+import TruncatedText from "@/shared/ui/truncated-text";
+import { useEnvironment } from "@/app/context/environment/hooks";
+import { useFeatureFlag } from "@/shared/lib/hooks/use-feature-flag";
+import { Protect } from "@/shared/lib/protect";
+import { buildRoute, ROUTES } from "@/shared/lib/routes";
 
 type SubscriptionItemProps = {
 	subscription: TopicSubscription;

@@ -1,9 +1,9 @@
-import { FeatureFlagsKeysEnum } from "@novu/shared";
+import { FeatureFlagsKeysEnum } from "@/shared";
 import { Question } from "@phosphor-icons/react";
-import { useFeatureFlag } from "@/hooks/use-feature-flag";
-import { usePlainChat } from "@/hooks/use-plain-chat";
-import { IS_SELF_HOSTED } from "../../config";
-import { openInNewTab } from "../../utils/url";
+import { useFeatureFlag } from "@/shared/lib/hooks/use-feature-flag";
+import { usePlainChat } from "@/shared/lib/hooks/use-plain-chat";
+import { IS_SELF_HOSTED } from "@/shared/config";
+import { openInNewTab } from "@/shared/lib/url";
 import { HeaderButton } from "./header-button";
 import { SupportDrawer } from "./support-drawer";
 

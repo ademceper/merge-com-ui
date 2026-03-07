@@ -1,5 +1,5 @@
 import { motion } from "motion/react";
-import type { RequestLog } from "../../types/logs";
+import type { RequestLog } from "@/shared/model/logs";
 import { LogsDetailContent } from "./logs-detail-content";
 import { RequestLogDetailEmptyState } from "./logs-detail-empty";
 import { LogsDetailError } from "./logs-detail-error";

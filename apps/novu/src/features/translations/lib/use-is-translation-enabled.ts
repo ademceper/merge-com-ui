@@ -2,9 +2,9 @@ import {
 	ApiServiceLevelEnum,
 	FeatureNameEnum,
 	getFeatureForTierAsBoolean,
-} from "@novu/shared";
-import { IS_ENTERPRISE, IS_SELF_HOSTED } from "@/config";
-import { useFetchSubscription } from "@/hooks/use-fetch-subscription";
+} from "@/shared";
+import { IS_ENTERPRISE, IS_SELF_HOSTED } from "@/shared/config";
+import { useFetchSubscription } from "@/shared/lib/hooks/use-fetch-subscription";
 
 export const useIsTranslationEnabled = ({
 	isTranslationEnabledOnResource = false,

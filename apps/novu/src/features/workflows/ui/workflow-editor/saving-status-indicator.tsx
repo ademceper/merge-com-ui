@@ -1,7 +1,7 @@
 import { CheckCircle } from "@phosphor-icons/react";
 import { AnimatePresence, motion } from "motion/react";
 import React, { useEffect, useState } from "react";
-import { LoadingIndicator } from "@/components/primitives/loading-indicator";
+import { LoadingIndicator } from "@/shared/ui/primitives/loading-indicator";
 
 type SavingState = "saving" | "badge" | "checkbox" | "hidden";
 

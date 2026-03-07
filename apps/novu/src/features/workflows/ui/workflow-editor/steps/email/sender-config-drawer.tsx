@@ -9,8 +9,8 @@ import {
 	FormItem,
 	FormLabel,
 	FormMessage,
-} from "@/components/primitives/form/form";
-import { InputRoot, InputWrapper } from "@/components/primitives/input";
+} from "@/shared/ui/primitives/form/form";
+import { InputRoot, InputWrapper } from "@/shared/ui/primitives/input";
 import {
 	Sheet,
 	SheetContent,
@@ -19,17 +19,17 @@ import {
 	SheetHeader,
 	SheetMain,
 	SheetTitle,
-} from "@/components/primitives/sheet";
+} from "@/shared/ui/primitives/sheet";
 import {
 	Tooltip,
 	TooltipContent,
 	TooltipTrigger,
-} from "@/components/primitives/tooltip";
-import { usePrimaryEmailIntegration } from "@/features/integrations/hooks/use-primary-email-integration";
-import { ControlInput } from "@/features/workflows/components/workflow-editor/control-input";
-import { useSaveForm } from "@/features/workflows/components/workflow-editor/steps/save-form-context";
-import { useWorkflow } from "@/features/workflows/components/workflow-editor/workflow-provider";
-import { useParseVariables } from "@/hooks/use-parse-variables";
+} from "@/shared/ui/primitives/tooltip";
+import { usePrimaryEmailIntegration } from "@/features/integrations/lib/use-primary-email-integration";
+import { ControlInput } from "@/features/workflows/ui/workflow-editor/control-input";
+import { useSaveForm } from "@/features/workflows/ui/workflow-editor/steps/save-form-context";
+import { useWorkflow } from "@/features/workflows/ui/workflow-editor/workflow-provider";
+import { useParseVariables } from "@/shared/lib/hooks/use-parse-variables";
 
 type SenderConfigDrawerProps = {
 	open: boolean;

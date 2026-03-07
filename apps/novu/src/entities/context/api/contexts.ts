@@ -9,8 +9,8 @@ import type {
 	ContextType,
 	DirectionEnum,
 	IEnvironment,
-} from "@novu/shared";
-import { delV2, getV2, patchV2, postV2 } from "./api.client";
+} from "@/shared";
+import { delV2, getV2, patchV2, postV2 } from "@/shared/api/api.client";
 
 export const getContexts = async ({
 	environment,

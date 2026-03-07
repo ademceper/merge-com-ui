@@ -1,5 +1,5 @@
-import { ChannelTypeEnum, SmsProviderIdEnum } from "../../../types";
-import { UTM_CAMPAIGN_QUERY_PARAM } from "../../../ui";
+import { ChannelTypeEnum, SmsProviderIdEnum } from "@/shared/model";
+import { UTM_CAMPAIGN_QUERY_PARAM } from "@/shared/ui";
 import {
 	africasTalkingConfig,
 	afroSmsConfig,
