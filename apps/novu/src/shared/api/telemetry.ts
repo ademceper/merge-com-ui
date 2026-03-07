@@ -27,7 +27,7 @@ interface IdentifyUserProps {
 	anonymousId?: string | null;
 }
 
-export const identifyUser = async (userData: IdentifyUserProps) => {
+const identifyUser = async (userData: IdentifyUserProps) => {
 	try {
 		await post("/telemetry/identify", { body: userData });
 	} catch (error) {

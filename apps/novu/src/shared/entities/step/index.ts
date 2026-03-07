@@ -9,7 +9,7 @@ export enum DigestUnitEnum {
 	MONTHS = "months",
 }
 
-export function castUnitToDigestUnitEnum(
+function castUnitToDigestUnitEnum(
 	unit: string,
 ): DigestUnitEnum | undefined {
 	switch (unit) {
@@ -30,7 +30,7 @@ export function castUnitToDigestUnitEnum(
 	}
 }
 
-export enum DaysEnum {
+enum DaysEnum {
 	MONDAY = "monday",
 	TUESDAY = "tuesday",
 	WEDNESDAY = "wednesday",
@@ -54,12 +54,12 @@ export enum DelayTypeEnum {
 	DYNAMIC = "dynamic",
 }
 
-export enum MonthlyTypeEnum {
+enum MonthlyTypeEnum {
 	EACH = "each",
 	ON = "on",
 }
 
-export enum OrdinalEnum {
+enum OrdinalEnum {
 	FIRST = "1",
 	SECOND = "2",
 	THIRD = "3",
@@ -68,7 +68,7 @@ export enum OrdinalEnum {
 	LAST = "last",
 }
 
-export enum OrdinalValueEnum {
+enum OrdinalValueEnum {
 	DAY = "day",
 	WEEKDAY = "weekday",
 	WEEKEND = "weekend",
@@ -81,17 +81,17 @@ export enum OrdinalValueEnum {
 	SATURDAY = "saturday",
 }
 
-export interface IAmountAndUnit {
+interface IAmountAndUnit {
 	amount: number;
 	unit: DigestUnitEnum;
 }
 
-export interface IAmountAndUnitDigest {
+interface IAmountAndUnitDigest {
 	amount?: number;
 	unit?: DigestUnitEnum;
 }
 
-export interface IDigestBaseMetadata extends IAmountAndUnitDigest {
+interface IDigestBaseMetadata extends IAmountAndUnitDigest {
 	digestKey?: string;
 	digestValue?: string;
 }

@@ -8,7 +8,7 @@ export interface IResponseError {
 	statusCode: number;
 }
 
-export interface IPaginatedResponse<T = unknown> {
+interface IPaginatedResponse<T = unknown> {
 	data: T[];
 	hasMore: boolean;
 	totalCount: number;
@@ -16,7 +16,7 @@ export interface IPaginatedResponse<T = unknown> {
 	page: number;
 }
 
-export type KeysOfT<T> = keyof T;
+type KeysOfT<T> = keyof T;
 
 export class LimitOffsetPaginationDto<T, K extends KeysOfT<T>> {
 	limit: string;
@@ -25,21 +25,21 @@ export class LimitOffsetPaginationDto<T, K extends KeysOfT<T>> {
 	orderBy?: K;
 }
 
-export interface IPaginationParams {
+interface IPaginationParams {
 	page: number;
 	limit: number;
 }
 
-export interface IPaginationWithQueryParams extends IPaginationParams {
+interface IPaginationWithQueryParams extends IPaginationParams {
 	query?: string;
 }
 
-export enum OrderDirectionEnum {
+enum OrderDirectionEnum {
 	ASC = 1,
 	DESC = -1,
 }
 
-export enum OrderByEnum {
+enum OrderByEnum {
 	ASC = "ASC",
 	DESC = "DESC",
 }

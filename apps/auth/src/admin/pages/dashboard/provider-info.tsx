@@ -14,7 +14,7 @@ import {
 import { Button } from "@merge-rd/ui/components/button";
 import { Input } from "@merge-rd/ui/components/input";
 import { useMemo, useState } from "react";
-import { useTranslation } from "react-i18next";
+import { useTranslation } from "@merge-rd/i18n";
 import { useServerInfo } from "../../app/providers/server-info/server-info-provider";
 import { CaretDown, CaretRight, MagnifyingGlass } from "@phosphor-icons/react";
 

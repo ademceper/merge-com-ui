@@ -29,7 +29,7 @@ const smsConfigBase: IConfigCredential[] = [
 
 const pushConfigBase: IConfigCredential[] = [];
 
-export const mailJsConfig: IConfigCredential[] = [
+const mailJsConfig: IConfigCredential[] = [
 	{
 		key: CredentialsKeyEnum.ApiKey,
 		displayName: "API Key",

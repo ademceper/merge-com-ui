@@ -1,6 +1,6 @@
 import React from "react";
 
-export function assertContextExists<T>(
+function assertContextExists<T>(
 	contextVal: unknown,
 	msgOrCtx: string | React.Context<T>,
 ): asserts contextVal {

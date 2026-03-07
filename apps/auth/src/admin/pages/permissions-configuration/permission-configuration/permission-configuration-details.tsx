@@ -5,8 +5,8 @@ import { Button, buttonVariants } from "@merge-rd/ui/components/button";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@merge-rd/ui/components/dropdown-menu";
 import { useMemo, useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
-import { useTranslation } from "react-i18next";
-import { Link, useNavigate } from "react-router-dom";
+import { useTranslation } from "@merge-rd/i18n";
+import { Link, useNavigate } from "@tanstack/react-router";
 import { useAdminClient } from "../../../app/admin-client";
 import { useConfirmDialog } from "../../../shared/ui/confirm-dialog/confirm-dialog";
 import { FormAccess } from "../../../shared/ui/form/form-access";
@@ -160,14 +160,14 @@ const [permission, setPermission] = useState<PolicyRepresentation>();
                     newPermission
                 );
                 setPermission(result);
-                navigate(
-                    toPermissionConfigurationDetails({
+                navigate({
+                    to: toPermissionConfigurationDetails({
                         realm,
                         permissionClientId: permissionClientId,
                         permissionId: result.id!,
                         resourceType
-                    })
-                );
+                    }) as string
+                });
             }
 
             toast.success(t(permissionId ? "updatePermissionSuccess" : "createPermissionSuccess"));
@@ -191,13 +191,13 @@ const [permission, setPermission] = useState<PolicyRepresentation>();
                     permissionId: permissionId
                 });
                 toast.success(t("permissionDeletedSuccess"));
-                navigate(
-                    toPermissionsConfigurationTabs({
+                navigate({
+                    to: toPermissionsConfigurationTabs({
                         realm,
                         permissionClientId,
                         tab: "permissions"
-                    })
-                );
+                    }) as string
+                });
             } catch (error) {
                 toast.error(t("permissionDeletedError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
             }
@@ -266,7 +266,7 @@ const [permission, setPermission] = useState<PolicyRepresentation>();
                                     realm,
                                     permissionClientId,
                                     tab: "permissions"
-                                })}
+                                }) as string}
                             >
                                 {t("cancel")}
                             </Link>

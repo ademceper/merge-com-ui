@@ -1,26 +1,11 @@
-import { lazy } from "react";
-import type { Path } from "react-router-dom";
 import { generateEncodedPath } from "../../../shared/lib/generateEncodedPath";
-import type { AppRouteObject } from "../../../app/routes";
 
 export type ThemesTabType = "settings" | "lightColors" | "darkColors";
 
-export type ThemesParams = {
+type ThemesParams = {
     realm: string;
     tab: ThemesTabType;
 };
 
-const RealmSettingsSection = lazy(() => import("../realm-settings-section"));
-
-export const ThemeTabRoute: AppRouteObject = {
-    path: "/:realm/realm-settings/themes/:tab",
-    element: <RealmSettingsSection />,
-    breadcrumb: t => t("themes"),
-    handle: {
-        access: "view-realm"
-    }
-};
-
-export const toThemesTab = (params: ThemesParams): Partial<Path> => ({
-    pathname: generateEncodedPath(ThemeTabRoute.path, params)
-});
+export const toThemesTab = (params: ThemesParams): string =>
+    generateEncodedPath("/:realm/realm-settings/themes/:tab", params);

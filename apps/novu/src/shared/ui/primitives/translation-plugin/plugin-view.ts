@@ -6,7 +6,7 @@ import {
 	type Range,
 } from "@uiw/react-codemirror";
 import type { MutableRefObject } from "react";
-import { validateTranslationKey } from "@/features/translations/lib/use-translation-validation";
+import { validateTranslationKey } from "@/shared/lib/translation-validation";
 import type { TranslationKey } from "@/shared/model/translations";
 import { TranslationPillWidget } from "./pill-widget";
 import { isTypingTranslation, parseTranslation } from "./utils";

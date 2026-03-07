@@ -11,8 +11,8 @@ import { Label } from "@merge-rd/ui/components/label";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@merge-rd/ui/components/dropdown-menu";
 import { useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
-import { useTranslation } from "react-i18next";
-import { Link, useNavigate } from "react-router-dom";
+import { useTranslation } from "@merge-rd/i18n";
+import { Link, useNavigate } from "@tanstack/react-router";
 import { useAdminClient } from "../../../app/admin-client";
 import { DefaultSwitchControl } from "../../../shared/ui/switch-control";
 import { useConfirmDialog } from "../../../shared/ui/confirm-dialog/confirm-dialog";
@@ -91,7 +91,7 @@ const form = useForm<SubmittedResource>({
             } else {
                 const result = await adminClient.clients.createResource({ id }, resource);
                 setResource(resource);
-                navigate(toResourceDetails({ realm, id, resourceId: result._id! }));
+                navigate({ to: toResourceDetails({ realm, id, resourceId: result._id! }) as string });
             }
             toast.success(
                 t((resourceId ? "update" : "create") + "ResourceSuccess")
@@ -130,7 +130,7 @@ const form = useForm<SubmittedResource>({
                     resourceId: resourceId!
                 });
                 toast.success(t("resourceDeletedSuccess"));
-                navigate(toAuthorizationTab({ realm, clientId: id, tab: "resources" }));
+                navigate({ to: toAuthorizationTab({ realm, clientId: id, tab: "resources" }) as string });
             } catch (error) {
                 toast.error(t("resourceDeletedError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
             }
@@ -250,7 +250,7 @@ const form = useForm<SubmittedResource>({
                                         realm,
                                         clientId: id,
                                         tab: "resources"
-                                    })}
+                                    }) as string}
                                 >
                                     {t("cancel")}
                                 </Link>

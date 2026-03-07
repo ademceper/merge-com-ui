@@ -1,7 +1,7 @@
 import { createContext } from "react";
 import type { EscapeKeyManagerPriority } from "./priority";
 
-export type EscapeKeyManagerContextType = {
+type EscapeKeyManagerContextType = {
 	registerEscapeHandler: (
 		id: string,
 		handler: () => void,

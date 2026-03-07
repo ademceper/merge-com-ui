@@ -2,7 +2,7 @@ import { type Editor, useEditorState } from "@tiptap/react";
 import deepEql from "fast-deep-equal";
 import type { AllowedLogoAlignment } from "../../nodes/logo/logo";
 
-export const DEFAULT_TEXT_COLOR = "#374151";
+const DEFAULT_TEXT_COLOR = "#374151";
 
 export const useTextMenuState = (editor: Editor) => {
 	const states = useEditorState({

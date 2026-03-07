@@ -2,9 +2,9 @@ import { SessionExpirationWarningOverlay } from "../../shared/session-expiration
 import KeycloakAdminClient from "@keycloak/keycloak-admin-client";
 import { mainPageContentId, useEnvironment } from "../../shared/keycloak-ui-shared";
 import { SidebarInset, SidebarPage, SidebarProvider } from "@merge-rd/ui/components/sidebar";
-import type { ComponentType } from "react";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { PropsWithChildren, Suspense, useEffect, useState } from "react";
-import { Outlet, useMatches } from "react-router-dom";
+import { Outlet, useMatches } from "@tanstack/react-router";
 
 import {
     ErrorBoundaryFallback,
@@ -25,9 +25,16 @@ import { AuthWall } from "./root/auth-wall";
 import { Banners } from "../widgets/banners";
 import { AdminHeader } from "../widgets/admin-header";
 
-const OutletComponent = Outlet as ComponentType;
+const queryClient = new QueryClient({
+    defaultOptions: {
+        queries: {
+            refetchOnWindowFocus: false,
+            retry: false
+        }
+    }
+});
 
-export const AppContexts = ({ children }: PropsWithChildren) => (
+const AppContexts = ({ children }: PropsWithChildren) => (
     <ErrorBoundaryProvider>
         <ErrorBoundaryFallback fallback={ErrorRenderer}>
             <ServerInfoProvider>
@@ -64,28 +71,31 @@ export const App = () => {
 
     const matches = useMatches();
     const isNotFound = matches.some(
-        (m) => (m.handle as { isNotFound?: true } | undefined)?.isNotFound === true
+        (m: any) => m.routeContext?.isNotFound === true || (m as any).handle?.isNotFound === true
     );
 
     if (!adminClient) return <KeycloakSpinner />;
 
     if (isNotFound) {
         return (
-            <AdminClientContext.Provider value={{ keycloak, adminClient }}>
-                <AppContexts>
-                    <Banners />
-                    <div className="min-h-svh flex flex-1 flex-col">
-                        <OutletComponent />
-                    </div>
-                    <SessionExpirationWarningOverlay warnUserSecondsBeforeAutoLogout={45} />
-                </AppContexts>
-            </AdminClientContext.Provider>
+            <QueryClientProvider client={queryClient}>
+                <AdminClientContext.Provider value={{ keycloak, adminClient }}>
+                    <AppContexts>
+                        <Banners />
+                        <div className="min-h-svh flex flex-1 flex-col">
+                            <Outlet />
+                        </div>
+                        <SessionExpirationWarningOverlay warnUserSecondsBeforeAutoLogout={45} />
+                    </AppContexts>
+                </AdminClientContext.Provider>
+            </QueryClientProvider>
         );
     }
 
     return (
-        <AdminClientContext.Provider value={{ keycloak, adminClient }}>
-            <AppContexts>
+        <QueryClientProvider client={queryClient}>
+            <AdminClientContext.Provider value={{ keycloak, adminClient }}>
+                <AppContexts>
                 <Banners />
                 <SidebarProvider defaultOpen={true} className="h-svh bg-sidebar overflow-hidden" data-scale-wrapper>
                     <AdminAppSidebar />
@@ -97,7 +107,7 @@ export const App = () => {
                             <ErrorBoundaryFallback fallback={ErrorRenderer}>
                                 <Suspense fallback={<KeycloakSpinner />}>
                                     <AuthWall>
-                                        <OutletComponent />
+                                        <Outlet />
                                     </AuthWall>
                                 </Suspense>
                             </ErrorBoundaryFallback>
@@ -107,5 +117,6 @@ export const App = () => {
                 <SessionExpirationWarningOverlay warnUserSecondsBeforeAutoLogout={45} />
             </AppContexts>
         </AdminClientContext.Provider>
+        </QueryClientProvider>
     );
 };

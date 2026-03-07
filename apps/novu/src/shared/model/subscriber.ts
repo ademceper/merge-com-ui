@@ -51,7 +51,7 @@ export interface ISubscriberChannel extends IChannelBase {
 /**
  * @deprecated: use ChannelEndpoint instead
  */
-export interface IChannelCredentials {
+interface IChannelCredentials {
 	phoneNumber?: string;
 	webhookUrl?: string;
 	channel?: string;
@@ -63,7 +63,7 @@ export type SubscriberId = string;
 
 export type SubscriberCustomData = CustomDataType;
 
-export interface ISubscriberPayload {
+interface ISubscriberPayload {
 	firstName?: string | null;
 	lastName?: string | null;
 	email?: string | null;
@@ -82,17 +82,17 @@ export interface ISubscribersDefine extends ISubscriberPayload {
 	subscriberId: string;
 }
 
-export interface ISubscribersSource extends ISubscribersDefine {
+interface ISubscribersSource extends ISubscribersDefine {
 	_subscriberSource: SubscriberSourceEnum;
 }
 
-export enum SubscriberSourceEnum {
+enum SubscriberSourceEnum {
 	BROADCAST = "broadcast",
 	SINGLE = "single",
 	TOPIC = "topic",
 }
 
-export enum PreferenceOverrideSourceEnum {
+enum PreferenceOverrideSourceEnum {
 	SUBSCRIBER = "subscriber",
 	TEMPLATE = "template",
 	WORKFLOW_OVERRIDE = "workflowOverride",

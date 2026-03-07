@@ -20,10 +20,10 @@ import {
 import { Button } from "@merge-rd/ui/components/button";
 import { DotsThreeVertical } from "@phosphor-icons/react";
 import { useState } from "react";
-import { Trans, useTranslation } from "react-i18next";
-import { Link, useNavigate } from "react-router-dom";
+import { Trans, useTranslation } from "@merge-rd/i18n";
+import { Link, useNavigate } from "@tanstack/react-router";
 import { useAdminClient } from "../../../app/admin-client";
-import { toPermissionDetails } from "../../../pages/clients/routes/permission-details";
+import { toPermissionDetails } from "../../lib/route-helpers";
 import { KeycloakSpinner } from "../../../../shared/keycloak-ui-shared";
 import { useRealm } from "../../../app/providers/realm-context/realm-context";
 import useLocaleSort from "../../lib/useLocaleSort";
@@ -210,7 +210,7 @@ export const PermissionsTab = ({ id, type }: PermissionsTabProps) => {
                                                         id: realmId,
                                                         permissionType: "scope",
                                                         permissionId: id
-                                                    })}
+                                                    }) as string}
                                                 >
                                                     {name}
                                                 </Link>
@@ -234,15 +234,15 @@ export const PermissionsTab = ({ id, type }: PermissionsTabProps) => {
                                                     <DropdownMenuContent align="end">
                                                         <DropdownMenuItem
                                                             onClick={() =>
-                                                                navigate(
-                                                                    toPermissionDetails({
+                                                                navigate({
+                                                                    to: toPermissionDetails({
                                                                         realm,
                                                                         id: realmId,
                                                                         permissionType:
                                                                             "scope",
                                                                         permissionId: id
-                                                                    })
-                                                                )
+                                                                    }) as string
+                                                                })
                                                             }
                                                         >
                                                             {t("edit")}

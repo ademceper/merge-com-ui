@@ -15,8 +15,8 @@ import {
 import { Info, SignOut, ProhibitInset } from "@phosphor-icons/react";
 import type { ReactNode } from "react";
 import { useMemo } from "react";
-import { useTranslation } from "react-i18next";
-import { Link, useMatch, useNavigate } from "react-router-dom";
+import { useTranslation } from "@merge-rd/i18n";
+import { Link, useNavigate, useLocation } from "@tanstack/react-router";
 import { useAdminClient } from "../../app/admin-client";
 import { getErrorDescription, getErrorMessage } from "../../../shared/keycloak-ui-shared";
 import { toast } from "sonner";
@@ -24,14 +24,14 @@ import { useConfirmDialog } from "../../shared/ui/confirm-dialog/confirm-dialog"
 import { useRealm } from "../../app/providers/realm-context/realm-context";
 import { useWhoAmI } from "../../app/providers/whoami/who-am-i";
 import { toClient } from "../clients/routes/client";
-import { UserRoute, toUser } from "../user/routes/user";
+import { toUser } from "../user/routes/user";
 import { toUsers } from "../user/routes/users";
 import { isLightweightUser } from "../user/utils";
 import useFormatDate from "../../shared/lib/useFormatDate";
 
-export type ColumnName = "username" | "start" | "lastAccess" | "clients" | "type" | "ipAddress";
+type ColumnName = "username" | "start" | "lastAccess" | "clients" | "type" | "ipAddress";
 
-export type SessionsTableProps = {
+type SessionsTableProps = {
     sessions: UserSessionRepresentation[];
     refresh: () => void;
     toolbar?: ReactNode;
@@ -56,7 +56,8 @@ export default function SessionsTable({
     const { t } = useTranslation();
     const formatDate = useFormatDate();
     const refreshInternal = () => refresh();
-    const isOnUserPage = !!useMatch(UserRoute.path);
+    const location = useLocation();
+    const isOnUserPage = location.pathname.includes("/users/");
 
     const [toggleLogoutDialog, LogoutConfirm] = useConfirmDialog({
         titleKey: "logoutAllSessions",
@@ -66,7 +67,7 @@ export default function SessionsTable({
             try {
                 await adminClient.users.logout({ id: logoutUser! });
                 if (isOnUserPage && logoutUser && isLightweightUser(logoutUser)) {
-                    navigate(toUsers({ realm }));
+                    navigate({ to: toUsers({ realm }) as string });
                 } else {
                     refreshInternal();
                 }
@@ -96,7 +97,7 @@ export default function SessionsTable({
         if (session.userId === whoAmI.userId) {
             await keycloak.logout({ redirectUri: "" });
         } else if (isOnUserPage && session.userId && isLightweightUser(session.userId)) {
-            navigate(toUsers({ realm }));
+            navigate({ to: toUsers({ realm }) as string });
         } else {
             refreshInternal();
         }
@@ -112,7 +113,7 @@ export default function SessionsTable({
                     const r = row.original;
                     return (
                         <Link
-                            to={toUser({ realm, id: r.userId!, tab: "sessions" })}
+                            to={toUser({ realm, id: r.userId!, tab: "sessions" }) as string}
                             className="text-primary hover:underline"
                         >
                             {r.username}
@@ -164,7 +165,7 @@ export default function SessionsTable({
                         {Object.entries(row.original.clients ?? {}).map(([clientId, client]) => (
                             <Link
                                 key={clientId}
-                                to={toClient({ realm, clientId, tab: "sessions" })}
+                                to={toClient({ realm, clientId, tab: "sessions" }) as string}
                                 className="text-primary hover:underline"
                             >
                                 {client}

@@ -17,7 +17,7 @@ import type { Keycloak } from "oidc-spa/keycloak-js";
 import { joinPath } from "../lib/joinPath";
 import { CONTENT_TYPE_HEADER, CONTENT_TYPE_JSON } from "./constants";
 
-export type RequestOptions = {
+type RequestOptions = {
     signal?: AbortSignal;
     getAccessToken?: () => Promise<string | undefined>;
     method?: "POST" | "PUT" | "DELETE";
@@ -61,12 +61,12 @@ export async function request(
     });
 }
 
-export const url = (environment: BaseEnvironment, path: string) =>
+const url = (environment: BaseEnvironment, path: string) =>
     new URL(
         joinPath(environment.serverBaseUrl, "realms", environment.realm, "account", path)
     );
 
-export const token = (keycloak: Keycloak) =>
+const token = (keycloak: Keycloak) =>
     async function getAccessToken() {
         try {
             await keycloak.updateToken(5);

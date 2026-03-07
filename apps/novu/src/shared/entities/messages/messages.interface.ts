@@ -5,7 +5,7 @@ import type { INotificationTemplate } from "../notification-template";
 
 export interface IMessageCTA extends IMessageCTADto {}
 
-export interface IMessageAction extends IMessageActionDto {}
+interface IMessageAction extends IMessageActionDto {}
 
 export interface IMessage {
 	_id: string;

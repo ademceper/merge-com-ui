@@ -1,5 +1,5 @@
 import { Fragment, useState } from "react";
-import { useTranslation } from "react-i18next";
+import { useTranslation } from "@merge-rd/i18n";
 import { Alert, AlertTitle } from "@merge-rd/ui/components/alert";
 import { Button } from "@merge-rd/ui/components/button";
 import { Separator } from "@merge-rd/ui/components/separator";

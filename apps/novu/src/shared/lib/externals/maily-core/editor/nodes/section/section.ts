@@ -3,7 +3,7 @@ import { mergeAttributes, Node } from "@tiptap/core";
 import { updateAttributes } from "../../utils/update-attribute";
 
 export const DEFAULT_SECTION_BACKGROUND_COLOR = "#f7f7f7";
-export const DEFAULT_SECTION_ALIGN = "left";
+const DEFAULT_SECTION_ALIGN = "left";
 export const DEFAULT_SECTION_BORDER_WIDTH = 0;
 export const DEFAULT_SECTION_BORDER_COLOR = "#e2e2e2";
 export const DEFAULT_SECTION_BORDER_RADIUS = 6;

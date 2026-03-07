@@ -15,7 +15,7 @@ import {
 import { DataTable, type ColumnDef } from "@/admin/shared/ui/data-table";
 import { CheckCircle } from "@phosphor-icons/react";
 import { useState } from "react";
-import { useTranslation } from "react-i18next";
+import { useTranslation } from "@merge-rd/i18n";
 import { useAdminClient } from "../../../app/admin-client";
 import { fetchUsedBy } from "../../../shared/ui/role-mapping/resource";
 import { useRealm } from "../../../app/providers/realm-context/realm-context";

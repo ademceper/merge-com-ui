@@ -6,7 +6,7 @@
  */
 
 import { useEnvironment } from "../../shared/keycloak-ui-shared";
-import { useTranslation } from "react-i18next";
+import { useTranslation } from "@merge-rd/i18n";
 import { Link } from "@merge-rd/ui/components/link";
 import { useThemeToggle } from "@merge-rd/ui/components/theme-toggle";
 import type { Environment } from "../app/environment";

@@ -8,7 +8,7 @@ import type {
 import type { RuntimeIssue } from "../../lib/utils/issues";
 import type { Controls, JSONSchemaDto } from "../workflows";
 
-export class LayoutDto {
+class LayoutDto {
 	_id?: string;
 	_organizationId: string;
 	_environmentId: string;
@@ -58,7 +58,7 @@ export type DuplicateLayoutDto = {
 	isTranslationEnabled?: boolean;
 };
 
-export type LayoutCreateAndUpdateKeys =
+type LayoutCreateAndUpdateKeys =
 	| keyof CreateLayoutDto
 	| keyof UpdateLayoutDto;
 
@@ -82,6 +82,6 @@ export type ListLayoutsResponse = {
 	totalCount: number;
 };
 
-export class LayoutIssuesDto {
+class LayoutIssuesDto {
 	controls?: Record<string, RuntimeIssue[]>;
 }

@@ -3,7 +3,7 @@ import { createNamedContext, useRequiredContext } from "../../shared/keycloak-ui
 import type { Keycloak } from "oidc-spa/keycloak-js";
 import type { Environment } from "./environment";
 
-export type AdminClientProps = {
+type AdminClientProps = {
     keycloak: Keycloak;
     adminClient: KeycloakAdminClient;
 };

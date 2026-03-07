@@ -2,7 +2,7 @@ import { RequiredActionAlias } from "@keycloak/keycloak-admin-client/lib/defs/re
 import type UserRepresentation from "@keycloak/keycloak-admin-client/lib/defs/userRepresentation";
 import { Label } from "@merge-rd/ui/components/label";
 import { FormProvider, useForm } from "react-hook-form";
-import { useTranslation } from "react-i18next";
+import { useTranslation } from "@merge-rd/i18n";
 import { FormErrorText, PasswordInput } from "../../../../shared/keycloak-ui-shared";
 import { useAdminClient } from "../../../app/admin-client";
 import { DefaultSwitchControl } from "../../../shared/ui/switch-control";
@@ -22,7 +22,7 @@ type ResetPasswordDialogProps = {
     onClose: () => void;
 };
 
-export type CredentialsForm = {
+type CredentialsForm = {
     password: string;
     passwordConfirmation: string;
     temporaryPassword: boolean;

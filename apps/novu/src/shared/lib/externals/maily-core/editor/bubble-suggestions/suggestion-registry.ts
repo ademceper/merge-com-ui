@@ -87,7 +87,7 @@ class SuggestionRegistry {
 }
 
 // Global registry instance
-export const suggestionRegistry = new SuggestionRegistry();
+const suggestionRegistry = new SuggestionRegistry();
 
 // Convenience functions
 export function registerSuggestionProvider(

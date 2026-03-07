@@ -36,10 +36,10 @@ export type VariablesFunction = (
 export type Variables = Array<Variable> | VariablesFunction;
 
 export const DEFAULT_VARIABLE_TRIGGER_CHAR = "@";
-export const DEFAULT_VARIABLES: Variables = [];
+const DEFAULT_VARIABLES: Variables = [];
 export const DEFAULT_RENDER_VARIABLE_FUNCTION: RenderVariableFunction =
 	DefaultRenderVariable;
-export const DEFAULT_VARIABLE_SUGGESTION_POPOVER = VariableSuggestionsPopover;
+const DEFAULT_VARIABLE_SUGGESTION_POPOVER = VariableSuggestionsPopover;
 
 export type RenderVariableOptions = {
 	variable: Variable;
@@ -75,11 +75,11 @@ export type VariableOptions = {
 	variableSuggestionsPopover: VariableSuggestionsPopoverType;
 };
 
-export type VariableStorage = {
+type VariableStorage = {
 	popover: boolean;
 };
 
-export const VariablePluginKey = new PluginKey("variable");
+const VariablePluginKey = new PluginKey("variable");
 
 export const VariableExtension = Node.create<VariableOptions, VariableStorage>({
 	name: "variable",

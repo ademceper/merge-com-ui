@@ -7,7 +7,7 @@ import {
 	DEFAULT_SECTION_SHOW_IF_KEY,
 } from "../section/section";
 
-export const DEFAULT_COLUMNS_GAP = 8;
+const DEFAULT_COLUMNS_GAP = 8;
 
 interface ColumnsAttributes {
 	showIfKey: string;

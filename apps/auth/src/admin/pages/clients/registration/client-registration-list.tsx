@@ -19,8 +19,8 @@ import {
 } from "@/admin/shared/ui/data-table";
 import { PencilSimple, Plus, Trash } from "@phosphor-icons/react";
 import { useState } from "react";
-import { useTranslation } from "react-i18next";
-import { useParams } from "react-router-dom";
+import { useTranslation } from "@merge-rd/i18n";
+import { useParams } from "@tanstack/react-router";
 import { useAdminClient } from "../../../app/admin-client";
 import { useRealm } from "../../../app/providers/realm-context/realm-context";
 import { ClientRegistrationParams } from "../routes/client-registration-path";
@@ -35,7 +35,7 @@ export const ClientRegistrationList = ({ subType }: ClientRegistrationListProps)
     const { adminClient } = useAdminClient();
 
     const { t } = useTranslation();
-    const { subTab: _subTab } = useParams<ClientRegistrationParams>();
+    const { subTab: _subTab } = useParams({ strict: false }) as ClientRegistrationParams;
     const { realm } = useRealm();
     const [policies, setPolicies] = useState<ComponentRepresentation[]>([]);
     const [selectedPolicy, setSelectedPolicy] = useState<ComponentRepresentation>();

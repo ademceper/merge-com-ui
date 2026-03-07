@@ -1,7 +1,7 @@
 import { ApiServiceLevelEnum } from "@/shared/model";
 
 // This is a large value on purpose that should surpass any realistic system limits
-export const UNLIMITED_VALUE = 9999;
+const UNLIMITED_VALUE = 9999;
 
 export enum FeatureNameEnum {
 	// Platform Features
@@ -64,7 +64,7 @@ export enum FeatureNameEnum {
 	WEBHOOKS = "webhooks",
 }
 
-export type FeatureValue =
+type FeatureValue =
 	| string
 	| number
 	| null
@@ -763,7 +763,7 @@ const novuServiceTiers: Record<
 	},
 };
 
-export function isDetailedPriceListItem(
+function isDetailedPriceListItem(
 	item: FeatureValue,
 ): item is DetailedPriceListItem {
 	return (
@@ -776,7 +776,7 @@ export function isDetailedPriceListItem(
 	);
 }
 
-export function getFeatureForTier(
+function getFeatureForTier(
 	featureName: FeatureNameEnum,
 	tier: ApiServiceLevelEnum,
 ): FeatureValue {
@@ -923,7 +923,7 @@ function getTextFromItem(feature: DetailedPriceListItem) {
 	return `${String(feature.value)} ${feature.timeSuffix || ""}`;
 }
 
-export function getFeatureForTierAsText(
+function getFeatureForTierAsText(
 	featureName: FeatureNameEnum,
 	tier: ApiServiceLevelEnum,
 ): string {
@@ -941,7 +941,7 @@ export function getFeatureForTierAsText(
 	return JSON.stringify(feature);
 }
 
-export function getFeatureForTierAsDateRangeValue(
+function getFeatureForTierAsDateRangeValue(
 	featureName: FeatureNameEnum,
 	tier: ApiServiceLevelEnum,
 ): string {

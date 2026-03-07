@@ -3,8 +3,8 @@ import { getErrorDescription, getErrorMessage, TextControl, useFetch } from "../
 import { toast } from "sonner";
 import { Button } from "@merge-rd/ui/components/button";
 import { FormProvider, useForm } from "react-hook-form";
-import { useTranslation } from "react-i18next";
-import { useNavigate } from "react-router-dom";
+import { useTranslation } from "@merge-rd/i18n";
+import { useNavigate } from "@tanstack/react-router";
 import { useAdminClient } from "../../../../app/admin-client";
 import { DynamicComponents } from "../../../../shared/ui/dynamic/dynamic-components";
 import { FormAccess } from "../../../../shared/ui/form/form-access";
@@ -131,7 +131,7 @@ export default function KeyProviderFormPage() {
                 <KeyProviderForm
                     {...params}
                     onClose={() =>
-                        navigate(toKeysTab({ realm: params.realm, tab: "providers" }))
+                        navigate({ to: toKeysTab({ realm: params.realm, tab: "providers" }) as string })
                     }
                 />
             </div>

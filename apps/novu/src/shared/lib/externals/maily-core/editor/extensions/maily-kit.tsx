@@ -27,7 +27,7 @@ import { Color } from "./color";
 import { HorizontalRule } from "./horizontal-rule";
 import { LinkCardExtension, type LinkCardOptions } from "./link-card";
 
-export type MailyKitOptions = {
+type MailyKitOptions = {
 	linkCard?: Partial<LinkCardOptions> | false;
 	repeat?: Partial<{}> | false;
 	section?: Partial<{}> | false;

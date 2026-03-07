@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useFormContext, useWatch } from "react-hook-form";
 import { ConfirmationModal } from "@/shared/ui/confirmation-modal";
 import { FormField } from "@/shared/ui/primitives/form/form";
-import { isEmptyMailyJson } from "./maily/maily-utils";
+import { isEmptyMailyJson } from "@/widgets/maily-editor/maily-utils";
 
 export const EmailEditorSelect = ({
 	isLoading,

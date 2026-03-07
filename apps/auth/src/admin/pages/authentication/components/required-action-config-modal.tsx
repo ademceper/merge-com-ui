@@ -15,7 +15,7 @@ import {
 import { Trash } from "@phosphor-icons/react";
 import { useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
-import { useTranslation } from "react-i18next";
+import { useTranslation } from "@merge-rd/i18n";
 import { useAdminClient } from "../../../app/admin-client";
 import { DynamicComponents } from "../../../shared/ui/dynamic/dynamic-components";
 import { convertFormValuesToObject, convertToFormValues } from "../../../shared/lib/util";

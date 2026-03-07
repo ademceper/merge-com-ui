@@ -1,4 +1,4 @@
-export enum NovuComponentEnum {
+enum NovuComponentEnum {
 	WEB,
 	API,
 	WIDGET,
@@ -13,7 +13,7 @@ declare global {
 	}
 }
 
-export function getContextPath(component: NovuComponentEnum) {
+function getContextPath(component: NovuComponentEnum) {
 	/**
 	 * Determine if we are running in the browser or in node.js. If we are
 	 * running in node.js, we will have access to the process.env object,

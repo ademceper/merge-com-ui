@@ -3,7 +3,7 @@ import PolicyRepresentation, {
     Logic
 } from "@keycloak/keycloak-admin-client/lib/defs/policyRepresentation";
 import PolicyProviderRepresentation from "@keycloak/keycloak-admin-client/lib/defs/policyProviderRepresentation";
-import { useTranslation } from "react-i18next";
+import { useTranslation } from "@merge-rd/i18n";
 import { Button } from "@merge-rd/ui/components/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@merge-rd/ui/components/dialog";
 import { getErrorDescription, getErrorMessage, SelectField,
@@ -67,7 +67,7 @@ const COMPONENTS: {
     default: Group
 } as const;
 
-export const isValidComponentType = (value: string) => value in COMPONENTS;
+const isValidComponentType = (value: string) => value in COMPONENTS;
 
 type NewPermissionConfigurationDialogProps = {
     permissionClientId: string;

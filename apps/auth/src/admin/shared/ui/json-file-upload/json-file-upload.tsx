@@ -1,6 +1,6 @@
 import { FileUploadForm, FileUploadFormProps } from "./file-upload-form";
 
-export type JsonFileUploadProps = Omit<
+type JsonFileUploadProps = Omit<
     FileUploadFormProps,
     "onChange" | "language" | "extension"
 > & {

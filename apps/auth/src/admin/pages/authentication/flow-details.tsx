@@ -17,8 +17,9 @@ import {
 } from "@/admin/shared/ui/data-table";
 import { Graph, Table as TableIconPhosphor } from "@phosphor-icons/react";
 import { useState } from "react";
-import { Trans, useTranslation } from "react-i18next";
-import { useNavigate, useParams } from "react-router-dom";
+import { Trans, useTranslation } from "@merge-rd/i18n";
+import { useNavigate } from "@tanstack/react-router";
+import { useParams } from "../../shared/lib/useParams";
 import { useAdminClient } from "../../app/admin-client";
 import { useConfirmDialog } from "../../shared/ui/confirm-dialog/confirm-dialog";
 import { useRealm } from "../../app/providers/realm-context/realm-context";
@@ -254,7 +255,7 @@ const { id, usedBy, builtIn } = useParams<FlowParams>();
                 await adminClient.authenticationManagement.deleteFlow({
                     flowId: flow!.id!
                 });
-                navigate(toAuthentication({ realm }));
+                navigate({ to: toAuthentication({ realm }) as string });
                 toast.success(t("deleteFlowSuccess"));
             } catch (error) {
                 toast.error(t("deleteFlowError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
@@ -310,14 +311,14 @@ const { id, usedBy, builtIn } = useParams<FlowParams>();
                     flowAlias={flow?.alias!}
                     onClose={usedBy => {
                         toggleBindFlow();
-                        navigate(
-                            toFlow({
+                        navigate({
+                            to: toFlow({
                                 realm,
                                 id: id!,
                                 usedBy: usedBy ? "DEFAULT" : "notInUse",
                                 builtIn: builtIn ? "builtIn" : undefined
-                            })
-                        );
+                            }) as string
+                        });
                     }}
                 />
             )}

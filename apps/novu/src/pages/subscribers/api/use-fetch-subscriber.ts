@@ -1,0 +1,33 @@
+import type { SubscriberResponseDto } from "@novu/api/models/components";
+import { type UseQueryOptions, useQuery } from "@tanstack/react-query";
+import { getSubscriber } from "@/entities/subscriber/api/subscribers";
+import { useEnvironment } from "@/app/context/environment/hooks";
+import { QueryKeys } from "@/shared/lib/query-keys";
+
+type SubscriberResponse = Awaited<ReturnType<typeof getSubscriber>>;
+
+type Props = {
+	subscriberId: string;
+	options?: Omit<
+		UseQueryOptions<SubscriberResponse, Error>,
+		"queryKey" | "queryFn"
+	>;
+};
+
+export function useFetchSubscriber({ subscriberId, options = {} }: Props) {
+	const { currentEnvironment } = useEnvironment();
+
+	const subscriberQuery = useQuery<SubscriberResponseDto>({
+		queryKey: [
+			QueryKeys.fetchSubscriber,
+			currentEnvironment?._id,
+			subscriberId,
+		],
+		queryFn: () =>
+			getSubscriber({ environment: currentEnvironment!, subscriberId }),
+		enabled: !!currentEnvironment,
+		...options,
+	});
+
+	return subscriberQuery;
+}

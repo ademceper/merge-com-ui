@@ -30,7 +30,7 @@ import {
 import { TablePagination } from "@/admin/shared/ui/table-pagination";
 import { useState } from "react";
 import { useFormContext } from "react-hook-form";
-import { Trans, useTranslation } from "react-i18next";
+import { Trans, useTranslation } from "@merge-rd/i18n";
 import { useAdminClient } from "../../../../app/admin-client";
 import { useRealm } from "../../../../app/providers/realm-context/realm-context";
 import { useWhoAmI } from "../../../../app/providers/whoami/who-am-i";

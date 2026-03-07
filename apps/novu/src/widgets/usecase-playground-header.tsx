@@ -1,6 +1,6 @@
 import { CaretLeft } from "@phosphor-icons/react";
-import { useNavigate } from "react-router-dom";
-import { Stepper } from "@/features/onboarding/ui/stepper";
+import { useNavigate } from "@tanstack/react-router";
+import { Stepper } from "@/pages/onboarding/ui/stepper";
 import { CompactButton } from "@/shared/ui/primitives/button-compact";
 import { LinkButton } from "@/shared/ui/primitives/button-link";
 
@@ -35,7 +35,7 @@ export function UsecasePlaygroundHeader({
 		onSkip?.();
 
 		if (skipPath) {
-			navigate(skipPath);
+			navigate({ to: skipPath });
 		}
 	};
 
@@ -55,7 +55,7 @@ export function UsecasePlaygroundHeader({
 						icon={CaretLeft}
 						variant="ghost"
 						className="mt-[16px] h-5 w-5"
-						onClick={() => navigate(-1)}
+						onClick={() => window.history.back()}
 					/>
 				)}
 

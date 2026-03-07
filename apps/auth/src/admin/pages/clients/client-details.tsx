@@ -12,8 +12,8 @@ import { Info } from "@phosphor-icons/react";
 import { cloneDeep, sortBy } from "lodash-es";
 import { Fragment, isValidElement, useMemo, useState } from "react";
 import { Controller, FormProvider, useForm, useWatch } from "react-hook-form";
-import { useTranslation } from "react-i18next";
-import { useNavigate, useLocation, useParams as useRouterParams } from "react-router-dom";
+import { useTranslation } from "@merge-rd/i18n";
+import { useNavigate, useLocation, useParams as useRouterParams } from "@tanstack/react-router";
 import { useAdminClient } from "../../app/admin-client";
 import {
     ConfirmDialogModal,
@@ -226,7 +226,7 @@ export default function ClientDetails() {
 
     const navigate = useNavigate();
     const location = useLocation();
-    const { tab } = useRouterParams<{ tab?: string }>();
+    const { tab } = useRouterParams({ strict: false }) as { tab?: string };
 
     const [downloadDialogOpen, toggleDownloadDialogOpen] = useToggle();
     const [changeAuthenticatorOpen, toggleChangeAuthenticatorOpen] = useToggle();
@@ -266,7 +266,7 @@ export default function ClientDetails() {
             try {
                 await adminClient.clients.del({ id: clientId });
                 toast.success(t("clientDeletedSuccess"));
-                navigate(toClients({ realm }));
+                navigate({ to: toClients({ realm }) as string });
             } catch (error) {
                 toast.error(t("clientDeleteError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
             }

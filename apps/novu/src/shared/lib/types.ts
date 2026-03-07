@@ -6,7 +6,7 @@ export enum ConnectionStatus {
 	LOADING = "loading",
 }
 
-export enum WorkflowIssueTypeEnum {
+enum WorkflowIssueTypeEnum {
 	MISSING_VARIABLE_IN_PAYLOAD = "MISSING_VARIABLE_IN_PAYLOAD",
 	VARIABLE_TYPE_MISMATCH = "VARIABLE_TYPE_MISMATCH",
 	MISSING_VALUE = "MISSING_VALUE",
@@ -14,7 +14,7 @@ export enum WorkflowIssueTypeEnum {
 	STEP_ID_ALREADY_EXIST = "STEP_ID_ALREADY_EXIST",
 }
 
-export type RuntimeIssue = {
+type RuntimeIssue = {
 	issueType: WorkflowIssueTypeEnum;
 	variableName?: string;
 	message: string;

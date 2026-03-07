@@ -7,11 +7,11 @@ import {
     useFetch
 } from "../../../../shared/keycloak-ui-shared";
 import { useState } from "react";
-import { useTranslation } from "react-i18next";
+import { useTranslation } from "@merge-rd/i18n";
 import { useAdminClient } from "../../../app/admin-client";
 import type { ComponentProps } from "../dynamic/components";
-import { PermissionsConfigurationTabsParams } from "../../../pages/permissions-configuration/routes/permissions-configuration-tabs";
-import { useParams } from "react-router-dom";
+import type { PermissionsConfigurationTabsParams } from "../../lib/route-helpers";
+import { useParams } from "@tanstack/react-router";
 import { useFormContext, useWatch } from "react-hook-form";
 
 type ClientSelectProps = Omit<ComponentProps, "convertToName"> & {
@@ -39,7 +39,7 @@ export const ClientSelect = ({
     const [clients, setClients] = useState<ClientRepresentation[]>([]);
     const [selectedClients, setSelectedClients] = useState<SelectControlOption[]>();
     const [search, setSearch] = useState("");
-    const { tab } = useParams<PermissionsConfigurationTabsParams>();
+    const { tab } = useParams({ strict: false }) as PermissionsConfigurationTabsParams;
 
     const { control } = useFormContext();
     const value = useWatch({

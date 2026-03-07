@@ -9,8 +9,8 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@merge
 import { CaretLeft, CaretRight, DotsThreeVertical, PencilSimple, Trash } from "@phosphor-icons/react";
 import type { ReactNode } from "react";
 import { useState, useCallback, useEffect } from "react";
-import { useTranslation } from "react-i18next";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useTranslation } from "@merge-rd/i18n";
+import { useLocation, useNavigate } from "@tanstack/react-router";
 import { useAdminClient } from "../../app/admin-client";
 import { PermissionsTab } from "../../shared/ui/permission-tab/permission-tab";
 import { useAccess } from "../../app/providers/access/access";
@@ -206,7 +206,7 @@ export default function GroupsSection() {
                 toggleDialog={toggleDeleteOpen}
                 selectedRows={[currentGroup()!]}
                 refresh={() => {
-                    navigate(toGroups({ realm }));
+                    navigate({ to: toGroups({ realm }) as string });
                     refresh();
                 }}
             />

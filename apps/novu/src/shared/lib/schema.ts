@@ -6,7 +6,7 @@ import type {
 import * as z from "zod";
 import { capitalize } from "./string";
 
-export type ZodValue =
+type ZodValue =
 	| z.ZodObject
 	| z.ZodString
 	| z.ZodNumber
@@ -175,7 +175,7 @@ const getZodValueByType = (
  * The function will recursively build the schema based on the JSONSchema object.
  * It removes empty strings and objects with empty required fields during the transformation phase after parsing.
  */
-export const buildDynamicZodSchema = (
+const buildDynamicZodSchema = (
 	obj: JSONSchemaDefinition,
 	key = "",
 ): ZodValue => {

@@ -10,14 +10,14 @@ import {
 } from "@merge-rd/ui/components/dialog";
 import { useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
-import { useTranslation } from "react-i18next";
+import { useTranslation } from "@merge-rd/i18n";
 
 import { DynamicComponents } from "../../../../shared/ui/dynamic/dynamic-components";
 import { useServerInfo } from "../../../../app/providers/server-info/server-info-provider";
 import type { IndexedValidations } from "../../new-attribute-settings";
 import { ValidatorSelect } from "./validator-select";
 
-export type AddValidatorDialogProps = {
+type AddValidatorDialogProps = {
     selectedValidators: IndexedValidations[];
     toggleDialog: () => void;
     onConfirm: (newValidator: ComponentRepresentation) => void;

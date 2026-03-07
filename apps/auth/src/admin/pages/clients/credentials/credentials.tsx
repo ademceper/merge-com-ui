@@ -11,7 +11,7 @@ import { Label } from "@merge-rd/ui/components/label";
 import { Separator } from "@merge-rd/ui/components/separator";
 import { useMemo, useState } from "react";
 import { useFormContext, useWatch } from "react-hook-form";
-import { useTranslation } from "react-i18next";
+import { useTranslation } from "@merge-rd/i18n";
 import { useAdminClient } from "../../../app/admin-client";
 import { useConfirmDialog } from "../../../shared/ui/confirm-dialog/confirm-dialog";
 import { DynamicComponents } from "../../../shared/ui/dynamic/dynamic-components";
@@ -27,7 +27,7 @@ type AccessToken = {
     registrationAccessToken: string;
 };
 
-export type CredentialsProps = {
+type CredentialsProps = {
     client: ClientRepresentation;
     save: () => void;
     refresh: () => void;

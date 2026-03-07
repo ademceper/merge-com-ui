@@ -15,8 +15,8 @@ import {
 import { motion } from "motion/react";
 import { useEffect, useMemo, useState } from "react";
 import { UpdatedAgo } from "@/shared/ui/updated-ago";
-import { useFetchRequestLogs } from "@/features/activity/lib/use-fetch-request-logs";
-import { useLogsUrlState } from "@/features/activity/lib/use-logs-url-state";
+import { useFetchRequestLogs } from "@/pages/activity/api/use-fetch-request-logs";
+import { useLogsUrlState } from "@/pages/activity/model/use-logs-url-state";
 import { useTelemetry } from "@/shared/lib/hooks/use-telemetry";
 import { TelemetryEvent } from "@/shared/lib/telemetry";
 import type { RequestLog } from "@/shared/model/logs";

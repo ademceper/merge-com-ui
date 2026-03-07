@@ -2,8 +2,8 @@ import type UserRepresentation from "@keycloak/keycloak-admin-client/lib/defs/us
 import { Button } from "@merge-rd/ui/components/button";
 import { Popover, PopoverContent, PopoverTrigger } from "@merge-rd/ui/components/popover";
 import { Question } from "@phosphor-icons/react";
-import { useTranslation } from "react-i18next";
-import { useNavigate } from "react-router-dom";
+import { useTranslation } from "@merge-rd/i18n";
+import { useNavigate } from "@tanstack/react-router";
 import { useHelp } from "../../../shared/keycloak-ui-shared";
 import { useAdminClient } from "../../app/admin-client";
 import type { ClientRoleParams } from "../clients/routes/client-role";
@@ -61,9 +61,9 @@ export const UsersInRoleTab = () => {
             <EmptyContent>
                 <EmptyDescription>
                     <span>{t("noUsersEmptyStateDescription")} </span>
-                    <Button variant="link" className="kc-groups-link-empty-state p-0 h-auto ml-1" onClick={() => navigate(`/${realm}/groups`)}>{t("groups")}</Button>
+                    <Button variant="link" className="kc-groups-link-empty-state p-0 h-auto ml-1" onClick={() => navigate({ to: `/${realm}/groups` })}>{t("groups")}</Button>
                     <span> {t("or")} </span>
-                    <Button variant="link" className="kc-users-link-empty-state p-0 h-auto ml-1" onClick={() => navigate(`/${realm}/users`)}>{t("users")}</Button>
+                    <Button variant="link" className="kc-users-link-empty-state p-0 h-auto ml-1" onClick={() => navigate({ to: `/${realm}/users` })}>{t("users")}</Button>
                     <span> {t("noUsersEmptyStateDescriptionContinued")}</span>
                 </EmptyDescription>
             </EmptyContent>
@@ -93,9 +93,9 @@ export const UsersInRoleTab = () => {
                                 <div className="space-y-2 text-sm">
                                     <p>
                                         {t("whoWillAppearPopoverTextRoles")}
-                                        <Button variant="link" className="kc-groups-link p-0 h-auto ml-1" onClick={() => navigate(`/${realm}/groups`)}>{t("groups")}</Button>
+                                        <Button variant="link" className="kc-groups-link p-0 h-auto ml-1" onClick={() => navigate({ to: `/${realm}/groups` })}>{t("groups")}</Button>
                                         {t("or")}
-                                        <Button variant="link" className="kc-users-link p-0 h-auto ml-1" onClick={() => navigate(`/${realm}/users`)}>{t("users")}.</Button>
+                                        <Button variant="link" className="kc-users-link p-0 h-auto ml-1" onClick={() => navigate({ to: `/${realm}/users` })}>{t("users")}.</Button>
                                     </p>
                                     <p className="text-muted-foreground">{t("whoWillAppearPopoverFooterText")}</p>
                                 </div>

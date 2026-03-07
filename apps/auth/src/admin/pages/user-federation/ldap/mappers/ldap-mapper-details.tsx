@@ -18,8 +18,8 @@ import {
 } from "@merge-rd/ui/components/select";
 import { useState } from "react";
 import { Controller, FormProvider, useForm, useWatch } from "react-hook-form";
-import { useTranslation } from "react-i18next";
-import { useNavigate } from "react-router-dom";
+import { useTranslation } from "@merge-rd/i18n";
+import { useNavigate } from "@tanstack/react-router";
 import { useAdminClient } from "../../../../app/admin-client";
 import { useConfirmDialog } from "../../../../shared/ui/confirm-dialog/confirm-dialog";
 import {
@@ -93,9 +93,9 @@ const [isMapperDropdownOpen, setIsMapperDropdownOpen] = useState(false);
         try {
             if (mapperId === "new") {
                 await adminClient.components.create(map);
-                navigate(
-                    toUserFederationLdap({ realm, id: mapper.parentId!, tab: "mappers" })
-                );
+                navigate({
+                    to: toUserFederationLdap({ realm, id: mapper.parentId!, tab: "mappers" }) as string
+                });
             } else {
                 await adminClient.components.update({ id: mapperId }, map);
             }
@@ -136,7 +136,7 @@ const [isMapperDropdownOpen, setIsMapperDropdownOpen] = useState(false);
                     id: mapping!.id!
                 });
                 toast.success(t("mappingDeletedSuccess"));
-                navigate(toUserFederationLdap({ id, realm, tab: "mappers" }));
+                navigate({ to: toUserFederationLdap({ id, realm, tab: "mappers" }) as string });
             } catch (error) {
                 toast.error(t("mappingDeletedError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
             }
@@ -308,12 +308,12 @@ const [isMapperDropdownOpen, setIsMapperDropdownOpen] = useState(false);
                                 variant="link"
                                 onClick={() =>
                                     isNew
-                                        ? navigate(-1)
-                                        : navigate(
-                                              `/${realm}/user-federation/ldap/${
+                                        ? window.history.back()
+                                        : navigate({
+                                              to: `/${realm}/user-federation/ldap/${
                                                   mapping!.parentId
-                                              }/mappers`
-                                          )
+                                              }/mappers` as string
+                                          })
                                 }
                                 data-testid="ldap-mapper-cancel"
                             >

@@ -1,6 +1,6 @@
 import { Label } from "@merge-rd/ui/components/label";
 import { useFormContext } from "react-hook-form";
-import { useTranslation } from "react-i18next";
+import { useTranslation } from "@merge-rd/i18n";
 import { FormErrorText, HelpItem } from "../../../../shared/keycloak-ui-shared";
 import { useAdminClient } from "../../../app/admin-client";
 import { JsonFileUpload } from "../../../shared/ui/json-file-upload/json-file-upload";

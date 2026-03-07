@@ -3,7 +3,7 @@ import type { EnvironmentId } from "./environment";
 import type { OrganizationId } from "./organization";
 import type { ProvidersIdEnum } from "./providers";
 
-export type ChannelConnection = {
+type ChannelConnection = {
 	_id: string;
 	identifier: string;
 

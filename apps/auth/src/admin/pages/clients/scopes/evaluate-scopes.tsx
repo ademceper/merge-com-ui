@@ -12,7 +12,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@merge-rd/ui/component
 import { Question } from "@phosphor-icons/react";
 import { useEffect, useMemo, useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
-import { useTranslation } from "react-i18next";
+import { useTranslation } from "@merge-rd/i18n";
 import { useAdminClient } from "../../../app/admin-client";
 import { ClientSelect } from "../../../shared/ui/client/client-select";
 import { UserSelect } from "../../../shared/ui/users/user-select";
@@ -22,7 +22,7 @@ import { useServerInfo } from "../../../app/providers/server-info/server-info-pr
 import { prettyPrintJSON } from "../../../shared/lib/util";
 import { GeneratedCodeTab } from "./generated-code-tab";
 
-export type EvaluateScopesProps = {
+type EvaluateScopesProps = {
     clientId: string;
     protocol: string;
 };

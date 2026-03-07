@@ -7,7 +7,7 @@ import { Popover, PopoverContent, PopoverTrigger } from "@merge-rd/ui/components
 import { Question } from "@phosphor-icons/react";
 import { intersectionBy, sortBy, uniqBy } from "lodash-es";
 import { useState } from "react";
-import { useTranslation } from "react-i18next";
+import { useTranslation } from "@merge-rd/i18n";
 import { useAdminClient } from "../../app/admin-client";
 import { getErrorDescription, getErrorMessage, useFetch } from "../../../shared/keycloak-ui-shared";
 import { toast } from "sonner";

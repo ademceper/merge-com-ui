@@ -6,7 +6,7 @@ import { Button } from "@merge-rd/ui/components/button";
 import { Separator } from "@merge-rd/ui/components/separator";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/admin/shared/ui/data-table";
 import { Fragment, DragEvent as ReactDragEvent, useMemo, useRef, useState } from "react";
-import { useTranslation } from "react-i18next";
+import { useTranslation } from "@merge-rd/i18n";
 import { useAdminClient } from "../../app/admin-client";
 import { useConfirmDialog } from "../../shared/ui/confirm-dialog/confirm-dialog";
 import { KeycloakSpinner } from "../../../shared/keycloak-ui-shared";

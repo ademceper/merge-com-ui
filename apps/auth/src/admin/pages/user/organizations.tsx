@@ -19,8 +19,9 @@ import {
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@merge-rd/ui/components/dropdown-menu";
 import { toast } from "sonner";
 import { useState } from "react";
-import { useTranslation } from "react-i18next";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { useTranslation } from "@merge-rd/i18n";
+import { Link, useNavigate } from "@tanstack/react-router";
+import { useParams } from "../../shared/lib/useParams";
 import { useAdminClient } from "../../app/admin-client";
 import { useConfirmDialog } from "../../shared/ui/confirm-dialog/confirm-dialog";
 import { useRealm } from "../../app/providers/realm-context/realm-context";
@@ -167,7 +168,7 @@ export const Organizations = ({ user }: OrganizationProps) => {
                 toast.success(t("organizationRemovedSuccess"));
                 const foundUser = await adminClient.users.findOne({ id: id! });
                 if (!foundUser) {
-                    navigate(toUsers({ realm: realm }));
+                    navigate({ to: toUsers({ realm: realm }) as string });
                 }
                 setSelectedOrgs([]);
                 refresh();
@@ -198,7 +199,7 @@ export const Organizations = ({ user }: OrganizationProps) => {
                         realm: realm!,
                         id: row.original.id!,
                         tab: "settings"
-                    })}
+                    }) as string}
                     className="text-primary hover:underline truncate block"
                 >
                     {row.original.name}

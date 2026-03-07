@@ -5,8 +5,9 @@ import { toast } from "sonner";
 import { Button } from "@merge-rd/ui/components/button";
 import { get } from "lodash-es";
 import { useMemo, useState } from "react";
-import { useTranslation } from "react-i18next";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { useTranslation } from "@merge-rd/i18n";
+import { Link, useNavigate } from "@tanstack/react-router";
+import { useParams } from "../../shared/lib/useParams";
 import { useAdminClient } from "../../app/admin-client";
 import { useConfirmDialog } from "../../shared/ui/confirm-dialog/confirm-dialog";
 import { useRealm } from "../../app/providers/realm-context/realm-context";
@@ -76,7 +77,7 @@ export default function PageList() {
                     const value = get(row.original, path);
                     if (index === 0) {
                         return (
-                            <Link to={toDetailPage({ realm: realmName!, providerId: page.id, id: row.original.id! })} className="text-primary hover:underline">
+                            <Link to={toDetailPage({ realm: realmName!, providerId: page.id, id: row.original.id! }) as string} className="text-primary hover:underline">
                                 {value ?? "-"}
                             </Link>
                         );
@@ -108,7 +109,7 @@ export default function PageList() {
             <EmptyHeader><EmptyTitle>{t("noItems")}</EmptyTitle></EmptyHeader>
             <EmptyContent>
                 <EmptyDescription>{t("noItemsInstructions")}</EmptyDescription>
-                <Button variant="default" onClick={() => navigate(addDetailPage({ realm: realmName!, providerId: page?.id! }))}>
+                <Button variant="default" onClick={() => navigate({ to: addDetailPage({ realm: realmName!, providerId: page?.id! }) as string })}>
                     {t("createItem")}
                 </Button>
             </EmptyContent>
@@ -130,7 +131,7 @@ export default function PageList() {
                 emptyMessage={t("noItems")}
                 toolbar={
                     <Button asChild>
-                        <Link to={addDetailPage({ realm: realmName!, providerId: page.id })}>
+                        <Link to={addDetailPage({ realm: realmName!, providerId: page.id }) as string}>
                             {t("createItem")}
                         </Link>
                     </Button>

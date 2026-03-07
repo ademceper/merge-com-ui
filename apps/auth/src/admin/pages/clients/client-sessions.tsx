@@ -1,7 +1,7 @@
 import type ClientRepresentation from "@keycloak/keycloak-admin-client/lib/defs/clientRepresentation";
 import type UserSessionRepresentation from "@keycloak/keycloak-admin-client/lib/defs/userSessionRepresentation";
 import { useState } from "react";
-import { useTranslation } from "react-i18next";
+import { useTranslation } from "@merge-rd/i18n";
 import { useAdminClient } from "../../app/admin-client";
 import { useFetch } from "../../../shared/keycloak-ui-shared";
 import { fetchAdminUI } from "../../app/providers/auth/admin-ui-endpoint";

@@ -1,24 +1,9 @@
-import { lazy } from "react";
-import type { Path } from "react-router-dom";
 import { generateEncodedPath } from "../../../shared/lib/generateEncodedPath";
-import type { AppRouteObject } from "../../../app/routes";
 
-export type AddExecutorParams = {
+type AddExecutorParams = {
     realm: string;
     profileName: string;
 };
 
-const ExecutorForm = lazy(() => import("../executor-form"));
-
-export const AddExecutorRoute: AppRouteObject = {
-    path: "/:realm/realm-settings/client-policies/:profileName/add-executor",
-    element: <ExecutorForm />,
-    breadcrumb: t => t("addExecutor"),
-    handle: {
-        access: "manage-realm"
-    }
-};
-
-export const toAddExecutor = (params: AddExecutorParams): Partial<Path> => ({
-    pathname: generateEncodedPath(AddExecutorRoute.path, params)
-});
+export const toAddExecutor = (params: AddExecutorParams): string =>
+    generateEncodedPath("/:realm/realm-settings/client-policies/:profileName/add-executor", params);

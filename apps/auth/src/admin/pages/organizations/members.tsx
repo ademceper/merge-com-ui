@@ -1,5 +1,6 @@
 import UserRepresentation from "@keycloak/keycloak-admin-client/lib/defs/userRepresentation";
-import { getErrorDescription, getErrorMessage, useFetch } from "../../../shared/keycloak-ui-shared";
+import { getErrorDescription, getErrorMessage } from "../../../shared/keycloak-ui-shared";
+import { useOrganizationMembers, useAddOrganizationMembers, useRemoveOrganizationMembers } from "./api/queries";
 import { DataTable, DataTableRowActions } from "@/admin/shared/ui/data-table";
 import { DropdownMenuItem } from "@merge-rd/ui/components/dropdown-menu";
 import {
@@ -13,8 +14,8 @@ import { Checkbox } from "@merge-rd/ui/components/checkbox";
 import { toast } from "sonner";
 import { Button } from "@merge-rd/ui/components/button";
 import { useState } from "react";
-import { useTranslation } from "react-i18next";
-import { Link } from "react-router-dom";
+import { useTranslation } from "@merge-rd/i18n";
+import { Link } from "@tanstack/react-router";
 import { useAdminClient } from "../../app/admin-client";
 import { CheckboxFilterComponent } from "../../shared/ui/dynamic/checkbox-filter-component";
 import { SearchInputComponent } from "../../shared/ui/dynamic/search-input-component";
@@ -33,7 +34,7 @@ type MembershipTypeRepresentation = UserRepresentation & {
 const UserDetailLink = (user: any) => {
     const { realm } = useRealm();
     return (
-        <Link to={toUser({ realm, id: user.id!, tab: "settings" })}>{user.username}</Link>
+        <Link to={toUser({ realm, id: user.id!, tab: "settings" }) as string}>{user.username}</Link>
     );
 };
 
@@ -41,14 +42,20 @@ export const Members = () => {
     const { t } = useTranslation();
     const { adminClient } = useAdminClient();
     const { id: orgId } = useParams<EditOrganizationParams>();
-const [key, setKey] = useState(0);
-    const refresh = () => setKey(key + 1);
     const [openAddMembers, toggleAddMembers] = useToggle();
     const [selectedMembers, setSelectedMembers] = useState<UserRepresentation[]>([]);
     const [searchText, setSearchText] = useState<string>("");
     const [searchTriggerText, setSearchTriggerText] = useState<string>("");
     const [filteredMembershipTypes, setFilteredMembershipTypes] = useState<string[]>([]);
     const [isOpen, setIsOpen] = useState(false);
+
+    const membershipType = filteredMembershipTypes.length === 1 ? filteredMembershipTypes[0] : undefined;
+    const { data: members = [] } = useOrganizationMembers(orgId, {
+        search: searchTriggerText,
+        membershipType
+    });
+    const addMembersMutation = useAddOrganizationMembers(orgId);
+    const removeMembersMutation = useRemoveOrganizationMembers(orgId);
 
     const membershipOptions = [
         { value: "Managed", label: "Managed" },
@@ -68,30 +75,7 @@ const [key, setKey] = useState(0);
             setFilteredMembershipTypes([...filteredMembershipTypes, value]);
         }
         setIsOpen(false);
-        refresh();
     };
-
-    const [members, setMembers] = useState<MembershipTypeRepresentation[]>([]);
-
-    useFetch(
-        async () => {
-            try {
-                const membershipType = filteredMembershipTypes.length === 1 ? filteredMembershipTypes[0] : undefined;
-                return await adminClient.organizations.listMembers({
-                    orgId,
-                    first: 0,
-                    max: 500,
-                    search: searchTriggerText,
-                    membershipType
-                });
-            } catch (error) {
-                toast.error(t("organizationsMembersListError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
-                return [];
-            }
-        },
-        setMembers,
-        [key, orgId, searchTriggerText, filteredMembershipTypes]
-    );
 
     const handleChange = (value: string) => {
         setSearchText(value);
@@ -99,31 +83,20 @@ const [key, setKey] = useState(0);
 
     const handleSearch = () => {
         setSearchTriggerText(searchText);
-        refresh();
     };
 
     const clearInput = () => {
         setSearchText("");
         setSearchTriggerText("");
-        refresh();
     };
 
-    const removeMember = async (selectedMembers: UserRepresentation[]) => {
+    const removeMember = async (selected: UserRepresentation[]) => {
         try {
-            await Promise.all(
-                selectedMembers.map(user =>
-                    adminClient.organizations.delMember({
-                        orgId,
-                        userId: user.id!
-                    })
-                )
-            );
-            toast.success(t("organizationUsersLeft", { count: selectedMembers.length }));
+            await removeMembersMutation.mutateAsync(selected.map(u => u.id!));
+            toast.success(t("organizationUsersLeft", { count: selected.length }));
         } catch (error) {
             toast.error(t("organizationUsersLeftError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
         }
-
-        refresh();
     };
 
     return (
@@ -133,14 +106,7 @@ const [key, setKey] = useState(0);
                     membersQuery={() => adminClient.organizations.listMembers({ orgId })}
                     onAdd={async selectedRows => {
                         try {
-                            await Promise.all(
-                                selectedRows.map(user =>
-                                    adminClient.organizations.addMember({
-                                        orgId,
-                                        userId: `"${user.id!}"`
-                                    })
-                                )
-                            );
+                            await addMembersMutation.mutateAsync(selectedRows.map(u => u.id!));
                             toast.success(t("organizationUsersAdded", {
                                     count: selectedRows.length
                                 }));
@@ -150,12 +116,10 @@ const [key, setKey] = useState(0);
                     }}
                     onClose={() => {
                         toggleAddMembers();
-                        refresh();
                     }}
                 />
             )}
             <DataTable<MembershipTypeRepresentation>
-                key={key}
                 columns={[
                     {
                         id: "select",
@@ -190,7 +154,7 @@ const [key, setKey] = useState(0);
                         )
                     }
                 ]}
-                data={members}
+                data={members as MembershipTypeRepresentation[]}
                 searchColumnId="username"
                 searchPlaceholder={t("search")}
                 emptyContent={

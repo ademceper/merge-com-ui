@@ -7,10 +7,10 @@ import {
     BreadcrumbSeparator
 } from "@merge-rd/ui/components/breadcrumb";
 import React, { useEffect } from "react";
-import { Link, useLocation } from "react-router-dom";
-import { useTranslation } from "react-i18next";
+import { Link, useLocation } from "@tanstack/react-router";
+import { useTranslation } from "@merge-rd/i18n";
 
-import { useSubGroups } from "../../../pages/groups/sub-groups-context";
+import { useSubGroups } from "../../lib/sub-groups-context";
 import { useRealm } from "../../../app/providers/realm-context/realm-context";
 
 /** Header'da kullanılmak üzere merge UI Breadcrumb bileşenleriyle aynı grup yolunu gösterir. */
@@ -28,7 +28,7 @@ export function GroupBreadCrumbsForHeader() {
                         <BreadcrumbPage>{t("groups")}</BreadcrumbPage>
                     ) : (
                         <BreadcrumbLink asChild>
-                            <Link to={`/${realm}/groups`}>{t("groups")}</Link>
+                            <Link to={`/${realm}/groups` as string}>{t("groups")}</Link>
                         </BreadcrumbLink>
                     )}
                 </BreadcrumbItem>
@@ -44,7 +44,7 @@ export function GroupBreadCrumbsForHeader() {
                             <BreadcrumbItem>
                                 {!isLastGroup ? (
                                     <BreadcrumbLink asChild>
-                                        <Link to={to} onClick={() => remove(group)}>
+                                        <Link to={to as string} onClick={() => remove(group)}>
                                             {group.name}
                                         </Link>
                                     </BreadcrumbLink>
@@ -62,7 +62,7 @@ export function GroupBreadCrumbsForHeader() {
     );
 }
 
-export const GroupBreadCrumbs = () => {
+const GroupBreadCrumbs = () => {
     const { t } = useTranslation();
     const { clear, remove, subGroups } = useSubGroups();
     const { realm } = useRealm();
@@ -79,7 +79,7 @@ export const GroupBreadCrumbs = () => {
     return subGroups.length !== 0 ? (
         <nav aria-label="breadcrumb" className="flex min-w-0 items-center gap-1 text-sm">
             <span key="home">
-                <Link to={`/${realm}/groups`}>{t("groups")}</Link>
+                <Link to={`/${realm}/groups` as string}>{t("groups")}</Link>
                 <span className="mx-1">/</span>
             </span>
             {subGroups.map((group, i) => {
@@ -93,7 +93,7 @@ export const GroupBreadCrumbs = () => {
                                         0,
                                         location.pathname.indexOf(group.id!) +
                                             group.id!.length
-                                    )}
+                                    ) as string}
                                     onClick={() => remove(group)}
                                 >
                                     {group.name}

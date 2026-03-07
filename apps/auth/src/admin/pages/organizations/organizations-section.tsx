@@ -1,5 +1,6 @@
 import OrganizationRepresentation from "@keycloak/keycloak-admin-client/lib/defs/organizationRepresentation";
-import { getErrorDescription, getErrorMessage, useFetch } from "../../../shared/keycloak-ui-shared";
+import { getErrorDescription, getErrorMessage } from "../../../shared/keycloak-ui-shared";
+import { useOrganizations, useCreateOrganization, useDeleteOrganization } from "./api/queries";
 import { toast } from "sonner";
 import { Button } from "@merge-rd/ui/components/button";
 import {
@@ -41,9 +42,8 @@ import { FacetedFormFilter } from "@merge-rd/ui/components/faceted-filter/facete
 import { useEffect, useMemo, useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { DotsThree, PencilSimple, Plus, Trash } from "@phosphor-icons/react";
-import { useTranslation } from "react-i18next";
-import { useNavigate } from "react-router-dom";
-import { useAdminClient } from "../../app/admin-client";
+import { useTranslation } from "@merge-rd/i18n";
+import { useNavigate } from "@tanstack/react-router";
 import { FormAccess } from "../../shared/ui/form/form-access";
 import { useRealm } from "../../app/providers/realm-context/realm-context";
 import {
@@ -54,15 +54,14 @@ import {
 import { toEditOrganization } from "./routes/edit-organization";
 
 export default function OrganizationSection() {
-    const { adminClient } = useAdminClient();
     const { realm } = useRealm();
     const { t } = useTranslation();
     const navigate = useNavigate();
 
-    const [key, setKey] = useState(0);
-    const refresh = () => setKey(key + 1);
+    const { data: organizations = [] } = useOrganizations();
+    const createMutation = useCreateOrganization();
+    const deleteMutation = useDeleteOrganization();
 
-    const [organizations, setOrganizations] = useState<OrganizationRepresentation[]>([]);
     const [selectedOrg, setSelectedOrg] = useState<OrganizationRepresentation>();
     const [createDialogOpen, setCreateDialogOpen] = useState(false);
     const [search, setSearch] = useState("");
@@ -89,12 +88,6 @@ export default function OrganizationSection() {
             createForm.reset({});
         }
     }, [createDialogOpen]);
-
-    useFetch(
-        () => adminClient.organizations.find({ first: 0, max: 1000 }),
-        (orgs) => setOrganizations(orgs),
-        [key]
-    );
 
     const filteredOrganizations = useMemo(() => {
         let result = organizations;
@@ -129,10 +122,9 @@ export default function OrganizationSection() {
     const onDeleteConfirm = async () => {
         if (!selectedOrg?.id) return;
         try {
-            await adminClient.organizations.delById({ id: selectedOrg.id });
+            await deleteMutation.mutateAsync(selectedOrg.id);
             toast.success(t("organizationDeletedSuccess"));
             setSelectedOrg(undefined);
-            refresh();
         } catch (error) {
             toast.error(t("organizationDeleteError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
         }
@@ -141,11 +133,10 @@ export default function OrganizationSection() {
     const onCreateSave = async (org: OrganizationFormType) => {
         try {
             const organization = convertToOrg(org);
-            await adminClient.organizations.create(organization);
+            await createMutation.mutateAsync(organization);
             toast.success(t("organizationSaveSuccess"));
             setCreateDialogOpen(false);
             createForm.reset();
-            refresh();
         } catch (error) {
             toast.error(t("organizationSaveError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
         }
@@ -272,7 +263,7 @@ export default function OrganizationSection() {
                                 <TableRow
                                     key={org.id}
                                     className="cursor-pointer"
-                                    onClick={() => navigate(toEditOrganization({ realm, id: org.id!, tab: "settings" }))}
+                                    onClick={() => navigate({ to: toEditOrganization({ realm, id: org.id!, tab: "settings" }) as string })}
                                 >
                                     <TableCell className="truncate">{org.name}</TableCell>
                                     <TableCell className="truncate">
@@ -290,7 +281,7 @@ export default function OrganizationSection() {
                                             </DropdownMenuTrigger>
                                             <DropdownMenuContent align="end">
                                                 <DropdownMenuItem
-                                                    onClick={() => navigate(toEditOrganization({ realm, id: org.id!, tab: "settings" }))}
+                                                    onClick={() => navigate({ to: toEditOrganization({ realm, id: org.id!, tab: "settings" }) as string })}
                                                 >
                                                     <PencilSimple className="size-4" />
                                                     {t("edit")}

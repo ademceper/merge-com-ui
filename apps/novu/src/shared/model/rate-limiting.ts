@@ -28,18 +28,18 @@ export class IApiRateLimitAlgorithm
 /**
  * The format of the environment variables used to configure the rate limit algorithm.
  */
-export type ApiRateLimitAlgorithmEnvVarFormat =
+type ApiRateLimitAlgorithmEnvVarFormat =
 	Uppercase<`${ApiRateLimitEnvVarNamespace}_${ApiRateLimitConfigEnum.ALGORITHM}_${ApiRateLimitAlgorithmEnum}`>;
 
 /**
  * The namespace for the environment variables used to configure rate limiting.
  */
-export type ApiRateLimitEnvVarNamespace = "API_RATE_LIMIT";
+type ApiRateLimitEnvVarNamespace = "API_RATE_LIMIT";
 
 /**
  * The configuration options for rate limiting.
  */
-export enum ApiRateLimitConfigEnum {
+enum ApiRateLimitConfigEnum {
 	ALGORITHM = "algorithm",
 	COST = "cost",
 	MAXIMUM = "maximum",
@@ -61,7 +61,7 @@ export type IApiRateLimitCost = Record<ApiRateLimitCostEnum, number>;
 /**
  * The format of all environment variables used to configure rate limiting.
  */
-export type ApiRateLimitEnvVarFormat =
+type ApiRateLimitEnvVarFormat =
 	| ApiRateLimitCostEnvVarFormat
 	| ApiRateLimitAlgorithmEnvVarFormat
 	| ApiRateLimitServiceMaximumEnvVarFormat;
@@ -69,7 +69,7 @@ export type ApiRateLimitEnvVarFormat =
 /**
  * The format of the environment variables used to configure the cost of a request.
  */
-export type ApiRateLimitCostEnvVarFormat =
+type ApiRateLimitCostEnvVarFormat =
 	Uppercase<`${ApiRateLimitEnvVarNamespace}_${ApiRateLimitConfigEnum.COST}_${ApiRateLimitCostEnum}`>;
 
 /**
@@ -89,7 +89,7 @@ export type IApiRateLimitMaximum = Record<ApiRateLimitCategoryEnum, number>;
 /**
  * A map of of the API Service level to the maximum number of requests allowed per category.
  */
-export type IApiRateLimitServiceMaximum = Record<
+type IApiRateLimitServiceMaximum = Record<
 	ApiServiceLevelEnum,
 	IApiRateLimitMaximum
 >;
@@ -97,5 +97,5 @@ export type IApiRateLimitServiceMaximum = Record<
 /**
  * The format of the environment variables used to configure maximum number of requests allowed per category.
  */
-export type ApiRateLimitServiceMaximumEnvVarFormat =
+type ApiRateLimitServiceMaximumEnvVarFormat =
 	Uppercase<`${ApiRateLimitEnvVarNamespace}_${ApiRateLimitConfigEnum.MAXIMUM}_${ApiServiceLevelEnum}_${ApiRateLimitCategoryEnum}`>;

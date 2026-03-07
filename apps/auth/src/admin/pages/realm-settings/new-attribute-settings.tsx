@@ -8,8 +8,8 @@ import { Button } from "@merge-rd/ui/components/button";
 import { flatten } from "flat";
 import { useState } from "react";
 import { FormProvider, useForm, useFormContext } from "react-hook-form";
-import { useTranslation } from "react-i18next";
-import { Link, useNavigate } from "react-router-dom";
+import { useTranslation } from "@merge-rd/i18n";
+import { Link, useNavigate } from "@tanstack/react-router";
 import { useAdminClient } from "../../app/admin-client";
 import { FixedButtonsGroup } from "../../shared/ui/form/fixed-button-group";
 import { convertToFormValues } from "../../shared/lib/util";
@@ -108,7 +108,7 @@ const CreateAttributeFormContent = ({
                         {editMode ? t("save") : t("create")}
                     </Button>
                     <Link
-                        to={toUserProfile({ realm, tab: "attributes" })}
+                        to={toUserProfile({ realm, tab: "attributes" }) as string}
                         data-testid="attribute-cancel"
                         className="kc-attributeCancel"
                     >
@@ -272,7 +272,7 @@ const [config, setConfig] = useState<UserProfileConfig | null>(null);
                     toast.error(t("errorSavingTranslations", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
                 }
             }
-            navigate(toUserProfile({ realm: realmName, tab: "attributes" }));
+            navigate({ to: toUserProfile({ realm: realmName, tab: "attributes" }) as string });
 
             toast.success(t("createAttributeSuccess"));
         } catch (error) {

@@ -57,7 +57,6 @@ export enum CredentialsKeyEnum {
 export type ConfigurationKey = keyof IConfigurations;
 
 export enum EmailProviderIdEnum {
-	EmailJS = "emailjs",
 	Mailgun = "mailgun",
 	Mailjet = "mailjet",
 	Mandrill = "mandrill",
@@ -72,7 +71,6 @@ export enum EmailProviderIdEnum {
 	Plunk = "plunk",
 	MailerSend = "mailersend",
 	Mailtrap = "mailtrap",
-	Clickatell = "clickatell",
 	Outlook365 = "outlook365",
 	Novu = "novu-email",
 	SparkPost = "sparkpost",
@@ -159,7 +157,7 @@ export type ProvidersIdEnum =
 	| InAppProviderIdEnum
 	| ChatProviderIdEnum;
 
-export const ProvidersIdEnumConst = {
+const ProvidersIdEnumConst = {
 	EmailProviderIdEnum,
 	SmsProviderIdEnum,
 	PushProviderIdEnum,

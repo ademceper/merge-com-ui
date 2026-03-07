@@ -3,7 +3,7 @@
  * @see https://github.com/joropeza/ts-timezone-enum
  */
 
-export enum TimezoneEnum {
+enum TimezoneEnum {
 	AFRICA_ABIDJAN = "Africa/Abidjan",
 	AFRICA_ACCRA = "Africa/Accra",
 	AFRICA_ADDIS_ABABA = "Africa/Addis_Ababa",
@@ -600,4 +600,4 @@ export enum TimezoneEnum {
 	ZULU = "Zulu",
 }
 
-export type Timezone = `${TimezoneEnum}`;
+type Timezone = `${TimezoneEnum}`;

@@ -18,7 +18,7 @@ import {
 import { get, isEqual } from "lodash-es";
 import { useState } from "react";
 import { Controller, FormProvider, UseFormReturn, useWatch } from "react-hook-form";
-import { useTranslation } from "react-i18next";
+import { useTranslation } from "@merge-rd/i18n";
 import { useAdminClient } from "../../../app/admin-client";
 import { getErrorDescription, getErrorMessage } from "../../../../shared/keycloak-ui-shared";
 import { toast } from "sonner";
@@ -26,7 +26,7 @@ import { FormAccess } from "../../../shared/ui/form/form-access";
 import { WizardSectionHeader } from "../../../shared/ui/wizard-section-header/wizard-section-header";
 import { useRealm } from "../../../app/providers/realm-context/realm-context";
 
-export type LdapSettingsConnectionProps = {
+type LdapSettingsConnectionProps = {
     form: UseFormReturn;
     id?: string;
     showSectionHeading?: boolean;

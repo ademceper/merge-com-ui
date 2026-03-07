@@ -20,7 +20,7 @@ import { useEvent } from "../../utils/use-event";
 
 const MIN_WIDTH = 20;
 export const IMAGE_MAX_WIDTH = 600;
-export const IMAGE_MAX_HEIGHT = 400;
+const IMAGE_MAX_HEIGHT = 400;
 
 export type ImageStatus = "idle" | "loading" | "loaded" | "error";
 

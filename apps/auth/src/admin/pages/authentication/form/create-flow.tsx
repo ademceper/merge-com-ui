@@ -3,8 +3,8 @@ import { SelectField } from "../../../../shared/keycloak-ui-shared";
 import { toast } from "sonner";
 import { Button } from "@merge-rd/ui/components/button";
 import { FormProvider, useForm } from "react-hook-form";
-import { useTranslation } from "react-i18next";
-import { Link, useNavigate } from "react-router-dom";
+import { useTranslation } from "@merge-rd/i18n";
+import { Link, useNavigate } from "@tanstack/react-router";
 import { useAdminClient } from "../../../app/admin-client";
 import { FormAccess } from "../../../shared/ui/form/form-access";
 import { useRealm } from "../../../app/providers/realm-context/realm-context";
@@ -29,13 +29,13 @@ export default function CreateFlow() {
         try {
             const { id } = await adminClient.authenticationManagement.createFlow(flow);
             toast.success(t("flowCreatedSuccess"));
-            navigate(
-                toFlow({
+            navigate({
+                to: toFlow({
                     realm,
                     id: id!,
                     usedBy: "notInUse"
-                })
-            );
+                }) as string
+            });
         } catch (error: any) {
             toast.error(t("flowCreateError", {
                     error: error.response?.data?.errorMessage || error
@@ -73,7 +73,7 @@ export default function CreateFlow() {
                                 {t("create")}
                             </Button>
                             <Button asChild data-testid="cancel" variant="link">
-                                <Link to={toAuthentication({ realm })}>{t("cancel")}</Link>
+                                <Link to={toAuthentication({ realm }) as string}>{t("cancel")}</Link>
                             </Button>
                         </div>
                     </FormAccess>

@@ -25,7 +25,7 @@ import {
     MouseEvent as ReactMouseEvent,
     useState
 } from "react";
-import { useTranslation } from "react-i18next";
+import { useTranslation } from "@merge-rd/i18n";
 import CodeEditor from "../form/code-editor";
 
 type FileUploadType = {
@@ -35,7 +35,7 @@ type FileUploadType = {
     modal: boolean;
 };
 
-export type FileUploadEvent =
+type FileUploadEvent =
     | ReactDragEvent<HTMLElement> // User dragged/dropped a file
     | ChangeEvent<HTMLTextAreaElement> // User typed in the TextArea
     | ReactMouseEvent<HTMLButtonElement, MouseEvent>; // User clicked Clear button

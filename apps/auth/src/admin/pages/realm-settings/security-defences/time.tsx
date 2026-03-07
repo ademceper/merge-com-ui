@@ -1,5 +1,5 @@
 import { CSSProperties } from "react";
-import { useTranslation } from "react-i18next";
+import { useTranslation } from "@merge-rd/i18n";
 
 import { TimeSelectorControl } from "../../../shared/ui/time-selector/time-selector-control";
 

@@ -7,7 +7,7 @@ import {
 	CaretRight,
 } from "@phosphor-icons/react";
 import type * as React from "react";
-import { Link } from "react-router-dom";
+import { Link } from "@tanstack/react-router";
 
 export {
 	Pagination,

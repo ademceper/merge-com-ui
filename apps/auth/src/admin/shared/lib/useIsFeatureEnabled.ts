@@ -10,7 +10,6 @@ export enum Feature {
     DPoP = "DPOP",
     DeviceFlow = "DEVICE_FLOW",
     TransientUsers = "TRANSIENT_USERS",
-    ClientTypes = "CLIENT_TYPES",
     DeclarativeUI = "DECLARATIVE_UI",
     Organizations = "ORGANIZATION",
     OpenId4VCI = "OID4VC_VCI",

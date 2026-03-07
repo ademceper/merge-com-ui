@@ -20,7 +20,7 @@ import {
 } from "@merge-rd/ui/components/empty";
 import { DataTable, type ColumnDef } from "@/admin/shared/ui/data-table";
 import { useMemo, useState } from "react";
-import { useTranslation } from "react-i18next";
+import { useTranslation } from "@merge-rd/i18n";
 import { useAdminClient } from "../../app/admin-client";
 import { KeycloakSpinner } from "../../../shared/keycloak-ui-shared";
 import { translationFormatter } from "../../shared/lib/translationFormatter";
@@ -29,7 +29,7 @@ type ClientProfile = ClientProfileRepresentation & {
     global: boolean;
 };
 
-export type AddClientProfileModalProps = {
+type AddClientProfileModalProps = {
     open: boolean;
     toggleDialog: () => void;
     onConfirm: (newReps: RoleRepresentation[]) => void;

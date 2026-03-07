@@ -1,17 +1,17 @@
 import { ButtonTypeEnum } from "@/shared/model";
 
-export interface INotificationButtonConfig {
+interface INotificationButtonConfig {
 	key: ButtonTypeEnum;
 	displayName: string;
 }
 
-export interface IButtonStyles {
+interface IButtonStyles {
 	backGroundColor: string;
 	fontColor: string;
 	removeCircleColor: string;
 }
 
-export interface IStyleButtons {
+interface IStyleButtons {
 	primary: IButtonStyles;
 	secondary: IButtonStyles;
 	clicked: IButtonStyles;
@@ -27,7 +27,7 @@ const secondaryButton: INotificationButtonConfig = {
 	displayName: "Secondary",
 };
 
-export const darkButtonStyle: IStyleButtons = {
+const darkButtonStyle: IStyleButtons = {
 	primary: {
 		backGroundColor: "linear-gradient(99deg,#DD2476 0% 0%, #FF512F 100% 100%)",
 		fontColor: "#FFFFFF",
@@ -45,7 +45,7 @@ export const darkButtonStyle: IStyleButtons = {
 	},
 };
 
-export const lightButtonStyle: IStyleButtons = {
+const lightButtonStyle: IStyleButtons = {
 	primary: {
 		backGroundColor: "linear-gradient(99deg,#DD2476 0% 0%, #FF512F 100% 100%)",
 		fontColor: "#FFFFFF",
@@ -63,7 +63,7 @@ export const lightButtonStyle: IStyleButtons = {
 	},
 };
 
-export const notificationItemButtons: INotificationButtonConfig[] = [
+const notificationItemButtons: INotificationButtonConfig[] = [
 	primaryButton,
 	secondaryButton,
 ];

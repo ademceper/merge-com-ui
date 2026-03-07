@@ -6,13 +6,13 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigge
 import { buttonVariants } from "@merge-rd/ui/components/button";
 import { useState } from "react";
 import { FormProvider, SubmitHandler, useForm, useWatch } from "react-hook-form";
-import { useTranslation } from "react-i18next";
-import { useMatch, useNavigate, useParams as useRouterParams } from "react-router-dom";
+import { useTranslation } from "@merge-rd/i18n";
+import { useNavigate, useLocation } from "@tanstack/react-router";
+import { useParams as useRouterParams } from "../../shared/lib/useParams";
 import { useAdminClient } from "../../app/admin-client";
 import { toClient } from "../clients/routes/client";
 import {
     ClientRoleParams,
-    ClientRoleRoute,
     ClientRoleTab,
     toClientRole
 } from "../clients/routes/client-role";
@@ -36,7 +36,7 @@ import { AdminEvents } from "../events/admin-events";
 import useIsFeatureEnabled, { Feature } from "../../shared/lib/useIsFeatureEnabled";
 import { useParams } from "../../shared/lib/useParams";
 import { UsersInRoleTab } from "./users-in-role-tab";
-import { RealmRoleRoute, RealmRoleTab, toRealmRole } from "./routes/realm-role";
+import { RealmRoleTab, toRealmRole } from "./routes/realm-role";
 import { toRealmRoles } from "./routes/realm-roles";
 
 export default function RealmRoleTabs() {
@@ -129,8 +129,9 @@ const { hasAccess } = useAccess();
         }
     };
 
-    const realmRoleMatch = useMatch(RealmRoleRoute.path);
-    const clientRoleMatch = useMatch(ClientRoleRoute.path);
+    const location = useLocation();
+    const clientRoleMatch = location.pathname.includes("/clients/");
+    const realmRoleMatch = !clientRoleMatch && location.pathname.includes("/roles/");
 
     const toOverview = () => {
         if (realmRoleMatch) {
@@ -140,7 +141,7 @@ const { hasAccess } = useAccess();
         if (clientRoleMatch) {
             return toClient({
                 realm: realmName,
-                clientId: clientRoleMatch.params.clientId!,
+                clientId: clientId,
                 tab: "roles"
             });
         }
@@ -161,7 +162,7 @@ const { hasAccess } = useAccess();
             return toClientRole({
                 realm: realmName,
                 id,
-                clientId: clientRoleMatch.params.clientId!,
+                clientId: clientId,
                 tab: tab as ClientRoleTab
             });
         }
@@ -187,7 +188,7 @@ const { hasAccess } = useAccess();
                     });
                 }
                 toast.success(t("roleDeletedSuccess"));
-                navigate(toOverview());
+                navigate({ to: toOverview() as string });
             } catch (error) {
                 toast.error(t("roleDeleteError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
             }
@@ -201,7 +202,7 @@ const { hasAccess } = useAccess();
                 composites
             );
             refresh();
-            navigate(toTab("associated-roles"));
+            navigate({ to: toTab("associated-roles") as string });
             toast.success(t("addAssociatedRolesSuccess"));
         } catch (error) {
             toast.error(t("addAssociatedRolesError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });

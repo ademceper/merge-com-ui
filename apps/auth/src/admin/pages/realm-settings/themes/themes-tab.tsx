@@ -1,8 +1,8 @@
 import type RealmRepresentation from "@keycloak/keycloak-admin-client/lib/defs/realmRepresentation";
 import JSZip from "jszip";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@merge-rd/ui/components/tabs";
-import { useTranslation } from "react-i18next";
-import { useNavigate } from "react-router-dom";
+import { useTranslation } from "@merge-rd/i18n";
+import { useNavigate } from "@tanstack/react-router";
 import { useRealm } from "../../../app/providers/realm-context/realm-context";
 import { toThemesTab } from "../routes/themes-tab";
 import type { ThemesTabType } from "../routes/themes-tab";
@@ -148,7 +148,7 @@ styles=css/login.css css/theme-styles.css
         <Tabs
             value={currentTab}
             onValueChange={(value) =>
-                navigate(toThemesTab({ realm: realmName!, tab: value as ThemesTabType }))
+                navigate({ to: toThemesTab({ realm: realmName!, tab: value as ThemesTabType }) as string })
             }
         >
             <TabsList variant="line" className="mb-4">

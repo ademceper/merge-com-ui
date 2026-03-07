@@ -1,9 +1,9 @@
 import { Button } from "@merge-rd/ui/components/button";
 import { FormProvider, useForm } from "react-hook-form";
-import { useTranslation } from "react-i18next";
-import { Link, useNavigate } from "react-router-dom";
-import { useAdminClient } from "../../app/admin-client";
+import { useTranslation } from "@merge-rd/i18n";
+import { Link, useNavigate } from "@tanstack/react-router";
 import { getErrorDescription, getErrorMessage } from "../../../shared/keycloak-ui-shared";
+import { useCreateOrganization } from "./api/queries";
 import { toast } from "sonner";
 import { FormAccess } from "../../shared/ui/form/form-access";
 import { useRealm } from "../../app/providers/realm-context/realm-context";
@@ -12,19 +12,19 @@ import { toEditOrganization } from "./routes/edit-organization";
 import { toOrganizations } from "./routes/organizations";
 
 export default function NewOrganization() {
-    const { adminClient } = useAdminClient();
-const { t } = useTranslation();
+    const { t } = useTranslation();
     const navigate = useNavigate();
     const { realm } = useRealm();
     const form = useForm({ mode: "onChange" });
     const { handleSubmit, formState } = form;
+    const createMutation = useCreateOrganization();
 
     const save = async (org: OrganizationFormType) => {
         try {
             const organization = convertToOrg(org);
-            const { id } = await adminClient.organizations.create(organization);
+            const { id } = await createMutation.mutateAsync(organization);
             toast.success(t("organizationSaveSuccess"));
-            navigate(toEditOrganization({ realm, id, tab: "settings" }));
+            navigate({ to: toEditOrganization({ realm, id, tab: "settings" }) as string });
         } catch (error) {
             toast.error(t("organizationSaveError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
         }
@@ -55,7 +55,7 @@ const { t } = useTranslation();
                                 variant="link"
                                 asChild
                             >
-                                <Link to={toOrganizations({ realm })}>
+                                <Link to={toOrganizations({ realm }) as string}>
                                     {t("cancel")}
                                 </Link>
                             </Button>

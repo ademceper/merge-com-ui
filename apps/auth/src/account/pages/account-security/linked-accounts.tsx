@@ -11,7 +11,7 @@
 
 import { useEnvironment } from "../../../shared/keycloak-ui-shared";
 import { useState } from "react";
-import { useTranslation } from "react-i18next";
+import { useTranslation } from "@merge-rd/i18n";
 import { getLinkedAccounts, LinkedAccountQueryParams } from "../../shared/api/methods";
 import { LinkedAccountRepresentation } from "../../shared/api/representations";
 import { EmptyRow } from "../../shared/ui/datalist/empty-row";
@@ -20,7 +20,7 @@ import { usePromise } from "../../shared/lib/usePromise";
 import { AccountRow } from "./account-row";
 import { LinkedAccountsToolbar } from "./linked-accounts-toolbar";
 
-export const LinkedAccounts = () => {
+const LinkedAccounts = () => {
     const { t } = useTranslation();
     const context = useEnvironment();
     const [linkedAccounts, setLinkedAccounts] = useState<LinkedAccountRepresentation[]>(

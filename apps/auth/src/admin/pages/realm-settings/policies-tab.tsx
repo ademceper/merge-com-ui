@@ -17,8 +17,8 @@ import { Label } from "@merge-rd/ui/components/label";
 import { omit } from "lodash-es";
 import { useState } from "react";
 import { Controller, useForm, type UseFormReturn } from "react-hook-form";
-import { useTranslation } from "react-i18next";
-import { Link, useNavigate } from "react-router-dom";
+import { useTranslation } from "@merge-rd/i18n";
+import { Link, useNavigate } from "@tanstack/react-router";
 import { useAdminClient } from "../../app/admin-client";
 import {
     AlertDialog,
@@ -105,7 +105,7 @@ const { realm } = useRealm();
             await adminClient.clientPolicies.updatePolicy({
                 policies: updatedPolicies
             });
-            navigate(toClientPolicies({ realm, tab: "policies" }));
+            navigate({ to: toClientPolicies({ realm, tab: "policies" }) as string });
             toast.success(t("updateClientPolicySuccess"));
         } catch (error) {
             toast.error(t("updateClientPolicyError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
@@ -233,7 +233,7 @@ const { realm } = useRealm();
                                 row.original.global ? (
                                     row.original.name
                                 ) : (
-                                    <Link to={toEditClientPolicy({ realm, policyName: row.original.name! })}>
+                                    <Link to={toEditClientPolicy({ realm, policyName: row.original.name! }) as string}>
                                         {row.original.name}
                                     </Link>
                                 )
@@ -283,14 +283,14 @@ const { realm } = useRealm();
                             <EmptyHeader><EmptyTitle>{t("noClientPolicies")}</EmptyTitle></EmptyHeader>
                             <EmptyContent><EmptyDescription>{t("noClientPoliciesInstructions")}</EmptyDescription></EmptyContent>
                             <Button asChild className="mt-2">
-                                <Link to={toAddClientPolicy({ realm })}>{t("createClientPolicy")}</Link>
+                                <Link to={toAddClientPolicy({ realm }) as string}>{t("createClientPolicy")}</Link>
                             </Button>
                         </Empty>
                     }
                     emptyMessage={t("noClientPolicies")}
                     toolbar={
                         <Button id="createPolicy" asChild data-testid="createPolicy">
-                            <Link to={toAddClientPolicy({ realm })}>{t("createClientPolicy")}</Link>
+                            <Link to={toAddClientPolicy({ realm }) as string}>{t("createClientPolicy")}</Link>
                         </Button>
                     }
                 />

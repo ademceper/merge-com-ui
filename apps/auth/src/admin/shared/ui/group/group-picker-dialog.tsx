@@ -26,11 +26,11 @@ import { Input } from "@merge-rd/ui/components/input";
 import { Separator } from "@merge-rd/ui/components/separator";
 import { CaretRight, MagnifyingGlass } from "@phosphor-icons/react";
 import { KeyboardEvent, useState } from "react";
-import { useTranslation } from "react-i18next";
+import { useTranslation } from "@merge-rd/i18n";
 import { useAdminClient } from "../../../app/admin-client";
 import { GroupPath } from "./group-path";
 
-export type GroupPickerDialogProps = {
+type GroupPickerDialogProps = {
     id?: string;
     type: "selectOne" | "selectMany";
     filterGroups?: GroupRepresentation[];

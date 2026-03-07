@@ -11,7 +11,7 @@
 
 import { useEnvironment } from "../../../shared/keycloak-ui-shared";
 import { useEffect, useMemo, useState } from "react";
-import { useTranslation } from "react-i18next";
+import { useTranslation } from "@merge-rd/i18n";
 import { CaretDown } from "@phosphor-icons/react";
 
 import { getIssuer, requestVCOffer } from "../../app/api";
@@ -19,7 +19,7 @@ import { CredentialsIssuer } from "../../shared/api/representations";
 import { Page } from "../../shared/ui/page/page";
 import { usePromise } from "../../shared/lib/usePromise";
 
-export const Oid4Vci = () => {
+const Oid4Vci = () => {
     const context = useEnvironment();
 
     const { t } = useTranslation();

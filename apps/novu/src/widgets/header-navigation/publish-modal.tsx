@@ -34,7 +34,7 @@ import {
 	TooltipContent,
 	TooltipTrigger,
 } from "@/shared/ui/primitives/tooltip";
-import { useDiffEnvironments } from "@/features/settings/lib/use-environments";
+import { useDiffEnvironments } from "@/pages/settings/model/use-environments";
 import { useResourceDependencies } from "@/shared/lib/hooks/use-resource-dependencies";
 import { formatDateSimple } from "@/shared/lib/format-date";
 import { LayoutUsageIndicator } from "./layout-usage-indicator";

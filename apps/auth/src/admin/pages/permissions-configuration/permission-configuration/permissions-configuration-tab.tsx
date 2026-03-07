@@ -22,8 +22,8 @@ import {
 import { TablePagination } from "@/admin/shared/ui/table-pagination";
 import { CaretDown, CaretRight, DotsThreeVertical } from "@phosphor-icons/react";
 import { Fragment, useState } from "react";
-import { useTranslation } from "react-i18next";
-import { Link, useNavigate } from "react-router-dom";
+import { useTranslation } from "@merge-rd/i18n";
+import { Link, useNavigate } from "@tanstack/react-router";
 import { useAdminClient } from "../../../app/admin-client";
 import { useConfirmDialog } from "../../../shared/ui/confirm-dialog/confirm-dialog";
 import { useRealm } from "../../../app/providers/realm-context/realm-context";
@@ -144,13 +144,13 @@ const { realm } = useRealm();
                         <NewPermissionConfigurationDialog
                             resourceTypes={resourceTypes}
                             onSelect={resourceType =>
-                                navigate(
-                                    toCreatePermissionConfiguration({
+                                navigate({
+                                    to: toCreatePermissionConfiguration({
                                         realm,
                                         permissionClientId: clientId,
                                         resourceType: resourceType.type!
-                                    })
-                                )
+                                    }) as string
+                                })
                             }
                             toggleDialog={toggleDialog}
                         />
@@ -227,7 +227,7 @@ const { realm } = useRealm();
                                                             permissionId: permission.id!,
                                                             resourceType:
                                                                 permission.resourceType!
-                                                        })}
+                                                        }) as string}
                                                     >
                                                         {permission.name}
                                                     </Link>
@@ -347,7 +347,7 @@ const { realm } = useRealm();
                         <NewPermissionConfigurationDialog
                             resourceTypes={resourceTypes}
                             onSelect={resourceType =>
-                                navigate(toCreatePermissionConfiguration({ realm, permissionClientId: clientId, resourceType: resourceType.type! }))
+                                navigate({ to: toCreatePermissionConfiguration({ realm, permissionClientId: clientId, resourceType: resourceType.type! }) as string })
                             }
                             toggleDialog={toggleDialog}
                         />

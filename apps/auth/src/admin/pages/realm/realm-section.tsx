@@ -24,8 +24,8 @@ import {
 } from "@merge-rd/ui/components/popover";
 import { Trash } from "@phosphor-icons/react";
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { useTranslation } from "react-i18next";
-import { Link, useNavigate } from "react-router-dom";
+import { useTranslation } from "@merge-rd/i18n";
+import { Link, useNavigate } from "@tanstack/react-router";
 import { useAdminClient } from "../../app/admin-client";
 import {
     AlertDialog,
@@ -73,7 +73,7 @@ const RecentRealmsDropdown = () => {
             <DropdownMenuContent align="end">
                 {recentRealms.map(({ name }) => (
                     <DropdownMenuItem key={name} asChild>
-                        <Link to={toDashboard({ realm: name })}>{name}</Link>
+                        <Link to={toDashboard({ realm: name }) as string}>{name}</Link>
                     </DropdownMenuItem>
                 ))}
             </DropdownMenuContent>
@@ -144,7 +144,7 @@ export default function RealmSection() {
             );
             toast.success(t("deletedSuccessRealmSetting"));
             if (selected.filter(({ name }) => name === realm).length > 0) {
-                navigate(toRealm({ realm: "master" }));
+                navigate({ to: toRealm({ realm: "master" }) as string });
             }
             refresh();
             setSelected([]);
@@ -166,7 +166,7 @@ export default function RealmSection() {
                     if (name !== realm) {
                         return (
                             <Link
-                                to={toDashboard({ realm: name })}
+                                to={toDashboard({ realm: name }) as string}
                                 className="font-medium text-primary hover:underline"
                             >
                                 {name}

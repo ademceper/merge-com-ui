@@ -31,7 +31,7 @@ export const MultiInputComponent = ({
     </UserProfileGroup>
 );
 
-export type MultiLineInputProps = {
+type MultiLineInputProps = {
     t: TFunction;
     name: FieldPath<UserFormFields>;
     form: UseFormReturn<UserFormFields>;

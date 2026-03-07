@@ -5,7 +5,7 @@ import {
     SelectValue
 } from "@merge-rd/ui/components/select";
 import { useState } from "react";
-import { useTranslation } from "react-i18next";
+import { useTranslation } from "@merge-rd/i18n";
 import { useAdminClient } from "../../app/admin-client";
 import type { Row } from "../clients/scopes/client-scopes";
 import { getErrorDescription, getErrorMessage } from "../../../shared/keycloak-ui-shared";

@@ -5,11 +5,11 @@ import {
 } from "../../../../shared/keycloak-ui-shared";
 import { isEqual } from "lodash-es";
 import { UseFormReturn, useWatch } from "react-hook-form";
-import { useTranslation } from "react-i18next";
+import { useTranslation } from "@merge-rd/i18n";
 import { FormAccess } from "../../../shared/ui/form/form-access";
 import { WizardSectionHeader } from "../../../shared/ui/wizard-section-header/wizard-section-header";
 
-export type SettingsCacheProps = {
+type SettingsCacheProps = {
     form: UseFormReturn;
     showSectionHeading?: boolean;
     showSectionDescription?: boolean;

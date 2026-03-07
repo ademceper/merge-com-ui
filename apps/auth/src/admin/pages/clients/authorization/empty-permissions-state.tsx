@@ -1,5 +1,5 @@
-import { useNavigate } from "react-router-dom";
-import { useTranslation } from "react-i18next";
+import { useNavigate } from "@tanstack/react-router";
+import { useTranslation } from "@merge-rd/i18n";
 import { Button } from "@merge-rd/ui/components/button";
 import { Tooltip, TooltipContent, TooltipTrigger, TooltipProvider } from "@merge-rd/ui/components/tooltip";
 import { PlusCircle } from "@phosphor-icons/react";
@@ -29,7 +29,7 @@ const EmptyButton = ({
             variant="secondary"
             onClick={() =>
                 !disabled &&
-                navigate(toNewPermission({ realm, id: clientId, permissionType }))
+                navigate({ to: toNewPermission({ realm, id: clientId, permissionType }) as string })
             }
         >
             {t(`create${toUpperCase(permissionType)}BasedPermission`)}

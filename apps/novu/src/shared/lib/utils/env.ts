@@ -21,7 +21,7 @@ const hasCloudflareContext = (context: any): context is CloudflareEnv => {
  * @param name Pass the name of the environment variable. The param is case-sensitive.
  * @returns string Returns the value of the environment variable if exists.
  */
-export const getEnvVariable = (name: string, context?: unknown): string => {
+const getEnvVariable = (name: string, context?: unknown): string => {
 	// Node envs
 	if (
 		typeof process !== "undefined" &&

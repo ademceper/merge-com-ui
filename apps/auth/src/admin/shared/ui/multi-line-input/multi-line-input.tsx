@@ -4,7 +4,7 @@ import { cn } from "@merge-rd/ui/lib/utils";
 import { MinusCircle, Plus } from "@phosphor-icons/react";
 import React, { Fragment, useEffect, useMemo } from "react";
 import { useFormContext, useWatch } from "react-hook-form";
-import { useTranslation } from "react-i18next";
+import { useTranslation } from "@merge-rd/i18n";
 import { formInputWrapperClassName, HelpItem } from "../../../../shared/keycloak-ui-shared";
 
 function stringToMultiline(value?: string): string[] {
@@ -15,7 +15,7 @@ function toStringValue(formValue: string[]): string {
     return formValue.join("##");
 }
 
-export type MultiLineInputProps = Omit<React.InputHTMLAttributes<HTMLInputElement>, "form" | "defaultValue"> & {
+type MultiLineInputProps = Omit<React.InputHTMLAttributes<HTMLInputElement>, "form" | "defaultValue"> & {
     name: string;
     addButtonLabel?: string;
     isDisabled?: boolean;

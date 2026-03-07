@@ -1,11 +1,11 @@
 import { MemberRoleEnum } from "../entities/organization/member.enum";
 
-export enum SignUpOriginEnum {
+enum SignUpOriginEnum {
 	WEB = "web",
 	CLI = "cli",
 }
 
-export type UserSessionData = {
+type UserSessionData = {
 	_id: string;
 	firstName?: string;
 	lastName?: string;
@@ -21,21 +21,21 @@ export type UserSessionData = {
 	environmentId: string;
 };
 
-export enum ApiAuthSchemeEnum {
+enum ApiAuthSchemeEnum {
 	BEARER = "Bearer",
 	API_KEY = "ApiKey",
 	KEYLESS = "Keyless",
 }
 
-export enum PassportStrategyEnum {
+enum PassportStrategyEnum {
 	JWT = "jwt",
 	HEADER_API_KEY = "headerapikey",
 	KEYLESS = "keyless",
 }
 
-export const NONE_AUTH_SCHEME = "None";
+const NONE_AUTH_SCHEME = "None";
 
-export type AuthenticateContext = {
+type AuthenticateContext = {
 	invitationToken?: string;
 	origin?: SignUpOriginEnum;
 };
@@ -65,9 +65,9 @@ export enum PermissionsEnum {
 	ORG_SETTINGS_READ = "org:settings:read",
 }
 
-export const ALL_PERMISSIONS = Object.values(PermissionsEnum);
+const ALL_PERMISSIONS = Object.values(PermissionsEnum);
 
-export const ROLE_PERMISSIONS: Record<MemberRoleEnum, PermissionsEnum[]> = {
+const ROLE_PERMISSIONS: Record<MemberRoleEnum, PermissionsEnum[]> = {
 	[MemberRoleEnum.OWNER]: [
 		PermissionsEnum.WORKFLOW_READ,
 		PermissionsEnum.WORKFLOW_WRITE,

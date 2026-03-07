@@ -13,11 +13,11 @@ import { Switch } from "@merge-rd/ui/components/switch";
 import { buttonVariants } from "@merge-rd/ui/components/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@merge-rd/ui/components/tabs";
 import { Info } from "@phosphor-icons/react";
-import { TFunction } from "i18next";
+import { TFunction } from "@merge-rd/i18n";
 import { useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
-import { useTranslation } from "react-i18next";
-import { useNavigate, useParams as useRouterParams } from "react-router-dom";
+import { useTranslation } from "@merge-rd/i18n";
+import { useNavigate } from "@tanstack/react-router";
 import { useAdminClient } from "../../app/admin-client";
 import {
     AlertDialog,
@@ -67,8 +67,7 @@ export default function EditUser() {
     const { t } = useTranslation();
 const navigate = useNavigate();
     const { hasAccess } = useAccess();
-    const { id } = useParams<UserParams>();
-    const { tab } = useRouterParams<{ tab?: string }>();
+    const { id, tab } = useParams<UserParams & { tab?: string }>();
     const { realm: realmName, realmRepresentation: realm } = useRealm();
     // Validation of form fields is performed on server, thus we need to clear all errors before submit
     const clearAllErrorsBeforeSubmit = async (values: UserFormFields) => ({
@@ -220,7 +219,7 @@ const navigate = useNavigate();
             }
             setDeleteDialogOpen(false);
             toast.success(t("userDeletedSuccess"));
-            navigate(toUsers({ realm: realmName }));
+            navigate({ to: toUsers({ realm: realmName }) as string });
         } catch (error) {
             toast.error(t("userDeletedError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
         }

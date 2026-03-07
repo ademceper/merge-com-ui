@@ -22,8 +22,8 @@ import {
 import { TablePagination } from "@/admin/shared/ui/table-pagination";
 import { CaretDown, CaretRight, DotsThreeVertical } from "@phosphor-icons/react";
 import { Fragment, useState } from "react";
-import { useTranslation } from "react-i18next";
-import { Link } from "react-router-dom";
+import { useTranslation } from "@merge-rd/i18n";
+import { Link } from "@tanstack/react-router";
 import { useAdminClient } from "../../../app/admin-client";
 import { KeycloakSpinner } from "../../../../shared/keycloak-ui-shared";
 import { useRealm } from "../../../app/providers/realm-context/realm-context";
@@ -175,7 +175,7 @@ export const AuthorizationScopes = ({ clientId, isDisabled = false }: ScopesProp
                             t={t}
                         />
                         <Button data-testid="createAuthorizationScope" asChild>
-                            <Link to={toNewScope({ realm, id: clientId })}>{t("createAuthorizationScope")}</Link>
+                            <Link to={toNewScope({ realm, id: clientId }) as string}>{t("createAuthorizationScope")}</Link>
                         </Button>
                     </div>
                     {!noData && (
@@ -221,7 +221,7 @@ export const AuthorizationScopes = ({ clientId, isDisabled = false }: ScopesProp
                                                         realm,
                                                         id: clientId,
                                                         scopeId: scope.id!
-                                                    })}
+                                                    }) as string}
                                                 >
                                                     {scope.name}
                                                 </Link>
@@ -235,7 +235,7 @@ export const AuthorizationScopes = ({ clientId, isDisabled = false }: ScopesProp
                                                             id: clientId,
                                                             permissionType: "scope",
                                                             selectedId: scope.id
-                                                        })}
+                                                        }) as string}
                                                     >
                                                         {t("createPermission")}
                                                     </Link>
@@ -317,7 +317,7 @@ export const AuthorizationScopes = ({ clientId, isDisabled = false }: ScopesProp
                 <Empty className="py-12">
                     <EmptyHeader><EmptyTitle>{t("emptyAuthorizationScopes")}</EmptyTitle></EmptyHeader>
                     <EmptyContent><EmptyDescription>{t("emptyAuthorizationInstructions")}</EmptyDescription></EmptyContent>
-                    {!isDisabled && <Button className="mt-2" asChild><Link to={toNewScope({ id: clientId, realm })}>{t("createAuthorizationScope")}</Link></Button>}
+                    {!isDisabled && <Button className="mt-2" asChild><Link to={toNewScope({ id: clientId, realm }) as string}>{t("createAuthorizationScope")}</Link></Button>}
                 </Empty>
             )}
             {noData && searching && (

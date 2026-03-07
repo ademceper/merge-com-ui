@@ -4,7 +4,7 @@ import {
     TableRow,
 } from "@/admin/shared/ui/data-table";
 import { DotsSixVertical } from "@phosphor-icons/react";
-import { useTranslation } from "react-i18next";
+import { useTranslation } from "@merge-rd/i18n";
 
 export const FlowHeader = () => {
     const { t } = useTranslation();

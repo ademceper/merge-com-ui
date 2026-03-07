@@ -3,7 +3,7 @@ import { Button } from "@merge-rd/ui/components/button";
 import { Tooltip, TooltipContent, TooltipTrigger, TooltipProvider } from "@merge-rd/ui/components/tooltip";
 import { Copy } from "@phosphor-icons/react";
 import { useEffect, useMemo, useState } from "react";
-import { useTranslation } from "react-i18next";
+import { useTranslation } from "@merge-rd/i18n";
 
 import useQueryPermission from "../../lib/useQueryPermission";
 

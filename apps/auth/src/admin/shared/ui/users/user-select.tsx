@@ -12,7 +12,7 @@ import { X } from "@phosphor-icons/react";
 import { debounce } from "lodash-es";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Controller, useFormContext } from "react-hook-form";
-import { useTranslation } from "react-i18next";
+import { useTranslation } from "@merge-rd/i18n";
 import { useAdminClient } from "../../../app/admin-client";
 import useToggle from "../../lib/useToggle";
 import type { ComponentProps } from "../dynamic/components";

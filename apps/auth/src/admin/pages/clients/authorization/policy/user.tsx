@@ -1,4 +1,4 @@
-import { useTranslation } from "react-i18next";
+import { useTranslation } from "@merge-rd/i18n";
 import { UserSelect } from "../../../../shared/ui/users/user-select";
 
 export const User = () => {

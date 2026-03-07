@@ -42,7 +42,7 @@ import {
   type TableSortDirection,
 } from "@merge-rd/ui/components/table";
 
-export type DraggableTableRowsProps<TData> = {
+type DraggableTableRowsProps<TData> = {
   columns: ColumnDef<TData>[];
   data: TData[];
   getRowId: (row: TData) => string;

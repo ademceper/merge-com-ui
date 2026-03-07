@@ -8,7 +8,7 @@ import type { Roles } from "@keycloak/keycloak-admin-client/lib/resources/roles"
 import type { Users } from "@keycloak/keycloak-admin-client/lib/resources/users";
 import { Row } from "./role-mapping";
 
-export type ResourcesKey = keyof KeycloakAdminClient;
+type ResourcesKey = keyof KeycloakAdminClient;
 
 type DeleteFunctions =
     | keyof Pick<Groups, "delClientRoleMappings" | "delRealmRoleMappings">

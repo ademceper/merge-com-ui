@@ -1,5 +1,5 @@
-import type { IMessageCTADto } from "../dto";
-import type { IMessage } from "../entities/messages";
+import type { IMessageCTADto } from "../../dto";
+import type { IMessage } from "../../entities/messages";
 import {
 	ButtonTypeEnum,
 	ChannelCTATypeEnum,
@@ -7,7 +7,7 @@ import {
 	ResourceTypeEnum,
 } from "@/shared/model";
 
-export const isBridgeWorkflow = (workflowType?: ResourceTypeEnum): boolean => {
+const isBridgeWorkflow = (workflowType?: ResourceTypeEnum): boolean => {
 	return (
 		workflowType === ResourceTypeEnum.BRIDGE ||
 		workflowType === ResourceTypeEnum.ECHO
@@ -46,7 +46,7 @@ type InAppMessage = Pick<
 /**
  * This function maps the V2 InAppOutput to the V1 MessageEntity.
  */
-export const inAppMessageFromBridgeOutputs = (outputs?: InAppOutput) => {
+const inAppMessageFromBridgeOutputs = (outputs?: InAppOutput) => {
 	const cta = {
 		type: ChannelCTATypeEnum.REDIRECT,
 		data: {

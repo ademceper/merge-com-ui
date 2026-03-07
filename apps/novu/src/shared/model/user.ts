@@ -14,21 +14,12 @@ export enum JobTitleEnum {
 }
 
 export enum OrganizationTypeEnum {
-	COMPANY = "Company",
-	AGENCY = "Agency",
-	EDUCATIONAL = "Student",
-	SOLOPRENEUR = "Solopreneur",
-	OTHER = "Other",
-}
+	}
 
 export enum CompanySizeEnum {
-	LESS_THAN_10 = "<10",
-	BETWEEN_10_50 = "10-50",
-	BETWEEN_51_100 = "51-100",
-	MORE_THAN_100 = "100+",
-}
+	}
 
-export const jobTitleToLabelMapper = {
+const jobTitleToLabelMapper = {
 	[JobTitleEnum.ENGINEER]: "Engineer",
 	[JobTitleEnum.ARCHITECT]: "Architect",
 	[JobTitleEnum.PRODUCT_MANAGER]: "Product Manager",
@@ -48,7 +39,7 @@ export interface IServicesHashes {
 /**
  * Public metadata can be read from the frontend
  */
-export type UserPublicMetadata = {
+type UserPublicMetadata = {
 	profilePicture?: string | null;
 	showOnBoarding?: boolean;
 	showOnBoardingTour?: number;
@@ -59,11 +50,11 @@ export type UserPublicMetadata = {
 /**
  * Unsafe metadata can be updated from the frontend
  */
-export type UserUnsafeMetadata = {
+type UserUnsafeMetadata = {
 	newDashboardOptInStatus?: NewDashboardOptInStatusEnum;
 };
 
-export enum NewDashboardOptInStatusEnum {
+enum NewDashboardOptInStatusEnum {
 	OPTED_IN = "opted_in", // user switched to the new dashboard
 	DISMISSED = "dismissed", // user dismissed the opt-in widget
 	OPTED_OUT = "opted_out", // user switched back to the old dashboard

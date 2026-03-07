@@ -5,10 +5,10 @@ import { Popover, PopoverContent, PopoverTrigger } from "@merge-rd/ui/components
 import { get } from "lodash-es";
 import { useState } from "react";
 import { Controller, FieldPathByValue, FieldValues, useFormContext } from "react-hook-form";
-import { useTranslation } from "react-i18next";
+import { useTranslation } from "@merge-rd/i18n";
 import { useAdminClient } from "../../../app/admin-client";
 
-export type RequiredActionMultiSelectProps<
+type RequiredActionMultiSelectProps<
     T extends FieldValues,
     P extends FieldPathByValue<T, string[] | undefined>
 > = {

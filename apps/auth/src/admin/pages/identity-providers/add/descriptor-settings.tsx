@@ -7,7 +7,7 @@ import {
 import { Button } from "@merge-rd/ui/components/button";
 import { useState } from "react";
 import { FormProvider, useFormContext, useWatch } from "react-hook-form";
-import { useTranslation } from "react-i18next";
+import { useTranslation } from "@merge-rd/i18n";
 import {
     NumberControl,
     SelectField,

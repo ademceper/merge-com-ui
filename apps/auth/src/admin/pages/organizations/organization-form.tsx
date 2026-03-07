@@ -2,7 +2,7 @@ import OrganizationRepresentation from "@keycloak/keycloak-admin-client/lib/defs
 import { FormErrorText, TextAreaControl, TextControl } from "../../../shared/keycloak-ui-shared";
 import { useEffect } from "react";
 import { useFormContext, useWatch } from "react-hook-form";
-import { useTranslation } from "react-i18next";
+import { useTranslation } from "@merge-rd/i18n";
 import { AttributeForm } from "../../shared/ui/key-value-form/attribute-form";
 import { keyValueToArray } from "../../shared/ui/key-value-form/key-value-convert";
 import { MultiLineInput } from "../../shared/ui/multi-line-input/multi-line-input";

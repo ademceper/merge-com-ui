@@ -3,8 +3,8 @@
 import type { Locale } from "./locales";
 import { locales } from "./locales";
 
-export type ILocale = Locale;
-export const SUPPORTED_LOCALES = locales;
+type ILocale = Locale;
+const SUPPORTED_LOCALES = locales;
 
 /**
  * Get all supported locales
@@ -16,7 +16,7 @@ export function getAllLocales(): ILocale[] {
 /**
  * Get all supported locale ISO codes
  */
-export function getSupportedLocaleIsoCodes(): string[] {
+function getSupportedLocaleIsoCodes(): string[] {
 	return SUPPORTED_LOCALES.map((locale) => locale.langIso);
 }
 

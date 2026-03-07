@@ -15,8 +15,8 @@ import {
 } from "@merge-rd/ui/components/select";
 import { useState } from "react";
 import { Controller, FormProvider, useForm } from "react-hook-form";
-import { useTranslation } from "react-i18next";
-import { Link, useNavigate } from "react-router-dom";
+import { useTranslation } from "@merge-rd/i18n";
+import { Link, useNavigate } from "@tanstack/react-router";
 import { useAdminClient } from "../../app/admin-client";
 import { DynamicComponents } from "../../shared/ui/dynamic/dynamic-components";
 import { FormAccess } from "../../shared/ui/form/form-access";
@@ -119,7 +119,7 @@ const [selectExecutorTypeOpen, setSelectExecutorTypeOpen] = useState(false);
                 editMode ? t("updateExecutorSuccess") : t("addExecutorSuccess")
             );
 
-            navigate(toClientProfile({ realm, profileName }));
+            navigate({ to: toClientProfile({ realm, profileName }) as string });
         } catch (error) {
             toast.error(t(editMode ? "updateExecutorError" : "addExecutorError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
         }
@@ -231,7 +231,7 @@ const [selectExecutorTypeOpen, setSelectExecutorTypeOpen] = useState(false);
                                 data-testid="addExecutor-cancelBtn"
                                 asChild
                             >
-                                <Link to={toClientProfile({ realm, profileName })}>
+                                <Link to={toClientProfile({ realm, profileName }) as string}>
                                     {t("cancel")}
                                 </Link>
                             </Button>
@@ -241,7 +241,7 @@ const [selectExecutorTypeOpen, setSelectExecutorTypeOpen] = useState(false);
                 {editMode && globalProfile && (
                     <div className="kc-backToProfile">
                         <Button asChild>
-                            <Link to={toClientProfile({ realm, profileName })}>
+                            <Link to={toClientProfile({ realm, profileName }) as string}>
                                 {t("back")}
                             </Link>
                         </Button>

@@ -6,7 +6,7 @@ import type {
 import type { SubscriberDto } from "../subscriber";
 import type { JSONSchemaDto } from "./json-schema-dto";
 
-export class RenderOutput {}
+class RenderOutput {}
 
 export class ChatRenderOutput extends RenderOutput {
 	body: string;
@@ -21,7 +21,7 @@ export class PushRenderOutput extends RenderOutput {
 	body: string;
 }
 
-export class EmailRenderOutput extends RenderOutput {
+class EmailRenderOutput extends RenderOutput {
 	subject: string;
 	body: string;
 	from?: {
@@ -30,7 +30,7 @@ export class EmailRenderOutput extends RenderOutput {
 	};
 }
 
-export class DigestOutputProcessor {
+class DigestOutputProcessor {
 	static isDigestRegularOutput(output: unknown): output is DigestRegularOutput {
 		if (typeof output !== "object" || output === null) return false;
 
@@ -70,15 +70,15 @@ class DigestTimedOutput {
 	digestKey?: string;
 }
 
-export type DigestRenderOutput = DigestRegularOutput | DigestTimedOutput;
+type DigestRenderOutput = DigestRegularOutput | DigestTimedOutput;
 
-export class DelayRenderOutput extends RenderOutput {
+class DelayRenderOutput extends RenderOutput {
 	type: TimeType;
 	amount: number;
 	unit: TimeUnitEnum;
 }
 
-export type ThrottleRenderOutput = RenderOutput & {
+type ThrottleRenderOutput = RenderOutput & {
 	type: "fixed" | "dynamic";
 	// Fixed throttle fields
 	amount?: number;

@@ -22,7 +22,7 @@ import { Switch } from "@merge-rd/ui/components/switch";
 import { isEqual } from "lodash-es";
 import { useState } from "react";
 import { Controller, FormProvider, useFormContext, useWatch } from "react-hook-form";
-import { useTranslation } from "react-i18next";
+import { useTranslation } from "@merge-rd/i18n";
 import { useAdminClient } from "../../../../app/admin-client";
 import { FormAccess } from "../../../../shared/ui/form/form-access";
 import { DefaultSwitchControl } from "../../../../shared/ui/switch-control";

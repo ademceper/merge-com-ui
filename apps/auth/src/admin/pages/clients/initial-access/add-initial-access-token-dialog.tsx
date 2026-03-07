@@ -11,7 +11,7 @@ import {
     DialogTrigger,
 } from "@merge-rd/ui/components/dialog";
 import { Controller, FormProvider, useForm } from "react-hook-form";
-import { useTranslation } from "react-i18next";
+import { useTranslation } from "@merge-rd/i18n";
 import { useState } from "react";
 import { useAdminClient } from "../../../app/admin-client";
 import { FormAccess } from "../../../shared/ui/form/form-access";

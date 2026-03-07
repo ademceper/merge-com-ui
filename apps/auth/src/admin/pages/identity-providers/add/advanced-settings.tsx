@@ -18,7 +18,7 @@ import { Label } from "@merge-rd/ui/components/label";
 import { Switch } from "@merge-rd/ui/components/switch";
 import { useState } from "react";
 import { Controller, useFormContext, useWatch } from "react-hook-form";
-import { useTranslation } from "react-i18next";
+import { useTranslation } from "@merge-rd/i18n";
 import { useAdminClient } from "../../../app/admin-client";
 import useIsFeatureEnabled, { Feature } from "../../../shared/lib/useIsFeatureEnabled";
 import type { FieldProps } from "../component/form-group-field";

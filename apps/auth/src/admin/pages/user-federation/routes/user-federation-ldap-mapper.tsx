@@ -1,7 +1,4 @@
-import { lazy } from "react";
-import type { Path } from "react-router-dom";
 import { generateEncodedPath } from "../../../shared/lib/generateEncodedPath";
-import type { AppRouteObject } from "../../../app/routes";
 
 export type UserFederationLdapMapperParams = {
     realm: string;
@@ -9,19 +6,7 @@ export type UserFederationLdapMapperParams = {
     mapperId: string;
 };
 
-const LdapMapperDetails = lazy(() => import("../ldap/mappers/ldap-mapper-details"));
-
-export const UserFederationLdapMapperRoute: AppRouteObject = {
-    path: "/:realm/user-federation/ldap/:id/mappers/:mapperId",
-    element: <LdapMapperDetails />,
-    breadcrumb: t => t("mappingDetails"),
-    handle: {
-        access: "view-realm"
-    }
-};
-
 export const toUserFederationLdapMapper = (
     params: UserFederationLdapMapperParams
-): Partial<Path> => ({
-    pathname: generateEncodedPath(UserFederationLdapMapperRoute.path, params)
-});
+): string =>
+    generateEncodedPath("/:realm/user-federation/ldap/:id/mappers/:mapperId", params);

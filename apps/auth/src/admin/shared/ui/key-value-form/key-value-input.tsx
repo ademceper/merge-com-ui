@@ -3,7 +3,7 @@ import { Input } from "@merge-rd/ui/components/input";
 import { MinusCircle, PlusCircle } from "@phosphor-icons/react";
 import { Fragment, FunctionComponent, PropsWithChildren } from "react";
 import { FieldValues, useFieldArray, useFormContext, useWatch } from "react-hook-form";
-import { useTranslation } from "react-i18next";
+import { useTranslation } from "@merge-rd/i18n";
 
 export type DefaultValue = {
     key: string;

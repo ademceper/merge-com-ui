@@ -11,7 +11,7 @@ import {
     TableRow,
 } from "@/admin/shared/ui/data-table";
 import { Trash } from "@phosphor-icons/react";
-import { useTranslation } from "react-i18next";
+import { useTranslation } from "@merge-rd/i18n";
 import type { ExpandableExecution } from "../execution-model";
 import { AddFlowDropdown } from "./add-flow-dropdown";
 import { EditFlow } from "./edit-flow";

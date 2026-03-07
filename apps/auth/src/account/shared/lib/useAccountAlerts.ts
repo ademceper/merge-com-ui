@@ -10,7 +10,7 @@
 // @ts-nocheck
 
 import { useCallback, useMemo, useState } from "react";
-import { useTranslation } from "react-i18next";
+import { useTranslation } from "@merge-rd/i18n";
 
 import { ApiError } from "../api/parse-response";
 
@@ -30,7 +30,7 @@ function broadcastAlert(alert: AlertEntry) {
     alertListeners.forEach(listener => listener(alert));
 }
 
-export function useAlertListener(onAlert: (alert: AlertEntry) => void) {
+function useAlertListener(onAlert: (alert: AlertEntry) => void) {
     // Components can use this to listen for alerts
     useState(() => {
         alertListeners.add(onAlert);

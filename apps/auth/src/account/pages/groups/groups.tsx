@@ -10,14 +10,14 @@
 // @ts-nocheck
 
 import { useState } from "react";
-import { useTranslation } from "react-i18next";
+import { useTranslation } from "@merge-rd/i18n";
 import { useEnvironment } from "../../../shared/keycloak-ui-shared";
 import { getGroups } from "../../shared/api/methods";
 import { Group } from "../../shared/api/representations";
 import { Page } from "../../shared/ui/page/page";
 import { usePromise } from "../../shared/lib/usePromise";
 
-export const Groups = () => {
+const Groups = () => {
     const { t } = useTranslation();
     const context = useEnvironment();
 

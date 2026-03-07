@@ -17,7 +17,7 @@ import { Alert, AlertTitle } from "@merge-rd/ui/components/alert";
 import { X } from "@phosphor-icons/react";
 import { useMemo, useState } from "react";
 import { FormProvider, useForm, useWatch } from "react-hook-form";
-import { useTranslation } from "react-i18next";
+import { useTranslation } from "@merge-rd/i18n";
 import { useAdminClient } from "../../../app/admin-client";
 import { FormAccess } from "../../../shared/ui/form/form-access";
 import { UserSelect } from "../../../shared/ui/users/user-select";

@@ -3,8 +3,8 @@ import {
     DropdownMenuItem
 } from "@merge-rd/ui/components/dropdown-menu";
 import { useFormContext, useWatch } from "react-hook-form";
-import { useTranslation } from "react-i18next";
-import { useParams } from "react-router-dom";
+import { useTranslation } from "@merge-rd/i18n";
+import { useParams } from "../../../shared/lib/useParams";
 import { useAdminClient } from "../../../app/admin-client";
 import { getErrorDescription, getErrorMessage } from "../../../../shared/keycloak-ui-shared";
 import { toast } from "sonner";

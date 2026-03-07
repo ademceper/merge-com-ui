@@ -12,9 +12,9 @@ import type {
 	ISubscriberResponseDto,
 } from "@/shared";
 import { delV2, getV2, patchV2, postV2 } from "@/shared/api/api.client";
-import type { ListTopicSubscriptionsResponse } from "./topics";
+import type { ListTopicSubscriptionsResponse } from "@/entities/topic/api/topics";
 
-export type ListSubscribersResponse = {
+type ListSubscribersResponse = {
 	data: Array<ISubscriberResponseDto>;
 	next: string | null;
 	previous: string | null;

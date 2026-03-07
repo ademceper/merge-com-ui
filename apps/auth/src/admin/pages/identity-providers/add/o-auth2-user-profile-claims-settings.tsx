@@ -1,4 +1,4 @@
-import { useTranslation } from "react-i18next";
+import { useTranslation } from "@merge-rd/i18n";
 import { TextControl } from "../../../../shared/keycloak-ui-shared";
 // Form and Title replaced with HTML equivalents
 

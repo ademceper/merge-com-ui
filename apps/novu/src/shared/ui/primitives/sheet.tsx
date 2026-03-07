@@ -3,7 +3,7 @@ import type * as React from "react";
 
 export {
 	Sheet,
-	SheetClose,
+	
 	SheetContent,
 	SheetDescription,
 	SheetFooter,

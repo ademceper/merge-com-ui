@@ -1,13 +1,1 @@
-import { lazy } from "react";
-import type { AppRouteObject } from "../../../app/routes";
-
-const AddOAuth2 = lazy(() => import("../add/add-o-auth2"));
-
-export const IdentityProviderOAuth2Route: AppRouteObject = {
-    path: "/:realm/identity-providers/oauth2/add",
-    element: <AddOAuth2 />,
-    breadcrumb: t => t("addOAuth2Provider"),
-    handle: {
-        access: "manage-identity-providers"
-    }
-};
+// Route object removed - now defined as file-based route.

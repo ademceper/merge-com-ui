@@ -13,7 +13,7 @@ import {
     DialogTrigger,
 } from "@merge-rd/ui/components/dialog";
 import { FormProvider, useForm } from "react-hook-form";
-import { useTranslation } from "react-i18next";
+import { useTranslation } from "@merge-rd/i18n";
 import { cn } from "@merge-rd/ui/lib/utils";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useAdminClient } from "../../../app/admin-client";

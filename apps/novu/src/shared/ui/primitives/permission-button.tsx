@@ -8,7 +8,7 @@ import {
 } from "@/shared/ui/primitives/tooltip";
 import { useHasPermission } from "@/shared/lib/hooks/use-has-permission";
 
-export interface PermissionButtonProps extends ButtonProps {
+interface PermissionButtonProps extends ButtonProps {
 	/** The permission required to access this button functionality */
 	permission: PermissionsEnum;
 	/** Custom tooltip content to show when permission is denied (defaults to standard message) */

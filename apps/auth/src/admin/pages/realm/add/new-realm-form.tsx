@@ -12,8 +12,8 @@ import {
 } from "@merge-rd/ui/components/dialog";
 import { useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
-import { useTranslation } from "react-i18next";
-import { useNavigate } from "react-router-dom";
+import { useTranslation } from "@merge-rd/i18n";
+import { useNavigate } from "@tanstack/react-router";
 import { useAdminClient } from "../../../app/admin-client";
 import { FormAccess } from "../../../shared/ui/form/form-access";
 import { JsonFileUpload } from "../../../shared/ui/json-file-upload/json-file-upload";
@@ -56,7 +56,7 @@ const [realm, setRealm] = useState<RealmRepresentation>();
 
             refresh();
             onClose();
-            navigate(toRealm({ realm: fields.realm! }));
+            navigate({ to: toRealm({ realm: fields.realm! }) as string });
         } catch (error) {
             toast.error(t("saveRealmError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
         }

@@ -21,7 +21,7 @@ export interface INotificationGroupDto {
 	_parentId?: string;
 }
 
-export interface ICreateNotificationTemplateDto {
+interface ICreateNotificationTemplateDto {
 	name: string;
 
 	tags: string[];

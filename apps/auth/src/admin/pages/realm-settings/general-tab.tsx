@@ -18,7 +18,7 @@ import { Link } from "@merge-rd/ui/components/link";
 import { Copy, ArrowSquareOut } from "@phosphor-icons/react";
 import { useEffect, useState } from "react";
 import { Controller, FormProvider, useForm } from "react-hook-form";
-import { useTranslation } from "react-i18next";
+import { useTranslation } from "@merge-rd/i18n";
 import { useAdminClient } from "../../app/admin-client";
 import { DefaultSwitchControl } from "../../shared/ui/switch-control";
 import { FixedButtonsGroup } from "../../shared/ui/form/fixed-button-group";

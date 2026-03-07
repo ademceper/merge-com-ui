@@ -23,12 +23,12 @@ import { MagnifyingGlass, X } from "@phosphor-icons/react";
 import { pickBy } from "lodash-es";
 import { useMemo, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
-import { useTranslation } from "react-i18next";
+import { useTranslation } from "@merge-rd/i18n";
 import { useAdminClient } from "../../../app/admin-client";
 import { useRealm } from "../../../app/providers/realm-context/realm-context";
 import { useServerInfo } from "../../../app/providers/server-info/server-info-provider";
 import { useWhoAmI } from "../../../app/providers/whoami/who-am-i";
-import { DEFAULT_LOCALE } from "../../../i18n/i18n";
+import { DEFAULT_LOCALE } from "@merge-rd/i18n";
 import { localeToDisplayName } from "../../../shared/lib/util";
 import useLocaleSort, { mapByKey } from "../../../shared/lib/useLocaleSort";
 

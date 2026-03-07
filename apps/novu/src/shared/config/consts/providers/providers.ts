@@ -15,13 +15,7 @@ import {
 } from "./channels";
 import type { IProviderConfig } from "./provider.interface";
 
-export {
-	chatProviders,
-	emailProviders,
-	inAppProviders,
-	pushProviders,
-	smsProviders,
-} from "./channels";
+;
 
 export const providers: IProviderConfig[] = [
 	...emailProviders,
@@ -38,10 +32,10 @@ export const NOVU_PROVIDERS: ProvidersIdEnum[] = [
 	ChatProviderIdEnum.Novu,
 ];
 
-export const NOVU_SMS_EMAIL_PROVIDERS: ProvidersIdEnum[] = [
+const NOVU_SMS_EMAIL_PROVIDERS: ProvidersIdEnum[] = [
 	SmsProviderIdEnum.Novu,
 	EmailProviderIdEnum.Novu,
 ];
 
-export const PROVIDER_ID_TO_CHANNEL_MAP: Record<string, ChannelTypeEnum> =
+const PROVIDER_ID_TO_CHANNEL_MAP: Record<string, ChannelTypeEnum> =
 	Object.fromEntries(providers.map((p) => [p.id, p.channel]));

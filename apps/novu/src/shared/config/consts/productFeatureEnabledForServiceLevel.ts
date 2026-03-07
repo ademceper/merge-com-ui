@@ -48,7 +48,7 @@ function createProductFeatureMap(): Record<
 	return Object.freeze(productFeatures);
 }
 
-export const productFeatureEnabledForServiceLevel: Record<
+const productFeatureEnabledForServiceLevel: Record<
 	ProductFeatureKeyEnum,
 	ApiServiceLevelEnum[]
 > = createProductFeatureMap();

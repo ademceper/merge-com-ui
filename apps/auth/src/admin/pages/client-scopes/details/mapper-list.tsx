@@ -1,7 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
-import { useTranslation } from "react-i18next";
-import type { Path } from "react-router-dom";
-import { Link } from "react-router-dom";
+import { useTranslation } from "@merge-rd/i18n";
+import { Link } from "@tanstack/react-router";
 
 import type ClientRepresentation from "@keycloak/keycloak-admin-client/lib/defs/clientRepresentation";
 import type ClientScopeRepresentation from "@keycloak/keycloak-admin-client/lib/defs/clientScopeRepresentation";
@@ -27,7 +26,7 @@ type MapperListProps = {
         mappers: ProtocolMapperTypeRepresentation | ProtocolMapperRepresentation[]
     ) => void;
     onDelete: (mapper: ProtocolMapperRepresentation) => void;
-    detailLink: (id: string) => Partial<Path>;
+    detailLink: (id: string) => string;
 };
 
 type Row = ProtocolMapperRepresentation & {
@@ -37,7 +36,7 @@ type Row = ProtocolMapperRepresentation & {
 };
 
 type MapperLinkProps = Row & {
-    detailLink: (id: string) => Partial<Path>;
+    detailLink: (id: string) => string;
 };
 
 const MapperLink = ({ id, name, detailLink }: MapperLinkProps) => (

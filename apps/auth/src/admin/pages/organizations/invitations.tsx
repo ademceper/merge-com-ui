@@ -3,10 +3,10 @@ import { OrganizationInvitationStatus } from "@keycloak/keycloak-admin-client";
 import { Button } from "@merge-rd/ui/components/button";
 import { Badge } from "@merge-rd/ui/components/badge";
 import { useState } from "react";
-import { useTranslation } from "react-i18next";
-import { useAdminClient } from "../../app/admin-client";
+import { useTranslation } from "@merge-rd/i18n";
 import { CheckboxFilterComponent } from "../../shared/ui/dynamic/checkbox-filter-component";
-import { getErrorDescription, getErrorMessage, useFetch } from "../../../shared/keycloak-ui-shared";
+import { getErrorDescription, getErrorMessage } from "../../../shared/keycloak-ui-shared";
+import { useOrganizationInvitations, useResendInvitation, useDeleteInvitations } from "./api/queries";
 import { toast } from "sonner";
 import { useParams } from "../../shared/lib/useParams";
 import { Checkbox } from "@merge-rd/ui/components/checkbox";
@@ -60,10 +60,7 @@ const DateCell = ({ date }: { date?: number }) => {
 
 export const Invitations = () => {
     const { t } = useTranslation();
-    const { adminClient } = useAdminClient();
     const { id: orgId } = useParams<EditOrganizationParams>();
-const [key, setKey] = useState(0);
-    const refresh = () => setKey(key + 1);
     const [openInviteMembers, toggleInviteMembers] = useToggle();
     const [selectedInvitations, setSelectedInvitations] = useState<
         OrganizationInvitationRepresentation[]
@@ -73,32 +70,19 @@ const [key, setKey] = useState(0);
     const [filteredStatuses, setFilteredStatuses] = useState<string[]>([]);
     const [isStatusFilterOpen, setIsStatusFilterOpen] = useState(false);
 
+    const statusFilter = filteredStatuses.length === 1 ? filteredStatuses[0] : undefined;
+    const { data: invitations = [] } = useOrganizationInvitations(orgId, {
+        search: searchTriggerText,
+        status: statusFilter
+    });
+    const resendMutation = useResendInvitation(orgId);
+    const deleteMutation = useDeleteInvitations(orgId);
+
     const statusOptions = Object.values(OrganizationInvitationStatus).map(
         (status: string) => ({
             value: status,
             label: t(`organizationInvitationStatus.${status.toLowerCase()}`)
         })
-    );
-
-    const [invitations, setInvitations] = useState<OrganizationInvitationRepresentation[]>([]);
-
-    useFetch(
-        async () => {
-            try {
-                return await adminClient.organizations.listInvitations({
-                    orgId,
-                    first: 0,
-                    max: 500,
-                    search: searchTriggerText,
-                    status: filteredStatuses.length === 1 ? filteredStatuses[0] : undefined
-                });
-            } catch (error) {
-                toast.error(t("organizationsInvitationsListError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
-                return [];
-            }
-        },
-        setInvitations,
-        [key, searchTriggerText, filteredStatuses]
     );
 
     const toggleSelect = (inv: OrganizationInvitationRepresentation) => {
@@ -111,53 +95,33 @@ const [key, setKey] = useState(0);
 
     const handleSearch = () => {
         setSearchTriggerText(searchText);
-        refresh();
     };
 
     const clearSearch = () => {
         setSearchText("");
         setSearchTriggerText("");
-        refresh();
     };
 
     const resendInvitation = async (invitation: OrganizationInvitationRepresentation) => {
         try {
-            await adminClient.organizations.resendInvitation({
-                orgId,
-                invitationId: invitation.id!
-            });
+            await resendMutation.mutateAsync(invitation.id!);
             toast.success(t("organizationInvitationResent"));
-            refresh();
         } catch (error) {
             toast.error(t("organizationInvitationResendError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
-        }
-    };
-
-    const deleteInvitations = async (
-        invitations: OrganizationInvitationRepresentation[]
-    ) => {
-        try {
-            await Promise.all(
-                invitations.map(invitation =>
-                    adminClient.organizations.deleteInvitation({
-                        orgId,
-                        invitationId: invitation.id!
-                    })
-                )
-            );
-            toast.success(t("organizationInvitationsDeleted", { count: invitations.length }));
-            refresh();
-        } catch (error) {
-            toast.error(t("organizationInvitationsDeleteError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
         }
     };
 
     const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
 
     const onDeleteConfirm = async () => {
-        await deleteInvitations(selectedInvitations);
-        setSelectedInvitations([]);
-        setDeleteDialogOpen(false);
+        try {
+            await deleteMutation.mutateAsync(selectedInvitations.map(i => i.id!));
+            toast.success(t("organizationInvitationsDeleted", { count: selectedInvitations.length }));
+            setSelectedInvitations([]);
+            setDeleteDialogOpen(false);
+        } catch (error) {
+            toast.error(t("organizationInvitationsDeleteError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
+        }
     };
 
     const onStatusFilterSelect = (
@@ -170,7 +134,6 @@ const [key, setKey] = useState(0);
             setFilteredStatuses([...filteredStatuses, value]);
         }
         setIsStatusFilterOpen(false);
-        refresh();
     };
 
     return (
@@ -194,12 +157,10 @@ const [key, setKey] = useState(0);
                     orgId={orgId}
                     onClose={() => {
                         toggleInviteMembers();
-                        refresh();
                     }}
                 />
             )}
             <DataTable<OrganizationInvitationRepresentation>
-                key={key}
                 columns={[
                     {
                         id: "select",

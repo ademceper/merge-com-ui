@@ -6,7 +6,7 @@ import {
 } from "@merge-rd/ui/components/dropdown-menu";
 import { Button } from "@merge-rd/ui/components/button";
 import { useState } from "react";
-import { useTranslation } from "react-i18next";
+import { useTranslation } from "@merge-rd/i18n";
 
 import type { ExpandableExecution } from "../execution-model";
 

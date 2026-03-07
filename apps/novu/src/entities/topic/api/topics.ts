@@ -5,7 +5,7 @@ import type {
 	IEnvironment,
 	SeverityLevelEnum,
 } from "@/shared";
-import type { Topic } from "@/features/topics/ui/types";
+import type { Topic } from "@/entities/topic/model/types";
 import { convertContextKeysToPayload } from "@/shared/lib/context-variable-utils";
 import { delV2, getV2, patchV2, postV2 } from "@/shared/api/api.client";
 

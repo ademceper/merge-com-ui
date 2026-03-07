@@ -5,7 +5,7 @@ import {
     type ColumnDef
 } from "@/admin/shared/ui/data-table";
 import { Trash } from "@phosphor-icons/react";
-import { useTranslation } from "react-i18next";
+import { useTranslation } from "@merge-rd/i18n";
 
 export type EventType = {
     id: string;

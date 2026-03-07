@@ -16,8 +16,9 @@ import {
 import { Copy, Link as LinkIcon, Trash } from "@phosphor-icons/react";
 import { sortBy } from "lodash-es";
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { Trans, useTranslation } from "react-i18next";
-import { Link, useParams, useNavigate } from "react-router-dom";
+import { Trans, useTranslation } from "@merge-rd/i18n";
+import { Link, useNavigate } from "@tanstack/react-router";
+import { useParams } from "../../shared/lib/useParams";
 import { useAdminClient } from "../../app/admin-client";
 import {
     AlertDialog,
@@ -137,7 +138,7 @@ export default function AuthenticationSection() {
                                     id: flow.id!,
                                     usedBy: flow.usedBy?.type || "notInUse",
                                     builtIn: flow.builtIn ? "builtIn" : undefined,
-                                })}
+                                }) as string}
                                 className="text-primary hover:underline"
                             >
                                 {flow.alias}
@@ -284,7 +285,7 @@ export default function AuthenticationSection() {
                                             <Link
                                                 to={toCreateFlow({
                                                     realm: realmName,
-                                                })}
+                                                }) as string}
                                             >
                                                 {t("createFlow")}
                                             </Link>
@@ -306,7 +307,7 @@ export default function AuthenticationSection() {
                 <Tabs
                     value={currentTab}
                     onValueChange={(value) =>
-                        navigate(toAuthentication({ realm: realmName, tab: value === "flows" ? undefined : value as AuthenticationTab }))
+                        navigate({ to: toAuthentication({ realm: realmName, tab: value === "flows" ? undefined : value as AuthenticationTab }) as string })
                     }
                 >
                     <div className="w-full min-w-0 overflow-x-auto overflow-y-hidden mb-4">

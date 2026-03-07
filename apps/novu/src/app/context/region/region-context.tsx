@@ -8,7 +8,7 @@ import {
 	useEffect,
 	useState,
 } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "@tanstack/react-router";
 import { apiHostnameManager } from "@/shared/lib/api-hostname-manager";
 import { ROUTES } from "@/shared/lib/routes";
 import { DEFAULT_REGION } from "./region-config";
@@ -46,7 +46,7 @@ interface RegionProviderProps {
 	children: ReactNode;
 }
 
-export function RegionProvider({ children }: RegionProviderProps) {
+function RegionProvider({ children }: RegionProviderProps) {
 	const queryClient = useQueryClient();
 	const navigate = useNavigate();
 	const { organization: currentOrganization } = useOrganization();
@@ -198,7 +198,7 @@ export function RegionProvider({ children }: RegionProviderProps) {
 		if (targetDashboardUrl !== window.location.origin) {
 			window.location.href = newUrl;
 		} else {
-			navigate(orgCreationPath);
+			navigate({ to: orgCreationPath });
 		}
 	};
 

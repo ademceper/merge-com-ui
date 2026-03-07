@@ -215,7 +215,7 @@ function removeNode(node: HTMLElement) {
 	}
 }
 
-export type FindElementNextToCoords = {
+type FindElementNextToCoords = {
 	x: number;
 	y: number;
 	direction?: "left" | "right";

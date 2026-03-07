@@ -3,7 +3,7 @@ import type UserRepresentation from "@keycloak/keycloak-admin-client/lib/defs/us
 import { useFetch } from "../../../shared/keycloak-ui-shared";
 import { Button } from "@merge-rd/ui/components/button";
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link } from "@tanstack/react-router";
 import { useAdminClient } from "../../app/admin-client";
 import { useAccess } from "../../app/providers/access/access";
 import { useRealm } from "../../app/providers/realm-context/realm-context";
@@ -45,7 +45,7 @@ export const FederatedUserLink = ({ user }: FederatedUserLinkProps) => {
                     id: component.id!,
                     providerId: component.providerId!,
                     realm
-                })}
+                }) as string}
             >
                 {component.name}
             </Link>

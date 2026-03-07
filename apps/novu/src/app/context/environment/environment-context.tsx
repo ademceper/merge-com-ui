@@ -1,7 +1,7 @@
 import type { IEnvironment } from "@/shared";
 import React from "react";
 
-export type EnvironmentContextValue = {
+type EnvironmentContextValue = {
 	currentEnvironment?: IEnvironment;
 	environments?: IEnvironment[];
 	areEnvironmentsInitialLoading: boolean;

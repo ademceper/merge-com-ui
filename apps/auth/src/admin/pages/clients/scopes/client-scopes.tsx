@@ -16,8 +16,8 @@ import {
 import { DotsThreeVertical } from "@phosphor-icons/react";
 import type { ComponentType } from "react";
 import { useState } from "react";
-import { useTranslation } from "react-i18next";
-import { Link, type LinkProps } from "react-router-dom";
+import { useTranslation } from "@merge-rd/i18n";
+import { Link, type LinkProps } from "@tanstack/react-router";
 import { useAdminClient } from "../../../app/admin-client";
 
 const RouterLink = Link as ComponentType<LinkProps>;
@@ -41,7 +41,7 @@ import { AddScopeDialog } from "./add-scope-dialog";
 import useIsFeatureEnabled, { Feature } from "../../../shared/lib/useIsFeatureEnabled";
 import { PROTOCOL_OIDC, PROTOCOL_OID4VC } from "../constants";
 
-export type ClientScopesProps = {
+type ClientScopesProps = {
     clientId: string;
     protocol: string;
     clientName: string;
@@ -233,7 +233,7 @@ const { realm } = useRealm();
                     return (
                         <RouterLink
                             className="text-primary hover:underline"
-                            to={toDedicatedScope({ realm, clientId })}
+                            to={toDedicatedScope({ realm, clientId }) as string}
                         >
                             {row.original.name}
                         </RouterLink>

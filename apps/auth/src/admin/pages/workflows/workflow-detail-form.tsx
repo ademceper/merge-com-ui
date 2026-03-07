@@ -1,8 +1,8 @@
 import { Button } from "@merge-rd/ui/components/button";
 import { Label } from "@merge-rd/ui/components/label";
 import { Controller, FormProvider, SubmitHandler, useForm } from "react-hook-form";
-import { useTranslation } from "react-i18next";
-import { Link, useNavigate } from "react-router-dom";
+import { useTranslation } from "@merge-rd/i18n";
+import { Link, useNavigate } from "@tanstack/react-router";
 import yaml from "yaml";
 import { useAdminClient } from "../../app/admin-client";
 import { getErrorDescription, getErrorMessage, HelpItem, useFetch } from "../../../shared/keycloak-ui-shared";
@@ -85,7 +85,7 @@ const { mode, id } = useParams<WorkflowDetailParams>();
                 yaml: data.workflowYAML
             });
             toast.success(t("workflowCreated"));
-            navigate(toWorkflows({ realm }));
+            navigate({ to: toWorkflows({ realm }) as string });
         } catch (error) {
             toast.error(t("workflowCreateError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
         }
@@ -162,14 +162,14 @@ const { mode, id } = useParams<WorkflowDetailParams>();
                                             realm,
                                             mode: "copy",
                                             id: id!
-                                        })}
+                                        }) as string}
                                     >
                                         {t("copy")}
                                     </Link>
                                 </Button>
                             )}
                             <Button data-testid="cancel" variant="link" asChild>
-                                <Link to={toWorkflows({ realm })}>{t("cancel")}</Link>
+                                <Link to={toWorkflows({ realm }) as string}>{t("cancel")}</Link>
                             </Button>
                         </div>
                     </FormAccess>

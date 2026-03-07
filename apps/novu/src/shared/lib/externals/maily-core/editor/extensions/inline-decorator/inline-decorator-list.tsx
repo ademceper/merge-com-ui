@@ -6,7 +6,7 @@ import type { VariableSuggestionsPopoverRef } from "../../nodes/variable/variabl
 import { useInlineDecoratorOptions } from "../../utils/node-options";
 import type { InlineDecoratorItem } from "./inline-decorator";
 
-export type InlineDecoratorListProps = {
+type InlineDecoratorListProps = {
 	command: (params: InlineDecoratorItem) => void;
 	items: InlineDecoratorItem[];
 } & SuggestionOptions;
@@ -74,7 +74,7 @@ function createItemSelectHandler(
  * This component reuses the existing VariableSuggestionsPopover UI component
  * but adapts it for inline decorator suggestions by transforming the data format.
  */
-export const InlineDecoratorList = forwardRef<any, InlineDecoratorListProps>(
+const InlineDecoratorList = forwardRef<any, InlineDecoratorListProps>(
 	(props, ref) => {
 		const { items = [], editor, command } = props;
 

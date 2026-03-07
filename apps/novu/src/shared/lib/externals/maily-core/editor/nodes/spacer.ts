@@ -1,7 +1,7 @@
 import { mergeAttributes, Node } from "@tiptap/core";
 import { DEFAULT_SECTION_SHOW_IF_KEY } from "./section/section";
 
-export interface SpacerOptions {
+interface SpacerOptions {
 	height: number;
 	showIfKey: string;
 	HTMLAttributes: Record<string, any>;

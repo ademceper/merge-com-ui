@@ -16,7 +16,7 @@ import {
     type Row as TableRow,
 } from "@/admin/shared/ui/data-table";
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { useTranslation } from "react-i18next";
+import { useTranslation } from "@merge-rd/i18n";
 import { useAdminClient } from "../../../app/admin-client";
 import { translationFormatter } from "../../lib/translationFormatter";
 import {
@@ -44,7 +44,7 @@ export type Row = {
     id?: string;
 };
 
-export const mapRoles = (
+const mapRoles = (
     assignedRoles: Row[],
     effectiveRoles: Row[],
     hide: boolean,

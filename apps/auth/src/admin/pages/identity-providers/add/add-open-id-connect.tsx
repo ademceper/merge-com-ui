@@ -1,8 +1,8 @@
 import type IdentityProviderRepresentation from "@keycloak/keycloak-admin-client/lib/defs/identityProviderRepresentation";
 import { Button } from "@merge-rd/ui/components/button";
 import { FormProvider, useForm } from "react-hook-form";
-import { useTranslation } from "react-i18next";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { useTranslation } from "@merge-rd/i18n";
+import { Link, useLocation, useNavigate } from "@tanstack/react-router";
 import { useAdminClient } from "../../../app/admin-client";
 import { getErrorDescription, getErrorMessage } from "../../../../shared/keycloak-ui-shared";
 import { toast } from "sonner";
@@ -45,14 +45,14 @@ const { realm } = useRealm();
                 providerId: id
             });
             toast.success(t("createIdentityProviderSuccess"));
-            navigate(
-                toIdentityProvider({
+            navigate({
+                to: toIdentityProvider({
                     realm,
                     providerId: id,
                     alias: provider.alias!,
                     tab: "settings"
-                })
-            );
+                }) as string
+            });
         } catch (error) {
             toast.error(t("createIdentityProviderError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
         }
@@ -83,7 +83,7 @@ const { realm } = useRealm();
                                 data-testid="cancel"
                                 asChild
                             >
-                                <Link to={toIdentityProviders({ realm })}>
+                                <Link to={toIdentityProviders({ realm }) as string}>
                                     {t("cancel")}
                                 </Link>
                             </Button>

@@ -1,26 +1,11 @@
-import { lazy } from "react";
-import type { Path } from "react-router-dom";
 import { generateEncodedPath } from "../../../shared/lib/generateEncodedPath";
-import type { AppRouteObject } from "../../../app/routes";
 
 export type ClientPoliciesTab = "profiles" | "policies";
 
-export type ClientPoliciesParams = {
+type ClientPoliciesParams = {
     realm: string;
     tab: ClientPoliciesTab;
 };
 
-const RealmSettingsSection = lazy(() => import("../realm-settings-section"));
-
-export const ClientPoliciesRoute: AppRouteObject = {
-    path: "/:realm/realm-settings/client-policies/:tab",
-    element: <RealmSettingsSection />,
-    breadcrumb: t => t("clientPolicies"),
-    handle: {
-        access: "view-realm"
-    }
-};
-
-export const toClientPolicies = (params: ClientPoliciesParams): Partial<Path> => ({
-    pathname: generateEncodedPath(ClientPoliciesRoute.path, params)
-});
+export const toClientPolicies = (params: ClientPoliciesParams): string =>
+    generateEncodedPath("/:realm/realm-settings/client-policies/:tab", params);

@@ -5,8 +5,8 @@ import { Button } from "@merge-rd/ui/components/button";
 import { Badge } from "@merge-rd/ui/components/badge";
 import { capitalize } from "lodash-es";
 import { useState } from "react";
-import { useTranslation } from "react-i18next";
-import { Link } from "react-router-dom";
+import { useTranslation } from "@merge-rd/i18n";
+import { Link } from "@tanstack/react-router";
 import { FormPanel } from "../../../shared/keycloak-ui-shared";
 import { useAdminClient } from "../../app/admin-client";
 import { getErrorDescription, getErrorMessage, useFetch } from "../../../shared/keycloak-ui-shared";
@@ -111,7 +111,7 @@ const { t } = useTranslation();
                     providerId: idp.providerId,
                     alias: idp.identityProvider!,
                     tab: "settings"
-                })}
+                }) as string}
             >
                 {capitalize(idp.identityProvider)}
             </Link>

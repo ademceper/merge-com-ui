@@ -11,7 +11,7 @@ import {
 import { formTextareaClassName } from "./form-input-styles";
 import { FormLabel } from "./form-label";
 
-export type TextAreaControlProps<
+type TextAreaControlProps<
     T extends FieldValues,
     P extends FieldPath<T> = FieldPath<T>
 > = UseControllerProps<T, P> &

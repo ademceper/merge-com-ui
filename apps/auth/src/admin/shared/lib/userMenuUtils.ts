@@ -1,5 +1,5 @@
 import type { KeycloakTokenParsed } from "oidc-spa/keycloak-js";
-import type { TFunction } from "i18next";
+import type { TFunction } from "@merge-rd/i18n";
 
 export function loggedInUserName(token: KeycloakTokenParsed | undefined, t: TFunction): string {
     if (!token) return t("unknownUser");

@@ -1,10 +1,10 @@
-export interface IBulkInviteRequestDto {
+interface IBulkInviteRequestDto {
 	invitees: {
 		email: string;
 	}[];
 }
 
-export interface IBulkInviteResponse {
+interface IBulkInviteResponse {
 	success: boolean;
 	email: string;
 }

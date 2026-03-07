@@ -1,7 +1,7 @@
 import type RoleRepresentation from "@keycloak/keycloak-admin-client/lib/defs/roleRepresentation";
 import { FormProvider, SubmitHandler, useForm } from "react-hook-form";
-import { useTranslation } from "react-i18next";
-import { useNavigate, useParams } from "react-router-dom";
+import { useTranslation } from "@merge-rd/i18n";
+import { useNavigate, useParams } from "@tanstack/react-router";
 import { useAdminClient } from "../../../app/admin-client";
 import { getErrorDescription, getErrorMessage } from "../../../../shared/keycloak-ui-shared";
 import { toast } from "sonner";
@@ -18,7 +18,7 @@ export default function CreateClientRole() {
     const { t } = useTranslation();
     const form = useForm<AttributeForm>({ mode: "onChange" });
     const navigate = useNavigate();
-    const { clientId } = useParams<NewRoleParams>();
+    const { clientId } = useParams({ strict: false }) as NewRoleParams;
     const { realm } = useRealm();
 const onSubmit: SubmitHandler<AttributeForm> = async formValues => {
         const role: RoleRepresentation = {
@@ -39,14 +39,14 @@ const onSubmit: SubmitHandler<AttributeForm> = async formValues => {
             }))!;
 
             toast.success(t("roleCreated"));
-            navigate(
+            navigate({ to:
                 toClientRole({
                     realm,
                     clientId: clientId!,
                     id: createdRole.id!,
                     tab: "details"
-                })
-            );
+                }) as string
+            });
         } catch (error) {
             toast.error(t("roleCreateError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
         }

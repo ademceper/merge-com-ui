@@ -11,7 +11,7 @@ export type MailyContextType = {
 	blocks?: BlockGroupItem[];
 };
 
-export const MailyContext = createContext<MailyContextType>({
+const MailyContext = createContext<MailyContextType>({
 	placeholderUrl: DEFAULT_PLACEHOLDER_URL,
 	blocks: DEFAULT_SLASH_COMMANDS,
 });

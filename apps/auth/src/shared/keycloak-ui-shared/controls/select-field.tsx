@@ -12,7 +12,7 @@ import { Controller, useFormContext } from "react-hook-form";
 import { getRuleValue } from "../utils/getRuleValue";
 import { FormLabel } from "./form-label";
 
-export type SelectOption = { key: string; value: string } | string;
+type SelectOption = { key: string; value: string } | string;
 
 function optKey(o: SelectOption): string {
     return typeof o === "string" ? o : o.key;
@@ -35,7 +35,7 @@ type SelectFieldProps = {
     onSelect?: (value: string, onChange: (v: string) => void) => void;
 };
 
-export type { SelectFieldProps };
+;
 
 export function SelectField({
     id,

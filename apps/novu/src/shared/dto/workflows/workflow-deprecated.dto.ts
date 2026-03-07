@@ -9,7 +9,7 @@ import type { MessageTemplateDto } from "../message-template";
 /**
  * @deprecated use DTOs from step.dto.ts
  */
-export class StepVariantDto {
+class StepVariantDto {
 	id?: string;
 	_id?: string;
 	name?: string;

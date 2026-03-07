@@ -1,7 +1,2 @@
-import type { AppRouteObject } from "../../app/routes";
-import { WorkflowsRoute } from "./routes/workflows";
-import { WorkflowDetailRoute } from "./routes/workflow-detail";
-
-const routes: AppRouteObject[] = [WorkflowsRoute, WorkflowDetailRoute];
-
-export default routes;
+// Route objects removed - now defined as file-based routes.
+export default [];

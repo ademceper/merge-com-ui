@@ -1,4 +1,4 @@
-import { useTranslation } from "react-i18next";
+import { useTranslation } from "@merge-rd/i18n";
 import { DefaultSwitchControl } from "../../../shared/ui/switch-control";
 import { Label } from "@merge-rd/ui/components/label";
 import { useFormContext, Controller } from "react-hook-form";

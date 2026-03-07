@@ -1,17 +1,21 @@
-import type { ComponentType } from "react";
 import { useEffect, useReducer } from "react";
 import { startColorSchemeManagement } from "./colorScheme";
-import { createHashRouter, RouterProvider } from "react-router-dom";
-import { i18n } from "../i18n/i18n";
-import { RootRoute } from "./routes";
+import { createRouter, RouterProvider } from "@tanstack/react-router";
+import { createHashHistory } from "@tanstack/react-router";
+import { i18n } from "./i18n";
+import { routeTree } from "../routeTree.gen";
 
 document.title = "Merge Administration Console";
 
-const router = createHashRouter([RootRoute]);
+const hashHistory = createHashHistory();
+const router = createRouter({
+    routeTree,
+    history: hashHistory,
+});
+
+
 const prI18nInitialized = i18n.init();
 startColorSchemeManagement();
-
-const RouterProviderComponent = RouterProvider as ComponentType<{ router: typeof router }>;
 
 export default function KcAdminUi() {
     const [isI18nInitialized, setI18nInitialized] = useReducer(() => true, false);
@@ -24,5 +28,5 @@ export default function KcAdminUi() {
         return null;
     }
 
-    return <RouterProviderComponent router={router} />;
+    return <RouterProvider router={router} />;
 }

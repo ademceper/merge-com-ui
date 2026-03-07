@@ -10,7 +10,7 @@ import { QueryKeys } from "@/shared/lib/query-keys";
 
 const today = new Date();
 
-export type UseSubscriptionType = GetSubscriptionDto & {
+type UseSubscriptionType = GetSubscriptionDto & {
 	daysLeft: number;
 	isLoading: boolean;
 };

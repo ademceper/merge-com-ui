@@ -8,7 +8,7 @@ export type CodeSnippet = {
 	secretKey?: string;
 };
 
-export type TriggerCurlCommandOptions = {
+type TriggerCurlCommandOptions = {
 	workflowId: string;
 	to: unknown;
 	payload: string | Record<string, unknown>;
@@ -85,7 +85,7 @@ export const createCurlSnippet = ({
 	)}'`;
 };
 
-export const createTriggerRequestBody = ({
+const createTriggerRequestBody = ({
 	workflowId,
 	to,
 	payload,
@@ -133,7 +133,7 @@ export const generateTriggerCurlCommand = ({
   -d '${JSON.stringify(body, null, 2)}'`;
 };
 
-export type PostmanCollectionOptions = {
+type PostmanCollectionOptions = {
 	workflowId: string;
 	to: unknown;
 	payload: string | Record<string, unknown>;

@@ -3,7 +3,7 @@ import { Badge } from "@merge-rd/ui/components/badge";
 import { Cube, Trash } from "@phosphor-icons/react";
 import { sortBy } from "lodash-es";
 import { useState } from "react";
-import { useTranslation } from "react-i18next";
+import { useTranslation } from "@merge-rd/i18n";
 import { useAdminClient } from "../../app/admin-client";
 import { getErrorDescription, getErrorMessage, useFetch } from "../../../shared/keycloak-ui-shared";
 import { toast } from "sonner";

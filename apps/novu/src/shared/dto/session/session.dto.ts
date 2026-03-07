@@ -10,7 +10,7 @@ export interface ISubscriberJwtDto {
 	aud: "widget_user";
 }
 
-export interface ISessionDto {
+interface ISessionDto {
 	token: string;
 	profile: ISubscriberJwtDto;
 }

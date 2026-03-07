@@ -20,7 +20,7 @@ import {
 import { Check, PencilSimple, Plus, Trash, X } from "@phosphor-icons/react";
 import { type FormEvent, useCallback, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import { useTranslation } from "react-i18next";
+import { useTranslation } from "@merge-rd/i18n";
 import { useAdminClient } from "../../../app/admin-client";
 import {
     AlertDialog,
@@ -35,7 +35,8 @@ import {
 import { KeyValueType } from "../../../shared/ui/key-value-form/key-value-convert";
 import { useRealm } from "../../../app/providers/realm-context/realm-context";
 import { useWhoAmI } from "../../../app/providers/whoami/who-am-i";
-import { DEFAULT_LOCALE, i18n } from "../../../i18n/i18n";
+import { DEFAULT_LOCALE } from "@merge-rd/i18n";
+import { i18n } from "../../../app/i18n";
 import { localeToDisplayName } from "../../../shared/lib/util";
 import { AddTranslationModal } from "../add-translation-modal";
 import { Separator } from "@merge-rd/ui/components/separator";
@@ -49,13 +50,13 @@ type RealmOverridesProps = {
 
 type TableRowData = { key: string; value: string };
 
-export type TranslationForm = {
+type TranslationForm = {
     key: string;
     value: string;
     translation: KeyValueType;
 };
 
-export enum RowEditAction {
+enum RowEditAction {
     Save = "save",
     Cancel = "cancel",
     Edit = "edit",

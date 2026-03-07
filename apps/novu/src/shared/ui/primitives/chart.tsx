@@ -3,11 +3,11 @@ import { cn } from "@merge-rd/ui/lib/utils";
 export type { ChartConfig } from "@merge-rd/ui/components/chart";
 export {
 	ChartContainer,
-	ChartLegend,
-	ChartLegendContent,
-	ChartStyle,
+	
+	
+	
 	ChartTooltip,
-	ChartTooltipContent,
+	
 } from "@merge-rd/ui/components/chart";
 
 /**

@@ -5,7 +5,7 @@ import { FieldError as RHFError, FieldValues, Merge } from "react-hook-form";
 import { FormErrorText } from "./form-error-text";
 import { HelpItem } from "./help-item";
 
-export type FieldProps<T extends FieldValues = FieldValues> = {
+type FieldProps<T extends FieldValues = FieldValues> = {
     id?: string | undefined;
     label?: string;
     name: string;

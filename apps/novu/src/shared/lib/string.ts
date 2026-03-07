@@ -35,6 +35,6 @@ export function containsHTMLEntities(value: string) {
 	return PopularHTMLEntities.some((entity) => value.includes(entity));
 }
 
-export function containsVariables(value: string) {
+function containsVariables(value: string) {
 	return /\{\{[^}]*\}\}/.test(value);
 }

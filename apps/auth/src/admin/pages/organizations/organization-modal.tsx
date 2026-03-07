@@ -1,5 +1,5 @@
 import OrganizationRepresentation from "@keycloak/keycloak-admin-client/lib/defs/organizationRepresentation";
-import { useFetch } from "../../../shared/keycloak-ui-shared";
+import { useOrganizations } from "./api/queries";
 import { Button } from "@merge-rd/ui/components/button";
 import { Checkbox } from "@merge-rd/ui/components/checkbox";
 import {
@@ -12,8 +12,7 @@ import {
 import { DataTable, type ColumnDef } from "@/admin/shared/ui/data-table";
 import { differenceBy } from "lodash-es";
 import { useState } from "react";
-import { useTranslation } from "react-i18next";
-import { useAdminClient } from "../../app/admin-client";
+import { useTranslation } from "@merge-rd/i18n";
 
 type OrganizationModalProps = {
     isJoin?: boolean;
@@ -28,19 +27,10 @@ export const OrganizationModal = ({
     onAdd,
     onClose
 }: OrganizationModalProps) => {
-    const { adminClient } = useAdminClient();
     const { t } = useTranslation();
     const [selectedRows, setSelectedRows] = useState<OrganizationRepresentation[]>([]);
-    const [orgs, setOrgs] = useState<OrganizationRepresentation[]>([]);
-
-    useFetch(
-        () =>
-            adminClient.organizations.find({ first: 0, max: 500 }).then(all =>
-                differenceBy(all, existingOrgs, "id")
-            ),
-        setOrgs,
-        [existingOrgs.length]
-    );
+    const { data: allOrgs = [] } = useOrganizations();
+    const orgs = differenceBy(allOrgs, existingOrgs, "id");
 
     const toggleSelect = (org: OrganizationRepresentation) => {
         setSelectedRows(prev =>

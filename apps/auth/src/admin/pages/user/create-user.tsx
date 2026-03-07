@@ -4,11 +4,11 @@ import { getErrorDescription, getErrorMessage, isUserProfileError,
     setUserProfileServerError,
     useFetch } from "../../../shared/keycloak-ui-shared";
 import { toast } from "sonner";
-import { TFunction } from "i18next";
+import { TFunction } from "@merge-rd/i18n";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { useTranslation } from "react-i18next";
-import { useNavigate } from "react-router-dom";
+import { useTranslation } from "@merge-rd/i18n";
+import { useNavigate } from "@tanstack/react-router";
 import { useAdminClient } from "../../app/admin-client";
 import { KeycloakSpinner } from "../../../shared/keycloak-ui-shared";
 import { useRealm } from "../../app/providers/realm-context/realm-context";
@@ -47,7 +47,7 @@ const navigate = useNavigate();
             });
 
             toast.success(t("userCreated"));
-            navigate(toUser({ id: createdUser.id, realm: realmName, tab: "settings" }));
+            navigate({ to: toUser({ id: createdUser.id, realm: realmName, tab: "settings" }) as string });
         } catch (error) {
             if (isUserProfileError(error)) {
                 setUserProfileServerError(error, form.setError, ((key, param) =>

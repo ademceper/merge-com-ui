@@ -1,3 +1,3 @@
 import type { ISubscriberJwtDto } from "../../dto";
 
-export interface ISubscriberJwt extends ISubscriberJwtDto {}
+interface ISubscriberJwt extends ISubscriberJwtDto {}

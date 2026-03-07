@@ -2,7 +2,7 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigge
 import { Label } from "@merge-rd/ui/components/label";
 import { Switch } from "@merge-rd/ui/components/switch";
 import { buttonVariants } from "@merge-rd/ui/components/button";
-import { useTranslation } from "react-i18next";
+import { useTranslation } from "@merge-rd/i18n";
 import {
     AlertDialog,
     AlertDialogAction,
@@ -16,7 +16,7 @@ import {
 import { useConfirmDialog } from "../../shared/ui/confirm-dialog/confirm-dialog";
 import { useState } from "react";
 import { useAdminClient } from "../../app/admin-client";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "@tanstack/react-router";
 import { getErrorDescription, getErrorMessage } from "../../../shared/keycloak-ui-shared";
 import { toast } from "sonner";
 import { Controller, useFormContext, useWatch } from "react-hook-form";
@@ -55,7 +55,7 @@ const id = useWatch({ name: "id" });
             await adminClient.organizations.delById({ id });
             setDeleteDialogOpen(false);
             toast.success(t("organizationDeletedSuccess"));
-            navigate(toOrganizations({ realm }));
+            navigate({ to: toOrganizations({ realm }) as string });
         } catch (error) {
             toast.error(t("organizationDeleteError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
         }

@@ -13,8 +13,8 @@ import { Textarea } from "@merge-rd/ui/components/textarea";
 import { Plus, Trash } from "@phosphor-icons/react";
 import { useState } from "react";
 import { Controller, FormProvider, useForm } from "react-hook-form";
-import { useTranslation } from "react-i18next";
-import { Link, useNavigate } from "react-router-dom";
+import { useTranslation } from "@merge-rd/i18n";
+import { Link, useNavigate } from "@tanstack/react-router";
 import { useAdminClient } from "../../app/admin-client";
 import { useConfirmDialog } from "../../shared/ui/confirm-dialog/confirm-dialog";
 import { FormAccess } from "../../shared/ui/form/form-access";
@@ -171,7 +171,7 @@ const [isGlobalPolicy, setIsGlobalPolicy] = useState(false);
                     ? t("updateClientPolicySuccess")
                     : t("createClientPolicySuccess")
             );
-            navigate(toEditClientPolicy({ realm, policyName: createdForm.name! }));
+            navigate({ to: toEditClientPolicy({ realm, policyName: createdForm.name! }) as string });
             setShowAddConditionsAndProfilesForm(true);
         } catch (error) {
             toast.error(t("createClientPolicyError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
@@ -195,12 +195,12 @@ const [isGlobalPolicy, setIsGlobalPolicy] = useState(false);
                     policies: updatedPolicies
                 });
                 toast.success(t("deleteClientPolicySuccess"));
-                navigate(
-                    toClientPolicies({
+                navigate({
+                    to: toClientPolicies({
                         realm,
                         tab: "policies"
-                    })
-                );
+                    }) as string
+                });
             } catch (error) {
                 toast.error(t("deleteClientPolicyError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
             }
@@ -222,7 +222,7 @@ const [isGlobalPolicy, setIsGlobalPolicy] = useState(false);
                         policies: policies
                     });
                     toast.success(t("deleteConditionSuccess"));
-                    navigate(toEditClientPolicy({ realm, policyName: formValues.name! }));
+                    navigate({ to: toEditClientPolicy({ realm, policyName: formValues.name! }) as string });
                 } catch (error) {
                     toast.error(t("deleteConditionError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
                 }
@@ -236,12 +236,12 @@ const [isGlobalPolicy, setIsGlobalPolicy] = useState(false);
                         policies: updatedPolicies
                     });
                     toast.success(t("deleteClientSuccess"));
-                    navigate(
-                        toClientPolicies({
+                    navigate({
+                        to: toClientPolicies({
                             realm,
                             tab: "policies"
-                        })
-                    );
+                        }) as string
+                    });
                 } catch (error) {
                     toast.error(t("deleteClientError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
                 }
@@ -266,7 +266,7 @@ const [isGlobalPolicy, setIsGlobalPolicy] = useState(false);
                     });
                     toast.success(t("deleteClientPolicyProfileSuccess"));
                     form.setValue("profiles", currentPolicy?.profiles || []);
-                    navigate(toEditClientPolicy({ realm, policyName: formValues.name! }));
+                    navigate({ to: toEditClientPolicy({ realm, policyName: formValues.name! }) as string });
                 } catch (error) {
                     toast.error(t("deleteClientPolicyProfileError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
                 }
@@ -280,12 +280,12 @@ const [isGlobalPolicy, setIsGlobalPolicy] = useState(false);
                         policies: updatedPolicies
                     });
                     toast.success(t("deleteClientSuccess"));
-                    navigate(
-                        toClientPolicies({
+                    navigate({
+                        to: toClientPolicies({
                             realm,
                             tab: "policies"
-                        })
-                    );
+                        }) as string
+                    });
                 } catch (error) {
                     toast.error(t("deleteClientError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
                 }
@@ -335,7 +335,7 @@ const [isGlobalPolicy, setIsGlobalPolicy] = useState(false);
             setAllPolicies(allClientPolicies);
             setCurrentPolicy(createdPolicy);
             form.setValue("profiles", createdPolicy.profiles);
-            navigate(toEditClientPolicy({ realm, policyName: formValues.name! }));
+            navigate({ to: toEditClientPolicy({ realm, policyName: formValues.name! }) as string });
             toast.success(t("addClientProfileSuccess"));
         } catch (error) {
             toast.error(t("addClientProfileError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
@@ -459,12 +459,12 @@ const [isGlobalPolicy, setIsGlobalPolicy] = useState(false);
                                     (showAddConditionsAndProfilesForm || policyName) &&
                                     !isGlobalPolicy
                                         ? reset()
-                                        : navigate(
-                                              toClientPolicies({
+                                        : navigate({
+                                              to: toClientPolicies({
                                                   realm,
                                                   tab: "policies"
-                                              })
-                                          )
+                                              }) as string
+                                          })
                                 }
                                 data-testid="cancelCreatePolicy"
                             >
@@ -492,7 +492,7 @@ const [isGlobalPolicy, setIsGlobalPolicy] = useState(false);
                                             data-testid="addCondition"
                                             asChild
                                         >
-                                            <Link to={toNewClientPolicyCondition({ realm, policyName: policyName! })}>
+                                            <Link to={toNewClientPolicyCondition({ realm, policyName: policyName! }) as string}>
                                                 <Plus className="size-4 mr-1 inline" />
                                                 {t("addCondition")}
                                             </Link>
@@ -517,7 +517,7 @@ const [isGlobalPolicy, setIsGlobalPolicy] = useState(false);
                                                                 realm,
                                                                 conditionName: condition.condition!,
                                                                 policyName: policyName
-                                                            })}
+                                                            }) as string}
                                                             className="kc-condition-link text-primary underline underline-offset-4"
                                                         >
                                                             {condition.condition}
@@ -604,7 +604,7 @@ const [isGlobalPolicy, setIsGlobalPolicy] = useState(false);
                                                             to={toClientProfile({
                                                                 realm,
                                                                 profileName: profile
-                                                            })}
+                                                            }) as string}
                                                             className="kc-profile-link text-primary underline-offset-4 hover:underline"
                                                         >
                                                             {profile}

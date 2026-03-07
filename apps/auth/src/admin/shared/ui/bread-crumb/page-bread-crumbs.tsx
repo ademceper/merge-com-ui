@@ -8,8 +8,8 @@ import {
 } from "@merge-rd/ui/components/breadcrumb";
 import { uniqBy } from "lodash-es";
 import React, { isValidElement } from "react";
-import { useTranslation } from "react-i18next";
-import { Link } from "react-router-dom";
+import { useTranslation } from "@merge-rd/i18n";
+import { Link } from "@tanstack/react-router";
 import useBreadcrumbs, {
     BreadcrumbData,
     BreadcrumbsRoute
@@ -60,7 +60,7 @@ export const PageBreadCrumbs = () => {
                         <BreadcrumbItem>
                             {crumbs.length - 1 !== i ? (
                                 <BreadcrumbLink asChild>
-                                    <Link to={match.pathname}>{crumb}</Link>
+                                    <Link to={match.pathname as string}>{crumb}</Link>
                                 </BreadcrumbLink>
                             ) : (
                                 <BreadcrumbPage>{crumb}</BreadcrumbPage>

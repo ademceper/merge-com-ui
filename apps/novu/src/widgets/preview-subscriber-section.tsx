@@ -11,10 +11,10 @@ import {
 	TooltipContent,
 	TooltipTrigger,
 } from "@/shared/ui/primitives/tooltip";
-import { SubscriberAutocomplete } from "@/features/subscribers/ui/subscriber-autocomplete";
-import { ACCORDION_STYLES } from "@/features/workflows/ui/workflow-editor/steps/constants/preview-context.constants";
-import { EditableJsonViewer } from "@/features/workflows/ui/workflow-editor/steps/shared/editable-json-viewer/editable-json-viewer";
-import type { SubscriberSectionProps } from "@/features/workflows/ui/workflow-editor/steps/types/preview-context.types";
+import { SubscriberAutocomplete } from "@/pages/subscribers/ui/subscriber-autocomplete";
+import { ACCORDION_STYLES } from "@/pages/workflows/ui/workflow-editor/steps/constants/preview-context.constants";
+import { EditableJsonViewer } from "@/pages/workflows/ui/workflow-editor/steps/shared/editable-json-viewer/editable-json-viewer";
+import type { SubscriberSectionProps } from "@/pages/workflows/ui/workflow-editor/steps/types/preview-context.types";
 
 export function PreviewSubscriberSection({
 	error,

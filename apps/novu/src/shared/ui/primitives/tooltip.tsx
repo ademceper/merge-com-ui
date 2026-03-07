@@ -17,6 +17,6 @@ export function TooltipPortal({ children }: { children: React.ReactNode }) {
 /**
  * TooltipArrow is a no-op since merge/ui's TooltipContent already includes an arrow.
  */
-export function TooltipArrow(_props: Record<string, unknown>) {
+function TooltipArrow(_props: Record<string, unknown>) {
 	return null;
 }

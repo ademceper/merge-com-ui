@@ -1,7 +1,7 @@
 import type { EnvironmentId } from "./environment";
 import type { OrganizationId } from "./organization";
 
-export type Context = {
+type Context = {
 	_id: string;
 	_organizationId: OrganizationId;
 	_environmentId: EnvironmentId;
@@ -23,9 +23,9 @@ export type ContextId = string;
 export const createContextKey = (type: ContextType, id: ContextId): string =>
 	`${type}:${id}`;
 
-export type ContextData = Record<string, unknown>;
+type ContextData = Record<string, unknown>;
 
-export const CONTEXT_IDENTIFIER_REGEX = /^[a-zA-Z0-9_-]+$/;
+const CONTEXT_IDENTIFIER_REGEX = /^[a-zA-Z0-9_-]+$/;
 
 // Context value can be either a simple string id or a rich object
 export type ContextValue =
@@ -72,7 +72,7 @@ function isValidContextValue(value: unknown): value is ContextValue {
 	return false;
 }
 
-export function isValidContextPayload(
+function isValidContextPayload(
 	context: unknown,
 ): context is ContextPayload {
 	if (

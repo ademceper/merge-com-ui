@@ -3,7 +3,7 @@ import { Label } from "@merge-rd/ui/components/label";
 import { RadioGroup, RadioGroupItem } from "@merge-rd/ui/components/radio-group";
 import { useState } from "react";
 import { FormErrorText, HelpItem } from "../../../../../shared/keycloak-ui-shared";
-import { useTranslation } from "react-i18next";
+import { useTranslation } from "@merge-rd/i18n";
 import { Controller, useFormContext } from "react-hook-form";
 
 const DATE_TIME_FORMAT = /(\d\d\d\d-\d\d-\d\d)? (\d\d?):(\d\d?)/;

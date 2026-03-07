@@ -1,0 +1,1769 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>2026 Pure Frontend Monorepo — Ultimate Stack Guide</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Cabinet+Grotesk:wght@400;500;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #050810;
+  --bg2: #080d1a;
+  --surface: #0c1425;
+  --surface2: #111c32;
+  --border: #1a2840;
+  --border2: #243550;
+  --blue: #4f8ef7;
+  --blue-dim: rgba(79,142,247,0.12);
+  --green: #2dd4a7;
+  --green-dim: rgba(45,212,167,0.1);
+  --purple: #a78bfa;
+  --purple-dim: rgba(167,139,250,0.1);
+  --amber: #f59e0b;
+  --amber-dim: rgba(245,158,11,0.1);
+  --rose: #fb7185;
+  --rose-dim: rgba(251,113,133,0.1);
+  --cyan: #22d3ee;
+  --cyan-dim: rgba(34,211,238,0.08);
+  --text: #e2eaf8;
+  --text2: #8fa3c4;
+  --text3: #4a6080;
+  --mono: 'Space Mono', monospace;
+  --sans: 'Cabinet Grotesk', sans-serif;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{
+  background:var(--bg);
+  color:var(--text);
+  font-family:var(--sans);
+  font-size:14px;
+  line-height:1.7;
+  overflow-x:hidden;
+}
+
+/* ─── SCROLLBAR ─── */
+::-webkit-scrollbar{width:6px;}
+::-webkit-scrollbar-track{background:var(--bg);}
+::-webkit-scrollbar-thumb{background:var(--border2);border-radius:3px;}
+
+/* ─── HERO ─── */
+.hero{
+  position:relative;
+  min-height:280px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  padding:80px 40px 60px;
+  text-align:center;
+  border-bottom:1px solid var(--border);
+  overflow:hidden;
+}
+.hero-bg{
+  position:absolute;inset:0;
+  background:
+    radial-gradient(ellipse 100% 60% at 50% 0%, rgba(79,142,247,0.1) 0%, transparent 65%),
+    radial-gradient(ellipse 50% 40% at 10% 90%, rgba(167,139,250,0.07) 0%, transparent 55%),
+    radial-gradient(ellipse 50% 40% at 90% 80%, rgba(45,212,167,0.06) 0%, transparent 55%);
+  pointer-events:none;
+}
+/* Grid pattern */
+.hero-bg::after{
+  content:'';
+  position:absolute;inset:0;
+  background-image:
+    linear-gradient(rgba(79,142,247,0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(79,142,247,0.04) 1px, transparent 1px);
+  background-size:60px 60px;
+  mask-image:radial-gradient(ellipse 80% 80% at center, black 20%, transparent 70%);
+}
+.hero-year{
+  font-family:var(--mono);
+  font-size:10px;
+  letter-spacing:.2em;
+  text-transform:uppercase;
+  color:var(--green);
+  background:var(--green-dim);
+  border:1px solid rgba(45,212,167,0.2);
+  padding:4px 16px;
+  border-radius:100px;
+  margin-bottom:20px;
+  display:inline-block;
+}
+.hero h1{
+  font-size:clamp(36px,5vw,64px);
+  font-weight:900;
+  line-height:1.05;
+  letter-spacing:-0.04em;
+  background:linear-gradient(160deg,#fff 0%,#8fa3c4 70%);
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+  background-clip:text;
+  margin-bottom:14px;
+}
+.hero p{
+  color:var(--text2);
+  font-size:15px;
+  max-width:560px;
+  font-weight:400;
+  margin-bottom:28px;
+}
+.hero-pills{
+  display:flex;
+  flex-wrap:wrap;
+  gap:6px;
+  justify-content:center;
+  max-width:720px;
+}
+.hp{
+  font-family:var(--mono);
+  font-size:10px;
+  padding:4px 10px;
+  border-radius:6px;
+  background:var(--surface2);
+  border:1px solid var(--border);
+  color:var(--text3);
+  letter-spacing:.05em;
+}
+
+/* ─── NAV ─── */
+.toc{
+  position:sticky;top:0;z-index:100;
+  background:rgba(5,8,16,0.92);
+  backdrop-filter:blur(12px);
+  border-bottom:1px solid var(--border);
+  padding:0 40px;
+  overflow-x:auto;
+  white-space:nowrap;
+}
+.toc-inner{
+  display:flex;
+  gap:4px;
+  max-width:1400px;
+  margin:0 auto;
+}
+.toc a{
+  font-family:var(--mono);
+  font-size:10px;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+  color:var(--text3);
+  text-decoration:none;
+  padding:14px 12px;
+  display:inline-block;
+  transition:color .2s;
+  border-bottom:2px solid transparent;
+}
+.toc a:hover{color:var(--blue);border-bottom-color:var(--blue);}
+
+/* ─── LAYOUT ─── */
+.page{max-width:1400px;margin:0 auto;}
+
+/* ─── SECTION ─── */
+section{
+  padding:64px 40px;
+  border-bottom:1px solid var(--border);
+}
+.sec-head{
+  display:flex;
+  align-items:baseline;
+  gap:16px;
+  margin-bottom:40px;
+}
+.sec-num{
+  font-family:var(--mono);
+  font-size:11px;
+  color:var(--text3);
+  letter-spacing:.1em;
+}
+.sec-title{
+  font-size:28px;
+  font-weight:800;
+  color:#fff;
+  letter-spacing:-0.03em;
+}
+.sec-sub{
+  font-size:14px;
+  color:var(--text2);
+  margin-top:4px;
+  font-weight:400;
+}
+
+/* ─── GRID ─── */
+.g2{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;}
+.g3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;}
+.g4{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;}
+.ga{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:16px;}
+.ga-sm{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:12px;}
+
+/* ─── CARD ─── */
+.card{
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:12px;
+  padding:24px;
+  transition:border-color .25s,transform .2s;
+}
+.card:hover{border-color:var(--border2);transform:translateY(-2px);}
+.card-blue{border-top:2px solid var(--blue);}
+.card-green{border-top:2px solid var(--green);}
+.card-purple{border-top:2px solid var(--purple);}
+.card-amber{border-top:2px solid var(--amber);}
+.card-rose{border-top:2px solid var(--rose);}
+.card-cyan{border-top:2px solid var(--cyan);}
+
+.card-ico{font-size:22px;margin-bottom:12px;display:block;}
+.card h3{
+  font-size:16px;font-weight:800;color:#fff;
+  margin-bottom:8px;letter-spacing:-0.02em;
+}
+.card h4{
+  font-size:13px;font-weight:700;color:var(--text);
+  margin-bottom:6px;
+}
+.card p{color:var(--text2);font-size:13px;line-height:1.65;}
+.card ul{color:var(--text2);font-size:12px;padding-left:16px;line-height:1.9;}
+.card li{margin-bottom:2px;}
+
+/* ─── TOOL ROW ─── */
+.tool-row{
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:10px;
+  padding:16px 20px;
+  display:flex;
+  align-items:flex-start;
+  gap:16px;
+  margin-bottom:8px;
+  transition:border-color .2s;
+}
+.tool-row:hover{border-color:var(--border2);}
+.tool-left{flex:1;}
+.tool-name{
+  font-family:var(--mono);
+  font-size:13px;
+  font-weight:700;
+  color:var(--blue);
+  margin-bottom:4px;
+  display:flex;
+  align-items:center;
+  gap:8px;
+  flex-wrap:wrap;
+}
+.tool-ver{
+  font-size:10px;
+  color:var(--text3);
+  background:var(--surface2);
+  border:1px solid var(--border);
+  padding:1px 7px;
+  border-radius:4px;
+  font-weight:400;
+}
+.tool-why{font-size:12px;color:var(--text2);line-height:1.6;}
+.tool-badge{
+  font-family:var(--mono);
+  font-size:9px;
+  font-weight:700;
+  letter-spacing:.08em;
+  padding:3px 10px;
+  border-radius:100px;
+  white-space:nowrap;
+  flex-shrink:0;
+  align-self:flex-start;
+}
+.tb-web{background:var(--blue-dim);color:var(--blue);border:1px solid rgba(79,142,247,.2);}
+.tb-mob{background:var(--green-dim);color:var(--green);border:1px solid rgba(45,212,167,.2);}
+.tb-share{background:var(--purple-dim);color:var(--purple);border:1px solid rgba(167,139,250,.2);}
+.tb-new{background:var(--amber-dim);color:var(--amber);border:1px solid rgba(245,158,11,.2);}
+.tb-warn{background:var(--rose-dim);color:var(--rose);border:1px solid rgba(251,113,133,.2);}
+
+/* ─── TABLE ─── */
+.tbl{width:100%;border-collapse:collapse;font-size:12.5px;margin:16px 0;}
+.tbl th{
+  background:var(--surface2);
+  color:var(--text3);
+  font-family:var(--mono);
+  font-size:10px;
+  letter-spacing:.1em;
+  text-transform:uppercase;
+  padding:12px 16px;
+  text-align:left;
+  border-bottom:1px solid var(--border);
+}
+.tbl td{
+  padding:11px 16px;
+  border-bottom:1px solid rgba(26,40,64,.4);
+  color:var(--text2);
+  vertical-align:top;
+}
+.tbl tr:hover td{background:rgba(79,142,247,.02);}
+.tbl td:first-child{font-family:var(--mono);color:var(--purple);font-size:12px;}
+.tbl td:nth-child(2){color:var(--text);font-weight:600;}
+.tbl .winner td:nth-child(2)::after{content:' ✓';color:var(--green);}
+
+/* ─── CODE ─── */
+.code{
+  background:#060b14;
+  border:1px solid var(--border);
+  border-radius:10px;
+  padding:20px 24px;
+  font-family:var(--mono);
+  font-size:12px;
+  line-height:1.85;
+  overflow-x:auto;
+  margin:14px 0;
+  position:relative;
+}
+.code-label{
+  position:absolute;top:12px;right:14px;
+  font-family:var(--mono);
+  font-size:9px;
+  letter-spacing:.1em;
+  color:var(--text3);
+  background:var(--surface2);
+  padding:2px 8px;
+  border-radius:4px;
+}
+.c-comment{color:#2d4a6a;}
+.c-key{color:var(--purple);}
+.c-str{color:var(--green);}
+.c-fn{color:var(--amber);}
+.c-type{color:var(--cyan);}
+.c-num{color:var(--rose);}
+.c-path{color:var(--text2);}
+.c-white{color:#fff;}
+
+/* ─── COMPARE CARDS ─── */
+.compare{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:16px 0;}
+.cmp{
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:12px;
+  padding:20px;
+  position:relative;
+}
+.cmp.best::before{
+  content:'ÖNERİLEN 2026';
+  position:absolute;top:-1px;right:16px;
+  background:var(--green);
+  color:#050810;
+  font-family:var(--mono);
+  font-size:9px;
+  font-weight:700;
+  letter-spacing:.1em;
+  padding:3px 10px;
+  border-radius:0 0 6px 6px;
+}
+.cmp h4{
+  font-family:var(--mono);
+  font-size:13px;
+  color:#fff;
+  margin-bottom:10px;
+}
+.cmp-pros span{
+  display:block;
+  font-size:12px;
+  color:var(--green);
+  line-height:1.9;
+}
+.cmp-pros span::before{content:'+ ';}
+.cmp-cons span{
+  display:block;
+  font-size:12px;
+  color:var(--rose);
+  line-height:1.9;
+}
+.cmp-cons span::before{content:'− ';}
+
+/* ─── DECISION MATRIX ─── */
+.matrix{
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:12px;
+  padding:24px;
+  margin:16px 0;
+}
+.matrix-title{
+  font-family:var(--mono);
+  font-size:11px;
+  letter-spacing:.1em;
+  text-transform:uppercase;
+  color:var(--text3);
+  margin-bottom:16px;
+}
+.m-row{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  padding:10px 0;
+  border-bottom:1px solid rgba(26,40,64,.4);
+  font-size:12px;
+}
+.m-row:last-child{border-bottom:none;}
+.m-cond{color:var(--text2);flex:2;}
+.m-arrow{color:var(--text3);}
+.m-choice{
+  font-family:var(--mono);
+  font-size:11px;
+  color:#fff;
+  background:var(--blue-dim);
+  border:1px solid rgba(79,142,247,.2);
+  padding:3px 10px;
+  border-radius:6px;
+  flex:1;
+}
+
+/* ─── SUMMARY FINAL ─── */
+.final{
+  background:linear-gradient(135deg,rgba(79,142,247,.06) 0%,rgba(45,212,167,.04) 100%);
+  border:1px solid rgba(79,142,247,.2);
+  border-radius:16px;
+  padding:40px;
+  margin:32px 0;
+}
+.final-title{
+  font-size:22px;font-weight:800;
+  color:#fff;letter-spacing:-0.02em;
+  margin-bottom:24px;
+}
+.final-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(180px,1fr));
+  gap:10px;
+}
+.fi{
+  background:rgba(255,255,255,.03);
+  border:1px solid rgba(255,255,255,.06);
+  border-radius:10px;
+  padding:14px 16px;
+}
+.fi-cat{
+  font-family:var(--mono);
+  font-size:9px;
+  letter-spacing:.12em;
+  text-transform:uppercase;
+  color:var(--text3);
+  margin-bottom:6px;
+}
+.fi-val{
+  font-family:var(--mono);
+  font-size:12px;
+  color:#fff;
+  font-weight:700;
+  line-height:1.5;
+}
+
+/* ─── ALERT ─── */
+.alert{
+  border-radius:10px;
+  padding:14px 18px;
+  margin:14px 0;
+  font-size:13px;
+  display:flex;
+  gap:10px;
+  align-items:flex-start;
+}
+.alert-blue{background:var(--blue-dim);border:1px solid rgba(79,142,247,.2);color:var(--text2);}
+.alert-green{background:var(--green-dim);border:1px solid rgba(45,212,167,.2);color:var(--text2);}
+.alert-amber{background:var(--amber-dim);border:1px solid rgba(245,158,11,.2);color:var(--text2);}
+.alert-rose{background:var(--rose-dim);border:1px solid rgba(251,113,133,.2);color:var(--text2);}
+.alert-ico{font-size:16px;flex-shrink:0;margin-top:2px;}
+.alert strong{color:#fff;}
+
+/* ─── BADGE INLINE ─── */
+.badge{
+  display:inline-block;
+  font-family:var(--mono);
+  font-size:10px;
+  padding:2px 8px;
+  border-radius:5px;
+  margin:0 2px;
+}
+.bd-b{background:var(--blue-dim);color:var(--blue);}
+.bd-g{background:var(--green-dim);color:var(--green);}
+.bd-p{background:var(--purple-dim);color:var(--purple);}
+.bd-a{background:var(--amber-dim);color:var(--amber);}
+.bd-r{background:var(--rose-dim);color:var(--rose);}
+
+/* ─── DIVIDER ─── */
+.div{height:1px;background:linear-gradient(90deg,transparent,var(--border),transparent);margin:32px 0;}
+
+/* ─── RESPONSIVE ─── */
+@media(max-width:900px){
+  section{padding:40px 20px;}
+  .hero{padding:60px 20px 40px;}
+  .g2,.g3,.g4,.compare{grid-template-columns:1fr;}
+  .toc{padding:0 20px;}
+}
+</style>
+</head>
+<body>
+
+<!-- ══════════════════ HERO ══════════════════ -->
+<div class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-year">2026 Edition — Pure Frontend</div>
+  <h1>Monorepo<br>Ultimate Stack</h1>
+  <p>Next.js · React+Vite · Expo — Sıfır backend, üç platform, tek repo. Araştırma destekli, üretim hazır.</p>
+  <div class="hero-pills">
+    <span class="hp">pnpm v9</span><span class="hp">Turborepo</span><span class="hp">TypeScript 5.x</span>
+    <span class="hp">Next.js 15</span><span class="hp">React 19</span><span class="hp">Vite 6</span>
+    <span class="hp">Expo SDK 53+</span><span class="hp">TanStack Query v5</span><span class="hp">Zustand v5</span>
+    <span class="hp">Tailwind v4</span><span class="hp">shadcn/ui</span><span class="hp">NativeWind v4</span>
+    <span class="hp">Biome v2</span><span class="hp">TanStack Router</span><span class="hp">React Hook Form</span>
+    <span class="hp">Zod v3</span><span class="hp">Motion v12</span><span class="hp">Reanimated 3</span>
+  </div>
+</div>
+
+<!-- ══════════════════ NAV ══════════════════ -->
+<nav class="toc">
+  <div class="toc-inner">
+    <a href="#s1">Monorepo</a>
+    <a href="#s2">Tooling</a>
+    <a href="#s3">Next.js</a>
+    <a href="#s4">React+Vite</a>
+    <a href="#s5">Expo</a>
+    <a href="#s6">Styling</a>
+    <a href="#s7">State</a>
+    <a href="#s8">Form+Valid</a>
+    <a href="#s9">Data Fetch</a>
+    <a href="#s10">Animasyon</a>
+    <a href="#s11">i18n</a>
+    <a href="#s12">Test</a>
+    <a href="#s13">Monitoring</a>
+    <a href="#s14">Packages</a>
+    <a href="#s15">Özet</a>
+  </div>
+</nav>
+
+<div class="page">
+
+<!-- ══════════════════ 01 MONOREPO ══════════════════ -->
+<section id="s1">
+  <div class="sec-head">
+    <span class="sec-num">01</span>
+    <div>
+      <div class="sec-title">Monorepo & Package Management</div>
+      <div class="sec-sub">Workspace orchestration, build cache, dependency yönetimi</div>
+    </div>
+  </div>
+
+  <div class="g2">
+    <div>
+      <div class="tool-row">
+        <div class="tool-left">
+          <div class="tool-name">pnpm <span class="tool-ver">v9+</span></div>
+          <div class="tool-why">2026'nın standart package manager'ı. Content-addressable store ile disk'e her paket yalnızca bir kez kaydedilir. Strict symlink tabanlı dependency tree — phantom dependencies imkansız. npm'den 3x, yarn'dan 2x hızlı kurulum.</div>
+        </div>
+        <span class="tool-badge tb-share">ZORUNLU</span>
+      </div>
+      <div class="tool-row">
+        <div class="tool-left">
+          <div class="tool-name">Turborepo <span class="tool-ver">2.x</span></div>
+          <div class="tool-why">Incremental build cache + remote caching. Dependency graph anlar — önce <code>packages/ui</code> build'lenir, sonra app'ler. Değişmeyen paketler cache'den &lt;1 saniyede replay edilir. Paralel task execution.</div>
+        </div>
+        <span class="tool-badge tb-share">ZORUNLU</span>
+      </div>
+      <div class="tool-row">
+        <div class="tool-left">
+          <div class="tool-name">Nx <span class="tool-ver">alt.</span></div>
+          <div class="tool-why">Turborepo'ya güçlü alternatif. Code generation, affected builds, project graph UI. 10+ developer'lı kurumsal ekipler için tercih edilebilir. Turborepo'dan daha fazla konfigürasyon gerektirir.</div>
+        </div>
+        <span class="tool-badge tb-warn">ALTERNATİF</span>
+      </div>
+      <div class="tool-row">
+        <div class="tool-left">
+          <div class="tool-name">Syncpack</div>
+          <div class="tool-why">Monorepo'daki tüm workspace'lerde aynı paket versiyonu zorunluluğu. "Version drift" sorununu otomatik tespit eder — iki farklı yerde React yüklenirse bundle şişer, context hataları çıkar.</div>
+        </div>
+        <span class="tool-badge tb-new">ÖNERİLEN</span>
+      </div>
+      <div class="tool-row">
+        <div class="tool-left">
+          <div class="tool-name">Changesets</div>
+          <div class="tool-why">Internal package versioning ve otomatik CHANGELOG üretimi. <code>packages/ui</code>'yi değiştirdiğinde hangi app'lerin etkileneceğini takip eder. Semantic versioning disiplini.</div>
+        </div>
+        <span class="tool-badge tb-new">ÖNERİLEN</span>
+      </div>
+    </div>
+    <div>
+      <div class="code">
+        <span class="code-label">turbo.json</span>
+<span class="c-comment">// Turborepo pipeline konfigürasyonu</span>
+{
+  <span class="c-str">"$schema"</span>: <span class="c-str">"https://turborepo.com/schema.json"</span>,
+  <span class="c-str">"tasks"</span>: {
+    <span class="c-str">"build"</span>: {
+      <span class="c-comment">// Önce bağımlı paketleri build et</span>
+      <span class="c-str">"dependsOn"</span>: [<span class="c-str">"^build"</span>],
+      <span class="c-str">"outputs"</span>: [<span class="c-str">".next/**"</span>, <span class="c-str">"dist/**"</span>],
+      <span class="c-str">"inputs"</span>: [<span class="c-str">"$TURBO_DEFAULT$"</span>, <span class="c-str">".env*"</span>]
+    },
+    <span class="c-str">"dev"</span>: {
+      <span class="c-str">"cache"</span>: <span class="c-key">false</span>,
+      <span class="c-str">"persistent"</span>: <span class="c-key">true</span>
+    },
+    <span class="c-str">"lint"</span>: { <span class="c-str">"dependsOn"</span>: [<span class="c-str">"^lint"</span>] },
+    <span class="c-str">"test"</span>: { <span class="c-str">"dependsOn"</span>: [<span class="c-str">"^build"</span>] },
+    <span class="c-str">"type-check"</span>: { <span class="c-str">"dependsOn"</span>: [<span class="c-str">"^build"</span>] }
+  }
+}
+      </div>
+      <div class="code">
+        <span class="code-label">pnpm-workspace.yaml</span>
+packages:
+  - <span class="c-str">'apps/*'</span>
+  - <span class="c-str">'packages/*'</span>
+      </div>
+      <div class="alert alert-green">
+        <span class="alert-ico">💡</span>
+        <div><strong>Remote Cache:</strong> Turborepo'yu Vercel Remote Cache ile bağlarsan aynı commit'i CI ve local'de iki kez build etmezsin. Takım genelinde paylaşılan cache.</div>
+      </div>
+    </div>
+  </div>
+
+</section>
+
+<!-- ══════════════════ 02 TOOLING ══════════════════ -->
+<section id="s2">
+  <div class="sec-head">
+    <span class="sec-num">02</span>
+    <div>
+      <div class="sec-title">Developer Tooling</div>
+      <div class="sec-sub">TypeScript, format, lint, git hooks, commit convention</div>
+    </div>
+  </div>
+
+  <div class="ga">
+    <div class="card card-blue">
+      <span class="card-ico">🦀</span>
+      <h3>Biome v2</h3>
+      <p>ESLint + Prettier'ın 2026'daki halefi. Rust ile yazıldı — <strong>10-25x daha hızlı</strong>. Tek binary, tek config. Haziran 2025'te v2.0 yayınlandı: plugin API ve type-aware linting eklendi. TypeScript-eslint'in yüzde 85 kapsamı.</p>
+      <div class="code" style="margin-top:12px;font-size:11px;">
+<span class="c-comment">// biome.json — tek dosya yeterli</span>
+{
+  <span class="c-str">"linter"</span>: { <span class="c-str">"rules"</span>: { <span class="c-str">"recommended"</span>: <span class="c-key">true</span> } },
+  <span class="c-str">"formatter"</span>: {
+    <span class="c-str">"indentStyle"</span>: <span class="c-str">"space"</span>,
+    <span class="c-str">"indentWidth"</span>: <span class="c-num">2</span>
+  },
+  <span class="c-str">"javascript"</span>: {
+    <span class="c-str">"formatter"</span>: { <span class="c-str">"quoteStyle"</span>: <span class="c-str">"single"</span> }
+  }
+}
+      </div>
+    </div>
+    <div class="card card-purple">
+      <span class="card-ico">📘</span>
+      <h3>TypeScript 5.x</h3>
+      <p><code>strict: true</code> zorunlu. Tüm packages ve apps ortak bir <code>tsconfig.base.json</code>'dan extend eder. <code>paths</code> ile <code>@ui/*</code>, <code>@store/*</code>, <code>@hooks/*</code> alias'ları tüm workspace'te tutarlı çalışır.</p>
+      <div class="code" style="margin-top:12px;font-size:11px;">
+<span class="c-comment">// packages/config/tsconfig.base.json</span>
+{
+  <span class="c-str">"compilerOptions"</span>: {
+    <span class="c-str">"strict"</span>: <span class="c-key">true</span>,
+    <span class="c-str">"target"</span>: <span class="c-str">"ES2022"</span>,
+    <span class="c-str">"moduleResolution"</span>: <span class="c-str">"bundler"</span>,
+    <span class="c-str">"verbatimModuleSyntax"</span>: <span class="c-key">true</span>
+  }
+}
+      </div>
+    </div>
+    <div class="card card-green">
+      <span class="card-ico">🪝</span>
+      <h3>Git Hooks & Commit</h3>
+      <ul>
+        <li><strong>Lefthook</strong> — Git hooks manager. Husky'den çok daha hızlı (binary, Go ile yazıldı). Parallel hook execution.</li>
+        <li><strong>Commitlint</strong> — Conventional Commits zorunluluğu. <code>feat:</code>, <code>fix:</code>, <code>chore:</code> pattern'ları.</li>
+        <li><strong>lint-staged</strong> — Yalnızca staged dosyaları lint'le, tüm projeyi değil. Pre-commit hızlanır.</li>
+      </ul>
+    </div>
+    <div class="card card-amber">
+      <span class="card-ico">🔄</span>
+      <h3>Alternatif: oxlint + Prettier</h3>
+      <p>Pure linting hızı istiyorsan: <strong>oxlint</strong> ESLint'ten 50x daha hızlı. Ama formatting için Prettier'a ihtiyaç var. Biome'dan daha az kapsam, fakat edge case'lerde daha esnek. Büyük legacy ESLint config varsa bu yol tercih edilebilir.</p>
+    </div>
+  </div>
+
+  <div class="alert alert-amber" style="margin-top:16px;">
+    <span class="alert-ico">⚠️</span>
+    <div><strong>Biome Sınırı:</strong> HTML, Markdown, SCSS, Vue ve Astro dosyalarına destek hâlâ kısmi. Bu dosya tiplerine yoğun çalışıyorsan Biome + ESLint karma yaklaşımı daha güvenli.</div>
+  </div>
+</section>
+
+<!-- ══════════════════ 03 NEXT.JS ══════════════════ -->
+<section id="s3">
+  <div class="sec-head">
+    <span class="sec-num">03</span>
+    <div>
+      <div class="sec-title">Web App — Next.js 15</div>
+      <div class="sec-sub">App Router, RSC, Streaming, Turbopack, Partial Prerendering</div>
+    </div>
+  </div>
+
+  <div class="g2">
+    <div>
+      <div class="tool-row">
+        <div class="tool-left">
+          <div class="tool-name">Next.js 15 — App Router <span class="tool-ver">15.x</span></div>
+          <div class="tool-why">React Server Components (RSC) default. Streaming, nested layouts, server actions, Turbopack dev server (~10x hızlı). Partial Prerendering (PPR) stabil — statik shell + streaming dynamic parts.</div>
+        </div>
+        <span class="tool-badge tb-web">PRIMARY</span>
+      </div>
+      <div class="tool-row">
+        <div class="tool-left">
+          <div class="tool-name">TanStack Start <span class="tool-ver">1.x</span></div>
+          <div class="tool-why">Vite tabanlı Next.js alternatifi. TanStack Router üzerine kurulu — full type-safe routing. Dev performance Next.js'ten üstün. RSC desteği gelişiyor. Vendor lock-in yok.</div>
+        </div>
+        <span class="tool-badge tb-warn">ALTERNATİF</span>
+      </div>
+
+      <div class="div"></div>
+
+      <h4 style="color:#fff;font-weight:700;margin-bottom:12px;">App Router vs Pages Router — Karar Matrisi</h4>
+      <div class="matrix">
+        <div class="matrix-title">Ne zaman ne kullan?</div>
+        <div class="m-row">
+          <span class="m-cond">Yeni proje başlatıyorsun</span>
+          <span class="m-arrow">→</span>
+          <span class="m-choice">App Router</span>
+        </div>
+        <div class="m-row">
+          <span class="m-cond">SEO kritik, içerik ağırlıklı</span>
+          <span class="m-arrow">→</span>
+          <span class="m-choice">App Router + RSC</span>
+        </div>
+        <div class="m-row">
+          <span class="m-cond">Mevcut Pages Router projesi</span>
+          <span class="m-arrow">→</span>
+          <span class="m-choice">Pages Router (stabil kal)</span>
+        </div>
+        <div class="m-row">
+          <span class="m-cond">Saf SPA / Dashboard</span>
+          <span class="m-arrow">→</span>
+          <span class="m-choice">React + Vite</span>
+        </div>
+        <div class="m-row">
+          <span class="m-cond">Max type-safety routing</span>
+          <span class="m-arrow">→</span>
+          <span class="m-choice">TanStack Start</span>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <div class="code">
+        <span class="code-label">app/layout.tsx</span>
+<span class="c-comment">// Server Component — default, 'use client' yok</span>
+<span class="c-key">export default async function</span> <span class="c-fn">RootLayout</span>({
+  children
+}: { children: React.ReactNode }) {
+  <span class="c-comment">// Veri fetch direkt component içinde</span>
+  <span class="c-key">const</span> session = <span class="c-key">await</span> <span class="c-fn">getSession</span>()
+
+  <span class="c-key">return</span> (
+    &lt;<span class="c-type">html</span>&gt;
+      &lt;<span class="c-type">body</span>&gt;
+        &lt;<span class="c-type">Providers</span> session={session}&gt;
+          {children}
+        &lt;/<span class="c-type">Providers</span>&gt;
+      &lt;/<span class="c-type">body</span>&gt;
+    &lt;/<span class="c-type">html</span>&gt;
+  )
+}
+      </div>
+      <div class="code">
+        <span class="code-label">Partial Prerendering (PPR)</span>
+<span class="c-comment">// next.config.ts</span>
+<span class="c-key">const</span> config: <span class="c-type">NextConfig</span> = {
+  <span class="c-str">experimental</span>: {
+    <span class="c-str">ppr</span>: <span class="c-key">true</span>  <span class="c-comment">// stabil Next.js 15'te</span>
+  }
+}
+
+<span class="c-comment">// page.tsx — statik shell + dynamic streaming</span>
+<span class="c-key">import</span> { Suspense } <span class="c-key">from</span> <span class="c-str">'react'</span>
+
+<span class="c-key">export default function</span> <span class="c-fn">Page</span>() {
+  <span class="c-key">return</span> (
+    &lt;&gt;
+      &lt;<span class="c-type">StaticHero</span> /&gt;  <span class="c-comment">// anında</span>
+      &lt;<span class="c-type">Suspense</span> fallback={&lt;<span class="c-type">Skeleton</span> /&gt;}&gt;
+        &lt;<span class="c-type">DynamicFeed</span> /&gt;  <span class="c-comment">// stream edilir</span>
+      &lt;/<span class="c-type">Suspense</span>&gt;
+    &lt;/&gt;
+  )
+}
+      </div>
+      <div class="alert alert-blue">
+        <span class="alert-ico">📌</span>
+        <div><strong>RSC Best Practice:</strong> <code>'use client'</code> direktifini component tree'de mümkün olduğunca aşağı it. Server Component kalmak = sıfır JS bundle maliyeti.</div>
+      </div>
+    </div>
+  </div>
+
+</section>
+
+<!-- ══════════════════ 04 REACT+VITE ══════════════════ -->
+<section id="s4">
+  <div class="sec-head">
+    <span class="sec-num">04</span>
+    <div>
+      <div class="sec-title">Admin/Dashboard — React 19 + Vite 6</div>
+      <div class="sec-sub">React Compiler, Actions API, TanStack Router</div>
+    </div>
+  </div>
+
+  <div class="ga">
+    <div class="card card-blue">
+      <span class="card-ico">⚛️</span>
+      <h3>React 19 — React Compiler</h3>
+      <p>React Compiler (eski adıyla React Forget) ile <strong>otomatik memoization</strong>. <code>useMemo</code>, <code>useCallback</code>, <code>memo</code> büyük ölçüde gereksiz hale geldi. Erken benimseyenler yüzde 25-40 daha az re-render bildiriyor. Instagram production'da kullanıyor.</p>
+    </div>
+    <div class="card card-green">
+      <span class="card-ico">🎬</span>
+      <h3>React 19 — Actions API</h3>
+      <p>Async fonksiyonlar artık transition içinde çalışır. <code>useActionState</code>, <code>useOptimistic</code>, <code>useFormStatus</code> — form ve async işlemler drastik biçimde sadeleşti. Basit formlar için artık React Hook Form şart değil.</p>
+      <div class="code" style="margin-top:10px;font-size:11px;">
+<span class="c-key">const</span> [state, action, isPending] = <span class="c-fn">useActionState</span>(
+  submitForm, null
+)
+      </div>
+    </div>
+    <div class="card card-purple">
+      <span class="card-ico">🔗</span>
+      <h3>TanStack Router v2</h3>
+      <p>React Router v7'den üstün type-safety. Route parametreleri, search params, context — hepsi fully-typed. File-based routing + code-based karma. Vite plugin ile route config otomatik üretilir. Built-in SWR caching.</p>
+    </div>
+    <div class="card card-amber">
+      <span class="card-ico">⚡</span>
+      <h3>Vite 6</h3>
+      <p>Native ESM, anında cold start, sub-millisecond HMR. Environment API (v6 yeni) ile server/client ortamları net ayrılır. Rollup tabanlı production build, mükemmel tree-shaking ve code splitting.</p>
+    </div>
+  </div>
+
+  <div class="div"></div>
+
+  <h4 style="color:#fff;font-weight:700;margin-bottom:16px;">TanStack Router v2 vs React Router v7 — Detaylı Karşılaştırma</h4>
+  <table class="tbl">
+    <thead>
+      <tr>
+        <th>Özellik</th>
+        <th>TanStack Router v2</th>
+        <th>React Router v7</th>
+        <th>Karar</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>TypeScript</td>
+        <td>100% type-safe, ground-up TS</td>
+        <td>Framework mode'da iyi, library mode'da sınırlı</td>
+        <td><span class="badge bd-g">TanStack</span></td>
+      </tr>
+      <tr>
+        <td>Search Params</td>
+        <td>JSON, schema validation, immutable</td>
+        <td>String tabanlı, manuel parsing</td>
+        <td><span class="badge bd-g">TanStack</span></td>
+      </tr>
+      <tr>
+        <td>Data Loading</td>
+        <td>Built-in loaders + SWR cache</td>
+        <td>Loader functions (v7)</td>
+        <td><span class="badge bd-b">Berabere</span></td>
+      </tr>
+      <tr>
+        <td>File-based Routing</td>
+        <td>Vite plugin ile otomatik</td>
+        <td>Framework mode gerektirir</td>
+        <td><span class="badge bd-g">TanStack</span></td>
+      </tr>
+      <tr>
+        <td>Ekosistem</td>
+        <td>Genç ama hızlı büyüyor</td>
+        <td>On yıllık, geniş community</td>
+        <td><span class="badge bd-p">React Router</span></td>
+      </tr>
+      <tr>
+        <td>Mevcut Proje</td>
+        <td>Migration gerektirir</td>
+        <td>v6→v7 non-breaking (flag'larla)</td>
+        <td><span class="badge bd-p">React Router</span></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="alert alert-green">
+    <span class="alert-ico">✅</span>
+    <div><strong>2026 Önerisi:</strong> Yeni Vite projesi başlatıyorsan TanStack Router v2. Mevcut React Router projesi varsa v7'ye upgrade et. Her iki durumda da Next.js Pages Router'ı yeni projede kullanma.</div>
+  </div>
+
+</section>
+
+<!-- ══════════════════ 05 EXPO ══════════════════ -->
+<section id="s5">
+  <div class="sec-head">
+    <span class="sec-num">05</span>
+    <div>
+      <div class="sec-title">Mobile — Expo SDK 53/54</div>
+      <div class="sec-sub">New Architecture zorunlu, React 19, Expo Router v4, EAS</div>
+    </div>
+  </div>
+
+  <div class="alert alert-rose" style="margin-bottom:24px;">
+    <span class="alert-ico">🚨</span>
+    <div><strong>Kritik Uyarı — New Architecture:</strong> Legacy Architecture Haziran 2025'te donduruldu. SDK 55 ve üstünde New Architecture her zaman aktif, devre dışı bırakılamaz. SDK 52 ile başlamak artık tavsiye edilmiyor — <strong>SDK 53+ ile başla.</strong> Büyük kütüphaneler artık yalnızca New Architecture destekliyor (Reanimated v4, Flash List v2).</div>
+  </div>
+
+  <div class="g2">
+    <div>
+      <div class="tool-row">
+        <div class="tool-left">
+          <div class="tool-name">Expo SDK 53/54 <span class="tool-ver">RN 0.79-0.81</span></div>
+          <div class="tool-why">SDK 53 = React Native 0.79 = React 19. SDK 54 = RN 0.81 = React 19.1. New Architecture default ve zorunlu. Yılda 3 SDK release. pnpm monorepo otomatik destek.</div>
+        </div>
+        <span class="tool-badge tb-mob">PRIMARY</span>
+      </div>
+      <div class="tool-row">
+        <div class="tool-left">
+          <div class="tool-name">Expo Router v4</div>
+          <div class="tool-why">File-based routing — Next.js App Router ile aynı paradigma. Tab, stack, modal, drawer yerleşik. Web + native aynı dosya yapısı. Deep linking otomatik.</div>
+        </div>
+        <span class="tool-badge tb-mob">PRIMARY</span>
+      </div>
+      <div class="tool-row">
+        <div class="tool-left">
+          <div class="tool-name">React Navigation v7</div>
+          <div class="tool-why">Expo Router altında çalışır. Tab, stack, drawer navigasyon primitifleri. v7 ile Type-safe navigation parametreleri iyileştirildi.</div>
+        </div>
+        <span class="tool-badge tb-mob">YERLEŞIK</span>
+      </div>
+      <div class="tool-row">
+        <div class="tool-left">
+          <div class="tool-name">EAS Build + Submit</div>
+          <div class="tool-why">Expo Application Services. Cloud build, OTA updates, App Store/Play Store submit otomasyonu. Preview builds ile PR-level test.</div>
+        </div>
+        <span class="tool-badge tb-mob">DEPLOY</span>
+      </div>
+      <div class="tool-row">
+        <div class="tool-left">
+          <div class="tool-name">expo/fetch</div>
+          <div class="tool-why">SDK 52+ ile geldi. WinterCG-compliant Fetch API. Download streaming — AI API'larından gelen stream'leri native handle eder.</div>
+        </div>
+        <span class="tool-badge tb-new">YENİ</span>
+      </div>
+    </div>
+    <div>
+      <div class="code">
+        <span class="code-label">app.json</span>
+{
+  <span class="c-str">"expo"</span>: {
+    <span class="c-str">"name"</span>: <span class="c-str">"MyApp"</span>,
+    <span class="c-str">"newArchEnabled"</span>: <span class="c-key">true</span>, <span class="c-comment">// SDK 53 default</span>
+    <span class="c-str">"plugins"</span>: [
+      <span class="c-str">"expo-router"</span>,
+      <span class="c-str">"expo-secure-store"</span>
+    ]
+  }
+}
+      </div>
+      <div class="code">
+        <span class="code-label">app/(tabs)/_layout.tsx</span>
+<span class="c-key">import</span> { Tabs } <span class="c-key">from</span> <span class="c-str">'expo-router'</span>
+
+<span class="c-key">export default function</span> <span class="c-fn">TabLayout</span>() {
+  <span class="c-key">return</span> (
+    &lt;<span class="c-type">Tabs</span> screenOptions={{
+      tabBarActiveTintColor: <span class="c-str">'#4f8ef7'</span>,
+      headerShown: <span class="c-key">false</span>
+    }}&gt;
+      &lt;<span class="c-type">Tabs.Screen</span>
+        name=<span class="c-str">"index"</span>
+        options={{
+          title: <span class="c-str">'Ana Sayfa'</span>,
+          tabBarIcon: ({ color }) =&gt; (
+            &lt;<span class="c-type">Home</span> color={color} /&gt;
+          )
+        }}
+      /&gt;
+    &lt;/<span class="c-type">Tabs</span>&gt;
+  )
+}
+      </div>
+      <div class="alert alert-blue">
+        <span class="alert-ico">📱</span>
+        <div><strong>DOM Components (SDK 52+):</strong> <code>"use dom"</code> direktifi ile web bileşenlerini native app içinde kullan. Web kütüphanelerini escape hatch olarak entegre etmek artık çok kolay.</div>
+      </div>
+    </div>
+  </div>
+
+</section>
+
+<!-- ══════════════════ 06 STYLING ══════════════════ -->
+<section id="s6">
+  <div class="sec-head">
+    <span class="sec-num">06</span>
+    <div>
+      <div class="sec-title">UI & Styling</div>
+      <div class="sec-sub">Tailwind v4 Oxide, shadcn/ui, NativeWind, component libraries</div>
+    </div>
+  </div>
+
+  <!-- Tailwind v4 -->
+  <h4 style="color:var(--amber);font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;margin-bottom:16px;">WEB STYLING</h4>
+
+  <div class="g2" style="margin-bottom:24px;">
+    <div>
+      <div class="tool-row">
+        <div class="tool-left">
+          <div class="tool-name">Tailwind CSS v4 <span class="tool-ver">4.1+</span></div>
+          <div class="tool-why">Oxide engine (Rust tabanlı) — incremental build 44ms → 5ms (100x). CSS-first konfigürasyon: <code>tailwind.config.js</code> yok, tüm ayarlar <code>@theme {}</code> bloğunda. OKLCH renk uzayı, container queries built-in, 3D transforms, <code>@starting-style</code> entry animations.</div>
+        </div>
+        <span class="tool-badge tb-web">STANDART</span>
+      </div>
+      <div class="tool-row">
+        <div class="tool-left">
+          <div class="tool-name">shadcn/ui</div>
+          <div class="tool-why">Kopyala-yapıştır component sistemi — node_modules'a girmez, kod sende. Radix UI unstyled primitifleri üzerine kurulu. Class Variance Authority (CVA) ile variant yönetimi. Tamamen özelleştirilebilir.</div>
+        </div>
+        <span class="tool-badge tb-web">STANDART</span>
+      </div>
+      <div class="tool-row">
+        <div class="tool-left">
+          <div class="tool-name">Radix UI Primitives</div>
+          <div class="tool-why">shadcn/ui'nin temeli. Dialog, Popover, Select, Tooltip — WAI-ARIA uyumlu, unstyled. Erişilebilirlik kutudan çıkar. Headless yaklaşım.</div>
+        </div>
+        <span class="tool-badge tb-web">ALTYAPI</span>
+      </div>
+      <div class="tool-row">
+        <div class="tool-left">
+          <div class="tool-name">Motion (Framer) v12</div>
+          <div class="tool-why">Layout animations, shared element transitions, spring physics, scroll-triggered effects. <code>useAnimate</code>, <code>AnimatePresence</code>, WAAPI ile native performans.</div>
+        </div>
+        <span class="tool-badge tb-web">ANİMASYON</span>
+      </div>
+      <div class="tool-row">
+        <div class="tool-left">
+          <div class="tool-name">Lucide React</div>
+          <div class="tool-why">Tree-shakeable SVG icon seti. 1500+ ikon. Web ve mobile versiyonları aynı naming convention. Tailwind ile mükemmel uyum.</div>
+        </div>
+        <span class="tool-badge tb-share">İKON</span>
+      </div>
+    </div>
+    <div>
+      <div class="code">
+        <span class="code-label">globals.css — Tailwind v4</span>
+<span class="c-comment">/* tailwind.config.js YOK — her şey burada */</span>
+<span class="c-key">@import</span> <span class="c-str">"tailwindcss"</span>;
+
+<span class="c-key">@theme</span> {
+  <span class="c-comment">/* Tüm token'lar CSS variable */</span>
+  --color-brand: oklch(<span class="c-num">0.6</span> <span class="c-num">0.2</span> <span class="c-num">250</span>);
+  --color-brand-dim: oklch(<span class="c-num">0.6</span> <span class="c-num">0.2</span> <span class="c-num">250</span> / <span class="c-num">0.15</span>);
+  --font-display: <span class="c-str">"Cabinet Grotesk"</span>, sans-serif;
+  --breakpoint-3xl: <span class="c-num">120rem</span>;
+  --radius-card: <span class="c-num">12px</span>;
+}
+
+<span class="c-comment">/* Container queries — plugin olmadan */</span>
+.<span class="c-fn">card</span> {
+  <span class="c-key">@container</span> (min-width: 400px) {
+    <span class="c-str">display</span>: grid;
+  }
+}
+      </div>
+      <div class="alert alert-amber">
+        <span class="alert-ico">⚠️</span>
+        <div><strong>Tailwind v4 Browser Desteği:</strong> Safari 16.4+, Chrome 111+, Firefox 128+. Eski tarayıcı desteği gerekiyorsa v3.4'te kal. Yeni projeler için v4 açık ara tercih.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Mobile Styling -->
+  <h4 style="color:var(--green);font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;margin-bottom:16px;margin-top:24px;">MOBİLE STYLING</h4>
+
+  <div class="ga-sm">
+    <div class="tool-row">
+      <div class="tool-left">
+        <div class="tool-name">NativeWind v4</div>
+        <div class="tool-why">Tailwind syntax → React Native StyleSheet. Web ile tutarlı class'lar. New Architecture ile çalışır. Tailwind v3.4 tabanlı (v4 uyumu yolda).</div>
+      </div>
+      <span class="tool-badge tb-mob">STANDART</span>
+    </div>
+    <div class="tool-row">
+      <div class="tool-left">
+        <div class="tool-name">React Native Reusables</div>
+        <div class="tool-why">shadcn/ui'nin mobile karşılığı. NativeWind + Radix primitif mantığı. Copy-paste, fully owned.</div>
+      </div>
+      <span class="tool-badge tb-mob">COMPONENT</span>
+    </div>
+    <div class="tool-row">
+      <div class="tool-left">
+        <div class="tool-name">Reanimated 3 (v4 yakında)</div>
+        <div class="tool-why">60/120fps animasyon, native thread. <strong>Not:</strong> Reanimated v4 (SDK 54) NativeWind ile henüz uyumsuz — şimdilik v3 kullan.</div>
+      </div>
+      <span class="tool-badge tb-mob">ANİMASYON</span>
+    </div>
+    <div class="tool-row">
+      <div class="tool-left">
+        <div class="tool-name">Expo Image</div>
+        <div class="tool-why">Caching, progressive loading, blurhash placeholder, format dönüşümü. FlatList içinde optimize scroll.</div>
+      </div>
+      <span class="tool-badge tb-mob">GÖRSEL</span>
+    </div>
+    <div class="tool-row">
+      <div class="tool-left">
+        <div class="tool-name">@shopify/flash-list v2</div>
+        <div class="tool-why">FlatList'ten 10x performanslı liste render. New Architecture only. Büyük listeler için zorunlu.</div>
+      </div>
+      <span class="tool-badge tb-mob">LİSTE</span>
+    </div>
+    <div class="tool-row">
+      <div class="tool-left">
+        <div class="tool-name">@gorhom/bottom-sheet</div>
+        <div class="tool-why">En olgun Bottom Sheet implementasyonu. Gesture Handler + Reanimated entegrasyonu. Snap points, backdrop, keyboard aware.</div>
+      </div>
+      <span class="tool-badge tb-mob">UI</span>
+    </div>
+  </div>
+
+  <div class="div"></div>
+
+  <!-- Extra web tools -->
+  <h4 style="color:var(--cyan);font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;margin-bottom:16px;">EK WEB ARAÇLARI</h4>
+  <div class="ga-sm">
+    <div class="tool-row"><div class="tool-left"><div class="tool-name">TanStack Table v8</div><div class="tool-why">Headless table primitifi. Sort, filter, pagination, virtualization. Her framework ile çalışır.</div></div><span class="tool-badge tb-web">TABLE</span></div>
+    <div class="tool-row"><div class="tool-left"><div class="tool-name">TanStack Virtual</div><div class="tool-why">10.000+ satır sorunsuz. Row, column ve grid virtualizer.</div></div><span class="tool-badge tb-web">VİRTUAL</span></div>
+    <div class="tool-row"><div class="tool-left"><div class="tool-name">Recharts / Observable Plot</div><div class="tool-why">D3 tabanlı React chart kütüphaneleri. Recharts daha kolay, Observable Plot daha güçlü.</div></div><span class="tool-badge tb-web">CHART</span></div>
+    <div class="tool-row"><div class="tool-left"><div class="tool-name">next/image + @unpic/react</div><div class="tool-why">Otomatik WebP/AVIF dönüşümü, lazy load, blur placeholder, CDN optimizasyonu.</div></div><span class="tool-badge tb-web">GÖRSEL</span></div>
+    <div class="tool-row"><div class="tool-left"><div class="tool-name">@formkit/auto-animate</div><div class="tool-why">Liste animasyonları için tek satır: <code>useAutoAnimate()</code>. Ekleme, kaldırma, sıralama.</div></div><span class="tool-badge tb-web">HAFIF</span></div>
+    <div class="tool-row"><div class="tool-left"><div class="tool-name">cmdk</div><div class="tool-why">Command menu primitifi. shadcn/ui içinde gelir. Fuzzy search, keyboard navigation.</div></div><span class="tool-badge tb-web">UX</span></div>
+  </div>
+</section>
+
+<!-- ══════════════════ 07 STATE ══════════════════ -->
+<section id="s7">
+  <div class="sec-head">
+    <span class="sec-num">07</span>
+    <div>
+      <div class="sec-title">State Yönetimi</div>
+      <div class="sec-sub">Global state, server state, atomic state, URL state, persistence</div>
+    </div>
+  </div>
+
+  <div class="g2" style="margin-bottom:24px;">
+    <div>
+      <div class="tool-row">
+        <div class="tool-left">
+          <div class="tool-name">Zustand v5 <span class="tool-ver">~1KB</span></div>
+          <div class="tool-why">Global client state için standart. Single store, JS proxy tabanlı, sıfır boilerplate. DevTools desteği. Provider gerekmez. Context API'den 3x daha hızlı render. React 19 Compiler uyumlu.</div>
+        </div>
+        <span class="tool-badge tb-share">GLOBAl STATE</span>
+      </div>
+      <div class="tool-row">
+        <div class="tool-left">
+          <div class="tool-name">TanStack Query v5 <span class="tool-ver">~20% küçük</span></div>
+          <div class="tool-why">Server/async state yönetimi için fiili standart. Cache, stale-while-revalidate, optimistic updates, background refetch. v5'te: <code>isPending</code> (loading yerine), <code>gcTime</code> (cacheTime yerine), unified API, <code>useSuspenseQuery</code>.</div>
+        </div>
+        <span class="tool-badge tb-share">SERVER STATE</span>
+      </div>
+      <div class="tool-row">
+        <div class="tool-left">
+          <div class="tool-name">Jotai v2 <span class="tool-ver">~1.2KB</span></div>
+          <div class="tool-why">Atomic state — bottom-up yaklaşım. Bağımsız küçük parçalar için ideal. Sadece ilgili atom değiştiğinde component re-render. Suspense native desteği. Zustand ile aynı anda kullanılabilir.</div>
+        </div>
+        <span class="tool-badge tb-share">ATOMİK</span>
+      </div>
+      <div class="tool-row">
+        <div class="tool-left">
+          <div class="tool-name">nuqs</div>
+          <div class="tool-why">Type-safe URL search params. <code>useState</code> gibi ama state URL'de. Next.js App Router + Vite uyumlu. Filter, sort, pagination state'ini URL'de tutmak için mükemmel.</div>
+        </div>
+        <span class="tool-badge tb-share">URL STATE</span>
+      </div>
+    </div>
+    <div>
+      <div class="code">
+        <span class="code-label">packages/store/auth.ts — Zustand</span>
+<span class="c-key">import</span> { create } <span class="c-key">from</span> <span class="c-str">'zustand'</span>
+<span class="c-key">import</span> { persist, createJSONStorage } <span class="c-key">from</span> <span class="c-str">'zustand/middleware'</span>
+
+<span class="c-key">interface</span> <span class="c-type">AuthState</span> {
+  user: <span class="c-type">User</span> | <span class="c-key">null</span>
+  token: <span class="c-key">string</span> | <span class="c-key">null</span>
+  setUser: (user: <span class="c-type">User</span>) => <span class="c-key">void</span>
+  logout: () => <span class="c-key">void</span>
+}
+
+<span class="c-key">export const</span> useAuthStore = <span class="c-fn">create</span>&lt;<span class="c-type">AuthState</span>&gt;()(
+  <span class="c-fn">persist</span>(
+    (set) => ({
+      user: <span class="c-key">null</span>,
+      token: <span class="c-key">null</span>,
+      setUser: (user) => <span class="c-fn">set</span>({ user }),
+      logout: () => <span class="c-fn">set</span>({ user: <span class="c-key">null</span>, token: <span class="c-key">null</span> })
+    }),
+    { name: <span class="c-str">'auth-storage'</span> }
+  )
+)
+      </div>
+      <div class="code">
+        <span class="code-label">packages/hooks/useProducts.ts — TanStack Query v5</span>
+<span class="c-key">import</span> { useQuery, queryOptions } <span class="c-key">from</span> <span class="c-str">'@tanstack/react-query'</span>
+
+<span class="c-comment">// queryOptions — type-safe, paylaşılabilir</span>
+<span class="c-key">export const</span> productsQuery = (filters: <span class="c-type">Filters</span>) =>
+  <span class="c-fn">queryOptions</span>({
+    queryKey: [<span class="c-str">'products'</span>, filters],
+    queryFn: () => <span class="c-fn">api.products.list</span>(filters),
+    staleTime: <span class="c-num">1000</span> * <span class="c-num">60</span> * <span class="c-num">5</span>,
+    placeholderData: <span class="c-fn">keepPreviousData</span>
+  })
+
+<span class="c-comment">// Web'de: useQuery(productsQuery(filters))</span>
+<span class="c-comment">// Mobile'da: aynı hook — packages/hooks paylaşılır</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- State Decision Matrix -->
+  <h4 style="color:#fff;font-weight:700;margin-bottom:16px;">Ne Zaman Hangi State? — Karar Matrisi</h4>
+  <table class="tbl">
+    <thead>
+      <tr>
+        <th>Durum</th>
+        <th>Çözüm</th>
+        <th>Neden</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>API verisini cache'le, refetch yönet</td>
+        <td>TanStack Query v5</td>
+        <td>Server state'in amacı bu</td>
+      </tr>
+      <tr>
+        <td>Kullanıcı oturumu, tema, cart</td>
+        <td>Zustand v5 + persist</td>
+        <td>Global, kalıcı, az değişir</td>
+      </tr>
+      <tr>
+        <td>Modal açık/kapalı, tab aktif</td>
+        <td>useState (local)</td>
+        <td>Global state gereksiz</td>
+      </tr>
+      <tr>
+        <td>Form filter, pagination, sort</td>
+        <td>nuqs (URL state)</td>
+        <td>Paylaşılabilir, bookmark'lanabilir</td>
+      </tr>
+      <tr>
+        <td>Notification, tooltip, complex UI</td>
+        <td>Jotai v2 atoms</td>
+        <td>Bağımsız parçalar, minimal re-render</td>
+      </tr>
+      <tr>
+        <td>Büyük enterprise, çok geliştirici</td>
+        <td>Redux Toolkit</td>
+        <td>Strict patterns, DevTools, audit</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- Persistence -->
+  <div class="div"></div>
+  <h4 style="color:#fff;font-weight:700;margin-bottom:12px;">Persistence — Platform Bazlı</h4>
+  <div class="g2">
+    <div class="card card-blue">
+      <h4>Web</h4>
+      <ul>
+        <li><strong>zustand/middleware persist</strong> → localStorage / sessionStorage</li>
+        <li><strong>TanStack Query persist</strong> → IndexedDB ile büyük cache kalıcılığı</li>
+        <li><strong>Cookies (httpOnly)</strong> → Auth token, güvenli</li>
+      </ul>
+    </div>
+    <div class="card card-green">
+      <h4>Mobile</h4>
+      <ul>
+        <li><strong>MMKV</strong> → AsyncStorage'dan 10x hızlı, synchronous, encrypted</li>
+        <li><strong>Expo SecureStore</strong> → Token, sensitive data, Keychain/Keystore</li>
+        <li><strong>Expo FileSystem</strong> → Binary, büyük dosyalar</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════ 08 FORM+VALIDATION ══════════════════ -->
+<section id="s8">
+  <div class="sec-head">
+    <span class="sec-num">08</span>
+    <div>
+      <div class="sec-title">Form & Validasyon</div>
+      <div class="sec-sub">React Hook Form, Zod, TanStack Form, paylaşılan şemalar</div>
+    </div>
+  </div>
+
+  <div class="g2">
+    <div>
+      <div class="tool-row">
+        <div class="tool-left">
+          <div class="tool-name">React Hook Form v8</div>
+          <div class="tool-why">Uncontrolled inputs ile en az re-render. <code>useForm</code>, <code>Controller</code>, <code>useFieldArray</code>. Native HTML form semantiği. Web ve mobile'da aynı API.</div>
+        </div>
+        <span class="tool-badge tb-share">STANDART</span>
+      </div>
+      <div class="tool-row">
+        <div class="tool-left">
+          <div class="tool-name">Zod v3</div>
+          <div class="tool-why">Runtime + compile-time type safety. Şemalar <code>packages/schemas</code>'da tanımlanır, tüm uygulamalarda paylaşılır. API response validation, environment variable validation, form validation — hepsi tek araç.</div>
+        </div>
+        <span class="tool-badge tb-share">STANDART</span>
+      </div>
+      <div class="tool-row">
+        <div class="tool-left">
+          <div class="tool-name">@hookform/resolvers</div>
+          <div class="tool-why">RHF + Zod entegrasyonu tek satır: <code>resolver: zodResolver(schema)</code>. Otomatik type inference, hata mesajları Zod'dan gelir.</div>
+        </div>
+        <span class="tool-badge tb-share">KÖPRÜ</span>
+      </div>
+      <div class="tool-row">
+        <div class="tool-left">
+          <div class="tool-name">TanStack Form</div>
+          <div class="tool-why">Yeni ve güçlü RHF alternatifi. Headless, framework-agnostic. TypeScript-first. Özellikle TanStack ekosistemi kullanıyorsan sinerji güçlü. Async validation, field-level subscription.</div>
+        </div>
+        <span class="tool-badge tb-new">ALTERNATİF</span>
+      </div>
+    </div>
+    <div>
+      <div class="code">
+        <span class="code-label">packages/schemas/auth.ts — Paylaşılan Zod</span>
+<span class="c-key">import</span> { z } <span class="c-key">from</span> <span class="c-str">'zod'</span>
+
+<span class="c-comment">// Tek tanım — web ve mobile paylaşır</span>
+<span class="c-key">export const</span> loginSchema = z.<span class="c-fn">object</span>({
+  email: z.<span class="c-fn">string</span>().<span class="c-fn">email</span>(<span class="c-str">'Geçersiz email'</span>),
+  password: z.<span class="c-fn">string</span>().<span class="c-fn">min</span>(<span class="c-num">8</span>, <span class="c-str">'Min 8 karakter'</span>)
+})
+
+<span class="c-key">export const</span> profileSchema = z.<span class="c-fn">object</span>({
+  name: z.<span class="c-fn">string</span>().<span class="c-fn">min</span>(<span class="c-num">2</span>).<span class="c-fn">max</span>(<span class="c-num">50</span>),
+  bio: z.<span class="c-fn">string</span>().<span class="c-fn">max</span>(<span class="c-num">500</span>).<span class="c-fn">optional</span>(),
+  avatar: z.<span class="c-fn">string</span>().<span class="c-fn">url</span>().<span class="c-fn">optional</span>()
+})
+
+<span class="c-comment">// TypeScript tipi otomatik çıkarılır</span>
+<span class="c-key">export type</span> <span class="c-type">LoginInput</span> = z.<span class="c-fn">infer</span>&lt;<span class="c-key">typeof</span> loginSchema&gt;
+      </div>
+      <div class="code">
+        <span class="code-label">LoginForm.tsx — RHF + Zod</span>
+<span class="c-key">import</span> { useForm } <span class="c-key">from</span> <span class="c-str">'react-hook-form'</span>
+<span class="c-key">import</span> { zodResolver } <span class="c-key">from</span> <span class="c-str">'@hookform/resolvers/zod'</span>
+<span class="c-key">import</span> { loginSchema } <span class="c-key">from</span> <span class="c-str">'@schemas/auth'</span>
+
+<span class="c-key">export function</span> <span class="c-fn">LoginForm</span>() {
+  <span class="c-key">const</span> { register, handleSubmit, formState } =
+    <span class="c-fn">useForm</span>({ resolver: <span class="c-fn">zodResolver</span>(loginSchema) })
+
+  <span class="c-key">return</span> (
+    &lt;<span class="c-type">form</span> onSubmit={<span class="c-fn">handleSubmit</span>(onSubmit)}&gt;
+      &lt;<span class="c-type">input</span> {...<span class="c-fn">register</span>(<span class="c-str">'email'</span>)} /&gt;
+      {formState.errors.email?.message}
+    &lt;/<span class="c-type">form</span>&gt;
+  )
+}
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════ 09 DATA FETCHING ══════════════════ -->
+<section id="s9">
+  <div class="sec-head">
+    <span class="sec-num">09</span>
+    <div>
+      <div class="sec-title">Data Fetching & API Katmanı</div>
+      <div class="sec-sub">HTTP client, GraphQL, Realtime, Mock, API client paketi</div>
+    </div>
+  </div>
+
+  <div class="ga">
+    <div class="card card-blue">
+      <span class="card-ico">🌐</span>
+      <h3>ky</h3>
+      <p>Fetch API wrapper. Axios'tan 3x küçük (~4KB), modern API. Retry, timeout, hooks, JSON otomatik parse. Node.js + browser + React Native universal. <code>beforeRequest</code>/<code>afterResponse</code> hooks ile merkezi auth header yönetimi.</p>
+    </div>
+    <div class="card card-purple">
+      <span class="card-ico">🌍</span>
+      <h3>ofetch</h3>
+      <p>Nuxt/Nitro ekibinden alternatif HTTP client. Daha zengin API, auto-retry, timeout, interceptors. Edge runtime uyumlu. <code>ky</code> yerine tercih edilebilir, API çok benzer.</p>
+    </div>
+    <div class="card card-green">
+      <span class="card-ico">📊</span>
+      <h3>GraphQL — urql</h3>
+      <p>Apollo'dan daha hafif ve esnek. Exchange tabanlı mimari — cache, auth, retry her biri ayrı exchange. Normalized cache, Suspense desteği. Büyük API'ler için güçlü seçim.</p>
+    </div>
+    <div class="card card-amber">
+      <span class="card-ico">⚡</span>
+      <h3>Realtime</h3>
+      <ul>
+        <li><strong>WebSocket native</strong> → basit, hiç bağımlılık yok</li>
+        <li><strong>socket.io-client</strong> → fallback, room, namespace</li>
+        <li><strong>EventSource (SSE)</strong> → AI streaming API'ları için ideal</li>
+        <li><strong>Ably / Pusher</strong> → hosted realtime servis</li>
+      </ul>
+    </div>
+    <div class="card card-rose">
+      <span class="card-ico">🎭</span>
+      <h3>MSW v2 — Mock Service Worker</h3>
+      <p>Service Worker tabanlı API mock. Network seviyesinde intercept — gerçek HTTP requestleri. Hem development hem test ortamında aynı mock. Browser + Node.js. en gerçekçi mock çözümü.</p>
+    </div>
+    <div class="card card-cyan">
+      <span class="card-ico">📦</span>
+      <h3>packages/api-client</h3>
+      <p>Monorepo'daki merkezi API katmanı. <code>ky</code> üzerine kurulu, type-safe endpoint'ler. Tüm app'ler bu paketi tüketir — auth header, base URL, error handling tek yerde.</p>
+    </div>
+  </div>
+
+  <div class="code" style="margin-top:20px;">
+    <span class="code-label">packages/api-client/index.ts</span>
+<span class="c-key">import</span> ky <span class="c-key">from</span> <span class="c-str">'ky'</span>
+<span class="c-key">import</span> { useAuthStore } <span class="c-key">from</span> <span class="c-str">'@store/auth'</span>
+
+<span class="c-comment">// Merkezi API client — tüm uygulamalar kullanır</span>
+<span class="c-key">export const</span> api = ky.<span class="c-fn">create</span>({
+  prefixUrl: process.env.<span class="c-type">NEXT_PUBLIC_API_URL</span>,
+  timeout: <span class="c-num">30000</span>,
+  retry: { limit: <span class="c-num">2</span>, methods: [<span class="c-str">'get'</span>] },
+  hooks: {
+    beforeRequest: [
+      req => {
+        <span class="c-key">const</span> token = <span class="c-fn">useAuthStore</span>.<span class="c-fn">getState</span>().token
+        <span class="c-key">if</span> (token) req.headers.<span class="c-fn">set</span>(<span class="c-str">'Authorization'</span>, <span class="c-str">`Bearer ${token}`</span>)
+      }
+    ],
+    afterResponse: [
+      <span class="c-key">async</span> (_req, _opt, res) => {
+        <span class="c-key">if</span> (res.status === <span class="c-num">401</span>) <span class="c-fn">useAuthStore</span>.<span class="c-fn">getState</span>().<span class="c-fn">logout</span>()
+        <span class="c-key">return</span> res
+      }
+    ]
+  }
+})
+
+<span class="c-comment">// Type-safe endpoint'ler</span>
+<span class="c-key">export const</span> endpoints = {
+  products: {
+    list: (filters: <span class="c-type">Filters</span>) =>
+      api.<span class="c-fn">get</span>(<span class="c-str">'products'</span>, { searchParams: filters }).<span class="c-fn">json</span>&lt;<span class="c-type">Product[]</span>&gt;(),
+    byId: (id: <span class="c-key">string</span>) =>
+      api.<span class="c-fn">get</span>(<span class="c-str">`products/${id}`</span>).<span class="c-fn">json</span>&lt;<span class="c-type">Product</span>&gt;()
+  }
+}
+  </div>
+</section>
+
+<!-- ══════════════════ 10 ANİMASYON ══════════════════ -->
+<section id="s10">
+  <div class="sec-head">
+    <span class="sec-num">10</span>
+    <div>
+      <div class="sec-title">Animasyon & Gesture</div>
+      <div class="sec-sub">Web: Motion v12, CSS native · Mobile: Reanimated 3, Gesture Handler</div>
+    </div>
+  </div>
+
+  <div class="g2">
+    <div>
+      <h4 style="color:var(--blue);font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;margin-bottom:12px;">WEB</h4>
+      <div class="tool-row"><div class="tool-left"><div class="tool-name">Motion v12 (Framer)</div><div class="tool-why">Layout animations, shared element transitions, scroll effects, spring physics. <code>AnimatePresence</code> ile exit animations. WAAPI entegrasyonu ile native performance.</div></div><span class="tool-badge tb-web">PRIMARY</span></div>
+      <div class="tool-row"><div class="tool-left"><div class="tool-name">CSS @starting-style</div><div class="tool-why">Native CSS entry animations (Tailwind v4 desteği var). JS olmadan element görünme animasyonları. Modern tarayıcılarda motion kütüphanesi gerekmez.</div></div><span class="tool-badge tb-web">NAT‍İF</span></div>
+      <div class="tool-row"><div class="tool-left"><div class="tool-name">@formkit/auto-animate</div><div class="tool-why">Tek satır: liste animasyonu. Ekleme/kaldırma/sıralama için Motion kadar güçlü değil ama çok daha hafif.</div></div><span class="tool-badge tb-web">HAFIF</span></div>
+    </div>
+    <div>
+      <h4 style="color:var(--green);font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;margin-bottom:12px;">MOBİLE</h4>
+      <div class="tool-row"><div class="tool-left"><div class="tool-name">Reanimated 3</div><div class="tool-why">Native thread animasyonu — 60/120fps. <code>useSharedValue</code>, <code>useAnimatedStyle</code>, <code>withSpring</code>. Shared Element Transitions. <strong>v4: SDK 54'te, NativeWind uyumsuz — şimdilik v3 kullan.</strong></div></div><span class="tool-badge tb-mob">PRIMARY</span></div>
+      <div class="tool-row"><div class="tool-left"><div class="tool-name">Gesture Handler</div><div class="tool-why">Pan, pinch, swipe, tap, long press. Reanimated ile native thread gesture. <code>GestureDetector</code> API v2 ile temiz kullanım.</div></div><span class="tool-badge tb-mob">GESTURE</span></div>
+      <div class="tool-row"><div class="tool-left"><div class="tool-name">Lottie (expo-lottie)</div><div class="tool-why">After Effects JSON animasyonları. Onboarding, empty state, success/error gibi zengin animasyonlar için ideal.</div></div><span class="tool-badge tb-mob">LOTTİE</span></div>
+      <div class="tool-row"><div class="tool-left"><div class="tool-name">Expo Blur</div><div class="tool-why">iOS/Android native blur efektleri. Glassmorphism UI, modal backdrop, navigation header blur.</div></div><span class="tool-badge tb-mob">EFEKT</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════ 11 i18n ══════════════════ -->
+<section id="s11">
+  <div class="sec-head">
+    <span class="sec-num">11</span>
+    <div>
+      <div class="sec-title">i18n — Çoklu Dil</div>
+      <div class="sec-sub">next-intl, i18next, paylaşılan translation key'leri, type-safe</div>
+    </div>
+  </div>
+
+  <div class="ga">
+    <div class="card card-blue">
+      <span class="card-ico">🌍</span>
+      <h3>next-intl (Next.js)</h3>
+      <p>App Router tam desteği. RSC içinde çalışır — server component'lerda <code>useTranslations()</code>. Middleware ile otomatik locale detection. ICU message format.</p>
+    </div>
+    <div class="card card-green">
+      <span class="card-ico">📱</span>
+      <h3>i18next + react-i18next (Mobile)</h3>
+      <p>Olgun ekosistem. <code>useTranslation()</code> hook. Namespace ile modüler translation. Pluralization, interpolation, formatting. Expo ile sorunsuz çalışır.</p>
+    </div>
+    <div class="card card-purple">
+      <span class="card-ico">🔑</span>
+      <h3>packages/i18n — Paylaşılan Key'ler</h3>
+      <p>Translation key'leri ve TypeScript tipleri <code>packages/i18n</code>'da tanımlanır. Hem web hem mobile aynı namespace'i tüketir. Eksik translation'lar compile-time yakalanır.</p>
+    </div>
+    <div class="card card-amber">
+      <span class="card-ico">🔒</span>
+      <h3>typesafe-i18n</h3>
+      <p>Translation key'leri için tam TypeScript autocomplete. <code>LL.auth.login.button()</code> şeklinde. Yanlış key kullanımı derleme hatasına dönüşür. Küçük projeler için next-intl yerine kullanılabilir.</p>
+    </div>
+  </div>
+
+  <div class="code" style="margin-top:20px;">
+    <span class="code-label">packages/i18n/locales/tr.ts — Paylaşılan</span>
+<span class="c-key">export const</span> tr = {
+  common: {
+    save: <span class="c-str">'Kaydet'</span>,
+    cancel: <span class="c-str">'İptal'</span>,
+    loading: <span class="c-str">'Yükleniyor...'</span>
+  },
+  auth: {
+    login: <span class="c-str">'Giriş Yap'</span>,
+    logout: <span class="c-str">'Çıkış Yap'</span>,
+    email: <span class="c-str">'E-posta adresi'</span>,
+    password: <span class="c-str">'Şifre'</span>
+  },
+  <span class="c-comment">// Web: next-intl tüketir</span>
+  <span class="c-comment">// Mobile: i18next tüketir</span>
+  <span class="c-comment">// Aynı key'ler, aynı değerler</span>
+} <span class="c-key">as const</span>
+  </div>
+</section>
+
+<!-- ══════════════════ 12 TEST ══════════════════ -->
+<section id="s12">
+  <div class="sec-head">
+    <span class="sec-num">12</span>
+    <div>
+      <div class="sec-title">Test Stratejisi</div>
+      <div class="sec-sub">Vitest, Testing Library, Playwright, Maestro, Storybook, MSW</div>
+    </div>
+  </div>
+
+  <div class="ga">
+    <div class="card card-green">
+      <span class="card-ico">⚡</span>
+      <h3>Vitest</h3>
+      <p>Jest-compatible, Vite native. Paralel worker execution, TypeScript native destek. <code>vi.mock()</code>, <code>vi.spyOn()</code>. Browser mode ile gerçek DOM test. Workspace config ile tüm packages aynı anda test edilir.</p>
+    </div>
+    <div class="card card-blue">
+      <span class="card-ico">🧪</span>
+      <h3>Testing Library</h3>
+      <p>DOM + React Native versiyonları mevcut. User-centric test — "nasıl görünüyor" değil "kullanıcı ne görür". <code>@testing-library/user-event</code> ile gerçekçi kullanıcı etkileşimi.</p>
+    </div>
+    <div class="card card-purple">
+      <span class="card-ico">🎭</span>
+      <h3>Playwright</h3>
+      <p>Multi-browser E2E test (Chrome, Firefox, Safari, Edge). Codegen ile otomatik test yazımı. Screenshot/video kaydı. Component test modu. CI'da paralel shard execution.</p>
+    </div>
+    <div class="card card-amber">
+      <span class="card-ico">📱</span>
+      <h3>Maestro</h3>
+      <p>YAML tabanlı mobile E2E test. En kolay mobile E2E çözümü. iOS + Android. Simulatör ve gerçek cihaz desteği. Expo ile sorunsuz entegrasyon.</p>
+    </div>
+    <div class="card card-rose">
+      <span class="card-ico">📚</span>
+      <h3>Storybook 8</h3>
+      <p>Component development ve dokümantasyon. Web + React Native desteği (Storybook RN). Chromatic entegrasyonu ile visual regression testing. Design system için zorunlu.</p>
+    </div>
+    <div class="card card-cyan">
+      <span class="card-ico">👁️</span>
+      <h3>Chromatic</h3>
+      <p>Storybook bazlı visual regression. Her PR'da pixel diff. Snapshot review UI. CI/CD entegrasyonu. Tasarım-geliştirici senkronizasyonu için güçlü.</p>
+    </div>
+  </div>
+
+  <div class="code" style="margin-top:20px;">
+    <span class="code-label">vitest.workspace.ts — Tüm packages</span>
+<span class="c-key">import</span> { defineWorkspace } <span class="c-key">from</span> <span class="c-str">'vitest/config'</span>
+
+<span class="c-key">export default</span> <span class="c-fn">defineWorkspace</span>([
+  <span class="c-str">'apps/web/vitest.config.ts'</span>,
+  <span class="c-str">'apps/admin/vitest.config.ts'</span>,
+  <span class="c-str">'packages/*/vitest.config.ts'</span>
+  <span class="c-comment">// Turborepo cache ile paralel çalışır</span>
+])
+  </div>
+
+  <div class="alert alert-green" style="margin-top:16px;">
+    <span class="alert-ico">💡</span>
+    <div><strong>Test Piramidi 2026:</strong> Unit (Vitest) → Component (Testing Library) → E2E (Playwright/Maestro). MSW v2 ile mock'lar hem test hem dev ortamında aynı — gerçekçilik artar, bakım azalır.</div>
+  </div>
+</section>
+
+<!-- ══════════════════ 13 MONITORING ══════════════════ -->
+<section id="s13">
+  <div class="sec-head">
+    <span class="sec-num">13</span>
+    <div>
+      <div class="sec-title">Monitoring & Observability</div>
+      <div class="sec-sub">Sentry, Posthog, Web Vitals, Bundle Analysis</div>
+    </div>
+  </div>
+
+  <div class="ga-sm">
+    <div class="tool-row"><div class="tool-left"><div class="tool-name">Sentry</div><div class="tool-why">Error tracking + performance monitoring. Next.js webpack plugin, Expo SDK entegrasyonu. Source map upload. Session replay. Her platform için ayrı proje.</div></div><span class="tool-badge tb-share">HATA</span></div>
+    <div class="tool-row"><div class="tool-left"><div class="tool-name">Posthog</div><div class="tool-why">Open source, self-hostable product analytics. Feature flags, A/B test, funnel analizi, session recording. React + React Native SDK mevcut.</div></div><span class="tool-badge tb-share">ANALİTİK</span></div>
+    <div class="tool-row"><div class="tool-left"><div class="tool-name">@vercel/speed-insights</div><div class="tool-why">Core Web Vitals otomatik izleme. LCP, CLS, INP gerçek kullanıcı verisi. Next.js ile tek satır entegrasyon.</div></div><span class="tool-badge tb-web">WEB VİTALS</span></div>
+    <div class="tool-row"><div class="tool-left"><div class="tool-name">Lighthouse CI</div><div class="tool-why">Her PR'da otomatik performance audit. Performance budget enforcement. GitHub Actions entegrasyonu.</div></div><span class="tool-badge tb-web">PERFORMANS</span></div>
+    <div class="tool-row"><div class="tool-left"><div class="tool-name">@next/bundle-analyzer</div><div class="tool-why">Next.js bundle görselleştirme. Hangi paket ne kadar yer kaplıyor? Tree-shaking fırsatları tespit.</div></div><span class="tool-badge tb-web">BUNDLE</span></div>
+    <div class="tool-row"><div class="tool-left"><div class="tool-name">vite-bundle-visualizer</div><div class="tool-why">Vite admin app için bundle analiz. Rollup chunk dağılımı, duplicate paket tespiti.</div></div><span class="tool-badge tb-web">BUNDLE</span></div>
+    <div class="tool-row"><div class="tool-left"><div class="tool-name">React Native DevTools</div><div class="tool-why">SDK 52+ ile geldi. Chrome DevTools tabanlı. Component inspector, network, JS profiler, Memo tagi ile Compiler doğrulama.</div></div><span class="tool-badge tb-mob">DEBUG</span></div>
+    <div class="tool-row"><div class="tool-left"><div class="tool-name">Umami (alternatif)</div><div class="tool-why">Posthog yerine minimal analytics. GDPR uyumlu, self-hosted, çok hafif. Sadece pageview ve event tracking yeterli olan projeler için.</div></div><span class="tool-badge tb-warn">ALTERNATİF</span></div>
+  </div>
+</section>
+
+<!-- ══════════════════ 14 PACKAGES ══════════════════ -->
+<section id="s14">
+  <div class="sec-head">
+    <span class="sec-num">14</span>
+    <div>
+      <div class="sec-title">Paylaşılan Packages Mimarisi</div>
+      <div class="sec-sub">Monorepo içi paket organizasyonu ve sorumluluk ayrımı</div>
+    </div>
+  </div>
+
+  <div class="g2">
+    <div>
+      <table class="tbl">
+        <thead>
+          <tr><th>Paket</th><th>İçerik</th><th>Tüketici</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>packages/ui</td><td>shadcn/ui (web) + RN Reusables (mobile)</td><td>Tüm apps</td></tr>
+          <tr><td>packages/store</td><td>Zustand stores, persist config</td><td>Web + Mobile</td></tr>
+          <tr><td>packages/hooks</td><td>TanStack Query hooks, custom hooks</td><td>Tüm apps</td></tr>
+          <tr><td>packages/schemas</td><td>Zod şemaları, TS tipleri</td><td>Tüm apps</td></tr>
+          <tr><td>packages/api-client</td><td>ky instance, type-safe endpoints</td><td>Tüm apps</td></tr>
+          <tr><td>packages/utils</td><td>date, number, string formatters</td><td>Tüm apps</td></tr>
+          <tr><td>packages/types</td><td>Domain modeller, API response tipleri</td><td>Tüm apps</td></tr>
+          <tr><td>packages/i18n</td><td>Translation key'leri, locale tipleri</td><td>Tüm apps</td></tr>
+          <tr><td>packages/config</td><td>tsconfig.base, biome, tailwind preset</td><td>Tüm apps</td></tr>
+          <tr><td>packages/assets</td><td>Paylaşılan görseller, fontlar, SVG'ler</td><td>Tüm apps</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div>
+      <div class="alert alert-blue" style="margin-bottom:12px;">
+        <span class="alert-ico">📌</span>
+        <div><strong>Temel Kural:</strong> Her paket platform-agnostic olmalı. <code>packages/store</code>'da <code>window</code> veya <code>Platform</code> kullanılmamalı. Platform-specific kod app seviyesinde kalmalı.</div>
+      </div>
+      <div class="code" style="font-size:11px;">
+<span class="c-comment">// packages/ui içinde platform ayrımı</span>
+<span class="c-comment">// Button.tsx (web)</span>
+<span class="c-key">export</span> { Button } <span class="c-key">from</span> <span class="c-str">'./web/Button'</span>
+
+<span class="c-comment">// Button.native.tsx (mobile — Metro resolver)</span>
+<span class="c-key">export</span> { Button } <span class="c-key">from</span> <span class="c-str">'./native/Button'</span>
+
+<span class="c-comment">// Kullanım — aynı import, farklı impl:</span>
+<span class="c-key">import</span> { Button } <span class="c-key">from</span> <span class="c-str">'@ui/button'</span>
+<span class="c-comment">// Web → shadcn/ui Radix button</span>
+<span class="c-comment">// Mobile → RN Pressable + NativeWind</span>
+      </div>
+      <div class="alert alert-amber">
+        <span class="alert-ico">⚙️</span>
+        <div><strong>Metro + pnpm:</strong> SDK 52+'da Metro pnpm monorepo'yu otomatik tanır. <code>EXPO_USE_METRO_WORKSPACE_ROOT=true</code> artık default. Ayrıca config gerekmez.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════ 15 ÖZET ══════════════════ -->
+<section id="s15">
+  <div class="sec-head">
+    <span class="sec-num">15</span>
+    <div>
+      <div class="sec-title">Tam Stack Özeti</div>
+      <div class="sec-sub">2026 pure frontend monorepo — seçimler ve gerekçeler</div>
+    </div>
+  </div>
+
+  <div class="final">
+    <div class="final-title">Teknoloji Kararları</div>
+    <div class="final-grid">
+      <div class="fi"><div class="fi-cat">Monorepo</div><div class="fi-val">pnpm v9<br>Turborepo 2.x</div></div>
+      <div class="fi"><div class="fi-cat">Language</div><div class="fi-val">TypeScript 5.x<br>strict mode</div></div>
+      <div class="fi"><div class="fi-cat">Tooling</div><div class="fi-val">Biome v2<br>Lefthook</div></div>
+      <div class="fi"><div class="fi-cat">Web App</div><div class="fi-val">Next.js 15<br>App Router</div></div>
+      <div class="fi"><div class="fi-cat">Admin</div><div class="fi-val">React 19 + Vite 6<br>TanStack Router v2</div></div>
+      <div class="fi"><div class="fi-cat">Mobile</div><div class="fi-val">Expo SDK 53/54<br>Expo Router v4</div></div>
+      <div class="fi"><div class="fi-cat">Server State</div><div class="fi-val">TanStack Query v5<br>MSW v2 (mock)</div></div>
+      <div class="fi"><div class="fi-cat">Global State</div><div class="fi-val">Zustand v5<br>+ Jotai v2</div></div>
+      <div class="fi"><div class="fi-cat">URL State</div><div class="fi-val">nuqs</div></div>
+      <div class="fi"><div class="fi-cat">Form</div><div class="fi-val">React Hook Form v8<br>+ Zod v3</div></div>
+      <div class="fi"><div class="fi-cat">HTTP</div><div class="fi-val">ky / ofetch</div></div>
+      <div class="fi"><div class="fi-cat">CSS (Web)</div><div class="fi-val">Tailwind v4<br>Oxide Engine</div></div>
+      <div class="fi"><div class="fi-cat">Components Web</div><div class="fi-val">shadcn/ui<br>Radix UI</div></div>
+      <div class="fi"><div class="fi-cat">CSS (Mobile)</div><div class="fi-val">NativeWind v4<br>RN Reusables</div></div>
+      <div class="fi"><div class="fi-cat">Animasyon Web</div><div class="fi-val">Motion v12<br>CSS native</div></div>
+      <div class="fi"><div class="fi-cat">Animasyon Mob</div><div class="fi-val">Reanimated 3<br>Gesture Handler</div></div>
+      <div class="fi"><div class="fi-cat">İkonlar</div><div class="fi-val">Lucide React<br>(web + mobile)</div></div>
+      <div class="fi"><div class="fi-cat">i18n</div><div class="fi-val">next-intl (web)<br>i18next (mobile)</div></div>
+      <div class="fi"><div class="fi-cat">Test</div><div class="fi-val">Vitest + TL<br>Playwright + Maestro</div></div>
+      <div class="fi"><div class="fi-cat">Visual Test</div><div class="fi-val">Storybook 8<br>Chromatic</div></div>
+      <div class="fi"><div class="fi-cat">Hata Takip</div><div class="fi-val">Sentry</div></div>
+      <div class="fi"><div class="fi-cat">Analytics</div><div class="fi-val">Posthog</div></div>
+    </div>
+  </div>
+
+  <!-- Top 5 Kritik Seçim -->
+  <h4 style="color:#fff;font-weight:800;font-size:18px;letter-spacing:-0.02em;margin:32px 0 16px;">2026'nın 5 Oyun Değiştirici Kararı</h4>
+  <div class="g2">
+    <div class="card card-amber">
+      <span class="card-ico">🦀</span>
+      <h3>1 — Tailwind v4 Oxide Engine</h3>
+      <p>Rust tabanlı yeniden yazım. Incremental build 100x hızlı (44ms → 5ms). CSS-first config — <code>tailwind.config.js</code> artık yok. OKLCH renk uzayı, container queries built-in. Yeni projeler için geçiş zorunlu.</p>
+    </div>
+    <div class="card card-blue">
+      <span class="card-ico">⚛️</span>
+      <h3>2 — React 19 Compiler</h3>
+      <p>Otomatik memoization — <code>useMemo</code>, <code>useCallback</code>, <code>memo</code> büyük ölçüde gereksiz. Erken benimseyenler yüzde 25-40 daha az re-render bildiriyor. Actions API ile form ve async işlemler sadeleşti.</p>
+    </div>
+    <div class="card card-rose">
+      <span class="card-ico">🚨</span>
+      <h3>3 — Expo New Architecture Zorunlu</h3>
+      <p>Legacy Architecture Haziran 2025'te donduruldu. SDK 55+'ta kapatılamaz. Büyük kütüphaneler (Reanimated v4, Flash List v2) New Architecture only. SDK 53+ ile başlamak zorunlu.</p>
+    </div>
+    <div class="card card-green">
+      <span class="card-ico">🦀</span>
+      <h3>4 — Biome v2 — ESLint+Prettier Bitti</h3>
+      <p>Tek binary, tek config dosyası — ESLint + Prettier + onlarca plugin yerine. 10-25x daha hızlı. Haziran 2025'te v2: plugin API + type-aware linting. Monorepo CI time'ı dramatik düşer.</p>
+    </div>
+    <div class="card card-purple">
+      <span class="card-ico">🔄</span>
+      <h3>5 — TanStack Query v5 Fiili Standart</h3>
+      <p>v4'ten yüzde 20 küçük. Unified API, <code>isPending</code>, <code>useSuspenseQuery</code>, <code>queryOptions</code>. Server state yönetimi için artık alternatifsiz. Web ve mobile'da aynı hook — <code>packages/hooks</code>'ta paylaşılır.</p>
+    </div>
+    <div class="card card-cyan">
+      <span class="card-ico">🔁</span>
+      <h3>6 — TanStack Router — Type-Safe Routing</h3>
+      <p>React Router v7 yaklaşmış ama type-safety'de TanStack hâlâ önde. Route params, search params, context — hepsi fully-typed. Vite projelerinde artık varsayılan tercih olmalı.</p>
+    </div>
+  </div>
+
+</section>
+
+</div><!-- /page -->
+
+<div style="text-align:center;padding:40px;border-top:1px solid var(--border);color:var(--text3);font-family:var(--mono);font-size:11px;letter-spacing:.05em;">
+  2026 Pure Frontend Monorepo Stack Guide · Araştırma destekli, üretim hazır
+</div>
+
+</body>
+</html>

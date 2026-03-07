@@ -2,7 +2,7 @@ import type ClientRepresentation from "@keycloak/keycloak-admin-client/lib/defs/
 import type { ProviderRepresentation } from "@keycloak/keycloak-admin-client/lib/defs/serverInfoRepesentation";
 type IFormatterValueType = string | undefined;
 /** Compatible with KeycloakDataTable IFormatter (value: unknown) => unknown */
-export type IFormatter = (data: unknown) => string | undefined;
+type IFormatter = (data: unknown) => string | undefined;
 import { saveAs } from "file-saver";
 import { flatten } from "flat";
 import { cloneDeep } from "lodash-es";
@@ -161,7 +161,7 @@ export const capitalizeFirstLetterFormatter =
         ) as string;
     };
 
-export const alphaRegexPattern = /[^A-Za-z]/g;
+const alphaRegexPattern = /[^A-Za-z]/g;
 
 export const emailRegexPattern =
     /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;

@@ -1,12 +1,12 @@
 import { Controller, FormProvider, UseFormReturn } from "react-hook-form";
 import { Switch } from "@merge-rd/ui/components/switch";
 import { FormLabel } from "../../../../shared/keycloak-ui-shared";
-import { useTranslation } from "react-i18next";
+import { useTranslation } from "@merge-rd/i18n";
 import { HelpItem, TextControl } from "../../../../shared/keycloak-ui-shared";
 import { FormAccess } from "../../../shared/ui/form/form-access";
 import { WizardSectionHeader } from "../../../shared/ui/wizard-section-header/wizard-section-header";
 
-export type LdapSettingsSynchronizationProps = {
+type LdapSettingsSynchronizationProps = {
     form: UseFormReturn;
     showSectionHeading?: boolean;
     showSectionDescription?: boolean;

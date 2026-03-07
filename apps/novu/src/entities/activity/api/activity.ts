@@ -27,7 +27,7 @@ export interface ActivityResponse {
 	previous?: string | null;
 }
 
-export interface StepRunDto {
+interface StepRunDto {
 	stepRunId: string;
 	stepId: string;
 	stepType: string;
@@ -40,7 +40,7 @@ export interface StepRunDto {
 	scheduleExtensionsCount?: number;
 }
 
-export interface GetWorkflowRunsDto {
+interface GetWorkflowRunsDto {
 	id: string;
 	workflowRunId: string;
 	workflowId: string;
@@ -61,11 +61,11 @@ export interface GetWorkflowRunsDto {
 	topics?: { _topicId: string; topicKey: string }[];
 }
 
-export type GetWorkflowRunResponse = GetWorkflowRunsDto & {
+type GetWorkflowRunResponse = GetWorkflowRunsDto & {
 	payload: Record<string, unknown>;
 };
 
-export interface GetWorkflowRunsResponseDto {
+interface GetWorkflowRunsResponseDto {
 	data: GetWorkflowRunsDto[];
 	next: string | null;
 	previous: string | null;
@@ -266,7 +266,7 @@ export function getActivityList({
 }
 
 // Types for the new workflow run endpoint
-export type StepRunStatus =
+type StepRunStatus =
 	| "pending"
 	| "queued"
 	| "running"
@@ -277,7 +277,7 @@ export type StepRunStatus =
 	| "merged"
 	| "skipped";
 
-export type GetWorkflowRunResponseDto = {
+type GetWorkflowRunResponseDto = {
 	data: GetWorkflowRunResponse;
 };
 
@@ -558,7 +558,7 @@ export type WorkflowRunsCountDataPoint = {
 	count: number;
 };
 
-export type GetChartsRequest = {
+type GetChartsRequest = {
 	createdAtGte?: string;
 	createdAtLte?: string;
 	reportType: ReportTypeEnum[];

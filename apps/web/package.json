@@ -4,9 +4,9 @@
   "type": "module",
   "private": true,
   "scripts": {
-    "dev": "rm -f .next/dev/lock && bun next dev --turbopack",
-    "build": "bun next build",
-    "start": "bun next start",
+    "dev": "rm -f .next/dev/lock && next dev --turbopack",
+    "build": "next build",
+    "start": "next start",
     "lint": "eslint . --max-warnings 0",
     "lint:fix": "eslint . --fix",
     "typecheck": "tsc --noEmit"
@@ -21,7 +21,6 @@
     "sonner": "^2.0.7"
   },
   "devDependencies": {
-    "@tailwindcss/postcss": "^4.1.17",
     "@types/node": "^20.19.25",
     "@types/react": "^19.2.7",
     "@types/react-dom": "^19.2.3",

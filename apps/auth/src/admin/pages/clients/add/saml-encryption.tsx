@@ -1,7 +1,7 @@
 import { SelectField } from "../../../../shared/keycloak-ui-shared";
 import { useEffect } from "react";
 import { useFormContext } from "react-hook-form";
-import { useTranslation } from "react-i18next";
+import { useTranslation } from "@merge-rd/i18n";
 import { convertAttributeNameToForm } from "../../../shared/lib/util";
 import { FormFields } from "../client-details";
 

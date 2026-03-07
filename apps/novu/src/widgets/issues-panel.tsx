@@ -11,7 +11,7 @@ import {
 	countIssues,
 	getAllStepIssues,
 	getFirstErrorMessage,
-} from "@/features/workflows/ui/workflow-editor/step-utils";
+} from "@/pages/workflows/ui/workflow-editor/step-utils";
 
 type IssuesPanelProps = {
 	issues?: {

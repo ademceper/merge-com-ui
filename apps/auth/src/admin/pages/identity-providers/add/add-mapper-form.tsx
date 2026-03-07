@@ -12,7 +12,7 @@ import { Label } from "@merge-rd/ui/components/label";
 import { get } from "lodash-es";
 import { useState } from "react";
 import { Controller, UseFormReturn } from "react-hook-form";
-import { useTranslation } from "react-i18next";
+import { useTranslation } from "@merge-rd/i18n";
 import type { IdPMapperRepresentationWithAttributes } from "./add-mapper";
 
 type AddMapperFormProps = {

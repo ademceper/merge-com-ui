@@ -4,7 +4,7 @@ import { Button } from "@merge-rd/ui/components/button";
 import { Label } from "@merge-rd/ui/components/label";
 import { useEffect, useState } from "react";
 import { useFormContext } from "react-hook-form";
-import { useTranslation } from "react-i18next";
+import { useTranslation } from "@merge-rd/i18n";
 import { PasswordInput } from "../../../../shared/keycloak-ui-shared";
 import { useAdminClient } from "../../../app/admin-client";
 import { getErrorDescription, getErrorMessage } from "../../../../shared/keycloak-ui-shared";
@@ -14,7 +14,7 @@ import { useAccess } from "../../../app/providers/access/access";
 import useFormatDate from "../../../shared/lib/useFormatDate";
 import { CopyToClipboardButton } from "../../../shared/ui/copy-to-clipboard-button/copy-to-clipboard-button";
 
-export type ClientSecretProps = {
+type ClientSecretProps = {
     client: ClientRepresentation;
     secret: string;
     toggle: () => void;

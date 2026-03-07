@@ -13,7 +13,7 @@ import { toast } from "sonner";
 import { Badge } from "@merge-rd/ui/components/badge";
 import { useMemo } from "react";
 import { Controller, FormProvider, useForm, useWatch } from "react-hook-form";
-import { useTranslation } from "react-i18next";
+import { useTranslation } from "@merge-rd/i18n";
 import { useAdminClient } from "../../../app/admin-client";
 import { FormAccess } from "../../../shared/ui/form/form-access";
 import { FixedButtonsGroup } from "../../../shared/ui/form/fixed-button-group";

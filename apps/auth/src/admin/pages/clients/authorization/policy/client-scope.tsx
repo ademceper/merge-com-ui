@@ -14,7 +14,7 @@ import {
 } from "@/admin/shared/ui/data-table";
 import { useState } from "react";
 import { Controller, useFormContext } from "react-hook-form";
-import { useTranslation } from "react-i18next";
+import { useTranslation } from "@merge-rd/i18n";
 import { useAdminClient } from "../../../../app/admin-client";
 import useLocaleSort, { mapByKey } from "../../../../shared/lib/useLocaleSort";
 import { AddScopeDialog } from "../../scopes/add-scope-dialog";

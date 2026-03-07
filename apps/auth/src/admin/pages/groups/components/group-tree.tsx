@@ -17,15 +17,15 @@ import { unionBy } from "lodash-es";
 import type { ReactNode } from "react";
 import { useEffect, useRef, useState } from "react";
 
-export type TreeViewDataItem = {
+type TreeViewDataItem = {
     id?: string;
     name: ReactNode;
     children?: TreeViewDataItem[];
     action?: ReactNode;
     defaultExpanded?: boolean;
 };
-import { useTranslation } from "react-i18next";
-import { useNavigate } from "react-router-dom";
+import { useTranslation } from "@merge-rd/i18n";
+import { useNavigate } from "@tanstack/react-router";
 import { useAdminClient } from "../../../app/admin-client";
 import { KeycloakSpinner } from "../../../../shared/keycloak-ui-shared";
 import { useAccess } from "../../../app/providers/access/access";
@@ -47,7 +47,7 @@ type GroupTreeContextMenuProps = {
     refresh: () => void;
 };
 
-export function countGroups(groups: GroupRepresentation[]) {
+function countGroups(groups: GroupRepresentation[]) {
     let count = groups.length;
     for (const group of groups) {
         if (group.subGroups) {
@@ -57,7 +57,7 @@ export function countGroups(groups: GroupRepresentation[]) {
     return count;
 }
 
-export const GroupTreeContextMenu = ({ group, refresh }: GroupTreeContextMenuProps) => {
+const GroupTreeContextMenu = ({ group, refresh }: GroupTreeContextMenuProps) => {
     const { t } = useTranslation();
 
     const [isOpen, toggleOpen] = useToggle();
@@ -75,7 +75,7 @@ export const GroupTreeContextMenu = ({ group, refresh }: GroupTreeContextMenuPro
                     id={group.id}
                     rename={group}
                     refresh={() => {
-                        navigate(toGroups({ realm }));
+                        navigate({ to: toGroups({ realm }) as string });
                         refresh();
                     }}
                     handleModalToggle={toggleRenameOpen}
@@ -96,7 +96,7 @@ export const GroupTreeContextMenu = ({ group, refresh }: GroupTreeContextMenuPro
                 toggleDialog={toggleDeleteOpen}
                 selectedRows={[group]}
                 refresh={() => {
-                    navigate(toGroups({ realm }));
+                    navigate({ to: toGroups({ realm }) as string });
                     refresh();
                 }}
             />
@@ -515,15 +515,15 @@ export const GroupTree = ({ refresh: viewRefresh, canViewDetails }: GroupTreePro
         const hasPermission = canViewDetails || targetGroup?.access?.view;
 
         if (hasPermission) {
-            navigate(
-                toGroups({
+            navigate({
+                to: toGroups({
                     realm,
                     id: path.map(g => g.id).join("/")
-                })
-            );
+                }) as string
+            });
         } else {
             toast.warning(t("noViewRights"));
-            navigate(toGroups({ realm }));
+            navigate({ to: toGroups({ realm }) as string });
         }
     };
 
@@ -534,7 +534,7 @@ export const GroupTree = ({ refresh: viewRefresh, canViewDetails }: GroupTreePro
         if (idx <= 0) {
             setActiveItem(undefined);
             clear();
-            navigate(toGroups({ realm }));
+            navigate({ to: toGroups({ realm }) as string });
             return;
         }
         const newSubGroups = subGroups.slice(0, idx);
@@ -542,7 +542,7 @@ export const GroupTree = ({ refresh: viewRefresh, canViewDetails }: GroupTreePro
         const parentGroup = newSubGroups[newSubGroups.length - 1];
         setActiveItem({ id: parentGroup.id, name: parentGroup.name } as ExtendedTreeViewDataItem);
         setSubGroups(newSubGroups);
-        navigate(toGroups({ realm, id: parentPath }));
+        navigate({ to: toGroups({ realm, id: parentPath }) as string });
     };
 
     const [searchInput, setSearchInput] = useState("");

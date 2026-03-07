@@ -1,7 +1,7 @@
 import { useOrganization } from "@merge-rd/auth";
 import { EnvironmentTypeEnum, type IEnvironment } from "@/shared";
 import { useCallback, useLayoutEffect, useMemo, useState } from "react";
-import { useLocation, useNavigate, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "@tanstack/react-router";
 import { EnvironmentContext } from "@/app/context/environment/environment-context";
 import { useFetchEnvironments } from "@/app/context/environment/hooks";
 import { loadFromStorage, saveToStorage } from "@/shared/lib/local-storage";
@@ -83,9 +83,9 @@ export function EnvironmentProvider({
 	const { organization: currentOrganization } = useOrganization();
 	const navigate = useNavigate();
 	const { pathname } = useLocation();
-	const { environmentSlug: paramsEnvironmentSlug } = useParams<{
+	const { environmentSlug: paramsEnvironmentSlug } = useParams({ strict: false }) as {
 		environmentSlug?: string;
-	}>();
+	};
 	const [currentEnvironment, setCurrentEnvironment] = useState<IEnvironment>();
 
 	const switchEnvironmentInternal = useCallback(
@@ -113,17 +113,17 @@ export function EnvironmentProvider({
 				pathname === ROUTES.ENV ||
 				pathname === `${ROUTES.ENV}/`
 			) {
-				navigate(
-					buildRoute(ROUTES.WORKFLOWS, {
+				navigate({
+					to: buildRoute(ROUTES.WORKFLOWS, {
 						environmentSlug: newEnvironmentSlug ?? "",
 					}),
-				);
+				});
 			} else if (pathname.includes(ROUTES.ENV) && isNewEnvironmentDifferent) {
 				const newPath = pathname.replace(
 					/\/env\/[^/]+(\/|$)/,
 					`${ROUTES.ENV}/${newEnvironmentSlug}$1`,
 				);
-				navigate(newPath);
+				navigate({ to: newPath });
 			}
 		},
 		[navigate, pathname, paramsEnvironmentSlug, currentOrganization?.id],

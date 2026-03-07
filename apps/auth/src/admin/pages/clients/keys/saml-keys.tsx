@@ -9,7 +9,7 @@ import { Switch } from "@merge-rd/ui/components/switch";
 import { saveAs } from "file-saver";
 import { Fragment, useState } from "react";
 import { Controller, useFormContext } from "react-hook-form";
-import { useTranslation } from "react-i18next";
+import { useTranslation } from "@merge-rd/i18n";
 import { useAdminClient } from "../../../app/admin-client";
 import { useConfirmDialog } from "../../../shared/ui/confirm-dialog/confirm-dialog";
 import { FormAccess } from "../../../shared/ui/form/form-access";

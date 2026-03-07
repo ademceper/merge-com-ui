@@ -1,28 +1,11 @@
-import { lazy } from "react";
-import type { Path } from "react-router-dom";
 import { generateEncodedPath } from "../../../shared/lib/generateEncodedPath";
-import type { AppRouteObject } from "../../../app/routes";
 
-export type PermissionsPoliciesParams = {
+type PermissionsPoliciesParams = {
     realm: string;
     permissionClientId: string;
 };
 
-const PermissionsPoliciesSection = lazy(
-    () => import("../permissions-configuration-section")
-);
-
-export const PermissionsPoliciesRoute: AppRouteObject = {
-    path: "/:realm/permissions/:permissionClientId/policies",
-    element: <PermissionsPoliciesSection />,
-    breadcrumb: t => t("policies"),
-    handle: {
-        access: ["view-realm", "view-clients", "view-users"]
-    }
-};
-
-export const toPermissionsPolicies = (
+const toPermissionsPolicies = (
     params: PermissionsPoliciesParams
-): Partial<Path> => ({
-    pathname: generateEncodedPath(PermissionsPoliciesRoute.path, params)
-});
+): string =>
+    generateEncodedPath("/:realm/permissions/:permissionClientId/policies", params);

@@ -1,8 +1,8 @@
 import type ClientRepresentation from "@keycloak/keycloak-admin-client/lib/defs/clientRepresentation";
 import type GlobalRequestResult from "@keycloak/keycloak-admin-client/lib/defs/globalRequestResult";
-import type { TFunction } from "i18next";
+import type { TFunction } from "@merge-rd/i18n";
 import { useFormContext } from "react-hook-form";
-import { useTranslation } from "react-i18next";
+import { useTranslation } from "@merge-rd/i18n";
 import { ScrollForm } from "../../../shared/keycloak-ui-shared";
 import { toast } from "sonner";
 import { convertAttributeNameToForm, toUpperCase } from "../../shared/lib/util";

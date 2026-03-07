@@ -84,7 +84,7 @@ import {
   type TableSortDirection,
 } from "@merge-rd/ui/components/table";
 
-export type DataTableProps<TData> = {
+type DataTableProps<TData> = {
   columns: ColumnDef<TData>[];
   data: TData[];
   emptyMessage?: string;
@@ -621,18 +621,15 @@ export function DataTableRowActions<TData>({
 export {
   Table,
   TableBody,
-  TableCaption,
+  
   TableCell,
-  TableFooter,
+  
   TableHead,
   TableHeader,
   TableRow,
-  tableCellVariants,
+  
 } from "@merge-rd/ui/components/table";
 
-export type {
-  TableHeadSortDirection,
-  TableSortDirection,
-} from "@merge-rd/ui/components/table";
+;
 
-export type { ColumnDef, FilterFn, Row, SortingState };
+export type { ColumnDef,  Row,  };

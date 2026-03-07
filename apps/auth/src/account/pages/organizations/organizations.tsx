@@ -11,7 +11,7 @@
 
 import { useEnvironment } from "../../../shared/keycloak-ui-shared";
 import { useState } from "react";
-import { useTranslation } from "react-i18next";
+import { useTranslation } from "@merge-rd/i18n";
 import { getUserOrganizations } from "../../shared/api/methods";
 import { Page } from "../../shared/ui/page/page";
 import { Environment } from "../../app/environment";
@@ -26,7 +26,7 @@ type OrgRepresentation = {
     [key: string]: unknown;
 };
 
-export const Organizations = () => {
+const Organizations = () => {
     const { t } = useTranslation();
     const context = useEnvironment<Environment>();
 

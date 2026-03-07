@@ -35,8 +35,8 @@ import {
 import { groupBy, sortBy } from "lodash-es";
 import type { SetStateAction } from "react";
 import { Fragment, useCallback, useEffect, useMemo, useState } from "react";
-import { useTranslation } from "react-i18next";
-import { Link, useNavigate } from "react-router-dom";
+import { useTranslation } from "@merge-rd/i18n";
+import { Link, useNavigate } from "@tanstack/react-router";
 import { useAdminClient } from "../../app/admin-client";
 import {
     AlertDialog,
@@ -206,7 +206,7 @@ export default function IdentityProvidersSection() {
     );
 
     const navigateToCreate = (providerId: string) =>
-        navigate(toIdentityProviderCreate({ realm, providerId }));
+        navigate({ to: toIdentityProviderCreate({ realm, providerId }) as string });
 
     const identityProviderOptions = () =>
         Object.keys(identityProviders).map((group) => (
@@ -217,12 +217,12 @@ export default function IdentityProvidersSection() {
                         key={provider.id}
                         data-testid={provider.id}
                         onClick={() =>
-                            navigate(
-                                toIdentityProviderCreate({
+                            navigate({
+                                to: toIdentityProviderCreate({
                                     realm,
                                     providerId: provider.id,
-                                }),
-                            )
+                                }) as string,
+                            })
                         }
                     >
                         {provider.name}
@@ -264,7 +264,7 @@ export default function IdentityProvidersSection() {
                                 providerId: idp.providerId!,
                                 alias: idp.alias!,
                                 tab: "settings",
-                            })}
+                            }) as string}
                             className="font-medium text-primary hover:underline"
                         >
                             {idp.displayName || idp.alias}
@@ -298,7 +298,7 @@ export default function IdentityProvidersSection() {
                                 realm,
                                 id: idp.organizationId,
                                 tab: "identityProviders",
-                            })}
+                            }) as string}
                             className="text-primary hover:underline"
                         >
                             {t("organization")}

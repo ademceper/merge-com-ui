@@ -1,7 +1,4 @@
-import { lazy } from "react";
-import type { Path } from "react-router-dom";
 import { generateEncodedPath } from "../../../shared/lib/generateEncodedPath";
-import type { AppRouteObject } from "../../../app/routes";
 
 export type MapperParams = {
     realm: string;
@@ -10,17 +7,5 @@ export type MapperParams = {
     viewMode: "edit" | "new";
 };
 
-const MappingDetails = lazy(() => import("../details/mapping-details"));
-
-export const MapperRoute: AppRouteObject = {
-    path: "/:realm/client-scopes/:id/mappers/:mapperId/:viewMode",
-    element: <MappingDetails />,
-    breadcrumb: t => t("mappingDetails"),
-    handle: {
-        access: "view-clients"
-    }
-};
-
-export const toMapper = (params: MapperParams): Partial<Path> => ({
-    pathname: generateEncodedPath(MapperRoute.path, params)
-});
+export const toMapper = (params: MapperParams): string =>
+    generateEncodedPath("/:realm/client-scopes/:id/mappers/:mapperId/:viewMode", params);

@@ -41,7 +41,7 @@ export type RequestTraces = {
 	traces: ApiTrace[];
 };
 
-export type LogsFilters = {
+type LogsFilters = {
 	statusCode?: number[];
 	method?: string[];
 	dateRange?: {
@@ -51,4 +51,4 @@ export type LogsFilters = {
 	search?: string;
 };
 
-export type LogsSortOrder = "asc" | "desc";
+type LogsSortOrder = "asc" | "desc";

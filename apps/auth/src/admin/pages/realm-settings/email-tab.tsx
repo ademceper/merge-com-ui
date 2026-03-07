@@ -5,8 +5,8 @@ import { Checkbox } from "@merge-rd/ui/components/checkbox";
 import { RadioGroup, RadioGroupItem } from "@merge-rd/ui/components/radio-group";
 import { Label } from "@merge-rd/ui/components/label";
 import { Controller, FormProvider, useForm, useWatch } from "react-hook-form";
-import { useTranslation } from "react-i18next";
-import { Link } from "react-router-dom";
+import { useTranslation } from "@merge-rd/i18n";
+import { Link } from "@tanstack/react-router";
 import { FormPanel, HelpItem, PasswordControl, TextControl } from "../../../shared/keycloak-ui-shared";
 import { Switch } from "@merge-rd/ui/components/switch";
 import { useAdminClient } from "../../app/admin-client";
@@ -431,7 +431,7 @@ const currentUser = useCurrentUser();
                                                         realm: currentUser.realm!,
                                                         id: currentUser.id!,
                                                         tab: "settings"
-                                                    })}
+                                                    }) as string}
                                                 >
                                                     {t(
                                                         "testConnectionHint.withoutEmailAction"

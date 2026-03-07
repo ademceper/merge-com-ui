@@ -8,7 +8,8 @@ import {
 } from "../../../../shared/keycloak-ui-shared";
 import { PropsWithChildren, useEffect, useState } from "react";
 import { useAdminClient } from "../../admin-client";
-import { DEFAULT_LOCALE, i18n } from "../../../i18n/i18n";
+import { DEFAULT_LOCALE } from "@merge-rd/i18n";
+import { i18n } from "../../i18n";
 import { useRealm } from "../realm-context/realm-context";
 
 // can be replaced with https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/Locale/getTextInfo
@@ -32,7 +33,7 @@ type WhoAmIProps = {
     whoAmI: WhoAmIRepresentation;
 };
 
-export const WhoAmIContext = createNamedContext<WhoAmIProps | undefined>(
+const WhoAmIContext = createNamedContext<WhoAmIProps | undefined>(
     "WhoAmIContext",
     undefined
 );

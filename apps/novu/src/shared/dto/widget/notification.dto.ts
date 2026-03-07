@@ -2,7 +2,7 @@ import type { ChannelTypeEnum } from "../../model";
 import type { IActorDto, IMessageCTADto } from "../message-template";
 import type { ISubscriberFeedResponseDto } from "../subscriber";
 
-export interface INotificationDto {
+interface INotificationDto {
 	_id: string;
 	_templateId: string;
 	_environmentId: string;

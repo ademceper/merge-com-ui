@@ -4,7 +4,7 @@ import type { NotificationStepDto } from "./workflow-deprecated.dto";
 /**
  * @deprecated use UpdateWorkflowDto instead
  */
-export interface IUpdateWorkflowDto {
+interface IUpdateWorkflowDto {
 	name?: string;
 
 	tags?: string[];

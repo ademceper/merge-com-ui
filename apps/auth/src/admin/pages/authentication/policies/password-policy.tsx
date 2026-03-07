@@ -12,7 +12,7 @@ import {
 import { PlusCircle } from "@phosphor-icons/react";
 import { useEffect, useMemo, useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
-import { useTranslation } from "react-i18next";
+import { useTranslation } from "@merge-rd/i18n";
 import { useAdminClient } from "../../../app/admin-client";
 import { FormAccess } from "../../../shared/ui/form/form-access";
 import { FixedButtonsGroup } from "../../../shared/ui/form/fixed-button-group";

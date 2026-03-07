@@ -14,7 +14,7 @@ export function getClosestNodeByName(editor: Editor, name: string) {
 	return findParentNode((node) => node.type.name === name)(state.selection);
 }
 
-export function addColumn(editor: Editor) {
+function addColumn(editor: Editor) {
 	const { node: columnsNode, pos: columnsNodePos = 0 } =
 		getClosestNodeByName(editor, "columns") || {};
 	if (!columnsNode) {
@@ -88,7 +88,7 @@ export function addColumn(editor: Editor) {
 	editor.view.focus();
 }
 
-export function removeColumn(editor: Editor) {
+function removeColumn(editor: Editor) {
 	const { node: columnsNode, pos: columnsNodePos = 0 } =
 		getClosestNodeByName(editor, "columns") || {};
 	if (!columnsNode) {

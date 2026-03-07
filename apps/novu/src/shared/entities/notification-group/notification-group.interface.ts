@@ -1,3 +1,3 @@
 import type { INotificationGroupDto } from "../../dto";
 
-export interface INotificationGroup extends INotificationGroupDto {}
+interface INotificationGroup extends INotificationGroupDto {}

@@ -1,7 +1,4 @@
-import { lazy } from "react";
-import type { Path } from "react-router-dom";
 import { generateEncodedPath } from "../../../shared/lib/generateEncodedPath";
-import type { AppRouteObject } from "../../../app/routes";
 
 export type PermissionType = "resource" | "scope";
 
@@ -12,29 +9,9 @@ export type NewPermissionParams = {
     selectedId?: string;
 };
 
-const PermissionDetails = lazy(() => import("../authorization/permission-details"));
-
-export const NewPermissionRoute: AppRouteObject = {
-    path: "/:realm/clients/:id/authorization/permission/new/:permissionType",
-    element: <PermissionDetails />,
-    breadcrumb: t => t("createPermission"),
-    handle: {
-        access: accessChecker =>
-            accessChecker.hasAny("manage-clients", "manage-authorization")
-    }
-};
-
-export const NewPermissionWithSelectedIdRoute: AppRouteObject = {
-    ...NewPermissionRoute,
-    path: "/:realm/clients/:id/authorization/permission/new/:permissionType/:selectedId"
-};
-
-export const toNewPermission = (params: NewPermissionParams): Partial<Path> => {
+export const toNewPermission = (params: NewPermissionParams): string => {
     const path = params.selectedId
-        ? NewPermissionWithSelectedIdRoute.path
-        : NewPermissionRoute.path;
-
-    return {
-        pathname: generateEncodedPath(path, params)
-    };
+        ? "/:realm/clients/:id/authorization/permission/new/:permissionType/:selectedId"
+        : "/:realm/clients/:id/authorization/permission/new/:permissionType";
+    return generateEncodedPath(path, params as any);
 };

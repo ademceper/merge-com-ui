@@ -1,4 +1,4 @@
-import { useTranslation } from "react-i18next";
+import { useTranslation } from "@merge-rd/i18n";
 import { Controller, useFormContext } from "react-hook-form";
 import { SelectField } from "../../../../shared/keycloak-ui-shared";
 import { useServerInfo } from "../../../app/providers/server-info/server-info-provider";

@@ -7,7 +7,7 @@ import {
 import { Label } from "@merge-rd/ui/components/label";
 import React, { useEffect, useMemo } from "react";
 import { FormProvider, useForm, useFormContext, useWatch } from "react-hook-form";
-import { useTranslation } from "react-i18next";
+import { useTranslation } from "@merge-rd/i18n";
 import { FixedButtonsGroup } from "../../../shared/ui/form/fixed-button-group";
 import { FormAccess } from "../../../shared/ui/form/form-access";
 import useToggle from "../../../shared/lib/useToggle";

@@ -1,6 +1,6 @@
 import { useWhoAmI } from "../../app/providers/whoami/who-am-i";
 
-export type ValueMapperFn<T> = (item: T) => string | undefined;
+type ValueMapperFn<T> = (item: T) => string | undefined;
 
 export default function useLocaleSort() {
     const { whoAmI } = useWhoAmI();

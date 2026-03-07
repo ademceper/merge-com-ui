@@ -11,18 +11,18 @@ import {
     SidebarMenuItem
 } from "@merge-rd/ui/components/sidebar";
 import { Switcher, type SwitcherItem } from "@merge-rd/ui/components/switcher";
-import { useTranslation } from "react-i18next";
-import { NavLink, useLocation, useNavigate } from "react-router-dom";
+import { useTranslation } from "@merge-rd/i18n";
+import { Link, useLocation, useNavigate } from "@tanstack/react-router";
 import { useAccess } from "../app/providers/access/access";
 import { useRealm } from "../app/providers/realm-context/realm-context";
 import { useServerInfo } from "../app/providers/server-info/server-info-provider";
 import type { Environment } from "../app/environment";
-import { toPage } from "../pages/page/routes";
+import { toPage } from "../shared/lib/route-helpers-page";
 import { routes } from "../app/routes";
 import useIsFeatureEnabled, { Feature } from "../shared/lib/useIsFeatureEnabled";
 import { useAdminClient } from "../app/admin-client";
 import { fetchAdminUI } from "../app/providers/auth/admin-ui-endpoint";
-import { toDashboard } from "../pages/dashboard/routes/dashboard";
+import { toDashboard } from "../shared/lib/route-helpers";
 import { useEffect, useState } from "react";
 import type { RealmNameRepresentation } from "../app/providers/recent-realms";
 import {
@@ -77,14 +77,13 @@ function LeftNav({ title, path, icon: Icon, id }: LeftNavProps) {
     return (
         <SidebarMenuItem>
             <SidebarMenuButton asChild isActive={isActive} tooltip={t(title)}>
-                <NavLink
-                    to={to}
+                <Link
+                    to={to as string}
                     data-testid={"nav-item" + path.replace("/", "-")}
-                    end={false}
                 >
                     <Icon className="size-4" />
                     <span>{t(title)}</span>
-                </NavLink>
+                </Link>
             </SidebarMenuButton>
         </SidebarMenuItem>
     );
@@ -128,7 +127,7 @@ export function AdminAppSidebar({ ...props }: React.ComponentProps<typeof Sideba
     }));
 
     const onRealmChange = (value: string) => {
-        navigate(toDashboard({ realm: value }));
+        navigate({ to: toDashboard({ realm: value }) as string });
     };
 
     const showManage = hasSomeAccess(
@@ -306,7 +305,7 @@ export function AdminAppSidebar({ ...props }: React.ComponentProps<typeof Sideba
                                         <LeftNav
                                             key={p.id}
                                             title={p.id}
-                                            path={toPage({ providerId: p.id }).pathname!}
+                                            path={toPage({ providerId: p.id })}
                                             icon={ListBulletsIcon}
                                             id="/page-section"
                                         />

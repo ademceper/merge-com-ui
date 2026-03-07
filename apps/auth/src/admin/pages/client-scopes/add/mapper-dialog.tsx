@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { useTranslation } from "react-i18next";
+import { useTranslation } from "@merge-rd/i18n";
 import { Button } from "@merge-rd/ui/components/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@merge-rd/ui/components/dialog";
 
@@ -24,7 +24,7 @@ type Row = {
     item: ProtocolMapperRepresentation;
 };
 
-export type AddMapperDialogModalProps = {
+type AddMapperDialogModalProps = {
     protocol: string;
     filter?: ProtocolMapperRepresentation[];
     onConfirm: (
@@ -32,7 +32,7 @@ export type AddMapperDialogModalProps = {
     ) => void;
 };
 
-export type AddMapperDialogProps = AddMapperDialogModalProps & {
+type AddMapperDialogProps = AddMapperDialogModalProps & {
     open: boolean;
     toggleDialog: () => void;
 };

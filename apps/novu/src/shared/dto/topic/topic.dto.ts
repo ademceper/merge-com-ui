@@ -1,4 +1,4 @@
-export class TopicDto {
+class TopicDto {
 	_id: string;
 	_organizationId: string;
 	_environmentId: string;
@@ -7,7 +7,7 @@ export class TopicDto {
 	subscribers: string[];
 }
 
-export class TopicSubscribersDto {
+class TopicSubscribersDto {
 	_organizationId: string;
 	_environmentId: string;
 	_subscriberId: string;

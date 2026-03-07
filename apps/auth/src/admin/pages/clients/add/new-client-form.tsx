@@ -2,8 +2,8 @@ import { getErrorDescription, getErrorMessage } from "../../../../shared/keycloa
 import { toast } from "sonner";
 import { Button } from "@merge-rd/ui/components/button";
 import { FormProvider, useForm } from "react-hook-form";
-import { useTranslation } from "react-i18next";
-import { useNavigate } from "react-router-dom";
+import { useTranslation } from "@merge-rd/i18n";
+import { useNavigate } from "@tanstack/react-router";
 import { useAdminClient } from "../../../app/admin-client";
 import { FormAccess } from "../../../shared/ui/form/form-access";
 import { useRealm } from "../../../app/providers/realm-context/realm-context";
@@ -62,7 +62,7 @@ const form = useForm<FormFields>({
                 clientId: client.clientId?.trim()
             });
             toast.success(t("createClientSuccess"));
-            navigate(toClient({ realm, clientId: newClient.id, tab: "settings" }));
+            navigate({ to: toClient({ realm, clientId: newClient.id, tab: "settings" }) as string });
         } catch (error) {
             toast.error(t("createClientError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
         } finally {
@@ -124,7 +124,7 @@ const form = useForm<FormFields>({
                     <div className="flex gap-2 mt-6">
                         <Button
                             variant="outline"
-                            onClick={() => navigate(toClients({ realm }))}
+                            onClick={() => navigate({ to: toClients({ realm }) as string })}
                         >
                             {t("cancel")}
                         </Button>

@@ -1,5 +1,5 @@
 import { Button } from "@merge-rd/ui/components/button";
-import { useTranslation } from "react-i18next";
+import { useTranslation } from "@merge-rd/i18n";
 
 import { FormAccess } from "../../../shared/ui/form/form-access";
 import { TextControl } from "../../../../shared/keycloak-ui-shared";

@@ -1,7 +1,7 @@
 import { Alert, AlertDescription } from "@merge-rd/ui/components/alert";
 import { Warning } from "@phosphor-icons/react";
 import { useWhoAmI } from "../app/providers/whoami/who-am-i";
-import { useTranslation } from "react-i18next";
+import { useTranslation } from "@merge-rd/i18n";
 import { cn } from "@merge-rd/ui/lib/utils";
 
 type WarnBannerProps = {

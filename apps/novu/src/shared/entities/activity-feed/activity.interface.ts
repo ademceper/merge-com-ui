@@ -1,4 +1,4 @@
-import type { SeverityLevelEnum } from "../../consts";
+import type { SeverityLevelEnum } from "../../config/consts";
 import type { ChannelTypeEnum, ISubscriber } from "../../model";
 import type { IExecutionDetail } from "../execution-details";
 import type { IJob as IJobBase } from "../job";

@@ -47,7 +47,7 @@ export interface IWorkflowOverrideRequestDto {
 	preferenceSettings?: IPreferenceChannelsDto;
 }
 
-export interface IWorkflowOverridesResponseDto {
+interface IWorkflowOverridesResponseDto {
 	hasMore: boolean;
 
 	data: IWorkflowOverrideResponseDto[];

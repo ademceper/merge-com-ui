@@ -17,7 +17,7 @@ import { Label } from "@merge-rd/ui/components/label";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@merge-rd/ui/components/collapsible";
 import { useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
-import { useTranslation } from "react-i18next";
+import { useTranslation } from "@merge-rd/i18n";
 import { ForbiddenSection } from "../../forbidden-section";
 import { useAdminClient } from "../../../app/admin-client";
 import { ClientSelect } from "../../../shared/ui/client/client-select";
@@ -45,7 +45,7 @@ interface EvaluateFormInputs extends Omit<ResourceEvaluation, "context" | "resou
     user: string[];
 }
 
-export type AttributeType = {
+type AttributeType = {
     key: string;
     name: string;
     custom?: boolean;
@@ -59,7 +59,7 @@ type ClientSettingsProps = {
     save: () => void;
 };
 
-export type AttributeForm = Omit<EvaluateFormInputs, "context" | "resources"> & {
+type AttributeForm = Omit<EvaluateFormInputs, "context" | "resources"> & {
     context: {
         attributes?: KeyValueType[];
     };

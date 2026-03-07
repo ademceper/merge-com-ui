@@ -16,12 +16,12 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigge
 import { Funnel, CaretDown } from "@phosphor-icons/react";
 import { sortBy } from "lodash-es";
 import { useState } from "react";
-import { useTranslation } from "react-i18next";
+import { useTranslation } from "@merge-rd/i18n";
 import { useAdminClient } from "../../../app/admin-client";
 import { capitalizeFirstLetterFormatter } from "../../../shared/lib/util";
 import useToggle from "../../../shared/lib/useToggle";
 
-export type ExistingPoliciesDialogProps = {
+type ExistingPoliciesDialogProps = {
     toggleDialog: () => void;
     onAssign: (policies: { policy: PolicyRepresentation }[]) => void;
     open: boolean;

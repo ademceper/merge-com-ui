@@ -16,7 +16,7 @@ import { FormLabel } from "./form-label";
 import { useTranslation } from "react-i18next";
 import { cn } from "@merge-rd/ui/lib/utils";
 
-export type FileUploadControlProps<
+type FileUploadControlProps<
     T extends FieldValues,
     P extends FieldPath<T> = FieldPath<T>
 > = UseControllerProps<T, P> & {

@@ -1,7 +1,7 @@
 import { mergeAttributes, Node } from "@tiptap/core";
 import { Plugin, PluginKey } from "@tiptap/pm/state";
 
-export interface InlineImageOptions {
+interface InlineImageOptions {
 	/**
 	 * HTML attributes to add to the image element.
 	 * @default {}

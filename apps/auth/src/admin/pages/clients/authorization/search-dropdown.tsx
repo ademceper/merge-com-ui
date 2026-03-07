@@ -4,7 +4,7 @@ import { Button } from "@merge-rd/ui/components/button";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger } from "@merge-rd/ui/components/dropdown-menu";
 import { useEffect } from "react";
 import { FormProvider, useForm } from "react-hook-form";
-import { useTranslation } from "react-i18next";
+import { useTranslation } from "@merge-rd/i18n";
 import useToggle from "../../../shared/lib/useToggle";
 
 export type SearchForm = {

@@ -8,7 +8,7 @@ export interface IDiffSummary {
 	unchanged: number;
 }
 
-export interface IUserInfo {
+interface IUserInfo {
 	_id: string;
 	firstName: string;
 	lastName?: string | null;

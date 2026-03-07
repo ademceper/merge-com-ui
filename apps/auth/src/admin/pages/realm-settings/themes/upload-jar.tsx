@@ -1,7 +1,7 @@
 import { Button } from "@merge-rd/ui/components/button";
 import JSZip from "jszip";
 import { ChangeEvent } from "react";
-import { useTranslation } from "react-i18next";
+import { useTranslation } from "@merge-rd/i18n";
 import { ThemeRealmRepresentation } from "./themes-tab";
 
 type UploadJarProps = {

@@ -15,8 +15,9 @@ import {
 import { camelCase } from "lodash-es";
 import { useState } from "react";
 import { Controller, FormProvider, useForm } from "react-hook-form";
-import { useTranslation } from "react-i18next";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { useTranslation } from "@merge-rd/i18n";
+import { Link, useNavigate } from "@tanstack/react-router";
+import { useParams } from "../../shared/lib/useParams";
 import { useAdminClient } from "../../app/admin-client";
 import { DynamicComponents } from "../../shared/ui/dynamic/dynamic-components";
 import { FormAccess } from "../../shared/ui/form/form-access";
@@ -160,7 +161,7 @@ const navigate = useNavigate();
                 policies: updatedPolicies
             });
             setPolicies(updatedPolicies);
-            navigate(toEditClientPolicy({ realm, policyName: policyName! }));
+            navigate({ to: toEditClientPolicy({ realm, policyName: policyName! }) as string });
             toast.success(
                 conditionName
                     ? t("updateClientConditionSuccess")
@@ -269,12 +270,12 @@ const navigate = useNavigate();
                                 variant="ghost"
                                 data-testid="addCondition-cancelBtn"
                                 onClick={() =>
-                                    navigate(
-                                        toEditClientPolicy({
+                                    navigate({
+                                        to: toEditClientPolicy({
                                             realm,
                                             policyName: policyName!
-                                        })
-                                    )
+                                        }) as string
+                                    })
                                 }
                             >
                                 {t("cancel")}
@@ -285,7 +286,7 @@ const navigate = useNavigate();
                 {isGlobalPolicy && (
                     <div className="kc-backToProfile">
                         <Button asChild>
-                            <Link to={toEditClientPolicy({ realm, policyName: policyName! })}>
+                            <Link to={toEditClientPolicy({ realm, policyName: policyName! }) as string}>
                                 {t("back")}
                             </Link>
                         </Button>

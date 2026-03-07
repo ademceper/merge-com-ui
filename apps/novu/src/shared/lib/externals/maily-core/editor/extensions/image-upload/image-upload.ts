@@ -5,12 +5,12 @@ import {
 	type ImageUploadPluginOptions,
 } from "../../plugins/image-upload/image-upload-plugin";
 
-export type ImageUploadOptions = Omit<ImageUploadPluginOptions, "editor"> & {};
-export type ImageUploadStorage = {
+type ImageUploadOptions = Omit<ImageUploadPluginOptions, "editor"> & {};
+type ImageUploadStorage = {
 	placeholderImages: Set<string>;
 };
 
-export const ImageUploadExtension = Extension.create<ImageUploadOptions>({
+const ImageUploadExtension = Extension.create<ImageUploadOptions>({
 	name: "imageUpload",
 
 	addOptions() {

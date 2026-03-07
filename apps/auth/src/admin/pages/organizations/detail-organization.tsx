@@ -1,11 +1,11 @@
-import { getErrorDescription, getErrorMessage, useFetch } from "../../../shared/keycloak-ui-shared";
+import { getErrorDescription, getErrorMessage } from "../../../shared/keycloak-ui-shared";
+import { useOrganization, useUpdateOrganization } from "./api/queries";
 import { toast } from "sonner";
 import { Button } from "@merge-rd/ui/components/button";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@merge-rd/ui/components/tabs";
 import { FormProvider, useForm } from "react-hook-form";
-import { useTranslation } from "react-i18next";
-import { useNavigate, useParams as useRouterParams } from "react-router-dom";
-import { useAdminClient } from "../../app/admin-client";
+import { useTranslation } from "@merge-rd/i18n";
+import { useNavigate } from "@tanstack/react-router";
 import { FormAccess } from "../../shared/ui/form/form-access";
 import { AttributesForm } from "../../shared/ui/key-value-form/attribute-form";
 import { arrayToKeyValue } from "../../shared/ui/key-value-form/key-value-convert";
@@ -18,43 +18,37 @@ import { OrganizationForm, OrganizationFormType, convertToOrgForUpdate } from ".
 import { EditOrganizationParams, toEditOrganization } from "./routes/edit-organization";
 import { useAccess } from "../../app/providers/access/access";
 import { AdminEvents } from "../events/admin-events";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export default function DetailOrganization() {
-    const { adminClient } = useAdminClient();
-
     const { realm, realmRepresentation } = useRealm();
-    const { id } = useParams<EditOrganizationParams>();
-    const { tab = "settings" } = useRouterParams<{ tab?: string }>();
+    const { id, tab = "settings" } = useParams<EditOrganizationParams & { tab?: string }>();
     const { t } = useTranslation();
     const navigate = useNavigate();
 
     const form = useForm<OrganizationFormType>();
+    const { data: org } = useOrganization(id);
+    const updateMutation = useUpdateOrganization(id);
 
-    const save = async (org: OrganizationFormType) => {
-        try {
-            const payload = { ...convertToOrgForUpdate(org), alias: org.alias };
-            await adminClient.organizations.updateById({ id }, payload);
-            toast.success(t("organizationSaveSuccess"));
-        } catch (error) {
-            toast.error(t("organizationSaveError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
-        }
-    };
-
-    useFetch(
-        () => adminClient.organizations.findOne({ id }),
-        org => {
-            if (!org) {
-                throw new Error(t("notFound"));
-            }
+    useEffect(() => {
+        if (org) {
             form.reset({
                 ...org,
                 domains: org.domains?.map(d => d.name),
                 attributes: arrayToKeyValue(org.attributes)
             });
-        },
-        [id]
-    );
+        }
+    }, [org]);
+
+    const save = async (orgData: OrganizationFormType) => {
+        try {
+            const payload = { ...convertToOrgForUpdate(orgData), alias: orgData.alias };
+            await updateMutation.mutateAsync(payload);
+            toast.success(t("organizationSaveSuccess"));
+        } catch (error) {
+            toast.error(t("organizationSaveError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
+        }
+    };
 
     const { hasAccess } = useAccess();
     const [activeEventsTab, setActiveEventsTab] = useState("adminEvents");
@@ -68,7 +62,7 @@ export default function DetailOrganization() {
                 <Tabs
                     value={tab}
                     onValueChange={(value) =>
-                        navigate(toEditOrganization({ realm, id, tab: value as EditOrganizationParams["tab"] }))
+                        navigate({ to: toEditOrganization({ realm, id, tab: value as EditOrganizationParams["tab"] }) as string })
                     }
                 >
                     <TabsList>

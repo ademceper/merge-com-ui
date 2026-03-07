@@ -4,7 +4,7 @@ import {
 } from "@merge-rd/ui/components/badge";
 import type * as React from "react";
 
-export { badgeVariants };
+;
 
 export type BadgeRootProps = React.ComponentProps<typeof MergeBadge>;
 

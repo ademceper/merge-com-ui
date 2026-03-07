@@ -1,7 +1,7 @@
 import type RoleRepresentation from "@keycloak/keycloak-admin-client/lib/defs/roleRepresentation";
 import { FormProvider, SubmitHandler, useForm } from "react-hook-form";
-import { useTranslation } from "react-i18next";
-import { useNavigate } from "react-router-dom";
+import { useTranslation } from "@merge-rd/i18n";
+import { useNavigate } from "@tanstack/react-router";
 import { useAdminClient } from "../../app/admin-client";
 import { getErrorDescription, getErrorMessage } from "../../../shared/keycloak-ui-shared";
 import { toast } from "sonner";
@@ -37,7 +37,7 @@ const onSubmit: SubmitHandler<AttributeForm> = async formValues => {
             }
 
             toast.success(t("roleCreated"));
-            navigate(toRealmRole({ realm, id: createdRole.id!, tab: "details" }));
+            navigate({ to: toRealmRole({ realm, id: createdRole.id!, tab: "details" }) as string });
         } catch (error) {
             toast.error(t("roleCreateError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
         }

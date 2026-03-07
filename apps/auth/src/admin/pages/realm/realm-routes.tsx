@@ -1,21 +1,6 @@
-import { lazy } from "react";
-import type { Path } from "react-router-dom";
 import { generateEncodedPath } from "../../shared/lib/generateEncodedPath";
-import type { AppRouteObject } from "../../app/routes";
 
-export type RealmParams = { realm: string };
+type RealmParams = { realm: string };
 
-const RealmSection = lazy(() => import("./realm-section"));
-
-export const RealmRoute: AppRouteObject = {
-    path: "/:realm/realms",
-    element: <RealmSection />,
-    breadcrumb: t => t("realms"),
-    handle: {
-        access: "anyone"
-    }
-};
-
-export const toRealm = (params: RealmParams): Partial<Path> => ({
-    pathname: generateEncodedPath(RealmRoute.path, params)
-});
+export const toRealm = (params: RealmParams): string =>
+    generateEncodedPath("/:realm/realms", params);

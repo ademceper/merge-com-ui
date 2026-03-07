@@ -1,21 +1,6 @@
-import { lazy } from "react";
-import type { Path } from "react-router-dom";
 import { generateEncodedPath } from "../../../shared/lib/generateEncodedPath";
-import type { AppRouteObject } from "../../../app/routes";
 
 export type NewRoleParams = { realm: string; clientId: string };
 
-const CreateClientRole = lazy(() => import("../roles/create-client-role"));
-
-export const NewRoleRoute: AppRouteObject = {
-    path: "/:realm/clients/:clientId/roles/new",
-    element: <CreateClientRole />,
-    breadcrumb: t => t("createRole"),
-    handle: {
-        access: "query-clients"
-    }
-};
-
-export const toCreateRole = (params: NewRoleParams): Partial<Path> => ({
-    pathname: generateEncodedPath(NewRoleRoute.path, params)
-});
+export const toCreateRole = (params: NewRoleParams): string =>
+    generateEncodedPath("/:realm/clients/:clientId/roles/new", params);

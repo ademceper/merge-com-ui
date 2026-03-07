@@ -10,7 +10,7 @@ import { Tooltip, TooltipContent, TooltipTrigger, TooltipProvider } from "@merge
 import { PencilSimple } from "@phosphor-icons/react";
 import { useEffect } from "react";
 import { FormProvider, useForm } from "react-hook-form";
-import { useTranslation } from "react-i18next";
+import { useTranslation } from "@merge-rd/i18n";
 import { TextAreaControl, TextControl } from "../../../../shared/keycloak-ui-shared";
 import useToggle from "../../../shared/lib/useToggle";
 import type { ExpandableExecution } from "../execution-model";

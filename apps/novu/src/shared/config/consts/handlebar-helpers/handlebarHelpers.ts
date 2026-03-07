@@ -18,7 +18,7 @@ export enum HandlebarHelpersEnum {
 	NE = "ne",
 }
 
-export const HandlebarHelpers = {
+const HandlebarHelpers = {
 	[HandlebarHelpersEnum.EQUALS]: { description: "assert equal" },
 	[HandlebarHelpersEnum.TITLECASE]: { description: "transform to TitleCase" },
 	[HandlebarHelpersEnum.UPPERCASE]: { description: "transform to UPPERCASE" },

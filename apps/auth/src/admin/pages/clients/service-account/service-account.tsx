@@ -6,8 +6,8 @@ import { toast } from "sonner";
 import { Info } from "@phosphor-icons/react";
 import type { ComponentType } from "react";
 import { useState } from "react";
-import { Trans, useTranslation } from "react-i18next";
-import { Link, type LinkProps } from "react-router-dom";
+import { Trans, useTranslation } from "@merge-rd/i18n";
+import { Link, type LinkProps } from "@tanstack/react-router";
 import { useAdminClient } from "../../../app/admin-client";
 import { KeycloakSpinner } from "../../../../shared/keycloak-ui-shared";
 import { RoleMapping, Row } from "../../../shared/ui/role-mapping/role-mapping";
@@ -80,7 +80,7 @@ const { realm } = useRealm();
                                 realm,
                                 id: serviceAccount.id!,
                                 tab: "settings"
-                            })}
+                            }) as string}
                         >
                             {{ link: serviceAccount.username }}
                         </RouterLink>

@@ -1,4 +1,4 @@
-export class StatelessControls {
+class StatelessControls {
 	/**
 	 * A mapping of step IDs to their corresponding data.
 	 * Built for stateless triggering by the local studio, those values will not be persisted outside of the job scope

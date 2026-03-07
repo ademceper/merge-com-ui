@@ -1,7 +1,7 @@
 import { ArrowSquareOut } from "@phosphor-icons/react";
 import { AnchorHTMLAttributes } from "react";
 
-export type FormattedLinkProps = AnchorHTMLAttributes<HTMLAnchorElement> & {
+type FormattedLinkProps = AnchorHTMLAttributes<HTMLAnchorElement> & {
     isInline?: boolean;
 };
 

@@ -8,7 +8,7 @@ import {
     TableHeader,
     TableRow
 } from "@/admin/shared/ui/data-table";
-import { useTranslation } from "react-i18next";
+import { useTranslation } from "@merge-rd/i18n";
 import { AuthorizationEvaluateResourcePolicies } from "./authorization-evaluate-resource-policies";
 import type EvaluationResultRepresentation from "@keycloak/keycloak-admin-client/lib/defs/evaluationResultRepresentation";
 import type PolicyResultRepresentation from "@keycloak/keycloak-admin-client/lib/defs/policyResultRepresentation";

@@ -1,7 +1,7 @@
 import { WarningCircle } from "@phosphor-icons/react";
 import { FieldError } from "@merge-rd/ui/components/field";
 
-export type FormErrorTextProps = React.ComponentProps<"div"> & {
+type FormErrorTextProps = React.ComponentProps<"div"> & {
     message: string;
 };
 

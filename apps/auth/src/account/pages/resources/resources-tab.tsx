@@ -11,7 +11,7 @@
 
 import { useEnvironment } from "../../../shared/keycloak-ui-shared";
 import { useState } from "react";
-import { useTranslation } from "react-i18next";
+import { useTranslation } from "@merge-rd/i18n";
 import { Button } from "@merge-rd/ui/components/button";
 import { Badge } from "@merge-rd/ui/components/badge";
 import {

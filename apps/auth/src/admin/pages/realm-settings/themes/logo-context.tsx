@@ -6,7 +6,7 @@ type LogoContextProps = {
     setLogo: (logo: string) => void;
 };
 
-export const LogoPreviewContext = createNamedContext<LogoContextProps | undefined>(
+const LogoPreviewContext = createNamedContext<LogoContextProps | undefined>(
     "LogoContext",
     undefined
 );

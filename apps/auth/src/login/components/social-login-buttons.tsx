@@ -1,6 +1,6 @@
 import { cn } from "@merge-rd/ui/lib/utils";
 
-export type SocialProvider = {
+type SocialProvider = {
     loginUrl: string;
     alias: string;
     providerId: string;
@@ -8,7 +8,7 @@ export type SocialProvider = {
     iconClasses?: string;
 };
 
-export function getFallbackSocialProviders(): SocialProvider[] {
+function getFallbackSocialProviders(): SocialProvider[] {
     if (typeof window === "undefined") return [];
     const providers: SocialProvider[] = [
         { alias: "google", providerId: "google", displayName: "Google", loginUrl: "" },

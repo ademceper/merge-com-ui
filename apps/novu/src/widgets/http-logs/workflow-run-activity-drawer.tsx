@@ -1,11 +1,11 @@
 import React, { forwardRef, useEffect, useState } from "react";
 import { Sheet, SheetContent, SheetTitle } from "@/shared/ui/primitives/sheet";
-import { ActivityError } from "@/features/activity/ui/activity-error";
-import { ActivityLogs } from "@/features/activity/ui/activity-logs";
-import { ActivityOverview } from "@/features/activity/ui/activity-overview";
-import { ActivityPanel } from "@/features/activity/ui/activity-panel";
-import { ActivitySkeleton } from "@/features/activity/ui/activity-skeleton";
-import { usePullActivity } from "@/features/activity/lib/use-pull-activity";
+import { ActivityError } from "@/pages/activity/ui/activity-error";
+import { ActivityLogs } from "@/pages/activity/ui/activity-logs";
+import { ActivityOverview } from "@/pages/activity/ui/activity-overview";
+import { ActivityPanel } from "@/pages/activity/ui/activity-panel";
+import { ActivitySkeleton } from "@/pages/activity/ui/activity-skeleton";
+import { usePullActivity } from "@/pages/activity/lib/use-pull-activity";
 
 type WorkflowRunActivityDrawerProps = {
 	isOpen: boolean;

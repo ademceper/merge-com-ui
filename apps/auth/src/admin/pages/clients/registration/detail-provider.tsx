@@ -6,8 +6,8 @@ import { Button, buttonVariants } from "@merge-rd/ui/components/button";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@merge-rd/ui/components/dropdown-menu";
 import { useState } from "react";
 import { FormProvider, useForm, useWatch } from "react-hook-form";
-import { useTranslation } from "react-i18next";
-import { Link, useNavigate } from "react-router-dom";
+import { useTranslation } from "@merge-rd/i18n";
+import { Link, useNavigate } from "@tanstack/react-router";
 import { useAdminClient } from "../../../app/admin-client";
 import {
     AlertDialog,
@@ -78,7 +78,7 @@ const [provider, setProvider] = useState<ComponentTypeRepresentation>();
                 await adminClient.components.update({ id }, updatedComponent);
             } else {
                 const { id } = await adminClient.components.create(updatedComponent);
-                navigate(toRegistrationProvider({ id, realm, subTab, providerId }));
+                navigate({ to: toRegistrationProvider({ id, realm, subTab, providerId }) as string });
             }
             toast.success(t(`provider${id ? "Updated" : "Create"}Success`));
         } catch (error) {
@@ -97,7 +97,7 @@ const [provider, setProvider] = useState<ComponentTypeRepresentation>();
             });
             setDeleteDialogOpen(false);
             toast.success(t("clientRegisterPolicyDeleteSuccess"));
-            navigate(toClientRegistration({ realm, subTab }));
+            navigate({ to: toClientRegistration({ realm, subTab }) as string });
         } catch (error) {
             toast.error(t("clientRegisterPolicyDeleteError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
         }
@@ -179,7 +179,7 @@ const [provider, setProvider] = useState<ComponentTypeRepresentation>();
                                 asChild
                             >
                                 <Link
-                                    to={toClientRegistration({ realm, subTab })}
+                                    to={toClientRegistration({ realm, subTab }) as string}
                                 >
                                     {t("cancel")}
                                 </Link>

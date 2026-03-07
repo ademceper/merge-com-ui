@@ -7,7 +7,7 @@ import {
 } from "@/shared/ui/primitives/tooltip";
 import { useHasPermission } from "@/shared/lib/hooks/use-has-permission";
 
-export interface PermissionSwitchProps {
+interface PermissionSwitchProps {
 	/** The permission required to access this switch functionality */
 	permission: PermissionsEnum;
 	/** Function called when switch value changes (only called when permission allows) */

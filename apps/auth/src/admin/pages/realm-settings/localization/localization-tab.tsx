@@ -3,13 +3,13 @@ import { MultiSelectField, SelectField, SwitchControl } from "../../../../shared
 import { FormPanel } from "../../../../shared/keycloak-ui-shared/scroll-form/form-panel";
 import { useMemo, useState } from "react";
 import { FormProvider, useFormContext, useWatch } from "react-hook-form";
-import { useTranslation } from "react-i18next";
+import { useTranslation } from "@merge-rd/i18n";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@merge-rd/ui/components/tabs";
 import { FixedButtonsGroup } from "../../../shared/ui/form/fixed-button-group";
 import { FormAccess } from "../../../shared/ui/form/form-access";
 import { useServerInfo } from "../../../app/providers/server-info/server-info-provider";
 import { useWhoAmI } from "../../../app/providers/whoami/who-am-i";
-import { DEFAULT_LOCALE } from "../../../i18n/i18n";
+import { DEFAULT_LOCALE } from "@merge-rd/i18n";
 import { localeToDisplayName } from "../../../shared/lib/util";
 import { EffectiveMessageBundles } from "./effective-message-bundles";
 import { RealmOverrides } from "./realm-overrides";

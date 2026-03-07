@@ -11,8 +11,8 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@merge-rd/ui/components/tabs";
 import { DownloadSimple, PencilSimple, Plus, Trash } from "@phosphor-icons/react";
 import { useState } from "react";
-import { useTranslation } from "react-i18next";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { useTranslation } from "@merge-rd/i18n";
+import { Link, useNavigate, useParams } from "@tanstack/react-router";
 import { useAdminClient } from "../../app/admin-client";
 import { AddClientDialog } from "./add/add-client-dialog";
 import {
@@ -46,7 +46,7 @@ export default function ClientsSection() {
     const { t } = useTranslation();
     const { realm } = useRealm();
     const navigate = useNavigate();
-    const { tab, subTab } = useParams<{ tab?: string; subTab?: string }>();
+    const { tab, subTab } = useParams({ strict: false }) as { tab?: string; subTab?: string };
 
     const [key, setKey] = useState(0);
     const refresh = () => setKey(key + 1);
@@ -81,7 +81,7 @@ export default function ClientsSection() {
             cell: ({ row }) => (
                 <span className="flex items-center gap-2">
                     <Link
-                        to={toClient({ realm, clientId: row.original.id!, tab: "settings" })}
+                        to={toClient({ realm, clientId: row.original.id!, tab: "settings" }) as string}
                         className="text-primary hover:underline"
                     >
                         {row.original.clientId}
@@ -121,7 +121,7 @@ export default function ClientsSection() {
                             type="button"
                             className="flex w-full items-center gap-2 rounded-md px-1.5 py-1 text-left text-sm hover:bg-accent hover:text-accent-foreground"
                             onClick={() =>
-                                navigate(toClient({ realm, clientId: client.id!, tab: "settings" }))
+                                navigate({ to: toClient({ realm, clientId: client.id!, tab: "settings" }) as string })
                             }
                         >
                             <PencilSimple className="size-4 shrink-0" />
@@ -166,7 +166,7 @@ export default function ClientsSection() {
                 <Tabs
                     value={clientRegistrationTab}
                     onValueChange={(value) =>
-                        navigate(toClientRegistration({ realm, subTab: value as ClientRegistrationTab }))
+                        navigate({ to: toClientRegistration({ realm, subTab: value as ClientRegistrationTab }) as string })
                     }
                 >
                     <div className="w-full min-w-0 overflow-x-auto overflow-y-hidden mb-4">
@@ -204,7 +204,7 @@ export default function ClientsSection() {
                         searchPlaceholder={t("searchForClient")}
                         emptyMessage={t("noClients")}
                         onRowClick={(row) =>
-                            navigate(toClient({ realm, clientId: row.original.id!, tab: "settings" }))
+                            navigate({ to: toClient({ realm, clientId: row.original.id!, tab: "settings" }) as string })
                         }
                         toolbar={
                             <AddClientDialog
@@ -247,7 +247,7 @@ export default function ClientsSection() {
                 <Tabs
                     value={currentTab}
                     onValueChange={(value) =>
-                        navigate(toClients({ realm, tab: value === "list" ? undefined : value as ClientsTab }))
+                        navigate({ to: toClients({ realm, tab: value === "list" ? undefined : value as ClientsTab }) as string })
                     }
                 >
                     <div className="w-full min-w-0 overflow-x-auto overflow-y-hidden mb-4">

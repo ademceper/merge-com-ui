@@ -14,7 +14,7 @@ const envFileFromNodeEnv = {
  * @param configDir The config directory.
  * @returns The path to the .env file.
  */
-export function getEnvFileNameForNodeEnv(nodeEnv?: string): string {
+function getEnvFileNameForNodeEnv(nodeEnv?: string): string {
 	return envFileFromNodeEnv[
 		(nodeEnv || DEFAULT_ENV) as keyof typeof envFileFromNodeEnv
 	];
@@ -24,7 +24,7 @@ export function getEnvFileNameForNodeEnv(nodeEnv?: string): string {
  * Converts all the values T of the object to typed template literals.
  * Use this type to convert the env object to a type that can be used to validate the env object.
  */
-export type StringifyEnv<
+type StringifyEnv<
 	T extends Record<string, string | number | boolean | undefined>,
 > = {
 	[K in keyof T]: T[K] extends undefined ? string : `${T[K]}`;

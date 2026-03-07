@@ -3,11 +3,11 @@ import { Slot } from "@radix-ui/react-slot";
 import type * as React from "react";
 
 export {
-	ButtonGroup,
+	
 	ButtonGroup as ButtonGroupRoot,
-	ButtonGroupSeparator,
-	ButtonGroupText,
-	buttonGroupVariants,
+	
+	
+	
 } from "@merge-rd/ui/components/button-group";
 
 export function ButtonGroupItem({

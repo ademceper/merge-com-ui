@@ -15,7 +15,7 @@ import {
 
 const DEFAULT_PAGE_SIZE_OPTIONS = [10, 20, 50, 100];
 
-export type TablePaginationProps = {
+type TablePaginationProps = {
   id?: string;
   count: number;
   first: number;

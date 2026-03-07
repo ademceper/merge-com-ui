@@ -3,12 +3,12 @@ import { getErrorDescription, getErrorMessage, HelpItem } from "../../../../shar
 import { toast } from "sonner";
 import { Button } from "@merge-rd/ui/components/button";
 import { useState } from "react";
-import { useTranslation } from "react-i18next";
-import { Link, To } from "react-router-dom";
+import { useTranslation } from "@merge-rd/i18n";
+import { Link } from "@tanstack/react-router";
 import { useAdminClient } from "../../../app/admin-client";
 import { useAccess } from "../../../app/providers/access/access";
 import { useRealm } from "../../../app/providers/realm-context/realm-context";
-import { toRealmSettings } from "../../../pages/realm-settings/routes/realm-settings";
+import { toRealmSettings } from "../../lib/route-helpers";
 import { emptyFormatter, upperCaseFormatter } from "../../lib/util";
 import { translationFormatter } from "../../lib/translationFormatter";
 import { useConfirmDialog } from "../confirm-dialog/confirm-dialog";
@@ -25,7 +25,7 @@ import { DropdownMenuItem } from "@merge-rd/ui/components/dropdown-menu";
 
 type RoleDetailLinkProps = RoleRepresentation & {
     defaultRoleName?: string;
-    toDetail: (roleId: string) => To;
+    toDetail: (roleId: string) => string;
     messageBundle?: string;
 };
 
@@ -37,11 +37,11 @@ const RoleDetailLink = ({ defaultRoleName, toDetail, ...role }: RoleDetailLinkPr
         hasAccess("view-realm") && hasSomeAccess("view-clients", "manage-clients");
 
     return role.name !== defaultRoleName ? (
-        <Link to={toDetail(role.id!)}>{role.name}</Link>
+        <Link to={toDetail(role.id!) as string}>{role.name}</Link>
     ) : (
         <>
             {canViewUserRegistration ? (
-                <Link to={toRealmSettings({ realm, tab: "user-registration" })}>
+                <Link to={toRealmSettings({ realm, tab: "user-registration" }) as string}>
                     {role.name}
                 </Link>
             ) : (
@@ -57,8 +57,8 @@ type RolesListProps = {
     parentRoleId?: string;
     messageBundle?: string;
     isReadOnly: boolean;
-    toCreate: To;
-    toDetail: (roleId: string) => To;
+    toCreate: string;
+    toDetail: (roleId: string) => string;
     loader?: (
         first?: number,
         max?: number,
@@ -149,7 +149,7 @@ export const RolesList = ({
         <Empty className="py-12">
             <EmptyHeader><EmptyTitle>{t(`noRoles-${messageBundle}`)}</EmptyTitle></EmptyHeader>
             <EmptyContent><EmptyDescription>{isReadOnly ? "" : t(`noRolesInstructions-${messageBundle}`)}</EmptyDescription></EmptyContent>
-            {!isReadOnly && <Button className="mt-2" asChild><Link to={toCreate}>{t("createRole")}</Link></Button>}
+            {!isReadOnly && <Button className="mt-2" asChild><Link to={toCreate as string}>{t("createRole")}</Link></Button>}
         </Empty>
     );
 
@@ -166,7 +166,7 @@ export const RolesList = ({
                 emptyMessage={t(`noRoles-${messageBundle}`)}
                 toolbar={!isReadOnly ? (
                     <Button data-testid="create-role" asChild>
-                        <Link to={toCreate}>{t("createRole")}</Link>
+                        <Link to={toCreate as string}>{t("createRole")}</Link>
                     </Button>
                 ) : undefined}
             />

@@ -8,7 +8,6 @@ import {
 } from "@merge-rd/ui/components/dialog";
 import { WarningCircle } from "@phosphor-icons/react";
 import { useTranslation } from "react-i18next";
-import { useRouteError } from "react-router-dom";
 import { getNetworkErrorMessage } from "../utils/errors";
 
 type ErrorPageProps = {
@@ -17,8 +16,7 @@ type ErrorPageProps = {
 
 export const ErrorPage = (props: ErrorPageProps) => {
     const { t, i18n } = useTranslation();
-    const routeError = useRouteError();
-    const error = props.error ?? routeError;
+    const error = props.error;
     const errorMessage = getErrorMessage(error);
     const networkErrorMessage = getNetworkErrorMessage(error);
     console.error("ErrorPage caught:", error);

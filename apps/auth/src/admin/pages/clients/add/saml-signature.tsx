@@ -1,5 +1,5 @@
 import { useFormContext } from "react-hook-form";
-import { useTranslation } from "react-i18next";
+import { useTranslation } from "@merge-rd/i18n";
 import { SelectField, TextControl } from "../../../../shared/keycloak-ui-shared";
 import { FormAccess } from "../../../shared/ui/form/form-access";
 import { convertAttributeNameToForm } from "../../../shared/lib/util";

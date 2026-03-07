@@ -12,9 +12,9 @@ import {
 	FormRoot,
 } from "@/shared/ui/primitives/form/form";
 import { useDebouncedForm } from "@/shared/lib/hooks/use-debounced-form";
-import { defaultWorkflowRunsFilter } from "./hooks/use-workflow-runs-url-state";
+import { defaultWorkflowRunsFilter } from "./model/use-workflow-runs-url-state";
 
-export type WorkflowRunsFiltersProps = HTMLAttributes<HTMLDivElement> & {
+type WorkflowRunsFiltersProps = HTMLAttributes<HTMLDivElement> & {
 	onFiltersChange: (filter: ActivityFilters) => void;
 	filterValues: ActivityFilters;
 	onReset?: () => void;

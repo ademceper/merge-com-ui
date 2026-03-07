@@ -8,8 +8,8 @@ import {
     TableRow
 } from "@/admin/shared/ui/data-table";
 import { useState } from "react";
-import { useTranslation } from "react-i18next";
-import { Link } from "react-router-dom";
+import { useTranslation } from "@merge-rd/i18n";
+import { Link } from "@tanstack/react-router";
 
 import { useRealm } from "../../../app/providers/realm-context/realm-context";
 import { useParams } from "../../../shared/lib/useParams";
@@ -56,7 +56,7 @@ export const AuthorizationEvaluateResourcePolicies = ({
                             id: clientId,
                             permissionType: outerPolicy.policy?.type!,
                             permissionId: outerPolicy.policy?.id!
-                        })}
+                        }) as string}
                     >
                         {outerPolicy.policy?.name}
                     </Link>
@@ -91,7 +91,7 @@ export const AuthorizationEvaluateResourcePolicies = ({
                                                 id: clientId,
                                                 policyType: item.policy?.type!,
                                                 policyId: item.policy?.id!
-                                            })}
+                                            }) as string}
                                         >
                                             {item.policy?.name}
                                         </Link>{" "}

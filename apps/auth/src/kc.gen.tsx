@@ -11,20 +11,20 @@ import { lazy, Suspense, type ReactNode } from "react";
 
 export type ThemeName = "merge";
 
-export const themeNames: ThemeName[] = ["merge"];
+const themeNames: ThemeName[] = ["merge"];
 
 export type KcEnvName = never;
 
-export const kcEnvNames: KcEnvName[] = [];
+const kcEnvNames: KcEnvName[] = [];
 
-export const kcEnvDefaults: Record<KcEnvName, string> = {};
+const kcEnvDefaults: Record<KcEnvName, string> = {};
 
 /**
  * NOTE: Do not import this type except maybe in your entrypoint.
  * If you need to import the KcContext import it either from src/login/KcContext.ts or src/account/KcContext.ts.
  * Depending on the theme type you are working on.
  */
-export type KcContext =
+type KcContext =
     | import("./login/kc-context").KcContext
     | import("./account/app/kc-context").KcContext
     | import("./admin/app/kc-context").KcContext;
@@ -35,9 +35,9 @@ declare global {
     }
 }
 
-export const KcLoginPage = lazy(() => import("./login/kc-page"));
-export const KcAccountPage = lazy(() => import("./account/app/kc-page"));
-export const KcAdminPage = lazy(() => import("./admin/app/kc-page"));
+const KcLoginPage = lazy(() => import("./login/kc-page"));
+const KcAccountPage = lazy(() => import("./account/app/kc-page"));
+const KcAdminPage = lazy(() => import("./admin/app/kc-page"));
 
 export function KcPage(props: { kcContext: KcContext; fallback?: ReactNode }) {
     const { kcContext, fallback } = props;
@@ -58,4 +58,4 @@ export function KcPage(props: { kcContext: KcContext; fallback?: ReactNode }) {
 }
 
 // NOTE: This is exported here only because in Webpack environnement it works differently
-export const BASE_URL = import.meta.env.BASE_URL;
+const BASE_URL = import.meta.env.BASE_URL;

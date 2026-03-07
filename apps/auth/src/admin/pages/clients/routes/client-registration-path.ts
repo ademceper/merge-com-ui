@@ -4,7 +4,6 @@
  * (used inside ClientsSection) does not import the module that lazy-loads ClientsSection.
  */
 
-import type { Path } from "react-router-dom";
 import { generateEncodedPath } from "../../../shared/lib/generateEncodedPath";
 
 export type ClientRegistrationTab = "anonymous" | "authenticated";
@@ -19,6 +18,5 @@ export const CLIENT_REGISTRATION_PATH =
 
 export const toClientRegistration = (
     params: ClientRegistrationParams
-): Partial<Path> => ({
-    pathname: generateEncodedPath(CLIENT_REGISTRATION_PATH, params)
-});
+): string =>
+    generateEncodedPath(CLIENT_REGISTRATION_PATH, params);

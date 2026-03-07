@@ -1,7 +1,7 @@
 import { LAYOUT_CONTENT_VARIABLE } from "@/shared";
-import { isAllowedAlias } from "@/shared/ui/maily/repeat-block-aliases";
+import { isAllowedAlias } from "@/widgets/maily-editor/repeat-block-aliases";
 
-export type VariableMatch = {
+type VariableMatch = {
 	fullLiquidExpression: string;
 	liquidVariable: string;
 	name: string;

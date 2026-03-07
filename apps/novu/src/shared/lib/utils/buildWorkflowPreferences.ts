@@ -1,5 +1,5 @@
 import { DEFAULT_WORKFLOW_PREFERENCES } from "@/shared/config/consts";
-import type { IPreferenceChannels } from "../entities/subscriber-preference";
+import type { IPreferenceChannels } from "../../entities/subscriber-preference";
 import {
 	ChannelTypeEnum,
 	type WorkflowPreference,
@@ -13,7 +13,7 @@ import {
  * - Uses the workflow-level preference as defaults for channel preferences if not specified
  * - Lastly, uses the defaults we've defined
  */
-export const buildWorkflowPreferences = (
+const buildWorkflowPreferences = (
 	inputPreferences: WorkflowPreferencesPartial | undefined | null,
 	defaultPreferences: WorkflowPreferences = DEFAULT_WORKFLOW_PREFERENCES,
 ): WorkflowPreferences => {
@@ -57,7 +57,7 @@ export const buildWorkflowPreferences = (
  *
  * @deprecated use `buildWorkflowPreferences` instead
  */
-export const buildWorkflowPreferencesFromPreferenceChannels = (
+const buildWorkflowPreferencesFromPreferenceChannels = (
 	critical: boolean = false,
 	preferenceChannels: IPreferenceChannels = {},
 ): WorkflowPreferences => {

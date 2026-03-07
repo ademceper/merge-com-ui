@@ -1,9 +1,9 @@
-import { useTranslation } from "react-i18next";
+import { useTranslation } from "@merge-rd/i18n";
 import { TextControl, NumberControl } from "../../../../shared/keycloak-ui-shared";
 import { JWTAuthorizationGrantAssertionSettings } from "./jwt-authorization-grant-assertion-settings";
 import { Separator } from "@merge-rd/ui/components/separator";
 import { JwksSettings } from "./jwks-settings";
-import { useParams } from "react-router-dom";
+import { useParams } from "../../../shared/lib/useParams";
 import type { IdentityProviderParams } from "../routes/identity-provider";
 
 export default function JWTAuthorizationGrantSettings() {

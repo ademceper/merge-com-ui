@@ -35,6 +35,4 @@ export enum ButtonTypeEnum {
 }
 
 export enum MessageActionStatusEnum {
-	PENDING = "pending",
-	DONE = "done",
-}
+	}

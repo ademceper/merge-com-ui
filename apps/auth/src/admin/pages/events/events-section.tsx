@@ -1,6 +1,7 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@merge-rd/ui/components/tabs";
-import { Trans, useTranslation } from "react-i18next";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { Trans, useTranslation } from "@merge-rd/i18n";
+import { useNavigate } from "@tanstack/react-router";
+import { useParams } from "../../shared/lib/useParams";
 import { useRealm } from "../../app/providers/realm-context/realm-context";
 import { toRealmSettings } from "../realm-settings/routes/realm-settings";
 import { AdminEvents } from "./admin-events";
@@ -22,7 +23,7 @@ export default function EventsSection() {
                 <Tabs
                     value={currentTab}
                     onValueChange={(value) =>
-                        navigate(toEvents({ realm, tab: value === "user-events" ? undefined : value as EventsTab }))
+                        navigate({ to: toEvents({ realm, tab: value === "user-events" ? undefined : value as EventsTab }) as string })
                     }
                 >
                     <div className="w-full min-w-0 overflow-x-auto overflow-y-hidden mb-4">

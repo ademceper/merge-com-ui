@@ -31,11 +31,11 @@ const getStartedDevelopmentIds = [
 	"65c25bd3f4de5ad335bb8d2a",
 ];
 
-export function getPopularTemplateIds({ production }: { production: boolean }) {
+function getPopularTemplateIds({ production }: { production: boolean }) {
 	return production ? popularProductionIds : popularDevelopmentIds;
 }
 
-export function getGetStartedTemplateIds({
+function getGetStartedTemplateIds({
 	production,
 }: {
 	production: boolean;

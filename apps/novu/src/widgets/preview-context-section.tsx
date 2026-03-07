@@ -10,8 +10,8 @@ import {
 	TooltipContent,
 	TooltipTrigger,
 } from "@/shared/ui/primitives/tooltip";
-import { ACCORDION_STYLES } from "@/features/workflows/ui/workflow-editor/steps/constants/preview-context.constants";
-import type { ContextSectionProps } from "@/features/workflows/ui/workflow-editor/steps/types/preview-context.types";
+import { ACCORDION_STYLES } from "@/pages/workflows/ui/workflow-editor/steps/constants/preview-context.constants";
+import type { ContextSectionProps } from "@/pages/workflows/ui/workflow-editor/steps/types/preview-context.types";
 import { ContextSearchEditor } from "./context-search-editor";
 import { ExternalLink } from "@/shared/ui/shared/external-link";
 

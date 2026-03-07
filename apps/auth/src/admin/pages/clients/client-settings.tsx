@@ -1,6 +1,6 @@
 import type ClientRepresentation from "@keycloak/keycloak-admin-client/lib/defs/clientRepresentation";
 import { useFormContext } from "react-hook-form";
-import { useTranslation } from "react-i18next";
+import { useTranslation } from "@merge-rd/i18n";
 import { ScrollForm } from "../../../shared/keycloak-ui-shared";
 import { FixedButtonsGroup } from "../../shared/ui/form/fixed-button-group";
 import { useAccess } from "../../app/providers/access/access";

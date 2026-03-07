@@ -26,7 +26,7 @@ import {
 	Translate,
 	UsersThree,
 } from "@phosphor-icons/react";
-import { NavLink, useLocation } from "react-router-dom";
+import { Link, useLocation } from "@tanstack/react-router";
 import { Badge } from "@/shared/ui/primitives/badge";
 import { useEnvironment } from "@/app/context/environment/hooks";
 import { useFeatureFlag } from "@/shared/lib/hooks/use-feature-flag";
@@ -52,7 +52,7 @@ function NovuNavLink({
 		<SidebarMenuItem>
 			<SidebarMenuButton asChild isActive={isActive} tooltip={label}>
 				{to ? (
-					<NavLink to={to}>
+					<Link to={to}>
 						<Icon className="size-4" />
 						<span>
 							{label}
@@ -65,7 +65,7 @@ function NovuNavLink({
 								</>
 							)}
 						</span>
-					</NavLink>
+					</Link>
 				) : (
 					<span>
 						<Icon className="size-4" />

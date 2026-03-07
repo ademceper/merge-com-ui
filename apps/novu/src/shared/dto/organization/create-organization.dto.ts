@@ -1,6 +1,6 @@
 import type { JobTitleEnum } from "../../model";
 
-export interface ICreateOrganizationDto {
+interface ICreateOrganizationDto {
 	name: string;
 	logo?: string;
 	taxIdentifier?: string;
@@ -10,7 +10,7 @@ export interface ICreateOrganizationDto {
 	frontend?: string[];
 }
 
-export interface IOrganizationDTO {
+interface IOrganizationDTO {
 	_id: string;
 	name: string;
 	createdAt: string;

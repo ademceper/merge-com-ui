@@ -7,7 +7,7 @@ import {
 import { PropsWithChildren, useState } from "react";
 import { useAdminClient } from "../../../app/admin-client";
 
-export const AuthenticationProviderContext = createNamedContext<
+const AuthenticationProviderContext = createNamedContext<
     { providers?: AuthenticationProviderRepresentation[] } | undefined
 >("AuthenticationProviderContext", undefined);
 

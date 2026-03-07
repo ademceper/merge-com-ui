@@ -2,9 +2,9 @@ import type { GetContextResponseDto } from "@novu/api/models/components";
 import type { ContextPayload } from "@/shared";
 import type { JSONSchema7 } from "json-schema";
 import { useCallback, useState } from "react";
-import { useFetchContexts } from "@/features/contexts/lib/use-fetch-contexts";
-import { ACCORDION_STYLES } from "@/features/workflows/ui/workflow-editor/steps/constants/preview-context.constants";
-import { EditableJsonViewer } from "@/features/workflows/ui/workflow-editor/steps/shared/editable-json-viewer/editable-json-viewer";
+import { useFetchContexts } from "@/pages/contexts/api/use-fetch-contexts";
+import { ACCORDION_STYLES } from "@/pages/workflows/ui/workflow-editor/steps/constants/preview-context.constants";
+import { EditableJsonViewer } from "@/pages/workflows/ui/workflow-editor/steps/shared/editable-json-viewer/editable-json-viewer";
 import { Autocomplete } from "@/shared/ui/primitives/autocomplete";
 
 type ContextSearchEditorProps = {

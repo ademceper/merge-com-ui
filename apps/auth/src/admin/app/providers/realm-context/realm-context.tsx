@@ -8,7 +8,7 @@ import {
 } from "../../../../shared/keycloak-ui-shared";
 import { PropsWithChildren, useEffect, useState } from "react";
 import { useAdminClient } from "../../admin-client";
-import { i18n } from "../../../i18n/i18n";
+import { i18n } from "../../i18n";
 import { useHash } from "./useHash";
 
 type RealmContextType = {
@@ -17,7 +17,7 @@ type RealmContextType = {
     refresh: () => void;
 };
 
-export const RealmContext = createNamedContext<RealmContextType | undefined>(
+const RealmContext = createNamedContext<RealmContextType | undefined>(
     "RealmContext",
     undefined
 );

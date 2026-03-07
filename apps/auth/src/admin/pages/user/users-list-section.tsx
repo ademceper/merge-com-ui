@@ -17,8 +17,8 @@ import {
 } from "@/admin/shared/ui/data-table";
 import { PencilSimple, Plus, Trash } from "@phosphor-icons/react";
 import { useState } from "react";
-import { useTranslation } from "react-i18next";
-import { Link } from "react-router-dom";
+import { useTranslation } from "@merge-rd/i18n";
+import { Link } from "@tanstack/react-router";
 import { useAdminClient } from "../../app/admin-client";
 import { getErrorDescription, getErrorMessage, useFetch } from "../../../shared/keycloak-ui-shared";
 import { toast } from "sonner";
@@ -68,7 +68,7 @@ export function UsersListSection() {
             header: t("username"),
             cell: ({ row }) => (
                 <Link
-                    to={toUser({ realm, id: row.original.id!, tab: "settings" })}
+                    to={toUser({ realm, id: row.original.id!, tab: "settings" }) as string}
                     className="text-primary hover:underline"
                 >
                     {row.original.username}

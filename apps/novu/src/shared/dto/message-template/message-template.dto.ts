@@ -10,7 +10,7 @@ import type {
 	UrlTarget,
 } from "../../model";
 
-export class ChannelCTADto {
+class ChannelCTADto {
 	type: ChannelCTATypeEnum;
 
 	data: {

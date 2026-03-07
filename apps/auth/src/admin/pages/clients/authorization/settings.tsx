@@ -7,7 +7,7 @@ import { Label } from "@merge-rd/ui/components/label";
 import { RadioGroup, RadioGroupItem } from "@merge-rd/ui/components/radio-group";
 import { useState } from "react";
 import { Controller, FormProvider, useForm } from "react-hook-form";
-import { useTranslation } from "react-i18next";
+import { useTranslation } from "@merge-rd/i18n";
 import { useAdminClient } from "../../../app/admin-client";
 import { FixedButtonsGroup } from "../../../shared/ui/form/fixed-button-group";
 import { FormAccess } from "../../../shared/ui/form/form-access";
@@ -20,7 +20,7 @@ import { ImportDialog } from "./import-dialog";
 
 const POLICY_ENFORCEMENT_MODES = ["ENFORCING", "PERMISSIVE", "DISABLED"] as const;
 
-export type FormFields = Omit<ResourceServerRepresentation, "scopes" | "resources">;
+type FormFields = Omit<ResourceServerRepresentation, "scopes" | "resources">;
 
 export const AuthorizationSettings = ({ clientId }: { clientId: string }) => {
     const { adminClient } = useAdminClient();

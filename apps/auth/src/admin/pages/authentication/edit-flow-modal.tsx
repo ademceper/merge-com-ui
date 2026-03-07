@@ -11,7 +11,7 @@ import {
 } from "@merge-rd/ui/components/dialog";
 import { useEffect } from "react";
 import { FormProvider, useForm } from "react-hook-form";
-import { useTranslation } from "react-i18next";
+import { useTranslation } from "@merge-rd/i18n";
 
 import { useAdminClient } from "../../app/admin-client";
 import { NameDescription } from "./form/name-description";

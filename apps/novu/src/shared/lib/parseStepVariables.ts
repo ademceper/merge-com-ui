@@ -1,12 +1,12 @@
 import type { Completion } from "@codemirror/autocomplete";
 import type { JSONSchemaDefinition } from "@/shared";
 import type { JSONSchema7 } from "json-schema";
-import { isAllowedAlias } from "@/shared/ui/maily/repeat-block-aliases";
+import { isAllowedAlias } from "@/widgets/maily-editor/repeat-block-aliases";
 import {
 	DIGEST_VARIABLES,
 	type DIGEST_VARIABLES_ENUM,
 	getDynamicDigestVariable,
-} from "@/shared/ui/variable/utils/digest-variables";
+} from "@/widgets/variable-editor/utils/digest-variables";
 import { isNamespaceOnlyVariable } from "./liquid";
 
 function normalizeArrayNotation(path: string): string {
@@ -39,7 +39,7 @@ export interface EnhancedLiquidVariable extends LiquidVariable {
 }
 
 export type IsAllowedVariable = (variable: LiquidVariable) => boolean;
-export type IsArbitraryNamespace = (path: string) => boolean;
+type IsArbitraryNamespace = (path: string) => boolean;
 
 export interface ParsedVariables {
 	primitives: LiquidVariable[];

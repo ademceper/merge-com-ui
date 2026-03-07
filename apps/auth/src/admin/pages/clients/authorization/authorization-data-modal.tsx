@@ -2,7 +2,7 @@ import type AccessTokenRepresentation from "@keycloak/keycloak-admin-client/lib/
 import { Button } from "@merge-rd/ui/components/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@merge-rd/ui/components/dialog";
 import { Textarea } from "@merge-rd/ui/components/textarea";
-import { useTranslation } from "react-i18next";
+import { useTranslation } from "@merge-rd/i18n";
 
 import { prettyPrintJSON } from "../../../shared/lib/util";
 import useToggle from "../../../shared/lib/useToggle";

@@ -10,7 +10,7 @@ const numberInputBase =
 const hideNativeSpinner =
   "[appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none";
 
-export interface NumberInputProps
+interface NumberInputProps
   extends Omit<React.ComponentProps<"input">, "type" | "onChange"> {
   value?: number | "";
   onChange?: (value: number | "") => void;

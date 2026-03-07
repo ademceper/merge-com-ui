@@ -12,8 +12,8 @@ import { Separator } from "@merge-rd/ui/components/separator";
 import { Plus, Trash } from "@phosphor-icons/react";
 import { Fragment, useMemo, useState } from "react";
 import { FormProvider, useFieldArray, useForm } from "react-hook-form";
-import { useTranslation } from "react-i18next";
-import { Link, useNavigate } from "react-router-dom";
+import { useTranslation } from "@merge-rd/i18n";
+import { Link, useNavigate } from "@tanstack/react-router";
 import { useAdminClient } from "../../app/admin-client";
 import { useConfirmDialog } from "../../shared/ui/confirm-dialog/confirm-dialog";
 import { FormAccess } from "../../shared/ui/form/form-access";
@@ -112,7 +112,7 @@ const [profiles, setProfiles] = useState<ClientProfilesRepresentation>();
                     : t("createClientProfileSuccess")
             );
 
-            navigate(toClientProfile({ realm, profileName: form.name }));
+            navigate({ to: toClientProfile({ realm, profileName: form.name }) as string });
         } catch (error) {
             toast.error(
                 t(editMode ? "updateClientProfileError" : "createClientProfileError", { error: getErrorMessage(error) }),
@@ -144,7 +144,7 @@ const [profiles, setProfiles] = useState<ClientProfilesRepresentation>();
                         profiles: [...(profiles!.profiles || []), getValues()]
                     });
                     toast.success(t("deleteExecutorSuccess"));
-                    navigate(toClientProfile({ realm, profileName }));
+                    navigate({ to: toClientProfile({ realm, profileName }) as string });
                 } catch (error) {
                     toast.error(t("deleteExecutorError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
                 }
@@ -152,7 +152,7 @@ const [profiles, setProfiles] = useState<ClientProfilesRepresentation>();
                 try {
                     await adminClient.clientPolicies.createProfiles(profiles);
                     toast.success(t("deleteClientSuccess"));
-                    navigate(toClientPolicies({ realm, tab: "profiles" }));
+                    navigate({ to: toClientPolicies({ realm, tab: "profiles" }) as string });
                 } catch (error) {
                     toast.error(t("deleteClientError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
                 }
@@ -239,7 +239,7 @@ const [profiles, setProfiles] = useState<ClientProfilesRepresentation>();
                                     data-testid="cancelCreateProfile"
                                     asChild
                                 >
-                                    <Link to={toClientPolicies({ realm, tab: "profiles" })}>
+                                    <Link to={toClientPolicies({ realm, tab: "profiles" }) as string}>
                                         {t("cancel")}
                                     </Link>
                                 </Button>
@@ -260,7 +260,7 @@ const [profiles, setProfiles] = useState<ClientProfilesRepresentation>();
                                             data-testid="addExecutor"
                                             asChild
                                         >
-                                            <Link to={toAddExecutor({ realm, profileName })}>
+                                            <Link to={toAddExecutor({ realm, profileName }) as string}>
                                                 <Plus className="size-4 mr-1 inline" />
                                                 {t("addExecutor")}
                                             </Link>
@@ -275,7 +275,7 @@ const [profiles, setProfiles] = useState<ClientProfilesRepresentation>();
                                                     <span data-testid="executor-type" className="flex items-center gap-2 min-w-0">
                                                         {executor.configuration ? (
                                                             <Button variant="ghost" className="p-0 h-auto font-normal text-primary underline" data-testid="editExecutor" asChild>
-                                                                <Link to={toExecutor({ realm, profileName, executorName: executor.executor! })}>
+                                                                <Link to={toExecutor({ realm, profileName, executorName: executor.executor! }) as string}>
                                                                     {executor.executor}
                                                                 </Link>
                                                             </Button>
@@ -309,7 +309,7 @@ const [profiles, setProfiles] = useState<ClientProfilesRepresentation>();
                                         </ul>
                                         {isGlobalProfile && (
                                             <Button id="backToClientPolicies" className="kc-backToPolicies mt-4" data-testid="backToClientPolicies" asChild>
-                                                <Link to={toClientPolicies({ realm, tab: "profiles" })}>{t("back")}</Link>
+                                                <Link to={toClientPolicies({ realm, tab: "profiles" }) as string}>{t("back")}</Link>
                                             </Button>
                                         )}
                                     </>

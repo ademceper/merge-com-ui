@@ -1,5 +1,5 @@
-import { useTranslation } from "react-i18next";
-import { useNavigate } from "react-router-dom";
+import { useTranslation } from "@merge-rd/i18n";
+import { useNavigate } from "@tanstack/react-router";
 import { useAdminClient } from "../../app/admin-client";
 import { getErrorDescription, getErrorMessage } from "../../../shared/keycloak-ui-shared";
 import { toast } from "sonner";
@@ -43,13 +43,13 @@ const onSubmit = async (formData: ClientScopeDefaultOptionalType) => {
 
             toast.success(t("createClientScopeSuccess"));
 
-            navigate(
-                toClientScope({
+            navigate({
+                to: toClientScope({
                     realm,
                     id: scope.id!,
                     tab: "settings"
-                })
-            );
+                }) as string
+            });
         } catch (error) {
             toast.error(t("createClientScopeError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
         }

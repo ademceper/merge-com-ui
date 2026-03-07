@@ -1,7 +1,7 @@
 /**
  * Shared input styling to match login form inputs (no border, bg-muted, focus ring only).
  */
-export const formInputClassName =
+const formInputClassName =
   "h-12 rounded-lg bg-muted border-0 text-foreground placeholder:text-muted-foreground focus-visible:ring-2 focus-visible:ring-ring";
 
 /** Wrapper for Alan adı (multi-line). Matches other inputs: base Input uses dark:bg-input/30 in dark mode. */

@@ -1,6 +1,6 @@
 import { ArrowSquareOut, LockKey } from "@phosphor-icons/react";
 import type { ReactNode } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "@tanstack/react-router";
 import {
 	Tooltip,
 	TooltipContent,
@@ -44,7 +44,7 @@ export function UpgradeCTATooltip({
 				`${SELF_HOSTED_UPGRADE_REDIRECT_URL}?utm_campaign=${utmCampaign}`,
 			);
 		} else {
-			navigate(`${ROUTES.SETTINGS_BILLING}?utm_source=${utmSource}`);
+			navigate({ to: `${ROUTES.SETTINGS_BILLING}?utm_source=${utmSource}` });
 		}
 	};
 

@@ -1,5 +1,5 @@
-import { useTranslation } from "react-i18next";
-import { Link, Path } from "react-router-dom";
+import { useTranslation } from "@merge-rd/i18n";
+import { Link } from "@tanstack/react-router";
 
 type DetailDescriptionProps<T> = {
     name: string;
@@ -12,7 +12,7 @@ export function DetailDescription<T>(props: DetailDescriptionProps<T>) {
 }
 
 type DetailDescriptionLinkProps<T> = DetailDescriptionProps<T> & {
-    link?: (element: T) => Partial<Path>;
+    link?: (element: T) => string;
 };
 
 export function DetailDescriptionLink<T>({

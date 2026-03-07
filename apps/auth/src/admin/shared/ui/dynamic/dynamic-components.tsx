@@ -4,7 +4,7 @@ import { COMPONENTS, type ComponentLayoutOptions, isValidComponentType } from ".
 import { convertAttributeNameToForm } from "../../lib/util";
 
 /** Layout overrides by component type (e.g. all List/MultivaluedList/boolean get same layout). */
-export type LayoutOverridesByType = Partial<Record<string, ComponentLayoutOptions>>;
+type LayoutOverridesByType = Partial<Record<string, ComponentLayoutOptions>>;
 
 type DynamicComponentProps = {
     properties: ConfigPropertyRepresentation[];

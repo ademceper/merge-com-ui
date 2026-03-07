@@ -11,17 +11,17 @@
 
 // @ts-nocheck
 
-import { i18n } from "../i18n";
+import { i18n } from "../../app/i18n";
 
-export const FORMAT_DATE_ONLY: Intl.DateTimeFormatOptions = {
+const FORMAT_DATE_ONLY: Intl.DateTimeFormatOptions = {
     dateStyle: "long"
 };
 
-export const FORMAT_TIME_ONLY: Intl.DateTimeFormatOptions = {
+const FORMAT_TIME_ONLY: Intl.DateTimeFormatOptions = {
     timeStyle: "short"
 };
 
-export const FORMAT_DATE_AND_TIME: Intl.DateTimeFormatOptions = {
+const FORMAT_DATE_AND_TIME: Intl.DateTimeFormatOptions = {
     ...FORMAT_DATE_ONLY,
     ...FORMAT_TIME_ONLY
 };

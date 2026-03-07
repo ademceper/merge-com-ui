@@ -11,7 +11,7 @@ import {
 } from "@/admin/shared/ui/data-table";
 import { useEffect, useState } from "react";
 import { useFormContext, useWatch } from "react-hook-form";
-import { useTranslation } from "react-i18next";
+import { useTranslation } from "@merge-rd/i18n";
 
 import { useConfirmDialog } from "../../../../shared/ui/confirm-dialog/confirm-dialog";
 import { DefaultValue } from "../../../../shared/ui/key-value-form/key-value-input";

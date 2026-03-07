@@ -15,8 +15,8 @@ import {
 import { Funnel, PencilSimple, Plus, Trash } from "@phosphor-icons/react";
 import { uniqBy } from "lodash-es";
 import { useMemo, useState } from "react";
-import { useTranslation } from "react-i18next";
-import { Link, useNavigate } from "react-router-dom";
+import { useTranslation } from "@merge-rd/i18n";
+import { Link, useNavigate } from "@tanstack/react-router";
 import { useAdminClient } from "../../../app/admin-client";
 import {
     AlertDialog,
@@ -142,7 +142,7 @@ export const AttributesTab = ({ setTableData }: AttributesTabProps) => {
                     to={toAttribute({
                         realm: realm ?? "",
                         attributeName: row.original.name!,
-                    })}
+                    }) as string}
                     className="text-primary hover:underline"
                 >
                     {row.original.name}
@@ -170,12 +170,12 @@ export const AttributesTab = ({ setTableData }: AttributesTabProps) => {
                         type="button"
                         className="flex w-full items-center gap-2 rounded-md px-1.5 py-1 text-left text-sm hover:bg-accent hover:text-accent-foreground"
                         onClick={() =>
-                            navigate(
-                                toAttribute({
+                            navigate({
+                                to: toAttribute({
                                     realm: realm ?? "",
                                     attributeName: row.original.name!,
-                                }),
-                            )
+                                }) as string,
+                            })
                         }
                     >
                         <PencilSimple className="size-4 shrink-0" />
@@ -259,7 +259,7 @@ export const AttributesTab = ({ setTableData }: AttributesTabProps) => {
                         variant="default"
                         className="flex h-9 w-9 shrink-0 items-center justify-center p-0 sm:h-9 sm:w-auto sm:gap-2 sm:px-4 sm:py-2"
                     >
-                        <Link to={toAddAttribute({ realm: realm ?? "" })}>
+                        <Link to={toAddAttribute({ realm: realm ?? "" }) as string}>
                             <Plus size={20} className="shrink-0 sm:hidden" />
                             <span className="hidden sm:inline">
                                 {t("createAttribute")}

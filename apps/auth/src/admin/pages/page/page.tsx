@@ -5,8 +5,9 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigge
 import { buttonVariants } from "@merge-rd/ui/components/button";
 import { get } from "lodash-es";
 import { useState } from "react";
-import { useTranslation } from "react-i18next";
-import { useNavigate, useParams } from "react-router-dom";
+import { useTranslation } from "@merge-rd/i18n";
+import { useNavigate } from "@tanstack/react-router";
+import { useParams } from "../../shared/lib/useParams";
 import { useAdminClient } from "../../app/admin-client";
 import { useConfirmDialog } from "../../shared/ui/confirm-dialog/confirm-dialog";
 
@@ -45,7 +46,7 @@ const [pageData, setPageData] = useState<ComponentRepresentation>();
                     id: id!
                 });
                 toast.success(t("itemDeletedSuccess"));
-                navigate(toPage({ realm, providerId: providerId! }));
+                navigate({ to: toPage({ realm, providerId: providerId! }) as string });
             } catch (error) {
                 toast.error(t("itemSaveError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
             }

@@ -5,7 +5,7 @@ import { updateAttributes } from "../../utils/update-attribute";
 export const DEFAULT_COLUMN_WIDTH = "auto";
 
 export type AllowedColumnVerticalAlign = "top" | "middle" | "bottom";
-export const DEFAULT_COLUMN_VERTICAL_ALIGN: AllowedColumnVerticalAlign = "top";
+const DEFAULT_COLUMN_VERTICAL_ALIGN: AllowedColumnVerticalAlign = "top";
 
 interface ColumnAttributes {
 	verticalAlign: AllowedColumnVerticalAlign;

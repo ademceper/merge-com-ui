@@ -2,7 +2,7 @@ import { Controller, UseFormReturn } from "react-hook-form";
 import { Button } from "@merge-rd/ui/components/button";
 import { Switch } from "@merge-rd/ui/components/switch";
 import { FormLabel } from "../../../../shared/keycloak-ui-shared";
-import { useTranslation } from "react-i18next";
+import { useTranslation } from "@merge-rd/i18n";
 import { HelpItem } from "../../../../shared/keycloak-ui-shared";
 import { useAdminClient } from "../../../app/admin-client";
 import { getErrorDescription, getErrorMessage } from "../../../../shared/keycloak-ui-shared";
@@ -12,7 +12,7 @@ import { WizardSectionHeader } from "../../../shared/ui/wizard-section-header/wi
 import { useRealm } from "../../../app/providers/realm-context/realm-context";
 import { convertFormToSettings } from "./ldap-settings-connection";
 
-export type LdapSettingsAdvancedProps = {
+type LdapSettingsAdvancedProps = {
     id?: string;
     form: UseFormReturn;
     showSectionHeading?: boolean;

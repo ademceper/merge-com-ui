@@ -7,7 +7,7 @@ import {
     SelectValue
 } from "@merge-rd/ui/components/select";
 import React, { useEffect, useMemo, useState } from "react";
-import { useTranslation } from "react-i18next";
+import { useTranslation } from "@merge-rd/i18n";
 
 export type Unit = "second" | "minute" | "hour" | "day";
 

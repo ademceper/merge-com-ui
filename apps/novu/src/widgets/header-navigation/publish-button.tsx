@@ -8,12 +8,11 @@ import {
 } from "@merge-rd/ui/components/dropdown-menu";
 import { Skeleton } from "@merge-rd/ui/components/skeleton";
 import type { IEnvironment } from "@/shared";
-import { CaretDown } from "@phosphor-icons/react";
+import { CaretDown, UploadSimple } from "@phosphor-icons/react";
 import { useQueryClient } from "@tanstack/react-query";
 import { AnimatePresence, motion } from "motion/react";
 import { useCallback, useEffect, useState } from "react";
-import { LuBookUp2 } from "react-icons/lu";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "@tanstack/react-router";
 import type {
 	IEnvironmentDiffResponse,
 	IEnvironmentPublishResponse,
@@ -28,7 +27,7 @@ import {
 import {
 	useDiffEnvironments,
 	usePublishEnvironments,
-} from "@/features/settings/lib/use-environments";
+} from "@/pages/settings/model/use-environments";
 import { QueryKeys } from "@/shared/lib/query-keys";
 import { buildRoute, ROUTES } from "@/shared/lib/routes";
 import { EnvironmentBranchIcon } from "@/shared/ui/primitives/environment-branch-icon";
@@ -155,11 +154,11 @@ export const PublishButton = () => {
 		}
 
 		switchEnvironment(state.selectedEnvironment.slug);
-		navigate(
-			buildRoute(ROUTES.WORKFLOWS, {
+		navigate({
+			to: buildRoute(ROUTES.WORKFLOWS, {
 				environmentSlug: state.selectedEnvironment.slug,
 			}),
-		);
+		});
 		actions.close();
 	};
 
@@ -171,7 +170,7 @@ export const PublishButton = () => {
 					className="h-[26px]"
 					mode="outline"
 					size="2xs"
-					leadingIcon={LuBookUp2}
+					leadingIcon={UploadSimple}
 					onClick={() =>
 						handleEnvironmentSelect(targetEnvironment, changesCount > 0)
 					}
@@ -217,7 +216,7 @@ export const PublishButton = () => {
 						className="h-[26px]"
 						mode="outline"
 						size="2xs"
-						leadingIcon={LuBookUp2}
+						leadingIcon={UploadSimple}
 						trailingIcon={CaretDown}
 						disabled={otherEnvironments.length === 0}
 					>

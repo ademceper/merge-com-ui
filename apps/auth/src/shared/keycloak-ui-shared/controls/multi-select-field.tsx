@@ -8,7 +8,7 @@ import { Controller, useFormContext } from "react-hook-form";
 import { getRuleValue } from "../utils/getRuleValue";
 import { FormLabel } from "./form-label";
 
-export type MultiSelectOption = { key: string; value: string } | string;
+type MultiSelectOption = { key: string; value: string } | string;
 
 function optKey(o: MultiSelectOption): string {
     return typeof o === "string" ? o : o.key;
@@ -30,7 +30,7 @@ type MultiSelectFieldProps = {
     className?: string;
 };
 
-export type { MultiSelectFieldProps };
+;
 
 export function MultiSelectField({
     id,

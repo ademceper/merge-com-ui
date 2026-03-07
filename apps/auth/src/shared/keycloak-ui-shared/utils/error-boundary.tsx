@@ -8,7 +8,7 @@ import {
 import { createNamedContext } from "./createNamedContext";
 import { useRequiredContext } from "./useRequiredContext";
 
-export interface ErrorBoundaryContextValue {
+interface ErrorBoundaryContextValue {
     error?: Error;
     showBoundary: (error?: Error) => void;
 }
@@ -20,11 +20,11 @@ const ErrorBoundaryContext = createNamedContext<ErrorBoundaryContextValue | unde
 
 export const useErrorBoundary = () => useRequiredContext(ErrorBoundaryContext);
 
-export interface ErrorBoundaryProviderProps {
+interface ErrorBoundaryProviderProps {
     children: ReactNode;
 }
 
-export interface ErrorBoundaryProviderState {
+interface ErrorBoundaryProviderState {
     error?: Error;
 }
 
@@ -60,7 +60,7 @@ export interface FallbackProps {
     error: Error;
 }
 
-export interface ErrorBoundaryFallbackProps {
+interface ErrorBoundaryFallbackProps {
     fallback: ComponentType<FallbackProps>;
     children: ReactNode;
 }

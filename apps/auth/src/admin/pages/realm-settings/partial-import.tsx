@@ -29,7 +29,7 @@ import {
     SelectValue
 } from "@merge-rd/ui/components/select";
 import { useEffect, useState } from "react";
-import { useTranslation } from "react-i18next";
+import { useTranslation } from "@merge-rd/i18n";
 import { useAdminClient } from "../../app/admin-client";
 import { getErrorDescription, getErrorMessage } from "../../../shared/keycloak-ui-shared";
 import { toast } from "sonner";
@@ -37,7 +37,7 @@ import { JsonFileUpload } from "../../shared/ui/json-file-upload/json-file-uploa
 import { DataTable, type ColumnDef } from "@/admin/shared/ui/data-table";
 import { useRealm } from "../../app/providers/realm-context/realm-context";
 
-export type PartialImportProps = {
+type PartialImportProps = {
     open: boolean;
     toggleDialog: () => void;
 };

@@ -22,8 +22,8 @@ import {
 import { TablePagination } from "@/admin/shared/ui/table-pagination";
 import { CaretDown, CaretRight, DotsThreeVertical } from "@phosphor-icons/react";
 import { Fragment, useState } from "react";
-import { useTranslation } from "react-i18next";
-import { Link, useNavigate } from "react-router-dom";
+import { useTranslation } from "@merge-rd/i18n";
+import { Link, useNavigate } from "@tanstack/react-router";
 import { useAdminClient } from "../../../app/admin-client";
 import { useConfirmDialog } from "../../../shared/ui/confirm-dialog/confirm-dialog";
 import { KeycloakSpinner } from "../../../../shared/keycloak-ui-shared";
@@ -170,8 +170,8 @@ const { realm } = useRealm();
                         <NewPolicyDialog
                             policyProviders={policyProviders}
                             onSelect={p =>
-                                navigate(
-                                    isAdminPermissionsClient
+                                navigate({ to:
+                                    (isAdminPermissionsClient
                                         ? toCreatePermissionPolicy({
                                               realm,
                                               permissionClientId: clientId,
@@ -181,8 +181,8 @@ const { realm } = useRealm();
                                               id: clientId,
                                               realm,
                                               policyType: p.type!
-                                          })
-                                )
+                                          })) as string
+                                })
                             }
                             toggleDialog={toggleDialog}
                         />
@@ -258,7 +258,7 @@ const { realm } = useRealm();
                                                                 permissionClientId: clientId,
                                                                 policyId: policy.id!,
                                                                 policyType: policy.type!
-                                                            })}
+                                                            }) as string}
                                                         >
                                                             {policy.name}
                                                         </Link>
@@ -269,7 +269,7 @@ const { realm } = useRealm();
                                                                 id: clientId,
                                                                 policyType: policy.type!,
                                                                 policyId: policy.id!
-                                                            })}
+                                                            }) as string}
                                                         >
                                                             {policy.name}
                                                         </Link>
@@ -386,11 +386,11 @@ const { realm } = useRealm();
                         <NewPolicyDialog
                             policyProviders={policyProviders?.filter(p => p.type !== "aggregate")}
                             onSelect={p =>
-                                navigate(
-                                    isAdminPermissionsClient
+                                navigate({
+                                    to: (isAdminPermissionsClient
                                         ? toCreatePermissionPolicy({ realm, permissionClientId: clientId, policyType: p.type! })
-                                        : toCreatePolicy({ id: clientId, realm, policyType: p.type! })
-                                )
+                                        : toCreatePolicy({ id: clientId, realm, policyType: p.type! })) as string
+                                })
                             }
                             toggleDialog={toggleDialog}
                         />

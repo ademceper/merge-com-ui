@@ -20,8 +20,8 @@ import {
 import { CardTitle } from "@merge-rd/ui/components/card";
 import { Database, Trash } from "@phosphor-icons/react";
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { useTranslation } from "react-i18next";
-import { Link, useNavigate } from "react-router-dom";
+import { useTranslation } from "@merge-rd/i18n";
+import { Link, useNavigate } from "@tanstack/react-router";
 import { useAdminClient } from "../../app/admin-client";
 import {
     AlertDialog,
@@ -132,7 +132,7 @@ export default function UserFederationSection() {
                     const href = toDetails(c.providerId!, c.id!);
                     return (
                         <Link
-                            to={href}
+                            to={href as string}
                             className="font-medium text-primary hover:underline"
                         >
                             {c.name ?? "-"}
@@ -191,12 +191,12 @@ export default function UserFederationSection() {
                     key={p.id}
                     data-testid={p.id}
                     onClick={() =>
-                        navigate(
-                            toNewCustomUserFederation({
+                        navigate({
+                            to: toNewCustomUserFederation({
                                 realm,
                                 providerId: p.id!,
-                            }),
-                        )
+                            }) as string,
+                        })
                     }
                 >
                     {p.id?.toUpperCase() === "LDAP"
@@ -283,12 +283,12 @@ export default function UserFederationSection() {
                                     key={p.id}
                                     data-testid={`${p.id}-card`}
                                     onClick={() =>
-                                        navigate(
-                                            toNewCustomUserFederation({
+                                        navigate({
+                                            to: toNewCustomUserFederation({
                                                 realm,
                                                 providerId: p.id!,
-                                            }),
-                                        )
+                                            }) as string,
+                                        })
                                     }
                                 >
                                     <CardTitle className="flex items-center gap-2">

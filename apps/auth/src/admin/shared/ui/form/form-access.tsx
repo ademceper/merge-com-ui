@@ -16,7 +16,7 @@ import { Controller } from "react-hook-form";
 import { useAccess } from "../../../app/providers/access/access";
 import { FixedButtonsGroup } from "./fixed-button-group";
 
-export type FormAccessProps = FormProps & {
+type FormAccessProps = FormProps & {
     /**
      * One of the AccessType's that the user needs to have to view this form. Also see {@link useAccess}.
      * @type {AccessType}

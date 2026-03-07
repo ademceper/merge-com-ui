@@ -1,1 +1,1 @@
-export { default } from "@merge/ui/postcss.config";
+export { default } from "@merge-rd/ui/postcss.config";

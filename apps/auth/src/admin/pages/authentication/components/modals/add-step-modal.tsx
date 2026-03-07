@@ -14,7 +14,7 @@ import {
 } from "@merge-rd/ui/components/dialog";
 import { TablePagination } from "@/admin/shared/ui/table-pagination";
 import { useMemo, useState } from "react";
-import { useTranslation } from "react-i18next";
+import { useTranslation } from "@merge-rd/i18n";
 import { useAdminClient } from "../../../../app/admin-client";
 import useLocaleSort, { mapByKey } from "../../../../shared/lib/useLocaleSort";
 import { providerConditionFilter } from "../../flow-details";

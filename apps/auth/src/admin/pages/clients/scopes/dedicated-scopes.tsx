@@ -4,8 +4,8 @@ import type { ProtocolMapperTypeRepresentation } from "@keycloak/keycloak-admin-
 import { getErrorDescription, getErrorMessage, useFetch } from "../../../../shared/keycloak-ui-shared";
 import { toast } from "sonner";
 import { useState } from "react";
-import { useTranslation } from "react-i18next";
-import { useNavigate, useParams as useRouterParams } from "react-router-dom";
+import { useTranslation } from "@merge-rd/i18n";
+import { useNavigate, useParams as useRouterParams } from "@tanstack/react-router";
 import { useAdminClient } from "../../../app/admin-client";
 import { MapperList } from "../../client-scopes/details/mapper-list";
 import { KeycloakSpinner } from "../../../../shared/keycloak-ui-shared";
@@ -20,7 +20,7 @@ export default function DedicatedScopes() {
     const { t } = useTranslation();
     const navigate = useNavigate();
     const { realm, clientId } = useParams<DedicatedScopeDetailsParams>();
-    const { tab } = useRouterParams<{ tab?: string }>();
+    const { tab } = useRouterParams({ strict: false }) as { tab?: string };
 const [client, setClient] = useState<ClientRepresentation>();
 
     useFetch(() => adminClient.clients.findOne({ id: clientId }), setClient, []);
@@ -34,14 +34,14 @@ const [client, setClient] = useState<ClientRepresentation>();
     ): Promise<void> => {
         if (!Array.isArray(mappers)) {
             const mapper = mappers as ProtocolMapperTypeRepresentation;
-            navigate(
+            navigate({ to:
                 toMapper({
                     realm,
                     id: client.id!,
                     mapperId: mapper.id!,
                     viewMode: "new"
-                })
-            );
+                }) as string
+            });
         } else {
             try {
                 await adminClient.clients.addMultipleProtocolMappers(

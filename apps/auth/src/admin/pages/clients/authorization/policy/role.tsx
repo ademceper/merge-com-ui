@@ -12,7 +12,7 @@ import {
 import { MinusCircle } from "@phosphor-icons/react";
 import { useState } from "react";
 import { Controller, useFormContext } from "react-hook-form";
-import { useTranslation } from "react-i18next";
+import { useTranslation } from "@merge-rd/i18n";
 import { useAdminClient } from "../../../../app/admin-client";
 import { DefaultSwitchControl } from "../../../../shared/ui/switch-control";
 import {

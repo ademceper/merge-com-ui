@@ -12,7 +12,7 @@ type AccessContextProps = {
     hasSomeAccess: (...types: AccessType[]) => boolean;
 };
 
-export const AccessContext = createNamedContext<AccessContextProps | undefined>(
+const AccessContext = createNamedContext<AccessContextProps | undefined>(
     "AccessContext",
     undefined
 );

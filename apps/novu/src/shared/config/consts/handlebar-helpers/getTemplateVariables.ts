@@ -3,14 +3,14 @@
 import { TemplateVariableTypeEnum } from "@/shared/model";
 import { HandlebarHelpersEnum } from "./handlebarHelpers";
 
-export interface IMustacheVariable {
+interface IMustacheVariable {
 	type: TemplateVariableTypeEnum;
 	name: string;
 	defaultValue?: string | boolean;
 	required?: boolean;
 }
 
-export function getTemplateVariables(bod): IMustacheVariable[] {
+function getTemplateVariables(bod): IMustacheVariable[] {
 	const pairVariables = bod
 		.filter((body) => body.type === "HashPair")
 		.flatMap((body) => {

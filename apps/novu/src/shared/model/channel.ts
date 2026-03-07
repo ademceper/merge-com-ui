@@ -7,14 +7,12 @@ export enum ChannelTypeEnum {
 }
 
 export enum ActionTypeEnum {
-	TRIGGER = "trigger",
 	DIGEST = "digest",
 	DELAY = "delay",
 	THROTTLE = "throttle",
-	CUSTOM = "custom",
-}
+	}
 
-export type StepType = ChannelTypeEnum | ActionTypeEnum;
+type StepType = ChannelTypeEnum | ActionTypeEnum;
 
 export enum StepTypeEnum {
 	IN_APP = "in_app",
@@ -29,7 +27,7 @@ export enum StepTypeEnum {
 	CUSTOM = "custom",
 }
 
-export const STEP_TYPE_TO_CHANNEL_TYPE = new Map<
+const STEP_TYPE_TO_CHANNEL_TYPE = new Map<
 	StepTypeEnum | string,
 	ChannelTypeEnum
 >([
@@ -51,13 +49,9 @@ export enum TemplateVariableTypeEnum {
 }
 
 export enum ActorTypeEnum {
-	NONE = "none",
-	USER = "user",
-	SYSTEM_ICON = "system_icon",
-	SYSTEM_CUSTOM = "system_custom",
-}
+	}
 
-export enum SystemAvatarIconEnum {
+enum SystemAvatarIconEnum {
 	WARNING = "warning",
 	INFO = "info",
 	ERROR = "error",
@@ -70,4 +64,4 @@ export const CHANNELS_WITH_PRIMARY = [
 	ChannelTypeEnum.EMAIL,
 	ChannelTypeEnum.SMS,
 ];
-export const DELAYED_STEPS = [StepTypeEnum.DELAY, StepTypeEnum.DIGEST];
+const DELAYED_STEPS = [StepTypeEnum.DELAY, StepTypeEnum.DIGEST];

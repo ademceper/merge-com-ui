@@ -27,7 +27,7 @@ import {
 import { Checkbox } from "@merge-rd/ui/components/checkbox";
 import { CaretDown, CaretUp, Funnel } from "@phosphor-icons/react";
 import { useMemo, useState } from "react";
-import { useTranslation } from "react-i18next";
+import { useTranslation } from "@merge-rd/i18n";
 import {
     ClientScopeType,
     clientScopeTypesDropdown
@@ -36,7 +36,7 @@ import useToggle from "../../../shared/lib/useToggle";
 import { getProtocolName } from "../utils";
 import useIsFeatureEnabled, { Feature } from "../../../shared/lib/useIsFeatureEnabled";
 
-export type AddScopeDialogProps = {
+type AddScopeDialogProps = {
     clientScopes: ClientScopeRepresentation[];
     clientName?: string;
     open: boolean;

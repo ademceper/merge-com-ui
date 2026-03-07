@@ -1,7 +1,7 @@
 import { getErrorDescription, getErrorMessage } from "../../../../shared/keycloak-ui-shared";
 import { toast } from "sonner";
 import { FormProvider, useForm } from "react-hook-form";
-import { useTranslation } from "react-i18next";
+import { useTranslation } from "@merge-rd/i18n";
 import { useAdminClient } from "../../../app/admin-client";
 import { ConfirmDialogModal } from "../../../shared/ui/confirm-dialog/confirm-dialog";
 import { KeyForm } from "./generate-key-dialog";

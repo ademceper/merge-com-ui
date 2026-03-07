@@ -26,10 +26,10 @@ import { Input } from "@merge-rd/ui/components/input";
 import { Label } from "@merge-rd/ui/components/label";
 import { Switch } from "@merge-rd/ui/components/switch";
 import { X } from "@phosphor-icons/react";
-import { TFunction } from "i18next";
+import { TFunction } from "@merge-rd/i18n";
 import { useEffect, useState } from "react";
 import { Controller, FormProvider, UseFormReturn } from "react-hook-form";
-import { useTranslation } from "react-i18next";
+import { useTranslation } from "@merge-rd/i18n";
 import { useAdminClient } from "../../app/admin-client";
 import { DefaultSwitchControl } from "../../shared/ui/switch-control";
 import { getErrorDescription, getErrorMessage } from "../../../shared/keycloak-ui-shared";
@@ -45,7 +45,7 @@ import { UserFormFields, toUserFormFields } from "./form-state";
 import { toUsers } from "./routes/users";
 import { FixedButtonsGroup } from "../../shared/ui/form/fixed-button-group";
 import { RequiredActionMultiSelect } from "./user-credentials/required-action-multi-select";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "@tanstack/react-router";
 import { CopyToClipboardButton } from "../../shared/ui/copy-to-clipboard-button/copy-to-clipboard-button";
 
 export type BruteForced = {
@@ -53,7 +53,7 @@ export type BruteForced = {
     isLocked?: boolean;
 };
 
-export type UserFormProps = {
+type UserFormProps = {
     form: UseFormReturn<UserFormFields>;
     realm: RealmRepresentation;
     user?: UserRepresentation;
@@ -145,7 +145,7 @@ const { hasAccess } = useAccess();
         if (user?.id) {
             reset(toUserFormFields(user));
         } else {
-            navigate(toUsers({ realm: realm.realm! }));
+            navigate({ to: toUsers({ realm: realm.realm! }) as string });
         }
     };
 

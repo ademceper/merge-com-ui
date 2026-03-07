@@ -11,7 +11,7 @@ export enum StepTypeEnum {
 	CUSTOM = "custom",
 }
 
-export enum ResourceTypeEnum {
+enum ResourceTypeEnum {
 	REGULAR = "REGULAR",
 	/** @deprecated Use BRIDGE instead */
 	ECHO = "ECHO",

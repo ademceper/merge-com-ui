@@ -20,10 +20,10 @@ import { MinusCircle, Plus } from "@phosphor-icons/react";
 import { camelCase } from "lodash-es";
 import { useEffect, useMemo, useState } from "react";
 import { Controller, useFieldArray, useFormContext } from "react-hook-form";
-import { useTranslation } from "react-i18next";
+import { useTranslation } from "@merge-rd/i18n";
 import { defaultContextAttributes } from "../utils";
 
-export type AttributeType = {
+type AttributeType = {
     key?: string;
     name: string;
     custom?: boolean;

@@ -5,8 +5,8 @@ import { getErrorDescription, getErrorMessage, useFetch } from "../../../shared/
 import { toast } from "sonner";
 import WorkflowRepresentation from "@keycloak/keycloak-admin-client/lib/defs/workflowRepresentation";
 import { useState } from "react";
-import { useTranslation } from "react-i18next";
-import { Link, useNavigate } from "react-router-dom";
+import { useTranslation } from "@merge-rd/i18n";
+import { Link, useNavigate } from "@tanstack/react-router";
 import { useAdminClient } from "../../app/admin-client";
 import { useRealm } from "../../app/providers/realm-context/realm-context";
 import {
@@ -80,7 +80,7 @@ export default function WorkflowsSection() {
             accessorKey: "name",
             header: t("name"),
             cell: ({ row }) => (
-                <Link to={toWorkflowDetail({ realm, mode: "update", id: row.original.id! })} className="text-primary hover:underline">
+                <Link to={toWorkflowDetail({ realm, mode: "update", id: row.original.id! }) as string} className="text-primary hover:underline">
                     {row.original.name}
                 </Link>
             )
@@ -117,7 +117,7 @@ export default function WorkflowsSection() {
                     <button
                         type="button"
                         className="flex w-full items-center gap-2 rounded-md px-1.5 py-1 text-left text-sm hover:bg-accent hover:text-accent-foreground"
-                        onClick={() => navigate(toWorkflowDetail({ realm, mode: "copy", id: row.original.id! }))}
+                        onClick={() => navigate({ to: toWorkflowDetail({ realm, mode: "copy", id: row.original.id! }) as string })}
                     >
                         {t("copy")}
                     </button>
@@ -133,7 +133,7 @@ export default function WorkflowsSection() {
             </EmptyHeader>
             <EmptyContent>
                 <EmptyDescription>{t("emptyWorkflowsInstructions")}</EmptyDescription>
-                <Button variant="default" onClick={() => navigate(toWorkflowDetail({ realm, mode: "create", id: "new" }))}>
+                <Button variant="default" onClick={() => navigate({ to: toWorkflowDetail({ realm, mode: "create", id: "new" }) as string })}>
                     {t("createWorkflow")}
                 </Button>
             </EmptyContent>
@@ -169,7 +169,7 @@ export default function WorkflowsSection() {
                     emptyMessage={t("emptyWorkflows")}
                     toolbar={
                         <Button asChild data-testid="create-workflow">
-                            <Link to={toWorkflowDetail({ realm, mode: "create", id: "new" })}>
+                            <Link to={toWorkflowDetail({ realm, mode: "create", id: "new" }) as string}>
                                 {t("createWorkflow")}
                             </Link>
                         </Button>

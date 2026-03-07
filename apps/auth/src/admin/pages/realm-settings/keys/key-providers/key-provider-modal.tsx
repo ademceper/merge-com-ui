@@ -4,7 +4,7 @@ import {
     DialogHeader,
     DialogTitle,
 } from "@merge-rd/ui/components/dialog";
-import { useTranslation } from "react-i18next";
+import { useTranslation } from "@merge-rd/i18n";
 import { KeyProviderForm } from "./key-provider-form";
 import type { ProviderType } from "../../routes/key-provider";
 

@@ -1,6 +1,6 @@
 import type React from "react";
 
-export function ArrowRight(props: React.ComponentPropsWithoutRef<"svg">) {
+function ArrowRight(props: React.ComponentPropsWithoutRef<"svg">) {
 	return (
 		<svg
 			xmlns="http://www.w3.org/2000/svg"

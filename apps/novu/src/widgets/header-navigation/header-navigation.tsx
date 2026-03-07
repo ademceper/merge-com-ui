@@ -4,7 +4,7 @@ import { SidebarPageHeader } from "@merge-rd/ui/components/sidebar";
 import { EnvironmentTypeEnum, PermissionsEnum } from "@/shared";
 import { MagnifyingGlass } from "@phosphor-icons/react";
 import type { HTMLAttributes, ReactNode } from "react";
-import { useCommandPalette } from "@/widgets/command-palette/hooks/use-command-palette";
+import { useCommandPalette } from "@/widgets/command-palette/model/use-command-palette";
 import { InboxButton } from "@/widgets/inbox-button";
 import { UserProfile } from "@/widgets/user-profile";
 import { RegionSelector } from "@/app/context/region";

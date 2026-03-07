@@ -5,7 +5,7 @@ export const MODE = import.meta.env.MODE;
 export const LAUNCH_DARKLY_CLIENT_SIDE_ID = import.meta.env
 	.VITE_LAUNCH_DARKLY_CLIENT_SIDE_ID;
 
-export const HUBSPOT_PORTAL_ID = import.meta.env.VITE_HUBSPOT_EMBED;
+const HUBSPOT_PORTAL_ID = import.meta.env.VITE_HUBSPOT_EMBED;
 
 export const APP_ID = import.meta.env.VITE_NOVU_APP_ID || "";
 

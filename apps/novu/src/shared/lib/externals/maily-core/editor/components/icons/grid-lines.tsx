@@ -2,7 +2,7 @@ import type { SVGProps } from "react";
 
 export type SVGIcon = (props: SVGProps<SVGSVGElement>) => JSX.Element;
 
-export function GridLines(props: SVGProps<SVGSVGElement>) {
+function GridLines(props: SVGProps<SVGSVGElement>) {
 	return (
 		<svg
 			xmlns="http://www.w3.org/2000/svg"

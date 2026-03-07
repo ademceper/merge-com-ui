@@ -18,8 +18,8 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigge
 import { DotsThreeVertical, Info } from "@phosphor-icons/react";
 import { uniqBy } from "lodash-es";
 import { useState } from "react";
-import { useTranslation } from "react-i18next";
-import { Link, useLocation } from "react-router-dom";
+import { useTranslation } from "@merge-rd/i18n";
+import { Link, useLocation } from "@tanstack/react-router";
 import { useAdminClient } from "../../app/admin-client";
 import { KeycloakSpinner } from "../../../shared/keycloak-ui-shared";
 import { useAccess } from "../../app/providers/access/access";
@@ -36,7 +36,7 @@ const UserDetailLink = (user: UserRepresentation) => {
     const { realm } = useRealm();
     const { t } = useTranslation();
     return (
-        <Link key={user.id} to={toUser({ realm, id: user.id!, tab: "settings" })}>
+        <Link key={user.id} to={toUser({ realm, id: user.id!, tab: "settings" }) as string}>
             {user.username}{" "}
             {!user.enabled && (
                 <Label className="text-red-500">

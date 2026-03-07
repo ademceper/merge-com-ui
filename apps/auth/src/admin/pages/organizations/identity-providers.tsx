@@ -1,5 +1,11 @@
 import IdentityProviderRepresentation from "@keycloak/keycloak-admin-client/lib/defs/identityProviderRepresentation";
-import { getErrorDescription, getErrorMessage, useFetch } from "../../../shared/keycloak-ui-shared";
+import { getErrorDescription, getErrorMessage } from "../../../shared/keycloak-ui-shared";
+import {
+    useOrganizationIdentityProviders,
+    useHasIdentityProviders,
+    useUnlinkIdentityProvider,
+    useUpdateIdentityProvider
+} from "./api/queries";
 import { DataTable, DataTableRowActions, type ColumnDef } from "@/admin/shared/ui/data-table";
 import {
     Empty,
@@ -12,11 +18,9 @@ import { DropdownMenuItem } from "@merge-rd/ui/components/dropdown-menu";
 import { toast } from "sonner";
 import { Button } from "@merge-rd/ui/components/button";
 import { Switch } from "@merge-rd/ui/components/switch";
-import { sortBy } from "lodash-es";
 import { useState } from "react";
-import { useTranslation } from "react-i18next";
-import { useParams } from "react-router-dom";
-import { useAdminClient } from "../../app/admin-client";
+import { useTranslation } from "@merge-rd/i18n";
+import { useParams } from "../../shared/lib/useParams";
 import {
     AlertDialog,
     AlertDialogAction,
@@ -34,13 +38,10 @@ import { EditOrganizationParams } from "./routes/edit-organization";
 
 type ShownOnLoginPageCheckProps = {
     row: IdentityProviderRepresentation;
-    refresh: () => void;
 };
 
 type IdentityProvidersTableProps = {
-    refreshKey: number;
     orgId: string;
-    refresh: () => void;
     setSelectedRow: (row: IdentityProviderRepresentation | undefined) => void;
     toggleOpen: () => void;
     setManageDisplayDialog: (v: boolean) => void;
@@ -49,22 +50,13 @@ type IdentityProvidersTableProps = {
 
 const IdentityProvidersTable = ({
     orgId,
-    refreshKey,
-    refresh,
     setSelectedRow,
     toggleOpen,
     setManageDisplayDialog,
     setIdpToUnlink
 }: IdentityProvidersTableProps) => {
-    const { adminClient } = useAdminClient();
     const { t } = useTranslation();
-    const [providers, setProviders] = useState<IdentityProviderRepresentation[]>([]);
-
-    useFetch(
-        async () => sortBy(await adminClient.organizations.listIdentityProviders({ orgId }), "alias"),
-        setProviders,
-        [orgId, refreshKey]
-    );
+    const { data: providers = [] } = useOrganizationIdentityProviders(orgId);
 
     const columns: ColumnDef<IdentityProviderRepresentation>[] = [
         { accessorKey: "alias", header: t("alias") },
@@ -73,7 +65,7 @@ const IdentityProvidersTable = ({
         {
             accessorKey: "hideOnLogin",
             header: t("hideOnLoginPage"),
-            cell: ({ row }) => <ShownOnLoginPageCheck row={row.original} refresh={refresh} />
+            cell: ({ row }) => <ShownOnLoginPageCheck row={row.original} />
         },
         {
             id: "actions",
@@ -120,22 +112,17 @@ const IdentityProvidersTable = ({
     );
 };
 
-const ShownOnLoginPageCheck = ({ row, refresh }: ShownOnLoginPageCheckProps) => {
-    const { adminClient } = useAdminClient();
-const { t } = useTranslation();
+const ShownOnLoginPageCheck = ({ row }: ShownOnLoginPageCheckProps) => {
+    const { t } = useTranslation();
+    const updateMutation = useUpdateIdentityProvider();
 
     const toggle = async (value: boolean) => {
         try {
-            await adminClient.identityProviders.update(
-                { alias: row.alias! },
-                {
-                    ...row,
-                    hideOnLogin: value
-                }
-            );
+            await updateMutation.mutateAsync({
+                ...row,
+                hideOnLogin: value
+            });
             toast.success(t("linkUpdatedSuccessful"));
-
-            refresh();
         } catch (error) {
             toast.error(t("linkUpdatedError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
         }
@@ -150,36 +137,23 @@ const { t } = useTranslation();
 };
 
 export const IdentityProviders = () => {
-    const { adminClient } = useAdminClient();
     const { t } = useTranslation();
     const { id: orgId } = useParams<EditOrganizationParams>();
-const [key, setKey] = useState(0);
-    const refresh = () => setKey(key + 1);
+
+    const { data: hasProviders = false } = useHasIdentityProviders();
+    const unlinkMutation = useUnlinkIdentityProvider(orgId!);
 
     const [manageDisplayDialog, setManageDisplayDialog] = useState(false);
-    const [hasProviders, setHasProviders] = useState(false);
     const [selectedRow, setSelectedRow] = useState<IdentityProviderRepresentation>();
     const [idpToUnlink, setIdpToUnlink] = useState<IdentityProviderRepresentation>();
     const [open, toggleOpen] = useToggle();
 
-    useFetch(
-        async () => adminClient.identityProviders.find({ max: 1 }),
-        providers => {
-            setHasProviders(providers.length === 1);
-        },
-        []
-    );
-
     const onUnlinkConfirm = async () => {
         if (!idpToUnlink?.alias || !orgId) return;
         try {
-            await adminClient.organizations.unLinkIdp({
-                orgId,
-                alias: idpToUnlink.alias as string
-            });
+            await unlinkMutation.mutateAsync(idpToUnlink.alias);
             setIdpToUnlink(undefined);
             toast.success(t("unLinkSuccessful"));
-            refresh();
         } catch (error) {
             toast.error(t("unLinkError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
         }
@@ -192,7 +166,6 @@ const [key, setKey] = useState(0);
                     orgId={orgId!}
                     onClose={() => {
                         setManageDisplayDialog(false);
-                        refresh();
                     }}
                 />
             )}
@@ -217,7 +190,6 @@ const [key, setKey] = useState(0);
                         identityProvider={selectedRow}
                         onClose={() => {
                             toggleOpen();
-                            refresh();
                         }}
                     />
                 )}
@@ -228,10 +200,7 @@ const [key, setKey] = useState(0);
                     </Empty>
                 ) : (
                     <IdentityProvidersTable
-                        key={key}
-                        refreshKey={key}
                         orgId={orgId!}
-                        refresh={refresh}
                         setSelectedRow={setSelectedRow}
                         toggleOpen={toggleOpen}
                         setManageDisplayDialog={setManageDisplayDialog}

@@ -1,8 +1,8 @@
 import type ComponentRepresentation from "@keycloak/keycloak-admin-client/lib/defs/componentRepresentation";
 import { Button } from "@merge-rd/ui/components/button";
 import { useFormContext } from "react-hook-form";
-import { useTranslation } from "react-i18next";
-import { useNavigate } from "react-router-dom";
+import { useTranslation } from "@merge-rd/i18n";
+import { useNavigate } from "@tanstack/react-router";
 import { ScrollForm } from "../../../shared/keycloak-ui-shared";
 
 import { FixedButtonsGroup } from "../../shared/ui/form/fixed-button-group";
@@ -24,7 +24,7 @@ export type LdapComponentRepresentation = ComponentRepresentation & {
     };
 };
 
-export type UserFederationLdapFormProps = {
+type UserFederationLdapFormProps = {
     id?: string;
     onSubmit: (formData: LdapComponentRepresentation) => void;
 };
@@ -78,7 +78,7 @@ export const UserFederationLdapForm = ({ id, onSubmit }: UserFederationLdapFormP
                     <Button
                         type="button"
                         variant="link"
-                        onClick={() => navigate(toUserFederation({ realm }))}
+                        onClick={() => navigate({ to: toUserFederation({ realm }) as string })}
                         data-testid="ldap-cancel"
                     >
                         {t("cancel")}

@@ -10,7 +10,7 @@ import {
     DialogTitle,
 } from "@merge-rd/ui/components/dialog";
 import { FormProvider, useForm } from "react-hook-form";
-import { useTranslation } from "react-i18next";
+import { useTranslation } from "@merge-rd/i18n";
 import { useEffect, useMemo, useState } from "react";
 import { useAdminClient } from "../../../app/admin-client";
 import { DynamicComponents } from "../../../shared/ui/dynamic/dynamic-components";

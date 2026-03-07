@@ -3,7 +3,7 @@ import { Button } from "@merge-rd/ui/components/button";
 import { Field } from "@merge-rd/ui/components/field";
 import { useFormContext, useWatch } from "react-hook-form";
 import { DefaultSwitchControl } from "../../../shared/ui/switch-control";
-import { useTranslation } from "react-i18next";
+import { useTranslation } from "@merge-rd/i18n";
 import { getErrorDescription, getErrorMessage, TextAreaControl,
     TextControl } from "../../../../shared/keycloak-ui-shared";
 import { toast } from "sonner";

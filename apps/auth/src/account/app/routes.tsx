@@ -26,32 +26,32 @@ const Resources = lazy(() => import("../pages/resources/resources"));
 const ContentComponent = lazy(() => import("../pages/content/content-component"));
 const Oid4Vci = lazy(() => import("../pages/oid4vci/oid4-vci"));
 
-export const DeviceActivityRoute: RouteObject = {
+const DeviceActivityRoute: RouteObject = {
     path: "account-security/device-activity",
     element: <DeviceActivity />
 };
 
-export const LinkedAccountsRoute: RouteObject = {
+const LinkedAccountsRoute: RouteObject = {
     path: "account-security/linked-accounts",
     element: <LinkedAccounts />
 };
 
-export const SigningInRoute: RouteObject = {
+const SigningInRoute: RouteObject = {
     path: "account-security/signing-in",
     element: <SigningIn />
 };
 
-export const ApplicationsRoute: RouteObject = {
+const ApplicationsRoute: RouteObject = {
     path: "applications",
     element: <Applications />
 };
 
-export const GroupsRoute: RouteObject = {
+const GroupsRoute: RouteObject = {
     path: "groups",
     element: <Groups />
 };
 
-export const ResourcesRoute: RouteObject = {
+const ResourcesRoute: RouteObject = {
     path: "resources",
     element: <Resources />
 };
@@ -60,23 +60,23 @@ export type ContentComponentParams = {
     componentId: string;
 };
 
-export const ContentRoute: RouteObject = {
+const ContentRoute: RouteObject = {
     path: "content/:componentId",
     element: <ContentComponent />
 };
 
-export const PersonalInfoRoute: IndexRouteObject = {
+const PersonalInfoRoute: IndexRouteObject = {
     index: true,
     element: <PersonalInfo />,
     path: ""
 };
 
-export const OrganizationsRoute: RouteObject = {
+const OrganizationsRoute: RouteObject = {
     path: "organizations",
     element: <Organizations />
 };
 
-export const Oid4VciRoute: RouteObject = {
+const Oid4VciRoute: RouteObject = {
     path: "oid4vci",
     element: <Oid4Vci />
 };

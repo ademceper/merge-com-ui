@@ -1,7 +1,4 @@
-import { lazy } from "react";
-import type { Path } from "react-router-dom";
 import { generateEncodedPath } from "../../../shared/lib/generateEncodedPath";
-import type { AppRouteObject } from "../../../app/routes";
 
 export type ResourceDetailsParams = {
     realm: string;
@@ -9,33 +6,9 @@ export type ResourceDetailsParams = {
     resourceId?: string;
 };
 
-const ResourceDetails = lazy(() => import("../authorization/resource-details"));
-
-export const ResourceDetailsRoute: AppRouteObject = {
-    path: "/:realm/clients/:id/authorization/resource",
-    element: <ResourceDetails />,
-    breadcrumb: t => t("resourceDetails"),
-    handle: {
-        access: accessChecker =>
-            accessChecker.hasAny(
-                "manage-clients",
-                "view-authorization",
-                "manage-authorization"
-            )
-    }
-};
-
-export const ResourceDetailsWithResourceIdRoute: AppRouteObject = {
-    ...ResourceDetailsRoute,
-    path: "/:realm/clients/:id/authorization/resource/:resourceId"
-};
-
-export const toResourceDetails = (params: ResourceDetailsParams): Partial<Path> => {
+export const toResourceDetails = (params: ResourceDetailsParams): string => {
     const path = params.resourceId
-        ? ResourceDetailsWithResourceIdRoute.path
-        : ResourceDetailsRoute.path;
-
-    return {
-        pathname: generateEncodedPath(path, params)
-    };
+        ? "/:realm/clients/:id/authorization/resource/:resourceId"
+        : "/:realm/clients/:id/authorization/resource";
+    return generateEncodedPath(path, params as any);
 };

@@ -2,7 +2,7 @@ import { NetworkError } from "@keycloak/keycloak-admin-client";
 import { useEnvironment, type FallbackProps } from "../../../../shared/keycloak-ui-shared";
 import { Alert, AlertDescription } from "@merge-rd/ui/components/alert";
 import { Button } from "@merge-rd/ui/components/button";
-import { useTranslation } from "react-i18next";
+import { useTranslation } from "@merge-rd/i18n";
 
 export const ErrorRenderer = ({ error }: FallbackProps) => {
     const { keycloak } = useEnvironment();

@@ -19,31 +19,31 @@ export type TranslationsFilter = {
 	offset?: number;
 };
 
-export type SaveTranslationRequest = CreateTranslationRequestDto;
+type SaveTranslationRequest = CreateTranslationRequestDto;
 
-export type DeleteTranslationRequest = {
+type DeleteTranslationRequest = {
 	resourceId: string;
 	resourceType: ResourceType;
 	locale: string;
 };
 
-export type DeleteTranslationGroupRequest = {
+type DeleteTranslationGroupRequest = {
 	resourceId: string;
 	resourceType: ResourceType;
 };
 
-export type UploadTranslationsRequest = {
+type UploadTranslationsRequest = {
 	resourceId: string;
 	resourceType: ResourceType;
 	files: File[];
 };
 
-export type UploadMasterJsonRequest = {
+type UploadMasterJsonRequest = {
 	file: File;
 };
 
 // Response types
-export type GetTranslationsListResponse = {
+type GetTranslationsListResponse = {
 	data: TranslationGroupDto[];
 	total: number;
 	limit: number;
@@ -128,7 +128,7 @@ export const saveTranslation = async ({
 	return response.data;
 };
 
-export const deleteTranslation = async ({
+const deleteTranslation = async ({
 	environment,
 	resourceId,
 	resourceType,

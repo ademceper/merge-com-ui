@@ -1,12 +1,12 @@
-export interface ISuccessResponseDto {
+interface ISuccessResponseDto {
 	success: boolean;
 }
 
-export interface IServerResponse<T> {
+interface IServerResponse<T> {
 	data: T;
 }
 
-export interface IPaginatedResponseDto<T> {
+interface IPaginatedResponseDto<T> {
 	hasMore: boolean;
 
 	page: number;

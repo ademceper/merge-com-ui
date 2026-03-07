@@ -5,8 +5,8 @@ import { Button, buttonVariants } from "@merge-rd/ui/components/button";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@merge-rd/ui/components/dropdown-menu";
 import { useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
-import { useTranslation } from "react-i18next";
-import { Link, useNavigate } from "react-router-dom";
+import { useTranslation } from "@merge-rd/i18n";
+import { Link, useNavigate } from "@tanstack/react-router";
 import { useAdminClient } from "../../../app/admin-client";
 import { FormAccess } from "../../../shared/ui/form/form-access";
 import { useParams } from "../../../shared/lib/useParams";
@@ -67,7 +67,7 @@ const [deleteDialog, toggleDeleteDialog] = useToggle();
                         iconUri: scope.iconUri
                     }
                 );
-                navigate(toAuthorizationTab({ realm, clientId: id, tab: "scopes" }));
+                navigate({ to: toAuthorizationTab({ realm, clientId: id, tab: "scopes" }) as string });
             }
             toast.success(
                 t((scopeId ? "update" : "create") + "ScopeSuccess")
@@ -85,7 +85,7 @@ const [deleteDialog, toggleDeleteDialog] = useToggle();
                 toggleDialog={toggleDeleteDialog}
                 selectedScope={scope}
                 refresh={() =>
-                    navigate(toAuthorizationTab({ realm, clientId: id, tab: "scopes" }))
+                    navigate({ to: toAuthorizationTab({ realm, clientId: id, tab: "scopes" }) as string })
                 }
             />
             {scopeId && (
@@ -151,7 +151,7 @@ const [deleteDialog, toggleDeleteDialog] = useToggle();
                                             realm,
                                             clientId: id,
                                             tab: "scopes"
-                                        })}
+                                        }) as string}
                                     >
                                         {t("cancel")}
                                     </Link>

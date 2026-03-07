@@ -15,7 +15,7 @@ import {
 	TooltipTrigger,
 } from "./ui/tooltip";
 
-export type ContentMenuProps = {
+type ContentMenuProps = {
 	editor: Editor;
 };
 

@@ -1,7 +1,4 @@
-import { lazy } from "react";
-import type { Path } from "react-router-dom";
 import { generateEncodedPath } from "../../../shared/lib/generateEncodedPath";
-import type { AppRouteObject } from "../../../app/routes";
 
 export type ProviderType =
     | "aes-generated"
@@ -19,17 +16,5 @@ export type KeyProviderParams = {
     realm: string;
 };
 
-const KeyProviderForm = lazy(() => import("../keys/key-providers/key-provider-form"));
-
-export const KeyProviderFormRoute: AppRouteObject = {
-    path: "/:realm/realm-settings/keys/providers/:id/:providerType/settings",
-    element: <KeyProviderForm />,
-    breadcrumb: t => t("editProvider"),
-    handle: {
-        access: "view-realm"
-    }
-};
-
-export const toKeyProvider = (params: KeyProviderParams): Partial<Path> => ({
-    pathname: generateEncodedPath(KeyProviderFormRoute.path, params)
-});
+export const toKeyProvider = (params: KeyProviderParams): string =>
+    generateEncodedPath("/:realm/realm-settings/keys/providers/:id/:providerType/settings", params);

@@ -13,7 +13,7 @@ import {
 	User,
 } from "@phosphor-icons/react";
 import { useMemo } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation } from "@tanstack/react-router";
 import { Bell, NovuIcon } from "@/shared/ui/icons";
 
 export const DRAWER_WIDTH_DEFAULT = 350;

@@ -6,7 +6,7 @@ import { SegmentContext } from "./segment-provider";
  *
  * const segment = useSegment();
  */
-export const useSegment = () => {
+const useSegment = () => {
 	const result = React.useContext(SegmentContext);
 
 	if (!result) {

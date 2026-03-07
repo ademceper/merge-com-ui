@@ -3,7 +3,7 @@ import * as React from "react";
 import { cn } from "../utils/classname";
 import { AUTOCOMPLETE_PASSWORD_MANAGERS_OFF } from "../utils/constants";
 
-export interface InputProps
+interface InputProps
 	extends React.InputHTMLAttributes<HTMLInputElement> {}
 
 const Input = React.forwardRef<HTMLInputElement, InputProps>(

@@ -16,7 +16,7 @@ import {
     labelAttribute
 } from "./utils";
 
-export type UserProfileGroupProps = {
+type UserProfileGroupProps = {
     t: TFunction;
     form: UseFormReturn<UserFormFields>;
     attribute: UserProfileAttributeMetadata;

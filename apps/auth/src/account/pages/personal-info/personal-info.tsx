@@ -16,23 +16,24 @@ import {
     setUserProfileServerError,
     useEnvironment
 } from "../../../shared/keycloak-ui-shared";
-import { TFunction } from "i18next";
+import { TFunction } from "@merge-rd/i18n";
 import { useState } from "react";
 import { ErrorOption, useForm } from "react-hook-form";
-import { useTranslation } from "react-i18next";
+import { useTranslation } from "@merge-rd/i18n";
 
 import { getPersonalInfo, getSupportedLocales, savePersonalInfo } from "../../shared/api/methods";
 import { UserProfileMetadata, UserRepresentation } from "../../shared/api/representations";
 import { Page } from "../../shared/ui/page/page";
 import type { Environment } from "../../app/environment";
-import { TFuncKey, i18n } from "../../shared/i18n";
+import type { TFuncKey } from "@merge-rd/i18n";
+import { i18n } from "../../app/i18n";
 import { useAccountAlerts } from "../../shared/lib/useAccountAlerts";
 import { usePromise } from "../../shared/lib/usePromise";
 import { Button } from "@merge-rd/ui/components/button";
 import { Link } from "@merge-rd/ui/components/link";
 import { ArrowSquareOut } from "@phosphor-icons/react";
 
-export const PersonalInfo = () => {
+const PersonalInfo = () => {
     const { t } = useTranslation();
     const context = useEnvironment<Environment>();
     const [userProfileMetadata, setUserProfileMetadata] = useState<UserProfileMetadata>();

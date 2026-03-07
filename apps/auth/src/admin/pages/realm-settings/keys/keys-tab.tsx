@@ -1,7 +1,7 @@
 import type ComponentRepresentation from "@keycloak/keycloak-admin-client/lib/defs/componentRepresentation";
 import { useState } from "react";
-import { useTranslation } from "react-i18next";
-import { useNavigate } from "react-router-dom";
+import { useTranslation } from "@merge-rd/i18n";
+import { useNavigate } from "@tanstack/react-router";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@merge-rd/ui/components/tabs";
 import { useFetch } from "../../../../shared/keycloak-ui-shared";
 import { useAdminClient } from "../../../app/admin-client";
@@ -60,7 +60,7 @@ export const KeysTab = ({ subTab = "list" }: KeysTabProps) => {
         <Tabs
             value={currentTab}
             onValueChange={(value) =>
-                navigate(toKeysTab({ realm: realmName!, tab: value as KeySubTab }))
+                navigate({ to: toKeysTab({ realm: realmName!, tab: value as KeySubTab }) as string })
             }
         >
             <div className="w-full min-w-0 overflow-x-auto overflow-y-hidden mb-4">

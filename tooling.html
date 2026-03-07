@@ -1,0 +1,1431 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>2026 Tooling Addendum — Eksik Kalanlar</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:       #07090f;
+  --bg2:      #0b0f1a;
+  --surface:  #0f1525;
+  --s2:       #141c30;
+  --border:   #1e2d47;
+  --b2:       #28395c;
+  --blue:     #5b9cf6;
+  --bdim:     rgba(91,156,246,.1);
+  --green:    #34d399;
+  --gdim:     rgba(52,211,153,.09);
+  --amber:    #fbbf24;
+  --adim:     rgba(251,191,36,.09);
+  --purple:   #a78bfa;
+  --pdim:     rgba(167,139,250,.09);
+  --rose:     #f87171;
+  --rdim:     rgba(248,113,113,.09);
+  --cyan:     #22d3ee;
+  --cdim:     rgba(34,211,238,.07);
+  --orange:   #fb923c;
+  --odim:     rgba(251,146,60,.09);
+  --text:     #dde8f8;
+  --t2:       #7d96bc;
+  --t3:       #3d546e;
+  --mono:     'JetBrains Mono', monospace;
+  --sans:     'Syne', sans-serif;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{background:var(--bg);color:var(--text);font-family:var(--sans);font-size:13.5px;line-height:1.7;overflow-x:hidden;}
+::-webkit-scrollbar{width:5px;} ::-webkit-scrollbar-track{background:var(--bg);} ::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px;}
+
+/* HERO */
+.hero{
+  padding:80px 40px 60px;
+  border-bottom:1px solid var(--border);
+  position:relative;
+  overflow:hidden;
+  text-align:center;
+}
+.hero::before{
+  content:'';position:absolute;inset:0;
+  background:
+    radial-gradient(ellipse 60% 50% at 20% 50%, rgba(91,156,246,.07) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 50% at 80% 50%, rgba(52,211,153,.05) 0%, transparent 60%),
+    repeating-linear-gradient(0deg, transparent, transparent 39px, rgba(91,156,246,.025) 40px),
+    repeating-linear-gradient(90deg, transparent, transparent 39px, rgba(91,156,246,.025) 40px);
+}
+.hero-tag{
+  display:inline-block;
+  font-family:var(--mono);font-size:10px;letter-spacing:.18em;text-transform:uppercase;
+  color:var(--amber);background:var(--adim);border:1px solid rgba(251,191,36,.2);
+  padding:4px 16px;border-radius:100px;margin-bottom:20px;position:relative;
+}
+.hero h1{
+  font-size:clamp(32px,5vw,60px);font-weight:800;letter-spacing:-0.04em;
+  background:linear-gradient(160deg,#fff 0%,#7d96bc 80%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  margin-bottom:14px;position:relative;
+}
+.hero p{color:var(--t2);font-size:14px;max-width:600px;margin:0 auto 32px;position:relative;}
+.hero-cats{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;position:relative;}
+.hcat{
+  font-family:var(--mono);font-size:10px;
+  padding:5px 14px;border-radius:8px;
+  background:var(--s2);border:1px solid var(--border);color:var(--t2);
+}
+
+/* NAV */
+.nav{
+  position:sticky;top:0;z-index:100;
+  background:rgba(7,9,15,.94);backdrop-filter:blur(14px);
+  border-bottom:1px solid var(--border);
+  padding:0 40px;overflow-x:auto;white-space:nowrap;
+}
+.nav-inner{display:flex;gap:0;max-width:1400px;margin:0 auto;}
+.nav a{
+  font-family:var(--mono);font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--t3);text-decoration:none;padding:13px 14px;display:inline-block;
+  border-bottom:2px solid transparent;transition:all .2s;
+}
+.nav a:hover{color:var(--green);border-bottom-color:var(--green);}
+
+/* PAGE */
+.page{max-width:1400px;margin:0 auto;}
+
+/* SECTIONS */
+section{padding:56px 40px;border-bottom:1px solid var(--border);}
+.sec-label{
+  font-family:var(--mono);font-size:9px;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--green);margin-bottom:6px;display:flex;align-items:center;gap:8px;
+}
+.sec-label::after{content:'';flex:1;height:1px;background:var(--border);}
+.sec-title{font-size:26px;font-weight:800;color:#fff;letter-spacing:-0.03em;margin-bottom:6px;}
+.sec-desc{color:var(--t2);font-size:13px;margin-bottom:32px;}
+
+/* TOOL CARDS */
+.tool-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(360px,1fr));gap:14px;}
+.tool-grid-sm{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:12px;}
+.tool-grid-2{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+
+.tc{
+  background:var(--surface);border:1px solid var(--border);border-radius:12px;
+  padding:20px 22px;transition:border-color .2s,transform .15s;position:relative;
+  overflow:hidden;
+}
+.tc::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;}
+.tc.blue::before{background:var(--blue);}
+.tc.green::before{background:var(--green);}
+.tc.amber::before{background:var(--amber);}
+.tc.purple::before{background:var(--purple);}
+.tc.rose::before{background:var(--rose);}
+.tc.cyan::before{background:var(--cyan);}
+.tc.orange::before{background:var(--orange);}
+.tc:hover{border-color:var(--b2);transform:translateY(-2px);}
+
+.tc-head{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;margin-bottom:10px;}
+.tc-name{
+  font-family:var(--mono);font-size:14px;font-weight:700;color:var(--blue);
+}
+.tc-name.g{color:var(--green);}
+.tc-name.a{color:var(--amber);}
+.tc-name.p{color:var(--purple);}
+.tc-name.r{color:var(--rose);}
+.tc-name.c{color:var(--cyan);}
+.tc-name.o{color:var(--orange);}
+.tc-tags{display:flex;flex-wrap:wrap;gap:4px;}
+.tag{
+  font-family:var(--mono);font-size:8.5px;letter-spacing:.06em;
+  padding:2px 8px;border-radius:4px;font-weight:500;white-space:nowrap;
+}
+.tag-b{background:var(--bdim);color:var(--blue);border:1px solid rgba(91,156,246,.2);}
+.tag-g{background:var(--gdim);color:var(--green);border:1px solid rgba(52,211,153,.2);}
+.tag-a{background:var(--adim);color:var(--amber);border:1px solid rgba(251,191,36,.2);}
+.tag-p{background:var(--pdim);color:var(--purple);border:1px solid rgba(167,139,250,.2);}
+.tag-r{background:var(--rdim);color:var(--rose);border:1px solid rgba(248,113,113,.2);}
+.tag-c{background:var(--cdim);color:var(--cyan);border:1px solid rgba(34,211,238,.2);}
+.tag-o{background:var(--odim);color:var(--orange);border:1px solid rgba(251,146,60,.2);}
+
+.tc p{color:var(--t2);font-size:12.5px;line-height:1.65;margin-bottom:10px;}
+.tc p strong{color:#fff;}
+.tc p code{
+  font-family:var(--mono);font-size:11px;
+  background:var(--s2);border:1px solid var(--border);
+  padding:1px 6px;border-radius:4px;color:var(--cyan);
+}
+
+/* CMD BLOCK */
+.cmd{
+  background:#060b14;border:1px solid var(--border);
+  border-radius:8px;padding:12px 16px;
+  font-family:var(--mono);font-size:11px;line-height:1.8;
+  overflow-x:auto;margin:8px 0;position:relative;
+}
+.cmd::before{
+  content:'$';position:absolute;top:12px;left:10px;
+  color:var(--t3);font-size:10px;
+}
+.cmd .line{padding-left:14px;color:var(--t2);}
+.cmd .line.cmd-blue{color:var(--blue);}
+.cmd .line.cmd-green{color:var(--green);}
+.cmd .line.cmd-amber{color:var(--amber);}
+.cmd .line.cmd-comment{color:var(--t3);}
+
+/* CODE BLOCK */
+.code{
+  background:#060b14;border:1px solid var(--border);
+  border-radius:8px;padding:14px 18px;
+  font-family:var(--mono);font-size:11px;line-height:1.85;
+  overflow-x:auto;margin:10px 0;
+}
+.ck{color:var(--purple);}
+.cs{color:var(--green);}
+.cc{color:var(--t3);}
+.ct{color:var(--cyan);}
+.ca{color:var(--amber);}
+.cn{color:var(--rose);}
+
+/* ALERT */
+.alert{
+  border-radius:8px;padding:12px 16px;
+  display:flex;gap:10px;align-items:flex-start;
+  font-size:12.5px;margin:12px 0;
+}
+.al-g{background:var(--gdim);border:1px solid rgba(52,211,153,.2);}
+.al-b{background:var(--bdim);border:1px solid rgba(91,156,246,.2);}
+.al-a{background:var(--adim);border:1px solid rgba(251,191,36,.2);}
+.al-r{background:var(--rdim);border:1px solid rgba(248,113,113,.2);}
+.al-p{background:var(--pdim);border:1px solid rgba(167,139,250,.2);}
+.alert-ico{flex-shrink:0;font-size:15px;margin-top:1px;}
+.alert strong{color:#fff;}
+.alert p{margin:0;color:var(--t2);}
+
+/* COMPARISON */
+.cmp-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:16px 0;}
+.cmp-c{
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:10px;padding:18px;
+}
+.cmp-c.winner{border-color:rgba(52,211,153,.3);}
+.cmp-c.winner::after{
+  content:'✓ 2026';display:block;
+  font-family:var(--mono);font-size:9px;font-weight:700;letter-spacing:.08em;
+  color:var(--green);background:var(--gdim);
+  padding:3px 10px;border-radius:4px;
+  display:inline-block;margin-bottom:10px;
+}
+.cmp-name{font-family:var(--mono);font-size:13px;font-weight:700;color:#fff;margin-bottom:10px;}
+.cmp-pro{color:var(--green);font-size:12px;line-height:1.8;}
+.cmp-pro::before{content:'+ ';}
+.cmp-con{color:var(--rose);font-size:12px;line-height:1.8;}
+.cmp-con::before{content:'− ';}
+
+/* FLOW */
+.flow{display:flex;align-items:center;gap:0;flex-wrap:wrap;margin:16px 0;}
+.flow-step{
+  background:var(--s2);border:1px solid var(--border);
+  border-radius:8px;padding:10px 14px;font-size:12px;color:var(--text);
+  font-family:var(--mono);font-size:11px;
+}
+.flow-arrow{color:var(--t3);padding:0 8px;font-size:16px;}
+
+/* BIGCARD */
+.bigcard{
+  background:linear-gradient(135deg,rgba(91,156,246,.05) 0%,rgba(52,211,153,.04) 100%);
+  border:1px solid rgba(91,156,246,.2);border-radius:14px;padding:32px;
+  margin:16px 0;
+}
+.bigcard-title{font-size:16px;font-weight:700;color:#fff;margin-bottom:18px;}
+
+/* TABLE */
+.tbl{width:100%;border-collapse:collapse;font-size:12px;margin:14px 0;}
+.tbl th{
+  background:var(--s2);color:var(--t3);font-family:var(--mono);
+  font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;
+  padding:10px 14px;text-align:left;border-bottom:1px solid var(--border);
+}
+.tbl td{
+  padding:10px 14px;border-bottom:1px solid rgba(30,45,71,.4);
+  color:var(--t2);vertical-align:top;
+}
+.tbl td:first-child{font-family:var(--mono);color:var(--purple);font-size:11px;}
+.tbl td strong{color:var(--text);}
+.tbl tr:hover td{background:rgba(91,156,246,.02);}
+
+/* DIVIDER */
+.div{height:1px;background:linear-gradient(90deg,transparent,var(--border),transparent);margin:28px 0;}
+
+/* QUICK LIST */
+.ql{list-style:none;padding:0;margin:0;}
+.ql li{
+  padding:8px 0;border-bottom:1px solid rgba(30,45,71,.4);
+  color:var(--t2);font-size:12.5px;display:flex;align-items:flex-start;gap:10px;
+}
+.ql li:last-child{border-bottom:none;}
+.ql-name{font-family:var(--mono);color:var(--blue);font-size:12px;min-width:180px;flex-shrink:0;}
+.ql-name.g{color:var(--green);}
+.ql-name.a{color:var(--amber);}
+.ql-name.p{color:var(--purple);}
+
+/* BADGE INLINE */
+.bd{
+  display:inline-block;font-family:var(--mono);font-size:9px;
+  padding:1px 7px;border-radius:4px;margin:0 2px;
+}
+.bd-g{background:var(--gdim);color:var(--green);}
+.bd-a{background:var(--adim);color:var(--amber);}
+.bd-r{background:var(--rdim);color:var(--rose);}
+.bd-b{background:var(--bdim);color:var(--blue);}
+
+/* RESPONSIVE */
+@media(max-width:900px){
+  section{padding:36px 20px;}
+  .hero{padding:56px 20px 40px;}
+  .nav{padding:0 20px;}
+  .tool-grid,.tool-grid-2,.cmp-grid{grid-template-columns:1fr;}
+}
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="hero-tag">Ek Rehber — Ana Rehberde Eksik Kalanlar</div>
+  <h1>Tooling Addendum<br>2026</h1>
+  <p>Knip, Madge, size-limit, publint ve daha fazlası. Projenin kalite, performans ve güvenilirliğini artıracak her araç.</p>
+  <div class="hero-cats">
+    <span class="hcat">🔪 Dead Code</span>
+    <span class="hcat">🌀 Circular Deps</span>
+    <span class="hcat">📦 Bundle Budget</span>
+    <span class="hcat">🔍 Package Audit</span>
+    <span class="hcat">🧹 Code Health</span>
+    <span class="hcat">🔒 Security</span>
+    <span class="hcat">⚡ DX</span>
+    <span class="hcat">🌐 Online Tools</span>
+    <span class="hcat">🔧 VSCode</span>
+    <span class="hcat">🚀 CI/CD</span>
+  </div>
+</div>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="#s1">Dead Code</a>
+    <a href="#s2">Circular Deps</a>
+    <a href="#s3">Bundle Budget</a>
+    <a href="#s4">Package Audit</a>
+    <a href="#s5">Dep Güvenlik</a>
+    <a href="#s6">pnpm v10</a>
+    <a href="#s7">VSCode Araçları</a>
+    <a href="#s8">Online Tools</a>
+    <a href="#s9">CI/CD Kalite</a>
+    <a href="#s10">TypeScript</a>
+    <a href="#s11">Küçük Detaylar</a>
+    <a href="#s12">CI Pipeline</a>
+  </div>
+</nav>
+
+<div class="page">
+
+<!-- ═══════════════ 01 DEAD CODE ═══════════════ -->
+<section id="s1">
+  <div class="sec-label">01 — Dead Code Detection</div>
+  <div class="sec-title">Kullanılmayan Dosya, Fonksiyon & Export</div>
+  <div class="sec-desc">ESLint tek dosya içine bakar. Bu araçlar projenin tamamına bakar — graph tabanlı analiz.</div>
+
+  <div class="tool-grid">
+
+    <div class="tc green">
+      <div class="tc-head">
+        <div class="tc-name g">Knip ✂️</div>
+        <div class="tc-tags">
+          <span class="tag tag-g">ZORUNLU</span>
+          <span class="tag tag-b">Monorepo</span>
+        </div>
+      </div>
+      <p>
+        <strong>2026'nın dead code silahı.</strong> ts-prune ve depcheck'in üstünde hem archived hem de Knip'i öneriyor. Yaptıkları:
+      </p>
+      <ul style="color:var(--t2);font-size:12px;padding-left:18px;line-height:2;">
+        <li>Hiçbir yerde import edilmeyen <strong>dosyalar</strong></li>
+        <li>Kullananı olmayan TypeScript <strong>export'lar</strong></li>
+        <li><code>package.json</code>'da kurulu ama hiç <strong>kullanılmayan npm paketleri</strong></li>
+        <li><code>package.json</code>'da <strong>unlisted</strong> (gizli bağımlı) paketler</li>
+        <li>Kullanılmayan <strong>class member</strong> ve <strong>enum member</strong>'lar</li>
+        <li><strong>devDependencies</strong> ile <strong>dependencies</strong> karışıklığı</li>
+      </ul>
+      <p>Vercel'de ~300k satır kodu silmek için kullanıldı. TanStack monorepo'ların tamamında aktif.</p>
+      <div class="cmd">
+        <div class="line cmd-comment"># Anında başla — zero-config</div>
+        <div class="line cmd-blue">pnpm add -D knip</div>
+        <div class="line cmd-comment"># İlk çalıştırma — tüm raporu gör</div>
+        <div class="line">npx knip</div>
+        <div class="line cmd-comment"># Otomatik fix — dikkatli kullan!</div>
+        <div class="line cmd-amber">npx knip --fix</div>
+        <div class="line cmd-comment"># Sadece unused deps listesi (CI için)</div>
+        <div class="line">npx knip --issues unused-dependencies</div>
+      </div>
+      <div class="code">
+<span class="cc">// knip.json — monorepo konfigürasyonu</span>
+{
+  <span class="cs">"workspaces"</span>: {
+    <span class="cs">"apps/web"</span>: { <span class="cs">"entry"</span>: [<span class="cs">"src/app/**/*.tsx"</span>] },
+    <span class="cs">"apps/admin"</span>: { <span class="cs">"entry"</span>: [<span class="cs">"src/main.tsx"</span>] },
+    <span class="cs">"packages/*"</span>: { <span class="cs">"entry"</span>: [<span class="cs">"src/index.ts"</span>] }
+  },
+  <span class="cs">"ignoreDependencies"</span>: [<span class="cs">"typescript"</span>],
+  <span class="cs">"ignorePatterns"</span>: [<span class="cs">"**/*.stories.tsx"</span>]
+}
+      </div>
+      <div class="alert al-a">
+        <span class="alert-ico">💡</span>
+        <p><strong>CI Stratejisi:</strong> İlk sprint'te sadece rapor al (fail etme), ignore list'i ayarla. Sonra <code>--reporter compact</code> ile CI'a ekle. Yeni dead code merge edilmesin.</p>
+      </div>
+    </div>
+
+    <div class="tc amber">
+      <div class="tc-head">
+        <div class="tc-name a">ts-prune</div>
+        <div class="tc-tags">
+          <span class="tag tag-r">ARCHIVED</span>
+          <span class="tag tag-a">Knip'e geç</span>
+        </div>
+      </div>
+      <p>Eski dead code aracı. Artık <strong>maintenance mode</strong> — yeni özellik almıyor. Monorepo desteği yok. ts-prune reposu kendisi Knip'i öneriyor. Mevcut projede varsa Knip'e migrate et.</p>
+      <div class="cmd">
+        <div class="line cmd-comment"># Migration</div>
+        <div class="line cmd-amber">pnpm remove ts-prune</div>
+        <div class="line cmd-green">pnpm add -D knip</div>
+      </div>
+      <div class="alert al-r">
+        <span class="alert-ico">⛔</span>
+        <p><strong>Yeni projede kullanma.</strong> ts-prune → depcheck → knip sırasıyla gelişti. 2026'da doğrudan Knip başla.</p>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ESLint vs Knip farkı -->
+  <div class="bigcard" style="margin-top:24px;">
+    <div class="bigcard-title">ESLint no-unused-vars vs Knip — Fark nedir?</div>
+    <table class="tbl">
+      <thead>
+        <tr><th>Özellik</th><th>ESLint no-unused-vars</th><th>Knip</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Scope</td>
+          <td>Tek dosya içi analiz</td>
+          <td><strong>Tüm proje graph analizi</strong></td>
+        </tr>
+        <tr>
+          <td>Export kontrolü</td>
+          <td>❌ Hayır — export varsa "kullanılıyor" sayar</td>
+          <td>✅ Evet — export edilen ama import edilmeyeni bulur</td>
+        </tr>
+        <tr>
+          <td>npm bağımlılıkları</td>
+          <td>❌ Hayır</td>
+          <td>✅ Evet — kullanılmayan package.json deps</td>
+        </tr>
+        <tr>
+          <td>Kullanılmayan dosyalar</td>
+          <td>❌ Hayır</td>
+          <td>✅ Evet — hiç import edilmeyen .ts dosyaları</td>
+        </tr>
+        <tr>
+          <td>Class/enum member</td>
+          <td>Sınırlı</td>
+          <td>✅ Evet</td>
+        </tr>
+        <tr>
+          <td>Monorepo</td>
+          <td>Workspace bilmez</td>
+          <td>✅ Native workspace desteği</td>
+        </tr>
+        <tr>
+          <td>Kullanım</td>
+          <td>Her save'de çalışır (linter)</td>
+          <td>CI'da veya haftalık (ağır analiz)</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- ═══════════════ 02 CIRCULAR DEPS ═══════════════ -->
+<section id="s2">
+  <div class="sec-label">02 — Circular Dependency Detection</div>
+  <div class="sec-title">Döngüsel Bağımlılık Tespiti</div>
+  <div class="sec-desc">A→B→C→A döngüleri: Webpack/Vite HMR sorunları, başlatma hataları, spaghetti mimari.</div>
+
+  <div class="tool-grid">
+    <div class="tc blue">
+      <div class="tc-head">
+        <div class="tc-name">Madge</div>
+        <div class="tc-tags">
+          <span class="tag tag-b">Görselleştirme</span>
+          <span class="tag tag-g">CI Friendly</span>
+        </div>
+      </div>
+      <p>
+        Module bağımlılık grafiği + circular dependency tespiti. SVG/PNG görsel çıktı üretiyor. Bağımlılığın nerede başlayıp nerede döndüğünü gösteriyor.
+      </p>
+      <div class="cmd">
+        <div class="line cmd-comment"># Circular deps listele</div>
+        <div class="line cmd-blue">npx madge --circular --extensions ts,tsx ./src</div>
+        <div class="line cmd-comment"># SVG görsel üret (Graphviz gerekli)</div>
+        <div class="line">npx madge src/index.ts --image dep-graph.svg</div>
+        <div class="line cmd-comment"># Yalnızca circular deps SVG</div>
+        <div class="line">npx madge --circular --image circular.svg src/</div>
+      </div>
+      <div class="code">
+<span class="cc">// package.json scripts</span>
+{
+  <span class="cs">"scripts"</span>: {
+    <span class="cs">"check:circular"</span>: <span class="cs">"madge --circular --extensions ts,tsx src/"</span>,
+    <span class="cs">"check:graph"</span>: <span class="cs">"madge --image dep-graph.png src/index.ts"</span>,
+    <span class="cs">"check:orphans"</span>: <span class="cs">"madge --orphans src/index.ts"</span>
+  }
+}
+      </div>
+      <p><strong>Çıktı örneği:</strong></p>
+      <div class="cmd">
+        <div class="line" style="color:var(--rose);">✖ Found 2 circular dependencies!</div>
+        <div class="line cmd-amber">1) store/auth.ts → api/client.ts → store/auth.ts</div>
+        <div class="line cmd-amber">2) ui/Button.tsx → hooks/useTheme.ts → ui/Button.tsx</div>
+      </div>
+      <div class="alert al-b">
+        <span class="alert-ico">📌</span>
+        <p>TypeScript type import'ları atlayabiliriz: <code>--detective-options '{"ts":{"skipTypeImports":true}}'</code> — sadece runtime circular'ları bul.</p>
+      </div>
+    </div>
+
+    <div class="tc purple">
+      <div class="tc-head">
+        <div class="tc-name p">dpdm</div>
+        <div class="tc-tags">
+          <span class="tag tag-p">Hızlı</span>
+          <span class="tag tag-b">ESM/CJS</span>
+        </div>
+      </div>
+      <p>Madge'e alternatif, <strong>büyük kod tabanlarında çok daha hızlı</strong>. CommonJS ve ESM desteği. CLI çıktısı temiz, JSON çıktı mevcut. Graphviz gerektirmez.</p>
+      <div class="cmd">
+        <div class="line cmd-blue">npx dpdm --no-warning src/index.ts</div>
+        <div class="line cmd-comment"># Sadece circular deps</div>
+        <div class="line">npx dpdm --circular src/index.ts</div>
+        <div class="line cmd-comment"># JSON çıktı (CI için)</div>
+        <div class="line">npx dpdm --exit-code circular:1 src/index.ts</div>
+      </div>
+    </div>
+
+    <div class="tc rose">
+      <div class="tc-head">
+        <div class="tc-name r">vite-plugin-circular-dependency</div>
+        <div class="tc-tags">
+          <span class="tag tag-r">Vite</span>
+          <span class="tag tag-a">Build-time</span>
+        </div>
+      </div>
+      <p>Vite dev server ve build sırasında circular deps'leri otomatik yakalar. Madge'e gerek kalmaz — geliştirme sürecinde terminal'de anında uyarı.</p>
+      <div class="code">
+<span class="cc">// vite.config.ts</span>
+<span class="ck">import</span> circularDeps <span class="ck">from</span> <span class="cs">'vite-plugin-circular-dependency'</span>
+
+<span class="ck">export default</span> {
+  plugins: [
+    circularDeps({
+      circularImportThrowErr: <span class="ck">false</span>, <span class="cc">// dev'de warn</span>
+    })
+  ]
+}
+      </div>
+    </div>
+
+  </div>
+
+  <div class="alert al-a" style="margin-top:16px;">
+    <span class="alert-ico">⚠️</span>
+    <p><strong>Sık circular dep nedeni:</strong> <code>packages/ui/index.ts</code> barrel dosyasından re-export + aynı paketteki component o barrel'ı import ediyor. Çözüm: component doğrudan kaynak dosyayı import etsin, barrel'ı değil.</p>
+  </div>
+</section>
+
+<!-- ═══════════════ 03 BUNDLE BUDGET ═══════════════ -->
+<section id="s3">
+  <div class="sec-label">03 — Bundle Size Enforcement</div>
+  <div class="sec-title">Bundle Bütçesi & PR Kontrolü</div>
+  <div class="sec-desc">Her PR'da bundle büyümesini yakala. "Çalışıyor" demeden önce kaç KB eklendi?</div>
+
+  <div class="tool-grid">
+    <div class="tc green">
+      <div class="tc-head">
+        <div class="tc-name g">size-limit</div>
+        <div class="tc-tags">
+          <span class="tag tag-g">ÖNERİLEN</span>
+          <span class="tag tag-b">CI</span>
+          <span class="tag tag-a">GitHub PR</span>
+        </div>
+      </div>
+      <p>
+        <strong>Performans bütçesi aracı.</strong> Her commit'te gerçek kullanıcı maliyetini hesaplar — sadece dosya boyutu değil, <strong>tarayıcı parse + execute süresi</strong> (headless Chrome). Limiti aşan PR'ları bloklar.
+      </p>
+      <div class="code">
+<span class="cc">// package.json</span>
+{
+  <span class="cs">"size-limit"</span>: [
+    {
+      <span class="cs">"path"</span>: <span class="cs">"dist/main.js"</span>,
+      <span class="cs">"limit"</span>: <span class="cs">"100 KB"</span>      <span class="cc">// gzip'd</span>
+    },
+    {
+      <span class="cs">"path"</span>: <span class="cs">"dist/vendor.js"</span>,
+      <span class="cs">"limit"</span>: <span class="cs">"200 KB"</span>
+    },
+    {
+      <span class="cs">"path"</span>: <span class="cs">"dist/main.js"</span>,
+      <span class="cs">"limit"</span>: <span class="cs">"500 ms"</span>,  <span class="cc">// parse+exec süresi</span>
+      <span class="cs">"name"</span>: <span class="cs">"JS Execution Budget"</span>
+    }
+  ],
+  <span class="cs">"scripts"</span>: {
+    <span class="cs">"size"</span>: <span class="cs">"size-limit"</span>,
+    <span class="cs">"size:why"</span>: <span class="cs">"size-limit --why"</span>  <span class="cc">// neden bu kadar büyük?</span>
+  }
+}
+      </div>
+      <div class="code">
+<span class="cc"># .github/workflows/size-limit.yml</span>
+name: Size Limit
+on: pull_request
+jobs:
+  size:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: andresz1/size-limit-action@v1
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          <span class="cc"># PR'a otomatik yorum: "+5.2 KB → ❌ limit aşıldı"</span>
+      </div>
+      <div class="alert al-g">
+        <span class="alert-ico">💡</span>
+        <p><strong>--why flag:</strong> <code>npx size-limit --why</code> ile hangi dependency ne kadar yer kaplıyor tam liste görürsün. Yanlış import edilen büyük kütüphaneleri bu şekilde tespit et.</p>
+      </div>
+    </div>
+
+    <div class="tc blue">
+      <div class="tc-head">
+        <div class="tc-name">bundlewatch</div>
+        <div class="tc-tags">
+          <span class="tag tag-b">CI</span>
+          <span class="tag tag-a">GitHub PR</span>
+        </div>
+      </div>
+      <p>size-limit'e alternatif. Webpack, Vite, Rollup output'larını izler. PR yorumlarında önceki build ile karşılaştırma.</p>
+      <div class="code">
+<span class="cc">// .bundlewatch.config.json</span>
+{
+  <span class="cs">"files"</span>: [
+    { <span class="cs">"path"</span>: <span class="cs">".next/static/**/*.js"</span>, <span class="cs">"maxSize"</span>: <span class="cs">"100kB"</span> },
+    { <span class="cs">"path"</span>: <span class="cs">".next/static/**/*.css"</span>, <span class="cs">"maxSize"</span>: <span class="cs">"20kB"</span> }
+  ]
+}
+      </div>
+    </div>
+
+    <div class="tc amber">
+      <div class="tc-head">
+        <div class="tc-name a">@next/bundle-analyzer</div>
+        <div class="tc-tags">
+          <span class="tag tag-a">Next.js</span>
+          <span class="tag tag-b">Görsel</span>
+        </div>
+      </div>
+      <p>Next.js için interaktif treemap. Her chunk'ın içinde ne var, hangi paket ne kadar yer kaplıyor. <code>ANALYZE=true pnpm build</code> ile aktif.</p>
+      <div class="code">
+<span class="cc">// next.config.ts</span>
+<span class="ck">import</span> bundleAnalyzer <span class="ck">from</span> <span class="cs">'@next/bundle-analyzer'</span>
+<span class="ck">const</span> withBundleAnalyzer = bundleAnalyzer({
+  enabled: process.env.ANALYZE === <span class="cs">'true'</span>
+})
+<span class="ck">export default</span> withBundleAnalyzer(nextConfig)
+      </div>
+    </div>
+
+    <div class="tc purple">
+      <div class="tc-head">
+        <div class="tc-name p">rollup-plugin-visualizer</div>
+        <div class="tc-tags">
+          <span class="tag tag-p">Vite</span>
+          <span class="tag tag-b">Görsel</span>
+        </div>
+      </div>
+      <p>Vite ve Rollup için bundle treemap. Sunburst, treemap, flamegraph seçenekleri. Hangi modülün ne kadar yer kapladığını renkli görselleştirme.</p>
+      <div class="code">
+<span class="cc">// vite.config.ts</span>
+<span class="ck">import</span> { visualizer } <span class="ck">from</span> <span class="cs">'rollup-plugin-visualizer'</span>
+plugins: [
+  visualizer({ open: <span class="ck">true</span>, gzipSize: <span class="ck">true</span> })
+]
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ 04 PACKAGE AUDIT ═══════════════ -->
+<section id="s4">
+  <div class="sec-label">04 — Package Quality & Audit</div>
+  <div class="sec-title">Paket Kalite Kontrolü</div>
+  <div class="sec-desc">Bir npm paketi kullanmadan önce: doğru mu yayınlanmış, ESM/CJS sorunu var mı, tipleri doğru mu?</div>
+
+  <div class="tool-grid">
+    <div class="tc green">
+      <div class="tc-head">
+        <div class="tc-name g">publint</div>
+        <div class="tc-tags">
+          <span class="tag tag-g">Library'ler için</span>
+          <span class="tag tag-b">package.json</span>
+        </div>
+      </div>
+      <p>
+        <strong>npm paket yayınlama linter'ı.</strong> Kendi packages/ içindeki kütüphaneleri yayınlamadan önce veya üçüncü parti bir paketin sorununu araştırırken kullan. Şunları kontrol eder:
+      </p>
+      <ul style="color:var(--t2);font-size:12px;padding-left:18px;line-height:2;">
+        <li>ESM mi yoksa CJS mi yazılmış, doğru mu yorumlanıyor?</li>
+        <li><code>exports</code> field'i tüm bundler'larda düzgün çalışıyor mu?</li>
+        <li>Vite, Webpack, Rollup, Node.js uyumluluğu</li>
+        <li>Yayınlanan dosyalar <code>.npmignore</code>'a düşmemiş mi?</li>
+        <li>Missing veya broken entry points</li>
+      </ul>
+      <div class="cmd">
+        <div class="line cmd-comment"># Kendi paketini kontrol et</div>
+        <div class="line cmd-blue">npx publint</div>
+        <div class="line cmd-comment"># Herhangi bir npm paketini kontrol et</div>
+        <div class="line">npx publint zod</div>
+        <div class="line">npx publint @tanstack/react-query</div>
+        <div class="line cmd-comment"># Online: publint.dev/&lt;paket-adı&gt;</div>
+      </div>
+      <div class="alert al-b">
+        <span class="alert-ico">🌐</span>
+        <p><strong>publint.dev</strong> — online versiyon. Bir paketin neden import'ta sorun çıkardığını araştırırken URL'e yaz: <code>publint.dev/react-query</code></p>
+      </div>
+    </div>
+
+    <div class="tc purple">
+      <div class="tc-head">
+        <div class="tc-name p">@arethetypeswrong/cli</div>
+        <div class="tc-tags">
+          <span class="tag tag-p">TypeScript</span>
+          <span class="tag tag-b">ESM/CJS Types</span>
+        </div>
+      </div>
+      <p>
+        <strong>"Are the types wrong?"</strong> — npm paketinin TypeScript tiplerini test eder. ESM/CJS type masquerading, yanlış <code>.d.ts</code> yapılandırması, module resolution sorunlarını bulur. publint ile <strong>birlikte</strong> kullan — farklı sorunları yakalar.
+      </p>
+      <div class="cmd">
+        <div class="line cmd-blue">npx @arethetypeswrong/cli zod</div>
+        <div class="line">npx @arethetypeswrong/cli @tanstack/react-query</div>
+        <div class="line cmd-comment"># Kendi paketini test et</div>
+        <div class="line">npx @arethetypeswrong/cli -P .</div>
+      </div>
+      <div class="alert al-g">
+        <span class="alert-ico">💡</span>
+        <p><strong>Online:</strong> <code>arethetypeswrong.github.io</code> — paketin adını yaz, anında rapor. Bir paketin CJS/ESM tip sorunu çıkarıyorsa buradan araştır.</p>
+      </div>
+    </div>
+
+    <div class="tc amber">
+      <div class="tc-head">
+        <div class="tc-name a">node-modules-inspector</div>
+        <div class="tc-tags">
+          <span class="tag tag-a">Görsel</span>
+          <span class="tag tag-b">pnpm</span>
+        </div>
+      </div>
+      <p>
+        <strong>node_modules içini görselleştir.</strong> Hangi paket hangi versiyonu, neden bu kadar büyük, hangi paketi kim import ediyor. pnpm'i tarayıcıda simüle ediyor. <code>pnpm dlx node-modules-inspector</code> ile anında çalışır.
+      </p>
+      <div class="cmd">
+        <div class="line cmd-blue">pnpm dlx node-modules-inspector</div>
+        <div class="line cmd-comment"># Tarayıcıda localhost açılır</div>
+      </div>
+    </div>
+
+    <div class="tc rose">
+      <div class="tc-head">
+        <div class="tc-name r">syncpack</div>
+        <div class="tc-tags">
+          <span class="tag tag-r">Monorepo</span>
+          <span class="tag tag-b">Version Drift</span>
+        </div>
+      </div>
+      <p>
+        Monorepo'da her workspace'de aynı paket farklı versiyonla kurulmuşsa bundle'a iki kez girer (React 18 + React 19 aynı anda). Syncpack tüm <code>package.json</code> dosyalarındaki versiyon tutarsızlıklarını bulur ve düzeltir.
+      </p>
+      <div class="cmd">
+        <div class="line cmd-blue">npx syncpack list-mismatches</div>
+        <div class="line cmd-comment"># Otomatik düzelt</div>
+        <div class="line cmd-green">npx syncpack fix-mismatches</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ 05 DEP SECURITY ═══════════════ -->
+<section id="s5">
+  <div class="sec-label">05 — Dependency Security</div>
+  <div class="sec-title">Bağımlılık Güvenliği & Güncelleme Takibi</div>
+  <div class="sec-desc">Hangi paket ne zaman güncellenmeli? Hangi paketin CVE'si var?</div>
+
+  <div class="tool-grid-sm">
+
+    <div class="tc blue">
+      <div class="tc-head">
+        <div class="tc-name">pnpm audit</div>
+        <div class="tc-tags"><span class="tag tag-b">Built-in</span></div>
+      </div>
+      <p>pnpm'in yerleşik güvenlik taraması. npm registry'nin CVE veritabanına karşı kontrol. CI'da <code>--audit-level=high</code> ile kritik açıkları yakala.</p>
+      <div class="cmd">
+        <div class="line cmd-blue">pnpm audit --audit-level=high</div>
+        <div class="line cmd-comment"># CI'da fail et</div>
+        <div class="line">pnpm audit --audit-level=critical</div>
+      </div>
+    </div>
+
+    <div class="tc green">
+      <div class="tc-head">
+        <div class="tc-name g">taze / npm-check-updates</div>
+        <div class="tc-tags"><span class="tag tag-g">Güncelleme</span></div>
+      </div>
+      <p>Hangi paketlerin yeni versiyonu var? <strong>taze</strong> — çok daha temiz UI. <strong>ncu</strong> — klasik, monorepo desteği. İkisi de update öneriyor ama apply etmeni istiyor.</p>
+      <div class="cmd">
+        <div class="line cmd-blue">npx taze</div>
+        <div class="line cmd-comment"># veya</div>
+        <div class="line">npx npm-check-updates -i</div>
+      </div>
+    </div>
+
+    <div class="tc amber">
+      <div class="tc-head">
+        <div class="tc-name a">Renovate Bot</div>
+        <div class="tc-tags"><span class="tag tag-a">Otomatik PR</span></div>
+      </div>
+      <p>Dependency güncellemelerini <strong>otomatik PR olarak açar</strong>. Dependabot'tan çok daha akıllı — monorepo, lockfile güncelleme, gruplandırma, test geçince auto-merge. GitHub App olarak kurulur.</p>
+    </div>
+
+    <div class="tc purple">
+      <div class="tc-head">
+        <div class="tc-name p">socket.dev</div>
+        <div class="tc-tags"><span class="tag tag-p">Supply Chain</span></div>
+      </div>
+      <p>npm paket supply chain ataklarını tespit eder. Yeni kurulan bir paketin başka bir güvenli paketi taklit edip etmediğini, typosquatting yapıp yapmadığını kontrol eder. GitHub App.</p>
+    </div>
+
+  </div>
+</section>
+
+<!-- ═══════════════ 06 PNPM V10 ═══════════════ -->
+<section id="s6">
+  <div class="sec-label">06 — pnpm v10 Yeni Özellikler</div>
+  <div class="sec-title">pnpm v10 — Security by Default</div>
+  <div class="sec-desc">2025'te yayınlanan pnpm v10, güvenlik modelini köklü değiştirdi.</div>
+
+  <div class="tool-grid">
+    <div class="tc blue">
+      <div class="tc-head">
+        <div class="tc-name">Security by Default</div>
+        <div class="tc-tags">
+          <span class="tag tag-r">Breaking Change</span>
+          <span class="tag tag-b">v10.0</span>
+        </div>
+      </div>
+      <p>
+        pnpm v10'da <code>preinstall</code> ve <code>postinstall</code> scriptleri artık <strong>default olarak çalışmıyor</strong>. Supply chain saldırılarının büyük çoğunluğu bu script'lerle gerçekleşiyordu. İzin vermek istediğin paketleri açıkça belirtmen gerekiyor.
+      </p>
+      <div class="code">
+<span class="cc"># .npmrc</span>
+<span class="ca">allow-scripts</span>=esbuild,@esbuild/*,sharp,canvas
+      </div>
+      <div class="code">
+<span class="cc">// package.json — alternatif (allowBuilds)</span>
+{
+  <span class="cs">"pnpm"</span>: {
+    <span class="cs">"allowBuilds"</span>: [<span class="cs">"esbuild"</span>, <span class="cs">"sharp"</span>, <span class="cs">"@img/sharp-linux-x64"</span>]
+  }
+}
+      </div>
+      <div class="alert al-r">
+        <span class="alert-ico">🚨</span>
+        <p><strong>Migration Notu:</strong> pnpm v9'dan v10'a geçince <code>postinstall</code> script'e ihtiyaç duyan paketler (esbuild, sharp, canvas) build sırasında sessizce başarısız olabilir. <code>pnpm install</code> sonrası warning'leri oku.</p>
+      </div>
+    </div>
+
+    <div class="tc green">
+      <div class="tc-head">
+        <div class="tc-name g">Runtime Management</div>
+        <div class="tc-tags">
+          <span class="tag tag-g">Yeni</span>
+          <span class="tag tag-b">2025</span>
+        </div>
+      </div>
+      <p>pnpm artık Node.js, Deno ve Bun versiyonlarını da yönetiyor. <code>package.json</code>'da <code>devEngines.runtime</code> belirterek takımdaki herkesin aynı runtime versiyonunu kullanması garantileniyor — "Works on my machine" bitti.</p>
+      <div class="code">
+<span class="cc">// package.json</span>
+{
+  <span class="cs">"devEngines"</span>: {
+    <span class="cs">"runtime"</span>: {
+      <span class="cs">"name"</span>: <span class="cs">"node"</span>,
+      <span class="cs">"version"</span>: <span class="cs">"22.x"</span>
+    }
+  }
+}
+<span class="cc">// pnpm otomatik doğru versiyonu indirir</span>
+      </div>
+    </div>
+
+    <div class="tc amber">
+      <div class="tc-head">
+        <div class="tc-name a">Config Dependencies</div>
+        <div class="tc-tags">
+          <span class="tag tag-a">Yeni</span>
+          <span class="tag tag-b">Monorepo</span>
+        </div>
+      </div>
+      <p>
+        Dependency graph resolve edilmeden önce yüklenen özel paketler. Shared <code>.pnpmfile.cjs</code> hook'larını, merkezi patch dosyalarını ve <code>allowBuilds</code> listesini repo genelinde paylaşmak için ideal.
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ 07 VSCODE ═══════════════ -->
+<section id="s7">
+  <div class="sec-label">07 — Editor Extensions</div>
+  <div class="sec-title">VSCode / Cursor Araçları</div>
+  <div class="sec-desc">Kod yazarken anında geri bildirim — CI'ı beklemeye gerek yok.</div>
+
+  <div class="tool-grid-sm">
+
+    <div class="tc amber">
+      <div class="tc-head">
+        <div class="tc-name a">Import Cost</div>
+        <div class="tc-tags"><span class="tag tag-a">VSCode</span><span class="tag tag-b">Bundle</span></div>
+      </div>
+      <p>
+        <strong>Her import satırının yanında gzip boyutunu gösterir.</strong> <code>import { motion } from 'framer-motion'</code> yazdığında yanına <code>47 KB</code> yazar. Büyük kütüphane import ederken anında farkında olursun.
+      </p>
+      <div class="alert al-a">
+        <span class="alert-ico">💡</span>
+        <p>Yeşil = küçük (&lt;50KB), kırmızı = büyük (&gt;100KB). Kırmızı görürsen named import'a geç veya daha hafif alternatif ara.</p>
+      </div>
+    </div>
+
+    <div class="tc blue">
+      <div class="tc-head">
+        <div class="tc-name">Biome VSCode</div>
+        <div class="tc-tags"><span class="tag tag-b">Resmi</span></div>
+      </div>
+      <p>Biome'un resmi VSCode extension'ı. Save on format, real-time lint, quick fix. ESLint + Prettier extension'larına ihtiyaç kalmaz.</p>
+    </div>
+
+    <div class="tc green">
+      <div class="tc-head">
+        <div class="tc-name g">Oxc VSCode</div>
+        <div class="tc-tags"><span class="tag tag-g">Hızlı</span></div>
+      </div>
+      <p>Oxlint kullanıyorsan resmi extension. ESLint'ten çok daha hızlı diagnostic. ESLint plugin shim ile mevcut ESLint plugin'lerini de çalıştırabilir.</p>
+    </div>
+
+    <div class="tc purple">
+      <div class="tc-head">
+        <div class="tc-name p">Error Lens</div>
+        <div class="tc-tags"><span class="tag tag-p">UX</span></div>
+      </div>
+      <p>TypeScript ve ESLint hata mesajlarını satır sonunda gösterir — Problems paneline gitmene gerek kalmaz. Çok küçük ama çok değerli.</p>
+    </div>
+
+    <div class="tc cyan">
+      <div class="tc-head">
+        <div class="tc-name c">Pretty TypeScript Errors</div>
+        <div class="tc-tags"><span class="tag tag-c">TypeScript</span></div>
+      </div>
+      <p>TypeScript'in iç içe geçmiş, okuması zor hata mesajlarını güzel formatlanmış, indented, renkli hale getirir. TypeScript hataları artık anlaşılır.</p>
+    </div>
+
+    <div class="tc rose">
+      <div class="tc-head">
+        <div class="tc-name r">Total TypeScript</div>
+        <div class="tc-tags"><span class="tag tag-r">Education</span></div>
+      </div>
+      <p>Matt Pocock'ın TS eğitim extension'ı. TypeScript özelliklerini inline açıklar. Öğrenirken veya ekipte kod review yaparken çok yararlı.</p>
+    </div>
+
+    <div class="tc orange">
+      <div class="tc-head">
+        <div class="tc-name o">Knip VSCode</div>
+        <div class="tc-tags"><span class="tag tag-o">Dead Code</span></div>
+      </div>
+      <p>Knip'in resmi VSCode extension'ı. Kullanılmayan export ve dosyaları IDE içinde inline vurgular — CLI çalıştırmaya gerek kalmaz.</p>
+    </div>
+
+    <div class="tc blue">
+      <div class="tc-head">
+        <div class="tc-name">Tailwind IntelliSense</div>
+        <div class="tc-tags"><span class="tag tag-b">Tailwind v4</span></div>
+      </div>
+      <p>Class autocomplete, hover preview, lint. Tailwind v4 için güncellenmiş. CSS variable'ları ve <code>@theme</code> tanımlarını okur.</p>
+    </div>
+
+  </div>
+</section>
+
+<!-- ═══════════════ 08 ONLINE TOOLS ═══════════════ -->
+<section id="s8">
+  <div class="sec-label">08 — Online Araçlar</div>
+  <div class="sec-title">Tarayıcıda Kullanılan Araçlar</div>
+  <div class="sec-desc">Kurulum gerektirmeyen, link paylaşarak takımla kullanılabilecek araçlar.</div>
+
+  <ul class="ql">
+    <li>
+      <span class="ql-name">bundlephobia.com</span>
+      <span>Herhangi bir npm paketinin gzip bundle boyutunu gösterir. Alternatif paket karşılaştırması. "moment.js (70KB) vs dayjs (2.6KB)" gibi seçimler için temel referans.</span>
+    </li>
+    <li>
+      <span class="ql-name">bundlejs.com</span>
+      <span>Import et, online bundle'la, boyutu gör. Tree-shaking'i test et: <code>import { format } from 'date-fns'</code> yazınca sadece o fonksiyonun boyutu çıkar. Badge için de kullanılır.</span>
+    </li>
+    <li>
+      <span class="ql-name g">publint.dev</span>
+      <span>Herhangi bir npm paketinin yayın yapılandırmasını analiz et. ESM/CJS sorununu araştırırken ilk gittiğin yer burası olmalı.</span>
+    </li>
+    <li>
+      <span class="ql-name g">arethetypeswrong.github.io</span>
+      <span>Paketin TypeScript type dosyalarının doğru yapılandırılıp yapılandırılmadığını kontrol et. ESM/CJS type masquerading sorunları için.</span>
+    </li>
+    <li>
+      <span class="ql-name p">pkg-size.dev</span>
+      <span>Paketin npm tarball boyutu, publish edilen dosyalar, tree-shaking sonucu. Bundlephobia'dan daha detaylı dosya bazlı analiz.</span>
+    </li>
+    <li>
+      <span class="ql-name a">npm.devtool.tech</span>
+      <span>npm paketlerini compare et. Side-by-side özellik karşılaştırması, bundle size, download trend, GitHub stars.</span>
+    </li>
+    <li>
+      <span class="ql-name">npmgraph.js.org</span>
+      <span>Bir npm paketinin dependency graph'ini görselleştir. "Bu paket gerçekte ne kadar bağımlılık getiriyor?" sorusuna cevap.</span>
+    </li>
+    <li>
+      <span class="ql-name">squoosh.app</span>
+      <span>Google'dan görsel optimizasyon aracı. WebP, AVIF, JPEG XL dönüşümü. <code>next/image</code> veya <code>expo-image</code>'a geçmeden önce statik görselleri optimize et.</span>
+    </li>
+    <li>
+      <span class="ql-name g">TypeScript Playground</span>
+      <span><code>play.typescriptlang.org</code> — TS kodu paylaş, ekiple debug et. Compiler options değiştir, output'u gör.</span>
+    </li>
+    <li>
+      <span class="ql-name p">regex101.com</span>
+      <span>Regex test ve debug. Zod pattern'larını, validation regex'lerini test et. Group açıklamaları ve step-by-step eşleşme görsel.</span>
+    </li>
+  </ul>
+</section>
+
+<!-- ═══════════════ 09 CI/CD QUALITY GATES ═══════════════ -->
+<section id="s9">
+  <div class="sec-label">09 — CI/CD Quality Gates</div>
+  <div class="sec-title">Her PR'da Çalışması Gereken Kontroller</div>
+  <div class="sec-desc">Hangi kontroller CI'a girince projenin kalitesi kendiliğinden korunur?</div>
+
+  <div class="bigcard">
+    <div class="bigcard-title">Tam CI Pipeline — Öncelik Sırasıyla</div>
+    <div class="flow" style="gap:6px;flex-direction:column;align-items:flex-start;">
+      <div style="display:flex;align-items:center;gap:8px;width:100%;">
+        <span class="flow-step" style="border-left:3px solid var(--green);">1. Type Check — <code>tsc --noEmit</code></span>
+        <span style="color:var(--t3);font-size:11px;">hızlı, erken hata yakalama</span>
+      </div>
+      <div style="display:flex;align-items:center;gap:8px;width:100%;">
+        <span class="flow-step" style="border-left:3px solid var(--blue);">2. Lint+Format — <code>biome check --write</code></span>
+        <span style="color:var(--t3);font-size:11px;">code style enforcement</span>
+      </div>
+      <div style="display:flex;align-items:center;gap:8px;width:100%;">
+        <span class="flow-step" style="border-left:3px solid var(--amber);">3. Unit Tests — <code>vitest run</code></span>
+        <span style="color:var(--t3);font-size:11px;">Turborepo cache ile hızlı</span>
+      </div>
+      <div style="display:flex;align-items:center;gap:8px;width:100%;">
+        <span class="flow-step" style="border-left:3px solid var(--purple);">4. Build — <code>turbo build</code></span>
+        <span style="color:var(--t3);font-size:11px;">incremental cache</span>
+      </div>
+      <div style="display:flex;align-items:center;gap:8px;width:100%;">
+        <span class="flow-step" style="border-left:3px solid var(--rose);">5. Bundle Size — <code>size-limit</code></span>
+        <span style="color:var(--t3);font-size:11px;">PR yorumu olarak</span>
+      </div>
+      <div style="display:flex;align-items:center;gap:8px;width:100%;">
+        <span class="flow-step" style="border-left:3px solid var(--cyan);">6. Circular Deps — <code>madge --circular</code></span>
+        <span style="color:var(--t3);font-size:11px;">mimarinin korunması</span>
+      </div>
+      <div style="display:flex;align-items:center;gap:8px;width:100%;">
+        <span class="flow-step" style="border-left:3px solid var(--orange);">7. Dead Code — <code>knip --reporter compact</code></span>
+        <span style="color:var(--t3);font-size:11px;">önce warn, sonra fail</span>
+      </div>
+      <div style="display:flex;align-items:center;gap:8px;width:100%;">
+        <span class="flow-step" style="border-left:3px solid var(--green);">8. E2E — Playwright (sadece main merge'de)</span>
+        <span style="color:var(--t3);font-size:11px;">ağır, paralel shard</span>
+      </div>
+      <div style="display:flex;align-items:center;gap:8px;width:100%;">
+        <span class="flow-step" style="border-left:3px solid var(--blue);">9. Security — <code>pnpm audit --audit-level=high</code></span>
+        <span style="color:var(--t3);font-size:11px;">CVE kontrolü</span>
+      </div>
+      <div style="display:flex;align-items:center;gap:8px;width:100%;">
+        <span class="flow-step" style="border-left:3px solid var(--purple);">10. Lighthouse CI (main'de)</span>
+        <span style="color:var(--t3);font-size:11px;">performance budget</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="code" style="margin-top:16px;">
+<span class="cc"># .github/workflows/ci.yml (özet)</span>
+jobs:
+  quality:
+    steps:
+      - run: pnpm tsc --noEmit
+      - run: pnpm biome check .
+      - run: pnpm turbo test --affected
+      - run: pnpm turbo build
+      - run: npx size-limit --json    <span class="cc"># bundle bütçe</span>
+      - run: npx knip --reporter compact  <span class="cc"># dead code raporu</span>
+      - run: npx madge --circular --extensions ts,tsx --exit-code src/
+      - run: pnpm audit --audit-level=high
+  </div>
+</section>
+
+<!-- ═══════════════ 10 TYPESCRIPT TOOLING ═══════════════ -->
+<section id="s10">
+  <div class="sec-label">10 — TypeScript Tooling</div>
+  <div class="sec-title">TypeScript Derleme & Analiz</div>
+  <div class="sec-desc">Type check hızı, strict ayarları, önemli compiler flagler.</div>
+
+  <div class="tool-grid">
+    <div class="tc blue">
+      <div class="tc-head">
+        <div class="tc-name">tsgo (TypeScript Native Port)</div>
+        <div class="tc-tags">
+          <span class="tag tag-b">2025 Yeni</span>
+          <span class="tag tag-a">10x Hızlı</span>
+        </div>
+      </div>
+      <p>
+        Microsoft'un TypeScript'i Go'ya port etme projesi. 2025'te preview olarak yayınlandı. <code>tsc</code>'den <strong>10x daha hızlı</strong> type checking. Production'da henüz değil ama izle — 2026 sonu stable olabilir.
+      </p>
+      <div class="cmd">
+        <div class="line cmd-comment"># Şu an preview</div>
+        <div class="line cmd-blue">npm install -g @typescript/native-preview</div>
+        <div class="line">tsgo --version</div>
+      </div>
+    </div>
+
+    <div class="tc green">
+      <div class="tc-head">
+        <div class="tc-name g">tsc --build mode</div>
+        <div class="tc-tags"><span class="tag tag-g">Monorepo</span></div>
+      </div>
+      <p>
+        Monorepo'da her package için ayrı <code>tsconfig.json</code> + project references. <code>tsc -b</code> sadece değişen paketleri derler. Turborepo cache ile birleşince type check dramatik hızlanır.
+      </p>
+      <div class="code">
+<span class="cc">// packages/ui/tsconfig.json</span>
+{
+  <span class="cs">"extends"</span>: <span class="cs">"../../packages/config/tsconfig.base.json"</span>,
+  <span class="cs">"compilerOptions"</span>: {
+    <span class="cs">"composite"</span>: <span class="ck">true</span>,   <span class="cc">// project references için</span>
+    <span class="cs">"outDir"</span>: <span class="cs">"dist"</span>
+  },
+  <span class="cs">"references"</span>: [
+    { <span class="cs">"path"</span>: <span class="cs">"../schemas"</span> }  <span class="cc">// bağımlı paketler</span>
+  ]
+}
+      </div>
+    </div>
+
+    <div class="tc amber">
+      <div class="tc-head">
+        <div class="tc-name a">verbatimModuleSyntax</div>
+        <div class="tc-tags"><span class="tag tag-a">TS 5.0+</span></div>
+      </div>
+      <p>
+        <code>import type</code> zorunluluğu. Type-only import'ları <code>import type</code> ile yazmaya zorlar — tree-shaking ve ESM/CJS interop için kritik. <code>tsconfig.base.json</code>'a ekle.
+      </p>
+      <div class="code">
+{
+  <span class="cs">"compilerOptions"</span>: {
+    <span class="cs">"verbatimModuleSyntax"</span>: <span class="ck">true</span>,
+    <span class="cs">"moduleResolution"</span>: <span class="cs">"bundler"</span>,
+    <span class="cs">"strict"</span>: <span class="ck">true</span>,
+    <span class="cs">"noUncheckedIndexedAccess"</span>: <span class="ck">true</span>  <span class="cc">// arr[0] → T | undefined</span>
+  }
+}
+      </div>
+    </div>
+
+    <div class="tc purple">
+      <div class="tc-head">
+        <div class="tc-name p">@total-typescript/ts-reset</div>
+        <div class="tc-tags"><span class="tag tag-p">Type Safety</span></div>
+      </div>
+      <p>
+        TypeScript'in "yanlış" davrandığı yerleri düzeltir. <code>JSON.parse()</code> artık <code>unknown</code> döndürür (<code>any</code> değil), <code>Array.filter(Boolean)</code> doğru tipte, <code>fetch</code> response düzgün typed. Tek satır ekle.
+      </p>
+      <div class="code">
+<span class="cc">// global.d.ts</span>
+/// &lt;reference types="@total-typescript/ts-reset" /&gt;
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ 11 KÜÇÜK DETAYLAR ═══════════════ -->
+<section id="s11">
+  <div class="sec-label">11 — Küçük Ama Kritik Detaylar</div>
+  <div class="sec-title">Gözden Kaçan Her Şey</div>
+  <div class="sec-desc">Tek araç değil ama mutlaka bilmen gereken pratikler ve küçük kütüphaneler.</div>
+
+  <div class="tool-grid">
+
+    <div class="tc blue">
+      <div class="tc-head">
+        <div class="tc-name">npm-run-all2</div>
+        <div class="tc-tags"><span class="tag tag-b">Script</span><span class="tag tag-a">Parallel</span></div>
+      </div>
+      <p>Script'leri paralel veya sıralı çalıştır. <code>run-p tsc lint lint:format</code> ile üçü aynı anda. Concurrently'ye göre daha temiz output, log interleaving yok. "2" eki — npm-run-all'ın aktif fork'u.</p>
+      <div class="code">
+{
+  <span class="cs">"scripts"</span>: {
+    <span class="cs">"check"</span>: <span class="cs">"run-p tsc lint test"</span>,
+    <span class="cs">"dev:all"</span>: <span class="cs">"run-p dev:web dev:admin"</span>
+  }
+}
+      </div>
+    </div>
+
+    <div class="tc green">
+      <div class="tc-head">
+        <div class="tc-name g">cross-env</div>
+        <div class="tc-tags"><span class="tag tag-g">Cross-Platform</span></div>
+      </div>
+      <p>Environment variable'ları Windows'ta da çalışacak şekilde set et. <code>NODE_ENV=production</code> Linux/Mac'te çalışır ama Windows'ta çöker. <code>cross-env NODE_ENV=production</code> her yerde çalışır.</p>
+    </div>
+
+    <div class="tc amber">
+      <div class="tc-head">
+        <div class="tc-name a">dotenv-cli / dotenvx</div>
+        <div class="tc-tags"><span class="tag tag-a">Env</span></div>
+      </div>
+      <p><strong>dotenv-cli:</strong> <code>.env.local</code> gibi farklı env dosyalarını script'te belirt. <strong>dotenvx:</strong> çok dosyalı env yönetimi, şifreleme, .env overriding. <code>dotenvx run --env-file=.env.local -- pnpm dev</code></p>
+    </div>
+
+    <div class="tc purple">
+      <div class="tc-head">
+        <div class="tc-name p">why-is-node-running</div>
+        <div class="tc-tags"><span class="tag tag-p">Debug</span></div>
+      </div>
+      <p>Node.js process neden kapanmıyor? Hangi async işlem açık kalıyor? <code>SIGINT</code>'e rağmen kapanmayan test veya dev server'ları debug etmek için. <code>node -r why-is-node-running script.js</code></p>
+    </div>
+
+    <div class="tc rose">
+      <div class="tc-head">
+        <div class="tc-name r">depcheck (artık Knip'e geç)</div>
+        <div class="tc-tags"><span class="tag tag-r">Archived</span></div>
+      </div>
+      <p>package.json'daki kullanılmayan dependency'leri bulur. Knip daha kapsamlı, ama küçük projeler için depcheck hâlâ işe yarar. Reposu artık Knip'i aktif olarak öneriyor.</p>
+    </div>
+
+    <div class="tc cyan">
+      <div class="tc-head">
+        <div class="tc-name c">is-esm</div>
+        <div class="tc-tags"><span class="tag tag-c">Küçük</span></div>
+      </div>
+      <p>Bir npm paketinin ESM mi CJS mi olduğunu tek komutla kontrol et. <code>npx is-esm lodash</code> → <code>No</code>. Bundle'a girince tree-shaking olmayacağını önceden bil.</p>
+    </div>
+
+    <div class="tc orange">
+      <div class="tc-head">
+        <div class="tc-name o">Barrel File Sorunları</div>
+        <div class="tc-tags"><span class="tag tag-o">Anti-Pattern</span></div>
+      </div>
+      <p>
+        <code>index.ts</code> barrel dosyaları (her şeyi re-export eden) monorepo'da çok yaygın ama <strong>circular dependency'nin ana nedeni</strong>. Next.js App Router'da da performans sorunu. Kural: barrel dosyasından import yerine doğrudan kaynak dosyadan import et.
+      </p>
+      <div class="code">
+<span class="cc">// ❌ Sorunlu — barrel file</span>
+<span class="ck">import</span> { Button, Input, Modal } <span class="ck">from</span> <span class="cs">'@ui'</span>
+
+<span class="cc">// ✅ Doğru — doğrudan kaynak</span>
+<span class="ck">import</span> { Button } <span class="ck">from</span> <span class="cs">'@ui/button'</span>
+<span class="ck">import</span> { Input } <span class="ck">from</span> <span class="cs">'@ui/input'</span>
+      </div>
+    </div>
+
+    <div class="tc blue">
+      <div class="tc-head">
+        <div class="tc-name">patch-package / pnpm patch</div>
+        <div class="tc-tags"><span class="tag tag-b">Workaround</span></div>
+      </div>
+      <p>
+        Upstream'e PR atmayı bekleyemediğin node_module bug'larını geçici olarak patch'le. <strong>pnpm v10'da built-in:</strong> <code>pnpm patch &lt;package&gt;</code> → düzenle → <code>pnpm patch-commit</code>
+      </p>
+      <div class="cmd">
+        <div class="line cmd-blue">pnpm patch some-broken-package@1.0.0</div>
+        <div class="line cmd-comment"># Düzenle...</div>
+        <div class="line cmd-green">pnpm patch-commit /tmp/patch-dir</div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ═══════════════ 12 FULL CI EXAMPLE ═══════════════ -->
+<section id="s12">
+  <div class="sec-label">12 — Tam CI Örneği</div>
+  <div class="sec-title">Gerçek GitHub Actions Yapısı</div>
+  <div class="sec-desc">Bu bölümdeki her araçı kullanan tam CI pipeline örneği.</div>
+
+  <div class="tool-grid-2">
+    <div>
+      <div class="code">
+<span class="cc"># .github/workflows/pr-checks.yml</span>
+name: PR Quality Gate
+on:
+  pull_request:
+    branches: [main]
+
+jobs:
+  # ─── 1. Hızlı kontroller (paralel) ───
+  fast-checks:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10  <span class="cc"># pnpm v10</span>
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: 'pnpm'
+      - run: pnpm install --frozen-lockfile
+      
+      <span class="cc"># Paralel çalıştır</span>
+      - run: run-p tsc:check lint:check
+        env:
+          npm_config_yes: true
+        
+      - name: Type Check
+        run: pnpm turbo type-check --affected
+      
+      - name: Biome Lint
+        run: pnpm biome check --reporter=github .
+
+  <span class="cc"># ─── 2. Test (cache ile) ───</span>
+  test:
+    needs: fast-checks
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - run: pnpm install --frozen-lockfile
+      - name: Run Tests
+        run: pnpm turbo test --affected
+        env:
+          TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
+          TURBO_TEAM: ${{ vars.TURBO_TEAM }}
+      </div>
+    </div>
+    <div>
+      <div class="code">
+  <span class="cc"># ─── 3. Build + Bundle ───</span>
+  bundle-check:
+    needs: fast-checks
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  <span class="cc"># size-limit için gerekli</span>
+      - uses: pnpm/action-setup@v4
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm turbo build
+      
+      - name: Bundle Size Check
+        uses: andresz1/size-limit-action@v1
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          
+  <span class="cc"># ─── 4. Code Health ───</span>
+  code-health:
+    needs: fast-checks
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - run: pnpm install --frozen-lockfile
+      
+      - name: Circular Dependency Check
+        run: |
+          npx madge --circular \
+            --extensions ts,tsx \
+            --exit-code \
+            apps/web/src apps/admin/src packages/
+      
+      - name: Dead Code Report
+        run: npx knip --reporter compact
+        continue-on-error: true  <span class="cc"># önce warn</span>
+      
+      - name: Security Audit
+        run: pnpm audit --audit-level=high
+      
+      - name: Syncpack Version Check
+        run: npx syncpack list-mismatches
+      </div>
+    </div>
+  </div>
+
+  <div class="alert al-g" style="margin-top:16px;">
+    <span class="alert-ico">🚀</span>
+    <p><strong>Turborepo Remote Cache:</strong> <code>TURBO_TOKEN</code> ve <code>TURBO_TEAM</code> ile Vercel Remote Cache'e bağlan. PR'larda değişmeyen paketler saniyeler içinde tamamlanır — CI maliyeti ve süresi dramatik düşer.</p>
+  </div>
+
+  <div class="div"></div>
+
+  <!-- Pre-commit hooks -->
+  <div class="bigcard">
+    <div class="bigcard-title">Pre-commit Hook Stratejisi — Lefthook</div>
+    <div class="code">
+<span class="cc"># lefthook.yml</span>
+pre-commit:
+  parallel: true
+  commands:
+    lint-staged:
+      run: npx lint-staged  <span class="cc"># sadece staged dosyalar</span>
+    type-check:
+      run: pnpm tsc --noEmit
+      
+pre-push:
+  commands:
+    tests:
+      run: pnpm turbo test --affected
+    circular:
+      run: npx madge --circular --exit-code src/
+
+<span class="cc"># .lintstagedrc.js</span>
+<span class="ck">export default</span> {
+  <span class="cs">'**/*.{ts,tsx}'</span>: [<span class="cs">'biome check --write'</span>],
+  <span class="cs">'**/*.{json,md}'</span>: [<span class="cs">'biome format --write'</span>],
+}
+    </div>
+    <div class="alert al-b">
+      <span class="alert-ico">💡</span>
+      <p><strong>Kural:</strong> Pre-commit hızlı (format, lint) yapılır. Yavaş şeyler (test, type-check) pre-push'a veya CI'a bırakılır. Commit'i engelleyen uzun hook = developer frustration.</p>
+    </div>
+  </div>
+</section>
+
+</div><!-- /page -->
+
+<div style="text-align:center;padding:40px 20px;border-top:1px solid var(--border);color:var(--t3);font-family:var(--mono);font-size:10px;letter-spacing:.08em;">
+  2026 Tooling Addendum · Knip · Madge · size-limit · publint · pnpm v10 · VSCode Extensions · Online Tools · CI Pipeline
+</div>
+</body>
+</html>

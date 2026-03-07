@@ -28,7 +28,7 @@ export function useVariableOptions(editor: Editor) {
 	}, [editor]);
 }
 
-export function getInlineDecoratorOptions(editor: Editor) {
+function getInlineDecoratorOptions(editor: Editor) {
 	return getNodeOptions<InlineDecoratorOptions>(editor, "inlineDecorator");
 }
 

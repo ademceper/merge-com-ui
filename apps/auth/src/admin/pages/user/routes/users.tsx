@@ -1,32 +1,10 @@
-import { lazy } from "react";
 import { generateEncodedPath } from "../../../shared/lib/generateEncodedPath";
-import type { Path } from "react-router-dom";
-import type { AppRouteObject } from "../../../app/routes";
 
-export type UserTab = "list" | "permissions";
+type UserTab = "list" | "permissions";
 
-export type UsersParams = { realm: string; tab?: UserTab };
+type UsersParams = { realm: string; tab?: UserTab };
 
-const UsersSection = lazy(() => import("../users-section"));
-
-export const UsersRoute: AppRouteObject = {
-    path: "/:realm/users",
-    element: <UsersSection />,
-    breadcrumb: t => t("titleUsers"),
-    handle: {
-        access: "query-users"
-    }
-};
-
-export const UsersRouteWithTab: AppRouteObject = {
-    ...UsersRoute,
-    path: "/:realm/users/:tab"
-};
-
-export const toUsers = (params: UsersParams): Partial<Path> => {
-    const path = params.tab ? UsersRouteWithTab.path : UsersRoute.path;
-
-    return {
-        pathname: generateEncodedPath(path, params)
-    };
+export const toUsers = (params: UsersParams): string => {
+    const path = params.tab ? "/:realm/users/:tab" : "/:realm/users";
+    return generateEncodedPath(path, params as any);
 };

@@ -5,7 +5,7 @@ import { Button } from "@merge-rd/ui/components/button";
 import { Popover, PopoverContent, PopoverTrigger } from "@merge-rd/ui/components/popover";
 import { useEffect, useRef, useState } from "react";
 import { FormProvider, useForm, useWatch } from "react-hook-form";
-import { useTranslation } from "react-i18next";
+import { useTranslation } from "@merge-rd/i18n";
 import useToggle from "../../../shared/lib/useToggle";
 import { ResourceType } from "./resource-type";
 

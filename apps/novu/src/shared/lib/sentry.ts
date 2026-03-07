@@ -1,11 +1,4 @@
 import * as Sentry from "@sentry/react";
-import { useEffect } from "react";
-import {
-	createRoutesFromChildren,
-	matchRoutes,
-	useLocation,
-	useNavigationType,
-} from "react-router-dom";
 import { MODE, SENTRY_DSN } from "@/shared/config";
 
 export const initializeSentry = () => {
@@ -13,15 +6,6 @@ export const initializeSentry = () => {
 		Sentry.init({
 			dsn: SENTRY_DSN,
 			integrations: [
-				// See docs for support of different versions of variation of react router
-				// https://docs.sentry.io/platforms/javascript/guides/react/configuration/integrations/react-router/
-				Sentry.reactRouterV6BrowserTracingIntegration({
-					useEffect,
-					useLocation,
-					useNavigationType,
-					createRoutesFromChildren,
-					matchRoutes,
-				}),
 				Sentry.replayIntegration({
 					maskAllText: true,
 					blockAllMedia: true,

@@ -4,8 +4,8 @@ import { Button } from "@merge-rd/ui/components/button";
 import { NumberInput } from "@/admin/shared/ui/number-input";
 import { useEffect, useMemo, useState } from "react";
 import { Controller, FormProvider, useForm, useFormContext, useWatch } from "react-hook-form";
-import { useTranslation } from "react-i18next";
-import { Link } from "react-router-dom";
+import { useTranslation } from "@merge-rd/i18n";
+import { Link } from "@tanstack/react-router";
 import {
     FormLabel,
     SelectField,
@@ -477,7 +477,7 @@ export const ScopeForm = ({ clientScope, save, formId, embedded }: ScopeFormProp
                             variant="link"
                             asChild
                         >
-                            <Link to={toClientScopes({ realm })}>{t("cancel")}</Link>
+                            <Link to={toClientScopes({ realm }) as string}>{t("cancel")}</Link>
                         </Button>
                     </div>
                 )}

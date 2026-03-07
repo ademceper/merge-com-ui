@@ -10,7 +10,7 @@ import {
     DialogFooter
 } from "@merge-rd/ui/components/dialog";
 import { FormProvider, useForm } from "react-hook-form";
-import { useTranslation } from "react-i18next";
+import { useTranslation } from "@merge-rd/i18n";
 import { useAdminClient } from "../../app/admin-client";
 import { useRealm } from "../../app/providers/realm-context/realm-context";
 import { REALM_FLOWS } from "./constants";

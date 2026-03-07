@@ -1,4 +1,4 @@
-import { Navigate, useLocation } from "react-router-dom";
+import { Navigate, useLocation } from "@tanstack/react-router";
 import { useRealm } from "../app/providers/realm-context/realm-context";
 import { ROUTES } from "../shared/lib/routes";
 import { generateEncodedPath } from "../shared/lib/generateEncodedPath";
@@ -35,14 +35,15 @@ export const CatchAllRoute = () => {
     for (const section of knownSections) {
         if (path === section || path.startsWith(`${section}/`)) {
             const targetPath = `/${realm}/${path}`;
-            return <Navigate to={`${targetPath}${location.search}${location.hash}`} replace />;
+            const searchStr = location.search ? `?${new URLSearchParams(location.search as Record<string, string>).toString()}` : "";
+            return <Navigate to={`${targetPath}${searchStr}${location.hash || ""}` as string} replace />;
         }
     }
 
     // Default: go to dashboard
     return (
         <Navigate
-            to={generateEncodedPath(ROUTES.REALM, { realm })}
+            to={generateEncodedPath(ROUTES.REALM, { realm }) as string}
             replace
         />
     );

@@ -1,9 +1,9 @@
 import { FieldPath, FieldValues } from "react-hook-form";
-import { useTranslation } from "react-i18next";
+import { useTranslation } from "@merge-rd/i18n";
 import type { SwitchControlProps } from "../../../shared/keycloak-ui-shared";
 import { SwitchControl } from "../../../shared/keycloak-ui-shared";
 
-export type DefaultSwitchControlProps<
+type DefaultSwitchControlProps<
     T extends FieldValues,
     P extends FieldPath<T> = FieldPath<T>
 > = Omit<SwitchControlProps<T, P>, "labelOn" | "labelOff">;

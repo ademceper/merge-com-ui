@@ -25,12 +25,12 @@ import {
     AlertDialogTrigger
 } from "@merge-rd/ui/components/alert-dialog";
 import { useState } from "react";
-import { useTranslation } from "react-i18next";
+import { useTranslation } from "@merge-rd/i18n";
 
 import { deleteConsent, getApplications } from "../../shared/api/methods";
 import { ClientRepresentation } from "../../shared/api/representations";
 import { Page } from "../../shared/ui/page/page";
-import { TFuncKey } from "../../shared/i18n";
+import type { TFuncKey } from "@merge-rd/i18n";
 import { formatDate } from "../../shared/lib/formatDate";
 import { useAccountAlerts } from "../../shared/lib/useAccountAlerts";
 import { usePromise } from "../../shared/lib/usePromise";
@@ -42,7 +42,7 @@ type Application = ClientRepresentation & {
     open: boolean;
 };
 
-export const Applications = () => {
+const Applications = () => {
     const { t } = useTranslation();
     const context = useEnvironment();
     const { addAlert, addError } = useAccountAlerts();

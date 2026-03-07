@@ -1,8 +1,4 @@
-import { lazy } from "react";
-import type { Path } from "react-router-dom";
 import { generateEncodedPath } from "../../../shared/lib/generateEncodedPath";
-
-import type { AppRouteObject } from "../../../app/routes";
 
 export type RealmRoleTab =
     | "details"
@@ -12,23 +8,11 @@ export type RealmRoleTab =
     | "permissions"
     | "events";
 
-export type RealmRoleParams = {
+type RealmRoleParams = {
     realm: string;
     id: string;
     tab: RealmRoleTab;
 };
 
-const RealmRoleTabs = lazy(() => import("../realm-role-tabs"));
-
-export const RealmRoleRoute: AppRouteObject = {
-    path: "/:realm/roles/:id/:tab",
-    element: <RealmRoleTabs />,
-    breadcrumb: t => t("roleDetails"),
-    handle: {
-        access: ["view-realm", "view-users"]
-    }
-};
-
-export const toRealmRole = (params: RealmRoleParams): Partial<Path> => ({
-    pathname: generateEncodedPath(RealmRoleRoute.path, params)
-});
+export const toRealmRole = (params: RealmRoleParams): string =>
+    generateEncodedPath("/:realm/roles/:id/:tab", params);

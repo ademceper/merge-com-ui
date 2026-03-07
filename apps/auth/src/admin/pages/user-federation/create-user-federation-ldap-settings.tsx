@@ -1,6 +1,6 @@
 import { FormProvider, useForm } from "react-hook-form";
-import { useTranslation } from "react-i18next";
-import { useNavigate } from "react-router-dom";
+import { useTranslation } from "@merge-rd/i18n";
+import { useNavigate } from "@tanstack/react-router";
 import { useAdminClient } from "../../app/admin-client";
 import { getErrorDescription, getErrorMessage } from "../../../shared/keycloak-ui-shared";
 import { toast } from "sonner";
@@ -24,7 +24,7 @@ const onSubmit = async (formData: LdapComponentRepresentation) => {
         try {
             await adminClient.components.create(serializeFormData(formData));
             toast.success(t("createUserProviderSuccess"));
-            navigate(toUserFederation({ realm }));
+            navigate({ to: toUserFederation({ realm }) as string });
         } catch (error) {
             toast.error(t("createUserProviderError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
         }

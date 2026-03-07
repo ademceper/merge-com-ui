@@ -5,7 +5,7 @@ import { Label } from "@merge-rd/ui/components/label";
 import { MinusCircle, PlusCircle } from "@phosphor-icons/react";
 import { useEffect, useState } from "react";
 import { useFormContext } from "react-hook-form";
-import { useTranslation } from "react-i18next";
+import { useTranslation } from "@merge-rd/i18n";
 import { KeyValueType } from "../key-value-form/key-value-convert";
 import type { ComponentProps } from "./components";
 

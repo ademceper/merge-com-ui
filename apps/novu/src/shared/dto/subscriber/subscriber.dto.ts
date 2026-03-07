@@ -65,7 +65,7 @@ export interface ISubscriberResponseDto {
 	timezone?: string;
 }
 
-export type SubscribersListResponseDto = {
+type SubscribersListResponseDto = {
 	data: Array<ISubscriberResponseDto>;
 	next: string | null;
 	previous: string | null;

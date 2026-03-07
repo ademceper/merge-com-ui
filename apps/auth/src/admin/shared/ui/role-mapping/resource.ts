@@ -64,11 +64,11 @@ type UserQuery = {
     q?: string;
 };
 
-export type BruteUser = UserRepresentation & {
+type BruteUser = UserRepresentation & {
     bruteForceStatus?: Record<string, object>;
 };
 
-export const findUsers = (
+const findUsers = (
     adminClient: KeycloakAdminClient,
     query: UserQuery
 ): Promise<BruteUser[]> =>

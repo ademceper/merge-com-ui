@@ -1,5 +1,5 @@
-import { useTranslation } from "react-i18next";
-import { useParams } from "react-router-dom";
+import { useTranslation } from "@merge-rd/i18n";
+import { useParams } from "../../shared/lib/useParams";
 import { useRealm } from "../../app/providers/realm-context/realm-context";
 import { PermissionsTab } from "../../shared/ui/permission-tab/permission-tab";
 import useIsFeatureEnabled, { Feature } from "../../shared/lib/useIsFeatureEnabled";

@@ -1,4 +1,4 @@
-export const passwordConstraints = {
+const passwordConstraints = {
 	minLength: 8,
 	maxLength: 64,
 	pattern:

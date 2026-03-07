@@ -10,8 +10,8 @@ import {
 import { DropdownMenuItem } from "@merge-rd/ui/components/dropdown-menu";
 import { Plus } from "@phosphor-icons/react";
 import { useState } from "react";
-import { useTranslation } from "react-i18next";
-import { useNavigate } from "react-router-dom";
+import { useTranslation } from "@merge-rd/i18n";
+import { useNavigate } from "@tanstack/react-router";
 import { useAdminClient } from "../../../app/admin-client";
 import { useConfirmDialog } from "../../../shared/ui/confirm-dialog/confirm-dialog";
 import { useRealm } from "../../../app/providers/realm-context/realm-context";
@@ -159,7 +159,7 @@ export const KeysListTab = ({ realmComponents }: KeysListTabProps) => {
                         variant="default"
                         className="flex h-9 w-9 shrink-0 items-center justify-center p-0 sm:h-9 sm:w-auto sm:gap-2 sm:px-4 sm:py-2"
                         aria-label={t("addProvider")}
-                        onClick={() => navigate(toKeysTab({ realm, tab: "providers" }))}
+                        onClick={() => navigate({ to: toKeysTab({ realm, tab: "providers" }) as string })}
                     >
                         <Plus size={20} className="shrink-0 sm:hidden" />
                         <span className="hidden sm:inline">{t("addProvider")}</span>

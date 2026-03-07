@@ -1,3 +1,3 @@
-export enum ResourceEnum {
+enum ResourceEnum {
 	EVENTS = "events",
 }

@@ -1,6 +1,6 @@
 import { StepTypeEnum } from "./enums";
 
-export enum StepColorEnum {
+enum StepColorEnum {
 	NEUTRAL = "neutral",
 	STABLE = "stable",
 	INFORMATION = "information",

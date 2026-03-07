@@ -10,7 +10,7 @@ import { Tooltip, TooltipContent, TooltipTrigger, TooltipProvider } from "@merge
 import { Plus } from "@phosphor-icons/react";
 import { Button } from "@merge-rd/ui/components/button";
 import { useState } from "react";
-import { useTranslation } from "react-i18next";
+import { useTranslation } from "@merge-rd/i18n";
 import { useAdminClient } from "../../../app/admin-client";
 import type { ExpandableExecution } from "../execution-model";
 import { AddStepModal, FlowType } from "./modals/add-step-modal";

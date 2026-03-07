@@ -3,7 +3,7 @@ import { FacetedFormFilter } from "@merge-rd/ui/components/faceted-filter/facete
 import { Calendar } from "@phosphor-icons/react";
 import { useEffect, useMemo } from "react";
 import { useForm } from "react-hook-form";
-import { Link } from "react-router-dom";
+import { Link } from "@tanstack/react-router";
 import { Badge } from "@/shared/ui/primitives/badge";
 import {
 	Tooltip,
@@ -11,7 +11,7 @@ import {
 	TooltipPortal,
 	TooltipTrigger,
 } from "@/shared/ui/primitives/tooltip";
-import type { LogsFilters } from "@/features/activity/lib/use-logs-url-state";
+import type { LogsFilters } from "@/pages/activity/model/use-logs-url-state";
 import { useFetchSubscription } from "@/shared/lib/hooks/use-fetch-subscription";
 import { buildLogsDateFilters } from "@/shared/lib/logs-filters.utils";
 import { ROUTES } from "@/shared/lib/routes";
@@ -53,7 +53,7 @@ const UpgradeCtaIcon: React.ComponentType<{ className?: string }> = () => {
 		<Tooltip>
 			<TooltipTrigger asChild>
 				<Link
-					to={`${ROUTES.SETTINGS_BILLING}?utm_source=logs-retention`}
+					to={`${ROUTES.SETTINGS_BILLING}?utm_source=logs-retention` as string}
 					className="block flex items-center justify-center transition-all duration-200 hover:scale-105"
 				>
 					<Badge color="purple" size="sm" variant="lighter">

@@ -7,7 +7,7 @@ import type { INotificationTemplate } from "../notification-template";
 import type { IPreferenceChannels } from "../subscriber-preference";
 import type { ITenantEntity } from "../tenant";
 
-export interface IWorkflowOverride {
+interface IWorkflowOverride {
 	_id?: WorkflowOverrideId;
 
 	_organizationId: OrganizationId;

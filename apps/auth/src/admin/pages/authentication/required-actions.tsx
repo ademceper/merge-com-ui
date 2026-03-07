@@ -20,7 +20,7 @@ import {
 } from "@merge-rd/ui/components/tooltip";
 import { Gear } from "@phosphor-icons/react";
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { useTranslation } from "react-i18next";
+import { useTranslation } from "@merge-rd/i18n";
 import { useAdminClient } from "../../app/admin-client";
 import { KeycloakSpinner } from "../../../shared/keycloak-ui-shared";
 import { useRealm } from "../../app/providers/realm-context/realm-context";

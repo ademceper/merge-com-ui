@@ -1,0 +1,140 @@
+import { DEFAULT_LOCALE } from "@/shared";
+import React, { useImperativeHandle, useMemo, useRef } from "react";
+import { useParams } from "@tanstack/react-router";
+import {
+	VariableList,
+	type VariableListRef,
+} from "@/widgets/variable-editor/variable-list";
+import { useFetchOrganizationSettings } from "@/pages/settings/api/use-fetch-organization-settings";
+import type {
+	LocalizationResourceEnum,
+	TranslationKey,
+} from "@/shared/model/translations";
+import { buildRoute, ROUTES } from "@/shared/lib/routes";
+import { NewTranslationKeyPreview } from "./new-translation-key-preview";
+
+export type TranslationKeyItem = {
+	name: string;
+	id: string;
+	type?: string;
+	displayLabel?: string;
+};
+
+type TranslationSuggestionsPopoverProps = {
+	items: TranslationKeyItem[];
+	onSelectItem: (item: TranslationKeyItem) => void;
+};
+
+type TranslationSuggestionsPopoverRef = {
+	moveUp: () => void;
+	moveDown: () => void;
+	select: () => void;
+};
+
+export const TranslationSuggestionsListView = React.forwardRef<
+	TranslationSuggestionsPopoverRef,
+	TranslationSuggestionsPopoverProps & {
+		translationKeys?: TranslationKey[];
+		resourceId: string;
+		resourceType: LocalizationResourceEnum;
+		isTranslationEnabled: boolean;
+	}
+>(
+	(
+		{
+			items,
+			onSelectItem,
+			translationKeys = [],
+			resourceId,
+			resourceType,
+			isTranslationEnabled,
+		},
+		ref,
+	) => {
+		const { environmentSlug } = useParams({ strict: false });
+		const { data: organizationSettings } = useFetchOrganizationSettings();
+
+		const defaultLocale =
+			organizationSettings?.data?.defaultLocale ?? DEFAULT_LOCALE;
+
+		const translationsUrl = buildRoute(ROUTES.TRANSLATIONS_EDIT, {
+			environmentSlug: environmentSlug ?? "",
+			resourceType,
+			resourceId,
+			locale: DEFAULT_LOCALE,
+		});
+
+		const options = useMemo(() => {
+			return items.map(
+				(
+					item: TranslationKeyItem,
+				): { label: string; value: string; preview?: React.ReactNode } => {
+					// Check if this item is a new translation key by seeing if it exists in translationKeys
+					const existingKeys = translationKeys.map((key) => key.name);
+					const isNewTranslationKeyItem = !existingKeys.includes(item.name);
+
+					if (isNewTranslationKeyItem) {
+						const displayLabel = `Create "${item.name}"`;
+
+						return {
+							label: displayLabel,
+							value: item.name,
+							preview: (
+								<NewTranslationKeyPreview
+									locale={defaultLocale}
+									translationsUrl={translationsUrl}
+								/>
+							),
+						};
+					}
+
+					return {
+						label: item.name,
+						value: item.name,
+					};
+				},
+			);
+		}, [items, translationKeys, defaultLocale, translationsUrl]);
+
+		const variablesListRef = useRef<VariableListRef>(null);
+
+		const onSelect = (value: string) => {
+			const item = items.find(
+				(item: TranslationKeyItem) => item.name === value,
+			);
+
+			if (!item) {
+				return;
+			}
+
+			onSelectItem(item);
+		};
+
+		useImperativeHandle(ref, () => ({
+			moveUp: () => {
+				variablesListRef.current?.prev();
+			},
+			moveDown: () => {
+				variablesListRef.current?.next();
+			},
+			select: () => {
+				variablesListRef.current?.select();
+			},
+		}));
+
+		if (!isTranslationEnabled || items.length === 0) {
+			return null;
+		}
+
+		return (
+			<VariableList
+				ref={variablesListRef}
+				className="min-w-[250px] rounded-md border shadow-md outline-hidden"
+				options={options}
+				onSelect={onSelect}
+				title="Translation Keys"
+				context="translations"
+			/>
+		);
+	},
+);

@@ -6,7 +6,7 @@ import type {
 	WorkflowPreferences,
 } from "../../model";
 import type { Slug } from "../../model/utils";
-import type { RuntimeIssue } from "../../utils/issues";
+import type { RuntimeIssue } from "../../lib/utils/issues";
 import type { JSONSchemaDto } from "./json-schema-dto";
 import type {
 	StepCreateDto,
@@ -16,7 +16,7 @@ import type {
 } from "./step.dto";
 import type { WorkflowStatusEnum } from "./workflow-status-enum";
 
-export class ControlsSchema {
+class ControlsSchema {
 	schema: JSONSchemaDto;
 }
 
@@ -93,7 +93,7 @@ export type WorkflowCreateAndUpdateKeys =
 	| keyof CreateWorkflowDto
 	| keyof UpdateWorkflowDto;
 
-export enum WorkflowIssueTypeEnum {
+enum WorkflowIssueTypeEnum {
 	MISSING_VALUE = "MISSING_VALUE",
 	MAX_LENGTH_ACCESSED = "MAX_LENGTH_ACCESSED",
 	WORKFLOW_ID_ALREADY_EXISTS = "WORKFLOW_ID_ALREADY_EXISTS",
@@ -128,13 +128,13 @@ export type UpdateWorkflowDto = WorkflowCommonsFields & {
 	payloadSchema?: object;
 };
 
-export type UpsertWorkflowBody = Omit<UpdateWorkflowDto, "steps"> & {
+type UpsertWorkflowBody = Omit<UpdateWorkflowDto, "steps"> & {
 	steps: UpsertStepBody[];
 };
 
-export type UpsertStepBody = StepCreateBody | UpdateStepBody;
-export type StepCreateBody = StepCreateDto;
-export type UpdateStepBody = StepUpdateDto;
+type UpsertStepBody = StepCreateBody | UpdateStepBody;
+type StepCreateBody = StepCreateDto;
+type UpdateStepBody = StepUpdateDto;
 
 export type DuplicateWorkflowDto = Pick<
 	CreateWorkflowDto,
@@ -143,10 +143,10 @@ export type DuplicateWorkflowDto = Pick<
 	workflowId?: string;
 };
 
-export function isStepCreateBody(step: UpsertStepBody): step is StepCreateDto {
+function isStepCreateBody(step: UpsertStepBody): step is StepCreateDto {
 	return step && typeof step === "object" && !(step as UpdateStepBody)._id;
 }
 
-export function isStepUpdateBody(step: UpsertStepBody): step is UpdateStepBody {
+function isStepUpdateBody(step: UpsertStepBody): step is UpdateStepBody {
 	return step && typeof step === "object" && !!(step as UpdateStepBody)._id;
 }

@@ -1,5 +1,5 @@
 import { TextControl } from "../../../../shared/keycloak-ui-shared";
-import { useTranslation } from "react-i18next";
+import { useTranslation } from "@merge-rd/i18n";
 import type { ComponentProps } from "./components";
 
 export const StringComponent = ({

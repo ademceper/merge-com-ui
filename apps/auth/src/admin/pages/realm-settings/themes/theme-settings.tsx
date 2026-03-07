@@ -3,7 +3,7 @@ import { SelectField } from "../../../../shared/keycloak-ui-shared";
 import { FormPanel } from "../../../../shared/keycloak-ui-shared/scroll-form/form-panel";
 import { useEffect } from "react";
 import { FormProvider, useForm } from "react-hook-form";
-import { useTranslation } from "react-i18next";
+import { useTranslation } from "@merge-rd/i18n";
 import { FixedButtonsGroup } from "../../../shared/ui/form/fixed-button-group";
 import { FormAccess } from "../../../shared/ui/form/form-access";
 import { DefaultSwitchControl } from "../../../shared/ui/switch-control";

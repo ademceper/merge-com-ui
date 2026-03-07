@@ -1,6 +1,6 @@
 import { mergeAttributes, Node } from "@tiptap/core";
 
-export interface FooterOptions {
+interface FooterOptions {
 	HTMLAttributes: Record<string, any>;
 }
 

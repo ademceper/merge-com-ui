@@ -12,7 +12,7 @@ import { fetchAdminUI } from "./auth/admin-ui-endpoint";
 
 const MAX_REALMS = 3;
 
-export const RecentRealmsContext = createNamedContext<
+const RecentRealmsContext = createNamedContext<
     RealmNameRepresentation[] | undefined
 >("RecentRealmsContext", undefined);
 

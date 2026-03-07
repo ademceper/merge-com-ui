@@ -9,8 +9,8 @@ import { TRANSLATION_NAMESPACE_SEPARATOR } from "@/shared";
 import type { EditorView } from "@uiw/react-codemirror";
 import type React from "react";
 import { createRoot } from "react-dom/client";
-import { NewVariablePreview } from "@/shared/ui/variable/components/new-variable-preview";
-import { getFilters } from "@/shared/ui/variable/constants";
+import { NewVariablePreview } from "@/widgets/variable-editor/components/new-variable-preview";
+import { getFilters } from "@/widgets/variable-editor/constants";
 import type { LiquidVariable } from "@/shared/lib/parseStepVariables";
 import { isValidContextVariable } from "./context-variable-utils";
 import { getVariablesAtPositionWithLoopProperties } from "./liquid-scope-analyzer";
@@ -313,7 +313,7 @@ const createInfoPanel = ({ component }: { component: React.ReactNode }) => {
  *    - payload.* (any new field)
  *    - steps.{valid-step}.events.n.payload.* (any new field)
  */
-export const completions =
+const completions =
 	(
 		scopedVariables: LiquidVariable[],
 		variables: LiquidVariable[],

@@ -11,7 +11,7 @@
 
 // @ts-nocheck
 
-import { Trans } from "react-i18next";
+import { Trans } from "@merge-rd/i18n";
 
 import { Permission } from "../../shared/api/representations";
 

@@ -5,16 +5,16 @@ import type { AllowedLogoAlignment } from "../logo/logo";
 import { DEFAULT_SECTION_SHOW_IF_KEY } from "../section/section";
 import { ButtonView } from "./button-view";
 
-export const DEFAULT_BUTTON_ALIGNMENT: AllowedLogoAlignment = "left";
-export const DEFAULT_BUTTON_VARIANT: AllowedButtonVariant = "filled";
-export const DEFAULT_BUTTON_BORDER_RADIUS: AllowedButtonBorderRadius = "smooth";
-export const DEFAULT_BUTTON_BACKGROUND_COLOR = "#000000";
-export const DEFAULT_BUTTON_TEXT_COLOR = "#ffffff";
+const DEFAULT_BUTTON_ALIGNMENT: AllowedLogoAlignment = "left";
+const DEFAULT_BUTTON_VARIANT: AllowedButtonVariant = "filled";
+const DEFAULT_BUTTON_BORDER_RADIUS: AllowedButtonBorderRadius = "smooth";
+const DEFAULT_BUTTON_BACKGROUND_COLOR = "#000000";
+const DEFAULT_BUTTON_TEXT_COLOR = "#ffffff";
 
-export const DEFAULT_BUTTON_PADDING_TOP = 10;
-export const DEFAULT_BUTTON_PADDING_RIGHT = 32;
-export const DEFAULT_BUTTON_PADDING_BOTTOM = 10;
-export const DEFAULT_BUTTON_PADDING_LEFT = 32;
+const DEFAULT_BUTTON_PADDING_TOP = 10;
+const DEFAULT_BUTTON_PADDING_RIGHT = 32;
+const DEFAULT_BUTTON_PADDING_BOTTOM = 10;
+const DEFAULT_BUTTON_PADDING_LEFT = 32;
 
 export const allowedButtonVariant = ["filled", "outline"] as const;
 export type AllowedButtonVariant = (typeof allowedButtonVariant)[number];

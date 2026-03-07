@@ -6,10 +6,9 @@
  */
 
 import { Suspense, lazy, useMemo, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams } from "@tanstack/react-router";
 import { useEnvironment } from "../../../shared/keycloak-ui-shared";
-import { MenuItem } from "../../widgets/page-nav";
-import { ContentComponentParams } from "../../app/routes";
+import type { MenuItem } from "../../shared/lib/menu-item";
 import { joinPath } from "../../shared/lib/joinPath";
 import { usePromise } from "../../shared/lib/usePromise";
 import fetchContentJson from "./fetchContent";
@@ -26,11 +25,11 @@ function findComponent(content: MenuItem[], componentId: string): string | undef
     return undefined;
 }
 
-export const ContentComponent = () => {
+const ContentComponent = () => {
     const context = useEnvironment();
 
     const [content, setContent] = useState<MenuItem[]>();
-    const { componentId } = useParams<ContentComponentParams>();
+    const { componentId } = useParams({ strict: false }) as { componentId?: string };
 
     usePromise(signal => fetchContentJson({ signal, context }), setContent);
     const modulePath = useMemo(

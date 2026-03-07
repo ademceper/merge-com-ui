@@ -10,7 +10,7 @@ import {
 	HoverCardContent,
 	HoverCardTrigger,
 } from "@/shared/ui/primitives/hover-card";
-import { useFetchRequestTraces } from "@/features/activity/lib/use-fetch-request-traces";
+import { useFetchRequestTraces } from "@/pages/activity/api/use-fetch-request-traces";
 import type { ApiTrace, RequestLog } from "@/shared/model/logs";
 import { formatDateSimple } from "@/shared/lib/format-date";
 import { StatusBadge, StatusBadgeIcon } from "@/shared/ui/primitives/status-badge";

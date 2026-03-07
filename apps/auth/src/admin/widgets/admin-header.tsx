@@ -1,5 +1,5 @@
-import { useTranslation } from "react-i18next";
-import { useLocation } from "react-router-dom";
+import { useTranslation } from "@merge-rd/i18n";
+import { useLocation } from "@tanstack/react-router";
 import { SidebarPageHeader } from "@merge-rd/ui/components/sidebar";
 import { GroupBreadCrumbsForHeader } from "../shared/ui/bread-crumb/group-bread-crumbs";
 import { PageBreadCrumbs, usePageTitle } from "../shared/ui/bread-crumb/page-bread-crumbs";

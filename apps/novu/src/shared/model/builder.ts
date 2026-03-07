@@ -1,4 +1,4 @@
-export enum FieldOperatorEnum {
+enum FieldOperatorEnum {
 	ALL_IN = "ALL_IN",
 	ANY_IN = "ANY_IN",
 	BETWEEN = "BETWEEN",
@@ -16,7 +16,7 @@ export enum FieldOperatorEnum {
 	SMALLER_EQUAL = "SMALLER_EQUAL",
 }
 
-export enum FieldLogicalOperatorEnum {
+enum FieldLogicalOperatorEnum {
 	AND = "AND",
 	OR = "OR",
 }
@@ -34,7 +34,7 @@ export type BuilderFieldType =
 	| "LIST"
 	| "MULTI_LIST"
 	| "GROUP";
-export enum BuilderFieldTypeEnum {
+enum BuilderFieldTypeEnum {
 	BOOLEAN = "BOOLEAN",
 	TEXT = "TEXT",
 	DATE = "DATE",
@@ -44,7 +44,7 @@ export enum BuilderFieldTypeEnum {
 	MULTI_LIST = "MULTI_LIST",
 	GROUP = "GROUP",
 }
-export type BuilderFieldOperator =
+type BuilderFieldOperator =
 	| FieldOperatorEnum.LARGER
 	| FieldOperatorEnum.SMALLER
 	| FieldOperatorEnum.LARGER_EQUAL
@@ -61,13 +61,13 @@ export type BuilderFieldOperator =
 	| FieldOperatorEnum.IN
 	| FieldOperatorEnum.IS_DEFINED;
 
-export enum TimeOperatorEnum {
+enum TimeOperatorEnum {
 	DAYS = "days",
 	HOURS = "hours",
 	MINUTES = "minutes",
 }
 
-export enum FilterPartTypeEnum {
+enum FilterPartTypeEnum {
 	PAYLOAD = "payload",
 	SUBSCRIBER = "subscriber",
 	WEBHOOK = "webhook",
@@ -77,18 +77,18 @@ export enum FilterPartTypeEnum {
 	TENANT = "tenant",
 }
 
-export enum PreviousStepTypeEnum {
+enum PreviousStepTypeEnum {
 	READ = "read",
 	UNREAD = "unread",
 	SEEN = "seen",
 	UNSEEN = "unseen",
 }
 
-export interface IBaseFilterPart {
+interface IBaseFilterPart {
 	on: FilterPartTypeEnum;
 }
 
-export interface IBaseFieldFilterPart extends IBaseFilterPart {
+interface IBaseFieldFilterPart extends IBaseFilterPart {
 	field: string;
 	value: string;
 	operator: BuilderFieldOperator;
@@ -136,9 +136,9 @@ export type FilterParts =
 	| IPreviousStepFilterPart
 	| ITenantFilterPart;
 
-export type Operator = BuilderFieldOperator | TimeOperatorEnum;
+type Operator = BuilderFieldOperator | TimeOperatorEnum;
 
-export interface ICondition {
+interface ICondition {
 	filter: string;
 	field: string;
 	expected: string;

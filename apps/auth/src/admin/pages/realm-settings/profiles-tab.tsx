@@ -13,8 +13,8 @@ import { RadioGroup, RadioGroupItem } from "@merge-rd/ui/components/radio-group"
 import { Trash } from "@phosphor-icons/react";
 import { omit } from "lodash-es";
 import { useState } from "react";
-import { useTranslation } from "react-i18next";
-import { Link } from "react-router-dom";
+import { useTranslation } from "@merge-rd/i18n";
+import { Link } from "@tanstack/react-router";
 import { useAdminClient } from "../../app/admin-client";
 import {
     AlertDialog,
@@ -104,7 +104,7 @@ export default function ProfilesTab() {
             header: t("name"),
             cell: ({ row }) => (
                 <Link
-                    to={toClientProfile({ realm, profileName: row.original.name! })}
+                    to={toClientProfile({ realm, profileName: row.original.name! }) as string}
                     className="text-primary hover:underline"
                 >
                     {row.original.name}
@@ -217,7 +217,7 @@ export default function ProfilesTab() {
                     emptyMessage={t("emptyClientProfiles")}
                     toolbar={
                         <Button asChild data-testid="createProfile" variant="default" className="flex h-9 shrink-0 items-center gap-2 px-4 py-2" aria-label={t("createClientProfile")}>
-                            <Link to={toAddClientProfile({ realm, tab: "profiles" })}>
+                            <Link to={toAddClientProfile({ realm, tab: "profiles" }) as string}>
                                 {t("createClientProfile")}
                             </Link>
                         </Button>

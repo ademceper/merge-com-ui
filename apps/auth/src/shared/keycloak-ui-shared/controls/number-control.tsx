@@ -11,12 +11,12 @@ import {
 import { getRuleValue } from "../utils/getRuleValue";
 import { FormLabel } from "./form-label";
 
-export type NumberControlOption = {
+type NumberControlOption = {
     key: string;
     value: string;
 };
 
-export type NumberControlProps<
+type NumberControlProps<
     T extends FieldValues,
     P extends FieldPath<T> = FieldPath<T>
 > = Omit<React.ComponentProps<typeof Input>, "name" | "required" | "type"> &

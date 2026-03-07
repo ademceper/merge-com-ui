@@ -1,7 +1,4 @@
-import { lazy } from "react";
-import type { Path } from "react-router-dom";
 import { generateEncodedPath } from "../../../shared/lib/generateEncodedPath";
-import type { AppRouteObject } from "../../../app/routes";
 
 export type OrganizationTab =
     | "settings"
@@ -16,17 +13,5 @@ export type EditOrganizationParams = {
     tab: OrganizationTab;
 };
 
-const DetailOrganization = lazy(() => import("../detail-organization"));
-
-export const EditOrganizationRoute: AppRouteObject = {
-    path: "/:realm/organizations/:id/:tab",
-    element: <DetailOrganization />,
-    breadcrumb: t => t("organizationDetails"),
-    handle: {
-        access: "manage-users"
-    }
-};
-
-export const toEditOrganization = (params: EditOrganizationParams): Partial<Path> => ({
-    pathname: generateEncodedPath(EditOrganizationRoute.path, params)
-});
+export const toEditOrganization = (params: EditOrganizationParams): string =>
+    generateEncodedPath("/:realm/organizations/:id/:tab", params);

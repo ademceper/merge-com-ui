@@ -1,0 +1,83 @@
+import { Button } from "@merge-rd/ui/components/button";
+import { cn } from "@merge-rd/ui/lib/utils";
+import type { RuntimeIssue, StepResponseDto } from "@/shared";
+import { ArrowUpRight } from "@phosphor-icons/react";
+import type { PropsWithChildren } from "react";
+import { Link } from "@tanstack/react-router";
+import { ExternalLink } from "@/shared/ui/shared/external-link";
+import { SidebarContent } from "@/widgets/side-navigation/sidebar";
+import TruncatedText from "@/shared/ui/truncated-text";
+import { titleize } from "@/shared/lib/titleize";
+
+export const ConfigureStepTemplateIssuesContainer = (
+	props: PropsWithChildren,
+) => {
+	const { children } = props;
+
+	return (
+		<SidebarContent className="gap-2">
+			<div className="flex items-center justify-between">
+				<span className="text-xs font-medium">Action required</span>
+				<ExternalLink
+					variant="text"
+					underline={false}
+					href="https://docs.novu.co/framework/typescript/steps/inApp"
+					className="text-xs"
+				>
+					<span>Help?</span>
+				</ExternalLink>
+			</div>
+			{children}
+		</SidebarContent>
+	);
+};
+
+type ConfigureStepTemplateIssueCtaProps = {
+	step: StepResponseDto;
+	issue: RuntimeIssue;
+	type: "error" | "info";
+};
+
+export const ConfigureStepTemplateIssueCta = (
+	props: ConfigureStepTemplateIssueCtaProps,
+) => {
+	const { step, issue, type } = props;
+	const isError = type === "error";
+
+	const linkTo = isError ? "./editor" : "/integrations";
+
+	const truncatedTextContent = isError
+		? `Invalid variable: ${issue.variableName}`
+		: `${titleize(step.type?.replace("_", " ") || "")} provider not connected`;
+
+	return (
+		<Link to={linkTo} relative="path" state={{ stepType: step.type }}>
+			<Button
+				size="sm"
+				variant="secondary"
+				mode="outline"
+				className="flex h-full w-full justify-start gap-3 py-2 text-xs"
+				type="button"
+			>
+				<span
+					className={cn(`h-full min-w-1 rounded-full`, {
+						"bg-destructive": isError,
+						"bg-bg-sub": !isError,
+					})}
+				/>
+				<div className="flex flex-col items-start gap-0.5 overflow-hidden">
+					<TruncatedText className="w-full text-left font-medium">
+						{truncatedTextContent}
+					</TruncatedText>
+					<p className="text-text-soft text-left text-wrap">{issue.message}</p>
+				</div>
+				<ArrowUpRight
+					className={cn(`mb-auto ml-auto size-4 shrink-0`, {
+						"text-destructive": isError,
+						"text-text-sub": !isError,
+					})}
+				/>
+			</Button>
+		</Link>
+	);
+};

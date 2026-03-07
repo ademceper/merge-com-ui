@@ -1,6 +1,6 @@
 import type { IWorkflowOverrideRequestDto } from "./workflow-override.dto";
 
-export interface ICreateWorkflowOverrideRequestDto
+interface ICreateWorkflowOverrideRequestDto
 	extends IWorkflowOverrideRequestDto {
 	workflowId: string;
 

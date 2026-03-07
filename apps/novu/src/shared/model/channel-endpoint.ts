@@ -3,7 +3,7 @@ import type { EnvironmentId } from "./environment";
 import type { OrganizationId } from "./organization";
 import type { ProvidersIdEnum } from "./providers";
 
-export const ENDPOINT_TYPES = {
+const ENDPOINT_TYPES = {
 	SLACK_CHANNEL: "slack_channel",
 	SLACK_USER: "slack_user",
 	WEBHOOK: "webhook",
@@ -12,10 +12,10 @@ export const ENDPOINT_TYPES = {
 	MS_TEAMS_USER: "ms_teams_user",
 } as const;
 
-export type ChannelEndpointType =
+type ChannelEndpointType =
 	(typeof ENDPOINT_TYPES)[keyof typeof ENDPOINT_TYPES];
 
-export type ChannelEndpointByType = {
+type ChannelEndpointByType = {
 	[ENDPOINT_TYPES.SLACK_CHANNEL]: { channelId: string };
 	[ENDPOINT_TYPES.SLACK_USER]: { userId: string };
 	[ENDPOINT_TYPES.WEBHOOK]: { url: string; channel?: string };
@@ -24,7 +24,7 @@ export type ChannelEndpointByType = {
 	[ENDPOINT_TYPES.MS_TEAMS_USER]: { userId: string };
 };
 
-export type ChannelEndpoint<
+type ChannelEndpoint<
 	T extends ChannelEndpointType = ChannelEndpointType,
 > = {
 	identifier: string;

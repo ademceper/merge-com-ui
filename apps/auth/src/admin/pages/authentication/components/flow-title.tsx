@@ -1,7 +1,7 @@
 import { HelpItem } from "../../../../shared/keycloak-ui-shared";
 import { Badge } from "@merge-rd/ui/components/badge";
 import { GitBranch, MapPin, Robot, ListChecks } from "@phosphor-icons/react";
-import { useTranslation } from "react-i18next";
+import { useTranslation } from "@merge-rd/i18n";
 import { useAuthenticationProvider } from "./authentication-provider-context";
 import { FlowType } from "./flow-row";
 

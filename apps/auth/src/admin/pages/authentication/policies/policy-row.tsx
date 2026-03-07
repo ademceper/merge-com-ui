@@ -5,7 +5,7 @@ import { Label } from "@merge-rd/ui/components/label";
 import { Switch } from "@merge-rd/ui/components/switch";
 import { MinusCircle } from "@phosphor-icons/react";
 import { Controller, useFormContext } from "react-hook-form";
-import { useTranslation } from "react-i18next";
+import { useTranslation } from "@merge-rd/i18n";
 import { FormErrorText, HelpItem } from "../../../../shared/keycloak-ui-shared";
 
 type PolicyRowProps = {

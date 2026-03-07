@@ -8,7 +8,7 @@ import {
 } from "@merge-rd/ui/components/select";
 import { get } from "lodash-es";
 import { Controller, useFormContext, useWatch } from "react-hook-form";
-import { useTranslation } from "react-i18next";
+import { useTranslation } from "@merge-rd/i18n";
 import { useServerInfo } from "../../../app/providers/server-info/server-info-provider";
 import { sortProviders } from "../../../shared/lib/util";
 import { ClientIdSecret } from "../component/client-id-secret";

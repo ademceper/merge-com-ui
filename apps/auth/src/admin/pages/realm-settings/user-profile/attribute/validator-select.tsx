@@ -8,7 +8,7 @@ import {
 } from "@merge-rd/ui/components/select";
 import { Label } from "@merge-rd/ui/components/label";
 import { useMemo, useState } from "react";
-import { useTranslation } from "react-i18next";
+import { useTranslation } from "@merge-rd/i18n";
 import { useServerInfo } from "../../../../app/providers/server-info/server-info-provider";
 import useToggle from "../../../../shared/lib/useToggle";
 

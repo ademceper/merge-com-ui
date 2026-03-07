@@ -5,7 +5,7 @@ import {
 import { toast } from "sonner";
 import CodeEditor from "../../../shared/ui/form/code-editor";
 import { useState } from "react";
-import { useTranslation } from "react-i18next";
+import { useTranslation } from "@merge-rd/i18n";
 import { prettyPrintJSON } from "../../../shared/lib/util";
 import { FormPanel } from "../../../../shared/keycloak-ui-shared";
 import { FixedButtonsGroup } from "../../../shared/ui/form/fixed-button-group";

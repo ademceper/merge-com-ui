@@ -18,8 +18,8 @@ import {
 } from "@/admin/shared/ui/data-table";
 import { ArrowsDownUp, CopySimple, PencilSimple, Plus, Trash } from "@phosphor-icons/react";
 import { useState } from "react";
-import { useTranslation } from "react-i18next";
-import { Link, useLocation } from "react-router-dom";
+import { useTranslation } from "@merge-rd/i18n";
+import { Link, useLocation } from "@tanstack/react-router";
 import { useAdminClient } from "../../app/admin-client";
 import { getErrorDescription, getErrorMessage, useFetch } from "../../../shared/keycloak-ui-shared";
 import { toast } from "sonner";
@@ -96,7 +96,7 @@ export const GroupTable = ({ refresh: viewRefresh }: GroupTableProps) => {
             enableHiding: false,
             cell: ({ row }) => (
                 <Link
-                    to={`${location.pathname}/${row.original.id}`}
+                    to={`${location.pathname}/${row.original.id}` as string}
                     className="text-primary hover:underline"
                 >
                     {row.original.name}

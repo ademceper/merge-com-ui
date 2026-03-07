@@ -1,5 +1,5 @@
 import { AccessType } from "@keycloak/keycloak-admin-client/lib/defs/whoAmIRepresentation";
-import { useMatches } from "react-router-dom";
+import { useMatches } from "@tanstack/react-router";
 
 import { ForbiddenSection } from "../../pages/forbidden-section";
 import { useAccess } from "../providers/access/access";
@@ -15,16 +15,17 @@ export const AuthWall = ({ children }: any) => {
     const matches = useMatches();
     const { hasAccess } = useAccess();
 
-    const permissionNeeded = matches.flatMap(({ handle }) => {
-        if (typeof handle !== "object" || handle === null || !hasProp(handle, "access")) {
+    const permissionNeeded = matches.flatMap((match: any) => {
+        const ctx = match.context || match.routeContext || {};
+        if (typeof ctx !== "object" || ctx === null || !hasProp(ctx, "access")) {
             return [];
         }
 
-        if (Array.isArray(handle.access)) {
-            return handle.access as AccessType[];
+        if (Array.isArray(ctx.access)) {
+            return ctx.access as AccessType[];
         }
 
-        return [handle.access] as AccessType[];
+        return [ctx.access] as AccessType[];
     });
 
     if (!hasAccess(...permissionNeeded)) {

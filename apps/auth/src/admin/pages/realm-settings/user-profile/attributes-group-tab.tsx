@@ -7,8 +7,8 @@ import {
 } from "@/admin/shared/ui/data-table";
 import { Trash } from "@phosphor-icons/react";
 import { useEffect, useState } from "react";
-import { Trans, useTranslation } from "react-i18next";
-import { Link } from "react-router-dom";
+import { Trans, useTranslation } from "@merge-rd/i18n";
+import { Link } from "@tanstack/react-router";
 import {
     AlertDialog,
     AlertDialogAction,
@@ -131,7 +131,7 @@ export const AttributesGroupTab = ({
                     to={toEditAttributesGroup({
                         realm,
                         name: row.original.name!,
-                    })}
+                    }) as string}
                     className="text-primary hover:underline"
                 >
                     {row.original.name}
@@ -204,7 +204,7 @@ export const AttributesGroupTab = ({
                             variant="default"
                             className="flex h-9 w-9 shrink-0 items-center justify-center p-0 sm:h-9 sm:w-auto sm:gap-2 sm:px-4 sm:py-2"
                         >
-                            <Link to={toNewAttributesGroup({ realm })}>
+                            <Link to={toNewAttributesGroup({ realm }) as string}>
                                 {t("createGroupText")}
                             </Link>
                         </Button>

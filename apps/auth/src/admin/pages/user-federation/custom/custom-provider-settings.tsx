@@ -5,8 +5,8 @@ import { getErrorDescription, getErrorMessage, KeycloakSpinner,
 import { toast } from "sonner";
 import { Button } from "@merge-rd/ui/components/button";
 import { FormProvider, useForm } from "react-hook-form";
-import { useTranslation } from "react-i18next";
-import { Link, useNavigate } from "react-router-dom";
+import { useTranslation } from "@merge-rd/i18n";
+import { Link, useNavigate } from "@tanstack/react-router";
 import { useAdminClient } from "../../../app/admin-client";
 import { DynamicComponents } from "../../../shared/ui/dynamic/dynamic-components";
 import { FormAccess } from "../../../shared/ui/form/form-access";
@@ -79,7 +79,7 @@ const { realm: realmName, realmRepresentation: realm } = useRealm();
         try {
             if (!id) {
                 await adminClient.components.create(saveComponent);
-                navigate(toUserFederation({ realm: realmName }));
+                navigate({ to: toUserFederation({ realm: realmName }) as string });
             } else {
                 await adminClient.components.update({ id }, saveComponent);
             }
@@ -126,7 +126,7 @@ const { realm: realmName, realmRepresentation: realm } = useRealm();
                             asChild
                             data-testid="custom-cancel"
                         >
-                            <Link to={toUserFederation({ realm: realmName })}>
+                            <Link to={toUserFederation({ realm: realmName }) as string}>
                                 {t("cancel")}
                             </Link>
                         </Button>

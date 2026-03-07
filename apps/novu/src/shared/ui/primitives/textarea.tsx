@@ -92,7 +92,7 @@ function ResizeHandle() {
 
 ResizeHandle.displayName = TEXTAREA_RESIZE_HANDLE_NAME;
 
-export type TextareaProps = React.TextareaHTMLAttributes<HTMLTextAreaElement> &
+type TextareaProps = React.TextareaHTMLAttributes<HTMLTextAreaElement> &
 	(
 		| {
 				simple: true;
@@ -214,4 +214,4 @@ function CharCounter({
 
 CharCounter.displayName = TEXTAREA_COUNTER_NAME;
 
-export { TextareaRoot as Textarea, CharCounter as TextareaCounter };
+export { TextareaRoot as Textarea,  };

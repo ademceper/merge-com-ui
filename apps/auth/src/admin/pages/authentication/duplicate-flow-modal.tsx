@@ -10,8 +10,8 @@ import {
     DialogFooter
 } from "@merge-rd/ui/components/dialog";
 import { FormProvider, useForm } from "react-hook-form";
-import { useTranslation } from "react-i18next";
-import { useNavigate } from "react-router-dom";
+import { useTranslation } from "@merge-rd/i18n";
+import { useNavigate } from "@tanstack/react-router";
 import { useAdminClient } from "../../app/admin-client";
 import { useRealm } from "../../app/providers/realm-context/realm-context";
 import { NameDescription } from "./form/name-description";
@@ -63,14 +63,14 @@ const navigate = useNavigate();
                 );
             }
             toast.success(t("copyFlowSuccess"));
-            navigate(
-                toFlow({
+            navigate({
+                to: toFlow({
                     realm,
                     id: newFlow.id!,
                     usedBy: "notInUse",
                     builtIn: newFlow.builtIn ? "builtIn" : undefined
-                })
-            );
+                }) as string
+            });
         } catch (error) {
             toast.error(t("copyFlowError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
         }

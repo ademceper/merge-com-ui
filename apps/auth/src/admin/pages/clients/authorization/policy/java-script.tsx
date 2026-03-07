@@ -3,7 +3,7 @@ import { HelpItem } from "../../../../../shared/keycloak-ui-shared";
 import { Label } from "@merge-rd/ui/components/label";
 import CodeEditor from "../../../../shared/ui/form/code-editor";
 import { Controller, type ControllerProps, useFormContext } from "react-hook-form";
-import { useTranslation } from "react-i18next";
+import { useTranslation } from "@merge-rd/i18n";
 
 const FormController = Controller as ComponentType<ControllerProps>;
 

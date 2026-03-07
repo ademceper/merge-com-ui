@@ -14,8 +14,8 @@ import { RadioGroup, RadioGroupItem } from "@merge-rd/ui/components/radio-group"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@merge-rd/ui/components/dropdown-menu";
 import { useState } from "react";
 import { Controller, FormProvider, useForm, useWatch } from "react-hook-form";
-import { useTranslation } from "react-i18next";
-import { Link, useNavigate } from "react-router-dom";
+import { useTranslation } from "@merge-rd/i18n";
+import { Link, useNavigate } from "@tanstack/react-router";
 import { useAdminClient } from "../../../app/admin-client";
 import { useConfirmDialog } from "../../../shared/ui/confirm-dialog/confirm-dialog";
 import { FormAccess } from "../../../shared/ui/form/form-access";
@@ -122,14 +122,14 @@ const [permission, setPermission] = useState<PolicyRepresentation>();
                     permission
                 );
                 setPermission(result);
-                navigate(
+                navigate({ to:
                     toPermissionDetails({
                         realm,
                         id,
                         permissionType,
                         permissionId: result.id!
-                    })
-                );
+                    }) as string
+                });
             }
             toast.success(
                 t((permissionId ? "update" : "create") + "PermissionSuccess")
@@ -154,7 +154,7 @@ const [permission, setPermission] = useState<PolicyRepresentation>();
                     permissionId: permissionId
                 });
                 toast.success(t("permissionDeletedSuccess"));
-                navigate(toAuthorizationTab({ realm, clientId: id, tab: "permissions" }));
+                navigate({ to: toAuthorizationTab({ realm, clientId: id, tab: "permissions" }) as string });
             } catch (error) {
                 toast.error(t("permissionDeletedError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
             }
@@ -360,7 +360,7 @@ const [permission, setPermission] = useState<PolicyRepresentation>();
                                         realm,
                                         clientId: id,
                                         tab: "permissions"
-                                    })}
+                                    }) as string}
                                 >
                                     {t("cancel")}
                                 </Link>

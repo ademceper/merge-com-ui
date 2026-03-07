@@ -1,7 +1,7 @@
 import { Switch } from "@merge-rd/ui/components/switch";
 import { Label } from "@merge-rd/ui/components/label";
 import { Controller, useFormContext } from "react-hook-form";
-import { useTranslation } from "react-i18next";
+import { useTranslation } from "@merge-rd/i18n";
 import { HelpItem, TextControl } from "../../../../shared/keycloak-ui-shared";
 
 import { DefaultSwitchControl } from "../../../shared/ui/switch-control";

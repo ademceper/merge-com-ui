@@ -1,6 +1,7 @@
 import IdentityProviderRepresentation from "@keycloak/keycloak-admin-client/lib/defs/identityProviderRepresentation";
 import { IdentityProvidersQuery } from "@keycloak/keycloak-admin-client/lib/resources/identityProviders";
-import { FormErrorText, HelpItem, useFetch } from "../../../shared/keycloak-ui-shared";
+import { FormErrorText, HelpItem } from "../../../shared/keycloak-ui-shared";
+import { useQuery } from "@tanstack/react-query";
 import { Button } from "@merge-rd/ui/components/button";
 import { Badge } from "@merge-rd/ui/components/badge";
 import { Label } from "@merge-rd/ui/components/label";
@@ -10,7 +11,7 @@ import { X } from "@phosphor-icons/react";
 import { debounce } from "lodash-es";
 import { useCallback, useRef, useState } from "react";
 import { Controller, useFormContext } from "react-hook-form";
-import { useTranslation } from "react-i18next";
+import { useTranslation } from "@merge-rd/i18n";
 import { useAdminClient } from "../../app/admin-client";
 import { ComponentProps } from "../../shared/ui/dynamic/components";
 import { KeycloakSpinner } from "../../../shared/keycloak-ui-shared";
@@ -43,13 +44,13 @@ export const IdentityProviderSelect = ({
     const [open, toggleOpen, setOpen] = useToggle(false);
     const [inputValue, setInputValue] = useState("");
     const textInputRef = useRef<HTMLInputElement | null>(null);
-    const [idps, setIdps] = useState<(IdentityProviderRepresentation | undefined)[]>([]);
     const [search, setSearch] = useState("");
 
     const debounceFn = useCallback(debounce(setSearch, 1000), []);
 
-    useFetch(
-        async () => {
+    const { data: idps = [] } = useQuery({
+        queryKey: ["identityProviders", "select", search],
+        queryFn: async () => {
             const params: IdentityProvidersQuery = {
                 max: 20,
                 realmOnly: true
@@ -57,12 +58,9 @@ export const IdentityProviderSelect = ({
             if (search) {
                 params.search = search;
             }
-
             return await adminClient.identityProviders.find(params);
-        },
-        setIdps,
-        [search]
-    );
+        }
+    });
 
     if (!idps) {
         return <KeycloakSpinner />;

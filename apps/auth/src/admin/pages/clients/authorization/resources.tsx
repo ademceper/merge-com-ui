@@ -22,8 +22,8 @@ import {
 import { TablePagination } from "@/admin/shared/ui/table-pagination";
 import { CaretDown, CaretRight, DotsThreeVertical } from "@phosphor-icons/react";
 import { Fragment, useState } from "react";
-import { useTranslation } from "react-i18next";
-import { Link } from "react-router-dom";
+import { useTranslation } from "@merge-rd/i18n";
+import { Link } from "@tanstack/react-router";
 import { useAdminClient } from "../../../app/admin-client";
 import { useConfirmDialog } from "../../../shared/ui/confirm-dialog/confirm-dialog";
 import { KeycloakSpinner } from "../../../../shared/keycloak-ui-shared";
@@ -152,7 +152,7 @@ const { realm } = useRealm();
                             t={t}
                         />
                         <Button data-testid="createResource" disabled={isDisabled} asChild>
-                            <Link to={toCreateResource({ realm, id: clientId })}>{t("createResource")}</Link>
+                            <Link to={toCreateResource({ realm, id: clientId }) as string}>{t("createResource")}</Link>
                         </Button>
                     </div>
                     {!noData && (
@@ -213,7 +213,7 @@ const { realm } = useRealm();
                                                         realm,
                                                         id: clientId,
                                                         resourceId: resource._id!
-                                                    })}
+                                                    }) as string}
                                                 >
                                                     {resource.name}
                                                 </Link>
@@ -242,7 +242,7 @@ const { realm } = useRealm();
                                                                         "resource",
                                                                     selectedId:
                                                                         resource._id
-                                                                })}
+                                                                }) as string}
                                                             >
                                                                 {t("createPermission")}
                                                             </Link>
@@ -316,7 +316,7 @@ const { realm } = useRealm();
                 <Empty className="py-12">
                     <EmptyHeader><EmptyTitle>{t("emptyResources")}</EmptyTitle></EmptyHeader>
                     <EmptyContent><EmptyDescription>{t("emptyResourcesInstructions")}</EmptyDescription></EmptyContent>
-                    {!isDisabled && <Button className="mt-2" asChild><Link to={toCreateResource({ realm, id: clientId })}>{t("createResource")}</Link></Button>}
+                    {!isDisabled && <Button className="mt-2" asChild><Link to={toCreateResource({ realm, id: clientId }) as string}>{t("createResource")}</Link></Button>}
                 </Empty>
             )}
         </div>

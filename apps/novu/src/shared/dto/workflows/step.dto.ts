@@ -43,7 +43,7 @@ export type StepListResponseDto = {
 	issues?: StepIssuesDto;
 };
 
-export type StepCreateAndUpdateKeys = keyof StepCreateDto | keyof StepUpdateDto;
+type StepCreateAndUpdateKeys = keyof StepCreateDto | keyof StepUpdateDto;
 
 export enum UiSchemaGroupEnum {
 	IN_APP = "IN_APP",
@@ -51,10 +51,6 @@ export enum UiSchemaGroupEnum {
 	DIGEST = "DIGEST",
 	DELAY = "DELAY",
 	THROTTLE = "THROTTLE",
-	SMS = "SMS",
-	CHAT = "CHAT",
-	PUSH = "PUSH",
-	SKIP = "SKIP",
 	LAYOUT = "LAYOUT",
 }
 
@@ -65,14 +61,12 @@ export enum UiComponentEnum {
 	/** @deprecated use EMAIL_BODY instead  */
 	BLOCK_EDITOR = "BLOCK_EDITOR",
 	EMAIL_BODY = "EMAIL_BODY",
-	TEXT_FULL_LINE = "TEXT_FULL_LINE",
 	TEXT_INLINE_LABEL = "TEXT_INLINE_LABEL",
 	IN_APP_BODY = "IN_APP_BODY",
 	IN_APP_AVATAR = "IN_APP_AVATAR",
 	IN_APP_SUBJECT = "IN_APP_PRIMARY_SUBJECT",
 	IN_APP_BUTTON_DROPDOWN = "IN_APP_BUTTON_DROPDOWN",
 	IN_APP_DISABLE_SANITIZATION_SWITCH = "IN_APP_DISABLE_SANITIZATION_SWITCH",
-	DISABLE_SANITIZATION_SWITCH = "DISABLE_SANITIZATION_SWITCH",
 	URL_TEXT_BOX = "URL_TEXT_BOX",
 	DIGEST_AMOUNT = "DIGEST_AMOUNT",
 	DIGEST_UNIT = "DIGEST_UNIT",
@@ -95,12 +89,10 @@ export enum UiComponentEnum {
 	CHAT_BODY = "CHAT_BODY",
 	PUSH_BODY = "PUSH_BODY",
 	PUSH_SUBJECT = "PUSH_SUBJECT",
-	QUERY_EDITOR = "QUERY_EDITOR",
 	DATA = "DATA",
-	LAYOUT_EMAIL = "LAYOUT_EMAIL",
-}
+	}
 
-export class UiSchemaProperty {
+class UiSchemaProperty {
 	placeholder?: unknown;
 	component: UiComponentEnum;
 	properties?: Record<string, UiSchemaProperty>;

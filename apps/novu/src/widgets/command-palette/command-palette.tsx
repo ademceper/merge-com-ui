@@ -21,8 +21,8 @@ import { useTelemetry } from "@/shared/lib/hooks/use-telemetry";
 import { TelemetryEvent } from "@/shared/lib/telemetry";
 import * as CommandMenu from "./command-menu";
 import type { CommandCategory, Command as CommandType } from "./command-types";
-import { useCommandPalette } from "./hooks/use-command-palette";
-import { useCommandRegistry } from "./hooks/use-command-registry";
+import { useCommandPalette } from "./model/use-command-palette";
+import { useCommandRegistry } from "./model/use-command-registry";
 
 const CategoryIconWrapper = ({ children }: { children: React.ReactNode }) => {
 	return (

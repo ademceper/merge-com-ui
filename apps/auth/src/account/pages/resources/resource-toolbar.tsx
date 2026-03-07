@@ -10,7 +10,7 @@
 // @ts-nocheck
 
 import { useState } from "react";
-import { useTranslation } from "react-i18next";
+import { useTranslation } from "@merge-rd/i18n";
 import { Input } from "@merge-rd/ui/components/input";
 import { Button } from "@merge-rd/ui/components/button";
 import { CaretLeft, CaretRight, MagnifyingGlass, X } from "@phosphor-icons/react";

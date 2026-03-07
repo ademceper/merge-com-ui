@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 
 /** A 'plain' object version of the permission status. */
-export type PlainPermissionStatus = {
+type PlainPermissionStatus = {
     readonly name: string;
     readonly state: PermissionState;
 };

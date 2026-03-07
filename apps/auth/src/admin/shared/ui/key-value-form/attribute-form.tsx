@@ -10,7 +10,7 @@ export type AttributeForm = Omit<RoleRepresentation, "attributes"> & {
     attributes?: KeyValueType[];
 };
 
-export type AttributesFormProps = {
+type AttributesFormProps = {
     form: UseFormReturn<AttributeForm>;
     save?: (model: AttributeForm) => void;
     reset?: () => void;

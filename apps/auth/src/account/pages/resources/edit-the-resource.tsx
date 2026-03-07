@@ -16,7 +16,7 @@ import {
 } from "../../../shared/keycloak-ui-shared";
 import { Fragment, useEffect } from "react";
 import { FormProvider, useFieldArray, useForm } from "react-hook-form";
-import { useTranslation } from "react-i18next";
+import { useTranslation } from "@merge-rd/i18n";
 import {
     Dialog,
     DialogContent,

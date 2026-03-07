@@ -9,7 +9,7 @@ import {
 } from "@/shared/ui/primitives/popover";
 import { APP_ID, IS_SELF_HOSTED } from "@/shared/config";
 import { useEnvironment } from "@/app/context/environment/hooks";
-import { useWorkflowEditorPage } from "@/features/workflows/lib/use-workflow-editor-page";
+import { useWorkflowEditorPage } from "@/pages/workflows/lib/use-workflow-editor-page";
 import { apiHostnameManager } from "@/shared/lib/api-hostname-manager";
 import { HeaderButton } from "@/widgets/header-navigation/header-button";
 import { InboxBellFilledDev } from "@/shared/ui/icons/inbox-bell-filled-dev";

@@ -1,4 +1,4 @@
-export interface IGetInviteResponseDto {
+interface IGetInviteResponseDto {
 	inviter: {
 		_id: string;
 		firstName?: string | null;

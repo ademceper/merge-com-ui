@@ -1,5 +1,5 @@
 import { Label } from "@merge-rd/ui/components/label";
-import { useTranslation } from "react-i18next";
+import { useTranslation } from "@merge-rd/i18n";
 import { HelpItem } from "../../../../../shared/keycloak-ui-shared";
 import { useParams } from "../../../../shared/lib/useParams";
 import type { PolicyDetailsParams } from "../../routes/policy-details";

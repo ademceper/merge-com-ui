@@ -8,7 +8,7 @@ type HelpContextProps = {
     toggleHelp: () => void;
 };
 
-export const HelpContext = createNamedContext<HelpContextProps | undefined>(
+const HelpContext = createNamedContext<HelpContextProps | undefined>(
     "HelpContext",
     undefined
 );

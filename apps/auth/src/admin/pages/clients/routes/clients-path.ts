@@ -4,7 +4,6 @@
  * import from the module that lazy-loads it.
  */
 
-import type { Path } from "react-router-dom";
 import { generateEncodedPath, type PathParams } from "../../../shared/lib/generateEncodedPath";
 
 export type ClientsTab = "list" | "initial-access-token" | "client-registration";
@@ -17,12 +16,10 @@ export type ClientsParams = {
 export const CLIENTS_PATH = "/:realm/clients";
 export const CLIENTS_PATH_WITH_TAB = "/:realm/clients/:tab";
 
-export const toClients = (params: ClientsParams): Partial<Path> => {
+export const toClients = (params: ClientsParams): string => {
     const path = params.tab ? CLIENTS_PATH_WITH_TAB : CLIENTS_PATH;
     const pathParams = (params.tab
         ? { realm: params.realm, tab: params.tab }
         : { realm: params.realm }) as PathParams<typeof path>;
-    return {
-        pathname: generateEncodedPath(path, pathParams)
-    };
+    return generateEncodedPath(path, pathParams);
 };

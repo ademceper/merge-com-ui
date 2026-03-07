@@ -10,7 +10,7 @@ import {
 import type { EditorView } from "@uiw/react-codemirror";
 import React from "react";
 import { createRoot } from "react-dom/client";
-import { NewTranslationKeyPreview } from "@/features/workflows/ui/workflow-editor/steps/email/translations/new-translation-key-preview";
+import { NewTranslationKeyPreview } from "./components/new-translation-key-preview";
 import type {
 	TranslationAutocompleteConfig,
 	TranslationCompletionOption,

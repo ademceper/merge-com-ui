@@ -15,4 +15,4 @@ export const PROTECTED_ENVIRONMENTS = [
 	EnvironmentEnum.PRODUCTION,
 ] as const;
 
-export type EnvironmentName = EnvironmentEnum | string;
+type EnvironmentName = EnvironmentEnum | string;

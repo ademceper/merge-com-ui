@@ -7,8 +7,8 @@ import { toast } from "sonner";
 import { Button } from "@merge-rd/ui/components/button";
 import { FormProvider, useForm } from "react-hook-form";
 import { useCallback, useEffect, useState } from "react";
-import { useTranslation } from "react-i18next";
-import { useNavigate } from "react-router-dom";
+import { useTranslation } from "@merge-rd/i18n";
+import { useNavigate } from "@tanstack/react-router";
 import { useAdminClient } from "../../app/admin-client";
 import { FormAccess } from "../../shared/ui/form/form-access";
 import { FixedButtonsGroup } from "../../shared/ui/form/fixed-button-group";
@@ -62,7 +62,7 @@ export default function UserFederationKerberosSettings() {
         try {
             if (!id) {
                 await adminClient.components.create(component);
-                navigate(`/${realm}/user-federation`);
+                navigate({ to: `/${realm}/user-federation` as string });
             } else {
                 await adminClient.components.update({ id }, component);
             }
@@ -123,7 +123,7 @@ export default function UserFederationKerberosSettings() {
                             variant="ghost"
                             data-testid="kerberos-cancel"
                             onClick={() =>
-                                navigate(toUserFederation({ realm }))
+                                navigate({ to: toUserFederation({ realm }) as string })
                             }
                         >
                             {t("cancel")}

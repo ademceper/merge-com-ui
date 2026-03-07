@@ -9,7 +9,7 @@ import { useReducer, useEffect } from "react";
 import { startColorSchemeManagement } from "./colorScheme";
 import { KeycloakProvider } from "../../shared/keycloak-ui-shared";
 import { environment } from "./environment";
-import { i18n } from "../shared/i18n/i18n";
+import { i18n } from "./i18n";
 import { Root } from "../widgets/root";
 import { SessionExpirationWarningOverlay } from "../../shared/session-expiration-warning-overlay";
 

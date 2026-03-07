@@ -12,8 +12,8 @@ import {
 } from "@merge-rd/ui/components/dialog";
 import { useEffect } from "react";
 import { FormProvider, useForm } from "react-hook-form";
-import { useTranslation } from "react-i18next";
-import { useNavigate } from "react-router-dom";
+import { useTranslation } from "@merge-rd/i18n";
+import { useNavigate } from "@tanstack/react-router";
 import { ArrowRight } from "@phosphor-icons/react";
 import { cn } from "@merge-rd/ui/lib/utils";
 import { useAdminClient } from "../../../app/admin-client";
@@ -114,7 +114,7 @@ export function AddClientDialog({ trigger, onSuccess }: AddClientDialogProps) {
             toast.success(t("createClientSuccess"));
             setOpen(false);
             onSuccess?.(newClient.id!);
-            navigate(toClient({ realm, clientId: newClient.id!, tab: "settings" }));
+            navigate({ to: toClient({ realm, clientId: newClient.id!, tab: "settings" }) as string });
         } catch (error) {
             toast.error(t("createClientError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
         } finally {

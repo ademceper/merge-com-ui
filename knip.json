@@ -1,0 +1,48 @@
+{
+  "$schema": "https://unpkg.com/knip@5/schema.json",
+  "workspaces": {
+    ".": {},
+    "apps/web": {
+      "entry": ["app/**/{page,layout,loading,error,not-found,template,default}.{ts,tsx}"],
+      "project": ["app/**/*.{ts,tsx}", "components/**/*.{ts,tsx}"]
+    },
+    "apps/auth": {
+      "ignore": ["public/**"],
+      "ignoreDependencies": [
+        "tw-animate-css",
+        "autoprefixer",
+        "postcss"
+      ]
+    },
+    "apps/novu": {
+      "ignore": ["**/*.spec.ts"],
+      "ignoreDependencies": [
+        "cross-fetch",
+        "dotenv",
+        "globals"
+      ]
+    },
+    "packages/ui": {
+      "entry": ["src/components/*.tsx", "src/lib/*.ts", "src/hooks/*.ts"],
+      "project": ["src/**/*.{ts,tsx}"],
+      "tsup": false,
+      "ignoreDependencies": ["@tailwindcss/postcss"]
+    },
+    "packages/auth": {
+      "entry": ["src/*.{ts,tsx}", "src/components/*.tsx", "src/hooks/*.ts"],
+      "project": ["src/**/*.{ts,tsx}"],
+      "tsup": false
+    },
+    "packages/i18n": {
+      "project": ["src/**/*.{ts,tsx}"],
+      "tsup": false
+    },
+    "packages/lint-cfg": {
+      "project": ["*.js"]
+    },
+    "packages/ts-cfg": {
+      "entry": ["base.json", "nextjs.json", "vite-react.json", "react-lib.json"],
+      "ignoreDependencies": ["next"]
+    }
+  }
+}

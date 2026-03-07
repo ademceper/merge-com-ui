@@ -11,8 +11,8 @@ import { Badge } from "@merge-rd/ui/components/badge";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@merge-rd/ui/components/dropdown-menu";
 import { buttonVariants } from "@merge-rd/ui/components/button";
 import { useState } from "react";
-import { useTranslation } from "react-i18next";
-import { useNavigate, useParams as useRouterParams } from "react-router-dom";
+import { useTranslation } from "@merge-rd/i18n";
+import { useNavigate, useParams as useRouterParams } from "@tanstack/react-router";
 import { useAdminClient } from "../../app/admin-client";
 import {
     AllClientScopes,
@@ -40,7 +40,7 @@ export default function EditClientScope() {
     const navigate = useNavigate();
     const { realm, realmRepresentation } = useRealm();
     const { id } = useParams<ClientScopeParams>();
-    const { tab } = useRouterParams<{ tab?: string }>();
+    const { tab } = useRouterParams({ strict: false }) as { tab: string };
 const { enabled } = useHelp();
     const [clientScope, setClientScope] = useState<ClientScopeDefaultOptionalType>();
     const [key, setKey] = useState(0);
@@ -113,7 +113,7 @@ const { enabled } = useHelp();
             try {
                 await adminClient.clientScopes.del({ id });
                 toast.success(t("deletedSuccessClientScope"));
-                navigate(toClientScopes({ realm }));
+                navigate({ to: toClientScopes({ realm }) as string });
             } catch (error) {
                 toast.error(t("deleteErrorClientScope", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
             }
@@ -156,14 +156,14 @@ const { enabled } = useHelp();
     ): Promise<void> => {
         if (!Array.isArray(mappers)) {
             const mapper = mappers as ProtocolMapperTypeRepresentation;
-            navigate(
-                toMapper({
+            navigate({
+                to: toMapper({
                     realm,
                     id: clientScope!.id!,
                     mapperId: mapper.id!,
                     viewMode: "new"
-                })
-            );
+                }) as string
+            });
         } else {
             try {
                 await adminClient.clientScopes.addMultipleProtocolMappers(

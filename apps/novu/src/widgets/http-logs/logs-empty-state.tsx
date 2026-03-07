@@ -1,14 +1,14 @@
 import { Button } from "@merge-rd/ui/components/button";
 import { BookBookmark, PlusCircle } from "@phosphor-icons/react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "@tanstack/react-router";
 import { LinkButton } from "@/shared/ui/primitives/button-link";
-import { EmptyTopicsIllustration } from "@/features/topics/ui/empty-topics-illustration";
+import { EmptyTopicsIllustration } from "@/pages/topics/ui/empty-topics-illustration";
 
 export const RequestLogsEmptyState = () => {
 	const navigate = useNavigate();
 
 	const handleCreateWorkflow = () => {
-		navigate("/workflows");
+		navigate({ to: "/env/$environmentSlug/workflows" as string });
 	};
 
 	return (
@@ -26,14 +26,15 @@ export const RequestLogsEmptyState = () => {
 			</div>
 
 			<div className="flex items-center justify-center gap-6">
-				<Link
-					to="https://docs.novu.co/platform/concepts/workflows"
+				<a
+					href="https://docs.novu.co/platform/concepts/workflows"
 					target="_blank"
+					rel="noopener"
 				>
 					<LinkButton variant="gray" trailingIcon={BookBookmark}>
 						View Docs
 					</LinkButton>
-				</Link>
+				</a>
 
 				<Button
 					variant="primary"

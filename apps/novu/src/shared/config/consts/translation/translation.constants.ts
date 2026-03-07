@@ -39,12 +39,12 @@ export const TRANSLATION_DELIMITER_CLOSE = "}}";
 /**
  * Length of the translation prefix ({{t.)
  */
-export const TRANSLATION_PREFIX_LENGTH = 4;
+const TRANSLATION_PREFIX_LENGTH = 4;
 
 /**
  * Template for missing translation placeholder
  */
-export const MISSING_TRANSLATION_TEMPLATE = (key: string) =>
+const MISSING_TRANSLATION_TEMPLATE = (key: string) =>
 	`[Translation missing: ${key}]`;
 
 /**

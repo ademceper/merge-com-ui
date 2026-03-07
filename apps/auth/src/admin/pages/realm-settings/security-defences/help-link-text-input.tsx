@@ -1,4 +1,4 @@
-import { Trans, useTranslation } from "react-i18next";
+import { Trans, useTranslation } from "@merge-rd/i18n";
 import { TextControl } from "../../../../shared/keycloak-ui-shared";
 import { FormattedLink } from "../../../shared/ui/external-link/formatted-link";
 

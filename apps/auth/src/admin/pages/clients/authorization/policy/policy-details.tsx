@@ -6,8 +6,8 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigge
 import type { ComponentType } from "react";
 import { useState, type JSX } from "react";
 import { FormProvider, useForm } from "react-hook-form";
-import { useTranslation } from "react-i18next";
-import { Link, type LinkProps, useNavigate } from "react-router-dom";
+import { useTranslation } from "@merge-rd/i18n";
+import { Link, type LinkProps, useNavigate } from "@tanstack/react-router";
 
 const RouterLink = Link as ComponentType<LinkProps>;
 import { useAdminClient } from "../../../../app/admin-client";
@@ -124,15 +124,15 @@ const [policy, setPolicy] = useState<PolicyRepresentation>();
                     policy
                 );
 
-                navigate(
+                navigate({ to:
                     navigateTo({
                         realm: realm!,
                         id: clientId!,
                         permissionClientId: clientId!,
                         policyId: result.id!,
                         policyType: result.type!
-                    })
-                );
+                    }) as string
+                });
             }
             toast.success(
                 t((policyId ? "update" : "create") + "PolicySuccess")
@@ -153,15 +153,15 @@ const [policy, setPolicy] = useState<PolicyRepresentation>();
                     policyId
                 });
                 toast.success(t("policyDeletedSuccess"));
-                navigate(
-                    isAdminPermissionsClient
+                navigate({ to:
+                    (isAdminPermissionsClient
                         ? toPermissionsConfigurationTabs({
                               realm: realm!,
                               permissionClientId,
                               tab: "policies"
                           })
-                        : toAuthorizationTab({ realm, clientId: id, tab: "policies" })
-                );
+                        : toAuthorizationTab({ realm, clientId: id, tab: "policies" })) as string
+                });
             } catch (error) {
                 toast.error(t("policyDeletedError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
             }
@@ -230,7 +230,7 @@ const [policy, setPolicy] = useState<PolicyRepresentation>();
                         >
                             <RouterLink
                                 to={
-                                    isAdminPermissionsClient
+                                    (isAdminPermissionsClient
                                         ? toPermissionsConfigurationTabs({
                                               realm: realm!,
                                               permissionClientId,
@@ -240,7 +240,7 @@ const [policy, setPolicy] = useState<PolicyRepresentation>();
                                               realm,
                                               clientId: id,
                                               tab: "policies"
-                                          })
+                                          })) as string
                                 }
                             >
                                 {t("cancel")}

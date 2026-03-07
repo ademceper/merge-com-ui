@@ -1,4 +1,4 @@
-import { useTranslation } from "react-i18next";
+import { useTranslation } from "@merge-rd/i18n";
 import { PasswordControl } from "../../../../shared/keycloak-ui-shared";
 import type { ComponentProps } from "./components";
 

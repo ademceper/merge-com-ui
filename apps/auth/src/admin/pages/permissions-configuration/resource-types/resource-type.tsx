@@ -1,4 +1,4 @@
-import { useTranslation } from "react-i18next";
+import { useTranslation } from "@merge-rd/i18n";
 import { Label } from "@merge-rd/ui/components/label";
 import { RadioGroup, RadioGroupItem } from "@merge-rd/ui/components/radio-group";
 import { HelpItem } from "../../../../shared/keycloak-ui-shared";
@@ -23,7 +23,7 @@ export const COMPONENTS: {
     roles: RoleSelect
 } as const;
 
-export const isValidComponentType = (value: string) => value in COMPONENTS;
+const isValidComponentType = (value: string) => value in COMPONENTS;
 
 export const ResourceType = ({
     resourceType,

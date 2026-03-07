@@ -25,7 +25,7 @@ import {
     AlertDialogTrigger
 } from "@merge-rd/ui/components/alert-dialog";
 import { useState } from "react";
-import { useTranslation } from "react-i18next";
+import { useTranslation } from "@merge-rd/i18n";
 
 import { deleteSession, getDevices } from "../../shared/api/methods";
 import {
@@ -41,7 +41,7 @@ import { Button } from "@merge-rd/ui/components/button";
 import { Badge } from "@merge-rd/ui/components/badge";
 import { Monitor, DeviceMobile } from "@phosphor-icons/react";
 
-export const DeviceActivity = () => {
+const DeviceActivity = () => {
     const { t } = useTranslation();
     const context = useEnvironment();
     const { addAlert, addError } = useAccountAlerts();

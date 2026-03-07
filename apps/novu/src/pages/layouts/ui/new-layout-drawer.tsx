@@ -1,0 +1,219 @@
+import { Button } from "@merge-rd/ui/components/button";
+import { Separator } from "@merge-rd/ui/components/separator";
+import { Skeleton } from "@merge-rd/ui/components/skeleton";
+import {
+	type DuplicateLayoutDto,
+	LayoutCreationSourceEnum,
+} from "@/shared";
+import { CaretRight } from "@phosphor-icons/react";
+import { useState } from "react";
+import { useNavigate } from "@tanstack/react-router";
+import type { ExternalToast } from "sonner";
+import {
+	Sheet,
+	SheetContent,
+	SheetDescription,
+	SheetFooter,
+	SheetHeader,
+	SheetMain,
+	SheetTitle,
+} from "@/shared/ui/primitives/sheet";
+import { ToastIcon } from "@/shared/ui/primitives/sonner";
+import {
+	showErrorToast,
+	showSuccessToast,
+	showToast,
+} from "@/shared/ui/primitives/sonner-helpers";
+import { ExternalLink } from "@/shared/ui/shared/external-link";
+import { useEnvironment } from "@/app/context/environment/hooks";
+import { CreateLayoutForm } from "@/pages/layouts/ui/create-layout-form";
+import { useCreateLayout } from "@/pages/layouts/api/use-create-layout";
+import { useDuplicateLayout } from "@/pages/layouts/api/use-duplicate-layout";
+import { useFetchLayout } from "@/pages/layouts/api/use-fetch-layout";
+import { useOnElementUnmount } from "@/shared/lib/hooks/use-on-element-unmount";
+import { useTelemetry } from "@/shared/lib/hooks/use-telemetry";
+import { buildRoute, ROUTES } from "@/shared/lib/routes";
+import { TelemetryEvent } from "@/shared/lib/telemetry";
+
+type NewLayoutDrawerProps = {
+	mode: "create" | "duplicate";
+	layoutId?: string;
+};
+
+const toastOptions: ExternalToast = {
+	duration: 5000,
+	position: "bottom-right",
+	classNames: {
+		toast: "mb-4 right-0",
+	},
+};
+
+export const NewLayoutDrawer = (props: NewLayoutDrawerProps) => {
+	const { mode, layoutId } = props;
+	const track = useTelemetry();
+	const navigate = useNavigate();
+	const { currentEnvironment } = useEnvironment();
+	const [open, setOpen] = useState(true);
+
+	const { layout, isPending: isLoadingLayout } = useFetchLayout({
+		layoutSlug: mode === "duplicate" ? layoutId : undefined,
+	});
+
+	const { createLayout, isPending: isCreateLayoutPending } = useCreateLayout({
+		onSuccess: (data) => {
+			showSuccessToast(`Layout created successfully`, undefined, toastOptions);
+			track(TelemetryEvent.LAYOUT_CREATED);
+			handleSuccess(data.slug);
+		},
+		onError: (error) => {
+			const errorMessage =
+				error instanceof Error ? error.message : "Failed to create layout";
+			showErrorToast(errorMessage);
+		},
+	});
+
+	const { duplicateLayout, isPending: isDuplicateLayoutPending } =
+		useDuplicateLayout({
+			onSuccess: (data) => {
+				showToast({
+					children: () => (
+						<>
+							<ToastIcon variant="success" />
+							<span className="text-sm">
+								Duplicated layout <span className="font-bold">{data.name}</span>
+							</span>
+						</>
+					),
+					options: toastOptions,
+				});
+				track(TelemetryEvent.LAYOUT_DUPLICATED);
+				handleSuccess(data.slug);
+			},
+			onError: () => {
+				showToast({
+					children: () => (
+						<>
+							<ToastIcon variant="error" />
+							<span className="text-sm">
+								Failed to duplicate layout{" "}
+								<span className="font-bold">{layout?.name}</span>
+							</span>
+						</>
+					),
+					options: toastOptions,
+				});
+			},
+		});
+
+	const { ref: unmountRef } = useOnElementUnmount({
+		callback: () => {
+			navigate({
+				to: buildRoute(ROUTES.LAYOUTS, {
+					environmentSlug: currentEnvironment?.slug ?? "",
+				}),
+			});
+		},
+		condition: !open,
+	});
+
+	const handleSuccess = (layoutSlug: string) => {
+		navigate({
+			to: buildRoute(ROUTES.LAYOUTS_EDIT, {
+				environmentSlug: currentEnvironment?.slug ?? "",
+				layoutSlug,
+			}),
+		});
+	};
+
+	const template: DuplicateLayoutDto | undefined =
+		mode === "duplicate" && layout
+			? {
+					name: `${layout.name} (Copy)`,
+					isTranslationEnabled: layout.isTranslationEnabled ?? false,
+				}
+			: undefined;
+	const title = mode === "create" ? "Create layout" : "Duplicate layout";
+	const buttonText = mode === "create" ? "Create layout" : "Duplicate layout";
+	const isLoadingTemplate = mode === "duplicate" && isLoadingLayout;
+
+	return (
+		<Sheet open={open} onOpenChange={setOpen}>
+			<SheetContent ref={unmountRef}>
+				<SheetHeader>
+					<SheetTitle>{title}</SheetTitle>
+					<div>
+						<SheetDescription>
+							Create a reusable email layout template for your notifications.{" "}
+							<ExternalLink href="https://docs.novu.co/platform/workflow/layouts">
+								Learn more
+							</ExternalLink>
+						</SheetDescription>
+					</div>
+				</SheetHeader>
+				<Separator />
+				<SheetMain>
+					{isLoadingTemplate ? (
+						<CreateLayoutFormSkeleton />
+					) : (
+						<CreateLayoutForm
+							onSubmit={(formData) => {
+								if (mode === "create") {
+									createLayout({
+										layoutId: formData.layoutId,
+										name: formData.name,
+										isTranslationEnabled: formData.isTranslationEnabled,
+										__source: LayoutCreationSourceEnum.DASHBOARD,
+									});
+									return;
+								}
+
+								duplicateLayout({
+									data: {
+										name: formData.name,
+										isTranslationEnabled: formData.isTranslationEnabled,
+									},
+									layoutSlug: layoutId!,
+								});
+							}}
+							template={template}
+						/>
+					)}
+				</SheetMain>
+				<Separator />
+				<SheetFooter>
+					<Button
+						isLoading={isDuplicateLayoutPending || isCreateLayoutPending}
+						trailingIcon={CaretRight}
+						variant="secondary"
+						mode="gradient"
+						type="submit"
+						form="create-layout"
+						disabled={isDuplicateLayoutPending || isCreateLayoutPending}
+					>
+						{buttonText}
+					</Button>
+				</SheetFooter>
+			</SheetContent>
+		</Sheet>
+	);
+};
+
+function CreateLayoutFormSkeleton() {
+	return (
+		<div className="flex flex-col gap-4">
+			<div>
+				<div className="mb-2">
+					<Skeleton className="h-4 w-16" />
+				</div>
+				<Skeleton className="h-9 w-full" />
+			</div>
+
+			<div>
+				<div className="mb-2">
+					<Skeleton className="h-4 w-24" />
+				</div>
+				<Skeleton className="h-9 w-full" />
+			</div>
+		</div>
+	);
+}

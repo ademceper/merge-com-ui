@@ -71,7 +71,7 @@ function TextAreaFieldComponent(props: UserProfileFieldProps) {
     );
 }
 
-export type UserProfileError = {
+type UserProfileError = {
     responseData: { errors?: { errorMessage: string }[] };
 };
 
@@ -107,7 +107,7 @@ export type UserProfileFieldProps = {
 
 export type OptionLabel = Record<string, string> | undefined;
 
-export const FIELDS: {
+const FIELDS: {
     [type in InputType]: (props: UserProfileFieldProps) => JSX.Element;
 } = {
     text: TextFieldComponent,
@@ -128,7 +128,7 @@ export const FIELDS: {
     "multi-input": MultiInputComponent
 } as const;
 
-export type UserProfileFieldsProps = {
+type UserProfileFieldsProps = {
     t: TFunction;
     form: UseFormReturn<UserFormFields>;
     userProfileMetadata: UserProfileMetadata;

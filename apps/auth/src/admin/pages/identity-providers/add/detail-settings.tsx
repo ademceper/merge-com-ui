@@ -19,8 +19,9 @@ import {
     useFormContext,
     useWatch
 } from "react-hook-form";
-import { useTranslation } from "react-i18next";
-import { Link, useNavigate, useParams as useRouterParams } from "react-router-dom";
+import { useTranslation } from "@merge-rd/i18n";
+import { Link, useNavigate } from "@tanstack/react-router";
+import { useParams as useRouterParams } from "../../../shared/lib/useParams";
 import { useAdminClient } from "../../../app/admin-client";
 import { useConfirmDialog } from "../../../shared/ui/confirm-dialog/confirm-dialog";
 import { DynamicComponents } from "../../../shared/ui/dynamic/dynamic-components";
@@ -251,7 +252,7 @@ const MapperLink = ({ name, mapperId, provider }: MapperLinkProps) => {
                 alias,
                 providerId: provider?.providerId!,
                 id: mapperId
-            })}
+            }) as string}
         >
             {name}
         </Link>
@@ -362,7 +363,7 @@ const navigate = useNavigate();
             try {
                 await adminClient.identityProviders.del({ alias: alias });
                 toast.success(t("deletedSuccessIdentityProvider"));
-                navigate(toIdentityProviders({ realm }));
+                navigate({ to: toIdentityProviders({ realm }) as string });
             } catch (error) {
                 toast.error(t("deleteErrorIdentityProvider", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
             }
@@ -384,9 +385,9 @@ const navigate = useNavigate();
                 });
                 toast.success(t("deleteMapperSuccess"));
                 refresh();
-                navigate(
-                    toIdentityProvider({ providerId, alias, tab: "mappers", realm })
-                );
+                navigate({
+                    to: toIdentityProvider({ providerId, alias, tab: "mappers", realm }) as string
+                });
             } catch (error) {
                 toast.error(t("deleteErrorIdentityProvider", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
             }
@@ -470,7 +471,7 @@ const navigate = useNavigate();
                                 <EmptyHeader><EmptyTitle>{t("noMappers")}</EmptyTitle></EmptyHeader>
                                 <EmptyContent><EmptyDescription>{t("noMappersInstructions")}</EmptyDescription></EmptyContent>
                                 <Button className="mt-2" asChild>
-                                    <Link to={toIdentityProviderAddMapper({ realm, alias: alias!, providerId: provider.providerId!, tab: "mappers" })}>
+                                    <Link to={toIdentityProviderAddMapper({ realm, alias: alias!, providerId: provider.providerId!, tab: "mappers" }) as string}>
                                         {t("addMapper")}
                                     </Link>
                                 </Button>
@@ -479,7 +480,7 @@ const navigate = useNavigate();
                         emptyMessage={t("noMappers")}
                         toolbar={
                             <Button id="add-mapper-button" asChild data-testid="addMapper">
-                                <Link to={toIdentityProviderAddMapper({ realm, alias: alias!, providerId: provider.providerId!, tab: "mappers" })}>
+                                <Link to={toIdentityProviderAddMapper({ realm, alias: alias!, providerId: provider.providerId!, tab: "mappers" }) as string}>
                                     {t("addMapper")}
                                 </Link>
                             </Button>

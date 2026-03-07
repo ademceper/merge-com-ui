@@ -2,7 +2,7 @@ import { Slot } from "@radix-ui/react-slot";
 import * as React from "react";
 import { cn } from "../utils/classname";
 
-export interface ButtonProps
+interface ButtonProps
 	extends React.ButtonHTMLAttributes<HTMLButtonElement> {
 	variant?:
 		| "default"

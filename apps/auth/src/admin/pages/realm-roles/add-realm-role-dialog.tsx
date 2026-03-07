@@ -13,7 +13,7 @@ import {
     DialogTrigger
 } from "@merge-rd/ui/components/dialog";
 import { useState } from "react";
-import { useTranslation } from "react-i18next";
+import { useTranslation } from "@merge-rd/i18n";
 import { useAdminClient } from "../../app/admin-client";
 import { AttributeForm } from "../../shared/ui/key-value-form/attribute-form";
 import { RoleForm } from "../../shared/ui/role-form/role-form";

@@ -20,7 +20,7 @@ type FieldError = {
 
 type ErrorArray = { errors?: FieldError[] };
 
-export type UserProfileError = {
+type UserProfileError = {
     responseData: ErrorArray | FieldError;
 };
 

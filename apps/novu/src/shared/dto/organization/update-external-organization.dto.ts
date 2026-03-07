@@ -4,7 +4,7 @@ import type {
 	OrganizationTypeEnum,
 } from "../../model";
 
-export type UpdateExternalOrganizationDto = {
+type UpdateExternalOrganizationDto = {
 	jobTitle?: JobTitleEnum;
 	domain?: string;
 	language?: string[];

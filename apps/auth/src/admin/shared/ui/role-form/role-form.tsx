@@ -1,7 +1,7 @@
 import type { ComponentType } from "react";
 import { SubmitHandler, UseFormReturn, useFormContext, useWatch } from "react-hook-form";
-import { useTranslation } from "react-i18next";
-import { Link, type LinkProps, type To } from "react-router-dom";
+import { useTranslation } from "@merge-rd/i18n";
+import { Link, type LinkProps } from "@tanstack/react-router";
 
 const RouterLink = Link as ComponentType<LinkProps>;
 import { Button } from "@merge-rd/ui/components/button";
@@ -11,10 +11,10 @@ import { cn } from "@merge-rd/ui/lib/utils";
 import { FormAccess } from "../form/form-access";
 import { AttributeForm } from "../key-value-form/attribute-form";
 
-export type RoleFormProps = {
+type RoleFormProps = {
     form: UseFormReturn<AttributeForm>;
     onSubmit: SubmitHandler<AttributeForm>;
-    cancelLink?: To;
+    cancelLink?: string;
     role: "manage-realm" | "manage-clients";
     editMode: boolean;
     /** Dialog içinde kullanıldığında: başlık ve iptal linki gizlenir, form id verilir. */
@@ -91,7 +91,7 @@ export const RoleForm = ({
                         </Button>
                         {cancelLink && (
                             <RouterLink
-                                to={cancelLink}
+                                to={cancelLink as string}
                                 data-testid="cancel"
                                 className="text-primary underline-offset-4 hover:underline"
                             >

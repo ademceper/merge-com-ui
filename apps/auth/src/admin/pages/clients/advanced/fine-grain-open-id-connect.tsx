@@ -2,7 +2,7 @@ import { ProviderRepresentation } from "@keycloak/keycloak-admin-client/lib/defs
 import { Button } from "@merge-rd/ui/components/button";
 import { Switch } from "@merge-rd/ui/components/switch";
 import { Label } from "@merge-rd/ui/components/label";
-import { useTranslation } from "react-i18next";
+import { useTranslation } from "@merge-rd/i18n";
 import { HelpItem, SelectField } from "../../../../shared/keycloak-ui-shared";
 import { FormAccess } from "../../../shared/ui/form/form-access";
 import { MultiLineInput } from "../../../shared/ui/multi-line-input/multi-line-input";

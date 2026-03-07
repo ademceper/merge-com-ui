@@ -27,7 +27,7 @@ export async function fetchAdminUI<T>(
     return await response.json();
 }
 
-export async function fetchRealmInfo(
+async function fetchRealmInfo(
     adminClient: KeycloakAdminClient
 ): Promise<UiRealmInfo> {
     return fetchAdminUI(adminClient, `ui-ext/info`);

@@ -1,4 +1,4 @@
-export enum WebhookEventEnum {
+enum WebhookEventEnum {
 	// Workflow
 	WORKFLOW_CREATED = "workflow.created",
 	WORKFLOW_UPDATED = "workflow.updated",
@@ -22,7 +22,7 @@ export enum WebhookEventEnum {
 	PREFERENCE_UPDATED = "preference.updated",
 }
 
-export enum WebhookObjectTypeEnum {
+enum WebhookObjectTypeEnum {
 	WORKFLOW = "workflow",
 	MESSAGE = "message",
 	PREFERENCE = "preference",

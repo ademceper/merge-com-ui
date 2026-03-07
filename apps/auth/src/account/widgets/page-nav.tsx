@@ -12,36 +12,21 @@
 import { useEnvironment } from "../../shared/keycloak-ui-shared";
 import {
     PropsWithChildren,
-    MouseEvent as ReactMouseEvent,
     Suspense,
     useMemo,
     useState
 } from "react";
-import { useTranslation } from "react-i18next";
-import { matchPath, useHref, useLinkClickHandler, useLocation } from "react-router-dom";
+import { useTranslation } from "@merge-rd/i18n";
+import { Link, useLocation } from "@tanstack/react-router";
 
-import fetchContentJson from "../pages/content/fetchContent";
+import fetchContentJson from "../shared/lib/fetchContent";
 import { environment, type Environment, type Feature } from "../app/environment";
-import { TFuncKey } from "../shared/i18n";
+import type { MenuItem } from "../shared/lib/menu-item";
 import { usePromise } from "../shared/lib/usePromise";
 import { buttonVariants } from "@merge-rd/ui/components/button";
 import { cn } from "@merge-rd/ui/lib/utils";
 
-type RootMenuItem = {
-    id?: string;
-    label: TFuncKey;
-    path: string;
-    isVisible?: keyof Feature;
-    modulePath?: string;
-};
-
-type MenuItemWithChildren = {
-    label: TFuncKey;
-    children: MenuItem[];
-    isVisible?: keyof Feature;
-};
-
-export type MenuItem = RootMenuItem | MenuItemWithChildren;
+;
 
 export const PageNav = () => {
     const [menuItems, setMenuItems] = useState<MenuItem[]>();
@@ -78,10 +63,10 @@ function NavMenuItem({ menuItem }: NavMenuItemProps) {
     const {
         environment: { features }
     } = useEnvironment<Environment>();
-    const { pathname } = useLocation();
+    const location = useLocation();
     const isActive = useMemo(
-        () => matchMenuItem(pathname, menuItem),
-        [pathname, menuItem]
+        () => matchMenuItem(location.pathname, menuItem),
+        [location.pathname, menuItem]
     );
 
     if ("path" in menuItem) {
@@ -114,7 +99,8 @@ function getFullUrl(path: string) {
 
 function matchMenuItem(currentPath: string, menuItem: MenuItem): boolean {
     if ("path" in menuItem) {
-        return !!matchPath(getFullUrl(menuItem.path), currentPath);
+        const fullUrl = getFullUrl(menuItem.path);
+        return currentPath === fullUrl || currentPath === fullUrl + "/";
     }
 
     return menuItem.children.some(child => matchMenuItem(currentPath, child));
@@ -125,20 +111,17 @@ type NavLinkProps = {
     isActive: boolean;
 };
 
-export const NavLink = ({
+const NavLink = ({
     path,
     isActive,
     children
 }: PropsWithChildren<NavLinkProps>) => {
-    const menuItemPath = getFullUrl(path) + location.search;
-    const href = useHref(menuItemPath);
-    const handleClick = useLinkClickHandler(menuItemPath);
+    const linkPath = ("/" + path) as string;
 
     return (
-        <a
+        <Link
             data-testid={path}
-            href={href}
-            onClick={event => handleClick(event as unknown as ReactMouseEvent<HTMLAnchorElement>)}
+            to={linkPath}
             className={cn(
                 buttonVariants({ variant: "ghost" }),
                 "min-h-10 justify-start whitespace-nowrap lg:whitespace-normal",
@@ -148,6 +131,6 @@ export const NavLink = ({
             )}
         >
             {children}
-        </a>
+        </Link>
     );
 };

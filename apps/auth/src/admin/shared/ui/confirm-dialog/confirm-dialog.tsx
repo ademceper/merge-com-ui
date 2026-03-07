@@ -7,7 +7,7 @@ import {
     DialogHeader,
     DialogTitle,
 } from "@merge-rd/ui/components/dialog";
-import { useTranslation } from "react-i18next";
+import { useTranslation } from "@merge-rd/i18n";
 
 export const useConfirmDialog = (
     props: ConfirmDialogProps
@@ -29,12 +29,12 @@ export const useConfirmDialog = (
     return [toggleDialog, Dialog];
 };
 
-export interface ConfirmDialogModalProps extends ConfirmDialogProps {
+interface ConfirmDialogModalProps extends ConfirmDialogProps {
     open: boolean;
     toggleDialog: () => void;
 }
 
-export type ConfirmDialogProps = {
+type ConfirmDialogProps = {
     titleKey: string;
     /** i18n interpolation for title, e.g. { count: 1 } */
     titleKeyVariables?: Record<string, unknown>;

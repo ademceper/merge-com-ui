@@ -12,7 +12,7 @@ interface IPreferenceChannelsDto {
 /**
  * @deprecated use CreateWorkflowDto instead
  */
-export interface ICreateWorkflowDto {
+interface ICreateWorkflowDto {
 	name: string;
 
 	tags: string[];

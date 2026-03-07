@@ -1,27 +1,12 @@
-import { lazy } from "react";
-import type { Path } from "react-router-dom";
 import { generateEncodedPath } from "../../../shared/lib/generateEncodedPath";
-import type { AppRouteObject } from "../../../app/routes";
 
-export type ClientScopesTab = "setup" | "evaluate";
+type ClientScopesTab = "setup" | "evaluate";
 
-export type ClientScopesParams = {
+type ClientScopesParams = {
     realm: string;
     clientId: string;
     tab: ClientScopesTab;
 };
 
-const ClientDetails = lazy(() => import("../client-details"));
-
-export const ClientScopesRoute: AppRouteObject = {
-    path: "/:realm/clients/:clientId/clientScopes/:tab",
-    element: <ClientDetails />,
-    breadcrumb: t => t("clientSettings"),
-    handle: {
-        access: "view-clients"
-    }
-};
-
-export const toClientScopesTab = (params: ClientScopesParams): Partial<Path> => ({
-    pathname: generateEncodedPath(ClientScopesRoute.path, params)
-});
+const toClientScopesTab = (params: ClientScopesParams): string =>
+    generateEncodedPath("/:realm/clients/:clientId/clientScopes/:tab", params);

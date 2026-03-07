@@ -18,7 +18,6 @@ export type WorkflowName = string;
 export enum ShortIsPrefixEnum {
 	WORKFLOW = "wf_",
 	STEP = "st_",
-	ENVIRONMENT = "env_",
 	LAYOUT = "lt_",
 }
 

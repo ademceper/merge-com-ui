@@ -6,13 +6,13 @@
  */
 
 import { useState } from "react";
-import { useTranslation } from "react-i18next";
+import { useTranslation } from "@merge-rd/i18n";
 import { cn } from "@merge-rd/ui/lib/utils";
 
 import { ResourcesTab } from "./resources-tab";
 import { Page } from "../../shared/ui/page/page";
 
-export const Resources = () => {
+const Resources = () => {
     const { t } = useTranslation();
     const [activeTabKey, setActiveTabKey] = useState(0);
 

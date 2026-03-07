@@ -3,9 +3,9 @@ import { FormErrorText, HelpItem, useFetch } from "../../../../shared/keycloak-u
 import { Label } from "@merge-rd/ui/components/label";
 import { useState } from "react";
 import { useFormContext } from "react-hook-form";
-import { useTranslation } from "react-i18next";
+import { useTranslation } from "@merge-rd/i18n";
 import { useAdminClient } from "../../../app/admin-client";
-import { KeySelect } from "../../../pages/realm-settings/user-profile/attribute/key-select";
+import { KeySelect } from "../key-select";
 import type { ComponentProps } from "./components";
 
 export const UserProfileAttributeListComponent = ({

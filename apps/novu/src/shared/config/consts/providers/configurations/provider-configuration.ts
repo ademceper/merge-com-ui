@@ -95,7 +95,7 @@ const sesConfigurations: ConfigConfiguration[] = [
 	},
 ];
 
-export const pushConfigurations: ConfigConfiguration[] = [
+const pushConfigurations: ConfigConfiguration[] = [
 	{
 		key: "inboundWebhookEnabled",
 		displayName: "Push Activity Tracking",

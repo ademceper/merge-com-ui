@@ -91,7 +91,7 @@ const lightTheme = createTheme({
 	],
 });
 
-export interface CodeBlockProps {
+interface CodeBlockProps {
 	code: string;
 	language?: Language;
 	theme?: "dark" | "light";

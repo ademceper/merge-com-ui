@@ -1,9 +1,9 @@
 import type { CustomDataType } from "./utils";
 
-export type TenantIdentifier = string;
+type TenantIdentifier = string;
 export type TenantId = string;
 
-export interface ITenantPayload {
+interface ITenantPayload {
 	name?: string;
 	data?: CustomDataType;
 }

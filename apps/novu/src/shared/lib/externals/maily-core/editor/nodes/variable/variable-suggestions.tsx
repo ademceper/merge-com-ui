@@ -13,12 +13,12 @@ import {
 } from "./variable";
 import type { VariableSuggestionsPopoverRef } from "./variable-suggestions-popover";
 
-export type VariableListProps = {
+type VariableListProps = {
 	command: (params: { id: string; required: boolean }) => void;
 	items: VariableType[];
 } & SuggestionOptions;
 
-export const VariableList = forwardRef((props: VariableListProps, ref) => {
+const VariableList = forwardRef((props: VariableListProps, ref) => {
 	const { items = [], editor } = props;
 
 	const popoverRef = useRef<VariableSuggestionsPopoverRef>(null);

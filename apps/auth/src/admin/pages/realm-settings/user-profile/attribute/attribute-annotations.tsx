@@ -1,7 +1,7 @@
 import { Input } from "@merge-rd/ui/components/input";
 import { Label } from "@merge-rd/ui/components/label";
 import { useFormContext } from "react-hook-form";
-import { useTranslation } from "react-i18next";
+import { useTranslation } from "@merge-rd/i18n";
 import { FormAccess } from "../../../../shared/ui/form/form-access";
 import { KeyValueInput } from "../../../../shared/ui/key-value-form/key-value-input";
 import { KeySelect } from "./key-select";

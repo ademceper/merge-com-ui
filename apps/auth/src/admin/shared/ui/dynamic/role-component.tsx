@@ -3,7 +3,7 @@ import { Label } from "@merge-rd/ui/components/label";
 import { Badge } from "@merge-rd/ui/components/badge";
 import { useState } from "react";
 import { Controller, useFormContext } from "react-hook-form";
-import { useTranslation } from "react-i18next";
+import { useTranslation } from "@merge-rd/i18n";
 import useToggle from "../../lib/useToggle";
 import {
     AddRoleButton,

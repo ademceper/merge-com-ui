@@ -3,7 +3,7 @@ import type { IResponseError } from "@/shared/model";
 /**
  * Validate (type-guard) that an error response matches our IResponseError interface.
  */
-export const checkIsResponseError = (err: unknown): err is IResponseError => {
+const checkIsResponseError = (err: unknown): err is IResponseError => {
 	return (
 		!!err &&
 		typeof err === "object" &&

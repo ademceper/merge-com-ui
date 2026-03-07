@@ -11,7 +11,7 @@ export default defineConfig(({ mode }) => {
 
   return {
     plugins: [
-      oidcSpa(),
+oidcSpa(),
       tailwindcss(),
       ViteEjsPlugin((viteConfig) => ({
         env: viteConfig.env,

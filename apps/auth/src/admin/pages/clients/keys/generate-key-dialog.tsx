@@ -8,7 +8,7 @@ import {
 import { Button } from "@merge-rd/ui/components/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@merge-rd/ui/components/dialog";
 import { FormProvider, useForm, useFormContext } from "react-hook-form";
-import { useTranslation } from "react-i18next";
+import { useTranslation } from "@merge-rd/i18n";
 import { useServerInfo } from "../../../app/providers/server-info/server-info-provider";
 import { StoreSettings } from "./store-settings";
 

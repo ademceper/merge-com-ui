@@ -10,7 +10,7 @@
 // @ts-nocheck
 
 import { Fragment, useState } from "react";
-import { Trans, useTranslation } from "react-i18next";
+import { Trans, useTranslation } from "@merge-rd/i18n";
 import { useEnvironment } from "../../../shared/keycloak-ui-shared";
 import { getCredentials } from "../../shared/api/methods";
 import {
@@ -19,13 +19,13 @@ import {
 } from "../../shared/api/representations";
 import { EmptyRow } from "../../shared/ui/datalist/empty-row";
 import { Page } from "../../shared/ui/page/page";
-import { TFuncKey } from "../../shared/i18n";
+import type { TFuncKey } from "@merge-rd/i18n";
 import { formatDate } from "../../shared/lib/formatDate";
 import { usePromise } from "../../shared/lib/usePromise";
 import { Link } from "@merge-rd/ui/components/link";
 import { Separator } from "@merge-rd/ui/components/separator";
 
-export const SigningIn = () => {
+const SigningIn = () => {
     const { t } = useTranslation();
     const context = useEnvironment();
     const { login } = context.keycloak;

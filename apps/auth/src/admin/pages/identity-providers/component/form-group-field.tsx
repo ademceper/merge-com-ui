@@ -1,11 +1,11 @@
 import { Label } from "@merge-rd/ui/components/label";
 import { PropsWithChildren } from "react";
-import { useTranslation } from "react-i18next";
+import { useTranslation } from "@merge-rd/i18n";
 
 import { HelpItem } from "../../../../shared/keycloak-ui-shared";
 
 export type FieldProps = { label: string; field: string; isReadOnly?: boolean };
-export type FormGroupFieldProps = { label: string };
+type FormGroupFieldProps = { label: string };
 
 export const FormGroupField = ({
     label,

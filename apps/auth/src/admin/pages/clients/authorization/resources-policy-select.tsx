@@ -23,8 +23,8 @@ import {
     useFormContext,
     useWatch
 } from "react-hook-form";
-import { useTranslation } from "react-i18next";
-import { Link, useNavigate } from "react-router-dom";
+import { useTranslation } from "@merge-rd/i18n";
+import { Link, useNavigate } from "@tanstack/react-router";
 import { useAdminClient } from "../../../app/admin-client";
 import { useConfirmDialog } from "../../../shared/ui/confirm-dialog/confirm-dialog";
 import { useRealm } from "../../../app/providers/realm-context/realm-context";
@@ -222,12 +222,12 @@ export const ResourcesPolicySelect = ({
                     >
                         {!isAdminPermissionsClient ? (
                             <Link
-                                to={to(item)}
+                                to={to(item) as string}
                                 onClick={event => {
                                     if (isDirty) {
                                         event.preventDefault();
                                         setOnUnsavedChangesConfirm(
-                                            () => () => navigate(to(item))
+                                            () => () => navigate({ to: to(item) as string })
                                         );
                                         toggleUnsavedChangesDialog();
                                     }
@@ -252,9 +252,9 @@ export const ResourcesPolicySelect = ({
                 <NewPolicyDialog
                     policyProviders={policyProviders}
                     onSelect={p => {
-                        navigate(
-                            toCreatePolicy({ id: clientId, realm, policyType: p.type! })
-                        );
+                        navigate({ to:
+                            toCreatePolicy({ id: clientId, realm, policyType: p.type! }) as string
+                        });
                     }}
                     toggleDialog={toggleCreatePolicyDialog}
                 />

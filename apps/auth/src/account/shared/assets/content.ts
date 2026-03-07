@@ -11,7 +11,7 @@
 
 // @ts-nocheck
 
-import type { MenuItem } from "../../widgets/page-nav";
+import type { MenuItem } from "../lib/menu-item";
 
 export const content: MenuItem[] = [
     { label: "personalInfo", path: "" },

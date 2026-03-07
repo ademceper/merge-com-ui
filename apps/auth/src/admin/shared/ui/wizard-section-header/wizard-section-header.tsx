@@ -1,4 +1,4 @@
-export type WizardSectionHeaderProps = {
+type WizardSectionHeaderProps = {
     title: string;
     description?: string;
     showDescription?: boolean;

@@ -172,6 +172,6 @@ function parseErrorMessage(errorData: any): string {
 	}
 }
 
-export function getApiBaseUrl(): string {
+function getApiBaseUrl(): string {
 	return apiHostnameManager.getHostname();
 }

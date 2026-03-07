@@ -1,7 +1,4 @@
-import { lazy } from "react";
-import type { Path } from "react-router-dom";
 import { generateEncodedPath } from "../../../shared/lib/generateEncodedPath";
-import type { AppRouteObject } from "../../../app/routes";
 
 export type IdentityProviderEditMapperParams = {
     realm: string;
@@ -10,19 +7,7 @@ export type IdentityProviderEditMapperParams = {
     id: string;
 };
 
-const AddMapper = lazy(() => import("../add/add-mapper"));
-
-export const IdentityProviderEditMapperRoute: AppRouteObject = {
-    path: "/:realm/identity-providers/:providerId/:alias/mappers/:id",
-    element: <AddMapper />,
-    breadcrumb: t => t("editIdPMapper"),
-    handle: {
-        access: "manage-identity-providers"
-    }
-};
-
 export const toIdentityProviderEditMapper = (
     params: IdentityProviderEditMapperParams
-): Partial<Path> => ({
-    pathname: generateEncodedPath(IdentityProviderEditMapperRoute.path, params)
-});
+): string =>
+    generateEncodedPath("/:realm/identity-providers/:providerId/:alias/mappers/:id", params);

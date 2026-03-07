@@ -29,7 +29,7 @@ export interface AutocompleteItem {
 	[key: string]: unknown;
 }
 
-export interface AutocompleteProps<T extends AutocompleteItem> {
+interface AutocompleteProps<T extends AutocompleteItem> {
 	value: string;
 	onChange: (value: string) => void;
 	items: T[];

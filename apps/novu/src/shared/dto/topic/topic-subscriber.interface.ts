@@ -7,7 +7,7 @@ import type {
 	TopicKey,
 } from "../../model";
 
-export interface ITopicSubscriber {
+interface ITopicSubscriber {
 	_organizationId: OrganizationId;
 
 	_environmentId: EnvironmentId;

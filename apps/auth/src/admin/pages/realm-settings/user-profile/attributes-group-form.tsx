@@ -5,8 +5,9 @@ import { Button } from "@merge-rd/ui/components/button";
 import { Label } from "@merge-rd/ui/components/label";
 import { useEffect, useMemo } from "react";
 import { FormProvider, SubmitHandler, useForm } from "react-hook-form";
-import { useTranslation } from "react-i18next";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { useTranslation } from "@merge-rd/i18n";
+import { Link, useNavigate } from "@tanstack/react-router";
+import { useParams } from "../../../shared/lib/useParams";
 import { useAdminClient } from "../../../app/admin-client";
 import { FormAccess } from "../../../shared/ui/form/form-access";
 import { KeyValueInput } from "../../../shared/ui/key-value-form/key-value-input";
@@ -109,7 +110,7 @@ export default function AttributesGroupForm() {
                     toast.error(t("errorSavingTranslations", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
                 }
             }
-            navigate(toUserProfile({ realm: realmName, tab: "attributes-group" }));
+            navigate({ to: toUserProfile({ realm: realmName, tab: "attributes-group" }) as string });
         }
     };
 
@@ -170,7 +171,7 @@ export default function AttributesGroupForm() {
                             variant="ghost"
                             asChild
                         >
-                            <Link to={toUserProfile({ realm: realmName, tab: "attributes-group" })}>
+                            <Link to={toUserProfile({ realm: realmName, tab: "attributes-group" }) as string}>
                                 {t("cancel")}
                             </Link>
                         </Button>

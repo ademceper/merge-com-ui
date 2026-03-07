@@ -4,7 +4,7 @@ import { getErrorDescription, getErrorMessage, createNamedContext,
     useRequiredContext } from "../../../../shared/keycloak-ui-shared";
 import { toast } from "sonner";
 import { PropsWithChildren, useState } from "react";
-import { useTranslation } from "react-i18next";
+import { useTranslation } from "@merge-rd/i18n";
 import { useAdminClient } from "../../../app/admin-client";
 import { useRealm } from "../../../app/providers/realm-context/realm-context";
 
@@ -14,17 +14,17 @@ type UserProfileProps = {
     isSaving: boolean;
 };
 
-export type SaveCallback = (
+type SaveCallback = (
     updatedConfig: UserProfileConfig,
     options?: SaveOptions
 ) => Promise<boolean>;
 
-export type SaveOptions = {
+type SaveOptions = {
     successMessageKey?: string;
     errorMessageKey?: string;
 };
 
-export const UserProfileContext = createNamedContext<UserProfileProps | undefined>(
+const UserProfileContext = createNamedContext<UserProfileProps | undefined>(
     "UserProfileContext",
     undefined
 );

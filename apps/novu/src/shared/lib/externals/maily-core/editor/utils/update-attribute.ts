@@ -1,6 +1,6 @@
 import type { Command } from "@tiptap/core";
 
-export function updateAttribute(
+function updateAttribute(
 	type: string,
 	attr: string,
 	value: any,

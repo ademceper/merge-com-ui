@@ -1,7 +1,7 @@
 import PolicyEvaluationResponse from "@keycloak/keycloak-admin-client/lib/defs/policyEvaluationResponse";
 import { useMemo } from "react";
 import { Alert, AlertTitle, AlertDescription } from "@merge-rd/ui/components/alert";
-import { useTranslation } from "react-i18next";
+import { useTranslation } from "@merge-rd/i18n";
 import { sortBy } from "lodash-es";
 
 type PermissionEvaluationResultProps = {

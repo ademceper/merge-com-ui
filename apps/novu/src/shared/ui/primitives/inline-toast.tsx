@@ -37,7 +37,7 @@ const BUTTON_COLORS = {
 	info: "text-information",
 } as const;
 
-export interface InlineToastProps
+interface InlineToastProps
 	extends React.HTMLAttributes<HTMLDivElement>,
 		VariantProps<typeof inlineToastVariants> {
 	title?: string;

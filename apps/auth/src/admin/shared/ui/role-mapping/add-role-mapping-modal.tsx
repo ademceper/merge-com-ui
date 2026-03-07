@@ -24,7 +24,7 @@ import {
     DropdownMenuTrigger,
 } from "@merge-rd/ui/components/dropdown-menu";
 import { useState } from "react";
-import { useTranslation } from "react-i18next";
+import { useTranslation } from "@merge-rd/i18n";
 import { useAdminClient } from "../../../app/admin-client";
 import { useAccess } from "../../../app/providers/access/access";
 import { translationFormatter } from "../../lib/translationFormatter";

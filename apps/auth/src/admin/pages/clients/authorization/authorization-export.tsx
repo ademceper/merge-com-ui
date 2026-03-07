@@ -5,7 +5,7 @@ import { Button } from "@merge-rd/ui/components/button";
 import CodeEditor from "@uiw/react-textarea-code-editor";
 import { saveAs } from "file-saver";
 import { useState } from "react";
-import { useTranslation } from "react-i18next";
+import { useTranslation } from "@merge-rd/i18n";
 import { useAdminClient } from "../../../app/admin-client";
 import { FormAccess } from "../../../shared/ui/form/form-access";
 import { prettyPrintJSON } from "../../../shared/lib/util";

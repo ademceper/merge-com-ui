@@ -10,8 +10,8 @@ import {
 } from "@/admin/shared/ui/data-table";
 import { Plus, Trash } from "@phosphor-icons/react";
 import { useMemo, useState } from "react";
-import { useTranslation } from "react-i18next";
-import { Link } from "react-router-dom";
+import { useTranslation } from "@merge-rd/i18n";
+import { Link } from "@tanstack/react-router";
 import { useAdminClient } from "../../../app/admin-client";
 import {
     AlertDialog,
@@ -96,7 +96,7 @@ export const KeysProvidersTab = ({ realmComponents, refresh }: KeysProvidersTabP
                         realm,
                         id: row.original.id!,
                         providerType: row.original.providerId as ProviderType
-                    })}
+                    }) as string}
                     className="text-primary hover:underline"
                     data-testid="provider-name-link"
                 >

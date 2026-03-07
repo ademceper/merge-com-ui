@@ -37,7 +37,7 @@ export interface CommandGroup {
 	commands: Command[];
 }
 
-export interface CommandPaletteState {
+interface CommandPaletteState {
 	isOpen: boolean;
 	search: string;
 	selectedIndex: number;

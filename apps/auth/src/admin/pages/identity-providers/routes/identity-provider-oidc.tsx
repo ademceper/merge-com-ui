@@ -1,23 +1,8 @@
-import { lazy } from "react";
-import type { Path } from "react-router-dom";
 import { generateEncodedPath } from "../../../shared/lib/generateEncodedPath";
-import type { AppRouteObject } from "../../../app/routes";
 
-export type IdentityProviderOidcParams = { realm: string };
+type IdentityProviderOidcParams = { realm: string };
 
-const AddOpenIdConnect = lazy(() => import("../add/add-open-id-connect"));
-
-export const IdentityProviderOidcRoute: AppRouteObject = {
-    path: "/:realm/identity-providers/oidc/add",
-    element: <AddOpenIdConnect />,
-    breadcrumb: t => t("addOpenIdProvider"),
-    handle: {
-        access: "manage-identity-providers"
-    }
-};
-
-export const toIdentityProviderOidc = (
+const toIdentityProviderOidc = (
     params: IdentityProviderOidcParams
-): Partial<Path> => ({
-    pathname: generateEncodedPath(IdentityProviderOidcRoute.path, params)
-});
+): string =>
+    generateEncodedPath("/:realm/identity-providers/oidc/add", params);

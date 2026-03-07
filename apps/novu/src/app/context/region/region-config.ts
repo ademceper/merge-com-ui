@@ -18,7 +18,7 @@ import {
 	WEBSOCKET_HOSTNAME,
 } from "@/shared/config";
 
-export interface RegionConfig {
+interface RegionConfig {
 	code: string;
 	name: string;
 	flag: string;
@@ -110,7 +110,7 @@ export const REGIONS: RegionConfig[] = parseRegionsFromEnv();
 /**
  * Map of region code to region config
  */
-export const REGION_MAP = new Map<string, RegionConfig>(
+const REGION_MAP = new Map<string, RegionConfig>(
 	REGIONS.map((region) => [region.code, region]),
 );
 
@@ -118,7 +118,7 @@ export const REGION_MAP = new Map<string, RegionConfig>(
  * Map of AWS region to region code
  * Used for detecting region from organization metadata
  */
-export const AWS_REGION_TO_CODE_MAP = new Map<string, string>(
+const AWS_REGION_TO_CODE_MAP = new Map<string, string>(
 	REGIONS.map((region) => [region.awsRegion, region.code]),
 );
 

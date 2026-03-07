@@ -7,7 +7,7 @@ import type {
 	ResourceOriginEnum,
 	ResourceTypeEnum,
 } from "../../model";
-import type { RuntimeIssue } from "../../utils/issues";
+import type { RuntimeIssue } from "../../lib/utils/issues";
 import type { ControlSchemas, IMessageTemplate } from "../message-template";
 import type {
 	INotificationBridgeTrigger,
@@ -42,7 +42,7 @@ export interface INotificationTemplate {
 	isTranslationEnabled?: boolean;
 }
 
-export class StepIssues {
+class StepIssues {
 	controls?: Record<string, RuntimeIssue[]>;
 	integration?: Record<string, RuntimeIssue[]>;
 }
@@ -84,7 +84,7 @@ export interface INotificationTemplateStep extends IStepVariant {
 	variants?: IStepVariant[];
 }
 
-export interface IMessageFilter {
+interface IMessageFilter {
 	isNegated?: boolean;
 	type?: BuilderFieldType;
 	value: BuilderGroupValues;

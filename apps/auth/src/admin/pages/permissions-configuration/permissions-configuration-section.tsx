@@ -3,8 +3,8 @@ import { getErrorDescription, getErrorMessage, useFetch } from "../../../shared/
 import { toast } from "sonner";
 import { useState } from "react";
 import { FormProvider, useForm, useWatch } from "react-hook-form";
-import { useTranslation } from "react-i18next";
-import { useParams } from "react-router-dom";
+import { useTranslation } from "@merge-rd/i18n";
+import { useParams } from "../../shared/lib/useParams";
 import { useAdminClient } from "../../app/admin-client";
 import { AuthorizationPolicies } from "../clients/authorization/policies";
 import { FormFields, SaveOptions } from "../clients/client-details";

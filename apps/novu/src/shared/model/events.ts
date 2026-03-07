@@ -1,7 +1,7 @@
 import type { ChannelTypeEnum } from "./channel";
 import type { TopicKey } from "./topic";
 
-export enum TriggerEventStatusEnum {
+enum TriggerEventStatusEnum {
 	ERROR = "error",
 	NOT_ACTIVE = "trigger_not_active",
 	NO_WORKFLOW_ACTIVE_STEPS = "no_workflow_active_steps_defined",
@@ -11,7 +11,7 @@ export enum TriggerEventStatusEnum {
 	INVALID_RECIPIENTS = "invalid_recipients",
 }
 
-export interface IAttachmentOptions {
+interface IAttachmentOptions {
 	mime: string;
 	file: Buffer;
 	name?: string;
@@ -20,7 +20,7 @@ export interface IAttachmentOptions {
 	disposition?: string;
 }
 
-export interface IEmailOptions {
+interface IEmailOptions {
 	to: string[];
 	subject: string;
 	html: string;
@@ -40,7 +40,7 @@ export interface IEmailOptions {
 	bridgeProviderData?: Record<string, unknown>;
 }
 
-export interface ITriggerPayload {
+interface ITriggerPayload {
 	attachments?: IAttachmentOptions[];
 	[key: string]:
 		| string
@@ -53,7 +53,7 @@ export interface ITriggerPayload {
 		| Record<string, unknown>;
 }
 
-export enum TriggerRecipientsTypeEnum {
+enum TriggerRecipientsTypeEnum {
 	SUBSCRIBER = "Subscriber",
 	TOPIC = "Topic",
 }
@@ -64,14 +64,14 @@ export interface ITopic {
 	exclude?: string[];
 }
 
-export type TriggerRecipientTopics = ITopic[];
+type TriggerRecipientTopics = ITopic[];
 
-export enum AddressingTypeEnum {
+enum AddressingTypeEnum {
 	BROADCAST = "broadcast",
 	MULTICAST = "multicast",
 }
 
-export enum TriggerRequestCategoryEnum {
+enum TriggerRequestCategoryEnum {
 	SINGLE = "single",
 	BULK = "bulk",
 }

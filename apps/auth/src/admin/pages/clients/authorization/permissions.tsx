@@ -23,8 +23,8 @@ import {
 import { TablePagination } from "@/admin/shared/ui/table-pagination";
 import { CaretDown, CaretRight, DotsThreeVertical } from "@phosphor-icons/react";
 import { Fragment, useState } from "react";
-import { useTranslation } from "react-i18next";
-import { Link, useNavigate } from "react-router-dom";
+import { useTranslation } from "@merge-rd/i18n";
+import { Link, useNavigate } from "@tanstack/react-router";
 import { useAdminClient } from "../../../app/admin-client";
 import { useConfirmDialog } from "../../../shared/ui/confirm-dialog/confirm-dialog";
 import { KeycloakSpinner } from "../../../../shared/keycloak-ui-shared";
@@ -198,13 +198,13 @@ export const AuthorizationPermissions = ({
                                             isDisabled || disabledCreate?.resources
                                         }
                                         onClick={() =>
-                                            navigate(
+                                            navigate({ to:
                                                 toNewPermission({
                                                     realm,
                                                     id: clientId,
                                                     permissionType: "resource"
-                                                })
-                                            )
+                                                }) as string
+                                            })
                                         }
                                     >
                                         {t("createResourceBasedPermission")}
@@ -216,13 +216,13 @@ export const AuthorizationPermissions = ({
                                             isDisabled || disabledCreate?.scopes
                                         }
                                         onClick={() =>
-                                            navigate(
+                                            navigate({ to:
                                                 toNewPermission({
                                                     realm,
                                                     id: clientId,
                                                     permissionType: "scope"
-                                                })
-                                            )
+                                                }) as string
+                                            })
                                         }
                                     >
                                         {t("createScopeBasedPermission")}
@@ -302,7 +302,7 @@ export const AuthorizationPermissions = ({
                                                         id: clientId,
                                                         permissionType: permission.type!,
                                                         permissionId: permission.id!
-                                                    })}
+                                                    }) as string}
                                                 >
                                                     {permission.name}
                                                 </Link>

@@ -8,12 +8,12 @@ import type {
 } from "@/shared";
 import { delV2, getV2, postV2, putV2 } from "@/shared/api/api.client";
 
-export type WorkflowInfo = {
+type WorkflowInfo = {
 	name: string;
 	workflowId: string;
 };
 
-export type GetLayoutUsageResponse = {
+type GetLayoutUsageResponse = {
 	workflows: WorkflowInfo[];
 };
 

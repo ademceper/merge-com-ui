@@ -28,7 +28,7 @@ const SubFlowNodeInner = ({ data: { label }, prefix, selected }: SubFlowNodeProp
     );
 };
 
-export const SubFlowNode = memo(SubFlowNodeInner);
+const SubFlowNode = memo(SubFlowNodeInner);
 
 export const StartSubFlowNode = ({ ...props }: NodeProps) => (
     <SubFlowNode {...props} prefix="Start" />

@@ -2,9 +2,9 @@ import { ClientIdSecret } from "../component/client-id-secret";
 import { DisplayOrder } from "../component/display-order";
 import { RedirectUrl } from "../component/redirect-url";
 import { TextControl } from "../../../../shared/keycloak-ui-shared";
-import { useTranslation } from "react-i18next";
+import { useTranslation } from "@merge-rd/i18n";
 import { useFormContext, useWatch } from "react-hook-form";
-import { useParams } from "react-router-dom";
+import { useParams } from "../../../shared/lib/useParams";
 import type { IdentityProviderParams } from "../routes/identity-provider";
 
 type GeneralSettingsProps = {

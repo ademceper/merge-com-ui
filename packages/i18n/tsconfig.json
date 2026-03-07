@@ -1,0 +1,12 @@
+{
+  "extends": "@merge/ts-cfg/react-lib.json",
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@merge-rd/i18n/*": ["./src/*"]
+    },
+    "types": []
+  },
+  "include": ["."],
+  "exclude": ["node_modules", "dist"]
+}

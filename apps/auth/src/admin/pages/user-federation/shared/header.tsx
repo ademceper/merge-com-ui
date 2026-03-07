@@ -4,8 +4,9 @@ import { Switch } from "@merge-rd/ui/components/switch";
 import { buttonVariants } from "@merge-rd/ui/components/button";
 import { ReactElement } from "react";
 import { Controller, useFormContext } from "react-hook-form";
-import { useTranslation } from "react-i18next";
-import { useNavigate, useParams } from "react-router-dom";
+import { useTranslation } from "@merge-rd/i18n";
+import { useNavigate } from "@tanstack/react-router";
+import { useParams } from "../../../shared/lib/useParams";
 import { useAdminClient } from "../../../app/admin-client";
 import { getErrorDescription, getErrorMessage } from "../../../../shared/keycloak-ui-shared";
 import { toast } from "sonner";
@@ -66,7 +67,7 @@ const { realm } = useRealm();
             await adminClient.components.del({ id });
             setDeleteDialogOpen(false);
             toast.success(t("userFedDeletedSuccess"));
-            navigate(toUserFederation({ realm }), { replace: true });
+            navigate({ to: toUserFederation({ realm }) as string, replace: true });
         } catch (error) {
             toast.error(t("userFedDeleteError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
         }

@@ -16,7 +16,7 @@ import { Textarea } from "@merge-rd/ui/components/textarea";
 import { Switch } from "@merge-rd/ui/components/switch";
 import { useState } from "react";
 import { Controller, useFormContext, useWatch } from "react-hook-form";
-import { useTranslation } from "react-i18next";
+import { useTranslation } from "@merge-rd/i18n";
 import { FormAccess } from "../../shared/ui/form/form-access";
 import { FixedButtonsGroup } from "../../shared/ui/form/fixed-button-group";
 import { DefaultSwitchControl } from "../../shared/ui/switch-control";

@@ -2,7 +2,7 @@ import { Label } from "@merge-rd/ui/components/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@merge-rd/ui/components/select";
 import { useState } from "react";
 import { Controller, useFormContext } from "react-hook-form";
-import { useTranslation } from "react-i18next";
+import { useTranslation } from "@merge-rd/i18n";
 
 import { HelpItem } from "../../../../shared/keycloak-ui-shared";
 import { TimeSelector, Unit } from "../../../shared/ui/time-selector/time-selector";

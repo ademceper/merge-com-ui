@@ -1,4 +1,4 @@
-import type { SeverityLevelEnum } from "../../consts";
+import type { SeverityLevelEnum } from "../../config/consts";
 import type {
 	ISubscribersDefine,
 	ITenantDefine,
@@ -6,19 +6,19 @@ import type {
 	ProvidersIdEnum,
 } from "../../model";
 
-export type TriggerRecipientSubscriber = string | ISubscribersDefine;
+type TriggerRecipientSubscriber = string | ISubscribersDefine;
 
-export type TriggerRecipient = TriggerRecipientSubscriber | ITopic;
+type TriggerRecipient = TriggerRecipientSubscriber | ITopic;
 
-export type TriggerRecipients = TriggerRecipient[];
+type TriggerRecipients = TriggerRecipient[];
 
-export type TriggerRecipientsPayload =
+type TriggerRecipientsPayload =
 	| TriggerRecipientSubscriber
 	| TriggerRecipients;
 
-export type TriggerTenantContext = string | ITenantDefine;
+type TriggerTenantContext = string | ITenantDefine;
 
-export type TriggerOverrides = {
+type TriggerOverrides = {
 	providers?: Record<ProvidersIdEnum, Record<string, unknown>>;
 	steps?: Record<
 		string,

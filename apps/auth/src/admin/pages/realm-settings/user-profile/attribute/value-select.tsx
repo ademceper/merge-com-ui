@@ -7,7 +7,7 @@ import {
 } from "@merge-rd/ui/components/select";
 import { useState } from "react";
 import { UseControllerProps, useController } from "react-hook-form";
-import { useTranslation } from "react-i18next";
+import { useTranslation } from "@merge-rd/i18n";
 
 type ValueSelectProps = UseControllerProps & {
     selectItems: string[];

@@ -10,7 +10,7 @@ import {
 } from "@merge-rd/ui/components/select";
 import { DotsThreeVertical, SignOut, ProhibitInset } from "@phosphor-icons/react";
 import { useState } from "react";
-import { useTranslation } from "react-i18next";
+import { useTranslation } from "@merge-rd/i18n";
 import { useAdminClient } from "../../app/admin-client";
 import { getErrorDescription, getErrorMessage, useFetch } from "../../../shared/keycloak-ui-shared";
 import { toast } from "sonner";

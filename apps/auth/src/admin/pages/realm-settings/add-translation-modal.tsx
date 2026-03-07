@@ -7,7 +7,7 @@ import {
     DialogTitle
 } from "@merge-rd/ui/components/dialog";
 import { FormProvider, SubmitHandler, UseFormReturn } from "react-hook-form";
-import { useTranslation } from "react-i18next";
+import { useTranslation } from "@merge-rd/i18n";
 import { TextControl } from "../../../shared/keycloak-ui-shared";
 import type { KeyValueType } from "../../shared/ui/key-value-form/key-value-convert";
 

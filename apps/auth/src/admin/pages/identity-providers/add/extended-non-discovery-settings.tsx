@@ -11,7 +11,7 @@ import { Label } from "@merge-rd/ui/components/label";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@merge-rd/ui/components/collapsible";
 import { useState } from "react";
 import { Controller, useFormContext } from "react-hook-form";
-import { useTranslation } from "react-i18next";
+import { useTranslation } from "@merge-rd/i18n";
 import { FormGroupField } from "../component/form-group-field";
 import { SwitchField } from "../component/switch-field";
 import { TextField } from "../component/text-field";

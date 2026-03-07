@@ -19,8 +19,8 @@ import {
 } from "@/admin/shared/ui/data-table";
 import { Plus, Question, Trash } from "@phosphor-icons/react";
 import { useMemo, useState } from "react";
-import { Trans, useTranslation } from "react-i18next";
-import { Link } from "react-router-dom";
+import { Trans, useTranslation } from "@merge-rd/i18n";
+import { Link } from "@tanstack/react-router";
 import { useAdminClient } from "../../app/admin-client";
 import { useConfirmDialog } from "../../shared/ui/confirm-dialog/confirm-dialog";
 import { GroupPickerDialog } from "../../shared/ui/group/group-picker-dialog";
@@ -178,7 +178,7 @@ export const DefaultGroupsTab = () => {
                         <PopoverContent>
                             <Trans i18nKey="defaultGroupsHelp">
                                 {" "}
-                                <Link to={toUserFederation({ realm })} />.
+                                <Link to={toUserFederation({ realm }) as string} />.
                             </Trans>
                         </PopoverContent>
                     </Popover>

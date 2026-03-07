@@ -4,7 +4,7 @@ import {
     DialogHeader,
     DialogTitle
 } from "@merge-rd/ui/components/dialog";
-import { useTranslation } from "react-i18next";
+import { useTranslation } from "@merge-rd/i18n";
 import { useServerInfo } from "../../../../app/providers/server-info/server-info-provider";
 import { KEY_PROVIDER_TYPE } from "../../../../shared/lib/util";
 

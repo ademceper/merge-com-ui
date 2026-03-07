@@ -1,5 +1,5 @@
 import { ReactElement } from "react";
-import { Link } from "react-router-dom";
+import { Link } from "@tanstack/react-router";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@merge-rd/ui/components/tooltip";
 
 import type AdminEventRepresentation from "@keycloak/keycloak-admin-client/lib/defs/adminEventRepresentation";
@@ -109,13 +109,13 @@ const createLink = (realm: string, event: AdminEventRepresentation) => {
     return "";
 };
 
-export const ResourceLink = ({ event }: ResourceLinkProps) => {
+const ResourceLink = ({ event }: ResourceLinkProps) => {
     const { realm } = useRealm();
     return (
         <Truncate text={event.resourcePath}>
             {text =>
                 isLinkable(event) ? (
-                    <Link to={createLink(realm, event)}>{text}</Link>
+                    <Link to={createLink(realm, event) as string}>{text}</Link>
                 ) : (
                     <span>{text}</span>
                 )

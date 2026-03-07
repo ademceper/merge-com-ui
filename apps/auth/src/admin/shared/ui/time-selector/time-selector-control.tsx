@@ -10,12 +10,12 @@ import {
 import { FormErrorText, HelpItem } from "../../../../shared/keycloak-ui-shared";
 import { TimeSelector, TimeSelectorProps } from "./time-selector";
 
-export type NumberControlOption = {
+type NumberControlOption = {
     key: string;
     value: string;
 };
 
-export type TimeSelectorControlProps<
+type TimeSelectorControlProps<
     T extends FieldValues,
     P extends FieldPath<T> = FieldPath<T>
 > = Omit<TimeSelectorProps, "name"> &

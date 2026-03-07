@@ -1,6 +1,6 @@
-import { EmptyTopicsIllustration } from "@/features/topics/ui/empty-topics-illustration";
+import { EmptyTopicsIllustration } from "@/pages/topics/ui/empty-topics-illustration";
 
-export function RequestLogDetailEmptyState2() {
+function RequestLogDetailEmptyState2() {
 	return (
 		<div className="flex h-full items-center justify-center p-4">
 			<div className="flex flex-col items-center gap-3 text-center">

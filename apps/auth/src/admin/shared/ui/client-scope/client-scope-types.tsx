@@ -1,9 +1,9 @@
 import type ClientScopeRepresentation from "@keycloak/keycloak-admin-client/lib/defs/clientScopeRepresentation";
 
 import KeycloakAdminClient from "@keycloak/keycloak-admin-client";
-import type { TFunction } from "i18next";
+import type { TFunction } from "@merge-rd/i18n";
 import { useState } from "react";
-import { useTranslation } from "react-i18next";
+import { useTranslation } from "@merge-rd/i18n";
 import { toUpperCase } from "../../lib/util";
 import { DropdownMenuItem } from "@merge-rd/ui/components/dropdown-menu";
 import {

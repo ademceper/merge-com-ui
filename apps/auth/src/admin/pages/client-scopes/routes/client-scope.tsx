@@ -1,7 +1,4 @@
-import { lazy } from "react";
-import type { Path } from "react-router-dom";
 import { generateEncodedPath } from "../../../shared/lib/generateEncodedPath";
-import type { AppRouteObject } from "../../../app/routes";
 
 export type ClientScopeTab = "settings" | "mappers" | "scope" | "events";
 
@@ -11,21 +8,5 @@ export type ClientScopeParams = {
     tab: ClientScopeTab;
 };
 
-const EditClientScope = lazy(() => import("../edit-client-scope"));
-
-export const ClientScopeRoute: AppRouteObject = {
-    path: "/:realm/client-scopes/:id/:tab",
-    element: <EditClientScope />,
-    breadcrumb: t => t("clientScopeDetails"),
-    handle: {
-        access: "view-clients"
-    }
-};
-
-export const toClientScope = (params: ClientScopeParams): Partial<Path> => {
-    const path = ClientScopeRoute.path;
-
-    return {
-        pathname: generateEncodedPath(path, params)
-    };
-};
+export const toClientScope = (params: ClientScopeParams): string =>
+    generateEncodedPath("/:realm/client-scopes/:id/:tab", params);

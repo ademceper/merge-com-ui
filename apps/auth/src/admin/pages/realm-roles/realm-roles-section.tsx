@@ -17,8 +17,8 @@ import {
 } from "@/admin/shared/ui/data-table";
 import { PencilSimple, Plus, Trash } from "@phosphor-icons/react";
 import { useState } from "react";
-import { useTranslation } from "react-i18next";
-import { Link } from "react-router-dom";
+import { useTranslation } from "@merge-rd/i18n";
+import { Link } from "@tanstack/react-router";
 import { useAdminClient } from "../../app/admin-client";
 import { getErrorDescription, getErrorMessage, HelpItem, useFetch } from "../../../shared/keycloak-ui-shared";
 import { toast } from "sonner";
@@ -48,7 +48,7 @@ function RoleDetailLink({ defaultRoleName, toDetail, ...role }: RoleDetailLinkPr
             <span className="inline-flex items-center gap-1.5 flex-nowrap">
                 {canViewUserRegistration ? (
                     <Link
-                        to={toRealmSettings({ realm, tab: "user-registration" })}
+                        to={toRealmSettings({ realm, tab: "user-registration" }) as string}
                         className="text-primary hover:underline"
                     >
                         {role.name}
@@ -61,7 +61,7 @@ function RoleDetailLink({ defaultRoleName, toDetail, ...role }: RoleDetailLinkPr
         );
     }
     return (
-        <Link to={toDetail(role.id!)} className="text-primary hover:underline">
+        <Link to={toDetail(role.id!) as string} className="text-primary hover:underline">
             {role.name}
         </Link>
     );

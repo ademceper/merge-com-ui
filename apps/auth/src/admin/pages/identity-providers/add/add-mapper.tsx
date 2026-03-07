@@ -7,8 +7,8 @@ import { Button, buttonVariants } from "@merge-rd/ui/components/button";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@merge-rd/ui/components/dropdown-menu";
 import { useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
-import { useTranslation } from "react-i18next";
-import { Link, useNavigate } from "react-router-dom";
+import { useTranslation } from "@merge-rd/i18n";
+import { Link, useNavigate } from "@tanstack/react-router";
 import { useAdminClient } from "../../../app/admin-client";
 import { useConfirmDialog } from "../../../shared/ui/confirm-dialog/confirm-dialog";
 import { DynamicComponents } from "../../../shared/ui/dynamic/dynamic-components";
@@ -87,14 +87,14 @@ const navigate = useNavigate();
                 });
 
                 toast.success(t("mapperCreateSuccess"));
-                navigate(
-                    toIdentityProviderEditMapper({
+                navigate({
+                    to: toIdentityProviderEditMapper({
                         realm,
                         alias,
                         providerId: providerId,
                         id: createdMapper.id
-                    })
-                );
+                    }) as string
+                });
             } catch (error) {
                 toast.error(t("mapperCreateError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
             }
@@ -115,9 +115,9 @@ const navigate = useNavigate();
                     id: id!
                 });
                 toast.success(t("deleteMapperSuccess"));
-                navigate(
-                    toIdentityProvider({ providerId, alias, tab: "mappers", realm })
-                );
+                navigate({
+                    to: toIdentityProvider({ providerId, alias, tab: "mappers", realm }) as string
+                });
             } catch (error) {
                 toast.error(t("deleteErrorIdentityProvider", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
             }
@@ -223,7 +223,7 @@ const navigate = useNavigate();
                                 providerId,
                                 alias: alias!,
                                 tab: "mappers"
-                            })}
+                            }) as string}
                         >
                             {t("cancel")}
                         </Link>

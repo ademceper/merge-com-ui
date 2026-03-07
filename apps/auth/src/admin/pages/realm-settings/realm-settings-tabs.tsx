@@ -17,8 +17,9 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@merge-rd/ui/component
 import { DotsThreeVertical, DownloadSimple, UploadSimple, Trash } from "@phosphor-icons/react";
 import { useEffect, useState } from "react";
 import { Controller, FormProvider, useForm } from "react-hook-form";
-import { useTranslation } from "react-i18next";
-import { useLocation, useNavigate, useParams } from "react-router-dom";
+import { useTranslation } from "@merge-rd/i18n";
+import { useLocation, useNavigate } from "@tanstack/react-router";
+import { useParams } from "../../shared/lib/useParams";
 import { useAdminClient } from "../../app/admin-client";
 import {
     AlertDialog,
@@ -107,7 +108,7 @@ const RealmSettingsHeader = ({
             await adminClient.realms.del({ realm: realmName });
             setDeleteRealmDialogOpen(false);
             toast.success(t("deletedSuccessRealmSetting"));
-            navigate(toDashboard({ realm: environment.masterRealm }));
+            navigate({ to: toDashboard({ realm: environment.masterRealm }) as string });
             refresh();
         } catch (error) {
             toast.error(t("deleteErrorRealmSetting", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
@@ -297,7 +298,7 @@ export const RealmSettingsTabs = () => {
 
         const isRealmRenamed = realmName !== (r.realm || realm?.realm);
         if (isRealmRenamed) {
-            navigate(toRealmSettings({ realm: r.realm!, tab: "general" }));
+            navigate({ to: toRealmSettings({ realm: r.realm!, tab: "general" }) as string });
         }
         refresh();
     };
@@ -334,7 +335,7 @@ export const RealmSettingsTabs = () => {
                 <Tabs
                     value={clientPoliciesTab}
                     onValueChange={(value) =>
-                        navigate(toClientPolicies({ realm: realmName!, tab: value as ClientPoliciesTab }))
+                        navigate({ to: toClientPolicies({ realm: realmName!, tab: value as ClientPoliciesTab }) as string })
                     }
                 >
                     <TabsList variant="line" className="mb-4">
@@ -424,7 +425,7 @@ export const RealmSettingsTabs = () => {
                 <Tabs
                     value={currentTab}
                     onValueChange={(value) =>
-                        navigate(toRealmSettings({ realm: realmName, tab: value as RealmSettingsTab }))
+                        navigate({ to: toRealmSettings({ realm: realmName, tab: value as RealmSettingsTab }) as string })
                     }
                 >
                     <div className="w-full min-w-0 overflow-x-auto overflow-y-hidden mb-4">

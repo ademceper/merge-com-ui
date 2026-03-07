@@ -18,12 +18,12 @@ import { useEffect, useState } from "react";
  * Function that creates a Promise. Receives an [AbortSignal](https://developer.mozilla.org/en-US/docs/Web/API/AbortSignal)
  * which is aborted when the component unmounts, or the dependencies of the hook have changed.
  */
-export type PromiseFactoryFn<T> = (signal: AbortSignal) => Promise<T>;
+type PromiseFactoryFn<T> = (signal: AbortSignal) => Promise<T>;
 
 /**
  * Function which is called with the value of the Promise when it resolves.
  */
-export type PromiseResolvedFn<T> = (value: T) => void;
+type PromiseResolvedFn<T> = (value: T) => void;
 
 /**
  * Takes a function that creates a Promise and returns its resolved result through a callback.

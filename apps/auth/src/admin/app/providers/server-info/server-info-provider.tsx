@@ -9,7 +9,7 @@ import { PropsWithChildren, useState } from "react";
 import { useAdminClient } from "../../admin-client";
 import { sortProviders } from "../../../shared/lib/util";
 
-export const ServerInfoContext = createNamedContext<ServerInfoRepresentation | undefined>(
+const ServerInfoContext = createNamedContext<ServerInfoRepresentation | undefined>(
     "ServerInfoContext",
     undefined
 );

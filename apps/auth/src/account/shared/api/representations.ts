@@ -13,7 +13,7 @@
 
 // Generated using typescript-generator version 2.37.1128 on 2022-09-16 15:57:05.
 
-export interface AccountLinkUriRepresentation {
+interface AccountLinkUriRepresentation {
     accountLinkUri: string;
     nonce: string;
     hash: string;
@@ -41,7 +41,7 @@ export interface ConsentRepresentation {
     lastUpdatedDate: number;
 }
 
-export interface ConsentScopeRepresentation {
+interface ConsentScopeRepresentation {
     id: string;
     name: string;
     displayText: string;
@@ -212,7 +212,7 @@ export interface Permission {
     username: string;
 }
 
-export interface Permissions {
+interface Permissions {
     permissions: Permission[];
     row?: number;
 }

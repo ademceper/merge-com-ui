@@ -12,19 +12,20 @@ import { DropdownMenuItem } from "@merge-rd/ui/components/dropdown-menu";
 import { toast } from "sonner";
 import { Button } from "@merge-rd/ui/components/button";
 import { useState } from "react";
-import { useTranslation } from "react-i18next";
-import { Link, To, useParams } from "react-router-dom";
+import { useTranslation } from "@merge-rd/i18n";
+import { Link } from "@tanstack/react-router";
+import { useParams } from "../../../../shared/lib/useParams";
 import { useAdminClient } from "../../../../app/admin-client";
 import { useConfirmDialog } from "../../../../shared/ui/confirm-dialog/confirm-dialog";
 import useLocaleSort, { mapByKey } from "../../../../shared/lib/useLocaleSort";
 
-export type LdapMapperListProps = {
-    toCreate: To;
-    toDetail: (mapperId: string) => To;
+type LdapMapperListProps = {
+    toCreate: string;
+    toDetail: (mapperId: string) => string;
 };
 
 type MapperLinkProps = ComponentRepresentation & {
-    toDetail: (mapperId: string) => To;
+    toDetail: (mapperId: string) => string;
 };
 
 const MapperLink = ({ toDetail, ...mapper }: MapperLinkProps) => (

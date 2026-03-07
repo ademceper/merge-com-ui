@@ -9,17 +9,17 @@ import {
 } from "@merge-rd/ui/components/tabs";
 import { ArrowUpRight, CaretDown, SpinnerGap } from "@phosphor-icons/react";
 import { useMemo, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "@tanstack/react-router";
 import type { ActivityFilters } from "@/entities/activity/api/activity";
 import { LinkButton } from "@/shared/ui/primitives/button-link";
 import { useEnvironment } from "@/app/context/environment/hooks";
-import { ActivityTableRow } from "@/features/activity/ui/activity-table-row";
-import { useFetchActivities } from "@/features/activity/lib/use-fetch-activities";
-import { useFetchWorkflowRunsCount } from "@/features/workflows/lib/use-fetch-workflow-runs-count";
+import { ActivityTableRow } from "@/pages/activity/ui/activity-table-row";
+import { useFetchActivities } from "@/pages/activity/api/use-fetch-activities";
+import { useFetchWorkflowRunsCount } from "@/pages/workflows/api/use-fetch-workflow-runs-count";
 import { buildRoute, ROUTES } from "@/shared/lib/routes";
 import type { RequestLog } from "@/shared/model/logs";
 import { ApiTracesContent } from "./api-traces-content";
-import { useWorkflowRunsUrlState } from "./hooks/use-workflow-runs-url-state";
+import { useWorkflowRunsUrlState } from "./model/use-workflow-runs-url-state";
 import { WorkflowRunActivityDrawer } from "./workflow-run-activity-drawer";
 import { WorkflowRunsFilters } from "./workflow-runs-filters";
 
@@ -131,7 +131,7 @@ export function WorkflowRunsContent({ log }: WorkflowRunsContentProps) {
 		const runsUrl = buildRoute(ROUTES.ACTIVITY_WORKFLOW_RUNS, {
 			environmentSlug: currentEnvironment.slug,
 		});
-		navigate(`${runsUrl}?${params.toString()}`);
+		navigate({ to: `${runsUrl}?${params.toString()}` });
 	};
 
 	const handleActivityClick = (activityId: string) => {

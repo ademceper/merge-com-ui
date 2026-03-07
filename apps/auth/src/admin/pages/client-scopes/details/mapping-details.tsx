@@ -8,8 +8,8 @@ import { Input } from "@merge-rd/ui/components/input";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@merge-rd/ui/components/dropdown-menu";
 import { useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
-import { useTranslation } from "react-i18next";
-import { Link, useMatch, useNavigate } from "react-router-dom";
+import { useTranslation } from "@merge-rd/i18n";
+import { Link, useNavigate, useLocation } from "@tanstack/react-router";
 import { useAdminClient } from "../../../app/admin-client";
 import { toDedicatedScope } from "../../clients/routes/dedicated-scope-details";
 import { useConfirmDialog } from "../../../shared/ui/confirm-dialog/confirm-dialog";
@@ -20,7 +20,7 @@ import { useServerInfo } from "../../../app/providers/server-info/server-info-pr
 import { convertFormValuesToObject, convertToFormValues } from "../../../shared/lib/util";
 import { useParams } from "../../../shared/lib/useParams";
 import { toClientScope } from "../routes/client-scope";
-import { MapperParams, MapperRoute } from "../routes/mapper";
+import { MapperParams } from "../routes/mapper";
 
 export default function MappingDetails() {
     const { adminClient } = useAdminClient();
@@ -40,7 +40,8 @@ const { id, mapperId, viewMode } = useParams<MapperParams>();
     const serverInfo = useServerInfo();
     const isUpdating = viewMode === "edit";
 
-    const isOnClientScope = !!useMatch(MapperRoute.path);
+    const location = useLocation();
+    const isOnClientScope = location.pathname.includes("/client-scopes/");
     const toDetails = () =>
         isOnClientScope
             ? toClientScope({ realm, id, tab: "mappers" })
@@ -128,7 +129,7 @@ const { id, mapperId, viewMode } = useParams<MapperParams>();
                     });
                 }
                 toast.success(t("mappingDeletedSuccess"));
-                navigate(toDetails());
+                navigate({ to: toDetails() as string });
             } catch (error) {
                 toast.error(t("mappingDeletedError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
             }
@@ -160,7 +161,7 @@ const { id, mapperId, viewMode } = useParams<MapperParams>();
             }
             toast.success(t(`mapping${key}Success`));
             if (!isUpdating) {
-                navigate(toDetails());
+                navigate({ to: toDetails() as string });
             }
         } catch (error) {
             toast.error(t(`mapping${key}Error`, { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
@@ -225,7 +226,7 @@ const { id, mapperId, viewMode } = useParams<MapperParams>();
                                 variant="link"
                                 asChild
                             >
-                                <Link to={toDetails()}>{t("cancel")}</Link>
+                                <Link to={toDetails() as string}>{t("cancel")}</Link>
                             </Button>
                         </div>
                     </FormAccess>

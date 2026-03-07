@@ -9,7 +9,7 @@ export const prepareBooleanStringFeatureFlag = (
 	return value === "true";
 };
 
-export const prepareNumberStringFeatureFlag = (
+const prepareNumberStringFeatureFlag = (
 	value: string | undefined,
 	defaultValue: number | undefined,
 ): number | undefined => {

@@ -8,7 +8,7 @@ import {
 	dragHandlePluginDefaultKey,
 } from "./drag-handle-plugin";
 
-export type DragHandleProps = {
+type DragHandleProps = {
 	editor: Editor;
 	pluginKey?: string;
 	className?: string;

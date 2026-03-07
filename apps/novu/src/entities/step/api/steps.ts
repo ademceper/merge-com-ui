@@ -6,7 +6,7 @@ import type {
 } from "@/shared";
 import { getV2, postV2 } from "@/shared/api/api.client";
 
-export const getStep = async ({
+const getStep = async ({
 	environment,
 	stepSlug,
 	workflowSlug,

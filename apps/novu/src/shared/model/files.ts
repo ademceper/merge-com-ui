@@ -1,16 +1,16 @@
-export enum FileExtensionEnum {
+enum FileExtensionEnum {
 	JPEG = "jpeg",
 	PNG = "png",
 	JPG = "jpg",
 }
 
-export enum MimeTypesEnum {
+enum MimeTypesEnum {
 	JPEG = "image/jpeg",
 	PNG = "image/png",
 	JPG = "image/jpg",
 }
 
-export const FILE_EXTENSION_TO_MIME_TYPE: Record<
+const FILE_EXTENSION_TO_MIME_TYPE: Record<
 	FileExtensionEnum,
 	MimeTypesEnum
 > = {
@@ -19,7 +19,7 @@ export const FILE_EXTENSION_TO_MIME_TYPE: Record<
 	[FileExtensionEnum.JPG]: MimeTypesEnum.JPG,
 };
 
-export const MIME_TYPE_TO_FILE_EXTENSION: Record<
+const MIME_TYPE_TO_FILE_EXTENSION: Record<
 	MimeTypesEnum,
 	FileExtensionEnum
 > = {

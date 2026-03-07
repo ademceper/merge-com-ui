@@ -19,14 +19,14 @@ import { DEFAULT_SIDE_OFFSET } from "@/shared/ui/primitives/popover";
 import { createVariableExtension } from "@/shared/ui/primitives/variable-plugin";
 import { DEFAULT_VARIABLE_PILL_HEIGHT } from "@/shared/ui/primitives/variable-plugin/variable-pill-widget";
 import { variablePillTheme } from "@/shared/ui/primitives/variable-plugin/variable-theme";
-import { EditVariablePopover } from "@/shared/ui/variable/edit-variable-popover";
-import { isPayloadVariable } from "@/shared/ui/variable/hooks/use-variable-validation";
+import { EditVariablePopover } from "@/widgets/variable-editor/edit-variable-popover";
+import { isPayloadVariable } from "@/widgets/variable-editor/hooks/use-variable-validation";
 import {
 	DIGEST_VARIABLES_ENUM,
 	DIGEST_VARIABLES_FILTER_MAP,
 	getDynamicDigestVariable,
-} from "@/shared/ui/variable/utils/digest-variables";
-import { getVariableErrorMessage } from "@/shared/ui/variable/utils/get-variable-error-message";
+} from "@/widgets/variable-editor/utils/digest-variables";
+import { getVariableErrorMessage } from "@/widgets/variable-editor/utils/get-variable-error-message";
 import { useTelemetry } from "@/shared/lib/hooks/use-telemetry";
 import {
 	type CompletionOption,

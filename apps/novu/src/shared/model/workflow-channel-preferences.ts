@@ -12,7 +12,7 @@ import type { DeepPartial } from "./utils";
  * 4. `USER_WORKFLOW` - The user's preference for a workflow in the dashboard.
  * 5. `WORKFLOW_RESOURCE` - The Framework-defined preference for a workflow.
  */
-export enum PreferencesTypeEnum {
+enum PreferencesTypeEnum {
 	SUBSCRIPTION_SUBSCRIBER_WORKFLOW = "SUBSCRIPTION_SUBSCRIBER_WORKFLOW",
 	SUBSCRIBER_WORKFLOW = "SUBSCRIBER_WORKFLOW",
 	SUBSCRIBER_GLOBAL = "SUBSCRIBER_GLOBAL",
@@ -85,7 +85,7 @@ export type WorkflowPreferences = {
 /** A partial set of workflow preferences. */
 export type WorkflowPreferencesPartial = DeepPartial<WorkflowPreferences>;
 
-export type SubscriberGlobalPreference = WorkflowPreferencesPartial & {
+type SubscriberGlobalPreference = WorkflowPreferencesPartial & {
 	/**
 	 * A preference for the schedule.
 	 *
@@ -94,7 +94,7 @@ export type SubscriberGlobalPreference = WorkflowPreferencesPartial & {
 	schedule?: Schedule;
 };
 
-export type TimeRange = {
+type TimeRange = {
 	start: string;
 	end: string;
 };

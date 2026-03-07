@@ -9,7 +9,7 @@ import { getRuleValue } from "../utils/getRuleValue";
 import { FormLabel } from "./form-label";
 import { PasswordInput, PasswordInputProps } from "./password-input";
 
-export type PasswordControlProps<
+type PasswordControlProps<
     T extends FieldValues,
     P extends FieldPath<T> = FieldPath<T>
 > = UseControllerProps<T, P> &

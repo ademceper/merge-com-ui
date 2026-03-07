@@ -3,8 +3,8 @@ import type ClientRepresentation from "@keycloak/keycloak-admin-client/lib/defs/
 import { Button } from "@merge-rd/ui/components/button";
 import { useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
-import { useTranslation } from "react-i18next";
-import { Link, useNavigate } from "react-router-dom";
+import { useTranslation } from "@merge-rd/i18n";
+import { Link, useNavigate } from "@tanstack/react-router";
 import { TextControl } from "../../../../shared/keycloak-ui-shared";
 import { useAdminClient } from "../../../app/admin-client";
 import { getErrorDescription, getErrorMessage } from "../../../../shared/keycloak-ui-shared";
@@ -81,7 +81,7 @@ const handleFileChange = async (contents: string) => {
                 })
             });
             toast.success(t("clientImportSuccess"));
-            navigate(toClient({ realm, clientId: newClient.id, tab: "settings" }));
+            navigate({ to: toClient({ realm, clientId: newClient.id, tab: "settings" }) as string });
         } catch (error) {
             toast.error(t("clientImportError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
         }
@@ -117,7 +117,7 @@ const handleFileChange = async (contents: string) => {
                                 variant="link"
                                 asChild
                             >
-                                <Link to={toClients({ realm })}>
+                                <Link to={toClients({ realm }) as string}>
                                     {t("cancel")}
                                 </Link>
                             </Button>

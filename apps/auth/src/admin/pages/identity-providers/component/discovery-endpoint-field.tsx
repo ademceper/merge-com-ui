@@ -4,7 +4,7 @@ import { KeycloakSpinner as Spinner } from "../../../../shared/keycloak-ui-share
 import debouncePromise from "p-debounce";
 import { ReactNode, useMemo, useState } from "react";
 import { useFormContext } from "react-hook-form";
-import { useTranslation } from "react-i18next";
+import { useTranslation } from "@merge-rd/i18n";
 import { HelpItem, TextControl } from "../../../../shared/keycloak-ui-shared";
 import { useAdminClient } from "../../../app/admin-client";
 
