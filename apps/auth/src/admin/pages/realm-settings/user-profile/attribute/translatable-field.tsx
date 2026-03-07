@@ -10,7 +10,7 @@ import { useEffect } from "react";
 import { useFormContext, useWatch } from "react-hook-form";
 import { Trans, useTranslation } from "react-i18next";
 import { useRealm } from "../../../../app/providers/realm-context/realm-context";
-import { i18n } from "../../../../shared/i18n/i18n";
+import { i18n } from "../../../../i18n/i18n";
 import { beerify, debeerify } from "../../../../shared/lib/util";
 import useToggle from "../../../../shared/lib/useToggle";
 import { AddTranslationsDialog } from "./add-translations-dialog";

@@ -3,8 +3,8 @@ import type { i18n as i18nType } from "i18next";
 import FetchBackend from "i18next-fetch-backend";
 import { initReactI18next } from "react-i18next";
 
-import { environment } from "../../app/environment";
-import { joinPath } from "../lib/joinPath";
+import { environment } from "../app/environment";
+import { joinPath } from "../shared/lib/joinPath";
 
 type KeyValue = { key: string; value: string };
 

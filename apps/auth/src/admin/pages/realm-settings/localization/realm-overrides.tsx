@@ -35,7 +35,7 @@ import {
 import { KeyValueType } from "../../../shared/ui/key-value-form/key-value-convert";
 import { useRealm } from "../../../app/providers/realm-context/realm-context";
 import { useWhoAmI } from "../../../app/providers/whoami/who-am-i";
-import { DEFAULT_LOCALE, i18n } from "../../../shared/i18n/i18n";
+import { DEFAULT_LOCALE, i18n } from "../../../i18n/i18n";
 import { localeToDisplayName } from "../../../shared/lib/util";
 import { AddTranslationModal } from "../add-translation-modal";
 import { Separator } from "@merge-rd/ui/components/separator";

@@ -157,12 +157,12 @@ export function AdminAppSidebar({ ...props }: React.ComponentProps<typeof Sideba
                     <img
                         src={`${baseUrl}merge-black-text.svg`}
                         alt="Merge"
-                        className="h-12 w-full object-contain object-left dark:hidden"
+                        className="h-8 w-full object-contain object-left dark:hidden"
                     />
                     <img
                         src={`${baseUrl}merge-white-text.svg`}
                         alt="Merge"
-                        className="hidden h-12 w-full object-contain object-left dark:block"
+                        className="hidden h-8 w-full object-contain object-left dark:block"
                     />
                 </div>
                 <Switcher value={realm} items={realmItems} onChange={onRealmChange} singleBadge={t("currentRealm")} />

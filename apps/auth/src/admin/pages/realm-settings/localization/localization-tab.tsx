@@ -9,7 +9,7 @@ import { FixedButtonsGroup } from "../../../shared/ui/form/fixed-button-group";
 import { FormAccess } from "../../../shared/ui/form/form-access";
 import { useServerInfo } from "../../../app/providers/server-info/server-info-provider";
 import { useWhoAmI } from "../../../app/providers/whoami/who-am-i";
-import { DEFAULT_LOCALE } from "../../../shared/i18n/i18n";
+import { DEFAULT_LOCALE } from "../../../i18n/i18n";
 import { localeToDisplayName } from "../../../shared/lib/util";
 import { EffectiveMessageBundles } from "./effective-message-bundles";
 import { RealmOverrides } from "./realm-overrides";
