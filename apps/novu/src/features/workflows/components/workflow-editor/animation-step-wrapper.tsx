@@ -1,26 +1,32 @@
-import { ReactNode } from 'react';
-import { cn } from '@merge-rd/ui/lib/utils';
+import { cn } from "@merge-rd/ui/lib/utils";
+import type { ReactNode } from "react";
 
 interface AnimationStepWrapperProps {
-  children: ReactNode;
-  isPending?: boolean;
-  isRemoving?: boolean;
-  className?: string;
+	children: ReactNode;
+	isPending?: boolean;
+	isRemoving?: boolean;
+	className?: string;
 }
 
-export function AnimationStepWrapper({ children, isPending, isRemoving, className }: AnimationStepWrapperProps) {
-  return (
-    <div
-      className={cn(
-        'transition-all duration-1000 scale-100 ease-in-out',
-        {
-          'opacity-70 scale-95 animate-[pulse_5s_ease-in-out_infinite]': isPending,
-          'opacity-40 scale-95': isRemoving,
-        },
-        className
-      )}
-    >
-      {children}
-    </div>
-  );
+export function AnimationStepWrapper({
+	children,
+	isPending,
+	isRemoving,
+	className,
+}: AnimationStepWrapperProps) {
+	return (
+		<div
+			className={cn(
+				"transition-all duration-1000 scale-100 ease-in-out",
+				{
+					"opacity-70 scale-95 animate-[pulse_5s_ease-in-out_infinite]":
+						isPending,
+					"opacity-40 scale-95": isRemoving,
+				},
+				className,
+			)}
+		>
+			{children}
+		</div>
+	);
 }

@@ -1,29 +1,35 @@
-import { useFetchTranslationList } from '@/hooks/use-fetch-translation-list';
-import { useTranslationsUrlState } from './use-translations-url-state';
+import { useFetchTranslationList } from "@/features/translations/hooks/use-fetch-translation-list";
+import { useTranslationsUrlState } from "./use-translations-url-state";
 
 interface UseTranslationListLogicOptions {
-  enabled?: boolean;
+	enabled?: boolean;
 }
 
-export function useTranslationListLogic(options: UseTranslationListLogicOptions = {}) {
-  const { enabled = true } = options;
-  
-  const { filterValues, handleFiltersChange, resetFilters } = useTranslationsUrlState({
-    total: 0,
-  });
+export function useTranslationListLogic(
+	options: UseTranslationListLogicOptions = {},
+) {
+	const { enabled = true } = options;
 
-  const { data, isPending, isFetching, refetch } = useFetchTranslationList(filterValues, { enabled });
+	const { filterValues, handleFiltersChange, resetFilters } =
+		useTranslationsUrlState({
+			total: 0,
+		});
 
-  const areFiltersApplied = filterValues.query !== '';
+	const { data, isPending, isFetching, refetch } = useFetchTranslationList(
+		filterValues,
+		{ enabled },
+	);
 
-  return {
-    filterValues,
-    handleFiltersChange,
-    resetFilters,
-    data,
-    isPending,
-    isFetching,
-    refetch,
-    areFiltersApplied,
-  };
+	const areFiltersApplied = filterValues.query !== "";
+
+	return {
+		filterValues,
+		handleFiltersChange,
+		resetFilters,
+		data,
+		isPending,
+		isFetching,
+		refetch,
+		areFiltersApplied,
+	};
 }

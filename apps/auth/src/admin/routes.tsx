@@ -2,7 +2,7 @@ import type { AccessType } from "@keycloak/keycloak-admin-client/lib/defs/whoAmI
 import type { TFunction } from "i18next";
 import type { ComponentType } from "react";
 import type { NonIndexRouteObject, RouteObject } from "react-router-dom";
-import { NotFound } from "./not-found";
+import { CatchAllRoute } from "./catch-all-route";
 import { Root } from "./root";
 import authenticationRoutes from "./authentication/routes";
 import clientScopesRoutes from "./client-scopes/routes";
@@ -35,7 +35,7 @@ export interface AppRouteObject extends NonIndexRouteObject {
 
 export const NotFoundRoute: AppRouteObject = {
     path: "*",
-    element: <NotFound />,
+    element: <CatchAllRoute />,
     handle: {
         access: "anyone",
         isNotFound: true

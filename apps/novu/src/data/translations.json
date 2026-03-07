@@ -1,40 +1,40 @@
 {
-  "data": [
-    {
-      "resourceId": "wf_002",
-      "resourceType": "workflow",
-      "locales": [
-        { "locale": "en", "completeness": 100 },
-        { "locale": "es", "completeness": 85 },
-        { "locale": "fr", "completeness": 60 },
-        { "locale": "de", "completeness": 40 }
-      ],
-      "name": "Order Confirmation",
-      "updatedAt": "2026-03-04T10:15:00.000Z"
-    },
-    {
-      "resourceId": "wf_008",
-      "resourceType": "workflow",
-      "locales": [
-        { "locale": "en", "completeness": 100 },
-        { "locale": "es", "completeness": 100 },
-        { "locale": "fr", "completeness": 90 }
-      ],
-      "name": "Password Reset",
-      "updatedAt": "2026-02-20T15:00:00.000Z"
-    },
-    {
-      "resourceId": "lay_002",
-      "resourceType": "layout",
-      "locales": [
-        { "locale": "en", "completeness": 100 },
-        { "locale": "de", "completeness": 70 }
-      ],
-      "name": "Marketing Campaign Layout",
-      "updatedAt": "2026-03-01T14:00:00.000Z"
-    }
-  ],
-  "total": 3,
-  "limit": 10,
-  "offset": 0
+	"data": [
+		{
+			"resourceId": "wf_002",
+			"resourceType": "workflow",
+			"locales": [
+				{ "locale": "en", "completeness": 100 },
+				{ "locale": "es", "completeness": 85 },
+				{ "locale": "fr", "completeness": 60 },
+				{ "locale": "de", "completeness": 40 }
+			],
+			"name": "Order Confirmation",
+			"updatedAt": "2026-03-04T10:15:00.000Z"
+		},
+		{
+			"resourceId": "wf_008",
+			"resourceType": "workflow",
+			"locales": [
+				{ "locale": "en", "completeness": 100 },
+				{ "locale": "es", "completeness": 100 },
+				{ "locale": "fr", "completeness": 90 }
+			],
+			"name": "Password Reset",
+			"updatedAt": "2026-02-20T15:00:00.000Z"
+		},
+		{
+			"resourceId": "lay_002",
+			"resourceType": "layout",
+			"locales": [
+				{ "locale": "en", "completeness": 100 },
+				{ "locale": "de", "completeness": 70 }
+			],
+			"name": "Marketing Campaign Layout",
+			"updatedAt": "2026-03-01T14:00:00.000Z"
+		}
+	],
+	"total": 3,
+	"limit": 10,
+	"offset": 0
 }

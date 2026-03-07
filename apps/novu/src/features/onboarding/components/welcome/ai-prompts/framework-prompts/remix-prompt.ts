@@ -1,4 +1,4 @@
-import { PromptConfig, replaceConfigVariables } from './types';
+import { type PromptConfig, replaceConfigVariables } from "./types";
 
 const KITCHEN_SINK_INBOX_SNIPPET = `import { useLoaderData, Outlet } from '@remix-run/react';
 import { Inbox } from '@novu/react';
@@ -376,5 +376,5 @@ ${KITCHEN_SINK_INBOX_SNIPPET}
  * Gets the Remix prompt with configuration
  */
 export function getRemixPromptString(config: PromptConfig): string {
-  return replaceConfigVariables(REMIX_PROMPT, config);
+	return replaceConfigVariables(REMIX_PROMPT, config);
 }

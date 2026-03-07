@@ -1,1 +1,1 @@
-export * from './change.interface';
+export * from "./change.interface";

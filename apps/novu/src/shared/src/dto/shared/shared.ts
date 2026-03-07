@@ -1,17 +1,17 @@
 export interface ISuccessResponseDto {
-  success: boolean;
+	success: boolean;
 }
 
 export interface IServerResponse<T> {
-  data: T;
+	data: T;
 }
 
 export interface IPaginatedResponseDto<T> {
-  hasMore: boolean;
+	hasMore: boolean;
 
-  page: number;
+	page: number;
 
-  pageSize: number;
+	pageSize: number;
 
-  data: T[];
+	data: T[];
 }

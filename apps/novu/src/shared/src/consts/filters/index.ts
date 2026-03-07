@@ -1,1 +1,1 @@
-export { FILTER_TO_LABEL } from './filters';
+export { FILTER_TO_LABEL } from "./filters";

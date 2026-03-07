@@ -1,41 +1,45 @@
-import type { GetSubscriptionDto } from '@novu/shared';
-import { useQuery } from '@tanstack/react-query';
-import { differenceInDays, isSameDay } from 'date-fns';
-import { useMemo } from 'react';
-import { getSubscription } from '@/api/billing';
-import { IS_ENTERPRISE, IS_SELF_HOSTED } from '@/config';
-import { useOrganization } from '@merge-rd/auth';
-import { useEnvironment } from '@/context/environment/hooks';
-import { QueryKeys } from '@/utils/query-keys';
+import { useOrganization } from "@merge-rd/auth";
+import type { GetSubscriptionDto } from "@novu/shared";
+import { useQuery } from "@tanstack/react-query";
+import { differenceInDays, isSameDay } from "date-fns";
+import { useMemo } from "react";
+import { getSubscription } from "@/api/billing";
+import { IS_ENTERPRISE, IS_SELF_HOSTED } from "@/config";
+import { useEnvironment } from "@/context/environment/hooks";
+import { QueryKeys } from "@/utils/query-keys";
 
 const today = new Date();
 
-export type UseSubscriptionType = GetSubscriptionDto & { daysLeft: number; isLoading: boolean };
+export type UseSubscriptionType = GetSubscriptionDto & {
+	daysLeft: number;
+	isLoading: boolean;
+};
 
 export const useFetchSubscription = () => {
-  const { organization: currentOrganization } = useOrganization();
-  const { currentEnvironment } = useEnvironment();
+	const { organization: currentOrganization } = useOrganization();
+	const { currentEnvironment } = useEnvironment();
 
-  const { data: subscription, isLoading: isLoadingSubscription } = useQuery<GetSubscriptionDto>({
-    queryKey: [QueryKeys.billingSubscription, currentOrganization?.id],
-    queryFn: () => getSubscription({ environment: currentEnvironment! }),
-    enabled: !!currentOrganization && (IS_ENTERPRISE || !IS_SELF_HOSTED),
-    meta: {
-      showError: false,
-    },
-  });
+	const { data: subscription, isLoading: isLoadingSubscription } =
+		useQuery<GetSubscriptionDto>({
+			queryKey: [QueryKeys.billingSubscription, currentOrganization?.id],
+			queryFn: () => getSubscription({ environment: currentEnvironment! }),
+			enabled: !!currentOrganization && (IS_ENTERPRISE || !IS_SELF_HOSTED),
+			meta: {
+				showError: false,
+			},
+		});
 
-  const daysLeft = useMemo(() => {
-    if (!subscription?.trial.end) return 0;
+	const daysLeft = useMemo(() => {
+		if (!subscription?.trial.end) return 0;
 
-    return isSameDay(new Date(subscription.trial.end), today)
-      ? 0
-      : differenceInDays(new Date(subscription.trial.end), today);
-  }, [subscription?.trial.end]);
+		return isSameDay(new Date(subscription.trial.end), today)
+			? 0
+			: differenceInDays(new Date(subscription.trial.end), today);
+	}, [subscription?.trial.end]);
 
-  return {
-    isLoading: isLoadingSubscription,
-    subscription,
-    daysLeft,
-  };
+	return {
+		isLoading: isLoadingSubscription,
+		subscription,
+		daysLeft,
+	};
 };

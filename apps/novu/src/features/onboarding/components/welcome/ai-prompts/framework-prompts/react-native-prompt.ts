@@ -358,36 +358,42 @@ ${KITCHEN_SINK_INBOX_SNIPPET}
 `;
 
 interface PromptConfig {
-  applicationIdentifier: string;
-  subscriberId: string;
-  backendUrl?: string;
-  socketUrl?: string;
+	applicationIdentifier: string;
+	subscriberId: string;
+	backendUrl?: string;
+	socketUrl?: string;
 }
 
 /**
  * Gets the React Native prompt with configuration
  */
 export function getReactNativePromptString(config: PromptConfig): string {
-  let prompt = REACT_NATIVE_PROMPT;
+	let prompt = REACT_NATIVE_PROMPT;
 
-  // Replace application identifier
-  prompt = prompt.replace(
-    /applicationIdentifier="your_app_identifier"/g,
-    `applicationIdentifier="${config.applicationIdentifier}"`
-  );
+	// Replace application identifier
+	prompt = prompt.replace(
+		/applicationIdentifier="your_app_identifier"/g,
+		`applicationIdentifier="${config.applicationIdentifier}"`,
+	);
 
-  // Replace subscriber ID
-  prompt = prompt.replace(/subscriberId="your_subscriber_id"/g, `subscriberId="${config.subscriberId}"`);
+	// Replace subscriber ID
+	prompt = prompt.replace(
+		/subscriberId="your_subscriber_id"/g,
+		`subscriberId="${config.subscriberId}"`,
+	);
 
-  // Replace backend URL if provided
-  if (config.backendUrl) {
-    prompt = prompt.replace(/backendUrl=""/g, `backendUrl="${config.backendUrl}"`);
-  }
+	// Replace backend URL if provided
+	if (config.backendUrl) {
+		prompt = prompt.replace(
+			/backendUrl=""/g,
+			`backendUrl="${config.backendUrl}"`,
+		);
+	}
 
-  // Replace socket URL if provided
-  if (config.socketUrl) {
-    prompt = prompt.replace(/socketUrl=""/g, `socketUrl="${config.socketUrl}"`);
-  }
+	// Replace socket URL if provided
+	if (config.socketUrl) {
+		prompt = prompt.replace(/socketUrl=""/g, `socketUrl="${config.socketUrl}"`);
+	}
 
-  return prompt;
+	return prompt;
 }

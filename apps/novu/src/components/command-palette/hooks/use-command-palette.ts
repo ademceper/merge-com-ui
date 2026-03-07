@@ -1,5 +1,5 @@
-import { useCommandPaletteContext } from '../command-palette-provider';
+import { useCommandPaletteContext } from "../command-palette-provider";
 
 export function useCommandPalette() {
-  return useCommandPaletteContext();
+	return useCommandPaletteContext();
 }

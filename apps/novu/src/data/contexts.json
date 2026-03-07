@@ -1,39 +1,39 @@
 {
-  "data": [
-    {
-      "_id": "ctx_001",
-      "_organizationId": "org_001",
-      "_environmentId": "env_dev",
-      "id": "acme-corp",
-      "type": "tenant",
-      "data": { "name": "Acme Corp", "plan": "enterprise", "seats": 50 },
-      "key": "tenant:acme-corp",
-      "createdAt": "2026-01-10T09:00:00.000Z",
-      "updatedAt": "2026-03-05T14:00:00.000Z"
-    },
-    {
-      "_id": "ctx_002",
-      "_organizationId": "org_001",
-      "_environmentId": "env_dev",
-      "id": "techco",
-      "type": "tenant",
-      "data": { "name": "TechCo", "plan": "pro", "seats": 15 },
-      "key": "tenant:techco",
-      "createdAt": "2026-02-01T11:00:00.000Z",
-      "updatedAt": "2026-03-03T10:00:00.000Z"
-    },
-    {
-      "_id": "ctx_003",
-      "_organizationId": "org_001",
-      "_environmentId": "env_dev",
-      "id": "web-app",
-      "type": "app",
-      "data": { "name": "Web Application", "version": "2.5.0" },
-      "key": "app:web-app",
-      "createdAt": "2026-02-15T08:30:00.000Z",
-      "updatedAt": "2026-03-04T16:00:00.000Z"
-    }
-  ],
-  "next": null,
-  "previous": null
+	"data": [
+		{
+			"_id": "ctx_001",
+			"_organizationId": "org_001",
+			"_environmentId": "env_dev",
+			"id": "acme-corp",
+			"type": "tenant",
+			"data": { "name": "Acme Corp", "plan": "enterprise", "seats": 50 },
+			"key": "tenant:acme-corp",
+			"createdAt": "2026-01-10T09:00:00.000Z",
+			"updatedAt": "2026-03-05T14:00:00.000Z"
+		},
+		{
+			"_id": "ctx_002",
+			"_organizationId": "org_001",
+			"_environmentId": "env_dev",
+			"id": "techco",
+			"type": "tenant",
+			"data": { "name": "TechCo", "plan": "pro", "seats": 15 },
+			"key": "tenant:techco",
+			"createdAt": "2026-02-01T11:00:00.000Z",
+			"updatedAt": "2026-03-03T10:00:00.000Z"
+		},
+		{
+			"_id": "ctx_003",
+			"_organizationId": "org_001",
+			"_environmentId": "env_dev",
+			"id": "web-app",
+			"type": "app",
+			"data": { "name": "Web Application", "version": "2.5.0" },
+			"key": "app:web-app",
+			"createdAt": "2026-02-15T08:30:00.000Z",
+			"updatedAt": "2026-03-04T16:00:00.000Z"
+		}
+	],
+	"next": null,
+	"previous": null
 }

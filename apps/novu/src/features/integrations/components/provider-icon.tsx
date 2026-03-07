@@ -1,17 +1,21 @@
-import { cn } from '@merge-rd/ui/lib/utils';
+import { cn } from "@merge-rd/ui/lib/utils";
 
 interface ProviderIconProps {
-  providerId: string;
-  providerDisplayName: string;
-  className?: string;
+	providerId: string;
+	providerDisplayName: string;
+	className?: string;
 }
 
-export function ProviderIcon({ providerId, providerDisplayName, className }: ProviderIconProps) {
-  return (
-    <img
-      src={`/images/providers/light/square/${providerId}.svg`}
-      alt={providerDisplayName}
-      className={cn('h-6 w-6', className)}
-    />
-  );
+export function ProviderIcon({
+	providerId,
+	providerDisplayName,
+	className,
+}: ProviderIconProps) {
+	return (
+		<img
+			src={`/images/providers/light/square/${providerId}.svg`}
+			alt={providerDisplayName}
+			className={cn("h-6 w-6", className)}
+		/>
+	);
 }

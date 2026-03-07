@@ -1,45 +1,45 @@
 export enum DirectionEnum {
-  ASC = 'ASC',
-  DESC = 'DESC',
+	ASC = "ASC",
+	DESC = "DESC",
 }
 export interface IResponseError {
-  error: string;
-  message: string;
-  statusCode: number;
+	error: string;
+	message: string;
+	statusCode: number;
 }
 
 export interface IPaginatedResponse<T = unknown> {
-  data: T[];
-  hasMore: boolean;
-  totalCount: number;
-  pageSize: number;
-  page: number;
+	data: T[];
+	hasMore: boolean;
+	totalCount: number;
+	pageSize: number;
+	page: number;
 }
 
 export type KeysOfT<T> = keyof T;
 
 export class LimitOffsetPaginationDto<T, K extends KeysOfT<T>> {
-  limit: string;
-  offset: string;
-  orderDirection?: DirectionEnum;
-  orderBy?: K;
+	limit: string;
+	offset: string;
+	orderDirection?: DirectionEnum;
+	orderBy?: K;
 }
 
 export interface IPaginationParams {
-  page: number;
-  limit: number;
+	page: number;
+	limit: number;
 }
 
 export interface IPaginationWithQueryParams extends IPaginationParams {
-  query?: string;
+	query?: string;
 }
 
 export enum OrderDirectionEnum {
-  ASC = 1,
-  DESC = -1,
+	ASC = 1,
+	DESC = -1,
 }
 
 export enum OrderByEnum {
-  ASC = 'ASC',
-  DESC = 'DESC',
+	ASC = "ASC",
+	DESC = "DESC",
 }

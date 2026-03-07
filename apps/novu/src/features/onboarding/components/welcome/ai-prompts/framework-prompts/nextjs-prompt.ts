@@ -1,4 +1,4 @@
-import { PromptConfig, replaceConfigVariables } from './types';
+import { type PromptConfig, replaceConfigVariables } from "./types";
 
 const KITCHEN_SINK_INBOX_SNIPPET = `'use client';
 import { Inbox } from '@novu/nextjs';
@@ -323,5 +323,5 @@ ${KITCHEN_SINK_INBOX_SNIPPET}
  * Gets the Next.js prompt with configuration
  */
 export function getNextJsPromptString(config: PromptConfig): string {
-  return replaceConfigVariables(NEXTJS_PROMPT, config);
+	return replaceConfigVariables(NEXTJS_PROMPT, config);
 }

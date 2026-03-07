@@ -1,25 +1,31 @@
-
-
-import { Button } from '@merge-rd/ui/components/button';
-import { Gear, Plus } from '@phosphor-icons/react';
+import { Button } from "@merge-rd/ui/components/button";
+import { Gear, Plus } from "@phosphor-icons/react";
 
 type IntegrationsEmptyStateProps = {
-  onAddIntegrationClick: () => void;
+	onAddIntegrationClick: () => void;
 };
 
-export function IntegrationsEmptyState({ onAddIntegrationClick }: IntegrationsEmptyStateProps) {
-  return (
-    <div className="flex min-h-[400px] flex-col items-center justify-center space-y-4 rounded-lg border border-dashed p-10">
-      <div className="bg-muted flex h-12 w-12 items-center justify-center rounded-full">
-        <Gear className="text-muted-foreground h-6 w-6" />
-      </div>
-      <div className="text-center">
-        <h2 className="text-xl font-semibold">No integrations found</h2>
-        <p className="text-muted-foreground text-sm">Add your first integration to get started</p>
-      </div>
-      <Button onClick={onAddIntegrationClick} leadingIcon={Plus} data-test-id="add-first-integration">
-        Add Integration
-      </Button>
-    </div>
-  );
+export function IntegrationsEmptyState({
+	onAddIntegrationClick,
+}: IntegrationsEmptyStateProps) {
+	return (
+		<div className="flex min-h-[400px] flex-col items-center justify-center space-y-4 rounded-lg border border-dashed p-10">
+			<div className="bg-muted flex h-12 w-12 items-center justify-center rounded-full">
+				<Gear className="text-muted-foreground h-6 w-6" />
+			</div>
+			<div className="text-center">
+				<h2 className="text-xl font-semibold">No integrations found</h2>
+				<p className="text-muted-foreground text-sm">
+					Add your first integration to get started
+				</p>
+			</div>
+			<Button
+				onClick={onAddIntegrationClick}
+				leadingIcon={Plus}
+				data-test-id="add-first-integration"
+			>
+				Add Integration
+			</Button>
+		</div>
+	);
 }

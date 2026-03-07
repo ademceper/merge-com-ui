@@ -1,3 +1,3 @@
 export interface IValidateBridgeUrlResponse {
-  isValid: boolean;
+	isValid: boolean;
 }

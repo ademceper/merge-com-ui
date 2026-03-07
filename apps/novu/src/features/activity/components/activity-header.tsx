@@ -1,136 +1,147 @@
-import { IActivity, IEnvironment } from '@novu/shared';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { motion } from 'motion/react';
-
-import { getActivityList } from '@/api/activity';
-import { Button } from '@merge-rd/ui/components/button';
-import { showErrorToast, showSuccessToast } from '@/components/primitives/sonner-helpers';
-import { useEnvironment } from '@/context/environment/hooks';
-import { fadeIn } from '@/utils/animation';
-import { QueryKeys } from '@/utils/query-keys';
-import { cn } from '@merge-rd/ui/lib/utils';
-import { triggerWorkflow } from '../../api/workflows';
-import { RepeatPlay } from '../icons/repeat-play';
-import { Path, X } from '@phosphor-icons/react';
+import { Button } from "@merge-rd/ui/components/button";
+import { cn } from "@merge-rd/ui/lib/utils";
+import type { IActivity } from "@novu/shared";
+import { Path, X } from "@phosphor-icons/react";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { motion } from "motion/react";
+import { getActivityList } from "@/api/activity";
+import { triggerWorkflow } from "@/api/workflows";
+import { RepeatPlay } from "@/components/icons/repeat-play";
+import {
+	showErrorToast,
+	showSuccessToast,
+} from "@/components/primitives/sonner-helpers";
+import { useEnvironment } from "@/context/environment/hooks";
+import { fadeIn } from "@/utils/animation";
+import { QueryKeys } from "@/utils/query-keys";
 
 type ActivityHeaderProps = {
-  className?: string;
-  activity?: IActivity;
-  onTransactionIdChange?: (transactionId: string, activityId: string) => void;
-  onClose?: () => void;
+	className?: string;
+	activity?: IActivity;
+	onTransactionIdChange?: (transactionId: string, activityId: string) => void;
+	onClose?: () => void;
 };
 
-export const ActivityHeader = ({ className, activity, onTransactionIdChange, onClose }: ActivityHeaderProps) => {
-  const queryClient = useQueryClient();
-  const { currentEnvironment } = useEnvironment();
+export const ActivityHeader = ({
+	className,
+	activity,
+	onTransactionIdChange,
+	onClose,
+}: ActivityHeaderProps) => {
+	const queryClient = useQueryClient();
+	const { currentEnvironment } = useEnvironment();
 
-  const resentMetadata = activity?.payload
-    ? {
-        __resent_transaction_id: activity.transactionId,
-        __resent_at: new Date().toISOString(),
-      }
-    : {};
+	const resentMetadata = activity?.payload
+		? {
+				__resent_transaction_id: activity.transactionId,
+				__resent_at: new Date().toISOString(),
+			}
+		: {};
 
-  const resentPayload = activity?.payload ? { ...activity.payload, ...resentMetadata } : resentMetadata;
-  const workflowExists = !!activity?.template;
+	const resentPayload = activity?.payload
+		? { ...activity.payload, ...resentMetadata }
+		: resentMetadata;
+	const workflowExists = !!activity?.template;
 
-  const { mutate: handleResend, isPending } = useMutation({
-    mutationFn: async () => {
-      if (!activity) throw new Error('No activity data available');
+	const { mutate: handleResend, isPending } = useMutation({
+		mutationFn: async () => {
+			if (!activity) throw new Error("No activity data available");
 
-      const {
-        data: { transactionId: newTransactionId },
-      } = await triggerWorkflow({
-        name: activity.template?.triggers[0].identifier ?? '',
-        to: activity.subscriber?.subscriberId,
-        payload: resentPayload,
-        environment: currentEnvironment!,
-      });
+			const {
+				data: { transactionId: newTransactionId },
+			} = await triggerWorkflow({
+				name: activity.template?.triggers[0].identifier ?? "",
+				to: activity.subscriber?.subscriberId,
+				payload: resentPayload,
+				environment: currentEnvironment!,
+			});
 
-      if (!newTransactionId) {
-        throw new Error(
-          `Workflow ${activity.template?.name} cannot be triggered. Ensure that it is active and requires not further actions`
-        );
-      }
+			if (!newTransactionId) {
+				throw new Error(
+					`Workflow ${activity.template?.name} cannot be triggered. Ensure that it is active and requires not further actions`,
+				);
+			}
 
-      return newTransactionId;
-    },
-    onSuccess: async (newTransactionId) => {
-      showSuccessToast(
-        `A new notification has been triggered with transaction ID: ${newTransactionId}`,
-        'Notification resent successfully'
-      );
+			return newTransactionId;
+		},
+		onSuccess: async (newTransactionId) => {
+			showSuccessToast(
+				`A new notification has been triggered with transaction ID: ${newTransactionId}`,
+				"Notification resent successfully",
+			);
 
-      const checkAndUpdateTransaction = async () => {
-        if (currentEnvironment) {
-          const { data: activities } = await getActivityList({
-            environment: currentEnvironment,
-            page: 0,
-            limit: 1,
-            filters: {
-              transactionId: newTransactionId,
-            },
-          });
+			const checkAndUpdateTransaction = async () => {
+				if (currentEnvironment) {
+					const { data: activities } = await getActivityList({
+						environment: currentEnvironment,
+						page: 0,
+						limit: 1,
+						filters: {
+							transactionId: newTransactionId,
+						},
+					});
 
-          if (activities.length > 0) {
-            queryClient.invalidateQueries({
-              queryKey: [QueryKeys.fetchActivities, activity?._environmentId],
-            });
-            onTransactionIdChange?.(newTransactionId, activities[0]._id);
-          }
-        }
-      };
+					if (activities.length > 0) {
+						queryClient.invalidateQueries({
+							queryKey: [QueryKeys.fetchActivities, activity?._environmentId],
+						});
+						onTransactionIdChange?.(newTransactionId, activities[0]._id);
+					}
+				}
+			};
 
-      setTimeout(checkAndUpdateTransaction, 1000);
-    },
-    onError: (error: Error) => {
-      showErrorToast(
-        error.message || 'There was an error triggering the resend workflow.',
-        'Failed to trigger resend workflow'
-      );
-    },
-  });
+			setTimeout(checkAndUpdateTransaction, 1000);
+		},
+		onError: (error: Error) => {
+			showErrorToast(
+				error.message || "There was an error triggering the resend workflow.",
+				"Failed to trigger resend workflow",
+			);
+		},
+	});
 
-  return (
-    <motion.header
-      {...fadeIn}
-      className={cn(
-        'bg-bg-weak border-stroke-soft flex items-center justify-between gap-1.5 border-b px-2 py-1.5',
-        className
-      )}
-    >
-      <div className="flex items-center gap-1.5">
-        <Path weight="fill" className="h-3 w-3" />
-        <span className="text-foreground-950 text-sm font-medium">Workflow run</span>
-      </div>
+	return (
+		<motion.header
+			{...fadeIn}
+			className={cn(
+				"bg-bg-weak border-stroke-soft flex items-center justify-between gap-1.5 border-b px-2 py-1.5",
+				className,
+			)}
+		>
+			<div className="flex items-center gap-1.5">
+				<Path weight="fill" className="h-3 w-3" />
+				<span className="text-foreground-950 text-sm font-medium">
+					Workflow run
+				</span>
+			</div>
 
-      <div className="flex items-center gap-1.5">
-        {activity && workflowExists && (
-          <Button
-            variant="secondary"
-            mode="ghost"
-            size="2xs"
-            onClick={() => handleResend()}
-            className="h-[20px]"
-            isLoading={isPending}
-            type="button"
-            trailingIcon={RepeatPlay}
-          >
-            Resend
-          </Button>
-        )}
-        {onClose && (
-          <Button
-            variant="secondary"
-            mode="ghost"
-            size="2xs"
-            onClick={onClose}
-            className="h-[20px]"
-            type="button"
-            trailingIcon={X}
-          ></Button>
-        )}
-      </div>
-    </motion.header>
-  );
+			<div className="flex items-center gap-1.5">
+				{activity && workflowExists && (
+					<Button
+						variant="secondary"
+						mode="ghost"
+						size="2xs"
+						onClick={() => handleResend()}
+						className="h-[20px]"
+						isLoading={isPending}
+						type="button"
+						trailingIcon={RepeatPlay}
+					>
+						Resend
+					</Button>
+				)}
+				{onClose && (
+					<Button
+						variant="secondary"
+						mode="ghost"
+						size="2xs"
+						onClick={onClose}
+						className="h-[20px]"
+						type="button"
+						trailingIcon={X}
+					></Button>
+				)}
+			</div>
+		</motion.header>
+	);
 };

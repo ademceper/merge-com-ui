@@ -1,1 +1,1 @@
-export * from './notification-template.interface';
+export * from "./notification-template.interface";

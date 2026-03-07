@@ -1,22 +1,27 @@
-import { ApiServiceLevelEnum, FeatureNameEnum, getFeatureForTierAsBoolean } from '@novu/shared';
-import { IS_ENTERPRISE, IS_SELF_HOSTED } from '@/config';
-import { useFetchSubscription } from '@/hooks/use-fetch-subscription';
+import {
+	ApiServiceLevelEnum,
+	FeatureNameEnum,
+	getFeatureForTierAsBoolean,
+} from "@novu/shared";
+import { IS_ENTERPRISE, IS_SELF_HOSTED } from "@/config";
+import { useFetchSubscription } from "@/hooks/use-fetch-subscription";
 
 export const useIsTranslationEnabled = ({
-  isTranslationEnabledOnResource = false,
+	isTranslationEnabledOnResource = false,
 }: {
-  isTranslationEnabledOnResource?: boolean;
+	isTranslationEnabledOnResource?: boolean;
 } = {}) => {
-  const { subscription } = useFetchSubscription();
+	const { subscription } = useFetchSubscription();
 
-  const canUseTranslationFeature =
-    getFeatureForTierAsBoolean(
-      FeatureNameEnum.AUTO_TRANSLATIONS,
-      subscription?.apiServiceLevel || ApiServiceLevelEnum.FREE
-    ) &&
-    (!IS_SELF_HOSTED || IS_ENTERPRISE);
+	const canUseTranslationFeature =
+		getFeatureForTierAsBoolean(
+			FeatureNameEnum.AUTO_TRANSLATIONS,
+			subscription?.apiServiceLevel || ApiServiceLevelEnum.FREE,
+		) &&
+		(!IS_SELF_HOSTED || IS_ENTERPRISE);
 
-  const isTranslationEnabled = isTranslationEnabledOnResource && canUseTranslationFeature;
+	const isTranslationEnabled =
+		isTranslationEnabledOnResource && canUseTranslationFeature;
 
-  return isTranslationEnabled;
+	return isTranslationEnabled;
 };

@@ -1,1 +1,1 @@
-export * from './subscriber-preference.interface';
+export * from "./subscriber-preference.interface";

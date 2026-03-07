@@ -1,101 +1,106 @@
-
-import { ReactNode } from 'react';
-import { IconType } from 'react-icons';
-
-import { Button } from '@merge-rd/ui/components/button';
+import { Button } from "@merge-rd/ui/components/button";
 import {
-  Dialog,
-  DialogClose,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogOverlay,
-  DialogPortal,
-  DialogTitle,
-} from '@merge-rd/ui/components/dialog';
-import { Warning, X } from '@phosphor-icons/react';
+	Dialog,
+	DialogClose,
+	DialogContent,
+	DialogDescription,
+	DialogFooter,
+	DialogOverlay,
+	DialogPortal,
+	DialogTitle,
+} from "@merge-rd/ui/components/dialog";
+import { Warning, X } from "@phosphor-icons/react";
+import type { ReactNode } from "react";
+import type { IconType } from "react-icons";
 
 type ConfirmationModalProps = {
-  open: boolean;
-  onOpenChange: (open: boolean) => void;
-  onConfirm: () => void;
-  title: string;
-  description: ReactNode;
-  confirmButtonText: string;
-  confirmTrailingIcon?: IconType;
-  isLoading?: boolean;
-  isConfirmDisabled?: boolean;
-  confirmButtonVariant?: 'primary' | 'error';
+	open: boolean;
+	onOpenChange: (open: boolean) => void;
+	onConfirm: () => void;
+	title: string;
+	description: ReactNode;
+	confirmButtonText: string;
+	confirmTrailingIcon?: IconType;
+	isLoading?: boolean;
+	isConfirmDisabled?: boolean;
+	confirmButtonVariant?: "primary" | "error";
 };
 
 export const ConfirmationModal = ({
-  open,
-  onOpenChange,
-  onConfirm,
-  title,
-  description,
-  confirmButtonText,
-  confirmTrailingIcon,
-  isLoading,
-  isConfirmDisabled,
-  confirmButtonVariant = 'primary',
+	open,
+	onOpenChange,
+	onConfirm,
+	title,
+	description,
+	confirmButtonText,
+	confirmTrailingIcon,
+	isLoading,
+	isConfirmDisabled,
+	confirmButtonVariant = "primary",
 }: ConfirmationModalProps) => {
-  return (
-    <Dialog modal open={open} onOpenChange={onOpenChange}>
-      <DialogPortal>
-        <DialogOverlay />
-        <DialogContent className="max-w-[440px] gap-4 rounded-xl! p-4 overflow-hidden" hideCloseButton>
-          <div className="flex items-start justify-between">
-            <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-warning/10">
-              <Warning weight="fill" className="size-6 text-warning" />
-            </div>
-            <DialogClose>
-              <X className="size-4" />
-              <span className="sr-only">Close</span>
-            </DialogClose>
-          </div>
+	return (
+		<Dialog modal open={open} onOpenChange={onOpenChange}>
+			<DialogPortal>
+				<DialogOverlay />
+				<DialogContent
+					className="max-w-[440px] gap-4 rounded-xl! p-4 overflow-hidden"
+					hideCloseButton
+				>
+					<div className="flex items-start justify-between">
+						<div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-warning/10">
+							<Warning weight="fill" className="size-6 text-warning" />
+						</div>
+						<DialogClose>
+							<X className="size-4" />
+							<span className="sr-only">Close</span>
+						</DialogClose>
+					</div>
 
-          <div className="flex flex-col gap-1">
-            <DialogTitle className="text-md font-medium tracking-normal">{title}</DialogTitle>
-            <DialogDescription className="text-foreground-600">{description}</DialogDescription>
-          </div>
+					<div className="flex flex-col gap-1">
+						<DialogTitle className="text-md font-medium tracking-normal">
+							{title}
+						</DialogTitle>
+						<DialogDescription className="text-foreground-600">
+							{description}
+						</DialogDescription>
+					</div>
 
-          {/* <div className="flex justify-end gap-3"> */}
-          <DialogFooter>
-            <DialogClose asChild aria-label="Close">
-              <Button
-                type="button"
-                size="sm"
-                mode="outline"
-                variant="secondary"
-                onClick={(e) => {
-                  e.preventDefault();
-                  e.stopPropagation();
-                  onOpenChange(false);
-                }}
-              >
-                Cancel
-              </Button>
-            </DialogClose>
+					{/* <div className="flex justify-end gap-3"> */}
+					<DialogFooter>
+						<DialogClose asChild aria-label="Close">
+							<Button
+								type="button"
+								size="sm"
+								mode="outline"
+								variant="secondary"
+								onClick={(e) => {
+									e.preventDefault();
+									e.stopPropagation();
+									onOpenChange(false);
+								}}
+							>
+								Cancel
+							</Button>
+						</DialogClose>
 
-            <Button
-              type="button"
-              size="sm"
-              variant={confirmButtonVariant}
-              onClick={(e) => {
-                e.preventDefault();
-                e.stopPropagation();
-                onConfirm();
-              }}
-              trailingIcon={confirmTrailingIcon}
-              isLoading={isLoading}
-              disabled={isConfirmDisabled}
-            >
-              {confirmButtonText}
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </DialogPortal>
-    </Dialog>
-  );
+						<Button
+							type="button"
+							size="sm"
+							variant={confirmButtonVariant}
+							onClick={(e) => {
+								e.preventDefault();
+								e.stopPropagation();
+								onConfirm();
+							}}
+							trailingIcon={confirmTrailingIcon}
+							isLoading={isLoading}
+							disabled={isConfirmDisabled}
+						>
+							{confirmButtonText}
+						</Button>
+					</DialogFooter>
+				</DialogContent>
+			</DialogPortal>
+		</Dialog>
+	);
 };

@@ -1,14 +1,14 @@
-import * as React from "react";
+import type * as React from "react";
 
 export {
-  HoverCard,
-  HoverCardContent,
-  HoverCardTrigger,
+	HoverCard,
+	HoverCardContent,
+	HoverCardTrigger,
 } from "@merge-rd/ui/components/hover-card";
 
 /**
  * HoverCardPortal is a passthrough since merge/ui's HoverCardContent already handles portaling.
  */
 export function HoverCardPortal({ children }: { children: React.ReactNode }) {
-  return <>{children}</>;
+	return <>{children}</>;
 }

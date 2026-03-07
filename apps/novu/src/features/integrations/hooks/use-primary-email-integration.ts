@@ -1,29 +1,32 @@
-import { ChannelTypeEnum, IIntegration } from '@novu/shared';
-import { useMemo } from 'react';
-import { useFetchIntegrations } from './use-fetch-integrations';
+import { ChannelTypeEnum, type IIntegration } from "@novu/shared";
+import { useMemo } from "react";
+import { useFetchIntegrations } from "@/features/integrations/hooks/use-fetch-integrations";
 
 type PrimaryEmailIntegrationResult = {
-  senderEmail?: string;
-  senderName?: string;
-  integration?: IIntegration;
-  isLoading: boolean;
+	senderEmail?: string;
+	senderName?: string;
+	integration?: IIntegration;
+	isLoading: boolean;
 };
 
 export function usePrimaryEmailIntegration(): PrimaryEmailIntegrationResult {
-  const { integrations, isLoading } = useFetchIntegrations();
+	const { integrations, isLoading } = useFetchIntegrations();
 
-  const primaryEmailIntegration = useMemo(() => {
-    if (!integrations) return undefined;
+	const primaryEmailIntegration = useMemo(() => {
+		if (!integrations) return undefined;
 
-    return integrations.find(
-      (integration) => integration.channel === ChannelTypeEnum.EMAIL && integration.active && integration.primary
-    );
-  }, [integrations]);
+		return integrations.find(
+			(integration) =>
+				integration.channel === ChannelTypeEnum.EMAIL &&
+				integration.active &&
+				integration.primary,
+		);
+	}, [integrations]);
 
-  return {
-    senderEmail: primaryEmailIntegration?.credentials?.from,
-    senderName: primaryEmailIntegration?.credentials?.senderName,
-    integration: primaryEmailIntegration,
-    isLoading,
-  };
+	return {
+		senderEmail: primaryEmailIntegration?.credentials?.from,
+		senderName: primaryEmailIntegration?.credentials?.senderName,
+		integration: primaryEmailIntegration,
+		isLoading,
+	};
 }

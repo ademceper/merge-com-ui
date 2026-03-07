@@ -1,8 +1,11 @@
-import { ResourceOriginEnum } from '@novu/shared';
-import { useWorkflow } from '@/components/workflow-editor/workflow-provider';
+import { ResourceOriginEnum } from "@novu/shared";
+import { useWorkflow } from "@/features/workflows/components/workflow-editor/workflow-provider";
 
 export function useIsPayloadSchemaEnabled(): boolean {
-  const { workflow } = useWorkflow();
+	const { workflow } = useWorkflow();
 
-  return workflow?.payloadSchema != null && workflow.origin === ResourceOriginEnum.NOVU_CLOUD;
+	return (
+		workflow?.payloadSchema != null &&
+		workflow.origin === ResourceOriginEnum.NOVU_CLOUD
+	);
 }

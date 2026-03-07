@@ -1,37 +1,37 @@
-import { CustomDataType } from '../../types';
-import { NotificationStepDto } from './workflow-deprecated.dto';
+import type { CustomDataType } from "../../types";
+import type { NotificationStepDto } from "./workflow-deprecated.dto";
 
 interface IPreferenceChannelsDto {
-  email?: boolean;
-  sms?: boolean;
-  in_app?: boolean;
-  chat?: boolean;
-  push?: boolean;
+	email?: boolean;
+	sms?: boolean;
+	in_app?: boolean;
+	chat?: boolean;
+	push?: boolean;
 }
 
 /**
  * @deprecated use CreateWorkflowDto instead
  */
 export interface ICreateWorkflowDto {
-  name: string;
+	name: string;
 
-  tags: string[];
+	tags: string[];
 
-  description?: string;
+	description?: string;
 
-  steps: NotificationStepDto[];
+	steps: NotificationStepDto[];
 
-  notificationGroupId: string;
+	notificationGroupId: string;
 
-  active?: boolean;
+	active?: boolean;
 
-  draft?: boolean;
+	draft?: boolean;
 
-  critical?: boolean;
+	critical?: boolean;
 
-  preferenceSettings?: IPreferenceChannelsDto;
+	preferenceSettings?: IPreferenceChannelsDto;
 
-  blueprintId?: string;
+	blueprintId?: string;
 
-  data?: CustomDataType;
+	data?: CustomDataType;
 }

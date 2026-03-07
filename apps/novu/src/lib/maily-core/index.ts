@@ -1,1 +1,1 @@
-export * from './editor/index';
+export * from "./editor/index";

@@ -5,7 +5,7 @@
  * @returns The aspect ratio as width/height
  */
 export function getAspectRatio(width: number, height: number): number {
-  return width / height;
+	return width / height;
 }
 
 /**
@@ -15,10 +15,10 @@ export function getAspectRatio(width: number, height: number): number {
  * @returns The corresponding height
  */
 export function getNewHeight(width: number, aspectRatio: number): number {
-  if (width <= 0 || aspectRatio <= 0) {
-    return 0;
-  }
-  return width / aspectRatio;
+	if (width <= 0 || aspectRatio <= 0) {
+		return 0;
+	}
+	return width / aspectRatio;
 }
 
 /**
@@ -28,5 +28,5 @@ export function getNewHeight(width: number, aspectRatio: number): number {
  * @returns The corresponding width
  */
 export function getNewWidth(height: number, aspectRatio: number): number {
-  return height * aspectRatio;
+	return height * aspectRatio;
 }

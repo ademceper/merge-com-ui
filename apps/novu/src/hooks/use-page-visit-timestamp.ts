@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState } from "react";
 
 /**
  * Hook that creates a timestamp when the component mounts on the client-side.
@@ -14,13 +14,13 @@ import { useEffect, useState } from 'react';
  * state appropriately during SSR or initial render.
  */
 export function usePageVisitTimestamp(): string | null {
-  // Initialize to null, will be set on client mount
-  const [visitTimestamp, setVisitTimestamp] = useState<string | null>(null);
+	// Initialize to null, will be set on client mount
+	const [visitTimestamp, setVisitTimestamp] = useState<string | null>(null);
 
-  // Set timestamp on client mount
-  useEffect(() => {
-    setVisitTimestamp(new Date().toISOString());
-  }, []);
+	// Set timestamp on client mount
+	useEffect(() => {
+		setVisitTimestamp(new Date().toISOString());
+	}, []);
 
-  return visitTimestamp;
+	return visitTimestamp;
 }

@@ -1,23 +1,26 @@
-import { cn } from '@merge-rd/ui/lib/utils';
+import { cn } from "@merge-rd/ui/lib/utils";
 
 type LoadingIndicatorProps = {
-  className?: string;
-  size?: 'sm' | 'md';
+	className?: string;
+	size?: "sm" | "md";
 };
 
-export function LoadingIndicator({ className, size = 'sm' }: LoadingIndicatorProps) {
-  const sizeClasses = {
-    sm: 'size-3',
-    md: 'size-4',
-  };
+export function LoadingIndicator({
+	className,
+	size = "sm",
+}: LoadingIndicatorProps) {
+	const sizeClasses = {
+		sm: "size-3",
+		md: "size-4",
+	};
 
-  return (
-    <div
-      className={cn(
-        'animate-spin rounded-full border-2 border-neutral-200 border-t-neutral-600',
-        sizeClasses[size],
-        className
-      )}
-    />
-  );
+	return (
+		<div
+			className={cn(
+				"animate-spin rounded-full border-2 border-neutral-200 border-t-neutral-600",
+				sizeClasses[size],
+				className,
+			)}
+		/>
+	);
 }

@@ -7,9 +7,9 @@
  * * - 'external' indicates that the resource originates from an external source, requiring a call to a customer-hosted Bridge endpoint.
  */
 export enum ResourceOriginEnum {
-  NOVU_CLOUD = 'novu-cloud',
-  NOVU_CLOUD_V1 = 'novu-cloud-v1',
-  EXTERNAL = 'external',
+	NOVU_CLOUD = "novu-cloud",
+	NOVU_CLOUD_V1 = "novu-cloud-v1",
+	EXTERNAL = "external",
 }
 
 /**
@@ -18,8 +18,8 @@ export enum ResourceOriginEnum {
  * One of its responsibilities is to help the API determine whether "changes" need to be created during the upsert process.
  */
 export enum ResourceTypeEnum {
-  REGULAR = 'REGULAR',
-  /** @deprecated Use BRIDGE instead */
-  ECHO = 'ECHO',
-  BRIDGE = 'BRIDGE',
+	REGULAR = "REGULAR",
+	/** @deprecated Use BRIDGE instead */
+	ECHO = "ECHO",
+	BRIDGE = "BRIDGE",
 }

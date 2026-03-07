@@ -1,75 +1,88 @@
-import { FeatureFlagsKeysEnum, ISubscriberResponseDto } from '@novu/shared';
-import { useCallback } from 'react';
-
-import { Accordion } from '@merge-rd/ui/components/accordion';
-import { useEnvironment } from '@/context/environment/hooks';
-import { useDefaultSubscriberData } from '@/hooks/use-default-subscriber-data';
-import { useFeatureFlag } from '@/hooks/use-feature-flag';
-import { useFetchOrganizationSettings } from '@/hooks/use-fetch-organization-settings';
-import { PreviewContextSection } from '../preview-context-section';
-import { PreviewSubscriberSection } from '../preview-subscriber-section';
-import { createSubscriberData } from '../workflow-editor/steps/utils/preview-context.utils';
-import { useLayoutEditor } from './layout-editor-provider';
+import { Accordion } from "@merge-rd/ui/components/accordion";
+import type { ISubscriberResponseDto } from "@novu/shared";
+import { useCallback } from "react";
+import { PreviewContextSection } from "@/components/preview-context-section";
+import { PreviewSubscriberSection } from "@/components/preview-subscriber-section";
+import { useEnvironment } from "@/context/environment/hooks";
+import { useFetchOrganizationSettings } from "@/features/settings/hooks/use-fetch-organization-settings";
+import { useDefaultSubscriberData } from "@/features/subscribers/hooks/use-default-subscriber-data";
+import { createSubscriberData } from "@/features/workflows/components/workflow-editor/steps/utils/preview-context.utils";
+import { useLayoutEditor } from "./layout-editor-provider";
 
 export const LayoutPreviewContextPanel = () => {
-  const {
-    layout,
-    selectedLocale,
-    onLocaleChange,
-    accordionValue,
-    setAccordionValue,
-    updatePreviewSection,
-    errors,
-    previewContext,
-    clearPersistedSubscriber,
-    clearPersistedContext,
-  } = useLayoutEditor();
-  const { data: organizationSettings } = useFetchOrganizationSettings();
-  const { currentEnvironment } = useEnvironment();
-  const createDefaultSubscriberData = useDefaultSubscriberData(undefined, organizationSettings?.data?.defaultLocale);
+	const {
+		layout,
+		selectedLocale,
+		onLocaleChange,
+		accordionValue,
+		setAccordionValue,
+		updatePreviewSection,
+		errors,
+		previewContext,
+		clearPersistedSubscriber,
+		clearPersistedContext,
+	} = useLayoutEditor();
+	const { data: organizationSettings } = useFetchOrganizationSettings();
+	const { currentEnvironment } = useEnvironment();
+	const createDefaultSubscriberData = useDefaultSubscriberData(
+		undefined,
+		organizationSettings?.data?.defaultLocale,
+	);
 
-  const handleSubscriberSelection = useCallback(
-    (subscriber: ISubscriberResponseDto) => {
-      const subscriberData = createSubscriberData(subscriber);
-      updatePreviewSection('subscriber', subscriberData);
+	const handleSubscriberSelection = useCallback(
+		(subscriber: ISubscriberResponseDto) => {
+			const subscriberData = createSubscriberData(subscriber);
+			updatePreviewSection("subscriber", subscriberData);
 
-      if (subscriber.locale && subscriber.locale !== selectedLocale && onLocaleChange) {
-        onLocaleChange(subscriber.locale);
-      }
-    },
-    [updatePreviewSection, onLocaleChange, selectedLocale]
-  );
+			if (
+				subscriber.locale &&
+				subscriber.locale !== selectedLocale &&
+				onLocaleChange
+			) {
+				onLocaleChange(subscriber.locale);
+			}
+		},
+		[updatePreviewSection, onLocaleChange, selectedLocale],
+	);
 
-  const handleClearPersistedSubscriber = () => {
-    clearPersistedSubscriber();
+	const handleClearPersistedSubscriber = () => {
+		clearPersistedSubscriber();
 
-    updatePreviewSection('subscriber', createDefaultSubscriberData());
-  };
+		updatePreviewSection("subscriber", createDefaultSubscriberData());
+	};
 
-  const handleClearPersistedContext = () => {
-    clearPersistedContext();
+	const handleClearPersistedContext = () => {
+		clearPersistedContext();
 
-    updatePreviewSection('context', {});
-  };
+		updatePreviewSection("context", {});
+	};
 
-  const canClearPersisted = !!(layout?._id && currentEnvironment?._id);
+	const canClearPersisted = !!(layout?._id && currentEnvironment?._id);
 
-  return (
-    <Accordion type="multiple" value={accordionValue} onValueChange={setAccordionValue}>
-      <PreviewSubscriberSection
-        error={errors.subscriber}
-        subscriber={previewContext.subscriber}
-        onUpdate={updatePreviewSection}
-        onSubscriberSelect={handleSubscriberSelection}
-        onClearPersisted={canClearPersisted ? handleClearPersistedSubscriber : undefined}
-      />
+	return (
+		<Accordion
+			type="multiple"
+			value={accordionValue}
+			onValueChange={setAccordionValue}
+		>
+			<PreviewSubscriberSection
+				error={errors.subscriber}
+				subscriber={previewContext.subscriber}
+				onUpdate={updatePreviewSection}
+				onSubscriberSelect={handleSubscriberSelection}
+				onClearPersisted={
+					canClearPersisted ? handleClearPersistedSubscriber : undefined
+				}
+			/>
 
-      <PreviewContextSection
-        error={errors.context}
-        context={previewContext.context}
-        onUpdate={updatePreviewSection}
-        onClearPersisted={canClearPersisted ? handleClearPersistedContext : undefined}
-      />
-    </Accordion>
-  );
+			<PreviewContextSection
+				error={errors.context}
+				context={previewContext.context}
+				onUpdate={updatePreviewSection}
+				onClearPersisted={
+					canClearPersisted ? handleClearPersistedContext : undefined
+				}
+			/>
+		</Accordion>
+	);
 };

@@ -1,4 +1,4 @@
-import { PromptConfig, replaceConfigVariables } from './types';
+import { type PromptConfig, replaceConfigVariables } from "./types";
 
 const KITCHEN_SINK_INBOX_SNIPPET = `<template>
   <div>
@@ -380,5 +380,5 @@ ${KITCHEN_SINK_INBOX_SNIPPET}
  * Gets the Vue prompt with configuration
  */
 export function getVuePromptString(config: PromptConfig): string {
-  return replaceConfigVariables(VUE_PROMPT, config);
+	return replaceConfigVariables(VUE_PROMPT, config);
 }

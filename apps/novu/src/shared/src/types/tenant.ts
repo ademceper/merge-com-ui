@@ -1,13 +1,13 @@
-import { CustomDataType } from './utils';
+import type { CustomDataType } from "./utils";
 
 export type TenantIdentifier = string;
 export type TenantId = string;
 
 export interface ITenantPayload {
-  name?: string;
-  data?: CustomDataType;
+	name?: string;
+	data?: CustomDataType;
 }
 
 export interface ITenantDefine extends ITenantPayload {
-  identifier: string;
+	identifier: string;
 }

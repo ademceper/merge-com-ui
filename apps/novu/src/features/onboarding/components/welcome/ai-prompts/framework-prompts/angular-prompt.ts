@@ -1,4 +1,4 @@
-import { PromptConfig, replaceConfigVariables } from './types';
+import { type PromptConfig, replaceConfigVariables } from "./types";
 
 const KITCHEN_SINK_INBOX_SNIPPET = `import { Component, OnInit } from '@angular/core';
 import { NovuService } from '../services/novu.service';
@@ -388,5 +388,5 @@ ${KITCHEN_SINK_INBOX_SNIPPET}
  * Gets the Angular prompt with configuration
  */
 export function getAngularPromptString(config: PromptConfig): string {
-  return replaceConfigVariables(ANGULAR_PROMPT, config);
+	return replaceConfigVariables(ANGULAR_PROMPT, config);
 }

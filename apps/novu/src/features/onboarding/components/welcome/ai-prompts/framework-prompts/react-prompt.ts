@@ -1,4 +1,4 @@
-import { PromptConfig, replaceConfigVariables } from './types';
+import { type PromptConfig, replaceConfigVariables } from "./types";
 
 const KITCHEN_SINK_INBOX_SNIPPET = `import { Inbox } from '@novu/react';
 
@@ -340,5 +340,5 @@ ${KITCHEN_SINK_INBOX_SNIPPET}
  * Gets the React prompt with configuration
  */
 export function getReactPromptString(config: PromptConfig): string {
-  return replaceConfigVariables(REACT_PROMPT, config);
+	return replaceConfigVariables(REACT_PROMPT, config);
 }

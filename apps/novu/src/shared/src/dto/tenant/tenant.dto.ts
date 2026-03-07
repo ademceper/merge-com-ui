@@ -1,21 +1,26 @@
-import { CustomDataType, EnvironmentId, OrganizationId, TenantId } from '../../types';
+import type {
+	CustomDataType,
+	EnvironmentId,
+	OrganizationId,
+	TenantId,
+} from "../../types";
 
 export interface ITenantDto {
-  _id?: TenantId;
+	_id?: TenantId;
 
-  identifier: string;
+	identifier: string;
 
-  name?: string;
+	name?: string;
 
-  deleted?: boolean;
+	deleted?: boolean;
 
-  createdAt: string;
+	createdAt: string;
 
-  updatedAt: string;
+	updatedAt: string;
 
-  data?: CustomDataType;
+	data?: CustomDataType;
 
-  _environmentId: EnvironmentId;
+	_environmentId: EnvironmentId;
 
-  _organizationId: OrganizationId;
+	_organizationId: OrganizationId;
 }

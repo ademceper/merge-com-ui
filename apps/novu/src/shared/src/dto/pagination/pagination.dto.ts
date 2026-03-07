@@ -1,8 +1,8 @@
-import { DirectionEnum } from '../../types';
+import type { DirectionEnum } from "../../types";
 
 export class CursorPaginationDto<T, K extends keyof T> {
-  limit?: number;
-  cursor?: string;
-  orderDirection?: DirectionEnum;
-  orderBy?: K;
+	limit?: number;
+	cursor?: string;
+	orderDirection?: DirectionEnum;
+	orderBy?: K;
 }

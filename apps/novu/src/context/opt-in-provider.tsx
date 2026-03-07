@@ -1,11 +1,11 @@
-import { PropsWithChildren, useEffect } from 'react';
+import { type PropsWithChildren, useEffect } from "react";
 
 export const OptInProvider = (props: PropsWithChildren) => {
-  const { children } = props;
+	const { children } = props;
 
-  useEffect(() => {
-    localStorage.setItem('mantine-theme', 'light');
-  }, []);
+	useEffect(() => {
+		localStorage.setItem("mantine-theme", "light");
+	}, []);
 
-  return <>{children}</>;
+	return <>{children}</>;
 };

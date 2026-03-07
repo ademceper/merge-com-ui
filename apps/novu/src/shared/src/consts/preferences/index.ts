@@ -1,1 +1,1 @@
-export * from './preferences.const';
+export * from "./preferences.const";

@@ -1,54 +1,58 @@
-import { EnvironmentId, OrganizationId, WorkflowOverrideId } from '../../types';
-import { IPreferenceChannelsDto } from '../notification-templates';
-import { ITenantDto } from '../tenant';
+import type {
+	EnvironmentId,
+	OrganizationId,
+	WorkflowOverrideId,
+} from "../../types";
+import type { IPreferenceChannelsDto } from "../notification-templates";
+import type { ITenantDto } from "../tenant";
 /*
  * TODO:
  * import { INotificationTemplate } from '../notification-template';
  */
 
 export interface IWorkflowOverrideResponseDto {
-  _id?: WorkflowOverrideId;
+	_id?: WorkflowOverrideId;
 
-  _organizationId: OrganizationId;
+	_organizationId: OrganizationId;
 
-  _environmentId: EnvironmentId;
+	_environmentId: EnvironmentId;
 
-  _workflowId: string;
+	_workflowId: string;
 
-  // TODO:
-  readonly workflow?: any;
+	// TODO:
+	readonly workflow?: any;
 
-  _tenantId: string;
+	_tenantId: string;
 
-  readonly tenant?: ITenantDto;
+	readonly tenant?: ITenantDto;
 
-  active: boolean;
+	active: boolean;
 
-  preferenceSettings: IPreferenceChannelsDto;
+	preferenceSettings: IPreferenceChannelsDto;
 
-  deleted: boolean;
+	deleted: boolean;
 
-  deletedAt?: string;
+	deletedAt?: string;
 
-  deletedBy?: string;
+	deletedBy?: string;
 
-  createdAt: string;
+	createdAt: string;
 
-  updatedAt?: string;
+	updatedAt?: string;
 }
 
 export interface IWorkflowOverrideRequestDto {
-  active?: boolean;
+	active?: boolean;
 
-  preferenceSettings?: IPreferenceChannelsDto;
+	preferenceSettings?: IPreferenceChannelsDto;
 }
 
 export interface IWorkflowOverridesResponseDto {
-  hasMore: boolean;
+	hasMore: boolean;
 
-  data: IWorkflowOverrideResponseDto[];
+	data: IWorkflowOverrideResponseDto[];
 
-  pageSize: number;
+	pageSize: number;
 
-  page: number;
+	page: number;
 }

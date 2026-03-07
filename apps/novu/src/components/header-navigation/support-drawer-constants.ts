@@ -1,298 +1,319 @@
-import { useMemo } from 'react';
-
-import { useLocation } from 'react-router-dom';
-import { Bell, NovuIcon } from '@/components/icons';
 import {
-  Buildings,
-  Envelope,
-  GearSix,
-  GlobeSimple,
-  Key,
-  Path,
-  Code,
-  Hash,
-  GridFour,
-  Storefront,
-  Translate,
-  User,
-} from '@phosphor-icons/react';
+	Buildings,
+	Code,
+	Envelope,
+	GearSix,
+	GlobeSimple,
+	GridFour,
+	Hash,
+	Key,
+	Path,
+	Storefront,
+	Translate,
+	User,
+} from "@phosphor-icons/react";
+import { useMemo } from "react";
+import { useLocation } from "react-router-dom";
+import { Bell, NovuIcon } from "@/components/icons";
 
 export const DRAWER_WIDTH_DEFAULT = 350;
 export const DRAWER_WIDTH_EXPANDED = 700;
 
-const DOCS_BASE_URL = 'https://docs.novu.co';
-const UTM_SUFFIX = '?utm_campaign=support_drawer';
+const DOCS_BASE_URL = "https://docs.novu.co";
+const UTM_SUFFIX = "?utm_campaign=support_drawer";
 
 export const BOOK_DEMO_URL = `https://cal.com/team/novu/intro${UTM_SUFFIX}`;
 export const CHANGELOG_URL = `https://go.novu.co/changelog${UTM_SUFFIX}`;
 export const ROADMAP_URL = `https://roadmap.novu.co/roadmap${UTM_SUFFIX}`;
 
-export function docsUrl(path = '') {
-  const [basePath, hash] = path.split('#');
-  const url = `${DOCS_BASE_URL}${basePath}${UTM_SUFFIX}`;
+export function docsUrl(path = "") {
+	const [basePath, hash] = path.split("#");
+	const url = `${DOCS_BASE_URL}${basePath}${UTM_SUFFIX}`;
 
-  return hash ? `${url}#${hash}` : url;
+	return hash ? `${url}#${hash}` : url;
 }
 
 export function toEmbedUrl(url: string) {
-  const [baseWithParams, hash] = url.split('#');
-  const embedUrl = `${baseWithParams}&full=true`;
+	const [baseWithParams, hash] = url.split("#");
+	const embedUrl = `${baseWithParams}&full=true`;
 
-  return hash ? `${embedUrl}#${hash}` : embedUrl;
+	return hash ? `${embedUrl}#${hash}` : embedUrl;
 }
 
 export type SuggestionItem = {
-  icon: React.ComponentType<{ className?: string }>;
-  title: string;
-  description: string;
-  url: string;
+	icon: React.ComponentType<{ className?: string }>;
+	title: string;
+	description: string;
+	url: string;
 };
 
 const DEFAULT_SUGGESTIONS: SuggestionItem[] = [
-  {
-    icon: Path,
-    title: 'Understand Novu',
-    description: 'Learn what Novu is and how it simplifies notification delivery across channels.',
-    url: docsUrl('platform/what-is-novu'),
-  },
-  {
-    icon: Code,
-    title: 'Introduction to Inbox',
-    description: 'Build an in-app notification center that keeps your users engaged.',
-    url: docsUrl('/platform/inbox/overview'),
-  },
+	{
+		icon: Path,
+		title: "Understand Novu",
+		description:
+			"Learn what Novu is and how it simplifies notification delivery across channels.",
+		url: docsUrl("platform/what-is-novu"),
+	},
+	{
+		icon: Code,
+		title: "Introduction to Inbox",
+		description:
+			"Build an in-app notification center that keeps your users engaged.",
+		url: docsUrl("/platform/inbox/overview"),
+	},
 ];
 
 type RouteContext =
-  | 'workflows'
-  | 'workflowEditor'
-  | 'subscribers'
-  | 'integrations'
-  | 'apiKeys'
-  | 'activity'
-  | 'analytics'
-  | 'topics'
-  | 'webhooks'
-  | 'layouts'
-  | 'translations'
-  | 'settings'
-  | 'environments'
-  | 'contexts'
-  | 'default';
+	| "workflows"
+	| "workflowEditor"
+	| "subscribers"
+	| "integrations"
+	| "apiKeys"
+	| "activity"
+	| "analytics"
+	| "topics"
+	| "webhooks"
+	| "layouts"
+	| "translations"
+	| "settings"
+	| "environments"
+	| "contexts"
+	| "default";
 
 const CONTEXTUAL_SUGGESTIONS: Record<RouteContext, SuggestionItem[]> = {
-  workflows: [
-    {
-      icon: Path,
-      title: 'Creating workflows',
-      description: 'Learn how to create and configure notification workflows.',
-      url: docsUrl('/platform/workflow/overview'),
-    },
-    {
-      icon: Code,
-      title: 'Using variables',
-      description: 'Say hello with {{firstName}}. Personal, but scalable.',
-      url: docsUrl('/framework/controls#using-variables'),
-    },
-  ],
-  workflowEditor: [
-    {
-      icon: Path,
-      title: 'Understand workflow editor',
-      description: 'What the workflow editor does—like Delay, Digest, Email, and when to use them.',
-      url: docsUrl('/platform/workflow/overview'),
-    },
-    {
-      icon: Code,
-      title: 'Using variables',
-      description: 'Say hello with {{firstName}}. Personal, but scalable.',
-      url: docsUrl('/framework/controls#using-variables'),
-    },
-  ],
-  subscribers: [
-    {
-      icon: User,
-      title: 'Managing subscribers',
-      description: 'Learn how to create, update, and manage your notification subscribers.',
-      url: docsUrl('/platform/concepts/subscribers'),
-    },
-    {
-      icon: GearSix,
-      title: 'Subscriber preferences',
-      description: 'Let users control what notifications they receive.',
-      url: docsUrl('/platform/concepts/preferences'),
-    },
-  ],
-  integrations: [
-    {
-      icon: Storefront,
-      title: 'Connect providers',
-      description: 'Email, SMS, chat—whatever you need to reach users.',
-      url: docsUrl('/integrations/overview'),
-    },
-    {
-      icon: GearSix,
-      title: 'Try demo providers',
-      description: 'Test notifications without configuring a provider.',
-      url: docsUrl('/platform/integrations/demo-providers'),
-    },
-  ],
-  apiKeys: [
-    {
-      icon: Code,
-      title: 'REST API reference',
-      description: "Learn how to authenticate and work with Novu's API endpoints.",
-      url: docsUrl('/api-reference/overview'),
-    },
-  ],
-  activity: DEFAULT_SUGGESTIONS,
-  analytics: DEFAULT_SUGGESTIONS,
-  topics: [
-    {
-      icon: Hash,
-      title: 'Working with topics',
-      description: 'Group subscribers and send bulk notifications efficiently.',
-      url: docsUrl('/platform/concepts/topics'),
-    },
-    {
-      icon: User,
-      title: 'Topic subscriptions',
-      description: 'Manage who receives notifications for each topic.',
-      url: docsUrl('/concepts/topics#dynamic-and-decoupled-grouping'),
-    },
-  ],
-  webhooks: [
-    {
-      icon: GlobeSimple,
-      title: 'Webhook setup',
-      description: 'Receive real-time updates about notification events.',
-      url: docsUrl('/platform/additional-resources/webhooks'),
-    },
-    {
-      icon: Code,
-      title: 'Webhook events',
-      description: 'Learn about the events you can subscribe to.',
-      url: docsUrl('/platform/additional-resources/webhooks#supported-event-types'),
-    },
-  ],
-  layouts: [
-    {
-      icon: GridFour,
-      title: 'Creating layouts',
-      description: 'Design reusable templates for consistent notifications.',
-      url: docsUrl('/platform/workflow/layouts'),
-    },
-    {
-      icon: Envelope,
-      title: 'Using layouts in workflows',
-      description: 'Apply layouts to email steps for consistent branding across notifications.',
-      url: docsUrl('/platform/workflow/layouts#using-a-layout-in-workflow-email-step'),
-    },
-  ],
-  translations: [
-    {
-      icon: Translate,
-      title: 'Translations',
-      description: 'Learn how to translate your workflow step content into multiple languages',
-      url: docsUrl('/platform/workflow/translations'),
-    },
-    {
-      icon: GearSix,
-      title: 'Managing translations',
-      description: 'Upload and manage translation files for your content.',
-      url: docsUrl('/api-reference/translations/create-a-translation'),
-    },
-  ],
-  environments: [
-    {
-      icon: GearSix,
-      title: 'Understanding environments',
-      description: 'Learn how Novu uses environments to separate development and production workflows.',
-      url: docsUrl('/platform/concepts/environments'),
-    },
-    {
-      icon: Key,
-      title: 'Environment credentials',
-      description: 'Understand Application Identifier and API Secret Key for each environment.',
-      url: docsUrl('/platform/concepts/environments#environment-credentials'),
-    },
-    {
-      icon: Path,
-      title: 'Publishing changes',
-      description: 'Promote workflows, layouts, and translations from Development to other environments.',
-      url: docsUrl('/platform/concepts/environments#publishing-changes-to-other-environments'),
-    },
-  ],
-  contexts: [
-    {
-      icon: Buildings,
-      title: 'Understanding contexts',
-      description: 'Learn how to create, update, and delete contexts to manage reusable metadata.',
-      url: docsUrl('/platform/workflow/contexts/manage-contexts'),
-    },
-    {
-      icon: Code,
-      title: 'Context object schema',
-      description: 'Learn about context types, IDs, and data formats for storing metadata.',
-      url: docsUrl('/platform/workflow/contexts/manage-contexts#context-object-schema'),
-    },
-    {
-      icon: GearSix,
-      title: 'Managing contexts',
-      description: 'Create, update, and delete contexts via dashboard or API.',
-      url: docsUrl('/platform/workflow/contexts/manage-contexts#create-a-context'),
-    },
-  ],
-  settings: DEFAULT_SUGGESTIONS,
-  default: DEFAULT_SUGGESTIONS,
+	workflows: [
+		{
+			icon: Path,
+			title: "Creating workflows",
+			description: "Learn how to create and configure notification workflows.",
+			url: docsUrl("/platform/workflow/overview"),
+		},
+		{
+			icon: Code,
+			title: "Using variables",
+			description: "Say hello with {{firstName}}. Personal, but scalable.",
+			url: docsUrl("/framework/controls#using-variables"),
+		},
+	],
+	workflowEditor: [
+		{
+			icon: Path,
+			title: "Understand workflow editor",
+			description:
+				"What the workflow editor does—like Delay, Digest, Email, and when to use them.",
+			url: docsUrl("/platform/workflow/overview"),
+		},
+		{
+			icon: Code,
+			title: "Using variables",
+			description: "Say hello with {{firstName}}. Personal, but scalable.",
+			url: docsUrl("/framework/controls#using-variables"),
+		},
+	],
+	subscribers: [
+		{
+			icon: User,
+			title: "Managing subscribers",
+			description:
+				"Learn how to create, update, and manage your notification subscribers.",
+			url: docsUrl("/platform/concepts/subscribers"),
+		},
+		{
+			icon: GearSix,
+			title: "Subscriber preferences",
+			description: "Let users control what notifications they receive.",
+			url: docsUrl("/platform/concepts/preferences"),
+		},
+	],
+	integrations: [
+		{
+			icon: Storefront,
+			title: "Connect providers",
+			description: "Email, SMS, chat—whatever you need to reach users.",
+			url: docsUrl("/integrations/overview"),
+		},
+		{
+			icon: GearSix,
+			title: "Try demo providers",
+			description: "Test notifications without configuring a provider.",
+			url: docsUrl("/platform/integrations/demo-providers"),
+		},
+	],
+	apiKeys: [
+		{
+			icon: Code,
+			title: "REST API reference",
+			description:
+				"Learn how to authenticate and work with Novu's API endpoints.",
+			url: docsUrl("/api-reference/overview"),
+		},
+	],
+	activity: DEFAULT_SUGGESTIONS,
+	analytics: DEFAULT_SUGGESTIONS,
+	topics: [
+		{
+			icon: Hash,
+			title: "Working with topics",
+			description: "Group subscribers and send bulk notifications efficiently.",
+			url: docsUrl("/platform/concepts/topics"),
+		},
+		{
+			icon: User,
+			title: "Topic subscriptions",
+			description: "Manage who receives notifications for each topic.",
+			url: docsUrl("/concepts/topics#dynamic-and-decoupled-grouping"),
+		},
+	],
+	webhooks: [
+		{
+			icon: GlobeSimple,
+			title: "Webhook setup",
+			description: "Receive real-time updates about notification events.",
+			url: docsUrl("/platform/additional-resources/webhooks"),
+		},
+		{
+			icon: Code,
+			title: "Webhook events",
+			description: "Learn about the events you can subscribe to.",
+			url: docsUrl(
+				"/platform/additional-resources/webhooks#supported-event-types",
+			),
+		},
+	],
+	layouts: [
+		{
+			icon: GridFour,
+			title: "Creating layouts",
+			description: "Design reusable templates for consistent notifications.",
+			url: docsUrl("/platform/workflow/layouts"),
+		},
+		{
+			icon: Envelope,
+			title: "Using layouts in workflows",
+			description:
+				"Apply layouts to email steps for consistent branding across notifications.",
+			url: docsUrl(
+				"/platform/workflow/layouts#using-a-layout-in-workflow-email-step",
+			),
+		},
+	],
+	translations: [
+		{
+			icon: Translate,
+			title: "Translations",
+			description:
+				"Learn how to translate your workflow step content into multiple languages",
+			url: docsUrl("/platform/workflow/translations"),
+		},
+		{
+			icon: GearSix,
+			title: "Managing translations",
+			description: "Upload and manage translation files for your content.",
+			url: docsUrl("/api-reference/translations/create-a-translation"),
+		},
+	],
+	environments: [
+		{
+			icon: GearSix,
+			title: "Understanding environments",
+			description:
+				"Learn how Novu uses environments to separate development and production workflows.",
+			url: docsUrl("/platform/concepts/environments"),
+		},
+		{
+			icon: Key,
+			title: "Environment credentials",
+			description:
+				"Understand Application Identifier and API Secret Key for each environment.",
+			url: docsUrl("/platform/concepts/environments#environment-credentials"),
+		},
+		{
+			icon: Path,
+			title: "Publishing changes",
+			description:
+				"Promote workflows, layouts, and translations from Development to other environments.",
+			url: docsUrl(
+				"/platform/concepts/environments#publishing-changes-to-other-environments",
+			),
+		},
+	],
+	contexts: [
+		{
+			icon: Buildings,
+			title: "Understanding contexts",
+			description:
+				"Learn how to create, update, and delete contexts to manage reusable metadata.",
+			url: docsUrl("/platform/workflow/contexts/manage-contexts"),
+		},
+		{
+			icon: Code,
+			title: "Context object schema",
+			description:
+				"Learn about context types, IDs, and data formats for storing metadata.",
+			url: docsUrl(
+				"/platform/workflow/contexts/manage-contexts#context-object-schema",
+			),
+		},
+		{
+			icon: GearSix,
+			title: "Managing contexts",
+			description: "Create, update, and delete contexts via dashboard or API.",
+			url: docsUrl(
+				"/platform/workflow/contexts/manage-contexts#create-a-context",
+			),
+		},
+	],
+	settings: DEFAULT_SUGGESTIONS,
+	default: DEFAULT_SUGGESTIONS,
 };
 
 function getRouteContext(pathname: string): RouteContext {
-  if (/\/workflows\/[^/]+/.test(pathname)) return 'workflowEditor';
-  if (pathname.includes('/workflows')) return 'workflows';
-  if (pathname.includes('/subscribers')) return 'subscribers';
-  if (pathname.includes('/integrations')) return 'integrations';
-  if (pathname.includes('/api-keys')) return 'apiKeys';
-  if (pathname.includes('/activity')) return 'activity';
-  if (pathname.includes('/analytics')) return 'analytics';
-  if (pathname.includes('/topics')) return 'topics';
-  if (pathname.includes('/webhooks')) return 'webhooks';
-  if (pathname.includes('/layouts')) return 'layouts';
-  if (pathname.includes('/translations')) return 'translations';
-  if (pathname.includes('/environments')) return 'environments';
-  if (pathname.includes('/contexts')) return 'contexts';
-  if (pathname.includes('/settings')) return 'settings';
+	if (/\/workflows\/[^/]+/.test(pathname)) return "workflowEditor";
+	if (pathname.includes("/workflows")) return "workflows";
+	if (pathname.includes("/subscribers")) return "subscribers";
+	if (pathname.includes("/integrations")) return "integrations";
+	if (pathname.includes("/api-keys")) return "apiKeys";
+	if (pathname.includes("/activity")) return "activity";
+	if (pathname.includes("/analytics")) return "analytics";
+	if (pathname.includes("/topics")) return "topics";
+	if (pathname.includes("/webhooks")) return "webhooks";
+	if (pathname.includes("/layouts")) return "layouts";
+	if (pathname.includes("/translations")) return "translations";
+	if (pathname.includes("/environments")) return "environments";
+	if (pathname.includes("/contexts")) return "contexts";
+	if (pathname.includes("/settings")) return "settings";
 
-  return 'default';
+	return "default";
 }
 
 export function useContextualSuggestions(): SuggestionItem[] {
-  const location = useLocation();
+	const location = useLocation();
 
-  return useMemo(() => {
-    const context = getRouteContext(location.pathname);
+	return useMemo(() => {
+		const context = getRouteContext(location.pathname);
 
-    return CONTEXTUAL_SUGGESTIONS[context];
-  }, [location.pathname]);
+		return CONTEXTUAL_SUGGESTIONS[context];
+	}, [location.pathname]);
 }
 
 export const GETTING_STARTED: SuggestionItem[] = [
-  {
-    icon: NovuIcon,
-    title: 'Learn the basics',
-    description: 'A quick tour of how Novu does what it does best.',
-    url: docsUrl('/platform/overview'),
-  },
-  {
-    icon: Bell,
-    title: '<Inbox/> Component',
-    description: 'Triggers, delays, emails—mix them like a wizard.',
-    url: docsUrl('/platform/inbox/overview'),
-  },
-  {
-    icon: Storefront,
-    title: 'Connect providers',
-    description: 'Email, SMS, chat—whatever you need to reach users.',
-    url: docsUrl('/integrations/overview'),
-  },
+	{
+		icon: NovuIcon,
+		title: "Learn the basics",
+		description: "A quick tour of how Novu does what it does best.",
+		url: docsUrl("/platform/overview"),
+	},
+	{
+		icon: Bell,
+		title: "<Inbox/> Component",
+		description: "Triggers, delays, emails—mix them like a wizard.",
+		url: docsUrl("/platform/inbox/overview"),
+	},
+	{
+		icon: Storefront,
+		title: "Connect providers",
+		description: "Email, SMS, chat—whatever you need to reach users.",
+		url: docsUrl("/integrations/overview"),
+	},
 ];

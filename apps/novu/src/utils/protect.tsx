@@ -1,5 +1,10 @@
-import { type ReactNode } from 'react';
+import type { ReactNode } from "react";
 
-export function Protect({ children }: { children: ReactNode; [key: string]: any }) {
-  return <>{children}</>;
+export function Protect({
+	children,
+}: {
+	children: ReactNode;
+	[key: string]: any;
+}) {
+	return <>{children}</>;
 }

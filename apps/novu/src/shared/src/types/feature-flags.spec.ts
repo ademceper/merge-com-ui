@@ -1,14 +1,14 @@
-import { describe, expect, it } from 'vitest';
-import { FlagKey, testFlagEnumValidity } from './feature-flags';
+import { describe, expect, it } from "vitest";
+import { type FlagKey, testFlagEnumValidity } from "./feature-flags";
 
-describe('Flags', () => {
-  /**
-   * This describe block resolves the Jest error of a test suite not having any tests.
-   * It has no other purpose.
-   */
-  it('tests the Typescript compiler errors below', () => {
-    expect(true).toEqual(true);
-  });
+describe("Flags", () => {
+	/**
+	 * This describe block resolves the Jest error of a test suite not having any tests.
+	 * It has no other purpose.
+	 */
+	it("tests the Typescript compiler errors below", () => {
+		expect(true).toEqual(true);
+	});
 });
 
 /**
@@ -23,39 +23,42 @@ describe('Flags', () => {
  * FlagKey tests
  */
 // Valid
-export const validFlag: FlagKey = 'IS_SOMETHING_ENABLED';
+export const validFlag: FlagKey = "IS_SOMETHING_ENABLED";
 
 // @ts-expect-error - Missing `IS_` prefix
-export const invalidPrefixFlag: FlagKey = 'SOMETHING_ENABLED';
+export const invalidPrefixFlag: FlagKey = "SOMETHING_ENABLED";
 
 // @ts-expect-error - Missing `_ENABLED` suffix
-export const invalidSuffixFlag: FlagKey = 'IS_SOMETHING';
+export const invalidSuffixFlag: FlagKey = "IS_SOMETHING";
 
 // @ts-expect-error - Incorrect subject casing
-export const invalidSubjectFlag: FlagKey = 'IS_something_ENABLED';
+export const invalidSubjectFlag: FlagKey = "IS_something_ENABLED";
 
 /**
  * testFlagEnumValidity Tests
  */
 enum ValidFlagsEnum {
-  IS_SOMETHING_ENABLED = 'IS_SOMETHING_ENABLED',
-  IS_SOMETHING_ELSE_ENABLED = 'IS_SOMETHING_ELSE_ENABLED',
+	IS_SOMETHING_ENABLED = "IS_SOMETHING_ENABLED",
+	IS_SOMETHING_ELSE_ENABLED = "IS_SOMETHING_ELSE_ENABLED",
 }
 testFlagEnumValidity(ValidFlagsEnum);
 
 enum InvalidFlagsEnum {
-  INVALID_ENABLED = 'INVALID_ENABLED',
+	INVALID_ENABLED = "INVALID_ENABLED",
 }
 // @ts-expect-error - not matching pattern
 testFlagEnumValidity(InvalidFlagsEnum);
 
 enum NonMatchingKeyValueEnum {
-  IS_SOMETHING_ENABLED = 'IS_SOMETHING_ELSE_ENABLED',
+	IS_SOMETHING_ENABLED = "IS_SOMETHING_ELSE_ENABLED",
 }
 
 // Ensure that the keys and values of FeatureFlagsKeysEnum match
 type ValidateNonMatchingKeyValueEnum = {
-  [K in keyof typeof NonMatchingKeyValueEnum]: K extends FlagKey ? K : `Value doesn't match key`;
+	[K in keyof typeof NonMatchingKeyValueEnum]: K extends FlagKey
+		? K
+		: `Value doesn't match key`;
 };
 // @ts-expect-error - non matching key-value pair in enum
-const validateNonMatchingKeyValueEnum: ValidateNonMatchingKeyValueEnum = NonMatchingKeyValueEnum;
+const _validateNonMatchingKeyValueEnum: ValidateNonMatchingKeyValueEnum =
+	NonMatchingKeyValueEnum;

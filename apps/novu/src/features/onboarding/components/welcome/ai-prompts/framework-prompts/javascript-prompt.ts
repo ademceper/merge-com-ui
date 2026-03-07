@@ -1,4 +1,4 @@
-import { PromptConfig, replaceConfigVariables } from './types';
+import { type PromptConfig, replaceConfigVariables } from "./types";
 
 const KITCHEN_SINK_INBOX_SNIPPET = `import { NovuUI } from '@novu/js/ui';
 
@@ -313,5 +313,5 @@ ${KITCHEN_SINK_INBOX_SNIPPET}
  * Gets the JavaScript prompt with configuration
  */
 export function getJavaScriptPromptString(config: PromptConfig): string {
-  return replaceConfigVariables(JAVASCRIPT_PROMPT, config);
+	return replaceConfigVariables(JAVASCRIPT_PROMPT, config);
 }

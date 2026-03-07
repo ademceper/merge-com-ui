@@ -1,6 +1,6 @@
-import { JSONContent } from '@tiptap/core';
-import { DEFAULT_SPACER_HEIGHT } from '../../extensions';
-import { spacing } from './spacing';
+import type { JSONContent } from "@tiptap/core";
+import { DEFAULT_SPACER_HEIGHT } from "../../extensions";
+import { spacing } from "./spacing";
 
 /**
  * To replace deprecated node type or attributes
@@ -10,34 +10,39 @@ import { spacing } from './spacing';
  * @returns JSONContent - new JSON content object
  */
 export function replaceDeprecatedNode(json: JSONContent) {
-  const stack = [json];
+	const stack = [json];
 
-  while (stack.length) {
-    const node = stack.pop();
-    if (!node) {
-      continue;
-    }
+	while (stack.length) {
+		const node = stack.pop();
+		if (!node) {
+			continue;
+		}
 
-    if (node.type === 'for') {
-      node.type = 'repeat';
-    }
+		if (node.type === "for") {
+			node.type = "repeat";
+		}
 
-    if (node.type === 'spacer') {
-      let height = node.attrs?.height;
-      if (typeof height === 'string' && ['sm', 'md', 'lg', 'xl'].includes(height)) {
-        height = spacing.find((s) => s.short === height)?.value || DEFAULT_SPACER_HEIGHT;
-      }
+		if (node.type === "spacer") {
+			let height = node.attrs?.height;
+			if (
+				typeof height === "string" &&
+				["sm", "md", "lg", "xl"].includes(height)
+			) {
+				height =
+					spacing.find((s) => s.short === height)?.value ||
+					DEFAULT_SPACER_HEIGHT;
+			}
 
-      node.attrs = {
-        ...node.attrs,
-        height,
-      };
-    }
+			node.attrs = {
+				...node.attrs,
+				height,
+			};
+		}
 
-    if (node.content) {
-      stack.push(...node.content);
-    }
-  }
+		if (node.content) {
+			stack.push(...node.content);
+		}
+	}
 
-  return json;
+	return json;
 }

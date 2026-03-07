@@ -1,48 +1,48 @@
-import { CustomDataType } from '../../types';
-import { NotificationStepDto } from '../workflows';
+import type { CustomDataType } from "../../types";
+import type { NotificationStepDto } from "../workflows";
 
 export interface IPreferenceChannelsDto {
-  email?: boolean;
-  sms?: boolean;
-  in_app?: boolean;
-  chat?: boolean;
-  push?: boolean;
+	email?: boolean;
+	sms?: boolean;
+	in_app?: boolean;
+	chat?: boolean;
+	push?: boolean;
 }
 
 export interface INotificationGroupDto {
-  _id?: string;
+	_id?: string;
 
-  name: string;
+	name: string;
 
-  _environmentId: string;
+	_environmentId: string;
 
-  _organizationId: string;
+	_organizationId: string;
 
-  _parentId?: string;
+	_parentId?: string;
 }
 
 export interface ICreateNotificationTemplateDto {
-  name: string;
+	name: string;
 
-  tags: string[];
+	tags: string[];
 
-  description?: string;
+	description?: string;
 
-  steps: NotificationStepDto[];
+	steps: NotificationStepDto[];
 
-  notificationGroupId?: string;
+	notificationGroupId?: string;
 
-  notificationGroup?: INotificationGroupDto;
+	notificationGroup?: INotificationGroupDto;
 
-  active?: boolean;
+	active?: boolean;
 
-  draft?: boolean;
+	draft?: boolean;
 
-  critical?: boolean;
+	critical?: boolean;
 
-  preferenceSettings?: IPreferenceChannelsDto;
+	preferenceSettings?: IPreferenceChannelsDto;
 
-  blueprintId?: string;
+	blueprintId?: string;
 
-  data?: CustomDataType;
+	data?: CustomDataType;
 }

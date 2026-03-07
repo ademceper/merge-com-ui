@@ -1,166 +1,179 @@
-import { Command } from 'cmdk';
-import { forwardRef, useEffect, useMemo, useState } from 'react';
-import { CommandGroup, CommandInput, CommandItem, CommandList } from '@merge-rd/ui/components/command';
-import { Popover, PopoverAnchor, PopoverContent } from '@/components/primitives/popover';
-import { cn } from '@merge-rd/ui/lib/utils';
-import { Tag } from './tag';
+import {
+	CommandGroup,
+	CommandInput,
+	CommandItem,
+	CommandList,
+} from "@merge-rd/ui/components/command";
+import { cn } from "@merge-rd/ui/lib/utils";
+import { Command } from "cmdk";
+import { forwardRef, useEffect, useMemo, useState } from "react";
+import {
+	Popover,
+	PopoverAnchor,
+	PopoverContent,
+} from "@/components/primitives/popover";
+import { Tag } from "./tag";
 
-type TagInputProps = Omit<React.InputHTMLAttributes<HTMLInputElement>, 'onChange'> & {
-  value: string[];
-  suggestions: string[];
-  onChange: (tags: string[]) => void;
-  size?: 'sm' | 'md' | 'xs';
+type TagInputProps = Omit<
+	React.InputHTMLAttributes<HTMLInputElement>,
+	"onChange"
+> & {
+	value: string[];
+	suggestions: string[];
+	onChange: (tags: string[]) => void;
+	size?: "sm" | "md" | "xs";
 };
 
 const TagInput = forwardRef<HTMLInputElement, TagInputProps>((props, ref) => {
-  const { className, suggestions, value, onChange, ...rest } = props;
-  const [tags, setTags] = useState<string[]>(value);
-  const [inputValue, setInputValue] = useState('');
-  const [isOpen, setIsOpen] = useState(false);
-  const validSuggestions = useMemo(
-    () => suggestions.filter((suggestion) => !tags.includes(suggestion)),
-    [tags, suggestions]
-  );
+	const { className, suggestions, value, onChange, ...rest } = props;
+	const [tags, setTags] = useState<string[]>(value);
+	const [inputValue, setInputValue] = useState("");
+	const [isOpen, setIsOpen] = useState(false);
+	const validSuggestions = useMemo(
+		() => suggestions.filter((suggestion) => !tags.includes(suggestion)),
+		[tags, suggestions],
+	);
 
-  useEffect(() => {
-    setTags(value);
-  }, [value]);
+	useEffect(() => {
+		setTags(value);
+	}, [value]);
 
-  const addTag = (tag: string) => {
-    const newTag = tag.trim();
+	const addTag = (tag: string) => {
+		const newTag = tag.trim();
 
-    if (newTag === '') {
-      return;
-    }
+		if (newTag === "") {
+			return;
+		}
 
-    const newTags = [...tags, tag];
+		const newTags = [...tags, tag];
 
-    if (new Set(newTags).size !== newTags.length) {
-      return;
-    }
+		if (new Set(newTags).size !== newTags.length) {
+			return;
+		}
 
-    onChange(newTags);
-    setInputValue('');
-    setIsOpen(false);
-  };
+		onChange(newTags);
+		setInputValue("");
+		setIsOpen(false);
+	};
 
-  const removeTag = (tag: string) => {
-    const newTags = [...tags];
-    const index = newTags.indexOf(tag);
+	const removeTag = (tag: string) => {
+		const newTags = [...tags];
+		const index = newTags.indexOf(tag);
 
-    if (index !== -1) {
-      newTags.splice(index, 1);
-    }
+		if (index !== -1) {
+			newTags.splice(index, 1);
+		}
 
-    onChange(newTags);
-    setInputValue('');
-  };
+		onChange(newTags);
+		setInputValue("");
+	};
 
-  return (
-    <Popover open={isOpen}>
-      <Command loop>
-        <div className="flex flex-col gap-2 pb-0.5">
-          <PopoverAnchor asChild>
-            <CommandInput
-              ref={ref}
-              autoComplete="off"
-              value={inputValue}
-              className={cn('grow', className)}
-              placeholder="Type a tag and press Enter"
-              onValueChange={(value) => {
-                setInputValue(value);
+	return (
+		<Popover open={isOpen}>
+			<Command loop>
+				<div className="flex flex-col gap-2 pb-0.5">
+					<PopoverAnchor asChild>
+						<CommandInput
+							ref={ref}
+							autoComplete="off"
+							value={inputValue}
+							className={cn("grow", className)}
+							placeholder="Type a tag and press Enter"
+							onValueChange={(value) => {
+								setInputValue(value);
 
-                if (value) {
-                  setIsOpen(true);
-                }
-              }}
-              onClick={() => setIsOpen(true)}
-              onKeyDown={(e) => {
-                if (e.key === 'Escape') {
-                  setIsOpen(false);
-                }
-              }}
-              {...rest}
-            />
-          </PopoverAnchor>
-          <div className="flex flex-wrap gap-2">
-            {tags.map((tag, index) => (
-              <Tag
-                key={index}
-                variant="stroke"
-                className="max-w-48 shrink-0"
-                onDismiss={(e) => {
-                  e.preventDefault();
-                  e.stopPropagation();
+								if (value) {
+									setIsOpen(true);
+								}
+							}}
+							onClick={() => setIsOpen(true)}
+							onKeyDown={(e) => {
+								if (e.key === "Escape") {
+									setIsOpen(false);
+								}
+							}}
+							{...rest}
+						/>
+					</PopoverAnchor>
+					<div className="flex flex-wrap gap-2">
+						{tags.map((tag, index) => (
+							<Tag
+								key={index}
+								variant="stroke"
+								className="max-w-48 shrink-0"
+								onDismiss={(e) => {
+									e.preventDefault();
+									e.stopPropagation();
 
-                  removeTag(tag);
-                }}
-                dismissTestId={`tags-badge-remove-${tag}`}
-              >
-                <span
-                  className="block max-w-full truncate"
-                  style={{ wordBreak: 'break-all' }}
-                  data-testid="tags-badge-value"
-                  title={tag}
-                >
-                  {tag}
-                </span>
-              </Tag>
-            ))}
-          </div>
-        </div>
-        <CommandList>
-          {(validSuggestions.length > 0 || inputValue !== '') && (
-            <PopoverContent
-              className="max-h-64 w-32 p-1"
-              portal={false}
-              onOpenAutoFocus={(e) => {
-                e.preventDefault();
-              }}
-              align="start"
-              sideOffset={4}
-              onPointerDownOutside={(e) => {
-                const target = e.target as HTMLElement;
+									removeTag(tag);
+								}}
+								dismissTestId={`tags-badge-remove-${tag}`}
+							>
+								<span
+									className="block max-w-full truncate"
+									style={{ wordBreak: "break-all" }}
+									data-testid="tags-badge-value"
+									title={tag}
+								>
+									{tag}
+								</span>
+							</Tag>
+						))}
+					</div>
+				</div>
+				<CommandList>
+					{(validSuggestions.length > 0 || inputValue !== "") && (
+						<PopoverContent
+							className="max-h-64 w-32 p-1"
+							portal={false}
+							onOpenAutoFocus={(e) => {
+								e.preventDefault();
+							}}
+							align="start"
+							sideOffset={4}
+							onPointerDownOutside={(e) => {
+								const target = e.target as HTMLElement;
 
-                if (!target.closest('[cmdk-input-wrapper]')) {
-                  setIsOpen(false);
-                }
-              }}
-            >
-              <CommandGroup>
-                {inputValue !== '' && !validSuggestions.includes(inputValue) && (
-                  <CommandItem
-                    value={inputValue}
-                    onSelect={() => {
-                      addTag(inputValue);
-                    }}
-                    className="gap-1"
-                    disabled={inputValue === '' || tags.includes(inputValue)}
-                  >
-                    <span className="truncate">{inputValue}</span>
-                  </CommandItem>
-                )}
+								if (!target.closest("[cmdk-input-wrapper]")) {
+									setIsOpen(false);
+								}
+							}}
+						>
+							<CommandGroup>
+								{inputValue !== "" &&
+									!validSuggestions.includes(inputValue) && (
+										<CommandItem
+											value={inputValue}
+											onSelect={() => {
+												addTag(inputValue);
+											}}
+											className="gap-1"
+											disabled={inputValue === "" || tags.includes(inputValue)}
+										>
+											<span className="truncate">{inputValue}</span>
+										</CommandItem>
+									)}
 
-                {validSuggestions.map((tag) => (
-                  <CommandItem
-                    key={tag}
-                    // We can't have duplicate keys in our list so adding a suffix
-                    // here to differentiate this from the value typed
-                    value={`${tag}-suggestion`}
-                    onSelect={() => {
-                      addTag(tag);
-                    }}
-                  >
-                    <span className="truncate">{tag}</span>
-                  </CommandItem>
-                ))}
-              </CommandGroup>
-            </PopoverContent>
-          )}
-        </CommandList>
-      </Command>
-    </Popover>
-  );
+								{validSuggestions.map((tag) => (
+									<CommandItem
+										key={tag}
+										// We can't have duplicate keys in our list so adding a suffix
+										// here to differentiate this from the value typed
+										value={`${tag}-suggestion`}
+										onSelect={() => {
+											addTag(tag);
+										}}
+									>
+										<span className="truncate">{tag}</span>
+									</CommandItem>
+								))}
+							</CommandGroup>
+						</PopoverContent>
+					)}
+				</CommandList>
+			</Command>
+		</Popover>
+	);
 });
 
 export { TagInput };

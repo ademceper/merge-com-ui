@@ -1,83 +1,83 @@
-import {
-  ActorTypeEnum,
-  ButtonTypeEnum,
-  ChannelCTATypeEnum,
-  IEmailBlock,
-  ITemplateVariable,
-  MessageActionStatusEnum,
-  MessageTemplateContentType,
-  StepTypeEnum,
-  UrlTarget,
-} from '../../types';
+import type {
+	ActorTypeEnum,
+	ButtonTypeEnum,
+	ChannelCTATypeEnum,
+	IEmailBlock,
+	ITemplateVariable,
+	MessageActionStatusEnum,
+	MessageTemplateContentType,
+	StepTypeEnum,
+	UrlTarget,
+} from "../../types";
 
 export class ChannelCTADto {
-  type: ChannelCTATypeEnum;
+	type: ChannelCTATypeEnum;
 
-  data: {
-    url: string;
-  };
+	data: {
+		url: string;
+	};
 }
 
 export interface IMessageActionDto {
-  status?: MessageActionStatusEnum;
-  buttons?: IMessageButton[];
-  result: {
-    payload?: Record<string, unknown>;
-    type?: ButtonTypeEnum;
-  };
+	status?: MessageActionStatusEnum;
+	buttons?: IMessageButton[];
+	result: {
+		payload?: Record<string, unknown>;
+		type?: ButtonTypeEnum;
+	};
 }
 
 export interface IMessageButton {
-  type: ButtonTypeEnum;
-  content: string;
-  resultContent?: string;
-  url?: string;
-  target?: UrlTarget;
+	type: ButtonTypeEnum;
+	content: string;
+	resultContent?: string;
+	url?: string;
+	target?: UrlTarget;
 }
 
 export interface IMessageCTADto {
-  type: ChannelCTATypeEnum;
-  data: {
-    url?: string;
-    target?: UrlTarget;
-  };
-  action?: IMessageActionDto;
+	type: ChannelCTATypeEnum;
+	data: {
+		url?: string;
+		target?: UrlTarget;
+	};
+	action?: IMessageActionDto;
 }
 
 export interface IActorDto {
-  type: ActorTypeEnum;
-  data: string | null;
+	type: ActorTypeEnum;
+	data: string | null;
 }
 
 export class MessageTemplateDto {
-  type: StepTypeEnum;
+	type: StepTypeEnum;
 
-  content: string | IEmailBlock[];
+	content: string | IEmailBlock[];
 
-  contentType?: MessageTemplateContentType;
+	contentType?: MessageTemplateContentType;
 
-  cta?: IMessageCTADto;
+	cta?: IMessageCTADto;
 
-  actor?: {
-    type: ActorTypeEnum;
-    data: string | null;
-  };
+	actor?: {
+		type: ActorTypeEnum;
+		data: string | null;
+	};
 
-  variables?: ITemplateVariable[];
+	variables?: ITemplateVariable[];
 
-  feedId?: string;
+	feedId?: string;
 
-  layoutId?: string | null;
+	layoutId?: string | null;
 
-  name?: string;
+	name?: string;
 
-  subject?: string;
+	subject?: string;
 
-  title?: string;
+	title?: string;
 
-  preheader?: string;
+	preheader?: string;
 
-  senderName?: string;
+	senderName?: string;
 
-  _creatorId?: string;
+	_creatorId?: string;
 }

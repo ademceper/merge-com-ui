@@ -1,176 +1,182 @@
-import { RegionSelector, useRegion } from '@/context/region';
-import { useOrganization } from '@merge-rd/auth';
-import { useEffect, useRef, useState } from 'react';
-import { useTelemetry } from '../../hooks/use-telemetry';
-import { ROUTES } from '../../utils/routes';
-import { TelemetryEvent } from '../../utils/telemetry';
-import { UsecasePlaygroundHeader } from '../usecase-playground-header';
-import { AuthCard } from './auth-card';
+import { useOrganization } from "@merge-rd/auth";
+import { useEffect, useRef, useState } from "react";
+import { RegionSelector, useRegion } from "@/context/region";
+import { useTelemetry } from "../../hooks/use-telemetry";
+import { ROUTES } from "../../utils/routes";
+import { TelemetryEvent } from "../../utils/telemetry";
+import { UsecasePlaygroundHeader } from "../usecase-playground-header";
+import { AuthCard } from "./auth-card";
 
 // Constants
 const HEADER_CONFIG = {
-  title: 'Create an organization',
-  description: 'Create an organization to get started',
-  showSkipButton: false,
-  showBackButton: false,
-  showStepper: true,
-  currentStep: 1,
-  totalSteps: 4,
+	title: "Create an organization",
+	description: "Create an organization to get started",
+	showSkipButton: false,
+	showBackButton: false,
+	showStepper: true,
+	currentStep: 1,
+	totalSteps: 4,
 } as const;
 
-const ORGANIZATION_FORM_CONFIG = {
-  hidePersonal: true,
-  skipInvitationScreen: true,
-  afterSelectOrganizationUrl: ROUTES.ENV,
-  afterCreateOrganizationUrl: ROUTES.INBOX_USECASE,
+const _ORGANIZATION_FORM_CONFIG = {
+	hidePersonal: true,
+	skipInvitationScreen: true,
+	afterSelectOrganizationUrl: ROUTES.ENV,
+	afterCreateOrganizationUrl: ROUTES.INBOX_USECASE,
 } as const;
 
-const FORM_APPEARANCE = {
-  elements: {
-    cardBox: { boxShadow: 'none' },
-    card: { paddingTop: 0, padding: 0 },
-  },
+const _FORM_APPEARANCE = {
+	elements: {
+		cardBox: { boxShadow: "none" },
+		card: { paddingTop: 0, padding: 0 },
+	},
 } as const;
 
 const ILLUSTRATION_CONFIG = {
-  src: '/images/auth/ui-org.svg',
-  alt: 'Novu dashboard overview',
-  className: 'opacity-70',
+	src: "/images/auth/ui-org.svg",
+	alt: "Novu dashboard overview",
+	className: "opacity-70",
 } as const;
 
 // Types
 interface FormContainerProps {
-  children: React.ReactNode;
+	children: React.ReactNode;
 }
 
 interface IllustrationProps {
-  src: string;
-  alt: string;
-  className?: string;
+	src: string;
+	alt: string;
+	className?: string;
 }
 
 // Small Components
 function FormContainer({ children }: FormContainerProps) {
-  return (
-    <div className="flex min-w-[564px] max-w-[564px] items-center p-[60px]">
-      <div className="flex flex-col gap-[4px]">{children}</div>
-    </div>
-  );
+	return (
+		<div className="flex min-w-[564px] max-w-[564px] items-center p-[60px]">
+			<div className="flex flex-col gap-[4px]">{children}</div>
+		</div>
+	);
 }
 
 function OrganizationForm() {
-  const [showRegionSelector, setShowRegionSelector] = useState(false);
+	const [showRegionSelector, setShowRegionSelector] = useState(false);
 
-  useEffect(() => {
-    // Watch for DOM changes to detect when we're on the form page (Page 2)
-    const observer = new MutationObserver(() => {
-      // Check if the organization creation form (with name input) is visible
-      const nameInput = document.querySelector('input[name="name"]');
-      const isOnFormPage = !!nameInput;
+	useEffect(() => {
+		// Watch for DOM changes to detect when we're on the form page (Page 2)
+		const observer = new MutationObserver(() => {
+			// Check if the organization creation form (with name input) is visible
+			const nameInput = document.querySelector('input[name="name"]');
+			const isOnFormPage = !!nameInput;
 
-      if (isOnFormPage !== showRegionSelector) {
-        setShowRegionSelector(isOnFormPage);
-      }
-    });
+			if (isOnFormPage !== showRegionSelector) {
+				setShowRegionSelector(isOnFormPage);
+			}
+		});
 
-    // Start observing
-    observer.observe(document.body, {
-      childList: true,
-      subtree: true,
-    });
+		// Start observing
+		observer.observe(document.body, {
+			childList: true,
+			subtree: true,
+		});
 
-    return () => observer.disconnect();
-  }, [showRegionSelector]);
+		return () => observer.disconnect();
+	}, [showRegionSelector]);
 
-  return (
-    <div className="relative">
-      {/* Region selector - only visible on Page 2 (form page), aligned with form content */}
-      {showRegionSelector && (
-        <div className="absolute -top-14 left-4 z-20">
-          <RegionSelector />
-        </div>
-      )}
+	return (
+		<div className="relative">
+			{/* Region selector - only visible on Page 2 (form page), aligned with form content */}
+			{showRegionSelector && (
+				<div className="absolute -top-14 left-4 z-20">
+					<RegionSelector />
+				</div>
+			)}
 
-      {/* Organization form — placeholder for Keycloak-based org creation */}
-      <p className="text-sm text-neutral-500">Organization creation is managed by Keycloak.</p>
-    </div>
-  );
+			{/* Organization form — placeholder for Keycloak-based org creation */}
+			<p className="text-sm text-neutral-500">
+				Organization creation is managed by Keycloak.
+			</p>
+		</div>
+	);
 }
 
 function OrganizationFormSection() {
-  return (
-    <div className="flex flex-1 items-center justify-center">
-      <FormContainer>
-        <OrganizationForm />
-      </FormContainer>
-    </div>
-  );
+	return (
+		<div className="flex flex-1 items-center justify-center">
+			<FormContainer>
+				<OrganizationForm />
+			</FormContainer>
+		</div>
+	);
 }
 
 function Illustration({ src, alt, className }: IllustrationProps) {
-  return (
-    <div className="w-full max-w-[564px]">
-      <img src={src} alt={alt} className={className} />
-    </div>
-  );
+	return (
+		<div className="w-full max-w-[564px]">
+			<img src={src} alt={alt} className={className} />
+		</div>
+	);
 }
 
 function IllustrationSection() {
-  return (
-    <div className="flex flex-1 items-center justify-center">
-      <Illustration {...ILLUSTRATION_CONFIG} />
-    </div>
-  );
+	return (
+		<div className="flex flex-1 items-center justify-center">
+			<Illustration {...ILLUSTRATION_CONFIG} />
+		</div>
+	);
 }
 
 function MainContent() {
-  return (
-    <div className="flex flex-1">
-      <OrganizationFormSection />
-      <IllustrationSection />
-    </div>
-  );
+	return (
+		<div className="flex flex-1">
+			<OrganizationFormSection />
+			<IllustrationSection />
+		</div>
+	);
 }
 
 function PageHeader() {
-  return <UsecasePlaygroundHeader {...HEADER_CONFIG} />;
+	return <UsecasePlaygroundHeader {...HEADER_CONFIG} />;
 }
 
 function PageContent() {
-  return (
-    <div className="flex flex-1 flex-col overflow-hidden pb-3">
-      <PageHeader />
-      <MainContent />
-    </div>
-  );
+	return (
+		<div className="flex flex-1 flex-col overflow-hidden pb-3">
+			<PageHeader />
+			<MainContent />
+		</div>
+	);
 }
 
 export default function OrganizationCreate() {
-  const { organization } = useOrganization();
-  const { selectedRegion } = useRegion();
-  const track = useTelemetry();
-  const hasTrackedRef = useRef(false);
-  const trackedOrgIdRef = useRef<string | null>(null);
+	const { organization } = useOrganization();
+	const { selectedRegion } = useRegion();
+	const track = useTelemetry();
+	const hasTrackedRef = useRef(false);
+	const trackedOrgIdRef = useRef<string | null>(null);
 
-  useEffect(() => {
-    if (organization?.id && !hasTrackedRef.current && trackedOrgIdRef.current !== organization.id) {
-      hasTrackedRef.current = true;
-      trackedOrgIdRef.current = organization.id;
+	useEffect(() => {
+		if (
+			organization?.id &&
+			!hasTrackedRef.current &&
+			trackedOrgIdRef.current !== organization.id
+		) {
+			hasTrackedRef.current = true;
+			trackedOrgIdRef.current = organization.id;
 
-      track(TelemetryEvent.CREATE_ORGANIZATION_FORM_SUBMITTED, {
-        location: 'web',
-        organizationId: organization.id,
-        organizationName: organization.name,
-        region: selectedRegion,
-      });
-    }
-  }, [organization?.id, organization?.name, selectedRegion, track]);
+			track(TelemetryEvent.CREATE_ORGANIZATION_FORM_SUBMITTED, {
+				location: "web",
+				organizationId: organization.id,
+				organizationName: organization.name,
+				region: selectedRegion,
+			});
+		}
+	}, [organization?.id, organization?.name, selectedRegion, track]);
 
-  return (
-    <div className="flex w-full flex-1 flex-row items-center justify-center">
-      <AuthCard>
-        <PageContent />
-      </AuthCard>
-    </div>
-  );
+	return (
+		<div className="flex w-full flex-1 flex-row items-center justify-center">
+			<AuthCard>
+				<PageContent />
+			</AuthCard>
+		</div>
+	);
 }

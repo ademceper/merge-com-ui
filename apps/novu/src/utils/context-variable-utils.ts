@@ -11,8 +11,8 @@
  * By using contextKeys=[''], the SDK sends contextKeys= (empty string),
  * which the backend can interpret as "filter for records with no context".
  */
-export const DEFAULT_CONTEXT_VALUE = '';
-export const DEFAULT_CONTEXT_LABEL = 'Default context';
+export const DEFAULT_CONTEXT_VALUE = "";
+export const DEFAULT_CONTEXT_LABEL = "Default context";
 
 /**
  * Simple context variable validation
@@ -21,24 +21,24 @@ export const DEFAULT_CONTEXT_LABEL = 'Default context';
  * - context.<type>.data (nesting allowed: context.<type>.data.*)
  */
 export function isValidContextVariable(variableName: string): boolean {
-  if (!variableName.startsWith('context.')) return false;
+	if (!variableName.startsWith("context.")) return false;
 
-  const parts = variableName.split('.');
-  if (parts.length < 3) return false;
+	const parts = variableName.split(".");
+	if (parts.length < 3) return false;
 
-  const [, , property] = parts;
+	const [, , property] = parts;
 
-  // context.<type>.id - no nesting allowed
-  if (property === 'id') {
-    return parts.length === 3; // Must be exactly context.<type>.id
-  }
+	// context.<type>.id - no nesting allowed
+	if (property === "id") {
+		return parts.length === 3; // Must be exactly context.<type>.id
+	}
 
-  // context.<type>.data.* - nesting allowed
-  if (property === 'data') {
-    return true; // Can be context.<type>.data or context.<type>.data.anything
-  }
+	// context.<type>.data.* - nesting allowed
+	if (property === "data") {
+		return true; // Can be context.<type>.data or context.<type>.data.anything
+	}
 
-  return false;
+	return false;
 }
 
 /**
@@ -63,20 +63,25 @@ export function isValidContextVariable(variableName: string): boolean {
  * convertContextKeysToPayload([])
  * // Returns: undefined (no context)
  */
-export function convertContextKeysToPayload(contextKeys?: string[]): Record<string, string> | undefined {
-  if (!contextKeys?.length || (contextKeys.length === 1 && contextKeys[0] === '')) {
-    return undefined;
-  }
+export function convertContextKeysToPayload(
+	contextKeys?: string[],
+): Record<string, string> | undefined {
+	if (
+		!contextKeys?.length ||
+		(contextKeys.length === 1 && contextKeys[0] === "")
+	) {
+		return undefined;
+	}
 
-  const context: Record<string, string> = {};
-  for (const key of contextKeys) {
-    const parts = key.split(':');
-    const type = parts[0];
-    const id = parts.slice(1).join(':');
-    if (type && id) {
-      context[type] = id;
-    }
-  }
+	const context: Record<string, string> = {};
+	for (const key of contextKeys) {
+		const parts = key.split(":");
+		const type = parts[0];
+		const id = parts.slice(1).join(":");
+		if (type && id) {
+			context[type] = id;
+		}
+	}
 
-  return context;
+	return context;
 }

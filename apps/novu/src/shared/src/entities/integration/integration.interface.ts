@@ -1,39 +1,44 @@
-import { ChannelTypeEnum, EnvironmentId, IPreviousStepFilterPart, OrganizationId } from '../../types';
-import { IConfigurations } from './configuration.interface';
-import { ICredentials } from './credential.interface';
+import type {
+	ChannelTypeEnum,
+	EnvironmentId,
+	IPreviousStepFilterPart,
+	OrganizationId,
+} from "../../types";
+import type { IConfigurations } from "./configuration.interface";
+import type { ICredentials } from "./credential.interface";
 
 export interface IIntegration {
-  _id: string;
+	_id: string;
 
-  _environmentId: EnvironmentId;
+	_environmentId: EnvironmentId;
 
-  _organizationId: OrganizationId;
+	_organizationId: OrganizationId;
 
-  providerId: string;
+	providerId: string;
 
-  channel: ChannelTypeEnum;
+	channel: ChannelTypeEnum;
 
-  credentials: ICredentials;
+	credentials: ICredentials;
 
-  configurations: IConfigurations;
+	configurations: IConfigurations;
 
-  active: boolean;
+	active: boolean;
 
-  name: string;
+	name: string;
 
-  identifier: string;
+	identifier: string;
 
-  priority: number;
+	priority: number;
 
-  primary: boolean;
+	primary: boolean;
 
-  deleted: boolean;
+	deleted: boolean;
 
-  deletedAt: string;
+	deletedAt: string;
 
-  deletedBy: string;
+	deletedBy: string;
 
-  conditions?: IPreviousStepFilterPart[];
+	conditions?: IPreviousStepFilterPart[];
 
-  connected?: boolean;
+	connected?: boolean;
 }

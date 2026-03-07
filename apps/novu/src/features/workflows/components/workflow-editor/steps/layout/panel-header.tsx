@@ -1,26 +1,32 @@
-import { ReactNode } from 'react';
-import { LoadingIndicator } from '@/components/primitives/loading-indicator';
-import { cn } from '@merge-rd/ui/lib/utils';
+import { cn } from "@merge-rd/ui/lib/utils";
+import type { ReactNode } from "react";
+import { LoadingIndicator } from "@/components/primitives/loading-indicator";
 
 type PanelHeaderProps = {
-  icon?: React.ComponentType<{ className?: string }>;
-  title: string;
-  children?: ReactNode;
-  className?: string;
-  isLoading?: boolean;
+	icon?: React.ComponentType<{ className?: string }>;
+	title: string;
+	children?: ReactNode;
+	className?: string;
+	isLoading?: boolean;
 };
 
-export function PanelHeader({ icon: Icon, title, children, className, isLoading }: PanelHeaderProps) {
-  return (
-    <div className={cn('border-b border-neutral-200 p-3', className)}>
-      <div className="flex h-full items-center justify-between">
-        <h3 className="text-label-sm text-text-strong flex items-center gap-2 font-medium">
-          {Icon && <Icon className="size-3.5" />}
-          {title}
-          {isLoading && <LoadingIndicator size="sm" />}
-        </h3>
-        {children}
-      </div>
-    </div>
-  );
+export function PanelHeader({
+	icon: Icon,
+	title,
+	children,
+	className,
+	isLoading,
+}: PanelHeaderProps) {
+	return (
+		<div className={cn("border-b border-neutral-200 p-3", className)}>
+			<div className="flex h-full items-center justify-between">
+				<h3 className="text-label-sm text-text-strong flex items-center gap-2 font-medium">
+					{Icon && <Icon className="size-3.5" />}
+					{title}
+					{isLoading && <LoadingIndicator size="sm" />}
+				</h3>
+				{children}
+			</div>
+		</div>
+	);
 }

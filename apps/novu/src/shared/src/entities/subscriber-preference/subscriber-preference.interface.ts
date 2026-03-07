@@ -1,52 +1,57 @@
-import { SeverityLevelEnum } from '../../consts';
-import { ChannelTypeEnum, PreferenceOverrideSourceEnum, PreferencesTypeEnum, Schedule } from '../../types';
-import { INotificationTrigger } from '../notification-trigger';
+import type { SeverityLevelEnum } from "../../consts";
+import {
+	type ChannelTypeEnum,
+	PreferenceOverrideSourceEnum,
+	type PreferencesTypeEnum,
+	type Schedule,
+} from "../../types";
+import type { INotificationTrigger } from "../notification-trigger";
 
 export interface IPreferenceChannels {
-  email?: boolean;
-  sms?: boolean;
-  in_app?: boolean;
-  chat?: boolean;
-  push?: boolean;
+	email?: boolean;
+	sms?: boolean;
+	in_app?: boolean;
+	chat?: boolean;
+	push?: boolean;
 }
 
 export interface IPreferenceOverride {
-  channel: ChannelTypeEnum;
-  source: PreferenceOverrideSourceEnum;
+	channel: ChannelTypeEnum;
+	source: PreferenceOverrideSourceEnum;
 }
 
 export interface ISubscriberPreferenceResponse {
-  template: ITemplateConfiguration;
-  preference: IPreferenceResponse;
-  type: PreferencesTypeEnum;
+	template: ITemplateConfiguration;
+	preference: IPreferenceResponse;
+	type: PreferencesTypeEnum;
 }
 
 interface IPreferenceResponse {
-  enabled: boolean;
-  channels: IPreferenceChannels;
-  overrides: IPreferenceOverride[];
-  schedule?: Schedule;
-  updatedAt?: string;
+	enabled: boolean;
+	channels: IPreferenceChannels;
+	overrides: IPreferenceOverride[];
+	schedule?: Schedule;
+	updatedAt?: string;
 }
 
 export interface ITemplateConfiguration {
-  _id: string;
-  name: string;
-  critical: boolean;
-  tags?: string[];
-  triggers: INotificationTrigger[];
-  updatedAt?: string;
-  createdAt?: string;
-  severity?: SeverityLevelEnum;
+	_id: string;
+	name: string;
+	critical: boolean;
+	tags?: string[];
+	triggers: INotificationTrigger[];
+	updatedAt?: string;
+	createdAt?: string;
+	severity?: SeverityLevelEnum;
 }
 
 export enum PreferenceLevelEnum {
-  GLOBAL = 'global',
-  TEMPLATE = 'template',
+	GLOBAL = "global",
+	TEMPLATE = "template",
 }
 
 export interface IOverridePreferencesSources {
-  [PreferenceOverrideSourceEnum.TEMPLATE]: IPreferenceChannels;
-  [PreferenceOverrideSourceEnum.SUBSCRIBER]: IPreferenceChannels;
-  [PreferenceOverrideSourceEnum.WORKFLOW_OVERRIDE]?: IPreferenceChannels;
+	[PreferenceOverrideSourceEnum.TEMPLATE]: IPreferenceChannels;
+	[PreferenceOverrideSourceEnum.SUBSCRIBER]: IPreferenceChannels;
+	[PreferenceOverrideSourceEnum.WORKFLOW_OVERRIDE]?: IPreferenceChannels;
 }

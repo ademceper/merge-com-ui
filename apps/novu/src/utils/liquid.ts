@@ -1,16 +1,16 @@
-import { LAYOUT_CONTENT_VARIABLE } from '@novu/shared';
-import { isAllowedAlias } from '@/components/maily/repeat-block-aliases';
+import { LAYOUT_CONTENT_VARIABLE } from "@novu/shared";
+import { isAllowedAlias } from "@/components/maily/repeat-block-aliases";
 
 export type VariableMatch = {
-  fullLiquidExpression: string;
-  liquidVariable: string;
-  name: string;
-  nameRoot: string;
-  filtersArray: string[];
-  filters: string;
+	fullLiquidExpression: string;
+	liquidVariable: string;
+	name: string;
+	nameRoot: string;
+	filtersArray: string[];
+	filters: string;
 };
 
-export const VARIABLE_REGEX_STRING = '{{([^{}]+)}}';
+export const VARIABLE_REGEX_STRING = "{{([^{}]+)}}";
 
 /**
  * Checks if a variable is a namespace-only variable (invalid single-part variable).
@@ -20,37 +20,37 @@ export const VARIABLE_REGEX_STRING = '{{([^{}]+)}}';
  * - Local variables (from loops, checked separately by callers)
  */
 export function isNamespaceOnlyVariable(variableName: string): boolean {
-  const hasNoNamespace = variableName.split('.').length === 1;
+	const hasNoNamespace = variableName.split(".").length === 1;
 
-  if (!hasNoNamespace) {
-    return false;
-  }
+	if (!hasNoNamespace) {
+		return false;
+	}
 
-  // Content variables are valid single-part variables
-  if (variableName === LAYOUT_CONTENT_VARIABLE) {
-    return false;
-  }
+	// Content variables are valid single-part variables
+	if (variableName === LAYOUT_CONTENT_VARIABLE) {
+		return false;
+	}
 
-  // Allowed aliases (e.g., "current" in repeat blocks) are valid single-part variables
-  // Note: Actual validation of whether we're in a repeat block happens later
-  // where editor context is available (e.g., in variable-view.tsx)
-  if (isAllowedAlias(variableName)) {
-    return false;
-  }
+	// Allowed aliases (e.g., "current" in repeat blocks) are valid single-part variables
+	// Note: Actual validation of whether we're in a repeat block happens later
+	// where editor context is available (e.g., in variable-view.tsx)
+	if (isAllowedAlias(variableName)) {
+		return false;
+	}
 
-  // All other single-part variables are invalid (namespace-only)
-  return true;
+	// All other single-part variables are invalid (namespace-only)
+	return true;
 }
 
 const stripBrackets = (value: string): string => {
-  return value.replace(/[{}]/g, '').trim();
+	return value.replace(/[{}]/g, "").trim();
 };
 
 // Function to normalize variable syntax by reducing multiple brackets to two
 const normalizeVariableSyntax = (value: string): string => {
-  const strippedValue = stripBrackets(value);
+	const strippedValue = stripBrackets(value);
 
-  return `{{${strippedValue}}}`;
+	return `{{${strippedValue}}}`;
 };
 
 /**
@@ -75,25 +75,27 @@ const normalizeVariableSyntax = (value: string): string => {
  * }
  */
 export function parseVariable(variable: string): VariableMatch | undefined {
-  const liquidVariable = variable.match(/^\{+.*\}+$/) ? normalizeVariableSyntax(variable) : `{{${variable}}}`;
-  const regex = new RegExp(VARIABLE_REGEX_STRING, 'g');
-  const match = regex.exec(liquidVariable);
+	const liquidVariable = variable.match(/^\{+.*\}+$/)
+		? normalizeVariableSyntax(variable)
+		: `{{${variable}}}`;
+	const regex = new RegExp(VARIABLE_REGEX_STRING, "g");
+	const match = regex.exec(liquidVariable);
 
-  if (!match) {
-    return;
-  }
+	if (!match) {
+		return;
+	}
 
-  const fullLiquidExpression = match[1].trim();
-  const parts = fullLiquidExpression.split('|').map((part) => part.trim());
-  const name = parts[0];
-  const hasFilters = parts.length > 1;
+	const fullLiquidExpression = match[1].trim();
+	const parts = fullLiquidExpression.split("|").map((part) => part.trim());
+	const name = parts[0];
+	const hasFilters = parts.length > 1;
 
-  return {
-    fullLiquidExpression: name ? fullLiquidExpression : '',
-    liquidVariable,
-    name,
-    nameRoot: name.trim().split('.')[0],
-    filtersArray: hasFilters ? parts.slice(1) : [],
-    filters: hasFilters ? `| ${parts.slice(1).join(' | ')}` : '',
-  };
+	return {
+		fullLiquidExpression: name ? fullLiquidExpression : "",
+		liquidVariable,
+		name,
+		nameRoot: name.trim().split(".")[0],
+		filtersArray: hasFilters ? parts.slice(1) : [],
+		filters: hasFilters ? `| ${parts.slice(1).join(" | ")}` : "",
+	};
 }

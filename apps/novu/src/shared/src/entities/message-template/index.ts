@@ -1,1 +1,1 @@
-export * from './message-template.interface';
+export * from "./message-template.interface";

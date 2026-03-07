@@ -1,71 +1,70 @@
-
-import type { BlockItem } from './types';
 import {
-  ArrowsVertical,
-  Columns,
-  Minus,
-  Rectangle,
-  Repeat,
-} from '@phosphor-icons/react';
+	ArrowsVertical,
+	Columns,
+	Minus,
+	Rectangle,
+	Repeat,
+} from "@phosphor-icons/react";
+import type { BlockItem } from "./types";
 
 export const columns: BlockItem = {
-  title: 'Columns',
-  description: 'Add columns to email.',
-  searchTerms: ['layout', 'columns'],
-  icon: <Columns className="mly-h-4 mly-w-4" />,
-  command: ({ editor, range }) => {
-    editor
-      .chain()
-      .focus()
-      .deleteRange(range)
-      .setColumns()
-      .focus(editor.state.selection.head - 2)
-      .run();
-  },
+	title: "Columns",
+	description: "Add columns to email.",
+	searchTerms: ["layout", "columns"],
+	icon: <Columns className="mly-h-4 mly-w-4" />,
+	command: ({ editor, range }) => {
+		editor
+			.chain()
+			.focus()
+			.deleteRange(range)
+			.setColumns()
+			.focus(editor.state.selection.head - 2)
+			.run();
+	},
 };
 
 export const section: BlockItem = {
-  title: 'Section',
-  description: 'Add a section to email.',
-  searchTerms: ['layout', 'section'],
-  icon: <Rectangle className="mly-h-4 mly-w-4" />,
-  command: ({ editor, range }) => {
-    editor.chain().focus().deleteRange(range).setSection().run();
-  },
+	title: "Section",
+	description: "Add a section to email.",
+	searchTerms: ["layout", "section"],
+	icon: <Rectangle className="mly-h-4 mly-w-4" />,
+	command: ({ editor, range }) => {
+		editor.chain().focus().deleteRange(range).setSection().run();
+	},
 };
 
 export const repeat: BlockItem = {
-  title: 'Repeat',
-  description: 'Loop over an array of items.',
-  searchTerms: ['repeat', 'for', 'loop'],
-  icon: <Repeat className="mly-h-4 mly-w-4" />,
-  command: ({ editor, range }) => {
-    editor.chain().focus().deleteRange(range).setRepeat().run();
-  },
+	title: "Repeat",
+	description: "Loop over an array of items.",
+	searchTerms: ["repeat", "for", "loop"],
+	icon: <Repeat className="mly-h-4 mly-w-4" />,
+	command: ({ editor, range }) => {
+		editor.chain().focus().deleteRange(range).setRepeat().run();
+	},
 };
 
 export const spacer: BlockItem = {
-  title: 'Spacer',
-  description: 'Add space between blocks.',
-  searchTerms: ['space', 'gap', 'divider'],
-  icon: <ArrowsVertical className="mly-h-4 mly-w-4" />,
-  command: ({ editor, range }) => {
-    editor
-      .chain()
-      .focus()
-      .deleteRange(range)
-      // @ts-expect-error
-      .setSpacer({ height: 'sm' })
-      .run();
-  },
+	title: "Spacer",
+	description: "Add space between blocks.",
+	searchTerms: ["space", "gap", "divider"],
+	icon: <ArrowsVertical className="mly-h-4 mly-w-4" />,
+	command: ({ editor, range }) => {
+		editor
+			.chain()
+			.focus()
+			.deleteRange(range)
+			// @ts-expect-error
+			.setSpacer({ height: "sm" })
+			.run();
+	},
 };
 
 export const divider: BlockItem = {
-  title: 'Divider',
-  description: 'Add a horizontal divider.',
-  searchTerms: ['divider', 'line'],
-  icon: <Minus className="mly-h-4 mly-w-4" />,
-  command: ({ editor, range }) => {
-    editor.chain().focus().deleteRange(range).setHorizontalRule().run();
-  },
+	title: "Divider",
+	description: "Add a horizontal divider.",
+	searchTerms: ["divider", "line"],
+	icon: <Minus className="mly-h-4 mly-w-4" />,
+	command: ({ editor, range }) => {
+		editor.chain().focus().deleteRange(range).setHorizontalRule().run();
+	},
 };

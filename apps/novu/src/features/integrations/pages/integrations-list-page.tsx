@@ -1,52 +1,66 @@
-import { PermissionsEnum } from '@novu/shared';
-import { useCallback } from 'react';
-import { Outlet, useNavigate } from 'react-router-dom';
-import { PermissionButton } from '@/components/primitives/permission-button';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@merge-rd/ui/components/tabs';
-import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/primitives/tooltip';
-import { buildRoute, ROUTES } from '@/utils/routes';
-import { useSetPageHeader } from '@/context/page-header';
-import { IntegrationsList } from '../components/integrations/components/integrations-list';
-import { TableIntegration } from '../components/integrations/types';
-import { Badge } from '@/components/primitives/badge';
+import {
+	Tabs,
+	TabsContent,
+	TabsList,
+	TabsTrigger,
+} from "@merge-rd/ui/components/tabs";
+import { PermissionsEnum } from "@novu/shared";
+import { useCallback } from "react";
+import { Outlet, useNavigate } from "react-router-dom";
+import { PermissionButton } from "@/components/primitives/permission-button";
+import { useSetPageHeader } from "@/context/page-header";
+import { IntegrationsList } from "@/features/integrations/components/integrations-list";
+import type { TableIntegration } from "@/features/integrations/components/types";
+import { buildRoute, ROUTES } from "@/utils/routes";
 
 export function IntegrationsListPage() {
-  useSetPageHeader(<h1 className="text-foreground-950 flex items-center gap-1">Integration Store</h1>);
-  const navigate = useNavigate();
+	useSetPageHeader(
+		<h1 className="text-foreground-950 flex items-center gap-1">
+			Integration Store
+		</h1>,
+	);
+	const navigate = useNavigate();
 
-  const onItemClick = (item: TableIntegration) => {
-    navigate(buildRoute(ROUTES.INTEGRATIONS_UPDATE, { integrationId: item.integrationId }));
-  };
+	const onItemClick = (item: TableIntegration) => {
+		navigate(
+			buildRoute(ROUTES.INTEGRATIONS_UPDATE, {
+				integrationId: item.integrationId,
+			}),
+		);
+	};
 
-  const onAddIntegrationClickCallback = useCallback(() => {
-    navigate(ROUTES.INTEGRATIONS_CONNECT);
-  }, [navigate]);
+	const onAddIntegrationClickCallback = useCallback(() => {
+		navigate(ROUTES.INTEGRATIONS_CONNECT);
+	}, [navigate]);
 
-  return (
-    <>
-      <Tabs defaultValue="providers" className="-mx-2">
-        <div className="border-neutral-alpha-200 flex items-center justify-between border-b">
-          <TabsList variant="regular" className="border-b-0 border-transparent p-0 px-2!">
-            <TabsTrigger value="providers" variant="regular" size="xl">
-              Providers
-            </TabsTrigger>
-          </TabsList>
-          <PermissionButton
-            permission={PermissionsEnum.INTEGRATION_WRITE}
-            size="xs"
-            variant="primary"
-            mode="gradient"
-            onClick={onAddIntegrationClickCallback}
-            className="mr-2.5"
-          >
-            Connect Provider
-          </PermissionButton>
-        </div>
-        <TabsContent value="providers" className="mt-0! p-2.5">
-          <IntegrationsList onItemClick={onItemClick} />
-        </TabsContent>
-      </Tabs>
-      <Outlet />
-    </>
-  );
+	return (
+		<>
+			<Tabs defaultValue="providers" className="-mx-2">
+				<div className="border-neutral-alpha-200 flex items-center justify-between border-b">
+					<TabsList
+						variant="regular"
+						className="border-b-0 border-transparent p-0 px-2!"
+					>
+						<TabsTrigger value="providers" variant="regular" size="xl">
+							Providers
+						</TabsTrigger>
+					</TabsList>
+					<PermissionButton
+						permission={PermissionsEnum.INTEGRATION_WRITE}
+						size="xs"
+						variant="primary"
+						mode="gradient"
+						onClick={onAddIntegrationClickCallback}
+						className="mr-2.5"
+					>
+						Connect Provider
+					</PermissionButton>
+				</div>
+				<TabsContent value="providers" className="mt-0! p-2.5">
+					<IntegrationsList onItemClick={onItemClick} />
+				</TabsContent>
+			</Tabs>
+			<Outlet />
+		</>
+	);
 }

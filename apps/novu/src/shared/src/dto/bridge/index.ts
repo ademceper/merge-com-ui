@@ -1,1 +1,1 @@
-export * from './bridge.interface';
+export * from "./bridge.interface";

@@ -1,11 +1,11 @@
 type Link = {
-  text: string;
-  url: string;
+	text: string;
+	url: string;
 };
 
 type DescriptionWithLinksProps = {
-  description: string;
-  links?: Link[];
+	description: string;
+	links?: Link[];
 };
 
 /**
@@ -28,22 +28,25 @@ type DescriptionWithLinksProps = {
  *   ]}
  * />
  */
-export function DescriptionWithLinks({ description, links }: DescriptionWithLinksProps) {
-  if (!links || links.length === 0) {
-    return <span>{description}</span>;
-  }
+export function DescriptionWithLinks({
+	description,
+	links,
+}: DescriptionWithLinksProps) {
+	if (!links || links.length === 0) {
+		return <span>{description}</span>;
+	}
 
-  // Filter and sort valid links by their position in the description
-  const validLinks = links
-    .map((link) => ({ ...link, position: description.indexOf(link.text) }))
-    .filter((link) => link.position !== -1)
-    .sort((a, b) => a.position - b.position);
+	// Filter and sort valid links by their position in the description
+	const validLinks = links
+		.map((link) => ({ ...link, position: description.indexOf(link.text) }))
+		.filter((link) => link.position !== -1)
+		.sort((a, b) => a.position - b.position);
 
-  if (validLinks.length === 0) {
-    return <span>{description}</span>;
-  }
+	if (validLinks.length === 0) {
+		return <span>{description}</span>;
+	}
 
-  return <span>{processTextWithLinks(description, validLinks)}</span>;
+	return <span>{processTextWithLinks(description, validLinks)}</span>;
 }
 
 /**
@@ -56,44 +59,48 @@ export function DescriptionWithLinks({ description, links }: DescriptionWithLink
  * @returns Array of text strings and link elements
  */
 function processTextWithLinks(
-  text: string,
-  remainingLinks: Array<Link & { position: number }>,
-  keyPrefix: string = 'link'
+	text: string,
+	remainingLinks: Array<Link & { position: number }>,
+	keyPrefix: string = "link",
 ): (string | React.ReactElement)[] {
-  if (remainingLinks.length === 0 || !text) {
-    return text ? [text] : [];
-  }
+	if (remainingLinks.length === 0 || !text) {
+		return text ? [text] : [];
+	}
 
-  const [firstLink, ...restLinks] = remainingLinks;
-  const linkPosition = text.indexOf(firstLink.text);
+	const [firstLink, ...restLinks] = remainingLinks;
+	const linkPosition = text.indexOf(firstLink.text);
 
-  if (linkPosition === -1) {
-    // Link not found in current text, process remaining links
-    return processTextWithLinks(text, restLinks, keyPrefix);
-  }
+	if (linkPosition === -1) {
+		// Link not found in current text, process remaining links
+		return processTextWithLinks(text, restLinks, keyPrefix);
+	}
 
-  const beforeLink = text.slice(0, linkPosition);
-  const afterLink = text.slice(linkPosition + firstLink.text.length);
+	const beforeLink = text.slice(0, linkPosition);
+	const afterLink = text.slice(linkPosition + firstLink.text.length);
 
-  // Update positions for remaining links since we're working with a substring
-  const updatedRestLinks = restLinks
-    .map((link) => ({
-      ...link,
-      position: link.position - (linkPosition + firstLink.text.length),
-    }))
-    .filter((link) => link.position >= 0);
+	// Update positions for remaining links since we're working with a substring
+	const updatedRestLinks = restLinks
+		.map((link) => ({
+			...link,
+			position: link.position - (linkPosition + firstLink.text.length),
+		}))
+		.filter((link) => link.position >= 0);
 
-  return [
-    ...(beforeLink ? [beforeLink] : []),
-    <a
-      key={`${keyPrefix}-${linkPosition}`}
-      href={firstLink.url}
-      target="_blank"
-      rel="noopener noreferrer"
-      className="text-blue-600 underline hover:text-blue-800"
-    >
-      {firstLink.text}
-    </a>,
-    ...processTextWithLinks(afterLink, updatedRestLinks, `${keyPrefix}-${linkPosition}`),
-  ];
+	return [
+		...(beforeLink ? [beforeLink] : []),
+		<a
+			key={`${keyPrefix}-${linkPosition}`}
+			href={firstLink.url}
+			target="_blank"
+			rel="noopener noreferrer"
+			className="text-blue-600 underline hover:text-blue-800"
+		>
+			{firstLink.text}
+		</a>,
+		...processTextWithLinks(
+			afterLink,
+			updatedRestLinks,
+			`${keyPrefix}-${linkPosition}`,
+		),
+	];
 }

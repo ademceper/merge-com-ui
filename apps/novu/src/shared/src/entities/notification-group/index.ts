@@ -1,1 +1,1 @@
-export * from './notification-group.interface';
+export * from "./notification-group.interface";

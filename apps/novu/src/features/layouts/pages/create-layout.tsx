@@ -1,5 +1,5 @@
-import { NewLayoutDrawer } from '@/pages/new-layout-drawer';
+import { NewLayoutDrawer } from "@/features/layouts/pages/new-layout-drawer";
 
 export function CreateLayoutPage() {
-  return <NewLayoutDrawer mode="create" />;
+	return <NewLayoutDrawer mode="create" />;
 }

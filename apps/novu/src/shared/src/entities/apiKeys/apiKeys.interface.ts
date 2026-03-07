@@ -1,5 +1,5 @@
 export interface IApiKey {
-  key: string;
-  _userId: string;
-  hash?: string;
+	key: string;
+	_userId: string;
+	hash?: string;
 }

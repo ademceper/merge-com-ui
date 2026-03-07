@@ -1,34 +1,42 @@
-import { ChannelTypeEnum, type GeneratePreviewResponseDto, SmsRenderOutput } from '@novu/shared';
-import { ReactNode } from 'react';
-import { SmsPhone } from '@/components/workflow-editor/steps/sms/sms-phone';
+import {
+	ChannelTypeEnum,
+	type GeneratePreviewResponseDto,
+	type SmsRenderOutput,
+} from "@novu/shared";
+import type { ReactNode } from "react";
+import { SmsPhone } from "@/features/workflows/components/workflow-editor/steps/sms/sms-phone";
 
 const SmsPreviewContainer = ({ children }: { children: ReactNode }) => {
-  return <div className="flex items-center justify-center">{children}</div>;
+	return <div className="flex items-center justify-center">{children}</div>;
 };
 
 export const SmsPreview = ({
-  isPreviewPending,
-  previewData,
+	isPreviewPending,
+	previewData,
 }: {
-  isPreviewPending: boolean;
-  previewData?: GeneratePreviewResponseDto;
+	isPreviewPending: boolean;
+	previewData?: GeneratePreviewResponseDto;
 }) => {
-  const previewResult = previewData?.result;
-  const isValidSmsPreview =
-    previewResult && previewResult.type === ChannelTypeEnum.SMS && previewResult.preview.body.length > 0;
-  const body = isValidSmsPreview ? ((previewData?.result.preview as SmsRenderOutput)?.body ?? '') : '';
+	const previewResult = previewData?.result;
+	const isValidSmsPreview =
+		previewResult &&
+		previewResult.type === ChannelTypeEnum.SMS &&
+		previewResult.preview.body.length > 0;
+	const body = isValidSmsPreview
+		? ((previewData?.result.preview as SmsRenderOutput)?.body ?? "")
+		: "";
 
-  if (isPreviewPending || previewData === undefined) {
-    return (
-      <SmsPreviewContainer>
-        <SmsPhone smsBody="" isLoading={isPreviewPending} />
-      </SmsPreviewContainer>
-    );
-  }
+	if (isPreviewPending || previewData === undefined) {
+		return (
+			<SmsPreviewContainer>
+				<SmsPhone smsBody="" isLoading={isPreviewPending} />
+			</SmsPreviewContainer>
+		);
+	}
 
-  return (
-    <SmsPreviewContainer>
-      <SmsPhone smsBody={body} />
-    </SmsPreviewContainer>
-  );
+	return (
+		<SmsPreviewContainer>
+			<SmsPhone smsBody={body} />
+		</SmsPreviewContainer>
+	);
 };

@@ -1,10 +1,10 @@
-import { AnimatedOutlet } from '@/components/animated-outlet';
-import { EnvironmentProvider } from '../context/environment/environment-provider';
+import { AnimatedOutlet } from "@/components/animated-outlet";
+import { EnvironmentProvider } from "../context/environment/environment-provider";
 
 export const OnboardingParentRoute = () => {
-  return (
-    <EnvironmentProvider>
-      <AnimatedOutlet />
-    </EnvironmentProvider>
-  );
+	return (
+		<EnvironmentProvider>
+			<AnimatedOutlet />
+		</EnvironmentProvider>
+	);
 };

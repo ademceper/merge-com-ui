@@ -1,24 +1,24 @@
-import { ChannelTypeEnum } from './channel';
-import { EnvironmentId } from './environment';
-import { OrganizationId } from './organization';
-import { ProvidersIdEnum } from './providers';
+import type { ChannelTypeEnum } from "./channel";
+import type { EnvironmentId } from "./environment";
+import type { OrganizationId } from "./organization";
+import type { ProvidersIdEnum } from "./providers";
 
 export type ChannelConnection = {
-  _id: string;
-  identifier: string;
+	_id: string;
+	identifier: string;
 
-  _organizationId: OrganizationId;
-  _environmentId: EnvironmentId;
+	_organizationId: OrganizationId;
+	_environmentId: EnvironmentId;
 
-  integrationIdentifier: string;
-  providerId: ProvidersIdEnum;
-  channel: ChannelTypeEnum;
-  subscriberId?: string;
-  contextKeys: string[];
+	integrationIdentifier: string;
+	providerId: ProvidersIdEnum;
+	channel: ChannelTypeEnum;
+	subscriberId?: string;
+	contextKeys: string[];
 
-  workspace: { id: string; name?: string };
-  auth: { accessToken: string };
+	workspace: { id: string; name?: string };
+	auth: { accessToken: string };
 
-  createdAt: string;
-  updatedAt: string;
+	createdAt: string;
+	updatedAt: string;
 };

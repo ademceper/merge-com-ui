@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState } from "react";
 
 /**
  * A hook that delays showing loading state for a specified duration.
@@ -10,19 +10,19 @@ import { useEffect, useState } from 'react';
  * @returns boolean indicating whether to show the loading skeleton
  */
 export function useDelayedLoading(isLoading: boolean, delay: number = 800) {
-  const [showSkeleton, setShowSkeleton] = useState(false);
+	const [showSkeleton, setShowSkeleton] = useState(false);
 
-  useEffect(() => {
-    if (isLoading) {
-      const timer = setTimeout(() => {
-        setShowSkeleton(true);
-      }, delay);
+	useEffect(() => {
+		if (isLoading) {
+			const timer = setTimeout(() => {
+				setShowSkeleton(true);
+			}, delay);
 
-      return () => clearTimeout(timer);
-    } else {
-      setShowSkeleton(false);
-    }
-  }, [isLoading, delay]);
+			return () => clearTimeout(timer);
+		} else {
+			setShowSkeleton(false);
+		}
+	}, [isLoading, delay]);
 
-  return showSkeleton;
+	return showSkeleton;
 }

@@ -1,13 +1,13 @@
-import { ChannelTypeEnum } from '../../../types';
+import type { ChannelTypeEnum } from "../../../types";
 
 export interface IUpdateSubscriberPreferenceDto {
-  channel?: IChannelPreference;
+	channel?: IChannelPreference;
 
-  enabled?: boolean;
+	enabled?: boolean;
 }
 
 export interface IChannelPreference {
-  type: ChannelTypeEnum;
+	type: ChannelTypeEnum;
 
-  enabled: boolean;
+	enabled: boolean;
 }

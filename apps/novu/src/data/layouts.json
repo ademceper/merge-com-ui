@@ -1,46 +1,46 @@
 {
-  "data": {
-    "layouts": [
-      {
-        "_id": "lay_001",
-        "layoutId": "default-layout",
-        "slug": "default-layout_lay_001",
-        "name": "Default Email Layout",
-        "isDefault": true,
-        "updatedAt": "2026-03-05T10:00:00.000Z",
-        "createdAt": "2026-01-05T08:00:00.000Z",
-        "origin": "novu-cloud",
-        "type": "REGULAR",
-        "isTranslationEnabled": false,
-        "controls": { "schema": { "type": "object", "properties": {} } }
-      },
-      {
-        "_id": "lay_002",
-        "layoutId": "marketing-layout",
-        "slug": "marketing-layout_lay_002",
-        "name": "Marketing Campaign Layout",
-        "isDefault": false,
-        "updatedAt": "2026-03-01T14:00:00.000Z",
-        "createdAt": "2026-02-10T11:00:00.000Z",
-        "origin": "novu-cloud",
-        "type": "REGULAR",
-        "isTranslationEnabled": true,
-        "controls": { "schema": { "type": "object", "properties": {} } }
-      },
-      {
-        "_id": "lay_003",
-        "layoutId": "transactional-layout",
-        "slug": "transactional-layout_lay_003",
-        "name": "Transactional Email Layout",
-        "isDefault": false,
-        "updatedAt": "2026-02-25T09:30:00.000Z",
-        "createdAt": "2026-02-01T10:00:00.000Z",
-        "origin": "novu-cloud",
-        "type": "REGULAR",
-        "isTranslationEnabled": false,
-        "controls": { "schema": { "type": "object", "properties": {} } }
-      }
-    ],
-    "totalCount": 3
-  }
+	"data": {
+		"layouts": [
+			{
+				"_id": "lay_001",
+				"layoutId": "default-layout",
+				"slug": "default-layout_lay_001",
+				"name": "Default Email Layout",
+				"isDefault": true,
+				"updatedAt": "2026-03-05T10:00:00.000Z",
+				"createdAt": "2026-01-05T08:00:00.000Z",
+				"origin": "novu-cloud",
+				"type": "REGULAR",
+				"isTranslationEnabled": false,
+				"controls": { "schema": { "type": "object", "properties": {} } }
+			},
+			{
+				"_id": "lay_002",
+				"layoutId": "marketing-layout",
+				"slug": "marketing-layout_lay_002",
+				"name": "Marketing Campaign Layout",
+				"isDefault": false,
+				"updatedAt": "2026-03-01T14:00:00.000Z",
+				"createdAt": "2026-02-10T11:00:00.000Z",
+				"origin": "novu-cloud",
+				"type": "REGULAR",
+				"isTranslationEnabled": true,
+				"controls": { "schema": { "type": "object", "properties": {} } }
+			},
+			{
+				"_id": "lay_003",
+				"layoutId": "transactional-layout",
+				"slug": "transactional-layout_lay_003",
+				"name": "Transactional Email Layout",
+				"isDefault": false,
+				"updatedAt": "2026-02-25T09:30:00.000Z",
+				"createdAt": "2026-02-01T10:00:00.000Z",
+				"origin": "novu-cloud",
+				"type": "REGULAR",
+				"isTranslationEnabled": false,
+				"controls": { "schema": { "type": "object", "properties": {} } }
+			}
+		],
+		"totalCount": 3
+	}
 }

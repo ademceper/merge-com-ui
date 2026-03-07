@@ -1,23 +1,23 @@
-import { CustomDataType } from '../../types';
-import { NotificationStepDto } from './workflow-deprecated.dto';
+import type { CustomDataType } from "../../types";
+import type { NotificationStepDto } from "./workflow-deprecated.dto";
 
 /**
  * @deprecated use UpdateWorkflowDto instead
  */
 export interface IUpdateWorkflowDto {
-  name?: string;
+	name?: string;
 
-  tags?: string[];
+	tags?: string[];
 
-  description?: string;
+	description?: string;
 
-  identifier?: string;
+	identifier?: string;
 
-  critical?: boolean;
+	critical?: boolean;
 
-  steps?: NotificationStepDto[];
+	steps?: NotificationStepDto[];
 
-  notificationGroupId?: string;
+	notificationGroupId?: string;
 
-  data?: CustomDataType;
+	data?: CustomDataType;
 }

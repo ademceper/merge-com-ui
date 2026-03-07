@@ -1,14 +1,13 @@
-import { useOrganization, useUser } from '@merge-rd/auth';
+import { useOrganization, useOrganization, useUser, useUser } from '@merge-rd/auth';
 import type { IEnvironment } from '@novu/shared';
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { AnimatedPage } from '@/components/onboarding/animated-page';
-import { AuthCard } from '../components/auth/auth-card';
-import { InboxPlayground } from '../components/auth/inbox-playground';
-import { PageMeta } from '../components/page-meta';
-import { useOrganization, useUser } from '@merge-rd/auth';
-import { useEnvironment, useFetchEnvironments } from '../context/environment/hooks';
-import { useTelemetry } from '../hooks/use-telemetry';
-import { TelemetryEvent } from '../utils/telemetry';
+import { AuthCard } from '@/components/auth/auth-card';
+import { InboxPlayground } from '@/components/auth/inbox-playground';
+import { PageMeta } from '@/components/page-meta';
+import { useEnvironment, useFetchEnvironments } from '@/context/environment/hooks';
+import { AnimatedPage } from '@/features/onboarding/components/animated-page';
+import { useTelemetry } from '@/hooks/use-telemetry';
+import { TelemetryEvent } from '@/utils/telemetry';
 
 interface RequiredData {
   appId: string;

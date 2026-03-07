@@ -1,1 +1,1 @@
-export * from './webhook-event.enum';
+export * from "./webhook-event.enum";

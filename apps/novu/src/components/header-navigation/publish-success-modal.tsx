@@ -1,97 +1,118 @@
-import type { IEnvironment } from '@novu/shared';
-
-import type { IEnvironmentPublishResponse } from '@/api/environments';
-import { useEnvironment } from '@/context/environment/hooks';
-import { Button } from '@merge-rd/ui/components/button';
-import { Dialog, DialogClose, DialogContent, DialogDescription, DialogTitle } from '@merge-rd/ui/components/dialog';
-import { VisuallyHidden } from '../primitives/visually-hidden';
-import { CaretRight, CheckCircle, X } from '@phosphor-icons/react';
+import { Button } from "@merge-rd/ui/components/button";
+import {
+	Dialog,
+	DialogClose,
+	DialogContent,
+	DialogDescription,
+	DialogTitle,
+} from "@merge-rd/ui/components/dialog";
+import type { IEnvironment } from "@novu/shared";
+import { CaretRight, CheckCircle, X } from "@phosphor-icons/react";
+import type { IEnvironmentPublishResponse } from "@/api/environments";
+import { useEnvironment } from "@/context/environment/hooks";
+import { VisuallyHidden } from "../primitives/visually-hidden";
 
 type PublishSuccessModalProps = {
-  isOpen: boolean;
-  onClose: () => void;
-  environment: IEnvironment | null;
-  publishResult?: IEnvironmentPublishResponse;
-  onSwitchEnvironment?: () => void;
+	isOpen: boolean;
+	onClose: () => void;
+	environment: IEnvironment | null;
+	publishResult?: IEnvironmentPublishResponse;
+	onSwitchEnvironment?: () => void;
 };
 
 export function PublishSuccessModal({
-  isOpen,
-  onClose,
-  environment,
-  publishResult,
-  onSwitchEnvironment,
+	isOpen,
+	onClose,
+	environment,
+	publishResult,
+	onSwitchEnvironment,
 }: PublishSuccessModalProps) {
-  const { currentEnvironment } = useEnvironment();
+	const { currentEnvironment } = useEnvironment();
 
-  const workflowCount = publishResult?.results?.find((r) => r.resourceType === 'workflow')?.successful?.length || 0;
-  const layoutCount = publishResult?.results?.find((r) => r.resourceType === 'layout')?.successful?.length || 0;
-  const translationCount =
-    publishResult?.results?.find((r) => r.resourceType === 'translation')?.successful?.length || 0;
+	const workflowCount =
+		publishResult?.results?.find((r) => r.resourceType === "workflow")
+			?.successful?.length || 0;
+	const layoutCount =
+		publishResult?.results?.find((r) => r.resourceType === "layout")?.successful
+			?.length || 0;
+	const translationCount =
+		publishResult?.results?.find((r) => r.resourceType === "translation")
+			?.successful?.length || 0;
 
-  const buildSummaryText = () => {
-    const parts: string[] = [];
+	const buildSummaryText = () => {
+		const parts: string[] = [];
 
-    if (workflowCount > 0) {
-      parts.push(`${workflowCount} workflow${workflowCount !== 1 ? 's' : ''}`);
-    }
+		if (workflowCount > 0) {
+			parts.push(`${workflowCount} workflow${workflowCount !== 1 ? "s" : ""}`);
+		}
 
-    if (layoutCount > 0) {
-      parts.push(`${layoutCount} layout${layoutCount !== 1 ? 's' : ''}`);
-    }
+		if (layoutCount > 0) {
+			parts.push(`${layoutCount} layout${layoutCount !== 1 ? "s" : ""}`);
+		}
 
-    if (translationCount > 0) {
-      parts.push(`${translationCount} shared component${translationCount !== 1 ? 's' : ''}`);
-    }
+		if (translationCount > 0) {
+			parts.push(
+				`${translationCount} shared component${translationCount !== 1 ? "s" : ""}`,
+			);
+		}
 
-    if (parts.length === 0) return 'No items';
-    if (parts.length === 1) return parts[0];
-    if (parts.length === 2) return `${parts[0]} and ${parts[1]}`;
+		if (parts.length === 0) return "No items";
+		if (parts.length === 1) return parts[0];
+		if (parts.length === 2) return `${parts[0]} and ${parts[1]}`;
 
-    return `${parts.slice(0, -1).join(', ')}, and ${parts[parts.length - 1]}`;
-  };
+		return `${parts.slice(0, -1).join(", ")}, and ${parts[parts.length - 1]}`;
+	};
 
-  return (
-    <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="max-w-sm gap-4 p-4">
-        <VisuallyHidden>
-          <DialogTitle>Environment Published to {environment?.name}</DialogTitle>
-          <DialogDescription>
-            {buildSummaryText()} have been published to {environment?.name}.
-          </DialogDescription>
-        </VisuallyHidden>
-        <div className="flex items-start justify-between">
-          <div className="bg-success-lighter rounded-full p-2">
-            <CheckCircle weight="fill" className="text-success-base size-6" />
-          </div>
-          <DialogClose asChild>
-            <button className="opacity-70 transition-opacity hover:opacity-100">
-              <X weight="fill" className="size-4" />
-            </button>
-          </DialogClose>
-        </div>
+	return (
+		<Dialog open={isOpen} onOpenChange={onClose}>
+			<DialogContent className="max-w-sm gap-4 p-4">
+				<VisuallyHidden>
+					<DialogTitle>
+						Environment Published to {environment?.name}
+					</DialogTitle>
+					<DialogDescription>
+						{buildSummaryText()} have been published to {environment?.name}.
+					</DialogDescription>
+				</VisuallyHidden>
+				<div className="flex items-start justify-between">
+					<div className="bg-success-lighter rounded-full p-2">
+						<CheckCircle weight="fill" className="text-success-base size-6" />
+					</div>
+					<DialogClose asChild>
+						<button className="opacity-70 transition-opacity hover:opacity-100">
+							<X weight="fill" className="size-4" />
+						</button>
+					</DialogClose>
+				</div>
 
-        <div className="space-y-2">
-          <h2 className="text-label-sm text-text-strong font-medium">Environment Published to {environment?.name}</h2>
-          <p className="text-paragraph-xs text-text-soft">
-            <span className="text-text-sub font-medium">{buildSummaryText()}</span> in{' '}
-            <span className="text-text-sub font-medium">{currentEnvironment?.name?.toLowerCase()}</span> have been
-            Published to {environment?.name}.
-          </p>
-        </div>
+				<div className="space-y-2">
+					<h2 className="text-label-sm text-text-strong font-medium">
+						Environment Published to {environment?.name}
+					</h2>
+					<p className="text-paragraph-xs text-text-soft">
+						<span className="text-text-sub font-medium">
+							{buildSummaryText()}
+						</span>{" "}
+						in{" "}
+						<span className="text-text-sub font-medium">
+							{currentEnvironment?.name?.toLowerCase()}
+						</span>{" "}
+						have been Published to {environment?.name}.
+					</p>
+				</div>
 
-        <div className="flex justify-end">
-          <Button
-            variant="secondary"
-            mode="filled"
-            size="2xs"
-            onClick={onSwitchEnvironment}
-            trailingIcon={CaretRight}
-          >
-            Switch to {environment?.name}
-          </Button>
-        </div>
-      </DialogContent>
-    </Dialog>
-  );
+				<div className="flex justify-end">
+					<Button
+						variant="secondary"
+						mode="filled"
+						size="2xs"
+						onClick={onSwitchEnvironment}
+						trailingIcon={CaretRight}
+					>
+						Switch to {environment?.name}
+					</Button>
+				</div>
+			</DialogContent>
+		</Dialog>
+	);
 }
