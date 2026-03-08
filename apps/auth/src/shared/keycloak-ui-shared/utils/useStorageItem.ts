@@ -1,4 +1,4 @@
-import { Dispatch, useCallback, useEffect, useState } from "react";
+import { type Dispatch, useCallback, useEffect, useState } from "react";
 
 /**
  * A hook that allows you to get a specific item stored by the [Web Storage API](https://developer.mozilla.org/en-US/docs/Web/API/Web_Storage_API).

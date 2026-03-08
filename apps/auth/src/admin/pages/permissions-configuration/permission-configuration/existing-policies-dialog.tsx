@@ -1,7 +1,20 @@
-import PolicyRepresentation from "@keycloak/keycloak-admin-client/lib/defs/policyRepresentation";
-import { PolicyQuery } from "@keycloak/keycloak-admin-client/lib/resources/clients";
-import { useFetch } from "../../../../shared/keycloak-ui-shared";
-import { DataTable, type ColumnDef } from "@/admin/shared/ui/data-table";
+import type PolicyRepresentation from "@keycloak/keycloak-admin-client/lib/defs/policyRepresentation";
+import { useTranslation } from "@merge-rd/i18n";
+import { Button } from "@merge-rd/ui/components/button";
+import { Checkbox } from "@merge-rd/ui/components/checkbox";
+import {
+    Dialog,
+    DialogContent,
+    DialogFooter,
+    DialogHeader,
+    DialogTitle
+} from "@merge-rd/ui/components/dialog";
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuTrigger
+} from "@merge-rd/ui/components/dropdown-menu";
 import {
     Empty,
     EmptyContent,
@@ -9,17 +22,13 @@ import {
     EmptyHeader,
     EmptyTitle
 } from "@merge-rd/ui/components/empty";
-import { Button } from "@merge-rd/ui/components/button";
-import { Checkbox } from "@merge-rd/ui/components/checkbox";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@merge-rd/ui/components/dialog";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@merge-rd/ui/components/dropdown-menu";
-import { Funnel, CaretDown } from "@phosphor-icons/react";
-import { sortBy } from "lodash-es";
+import { CaretDown, Funnel } from "@phosphor-icons/react";
 import { useState } from "react";
-import { useTranslation } from "@merge-rd/i18n";
-import { useAdminClient } from "../../../app/admin-client";
-import { capitalizeFirstLetterFormatter } from "../../../shared/lib/util";
+import { type ColumnDef, DataTable } from "@/admin/shared/ui/data-table";
 import useToggle from "../../../shared/lib/useToggle";
+import { capitalizeFirstLetterFormatter } from "../../../shared/lib/util";
+import { usePoliciesList } from "../api/use-policies-list";
+import { usePolicyProviders } from "../api/use-policy-providers";
 
 type ExistingPoliciesDialogProps = {
     toggleDialog: () => void;
@@ -35,43 +44,12 @@ export const ExistingPoliciesDialog = ({
     permissionClientId
 }: ExistingPoliciesDialogProps) => {
     const { t } = useTranslation();
-    const { adminClient } = useAdminClient();
     const [rows, setRows] = useState<PolicyRepresentation[]>([]);
     const [filterType, setFilterType] = useState<string | undefined>(undefined);
     const [_isFilterTypeDropdownOpen, _toggleIsFilterTypeDropdownOpen] = useToggle();
-    const [providers, setProviders] = useState<string[]>([]);
 
-    useFetch(
-        () =>
-            adminClient.clients.listPolicyProviders({
-                id: permissionClientId!
-            }),
-        providers => {
-            const formattedProviders = providers
-                .filter(p => p.type !== "resource" && p.type !== "scope")
-                .map(provider => provider.name)
-                .filter(name => name !== undefined);
-            setProviders(sortBy(formattedProviders));
-        },
-        [permissionClientId]
-    );
-
-    const [policiesData, setPoliciesData] = useState<PolicyRepresentation[]>([]);
-
-    useFetch(
-        async () => {
-            const params: PolicyQuery = {
-                id: permissionClientId!,
-                permission: "false",
-                first: 0,
-                max: 500
-            };
-            if (filterType) params.type = filterType;
-            return (await adminClient.clients.listPolicies(params)) || [];
-        },
-        setPoliciesData,
-        [permissionClientId, filterType]
-    );
+    const { data: providers = [] } = usePolicyProviders(permissionClientId);
+    const { data: policiesData = [] } = usePoliciesList(permissionClientId, filterType);
 
     const columns: ColumnDef<PolicyRepresentation>[] = [
         {
@@ -92,14 +70,24 @@ export const ExistingPoliciesDialog = ({
             )
         },
         { accessorKey: "name", header: t("name") },
-        { accessorKey: "type", header: t("type"), cell: ({ getValue }) => capitalizeFirstLetterFormatter()(getValue()) },
+        {
+            accessorKey: "type",
+            header: t("type"),
+            cell: ({ getValue }) => capitalizeFirstLetterFormatter()(getValue())
+        },
         { accessorKey: "description", header: t("description") }
     ];
 
     const emptyContent = (
         <Empty className="py-12">
-            <EmptyHeader><EmptyTitle>{t("emptyAssignExistingPolicies")}</EmptyTitle></EmptyHeader>
-            <EmptyContent><EmptyDescription>{t("emptyAssignExistingPoliciesInstructions")}</EmptyDescription></EmptyContent>
+            <EmptyHeader>
+                <EmptyTitle>{t("emptyAssignExistingPolicies")}</EmptyTitle>
+            </EmptyHeader>
+            <EmptyContent>
+                <EmptyDescription>
+                    {t("emptyAssignExistingPoliciesInstructions")}
+                </EmptyDescription>
+            </EmptyContent>
         </Empty>
     );
 
@@ -120,16 +108,30 @@ export const ExistingPoliciesDialog = ({
                     toolbar={
                         <DropdownMenu>
                             <DropdownMenuTrigger asChild>
-                                <Button variant="outline" data-testid="filter-type-dropdown-existingPolicies">
+                                <Button
+                                    variant="outline"
+                                    data-testid="filter-type-dropdown-existingPolicies"
+                                >
                                     <Funnel className="size-4 mr-1" />
                                     {filterType ? filterType : t("allTypes")}
                                     <CaretDown className="size-4 ml-1" />
                                 </Button>
                             </DropdownMenuTrigger>
                             <DropdownMenuContent>
-                                <DropdownMenuItem data-testid="filter-type-dropdown-existingPolicies-all" onClick={() => setFilterType(undefined)}>{t("allTypes")}</DropdownMenuItem>
+                                <DropdownMenuItem
+                                    data-testid="filter-type-dropdown-existingPolicies-all"
+                                    onClick={() => setFilterType(undefined)}
+                                >
+                                    {t("allTypes")}
+                                </DropdownMenuItem>
                                 {providers.map(name => (
-                                    <DropdownMenuItem data-testid={`filter-type-dropdown-existingPolicies-${name}`} key={name} onClick={() => setFilterType(name)}>{name}</DropdownMenuItem>
+                                    <DropdownMenuItem
+                                        data-testid={`filter-type-dropdown-existingPolicies-${name}`}
+                                        key={name}
+                                        onClick={() => setFilterType(name)}
+                                    >
+                                        {name}
+                                    </DropdownMenuItem>
                                 ))}
                             </DropdownMenuContent>
                         </DropdownMenu>

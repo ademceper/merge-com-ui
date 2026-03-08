@@ -1,34 +1,42 @@
 import type PolicyRepresentation from "@keycloak/keycloak-admin-client/lib/defs/policyRepresentation";
 import { DecisionStrategy } from "@keycloak/keycloak-admin-client/lib/defs/policyRepresentation";
-import { getErrorDescription, getErrorMessage, FormErrorText,
-    HelpItem,
-    SelectVariant,
-    TextAreaControl,
-    TextControl,
-    useFetch } from "../../../../shared/keycloak-ui-shared";
-import { toast } from "sonner";
+import { useTranslation } from "@merge-rd/i18n";
 import { Button, buttonVariants } from "@merge-rd/ui/components/button";
-import { Switch } from "@merge-rd/ui/components/switch";
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuTrigger
+} from "@merge-rd/ui/components/dropdown-menu";
 import { Label } from "@merge-rd/ui/components/label";
 import { RadioGroup, RadioGroupItem } from "@merge-rd/ui/components/radio-group";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@merge-rd/ui/components/dropdown-menu";
-import { useState } from "react";
-import { Controller, FormProvider, useForm, useWatch } from "react-hook-form";
-import { useTranslation } from "@merge-rd/i18n";
+import { Switch } from "@merge-rd/ui/components/switch";
 import { Link, useNavigate } from "@tanstack/react-router";
+import { useEffect, useState } from "react";
+import { Controller, FormProvider, useForm, useWatch } from "react-hook-form";
+import { toast } from "sonner";
+import {
+    FormErrorText,
+    getErrorDescription,
+    getErrorMessage,
+    HelpItem,
+    KeycloakSpinner,
+    SelectVariant,
+    TextAreaControl,
+    TextControl
+} from "../../../../shared/keycloak-ui-shared";
 import { useAdminClient } from "../../../app/admin-client";
+import { useAccess } from "../../../app/providers/access/access";
+import { useParams } from "../../../shared/lib/useParams";
 import { useConfirmDialog } from "../../../shared/ui/confirm-dialog/confirm-dialog";
 import { FormAccess } from "../../../shared/ui/form/form-access";
-import { KeycloakSpinner } from "../../../../shared/keycloak-ui-shared";
-import { useAccess } from "../../../app/providers/access/access";
-import { toUpperCase } from "../../../shared/lib/util";
-import { useParams } from "../../../shared/lib/useParams";
-import { toAuthorizationTab } from "../routes/authentication-tab";
-import type { NewPermissionParams } from "../routes/new-permission";
+import { toAuthorizationTab } from "../../../shared/lib/routes/clients";
+import type { NewPermissionParams } from "../../../shared/lib/routes/clients";
 import {
-    PermissionDetailsParams,
+    type PermissionDetailsParams,
     toPermissionDetails
-} from "../routes/permission-details";
+} from "../../../shared/lib/routes/clients";
+import { usePermissionDetails as usePermissionDetailsQuery } from "./api/use-permission-details";
 import { ResourcesPolicySelect } from "./resources-policy-select";
 import { ScopeSelect } from "./scope-select";
 
@@ -55,59 +63,42 @@ export default function PermissionDetails() {
     const { id, realm, permissionType, permissionId, selectedId } = useParams<
         NewPermissionParams & PermissionDetailsParams
     >();
-const [permission, setPermission] = useState<PolicyRepresentation>();
+    const [permission, setPermission] = useState<PolicyRepresentation>();
     const [applyToResourceTypeFlag, setApplyToResourceTypeFlag] = useState(false);
     const { hasAccess } = useAccess();
 
     const isDisabled = !hasAccess("manage-authorization");
 
-    useFetch(
-        async () => {
-            if (!permissionId) {
-                return {};
-            }
-            const [permission, resources, policies, scopes] = await Promise.all([
-                adminClient.clients.findOnePermission({
-                    id,
-                    type: permissionType,
-                    permissionId
-                }),
-                adminClient.clients.getAssociatedResources({
-                    id,
-                    permissionId
-                }),
-                adminClient.clients.getAssociatedPolicies({
-                    id,
-                    permissionId
-                }),
-                adminClient.clients.getAssociatedScopes({
-                    id,
-                    permissionId
-                })
-            ]);
+    const { data: permDetailsData } = usePermissionDetailsQuery(
+        id,
+        permissionType,
+        permissionId
+    );
 
-            if (!permission) {
-                throw new Error(t("notFound"));
-            }
-
-            return {
-                permission,
-                resources: resources.map(r => r._id),
-                policies: policies.map(p => p.id!),
-                scopes: scopes.map(s => s.id!)
+    useEffect(() => {
+        if (permDetailsData) {
+            const {
+                permission: perm,
+                resources,
+                policies,
+                scopes
+            } = permDetailsData as {
+                permission?: PolicyRepresentation;
+                resources?: string[];
+                policies?: string[];
+                scopes?: string[];
             };
-        },
-        ({ permission, resources, policies, scopes }) => {
-            reset({ ...permission, resources, policies, scopes });
-            if (permission && "resourceType" in permission) {
+            reset({ ...perm, resources, policies, scopes });
+            if (perm && "resourceType" in perm) {
                 setApplyToResourceTypeFlag(
-                    !!(permission as { resourceType: string }).resourceType
+                    !!(perm as { resourceType: string }).resourceType
                 );
             }
-            setPermission({ ...permission, resources, policies });
-        },
-        []
-    );
+            setPermission({ ...perm, resources, policies });
+        } else if (!permissionId) {
+            setPermission({});
+        }
+    }, [permDetailsData]);
 
     const save = async (permission: PolicyRepresentation) => {
         try {
@@ -122,8 +113,8 @@ const [permission, setPermission] = useState<PolicyRepresentation>();
                     permission
                 );
                 setPermission(result);
-                navigate({ to:
-                    toPermissionDetails({
+                navigate({
+                    to: toPermissionDetails({
                         realm,
                         id,
                         permissionType,
@@ -131,11 +122,11 @@ const [permission, setPermission] = useState<PolicyRepresentation>();
                     }) as string
                 });
             }
-            toast.success(
-                t((permissionId ? "update" : "create") + "PermissionSuccess")
-            );
+            toast.success(t(`${permissionId ? "update" : "create"}PermissionSuccess`));
         } catch (error) {
-            toast.error(t("permissionSaveError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
+            toast.error(t("permissionSaveError", { error: getErrorMessage(error) }), {
+                description: getErrorDescription(error)
+            });
         }
     };
 
@@ -154,9 +145,18 @@ const [permission, setPermission] = useState<PolicyRepresentation>();
                     permissionId: permissionId
                 });
                 toast.success(t("permissionDeletedSuccess"));
-                navigate({ to: toAuthorizationTab({ realm, clientId: id, tab: "permissions" }) as string });
+                navigate({
+                    to: toAuthorizationTab({
+                        realm,
+                        clientId: id,
+                        tab: "permissions"
+                    }) as string
+                });
             } catch (error) {
-                toast.error(t("permissionDeletedError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
+                toast.error(
+                    t("permissionDeletedError", { error: getErrorMessage(error) }),
+                    { description: getErrorDescription(error) }
+                );
             }
         }
     });
@@ -179,7 +179,10 @@ const [permission, setPermission] = useState<PolicyRepresentation>();
                     <div className="flex flex-wrap items-center gap-2" />
                     <div className="flex items-center gap-2">
                         <DropdownMenu>
-                            <DropdownMenuTrigger data-testid="action-dropdown" className={buttonVariants()}>
+                            <DropdownMenuTrigger
+                                data-testid="action-dropdown"
+                                className={buttonVariants()}
+                            >
                                 {t("action")}
                             </DropdownMenuTrigger>
                             <DropdownMenuContent align="end">
@@ -244,7 +247,7 @@ const [permission, setPermission] = useState<PolicyRepresentation>();
                                 labelIcon={t("resourceTypeHelp")}
                                 rules={{
                                     required: {
-                                        value: permissionType === "scope" ? true : false,
+                                        value: permissionType === "scope",
                                         message: t("required")
                                     }
                                 }}
@@ -333,9 +336,18 @@ const [permission, setPermission] = useState<PolicyRepresentation>();
                                         className="flex flex-col gap-2"
                                     >
                                         {Object.values(DecisionStrategy).map(strategy => (
-                                            <div key={strategy} className="flex items-center gap-2" data-testid={strategy}>
-                                                <RadioGroupItem value={strategy} id={strategy} />
-                                                <Label htmlFor={strategy}>{t(`decisionStrategies.${strategy}`)}</Label>
+                                            <div
+                                                key={strategy}
+                                                className="flex items-center gap-2"
+                                                data-testid={strategy}
+                                            >
+                                                <RadioGroupItem
+                                                    value={strategy}
+                                                    id={strategy}
+                                                />
+                                                <Label htmlFor={strategy}>
+                                                    {t(`decisionStrategies.${strategy}`)}
+                                                </Label>
                                             </div>
                                         ))}
                                     </RadioGroup>
@@ -343,24 +355,19 @@ const [permission, setPermission] = useState<PolicyRepresentation>();
                             />
                         </div>
                         <div className="flex gap-2 mt-4">
-                            <Button
-                                type="submit"
-                                data-testid="save"
-                            >
+                            <Button type="submit" data-testid="save">
                                 {t("save")}
                             </Button>
 
-                            <Button
-                                variant="link"
-                                data-testid="cancel"
-                                asChild
-                            >
+                            <Button variant="link" data-testid="cancel" asChild>
                                 <Link
-                                    to={toAuthorizationTab({
-                                        realm,
-                                        clientId: id,
-                                        tab: "permissions"
-                                    }) as string}
+                                    to={
+                                        toAuthorizationTab({
+                                            realm,
+                                            clientId: id,
+                                            tab: "permissions"
+                                        }) as string
+                                    }
                                 >
                                     {t("cancel")}
                                 </Link>

@@ -1,7 +1,12 @@
 import { useTranslation } from "@merge-rd/i18n";
 import { Alert, AlertTitle } from "@merge-rd/ui/components/alert";
+import {
+    Dialog,
+    DialogContent,
+    DialogHeader,
+    DialogTitle
+} from "@merge-rd/ui/components/dialog";
 import { Label } from "@merge-rd/ui/components/label";
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@merge-rd/ui/components/dialog";
 
 type AccessTokenDialogProps = {
     token: string;
@@ -11,7 +16,12 @@ type AccessTokenDialogProps = {
 export const AccessTokenDialog = ({ token, toggleDialog }: AccessTokenDialogProps) => {
     const { t } = useTranslation();
     return (
-        <Dialog open={true} onOpenChange={(open) => { if (!open) toggleDialog(); }}>
+        <Dialog
+            open={true}
+            onOpenChange={open => {
+                if (!open) toggleDialog();
+            }}
+        >
             <DialogContent className="max-w-lg">
                 <DialogHeader>
                     <DialogTitle>{t("initialAccessTokenDetails")}</DialogTitle>

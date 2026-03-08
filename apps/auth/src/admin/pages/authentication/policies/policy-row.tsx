@@ -1,11 +1,11 @@
 import type PasswordPolicyTypeRepresentation from "@keycloak/keycloak-admin-client/lib/defs/passwordPolicyTypeRepresentation";
+import { useTranslation } from "@merge-rd/i18n";
 import { Button } from "@merge-rd/ui/components/button";
 import { Input } from "@merge-rd/ui/components/input";
 import { Label } from "@merge-rd/ui/components/label";
 import { Switch } from "@merge-rd/ui/components/switch";
 import { MinusCircle } from "@phosphor-icons/react";
 import { Controller, useFormContext } from "react-hook-form";
-import { useTranslation } from "@merge-rd/i18n";
 import { FormErrorText, HelpItem } from "../../../../shared/keycloak-ui-shared";
 
 type PolicyRowProps = {
@@ -46,7 +46,7 @@ export const PolicyRow = ({
                     {configType === "int" && (
                         <Controller
                             name={id!}
-                            defaultValue={Number.parseInt(defaultValue || "0")}
+                            defaultValue={Number.parseInt(defaultValue || "0", 10)}
                             control={control}
                             render={({ field }) => {
                                 const MIN_VALUE = 0;
@@ -62,7 +62,9 @@ export const PolicyRow = ({
                                         value={value}
                                         onChange={e => {
                                             const newValue = Number(e.target.value);
-                                            setValue(!isNaN(newValue) ? newValue : 0);
+                                            setValue(
+                                                !Number.isNaN(newValue) ? newValue : 0
+                                            );
                                         }}
                                         className="keycloak__policies_authentication__number-field"
                                     />
@@ -71,12 +73,7 @@ export const PolicyRow = ({
                         />
                     )}
                     {!configType && (
-                        <Switch
-                            id={id!}
-                            checked
-                            disabled
-                            aria-label={displayName}
-                        />
+                        <Switch id={id!} checked disabled aria-label={displayName} />
                     )}
                 </div>
                 <Button

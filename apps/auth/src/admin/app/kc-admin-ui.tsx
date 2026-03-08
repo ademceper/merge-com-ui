@@ -1,9 +1,8 @@
+import { createHashHistory, createRouter, RouterProvider } from "@tanstack/react-router";
 import { useEffect, useReducer } from "react";
-import { startColorSchemeManagement } from "./colorScheme";
-import { createRouter, RouterProvider } from "@tanstack/react-router";
-import { createHashHistory } from "@tanstack/react-router";
-import { i18n } from "./i18n";
 import { routeTree } from "../routeTree.gen";
+import { startColorSchemeManagement } from "./colorScheme";
+import { i18n } from "./i18n";
 
 document.title = "Merge Administration Console";
 
@@ -11,8 +10,9 @@ const hashHistory = createHashHistory();
 const router = createRouter({
     routeTree,
     history: hashHistory,
+    defaultPreload: "intent",
+    defaultPreloadStaleTime: 0
 });
-
 
 const prI18nInitialized = i18n.init();
 startColorSchemeManagement();

@@ -5,7 +5,10 @@ export const KeycloakSpinner = () => {
     const { t } = useTranslation();
 
     return (
-        <div className="flex min-h-[200px] items-center justify-center" aria-label={t("spinnerLoading")}>
+        <div
+            className="flex min-h-[200px] items-center justify-center"
+            aria-label={t("spinnerLoading")}
+        >
             <Spinner className="size-8" />
         </div>
     );

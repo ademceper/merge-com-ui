@@ -1,10 +1,5 @@
-import { createFileRoute } from "@tanstack/react-router";
-import { lazy } from "react";
-
-const UsersSection = lazy(
-    () => import("../../../../pages/user/users-section"),
-);
+import { createFileRoute, lazyRouteComponent } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/_app/$realm/users/")({
-    component: UsersSection,
+    component: lazyRouteComponent(() => import("../../../../pages/user/users-section")),
 });

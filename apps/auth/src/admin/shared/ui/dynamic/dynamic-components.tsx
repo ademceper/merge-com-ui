@@ -1,7 +1,10 @@
 import type { ConfigPropertyRepresentation } from "@keycloak/keycloak-admin-client/lib/defs/authenticatorConfigInfoRepresentation";
-
-import { COMPONENTS, type ComponentLayoutOptions, isValidComponentType } from "./components";
 import { convertAttributeNameToForm } from "../../lib/util";
+import {
+    COMPONENTS,
+    type ComponentLayoutOptions,
+    isValidComponentType
+} from "./components";
 
 /** Layout overrides by component type (e.g. all List/MultivaluedList/boolean get same layout). */
 type LayoutOverridesByType = Partial<Record<string, ComponentLayoutOptions>>;
@@ -31,7 +34,7 @@ export const DynamicComponents = ({
                 const Component = COMPONENTS[componentType];
                 const options: ComponentLayoutOptions = {
                     ...layoutOverridesByType?.[componentType],
-                    ...layoutOverrides?.[property.name!],
+                    ...layoutOverrides?.[property.name!]
                 };
                 return (
                     <Component

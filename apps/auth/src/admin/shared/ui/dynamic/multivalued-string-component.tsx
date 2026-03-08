@@ -1,6 +1,6 @@
-import { HelpItem } from "../../../../shared/keycloak-ui-shared";
-import { Label } from "@merge-rd/ui/components/label";
 import { useTranslation } from "@merge-rd/i18n";
+import { Label } from "@merge-rd/ui/components/label";
+import { HelpItem } from "../../../../shared/keycloak-ui-shared";
 import { MultiLineInput } from "../multi-line-input/multi-line-input";
 import type { ComponentProps } from "./components";
 
@@ -18,7 +18,7 @@ export const MultiValuedStringComponent = ({
     isDisabled = false,
     convertToName,
     hideLabel = false,
-    helpIconAfterControl = false,
+    helpIconAfterControl = false
 }: ComponentProps) => {
     const { t } = useTranslation();
     const fieldName = convertToName(name!);
@@ -27,7 +27,10 @@ export const MultiValuedStringComponent = ({
         <div className="space-y-2">
             {!hideLabel && (
                 <div className="flex items-center gap-1">
-                    <Label htmlFor={name!}>{t(label!)}{required && " *"}</Label>
+                    <Label htmlFor={name!}>
+                        {t(label!)}
+                        {required && " *"}
+                    </Label>
                     {!helpIconAfterControl && (
                         <HelpItem helpText={t(helpText!)} fieldLabelId={`${label}`} />
                     )}

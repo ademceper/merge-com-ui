@@ -5,11 +5,11 @@ import type {
     PartialImportResult
 } from "@keycloak/keycloak-admin-client/lib/defs/realmRepresentation";
 import type RoleRepresentation from "@keycloak/keycloak-admin-client/lib/defs/roleRepresentation";
+import { useTranslation } from "@merge-rd/i18n";
+import { Alert, AlertTitle } from "@merge-rd/ui/components/alert";
+import { Badge } from "@merge-rd/ui/components/badge";
 import { Button } from "@merge-rd/ui/components/button";
 import { Checkbox } from "@merge-rd/ui/components/checkbox";
-import { Badge } from "@merge-rd/ui/components/badge";
-import { Separator } from "@merge-rd/ui/components/separator";
-import { Label } from "@merge-rd/ui/components/label";
 import {
     Dialog,
     DialogContent,
@@ -17,10 +17,7 @@ import {
     DialogHeader,
     DialogTitle
 } from "@merge-rd/ui/components/dialog";
-import {
-    Alert,
-    AlertTitle
-} from "@merge-rd/ui/components/alert";
+import { Label } from "@merge-rd/ui/components/label";
 import {
     Select,
     SelectContent,
@@ -28,14 +25,14 @@ import {
     SelectTrigger,
     SelectValue
 } from "@merge-rd/ui/components/select";
+import { Separator } from "@merge-rd/ui/components/separator";
 import { useEffect, useState } from "react";
-import { useTranslation } from "@merge-rd/i18n";
-import { useAdminClient } from "../../app/admin-client";
-import { getErrorDescription, getErrorMessage } from "../../../shared/keycloak-ui-shared";
 import { toast } from "sonner";
-import { JsonFileUpload } from "../../shared/ui/json-file-upload/json-file-upload";
-import { DataTable, type ColumnDef } from "@/admin/shared/ui/data-table";
+import { type ColumnDef, DataTable } from "@/admin/shared/ui/data-table";
+import { getErrorDescription, getErrorMessage } from "../../../shared/keycloak-ui-shared";
+import { useAdminClient } from "../../app/admin-client";
 import { useRealm } from "../../app/providers/realm-context/realm-context";
+import { JsonFileUpload } from "../../shared/ui/json-file-upload/json-file-upload";
 
 type PartialImportProps = {
     open: boolean;
@@ -170,7 +167,10 @@ export const PartialImportDialog = (props: PartialImportProps) => {
 
     const resourceDataListItem = (resource: Resource, resourceDisplayName: string) => {
         return (
-            <li className="flex items-center gap-2 py-2 px-3" aria-labelledby={`${resource}-list-item`}>
+            <li
+                className="flex items-center gap-2 py-2 px-3"
+                aria-labelledby={`${resource}-list-item`}
+            >
                 <Checkbox
                     id={`${resource}-checkbox`}
                     name={resource}
@@ -181,9 +181,11 @@ export const PartialImportDialog = (props: PartialImportProps) => {
                             [resource]: checked
                         });
                     }}
-                    data-testid={resource + "-checkbox"}
+                    data-testid={`${resource}-checkbox`}
                 />
-                <Label htmlFor={`${resource}-checkbox`}>{`${itemCount(resource)} ${resourceDisplayName}`}</Label>
+                <Label
+                    htmlFor={`${resource}-checkbox`}
+                >{`${itemCount(resource)} ${resourceDisplayName}`}</Label>
             </li>
         );
     };
@@ -195,15 +197,15 @@ export const PartialImportDialog = (props: PartialImportProps) => {
             realm: targetRealm.realm
         };
 
-        if (resourcesToImport["users"]) jsonToImport.users = targetRealm.users;
-        if (resourcesToImport["groups"]) jsonToImport.groups = targetRealm.groups;
-        if (resourcesToImport["identityProviders"])
+        if (resourcesToImport.users) jsonToImport.users = targetRealm.users;
+        if (resourcesToImport.groups) jsonToImport.groups = targetRealm.groups;
+        if (resourcesToImport.identityProviders)
             jsonToImport.identityProviders = targetRealm.identityProviders;
-        if (resourcesToImport["clients"]) jsonToImport.clients = targetRealm.clients;
-        if (resourcesToImport["realmRoles"] || resourcesToImport["clientRoles"]) {
+        if (resourcesToImport.clients) jsonToImport.clients = targetRealm.clients;
+        if (resourcesToImport.realmRoles || resourcesToImport.clientRoles) {
             jsonToImport.roles = targetRealm.roles;
-            if (!resourcesToImport["realmRoles"]) delete jsonToImport.roles?.realm;
-            if (!resourcesToImport["clientRoles"]) delete jsonToImport.roles?.client;
+            if (!resourcesToImport.realmRoles) delete jsonToImport.roles?.realm;
+            if (!resourcesToImport.clientRoles) delete jsonToImport.roles?.client;
         }
         return jsonToImport;
     };
@@ -220,7 +222,9 @@ export const PartialImportDialog = (props: PartialImportProps) => {
             });
             setImportResponse(importResults);
         } catch (error) {
-            toast.error(t("importFail", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
+            toast.error(t("importFail", { error: getErrorMessage(error) }), {
+                description: getErrorDescription(error)
+            });
         }
 
         setImportInProgress(false);
@@ -228,14 +232,21 @@ export const PartialImportDialog = (props: PartialImportProps) => {
 
     const importModal = () => {
         return (
-            <Dialog open={props.open} onOpenChange={(open) => { if (!open) props.toggleDialog(); }}>
+            <Dialog
+                open={props.open}
+                onOpenChange={open => {
+                    if (!open) props.toggleDialog();
+                }}
+            >
                 <DialogContent className="max-w-2xl">
                     <DialogHeader>
                         <DialogTitle>{t("partialImport")}</DialogTitle>
                     </DialogHeader>
                     <div className="flex flex-col gap-4">
                         <div>
-                            <p className="text-sm text-muted-foreground">{t("partialImportHeaderText")}</p>
+                            <p className="text-sm text-muted-foreground">
+                                {t("partialImportHeaderText")}
+                            </p>
                         </div>
                         <div>
                             <JsonFileUpload
@@ -248,45 +259,62 @@ export const PartialImportDialog = (props: PartialImportProps) => {
                         {isFileSelected && targetHasResources() && (
                             <>
                                 <Separator />
-                                {Array.isArray(importedFile) && importedFile.length > 1 && (
-                                    <div>
-                                        <p className="text-sm font-medium">{t("selectRealm")}:</p>
-                                        <Select
-                                            open={isRealmSelectOpen}
-                                            onOpenChange={setIsRealmSelectOpen}
-                                            value={targetRealm.realm ?? targetRealm.id ?? ""}
-                                            onValueChange={(v) => {
-                                                const realm = importedFile.find(
-                                                    r => (r.realm ?? r.id) === v
-                                                );
-                                                if (realm) handleRealmSelect(realm);
-                                            }}
-                                            aria-label={t("realmSelector")}
-                                        >
-                                            <SelectTrigger id="realm-selector">
-                                                <SelectValue
-                                                    placeholder={
-                                                        targetRealm.realm || targetRealm.id
-                                                    }
-                                                />
-                                            </SelectTrigger>
-                                            <SelectContent>
-                                                {importedFile.map(realm => (
-                                                    <SelectItem
-                                                        key={realm.id}
-                                                        value={realm.realm ?? realm.id ?? ""}
-                                                        data-testid={realm.id + "-select-option"}
-                                                    >
-                                                        {realm.realm || realm.id}
-                                                    </SelectItem>
-                                                ))}
-                                            </SelectContent>
-                                        </Select>
-                                    </div>
-                                )}
+                                {Array.isArray(importedFile) &&
+                                    importedFile.length > 1 && (
+                                        <div>
+                                            <p className="text-sm font-medium">
+                                                {t("selectRealm")}:
+                                            </p>
+                                            <Select
+                                                open={isRealmSelectOpen}
+                                                onOpenChange={setIsRealmSelectOpen}
+                                                value={
+                                                    targetRealm.realm ??
+                                                    targetRealm.id ??
+                                                    ""
+                                                }
+                                                onValueChange={v => {
+                                                    const realm = importedFile.find(
+                                                        r => (r.realm ?? r.id) === v
+                                                    );
+                                                    if (realm) handleRealmSelect(realm);
+                                                }}
+                                                aria-label={t("realmSelector")}
+                                            >
+                                                <SelectTrigger id="realm-selector">
+                                                    <SelectValue
+                                                        placeholder={
+                                                            targetRealm.realm ||
+                                                            targetRealm.id
+                                                        }
+                                                    />
+                                                </SelectTrigger>
+                                                <SelectContent>
+                                                    {importedFile.map(realm => (
+                                                        <SelectItem
+                                                            key={realm.id}
+                                                            value={
+                                                                realm.realm ??
+                                                                realm.id ??
+                                                                ""
+                                                            }
+                                                            data-testid={`${realm.id}-select-option`}
+                                                        >
+                                                            {realm.realm || realm.id}
+                                                        </SelectItem>
+                                                    ))}
+                                                </SelectContent>
+                                            </Select>
+                                        </div>
+                                    )}
                                 <div>
-                                    <p className="text-sm font-medium">{t("chooseResources")}:</p>
-                                    <ul className="divide-y border rounded-md" aria-label={t("resourcesToImport")}>
+                                    <p className="text-sm font-medium">
+                                        {t("chooseResources")}:
+                                    </p>
+                                    <ul
+                                        className="divide-y border rounded-md"
+                                        aria-label={t("resourcesToImport")}
+                                    >
                                         {targetHasResource("users") &&
                                             resourceDataListItem("users", t("users"))}
                                         {targetHasResource("groups") &&
@@ -311,22 +339,32 @@ export const PartialImportDialog = (props: PartialImportProps) => {
                                     </ul>
                                 </div>
                                 <div>
-                                    <p className="text-sm font-medium">{t("selectIfResourceExists")}:</p>
+                                    <p className="text-sm font-medium">
+                                        {t("selectIfResourceExists")}:
+                                    </p>
                                     <Select
                                         open={isCollisionSelectOpen}
                                         onOpenChange={setIsCollisionSelectOpen}
                                         value={collisionOption}
-                                        onValueChange={(v) =>
+                                        onValueChange={v =>
                                             handleCollisionSelect(v as CollisionOption)
                                         }
                                     >
                                         <SelectTrigger>
-                                            <SelectValue placeholder={t(collisionOption)} />
+                                            <SelectValue
+                                                placeholder={t(collisionOption)}
+                                            />
                                         </SelectTrigger>
                                         <SelectContent>
-                                            <SelectItem value="FAIL">{t("FAIL")}</SelectItem>
-                                            <SelectItem value="SKIP">{t("SKIP")}</SelectItem>
-                                            <SelectItem value="OVERWRITE">{t("OVERWRITE")}</SelectItem>
+                                            <SelectItem value="FAIL">
+                                                {t("FAIL")}
+                                            </SelectItem>
+                                            <SelectItem value="SKIP">
+                                                {t("SKIP")}
+                                            </SelectItem>
+                                            <SelectItem value="OVERWRITE">
+                                                {t("OVERWRITE")}
+                                            </SelectItem>
                                         </SelectContent>
                                     </Select>
                                 </div>
@@ -385,9 +423,33 @@ export const PartialImportDialog = (props: PartialImportProps) => {
             header: t("action"),
             cell: ({ row }) => {
                 const action = row.original.action;
-                if (action === "ADDED") return <Badge variant="secondary" className="bg-green-500/20 text-green-700">{t("added")}</Badge>;
-                if (action === "SKIPPED") return <Badge variant="secondary" className="bg-orange-500/20 text-orange-700">{t("skipped")}</Badge>;
-                if (action === "OVERWRITTEN") return <Badge variant="secondary" className="bg-purple-500/20 text-purple-700">{t("overwritten")}</Badge>;
+                if (action === "ADDED")
+                    return (
+                        <Badge
+                            variant="secondary"
+                            className="bg-green-500/20 text-green-700"
+                        >
+                            {t("added")}
+                        </Badge>
+                    );
+                if (action === "SKIPPED")
+                    return (
+                        <Badge
+                            variant="secondary"
+                            className="bg-orange-500/20 text-orange-700"
+                        >
+                            {t("skipped")}
+                        </Badge>
+                    );
+                if (action === "OVERWRITTEN")
+                    return (
+                        <Badge
+                            variant="secondary"
+                            className="bg-purple-500/20 text-purple-700"
+                        >
+                            {t("overwritten")}
+                        </Badge>
+                    );
                 return null;
             }
         },
@@ -402,7 +464,12 @@ export const PartialImportDialog = (props: PartialImportProps) => {
 
     const importCompletedModal = () => {
         return (
-            <Dialog open={props.open} onOpenChange={(open) => { if (!open) props.toggleDialog(); }}>
+            <Dialog
+                open={props.open}
+                onOpenChange={open => {
+                    if (!open) props.toggleDialog();
+                }}
+            >
                 <DialogContent className="max-w-2xl">
                     <DialogHeader>
                         <DialogTitle>{t("partialImport")}</DialogTitle>
@@ -416,7 +483,11 @@ export const PartialImportDialog = (props: PartialImportProps) => {
                         emptyMessage={t("noResults")}
                     />
                     <DialogFooter>
-                        <Button id="modal-close" data-testid="close-button" onClick={() => props.toggleDialog()}>
+                        <Button
+                            id="modal-close"
+                            data-testid="close-button"
+                            onClick={() => props.toggleDialog()}
+                        >
                             {t("close")}
                         </Button>
                     </DialogFooter>

@@ -1,19 +1,16 @@
 import type UserRepresentation from "@keycloak/keycloak-admin-client/lib/defs/userRepresentation";
-import { FormLabel, useFetch } from "../../../../shared/keycloak-ui-shared";
+import { useTranslation } from "@merge-rd/i18n";
+import { Badge } from "@merge-rd/ui/components/badge";
 import { Button } from "@merge-rd/ui/components/button";
 import { Input } from "@merge-rd/ui/components/input";
-import { Badge } from "@merge-rd/ui/components/badge";
-import {
-    Popover,
-    PopoverContent,
-    PopoverTrigger,
-} from "@merge-rd/ui/components/popover";
+import { Popover, PopoverContent, PopoverTrigger } from "@merge-rd/ui/components/popover";
 import { X } from "@phosphor-icons/react";
 import { debounce } from "lodash-es";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Controller, useFormContext } from "react-hook-form";
-import { useTranslation } from "@merge-rd/i18n";
-import { useAdminClient } from "../../../app/admin-client";
+import { FormLabel } from "../../../../shared/keycloak-ui-shared";
+import { useUsersByIds } from "../../api/use-users-by-ids";
+import { useUsersSearch } from "../../api/use-users-search";
 import useToggle from "../../lib/useToggle";
 import type { ComponentProps } from "../dynamic/components";
 
@@ -32,8 +29,6 @@ export const UserSelect = ({
     isRequired,
     variant = "typeaheadMulti"
 }: UserSelectProps) => {
-    const { adminClient } = useAdminClient();
-
     const { t } = useTranslation();
     const {
         control,
@@ -44,43 +39,23 @@ export const UserSelect = ({
 
     const [open, _toggleOpen, setOpen] = useToggle();
     const [selectedUsers, setSelectedUsers] = useState<UserRepresentation[]>([]);
-    const [searchedUsers, setSearchedUsers] = useState<UserRepresentation[]>([]);
     const [inputValue, setInputValue] = useState("");
     const [search, setSearch] = useState("");
     const textInputRef = useRef<HTMLInputElement>(null);
 
     const debounceFn = useCallback(debounce(setSearch, 500), []);
 
-    useFetch(
-        async () => {
-            if (!values) {
-                return [];
-            }
-
-            const foundUsers = await Promise.all(
-                values.map(id => adminClient.users.findOne({ id }))
-            );
-
-            return foundUsers.filter(user => user !== undefined);
-        },
-        users => {
-            setSelectedUsers(users);
+    const { data: foundUsers } = useUsersByIds(values);
+    useEffect(() => {
+        if (foundUsers) {
+            setSelectedUsers(foundUsers);
             if (variant !== "typeaheadMulti") {
-                setInputValue(users[0]?.username || "");
+                setInputValue(foundUsers[0]?.username || "");
             }
-        },
-        [values]
-    );
+        }
+    }, [foundUsers]);
 
-    useFetch(
-        async () =>
-            adminClient.users.find({
-                username: search,
-                max: 20
-            }),
-        setSearchedUsers,
-        [search]
-    );
+    const { data: searchedUsers = [] } = useUsersSearch(search);
 
     useEffect(() => {
         if (!values || values.length === 0) {
@@ -126,27 +101,34 @@ export const UserSelect = ({
                                     Array.isArray(field.value) &&
                                     field.value.length > 0 && (
                                         <div className="flex flex-wrap gap-1">
-                                            {field.value.map((selection: string, index: number) => (
-                                                <Badge
-                                                    key={index}
-                                                    variant="secondary"
-                                                    className="cursor-pointer gap-0.5 py-0 pr-1"
-                                                    onClick={ev => {
-                                                        ev.stopPropagation();
-                                                        field.onChange(
-                                                            field.value.filter(
-                                                                (item: string) => item !== selection
-                                                            )
-                                                        );
-                                                    }}
-                                                >
-                                                    {
-                                                        users.find(u => u?.id === selection)
-                                                            ?.username
-                                                    }
-                                                    <X className="size-3" aria-hidden />
-                                                </Badge>
-                                            ))}
+                                            {field.value.map(
+                                                (selection: string, index: number) => (
+                                                    <Badge
+                                                        key={index}
+                                                        variant="secondary"
+                                                        className="cursor-pointer gap-0.5 py-0 pr-1"
+                                                        onClick={ev => {
+                                                            ev.stopPropagation();
+                                                            field.onChange(
+                                                                field.value.filter(
+                                                                    (item: string) =>
+                                                                        item !== selection
+                                                                )
+                                                            );
+                                                        }}
+                                                    >
+                                                        {
+                                                            users.find(
+                                                                u => u?.id === selection
+                                                            )?.username
+                                                        }
+                                                        <X
+                                                            className="size-3"
+                                                            aria-hidden
+                                                        />
+                                                    </Badge>
+                                                )
+                                            )}
                                         </div>
                                     )}
                                 <Input
@@ -186,31 +168,39 @@ export const UserSelect = ({
                             className="max-h-64 w-[var(--radix-popover-trigger-width)] overflow-auto p-0"
                             align="start"
                         >
-                            <ul className="flex flex-col py-1" role="listbox">
+                            <ul className="flex flex-col py-1">
                                 {searchedUsers.map(user => {
                                     const option = user.id!;
                                     const isSelected = field.value?.includes(option);
                                     return (
                                         <li
                                             key={user.id}
-                                            role="option"
                                             aria-selected={isSelected}
                                             className="hover:bg-accent focus:bg-accent cursor-pointer px-2 py-1.5 text-sm outline-none"
                                             onMouseDown={e => e.preventDefault()}
                                             onClick={() => {
                                                 if (variant !== "typeaheadMulti") {
-                                                    const removed = field.value?.includes(option);
-                                                    field.onChange(removed ? [] : [option]);
+                                                    const removed =
+                                                        field.value?.includes(option);
+                                                    field.onChange(
+                                                        removed ? [] : [option]
+                                                    );
                                                     setInputValue(
-                                                        removed ? "" : (user.username || "")
+                                                        removed ? "" : user.username || ""
                                                     );
                                                     setOpen(false);
                                                 } else {
-                                                    const current = Array.isArray(field.value)
+                                                    const current = Array.isArray(
+                                                        field.value
+                                                    )
                                                         ? field.value
                                                         : [];
-                                                    const changedValue = current.includes(option)
-                                                        ? current.filter((v: string) => v !== option)
+                                                    const changedValue = current.includes(
+                                                        option
+                                                    )
+                                                        ? current.filter(
+                                                              (v: string) => v !== option
+                                                          )
                                                         : [...current, option];
                                                     field.onChange(changedValue);
                                                 }

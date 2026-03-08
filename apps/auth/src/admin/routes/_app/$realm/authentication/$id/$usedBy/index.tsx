@@ -1,10 +1,5 @@
-import { createFileRoute } from "@tanstack/react-router";
-import { lazy } from "react";
-
-const FlowDetails = lazy(
-    () => import("../../../../../../pages/authentication/flow-details"),
-);
+import { createFileRoute, lazyRouteComponent } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/_app/$realm/authentication/$id/$usedBy/")({
-    component: FlowDetails,
+    component: lazyRouteComponent(() => import("../../../../../../pages/authentication/flow-details")),
 });

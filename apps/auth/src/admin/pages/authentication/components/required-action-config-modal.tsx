@@ -1,10 +1,6 @@
-import RequiredActionConfigInfoRepresentation from "@keycloak/keycloak-admin-client/lib/defs/requiredActionConfigInfoRepresentation";
-import RequiredActionConfigRepresentation from "@keycloak/keycloak-admin-client/lib/defs/requiredActionConfigRepresentation";
+import type RequiredActionConfigRepresentation from "@keycloak/keycloak-admin-client/lib/defs/requiredActionConfigRepresentation";
 import type RequiredActionProviderRepresentation from "@keycloak/keycloak-admin-client/lib/defs/requiredActionProviderRepresentation";
-import { getErrorDescription, getErrorMessage, isUserProfileError,
-    setUserProfileServerError,
-    useFetch } from "../../../../shared/keycloak-ui-shared";
-import { toast } from "sonner";
+import { useTranslation } from "@merge-rd/i18n";
 import { Button } from "@merge-rd/ui/components/button";
 import {
     Dialog,
@@ -13,12 +9,19 @@ import {
     DialogTitle
 } from "@merge-rd/ui/components/dialog";
 import { Trash } from "@phosphor-icons/react";
-import { useState } from "react";
+import { useEffect } from "react";
 import { FormProvider, useForm } from "react-hook-form";
-import { useTranslation } from "@merge-rd/i18n";
+import { toast } from "sonner";
+import {
+    getErrorDescription,
+    getErrorMessage,
+    isUserProfileError,
+    setUserProfileServerError
+} from "../../../../shared/keycloak-ui-shared";
 import { useAdminClient } from "../../../app/admin-client";
-import { DynamicComponents } from "../../../shared/ui/dynamic/dynamic-components";
 import { convertFormValuesToObject, convertToFormValues } from "../../../shared/lib/util";
+import { DynamicComponents } from "../../../shared/ui/dynamic/dynamic-components";
+import { useRequiredActionConfigData } from "../api/use-required-action-config-data";
 
 type RequiredActionConfigModalForm = {
     // alias: string;
@@ -36,47 +39,22 @@ export const RequiredActionConfigModal = ({
 }: RequiredActionConfigModalProps) => {
     const { adminClient } = useAdminClient();
     const { t } = useTranslation();
-const [configDescription, setConfigDescription] =
-        useState<RequiredActionConfigInfoRepresentation>();
 
     const form = useForm<RequiredActionConfigModalForm>();
     const { setValue, handleSubmit } = form;
 
-    // // default config all required actions should have
-    // const defaultConfigProperties = [];
+    const { data: configData } = useRequiredActionConfigData(requiredAction.alias!);
+    const configDescription = configData?.configDescription;
 
     const setupForm = (config?: RequiredActionConfigRepresentation) => {
         convertToFormValues(config || {}, setValue);
     };
 
-    useFetch(
-        async () => {
-            const configDescription =
-                await adminClient.authenticationManagement.getRequiredActionConfigDescription(
-                    {
-                        alias: requiredAction.alias!
-                    }
-                );
-
-            const config =
-                await adminClient.authenticationManagement.getRequiredActionConfig({
-                    alias: requiredAction.alias!
-                });
-
-            // merge default and fetched config properties
-            configDescription.properties = [
-                //...defaultConfigProperties!,
-                ...configDescription.properties!
-            ];
-
-            return { configDescription, config };
-        },
-        ({ configDescription, config }) => {
-            setConfigDescription(configDescription);
-            setupForm(config);
-        },
-        []
-    );
+    useEffect(() => {
+        if (configData?.config) {
+            setupForm(configData.config);
+        }
+    }, [configData]);
 
     const save = async (saved: RequiredActionConfigModalForm) => {
         const newConfig = convertFormValuesToObject(saved);
@@ -95,21 +73,33 @@ const [configDescription, setConfigDescription] =
                     (_name: string | number, error: unknown) => {
                         // TODO: Does not set set the error message to the field, yet.
                         // Still, this will do all front end replacement and translation of keys.
-                        toast.error(t("configSaveError", { error: (error as any).message }), { description: getErrorDescription(error) });
+                        toast.error(
+                            t("configSaveError", { error: (error as any).message }),
+                            { description: getErrorDescription(error) }
+                        );
                     },
                     t
                 );
             } else {
-                toast.error(t("configSaveError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
+                toast.error(t("configSaveError", { error: getErrorMessage(error) }), {
+                    description: getErrorDescription(error)
+                });
             }
         }
     };
 
     return (
-        <Dialog open onOpenChange={(open) => { if (!open) onClose(); }}>
+        <Dialog
+            open
+            onOpenChange={open => {
+                if (!open) onClose();
+            }}
+        >
             <DialogContent className="max-w-md">
                 <DialogHeader>
-                    <DialogTitle>{t("requiredActionConfig", { name: requiredAction.name })}</DialogTitle>
+                    <DialogTitle>
+                        {t("requiredActionConfig", { name: requiredAction.name })}
+                    </DialogTitle>
                 </DialogHeader>
                 <form id="required-action-config-form" onSubmit={handleSubmit(save)}>
                     <FormProvider {...form}>
@@ -122,11 +112,7 @@ const [configDescription, setConfigDescription] =
                         <Button data-testid="save" type="submit">
                             {t("save")}
                         </Button>
-                        <Button
-                            data-testid="cancel"
-                            variant="link"
-                            onClick={onClose}
-                        >
+                        <Button data-testid="cancel" variant="link" onClick={onClose}>
                             {t("cancel")}
                         </Button>
                         <Button

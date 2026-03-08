@@ -23,34 +23,37 @@ const { useI18n, ofTypeI18n } = i18nBuilder
             "identity-provider-login-label": "Or",
             continueWithProvider: "Continue with {{provider}}",
             loginPlaceholder: "Enter phone number or email address",
-            
+
             // Register page
             registerTitle: "Create an account",
             registerAccountDescription: "Create a new account to get started",
             backToLogin: "Already have an account?",
-            signUpWithSocialHint: "You can also sign in with Google, Apple, or Facebook on the login page.",
+            signUpWithSocialHint:
+                "You can also sign in with Google, Apple, or Facebook on the login page.",
             email: "Email",
             firstName: "First name",
             lastName: "Last name",
-            
+
             // Forgot Password page
             emailForgotTitle: "Forgot your password?",
-            emailForgotDescription: "Enter your email and we'll send you instructions to reset your password",
+            emailForgotDescription:
+                "Enter your email and we'll send you instructions to reset your password",
             backToLoginPage: "Back to login",
             doSubmit: "Submit",
             doCancel: "Cancel",
-            
+
             // Update Password page
             updatePasswordTitle: "Update your password",
             updatePasswordDescription: "Please set a new password for your account",
             updatePasswordRequiredDescription: "You need to change your password",
             passwordNew: "New password",
             passwordConfirm: "Confirm password",
-            
+
             // Update Profile page
             loginProfileTitle: "Update your profile",
             loginProfileDescription: "Please update your profile information",
-            loginProfileRequiredDescription: "You need to update your profile information",
+            loginProfileRequiredDescription:
+                "You need to update your profile information",
 
             // Delete account confirm
             deleteAccountConfirm: "Delete account confirmation",
@@ -63,7 +66,8 @@ const { useI18n, ofTypeI18n } = i18nBuilder
 
             // Configure TOTP page
             loginTotpTitle: "Set up two-factor authentication",
-            loginTotpConfigureDescription: "Configure an authenticator app to secure your account",
+            loginTotpConfigureDescription:
+                "Configure an authenticator app to secure your account",
             loginTotpStepInstall: "Supported apps:",
             loginTotpDeviceName: "Device name",
             logoutOtherSessions: "Sign out from other devices",
@@ -72,7 +76,8 @@ const { useI18n, ofTypeI18n } = i18nBuilder
 
             // Delete credential page
             deleteCredentialTitle: "Remove {0}",
-            deleteCredentialMessage: "Are you sure you want to remove this credential? This action cannot be undone.",
+            deleteCredentialMessage:
+                "Are you sure you want to remove this credential? This action cannot be undone.",
 
             // Error page
             errorTitle: "An error occurred",
@@ -83,7 +88,7 @@ const { useI18n, ofTypeI18n } = i18nBuilder
             pageExpiredMsg1: "The page you were trying to access has expired.",
             pageExpiredMsg2: "Or",
             pageExpiredRestartLogin: "Restart login",
-            pageExpiredContinueToApp: "continue to your application",
+            pageExpiredContinueToApp: "continue to your application"
         },
         tr: {
             // Login page
@@ -103,34 +108,37 @@ const { useI18n, ofTypeI18n } = i18nBuilder
             "identity-provider-login-label": "Veya",
             continueWithProvider: "{{provider}} ile devam edin",
             loginPlaceholder: "Telefon numarası veya e-posta adresi girin",
-            
+
             // Register page
             registerTitle: "Hesap oluştur",
             registerAccountDescription: "Başlamak için yeni bir hesap oluşturun",
             backToLogin: "Zaten hesabınız var mı?",
-            signUpWithSocialHint: "Giriş sayfasından Google, Apple veya Facebook ile de giriş yapabilirsiniz.",
+            signUpWithSocialHint:
+                "Giriş sayfasından Google, Apple veya Facebook ile de giriş yapabilirsiniz.",
             email: "E-posta",
             firstName: "Ad",
             lastName: "Soyad",
-            
+
             // Forgot Password page
             emailForgotTitle: "Şifrenizi mi unuttunuz?",
-            emailForgotDescription: "E-posta adresinizi girin, size şifre sıfırlama talimatları gönderelim",
+            emailForgotDescription:
+                "E-posta adresinizi girin, size şifre sıfırlama talimatları gönderelim",
             backToLoginPage: "Giriş sayfasına dön",
             doSubmit: "Gönder",
             doCancel: "İptal",
-            
+
             // Update Password page
             updatePasswordTitle: "Şifrenizi güncelleyin",
             updatePasswordDescription: "Lütfen hesabınız için yeni bir şifre belirleyin",
             updatePasswordRequiredDescription: "Şifrenizi değiştirmeniz gerekiyor",
             passwordNew: "Yeni şifre",
             passwordConfirm: "Şifre tekrarı",
-            
+
             // Update Profile page
             loginProfileTitle: "Profilinizi güncelleyin",
             loginProfileDescription: "Lütfen profil bilgilerinizi güncelleyin",
-            loginProfileRequiredDescription: "Profil bilgilerinizi güncellemeniz gerekiyor",
+            loginProfileRequiredDescription:
+                "Profil bilgilerinizi güncellemeniz gerekiyor",
 
             // Delete account confirm
             deleteAccountConfirm: "Hesabı silme onayı",
@@ -143,7 +151,8 @@ const { useI18n, ofTypeI18n } = i18nBuilder
 
             // Configure TOTP page
             loginTotpTitle: "İki faktörlü kimlik doğrulamayı ayarla",
-            loginTotpConfigureDescription: "Hesabınızı güvence altına almak için bir doğrulama uygulaması yapılandırın",
+            loginTotpConfigureDescription:
+                "Hesabınızı güvence altına almak için bir doğrulama uygulaması yapılandırın",
             loginTotpStepInstall: "Desteklenen uygulamalar:",
             loginTotpDeviceName: "Cihaz adı",
             logoutOtherSessions: "Diğer cihazlardan çıkış yap",
@@ -152,7 +161,8 @@ const { useI18n, ofTypeI18n } = i18nBuilder
 
             // Delete credential page
             deleteCredentialTitle: "{0} kaldır",
-            deleteCredentialMessage: "Bu kimlik bilgisini kaldırmak istediğinizden emin misiniz? Bu işlem geri alınamaz.",
+            deleteCredentialMessage:
+                "Bu kimlik bilgisini kaldırmak istediğinizden emin misiniz? Bu işlem geri alınamaz.",
 
             // Error page
             errorTitle: "Bir hata oluştu",
@@ -163,7 +173,7 @@ const { useI18n, ofTypeI18n } = i18nBuilder
             pageExpiredMsg1: "Erişmeye çalıştığınız sayfanın süresi doldu.",
             pageExpiredMsg2: "Veya",
             pageExpiredRestartLogin: "girişe yeniden başlayın",
-            pageExpiredContinueToApp: "uygulamaya devam edin",
+            pageExpiredContinueToApp: "uygulamaya devam edin"
         }
     })
     .build();

@@ -1,5 +1,5 @@
+import { type PropsWithChildren, useContext, useState } from "react";
 import { createNamedContext } from "../../../../shared/keycloak-ui-shared";
-import { PropsWithChildren, useContext, useState } from "react";
 
 type LogoContextProps = {
     logo: string;

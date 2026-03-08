@@ -1,12 +1,11 @@
-import { useState } from "react";
+import type GroupRepresentation from "@keycloak/keycloak-admin-client/lib/defs/groupRepresentation";
 import {
     Tooltip,
     TooltipContent,
     TooltipProvider,
-    TooltipTrigger,
+    TooltipTrigger
 } from "@merge-rd/ui/components/tooltip";
-
-import type GroupRepresentation from "@keycloak/keycloak-admin-client/lib/defs/groupRepresentation";
+import { useState } from "react";
 
 type GroupPathProps = React.ComponentProps<"span"> & {
     group: GroupRepresentation;

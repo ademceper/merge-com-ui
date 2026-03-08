@@ -1,18 +1,22 @@
 import { RequiredActionAlias } from "@keycloak/keycloak-admin-client/lib/defs/requiredActionProviderRepresentation";
 import type UserRepresentation from "@keycloak/keycloak-admin-client/lib/defs/userRepresentation";
+import { useTranslation } from "@merge-rd/i18n";
 import { Label } from "@merge-rd/ui/components/label";
 import { FormProvider, useForm } from "react-hook-form";
-import { useTranslation } from "@merge-rd/i18n";
-import { FormErrorText, PasswordInput } from "../../../../shared/keycloak-ui-shared";
-import { useAdminClient } from "../../../app/admin-client";
-import { DefaultSwitchControl } from "../../../shared/ui/switch-control";
-import { getErrorDescription, getErrorMessage } from "../../../../shared/keycloak-ui-shared";
 import { toast } from "sonner";
+import {
+    FormErrorText,
+    getErrorDescription,
+    getErrorMessage,
+    PasswordInput
+} from "../../../../shared/keycloak-ui-shared";
+import { useAdminClient } from "../../../app/admin-client";
+import useToggle from "../../../shared/lib/useToggle";
 import {
     ConfirmDialogModal,
     useConfirmDialog
 } from "../../../shared/ui/confirm-dialog/confirm-dialog";
-import useToggle from "../../../shared/lib/useToggle";
+import { DefaultSwitchControl } from "../../../shared/ui/switch-control";
 
 type ResetPasswordDialogProps = {
     user: UserRepresentation;
@@ -60,7 +64,7 @@ export const ResetPasswordDialog = ({
     const [confirm, toggle] = useToggle(true);
     const password = watch("password", "");
     const passwordConfirmation = watch("passwordConfirmation", "");
-const [toggleConfirmSaveModal, ConfirmSaveModal] = useConfirmDialog({
+    const [toggleConfirmSaveModal, ConfirmSaveModal] = useConfirmDialog({
         titleKey: isResetPassword ? "resetPasswordConfirm" : "setPasswordConfirm",
         messageKey: isResetPassword
             ? t("resetPasswordConfirmText", { username: user.username })
@@ -104,7 +108,12 @@ const [toggleConfirmSaveModal, ConfirmSaveModal] = useConfirmDialog({
             );
             refresh();
         } catch (error) {
-            toast.error(t(isResetPassword ? "resetPasswordError" : "savePasswordError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
+            toast.error(
+                t(isResetPassword ? "resetPasswordError" : "savePasswordError", {
+                    error: getErrorMessage(error)
+                }),
+                { description: getErrorDescription(error) }
+            );
         }
 
         onClose();
@@ -157,7 +166,8 @@ const [toggleConfirmSaveModal, ConfirmSaveModal] = useConfirmDialog({
                         <Label htmlFor="passwordConfirmation">
                             {isResetPassword
                                 ? t("resetPasswordConfirmation")
-                                : t("passwordConfirmation")} *
+                                : t("passwordConfirmation")}{" "}
+                            *
                         </Label>
                         <PasswordInput
                             data-testid="passwordConfirmationField"

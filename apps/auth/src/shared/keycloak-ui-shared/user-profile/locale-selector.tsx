@@ -1,5 +1,3 @@
-import { useMemo } from "react";
-import { FormProvider, Controller, useFormContext } from "react-hook-form";
 import {
     Select,
     SelectContent,
@@ -7,7 +5,9 @@ import {
     SelectTrigger,
     SelectValue
 } from "@merge-rd/ui/components/select";
-import { UserProfileFieldProps } from "./user-profile-fields";
+import { useMemo } from "react";
+import { Controller, FormProvider, useFormContext } from "react-hook-form";
+import type { UserProfileFieldProps } from "./user-profile-fields";
 
 const localeToDisplayName = (locale: string) => {
     try {
@@ -50,7 +50,13 @@ export const LocaleSelector = ({
     );
 };
 
-function LocaleSelectInner({ t, options }: { t: UserProfileFieldProps["t"]; options: { key: string; value: string }[] }) {
+function LocaleSelectInner({
+    t,
+    options
+}: {
+    t: UserProfileFieldProps["t"];
+    options: { key: string; value: string }[];
+}) {
     const { control } = useFormContext();
     return (
         <Controller
@@ -60,21 +66,25 @@ function LocaleSelectInner({ t, options }: { t: UserProfileFieldProps["t"]; opti
             render={({ field }) => {
                 const val = Array.isArray(field.value) ? field.value[0] : field.value;
                 return (
-                <Select
-                    value={val || undefined}
-                    onValueChange={(v) => field.onChange(v)}
-                >
-                    <SelectTrigger id="attributes.locale" data-testid="locale-select" className="h-12 rounded-lg bg-muted border-0">
-                        <SelectValue placeholder={t("selectALocale")} />
-                    </SelectTrigger>
-                    <SelectContent>
-                        {options.map((opt) => (
-                            <SelectItem key={opt.key} value={opt.key}>
-                                {opt.value}
-                            </SelectItem>
-                        ))}
-                    </SelectContent>
-                </Select>
+                    <Select
+                        value={val || undefined}
+                        onValueChange={v => field.onChange(v)}
+                    >
+                        <SelectTrigger
+                            id="attributes.locale"
+                            data-testid="locale-select"
+                            className="h-12 rounded-lg bg-muted border-0"
+                        >
+                            <SelectValue placeholder={t("selectALocale")} />
+                        </SelectTrigger>
+                        <SelectContent>
+                            {options.map(opt => (
+                                <SelectItem key={opt.key} value={opt.key}>
+                                    {opt.value}
+                                </SelectItem>
+                            ))}
+                        </SelectContent>
+                    </Select>
                 );
             }}
         />

@@ -1,21 +1,16 @@
-import type { AuthenticationProviderRepresentation } from "@keycloak/keycloak-admin-client/lib/defs/authenticatorConfigRepresentation";
-import {
-    SelectField,
-    TextControl,
-    useFetch
-} from "../../../../../shared/keycloak-ui-shared";
+import { useTranslation } from "@merge-rd/i18n";
 import { Button } from "@merge-rd/ui/components/button";
 import {
     Dialog,
     DialogContent,
+    DialogFooter,
     DialogHeader,
-    DialogTitle,
-    DialogFooter
+    DialogTitle
 } from "@merge-rd/ui/components/dialog";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { FormProvider, useForm } from "react-hook-form";
-import { useTranslation } from "@merge-rd/i18n";
-import { useAdminClient } from "../../../../app/admin-client";
+import { SelectField, TextControl } from "../../../../../shared/keycloak-ui-shared";
+import { useFormProviders } from "../../api/use-form-providers";
 
 type AddSubFlowProps = {
     name: string;
@@ -33,18 +28,9 @@ export type Flow = {
 };
 
 export const AddSubFlowModal = ({ name, onConfirm, onCancel }: AddSubFlowProps) => {
-    const { adminClient } = useAdminClient();
-
     const { t } = useTranslation();
     const form = useForm<Flow>();
-    const [formProviders, setFormProviders] =
-        useState<AuthenticationProviderRepresentation[]>();
-
-    useFetch(
-        () => adminClient.authenticationManagement.getFormProviders(),
-        setFormProviders,
-        []
-    );
+    const { data: formProviders } = useFormProviders();
 
     useEffect(() => {
         if (formProviders?.length === 1) {
@@ -53,7 +39,12 @@ export const AddSubFlowModal = ({ name, onConfirm, onCancel }: AddSubFlowProps) 
     }, [formProviders]);
 
     return (
-        <Dialog open onOpenChange={(open) => { if (!open) onCancel(); }}>
+        <Dialog
+            open
+            onOpenChange={open => {
+                if (!open) onCancel();
+            }}
+        >
             <DialogContent className="max-w-2xl">
                 <DialogHeader>
                     <DialogTitle>{t("addSubFlowTo", { name })}</DialogTitle>

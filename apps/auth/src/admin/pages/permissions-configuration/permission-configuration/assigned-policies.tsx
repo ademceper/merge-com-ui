@@ -1,6 +1,13 @@
-import PolicyRepresentation from "@keycloak/keycloak-admin-client/lib/defs/policyRepresentation";
-import { FormErrorText, HelpItem, useFetch } from "../../../../shared/keycloak-ui-shared";
-import { DataTable, DataTableRowActions } from "@/admin/shared/ui/data-table";
+import type PolicyProviderRepresentation from "@keycloak/keycloak-admin-client/lib/defs/policyProviderRepresentation";
+import type PolicyRepresentation from "@keycloak/keycloak-admin-client/lib/defs/policyRepresentation";
+import { useTranslation } from "@merge-rd/i18n";
+import { Button } from "@merge-rd/ui/components/button";
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuTrigger
+} from "@merge-rd/ui/components/dropdown-menu";
 import {
     Empty,
     EmptyContent,
@@ -8,19 +15,17 @@ import {
     EmptyHeader,
     EmptyTitle
 } from "@merge-rd/ui/components/empty";
-import { Button } from "@merge-rd/ui/components/button";
 import { Label } from "@merge-rd/ui/components/label";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@merge-rd/ui/components/dropdown-menu";
-import { useState } from "react";
-import { Controller, useFormContext } from "react-hook-form";
-import { useTranslation } from "@merge-rd/i18n";
-import { useAdminClient } from "../../../app/admin-client";
-import { NewPermissionPolicyDialog } from "./new-permission-policy-dialog";
-import PolicyProviderRepresentation from "@keycloak/keycloak-admin-client/lib/defs/policyProviderRepresentation";
-import { ExistingPoliciesDialog } from "./existing-policies-dialog";
-import { Funnel, CaretDown } from "@phosphor-icons/react";
+import { CaretDown, Funnel } from "@phosphor-icons/react";
 import { capitalize, sortBy } from "lodash-es";
+import { useEffect, useState } from "react";
+import { Controller, useFormContext } from "react-hook-form";
+import { DataTable, DataTableRowActions } from "@/admin/shared/ui/data-table";
+import { FormErrorText, HelpItem } from "../../../../shared/keycloak-ui-shared";
 import useToggle from "../../../shared/lib/useToggle";
+import { usePolicyDetailsByType } from "../api/use-policy-details-by-type";
+import { ExistingPoliciesDialog } from "./existing-policies-dialog";
+import { NewPermissionPolicyDialog } from "./new-permission-policy-dialog";
 
 type AssignedPoliciesProps = {
     permissionClientId: string;
@@ -39,7 +44,6 @@ export const AssignedPolicies = ({
     policies,
     resourceType
 }: AssignedPoliciesProps) => {
-    const { adminClient } = useAdminClient();
     const { t } = useTranslation();
     const {
         control,
@@ -55,26 +59,16 @@ export const AssignedPolicies = ({
     const [filterType, setFilterType] = useState<string | undefined>(undefined);
     const [_isFilterTypeDropdownOpen, _toggleIsFilterTypeDropdownOpen] = useToggle();
 
-    useFetch(
-        () => {
-            if (values && values.length > 0)
-                return Promise.all(
-                    values.map(p =>
-                        adminClient.clients.findOnePolicyWithType({
-                            id: permissionClientId,
-                            type: p.type!,
-                            policyId: p.id
-                        })
-                    )
-                );
-            return Promise.resolve([]);
-        },
-        policies => {
-            const filteredPolicy = policies.filter(p => p) as [];
-            setSelectedPolicies(filteredPolicy);
-        },
-        [policies]
+    const { data: policyDetailsData } = usePolicyDetailsByType(
+        permissionClientId,
+        values
     );
+
+    useEffect(() => {
+        if (policyDetailsData) {
+            setSelectedPolicies(policyDetailsData);
+        }
+    }, [policyDetailsData]);
 
     const sortedProviders = sortBy(
         providers
@@ -186,13 +180,20 @@ export const AssignedPolicies = ({
                 <DataTable<PolicyRepresentation>
                     columns={[
                         { accessorKey: "name", header: t("name") },
-                        { accessorKey: "type", header: t("type"), cell: ({ getValue }) => capitalize(String(getValue() ?? "")) },
+                        {
+                            accessorKey: "type",
+                            header: t("type"),
+                            cell: ({ getValue }) => capitalize(String(getValue() ?? ""))
+                        },
                         { accessorKey: "description", header: t("description") },
                         {
                             id: "actions",
                             cell: ({ row }) => (
                                 <DataTableRowActions row={row}>
-                                    <DropdownMenuItem onClick={() => unAssign(row.original)} className="text-destructive">
+                                    <DropdownMenuItem
+                                        onClick={() => unAssign(row.original)}
+                                        className="text-destructive"
+                                    >
                                         {t("unAssignPolicy")}
                                     </DropdownMenuItem>
                                 </DataTableRowActions>
@@ -204,24 +205,46 @@ export const AssignedPolicies = ({
                     searchPlaceholder={t("searchClientAuthorizationPolicy")}
                     emptyContent={
                         <Empty className="py-12">
-                            <EmptyHeader><EmptyTitle>{t("emptyAssignExistingPolicies")}</EmptyTitle></EmptyHeader>
-                            <EmptyContent><EmptyDescription>{t("emptyAssignExistingPoliciesInstructions")}</EmptyDescription></EmptyContent>
+                            <EmptyHeader>
+                                <EmptyTitle>
+                                    {t("emptyAssignExistingPolicies")}
+                                </EmptyTitle>
+                            </EmptyHeader>
+                            <EmptyContent>
+                                <EmptyDescription>
+                                    {t("emptyAssignExistingPoliciesInstructions")}
+                                </EmptyDescription>
+                            </EmptyContent>
                         </Empty>
                     }
                     emptyMessage={t("emptyAssignExistingPolicies")}
                     toolbar={
                         <DropdownMenu>
                             <DropdownMenuTrigger asChild>
-                                <Button variant="outline" data-testid="filter-type-dropdown-existingPolicies">
+                                <Button
+                                    variant="outline"
+                                    data-testid="filter-type-dropdown-existingPolicies"
+                                >
                                     <Funnel className="size-4 mr-1" />
                                     {filterType ? capitalize(filterType) : t("allTypes")}
                                     <CaretDown className="size-4 ml-1" />
                                 </Button>
                             </DropdownMenuTrigger>
                             <DropdownMenuContent>
-                                <DropdownMenuItem data-testid="filter-type-dropdown-existingPolicies-all" onClick={() => setFilterType(undefined)}>{t("allTypes")}</DropdownMenuItem>
+                                <DropdownMenuItem
+                                    data-testid="filter-type-dropdown-existingPolicies-all"
+                                    onClick={() => setFilterType(undefined)}
+                                >
+                                    {t("allTypes")}
+                                </DropdownMenuItem>
                                 {sortedProviders.map(name => (
-                                    <DropdownMenuItem data-testid={`filter-type-dropdown-existingPolicies-${name}`} key={name} onClick={() => setFilterType(name)}>{name}</DropdownMenuItem>
+                                    <DropdownMenuItem
+                                        data-testid={`filter-type-dropdown-existingPolicies-${name}`}
+                                        key={name}
+                                        onClick={() => setFilterType(name)}
+                                    >
+                                        {name}
+                                    </DropdownMenuItem>
                                 ))}
                             </DropdownMenuContent>
                         </DropdownMenu>

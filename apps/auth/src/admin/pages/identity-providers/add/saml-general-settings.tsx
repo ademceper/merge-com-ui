@@ -1,15 +1,14 @@
+import { useTranslation } from "@merge-rd/i18n";
+import { Label } from "@merge-rd/ui/components/label";
+import { useFormContext, useWatch } from "react-hook-form";
 import {
     HelpItem,
     TextControl,
     useEnvironment
 } from "../../../../shared/keycloak-ui-shared";
-import { Label } from "@merge-rd/ui/components/label";
-import { useFormContext, useWatch } from "react-hook-form";
-import { useTranslation } from "@merge-rd/i18n";
-
-import { FormattedLink } from "../../../shared/ui/external-link/formatted-link";
-import { useRealm } from "../../../app/providers/realm-context/realm-context";
 import type { Environment } from "../../../app/environment";
+import { useRealm } from "../../../app/providers/realm-context/realm-context";
+import { FormattedLink } from "../../../shared/ui/external-link/formatted-link";
 import { DisplayOrder } from "../component/display-order";
 import { RedirectUrl } from "../component/redirect-url";
 

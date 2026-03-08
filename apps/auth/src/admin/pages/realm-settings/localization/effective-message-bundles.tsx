@@ -1,16 +1,6 @@
-import { Button } from "@merge-rd/ui/components/button";
+import { DEFAULT_LOCALE, useTranslation } from "@merge-rd/i18n";
 import { Badge } from "@merge-rd/ui/components/badge";
-import { Input } from "@merge-rd/ui/components/input";
-import { Label } from "@merge-rd/ui/components/label";
-import {
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-    SelectValue,
-} from "@merge-rd/ui/components/select";
-import { DataTable, type ColumnDef } from "@/admin/shared/ui/data-table";
-import { FormPanel } from "../../../../shared/keycloak-ui-shared/scroll-form/form-panel";
+import { Button } from "@merge-rd/ui/components/button";
 import {
     Empty,
     EmptyContent,
@@ -19,18 +9,27 @@ import {
     EmptyMedia,
     EmptyTitle
 } from "@merge-rd/ui/components/empty";
+import { Input } from "@merge-rd/ui/components/input";
+import { Label } from "@merge-rd/ui/components/label";
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue
+} from "@merge-rd/ui/components/select";
 import { MagnifyingGlass, X } from "@phosphor-icons/react";
 import { pickBy } from "lodash-es";
 import { useMemo, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
-import { useTranslation } from "@merge-rd/i18n";
+import { type ColumnDef, DataTable } from "@/admin/shared/ui/data-table";
+import { FormPanel } from "../../../../shared/keycloak-ui-shared/scroll-form/form-panel";
 import { useAdminClient } from "../../../app/admin-client";
 import { useRealm } from "../../../app/providers/realm-context/realm-context";
 import { useServerInfo } from "../../../app/providers/server-info/server-info-provider";
 import { useWhoAmI } from "../../../app/providers/whoami/who-am-i";
-import { DEFAULT_LOCALE } from "@merge-rd/i18n";
-import { localeToDisplayName } from "../../../shared/lib/util";
 import useLocaleSort, { mapByKey } from "../../../shared/lib/useLocaleSort";
+import { localeToDisplayName } from "../../../shared/lib/util";
 
 type EffectiveMessageBundlesProps = {
     defaultSupportedLocales: string[];
@@ -50,12 +49,12 @@ const defaultValues: EffectiveMessageBundlesSearchForm = {
     theme: "",
     themeType: "",
     locale: "",
-    hasWords: [],
+    hasWords: []
 };
 
 export const EffectiveMessageBundles = ({
     defaultSupportedLocales,
-    defaultLocales,
+    defaultLocales
 }: EffectiveMessageBundlesProps) => {
     const { adminClient } = useAdminClient();
     const { t } = useTranslation();
@@ -72,53 +71,52 @@ export const EffectiveMessageBundles = ({
 
     const themeTypes = useMemo(() => {
         if (!themes) return [];
-        return localeSort(Object.keys(themes), (key) => key);
+        return localeSort(Object.keys(themes), key => key);
     }, [themes, localeSort]);
 
     const themeNames = useMemo(() => {
         if (!themes) return [];
         return localeSort(
             Object.values(themes as Record<string, { name: string }[]>)
-                .flatMap((theme) => theme.map((item) => item.name))
+                .flatMap(theme => theme.map(item => item.name))
                 .filter((value, index, self) => self.indexOf(value) === index),
-            (name) => name,
+            name => name
         );
     }, [themes, localeSort]);
 
     const combinedLocales = useMemo(() => {
         return Array.from(
-            new Set([...defaultLocales, ...defaultSupportedLocales]),
+            new Set([...defaultLocales, ...defaultSupportedLocales])
         ).filter(Boolean);
     }, [defaultLocales, defaultSupportedLocales]);
 
-    const filterLabels: Record<keyof EffectiveMessageBundlesSearchForm, string> =
-        {
-            theme: t("theme"),
-            themeType: t("themeType"),
-            locale: t("language"),
-            hasWords: t("hasWords"),
-        };
+    const filterLabels: Record<keyof EffectiveMessageBundlesSearchForm, string> = {
+        theme: t("theme"),
+        themeType: t("themeType"),
+        locale: t("language"),
+        hasWords: t("hasWords")
+    };
 
     const {
         getValues,
         reset,
         formState: { isDirty, isValid },
-        control,
+        control
     } = useForm<EffectiveMessageBundlesSearchForm>({
         mode: "onChange",
-        defaultValues,
+        defaultValues
     });
 
     const runSearchWithFilter = (
-        filter: EffectiveMessageBundlesSearchForm = getValues(),
+        filter: EffectiveMessageBundlesSearchForm = getValues()
     ) => {
         const requiredKeys = ["theme", "themeType", "locale"];
         const hasAll =
             requiredKeys.every(
-                (k) =>
+                k =>
                     (filter[k as keyof EffectiveMessageBundlesSearchForm] ?? "")
                         .toString()
-                        .trim() !== "",
+                        .trim() !== ""
             ) &&
             themeNames.includes(filter.theme) &&
             themeTypes.includes(filter.themeType);
@@ -135,21 +133,20 @@ export const EffectiveMessageBundles = ({
                 theme: filter.theme,
                 themeType: filter.themeType,
                 locale: filter.locale || DEFAULT_LOCALE,
-                source: true,
+                source: true
             })
-            .then((messages) => {
+            .then(messages => {
                 const filtered =
                     filter.hasWords.length > 0
-                        ? messages.filter((m) =>
+                        ? messages.filter(m =>
                               filter.hasWords.some(
-                                  (f) =>
-                                      m.value.includes(f) || m.key.includes(f),
-                              ),
+                                  f => m.value.includes(f) || m.key.includes(f)
+                              )
                           )
                         : messages;
                 const sorted = localeSort(
                     [...filtered],
-                    mapByKey("key"),
+                    mapByKey("key")
                 ) as MessageBundleRow[];
                 setSearchResult(sorted);
                 setSearchPerformed(true);
@@ -165,9 +162,9 @@ export const EffectiveMessageBundles = ({
     const commitFilters = () => {
         const newFilters = pickBy(
             getValues(),
-            (value) =>
+            value =>
                 (typeof value === "string" && value !== "") ||
-                (Array.isArray(value) && value.length > 0),
+                (Array.isArray(value) && value.length > 0)
         );
         setActiveFilters(newFilters);
     };
@@ -189,22 +186,36 @@ export const EffectiveMessageBundles = ({
         const next = { ...defaultValues, ...formValues };
         delete next[key];
         reset(next);
-        setActiveFilters(pickBy(next, (v) => (typeof v === "string" && v !== "") || (Array.isArray(v) && v.length > 0)));
+        setActiveFilters(
+            pickBy(
+                next,
+                v =>
+                    (typeof v === "string" && v !== "") ||
+                    (Array.isArray(v) && v.length > 0)
+            )
+        );
         runSearchWithFilter(next);
     };
 
     const removeFilterValue = (
         key: keyof EffectiveMessageBundlesSearchForm,
-        valueToRemove: string,
+        valueToRemove: string
     ) => {
         const formValues = getValues();
         const fieldValue = formValues[key];
         const newFieldValue = Array.isArray(fieldValue)
-            ? fieldValue.filter((val) => val !== valueToRemove)
+            ? fieldValue.filter(val => val !== valueToRemove)
             : fieldValue;
         const next = { ...formValues, [key]: newFieldValue };
         reset(next);
-        setActiveFilters(pickBy(next, (v) => (typeof v === "string" && v !== "") || (Array.isArray(v) && v.length > 0)));
+        setActiveFilters(
+            pickBy(
+                next,
+                v =>
+                    (typeof v === "string" && v !== "") ||
+                    (Array.isArray(v) && v.length > 0)
+            )
+        );
         runSearchWithFilter(next);
     };
 
@@ -212,15 +223,13 @@ export const EffectiveMessageBundles = ({
         {
             accessorKey: "key",
             header: t("key"),
-            cell: ({ row }) => (
-                <span className="font-medium">{row.original.key}</span>
-            ),
+            cell: ({ row }) => <span className="font-medium">{row.original.key}</span>
         },
         {
             accessorKey: "value",
             header: t("value"),
-            cell: ({ row }) => row.original.value,
-        },
+            cell: ({ row }) => row.original.value
+        }
     ];
 
     return (
@@ -236,7 +245,7 @@ export const EffectiveMessageBundles = ({
                 <form
                     className="space-y-4"
                     data-testid="effectiveMessageBundlesSearchForm"
-                    onSubmit={(e) => {
+                    onSubmit={e => {
                         e.preventDefault();
                         submitSearch();
                     }}
@@ -248,9 +257,9 @@ export const EffectiveMessageBundles = ({
                                 name="theme"
                                 control={control}
                                 rules={{
-                                    validate: (v) =>
+                                    validate: v =>
                                         (v || "").toString().trim().length > 0 ||
-                                        t("required"),
+                                        t("required")
                                 }}
                                 render={({ field }) => (
                                     <Select
@@ -259,7 +268,7 @@ export const EffectiveMessageBundles = ({
                                                 ? field.value
                                                 : "__placeholder_theme__"
                                         }
-                                        onValueChange={(v) =>
+                                        onValueChange={v =>
                                             v !== "__placeholder_theme__" &&
                                             field.onChange(v)
                                         }
@@ -268,9 +277,7 @@ export const EffectiveMessageBundles = ({
                                             id="kc-theme"
                                             data-testid="effective_message_bundles-theme-searchField"
                                         >
-                                            <SelectValue
-                                                placeholder={t("selectTheme")}
-                                            />
+                                            <SelectValue placeholder={t("selectTheme")} />
                                         </SelectTrigger>
                                         <SelectContent>
                                             <SelectItem
@@ -279,11 +286,8 @@ export const EffectiveMessageBundles = ({
                                             >
                                                 {t("selectTheme")}
                                             </SelectItem>
-                                            {themeNames.map((option) => (
-                                                <SelectItem
-                                                    key={option}
-                                                    value={option}
-                                                >
+                                            {themeNames.map(option => (
+                                                <SelectItem key={option} value={option}>
                                                     {option}
                                                 </SelectItem>
                                             ))}
@@ -298,9 +302,9 @@ export const EffectiveMessageBundles = ({
                                 name="themeType"
                                 control={control}
                                 rules={{
-                                    validate: (v) =>
+                                    validate: v =>
                                         (v || "").toString().trim().length > 0 ||
-                                        t("required"),
+                                        t("required")
                                 }}
                                 render={({ field }) => (
                                     <Select
@@ -309,7 +313,7 @@ export const EffectiveMessageBundles = ({
                                                 ? field.value
                                                 : "__placeholder_themeType__"
                                         }
-                                        onValueChange={(v) =>
+                                        onValueChange={v =>
                                             v !== "__placeholder_themeType__" &&
                                             field.onChange(v)
                                         }
@@ -319,9 +323,7 @@ export const EffectiveMessageBundles = ({
                                             data-testid="effective-message-bundles-feature-searchField"
                                         >
                                             <SelectValue
-                                                placeholder={t(
-                                                    "selectThemeType",
-                                                )}
+                                                placeholder={t("selectThemeType")}
                                             />
                                         </SelectTrigger>
                                         <SelectContent>
@@ -331,11 +333,8 @@ export const EffectiveMessageBundles = ({
                                             >
                                                 {t("selectThemeType")}
                                             </SelectItem>
-                                            {themeTypes.map((option) => (
-                                                <SelectItem
-                                                    key={option}
-                                                    value={option}
-                                                >
+                                            {themeTypes.map(option => (
+                                                <SelectItem key={option} value={option}>
                                                     {option}
                                                 </SelectItem>
                                             ))}
@@ -350,9 +349,9 @@ export const EffectiveMessageBundles = ({
                                 name="locale"
                                 control={control}
                                 rules={{
-                                    validate: (v) =>
+                                    validate: v =>
                                         (v || "").toString().trim().length > 0 ||
-                                        t("required"),
+                                        t("required")
                                 }}
                                 render={({ field }) => (
                                     <Select
@@ -361,7 +360,7 @@ export const EffectiveMessageBundles = ({
                                                 ? field.value
                                                 : "__placeholder_language__"
                                         }
-                                        onValueChange={(v) =>
+                                        onValueChange={v =>
                                             v !== "__placeholder_language__" &&
                                             field.onChange(v)
                                         }
@@ -371,9 +370,7 @@ export const EffectiveMessageBundles = ({
                                             data-testid="effective-message-bundles-language-searchField"
                                         >
                                             <SelectValue
-                                                placeholder={t(
-                                                    "selectLanguage",
-                                                )}
+                                                placeholder={t("selectLanguage")}
                                             />
                                         </SelectTrigger>
                                         <SelectContent>
@@ -383,14 +380,11 @@ export const EffectiveMessageBundles = ({
                                             >
                                                 {t("selectLanguage")}
                                             </SelectItem>
-                                            {combinedLocales.map((option) => (
-                                                <SelectItem
-                                                    key={option}
-                                                    value={option}
-                                                >
+                                            {combinedLocales.map(option => (
+                                                <SelectItem key={option} value={option}>
                                                     {localeToDisplayName(
                                                         option,
-                                                        whoAmI.locale,
+                                                        whoAmI.locale
                                                     )}
                                                 </SelectItem>
                                             ))}
@@ -410,7 +404,7 @@ export const EffectiveMessageBundles = ({
                                             id="kc-hasWords"
                                             data-testid="effective-message-bundles-hasWords-searchField"
                                             value={field.value.join(" ")}
-                                            onChange={(e) => {
+                                            onChange={e => {
                                                 const input = e.target.value;
                                                 if (input.trim().length === 0) {
                                                     field.onChange([]);
@@ -418,10 +412,8 @@ export const EffectiveMessageBundles = ({
                                                     field.onChange(
                                                         input
                                                             .split(" ")
-                                                            .map((word) =>
-                                                                word.trim(),
-                                                            )
-                                                            .filter(Boolean),
+                                                            .map(word => word.trim())
+                                                            .filter(Boolean)
                                                     );
                                                 }
                                             }}
@@ -439,18 +431,16 @@ export const EffectiveMessageBundles = ({
                                                                     field.value.filter(
                                                                         (
                                                                             _: string,
-                                                                            i: number,
-                                                                        ) =>
-                                                                            i !==
-                                                                            index,
-                                                                    ),
+                                                                            i: number
+                                                                        ) => i !== index
+                                                                    )
                                                                 )
                                                             }
                                                         >
                                                             {word}{" "}
                                                             <X className="ml-1 inline size-3" />
                                                         </Badge>
-                                                    ),
+                                                    )
                                                 )}
                                             </div>
                                         )}
@@ -484,13 +474,10 @@ export const EffectiveMessageBundles = ({
                         {(
                             Object.entries(activeFilters) as [
                                 keyof EffectiveMessageBundlesSearchForm,
-                                string | string[],
+                                string | string[]
                             ][]
                         ).map(([key, value]) => (
-                            <div
-                                key={key}
-                                className="flex items-center gap-1"
-                            >
+                            <div key={key} className="flex items-center gap-1">
                                 <span className="text-muted-foreground text-xs">
                                     {filterLabels[key]}:
                                 </span>
@@ -503,23 +490,20 @@ export const EffectiveMessageBundles = ({
                                         {key === "locale"
                                             ? localeToDisplayName(
                                                   value,
-                                                  whoAmI.locale,
+                                                  whoAmI.locale
                                               )?.toLowerCase()
                                             : value}
                                         <X className="ml-1 inline size-3" />
                                     </Badge>
                                 ) : (
-                                    value.map((entry) => (
+                                    value.map(entry => (
                                         <Badge
                                             variant="secondary"
                                             key={entry}
                                             className="cursor-pointer"
-                                            onClick={() =>
-                                                removeFilterValue(key, entry)
-                                            }
+                                            onClick={() => removeFilterValue(key, entry)}
                                         >
-                                            {entry}{" "}
-                                            <X className="ml-1 inline size-3" />
+                                            {entry} <X className="ml-1 inline size-3" />
                                         </Badge>
                                     ))
                                 )}
@@ -538,7 +522,9 @@ export const EffectiveMessageBundles = ({
                         <EmptyTitle>{t("emptyEffectiveMessageBundles")}</EmptyTitle>
                     </EmptyHeader>
                     <EmptyContent>
-                        <EmptyDescription>{t("emptyEffectiveMessageBundlesInstructions")}</EmptyDescription>
+                        <EmptyDescription>
+                            {t("emptyEffectiveMessageBundlesInstructions")}
+                        </EmptyDescription>
                     </EmptyContent>
                 </Empty>
             )}

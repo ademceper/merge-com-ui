@@ -1,10 +1,10 @@
+import { useTranslation } from "@merge-rd/i18n";
 import { Button } from "@merge-rd/ui/components/button";
 import { Input } from "@merge-rd/ui/components/input";
 import { Label } from "@merge-rd/ui/components/label";
 import { MinusCircle, PlusCircle } from "@phosphor-icons/react";
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useFormContext } from "react-hook-form";
-import { useTranslation } from "@merge-rd/i18n";
 import { HelpItem } from "../../../../shared/keycloak-ui-shared";
 import type { ComponentProps } from "./components";
 
@@ -122,7 +122,10 @@ export const ClaimDisplayComponent = ({
     return displays.length !== 0 ? (
         <div className="space-y-2">
             <div className="flex items-center gap-1">
-                <Label htmlFor={name!}>{t(label!)}{required && " *"}</Label>
+                <Label htmlFor={name!}>
+                    {t(label!)}
+                    {required && " *"}
+                </Label>
                 <HelpItem helpText={t(helpText!)} fieldLabelId={`${label}`} />
             </div>
             <div className="flex flex-col gap-2">
@@ -135,13 +138,17 @@ export const ClaimDisplayComponent = ({
                     </div>
                 </div>
                 {displays.map((display, index) => (
-                    <div className="flex gap-2" key={display.id} data-testid="claim-display-row">
+                    <div
+                        className="flex gap-2"
+                        key={display.id}
+                        data-testid="claim-display-row"
+                    >
                         <div className="flex-1">
                             <Input
                                 id={`${fieldName}.${index}.name`}
                                 data-testid={`${fieldName}.${index}.name`}
                                 value={display.name}
-                                onChange={(e) => updateName(index, e.target.value)}
+                                onChange={e => updateName(index, e.target.value)}
                                 onBlur={() => flushUpdate()}
                                 disabled={isDisabled}
                                 placeholder={t("claimDisplayNamePlaceholder")}
@@ -152,7 +159,7 @@ export const ClaimDisplayComponent = ({
                                 id={`${fieldName}.${index}.locale`}
                                 data-testid={`${fieldName}.${index}.locale`}
                                 value={display.locale}
-                                onChange={(e) => updateLocale(index, e.target.value)}
+                                onChange={e => updateLocale(index, e.target.value)}
                                 onBlur={() => flushUpdate()}
                                 disabled={isDisabled}
                                 placeholder={t("claimDisplayLocalePlaceholder")}
@@ -185,10 +192,7 @@ export const ClaimDisplayComponent = ({
             </div>
         </div>
     ) : (
-        <div
-            data-testid={`${fieldName}-empty-state`}
-            className="p-0 text-center"
-        >
+        <div data-testid={`${fieldName}-empty-state`} className="p-0 text-center">
             <p className="text-muted-foreground">{t("noClaimDisplayEntries")}</p>
             <div className="mt-2">
                 <Button

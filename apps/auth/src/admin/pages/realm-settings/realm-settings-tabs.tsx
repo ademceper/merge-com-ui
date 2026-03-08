@@ -1,26 +1,7 @@
 import { fetchWithError } from "@keycloak/keycloak-admin-client";
 import type RealmRepresentation from "@keycloak/keycloak-admin-client/lib/defs/realmRepresentation";
-import { UserProfileConfig } from "@keycloak/keycloak-admin-client/lib/defs/userProfileMetadata";
-import { getErrorDescription, getErrorMessage, useEnvironment } from "../../../shared/keycloak-ui-shared";
-import { toast } from "sonner";
-import {
-    DropdownMenu,
-    DropdownMenuContent,
-    DropdownMenuItem,
-    DropdownMenuSeparator,
-    DropdownMenuTrigger
-} from "@merge-rd/ui/components/dropdown-menu";
-import { Label } from "@merge-rd/ui/components/label";
-import { Switch } from "@merge-rd/ui/components/switch";
-import { buttonVariants } from "@merge-rd/ui/components/button";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@merge-rd/ui/components/tabs";
-import { DotsThreeVertical, DownloadSimple, UploadSimple, Trash } from "@phosphor-icons/react";
-import { useEffect, useState } from "react";
-import { Controller, FormProvider, useForm } from "react-hook-form";
+import type { UserProfileConfig } from "@keycloak/keycloak-admin-client/lib/defs/userProfileMetadata";
 import { useTranslation } from "@merge-rd/i18n";
-import { useLocation, useNavigate } from "@tanstack/react-router";
-import { useParams } from "../../shared/lib/useParams";
-import { useAdminClient } from "../../app/admin-client";
 import {
     AlertDialog,
     AlertDialogAction,
@@ -31,38 +12,63 @@ import {
     AlertDialogHeader,
     AlertDialogTitle
 } from "@merge-rd/ui/components/alert-dialog";
-import { useConfirmDialog } from "../../shared/ui/confirm-dialog/confirm-dialog";
-import type { KeyValueType } from "../../shared/ui/key-value-form/key-value-convert";
-
+import { buttonVariants } from "@merge-rd/ui/components/button";
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuSeparator,
+    DropdownMenuTrigger
+} from "@merge-rd/ui/components/dropdown-menu";
+import { Label } from "@merge-rd/ui/components/label";
+import { Switch } from "@merge-rd/ui/components/switch";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@merge-rd/ui/components/tabs";
+import {
+    DotsThreeVertical,
+    DownloadSimple,
+    Trash,
+    UploadSimple
+} from "@phosphor-icons/react";
+import { useLocation, useNavigate } from "@tanstack/react-router";
+import { useEffect, useState } from "react";
+import { Controller, FormProvider, useForm } from "react-hook-form";
+import { toast } from "sonner";
+import {
+    getErrorDescription,
+    getErrorMessage,
+    useEnvironment
+} from "../../../shared/keycloak-ui-shared";
+import { useAdminClient } from "../../app/admin-client";
+import type { Environment } from "../../app/environment";
 import { useAccess } from "../../app/providers/access/access";
 import { useRealm } from "../../app/providers/realm-context/realm-context";
-import { toDashboard } from "../../shared/lib/route-helpers";
-import type { Environment } from "../../app/environment";
-import { convertFormValuesToObject, convertToFormValues } from "../../shared/lib/util";
 import { getAuthorizationHeaders } from "../../shared/lib/getAuthorizationHeaders";
 import { joinPath } from "../../shared/lib/joinPath";
+import type { RealmSettingsTab } from "../../shared/lib/route-helpers";
+import { toDashboard, toRealmSettings } from "../../shared/lib/route-helpers";
 import useIsFeatureEnabled, { Feature } from "../../shared/lib/useIsFeatureEnabled";
 import useLocale from "../../shared/lib/useLocale";
+import { useParams } from "../../shared/lib/useParams";
+import { convertFormValuesToObject, convertToFormValues } from "../../shared/lib/util";
+import { useConfirmDialog } from "../../shared/ui/confirm-dialog/confirm-dialog";
+import type { KeyValueType } from "../../shared/ui/key-value-form/key-value-convert";
 import { RealmSettingsEmailTab } from "./email-tab";
+import { EventsTab } from "./event-config/events-tab";
 import { RealmSettingsGeneralTab } from "./general-tab";
+import { KeysTab } from "./keys/keys-tab";
+import { LocalizationTab } from "./localization/localization-tab";
 import { RealmSettingsLoginTab } from "./login-tab";
 import { PartialExportDialog } from "./partial-export";
 import { PartialImportDialog } from "./partial-import";
 import { PoliciesTab } from "./policies-tab";
 import ProfilesTab from "./profiles-tab";
+import { type ClientPoliciesTab, toClientPolicies } from "../../shared/lib/routes/realm-settings";
+import { SecurityDefenses } from "./security-defences/security-defenses";
 import { RealmSettingsSessionsTab } from "./sessions-tab";
 import ThemesTab from "./themes/themes-tab";
 import { RealmSettingsTokensTab } from "./tokens-tab";
-import { UserRegistration } from "./user-registration";
-import { EventsTab } from "./event-config/events-tab";
-import { KeysTab } from "./keys/keys-tab";
-import { LocalizationTab } from "./localization/localization-tab";
-import { toClientPolicies } from "./routes/client-policies";
-import type { ClientPoliciesTab } from "./routes/client-policies";
-import { toRealmSettings } from "../../shared/lib/route-helpers";
-import type { RealmSettingsTab } from "../../shared/lib/route-helpers";
-import { SecurityDefenses } from "./security-defences/security-defenses";
 import { UserProfileTab } from "./user-profile/user-profile-tab";
+import { UserRegistration } from "./user-registration";
 
 export interface UIRealmRepresentation extends RealmRepresentation {
     upConfig?: UserProfileConfig;
@@ -111,22 +117,33 @@ const RealmSettingsHeader = ({
             navigate({ to: toDashboard({ realm: environment.masterRealm }) as string });
             refresh();
         } catch (error) {
-            toast.error(t("deleteErrorRealmSetting", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
+            toast.error(t("deleteErrorRealmSetting", { error: getErrorMessage(error) }), {
+                description: getErrorDescription(error)
+            });
         }
     };
 
     return (
         <>
             <DisableConfirm />
-            <AlertDialog open={deleteRealmDialogOpen} onOpenChange={setDeleteRealmDialogOpen}>
+            <AlertDialog
+                open={deleteRealmDialogOpen}
+                onOpenChange={setDeleteRealmDialogOpen}
+            >
                 <AlertDialogContent>
                     <AlertDialogHeader>
                         <AlertDialogTitle>{t("deleteConfirmTitle")}</AlertDialogTitle>
-                        <AlertDialogDescription>{t("deleteConfirmRealmSetting")}</AlertDialogDescription>
+                        <AlertDialogDescription>
+                            {t("deleteConfirmRealmSetting")}
+                        </AlertDialogDescription>
                     </AlertDialogHeader>
                     <AlertDialogFooter>
                         <AlertDialogCancel>{t("cancel")}</AlertDialogCancel>
-                        <AlertDialogAction variant="destructive" data-testid="confirm" onClick={onDeleteRealmConfirm}>
+                        <AlertDialogAction
+                            variant="destructive"
+                            data-testid="confirm"
+                            onClick={onDeleteRealmConfirm}
+                        >
                             {t("delete")}
                         </AlertDialogAction>
                     </AlertDialogFooter>
@@ -144,18 +161,30 @@ const RealmSettingsHeader = ({
                 <div className="flex flex-wrap items-center gap-2" />
                 <div className="flex items-center gap-2">
                     <div className="flex items-center gap-2 mr-4">
-                        <Label htmlFor="realm-settings-switch" className="text-sm">{t("enabled")}</Label>
-                        <Switch id="realm-settings-switch" data-testid="realm-settings-switch" disabled={!canManageRealm} checked={value} aria-label={t("enabled")} onCheckedChange={val => {
-                            if (!val) {
-                                toggleDisableDialog();
-                            } else {
-                                onChange(val);
-                                save();
-                            }
-                        }} />
+                        <Label htmlFor="realm-settings-switch" className="text-sm">
+                            {t("enabled")}
+                        </Label>
+                        <Switch
+                            id="realm-settings-switch"
+                            data-testid="realm-settings-switch"
+                            disabled={!canManageRealm}
+                            checked={value}
+                            aria-label={t("enabled")}
+                            onCheckedChange={val => {
+                                if (!val) {
+                                    toggleDisableDialog();
+                                } else {
+                                    onChange(val);
+                                    save();
+                                }
+                            }}
+                        />
                     </div>
                     <DropdownMenu>
-                        <DropdownMenuTrigger data-testid="action-dropdown" className={buttonVariants({ variant: "ghost", size: "icon" })}>
+                        <DropdownMenuTrigger
+                            data-testid="action-dropdown"
+                            className={buttonVariants({ variant: "ghost", size: "icon" })}
+                        >
                             <DotsThreeVertical className="size-5" />
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end">
@@ -195,7 +224,13 @@ const RealmSettingsHeader = ({
     );
 };
 
-function ClientPoliciesSubTabs({ realmName: _realmName, subTab = "profiles" }: { realmName: string; subTab?: string }) {
+function ClientPoliciesSubTabs({
+    realmName: _realmName,
+    subTab = "profiles"
+}: {
+    realmName: string;
+    subTab?: string;
+}) {
     if (subTab === "policies") {
         return <PoliciesTab />;
     }
@@ -293,12 +328,16 @@ export const RealmSettingsTabs = () => {
             if (!response.ok) throw new Error(response.statusText);
             toast.success(t("realmSaveSuccess"));
         } catch (error) {
-            toast.error(t("realmSaveError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
+            toast.error(t("realmSaveError", { error: getErrorMessage(error) }), {
+                description: getErrorDescription(error)
+            });
         }
 
         const isRealmRenamed = realmName !== (r.realm || realm?.realm);
         if (isRealmRenamed) {
-            navigate({ to: toRealmSettings({ realm: r.realm!, tab: "general" }) as string });
+            navigate({
+                to: toRealmSettings({ realm: r.realm!, tab: "general" }) as string
+            });
         }
         refresh();
     };
@@ -314,8 +353,12 @@ export const RealmSettingsTabs = () => {
     // Check if we're in a sub-tab route by examining the pathname
     const isThemesSubTab = location.pathname.includes("/realm-settings/themes/");
     const isKeysSubTab = location.pathname.includes("/realm-settings/keys/");
-    const isUserProfileSubTab = location.pathname.includes("/realm-settings/user-profile/");
-    const isClientPoliciesSubTab = location.pathname.includes("/realm-settings/client-policies/");
+    const isUserProfileSubTab = location.pathname.includes(
+        "/realm-settings/user-profile/"
+    );
+    const isClientPoliciesSubTab = location.pathname.includes(
+        "/realm-settings/client-policies/"
+    );
 
     const renderContent = () => {
         // Handle sub-tab routes where tab param contains the sub-tab value
@@ -334,15 +377,26 @@ export const RealmSettingsTabs = () => {
             return (
                 <Tabs
                     value={clientPoliciesTab}
-                    onValueChange={(value) =>
-                        navigate({ to: toClientPolicies({ realm: realmName!, tab: value as ClientPoliciesTab }) as string })
+                    onValueChange={value =>
+                        navigate({
+                            to: toClientPolicies({
+                                realm: realmName!,
+                                tab: value as ClientPoliciesTab
+                            }) as string
+                        })
                     }
                 >
                     <TabsList variant="line" className="mb-4">
-                        <TabsTrigger value="profiles" data-testid="rs-client-policies-profiles-tab">
+                        <TabsTrigger
+                            value="profiles"
+                            data-testid="rs-client-policies-profiles-tab"
+                        >
                             {t("profiles")}
                         </TabsTrigger>
-                        <TabsTrigger value="policies" data-testid="rs-client-policies-policies-tab">
+                        <TabsTrigger
+                            value="policies"
+                            data-testid="rs-client-policies-policies-tab"
+                        >
                             {t("policies")}
                         </TabsTrigger>
                     </TabsList>
@@ -389,7 +443,12 @@ export const RealmSettingsTabs = () => {
                     <ClientPoliciesSubTabs realmName={realmName} subTab="profiles" />
                 ) : null;
             case "user-profile":
-                return <UserProfileTab setTableData={setTableData as any} subTab="attributes" />;
+                return (
+                    <UserProfileTab
+                        setTableData={setTableData as any}
+                        subTab="attributes"
+                    />
+                );
             case "user-registration":
                 return canViewUserRegistration ? <UserRegistration /> : null;
             default:
@@ -424,12 +483,20 @@ export const RealmSettingsTabs = () => {
             <div className="pt-4 pb-6 px-0 min-w-0">
                 <Tabs
                     value={currentTab}
-                    onValueChange={(value) =>
-                        navigate({ to: toRealmSettings({ realm: realmName, tab: value as RealmSettingsTab }) as string })
+                    onValueChange={value =>
+                        navigate({
+                            to: toRealmSettings({
+                                realm: realmName,
+                                tab: value as RealmSettingsTab
+                            }) as string
+                        })
                     }
                 >
                     <div className="w-full min-w-0 overflow-x-auto overflow-y-hidden mb-4">
-                        <TabsList variant="line" className="mb-0 w-max min-w-0 **:data-[slot=tabs-trigger]:flex-none">
+                        <TabsList
+                            variant="line"
+                            className="mb-0 w-max min-w-0 **:data-[slot=tabs-trigger]:flex-none"
+                        >
                             <TabsTrigger value="general" data-testid="rs-general-tab">
                                 {t("general")}
                             </TabsTrigger>
@@ -450,10 +517,16 @@ export const RealmSettingsTabs = () => {
                                     {t("events")}
                                 </TabsTrigger>
                             )}
-                            <TabsTrigger value="localization" data-testid="rs-localization-tab">
+                            <TabsTrigger
+                                value="localization"
+                                data-testid="rs-localization-tab"
+                            >
                                 {t("localization")}
                             </TabsTrigger>
-                            <TabsTrigger value="security-defenses" data-testid="rs-security-defenses-tab">
+                            <TabsTrigger
+                                value="security-defenses"
+                                data-testid="rs-security-defenses-tab"
+                            >
                                 {t("securityDefences")}
                             </TabsTrigger>
                             <TabsTrigger value="sessions" data-testid="rs-sessions-tab">
@@ -463,15 +536,24 @@ export const RealmSettingsTabs = () => {
                                 {t("tokens")}
                             </TabsTrigger>
                             {isFeatureEnabled(Feature.ClientPolicies) && (
-                                <TabsTrigger value="client-policies" data-testid="rs-client-policies-tab">
+                                <TabsTrigger
+                                    value="client-policies"
+                                    data-testid="rs-client-policies-tab"
+                                >
                                     {t("clientPolicies")}
                                 </TabsTrigger>
                             )}
-                            <TabsTrigger value="user-profile" data-testid="rs-user-profile-tab">
+                            <TabsTrigger
+                                value="user-profile"
+                                data-testid="rs-user-profile-tab"
+                            >
                                 {t("attributes")}
                             </TabsTrigger>
                             {canViewUserRegistration && (
-                                <TabsTrigger value="user-registration" data-testid="rs-user-registration-tab">
+                                <TabsTrigger
+                                    value="user-registration"
+                                    data-testid="rs-user-registration-tab"
+                                >
                                     {t("registration")}
                                 </TabsTrigger>
                             )}

@@ -1,25 +1,5 @@
 import { fetchWithError } from "@keycloak/keycloak-admin-client";
-import {
-    getErrorDescription,
-    getErrorMessage,
-    KeycloakSpinner,
-} from "../../../shared/keycloak-ui-shared";
-import { toast } from "sonner";
-import { Button } from "@merge-rd/ui/components/button";
-import { Label } from "@merge-rd/ui/components/label";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@merge-rd/ui/components/tabs";
-import {
-    DataTable,
-    DataTableRowActions,
-    type ColumnDef,
-} from "@/admin/shared/ui/data-table";
-import { Copy, Link as LinkIcon, Trash } from "@phosphor-icons/react";
-import { sortBy } from "lodash-es";
-import { useCallback, useEffect, useMemo, useState } from "react";
 import { Trans, useTranslation } from "@merge-rd/i18n";
-import { Link, useNavigate } from "@tanstack/react-router";
-import { useParams } from "../../shared/lib/useParams";
-import { useAdminClient } from "../../app/admin-client";
 import {
     AlertDialog,
     AlertDialogAction,
@@ -30,20 +10,38 @@ import {
     AlertDialogHeader,
     AlertDialogTitle
 } from "@merge-rd/ui/components/alert-dialog";
+import { Button } from "@merge-rd/ui/components/button";
+import { Label } from "@merge-rd/ui/components/label";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@merge-rd/ui/components/tabs";
+import { Copy, Link as LinkIcon, Trash } from "@phosphor-icons/react";
+import { Link, useNavigate } from "@tanstack/react-router";
+import { sortBy } from "lodash-es";
+import { useCallback, useEffect, useMemo, useState } from "react";
+import { toast } from "sonner";
+import {
+    type ColumnDef,
+    DataTable,
+    DataTableRowActions
+} from "@/admin/shared/ui/data-table";
+import {
+    getErrorDescription,
+    getErrorMessage,
+    KeycloakSpinner
+} from "../../../shared/keycloak-ui-shared";
+import { useAdminClient } from "../../app/admin-client";
 import { useRealm } from "../../app/providers/realm-context/realm-context";
-import { addTrailingSlash } from "../../shared/lib/util";
 import { getAuthorizationHeaders } from "../../shared/lib/getAuthorizationHeaders";
+import { useParams } from "../../shared/lib/useParams";
 import useToggle from "../../shared/lib/useToggle";
+import { addTrailingSlash } from "../../shared/lib/util";
 import { BindFlowDialog } from "./bind-flow-dialog";
-import { DuplicateFlowModal } from "./duplicate-flow-modal";
-import { RequiredActions } from "./required-actions";
 import { UsedBy } from "./components/used-by";
-import { AuthenticationType } from "./constants";
+import type { AuthenticationType } from "./constants";
+import { DuplicateFlowModal } from "./duplicate-flow-modal";
 import { Policies } from "./policies/policies";
-import { toAuthentication } from "./routes/authentication";
-import type { AuthenticationTab } from "./routes/authentication";
-import { toCreateFlow } from "./routes/create-flow";
-import { toFlow } from "./routes/flow";
+import { RequiredActions } from "./required-actions";
+import type { AuthenticationTab } from "../../shared/lib/routes/authentication";
+import { toAuthentication, toCreateFlow, toFlow } from "../../shared/lib/routes/authentication";
 
 export default function AuthenticationSection() {
     const { adminClient } = useAdminClient();
@@ -52,7 +50,7 @@ export default function AuthenticationSection() {
     const { tab } = useParams<{ tab?: string }>();
     const navigate = useNavigate();
     const [key, setKey] = useState(0);
-    const refresh = useCallback(() => setKey((k) => k + 1), []);
+    const refresh = useCallback(() => setKey(k => k + 1), []);
     const [selectedFlow, setSelectedFlow] = useState<AuthenticationType>();
     const [flowToDelete, setFlowToDelete] = useState<AuthenticationType>();
     const [open, toggleOpen] = useToggle();
@@ -72,14 +70,14 @@ export default function AuthenticationSection() {
             try {
                 const flowsRequest = await fetchWithError(
                     `${addTrailingSlash(
-                        adminClient.baseUrl,
+                        adminClient.baseUrl
                     )}admin/realms/${realmName}/ui-ext/authentication-management/flows`,
                     {
                         method: "GET",
                         headers: getAuthorizationHeaders(
-                            await adminClient.getAccessToken(),
-                        ),
-                    },
+                            await adminClient.getAccessToken()
+                        )
+                    }
                 );
                 const data = await flowsRequest.json();
                 if (cancelled) return;
@@ -89,9 +87,9 @@ export default function AuthenticationSection() {
                 }
                 const sorted = sortBy(
                     [...data].sort((a, b) =>
-                        (a.alias ?? "").localeCompare(b.alias ?? ""),
+                        (a.alias ?? "").localeCompare(b.alias ?? "")
                     ),
-                    (flow) => flow.usedBy?.type,
+                    flow => flow.usedBy?.type
                 );
                 if (!cancelled) setFlows(sorted);
             } catch {
@@ -109,16 +107,15 @@ export default function AuthenticationSection() {
         if (!flowToDelete?.id) return;
         try {
             await adminClient.authenticationManagement.deleteFlow({
-                flowId: flowToDelete.id,
+                flowId: flowToDelete.id
             });
             setFlowToDelete(undefined);
             refresh();
             toast.success(t("deleteFlowSuccess"));
         } catch (error) {
-            toast.error(
-                t("deleteFlowError", { error: getErrorMessage(error) }),
-                { description: getErrorDescription(error) },
-            );
+            toast.error(t("deleteFlowError", { error: getErrorMessage(error) }), {
+                description: getErrorDescription(error)
+            });
         }
     };
 
@@ -133,33 +130,33 @@ export default function AuthenticationSection() {
                     return (
                         <>
                             <Link
-                                to={toFlow({
-                                    realm: realmName!,
-                                    id: flow.id!,
-                                    usedBy: flow.usedBy?.type || "notInUse",
-                                    builtIn: flow.builtIn ? "builtIn" : undefined,
-                                }) as string}
+                                to={
+                                    toFlow({
+                                        realm: realmName!,
+                                        id: flow.id!,
+                                        usedBy: flow.usedBy?.type || "notInUse",
+                                        builtIn: flow.builtIn ? "builtIn" : undefined
+                                    }) as string
+                                }
                                 className="text-primary hover:underline"
                             >
                                 {flow.alias}
                             </Link>{" "}
-                            {flow.builtIn && (
-                                <Label>{t("buildIn")}</Label>
-                            )}
+                            {flow.builtIn && <Label>{t("buildIn")}</Label>}
                         </>
                     );
-                },
+                }
             },
             {
                 id: "usedBy",
                 accessorKey: "usedBy",
                 header: t("usedBy"),
-                cell: ({ row }) => <UsedBy authType={row.original} />,
+                cell: ({ row }) => <UsedBy authType={row.original} />
             },
             {
                 accessorKey: "description",
                 header: t("description"),
-                cell: ({ row }) => row.original.description ?? "-",
+                cell: ({ row }) => row.original.description ?? "-"
             },
             {
                 id: "actions",
@@ -209,10 +206,10 @@ export default function AuthenticationSection() {
                             )}
                         </DataTableRowActions>
                     );
-                },
-            },
+                }
+            }
         ],
-        [t, realm, toggleOpen, toggleBindFlow],
+        [t, realm, toggleOpen, toggleBindFlow]
     );
 
     if (!realm) return <KeycloakSpinner />;
@@ -226,20 +223,32 @@ export default function AuthenticationSection() {
             default:
                 return (
                     <>
-                        <AlertDialog open={!!flowToDelete} onOpenChange={(open) => !open && setFlowToDelete(undefined)}>
+                        <AlertDialog
+                            open={!!flowToDelete}
+                            onOpenChange={open => !open && setFlowToDelete(undefined)}
+                        >
                             <AlertDialogContent>
                                 <AlertDialogHeader>
-                                    <AlertDialogTitle>{t("deleteConfirmFlow")}</AlertDialogTitle>
+                                    <AlertDialogTitle>
+                                        {t("deleteConfirmFlow")}
+                                    </AlertDialogTitle>
                                     <AlertDialogDescription>
                                         <Trans i18nKey="deleteConfirmFlowMessage">
                                             {" "}
-                                            <strong>{{ flow: flowToDelete?.alias ?? "" }}</strong>.
+                                            <strong>
+                                                {{ flow: flowToDelete?.alias ?? "" }}
+                                            </strong>
+                                            .
                                         </Trans>
                                     </AlertDialogDescription>
                                 </AlertDialogHeader>
                                 <AlertDialogFooter>
                                     <AlertDialogCancel>{t("cancel")}</AlertDialogCancel>
-                                    <AlertDialogAction variant="destructive" data-testid="confirm" onClick={onDeleteFlowConfirm}>
+                                    <AlertDialogAction
+                                        variant="destructive"
+                                        data-testid="confirm"
+                                        onClick={onDeleteFlowConfirm}
+                                    >
                                         {t("delete")}
                                     </AlertDialogAction>
                                 </AlertDialogFooter>
@@ -283,9 +292,11 @@ export default function AuthenticationSection() {
                                             className="flex h-9 w-9 shrink-0 items-center justify-center p-0 sm:h-9 sm:w-auto sm:gap-2 sm:px-4 sm:py-2"
                                         >
                                             <Link
-                                                to={toCreateFlow({
-                                                    realm: realmName,
-                                                }) as string}
+                                                to={
+                                                    toCreateFlow({
+                                                        realm: realmName
+                                                    }) as string
+                                                }
                                             >
                                                 {t("createFlow")}
                                             </Link>
@@ -299,41 +310,57 @@ export default function AuthenticationSection() {
         }
     };
 
-    const currentTab: AuthenticationTab = tab === "required-actions" || tab === "policies" ? tab : "flows";
+    const currentTab: AuthenticationTab =
+        tab === "required-actions" || tab === "policies" ? tab : "flows";
 
     return (
-        <>
-                        <div className="p-0">
-                <Tabs
-                    value={currentTab}
-                    onValueChange={(value) =>
-                        navigate({ to: toAuthentication({ realm: realmName, tab: value === "flows" ? undefined : value as AuthenticationTab }) as string })
-                    }
-                >
-                    <div className="w-full min-w-0 overflow-x-auto overflow-y-hidden mb-4">
-                        <TabsList variant="line" className="mb-0 w-max min-w-0 **:data-[slot=tabs-trigger]:flex-none">
-                            <TabsTrigger value="flows" data-testid="authentication-flows-tab">
-                                {t("flows")}
-                            </TabsTrigger>
-                            <TabsTrigger value="required-actions" data-testid="authentication-required-actions-tab">
-                                {t("requiredActions")}
-                            </TabsTrigger>
-                            <TabsTrigger value="policies" data-testid="authentication-policies-tab">
-                                {t("policies")}
-                            </TabsTrigger>
-                        </TabsList>
-                    </div>
-                    <TabsContent value="flows" className="mt-0 pt-0 outline-none">
-                        {renderContent()}
-                    </TabsContent>
-                    <TabsContent value="required-actions" className="mt-0 pt-0 outline-none">
-                        {renderContent()}
-                    </TabsContent>
-                    <TabsContent value="policies" className="mt-0 pt-0 outline-none">
-                        {renderContent()}
-                    </TabsContent>
-                </Tabs>
-            </div>
-        </>
+        <div className="p-0">
+            <Tabs
+                value={currentTab}
+                onValueChange={value =>
+                    navigate({
+                        to: toAuthentication({
+                            realm: realmName,
+                            tab:
+                                value === "flows"
+                                    ? undefined
+                                    : (value as AuthenticationTab)
+                        }) as string
+                    })
+                }
+            >
+                <div className="w-full min-w-0 overflow-x-auto overflow-y-hidden mb-4">
+                    <TabsList
+                        variant="line"
+                        className="mb-0 w-max min-w-0 **:data-[slot=tabs-trigger]:flex-none"
+                    >
+                        <TabsTrigger value="flows" data-testid="authentication-flows-tab">
+                            {t("flows")}
+                        </TabsTrigger>
+                        <TabsTrigger
+                            value="required-actions"
+                            data-testid="authentication-required-actions-tab"
+                        >
+                            {t("requiredActions")}
+                        </TabsTrigger>
+                        <TabsTrigger
+                            value="policies"
+                            data-testid="authentication-policies-tab"
+                        >
+                            {t("policies")}
+                        </TabsTrigger>
+                    </TabsList>
+                </div>
+                <TabsContent value="flows" className="mt-0 pt-0 outline-none">
+                    {renderContent()}
+                </TabsContent>
+                <TabsContent value="required-actions" className="mt-0 pt-0 outline-none">
+                    {renderContent()}
+                </TabsContent>
+                <TabsContent value="policies" className="mt-0 pt-0 outline-none">
+                    {renderContent()}
+                </TabsContent>
+            </Tabs>
+        </div>
     );
 }

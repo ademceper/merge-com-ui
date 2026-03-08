@@ -1,22 +1,21 @@
 import type ComponentRepresentation from "@keycloak/keycloak-admin-client/lib/defs/componentRepresentation";
 import type { KeyMetadataRepresentation } from "@keycloak/keycloak-admin-client/lib/defs/keyMetadataRepresentation";
-import { useFetch } from "../../../../shared/keycloak-ui-shared";
+import { useTranslation } from "@merge-rd/i18n";
 import { Button } from "@merge-rd/ui/components/button";
-import {
-    DataTable,
-    DataTableRowActions,
-    type ColumnDef
-} from "@/admin/shared/ui/data-table";
 import { DropdownMenuItem } from "@merge-rd/ui/components/dropdown-menu";
 import { Plus } from "@phosphor-icons/react";
-import { useState } from "react";
-import { useTranslation } from "@merge-rd/i18n";
 import { useNavigate } from "@tanstack/react-router";
-import { useAdminClient } from "../../../app/admin-client";
-import { useConfirmDialog } from "../../../shared/ui/confirm-dialog/confirm-dialog";
+import { useState } from "react";
+import {
+    type ColumnDef,
+    DataTable,
+    DataTableRowActions
+} from "@/admin/shared/ui/data-table";
 import { useRealm } from "../../../app/providers/realm-context/realm-context";
 import useFormatDate from "../../../shared/lib/useFormatDate";
-import { toKeysTab } from "../routes/keys-tab";
+import { useConfirmDialog } from "../../../shared/ui/confirm-dialog/confirm-dialog";
+import { useKeysMetadata } from "../api/use-keys-metadata";
+import { toKeysTab } from "../../../shared/lib/routes/realm-settings";
 
 type KeyData = KeyMetadataRepresentation & {
     provider?: string;
@@ -27,7 +26,6 @@ type KeysListTabProps = {
 };
 
 export const KeysListTab = ({ realmComponents }: KeysListTabProps) => {
-    const { adminClient } = useAdminClient();
     const { t } = useTranslation();
     const navigate = useNavigate();
     const formatDate = useFormatDate();
@@ -35,21 +33,7 @@ export const KeysListTab = ({ realmComponents }: KeysListTabProps) => {
 
     const [publicKey, setPublicKey] = useState("");
     const [certificate, setCertificate] = useState("");
-    const [keyData, setKeyData] = useState<KeyData[]>([]);
-
-    useFetch(
-        async () => {
-            const keysMetaData = await adminClient.realms.getKeys({ realm });
-            return keysMetaData.keys?.map(key => {
-                const provider = realmComponents.find(
-                    (c: ComponentRepresentation) => c.id === key.providerId
-                );
-                return { ...key, provider: provider?.name } as KeyData;
-            }) ?? [];
-        },
-        setKeyData,
-        []
-    );
+    const { data: keyData = [] } = useKeysMetadata(realmComponents);
 
     const [togglePublicKeyDialog, PublicKeyDialog] = useConfirmDialog({
         titleKey: t("publicKey"),
@@ -159,7 +143,11 @@ export const KeysListTab = ({ realmComponents }: KeysListTabProps) => {
                         variant="default"
                         className="flex h-9 w-9 shrink-0 items-center justify-center p-0 sm:h-9 sm:w-auto sm:gap-2 sm:px-4 sm:py-2"
                         aria-label={t("addProvider")}
-                        onClick={() => navigate({ to: toKeysTab({ realm, tab: "providers" }) as string })}
+                        onClick={() =>
+                            navigate({
+                                to: toKeysTab({ realm, tab: "providers" }) as string
+                            })
+                        }
                     >
                         <Plus size={20} className="shrink-0 sm:hidden" />
                         <span className="hidden sm:inline">{t("addProvider")}</span>

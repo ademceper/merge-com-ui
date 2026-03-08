@@ -1,8 +1,7 @@
-import { Controller, FormProvider, useFormContext } from "react-hook-form";
-import { Switch } from "@merge-rd/ui/components/switch";
-import { FormLabel } from "../../../../shared/keycloak-ui-shared";
 import { useTranslation } from "@merge-rd/i18n";
-import { HelpItem, TextControl } from "../../../../shared/keycloak-ui-shared";
+import { Switch } from "@merge-rd/ui/components/switch";
+import { Controller, FormProvider, useFormContext } from "react-hook-form";
+import { FormLabel, HelpItem, TextControl } from "../../../../shared/keycloak-ui-shared";
 
 export const SyncSettings = () => {
     const { t } = useTranslation();
@@ -33,7 +32,7 @@ export const SyncSettings = () => {
                             id="kc-periodic-full-sync"
                             data-testid="periodic-full-sync"
                             checked={field.value !== "-1"}
-                            onCheckedChange={(value) => {
+                            onCheckedChange={value => {
                                 field.onChange(value ? "604800" : "-1");
                             }}
                             aria-label={t("periodicFullSync")}
@@ -71,7 +70,7 @@ export const SyncSettings = () => {
                             id="kc-periodic-changed-users-sync"
                             data-testid="periodic-changed-users-sync"
                             checked={field.value !== "-1"}
-                            onCheckedChange={(value) => {
+                            onCheckedChange={value => {
                                 field.onChange(value ? "86400" : "-1");
                             }}
                             aria-label={t("periodicChangedUsersSync")}

@@ -1,5 +1,5 @@
 import { useTranslation } from "@merge-rd/i18n";
-import { TextControl, TextAreaControl } from "../../../shared/keycloak-ui-shared";
+import { TextAreaControl, TextControl } from "../../../shared/keycloak-ui-shared";
 
 import { FormAccess } from "../../shared/ui/form/form-access";
 import { DefaultSwitchControl } from "../../shared/ui/switch-control";
@@ -22,7 +22,11 @@ export const ClientDescription = ({
                     labelIcon={t("clientIdHelp")}
                     rules={{ required: t("required") }}
                 />
-                <TextControl name="name" label={t("name")} labelIcon={t("clientNameHelp")} />
+                <TextControl
+                    name="name"
+                    label={t("name")}
+                    labelIcon={t("clientNameHelp")}
+                />
                 <TextAreaControl
                     name="description"
                     label={t("description")}

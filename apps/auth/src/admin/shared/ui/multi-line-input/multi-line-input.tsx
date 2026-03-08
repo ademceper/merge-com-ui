@@ -1,11 +1,15 @@
+import { useTranslation } from "@merge-rd/i18n";
 import { Button } from "@merge-rd/ui/components/button";
 import { Input } from "@merge-rd/ui/components/input";
 import { cn } from "@merge-rd/ui/lib/utils";
 import { MinusCircle, Plus } from "@phosphor-icons/react";
-import React, { Fragment, useEffect, useMemo } from "react";
+import type React from "react";
+import { Fragment, useEffect, useMemo } from "react";
 import { useFormContext, useWatch } from "react-hook-form";
-import { useTranslation } from "@merge-rd/i18n";
-import { formInputWrapperClassName, HelpItem } from "../../../../shared/keycloak-ui-shared";
+import {
+    formInputWrapperClassName,
+    HelpItem
+} from "../../../../shared/keycloak-ui-shared";
 
 function stringToMultiline(value?: string): string[] {
     return typeof value === "string" ? value.split("##") : [value || ""];
@@ -15,7 +19,10 @@ function toStringValue(formValue: string[]): string {
     return formValue.join("##");
 }
 
-type MultiLineInputProps = Omit<React.InputHTMLAttributes<HTMLInputElement>, "form" | "defaultValue"> & {
+type MultiLineInputProps = Omit<
+    React.InputHTMLAttributes<HTMLInputElement>,
+    "form" | "defaultValue"
+> & {
     name: string;
     addButtonLabel?: string;
     isDisabled?: boolean;
@@ -60,7 +67,9 @@ export const MultiLineInput = ({
         if (!Array.isArray(values) || values.length === 0) {
             values = (stringify
                 ? stringToMultiline(
-                      Array.isArray(defaultValue) ? defaultValue.join("##") : (defaultValue as string | undefined) ?? ""
+                      Array.isArray(defaultValue)
+                          ? defaultValue.join("##")
+                          : ((defaultValue as string | undefined) ?? "")
                   )
                 : defaultValue) || [""];
         }
@@ -81,7 +90,7 @@ export const MultiLineInput = ({
     };
 
     const update = (values: string[]) => {
-        const fieldValue = values.flatMap(field => field);
+        const fieldValue = values.flat();
         setValue(name, stringify ? toStringValue(fieldValue) : fieldValue, {
             shouldDirty: true,
             shouldValidate: true
@@ -103,10 +112,15 @@ export const MultiLineInput = ({
                 <Fragment key={index}>
                     {index === 0 && labelIcon != null ? (
                         <div className="flex min-w-0 items-center gap-2">
-                            <div className={cn(formInputWrapperClassName, "min-w-0 flex-1")}>
+                            <div
+                                className={cn(
+                                    formInputWrapperClassName,
+                                    "min-w-0 flex-1"
+                                )}
+                            >
                                 <Input
                                     data-testid={name + index}
-                                    onChange={(e) => updateValue(index, e.target.value)}
+                                    onChange={e => updateValue(index, e.target.value)}
                                     name={`${name}.${index}.value`}
                                     value={value}
                                     disabled={isDisabled}
@@ -119,7 +133,7 @@ export const MultiLineInput = ({
                                 />
                                 <Button
                                     type="button"
-                                    data-testid={"remove" + index}
+                                    data-testid={`remove${index}`}
                                     variant="ghost"
                                     size="icon-sm"
                                     onClick={() => remove(index)}
@@ -137,7 +151,7 @@ export const MultiLineInput = ({
                         <div className={formInputWrapperClassName}>
                             <Input
                                 data-testid={name + index}
-                                onChange={(e) => updateValue(index, e.target.value)}
+                                onChange={e => updateValue(index, e.target.value)}
                                 name={`${name}.${index}.value`}
                                 value={value}
                                 disabled={isDisabled}
@@ -149,7 +163,7 @@ export const MultiLineInput = ({
                             />
                             <Button
                                 type="button"
-                                data-testid={"remove" + index}
+                                data-testid={`remove${index}`}
                                 variant="ghost"
                                 size="icon-sm"
                                 onClick={() => remove(index)}

@@ -1,32 +1,42 @@
-import PolicyRepresentation, {
+import type PolicyProviderRepresentation from "@keycloak/keycloak-admin-client/lib/defs/policyProviderRepresentation";
+import type PolicyRepresentation from "@keycloak/keycloak-admin-client/lib/defs/policyRepresentation";
+import {
     DecisionStrategy,
     Logic
 } from "@keycloak/keycloak-admin-client/lib/defs/policyRepresentation";
-import PolicyProviderRepresentation from "@keycloak/keycloak-admin-client/lib/defs/policyProviderRepresentation";
 import { useTranslation } from "@merge-rd/i18n";
 import { Button } from "@merge-rd/ui/components/button";
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@merge-rd/ui/components/dialog";
-import { getErrorDescription, getErrorMessage, SelectField,
-    TextControl } from "../../../../shared/keycloak-ui-shared";
-import { toast } from "sonner";
+import {
+    Dialog,
+    DialogContent,
+    DialogHeader,
+    DialogTitle
+} from "@merge-rd/ui/components/dialog";
+import { capitalize } from "lodash-es";
+import { type JSX, useEffect } from "react";
 import { FormProvider, useForm, useWatch } from "react-hook-form";
+import { toast } from "sonner";
+import {
+    getErrorDescription,
+    getErrorMessage,
+    SelectField,
+    TextControl
+} from "../../../../shared/keycloak-ui-shared";
 import { useAdminClient } from "../../../app/admin-client";
 import { useRealm } from "../../../app/providers/realm-context/realm-context";
+import { Aggregate } from "../../clients/authorization/policy/aggregate";
 import { Client } from "../../clients/authorization/policy/client";
-import { User } from "../../clients/authorization/policy/user";
 import {
     ClientScope,
-    RequiredIdValue
+    type RequiredIdValue
 } from "../../clients/authorization/policy/client-scope";
-import { Group, GroupValue } from "../../clients/authorization/policy/group";
+import { Group, type GroupValue } from "../../clients/authorization/policy/group";
+import { JavaScript } from "../../clients/authorization/policy/java-script";
+import { LogicSelector } from "../../clients/authorization/policy/logic-selector";
 import { Regex } from "../../clients/authorization/policy/regex";
 import { Role } from "../../clients/authorization/policy/role";
 import { Time } from "../../clients/authorization/policy/time";
-import { JavaScript } from "../../clients/authorization/policy/java-script";
-import { LogicSelector } from "../../clients/authorization/policy/logic-selector";
-import { Aggregate } from "../../clients/authorization/policy/aggregate";
-import { capitalize } from "lodash-es";
-import { useEffect, type JSX } from "react";
+import { User } from "../../clients/authorization/policy/user";
 
 type Policy = Omit<PolicyRepresentation, "roles"> & {
     groups?: GroupValue[];
@@ -92,7 +102,7 @@ export const NewPermissionPolicyDialog = ({
         mode: "onChange",
         defaultValues
     });
-const { handleSubmit, reset } = form;
+    const { handleSubmit, reset } = form;
     const isPermissionClient = realmRepresentation?.adminPermissionsEnabled;
 
     const policyTypeSelector = useWatch({
@@ -104,7 +114,7 @@ const { handleSubmit, reset } = form;
         if (policyTypeSelector && isValidComponentType(policyTypeSelector)) {
             return COMPONENTS[policyTypeSelector];
         }
-        return COMPONENTS["default"];
+        return COMPONENTS.default;
     }
 
     const ComponentType = getComponentType();
@@ -148,69 +158,76 @@ const { handleSubmit, reset } = form;
             toggleDialog();
             toast.success(t("createPolicySuccess"));
         } catch (error) {
-            toast.error(t("policySaveError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
+            toast.error(t("policySaveError", { error: getErrorMessage(error) }), {
+                description: getErrorDescription(error)
+            });
         }
     };
 
     return (
-        <Dialog open onOpenChange={(open) => { if (!open) toggleDialog(); }}>
+        <Dialog
+            open
+            onOpenChange={open => {
+                if (!open) toggleDialog();
+            }}
+        >
             <DialogContent className="max-w-2xl" aria-label={t("createPermissionPolicy")}>
                 <DialogHeader>
                     <DialogTitle>{t("createPermissionPolicy")}</DialogTitle>
                 </DialogHeader>
-            <form
-                id="createPermissionPolicy-form"
-                onSubmit={async e => {
-                    e.stopPropagation();
-                    await handleSubmit(save)(e);
-                }}
-            >
-                <FormProvider {...form}>
-                    <TextControl
-                        name="name"
-                        label={t("name")}
-                        rules={{ required: t("required") }}
-                    />
-                    <TextControl name="description" label={t("description")} />
-                    {providers && providers.length > 0 && (
-                        <SelectField
-                            name="type"
-                            label={t("policyType")}
-                            labelIcon={t("policyTypeHelpText")}
-                            options={providers.map(provider => ({
-                                key: provider.type!,
-                                value: capitalize(provider.type!)
-                            }))}
-                            defaultValue=""
+                <form
+                    id="createPermissionPolicy-form"
+                    onSubmit={async e => {
+                        e.stopPropagation();
+                        await handleSubmit(save)(e);
+                    }}
+                >
+                    <FormProvider {...form}>
+                        <TextControl
+                            name="name"
+                            label={t("name")}
+                            rules={{ required: t("required") }}
                         />
-                    )}
-                    <ComponentType
-                        isPermissionClient={isPermissionClient}
-                        permissionClientId={permissionClientId}
-                    />
-                    <LogicSelector />
-                </FormProvider>
-                <div className="flex gap-2 mt-4">
-                    <Button
-                        className="mr-2"
-                        type="submit"
-                        data-testid="save"
-                        disabled={
-                            policies?.length === 0 &&
-                            policyTypeSelector === "aggregate"
-                        }
-                    >
-                        {t("save")}
-                    </Button>
-                    <Button
-                        variant="link"
-                        data-testid="cancel"
-                        onClick={toggleDialog}
-                    >
-                        {t("cancel")}
-                    </Button>
-                </div>
-            </form>
+                        <TextControl name="description" label={t("description")} />
+                        {providers && providers.length > 0 && (
+                            <SelectField
+                                name="type"
+                                label={t("policyType")}
+                                labelIcon={t("policyTypeHelpText")}
+                                options={providers.map(provider => ({
+                                    key: provider.type!,
+                                    value: capitalize(provider.type!)
+                                }))}
+                                defaultValue=""
+                            />
+                        )}
+                        <ComponentType
+                            isPermissionClient={isPermissionClient}
+                            permissionClientId={permissionClientId}
+                        />
+                        <LogicSelector />
+                    </FormProvider>
+                    <div className="flex gap-2 mt-4">
+                        <Button
+                            className="mr-2"
+                            type="submit"
+                            data-testid="save"
+                            disabled={
+                                policies?.length === 0 &&
+                                policyTypeSelector === "aggregate"
+                            }
+                        >
+                            {t("save")}
+                        </Button>
+                        <Button
+                            variant="link"
+                            data-testid="cancel"
+                            onClick={toggleDialog}
+                        >
+                            {t("cancel")}
+                        </Button>
+                    </div>
+                </form>
             </DialogContent>
         </Dialog>
     );

@@ -9,10 +9,8 @@
 
 // @ts-nocheck
 
-import {
-    label,
-    useEnvironment
-} from "../../../shared/keycloak-ui-shared";
+import type { TFuncKey } from "@merge-rd/i18n";
+import { useTranslation } from "@merge-rd/i18n";
 import {
     AlertDialog,
     AlertDialogAction,
@@ -24,19 +22,24 @@ import {
     AlertDialogTitle,
     AlertDialogTrigger
 } from "@merge-rd/ui/components/alert-dialog";
+import { Badge } from "@merge-rd/ui/components/badge";
+import { Button } from "@merge-rd/ui/components/button";
+import {
+    AppWindow,
+    ArrowSquareOut,
+    CaretDown,
+    CaretUp,
+    Check,
+    Info
+} from "@phosphor-icons/react";
 import { useState } from "react";
-import { useTranslation } from "@merge-rd/i18n";
-
+import { label, useEnvironment } from "../../../shared/keycloak-ui-shared";
 import { deleteConsent, getApplications } from "../../shared/api/methods";
-import { ClientRepresentation } from "../../shared/api/representations";
-import { Page } from "../../shared/ui/page/page";
-import type { TFuncKey } from "@merge-rd/i18n";
+import type { ClientRepresentation } from "../../shared/api/representations";
 import { formatDate } from "../../shared/lib/formatDate";
 import { useAccountAlerts } from "../../shared/lib/useAccountAlerts";
 import { usePromise } from "../../shared/lib/usePromise";
-import { Button } from "@merge-rd/ui/components/button";
-import { Badge } from "@merge-rd/ui/components/badge";
-import { AppWindow, ArrowSquareOut, Check, Info, CaretDown, CaretUp } from "@phosphor-icons/react";
+import { Page } from "../../shared/ui/page/page";
 
 type Application = ClientRepresentation & {
     open: boolean;
@@ -146,10 +149,13 @@ const Applications = () => {
                                     ? t("thirdPartyApp")
                                     : t("internalApp")}
                                 {application.offlineAccess
-                                    ? ", " + t("offlineAccess")
+                                    ? `, ${t("offlineAccess")}`
                                     : ""}
                             </div>
-                            <Badge variant={application.inUse ? "default" : "secondary"} className="shrink-0">
+                            <Badge
+                                variant={application.inUse ? "default" : "secondary"}
+                                className="shrink-0"
+                            >
                                 {application.inUse ? t("inUse") : t("notInUse")}
                             </Badge>
                         </div>
@@ -162,11 +168,15 @@ const Applications = () => {
                                 <dl className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-3 text-sm">
                                     <div>
                                         <dt className="font-medium">{t("client")}</dt>
-                                        <dd className="text-muted-foreground">{application.clientId}</dd>
+                                        <dd className="text-muted-foreground">
+                                            {application.clientId}
+                                        </dd>
                                     </div>
                                     {application.description && (
                                         <div>
-                                            <dt className="font-medium">{t("description")}</dt>
+                                            <dt className="font-medium">
+                                                {t("description")}
+                                            </dt>
                                             <dd className="text-muted-foreground">
                                                 {application.description}
                                             </dd>
@@ -207,20 +217,33 @@ const Applications = () => {
                                         </div>
                                         {application.tosUri && (
                                             <div className="text-sm">
-                                                <span className="font-medium">{t("termsOfService")}: </span>
-                                                <span className="text-muted-foreground">{application.tosUri}</span>
+                                                <span className="font-medium">
+                                                    {t("termsOfService")}:{" "}
+                                                </span>
+                                                <span className="text-muted-foreground">
+                                                    {application.tosUri}
+                                                </span>
                                             </div>
                                         )}
                                         {application.policyUri && (
                                             <div className="text-sm">
-                                                <span className="font-medium">{t("privacyPolicy")}: </span>
-                                                <span className="text-muted-foreground">{application.policyUri}</span>
+                                                <span className="font-medium">
+                                                    {t("privacyPolicy")}:{" "}
+                                                </span>
+                                                <span className="text-muted-foreground">
+                                                    {application.policyUri}
+                                                </span>
                                             </div>
                                         )}
                                         {application.logoUri && (
                                             <div>
-                                                <div className="text-sm font-medium mb-1">{t("logo")}</div>
-                                                <img src={application.logoUri} className="h-10" />
+                                                <div className="text-sm font-medium mb-1">
+                                                    {t("logo")}
+                                                </div>
+                                                <img
+                                                    src={application.logoUri}
+                                                    className="h-10"
+                                                />
                                             </div>
                                         )}
                                         <div className="text-sm text-muted-foreground">
@@ -241,7 +264,9 @@ const Applications = () => {
                                             </AlertDialogTrigger>
                                             <AlertDialogContent>
                                                 <AlertDialogHeader>
-                                                    <AlertDialogTitle>{t("removeAccess")}</AlertDialogTitle>
+                                                    <AlertDialogTitle>
+                                                        {t("removeAccess")}
+                                                    </AlertDialogTitle>
                                                     <AlertDialogDescription>
                                                         {t("removeModalMessage", {
                                                             name: application.clientId
@@ -249,8 +274,17 @@ const Applications = () => {
                                                     </AlertDialogDescription>
                                                 </AlertDialogHeader>
                                                 <AlertDialogFooter>
-                                                    <AlertDialogCancel>{t("cancel")}</AlertDialogCancel>
-                                                    <AlertDialogAction variant="destructive" onClick={() => removeConsent(application.clientId)}>
+                                                    <AlertDialogCancel>
+                                                        {t("cancel")}
+                                                    </AlertDialogCancel>
+                                                    <AlertDialogAction
+                                                        variant="destructive"
+                                                        onClick={() =>
+                                                            removeConsent(
+                                                                application.clientId
+                                                            )
+                                                        }
+                                                    >
                                                         {t("confirm")}
                                                     </AlertDialogAction>
                                                 </AlertDialogFooter>

@@ -1,20 +1,13 @@
-import { UserProfileAttributeMetadata } from "@keycloak/keycloak-admin-client/lib/defs/userProfileMetadata";
-import { Field, FieldContent, FieldLabel } from "@merge-rd/ui/components/field";
+import type { UserProfileAttributeMetadata } from "@keycloak/keycloak-admin-client/lib/defs/userProfileMetadata";
+import { Field, FieldContent } from "@merge-rd/ui/components/field";
 import { InputGroup } from "@merge-rd/ui/components/input-group";
-import { TFunction } from "i18next";
+import type { TFunction } from "i18next";
 import { get } from "lodash-es";
-import { PropsWithChildren, ReactNode } from "react";
-import { UseFormReturn, type FieldError } from "react-hook-form";
+import type { PropsWithChildren, ReactNode } from "react";
+import type { FieldError, UseFormReturn } from "react-hook-form";
 
 import { FormErrorText } from "../controls/form-error-text";
-import { HelpItem } from "../controls/help-item";
-import {
-    UserFormFields,
-    fieldName,
-    isRequiredAttribute,
-    label,
-    labelAttribute
-} from "./utils";
+import { fieldName, label, type UserFormFields } from "./utils";
 
 type UserProfileGroupProps = {
     t: TFunction;
@@ -30,7 +23,7 @@ export const UserProfileGroup = ({
     renderer,
     children
 }: PropsWithChildren<UserProfileGroupProps>) => {
-    const helpText = label(t, attribute.annotations?.["inputHelperTextBefore"] as string);
+    const helpText = label(t, attribute.annotations?.inputHelperTextBefore as string);
     const {
         formState: { errors }
     } = form;

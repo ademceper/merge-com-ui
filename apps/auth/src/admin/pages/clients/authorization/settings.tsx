@@ -1,20 +1,25 @@
 import type ResourceServerRepresentation from "@keycloak/keycloak-admin-client/lib/defs/resourceServerRepresentation";
-import { getErrorDescription, getErrorMessage, HelpItem, useFetch } from "../../../../shared/keycloak-ui-shared";
-import { toast } from "sonner";
+import { useTranslation } from "@merge-rd/i18n";
 import { Button } from "@merge-rd/ui/components/button";
-import { Separator } from "@merge-rd/ui/components/separator";
 import { Label } from "@merge-rd/ui/components/label";
 import { RadioGroup, RadioGroupItem } from "@merge-rd/ui/components/radio-group";
-import { useState } from "react";
+import { Separator } from "@merge-rd/ui/components/separator";
+import { useEffect, useState } from "react";
 import { Controller, FormProvider, useForm } from "react-hook-form";
-import { useTranslation } from "@merge-rd/i18n";
+import { toast } from "sonner";
+import {
+    getErrorDescription,
+    getErrorMessage,
+    HelpItem,
+    KeycloakSpinner
+} from "../../../../shared/keycloak-ui-shared";
 import { useAdminClient } from "../../../app/admin-client";
-import { FixedButtonsGroup } from "../../../shared/ui/form/fixed-button-group";
-import { FormAccess } from "../../../shared/ui/form/form-access";
-import { KeycloakSpinner } from "../../../../shared/keycloak-ui-shared";
-import { DefaultSwitchControl } from "../../../shared/ui/switch-control";
 import { useAccess } from "../../../app/providers/access/access";
 import useToggle from "../../../shared/lib/useToggle";
+import { FixedButtonsGroup } from "../../../shared/ui/form/fixed-button-group";
+import { FormAccess } from "../../../shared/ui/form/form-access";
+import { DefaultSwitchControl } from "../../../shared/ui/switch-control";
+import { useResourceServer } from "./api/use-resource-server";
 import { DecisionStrategySelect } from "./decision-strategy-select";
 import { ImportDialog } from "./import-dialog";
 
@@ -31,18 +36,18 @@ export const AuthorizationSettings = ({ clientId }: { clientId: string }) => {
 
     const form = useForm<FormFields>({});
     const { control, reset, handleSubmit } = form;
-const { hasAccess } = useAccess();
+    const { hasAccess } = useAccess();
 
     const isDisabled = !hasAccess("manage-authorization");
 
-    useFetch(
-        () => adminClient.clients.getResourceServer({ id: clientId }),
-        resource => {
-            setResource(resource);
-            reset(resource);
-        },
-        []
-    );
+    const { data: resourceServerData } = useResourceServer(clientId);
+
+    useEffect(() => {
+        if (resourceServerData) {
+            setResource(resourceServerData);
+            reset(resourceServerData);
+        }
+    }, [resourceServerData]);
 
     const importResource = async (value: ResourceServerRepresentation) => {
         try {
@@ -50,7 +55,9 @@ const { hasAccess } = useAccess();
             toast.success(t("importResourceSuccess"));
             reset({ ...value });
         } catch (error) {
-            toast.error(t("importResourceError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
+            toast.error(t("importResourceError", { error: getErrorMessage(error) }), {
+                description: getErrorDescription(error)
+            });
         }
     };
 
@@ -59,7 +66,9 @@ const { hasAccess } = useAccess();
             await adminClient.clients.updateResourceServer({ id: clientId }, resource);
             toast.success(t("updateResourceSuccess"));
         } catch (error) {
-            toast.error(t("resourceSaveError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
+            toast.error(t("resourceSaveError", { error: getErrorMessage(error) }), {
+                description: getErrorDescription(error)
+            });
         }
     };
 
@@ -111,9 +120,15 @@ const { hasAccess } = useAccess();
                                 className="flex flex-col gap-2"
                             >
                                 {POLICY_ENFORCEMENT_MODES.map(mode => (
-                                    <div key={mode} className="flex items-center gap-2" data-testid={mode}>
+                                    <div
+                                        key={mode}
+                                        className="flex items-center gap-2"
+                                        data-testid={mode}
+                                    >
                                         <RadioGroupItem value={mode} id={mode} />
-                                        <Label htmlFor={mode}>{t(`policyEnforcementModes.${mode}`)}</Label>
+                                        <Label htmlFor={mode}>
+                                            {t(`policyEnforcementModes.${mode}`)}
+                                        </Label>
                                     </div>
                                 ))}
                             </RadioGroup>

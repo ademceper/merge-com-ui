@@ -1,7 +1,7 @@
 import { Navigate, useLocation } from "@tanstack/react-router";
 import { useRealm } from "../app/providers/realm-context/realm-context";
-import { ROUTES } from "../shared/lib/routes";
 import { generateEncodedPath } from "../shared/lib/generateEncodedPath";
+import { ROUTES } from "../shared/lib/routes";
 
 /**
  * Smart catch-all route that tries to resolve unknown paths
@@ -28,23 +28,27 @@ export const CatchAllRoute = () => {
         "events",
         "user-federation",
         "workflows",
-        "permissions",
+        "permissions"
     ];
 
     // If the path matches a known section, redirect with realm prefix
     for (const section of knownSections) {
         if (path === section || path.startsWith(`${section}/`)) {
             const targetPath = `/${realm}/${path}`;
-            const searchStr = location.search ? `?${new URLSearchParams(location.search as Record<string, string>).toString()}` : "";
-            return <Navigate to={`${targetPath}${searchStr}${location.hash || ""}` as string} replace />;
+            const searchStr = location.search
+                ? `?${new URLSearchParams(location.search as Record<string, string>).toString()}`
+                : "";
+            return (
+                <Navigate
+                    to={`${targetPath}${searchStr}${location.hash || ""}` as string}
+                    replace
+                />
+            );
         }
     }
 
     // Default: go to dashboard
     return (
-        <Navigate
-            to={generateEncodedPath(ROUTES.REALM, { realm }) as string}
-            replace
-        />
+        <Navigate to={generateEncodedPath(ROUTES.REALM, { realm }) as string} replace />
     );
 };

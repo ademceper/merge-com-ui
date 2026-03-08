@@ -1,4 +1,4 @@
-import { NumberInput } from "@/admin/shared/ui/number-input";
+import { useTranslation } from "@merge-rd/i18n";
 import {
     Select,
     SelectContent,
@@ -6,8 +6,9 @@ import {
     SelectTrigger,
     SelectValue
 } from "@merge-rd/ui/components/select";
-import React, { useEffect, useMemo, useState } from "react";
-import { useTranslation } from "@merge-rd/i18n";
+import type React from "react";
+import { useEffect, useMemo, useState } from "react";
+import { NumberInput } from "@/admin/shared/ui/number-input";
 
 export type Unit = "second" | "minute" | "hour" | "day";
 
@@ -20,15 +21,18 @@ const allTimes: TimeUnit[] = [
     { unit: "day", label: "times.days", multiplier: 86400 }
 ];
 
-export type TimeSelectorProps = Omit<React.InputHTMLAttributes<HTMLInputElement>, "onChange" | "defaultValue"> & {
-        value?: number;
-        units?: Unit[];
-        onChange?: (time: number | string) => void;
-        className?: string;
-        validated?: "success" | "warning" | "error" | "default";
-        /** Input + unit row takes full width, number input grows. */
-        fullWidth?: boolean;
-    };
+export type TimeSelectorProps = Omit<
+    React.InputHTMLAttributes<HTMLInputElement>,
+    "onChange" | "defaultValue"
+> & {
+    value?: number;
+    units?: Unit[];
+    onChange?: (time: number | string) => void;
+    className?: string;
+    validated?: "success" | "warning" | "error" | "default";
+    /** Input + unit row takes full width, number input grows. */
+    fullWidth?: boolean;
+};
 
 const getTimeUnit = (units: TimeUnit[], value = 0) =>
     units.reduce(
@@ -126,12 +130,15 @@ export const TimeSelector = ({
                     } as React.ComponentProps<typeof NumberInput>)}
                 />
             </div>
-            <div id={`${className || ""}-select-menu`} className={fullWidth ? "shrink-0" : ""}>
+            <div
+                id={`${className || ""}-select-menu`}
+                className={fullWidth ? "shrink-0" : ""}
+            >
                 <Select
                     open={open}
                     onOpenChange={setOpen}
                     value={String(multiplier)}
-                    onValueChange={(v) => {
+                    onValueChange={v => {
                         const mult = Number(v);
                         setMultiplier(mult);
                         updateTimeout(timeValue, mult);
@@ -145,10 +152,7 @@ export const TimeSelector = ({
                     </SelectTrigger>
                     <SelectContent>
                         {times.map(time => (
-                            <SelectItem
-                                key={time.label}
-                                value={String(time.multiplier)}
-                            >
+                            <SelectItem key={time.label} value={String(time.multiplier)}>
                                 {t(time.label)}
                             </SelectItem>
                         ))}

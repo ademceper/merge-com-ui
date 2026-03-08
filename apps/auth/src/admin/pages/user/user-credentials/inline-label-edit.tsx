@@ -1,12 +1,15 @@
 import type CredentialRepresentation from "@keycloak/keycloak-admin-client/lib/defs/credentialRepresentation";
+import { useTranslation } from "@merge-rd/i18n";
 import { Button } from "@merge-rd/ui/components/button";
 import { Input } from "@merge-rd/ui/components/input";
 import { Check, PencilSimple, X } from "@phosphor-icons/react";
 import { useForm } from "react-hook-form";
-import { useTranslation } from "@merge-rd/i18n";
-import { useAdminClient } from "../../../app/admin-client";
-import { getErrorDescription, getErrorMessage } from "../../../../shared/keycloak-ui-shared";
 import { toast } from "sonner";
+import {
+    getErrorDescription,
+    getErrorMessage
+} from "../../../../shared/keycloak-ui-shared";
+import { useAdminClient } from "../../../app/admin-client";
 
 type UserLabelForm = {
     userLabel: string;
@@ -29,7 +32,7 @@ export const InlineLabelEdit = ({
 
     const { t } = useTranslation();
     const { register, handleSubmit } = useForm<UserLabelForm>();
-const saveUserLabel = async (userLabel: UserLabelForm) => {
+    const saveUserLabel = async (userLabel: UserLabelForm) => {
         try {
             await adminClient.users.updateCredentialLabel(
                 {
@@ -41,15 +44,15 @@ const saveUserLabel = async (userLabel: UserLabelForm) => {
             toast.success(t("updateCredentialUserLabelSuccess"));
             toggle();
         } catch (error) {
-            toast.error(t("updateCredentialUserLabelError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
+            toast.error(
+                t("updateCredentialUserLabelError", { error: getErrorMessage(error) }),
+                { description: getErrorDescription(error) }
+            );
         }
     };
 
     return (
-        <form
-            className="kc-form-userLabel"
-            onSubmit={handleSubmit(saveUserLabel)}
-        >
+        <form className="kc-form-userLabel" onSubmit={handleSubmit(saveUserLabel)}>
             <div className="space-y-2 kc-userLabel-row">
                 <div className="kc-form-group-userLabel">
                     {isEditable ? (

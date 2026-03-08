@@ -1,19 +1,24 @@
+import type WorkflowRepresentation from "@keycloak/keycloak-admin-client/lib/defs/workflowRepresentation";
+import { useTranslation } from "@merge-rd/i18n";
 import { Button } from "@merge-rd/ui/components/button";
 import { Label } from "@merge-rd/ui/components/label";
-import { Controller, FormProvider, SubmitHandler, useForm } from "react-hook-form";
-import { useTranslation } from "@merge-rd/i18n";
 import { Link, useNavigate } from "@tanstack/react-router";
-import yaml from "yaml";
-import { useAdminClient } from "../../app/admin-client";
-import { getErrorDescription, getErrorMessage, HelpItem, useFetch } from "../../../shared/keycloak-ui-shared";
+import { useEffect } from "react";
+import { Controller, FormProvider, type SubmitHandler, useForm } from "react-hook-form";
 import { toast } from "sonner";
+import yaml from "yaml";
+import {
+    getErrorDescription,
+    getErrorMessage,
+    HelpItem
+} from "../../../shared/keycloak-ui-shared";
+import { useAdminClient } from "../../app/admin-client";
 import { useRealm } from "../../app/providers/realm-context/realm-context";
-import { FormAccess } from "../../shared/ui/form/form-access";
-import { toWorkflows } from "./routes/workflows";
-import CodeEditor from "../../shared/ui/form/code-editor";
 import { useParams } from "../../shared/lib/useParams";
-import { WorkflowDetailParams, toWorkflowDetail } from "./routes/workflow-detail";
-import type WorkflowRepresentation from "@keycloak/keycloak-admin-client/lib/defs/workflowRepresentation";
+import CodeEditor from "../../shared/ui/form/code-editor";
+import { FormAccess } from "../../shared/ui/form/form-access";
+import { useWorkflow } from "./api/use-workflow";
+import { toWorkflowDetail, type WorkflowDetailParams, toWorkflows } from "../../shared/lib/routes/workflows";
 
 type AttributeForm = {
     workflowYAML: string;
@@ -25,7 +30,7 @@ export default function WorkflowDetailForm() {
     const { t } = useTranslation();
     const navigate = useNavigate();
     const { realm } = useRealm();
-const { mode, id } = useParams<WorkflowDetailParams>();
+    const { mode, id } = useParams<WorkflowDetailParams>();
     const form = useForm<AttributeForm>({
         mode: "onChange",
         defaultValues: {
@@ -34,31 +39,19 @@ const { mode, id } = useParams<WorkflowDetailParams>();
     });
     const { control, handleSubmit, setValue } = form;
 
-    useFetch(
-        async () => {
-            if (mode === "create") {
-                return undefined;
-            }
-            return adminClient.workflows.findOne({
-                id: id!,
-                includeId: false
-            });
-        },
-        workflow => {
-            if (!workflow) {
-                return;
-            }
+    const { data: workflowData } = useWorkflow(id!, mode !== "create");
 
-            const workflowToSet = { ...workflow };
-            if (mode === "copy") {
-                delete workflowToSet.id;
-                workflowToSet.name = `${workflow.name} -- ${t("copy")}`;
-            }
+    useEffect(() => {
+        if (!workflowData) return;
 
-            setValue("workflowYAML", yaml.stringify(workflowToSet));
-        },
-        [mode, id, setValue, t]
-    );
+        const workflowToSet = { ...workflowData };
+        if (mode === "copy") {
+            delete workflowToSet.id;
+            workflowToSet.name = `${workflowData.name} -- ${t("copy")}`;
+        }
+
+        setValue("workflowYAML", yaml.stringify(workflowToSet));
+    }, [workflowData, mode, setValue, t]);
 
     const validateworkflowYAML = (yamlStr: string): WorkflowRepresentation => {
         const json: WorkflowRepresentation = yaml.parse(yamlStr);
@@ -74,7 +67,9 @@ const { mode, id } = useParams<WorkflowDetailParams>();
             await adminClient.workflows.update({ id }, json);
             toast.success(t("workflowUpdated"));
         } catch (error) {
-            toast.error(t("workflowUpdateError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
+            toast.error(t("workflowUpdateError", { error: getErrorMessage(error) }), {
+                description: getErrorDescription(error)
+            });
         }
     };
 
@@ -87,7 +82,9 @@ const { mode, id } = useParams<WorkflowDetailParams>();
             toast.success(t("workflowCreated"));
             navigate({ to: toWorkflows({ realm }) as string });
         } catch (error) {
-            toast.error(t("workflowCreateError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
+            toast.error(t("workflowCreateError", { error: getErrorMessage(error) }), {
+                description: getErrorDescription(error)
+            });
         }
     };
 
@@ -104,77 +101,78 @@ const { mode, id } = useParams<WorkflowDetailParams>();
     };
 
     return (
-        <>
-            
-            <FormProvider {...form}>
-                <div className="bg-muted/30 p-4">
-                    <FormAccess
-                        isHorizontal
-                        onSubmit={
-                            mode === "update"
-                                ? handleSubmit(onUpdate)
-                                : handleSubmit(onCreate)
-                        }
-                        role={"manage-realm"}
-                        className="mt-4"
-                        fineGrainedAccess={true}
-                    >
-                        <div className="space-y-2">
-                            <Label htmlFor="code" className="flex items-center gap-1">
-                                {t("workflowYAML")}
-                                <HelpItem
-                                    helpText={t("workflowYAMLHelp")}
-                                    fieldLabelId="code"
-                                />
-                            </Label>
-                            <Controller
-                                name="workflowYAML"
-                                control={control}
-                                render={({ field }) => (
-                                    <CodeEditor
-                                        id="workflowYAML"
-                                        data-testid="workflowYAML"
-                                        value={field.value}
-                                        onChange={field.onChange}
-                                        language="yaml"
-                                        height={600}
-                                    />
-                                )}
+        <FormProvider {...form}>
+            <div className="bg-muted/30 p-4">
+                <FormAccess
+                    isHorizontal
+                    onSubmit={
+                        mode === "update"
+                            ? handleSubmit(onUpdate)
+                            : handleSubmit(onCreate)
+                    }
+                    role={"manage-realm"}
+                    className="mt-4"
+                    fineGrainedAccess={true}
+                >
+                    <div className="space-y-2">
+                        <Label htmlFor="code" className="flex items-center gap-1">
+                            {t("workflowYAML")}
+                            <HelpItem
+                                helpText={t("workflowYAMLHelp")}
+                                fieldLabelId="code"
                             />
-                        </div>
-                        <div className="flex gap-2">
-                            <Button
-                                type="submit"
-                                data-testid="save"
-                                disabled={
-                                    form.formState.isLoading ||
-                                    form.formState.isValidating ||
-                                    form.formState.isSubmitting ||
-                                    (mode === "create" && !form.formState.isDirty)
-                                }
-                            >
-                                {mode === "update" ? t("save") : t("create")}
-                            </Button>
-                            {mode === "update" && (
-                                <Button data-testid="copy" variant="link" asChild>
-                                    <Link
-                                        to={toWorkflowDetail({
+                        </Label>
+                        <Controller
+                            name="workflowYAML"
+                            control={control}
+                            render={({ field }) => (
+                                <CodeEditor
+                                    id="workflowYAML"
+                                    data-testid="workflowYAML"
+                                    value={field.value}
+                                    onChange={field.onChange}
+                                    language="yaml"
+                                    height={600}
+                                />
+                            )}
+                        />
+                    </div>
+                    <div className="flex gap-2">
+                        <Button
+                            type="submit"
+                            data-testid="save"
+                            disabled={
+                                form.formState.isLoading ||
+                                form.formState.isValidating ||
+                                form.formState.isSubmitting ||
+                                (mode === "create" && !form.formState.isDirty)
+                            }
+                        >
+                            {mode === "update" ? t("save") : t("create")}
+                        </Button>
+                        {mode === "update" && (
+                            <Button data-testid="copy" variant="link" asChild>
+                                <Link
+                                    to={
+                                        toWorkflowDetail({
                                             realm,
                                             mode: "copy",
                                             id: id!
-                                        }) as string}
-                                    >
-                                        {t("copy")}
-                                    </Link>
-                                </Button>
-                            )}
-                            <Button data-testid="cancel" variant="link" asChild>
-                                <Link to={toWorkflows({ realm }) as string}>{t("cancel")}</Link>
+                                        }) as string
+                                    }
+                                >
+                                    {t("copy")}
+                                </Link>
                             </Button>
-                        </div>
-                    </FormAccess>
-                </div>
-            </FormProvider>
-        </>
+                        )}
+                        <Button data-testid="cancel" variant="link" asChild>
+                            <Link to={toWorkflows({ realm }) as string}>
+                                {t("cancel")}
+                            </Link>
+                        </Button>
+                    </div>
+                </FormAccess>
+            </div>
+        </FormProvider>
     );
 }

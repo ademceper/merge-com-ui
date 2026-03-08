@@ -11,12 +11,12 @@
 
 // @ts-nocheck
 
-import { KeycloakContext, type BaseEnvironment } from "../../shared/keycloak-ui-shared";
+import type { BaseEnvironment, KeycloakContext } from "../../shared/keycloak-ui-shared";
 
-import { CallOptions } from "../shared/api/methods";
-import { Links, parseLinks } from "../shared/api/parse-links";
+import type { CallOptions } from "../shared/api/methods";
+import { type Links, parseLinks } from "../shared/api/parse-links";
 import { parseResponse } from "../shared/api/parse-response";
-import {
+import type {
     CredentialsIssuer,
     Permission,
     Resource,

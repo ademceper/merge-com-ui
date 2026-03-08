@@ -1,9 +1,12 @@
 import { createFileRoute, Outlet } from "@tanstack/react-router";
+import { Suspense } from "react";
 
 function FullPageLayout() {
 	return (
 		<div className="flex h-svh flex-col overflow-hidden">
-			<Outlet />
+			<Suspense>
+				<Outlet />
+			</Suspense>
 		</div>
 	);
 }

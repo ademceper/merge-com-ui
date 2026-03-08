@@ -9,15 +9,15 @@
 
 // @ts-nocheck
 
-import { useEnvironment } from "../../../shared/keycloak-ui-shared";
-import { useEffect, useMemo, useState } from "react";
 import { useTranslation } from "@merge-rd/i18n";
 import { CaretDown } from "@phosphor-icons/react";
+import { useEffect, useMemo, useState } from "react";
+import { useEnvironment } from "../../../shared/keycloak-ui-shared";
 
 import { getIssuer, requestVCOffer } from "../../app/api";
-import { CredentialsIssuer } from "../../shared/api/representations";
-import { Page } from "../../shared/ui/page/page";
+import type { CredentialsIssuer } from "../../shared/api/representations";
 import { usePromise } from "../../shared/lib/usePromise";
+import { Page } from "../../shared/ui/page/page";
 
 const Oid4Vci = () => {
     const context = useEnvironment();
@@ -53,7 +53,7 @@ const Oid4Vci = () => {
                 blob => {
                     const reader = new FileReader();
                     reader.readAsDataURL(blob);
-                    reader.onloadend = function () {
+                    reader.onloadend = () => {
                         const result = reader.result;
                         if (typeof result === "string") {
                             setQrCode(result);

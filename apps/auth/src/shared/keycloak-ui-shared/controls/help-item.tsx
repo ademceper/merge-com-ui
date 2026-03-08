@@ -1,10 +1,6 @@
+import { Tooltip, TooltipContent, TooltipTrigger } from "@merge-rd/ui/components/tooltip";
 import { Question } from "@phosphor-icons/react";
-import {
-    Tooltip,
-    TooltipContent,
-    TooltipTrigger,
-} from "@merge-rd/ui/components/tooltip";
-import { ReactNode } from "react";
+import type { ReactNode } from "react";
 import { useHelp } from "../context/help-context";
 
 type HelpItemProps = {
@@ -23,11 +19,7 @@ export const HelpItem = ({
     const { enabled } = useHelp();
     if (!enabled) return null;
     const icon = (
-        <Question
-            size={14}
-            className={noVerticalAlign ? "shrink-0" : ""}
-            aria-hidden
-        />
+        <Question size={14} className={noVerticalAlign ? "shrink-0" : ""} aria-hidden />
     );
     return (
         <Tooltip>

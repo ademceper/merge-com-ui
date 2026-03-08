@@ -1,24 +1,23 @@
+import type PolicyProviderRepresentation from "@keycloak/keycloak-admin-client/lib/defs/policyProviderRepresentation";
 import { useTranslation } from "@merge-rd/i18n";
 import {
     Dialog,
     DialogContent,
     DialogHeader,
-    DialogTitle,
+    DialogTitle
 } from "@merge-rd/ui/components/dialog";
+import { cn } from "@merge-rd/ui/lib/utils";
+import { useMemo } from "react";
 import {
     Table,
     TableBody,
     TableCell,
     TableHead,
     TableHeader,
-    TableRow,
+    TableRow
 } from "@/admin/shared/ui/data-table";
-import { cn } from "@merge-rd/ui/lib/utils";
-
-import type PolicyProviderRepresentation from "@keycloak/keycloak-admin-client/lib/defs/policyProviderRepresentation";
-import { isValidComponentType } from "./policy/policy-details";
-import { useMemo } from "react";
 import useLocaleSort, { mapByKey } from "../../../shared/lib/useLocaleSort";
+import { isValidComponentType } from "./policy/policy-details";
 
 type NewPolicyDialogProps = {
     policyProviders?: PolicyProviderRepresentation[];
@@ -40,11 +39,17 @@ export const NewPolicyDialog = ({
     );
 
     return (
-        <Dialog open={true} onOpenChange={(v) => !v && toggleDialog()}>
-            <DialogContent showCloseButton className="sm:max-w-lg" aria-label={t("createPolicy")}>
+        <Dialog open={true} onOpenChange={v => !v && toggleDialog()}>
+            <DialogContent
+                showCloseButton
+                className="sm:max-w-lg"
+                aria-label={t("createPolicy")}
+            >
                 <DialogHeader>
                     <DialogTitle>{t("chooseAPolicyType")}</DialogTitle>
-                    <p className="text-muted-foreground text-sm">{t("chooseAPolicyTypeInstructions")}</p>
+                    <p className="text-muted-foreground text-sm">
+                        {t("chooseAPolicyTypeInstructions")}
+                    </p>
                 </DialogHeader>
                 <Table aria-label={t("policies")} className="text-sm">
                     <TableHeader>

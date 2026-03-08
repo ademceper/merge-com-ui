@@ -12,8 +12,8 @@
 // @ts-nocheck
 
 import {
-    getInjectedEnvironment,
-    type BaseEnvironment
+    type BaseEnvironment,
+    getInjectedEnvironment
 } from "../../shared/keycloak-ui-shared";
 
 export type Environment = BaseEnvironment & {

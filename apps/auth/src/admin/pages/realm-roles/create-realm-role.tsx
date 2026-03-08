@@ -1,15 +1,14 @@
 import type RoleRepresentation from "@keycloak/keycloak-admin-client/lib/defs/roleRepresentation";
-import { FormProvider, SubmitHandler, useForm } from "react-hook-form";
 import { useTranslation } from "@merge-rd/i18n";
 import { useNavigate } from "@tanstack/react-router";
-import { useAdminClient } from "../../app/admin-client";
-import { getErrorDescription, getErrorMessage } from "../../../shared/keycloak-ui-shared";
+import { FormProvider, type SubmitHandler, useForm } from "react-hook-form";
 import { toast } from "sonner";
-import { AttributeForm } from "../../shared/ui/key-value-form/attribute-form";
-import { RoleForm } from "../../shared/ui/role-form/role-form";
+import { getErrorDescription, getErrorMessage } from "../../../shared/keycloak-ui-shared";
+import { useAdminClient } from "../../app/admin-client";
 import { useRealm } from "../../app/providers/realm-context/realm-context";
-import { toRealmRole } from "./routes/realm-role";
-import { toRealmRoles } from "./routes/realm-roles";
+import type { AttributeForm } from "../../shared/ui/key-value-form/attribute-form";
+import { RoleForm } from "../../shared/ui/role-form/role-form";
+import { toRealmRole, toRealmRoles } from "../../shared/lib/routes/realm-roles";
 
 export default function CreateRealmRole() {
     const { adminClient } = useAdminClient();
@@ -18,7 +17,7 @@ export default function CreateRealmRole() {
     const form = useForm<AttributeForm>({ mode: "onChange" });
     const navigate = useNavigate();
     const { realm } = useRealm();
-const onSubmit: SubmitHandler<AttributeForm> = async formValues => {
+    const onSubmit: SubmitHandler<AttributeForm> = async formValues => {
         const role: RoleRepresentation = {
             ...formValues,
             name: formValues.name?.trim(),
@@ -37,9 +36,13 @@ const onSubmit: SubmitHandler<AttributeForm> = async formValues => {
             }
 
             toast.success(t("roleCreated"));
-            navigate({ to: toRealmRole({ realm, id: createdRole.id!, tab: "details" }) as string });
+            navigate({
+                to: toRealmRole({ realm, id: createdRole.id!, tab: "details" }) as string
+            });
         } catch (error) {
-            toast.error(t("roleCreateError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
+            toast.error(t("roleCreateError", { error: getErrorMessage(error) }), {
+                description: getErrorDescription(error)
+            });
         }
     };
 

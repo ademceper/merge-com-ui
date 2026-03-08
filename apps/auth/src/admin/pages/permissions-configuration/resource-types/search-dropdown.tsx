@@ -1,11 +1,11 @@
-import PolicyRepresentation from "@keycloak/keycloak-admin-client/lib/defs/policyRepresentation";
-import UserRepresentation from "@keycloak/keycloak-admin-client/lib/defs/userRepresentation";
-import { SelectField, TextControl } from "../../../../shared/keycloak-ui-shared";
+import type PolicyRepresentation from "@keycloak/keycloak-admin-client/lib/defs/policyRepresentation";
+import type UserRepresentation from "@keycloak/keycloak-admin-client/lib/defs/userRepresentation";
+import { useTranslation } from "@merge-rd/i18n";
 import { Button } from "@merge-rd/ui/components/button";
 import { Popover, PopoverContent, PopoverTrigger } from "@merge-rd/ui/components/popover";
 import { useEffect, useRef, useState } from "react";
 import { FormProvider, useForm, useWatch } from "react-hook-form";
-import { useTranslation } from "@merge-rd/i18n";
+import { SelectField, TextControl } from "../../../../shared/keycloak-ui-shared";
 import useToggle from "../../../shared/lib/useToggle";
 import { ResourceType } from "./resource-type";
 
@@ -77,73 +77,73 @@ export const SearchDropdown = ({ types, search, onSearch }: SearchDropdownProps)
                 </Button>
             </PopoverTrigger>
             <PopoverContent className="w-80">
-            <FormProvider {...form}>
-                <form
-                    key={key}
-                    className="keycloak__client_authentication__searchdropdown_form space-y-4"
-                    onSubmit={handleSubmit(submit)}
-                >
-                    <TextControl name="name" label={t("name")} />
-                    <SelectField
-                        name="resourceType"
-                        label={t("type")}
-                        defaultValue=""
-                        options={[
-                            { key: "", value: t("choose") },
-                            ...types.map(({ type, name }) => ({
-                                key: type!,
-                                value: name! || type!
-                            }))
-                        ]}
-                        onSelect={(value, onChange) => {
-                            if (ref.current !== value) {
-                                ref.current = value as string;
-                                form.setValue("resources", undefined);
-                            }
-                            onChange(value);
-                        }}
-                    />
-                    {selectedType !== "" && (
-                        <>
-                            <ResourceType
-                                resourceType={selectedType || "clients"}
-                                withEnforceAccessTo={false}
-                            />
-                            <SelectField
-                                name={"scope"}
-                                label={t("authorizationScope")}
-                                defaultValue=""
-                                options={[
-                                    ...(resourceScopes || []).map(resourceScope => ({
-                                        key: resourceScope!,
-                                        value: resourceScope!
-                                    }))
-                                ]}
-                            />
-                        </>
-                    )}
-
-                    <div className="flex gap-2">
-                        <Button
-                            type="submit"
-                            data-testid="search-btn"
-                            disabled={!isDirty}
-                        >
-                            {t("search")}
-                        </Button>
-                        <Button
-                            variant="link"
-                            data-testid="revert-btn"
-                            onClick={() => {
-                                reset({});
-                                onSearch({});
+                <FormProvider {...form}>
+                    <form
+                        key={key}
+                        className="keycloak__client_authentication__searchdropdown_form space-y-4"
+                        onSubmit={handleSubmit(submit)}
+                    >
+                        <TextControl name="name" label={t("name")} />
+                        <SelectField
+                            name="resourceType"
+                            label={t("type")}
+                            defaultValue=""
+                            options={[
+                                { key: "", value: t("choose") },
+                                ...types.map(({ type, name }) => ({
+                                    key: type!,
+                                    value: name! || type!
+                                }))
+                            ]}
+                            onSelect={(value, onChange) => {
+                                if (ref.current !== value) {
+                                    ref.current = value as string;
+                                    form.setValue("resources", undefined);
+                                }
+                                onChange(value);
                             }}
-                        >
-                            {t("clear")}
-                        </Button>
-                    </div>
-                </form>
-            </FormProvider>
+                        />
+                        {selectedType !== "" && (
+                            <>
+                                <ResourceType
+                                    resourceType={selectedType || "clients"}
+                                    withEnforceAccessTo={false}
+                                />
+                                <SelectField
+                                    name={"scope"}
+                                    label={t("authorizationScope")}
+                                    defaultValue=""
+                                    options={[
+                                        ...(resourceScopes || []).map(resourceScope => ({
+                                            key: resourceScope!,
+                                            value: resourceScope!
+                                        }))
+                                    ]}
+                                />
+                            </>
+                        )}
+
+                        <div className="flex gap-2">
+                            <Button
+                                type="submit"
+                                data-testid="search-btn"
+                                disabled={!isDirty}
+                            >
+                                {t("search")}
+                            </Button>
+                            <Button
+                                variant="link"
+                                data-testid="revert-btn"
+                                onClick={() => {
+                                    reset({});
+                                    onSearch({});
+                                }}
+                            >
+                                {t("clear")}
+                            </Button>
+                        </div>
+                    </form>
+                </FormProvider>
             </PopoverContent>
         </Popover>
     );

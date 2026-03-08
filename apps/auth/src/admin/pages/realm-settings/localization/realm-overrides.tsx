@@ -1,27 +1,5 @@
 import type RealmRepresentation from "@keycloak/keycloak-admin-client/lib/defs/realmRepresentation";
-import { getErrorDescription, getErrorMessage } from "../../../../shared/keycloak-ui-shared";
-import { toast } from "sonner";
-import {
-    Select,
-    SelectContent,
-    SelectGroup,
-    SelectItem,
-    SelectLabel,
-    SelectTrigger,
-    SelectValue,
-} from "@merge-rd/ui/components/select";
-import { Button } from "@merge-rd/ui/components/button";
-import { Input } from "@merge-rd/ui/components/input";
-import {
-    DataTable,
-    DataTableRowActions,
-    type ColumnDef,
-} from "@/admin/shared/ui/data-table";
-import { Check, PencilSimple, Plus, Trash, X } from "@phosphor-icons/react";
-import { type FormEvent, useCallback, useEffect, useState } from "react";
-import { useForm } from "react-hook-form";
-import { useTranslation } from "@merge-rd/i18n";
-import { useAdminClient } from "../../../app/admin-client";
+import { DEFAULT_LOCALE, useTranslation } from "@merge-rd/i18n";
 import {
     AlertDialog,
     AlertDialogAction,
@@ -32,14 +10,38 @@ import {
     AlertDialogHeader,
     AlertDialogTitle
 } from "@merge-rd/ui/components/alert-dialog";
-import { KeyValueType } from "../../../shared/ui/key-value-form/key-value-convert";
+import { Button } from "@merge-rd/ui/components/button";
+import { Input } from "@merge-rd/ui/components/input";
+import {
+    Select,
+    SelectContent,
+    SelectGroup,
+    SelectItem,
+    SelectLabel,
+    SelectTrigger,
+    SelectValue
+} from "@merge-rd/ui/components/select";
+import { Separator } from "@merge-rd/ui/components/separator";
+import { Check, PencilSimple, Plus, Trash, X } from "@phosphor-icons/react";
+import { type FormEvent, useCallback, useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
+import { toast } from "sonner";
+import {
+    type ColumnDef,
+    DataTable,
+    DataTableRowActions
+} from "@/admin/shared/ui/data-table";
+import {
+    getErrorDescription,
+    getErrorMessage
+} from "../../../../shared/keycloak-ui-shared";
+import { useAdminClient } from "../../../app/admin-client";
+import { i18n } from "../../../app/i18n";
 import { useRealm } from "../../../app/providers/realm-context/realm-context";
 import { useWhoAmI } from "../../../app/providers/whoami/who-am-i";
-import { DEFAULT_LOCALE } from "@merge-rd/i18n";
-import { i18n } from "../../../app/i18n";
 import { localeToDisplayName } from "../../../shared/lib/util";
+import type { KeyValueType } from "../../../shared/ui/key-value-form/key-value-convert";
 import { AddTranslationModal } from "../add-translation-modal";
-import { Separator } from "@merge-rd/ui/components/separator";
 
 type RealmOverridesProps = {
     internationalizationEnabled: boolean;
@@ -60,7 +62,7 @@ enum RowEditAction {
     Save = "save",
     Cancel = "cancel",
     Edit = "edit",
-    Delete = "delete",
+    Delete = "delete"
 }
 
 const PAGE_SIZE = 500;
@@ -69,7 +71,7 @@ export const RealmOverrides = ({
     internationalizationEnabled,
     watchSupportedLocales,
     realm,
-    tableData,
+    tableData
 }: RealmOverridesProps) => {
     const { adminClient } = useAdminClient();
     const { t } = useTranslation();
@@ -87,7 +89,7 @@ export const RealmOverrides = ({
     const translationForm = useForm<TranslationForm>({ mode: "onChange" });
 
     const refreshTable = useCallback(() => {
-        setTableKey((k) => k + 1);
+        setTableKey(k => k + 1);
     }, []);
 
     useEffect(() => {
@@ -100,7 +102,7 @@ export const RealmOverrides = ({
                     first: 0,
                     max: PAGE_SIZE,
                     realm: realm.realm!,
-                    selectedLocale,
+                    selectedLocale
                 });
                 if (cancelled) return;
                 const entries = Object.entries(result);
@@ -129,12 +131,12 @@ export const RealmOverrides = ({
             <SelectLabel>{t("supportedLocales")}</SelectLabel>
             {watchSupportedLocales
                 .filter((locale): locale is string => Boolean(locale))
-                .map((locale) => (
+                .map(locale => (
                     <SelectItem key={locale} value={locale}>
                         {localeToDisplayName(locale, whoAmI.locale)}
                     </SelectItem>
                 ))}
-        </SelectGroup>,
+        </SelectGroup>
     ];
 
     const addKeyValue = async (pair: KeyValueType): Promise<void> => {
@@ -143,9 +145,9 @@ export const RealmOverrides = ({
                 {
                     realm: currentRealm!,
                     selectedLocale: selectMenuLocale || DEFAULT_LOCALE,
-                    key: pair.key,
+                    key: pair.key
                 },
-                pair.value,
+                pair.value
             );
             adminClient.setConfig({ realmName: currentRealm! });
             refreshTable();
@@ -155,7 +157,7 @@ export const RealmOverrides = ({
             toast.success(t("addTranslationSuccess"));
         } catch (error) {
             toast.error(t("addTranslationError", { error: getErrorMessage(error) }), {
-                description: getErrorDescription(error),
+                description: getErrorDescription(error)
             });
         }
     };
@@ -163,15 +165,14 @@ export const RealmOverrides = ({
     const onDeleteConfirm = async () => {
         try {
             for (const key of keysToDelete) {
-                const data = i18n.store.data[whoAmI.locale][currentRealm] as Record<
-                    string,
-                    string
-                > | undefined;
+                const data = i18n.store.data[whoAmI.locale][currentRealm] as
+                    | Record<string, string>
+                    | undefined;
                 if (data && key in data) delete data[key];
                 await adminClient.realms.deleteRealmLocalizationTexts({
                     realm: currentRealm!,
                     selectedLocale: selectMenuLocale,
-                    key,
+                    key
                 });
             }
             setKeysToDelete([]);
@@ -180,7 +181,7 @@ export const RealmOverrides = ({
         } catch (error) {
             toast.error(
                 t("deleteAllTranslationsError", { error: getErrorMessage(error) }),
-                { description: getErrorDescription(error) },
+                { description: getErrorDescription(error) }
             );
         }
     };
@@ -191,18 +192,18 @@ export const RealmOverrides = ({
                 {
                     realm: realm.realm!,
                     selectedLocale: selectMenuLocale || DEFAULT_LOCALE,
-                    key,
+                    key
                 },
-                newValue,
+                newValue
             );
             await i18n.reloadResources();
             toast.success(t("updateTranslationSuccess"));
-            setTableRows((prev) =>
-                prev.map((r) => (r.key === key ? { ...r, value: newValue } : r)),
+            setTableRows(prev =>
+                prev.map(r => (r.key === key ? { ...r, value: newValue } : r))
             );
         } catch (error) {
             toast.error(t("updateTranslationError", { error: getErrorMessage(error) }), {
-                description: getErrorDescription(error),
+                description: getErrorDescription(error)
             });
         }
         setEditingKey(null);
@@ -212,9 +213,7 @@ export const RealmOverrides = ({
         {
             accessorKey: "key",
             header: t("key"),
-            cell: ({ row }) => (
-                <span className="font-medium">{row.original.key}</span>
-            ),
+            cell: ({ row }) => <span className="font-medium">{row.original.key}</span>
         },
         {
             accessorKey: "value",
@@ -280,7 +279,7 @@ export const RealmOverrides = ({
                         </Button>
                     </div>
                 );
-            },
+            }
         },
         {
             id: "actions",
@@ -298,8 +297,8 @@ export const RealmOverrides = ({
                         {t("delete")}
                     </button>
                 </DataTableRowActions>
-            ),
-        },
+            )
+        }
     ];
 
     const currentLocaleLabel =
@@ -311,17 +310,28 @@ export const RealmOverrides = ({
 
     return (
         <>
-            <AlertDialog open={keysToDelete.length > 0} onOpenChange={(open) => !open && setKeysToDelete([])}>
+            <AlertDialog
+                open={keysToDelete.length > 0}
+                onOpenChange={open => !open && setKeysToDelete([])}
+            >
                 <AlertDialogContent>
                     <AlertDialogHeader>
-                        <AlertDialogTitle>{t("deleteConfirmTranslationTitle")}</AlertDialogTitle>
+                        <AlertDialogTitle>
+                            {t("deleteConfirmTranslationTitle")}
+                        </AlertDialogTitle>
                         <AlertDialogDescription>
-                            {t("translationDeleteConfirmDialog", { count: keysToDelete.length })}
+                            {t("translationDeleteConfirmDialog", {
+                                count: keysToDelete.length
+                            })}
                         </AlertDialogDescription>
                     </AlertDialogHeader>
                     <AlertDialogFooter>
                         <AlertDialogCancel>{t("cancel")}</AlertDialogCancel>
-                        <AlertDialogAction variant="destructive" data-testid="confirm" onClick={onDeleteConfirm}>
+                        <AlertDialogAction
+                            variant="destructive"
+                            data-testid="confirm"
+                            onClick={onDeleteConfirm}
+                        >
                             {t("delete")}
                         </AlertDialogAction>
                     </AlertDialogFooter>
@@ -344,16 +354,13 @@ export const RealmOverrides = ({
                 <div className="flex flex-wrap items-center gap-2 sm:gap-3">
                     <Select
                         value={selectMenuLocale || DEFAULT_LOCALE}
-                        onValueChange={(v) => {
+                        onValueChange={v => {
                             setSelectMenuLocale(v);
                             refreshTable();
                         }}
                         disabled={!internationalizationEnabled}
                     >
-                        <SelectTrigger
-                            className="w-[180px]"
-                            data-testid="locale-select"
-                        >
+                        <SelectTrigger className="w-[180px]" data-testid="locale-select">
                             <SelectValue placeholder={t("placeholderText")}>
                                 {currentLocaleLabel}
                             </SelectValue>

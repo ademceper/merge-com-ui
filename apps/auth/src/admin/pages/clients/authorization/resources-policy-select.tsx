@@ -1,13 +1,11 @@
-import PolicyProviderRepresentation from "@keycloak/keycloak-admin-client/lib/defs/policyProviderRepresentation";
+import type PolicyProviderRepresentation from "@keycloak/keycloak-admin-client/lib/defs/policyProviderRepresentation";
 import type PolicyRepresentation from "@keycloak/keycloak-admin-client/lib/defs/policyRepresentation";
 import type ResourceRepresentation from "@keycloak/keycloak-admin-client/lib/defs/resourceRepresentation";
-import type {
-    Clients,
-    PolicyQuery
-} from "@keycloak/keycloak-admin-client/lib/resources/clients";
-import { SelectVariant, useFetch } from "../../../../shared/keycloak-ui-shared";
-import { Button } from "@merge-rd/ui/components/button";
+import type { Clients } from "@keycloak/keycloak-admin-client/lib/resources/clients";
+import { useTranslation } from "@merge-rd/i18n";
 import { Badge } from "@merge-rd/ui/components/badge";
+import { Button } from "@merge-rd/ui/components/button";
+import { Popover, PopoverContent, PopoverTrigger } from "@merge-rd/ui/components/popover";
 import {
     Select,
     SelectContent,
@@ -15,25 +13,26 @@ import {
     SelectTrigger,
     SelectValue
 } from "@merge-rd/ui/components/select";
-import { Popover, PopoverContent, PopoverTrigger } from "@merge-rd/ui/components/popover";
-import { useState } from "react";
+import { Link, useNavigate } from "@tanstack/react-router";
+import { useEffect, useState } from "react";
 import {
     Controller,
-    ControllerRenderProps,
+    type ControllerRenderProps,
     useFormContext,
     useWatch
 } from "react-hook-form";
-import { useTranslation } from "@merge-rd/i18n";
-import { Link, useNavigate } from "@tanstack/react-router";
+import { SelectVariant } from "../../../../shared/keycloak-ui-shared";
 import { useAdminClient } from "../../../app/admin-client";
-import { useConfirmDialog } from "../../../shared/ui/confirm-dialog/confirm-dialog";
 import { useRealm } from "../../../app/providers/realm-context/realm-context";
-import useToggle from "../../../shared/lib/useToggle";
-import { toCreatePolicy } from "../routes/new-policy";
-import { toPolicyDetails } from "../routes/policy-details";
-import { toResourceDetails } from "../routes/resource";
-import { NewPolicyDialog } from "./new-policy-dialog";
 import { useIsAdminPermissionsClient } from "../../../shared/lib/useIsAdminPermissionsClient";
+import useToggle from "../../../shared/lib/useToggle";
+import { useConfirmDialog } from "../../../shared/ui/confirm-dialog/confirm-dialog";
+import { toCreatePolicy } from "../../../shared/lib/routes/clients";
+import { toPolicyDetails } from "../../../shared/lib/routes/clients";
+import { toResourceDetails } from "../../../shared/lib/routes/clients";
+import { useResourcesPolicySelectItems } from "./api/use-resources-policy-select-items";
+import { useSelectedItems } from "./api/use-selected-items";
+import { NewPolicyDialog } from "./new-policy-dialog";
 
 type Type = "resources" | "policies";
 type Variant = "single" | "typeahead" | "typeaheadMulti";
@@ -116,32 +115,21 @@ export const ResourcesPolicySelect = ({
         type: p.type
     });
 
-    useFetch(
-        async () => {
-            const params: PolicyQuery = Object.assign(
-                { id: clientId, first: 0, max: 10, permission: "false" },
-                search === "" ? null : { name: search }
-            );
-            return await Promise.all([
-                adminClient.clients.listPolicyProviders({ id: clientId }),
-                adminClient.clients[functions.searchFunction](params),
-                permissionId
-                    ? adminClient.clients[functions.fetchFunction]({
-                          id: clientId,
-                          permissionId
-                      })
-                    : Promise.resolve([]),
-                preSelected && name === "resources"
-                    ? adminClient.clients.getResource({
-                          id: clientId,
-                          resourceId: preSelected
-                      })
-                    : Promise.resolve([])
-            ]);
-        },
-        ([providers, ...policies]) => {
+    const { data: selectData } = useResourcesPolicySelectItems(
+        clientId,
+        name,
+        search,
+        permissionId,
+        preSelected
+    );
+
+    useEffect(() => {
+        if (selectData) {
+            const [providers, ...policies] = selectData;
             setPolicyProviders(
-                providers.filter(p => p.type !== "resource" && p.type !== "scope")
+                (providers as PolicyProviderRepresentation[]).filter(
+                    p => p.type !== "resource" && p.type !== "scope"
+                )
             );
             setItems(
                 policies
@@ -156,30 +144,16 @@ export const ResourcesPolicySelect = ({
                             index === self.findIndex(({ id: otherId }) => id === otherId)
                     )
             );
-        },
-        [search]
-    );
+        }
+    }, [selectData]);
 
-    useFetch(
-        async () => {
-            if (name === "resources")
-                return await Promise.all(
-                    (value || []).map(id =>
-                        adminClient.clients.getResource({ id: clientId, resourceId: id })
-                    )
-                );
-            return await Promise.all(
-                (value || []).map(async id =>
-                    adminClient.clients.findOnePolicy({
-                        id: clientId,
-                        policyId: id
-                    })
-                )
-            );
-        },
-        (result: any[]) => setSelected(result.map(r => convert(r))),
-        [value]
-    );
+    const { data: selectedItemsData } = useSelectedItems(clientId, name, value || []);
+
+    useEffect(() => {
+        if (selectedItemsData) {
+            setSelected((selectedItemsData as any[]).map(r => convert(r)));
+        }
+    }, [selectedItemsData]);
 
     const [toggleUnsavedChangesDialog, UnsavedChangesConfirm] = useConfirmDialog({
         titleKey: t("unsavedChangesTitle"),
@@ -227,7 +201,8 @@ export const ResourcesPolicySelect = ({
                                     if (isDirty) {
                                         event.preventDefault();
                                         setOnUnsavedChangesConfirm(
-                                            () => () => navigate({ to: to(item) as string })
+                                            () => () =>
+                                                navigate({ to: to(item) as string })
                                         );
                                         toggleUnsavedChangesDialog();
                                     }
@@ -252,8 +227,12 @@ export const ResourcesPolicySelect = ({
                 <NewPolicyDialog
                     policyProviders={policyProviders}
                     onSelect={p => {
-                        navigate({ to:
-                            toCreatePolicy({ id: clientId, realm, policyType: p.type! }) as string
+                        navigate({
+                            to: toCreatePolicy({
+                                id: clientId,
+                                realm,
+                                policyType: p.type!
+                            }) as string
                         });
                     }}
                     toggleDialog={toggleCreatePolicyDialog}
@@ -287,30 +266,36 @@ export const ResourcesPolicySelect = ({
                                     </Button>
                                 </div>
                             </PopoverTrigger>
-                            <PopoverContent className="w-(--radix-popover-trigger-width) p-0" align="start">
+                            <PopoverContent
+                                className="w-(--radix-popover-trigger-width) p-0"
+                                align="start"
+                            >
                                 <div className="border-b p-2">
                                     <input
                                         type="text"
                                         placeholder={t("filter")}
                                         value={search}
-                                        onChange={(e) => setSearch(e.target.value)}
+                                        onChange={e => setSearch(e.target.value)}
                                         className="border-input bg-background flex h-8 w-full rounded-md border px-2 text-sm"
                                     />
                                 </div>
                                 <ul className="max-h-64 overflow-auto py-1">
-                                    {items.map((p) => {
+                                    {items.map(p => {
                                         const id = p.id ?? "";
-                                        const isSelected = (field.value ?? []).includes(id);
+                                        const isSelected = (field.value ?? []).includes(
+                                            id
+                                        );
                                         return (
                                             <li
                                                 key={p.id}
-                                                role="option"
                                                 aria-selected={isSelected}
                                                 className="hover:bg-accent cursor-pointer px-2 py-1.5 text-sm"
-                                                onMouseDown={(e) => e.preventDefault()}
+                                                onMouseDown={e => e.preventDefault()}
                                                 onClick={() => {
                                                     const changedValue = isSelected
-                                                        ? (field.value ?? []).filter((x: string) => x !== id)
+                                                        ? (field.value ?? []).filter(
+                                                              (x: string) => x !== id
+                                                          )
                                                         : [...(field.value ?? []), id];
                                                     field.onChange(changedValue);
                                                     setSearch("");
@@ -346,7 +331,9 @@ export const ResourcesPolicySelect = ({
                                             onClick={() => {
                                                 if (isDirty) {
                                                     setOpen(false);
-                                                    setOnUnsavedChangesConfirm(() => toggleCreatePolicyDialog);
+                                                    setOnUnsavedChangesConfirm(
+                                                        () => toggleCreatePolicyDialog
+                                                    );
                                                     toggleUnsavedChangesDialog();
                                                 } else {
                                                     toggleCreatePolicyDialog();
@@ -364,7 +351,7 @@ export const ResourcesPolicySelect = ({
                             open={open}
                             onOpenChange={setOpen}
                             value={field.value?.[0] ?? ""}
-                            onValueChange={(v) => {
+                            onValueChange={v => {
                                 field.onChange([v]);
                                 setSearch("");
                             }}
@@ -374,7 +361,7 @@ export const ResourcesPolicySelect = ({
                                 <SelectValue placeholder={t(name)} />
                             </SelectTrigger>
                             <SelectContent>
-                                {items.map((p) => (
+                                {items.map(p => (
                                     <SelectItem key={p.id} value={p.id ?? ""}>
                                         {p.name}
                                     </SelectItem>

@@ -1,23 +1,29 @@
 import type RealmRepresentation from "@keycloak/keycloak-admin-client/lib/defs/realmRepresentation";
+import { useTranslation } from "@merge-rd/i18n";
 import { Alert, AlertDescription, AlertTitle } from "@merge-rd/ui/components/alert";
 import { Button } from "@merge-rd/ui/components/button";
 import { Checkbox } from "@merge-rd/ui/components/checkbox";
-import { RadioGroup, RadioGroupItem } from "@merge-rd/ui/components/radio-group";
 import { Label } from "@merge-rd/ui/components/label";
-import { Controller, FormProvider, useForm, useWatch } from "react-hook-form";
-import { useTranslation } from "@merge-rd/i18n";
-import { Link } from "@tanstack/react-router";
-import { FormPanel, HelpItem, PasswordControl, TextControl } from "../../../shared/keycloak-ui-shared";
+import { RadioGroup, RadioGroupItem } from "@merge-rd/ui/components/radio-group";
 import { Switch } from "@merge-rd/ui/components/switch";
-import { useAdminClient } from "../../app/admin-client";
-import { getErrorDescription, getErrorMessage } from "../../../shared/keycloak-ui-shared";
+import { Link } from "@tanstack/react-router";
+import { Controller, FormProvider, useForm, useWatch } from "react-hook-form";
 import { toast } from "sonner";
-import { FixedButtonsGroup } from "../../shared/ui/form/fixed-button-group";
-import { FormAccess } from "../../shared/ui/form/form-access";
-import { toUser } from "../user/routes/user";
-import { emailRegexPattern } from "../../shared/lib/util";
+import {
+    FormPanel,
+    getErrorDescription,
+    getErrorMessage,
+    HelpItem,
+    PasswordControl,
+    TextControl
+} from "../../../shared/keycloak-ui-shared";
+import { useAdminClient } from "../../app/admin-client";
 import { useCurrentUser } from "../../shared/lib/useCurrentUser";
 import useToggle from "../../shared/lib/useToggle";
+import { emailRegexPattern } from "../../shared/lib/util";
+import { FixedButtonsGroup } from "../../shared/ui/form/fixed-button-group";
+import { FormAccess } from "../../shared/ui/form/form-access";
+import { toUser } from "../../shared/lib/routes/user";
 
 type RealmSettingsEmailTabProps = {
     realm: RealmRepresentation;
@@ -30,7 +36,7 @@ export const RealmSettingsEmailTab = ({ realm, save }: RealmSettingsEmailTabProp
     const { adminClient } = useAdminClient();
 
     const { t } = useTranslation();
-const currentUser = useCurrentUser();
+    const currentUser = useCurrentUser();
 
     const form = useForm<FormFields>({ defaultValues: realm });
     const { control, handleSubmit, watch, reset: resetForm, getValues } = form;
@@ -62,7 +68,7 @@ const currentUser = useCurrentUser();
             ["auth", toBoolean]
         ]);
 
-        const serverSettings = { ...getValues()["smtpServer"] };
+        const serverSettings = { ...getValues().smtpServer };
 
         for (const [key, mapperFn] of valueMapper.entries()) {
             serverSettings[key] = mapperFn(serverSettings[key]);
@@ -79,7 +85,9 @@ const currentUser = useCurrentUser();
             );
             toast.success(t("testConnectionSuccess"));
         } catch (error) {
-            toast.error(t("testConnectionError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
+            toast.error(t("testConnectionError", { error: getErrorMessage(error) }), {
+                description: getErrorDescription(error)
+            });
         }
         toggleTest();
     };
@@ -156,9 +164,16 @@ const currentUser = useCurrentUser();
                                 placeholder={t("smtpPortPlaceholder")}
                             />
                             <div className="space-y-4">
-                                <span className="text-sm font-medium text-muted-foreground">{t("encryption")}</span>
+                                <span className="text-sm font-medium text-muted-foreground">
+                                    {t("encryption")}
+                                </span>
                                 <div className="flex w-full items-center justify-between gap-2">
-                                    <Label htmlFor="kc-enable-ssl" className="text-sm font-medium">{t("enableSSL")}</Label>
+                                    <Label
+                                        htmlFor="kc-enable-ssl"
+                                        className="text-sm font-medium"
+                                    >
+                                        {t("enableSSL")}
+                                    </Label>
                                     <div className="flex shrink-0 items-center gap-2">
                                         <Controller
                                             name="smtpServer.ssl"
@@ -167,14 +182,16 @@ const currentUser = useCurrentUser();
                                             render={({ field }) => (
                                                 <>
                                                     <span className="text-sm text-muted-foreground">
-                                                        {field.value === "true" ? t("on") : t("off")}
+                                                        {field.value === "true"
+                                                            ? t("on")
+                                                            : t("off")}
                                                     </span>
                                                     <Checkbox
                                                         id="kc-enable-ssl"
                                                         data-testid="enable-ssl"
                                                         checked={field.value === "true"}
-                                                        onCheckedChange={(value) =>
-                                                            field.onChange("" + value)
+                                                        onCheckedChange={value =>
+                                                            field.onChange(`${value}`)
                                                         }
                                                     />
                                                 </>
@@ -183,7 +200,12 @@ const currentUser = useCurrentUser();
                                     </div>
                                 </div>
                                 <div className="flex w-full items-center justify-between gap-2">
-                                    <Label htmlFor="kc-enable-start-tls" className="text-sm font-medium">{t("enableStartTLS")}</Label>
+                                    <Label
+                                        htmlFor="kc-enable-start-tls"
+                                        className="text-sm font-medium"
+                                    >
+                                        {t("enableStartTLS")}
+                                    </Label>
                                     <div className="flex shrink-0 items-center gap-2">
                                         <Controller
                                             name="smtpServer.starttls"
@@ -192,14 +214,16 @@ const currentUser = useCurrentUser();
                                             render={({ field }) => (
                                                 <>
                                                     <span className="text-sm text-muted-foreground">
-                                                        {field.value === "true" ? t("on") : t("off")}
+                                                        {field.value === "true"
+                                                            ? t("on")
+                                                            : t("off")}
                                                     </span>
                                                     <Checkbox
                                                         id="kc-enable-start-tls"
                                                         data-testid="enable-start-tls"
                                                         checked={field.value === "true"}
-                                                        onCheckedChange={(value) =>
-                                                            field.onChange("" + value)
+                                                        onCheckedChange={value =>
+                                                            field.onChange(`${value}`)
                                                         }
                                                     />
                                                 </>
@@ -210,7 +234,9 @@ const currentUser = useCurrentUser();
                             </div>
                             <div className="flex w-full items-center justify-between gap-2">
                                 <div className="flex items-center gap-1.5">
-                                    <span className="text-sm font-medium">{t("authentication")}</span>
+                                    <span className="text-sm font-medium">
+                                        {t("authentication")}
+                                    </span>
                                 </div>
                                 <div className="flex shrink-0 items-center gap-2">
                                     <Controller
@@ -218,7 +244,9 @@ const currentUser = useCurrentUser();
                                         control={control}
                                         defaultValue={realm.smtpServer?.auth ?? "false"}
                                         render={({ field }) => {
-                                            const on = field.value === "true" || field.value === true;
+                                            const on =
+                                                field.value === "true" ||
+                                                field.value === true;
                                             return (
                                                 <>
                                                     <span className="text-sm text-muted-foreground">
@@ -229,7 +257,9 @@ const currentUser = useCurrentUser();
                                                         data-testid="smtpServer.auth"
                                                         aria-label={t("authentication")}
                                                         checked={on}
-                                                        onCheckedChange={(v) => field.onChange("" + v)}
+                                                        onCheckedChange={v =>
+                                                            field.onChange(`${v}`)
+                                                        }
                                                     />
                                                 </>
                                             );
@@ -248,7 +278,9 @@ const currentUser = useCurrentUser();
                                         }}
                                     />
                                     <div className="space-y-2">
-                                        <span className="text-sm font-medium">{t("authenticationType")}</span>
+                                        <span className="text-sm font-medium">
+                                            {t("authenticationType")}
+                                        </span>
                                         <Controller
                                             name="smtpServer.authType"
                                             control={control}
@@ -264,7 +296,11 @@ const currentUser = useCurrentUser();
                                                             value="basic"
                                                             data-testid="smtpServer.authType.basic"
                                                         />
-                                                        <Label htmlFor="basicAuth">{t("authenticationTypeBasicAuth")}</Label>
+                                                        <Label htmlFor="basicAuth">
+                                                            {t(
+                                                                "authenticationTypeBasicAuth"
+                                                            )}
+                                                        </Label>
                                                     </div>
                                                     <div className="flex items-center gap-2">
                                                         <RadioGroupItem
@@ -272,7 +308,11 @@ const currentUser = useCurrentUser();
                                                             value="token"
                                                             data-testid="smtpServer.authType.token"
                                                         />
-                                                        <Label htmlFor="tokenAuth">{t("authenticationTypeTokenAuth")}</Label>
+                                                        <Label htmlFor="tokenAuth">
+                                                            {t(
+                                                                "authenticationTypeTokenAuth"
+                                                            )}
+                                                        </Label>
                                                     </div>
                                                 </RadioGroup>
                                             )}
@@ -328,7 +368,9 @@ const currentUser = useCurrentUser();
                             )}
                             <div className="flex w-full items-center justify-between gap-2">
                                 <div className="flex items-center gap-1.5">
-                                    <span className="text-sm font-medium">{t("allowutf8")}</span>
+                                    <span className="text-sm font-medium">
+                                        {t("allowutf8")}
+                                    </span>
                                     <HelpItem
                                         helpText={t("allowutf8Help")}
                                         fieldLabelId="allowutf8"
@@ -338,9 +380,13 @@ const currentUser = useCurrentUser();
                                     <Controller
                                         name="smtpServer.allowutf8"
                                         control={control}
-                                        defaultValue={realm.smtpServer?.allowutf8 ?? "false"}
+                                        defaultValue={
+                                            realm.smtpServer?.allowutf8 ?? "false"
+                                        }
                                         render={({ field }) => {
-                                            const on = field.value === "true" || field.value === true;
+                                            const on =
+                                                field.value === "true" ||
+                                                field.value === true;
                                             return (
                                                 <>
                                                     <span className="text-sm text-muted-foreground">
@@ -351,7 +397,9 @@ const currentUser = useCurrentUser();
                                                         data-testid="smtpServer.allowutf8"
                                                         aria-label={t("allowutf8")}
                                                         checked={on}
-                                                        onCheckedChange={(v) => field.onChange("" + v)}
+                                                        onCheckedChange={v =>
+                                                            field.onChange(`${v}`)
+                                                        }
                                                     />
                                                 </>
                                             );
@@ -384,7 +432,12 @@ const currentUser = useCurrentUser();
                                 min={0}
                             />
                             <div className="flex w-full items-center justify-between gap-2">
-                                <Label htmlFor="kc-enable-debug" className="text-sm font-medium">{t("enableDebugSMTP")}</Label>
+                                <Label
+                                    htmlFor="kc-enable-debug"
+                                    className="text-sm font-medium"
+                                >
+                                    {t("enableDebugSMTP")}
+                                </Label>
                                 <div className="flex shrink-0 items-center gap-2">
                                     <Controller
                                         name="smtpServer.debug"
@@ -393,14 +446,16 @@ const currentUser = useCurrentUser();
                                         render={({ field }) => (
                                             <>
                                                 <span className="text-sm text-muted-foreground">
-                                                    {field.value === "true" ? t("on") : t("off")}
+                                                    {field.value === "true"
+                                                        ? t("on")
+                                                        : t("off")}
                                                 </span>
                                                 <Checkbox
                                                     id="kc-enable-debug"
                                                     data-testid="enable-debug"
                                                     checked={field.value === "true"}
-                                                    onCheckedChange={(value) =>
-                                                        field.onChange("" + value)
+                                                    onCheckedChange={value =>
+                                                        field.onChange(`${value}`)
                                                     }
                                                 />
                                             </>
@@ -427,11 +482,13 @@ const currentUser = useCurrentUser();
                                             </AlertTitle>
                                             <AlertDescription>
                                                 <Link
-                                                    to={toUser({
-                                                        realm: currentUser.realm!,
-                                                        id: currentUser.id!,
-                                                        tab: "settings"
-                                                    }) as string}
+                                                    to={
+                                                        toUser({
+                                                            realm: currentUser.realm!,
+                                                            id: currentUser.id!,
+                                                            tab: "settings"
+                                                        }) as string
+                                                    }
                                                 >
                                                     {t(
                                                         "testConnectionHint.withoutEmailAction"
@@ -446,11 +503,7 @@ const currentUser = useCurrentUser();
                     </FormPanel>
 
                     <div className="flex gap-2 pt-2">
-                        <FixedButtonsGroup
-                            name="email-tab"
-                            reset={reset}
-                            isSubmit
-                        >
+                        <FixedButtonsGroup name="email-tab" reset={reset} isSubmit>
                             <Button
                                 variant="secondary"
                                 onClick={() => testConnection()}

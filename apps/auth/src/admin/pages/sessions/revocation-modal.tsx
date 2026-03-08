@@ -1,4 +1,5 @@
 import type GlobalRequestResult from "@keycloak/keycloak-admin-client/lib/defs/globalRequestResult";
+import { useTranslation } from "@merge-rd/i18n";
 import { Button } from "@merge-rd/ui/components/button";
 import {
     Dialog,
@@ -10,10 +11,9 @@ import {
 import { Input } from "@merge-rd/ui/components/input";
 import { Label } from "@merge-rd/ui/components/label";
 import { useForm } from "react-hook-form";
-import { useTranslation } from "@merge-rd/i18n";
-import { useAdminClient } from "../../app/admin-client";
-import { getErrorDescription, getErrorMessage } from "../../../shared/keycloak-ui-shared";
 import { toast } from "sonner";
+import { getErrorDescription, getErrorMessage } from "../../../shared/keycloak-ui-shared";
+import { useAdminClient } from "../../app/admin-client";
 import { useRealm } from "../../app/providers/realm-context/realm-context";
 
 type RevocationModalProps = {
@@ -35,16 +35,22 @@ export const RevocationModal = ({ handleModalToggle, save }: RevocationModalProp
         if (successCount === 0 && failedCount === 0) {
             toast.warning(t("noAdminUrlSet"));
         } else if (failedCount > 0) {
-            toast.success(t(prefixKey + "Success", {
+            toast.success(
+                t(`${prefixKey}Success`, {
                     successNodes: result.successRequests
-                }));
-            toast.error(t(prefixKey + "Fail", {
+                })
+            );
+            toast.error(
+                t(`${prefixKey}Fail`, {
                     failedNodes: result.failedRequests
-                }));
+                })
+            );
         } else {
-            toast.success(t(prefixKey + "Success", {
+            toast.success(
+                t(`${prefixKey}Success`, {
                     successNodes: result.successRequests
-                }));
+                })
+            );
         }
     };
 
@@ -60,7 +66,9 @@ export const RevocationModal = ({ handleModalToggle, save }: RevocationModalProp
 
             toast.success(t("notBeforeSuccess"));
         } catch (error) {
-            toast.error(t("setToNowError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
+            toast.error(t("setToNowError", { error: getErrorMessage(error) }), {
+                description: getErrorDescription(error)
+            });
         }
     };
 
@@ -76,7 +84,9 @@ export const RevocationModal = ({ handleModalToggle, save }: RevocationModalProp
             toast.success(t("notBeforeClearedSuccess"));
             refresh();
         } catch (error) {
-            toast.error(t("notBeforeError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
+            toast.error(t("notBeforeError", { error: getErrorMessage(error) }), {
+                description: getErrorDescription(error)
+            });
         }
     };
 
@@ -98,7 +108,11 @@ export const RevocationModal = ({ handleModalToggle, save }: RevocationModalProp
                 <p className="kc-revocation-description-text text-sm">
                     {t("revocationDescription")}
                 </p>
-                <form id="revocation-modal-form" className="space-y-4" onSubmit={handleSubmit(save)}>
+                <form
+                    id="revocation-modal-form"
+                    className="space-y-4"
+                    onSubmit={handleSubmit(save)}
+                >
                     <div className="space-y-2 kc-revocation-modal-form-group">
                         <Label htmlFor="not-before">{t("notBefore")}</Label>
                         <Input

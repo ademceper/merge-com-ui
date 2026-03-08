@@ -13,7 +13,7 @@
 
 import { Trans } from "@merge-rd/i18n";
 
-import { Permission } from "../../shared/api/representations";
+import type { Permission } from "../../shared/api/representations";
 
 type SharedWithProps = {
     permissions?: Permission[];

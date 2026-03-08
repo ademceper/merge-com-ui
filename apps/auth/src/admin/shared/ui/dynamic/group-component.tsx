@@ -1,13 +1,12 @@
-import GroupRepresentation from "@keycloak/keycloak-admin-client/lib/defs/groupRepresentation";
+import type GroupRepresentation from "@keycloak/keycloak-admin-client/lib/defs/groupRepresentation";
+import { useTranslation } from "@merge-rd/i18n";
 import { Badge } from "@merge-rd/ui/components/badge";
 import { Button } from "@merge-rd/ui/components/button";
 import { Label } from "@merge-rd/ui/components/label";
 import { useState } from "react";
 import { Controller, useFormContext } from "react-hook-form";
-import { useTranslation } from "@merge-rd/i18n";
-
-import { GroupPickerDialog } from "../group/group-picker-dialog";
 import { HelpItem } from "../../../../shared/keycloak-ui-shared";
+import { GroupPickerDialog } from "../group/group-picker-dialog";
 import type { ComponentProps } from "./components";
 
 export const GroupComponent = ({
@@ -48,7 +47,10 @@ export const GroupComponent = ({
 
                     <div className="space-y-2">
                         <div className="flex items-center gap-1">
-                            <Label htmlFor={name!}>{t(label!)}{required && " *"}</Label>
+                            <Label htmlFor={name!}>
+                                {t(label!)}
+                                {required && " *"}
+                            </Label>
                             <HelpItem helpText={t(helpText!)} fieldLabelId={`${label}`} />
                         </div>
                         <div className="flex gap-2 flex-wrap">

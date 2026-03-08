@@ -9,29 +9,29 @@
 
 // @ts-nocheck
 
+import { useTranslation } from "@merge-rd/i18n";
+import { Badge } from "@merge-rd/ui/components/badge";
+import { Button } from "@merge-rd/ui/components/button";
+import {
+    Dialog,
+    DialogContent,
+    DialogDescription,
+    DialogFooter,
+    DialogHeader,
+    DialogTitle
+} from "@merge-rd/ui/components/dialog";
+import { Input } from "@merge-rd/ui/components/input";
+import { X } from "@phosphor-icons/react";
+import { useEffect } from "react";
+import { FormProvider, useFieldArray, useForm, useWatch } from "react-hook-form";
 import {
     FormErrorText,
     MultiSelectField,
     useEnvironment
 } from "../../../shared/keycloak-ui-shared";
-import { useEffect } from "react";
-import { FormProvider, useFieldArray, useForm, useWatch } from "react-hook-form";
-import { useTranslation } from "@merge-rd/i18n";
-import {
-    Dialog,
-    DialogContent,
-    DialogHeader,
-    DialogTitle,
-    DialogFooter,
-    DialogDescription
-} from "@merge-rd/ui/components/dialog";
-import { Button } from "@merge-rd/ui/components/button";
-import { Input } from "@merge-rd/ui/components/input";
-import { Badge } from "@merge-rd/ui/components/badge";
-import { X } from "@phosphor-icons/react";
 
 import { updateRequest } from "../../app/api";
-import { Permission, Resource } from "../../shared/api/representations";
+import type { Permission, Resource } from "../../shared/api/representations";
 import { useAccountAlerts } from "../../shared/lib/useAccountAlerts";
 import { SharedWith } from "./shared-with";
 
@@ -104,7 +104,7 @@ export const ShareTheResource = ({
 
     const validateUser = async () => {
         const userOrEmails = fields.map(f => f.value).filter(f => f !== "");
-        const userPermission = permissions?.map(p => [p.username, p.email]).flat();
+        const userPermission = permissions?.flatMap(p => [p.username, p.email]);
 
         const hasUsers = userOrEmails.length > 0;
         const alreadyShared =
@@ -122,15 +122,26 @@ export const ShareTheResource = ({
     };
 
     return (
-        <Dialog open={open} onOpenChange={o => { if (!o) onClose(); }}>
+        <Dialog
+            open={open}
+            onOpenChange={o => {
+                if (!o) onClose();
+            }}
+        >
             <DialogContent className="sm:max-w-lg">
                 <DialogHeader>
-                    <DialogTitle>{t("shareTheResource", { name: resource.name })}</DialogTitle>
+                    <DialogTitle>
+                        {t("shareTheResource", { name: resource.name })}
+                    </DialogTitle>
                     <DialogDescription className="sr-only">
                         {t("shareTheResource", { name: resource.name })}
                     </DialogDescription>
                 </DialogHeader>
-                <form id="share-form" onSubmit={handleSubmit(addShare)} className="space-y-4">
+                <form
+                    id="share-form"
+                    onSubmit={handleSubmit(addShare)}
+                    className="space-y-4"
+                >
                     <div className="space-y-2">
                         <label htmlFor="users" className="text-sm font-medium">
                             {t("shareUser")} <span className="text-destructive">*</span>

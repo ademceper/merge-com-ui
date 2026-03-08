@@ -11,8 +11,11 @@
 
 // @ts-nocheck
 
-import { KeycloakContext, type BaseEnvironment } from "../../../shared/keycloak-ui-shared";
 import type { Keycloak } from "oidc-spa/keycloak-js";
+import type {
+    BaseEnvironment,
+    KeycloakContext
+} from "../../../shared/keycloak-ui-shared";
 
 import { joinPath } from "../lib/joinPath";
 import { CONTENT_TYPE_HEADER, CONTENT_TYPE_JSON } from "./constants";

@@ -1,17 +1,14 @@
 import type { AuthenticationProviderRepresentation } from "@keycloak/keycloak-admin-client/lib/defs/authenticatorConfigRepresentation";
+import { useTranslation } from "@merge-rd/i18n";
+import { Button } from "@merge-rd/ui/components/button";
 import {
     Tooltip,
     TooltipContent,
-    TooltipTrigger,
     TooltipProvider,
+    TooltipTrigger
 } from "@merge-rd/ui/components/tooltip";
-import { Button } from "@merge-rd/ui/components/button";
-import {
-    TableCell,
-    TableRow,
-} from "@/admin/shared/ui/data-table";
 import { Trash } from "@phosphor-icons/react";
-import { useTranslation } from "@merge-rd/i18n";
+import { TableCell, TableRow } from "@/admin/shared/ui/data-table";
 import type { ExpandableExecution } from "../execution-model";
 import { AddFlowDropdown } from "./add-flow-dropdown";
 import { EditFlow } from "./edit-flow";
@@ -55,7 +52,7 @@ export const FlowRow = ({
     onRowChange,
     onAddExecution,
     onAddFlow,
-    onDelete,
+    onDelete
 }: FlowRowProps) => {
     const { t } = useTranslation();
     const hasSubList = !!execution.executionList?.length;
@@ -86,10 +83,7 @@ export const FlowRow = ({
                     />
                 </TableCell>
                 <TableCell>
-                    <FlowRequirementDropdown
-                        flow={execution}
-                        onChange={onRowChange}
-                    />
+                    <FlowRequirementDropdown flow={execution} onChange={onRowChange} />
                 </TableCell>
                 {(!execution.authenticationFlow || builtIn) && (
                     <>
@@ -111,10 +105,7 @@ export const FlowRow = ({
                             />
                         </TableCell>
                         <TableCell className="w-10">
-                            <EditFlow
-                                execution={execution}
-                                onRowChange={onRowChange}
-                            />
+                            <EditFlow execution={execution} onRowChange={onRowChange} />
                         </TableCell>
                     </>
                 )}

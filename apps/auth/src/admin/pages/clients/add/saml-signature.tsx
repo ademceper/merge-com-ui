@@ -1,9 +1,9 @@
-import { useFormContext } from "react-hook-form";
 import { useTranslation } from "@merge-rd/i18n";
+import { useFormContext } from "react-hook-form";
 import { SelectField, TextControl } from "../../../../shared/keycloak-ui-shared";
-import { FormAccess } from "../../../shared/ui/form/form-access";
 import { convertAttributeNameToForm } from "../../../shared/lib/util";
-import { FormFields } from "../client-details";
+import { FormAccess } from "../../../shared/ui/form/form-access";
+import type { FormFields } from "../client-details";
 import { Toggle } from "./saml-config";
 import { SamlEncryption } from "./saml-encryption";
 
@@ -57,72 +57,71 @@ export const SamlSignature = () => {
     );
 
     return (
-        <FormAccess
-            role="manage-clients"
-            className="keycloak__capability-config__form"
-        >
+        <FormAccess role="manage-clients" className="keycloak__capability-config__form">
             <div className="flex flex-col gap-5">
-            <Toggle
-                name={convertAttributeNameToForm("attributes.saml.server.signature")}
-                label="signDocuments"
-            />
-            <Toggle
-                name={convertAttributeNameToForm("attributes.saml.assertion.signature")}
-                label="signAssertions"
-            />
-            {(signDocs === "true" || signAssertion === "true") && (
-                <>
-                    <SelectField
-                        name={convertAttributeNameToForm<FormFields>(
-                            "attributes.saml.signature.algorithm"
-                        )}
-                        label={t("signatureAlgorithm")}
-                        labelIcon={t("signatureAlgorithmHelp")}
-                        defaultValue={SIGNATURE_ALGORITHMS[0]}
-                        options={[...SIGNATURE_ALGORITHMS]}
+                <Toggle
+                    name={convertAttributeNameToForm("attributes.saml.server.signature")}
+                    label="signDocuments"
+                />
+                <Toggle
+                    name={convertAttributeNameToForm(
+                        "attributes.saml.assertion.signature"
+                    )}
+                    label="signAssertions"
+                />
+                {(signDocs === "true" || signAssertion === "true") && (
+                    <>
+                        <SelectField
+                            name={convertAttributeNameToForm<FormFields>(
+                                "attributes.saml.signature.algorithm"
+                            )}
+                            label={t("signatureAlgorithm")}
+                            labelIcon={t("signatureAlgorithmHelp")}
+                            defaultValue={SIGNATURE_ALGORITHMS[0]}
+                            options={[...SIGNATURE_ALGORITHMS]}
                         />
-                    <SelectField
-                        name={convertAttributeNameToForm<FormFields>(
-                            "attributes.saml.server.signature.keyinfo.xmlSigKeyInfoKeyNameTransformer"
-                        )}
-                        label={t("signatureKeyName")}
-                        labelIcon={t("signatureKeyNameHelp")}
-                        defaultValue={KEYNAME_TRANSFORMER[0]}
-                        options={[...KEYNAME_TRANSFORMER]}
+                        <SelectField
+                            name={convertAttributeNameToForm<FormFields>(
+                                "attributes.saml.server.signature.keyinfo.xmlSigKeyInfoKeyNameTransformer"
+                            )}
+                            label={t("signatureKeyName")}
+                            labelIcon={t("signatureKeyNameHelp")}
+                            defaultValue={KEYNAME_TRANSFORMER[0]}
+                            options={[...KEYNAME_TRANSFORMER]}
                         />
-                    <SelectField
-                        name="attributes.saml_signature_canonicalization_method"
-                        label={t("canonicalization")}
-                        labelIcon={t("canonicalizationHelp")}
-                        defaultValue={CANONICALIZATION[0].value}
-                        options={CANONICALIZATION.map(({ name, value }) => ({
-                            key: value,
-                            value: name
-                        }))}
+                        <SelectField
+                            name="attributes.saml_signature_canonicalization_method"
+                            label={t("canonicalization")}
+                            labelIcon={t("canonicalizationHelp")}
+                            defaultValue={CANONICALIZATION[0].value}
+                            options={CANONICALIZATION.map(({ name, value }) => ({
+                                key: value,
+                                value: name
+                            }))}
                         />
-                    <TextControl
-                        name={convertAttributeNameToForm<FormFields>(
-                            "attributes.saml.metadataDescriptorUrl"
-                        )}
-                        label={t("samlClientMetadataDescriptorUrl")}
-                        labelIcon={t("samlClientMetadataDescriptorUrlHelp")}
-                        type="url"
-                        rules={{
-                            required: {
-                                value: useMetadataDescriptorUrl === "true",
-                                message: t("required")
-                            }
-                        }}
-                    />
-                    <Toggle
-                        name={convertAttributeNameToForm(
-                            "attributes.saml.useMetadataDescriptorUrl"
-                        )}
-                        label="samlClientUseMetadataDescriptorUrl"
-                    />
-                    {samlEncryption === "true" && <SamlEncryption />}
-                </>
-            )}
+                        <TextControl
+                            name={convertAttributeNameToForm<FormFields>(
+                                "attributes.saml.metadataDescriptorUrl"
+                            )}
+                            label={t("samlClientMetadataDescriptorUrl")}
+                            labelIcon={t("samlClientMetadataDescriptorUrlHelp")}
+                            type="url"
+                            rules={{
+                                required: {
+                                    value: useMetadataDescriptorUrl === "true",
+                                    message: t("required")
+                                }
+                            }}
+                        />
+                        <Toggle
+                            name={convertAttributeNameToForm(
+                                "attributes.saml.useMetadataDescriptorUrl"
+                            )}
+                            label="samlClientUseMetadataDescriptorUrl"
+                        />
+                        {samlEncryption === "true" && <SamlEncryption />}
+                    </>
+                )}
             </div>
         </FormAccess>
     );

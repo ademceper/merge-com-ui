@@ -1,9 +1,14 @@
+import { useTranslation } from "@merge-rd/i18n";
 import { Button } from "@merge-rd/ui/components/button";
 import { Input } from "@merge-rd/ui/components/input";
 import { MinusCircle, PlusCircle } from "@phosphor-icons/react";
-import { Fragment, FunctionComponent, PropsWithChildren } from "react";
-import { FieldValues, useFieldArray, useFormContext, useWatch } from "react-hook-form";
-import { useTranslation } from "@merge-rd/i18n";
+import { Fragment, type FunctionComponent, type PropsWithChildren } from "react";
+import {
+    type FieldValues,
+    useFieldArray,
+    useFormContext,
+    useWatch
+} from "react-hook-form";
 
 export type DefaultValue = {
     key: string;
@@ -106,7 +111,9 @@ export const KeyValueInput = ({
                                         {...register(`${name}.${index}.value`, {
                                             required: true
                                         })}
-                                        className={valueErrorPresent ? "border-destructive" : ""}
+                                        className={
+                                            valueErrorPresent ? "border-destructive" : ""
+                                        }
                                         required
                                         disabled={isDisabled}
                                     />
@@ -146,10 +153,7 @@ export const KeyValueInput = ({
             </div>
         </>
     ) : (
-        <div
-            data-testid={`${name}-empty-state`}
-            className="p-0 text-center"
-        >
+        <div data-testid={`${name}-empty-state`} className="p-0 text-center">
             <p className="text-muted-foreground">{t("missingAttributes", { label })}</p>
             <div className="mt-2">
                 <Button

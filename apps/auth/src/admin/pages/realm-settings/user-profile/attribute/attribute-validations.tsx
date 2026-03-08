@@ -1,6 +1,9 @@
+import { useTranslation } from "@merge-rd/i18n";
 import { Button } from "@merge-rd/ui/components/button";
 import { Separator } from "@merge-rd/ui/components/separator";
 import { PlusCircle } from "@phosphor-icons/react";
+import { useEffect, useState } from "react";
+import { useFormContext, useWatch } from "react-hook-form";
 import {
     Table,
     TableBody,
@@ -9,13 +12,9 @@ import {
     TableHeader,
     TableRow
 } from "@/admin/shared/ui/data-table";
-import { useEffect, useState } from "react";
-import { useFormContext, useWatch } from "react-hook-form";
-import { useTranslation } from "@merge-rd/i18n";
-
-import { useConfirmDialog } from "../../../../shared/ui/confirm-dialog/confirm-dialog";
-import { DefaultValue } from "../../../../shared/ui/key-value-form/key-value-input";
 import useToggle from "../../../../shared/lib/useToggle";
+import { useConfirmDialog } from "../../../../shared/ui/confirm-dialog/confirm-dialog";
+import type { DefaultValue } from "../../../../shared/ui/key-value-form/key-value-input";
 import type { IndexedValidations } from "../../new-attribute-settings";
 import { AddValidatorDialog } from "./add-validator-dialog";
 
@@ -100,10 +99,14 @@ export const AttributeValidations = () => {
                         <TableBody>
                             {validators.map(validator => (
                                 <TableRow key={validator.key}>
-                                    <TableCell data-label={t("validatorColNames.colName")}>
+                                    <TableCell
+                                        data-label={t("validatorColNames.colName")}
+                                    >
                                         {validator.key}
                                     </TableCell>
-                                    <TableCell data-label={t("validatorColNames.colConfig")}>
+                                    <TableCell
+                                        data-label={t("validatorColNames.colConfig")}
+                                    >
                                         {JSON.stringify(validator.value)}
                                     </TableCell>
                                     <TableCell className="kc--attributes-validations--action-cell">
@@ -124,9 +127,7 @@ export const AttributeValidations = () => {
                         </TableBody>
                     </Table>
                 ) : (
-                    <p className="kc-emptyValidators">
-                        {t("emptyValidators")}
-                    </p>
+                    <p className="kc-emptyValidators">{t("emptyValidators")}</p>
                 )}
             </div>
         </>

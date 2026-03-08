@@ -1,28 +1,28 @@
 import type RealmRepresentation from "@keycloak/keycloak-admin-client/lib/defs/realmRepresentation";
+import { useTranslation } from "@merge-rd/i18n";
 import { Popover, PopoverContent, PopoverTrigger } from "@merge-rd/ui/components/popover";
 import { Question } from "@phosphor-icons/react";
 import { useEffect } from "react";
 import { FormProvider, useForm } from "react-hook-form";
-import { useTranslation } from "@merge-rd/i18n";
+import { toast } from "sonner";
 import {
+    FormPanel,
     getErrorDescription,
     getErrorMessage,
     HelpItem,
     SelectField,
     SwitchControl,
     TextControl,
-    useHelp,
+    useHelp
 } from "../../../../shared/keycloak-ui-shared";
-import { toast } from "sonner";
 import { useAdminClient } from "../../../app/admin-client";
-import { FormAccess } from "../../../shared/ui/form/form-access";
+import { useRealm } from "../../../app/providers/realm-context/realm-context";
+import useIsFeatureEnabled, { Feature } from "../../../shared/lib/useIsFeatureEnabled";
+import { convertFormValuesToObject, convertToFormValues } from "../../../shared/lib/util";
 import { FixedButtonsGroup } from "../../../shared/ui/form/fixed-button-group";
-import { FormPanel } from "../../../../shared/keycloak-ui-shared";
+import { FormAccess } from "../../../shared/ui/form/form-access";
 import { MultiLineInput } from "../../../shared/ui/multi-line-input/multi-line-input";
 import { TimeSelectorControl } from "../../../shared/ui/time-selector/time-selector-control";
-import { useRealm } from "../../../app/providers/realm-context/realm-context";
-import { convertFormValuesToObject, convertToFormValues } from "../../../shared/lib/util";
-import useIsFeatureEnabled, { Feature } from "../../../shared/lib/useIsFeatureEnabled";
 
 const SIGNATURE_ALGORITHMS = [
     "ES256",
@@ -88,7 +88,7 @@ export const WebauthnPolicy = ({
     const { adminClient } = useAdminClient();
 
     const { t } = useTranslation();
-const { realm: realmName } = useRealm();
+    const { realm: realmName } = useRealm();
     const { enabled } = useHelp();
     const form = useForm({ mode: "onChange" });
     const {
@@ -112,7 +112,9 @@ const { realm: realmName } = useRealm();
             setupForm(submittedRealm);
             toast.success(t("webAuthnUpdateSuccess"));
         } catch (error) {
-            toast.error(t("webAuthnUpdateError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
+            toast.error(t("webAuthnUpdateError", { error: getErrorMessage(error) }), {
+                description: getErrorDescription(error)
+            });
         }
     };
 
@@ -170,7 +172,9 @@ const { realm: realmName } = useRealm();
                             <WebauthnSelect
                                 name={`${namePrefix}AttestationConveyancePreference`}
                                 label={t("webAuthnPolicyAttestationConveyancePreference")}
-                                labelIcon={t("webAuthnPolicyAttestationConveyancePreferenceHelp")}
+                                labelIcon={t(
+                                    "webAuthnPolicyAttestationConveyancePreferenceHelp"
+                                )}
                                 options={ATTESTATION_PREFERENCE}
                                 labelPrefix="attestationPreference"
                             />
@@ -197,7 +201,9 @@ const { realm: realmName } = useRealm();
                             <WebauthnSelect
                                 name={`${namePrefix}UserVerificationRequirement`}
                                 label={t("webAuthnPolicyUserVerificationRequirement")}
-                                labelIcon={t("webAuthnPolicyUserVerificationRequirementHelp")}
+                                labelIcon={t(
+                                    "webAuthnPolicyUserVerificationRequirementHelp"
+                                )}
                                 options={USER_VERIFY}
                                 labelPrefix="userVerify"
                             />
@@ -224,14 +230,19 @@ const { realm: realmName } = useRealm();
                             <SwitchControl
                                 name={`${namePrefix}AvoidSameAuthenticatorRegister`}
                                 label={t("webAuthnPolicyAvoidSameAuthenticatorRegister")}
-                                labelIcon={t("webAuthnPolicyAvoidSameAuthenticatorRegisterHelp")}
+                                labelIcon={t(
+                                    "webAuthnPolicyAvoidSameAuthenticatorRegisterHelp"
+                                )}
                                 labelOn={t("on")}
                                 labelOff={t("off")}
                             />
                         </div>
                         <div className="space-y-2">
                             <div className="flex items-center gap-2">
-                                <label htmlFor="webAuthnPolicyAcceptableAaguids" className="text-sm font-medium">
+                                <label
+                                    htmlFor="webAuthnPolicyAcceptableAaguids"
+                                    className="text-sm font-medium"
+                                >
                                     {t("webAuthnPolicyAcceptableAaguids")}
                                 </label>
                                 <HelpItem
@@ -247,7 +258,10 @@ const { realm: realmName } = useRealm();
                         </div>
                         <div className="space-y-2">
                             <div className="flex items-center gap-2">
-                                <label htmlFor="webAuthnPolicyExtraOrigins" className="text-sm font-medium">
+                                <label
+                                    htmlFor="webAuthnPolicyExtraOrigins"
+                                    className="text-sm font-medium"
+                                >
                                     {t("webAuthnPolicyExtraOrigins")}
                                 </label>
                                 <HelpItem

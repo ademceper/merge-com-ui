@@ -1,21 +1,25 @@
 import type CertificateRepresentation from "@keycloak/keycloak-admin-client/lib/defs/certificateRepresentation";
-import { getErrorDescription, getErrorMessage, FormPanel,
-    HelpItem,
-    useFetch } from "../../../../shared/keycloak-ui-shared";
-import { toast } from "sonner";
+import { useTranslation } from "@merge-rd/i18n";
 import { Button } from "@merge-rd/ui/components/button";
 import { Label } from "@merge-rd/ui/components/label";
 import { Switch } from "@merge-rd/ui/components/switch";
 import { saveAs } from "file-saver";
 import { Fragment, useState } from "react";
 import { Controller, useFormContext } from "react-hook-form";
-import { useTranslation } from "@merge-rd/i18n";
+import { toast } from "sonner";
+import {
+    FormPanel,
+    getErrorDescription,
+    getErrorMessage,
+    HelpItem
+} from "../../../../shared/keycloak-ui-shared";
 import { useAdminClient } from "../../../app/admin-client";
+import useToggle from "../../../shared/lib/useToggle";
+import { convertAttributeNameToForm } from "../../../shared/lib/util";
 import { useConfirmDialog } from "../../../shared/ui/confirm-dialog/confirm-dialog";
 import { FormAccess } from "../../../shared/ui/form/form-access";
-import { convertAttributeNameToForm } from "../../../shared/lib/util";
-import useToggle from "../../../shared/lib/useToggle";
-import { FormFields } from "../client-details";
+import { useSamlKeyInfo } from "../api/use-saml-key-info";
+import type { FormFields } from "../client-details";
 import { Certificate } from "./certificate";
 import { ExportSamlKeyDialog } from "./export-saml-key-dialog";
 import { SamlImportKeyDialog } from "./saml-import-key-dialog";
@@ -107,7 +111,9 @@ const KeySection = ({
                 />
             )}
             <FormPanel title={t(title)} className="kc-form-panel__panel">
-                <p className="pb-4 text-sm text-muted-foreground">{t(`${title}Explain`)}</p>
+                <p className="pb-4 text-sm text-muted-foreground">
+                    {t(`${title}Explain`)}
+                </p>
                 <FormAccess role="manage-clients" isHorizontal>
                     <div className="space-y-2">
                         <div className="flex items-center gap-2">
@@ -123,7 +129,7 @@ const KeySection = ({
                                     data-testid={key}
                                     id={key}
                                     checked={field.value === "true"}
-                                    onCheckedChange={(checked) => {
+                                    onCheckedChange={checked => {
                                         const v = checked.toString();
                                         if (
                                             v === "true" &&
@@ -191,17 +197,14 @@ export const SamlKeys = ({ clientId, save }: SamlKeysProps) => {
     const [keyInfo, setKeyInfo] = useState<CertificateRepresentation[]>();
     const [selectedType, setSelectedType] = useState<KeyTypes>();
     const [openImport, setImportOpen] = useState<KeyTypes>();
-    const [refresh, setRefresh] = useState(0);
 
     const { setValue } = useFormContext();
-useFetch(
-        () =>
-            Promise.all(
-                KEYS.map(attr => adminClient.clients.getKeyInfo({ id: clientId, attr }))
-            ),
-        info => setKeyInfo(info),
-        [refresh]
-    );
+    const { data: samlKeyData, refetch: refetchSamlKeys } = useSamlKeyInfo(clientId);
+
+    // Sync query data to local state (needed because generate mutates locally)
+    if (samlKeyData && !keyInfo) {
+        setKeyInfo(samlKeyData);
+    }
 
     const generate = async (attr: KeyTypes) => {
         const index = KEYS.indexOf(attr);
@@ -222,7 +225,9 @@ useFetch(
 
             toast.success(t("generateSuccess"));
         } catch (error) {
-            toast.error(t("generateError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
+            toast.error(t("generateError", { error: getErrorMessage(error) }), {
+                description: getErrorDescription(error)
+            });
         }
     };
 
@@ -248,7 +253,7 @@ useFetch(
     const regenerateKey = selectedType ? KEYS_MAPPING[selectedType].regenerateKey : "";
     const [toggleReGenerateDialog, ReGenerateConfirm] = useConfirmDialog({
         titleKey: regenerateKey,
-        messageKey: regenerateKey + "Explain",
+        messageKey: `${regenerateKey}Explain`,
         continueButtonLabel: "yes",
         cancelButtonLabel: "no",
         onConfirm: async () => {
@@ -269,7 +274,7 @@ useFetch(
                             setValue(key, ""); // take defaults when enabled
                         }
                         save();
-                        setRefresh(refresh + 1);
+                        refetchSamlKeys();
                     }}
                     onCancel={() => {
                         setValue(KEYS_MAPPING[selectedType!].name, "false");
@@ -286,7 +291,7 @@ useFetch(
                             id={clientId}
                             attr={attr}
                             onClose={() => setImportOpen(undefined)}
-                            onImported={() => setRefresh(refresh + 1)}
+                            onImported={() => refetchSamlKeys()}
                         />
                     )}
                     <KeySection

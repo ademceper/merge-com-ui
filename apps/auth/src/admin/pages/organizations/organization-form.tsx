@@ -1,9 +1,13 @@
-import OrganizationRepresentation from "@keycloak/keycloak-admin-client/lib/defs/organizationRepresentation";
-import { FormErrorText, TextAreaControl, TextControl } from "../../../shared/keycloak-ui-shared";
+import type OrganizationRepresentation from "@keycloak/keycloak-admin-client/lib/defs/organizationRepresentation";
+import { useTranslation } from "@merge-rd/i18n";
 import { useEffect } from "react";
 import { useFormContext, useWatch } from "react-hook-form";
-import { useTranslation } from "@merge-rd/i18n";
-import { AttributeForm } from "../../shared/ui/key-value-form/attribute-form";
+import {
+    FormErrorText,
+    TextAreaControl,
+    TextControl
+} from "../../../shared/keycloak-ui-shared";
+import type { AttributeForm } from "../../shared/ui/key-value-form/attribute-form";
 import { keyValueToArray } from "../../shared/ui/key-value-form/key-value-convert";
 import { MultiLineInput } from "../../shared/ui/multi-line-input/multi-line-input";
 
@@ -22,7 +26,9 @@ export const convertToOrg = (org: OrganizationFormType): OrganizationRepresentat
  * Güncelleme için: Keycloak alias değişikliğine izin vermiyor ("Cannot change the alias").
  * Sadece güncellenebilir alanları açıkça gönderiyoruz; alias ve id hiç eklenmiyor.
  */
-export const convertToOrgForUpdate = (org: OrganizationFormType): Omit<OrganizationRepresentation, "alias" | "id"> => {
+export const convertToOrgForUpdate = (
+    org: OrganizationFormType
+): Omit<OrganizationRepresentation, "alias" | "id"> => {
     return {
         name: org.name,
         description: org.description,
@@ -73,8 +79,8 @@ export const OrganizationForm = ({ readOnly = false }: OrganizationFormProps) =>
                     placeholder={t("domain")}
                     labelIcon={t("organizationDomainHelp")}
                 />
-                {errors?.["domains"]?.message && (
-                    <FormErrorText message={errors["domains"].message.toString()} />
+                {errors?.domains?.message && (
+                    <FormErrorText message={errors.domains.message.toString()} />
                 )}
             </div>
             <TextControl
@@ -83,7 +89,11 @@ export const OrganizationForm = ({ readOnly = false }: OrganizationFormProps) =>
                 variant="secondary"
                 labelIcon={t("organizationRedirectUrlHelp")}
             />
-            <TextAreaControl name="description" label={t("description")} variant="secondary" />
+            <TextAreaControl
+                name="description"
+                label={t("description")}
+                variant="secondary"
+            />
         </div>
     );
 };

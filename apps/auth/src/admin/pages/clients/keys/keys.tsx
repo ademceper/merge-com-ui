@@ -1,21 +1,24 @@
-import type CertificateRepresentation from "@keycloak/keycloak-admin-client/lib/defs/certificateRepresentation";
 import type KeyStoreConfig from "@keycloak/keycloak-admin-client/lib/defs/keystoreConfig";
-import { getErrorDescription, getErrorMessage, TextControl, useFetch } from "../../../../shared/keycloak-ui-shared";
-import { toast } from "sonner";
+import { useTranslation } from "@merge-rd/i18n";
 import { Button } from "@merge-rd/ui/components/button";
 import { saveAs } from "file-saver";
-import { useState } from "react";
 import { useFormContext, useWatch } from "react-hook-form";
-import { useTranslation } from "@merge-rd/i18n";
+import { toast } from "sonner";
+import {
+    getErrorDescription,
+    getErrorMessage,
+    TextControl
+} from "../../../../shared/keycloak-ui-shared";
 import { useAdminClient } from "../../../app/admin-client";
+import useToggle from "../../../shared/lib/useToggle";
+import { convertAttributeNameToForm } from "../../../shared/lib/util";
 import { FormAccess } from "../../../shared/ui/form/form-access";
 import { DefaultSwitchControl } from "../../../shared/ui/switch-control";
-import { convertAttributeNameToForm } from "../../../shared/lib/util";
-import useToggle from "../../../shared/lib/useToggle";
-import { FormFields } from "../client-details";
+import { useClientKeyInfo } from "../api/use-client-key-info";
+import type { FormFields } from "../client-details";
 import { Certificate } from "./certificate";
 import { GenerateKeyDialog, getFileExtension } from "./generate-key-dialog";
-import { ImportFile, ImportKeyDialog } from "./import-key-dialog";
+import { type ImportFile, ImportKeyDialog } from "./import-key-dialog";
 
 type KeysProps = {
     save: () => void;
@@ -40,12 +43,11 @@ export const Keys = ({
         getValues,
         formState: { isDirty }
     } = useFormContext<FormFields>();
-const [keyInfo, setKeyInfo] = useState<CertificateRepresentation>();
+    const { data: keyInfo, refetch: refetchKeyInfo } = useClientKeyInfo(clientId, attr);
     const [openGenerateKeys, toggleOpenGenerateKeys, setOpenGenerateKeys] = useToggle();
     const [openImportKeys, toggleOpenImportKeys, setOpenImportKeys] = useToggle();
-    const [key, setKey] = useState(0);
     const refresh = () => {
-        setKey(key + 1);
+        refetchKeyInfo();
         refreshParent();
     };
 
@@ -54,19 +56,6 @@ const [keyInfo, setKeyInfo] = useState<CertificateRepresentation>();
         name: convertAttributeNameToForm<FormFields>("attributes.use.jwks.url"),
         defaultValue: "false"
     });
-
-    useFetch(
-        async () => {
-            try {
-                return await adminClient.clients.getKeyInfo({ id: clientId, attr });
-            } catch (error) {
-                toast.error(t("getKeyInfoError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
-                return {} as CertificateRepresentation;
-            }
-        },
-        info => setKeyInfo(info),
-        [key]
-    );
 
     const generate = async (config: KeyStoreConfig) => {
         try {
@@ -84,7 +73,9 @@ const [keyInfo, setKeyInfo] = useState<CertificateRepresentation>();
             toast.success(t("generateSuccess"));
             refresh();
         } catch (error) {
-            toast.error(t("generateError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
+            toast.error(t("generateError", { error: getErrorMessage(error) }), {
+                description: getErrorDescription(error)
+            });
         }
     };
 
@@ -102,7 +93,9 @@ const [keyInfo, setKeyInfo] = useState<CertificateRepresentation>();
             toast.success(t("importSuccess"));
             refresh();
         } catch (error) {
-            toast.error(t("importError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
+            toast.error(t("importError", { error: getErrorMessage(error) }), {
+                description: getErrorDescription(error)
+            });
         }
     };
 

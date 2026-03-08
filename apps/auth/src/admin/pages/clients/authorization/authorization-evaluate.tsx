@@ -5,34 +5,42 @@ import type ResourceEvaluation from "@keycloak/keycloak-admin-client/lib/defs/re
 import type ResourceRepresentation from "@keycloak/keycloak-admin-client/lib/defs/resourceRepresentation";
 import type RoleRepresentation from "@keycloak/keycloak-admin-client/lib/defs/roleRepresentation";
 import type ScopeRepresentation from "@keycloak/keycloak-admin-client/lib/defs/scopeRepresentation";
-import { getErrorDescription, getErrorMessage, HelpItem,
-    MultiSelectField,
-    SelectField,
-    TextControl,
-    useFetch } from "../../../../shared/keycloak-ui-shared";
-import { toast } from "sonner";
-import { Button } from "@merge-rd/ui/components/button";
-import { Switch } from "@merge-rd/ui/components/switch";
-import { Label } from "@merge-rd/ui/components/label";
-import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@merge-rd/ui/components/collapsible";
-import { useState } from "react";
-import { FormProvider, useForm } from "react-hook-form";
 import { useTranslation } from "@merge-rd/i18n";
-import { ForbiddenSection } from "../../forbidden-section";
+import { Button } from "@merge-rd/ui/components/button";
+import {
+    Collapsible,
+    CollapsibleContent,
+    CollapsibleTrigger
+} from "@merge-rd/ui/components/collapsible";
+import { Label } from "@merge-rd/ui/components/label";
+import { Switch } from "@merge-rd/ui/components/switch";
+import { useEffect, useState } from "react";
+import { FormProvider, useForm } from "react-hook-form";
+import { toast } from "sonner";
+import {
+    getErrorDescription,
+    getErrorMessage,
+    HelpItem,
+    MultiSelectField,
+    TextControl
+} from "../../../../shared/keycloak-ui-shared";
 import { useAdminClient } from "../../../app/admin-client";
+import { useAccess } from "../../../app/providers/access/access";
+import { useRealm } from "../../../app/providers/realm-context/realm-context";
 import { ClientSelect } from "../../../shared/ui/client/client-select";
 import { FormAccess } from "../../../shared/ui/form/form-access";
 import {
-    KeyValueType,
+    type KeyValueType,
     keyValueToArray
 } from "../../../shared/ui/key-value-form/key-value-convert";
 import { UserSelect } from "../../../shared/ui/users/user-select";
-import { useAccess } from "../../../app/providers/access/access";
-import { useRealm } from "../../../app/providers/realm-context/realm-context";
-import { FormFields } from "../client-details";
+import { ForbiddenSection } from "../../forbidden-section";
+import type { FormFields } from "../client-details";
 import { defaultContextAttributes } from "../utils";
-import { KeyBasedAttributeInput } from "./key-based-attribute-input";
+import { useResourcesAndScopes } from "./api/use-resources-and-scopes";
+import { useRoles } from "./api/use-roles";
 import { Results } from "./evaluate/results";
+import { KeyBasedAttributeInput } from "./key-based-attribute-input";
 
 interface EvaluateFormInputs extends Omit<ResourceEvaluation, "context" | "resources"> {
     alias: string;
@@ -96,30 +104,21 @@ const AuthorizationEvaluateContent = ({ client }: Props) => {
     const [evaluateResult, setEvaluateResult] = useState<PolicyEvaluationResponse>();
     const [clientRoles, setClientRoles] = useState<RoleRepresentation[]>([]);
 
-    useFetch(
-        () => adminClient.roles.find(),
-        roles => {
-            setClientRoles(roles);
-        },
-        []
-    );
+    const { data: rolesData } = useRoles();
+    const { data: resourcesScopesData } = useResourcesAndScopes(client.id!);
 
-    useFetch(
-        () =>
-            Promise.all([
-                adminClient.clients.listResources({
-                    id: client.id!
-                }),
-                adminClient.clients.listAllScopes({
-                    id: client.id!
-                })
-            ]),
-        ([resources, scopes]) => {
-            setResources(resources);
-            setScopes(scopes);
-        },
-        []
-    );
+    useEffect(() => {
+        if (rolesData) {
+            setClientRoles(rolesData);
+        }
+    }, [rolesData]);
+
+    useEffect(() => {
+        if (resourcesScopesData) {
+            setResources(resourcesScopesData[0]);
+            setScopes(resourcesScopesData[1]);
+        }
+    }, [resourcesScopesData]);
 
     const evaluate = async () => {
         if (!(await trigger())) {
@@ -136,9 +135,7 @@ const AuthorizationEvaluateContent = ({ client }: Props) => {
                 .map(r => ({
                     ...r,
                     scopes: r.scopes?.filter(s =>
-                        Object.values(keys)
-                            .flatMap(v => v)
-                            .includes(s.name!)
+                        Object.values(keys).flat().includes(s.name!)
                     )
                 })),
             entitlements: false,
@@ -159,7 +156,9 @@ const AuthorizationEvaluateContent = ({ client }: Props) => {
 
             setEvaluateResult(evaluation);
         } catch (error) {
-            toast.error(t("evaluateError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
+            toast.error(t("evaluateError", { error: getErrorMessage(error) }), {
+                description: getErrorDescription(error)
+            });
         }
     };
 
@@ -178,7 +177,9 @@ const AuthorizationEvaluateContent = ({ client }: Props) => {
             <FormProvider {...form}>
                 <div className="border rounded-lg">
                     <div className="p-4 border-b">
-                        <h2 className="text-lg font-semibold">{t("identityInformation")}</h2>
+                        <h2 className="text-lg font-semibold">
+                            {t("identityInformation")}
+                        </h2>
                     </div>
                     <div className="p-4">
                         <FormAccess isHorizontal role="view-clients">
@@ -216,7 +217,9 @@ const AuthorizationEvaluateContent = ({ client }: Props) => {
                         <FormAccess isHorizontal role="view-clients">
                             <div className="space-y-2">
                                 <div className="flex items-center gap-2">
-                                    <Label htmlFor="applyToResourceType">{t("applyToResourceType")}</Label>
+                                    <Label htmlFor="applyToResourceType">
+                                        {t("applyToResourceType")}
+                                    </Label>
                                     <HelpItem
                                         helpText={t("applyToResourceTypeHelp")}
                                         fieldLabelId="applyToResourceType"

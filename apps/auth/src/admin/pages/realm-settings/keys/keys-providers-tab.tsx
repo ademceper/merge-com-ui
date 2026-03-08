@@ -1,18 +1,6 @@
 import type ComponentRepresentation from "@keycloak/keycloak-admin-client/lib/defs/componentRepresentation";
 import type ComponentTypeRepresentation from "@keycloak/keycloak-admin-client/lib/defs/componentTypeRepresentation";
-import { getErrorDescription, getErrorMessage } from "../../../../shared/keycloak-ui-shared";
-import { toast } from "sonner";
-import { Button } from "@merge-rd/ui/components/button";
-import {
-    DataTable,
-    DataTableRowActions,
-    type ColumnDef
-} from "@/admin/shared/ui/data-table";
-import { Plus, Trash } from "@phosphor-icons/react";
-import { useMemo, useState } from "react";
 import { useTranslation } from "@merge-rd/i18n";
-import { Link } from "@tanstack/react-router";
-import { useAdminClient } from "../../../app/admin-client";
 import {
     AlertDialog,
     AlertDialogAction,
@@ -23,11 +11,26 @@ import {
     AlertDialogHeader,
     AlertDialogTitle
 } from "@merge-rd/ui/components/alert-dialog";
+import { Button } from "@merge-rd/ui/components/button";
+import { Plus, Trash } from "@phosphor-icons/react";
+import { Link } from "@tanstack/react-router";
+import { useMemo, useState } from "react";
+import { toast } from "sonner";
+import {
+    type ColumnDef,
+    DataTable,
+    DataTableRowActions
+} from "@/admin/shared/ui/data-table";
+import {
+    getErrorDescription,
+    getErrorMessage
+} from "../../../../shared/keycloak-ui-shared";
+import { useAdminClient } from "../../../app/admin-client";
 import { useRealm } from "../../../app/providers/realm-context/realm-context";
 import { useServerInfo } from "../../../app/providers/server-info/server-info-provider";
-import { KEY_PROVIDER_TYPE } from "../../../shared/lib/util";
 import useToggle from "../../../shared/lib/useToggle";
-import { ProviderType, toKeyProvider } from "../routes/key-provider";
+import { KEY_PROVIDER_TYPE } from "../../../shared/lib/util";
+import { type ProviderType, toKeyProvider } from "../../../shared/lib/routes/realm-settings";
 import { KeyProviderModal } from "./key-providers/key-provider-modal";
 import { KeyProvidersPicker } from "./key-providers/key-providers-picker";
 
@@ -58,8 +61,7 @@ export const KeysProvidersTab = ({ realmComponents, refresh }: KeysProvidersTabP
         () =>
             realmComponents.map(component => {
                 const provider = keyProviderComponentTypes.find(
-                    (ct: ComponentTypeRepresentation) =>
-                        component.providerId === ct.id
+                    (ct: ComponentTypeRepresentation) => component.providerId === ct.id
                 );
                 return {
                     ...component,
@@ -92,11 +94,13 @@ export const KeysProvidersTab = ({ realmComponents, refresh }: KeysProvidersTabP
             header: t("name"),
             cell: ({ row }) => (
                 <Link
-                    to={toKeyProvider({
-                        realm,
-                        id: row.original.id!,
-                        providerType: row.original.providerId as ProviderType
-                    }) as string}
+                    to={
+                        toKeyProvider({
+                            realm,
+                            id: row.original.id!,
+                            providerType: row.original.providerId as ProviderType
+                        }) as string
+                    }
                     className="text-primary hover:underline"
                     data-testid="provider-name-link"
                 >
@@ -155,17 +159,26 @@ export const KeysProvidersTab = ({ realmComponents, refresh }: KeysProvidersTabP
                     }}
                 />
             )}
-            <AlertDialog open={!!selectedComponent} onOpenChange={(open) => !open && setSelectedComponent(undefined)}>
+            <AlertDialog
+                open={!!selectedComponent}
+                onOpenChange={open => !open && setSelectedComponent(undefined)}
+            >
                 <AlertDialogContent>
                     <AlertDialogHeader>
                         <AlertDialogTitle>{t("deleteProviderTitle")}</AlertDialogTitle>
                         <AlertDialogDescription>
-                            {t("deleteProviderConfirm", { provider: selectedComponent?.name })}
+                            {t("deleteProviderConfirm", {
+                                provider: selectedComponent?.name
+                            })}
                         </AlertDialogDescription>
                     </AlertDialogHeader>
                     <AlertDialogFooter>
                         <AlertDialogCancel>{t("cancel")}</AlertDialogCancel>
-                        <AlertDialogAction variant="destructive" data-testid="confirm" onClick={onDeleteConfirm}>
+                        <AlertDialogAction
+                            variant="destructive"
+                            data-testid="confirm"
+                            onClick={onDeleteConfirm}
+                        >
                             {t("delete")}
                         </AlertDialogAction>
                     </AlertDialogFooter>

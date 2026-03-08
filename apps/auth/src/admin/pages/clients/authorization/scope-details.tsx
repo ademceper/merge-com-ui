@@ -1,18 +1,28 @@
 import type ScopeRepresentation from "@keycloak/keycloak-admin-client/lib/defs/scopeRepresentation";
-import { getErrorDescription, getErrorMessage, TextControl, useFetch } from "../../../../shared/keycloak-ui-shared";
-import { toast } from "sonner";
-import { Button, buttonVariants } from "@merge-rd/ui/components/button";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@merge-rd/ui/components/dropdown-menu";
-import { useState } from "react";
-import { FormProvider, useForm } from "react-hook-form";
 import { useTranslation } from "@merge-rd/i18n";
+import { Button, buttonVariants } from "@merge-rd/ui/components/button";
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuTrigger
+} from "@merge-rd/ui/components/dropdown-menu";
 import { Link, useNavigate } from "@tanstack/react-router";
+import { useEffect, useState } from "react";
+import { FormProvider, useForm } from "react-hook-form";
+import { toast } from "sonner";
+import {
+    getErrorDescription,
+    getErrorMessage,
+    TextControl
+} from "../../../../shared/keycloak-ui-shared";
 import { useAdminClient } from "../../../app/admin-client";
-import { FormAccess } from "../../../shared/ui/form/form-access";
 import { useParams } from "../../../shared/lib/useParams";
 import useToggle from "../../../shared/lib/useToggle";
-import { toAuthorizationTab } from "../routes/authentication-tab";
-import type { ScopeDetailsParams } from "../routes/scope";
+import { FormAccess } from "../../../shared/ui/form/form-access";
+import { toAuthorizationTab } from "../../../shared/lib/routes/clients";
+import type { ScopeDetailsParams } from "../../../shared/lib/routes/clients";
+import { useScopeDetails as useScopeDetailsQuery } from "./api/use-scope-details";
 import { DeleteScopeDialog } from "./delete-scope-dialog";
 
 type FormFields = Omit<ScopeRepresentation, "resources">;
@@ -23,32 +33,21 @@ export default function ScopeDetails() {
     const { t } = useTranslation();
     const { id, scopeId, realm } = useParams<ScopeDetailsParams>();
     const navigate = useNavigate();
-const [deleteDialog, toggleDeleteDialog] = useToggle();
+    const [deleteDialog, toggleDeleteDialog] = useToggle();
     const [scope, setScope] = useState<ScopeRepresentation>();
     const form = useForm<FormFields>({
         mode: "onChange"
     });
     const { reset, handleSubmit } = form;
 
-    useFetch(
-        async () => {
-            if (scopeId) {
-                const scope = await adminClient.clients.getAuthorizationScope({
-                    id,
-                    scopeId
-                });
-                if (!scope) {
-                    throw new Error(t("notFound"));
-                }
-                return scope;
-            }
-        },
-        scope => {
-            setScope(scope);
-            reset({ ...scope });
-        },
-        []
-    );
+    const { data: scopeData } = useScopeDetailsQuery(id, scopeId);
+
+    useEffect(() => {
+        if (scopeData) {
+            setScope(scopeData);
+            reset({ ...scopeData });
+        }
+    }, [scopeData]);
 
     const onSubmit = async (scope: ScopeRepresentation) => {
         try {
@@ -67,13 +66,19 @@ const [deleteDialog, toggleDeleteDialog] = useToggle();
                         iconUri: scope.iconUri
                     }
                 );
-                navigate({ to: toAuthorizationTab({ realm, clientId: id, tab: "scopes" }) as string });
+                navigate({
+                    to: toAuthorizationTab({
+                        realm,
+                        clientId: id,
+                        tab: "scopes"
+                    }) as string
+                });
             }
-            toast.success(
-                t((scopeId ? "update" : "create") + "ScopeSuccess")
-            );
+            toast.success(t(`${scopeId ? "update" : "create"}ScopeSuccess`));
         } catch (error) {
-            toast.error(t("scopeSaveError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
+            toast.error(t("scopeSaveError", { error: getErrorMessage(error) }), {
+                description: getErrorDescription(error)
+            });
         }
     };
 
@@ -85,7 +90,13 @@ const [deleteDialog, toggleDeleteDialog] = useToggle();
                 toggleDialog={toggleDeleteDialog}
                 selectedScope={scope}
                 refresh={() =>
-                    navigate({ to: toAuthorizationTab({ realm, clientId: id, tab: "scopes" }) as string })
+                    navigate({
+                        to: toAuthorizationTab({
+                            realm,
+                            clientId: id,
+                            tab: "scopes"
+                        }) as string
+                    })
                 }
             />
             {scopeId && (
@@ -93,7 +104,10 @@ const [deleteDialog, toggleDeleteDialog] = useToggle();
                     <div className="flex flex-wrap items-center gap-2" />
                     <div className="flex items-center gap-2">
                         <DropdownMenu>
-                            <DropdownMenuTrigger data-testid="action-dropdown" className={buttonVariants()}>
+                            <DropdownMenuTrigger
+                                data-testid="action-dropdown"
+                                className={buttonVariants()}
+                            >
                                 {t("action")}
                             </DropdownMenuTrigger>
                             <DropdownMenuContent align="end">
@@ -133,25 +147,20 @@ const [deleteDialog, toggleDeleteDialog] = useToggle();
                             labelIcon={t("iconUriHelp")}
                         />
                         <div className="flex gap-2 mt-4">
-                            <Button
-                                type="submit"
-                                data-testid="save"
-                            >
+                            <Button type="submit" data-testid="save">
                                 {t("save")}
                             </Button>
 
                             {!scope ? (
-                                <Button
-                                    variant="link"
-                                    data-testid="cancel"
-                                    asChild
-                                >
+                                <Button variant="link" data-testid="cancel" asChild>
                                     <Link
-                                        to={toAuthorizationTab({
-                                            realm,
-                                            clientId: id,
-                                            tab: "scopes"
-                                        }) as string}
+                                        to={
+                                            toAuthorizationTab({
+                                                realm,
+                                                clientId: id,
+                                                tab: "scopes"
+                                            }) as string
+                                        }
                                     >
                                         {t("cancel")}
                                     </Link>

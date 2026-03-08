@@ -1,7 +1,5 @@
 import type UserRepresentation from "@keycloak/keycloak-admin-client/lib/defs/userRepresentation";
-import { FormProvider, useForm } from "react-hook-form";
-import { getErrorDescription, getErrorMessage, KeycloakSpinner } from "../../../shared/keycloak-ui-shared";
-import { toast } from "sonner";
+import { useTranslation } from "@merge-rd/i18n";
 import { Button } from "@merge-rd/ui/components/button";
 import {
     Dialog,
@@ -12,9 +10,15 @@ import {
     DialogTitle
 } from "@merge-rd/ui/components/dialog";
 import { useEffect, useState } from "react";
-import { useTranslation } from "@merge-rd/i18n";
-import { useAdminClient } from "../../app/admin-client";
+import { FormProvider, useForm } from "react-hook-form";
+import { toast } from "sonner";
+import {
+    getErrorDescription,
+    getErrorMessage,
+    KeycloakSpinner
+} from "../../../shared/keycloak-ui-shared";
 import { TextControl } from "../../../shared/keycloak-ui-shared/controls/text-control";
+import { useAdminClient } from "../../app/admin-client";
 import { emailRegexPattern } from "../../shared/lib/util";
 import { FormAccess } from "../../shared/ui/form/form-access";
 
@@ -55,7 +59,7 @@ export function EditUserDialog({
         setLoading(true);
         adminClient.users
             .findOne({ id: userId })
-            .then((u) => {
+            .then(u => {
                 if (!u) throw new Error(t("notFound"));
                 setUser(u);
                 form.reset({
@@ -132,8 +136,16 @@ export function EditUserDialog({
                                         }
                                     }}
                                 />
-                                <TextControl name="firstName" label={t("firstName")} showLabel />
-                                <TextControl name="lastName" label={t("lastName")} showLabel />
+                                <TextControl
+                                    name="firstName"
+                                    label={t("firstName")}
+                                    showLabel
+                                />
+                                <TextControl
+                                    name="lastName"
+                                    label={t("lastName")}
+                                    showLabel
+                                />
                             </FormAccess>
                         </FormProvider>
                     </div>

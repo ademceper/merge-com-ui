@@ -1,12 +1,7 @@
-import { createFileRoute } from "@tanstack/react-router";
-import { lazy } from "react";
-
-const MappingDetails = lazy(
-    () => import("../../../../../../../pages/client-scopes/details/mapping-details"),
-);
+import { createFileRoute, lazyRouteComponent } from "@tanstack/react-router";
 
 export const Route = createFileRoute(
     "/_app/$realm/client-scopes/$id/mappers/$mapperId/$viewMode",
 )({
-    component: MappingDetails,
+    component: lazyRouteComponent(() => import("../../../../../../../pages/client-scopes/details/mapping-details")),
 });

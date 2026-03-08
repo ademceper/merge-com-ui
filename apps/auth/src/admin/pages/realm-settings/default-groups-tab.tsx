@@ -1,96 +1,65 @@
 import type GroupRepresentation from "@keycloak/keycloak-admin-client/lib/defs/groupRepresentation";
+import { Trans, useTranslation } from "@merge-rd/i18n";
+import { Button } from "@merge-rd/ui/components/button";
+import { Popover, PopoverContent, PopoverTrigger } from "@merge-rd/ui/components/popover";
+import { Plus, Question, Trash } from "@phosphor-icons/react";
+import { Link } from "@tanstack/react-router";
+import { useMemo, useState } from "react";
+import { toast } from "sonner";
+import {
+    type ColumnDef,
+    DataTable,
+    DataTableRowActions
+} from "@/admin/shared/ui/data-table";
 import {
     getErrorDescription,
     getErrorMessage,
-    useFetch,
-    useHelp,
+    KeycloakSpinner,
+    useHelp
 } from "../../../shared/keycloak-ui-shared";
-import { toast } from "sonner";
-import { Button } from "@merge-rd/ui/components/button";
-import {
-    Popover,
-    PopoverContent,
-    PopoverTrigger,
-} from "@merge-rd/ui/components/popover";
-import {
-    DataTable,
-    DataTableRowActions,
-    type ColumnDef,
-} from "@/admin/shared/ui/data-table";
-import { Plus, Question, Trash } from "@phosphor-icons/react";
-import { useMemo, useState } from "react";
-import { Trans, useTranslation } from "@merge-rd/i18n";
-import { Link } from "@tanstack/react-router";
-import { useAdminClient } from "../../app/admin-client";
+import { useAccess } from "../../app/providers/access/access";
+import { useRealm } from "../../app/providers/realm-context/realm-context";
+import useToggle from "../../shared/lib/useToggle";
 import { useConfirmDialog } from "../../shared/ui/confirm-dialog/confirm-dialog";
 import { GroupPickerDialog } from "../../shared/ui/group/group-picker-dialog";
-import { KeycloakSpinner } from "../../../shared/keycloak-ui-shared";
-import { useRealm } from "../../app/providers/realm-context/realm-context";
-import { toUserFederation } from "../user-federation/routes/user-federation";
-import useToggle from "../../shared/lib/useToggle";
-import { useAccess } from "../../app/providers/access/access";
+import { toUserFederation } from "../../shared/lib/routes/user-federation";
+import { useAddDefaultGroup } from "./api/use-add-default-group";
+import { useDefaultGroups } from "./api/use-default-groups";
+import { useRemoveDefaultGroup } from "./api/use-remove-default-group";
 
 export const DefaultGroupsTab = () => {
-    const { adminClient } = useAdminClient();
     const { t } = useTranslation();
     const [isGroupPickerOpen, toggleGroupPicker] = useToggle();
-    const [defaultGroups, setDefaultGroups] = useState<GroupRepresentation[]>();
     const [selectedRows, setSelectedRows] = useState<GroupRepresentation[]>([]);
-    const [key, setKey] = useState(0);
-    const [load, setLoad] = useState(0);
-    const reload = () => setLoad(load + 1);
     const { realm } = useRealm();
     const { enabled } = useHelp();
     const { hasAccess } = useAccess();
     const canAddOrRemoveGroups = hasAccess("view-users", "manage-realm");
 
-    useFetch(
-        () => adminClient.realms.getDefaultGroups({ realm }),
-        (groups) => {
-            setDefaultGroups(groups);
-            setKey((k) => k + 1);
-        },
-        [load],
-    );
+    const { data: defaultGroups } = useDefaultGroups();
+    const addDefaultGroupMutation = useAddDefaultGroup();
+    const removeDefaultGroupMutation = useRemoveDefaultGroup();
 
     const removeGroups = async (groups: GroupRepresentation[]) => {
         try {
-            await Promise.all(
-                groups.map((group) =>
-                    adminClient.realms.removeDefaultGroup({
-                        realm,
-                        id: group.id!,
-                    }),
-                ),
-            );
+            await removeDefaultGroupMutation.mutateAsync(groups);
             toast.success(t("groupRemove", { count: groups.length }));
         } catch (error) {
-            toast.error(
-                t("groupRemoveError", { error: getErrorMessage(error) }),
-                { description: getErrorDescription(error) },
-            );
+            toast.error(t("groupRemoveError", { error: getErrorMessage(error) }), {
+                description: getErrorDescription(error)
+            });
         }
-        reload();
     };
 
     const addGroups = async (groups: GroupRepresentation[]) => {
         try {
-            await Promise.all(
-                groups.map((group) =>
-                    adminClient.realms.addDefaultGroup({
-                        realm,
-                        id: group.id!,
-                    }),
-                ),
-            );
+            await addDefaultGroupMutation.mutateAsync(groups);
             toast.success(t("defaultGroupAdded", { count: groups.length }));
         } catch (error) {
-            toast.error(
-                t("defaultGroupAddedError", { error: getErrorMessage(error) }),
-                { description: getErrorDescription(error) },
-            );
+            toast.error(t("defaultGroupAddedError", { error: getErrorMessage(error) }), {
+                description: getErrorDescription(error)
+            });
         }
-        reload();
     };
 
     const [toggleRemoveDialog, RemoveDialog] = useConfirmDialog({
@@ -101,7 +70,7 @@ export const DefaultGroupsTab = () => {
         onConfirm: async () => {
             await removeGroups(selectedRows);
             setSelectedRows([]);
-        },
+        }
     });
 
     const columns: ColumnDef<GroupRepresentation>[] = useMemo(
@@ -109,12 +78,12 @@ export const DefaultGroupsTab = () => {
             {
                 accessorKey: "name",
                 header: t("groupName"),
-                cell: ({ row }) => row.original.name ?? "-",
+                cell: ({ row }) => row.original.name ?? "-"
             },
             {
                 accessorKey: "path",
                 header: t("path"),
-                cell: ({ row }) => row.original.path ?? "-",
+                cell: ({ row }) => row.original.path ?? "-"
             },
             ...(canAddOrRemoveGroups
                 ? [
@@ -137,12 +106,12 @@ export const DefaultGroupsTab = () => {
                                       {t("remove")}
                                   </button>
                               </DataTableRowActions>
-                          ),
-                      } as ColumnDef<GroupRepresentation>,
+                          )
+                      } as ColumnDef<GroupRepresentation>
                   ]
-                : []),
+                : [])
         ],
-        [t, canAddOrRemoveGroups, toggleRemoveDialog],
+        [t, canAddOrRemoveGroups, toggleRemoveDialog]
     );
 
     if (!defaultGroups) {
@@ -157,9 +126,9 @@ export const DefaultGroupsTab = () => {
                     type="selectMany"
                     text={{
                         title: "addDefaultGroups",
-                        ok: "add",
+                        ok: "add"
                     }}
-                    onConfirm={async (groups) => {
+                    onConfirm={async groups => {
                         await addGroups(groups || []);
                         toggleGroupPicker();
                     }}
@@ -184,7 +153,6 @@ export const DefaultGroupsTab = () => {
                     </Popover>
                 )}
                 <DataTable
-                    key={key}
                     columns={columns}
                     data={defaultGroups}
                     searchColumnId="name"
@@ -192,8 +160,7 @@ export const DefaultGroupsTab = () => {
                     emptyMessage={t("noDefaultGroups")}
                     onDeleteRows={
                         canAddOrRemoveGroups
-                            ? (rows) =>
-                                  removeGroups(rows.map((r) => r.original))
+                            ? rows => removeGroups(rows.map(r => r.original))
                             : undefined
                     }
                     toolbar={
@@ -205,9 +172,7 @@ export const DefaultGroupsTab = () => {
                                 onClick={toggleGroupPicker}
                             >
                                 <Plus size={20} className="shrink-0 sm:hidden" />
-                                <span className="hidden sm:inline">
-                                    {t("addGroups")}
-                                </span>
+                                <span className="hidden sm:inline">{t("addGroups")}</span>
                             </Button>
                         ) : undefined
                     }

@@ -1,9 +1,9 @@
+import { Separator } from "@merge-rd/ui/components/separator";
 import { createFileRoute, Outlet } from "@tanstack/react-router";
 import { Suspense } from "react";
 import { ErrorPage } from "../../shared/keycloak-ui-shared";
 import { Header } from "../widgets/header";
 import { PageNav } from "../widgets/page-nav";
-import { Separator } from "@merge-rd/ui/components/separator";
 
 function AccountLayout() {
     return (
@@ -28,5 +28,5 @@ function AccountLayout() {
 
 export const Route = createFileRoute("/_layout")({
     component: AccountLayout,
-    errorComponent: ErrorPage,
+    errorComponent: ErrorPage
 });

@@ -1,5 +1,5 @@
-import OrganizationRepresentation from "@keycloak/keycloak-admin-client/lib/defs/organizationRepresentation";
-import { useOrganizations } from "./api/queries";
+import type OrganizationRepresentation from "@keycloak/keycloak-admin-client/lib/defs/organizationRepresentation";
+import { useTranslation } from "@merge-rd/i18n";
 import { Button } from "@merge-rd/ui/components/button";
 import { Checkbox } from "@merge-rd/ui/components/checkbox";
 import {
@@ -7,12 +7,12 @@ import {
     DialogContent,
     DialogFooter,
     DialogHeader,
-    DialogTitle,
+    DialogTitle
 } from "@merge-rd/ui/components/dialog";
-import { DataTable, type ColumnDef } from "@/admin/shared/ui/data-table";
 import { differenceBy } from "lodash-es";
 import { useState } from "react";
-import { useTranslation } from "@merge-rd/i18n";
+import { type ColumnDef, DataTable } from "@/admin/shared/ui/data-table";
+import { useOrganizations } from "./api/use-organizations";
 
 type OrganizationModalProps = {
     isJoin?: boolean;
@@ -82,11 +82,7 @@ export const OrganizationModal = ({
                     emptyMessage={t("noResults")}
                 />
                 <DialogFooter>
-                    <Button
-                        data-testid="cancel"
-                        variant="ghost"
-                        onClick={onClose}
-                    >
+                    <Button data-testid="cancel" variant="ghost" onClick={onClose}>
                         {t("cancel")}
                     </Button>
                     <Button

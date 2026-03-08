@@ -1,45 +1,54 @@
 import type PolicyProviderRepresentation from "@keycloak/keycloak-admin-client/lib/defs/policyProviderRepresentation";
 import type PolicyRepresentation from "@keycloak/keycloak-admin-client/lib/defs/policyRepresentation";
-import { getErrorDescription, getErrorMessage, useFetch } from "../../../../shared/keycloak-ui-shared";
-import { Empty, EmptyContent, EmptyDescription, EmptyHeader, EmptyTitle } from "@merge-rd/ui/components/empty";
-import { toast } from "sonner";
+import { useTranslation } from "@merge-rd/i18n";
 import { Alert, AlertTitle } from "@merge-rd/ui/components/alert";
 import { Button } from "@merge-rd/ui/components/button";
 import {
     DropdownMenu,
     DropdownMenuContent,
     DropdownMenuItem,
-    DropdownMenuTrigger,
+    DropdownMenuTrigger
 } from "@merge-rd/ui/components/dropdown-menu";
+import {
+    Empty,
+    EmptyContent,
+    EmptyDescription,
+    EmptyHeader,
+    EmptyTitle
+} from "@merge-rd/ui/components/empty";
+import { CaretDown, CaretRight, DotsThreeVertical } from "@phosphor-icons/react";
+import { Link, useNavigate } from "@tanstack/react-router";
+import { Fragment, useEffect, useState } from "react";
+import { toast } from "sonner";
 import {
     Table,
     TableBody,
     TableCell,
     TableHead,
     TableHeader,
-    TableRow,
+    TableRow
 } from "@/admin/shared/ui/data-table";
 import { TablePagination } from "@/admin/shared/ui/table-pagination";
-import { CaretDown, CaretRight, DotsThreeVertical } from "@phosphor-icons/react";
-import { Fragment, useState } from "react";
-import { useTranslation } from "@merge-rd/i18n";
-import { Link, useNavigate } from "@tanstack/react-router";
+import {
+    getErrorDescription,
+    getErrorMessage,
+    KeycloakSpinner
+} from "../../../../shared/keycloak-ui-shared";
 import { useAdminClient } from "../../../app/admin-client";
-import { useConfirmDialog } from "../../../shared/ui/confirm-dialog/confirm-dialog";
-import { KeycloakSpinner } from "../../../../shared/keycloak-ui-shared";
 import { useRealm } from "../../../app/providers/realm-context/realm-context";
-import { toUpperCase } from "../../../shared/lib/util";
+import { useIsAdminPermissionsClient } from "../../../shared/lib/useIsAdminPermissionsClient";
 import useToggle from "../../../shared/lib/useToggle";
-import { toCreatePolicy } from "../routes/new-policy";
-import { toPermissionDetails } from "../routes/permission-details";
-import { toPolicyDetails } from "../routes/policy-details";
+import { toUpperCase } from "../../../shared/lib/util";
+import { useConfirmDialog } from "../../../shared/ui/confirm-dialog/confirm-dialog";
+import { toCreatePermissionPolicy, toPermissionPolicyDetails } from "../../../shared/lib/routes/permissions";
+import { toCreatePolicy } from "../../../shared/lib/routes/clients";
+import { toPermissionDetails } from "../../../shared/lib/routes/clients";
+import { toPolicyDetails } from "../../../shared/lib/routes/clients";
+import { usePolicies as usePoliciesQuery } from "./api/use-policies";
 import { DetailDescriptionLink } from "./detail-description";
 import { MoreLabel } from "./more-label";
 import { NewPolicyDialog } from "./new-policy-dialog";
-import { SearchDropdown, SearchForm } from "./search-dropdown";
-import { useIsAdminPermissionsClient } from "../../../shared/lib/useIsAdminPermissionsClient";
-import { toCreatePermissionPolicy } from "../../permissions-configuration/routes/new-permission-policy";
-import { toPermissionPolicyDetails } from "../../permissions-configuration/routes/permission-policy-details";
+import { SearchDropdown, type SearchForm } from "./search-dropdown";
 
 type PoliciesProps = {
     clientId: string;
@@ -66,7 +75,7 @@ export const AuthorizationPolicies = ({
     const { adminClient } = useAdminClient();
 
     const { t } = useTranslation();
-const { realm } = useRealm();
+    const { realm } = useRealm();
     const navigate = useNavigate();
 
     const [policies, setPolicies] = useState<ExpandablePolicyRepresentation[]>();
@@ -75,50 +84,31 @@ const { realm } = useRealm();
     const [policyProviders, setPolicyProviders] =
         useState<PolicyProviderRepresentation[]>();
 
-    const [key, setKey] = useState(0);
-    const refresh = () => setKey(key + 1);
-
     const [max, setMax] = useState(10);
     const [first, setFirst] = useState(0);
     const [search, setSearch] = useState<SearchForm>({});
     const [newDialog, toggleDialog] = useToggle();
     const isAdminPermissionsClient = useIsAdminPermissionsClient(clientId);
 
-    useFetch(
-        async () => {
-            const policies = await adminClient.clients.listPolicies({
-                first,
-                max: max + 1,
-                id: clientId,
-                permission: "false",
-                ...search
-            });
-
-            return await Promise.all([
-                adminClient.clients.listPolicyProviders({ id: clientId }),
-                ...(policies || []).map(async policy => {
-                    const dependentPolicies =
-                        await adminClient.clients.listDependentPolicies({
-                            id: clientId,
-                            policyId: policy.id!
-                        });
-
-                    return {
-                        ...policy,
-                        dependentPolicies,
-                        isExpanded: false
-                    };
-                })
-            ]);
-        },
-        ([providers, ...policies]) => {
-            setPolicyProviders(
-                providers.filter(p => p.type !== "resource" && p.type !== "scope")
-            );
-            setPolicies(policies);
-        },
-        [key, search, first, max]
+    const { data: policiesData, refetch } = usePoliciesQuery(
+        clientId,
+        first,
+        max,
+        search
     );
+    const refresh = () => {
+        refetch();
+    };
+
+    useEffect(() => {
+        if (policiesData) {
+            const [providers, ...pols] = policiesData as [any, ...any[]];
+            setPolicyProviders(
+                providers.filter((p: any) => p.type !== "resource" && p.type !== "scope")
+            );
+            setPolicies(pols);
+        }
+    }, [policiesData]);
 
     const [toggleDeleteDialog, DeleteConfirm] = useConfirmDialog({
         titleKey: "deletePolicy",
@@ -150,7 +140,9 @@ const { realm } = useRealm();
                 toast.success(t("policyDeletedSuccess"));
                 refresh();
             } catch (error) {
-                toast.error(t("policyDeletedError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
+                toast.error(t("policyDeletedError", { error: getErrorMessage(error) }), {
+                    description: getErrorDescription(error)
+                });
             }
         }
     });
@@ -170,8 +162,8 @@ const { realm } = useRealm();
                         <NewPolicyDialog
                             policyProviders={policyProviders}
                             onSelect={p =>
-                                navigate({ to:
-                                    (isAdminPermissionsClient
+                                navigate({
+                                    to: (isAdminPermissionsClient
                                         ? toCreatePermissionPolicy({
                                               realm,
                                               permissionClientId: clientId,
@@ -189,18 +181,32 @@ const { realm } = useRealm();
                     )}
                     <div className="space-y-2">
                         <div className="flex flex-wrap items-center gap-2">
-                            <SearchDropdown types={policyProviders} search={search} onSearch={setSearch} type="policy" />
+                            <SearchDropdown
+                                types={policyProviders}
+                                search={search}
+                                onSearch={setSearch}
+                                type="policy"
+                            />
                             <TablePagination
                                 count={policies.length}
                                 first={first}
                                 max={max}
                                 onNextClick={setFirst}
                                 onPreviousClick={setFirst}
-                                onPerPageSelect={(_first, newMax) => { setMax(newMax); setFirst(0); }}
+                                onPerPageSelect={(_first, newMax) => {
+                                    setMax(newMax);
+                                    setFirst(0);
+                                }}
                                 t={t}
                             />
-                            <Button data-testid="createPolicy" onClick={() => toggleDialog()} disabled={isDisabled}>
-                                {isAdminPermissionsClient ? t("createPermissionPolicy") : t("createPolicy")}
+                            <Button
+                                data-testid="createPolicy"
+                                onClick={() => toggleDialog()}
+                                disabled={isDisabled}
+                            >
+                                {isAdminPermissionsClient
+                                    ? t("createPermissionPolicy")
+                                    : t("createPolicy")}
                             </Button>
                         </div>
                         {!noData && (
@@ -213,7 +219,10 @@ const { realm } = useRealm();
                                         <TableHead>{t("dependentPermission")}</TableHead>
                                         <TableHead>{t("description")}</TableHead>
                                         {!isDisabled && (
-                                            <TableHead aria-hidden="true" className="w-10" />
+                                            <TableHead
+                                                aria-hidden="true"
+                                                className="w-10"
+                                            />
                                         )}
                                     </TableRow>
                                 </TableHeader>
@@ -253,33 +262,49 @@ const { realm } = useRealm();
                                                 >
                                                     {isAdminPermissionsClient ? (
                                                         <Link
-                                                            to={toPermissionPolicyDetails({
-                                                                realm,
-                                                                permissionClientId: clientId,
-                                                                policyId: policy.id!,
-                                                                policyType: policy.type!
-                                                            }) as string}
+                                                            to={
+                                                                toPermissionPolicyDetails(
+                                                                    {
+                                                                        realm,
+                                                                        permissionClientId:
+                                                                            clientId,
+                                                                        policyId:
+                                                                            policy.id!,
+                                                                        policyType:
+                                                                            policy.type!
+                                                                    }
+                                                                ) as string
+                                                            }
                                                         >
                                                             {policy.name}
                                                         </Link>
                                                     ) : (
                                                         <Link
-                                                            to={toPolicyDetails({
-                                                                realm,
-                                                                id: clientId,
-                                                                policyType: policy.type!,
-                                                                policyId: policy.id!
-                                                            }) as string}
+                                                            to={
+                                                                toPolicyDetails({
+                                                                    realm,
+                                                                    id: clientId,
+                                                                    policyType:
+                                                                        policy.type!,
+                                                                    policyId: policy.id!
+                                                                }) as string
+                                                            }
                                                         >
                                                             {policy.name}
                                                         </Link>
                                                     )}
                                                 </TableCell>
-                                                <TableCell>{toUpperCase(policy.type!)}</TableCell>
                                                 <TableCell>
-                                                    <DependentPoliciesRenderer row={policy} />
+                                                    {toUpperCase(policy.type!)}
                                                 </TableCell>
-                                                <TableCell>{policy.description}</TableCell>
+                                                <TableCell>
+                                                    <DependentPoliciesRenderer
+                                                        row={policy}
+                                                    />
+                                                </TableCell>
+                                                <TableCell>
+                                                    {policy.description}
+                                                </TableCell>
                                                 {!isDisabled && (
                                                     <TableCell className="w-10">
                                                         <DropdownMenu>
@@ -288,7 +313,9 @@ const { realm } = useRealm();
                                                                     variant="ghost"
                                                                     size="icon"
                                                                     className="h-8 w-8"
-                                                                    aria-label={t("delete")}
+                                                                    aria-label={t(
+                                                                        "delete"
+                                                                    )}
                                                                 >
                                                                     <DotsThreeVertical className="size-4" />
                                                                 </Button>
@@ -317,9 +344,7 @@ const { realm } = useRealm();
                                                         className="bg-muted/30 p-4"
                                                     >
                                                         {!isAdminPermissionsClient && (
-                                                            <dl
-                                                                className="grid grid-cols-[auto_1fr] gap-x-4 gap-y-1 keycloak_resource_details"
-                                                            >
+                                                            <dl className="grid grid-cols-[auto_1fr] gap-x-4 gap-y-1 keycloak_resource_details">
                                                                 <DetailDescriptionLink
                                                                     name="dependentPermission"
                                                                     array={
@@ -327,14 +352,16 @@ const { realm } = useRealm();
                                                                     }
                                                                     convert={p => p.name!}
                                                                     link={permission =>
-                                                                        toPermissionDetails({
-                                                                            realm,
-                                                                            id: clientId,
-                                                                            permissionId:
-                                                                                permission.id!,
-                                                                            permissionType:
-                                                                                permission.type!
-                                                                        })
+                                                                        toPermissionDetails(
+                                                                            {
+                                                                                realm,
+                                                                                id: clientId,
+                                                                                permissionId:
+                                                                                    permission.id!,
+                                                                                permissionType:
+                                                                                    permission.type!
+                                                                            }
+                                                                        )
                                                                     }
                                                                 />
                                                             </dl>
@@ -342,7 +369,9 @@ const { realm } = useRealm();
                                                         {isAdminPermissionsClient && (
                                                             <div className="space-y-2">
                                                                 <div className="font-medium">
-                                                                    {t("dependentPermission")}
+                                                                    {t(
+                                                                        "dependentPermission"
+                                                                    )}
                                                                 </div>
                                                                 <div className="flex flex-wrap gap-2">
                                                                     {policy.dependentPolicies?.map(
@@ -351,7 +380,9 @@ const { realm } = useRealm();
                                                                             index
                                                                         ) => (
                                                                             <span
-                                                                                key={index}
+                                                                                key={
+                                                                                    index
+                                                                                }
                                                                                 className="ml-2"
                                                                             >
                                                                                 {
@@ -376,27 +407,45 @@ const { realm } = useRealm();
             )}
             {noData && searching && (
                 <Empty className="py-12">
-                    <EmptyHeader><EmptyTitle>{t("noSearchResults")}</EmptyTitle></EmptyHeader>
-                    <EmptyContent><EmptyDescription>{t("noSearchResultsInstructions")}</EmptyDescription></EmptyContent>
+                    <EmptyHeader>
+                        <EmptyTitle>{t("noSearchResults")}</EmptyTitle>
+                    </EmptyHeader>
+                    <EmptyContent>
+                        <EmptyDescription>
+                            {t("noSearchResultsInstructions")}
+                        </EmptyDescription>
+                    </EmptyContent>
                 </Empty>
             )}
             {noData && !searching && (
                 <>
                     {newDialog && (
                         <NewPolicyDialog
-                            policyProviders={policyProviders?.filter(p => p.type !== "aggregate")}
+                            policyProviders={policyProviders?.filter(
+                                p => p.type !== "aggregate"
+                            )}
                             onSelect={p =>
                                 navigate({
                                     to: (isAdminPermissionsClient
-                                        ? toCreatePermissionPolicy({ realm, permissionClientId: clientId, policyType: p.type! })
-                                        : toCreatePolicy({ id: clientId, realm, policyType: p.type! })) as string
+                                        ? toCreatePermissionPolicy({
+                                              realm,
+                                              permissionClientId: clientId,
+                                              policyType: p.type!
+                                          })
+                                        : toCreatePolicy({
+                                              id: clientId,
+                                              realm,
+                                              policyType: p.type!
+                                          })) as string
                                 })
                             }
                             toggleDialog={toggleDialog}
                         />
                     )}
                     <Empty className="py-12">
-                        <EmptyHeader><EmptyTitle>{t("emptyPolicies")}</EmptyTitle></EmptyHeader>
+                        <EmptyHeader>
+                            <EmptyTitle>{t("emptyPolicies")}</EmptyTitle>
+                        </EmptyHeader>
                         <EmptyContent>
                             <EmptyDescription>
                                 {isAdminPermissionsClient
@@ -405,7 +454,9 @@ const { realm } = useRealm();
                             </EmptyDescription>
                             {!isDisabled && (
                                 <Button className="mt-2" onClick={() => toggleDialog()}>
-                                    {isAdminPermissionsClient ? t("createPermissionPolicy") : t("createPolicy")}
+                                    {isAdminPermissionsClient
+                                        ? t("createPermissionPolicy")
+                                        : t("createPolicy")}
                                 </Button>
                             )}
                         </EmptyContent>

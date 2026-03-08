@@ -1,7 +1,5 @@
-import type AuthenticatorConfigInfoRepresentation from "@keycloak/keycloak-admin-client/lib/defs/authenticatorConfigInfoRepresentation";
 import type AuthenticatorConfigRepresentation from "@keycloak/keycloak-admin-client/lib/defs/authenticatorConfigRepresentation";
-import { getErrorDescription, getErrorMessage, TextControl, useFetch } from "../../../../shared/keycloak-ui-shared";
-import { toast } from "sonner";
+import { useTranslation } from "@merge-rd/i18n";
 import { Button } from "@merge-rd/ui/components/button";
 import {
     Dialog,
@@ -9,14 +7,25 @@ import {
     DialogHeader,
     DialogTitle
 } from "@merge-rd/ui/components/dialog";
-import { Tooltip, TooltipContent, TooltipTrigger, TooltipProvider } from "@merge-rd/ui/components/tooltip";
+import {
+    Tooltip,
+    TooltipContent,
+    TooltipProvider,
+    TooltipTrigger
+} from "@merge-rd/ui/components/tooltip";
 import { Gear, Trash } from "@phosphor-icons/react";
 import { useEffect, useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
-import { useTranslation } from "@merge-rd/i18n";
+import { toast } from "sonner";
+import {
+    getErrorDescription,
+    getErrorMessage,
+    TextControl
+} from "../../../../shared/keycloak-ui-shared";
 import { useAdminClient } from "../../../app/admin-client";
-import { DynamicComponents } from "../../../shared/ui/dynamic/dynamic-components";
 import { convertFormValuesToObject, convertToFormValues } from "../../../shared/lib/util";
+import { DynamicComponents } from "../../../shared/ui/dynamic/dynamic-components";
+import { useExecutionConfig } from "../api/use-execution-config";
 import type { ExpandableExecution } from "../execution-model";
 
 type ExecutionConfigModalForm = {
@@ -32,10 +41,8 @@ export const ExecutionConfigModal = ({ execution }: ExecutionConfigModalProps) =
     const { adminClient } = useAdminClient();
 
     const { t } = useTranslation();
-const [show, setShow] = useState(false);
+    const [show, setShow] = useState(false);
     const [config, setConfig] = useState<AuthenticatorConfigRepresentation>();
-    const [configDescription, setConfigDescription] =
-        useState<AuthenticatorConfigInfoRepresentation>();
 
     const form = useForm<ExecutionConfigModalForm>();
     const { setValue, handleSubmit } = form;
@@ -66,39 +73,24 @@ const [show, setShow] = useState(false);
         convertToFormValues(config || {}, setValue);
     };
 
-    useFetch(
-        async () => {
-            let config: AuthenticatorConfigRepresentation | undefined;
+    const { data: execConfigData } = useExecutionConfig(execution);
 
-            const configDescription = execution.configurable
-                ? await adminClient.authenticationManagement.getConfigDescription({
-                      providerId: execution.providerId!
-                  })
-                : {
-                      name: execution.displayName,
-                      properties: []
-                  };
+    // Merge default config properties with fetched ones
+    const configDescription = execConfigData?.configDescription
+        ? {
+              ...execConfigData.configDescription,
+              properties: [
+                  ...defaultConfigProperties,
+                  ...(execConfigData.configDescription.properties || [])
+              ]
+          }
+        : undefined;
 
-            if (execution.authenticationConfig) {
-                config = await adminClient.authenticationManagement.getConfig({
-                    id: execution.authenticationConfig
-                });
-            }
-
-            // merge default and fetched config properties
-            configDescription.properties = [
-                ...defaultConfigProperties!,
-                ...configDescription.properties!
-            ];
-
-            return { configDescription, config };
-        },
-        ({ configDescription, config }) => {
-            setConfigDescription(configDescription);
-            setConfig(config);
-        },
-        []
-    );
+    useEffect(() => {
+        if (execConfigData?.config) {
+            setConfig(execConfigData.config);
+        }
+    }, [execConfigData]);
 
     useEffect(() => {
         if (config) setupForm(config);
@@ -128,7 +120,9 @@ const [show, setShow] = useState(false);
             toast.success(t("configSaveSuccess"));
             setShow(false);
         } catch (error) {
-            toast.error(t("configSaveError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
+            toast.error(t("configSaveError", { error: getErrorMessage(error) }), {
+                description: getErrorDescription(error)
+            });
         }
     };
 
@@ -150,10 +144,17 @@ const [show, setShow] = useState(false);
                 </Tooltip>
             </TooltipProvider>
             {configDescription && (
-                <Dialog open={show} onOpenChange={(open) => { if (!open) setShow(false); }}>
+                <Dialog
+                    open={show}
+                    onOpenChange={open => {
+                        if (!open) setShow(false);
+                    }}
+                >
                     <DialogContent className="max-w-md">
                         <DialogHeader>
-                            <DialogTitle>{t("executionConfig", { name: configDescription.name })}</DialogTitle>
+                            <DialogTitle>
+                                {t("executionConfig", { name: configDescription.name })}
+                            </DialogTitle>
                         </DialogHeader>
                         <form id="execution-config-form" onSubmit={handleSubmit(save)}>
                             <FormProvider {...form}>

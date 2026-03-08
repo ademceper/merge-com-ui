@@ -1,14 +1,13 @@
-import { Button } from "@merge-rd/ui/components/button";
-import { Switch } from "@merge-rd/ui/components/switch";
-import { Label } from "@merge-rd/ui/components/label";
-import { Controller, useFormContext } from "react-hook-form";
 import { useTranslation } from "@merge-rd/i18n";
-
-import { FormAccess } from "../../../shared/ui/form/form-access";
+import { Button } from "@merge-rd/ui/components/button";
+import { Label } from "@merge-rd/ui/components/label";
+import { Switch } from "@merge-rd/ui/components/switch";
+import { Controller, useFormContext } from "react-hook-form";
 import { HelpItem, SelectField } from "../../../../shared/keycloak-ui-shared";
-import { convertAttributeNameToForm } from "../../../shared/lib/util";
-import { FormFields } from "../client-details";
 import useIsFeatureEnabled, { Feature } from "../../../shared/lib/useIsFeatureEnabled";
+import { convertAttributeNameToForm } from "../../../shared/lib/util";
+import { FormAccess } from "../../../shared/ui/form/form-access";
+import type { FormFields } from "../client-details";
 
 type OpenIdConnectCompatibilityModesProps = {
     save: () => void;
@@ -57,7 +56,7 @@ export const OpenIdConnectCompatibilityModes = ({
                         <Switch
                             id="excludeSessionStateFromAuthenticationResponse-switch"
                             checked={field.value === "true"}
-                            onCheckedChange={(value) => field.onChange(value.toString())}
+                            onCheckedChange={value => field.onChange(value.toString())}
                             aria-label={t(
                                 "excludeSessionStateFromAuthenticationResponse"
                             )}
@@ -83,7 +82,7 @@ export const OpenIdConnectCompatibilityModes = ({
                         <Switch
                             id="excludeIssuerFromAuthenticationResponse-switch"
                             checked={field.value === "true"}
-                            onCheckedChange={(value) => field.onChange(value.toString())}
+                            onCheckedChange={value => field.onChange(value.toString())}
                             aria-label={t("excludeIssuerFromAuthenticationResponse")}
                         />
                     )}
@@ -107,7 +106,7 @@ export const OpenIdConnectCompatibilityModes = ({
                         <Switch
                             id="useRefreshTokens"
                             checked={field.value === "true"}
-                            onCheckedChange={(value) => field.onChange(value.toString())}
+                            onCheckedChange={value => field.onChange(value.toString())}
                             aria-label={t("useRefreshTokens")}
                         />
                     )}
@@ -131,7 +130,7 @@ export const OpenIdConnectCompatibilityModes = ({
                         <Switch
                             id="useRefreshTokenForClientCredentialsGrant"
                             checked={field.value === "true"}
-                            onCheckedChange={(value) => field.onChange(value.toString())}
+                            onCheckedChange={value => field.onChange(value.toString())}
                             aria-label={t("useRefreshTokenForClientCredentialsGrant")}
                         />
                     )}
@@ -155,7 +154,7 @@ export const OpenIdConnectCompatibilityModes = ({
                         <Switch
                             id="useLowerCaseBearerType"
                             checked={field.value === "true"}
-                            onCheckedChange={(value) => field.onChange(value.toString())}
+                            onCheckedChange={value => field.onChange(value.toString())}
                             aria-label={t("useLowerCaseBearerType")}
                         />
                     )}

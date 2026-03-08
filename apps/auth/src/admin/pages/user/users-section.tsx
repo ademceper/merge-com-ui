@@ -1,10 +1,10 @@
 import { useTranslation } from "@merge-rd/i18n";
-import { useParams } from "../../shared/lib/useParams";
-import { useRealm } from "../../app/providers/realm-context/realm-context";
-import { PermissionsTab } from "../../shared/ui/permission-tab/permission-tab";
-import useIsFeatureEnabled, { Feature } from "../../shared/lib/useIsFeatureEnabled";
-import { UsersListSection } from "./users-list-section";
 import { useAccess } from "../../app/providers/access/access";
+import { useRealm } from "../../app/providers/realm-context/realm-context";
+import useIsFeatureEnabled, { Feature } from "../../shared/lib/useIsFeatureEnabled";
+import { useParams } from "../../shared/lib/useParams";
+import { PermissionsTab } from "../../shared/ui/permission-tab/permission-tab";
+import { UsersListSection } from "./users-list-section";
 
 export default function UsersSection() {
     useTranslation();
@@ -25,10 +25,8 @@ export default function UsersSection() {
     };
 
     return (
-        <>
-                        <div data-testid="users-page" className="pt-4 pb-6 px-0">
-                {content()}
-            </div>
-        </>
+        <div data-testid="users-page" className="pt-4 pb-6 px-0">
+            {content()}
+        </div>
     );
 }

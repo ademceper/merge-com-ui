@@ -1,8 +1,7 @@
-import { Controller, FormProvider, UseFormReturn, useWatch } from "react-hook-form";
-import { Switch } from "@merge-rd/ui/components/switch";
-import { FormLabel } from "../../../../shared/keycloak-ui-shared";
 import { useTranslation } from "@merge-rd/i18n";
-import { HelpItem, TextControl } from "../../../../shared/keycloak-ui-shared";
+import { Switch } from "@merge-rd/ui/components/switch";
+import { Controller, FormProvider, type UseFormReturn, useWatch } from "react-hook-form";
+import { FormLabel, HelpItem, TextControl } from "../../../../shared/keycloak-ui-shared";
 import { FormAccess } from "../../../shared/ui/form/form-access";
 import { WizardSectionHeader } from "../../../shared/ui/wizard-section-header/wizard-section-header";
 
@@ -40,29 +39,31 @@ export const LdapSettingsKerberosIntegration = ({
                     <div className="space-y-2">
                         <FormLabel
                             name="kc-allow-kerberos-authentication"
-                    label={t("allowKerberosAuthentication")}
-                    labelIcon={
-                        <HelpItem
-                            helpText={t("allowKerberosAuthenticationHelp")}
-                            fieldLabelId="allowKerberosAuthentication"
-                        />
-                    }
-                    hasNoPaddingTop
-                >
-                    <Controller
-                        name="config.allowKerberosAuthentication"
-                        defaultValue={["false"]}
-                        control={form.control}
-                        render={({ field }) => (
-                            <Switch
-                                id="kc-allow-kerberos-authentication"
-                                data-testid="allow-kerberos-auth"
-                                checked={field.value[0] === "true"}
-                                onCheckedChange={(value) => field.onChange([`${value}`])}
-                                aria-label={t("allowKerberosAuthentication")}
+                            label={t("allowKerberosAuthentication")}
+                            labelIcon={
+                                <HelpItem
+                                    helpText={t("allowKerberosAuthenticationHelp")}
+                                    fieldLabelId="allowKerberosAuthentication"
+                                />
+                            }
+                            hasNoPaddingTop
+                        >
+                            <Controller
+                                name="config.allowKerberosAuthentication"
+                                defaultValue={["false"]}
+                                control={form.control}
+                                render={({ field }) => (
+                                    <Switch
+                                        id="kc-allow-kerberos-authentication"
+                                        data-testid="allow-kerberos-auth"
+                                        checked={field.value[0] === "true"}
+                                        onCheckedChange={value =>
+                                            field.onChange([`${value}`])
+                                        }
+                                        aria-label={t("allowKerberosAuthentication")}
+                                    />
+                                )}
                             />
-                        )}
-                    />
                         </FormLabel>
                     </div>
 
@@ -74,8 +75,8 @@ export const LdapSettingsKerberosIntegration = ({
                                     label={t("kerberosRealm")}
                                     labelIcon={t("kerberosRealmHelp")}
                                     rules={{
-                                required: t("validateRealm")
-                            }}
+                                        required: t("validateRealm")
+                                    }}
                                 />
                             </div>
                             <div className="space-y-2">
@@ -84,8 +85,8 @@ export const LdapSettingsKerberosIntegration = ({
                                     label={t("serverPrincipal")}
                                     labelIcon={t("serverPrincipalHelp")}
                                     rules={{
-                                required: t("validateServerPrincipal")
-                            }}
+                                        required: t("validateServerPrincipal")
+                                    }}
                                 />
                             </div>
                             <div className="space-y-2">
@@ -94,8 +95,8 @@ export const LdapSettingsKerberosIntegration = ({
                                     label={t("keyTab")}
                                     labelIcon={t("keyTabHelp")}
                                     rules={{
-                                required: t("validateKeyTab")
-                            }}
+                                        required: t("validateKeyTab")
+                                    }}
                                 />
                             </div>
                             <div className="space-y-2">
@@ -104,36 +105,35 @@ export const LdapSettingsKerberosIntegration = ({
                                     label={t("krbPrincipalAttribute")}
                                     labelIcon={t("krbPrincipalAttributeHelp")}
                                 />
-
                             </div>
                             <div className="space-y-2">
                                 <FormLabel
                                     name="kc-debug"
-                            label={t("debug")}
-                            labelIcon={
-                                <HelpItem
-                                    helpText={t("debugHelp")}
-                                    fieldLabelId="debug"
-                                />
-                            }
-                            hasNoPaddingTop
-                        >
-                            <Controller
-                                name="config.debug"
-                                defaultValue={["false"]}
-                                control={form.control}
-                                render={({ field }) => (
-                                    <Switch
-                                        id="kc-debug"
-                                        data-testid="debug"
-                                        checked={field.value[0] === "true"}
-                                        onCheckedChange={(value) =>
-                                            field.onChange([`${value}`])
-                                        }
-                                        aria-label={t("debug")}
+                                    label={t("debug")}
+                                    labelIcon={
+                                        <HelpItem
+                                            helpText={t("debugHelp")}
+                                            fieldLabelId="debug"
+                                        />
+                                    }
+                                    hasNoPaddingTop
+                                >
+                                    <Controller
+                                        name="config.debug"
+                                        defaultValue={["false"]}
+                                        control={form.control}
+                                        render={({ field }) => (
+                                            <Switch
+                                                id="kc-debug"
+                                                data-testid="debug"
+                                                checked={field.value[0] === "true"}
+                                                onCheckedChange={value =>
+                                                    field.onChange([`${value}`])
+                                                }
+                                                aria-label={t("debug")}
+                                            />
+                                        )}
                                     />
-                                )}
-                            />
                                 </FormLabel>
                             </div>
                         </div>
@@ -141,29 +141,35 @@ export const LdapSettingsKerberosIntegration = ({
                     <div className="space-y-2">
                         <FormLabel
                             name="kc-use-kerberos-password-authentication"
-                    label={t("useKerberosForPasswordAuthentication")}
-                    labelIcon={
-                        <HelpItem
-                            helpText={t("useKerberosForPasswordAuthenticationHelp")}
-                            fieldLabelId="useKerberosForPasswordAuthentication"
-                        />
-                    }
-                    hasNoPaddingTop
-                >
-                    <Controller
-                        name="config.useKerberosForPasswordAuthentication"
-                        defaultValue={["false"]}
-                        control={form.control}
-                        render={({ field }) => (
-                            <Switch
-                                id="kc-use-kerberos-password-authentication"
-                                data-testid="use-kerberos-pw-auth"
-                                checked={field.value[0] === "true"}
-                                onCheckedChange={(value) => field.onChange([`${value}`])}
-                                aria-label={t("useKerberosForPasswordAuthentication")}
+                            label={t("useKerberosForPasswordAuthentication")}
+                            labelIcon={
+                                <HelpItem
+                                    helpText={t(
+                                        "useKerberosForPasswordAuthenticationHelp"
+                                    )}
+                                    fieldLabelId="useKerberosForPasswordAuthentication"
+                                />
+                            }
+                            hasNoPaddingTop
+                        >
+                            <Controller
+                                name="config.useKerberosForPasswordAuthentication"
+                                defaultValue={["false"]}
+                                control={form.control}
+                                render={({ field }) => (
+                                    <Switch
+                                        id="kc-use-kerberos-password-authentication"
+                                        data-testid="use-kerberos-pw-auth"
+                                        checked={field.value[0] === "true"}
+                                        onCheckedChange={value =>
+                                            field.onChange([`${value}`])
+                                        }
+                                        aria-label={t(
+                                            "useKerberosForPasswordAuthentication"
+                                        )}
+                                    />
+                                )}
                             />
-                        )}
-                    />
                         </FormLabel>
                     </div>
                 </div>

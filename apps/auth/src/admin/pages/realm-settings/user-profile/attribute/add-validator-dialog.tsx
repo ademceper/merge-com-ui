@@ -1,19 +1,18 @@
-import ComponentRepresentation from "@keycloak/keycloak-admin-client/lib/defs/componentRepresentation";
-import ComponentTypeRepresentation from "@keycloak/keycloak-admin-client/lib/defs/componentTypeRepresentation";
+import type ComponentRepresentation from "@keycloak/keycloak-admin-client/lib/defs/componentRepresentation";
+import type ComponentTypeRepresentation from "@keycloak/keycloak-admin-client/lib/defs/componentTypeRepresentation";
+import { useTranslation } from "@merge-rd/i18n";
 import { Button } from "@merge-rd/ui/components/button";
 import {
     Dialog,
     DialogContent,
+    DialogFooter,
     DialogHeader,
-    DialogTitle,
-    DialogFooter
+    DialogTitle
 } from "@merge-rd/ui/components/dialog";
 import { useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
-import { useTranslation } from "@merge-rd/i18n";
-
-import { DynamicComponents } from "../../../../shared/ui/dynamic/dynamic-components";
 import { useServerInfo } from "../../../../app/providers/server-info/server-info-provider";
+import { DynamicComponents } from "../../../../shared/ui/dynamic/dynamic-components";
 import type { IndexedValidations } from "../../new-attribute-settings";
 import { ValidatorSelect } from "./validator-select";
 

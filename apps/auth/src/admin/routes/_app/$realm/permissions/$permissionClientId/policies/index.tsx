@@ -1,15 +1,9 @@
-import { createFileRoute } from "@tanstack/react-router";
-import { lazy } from "react";
-
-const PermissionsConfigurationSection = lazy(
-    () =>
-        import(
-            "../../../../../../pages/permissions-configuration/permissions-configuration-section"
-        ),
-);
+import { createFileRoute, lazyRouteComponent } from "@tanstack/react-router";
 
 export const Route = createFileRoute(
     "/_app/$realm/permissions/$permissionClientId/policies/",
 )({
-    component: PermissionsConfigurationSection,
+    component: lazyRouteComponent(() => import(
+            "../../../../../../pages/permissions-configuration/permissions-configuration-section"
+        )),
 });

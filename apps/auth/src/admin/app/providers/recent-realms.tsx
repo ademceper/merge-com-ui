@@ -1,20 +1,21 @@
 import type RealmRepresentation from "@keycloak/keycloak-admin-client/lib/defs/realmRepresentation";
+import { useQuery } from "@tanstack/react-query";
+import { type PropsWithChildren, useEffect } from "react";
 import {
     createNamedContext,
-    useFetch,
     useRequiredContext,
     useStoredState
 } from "../../../shared/keycloak-ui-shared";
-import { PropsWithChildren, useEffect } from "react";
 import { useAdminClient } from "../admin-client";
-import { useRealm } from "./realm-context/realm-context";
 import { fetchAdminUI } from "./auth/admin-ui-endpoint";
+import { useRealm } from "./realm-context/realm-context";
 
 const MAX_REALMS = 3;
 
-const RecentRealmsContext = createNamedContext<
-    RealmNameRepresentation[] | undefined
->("RecentRealmsContext", undefined);
+const RecentRealmsContext = createNamedContext<RealmNameRepresentation[] | undefined>(
+    "RecentRealmsContext",
+    undefined
+);
 
 export type RealmNameRepresentation = {
     name: string;
@@ -35,8 +36,9 @@ export const RecentRealmsProvider = ({ children }: PropsWithChildren) => {
         { name: "" }
     ] as RealmNameRepresentation[]);
 
-    useFetch(
-        () =>
+    const { data: recentRealmsData } = useQuery({
+        queryKey: ["recentRealms", realm?.realm === "master"],
+        queryFn: () =>
             Promise.all(
                 storedRealms.map(async r => {
                     if (!r.name) {
@@ -55,10 +57,14 @@ export const RecentRealmsProvider = ({ children }: PropsWithChildren) => {
                         return undefined;
                     }
                 })
-            ),
-        realms => setStoredRealms(realms.filter(r => !!r)),
-        [realm?.realm === "master"]
-    );
+            )
+    });
+    useEffect(() => {
+        if (recentRealmsData)
+            setStoredRealms(
+                recentRealmsData.filter((r): r is RealmNameRepresentation => !!r)
+            );
+    }, [recentRealmsData]);
 
     useEffect(() => {
         if (storedRealms.map(r => r.name).includes(realm?.realm || "") || !realm) {

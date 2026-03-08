@@ -1,3 +1,4 @@
+import { useTranslation } from "@merge-rd/i18n";
 import {
     Select,
     SelectContent,
@@ -5,18 +6,17 @@ import {
     SelectValue
 } from "@merge-rd/ui/components/select";
 import { useState } from "react";
-import { useTranslation } from "@merge-rd/i18n";
-import { useAdminClient } from "../../app/admin-client";
-import type { Row } from "../clients/scopes/client-scopes";
-import { getErrorDescription, getErrorMessage } from "../../../shared/keycloak-ui-shared";
 import { toast } from "sonner";
+import { getErrorDescription, getErrorMessage } from "../../../shared/keycloak-ui-shared";
+import { useAdminClient } from "../../app/admin-client";
 import {
-    ClientScope,
     allClientScopeTypes,
+    type ClientScope,
     changeClientScope,
     changeScope,
     clientScopeTypesSelectOptions
 } from "../../shared/ui/client-scope/client-scope-types";
+import type { Row } from "../clients/scopes/client-scopes";
 
 type ChangeTypeDropdownProps = {
     clientId?: string;
@@ -33,11 +33,11 @@ export const ChangeTypeDropdown = ({
 
     const { t } = useTranslation();
     const [open, setOpen] = useState(false);
-return (
+    return (
         <Select
             open={open}
             onOpenChange={setOpen}
-            onValueChange={async (value) => {
+            onValueChange={async value => {
                 try {
                     await Promise.all(
                         selectedRows.map(row =>
@@ -56,7 +56,10 @@ return (
                     refresh();
                     toast.success(t("clientScopeSuccess"));
                 } catch (error) {
-                    toast.error(t("clientScopeError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
+                    toast.error(
+                        t("clientScopeError", { error: getErrorMessage(error) }),
+                        { description: getErrorDescription(error) }
+                    );
                 }
             }}
         >

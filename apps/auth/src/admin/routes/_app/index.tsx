@@ -1,10 +1,5 @@
-import { createFileRoute } from "@tanstack/react-router";
-import { lazy } from "react";
-
-const RedirectToOrganizations = lazy(
-    () => import("../../pages/organizations/redirect-to-organizations"),
-);
+import { createFileRoute, lazyRouteComponent } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/_app/")({
-    component: RedirectToOrganizations,
+    component: lazyRouteComponent(() => import("../../pages/organizations/redirect-to-organizations")),
 });

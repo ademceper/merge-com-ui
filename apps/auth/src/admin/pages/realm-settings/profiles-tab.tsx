@@ -1,21 +1,5 @@
 import type ClientProfileRepresentation from "@keycloak/keycloak-admin-client/lib/defs/clientProfileRepresentation";
-import { getErrorDescription, getErrorMessage, useFetch } from "../../../shared/keycloak-ui-shared";
-import { toast } from "sonner";
-import { Button } from "@merge-rd/ui/components/button";
-import { Badge } from "@merge-rd/ui/components/badge";
-import {
-    DataTable,
-    DataTableRowActions,
-    type ColumnDef
-} from "@/admin/shared/ui/data-table";
-import { Label } from "@merge-rd/ui/components/label";
-import { RadioGroup, RadioGroupItem } from "@merge-rd/ui/components/radio-group";
-import { Trash } from "@phosphor-icons/react";
-import { omit } from "lodash-es";
-import { useState } from "react";
 import { useTranslation } from "@merge-rd/i18n";
-import { Link } from "@tanstack/react-router";
-import { useAdminClient } from "../../app/admin-client";
 import {
     AlertDialog,
     AlertDialogAction,
@@ -26,12 +10,31 @@ import {
     AlertDialogHeader,
     AlertDialogTitle
 } from "@merge-rd/ui/components/alert-dialog";
-import CodeEditor from "../../shared/ui/form/code-editor";
+import { Badge } from "@merge-rd/ui/components/badge";
+import { Button } from "@merge-rd/ui/components/button";
+import { Label } from "@merge-rd/ui/components/label";
+import { RadioGroup, RadioGroupItem } from "@merge-rd/ui/components/radio-group";
+import { Trash } from "@phosphor-icons/react";
+import { Link } from "@tanstack/react-router";
+import { omit } from "lodash-es";
+import { useEffect, useState } from "react";
+import { toast } from "sonner";
+import {
+    type ColumnDef,
+    DataTable,
+    DataTableRowActions
+} from "@/admin/shared/ui/data-table";
+import {
+    getErrorDescription,
+    getErrorMessage,
+    KeycloakSpinner
+} from "../../../shared/keycloak-ui-shared";
+import { useAdminClient } from "../../app/admin-client";
 import { useRealm } from "../../app/providers/realm-context/realm-context";
 import { prettyPrintJSON } from "../../shared/lib/util";
-import { toAddClientProfile } from "./routes/add-client-profile";
-import { toClientProfile } from "./routes/client-profile";
-import { KeycloakSpinner } from "../../../shared/keycloak-ui-shared";
+import CodeEditor from "../../shared/ui/form/code-editor";
+import { useClientProfiles } from "./api/use-client-profiles";
+import { toAddClientProfile, toClientProfile } from "../../shared/lib/routes/realm-settings";
 
 type ClientProfile = ClientProfileRepresentation & {
     global: boolean;
@@ -47,32 +50,28 @@ export default function ProfilesTab() {
     const [selectedProfile, setSelectedProfile] = useState<ClientProfile>();
     const [show, setShow] = useState(false);
     const [code, setCode] = useState<string>();
-    const [key, setKey] = useState(0);
 
-    useFetch(
-        () =>
-            adminClient.clientPolicies.listProfiles({
-                includeGlobalProfiles: true
-            }),
-        allProfiles => {
-            setGlobalProfiles(allProfiles.globalProfiles);
+    const { data: allProfilesData, refetch: refetchProfiles } = useClientProfiles();
 
-            const globalProfiles = allProfiles.globalProfiles?.map(globalProfiles => ({
-                ...globalProfiles,
+    useEffect(() => {
+        if (allProfilesData) {
+            setGlobalProfiles(allProfilesData.globalProfiles);
+
+            const gProfiles = allProfilesData.globalProfiles?.map(p => ({
+                ...p,
                 global: true
             }));
 
-            const profiles = allProfiles.profiles?.map(profiles => ({
-                ...profiles,
+            const profiles = allProfilesData.profiles?.map(p => ({
+                ...p,
                 global: false
             }));
 
-            const allClientProfiles = globalProfiles?.concat(profiles ?? []);
+            const allClientProfiles = gProfiles?.concat(profiles ?? []);
             setTableProfiles(allClientProfiles || []);
             setCode(JSON.stringify(allClientProfiles, null, 2));
-        },
-        [key]
-    );
+        }
+    }, [allProfilesData]);
 
     const normalizeProfile = (profile: ClientProfile): ClientProfileRepresentation =>
         omit(profile, "global");
@@ -80,9 +79,7 @@ export default function ProfilesTab() {
     const onDeleteConfirm = async () => {
         if (!selectedProfile) return;
         const updatedProfiles = tableProfiles
-            ?.filter(
-                profile => profile.name !== selectedProfile.name && !profile.global
-            )
+            ?.filter(profile => profile.name !== selectedProfile.name && !profile.global)
             .map<ClientProfileRepresentation>(profile => normalizeProfile(profile));
 
         try {
@@ -92,9 +89,11 @@ export default function ProfilesTab() {
             });
             setSelectedProfile(undefined);
             toast.success(t("deleteClientSuccess"));
-            setKey(key + 1);
+            refetchProfiles();
         } catch (error) {
-            toast.error(t("deleteClientError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
+            toast.error(t("deleteClientError", { error: getErrorMessage(error) }), {
+                description: getErrorDescription(error)
+            });
         }
     };
 
@@ -104,12 +103,20 @@ export default function ProfilesTab() {
             header: t("name"),
             cell: ({ row }) => (
                 <Link
-                    to={toClientProfile({ realm, profileName: row.original.name! }) as string}
+                    to={
+                        toClientProfile({
+                            realm,
+                            profileName: row.original.name!
+                        }) as string
+                    }
                     className="text-primary hover:underline"
                 >
                     {row.original.name}
                     {row.original.global && (
-                        <Badge variant="secondary" className="bg-blue-500/20 text-blue-700 dark:text-blue-300 ml-1">
+                        <Badge
+                            variant="secondary"
+                            className="bg-blue-500/20 text-blue-700 dark:text-blue-300 ml-1"
+                        >
                             {t("global")}
                         </Badge>
                     )}
@@ -167,28 +174,45 @@ export default function ProfilesTab() {
                     globalProfiles: changedGlobalProfiles
                 });
                 toast.success(t("updateClientProfilesSuccess"));
-                setKey(key + 1);
+                refetchProfiles();
             } catch (error) {
-                toast.error(t("updateClientProfilesError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
+                toast.error(
+                    t("updateClientProfilesError", { error: getErrorMessage(error) }),
+                    { description: getErrorDescription(error) }
+                );
             }
         } catch (error) {
-            toast.error(t("invalidJsonClientProfilesError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
+            toast.error(
+                t("invalidJsonClientProfilesError", { error: getErrorMessage(error) }),
+                { description: getErrorDescription(error) }
+            );
         }
     };
 
     return (
         <>
-            <AlertDialog open={!!selectedProfile} onOpenChange={(open) => !open && setSelectedProfile(undefined)}>
+            <AlertDialog
+                open={!!selectedProfile}
+                onOpenChange={open => !open && setSelectedProfile(undefined)}
+            >
                 <AlertDialogContent>
                     <AlertDialogHeader>
-                        <AlertDialogTitle>{t("deleteClientProfileConfirmTitle")}</AlertDialogTitle>
+                        <AlertDialogTitle>
+                            {t("deleteClientProfileConfirmTitle")}
+                        </AlertDialogTitle>
                         <AlertDialogDescription>
-                            {t("deleteClientProfileConfirm", { profileName: selectedProfile?.name })}
+                            {t("deleteClientProfileConfirm", {
+                                profileName: selectedProfile?.name
+                            })}
                         </AlertDialogDescription>
                     </AlertDialogHeader>
                     <AlertDialogFooter>
                         <AlertDialogCancel>{t("cancel")}</AlertDialogCancel>
-                        <AlertDialogAction variant="destructive" data-testid="confirm" onClick={onDeleteConfirm}>
+                        <AlertDialogAction
+                            variant="destructive"
+                            data-testid="confirm"
+                            onClick={onDeleteConfirm}
+                        >
                             {t("delete")}
                         </AlertDialogAction>
                     </AlertDialogFooter>
@@ -196,28 +220,57 @@ export default function ProfilesTab() {
             </AlertDialog>
             <div className="flex flex-wrap items-center gap-4 mb-4">
                 <h2 className="text-base font-medium">{t("profilesConfigType")}</h2>
-                <RadioGroup value={show ? "json" : "form"} onValueChange={(v) => setShow(v === "json")} className="flex flex-wrap items-center gap-4">
-                    <div className="flex items-center gap-2" data-testid="formView-profilesView">
+                <RadioGroup
+                    value={show ? "json" : "form"}
+                    onValueChange={v => setShow(v === "json")}
+                    className="flex flex-wrap items-center gap-4"
+                >
+                    <div
+                        className="flex items-center gap-2"
+                        data-testid="formView-profilesView"
+                    >
                         <RadioGroupItem value="form" id="formView-profilesView" />
-                        <Label htmlFor="formView-profilesView" className="cursor-pointer">{t("profilesConfigTypes.formView")}</Label>
+                        <Label htmlFor="formView-profilesView" className="cursor-pointer">
+                            {t("profilesConfigTypes.formView")}
+                        </Label>
                     </div>
-                    <div className="flex items-center gap-2" data-testid="jsonEditor-profilesView">
+                    <div
+                        className="flex items-center gap-2"
+                        data-testid="jsonEditor-profilesView"
+                    >
                         <RadioGroupItem value="json" id="jsonEditor-profilesView" />
-                        <Label htmlFor="jsonEditor-profilesView" className="cursor-pointer">{t("profilesConfigTypes.jsonEditor")}</Label>
+                        <Label
+                            htmlFor="jsonEditor-profilesView"
+                            className="cursor-pointer"
+                        >
+                            {t("profilesConfigTypes.jsonEditor")}
+                        </Label>
                     </div>
                 </RadioGroup>
             </div>
             {!show ? (
                 <DataTable
-                    key={key}
                     columns={columns}
                     data={tableProfiles}
                     searchColumnId="name"
                     searchPlaceholder={t("clientProfileSearch")}
                     emptyMessage={t("emptyClientProfiles")}
                     toolbar={
-                        <Button asChild data-testid="createProfile" variant="default" className="flex h-9 shrink-0 items-center gap-2 px-4 py-2" aria-label={t("createClientProfile")}>
-                            <Link to={toAddClientProfile({ realm, tab: "profiles" }) as string}>
+                        <Button
+                            asChild
+                            data-testid="createProfile"
+                            variant="default"
+                            className="flex h-9 shrink-0 items-center gap-2 px-4 py-2"
+                            aria-label={t("createClientProfile")}
+                        >
+                            <Link
+                                to={
+                                    toAddClientProfile({
+                                        realm,
+                                        tab: "profiles"
+                                    }) as string
+                                }
+                            >
                                 {t("createClientProfile")}
                             </Link>
                         </Button>

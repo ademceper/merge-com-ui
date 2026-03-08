@@ -1,4 +1,4 @@
-import { PropsWithChildren } from "react";
+import type { PropsWithChildren } from "react";
 import { createNamedContext } from "../utils/createNamedContext";
 import { useRequiredContext } from "../utils/useRequiredContext";
 import { useStoredState } from "../utils/useStoredState";

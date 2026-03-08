@@ -1,17 +1,21 @@
-import type ClientRepresentation from "@keycloak/keycloak-admin-client/lib/defs/clientRepresentation";
 import type ProtocolMapperRepresentation from "@keycloak/keycloak-admin-client/lib/defs/protocolMapperRepresentation";
 import type { ProtocolMapperTypeRepresentation } from "@keycloak/keycloak-admin-client/lib/defs/serverInfoRepesentation";
-import { getErrorDescription, getErrorMessage, useFetch } from "../../../../shared/keycloak-ui-shared";
-import { toast } from "sonner";
-import { useState } from "react";
 import { useTranslation } from "@merge-rd/i18n";
+import { useQueryClient } from "@tanstack/react-query";
 import { useNavigate, useParams as useRouterParams } from "@tanstack/react-router";
+import { toast } from "sonner";
+import {
+    getErrorDescription,
+    getErrorMessage,
+    KeycloakSpinner
+} from "../../../../shared/keycloak-ui-shared";
 import { useAdminClient } from "../../../app/admin-client";
-import { MapperList } from "../../client-scopes/details/mapper-list";
-import { KeycloakSpinner } from "../../../../shared/keycloak-ui-shared";
 import { useParams } from "../../../shared/lib/useParams";
-import { DedicatedScopeDetailsParams } from "../routes/dedicated-scope-details";
-import { toMapper } from "../routes/mapper";
+import { MapperList } from "../../client-scopes/details/mapper-list";
+import { clientKeys } from "../api/keys";
+import { useDedicatedScopeClient } from "../api/use-dedicated-scope-client";
+import type { DedicatedScopeDetailsParams } from "../../../shared/lib/routes/clients";
+import { toMapper } from "../../../shared/lib/routes/clients";
 import { DedicatedScope } from "./dedicated-scope";
 
 export default function DedicatedScopes() {
@@ -21,9 +25,8 @@ export default function DedicatedScopes() {
     const navigate = useNavigate();
     const { realm, clientId } = useParams<DedicatedScopeDetailsParams>();
     const { tab } = useRouterParams({ strict: false }) as { tab?: string };
-const [client, setClient] = useState<ClientRepresentation>();
-
-    useFetch(() => adminClient.clients.findOne({ id: clientId }), setClient, []);
+    const queryClient = useQueryClient();
+    const { data: client } = useDedicatedScopeClient(clientId);
 
     if (!client) {
         return <KeycloakSpinner />;
@@ -34,8 +37,8 @@ const [client, setClient] = useState<ClientRepresentation>();
     ): Promise<void> => {
         if (!Array.isArray(mappers)) {
             const mapper = mappers as ProtocolMapperTypeRepresentation;
-            navigate({ to:
-                toMapper({
+            navigate({
+                to: toMapper({
                     realm,
                     id: client.id!,
                     mapperId: mapper.id!,
@@ -48,10 +51,12 @@ const [client, setClient] = useState<ClientRepresentation>();
                     { id: client.id! },
                     mappers as ProtocolMapperRepresentation[]
                 );
-                setClient(await adminClient.clients.findOne({ id: client.id! }));
+                await queryClient.invalidateQueries({ queryKey: clientKeys.detail(client.id!) });
                 toast.success(t("mappingCreatedSuccess"));
             } catch (error) {
-                toast.error(t("mappingCreatedError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
+                toast.error(t("mappingCreatedError", { error: getErrorMessage(error) }), {
+                    description: getErrorDescription(error)
+                });
             }
         }
     };
@@ -62,13 +67,12 @@ const [client, setClient] = useState<ClientRepresentation>();
                 id: client.id!,
                 mapperId: mapper.id!
             });
-            setClient({
-                ...client,
-                protocolMappers: client.protocolMappers?.filter(m => m.id !== mapper.id)
-            });
+            await queryClient.invalidateQueries({ queryKey: clientKeys.detail(client.id!) });
             toast.success(t("mappingDeletedSuccess"));
         } catch (error) {
-            toast.error(t("mappingDeletedError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
+            toast.error(t("mappingDeletedError", { error: getErrorMessage(error) }), {
+                description: getErrorDescription(error)
+            });
         }
         return true;
     };
@@ -97,12 +101,8 @@ const [client, setClient] = useState<ClientRepresentation>();
     };
 
     return (
-        <>
-                        <div className="p-0">
-                <div className="bg-muted/30">
-                    {renderContent()}
-                </div>
-            </div>
-        </>
+        <div className="p-0">
+            <div className="bg-muted/30">{renderContent()}</div>
+        </div>
     );
 }

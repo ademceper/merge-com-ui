@@ -1,8 +1,6 @@
 import type PolicyProviderRepresentation from "@keycloak/keycloak-admin-client/lib/defs/policyProviderRepresentation";
 import type PolicyRepresentation from "@keycloak/keycloak-admin-client/lib/defs/policyRepresentation";
-import { getErrorDescription, getErrorMessage, useFetch } from "../../../../shared/keycloak-ui-shared";
-import { Empty, EmptyContent, EmptyDescription, EmptyHeader, EmptyTitle } from "@merge-rd/ui/components/empty";
-import { toast } from "sonner";
+import { useTranslation } from "@merge-rd/i18n";
 import { Alert, AlertTitle } from "@merge-rd/ui/components/alert";
 import { Button } from "@merge-rd/ui/components/button";
 import {
@@ -10,33 +8,46 @@ import {
     DropdownMenuContent,
     DropdownMenuItem,
     DropdownMenuSeparator,
-    DropdownMenuTrigger,
+    DropdownMenuTrigger
 } from "@merge-rd/ui/components/dropdown-menu";
+import {
+    Empty,
+    EmptyContent,
+    EmptyDescription,
+    EmptyHeader,
+    EmptyTitle
+} from "@merge-rd/ui/components/empty";
+import { CaretDown, CaretRight, DotsThreeVertical } from "@phosphor-icons/react";
+import { Link, useNavigate } from "@tanstack/react-router";
+import { Fragment, useEffect, useState } from "react";
+import { toast } from "sonner";
 import {
     Table,
     TableBody,
     TableCell,
     TableHead,
     TableHeader,
-    TableRow,
+    TableRow
 } from "@/admin/shared/ui/data-table";
 import { TablePagination } from "@/admin/shared/ui/table-pagination";
-import { CaretDown, CaretRight, DotsThreeVertical } from "@phosphor-icons/react";
-import { Fragment, useState } from "react";
-import { useTranslation } from "@merge-rd/i18n";
-import { Link, useNavigate } from "@tanstack/react-router";
+import {
+    getErrorDescription,
+    getErrorMessage,
+    KeycloakSpinner
+} from "../../../../shared/keycloak-ui-shared";
 import { useAdminClient } from "../../../app/admin-client";
-import { useConfirmDialog } from "../../../shared/ui/confirm-dialog/confirm-dialog";
-import { KeycloakSpinner } from "../../../../shared/keycloak-ui-shared";
 import { useRealm } from "../../../app/providers/realm-context/realm-context";
 import useToggle from "../../../shared/lib/useToggle";
-import { toNewPermission } from "../routes/new-permission";
-import { toPermissionDetails } from "../routes/permission-details";
-import { toPolicyDetails } from "../routes/policy-details";
+import { useConfirmDialog } from "../../../shared/ui/confirm-dialog/confirm-dialog";
+import { toNewPermission } from "../../../shared/lib/routes/clients";
+import { toPermissionDetails } from "../../../shared/lib/routes/clients";
+import { toPolicyDetails } from "../../../shared/lib/routes/clients";
+import { usePermissionProviders } from "./api/use-permission-providers";
+import { usePermissions } from "./api/use-permissions";
 import { DetailDescriptionLink } from "./detail-description";
 import { EmptyPermissionsState } from "./empty-permissions-state";
 import { MoreLabel } from "./more-label";
-import { SearchDropdown, SearchForm } from "./search-dropdown";
+import { SearchDropdown, type SearchForm } from "./search-dropdown";
 
 type PermissionsProps = {
     clientId: string;
@@ -78,68 +89,36 @@ export const AuthorizationPermissions = ({
     const [createOpen, toggleCreate] = useToggle();
     const [search, setSearch] = useState<SearchForm>({});
 
-    const [key, setKey] = useState(0);
-    const refresh = () => setKey(key + 1);
-
     const [max, setMax] = useState(10);
     const [first, setFirst] = useState(0);
 
-    useFetch(
-        async () => {
-            const permissions = await adminClient.clients.findPermissions({
-                first,
-                max: max + 1,
-                id: clientId,
-                ...search
+    const { data: permissionsData, refetch } = usePermissions(
+        clientId,
+        first,
+        max,
+        search
+    );
+    const refresh = () => {
+        refetch();
+    };
+
+    useEffect(() => {
+        if (permissionsData) {
+            setPermissions(permissionsData as ExpandablePolicyRepresentation[]);
+        }
+    }, [permissionsData]);
+
+    const { data: providersData } = usePermissionProviders(clientId);
+
+    useEffect(() => {
+        if (providersData) {
+            setPolicyProviders(providersData.policies);
+            setDisabledCreate({
+                resources: providersData.resources,
+                scopes: providersData.scopes
             });
-
-            return await Promise.all(
-                permissions.map(async permission => {
-                    const associatedPolicies =
-                        await adminClient.clients.getAssociatedPolicies({
-                            id: clientId,
-                            permissionId: permission.id!
-                        });
-
-                    return {
-                        ...permission,
-                        associatedPolicies,
-                        isExpanded: false
-                    };
-                })
-            );
-        },
-        setPermissions,
-        [key, search, first, max]
-    );
-
-    useFetch(
-        async () => {
-            const params = {
-                first: 0,
-                max: 1
-            };
-            const [policies, resources, scopes] = await Promise.all([
-                adminClient.clients.listPolicyProviders({
-                    id: clientId
-                }),
-                adminClient.clients.listResources({ ...params, id: clientId }),
-                adminClient.clients.listAllScopes({ ...params, id: clientId })
-            ]);
-            return {
-                policies: policies.filter(
-                    p => p.type === "resource" || p.type === "scope"
-                ),
-                resources: resources.length !== 1,
-                scopes: scopes.length !== 1
-            };
-        },
-        ({ policies, resources, scopes }) => {
-            setPolicyProviders(policies);
-            setDisabledCreate({ resources, scopes });
-        },
-        []
-    );
+        }
+    }, [providersData]);
 
     const [toggleDeleteDialog, DeleteConfirm] = useConfirmDialog({
         titleKey: "deletePermission",
@@ -158,7 +137,10 @@ export const AuthorizationPermissions = ({
                 toast.success(t("permissionDeletedSuccess"));
                 refresh();
             } catch (error) {
-                toast.error(t("permissionDeletedError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
+                toast.error(
+                    t("permissionDeletedError", { error: getErrorMessage(error) }),
+                    { description: getErrorDescription(error) }
+                );
             }
         }
     });
@@ -194,12 +176,10 @@ export const AuthorizationPermissions = ({
                                 <DropdownMenuContent align="end">
                                     <DropdownMenuItem
                                         data-testid="create-resource"
-                                        disabled={
-                                            isDisabled || disabledCreate?.resources
-                                        }
+                                        disabled={isDisabled || disabledCreate?.resources}
                                         onClick={() =>
-                                            navigate({ to:
-                                                toNewPermission({
+                                            navigate({
+                                                to: toNewPermission({
                                                     realm,
                                                     id: clientId,
                                                     permissionType: "resource"
@@ -212,12 +192,10 @@ export const AuthorizationPermissions = ({
                                     <DropdownMenuSeparator />
                                     <DropdownMenuItem
                                         data-testid="create-scope"
-                                        disabled={
-                                            isDisabled || disabledCreate?.scopes
-                                        }
+                                        disabled={isDisabled || disabledCreate?.scopes}
                                         onClick={() =>
-                                            navigate({ to:
-                                                toNewPermission({
+                                            navigate({
+                                                to: toNewPermission({
                                                     realm,
                                                     id: clientId,
                                                     permissionType: "scope"
@@ -230,7 +208,9 @@ export const AuthorizationPermissions = ({
                                     {disabledCreate?.scopes && (
                                         <div className="p-2">
                                             <Alert variant="destructive" className="mt-2">
-                                                <AlertTitle>{t("noScopeCreateHint")}</AlertTitle>
+                                                <AlertTitle>
+                                                    {t("noScopeCreateHint")}
+                                                </AlertTitle>
                                             </Alert>
                                         </div>
                                     )}
@@ -277,10 +257,10 @@ export const AuthorizationPermissions = ({
                                                             (p, index) =>
                                                                 index === rowIndex
                                                                     ? {
-                                                                        ...p,
-                                                                        isExpanded:
-                                                                            !p.isExpanded
-                                                                    }
+                                                                          ...p,
+                                                                          isExpanded:
+                                                                              !p.isExpanded
+                                                                      }
                                                                     : p
                                                         );
                                                         setPermissions(rows);
@@ -297,12 +277,15 @@ export const AuthorizationPermissions = ({
                                                 data-testid={`name-column-${permission.name}`}
                                             >
                                                 <Link
-                                                    to={toPermissionDetails({
-                                                        realm,
-                                                        id: clientId,
-                                                        permissionType: permission.type!,
-                                                        permissionId: permission.id!
-                                                    }) as string}
+                                                    to={
+                                                        toPermissionDetails({
+                                                            realm,
+                                                            id: clientId,
+                                                            permissionType:
+                                                                permission.type!,
+                                                            permissionId: permission.id!
+                                                        }) as string
+                                                    }
                                                 >
                                                     {permission.name}
                                                 </Link>
@@ -319,7 +302,9 @@ export const AuthorizationPermissions = ({
                                                     row={permission}
                                                 />
                                             </TableCell>
-                                            <TableCell>{permission.description || "—"}</TableCell>
+                                            <TableCell>
+                                                {permission.description || "—"}
+                                            </TableCell>
                                             <TableCell className="w-10">
                                                 <DropdownMenu>
                                                     <DropdownMenuTrigger asChild>
@@ -354,9 +339,7 @@ export const AuthorizationPermissions = ({
                                                     colSpan={5}
                                                     className="bg-muted/30 p-4"
                                                 >
-                                                    <dl
-                                                        className="grid grid-cols-[auto_1fr] gap-x-4 gap-y-1 keycloak_resource_details"
-                                                    >
+                                                    <dl className="grid grid-cols-[auto_1fr] gap-x-4 gap-y-1 keycloak_resource_details">
                                                         <DetailDescriptionLink
                                                             name="associatedPolicy"
                                                             array={
@@ -392,8 +375,14 @@ export const AuthorizationPermissions = ({
             )}
             {noData && searching && (
                 <Empty className="py-12">
-                    <EmptyHeader><EmptyTitle>{t("noSearchResults")}</EmptyTitle></EmptyHeader>
-                    <EmptyContent><EmptyDescription>{t("noSearchResultsInstructions")}</EmptyDescription></EmptyContent>
+                    <EmptyHeader>
+                        <EmptyTitle>{t("noSearchResults")}</EmptyTitle>
+                    </EmptyHeader>
+                    <EmptyContent>
+                        <EmptyDescription>
+                            {t("noSearchResultsInstructions")}
+                        </EmptyDescription>
+                    </EmptyContent>
                 </Empty>
             )}
         </div>

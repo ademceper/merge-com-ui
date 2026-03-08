@@ -1,18 +1,14 @@
 import type GroupRepresentation from "@keycloak/keycloak-admin-client/lib/defs/groupRepresentation";
 import type RealmRepresentation from "@keycloak/keycloak-admin-client/lib/defs/realmRepresentation";
-import {
+import type {
     UserProfileAttributeMetadata,
     UserProfileMetadata
 } from "@keycloak/keycloak-admin-client/lib/defs/userProfileMetadata";
 import type UserRepresentation from "@keycloak/keycloak-admin-client/lib/defs/userRepresentation";
-import {
-    FormErrorText,
-    HelpItem,
-    SwitchControl,
-    TextControl,
-    UserProfileFields
-} from "../../../shared/keycloak-ui-shared";
+import { type TFunction, useTranslation } from "@merge-rd/i18n";
 import { Alert, AlertDescription } from "@merge-rd/ui/components/alert";
+import { Badge } from "@merge-rd/ui/components/badge";
+import { Button } from "@merge-rd/ui/components/button";
 import {
     Dialog,
     DialogContent,
@@ -20,33 +16,37 @@ import {
     DialogHeader,
     DialogTitle
 } from "@merge-rd/ui/components/dialog";
-import { Button } from "@merge-rd/ui/components/button";
-import { Badge } from "@merge-rd/ui/components/badge";
 import { Input } from "@merge-rd/ui/components/input";
 import { Label } from "@merge-rd/ui/components/label";
 import { Switch } from "@merge-rd/ui/components/switch";
 import { X } from "@phosphor-icons/react";
-import { TFunction } from "@merge-rd/i18n";
+import { useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { Controller, FormProvider, UseFormReturn } from "react-hook-form";
-import { useTranslation } from "@merge-rd/i18n";
-import { useAdminClient } from "../../app/admin-client";
-import { DefaultSwitchControl } from "../../shared/ui/switch-control";
-import { getErrorDescription, getErrorMessage } from "../../../shared/keycloak-ui-shared";
+import { Controller, FormProvider, type UseFormReturn } from "react-hook-form";
 import { toast } from "sonner";
-import { FormAccess } from "../../shared/ui/form/form-access";
-import { GroupPickerDialog } from "../../shared/ui/group/group-picker-dialog";
+import {
+    FormErrorText,
+    getErrorDescription,
+    getErrorMessage,
+    HelpItem,
+    SwitchControl,
+    TextControl,
+    UserProfileFields
+} from "../../../shared/keycloak-ui-shared";
+import { useAdminClient } from "../../app/admin-client";
 import { useAccess } from "../../app/providers/access/access";
 import { useWhoAmI } from "../../app/providers/whoami/who-am-i";
-import { emailRegexPattern } from "../../shared/lib/util";
 import useFormatDate from "../../shared/lib/useFormatDate";
-import { FederatedUserLink } from "./federated-user-link";
-import { UserFormFields, toUserFormFields } from "./form-state";
-import { toUsers } from "./routes/users";
-import { FixedButtonsGroup } from "../../shared/ui/form/fixed-button-group";
-import { RequiredActionMultiSelect } from "./user-credentials/required-action-multi-select";
-import { useNavigate } from "@tanstack/react-router";
+import { emailRegexPattern } from "../../shared/lib/util";
 import { CopyToClipboardButton } from "../../shared/ui/copy-to-clipboard-button/copy-to-clipboard-button";
+import { FixedButtonsGroup } from "../../shared/ui/form/fixed-button-group";
+import { FormAccess } from "../../shared/ui/form/form-access";
+import { GroupPickerDialog } from "../../shared/ui/group/group-picker-dialog";
+import { DefaultSwitchControl } from "../../shared/ui/switch-control";
+import { FederatedUserLink } from "./federated-user-link";
+import { toUserFormFields, type UserFormFields } from "./form-state";
+import { toUsers } from "../../shared/lib/routes/user";
+import { RequiredActionMultiSelect } from "./user-credentials/required-action-multi-select";
 
 export type BruteForced = {
     isBruteForceProtected?: boolean;
@@ -81,7 +81,7 @@ export const UserForm = ({
 
     const { t } = useTranslation();
     const formatDate = useFormatDate();
-const { hasAccess } = useAccess();
+    const { hasAccess } = useAccess();
     const isManager = hasAccess("manage-users");
     const canViewFederationLink = hasAccess("view-realm");
     const { whoAmI } = useWhoAmI();
@@ -107,7 +107,9 @@ const { hasAccess } = useAccess();
                 refresh();
             }
         } catch (error) {
-            toast.error(t("unlockError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
+            toast.error(t("unlockError", { error: getErrorMessage(error) }), {
+                description: getErrorDescription(error)
+            });
         }
     };
 
@@ -132,7 +134,10 @@ const { hasAccess } = useAccess();
                 });
                 toast.success(t("addedGroupMembership"));
             } catch (error) {
-                toast.error(t("addedGroupMembershipError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
+                toast.error(
+                    t("addedGroupMembershipError", { error: getErrorMessage(error) }),
+                    { description: getErrorDescription(error) }
+                );
             }
         });
     };
@@ -173,7 +178,12 @@ const { hasAccess } = useAccess();
                 refresh();
             }
         } catch (error) {
-            toast.error(t("emailPendingVerificationUpdateError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
+            toast.error(
+                t("emailPendingVerificationUpdateError", {
+                    error: getErrorMessage(error)
+                }),
+                { description: getErrorDescription(error) }
+            );
         }
     };
 
@@ -267,14 +277,18 @@ const { hasAccess } = useAccess();
                         {user?.attributes?.["kc.email.pending"] && (
                             <Alert variant="destructive">
                                 <AlertDescription>
-                                    <p className="font-semibold">{t("emailPendingVerificationAlertTitle")}</p>
+                                    <p className="font-semibold">
+                                        {t("emailPendingVerificationAlertTitle")}
+                                    </p>
                                     {t("userNotYetConfirmedNewEmail", {
                                         email: user.attributes!["kc.email.pending"]
                                     })}
                                     <Button
                                         variant="link"
                                         className="p-0 h-auto font-semibold"
-                                        onClick={() => setEmailVerificationDialogOpen(true)}
+                                        onClick={() =>
+                                            setEmailVerificationDialogOpen(true)
+                                        }
                                     >
                                         {t("emailPendingVerificationResetAction")}
                                     </Button>
@@ -282,10 +296,15 @@ const { hasAccess } = useAccess();
                                         open={emailVerificationDialogOpen}
                                         onOpenChange={setEmailVerificationDialogOpen}
                                     >
-                                        <DialogContent showCloseButton className="sm:max-w-sm">
+                                        <DialogContent
+                                            showCloseButton
+                                            className="sm:max-w-sm"
+                                        >
                                             <DialogHeader>
                                                 <DialogTitle>
-                                                    {t("confirmEmailPendingVerificationAction")}
+                                                    {t(
+                                                        "confirmEmailPendingVerificationAction"
+                                                    )}
                                                 </DialogTitle>
                                             </DialogHeader>
                                             {t("emailPendingVerificationActionMessage")}
@@ -293,7 +312,9 @@ const { hasAccess } = useAccess();
                                                 <Button
                                                     id="modal-confirm"
                                                     onClick={() => {
-                                                        setEmailVerificationDialogOpen(false);
+                                                        setEmailVerificationDialogOpen(
+                                                            false
+                                                        );
                                                         handleEmailVerificationReset();
                                                     }}
                                                 >
@@ -302,7 +323,11 @@ const { hasAccess } = useAccess();
                                                 <Button
                                                     id="modal-cancel"
                                                     variant="outline"
-                                                    onClick={() => setEmailVerificationDialogOpen(false)}
+                                                    onClick={() =>
+                                                        setEmailVerificationDialogOpen(
+                                                            false
+                                                        )
+                                                    }
                                                 >
                                                     {t("cancel")}
                                                 </Button>
@@ -372,7 +397,9 @@ const { hasAccess } = useAccess();
                 {isBruteForceProtected && (
                     <div className="space-y-2">
                         <div className="flex items-center gap-1">
-                            <Label htmlFor="temporaryLocked">{t("temporaryLocked")}</Label>
+                            <Label htmlFor="temporaryLocked">
+                                {t("temporaryLocked")}
+                            </Label>
                             <HelpItem
                                 helpText={t("temporaryLockedHelp")}
                                 fieldLabelId="temporaryLocked"
@@ -382,7 +409,7 @@ const { hasAccess } = useAccess();
                             <Switch
                                 data-testid="user-locked-switch"
                                 id="temporaryLocked"
-                                onCheckedChange={async (value) => {
+                                onCheckedChange={async value => {
                                     await unLockUser();
                                     setLocked(value);
                                 }}

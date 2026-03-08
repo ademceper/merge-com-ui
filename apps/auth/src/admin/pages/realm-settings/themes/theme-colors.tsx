@@ -1,22 +1,20 @@
-import RealmRepresentation from "@keycloak/keycloak-admin-client/lib/defs/realmRepresentation";
-import { TextControl } from "../../../../shared/keycloak-ui-shared";
-import {
-    Alert,
-    AlertTitle
-} from "@merge-rd/ui/components/alert";
-import { Label } from "@merge-rd/ui/components/label";
-import React, { useEffect, useMemo } from "react";
-import { FormProvider, useForm, useFormContext, useWatch } from "react-hook-form";
+import type RealmRepresentation from "@keycloak/keycloak-admin-client/lib/defs/realmRepresentation";
 import { useTranslation } from "@merge-rd/i18n";
+import { Alert, AlertTitle } from "@merge-rd/ui/components/alert";
+import { Label } from "@merge-rd/ui/components/label";
+import type React from "react";
+import { useEffect, useMemo } from "react";
+import { FormProvider, useForm, useFormContext, useWatch } from "react-hook-form";
+import { TextControl } from "../../../../shared/keycloak-ui-shared";
+import useToggle from "../../../shared/lib/useToggle";
 import { FixedButtonsGroup } from "../../../shared/ui/form/fixed-button-group";
 import { FormAccess } from "../../../shared/ui/form/form-access";
-import useToggle from "../../../shared/lib/useToggle";
 import { FileNameDialog } from "./file-name-dialog";
 import { ImageUpload } from "./image-upload";
 import { usePreviewLogo } from "./logo-context";
 import { darkTheme, lightTheme } from "./patternfly-vars";
 import { PreviewWindow } from "./preview-window";
-import { ThemeRealmRepresentation } from "./themes-tab";
+import type { ThemeRealmRepresentation } from "./themes-tab";
 import { UploadJar } from "./upload-jar";
 
 type ThemeType = "light" | "dark";
@@ -137,7 +135,9 @@ export const ThemeColors = ({ realm, save, theme }: ThemeColorsProps) => {
                 />
             )}
             <div className="px-4 pt-0">
-                <p className="mb-6 text-sm text-muted-foreground">{t("themeColorInfo")}</p>
+                <p className="mb-6 text-sm text-muted-foreground">
+                    {t("themeColorInfo")}
+                </p>
                 {mediaQuery.matches && theme === "light" && (
                     <Alert>
                         <AlertTitle>{t("themePreviewInfo")}</AlertTitle>

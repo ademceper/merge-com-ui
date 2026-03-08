@@ -1,3 +1,4 @@
+import { useTranslation } from "@merge-rd/i18n";
 import {
     Breadcrumb,
     BreadcrumbItem,
@@ -6,12 +7,10 @@ import {
     BreadcrumbPage,
     BreadcrumbSeparator
 } from "@merge-rd/ui/components/breadcrumb";
-import React, { useEffect } from "react";
 import { Link, useLocation } from "@tanstack/react-router";
-import { useTranslation } from "@merge-rd/i18n";
-
-import { useSubGroups } from "../../lib/sub-groups-context";
+import React, { useEffect } from "react";
 import { useRealm } from "../../../app/providers/realm-context/realm-context";
+import { useSubGroups } from "../../lib/sub-groups-context";
 
 /** Header'da kullanılmak üzere merge UI Breadcrumb bileşenleriyle aynı grup yolunu gösterir. */
 export function GroupBreadCrumbsForHeader() {
@@ -32,31 +31,37 @@ export function GroupBreadCrumbsForHeader() {
                         </BreadcrumbLink>
                     )}
                 </BreadcrumbItem>
-                {subGroups.length > 0 && subGroups.map((group, i) => {
-                    const isLastGroup = i === subGroups.length - 1;
-                    const to = location.pathname.substring(
-                        0,
-                        location.pathname.indexOf(group.id!) + group.id!.length
-                    );
-                    return (
-                        <React.Fragment key={group.id}>
-                            <BreadcrumbSeparator />
-                            <BreadcrumbItem>
-                                {!isLastGroup ? (
-                                    <BreadcrumbLink asChild>
-                                        <Link to={to as string} onClick={() => remove(group)}>
-                                            {group.name}
-                                        </Link>
-                                    </BreadcrumbLink>
-                                ) : (
-                                    <BreadcrumbPage>
-                                        {group.id === "search" ? group.name : t("groupDetails")}
-                                    </BreadcrumbPage>
-                                )}
-                            </BreadcrumbItem>
-                        </React.Fragment>
-                    );
-                })}
+                {subGroups.length > 0 &&
+                    subGroups.map((group, i) => {
+                        const isLastGroup = i === subGroups.length - 1;
+                        const to = location.pathname.substring(
+                            0,
+                            location.pathname.indexOf(group.id!) + group.id!.length
+                        );
+                        return (
+                            <React.Fragment key={group.id}>
+                                <BreadcrumbSeparator />
+                                <BreadcrumbItem>
+                                    {!isLastGroup ? (
+                                        <BreadcrumbLink asChild>
+                                            <Link
+                                                to={to as string}
+                                                onClick={() => remove(group)}
+                                            >
+                                                {group.name}
+                                            </Link>
+                                        </BreadcrumbLink>
+                                    ) : (
+                                        <BreadcrumbPage>
+                                            {group.id === "search"
+                                                ? group.name
+                                                : t("groupDetails")}
+                                        </BreadcrumbPage>
+                                    )}
+                                </BreadcrumbItem>
+                            </React.Fragment>
+                        );
+                    })}
             </BreadcrumbList>
         </Breadcrumb>
     );
@@ -89,11 +94,13 @@ const GroupBreadCrumbs = () => {
                         {!isLastGroup && (
                             <>
                                 <Link
-                                    to={location.pathname.substring(
-                                        0,
-                                        location.pathname.indexOf(group.id!) +
-                                            group.id!.length
-                                    ) as string}
+                                    to={
+                                        location.pathname.substring(
+                                            0,
+                                            location.pathname.indexOf(group.id!) +
+                                                group.id!.length
+                                        ) as string
+                                    }
                                     onClick={() => remove(group)}
                                 >
                                     {group.name}

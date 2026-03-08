@@ -12,8 +12,8 @@
 // @ts-nocheck
 
 import {
-    getNetworkErrorMessage,
-    getNetworkErrorDescription
+    getNetworkErrorDescription,
+    getNetworkErrorMessage
 } from "../../../shared/keycloak-ui-shared";
 import { CONTENT_TYPE_HEADER, CONTENT_TYPE_JSON } from "./constants";
 

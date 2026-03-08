@@ -1,21 +1,25 @@
 import type GroupRepresentation from "@keycloak/keycloak-admin-client/lib/defs/groupRepresentation";
-import { useFetch } from "../../../../shared/keycloak-ui-shared";
-import { toast } from "sonner";
 import { Button } from "@merge-rd/ui/components/button";
-import { Input } from "@merge-rd/ui/components/input";
 import {
     DropdownMenu,
     DropdownMenuContent,
     DropdownMenuItem,
-    DropdownMenuTrigger,
+    DropdownMenuTrigger
 } from "@merge-rd/ui/components/dropdown-menu";
+import { Input } from "@merge-rd/ui/components/input";
 import { Separator } from "@merge-rd/ui/components/separator";
 import { Spinner } from "@merge-rd/ui/components/spinner";
 import { cn } from "@merge-rd/ui/lib/utils";
-import { CaretRight, DotsThreeVertical, MagnifyingGlass, XCircle } from "@phosphor-icons/react";
+import {
+    CaretRight,
+    DotsThreeVertical,
+    MagnifyingGlass,
+    XCircle
+} from "@phosphor-icons/react";
 import { unionBy } from "lodash-es";
 import type { ReactNode } from "react";
 import { useEffect, useRef, useState } from "react";
+import { toast } from "sonner";
 
 type TreeViewDataItem = {
     id?: string;
@@ -24,19 +28,19 @@ type TreeViewDataItem = {
     action?: ReactNode;
     defaultExpanded?: boolean;
 };
+
 import { useTranslation } from "@merge-rd/i18n";
 import { useNavigate } from "@tanstack/react-router";
-import { useAdminClient } from "../../../app/admin-client";
 import { KeycloakSpinner } from "../../../../shared/keycloak-ui-shared";
 import { useAccess } from "../../../app/providers/access/access";
-import { fetchAdminUI } from "../../../app/providers/auth/admin-ui-endpoint";
 import { useRealm } from "../../../app/providers/realm-context/realm-context";
 import useToggle from "../../../shared/lib/useToggle";
+import { useGroupTree } from "../api/use-group-tree";
 import { GroupsModal } from "../groups-modal";
-import { useSubGroups } from "../sub-groups-context";
-import { toGroups } from "../routes/groups";
-import { DeleteGroup } from "./delete-group";
 import { MoveDialog } from "../move-dialog";
+import { toGroups } from "../../../shared/lib/routes/groups";
+import { useSubGroups } from "../sub-groups-context";
+import { DeleteGroup } from "./delete-group";
 
 type ExtendedTreeViewDataItem = TreeViewDataItem & {
     access?: Record<string, boolean>;
@@ -102,11 +106,7 @@ const GroupTreeContextMenu = ({ group, refresh }: GroupTreeContextMenuProps) => 
             />
             <DropdownMenu open={isOpen} onOpenChange={toggleOpen} modal={false}>
                 <DropdownMenuTrigger asChild>
-                    <Button
-                        variant="ghost"
-                        size="icon"
-                        aria-label="Actions"
-                    >
+                    <Button variant="ghost" size="icon" aria-label="Actions">
                         <DotsThreeVertical className="size-4" />
                     </Button>
                 </DropdownMenuTrigger>
@@ -116,11 +116,19 @@ const GroupTreeContextMenu = ({ group, refresh }: GroupTreeContextMenuProps) => 
                     sideOffset={5}
                     collisionPadding={10}
                 >
-                    <DropdownMenuItem onClick={toggleRenameOpen}>{t("edit")}</DropdownMenuItem>
-                    <DropdownMenuItem onClick={toggleMoveOpen}>{t("moveTo")}</DropdownMenuItem>
-                    <DropdownMenuItem onClick={toggleCreateOpen}>{t("createChildGroup")}</DropdownMenuItem>
+                    <DropdownMenuItem onClick={toggleRenameOpen}>
+                        {t("edit")}
+                    </DropdownMenuItem>
+                    <DropdownMenuItem onClick={toggleMoveOpen}>
+                        {t("moveTo")}
+                    </DropdownMenuItem>
+                    <DropdownMenuItem onClick={toggleCreateOpen}>
+                        {t("createChildGroup")}
+                    </DropdownMenuItem>
                     <Separator />
-                    <DropdownMenuItem onClick={toggleDeleteOpen}>{t("delete")}</DropdownMenuItem>
+                    <DropdownMenuItem onClick={toggleDeleteOpen}>
+                        {t("delete")}
+                    </DropdownMenuItem>
                 </DropdownMenuContent>
             </DropdownMenu>
         </>
@@ -154,18 +162,28 @@ function pathIdsToExpand(items: ExtendedTreeViewDataItem[]): Set<string> {
     for (const item of items) {
         if (item.id && item.defaultExpanded && hasRealChildren(item)) ids.add(item.id);
         if (item.children?.length)
-            pathIdsToExpand(item.children as ExtendedTreeViewDataItem[]).forEach(id => ids.add(id));
+            pathIdsToExpand(item.children as ExtendedTreeViewDataItem[]).forEach(id =>
+                ids.add(id)
+            );
     }
     return ids;
 }
 
-function SimpleTreeView({ data, allExpanded, activeItems = [], onExpand, onSelect, onCollapse }: SimpleTreeViewProps) {
-    const [expanded, setExpanded] = useState<Set<string>>(() =>
-        new Set(
-            data
-                .filter(i => i.defaultExpanded && i.id && hasRealChildren(i))
-                .map(i => i.id!)
-        )
+function SimpleTreeView({
+    data,
+    allExpanded,
+    activeItems = [],
+    onExpand,
+    onSelect,
+    onCollapse
+}: SimpleTreeViewProps) {
+    const [expanded, setExpanded] = useState<Set<string>>(
+        () =>
+            new Set(
+                data
+                    .filter(i => i.defaultExpanded && i.id && hasRealChildren(i))
+                    .map(i => i.id!)
+            )
     );
 
     // Path restore: sadece henüz eklenmemiş path düğümlerini aç (kullanıcı kapattıysa tekrar açma)
@@ -185,7 +203,8 @@ function SimpleTreeView({ data, allExpanded, activeItems = [], onExpand, onSelec
             return next;
         });
     }, [data]);
-    const isExpanded = (id: string | undefined) => id && (allExpanded || expanded.has(id));
+    const isExpanded = (id: string | undefined) =>
+        id && (allExpanded || expanded.has(id));
     const toggle = (id: string | undefined) => {
         if (!id) return;
         setExpanded(prev => {
@@ -238,16 +257,22 @@ function SimpleTreeView({ data, allExpanded, activeItems = [], onExpand, onSelec
                                 }}
                                 aria-expanded={!!expanded_}
                             >
-                                <CaretRight className={`size-4 transition-transform ${expanded_ ? "rotate-90" : ""}`} />
+                                <CaretRight
+                                    className={`size-4 transition-transform ${expanded_ ? "rotate-90" : ""}`}
+                                />
                             </button>
                         ) : null}
                     </span>
                     <span className="flex-1 min-w-0 truncate">{item.name}</span>
-                    {item.action ? <span onClick={e => e.stopPropagation()}>{item.action}</span> : null}
+                    {item.action ? (
+                        <span onClick={e => e.stopPropagation()}>{item.action}</span>
+                    ) : null}
                 </div>
                 {hasChildren && expanded_ && (
                     <div>
-                        {item.children!.map((child, _i) => renderItem(child as ExtendedTreeViewDataItem, depth + 1))}
+                        {item.children!.map((child, _i) =>
+                            renderItem(child as ExtendedTreeViewDataItem, depth + 1)
+                        )}
                     </div>
                 )}
             </div>
@@ -282,8 +307,6 @@ const CHEVRON_PLACEHOLDER: ExtendedTreeViewDataItem[] = [
 ];
 
 export const GroupTree = ({ refresh: viewRefresh, canViewDetails }: GroupTreeProps) => {
-    const { adminClient } = useAdminClient();
-
     const { t } = useTranslation();
     const { realm } = useRealm();
     const navigate = useNavigate();
@@ -322,7 +345,10 @@ export const GroupTree = ({ refresh: viewRefresh, canViewDetails }: GroupTreePro
         nodes.map(node => {
             if (node.id === id) return { ...node, children: newChildren };
             if (node.children?.length)
-                return { ...node, children: updateChildrenAtId(node.children, id, newChildren) };
+                return {
+                    ...node,
+                    children: updateChildrenAtId(node.children, id, newChildren)
+                };
             return node;
         });
 
@@ -348,101 +374,87 @@ export const GroupTree = ({ refresh: viewRefresh, canViewDetails }: GroupTreePro
         };
     };
 
-    useFetch(
-        async () => {
-            const groups = await fetchAdminUI<GroupRepresentation[]>(
-                adminClient,
-                "groups",
-                Object.assign(
-                    {
-                        first: `${first}`,
-                        max: `${max + 1}`,
-                        exact: "false",
-                        global: `${search !== ""}`
-                    },
-                    search === "" ? null : { search }
-                )
-            );
-            let subGroups: GroupRepresentation[] = [];
-            if (activeItem) {
-                subGroups = await fetchAdminUI<GroupRepresentation[]>(
-                    adminClient,
-                    `groups/${activeItem.id}/children`,
-                    {
-                        first: `${firstSub}`,
-                        max: `${SUBGROUP_COUNT}`
-                    }
-                );
-            }
-            return { groups, subGroups };
-        },
-        ({ groups, subGroups: fetchedSubGroups }) => {
-            let newData: ExtendedTreeViewDataItem[];
-            if (search || prefFirst.current !== first || prefMax.current !== max) {
-                newData = groups.map(g => mapGroup(g, refresh));
-            } else {
-                newData = unionBy(
-                    data || [],
-                    groups.map(g => mapGroup(g, refresh)),
-                    "id"
-                );
-            }
-            if (activeItem && fetchedSubGroups.length > 0) {
-                const path = findGroup(newData, activeItem.id!, []);
-                const foundTreeItem = path[path.length - 1];
-                const currentChildren = foundTreeItem?.children || [];
-                const existing = unionBy(currentChildren, "id")
-                    .filter((c: ExtendedTreeViewDataItem) => c.id !== "next" && c.id !== "__placeholder")
-                    .slice(0, SUBGROUP_COUNT);
-                const mapped = fetchedSubGroups.map(g => mapGroup(g, refresh));
-                const mergedChildren = unionBy(existing, mapped, "id");
-                const newChildren: ExtendedTreeViewDataItem[] = [
-                    ...mergedChildren,
-                    ...(fetchedSubGroups.length === SUBGROUP_COUNT
-                        ? [
-                              {
-                                  id: "next",
-                                  name: (
-                                      <Button
-                                          variant="ghost"
-                                          onClick={() =>
-                                              setFirstSub(firstSub + SUBGROUP_COUNT)
-                                          }
-                                      >
-                                          <CaretRight className="size-4" />
-                                      </Button>
-                                  )
-                              } as ExtendedTreeViewDataItem
-                          ]
-                        : [])
-                ];
-                newData = updateChildrenAtId(newData, activeItem.id!, newChildren);
-            }
-            // Clear loading state after data is loaded (whether subgroups exist or not)
-            if (activeItem && loadingGroupId === activeItem.id) {
-                setLoadingGroupId(undefined);
-            }
-            setCount(countGroups(groups));
-            prefFirst.current = first;
-            prefMax.current = max;
-            setData(newData);
+    const { data: treeData } = useGroupTree({
+        first,
+        max,
+        search,
+        activeItemId: activeItem?.id,
+        firstSub,
+        subGroupCount: SUBGROUP_COUNT
+    });
 
-            // URL path restore: bu segment yüklendi, sıradaki varsa onu yükle
-            const pathFromUrl = subGroups;
-            if (
-                pathFromUrl.length > 0 &&
-                activeItem?.id === pathFromUrl[pathIndexRef.current]?.id &&
-                pathIndexRef.current < pathFromUrl.length - 1
-            ) {
-                pathIndexRef.current += 1;
-                setActiveItem({
-                    id: pathFromUrl[pathIndexRef.current].id,
-                    name: pathFromUrl[pathIndexRef.current].name
-                } as ExtendedTreeViewDataItem);
-            }
-        },
-        [key, first, firstSub, max, search, activeItem?.id]
-    );
+    useEffect(() => {
+        if (!treeData) return;
+        const { groups, subGroups: fetchedSubGroups } = treeData;
+
+        let newData: ExtendedTreeViewDataItem[];
+        if (search || prefFirst.current !== first || prefMax.current !== max) {
+            newData = groups.map(g => mapGroup(g, refresh));
+        } else {
+            newData = unionBy(
+                data || [],
+                groups.map(g => mapGroup(g, refresh)),
+                "id"
+            );
+        }
+        if (activeItem && fetchedSubGroups.length > 0) {
+            const path = findGroup(newData, activeItem.id!, []);
+            const foundTreeItem = path[path.length - 1];
+            const currentChildren = foundTreeItem?.children || [];
+            const existing = unionBy(currentChildren, "id")
+                .filter(
+                    (c: ExtendedTreeViewDataItem) =>
+                        c.id !== "next" && c.id !== "__placeholder"
+                )
+                .slice(0, SUBGROUP_COUNT);
+            const mapped = fetchedSubGroups.map(g => mapGroup(g, refresh));
+            const mergedChildren = unionBy(existing, mapped, "id");
+            const newChildren: ExtendedTreeViewDataItem[] = [
+                ...mergedChildren,
+                ...(fetchedSubGroups.length === SUBGROUP_COUNT
+                    ? [
+                          {
+                              id: "next",
+                              name: (
+                                  <Button
+                                      variant="ghost"
+                                      onClick={() =>
+                                          setFirstSub(firstSub + SUBGROUP_COUNT)
+                                      }
+                                  >
+                                      <CaretRight className="size-4" />
+                                  </Button>
+                              )
+                          } as ExtendedTreeViewDataItem
+                      ]
+                    : [])
+            ];
+            newData = updateChildrenAtId(newData, activeItem.id!, newChildren);
+        }
+        // Clear loading state after data is loaded (whether subgroups exist or not)
+        if (activeItem && loadingGroupId === activeItem.id) {
+            setLoadingGroupId(undefined);
+        }
+        setCount(countGroups(groups));
+        prefFirst.current = first;
+        prefMax.current = max;
+        setData(newData);
+
+        // URL path restore: bu segment yüklendi, sıradaki varsa onu yükle
+        const pathFromUrl = subGroups;
+        if (
+            pathFromUrl.length > 0 &&
+            activeItem?.id === pathFromUrl[pathIndexRef.current]?.id &&
+            pathIndexRef.current < pathFromUrl.length - 1
+        ) {
+            pathIndexRef.current += 1;
+            setActiveItem({
+                id: pathFromUrl[pathIndexRef.current].id,
+                name: pathFromUrl[pathIndexRef.current].name
+            } as ExtendedTreeViewDataItem);
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [treeData]);
 
     const findGroup = (
         groups: ExtendedTreeViewDataItem[],
@@ -496,15 +508,15 @@ export const GroupTree = ({ refresh: viewRefresh, canViewDetails }: GroupTreePro
         // Optimistically update breadcrumb with new path instead of clearing (prevents flickering)
         const newBreadcrumbPath = path.map(g => {
             let name = g.id;
-            if (typeof g.name === 'string') {
+            if (typeof g.name === "string") {
                 name = g.name;
-            } else if (g.name && typeof g.name === 'object' && 'props' in g.name) {
+            } else if (g.name && typeof g.name === "object" && "props" in g.name) {
                 // Extract from React element: <span>{name}</span>
                 name = (g.name as any).props?.children || g.id;
             }
             return {
                 id: g.id,
-                name: typeof name === 'string' ? name : String(name || g.id),
+                name: typeof name === "string" ? name : String(name || g.id),
                 access: g.access
             } as GroupRepresentation;
         });
@@ -540,7 +552,10 @@ export const GroupTree = ({ refresh: viewRefresh, canViewDetails }: GroupTreePro
         const newSubGroups = subGroups.slice(0, idx);
         const parentPath = newSubGroups.map(g => g.id).join("/");
         const parentGroup = newSubGroups[newSubGroups.length - 1];
-        setActiveItem({ id: parentGroup.id, name: parentGroup.name } as ExtendedTreeViewDataItem);
+        setActiveItem({
+            id: parentGroup.id,
+            name: parentGroup.name
+        } as ExtendedTreeViewDataItem);
         setSubGroups(newSubGroups);
         navigate({ to: toGroups({ realm, id: parentPath }) as string });
     };
@@ -589,7 +604,7 @@ export const GroupTree = ({ refresh: viewRefresh, canViewDetails }: GroupTreePro
                     placeholder={t("searchForGroups")}
                     type="text"
                     value={searchInput}
-                    onChange={(e) => setSearchInput(e.target.value)}
+                    onChange={e => setSearchInput(e.target.value)}
                     className={cn(
                         "peer h-9 min-w-0 flex-1 ps-9 sm:min-w-60",
                         searchInput && "pe-9"

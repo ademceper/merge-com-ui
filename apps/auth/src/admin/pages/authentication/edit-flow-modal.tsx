@@ -1,17 +1,17 @@
 import type AuthenticationFlowRepresentation from "@keycloak/keycloak-admin-client/lib/defs/authenticationFlowRepresentation";
-import { getErrorDescription, getErrorMessage } from "../../../shared/keycloak-ui-shared";
-import { toast } from "sonner";
+import { useTranslation } from "@merge-rd/i18n";
 import { Button } from "@merge-rd/ui/components/button";
 import {
     Dialog,
     DialogContent,
+    DialogFooter,
     DialogHeader,
-    DialogTitle,
-    DialogFooter
+    DialogTitle
 } from "@merge-rd/ui/components/dialog";
 import { useEffect } from "react";
 import { FormProvider, useForm } from "react-hook-form";
-import { useTranslation } from "@merge-rd/i18n";
+import { toast } from "sonner";
+import { getErrorDescription, getErrorMessage } from "../../../shared/keycloak-ui-shared";
 
 import { useAdminClient } from "../../app/admin-client";
 import { NameDescription } from "./form/name-description";
@@ -25,7 +25,7 @@ export const EditFlowModal = ({ flow, toggleDialog }: EditFlowModalProps) => {
     const { adminClient } = useAdminClient();
 
     const { t } = useTranslation();
-const form = useForm<AuthenticationFlowRepresentation>({ mode: "onChange" });
+    const form = useForm<AuthenticationFlowRepresentation>({ mode: "onChange" });
     const { reset, handleSubmit } = form;
 
     useEffect(() => reset(flow), [flow]);
@@ -38,13 +38,20 @@ const form = useForm<AuthenticationFlowRepresentation>({ mode: "onChange" });
             );
             toast.success(t("updateFlowSuccess"));
         } catch (error) {
-            toast.error(t("updateFlowError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
+            toast.error(t("updateFlowError", { error: getErrorMessage(error) }), {
+                description: getErrorDescription(error)
+            });
         }
         toggleDialog();
     };
 
     return (
-        <Dialog open onOpenChange={(open) => { if (!open) toggleDialog(); }}>
+        <Dialog
+            open
+            onOpenChange={open => {
+                if (!open) toggleDialog();
+            }}
+        >
             <DialogContent className="max-w-md">
                 <DialogHeader>
                     <DialogTitle>{t("editFlow")}</DialogTitle>

@@ -1,3 +1,4 @@
+import { useTranslation } from "@merge-rd/i18n";
 import { Alert, AlertDescription, AlertTitle } from "@merge-rd/ui/components/alert";
 import { Button } from "@merge-rd/ui/components/button";
 import {
@@ -11,10 +12,9 @@ import { Label } from "@merge-rd/ui/components/label";
 import { Switch } from "@merge-rd/ui/components/switch";
 import { saveAs } from "file-saver";
 import { useState } from "react";
-import { useTranslation } from "@merge-rd/i18n";
-import { useAdminClient } from "../../app/admin-client";
-import { getErrorDescription, getErrorMessage } from "../../../shared/keycloak-ui-shared";
 import { toast } from "sonner";
+import { getErrorDescription, getErrorMessage } from "../../../shared/keycloak-ui-shared";
+import { useAdminClient } from "../../app/admin-client";
 import { useRealm } from "../../app/providers/realm-context/realm-context";
 import { prettyPrintJSON } from "../../shared/lib/util";
 
@@ -28,7 +28,7 @@ export const PartialExportDialog = ({ isOpen, onClose }: PartialExportDialogProp
 
     const { t } = useTranslation();
     const { realm } = useRealm();
-const [exportGroupsAndRoles, setExportGroupsAndRoles] = useState(false);
+    const [exportGroupsAndRoles, setExportGroupsAndRoles] = useState(false);
     const [exportClients, setExportClients] = useState(false);
     const [isExporting, setIsExporting] = useState(false);
 
@@ -54,7 +54,9 @@ const [exportGroupsAndRoles, setExportGroupsAndRoles] = useState(false);
             toast.success(t("exportSuccess"));
             onClose();
         } catch (error) {
-            toast.error(t("exportFail", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
+            toast.error(t("exportFail", { error: getErrorMessage(error) }), {
+                description: getErrorDescription(error)
+            });
         }
 
         setIsExporting(false);

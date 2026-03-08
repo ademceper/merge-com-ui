@@ -1,34 +1,46 @@
 import type ClientPolicyRepresentation from "@keycloak/keycloak-admin-client/lib/defs/clientPolicyRepresentation";
 import type ClientProfileRepresentation from "@keycloak/keycloak-admin-client/lib/defs/clientProfileRepresentation";
-import { getErrorDescription, getErrorMessage, HelpItem,
-    TextControl,
-    useFetch } from "../../../shared/keycloak-ui-shared";
-import { toast } from "sonner";
+import { useTranslation } from "@merge-rd/i18n";
 import { Button, buttonVariants } from "@merge-rd/ui/components/button";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@merge-rd/ui/components/dropdown-menu";
-import { Switch } from "@merge-rd/ui/components/switch";
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuTrigger
+} from "@merge-rd/ui/components/dropdown-menu";
 import { Label } from "@merge-rd/ui/components/label";
 import { Separator } from "@merge-rd/ui/components/separator";
+import { Switch } from "@merge-rd/ui/components/switch";
 import { Textarea } from "@merge-rd/ui/components/textarea";
 import { Plus, Trash } from "@phosphor-icons/react";
-import { useState } from "react";
-import { Controller, FormProvider, useForm } from "react-hook-form";
-import { useTranslation } from "@merge-rd/i18n";
 import { Link, useNavigate } from "@tanstack/react-router";
+import { useEffect, useState } from "react";
+import { Controller, FormProvider, useForm } from "react-hook-form";
+import { toast } from "sonner";
+import {
+    getErrorDescription,
+    getErrorMessage,
+    HelpItem,
+    KeycloakSpinner,
+    TextControl
+} from "../../../shared/keycloak-ui-shared";
 import { useAdminClient } from "../../app/admin-client";
-import { useConfirmDialog } from "../../shared/ui/confirm-dialog/confirm-dialog";
-import { FormAccess } from "../../shared/ui/form/form-access";
-import { KeycloakSpinner } from "../../../shared/keycloak-ui-shared";
-
 import { useRealm } from "../../app/providers/realm-context/realm-context";
 import { useServerInfo } from "../../app/providers/server-info/server-info-provider";
 import { useParams } from "../../shared/lib/useParams";
+import { useConfirmDialog } from "../../shared/ui/confirm-dialog/confirm-dialog";
+import { FormAccess } from "../../shared/ui/form/form-access";
 import { AddClientProfileModal } from "./add-client-profile-modal";
-import { toNewClientPolicyCondition } from "./routes/add-condition";
-import { toClientPolicies } from "./routes/client-policies";
-import { toClientProfile } from "./routes/client-profile";
-import { EditClientPolicyParams, toEditClientPolicy } from "./routes/edit-client-policy";
-import { toEditClientPolicyCondition } from "./routes/edit-condition";
+import { useClientPolicies } from "./api/use-client-policies";
+import { useClientProfiles } from "./api/use-client-profiles";
+import {
+    toNewClientPolicyCondition,
+    toClientPolicies,
+    toClientProfile,
+    type EditClientPolicyParams,
+    toEditClientPolicy,
+    toEditClientPolicyCondition
+} from "../../shared/lib/routes/realm-settings";
 
 type FormFields = Required<ClientPolicyRepresentation>;
 
@@ -50,7 +62,7 @@ export default function NewClientPolicy() {
 
     const { t } = useTranslation();
     const { realm } = useRealm();
-const [isGlobalPolicy, setIsGlobalPolicy] = useState(false);
+    const [isGlobalPolicy, setIsGlobalPolicy] = useState(false);
     const [policies, setPolicies] = useState<ClientPolicyRepresentation[]>();
     const [globalPolicies, setGlobalPolicies] = useState<ClientPolicyRepresentation[]>();
     const [allPolicies, setAllPolicies] = useState<ClientPolicyRepresentation[]>();
@@ -79,50 +91,40 @@ const [isGlobalPolicy, setIsGlobalPolicy] = useState(false);
 
     const formValues = form.getValues();
 
-    useFetch(
-        async () => {
-            const [policies, profiles] = await Promise.all([
-                adminClient.clientPolicies.listPolicies({
-                    includeGlobalPolicies: true
-                }),
-                adminClient.clientPolicies.listProfiles({
-                    includeGlobalProfiles: true
-                })
-            ]);
+    const { data: policiesData } = useClientPolicies();
+    const { data: profilesData } = useClientProfiles();
 
-            return { policies, profiles };
-        },
-        ({ policies, profiles }) => {
-            let currentPolicy = policies.policies?.find(item => item.name === policyName);
-            if (currentPolicy === undefined) {
-                currentPolicy = policies.globalPolicies?.find(
+    useEffect(() => {
+        if (policiesData && profilesData) {
+            let curPolicy = policiesData.policies?.find(item => item.name === policyName);
+            if (curPolicy === undefined) {
+                curPolicy = policiesData.globalPolicies?.find(
                     item => item.name === policyName
                 );
-                setIsGlobalPolicy(currentPolicy !== undefined);
+                setIsGlobalPolicy(curPolicy !== undefined);
             }
 
             const allClientProfiles = [
-                ...(profiles.globalProfiles ?? []),
-                ...(profiles.profiles ?? [])
+                ...(profilesData.globalProfiles ?? []),
+                ...(profilesData.profiles ?? [])
             ];
 
             const allClientPolicies = [
-                ...(policies.globalPolicies ?? []),
-                ...(policies.policies ?? [])
+                ...(policiesData.globalPolicies ?? []),
+                ...(policiesData.policies ?? [])
             ];
 
-            setPolicies(policies.policies ?? []);
-            setGlobalPolicies(policies.globalPolicies ?? []);
+            setPolicies(policiesData.policies ?? []);
+            setGlobalPolicies(policiesData.globalPolicies ?? []);
             setAllPolicies(allClientPolicies);
-            if (currentPolicy) {
-                setupForm(currentPolicy);
+            if (curPolicy) {
+                setupForm(curPolicy);
                 setClientProfiles(allClientProfiles);
-                setCurrentPolicy(currentPolicy);
+                setCurrentPolicy(curPolicy);
                 setShowAddConditionsAndProfilesForm(true);
             }
-        },
-        []
-    );
+        }
+    }, [policiesData, profilesData]);
 
     const setupForm = (policy: ClientPolicyRepresentation) => {
         form.reset(policy);
@@ -171,10 +173,14 @@ const [isGlobalPolicy, setIsGlobalPolicy] = useState(false);
                     ? t("updateClientPolicySuccess")
                     : t("createClientPolicySuccess")
             );
-            navigate({ to: toEditClientPolicy({ realm, policyName: createdForm.name! }) as string });
+            navigate({
+                to: toEditClientPolicy({ realm, policyName: createdForm.name! }) as string
+            });
             setShowAddConditionsAndProfilesForm(true);
         } catch (error) {
-            toast.error(t("createClientPolicyError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
+            toast.error(t("createClientPolicyError", { error: getErrorMessage(error) }), {
+                description: getErrorDescription(error)
+            });
         }
     };
 
@@ -202,7 +208,10 @@ const [isGlobalPolicy, setIsGlobalPolicy] = useState(false);
                     }) as string
                 });
             } catch (error) {
-                toast.error(t("deleteClientPolicyError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
+                toast.error(
+                    t("deleteClientPolicyError", { error: getErrorMessage(error) }),
+                    { description: getErrorDescription(error) }
+                );
             }
         }
     });
@@ -222,9 +231,17 @@ const [isGlobalPolicy, setIsGlobalPolicy] = useState(false);
                         policies: policies
                     });
                     toast.success(t("deleteConditionSuccess"));
-                    navigate({ to: toEditClientPolicy({ realm, policyName: formValues.name! }) as string });
+                    navigate({
+                        to: toEditClientPolicy({
+                            realm,
+                            policyName: formValues.name!
+                        }) as string
+                    });
                 } catch (error) {
-                    toast.error(t("deleteConditionError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
+                    toast.error(
+                        t("deleteConditionError", { error: getErrorMessage(error) }),
+                        { description: getErrorDescription(error) }
+                    );
                 }
             } else {
                 const updatedPolicies = policies?.filter(
@@ -243,7 +260,10 @@ const [isGlobalPolicy, setIsGlobalPolicy] = useState(false);
                         }) as string
                     });
                 } catch (error) {
-                    toast.error(t("deleteClientError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
+                    toast.error(
+                        t("deleteClientError", { error: getErrorMessage(error) }),
+                        { description: getErrorDescription(error) }
+                    );
                 }
             }
         }
@@ -266,9 +286,19 @@ const [isGlobalPolicy, setIsGlobalPolicy] = useState(false);
                     });
                     toast.success(t("deleteClientPolicyProfileSuccess"));
                     form.setValue("profiles", currentPolicy?.profiles || []);
-                    navigate({ to: toEditClientPolicy({ realm, policyName: formValues.name! }) as string });
+                    navigate({
+                        to: toEditClientPolicy({
+                            realm,
+                            policyName: formValues.name!
+                        }) as string
+                    });
                 } catch (error) {
-                    toast.error(t("deleteClientPolicyProfileError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
+                    toast.error(
+                        t("deleteClientPolicyProfileError", {
+                            error: getErrorMessage(error)
+                        }),
+                        { description: getErrorDescription(error) }
+                    );
                 }
             } else {
                 const updatedPolicies = policies?.filter(
@@ -287,7 +317,10 @@ const [isGlobalPolicy, setIsGlobalPolicy] = useState(false);
                         }) as string
                     });
                 } catch (error) {
-                    toast.error(t("deleteClientError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
+                    toast.error(
+                        t("deleteClientError", { error: getErrorMessage(error) }),
+                        { description: getErrorDescription(error) }
+                    );
                 }
             }
         }
@@ -335,10 +368,14 @@ const [isGlobalPolicy, setIsGlobalPolicy] = useState(false);
             setAllPolicies(allClientPolicies);
             setCurrentPolicy(createdPolicy);
             form.setValue("profiles", createdPolicy.profiles);
-            navigate({ to: toEditClientPolicy({ realm, policyName: formValues.name! }) as string });
+            navigate({
+                to: toEditClientPolicy({ realm, policyName: formValues.name! }) as string
+            });
             toast.success(t("addClientProfileSuccess"));
         } catch (error) {
-            toast.error(t("addClientProfileError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
+            toast.error(t("addClientProfileError", { error: getErrorMessage(error) }), {
+                description: getErrorDescription(error)
+            });
         }
     };
 
@@ -384,32 +421,48 @@ const [isGlobalPolicy, setIsGlobalPolicy] = useState(false);
                             </div>
                             <div className="flex items-center gap-2">
                                 <div className="flex items-center gap-2 mr-4">
-                                    <Label htmlFor="client-policy-switch" className="text-sm">{t("enabled")}</Label>
-                                    <Switch id="client-policy-switch" data-testid="client-policy-switch" disabled={isGlobalPolicy} checked={field.value} aria-label={t("enabled")} onCheckedChange={async value => {
-                                        if (!value) {
-                                            toggleDisableDialog();
-                                        } else {
-                                            field.onChange(value);
-                                            await save();
-                                        }
-                                    }} />
+                                    <Label
+                                        htmlFor="client-policy-switch"
+                                        className="text-sm"
+                                    >
+                                        {t("enabled")}
+                                    </Label>
+                                    <Switch
+                                        id="client-policy-switch"
+                                        data-testid="client-policy-switch"
+                                        disabled={isGlobalPolicy}
+                                        checked={field.value}
+                                        aria-label={t("enabled")}
+                                        onCheckedChange={async value => {
+                                            if (!value) {
+                                                toggleDisableDialog();
+                                            } else {
+                                                field.onChange(value);
+                                                await save();
+                                            }
+                                        }}
+                                    />
                                 </div>
-                                {(showAddConditionsAndProfilesForm || policyName) && !isGlobalPolicy && (
-                                    <DropdownMenu>
-                                        <DropdownMenuTrigger data-testid="action-dropdown" className={buttonVariants()}>
-                                            {t("action")}
-                                        </DropdownMenuTrigger>
-                                        <DropdownMenuContent align="end">
-                                            <DropdownMenuItem
-                                                key="delete"
-                                                data-testid="deleteClientPolicyDropdown"
-                                                onClick={() => toggleDeleteDialog()}
+                                {(showAddConditionsAndProfilesForm || policyName) &&
+                                    !isGlobalPolicy && (
+                                        <DropdownMenu>
+                                            <DropdownMenuTrigger
+                                                data-testid="action-dropdown"
+                                                className={buttonVariants()}
                                             >
-                                                {t("deleteClientPolicy")}
-                                            </DropdownMenuItem>
-                                        </DropdownMenuContent>
-                                    </DropdownMenu>
-                                )}
+                                                {t("action")}
+                                            </DropdownMenuTrigger>
+                                            <DropdownMenuContent align="end">
+                                                <DropdownMenuItem
+                                                    key="delete"
+                                                    data-testid="deleteClientPolicyDropdown"
+                                                    onClick={() => toggleDeleteDialog()}
+                                                >
+                                                    {t("deleteClientPolicy")}
+                                                </DropdownMenuItem>
+                                            </DropdownMenuContent>
+                                        </DropdownMenu>
+                                    )}
                             </div>
                         </div>
                     </>
@@ -435,7 +488,9 @@ const [isGlobalPolicy, setIsGlobalPolicy] = useState(false);
                             }}
                         />
                         <div className="space-y-2">
-                            <Label htmlFor="kc-client-policy-description">{t("description")}</Label>
+                            <Label htmlFor="kc-client-policy-description">
+                                {t("description")}
+                            </Label>
                             <Textarea
                                 id="kc-client-policy-description"
                                 data-testid="client-policy-description"
@@ -492,7 +547,14 @@ const [isGlobalPolicy, setIsGlobalPolicy] = useState(false);
                                             data-testid="addCondition"
                                             asChild
                                         >
-                                            <Link to={toNewClientPolicyCondition({ realm, policyName: policyName! }) as string}>
+                                            <Link
+                                                to={
+                                                    toNewClientPolicyCondition({
+                                                        realm,
+                                                        policyName: policyName!
+                                                    }) as string
+                                                }
+                                            >
                                                 <Plus className="size-4 mr-1 inline" />
                                                 {t("addCondition")}
                                             </Link>
@@ -500,7 +562,10 @@ const [isGlobalPolicy, setIsGlobalPolicy] = useState(false);
                                     )}
                                 </div>
                                 {policyConditions.length > 0 ? (
-                                    <ul className="mt-2 space-y-1 border rounded-md divide-y" aria-label={t("conditions")}>
+                                    <ul
+                                        className="mt-2 space-y-1 border rounded-md divide-y"
+                                        aria-label={t("conditions")}
+                                    >
                                         {policyConditions.map((condition, idx) => (
                                             <li
                                                 key={`list-item-${idx}`}
@@ -508,16 +573,26 @@ const [isGlobalPolicy, setIsGlobalPolicy] = useState(false);
                                                 data-testid="conditions-list-item"
                                                 className="flex items-center justify-between gap-2 py-2 px-3"
                                             >
-                                                <span data-testid="condition-type" className="flex items-center gap-2 min-w-0">
-                                                    {Object.keys(condition.configuration!).length !== 0 ? (
+                                                <span
+                                                    data-testid="condition-type"
+                                                    className="flex items-center gap-2 min-w-0"
+                                                >
+                                                    {Object.keys(condition.configuration!)
+                                                        .length !== 0 ? (
                                                         <Link
                                                             key={condition.condition}
                                                             data-testid={`${condition.condition}-condition-link`}
-                                                            to={toEditClientPolicyCondition({
-                                                                realm,
-                                                                conditionName: condition.condition!,
-                                                                policyName: policyName
-                                                            }) as string}
+                                                            to={
+                                                                toEditClientPolicyCondition(
+                                                                    {
+                                                                        realm,
+                                                                        conditionName:
+                                                                            condition.condition!,
+                                                                        policyName:
+                                                                            policyName
+                                                                    }
+                                                                ) as string
+                                                            }
                                                             className="kc-condition-link text-primary underline underline-offset-4"
                                                         >
                                                             {condition.condition}
@@ -525,28 +600,45 @@ const [isGlobalPolicy, setIsGlobalPolicy] = useState(false);
                                                     ) : (
                                                         condition.condition
                                                     )}
-                                                    {conditionTypes?.map(type =>
-                                                        type.id === condition.condition && (
-                                                            <span key={type.id} className="flex items-center gap-1">
-                                                                <HelpItem helpText={type.helpText} fieldLabelId={condition.condition} />
-                                                                {!isGlobalPolicy && (
-                                                                    <Button
-                                                                        type="button"
-                                                                        variant="ghost"
-                                                                        size="icon"
-                                                                        aria-label="remove-condition"
-                                                                        className="kc-conditionType-trash-icon shrink-0"
-                                                                        data-testid={`delete-${condition.condition}-condition`}
-                                                                        onClick={() => {
-                                                                            toggleDeleteConditionDialog();
-                                                                            setConditionToDelete({ idx, name: type.id! });
-                                                                        }}
-                                                                    >
-                                                                        <Trash className="size-4" />
-                                                                    </Button>
-                                                                )}
-                                                            </span>
-                                                        )
+                                                    {conditionTypes?.map(
+                                                        type =>
+                                                            type.id ===
+                                                                condition.condition && (
+                                                                <span
+                                                                    key={type.id}
+                                                                    className="flex items-center gap-1"
+                                                                >
+                                                                    <HelpItem
+                                                                        helpText={
+                                                                            type.helpText
+                                                                        }
+                                                                        fieldLabelId={
+                                                                            condition.condition
+                                                                        }
+                                                                    />
+                                                                    {!isGlobalPolicy && (
+                                                                        <Button
+                                                                            type="button"
+                                                                            variant="ghost"
+                                                                            size="icon"
+                                                                            aria-label="remove-condition"
+                                                                            className="kc-conditionType-trash-icon shrink-0"
+                                                                            data-testid={`delete-${condition.condition}-condition`}
+                                                                            onClick={() => {
+                                                                                toggleDeleteConditionDialog();
+                                                                                setConditionToDelete(
+                                                                                    {
+                                                                                        idx,
+                                                                                        name: type.id!
+                                                                                    }
+                                                                                );
+                                                                            }}
+                                                                        >
+                                                                            <Trash className="size-4" />
+                                                                        </Button>
+                                                                    )}
+                                                                </span>
+                                                            )
                                                     )}
                                                 </span>
                                             </li>
@@ -555,14 +647,17 @@ const [isGlobalPolicy, setIsGlobalPolicy] = useState(false);
                                 ) : (
                                     <>
                                         <Separator className="my-4" />
-                                        <h3 data-testid="no-conditions" className="kc-emptyConditions text-base font-medium text-muted-foreground">
+                                        <h3
+                                            data-testid="no-conditions"
+                                            className="kc-emptyConditions text-base font-medium text-muted-foreground"
+                                        >
                                             {t("emptyConditions")}
                                         </h3>
                                     </>
                                 )}
                             </>
                         )}
-{(showAddConditionsAndProfilesForm ||
+                        {(showAddConditionsAndProfilesForm ||
                             form.formState.isSubmitted) && (
                             <>
                                 <div className="flex items-center justify-between gap-4">
@@ -587,7 +682,10 @@ const [isGlobalPolicy, setIsGlobalPolicy] = useState(false);
                                     )}
                                 </div>
                                 {policyProfiles.length > 0 ? (
-                                    <ul aria-label={t("profiles")} className="list-none divide-y divide-border rounded-md border border-border p-0">
+                                    <ul
+                                        aria-label={t("profiles")}
+                                        className="list-none divide-y divide-border rounded-md border border-border p-0"
+                                    >
                                         {policyProfiles.map((profile, idx) => (
                                             <li
                                                 key={profile}
@@ -596,15 +694,20 @@ const [isGlobalPolicy, setIsGlobalPolicy] = useState(false);
                                                 aria-labelledby={`${profile}-profile-list-item`}
                                                 className="flex items-center gap-2 px-3 py-2"
                                             >
-                                                <div data-testid="profile-name" className="flex flex-1 flex-wrap items-center gap-1">
+                                                <div
+                                                    data-testid="profile-name"
+                                                    className="flex flex-1 flex-wrap items-center gap-1"
+                                                >
                                                     {profile && (
                                                         <Link
                                                             key={profile}
                                                             data-testid="profile-name-link"
-                                                            to={toClientProfile({
-                                                                realm,
-                                                                profileName: profile
-                                                            }) as string}
+                                                            to={
+                                                                toClientProfile({
+                                                                    realm,
+                                                                    profileName: profile
+                                                                }) as string
+                                                            }
                                                             className="kc-profile-link text-primary underline-offset-4 hover:underline"
                                                         >
                                                             {profile}
@@ -613,10 +716,17 @@ const [isGlobalPolicy, setIsGlobalPolicy] = useState(false);
                                                     {policyProfiles
                                                         .filter(type => type === profile)
                                                         .map(type => (
-                                                            <span key={type} className="inline-flex items-center gap-1">
+                                                            <span
+                                                                key={type}
+                                                                className="inline-flex items-center gap-1"
+                                                            >
                                                                 <HelpItem
                                                                     helpText={
-                                                                        clientProfiles.find(p => type === p.name)?.description
+                                                                        clientProfiles.find(
+                                                                            p =>
+                                                                                type ===
+                                                                                p.name
+                                                                        )?.description
                                                                     }
                                                                     fieldLabelId={profile}
                                                                 />
@@ -629,7 +739,12 @@ const [isGlobalPolicy, setIsGlobalPolicy] = useState(false);
                                                                         data-testid="deleteClientProfileDropdown"
                                                                         onClick={() => {
                                                                             toggleDeleteProfileDialog();
-                                                                            setProfileToDelete({ idx, name: type! });
+                                                                            setProfileToDelete(
+                                                                                {
+                                                                                    idx,
+                                                                                    name: type!
+                                                                                }
+                                                                            );
                                                                         }}
                                                                     >
                                                                         <Trash className="kc-conditionType-trash-icon size-4" />

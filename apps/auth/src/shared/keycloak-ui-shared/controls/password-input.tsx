@@ -1,10 +1,10 @@
 import {
     InputGroup,
     InputGroupButton,
-    InputGroupInput,
+    InputGroupInput
 } from "@merge-rd/ui/components/input-group";
 import { Eye, EyeSlash } from "@phosphor-icons/react";
-import { MutableRefObject, Ref, forwardRef, useState } from "react";
+import { forwardRef, type MutableRefObject, type Ref, useState } from "react";
 import { useTranslation } from "react-i18next";
 
 export type PasswordInputProps = Omit<
@@ -36,7 +36,11 @@ const PasswordInputBase = ({
                     aria-label={t("showPassword")}
                     onClick={() => setHidePassword(!hidePassword)}
                 >
-                    {hidePassword ? <Eye className="size-4" /> : <EyeSlash className="size-4" />}
+                    {hidePassword ? (
+                        <Eye className="size-4" />
+                    ) : (
+                        <EyeSlash className="size-4" />
+                    )}
                 </InputGroupButton>
             )}
         </InputGroup>

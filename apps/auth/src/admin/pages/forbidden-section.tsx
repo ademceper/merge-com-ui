@@ -1,5 +1,5 @@
-import { useTranslation } from "@merge-rd/i18n";
 import type { AccessType } from "@keycloak/keycloak-admin-client/lib/defs/whoAmIRepresentation";
+import { useTranslation } from "@merge-rd/i18n";
 
 type ForbiddenSectionProps = {
     permissionNeeded: AccessType | AccessType[];

@@ -9,21 +9,18 @@
 
 // @ts-nocheck
 
-import { Fragment, useState } from "react";
-import { Trans, useTranslation } from "@merge-rd/i18n";
-import { useEnvironment } from "../../../shared/keycloak-ui-shared";
-import { getCredentials } from "../../shared/api/methods";
-import {
-    CredentialContainer,
-    CredentialMetadataRepresentation
-} from "../../shared/api/representations";
-import { EmptyRow } from "../../shared/ui/datalist/empty-row";
-import { Page } from "../../shared/ui/page/page";
 import type { TFuncKey } from "@merge-rd/i18n";
-import { formatDate } from "../../shared/lib/formatDate";
-import { usePromise } from "../../shared/lib/usePromise";
+import { Trans, useTranslation } from "@merge-rd/i18n";
 import { Link } from "@merge-rd/ui/components/link";
 import { Separator } from "@merge-rd/ui/components/separator";
+import { useState } from "react";
+import { useEnvironment } from "../../../shared/keycloak-ui-shared";
+import { getCredentials } from "../../shared/api/methods";
+import type { CredentialContainer } from "../../shared/api/representations";
+import { formatDate } from "../../shared/lib/formatDate";
+import { usePromise } from "../../shared/lib/usePromise";
+import { EmptyRow } from "../../shared/ui/datalist/empty-row";
+import { Page } from "../../shared/ui/page/page";
 
 const SigningIn = () => {
     const { t } = useTranslation();
@@ -50,22 +47,32 @@ const SigningIn = () => {
                 {credentialUniqueCategories.map(category => (
                     <div key={category} className="space-y-4">
                         {credentials
-                            .filter(cred => cred.category == category)
+                            .filter(cred => cred.category === category)
                             .map(container => (
                                 <div key={container.type} className="space-y-3">
                                     <div className="flex items-center justify-between">
-                                        <h2 className="text-base font-semibold" id={`${category}-categ-title`}>
+                                        <h2
+                                            className="text-base font-semibold"
+                                            id={`${category}-categ-title`}
+                                        >
                                             {t(category as TFuncKey)}
                                         </h2>
                                         {container.createAction && (
                                             <Link
                                                 href="#"
-                                                onClick={(e) => { e.preventDefault(); login({ action: container.createAction }); }}
+                                                onClick={e => {
+                                                    e.preventDefault();
+                                                    login({
+                                                        action: container.createAction
+                                                    });
+                                                }}
                                                 className="text-foreground text-sm font-medium shrink-0"
                                                 data-testid={`${container.type}/create`}
                                             >
                                                 {t("setUpNew", {
-                                                    name: t(`${container.type}-display-name` as TFuncKey)
+                                                    name: t(
+                                                        `${container.type}-display-name` as TFuncKey
+                                                    )
                                                 })}
                                             </Link>
                                         )}
@@ -75,10 +82,13 @@ const SigningIn = () => {
                                         className="space-y-2"
                                         data-testid={`${container.type}/credential-list`}
                                     >
-                                        {container.userCredentialMetadatas.length === 0 && (
+                                        {container.userCredentialMetadatas.length ===
+                                            0 && (
                                             <EmptyRow
                                                 message={t("notSetUp", {
-                                                    name: t(container.displayName as TFuncKey)
+                                                    name: t(
+                                                        container.displayName as TFuncKey
+                                                    )
                                                 })}
                                                 data-testid={`${container.type}/not-set-up`}
                                             />
@@ -98,8 +108,13 @@ const SigningIn = () => {
                                                             data-testrole="label"
                                                         >
                                                             {container.type === "password"
-                                                                ? t(container.displayName as TFuncKey)
-                                                                : credential.userLabel || t(container.displayName as TFuncKey)}
+                                                                ? t(
+                                                                      container.displayName as TFuncKey
+                                                                  )
+                                                                : credential.userLabel ||
+                                                                  t(
+                                                                      container.displayName as TFuncKey
+                                                                  )}
                                                         </p>
                                                         {credential.createdDate && (
                                                             <p
@@ -110,7 +125,9 @@ const SigningIn = () => {
                                                                     <strong className="mr-1"></strong>
                                                                     {{
                                                                         date: formatDate(
-                                                                            new Date(credential.createdDate)
+                                                                            new Date(
+                                                                                credential.createdDate
+                                                                            )
                                                                         )
                                                                     }}
                                                                 </Trans>
@@ -121,7 +138,12 @@ const SigningIn = () => {
                                                         {container.updateAction && (
                                                             <Link
                                                                 href="#"
-                                                                onClick={async (e) => { e.preventDefault(); await login({ action: container.updateAction }); }}
+                                                                onClick={async e => {
+                                                                    e.preventDefault();
+                                                                    await login({
+                                                                        action: container.updateAction
+                                                                    });
+                                                                }}
                                                                 className="text-foreground text-sm font-medium"
                                                                 data-testrole="update"
                                                             >
@@ -131,7 +153,12 @@ const SigningIn = () => {
                                                         {container.removeable && (
                                                             <Link
                                                                 href="#"
-                                                                onClick={async (e) => { e.preventDefault(); await login({ action: "delete_credential:" + credential.id }); }}
+                                                                onClick={async e => {
+                                                                    e.preventDefault();
+                                                                    await login({
+                                                                        action: `delete_credential:${credential.id}`
+                                                                    });
+                                                                }}
                                                                 className="text-destructive hover:text-destructive text-sm font-medium"
                                                                 data-testrole="remove"
                                                             >

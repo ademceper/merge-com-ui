@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 
 /** A 'plain' object version of the permission status. */
 type PlainPermissionStatus = {

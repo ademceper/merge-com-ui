@@ -1,17 +1,17 @@
-import { FormProvider, useForm } from "react-hook-form";
 import { useTranslation } from "@merge-rd/i18n";
 import { useNavigate } from "@tanstack/react-router";
-import { useAdminClient } from "../../app/admin-client";
-import { getErrorDescription, getErrorMessage } from "../../../shared/keycloak-ui-shared";
+import { FormProvider, useForm } from "react-hook-form";
 import { toast } from "sonner";
+import { getErrorDescription, getErrorMessage } from "../../../shared/keycloak-ui-shared";
+import { useAdminClient } from "../../app/admin-client";
 import { useRealm } from "../../app/providers/realm-context/realm-context";
-import {
-    LdapComponentRepresentation,
-    UserFederationLdapForm,
-    serializeFormData
-} from "./user-federation-ldap-form";
-import { toUserFederation } from "./routes/user-federation";
+import { toUserFederation } from "../../shared/lib/routes/user-federation";
 import { ExtendedHeader } from "./shared/extended-header";
+import {
+    type LdapComponentRepresentation,
+    serializeFormData,
+    UserFederationLdapForm
+} from "./user-federation-ldap-form";
 
 export default function CreateUserFederationLdapSettings() {
     const { adminClient } = useAdminClient();
@@ -20,13 +20,15 @@ export default function CreateUserFederationLdapSettings() {
     const form = useForm<LdapComponentRepresentation>({ mode: "onChange" });
     const navigate = useNavigate();
     const { realm } = useRealm();
-const onSubmit = async (formData: LdapComponentRepresentation) => {
+    const onSubmit = async (formData: LdapComponentRepresentation) => {
         try {
             await adminClient.components.create(serializeFormData(formData));
             toast.success(t("createUserProviderSuccess"));
             navigate({ to: toUserFederation({ realm }) as string });
         } catch (error) {
-            toast.error(t("createUserProviderError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
+            toast.error(t("createUserProviderError", { error: getErrorMessage(error) }), {
+                description: getErrorDescription(error)
+            });
         }
     };
 
@@ -37,7 +39,7 @@ const onSubmit = async (formData: LdapComponentRepresentation) => {
                 noDivider
                 save={() => form.handleSubmit(onSubmit)()}
             />
-<div className="space-y-6 py-6">
+            <div className="space-y-6 py-6">
                 <div className="rounded-lg bg-muted/30 p-6">
                     <UserFederationLdapForm onSubmit={onSubmit} />
                 </div>

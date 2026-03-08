@@ -1,11 +1,8 @@
-import AuthenticationFlowRepresentation from "@keycloak/keycloak-admin-client/lib/defs/authenticationFlowRepresentation";
-import { SelectField, useFetch } from "../../../../shared/keycloak-ui-shared";
-import { Button } from "@merge-rd/ui/components/button";
-import { sortBy } from "lodash-es";
-import { useState } from "react";
 import { useTranslation } from "@merge-rd/i18n";
-import { useAdminClient } from "../../../app/admin-client";
+import { Button } from "@merge-rd/ui/components/button";
+import { SelectField } from "../../../../shared/keycloak-ui-shared";
 import { FormAccess } from "../../../shared/ui/form/form-access";
+import { useAuthFlows } from "../api/use-auth-flows";
 
 type AuthenticationOverridesProps = {
     save: () => void;
@@ -20,22 +17,8 @@ export const AuthenticationOverrides = ({
     reset,
     hasConfigureAccess
 }: AuthenticationOverridesProps) => {
-    const { adminClient } = useAdminClient();
-
     const { t } = useTranslation();
-    const [flows, setFlows] = useState<AuthenticationFlowRepresentation[]>([]);
-
-    useFetch(
-        () => adminClient.authenticationManagement.getFlows(),
-        flows => {
-            let filteredFlows = [
-                ...flows.filter(flow => flow.providerId !== "client-flow")
-            ];
-            filteredFlows = sortBy(filteredFlows, [f => f.alias]);
-            setFlows(filteredFlows);
-        },
-        []
-    );
+    const { data: flows = [] } = useAuthFlows();
 
     return (
         <FormAccess

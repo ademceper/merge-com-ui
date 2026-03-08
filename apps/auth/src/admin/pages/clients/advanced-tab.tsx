@@ -1,13 +1,12 @@
 import type ClientRepresentation from "@keycloak/keycloak-admin-client/lib/defs/clientRepresentation";
 import type GlobalRequestResult from "@keycloak/keycloak-admin-client/lib/defs/globalRequestResult";
 import type { TFunction } from "@merge-rd/i18n";
-import { useFormContext } from "react-hook-form";
 import { useTranslation } from "@merge-rd/i18n";
-import { ScrollForm } from "../../../shared/keycloak-ui-shared";
+import { useFormContext } from "react-hook-form";
 import { toast } from "sonner";
-import { convertAttributeNameToForm, toUpperCase } from "../../shared/lib/util";
+import { ScrollForm } from "../../../shared/keycloak-ui-shared";
 import useIsFeatureEnabled, { Feature } from "../../shared/lib/useIsFeatureEnabled";
-import type { FormFields, SaveOptions } from "./client-details";
+import { convertAttributeNameToForm, toUpperCase } from "../../shared/lib/util";
 import { AdvancedSettings } from "./advanced/advanced-settings";
 import { AuthenticationOverrides } from "./advanced/authentication-overrides";
 import { ClusteringPanel } from "./advanced/clustering-panel";
@@ -15,7 +14,8 @@ import { FineGrainOpenIdConnect } from "./advanced/fine-grain-open-id-connect";
 import { FineGrainSamlEndpointConfig } from "./advanced/fine-grain-saml-endpoint-config";
 import { OpenIdConnectCompatibilityModes } from "./advanced/open-id-connect-compatibility-modes";
 import { OpenIdVerifiableCredentials } from "./advanced/open-id-verifiable-credentials";
-import { PROTOCOL_OIDC, PROTOCOL_OID4VC } from "./constants";
+import type { FormFields, SaveOptions } from "./client-details";
+import { PROTOCOL_OID4VC, PROTOCOL_OIDC } from "./constants";
 
 export const parseResult = (
     result: GlobalRequestResult,
@@ -28,10 +28,10 @@ export const parseResult = (
     if (successCount === 0 && failedCount === 0) {
         toast.warning(t("noAdminUrlSet"));
     } else if (failedCount > 0) {
-        toast.success(t(prefixKey + "Success", { successNodes: result.successRequests }));
-        toast.error(t(prefixKey + "Fail", { failedNodes: result.failedRequests }));
+        toast.success(t(`${prefixKey}Success`, { successNodes: result.successRequests }));
+        toast.error(t(`${prefixKey}Fail`, { failedNodes: result.failedRequests }));
     } else {
-        toast.success(t(prefixKey + "Success", { successNodes: result.successRequests }));
+        toast.success(t(`${prefixKey}Success`, { successNodes: result.successRequests }));
     }
 };
 
@@ -160,7 +160,7 @@ export const AdvancedTab = ({ save, client }: AdvancedProps) => {
                         panel: (
                             <>
                                 <p className="pb-6">
-                                    {t("advancedSettings" + toUpperCase(protocol || ""))}
+                                    {t(`advancedSettings${toUpperCase(protocol || "")}`)}
                                 </p>
                                 <AdvancedSettings
                                     protocol={protocol}
@@ -211,9 +211,7 @@ export const AdvancedTab = ({ save, client }: AdvancedProps) => {
                         title: t("authenticationOverrides"),
                         panel: (
                             <>
-                                <p className="pb-6">
-                                    {t("authenticationOverridesHelp")}
-                                </p>
+                                <p className="pb-6">{t("authenticationOverridesHelp")}</p>
                                 <AuthenticationOverrides
                                     protocol={protocol}
                                     save={() => save()}

@@ -1,15 +1,15 @@
-import { MouseEvent as ReactMouseEvent, useMemo, useState } from "react";
+import { type MouseEvent as ReactMouseEvent, useMemo, useState } from "react";
 import {
     Background,
     Controls,
-    Edge,
-    EdgeTypes,
+    type Edge,
+    type EdgeTypes,
     MiniMap,
-    Node,
-    NodeMouseHandler,
+    type Node,
+    type NodeMouseHandler,
     Position,
     ReactFlow,
-    ReactFlowInstance,
+    type ReactFlowInstance,
     useEdgesState,
     useNodesState
 } from "reactflow";
@@ -18,7 +18,7 @@ import { useUpdateEffect } from "../../../shared/lib/useUpdateEffect";
 import type { ExecutionList, ExpandableExecution } from "../execution-model";
 import { providerConditionFilter } from "../flow-details";
 import { getLayoutedEdges, getLayoutedNodes } from "./diagram/auto-layout";
-import { ButtonEdge, ButtonEdges } from "./diagram/button-edge";
+import { ButtonEdge, type ButtonEdges } from "./diagram/button-edge";
 import { ConditionalNode } from "./diagram/conditional-node";
 import { EndSubFlowNode, StartSubFlowNode } from "./diagram/sub-flow-node";
 

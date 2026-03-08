@@ -1,17 +1,20 @@
 import type ClientRepresentation from "@keycloak/keycloak-admin-client/lib/defs/clientRepresentation";
 import type { RoleMappingPayload } from "@keycloak/keycloak-admin-client/lib/defs/roleRepresentation";
+import { useTranslation } from "@merge-rd/i18n";
 import { Label } from "@merge-rd/ui/components/label";
 import { Separator } from "@merge-rd/ui/components/separator";
 import { Switch } from "@merge-rd/ui/components/switch";
 import { useState } from "react";
-import { useTranslation } from "@merge-rd/i18n";
-import { HelpItem } from "../../../../shared/keycloak-ui-shared";
-import { useAdminClient } from "../../../app/admin-client";
-import { getErrorDescription, getErrorMessage } from "../../../../shared/keycloak-ui-shared";
 import { toast } from "sonner";
-import { FormAccess } from "../../../shared/ui/form/form-access";
-import { RoleMapping, Row } from "../../../shared/ui/role-mapping/role-mapping";
+import {
+    getErrorDescription,
+    getErrorMessage,
+    HelpItem
+} from "../../../../shared/keycloak-ui-shared";
+import { useAdminClient } from "../../../app/admin-client";
 import { useAccess } from "../../../app/providers/access/access";
+import { FormAccess } from "../../../shared/ui/form/form-access";
+import { RoleMapping, type Row } from "../../../shared/ui/role-mapping/role-mapping";
 
 type DedicatedScopeProps = {
     client: ClientRepresentation;
@@ -21,7 +24,7 @@ export const DedicatedScope = ({ client: initialClient }: DedicatedScopeProps) =
     const { adminClient } = useAdminClient();
 
     const { t } = useTranslation();
-const [client, setClient] = useState<ClientRepresentation>(initialClient);
+    const [client, setClient] = useState<ClientRepresentation>(initialClient);
 
     const { hasAccess } = useAccess();
     const isManager = hasAccess("manage-clients") || client.access?.manage;
@@ -30,8 +33,7 @@ const [client, setClient] = useState<ClientRepresentation>(initialClient);
         try {
             const realmRoles = rows
                 .filter(row => row.client === undefined)
-                .map(row => row.role as RoleMappingPayload)
-                .flat();
+                .flatMap(row => row.role as RoleMappingPayload);
             await Promise.all([
                 adminClient.clients.addRealmScopeMappings(
                     {
@@ -54,7 +56,9 @@ const [client, setClient] = useState<ClientRepresentation>(initialClient);
 
             toast.success(t("clientScopeSuccess"));
         } catch (error) {
-            toast.error(t("clientScopeError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
+            toast.error(t("clientScopeError", { error: getErrorMessage(error) }), {
+                description: getErrorDescription(error)
+            });
         }
     };
 
@@ -65,7 +69,9 @@ const [client, setClient] = useState<ClientRepresentation>(initialClient);
             toast.success(t("clientScopeSuccess"));
             setClient(newClient);
         } catch (error) {
-            toast.error(t("clientScopeError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
+            toast.error(t("clientScopeError", { error: getErrorMessage(error) }), {
+                description: getErrorDescription(error)
+            });
         }
     };
 

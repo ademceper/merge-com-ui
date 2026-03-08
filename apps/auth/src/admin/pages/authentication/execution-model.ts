@@ -100,7 +100,7 @@ export class ExecutionList {
     }
 
     #getParentNodes(level: number, index: number) {
-        let parent = undefined;
+        let parent;
         for (let i = 0; i < index; i++) {
             const ex = this.#list[i];
             if (level - 1 === ex.level) {
@@ -112,7 +112,7 @@ export class ExecutionList {
 
     getChange(changed: AuthenticationExecutionInfoRepresentation, order: string[]) {
         const currentOrder = this.order();
-        const newLocIndex = order.findIndex(id => id === changed.id);
+        const newLocIndex = order.indexOf(changed.id);
         const oldLocIndex = currentOrder.findIndex(ex => ex.id === changed.id);
         const oldLocation = currentOrder[oldLocIndex];
         const newLocation = currentOrder[newLocIndex];

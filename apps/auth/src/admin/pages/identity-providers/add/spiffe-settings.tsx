@@ -1,5 +1,5 @@
-import { TextControl } from "../../../../shared/keycloak-ui-shared";
 import { useTranslation } from "@merge-rd/i18n";
+import { TextControl } from "../../../../shared/keycloak-ui-shared";
 
 export const SpiffeSettings = () => {
     const { t } = useTranslation();

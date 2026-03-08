@@ -1,7 +1,10 @@
 import type ClientRepresentation from "@keycloak/keycloak-admin-client/lib/defs/clientRepresentation";
 import type EvaluationResultRepresentation from "@keycloak/keycloak-admin-client/lib/defs/evaluationResultRepresentation";
-import PolicyEvaluationResponse from "@keycloak/keycloak-admin-client/lib/defs/policyEvaluationResponse";
+import type PolicyEvaluationResponse from "@keycloak/keycloak-admin-client/lib/defs/policyEvaluationResponse";
 import type ResourceEvaluation from "@keycloak/keycloak-admin-client/lib/defs/resourceEvaluation";
+import { useTranslation } from "@merge-rd/i18n";
+import { Alert, AlertTitle } from "@merge-rd/ui/components/alert";
+import { Button } from "@merge-rd/ui/components/button";
 import {
     Empty,
     EmptyContent,
@@ -9,24 +12,24 @@ import {
     EmptyHeader,
     EmptyTitle
 } from "@merge-rd/ui/components/empty";
-import { getErrorDescription, getErrorMessage,
-    SelectField } from "../../../../shared/keycloak-ui-shared";
-import { toast } from "sonner";
-import { Button } from "@merge-rd/ui/components/button";
-import { Alert, AlertTitle } from "@merge-rd/ui/components/alert";
 import { X } from "@phosphor-icons/react";
 import { useMemo, useState } from "react";
 import { FormProvider, useForm, useWatch } from "react-hook-form";
-import { useTranslation } from "@merge-rd/i18n";
+import { toast } from "sonner";
+import {
+    getErrorDescription,
+    getErrorMessage,
+    SelectField
+} from "../../../../shared/keycloak-ui-shared";
 import { useAdminClient } from "../../../app/admin-client";
-import { FormAccess } from "../../../shared/ui/form/form-access";
-import { UserSelect } from "../../../shared/ui/users/user-select";
 import { useAccess } from "../../../app/providers/access/access";
 import { useRealm } from "../../../app/providers/realm-context/realm-context";
-import { ForbiddenSection } from "../../forbidden-section";
 import useSortedResourceTypes from "../../../shared/lib/useSortedResourceTypes";
-import { PermissionEvaluationResult } from "./permission-evaluation-result";
+import { FormAccess } from "../../../shared/ui/form/form-access";
+import { UserSelect } from "../../../shared/ui/users/user-select";
+import { ForbiddenSection } from "../../forbidden-section";
 import { COMPONENTS } from "../resource-types/resource-type";
+import { PermissionEvaluationResult } from "./permission-evaluation-result";
 
 interface EvaluateFormInputs extends Omit<ResourceEvaluation, "context" | "resources"> {
     authScopes: string[];
@@ -136,7 +139,9 @@ const PermissionEvaluateContent = ({ client }: Props) => {
             setEvaluateResult(evaluation);
             setIsEvaluated(true);
         } catch (error) {
-            toast.error(t("evaluateError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
+            toast.error(t("evaluateError", { error: getErrorMessage(error) }), {
+                description: getErrorDescription(error)
+            });
         }
     };
 
@@ -152,7 +157,11 @@ const PermissionEvaluateContent = ({ client }: Props) => {
                                         <Alert>
                                             <AlertTitle className="flex items-center justify-between">
                                                 {t("permissionsEvaluationInstructions")}
-                                                <button onClick={() => setIsAlertOpened(false)}>
+                                                <button
+                                                    onClick={() =>
+                                                        setIsAlertOpened(false)
+                                                    }
+                                                >
                                                     <X className="size-4" />
                                                 </button>
                                             </AlertTitle>
@@ -170,9 +179,11 @@ const PermissionEvaluateContent = ({ client }: Props) => {
                                         name="resourceType"
                                         label={t("resourceType")}
                                         labelIcon={t("resourceTypeSelectHelp")}
-                                        defaultValue={resourceTypes.length
-                                            ? resourceTypes[0]?.type ?? ""
-                                            : ""}
+                                        defaultValue={
+                                            resourceTypes.length
+                                                ? (resourceTypes[0]?.type ?? "")
+                                                : ""
+                                        }
                                         rules={{ required: true }}
                                         options={resourceTypes.map(
                                             resource => resource.type!
@@ -236,11 +247,15 @@ const PermissionEvaluateContent = ({ client }: Props) => {
                             {!isEvaluated ? (
                                 <Empty className="py-12">
                                     <EmptyHeader>
-                                        <EmptyTitle>{t("noPermissionsEvaluationResults")}</EmptyTitle>
+                                        <EmptyTitle>
+                                            {t("noPermissionsEvaluationResults")}
+                                        </EmptyTitle>
                                     </EmptyHeader>
                                     <EmptyContent>
                                         <EmptyDescription>
-                                            {t("noPermissionsEvaluationResultsInstructions")}
+                                            {t(
+                                                "noPermissionsEvaluationResultsInstructions"
+                                            )}
                                         </EmptyDescription>
                                     </EmptyContent>
                                 </Empty>

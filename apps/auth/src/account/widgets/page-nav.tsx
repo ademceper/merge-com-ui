@@ -9,24 +9,16 @@
 
 // @ts-nocheck
 
-import { useEnvironment } from "../../shared/keycloak-ui-shared";
-import {
-    PropsWithChildren,
-    Suspense,
-    useMemo,
-    useState
-} from "react";
 import { useTranslation } from "@merge-rd/i18n";
-import { Link, useLocation } from "@tanstack/react-router";
-
-import fetchContentJson from "../shared/lib/fetchContent";
-import { environment, type Environment, type Feature } from "../app/environment";
-import type { MenuItem } from "../shared/lib/menu-item";
-import { usePromise } from "../shared/lib/usePromise";
 import { buttonVariants } from "@merge-rd/ui/components/button";
 import { cn } from "@merge-rd/ui/lib/utils";
-
-;
+import { Link, useLocation } from "@tanstack/react-router";
+import { type PropsWithChildren, Suspense, useMemo, useState } from "react";
+import { useEnvironment } from "../../shared/keycloak-ui-shared";
+import { type Environment, environment } from "../app/environment";
+import fetchContentJson from "../shared/lib/fetchContent";
+import type { MenuItem } from "../shared/lib/menu-item";
+import { usePromise } from "../shared/lib/usePromise";
 
 export const PageNav = () => {
     const [menuItems, setMenuItems] = useState<MenuItem[]>();
@@ -44,10 +36,7 @@ export const PageNav = () => {
                             : true
                     )
                     .map(menuItem => (
-                        <NavMenuItem
-                            key={menuItem.label as string}
-                            menuItem={menuItem}
-                        />
+                        <NavMenuItem key={menuItem.label as string} menuItem={menuItem} />
                     ))}
             </Suspense>
         </nav>
@@ -100,7 +89,7 @@ function getFullUrl(path: string) {
 function matchMenuItem(currentPath: string, menuItem: MenuItem): boolean {
     if ("path" in menuItem) {
         const fullUrl = getFullUrl(menuItem.path);
-        return currentPath === fullUrl || currentPath === fullUrl + "/";
+        return currentPath === fullUrl || currentPath === `${fullUrl}/`;
     }
 
     return menuItem.children.some(child => matchMenuItem(currentPath, child));
@@ -111,12 +100,8 @@ type NavLinkProps = {
     isActive: boolean;
 };
 
-const NavLink = ({
-    path,
-    isActive,
-    children
-}: PropsWithChildren<NavLinkProps>) => {
-    const linkPath = ("/" + path) as string;
+const NavLink = ({ path, isActive, children }: PropsWithChildren<NavLinkProps>) => {
+    const linkPath = `/${path}` as string;
 
     return (
         <Link

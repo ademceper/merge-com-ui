@@ -1,28 +1,5 @@
 import type ComponentRepresentation from "@keycloak/keycloak-admin-client/lib/defs/componentRepresentation";
-import {
-    getErrorDescription,
-    getErrorMessage,
-} from "../../../shared/keycloak-ui-shared";
-import { toast } from "sonner";
-import { Badge } from "@merge-rd/ui/components/badge";
-import { Button } from "@merge-rd/ui/components/button";
-import {
-    DropdownMenu,
-    DropdownMenuContent,
-    DropdownMenuItem,
-    DropdownMenuTrigger,
-} from "@merge-rd/ui/components/dropdown-menu";
-import {
-    DataTable,
-    DataTableRowActions,
-    type ColumnDef,
-} from "@/admin/shared/ui/data-table";
-import { CardTitle } from "@merge-rd/ui/components/card";
-import { Database, Trash } from "@phosphor-icons/react";
-import { useCallback, useEffect, useMemo, useState } from "react";
 import { useTranslation } from "@merge-rd/i18n";
-import { Link, useNavigate } from "@tanstack/react-router";
-import { useAdminClient } from "../../app/admin-client";
 import {
     AlertDialog,
     AlertDialogAction,
@@ -33,15 +10,32 @@ import {
     AlertDialogHeader,
     AlertDialogTitle
 } from "@merge-rd/ui/components/alert-dialog";
-import { ClickableCard } from "../../shared/ui/keycloak-card/clickable-card";
+import { Badge } from "@merge-rd/ui/components/badge";
+import { Button } from "@merge-rd/ui/components/button";
+import { CardTitle } from "@merge-rd/ui/components/card";
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuTrigger
+} from "@merge-rd/ui/components/dropdown-menu";
+import { Database, Trash } from "@phosphor-icons/react";
+import { Link, useNavigate } from "@tanstack/react-router";
+import { useCallback, useEffect, useMemo, useState } from "react";
+import { toast } from "sonner";
+import {
+    type ColumnDef,
+    DataTable,
+    DataTableRowActions
+} from "@/admin/shared/ui/data-table";
+import { getErrorDescription, getErrorMessage } from "../../../shared/keycloak-ui-shared";
+import { useAdminClient } from "../../app/admin-client";
 import { useRealm } from "../../app/providers/realm-context/realm-context";
 import { useServerInfo } from "../../app/providers/server-info/server-info-provider";
 import { toUpperCase } from "../../shared/lib/util";
+import { ClickableCard } from "../../shared/ui/keycloak-card/clickable-card";
 import { ManagePriorityDialog } from "./manage-priority-dialog";
-import { toCustomUserFederation } from "./routes/custom-user-federation";
-import { toNewCustomUserFederation } from "./routes/new-custom-user-federation";
-import { toUserFederationKerberos } from "./routes/user-federation-kerberos";
-import { toUserFederationLdap } from "./routes/user-federation-ldap";
+import { toCustomUserFederation, toNewCustomUserFederation, toUserFederationKerberos, toUserFederationLdap } from "../../shared/lib/routes/user-federation";
 
 export default function UserFederationSection() {
     const { adminClient } = useAdminClient();
@@ -50,18 +44,14 @@ export default function UserFederationSection() {
     const navigate = useNavigate();
 
     const [key, setKey] = useState(0);
-    const refresh = useCallback(() => setKey((k) => k + 1), []);
+    const refresh = useCallback(() => setKey(k => k + 1), []);
     const [manageDisplayDialog, setManageDisplayDialog] = useState(false);
-    const [userFederations, setUserFederations] = useState<
-        ComponentRepresentation[]
-    >([]);
-    const [selectedComponent, setSelectedComponent] =
-        useState<ComponentRepresentation>();
+    const [userFederations, setUserFederations] = useState<ComponentRepresentation[]>([]);
+    const [selectedComponent, setSelectedComponent] = useState<ComponentRepresentation>();
 
     const providers =
-        useServerInfo().componentTypes?.[
-            "org.keycloak.storage.UserStorageProvider"
-        ] ?? [];
+        useServerInfo().componentTypes?.["org.keycloak.storage.UserStorageProvider"] ??
+        [];
 
     useEffect(() => {
         if (!realmRepresentation?.id) return;
@@ -70,7 +60,7 @@ export default function UserFederationSection() {
             try {
                 const list = await adminClient.components.find({
                     parent: realmRepresentation.id,
-                    type: "org.keycloak.storage.UserStorageProvider",
+                    type: "org.keycloak.storage.UserStorageProvider"
                 });
                 if (cancelled) return;
                 setUserFederations(list ?? []);
@@ -94,7 +84,7 @@ export default function UserFederationSection() {
                     return toCustomUserFederation({ realm, providerId, id });
             }
         },
-        [realm],
+        [realm]
     );
 
     const onDeleteConfirm = async () => {
@@ -107,9 +97,9 @@ export default function UserFederationSection() {
         } catch (error) {
             toast.error(
                 t("userFedDeleteError", {
-                    error: getErrorMessage(error),
+                    error: getErrorMessage(error)
                 }),
-                { description: getErrorDescription(error) },
+                { description: getErrorDescription(error) }
             );
         }
     };
@@ -117,9 +107,9 @@ export default function UserFederationSection() {
     const sortedFederations = useMemo(
         () =>
             [...userFederations].sort((a, b) =>
-                (a.name ?? "").localeCompare(b.name ?? ""),
+                (a.name ?? "").localeCompare(b.name ?? "")
             ),
-        [userFederations],
+        [userFederations]
     );
 
     const columns: ColumnDef<ComponentRepresentation>[] = useMemo(
@@ -138,29 +128,25 @@ export default function UserFederationSection() {
                             {c.name ?? "-"}
                         </Link>
                     );
-                },
+                }
             },
             {
                 accessorKey: "providerId",
                 header: t("providerDetails"),
-                cell: ({ row }) =>
-                    toUpperCase(row.original.providerId ?? "") || "-",
+                cell: ({ row }) => toUpperCase(row.original.providerId ?? "") || "-"
             },
             {
                 id: "status",
                 accessorKey: "config",
                 header: t("status"),
                 cell: ({ row }) => {
-                    const enabled =
-                        row.original.config?.["enabled"]?.[0] !== "false";
+                    const enabled = row.original.config?.enabled?.[0] !== "false";
                     return (
-                        <Badge
-                            variant={enabled ? "default" : "secondary"}
-                        >
+                        <Badge variant={enabled ? "default" : "secondary"}>
                             {enabled ? t("enabled") : t("disabled")}
                         </Badge>
                     );
-                },
+                }
             },
             {
                 id: "actions",
@@ -178,15 +164,15 @@ export default function UserFederationSection() {
                             {t("delete")}
                         </button>
                     </DataTableRowActions>
-                ),
-            },
+                )
+            }
         ],
-        [t, toDetails],
+        [t, toDetails]
     );
 
     const addProviderDropdownItems = useMemo(
         () =>
-            providers.map((p) => (
+            providers.map(p => (
                 <DropdownMenuItem
                     key={p.id}
                     data-testid={p.id}
@@ -194,8 +180,8 @@ export default function UserFederationSection() {
                         navigate({
                             to: toNewCustomUserFederation({
                                 realm,
-                                providerId: p.id!,
-                            }) as string,
+                                providerId: p.id!
+                            }) as string
                         })
                     }
                 >
@@ -204,20 +190,31 @@ export default function UserFederationSection() {
                         : toUpperCase(p.id)}
                 </DropdownMenuItem>
             )),
-        [providers, realm, navigate],
+        [providers, realm, navigate]
     );
 
     return (
         <>
-            <AlertDialog open={!!selectedComponent} onOpenChange={(open) => !open && setSelectedComponent(undefined)}>
+            <AlertDialog
+                open={!!selectedComponent}
+                onOpenChange={open => !open && setSelectedComponent(undefined)}
+            >
                 <AlertDialogContent>
                     <AlertDialogHeader>
-                        <AlertDialogTitle>{t("userFedDeleteConfirmTitle")}</AlertDialogTitle>
-                        <AlertDialogDescription>{t("userFedDeleteConfirm")}</AlertDialogDescription>
+                        <AlertDialogTitle>
+                            {t("userFedDeleteConfirmTitle")}
+                        </AlertDialogTitle>
+                        <AlertDialogDescription>
+                            {t("userFedDeleteConfirm")}
+                        </AlertDialogDescription>
                     </AlertDialogHeader>
                     <AlertDialogFooter>
                         <AlertDialogCancel>{t("cancel")}</AlertDialogCancel>
-                        <AlertDialogAction variant="destructive" data-testid="confirm" onClick={onDeleteConfirm}>
+                        <AlertDialogAction
+                            variant="destructive"
+                            data-testid="confirm"
+                            onClick={onDeleteConfirm}
+                        >
                             {t("delete")}
                         </AlertDialogAction>
                     </AlertDialogFooter>
@@ -227,11 +224,11 @@ export default function UserFederationSection() {
                 <ManagePriorityDialog
                     onClose={() => setManageDisplayDialog(false)}
                     components={userFederations.filter(
-                        (p) => p.config?.enabled?.[0] !== "false",
+                        p => p.config?.enabled?.[0] !== "false"
                     )}
                 />
             )}
-                        <div className="space-y-4 py-6">
+            <div className="space-y-4 py-6">
                 {userFederations.length > 0 ? (
                     <DataTable<ComponentRepresentation>
                         columns={columns}
@@ -259,9 +256,7 @@ export default function UserFederationSection() {
                                     data-testid="managePriorities"
                                     variant="ghost"
                                     size="sm"
-                                    onClick={() =>
-                                        setManageDisplayDialog(true)
-                                    }
+                                    onClick={() => setManageDisplayDialog(true)}
                                 >
                                     {t("managePriorities")}
                                 </Button>
@@ -270,15 +265,13 @@ export default function UserFederationSection() {
                     />
                 ) : (
                     <div className="p-6">
-                        <p className="text-muted-foreground">
-                            {t("getStarted")}
-                        </p>
+                        <p className="text-muted-foreground">{t("getStarted")}</p>
                         <h2 className="mt-6 text-lg font-semibold">
                             {t("add-providers")}
                         </h2>
                         <hr className="my-4 border-border" />
                         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-                            {providers.map((p) => (
+                            {providers.map(p => (
                                 <ClickableCard
                                     key={p.id}
                                     data-testid={`${p.id}-card`}
@@ -286,8 +279,8 @@ export default function UserFederationSection() {
                                         navigate({
                                             to: toNewCustomUserFederation({
                                                 realm,
-                                                providerId: p.id!,
-                                            }) as string,
+                                                providerId: p.id!
+                                            }) as string
                                         })
                                     }
                                 >
@@ -296,7 +289,7 @@ export default function UserFederationSection() {
                                         <span>
                                             {t("addProvider", {
                                                 provider: toUpperCase(p.id!),
-                                                count: 4,
+                                                count: 4
                                             })}
                                         </span>
                                     </CardTitle>

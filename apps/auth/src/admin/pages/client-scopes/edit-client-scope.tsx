@@ -1,37 +1,42 @@
-import ClientScopeRepresentation from "@keycloak/keycloak-admin-client/lib/defs/clientScopeRepresentation";
 import type ProtocolMapperRepresentation from "@keycloak/keycloak-admin-client/lib/defs/protocolMapperRepresentation";
 import type { RoleMappingPayload } from "@keycloak/keycloak-admin-client/lib/defs/roleRepresentation";
 import type { ProtocolMapperTypeRepresentation } from "@keycloak/keycloak-admin-client/lib/defs/serverInfoRepesentation";
-import { getErrorDescription, getErrorMessage, KeycloakSpinner,
-    useFetch,
-    useHelp } from "../../../shared/keycloak-ui-shared";
-import { toast } from "sonner";
+import { useTranslation } from "@merge-rd/i18n";
 import { Alert, AlertTitle } from "@merge-rd/ui/components/alert";
 import { Badge } from "@merge-rd/ui/components/badge";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@merge-rd/ui/components/dropdown-menu";
 import { buttonVariants } from "@merge-rd/ui/components/button";
-import { useState } from "react";
-import { useTranslation } from "@merge-rd/i18n";
-import { useNavigate, useParams as useRouterParams } from "@tanstack/react-router";
-import { useAdminClient } from "../../app/admin-client";
 import {
-    AllClientScopes,
-    ClientScope,
-    ClientScopeDefaultOptionalType,
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuTrigger
+} from "@merge-rd/ui/components/dropdown-menu";
+import { useNavigate, useParams as useRouterParams } from "@tanstack/react-router";
+import { toast } from "sonner";
+import {
+    getErrorDescription,
+    getErrorMessage,
+    KeycloakSpinner,
+    useHelp
+} from "../../../shared/keycloak-ui-shared";
+import { useAdminClient } from "../../app/admin-client";
+import { useAccess } from "../../app/providers/access/access";
+import { useRealm } from "../../app/providers/realm-context/realm-context";
+import { useParams } from "../../shared/lib/useParams";
+import { convertFormValuesToObject } from "../../shared/lib/util";
+import {
+    type ClientScopeDefaultOptionalType,
     changeScope
 } from "../../shared/ui/client-scope/client-scope-types";
 import { useConfirmDialog } from "../../shared/ui/confirm-dialog/confirm-dialog";
-import { RoleMapping, Row } from "../../shared/ui/role-mapping/role-mapping";
-import { useRealm } from "../../app/providers/realm-context/realm-context";
-import { convertFormValuesToObject } from "../../shared/lib/util";
-import { useParams } from "../../shared/lib/useParams";
+import { RoleMapping, type Row } from "../../shared/ui/role-mapping/role-mapping";
+import { AdminEvents } from "../events/admin-events";
+import { useClientScope } from "./api/use-client-scope";
 import { MapperList } from "./details/mapper-list";
 import { ScopeForm } from "./details/scope-form";
-import { ClientScopeParams } from "./routes/client-scope";
-import { toClientScopes } from "./routes/client-scopes";
-import { toMapper } from "./routes/mapper";
-import { useAccess } from "../../app/providers/access/access";
-import { AdminEvents } from "../events/admin-events";
+import type { ClientScopeParams } from "../../shared/lib/routes/client-scopes";
+import { toClientScopes } from "../../shared/lib/routes/client-scopes";
+import { toMapper } from "../../shared/lib/routes/client-scopes";
 
 export default function EditClientScope() {
     const { adminClient } = useAdminClient();
@@ -41,49 +46,12 @@ export default function EditClientScope() {
     const { realm, realmRepresentation } = useRealm();
     const { id } = useParams<ClientScopeParams>();
     const { tab } = useRouterParams({ strict: false }) as { tab: string };
-const { enabled } = useHelp();
-    const [clientScope, setClientScope] = useState<ClientScopeDefaultOptionalType>();
-    const [key, setKey] = useState(0);
-    const refresh = () => setKey(key + 1);
+    const { enabled } = useHelp();
+    const { data: clientScope, refetch: refetchScope } = useClientScope(id);
+    const refresh = () => {
+        refetchScope();
+    };
     const { hasAccess } = useAccess();
-
-    useFetch(
-        async () => {
-            const clientScope = await adminClient.clientScopes.findOne({ id });
-
-            if (!clientScope) {
-                throw new Error(t("notFound"));
-            }
-
-            return {
-                ...clientScope,
-                type: await determineScopeType(clientScope)
-            };
-        },
-        clientScope => {
-            setClientScope(clientScope);
-        },
-        [key, id]
-    );
-
-    async function determineScopeType(clientScope: ClientScopeRepresentation) {
-        const defaultScopes = await adminClient.clientScopes.listDefaultClientScopes();
-        const hasDefaultScope = defaultScopes.find(
-            defaultScope => defaultScope.name === clientScope.name
-        );
-
-        if (hasDefaultScope) {
-            return ClientScope.default;
-        }
-
-        const optionalScopes =
-            await adminClient.clientScopes.listDefaultOptionalClientScopes();
-        const hasOptionalScope = optionalScopes.find(
-            optionalScope => optionalScope.name === clientScope.name
-        );
-
-        return hasOptionalScope ? ClientScope.optional : AllClientScopes.none;
-    }
 
     const onSubmit = async (formData: ClientScopeDefaultOptionalType) => {
         const clientScope = convertFormValuesToObject({
@@ -97,7 +65,9 @@ const { enabled } = useHelp();
 
             toast.success(t("updateSuccessClientScope"));
         } catch (error) {
-            toast.error(t("updateErrorClientScope", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
+            toast.error(t("updateErrorClientScope", { error: getErrorMessage(error) }), {
+                description: getErrorDescription(error)
+            });
         }
     };
 
@@ -115,7 +85,10 @@ const { enabled } = useHelp();
                 toast.success(t("deletedSuccessClientScope"));
                 navigate({ to: toClientScopes({ realm }) as string });
             } catch (error) {
-                toast.error(t("deleteErrorClientScope", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
+                toast.error(
+                    t("deleteErrorClientScope", { error: getErrorMessage(error) }),
+                    { description: getErrorDescription(error) }
+                );
             }
         }
     });
@@ -124,8 +97,7 @@ const { enabled } = useHelp();
         try {
             const realmRoles = rows
                 .filter(row => row.client === undefined)
-                .map(row => row.role as RoleMappingPayload)
-                .flat();
+                .flatMap(row => row.role as RoleMappingPayload);
             await adminClient.clientScopes.addRealmScopeMappings(
                 {
                     id
@@ -147,7 +119,9 @@ const { enabled } = useHelp();
             );
             toast.success(t("roleMappingUpdatedSuccess"));
         } catch (error) {
-            toast.error(t("roleMappingUpdatedError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
+            toast.error(t("roleMappingUpdatedError", { error: getErrorMessage(error) }), {
+                description: getErrorDescription(error)
+            });
         }
     };
 
@@ -173,7 +147,9 @@ const { enabled } = useHelp();
                 refresh();
                 toast.success(t("mappingCreatedSuccess"));
             } catch (error) {
-                toast.error(t("mappingCreatedError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
+                toast.error(t("mappingCreatedError", { error: getErrorMessage(error) }), {
+                    description: getErrorDescription(error)
+                });
             }
         }
     };
@@ -187,7 +163,9 @@ const { enabled } = useHelp();
             toast.success(t("mappingDeletedSuccess"));
             refresh();
         } catch (error) {
-            toast.error(t("mappingDeletedError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
+            toast.error(t("mappingDeletedError", { error: getErrorMessage(error) }), {
+                description: getErrorDescription(error)
+            });
         }
         return true;
     };
@@ -233,7 +211,8 @@ const { enabled } = useHelp();
                     </>
                 );
             case "events":
-                return (realmRepresentation?.adminEventsEnabled && hasAccess("view-events")) ? (
+                return realmRepresentation?.adminEventsEnabled &&
+                    hasAccess("view-events") ? (
                     <AdminEvents resourcePath={`*client-scopes/${id}`} />
                 ) : null;
             default:
@@ -254,7 +233,10 @@ const { enabled } = useHelp();
                 </div>
                 <div className="flex items-center gap-2">
                     <DropdownMenu>
-                        <DropdownMenuTrigger data-testid="action-dropdown" className={buttonVariants()}>
+                        <DropdownMenuTrigger
+                            data-testid="action-dropdown"
+                            className={buttonVariants()}
+                        >
                             {t("action")}
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end">
@@ -267,9 +249,7 @@ const { enabled } = useHelp();
             </div>
 
             <div className="p-0">
-                <div className="bg-muted/30">
-                    {renderContent()}
-                </div>
+                <div className="bg-muted/30">{renderContent()}</div>
             </div>
         </>
     );

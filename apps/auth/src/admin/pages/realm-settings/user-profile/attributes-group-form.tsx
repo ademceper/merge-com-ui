@@ -1,23 +1,30 @@
 import type { UserProfileGroup } from "@keycloak/keycloak-admin-client/lib/defs/userProfileMetadata";
-import { getErrorDescription, getErrorMessage, HelpItem, TextControl } from "../../../../shared/keycloak-ui-shared";
-import { toast } from "sonner";
+import { useTranslation } from "@merge-rd/i18n";
 import { Button } from "@merge-rd/ui/components/button";
 import { Label } from "@merge-rd/ui/components/label";
-import { useEffect, useMemo } from "react";
-import { FormProvider, SubmitHandler, useForm } from "react-hook-form";
-import { useTranslation } from "@merge-rd/i18n";
 import { Link, useNavigate } from "@tanstack/react-router";
-import { useParams } from "../../../shared/lib/useParams";
+import { useEffect, useMemo } from "react";
+import { FormProvider, type SubmitHandler, useForm } from "react-hook-form";
+import { toast } from "sonner";
+import {
+    getErrorDescription,
+    getErrorMessage,
+    HelpItem,
+    TextControl
+} from "../../../../shared/keycloak-ui-shared";
 import { useAdminClient } from "../../../app/admin-client";
-import { FormAccess } from "../../../shared/ui/form/form-access";
-import { KeyValueInput } from "../../../shared/ui/key-value-form/key-value-input";
-import type { KeyValueType } from "../../../shared/ui/key-value-form/key-value-convert";
 import { useRealm } from "../../../app/providers/realm-context/realm-context";
-import type { EditAttributesGroupParams } from "../routes/edit-attributes-group";
-import { toUserProfile } from "../routes/user-profile";
+import { useParams } from "../../../shared/lib/useParams";
+import { FormAccess } from "../../../shared/ui/form/form-access";
+import type { KeyValueType } from "../../../shared/ui/key-value-form/key-value-convert";
+import { KeyValueInput } from "../../../shared/ui/key-value-form/key-value-input";
+import { type EditAttributesGroupParams, toUserProfile } from "../../../shared/lib/routes/realm-settings";
+import {
+    saveTranslations,
+    TranslatableField,
+    type Translations
+} from "./attribute/translatable-field";
 import { useUserProfile } from "./user-profile-context";
-import { saveTranslations, Translations } from "./attribute/translatable-field";
-import { TranslatableField } from "./attribute/translatable-field";
 
 function parseAnnotations(input: Record<string, unknown>): KeyValueType[] {
     return Object.entries(input).reduce((p, [key, value]) => {
@@ -58,7 +65,7 @@ export default function AttributesGroupForm() {
     const navigate = useNavigate();
     const params = useParams<EditAttributesGroupParams>();
     const form = useForm<FormFields>({ defaultValues });
-    const editMode = params.name ? true : false;
+    const editMode = !!params.name;
 
     const matchingGroup = useMemo(
         () => config?.groups?.find(({ name }) => name === params.name),
@@ -107,16 +114,21 @@ export default function AttributesGroupForm() {
                         translationsData: { translation }
                     });
                 } catch (error) {
-                    toast.error(t("errorSavingTranslations", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
+                    toast.error(
+                        t("errorSavingTranslations", { error: getErrorMessage(error) }),
+                        { description: getErrorDescription(error) }
+                    );
                 }
             }
-            navigate({ to: toUserProfile({ realm: realmName, tab: "attributes-group" }) as string });
+            navigate({
+                to: toUserProfile({ realm: realmName, tab: "attributes-group" }) as string
+            });
         }
     };
 
     return (
         <FormProvider {...form}>
-                        <div className="p-6" onSubmit={form.handleSubmit(onSubmit)}>
+            <div className="p-6" onSubmit={form.handleSubmit(onSubmit)}>
                 <FormAccess isHorizontal role="manage-realm">
                     <TextControl
                         name="name"
@@ -129,7 +141,9 @@ export default function AttributesGroupForm() {
                     />
                     <div className="space-y-2">
                         <div className="flex items-center gap-1">
-                            <Label htmlFor="kc-attributes-group-display-header">{t("displayHeader")}</Label>
+                            <Label htmlFor="kc-attributes-group-display-header">
+                                {t("displayHeader")}
+                            </Label>
                             <HelpItem
                                 helpText={t("displayHeaderHintHelp")}
                                 fieldLabelId="displayHeader"
@@ -143,7 +157,9 @@ export default function AttributesGroupForm() {
                     </div>
                     <div className="space-y-2">
                         <div className="flex items-center gap-1">
-                            <Label htmlFor="kc-attributes-group-display-description">{t("displayDescription")}</Label>
+                            <Label htmlFor="kc-attributes-group-display-description">
+                                {t("displayDescription")}
+                            </Label>
                             <HelpItem
                                 helpText={t("displayDescriptionHintHelp")}
                                 fieldLabelId="displayDescription"
@@ -161,17 +177,18 @@ export default function AttributesGroupForm() {
                         <KeyValueInput label={t("annotationsText")} name="annotations" />
                     </div>
                     <div className="flex gap-2">
-                        <Button
-                            type="submit"
-                            data-testid="saveGroupBtn"
-                        >
+                        <Button type="submit" data-testid="saveGroupBtn">
                             {t("save")}
                         </Button>
-                        <Button
-                            variant="ghost"
-                            asChild
-                        >
-                            <Link to={toUserProfile({ realm: realmName, tab: "attributes-group" }) as string}>
+                        <Button variant="ghost" asChild>
+                            <Link
+                                to={
+                                    toUserProfile({
+                                        realm: realmName,
+                                        tab: "attributes-group"
+                                    }) as string
+                                }
+                            >
                                 {t("cancel")}
                             </Link>
                         </Button>

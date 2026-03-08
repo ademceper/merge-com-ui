@@ -9,8 +9,8 @@
 
 // @ts-nocheck
 
-import { useCallback, useMemo, useState } from "react";
 import { useTranslation } from "@merge-rd/i18n";
+import { useCallback, useMemo, useState } from "react";
 
 import { ApiError } from "../api/parse-response";
 
@@ -42,7 +42,11 @@ export function useAccountAlerts() {
     const { t } = useTranslation();
 
     const addAlert = useCallback(
-        (message: string, variant: AlertVariant | string = "success", description?: string) => {
+        (
+            message: string,
+            variant: AlertVariant | string = "success",
+            description?: string
+        ) => {
             broadcastAlert({
                 id: ++alertIdCounter,
                 message,
@@ -68,8 +72,5 @@ export function useAccountAlerts() {
         [addAlert, t]
     );
 
-    return useMemo(
-        () => ({ addAlert, addError }),
-        [addAlert, addError]
-    );
+    return useMemo(() => ({ addAlert, addError }), [addAlert, addError]);
 }

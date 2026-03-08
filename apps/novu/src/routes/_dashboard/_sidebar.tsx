@@ -4,6 +4,7 @@ import {
 	SidebarProvider,
 } from "@merge-rd/ui/components/sidebar";
 import { createFileRoute, Outlet } from "@tanstack/react-router";
+import { Suspense } from "react";
 import { HeaderNavigation } from "@/widgets/header-navigation/header-navigation";
 import { NovuAppSidebar } from "@/widgets/novu-app-sidebar";
 import {
@@ -18,7 +19,9 @@ function SidebarLayoutContent() {
 		<SidebarInset>
 			<HeaderNavigation startItems={startItems} />
 			<SidebarPage className="px-4 pb-4">
-				<Outlet />
+				<Suspense>
+					<Outlet />
+				</Suspense>
 			</SidebarPage>
 		</SidebarInset>
 	);

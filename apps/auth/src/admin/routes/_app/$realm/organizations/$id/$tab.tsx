@@ -1,10 +1,5 @@
-import { createFileRoute } from "@tanstack/react-router";
-import { lazy } from "react";
-
-const DetailOrganization = lazy(
-    () => import("../../../../../pages/organizations/detail-organization"),
-);
+import { createFileRoute, lazyRouteComponent } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/_app/$realm/organizations/$id/$tab")({
-    component: DetailOrganization,
+    component: lazyRouteComponent(() => import("../../../../../pages/organizations/detail-organization")),
 });

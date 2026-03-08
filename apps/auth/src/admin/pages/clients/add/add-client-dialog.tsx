@@ -1,5 +1,4 @@
-import { getErrorDescription, getErrorMessage } from "../../../../shared/keycloak-ui-shared";
-import { toast } from "sonner";
+import { useTranslation } from "@merge-rd/i18n";
 import { Button } from "@merge-rd/ui/components/button";
 import {
     Dialog,
@@ -8,24 +7,27 @@ import {
     DialogFooter,
     DialogHeader,
     DialogTitle,
-    DialogTrigger,
+    DialogTrigger
 } from "@merge-rd/ui/components/dialog";
-import { useEffect } from "react";
-import { FormProvider, useForm } from "react-hook-form";
-import { useTranslation } from "@merge-rd/i18n";
-import { useNavigate } from "@tanstack/react-router";
-import { ArrowRight } from "@phosphor-icons/react";
 import { cn } from "@merge-rd/ui/lib/utils";
+import { ArrowRight } from "@phosphor-icons/react";
+import { useNavigate } from "@tanstack/react-router";
+import { useEffect, useState } from "react";
+import { FormProvider, useForm } from "react-hook-form";
+import { toast } from "sonner";
+import {
+    getErrorDescription,
+    getErrorMessage
+} from "../../../../shared/keycloak-ui-shared";
 import { useAdminClient } from "../../../app/admin-client";
-import { FormAccess } from "../../../shared/ui/form/form-access";
 import { useRealm } from "../../../app/providers/realm-context/realm-context";
 import { convertFormValuesToObject } from "../../../shared/lib/util";
-import { FormFields } from "../client-details";
-import { toClient } from "../routes/client";
+import { FormAccess } from "../../../shared/ui/form/form-access";
+import type { FormFields } from "../client-details";
+import { toClient } from "../../../shared/lib/routes/clients";
 import { CapabilityConfig } from "./capability-config";
 import { GeneralSettings } from "./general-settings";
 import { LoginSettings } from "./login-settings";
-import { useState } from "react";
 
 type WizardStep = {
     name: string;
@@ -62,9 +64,9 @@ export function AddClientDialog({ trigger, onSuccess }: AddClientDialogProps) {
             standardFlowEnabled: true,
             frontchannelLogout: true,
             attributes: {
-                saml_idp_initiated_sso_url_name: "",
-            },
-        },
+                saml_idp_initiated_sso_url_name: ""
+            }
+        }
     });
     const { getValues, watch, trigger: formTrigger } = form;
     const protocol = watch("protocol");
@@ -73,13 +75,13 @@ export function AddClientDialog({ trigger, onSuccess }: AddClientDialogProps) {
         {
             name: t("generalSettings"),
             id: "generalSettings",
-            component: <GeneralSettings />,
+            component: <GeneralSettings />
         },
         {
             name: t("capabilityConfig"),
             id: "capabilityConfig",
             isHidden: protocol === "saml",
-            component: <CapabilityConfig protocol={protocol} />,
+            component: <CapabilityConfig protocol={protocol} />
         },
         {
             name: t("loginSettings"),
@@ -88,9 +90,9 @@ export function AddClientDialog({ trigger, onSuccess }: AddClientDialogProps) {
                 <FormAccess role="manage-clients">
                     <LoginSettings protocol={protocol} />
                 </FormAccess>
-            ),
-        },
-    ].filter((step) => !step.isHidden);
+            )
+        }
+    ].filter(step => !step.isHidden);
 
     const totalSteps = steps.length;
     const effectiveStep = Math.min(currentStep, totalSteps - 1);
@@ -109,14 +111,22 @@ export function AddClientDialog({ trigger, onSuccess }: AddClientDialogProps) {
         try {
             const newClient = await adminClient.clients.create({
                 ...client,
-                clientId: client.clientId?.trim(),
+                clientId: client.clientId?.trim()
             });
             toast.success(t("createClientSuccess"));
             setOpen(false);
             onSuccess?.(newClient.id!);
-            navigate({ to: toClient({ realm, clientId: newClient.id!, tab: "settings" }) as string });
+            navigate({
+                to: toClient({
+                    realm,
+                    clientId: newClient.id!,
+                    tab: "settings"
+                }) as string
+            });
         } catch (error) {
-            toast.error(t("createClientError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
+            toast.error(t("createClientError", { error: getErrorMessage(error) }), {
+                description: getErrorDescription(error)
+            });
         } finally {
             setSaving(false);
         }
@@ -135,7 +145,7 @@ export function AddClientDialog({ trigger, onSuccess }: AddClientDialogProps) {
         if (isLastStep) {
             save();
         } else {
-            setCurrentStep((s) => s + 1);
+            setCurrentStep(s => s + 1);
         }
     };
 
@@ -160,7 +170,7 @@ export function AddClientDialog({ trigger, onSuccess }: AddClientDialogProps) {
                                             "size-1.5 rounded-full",
                                             index === effectiveStep
                                                 ? "bg-foreground"
-                                                : "bg-muted-foreground/30",
+                                                : "bg-muted-foreground/30"
                                         )}
                                         aria-hidden
                                     />
@@ -186,7 +196,7 @@ export function AddClientDialog({ trigger, onSuccess }: AddClientDialogProps) {
                                         "size-2 rounded-full transition-colors",
                                         index === effectiveStep
                                             ? "bg-foreground"
-                                            : "bg-muted-foreground/30",
+                                            : "bg-muted-foreground/30"
                                     )}
                                     aria-hidden
                                 />
@@ -195,7 +205,11 @@ export function AddClientDialog({ trigger, onSuccess }: AddClientDialogProps) {
                     </div>
                     <div className="flex w-full flex-col gap-2 sm:w-auto sm:flex-row sm:shrink-0 sm:items-center">
                         <DialogClose asChild>
-                            <Button type="button" variant="ghost" className="h-9 min-h-9 w-full text-foreground sm:w-auto">
+                            <Button
+                                type="button"
+                                variant="ghost"
+                                className="h-9 min-h-9 w-full text-foreground sm:w-auto"
+                            >
                                 {t("cancel")}
                             </Button>
                         </DialogClose>
@@ -204,7 +218,7 @@ export function AddClientDialog({ trigger, onSuccess }: AddClientDialogProps) {
                                 type="button"
                                 variant="secondary"
                                 className="h-9 min-h-9 w-full sm:w-auto"
-                                onClick={() => setCurrentStep((s) => s - 1)}
+                                onClick={() => setCurrentStep(s => s - 1)}
                             >
                                 {t("back")}
                             </Button>

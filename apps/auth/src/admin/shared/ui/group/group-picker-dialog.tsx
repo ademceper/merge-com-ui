@@ -1,9 +1,19 @@
 import type GroupRepresentation from "@keycloak/keycloak-admin-client/lib/defs/groupRepresentation";
-import {
+import type {
     GroupQuery,
     SubGroupQuery
 } from "@keycloak/keycloak-admin-client/lib/resources/groups";
-import { useFetch } from "../../../../shared/keycloak-ui-shared";
+import { useTranslation } from "@merge-rd/i18n";
+import { Button } from "@merge-rd/ui/components/button";
+import { Checkbox } from "@merge-rd/ui/components/checkbox";
+import {
+    Dialog,
+    DialogClose,
+    DialogContent,
+    DialogFooter,
+    DialogHeader,
+    DialogTitle
+} from "@merge-rd/ui/components/dialog";
 import {
     Empty,
     EmptyContent,
@@ -11,22 +21,12 @@ import {
     EmptyHeader,
     EmptyTitle
 } from "@merge-rd/ui/components/empty";
-import { Button } from "@merge-rd/ui/components/button";
-import {
-    Dialog,
-    DialogClose,
-    DialogContent,
-    DialogHeader,
-    DialogTitle,
-    DialogFooter
-} from "@merge-rd/ui/components/dialog";
-import { TablePagination } from "@/admin/shared/ui/table-pagination";
-import { Checkbox } from "@merge-rd/ui/components/checkbox";
 import { Input } from "@merge-rd/ui/components/input";
 import { Separator } from "@merge-rd/ui/components/separator";
 import { CaretRight, MagnifyingGlass } from "@phosphor-icons/react";
-import { KeyboardEvent, useState } from "react";
-import { useTranslation } from "@merge-rd/i18n";
+import { useQuery } from "@tanstack/react-query";
+import { type KeyboardEvent, useEffect, useState } from "react";
+import { TablePagination } from "@/admin/shared/ui/table-pagination";
 import { useAdminClient } from "../../../app/admin-client";
 import { GroupPath } from "./group-path";
 
@@ -87,8 +87,9 @@ export const GroupPickerDialog = ({
         if (e.key === "Enter") applyMoveSearch();
     };
 
-    useFetch(
-        async () => {
+    const { data: groupPickerData } = useQuery({
+        queryKey: ["groupPicker", groupId, filter, first, max],
+        queryFn: async () => {
             let group;
             let groups;
             let existingUserGroups;
@@ -125,24 +126,26 @@ export const GroupPickerDialog = ({
             }
 
             return { group, groups, existingUserGroups };
-        },
-        async ({ group: selectedGroup, groups, existingUserGroups }) => {
-            setJoinedGroups(existingUserGroups || []);
-            if (selectedGroup) {
-                setNavigation([...navigation, selectedGroup]);
-                setCount(selectedGroup.subGroupCount!);
-            }
+        }
+    });
 
-            groups.forEach((group: SelectableGroup) => {
-                group.checked = !!selectedRows.find(r => r.id === group.id);
-            });
-            setGroups(groups);
-            if (filter !== "" || !groupId) {
-                setCount(groups.length);
-            }
-        },
-        [groupId, filter, first, max]
-    );
+    useEffect(() => {
+        if (!groupPickerData) return;
+        const { group: selectedGroup, groups, existingUserGroups } = groupPickerData;
+        setJoinedGroups(existingUserGroups || []);
+        if (selectedGroup) {
+            setNavigation(prev => [...prev, selectedGroup]);
+            setCount(selectedGroup.subGroupCount!);
+        }
+
+        groups.forEach((group: SelectableGroup) => {
+            group.checked = !!selectedRows.find(r => r.id === group.id);
+        });
+        setGroups(groups);
+        if (filter !== "" || !groupId) {
+            setCount(groups.length);
+        }
+    }, [groupPickerData]);
 
     const isRowDisabled = (row?: GroupRepresentation) => {
         return [
@@ -200,12 +203,14 @@ export const GroupPickerDialog = ({
                                 <span className="mx-1">/</span>
                             </>
                         )}
-                        {navigation.length - 1 === i && <span className="font-medium">{group.name}</span>}
+                        {navigation.length - 1 === i && (
+                            <span className="font-medium">{group.name}</span>
+                        )}
                     </span>
                 ))}
             </nav>
             <div aria-label={t("groups")} className="space-y-1">
-                {filter == ""
+                {filter === ""
                     ? groups.slice(0, max).map((group: SelectableGroup) => (
                           <GroupRow
                               key={group.id}
@@ -217,17 +222,14 @@ export const GroupPickerDialog = ({
                               }}
                               type={type}
                               isSearching={filter !== ""}
-                              setIsSearching={boolean =>
-                                  setFilter(boolean ? "" : filter)
-                              }
+                              setIsSearching={boolean => setFilter(boolean ? "" : filter)}
                               selectedRows={selectedRows}
                               setSelectedRows={setSelectedRows}
                               canBrowse={canBrowse}
                           />
                       ))
                     : groups
-                          ?.map(g => deepGroup([g]))
-                          .flat()
+                          ?.flatMap(g => deepGroup([g]))
                           .map(g => (
                               <GroupRow
                                   key={g.id}
@@ -243,27 +245,48 @@ export const GroupPickerDialog = ({
             </div>
             {groups.length === 0 && filter === "" && (
                 <Empty className="py-8">
-                    <EmptyHeader><EmptyTitle>{t("moveGroupEmpty")}</EmptyTitle></EmptyHeader>
-                    {isMove && <EmptyContent><EmptyDescription>{t("moveGroupEmptyInstructions")}</EmptyDescription></EmptyContent>}
+                    <EmptyHeader>
+                        <EmptyTitle>{t("moveGroupEmpty")}</EmptyTitle>
+                    </EmptyHeader>
+                    {isMove && (
+                        <EmptyContent>
+                            <EmptyDescription>
+                                {t("moveGroupEmptyInstructions")}
+                            </EmptyDescription>
+                        </EmptyContent>
+                    )}
                 </Empty>
             )}
             {groups.length === 0 && filter !== "" && (
                 <Empty className="py-8">
-                    <EmptyHeader><EmptyTitle>{t("noSearchResults")}</EmptyTitle></EmptyHeader>
-                    <EmptyContent><EmptyDescription>{t("noSearchResultsInstructions")}</EmptyDescription></EmptyContent>
+                    <EmptyHeader>
+                        <EmptyTitle>{t("noSearchResults")}</EmptyTitle>
+                    </EmptyHeader>
+                    <EmptyContent>
+                        <EmptyDescription>
+                            {t("noSearchResultsInstructions")}
+                        </EmptyDescription>
+                    </EmptyContent>
                 </Empty>
             )}
         </>
     );
 
     return (
-        <Dialog open onOpenChange={(open) => { if (!open) onClose(); }}>
+        <Dialog
+            open
+            onOpenChange={open => {
+                if (!open) onClose();
+            }}
+        >
             <DialogContent className="max-w-2xl" showCloseButton={true}>
                 <DialogHeader>
-                    <DialogTitle>{t(text.title, {
-                        group1: filterGroups?.[0]?.name,
-                        group2: navigation.length ? currentGroup().name : t("root")
-                    })}</DialogTitle>
+                    <DialogTitle>
+                        {t(text.title, {
+                            group1: filterGroups?.[0]?.name,
+                            group2: navigation.length ? currentGroup().name : t("root")
+                        })}
+                    </DialogTitle>
                 </DialogHeader>
                 {isMove ? (
                     <>
@@ -286,7 +309,11 @@ export const GroupPickerDialog = ({
                         {listContent}
                         {count !== 0 && (
                             <div className="flex items-center gap-2 mt-3">
-                                <TablePagination {...paginationProps} variant="bottom" t={t} />
+                                <TablePagination
+                                    {...paginationProps}
+                                    variant="bottom"
+                                    t={t}
+                                />
                             </div>
                         )}
                         <DialogFooter className="mt-4 flex flex-col gap-2 sm:flex-row sm:flex-nowrap sm:items-center sm:justify-end sm:gap-4">
@@ -312,7 +339,9 @@ export const GroupPickerDialog = ({
                                                   : undefined
                                         );
                                     }}
-                                    disabled={type === "selectMany" && selectedRows.length === 0}
+                                    disabled={
+                                        type === "selectMany" && selectedRows.length === 0
+                                    }
                                 >
                                     {t(text.ok)}
                                 </Button>
@@ -329,9 +358,9 @@ export const GroupPickerDialog = ({
                                     placeholder={t("searchForGroups")}
                                     aria-label={t("search")}
                                     value={searchInputValue}
-                                    onChange={(e) => setSearchInputValue(e.target.value)}
+                                    onChange={e => setSearchInputValue(e.target.value)}
                                     className="border-0 bg-transparent shadow-none focus-visible:ring-0 flex-1 min-w-0"
-                                    onKeyDown={(e) => {
+                                    onKeyDown={e => {
                                         if (e.key === "Enter") {
                                             setFilter(searchInputValue);
                                             setFirst(0);
@@ -381,7 +410,9 @@ export const GroupPickerDialog = ({
                                                   : undefined
                                         );
                                     }}
-                                    disabled={type === "selectMany" && selectedRows.length === 0}
+                                    disabled={
+                                        type === "selectMany" && selectedRows.length === 0
+                                    }
                                 >
                                     {t(text.ok)}
                                 </Button>
@@ -461,7 +492,7 @@ const GroupRow = ({
                         aria-label={group.name}
                         checked={group.checked}
                         disabled={isRowDisabled(group)}
-                        onCheckedChange={(checked) => {
+                        onCheckedChange={checked => {
                             group.checked = !!checked;
                             let newSelectedRows: SelectableGroup[] = [];
                             if (!group.checked) {
@@ -485,10 +516,7 @@ const GroupRow = ({
                         <span id={`select-${group.name}`}>{group.name}</span>
                     )}
                 </div>
-                <div
-                    aria-labelledby={`select-${group.name}`}
-                    aria-label={t("groupName")}
-                >
+                <div aria-labelledby={`select-${group.name}`} aria-label={t("groupName")}>
                     {(canBrowse || type === "selectOne") && group.subGroupCount !== 0 && (
                         <Button variant="link" aria-label={t("select")}>
                             <CaretRight className="size-4" />

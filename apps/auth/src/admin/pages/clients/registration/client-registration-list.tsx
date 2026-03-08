@@ -1,7 +1,5 @@
-import ComponentRepresentation from "@keycloak/keycloak-admin-client/lib/defs/componentRepresentation";
-import { getErrorDescription, getErrorMessage, useFetch } from "../../../../shared/keycloak-ui-shared";
-import { toast } from "sonner";
-import { Button } from "@merge-rd/ui/components/button";
+import type ComponentRepresentation from "@keycloak/keycloak-admin-client/lib/defs/componentRepresentation";
+import { useTranslation } from "@merge-rd/i18n";
 import {
     AlertDialog,
     AlertDialogAction,
@@ -12,18 +10,24 @@ import {
     AlertDialogHeader,
     AlertDialogTitle
 } from "@merge-rd/ui/components/alert-dialog";
-import {
-    DataTable,
-    DataTableRowActions,
-    type ColumnDef
-} from "@/admin/shared/ui/data-table";
+import { Button } from "@merge-rd/ui/components/button";
 import { PencilSimple, Plus, Trash } from "@phosphor-icons/react";
-import { useState } from "react";
-import { useTranslation } from "@merge-rd/i18n";
 import { useParams } from "@tanstack/react-router";
+import { useState } from "react";
+import { toast } from "sonner";
+import {
+    type ColumnDef,
+    DataTable,
+    DataTableRowActions
+} from "@/admin/shared/ui/data-table";
+import {
+    getErrorDescription,
+    getErrorMessage
+} from "../../../../shared/keycloak-ui-shared";
 import { useAdminClient } from "../../../app/admin-client";
 import { useRealm } from "../../../app/providers/realm-context/realm-context";
-import { ClientRegistrationParams } from "../routes/client-registration-path";
+import { useClientRegistrationPolicies } from "../api/use-client-registration-policies";
+import type { ClientRegistrationParams } from "../../../shared/lib/routes/clients";
 import { AddClientRegistrationPolicyDialog } from "./add-client-registration-policy-dialog";
 import { EditClientRegistrationPolicyDialog } from "./edit-client-registration-policy-dialog";
 
@@ -37,20 +41,12 @@ export const ClientRegistrationList = ({ subType }: ClientRegistrationListProps)
     const { t } = useTranslation();
     const { subTab: _subTab } = useParams({ strict: false }) as ClientRegistrationParams;
     const { realm } = useRealm();
-    const [policies, setPolicies] = useState<ComponentRepresentation[]>([]);
+    const { data: policies = [], refetch } = useClientRegistrationPolicies(subType);
     const [selectedPolicy, setSelectedPolicy] = useState<ComponentRepresentation>();
     const [editPolicy, setEditPolicy] = useState<ComponentRepresentation>();
-    const [key, setKey] = useState(0);
-    const refresh = () => setKey(key + 1);
-
-    useFetch(
-        () =>
-            adminClient.components.find({
-                type: "org.keycloak.services.clientregistration.policy.ClientRegistrationPolicy"
-            }),
-        policies => setPolicies(policies.filter(p => p.subType === subType)),
-        [key, subType]
-    );
+    const refresh = () => {
+        refetch();
+    };
 
     const onDeleteConfirm = async () => {
         if (!selectedPolicy?.id) return;
@@ -63,7 +59,10 @@ export const ClientRegistrationList = ({ subType }: ClientRegistrationListProps)
             setSelectedPolicy(undefined);
             refresh();
         } catch (error) {
-            toast.error(t("clientRegisterPolicyDeleteError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
+            toast.error(
+                t("clientRegisterPolicyDeleteError", { error: getErrorMessage(error) }),
+                { description: getErrorDescription(error) }
+            );
         }
     };
 
@@ -117,12 +116,19 @@ export const ClientRegistrationList = ({ subType }: ClientRegistrationListProps)
 
     return (
         <>
-            <AlertDialog open={!!selectedPolicy} onOpenChange={(open) => !open && setSelectedPolicy(undefined)}>
+            <AlertDialog
+                open={!!selectedPolicy}
+                onOpenChange={open => !open && setSelectedPolicy(undefined)}
+            >
                 <AlertDialogContent>
                     <AlertDialogHeader>
-                        <AlertDialogTitle>{t("clientRegisterPolicyDeleteConfirmTitle")}</AlertDialogTitle>
+                        <AlertDialogTitle>
+                            {t("clientRegisterPolicyDeleteConfirmTitle")}
+                        </AlertDialogTitle>
                         <AlertDialogDescription>
-                            {t("clientRegisterPolicyDeleteConfirm", { name: selectedPolicy?.name })}
+                            {t("clientRegisterPolicyDeleteConfirm", {
+                                name: selectedPolicy?.name
+                            })}
                         </AlertDialogDescription>
                     </AlertDialogHeader>
                     <AlertDialogFooter>
@@ -146,13 +152,12 @@ export const ClientRegistrationList = ({ subType }: ClientRegistrationListProps)
             />
 
             <DataTable
-                key={key}
                 columns={columns}
                 data={policies}
                 searchColumnId="name"
                 searchPlaceholder={t("searchClientRegistration")}
                 emptyMessage={t("noAccessPolicies")}
-                onRowClick={(row) => setEditPolicy(row.original)}
+                onRowClick={row => setEditPolicy(row.original)}
                 toolbar={
                     <AddClientRegistrationPolicyDialog
                         subTab={subType}
@@ -166,7 +171,9 @@ export const ClientRegistrationList = ({ subType }: ClientRegistrationListProps)
                                 aria-label={t("createPolicy")}
                             >
                                 <Plus size={20} className="shrink-0 sm:hidden" />
-                                <span className="hidden sm:inline">{t("createPolicy")}</span>
+                                <span className="hidden sm:inline">
+                                    {t("createPolicy")}
+                                </span>
                             </Button>
                         }
                     />

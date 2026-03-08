@@ -1,18 +1,20 @@
 import type ClientRepresentation from "@keycloak/keycloak-admin-client/lib/defs/clientRepresentation";
 import type { ProviderRepresentation } from "@keycloak/keycloak-admin-client/lib/defs/serverInfoRepesentation";
+
 type IFormatterValueType = string | undefined;
 /** Compatible with KeycloakDataTable IFormatter (value: unknown) => unknown */
 type IFormatter = (data: unknown) => string | undefined;
+
 import { saveAs } from "file-saver";
 import { flatten } from "flat";
 import { cloneDeep } from "lodash-es";
-import { FieldValues, Path, PathValue, UseFormSetValue } from "react-hook-form";
+import type { FieldValues, Path, PathValue, UseFormSetValue } from "react-hook-form";
 import {
-    KeyValueType,
     arrayToKeyValue,
+    type KeyValueType,
     keyValueToArray
 } from "../ui/key-value-form/key-value-convert";
-import { ReplaceString } from "./types";
+import type { ReplaceString } from "./types";
 
 export const sortProviders = (providers: { [index: string]: ProviderRepresentation }) => {
     return [...new Map(Object.entries(providers).sort(sortProvider)).keys()];
@@ -55,7 +57,7 @@ export const exportClient = (client: ClientRepresentation): void => {
         new Blob([prettyPrintJSON(clientCopy)], {
             type: "application/json"
         }),
-        clientCopy.clientId + ".json"
+        `${clientCopy.clientId}.json`
     );
 };
 
@@ -150,16 +152,13 @@ export const upperCaseFormatter = (): IFormatter => (data: unknown) => {
     return (value ? toUpperCase(value) : undefined) as string;
 };
 
-export const capitalizeFirstLetterFormatter =
-    (): IFormatter => (data: unknown) => {
-        const value = (data as IFormatterValueType)?.toString();
+export const capitalizeFirstLetterFormatter = (): IFormatter => (data: unknown) => {
+    const value = (data as IFormatterValueType)?.toString();
 
-        return (
-            value
-                ? value.charAt(0).toUpperCase() + value.slice(1).toLowerCase()
-                : undefined
-        ) as string;
-    };
+    return (
+        value ? value.charAt(0).toUpperCase() + value.slice(1).toLowerCase() : undefined
+    ) as string;
+};
 
 const alphaRegexPattern = /[^A-Za-z]/g;
 
@@ -170,7 +169,7 @@ export const KEY_PROVIDER_TYPE = "org.keycloak.keys.KeyProvider";
 
 export const prettyPrintJSON = (value: any) => JSON.stringify(value, null, 2);
 
-export const addTrailingSlash = (url: string) => (url.endsWith("/") ? url : url + "/");
+export const addTrailingSlash = (url: string) => (url.endsWith("/") ? url : `${url}/`);
 
 export const localeToDisplayName = (locale: string, displayLocale: string) => {
     try {

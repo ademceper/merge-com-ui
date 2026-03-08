@@ -1,23 +1,5 @@
 import type { UserProfileAttribute } from "@keycloak/keycloak-admin-client/lib/defs/userProfileMetadata";
-import {
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-    SelectValue,
-} from "@merge-rd/ui/components/select";
-import { Button } from "@merge-rd/ui/components/button";
-import {
-    DataTable,
-    DataTableRowActions,
-    type ColumnDef,
-} from "@/admin/shared/ui/data-table";
-import { Funnel, PencilSimple, Plus, Trash } from "@phosphor-icons/react";
-import { uniqBy } from "lodash-es";
-import { useMemo, useState } from "react";
 import { useTranslation } from "@merge-rd/i18n";
-import { Link, useNavigate } from "@tanstack/react-router";
-import { useAdminClient } from "../../../app/admin-client";
 import {
     AlertDialog,
     AlertDialogAction,
@@ -28,11 +10,28 @@ import {
     AlertDialogHeader,
     AlertDialogTitle
 } from "@merge-rd/ui/components/alert-dialog";
+import { Button } from "@merge-rd/ui/components/button";
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue
+} from "@merge-rd/ui/components/select";
+import { Funnel, PencilSimple, Plus, Trash } from "@phosphor-icons/react";
+import { Link, useNavigate } from "@tanstack/react-router";
+import { uniqBy } from "lodash-es";
+import { useMemo, useState } from "react";
+import {
+    type ColumnDef,
+    DataTable,
+    DataTableRowActions
+} from "@/admin/shared/ui/data-table";
 import { KeycloakSpinner } from "../../../../shared/keycloak-ui-shared";
+import { useAdminClient } from "../../../app/admin-client";
 import { useRealm } from "../../../app/providers/realm-context/realm-context";
 import useLocale from "../../../shared/lib/useLocale";
-import { toAddAttribute } from "../routes/add-attribute";
-import { toAttribute } from "../routes/attribute";
+import { toAddAttribute, toAttribute } from "../../../shared/lib/routes/realm-settings";
 import { useUserProfile } from "./user-profile-context";
 
 const RESTRICTED_ATTRIBUTES = ["username", "email"];
@@ -57,47 +56,43 @@ export const AttributesTab = ({ setTableData }: AttributesTabProps) => {
         if (!config?.attributes || !attributeToDelete) return;
 
         const translationsToDelete = config.attributes.find(
-            (attribute) => attribute.name === attributeToDelete,
+            attribute => attribute.name === attributeToDelete
         )?.displayName;
 
         const formattedTranslationsToDelete = translationsToDelete?.substring(
             2,
-            translationsToDelete.length - 1,
+            translationsToDelete.length - 1
         );
 
         try {
             await Promise.all(
-                combinedLocales.map(async (locale) => {
+                combinedLocales.map(async locale => {
                     try {
                         await adminClient.realms.getRealmLocalizationTexts({
                             realm,
-                            selectedLocale: locale,
+                            selectedLocale: locale
                         });
 
                         await adminClient.realms.deleteRealmLocalizationTexts({
                             realm,
                             selectedLocale: locale,
-                            key: formattedTranslationsToDelete,
+                            key: formattedTranslationsToDelete
                         });
 
                         const updatedData =
-                            await adminClient.realms.getRealmLocalizationTexts(
-                                {
-                                    realm,
-                                    selectedLocale: locale,
-                                },
-                            );
+                            await adminClient.realms.getRealmLocalizationTexts({
+                                realm,
+                                selectedLocale: locale
+                            });
                         setTableData([updatedData]);
                     } catch {
-                        console.error(
-                            `Error removing translations for ${locale}`,
-                        );
+                        console.error(`Error removing translations for ${locale}`);
                     }
-                }),
+                })
             );
 
             const updatedAttributes = config.attributes.filter(
-                (attribute) => attribute.name !== attributeToDelete,
+                attribute => attribute.name !== attributeToDelete
             );
             const groups = config.groups ?? [];
 
@@ -105,100 +100,102 @@ export const AttributesTab = ({ setTableData }: AttributesTabProps) => {
                 { ...config, attributes: updatedAttributes, groups },
                 {
                     successMessageKey: "deleteAttributeSuccess",
-                    errorMessageKey: "deleteAttributeError",
-                },
+                    errorMessageKey: "deleteAttributeError"
+                }
             );
 
             setAttributeToDelete("");
         } catch (error) {
-            console.error(
-                `Error removing translations or updating attributes: ${error}`,
-            );
+            console.error(`Error removing translations or updating attributes: ${error}`);
         }
     };
 
     const attributes = config?.attributes ?? [];
     const filteredData = useMemo(() => {
         if (filter === "allGroups") return attributes;
-        return attributes.filter((attr) => attr.group === filter);
+        return attributes.filter(attr => attr.group === filter);
     }, [attributes, filter]);
 
     const groupOptions = useMemo(
         () =>
             uniqBy(
-                attributes.filter((attr) => !!attr.group),
-                "group",
+                attributes.filter(attr => !!attr.group),
+                "group"
             ),
-        [attributes],
+        [attributes]
     );
 
     const columns: ColumnDef<UserProfileAttribute>[] = useMemo(
         () => [
-        {
-            accessorKey: "name",
-            header: t("attributeName"),
-            cell: ({ row }) => (
-                <Link
-                    to={toAttribute({
-                        realm: realm ?? "",
-                        attributeName: row.original.name!,
-                    }) as string}
-                    className="text-primary hover:underline"
-                >
-                    {row.original.name}
-                </Link>
-            ),
-        },
-        {
-            accessorKey: "displayName",
-            header: t("attributeDisplayName"),
-            cell: ({ row }) => row.original.displayName ?? "-",
-        },
-        {
-            accessorKey: "group",
-            header: t("attributeGroup"),
-            cell: ({ row }) => row.original.group ?? "-",
-        },
-        {
-            id: "actions",
-            header: "",
-            size: 50,
-            enableHiding: false,
-            cell: ({ row }) => (
-                <DataTableRowActions row={row}>
-                    <button
-                        type="button"
-                        className="flex w-full items-center gap-2 rounded-md px-1.5 py-1 text-left text-sm hover:bg-accent hover:text-accent-foreground"
-                        onClick={() =>
-                            navigate({
-                                to: toAttribute({
-                                    realm: realm ?? "",
-                                    attributeName: row.original.name!,
-                                }) as string,
-                            })
+            {
+                accessorKey: "name",
+                header: t("attributeName"),
+                cell: ({ row }) => (
+                    <Link
+                        to={
+                            toAttribute({
+                                realm: realm ?? "",
+                                attributeName: row.original.name!
+                            }) as string
                         }
+                        className="text-primary hover:underline"
                     >
-                        <PencilSimple className="size-4 shrink-0" />
-                        {t("edit")}
-                    </button>
-                    {!RESTRICTED_ATTRIBUTES.includes(row.original.name ?? "") && (
-                        <>
-                            <div className="my-1 h-px bg-border" />
-                            <button
-                                type="button"
-                                className="flex w-full items-center gap-2 rounded-md px-1.5 py-1 text-left text-sm text-destructive hover:bg-destructive/10 hover:text-destructive"
-                                onClick={() => setAttributeToDelete(row.original.name ?? "")}
-                            >
-                                <Trash className="size-4 shrink-0" />
-                                {t("delete")}
-                            </button>
-                        </>
-                    )}
-                </DataTableRowActions>
-            ),
-        },
-    ],
-        [t, navigate, realm],
+                        {row.original.name}
+                    </Link>
+                )
+            },
+            {
+                accessorKey: "displayName",
+                header: t("attributeDisplayName"),
+                cell: ({ row }) => row.original.displayName ?? "-"
+            },
+            {
+                accessorKey: "group",
+                header: t("attributeGroup"),
+                cell: ({ row }) => row.original.group ?? "-"
+            },
+            {
+                id: "actions",
+                header: "",
+                size: 50,
+                enableHiding: false,
+                cell: ({ row }) => (
+                    <DataTableRowActions row={row}>
+                        <button
+                            type="button"
+                            className="flex w-full items-center gap-2 rounded-md px-1.5 py-1 text-left text-sm hover:bg-accent hover:text-accent-foreground"
+                            onClick={() =>
+                                navigate({
+                                    to: toAttribute({
+                                        realm: realm ?? "",
+                                        attributeName: row.original.name!
+                                    }) as string
+                                })
+                            }
+                        >
+                            <PencilSimple className="size-4 shrink-0" />
+                            {t("edit")}
+                        </button>
+                        {!RESTRICTED_ATTRIBUTES.includes(row.original.name ?? "") && (
+                            <>
+                                <div className="my-1 h-px bg-border" />
+                                <button
+                                    type="button"
+                                    className="flex w-full items-center gap-2 rounded-md px-1.5 py-1 text-left text-sm text-destructive hover:bg-destructive/10 hover:text-destructive"
+                                    onClick={() =>
+                                        setAttributeToDelete(row.original.name ?? "")
+                                    }
+                                >
+                                    <Trash className="size-4 shrink-0" />
+                                    {t("delete")}
+                                </button>
+                            </>
+                        )}
+                    </DataTableRowActions>
+                )
+            }
+        ],
+        [t, navigate, realm]
     );
 
     if (!config) {
@@ -207,17 +204,28 @@ export const AttributesTab = ({ setTableData }: AttributesTabProps) => {
 
     return (
         <>
-            <AlertDialog open={!!attributeToDelete} onOpenChange={(open) => !open && setAttributeToDelete("")}>
+            <AlertDialog
+                open={!!attributeToDelete}
+                onOpenChange={open => !open && setAttributeToDelete("")}
+            >
                 <AlertDialogContent>
                     <AlertDialogHeader>
-                        <AlertDialogTitle>{t("deleteAttributeConfirmTitle")}</AlertDialogTitle>
+                        <AlertDialogTitle>
+                            {t("deleteAttributeConfirmTitle")}
+                        </AlertDialogTitle>
                         <AlertDialogDescription>
-                            {t("deleteAttributeConfirm", { attributeName: attributeToDelete })}
+                            {t("deleteAttributeConfirm", {
+                                attributeName: attributeToDelete
+                            })}
                         </AlertDialogDescription>
                     </AlertDialogHeader>
                     <AlertDialogFooter>
                         <AlertDialogCancel>{t("cancel")}</AlertDialogCancel>
-                        <AlertDialogAction variant="destructive" data-testid="confirm" onClick={onDeleteConfirm}>
+                        <AlertDialogAction
+                            variant="destructive"
+                            data-testid="confirm"
+                            onClick={onDeleteConfirm}
+                        >
                             {t("delete")}
                         </AlertDialogAction>
                     </AlertDialogFooter>
@@ -225,14 +233,8 @@ export const AttributesTab = ({ setTableData }: AttributesTabProps) => {
             </AlertDialog>
             <div className="space-y-4">
                 <div className="flex flex-wrap items-center gap-2 sm:gap-3">
-                    <Select
-                        value={filter}
-                        onValueChange={(value) => setFilter(value)}
-                    >
-                        <SelectTrigger
-                            className="w-[200px]"
-                            data-testid="filter-select"
-                        >
+                    <Select value={filter} onValueChange={value => setFilter(value)}>
+                        <SelectTrigger className="w-[200px]" data-testid="filter-select">
                             <Funnel className="mr-2 size-4 shrink-0 opacity-60" />
                             <SelectValue />
                         </SelectTrigger>
@@ -241,15 +243,12 @@ export const AttributesTab = ({ setTableData }: AttributesTabProps) => {
                                 {t("allGroups")}
                             </SelectItem>
                             {groupOptions.map(
-                                (attr) =>
+                                attr =>
                                     attr.group && (
-                                        <SelectItem
-                                            key={attr.group}
-                                            value={attr.group}
-                                        >
+                                        <SelectItem key={attr.group} value={attr.group}>
                                             {attr.group}
                                         </SelectItem>
-                                    ),
+                                    )
                             )}
                         </SelectContent>
                     </Select>

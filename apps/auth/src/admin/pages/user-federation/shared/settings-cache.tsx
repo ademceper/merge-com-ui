@@ -1,11 +1,11 @@
+import { useTranslation } from "@merge-rd/i18n";
+import { isEqual } from "lodash-es";
+import { type UseFormReturn, useWatch } from "react-hook-form";
 import {
     NumberControl,
-    SelectField,
-    SelectControlOption
+    type SelectControlOption,
+    SelectField
 } from "../../../../shared/keycloak-ui-shared";
-import { isEqual } from "lodash-es";
-import { UseFormReturn, useWatch } from "react-hook-form";
-import { useTranslation } from "@merge-rd/i18n";
 import { FormAccess } from "../../../shared/ui/form/form-access";
 import { WizardSectionHeader } from "../../../shared/ui/wizard-section-header/wizard-section-header";
 
@@ -54,14 +54,14 @@ const CacheFields = ({ form }: { form: UseFormReturn }) => {
                     name="config.cachePolicy"
                     label={t("cachePolicy")}
                     labelIcon={t("cachePolicyHelp")}
-                defaultValue="DEFAULT"
-                options={[
-                    "DEFAULT",
-                    "EVICT_DAILY",
-                    "EVICT_WEEKLY",
-                    "MAX_LIFESPAN",
-                    "NO_CACHE"
-                ]}
+                    defaultValue="DEFAULT"
+                    options={[
+                        "DEFAULT",
+                        "EVICT_DAILY",
+                        "EVICT_WEEKLY",
+                        "MAX_LIFESPAN",
+                        "NO_CACHE"
+                    ]}
                 />
             </div>
             {isEqual(cachePolicyType, ["EVICT_WEEKLY"]) ? (
@@ -89,22 +89,22 @@ const CacheFields = ({ form }: { form: UseFormReturn }) => {
                 <div className="space-y-6">
                     <div className="space-y-2">
                         <SelectField
-                        id="kc-eviction-hour"
-                        name="config.evictionHour"
-                        label={t("evictionHour")}
-                        labelIcon={t("evictionHourHelp")}
-                        defaultValue="0"
-                        options={hourOptions}
+                            id="kc-eviction-hour"
+                            name="config.evictionHour"
+                            label={t("evictionHour")}
+                            labelIcon={t("evictionHourHelp")}
+                            defaultValue="0"
+                            options={hourOptions}
                         />
                     </div>
                     <div className="space-y-2">
                         <SelectField
                             id="kc-eviction-minute"
-                        name="config.evictionMinute"
-                        label={t("evictionMinute")}
-                        labelIcon={t("evictionMinuteHelp")}
-                        defaultValue="0"
-                        options={minuteOptions}
+                            name="config.evictionMinute"
+                            label={t("evictionMinute")}
+                            labelIcon={t("evictionMinuteHelp")}
+                            defaultValue="0"
+                            options={minuteOptions}
                         />
                     </div>
                 </div>
@@ -112,12 +112,12 @@ const CacheFields = ({ form }: { form: UseFormReturn }) => {
             {isEqual(cachePolicyType, ["MAX_LIFESPAN"]) ? (
                 <div className="space-y-2">
                     <NumberControl
-                    data-testid="kerberos-cache-lifespan"
-                    name="config.maxLifespan[0]"
-                    label={t("maxLifespan")}
-                    labelIcon={t("maxLifespanHelp")}
-                    unit={t("ms")}
-                    controller={{ defaultValue: 0, rules: { min: 0 } }}
+                        data-testid="kerberos-cache-lifespan"
+                        name="config.maxLifespan[0]"
+                        label={t("maxLifespan")}
+                        labelIcon={t("maxLifespanHelp")}
+                        unit={t("ms")}
+                        controller={{ defaultValue: 0, rules: { min: 0 } }}
                     />
                 </div>
             ) : null}

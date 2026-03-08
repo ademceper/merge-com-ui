@@ -1,10 +1,5 @@
-import { createFileRoute } from "@tanstack/react-router";
-import { lazy } from "react";
-
-const GroupsSection = lazy(
-    () => import("../../../../pages/groups/groups-section"),
-);
+import { createFileRoute, lazyRouteComponent } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/_app/$realm/groups/$")({
-    component: GroupsSection,
+    component: lazyRouteComponent(() => import("../../../../pages/groups/groups-section")),
 });

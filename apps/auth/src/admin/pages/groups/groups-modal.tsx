@@ -1,6 +1,6 @@
 import type GroupRepresentation from "@keycloak/keycloak-admin-client/lib/defs/groupRepresentation";
-import { getErrorDescription, getErrorMessage, TextControl, useFetch } from "../../../shared/keycloak-ui-shared";
-import { toast } from "sonner";
+import { useTranslation } from "@merge-rd/i18n";
+import { Alert, AlertTitle } from "@merge-rd/ui/components/alert";
 import { Button } from "@merge-rd/ui/components/button";
 import {
     Dialog,
@@ -10,12 +10,17 @@ import {
     DialogHeader,
     DialogTitle
 } from "@merge-rd/ui/components/dialog";
-import { Alert, AlertTitle } from "@merge-rd/ui/components/alert";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
-import { useTranslation } from "@merge-rd/i18n";
+import { toast } from "sonner";
+import {
+    getErrorDescription,
+    getErrorMessage,
+    TextControl
+} from "../../../shared/keycloak-ui-shared";
 import { useAdminClient } from "../../app/admin-client";
 import useIsFeatureEnabled, { Feature } from "../../shared/lib/useIsFeatureEnabled";
+import { useGroup } from "./api/use-group";
 
 type GroupsModalProps = {
     id?: string;
@@ -62,20 +67,14 @@ export const GroupsModal = ({
     });
     const { handleSubmit, formState } = form;
 
-    useFetch(
-        async () => {
-            if (duplicateId) {
-                return adminClient.groups.findOne({ id: duplicateId });
-            }
-        },
-        group => {
-            if (group) {
-                setDuplicateGroupDetails(group);
-                form.reset({ name: t("copyOf", { name: group.name }) });
-            }
-        },
-        [duplicateId]
-    );
+    const { data: duplicateGroupData } = useGroup(duplicateId ?? "");
+
+    useEffect(() => {
+        if (duplicateGroupData && duplicateId) {
+            setDuplicateGroupDetails(duplicateGroupData);
+            form.reset({ name: t("copyOf", { name: duplicateGroupData.name }) });
+        }
+    }, [duplicateGroupData, duplicateId, form, t]);
 
     const fetchClientRoleMappings = async (groupId: string) => {
         try {
@@ -102,7 +101,10 @@ export const GroupsModal = ({
 
             return clientRoleMappings;
         } catch (error) {
-            toast.error(t("couldNotFetchClientRoleMappings", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
+            toast.error(
+                t("couldNotFetchClientRoleMappings", { error: getErrorMessage(error) }),
+                { description: getErrorDescription(error) }
+            );
             throw error;
         }
     };
@@ -193,7 +195,9 @@ export const GroupsModal = ({
 
             return createdGroup;
         } catch (error) {
-            toast.error(t("couldNotDuplicateGroup", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
+            toast.error(t("couldNotDuplicateGroup", { error: getErrorMessage(error) }), {
+                description: getErrorDescription(error)
+            });
             throw error;
         }
     };
@@ -221,7 +225,9 @@ export const GroupsModal = ({
                 })
             );
         } catch (error) {
-            toast.error(t("roleMappingUpdatedError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
+            toast.error(t("roleMappingUpdatedError", { error: getErrorMessage(error) }), {
+                description: getErrorDescription(error)
+            });
         }
     };
 
@@ -244,15 +250,19 @@ export const GroupsModal = ({
 
             refresh(rename ? { ...rename, ...group } : undefined);
             handleModalToggle();
-            toast.success(t(
+            toast.success(
+                t(
                     rename
                         ? "groupUpdated"
                         : duplicateId
                           ? "groupDuplicated"
                           : "groupCreated"
-                ));
+                )
+            );
         } catch (error) {
-            toast.error(t("couldNotCreateGroup", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
+            toast.error(t("couldNotCreateGroup", { error: getErrorMessage(error) }), {
+                description: getErrorDescription(error)
+            });
         }
     };
 
@@ -278,7 +288,11 @@ export const GroupsModal = ({
                 </DialogHeader>
                 <div className="min-h-[120px]">
                     <FormProvider {...form}>
-                        <form id="group-form" onSubmit={handleSubmit(submitForm)} className="flex flex-col gap-5 py-2">
+                        <form
+                            id="group-form"
+                            onSubmit={handleSubmit(submitForm)}
+                            className="flex flex-col gap-5 py-2"
+                        >
                             {duplicateId && (
                                 <Alert variant="destructive">
                                     <AlertTitle>{t("duplicateGroupWarning")}</AlertTitle>
@@ -291,7 +305,11 @@ export const GroupsModal = ({
                                 rules={{ required: t("required") }}
                                 autoFocus
                             />
-                            <TextControl name="description" label={t("description")} showLabel />
+                            <TextControl
+                                name="description"
+                                label={t("description")}
+                                showLabel
+                            />
                         </form>
                     </FormProvider>
                 </div>
@@ -311,7 +329,11 @@ export const GroupsModal = ({
                             type="submit"
                             form="group-form"
                             data-testid={`${rename ? "rename" : duplicateId ? "duplicate" : "create"}Group`}
-                            disabled={formState.isLoading || formState.isValidating || formState.isSubmitting}
+                            disabled={
+                                formState.isLoading ||
+                                formState.isValidating ||
+                                formState.isSubmitting
+                            }
                             className="h-9 min-h-9 w-full group sm:w-auto"
                         >
                             {t(rename ? "edit" : duplicateId ? "duplicate" : "create")}

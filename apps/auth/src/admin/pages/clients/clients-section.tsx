@@ -1,20 +1,5 @@
 import type ClientRepresentation from "@keycloak/keycloak-admin-client/lib/defs/clientRepresentation";
-import { getErrorDescription, getErrorMessage, useFetch } from "../../../shared/keycloak-ui-shared";
-import { toast } from "sonner";
-import { Badge } from "@merge-rd/ui/components/badge";
-import { Button } from "@merge-rd/ui/components/button";
-import {
-    DataTable,
-    DataTableRowActions,
-    type ColumnDef
-} from "@/admin/shared/ui/data-table";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@merge-rd/ui/components/tabs";
-import { DownloadSimple, PencilSimple, Plus, Trash } from "@phosphor-icons/react";
-import { useState } from "react";
 import { useTranslation } from "@merge-rd/i18n";
-import { Link, useNavigate, useParams } from "@tanstack/react-router";
-import { useAdminClient } from "../../app/admin-client";
-import { AddClientDialog } from "./add/add-client-dialog";
 import {
     AlertDialog,
     AlertDialogAction,
@@ -25,19 +10,33 @@ import {
     AlertDialogHeader,
     AlertDialogTitle
 } from "@merge-rd/ui/components/alert-dialog";
+import { Badge } from "@merge-rd/ui/components/badge";
+import { Button } from "@merge-rd/ui/components/button";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@merge-rd/ui/components/tabs";
+import { DownloadSimple, PencilSimple, Plus, Trash } from "@phosphor-icons/react";
+import { Link, useNavigate, useParams } from "@tanstack/react-router";
+import { useState } from "react";
+import { toast } from "sonner";
+import {
+    type ColumnDef,
+    DataTable,
+    DataTableRowActions
+} from "@/admin/shared/ui/data-table";
+import { getErrorDescription, getErrorMessage } from "../../../shared/keycloak-ui-shared";
+import { useAdminClient } from "../../app/admin-client";
 import { useAccess } from "../../app/providers/access/access";
 import { useRealm } from "../../app/providers/realm-context/realm-context";
-import { exportClient } from "../../shared/lib/util";
 import { translationFormatter } from "../../shared/lib/translationFormatter";
+import { exportClient } from "../../shared/lib/util";
+import { AddClientDialog } from "./add/add-client-dialog";
+import { useClients } from "./api/use-clients";
 import { InitialAccessTokenList } from "./initial-access/initial-access-token-list";
 import { ClientRegistration } from "./registration/client-registration";
-import { toClient } from "./routes/client";
-import { toClients } from "./routes/clients-path";
-import type { ClientsTab } from "./routes/clients-path";
-import {
-    toClientRegistration
-} from "./routes/client-registration-path";
-import type { ClientRegistrationTab } from "./routes/client-registration-path";
+import { toClient } from "../../shared/lib/routes/clients";
+import type { ClientRegistrationTab } from "../../shared/lib/routes/clients";
+import { toClientRegistration } from "../../shared/lib/routes/clients";
+import type { ClientsTab } from "../../shared/lib/routes/clients";
+import { toClients } from "../../shared/lib/routes/clients";
 import { getProtocolName, isRealmClient } from "./utils";
 
 export default function ClientsSection() {
@@ -46,21 +45,16 @@ export default function ClientsSection() {
     const { t } = useTranslation();
     const { realm } = useRealm();
     const navigate = useNavigate();
-    const { tab, subTab } = useParams({ strict: false }) as { tab?: string; subTab?: string };
+    const { tab, subTab } = useParams({ strict: false }) as {
+        tab?: string;
+        subTab?: string;
+    };
 
-    const [key, setKey] = useState(0);
-    const refresh = () => setKey(key + 1);
-    const [clients, setClients] = useState<ClientRepresentation[]>([]);
+    const { data: clients = [], refetch } = useClients();
     const [selectedClient, setSelectedClient] = useState<ClientRepresentation>();
 
     const { hasAccess } = useAccess();
     const isManager = hasAccess("manage-clients");
-
-    useFetch(
-        () => adminClient.clients.find({}),
-        (data) => setClients(data),
-        [key]
-    );
 
     const onDeleteConfirm = async () => {
         if (!selectedClient?.id) return;
@@ -68,9 +62,11 @@ export default function ClientsSection() {
             await adminClient.clients.del({ id: selectedClient.id });
             setSelectedClient(undefined);
             toast.success(t("clientDeletedSuccess"));
-            refresh();
+            refetch();
         } catch (error) {
-            toast.error(t("clientDeleteError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
+            toast.error(t("clientDeleteError", { error: getErrorMessage(error) }), {
+                description: getErrorDescription(error)
+            });
         }
     };
 
@@ -81,7 +77,13 @@ export default function ClientsSection() {
             cell: ({ row }) => (
                 <span className="flex items-center gap-2">
                     <Link
-                        to={toClient({ realm, clientId: row.original.id!, tab: "settings" }) as string}
+                        to={
+                            toClient({
+                                realm,
+                                clientId: row.original.id!,
+                                tab: "settings"
+                            }) as string
+                        }
                         className="text-primary hover:underline"
                     >
                         {row.original.clientId}
@@ -95,12 +97,14 @@ export default function ClientsSection() {
         {
             accessorKey: "name",
             header: t("clientName"),
-            cell: ({ row }) => translationFormatter(t)(row.original.name) as string || "-"
+            cell: ({ row }) =>
+                (translationFormatter(t)(row.original.name) as string) || "-"
         },
         {
             accessorKey: "protocol",
             header: t("type"),
-            cell: ({ row }) => getProtocolName(t, row.original.protocol ?? "openid-connect")
+            cell: ({ row }) =>
+                getProtocolName(t, row.original.protocol ?? "openid-connect")
         },
         {
             accessorKey: "description",
@@ -114,14 +118,21 @@ export default function ClientsSection() {
             enableHiding: false,
             cell: ({ row }) => {
                 const client = row.original;
-                const canDelete = !isRealmClient(client) && (isManager || client.access?.configure);
+                const canDelete =
+                    !isRealmClient(client) && (isManager || client.access?.configure);
                 return (
                     <DataTableRowActions row={row}>
                         <button
                             type="button"
                             className="flex w-full items-center gap-2 rounded-md px-1.5 py-1 text-left text-sm hover:bg-accent hover:text-accent-foreground"
                             onClick={() =>
-                                navigate({ to: toClient({ realm, clientId: client.id!, tab: "settings" }) as string })
+                                navigate({
+                                    to: toClient({
+                                        realm,
+                                        clientId: client.id!,
+                                        tab: "settings"
+                                    }) as string
+                                })
                             }
                         >
                             <PencilSimple className="size-4 shrink-0" />
@@ -158,23 +169,38 @@ export default function ClientsSection() {
     const clientRegistrationTab: ClientRegistrationTab =
         subTab === "authenticated" ? "authenticated" : "anonymous";
 
-    const currentTab: ClientsTab = tab === "initial-access-token" || tab === "client-registration" ? tab : "list";
+    const currentTab: ClientsTab =
+        tab === "initial-access-token" || tab === "client-registration" ? tab : "list";
 
     const renderMainContent = () => {
         if (isClientRegistration) {
             return (
                 <Tabs
                     value={clientRegistrationTab}
-                    onValueChange={(value) =>
-                        navigate({ to: toClientRegistration({ realm, subTab: value as ClientRegistrationTab }) as string })
+                    onValueChange={value =>
+                        navigate({
+                            to: toClientRegistration({
+                                realm,
+                                subTab: value as ClientRegistrationTab
+                            }) as string
+                        })
                     }
                 >
                     <div className="w-full min-w-0 overflow-x-auto overflow-y-hidden mb-4">
-                        <TabsList variant="line" className="mb-0 w-max min-w-0 **:data-[slot=tabs-trigger]:flex-none">
-                            <TabsTrigger value="anonymous" data-testid="client-registration-anonymous-tab">
+                        <TabsList
+                            variant="line"
+                            className="mb-0 w-max min-w-0 **:data-[slot=tabs-trigger]:flex-none"
+                        >
+                            <TabsTrigger
+                                value="anonymous"
+                                data-testid="client-registration-anonymous-tab"
+                            >
                                 {t("anonymousAccessPolicies")}
                             </TabsTrigger>
-                            <TabsTrigger value="authenticated" data-testid="client-registration-authenticated-tab">
+                            <TabsTrigger
+                                value="authenticated"
+                                data-testid="client-registration-authenticated-tab"
+                            >
                                 {t("authenticatedAccessPolicies")}
                             </TabsTrigger>
                         </TabsList>
@@ -197,14 +223,19 @@ export default function ClientsSection() {
             default:
                 return (
                     <DataTable
-                        key={key}
                         columns={columns}
                         data={clients}
                         searchColumnId="clientId"
                         searchPlaceholder={t("searchForClient")}
                         emptyMessage={t("noClients")}
-                        onRowClick={(row) =>
-                            navigate({ to: toClient({ realm, clientId: row.original.id!, tab: "settings" }) as string })
+                        onRowClick={row =>
+                            navigate({
+                                to: toClient({
+                                    realm,
+                                    clientId: row.original.id!,
+                                    tab: "settings"
+                                }) as string
+                            })
                         }
                         toolbar={
                             <AddClientDialog
@@ -217,7 +248,9 @@ export default function ClientsSection() {
                                         aria-label={t("createClient")}
                                     >
                                         <Plus size={20} className="shrink-0 sm:hidden" />
-                                        <span className="hidden sm:inline">{t("createClient")}</span>
+                                        <span className="hidden sm:inline">
+                                            {t("createClient")}
+                                        </span>
                                     </Button>
                                 }
                             />
@@ -228,46 +261,69 @@ export default function ClientsSection() {
     };
 
     return (
-        <>
-                        <div className="pt-4 pb-6 px-0 min-w-0">
-                <AlertDialog open={!!selectedClient} onOpenChange={(open) => !open && setSelectedClient(undefined)}>
-                    <AlertDialogContent>
-                        <AlertDialogHeader>
-                            <AlertDialogTitle>{t("clientDelete", { clientId: selectedClient?.clientId })}</AlertDialogTitle>
-                            <AlertDialogDescription>{t("clientDeleteConfirm")}</AlertDialogDescription>
-                        </AlertDialogHeader>
-                        <AlertDialogFooter>
-                            <AlertDialogCancel>{t("cancel")}</AlertDialogCancel>
-                            <AlertDialogAction variant="destructive" data-testid="confirm" onClick={onDeleteConfirm}>
-                                {t("delete")}
-                            </AlertDialogAction>
-                        </AlertDialogFooter>
-                    </AlertDialogContent>
-                </AlertDialog>
-                <Tabs
-                    value={currentTab}
-                    onValueChange={(value) =>
-                        navigate({ to: toClients({ realm, tab: value === "list" ? undefined : value as ClientsTab }) as string })
-                    }
-                >
-                    <div className="w-full min-w-0 overflow-x-auto overflow-y-hidden mb-4">
-                        <TabsList variant="line" className="mb-0 w-max min-w-0 **:data-[slot=tabs-trigger]:flex-none">
-                            <TabsTrigger value="list" data-testid="clients-list-tab">
-                                {t("clientList")}
-                            </TabsTrigger>
-                            <TabsTrigger value="initial-access-token" data-testid="clients-initial-access-tab">
-                                {t("initialAccessToken")}
-                            </TabsTrigger>
-                            <TabsTrigger value="client-registration" data-testid="clients-registration-tab">
-                                {t("clientRegistration")}
-                            </TabsTrigger>
-                        </TabsList>
-                    </div>
-                    <TabsContent value={currentTab} className="mt-0 pt-0 outline-none">
-                        {renderMainContent()}
-                    </TabsContent>
-                </Tabs>
-            </div>
-        </>
+        <div className="pt-4 pb-6 px-0 min-w-0">
+            <AlertDialog
+                open={!!selectedClient}
+                onOpenChange={open => !open && setSelectedClient(undefined)}
+            >
+                <AlertDialogContent>
+                    <AlertDialogHeader>
+                        <AlertDialogTitle>
+                            {t("clientDelete", { clientId: selectedClient?.clientId })}
+                        </AlertDialogTitle>
+                        <AlertDialogDescription>
+                            {t("clientDeleteConfirm")}
+                        </AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter>
+                        <AlertDialogCancel>{t("cancel")}</AlertDialogCancel>
+                        <AlertDialogAction
+                            variant="destructive"
+                            data-testid="confirm"
+                            onClick={onDeleteConfirm}
+                        >
+                            {t("delete")}
+                        </AlertDialogAction>
+                    </AlertDialogFooter>
+                </AlertDialogContent>
+            </AlertDialog>
+            <Tabs
+                value={currentTab}
+                onValueChange={value =>
+                    navigate({
+                        to: toClients({
+                            realm,
+                            tab: value === "list" ? undefined : (value as ClientsTab)
+                        }) as string
+                    })
+                }
+            >
+                <div className="w-full min-w-0 overflow-x-auto overflow-y-hidden mb-4">
+                    <TabsList
+                        variant="line"
+                        className="mb-0 w-max min-w-0 **:data-[slot=tabs-trigger]:flex-none"
+                    >
+                        <TabsTrigger value="list" data-testid="clients-list-tab">
+                            {t("clientList")}
+                        </TabsTrigger>
+                        <TabsTrigger
+                            value="initial-access-token"
+                            data-testid="clients-initial-access-tab"
+                        >
+                            {t("initialAccessToken")}
+                        </TabsTrigger>
+                        <TabsTrigger
+                            value="client-registration"
+                            data-testid="clients-registration-tab"
+                        >
+                            {t("clientRegistration")}
+                        </TabsTrigger>
+                    </TabsList>
+                </div>
+                <TabsContent value={currentTab} className="mt-0 pt-0 outline-none">
+                    {renderMainContent()}
+                </TabsContent>
+            </Tabs>
+        </div>
     );
 }

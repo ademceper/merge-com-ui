@@ -5,13 +5,13 @@
  * $ npx keycloakify own --path "account/KcAccountUi.tsx" --revert
  */
 
-import { useReducer, useEffect } from "react";
-import { startColorSchemeManagement } from "./colorScheme";
+import { useEffect, useReducer } from "react";
 import { KeycloakProvider } from "../../shared/keycloak-ui-shared";
+import { SessionExpirationWarningOverlay } from "../../shared/session-expiration-warning-overlay";
+import { Root } from "../widgets/root";
+import { startColorSchemeManagement } from "./colorScheme";
 import { environment } from "./environment";
 import { i18n } from "./i18n";
-import { Root } from "../widgets/root";
-import { SessionExpirationWarningOverlay } from "../../shared/session-expiration-warning-overlay";
 
 document.title = "Account Management";
 

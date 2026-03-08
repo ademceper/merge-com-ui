@@ -1,4 +1,7 @@
-import { FormErrorText, HelpItem, SelectVariant } from "../../../../shared/keycloak-ui-shared";
+import { useTranslation } from "@merge-rd/i18n";
+import { Button } from "@merge-rd/ui/components/button";
+import { Label } from "@merge-rd/ui/components/label";
+import { Popover, PopoverContent, PopoverTrigger } from "@merge-rd/ui/components/popover";
 import {
     Select,
     SelectContent,
@@ -6,12 +9,13 @@ import {
     SelectTrigger,
     SelectValue
 } from "@merge-rd/ui/components/select";
-import { Button } from "@merge-rd/ui/components/button";
-import { Label } from "@merge-rd/ui/components/label";
-import { Popover, PopoverContent, PopoverTrigger } from "@merge-rd/ui/components/popover";
 import { useState } from "react";
 import { Controller, useFormContext } from "react-hook-form";
-import { useTranslation } from "@merge-rd/i18n";
+import {
+    FormErrorText,
+    HelpItem,
+    SelectVariant
+} from "../../../../shared/keycloak-ui-shared";
 import type { ComponentProps } from "./components";
 
 function stringToMultiline(value?: string): string[] {
@@ -67,7 +71,10 @@ export const MultiValuedListComponent = ({
             {!(hideLabel && helpIconAfterControl) && (
                 <div className="flex items-center gap-1">
                     {!hideLabel && (
-                        <Label htmlFor={name!}>{t(label!)}{required && " *"}</Label>
+                        <Label htmlFor={name!}>
+                            {t(label!)}
+                            {required && " *"}
+                        </Label>
                     )}
                     {!helpIconAfterControl && helpText && (
                         <HelpItem helpText={t(helpText!)} fieldLabelId={`${label}`} />
@@ -88,7 +95,13 @@ export const MultiValuedListComponent = ({
                     required: { value: required || false, message: t("required") }
                 }}
                 render={({ field }) => (
-                    <div className={helpIconAfterControl ? "flex w-full items-center gap-2" : undefined}>
+                    <div
+                        className={
+                            helpIconAfterControl
+                                ? "flex w-full items-center gap-2"
+                                : undefined
+                        }
+                    >
                         {variant === SelectVariant.typeaheadMulti ? (
                             <Popover open={open} onOpenChange={setOpen}>
                                 <PopoverTrigger asChild>
@@ -102,31 +115,59 @@ export const MultiValuedListComponent = ({
                                         data-testid={name}
                                     >
                                         <span className="truncate">
-                                            {(stringify ? stringToMultiline(field.value) : field.value)?.length > 0
-                                                ? (stringify ? stringToMultiline(field.value) : field.value).join(", ")
+                                            {(stringify
+                                                ? stringToMultiline(field.value)
+                                                : field.value
+                                            )?.length > 0
+                                                ? (stringify
+                                                      ? stringToMultiline(field.value)
+                                                      : field.value
+                                                  ).join(", ")
                                                 : t("choose")}
                                         </span>
                                     </Button>
                                 </PopoverTrigger>
-                                <PopoverContent className="w-(--radix-popover-trigger-width) p-0" align="start">
+                                <PopoverContent
+                                    className="w-(--radix-popover-trigger-width) p-0"
+                                    align="start"
+                                >
                                     <ul className="max-h-64 overflow-auto py-1">
-                                        {(options ?? []).map((option) => {
-                                            const values = stringify ? stringToMultiline(field.value) : (field.value ?? []);
+                                        {(options ?? []).map(option => {
+                                            const values = stringify
+                                                ? stringToMultiline(field.value)
+                                                : (field.value ?? []);
                                             const selected = values.includes(option);
                                             return (
                                                 <li
                                                     key={option}
-                                                    role="option"
                                                     aria-selected={selected}
                                                     className="hover:bg-accent cursor-pointer px-2 py-1.5 text-sm"
-                                                    onMouseDown={(e) => e.preventDefault()}
+                                                    onMouseDown={e => e.preventDefault()}
                                                     onClick={() => {
                                                         if (selected) {
-                                                            const newVal = values.filter((x: string) => x !== option);
-                                                            field.onChange(stringify ? toStringValue(newVal) : newVal);
+                                                            const newVal = values.filter(
+                                                                (x: string) =>
+                                                                    x !== option
+                                                            );
+                                                            field.onChange(
+                                                                stringify
+                                                                    ? toStringValue(
+                                                                          newVal
+                                                                      )
+                                                                    : newVal
+                                                            );
                                                         } else {
-                                                            const newVal = [...values, option];
-                                                            field.onChange(stringify ? toStringValue(newVal) : newVal);
+                                                            const newVal = [
+                                                                ...values,
+                                                                option
+                                                            ];
+                                                            field.onChange(
+                                                                stringify
+                                                                    ? toStringValue(
+                                                                          newVal
+                                                                      )
+                                                                    : newVal
+                                                            );
                                                         }
                                                     }}
                                                 >
@@ -135,14 +176,20 @@ export const MultiValuedListComponent = ({
                                             );
                                         })}
                                     </ul>
-                                    {((stringify ? stringToMultiline(field.value) : field.value) ?? []).length > 0 && (
+                                    {(
+                                        (stringify
+                                            ? stringToMultiline(field.value)
+                                            : field.value) ?? []
+                                    ).length > 0 && (
                                         <div className="border-t px-2 py-1">
                                             <Button
                                                 type="button"
                                                 variant="ghost"
                                                 size="sm"
                                                 className="h-7 w-full justify-center"
-                                                onClick={() => field.onChange(stringify ? "" : [])}
+                                                onClick={() =>
+                                                    field.onChange(stringify ? "" : [])
+                                                }
                                             >
                                                 {t("clear")}
                                             </Button>
@@ -154,8 +201,14 @@ export const MultiValuedListComponent = ({
                             <Select
                                 open={open}
                                 onOpenChange={setOpen}
-                                value={(stringify ? (field.value ?? "") : (Array.isArray(field.value) ? field.value[0] : field.value)) ?? ""}
-                                onValueChange={(v) => {
+                                value={
+                                    (stringify
+                                        ? (field.value ?? "")
+                                        : Array.isArray(field.value)
+                                          ? field.value[0]
+                                          : field.value) ?? ""
+                                }
+                                onValueChange={v => {
                                     field.onChange(v);
                                     setOpen(false);
                                 }}
@@ -163,13 +216,17 @@ export const MultiValuedListComponent = ({
                             >
                                 <SelectTrigger
                                     id={name}
-                                    className={helpIconAfterControl ? "flex-1 min-w-0" : undefined}
+                                    className={
+                                        helpIconAfterControl
+                                            ? "flex-1 min-w-0"
+                                            : undefined
+                                    }
                                     data-testid={name}
                                 >
                                     <SelectValue placeholder={t("choose")} />
                                 </SelectTrigger>
                                 <SelectContent>
-                                    {(options ?? []).map((option) => (
+                                    {(options ?? []).map(option => (
                                         <SelectItem key={option} value={option}>
                                             {option}
                                         </SelectItem>

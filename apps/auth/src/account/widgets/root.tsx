@@ -9,10 +9,10 @@
 
 // @ts-nocheck
 
-import { useMemo } from "react";
 import { createRouter, RouterProvider } from "@tanstack/react-router";
-import { routeTree } from "../routeTree.gen";
+import { useMemo } from "react";
 import { environment } from "../app/environment";
+import { routeTree } from "../routeTree.gen";
 
 function getBasepath() {
     try {
@@ -31,7 +31,7 @@ declare module "@tanstack/react-router" {
 export const Root = () => {
     const router = useMemo(
         () => createRouter({ routeTree, basepath: getBasepath() }),
-        [],
+        []
     );
 
     return <RouterProvider router={router} />;

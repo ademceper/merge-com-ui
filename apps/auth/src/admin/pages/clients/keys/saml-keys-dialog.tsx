@@ -1,18 +1,27 @@
-import KeycloakAdminClient from "@keycloak/keycloak-admin-client";
+import type KeycloakAdminClient from "@keycloak/keycloak-admin-client";
 import type CertificateRepresentation from "@keycloak/keycloak-admin-client/lib/defs/certificateRepresentation";
 import type KeyStoreConfig from "@keycloak/keycloak-admin-client/lib/defs/keystoreConfig";
+import { useTranslation } from "@merge-rd/i18n";
 import { Button } from "@merge-rd/ui/components/button";
+import {
+    Dialog,
+    DialogContent,
+    DialogFooter,
+    DialogHeader,
+    DialogTitle
+} from "@merge-rd/ui/components/dialog";
 import { Label } from "@merge-rd/ui/components/label";
 import { RadioGroup, RadioGroupItem } from "@merge-rd/ui/components/radio-group";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@merge-rd/ui/components/dialog";
 import { saveAs } from "file-saver";
 import { useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
-import { useTranslation } from "@merge-rd/i18n";
-import { HelpItem } from "../../../../shared/keycloak-ui-shared";
-import { useAdminClient } from "../../../app/admin-client";
-import { getErrorDescription, getErrorMessage } from "../../../../shared/keycloak-ui-shared";
 import { toast } from "sonner";
+import {
+    getErrorDescription,
+    getErrorMessage,
+    HelpItem
+} from "../../../../shared/keycloak-ui-shared";
+import { useAdminClient } from "../../../app/admin-client";
 import { Certificate } from "./certificate";
 import { KeyForm } from "./generate-key-dialog";
 import type { KeyTypes } from "./saml-keys";
@@ -68,10 +77,12 @@ export const SamlKeysDialog = ({
         handleSubmit,
         formState: { isValid }
     } = form;
-const submit = async (form: SamlKeysDialogForm) => {
+    const submit = async (form: SamlKeysDialogForm) => {
         await submitForm(adminClient, form, id, attr, error => {
             if (error) {
-                toast.error(t("importError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
+                toast.error(t("importError", { error: getErrorMessage(error) }), {
+                    description: getErrorDescription(error)
+                });
             } else {
                 toast.success(t("importSuccess"));
             }
@@ -94,12 +105,19 @@ const submit = async (form: SamlKeysDialogForm) => {
 
             toast.success(t("generateSuccess"));
         } catch (error) {
-            toast.error(t("generateError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
+            toast.error(t("generateError", { error: getErrorMessage(error) }), {
+                description: getErrorDescription(error)
+            });
         }
     };
 
     return (
-        <Dialog open={true} onOpenChange={(open) => { if (!open) onClose(); }}>
+        <Dialog
+            open={true}
+            onOpenChange={open => {
+                if (!open) onClose();
+            }}
+        >
             <DialogContent className="max-w-lg">
                 <DialogHeader>
                     <DialogTitle>
@@ -119,16 +137,26 @@ const submit = async (form: SamlKeysDialogForm) => {
                             <Label>{t("selectMethod")}</Label>
                             <RadioGroup
                                 value={type ? "import" : "generate"}
-                                onValueChange={(v) => setType(v === "import")}
+                                onValueChange={v => setType(v === "import")}
                                 className="flex gap-4"
                             >
                                 <div className="flex items-center gap-2">
-                                    <RadioGroupItem value="generate" id="selectMethodType-generate" />
-                                    <Label htmlFor="selectMethodType-generate">{t("selectMethodType.generate")}</Label>
+                                    <RadioGroupItem
+                                        value="generate"
+                                        id="selectMethodType-generate"
+                                    />
+                                    <Label htmlFor="selectMethodType-generate">
+                                        {t("selectMethodType.generate")}
+                                    </Label>
                                 </div>
                                 <div className="flex items-center gap-2">
-                                    <RadioGroupItem value="import" id="selectMethodType-import" />
-                                    <Label htmlFor="selectMethodType-import">{t("selectMethodType.import")}</Label>
+                                    <RadioGroupItem
+                                        value="import"
+                                        id="selectMethodType-import"
+                                    />
+                                    <Label htmlFor="selectMethodType-import">
+                                        {t("selectMethodType.import")}
+                                    </Label>
                                 </div>
                             </RadioGroup>
                         </div>

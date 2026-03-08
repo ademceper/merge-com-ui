@@ -1,21 +1,21 @@
-import AuthenticationFlowRepresentation from "@keycloak/keycloak-admin-client/lib/defs/authenticationFlowRepresentation";
-import { getErrorDescription, getErrorMessage } from "../../../shared/keycloak-ui-shared";
-import { toast } from "sonner";
+import type AuthenticationFlowRepresentation from "@keycloak/keycloak-admin-client/lib/defs/authenticationFlowRepresentation";
+import { useTranslation } from "@merge-rd/i18n";
 import { Button } from "@merge-rd/ui/components/button";
 import {
     Dialog,
     DialogContent,
+    DialogFooter,
     DialogHeader,
-    DialogTitle,
-    DialogFooter
+    DialogTitle
 } from "@merge-rd/ui/components/dialog";
-import { FormProvider, useForm } from "react-hook-form";
-import { useTranslation } from "@merge-rd/i18n";
 import { useNavigate } from "@tanstack/react-router";
+import { FormProvider, useForm } from "react-hook-form";
+import { toast } from "sonner";
+import { getErrorDescription, getErrorMessage } from "../../../shared/keycloak-ui-shared";
 import { useAdminClient } from "../../app/admin-client";
 import { useRealm } from "../../app/providers/realm-context/realm-context";
 import { NameDescription } from "./form/name-description";
-import { toFlow } from "./routes/flow";
+import { toFlow } from "../../shared/lib/routes/authentication";
 
 type DuplicateFlowModalProps = {
     name: string;
@@ -41,7 +41,7 @@ export const DuplicateFlowModal = ({
         }
     });
     const { getValues, handleSubmit } = form;
-const navigate = useNavigate();
+    const navigate = useNavigate();
     const { realm } = useRealm();
 
     const onSubmit = async () => {
@@ -72,22 +72,26 @@ const navigate = useNavigate();
                 }) as string
             });
         } catch (error) {
-            toast.error(t("copyFlowError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
+            toast.error(t("copyFlowError", { error: getErrorMessage(error) }), {
+                description: getErrorDescription(error)
+            });
         }
         onComplete();
     };
 
     return (
-        <Dialog open onOpenChange={(open) => { if (!open) toggleDialog(); }}>
+        <Dialog
+            open
+            onOpenChange={open => {
+                if (!open) toggleDialog();
+            }}
+        >
             <DialogContent className="max-w-md">
                 <DialogHeader>
                     <DialogTitle>{t("duplicateFlow")}</DialogTitle>
                 </DialogHeader>
                 <FormProvider {...form}>
-                    <form
-                        id="duplicate-flow-form"
-                        onSubmit={handleSubmit(onSubmit)}
-                    >
+                    <form id="duplicate-flow-form" onSubmit={handleSubmit(onSubmit)}>
                         <NameDescription />
                     </form>
                 </FormProvider>

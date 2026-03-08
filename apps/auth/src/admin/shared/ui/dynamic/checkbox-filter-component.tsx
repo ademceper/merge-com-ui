@@ -1,11 +1,7 @@
 import { Badge } from "@merge-rd/ui/components/badge";
-import { Checkbox } from "@merge-rd/ui/components/checkbox";
-import {
-    Popover,
-    PopoverContent,
-    PopoverTrigger,
-} from "@merge-rd/ui/components/popover";
 import { Button } from "@merge-rd/ui/components/button";
+import { Checkbox } from "@merge-rd/ui/components/checkbox";
+import { Popover, PopoverContent, PopoverTrigger } from "@merge-rd/ui/components/popover";
 
 type CheckboxFilterOptions = {
     value: string;
@@ -51,7 +47,10 @@ export const CheckboxFilterComponent = ({
                     )}
                 </Button>
             </PopoverTrigger>
-            <PopoverContent className="w-[var(--radix-popover-trigger-width)] p-2" align="start">
+            <PopoverContent
+                className="w-[var(--radix-popover-trigger-width)] p-2"
+                align="start"
+            >
                 <div className="flex flex-col gap-2 max-h-64 overflow-auto">
                     {options.map(option => (
                         <label
@@ -62,7 +61,10 @@ export const CheckboxFilterComponent = ({
                             <Checkbox
                                 checked={selectedItems.includes(option.value)}
                                 onCheckedChange={() => {
-                                    onSelect({} as React.MouseEvent<HTMLButtonElement>, option.value);
+                                    onSelect(
+                                        {} as React.MouseEvent<HTMLButtonElement>,
+                                        option.value
+                                    );
                                 }}
                             />
                             <span>{option.label}</span>

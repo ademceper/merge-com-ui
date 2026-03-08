@@ -11,11 +11,13 @@
 
 // @ts-nocheck
 
-import { BaseEnvironment, type KeycloakContext } from "../../../shared/keycloak-ui-shared";
-
-import OrganizationRepresentation from "@keycloak/keycloak-admin-client/lib/defs/organizationRepresentation";
+import type OrganizationRepresentation from "@keycloak/keycloak-admin-client/lib/defs/organizationRepresentation";
+import type {
+    BaseEnvironment,
+    KeycloakContext
+} from "../../../shared/keycloak-ui-shared";
 import { parseResponse } from "./parse-response";
-import {
+import type {
     ClientRepresentation,
     CredentialContainer,
     DeviceRepresentation,
@@ -141,7 +143,7 @@ export async function unLinkAccount(
     context: KeycloakContext<BaseEnvironment>,
     account: LinkedAccountRepresentation
 ) {
-    const response = await request("/linked-accounts/" + account.providerName, context, {
+    const response = await request(`/linked-accounts/${account.providerName}`, context, {
         method: "DELETE"
     });
     if (response.ok) return;

@@ -9,12 +9,12 @@
 
 /* eslint-disable */
 
-import { lazy } from "react";
 import { KcAccountUiLoader } from "@keycloakify/keycloak-account-ui";
-import type { KcContext } from "./kc-context";
-import { oidcEarlyInit } from "oidc-spa/entrypoint";
 import { browserRuntimeFreeze } from "oidc-spa/browser-runtime-freeze";
 import { DPoP } from "oidc-spa/DPoP";
+import { oidcEarlyInit } from "oidc-spa/entrypoint";
+import { lazy } from "react";
+import type { KcContext } from "./kc-context";
 
 const KcAccountUi = lazy(() => import("./kc-account-ui"));
 

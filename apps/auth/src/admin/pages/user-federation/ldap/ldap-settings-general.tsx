@@ -1,6 +1,5 @@
-import ComponentRepresentation from "@keycloak/keycloak-admin-client/lib/defs/componentRepresentation";
-import { HelpItem, TextControl } from "../../../../shared/keycloak-ui-shared";
-import { FormLabel } from "../../../../shared/keycloak-ui-shared";
+import type ComponentRepresentation from "@keycloak/keycloak-admin-client/lib/defs/componentRepresentation";
+import { useTranslation } from "@merge-rd/i18n";
 import {
     Select,
     SelectContent,
@@ -9,11 +8,11 @@ import {
     SelectValue
 } from "@merge-rd/ui/components/select";
 import { useEffect, useState } from "react";
-import { Controller, FormProvider, UseFormReturn } from "react-hook-form";
-import { useTranslation } from "@merge-rd/i18n";
+import { Controller, FormProvider, type UseFormReturn } from "react-hook-form";
+import { FormLabel, HelpItem, TextControl } from "../../../../shared/keycloak-ui-shared";
+import { useRealm } from "../../../app/providers/realm-context/realm-context";
 import { FormAccess } from "../../../shared/ui/form/form-access";
 import { WizardSectionHeader } from "../../../shared/ui/wizard-section-header/wizard-section-header";
-import { useRealm } from "../../../app/providers/realm-context/realm-context";
 
 type LdapSettingsGeneralProps = {
     form: UseFormReturn<ComponentRepresentation>;
@@ -134,41 +133,50 @@ export const LdapSettingsGeneral = ({
                             name="kc-vendor"
                             label={t("vendor")}
                             labelIcon={
-                                <HelpItem helpText={t("vendorHelp")} fieldLabelId="vendor" />
+                                <HelpItem
+                                    helpText={t("vendorHelp")}
+                                    fieldLabelId="vendor"
+                                />
                             }
                             isRequired
                         >
-                    <Controller
-                        name="config.vendor[0]"
-                        defaultValue="ad"
-                        control={form.control}
-                        render={({ field }) => (
-                            <Select
-                                open={isVendorDropdownOpen}
-                                onOpenChange={setIsVendorDropdownOpen}
-                                value={field.value ?? "ad"}
-                                onValueChange={(v) => {
-                                    field.onChange(v);
-                                    setVendorDefaultValues();
-                                    setIsVendorDropdownOpen(false);
-                                }}
-                                disabled={vendorEdit}
-                                aria-label={t("selectVendor")}
-                            >
-                                <SelectTrigger id="kc-vendor">
-                                    <SelectValue />
-                                </SelectTrigger>
-                                <SelectContent>
-                                    <SelectItem value="ad">Active Directory</SelectItem>
-                                    <SelectItem value="rhds">Red Hat Directory Server</SelectItem>
-                                    <SelectItem value="tivoli">Tivoli</SelectItem>
-                                    <SelectItem value="edirectory">Novell eDirectory</SelectItem>
-                                    <SelectItem value="other">Other</SelectItem>
-                                </SelectContent>
-                            </Select>
-                        )}
-                    />
-                </FormLabel>
+                            <Controller
+                                name="config.vendor[0]"
+                                defaultValue="ad"
+                                control={form.control}
+                                render={({ field }) => (
+                                    <Select
+                                        open={isVendorDropdownOpen}
+                                        onOpenChange={setIsVendorDropdownOpen}
+                                        value={field.value ?? "ad"}
+                                        onValueChange={v => {
+                                            field.onChange(v);
+                                            setVendorDefaultValues();
+                                            setIsVendorDropdownOpen(false);
+                                        }}
+                                        disabled={vendorEdit}
+                                        aria-label={t("selectVendor")}
+                                    >
+                                        <SelectTrigger id="kc-vendor">
+                                            <SelectValue />
+                                        </SelectTrigger>
+                                        <SelectContent>
+                                            <SelectItem value="ad">
+                                                Active Directory
+                                            </SelectItem>
+                                            <SelectItem value="rhds">
+                                                Red Hat Directory Server
+                                            </SelectItem>
+                                            <SelectItem value="tivoli">Tivoli</SelectItem>
+                                            <SelectItem value="edirectory">
+                                                Novell eDirectory
+                                            </SelectItem>
+                                            <SelectItem value="other">Other</SelectItem>
+                                        </SelectContent>
+                                    </Select>
+                                )}
+                            />
+                        </FormLabel>
                     </div>
                 </div>
             </FormAccess>

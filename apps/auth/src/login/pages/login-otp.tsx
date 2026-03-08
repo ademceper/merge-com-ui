@@ -1,14 +1,16 @@
-import { Fragment, useRef, useState } from "react";
-import type { PageProps } from "keycloakify/login/pages/PageProps";
-import type { KcContext } from "../kc-context";
-import type { I18n } from "../i18n";
-import AuthLayout from "../components/auth-layout";
-import { Button } from "@merge-rd/ui/components/button";
 import { Alert, AlertDescription } from "@merge-rd/ui/components/alert";
+import { Button } from "@merge-rd/ui/components/button";
 import { InputOTP, InputOTPGroup, InputOTPSlot } from "@merge-rd/ui/components/input-otp";
 import { cn } from "@merge-rd/ui/lib/utils";
+import type { PageProps } from "keycloakify/login/pages/PageProps";
+import { Fragment, useRef, useState } from "react";
+import AuthLayout from "../components/auth-layout";
+import type { I18n } from "../i18n";
+import type { KcContext } from "../kc-context";
 
-export default function LoginOtp(props: PageProps<Extract<KcContext, { pageId: "login-otp.ftl" }>, I18n>) {
+export default function LoginOtp(
+    props: PageProps<Extract<KcContext, { pageId: "login-otp.ftl" }>, I18n>
+) {
     const { kcContext, i18n } = props;
 
     const { otpLogin, url, messagesPerField, message } = kcContext;
@@ -22,10 +24,15 @@ export default function LoginOtp(props: PageProps<Extract<KcContext, { pageId: "
     return (
         <AuthLayout>
             <div className="space-y-5">
-                <h1 className="text-xl font-semibold text-foreground tracking-tight">{msg("loginOtpTitle")}</h1>
+                <h1 className="text-xl font-semibold text-foreground tracking-tight">
+                    {msg("loginOtpTitle")}
+                </h1>
 
                 {message && !messagesPerField.existsError("totp") && (
-                    <Alert variant={message.type === "error" ? "destructive" : "default"} className="rounded-lg">
+                    <Alert
+                        variant={message.type === "error" ? "destructive" : "default"}
+                        className="rounded-lg"
+                    >
                         <AlertDescription>{message.summary}</AlertDescription>
                     </Alert>
                 )}
@@ -56,10 +63,15 @@ export default function LoginOtp(props: PageProps<Extract<KcContext, { pageId: "
                                             type="radio"
                                             name="selectedCredentialId"
                                             value={otpCredential.id}
-                                            defaultChecked={otpCredential.id === otpLogin.selectedCredentialId}
+                                            defaultChecked={
+                                                otpCredential.id ===
+                                                otpLogin.selectedCredentialId
+                                            }
                                             className="accent-primary"
                                         />
-                                        <span className="text-sm text-foreground">{otpCredential.userLabel}</span>
+                                        <span className="text-sm text-foreground">
+                                            {otpCredential.userLabel}
+                                        </span>
                                     </label>
                                 </Fragment>
                             ))}
@@ -67,7 +79,9 @@ export default function LoginOtp(props: PageProps<Extract<KcContext, { pageId: "
                     )}
 
                     <div className="space-y-2">
-                        <p className="text-sm text-muted-foreground">{msg("loginOtpOneTime")}</p>
+                        <p className="text-sm text-muted-foreground">
+                            {msg("loginOtpOneTime")}
+                        </p>
                         <div className="flex justify-center">
                             <InputOTP
                                 maxLength={6}
@@ -90,13 +104,26 @@ export default function LoginOtp(props: PageProps<Extract<KcContext, { pageId: "
                                 </InputOTPGroup>
                             </InputOTP>
                         </div>
-                        <input type="hidden" id="otp" name="otp" ref={hiddenInputRef} value={otpValue} />
+                        <input
+                            type="hidden"
+                            id="otp"
+                            name="otp"
+                            ref={hiddenInputRef}
+                            value={otpValue}
+                        />
                         {messagesPerField.existsError("totp") && (
-                            <p className="text-sm text-destructive text-center">{messagesPerField.get("totp")}</p>
+                            <p className="text-sm text-destructive text-center">
+                                {messagesPerField.get("totp")}
+                            </p>
                         )}
                     </div>
 
-                    <Button type="submit" disabled={isSubmitting || otpValue.length < 6} size="xl" className="w-full">
+                    <Button
+                        type="submit"
+                        disabled={isSubmitting || otpValue.length < 6}
+                        size="xl"
+                        className="w-full"
+                    >
                         {msgStr("doLogIn")}
                     </Button>
                 </form>

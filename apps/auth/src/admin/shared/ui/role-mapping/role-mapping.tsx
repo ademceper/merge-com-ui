@@ -1,24 +1,7 @@
 import type KeycloakAdminClient from "@keycloak/keycloak-admin-client";
 import type ClientRepresentation from "@keycloak/keycloak-admin-client/lib/defs/clientRepresentation";
 import type RoleRepresentation from "@keycloak/keycloak-admin-client/lib/defs/roleRepresentation";
-import {
-    getErrorDescription,
-    getErrorMessage,
-    KeycloakSpinner,
-} from "../../../../shared/keycloak-ui-shared";
-import { toast } from "sonner";
-import { Badge } from "@merge-rd/ui/components/badge";
-import { Checkbox } from "@merge-rd/ui/components/checkbox";
-import {
-    DataTable,
-    DataTableRowActions,
-    type ColumnDef,
-    type Row as TableRow,
-} from "@/admin/shared/ui/data-table";
-import { useCallback, useEffect, useMemo, useState } from "react";
 import { useTranslation } from "@merge-rd/i18n";
-import { useAdminClient } from "../../../app/admin-client";
-import { translationFormatter } from "../../lib/translationFormatter";
 import {
     AlertDialog,
     AlertDialogAction,
@@ -29,7 +12,28 @@ import {
     AlertDialogHeader,
     AlertDialogTitle
 } from "@merge-rd/ui/components/alert-dialog";
-import { AddRoleButton, AddRoleMappingModal, FilterType } from "./add-role-mapping-modal";
+import { Badge } from "@merge-rd/ui/components/badge";
+import { Checkbox } from "@merge-rd/ui/components/checkbox";
+import { useCallback, useEffect, useMemo, useState } from "react";
+import { toast } from "sonner";
+import {
+    type ColumnDef,
+    DataTable,
+    DataTableRowActions,
+    type Row as TableRow
+} from "@/admin/shared/ui/data-table";
+import {
+    getErrorDescription,
+    getErrorMessage,
+    KeycloakSpinner
+} from "../../../../shared/keycloak-ui-shared";
+import { useAdminClient } from "../../../app/admin-client";
+import { translationFormatter } from "../../lib/translationFormatter";
+import {
+    AddRoleButton,
+    AddRoleMappingModal,
+    type FilterType
+} from "./add-role-mapping-modal";
 import { deleteMapping, getEffectiveRoles, getMapping } from "./queries";
 import { getEffectiveClientRoles } from "./resource";
 
@@ -44,30 +48,25 @@ export type Row = {
     id?: string;
 };
 
-const mapRoles = (
-    assignedRoles: Row[],
-    effectiveRoles: Row[],
-    hide: boolean,
-): Row[] => [
+const mapRoles = (assignedRoles: Row[], effectiveRoles: Row[], hide: boolean): Row[] => [
     ...(hide
-        ? assignedRoles.map((row) => ({
+        ? assignedRoles.map(row => ({
               id: row.role.id,
               ...row,
               role: {
                   ...row.role,
-                  isInherited: false,
-              },
+                  isInherited: false
+              }
           }))
-        : effectiveRoles.map((row) => ({
+        : effectiveRoles.map(row => ({
               id: row.role.id,
               ...row,
               role: {
                   ...row.role,
                   isInherited:
-                      assignedRoles.find((r) => r.role.id === row.role.id) ===
-                      undefined,
-              },
-          }))),
+                      assignedRoles.find(r => r.role.id === row.role.id) === undefined
+              }
+          })))
 ];
 
 export const ServiceRole = ({ role, client }: Row) => (
@@ -103,12 +102,12 @@ export const RoleMapping = ({
     id,
     type,
     isManager = true,
-    save,
+    save
 }: RoleMappingProps) => {
     const { adminClient } = useAdminClient();
     const { t } = useTranslation();
     const [key, setKey] = useState(0);
-    const refresh = useCallback(() => setKey((k) => k + 1), []);
+    const refresh = useCallback(() => setKey(k => k + 1), []);
     const [hide, setHide] = useState(true);
     const [showAssign, setShowAssign] = useState(false);
     const [filterType, setFilterType] = useState<FilterType>("clients");
@@ -130,38 +129,35 @@ export const RoleMapping = ({
             effectiveRoles = await getEffectiveRoles(adminClient, type, id);
             effectiveClientRoles = (
                 await getEffectiveClientRoles(adminClient, { type, id })
-            ).map((e) => ({
+            ).map(e => ({
                 client: { clientId: e.client, id: e.clientId },
                 role: {
                     id: e.id,
                     name: e.role,
-                    description: e.description,
-                },
+                    description: e.description
+                }
             }));
             effectiveRoles = effectiveRoles.filter(
-                (role) =>
+                role =>
                     !effectiveClientRoles.some(
-                        (clientRole) => clientRole.role.id === role.role.id,
-                    ),
+                        clientRole => clientRole.role.id === role.role.id
+                    )
             );
         }
 
         const roles = await getMapping(adminClient, type, id);
-        const realmRolesMapping =
-            roles.realmMappings?.map((role) => ({ role })) || [];
-        const clientMapping = Object.values(roles.clientMappings || {})
-            .map((client) =>
-                client.mappings.map((role: RoleRepresentation) => ({
-                    client: { clientId: client.client, ...client },
-                    role,
-                })),
-            )
-            .flat();
+        const realmRolesMapping = roles.realmMappings?.map(role => ({ role })) || [];
+        const clientMapping = Object.values(roles.clientMappings || {}).flatMap(client =>
+            client.mappings.map((role: RoleRepresentation) => ({
+                client: { clientId: client.client, ...client },
+                role
+            }))
+        );
 
         const result = mapRoles(
             [...clientMapping, ...realmRolesMapping],
             [...effectiveClientRoles, ...effectiveRoles],
-            hide,
+            hide
         );
         setRows(result);
         setLoading(false);
@@ -180,9 +176,9 @@ export const RoleMapping = ({
         } catch (error) {
             toast.error(
                 t("roleMappingUpdatedError", {
-                    error: getErrorMessage(error),
+                    error: getErrorMessage(error)
                 }),
-                { description: getErrorDescription(error) },
+                { description: getErrorDescription(error) }
             );
         }
     };
@@ -197,50 +193,47 @@ export const RoleMapping = ({
     const handleUnassignRows = useCallback(
         async (rowsToRemove: Row[]) => {
             const nonInherited = rowsToRemove.filter(
-                (r) => !(r.role as CompositeRole).isInherited,
+                r => !(r.role as CompositeRole).isInherited
             );
             if (nonInherited.length === 0) return;
             try {
-                await Promise.all(
-                    deleteMapping(adminClient, type, id, nonInherited),
-                );
+                await Promise.all(deleteMapping(adminClient, type, id, nonInherited));
                 toast.success(t("roleMappingUpdatedSuccess"));
                 refresh();
             } catch (error) {
                 toast.error(
                     t("roleMappingUpdatedError", {
-                        error: getErrorMessage(error),
+                        error: getErrorMessage(error)
                     }),
-                    { description: getErrorDescription(error) },
+                    { description: getErrorDescription(error) }
                 );
             }
         },
-        [adminClient, type, id, t, refresh],
+        [adminClient, type, id, t, refresh]
     );
 
     const columns: ColumnDef<Row>[] = useMemo(
         () => [
             {
                 id: "name",
-                accessorFn: (row) => row.role?.name ?? "",
+                accessorFn: row => row.role?.name ?? "",
                 header: t("name"),
-                cell: ({ row }) => <ServiceRoleCell row={row} />,
+                cell: ({ row }) => <ServiceRoleCell row={row} />
             },
             {
                 id: "inherent",
                 accessorKey: "role",
                 header: t("inherent"),
                 cell: ({ row }) =>
-                    (row.original.role as CompositeRole).isInherited ? t("true") : "-",
+                    (row.original.role as CompositeRole).isInherited ? t("true") : "-"
             },
             {
                 id: "description",
                 accessorKey: "role",
                 header: t("description"),
                 cell: ({ row }) =>
-                    (translationFormatter(t)(
-                        row.original.role.description,
-                    ) as string) || "-",
+                    (translationFormatter(t)(row.original.role.description) as string) ||
+                    "-"
             },
             ...(isManager
                 ? [
@@ -256,19 +249,18 @@ export const RoleMapping = ({
                                       className="flex w-full items-center gap-2 rounded-md px-1.5 py-1 text-left text-sm text-destructive hover:bg-destructive/10 hover:text-destructive"
                                       onClick={() => setSelected([row.original])}
                                       disabled={
-                                          (row.original.role as CompositeRole)
-                                              .isInherited
+                                          (row.original.role as CompositeRole).isInherited
                                       }
                                   >
                                       {t("unAssignRole")}
                                   </button>
                               </DataTableRowActions>
-                          ),
-                      } as ColumnDef<Row>,
+                          )
+                      } as ColumnDef<Row>
                   ]
-                : []),
+                : [])
         ],
-        [t, isManager],
+        [t, isManager]
     );
 
     if (loading) {
@@ -287,7 +279,10 @@ export const RoleMapping = ({
                     onClose={() => setShowAssign(false)}
                 />
             )}
-            <AlertDialog open={selected.length > 0} onOpenChange={onRemoveDialogOpenChange}>
+            <AlertDialog
+                open={selected.length > 0}
+                onOpenChange={onRemoveDialogOpenChange}
+            >
                 <AlertDialogContent>
                     <AlertDialogHeader>
                         <AlertDialogTitle>{t("removeMappingTitle")}</AlertDialogTitle>
@@ -297,7 +292,11 @@ export const RoleMapping = ({
                     </AlertDialogHeader>
                     <AlertDialogFooter>
                         <AlertDialogCancel>{t("cancel")}</AlertDialogCancel>
-                        <AlertDialogAction variant="destructive" data-testid="confirm" onClick={onDeleteConfirm}>
+                        <AlertDialogAction
+                            variant="destructive"
+                            data-testid="confirm"
+                            onClick={onDeleteConfirm}
+                        >
                             {t("remove")}
                         </AlertDialogAction>
                     </AlertDialogFooter>
@@ -310,7 +309,7 @@ export const RoleMapping = ({
                             id="hideInheritedRoles"
                             data-testid="hideInheritedRoles"
                             checked={hide}
-                            onCheckedChange={(check) => {
+                            onCheckedChange={check => {
                                 setHide(!!check);
                                 refresh();
                             }}
@@ -323,14 +322,12 @@ export const RoleMapping = ({
                         </label>
                     </div>
                     {isManager && (
-                        <>
-                            <AddRoleButton
-                                onFilerTypeChange={(type) => {
-                                    setFilterType(type);
-                                    setShowAssign(true);
-                                }}
-                            />
-                        </>
+                        <AddRoleButton
+                            onFilerTypeChange={type => {
+                                setFilterType(type);
+                                setShowAssign(true);
+                            }}
+                        />
                     )}
                 </div>
                 <DataTable<Row>
@@ -343,16 +340,15 @@ export const RoleMapping = ({
                     emptyMessage={t(`noRoles-${type}`)}
                     onDeleteRows={
                         isManager
-                            ? (tableRows) =>
+                            ? tableRows =>
                                   handleUnassignRows(
                                       tableRows
                                           .filter(
-                                              (r) =>
-                                                  !(r.original
-                                                      .role as CompositeRole)
-                                                      .isInherited,
+                                              r =>
+                                                  !(r.original.role as CompositeRole)
+                                                      .isInherited
                                           )
-                                          .map((r) => r.original),
+                                          .map(r => r.original)
                                   )
                             : undefined
                     }

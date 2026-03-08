@@ -32,7 +32,7 @@ export const routes: AppRouteObject[] = [
     { path: "/realm-settings", handle: { access: "view-realm" } },
     { path: "/realms", handle: { access: "view-realm" } },
     { path: "/workflows", handle: { access: "manage-realm" } },
-    { path: "/page-section", handle: { access: "view-realm" } },
+    { path: "/page-section", handle: { access: "view-realm" } }
 ];
 
 export const RootRoute = {

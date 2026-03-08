@@ -1,14 +1,15 @@
-import OrganizationRepresentation from "@keycloak/keycloak-admin-client/lib/defs/organizationRepresentation";
-import UserRepresentation from "@keycloak/keycloak-admin-client/lib/defs/userRepresentation";
-import { getErrorDescription, getErrorMessage, useFetch } from "../../../shared/keycloak-ui-shared";
+import type OrganizationRepresentation from "@keycloak/keycloak-admin-client/lib/defs/organizationRepresentation";
+import type UserRepresentation from "@keycloak/keycloak-admin-client/lib/defs/userRepresentation";
+import { useTranslation } from "@merge-rd/i18n";
 import { Badge } from "@merge-rd/ui/components/badge";
 import { Button } from "@merge-rd/ui/components/button";
 import { Checkbox } from "@merge-rd/ui/components/checkbox";
 import {
-    DataTable,
-    DataTableRowActions,
-    type ColumnDef
-} from "@/admin/shared/ui/data-table";
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuTrigger
+} from "@merge-rd/ui/components/dropdown-menu";
 import {
     Empty,
     EmptyContent,
@@ -16,23 +17,27 @@ import {
     EmptyHeader,
     EmptyTitle
 } from "@merge-rd/ui/components/empty";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@merge-rd/ui/components/dropdown-menu";
-import { toast } from "sonner";
-import { useState } from "react";
-import { useTranslation } from "@merge-rd/i18n";
 import { Link, useNavigate } from "@tanstack/react-router";
-import { useParams } from "../../shared/lib/useParams";
+import { useState } from "react";
+import { toast } from "sonner";
+import {
+    type ColumnDef,
+    DataTable,
+    DataTableRowActions
+} from "@/admin/shared/ui/data-table";
+import { getErrorDescription, getErrorMessage } from "../../../shared/keycloak-ui-shared";
 import { useAdminClient } from "../../app/admin-client";
-import { useConfirmDialog } from "../../shared/ui/confirm-dialog/confirm-dialog";
 import { useRealm } from "../../app/providers/realm-context/realm-context";
-import { OrganizationModal } from "../organizations/organization-modal";
-import { toEditOrganization } from "../organizations/routes/edit-organization";
+import { useParams } from "../../shared/lib/useParams";
 import useToggle from "../../shared/lib/useToggle";
-import { UserParams } from "./routes/user";
-import { toUsers } from "./routes/users";
+import { useConfirmDialog } from "../../shared/ui/confirm-dialog/confirm-dialog";
 import { CheckboxFilterComponent } from "../../shared/ui/dynamic/checkbox-filter-component";
-import { capitalizeFirstLetterFormatter } from "../../shared/lib/util";
 import { SearchInputComponent } from "../../shared/ui/dynamic/search-input-component";
+import { OrganizationModal } from "../organizations/organization-modal";
+import { toEditOrganization } from "../../shared/lib/routes/organizations";
+import { useUserOrganizations } from "./api/use-user-organizations";
+import type { UserParams } from "../../shared/lib/routes/user";
+import { toUsers } from "../../shared/lib/routes/user";
 
 type OrganizationProps = {
     user: UserRepresentation;
@@ -48,12 +53,9 @@ export const Organizations = ({ user }: OrganizationProps) => {
     const { id } = useParams<UserParams>();
     const navigate = useNavigate();
     const { realm } = useRealm();
-    const [key, setKey] = useState(0);
-    const refresh = () => setKey(k => k + 1);
     const [joinToggle, setJoinToggle] = useToggle();
     const [shouldJoin, setShouldJoin] = useState(true);
     const [openOrganizationPicker, setOpenOrganizationPicker] = useState(false);
-    const [userOrgs, setUserOrgs] = useState<MembershipTypeRepresentation[]>([]);
     const [selectedOrgs, setSelectedOrgs] = useState<OrganizationRepresentation[]>([]);
     const [searchText, setSearchText] = useState<string>("");
     const [searchTriggerText, setSearchTriggerText] = useState<string>("");
@@ -78,54 +80,18 @@ export const Organizations = ({ user }: OrganizationProps) => {
             setFilteredMembershipTypes([...filteredMembershipTypes, value]);
         }
         setIsOpen(false);
-        refresh();
     };
 
-    useFetch(
-        async () => {
-            const userOrganizations = await adminClient.organizations.memberOrganizations(
-                { userId: id! }
-            );
-
-            const userOrganizationsWithMembershipTypes = await Promise.all(
-                userOrganizations.map(async org => {
-                    const orgId = org.id;
-                    const memberships = await adminClient.organizations.listMembers({
-                        orgId: orgId!
-                    });
-
-                    const userMemberships = memberships.filter(
-                        (m: UserRepresentation) => m.username === user.username
-                    );
-
-                    const membershipType = userMemberships.map((m: UserRepresentation & { membershipType?: string }) =>
-                        capitalizeFirstLetterFormatter()(m.membershipType)
-                    );
-
-                    return { ...org, membershipType };
-                })
-            );
-
-            let filteredOrgs = userOrganizationsWithMembershipTypes;
-            if (filteredMembershipTypes.length > 0) {
-                filteredOrgs = filteredOrgs.filter(org =>
-                    org.membershipType?.some((type: string | undefined) =>
-                        type != null && filteredMembershipTypes.includes(type)
-                    )
-                );
-            }
-
-            if (searchTriggerText) {
-                filteredOrgs = filteredOrgs.filter(org =>
-                    org.name?.toLowerCase().includes(searchTriggerText.toLowerCase())
-                );
-            }
-
-            return filteredOrgs;
-        },
-        setUserOrgs,
-        [key, filteredMembershipTypes, searchTriggerText]
+    const { data: userOrgs = [], refetch: refreshOrgs } = useUserOrganizations(
+        id!,
+        user.username,
+        {
+            membershipTypes:
+                filteredMembershipTypes.length > 0 ? filteredMembershipTypes : undefined,
+            search: searchTriggerText || undefined
+        }
     );
+    const refresh = () => refreshOrgs();
 
     const handleChange = (value: string) => {
         setSearchText(value);
@@ -173,7 +139,10 @@ export const Organizations = ({ user }: OrganizationProps) => {
                 setSelectedOrgs([]);
                 refresh();
             } catch (error) {
-                toast.error(t("organizationRemoveError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
+                toast.error(
+                    t("organizationRemoveError", { error: getErrorMessage(error) }),
+                    { description: getErrorDescription(error) }
+                );
             }
         }
     });
@@ -195,11 +164,13 @@ export const Organizations = ({ user }: OrganizationProps) => {
             header: t("name"),
             cell: ({ row }) => (
                 <Link
-                    to={toEditOrganization({
-                        realm: realm!,
-                        id: row.original.id!,
-                        tab: "settings"
-                    }) as string}
+                    to={
+                        toEditOrganization({
+                            realm: realm!,
+                            id: row.original.id!,
+                            tab: "settings"
+                        }) as string
+                    }
                     className="text-primary hover:underline truncate block"
                 >
                     {row.original.name}
@@ -217,8 +188,13 @@ export const Organizations = ({ user }: OrganizationProps) => {
             cell: ({ row }) => (
                 <div className="flex flex-wrap gap-1">
                     {row.original.domains?.map(dn => {
-                        const name = typeof dn === "string" ? dn : (dn as { name?: string }).name;
-                        return name ? <Badge key={name} variant="secondary">{name}</Badge> : null;
+                        const name =
+                            typeof dn === "string" ? dn : (dn as { name?: string }).name;
+                        return name ? (
+                            <Badge key={name} variant="secondary">
+                                {name}
+                            </Badge>
+                        ) : null;
                     })}
                 </div>
             )
@@ -231,7 +207,8 @@ export const Organizations = ({ user }: OrganizationProps) => {
         {
             accessorKey: "membershipType",
             header: t("membershipType"),
-            cell: ({ row }) => row.original.membershipType?.filter(Boolean).join(", ") ?? "-"
+            cell: ({ row }) =>
+                row.original.membershipType?.filter(Boolean).join(", ") ?? "-"
         },
         {
             id: "actions",
@@ -258,10 +235,14 @@ export const Organizations = ({ user }: OrganizationProps) => {
     const emptyContent = (
         <Empty className="py-12">
             <EmptyHeader>
-                <EmptyTitle className="text-base font-medium">{t("emptyUserOrganizations")}</EmptyTitle>
+                <EmptyTitle className="text-base font-medium">
+                    {t("emptyUserOrganizations")}
+                </EmptyTitle>
             </EmptyHeader>
             <EmptyContent>
-                <EmptyDescription>{t("emptyUserOrganizationsInstructions")}</EmptyDescription>
+                <EmptyDescription>
+                    {t("emptyUserOrganizationsInstructions")}
+                </EmptyDescription>
                 <div className="flex flex-wrap justify-center gap-2">
                     <Button
                         variant="default"
@@ -310,12 +291,14 @@ export const Organizations = ({ user }: OrganizationProps) => {
                                           );
                                 })
                             );
-                            toast.success(t(
+                            toast.success(
+                                t(
                                     shouldJoin
                                         ? "userAddedOrganization"
                                         : "userInvitedOrganization",
                                     { count: orgs.length }
-                                ));
+                                )
+                            );
                             refresh();
                         } catch (error) {
                             toast.error(
@@ -333,7 +316,6 @@ export const Organizations = ({ user }: OrganizationProps) => {
             )}
             <DeleteConfirm />
             <DataTable<MembershipTypeRepresentation>
-                key={key}
                 columns={columns}
                 data={userOrgs}
                 searchColumnId="name"
@@ -343,18 +325,16 @@ export const Organizations = ({ user }: OrganizationProps) => {
                 toolbar={
                     <div className="flex flex-wrap items-center gap-2">
                         <SearchInputComponent
-                                value={searchText}
-                                placeholder={t("searchMembers")}
-                                onChange={handleChange}
-                                onSearch={handleSearch}
-                                onClear={clearInput}
-                                aria-label={t("searchMembers")}
-                            />
+                            value={searchText}
+                            placeholder={t("searchMembers")}
+                            onChange={handleChange}
+                            onSearch={handleSearch}
+                            onClear={clearInput}
+                            aria-label={t("searchMembers")}
+                        />
                         <DropdownMenu open={joinToggle} onOpenChange={setJoinToggle}>
                             <DropdownMenuTrigger asChild>
-                                <Button id="toggle-id">
-                                    {t("joinOrganization")}
-                                </Button>
+                                <Button id="toggle-id">{t("joinOrganization")}</Button>
                             </DropdownMenuTrigger>
                             <DropdownMenuContent>
                                 <DropdownMenuItem

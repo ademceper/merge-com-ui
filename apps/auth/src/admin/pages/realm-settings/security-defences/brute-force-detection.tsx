@@ -1,24 +1,24 @@
 import type RealmRepresentation from "@keycloak/keycloak-admin-client/lib/defs/realmRepresentation";
-import {
-    FormLabel,
-    HelpItem,
-    NumberControl,
-} from "../../../../shared/keycloak-ui-shared";
+import { useTranslation } from "@merge-rd/i18n";
 import { Label } from "@merge-rd/ui/components/label";
 import {
     Select,
     SelectContent,
     SelectItem,
     SelectTrigger,
-    SelectValue,
+    SelectValue
 } from "@merge-rd/ui/components/select";
 import { useEffect, useState } from "react";
 import { Controller, FormProvider, useForm } from "react-hook-form";
-import { useTranslation } from "@merge-rd/i18n";
-import { FormPanel } from "../../../../shared/keycloak-ui-shared";
-import { FormAccess } from "../../../shared/ui/form/form-access";
-import { FixedButtonsGroup } from "../../../shared/ui/form/fixed-button-group";
+import {
+    FormLabel,
+    FormPanel,
+    HelpItem,
+    NumberControl
+} from "../../../../shared/keycloak-ui-shared";
 import { convertToFormValues } from "../../../shared/lib/util";
+import { FixedButtonsGroup } from "../../../shared/ui/form/fixed-button-group";
+import { FormAccess } from "../../../shared/ui/form/form-access";
 import { Time } from "./time";
 
 type BruteForceDetectionProps = {
@@ -30,14 +30,14 @@ enum BruteForceMode {
     Disabled = "Disabled",
     PermanentLockout = "PermanentLockout",
     TemporaryLockout = "TemporaryLockout",
-    PermanentAfterTemporaryLockout = "PermanentAfterTemporaryLockout",
+    PermanentAfterTemporaryLockout = "PermanentAfterTemporaryLockout"
 }
 
 const bruteForceModes = [
     BruteForceMode.Disabled,
     BruteForceMode.PermanentLockout,
     BruteForceMode.TemporaryLockout,
-    BruteForceMode.PermanentAfterTemporaryLockout,
+    BruteForceMode.PermanentAfterTemporaryLockout
 ];
 
 const bruteForceStrategyTypes = ["MULTIPLE", "LINEAR"];
@@ -61,7 +61,7 @@ export const BruteForceDetection = ({ realm, save }: BruteForceDetectionProps) =
         if (!getValues("permanentLockout")) {
             return BruteForceMode.TemporaryLockout;
         }
-        return getValues("maxTemporaryLockouts") == 0
+        return getValues("maxTemporaryLockouts") === 0
             ? BruteForceMode.PermanentLockout
             : BruteForceMode.PermanentAfterTemporaryLockout;
     })();
@@ -114,9 +114,7 @@ export const BruteForceDetection = ({ realm, save }: BruteForceDetectionProps) =
                             </div>
                             <Select
                                 value={bruteForceMode}
-                                onValueChange={(v) =>
-                                    handleModeChange(v as BruteForceMode)
-                                }
+                                onValueChange={v => handleModeChange(v as BruteForceMode)}
                             >
                                 <SelectTrigger
                                     id="kc-brute-force-mode"
@@ -126,7 +124,7 @@ export const BruteForceDetection = ({ realm, save }: BruteForceDetectionProps) =
                                     <SelectValue />
                                 </SelectTrigger>
                                 <SelectContent>
-                                    {bruteForceModes.map((mode) => (
+                                    {bruteForceModes.map(mode => (
                                         <SelectItem key={mode} value={mode}>
                                             {t(`bruteForceMode.${mode}`)}
                                         </SelectItem>
@@ -144,8 +142,8 @@ export const BruteForceDetection = ({ realm, save }: BruteForceDetectionProps) =
                                         defaultValue: 0,
                                         rules: {
                                             required: t("required"),
-                                            min: 0,
-                                        },
+                                            min: 0
+                                        }
                                     }}
                                 />
                                 {bruteForceMode ===
@@ -156,27 +154,47 @@ export const BruteForceDetection = ({ realm, save }: BruteForceDetectionProps) =
                                         labelIcon={t("maxTemporaryLockoutsHelp")}
                                         controller={{
                                             defaultValue: 0,
-                                            rules: { min: 0 },
+                                            rules: { min: 0 }
                                         }}
                                     />
                                 )}
-                                {(bruteForceMode ===
-                                    BruteForceMode.TemporaryLockout ||
+                                {(bruteForceMode === BruteForceMode.TemporaryLockout ||
                                     bruteForceMode ===
                                         BruteForceMode.PermanentAfterTemporaryLockout) && (
                                     <>
-                                        <FormLabel name="bruteForceStrategy" label={t("bruteForceStrategy")} labelIcon={t("bruteForceStrategyHelp", { failureFactor: getValues("failureFactor") })} error={formState.errors.bruteForceStrategy}>
+                                        <FormLabel
+                                            name="bruteForceStrategy"
+                                            label={t("bruteForceStrategy")}
+                                            labelIcon={t("bruteForceStrategyHelp", {
+                                                failureFactor: getValues("failureFactor")
+                                            })}
+                                            error={formState.errors.bruteForceStrategy}
+                                        >
                                             <Controller
                                                 name="bruteForceStrategy"
                                                 control={form.control}
                                                 defaultValue=""
                                                 render={({ field }) => (
-                                                    <Select value={field.value ?? ""} onValueChange={field.onChange}>
-                                                        <SelectTrigger id="bruteForceStrategy"><SelectValue /></SelectTrigger>
+                                                    <Select
+                                                        value={field.value ?? ""}
+                                                        onValueChange={field.onChange}
+                                                    >
+                                                        <SelectTrigger id="bruteForceStrategy">
+                                                            <SelectValue />
+                                                        </SelectTrigger>
                                                         <SelectContent>
-                                                            {bruteForceStrategyTypes.map((key) => (
-                                                                <SelectItem key={key} value={key}>{t(`bruteForceStrategy.${key}`)}</SelectItem>
-                                                            ))}
+                                                            {bruteForceStrategyTypes.map(
+                                                                key => (
+                                                                    <SelectItem
+                                                                        key={key}
+                                                                        value={key}
+                                                                    >
+                                                                        {t(
+                                                                            `bruteForceStrategy.${key}`
+                                                                        )}
+                                                                    </SelectItem>
+                                                                )
+                                                            )}
                                                         </SelectContent>
                                                     </Select>
                                                 )}
@@ -184,27 +202,19 @@ export const BruteForceDetection = ({ realm, save }: BruteForceDetectionProps) =
                                         </FormLabel>
                                         <Time name="waitIncrementSeconds" min={0} />
                                         <Time name="maxFailureWaitSeconds" min={0} />
-                                        <Time
-                                            name="maxDeltaTimeSeconds"
-                                            min={0}
-                                        />
+                                        <Time name="maxDeltaTimeSeconds" min={0} />
                                     </>
                                 )}
                                 <NumberControl
                                     name="quickLoginCheckMilliSeconds"
                                     label={t("quickLoginCheckMilliSeconds")}
-                                    labelIcon={t(
-                                        "quickLoginCheckMilliSecondsHelp",
-                                    )}
+                                    labelIcon={t("quickLoginCheckMilliSecondsHelp")}
                                     controller={{
                                         defaultValue: 0,
-                                        rules: { min: 0 },
+                                        rules: { min: 0 }
                                     }}
                                 />
-                                <Time
-                                    name="minimumQuickLoginWaitSeconds"
-                                    min={0}
-                                />
+                                <Time name="minimumQuickLoginWaitSeconds" min={0} />
                             </>
                         )}
                     </div>
@@ -213,9 +223,7 @@ export const BruteForceDetection = ({ realm, save }: BruteForceDetectionProps) =
                     name="bruteForce"
                     reset={setupForm}
                     isSubmit
-                    isDisabled={
-                        !formState.isDirty && !isBruteForceModeUpdated
-                    }
+                    isDisabled={!formState.isDirty && !isBruteForceModeUpdated}
                 />
             </FormAccess>
         </FormProvider>

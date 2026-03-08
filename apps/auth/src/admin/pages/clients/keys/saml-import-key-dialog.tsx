@@ -1,12 +1,15 @@
-import { getErrorDescription, getErrorMessage } from "../../../../shared/keycloak-ui-shared";
-import { toast } from "sonner";
-import { FormProvider, useForm } from "react-hook-form";
 import { useTranslation } from "@merge-rd/i18n";
+import { FormProvider, useForm } from "react-hook-form";
+import { toast } from "sonner";
+import {
+    getErrorDescription,
+    getErrorMessage
+} from "../../../../shared/keycloak-ui-shared";
 import { useAdminClient } from "../../../app/admin-client";
 import { ConfirmDialogModal } from "../../../shared/ui/confirm-dialog/confirm-dialog";
 import { KeyForm } from "./generate-key-dialog";
 import type { KeyTypes } from "./saml-keys";
-import { SamlKeysDialogForm, submitForm } from "./saml-keys-dialog";
+import { type SamlKeysDialogForm, submitForm } from "./saml-keys-dialog";
 
 type SamlImportKeyDialogProps = {
     id: string;
@@ -29,10 +32,12 @@ export const SamlImportKeyDialog = ({
         handleSubmit,
         formState: { isValid }
     } = form;
-const submit = async (form: SamlKeysDialogForm) => {
+    const submit = async (form: SamlKeysDialogForm) => {
         await submitForm(adminClient, form, id, attr, error => {
             if (error) {
-                toast.error(t("importError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
+                toast.error(t("importError", { error: getErrorMessage(error) }), {
+                    description: getErrorDescription(error)
+                });
             } else {
                 toast.success(t("importSuccess"));
                 onImported();

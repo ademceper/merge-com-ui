@@ -1,13 +1,13 @@
-import {
+import type {
     UserProfileAttributeGroupMetadata,
     UserProfileAttributeMetadata,
     UserProfileMetadata
 } from "@keycloak/keycloak-admin-client/lib/defs/userProfileMetadata";
 import { Input } from "@merge-rd/ui/components/input";
 import { Textarea } from "@merge-rd/ui/components/textarea";
-import { TFunction } from "i18next";
-import { ReactNode, useMemo, type JSX } from "react";
-import { FieldPath, UseFormReturn } from "react-hook-form";
+import type { TFunction } from "i18next";
+import { type JSX, type ReactNode, useMemo } from "react";
+import type { FieldPath, UseFormReturn } from "react-hook-form";
 
 import { ScrollForm } from "../scroll-form/scroll-form";
 import { LocaleSelector } from "./locale-selector";
@@ -15,9 +15,26 @@ import { MultiInputComponent } from "./multi-input-component";
 import { OptionComponent } from "./options-component";
 import { SelectComponent } from "./select-component";
 import { UserProfileGroup } from "./user-profile-group";
-import { UserFormFields, fieldName, isRootAttribute, isRequiredAttribute, label, labelAttribute } from "./utils";
+import {
+    fieldName,
+    isRequiredAttribute,
+    isRootAttribute,
+    label,
+    labelAttribute,
+    type UserFormFields
+} from "./utils";
 
-type HtmlInputType = "text" | "email" | "tel" | "url" | "number" | "range" | "datetime-local" | "date" | "month" | "time";
+type HtmlInputType =
+    | "text"
+    | "email"
+    | "tel"
+    | "url"
+    | "number"
+    | "range"
+    | "datetime-local"
+    | "date"
+    | "month"
+    | "time";
 
 function TextFieldComponent(props: UserProfileFieldProps) {
     const { form, inputType, attribute } = props;
@@ -36,10 +53,12 @@ function TextFieldComponent(props: UserProfileFieldProps) {
                         ? ""
                         : label(
                               props.t,
-                              attribute.annotations?.["inputTypePlaceholder"] as string,
+                              attribute.annotations?.inputTypePlaceholder as string,
                               "",
-                              attribute.annotations?.["inputOptionLabelsI18nPrefix"] as string
-                          ) || labelAttribute(props.t, attribute) || ""
+                              attribute.annotations?.inputOptionLabelsI18nPrefix as string
+                          ) ||
+                          labelAttribute(props.t, attribute) ||
+                          ""
                 }
                 disabled={attribute.readOnly}
                 defaultValue={attribute.defaultValue}
@@ -59,8 +78,8 @@ function TextAreaFieldComponent(props: UserProfileFieldProps) {
             <Textarea
                 id={attribute.name}
                 data-testid={attribute.name}
-                cols={attribute.annotations?.["inputTypeCols"] as number}
-                rows={attribute.annotations?.["inputTypeRows"] as number}
+                cols={attribute.annotations?.inputTypeCols as number}
+                rows={attribute.annotations?.inputTypeRows as number}
                 disabled={attribute.readOnly}
                 required={isRequired}
                 defaultValue={attribute.defaultValue}

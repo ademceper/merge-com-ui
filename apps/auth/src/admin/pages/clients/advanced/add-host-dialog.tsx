@@ -1,11 +1,20 @@
-import { Button } from "@merge-rd/ui/components/button";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@merge-rd/ui/components/dialog";
-import { FormProvider, useForm } from "react-hook-form";
 import { useTranslation } from "@merge-rd/i18n";
-import { TextControl } from "../../../../shared/keycloak-ui-shared";
-import { useAdminClient } from "../../../app/admin-client";
-import { getErrorDescription, getErrorMessage } from "../../../../shared/keycloak-ui-shared";
+import { Button } from "@merge-rd/ui/components/button";
+import {
+    Dialog,
+    DialogContent,
+    DialogFooter,
+    DialogHeader,
+    DialogTitle
+} from "@merge-rd/ui/components/dialog";
+import { FormProvider, useForm } from "react-hook-form";
 import { toast } from "sonner";
+import {
+    getErrorDescription,
+    getErrorMessage,
+    TextControl
+} from "../../../../shared/keycloak-ui-shared";
+import { useAdminClient } from "../../../app/admin-client";
 
 type FormFields = {
     node: string;
@@ -32,7 +41,7 @@ export const AddHostDialog = ({
         handleSubmit,
         formState: { isDirty, isValid }
     } = form;
-async function onSubmit({ node }: FormFields) {
+    async function onSubmit({ node }: FormFields) {
         try {
             await adminClient.clients.addClusterNode({
                 id,
@@ -41,20 +50,31 @@ async function onSubmit({ node }: FormFields) {
             onAdded(node);
             toast.success(t("addedNodeSuccess"));
         } catch (error) {
-            toast.error(t("addedNodeFail", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
+            toast.error(t("addedNodeFail", { error: getErrorMessage(error) }), {
+                description: getErrorDescription(error)
+            });
         }
 
         onClose();
     }
 
     return (
-        <Dialog open={isOpen} onOpenChange={(open) => { if (!open) onClose(); }}>
+        <Dialog
+            open={isOpen}
+            onOpenChange={open => {
+                if (!open) onClose();
+            }}
+        >
             <DialogContent className="max-w-md">
                 <DialogHeader>
                     <DialogTitle>{t("addNode")}</DialogTitle>
                 </DialogHeader>
                 <FormProvider {...form}>
-                    <form id="add-host-form" onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+                    <form
+                        id="add-host-form"
+                        onSubmit={handleSubmit(onSubmit)}
+                        className="space-y-4"
+                    >
                         <TextControl
                             name="node"
                             label={t("nodeHost")}
@@ -73,11 +93,7 @@ async function onSubmit({ node }: FormFields) {
                     >
                         {t("save")}
                     </Button>
-                    <Button
-                        id="add-node-cancel"
-                        variant="link"
-                        onClick={onClose}
-                    >
+                    <Button id="add-node-cancel" variant="link" onClick={onClose}>
                         {t("cancel")}
                     </Button>
                 </DialogFooter>

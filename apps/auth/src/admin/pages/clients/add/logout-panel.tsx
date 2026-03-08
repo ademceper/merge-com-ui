@@ -1,14 +1,13 @@
-import { Switch } from "@merge-rd/ui/components/switch";
-import { Label } from "@merge-rd/ui/components/label";
-import { Controller, useFormContext } from "react-hook-form";
 import { useTranslation } from "@merge-rd/i18n";
+import { Label } from "@merge-rd/ui/components/label";
+import { Switch } from "@merge-rd/ui/components/switch";
+import { Controller, useFormContext } from "react-hook-form";
 import { HelpItem, TextControl } from "../../../../shared/keycloak-ui-shared";
-
-import { DefaultSwitchControl } from "../../../shared/ui/switch-control";
-import { FormAccess } from "../../../shared/ui/form/form-access";
 import { useAccess } from "../../../app/providers/access/access";
 import { convertAttributeNameToForm } from "../../../shared/lib/util";
-import { FormFields } from "../client-details";
+import { FormAccess } from "../../../shared/ui/form/form-access";
+import { DefaultSwitchControl } from "../../../shared/ui/switch-control";
+import type { FormFields } from "../client-details";
 import type { ClientSettingsProps } from "../client-settings";
 
 const validateUrl = (uri: string | undefined, error: string) =>
@@ -30,154 +29,166 @@ export const LogoutPanel = ({ client: { access } }: ClientSettingsProps) => {
             : "frontchannelLogoutHelp";
 
     return (
-        <FormAccess
-            fineGrainedAccess={access?.configure}
-            role="manage-clients"
-        >
+        <FormAccess fineGrainedAccess={access?.configure} role="manage-clients">
             <div className="flex flex-col gap-5">
-            <div className="flex w-full items-center justify-between gap-2">
-                <Label htmlFor="kc-frontchannelLogout">{t("frontchannelLogout")}</Label>
-                <div className="flex shrink-0 items-center gap-2">
-                    <Controller
-                        name="frontchannelLogout"
-                        defaultValue={true}
-                        control={control}
-                        render={({ field }) => (
-                            <>
-                                <span className="text-sm text-muted-foreground">
-                                    {field.value ? t("on") : t("off")}
-                                </span>
-                                <Switch
-                                    id="kc-frontchannelLogout-switch"
-                                    checked={field.value}
-                                    onCheckedChange={field.onChange}
-                                    aria-label={t("frontchannelLogout")}
-                                />
-                            </>
-                        )}
-                    />
-                    <HelpItem
-                        helpText={t(frontchannelLogoutTooltip)}
-                        fieldLabelId="frontchannelLogout"
-                    />
+                <div className="flex w-full items-center justify-between gap-2">
+                    <Label htmlFor="kc-frontchannelLogout">
+                        {t("frontchannelLogout")}
+                    </Label>
+                    <div className="flex shrink-0 items-center gap-2">
+                        <Controller
+                            name="frontchannelLogout"
+                            defaultValue={true}
+                            control={control}
+                            render={({ field }) => (
+                                <>
+                                    <span className="text-sm text-muted-foreground">
+                                        {field.value ? t("on") : t("off")}
+                                    </span>
+                                    <Switch
+                                        id="kc-frontchannelLogout-switch"
+                                        checked={field.value}
+                                        onCheckedChange={field.onChange}
+                                        aria-label={t("frontchannelLogout")}
+                                    />
+                                </>
+                            )}
+                        />
+                        <HelpItem
+                            helpText={t(frontchannelLogoutTooltip)}
+                            fieldLabelId="frontchannelLogout"
+                        />
+                    </div>
                 </div>
-            </div>
-            {protocol === "openid-connect" && frontchannelLogout && (
-                <TextControl
-                    data-testid="frontchannelLogoutUrl"
-                    type="url"
-                    name={convertAttributeNameToForm<FormFields>(
-                        "attributes.frontchannel.logout.url"
-                    )}
-                    label={t("frontchannelLogoutUrl")}
-                    labelIcon={t("frontchannelLogoutUrlHelp")}
-                    rules={{
-                        validate: uri => validateUrl(uri, t("frontchannelUrlInvalid"))
-                    }}
-                />
-            )}
-            {protocol === "openid-connect" && frontchannelLogout && (
-                <DefaultSwitchControl
-                    name={convertAttributeNameToForm<FormFields>(
-                        "attributes.frontchannel.logout.session.required"
-                    )}
-                    defaultValue="true"
-                    label={t("frontchannelLogoutSessionRequired")}
-                    labelIcon={t("frontchannelLogoutSessionRequiredHelp")}
-                    stringify
-                />
-            )}
-            {protocol === "openid-connect" && !frontchannelLogout && (
-                <>
+                {protocol === "openid-connect" && frontchannelLogout && (
                     <TextControl
-                        data-testid="backchannelLogoutUrl"
+                        data-testid="frontchannelLogoutUrl"
                         type="url"
                         name={convertAttributeNameToForm<FormFields>(
-                            "attributes.backchannel.logout.url"
+                            "attributes.frontchannel.logout.url"
                         )}
-                        label={t("backchannelLogoutUrl")}
-                        labelIcon={t("backchannelLogoutUrlHelp")}
+                        label={t("frontchannelLogoutUrl")}
+                        labelIcon={t("frontchannelLogoutUrlHelp")}
                         rules={{
-                            validate: uri => validateUrl(uri, t("backchannelUrlInvalid"))
+                            validate: uri => validateUrl(uri, t("frontchannelUrlInvalid"))
                         }}
                     />
-                    <div className="flex w-full items-center justify-between gap-2">
-                        <Label htmlFor="backchannelLogoutSessionRequired">{t("backchannelLogoutSessionRequired")}</Label>
-                        <div className="flex shrink-0 items-center gap-2">
-                            <Controller
-                                name={convertAttributeNameToForm<FormFields>(
-                                    "attributes.backchannel.logout.session.required"
-                                )}
-                                defaultValue="false"
-                                control={control}
-                                render={({ field }) => (
-                                    <>
-                                        <span className="text-sm text-muted-foreground">
-                                            {field.value === "true" ? t("on") : t("off")}
-                                        </span>
-                                        <Switch
-                                            id="backchannelLogoutSessionRequired"
-                                            checked={field.value === "true"}
-                                            onCheckedChange={(value) =>
-                                                field.onChange(value.toString())
-                                            }
-                                            aria-label={t("backchannelLogoutSessionRequired")}
-                                        />
-                                    </>
-                                )}
-                            />
-                            <HelpItem
-                                helpText={t("backchannelLogoutSessionRequiredHelp")}
-                                fieldLabelId="backchannelLogoutSessionRequired"
-                            />
+                )}
+                {protocol === "openid-connect" && frontchannelLogout && (
+                    <DefaultSwitchControl
+                        name={convertAttributeNameToForm<FormFields>(
+                            "attributes.frontchannel.logout.session.required"
+                        )}
+                        defaultValue="true"
+                        label={t("frontchannelLogoutSessionRequired")}
+                        labelIcon={t("frontchannelLogoutSessionRequiredHelp")}
+                        stringify
+                    />
+                )}
+                {protocol === "openid-connect" && !frontchannelLogout && (
+                    <>
+                        <TextControl
+                            data-testid="backchannelLogoutUrl"
+                            type="url"
+                            name={convertAttributeNameToForm<FormFields>(
+                                "attributes.backchannel.logout.url"
+                            )}
+                            label={t("backchannelLogoutUrl")}
+                            labelIcon={t("backchannelLogoutUrlHelp")}
+                            rules={{
+                                validate: uri =>
+                                    validateUrl(uri, t("backchannelUrlInvalid"))
+                            }}
+                        />
+                        <div className="flex w-full items-center justify-between gap-2">
+                            <Label htmlFor="backchannelLogoutSessionRequired">
+                                {t("backchannelLogoutSessionRequired")}
+                            </Label>
+                            <div className="flex shrink-0 items-center gap-2">
+                                <Controller
+                                    name={convertAttributeNameToForm<FormFields>(
+                                        "attributes.backchannel.logout.session.required"
+                                    )}
+                                    defaultValue="false"
+                                    control={control}
+                                    render={({ field }) => (
+                                        <>
+                                            <span className="text-sm text-muted-foreground">
+                                                {field.value === "true"
+                                                    ? t("on")
+                                                    : t("off")}
+                                            </span>
+                                            <Switch
+                                                id="backchannelLogoutSessionRequired"
+                                                checked={field.value === "true"}
+                                                onCheckedChange={value =>
+                                                    field.onChange(value.toString())
+                                                }
+                                                aria-label={t(
+                                                    "backchannelLogoutSessionRequired"
+                                                )}
+                                            />
+                                        </>
+                                    )}
+                                />
+                                <HelpItem
+                                    helpText={t("backchannelLogoutSessionRequiredHelp")}
+                                    fieldLabelId="backchannelLogoutSessionRequired"
+                                />
+                            </div>
                         </div>
-                    </div>
-                    <div className="flex w-full items-center justify-between gap-2">
-                        <Label htmlFor="backchannelLogoutRevokeOfflineSessions">{t("backchannelLogoutRevokeOfflineSessions")}</Label>
-                        <div className="flex shrink-0 items-center gap-2">
-                            <Controller
-                                name={convertAttributeNameToForm<FormFields>(
-                                    "attributes.backchannel.logout.revoke.offline.tokens"
-                                )}
-                                defaultValue="false"
-                                control={control}
-                                render={({ field }) => (
-                                    <>
-                                        <span className="text-sm text-muted-foreground">
-                                            {field.value === "true" ? t("on") : t("off")}
-                                        </span>
-                                        <Switch
-                                            id="backchannelLogoutRevokeOfflineSessions"
-                                            checked={field.value === "true"}
-                                            onCheckedChange={(value) =>
-                                                field.onChange(value.toString())
-                                            }
-                                            aria-label={t(
-                                                "backchannelLogoutRevokeOfflineSessions"
-                                            )}
-                                        />
-                                    </>
-                                )}
-                            />
-                            <HelpItem
-                                helpText={t("backchannelLogoutRevokeOfflineSessionsHelp")}
-                                fieldLabelId="backchannelLogoutRevokeOfflineSessions"
-                            />
+                        <div className="flex w-full items-center justify-between gap-2">
+                            <Label htmlFor="backchannelLogoutRevokeOfflineSessions">
+                                {t("backchannelLogoutRevokeOfflineSessions")}
+                            </Label>
+                            <div className="flex shrink-0 items-center gap-2">
+                                <Controller
+                                    name={convertAttributeNameToForm<FormFields>(
+                                        "attributes.backchannel.logout.revoke.offline.tokens"
+                                    )}
+                                    defaultValue="false"
+                                    control={control}
+                                    render={({ field }) => (
+                                        <>
+                                            <span className="text-sm text-muted-foreground">
+                                                {field.value === "true"
+                                                    ? t("on")
+                                                    : t("off")}
+                                            </span>
+                                            <Switch
+                                                id="backchannelLogoutRevokeOfflineSessions"
+                                                checked={field.value === "true"}
+                                                onCheckedChange={value =>
+                                                    field.onChange(value.toString())
+                                                }
+                                                aria-label={t(
+                                                    "backchannelLogoutRevokeOfflineSessions"
+                                                )}
+                                            />
+                                        </>
+                                    )}
+                                />
+                                <HelpItem
+                                    helpText={t(
+                                        "backchannelLogoutRevokeOfflineSessionsHelp"
+                                    )}
+                                    fieldLabelId="backchannelLogoutRevokeOfflineSessions"
+                                />
+                            </div>
                         </div>
-                    </div>
-                </>
-            )}
-            {protocol === "openid-connect" && (
-                <DefaultSwitchControl
-                    name={convertAttributeNameToForm<FormFields>(
-                        "attributes.logout.confirmation.enabled"
-                    )}
-                    defaultValue="false"
-                    label={t("logoutConfirmation")}
-                    labelIcon={t("logoutConfirmationHelp")}
-                    stringify
-                />
-            )}
+                    </>
+                )}
+                {protocol === "openid-connect" && (
+                    <DefaultSwitchControl
+                        name={convertAttributeNameToForm<FormFields>(
+                            "attributes.logout.confirmation.enabled"
+                        )}
+                        defaultValue="false"
+                        label={t("logoutConfirmation")}
+                        labelIcon={t("logoutConfirmationHelp")}
+                        stringify
+                    />
+                )}
             </div>
         </FormAccess>
     );

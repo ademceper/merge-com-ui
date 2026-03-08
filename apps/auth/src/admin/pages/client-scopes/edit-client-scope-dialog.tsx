@@ -1,7 +1,5 @@
 import type ClientScopeRepresentation from "@keycloak/keycloak-admin-client/lib/defs/clientScopeRepresentation";
-import { getErrorDescription, getErrorMessage } from "../../../shared/keycloak-ui-shared";
-import { KeycloakSpinner } from "../../../shared/keycloak-ui-shared";
-import { toast } from "sonner";
+import { useTranslation } from "@merge-rd/i18n";
 import { Button } from "@merge-rd/ui/components/button";
 import {
     Dialog,
@@ -12,15 +10,20 @@ import {
     DialogTitle
 } from "@merge-rd/ui/components/dialog";
 import { useEffect, useState } from "react";
-import { useTranslation } from "@merge-rd/i18n";
+import { toast } from "sonner";
+import {
+    getErrorDescription,
+    getErrorMessage,
+    KeycloakSpinner
+} from "../../../shared/keycloak-ui-shared";
 import { useAdminClient } from "../../app/admin-client";
+import { convertFormValuesToObject } from "../../shared/lib/util";
 import {
     AllClientScopes,
     ClientScope,
-    ClientScopeDefaultOptionalType,
+    type ClientScopeDefaultOptionalType,
     changeScope
 } from "../../shared/ui/client-scope/client-scope-types";
-import { convertFormValuesToObject } from "../../shared/lib/util";
 import { ScopeForm } from "./details/scope-form";
 
 type EditClientScopeDialogProps = {
@@ -37,9 +40,10 @@ async function determineScopeType(
     clientScope: ClientScopeRepresentation
 ) {
     const defaultScopes = await adminClient.clientScopes.listDefaultClientScopes();
-    if (defaultScopes.find((s) => s.name === clientScope.name)) return ClientScope.default;
-    const optionalScopes = await adminClient.clientScopes.listDefaultOptionalClientScopes();
-    return optionalScopes.find((s) => s.name === clientScope.name)
+    if (defaultScopes.find(s => s.name === clientScope.name)) return ClientScope.default;
+    const optionalScopes =
+        await adminClient.clientScopes.listDefaultOptionalClientScopes();
+    return optionalScopes.find(s => s.name === clientScope.name)
         ? ClientScope.optional
         : AllClientScopes.none;
 }
@@ -54,7 +58,9 @@ export function EditClientScopeDialog({
     const { t } = useTranslation();
     const [saving, setSaving] = useState(false);
     const [loading, setLoading] = useState(false);
-    const [clientScope, setClientScope] = useState<ClientScopeDefaultOptionalType | null>(null);
+    const [clientScope, setClientScope] = useState<ClientScopeDefaultOptionalType | null>(
+        null
+    );
 
     useEffect(() => {
         if (!open || !scopeId) {
@@ -64,7 +70,7 @@ export function EditClientScopeDialog({
         setLoading(true);
         adminClient.clientScopes
             .findOne({ id: scopeId })
-            .then(async (scope) => {
+            .then(async scope => {
                 if (!scope) throw new Error(t("notFound"));
                 const type = await determineScopeType(adminClient, scope);
                 setClientScope({ ...scope, type } as ClientScopeDefaultOptionalType);

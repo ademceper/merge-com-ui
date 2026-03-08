@@ -1,13 +1,16 @@
+import { useTranslation } from "@merge-rd/i18n";
 import {
-    DropdownMenuSeparator,
-    DropdownMenuItem
+    DropdownMenuItem,
+    DropdownMenuSeparator
 } from "@merge-rd/ui/components/dropdown-menu";
 import { useFormContext, useWatch } from "react-hook-form";
-import { useTranslation } from "@merge-rd/i18n";
-import { useParams } from "../../../shared/lib/useParams";
-import { useAdminClient } from "../../../app/admin-client";
-import { getErrorDescription, getErrorMessage } from "../../../../shared/keycloak-ui-shared";
 import { toast } from "sonner";
+import {
+    getErrorDescription,
+    getErrorMessage
+} from "../../../../shared/keycloak-ui-shared";
+import { useAdminClient } from "../../../app/admin-client";
+import { useParams } from "../../../shared/lib/useParams";
 import { useConfirmDialog } from "../../../shared/ui/confirm-dialog/confirm-dialog";
 import { Header } from "./header";
 
@@ -28,7 +31,7 @@ export const ExtendedHeader = ({
 
     const { t } = useTranslation();
     const { id } = useParams<{ id: string }>();
-const { control } = useFormContext();
+    const { control } = useFormContext();
     const hasImportUsers = useWatch({
         name: "config.importEnabled",
         control,
@@ -58,7 +61,10 @@ const { control } = useFormContext();
                 toast.success(t("removeImportedUsersSuccess"));
             }
         } catch (error) {
-            toast.error(t("removeImportedUsersError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
+            toast.error(
+                t("removeImportedUsersError", { error: getErrorMessage(error) }),
+                { description: getErrorDescription(error) }
+            );
         }
     };
 
@@ -80,7 +86,9 @@ const { control } = useFormContext();
                 }
             }
         } catch (error) {
-            toast.error(t("syncUsersError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
+            toast.error(t("syncUsersError", { error: getErrorMessage(error) }), {
+                description: getErrorDescription(error)
+            });
         }
     };
 
@@ -102,7 +110,9 @@ const { control } = useFormContext();
                 }
             }
         } catch (error) {
-            toast.error(t("syncUsersError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
+            toast.error(t("syncUsersError", { error: getErrorMessage(error) }), {
+                description: getErrorDescription(error)
+            });
         }
     };
 
@@ -113,7 +123,9 @@ const { control } = useFormContext();
             }
             toast.success(t("unlinkUsersSuccess"));
         } catch (error) {
-            toast.error(t("unlinkUsersError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
+            toast.error(t("unlinkUsersError", { error: getErrorMessage(error) }), {
+                description: getErrorDescription(error)
+            });
         }
     };
 

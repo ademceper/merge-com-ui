@@ -1,28 +1,38 @@
-import { getErrorDescription, getErrorMessage } from "../../../shared/keycloak-ui-shared";
-import { useOrganization, useUpdateOrganization } from "./api/queries";
-import { toast } from "sonner";
-import { Button } from "@merge-rd/ui/components/button";
-import { Tabs, TabsList, TabsTrigger, TabsContent } from "@merge-rd/ui/components/tabs";
-import { FormProvider, useForm } from "react-hook-form";
 import { useTranslation } from "@merge-rd/i18n";
+import { Button } from "@merge-rd/ui/components/button";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@merge-rd/ui/components/tabs";
 import { useNavigate } from "@tanstack/react-router";
+import { useEffect, useState } from "react";
+import { FormProvider, useForm } from "react-hook-form";
+import { toast } from "sonner";
+import { getErrorDescription, getErrorMessage } from "../../../shared/keycloak-ui-shared";
+import { useAccess } from "../../app/providers/access/access";
+import { useRealm } from "../../app/providers/realm-context/realm-context";
+import { useParams } from "../../shared/lib/useParams";
 import { FormAccess } from "../../shared/ui/form/form-access";
 import { AttributesForm } from "../../shared/ui/key-value-form/attribute-form";
 import { arrayToKeyValue } from "../../shared/ui/key-value-form/key-value-convert";
-import { useRealm } from "../../app/providers/realm-context/realm-context";
-import { useParams } from "../../shared/lib/useParams";
+import { AdminEvents } from "../events/admin-events";
+import { useOrganization } from "./api/use-organization";
+import { useUpdateOrganization } from "./api/use-update-organization";
 import { DetailOrganizationHeader } from "./detail-organization-header";
 import { IdentityProviders } from "./identity-providers";
 import { MembersSection } from "./members-section";
-import { OrganizationForm, OrganizationFormType, convertToOrgForUpdate } from "./organization-form";
-import { EditOrganizationParams, toEditOrganization } from "./routes/edit-organization";
-import { useAccess } from "../../app/providers/access/access";
-import { AdminEvents } from "../events/admin-events";
-import { useEffect, useState } from "react";
+import {
+    convertToOrgForUpdate,
+    OrganizationForm,
+    type OrganizationFormType
+} from "./organization-form";
+import {
+    type EditOrganizationParams,
+    toEditOrganization
+} from "../../shared/lib/routes/organizations";
 
 export default function DetailOrganization() {
     const { realm, realmRepresentation } = useRealm();
-    const { id, tab = "settings" } = useParams<EditOrganizationParams & { tab?: string }>();
+    const { id, tab = "settings" } = useParams<
+        EditOrganizationParams & { tab?: string }
+    >();
     const { t } = useTranslation();
     const navigate = useNavigate();
 
@@ -46,14 +56,17 @@ export default function DetailOrganization() {
             await updateMutation.mutateAsync(payload);
             toast.success(t("organizationSaveSuccess"));
         } catch (error) {
-            toast.error(t("organizationSaveError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
+            toast.error(t("organizationSaveError", { error: getErrorMessage(error) }), {
+                description: getErrorDescription(error)
+            });
         }
     };
 
     const { hasAccess } = useAccess();
     const [activeEventsTab, setActiveEventsTab] = useState("adminEvents");
 
-    const showEvents = realmRepresentation?.adminEventsEnabled && hasAccess("view-events");
+    const showEvents =
+        realmRepresentation?.adminEventsEnabled && hasAccess("view-events");
 
     return (
         <div className="p-0">
@@ -61,8 +74,14 @@ export default function DetailOrganization() {
                 <DetailOrganizationHeader save={() => save(form.getValues())} />
                 <Tabs
                     value={tab}
-                    onValueChange={(value) =>
-                        navigate({ to: toEditOrganization({ realm, id, tab: value as EditOrganizationParams["tab"] }) as string })
+                    onValueChange={value =>
+                        navigate({
+                            to: toEditOrganization({
+                                realm,
+                                id,
+                                tab: value as EditOrganizationParams["tab"]
+                            }) as string
+                        })
                     }
                 >
                     <TabsList>
@@ -145,7 +164,9 @@ export default function DetailOrganization() {
                                     </button>
                                     <button
                                         className={`px-4 py-2 text-sm font-medium ${activeEventsTab === "membershipEvents" ? "border-b-2 border-primary" : ""}`}
-                                        onClick={() => setActiveEventsTab("membershipEvents")}
+                                        onClick={() =>
+                                            setActiveEventsTab("membershipEvents")
+                                        }
                                     >
                                         {t("membershipEvents")}
                                     </button>
@@ -154,7 +175,9 @@ export default function DetailOrganization() {
                                     <AdminEvents resourcePath={`organizations/${id}`} />
                                 )}
                                 {activeEventsTab === "membershipEvents" && (
-                                    <AdminEvents resourcePath={`organizations/${id}/members`} />
+                                    <AdminEvents
+                                        resourcePath={`organizations/${id}/members`}
+                                    />
                                 )}
                             </div>
                         </TabsContent>

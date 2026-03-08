@@ -1,10 +1,5 @@
-import { createFileRoute } from "@tanstack/react-router";
-import { lazy } from "react";
-
-const RealmRoleTabs = lazy(
-    () => import("../../../../../pages/realm-roles/realm-role-tabs"),
-);
+import { createFileRoute, lazyRouteComponent } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/_app/$realm/roles/$id/$tab")({
-    component: RealmRoleTabs,
+    component: lazyRouteComponent(() => import("../../../../../pages/realm-roles/realm-role-tabs")),
 });

@@ -1,10 +1,10 @@
-import { Path, PathValue } from "react-hook-form";
 import { useTranslation } from "@merge-rd/i18n";
+import type { Path, PathValue } from "react-hook-form";
 import { SelectField } from "../../../../shared/keycloak-ui-shared";
-import { DefaultSwitchControl } from "../../../shared/ui/switch-control";
-import { FormAccess } from "../../../shared/ui/form/form-access";
 import { convertAttributeNameToForm } from "../../../shared/lib/util";
-import { FormFields } from "../client-details";
+import { FormAccess } from "../../../shared/ui/form/form-access";
+import { DefaultSwitchControl } from "../../../shared/ui/switch-control";
+import type { FormFields } from "../client-details";
 
 type ToggleProps = {
     name: PathValue<FormFields, Path<FormFields>>;
@@ -27,48 +27,49 @@ export const SamlConfig = () => {
     const { t } = useTranslation();
 
     return (
-        <FormAccess
-            role="manage-clients"
-            className="keycloak__capability-config__form"
-        >
+        <FormAccess role="manage-clients" className="keycloak__capability-config__form">
             <div className="flex flex-col gap-5">
-            <SelectField
-                name="attributes.saml_name_id_format"
-                label={t("nameIdFormat")}
-                labelIcon={t("nameIdFormatHelp")}
-                defaultValue="username"
-                options={["username", "email", "transient", "persistent"]}
-            />
-            <Toggle
-                name="attributes.saml_force_name_id_format"
-                label="forceNameIdFormat"
-            />
-            <Toggle
-                name={convertAttributeNameToForm("attributes.saml.force.post.binding")}
-                label="forcePostBinding"
-            />
-            <Toggle
-                name={convertAttributeNameToForm("attributes.saml.artifact.binding")}
-                label="forceArtifactBinding"
-            />
-            <Toggle
-                name={convertAttributeNameToForm("attributes.saml.authnstatement")}
-                label="includeAuthnStatement"
-            />
-            <Toggle
-                name={convertAttributeNameToForm("attributes.saml.onetimeuse.condition")}
-                label="includeOneTimeUseCondition"
-            />
-            <Toggle
-                name={convertAttributeNameToForm(
-                    "attributes.saml.server.signature.keyinfo.ext"
-                )}
-                label="optimizeLookup"
-            />
-            <Toggle
-                name={convertAttributeNameToForm("attributes.saml.allow.ecp.flow")}
-                label="allowEcpFlow"
-            />
+                <SelectField
+                    name="attributes.saml_name_id_format"
+                    label={t("nameIdFormat")}
+                    labelIcon={t("nameIdFormatHelp")}
+                    defaultValue="username"
+                    options={["username", "email", "transient", "persistent"]}
+                />
+                <Toggle
+                    name="attributes.saml_force_name_id_format"
+                    label="forceNameIdFormat"
+                />
+                <Toggle
+                    name={convertAttributeNameToForm(
+                        "attributes.saml.force.post.binding"
+                    )}
+                    label="forcePostBinding"
+                />
+                <Toggle
+                    name={convertAttributeNameToForm("attributes.saml.artifact.binding")}
+                    label="forceArtifactBinding"
+                />
+                <Toggle
+                    name={convertAttributeNameToForm("attributes.saml.authnstatement")}
+                    label="includeAuthnStatement"
+                />
+                <Toggle
+                    name={convertAttributeNameToForm(
+                        "attributes.saml.onetimeuse.condition"
+                    )}
+                    label="includeOneTimeUseCondition"
+                />
+                <Toggle
+                    name={convertAttributeNameToForm(
+                        "attributes.saml.server.signature.keyinfo.ext"
+                    )}
+                    label="optimizeLookup"
+                />
+                <Toggle
+                    name={convertAttributeNameToForm("attributes.saml.allow.ecp.flow")}
+                    label="allowEcpFlow"
+                />
             </div>
         </FormAccess>
     );

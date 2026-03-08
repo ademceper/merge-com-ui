@@ -1,15 +1,9 @@
-import { createFileRoute } from "@tanstack/react-router";
-import { lazy } from "react";
-
-const AttributesGroupForm = lazy(
-    () =>
-        import(
-            "../../../../../../../pages/realm-settings/user-profile/attributes-group-form"
-        ),
-);
+import { createFileRoute, lazyRouteComponent } from "@tanstack/react-router";
 
 export const Route = createFileRoute(
     "/_app/$realm/realm-settings/user-profile/attributesGroup/edit/$name",
 )({
-    component: AttributesGroupForm,
+    component: lazyRouteComponent(() => import(
+            "../../../../../../../pages/realm-settings/user-profile/attributes-group-form"
+        )),
 });

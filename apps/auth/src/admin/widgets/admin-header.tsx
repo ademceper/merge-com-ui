@@ -1,12 +1,20 @@
 import { useTranslation } from "@merge-rd/i18n";
-import { useLocation } from "@tanstack/react-router";
 import { SidebarPageHeader } from "@merge-rd/ui/components/sidebar";
-import { GroupBreadCrumbsForHeader } from "../shared/ui/bread-crumb/group-bread-crumbs";
-import { PageBreadCrumbs, usePageTitle } from "../shared/ui/bread-crumb/page-bread-crumbs";
+import { useLocation } from "@tanstack/react-router";
+import { useMemo } from "react";
 import { useEnvironment } from "../../shared/keycloak-ui-shared";
 import type { Environment } from "../app/environment";
+import {
+    avatarInitials,
+    loggedInUserName,
+    userEmailFromToken
+} from "../shared/lib/userMenuUtils";
+import { GroupBreadCrumbsForHeader } from "../shared/ui/bread-crumb/group-bread-crumbs";
+import {
+    PageBreadCrumbs,
+    usePageTitle
+} from "../shared/ui/bread-crumb/page-bread-crumbs";
 import { AdminNavUser } from "./admin-nav-user";
-import { loggedInUserName, avatarInitials, userEmailFromToken } from "../shared/lib/userMenuUtils";
 
 export type UserMenuInfo = {
     keycloak: {
@@ -27,13 +35,16 @@ export function AdminHeader() {
     const isGroupsSection = pathname.includes("/groups");
     const pageTitle = usePageTitle();
 
-    const userMenuInfo: UserMenuInfo = {
-        keycloak,
-        userName: loggedInUserName(keycloak.idTokenParsed, t),
-        userEmail: userEmailFromToken(keycloak.idTokenParsed),
-        userAvatarUrl: keycloak.idTokenParsed?.picture ?? undefined,
-        initials: avatarInitials(keycloak.idTokenParsed)
-    };
+    const userMenuInfo = useMemo<UserMenuInfo>(
+        () => ({
+            keycloak,
+            userName: loggedInUserName(keycloak.idTokenParsed, t),
+            userEmail: userEmailFromToken(keycloak.idTokenParsed),
+            userAvatarUrl: keycloak.idTokenParsed?.picture ?? undefined,
+            initials: avatarInitials(keycloak.idTokenParsed)
+        }),
+        [keycloak, t]
+    );
 
     return (
         <SidebarPageHeader>

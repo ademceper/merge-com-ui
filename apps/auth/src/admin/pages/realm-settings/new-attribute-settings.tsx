@@ -2,30 +2,34 @@ import type {
     UserProfileAttribute,
     UserProfileConfig
 } from "@keycloak/keycloak-admin-client/lib/defs/userProfileMetadata";
-import { getErrorDescription, getErrorMessage, ScrollForm, useFetch } from "../../../shared/keycloak-ui-shared";
-import { toast } from "sonner";
-import { Button } from "@merge-rd/ui/components/button";
-import { flatten } from "flat";
-import { useState } from "react";
-import { FormProvider, useForm, useFormContext } from "react-hook-form";
 import { useTranslation } from "@merge-rd/i18n";
+import { Button } from "@merge-rd/ui/components/button";
 import { Link, useNavigate } from "@tanstack/react-router";
-import { useAdminClient } from "../../app/admin-client";
-import { FixedButtonsGroup } from "../../shared/ui/form/fixed-button-group";
-import { convertToFormValues } from "../../shared/lib/util";
-import { useParams } from "../../shared/lib/useParams";
-import { TranslationForm } from "./add-translation-modal";
-import type { AttributeParams } from "./routes/attribute";
-import { toUserProfile } from "./routes/user-profile";
-import { UserProfileProvider } from "./user-profile/user-profile-context";
+import { flatten } from "flat";
+import { useEffect, useState } from "react";
+import { FormProvider, useForm, useFormContext } from "react-hook-form";
+import { toast } from "sonner";
 import {
-    saveTranslations,
-    Translations
-} from "./user-profile/attribute/translatable-field";
+    getErrorDescription,
+    getErrorMessage,
+    ScrollForm
+} from "../../../shared/keycloak-ui-shared";
+import { useAdminClient } from "../../app/admin-client";
+import { useParams } from "../../shared/lib/useParams";
+import { convertToFormValues } from "../../shared/lib/util";
+import { FixedButtonsGroup } from "../../shared/ui/form/fixed-button-group";
+import type { TranslationForm } from "./add-translation-modal";
+import { useUserProfileConfigGlobal } from "./api/use-user-profile-config-global";
+import { type AttributeParams, toUserProfile } from "../../shared/lib/routes/realm-settings";
 import { AttributeAnnotations } from "./user-profile/attribute/attribute-annotations";
 import { AttributeGeneralSettings } from "./user-profile/attribute/attribute-general-settings";
 import { AttributePermission } from "./user-profile/attribute/attribute-permission";
 import { AttributeValidations } from "./user-profile/attribute/attribute-validations";
+import {
+    saveTranslations,
+    type Translations
+} from "./user-profile/attribute/translatable-field";
+import { UserProfileProvider } from "./user-profile/user-profile-context";
 
 type IndexedAnnotations = {
     key: string;
@@ -86,7 +90,7 @@ const CreateAttributeFormContent = ({
     const { t } = useTranslation();
     const form = useFormContext();
     const { realm, attributeName } = useParams<AttributeParams>();
-    const editMode = attributeName ? true : false;
+    const editMode = !!attributeName;
 
     return (
         <UserProfileProvider>
@@ -101,10 +105,7 @@ const CreateAttributeFormContent = ({
             />
             <form onSubmit={form.handleSubmit(save)}>
                 <FixedButtonsGroup name="attribute-settings">
-                    <Button
-                        type="submit"
-                        data-testid="attribute-create"
-                    >
+                    <Button type="submit" data-testid="attribute-create">
                         {editMode ? t("save") : t("create")}
                     </Button>
                     <Link
@@ -126,13 +127,14 @@ export default function NewAttributeSettings() {
     const form = useForm<UserProfileAttributeFormFields>();
     const { t } = useTranslation();
     const navigate = useNavigate();
-const [config, setConfig] = useState<UserProfileConfig | null>(null);
-    const editMode = attributeName ? true : false;
+    const [config, setConfig] = useState<UserProfileConfig | null>(null);
+    const editMode = !!attributeName;
 
-    useFetch(
-        () => adminClient.users.getProfile(),
-        config => {
-            setConfig(config);
+    const { data: profileData } = useUserProfileConfigGlobal();
+
+    useEffect(() => {
+        if (profileData) {
+            setConfig(profileData);
             const {
                 annotations,
                 validations,
@@ -142,7 +144,7 @@ const [config, setConfig] = useState<UserProfileConfig | null>(null);
                 multivalued,
                 defaultValue,
                 ...values
-            } = config.attributes!.find(
+            } = profileData.attributes!.find(
                 attribute => attribute.name === attributeName
             ) || { permissions: { edit: ["admin"] } };
             convertToFormValues(
@@ -173,9 +175,8 @@ const [config, setConfig] = useState<UserProfileConfig | null>(null);
             form.setValue("isRequired", required !== undefined);
             form.setValue("multivalued", multivalued === true);
             form.setValue("defaultValue", defaultValue);
-        },
-        []
-    );
+        }
+    }, [profileData]);
 
     const save = async ({
         hasSelector,
@@ -269,20 +270,27 @@ const [config, setConfig] = useState<UserProfileConfig | null>(null);
                         }
                     });
                 } catch (error) {
-                    toast.error(t("errorSavingTranslations", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
+                    toast.error(
+                        t("errorSavingTranslations", { error: getErrorMessage(error) }),
+                        { description: getErrorDescription(error) }
+                    );
                 }
             }
-            navigate({ to: toUserProfile({ realm: realmName, tab: "attributes" }) as string });
+            navigate({
+                to: toUserProfile({ realm: realmName, tab: "attributes" }) as string
+            });
 
             toast.success(t("createAttributeSuccess"));
         } catch (error) {
-            toast.error(t("createAttributeError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
+            toast.error(t("createAttributeError", { error: getErrorMessage(error) }), {
+                description: getErrorDescription(error)
+            });
         }
     };
 
     return (
         <FormProvider {...form}>
-                        <div className="p-6">
+            <div className="p-6">
                 <CreateAttributeFormContent save={() => form.handleSubmit(save)()} />
             </div>
         </FormProvider>

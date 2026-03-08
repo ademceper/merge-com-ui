@@ -1,31 +1,31 @@
 import type { ManagementPermissionReference } from "@keycloak/keycloak-admin-client/lib/defs/managementPermissionReference";
-import { HelpItem, useFetch } from "../../../../shared/keycloak-ui-shared";
+import { Trans, useTranslation } from "@merge-rd/i18n";
+import { Button } from "@merge-rd/ui/components/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@merge-rd/ui/components/card";
-import { Label } from "@merge-rd/ui/components/label";
-import { Switch } from "@merge-rd/ui/components/switch";
 import {
     DropdownMenu,
     DropdownMenuContent,
     DropdownMenuItem,
-    DropdownMenuTrigger,
+    DropdownMenuTrigger
 } from "@merge-rd/ui/components/dropdown-menu";
+import { Label } from "@merge-rd/ui/components/label";
+import { Switch } from "@merge-rd/ui/components/switch";
+import { DotsThreeVertical } from "@phosphor-icons/react";
+import { Link, useNavigate } from "@tanstack/react-router";
+import { useEffect, useState } from "react";
 import {
     Table,
     TableBody,
     TableCell,
     TableHead,
     TableHeader,
-    TableRow,
+    TableRow
 } from "@/admin/shared/ui/data-table";
-import { Button } from "@merge-rd/ui/components/button";
-import { DotsThreeVertical } from "@phosphor-icons/react";
-import { useState } from "react";
-import { Trans, useTranslation } from "@merge-rd/i18n";
-import { Link, useNavigate } from "@tanstack/react-router";
+import { HelpItem, KeycloakSpinner } from "../../../../shared/keycloak-ui-shared";
 import { useAdminClient } from "../../../app/admin-client";
-import { toPermissionDetails } from "../../lib/route-helpers";
-import { KeycloakSpinner } from "../../../../shared/keycloak-ui-shared";
 import { useRealm } from "../../../app/providers/realm-context/realm-context";
+import { usePermissions } from "../../api/use-permissions";
+import { toPermissionDetails } from "../../lib/route-helpers";
 import useLocaleSort from "../../lib/useLocaleSort";
 import { useConfirmDialog } from "../confirm-dialog/confirm-dialog";
 
@@ -47,9 +47,14 @@ export const PermissionsTab = ({ id, type }: PermissionsTabProps) => {
     const { t } = useTranslation();
     const navigate = useNavigate();
     const { realm } = useRealm();
-    const [realmId, setRealmId] = useState("");
     const [permission, setPermission] = useState<ManagementPermissionReference>();
     const localeSort = useLocaleSort();
+
+    const { data: permissionsData } = usePermissions(id, type);
+    const realmId = permissionsData?.realmId ?? "";
+    useEffect(() => {
+        if (permissionsData) setPermission(permissionsData.permission);
+    }, [permissionsData]);
 
     const togglePermissionEnabled = (enabled: boolean) => {
         switch (type) {
@@ -75,41 +80,6 @@ export const PermissionsTab = ({ id, type }: PermissionsTabProps) => {
         }
     };
 
-    useFetch(
-        () =>
-            Promise.all([
-                adminClient.clients.find({
-                    search: true,
-                    clientId: realm === "master" ? "master-realm" : "realm-management"
-                }),
-                (() => {
-                    switch (type) {
-                        case "clients":
-                            return adminClient.clients.listFineGrainPermissions({
-                                id: id!
-                            });
-                        case "users":
-                            return adminClient.realms.getUsersManagementPermissions({
-                                realm
-                            });
-                        case "groups":
-                            return adminClient.groups.listPermissions({ id: id! });
-                        case "roles":
-                            return adminClient.roles.listPermissions({ id: id! });
-                        case "identityProviders":
-                            return adminClient.identityProviders.listPermissions({
-                                alias: id!
-                            });
-                    }
-                })()
-            ]),
-        ([clients, permission]) => {
-            setRealmId(clients[0]?.id!);
-            setPermission(permission);
-        },
-        [id]
-    );
-
     const [toggleDisableDialog, DisableConfirm] = useConfirmDialog({
         titleKey: "permissionsDisable",
         messageKey: "permissionsDisableConfirm",
@@ -134,7 +104,10 @@ export const PermissionsTab = ({ id, type }: PermissionsTabProps) => {
                 <CardContent>
                     {t(`${type}PermissionsHint`)}
                     <div className="pt-4 permission-label">
-                        <Label htmlFor="permissionsEnabled" className="flex items-center gap-1">
+                        <Label
+                            htmlFor="permissionsEnabled"
+                            className="flex items-center gap-1"
+                        >
                             {t("permissionsEnabled")}
                             <HelpItem
                                 helpText={t("permissionsEnabledHelp")}
@@ -146,7 +119,7 @@ export const PermissionsTab = ({ id, type }: PermissionsTabProps) => {
                                 id="permissionsEnabled"
                                 data-testid="permissionSwitch"
                                 checked={permission.enabled}
-                                onCheckedChange={async (enabled) => {
+                                onCheckedChange={async enabled => {
                                     if (enabled) {
                                         const perm =
                                             await togglePermissionEnabled(enabled);
@@ -193,7 +166,9 @@ export const PermissionsTab = ({ id, type }: PermissionsTabProps) => {
                                         <TableHead id="permissionsScopeName">
                                             {t("permissionsScopeName")}
                                         </TableHead>
-                                        <TableHead id="description">{t("description")}</TableHead>
+                                        <TableHead id="description">
+                                            {t("description")}
+                                        </TableHead>
                                         <TableHead aria-hidden="true" className="w-10" />
                                     </TableRow>
                                 </TableHeader>
@@ -205,12 +180,14 @@ export const PermissionsTab = ({ id, type }: PermissionsTabProps) => {
                                         <TableRow key={id}>
                                             <TableCell>
                                                 <Link
-                                                    to={toPermissionDetails({
-                                                        realm,
-                                                        id: realmId,
-                                                        permissionType: "scope",
-                                                        permissionId: id
-                                                    }) as string}
+                                                    to={
+                                                        toPermissionDetails({
+                                                            realm,
+                                                            id: realmId,
+                                                            permissionType: "scope",
+                                                            permissionId: id
+                                                        }) as string
+                                                    }
                                                 >
                                                     {name}
                                                 </Link>
@@ -235,13 +212,16 @@ export const PermissionsTab = ({ id, type }: PermissionsTabProps) => {
                                                         <DropdownMenuItem
                                                             onClick={() =>
                                                                 navigate({
-                                                                    to: toPermissionDetails({
-                                                                        realm,
-                                                                        id: realmId,
-                                                                        permissionType:
-                                                                            "scope",
-                                                                        permissionId: id
-                                                                    }) as string
+                                                                    to: toPermissionDetails(
+                                                                        {
+                                                                            realm,
+                                                                            id: realmId,
+                                                                            permissionType:
+                                                                                "scope",
+                                                                            permissionId:
+                                                                                id
+                                                                        }
+                                                                    ) as string
                                                                 })
                                                             }
                                                         >

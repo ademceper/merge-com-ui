@@ -1,7 +1,5 @@
 import type ClientInitialAccessPresentation from "@keycloak/keycloak-admin-client/lib/defs/clientInitialAccessPresentation";
-import { useFetch, getErrorDescription, getErrorMessage } from "../../../../shared/keycloak-ui-shared";
-import { toast } from "sonner";
-import { Button } from "@merge-rd/ui/components/button";
+import { useTranslation } from "@merge-rd/i18n";
 import {
     AlertDialog,
     AlertDialogAction,
@@ -12,17 +10,23 @@ import {
     AlertDialogHeader,
     AlertDialogTitle
 } from "@merge-rd/ui/components/alert-dialog";
-import {
-    DataTable,
-    DataTableRowActions,
-    type ColumnDef
-} from "@/admin/shared/ui/data-table";
+import { Button } from "@merge-rd/ui/components/button";
 import { Plus, Trash } from "@phosphor-icons/react";
 import { useState } from "react";
-import { useTranslation } from "@merge-rd/i18n";
+import { toast } from "sonner";
+import {
+    type ColumnDef,
+    DataTable,
+    DataTableRowActions
+} from "@/admin/shared/ui/data-table";
+import {
+    getErrorDescription,
+    getErrorMessage
+} from "../../../../shared/keycloak-ui-shared";
 import { useAdminClient } from "../../../app/admin-client";
 import { useRealm } from "../../../app/providers/realm-context/realm-context";
 import useFormatDate, { FORMAT_DATE_AND_TIME } from "../../../shared/lib/useFormatDate";
+import { useInitialAccessTokens } from "../api/use-initial-access-tokens";
 import { AddInitialAccessTokenDialog } from "./add-initial-access-token-dialog";
 
 export const InitialAccessTokenList = () => {
@@ -31,22 +35,8 @@ export const InitialAccessTokenList = () => {
     const { realm } = useRealm();
     const formatDate = useFormatDate();
 
-    const [tokens, setTokens] = useState<ClientInitialAccessPresentation[]>([]);
+    const { data: tokens = [], refetch } = useInitialAccessTokens();
     const [token, setToken] = useState<ClientInitialAccessPresentation>();
-    const [key, setKey] = useState(0);
-    const refresh = () => setKey(key + 1);
-
-    useFetch(
-        async () => {
-            try {
-                return await adminClient.realms.getClientsInitialAccess({ realm });
-            } catch {
-                return [];
-            }
-        },
-        (data) => setTokens(data),
-        [key]
-    );
 
     const onDeleteConfirm = async () => {
         if (!token?.id) return;
@@ -54,9 +44,11 @@ export const InitialAccessTokenList = () => {
             await adminClient.realms.delClientsInitialAccess({ realm, id: token.id });
             toast.success(t("tokenDeleteSuccess"));
             setToken(undefined);
-            refresh();
+            refetch();
         } catch (error) {
-            toast.error(t("tokenDeleteError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
+            toast.error(t("tokenDeleteError", { error: getErrorMessage(error) }), {
+                description: getErrorDescription(error)
+            });
         }
     };
 
@@ -70,17 +62,16 @@ export const InitialAccessTokenList = () => {
             accessorKey: "timestamp",
             header: t("timestamp"),
             cell: ({ row }) =>
-                formatDate(
-                    new Date(row.original.timestamp! * 1000),
-                    FORMAT_DATE_AND_TIME
-                )
+                formatDate(new Date(row.original.timestamp! * 1000), FORMAT_DATE_AND_TIME)
         },
         {
             id: "expiration",
             header: t("expires"),
             cell: ({ row }) =>
                 formatDate(
-                    new Date(row.original.timestamp! * 1000 + row.original.expiration! * 1000),
+                    new Date(
+                        row.original.timestamp! * 1000 + row.original.expiration! * 1000
+                    ),
                     FORMAT_DATE_AND_TIME
                 )
         },
@@ -116,10 +107,15 @@ export const InitialAccessTokenList = () => {
 
     return (
         <>
-            <AlertDialog open={!!token} onOpenChange={(open) => !open && setToken(undefined)}>
+            <AlertDialog
+                open={!!token}
+                onOpenChange={open => !open && setToken(undefined)}
+            >
                 <AlertDialogContent>
                     <AlertDialogHeader>
-                        <AlertDialogTitle>{t("tokenDeleteConfirmTitle")}</AlertDialogTitle>
+                        <AlertDialogTitle>
+                            {t("tokenDeleteConfirmTitle")}
+                        </AlertDialogTitle>
                         <AlertDialogDescription>
                             {t("tokenDeleteConfirm", { id: token?.id })}
                         </AlertDialogDescription>
@@ -137,7 +133,6 @@ export const InitialAccessTokenList = () => {
                 </AlertDialogContent>
             </AlertDialog>
             <DataTable
-                key={key}
                 columns={columns}
                 data={tokens}
                 searchColumnId="id"
@@ -145,7 +140,7 @@ export const InitialAccessTokenList = () => {
                 emptyMessage={t("noTokens")}
                 toolbar={
                     <AddInitialAccessTokenDialog
-                        onSuccess={refresh}
+                        onSuccess={() => refetch()}
                         trigger={
                             <Button
                                 type="button"
@@ -155,7 +150,9 @@ export const InitialAccessTokenList = () => {
                                 aria-label={t("createToken")}
                             >
                                 <Plus size={20} className="shrink-0 sm:hidden" />
-                                <span className="hidden sm:inline">{t("createToken")}</span>
+                                <span className="hidden sm:inline">
+                                    {t("createToken")}
+                                </span>
                             </Button>
                         }
                     />

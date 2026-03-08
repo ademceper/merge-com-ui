@@ -1,12 +1,11 @@
 import type ScopeRepresentation from "@keycloak/keycloak-admin-client/lib/defs/scopeRepresentation";
-import { useFetch } from "../../../../shared/keycloak-ui-shared";
+import { useTranslation } from "@merge-rd/i18n";
 import { Button } from "@merge-rd/ui/components/button";
 import { Input } from "@merge-rd/ui/components/input";
 import { Popover, PopoverContent, PopoverTrigger } from "@merge-rd/ui/components/popover";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Controller, useFormContext } from "react-hook-form";
-import { useTranslation } from "@merge-rd/i18n";
-import { useAdminClient } from "../../../app/admin-client";
+import { useScopeSelectScopes } from "./api/use-scope-select-scopes";
 
 type ScopeSelectProps = {
     clientId: string;
@@ -15,8 +14,6 @@ type ScopeSelectProps = {
 };
 
 export const ScopeSelect = ({ clientId, resourceId, preSelected }: ScopeSelectProps) => {
-    const { adminClient } = useAdminClient();
-
     const { t } = useTranslation();
 
     const {
@@ -34,36 +31,23 @@ export const ScopeSelect = ({ clientId, resourceId, preSelected }: ScopeSelectPr
 
     const values: string[] | undefined = getValues("scopes");
 
-    useFetch(
-        async (): Promise<ScopeRepresentation[]> => {
-            if (!resourceId) {
-                return adminClient.clients.listAllScopes(
-                    Object.assign(
-                        { id: clientId, deep: false },
-                        search === "" ? null : { name: search }
-                    )
-                );
-            }
+    const { data: scopeSelectData } = useScopeSelectScopes(clientId, resourceId, search);
 
+    useEffect(() => {
+        if (scopeSelectData) {
             if (resourceId && !firstUpdate.current) {
                 setValue("scopes", []);
             }
-
             firstUpdate.current = false;
-            return adminClient.clients.listScopesByResource({
-                id: clientId,
-                resourceName: resourceId
-            });
-        },
-        scopes => {
-            setScopes(scopes);
+            setScopes(scopeSelectData);
             if (!search)
                 setSelectedScopes(
-                    scopes.filter((s: ScopeRepresentation) => values?.includes(s.id!))
+                    scopeSelectData.filter((s: ScopeRepresentation) =>
+                        values?.includes(s.id!)
+                    )
                 );
-        },
-        [resourceId, search]
-    );
+        }
+    }, [scopeSelectData]);
 
     return (
         <Controller
@@ -85,33 +69,39 @@ export const ScopeSelect = ({ clientId, resourceId, preSelected }: ScopeSelectPr
                         >
                             <span className="truncate">
                                 {selectedScopes.length > 0
-                                    ? selectedScopes.map((s) => s.name).join(", ")
+                                    ? selectedScopes.map(s => s.name).join(", ")
                                     : t("scopes")}
                             </span>
                         </Button>
                     </PopoverTrigger>
-                    <PopoverContent className="w-(--radix-popover-trigger-width) p-0" align="start">
+                    <PopoverContent
+                        className="w-(--radix-popover-trigger-width) p-0"
+                        align="start"
+                    >
                         <Input
                             placeholder={t("filter")}
                             value={search}
-                            onChange={(e) => setSearch(e.target.value)}
+                            onChange={e => setSearch(e.target.value)}
                             className="m-2 h-8"
                         />
                         <ul className="max-h-64 overflow-auto py-1">
-                            {scopes.map((scope) => {
-                                const isSelected = selectedScopes.some((p) => p.id === scope.id);
+                            {scopes.map(scope => {
+                                const isSelected = selectedScopes.some(
+                                    p => p.id === scope.id
+                                );
                                 return (
                                     <li
                                         key={scope.id}
-                                        role="option"
                                         aria-selected={isSelected}
                                         className="hover:bg-accent cursor-pointer px-2 py-1.5 text-sm"
-                                        onMouseDown={(e) => e.preventDefault()}
+                                        onMouseDown={e => e.preventDefault()}
                                         onClick={() => {
                                             const changedValue = isSelected
-                                                ? selectedScopes.filter((p) => p.id !== scope.id)
+                                                ? selectedScopes.filter(
+                                                      p => p.id !== scope.id
+                                                  )
                                                 : [...selectedScopes, scope];
-                                            field.onChange(changedValue.map((s) => s.id));
+                                            field.onChange(changedValue.map(s => s.id));
                                             setSelectedScopes(changedValue);
                                         }}
                                     >

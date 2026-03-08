@@ -1,4 +1,6 @@
-import ComponentTypeRepresentation from "@keycloak/keycloak-admin-client/lib/defs/componentTypeRepresentation";
+import type ComponentTypeRepresentation from "@keycloak/keycloak-admin-client/lib/defs/componentTypeRepresentation";
+import { useTranslation } from "@merge-rd/i18n";
+import { Label } from "@merge-rd/ui/components/label";
 import {
     Select,
     SelectContent,
@@ -6,9 +8,7 @@ import {
     SelectTrigger,
     SelectValue
 } from "@merge-rd/ui/components/select";
-import { Label } from "@merge-rd/ui/components/label";
 import { useMemo, useState } from "react";
-import { useTranslation } from "@merge-rd/i18n";
 import { useServerInfo } from "../../../../app/providers/server-info/server-info-provider";
 import useToggle from "../../../../shared/lib/useToggle";
 
@@ -38,8 +38,8 @@ export const ValidatorSelect = ({
                 open={open}
                 onOpenChange={toggle}
                 value={value?.id ?? ""}
-                onValueChange={(id) => {
-                    const option = validators.find((v) => v.id === id);
+                onValueChange={id => {
+                    const option = validators.find(v => v.id === id);
                     if (option) {
                         onChange(option);
                         setValue(option);
@@ -53,8 +53,8 @@ export const ValidatorSelect = ({
                 </SelectTrigger>
                 <SelectContent>
                     {validators
-                        .filter((option) => option.id != null && option.id !== "")
-                        .map((option) => (
+                        .filter(option => option.id != null && option.id !== "")
+                        .map(option => (
                             <SelectItem key={option.id!} value={option.id!}>
                                 {option.id}
                             </SelectItem>

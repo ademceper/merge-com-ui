@@ -1,23 +1,33 @@
-import type { PageProps } from "keycloakify/login/pages/PageProps";
-import type { KcContext } from "../kc-context";
-import type { I18n } from "../i18n";
-import AuthLayout from "../components/auth-layout";
-import { Link } from "@merge-rd/ui/components/link";
 import { Alert, AlertDescription } from "@merge-rd/ui/components/alert";
+import { Link } from "@merge-rd/ui/components/link";
+import type { PageProps } from "keycloakify/login/pages/PageProps";
+import AuthLayout from "../components/auth-layout";
+import type { I18n } from "../i18n";
+import type { KcContext } from "../kc-context";
 
-export default function Info(props: PageProps<Extract<KcContext, { pageId: "info.ftl" }>, I18n>) {
+export default function Info(
+    props: PageProps<Extract<KcContext, { pageId: "info.ftl" }>, I18n>
+) {
     const { kcContext, i18n } = props;
 
     const { advancedMsgStr, msg } = i18n;
 
-    const { messageHeader, message, requiredActions, skipLink, pageRedirectUri, actionUri, client } = kcContext;
+    const {
+        messageHeader,
+        message,
+        requiredActions,
+        skipLink,
+        pageRedirectUri,
+        actionUri,
+        client
+    } = kcContext;
 
     const headerText = messageHeader ? advancedMsgStr(messageHeader) : message.summary;
 
     const bodyHtml = (() => {
         let html = message.summary?.trim() ?? "";
         if (requiredActions) {
-            html += " <b>" + requiredActions.map(ra => advancedMsgStr(`requiredAction.${ra}`)).join(", ") + "</b>";
+            html += ` <b>${requiredActions.map(ra => advancedMsgStr(`requiredAction.${ra}`)).join(", ")}</b>`;
         }
         return html;
     })();

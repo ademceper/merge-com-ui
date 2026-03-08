@@ -1,6 +1,6 @@
 import { Plus } from "@phosphor-icons/react";
-import { ComponentType, MouseEvent as ReactMouseEvent } from "react";
-import { EdgeProps, getBezierPath, getMarkerEnd, MarkerType } from "reactflow";
+import type { ComponentType, MouseEvent as ReactMouseEvent } from "react";
+import { type EdgeProps, getBezierPath, getMarkerEnd, type MarkerType } from "reactflow";
 
 export type ButtonEdges = {
     [key: string]: ComponentType<ButtonEdgeProps>;

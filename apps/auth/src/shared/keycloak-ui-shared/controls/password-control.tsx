@@ -1,13 +1,13 @@
 import {
-    FieldPath,
-    FieldValues,
-    PathValue,
-    UseControllerProps,
+    type FieldPath,
+    type FieldValues,
+    type PathValue,
+    type UseControllerProps,
     useController
 } from "react-hook-form";
 import { getRuleValue } from "../utils/getRuleValue";
 import { FormLabel } from "./form-label";
-import { PasswordInput, PasswordInputProps } from "./password-input";
+import { PasswordInput, type PasswordInputProps } from "./password-input";
 
 type PasswordControlProps<
     T extends FieldValues,

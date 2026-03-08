@@ -1,13 +1,13 @@
-import { ReactElement, ReactNode, useState } from "react";
+import { useTranslation } from "@merge-rd/i18n";
 import { Button } from "@merge-rd/ui/components/button";
 import {
     Dialog,
     DialogContent,
     DialogFooter,
     DialogHeader,
-    DialogTitle,
+    DialogTitle
 } from "@merge-rd/ui/components/dialog";
-import { useTranslation } from "@merge-rd/i18n";
+import { type ReactElement, type ReactNode, useState } from "react";
 
 export const useConfirmDialog = (
     props: ConfirmDialogProps
@@ -69,14 +69,25 @@ export const ConfirmDialogModal = ({
 }: ConfirmDialogModalProps) => {
     const { t } = useTranslation();
     return (
-        <Dialog open={open} onOpenChange={(v) => { if (!v) toggleDialog(); }}>
-            <DialogContent className="max-w-lg sm:max-w-lg max-h-[80vh] overflow-auto" showCloseButton={true}>
+        <Dialog
+            open={open}
+            onOpenChange={v => {
+                if (!v) toggleDialog();
+            }}
+        >
+            <DialogContent
+                className="max-w-lg sm:max-w-lg max-h-[80vh] overflow-auto"
+                showCloseButton={true}
+            >
                 <DialogHeader>
-                    <DialogTitle>{t(titleKey, titleKeyVariables as any) as React.ReactNode}</DialogTitle>
+                    <DialogTitle>
+                        {t(titleKey, titleKeyVariables as any) as React.ReactNode}
+                    </DialogTitle>
                 </DialogHeader>
                 <div className="py-2 break-all whitespace-pre-wrap">
                     {!messageKey && children}
-                    {messageKey && (t(messageKey, messageKeyVariables as any) as React.ReactNode)}
+                    {messageKey &&
+                        (t(messageKey, messageKeyVariables as any) as React.ReactNode)}
                 </div>
                 <DialogFooter className="flex flex-col gap-2 sm:flex-row sm:flex-nowrap sm:items-center sm:justify-end sm:gap-4">
                     <div className="flex w-full flex-col gap-2 sm:w-auto sm:flex-row sm:shrink-0 sm:items-center">

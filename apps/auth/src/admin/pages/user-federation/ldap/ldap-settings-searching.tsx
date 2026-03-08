@@ -1,8 +1,12 @@
-import { HelpItem, SelectField, TextControl } from "../../../../shared/keycloak-ui-shared";
-import { Controller, FormProvider, UseFormReturn } from "react-hook-form";
-import { Switch } from "@merge-rd/ui/components/switch";
-import { FormLabel } from "../../../../shared/keycloak-ui-shared";
 import { useTranslation } from "@merge-rd/i18n";
+import { Switch } from "@merge-rd/ui/components/switch";
+import { Controller, FormProvider, type UseFormReturn } from "react-hook-form";
+import {
+    FormLabel,
+    HelpItem,
+    SelectField,
+    TextControl
+} from "../../../../shared/keycloak-ui-shared";
 import { FormAccess } from "../../../shared/ui/form/form-access";
 import { WizardSectionHeader } from "../../../shared/ui/wizard-section-header/wizard-section-header";
 
@@ -53,8 +57,8 @@ export const LdapSettingsSearching = ({
                             label={t("usersDN")}
                             labelIcon={t("usersDNHelp")}
                             rules={{
-                        required: t("validateUsersDn")
-                    }}
+                                required: t("validateUsersDn")
+                            }}
                         />
                     </div>
                     <div className="space-y-2">
@@ -70,9 +74,9 @@ export const LdapSettingsSearching = ({
                             label={t("usernameLdapAttribute")}
                             labelIcon={t("usernameLdapAttributeHelp")}
                             defaultValue="cn"
-                    rules={{
-                        required: t("validateUsernameLDAPAttribute")
-                    }}
+                            rules={{
+                                required: t("validateUsernameLDAPAttribute")
+                            }}
                         />
                     </div>
                     <div className="space-y-2">
@@ -81,9 +85,9 @@ export const LdapSettingsSearching = ({
                             label={t("rdnLdapAttribute")}
                             labelIcon={t("rdnLdapAttributeHelp")}
                             defaultValue="cn"
-                    rules={{
-                        required: t("validateRdnLdapAttribute")
-                    }}
+                            rules={{
+                                required: t("validateRdnLdapAttribute")
+                            }}
                         />
                     </div>
                     <div className="space-y-2">
@@ -92,9 +96,9 @@ export const LdapSettingsSearching = ({
                             label={t("uuidLdapAttribute")}
                             labelIcon={t("uuidLdapAttributeHelp")}
                             defaultValue="objectGUID"
-                    rules={{
-                        required: t("validateUuidLDAPAttribute")
-                    }}
+                            rules={{
+                                required: t("validateUuidLDAPAttribute")
+                            }}
                         />
                     </div>
                     <div className="space-y-2">
@@ -103,9 +107,9 @@ export const LdapSettingsSearching = ({
                             label={t("userObjectClasses")}
                             labelIcon={t("userObjectClassesHelp")}
                             defaultValue="person, organizationalPerson, user"
-                    rules={{
-                        required: t("validateUserObjectClasses")
-                    }}
+                            rules={{
+                                required: t("validateUserObjectClasses")
+                            }}
                         />
                     </div>
                     <div className="space-y-2">
@@ -113,12 +117,12 @@ export const LdapSettingsSearching = ({
                             name="config.customUserSearchFilter.0"
                             label={t("userLdapFilter")}
                             labelIcon={t("userLdapFilterHelp")}
-                    rules={{
-                        pattern: {
-                            value: /(\(.*\))$/,
-                            message: t("validateCustomUserSearchFilter")
-                        }
-                    }}
+                            rules={{
+                                pattern: {
+                                    value: /(\(.*\))$/,
+                                    message: t("validateCustomUserSearchFilter")
+                                }
+                            }}
                         />
                     </div>
                     <div className="space-y-2">
@@ -129,9 +133,9 @@ export const LdapSettingsSearching = ({
                             labelIcon={t("searchScopeHelp")}
                             defaultValue="1"
                             options={[
-                        { key: "1", value: t("oneLevel") },
-                        { key: "2", value: t("subtree") }
-                    ]}
+                                { key: "1", value: t("oneLevel") },
+                                { key: "2", value: t("subtree") }
+                            ]}
                         />
                     </div>
                     <div className="space-y-2">
@@ -146,29 +150,31 @@ export const LdapSettingsSearching = ({
                     <div className="space-y-2">
                         <FormLabel
                             name="kc-ui-pagination"
-                    label={t("pagination")}
-                    labelIcon={
-                        <HelpItem
-                            helpText={t("paginationHelp")}
-                            fieldLabelId="pagination"
-                        />
-                    }
-                    hasNoPaddingTop
-                >
-                    <Controller
-                        name="config.pagination"
-                        defaultValue={["true"]}
-                        control={form.control}
-                        render={({ field }) => (
-                            <Switch
-                                id="kc-ui-pagination"
-                                data-testid="ui-pagination"
-                                checked={field.value[0] === "true"}
-                                onCheckedChange={(value) => field.onChange([`${value}`])}
-                                aria-label={t("pagination")}
+                            label={t("pagination")}
+                            labelIcon={
+                                <HelpItem
+                                    helpText={t("paginationHelp")}
+                                    fieldLabelId="pagination"
+                                />
+                            }
+                            hasNoPaddingTop
+                        >
+                            <Controller
+                                name="config.pagination"
+                                defaultValue={["true"]}
+                                control={form.control}
+                                render={({ field }) => (
+                                    <Switch
+                                        id="kc-ui-pagination"
+                                        data-testid="ui-pagination"
+                                        checked={field.value[0] === "true"}
+                                        onCheckedChange={value =>
+                                            field.onChange([`${value}`])
+                                        }
+                                        aria-label={t("pagination")}
+                                    />
+                                )}
                             />
-                        )}
-                    />
                         </FormLabel>
                     </div>
                     <div className="space-y-2">

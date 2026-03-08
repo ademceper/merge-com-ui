@@ -1,7 +1,7 @@
-import UserRepresentation from "@keycloak/keycloak-admin-client/lib/defs/userRepresentation";
-import { getErrorDescription, getErrorMessage } from "../../../shared/keycloak-ui-shared";
-import { useOrganizationMembers, useAddOrganizationMembers, useRemoveOrganizationMembers } from "./api/queries";
-import { DataTable, DataTableRowActions } from "@/admin/shared/ui/data-table";
+import type UserRepresentation from "@keycloak/keycloak-admin-client/lib/defs/userRepresentation";
+import { useTranslation } from "@merge-rd/i18n";
+import { Button } from "@merge-rd/ui/components/button";
+import { Checkbox } from "@merge-rd/ui/components/checkbox";
 import { DropdownMenuItem } from "@merge-rd/ui/components/dropdown-menu";
 import {
     Empty,
@@ -10,22 +10,24 @@ import {
     EmptyHeader,
     EmptyTitle
 } from "@merge-rd/ui/components/empty";
-import { Checkbox } from "@merge-rd/ui/components/checkbox";
-import { toast } from "sonner";
-import { Button } from "@merge-rd/ui/components/button";
-import { useState } from "react";
-import { useTranslation } from "@merge-rd/i18n";
 import { Link } from "@tanstack/react-router";
+import { useState } from "react";
+import { toast } from "sonner";
+import { DataTable, DataTableRowActions } from "@/admin/shared/ui/data-table";
+import { getErrorDescription, getErrorMessage } from "../../../shared/keycloak-ui-shared";
 import { useAdminClient } from "../../app/admin-client";
-import { CheckboxFilterComponent } from "../../shared/ui/dynamic/checkbox-filter-component";
-import { SearchInputComponent } from "../../shared/ui/dynamic/search-input-component";
 import { useRealm } from "../../app/providers/realm-context/realm-context";
-import { MemberModal } from "../groups/members-modal";
-import { toUser } from "../user/routes/user";
 import { translationFormatter } from "../../shared/lib/translationFormatter";
 import { useParams } from "../../shared/lib/useParams";
 import useToggle from "../../shared/lib/useToggle";
-import { EditOrganizationParams } from "./routes/edit-organization";
+import { CheckboxFilterComponent } from "../../shared/ui/dynamic/checkbox-filter-component";
+import { SearchInputComponent } from "../../shared/ui/dynamic/search-input-component";
+import { MemberModal } from "../groups/members-modal";
+import { toUser } from "../../shared/lib/routes/user";
+import { useAddOrganizationMembers } from "./api/use-add-organization-members";
+import { useOrganizationMembers } from "./api/use-organization-members";
+import { useRemoveOrganizationMembers } from "./api/use-remove-organization-members";
+import type { EditOrganizationParams } from "../../shared/lib/routes/organizations";
 
 type MembershipTypeRepresentation = UserRepresentation & {
     membershipType?: string;
@@ -34,7 +36,9 @@ type MembershipTypeRepresentation = UserRepresentation & {
 const UserDetailLink = (user: any) => {
     const { realm } = useRealm();
     return (
-        <Link to={toUser({ realm, id: user.id!, tab: "settings" }) as string}>{user.username}</Link>
+        <Link to={toUser({ realm, id: user.id!, tab: "settings" }) as string}>
+            {user.username}
+        </Link>
     );
 };
 
@@ -49,7 +53,8 @@ export const Members = () => {
     const [filteredMembershipTypes, setFilteredMembershipTypes] = useState<string[]>([]);
     const [isOpen, setIsOpen] = useState(false);
 
-    const membershipType = filteredMembershipTypes.length === 1 ? filteredMembershipTypes[0] : undefined;
+    const membershipType =
+        filteredMembershipTypes.length === 1 ? filteredMembershipTypes[0] : undefined;
     const { data: members = [] } = useOrganizationMembers(orgId, {
         search: searchTriggerText,
         membershipType
@@ -95,7 +100,10 @@ export const Members = () => {
             await removeMembersMutation.mutateAsync(selected.map(u => u.id!));
             toast.success(t("organizationUsersLeft", { count: selected.length }));
         } catch (error) {
-            toast.error(t("organizationUsersLeftError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
+            toast.error(
+                t("organizationUsersLeftError", { error: getErrorMessage(error) }),
+                { description: getErrorDescription(error) }
+            );
         }
     };
 
@@ -106,12 +114,21 @@ export const Members = () => {
                     membersQuery={() => adminClient.organizations.listMembers({ orgId })}
                     onAdd={async selectedRows => {
                         try {
-                            await addMembersMutation.mutateAsync(selectedRows.map(u => u.id!));
-                            toast.success(t("organizationUsersAdded", {
+                            await addMembersMutation.mutateAsync(
+                                selectedRows.map(u => u.id!)
+                            );
+                            toast.success(
+                                t("organizationUsersAdded", {
                                     count: selectedRows.length
-                                }));
+                                })
+                            );
                         } catch (error) {
-                            toast.error(t("organizationUsersAddedError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
+                            toast.error(
+                                t("organizationUsersAddedError", {
+                                    error: getErrorMessage(error)
+                                }),
+                                { description: getErrorDescription(error) }
+                            );
                         }
                     }}
                     onClose={() => {
@@ -127,7 +144,9 @@ export const Members = () => {
                         size: 40,
                         cell: ({ row }) => (
                             <Checkbox
-                                checked={selectedMembers.some(s => s.id === row.original.id)}
+                                checked={selectedMembers.some(
+                                    s => s.id === row.original.id
+                                )}
                                 onCheckedChange={() =>
                                     setSelectedMembers(prev =>
                                         prev.some(s => s.id === row.original.id)
@@ -138,16 +157,40 @@ export const Members = () => {
                             />
                         )
                     },
-                    { accessorKey: "username", header: t("name"), cell: ({ row }) => <UserDetailLink {...row.original} /> },
-                    { accessorKey: "email", header: t("email"), cell: ({ getValue }) => (getValue() ?? "—") as string },
-                    { accessorKey: "firstName", header: t("firstName"), cell: ({ getValue }) => (getValue() ?? "—") as string },
-                    { accessorKey: "lastName", header: t("lastName"), cell: ({ getValue }) => (getValue() ?? "—") as string },
-                    { accessorKey: "membershipType", header: t("membershipType"), cell: ({ row }) => translationFormatter(t)(row.original.membershipType) },
+                    {
+                        accessorKey: "username",
+                        header: t("name"),
+                        cell: ({ row }) => <UserDetailLink {...row.original} />
+                    },
+                    {
+                        accessorKey: "email",
+                        header: t("email"),
+                        cell: ({ getValue }) => (getValue() ?? "—") as string
+                    },
+                    {
+                        accessorKey: "firstName",
+                        header: t("firstName"),
+                        cell: ({ getValue }) => (getValue() ?? "—") as string
+                    },
+                    {
+                        accessorKey: "lastName",
+                        header: t("lastName"),
+                        cell: ({ getValue }) => (getValue() ?? "—") as string
+                    },
+                    {
+                        accessorKey: "membershipType",
+                        header: t("membershipType"),
+                        cell: ({ row }) =>
+                            translationFormatter(t)(row.original.membershipType)
+                    },
                     {
                         id: "actions",
                         cell: ({ row }) => (
                             <DataTableRowActions row={row}>
-                                <DropdownMenuItem onClick={() => removeMember([row.original])} className="text-destructive">
+                                <DropdownMenuItem
+                                    onClick={() => removeMember([row.original])}
+                                    className="text-destructive"
+                                >
                                     {t("remove")}
                                 </DropdownMenuItem>
                             </DataTableRowActions>
@@ -159,10 +202,20 @@ export const Members = () => {
                 searchPlaceholder={t("search")}
                 emptyContent={
                     <Empty className="py-12">
-                        <EmptyHeader><EmptyTitle>{t("emptyMembers")}</EmptyTitle></EmptyHeader>
+                        <EmptyHeader>
+                            <EmptyTitle>{t("emptyMembers")}</EmptyTitle>
+                        </EmptyHeader>
                         <EmptyContent>
-                            <EmptyDescription>{t("emptyMembersInstructions")}</EmptyDescription>
-                            <Button variant="outline" className="mt-2" onClick={toggleAddMembers}>{t("addRealmUser")}</Button>
+                            <EmptyDescription>
+                                {t("emptyMembersInstructions")}
+                            </EmptyDescription>
+                            <Button
+                                variant="outline"
+                                className="mt-2"
+                                onClick={toggleAddMembers}
+                            >
+                                {t("addRealmUser")}
+                            </Button>
                         </EmptyContent>
                     </Empty>
                 }

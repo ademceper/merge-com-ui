@@ -1,21 +1,23 @@
-import ComponentRepresentation from "@keycloak/keycloak-admin-client/lib/defs/componentRepresentation";
-import { getErrorDescription, getErrorMessage, useFetch } from "../../../shared/keycloak-ui-shared";
-import { toast } from "sonner";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@merge-rd/ui/components/dropdown-menu";
-import { buttonVariants } from "@merge-rd/ui/components/button";
-import { get } from "lodash-es";
-import { useState } from "react";
 import { useTranslation } from "@merge-rd/i18n";
+import { buttonVariants } from "@merge-rd/ui/components/button";
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuTrigger
+} from "@merge-rd/ui/components/dropdown-menu";
 import { useNavigate } from "@tanstack/react-router";
-import { useParams } from "../../shared/lib/useParams";
+import { toast } from "sonner";
+import { getErrorDescription, getErrorMessage } from "../../../shared/keycloak-ui-shared";
 import { useAdminClient } from "../../app/admin-client";
-import { useConfirmDialog } from "../../shared/ui/confirm-dialog/confirm-dialog";
-
 import { useRealm } from "../../app/providers/realm-context/realm-context";
 import { useServerInfo } from "../../app/providers/server-info/server-info-provider";
-import { PageHandler } from "./page-handler";
+import { useParams } from "../../shared/lib/useParams";
+import { useConfirmDialog } from "../../shared/ui/confirm-dialog/confirm-dialog";
+import { usePageComponent } from "./api/use-page-component";
 import { PAGE_PROVIDER } from "./constants";
-import { PageParams, toPage } from "./routes";
+import { PageHandler } from "./page-handler";
+import { type PageParams, toPage } from "../../shared/lib/routes/page";
 
 export default function Page() {
     const { adminClient } = useAdminClient();
@@ -26,14 +28,13 @@ export default function Page() {
     const pages = componentTypes?.[PAGE_PROVIDER];
     const navigate = useNavigate();
     const { id, providerId } = useParams<PageParams>();
-const [pageData, setPageData] = useState<ComponentRepresentation>();
 
     const page = pages?.find(p => p.id === providerId);
     if (!page) {
         throw new Error(t("notFound"));
     }
 
-    useFetch(async () => adminClient.components.findOne({ id: id! }), setPageData, [id]);
+    const { data: pageData } = usePageComponent(id);
 
     const [toggleDeleteDialog, DeleteConfirm] = useConfirmDialog({
         titleKey: "itemDeleteConfirmTitle",
@@ -48,7 +49,9 @@ const [pageData, setPageData] = useState<ComponentRepresentation>();
                 toast.success(t("itemDeletedSuccess"));
                 navigate({ to: toPage({ realm, providerId: providerId! }) as string });
             } catch (error) {
-                toast.error(t("itemSaveError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
+                toast.error(t("itemSaveError", { error: getErrorMessage(error) }), {
+                    description: getErrorDescription(error)
+                });
             }
         }
     });
@@ -60,7 +63,10 @@ const [pageData, setPageData] = useState<ComponentRepresentation>();
                     <div className="flex flex-wrap items-center gap-2" />
                     <div className="flex items-center gap-2">
                         <DropdownMenu>
-                            <DropdownMenuTrigger data-testid="action-dropdown" className={buttonVariants()}>
+                            <DropdownMenuTrigger
+                                data-testid="action-dropdown"
+                                className={buttonVariants()}
+                            >
                                 {t("action")}
                             </DropdownMenuTrigger>
                             <DropdownMenuContent align="end">

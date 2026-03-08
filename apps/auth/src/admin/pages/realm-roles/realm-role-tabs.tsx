@@ -1,43 +1,51 @@
 import type RoleRepresentation from "@keycloak/keycloak-admin-client/lib/defs/roleRepresentation";
-import { getErrorDescription, getErrorMessage, KeycloakSpinner, useFetch } from "../../../shared/keycloak-ui-shared";
-import { toast } from "sonner";
-import { Badge } from "@merge-rd/ui/components/badge";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@merge-rd/ui/components/dropdown-menu";
-import { buttonVariants } from "@merge-rd/ui/components/button";
-import { useState } from "react";
-import { FormProvider, SubmitHandler, useForm, useWatch } from "react-hook-form";
 import { useTranslation } from "@merge-rd/i18n";
-import { useNavigate, useLocation } from "@tanstack/react-router";
-import { useParams as useRouterParams } from "../../shared/lib/useParams";
-import { useAdminClient } from "../../app/admin-client";
-import { toClient } from "../clients/routes/client";
+import { Badge } from "@merge-rd/ui/components/badge";
+import { buttonVariants } from "@merge-rd/ui/components/button";
 import {
-    ClientRoleParams,
-    ClientRoleTab,
-    toClientRole
-} from "../clients/routes/client-role";
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuTrigger
+} from "@merge-rd/ui/components/dropdown-menu";
+import { useLocation, useNavigate } from "@tanstack/react-router";
+import { useEffect, useState } from "react";
+import { FormProvider, type SubmitHandler, useForm, useWatch } from "react-hook-form";
+import { toast } from "sonner";
+import {
+    getErrorDescription,
+    getErrorMessage,
+    KeycloakSpinner
+} from "../../../shared/keycloak-ui-shared";
+import { useAdminClient } from "../../app/admin-client";
+import { useAccess } from "../../app/providers/access/access";
+import { useRealm } from "../../app/providers/realm-context/realm-context";
+import useIsFeatureEnabled, { Feature } from "../../shared/lib/useIsFeatureEnabled";
+import { useParams, useParams as useRouterParams } from "../../shared/lib/useParams";
 import { useConfirmDialog } from "../../shared/ui/confirm-dialog/confirm-dialog";
 import {
-    AttributeForm,
+    type AttributeForm,
     AttributesForm
 } from "../../shared/ui/key-value-form/attribute-form";
 import {
-    KeyValueType,
     arrayToKeyValue,
+    type KeyValueType,
     keyValueToArray
 } from "../../shared/ui/key-value-form/key-value-convert";
 import { PermissionsTab } from "../../shared/ui/permission-tab/permission-tab";
 import { RoleForm } from "../../shared/ui/role-form/role-form";
 import { RoleMapping } from "../../shared/ui/role-mapping/role-mapping";
-
-import { useAccess } from "../../app/providers/access/access";
-import { useRealm } from "../../app/providers/realm-context/realm-context";
+import { toClient } from "../../shared/lib/routes/clients";
+import {
+    type ClientRoleParams,
+    type ClientRoleTab,
+    toClientRole
+} from "../../shared/lib/routes/clients";
 import { AdminEvents } from "../events/admin-events";
-import useIsFeatureEnabled, { Feature } from "../../shared/lib/useIsFeatureEnabled";
-import { useParams } from "../../shared/lib/useParams";
+import { useClientDetail } from "./api/use-client-detail";
+import { useRealmRole } from "./api/use-realm-role";
+import { type RealmRoleTab, toRealmRole, toRealmRoles } from "../../shared/lib/routes/realm-roles";
 import { UsersInRoleTab } from "./users-in-role-tab";
-import { RealmRoleTab, toRealmRole } from "./routes/realm-role";
-import { toRealmRoles } from "./routes/realm-roles";
 
 export default function RealmRoleTabs() {
     const { adminClient } = useAdminClient();
@@ -53,11 +61,9 @@ export default function RealmRoleTabs() {
     const { id, clientId } = useParams<ClientRoleParams>();
     const { tab } = useRouterParams<{ tab?: string }>();
     const { realm: realmName, realmRepresentation: realm } = useRealm();
-    const [key, setKey] = useState(0);
     const [attributes, setAttributes] = useState<KeyValueType[] | undefined>();
 
-    const refresh = () => setKey(key + 1);
-const { hasAccess } = useAccess();
+    const { hasAccess } = useAccess();
     const canViewPermissionsTab = hasAccess("query-clients", "manage-authorization");
 
     const [canManageClientRole, setCanManageClientRole] = useState(false);
@@ -82,28 +88,23 @@ const { hasAccess } = useAccess();
         name: "composite"
     });
 
-    useFetch(
-        async () => adminClient.roles.findOneById({ id }),
-        role => {
-            if (!role) {
-                throw new Error(t("notFound"));
-            }
+    const { data: roleData, refetch: refetchRole } = useRealmRole(id);
+    const refresh = () => refetchRole();
 
-            const convertedRole = convert(role);
+    useEffect(() => {
+        if (!roleData) return;
+        const convertedRole = convert(roleData);
+        reset(convertedRole);
+        setAttributes(convertedRole.attributes);
+    }, [roleData, reset]);
 
-            reset(convertedRole);
-            setAttributes(convertedRole.attributes);
-        },
-        [key]
-    );
+    const { data: clientData } = useClientDetail(clientId);
 
-    useFetch(
-        async () => adminClient.clients.findOne({ id: clientId }),
-        client => {
-            if (clientId) setCanManageClientRole(client?.access?.manage as boolean);
-        },
-        []
-    );
+    useEffect(() => {
+        if (clientId && clientData) {
+            setCanManageClientRole(clientData.access?.manage as boolean);
+        }
+    }, [clientId, clientData]);
 
     const onSubmit: SubmitHandler<AttributeForm> = async formValues => {
         try {
@@ -125,7 +126,9 @@ const { hasAccess } = useAccess();
             setAttributes(attributes);
             toast.success(t("roleSaveSuccess"));
         } catch (error) {
-            toast.error(t("roleSaveError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
+            toast.error(t("roleSaveError", { error: getErrorMessage(error) }), {
+                description: getErrorDescription(error)
+            });
         }
     };
 
@@ -190,7 +193,9 @@ const { hasAccess } = useAccess();
                 toast.success(t("roleDeletedSuccess"));
                 navigate({ to: toOverview() as string });
             } catch (error) {
-                toast.error(t("roleDeleteError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
+                toast.error(t("roleDeleteError", { error: getErrorMessage(error) }), {
+                    description: getErrorDescription(error)
+                });
             }
         }
     });
@@ -205,7 +210,9 @@ const { hasAccess } = useAccess();
             navigate({ to: toTab("associated-roles") as string });
             toast.success(t("addAssociatedRolesSuccess"));
         } catch (error) {
-            toast.error(t("addAssociatedRolesError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
+            toast.error(t("addAssociatedRolesError", { error: getErrorMessage(error) }), {
+                description: getErrorDescription(error)
+            });
         }
     };
 
@@ -246,7 +253,8 @@ const { hasAccess } = useAccess();
                     <UsersInRoleTab data-cy="users-in-role-tab" />
                 ) : null;
             case "permissions":
-                return (isFeatureEnabled(Feature.AdminFineGrainedAuthz) && canViewPermissionsTab) ? (
+                return isFeatureEnabled(Feature.AdminFineGrainedAuthz) &&
+                    canViewPermissionsTab ? (
                     <PermissionsTab id={id} type="roles" />
                 ) : null;
             case "events":
@@ -287,7 +295,11 @@ const { hasAccess } = useAccess();
                 </div>
                 <div className="flex items-center gap-2">
                     <DropdownMenu>
-                        <DropdownMenuTrigger id="roles-actions-dropdown" data-testid="action-dropdown" className={buttonVariants()}>
+                        <DropdownMenuTrigger
+                            id="roles-actions-dropdown"
+                            data-testid="action-dropdown"
+                            className={buttonVariants()}
+                        >
                             {t("action")}
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end">
@@ -305,9 +317,7 @@ const { hasAccess } = useAccess();
             </div>
             <section className="py-6 bg-muted/30 p-0">
                 <FormProvider {...form}>
-                    <div className="bg-muted/30">
-                        {renderContent()}
-                    </div>
+                    <div className="bg-muted/30">{renderContent()}</div>
                 </FormProvider>
             </section>
         </>

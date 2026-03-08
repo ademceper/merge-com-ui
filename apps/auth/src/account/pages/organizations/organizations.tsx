@@ -9,14 +9,14 @@
 
 // @ts-nocheck
 
-import { useEnvironment } from "../../../shared/keycloak-ui-shared";
-import { useState } from "react";
 import { useTranslation } from "@merge-rd/i18n";
-import { getUserOrganizations } from "../../shared/api/methods";
-import { Page } from "../../shared/ui/page/page";
-import { Environment } from "../../app/environment";
-import { usePromise } from "../../shared/lib/usePromise";
 import { Buildings } from "@phosphor-icons/react";
+import { useState } from "react";
+import { useEnvironment } from "../../../shared/keycloak-ui-shared";
+import type { Environment } from "../../app/environment";
+import { getUserOrganizations } from "../../shared/api/methods";
+import { usePromise } from "../../shared/lib/usePromise";
+import { Page } from "../../shared/ui/page/page";
 
 type OrgRepresentation = {
     id?: string;
@@ -48,7 +48,9 @@ const Organizations = () => {
                 <div className="py-12 text-center text-muted-foreground">
                     <Buildings className="h-10 w-10 mx-auto mb-3 opacity-50" />
                     <p>{t("emptyUserOrganizations")}</p>
-                    <p className="text-sm mt-1">{t("emptyUserOrganizationsInstructions")}</p>
+                    <p className="text-sm mt-1">
+                        {t("emptyUserOrganizationsInstructions")}
+                    </p>
                 </div>
             ) : (
                 <div className="space-y-3">
@@ -59,7 +61,9 @@ const Organizations = () => {
                                     <Buildings className="h-5 w-5 text-primary" />
                                 </div>
                                 <div className="min-w-0">
-                                    <div className="text-base font-medium">{org.name}</div>
+                                    <div className="text-base font-medium">
+                                        {org.name}
+                                    </div>
                                     {org.description && (
                                         <div className="text-sm text-muted-foreground">
                                             {org.description}

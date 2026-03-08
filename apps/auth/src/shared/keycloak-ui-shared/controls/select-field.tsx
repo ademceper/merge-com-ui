@@ -5,7 +5,7 @@ import {
     SelectContent,
     SelectItem,
     SelectTrigger,
-    SelectValue,
+    SelectValue
 } from "@merge-rd/ui/components/select";
 import { get } from "lodash-es";
 import { Controller, useFormContext } from "react-hook-form";
@@ -35,8 +35,6 @@ type SelectFieldProps = {
     onSelect?: (value: string, onChange: (v: string) => void) => void;
 };
 
-;
-
 export function SelectField({
     id,
     name,
@@ -48,9 +46,12 @@ export function SelectField({
     placeholderText,
     isDisabled,
     className,
-    onSelect,
+    onSelect
 }: SelectFieldProps) {
-    const { control, formState: { errors } } = useFormContext();
+    const {
+        control,
+        formState: { errors }
+    } = useFormContext();
     const required = getRuleValue(rules?.required) === true;
     return (
         <FormLabel
@@ -68,8 +69,12 @@ export function SelectField({
                 rules={rules as any}
                 render={({ field }) => (
                     <Select
-                        value={field.value === "" || field.value == null ? "" : String(field.value)}
-                        onValueChange={(v) => {
+                        value={
+                            field.value === "" || field.value == null
+                                ? ""
+                                : String(field.value)
+                        }
+                        onValueChange={v => {
                             if (onSelect) onSelect(v, field.onChange);
                             else field.onChange(v);
                         }}
@@ -79,7 +84,7 @@ export function SelectField({
                             <SelectValue placeholder={placeholderText} />
                         </SelectTrigger>
                         <SelectContent>
-                            {options.map((opt) => (
+                            {options.map(opt => (
                                 <SelectItem key={optKey(opt)} value={optKey(opt)}>
                                     {optVal(opt)}
                                 </SelectItem>

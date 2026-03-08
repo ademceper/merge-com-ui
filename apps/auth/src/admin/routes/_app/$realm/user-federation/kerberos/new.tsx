@@ -1,15 +1,9 @@
-import { createFileRoute } from "@tanstack/react-router";
-import { lazy } from "react";
-
-const UserFederationKerberosSettings = lazy(
-    () =>
-        import(
-            "../../../../../pages/user-federation/user-federation-kerberos-settings"
-        ),
-);
+import { createFileRoute, lazyRouteComponent } from "@tanstack/react-router";
 
 export const Route = createFileRoute(
     "/_app/$realm/user-federation/kerberos/new",
 )({
-    component: UserFederationKerberosSettings,
+    component: lazyRouteComponent(() => import(
+            "../../../../../pages/user-federation/user-federation-kerberos-settings"
+        )),
 });

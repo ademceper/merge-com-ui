@@ -1,17 +1,7 @@
-import { FormProvider, UseFormReturn } from "react-hook-form";
 import { useTranslation } from "@merge-rd/i18n";
-import {
-    KeycloakSpinner,
-    useFetch,
-    MultiSelectField
-} from "../../../../shared/keycloak-ui-shared";
-import { useState } from "react";
-import { fetchAdminUI } from "../../../app/providers/auth/admin-ui-endpoint";
-import { useAdminClient } from "../../../app/admin-client";
-
-type EventListenerRepresentation = {
-    id: string;
-};
+import { FormProvider, type UseFormReturn } from "react-hook-form";
+import { KeycloakSpinner, MultiSelectField } from "../../../../shared/keycloak-ui-shared";
+import { useAvailableEventListeners } from "../api/use-available-event-listeners";
 
 type EventListenersFormProps = {
     form: UseFormReturn;
@@ -21,19 +11,7 @@ type EventListenersFormProps = {
 export const EventListenersForm = ({ form, reset: _reset }: EventListenersFormProps) => {
     const { t } = useTranslation();
 
-    const [eventListeners, setEventListeners] = useState<EventListenerRepresentation[]>();
-
-    const { adminClient } = useAdminClient();
-
-    useFetch(
-        () =>
-            fetchAdminUI<EventListenerRepresentation[]>(
-                adminClient,
-                "ui-ext/available-event-listeners"
-            ),
-        setEventListeners,
-        []
-    );
+    const { data: eventListeners } = useAvailableEventListeners();
 
     if (!eventListeners) {
         return <KeycloakSpinner />;

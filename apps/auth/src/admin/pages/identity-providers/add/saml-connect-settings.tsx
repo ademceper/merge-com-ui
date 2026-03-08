@@ -1,21 +1,21 @@
 import { fetchWithError } from "@keycloak/keycloak-admin-client";
 import type IdentityProviderRepresentation from "@keycloak/keycloak-admin-client/lib/defs/identityProviderRepresentation";
+import { useTranslation } from "@merge-rd/i18n";
+import { Label } from "@merge-rd/ui/components/label";
+import { useFormContext } from "react-hook-form";
 import {
     FormErrorText,
     HelpItem,
     TextControl,
     useEnvironment
 } from "../../../../shared/keycloak-ui-shared";
-import { Label } from "@merge-rd/ui/components/label";
-import { useFormContext } from "react-hook-form";
-import { useTranslation } from "@merge-rd/i18n";
 
 import { useAdminClient } from "../../../app/admin-client";
-import { FileUploadForm } from "../../../shared/ui/json-file-upload/file-upload-form";
-import { useRealm } from "../../../app/providers/realm-context/realm-context";
 import type { Environment } from "../../../app/environment";
-import { addTrailingSlash } from "../../../shared/lib/util";
+import { useRealm } from "../../../app/providers/realm-context/realm-context";
 import { getAuthorizationHeaders } from "../../../shared/lib/getAuthorizationHeaders";
+import { addTrailingSlash } from "../../../shared/lib/util";
+import { FileUploadForm } from "../../../shared/ui/json-file-upload/file-upload-form";
 import { DiscoveryEndpointField } from "../component/discovery-endpoint-field";
 import { DescriptorSettings } from "./descriptor-settings";
 
@@ -81,9 +81,7 @@ export const SamlConnectSettings = () => {
 
     return (
         <>
-            <h2 className="text-xl font-bold">
-                {t("samlSettings")}
-            </h2>
+            <h2 className="text-xl font-bold">{t("samlSettings")}</h2>
 
             <TextControl
                 name="config.entityId"

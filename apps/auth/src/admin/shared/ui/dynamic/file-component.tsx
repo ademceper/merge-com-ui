@@ -1,10 +1,10 @@
-import { HelpItem } from "../../../../shared/keycloak-ui-shared";
+import { useTranslation } from "@merge-rd/i18n";
 import { Button } from "@merge-rd/ui/components/button";
 import { Input } from "@merge-rd/ui/components/input";
 import { Label } from "@merge-rd/ui/components/label";
 import { useState } from "react";
 import { Controller, useFormContext } from "react-hook-form";
-import { useTranslation } from "@merge-rd/i18n";
+import { HelpItem } from "../../../../shared/keycloak-ui-shared";
 import type { ComponentProps } from "./components";
 
 export const FileComponent = ({
@@ -24,7 +24,10 @@ export const FileComponent = ({
     return (
         <div className="space-y-2">
             <div className="flex items-center gap-1">
-                <Label htmlFor={name!}>{t(label!)}{required && " *"}</Label>
+                <Label htmlFor={name!}>
+                    {t(label!)}
+                    {required && " *"}
+                </Label>
                 <HelpItem helpText={t(helpText!)} fieldLabelId={`${label}`} />
             </div>
             <Controller
@@ -39,7 +42,7 @@ export const FileComponent = ({
                                 type="file"
                                 disabled={isDisabled}
                                 className="flex-1"
-                                onChange={(e) => {
+                                onChange={e => {
                                     const file = e.target.files?.[0];
                                     if (file) {
                                         setFilename(file.name);
@@ -66,8 +69,16 @@ export const FileComponent = ({
                                 {t("clear")}
                             </Button>
                         </div>
-                        {isLoading && <span className="text-sm text-muted-foreground">{t("loading")}</span>}
-                        {filename && <span className="text-sm text-muted-foreground truncate">{filename}</span>}
+                        {isLoading && (
+                            <span className="text-sm text-muted-foreground">
+                                {t("loading")}
+                            </span>
+                        )}
+                        {filename && (
+                            <span className="text-sm text-muted-foreground truncate">
+                                {filename}
+                            </span>
+                        )}
                     </div>
                 )}
             />

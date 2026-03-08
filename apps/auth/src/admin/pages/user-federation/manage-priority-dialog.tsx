@@ -1,12 +1,18 @@
 import type ComponentRepresentation from "@keycloak/keycloak-admin-client/lib/defs/componentRepresentation";
+import { useTranslation } from "@merge-rd/i18n";
 import { Button } from "@merge-rd/ui/components/button";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@merge-rd/ui/components/dialog";
+import {
+    Dialog,
+    DialogContent,
+    DialogFooter,
+    DialogHeader,
+    DialogTitle
+} from "@merge-rd/ui/components/dialog";
 import { sortBy } from "lodash-es";
 import { useState } from "react";
-import { useTranslation } from "@merge-rd/i18n";
-import { useAdminClient } from "../../app/admin-client";
-import { getErrorDescription, getErrorMessage } from "../../../shared/keycloak-ui-shared";
 import { toast } from "sonner";
+import { getErrorDescription, getErrorMessage } from "../../../shared/keycloak-ui-shared";
+import { useAdminClient } from "../../app/admin-client";
 
 type ManagePriorityDialogProps = {
     components: ComponentRepresentation[];
@@ -20,7 +26,7 @@ export const ManagePriorityDialog = ({
     const { adminClient } = useAdminClient();
 
     const { t } = useTranslation();
-const [liveText, setLiveText] = useState("");
+    const [liveText, setLiveText] = useState("");
     const [order, setOrder] = useState(
         sortBy(components, "config.priority", "name").map(component => component.name!)
     );
@@ -48,7 +54,12 @@ const [liveText, setLiveText] = useState("");
     };
 
     return (
-        <Dialog open onOpenChange={(open) => { if (!open) onClose(); }}>
+        <Dialog
+            open
+            onOpenChange={open => {
+                if (!open) onClose();
+            }}
+        >
             <DialogContent className="sm:max-w-md">
                 <DialogHeader>
                     <DialogTitle>{t("managePriorityOrder")}</DialogTitle>
@@ -66,13 +77,18 @@ const [liveText, setLiveText] = useState("");
                             key={name}
                             draggable
                             onDragStart={() => onDragStartHandler(index)}
-                            onDragOver={(e) => onDragOverHandler(e, index)}
+                            onDragOver={e => onDragOverHandler(e, index)}
                             onDragEnd={onDragEndHandler}
                             className="flex items-center gap-2 p-2 border rounded cursor-grab"
                             aria-label={name}
                             id={name}
                         >
-                            <span className="text-muted-foreground cursor-grab" aria-label={t("dragHelp")}>☰</span>
+                            <span
+                                className="text-muted-foreground cursor-grab"
+                                aria-label={t("dragHelp")}
+                            >
+                                ☰
+                            </span>
                             <span data-testid={name}>{name}</span>
                         </div>
                     ))}
@@ -98,7 +114,12 @@ const [liveText, setLiveText] = useState("");
                                 await Promise.all(updates);
                                 toast.success(t("orderChangeSuccessUserFed"));
                             } catch (error) {
-                                toast.error(t("orderChangeErrorUserFed", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
+                                toast.error(
+                                    t("orderChangeErrorUserFed", {
+                                        error: getErrorMessage(error)
+                                    }),
+                                    { description: getErrorDescription(error) }
+                                );
                             }
 
                             onClose();
@@ -106,11 +127,7 @@ const [liveText, setLiveText] = useState("");
                     >
                         {t("save")}
                     </Button>
-                    <Button
-                        id="modal-cancel"
-                        variant="link"
-                        onClick={onClose}
-                    >
+                    <Button id="modal-cancel" variant="link" onClick={onClose}>
                         {t("cancel")}
                     </Button>
                 </DialogFooter>

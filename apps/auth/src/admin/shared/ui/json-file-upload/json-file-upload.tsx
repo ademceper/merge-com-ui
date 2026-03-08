@@ -1,4 +1,4 @@
-import { FileUploadForm, FileUploadFormProps } from "./file-upload-form";
+import { FileUploadForm, type FileUploadFormProps } from "./file-upload-form";
 
 type JsonFileUploadProps = Omit<
     FileUploadFormProps,

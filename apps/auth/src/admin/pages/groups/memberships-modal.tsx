@@ -1,15 +1,15 @@
 import type GroupRepresentation from "@keycloak/keycloak-admin-client/lib/defs/groupRepresentation";
-import UserRepresentation from "@keycloak/keycloak-admin-client/lib/defs/userRepresentation";
+import type UserRepresentation from "@keycloak/keycloak-admin-client/lib/defs/userRepresentation";
+import { useTranslation } from "@merge-rd/i18n";
 import { Button } from "@merge-rd/ui/components/button";
 import { Checkbox } from "@merge-rd/ui/components/checkbox";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@merge-rd/ui/components/dialog";
-import { Popover, PopoverContent, PopoverTrigger } from "@merge-rd/ui/components/popover";
-import { Question } from "@phosphor-icons/react";
-import { useHelp } from "../../../shared/keycloak-ui-shared";
-import { useFetch } from "../../../shared/keycloak-ui-shared";
-import { sortBy, uniqBy } from "lodash-es";
-import { useState } from "react";
-import { DataTable, type ColumnDef } from "@/admin/shared/ui/data-table";
+import {
+    Dialog,
+    DialogContent,
+    DialogFooter,
+    DialogHeader,
+    DialogTitle
+} from "@merge-rd/ui/components/dialog";
 import {
     Empty,
     EmptyContent,
@@ -17,9 +17,13 @@ import {
     EmptyHeader,
     EmptyTitle
 } from "@merge-rd/ui/components/empty";
-import { useTranslation } from "@merge-rd/i18n";
-import { useAdminClient } from "../../app/admin-client";
+import { Popover, PopoverContent, PopoverTrigger } from "@merge-rd/ui/components/popover";
+import { Question } from "@phosphor-icons/react";
+import { useState } from "react";
+import { type ColumnDef, DataTable } from "@/admin/shared/ui/data-table";
+import { useHelp } from "../../../shared/keycloak-ui-shared";
 import { GroupPath } from "../../shared/ui/group/group-path";
+import { useUserMemberships } from "./api/use-user-memberships";
 
 type CredentialDataDialogProps = {
     user: UserRepresentation;
@@ -28,49 +32,53 @@ type CredentialDataDialogProps = {
 
 export const MembershipsModal = ({ user, onClose }: CredentialDataDialogProps) => {
     const { t } = useTranslation();
-    const { adminClient } = useAdminClient();
-    const [key, setKey] = useState(0);
-    const refresh = () => setKey(key + 1);
     const [isDirectMembership, setDirectMembership] = useState(true);
     const { enabled } = useHelp();
-    const [groups, setGroups] = useState<GroupRepresentation[]>([]);
 
-    useFetch(
-        async () => {
-            const joinedUserGroups = await adminClient.users.listGroups({ id: user.id!, first: 0, max: 500 });
-            const indirect: GroupRepresentation[] = [];
-            if (!isDirectMembership) {
-                joinedUserGroups.forEach(g => {
-                    const paths = (g.path?.substring(1).match(/((~\/)|[^/])+/g) || []).slice(0, -1);
-                    indirect.push(...paths.map(p => ({ name: p, path: g.path?.substring(0, g.path!.indexOf(p) + p.length) } as GroupRepresentation)));
-                });
-            }
-            return sortBy(uniqBy([...joinedUserGroups, ...indirect], "path"), group => group.path?.toUpperCase());
-        },
-        setGroups,
-        [key, isDirectMembership]
-    );
+    const { data: groups = [] } = useUserMemberships(user.id!, isDirectMembership);
 
     const columns: ColumnDef<GroupRepresentation>[] = [
-        { accessorKey: "name", header: t("groupMembership"), cell: ({ row }) => row.original.name || "-" },
-        { accessorKey: "path", header: t("path"), cell: ({ row }) => <GroupPath group={row.original} /> }
+        {
+            accessorKey: "name",
+            header: t("groupMembership"),
+            cell: ({ row }) => row.original.name || "-"
+        },
+        {
+            accessorKey: "path",
+            header: t("path"),
+            cell: ({ row }) => <GroupPath group={row.original} />
+        }
     ];
 
     const emptyContent = (
         <Empty className="py-12">
-            <EmptyHeader><EmptyTitle>{t("noGroupMemberships")}</EmptyTitle></EmptyHeader>
-            <EmptyContent><EmptyDescription>{t("noGroupMembershipsText")}</EmptyDescription></EmptyContent>
+            <EmptyHeader>
+                <EmptyTitle>{t("noGroupMemberships")}</EmptyTitle>
+            </EmptyHeader>
+            <EmptyContent>
+                <EmptyDescription>{t("noGroupMembershipsText")}</EmptyDescription>
+            </EmptyContent>
         </Empty>
     );
 
     return (
-        <Dialog open onOpenChange={(open) => { if (!open) onClose(); }}>
-            <DialogContent className="max-w-4xl" data-testid="showMembershipsDialog" showCloseButton={true}>
+        <Dialog
+            open
+            onOpenChange={open => {
+                if (!open) onClose();
+            }}
+        >
+            <DialogContent
+                className="max-w-4xl"
+                data-testid="showMembershipsDialog"
+                showCloseButton={true}
+            >
                 <DialogHeader>
-                    <DialogTitle>{t("showMembershipsTitle", { username: user.username })}</DialogTitle>
+                    <DialogTitle>
+                        {t("showMembershipsTitle", { username: user.username })}
+                    </DialogTitle>
                 </DialogHeader>
                 <DataTable<GroupRepresentation>
-                    key={key}
                     columns={columns}
                     data={groups}
                     searchColumnId="name"
@@ -84,14 +92,21 @@ export const MembershipsModal = ({ user, onClose }: CredentialDataDialogProps) =
                                 <Checkbox
                                     id="kc-direct-membership-checkbox"
                                     checked={isDirectMembership}
-                                    onCheckedChange={() => { setDirectMembership(!isDirectMembership); refresh(); }}
+                                    onCheckedChange={() => {
+                                        setDirectMembership(!isDirectMembership);
+                                    }}
                                 />
-                                <label htmlFor="kc-direct-membership-checkbox">{t("directMembership")}</label>
+                                <label htmlFor="kc-direct-membership-checkbox">
+                                    {t("directMembership")}
+                                </label>
                             </div>
                             {enabled && (
                                 <Popover>
                                     <PopoverTrigger asChild>
-                                        <Button variant="link" className="kc-who-will-appear-button">
+                                        <Button
+                                            variant="link"
+                                            className="kc-who-will-appear-button"
+                                        >
                                             <Question className="size-4" />
                                             {t("whoWillAppearLinkTextUsers")}
                                         </Button>

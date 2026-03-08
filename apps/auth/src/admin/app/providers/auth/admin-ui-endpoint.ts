@@ -1,7 +1,8 @@
-import KeycloakAdminClient, { fetchWithError } from "@keycloak/keycloak-admin-client";
+import type KeycloakAdminClient from "@keycloak/keycloak-admin-client";
+import { fetchWithError } from "@keycloak/keycloak-admin-client";
 import { getAuthorizationHeaders } from "../../../shared/lib/getAuthorizationHeaders";
 import { joinPath } from "../../../shared/lib/joinPath";
-import { UiRealmInfo } from "./uiRealmInfo";
+import type { UiRealmInfo } from "./uiRealmInfo";
 
 export async function fetchAdminUI<T>(
     adminClient: KeycloakAdminClient,
@@ -17,7 +18,7 @@ export async function fetchAdminUI<T>(
             "admin/realms",
             encodeURIComponent(adminClient.realmName),
             endpoint
-        ) + (query ? "?" + new URLSearchParams(query) : ""),
+        ) + (query ? `?${new URLSearchParams(query)}` : ""),
         {
             method: "GET",
             headers: getAuthorizationHeaders(accessToken)
@@ -27,8 +28,6 @@ export async function fetchAdminUI<T>(
     return await response.json();
 }
 
-async function fetchRealmInfo(
-    adminClient: KeycloakAdminClient
-): Promise<UiRealmInfo> {
+async function fetchRealmInfo(adminClient: KeycloakAdminClient): Promise<UiRealmInfo> {
     return fetchAdminUI(adminClient, `ui-ext/info`);
 }

@@ -4,7 +4,7 @@ import {
     DialogContent,
     DialogFooter,
     DialogHeader,
-    DialogTitle,
+    DialogTitle
 } from "@merge-rd/ui/components/dialog";
 import { WarningCircle } from "@phosphor-icons/react";
 import { useTranslation } from "react-i18next";
@@ -38,7 +38,10 @@ export const ErrorPage = (props: ErrorPageProps) => {
                     <DialogHeader>
                         <DialogTitle>
                             <span className="inline-flex items-center gap-2">
-                                <WarningCircle className="size-5 text-destructive shrink-0" aria-hidden />
+                                <WarningCircle
+                                    className="size-5 text-destructive shrink-0"
+                                    aria-hidden
+                                />
                                 {t("somethingWentWrong")}
                             </span>
                         </DialogTitle>

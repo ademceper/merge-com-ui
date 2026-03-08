@@ -1,26 +1,29 @@
 import type ComponentRepresentation from "@keycloak/keycloak-admin-client/lib/defs/componentRepresentation";
-import { getErrorDescription, getErrorMessage, KeycloakSpinner,
-    TextControl,
-    useFetch } from "../../../../shared/keycloak-ui-shared";
-import { toast } from "sonner";
-import { Button } from "@merge-rd/ui/components/button";
-import { FormProvider, useForm } from "react-hook-form";
 import { useTranslation } from "@merge-rd/i18n";
+import { Button } from "@merge-rd/ui/components/button";
 import { Link, useNavigate } from "@tanstack/react-router";
+import { useEffect } from "react";
+import { FormProvider, useForm } from "react-hook-form";
+import { toast } from "sonner";
+import {
+    getErrorDescription,
+    getErrorMessage,
+    KeycloakSpinner,
+    TextControl
+} from "../../../../shared/keycloak-ui-shared";
 import { useAdminClient } from "../../../app/admin-client";
-import { DynamicComponents } from "../../../shared/ui/dynamic/dynamic-components";
-import { FormAccess } from "../../../shared/ui/form/form-access";
 import { useRealm } from "../../../app/providers/realm-context/realm-context";
 import { useServerInfo } from "../../../app/providers/server-info/server-info-provider";
-import { convertFormValuesToObject, convertToFormValues } from "../../../shared/lib/util";
 import { useParams } from "../../../shared/lib/useParams";
-import type { CustomUserFederationRouteParams } from "../routes/custom-user-federation";
-import { toUserFederation } from "../routes/user-federation";
+import { convertFormValuesToObject, convertToFormValues } from "../../../shared/lib/util";
+import { DynamicComponents } from "../../../shared/ui/dynamic/dynamic-components";
+import { FormAccess } from "../../../shared/ui/form/form-access";
+import { useCustomComponent } from "../api/use-custom-component";
+import type { CustomUserFederationRouteParams } from "../../../shared/lib/routes/user-federation";
+import { toUserFederation } from "../../../shared/lib/routes/user-federation";
 import { ExtendedHeader } from "../shared/extended-header";
 import { SettingsCache } from "../shared/settings-cache";
 import { SyncSettings } from "./sync-settings";
-
-import { useState } from "react";
 
 export default function CustomProviderSettings() {
     const { adminClient } = useAdminClient();
@@ -37,30 +40,21 @@ export default function CustomProviderSettings() {
         handleSubmit,
         formState: { isDirty }
     } = form;
-const { realm: realmName, realmRepresentation: realm } = useRealm();
-    const [loading, setLoading] = useState(true);
+    const { realm: realmName, realmRepresentation: realm } = useRealm();
 
     const provider = (
         useServerInfo().componentTypes?.["org.keycloak.storage.UserStorageProvider"] || []
     ).find(p => p.id === providerId);
 
-    useFetch(
-        async () => {
-            if (id) {
-                return await adminClient.components.findOne({ id });
-            }
-            return undefined;
-        },
-        fetchedComponent => {
-            if (fetchedComponent) {
-                convertToFormValues(fetchedComponent, setValue);
-            } else if (id) {
-                throw new Error(t("notFound"));
-            }
-            setLoading(false);
-        },
-        []
-    );
+    const { data: fetchedComponent, isLoading } = useCustomComponent(id);
+
+    useEffect(() => {
+        if (fetchedComponent) {
+            convertToFormValues(fetchedComponent, setValue);
+        } else if (id && !isLoading) {
+            throw new Error(t("notFound"));
+        }
+    }, [fetchedComponent, isLoading]);
 
     const save = async (component: ComponentRepresentation) => {
         const saveComponent = convertFormValuesToObject({
@@ -84,13 +78,20 @@ const { realm: realmName, realmRepresentation: realm } = useRealm();
                 await adminClient.components.update({ id }, saveComponent);
             }
             reset({ ...component });
-            toast.success(t(!id ? "createUserProviderSuccess" : "userProviderSaveSuccess"));
+            toast.success(
+                t(!id ? "createUserProviderSuccess" : "userProviderSaveSuccess")
+            );
         } catch (error) {
-            toast.error(t(!id ? "createUserProviderError" : "userProviderSaveError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
+            toast.error(
+                t(!id ? "createUserProviderError" : "userProviderSaveError", {
+                    error: getErrorMessage(error)
+                }),
+                { description: getErrorDescription(error) }
+            );
         }
     };
 
-    if (loading) return <KeycloakSpinner />;
+    if (isLoading) return <KeycloakSpinner />;
 
     return (
         <FormProvider {...form}>
@@ -121,11 +122,7 @@ const { realm: realmName, realmRepresentation: realm } = useRealm();
                         >
                             {t("save")}
                         </Button>
-                        <Button
-                            variant="link"
-                            asChild
-                            data-testid="custom-cancel"
-                        >
+                        <Button variant="link" asChild data-testid="custom-cancel">
                             <Link to={toUserFederation({ realm: realmName }) as string}>
                                 {t("cancel")}
                             </Link>

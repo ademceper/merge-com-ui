@@ -1,6 +1,7 @@
 import type ComponentRepresentation from "@keycloak/keycloak-admin-client/lib/defs/componentRepresentation";
-import { getErrorDescription, getErrorMessage, useFetch } from "../../../../../shared/keycloak-ui-shared";
-import { DataTable, DataTableRowActions, type ColumnDef } from "@/admin/shared/ui/data-table";
+import { useTranslation } from "@merge-rd/i18n";
+import { Button } from "@merge-rd/ui/components/button";
+import { DropdownMenuItem } from "@merge-rd/ui/components/dropdown-menu";
 import {
     Empty,
     EmptyContent,
@@ -8,16 +9,23 @@ import {
     EmptyHeader,
     EmptyTitle
 } from "@merge-rd/ui/components/empty";
-import { DropdownMenuItem } from "@merge-rd/ui/components/dropdown-menu";
-import { toast } from "sonner";
-import { Button } from "@merge-rd/ui/components/button";
-import { useState } from "react";
-import { useTranslation } from "@merge-rd/i18n";
 import { Link } from "@tanstack/react-router";
-import { useParams } from "../../../../shared/lib/useParams";
+import { useMemo, useState } from "react";
+import { toast } from "sonner";
+import {
+    type ColumnDef,
+    DataTable,
+    DataTableRowActions
+} from "@/admin/shared/ui/data-table";
+import {
+    getErrorDescription,
+    getErrorMessage
+} from "../../../../../shared/keycloak-ui-shared";
 import { useAdminClient } from "../../../../app/admin-client";
-import { useConfirmDialog } from "../../../../shared/ui/confirm-dialog/confirm-dialog";
 import useLocaleSort, { mapByKey } from "../../../../shared/lib/useLocaleSort";
+import { useParams } from "../../../../shared/lib/useParams";
+import { useConfirmDialog } from "../../../../shared/ui/confirm-dialog/confirm-dialog";
+import { useLdapMappers } from "../../../user-federation/api/use-ldap-mappers";
 
 type LdapMapperListProps = {
     toCreate: string;
@@ -36,35 +44,28 @@ export const LdapMapperList = ({ toCreate, toDetail }: LdapMapperListProps) => {
     const { adminClient } = useAdminClient();
 
     const { t } = useTranslation();
-const [key, setKey] = useState(0);
-    const refresh = () => setKey(key + 1);
-
-    const [mappers, setMappers] = useState<ComponentRepresentation[]>([]);
     const localeSort = useLocaleSort();
 
     const { id } = useParams<{ id: string }>();
 
     const [selectedMapper, setSelectedMapper] = useState<ComponentRepresentation>();
 
-    useFetch(
+    const { data: rawMappers, refetch: refetchMappers } = useLdapMappers(id);
+    const refresh = () => {
+        refetchMappers();
+    };
+
+    const mappers = useMemo(
         () =>
-            adminClient.components.find({
-                parent: id,
-                type: "org.keycloak.storage.ldap.mappers.LDAPStorageMapper"
-            }),
-        mapper => {
-            setMappers(
-                localeSort(
-                    mapper.map(mapper => ({
-                        ...mapper,
-                        name: mapper.name,
-                        type: mapper.providerId
-                    })),
-                    mapByKey("name")
-                )
-            );
-        },
-        [key]
+            localeSort(
+                (rawMappers || []).map(mapper => ({
+                    ...mapper,
+                    name: mapper.name,
+                    type: mapper.providerId
+                })),
+                mapByKey("name")
+            ),
+        [rawMappers, localeSort]
     );
 
     const [toggleDeleteDialog, DeleteConfirm] = useConfirmDialog({
@@ -81,19 +82,31 @@ const [key, setKey] = useState(0);
                 toast.success(t("mappingDeletedSuccess"));
                 setSelectedMapper(undefined);
             } catch (error) {
-                toast.error(t("mappingDeletedError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
+                toast.error(t("mappingDeletedError", { error: getErrorMessage(error) }), {
+                    description: getErrorDescription(error)
+                });
             }
         }
     });
 
     const columns: ColumnDef<ComponentRepresentation>[] = [
-        { accessorKey: "name", header: t("name"), cell: ({ row }) => <MapperLink {...row.original} toDetail={toDetail} /> },
+        {
+            accessorKey: "name",
+            header: t("name"),
+            cell: ({ row }) => <MapperLink {...row.original} toDetail={toDetail} />
+        },
         { accessorKey: "type", header: t("type") },
         {
             id: "actions",
             cell: ({ row }) => (
                 <DataTableRowActions row={row}>
-                    <DropdownMenuItem onClick={() => { setSelectedMapper(row.original); toggleDeleteDialog(); }} className="text-destructive">
+                    <DropdownMenuItem
+                        onClick={() => {
+                            setSelectedMapper(row.original);
+                            toggleDeleteDialog();
+                        }}
+                        className="text-destructive"
+                    >
                         {t("delete")}
                     </DropdownMenuItem>
                 </DataTableRowActions>
@@ -103,9 +116,15 @@ const [key, setKey] = useState(0);
 
     const emptyContent = (
         <Empty className="py-12">
-            <EmptyHeader><EmptyTitle>{t("emptyMappers")}</EmptyTitle></EmptyHeader>
-            <EmptyContent><EmptyDescription>{t("emptyMappersInstructions")}</EmptyDescription></EmptyContent>
-            <Button className="mt-2" asChild><Link to={toCreate}>{t("emptyPrimaryAction")}</Link></Button>
+            <EmptyHeader>
+                <EmptyTitle>{t("emptyMappers")}</EmptyTitle>
+            </EmptyHeader>
+            <EmptyContent>
+                <EmptyDescription>{t("emptyMappersInstructions")}</EmptyDescription>
+            </EmptyContent>
+            <Button className="mt-2" asChild>
+                <Link to={toCreate}>{t("emptyPrimaryAction")}</Link>
+            </Button>
         </Empty>
     );
 
@@ -113,7 +132,6 @@ const [key, setKey] = useState(0);
         <>
             <DeleteConfirm />
             <DataTable<ComponentRepresentation>
-                key={key}
                 columns={columns}
                 data={mappers}
                 searchColumnId="name"

@@ -1,21 +1,18 @@
 import type EvaluationResultRepresentation from "@keycloak/keycloak-admin-client/lib/defs/evaluationResultRepresentation";
 import { DecisionEffect } from "@keycloak/keycloak-admin-client/lib/defs/policyRepresentation";
 import type PolicyResultRepresentation from "@keycloak/keycloak-admin-client/lib/defs/policyResultRepresentation";
-import { capitalize } from "lodash-es";
-import { Button } from "@merge-rd/ui/components/button";
-import {
-    TableCell,
-    TableRow
-} from "@/admin/shared/ui/data-table";
-import { useState } from "react";
 import { useTranslation } from "@merge-rd/i18n";
+import { Button } from "@merge-rd/ui/components/button";
 import { Link } from "@tanstack/react-router";
+import { capitalize } from "lodash-es";
+import { useState } from "react";
+import { TableCell, TableRow } from "@/admin/shared/ui/data-table";
 
 import { useRealm } from "../../../app/providers/realm-context/realm-context";
 import { useParams } from "../../../shared/lib/useParams";
-import type { ClientParams } from "../routes/client";
-import { toPermissionDetails } from "../routes/permission-details";
-import { toPolicyDetails } from "../routes/policy-details";
+import type { ClientParams } from "../../../shared/lib/routes/clients";
+import { toPermissionDetails } from "../../../shared/lib/routes/clients";
+import { toPolicyDetails } from "../../../shared/lib/routes/clients";
 
 type Props = {
     idx: number;
@@ -51,12 +48,14 @@ export const AuthorizationEvaluateResourcePolicies = ({
                 </TableCell>
                 <TableCell data-testid={`name-column-${resource.resource}`}>
                     <Link
-                        to={toPermissionDetails({
-                            realm,
-                            id: clientId,
-                            permissionType: outerPolicy.policy?.type!,
-                            permissionId: outerPolicy.policy?.id!
-                        }) as string}
+                        to={
+                            toPermissionDetails({
+                                realm,
+                                id: clientId,
+                                permissionType: outerPolicy.policy?.type!,
+                                permissionId: outerPolicy.policy?.id!
+                            }) as string
+                        }
                     >
                         {outerPolicy.policy?.name}
                     </Link>
@@ -64,7 +63,9 @@ export const AuthorizationEvaluateResourcePolicies = ({
                 <TableCell id={outerPolicy.status?.toLowerCase()}>
                     {t(outerPolicy.status?.toLowerCase() as string)}
                 </TableCell>
-                <TableCell>{t(`${outerPolicy.policy?.decisionStrategy?.toLowerCase()}`)}</TableCell>
+                <TableCell>
+                    {t(`${outerPolicy.policy?.decisionStrategy?.toLowerCase()}`)}
+                </TableCell>
                 <TableCell>
                     {outerPolicy.status === DecisionEffect.Permit
                         ? resource.policies?.[rowIndex]?.scopes?.join(", ")
@@ -86,19 +87,19 @@ export const AuthorizationEvaluateResourcePolicies = ({
                                 {outerPolicy.associatedPolicies?.map(item => (
                                     <li key={item.policy?.id ?? "policyDetails"}>
                                         <Link
-                                            to={toPolicyDetails({
-                                                realm,
-                                                id: clientId,
-                                                policyType: item.policy?.type!,
-                                                policyId: item.policy?.id!
-                                            }) as string}
+                                            to={
+                                                toPolicyDetails({
+                                                    realm,
+                                                    id: clientId,
+                                                    policyType: item.policy?.type!,
+                                                    policyId: item.policy?.id!
+                                                }) as string
+                                            }
                                         >
                                             {item.policy?.name}
                                         </Link>{" "}
                                         {t("votedToStatus", {
-                                            status: capitalize(
-                                                item.status as string
-                                            )
+                                            status: capitalize(item.status as string)
                                         })}
                                     </li>
                                 ))}

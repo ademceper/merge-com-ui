@@ -1,11 +1,7 @@
-import type AuthenticationFlowRepresentation from "@keycloak/keycloak-admin-client/lib/defs/authenticationFlowRepresentation";
 import type IdentityProviderRepresentation from "@keycloak/keycloak-admin-client/lib/defs/identityProviderRepresentation";
-import {
-    FormErrorText,
-    HelpItem,
-    SelectField,
-    useFetch
-} from "../../../../shared/keycloak-ui-shared";
+import { useTranslation } from "@merge-rd/i18n";
+import { Input } from "@merge-rd/ui/components/input";
+import { Label } from "@merge-rd/ui/components/label";
 import {
     Select,
     SelectContent,
@@ -13,14 +9,16 @@ import {
     SelectTrigger,
     SelectValue
 } from "@merge-rd/ui/components/select";
-import { Input } from "@merge-rd/ui/components/input";
-import { Label } from "@merge-rd/ui/components/label";
 import { Switch } from "@merge-rd/ui/components/switch";
 import { useState } from "react";
 import { Controller, useFormContext, useWatch } from "react-hook-form";
-import { useTranslation } from "@merge-rd/i18n";
-import { useAdminClient } from "../../../app/admin-client";
+import {
+    FormErrorText,
+    HelpItem,
+    SelectField
+} from "../../../../shared/keycloak-ui-shared";
 import useIsFeatureEnabled, { Feature } from "../../../shared/lib/useIsFeatureEnabled";
+import { useAuthenticationFlows } from "../api/use-authentication-flows";
 import type { FieldProps } from "../component/form-group-field";
 import { FormGroupField } from "../component/form-group-field";
 import { SwitchField } from "../component/switch-field";
@@ -32,19 +30,11 @@ const LoginFlow = ({
     defaultValue,
     labelForEmpty = "none"
 }: FieldProps & { defaultValue: string; labelForEmpty?: string }) => {
-    const { adminClient } = useAdminClient();
-
     const { t } = useTranslation();
     const { control } = useFormContext();
 
-    const [flows, setFlows] = useState<AuthenticationFlowRepresentation[]>();
+    const { data: flows } = useAuthenticationFlows();
     const [open, setOpen] = useState(false);
-
-    useFetch(
-        () => adminClient.authenticationManagement.getFlows(),
-        flows => setFlows(flows.filter(flow => flow.providerId === "basic-flow")),
-        []
-    );
 
     return (
         <div className="space-y-2">
@@ -61,7 +51,7 @@ const LoginFlow = ({
                         open={open}
                         onOpenChange={setOpen}
                         value={field.value ?? ""}
-                        onValueChange={(v) => {
+                        onValueChange={v => {
                             field.onChange(v);
                             setOpen(false);
                         }}
@@ -75,10 +65,7 @@ const LoginFlow = ({
                                 <SelectItem value="">{t(labelForEmpty)}</SelectItem>
                             )}
                             {flows?.map(option => (
-                                <SelectItem
-                                    key={option.id}
-                                    value={option.alias ?? ""}
-                                >
+                                <SelectItem key={option.id} value={option.alias ?? ""}>
                                     {option.alias}
                                 </SelectItem>
                             ))}
@@ -181,7 +168,7 @@ export const AdvancedSettings = ({ isOIDC, isSAML, isOAuth2 }: AdvancedSettingsP
                             <Switch
                                 id="filteredByClaim"
                                 checked={field.value === "true"}
-                                onCheckedChange={(value) => {
+                                onCheckedChange={value => {
                                     field.onChange(value.toString());
                                 }}
                             />
@@ -193,7 +180,9 @@ export const AdvancedSettings = ({ isOIDC, isSAML, isOAuth2 }: AdvancedSettingsP
                 <>
                     <div className="space-y-2">
                         <div className="flex items-center gap-2">
-                            <Label htmlFor="kc-claim-filter-name">{t("claimFilterName")}</Label>
+                            <Label htmlFor="kc-claim-filter-name">
+                                {t("claimFilterName")}
+                            </Label>
                             <HelpItem
                                 helpText={t("claimFilterNameHelp")}
                                 fieldLabelId="claimFilterName"
@@ -203,7 +192,9 @@ export const AdvancedSettings = ({ isOIDC, isSAML, isOAuth2 }: AdvancedSettingsP
                             required
                             id="kc-claim-filter-name"
                             data-testid="claimFilterName"
-                            className={errors.config?.claimFilterName ? "border-destructive" : ""}
+                            className={
+                                errors.config?.claimFilterName ? "border-destructive" : ""
+                            }
                             {...register("config.claimFilterName", { required: true })}
                         />
                         {errors.config?.claimFilterName && (
@@ -212,7 +203,9 @@ export const AdvancedSettings = ({ isOIDC, isSAML, isOAuth2 }: AdvancedSettingsP
                     </div>
                     <div className="space-y-2">
                         <div className="flex items-center gap-2">
-                            <Label htmlFor="kc-claim-filter-value">{t("claimFilterValue")}</Label>
+                            <Label htmlFor="kc-claim-filter-value">
+                                {t("claimFilterValue")}
+                            </Label>
                             <HelpItem
                                 helpText={t("claimFilterValueHelp")}
                                 fieldLabelId="claimFilterName"
@@ -222,7 +215,11 @@ export const AdvancedSettings = ({ isOIDC, isSAML, isOAuth2 }: AdvancedSettingsP
                             required
                             id="kc-claim-filter-value"
                             data-testid="claimFilterValue"
-                            className={errors.config?.claimFilterValue ? "border-destructive" : ""}
+                            className={
+                                errors.config?.claimFilterValue
+                                    ? "border-destructive"
+                                    : ""
+                            }
                             {...register("config.claimFilterValue", { required: true })}
                         />
                         {errors.config?.claimFilterValue && (
@@ -253,7 +250,7 @@ export const AdvancedSettings = ({ isOIDC, isSAML, isOAuth2 }: AdvancedSettingsP
                             <Switch
                                 id="doNotStoreUsers"
                                 checked={field.value === "true"}
-                                onCheckedChange={(value) => {
+                                onCheckedChange={value => {
                                     field.onChange(value.toString());
                                     // if field is checked, set sync mode to import
                                     if (value) {

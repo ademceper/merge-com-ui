@@ -1,11 +1,10 @@
+import { useTranslation } from "@merge-rd/i18n";
 import { Label } from "@merge-rd/ui/components/label";
 import { useFormContext } from "react-hook-form";
-import { useTranslation } from "@merge-rd/i18n";
 import { HelpItem, TextControl } from "../../../../shared/keycloak-ui-shared";
-
-import { MultiLineInput } from "../../../shared/ui/multi-line-input/multi-line-input";
 import { convertAttributeNameToForm } from "../../../shared/lib/util";
-import { FormFields } from "../client-details";
+import { MultiLineInput } from "../../../shared/ui/multi-line-input/multi-line-input";
+import type { FormFields } from "../client-details";
 
 type LoginSettingsProps = {
     protocol?: string;
@@ -51,7 +50,9 @@ export const LoginSettings = ({ protocol = "openid-connect" }: LoginSettingsProp
                     </div>
                     <div className="flex flex-col gap-2">
                         <div className="flex w-full items-center justify-between gap-2">
-                            <Label htmlFor="kc-postLogoutRedirect">{t("validPostLogoutRedirectUri")}</Label>
+                            <Label htmlFor="kc-postLogoutRedirect">
+                                {t("validPostLogoutRedirectUri")}
+                            </Label>
                             <HelpItem
                                 helpText={t("validPostLogoutRedirectURIsHelp")}
                                 fieldLabelId="validPostLogoutRedirectUri"

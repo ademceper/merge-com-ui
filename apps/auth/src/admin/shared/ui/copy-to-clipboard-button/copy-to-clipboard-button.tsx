@@ -1,9 +1,14 @@
-import { useSetTimeout } from "../../../../shared/keycloak-ui-shared";
+import { useTranslation } from "@merge-rd/i18n";
 import { Button } from "@merge-rd/ui/components/button";
-import { Tooltip, TooltipContent, TooltipTrigger, TooltipProvider } from "@merge-rd/ui/components/tooltip";
+import {
+    Tooltip,
+    TooltipContent,
+    TooltipProvider,
+    TooltipTrigger
+} from "@merge-rd/ui/components/tooltip";
 import { Copy } from "@phosphor-icons/react";
 import { useEffect, useMemo, useState } from "react";
-import { useTranslation } from "@merge-rd/i18n";
+import { useSetTimeout } from "../../../../shared/keycloak-ui-shared";
 
 import useQueryPermission from "../../lib/useQueryPermission";
 

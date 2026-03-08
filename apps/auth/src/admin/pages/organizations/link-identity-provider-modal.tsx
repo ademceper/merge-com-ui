@@ -1,21 +1,30 @@
-import IdentityProviderRepresentation from "@keycloak/keycloak-admin-client/lib/defs/identityProviderRepresentation";
-import { SelectField } from "../../../shared/keycloak-ui-shared";
+import type IdentityProviderRepresentation from "@keycloak/keycloak-admin-client/lib/defs/identityProviderRepresentation";
+import { useTranslation } from "@merge-rd/i18n";
 import { Button } from "@merge-rd/ui/components/button";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@merge-rd/ui/components/dialog";
+import {
+    Dialog,
+    DialogContent,
+    DialogFooter,
+    DialogHeader,
+    DialogTitle
+} from "@merge-rd/ui/components/dialog";
 import { useEffect } from "react";
 import { FormProvider, useForm, useFormContext } from "react-hook-form";
-import { useTranslation } from "@merge-rd/i18n";
-import { useAdminClient } from "../../app/admin-client";
-import { DefaultSwitchControl } from "../../shared/ui/switch-control";
-import { getErrorDescription, getErrorMessage } from "../../../shared/keycloak-ui-shared";
 import { toast } from "sonner";
+import {
+    getErrorDescription,
+    getErrorMessage,
+    SelectField
+} from "../../../shared/keycloak-ui-shared";
+import { useAdminClient } from "../../app/admin-client";
 import {
     convertAttributeNameToForm,
     convertFormValuesToObject,
     convertToFormValues
 } from "../../shared/lib/util";
+import { DefaultSwitchControl } from "../../shared/ui/switch-control";
 import { IdentityProviderSelect } from "./identity-provider-select";
-import { OrganizationFormType } from "./organization-form";
+import type { OrganizationFormType } from "./organization-form";
 
 type LinkIdentityProviderModalProps = {
     orgId: string;
@@ -38,7 +47,7 @@ export const LinkIdentityProviderModal = ({
 }: LinkIdentityProviderModalProps) => {
     const { adminClient } = useAdminClient();
     const { t } = useTranslation();
-const form = useForm<LinkRepresentation>({ mode: "onChange" });
+    const form = useForm<LinkRepresentation>({ mode: "onChange" });
     const { handleSubmit, formState, setValue } = form;
     const { getValues } = useFormContext<OrganizationFormType>();
 
@@ -80,15 +89,27 @@ const form = useForm<LinkRepresentation>({ mode: "onChange" });
                     alias: data.alias[0]
                 });
             }
-            toast.success(t(!identityProvider ? "linkSuccessful" : "linkUpdatedSuccessful"));
+            toast.success(
+                t(!identityProvider ? "linkSuccessful" : "linkUpdatedSuccessful")
+            );
             onClose();
         } catch (error) {
-            toast.error(t(!identityProvider ? "linkError" : "linkUpdatedError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
+            toast.error(
+                t(!identityProvider ? "linkError" : "linkUpdatedError", {
+                    error: getErrorMessage(error)
+                }),
+                { description: getErrorDescription(error) }
+            );
         }
     };
 
     return (
-        <Dialog open onOpenChange={(open) => { if (!open) onClose(); }}>
+        <Dialog
+            open
+            onOpenChange={open => {
+                if (!open) onClose();
+            }}
+        >
             <DialogContent>
                 <DialogHeader>
                     <DialogTitle>{t("linkIdentityProvider")}</DialogTitle>
@@ -110,7 +131,10 @@ const form = useForm<LinkRepresentation>({ mode: "onChange" });
                                 { key: "", value: t("none") },
                                 { key: "ANY", value: t("any") },
                                 ...(getValues("domains")
-                                    ? getValues("domains")!.map(d => ({ key: d, value: d }))
+                                    ? getValues("domains")!.map(d => ({
+                                          key: d,
+                                          value: d
+                                      }))
                                     : [])
                             ]}
                         />
@@ -135,7 +159,11 @@ const form = useForm<LinkRepresentation>({ mode: "onChange" });
                         type="submit"
                         form="form"
                         data-testid="confirm"
-                        disabled={formState.isLoading || formState.isValidating || formState.isSubmitting}
+                        disabled={
+                            formState.isLoading ||
+                            formState.isValidating ||
+                            formState.isSubmitting
+                        }
                     >
                         {t("save")}
                     </Button>

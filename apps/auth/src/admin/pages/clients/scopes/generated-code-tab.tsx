@@ -1,6 +1,6 @@
 import type UserRepresentation from "@keycloak/keycloak-admin-client/lib/defs/userRepresentation";
-import { Textarea } from "@merge-rd/ui/components/textarea";
 import { useTranslation } from "@merge-rd/i18n";
+import { Textarea } from "@merge-rd/ui/components/textarea";
 import { CopyToClipboardButton } from "../../../shared/ui/copy-to-clipboard-button/copy-to-clipboard-button";
 
 type GeneratedCodeTabProps = {
@@ -27,9 +27,14 @@ export const GeneratedCodeTab = ({ text, user, label }: GeneratedCodeTabProps) =
             />
         </div>
     ) : (
-        <div className="flex flex-col items-center justify-center p-12 text-center" id={label}>
+        <div
+            className="flex flex-col items-center justify-center p-12 text-center"
+            id={label}
+        >
             <h2 className="text-lg font-semibold">{t(`${label}No`)}</h2>
-            <p className="text-sm text-muted-foreground mt-2">{t(`${label}IsDisabled`)}</p>
+            <p className="text-sm text-muted-foreground mt-2">
+                {t(`${label}IsDisabled`)}
+            </p>
         </div>
     );
 };

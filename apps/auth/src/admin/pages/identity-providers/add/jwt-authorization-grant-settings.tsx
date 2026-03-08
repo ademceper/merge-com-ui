@@ -1,10 +1,10 @@
 import { useTranslation } from "@merge-rd/i18n";
-import { TextControl, NumberControl } from "../../../../shared/keycloak-ui-shared";
-import { JWTAuthorizationGrantAssertionSettings } from "./jwt-authorization-grant-assertion-settings";
 import { Separator } from "@merge-rd/ui/components/separator";
-import { JwksSettings } from "./jwks-settings";
+import { NumberControl, TextControl } from "../../../../shared/keycloak-ui-shared";
 import { useParams } from "../../../shared/lib/useParams";
-import type { IdentityProviderParams } from "../routes/identity-provider";
+import type { IdentityProviderParams } from "../../../shared/lib/routes/identity-providers";
+import { JwksSettings } from "./jwks-settings";
+import { JWTAuthorizationGrantAssertionSettings } from "./jwt-authorization-grant-assertion-settings";
 
 export default function JWTAuthorizationGrantSettings() {
     const { t } = useTranslation();

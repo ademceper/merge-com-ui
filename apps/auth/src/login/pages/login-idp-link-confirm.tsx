@@ -1,11 +1,13 @@
-import type { PageProps } from "keycloakify/login/pages/PageProps";
-import type { KcContext } from "../kc-context";
-import type { I18n } from "../i18n";
-import AuthLayout from "../components/auth-layout";
-import { Button } from "@merge-rd/ui/components/button";
 import { Alert, AlertDescription } from "@merge-rd/ui/components/alert";
+import { Button } from "@merge-rd/ui/components/button";
+import type { PageProps } from "keycloakify/login/pages/PageProps";
+import AuthLayout from "../components/auth-layout";
+import type { I18n } from "../i18n";
+import type { KcContext } from "../kc-context";
 
-export default function LoginIdpLinkConfirm(props: PageProps<Extract<KcContext, { pageId: "login-idp-link-confirm.ftl" }>, I18n>) {
+export default function LoginIdpLinkConfirm(
+    props: PageProps<Extract<KcContext, { pageId: "login-idp-link-confirm.ftl" }>, I18n>
+) {
     const { kcContext, i18n } = props;
 
     const { url, idpAlias } = kcContext;
@@ -15,18 +17,43 @@ export default function LoginIdpLinkConfirm(props: PageProps<Extract<KcContext, 
     return (
         <AuthLayout>
             <div className="space-y-5">
-                <h1 className="text-xl font-semibold text-foreground tracking-tight">{msg("confirmLinkIdpTitle")}</h1>
+                <h1 className="text-xl font-semibold text-foreground tracking-tight">
+                    {msg("confirmLinkIdpTitle")}
+                </h1>
 
-                <Alert variant="default" className="rounded-lg border-border bg-muted text-foreground">
-                    <AlertDescription>{msg("confirmLinkIdpReviewProfile")}</AlertDescription>
+                <Alert
+                    variant="default"
+                    className="rounded-lg border-border bg-muted text-foreground"
+                >
+                    <AlertDescription>
+                        {msg("confirmLinkIdpReviewProfile")}
+                    </AlertDescription>
                 </Alert>
 
-                <form id="kc-register-form" action={url.loginAction} method="post" className="pt-2">
+                <form
+                    id="kc-register-form"
+                    action={url.loginAction}
+                    method="post"
+                    className="pt-2"
+                >
                     <div className="flex flex-col gap-3">
-                        <Button type="submit" name="submitAction" value="updateProfile" size="xl" variant="secondary" className="w-full">
+                        <Button
+                            type="submit"
+                            name="submitAction"
+                            value="updateProfile"
+                            size="xl"
+                            variant="secondary"
+                            className="w-full"
+                        >
                             {msgStr("confirmLinkIdpReviewProfile")}
                         </Button>
-                        <Button type="submit" name="submitAction" value="linkAccount" size="xl" className="w-full">
+                        <Button
+                            type="submit"
+                            name="submitAction"
+                            value="linkAccount"
+                            size="xl"
+                            className="w-full"
+                        >
                             {msg("confirmLinkIdpContinue", idpAlias)}
                         </Button>
                     </div>

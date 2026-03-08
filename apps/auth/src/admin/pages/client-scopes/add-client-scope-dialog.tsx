@@ -1,5 +1,4 @@
-import { getErrorDescription, getErrorMessage } from "../../../shared/keycloak-ui-shared";
-import { toast } from "sonner";
+import { useTranslation } from "@merge-rd/i18n";
 import { Button } from "@merge-rd/ui/components/button";
 import {
     Dialog,
@@ -11,13 +10,14 @@ import {
     DialogTrigger
 } from "@merge-rd/ui/components/dialog";
 import { useState } from "react";
-import { useTranslation } from "@merge-rd/i18n";
+import { toast } from "sonner";
+import { getErrorDescription, getErrorMessage } from "../../../shared/keycloak-ui-shared";
 import { useAdminClient } from "../../app/admin-client";
+import { convertFormValuesToObject } from "../../shared/lib/util";
 import {
-    ClientScopeDefaultOptionalType,
+    type ClientScopeDefaultOptionalType,
     changeScope
 } from "../../shared/ui/client-scope/client-scope-types";
-import { convertFormValuesToObject } from "../../shared/lib/util";
 import { ScopeForm } from "./details/scope-form";
 
 type AddClientScopeDialogProps = {
@@ -46,7 +46,11 @@ export function AddClientScopeDialog({ trigger, onSuccess }: AddClientScopeDialo
                 name: clientScope.name!
             });
             if (!scope) throw new Error(t("notFound"));
-            await changeScope(adminClient, { ...clientScope, id: scope.id }, clientScope.type);
+            await changeScope(
+                adminClient,
+                { ...clientScope, id: scope.id },
+                clientScope.type
+            );
             toast.success(t("createClientScopeSuccess"));
             setOpen(false);
             onSuccess?.();
@@ -75,11 +79,7 @@ export function AddClientScopeDialog({ trigger, onSuccess }: AddClientScopeDialo
                     </div>
                 </DialogHeader>
                 <div className="min-h-[200px]">
-                    <ScopeForm
-                        save={handleSave}
-                        formId={FORM_ID}
-                        embedded
-                    />
+                    <ScopeForm save={handleSave} formId={FORM_ID} embedded />
                 </div>
                 <DialogFooter className="flex flex-col gap-2 sm:flex-row sm:flex-nowrap sm:items-center sm:justify-end sm:gap-4">
                     <div className="flex w-full flex-col gap-2 sm:w-auto sm:flex-row sm:shrink-0 sm:items-center">

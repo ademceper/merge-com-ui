@@ -1,7 +1,5 @@
 import type RoleRepresentation from "@keycloak/keycloak-admin-client/lib/defs/roleRepresentation";
-import { FormProvider, SubmitHandler, useForm } from "react-hook-form";
-import { getErrorDescription, getErrorMessage } from "../../../shared/keycloak-ui-shared";
-import { toast } from "sonner";
+import { useTranslation } from "@merge-rd/i18n";
 import { Button } from "@merge-rd/ui/components/button";
 import {
     Dialog,
@@ -13,9 +11,11 @@ import {
     DialogTrigger
 } from "@merge-rd/ui/components/dialog";
 import { useState } from "react";
-import { useTranslation } from "@merge-rd/i18n";
+import { FormProvider, type SubmitHandler, useForm } from "react-hook-form";
+import { toast } from "sonner";
+import { getErrorDescription, getErrorMessage } from "../../../shared/keycloak-ui-shared";
 import { useAdminClient } from "../../app/admin-client";
-import { AttributeForm } from "../../shared/ui/key-value-form/attribute-form";
+import type { AttributeForm } from "../../shared/ui/key-value-form/attribute-form";
 import { RoleForm } from "../../shared/ui/role-form/role-form";
 
 const FORM_ID = "add-realm-role-form";
@@ -32,7 +32,7 @@ export function AddRealmRoleDialog({ trigger, onSuccess }: AddRealmRoleDialogPro
 
     const form = useForm<AttributeForm>({ mode: "onChange" });
 
-    const onSubmit: SubmitHandler<AttributeForm> = async (formValues) => {
+    const onSubmit: SubmitHandler<AttributeForm> = async formValues => {
         const role: RoleRepresentation = {
             ...formValues,
             name: formValues.name?.trim(),
@@ -69,14 +69,14 @@ export function AddRealmRoleDialog({ trigger, onSuccess }: AddRealmRoleDialogPro
                 </DialogHeader>
                 <div className="min-h-[200px]">
                     <FormProvider {...form}>
-                    <RoleForm
-                        form={form}
-                        onSubmit={onSubmit}
-                        role="manage-realm"
-                        editMode={false}
-                        embedded
-                        formId={FORM_ID}
-                    />
+                        <RoleForm
+                            form={form}
+                            onSubmit={onSubmit}
+                            role="manage-realm"
+                            editMode={false}
+                            embedded
+                            formId={FORM_ID}
+                        />
                     </FormProvider>
                 </div>
                 <DialogFooter className="flex flex-col gap-2 sm:flex-row sm:flex-nowrap sm:items-center sm:justify-end sm:gap-4">

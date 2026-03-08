@@ -1,10 +1,9 @@
-import { Label } from "@merge-rd/ui/components/label";
 import { useTranslation } from "@merge-rd/i18n";
-
-import { HelpItem } from "../../../../shared/keycloak-ui-shared";
+import { Label } from "@merge-rd/ui/components/label";
 import { useFormContext, useWatch } from "react-hook-form";
-import type { ComponentProps } from "./components";
+import { HelpItem } from "../../../../shared/keycloak-ui-shared";
 import { FormattedLink } from "../external-link/formatted-link";
+import type { ComponentProps } from "./components";
 
 export const UrlComponent = ({ name, label, helpText }: ComponentProps) => {
     const { t } = useTranslation();

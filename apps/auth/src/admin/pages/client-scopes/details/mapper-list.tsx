@@ -1,15 +1,15 @@
-import { useEffect, useMemo, useState } from "react";
-import { useTranslation } from "@merge-rd/i18n";
-import { Link } from "@tanstack/react-router";
-
 import type ClientRepresentation from "@keycloak/keycloak-admin-client/lib/defs/clientRepresentation";
 import type ClientScopeRepresentation from "@keycloak/keycloak-admin-client/lib/defs/clientScopeRepresentation";
 import type ProtocolMapperRepresentation from "@keycloak/keycloak-admin-client/lib/defs/protocolMapperRepresentation";
 import type { ProtocolMapperTypeRepresentation } from "@keycloak/keycloak-admin-client/lib/defs/serverInfoRepesentation";
-import { useServerInfo } from "../../../app/providers/server-info/server-info-provider";
-
-import { AddMapperDialog } from "../add/mapper-dialog";
-import { DataTable, DataTableRowActions, type ColumnDef } from "@/admin/shared/ui/data-table";
+import { useTranslation } from "@merge-rd/i18n";
+import { Button } from "@merge-rd/ui/components/button";
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuTrigger
+} from "@merge-rd/ui/components/dropdown-menu";
 import {
     Empty,
     EmptyContent,
@@ -17,8 +17,15 @@ import {
     EmptyHeader,
     EmptyTitle
 } from "@merge-rd/ui/components/empty";
-import { Button } from "@merge-rd/ui/components/button";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@merge-rd/ui/components/dropdown-menu";
+import { Link } from "@tanstack/react-router";
+import { useEffect, useMemo, useState } from "react";
+import {
+    type ColumnDef,
+    DataTable,
+    DataTableRowActions
+} from "@/admin/shared/ui/data-table";
+import { useServerInfo } from "../../../app/providers/server-info/server-info-provider";
+import { AddMapperDialog } from "../add/mapper-dialog";
 
 type MapperListProps = {
     model: ClientScopeRepresentation | ClientRepresentation;
@@ -92,7 +99,10 @@ export const MapperList = ({ model, onAdd, onDelete, detailLink }: MapperListPro
             id: "actions",
             cell: ({ row }) => (
                 <DataTableRowActions row={row}>
-                    <DropdownMenuItem onClick={() => onDelete(row.original)} className="text-destructive">
+                    <DropdownMenuItem
+                        onClick={() => onDelete(row.original)}
+                        className="text-destructive"
+                    >
                         {t("delete")}
                     </DropdownMenuItem>
                 </DataTableRowActions>
@@ -102,12 +112,24 @@ export const MapperList = ({ model, onAdd, onDelete, detailLink }: MapperListPro
 
     const emptyContent = (
         <Empty className="py-12">
-            <EmptyHeader><EmptyTitle>{t("emptyMappers")}</EmptyTitle></EmptyHeader>
+            <EmptyHeader>
+                <EmptyTitle>{t("emptyMappers")}</EmptyTitle>
+            </EmptyHeader>
             <EmptyContent>
                 <EmptyDescription>{t("emptyMappersInstructions")}</EmptyDescription>
                 <div className="flex gap-2 mt-2 justify-center">
-                    <Button variant="secondary" onClick={() => toggleAddMapperDialog(true)}>{t("emptyPrimaryAction")}</Button>
-                    <Button variant="outline" onClick={() => toggleAddMapperDialog(false)}>{t("emptySecondaryAction")}</Button>
+                    <Button
+                        variant="secondary"
+                        onClick={() => toggleAddMapperDialog(true)}
+                    >
+                        {t("emptyPrimaryAction")}
+                    </Button>
+                    <Button
+                        variant="outline"
+                        onClick={() => toggleAddMapperDialog(false)}
+                    >
+                        {t("emptySecondaryAction")}
+                    </Button>
                 </div>
             </EmptyContent>
         </Empty>
@@ -137,8 +159,14 @@ export const MapperList = ({ model, onAdd, onDelete, detailLink }: MapperListPro
                             <Button id="mapperAction">{t("addMapper")}</Button>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent>
-                            <DropdownMenuItem onClick={() => toggleAddMapperDialog(true)}>{t("fromPredefinedMapper")}</DropdownMenuItem>
-                            <DropdownMenuItem onClick={() => toggleAddMapperDialog(false)}>{t("byConfiguration")}</DropdownMenuItem>
+                            <DropdownMenuItem onClick={() => toggleAddMapperDialog(true)}>
+                                {t("fromPredefinedMapper")}
+                            </DropdownMenuItem>
+                            <DropdownMenuItem
+                                onClick={() => toggleAddMapperDialog(false)}
+                            >
+                                {t("byConfiguration")}
+                            </DropdownMenuItem>
                         </DropdownMenuContent>
                     </DropdownMenu>
                 }

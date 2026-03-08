@@ -1,38 +1,36 @@
 import type ResourceServerRepresentation from "@keycloak/keycloak-admin-client/lib/defs/resourceServerRepresentation";
-import { getErrorDescription, getErrorMessage, KeycloakSpinner, useFetch } from "../../../../shared/keycloak-ui-shared";
-import { toast } from "sonner";
+import { useTranslation } from "@merge-rd/i18n";
 import { Button } from "@merge-rd/ui/components/button";
 import CodeEditor from "@uiw/react-textarea-code-editor";
 import { saveAs } from "file-saver";
-import { useState } from "react";
-import { useTranslation } from "@merge-rd/i18n";
-import { useAdminClient } from "../../../app/admin-client";
-import { FormAccess } from "../../../shared/ui/form/form-access";
-import { prettyPrintJSON } from "../../../shared/lib/util";
+import { useEffect, useState } from "react";
+import { toast } from "sonner";
+import {
+    getErrorDescription,
+    getErrorMessage,
+    KeycloakSpinner
+} from "../../../../shared/keycloak-ui-shared";
 import { useParams } from "../../../shared/lib/useParams";
-import type { ClientParams } from "../routes/client";
+import { prettyPrintJSON } from "../../../shared/lib/util";
+import { FormAccess } from "../../../shared/ui/form/form-access";
+import type { ClientParams } from "../../../shared/lib/routes/clients";
+import { useExportResource } from "./api/use-export-resource";
 
 export const AuthorizationExport = () => {
-    const { adminClient } = useAdminClient();
-
     const { t } = useTranslation();
     const { clientId } = useParams<ClientParams>();
-const [code, setCode] = useState<string>();
+    const [code, setCode] = useState<string>();
     const [authorizationDetails, setAuthorizationDetails] =
         useState<ResourceServerRepresentation>();
 
-    useFetch(
-        () =>
-            adminClient.clients.exportResource({
-                id: clientId
-            }),
+    const { data: exportData } = useExportResource(clientId);
 
-        authDetails => {
-            setCode(JSON.stringify(authDetails, null, 2));
-            setAuthorizationDetails(authDetails);
-        },
-        []
-    );
+    useEffect(() => {
+        if (exportData) {
+            setCode(JSON.stringify(exportData, null, 2));
+            setAuthorizationDetails(exportData);
+        }
+    }, [exportData]);
 
     const exportAuthDetails = () => {
         try {
@@ -44,7 +42,9 @@ const [code, setCode] = useState<string>();
             );
             toast.success(t("exportAuthDetailsSuccess"));
         } catch (error) {
-            toast.error(t("exportAuthDetailsError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
+            toast.error(t("exportAuthDetailsError", { error: getErrorMessage(error) }), {
+                description: getErrorDescription(error)
+            });
         }
     };
 
@@ -82,7 +82,10 @@ const [code, setCode] = useState<string>();
                                 await navigator.clipboard.writeText(code!);
                                 toast.success(t("copied"));
                             } catch (error) {
-                                toast.error(t("copyError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
+                                toast.error(
+                                    t("copyError", { error: getErrorMessage(error) }),
+                                    { description: getErrorDescription(error) }
+                                );
                             }
                         }}
                     >

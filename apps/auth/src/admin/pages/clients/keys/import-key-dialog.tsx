@@ -1,8 +1,14 @@
-import { SelectField, FileUploadControl } from "../../../../shared/keycloak-ui-shared";
-import { Button } from "@merge-rd/ui/components/button";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@merge-rd/ui/components/dialog";
-import { FormProvider, useForm, useWatch } from "react-hook-form";
 import { useTranslation } from "@merge-rd/i18n";
+import { Button } from "@merge-rd/ui/components/button";
+import {
+    Dialog,
+    DialogContent,
+    DialogFooter,
+    DialogHeader,
+    DialogTitle
+} from "@merge-rd/ui/components/dialog";
+import { FormProvider, useForm, useWatch } from "react-hook-form";
+import { FileUploadControl, SelectField } from "../../../../shared/keycloak-ui-shared";
 import { useServerInfo } from "../../../app/providers/server-info/server-info-provider";
 import { StoreSettings } from "./store-settings";
 
@@ -45,7 +51,12 @@ export const ImportKeyDialog = ({
     });
 
     return (
-        <Dialog open onOpenChange={(open) => { if (!open) toggleDialog(); }}>
+        <Dialog
+            open
+            onOpenChange={open => {
+                if (!open) toggleDialog();
+            }}
+        >
             <DialogContent className="max-w-lg">
                 <DialogHeader>
                     <DialogTitle>{t(title)}</DialogTitle>

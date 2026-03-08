@@ -1,17 +1,27 @@
 import type IdentityProviderMapperRepresentation from "@keycloak/keycloak-admin-client/lib/defs/identityProviderMapperRepresentation";
-import IdentityProviderRepresentation, {
-    IdentityProviderType
-} from "@keycloak/keycloak-admin-client/lib/defs/identityProviderRepresentation";
-import { getErrorDescription, getErrorMessage, KeycloakSpinner, ScrollForm, useFetch } from "../../../../shared/keycloak-ui-shared";
-import { DataTable, DataTableRowActions, type ColumnDef } from "@/admin/shared/ui/data-table";
-import { Empty, EmptyContent, EmptyDescription, EmptyHeader, EmptyTitle } from "@merge-rd/ui/components/empty";
-import { toast } from "sonner";
+import type IdentityProviderRepresentation from "@keycloak/keycloak-admin-client/lib/defs/identityProviderRepresentation";
+import { IdentityProviderType } from "@keycloak/keycloak-admin-client/lib/defs/identityProviderRepresentation";
+import { useQueryClient } from "@tanstack/react-query";
+import { useTranslation } from "@merge-rd/i18n";
 import { Button, buttonVariants } from "@merge-rd/ui/components/button";
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuTrigger
+} from "@merge-rd/ui/components/dropdown-menu";
+import {
+    Empty,
+    EmptyContent,
+    EmptyDescription,
+    EmptyHeader,
+    EmptyTitle
+} from "@merge-rd/ui/components/empty";
 import { Label } from "@merge-rd/ui/components/label";
-import { Switch } from "@merge-rd/ui/components/switch";
 import { Separator } from "@merge-rd/ui/components/separator";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@merge-rd/ui/components/dropdown-menu";
-import { useMemo, useState } from "react";
+import { Switch } from "@merge-rd/ui/components/switch";
+import { Link, useNavigate } from "@tanstack/react-router";
+import { useEffect, useMemo, useState } from "react";
 import {
     Controller,
     FormProvider,
@@ -19,45 +29,58 @@ import {
     useFormContext,
     useWatch
 } from "react-hook-form";
-import { useTranslation } from "@merge-rd/i18n";
-import { Link, useNavigate } from "@tanstack/react-router";
-import { useParams as useRouterParams } from "../../../shared/lib/useParams";
+import { toast } from "sonner";
+import {
+    type ColumnDef,
+    DataTable,
+    DataTableRowActions
+} from "@/admin/shared/ui/data-table";
+import {
+    getErrorDescription,
+    getErrorMessage,
+    KeycloakSpinner,
+    ScrollForm
+} from "../../../../shared/keycloak-ui-shared";
 import { useAdminClient } from "../../../app/admin-client";
+import { useAccess } from "../../../app/providers/access/access";
+import { useRealm } from "../../../app/providers/realm-context/realm-context";
+import { useServerInfo } from "../../../app/providers/server-info/server-info-provider";
+import useIsFeatureEnabled, { Feature } from "../../../shared/lib/useIsFeatureEnabled";
+import { useParams, useParams as useRouterParams } from "../../../shared/lib/useParams";
+import { toUpperCase } from "../../../shared/lib/util";
 import { useConfirmDialog } from "../../../shared/ui/confirm-dialog/confirm-dialog";
 import { DynamicComponents } from "../../../shared/ui/dynamic/dynamic-components";
 import { FixedButtonsGroup } from "../../../shared/ui/form/fixed-button-group";
 import { FormAccess } from "../../../shared/ui/form/form-access";
 import { PermissionsTab } from "../../../shared/ui/permission-tab/permission-tab";
-import { useAccess } from "../../../app/providers/access/access";
-import { useRealm } from "../../../app/providers/realm-context/realm-context";
-import { useServerInfo } from "../../../app/providers/server-info/server-info-provider";
-import { toUpperCase } from "../../../shared/lib/util";
-import useIsFeatureEnabled, { Feature } from "../../../shared/lib/useIsFeatureEnabled";
-import { useParams } from "../../../shared/lib/useParams";
-import { toIdentityProviderAddMapper } from "../routes/add-mapper";
-import { toIdentityProviderEditMapper } from "../routes/edit-mapper";
+import { DefaultSwitchControl } from "../../../shared/ui/switch-control";
+import { AdminEvents } from "../../events/admin-events";
+import { idpKeys } from "../api/keys";
+import { useIdentityProvider } from "../api/use-identity-provider";
+import { useIdentityProviderMappers } from "../api/use-identity-provider-mappers";
+import { useIdentityProviderMapperTypes } from "../api/use-identity-provider-mapper-types";
 import {
-    IdentityProviderParams,
-    toIdentityProvider
-} from "../routes/identity-provider";
-import { toIdentityProviders } from "../routes/identity-providers";
+    toIdentityProviderAddMapper,
+    toIdentityProviderEditMapper,
+    type IdentityProviderParams,
+    toIdentityProvider,
+    toIdentityProviders
+} from "../../../shared/lib/routes/identity-providers";
 import { AdvancedSettings } from "./advanced-settings";
 import { DescriptorSettings } from "./descriptor-settings";
 import { DiscoverySettings } from "./discovery-settings";
 import { ExtendedNonDiscoverySettings } from "./extended-non-discovery-settings";
 import { ExtendedOAuth2Settings } from "./extended-o-auth2-settings";
 import { GeneralSettings } from "./general-settings";
+import { JWTAuthorizationGrantAssertionSettings } from "./jwt-authorization-grant-assertion-settings";
+import JWTAuthorizationGrantSettings from "./jwt-authorization-grant-settings";
+import { KubernetesSettings } from "./kubernetes-settings";
+import { UserProfileClaimsSettings } from "./o-auth2-user-profile-claims-settings";
 import { OIDCAuthentication } from "./oidc-authentication";
 import { OIDCGeneralSettings } from "./oidc-general-settings";
 import { ReqAuthnConstraints } from "./req-authn-constraints-settings";
 import { SamlGeneralSettings } from "./saml-general-settings";
 import { SpiffeSettings } from "./spiffe-settings";
-import { AdminEvents } from "../../events/admin-events";
-import { UserProfileClaimsSettings } from "./o-auth2-user-profile-claims-settings";
-import { KubernetesSettings } from "./kubernetes-settings";
-import { JWTAuthorizationGrantAssertionSettings } from "./jwt-authorization-grant-assertion-settings";
-import JWTAuthorizationGrantSettings from "./jwt-authorization-grant-settings";
-import { DefaultSwitchControl } from "../../../shared/ui/switch-control";
 
 type HeaderProps = {
     onChange: (value: boolean) => void;
@@ -79,8 +102,8 @@ const Header = ({ onChange, value, save, toggleDeleteDialog }: HeaderProps) => {
 
     const { t } = useTranslation();
     const { alias: displayName } = useParams<{ alias: string }>();
-    const [provider, setProvider] = useState<IdentityProviderRepresentation>();
-const { setValue, formState, control } = useFormContext();
+    const { data: provider } = useIdentityProvider(displayName);
+    const { setValue, formState, control } = useFormContext();
 
     const validateSignature = useWatch({
         control,
@@ -96,17 +119,6 @@ const { setValue, formState, control } = useFormContext();
         control,
         name: "config.metadataDescriptorUrl"
     });
-
-    useFetch(
-        () => adminClient.identityProviders.findOne({ alias: displayName }),
-        fetchedProvider => {
-            if (!fetchedProvider) {
-                throw new Error(t("notFound"));
-            }
-            setProvider(fetchedProvider);
-        },
-        []
-    );
 
     const [toggleDisableDialog, DisableConfirm] = useConfirmDialog({
         titleKey: "disableProvider",
@@ -128,10 +140,16 @@ const { setValue, formState, control } = useFormContext();
                 setValue(`config.signingCertificate`, result.signingCertificate);
                 toast.success(t("importKeysSuccess"));
             } else {
-                toast.error(t("importKeysError", { error: t("importKeysErrorNoSigningCertificate") }));
+                toast.error(
+                    t("importKeysError", {
+                        error: t("importKeysErrorNoSigningCertificate")
+                    })
+                );
             }
         } catch (error) {
-            toast.error(t("importKeysError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
+            toast.error(t("importKeysError", { error: getErrorMessage(error) }), {
+                description: getErrorDescription(error)
+            });
         }
     };
 
@@ -146,7 +164,9 @@ const { setValue, formState, control } = useFormContext();
                 toast.warning(t("reloadKeysSuccessButFalse"));
             }
         } catch (error) {
-            toast.error(t("reloadKeysError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
+            toast.error(t("reloadKeysError", { error: getErrorMessage(error) }), {
+                description: getErrorDescription(error)
+            });
         }
     };
 
@@ -182,10 +202,7 @@ const { setValue, formState, control } = useFormContext();
                     <DropdownMenuItem
                         key="importKeys"
                         onClick={() =>
-                            importSamlKeys(
-                                provider.providerId!,
-                                metadataDescriptorUrl
-                            )
+                            importSamlKeys(provider.providerId!, metadataDescriptorUrl)
                         }
                     >
                         {t("importKeys")}
@@ -205,7 +222,10 @@ const { setValue, formState, control } = useFormContext();
                 <div className="flex flex-wrap items-center gap-2" />
                 <div className="flex items-center gap-2">
                     <div className="flex items-center gap-2 mr-4">
-                        <Label htmlFor={`${headerTitleKey.replace(/\s/g, "-")}-switch`} className="text-sm">
+                        <Label
+                            htmlFor={`${headerTitleKey.replace(/\s/g, "-")}-switch`}
+                            className="text-sm"
+                        >
                             {t("enabled")}
                         </Label>
                         <Switch
@@ -225,10 +245,15 @@ const { setValue, formState, control } = useFormContext();
                     </div>
                     {dropdownItems.length > 0 && (
                         <DropdownMenu>
-                            <DropdownMenuTrigger data-testid="action-dropdown" className={buttonVariants()}>
+                            <DropdownMenuTrigger
+                                data-testid="action-dropdown"
+                                className={buttonVariants()}
+                            >
                                 {t("action")}
                             </DropdownMenuTrigger>
-                            <DropdownMenuContent align="end">{dropdownItems}</DropdownMenuContent>
+                            <DropdownMenuContent align="end">
+                                {dropdownItems}
+                            </DropdownMenuContent>
                         </DropdownMenu>
                     )}
                 </div>
@@ -247,12 +272,14 @@ const MapperLink = ({ name, mapperId, provider }: MapperLinkProps) => {
 
     return (
         <Link
-            to={toIdentityProviderEditMapper({
-                realm,
-                alias,
-                providerId: provider?.providerId!,
-                id: mapperId
-            }) as string}
+            to={
+                toIdentityProviderEditMapper({
+                    realm,
+                    alias,
+                    providerId: provider?.providerId!,
+                    id: mapperId
+                }) as string
+            }
         >
             {name}
         </Link>
@@ -261,6 +288,7 @@ const MapperLink = ({ name, mapperId, provider }: MapperLinkProps) => {
 
 export default function DetailSettings() {
     const { adminClient } = useAdminClient();
+    const queryClient = useQueryClient();
 
     const { t } = useTranslation();
     const { alias, providerId } = useParams<IdentityProviderParams>();
@@ -287,38 +315,34 @@ export default function DetailSettings() {
             }
         }
     }, [serverInfo, providerId]);
-const navigate = useNavigate();
+    const navigate = useNavigate();
     const { realm, realmRepresentation } = useRealm();
-    const [key, setKey] = useState(0);
-    const refresh = () => setKey(key + 1);
     const { hasAccess } = useAccess();
 
-    useFetch(
-        () => adminClient.identityProviders.findOne({ alias }),
-        fetchedProvider => {
-            if (!fetchedProvider) {
-                throw new Error(t("notFound"));
-            }
+    const { data: fetchedProvider } = useIdentityProvider(alias);
 
-            reset(fetchedProvider);
-            setProvider(fetchedProvider);
+    useEffect(() => {
+        if (fetchedProvider) {
+            if (!provider) {
+                reset(fetchedProvider);
+                setProvider(fetchedProvider);
 
-            if (fetchedProvider.config!.authnContextClassRefs) {
-                form.setValue(
-                    "config.authnContextClassRefs",
-                    JSON.parse(fetchedProvider.config?.authnContextClassRefs)
-                );
-            }
+                if (fetchedProvider.config!.authnContextClassRefs) {
+                    form.setValue(
+                        "config.authnContextClassRefs",
+                        JSON.parse(fetchedProvider.config?.authnContextClassRefs)
+                    );
+                }
 
-            if (fetchedProvider.config!.authnContextDeclRefs) {
-                form.setValue(
-                    "config.authnContextDeclRefs",
-                    JSON.parse(fetchedProvider.config?.authnContextDeclRefs)
-                );
+                if (fetchedProvider.config!.authnContextDeclRefs) {
+                    form.setValue(
+                        "config.authnContextDeclRefs",
+                        JSON.parse(fetchedProvider.config?.authnContextDeclRefs)
+                    );
+                }
             }
-        },
-        []
-    );
+        }
+    }, [fetchedProvider]);
 
     const save = async (savedProvider?: IdentityProviderRepresentation) => {
         const p = savedProvider || getValues();
@@ -350,7 +374,10 @@ const navigate = useNavigate();
             reset(p);
             toast.success(t("updateSuccessIdentityProvider"));
         } catch (error) {
-            toast.error(t("updateErrorIdentityProvider", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
+            toast.error(
+                t("updateErrorIdentityProvider", { error: getErrorMessage(error) }),
+                { description: getErrorDescription(error) }
+            );
         }
     };
 
@@ -365,7 +392,10 @@ const navigate = useNavigate();
                 toast.success(t("deletedSuccessIdentityProvider"));
                 navigate({ to: toIdentityProviders({ realm }) as string });
             } catch (error) {
-                toast.error(t("deleteErrorIdentityProvider", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
+                toast.error(
+                    t("deleteErrorIdentityProvider", { error: getErrorMessage(error) }),
+                    { description: getErrorDescription(error) }
+                );
             }
         }
     });
@@ -384,12 +414,20 @@ const navigate = useNavigate();
                     id: selectedMapper?.mapperId!
                 });
                 toast.success(t("deleteMapperSuccess"));
-                refresh();
+                await queryClient.invalidateQueries({ queryKey: idpKeys.mappers(alias) });
                 navigate({
-                    to: toIdentityProvider({ providerId, alias, tab: "mappers", realm }) as string
+                    to: toIdentityProvider({
+                        providerId,
+                        alias,
+                        tab: "mappers",
+                        realm
+                    }) as string
                 });
             } catch (error) {
-                toast.error(t("deleteErrorIdentityProvider", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
+                toast.error(
+                    t("deleteErrorIdentityProvider", { error: getErrorMessage(error) }),
+                    { description: getErrorDescription(error) }
+                );
             }
         }
     });
@@ -416,39 +454,43 @@ const navigate = useNavigate();
         !!provider?.types?.includes(IdentityProviderType.JWT_AUTHORIZATION_GRANT) &&
         isFeatureEnabled(Feature.JWTAuthorizationGrant);
 
-    const [mappers, setMappers] = useState<IdPWithMapperAttributes[]>([]);
+    const { data: loaderMappers = [] } = useIdentityProviderMappers(alias);
+    const { data: loaderMapperTypes } = useIdentityProviderMapperTypes(alias);
 
-    useFetch(
-        async () => {
-            const [loaderMappers, loaderMapperTypes] = await Promise.all([
-                adminClient.identityProviders.findMappers({ alias }),
-                adminClient.identityProviders.findMapperTypes({ alias })
-            ]);
-            return loaderMappers.map(loaderMapper => {
-                const mapperType = Object.values(loaderMapperTypes).find(
-                    mt => loaderMapper.identityProviderMapper! === mt.id!
-                );
-                return {
-                    ...mapperType,
-                    name: loaderMapper.name!,
-                    type: mapperType?.name!,
-                    mapperId: loaderMapper.id!
-                } as IdPWithMapperAttributes;
-            });
-        },
-        setMappers,
-        [key, alias]
-    );
+    const mappers = useMemo(() => {
+        if (!loaderMappers || !loaderMapperTypes) return [];
+        return loaderMappers.map(loaderMapper => {
+            const mapperType = Object.values(loaderMapperTypes).find(
+                mt => loaderMapper.identityProviderMapper! === mt.id!
+            );
+            return {
+                ...mapperType,
+                name: loaderMapper.name!,
+                type: mapperType?.name!,
+                mapperId: loaderMapper.id!
+            } as IdPWithMapperAttributes;
+        });
+    }, [loaderMappers, loaderMapperTypes]);
 
     const mapperColumns: ColumnDef<IdPWithMapperAttributes>[] = [
-        { accessorKey: "name", header: t("name"), cell: ({ row }) => <MapperLink {...row.original} provider={provider} /> },
+        {
+            accessorKey: "name",
+            header: t("name"),
+            cell: ({ row }) => <MapperLink {...row.original} provider={provider} />
+        },
         { accessorKey: "category", header: t("category") },
         { accessorKey: "type", header: t("type") },
         {
             id: "actions",
             cell: ({ row }) => (
                 <DataTableRowActions row={row}>
-                    <DropdownMenuItem onClick={() => { setSelectedMapper(row.original); toggleDeleteMapperDialog(); }} className="text-destructive">
+                    <DropdownMenuItem
+                        onClick={() => {
+                            setSelectedMapper(row.original);
+                            toggleDeleteMapperDialog();
+                        }}
+                        className="text-destructive"
+                    >
                         {t("delete")}
                     </DropdownMenuItem>
                 </DataTableRowActions>
@@ -459,19 +501,33 @@ const navigate = useNavigate();
     const renderContent = () => {
         switch (tab) {
             case "mappers":
-                return (isSPIFFE || isKubernetes || isJWTAuthorizationGrant) ? null : (
+                return isSPIFFE || isKubernetes || isJWTAuthorizationGrant ? null : (
                     <DataTable<IdPWithMapperAttributes>
-                        key={key}
                         columns={mapperColumns}
                         data={mappers}
                         searchColumnId="name"
                         searchPlaceholder={t("searchForMapper")}
                         emptyContent={
                             <Empty className="py-12">
-                                <EmptyHeader><EmptyTitle>{t("noMappers")}</EmptyTitle></EmptyHeader>
-                                <EmptyContent><EmptyDescription>{t("noMappersInstructions")}</EmptyDescription></EmptyContent>
+                                <EmptyHeader>
+                                    <EmptyTitle>{t("noMappers")}</EmptyTitle>
+                                </EmptyHeader>
+                                <EmptyContent>
+                                    <EmptyDescription>
+                                        {t("noMappersInstructions")}
+                                    </EmptyDescription>
+                                </EmptyContent>
                                 <Button className="mt-2" asChild>
-                                    <Link to={toIdentityProviderAddMapper({ realm, alias: alias!, providerId: provider.providerId!, tab: "mappers" }) as string}>
+                                    <Link
+                                        to={
+                                            toIdentityProviderAddMapper({
+                                                realm,
+                                                alias: alias!,
+                                                providerId: provider.providerId!,
+                                                tab: "mappers"
+                                            }) as string
+                                        }
+                                    >
                                         {t("addMapper")}
                                     </Link>
                                 </Button>
@@ -479,8 +535,21 @@ const navigate = useNavigate();
                         }
                         emptyMessage={t("noMappers")}
                         toolbar={
-                            <Button id="add-mapper-button" asChild data-testid="addMapper">
-                                <Link to={toIdentityProviderAddMapper({ realm, alias: alias!, providerId: provider.providerId!, tab: "mappers" }) as string}>
+                            <Button
+                                id="add-mapper-button"
+                                asChild
+                                data-testid="addMapper"
+                            >
+                                <Link
+                                    to={
+                                        toIdentityProviderAddMapper({
+                                            realm,
+                                            alias: alias!,
+                                            providerId: provider.providerId!,
+                                            tab: "mappers"
+                                        }) as string
+                                    }
+                                >
                                     {t("addMapper")}
                                 </Link>
                             </Button>
@@ -492,10 +561,9 @@ const navigate = useNavigate();
                     <PermissionsTab id={alias} type="identityProviders" />
                 ) : null;
             case "events":
-                return (realmRepresentation?.adminEventsEnabled && hasAccess("view-events")) ? (
-                    <AdminEvents
-                        resourcePath={`identity-provider/instances/${alias}`}
-                    />
+                return realmRepresentation?.adminEventsEnabled &&
+                    hasAccess("view-events") ? (
+                    <AdminEvents resourcePath={`identity-provider/instances/${alias}`} />
                 ) : null;
             default:
                 return (
@@ -564,13 +632,8 @@ const navigate = useNavigate();
             isHidden: !isJWTAuthorizationGrantSupported,
             panel: (
                 <>
-                    <p className="pb-4">
-                        {t("authorizationGrantSettingsHelp")}
-                    </p>
-                    <form
-                        className="py-4"
-                        onSubmit={handleSubmit(save)}
-                    >
+                    <p className="pb-4">{t("authorizationGrantSettingsHelp")}</p>
+                    <form className="py-4" onSubmit={handleSubmit(save)}>
                         <DefaultSwitchControl
                             name="config.jwtAuthorizationGrantEnabled"
                             label={t("jwtAuthorizationGrantIdpEnabled")}
@@ -589,10 +652,7 @@ const navigate = useNavigate();
             title: t("generalSettings"),
             isHidden: !isSPIFFE,
             panel: (
-                <form
-                    className="py-4"
-                    onSubmit={handleSubmit(save)}
-                >
+                <form className="py-4" onSubmit={handleSubmit(save)}>
                     <SpiffeSettings />
                     <FixedButtonsGroup name="idp-details" isSubmit reset={reset} />
                 </form>
@@ -602,10 +662,7 @@ const navigate = useNavigate();
             title: t("generalSettings"),
             isHidden: !isJWTAuthorizationGrant,
             panel: (
-                <form
-                    className="py-4"
-                    onSubmit={handleSubmit(save)}
-                >
+                <form className="py-4" onSubmit={handleSubmit(save)}>
                     <JWTAuthorizationGrantSettings />
                     <FixedButtonsGroup name="idp-details" isSubmit reset={reset} />
                 </form>
@@ -615,10 +672,7 @@ const navigate = useNavigate();
             title: t("generalSettings"),
             isHidden: !isKubernetes,
             panel: (
-                <form
-                    className="py-4"
-                    onSubmit={handleSubmit(save)}
-                >
+                <form className="py-4" onSubmit={handleSubmit(save)}>
                     <KubernetesSettings />
                     <FixedButtonsGroup name="idp-details" isSubmit reset={reset} />
                 </form>
@@ -682,9 +736,7 @@ const navigate = useNavigate();
             />
 
             <div className="p-0">
-                <div className="bg-muted/30">
-                    {renderContent()}
-                </div>
+                <div className="bg-muted/30">{renderContent()}</div>
             </div>
         </FormProvider>
     );

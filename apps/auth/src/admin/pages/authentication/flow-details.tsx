@@ -1,48 +1,45 @@
-import AuthenticationFlowRepresentation from "@keycloak/keycloak-admin-client/lib/defs/authenticationFlowRepresentation";
+import type AuthenticationFlowRepresentation from "@keycloak/keycloak-admin-client/lib/defs/authenticationFlowRepresentation";
+import type AuthenticatorConfigRepresentation from "@keycloak/keycloak-admin-client/lib/defs/authenticatorConfigRepresentation";
 import type { AuthenticationProviderRepresentation } from "@keycloak/keycloak-admin-client/lib/defs/authenticatorConfigRepresentation";
-import AuthenticatorConfigRepresentation from "@keycloak/keycloak-admin-client/lib/defs/authenticatorConfigRepresentation";
-import { getErrorDescription, getErrorMessage, useFetch } from "../../../shared/keycloak-ui-shared";
-import { toast } from "sonner";
+import { Trans, useTranslation } from "@merge-rd/i18n";
 import { Button, buttonVariants } from "@merge-rd/ui/components/button";
-import { Label } from "@merge-rd/ui/components/label";
 import {
     DropdownMenu,
     DropdownMenuContent,
     DropdownMenuItem,
-    DropdownMenuTrigger,
+    DropdownMenuTrigger
 } from "@merge-rd/ui/components/dropdown-menu";
-import {
-    Table,
-    TableBody,
-} from "@/admin/shared/ui/data-table";
+import { Label } from "@merge-rd/ui/components/label";
 import { Graph, Table as TableIconPhosphor } from "@phosphor-icons/react";
-import { useState } from "react";
-import { Trans, useTranslation } from "@merge-rd/i18n";
 import { useNavigate } from "@tanstack/react-router";
-import { useParams } from "../../shared/lib/useParams";
+import { useState } from "react";
+import { toast } from "sonner";
+import { Table, TableBody } from "@/admin/shared/ui/data-table";
+import { getErrorDescription, getErrorMessage } from "../../../shared/keycloak-ui-shared";
 import { useAdminClient } from "../../app/admin-client";
-import { useConfirmDialog } from "../../shared/ui/confirm-dialog/confirm-dialog";
 import { useRealm } from "../../app/providers/realm-context/realm-context";
+import { useParams } from "../../shared/lib/useParams";
 import useToggle from "../../shared/lib/useToggle";
+import { useConfirmDialog } from "../../shared/ui/confirm-dialog/confirm-dialog";
+import { useFlowDetail } from "./api/use-flow-detail";
 import { BindFlowDialog } from "./bind-flow-dialog";
 import { BuildInLabel } from "./build-in-label";
-import { DuplicateFlowModal } from "./duplicate-flow-modal";
-import { EditFlowModal } from "./edit-flow-modal";
-import { EmptyExecutionState } from "./empty-execution-state";
 import { AuthenticationProviderContextProvider } from "./components/authentication-provider-context";
 import { FlowDiagram } from "./components/flow-diagram";
 import { FlowHeader } from "./components/flow-header";
 import { FlowRow } from "./components/flow-row";
 import { AddStepModal } from "./components/modals/add-step-modal";
-import { AddSubFlowModal, Flow } from "./components/modals/add-sub-flow-modal";
-import {
+import { AddSubFlowModal, type Flow } from "./components/modals/add-sub-flow-modal";
+import { DuplicateFlowModal } from "./duplicate-flow-modal";
+import { EditFlowModal } from "./edit-flow-modal";
+import { EmptyExecutionState } from "./empty-execution-state";
+import type {
     ExecutionList,
     ExpandableExecution,
     IndexChange,
     LevelChange
 } from "./execution-model";
-import { toAuthentication } from "./routes/authentication";
-import { toFlow, type FlowParams } from "./routes/flow";
+import { toAuthentication, type FlowParams, toFlow } from "../../shared/lib/routes/authentication";
 
 export const providerConditionFilter = (value: AuthenticationProviderRepresentation) =>
     value.displayName?.startsWith("Condition ");
@@ -52,14 +49,10 @@ export default function FlowDetails() {
 
     const { t } = useTranslation();
     const { realm } = useRealm();
-const { id, usedBy, builtIn } = useParams<FlowParams>();
+    const { id, usedBy, builtIn } = useParams<FlowParams>();
     const navigate = useNavigate();
-    const [key, setKey] = useState(0);
-    const refresh = () => setKey(new Date().getTime());
 
     const [tableView, setTableView] = useState(true);
-    const [flow, setFlow] = useState<AuthenticationFlowRepresentation>();
-    const [executionList, setExecutionList] = useState<ExecutionList>();
     const [liveText, _setLiveText] = useState("");
 
     const [showAddExecutionDialog, setShowAddExecutionDialog] = useState<boolean>();
@@ -69,25 +62,17 @@ const { id, usedBy, builtIn } = useParams<FlowParams>();
     const [edit, setEdit] = useState(false);
     const [bindFlowOpen, toggleBindFlow] = useToggle();
 
-    useFetch(
-        async () => {
-            const flows = await adminClient.authenticationManagement.getFlows();
-            const flow = flows.find(f => f.id === id);
-            if (!flow) {
-                throw new Error(t("notFound"));
-            }
+    const { data: flowDetailData, refetch: refetchFlowDetail } = useFlowDetail(id);
+    const refresh = () => {
+        refetchFlowDetail();
+    };
+    const flow = flowDetailData?.flow;
+    const [executionList, setExecutionList] = useState<ExecutionList>();
 
-            const executions = await adminClient.authenticationManagement.getExecutions({
-                flow: flow.alias!
-            });
-            return { flow, executions };
-        },
-        ({ flow, executions }) => {
-            setFlow(flow);
-            setExecutionList(new ExecutionList(executions));
-        },
-        [key]
-    );
+    // Update executionList when query data changes
+    if (flowDetailData?.executionList && executionList !== flowDetailData.executionList) {
+        setExecutionList(flowDetailData.executionList);
+    }
 
     const executeChange = async (
         ex: AuthenticationFlowRepresentation | ExpandableExecution,
@@ -162,7 +147,9 @@ const { id, usedBy, builtIn } = useParams<FlowParams>();
             refresh();
             toast.success(t("updateFlowSuccess"));
         } catch (error: any) {
-            toast.error(t("updateFlowError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
+            toast.error(t("updateFlowError", { error: getErrorMessage(error) }), {
+                description: getErrorDescription(error)
+            });
         }
     };
 
@@ -176,7 +163,9 @@ const { id, usedBy, builtIn } = useParams<FlowParams>();
             refresh();
             toast.success(t("updateFlowSuccess"));
         } catch (error: any) {
-            toast.error(t("updateFlowError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
+            toast.error(t("updateFlowError", { error: getErrorMessage(error) }), {
+                description: getErrorDescription(error)
+            });
         }
     };
 
@@ -192,7 +181,9 @@ const { id, usedBy, builtIn } = useParams<FlowParams>();
             refresh();
             toast.success(t("updateFlowSuccess"));
         } catch (error) {
-            toast.error(t("updateFlowError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
+            toast.error(t("updateFlowError", { error: getErrorMessage(error) }), {
+                description: getErrorDescription(error)
+            });
         }
     };
 
@@ -211,7 +202,9 @@ const { id, usedBy, builtIn } = useParams<FlowParams>();
             refresh();
             toast.success(t("updateFlowSuccess"));
         } catch (error) {
-            toast.error(t("updateFlowError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
+            toast.error(t("updateFlowError", { error: getErrorMessage(error) }), {
+                description: getErrorDescription(error)
+            });
         }
     };
 
@@ -235,7 +228,10 @@ const { id, usedBy, builtIn } = useParams<FlowParams>();
                 toast.success(t("deleteExecutionSuccess"));
                 refresh();
             } catch (error) {
-                toast.error(t("deleteExecutionError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
+                toast.error(
+                    t("deleteExecutionError", { error: getErrorMessage(error) }),
+                    { description: getErrorDescription(error) }
+                );
             }
         }
     });
@@ -258,7 +254,9 @@ const { id, usedBy, builtIn } = useParams<FlowParams>();
                 navigate({ to: toAuthentication({ realm }) as string });
                 toast.success(t("deleteFlowSuccess"));
             } catch (error) {
-                toast.error(t("deleteFlowError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
+                toast.error(t("deleteFlowError", { error: getErrorMessage(error) }), {
+                    description: getErrorDescription(error)
+                });
             }
         }
     });
@@ -352,10 +350,15 @@ const { id, usedBy, builtIn } = useParams<FlowParams>();
                 <div className="flex items-center gap-2">
                     {dropdownItems.length > 0 && (
                         <DropdownMenu>
-                            <DropdownMenuTrigger data-testid="action-dropdown" className={buttonVariants()}>
+                            <DropdownMenuTrigger
+                                data-testid="action-dropdown"
+                                className={buttonVariants()}
+                            >
                                 {t("action")}
                             </DropdownMenuTrigger>
-                            <DropdownMenuContent align="end">{dropdownItems}</DropdownMenuContent>
+                            <DropdownMenuContent align="end">
+                                {dropdownItems}
+                            </DropdownMenuContent>
                         </DropdownMenu>
                     )}
                 </div>
@@ -363,28 +366,31 @@ const { id, usedBy, builtIn } = useParams<FlowParams>();
             <div className="bg-muted/30 p-4">
                 {executionList && hasExecutions && (
                     <>
-                        <div id="toolbar" className="flex flex-wrap items-center gap-2 mb-4">
+                        <div
+                            id="toolbar"
+                            className="flex flex-wrap items-center gap-2 mb-4"
+                        >
                             <div className="flex rounded-lg border p-0.5">
-                                        <Button
-                                            type="button"
-                                            variant={tableView ? "secondary" : "ghost"}
-                                            size="sm"
-                                            aria-label={t("tableView")}
-                                            data-testid="tableView"
-                                            onClick={() => setTableView(true)}
-                                        >
-                                            <TableIconPhosphor className="size-4" />
-                                        </Button>
-                                        <Button
-                                            type="button"
-                                            variant={!tableView ? "secondary" : "ghost"}
-                                            size="sm"
-                                            aria-label={t("diagramView")}
-                                            data-testid="diagramView"
-                                            onClick={() => setTableView(false)}
-                                        >
-                                            <Graph className="size-4" />
-                                        </Button>
+                                <Button
+                                    type="button"
+                                    variant={tableView ? "secondary" : "ghost"}
+                                    size="sm"
+                                    aria-label={t("tableView")}
+                                    data-testid="tableView"
+                                    onClick={() => setTableView(true)}
+                                >
+                                    <TableIconPhosphor className="size-4" />
+                                </Button>
+                                <Button
+                                    type="button"
+                                    variant={!tableView ? "secondary" : "ghost"}
+                                    size="sm"
+                                    aria-label={t("diagramView")}
+                                    data-testid="diagramView"
+                                    onClick={() => setTableView(false)}
+                                >
+                                    <Graph className="size-4" />
+                                </Button>
                             </div>
                             <Button
                                 data-testid="add-step"
@@ -403,55 +409,32 @@ const { id, usedBy, builtIn } = useParams<FlowParams>();
                         </div>
                         <DeleteConfirm />
                         {tableView && (
-                            <Table
-                                aria-label={t("flows")}
-                                className="text-sm"
-                            >
+                            <Table aria-label={t("flows")} className="text-sm">
                                 <FlowHeader />
-                                <>
-                                    {executionList.expandableList.map(
-                                        execution => (
-                                            <TableBody key={execution.id}>
-                                                <FlowRow
-                                                    builtIn={!!builtIn}
-                                                    execution={execution}
-                                                    onRowClick={execution => {
-                                                        execution.isCollapsed =
-                                                            !execution.isCollapsed;
-                                                        setExecutionList(
-                                                            executionList.clone()
-                                                        );
-                                                    }}
-                                                    onRowChange={update}
-                                                    onAddExecution={(
-                                                        execution,
-                                                        type
-                                                    ) =>
-                                                        addExecution(
-                                                            execution.displayName!,
-                                                            type
-                                                        )
-                                                    }
-                                                    onAddFlow={(
-                                                        execution,
-                                                        flow
-                                                    ) =>
-                                                        addFlow(
-                                                            execution.displayName!,
-                                                            flow
-                                                        )
-                                                    }
-                                                    onDelete={execution => {
-                                                        setSelectedExecution(
-                                                            execution
-                                                        );
-                                                        toggleDeleteDialog();
-                                                    }}
-                                                />
-                                            </TableBody>
-                                        )
-                                    )}
-                                </>
+                                {executionList.expandableList.map(execution => (
+                                    <TableBody key={execution.id}>
+                                        <FlowRow
+                                            builtIn={!!builtIn}
+                                            execution={execution}
+                                            onRowClick={execution => {
+                                                execution.isCollapsed =
+                                                    !execution.isCollapsed;
+                                                setExecutionList(executionList.clone());
+                                            }}
+                                            onRowChange={update}
+                                            onAddExecution={(execution, type) =>
+                                                addExecution(execution.displayName!, type)
+                                            }
+                                            onAddFlow={(execution, flow) =>
+                                                addFlow(execution.displayName!, flow)
+                                            }
+                                            onDelete={execution => {
+                                                setSelectedExecution(execution);
+                                                toggleDeleteDialog();
+                                            }}
+                                        />
+                                    </TableBody>
+                                ))}
                             </Table>
                         )}
                         {flow && (

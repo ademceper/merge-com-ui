@@ -5,12 +5,11 @@
  * $ npx keycloakify own --path "account/resources/Resources.tsx" --revert
  */
 
-import { useState } from "react";
 import { useTranslation } from "@merge-rd/i18n";
 import { cn } from "@merge-rd/ui/lib/utils";
-
-import { ResourcesTab } from "./resources-tab";
+import { useState } from "react";
 import { Page } from "../../shared/ui/page/page";
+import { ResourcesTab } from "./resources-tab";
 
 const Resources = () => {
     const { t } = useTranslation();

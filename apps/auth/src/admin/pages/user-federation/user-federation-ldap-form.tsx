@@ -1,20 +1,19 @@
 import type ComponentRepresentation from "@keycloak/keycloak-admin-client/lib/defs/componentRepresentation";
-import { Button } from "@merge-rd/ui/components/button";
-import { useFormContext } from "react-hook-form";
 import { useTranslation } from "@merge-rd/i18n";
+import { Button } from "@merge-rd/ui/components/button";
 import { useNavigate } from "@tanstack/react-router";
+import { useFormContext } from "react-hook-form";
 import { ScrollForm } from "../../../shared/keycloak-ui-shared";
-
-import { FixedButtonsGroup } from "../../shared/ui/form/fixed-button-group";
 import { useRealm } from "../../app/providers/realm-context/realm-context";
 import useIsFeatureEnabled, { Feature } from "../../shared/lib/useIsFeatureEnabled";
+import { FixedButtonsGroup } from "../../shared/ui/form/fixed-button-group";
 import { LdapSettingsAdvanced } from "./ldap/ldap-settings-advanced";
 import { LdapSettingsConnection } from "./ldap/ldap-settings-connection";
 import { LdapSettingsGeneral } from "./ldap/ldap-settings-general";
 import { LdapSettingsKerberosIntegration } from "./ldap/ldap-settings-kerberos-integration";
 import { LdapSettingsSearching } from "./ldap/ldap-settings-searching";
 import { LdapSettingsSynchronization } from "./ldap/ldap-settings-synchronization";
-import { toUserFederation } from "./routes/user-federation";
+import { toUserFederation } from "../../shared/lib/routes/user-federation";
 import { SettingsCache } from "./shared/settings-cache";
 
 export type LdapComponentRepresentation = ComponentRepresentation & {
@@ -78,7 +77,9 @@ export const UserFederationLdapForm = ({ id, onSubmit }: UserFederationLdapFormP
                     <Button
                         type="button"
                         variant="link"
-                        onClick={() => navigate({ to: toUserFederation({ realm }) as string })}
+                        onClick={() =>
+                            navigate({ to: toUserFederation({ realm }) as string })
+                        }
                         data-testid="ldap-cancel"
                     >
                         {t("cancel")}

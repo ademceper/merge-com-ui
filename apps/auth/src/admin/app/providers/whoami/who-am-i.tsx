@@ -1,18 +1,17 @@
 import type WhoAmIRepresentation from "@keycloak/keycloak-admin-client/lib/defs/whoAmIRepresentation";
+import { DEFAULT_LOCALE } from "@merge-rd/i18n";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { type PropsWithChildren, useCallback, useEffect, useMemo } from "react";
 import {
     createNamedContext,
     KeycloakSpinner,
     useEnvironment,
-    useFetch,
     useRequiredContext
 } from "../../../../shared/keycloak-ui-shared";
-import { PropsWithChildren, useEffect, useState } from "react";
 import { useAdminClient } from "../../admin-client";
-import { DEFAULT_LOCALE } from "@merge-rd/i18n";
 import { i18n } from "../../i18n";
 import { useRealm } from "../realm-context/realm-context";
 
-// can be replaced with https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/Locale/getTextInfo
 const RTL_LOCALES = [
     "ar",
     "dv",
@@ -43,13 +42,17 @@ export const useWhoAmI = () => useRequiredContext(WhoAmIContext);
 export const WhoAmIContextProvider = ({ children }: PropsWithChildren) => {
     const { adminClient } = useAdminClient();
     const { environment } = useEnvironment();
-
-    const [whoAmI, setWhoAmI] = useState<WhoAmIRepresentation>();
+    const queryClient = useQueryClient();
     const { realm } = useRealm();
-    const [key, setKey] = useState(0);
 
-    useFetch(
-        async () => {
+    const refresh = useCallback(() => {
+        queryClient.invalidateQueries({ queryKey: ["whoAmI", environment.realm, realm] });
+    }, [queryClient, environment.realm, realm]);
+
+    const { data: whoAmI } = useQuery({
+        queryKey: ["whoAmI", environment.realm, realm],
+        staleTime: Number.POSITIVE_INFINITY,
+        queryFn: async () => {
             try {
                 return await adminClient.whoAmI.find({
                     realm: environment.realm,
@@ -71,20 +74,14 @@ export const WhoAmIContextProvider = ({ children }: PropsWithChildren) => {
                     temporary: false
                 };
             }
-        },
-        setWhoAmI,
-        [key, environment.realm, realm]
-    );
+        }
+    });
 
-    useFetch(
-        async () => {
-            if (whoAmI?.locale) {
-                await i18n.changeLanguage(whoAmI.locale);
-            }
-        },
-        () => {}, // noop
-        [whoAmI?.locale]
-    );
+    useEffect(() => {
+        if (whoAmI?.locale) {
+            i18n.changeLanguage(whoAmI.locale);
+        }
+    }, [whoAmI?.locale]);
 
     useEffect(() => {
         if (whoAmI?.locale && RTL_LOCALES.includes(whoAmI.locale)) {
@@ -94,12 +91,17 @@ export const WhoAmIContextProvider = ({ children }: PropsWithChildren) => {
         }
     }, [whoAmI?.locale]);
 
+    const value = useMemo(
+        () => ({ refresh, whoAmI: whoAmI! }),
+        [refresh, whoAmI]
+    );
+
     if (!whoAmI) {
         return <KeycloakSpinner />;
     }
 
     return (
-        <WhoAmIContext.Provider value={{ refresh: () => setKey(key + 1), whoAmI }}>
+        <WhoAmIContext.Provider value={value}>
             {children}
         </WhoAmIContext.Provider>
     );

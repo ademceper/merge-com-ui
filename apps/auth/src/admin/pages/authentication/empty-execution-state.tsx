@@ -1,9 +1,7 @@
-import { useState } from "react";
-import { useTranslation } from "@merge-rd/i18n";
-import { Button } from "@merge-rd/ui/components/button";
-
 import type AuthenticationFlowRepresentation from "@keycloak/keycloak-admin-client/lib/defs/authenticationFlowRepresentation";
 import type { AuthenticationProviderRepresentation } from "@keycloak/keycloak-admin-client/lib/defs/authenticatorConfigRepresentation";
+import { useTranslation } from "@merge-rd/i18n";
+import { Button } from "@merge-rd/ui/components/button";
 import {
     Empty,
     EmptyContent,
@@ -11,8 +9,9 @@ import {
     EmptyHeader,
     EmptyTitle
 } from "@merge-rd/ui/components/empty";
+import { useState } from "react";
 import { AddStepModal } from "./components/modals/add-step-modal";
-import { AddSubFlowModal, Flow } from "./components/modals/add-sub-flow-modal";
+import { AddSubFlowModal, type Flow } from "./components/modals/add-sub-flow-modal";
 
 const SECTIONS = ["addExecution", "addSubFlow"] as const;
 type SectionType = (typeof SECTIONS)[number] | undefined;
@@ -57,7 +56,9 @@ export const EmptyExecutionState = ({
             )}
             <Empty data-testid="empty-state" className="py-12">
                 <EmptyHeader>
-                    <EmptyTitle className="text-base font-medium">{t("emptyExecution")}</EmptyTitle>
+                    <EmptyTitle className="text-base font-medium">
+                        {t("emptyExecution")}
+                    </EmptyTitle>
                 </EmptyHeader>
                 <EmptyContent>
                     <EmptyDescription>{t("emptyExecutionInstructions")}</EmptyDescription>
@@ -71,7 +72,9 @@ export const EmptyExecutionState = ({
                         className="keycloak__empty-execution-state__help flex flex-1 items-center justify-between gap-4"
                     >
                         <div className="flex-1">
-                            <h2 className="text-base font-medium">{t(`${section}Title`)}</h2>
+                            <h2 className="text-base font-medium">
+                                {t(`${section}Title`)}
+                            </h2>
                             <p className="text-sm text-muted-foreground">{t(section)}</p>
                         </div>
                         <Button

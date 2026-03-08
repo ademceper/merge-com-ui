@@ -1,18 +1,13 @@
 import type ClientRepresentation from "@keycloak/keycloak-admin-client/lib/defs/clientRepresentation";
-import type { ClientQuery } from "@keycloak/keycloak-admin-client/lib/resources/clients";
-import {
-    SelectField,
-    SelectControlOption,
-    SelectVariant,
-    useFetch
-} from "../../../../shared/keycloak-ui-shared";
-import { useState } from "react";
 import { useTranslation } from "@merge-rd/i18n";
-import { useAdminClient } from "../../../app/admin-client";
-import type { ComponentProps } from "../dynamic/components";
-import type { PermissionsConfigurationTabsParams } from "../../lib/route-helpers";
 import { useParams } from "@tanstack/react-router";
+import { useState } from "react";
 import { useFormContext, useWatch } from "react-hook-form";
+import { SelectField } from "../../../../shared/keycloak-ui-shared";
+import { useClientsByValues } from "../../api/use-clients-by-values";
+import { useClientsSearch } from "../../api/use-clients-search";
+import type { PermissionsConfigurationTabsParams } from "../../lib/route-helpers";
+import type { ComponentProps } from "../dynamic/components";
 
 type ClientSelectProps = Omit<ComponentProps, "convertToName"> & {
     variant?: string;
@@ -32,12 +27,8 @@ export const ClientSelect = ({
     clientKey = "clientId",
     placeholderText
 }: ClientSelectProps) => {
-    const { adminClient } = useAdminClient();
-
     const { t } = useTranslation();
 
-    const [clients, setClients] = useState<ClientRepresentation[]>([]);
-    const [selectedClients, setSelectedClients] = useState<SelectControlOption[]>();
     const [search, setSearch] = useState("");
     const { tab } = useParams({ strict: false }) as PermissionsConfigurationTabsParams;
 
@@ -55,44 +46,8 @@ export const ClientSelect = ({
         return value || [];
     };
 
-    useFetch(
-        () => {
-            const params: ClientQuery = {
-                max: 20
-            };
-            if (search) {
-                params.clientId = search;
-                params.search = true;
-            }
-            return adminClient.clients.find(params);
-        },
-        clients => setClients(clients),
-        [search]
-    );
-
-    useFetch(
-        () => {
-            const values = getValue().map(async clientId => {
-                if (clientKey === "clientId") {
-                    return (await adminClient.clients.find({ clientId }))[0];
-                } else {
-                    return adminClient.clients.findOne({ id: clientId });
-                }
-            });
-            return Promise.all(values);
-        },
-        clients => {
-            setSelectedClients(
-                clients
-                    .filter(client => !!client)
-                    .map(client => ({
-                        key: client[clientKey] as string,
-                        value: client.clientId!
-                    }))
-            );
-        },
-        []
-    );
+    const { data: clients = [] } = useClientsSearch(search);
+    const { data: selectedClients } = useClientsByValues(getValue(), clientKey);
 
     return (
         <SelectField

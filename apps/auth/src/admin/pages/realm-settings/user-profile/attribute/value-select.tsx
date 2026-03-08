@@ -1,3 +1,4 @@
+import { useTranslation } from "@merge-rd/i18n";
 import {
     Select,
     SelectContent,
@@ -6,8 +7,7 @@ import {
     SelectValue
 } from "@merge-rd/ui/components/select";
 import { useState } from "react";
-import { UseControllerProps, useController } from "react-hook-form";
-import { useTranslation } from "@merge-rd/i18n";
+import { type UseControllerProps, useController } from "react-hook-form";
 
 type ValueSelectProps = UseControllerProps & {
     selectItems: string[];
@@ -23,7 +23,7 @@ export const ValueSelect = ({ selectItems, ...rest }: ValueSelectProps) => {
             open={open}
             onOpenChange={setOpen}
             value={field.value ?? ""}
-            onValueChange={(v) => {
+            onValueChange={v => {
                 field.onChange(v);
                 setOpen(false);
             }}

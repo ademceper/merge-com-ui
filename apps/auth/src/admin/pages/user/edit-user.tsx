@@ -2,23 +2,7 @@ import type {
     UserProfileConfig,
     UserProfileMetadata
 } from "@keycloak/keycloak-admin-client/lib/defs/userProfileMetadata";
-import { getErrorDescription, getErrorMessage, isUserProfileError,
-    setUserProfileServerError,
-    useFetch } from "../../../shared/keycloak-ui-shared";
-import { toast } from "sonner";
-import { Label } from "@merge-rd/ui/components/label";
-import { Tooltip, TooltipContent, TooltipTrigger, TooltipProvider } from "@merge-rd/ui/components/tooltip";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@merge-rd/ui/components/dropdown-menu";
-import { Switch } from "@merge-rd/ui/components/switch";
-import { buttonVariants } from "@merge-rd/ui/components/button";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@merge-rd/ui/components/tabs";
-import { Info } from "@phosphor-icons/react";
-import { TFunction } from "@merge-rd/i18n";
-import { useState } from "react";
-import { FormProvider, useForm } from "react-hook-form";
-import { useTranslation } from "@merge-rd/i18n";
-import { useNavigate } from "@tanstack/react-router";
-import { useAdminClient } from "../../app/admin-client";
+import { type TFunction, useTranslation } from "@merge-rd/i18n";
 import {
     AlertDialog,
     AlertDialogAction,
@@ -29,43 +13,70 @@ import {
     AlertDialogHeader,
     AlertDialogTitle
 } from "@merge-rd/ui/components/alert-dialog";
-import { useConfirmDialog } from "../../shared/ui/confirm-dialog/confirm-dialog";
-import { KeyValueType } from "../../shared/ui/key-value-form/key-value-convert";
-import { KeycloakSpinner } from "../../../shared/keycloak-ui-shared";
-
+import { buttonVariants } from "@merge-rd/ui/components/button";
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuTrigger
+} from "@merge-rd/ui/components/dropdown-menu";
+import { Label } from "@merge-rd/ui/components/label";
+import { Switch } from "@merge-rd/ui/components/switch";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@merge-rd/ui/components/tabs";
+import {
+    Tooltip,
+    TooltipContent,
+    TooltipProvider,
+    TooltipTrigger
+} from "@merge-rd/ui/components/tooltip";
+import { Info } from "@phosphor-icons/react";
+import { useNavigate } from "@tanstack/react-router";
+import { useEffect, useState } from "react";
+import { FormProvider, useForm } from "react-hook-form";
+import { toast } from "sonner";
+import {
+    getErrorDescription,
+    getErrorMessage,
+    isUserProfileError,
+    KeycloakSpinner,
+    setUserProfileServerError
+} from "../../../shared/keycloak-ui-shared";
+import { useAdminClient } from "../../app/admin-client";
 import { useAccess } from "../../app/providers/access/access";
 import { useRealm } from "../../app/providers/realm-context/realm-context";
-import { UserProfileProvider } from "../realm-settings/user-profile/user-profile-context";
 import useIsFeatureEnabled, { Feature } from "../../shared/lib/useIsFeatureEnabled";
 import { useParams } from "../../shared/lib/useParams";
+import { useConfirmDialog } from "../../shared/ui/confirm-dialog/confirm-dialog";
+import type { KeyValueType } from "../../shared/ui/key-value-form/key-value-convert";
+import { AdminEvents } from "../events/admin-events";
+import { UserEvents } from "../events/user-events";
+import { UserProfileProvider } from "../realm-settings/user-profile/user-profile-context";
+import { useUserDetail } from "./api/use-user-detail";
+import {
+    filterManagedAttributes,
+    toUserFormFields,
+    toUserRepresentation,
+    type UIUserRepresentation,
+    type UserFormFields
+} from "./form-state";
 import { Organizations } from "./organizations";
+import type { UserParams } from "../../shared/lib/routes/user";
+import { toUsers } from "../../shared/lib/routes/user";
 import { UserAttributes } from "./user-attributes";
 import { UserConsents } from "./user-consents";
 import { UserCredentials } from "./user-credentials";
-import { BruteForced, UserForm } from "./user-form";
+import { type BruteForced, UserForm } from "./user-form";
 import { UserGroups } from "./user-groups";
 import { UserIdentityProviderLinks } from "./user-identity-provider-links";
 import { UserRoleMapping } from "./user-role-mapping";
 import { UserSessions } from "./user-sessions";
-import { UserEvents } from "../events/user-events";
-import {
-    UIUserRepresentation,
-    UserFormFields,
-    filterManagedAttributes,
-    toUserFormFields,
-    toUserRepresentation
-} from "./form-state";
-import { UserParams } from "./routes/user";
-import { toUsers } from "./routes/users";
 import { isLightweightUser } from "./utils";
-
-import { AdminEvents } from "../events/admin-events";
 
 export default function EditUser() {
     const { adminClient } = useAdminClient();
 
     const { t } = useTranslation();
-const navigate = useNavigate();
+    const navigate = useNavigate();
     const { hasAccess } = useAccess();
     const { id, tab } = useParams<UserParams & { tab?: string }>();
     const { realm: realmName, realmRepresentation: realm } = useRealm();
@@ -83,8 +94,6 @@ const navigate = useNavigate();
     const [isUnmanagedAttributesEnabled, setUnmanagedAttributesEnabled] =
         useState<boolean>();
     const [userProfileMetadata, setUserProfileMetadata] = useState<UserProfileMetadata>();
-    const [refreshCount, setRefreshCount] = useState(0);
-    const refresh = () => setRefreshCount(count => count + 1);
     const lightweightUser = isLightweightUser(user?.id);
     const [upConfig, setUpConfig] = useState<UserProfileConfig>();
 
@@ -95,50 +104,40 @@ const navigate = useNavigate();
 
     const [activeEventsTab, setActiveEventsTab] = useState("userEvents");
 
-    useFetch(
-        async () =>
-            Promise.all([
-                adminClient.users.findOne({
-                    id: id!,
-                    userProfileMetadata: true
-                }) as UIUserRepresentation | undefined,
-                adminClient.attackDetection.findOne({ id: id! }),
-                adminClient.users.getUnmanagedAttributes({ id: id! }),
-                adminClient.users.getProfile({ realm: realmName }),
-                showOrganizations
-                    ? adminClient.organizations.find({ first: 0, max: 1 })
-                    : []
-            ]),
-        ([userData, attackDetection, unmanagedAttributes, upConfig, organizations]) => {
-            if (!userData || !realm || !attackDetection) {
-                throw new Error(t("notFound"));
-            }
-
-            const { userProfileMetadata, ...user } = userData;
-            setUserProfileMetadata(userProfileMetadata);
-            user.unmanagedAttributes = unmanagedAttributes;
-            user.attributes = filterManagedAttributes(
-                user.attributes,
-                unmanagedAttributes
-            );
-
-            if (upConfig.unmanagedAttributePolicy !== undefined) {
-                setUnmanagedAttributesEnabled(true);
-            }
-
-            setUser(user);
-            setUpConfig(upConfig);
-
-            const isBruteForceProtected = realm.bruteForceProtected;
-            const isLocked = isBruteForceProtected && attackDetection.disabled;
-
-            setBruteForced({ isBruteForceProtected, isLocked });
-            setRealmHasOrganizations(organizations.length === 1);
-
-            form.reset(toUserFormFields(user));
-        },
-        [refreshCount]
+    const { data: userDetailData, refetch: refetchUserDetail } = useUserDetail(
+        id!,
+        realmName,
+        realm,
+        !!showOrganizations
     );
+    const refresh = () => refetchUserDetail();
+
+    useEffect(() => {
+        if (!userDetailData) return;
+
+        const { userProfileMetadata: upm, ...userData } =
+            userDetailData.user as UIUserRepresentation & {
+                userProfileMetadata?: UserProfileMetadata;
+            };
+        // userDetailData already has userProfileMetadata separated
+        setUserProfileMetadata(userDetailData.userProfileMetadata);
+        userData.unmanagedAttributes = (userDetailData.user as any).unmanagedAttributes;
+        userData.attributes = filterManagedAttributes(
+            userData.attributes,
+            userData.unmanagedAttributes
+        );
+
+        if (userDetailData.isUnmanagedAttributesEnabled) {
+            setUnmanagedAttributesEnabled(true);
+        }
+
+        setUser(userDetailData.user);
+        setUpConfig(userDetailData.upConfig);
+        setBruteForced(userDetailData.bruteForced);
+        setRealmHasOrganizations(userDetailData.realmHasOrganizations);
+
+        form.reset(toUserFormFields(userDetailData.user));
+    }, [userDetailData, form]);
 
     const save = async (data: UserFormFields) => {
         try {
@@ -190,7 +189,9 @@ const navigate = useNavigate();
                 }
                 toast.error(t("userNotSaved"));
             } else {
-                toast.error(t("userCreateError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
+                toast.error(t("userCreateError", { error: getErrorMessage(error) }), {
+                    description: getErrorDescription(error)
+                });
             }
         }
     };
@@ -221,7 +222,9 @@ const navigate = useNavigate();
             toast.success(t("userDeletedSuccess"));
             navigate({ to: toUsers({ realm: realmName }) as string });
         } catch (error) {
-            toast.error(t("userDeletedError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
+            toast.error(t("userDeletedError", { error: getErrorMessage(error) }), {
+                description: getErrorDescription(error)
+            });
         }
     };
 
@@ -241,7 +244,9 @@ const navigate = useNavigate();
                     window.open(data.redirect, "_blank");
                 }
             } catch (error) {
-                toast.error(t("impersonateError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
+                toast.error(t("impersonateError", { error: getErrorMessage(error) }), {
+                    description: getErrorDescription(error)
+                });
             }
         }
     });
@@ -254,11 +259,7 @@ const navigate = useNavigate();
         switch (tab) {
             case "attributes":
                 return isUnmanagedAttributesEnabled ? (
-                    <UserAttributes
-                        user={user}
-                        save={save}
-                        upConfig={upConfig}
-                    />
+                    <UserAttributes user={user} save={save} upConfig={upConfig} />
                 ) : null;
             case "credentials":
                 return user.access?.view ? (
@@ -269,9 +270,7 @@ const navigate = useNavigate();
                     <UserRoleMapping id={user.id!} name={user.username!} />
                 ) : null;
             case "groups":
-                return hasAccess("query-groups") ? (
-                    <UserGroups user={user} />
-                ) : null;
+                return hasAccess("query-groups") ? <UserGroups user={user} /> : null;
             case "organizations":
                 return showOrganizations && realmHasOrganizations ? (
                     <Organizations user={user} />
@@ -297,9 +296,7 @@ const navigate = useNavigate();
                             <UserEvents user={user.id} />
                         </TabsContent>
                         <TabsContent value="adminEvents">
-                            <AdminEvents
-                                resourcePath={`users/${user.id}*`}
-                            />
+                            <AdminEvents resourcePath={`users/${user.id}*`} />
                         </TabsContent>
                     </Tabs>
                 ) : null;
@@ -326,12 +323,20 @@ const navigate = useNavigate();
             <AlertDialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
                 <AlertDialogContent>
                     <AlertDialogHeader>
-                        <AlertDialogTitle>{t("deleteConfirmUsers", { count: 1, name: user?.username })}</AlertDialogTitle>
-                        <AlertDialogDescription>{t("deleteConfirmCurrentUser")}</AlertDialogDescription>
+                        <AlertDialogTitle>
+                            {t("deleteConfirmUsers", { count: 1, name: user?.username })}
+                        </AlertDialogTitle>
+                        <AlertDialogDescription>
+                            {t("deleteConfirmCurrentUser")}
+                        </AlertDialogDescription>
                     </AlertDialogHeader>
                     <AlertDialogFooter>
                         <AlertDialogCancel>{t("cancel")}</AlertDialogCancel>
-                        <AlertDialogAction variant="destructive" data-testid="confirm" onClick={onDeleteConfirm}>
+                        <AlertDialogAction
+                            variant="destructive"
+                            data-testid="confirm"
+                            onClick={onDeleteConfirm}
+                        >
                             {t("delete")}
                         </AlertDialogAction>
                     </AlertDialogFooter>
@@ -352,27 +357,40 @@ const navigate = useNavigate();
                                         {t("transientUser")}
                                     </Label>
                                 </TooltipTrigger>
-                                <TooltipContent>{t("transientUserTooltip")}</TooltipContent>
+                                <TooltipContent>
+                                    {t("transientUserTooltip")}
+                                </TooltipContent>
                             </Tooltip>
                         </TooltipProvider>
                     )}
                 </div>
                 <div className="flex items-center gap-2">
                     <div className="flex items-center gap-2 mr-4">
-                        <Label htmlFor="user-switch" className="text-sm">{t("enabled")}</Label>
-                        <Switch id="user-switch" data-testid="user-switch" checked={user.enabled} aria-label={t("enabled")} onCheckedChange={async value => {
-                            if (!value) {
-                                toggleDisableDialog();
-                            } else {
-                                await save({
-                                    ...toUserFormFields(user),
-                                    enabled: value
-                                });
-                            }
-                        }} />
+                        <Label htmlFor="user-switch" className="text-sm">
+                            {t("enabled")}
+                        </Label>
+                        <Switch
+                            id="user-switch"
+                            data-testid="user-switch"
+                            checked={user.enabled}
+                            aria-label={t("enabled")}
+                            onCheckedChange={async value => {
+                                if (!value) {
+                                    toggleDisableDialog();
+                                } else {
+                                    await save({
+                                        ...toUserFormFields(user),
+                                        enabled: value
+                                    });
+                                }
+                            }}
+                        />
                     </div>
                     <DropdownMenu>
-                        <DropdownMenuTrigger data-testid="action-dropdown" className={buttonVariants()}>
+                        <DropdownMenuTrigger
+                            data-testid="action-dropdown"
+                            className={buttonVariants()}
+                        >
                             {t("action")}
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end">
@@ -398,9 +416,7 @@ const navigate = useNavigate();
             <div className="p-0">
                 <UserProfileProvider>
                     <FormProvider {...form}>
-                        <div className="bg-muted/30">
-                            {renderContent()}
-                        </div>
+                        <div className="bg-muted/30">{renderContent()}</div>
                     </FormProvider>
                 </UserProfileProvider>
             </div>

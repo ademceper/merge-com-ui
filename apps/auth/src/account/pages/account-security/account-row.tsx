@@ -9,15 +9,14 @@
 
 // @ts-nocheck
 
-import { useEnvironment } from "../../../shared/keycloak-ui-shared";
 import { useTranslation } from "@merge-rd/i18n";
-
-import { unLinkAccount } from "../../shared/api/methods";
-import { LinkedAccountRepresentation } from "../../shared/api/representations";
-import { useAccountAlerts } from "../../shared/lib/useAccountAlerts";
-import { Button } from "@merge-rd/ui/components/button";
 import { Badge } from "@merge-rd/ui/components/badge";
-import { Link as LinkIcon, LinkBreak, LinkSimple } from "@phosphor-icons/react";
+import { Button } from "@merge-rd/ui/components/button";
+import { LinkBreak, Link as LinkIcon, LinkSimple } from "@phosphor-icons/react";
+import { useEnvironment } from "../../../shared/keycloak-ui-shared";
+import { unLinkAccount } from "../../shared/api/methods";
+import type { LinkedAccountRepresentation } from "../../shared/api/representations";
+import { useAccountAlerts } from "../../shared/lib/useAccountAlerts";
 
 type AccountRowProps = {
     account: LinkedAccountRepresentation;
@@ -49,7 +48,9 @@ export const AccountRow = ({ account, isLinked = false, refresh }: AccountRowPro
         >
             <div className="flex items-center justify-between gap-4">
                 <div className="flex items-center gap-3 min-w-0">
-                    <div className={`p-2 rounded shrink-0 ${isLinked ? 'bg-green-100 dark:bg-green-900/20' : 'bg-muted'}`}>
+                    <div
+                        className={`p-2 rounded shrink-0 ${isLinked ? "bg-green-100 dark:bg-green-900/20" : "bg-muted"}`}
+                    >
                         <LinkSimple className="h-5 w-5 text-primary" />
                     </div>
                     <div className="min-w-0 space-y-1">
@@ -61,11 +62,7 @@ export const AccountRow = ({ account, isLinked = false, refresh }: AccountRowPro
                                 variant={account.social ? "secondary" : "default"}
                                 id={`${account.providerAlias}-idp-label`}
                             >
-                                {t(
-                                    account.social
-                                        ? "socialLogin"
-                                        : "systemDefined"
-                                )}
+                                {t(account.social ? "socialLogin" : "systemDefined")}
                             </Badge>
                         </div>
                         {account.linkedUsername && (
@@ -97,7 +94,7 @@ export const AccountRow = ({ account, isLinked = false, refresh }: AccountRowPro
                             size="sm"
                             onClick={async () => {
                                 await login({
-                                    action: "idp_link:" + account.providerAlias
+                                    action: `idp_link:${account.providerAlias}`
                                 });
                             }}
                             className="inline-flex items-center gap-1"

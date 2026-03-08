@@ -1,18 +1,17 @@
-import KeycloakAdminClient from "@keycloak/keycloak-admin-client";
-import RealmRepresentation from "@keycloak/keycloak-admin-client/lib/defs/realmRepresentation";
-import { FormErrorText } from "../../../../../shared/keycloak-ui-shared";
+import type KeycloakAdminClient from "@keycloak/keycloak-admin-client";
+import type RealmRepresentation from "@keycloak/keycloak-admin-client/lib/defs/realmRepresentation";
+import { type TFunction, Trans, useTranslation } from "@merge-rd/i18n";
 import { Alert, AlertDescription } from "@merge-rd/ui/components/alert";
 import { Button } from "@merge-rd/ui/components/button";
 import { Input } from "@merge-rd/ui/components/input";
 import { Globe } from "@phosphor-icons/react";
-import { TFunction } from "@merge-rd/i18n";
 import { useEffect } from "react";
 import { useFormContext, useWatch } from "react-hook-form";
-import { Trans, useTranslation } from "@merge-rd/i18n";
-import { useRealm } from "../../../../app/providers/realm-context/realm-context";
+import { FormErrorText } from "../../../../../shared/keycloak-ui-shared";
 import { i18n } from "../../../../app/i18n";
-import { beerify, debeerify } from "../../../../shared/lib/util";
+import { useRealm } from "../../../../app/providers/realm-context/realm-context";
 import useToggle from "../../../../shared/lib/useToggle";
+import { beerify, debeerify } from "../../../../shared/lib/util";
 import { AddTranslationsDialog } from "./add-translations-dialog";
 
 export type TranslationForm = {
@@ -38,22 +37,20 @@ export const saveTranslations = async ({
     translationsData
 }: SaveTranslationsProps) => {
     await Promise.all(
-        Object.entries(translationsData.translation)
-            .map(([key, translation]) =>
-                translation
-                    .filter(translation => translation.value.trim() !== "")
-                    .map(translation =>
-                        adminClient.realms.addLocalization(
-                            {
-                                realm: realmName,
-                                selectedLocale: translation.locale,
-                                key: debeerify(key)
-                            },
-                            translation.value
-                        )
+        Object.entries(translationsData.translation).flatMap(([key, translation]) =>
+            translation
+                .filter(translation => translation.value.trim() !== "")
+                .map(translation =>
+                    adminClient.realms.addLocalization(
+                        {
+                            realm: realmName,
+                            selectedLocale: translation.locale,
+                            key: debeerify(key)
+                        },
+                        translation.value
                     )
-            )
-            .flat()
+                )
+        )
     );
     await i18n.reloadResources();
 };

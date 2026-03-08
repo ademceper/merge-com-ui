@@ -1,16 +1,15 @@
 import type UserRepresentation from "@keycloak/keycloak-admin-client/lib/defs/userRepresentation";
+import { useTranslation } from "@merge-rd/i18n";
 import { Button } from "@merge-rd/ui/components/button";
 import { Checkbox } from "@merge-rd/ui/components/checkbox";
 import {
     Dialog,
     DialogClose,
     DialogContent,
+    DialogFooter,
     DialogHeader,
-    DialogTitle,
-    DialogFooter
+    DialogTitle
 } from "@merge-rd/ui/components/dialog";
-import { Label } from "@merge-rd/ui/components/label";
-import { DataTable, type ColumnDef } from "@/admin/shared/ui/data-table";
 import {
     Empty,
     EmptyContent,
@@ -18,13 +17,14 @@ import {
     EmptyHeader,
     EmptyTitle
 } from "@merge-rd/ui/components/empty";
+import { Label } from "@merge-rd/ui/components/label";
 import { Info } from "@phosphor-icons/react";
 import { differenceBy } from "lodash-es";
 import { useEffect, useState } from "react";
-import { useTranslation } from "@merge-rd/i18n";
-import { useAdminClient } from "../../app/admin-client";
-import { getErrorDescription, getErrorMessage } from "../../../shared/keycloak-ui-shared";
 import { toast } from "sonner";
+import { type ColumnDef, DataTable } from "@/admin/shared/ui/data-table";
+import { getErrorDescription, getErrorMessage } from "../../../shared/keycloak-ui-shared";
+import { useAdminClient } from "../../app/admin-client";
 import { emptyFormatter } from "../../shared/lib/util";
 
 type MemberModalProps = {
@@ -44,22 +44,33 @@ export const MemberModal = ({ membersQuery, onAdd, onClose }: MemberModalProps) 
         (async () => {
             try {
                 const members = await membersQuery(0, 100);
-                const found = await adminClient.users.find({ first: 0, max: 500, search: "" });
+                const found = await adminClient.users.find({
+                    first: 0,
+                    max: 500,
+                    search: ""
+                });
                 const available = differenceBy(found, members, "id").slice(0, 100);
                 if (!cancelled) setUsers(available);
             } catch (error) {
                 if (!cancelled) {
-                    toast.error(t("noUsersFoundError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
+                    toast.error(
+                        t("noUsersFoundError", { error: getErrorMessage(error) }),
+                        { description: getErrorDescription(error) }
+                    );
                     setUsers([]);
                 }
             }
         })();
-        return () => { cancelled = true; };
+        return () => {
+            cancelled = true;
+        };
     }, []);
 
     const toggleSelect = (user: UserRepresentation) => {
         setSelectedRows(prev =>
-            prev.some(u => u.id === user.id) ? prev.filter(u => u.id !== user.id) : [...prev, user]
+            prev.some(u => u.id === user.id)
+                ? prev.filter(u => u.id !== user.id)
+                : [...prev, user]
         );
     };
 
@@ -90,20 +101,41 @@ export const MemberModal = ({ membersQuery, onAdd, onClose }: MemberModalProps) 
                 </>
             )
         },
-        { accessorKey: "email", header: t("email"), cell: ({ row }) => emptyFormatter()(row.original.email) as string },
-        { accessorKey: "lastName", header: t("lastName"), cell: ({ row }) => emptyFormatter()(row.original.lastName) as string },
-        { accessorKey: "firstName", header: t("firstName"), cell: ({ row }) => emptyFormatter()(row.original.firstName) as string }
+        {
+            accessorKey: "email",
+            header: t("email"),
+            cell: ({ row }) => emptyFormatter()(row.original.email) as string
+        },
+        {
+            accessorKey: "lastName",
+            header: t("lastName"),
+            cell: ({ row }) => emptyFormatter()(row.original.lastName) as string
+        },
+        {
+            accessorKey: "firstName",
+            header: t("firstName"),
+            cell: ({ row }) => emptyFormatter()(row.original.firstName) as string
+        }
     ];
 
     const emptyContent = (
         <Empty className="py-12">
-            <EmptyHeader><EmptyTitle>{t("noUsersFound")}</EmptyTitle></EmptyHeader>
-            <EmptyContent><EmptyDescription>{t("emptyInstructions")}</EmptyDescription></EmptyContent>
+            <EmptyHeader>
+                <EmptyTitle>{t("noUsersFound")}</EmptyTitle>
+            </EmptyHeader>
+            <EmptyContent>
+                <EmptyDescription>{t("emptyInstructions")}</EmptyDescription>
+            </EmptyContent>
         </Empty>
     );
 
     return (
-        <Dialog open onOpenChange={(open) => { if (!open) onClose(); }}>
+        <Dialog
+            open
+            onOpenChange={open => {
+                if (!open) onClose();
+            }}
+        >
             <DialogContent className="max-w-4xl" showCloseButton={true}>
                 <DialogHeader>
                     <DialogTitle>{t("addMember")}</DialogTitle>

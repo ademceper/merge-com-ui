@@ -1,15 +1,14 @@
-import type UserRepresentation from "@keycloak/keycloak-admin-client/lib/defs/userRepresentation";
-import { UseFormReturn, useFormContext } from "react-hook-form";
-
-import {
-    AttributeForm,
-    AttributesForm
-} from "../../shared/ui/key-value-form/attribute-form";
-import { UserFormFields, toUserFormFields } from "./form-state";
 import {
     UnmanagedAttributePolicy,
-    UserProfileConfig
+    type UserProfileConfig
 } from "@keycloak/keycloak-admin-client/lib/defs/userProfileMetadata";
+import type UserRepresentation from "@keycloak/keycloak-admin-client/lib/defs/userRepresentation";
+import { type UseFormReturn, useFormContext } from "react-hook-form";
+import {
+    type AttributeForm,
+    AttributesForm
+} from "../../shared/ui/key-value-form/attribute-form";
+import { toUserFormFields, type UserFormFields } from "./form-state";
 
 type UserAttributesProps = {
     user: UserRepresentation;
@@ -34,7 +33,7 @@ export const UserAttributes = ({ user, save, upConfig }: UserAttributesProps) =>
                 }
                 name="unmanagedAttributes"
                 isDisabled={
-                    UnmanagedAttributePolicy.AdminView ==
+                    UnmanagedAttributePolicy.AdminView ===
                     upConfig?.unmanagedAttributePolicy
                 }
             />

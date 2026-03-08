@@ -1,8 +1,5 @@
-import OrganizationRepresentation from "@keycloak/keycloak-admin-client/lib/defs/organizationRepresentation";
-import { getErrorDescription, getErrorMessage } from "../../../shared/keycloak-ui-shared";
-import { useOrganizations, useCreateOrganization, useDeleteOrganization } from "./api/queries";
-import { toast } from "sonner";
-import { Button } from "@merge-rd/ui/components/button";
+import type OrganizationRepresentation from "@keycloak/keycloak-admin-client/lib/defs/organizationRepresentation";
+import { useTranslation } from "@merge-rd/i18n";
 import {
     AlertDialog,
     AlertDialogAction,
@@ -13,6 +10,7 @@ import {
     AlertDialogHeader,
     AlertDialogTitle
 } from "@merge-rd/ui/components/alert-dialog";
+import { Button } from "@merge-rd/ui/components/button";
 import {
     Drawer,
     DrawerContent,
@@ -21,17 +19,6 @@ import {
     DrawerTitle
 } from "@merge-rd/ui/components/drawer";
 import {
-    Table,
-    TableBody,
-    TableCell,
-    TableFooter,
-    TableHead,
-    TableHeader,
-    TableRow,
-    TablePaginationFooter,
-    type TableSortDirection
-} from "@merge-rd/ui/components/table";
-import {
     DropdownMenu,
     DropdownMenuContent,
     DropdownMenuItem,
@@ -39,19 +26,34 @@ import {
     DropdownMenuTrigger
 } from "@merge-rd/ui/components/dropdown-menu";
 import { FacetedFormFilter } from "@merge-rd/ui/components/faceted-filter/faceted-form-filter";
+import {
+    Table,
+    TableBody,
+    TableCell,
+    TableFooter,
+    TableHead,
+    TableHeader,
+    TablePaginationFooter,
+    TableRow,
+    type TableSortDirection
+} from "@merge-rd/ui/components/table";
+import { DotsThree, PencilSimple, Plus, Trash } from "@phosphor-icons/react";
+import { useNavigate } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
-import { DotsThree, PencilSimple, Plus, Trash } from "@phosphor-icons/react";
-import { useTranslation } from "@merge-rd/i18n";
-import { useNavigate } from "@tanstack/react-router";
-import { FormAccess } from "../../shared/ui/form/form-access";
+import { toast } from "sonner";
+import { getErrorDescription, getErrorMessage } from "../../../shared/keycloak-ui-shared";
 import { useRealm } from "../../app/providers/realm-context/realm-context";
+import { FormAccess } from "../../shared/ui/form/form-access";
+import { useCreateOrganization } from "./api/use-create-organization";
+import { useDeleteOrganization } from "./api/use-delete-organization";
+import { useOrganizations } from "./api/use-organizations";
 import {
+    convertToOrg,
     OrganizationForm,
-    OrganizationFormType,
-    convertToOrg
+    type OrganizationFormType
 } from "./organization-form";
-import { toEditOrganization } from "./routes/edit-organization";
+import { toEditOrganization } from "../../shared/lib/routes/organizations";
 
 export default function OrganizationSection() {
     const { realm } = useRealm();
@@ -73,7 +75,7 @@ export default function OrganizationSection() {
 
     const toggleSort = (column: "name" | "description") => {
         if (sortBy === column) {
-            setSortDirection((prev) =>
+            setSortDirection(prev =>
                 prev === "asc" ? "desc" : prev === "desc" ? false : "asc"
             );
             if (sortDirection === "desc") setSortBy(null);
@@ -93,9 +95,7 @@ export default function OrganizationSection() {
         let result = organizations;
         if (search) {
             const lower = search.toLowerCase();
-            result = result.filter((org) =>
-                org.name?.toLowerCase().includes(lower)
-            );
+            result = result.filter(org => org.name?.toLowerCase().includes(lower));
         }
         if (sortBy && sortDirection) {
             const dir = sortDirection === "asc" ? 1 : -1;
@@ -126,7 +126,9 @@ export default function OrganizationSection() {
             toast.success(t("organizationDeletedSuccess"));
             setSelectedOrg(undefined);
         } catch (error) {
-            toast.error(t("organizationDeleteError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
+            toast.error(t("organizationDeleteError", { error: getErrorMessage(error) }), {
+                description: getErrorDescription(error)
+            });
         }
     };
 
@@ -138,17 +140,24 @@ export default function OrganizationSection() {
             setCreateDialogOpen(false);
             createForm.reset();
         } catch (error) {
-            toast.error(t("organizationSaveError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
+            toast.error(t("organizationSaveError", { error: getErrorMessage(error) }), {
+                description: getErrorDescription(error)
+            });
         }
     };
 
     return (
         <>
-            <AlertDialog open={!!selectedOrg} onOpenChange={(open) => !open && setSelectedOrg(undefined)}>
+            <AlertDialog
+                open={!!selectedOrg}
+                onOpenChange={open => !open && setSelectedOrg(undefined)}
+            >
                 <AlertDialogContent>
                     <AlertDialogHeader>
                         <AlertDialogTitle>{t("organizationDelete")}</AlertDialogTitle>
-                        <AlertDialogDescription>{t("organizationDeleteConfirm")}</AlertDialogDescription>
+                        <AlertDialogDescription>
+                            {t("organizationDeleteConfirm")}
+                        </AlertDialogDescription>
                     </AlertDialogHeader>
                     <AlertDialogFooter>
                         <AlertDialogCancel>{t("cancel")}</AlertDialogCancel>
@@ -213,7 +222,7 @@ export default function OrganizationSection() {
                         size="small"
                         title={t("search")}
                         value={search}
-                        onChange={(value) => setSearch(value)}
+                        onChange={value => setSearch(value)}
                         placeholder={t("searchOrganization")}
                     />
                     <Button
@@ -243,7 +252,9 @@ export default function OrganizationSection() {
                             <TableHead
                                 className="w-[35%]"
                                 sortable
-                                sortDirection={sortBy === "description" ? sortDirection : false}
+                                sortDirection={
+                                    sortBy === "description" ? sortDirection : false
+                                }
                                 onSort={() => toggleSort("description")}
                             >
                                 {t("description")}
@@ -254,16 +265,27 @@ export default function OrganizationSection() {
                     <TableBody>
                         {paginatedOrganizations.length === 0 ? (
                             <TableRow>
-                                <TableCell colSpan={4} className="text-center text-muted-foreground">
+                                <TableCell
+                                    colSpan={4}
+                                    className="text-center text-muted-foreground"
+                                >
                                     {t("emptyOrganizations")}
                                 </TableCell>
                             </TableRow>
                         ) : (
-                            paginatedOrganizations.map((org) => (
+                            paginatedOrganizations.map(org => (
                                 <TableRow
                                     key={org.id}
                                     className="cursor-pointer"
-                                    onClick={() => navigate({ to: toEditOrganization({ realm, id: org.id!, tab: "settings" }) as string })}
+                                    onClick={() =>
+                                        navigate({
+                                            to: toEditOrganization({
+                                                realm,
+                                                id: org.id!,
+                                                tab: "settings"
+                                            }) as string
+                                        })
+                                    }
                                 >
                                     <TableCell className="truncate">{org.name}</TableCell>
                                     <TableCell className="truncate">
@@ -271,17 +293,30 @@ export default function OrganizationSection() {
                                             ? org.domains.map(d => d.name).join(", ")
                                             : "-"}
                                     </TableCell>
-                                    <TableCell className="truncate">{org.description || "-"}</TableCell>
-                                    <TableCell onClick={(e) => e.stopPropagation()}>
+                                    <TableCell className="truncate">
+                                        {org.description || "-"}
+                                    </TableCell>
+                                    <TableCell onClick={e => e.stopPropagation()}>
                                         <DropdownMenu>
                                             <DropdownMenuTrigger asChild>
                                                 <Button variant="ghost" size="icon-sm">
-                                                    <DotsThree weight="bold" className="size-4" />
+                                                    <DotsThree
+                                                        weight="bold"
+                                                        className="size-4"
+                                                    />
                                                 </Button>
                                             </DropdownMenuTrigger>
                                             <DropdownMenuContent align="end">
                                                 <DropdownMenuItem
-                                                    onClick={() => navigate({ to: toEditOrganization({ realm, id: org.id!, tab: "settings" }) as string })}
+                                                    onClick={() =>
+                                                        navigate({
+                                                            to: toEditOrganization({
+                                                                realm,
+                                                                id: org.id!,
+                                                                tab: "settings"
+                                                            }) as string
+                                                        })
+                                                    }
                                                 >
                                                     <PencilSimple className="size-4" />
                                                     {t("edit")}
@@ -307,8 +342,14 @@ export default function OrganizationSection() {
                                 <TablePaginationFooter
                                     pageSize={pageSize}
                                     onPageSizeChange={setPageSize}
-                                    onPreviousPage={() => setCurrentPage((p) => Math.max(0, p - 1))}
-                                    onNextPage={() => setCurrentPage((p) => Math.min(totalPages - 1, p + 1))}
+                                    onPreviousPage={() =>
+                                        setCurrentPage(p => Math.max(0, p - 1))
+                                    }
+                                    onNextPage={() =>
+                                        setCurrentPage(p =>
+                                            Math.min(totalPages - 1, p + 1)
+                                        )
+                                    }
                                     hasPreviousPage={currentPage > 0}
                                     hasNextPage={currentPage < totalPages - 1}
                                     totalCount={totalCount}

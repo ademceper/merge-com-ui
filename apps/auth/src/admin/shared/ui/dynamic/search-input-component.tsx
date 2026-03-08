@@ -1,7 +1,7 @@
+import { useTranslation } from "@merge-rd/i18n";
 import { Button } from "@merge-rd/ui/components/button";
 import { Input } from "@merge-rd/ui/components/input";
 import { ArrowRight, MagnifyingGlass, X } from "@phosphor-icons/react";
-import { useTranslation } from "@merge-rd/i18n";
 
 type SearchInputComponentProps = {
     value: string;
@@ -28,7 +28,7 @@ export const SearchInputComponent = ({
                 <MagnifyingGlass className="size-4 absolute left-2 top-1/2 -translate-y-1/2 text-muted-foreground" />
                 <Input
                     value={value}
-                    onChange={(e) => onChange(e.target.value)}
+                    onChange={e => onChange(e.target.value)}
                     placeholder={placeholder}
                     aria-label={ariaLabel}
                     data-testid="search-input"

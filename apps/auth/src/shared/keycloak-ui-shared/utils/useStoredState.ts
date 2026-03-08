@@ -1,4 +1,4 @@
-import { Dispatch, useCallback, useMemo } from "react";
+import { type Dispatch, useCallback, useMemo } from "react";
 import { useStorageItem } from "./useStorageItem";
 
 /**

@@ -1,14 +1,16 @@
-import { useState } from "react";
-import type { PageProps } from "keycloakify/login/pages/PageProps";
-import type { KcContext } from "../kc-context";
-import type { I18n } from "../i18n";
-import AuthLayout from "../components/auth-layout";
-import { Input } from "@merge-rd/ui/components/input";
-import { Button } from "@merge-rd/ui/components/button";
 import { Alert, AlertDescription } from "@merge-rd/ui/components/alert";
+import { Button } from "@merge-rd/ui/components/button";
+import { Input } from "@merge-rd/ui/components/input";
 import { cn } from "@merge-rd/ui/lib/utils";
+import type { PageProps } from "keycloakify/login/pages/PageProps";
+import { useState } from "react";
+import AuthLayout from "../components/auth-layout";
+import type { I18n } from "../i18n";
+import type { KcContext } from "../kc-context";
 
-export default function LoginUpdatePassword(props: PageProps<Extract<KcContext, { pageId: "login-update-password.ftl" }>, I18n>) {
+export default function LoginUpdatePassword(
+    props: PageProps<Extract<KcContext, { pageId: "login-update-password.ftl" }>, I18n>
+) {
     const { kcContext, i18n } = props;
 
     const { url, messagesPerField, isAppInitiatedAction, message } = kcContext;
@@ -20,13 +22,20 @@ export default function LoginUpdatePassword(props: PageProps<Extract<KcContext, 
     return (
         <AuthLayout>
             <div className="space-y-5">
-                <h1 className="text-xl font-semibold text-black tracking-tight">{msg("updatePasswordTitle")}</h1>
+                <h1 className="text-xl font-semibold text-black tracking-tight">
+                    {msg("updatePasswordTitle")}
+                </h1>
                 <p className="text-sm text-gray-500">
-                    {isAppInitiatedAction ? msg("updatePasswordDescription") : msg("updatePasswordRequiredDescription")}
+                    {isAppInitiatedAction
+                        ? msg("updatePasswordDescription")
+                        : msg("updatePasswordRequiredDescription")}
                 </p>
 
                 {message && (
-                    <Alert variant={message.type === "error" ? "destructive" : "default"} className="rounded-lg">
+                    <Alert
+                        variant={message.type === "error" ? "destructive" : "default"}
+                        className="rounded-lg"
+                    >
                         <AlertDescription>{message.summary}</AlertDescription>
                     </Alert>
                 )}
@@ -41,8 +50,20 @@ export default function LoginUpdatePassword(props: PageProps<Extract<KcContext, 
                     }}
                     className="space-y-4"
                 >
-                    <input type="text" id="username" name="username" autoComplete="username" style={{ display: "none" }} />
-                    <input type="password" id="password" name="password" autoComplete="current-password" style={{ display: "none" }} />
+                    <input
+                        type="text"
+                        id="username"
+                        name="username"
+                        autoComplete="username"
+                        style={{ display: "none" }}
+                    />
+                    <input
+                        type="password"
+                        id="password"
+                        name="password"
+                        autoComplete="current-password"
+                        style={{ display: "none" }}
+                    />
 
                     <div className="space-y-2">
                         <Input
@@ -54,11 +75,24 @@ export default function LoginUpdatePassword(props: PageProps<Extract<KcContext, 
                             autoFocus
                             placeholder={msgStr("passwordNew")}
                             autoComplete="new-password"
-                            aria-invalid={messagesPerField.existsError("password", "password-confirm")}
-                            className={cn(messagesPerField.existsError("password", "password-confirm") && "border border-destructive")}
+                            aria-invalid={messagesPerField.existsError(
+                                "password",
+                                "password-confirm"
+                            )}
+                            className={cn(
+                                messagesPerField.existsError(
+                                    "password",
+                                    "password-confirm"
+                                ) && "border border-destructive"
+                            )}
                         />
                         {messagesPerField.existsError("password", "password-confirm") && (
-                            <p className="text-sm text-red-600">{messagesPerField.getFirstError("password", "password-confirm")}</p>
+                            <p className="text-sm text-red-600">
+                                {messagesPerField.getFirstError(
+                                    "password",
+                                    "password-confirm"
+                                )}
+                            </p>
                         )}
                     </div>
 
@@ -71,24 +105,48 @@ export default function LoginUpdatePassword(props: PageProps<Extract<KcContext, 
                             name="password-confirm"
                             placeholder={msgStr("passwordConfirm")}
                             autoComplete="new-password"
-                            aria-invalid={messagesPerField.existsError("password-confirm")}
-                            className={cn(messagesPerField.existsError("password-confirm") && "border border-destructive")}
+                            aria-invalid={messagesPerField.existsError(
+                                "password-confirm"
+                            )}
+                            className={cn(
+                                messagesPerField.existsError("password-confirm") &&
+                                    "border border-destructive"
+                            )}
                         />
                         {messagesPerField.existsError("password-confirm") && (
-                            <p className="text-sm text-destructive">{messagesPerField.get("password-confirm")}</p>
+                            <p className="text-sm text-destructive">
+                                {messagesPerField.get("password-confirm")}
+                            </p>
                         )}
                     </div>
 
                     <div className="flex flex-col gap-3 pt-2">
-                        <Button type="submit" disabled={isSubmitting} size="xl" className="w-full">
+                        <Button
+                            type="submit"
+                            disabled={isSubmitting}
+                            size="xl"
+                            className="w-full"
+                        >
                             {msgStr("doSubmit")}
                         </Button>
                         {isAppInitiatedAction ? (
-                            <Button type="submit" name="cancel-aia" value="true" variant="secondary" size="xl" className="w-full">
+                            <Button
+                                type="submit"
+                                name="cancel-aia"
+                                value="true"
+                                variant="secondary"
+                                size="xl"
+                                className="w-full"
+                            >
                                 {msgStr("doCancel")}
                             </Button>
                         ) : (
-                            <Button variant="secondary" size="xl" className="w-full" asChild>
+                            <Button
+                                variant="secondary"
+                                size="xl"
+                                className="w-full"
+                                asChild
+                            >
                                 <a href={url.loginRestartFlowUrl}>{msgStr("doCancel")}</a>
                             </Button>
                         )}

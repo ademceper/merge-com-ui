@@ -1,8 +1,6 @@
 "use client";
 
 import { useTranslation } from "@merge-rd/i18n";
-import { useTheme } from "next-themes";
-import { SignOutIcon, UserIcon, PaletteIcon, SunIcon, MoonIcon, MonitorIcon } from "@phosphor-icons/react";
 import { Avatar, AvatarFallback } from "@merge-rd/ui/components/avatar";
 import {
     DropdownMenu,
@@ -18,6 +16,15 @@ import {
     DropdownMenuSubTrigger,
     DropdownMenuTrigger
 } from "@merge-rd/ui/components/dropdown-menu";
+import {
+    MonitorIcon,
+    MoonIcon,
+    PaletteIcon,
+    SignOutIcon,
+    SunIcon,
+    UserIcon
+} from "@phosphor-icons/react";
+import { useTheme } from "next-themes";
 import type { UserMenuInfo } from "./admin-header";
 
 export function AdminNavUser({ userMenuInfo }: { userMenuInfo: UserMenuInfo }) {
@@ -60,8 +67,13 @@ export function AdminNavUser({ userMenuInfo }: { userMenuInfo: UserMenuInfo }) {
                     </DropdownMenuSubTrigger>
                     <DropdownMenuPortal>
                         <DropdownMenuSubContent>
-                            <DropdownMenuLabel>{t("appearance", "Appearance")}</DropdownMenuLabel>
-                            <DropdownMenuRadioGroup value={theme ?? "system"} onValueChange={onThemeChange}>
+                            <DropdownMenuLabel>
+                                {t("appearance", "Appearance")}
+                            </DropdownMenuLabel>
+                            <DropdownMenuRadioGroup
+                                value={theme ?? "system"}
+                                onValueChange={onThemeChange}
+                            >
                                 <DropdownMenuRadioItem value="light">
                                     <SunIcon className="mr-2 size-4" />
                                     {t("light", "Light")}

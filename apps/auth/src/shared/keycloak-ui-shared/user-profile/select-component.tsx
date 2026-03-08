@@ -1,3 +1,5 @@
+import { Button } from "@merge-rd/ui/components/button";
+import { Popover, PopoverContent, PopoverTrigger } from "@merge-rd/ui/components/popover";
 import {
     Select,
     SelectContent,
@@ -5,11 +7,9 @@ import {
     SelectTrigger,
     SelectValue
 } from "@merge-rd/ui/components/select";
-import { Popover, PopoverContent, PopoverTrigger } from "@merge-rd/ui/components/popover";
-import { Button } from "@merge-rd/ui/components/button";
 import { useState } from "react";
 import { Controller } from "react-hook-form";
-import { OptionLabel, Options, UserProfileFieldProps } from "./user-profile-fields";
+import type { OptionLabel, Options, UserProfileFieldProps } from "./user-profile-fields";
 import { UserProfileGroup } from "./user-profile-group";
 import { fieldName, label, labelAttribute } from "./utils";
 
@@ -21,9 +21,8 @@ export const SelectComponent = (props: UserProfileFieldProps) => {
 
     const options = (attribute.validators?.options as Options | undefined)?.options || [];
 
-    const optionLabel =
-        (attribute.annotations?.["inputOptionLabels"] as OptionLabel) || {};
-    const prefix = attribute.annotations?.["inputOptionLabelsI18nPrefix"] as string;
+    const optionLabel = (attribute.annotations?.inputOptionLabels as OptionLabel) || {};
+    const prefix = attribute.annotations?.inputOptionLabelsI18nPrefix as string;
 
     const fetchLabel = (option: string) =>
         label(props.t, optionLabel[option], option, prefix);
@@ -47,9 +46,13 @@ export const SelectComponent = (props: UserProfileFieldProps) => {
                                     className="h-12 w-full justify-between font-normal rounded-lg bg-muted border-0"
                                 >
                                     <span className="truncate">
-                                        {Array.isArray(field.value) && field.value.length > 0
-                                            ? field.value.map((opt) => fetchLabel(opt)).join(", ")
-                                            : labelAttribute(t, attribute) || t("selectOne")}
+                                        {Array.isArray(field.value) &&
+                                        field.value.length > 0
+                                            ? field.value
+                                                  .map(opt => fetchLabel(opt))
+                                                  .join(", ")
+                                            : labelAttribute(t, attribute) ||
+                                              t("selectOne")}
                                     </span>
                                 </Button>
                             </PopoverTrigger>
@@ -58,20 +61,29 @@ export const SelectComponent = (props: UserProfileFieldProps) => {
                                 align="start"
                             >
                                 <ul className="max-h-64 overflow-auto py-1">
-                                    {options.map((option) => {
-                                        const selected = Array.isArray(field.value) && field.value.includes(option);
+                                    {options.map(option => {
+                                        const selected =
+                                            Array.isArray(field.value) &&
+                                            field.value.includes(option);
                                         return (
                                             <li
                                                 key={option}
-                                                role="option"
                                                 aria-selected={selected}
                                                 className="hover:bg-accent cursor-pointer px-2 py-1.5 text-sm"
-                                                onMouseDown={(e) => e.preventDefault()}
+                                                onMouseDown={e => e.preventDefault()}
                                                 onClick={() => {
                                                     if (selected) {
-                                                        field.onChange(field.value.filter((x: string) => x !== option));
+                                                        field.onChange(
+                                                            field.value.filter(
+                                                                (x: string) =>
+                                                                    x !== option
+                                                            )
+                                                        );
                                                     } else {
-                                                        field.onChange([...(field.value || []), option]);
+                                                        field.onChange([
+                                                            ...(field.value || []),
+                                                            option
+                                                        ]);
                                                     }
                                                 }}
                                             >
@@ -115,18 +127,25 @@ export const SelectComponent = (props: UserProfileFieldProps) => {
                         open={open}
                         onOpenChange={setOpen}
                         value={field.value ?? ""}
-                        onValueChange={(v) => {
+                        onValueChange={v => {
                             field.onChange(v);
                             setOpen(false);
                         }}
                         disabled={attribute.readOnly}
                         aria-label={t("selectOne")}
                     >
-                        <SelectTrigger id={attribute.name} className="h-12 rounded-lg bg-muted border-0">
-                            <SelectValue placeholder={labelAttribute(t, attribute) || t("selectOne")} />
+                        <SelectTrigger
+                            id={attribute.name}
+                            className="h-12 rounded-lg bg-muted border-0"
+                        >
+                            <SelectValue
+                                placeholder={
+                                    labelAttribute(t, attribute) || t("selectOne")
+                                }
+                            />
                         </SelectTrigger>
                         <SelectContent>
-                            {options.map((option) => (
+                            {options.map(option => (
                                 <SelectItem key={option} value={option}>
                                     {fetchLabel(option)}
                                 </SelectItem>

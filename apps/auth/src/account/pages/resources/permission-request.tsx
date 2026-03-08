@@ -9,23 +9,23 @@
 
 // @ts-nocheck
 
-import { useEnvironment } from "../../../shared/keycloak-ui-shared";
-import { useState } from "react";
 import { useTranslation } from "@merge-rd/i18n";
+import { Badge } from "@merge-rd/ui/components/badge";
+import { Button } from "@merge-rd/ui/components/button";
 import {
     Dialog,
     DialogContent,
-    DialogHeader,
-    DialogTitle,
+    DialogDescription,
     DialogFooter,
-    DialogDescription
+    DialogHeader,
+    DialogTitle
 } from "@merge-rd/ui/components/dialog";
-import { Button } from "@merge-rd/ui/components/button";
-import { Badge } from "@merge-rd/ui/components/badge";
 import { UserCheck } from "@phosphor-icons/react";
+import { useState } from "react";
+import { useEnvironment } from "../../../shared/keycloak-ui-shared";
 
 import { fetchPermission, updateRequest } from "../../app/api";
-import { Permission, Resource } from "../../shared/api/representations";
+import type { Permission, Resource } from "../../shared/api/representations";
 import { useAccountAlerts } from "../../shared/lib/useAccountAlerts";
 
 type PermissionRequestProps = {
@@ -89,9 +89,16 @@ export const PermissionRequest = ({ resource, refresh }: PermissionRequestProps)
                         <table className="w-full text-sm" aria-label={t("resources")}>
                             <thead className="bg-muted/50">
                                 <tr>
-                                    <th className="px-4 py-3 text-left font-medium">{t("requestor")}</th>
-                                    <th className="px-4 py-3 text-left font-medium">{t("permissionRequests")}</th>
-                                    <th className="px-4 py-3 text-right font-medium" aria-hidden="true"></th>
+                                    <th className="px-4 py-3 text-left font-medium">
+                                        {t("requestor")}
+                                    </th>
+                                    <th className="px-4 py-3 text-left font-medium">
+                                        {t("permissionRequests")}
+                                    </th>
+                                    <th
+                                        className="px-4 py-3 text-right font-medium"
+                                        aria-hidden="true"
+                                    ></th>
                                 </tr>
                             </thead>
                             <tbody className="divide-y">
@@ -99,8 +106,11 @@ export const PermissionRequest = ({ resource, refresh }: PermissionRequestProps)
                                     <tr key={shareRequest.username}>
                                         <td className="px-4 py-3">
                                             <div>
-                                                {shareRequest.firstName} {shareRequest.lastName}{" "}
-                                                {shareRequest.lastName ? "" : shareRequest.username}
+                                                {shareRequest.firstName}{" "}
+                                                {shareRequest.lastName}{" "}
+                                                {shareRequest.lastName
+                                                    ? ""
+                                                    : shareRequest.username}
                                             </div>
                                             <div className="text-xs text-muted-foreground">
                                                 {shareRequest.email}
@@ -109,7 +119,10 @@ export const PermissionRequest = ({ resource, refresh }: PermissionRequestProps)
                                         <td className="px-4 py-3">
                                             <div className="flex flex-wrap gap-1">
                                                 {shareRequest.scopes.map(scope => (
-                                                    <Badge key={scope.toString()} variant="secondary">
+                                                    <Badge
+                                                        key={scope.toString()}
+                                                        variant="secondary"
+                                                    >
                                                         {scope as string}
                                                     </Badge>
                                                 ))}
@@ -120,7 +133,10 @@ export const PermissionRequest = ({ resource, refresh }: PermissionRequestProps)
                                                 <Button
                                                     size="sm"
                                                     onClick={async () => {
-                                                        await approveDeny(shareRequest, true);
+                                                        await approveDeny(
+                                                            shareRequest,
+                                                            true
+                                                        );
                                                     }}
                                                 >
                                                     {t("accept")}

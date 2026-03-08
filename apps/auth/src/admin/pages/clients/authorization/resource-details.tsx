@@ -1,31 +1,40 @@
 import type ClientRepresentation from "@keycloak/keycloak-admin-client/lib/defs/clientRepresentation";
 import type ResourceRepresentation from "@keycloak/keycloak-admin-client/lib/defs/resourceRepresentation";
 import type ResourceServerRepresentation from "@keycloak/keycloak-admin-client/lib/defs/resourceServerRepresentation";
-import { getErrorDescription, getErrorMessage, HelpItem,
-    TextControl,
-    useFetch } from "../../../../shared/keycloak-ui-shared";
-import { toast } from "sonner";
+import { useTranslation } from "@merge-rd/i18n";
 import { Alert, AlertDescription, AlertTitle } from "@merge-rd/ui/components/alert";
 import { Button, buttonVariants } from "@merge-rd/ui/components/button";
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuTrigger
+} from "@merge-rd/ui/components/dropdown-menu";
 import { Label } from "@merge-rd/ui/components/label";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@merge-rd/ui/components/dropdown-menu";
-import { useState } from "react";
-import { FormProvider, useForm } from "react-hook-form";
-import { useTranslation } from "@merge-rd/i18n";
 import { Link, useNavigate } from "@tanstack/react-router";
+import { useEffect, useState } from "react";
+import { FormProvider, useForm } from "react-hook-form";
+import { toast } from "sonner";
+import {
+    getErrorDescription,
+    getErrorMessage,
+    HelpItem,
+    KeycloakSpinner,
+    TextControl
+} from "../../../../shared/keycloak-ui-shared";
 import { useAdminClient } from "../../../app/admin-client";
-import { DefaultSwitchControl } from "../../../shared/ui/switch-control";
+import { useAccess } from "../../../app/providers/access/access";
+import { useParams } from "../../../shared/lib/useParams";
+import { convertFormValuesToObject, convertToFormValues } from "../../../shared/lib/util";
 import { useConfirmDialog } from "../../../shared/ui/confirm-dialog/confirm-dialog";
 import { FormAccess } from "../../../shared/ui/form/form-access";
-import { KeyValueInput } from "../../../shared/ui/key-value-form/key-value-input";
 import type { KeyValueType } from "../../../shared/ui/key-value-form/key-value-convert";
-import { KeycloakSpinner } from "../../../../shared/keycloak-ui-shared";
+import { KeyValueInput } from "../../../shared/ui/key-value-form/key-value-input";
 import { MultiLineInput } from "../../../shared/ui/multi-line-input/multi-line-input";
-import { useAccess } from "../../../app/providers/access/access";
-import { convertFormValuesToObject, convertToFormValues } from "../../../shared/lib/util";
-import { useParams } from "../../../shared/lib/useParams";
-import { toAuthorizationTab } from "../routes/authentication-tab";
-import { ResourceDetailsParams, toResourceDetails } from "../routes/resource";
+import { DefaultSwitchControl } from "../../../shared/ui/switch-control";
+import { toAuthorizationTab } from "../../../shared/lib/routes/clients";
+import { type ResourceDetailsParams, toResourceDetails } from "../../../shared/lib/routes/clients";
+import { useResourceDetails as useResourceDetailsQuery } from "./api/use-resource-details";
 import { ScopePicker } from "./scope-picker";
 
 type SubmittedResource = Omit<ResourceRepresentation, "attributes" | "scopes"> & {
@@ -40,7 +49,7 @@ export default function ResourceDetails() {
     const [resource, setResource] = useState<ResourceRepresentation>();
 
     const [permissions, setPermission] = useState<ResourceServerRepresentation[]>();
-const form = useForm<SubmittedResource>({
+    const form = useForm<SubmittedResource>({
         mode: "onChange"
     });
     const { setValue, handleSubmit } = form;
@@ -56,28 +65,21 @@ const form = useForm<SubmittedResource>({
 
     const isDisabled = !hasAccess("manage-authorization");
 
-    useFetch(
-        () =>
-            Promise.all([
-                adminClient.clients.findOne({ id }),
-                resourceId
-                    ? adminClient.clients.getResource({ id, resourceId })
-                    : Promise.resolve(undefined),
-                resourceId
-                    ? adminClient.clients.listPermissionsByResource({ id, resourceId })
-                    : Promise.resolve(undefined)
-            ]),
-        ([client, resource, permissions]) => {
-            if (!client) {
+    const { data: resourceDetailsData } = useResourceDetailsQuery(id, resourceId);
+
+    useEffect(() => {
+        if (resourceDetailsData) {
+            const [fetchedClient, fetchedResource, fetchedPermissions] =
+                resourceDetailsData;
+            if (!fetchedClient) {
                 throw new Error(t("notFound"));
             }
-            setClient(client);
-            setPermission(permissions);
-            setResource(resource);
-            setupForm(resource);
-        },
-        []
-    );
+            setClient(fetchedClient);
+            setPermission(fetchedPermissions);
+            setResource(fetchedResource);
+            setupForm(fetchedResource);
+        }
+    }, [resourceDetailsData]);
 
     const submit = async (submitted: SubmittedResource) => {
         const resource = convertFormValuesToObject<
@@ -91,13 +93,19 @@ const form = useForm<SubmittedResource>({
             } else {
                 const result = await adminClient.clients.createResource({ id }, resource);
                 setResource(resource);
-                navigate({ to: toResourceDetails({ realm, id, resourceId: result._id! }) as string });
+                navigate({
+                    to: toResourceDetails({
+                        realm,
+                        id,
+                        resourceId: result._id!
+                    }) as string
+                });
             }
-            toast.success(
-                t((resourceId ? "update" : "create") + "ResourceSuccess")
-            );
+            toast.success(t(`${resourceId ? "update" : "create"}ResourceSuccess`));
         } catch (error) {
-            toast.error(t("resourceSaveError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
+            toast.error(t("resourceSaveError", { error: getErrorMessage(error) }), {
+                description: getErrorDescription(error)
+            });
         }
     };
 
@@ -110,13 +118,13 @@ const form = useForm<SubmittedResource>({
                     <Alert variant="destructive" className="pt-4">
                         <AlertTitle>{t("deleteResourceWarning")}</AlertTitle>
                         <AlertDescription>
-                        <p className="pt-1">
-                            {permissions?.map(permission => (
-                                <strong key={permission.id} className="pr-2">
-                                    {permission.name}
-                                </strong>
-                            ))}
-                        </p>
+                            <p className="pt-1">
+                                {permissions?.map(permission => (
+                                    <strong key={permission.id} className="pr-2">
+                                        {permission.name}
+                                    </strong>
+                                ))}
+                            </p>
                         </AlertDescription>
                     </Alert>
                 )}
@@ -130,9 +138,18 @@ const form = useForm<SubmittedResource>({
                     resourceId: resourceId!
                 });
                 toast.success(t("resourceDeletedSuccess"));
-                navigate({ to: toAuthorizationTab({ realm, clientId: id, tab: "resources" }) as string });
+                navigate({
+                    to: toAuthorizationTab({
+                        realm,
+                        clientId: id,
+                        tab: "resources"
+                    }) as string
+                });
             } catch (error) {
-                toast.error(t("resourceDeletedError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
+                toast.error(
+                    t("resourceDeletedError", { error: getErrorMessage(error) }),
+                    { description: getErrorDescription(error) }
+                );
             }
         }
     });
@@ -149,7 +166,10 @@ const form = useForm<SubmittedResource>({
                     <div className="flex flex-wrap items-center gap-2" />
                     <div className="flex items-center gap-2">
                         <DropdownMenu>
-                            <DropdownMenuTrigger data-testid="action-dropdown" className={buttonVariants()}>
+                            <DropdownMenuTrigger
+                                data-testid="action-dropdown"
+                                className={buttonVariants()}
+                            >
                                 {t("action")}
                             </DropdownMenuTrigger>
                             <DropdownMenuContent align="end">
@@ -233,24 +253,19 @@ const form = useForm<SubmittedResource>({
                             <KeyValueInput name="attributes" isDisabled={isDisabled} />
                         </div>
                         <div className="flex gap-2 mt-4">
-                            <Button
-                                type="submit"
-                                data-testid="save"
-                            >
+                            <Button type="submit" data-testid="save">
                                 {t("save")}
                             </Button>
 
-                            <Button
-                                variant="link"
-                                data-testid="cancel"
-                                asChild
-                            >
+                            <Button variant="link" data-testid="cancel" asChild>
                                 <Link
-                                    to={toAuthorizationTab({
-                                        realm,
-                                        clientId: id,
-                                        tab: "resources"
-                                    }) as string}
+                                    to={
+                                        toAuthorizationTab({
+                                            realm,
+                                            clientId: id,
+                                            tab: "resources"
+                                        }) as string
+                                    }
                                 >
                                     {t("cancel")}
                                 </Link>

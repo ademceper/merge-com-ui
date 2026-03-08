@@ -1,10 +1,5 @@
-import { createFileRoute } from "@tanstack/react-router";
-import { lazy } from "react";
-
-const CreateClientRole = lazy(
-    () => import("../../../../../../pages/clients/roles/create-client-role"),
-);
+import { createFileRoute, lazyRouteComponent } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/_app/$realm/clients/$clientId/roles/new")({
-    component: CreateClientRole,
+    component: lazyRouteComponent(() => import("../../../../../../pages/clients/roles/create-client-role")),
 });

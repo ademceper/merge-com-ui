@@ -1,5 +1,5 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@merge-rd/ui/components/card";
-import { PropsWithChildren, useId } from "react";
+import { type PropsWithChildren, useId } from "react";
 import { FormTitle } from "./form-title";
 
 type FormPanelProps = {

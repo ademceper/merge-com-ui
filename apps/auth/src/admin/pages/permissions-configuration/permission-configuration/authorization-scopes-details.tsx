@@ -1,7 +1,7 @@
 import { useTranslation } from "@merge-rd/i18n";
-import { capitalize } from "lodash-es";
 import { Badge } from "@merge-rd/ui/components/badge";
 import { Popover, PopoverContent, PopoverTrigger } from "@merge-rd/ui/components/popover";
+import { capitalize } from "lodash-es";
 
 type AuthorizationScopesDetailsProps = {
     row: {
@@ -35,9 +35,7 @@ export const AuthorizationScopesDetails = ({ row }: AuthorizationScopesDetailsPr
                             <dt className="font-medium">
                                 {t("authorizationScopeDetailsName")}
                             </dt>
-                            <dd>
-                                {capitalize(scope.name)}
-                            </dd>
+                            <dd>{capitalize(scope.name)}</dd>
                             <dt className="font-medium mt-1">
                                 {t("authorizationScopeDetailsDescription")}
                             </dt>

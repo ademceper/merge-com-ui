@@ -1,12 +1,12 @@
+import { useTranslation } from "@merge-rd/i18n";
 import {
     Dialog,
     DialogContent,
     DialogHeader,
-    DialogTitle,
+    DialogTitle
 } from "@merge-rd/ui/components/dialog";
-import { useTranslation } from "@merge-rd/i18n";
+import type { ProviderType } from "../../../../shared/lib/routes/realm-settings";
 import { KeyProviderForm } from "./key-provider-form";
-import type { ProviderType } from "../../routes/key-provider";
 
 type KeyProviderModalProps = {
     providerType: ProviderType;

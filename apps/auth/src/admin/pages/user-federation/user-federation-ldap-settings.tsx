@@ -1,21 +1,26 @@
 import type ComponentRepresentation from "@keycloak/keycloak-admin-client/lib/defs/componentRepresentation";
-import { getErrorDescription, getErrorMessage, KeycloakSpinner, useFetch } from "../../../shared/keycloak-ui-shared";
-import { toast } from "sonner";
-import { useState } from "react";
-import { FormProvider, useForm } from "react-hook-form";
 import { useTranslation } from "@merge-rd/i18n";
-import { useParams } from "../../shared/lib/useParams";
+import { useEffect } from "react";
+import { FormProvider, useForm } from "react-hook-form";
+import { toast } from "sonner";
+import {
+    getErrorDescription,
+    getErrorMessage,
+    KeycloakSpinner
+} from "../../../shared/keycloak-ui-shared";
 import { useAdminClient } from "../../app/admin-client";
 import { useRealm } from "../../app/providers/realm-context/realm-context";
-import {
-    LdapComponentRepresentation,
-    UserFederationLdapForm,
-    serializeFormData
-} from "./user-federation-ldap-form";
+import { useParams } from "../../shared/lib/useParams";
+import { useComponentDetail } from "./api/use-component-detail";
 import { LdapMapperList } from "./ldap/mappers/ldap-mapper-list";
-import { UserFederationLdapParams } from "./routes/user-federation-ldap";
-import { toUserFederationLdapMapper } from "./routes/user-federation-ldap-mapper";
+import type { UserFederationLdapParams } from "../../shared/lib/routes/user-federation";
+import { toUserFederationLdapMapper } from "../../shared/lib/routes/user-federation";
 import { ExtendedHeader } from "./shared/extended-header";
+import {
+    type LdapComponentRepresentation,
+    serializeFormData,
+    UserFederationLdapForm
+} from "./user-federation-ldap-form";
 
 export default function UserFederationLdapSettings() {
     const { adminClient } = useAdminClient();
@@ -24,35 +29,30 @@ export default function UserFederationLdapSettings() {
     const form = useForm<LdapComponentRepresentation>({ mode: "onChange" });
     const { realm } = useRealm();
     const { id, tab } = useParams<UserFederationLdapParams & { tab?: string }>();
-const [component, setComponent] = useState<ComponentRepresentation>();
-    const [refreshCount, setRefreshCount] = useState(0);
 
-    const refresh = () => setRefreshCount(count => count + 1);
+    const { data: component, refetch: refetchComponent } = useComponentDetail(id);
 
-    useFetch(
-        () => adminClient.components.findOne({ id: id! }),
-        component => {
-            if (!component) {
-                throw new Error(t("notFound"));
-            }
-
-            setComponent(component);
+    useEffect(() => {
+        if (component) {
             setupForm(component);
-        },
-        [id, refreshCount]
-    );
+        }
+    }, [component]);
+
+    const refresh = () => {
+        refetchComponent();
+    };
 
     const setupForm = (component: ComponentRepresentation) => {
         form.reset({});
         form.reset(component);
         form.setValue(
             "config.periodicChangedUsersSync",
-            component.config?.["changedSyncPeriod"]?.[0] !== "-1"
+            component.config?.changedSyncPeriod?.[0] !== "-1"
         );
 
         form.setValue(
             "config.periodicFullSync",
-            component.config?.["fullSyncPeriod"]?.[0] !== "-1"
+            component.config?.fullSyncPeriod?.[0] !== "-1"
         );
     };
 
@@ -62,7 +62,9 @@ const [component, setComponent] = useState<ComponentRepresentation>();
             toast.success(t("userProviderSaveSuccess"));
             refresh();
         } catch (error) {
-            toast.error(t("userProviderSaveError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
+            toast.error(t("userProviderSaveError", { error: getErrorMessage(error) }), {
+                description: getErrorDescription(error)
+            });
         }
     };
 
@@ -107,9 +109,7 @@ const [component, setComponent] = useState<ComponentRepresentation>();
                 save={() => form.handleSubmit(onSubmit)()}
             />
             <div className="p-0">
-                <div className="bg-muted/30">
-                    {renderContent()}
-                </div>
+                <div className="bg-muted/30">{renderContent()}</div>
             </div>
         </FormProvider>
     );

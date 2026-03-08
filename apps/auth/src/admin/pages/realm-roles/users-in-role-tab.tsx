@@ -1,16 +1,6 @@
 import type UserRepresentation from "@keycloak/keycloak-admin-client/lib/defs/userRepresentation";
-import { Button } from "@merge-rd/ui/components/button";
-import { Popover, PopoverContent, PopoverTrigger } from "@merge-rd/ui/components/popover";
-import { Question } from "@phosphor-icons/react";
 import { useTranslation } from "@merge-rd/i18n";
-import { useNavigate } from "@tanstack/react-router";
-import { useHelp } from "../../../shared/keycloak-ui-shared";
-import { useAdminClient } from "../../app/admin-client";
-import type { ClientRoleParams } from "../clients/routes/client-role";
-import { useRealm } from "../../app/providers/realm-context/realm-context";
-import { emptyFormatter, upperCaseFormatter } from "../../shared/lib/util";
-import { useParams } from "../../shared/lib/useParams";
-import { DataTable, type ColumnDef } from "@/admin/shared/ui/data-table";
+import { Button } from "@merge-rd/ui/components/button";
 import {
     Empty,
     EmptyContent,
@@ -18,7 +8,17 @@ import {
     EmptyHeader,
     EmptyTitle
 } from "@merge-rd/ui/components/empty";
+import { Popover, PopoverContent, PopoverTrigger } from "@merge-rd/ui/components/popover";
+import { Question } from "@phosphor-icons/react";
+import { useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
+import { type ColumnDef, DataTable } from "@/admin/shared/ui/data-table";
+import { useHelp } from "../../../shared/keycloak-ui-shared";
+import { useAdminClient } from "../../app/admin-client";
+import { useRealm } from "../../app/providers/realm-context/realm-context";
+import { useParams } from "../../shared/lib/useParams";
+import { emptyFormatter, upperCaseFormatter } from "../../shared/lib/util";
+import type { ClientRoleParams } from "../../shared/lib/routes/clients";
 
 export const UsersInRoleTab = () => {
     const { adminClient } = useAdminClient();
@@ -36,34 +36,78 @@ export const UsersInRoleTab = () => {
                 const role = await adminClient.roles.findOneById({ id: id! });
                 if (!role) throw new Error(t("notFound"));
                 const list = role.clientRole
-                    ? await adminClient.clients.findUsersWithRole({ roleName: role.name!, id: clientId!, briefRepresentation: true, first: 0, max: 500 })
-                    : await adminClient.roles.findUsersWithRole({ name: role.name!, briefRepresentation: true, first: 0, max: 500 });
+                    ? await adminClient.clients.findUsersWithRole({
+                          roleName: role.name!,
+                          id: clientId!,
+                          briefRepresentation: true,
+                          first: 0,
+                          max: 500
+                      })
+                    : await adminClient.roles.findUsersWithRole({
+                          name: role.name!,
+                          briefRepresentation: true,
+                          first: 0,
+                          max: 500
+                      });
                 if (!cancelled) setUsers(list);
             } catch {
                 if (!cancelled) setUsers([]);
             }
         })();
-        return () => { cancelled = true; };
+        return () => {
+            cancelled = true;
+        };
     }, [key, id, clientId]);
 
     const { enabled } = useHelp();
 
     const columns: ColumnDef<UserRepresentation>[] = [
-        { accessorKey: "username", header: t("userName"), cell: ({ row }) => emptyFormatter()(row.original.username) as string },
-        { accessorKey: "email", header: t("email"), cell: ({ row }) => emptyFormatter()(row.original.email) as string },
-        { accessorKey: "lastName", header: t("lastName"), cell: ({ row }) => emptyFormatter()(row.original.lastName) as string },
-        { accessorKey: "firstName", header: t("firstName"), cell: ({ row }) => upperCaseFormatter()(emptyFormatter()(row.original.firstName)) as string }
+        {
+            accessorKey: "username",
+            header: t("userName"),
+            cell: ({ row }) => emptyFormatter()(row.original.username) as string
+        },
+        {
+            accessorKey: "email",
+            header: t("email"),
+            cell: ({ row }) => emptyFormatter()(row.original.email) as string
+        },
+        {
+            accessorKey: "lastName",
+            header: t("lastName"),
+            cell: ({ row }) => emptyFormatter()(row.original.lastName) as string
+        },
+        {
+            accessorKey: "firstName",
+            header: t("firstName"),
+            cell: ({ row }) =>
+                upperCaseFormatter()(emptyFormatter()(row.original.firstName)) as string
+        }
     ];
 
     const emptyContent = (
         <Empty className="py-12">
-            <EmptyHeader><EmptyTitle>{t("noDirectUsers")}</EmptyTitle></EmptyHeader>
+            <EmptyHeader>
+                <EmptyTitle>{t("noDirectUsers")}</EmptyTitle>
+            </EmptyHeader>
             <EmptyContent>
                 <EmptyDescription>
                     <span>{t("noUsersEmptyStateDescription")} </span>
-                    <Button variant="link" className="kc-groups-link-empty-state p-0 h-auto ml-1" onClick={() => navigate({ to: `/${realm}/groups` })}>{t("groups")}</Button>
+                    <Button
+                        variant="link"
+                        className="kc-groups-link-empty-state p-0 h-auto ml-1"
+                        onClick={() => navigate({ to: `/${realm}/groups` })}
+                    >
+                        {t("groups")}
+                    </Button>
                     <span> {t("or")} </span>
-                    <Button variant="link" className="kc-users-link-empty-state p-0 h-auto ml-1" onClick={() => navigate({ to: `/${realm}/users` })}>{t("users")}</Button>
+                    <Button
+                        variant="link"
+                        className="kc-users-link-empty-state p-0 h-auto ml-1"
+                        onClick={() => navigate({ to: `/${realm}/users` })}
+                    >
+                        {t("users")}
+                    </Button>
                     <span> {t("noUsersEmptyStateDescriptionContinued")}</span>
                 </EmptyDescription>
             </EmptyContent>
@@ -84,7 +128,10 @@ export const UsersInRoleTab = () => {
                     enabled ? (
                         <Popover>
                             <PopoverTrigger asChild>
-                                <Button variant="ghost" className="kc-who-will-appear-button">
+                                <Button
+                                    variant="ghost"
+                                    className="kc-who-will-appear-button"
+                                >
                                     <Question className="size-4 mr-1" />
                                     {t("whoWillAppearLinkTextRoles")}
                                 </Button>
@@ -93,11 +140,29 @@ export const UsersInRoleTab = () => {
                                 <div className="space-y-2 text-sm">
                                     <p>
                                         {t("whoWillAppearPopoverTextRoles")}
-                                        <Button variant="link" className="kc-groups-link p-0 h-auto ml-1" onClick={() => navigate({ to: `/${realm}/groups` })}>{t("groups")}</Button>
+                                        <Button
+                                            variant="link"
+                                            className="kc-groups-link p-0 h-auto ml-1"
+                                            onClick={() =>
+                                                navigate({ to: `/${realm}/groups` })
+                                            }
+                                        >
+                                            {t("groups")}
+                                        </Button>
                                         {t("or")}
-                                        <Button variant="link" className="kc-users-link p-0 h-auto ml-1" onClick={() => navigate({ to: `/${realm}/users` })}>{t("users")}.</Button>
+                                        <Button
+                                            variant="link"
+                                            className="kc-users-link p-0 h-auto ml-1"
+                                            onClick={() =>
+                                                navigate({ to: `/${realm}/users` })
+                                            }
+                                        >
+                                            {t("users")}.
+                                        </Button>
                                     </p>
-                                    <p className="text-muted-foreground">{t("whoWillAppearPopoverFooterText")}</p>
+                                    <p className="text-muted-foreground">
+                                        {t("whoWillAppearPopoverFooterText")}
+                                    </p>
                                 </div>
                             </PopoverContent>
                         </Popover>

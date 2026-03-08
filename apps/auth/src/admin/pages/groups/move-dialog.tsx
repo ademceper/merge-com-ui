@@ -1,9 +1,9 @@
 import type KeycloakAdminClient from "@keycloak/keycloak-admin-client";
 import type GroupRepresentation from "@keycloak/keycloak-admin-client/lib/defs/groupRepresentation";
 import { useTranslation } from "@merge-rd/i18n";
-import { useAdminClient } from "../../app/admin-client";
-import { getErrorDescription, getErrorMessage } from "../../../shared/keycloak-ui-shared";
 import { toast } from "sonner";
+import { getErrorDescription, getErrorMessage } from "../../../shared/keycloak-ui-shared";
+import { useAdminClient } from "../../app/admin-client";
 import { GroupPickerDialog } from "../../shared/ui/group/group-picker-dialog";
 
 type MoveDialogProps = {

@@ -1,5 +1,5 @@
 import type UserRepresentation from "@keycloak/keycloak-admin-client/lib/defs/userRepresentation";
-import { Button } from "@merge-rd/ui/components/button";
+import { useTranslation } from "@merge-rd/i18n";
 import {
     AlertDialog,
     AlertDialogAction,
@@ -10,24 +10,25 @@ import {
     AlertDialogHeader,
     AlertDialogTitle
 } from "@merge-rd/ui/components/alert-dialog";
-import {
-    DataTable,
-    DataTableRowActions,
-    type ColumnDef
-} from "@/admin/shared/ui/data-table";
+import { Button } from "@merge-rd/ui/components/button";
 import { PencilSimple, Plus, Trash } from "@phosphor-icons/react";
-import { useState } from "react";
-import { useTranslation } from "@merge-rd/i18n";
 import { Link } from "@tanstack/react-router";
-import { useAdminClient } from "../../app/admin-client";
-import { getErrorDescription, getErrorMessage, useFetch } from "../../../shared/keycloak-ui-shared";
+import { useState } from "react";
 import { toast } from "sonner";
+import {
+    type ColumnDef,
+    DataTable,
+    DataTableRowActions
+} from "@/admin/shared/ui/data-table";
+import { getErrorDescription, getErrorMessage } from "../../../shared/keycloak-ui-shared";
+import { useAdminClient } from "../../app/admin-client";
 import { useAccess } from "../../app/providers/access/access";
 import { useRealm } from "../../app/providers/realm-context/realm-context";
 import { emptyFormatter } from "../../shared/lib/util";
-import { toUser } from "./routes/user";
 import { AddUserDialog } from "./add-user-dialog";
+import { useUsers } from "./api/use-users";
 import { EditUserDialog } from "./edit-user-dialog";
+import { toUser } from "../../shared/lib/routes/user";
 
 export function UsersListSection() {
     const { adminClient } = useAdminClient();
@@ -36,17 +37,10 @@ export function UsersListSection() {
     const { hasAccess } = useAccess();
     const canManage = hasAccess("manage-users");
 
-    const [key, setKey] = useState(0);
-    const refresh = () => setKey((k) => k + 1);
-    const [users, setUsers] = useState<UserRepresentation[]>([]);
+    const { data: users = [], refetch } = useUsers();
+    const refresh = () => refetch();
     const [selectedUser, setSelectedUser] = useState<UserRepresentation | undefined>();
     const [editUserId, setEditUserId] = useState<string | null>(null);
-
-    useFetch(
-        async () => adminClient.users.find({ first: 0, max: 1000 }),
-        (data) => setUsers(data),
-        [key]
-    );
 
     const onDeleteConfirm = async () => {
         if (!selectedUser?.id) return;
@@ -68,7 +62,9 @@ export function UsersListSection() {
             header: t("username"),
             cell: ({ row }) => (
                 <Link
-                    to={toUser({ realm, id: row.original.id!, tab: "settings" }) as string}
+                    to={
+                        toUser({ realm, id: row.original.id!, tab: "settings" }) as string
+                    }
                     className="text-primary hover:underline"
                 >
                     {row.original.username}
@@ -127,11 +123,16 @@ export function UsersListSection() {
         <>
             <AlertDialog
                 open={!!selectedUser}
-                onOpenChange={(open) => !open && setSelectedUser(undefined)}
+                onOpenChange={open => !open && setSelectedUser(undefined)}
             >
                 <AlertDialogContent>
                     <AlertDialogHeader>
-                        <AlertDialogTitle>{t("deleteConfirmUsers", { count: 1, name: selectedUser?.username })}</AlertDialogTitle>
+                        <AlertDialogTitle>
+                            {t("deleteConfirmUsers", {
+                                count: 1,
+                                name: selectedUser?.username
+                            })}
+                        </AlertDialogTitle>
                         <AlertDialogDescription>
                             {t("deleteConfirmDialog", { count: 1 })}
                         </AlertDialogDescription>
@@ -151,19 +152,18 @@ export function UsersListSection() {
 
             <EditUserDialog
                 open={!!editUserId}
-                onOpenChange={(open) => !open && setEditUserId(null)}
+                onOpenChange={open => !open && setEditUserId(null)}
                 userId={editUserId}
                 onSuccess={refresh}
             />
 
             <DataTable
-                key={key}
                 columns={columns}
                 data={users}
                 searchColumnId="username"
                 searchPlaceholder={t("searchForUser")}
                 emptyMessage={t("noUsersFound")}
-                onRowClick={(row) => canManage && setEditUserId(row.original.id!)}
+                onRowClick={row => canManage && setEditUserId(row.original.id!)}
                 toolbar={
                     canManage ? (
                         <AddUserDialog
@@ -176,7 +176,9 @@ export function UsersListSection() {
                                     aria-label={t("createNewUser")}
                                 >
                                     <Plus size={20} className="shrink-0 sm:hidden" />
-                                    <span className="hidden sm:inline">{t("createNewUser")}</span>
+                                    <span className="hidden sm:inline">
+                                        {t("createNewUser")}
+                                    </span>
                                 </Button>
                             }
                             onSuccess={refresh}

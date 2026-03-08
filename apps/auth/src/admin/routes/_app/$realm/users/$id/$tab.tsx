@@ -1,10 +1,5 @@
-import { createFileRoute } from "@tanstack/react-router";
-import { lazy } from "react";
-
-const EditUser = lazy(
-    () => import("../../../../../pages/user/edit-user"),
-);
+import { createFileRoute, lazyRouteComponent } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/_app/$realm/users/$id/$tab")({
-    component: EditUser,
+    component: lazyRouteComponent(() => import("../../../../../pages/user/edit-user")),
 });

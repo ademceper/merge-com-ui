@@ -1,7 +1,7 @@
-import { createRoot } from "react-dom/client";
-import { StrictMode } from "react";
-import { KcPage } from "./kc.gen";
 import { Providers } from "@merge-rd/ui/components/providers";
+import { StrictMode } from "react";
+import { createRoot } from "react-dom/client";
+import { KcPage } from "./kc.gen";
 import "@merge-rd/ui/globals.css";
 
 createRoot(document.getElementById("root")!).render(

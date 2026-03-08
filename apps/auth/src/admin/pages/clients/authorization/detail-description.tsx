@@ -30,11 +30,7 @@ export function DetailDescriptionLink<T>({
                     const value =
                         typeof element === "string" ? element : convert!(element);
                     return link ? (
-                        <Link
-                            key={value}
-                            to={link(element as T)}
-                            className="pr-2"
-                        >
+                        <Link key={value} to={link(element as T)} className="pr-2">
                             {value}
                         </Link>
                     ) : (

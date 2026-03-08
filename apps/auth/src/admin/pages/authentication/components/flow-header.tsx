@@ -1,10 +1,6 @@
-import {
-    TableHead,
-    TableHeader,
-    TableRow,
-} from "@/admin/shared/ui/data-table";
-import { DotsSixVertical } from "@phosphor-icons/react";
 import { useTranslation } from "@merge-rd/i18n";
+import { DotsSixVertical } from "@phosphor-icons/react";
+import { TableHead, TableHeader, TableRow } from "@/admin/shared/ui/data-table";
 
 export const FlowHeader = () => {
     const { t } = useTranslation();

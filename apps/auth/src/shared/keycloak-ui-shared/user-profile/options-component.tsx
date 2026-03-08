@@ -1,8 +1,8 @@
 import { Checkbox } from "@merge-rd/ui/components/checkbox";
-import { RadioGroup, RadioGroupItem } from "@merge-rd/ui/components/radio-group";
 import { Label } from "@merge-rd/ui/components/label";
+import { RadioGroup, RadioGroupItem } from "@merge-rd/ui/components/radio-group";
 import { Controller } from "react-hook-form";
-import { OptionLabel, Options, UserProfileFieldProps } from "./user-profile-fields";
+import type { OptionLabel, Options, UserProfileFieldProps } from "./user-profile-fields";
 import { UserProfileGroup } from "./user-profile-group";
 import { fieldName, label } from "./utils";
 
@@ -11,9 +11,8 @@ export const OptionComponent = (props: UserProfileFieldProps) => {
     const isMultiSelect = inputType.startsWith("multiselect");
     const options = (attribute.validators?.options as Options | undefined)?.options || [];
 
-    const optionLabel =
-        (attribute.annotations?.["inputOptionLabels"] as OptionLabel) || {};
-    const prefix = attribute.annotations?.["inputOptionLabelsI18nPrefix"] as string;
+    const optionLabel = (attribute.annotations?.inputOptionLabels as OptionLabel) || {};
+    const prefix = attribute.annotations?.inputOptionLabelsI18nPrefix as string;
 
     const optionLabelText = (option: string) =>
         label(props.t, optionLabel[option], option, prefix);
@@ -61,24 +60,30 @@ export const OptionComponent = (props: UserProfileFieldProps) => {
                     ) : (
                         <RadioGroup
                             value={field.value || "__empty__"}
-                            onValueChange={(v) => field.onChange(v === "__empty__" ? "" : v)}
+                            onValueChange={v =>
+                                field.onChange(v === "__empty__" ? "" : v)
+                            }
                             disabled={attribute.readOnly}
                             className="flex flex-col gap-2"
                         >
                             {options.map(option => {
-                            const value = option || "__empty__";
-                            return (
-                                <div key={value} className="flex items-center gap-2">
-                                    <RadioGroupItem value={value} id={value} data-testid={value} />
-                                    <Label
-                                        htmlFor={value}
-                                        className="cursor-pointer text-sm font-normal"
-                                    >
-                                        {optionLabelText(option)}
-                                    </Label>
-                                </div>
-                            );
-                        })}
+                                const value = option || "__empty__";
+                                return (
+                                    <div key={value} className="flex items-center gap-2">
+                                        <RadioGroupItem
+                                            value={value}
+                                            id={value}
+                                            data-testid={value}
+                                        />
+                                        <Label
+                                            htmlFor={value}
+                                            className="cursor-pointer text-sm font-normal"
+                                        >
+                                            {optionLabelText(option)}
+                                        </Label>
+                                    </div>
+                                );
+                            })}
                         </RadioGroup>
                     )
                 }

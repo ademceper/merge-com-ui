@@ -1,9 +1,11 @@
 import type GroupRepresentation from "@keycloak/keycloak-admin-client/lib/defs/groupRepresentation";
-import { HelpItem, TextControl, useFetch } from "../../../../../shared/keycloak-ui-shared";
+import { useTranslation } from "@merge-rd/i18n";
 import { Button } from "@merge-rd/ui/components/button";
 import { Checkbox } from "@merge-rd/ui/components/checkbox";
 import { Label } from "@merge-rd/ui/components/label";
 import { MinusCircle } from "@phosphor-icons/react";
+import { useEffect, useState } from "react";
+import { Controller, useFormContext } from "react-hook-form";
 import {
     Table,
     TableBody,
@@ -12,11 +14,9 @@ import {
     TableHeader,
     TableRow
 } from "@/admin/shared/ui/data-table";
-import { useState } from "react";
-import { Controller, useFormContext } from "react-hook-form";
-import { useTranslation } from "@merge-rd/i18n";
-import { useAdminClient } from "../../../../app/admin-client";
+import { HelpItem, TextControl } from "../../../../../shared/keycloak-ui-shared";
 import { GroupPickerDialog } from "../../../../shared/ui/group/group-picker-dialog";
+import { useGroupsById } from "../api/use-groups-by-id";
 
 type GroupForm = {
     groups?: GroupValue[];
@@ -29,8 +29,6 @@ export type GroupValue = {
 };
 
 export const Group = () => {
-    const { adminClient } = useAdminClient();
-
     const { t } = useTranslation();
     const { control, getValues, setValue } = useFormContext<GroupForm>();
     const values = getValues("groups");
@@ -38,20 +36,15 @@ export const Group = () => {
     const [open, setOpen] = useState(false);
     const [selectedGroups, setSelectedGroups] = useState<GroupRepresentation[]>([]);
 
-    useFetch(
-        () => {
-            if (values && values.length > 0)
-                return Promise.all(
-                    values.map(g => adminClient.groups.findOne({ id: g.id }))
-                );
-            return Promise.resolve([]);
-        },
-        groups => {
-            const filteredGroup = groups.filter(g => g) as GroupRepresentation[];
+    const groupIds = (values || []).map(g => g.id);
+    const { data: groupsData } = useGroupsById(groupIds);
+
+    useEffect(() => {
+        if (groupsData) {
+            const filteredGroup = groupsData.filter(g => g) as GroupRepresentation[];
             setSelectedGroups(filteredGroup);
-        },
-        []
-    );
+        }
+    }, [groupsData]);
 
     return (
         <>
@@ -66,105 +59,109 @@ export const Group = () => {
                     <HelpItem helpText={t("policyGroupsHelp")} fieldLabelId="groups" />
                 </Label>
                 <div id="groups">
-                <Controller
-                    name="groups"
-                    control={control}
-                    defaultValue={[]}
-                    render={({ field }) => (
-                        <>
-                            {open && (
-                                <GroupPickerDialog
-                                    type="selectMany"
-                                    text={{
-                                        title: "addGroupsToGroupPolicy",
-                                        ok: "add"
+                    <Controller
+                        name="groups"
+                        control={control}
+                        defaultValue={[]}
+                        render={({ field }) => (
+                            <>
+                                {open && (
+                                    <GroupPickerDialog
+                                        type="selectMany"
+                                        text={{
+                                            title: "addGroupsToGroupPolicy",
+                                            ok: "add"
+                                        }}
+                                        onConfirm={groups => {
+                                            field.onChange([
+                                                ...(field.value || []),
+                                                ...(groups || []).map(({ id }) => ({
+                                                    id
+                                                }))
+                                            ]);
+                                            setSelectedGroups([
+                                                ...selectedGroups,
+                                                ...(groups || [])
+                                            ]);
+                                            setOpen(false);
+                                        }}
+                                        onClose={() => {
+                                            setOpen(false);
+                                        }}
+                                        filterGroups={selectedGroups}
+                                    />
+                                )}
+                                <Button
+                                    data-testid="select-group-button"
+                                    variant="secondary"
+                                    onClick={() => {
+                                        setOpen(true);
                                     }}
-                                    onConfirm={groups => {
-                                        field.onChange([
-                                            ...(field.value || []),
-                                            ...(groups || []).map(({ id }) => ({ id }))
-                                        ]);
-                                        setSelectedGroups([
-                                            ...selectedGroups,
-                                            ...(groups || [])
-                                        ]);
-                                        setOpen(false);
-                                    }}
-                                    onClose={() => {
-                                        setOpen(false);
-                                    }}
-                                    filterGroups={selectedGroups}
-                                />
-                            )}
-                            <Button
-                                data-testid="select-group-button"
-                                variant="secondary"
-                                onClick={() => {
-                                    setOpen(true);
-                                }}
-                            >
-                                {t("addGroups")}
-                            </Button>
-                        </>
-                    )}
-                />
-                {selectedGroups.length > 0 && (
-                    <Table className="text-sm">
-                        <TableHeader>
-                            <TableRow>
-                                <TableHead>{t("groups")}</TableHead>
-                                <TableHead>{t("extendToChildren")}</TableHead>
-                                <TableHead aria-hidden="true" />
-                            </TableRow>
-                        </TableHeader>
-                        <TableBody>
-                            {selectedGroups.map((group, index) => (
-                                <TableRow key={group.id}>
-                                    <TableCell>{group.path}</TableCell>
-                                    <TableCell>
-                                        <Controller
-                                            name={`groups.${index}.extendChildren`}
-                                            defaultValue={false}
-                                            control={control}
-                                            render={({ field }) => (
-                                                <Checkbox
-                                                    id="extendChildren"
-                                                    data-testid="standard"
-                                                    name="extendChildren"
-                                                    checked={field.value}
-                                                    onCheckedChange={field.onChange}
-                                                    disabled={group.subGroupCount === 0}
-                                                />
-                                            )}
-                                        />
-                                    </TableCell>
-                                    <TableCell>
-                                        <Button
-                                            type="button"
-                                            variant="ghost"
-                                            size="icon"
-                                            className="keycloak__client-authorization__policy-row-remove"
-                                            onClick={() => {
-                                                setValue("groups", [
-                                                    ...(values || []).filter(
-                                                        ({ id }) => id !== group.id
-                                                    )
-                                                ]);
-                                                setSelectedGroups([
-                                                    ...selectedGroups.filter(
-                                                        ({ id }) => id !== group.id
-                                                    )
-                                                ]);
-                                            }}
-                                        >
-                                            <MinusCircle className="size-4" />
-                                        </Button>
-                                    </TableCell>
+                                >
+                                    {t("addGroups")}
+                                </Button>
+                            </>
+                        )}
+                    />
+                    {selectedGroups.length > 0 && (
+                        <Table className="text-sm">
+                            <TableHeader>
+                                <TableRow>
+                                    <TableHead>{t("groups")}</TableHead>
+                                    <TableHead>{t("extendToChildren")}</TableHead>
+                                    <TableHead aria-hidden="true" />
                                 </TableRow>
-                            ))}
-                        </TableBody>
-                    </Table>
-                )}
+                            </TableHeader>
+                            <TableBody>
+                                {selectedGroups.map((group, index) => (
+                                    <TableRow key={group.id}>
+                                        <TableCell>{group.path}</TableCell>
+                                        <TableCell>
+                                            <Controller
+                                                name={`groups.${index}.extendChildren`}
+                                                defaultValue={false}
+                                                control={control}
+                                                render={({ field }) => (
+                                                    <Checkbox
+                                                        id="extendChildren"
+                                                        data-testid="standard"
+                                                        name="extendChildren"
+                                                        checked={field.value}
+                                                        onCheckedChange={field.onChange}
+                                                        disabled={
+                                                            group.subGroupCount === 0
+                                                        }
+                                                    />
+                                                )}
+                                            />
+                                        </TableCell>
+                                        <TableCell>
+                                            <Button
+                                                type="button"
+                                                variant="ghost"
+                                                size="icon"
+                                                className="keycloak__client-authorization__policy-row-remove"
+                                                onClick={() => {
+                                                    setValue("groups", [
+                                                        ...(values || []).filter(
+                                                            ({ id }) => id !== group.id
+                                                        )
+                                                    ]);
+                                                    setSelectedGroups([
+                                                        ...selectedGroups.filter(
+                                                            ({ id }) => id !== group.id
+                                                        )
+                                                    ]);
+                                                }}
+                                            >
+                                                <MinusCircle className="size-4" />
+                                            </Button>
+                                        </TableCell>
+                                    </TableRow>
+                                ))}
+                            </TableBody>
+                        </Table>
+                    )}
                 </div>
             </div>
         </>

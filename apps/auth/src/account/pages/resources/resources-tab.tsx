@@ -9,17 +9,7 @@
 
 // @ts-nocheck
 
-import { useEnvironment } from "../../../shared/keycloak-ui-shared";
-import { useState } from "react";
 import { useTranslation } from "@merge-rd/i18n";
-import { Button } from "@merge-rd/ui/components/button";
-import { Badge } from "@merge-rd/ui/components/badge";
-import {
-    DropdownMenu,
-    DropdownMenuContent,
-    DropdownMenuItem,
-    DropdownMenuTrigger
-} from "@merge-rd/ui/components/dropdown-menu";
 import {
     AlertDialog,
     AlertDialogAction,
@@ -31,6 +21,14 @@ import {
     AlertDialogTitle,
     AlertDialogTrigger
 } from "@merge-rd/ui/components/alert-dialog";
+import { Badge } from "@merge-rd/ui/components/badge";
+import { Button } from "@merge-rd/ui/components/button";
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuTrigger
+} from "@merge-rd/ui/components/dropdown-menu";
 import {
     ArrowSquareOut,
     CaretDown,
@@ -40,11 +38,13 @@ import {
     ShareNetwork,
     Trash
 } from "@phosphor-icons/react";
+import { useState } from "react";
+import { useEnvironment } from "../../../shared/keycloak-ui-shared";
 
 import { fetchPermission, fetchResources, updatePermissions } from "../../app/api";
 import { getPermissionRequests } from "../../shared/api/methods";
-import { Links } from "../../shared/api/parse-links";
-import { Permission, Resource } from "../../shared/api/representations";
+import type { Links } from "../../shared/api/parse-links";
+import type { Permission, Resource } from "../../shared/api/representations";
 import { useAccountAlerts } from "../../shared/lib/useAccountAlerts";
 import { usePromise } from "../../shared/lib/usePromise";
 import { EditTheResource } from "./edit-the-resource";
@@ -155,8 +155,8 @@ export const ResourcesTab = ({ isShared = false }: ResourcesTabProps) => {
             <ResourceToolbar
                 onFilter={name => setParams({ ...params, name })}
                 count={resources.length}
-                first={parseInt(params["first"])}
-                max={parseInt(params["max"])}
+                first={parseInt(params.first, 10)}
+                max={parseInt(params.max, 10)}
                 onNextClick={() => setParams(links?.next || {})}
                 onPreviousClick={() => setParams(links?.prev || {})}
                 onPerPageSelect={(first, max) =>
@@ -169,12 +169,22 @@ export const ResourcesTab = ({ isShared = false }: ResourcesTabProps) => {
                     <thead className="bg-muted/50">
                         <tr>
                             <th className="w-10 px-4 py-3" aria-hidden="true" />
-                            <th className="px-4 py-3 text-left font-medium">{t("resourceName")}</th>
-                            <th className="px-4 py-3 text-left font-medium">{t("application")}</th>
-                            <th className="px-4 py-3 text-left font-medium" aria-hidden={isShared}>
+                            <th className="px-4 py-3 text-left font-medium">
+                                {t("resourceName")}
+                            </th>
+                            <th className="px-4 py-3 text-left font-medium">
+                                {t("application")}
+                            </th>
+                            <th
+                                className="px-4 py-3 text-left font-medium"
+                                aria-hidden={isShared}
+                            >
                                 {!isShared ? t("permissionRequests") : ""}
                             </th>
-                            <th className="px-4 py-3 text-right font-medium" aria-hidden="true" />
+                            <th
+                                className="px-4 py-3 text-right font-medium"
+                                aria-hidden="true"
+                            />
                         </tr>
                     </thead>
                     <tbody className="divide-y">
@@ -214,7 +224,11 @@ function ResourceRow({
     index: number;
     isShared: boolean;
     details: Record<string, PermissionDetail | undefined>;
-    toggleOpen: (id: string, field: keyof PermissionDetail, open: boolean) => Promise<void>;
+    toggleOpen: (
+        id: string,
+        field: keyof PermissionDetail,
+        open: boolean
+    ) => Promise<void>;
     removeShare: (resource: Resource) => Promise<void>;
     setDetails: (d: Record<string, PermissionDetail | undefined>) => void;
     refresh: () => void;
@@ -230,7 +244,9 @@ function ResourceRow({
                         <button
                             type="button"
                             data-testid={`expand-${resource.name}`}
-                            onClick={() => toggleOpen(resource._id, "rowOpen", !isExpanded)}
+                            onClick={() =>
+                                toggleOpen(resource._id, "rowOpen", !isExpanded)
+                            }
                             className="text-muted-foreground hover:text-foreground"
                         >
                             {isExpanded ? (
@@ -241,10 +257,7 @@ function ResourceRow({
                         </button>
                     )}
                 </td>
-                <td
-                    className="px-4 py-3 font-medium"
-                    data-testid={`row[${index}].name`}
-                >
+                <td className="px-4 py-3 font-medium" data-testid={`row[${index}].name`}>
                     {resource.name}
                 </td>
                 <td className="px-4 py-3">
@@ -257,13 +270,12 @@ function ResourceRow({
                     </a>
                 </td>
                 <td className="px-4 py-3">
-                    {resource.shareRequests &&
-                        resource.shareRequests.length > 0 && (
-                            <PermissionRequest
-                                resource={resource}
-                                refresh={() => refresh()}
-                            />
-                        )}
+                    {resource.shareRequests && resource.shareRequests.length > 0 && (
+                        <PermissionRequest
+                            resource={resource}
+                            refresh={() => refresh()}
+                        />
+                    )}
                     <ShareTheResource
                         resource={resource}
                         permissions={details[resource._id]?.permissions}
@@ -305,17 +317,26 @@ function ResourceRow({
                             </Button>
                             <DropdownMenu>
                                 <DropdownMenuTrigger asChild>
-                                    <Button variant="ghost" size="icon" className="h-8 w-8">
+                                    <Button
+                                        variant="ghost"
+                                        size="icon"
+                                        className="h-8 w-8"
+                                    >
                                         <DotsThreeVertical className="h-4 w-4" />
                                     </Button>
                                 </DropdownMenuTrigger>
                                 <DropdownMenuContent align="end">
                                     <DropdownMenuItem
                                         disabled={
-                                            details[resource._id]?.permissions?.length === 0
+                                            details[resource._id]?.permissions?.length ===
+                                            0
                                         }
                                         onClick={() =>
-                                            toggleOpen(resource._id, "editDialogOpen", true)
+                                            toggleOpen(
+                                                resource._id,
+                                                "editDialogOpen",
+                                                true
+                                            )
                                         }
                                     >
                                         <PencilSimple className="h-4 w-4 mr-2" />
@@ -325,7 +346,8 @@ function ResourceRow({
                                         <AlertDialogTrigger asChild>
                                             <DropdownMenuItem
                                                 disabled={
-                                                    details[resource._id]?.permissions?.length === 0
+                                                    details[resource._id]?.permissions
+                                                        ?.length === 0
                                                 }
                                                 onSelect={e => e.preventDefault()}
                                                 variant="destructive"
@@ -336,13 +358,17 @@ function ResourceRow({
                                         </AlertDialogTrigger>
                                         <AlertDialogContent>
                                             <AlertDialogHeader>
-                                                <AlertDialogTitle>{t("unShare")}</AlertDialogTitle>
+                                                <AlertDialogTitle>
+                                                    {t("unShare")}
+                                                </AlertDialogTitle>
                                                 <AlertDialogDescription>
                                                     {t("unShareAllConfirm")}
                                                 </AlertDialogDescription>
                                             </AlertDialogHeader>
                                             <AlertDialogFooter>
-                                                <AlertDialogCancel>{t("cancel")}</AlertDialogCancel>
+                                                <AlertDialogCancel>
+                                                    {t("cancel")}
+                                                </AlertDialogCancel>
                                                 <AlertDialogAction
                                                     variant="destructive"
                                                     onClick={() => removeShare(resource)}

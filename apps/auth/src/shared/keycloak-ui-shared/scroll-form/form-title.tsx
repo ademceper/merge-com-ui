@@ -26,7 +26,11 @@ export const FormTitle = ({
     const Tag = headingLevel;
     return (
         <Tag
-            className={cn("font-semibold text-foreground", sizeClass[size] || sizeClass.lg, className)}
+            className={cn(
+                "font-semibold text-foreground",
+                sizeClass[size] || sizeClass.lg,
+                className
+            )}
             id={id}
             tabIndex={0}
             {...rest}

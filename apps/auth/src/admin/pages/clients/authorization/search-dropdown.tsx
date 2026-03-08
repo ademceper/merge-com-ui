@@ -1,10 +1,14 @@
 import type PolicyProviderRepresentation from "@keycloak/keycloak-admin-client/lib/defs/policyProviderRepresentation";
-import { SelectField, TextControl } from "../../../../shared/keycloak-ui-shared";
+import { useTranslation } from "@merge-rd/i18n";
 import { Button } from "@merge-rd/ui/components/button";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger } from "@merge-rd/ui/components/dropdown-menu";
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuTrigger
+} from "@merge-rd/ui/components/dropdown-menu";
 import { useEffect } from "react";
 import { FormProvider, useForm } from "react-hook-form";
-import { useTranslation } from "@merge-rd/i18n";
+import { SelectField, TextControl } from "../../../../shared/keycloak-ui-shared";
 import useToggle from "../../../shared/lib/useToggle";
 
 export type SearchForm = {
@@ -61,10 +65,7 @@ export const SearchDropdown = ({
             </DropdownMenuTrigger>
             <DropdownMenuContent className="p-4 w-80">
                 <FormProvider {...form}>
-                    <form
-                        className="space-y-4"
-                        onSubmit={handleSubmit(submit)}
-                    >
+                    <form className="space-y-4" onSubmit={handleSubmit(submit)}>
                         <TextControl name="name" label={t("name")} />
                         {type === "resource" && (
                             <>
@@ -76,7 +77,9 @@ export const SearchDropdown = ({
                         {type !== "resource" && type !== "policy" && (
                             <TextControl name="resource" label={t("resource")} />
                         )}
-                        {type !== "policy" && <TextControl name="scope" label={t("scope")} />}
+                        {type !== "policy" && (
+                            <TextControl name="scope" label={t("scope")} />
+                        )}
                         {type !== "resource" && (
                             <SelectField
                                 name="type"

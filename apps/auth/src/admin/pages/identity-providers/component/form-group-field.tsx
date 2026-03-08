@@ -1,6 +1,6 @@
-import { Label } from "@merge-rd/ui/components/label";
-import { PropsWithChildren } from "react";
 import { useTranslation } from "@merge-rd/i18n";
+import { Label } from "@merge-rd/ui/components/label";
+import type { PropsWithChildren } from "react";
 
 import { HelpItem } from "../../../../shared/keycloak-ui-shared";
 

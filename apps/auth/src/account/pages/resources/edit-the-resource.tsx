@@ -9,23 +9,23 @@
 
 // @ts-nocheck
 
+import { useTranslation } from "@merge-rd/i18n";
+import { Button } from "@merge-rd/ui/components/button";
+import {
+    Dialog,
+    DialogContent,
+    DialogDescription,
+    DialogFooter,
+    DialogHeader,
+    DialogTitle
+} from "@merge-rd/ui/components/dialog";
+import { Fragment, useEffect } from "react";
+import { FormProvider, useFieldArray, useForm } from "react-hook-form";
 import {
     MultiSelectField,
     TextControl,
     useEnvironment
 } from "../../../shared/keycloak-ui-shared";
-import { Fragment, useEffect } from "react";
-import { FormProvider, useFieldArray, useForm } from "react-hook-form";
-import { useTranslation } from "@merge-rd/i18n";
-import {
-    Dialog,
-    DialogContent,
-    DialogHeader,
-    DialogTitle,
-    DialogFooter,
-    DialogDescription
-} from "@merge-rd/ui/components/dialog";
-import { Button } from "@merge-rd/ui/components/button";
 
 import { updatePermissions } from "../../app/api";
 import type { Permission, Resource } from "../../shared/api/representations";
@@ -75,15 +75,26 @@ export const EditTheResource = ({
     };
 
     return (
-        <Dialog open onOpenChange={open => { if (!open) onClose(); }}>
+        <Dialog
+            open
+            onOpenChange={open => {
+                if (!open) onClose();
+            }}
+        >
             <DialogContent className="sm:max-w-lg">
                 <DialogHeader>
-                    <DialogTitle>{t("editTheResource", { name: resource.name })}</DialogTitle>
+                    <DialogTitle>
+                        {t("editTheResource", { name: resource.name })}
+                    </DialogTitle>
                     <DialogDescription className="sr-only">
                         {t("editTheResource", { name: resource.name })}
                     </DialogDescription>
                 </DialogHeader>
-                <form id="edit-form" onSubmit={handleSubmit(editShares)} className="space-y-4">
+                <form
+                    id="edit-form"
+                    onSubmit={handleSubmit(editShares)}
+                    className="space-y-4"
+                >
                     <FormProvider {...form}>
                         {fields.map((p, index) => (
                             <Fragment key={p.id}>
@@ -97,10 +108,12 @@ export const EditTheResource = ({
                                     name={`permissions.${index}.scopes`}
                                     label="permissions"
                                     defaultValue={[]}
-                                    options={resource.scopes.map(({ name, displayName }) => ({
-                                        key: name,
-                                        value: displayName || name
-                                    }))}
+                                    options={resource.scopes.map(
+                                        ({ name, displayName }) => ({
+                                            key: name,
+                                            value: displayName || name
+                                        })
+                                    )}
                                 />
                             </Fragment>
                         ))}

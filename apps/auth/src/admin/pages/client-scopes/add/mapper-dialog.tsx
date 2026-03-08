@@ -1,13 +1,16 @@
-import { useEffect, useMemo, useState } from "react";
-import { useTranslation } from "@merge-rd/i18n";
-import { Button } from "@merge-rd/ui/components/button";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@merge-rd/ui/components/dialog";
-
 import type ProtocolMapperRepresentation from "@keycloak/keycloak-admin-client/lib/defs/protocolMapperRepresentation";
 import type { ProtocolMapperTypeRepresentation } from "@keycloak/keycloak-admin-client/lib/defs/serverInfoRepesentation";
-
-import { useServerInfo } from "../../../app/providers/server-info/server-info-provider";
-import { DataTable } from "@/admin/shared/ui/data-table";
+import { useTranslation } from "@merge-rd/i18n";
+import { Button } from "@merge-rd/ui/components/button";
+import { Checkbox } from "@merge-rd/ui/components/checkbox";
+import {
+    Dialog,
+    DialogContent,
+    DialogDescription,
+    DialogFooter,
+    DialogHeader,
+    DialogTitle
+} from "@merge-rd/ui/components/dialog";
 import {
     Empty,
     EmptyContent,
@@ -15,8 +18,10 @@ import {
     EmptyHeader,
     EmptyTitle
 } from "@merge-rd/ui/components/empty";
+import { useEffect, useMemo, useState } from "react";
+import { DataTable } from "@/admin/shared/ui/data-table";
+import { useServerInfo } from "../../../app/providers/server-info/server-info-provider";
 import useLocaleSort, { mapByKey } from "../../../shared/lib/useLocaleSort";
-import { Checkbox } from "@merge-rd/ui/components/checkbox";
 
 type Row = {
     id: string;
@@ -82,7 +87,12 @@ export const AddMapperDialog = (props: AddMapperDialogProps) => {
     const header = [t("name"), t("description")];
 
     return (
-        <Dialog open={props.open} onOpenChange={open => { if (!open) props.toggleDialog(); }}>
+        <Dialog
+            open={props.open}
+            onOpenChange={open => {
+                if (!open) props.toggleDialog();
+            }}
+        >
             <DialogContent className="max-w-3xl">
                 <DialogHeader>
                     <DialogTitle>
@@ -127,11 +137,15 @@ export const AddMapperDialog = (props: AddMapperDialogProps) => {
                                 size: 40,
                                 cell: ({ row }) => (
                                     <Checkbox
-                                        checked={selectedRows.some(s => s.id === row.original.id)}
+                                        checked={selectedRows.some(
+                                            s => s.id === row.original.id
+                                        )}
                                         onCheckedChange={() => {
                                             setSelectedRows(prev =>
                                                 prev.some(s => s.id === row.original.id)
-                                                    ? prev.filter(s => s.id !== row.original.id)
+                                                    ? prev.filter(
+                                                          s => s.id !== row.original.id
+                                                      )
                                                     : [...prev, row.original]
                                             );
                                         }}
@@ -146,8 +160,14 @@ export const AddMapperDialog = (props: AddMapperDialogProps) => {
                         searchPlaceholder={t("searchForMapper")}
                         emptyContent={
                             <Empty className="py-12">
-                                <EmptyHeader><EmptyTitle>{t("emptyMappers")}</EmptyTitle></EmptyHeader>
-                                <EmptyContent><EmptyDescription>{t("emptyBuiltInMappersInstructions")}</EmptyDescription></EmptyContent>
+                                <EmptyHeader>
+                                    <EmptyTitle>{t("emptyMappers")}</EmptyTitle>
+                                </EmptyHeader>
+                                <EmptyContent>
+                                    <EmptyDescription>
+                                        {t("emptyBuiltInMappersInstructions")}
+                                    </EmptyDescription>
+                                </EmptyContent>
                             </Empty>
                         }
                         emptyMessage={t("emptyMappers")}

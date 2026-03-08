@@ -1,12 +1,12 @@
+import { useTranslation } from "@merge-rd/i18n";
+import { Button } from "@merge-rd/ui/components/button";
 import {
     DropdownMenu,
     DropdownMenuContent,
     DropdownMenuItem,
     DropdownMenuTrigger
 } from "@merge-rd/ui/components/dropdown-menu";
-import { Button } from "@merge-rd/ui/components/button";
 import { useState } from "react";
-import { useTranslation } from "@merge-rd/i18n";
 
 import type { ExpandableExecution } from "../execution-model";
 
@@ -50,9 +50,8 @@ export const FlowRequirementDropdown = ({
                     </DropdownMenuContent>
                 </DropdownMenu>
             )}
-            {(!flow.requirementChoices || flow.requirementChoices.length <= 1) && (
-                <>{t(`requirements.${flow.requirement}`)}</>
-            )}
+            {(!flow.requirementChoices || flow.requirementChoices.length <= 1) &&
+                t(`requirements.${flow.requirement}`)}
         </>
     );
 };

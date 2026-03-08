@@ -1,9 +1,9 @@
 import type { RoleMappingPayload } from "@keycloak/keycloak-admin-client/lib/defs/roleRepresentation";
 import { useTranslation } from "@merge-rd/i18n";
-import { useAdminClient } from "../../app/admin-client";
-import { getErrorDescription, getErrorMessage } from "../../../shared/keycloak-ui-shared";
 import { toast } from "sonner";
-import { RoleMapping, Row } from "../../shared/ui/role-mapping/role-mapping";
+import { getErrorDescription, getErrorMessage } from "../../../shared/keycloak-ui-shared";
+import { useAdminClient } from "../../app/admin-client";
+import { RoleMapping, type Row } from "../../shared/ui/role-mapping/role-mapping";
 
 type GroupRoleMappingProps = {
     id: string;
@@ -15,12 +15,11 @@ export const GroupRoleMapping = ({ id, name, canManageGroup }: GroupRoleMappingP
     const { adminClient } = useAdminClient();
 
     const { t } = useTranslation();
-const assignRoles = async (rows: Row[]) => {
+    const assignRoles = async (rows: Row[]) => {
         try {
             const realmRoles = rows
                 .filter(row => row.client === undefined)
-                .map(row => row.role as RoleMappingPayload)
-                .flat();
+                .flatMap(row => row.role as RoleMappingPayload);
             await adminClient.groups.addRealmRoleMappings({
                 id,
                 roles: realmRoles
@@ -38,7 +37,9 @@ const assignRoles = async (rows: Row[]) => {
             );
             toast.success(t("roleMappingUpdatedSuccess"));
         } catch (error) {
-            toast.error(t("roleMappingUpdatedError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
+            toast.error(t("roleMappingUpdatedError", { error: getErrorMessage(error) }), {
+                description: getErrorDescription(error)
+            });
         }
     };
 

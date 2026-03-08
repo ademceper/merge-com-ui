@@ -1,9 +1,12 @@
 import type ScopeRepresentation from "@keycloak/keycloak-admin-client/lib/defs/scopeRepresentation";
-import { Alert, AlertTitle, AlertDescription } from "@merge-rd/ui/components/alert";
 import { useTranslation } from "@merge-rd/i18n";
-import { useAdminClient } from "../../../app/admin-client";
-import { getErrorDescription, getErrorMessage } from "../../../../shared/keycloak-ui-shared";
+import { Alert, AlertDescription, AlertTitle } from "@merge-rd/ui/components/alert";
 import { toast } from "sonner";
+import {
+    getErrorDescription,
+    getErrorMessage
+} from "../../../../shared/keycloak-ui-shared";
+import { useAdminClient } from "../../../app/admin-client";
 import { ConfirmDialogModal } from "../../../shared/ui/confirm-dialog/confirm-dialog";
 import type { PermissionScopeRepresentation } from "./scopes";
 
@@ -25,7 +28,7 @@ export const DeleteScopeDialog = ({
     const { adminClient } = useAdminClient();
 
     const { t } = useTranslation();
-return (
+    return (
         <ConfirmDialogModal
             open={open}
             toggleDialog={toggleDialog}
@@ -40,7 +43,10 @@ return (
                     toast.success(t("resourceScopeSuccess"));
                     refresh();
                 } catch (error) {
-                    toast.error(t("resourceScopeError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
+                    toast.error(
+                        t("resourceScopeError", { error: getErrorMessage(error) }),
+                        { description: getErrorDescription(error) }
+                    );
                 }
             }}
         >

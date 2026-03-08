@@ -1,12 +1,7 @@
-import { createFileRoute } from "@tanstack/react-router";
-import { lazy } from "react";
-
-const AddMapper = lazy(
-    () => import("../../../../../../../pages/identity-providers/add/add-mapper"),
-);
+import { createFileRoute, lazyRouteComponent } from "@tanstack/react-router";
 
 export const Route = createFileRoute(
     "/_app/$realm/identity-providers/$providerId/$alias/mappers/$id",
 )({
-    component: AddMapper,
+    component: lazyRouteComponent(() => import("../../../../../../../pages/identity-providers/add/add-mapper")),
 });

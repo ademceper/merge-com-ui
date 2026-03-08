@@ -1,13 +1,13 @@
-import RealmRepresentation from "@keycloak/keycloak-admin-client/lib/defs/realmRepresentation";
+import type RealmRepresentation from "@keycloak/keycloak-admin-client/lib/defs/realmRepresentation";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useParams } from "@tanstack/react-router";
+import { type PropsWithChildren, useCallback, useEffect, useMemo } from "react";
 import {
     createNamedContext,
     KeycloakSpinner,
     useEnvironment,
-    useFetch,
     useRequiredContext
 } from "../../../../shared/keycloak-ui-shared";
-import { PropsWithChildren, useEffect, useState } from "react";
-import { useParams } from "@tanstack/react-router";
 import { useAdminClient } from "../../admin-client";
 import { i18n } from "../../i18n";
 
@@ -25,12 +25,14 @@ const RealmContext = createNamedContext<RealmContextType | undefined>(
 export const RealmContextProvider = ({ children }: PropsWithChildren) => {
     const { adminClient } = useAdminClient();
     const { environment } = useEnvironment();
-    const [key, setKey] = useState(0);
-    const refresh = () => setKey(key + 1);
-    const [realmRepresentation, setRealmRepresentation] = useState<RealmRepresentation>();
+    const queryClient = useQueryClient();
 
     const { realm: routeRealm } = useParams({ strict: false }) as { realm?: string };
     const realm = routeRealm ?? environment.realm;
+
+    const refresh = useCallback(() => {
+        queryClient.invalidateQueries({ queryKey: ["realm", realm] });
+    }, [queryClient, realm]);
 
     // Configure admin client to use selected realm when it changes.
     useEffect(() => {
@@ -41,17 +43,24 @@ export const RealmContextProvider = ({ children }: PropsWithChildren) => {
             i18n.setDefaultNamespace(namespace);
         })();
     }, [realm]);
-    useFetch(() => adminClient.realms.findOne({ realm }), setRealmRepresentation, [
-        realm,
-        key
-    ]);
+
+    const { data: realmRepresentation } = useQuery({
+        queryKey: ["realm", realm],
+        queryFn: () => adminClient.realms.findOne({ realm }),
+        staleTime: 5 * 60_000
+    });
+
+    const value = useMemo(
+        () => ({ realm, realmRepresentation, refresh }),
+        [realm, realmRepresentation, refresh]
+    );
 
     if (!realmRepresentation) {
         return <KeycloakSpinner />;
     }
 
     return (
-        <RealmContext.Provider value={{ realm, realmRepresentation, refresh }}>
+        <RealmContext.Provider value={value}>
             {children}
         </RealmContext.Provider>
     );

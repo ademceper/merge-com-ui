@@ -1,5 +1,5 @@
-import { ReactNode, useMemo, useState } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@merge-rd/ui/components/tabs";
+import { type ReactNode, useMemo, useState } from "react";
 import { FormPanel } from "./form-panel";
 
 export const mainPageContentId = "kc-main-content-page-container";
@@ -52,11 +52,11 @@ export const ScrollForm = ({
                         {panel}
                     </FormPanel>
                 ) : (
-                    <section id={spacesToHyphens(title.toLowerCase())}>
-                        {panel}
-                    </section>
+                    <section id={spacesToHyphens(title.toLowerCase())}>{panel}</section>
                 )}
-                {actions && <div className="mt-6 flex shrink-0 justify-end">{actions}</div>}
+                {actions && (
+                    <div className="mt-6 flex shrink-0 justify-end">{actions}</div>
+                )}
             </div>
         );
     }
@@ -70,7 +70,11 @@ export const ScrollForm = ({
                     aria-label={label}
                 >
                     {shownSections.map(({ title }) => (
-                        <TabsTrigger key={title} value={title} className="whitespace-nowrap">
+                        <TabsTrigger
+                            key={title}
+                            value={title}
+                            className="whitespace-nowrap"
+                        >
                             {title}
                         </TabsTrigger>
                     ))}

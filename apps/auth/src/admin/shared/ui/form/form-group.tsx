@@ -1,5 +1,5 @@
 import { Label } from "@merge-rd/ui/components/label";
-import { ReactNode } from "react";
+import type { ReactNode } from "react";
 
 type FormGroupProps = {
     label: string;
@@ -10,7 +10,14 @@ type FormGroupProps = {
     children: ReactNode;
 };
 
-export const FormGroup = ({ label, fieldId, labelIcon, id, hasNoPaddingTop: _hasNoPaddingTop, children }: FormGroupProps) => (
+export const FormGroup = ({
+    label,
+    fieldId,
+    labelIcon,
+    id,
+    hasNoPaddingTop: _hasNoPaddingTop,
+    children
+}: FormGroupProps) => (
     <div className="space-y-2">
         <div className="flex items-center gap-1">
             <Label htmlFor={fieldId} id={id}>

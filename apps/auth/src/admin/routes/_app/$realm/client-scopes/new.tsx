@@ -1,10 +1,5 @@
-import { createFileRoute } from "@tanstack/react-router";
-import { lazy } from "react";
-
-const CreateClientScope = lazy(
-    () => import("../../../../pages/client-scopes/create-client-scope"),
-);
+import { createFileRoute, lazyRouteComponent } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/_app/$realm/client-scopes/new")({
-    component: CreateClientScope,
+    component: lazyRouteComponent(() => import("../../../../pages/client-scopes/create-client-scope")),
 });

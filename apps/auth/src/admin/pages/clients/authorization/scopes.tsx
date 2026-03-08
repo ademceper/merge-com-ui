@@ -1,38 +1,49 @@
 import type PolicyRepresentation from "@keycloak/keycloak-admin-client/lib/defs/policyRepresentation";
 import type ScopeRepresentation from "@keycloak/keycloak-admin-client/lib/defs/scopeRepresentation";
-import { useFetch } from "../../../../shared/keycloak-ui-shared";
-import { Empty, EmptyContent, EmptyDescription, EmptyHeader, EmptyTitle } from "@merge-rd/ui/components/empty";
-import { Input } from "@merge-rd/ui/components/input";
-import { MagnifyingGlass } from "@phosphor-icons/react";
+import { useTranslation } from "@merge-rd/i18n";
 import { Button } from "@merge-rd/ui/components/button";
 import {
     DropdownMenu,
     DropdownMenuContent,
     DropdownMenuItem,
-    DropdownMenuTrigger,
+    DropdownMenuTrigger
 } from "@merge-rd/ui/components/dropdown-menu";
+import {
+    Empty,
+    EmptyContent,
+    EmptyDescription,
+    EmptyHeader,
+    EmptyTitle
+} from "@merge-rd/ui/components/empty";
+import { Input } from "@merge-rd/ui/components/input";
+import {
+    CaretDown,
+    CaretRight,
+    DotsThreeVertical,
+    MagnifyingGlass
+} from "@phosphor-icons/react";
+import { Link } from "@tanstack/react-router";
+import { Fragment, useEffect, useState } from "react";
 import {
     Table,
     TableBody,
     TableCell,
     TableHead,
     TableHeader,
-    TableRow,
+    TableRow
 } from "@/admin/shared/ui/data-table";
 import { TablePagination } from "@/admin/shared/ui/table-pagination";
-import { CaretDown, CaretRight, DotsThreeVertical } from "@phosphor-icons/react";
-import { Fragment, useState } from "react";
-import { useTranslation } from "@merge-rd/i18n";
-import { Link } from "@tanstack/react-router";
-import { useAdminClient } from "../../../app/admin-client";
 import { KeycloakSpinner } from "../../../../shared/keycloak-ui-shared";
+import { useAdminClient } from "../../../app/admin-client";
 import { useRealm } from "../../../app/providers/realm-context/realm-context";
 import useToggle from "../../../shared/lib/useToggle";
-import { toNewPermission } from "../routes/new-permission";
-import { toNewScope } from "../routes/new-scope";
-import { toPermissionDetails } from "../routes/permission-details";
-import { toResourceDetails } from "../routes/resource";
-import { toScopeDetails } from "../routes/scope";
+import { toNewPermission } from "../../../shared/lib/routes/clients";
+import { toNewScope } from "../../../shared/lib/routes/clients";
+import { toPermissionDetails } from "../../../shared/lib/routes/clients";
+import { toResourceDetails } from "../../../shared/lib/routes/clients";
+import { toScopeDetails } from "../../../shared/lib/routes/clients";
+import { useScopePermissions } from "./api/use-scope-permissions";
+import { useScopes as useScopesQuery } from "./api/use-scopes";
 import { DeleteScopeDialog } from "./delete-scope-dialog";
 import { DetailDescriptionLink } from "./detail-description";
 
@@ -62,81 +73,54 @@ export const AuthorizationScopes = ({ clientId, isDisabled = false }: ScopesProp
     const [selectedScope, setSelectedScope] = useState<PermissionScopeRepresentation>();
     const [collapsed, setCollapsed] = useState<ExpandableRow[]>([]);
 
-    const [key, setKey] = useState(0);
-    const refresh = () => setKey(key + 1);
-
     const [max, setMax] = useState(10);
     const [first, setFirst] = useState(0);
     const [search, setSearch] = useState("");
 
-    useFetch(
-        () => {
-            const params = {
-                first,
-                max: max + 1,
-                deep: false,
-                name: search
-            };
-            return adminClient.clients.listAllScopes({
-                ...params,
-                id: clientId
-            });
-        },
-        scopes => {
-            setScopes(scopes.map(s => ({ ...s, isLoaded: false })));
-            setCollapsed(scopes.map(s => ({ id: s.id!, isExpanded: false })));
-        },
-        [key, search, first, max]
-    );
+    const { data: scopesData, refetch } = useScopesQuery(clientId, first, max, search);
+    const refresh = () => {
+        refetch();
+    };
+
+    useEffect(() => {
+        if (scopesData) {
+            setScopes(scopesData.map(s => ({ ...s, isLoaded: false })));
+            setCollapsed(scopesData.map(s => ({ id: s.id!, isExpanded: false })));
+        }
+    }, [scopesData]);
 
     const getScope = (id: string) => scopes?.find(scope => scope.id === id)!;
     const isExpanded = (id: string | undefined) =>
         collapsed.find(c => c.id === id)?.isExpanded || false;
 
-    useFetch(
-        () => {
-            const newlyOpened = collapsed
-                .filter(row => row.isExpanded)
-                .map(({ id }) => getScope(id))
-                .filter(s => !s.isLoaded);
+    // Find the first newly-opened scope that needs loading
+    const newlyOpenedScope = collapsed
+        .filter(row => row.isExpanded)
+        .map(({ id }) => scopes?.find(scope => scope.id === id))
+        .find(s => s && !s.isLoaded);
 
-            return Promise.all(
-                newlyOpened.map(async scope => {
-                    const [resources, permissions] = await Promise.all([
-                        adminClient.clients.listAllResourcesByScope({
-                            id: clientId,
-                            scopeId: scope.id!
-                        }),
-                        adminClient.clients.listAllPermissionsByScope({
-                            id: clientId,
-                            scopeId: scope.id!
-                        })
-                    ]);
-
-                    return {
-                        ...scope,
-                        resources,
-                        permissions,
-                        isLoaded: true
-                    };
-                })
-            );
-        },
-        resourcesScopes => {
-            let result = [...(scopes || [])];
-            resourcesScopes.forEach(resourceScope => {
-                const index = scopes?.findIndex(scope => resourceScope.id === scope.id)!;
-                result = [
-                    ...result.slice(0, index),
-                    resourceScope,
-                    ...result.slice(index + 1)
-                ];
-            });
-
-            setScopes(result);
-        },
-        [collapsed]
+    const { data: scopePermData } = useScopePermissions(
+        clientId,
+        newlyOpenedScope?.id ?? "",
+        !!newlyOpenedScope
     );
+
+    useEffect(() => {
+        if (scopePermData && newlyOpenedScope) {
+            const updatedScope = {
+                ...newlyOpenedScope,
+                resources: scopePermData.resources,
+                permissions: scopePermData.permissions,
+                isLoaded: true
+            };
+            setScopes(prev => {
+                if (!prev) return prev;
+                const index = prev.findIndex(s => s.id === newlyOpenedScope.id);
+                if (index === -1) return prev;
+                return [...prev.slice(0, index), updatedScope, ...prev.slice(index + 1)];
+            });
+        }
+    }, [scopePermData, newlyOpenedScope?.id]);
 
     if (!scopes) {
         return <KeycloakSpinner />;
@@ -162,7 +146,10 @@ export const AuthorizationScopes = ({ clientId, isDisabled = false }: ScopesProp
                                 placeholder={t("searchByName")}
                                 defaultValue={search}
                                 className="border-0 bg-transparent shadow-none focus-visible:ring-0 flex-1 min-w-0"
-                                onKeyDown={(e) => { if (e.key === "Enter") setSearch((e.target as HTMLInputElement).value); }}
+                                onKeyDown={e => {
+                                    if (e.key === "Enter")
+                                        setSearch((e.target as HTMLInputElement).value);
+                                }}
                             />
                         </div>
                         <TablePagination
@@ -171,11 +158,16 @@ export const AuthorizationScopes = ({ clientId, isDisabled = false }: ScopesProp
                             max={max}
                             onNextClick={setFirst}
                             onPreviousClick={setFirst}
-                            onPerPageSelect={(_first, newMax) => { setMax(newMax); setFirst(0); }}
+                            onPerPageSelect={(_first, newMax) => {
+                                setMax(newMax);
+                                setFirst(0);
+                            }}
                             t={t}
                         />
                         <Button data-testid="createAuthorizationScope" asChild>
-                            <Link to={toNewScope({ realm, id: clientId }) as string}>{t("createAuthorizationScope")}</Link>
+                            <Link to={toNewScope({ realm, id: clientId }) as string}>
+                                {t("createAuthorizationScope")}
+                            </Link>
                         </Button>
                     </div>
                     {!noData && (
@@ -200,11 +192,21 @@ export const AuthorizationScopes = ({ clientId, isDisabled = false }: ScopesProp
                                                     className="h-8 w-8"
                                                     aria-expanded={isExpanded(scope.id)}
                                                     onClick={() => {
-                                                        const newVal = !isExpanded(scope.id);
+                                                        const newVal = !isExpanded(
+                                                            scope.id
+                                                        );
                                                         setCollapsed([
-                                                            ...collapsed.slice(0, rowIndex),
-                                                            { id: scope.id!, isExpanded: newVal },
-                                                            ...collapsed.slice(rowIndex + 1)
+                                                            ...collapsed.slice(
+                                                                0,
+                                                                rowIndex
+                                                            ),
+                                                            {
+                                                                id: scope.id!,
+                                                                isExpanded: newVal
+                                                            },
+                                                            ...collapsed.slice(
+                                                                rowIndex + 1
+                                                            )
                                                         ]);
                                                     }}
                                                 >
@@ -215,13 +217,17 @@ export const AuthorizationScopes = ({ clientId, isDisabled = false }: ScopesProp
                                                     )}
                                                 </Button>
                                             </TableCell>
-                                            <TableCell data-testid={`name-column-${scope.name}`}>
+                                            <TableCell
+                                                data-testid={`name-column-${scope.name}`}
+                                            >
                                                 <Link
-                                                    to={toScopeDetails({
-                                                        realm,
-                                                        id: clientId,
-                                                        scopeId: scope.id!
-                                                    }) as string}
+                                                    to={
+                                                        toScopeDetails({
+                                                            realm,
+                                                            id: clientId,
+                                                            scopeId: scope.id!
+                                                        }) as string
+                                                    }
                                                 >
                                                     {scope.name}
                                                 </Link>
@@ -230,12 +236,14 @@ export const AuthorizationScopes = ({ clientId, isDisabled = false }: ScopesProp
                                             <TableCell className="w-10">
                                                 <Button variant="link" asChild>
                                                     <Link
-                                                        to={toNewPermission({
-                                                            realm,
-                                                            id: clientId,
-                                                            permissionType: "scope",
-                                                            selectedId: scope.id
-                                                        }) as string}
+                                                        to={
+                                                            toNewPermission({
+                                                                realm,
+                                                                id: clientId,
+                                                                permissionType: "scope",
+                                                                selectedId: scope.id
+                                                            }) as string
+                                                        }
                                                     >
                                                         {t("createPermission")}
                                                     </Link>
@@ -269,11 +277,12 @@ export const AuthorizationScopes = ({ clientId, isDisabled = false }: ScopesProp
                                         {isExpanded(scope.id) && (
                                             <TableRow>
                                                 <TableCell />
-                                                <TableCell colSpan={4} className="bg-muted/30 p-4">
+                                                <TableCell
+                                                    colSpan={4}
+                                                    className="bg-muted/30 p-4"
+                                                >
                                                     {scope.isLoaded ? (
-                                                        <dl
-                                                            className="grid grid-cols-[auto_1fr] gap-x-4 gap-y-1 keycloak_resource_details"
-                                                        >
+                                                        <dl className="grid grid-cols-[auto_1fr] gap-x-4 gap-y-1 keycloak_resource_details">
                                                             <DetailDescriptionLink
                                                                 name="resources"
                                                                 array={scope.resources}
@@ -294,8 +303,10 @@ export const AuthorizationScopes = ({ clientId, isDisabled = false }: ScopesProp
                                                                     toPermissionDetails({
                                                                         id: clientId,
                                                                         realm,
-                                                                        permissionId: p.id!,
-                                                                        permissionType: p.type!
+                                                                        permissionId:
+                                                                            p.id!,
+                                                                        permissionType:
+                                                                            p.type!
                                                                     })
                                                                 }
                                                             />
@@ -315,15 +326,33 @@ export const AuthorizationScopes = ({ clientId, isDisabled = false }: ScopesProp
             )}
             {noData && !searching && (
                 <Empty className="py-12">
-                    <EmptyHeader><EmptyTitle>{t("emptyAuthorizationScopes")}</EmptyTitle></EmptyHeader>
-                    <EmptyContent><EmptyDescription>{t("emptyAuthorizationInstructions")}</EmptyDescription></EmptyContent>
-                    {!isDisabled && <Button className="mt-2" asChild><Link to={toNewScope({ id: clientId, realm }) as string}>{t("createAuthorizationScope")}</Link></Button>}
+                    <EmptyHeader>
+                        <EmptyTitle>{t("emptyAuthorizationScopes")}</EmptyTitle>
+                    </EmptyHeader>
+                    <EmptyContent>
+                        <EmptyDescription>
+                            {t("emptyAuthorizationInstructions")}
+                        </EmptyDescription>
+                    </EmptyContent>
+                    {!isDisabled && (
+                        <Button className="mt-2" asChild>
+                            <Link to={toNewScope({ id: clientId, realm }) as string}>
+                                {t("createAuthorizationScope")}
+                            </Link>
+                        </Button>
+                    )}
                 </Empty>
             )}
             {noData && searching && (
                 <Empty className="py-12">
-                    <EmptyHeader><EmptyTitle>{t("noSearchResults")}</EmptyTitle></EmptyHeader>
-                    <EmptyContent><EmptyDescription>{t("noSearchResultsInstructions")}</EmptyDescription></EmptyContent>
+                    <EmptyHeader>
+                        <EmptyTitle>{t("noSearchResults")}</EmptyTitle>
+                    </EmptyHeader>
+                    <EmptyContent>
+                        <EmptyDescription>
+                            {t("noSearchResultsInstructions")}
+                        </EmptyDescription>
+                    </EmptyContent>
                 </Empty>
             )}
         </div>

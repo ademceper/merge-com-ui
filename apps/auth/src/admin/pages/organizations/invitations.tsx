@@ -1,27 +1,6 @@
 import type { OrganizationInvitationRepresentation } from "@keycloak/keycloak-admin-client";
 import { OrganizationInvitationStatus } from "@keycloak/keycloak-admin-client";
-import { Button } from "@merge-rd/ui/components/button";
-import { Badge } from "@merge-rd/ui/components/badge";
-import { useState } from "react";
 import { useTranslation } from "@merge-rd/i18n";
-import { CheckboxFilterComponent } from "../../shared/ui/dynamic/checkbox-filter-component";
-import { getErrorDescription, getErrorMessage } from "../../../shared/keycloak-ui-shared";
-import { useOrganizationInvitations, useResendInvitation, useDeleteInvitations } from "./api/queries";
-import { toast } from "sonner";
-import { useParams } from "../../shared/lib/useParams";
-import { Checkbox } from "@merge-rd/ui/components/checkbox";
-import { DataTable, DataTableRowActions } from "@/admin/shared/ui/data-table";
-import {
-    Empty,
-    EmptyContent,
-    EmptyDescription,
-    EmptyHeader,
-    EmptyTitle
-} from "@merge-rd/ui/components/empty";
-import useToggle from "../../shared/lib/useToggle";
-import { InviteMemberModal } from "./invite-member-modal";
-import { EditOrganizationParams } from "./routes/edit-organization";
-import { SearchInputComponent } from "../../shared/ui/dynamic/search-input-component";
 import {
     AlertDialog,
     AlertDialogAction,
@@ -32,7 +11,30 @@ import {
     AlertDialogHeader,
     AlertDialogTitle
 } from "@merge-rd/ui/components/alert-dialog";
+import { Badge } from "@merge-rd/ui/components/badge";
+import { Button } from "@merge-rd/ui/components/button";
+import { Checkbox } from "@merge-rd/ui/components/checkbox";
+import {
+    Empty,
+    EmptyContent,
+    EmptyDescription,
+    EmptyHeader,
+    EmptyTitle
+} from "@merge-rd/ui/components/empty";
+import { useState } from "react";
+import { toast } from "sonner";
+import { DataTable, DataTableRowActions } from "@/admin/shared/ui/data-table";
+import { getErrorDescription, getErrorMessage } from "../../../shared/keycloak-ui-shared";
 import useFormatDate from "../../shared/lib/useFormatDate";
+import { useParams } from "../../shared/lib/useParams";
+import useToggle from "../../shared/lib/useToggle";
+import { CheckboxFilterComponent } from "../../shared/ui/dynamic/checkbox-filter-component";
+import { SearchInputComponent } from "../../shared/ui/dynamic/search-input-component";
+import { useDeleteInvitations } from "./api/use-delete-invitations";
+import { useOrganizationInvitations } from "./api/use-organization-invitations";
+import { useResendInvitation } from "./api/use-resend-invitation";
+import { InviteMemberModal } from "./invite-member-modal";
+import type { EditOrganizationParams } from "../../shared/lib/routes/organizations";
 
 const InvitationStatusBadge = ({ status }: { status?: OrganizationInvitationStatus }) => {
     const { t } = useTranslation();
@@ -107,7 +109,10 @@ export const Invitations = () => {
             await resendMutation.mutateAsync(invitation.id!);
             toast.success(t("organizationInvitationResent"));
         } catch (error) {
-            toast.error(t("organizationInvitationResendError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
+            toast.error(
+                t("organizationInvitationResendError", { error: getErrorMessage(error) }),
+                { description: getErrorDescription(error) }
+            );
         }
     };
 
@@ -116,11 +121,18 @@ export const Invitations = () => {
     const onDeleteConfirm = async () => {
         try {
             await deleteMutation.mutateAsync(selectedInvitations.map(i => i.id!));
-            toast.success(t("organizationInvitationsDeleted", { count: selectedInvitations.length }));
+            toast.success(
+                t("organizationInvitationsDeleted", { count: selectedInvitations.length })
+            );
             setSelectedInvitations([]);
             setDeleteDialogOpen(false);
         } catch (error) {
-            toast.error(t("organizationInvitationsDeleteError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
+            toast.error(
+                t("organizationInvitationsDeleteError", {
+                    error: getErrorMessage(error)
+                }),
+                { description: getErrorDescription(error) }
+            );
         }
     };
 
@@ -141,12 +153,20 @@ export const Invitations = () => {
             <AlertDialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
                 <AlertDialogContent>
                     <AlertDialogHeader>
-                        <AlertDialogTitle>{t("organizationInvitationsDeleteConfirmTitle")}</AlertDialogTitle>
-                        <AlertDialogDescription>{t("organizationInvitationsDeleteConfirm")}</AlertDialogDescription>
+                        <AlertDialogTitle>
+                            {t("organizationInvitationsDeleteConfirmTitle")}
+                        </AlertDialogTitle>
+                        <AlertDialogDescription>
+                            {t("organizationInvitationsDeleteConfirm")}
+                        </AlertDialogDescription>
                     </AlertDialogHeader>
                     <AlertDialogFooter>
                         <AlertDialogCancel>{t("cancel")}</AlertDialogCancel>
-                        <AlertDialogAction variant="destructive" data-testid="confirm" onClick={onDeleteConfirm}>
+                        <AlertDialogAction
+                            variant="destructive"
+                            data-testid="confirm"
+                            onClick={onDeleteConfirm}
+                        >
                             {t("delete")}
                         </AlertDialogAction>
                     </AlertDialogFooter>
@@ -168,14 +188,24 @@ export const Invitations = () => {
                         size: 40,
                         cell: ({ row }) => (
                             <Checkbox
-                                checked={selectedInvitations.some(i => i.id === row.original.id)}
+                                checked={selectedInvitations.some(
+                                    i => i.id === row.original.id
+                                )}
                                 onCheckedChange={() => toggleSelect(row.original)}
                             />
                         )
                     },
                     { accessorKey: "email", header: t("email") },
-                    { accessorKey: "firstName", header: t("firstName"), cell: ({ row }) => row.original.firstName || "-" },
-                    { accessorKey: "lastName", header: t("lastName"), cell: ({ row }) => row.original.lastName || "-" },
+                    {
+                        accessorKey: "firstName",
+                        header: t("firstName"),
+                        cell: ({ row }) => row.original.firstName || "-"
+                    },
+                    {
+                        accessorKey: "lastName",
+                        header: t("lastName"),
+                        cell: ({ row }) => row.original.lastName || "-"
+                    },
                     {
                         accessorKey: "sentDate",
                         header: t("sentDate"),
@@ -189,7 +219,9 @@ export const Invitations = () => {
                     {
                         accessorKey: "status",
                         header: t("status"),
-                        cell: ({ row }) => <InvitationStatusBadge status={row.original.status} />
+                        cell: ({ row }) => (
+                            <InvitationStatusBadge status={row.original.status} />
+                        )
                     },
                     {
                         id: "actions",
@@ -200,22 +232,47 @@ export const Invitations = () => {
                             const inv = row.original;
                             return (
                                 <DataTableRowActions row={row}>
-                                    <button type="button" className="flex w-full items-center gap-2 rounded-md px-1.5 py-1 text-left text-sm hover:bg-accent" onClick={() => resendInvitation(inv)}>
+                                    <button
+                                        type="button"
+                                        className="flex w-full items-center gap-2 rounded-md px-1.5 py-1 text-left text-sm hover:bg-accent"
+                                        onClick={() => resendInvitation(inv)}
+                                    >
                                         {t("resendInvitation")}
                                     </button>
                                     {inv.inviteLink && (
-                                        <button type="button" className="flex w-full items-center gap-2 rounded-md px-1.5 py-1 text-left text-sm hover:bg-accent" onClick={async () => {
-                                            try {
-                                                await navigator.clipboard.writeText(inv.inviteLink!);
-                                                toast.success(t("inviteLinkCopied"));
-                                            } catch (err) {
-                                                toast.error(t("clipboardCopyError", { error: getErrorMessage(err) }), { description: getErrorDescription(err) });
-                                            }
-                                        }}>
+                                        <button
+                                            type="button"
+                                            className="flex w-full items-center gap-2 rounded-md px-1.5 py-1 text-left text-sm hover:bg-accent"
+                                            onClick={async () => {
+                                                try {
+                                                    await navigator.clipboard.writeText(
+                                                        inv.inviteLink!
+                                                    );
+                                                    toast.success(t("inviteLinkCopied"));
+                                                } catch (err) {
+                                                    toast.error(
+                                                        t("clipboardCopyError", {
+                                                            error: getErrorMessage(err)
+                                                        }),
+                                                        {
+                                                            description:
+                                                                getErrorDescription(err)
+                                                        }
+                                                    );
+                                                }
+                                            }}
+                                        >
                                             {t("copyInviteLink")}
                                         </button>
                                     )}
-                                    <button type="button" className="flex w-full items-center gap-2 rounded-md px-1.5 py-1 text-left text-sm text-destructive hover:bg-destructive/10" onClick={() => { setSelectedInvitations([inv]); setDeleteDialogOpen(true); }}>
+                                    <button
+                                        type="button"
+                                        className="flex w-full items-center gap-2 rounded-md px-1.5 py-1 text-left text-sm text-destructive hover:bg-destructive/10"
+                                        onClick={() => {
+                                            setSelectedInvitations([inv]);
+                                            setDeleteDialogOpen(true);
+                                        }}
+                                    >
                                         {t("deleteInvitation")}
                                     </button>
                                 </DataTableRowActions>
@@ -228,20 +285,52 @@ export const Invitations = () => {
                 searchPlaceholder={t("searchInvitations")}
                 emptyContent={
                     <Empty className="py-12">
-                        <EmptyHeader><EmptyTitle>{t("emptyInvitations")}</EmptyTitle></EmptyHeader>
+                        <EmptyHeader>
+                            <EmptyTitle>{t("emptyInvitations")}</EmptyTitle>
+                        </EmptyHeader>
                         <EmptyContent>
-                            <EmptyDescription>{t("emptyInvitationsInstructions")}</EmptyDescription>
-                            <Button variant="secondary" onClick={toggleInviteMembers}>{t("inviteMember")}</Button>
+                            <EmptyDescription>
+                                {t("emptyInvitationsInstructions")}
+                            </EmptyDescription>
+                            <Button variant="secondary" onClick={toggleInviteMembers}>
+                                {t("inviteMember")}
+                            </Button>
                         </EmptyContent>
                     </Empty>
                 }
                 emptyMessage={t("emptyInvitations")}
                 toolbar={
                     <div className="flex flex-wrap items-center gap-2">
-                        <SearchInputComponent value={searchText} onChange={setSearchText} onSearch={handleSearch} onClear={clearSearch} placeholder={t("searchInvitations")} aria-label={t("searchInvitations")} />
-                        <Button variant="default" onClick={toggleInviteMembers}>{t("inviteMember")}</Button>
-                        <Button variant="ghost" disabled={selectedInvitations.length === 0} onClick={() => setDeleteDialogOpen(true)}>{t("deleteInvitations")}</Button>
-                        <CheckboxFilterComponent filterPlaceholderText={t("filterByStatus")} isOpen={isStatusFilterOpen} options={statusOptions} onOpenChange={setIsStatusFilterOpen} onToggleClick={() => setIsStatusFilterOpen(!isStatusFilterOpen)} onSelect={onStatusFilterSelect} selectedItems={filteredStatuses} width="200px" />
+                        <SearchInputComponent
+                            value={searchText}
+                            onChange={setSearchText}
+                            onSearch={handleSearch}
+                            onClear={clearSearch}
+                            placeholder={t("searchInvitations")}
+                            aria-label={t("searchInvitations")}
+                        />
+                        <Button variant="default" onClick={toggleInviteMembers}>
+                            {t("inviteMember")}
+                        </Button>
+                        <Button
+                            variant="ghost"
+                            disabled={selectedInvitations.length === 0}
+                            onClick={() => setDeleteDialogOpen(true)}
+                        >
+                            {t("deleteInvitations")}
+                        </Button>
+                        <CheckboxFilterComponent
+                            filterPlaceholderText={t("filterByStatus")}
+                            isOpen={isStatusFilterOpen}
+                            options={statusOptions}
+                            onOpenChange={setIsStatusFilterOpen}
+                            onToggleClick={() =>
+                                setIsStatusFilterOpen(!isStatusFilterOpen)
+                            }
+                            onSelect={onStatusFilterSelect}
+                            selectedItems={filteredStatuses}
+                            width="200px"
+                        />
                     </div>
                 }
             />

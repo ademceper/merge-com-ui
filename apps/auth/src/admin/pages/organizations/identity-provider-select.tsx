@@ -1,21 +1,23 @@
-import IdentityProviderRepresentation from "@keycloak/keycloak-admin-client/lib/defs/identityProviderRepresentation";
-import { IdentityProvidersQuery } from "@keycloak/keycloak-admin-client/lib/resources/identityProviders";
-import { FormErrorText, HelpItem } from "../../../shared/keycloak-ui-shared";
-import { useQuery } from "@tanstack/react-query";
-import { Button } from "@merge-rd/ui/components/button";
+import type { IdentityProvidersQuery } from "@keycloak/keycloak-admin-client/lib/resources/identityProviders";
+import { useTranslation } from "@merge-rd/i18n";
 import { Badge } from "@merge-rd/ui/components/badge";
-import { Label } from "@merge-rd/ui/components/label";
+import { Button } from "@merge-rd/ui/components/button";
 import { Input } from "@merge-rd/ui/components/input";
+import { Label } from "@merge-rd/ui/components/label";
 import { Popover, PopoverContent, PopoverTrigger } from "@merge-rd/ui/components/popover";
 import { X } from "@phosphor-icons/react";
+import { useQuery } from "@tanstack/react-query";
 import { debounce } from "lodash-es";
 import { useCallback, useRef, useState } from "react";
 import { Controller, useFormContext } from "react-hook-form";
-import { useTranslation } from "@merge-rd/i18n";
+import {
+    FormErrorText,
+    HelpItem,
+    KeycloakSpinner
+} from "../../../shared/keycloak-ui-shared";
 import { useAdminClient } from "../../app/admin-client";
-import { ComponentProps } from "../../shared/ui/dynamic/components";
-import { KeycloakSpinner } from "../../../shared/keycloak-ui-shared";
 import useToggle from "../../shared/lib/useToggle";
+import type { ComponentProps } from "../../shared/ui/dynamic/components";
 
 type IdentityProviderSelectProps = Omit<ComponentProps, "convertToName"> & {
     variant?: "typeaheadMulti" | "typeahead";
@@ -69,7 +71,8 @@ export const IdentityProviderSelect = ({
         <div className="space-y-2">
             <div className="flex items-center gap-1">
                 <Label htmlFor={name!}>
-                    {t(label!)}{isRequired && " *"}
+                    {t(label!)}
+                    {isRequired && " *"}
                 </Label>
                 {helpText && <HelpItem helpText={helpText!} fieldLabelId={label!} />}
             </div>
@@ -92,23 +95,46 @@ export const IdentityProviderSelect = ({
                                 onClick={toggleOpen}
                             >
                                 <div className="flex-1 flex flex-wrap gap-1">
-                                    {variant === "typeaheadMulti" && Array.isArray(field.value) && field.value.map((selection: string, index: number) => (
-                                        <Badge key={index} variant="secondary" className="cursor-pointer" onClick={ev => {
-                                            ev.stopPropagation();
-                                            field.onChange(field.value.filter((item: string) => item !== selection));
-                                        }}>
-                                            {selection} <X className="size-3 ml-1 inline" />
-                                        </Badge>
-                                    ))}
+                                    {variant === "typeaheadMulti" &&
+                                        Array.isArray(field.value) &&
+                                        field.value.map(
+                                            (selection: string, index: number) => (
+                                                <Badge
+                                                    key={index}
+                                                    variant="secondary"
+                                                    className="cursor-pointer"
+                                                    onClick={ev => {
+                                                        ev.stopPropagation();
+                                                        field.onChange(
+                                                            field.value.filter(
+                                                                (item: string) =>
+                                                                    item !== selection
+                                                            )
+                                                        );
+                                                    }}
+                                                >
+                                                    {selection}{" "}
+                                                    <X className="size-3 ml-1 inline" />
+                                                </Badge>
+                                            )
+                                        )}
                                     <Input
                                         ref={textInputRef}
-                                        value={inputValue || (variant !== "typeaheadMulti" ? field.value?.[0] || "" : "")}
-                                        onChange={(e) => {
+                                        value={
+                                            inputValue ||
+                                            (variant !== "typeaheadMulti"
+                                                ? field.value?.[0] || ""
+                                                : "")
+                                        }
+                                        onChange={e => {
                                             setOpen(true);
                                             setInputValue(e.target.value);
                                             debounceFn(e.target.value);
                                         }}
-                                        onClick={(e) => { e.stopPropagation(); setOpen(true); }}
+                                        onClick={e => {
+                                            e.stopPropagation();
+                                            setOpen(true);
+                                        }}
                                         autoComplete="off"
                                         placeholder={t("selectAUser")}
                                         className="border-0 p-0 h-auto focus-visible:ring-0 shadow-none"
@@ -118,7 +144,7 @@ export const IdentityProviderSelect = ({
                                     <Button
                                         variant="ghost"
                                         className="h-auto p-1"
-                                        onClick={(e) => {
+                                        onClick={e => {
                                             e.stopPropagation();
                                             setInputValue("");
                                             setSearch("");
@@ -132,10 +158,15 @@ export const IdentityProviderSelect = ({
                                 )}
                             </div>
                         </PopoverTrigger>
-                        <PopoverContent className="w-[var(--radix-popover-trigger-width)] p-0" align="start">
+                        <PopoverContent
+                            className="w-[var(--radix-popover-trigger-width)] p-0"
+                            align="start"
+                        >
                             <div className="max-h-60 overflow-auto">
                                 {idps.length === 0 ? (
-                                    <div className="px-3 py-2 text-sm text-muted-foreground">{t("noResultsFound")}</div>
+                                    <div className="px-3 py-2 text-sm text-muted-foreground">
+                                        {t("noResultsFound")}
+                                    </div>
                                 ) : (
                                     idps.map(option => (
                                         <div
@@ -144,13 +175,20 @@ export const IdentityProviderSelect = ({
                                             onClick={() => {
                                                 const alias = option!.alias!;
                                                 if (variant !== "typeaheadMulti") {
-                                                    const removed = field.value.includes(alias);
-                                                    field.onChange(removed ? [] : [alias]);
+                                                    const removed =
+                                                        field.value.includes(alias);
+                                                    field.onChange(
+                                                        removed ? [] : [alias]
+                                                    );
                                                     setInputValue(removed ? "" : alias);
                                                     setOpen(false);
                                                 } else {
-                                                    const changedValue = field.value.find((v: string) => v === alias)
-                                                        ? field.value.filter((v: string) => v !== alias)
+                                                    const changedValue = field.value.find(
+                                                        (v: string) => v === alias
+                                                    )
+                                                        ? field.value.filter(
+                                                              (v: string) => v !== alias
+                                                          )
                                                         : [...field.value, alias];
                                                     field.onChange(changedValue);
                                                 }

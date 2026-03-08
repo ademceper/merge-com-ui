@@ -1,20 +1,24 @@
 import type { AuthenticationProviderRepresentation } from "@keycloak/keycloak-admin-client/lib/defs/authenticatorConfigRepresentation";
-import { useFetch } from "../../../../shared/keycloak-ui-shared";
+import { useTranslation } from "@merge-rd/i18n";
+import { Button } from "@merge-rd/ui/components/button";
 import {
     DropdownMenu,
     DropdownMenuContent,
     DropdownMenuItem,
     DropdownMenuTrigger
 } from "@merge-rd/ui/components/dropdown-menu";
-import { Tooltip, TooltipContent, TooltipTrigger, TooltipProvider } from "@merge-rd/ui/components/tooltip";
+import {
+    Tooltip,
+    TooltipContent,
+    TooltipProvider,
+    TooltipTrigger
+} from "@merge-rd/ui/components/tooltip";
 import { Plus } from "@phosphor-icons/react";
-import { Button } from "@merge-rd/ui/components/button";
 import { useState } from "react";
-import { useTranslation } from "@merge-rd/i18n";
-import { useAdminClient } from "../../../app/admin-client";
+import { useFlowProviderId } from "../api/use-flow-provider-id";
 import type { ExpandableExecution } from "../execution-model";
-import { AddStepModal, FlowType } from "./modals/add-step-modal";
-import { AddSubFlowModal, Flow } from "./modals/add-sub-flow-modal";
+import { AddStepModal, type FlowType } from "./modals/add-step-modal";
+import { AddSubFlowModal, type Flow } from "./modals/add-sub-flow-modal";
 
 type AddFlowDropdownProps = {
     execution: ExpandableExecution;
@@ -30,22 +34,11 @@ export const AddFlowDropdown = ({
     onAddExecution,
     onAddFlow
 }: AddFlowDropdownProps) => {
-    const { adminClient } = useAdminClient();
-
     const { t } = useTranslation();
 
     const [open, setOpen] = useState(false);
     const [type, setType] = useState<FlowType>();
-    const [providerId, setProviderId] = useState<string>();
-
-    useFetch(
-        () =>
-            adminClient.authenticationManagement.getFlow({
-                flowId: execution.flowId!
-            }),
-        ({ providerId }) => setProviderId(providerId),
-        []
-    );
+    const { data: providerId } = useFlowProviderId(execution.flowId!);
 
     return (
         <TooltipProvider>
@@ -67,7 +60,9 @@ export const AddFlowDropdown = ({
                                 <DropdownMenuItem
                                     key="addStep"
                                     onClick={() =>
-                                        setType(providerId === "form-flow" ? "form" : "basic")
+                                        setType(
+                                            providerId === "form-flow" ? "form" : "basic"
+                                        )
                                     }
                                 >
                                     {t("addExecution")}
@@ -78,7 +73,10 @@ export const AddFlowDropdown = ({
                                 >
                                     {t("addCondition")}
                                 </DropdownMenuItem>
-                                <DropdownMenuItem key="addSubFlow" onClick={() => setType("subFlow")}>
+                                <DropdownMenuItem
+                                    key="addSubFlow"
+                                    onClick={() => setType("subFlow")}
+                                >
                                     {t("addSubFlow")}
                                 </DropdownMenuItem>
                             </DropdownMenuContent>

@@ -1,24 +1,29 @@
 import type ComponentRepresentation from "@keycloak/keycloak-admin-client/lib/defs/componentRepresentation";
-import { getErrorDescription, getErrorMessage, TextControl } from "../../../../shared/keycloak-ui-shared";
-import { toast } from "sonner";
+import { useTranslation } from "@merge-rd/i18n";
 import { Button } from "@merge-rd/ui/components/button";
 import {
     Dialog,
     DialogContent,
     DialogFooter,
     DialogHeader,
-    DialogTitle,
+    DialogTitle
 } from "@merge-rd/ui/components/dialog";
-import { FormProvider, useForm } from "react-hook-form";
-import { useTranslation } from "@merge-rd/i18n";
 import { useEffect, useMemo, useState } from "react";
+import { FormProvider, useForm } from "react-hook-form";
+import { toast } from "sonner";
+import {
+    getErrorDescription,
+    getErrorMessage,
+    TextControl
+} from "../../../../shared/keycloak-ui-shared";
 import { useAdminClient } from "../../../app/admin-client";
-import { DynamicComponents } from "../../../shared/ui/dynamic/dynamic-components";
-import { FormAccess } from "../../../shared/ui/form/form-access";
 import { useRealm } from "../../../app/providers/realm-context/realm-context";
 import { useServerInfo } from "../../../app/providers/server-info/server-info-provider";
+import { DynamicComponents } from "../../../shared/ui/dynamic/dynamic-components";
+import { FormAccess } from "../../../shared/ui/form/form-access";
 
-const POLICY_TYPE = "org.keycloak.services.clientregistration.policy.ClientRegistrationPolicy";
+const POLICY_TYPE =
+    "org.keycloak.services.clientregistration.policy.ClientRegistrationPolicy";
 
 type EditClientRegistrationPolicyDialogProps = {
     policy: ComponentRepresentation | null;
@@ -31,7 +36,7 @@ export function EditClientRegistrationPolicyDialog({
     policy,
     subTab,
     onClose,
-    onSuccess,
+    onSuccess
 }: EditClientRegistrationPolicyDialogProps) {
     const { adminClient } = useAdminClient();
     const { t } = useTranslation();
@@ -42,11 +47,11 @@ export function EditClientRegistrationPolicyDialog({
     const provider = useMemo(() => {
         if (!policy?.providerId) return null;
         const descriptions = serverInfo.componentTypes?.[POLICY_TYPE];
-        return descriptions?.find((p) => p.id === policy.providerId) ?? null;
+        return descriptions?.find(p => p.id === policy.providerId) ?? null;
     }, [policy?.providerId, serverInfo.componentTypes]);
 
     const form = useForm<ComponentRepresentation>({
-        defaultValues: policy ?? { providerId: "", name: "" },
+        defaultValues: policy ?? { providerId: "", name: "" }
     });
     const { handleSubmit, reset } = form;
 
@@ -69,75 +74,85 @@ export function EditClientRegistrationPolicyDialog({
                 subType: subTab,
                 parentId: realmRepresentation?.id,
                 providerType: POLICY_TYPE,
-                providerId: policy.providerId,
+                providerId: policy.providerId
             };
             await adminClient.components.update({ id: policy.id }, updatedComponent);
             toast.success(t("providerUpdatedSuccess"));
             onClose();
             onSuccess();
         } catch (error) {
-            toast.error(
-                t("providerUpdatedError", { error: getErrorMessage(error) }),
-                { description: getErrorDescription(error) }
-            );
+            toast.error(t("providerUpdatedError", { error: getErrorMessage(error) }), {
+                description: getErrorDescription(error)
+            });
         } finally {
             setSaving(false);
         }
     };
 
     return (
-        <>
-            <Dialog open={!!policy} onOpenChange={(open) => !open && onClose()}>
-                <DialogContent className="max-w-lg">
-                    <DialogHeader>
-                        <DialogTitle>{policy?.name || t("createPolicy")}</DialogTitle>
-                    </DialogHeader>
-                    {policy && provider ? (
-                        <FormProvider {...form}>
-                            <FormAccess
-                                id="edit-client-registration-policy-form"
-                                role="manage-clients"
-                                isHorizontal
-                                onSubmit={handleSubmit(onSubmit)}
-                            >
-                                <div className="min-h-[200px] flex flex-col gap-4">
-                                    <TextControl name="providerId" label={t("provider")} readOnly />
-                                    <TextControl
-                                        name="name"
-                                        label={t("name")}
-                                        labelIcon={t("clientPolicyNameHelp")}
-                                        rules={{ required: t("required") }}
-                                    />
-                                    <DynamicComponents
-                                        properties={provider.properties!}
-                                        layoutOverridesByType={{
-                                            List: { hideLabel: true, helpIconAfterControl: true },
-                                            MultivaluedList: { hideLabel: true, helpIconAfterControl: true },
-                                            MultivaluedString: { hideLabel: true, helpIconAfterControl: true },
-                                            boolean: { booleanLabelTextSwitchHelp: true },
-                                        }}
-                                    />
-                                </div>
-                            </FormAccess>
-                        </FormProvider>
-                    ) : null}
-                    {policy && (
-                        <DialogFooter>
-                            <Button type="button" variant="outline" onClick={onClose}>
-                                {t("cancel")}
-                            </Button>
-                            <Button
-                                type="submit"
-                                form="edit-client-registration-policy-form"
-                                data-testid="save"
-                                disabled={saving}
-                            >
-                                {t("save")}
-                            </Button>
-                        </DialogFooter>
-                    )}
-                </DialogContent>
-            </Dialog>
-        </>
+        <Dialog open={!!policy} onOpenChange={open => !open && onClose()}>
+            <DialogContent className="max-w-lg">
+                <DialogHeader>
+                    <DialogTitle>{policy?.name || t("createPolicy")}</DialogTitle>
+                </DialogHeader>
+                {policy && provider ? (
+                    <FormProvider {...form}>
+                        <FormAccess
+                            id="edit-client-registration-policy-form"
+                            role="manage-clients"
+                            isHorizontal
+                            onSubmit={handleSubmit(onSubmit)}
+                        >
+                            <div className="min-h-[200px] flex flex-col gap-4">
+                                <TextControl
+                                    name="providerId"
+                                    label={t("provider")}
+                                    readOnly
+                                />
+                                <TextControl
+                                    name="name"
+                                    label={t("name")}
+                                    labelIcon={t("clientPolicyNameHelp")}
+                                    rules={{ required: t("required") }}
+                                />
+                                <DynamicComponents
+                                    properties={provider.properties!}
+                                    layoutOverridesByType={{
+                                        List: {
+                                            hideLabel: true,
+                                            helpIconAfterControl: true
+                                        },
+                                        MultivaluedList: {
+                                            hideLabel: true,
+                                            helpIconAfterControl: true
+                                        },
+                                        MultivaluedString: {
+                                            hideLabel: true,
+                                            helpIconAfterControl: true
+                                        },
+                                        boolean: { booleanLabelTextSwitchHelp: true }
+                                    }}
+                                />
+                            </div>
+                        </FormAccess>
+                    </FormProvider>
+                ) : null}
+                {policy && (
+                    <DialogFooter>
+                        <Button type="button" variant="outline" onClick={onClose}>
+                            {t("cancel")}
+                        </Button>
+                        <Button
+                            type="submit"
+                            form="edit-client-registration-policy-form"
+                            data-testid="save"
+                            disabled={saving}
+                        >
+                            {t("save")}
+                        </Button>
+                    </DialogFooter>
+                )}
+            </DialogContent>
+        </Dialog>
     );
 }

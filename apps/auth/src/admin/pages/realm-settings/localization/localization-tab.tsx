@@ -1,16 +1,19 @@
 import type RealmRepresentation from "@keycloak/keycloak-admin-client/lib/defs/realmRepresentation";
-import { MultiSelectField, SelectField, SwitchControl } from "../../../../shared/keycloak-ui-shared";
-import { FormPanel } from "../../../../shared/keycloak-ui-shared/scroll-form/form-panel";
+import { DEFAULT_LOCALE, useTranslation } from "@merge-rd/i18n";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@merge-rd/ui/components/tabs";
 import { useMemo, useState } from "react";
 import { FormProvider, useFormContext, useWatch } from "react-hook-form";
-import { useTranslation } from "@merge-rd/i18n";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@merge-rd/ui/components/tabs";
-import { FixedButtonsGroup } from "../../../shared/ui/form/fixed-button-group";
-import { FormAccess } from "../../../shared/ui/form/form-access";
+import {
+    MultiSelectField,
+    SelectField,
+    SwitchControl
+} from "../../../../shared/keycloak-ui-shared";
+import { FormPanel } from "../../../../shared/keycloak-ui-shared/scroll-form/form-panel";
 import { useServerInfo } from "../../../app/providers/server-info/server-info-provider";
 import { useWhoAmI } from "../../../app/providers/whoami/who-am-i";
-import { DEFAULT_LOCALE } from "@merge-rd/i18n";
 import { localeToDisplayName } from "../../../shared/lib/util";
+import { FixedButtonsGroup } from "../../../shared/ui/form/fixed-button-group";
+import { FormAccess } from "../../../shared/ui/form/form-access";
 import { EffectiveMessageBundles } from "./effective-message-bundles";
 import { RealmOverrides } from "./realm-overrides";
 
@@ -59,16 +62,25 @@ export const LocalizationTab = ({ save, realm, tableData }: LocalizationTabProps
     });
 
     return (
-        <Tabs value={String(activeTab)} onValueChange={(v) => setActiveTab(Number(v))}>
+        <Tabs value={String(activeTab)} onValueChange={v => setActiveTab(Number(v))}>
             <div className="w-full min-w-0 overflow-x-auto overflow-y-hidden mb-4">
-                <TabsList variant="line" className="mb-0 w-max min-w-0 **:data-[slot=tabs-trigger]:flex-none">
+                <TabsList
+                    variant="line"
+                    className="mb-0 w-max min-w-0 **:data-[slot=tabs-trigger]:flex-none"
+                >
                     <TabsTrigger value="0" data-testid="rs-localization-locales-tab">
                         {t("locales")}
                     </TabsTrigger>
-                    <TabsTrigger value="1" data-testid="rs-localization-realm-overrides-tab">
+                    <TabsTrigger
+                        value="1"
+                        data-testid="rs-localization-realm-overrides-tab"
+                    >
                         {t("realmOverrides")}
                     </TabsTrigger>
-                    <TabsTrigger value="2" data-testid="rs-localization-effective-message-bundles-tab">
+                    <TabsTrigger
+                        value="2"
+                        data-testid="rs-localization-effective-message-bundles-tab"
+                    >
                         {t("effectiveMessageBundles")}
                     </TabsTrigger>
                 </TabsList>
@@ -84,51 +96,60 @@ export const LocalizationTab = ({ save, realm, tableData }: LocalizationTabProps
                         <div className="space-y-4">
                             <FormProvider {...form}>
                                 <SwitchControl
-                            name="internationalizationEnabled"
-                            label={t("internationalization")}
-                            labelIcon={t("internationalizationHelp")}
-                            labelOn={t("enabled")}
-                            labelOff={t("disabled")}
-                            aria-label={t("internationalization")}
-                        />
-                        {internationalizationEnabled && (
-                            <>
-                                <MultiSelectField
-                                    name="supportedLocales"
-                                    label={t("supportedLocales")}
-                                    labelIcon={t("supportedLocalesHelp")}
-                                    defaultValue={defaultSupportedLocales}
-                                    rules={{
-                                        required: t("required"),
-                                        validate: (value: string[]) =>
-                                            value.every(v =>
-                                                allLocales.includes(v)
-                                            ) || t("invalidLocale")
-                                    }}
-                                    placeholderText={t("selectLocales")}
-                                    options={allLocales.map(l => ({
-                                        key: l,
-                                        value: localeToDisplayName(l, whoAmI.locale) || l
-                                    }))}
+                                    name="internationalizationEnabled"
+                                    label={t("internationalization")}
+                                    labelIcon={t("internationalizationHelp")}
+                                    labelOn={t("enabled")}
+                                    labelOff={t("disabled")}
+                                    aria-label={t("internationalization")}
                                 />
-                                <SelectField
-                                    name="defaultLocale"
-                                    label={t("defaultLocale")}
-                                    labelIcon={t("defaultLocaleHelp")}
-                                    defaultValue={DEFAULT_LOCALE}
-                                    rules={{
-                                        required: t("required"),
-                                        validate: (value: string) =>
-                                            watchSupportedLocales?.includes(value) ||
-                                            t("required")
-                                    }}
-                                    options={watchSupportedLocales!.map(l => ({
-                                        key: l,
-                                        value: localeToDisplayName(l, whoAmI.locale) || l
-                                    }))}
-                                />
-                            </>
-                        )}
+                                {internationalizationEnabled && (
+                                    <>
+                                        <MultiSelectField
+                                            name="supportedLocales"
+                                            label={t("supportedLocales")}
+                                            labelIcon={t("supportedLocalesHelp")}
+                                            defaultValue={defaultSupportedLocales}
+                                            rules={{
+                                                required: t("required"),
+                                                validate: (value: string[]) =>
+                                                    value.every(v =>
+                                                        allLocales.includes(v)
+                                                    ) || t("invalidLocale")
+                                            }}
+                                            placeholderText={t("selectLocales")}
+                                            options={allLocales.map(l => ({
+                                                key: l,
+                                                value:
+                                                    localeToDisplayName(
+                                                        l,
+                                                        whoAmI.locale
+                                                    ) || l
+                                            }))}
+                                        />
+                                        <SelectField
+                                            name="defaultLocale"
+                                            label={t("defaultLocale")}
+                                            labelIcon={t("defaultLocaleHelp")}
+                                            defaultValue={DEFAULT_LOCALE}
+                                            rules={{
+                                                required: t("required"),
+                                                validate: (value: string) =>
+                                                    watchSupportedLocales?.includes(
+                                                        value
+                                                    ) || t("required")
+                                            }}
+                                            options={watchSupportedLocales!.map(l => ({
+                                                key: l,
+                                                value:
+                                                    localeToDisplayName(
+                                                        l,
+                                                        whoAmI.locale
+                                                    ) || l
+                                            }))}
+                                        />
+                                    </>
+                                )}
                             </FormProvider>
                         </div>
                     </FormPanel>

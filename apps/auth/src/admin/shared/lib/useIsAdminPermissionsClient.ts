@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useRealm } from "../../app/providers/realm-context/realm-context";
 
 export function useIsAdminPermissionsClient(selectedClientId: string) {

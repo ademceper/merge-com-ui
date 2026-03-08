@@ -1,6 +1,11 @@
-import UserSessionRepresentation from "@keycloak/keycloak-admin-client/lib/defs/userSessionRepresentation";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@merge-rd/ui/components/dropdown-menu";
+import { useTranslation } from "@merge-rd/i18n";
 import { buttonVariants } from "@merge-rd/ui/components/button";
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuTrigger
+} from "@merge-rd/ui/components/dropdown-menu";
 import {
     Select,
     SelectContent,
@@ -8,16 +13,14 @@ import {
     SelectTrigger,
     SelectValue
 } from "@merge-rd/ui/components/select";
-import { DotsThreeVertical, SignOut, ProhibitInset } from "@phosphor-icons/react";
+import { DotsThreeVertical, ProhibitInset, SignOut } from "@phosphor-icons/react";
 import { useState } from "react";
-import { useTranslation } from "@merge-rd/i18n";
-import { useAdminClient } from "../../app/admin-client";
-import { getErrorDescription, getErrorMessage, useFetch } from "../../../shared/keycloak-ui-shared";
 import { toast } from "sonner";
-import { useConfirmDialog } from "../../shared/ui/confirm-dialog/confirm-dialog";
-
-import { fetchAdminUI } from "../../app/providers/auth/admin-ui-endpoint";
+import { getErrorDescription, getErrorMessage } from "../../../shared/keycloak-ui-shared";
+import { useAdminClient } from "../../app/admin-client";
 import { useRealm } from "../../app/providers/realm-context/realm-context";
+import { useConfirmDialog } from "../../shared/ui/confirm-dialog/confirm-dialog";
+import { useSessions as useSessionsQuery } from "./api/use-sessions";
 import { RevocationModal } from "./revocation-modal";
 import SessionsTable from "./sessions-table";
 
@@ -60,35 +63,17 @@ export default function SessionsSection() {
     const { t } = useTranslation();
     const { realm } = useRealm();
 
-    const [key, setKey] = useState(0);
-    const refresh = () => setKey((k) => k + 1);
     const [revocationModalOpen, setRevocationModalOpen] = useState(false);
     const [filterType, setFilterType] = useState<FilterType>("ALL");
-    const [sessions, setSessions] = useState<UserSessionRepresentation[]>([]);
-    const [noSessions, setNoSessions] = useState(false);
+
+    const { data: sessions = [], refetch: refreshSessions } =
+        useSessionsQuery(filterType);
+    const refresh = () => refreshSessions();
+    const noSessions = sessions.length === 0;
 
     const handleRevocationModalToggle = () => {
         setRevocationModalOpen(!revocationModalOpen);
     };
-
-    useFetch(
-        async () => {
-            const data = await fetchAdminUI<UserSessionRepresentation[]>(
-                adminClient,
-                "ui-ext/sessions",
-                {
-                    first: "0",
-                    max: "1000",
-                    type: filterType,
-                    search: ""
-                }
-            );
-            setNoSessions(data.length === 0);
-            return data;
-        },
-        (data) => setSessions(data),
-        [key, filterType]
-    );
 
     const [toggleLogoutDialog, LogoutConfirm] = useConfirmDialog({
         titleKey: "logoutAllSessions",
@@ -99,7 +84,10 @@ export default function SessionsSection() {
                 await adminClient.realms.logoutAll({ realm });
                 refresh();
             } catch (error) {
-                toast.error(t("logoutAllSessionsError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
+                toast.error(
+                    t("logoutAllSessionsError", { error: getErrorMessage(error) }),
+                    { description: getErrorDescription(error) }
+                );
             }
         }
     });
@@ -111,7 +99,10 @@ export default function SessionsSection() {
                 <div className="flex flex-wrap items-center gap-2" />
                 <div className="flex items-center gap-2">
                     <DropdownMenu>
-                        <DropdownMenuTrigger data-testid="action-dropdown" className={buttonVariants({ variant: "ghost", size: "icon" })}>
+                        <DropdownMenuTrigger
+                            data-testid="action-dropdown"
+                            className={buttonVariants({ variant: "ghost", size: "icon" })}
+                        >
                             <DotsThreeVertical className="size-5" />
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end">
@@ -146,7 +137,6 @@ export default function SessionsSection() {
                     />
                 )}
                 <SessionsTable
-                    key={key}
                     sessions={sessions}
                     refresh={refresh}
                     toolbar={
@@ -154,7 +144,6 @@ export default function SessionsSection() {
                             filterType={filterType}
                             onChange={type => {
                                 setFilterType(type);
-                                refresh();
                             }}
                         />
                     }

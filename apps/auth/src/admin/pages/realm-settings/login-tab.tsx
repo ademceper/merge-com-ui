@@ -1,12 +1,16 @@
 import type RealmRepresentation from "@keycloak/keycloak-admin-client/lib/defs/realmRepresentation";
-import { Switch } from "@merge-rd/ui/components/switch";
 import { useTranslation } from "@merge-rd/i18n";
-import { FormPanel, HelpItem } from "../../../shared/keycloak-ui-shared";
-import { useAdminClient } from "../../app/admin-client";
-import { getErrorDescription, getErrorMessage } from "../../../shared/keycloak-ui-shared";
+import { Switch } from "@merge-rd/ui/components/switch";
 import { toast } from "sonner";
-import { FormAccess } from "../../shared/ui/form/form-access";
+import {
+    FormPanel,
+    getErrorDescription,
+    getErrorMessage,
+    HelpItem
+} from "../../../shared/keycloak-ui-shared";
+import { useAdminClient } from "../../app/admin-client";
 import { useRealm } from "../../app/providers/realm-context/realm-context";
+import { FormAccess } from "../../shared/ui/form/form-access";
 
 type RealmSettingsLoginTabProps = {
     realm: RealmRepresentation;
@@ -38,7 +42,9 @@ export const RealmSettingsLoginTab = ({ realm, refresh }: RealmSettingsLoginTabP
             toast.success(t("enableSwitchSuccess", { switch: t(name) }));
             refresh();
         } catch (error) {
-            toast.error(t("enableSwitchError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
+            toast.error(t("enableSwitchError", { error: getErrorMessage(error) }), {
+                description: getErrorDescription(error)
+            });
         }
     };
 
@@ -48,7 +54,9 @@ export const RealmSettingsLoginTab = ({ realm, refresh }: RealmSettingsLoginTabP
                 <FormAccess isHorizontal role="manage-realm">
                     <div className="flex w-full items-center justify-between gap-2">
                         <div className="flex items-center gap-1.5">
-                            <span className="text-sm font-medium">{t("registrationAllowed")}</span>
+                            <span className="text-sm font-medium">
+                                {t("registrationAllowed")}
+                            </span>
                             <HelpItem
                                 helpText={t("userRegistrationHelpText")}
                                 fieldLabelId="registrationAllowed"
@@ -62,8 +70,10 @@ export const RealmSettingsLoginTab = ({ realm, refresh }: RealmSettingsLoginTabP
                                 id="kc-user-reg-switch"
                                 data-testid="user-reg-switch"
                                 checked={!!realm.registrationAllowed}
-                                onCheckedChange={async (value) => {
-                                    await updateSwitchValue({ registrationAllowed: value });
+                                onCheckedChange={async value => {
+                                    await updateSwitchValue({
+                                        registrationAllowed: value
+                                    });
                                 }}
                                 aria-label={t("registrationAllowed")}
                             />
@@ -71,7 +81,9 @@ export const RealmSettingsLoginTab = ({ realm, refresh }: RealmSettingsLoginTabP
                     </div>
                     <div className="flex w-full items-center justify-between gap-2">
                         <div className="flex items-center gap-1.5">
-                            <span className="text-sm font-medium">{t("resetPasswordAllowed")}</span>
+                            <span className="text-sm font-medium">
+                                {t("resetPasswordAllowed")}
+                            </span>
                             <HelpItem
                                 helpText={t("forgotPasswordHelpText")}
                                 fieldLabelId="resetPasswordAllowed"
@@ -85,8 +97,10 @@ export const RealmSettingsLoginTab = ({ realm, refresh }: RealmSettingsLoginTabP
                                 id="kc-forgot-pw-switch"
                                 data-testid="forgot-pw-switch"
                                 checked={!!realm.resetPasswordAllowed}
-                                onCheckedChange={async (value) => {
-                                    await updateSwitchValue({ resetPasswordAllowed: value });
+                                onCheckedChange={async value => {
+                                    await updateSwitchValue({
+                                        resetPasswordAllowed: value
+                                    });
                                 }}
                                 aria-label={t("resetPasswordAllowed")}
                             />
@@ -108,7 +122,7 @@ export const RealmSettingsLoginTab = ({ realm, refresh }: RealmSettingsLoginTabP
                                 id="kc-remember-me-switch"
                                 data-testid="remember-me-switch"
                                 checked={!!realm.rememberMe}
-                                onCheckedChange={async (value) => {
+                                onCheckedChange={async value => {
                                     await updateSwitchValue({ rememberMe: value });
                                 }}
                                 aria-label={t("rememberMe")}
@@ -121,7 +135,9 @@ export const RealmSettingsLoginTab = ({ realm, refresh }: RealmSettingsLoginTabP
                 <FormAccess isHorizontal role="manage-realm">
                     <div className="flex w-full items-center justify-between gap-2">
                         <div className="flex items-center gap-1.5">
-                            <span className="text-sm font-medium">{t("registrationEmailAsUsername")}</span>
+                            <span className="text-sm font-medium">
+                                {t("registrationEmailAsUsername")}
+                            </span>
                             <HelpItem
                                 helpText={t("emailAsUsernameHelpText")}
                                 fieldLabelId="registrationEmailAsUsername"
@@ -135,7 +151,7 @@ export const RealmSettingsLoginTab = ({ realm, refresh }: RealmSettingsLoginTabP
                                 id="kc-email-as-username-switch"
                                 data-testid="email-as-username-switch"
                                 checked={!!realm.registrationEmailAsUsername}
-                                onCheckedChange={async (value) => {
+                                onCheckedChange={async value => {
                                     await updateSwitchValue([
                                         {
                                             registrationEmailAsUsername: value
@@ -151,7 +167,9 @@ export const RealmSettingsLoginTab = ({ realm, refresh }: RealmSettingsLoginTabP
                     </div>
                     <div className="flex w-full items-center justify-between gap-2">
                         <div className="flex items-center gap-1.5">
-                            <span className="text-sm font-medium">{t("loginWithEmailAllowed")}</span>
+                            <span className="text-sm font-medium">
+                                {t("loginWithEmailAllowed")}
+                            </span>
                             <HelpItem
                                 helpText={t("loginWithEmailHelpText")}
                                 fieldLabelId="loginWithEmailAllowed"
@@ -165,7 +183,7 @@ export const RealmSettingsLoginTab = ({ realm, refresh }: RealmSettingsLoginTabP
                                 id="kc-login-with-email-switch"
                                 data-testid="login-with-email-switch"
                                 checked={!!realm.loginWithEmailAllowed}
-                                onCheckedChange={async (value) => {
+                                onCheckedChange={async value => {
                                     await updateSwitchValue([
                                         {
                                             loginWithEmailAllowed: value
@@ -179,7 +197,9 @@ export const RealmSettingsLoginTab = ({ realm, refresh }: RealmSettingsLoginTabP
                     </div>
                     <div className="flex w-full items-center justify-between gap-2">
                         <div className="flex items-center gap-1.5">
-                            <span className="text-sm font-medium">{t("duplicateEmailsAllowed")}</span>
+                            <span className="text-sm font-medium">
+                                {t("duplicateEmailsAllowed")}
+                            </span>
                             <HelpItem
                                 helpText={t("duplicateEmailsHelpText")}
                                 fieldLabelId="duplicateEmailsAllowed"
@@ -193,7 +213,7 @@ export const RealmSettingsLoginTab = ({ realm, refresh }: RealmSettingsLoginTabP
                                 id="kc-duplicate-emails-switch"
                                 data-testid="duplicate-emails-switch"
                                 checked={!!realm.duplicateEmailsAllowed}
-                                onCheckedChange={async (value) => {
+                                onCheckedChange={async value => {
                                     await updateSwitchValue({
                                         duplicateEmailsAllowed: value
                                     });
@@ -208,7 +228,9 @@ export const RealmSettingsLoginTab = ({ realm, refresh }: RealmSettingsLoginTabP
                     </div>
                     <div className="flex w-full items-center justify-between gap-2">
                         <div className="flex items-center gap-1.5">
-                            <span className="text-sm font-medium">{t("verifyEmail")}</span>
+                            <span className="text-sm font-medium">
+                                {t("verifyEmail")}
+                            </span>
                             <HelpItem
                                 helpText={t("verifyEmailHelpText")}
                                 fieldLabelId="verifyEmail"
@@ -222,7 +244,7 @@ export const RealmSettingsLoginTab = ({ realm, refresh }: RealmSettingsLoginTabP
                                 id="kc-verify-email-switch"
                                 data-testid="verify-email-switch"
                                 checked={!!realm.verifyEmail}
-                                onCheckedChange={async (value) => {
+                                onCheckedChange={async value => {
                                     await updateSwitchValue({ verifyEmail: value });
                                 }}
                                 aria-label={t("verifyEmail")}
@@ -235,7 +257,9 @@ export const RealmSettingsLoginTab = ({ realm, refresh }: RealmSettingsLoginTabP
                 <FormAccess isHorizontal role="manage-realm">
                     <div className="flex w-full items-center justify-between gap-2">
                         <div className="flex items-center gap-1.5">
-                            <span className="text-sm font-medium">{t("editUsernameAllowed")}</span>
+                            <span className="text-sm font-medium">
+                                {t("editUsernameAllowed")}
+                            </span>
                             <HelpItem
                                 helpText={t("editUsernameHelp")}
                                 fieldLabelId="editUsernameAllowed"
@@ -249,8 +273,10 @@ export const RealmSettingsLoginTab = ({ realm, refresh }: RealmSettingsLoginTabP
                                 id="kc-edit-username-switch"
                                 data-testid="edit-username-switch"
                                 checked={!!realm.editUsernameAllowed}
-                                onCheckedChange={async (value) => {
-                                    await updateSwitchValue({ editUsernameAllowed: value });
+                                onCheckedChange={async value => {
+                                    await updateSwitchValue({
+                                        editUsernameAllowed: value
+                                    });
                                 }}
                                 aria-label={t("editUsernameAllowed")}
                             />

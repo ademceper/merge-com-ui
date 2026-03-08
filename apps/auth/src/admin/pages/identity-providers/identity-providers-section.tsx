@@ -1,43 +1,6 @@
 import type IdentityProviderRepresentation from "@keycloak/keycloak-admin-client/lib/defs/identityProviderRepresentation";
 import type { IdentityProvidersQuery } from "@keycloak/keycloak-admin-client/lib/resources/identityProviders";
-import { getErrorDescription, getErrorMessage } from "../../../shared/keycloak-ui-shared";
-import { toast } from "sonner";
-import { Badge } from "@merge-rd/ui/components/badge";
-import { Button } from "@merge-rd/ui/components/button";
-import { Checkbox } from "@merge-rd/ui/components/checkbox";
-import {
-    DropdownMenu,
-    DropdownMenuContent,
-    DropdownMenuGroup,
-    DropdownMenuItem,
-    DropdownMenuLabel,
-    DropdownMenuTrigger,
-} from "@merge-rd/ui/components/dropdown-menu";
-import {
-    DataTableRowActions,
-    type ColumnDef,
-} from "@/admin/shared/ui/data-table";
-import { DraggableTableRows } from "@/admin/shared/ui/table-draggable-rows";
-import { Input } from "@merge-rd/ui/components/input";
-import { CardTitle } from "@merge-rd/ui/components/card";
-import {
-    Cube,
-    FacebookLogo,
-    GithubLogo,
-    GitlabLogo,
-    GoogleLogo,
-    InstagramLogo,
-    LinkedinLogo,
-    PaypalLogo,
-    StackOverflowLogo,
-    TwitterLogo,
-} from "@phosphor-icons/react";
-import { groupBy, sortBy } from "lodash-es";
-import type { SetStateAction } from "react";
-import { Fragment, useCallback, useEffect, useMemo, useState } from "react";
 import { useTranslation } from "@merge-rd/i18n";
-import { Link, useNavigate } from "@tanstack/react-router";
-import { useAdminClient } from "../../app/admin-client";
 import {
     AlertDialog,
     AlertDialogAction,
@@ -48,14 +11,47 @@ import {
     AlertDialogHeader,
     AlertDialogTitle
 } from "@merge-rd/ui/components/alert-dialog";
-import { ClickableCard } from "../../shared/ui/keycloak-card/clickable-card";
+import { Badge } from "@merge-rd/ui/components/badge";
+import { Button } from "@merge-rd/ui/components/button";
+import { CardTitle } from "@merge-rd/ui/components/card";
+import { Checkbox } from "@merge-rd/ui/components/checkbox";
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuGroup,
+    DropdownMenuItem,
+    DropdownMenuLabel,
+    DropdownMenuTrigger
+} from "@merge-rd/ui/components/dropdown-menu";
+import { Input } from "@merge-rd/ui/components/input";
+import {
+    Cube,
+    FacebookLogo,
+    GithubLogo,
+    GitlabLogo,
+    GoogleLogo,
+    InstagramLogo,
+    LinkedinLogo,
+    PaypalLogo,
+    StackOverflowLogo,
+    Trash,
+    TwitterLogo
+} from "@phosphor-icons/react";
+import { Link, useNavigate } from "@tanstack/react-router";
+import { groupBy, sortBy } from "lodash-es";
+import type { SetStateAction } from "react";
+import { Fragment, useCallback, useEffect, useMemo, useState } from "react";
+import { toast } from "sonner";
+import { type ColumnDef, DataTableRowActions } from "@/admin/shared/ui/data-table";
+import { DraggableTableRows } from "@/admin/shared/ui/table-draggable-rows";
+import { getErrorDescription, getErrorMessage } from "../../../shared/keycloak-ui-shared";
+import { useAdminClient } from "../../app/admin-client";
 import { useRealm } from "../../app/providers/realm-context/realm-context";
 import { useServerInfo } from "../../app/providers/server-info/server-info-provider";
-import { toEditOrganization } from "../organizations/routes/edit-organization";
 import { upperCaseFormatter } from "../../shared/lib/util";
-import { toIdentityProvider } from "./routes/identity-provider";
-import { toIdentityProviderCreate } from "./routes/identity-provider-create";
-import { Trash } from "@phosphor-icons/react";
+import { ClickableCard } from "../../shared/ui/keycloak-card/clickable-card";
+import { toEditOrganization } from "../../shared/lib/routes/organizations";
+import { toIdentityProvider, toIdentityProviderCreate } from "../../shared/lib/routes/identity-providers";
 
 function getIdpIcon(iconId: string) {
     switch (iconId) {
@@ -96,12 +92,13 @@ export default function IdentityProvidersSection() {
     const navigate = useNavigate();
 
     const [key, setKey] = useState(0);
-    const refresh = useCallback(() => setKey((k) => k + 1), []);
+    const refresh = useCallback(() => setKey(k => k + 1), []);
     const [hide, setHide] = useState(false);
     const [hasProviders, setHasProviders] = useState(false);
     const [providers, setProviders] = useState<IdentityProviderRepresentation[]>([]);
     const [search, setSearch] = useState("");
-    const [selectedProvider, setSelectedProvider] = useState<IdentityProviderRepresentation>();
+    const [selectedProvider, setSelectedProvider] =
+        useState<IdentityProviderRepresentation>();
 
     useEffect(() => {
         let cancelled = false;
@@ -112,16 +109,13 @@ export default function IdentityProvidersSection() {
                     adminClient.identityProviders.find({
                         first: 0,
                         max: 1000,
-                        realmOnly: hide,
-                    } as IdentityProvidersQuery),
+                        realmOnly: hide
+                    } as IdentityProvidersQuery)
                 ]);
                 if (cancelled) return;
                 setHasProviders((firstPage?.length ?? 0) > 0);
                 setProviders(
-                    sortBy(list ?? [], [
-                        (p) => Number(p.config?.guiOrder ?? 0),
-                        "alias",
-                    ]),
+                    sortBy(list ?? [], [p => Number(p.config?.guiOrder ?? 0), "alias"])
                 );
             } catch {
                 if (!cancelled) {
@@ -139,44 +133,38 @@ export default function IdentityProvidersSection() {
         if (!search.trim()) return providers;
         const q = search.trim().toLowerCase();
         return providers.filter(
-            (p) =>
+            p =>
                 p.alias?.toLowerCase().includes(q) ||
                 p.displayName?.toLowerCase().includes(q) ||
-                p.providerId?.toLowerCase().includes(q),
+                p.providerId?.toLowerCase().includes(q)
         );
     }, [providers, search]);
 
     const setTableData = useCallback(
         (action: SetStateAction<IdentityProviderRepresentation[]>) => {
-            setProviders((current) => {
+            setProviders(current => {
                 const next =
-                    typeof action === "function"
-                        ? action(filteredProviders)
-                        : action;
+                    typeof action === "function" ? action(filteredProviders) : action;
                 if (next.length === current.length && current.length > 0) {
                     return next;
                 }
-                const filteredSet = new Set(next.map((p) => p.alias));
+                const filteredSet = new Set(next.map(p => p.alias));
                 let j = 0;
-                return current.map((p) =>
-                    filteredSet.has(p.alias!) ? next[j++] : p,
-                );
+                return current.map(p => (filteredSet.has(p.alias!) ? next[j++] : p));
             });
         },
-        [filteredProviders],
+        [filteredProviders]
     );
 
     const handleOrderChange = useCallback(
         async (reorderedData: IdentityProviderRepresentation[]) => {
-            const filteredSet = new Set(reorderedData.map((p) => p.alias));
+            const filteredSet = new Set(reorderedData.map(p => p.alias));
             const fullOrder =
                 filteredSet.size < providers.length
                     ? (() => {
                           let j = 0;
-                          return providers.map((p) =>
-                              filteredSet.has(p.alias!)
-                                  ? reorderedData[j++]
-                                  : p,
+                          return providers.map(p =>
+                              filteredSet.has(p.alias!) ? reorderedData[j++] : p
                           );
                       })()
                     : reorderedData;
@@ -184,11 +172,11 @@ export default function IdentityProvidersSection() {
             const updates = fullOrder.map((provider, index) => {
                 const updated = {
                     ...provider,
-                    config: { ...provider.config, guiOrder: String(index) },
+                    config: { ...provider.config, guiOrder: String(index) }
                 };
                 return adminClient.identityProviders.update(
                     { alias: provider.alias! },
-                    updated,
+                    updated
                 );
             });
             try {
@@ -196,23 +184,22 @@ export default function IdentityProvidersSection() {
                 toast.success(t("orderChangeSuccess"));
                 refresh();
             } catch (error) {
-                toast.error(
-                    t("orderChangeError", { error: getErrorMessage(error) }),
-                    { description: getErrorDescription(error) },
-                );
+                toast.error(t("orderChangeError", { error: getErrorMessage(error) }), {
+                    description: getErrorDescription(error)
+                });
             }
         },
-        [adminClient, t, refresh, providers],
+        [adminClient, t, refresh, providers]
     );
 
     const navigateToCreate = (providerId: string) =>
         navigate({ to: toIdentityProviderCreate({ realm, providerId }) as string });
 
     const identityProviderOptions = () =>
-        Object.keys(identityProviders).map((group) => (
+        Object.keys(identityProviders).map(group => (
             <DropdownMenuGroup key={group}>
                 <DropdownMenuLabel>{group}</DropdownMenuLabel>
-                {sortBy(identityProviders[group], "name").map((provider) => (
+                {sortBy(identityProviders[group], "name").map(provider => (
                     <DropdownMenuItem
                         key={provider.id}
                         data-testid={provider.id}
@@ -220,8 +207,8 @@ export default function IdentityProvidersSection() {
                             navigate({
                                 to: toIdentityProviderCreate({
                                     realm,
-                                    providerId: provider.id,
-                                }) as string,
+                                    providerId: provider.id
+                                }) as string
                             })
                         }
                     >
@@ -235,7 +222,7 @@ export default function IdentityProvidersSection() {
         if (!selectedProvider?.alias) return;
         try {
             await adminClient.identityProviders.del({
-                alias: selectedProvider.alias,
+                alias: selectedProvider.alias
             });
             setSelectedProvider(undefined);
             refresh();
@@ -243,9 +230,9 @@ export default function IdentityProvidersSection() {
         } catch (error) {
             toast.error(
                 t("deleteErrorIdentityProvider", {
-                    error: getErrorMessage(error),
+                    error: getErrorMessage(error)
                 }),
-                { description: getErrorDescription(error) },
+                { description: getErrorDescription(error) }
             );
         }
     };
@@ -259,32 +246,30 @@ export default function IdentityProvidersSection() {
                     const idp = row.original;
                     return (
                         <Link
-                            to={toIdentityProvider({
-                                realm,
-                                providerId: idp.providerId!,
-                                alias: idp.alias!,
-                                tab: "settings",
-                            }) as string}
+                            to={
+                                toIdentityProvider({
+                                    realm,
+                                    providerId: idp.providerId!,
+                                    alias: idp.alias!,
+                                    tab: "settings"
+                                }) as string
+                            }
                             className="font-medium text-primary hover:underline"
                         >
                             {idp.displayName || idp.alias}
                             {!idp.enabled && (
-                                <Badge
-                                    variant="secondary"
-                                    className="ml-2"
-                                >
+                                <Badge variant="secondary" className="ml-2">
                                     {t("disabled")}
                                 </Badge>
                             )}
                         </Link>
                     );
-                },
+                }
             },
             {
                 accessorKey: "providerId",
                 header: t("providerDetails"),
-                cell: ({ row }) =>
-                    upperCaseFormatter()(row.original.providerId) ?? "-",
+                cell: ({ row }) => upperCaseFormatter()(row.original.providerId) ?? "-"
             },
             {
                 accessorKey: "organizationId",
@@ -294,17 +279,19 @@ export default function IdentityProvidersSection() {
                     if (!idp?.organizationId) return "—";
                     return (
                         <Link
-                            to={toEditOrganization({
-                                realm,
-                                id: idp.organizationId,
-                                tab: "identityProviders",
-                            }) as string}
+                            to={
+                                toEditOrganization({
+                                    realm,
+                                    id: idp.organizationId,
+                                    tab: "identityProviders"
+                                }) as string
+                            }
                             className="text-primary hover:underline"
                         >
                             {t("organization")}
                         </Link>
                     );
-                },
+                }
             },
             {
                 id: "actions",
@@ -322,15 +309,18 @@ export default function IdentityProvidersSection() {
                             {t("delete")}
                         </button>
                     </DataTableRowActions>
-                ),
-            },
+                )
+            }
         ],
-        [t, realm],
+        [t, realm]
     );
 
     return (
         <>
-            <AlertDialog open={!!selectedProvider} onOpenChange={(open) => !open && setSelectedProvider(undefined)}>
+            <AlertDialog
+                open={!!selectedProvider}
+                onOpenChange={open => !open && setSelectedProvider(undefined)}
+            >
                 <AlertDialogContent>
                     <AlertDialogHeader>
                         <AlertDialogTitle>{t("deleteProvider")}</AlertDialogTitle>
@@ -340,25 +330,27 @@ export default function IdentityProvidersSection() {
                     </AlertDialogHeader>
                     <AlertDialogFooter>
                         <AlertDialogCancel>{t("cancel")}</AlertDialogCancel>
-                        <AlertDialogAction variant="destructive" data-testid="confirm" onClick={onDeleteConfirm}>
+                        <AlertDialogAction
+                            variant="destructive"
+                            data-testid="confirm"
+                            onClick={onDeleteConfirm}
+                        >
                             {t("delete")}
                         </AlertDialogAction>
                     </AlertDialogFooter>
                 </AlertDialogContent>
             </AlertDialog>
-                        <div className="space-y-4 py-6">
+            <div className="space-y-4 py-6">
                 {!hasProviders && (
                     <div className="p-6">
                         <p className="text-muted-foreground">{t("getStarted")}</p>
-                        {Object.keys(identityProviders).map((group) => (
+                        {Object.keys(identityProviders).map(group => (
                             <Fragment key={group}>
-                                <h2 className="mt-6 text-sm font-medium">
-                                    {group}:
-                                </h2>
+                                <h2 className="mt-6 text-sm font-medium">{group}:</h2>
                                 <hr className="my-4 border-border" />
                                 <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
                                     {sortBy(identityProviders[group], "name").map(
-                                        (provider) => (
+                                        provider => (
                                             <ClickableCard
                                                 key={provider.id}
                                                 data-testid={`${provider.id}-card`}
@@ -373,15 +365,10 @@ export default function IdentityProvidersSection() {
                                                             aria-hidden
                                                         >
                                                             {(() => {
-                                                                const Icon =
-                                                                    getIdpIcon(
-                                                                        provider.id ?? "",
-                                                                    );
-                                                                return (
-                                                                    <Icon
-                                                                        size={24}
-                                                                    />
+                                                                const Icon = getIdpIcon(
+                                                                    provider.id ?? ""
                                                                 );
+                                                                return <Icon size={24} />;
                                                             })()}
                                                         </div>
                                                         <div className="flex-1">
@@ -390,7 +377,7 @@ export default function IdentityProvidersSection() {
                                                     </div>
                                                 </CardTitle>
                                             </ClickableCard>
-                                        ),
+                                        )
                                     )}
                                 </div>
                             </Fragment>
@@ -403,7 +390,7 @@ export default function IdentityProvidersSection() {
                             <Input
                                 placeholder={t("searchForProvider")}
                                 value={search}
-                                onChange={(e) => setSearch(e.target.value)}
+                                onChange={e => setSearch(e.target.value)}
                                 className="h-9 w-64"
                             />
                             <label className="flex cursor-pointer items-center gap-2 text-sm">
@@ -411,7 +398,7 @@ export default function IdentityProvidersSection() {
                                     id="hideOrganizationLinkedIdps"
                                     data-testid="hideOrganizationLinkedIdps"
                                     checked={hide}
-                                    onCheckedChange={(checked) => {
+                                    onCheckedChange={checked => {
                                         setHide(!!checked);
                                         refresh();
                                     }}
@@ -437,7 +424,7 @@ export default function IdentityProvidersSection() {
                             columns={columns}
                             data={filteredProviders}
                             setData={setTableData}
-                            getRowId={(row) => row.alias ?? row.providerId ?? ""}
+                            getRowId={row => row.alias ?? row.providerId ?? ""}
                             onOrderChange={handleOrderChange}
                         />
                     </div>

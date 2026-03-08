@@ -1,10 +1,9 @@
 import type RoleRepresentation from "@keycloak/keycloak-admin-client/lib/defs/roleRepresentation";
-import { FormProvider, UseFormReturn } from "react-hook-form";
-
+import { FormProvider, type UseFormReturn } from "react-hook-form";
+import { FixedButtonsGroup } from "../form/fixed-button-group";
 import { FormAccess } from "../form/form-access";
 import type { KeyValueType } from "./key-value-convert";
 import { KeyValueInput } from "./key-value-input";
-import { FixedButtonsGroup } from "../form/fixed-button-group";
 
 export type AttributeForm = Omit<RoleRepresentation, "attributes"> & {
     attributes?: KeyValueType[];

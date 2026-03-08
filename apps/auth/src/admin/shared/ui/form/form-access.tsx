@@ -3,13 +3,14 @@ import type { ComponentProps } from "react";
 
 /** Form element props (replaces PatternFly FormProps). */
 type FormProps = ComponentProps<"form">;
+
 import {
     Children,
     cloneElement,
     isValidElement,
-    PropsWithChildren,
-    ReactElement,
-    ReactNode
+    type PropsWithChildren,
+    type ReactElement,
+    type ReactNode
 } from "react";
 import { Controller } from "react-hook-form";
 
@@ -71,7 +72,9 @@ export const FormAccess = ({
                     return cloneElement(child, {
                         ...element.props,
                         render: (props: unknown) => {
-                            const renderElement = (element.props as { render: (p: unknown) => ReactElement }).render(props);
+                            const renderElement = (
+                                element.props as { render: (p: unknown) => ReactElement }
+                            ).render(props);
                             return cloneElement(renderElement, {
                                 ...(renderElement.props as Record<string, unknown>),
                                 ...newProps
@@ -79,14 +82,20 @@ export const FormAccess = ({
                         }
                     } as Record<string, unknown>);
                 }
-                const clonedChildren = recursiveCloneChildren(element.props.children as ReactNode, newProps);
+                const clonedChildren = recursiveCloneChildren(
+                    element.props.children as ReactNode,
+                    newProps
+                );
                 if (child.type === FixedButtonsGroup) {
                     return cloneElement(child, {
                         isActive: !(newProps as { isDisabled?: boolean }).isDisabled,
                         children: clonedChildren
                     } as Record<string, unknown>);
                 }
-                return cloneElement(child, { ...newProps, children: clonedChildren } as Record<string, unknown>);
+                return cloneElement(child, {
+                    ...newProps,
+                    children: clonedChildren
+                } as Record<string, unknown>);
             }
             return child;
         });
@@ -100,7 +109,10 @@ export const FormAccess = ({
     return (
         <>
             {!unWrap && (
-                <form {...rest} className={"keycloak__form " + (isHorizontal ? "pf-m-horizontal " : "") + (rest.className || "")}>
+                <form
+                    {...rest}
+                    className={`keycloak__form ${isHorizontal ? "pf-m-horizontal " : ""}${rest.className || ""}`}
+                >
                     {recursiveCloneChildren(children, disabledProps)}
                 </form>
             )}

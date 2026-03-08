@@ -1,8 +1,8 @@
+import { useTranslation } from "@merge-rd/i18n";
 import { Alert, AlertDescription } from "@merge-rd/ui/components/alert";
+import { cn } from "@merge-rd/ui/lib/utils";
 import { Warning } from "@phosphor-icons/react";
 import { useWhoAmI } from "../app/providers/whoami/who-am-i";
-import { useTranslation } from "@merge-rd/i18n";
-import { cn } from "@merge-rd/ui/lib/utils";
 
 type WarnBannerProps = {
     msg: string;
@@ -24,9 +24,7 @@ const WarnBanner = ({ msg, className }: WarnBannerProps) => {
             )}
         >
             <Warning className="size-4 shrink-0" aria-hidden />
-            <AlertDescription className="text-foreground mb-0">
-                {t(msg)}
-            </AlertDescription>
+            <AlertDescription className="text-foreground mb-0">{t(msg)}</AlertDescription>
         </Alert>
     );
 };

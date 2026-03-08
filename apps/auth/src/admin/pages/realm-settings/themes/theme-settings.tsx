@@ -1,14 +1,14 @@
 import type RealmRepresentation from "@keycloak/keycloak-admin-client/lib/defs/realmRepresentation";
-import { SelectField } from "../../../../shared/keycloak-ui-shared";
-import { FormPanel } from "../../../../shared/keycloak-ui-shared/scroll-form/form-panel";
+import { useTranslation } from "@merge-rd/i18n";
 import { useEffect } from "react";
 import { FormProvider, useForm } from "react-hook-form";
-import { useTranslation } from "@merge-rd/i18n";
+import { SelectField } from "../../../../shared/keycloak-ui-shared";
+import { FormPanel } from "../../../../shared/keycloak-ui-shared/scroll-form/form-panel";
+import { useServerInfo } from "../../../app/providers/server-info/server-info-provider";
+import { convertToFormValues } from "../../../shared/lib/util";
 import { FixedButtonsGroup } from "../../../shared/ui/form/fixed-button-group";
 import { FormAccess } from "../../../shared/ui/form/form-access";
 import { DefaultSwitchControl } from "../../../shared/ui/switch-control";
-import { useServerInfo } from "../../../app/providers/server-info/server-info-provider";
-import { convertToFormValues } from "../../../shared/lib/util";
 
 type ThemeSettingsTabProps = {
     realm: RealmRepresentation;
@@ -97,11 +97,7 @@ export const ThemeSettingsTab = ({ realm, save }: ThemeSettingsTabProps) => {
                     </FormPanel>
 
                     <div className="flex gap-2 pt-2">
-                        <FixedButtonsGroup
-                            name="themes-tab"
-                            reset={setupForm}
-                            isSubmit
-                        />
+                        <FixedButtonsGroup name="themes-tab" reset={setupForm} isSubmit />
                     </div>
                 </FormAccess>
             </FormProvider>

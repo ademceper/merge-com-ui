@@ -9,14 +9,17 @@
 
 // @ts-nocheck
 
-import { useEnvironment } from "../../../shared/keycloak-ui-shared";
-import { useState } from "react";
 import { useTranslation } from "@merge-rd/i18n";
-import { getLinkedAccounts, LinkedAccountQueryParams } from "../../shared/api/methods";
-import { LinkedAccountRepresentation } from "../../shared/api/representations";
+import { useState } from "react";
+import { useEnvironment } from "../../../shared/keycloak-ui-shared";
+import {
+    getLinkedAccounts,
+    type LinkedAccountQueryParams
+} from "../../shared/api/methods";
+import type { LinkedAccountRepresentation } from "../../shared/api/representations";
+import { usePromise } from "../../shared/lib/usePromise";
 import { EmptyRow } from "../../shared/ui/datalist/empty-row";
 import { Page } from "../../shared/ui/page/page";
-import { usePromise } from "../../shared/lib/usePromise";
 import { AccountRow } from "./account-row";
 import { LinkedAccountsToolbar } from "./linked-accounts-toolbar";
 
@@ -67,8 +70,8 @@ const LinkedAccounts = () => {
                             setParamsLinked({ ...paramsLinked, first: 0, search })
                         }
                         count={linkedAccounts.length}
-                        first={paramsLinked["first"]}
-                        max={paramsLinked["max"]}
+                        first={paramsLinked.first}
+                        max={paramsLinked.max}
                         onNextClick={() => {
                             setParamsLinked({
                                 ...paramsLinked,
@@ -117,8 +120,8 @@ const LinkedAccounts = () => {
                             setParamsUnlinked({ ...paramsUnlinked, first: 0, search })
                         }
                         count={unlinkedAccounts.length}
-                        first={paramsUnlinked["first"]}
-                        max={paramsUnlinked["max"]}
+                        first={paramsUnlinked.first}
+                        max={paramsUnlinked.max}
                         onNextClick={() => {
                             setParamsUnlinked({
                                 ...paramsUnlinked,

@@ -1,16 +1,21 @@
+import { useTranslation } from "@merge-rd/i18n";
 import { Button } from "@merge-rd/ui/components/button";
 import {
     Dialog,
     DialogContent,
+    DialogFooter,
     DialogHeader,
-    DialogTitle,
-    DialogFooter
+    DialogTitle
 } from "@merge-rd/ui/components/dialog";
-import { Tooltip, TooltipContent, TooltipTrigger, TooltipProvider } from "@merge-rd/ui/components/tooltip";
+import {
+    Tooltip,
+    TooltipContent,
+    TooltipProvider,
+    TooltipTrigger
+} from "@merge-rd/ui/components/tooltip";
 import { PencilSimple } from "@phosphor-icons/react";
 import { useEffect } from "react";
 import { FormProvider, useForm } from "react-hook-form";
-import { useTranslation } from "@merge-rd/i18n";
 import { TextAreaControl, TextControl } from "../../../../shared/keycloak-ui-shared";
 import useToggle from "../../../shared/lib/useToggle";
 import type { ExpandableExecution } from "../execution-model";
@@ -56,15 +61,17 @@ export const EditFlow = ({ execution, onRowChange }: EditFlowProps) => {
                 </Tooltip>
             </TooltipProvider>
             {show && (
-                <Dialog open onOpenChange={(open) => { if (!open) toggle(); }}>
+                <Dialog
+                    open
+                    onOpenChange={open => {
+                        if (!open) toggle();
+                    }}
+                >
                     <DialogContent className="max-w-md">
                         <DialogHeader>
                             <DialogTitle>{t("editFlow")}</DialogTitle>
                         </DialogHeader>
-                        <form
-                            id="edit-flow-form"
-                            onSubmit={form.handleSubmit(onSubmit)}
-                        >
+                        <form id="edit-flow-form" onSubmit={form.handleSubmit(onSubmit)}>
                             <FormProvider {...form}>
                                 <TextControl
                                     name="displayName"

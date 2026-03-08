@@ -1,16 +1,21 @@
-import { Fragment, useState } from "react";
+import type ResourceServerRepresentation from "@keycloak/keycloak-admin-client/lib/defs/resourceServerRepresentation";
 import { useTranslation } from "@merge-rd/i18n";
 import { Alert, AlertTitle } from "@merge-rd/ui/components/alert";
 import { Button } from "@merge-rd/ui/components/button";
-import { Separator } from "@merge-rd/ui/components/separator";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@merge-rd/ui/components/dialog";
-import { Switch } from "@merge-rd/ui/components/switch";
+import {
+    Dialog,
+    DialogContent,
+    DialogFooter,
+    DialogHeader,
+    DialogTitle
+} from "@merge-rd/ui/components/dialog";
 import { Label } from "@merge-rd/ui/components/label";
 import { RadioGroup, RadioGroupItem } from "@merge-rd/ui/components/radio-group";
-
-import type ResourceServerRepresentation from "@keycloak/keycloak-admin-client/lib/defs/resourceServerRepresentation";
-import { JsonFileUpload } from "../../../shared/ui/json-file-upload/json-file-upload";
+import { Separator } from "@merge-rd/ui/components/separator";
+import { Switch } from "@merge-rd/ui/components/switch";
+import { Fragment, useState } from "react";
 import { HelpItem } from "../../../../shared/keycloak-ui-shared";
+import { JsonFileUpload } from "../../../shared/ui/json-file-upload/json-file-upload";
 
 type ImportDialogProps = {
     onConfirm: (value: ResourceServerRepresentation) => void;
@@ -21,7 +26,12 @@ export const ImportDialog = ({ onConfirm, closeDialog }: ImportDialogProps) => {
     const { t } = useTranslation();
     const [imported, setImported] = useState<ResourceServerRepresentation>({});
     return (
-        <Dialog open onOpenChange={(open) => { if (!open) closeDialog(); }}>
+        <Dialog
+            open
+            onOpenChange={open => {
+                if (!open) closeDialog();
+            }}
+        >
             <DialogContent className="max-w-md">
                 <DialogHeader>
                     <DialogTitle>{t("import")}</DialogTitle>
@@ -42,11 +52,24 @@ export const ImportDialog = ({ onConfirm, closeDialog }: ImportDialogProps) => {
                                         fieldLabelId="policyEnforcementMode"
                                     />
                                 </div>
-                                <RadioGroup value={imported.policyEnforcementMode ?? "__none__"} disabled>
+                                <RadioGroup
+                                    value={imported.policyEnforcementMode ?? "__none__"}
+                                    disabled
+                                >
                                     <div className="flex items-center gap-2">
-                                        <RadioGroupItem value={imported.policyEnforcementMode ?? "__none__"} id="policyEnforcementMode" />
+                                        <RadioGroupItem
+                                            value={
+                                                imported.policyEnforcementMode ??
+                                                "__none__"
+                                            }
+                                            id="policyEnforcementMode"
+                                        />
                                         <Label htmlFor="policyEnforcementMode">
-                                            {imported.policyEnforcementMode ? t(`policyEnforcementModes.${imported.policyEnforcementMode}`) : "—"}
+                                            {imported.policyEnforcementMode
+                                                ? t(
+                                                      `policyEnforcementModes.${imported.policyEnforcementMode}`
+                                                  )
+                                                : "—"}
                                         </Label>
                                     </div>
                                 </RadioGroup>
@@ -59,11 +82,23 @@ export const ImportDialog = ({ onConfirm, closeDialog }: ImportDialogProps) => {
                                         fieldLabelId="decisionStrategy"
                                     />
                                 </div>
-                                <RadioGroup value={imported.decisionStrategy ?? "__none__"} disabled>
+                                <RadioGroup
+                                    value={imported.decisionStrategy ?? "__none__"}
+                                    disabled
+                                >
                                     <div className="flex items-center gap-2">
-                                        <RadioGroupItem value={imported.decisionStrategy ?? "__none__"} id="decisionStrategy" />
+                                        <RadioGroupItem
+                                            value={
+                                                imported.decisionStrategy ?? "__none__"
+                                            }
+                                            id="decisionStrategy"
+                                        />
                                         <Label htmlFor="decisionStrategy">
-                                            {imported.decisionStrategy ? t(`decisionStrategies.${imported.decisionStrategy}`) : "—"}
+                                            {imported.decisionStrategy
+                                                ? t(
+                                                      `decisionStrategies.${imported.decisionStrategy}`
+                                                  )
+                                                : "—"}
                                         </Label>
                                     </div>
                                 </RadioGroup>

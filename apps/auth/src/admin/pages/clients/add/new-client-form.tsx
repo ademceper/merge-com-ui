@@ -1,20 +1,23 @@
-import { getErrorDescription, getErrorMessage } from "../../../../shared/keycloak-ui-shared";
-import { toast } from "sonner";
-import { Button } from "@merge-rd/ui/components/button";
-import { FormProvider, useForm } from "react-hook-form";
 import { useTranslation } from "@merge-rd/i18n";
+import { Button } from "@merge-rd/ui/components/button";
 import { useNavigate } from "@tanstack/react-router";
+import { useState } from "react";
+import { FormProvider, useForm } from "react-hook-form";
+import { toast } from "sonner";
+import {
+    getErrorDescription,
+    getErrorMessage
+} from "../../../../shared/keycloak-ui-shared";
 import { useAdminClient } from "../../../app/admin-client";
-import { FormAccess } from "../../../shared/ui/form/form-access";
 import { useRealm } from "../../../app/providers/realm-context/realm-context";
 import { convertFormValuesToObject } from "../../../shared/lib/util";
-import { FormFields } from "../client-details";
-import { toClient } from "../routes/client";
-import { toClients } from "../routes/clients";
+import { FormAccess } from "../../../shared/ui/form/form-access";
+import type { FormFields } from "../client-details";
+import { toClient } from "../../../shared/lib/routes/clients";
+import { toClients } from "../../../shared/lib/routes/clients";
 import { CapabilityConfig } from "./capability-config";
 import { GeneralSettings } from "./general-settings";
 import { LoginSettings } from "./login-settings";
-import { useState } from "react";
 
 type WizardStep = {
     name: string;
@@ -31,7 +34,7 @@ export default function NewClientForm() {
     const navigate = useNavigate();
     const [saving, setSaving] = useState<boolean>(false);
     const [currentStep, setCurrentStep] = useState(0);
-const form = useForm<FormFields>({
+    const form = useForm<FormFields>({
         defaultValues: {
             protocol: "openid-connect",
             clientId: "",
@@ -62,9 +65,13 @@ const form = useForm<FormFields>({
                 clientId: client.clientId?.trim()
             });
             toast.success(t("createClientSuccess"));
-            navigate({ to: toClient({ realm, clientId: newClient.id, tab: "settings" }) as string });
+            navigate({
+                to: toClient({ realm, clientId: newClient.id, tab: "settings" }) as string
+            });
         } catch (error) {
-            toast.error(t("createClientError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
+            toast.error(t("createClientError", { error: getErrorMessage(error) }), {
+                description: getErrorDescription(error)
+            });
         } finally {
             setSaving(false);
         }
@@ -105,43 +112,41 @@ const form = useForm<FormFields>({
     };
 
     return (
-        <>
-                        <div className="p-6">
-                <FormProvider {...form}>
-                    <nav aria-label={`${t("createClient")} steps`} className="mb-6">
-                        <ol className="flex gap-4">
-                            {steps.map((step, index) => (
-                                <li
-                                    key={step.id}
-                                    className={`text-sm font-medium ${index === currentStep ? "text-primary" : "text-muted-foreground"}`}
-                                >
-                                    {index + 1}. {step.name}
-                                </li>
-                            ))}
-                        </ol>
-                    </nav>
-                    <div>{steps[currentStep]?.component}</div>
-                    <div className="flex gap-2 mt-6">
-                        <Button
-                            variant="outline"
-                            onClick={() => navigate({ to: toClients({ realm }) as string })}
-                        >
-                            {t("cancel")}
-                        </Button>
-                        {currentStep > 0 && (
-                            <Button
-                                variant="secondary"
-                                onClick={() => setCurrentStep(currentStep - 1)}
+        <div className="p-6">
+            <FormProvider {...form}>
+                <nav aria-label={`${t("createClient")} steps`} className="mb-6">
+                    <ol className="flex gap-4">
+                        {steps.map((step, index) => (
+                            <li
+                                key={step.id}
+                                className={`text-sm font-medium ${index === currentStep ? "text-primary" : "text-muted-foreground"}`}
                             >
-                                {t("back")}
-                            </Button>
-                        )}
-                        <Button onClick={forward}>
-                            {isLastStep ? t("save") : t("next")}
+                                {index + 1}. {step.name}
+                            </li>
+                        ))}
+                    </ol>
+                </nav>
+                <div>{steps[currentStep]?.component}</div>
+                <div className="flex gap-2 mt-6">
+                    <Button
+                        variant="outline"
+                        onClick={() => navigate({ to: toClients({ realm }) as string })}
+                    >
+                        {t("cancel")}
+                    </Button>
+                    {currentStep > 0 && (
+                        <Button
+                            variant="secondary"
+                            onClick={() => setCurrentStep(currentStep - 1)}
+                        >
+                            {t("back")}
                         </Button>
-                    </div>
-                </FormProvider>
-            </div>
-        </>
+                    )}
+                    <Button onClick={forward}>
+                        {isLastStep ? t("save") : t("next")}
+                    </Button>
+                </div>
+            </FormProvider>
+        </div>
     );
 }

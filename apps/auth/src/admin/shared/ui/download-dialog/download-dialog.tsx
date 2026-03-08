@@ -1,22 +1,19 @@
-import { fetchWithError } from "@keycloak/keycloak-admin-client";
-import { HelpItem, useFetch, useHelp } from "../../../../shared/keycloak-ui-shared";
-import { Textarea } from "@merge-rd/ui/components/textarea";
+import { useTranslation } from "@merge-rd/i18n";
 import { Label } from "@merge-rd/ui/components/label";
 import {
     Select,
     SelectContent,
     SelectItem,
     SelectTrigger,
-    SelectValue,
+    SelectValue
 } from "@merge-rd/ui/components/select";
+import { Textarea } from "@merge-rd/ui/components/textarea";
 import { saveAs } from "file-saver";
-import { useEffect, useMemo, useState } from "react";
-import { useTranslation } from "@merge-rd/i18n";
-import { useAdminClient } from "../../../app/admin-client";
+import { useMemo, useState } from "react";
+import { HelpItem, useHelp } from "../../../../shared/keycloak-ui-shared";
 import { useRealm } from "../../../app/providers/realm-context/realm-context";
 import { useServerInfo } from "../../../app/providers/server-info/server-info-provider";
-import { addTrailingSlash, prettyPrintJSON } from "../../lib/util";
-import { getAuthorizationHeaders } from "../../lib/getAuthorizationHeaders";
+import { useInstallationSnippet } from "../../api/use-installation-snippet";
 import { ConfirmDialogModal } from "../confirm-dialog/confirm-dialog";
 
 type DownloadDialogProps = {
@@ -32,8 +29,6 @@ export const DownloadDialog = ({
     toggleDialog,
     protocol = "openid-connect"
 }: DownloadDialogProps) => {
-    const { adminClient } = useAdminClient();
-
     const { realm } = useRealm();
     const { t } = useTranslation();
     const { enabled } = useHelp();
@@ -41,11 +36,16 @@ export const DownloadDialog = ({
 
     const configFormats = serverInfo.clientInstallations![protocol];
     const [selected, setSelected] = useState(configFormats[configFormats.length - 1].id);
-    const [snippet, setSnippet] = useState<string | ArrayBuffer>();
 
     const selectedConfig = useMemo(
         () => configFormats.find(config => config.id === selected) ?? null,
         [selected]
+    );
+
+    const { data: snippetData } = useInstallationSnippet(
+        id,
+        selected,
+        selectedConfig?.mediaType
     );
 
     const sanitizeSnippet = (snippet: string) =>
@@ -54,40 +54,11 @@ export const DownloadDialog = ({
             `<PrivateKeyPem>${t("privateKeyMask")}</PrivateKeyPem>`
         );
 
-    useFetch(
-        async () => {
-            if (selectedConfig?.mediaType === "application/zip") {
-                const response = await fetchWithError(
-                    `${addTrailingSlash(
-                        adminClient.baseUrl
-                    )}admin/realms/${realm}/clients/${id}/installation/providers/${selected}`,
-                    {
-                        method: "GET",
-                        headers: getAuthorizationHeaders(
-                            await adminClient.getAccessToken()
-                        )
-                    }
-                );
-
-                return response.arrayBuffer();
-            } else {
-                const snippet = await adminClient.clients.getInstallationProviders({
-                    id,
-                    providerId: selected
-                });
-                if (typeof snippet === "string") {
-                    return sanitizeSnippet(snippet);
-                } else {
-                    return prettyPrintJSON(snippet);
-                }
-            }
-        },
-        snippet => setSnippet(snippet),
-        [id, selected]
-    );
-
-    // Clear snippet when selected config changes, this prevents old snippets from being displayed during fetch.
-    useEffect(() => setSnippet(""), [id, selected]);
+    const snippet = useMemo(() => {
+        if (!snippetData) return undefined;
+        if (typeof snippetData === "string") return sanitizeSnippet(snippetData);
+        return snippetData;
+    }, [snippetData]);
 
     return (
         <ConfirmDialogModal
@@ -107,13 +78,20 @@ export const DownloadDialog = ({
                     <div className="space-y-2">
                         <Label htmlFor="type" className="flex items-center gap-1">
                             {t("formatOption")}
-                            <HelpItem helpText={t("downloadType")} fieldLabelId="formatOption" />
+                            <HelpItem
+                                helpText={t("downloadType")}
+                                fieldLabelId="formatOption"
+                            />
                         </Label>
                         <Select
                             value={selected}
-                            onValueChange={(value) => setSelected(value || "")}
+                            onValueChange={value => setSelected(value || "")}
                         >
-                            <SelectTrigger id="type" aria-label={t("selectOne")} className="w-full">
+                            <SelectTrigger
+                                id="type"
+                                aria-label={t("selectOne")}
+                                className="w-full"
+                            >
                                 <SelectValue />
                             </SelectTrigger>
                             <SelectContent>
@@ -137,7 +115,10 @@ export const DownloadDialog = ({
                         <div className="flex-1 space-y-2">
                             <Label htmlFor="details" className="flex items-center gap-1">
                                 {t("details")}
-                                <HelpItem helpText={t("detailsHelp")} fieldLabelId="details" />
+                                <HelpItem
+                                    helpText={t("detailsHelp")}
+                                    fieldLabelId="details"
+                                />
                             </Label>
                             <Textarea
                                 id="details"
@@ -145,9 +126,7 @@ export const DownloadDialog = ({
                                 rows={12}
                                 className="resize-y"
                                 value={
-                                    snippet && typeof snippet === "string"
-                                        ? snippet
-                                        : ""
+                                    snippet && typeof snippet === "string" ? snippet : ""
                                 }
                                 aria-label="text area example"
                             />

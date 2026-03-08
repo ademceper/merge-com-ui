@@ -1,26 +1,19 @@
-import { useFetch } from "../../../../shared/keycloak-ui-shared";
+import { useTranslation } from "@merge-rd/i18n";
 import { Button } from "@merge-rd/ui/components/button";
 import {
     Dialog,
     DialogContent,
     DialogFooter,
     DialogHeader,
-    DialogTitle,
+    DialogTitle
 } from "@merge-rd/ui/components/dialog";
-import {
-    Popover,
-    PopoverContent,
-    PopoverTrigger,
-} from "@merge-rd/ui/components/popover";
-import { DataTable, type ColumnDef } from "@/admin/shared/ui/data-table";
+import { Popover, PopoverContent, PopoverTrigger } from "@merge-rd/ui/components/popover";
 import { CheckCircle } from "@phosphor-icons/react";
-import { useState } from "react";
-import { useTranslation } from "@merge-rd/i18n";
-import { useAdminClient } from "../../../app/admin-client";
-import { fetchUsedBy } from "../../../shared/ui/role-mapping/resource";
+import { type ColumnDef, DataTable } from "@/admin/shared/ui/data-table";
 import { useRealm } from "../../../app/providers/realm-context/realm-context";
 import useToggle from "../../../shared/lib/useToggle";
-import { AuthenticationType, REALM_FLOWS } from "../constants";
+import { useUsedBy } from "../api/use-used-by";
+import { type AuthenticationType, REALM_FLOWS } from "../constants";
 
 type UsedByProps = {
     authType: AuthenticationType;
@@ -39,21 +32,8 @@ type UsedByModalProps = {
 };
 
 const UsedByModal = ({ id, isSpecificClient, onClose }: UsedByModalProps) => {
-    const { adminClient } = useAdminClient();
     const { t } = useTranslation();
-    const [list, setList] = useState<{ name: string }[]>([]);
-    useFetch(
-        () =>
-            fetchUsedBy(adminClient, {
-                id,
-                type: isSpecificClient ? "clients" : "idp",
-                first: 0,
-                max: 500,
-                search: undefined
-            }).then(names => names.map(name => ({ name }))),
-        setList,
-        [id, isSpecificClient]
-    );
+    const { data: list = [] } = useUsedBy(id, isSpecificClient);
 
     const columns: ColumnDef<{ name: string }>[] = [
         { accessorKey: "name", header: t("name") }

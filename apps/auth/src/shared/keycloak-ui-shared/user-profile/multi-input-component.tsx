@@ -1,13 +1,13 @@
 import { Button } from "@merge-rd/ui/components/button";
 import { Input } from "@merge-rd/ui/components/input";
 import { MinusCircle, PlusCircle } from "@phosphor-icons/react";
-import { type TFunction } from "i18next";
+import type { TFunction } from "i18next";
 import { Fragment, useEffect, useMemo } from "react";
-import { FieldPath, UseFormReturn, useWatch } from "react-hook-form";
+import { type FieldPath, type UseFormReturn, useWatch } from "react-hook-form";
 
-import { InputType, UserProfileFieldProps } from "./user-profile-fields";
+import type { InputType, UserProfileFieldProps } from "./user-profile-fields";
 import { UserProfileGroup } from "./user-profile-group";
-import { UserFormFields, fieldName, labelAttribute } from "./utils";
+import { fieldName, labelAttribute, type UserFormFields } from "./utils";
 
 export const MultiInputComponent = ({
     t,
@@ -80,7 +80,7 @@ const MultiLineInput = ({
     };
 
     const update = (values: string[]) => {
-        const fieldValue = values.flatMap(field => field);
+        const fieldValue = values.flat();
         setValue(name, fieldValue, {
             shouldDirty: true
         });
@@ -112,7 +112,7 @@ const MultiLineInput = ({
                             type="button"
                             variant="ghost"
                             size="icon"
-                            data-testid={"remove" + index}
+                            data-testid={`remove${index}`}
                             onClick={() => remove(index)}
                             tabIndex={-1}
                             aria-label={t("remove")}
@@ -133,7 +133,8 @@ const MultiLineInput = ({
                             disabled={!val || isDisabled}
                             className="h-auto p-0"
                         >
-                            <PlusCircle className="size-5 mr-1" /> {t(addButtonLabel || "add")}
+                            <PlusCircle className="size-5 mr-1" />{" "}
+                            {t(addButtonLabel || "add")}
                         </Button>
                     )}
                 </Fragment>

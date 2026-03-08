@@ -1,7 +1,10 @@
-import type { KeycloakTokenParsed } from "oidc-spa/keycloak-js";
 import type { TFunction } from "@merge-rd/i18n";
+import type { KeycloakTokenParsed } from "oidc-spa/keycloak-js";
 
-export function loggedInUserName(token: KeycloakTokenParsed | undefined, t: TFunction): string {
+export function loggedInUserName(
+    token: KeycloakTokenParsed | undefined,
+    t: TFunction
+): string {
     if (!token) return t("unknownUser");
     const givenName = token.given_name;
     const familyName = token.family_name;
@@ -12,7 +15,8 @@ export function loggedInUserName(token: KeycloakTokenParsed | undefined, t: TFun
 
 export function avatarInitials(token: KeycloakTokenParsed | undefined): string {
     if (!token) return "?";
-    const initial = token.given_name?.[0] ?? token.family_name?.[0] ?? token.preferred_username?.[0];
+    const initial =
+        token.given_name?.[0] ?? token.family_name?.[0] ?? token.preferred_username?.[0];
     return initial ? initial.toUpperCase() : "?";
 }
 

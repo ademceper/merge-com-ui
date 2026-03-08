@@ -1,4 +1,4 @@
-import { type KcContextLike, createGetKcContext } from "@keycloakify/keycloak-admin-ui";
+import { createGetKcContext, type KcContextLike } from "@keycloakify/keycloak-admin-ui";
 import type { KcEnvName } from "../../kc.gen";
 
 export type KcContext = KcContextLike & {

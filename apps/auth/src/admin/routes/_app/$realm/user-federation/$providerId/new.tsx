@@ -1,13 +1,7 @@
-import { createFileRoute } from "@tanstack/react-router";
-import { lazy } from "react";
-
-const CustomProviderSettings = lazy(
-    () =>
-        import("../../../../../pages/user-federation/custom/custom-provider-settings"),
-);
+import { createFileRoute, lazyRouteComponent } from "@tanstack/react-router";
 
 export const Route = createFileRoute(
     "/_app/$realm/user-federation/$providerId/new",
 )({
-    component: CustomProviderSettings,
+    component: lazyRouteComponent(() => import("../../../../../pages/user-federation/custom/custom-provider-settings")),
 });

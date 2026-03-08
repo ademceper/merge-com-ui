@@ -1,13 +1,13 @@
 import { useTranslation } from "@merge-rd/i18n";
 import { Label } from "@merge-rd/ui/components/label";
 import { RadioGroup, RadioGroupItem } from "@merge-rd/ui/components/radio-group";
-import { HelpItem } from "../../../../shared/keycloak-ui-shared";
+import { type JSX, useState } from "react";
 import { useFormContext } from "react-hook-form";
-import { useState, type JSX } from "react";
-import { GroupSelect } from "./group-select";
+import { HelpItem } from "../../../../shared/keycloak-ui-shared";
 import { UserSelect } from "../../../shared/ui/users/user-select";
-import { RoleSelect } from "./role-select";
 import { ClientSelectComponent } from "./client-select-component";
+import { GroupSelect } from "./group-select";
+import { RoleSelect } from "./role-select";
 
 type ResourceTypeProps = {
     withEnforceAccessTo?: boolean;
@@ -60,19 +60,31 @@ export const ResourceType = ({
                     </div>
                     <RadioGroup
                         value={isSpecificResources ? "specificResources" : "allResources"}
-                        onValueChange={(v) => {
+                        onValueChange={v => {
                             setIsSpecificResources(v === "specificResources");
                             form.setValue("resources", []);
                         }}
                         className="flex flex-col gap-2"
                     >
                         <div className="flex items-center gap-2">
-                            <RadioGroupItem value="allResources" id="allResources" data-testid="allResources" />
-                            <Label htmlFor="allResources" className="cursor-pointer">{t(`allResourceType`, { resourceType })}</Label>
+                            <RadioGroupItem
+                                value="allResources"
+                                id="allResources"
+                                data-testid="allResources"
+                            />
+                            <Label htmlFor="allResources" className="cursor-pointer">
+                                {t(`allResourceType`, { resourceType })}
+                            </Label>
                         </div>
                         <div className="flex items-center gap-2">
-                            <RadioGroupItem value="specificResources" id="specificResources" data-testid="specificResources" />
-                            <Label htmlFor="specificResources" className="cursor-pointer">{t(`specificResourceType`, { resourceType })}</Label>
+                            <RadioGroupItem
+                                value="specificResources"
+                                id="specificResources"
+                                data-testid="specificResources"
+                            />
+                            <Label htmlFor="specificResources" className="cursor-pointer">
+                                {t(`specificResourceType`, { resourceType })}
+                            </Label>
                         </div>
                     </RadioGroup>
                 </div>

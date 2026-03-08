@@ -1,11 +1,17 @@
+import { useTranslation } from "@merge-rd/i18n";
 import { Label } from "@merge-rd/ui/components/label";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@merge-rd/ui/components/select";
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue
+} from "@merge-rd/ui/components/select";
 import { useState } from "react";
 import { Controller, useFormContext } from "react-hook-form";
-import { useTranslation } from "@merge-rd/i18n";
 
 import { HelpItem } from "../../../../shared/keycloak-ui-shared";
-import { TimeSelector, Unit } from "../../../shared/ui/time-selector/time-selector";
+import { TimeSelector, type Unit } from "../../../shared/ui/time-selector/time-selector";
 
 type TokenLifespanProps = {
     id: string;
@@ -49,7 +55,7 @@ export const TokenLifespan = ({ id, name, defaultValue, units }: TokenLifespanPr
                         <div>
                             <Select
                                 value={isExpireSet(field.value) ? "60" : INHERITED_VALUE}
-                                onValueChange={(value) => {
+                                onValueChange={value => {
                                     field.onChange(value === INHERITED_VALUE ? "" : 60);
                                 }}
                             >
@@ -61,7 +67,9 @@ export const TokenLifespan = ({ id, name, defaultValue, units }: TokenLifespanPr
                                     </SelectValue>
                                 </SelectTrigger>
                                 <SelectContent>
-                                    <SelectItem value={INHERITED_VALUE}>{t(inherited)}</SelectItem>
+                                    <SelectItem value={INHERITED_VALUE}>
+                                        {t(inherited)}
+                                    </SelectItem>
                                     <SelectItem value="60">{t(expires)}</SelectItem>
                                 </SelectContent>
                             </Select>
@@ -75,7 +83,9 @@ export const TokenLifespan = ({ id, name, defaultValue, units }: TokenLifespanPr
                                             : "default"
                                     }
                                     units={units}
-                                    value={field.value === "" ? defaultValue : field.value}
+                                    value={
+                                        field.value === "" ? defaultValue : field.value
+                                    }
                                     onChange={field.onChange}
                                     onFocus={onFocus}
                                     onBlur={onBlur}

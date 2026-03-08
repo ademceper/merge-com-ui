@@ -1,8 +1,8 @@
+import { useTranslation } from "@merge-rd/i18n";
 import { Switch } from "@merge-rd/ui/components/switch";
 import { Controller, useFormContext } from "react-hook-form";
-import { useTranslation } from "@merge-rd/i18n";
 
-import { FieldProps, FormGroupField } from "./form-group-field";
+import { type FieldProps, FormGroupField } from "./form-group-field";
 
 type FieldType = "boolean" | "string";
 
@@ -36,8 +36,8 @@ export const SwitchField = ({
                                 ? field.value === "true"
                                 : (field.value as boolean)
                         }
-                        onCheckedChange={(value) =>
-                            field.onChange(fieldType === "string" ? "" + value : value)
+                        onCheckedChange={value =>
+                            field.onChange(fieldType === "string" ? `${value}` : value)
                         }
                         disabled={isReadOnly}
                         aria-label={label}

@@ -1,13 +1,6 @@
 import type { RealmEventsConfigRepresentation } from "@keycloak/keycloak-admin-client/lib/defs/realmEventsConfigRepresentation";
 import type RealmRepresentation from "@keycloak/keycloak-admin-client/lib/defs/realmRepresentation";
-import { getErrorDescription, getErrorMessage, useFetch } from "../../../../shared/keycloak-ui-shared";
-import { toast } from "sonner";
-import { isEqual } from "lodash-es";
-import { useState } from "react";
-import { useForm } from "react-hook-form";
 import { useTranslation } from "@merge-rd/i18n";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@merge-rd/ui/components/tabs";
-import { useAdminClient } from "../../../app/admin-client";
 import {
     AlertDialog,
     AlertDialogAction,
@@ -18,15 +11,26 @@ import {
     AlertDialogHeader,
     AlertDialogTitle
 } from "@merge-rd/ui/components/alert-dialog";
-import { FormAccess } from "../../../shared/ui/form/form-access";
-import { FixedButtonsGroup } from "../../../shared/ui/form/fixed-button-group";
-import { FormPanel } from "../../../../shared/keycloak-ui-shared";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@merge-rd/ui/components/tabs";
+import { isEqual } from "lodash-es";
+import { useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
+import { toast } from "sonner";
+import {
+    FormPanel,
+    getErrorDescription,
+    getErrorMessage
+} from "../../../../shared/keycloak-ui-shared";
+import { useAdminClient } from "../../../app/admin-client";
 import { useRealm } from "../../../app/providers/realm-context/realm-context";
 import { convertToFormValues } from "../../../shared/lib/util";
+import { FixedButtonsGroup } from "../../../shared/ui/form/fixed-button-group";
+import { FormAccess } from "../../../shared/ui/form/form-access";
+import { useEventsConfig } from "../api/use-events-config";
 import { AddEventTypesDialog } from "./add-event-types-dialog";
-import { EventConfigForm, EventsType } from "./event-config-form";
+import { EventConfigForm, type EventsType } from "./event-config-form";
 import { EventListenersForm } from "./event-listeners-form";
-import { EventsTypeTable, EventType } from "./events-type-table";
+import { EventsTypeTable, type EventType } from "./events-type-table";
 
 type EventsTabProps = {
     realm: RealmRepresentation;
@@ -43,21 +47,27 @@ export const EventsTab = ({ realm }: EventsTabProps) => {
     const form = useForm<EventsConfigForm>();
     const { setValue, handleSubmit } = form;
 
-    const [key, setKey] = useState(0);
-    const refresh = () => setKey(new Date().getTime());
-    const [tableKey, setTableKey] = useState(0);
-    const reload = () => setTableKey(new Date().getTime());
-
     const [activeTab, setActiveTab] = useState("event");
     const [events, setEvents] = useState<RealmEventsConfigRepresentation>();
     const [type, setType] = useState<EventsType>();
     const [addEventType, setAddEventType] = useState(false);
     const { realm: realmName, refresh: refreshRealm } = useRealm();
 
+    const { data: eventsConfigData, refetch: refetchEventsConfig } = useEventsConfig();
+
     const setupForm = (eventConfig?: EventsConfigForm) => {
         setEvents(eventConfig);
         convertToFormValues(eventConfig || {}, setValue);
     };
+
+    useEffect(() => {
+        if (eventsConfigData) {
+            setupForm({
+                ...eventsConfigData,
+                adminEventsExpiration: realm.attributes?.adminEventsExpiration
+            });
+        }
+    }, [eventsConfigData]);
 
     const clear = (eventType: EventsType) => {
         setType(eventType);
@@ -77,21 +87,12 @@ export const EventsTab = ({ realm }: EventsTabProps) => {
             toast.success(t(`${type}-events-cleared`));
             setType(undefined);
         } catch (error) {
-            toast.error(t(`${type}-events-cleared-error`, { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
+            toast.error(
+                t(`${type}-events-cleared-error`, { error: getErrorMessage(error) }),
+                { description: getErrorDescription(error) }
+            );
         }
     };
-
-    useFetch(
-        () => adminClient.realms.getConfigEvents({ realm: realmName }),
-        eventConfig => {
-            setupForm({
-                ...eventConfig,
-                adminEventsExpiration: realm.attributes?.adminEventsExpiration
-            });
-            reload();
-        },
-        [key]
-    );
 
     const save = async (config: EventsConfigForm) => {
         const updatedEventListener = !isEqual(
@@ -123,12 +124,9 @@ export const EventsTab = ({ realm }: EventsTabProps) => {
             );
         } catch (error) {
             toast.error(
-                t(
-                    updatedEventListener
-                        ? "saveEventListenersError"
-                        : "eventConfigError",
-                    { error: getErrorMessage(error) }
-                ),
+                t(updatedEventListener ? "saveEventListenersError" : "eventConfigError", {
+                    error: getErrorMessage(error)
+                }),
                 { description: getErrorDescription(error) }
             );
         }
@@ -146,7 +144,7 @@ export const EventsTab = ({ realm }: EventsTabProps) => {
         const eventConfig = { ...form.getValues(), enabledEventTypes: events };
         await save(eventConfig);
         setAddEventType(false);
-        refresh();
+        refetchEventsConfig();
     };
 
     const removeEvents = async (eventTypes: EventType[] = []) => {
@@ -160,15 +158,21 @@ export const EventsTab = ({ realm }: EventsTabProps) => {
 
     return (
         <>
-            <AlertDialog open={!!type} onOpenChange={(open) => !open && setType(undefined)}>
+            <AlertDialog open={!!type} onOpenChange={open => !open && setType(undefined)}>
                 <AlertDialogContent>
                     <AlertDialogHeader>
                         <AlertDialogTitle>{t("deleteEvents")}</AlertDialogTitle>
-                        <AlertDialogDescription>{t("deleteEventsConfirm")}</AlertDialogDescription>
+                        <AlertDialogDescription>
+                            {t("deleteEventsConfirm")}
+                        </AlertDialogDescription>
                     </AlertDialogHeader>
                     <AlertDialogFooter>
                         <AlertDialogCancel>{t("cancel")}</AlertDialogCancel>
-                        <AlertDialogAction variant="destructive" data-testid="confirm" onClick={onDeleteConfirm}>
+                        <AlertDialogAction
+                            variant="destructive"
+                            data-testid="confirm"
+                            onClick={onDeleteConfirm}
+                        >
                             {t("clear")}
                         </AlertDialogAction>
                     </AlertDialogFooter>
@@ -181,9 +185,12 @@ export const EventsTab = ({ realm }: EventsTabProps) => {
                     onClose={() => setAddEventType(false)}
                 />
             )}
-            <Tabs value={activeTab} onValueChange={(v) => setActiveTab(v)}>
+            <Tabs value={activeTab} onValueChange={v => setActiveTab(v)}>
                 <div className="w-full min-w-0 overflow-x-auto overflow-y-hidden mb-4">
-                    <TabsList variant="line" className="mb-0 w-max min-w-0 **:data-[slot=tabs-trigger]:flex-none">
+                    <TabsList
+                        variant="line"
+                        className="mb-0 w-max min-w-0 **:data-[slot=tabs-trigger]:flex-none"
+                    >
                         <TabsTrigger value="event" data-testid="rs-event-listeners-tab">
                             {t("eventListeners")}
                         </TabsTrigger>
@@ -216,59 +223,64 @@ export const EventsTab = ({ realm }: EventsTabProps) => {
                         />
                     </FormAccess>
                 </TabsContent>
-                    <TabsContent value="user" className="mt-0 pt-0 outline-none space-y-6">
-                        <FormAccess
-                            role="manage-events"
-                            isHorizontal
-                            onSubmit={handleSubmit(save)}
+                <TabsContent value="user" className="mt-0 pt-0 outline-none space-y-6">
+                    <FormAccess
+                        role="manage-events"
+                        isHorizontal
+                        onSubmit={handleSubmit(save)}
+                    >
+                        <FormPanel
+                            title={t("userEventsSettings")}
+                            className="mt-6 space-y-6"
                         >
-                            <FormPanel title={t("userEventsSettings")} className="mt-6 space-y-6">
-                                <div className="space-y-4">
-                                    <EventConfigForm
-                                        type="user"
-                                        form={form}
-                                        reset={() => setupForm(events)}
-                                        clear={() => clear("user")}
-                                    />
-                                </div>
-                            </FormPanel>
-                            <FixedButtonsGroup
-                                name="userEvents"
-                                reset={() => setupForm(events)}
-                                isSubmit
-                            />
-                        </FormAccess>
-                        <EventsTypeTable
-                            key={tableKey}
-                            addTypes={() => setAddEventType(true)}
-                            eventTypes={events?.enabledEventTypes || []}
-                            onDelete={value => removeEvents([value])}
+                            <div className="space-y-4">
+                                <EventConfigForm
+                                    type="user"
+                                    form={form}
+                                    reset={() => setupForm(events)}
+                                    clear={() => clear("user")}
+                                />
+                            </div>
+                        </FormPanel>
+                        <FixedButtonsGroup
+                            name="userEvents"
+                            reset={() => setupForm(events)}
+                            isSubmit
                         />
-                    </TabsContent>
-                    <TabsContent value="admin" className="mt-0 pt-0 outline-none">
-                        <FormAccess
-                            role="manage-events"
-                            isHorizontal
-                            onSubmit={handleSubmit(save)}
+                    </FormAccess>
+                    <EventsTypeTable
+                        addTypes={() => setAddEventType(true)}
+                        eventTypes={events?.enabledEventTypes || []}
+                        onDelete={value => removeEvents([value])}
+                    />
+                </TabsContent>
+                <TabsContent value="admin" className="mt-0 pt-0 outline-none">
+                    <FormAccess
+                        role="manage-events"
+                        isHorizontal
+                        onSubmit={handleSubmit(save)}
+                    >
+                        <FormPanel
+                            title={t("adminEventsSettings")}
+                            className="mt-6 space-y-6"
                         >
-                            <FormPanel title={t("adminEventsSettings")} className="mt-6 space-y-6">
-                                <div className="space-y-4">
-                                    <EventConfigForm
-                                        type="admin"
-                                        form={form}
-                                        reset={() => setupForm(events)}
-                                        clear={() => clear("admin")}
-                                    />
-                                </div>
-                            </FormPanel>
-                            <FixedButtonsGroup
-                                name="adminEvents"
-                                reset={() => setupForm(events)}
-                                isSubmit
-                            />
-                        </FormAccess>
-                    </TabsContent>
-                </Tabs>
+                            <div className="space-y-4">
+                                <EventConfigForm
+                                    type="admin"
+                                    form={form}
+                                    reset={() => setupForm(events)}
+                                    clear={() => clear("admin")}
+                                />
+                            </div>
+                        </FormPanel>
+                        <FixedButtonsGroup
+                            name="adminEvents"
+                            reset={() => setupForm(events)}
+                            isSubmit
+                        />
+                    </FormAccess>
+                </TabsContent>
+            </Tabs>
         </>
     );
 };

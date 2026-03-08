@@ -1,16 +1,20 @@
 import type RealmRepresentation from "@keycloak/keycloak-admin-client/lib/defs/realmRepresentation";
-import { getErrorDescription, getErrorMessage, SelectField } from "../../../shared/keycloak-ui-shared";
-import { toast } from "sonner";
+import { useTranslation } from "@merge-rd/i18n";
 import { Button } from "@merge-rd/ui/components/button";
 import {
     Dialog,
     DialogContent,
+    DialogFooter,
     DialogHeader,
-    DialogTitle,
-    DialogFooter
+    DialogTitle
 } from "@merge-rd/ui/components/dialog";
 import { FormProvider, useForm } from "react-hook-form";
-import { useTranslation } from "@merge-rd/i18n";
+import { toast } from "sonner";
+import {
+    getErrorDescription,
+    getErrorMessage,
+    SelectField
+} from "../../../shared/keycloak-ui-shared";
 import { useAdminClient } from "../../app/admin-client";
 import { useRealm } from "../../app/providers/realm-context/realm-context";
 import { REALM_FLOWS } from "./constants";
@@ -29,7 +33,7 @@ export const BindFlowDialog = ({ flowAlias, onClose }: BindFlowDialogProps) => {
 
     const { t } = useTranslation();
     const form = useForm<BindingForm>();
-const { realm, realmRepresentation: realmRep, refresh } = useRealm();
+    const { realm, realmRepresentation: realmRep, refresh } = useRealm();
 
     const onSubmit = async ({ bindingType }: BindingForm) => {
         try {
@@ -40,7 +44,9 @@ const { realm, realmRepresentation: realmRep, refresh } = useRealm();
             refresh();
             toast.success(t("updateFlowSuccess"));
         } catch (error) {
-            toast.error(t("updateFlowError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
+            toast.error(t("updateFlowError", { error: getErrorMessage(error) }), {
+                description: getErrorDescription(error)
+            });
         }
 
         onClose(true);
@@ -49,7 +55,12 @@ const { realm, realmRepresentation: realmRep, refresh } = useRealm();
     const flowKeys = Array.from(REALM_FLOWS.keys());
 
     return (
-        <Dialog open onOpenChange={(open) => { if (!open) onClose(); }}>
+        <Dialog
+            open
+            onOpenChange={open => {
+                if (!open) onClose();
+            }}
+        >
             <DialogContent className="max-w-md">
                 <DialogHeader>
                     <DialogTitle>{t("bindFlow")}</DialogTitle>
@@ -72,7 +83,12 @@ const { realm, realmRepresentation: realmRep, refresh } = useRealm();
                     </FormProvider>
                 </form>
                 <DialogFooter>
-                    <Button key="confirm" data-testid="save" type="submit" form="bind-form">
+                    <Button
+                        key="confirm"
+                        data-testid="save"
+                        type="submit"
+                        form="bind-form"
+                    >
                         {t("save")}
                     </Button>
                     <Button

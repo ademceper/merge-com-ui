@@ -12,10 +12,7 @@ type EmptyRowProps = {
 
 export const EmptyRow = ({ message, ...props }: EmptyRowProps) => {
     return (
-        <div
-            className="py-8 text-center text-sm text-muted-foreground"
-            {...props}
-        >
+        <div className="py-8 text-center text-sm text-muted-foreground" {...props}>
             {message}
         </div>
     );

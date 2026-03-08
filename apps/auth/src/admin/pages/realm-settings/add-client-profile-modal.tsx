@@ -1,8 +1,8 @@
 import type ClientProfileRepresentation from "@keycloak/keycloak-admin-client/lib/defs/clientProfileRepresentation";
 import type RoleRepresentation from "@keycloak/keycloak-admin-client/lib/defs/roleRepresentation";
-import { useFetch } from "../../../shared/keycloak-ui-shared";
-import { Button } from "@merge-rd/ui/components/button";
+import { useTranslation } from "@merge-rd/i18n";
 import { Badge } from "@merge-rd/ui/components/badge";
+import { Button } from "@merge-rd/ui/components/button";
 import { Checkbox } from "@merge-rd/ui/components/checkbox";
 import {
     Dialog,
@@ -18,12 +18,11 @@ import {
     EmptyHeader,
     EmptyTitle
 } from "@merge-rd/ui/components/empty";
-import { DataTable, type ColumnDef } from "@/admin/shared/ui/data-table";
-import { useMemo, useState } from "react";
-import { useTranslation } from "@merge-rd/i18n";
-import { useAdminClient } from "../../app/admin-client";
+import { useEffect, useMemo, useState } from "react";
+import { type ColumnDef, DataTable } from "@/admin/shared/ui/data-table";
 import { KeycloakSpinner } from "../../../shared/keycloak-ui-shared";
 import { translationFormatter } from "../../shared/lib/translationFormatter";
+import { useClientProfiles } from "./api/use-client-profiles";
 
 type ClientProfile = ClientProfileRepresentation & {
     global: boolean;
@@ -37,33 +36,32 @@ type AddClientProfileModalProps = {
 };
 
 export const AddClientProfileModal = (props: AddClientProfileModalProps) => {
-    const { adminClient } = useAdminClient();
     const { t } = useTranslation();
     const [selectedRows, setSelectedRows] = useState<ClientProfile[]>([]);
-    const [tableProfiles, setTableProfiles] = useState<ClientProfile[] | undefined>(undefined);
+    const [tableProfiles, setTableProfiles] = useState<ClientProfile[] | undefined>(
+        undefined
+    );
 
-    useFetch(
-        () =>
-            adminClient.clientPolicies.listProfiles({
-                includeGlobalProfiles: true
-            }),
-        allProfiles => {
-            const globalProfiles = (allProfiles.globalProfiles ?? []).map(p => ({
+    const { data: allProfilesData } = useClientProfiles();
+
+    useEffect(() => {
+        if (allProfilesData) {
+            const globalProfiles = (allProfilesData.globalProfiles ?? []).map(p => ({
                 id: p.name,
                 ...p,
                 global: true
             })) as ClientProfile[];
-            const profiles = (allProfiles.profiles ?? []).map(p => ({
+            const profiles = (allProfilesData.profiles ?? []).map(p => ({
                 ...p,
                 global: false
             })) as ClientProfile[];
             setTableProfiles([...globalProfiles, ...profiles]);
-        },
-        []
-    );
+        }
+    }, [allProfilesData]);
 
     const data = useMemo(
-        () => (tableProfiles ?? []).filter(item => !props.allProfiles.includes(item.name!)),
+        () =>
+            (tableProfiles ?? []).filter(item => !props.allProfiles.includes(item.name!)),
         [tableProfiles, props.allProfiles]
     );
 
@@ -94,7 +92,10 @@ export const AddClientProfileModal = (props: AddClientProfileModalProps) => {
                 <>
                     {row.original.name}{" "}
                     {row.original.global && (
-                        <Badge variant="secondary" className="bg-blue-500/20 text-blue-700 dark:text-blue-300 ml-1">
+                        <Badge
+                            variant="secondary"
+                            className="bg-blue-500/20 text-blue-700 dark:text-blue-300 ml-1"
+                        >
                             {t("global")}
                         </Badge>
                     )}
@@ -125,7 +126,12 @@ export const AddClientProfileModal = (props: AddClientProfileModalProps) => {
     }
 
     return (
-        <Dialog open={props.open} onOpenChange={(open) => { if (!open) props.toggleDialog(); }}>
+        <Dialog
+            open={props.open}
+            onOpenChange={open => {
+                if (!open) props.toggleDialog();
+            }}
+        >
             <DialogContent data-testid="addClientProfile" className="max-w-4xl">
                 <DialogHeader>
                     <DialogTitle>{t("addClientProfile")}</DialogTitle>
@@ -144,15 +150,14 @@ export const AddClientProfileModal = (props: AddClientProfileModalProps) => {
                         disabled={selectedRows.length === 0}
                         onClick={() => {
                             props.toggleDialog();
-                            props.onConfirm(selectedRows as unknown as RoleRepresentation[]);
+                            props.onConfirm(
+                                selectedRows as unknown as RoleRepresentation[]
+                            );
                         }}
                     >
                         {t("add")}
                     </Button>
-                    <Button
-                        variant="ghost"
-                        onClick={() => props.toggleDialog()}
-                    >
+                    <Button variant="ghost" onClick={() => props.toggleDialog()}>
                         {t("cancel")}
                     </Button>
                 </DialogFooter>

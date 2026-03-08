@@ -1,4 +1,4 @@
-import { Button } from "@merge-rd/ui/components/button";
+import { useTranslation } from "@merge-rd/i18n";
 import {
     AlertDialog,
     AlertDialogAction,
@@ -9,31 +9,29 @@ import {
     AlertDialogHeader,
     AlertDialogTitle
 } from "@merge-rd/ui/components/alert-dialog";
-import {
-    DataTable,
-    DataTableRowActions,
-    type ColumnDef
-} from "@/admin/shared/ui/data-table";
+import { Button } from "@merge-rd/ui/components/button";
 import { PencilSimple, Plus, Trash } from "@phosphor-icons/react";
 import { useState } from "react";
-import { useTranslation } from "@merge-rd/i18n";
-import { useAdminClient } from "../../app/admin-client";
-import type { Row } from "../clients/scopes/client-scopes";
-import { getProtocolName } from "../clients/utils";
-import { getErrorDescription, getErrorMessage } from "../../../shared/keycloak-ui-shared";
 import { toast } from "sonner";
 import {
-    AllClientScopeType,
-    AllClientScopes,
+    type ColumnDef,
+    DataTable,
+    DataTableRowActions
+} from "@/admin/shared/ui/data-table";
+import { getErrorDescription, getErrorMessage } from "../../../shared/keycloak-ui-shared";
+import { useAdminClient } from "../../app/admin-client";
+import useLocaleSort, { mapByKey } from "../../shared/lib/useLocaleSort";
+import {
+    type AllClientScopeType,
     CellDropdown,
-    ClientScope,
-    ClientScopeDefaultOptionalType,
+    type ClientScopeDefaultOptionalType,
     changeScope,
     removeScope
 } from "../../shared/ui/client-scope/client-scope-types";
-import useLocaleSort, { mapByKey } from "../../shared/lib/useLocaleSort";
-import { useFetch } from "../../../shared/keycloak-ui-shared";
+import type { Row } from "../clients/scopes/client-scopes";
+import { getProtocolName } from "../clients/utils";
 import { AddClientScopeDialog } from "./add-client-scope-dialog";
+import { useClientScopes } from "./api/use-client-scopes";
 import { EditClientScopeDialog } from "./edit-client-scope-dialog";
 
 type TypeSelectorProps = ClientScopeDefaultOptionalType & {
@@ -50,15 +48,18 @@ function TypeSelector(scope: TypeSelectorProps) {
             type={scope.type}
             all
             className={scope.className}
-            onSelect={async (value) => {
+            onSelect={async value => {
                 try {
                     await changeScope(adminClient, scope, value as AllClientScopeType);
                     toast.success(t("clientScopeSuccess"));
                     scope.refresh();
                 } catch (error) {
-                    toast.error(t("clientScopeError", { error: getErrorMessage(error) }), {
-                        description: getErrorDescription(error)
-                    });
+                    toast.error(
+                        t("clientScopeError", { error: getErrorMessage(error) }),
+                        {
+                            description: getErrorDescription(error)
+                        }
+                    );
                 }
             }}
         />
@@ -70,32 +71,13 @@ export default function ClientScopesSection() {
     const { t } = useTranslation();
     const localeSort = useLocaleSort();
 
-    const [key, setKey] = useState(0);
-    const refresh = () => setKey(key + 1);
-    const [clientScopes, setClientScopes] = useState<Row[]>([]);
+    const { data: rawClientScopes = [], refetch: refetchScopes } = useClientScopes();
+    const clientScopes = localeSort(rawClientScopes as Row[], mapByKey("name"));
+    const refresh = () => {
+        refetchScopes();
+    };
     const [selectedScope, setSelectedScope] = useState<ClientScopeDefaultOptionalType>();
     const [editScopeId, setEditScopeId] = useState<string | null>(null);
-
-    useFetch(
-        async () => {
-            const [defaultScopes, optionalScopes, scopes] = await Promise.all([
-                adminClient.clientScopes.listDefaultClientScopes(),
-                adminClient.clientScopes.listDefaultOptionalClientScopes(),
-                adminClient.clientScopes.find()
-            ]);
-            const transformed: Row[] = scopes.map(scope => ({
-                ...scope,
-                type: defaultScopes.find(s => s.name === scope.name)
-                    ? ClientScope.default
-                    : optionalScopes.find(s => s.name === scope.name)
-                      ? ClientScope.optional
-                      : AllClientScopes.none
-            }));
-            return localeSort(transformed, mapByKey("name"));
-        },
-        (data) => setClientScopes(data),
-        [key]
-    );
 
     const onDeleteConfirm = async () => {
         if (!selectedScope?.id) return;
@@ -151,7 +133,7 @@ export default function ClientScopesSection() {
         },
         {
             id: "displayOrder",
-            accessorFn: (row) => row.attributes?.["gui.order"],
+            accessorFn: row => row.attributes?.["gui.order"],
             header: t("displayOrder"),
             cell: ({ row }) => row.original.attributes?.["gui.order"] ?? "-"
         },
@@ -190,71 +172,70 @@ export default function ClientScopesSection() {
     ];
 
     return (
-        <>
-                        <div className="pt-4 pb-6 px-0">
-                <AlertDialog
-                    open={!!selectedScope}
-                    onOpenChange={(open) => !open && setSelectedScope(undefined)}
-                >
-                    <AlertDialogContent>
-                        <AlertDialogHeader>
-                            <AlertDialogTitle>
-                                {t("deleteClientScope", {
-                                    count: 1,
-                                    name: selectedScope?.name
-                                })}
-                            </AlertDialogTitle>
-                            <AlertDialogDescription>
-                                {t("deleteConfirmClientScopes")}
-                            </AlertDialogDescription>
-                        </AlertDialogHeader>
-                        <AlertDialogFooter>
-                            <AlertDialogCancel>{t("cancel")}</AlertDialogCancel>
-                            <AlertDialogAction
-                                variant="destructive"
-                                data-testid="confirm"
-                                onClick={onDeleteConfirm}
+        <div className="pt-4 pb-6 px-0">
+            <AlertDialog
+                open={!!selectedScope}
+                onOpenChange={open => !open && setSelectedScope(undefined)}
+            >
+                <AlertDialogContent>
+                    <AlertDialogHeader>
+                        <AlertDialogTitle>
+                            {t("deleteClientScope", {
+                                count: 1,
+                                name: selectedScope?.name
+                            })}
+                        </AlertDialogTitle>
+                        <AlertDialogDescription>
+                            {t("deleteConfirmClientScopes")}
+                        </AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter>
+                        <AlertDialogCancel>{t("cancel")}</AlertDialogCancel>
+                        <AlertDialogAction
+                            variant="destructive"
+                            data-testid="confirm"
+                            onClick={onDeleteConfirm}
+                        >
+                            {t("delete")}
+                        </AlertDialogAction>
+                    </AlertDialogFooter>
+                </AlertDialogContent>
+            </AlertDialog>
+
+            <EditClientScopeDialog
+                open={!!editScopeId}
+                onOpenChange={open => !open && setEditScopeId(null)}
+                scopeId={editScopeId}
+                onSuccess={refresh}
+            />
+
+            <DataTable
+                columns={columns}
+                data={clientScopes}
+                searchColumnId="name"
+                searchPlaceholder={t("searchForClientScope")}
+                emptyMessage={t("emptyClientScopes")}
+                onRowClick={row => setEditScopeId(row.original.id!)}
+                toolbar={
+                    <AddClientScopeDialog
+                        trigger={
+                            <Button
+                                type="button"
+                                data-testid="createClientScope"
+                                variant="default"
+                                className="flex h-9 w-9 shrink-0 items-center justify-center p-0 sm:h-9 sm:w-auto sm:gap-2 sm:px-4 sm:py-2"
+                                aria-label={t("createClientScope")}
                             >
-                                {t("delete")}
-                            </AlertDialogAction>
-                        </AlertDialogFooter>
-                    </AlertDialogContent>
-                </AlertDialog>
-
-                <EditClientScopeDialog
-                    open={!!editScopeId}
-                    onOpenChange={(open) => !open && setEditScopeId(null)}
-                    scopeId={editScopeId}
-                    onSuccess={refresh}
-                />
-
-                <DataTable
-                    key={key}
-                    columns={columns}
-                    data={clientScopes}
-                    searchColumnId="name"
-                    searchPlaceholder={t("searchForClientScope")}
-                    emptyMessage={t("emptyClientScopes")}
-                    onRowClick={(row) => setEditScopeId(row.original.id!)}
-                    toolbar={
-                        <AddClientScopeDialog
-                            trigger={
-                                <Button
-                                    type="button"
-                                    data-testid="createClientScope"
-                                    variant="default"
-                                    className="flex h-9 w-9 shrink-0 items-center justify-center p-0 sm:h-9 sm:w-auto sm:gap-2 sm:px-4 sm:py-2"
-                                    aria-label={t("createClientScope")}
-                                >
-                                    <Plus size={20} className="shrink-0 sm:hidden" />
-                                    <span className="hidden sm:inline">{t("createClientScope")}</span>
-                                </Button>
-                            }
-                            onSuccess={refresh}
-                        />
-                    }
-                />
-            </div>
-        </>
+                                <Plus size={20} className="shrink-0 sm:hidden" />
+                                <span className="hidden sm:inline">
+                                    {t("createClientScope")}
+                                </span>
+                            </Button>
+                        }
+                        onSuccess={refresh}
+                    />
+                }
+            />
+        </div>
     );
 }

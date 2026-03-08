@@ -1,10 +1,10 @@
+import { useTranslation } from "@merge-rd/i18n";
 import {
     Dialog,
     DialogContent,
     DialogHeader,
     DialogTitle
 } from "@merge-rd/ui/components/dialog";
-import { useTranslation } from "@merge-rd/i18n";
 import { useServerInfo } from "../../../../app/providers/server-info/server-info-provider";
 import { KEY_PROVIDER_TYPE } from "../../../../shared/lib/util";
 
@@ -19,12 +19,20 @@ export const KeyProvidersPicker = ({ onConfirm, onClose }: KeyProvidersPickerPro
     const keyProviderComponentTypes =
         serverInfo.componentTypes?.[KEY_PROVIDER_TYPE] ?? [];
     return (
-        <Dialog open onOpenChange={(open) => { if (!open) onClose(); }}>
+        <Dialog
+            open
+            onOpenChange={open => {
+                if (!open) onClose();
+            }}
+        >
             <DialogContent className="max-w-2xl">
                 <DialogHeader>
                     <DialogTitle>{t("addProvider")}</DialogTitle>
                 </DialogHeader>
-                <ul className="divide-y border rounded-md" aria-label={t("addPredefinedMappers")}>
+                <ul
+                    className="divide-y border rounded-md"
+                    aria-label={t("addPredefinedMappers")}
+                >
                     {keyProviderComponentTypes.map(provider => (
                         <li
                             key={provider.id}
@@ -33,7 +41,9 @@ export const KeyProvidersPicker = ({ onConfirm, onClose }: KeyProvidersPickerPro
                             onClick={() => onConfirm(provider.id)}
                         >
                             <span className="font-medium">{provider.id}</span>
-                            <span className="text-sm text-muted-foreground flex-1">{provider.helpText}</span>
+                            <span className="text-sm text-muted-foreground flex-1">
+                                {provider.helpText}
+                            </span>
                         </li>
                     ))}
                 </ul>

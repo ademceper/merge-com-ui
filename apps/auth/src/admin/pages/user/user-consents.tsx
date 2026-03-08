@@ -1,14 +1,7 @@
 import type UserConsentRepresentation from "@keycloak/keycloak-admin-client/lib/defs/userConsentRepresentation";
-import { Badge } from "@merge-rd/ui/components/badge";
-import { Cube, Trash } from "@phosphor-icons/react";
-import { sortBy } from "lodash-es";
-import { useState } from "react";
 import { useTranslation } from "@merge-rd/i18n";
-import { useAdminClient } from "../../app/admin-client";
-import { getErrorDescription, getErrorMessage, useFetch } from "../../../shared/keycloak-ui-shared";
-import { toast } from "sonner";
-import { useConfirmDialog } from "../../shared/ui/confirm-dialog/confirm-dialog";
-import { DataTable, DataTableRowActions, type ColumnDef } from "@/admin/shared/ui/data-table";
+import { Badge } from "@merge-rd/ui/components/badge";
+import { DropdownMenuItem } from "@merge-rd/ui/components/dropdown-menu";
 import {
     Empty,
     EmptyContent,
@@ -17,37 +10,42 @@ import {
     EmptyMedia,
     EmptyTitle
 } from "@merge-rd/ui/components/empty";
-import { DropdownMenuItem } from "@merge-rd/ui/components/dropdown-menu";
+import { Cube, Trash } from "@phosphor-icons/react";
+import { useState } from "react";
+import { toast } from "sonner";
+import {
+    type ColumnDef,
+    DataTable,
+    DataTableRowActions
+} from "@/admin/shared/ui/data-table";
+import { getErrorDescription, getErrorMessage } from "../../../shared/keycloak-ui-shared";
+import { useAdminClient } from "../../app/admin-client";
 import useFormatDate from "../../shared/lib/useFormatDate";
 import { useParams } from "../../shared/lib/useParams";
+import { useConfirmDialog } from "../../shared/ui/confirm-dialog/confirm-dialog";
+import { useUserConsents as useUserConsentsQuery } from "./api/use-user-consents";
 
 export const UserConsents = () => {
     const { adminClient } = useAdminClient();
 
     const [selectedClient, setSelectedClient] = useState<UserConsentRepresentation>();
     const { t } = useTranslation();
-const formatDate = useFormatDate();
-    const [key, setKey] = useState(0);
+    const formatDate = useFormatDate();
 
     const { id } = useParams<{ id: string }>();
-    const alphabetize = (consentsList: UserConsentRepresentation[]) => {
-        return sortBy(consentsList, client => client.clientId?.toUpperCase());
-    };
 
-    const refresh = () => setKey(new Date().getTime());
-
-    const [consents, setConsents] = useState<UserConsentRepresentation[]>([]);
-    useFetch(
-        async () => alphabetize(await adminClient.users.listConsents({ id })),
-        setConsents,
-        [key, id]
-    );
+    const { data: consents = [], refetch: refreshConsents } = useUserConsentsQuery(id);
+    const refresh = () => refreshConsents();
 
     const clientScopesRenderer = ({ grantedClientScopes }: UserConsentRepresentation) => {
         return (
             <div className="flex gap-1 flex-wrap kc-consents-chip-group">
                 {grantedClientScopes!.map(currentChip => (
-                    <Badge key={currentChip} variant="secondary" className="kc-consents-chip">
+                    <Badge
+                        key={currentChip}
+                        variant="secondary"
+                        className="kc-consents-chip"
+                    >
                         {currentChip}
                     </Badge>
                 ))}
@@ -73,22 +71,49 @@ const formatDate = useFormatDate();
 
                 toast.success(t("deleteGrantsSuccess"));
             } catch (error) {
-                toast.error(t("deleteGrantsError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
+                toast.error(t("deleteGrantsError", { error: getErrorMessage(error) }), {
+                    description: getErrorDescription(error)
+                });
             }
         }
     });
 
     const columns: ColumnDef<UserConsentRepresentation>[] = [
-        { accessorKey: "clientId", header: t("Client"), cell: ({ getValue }) => getValue() ?? "—" },
-        { accessorKey: "grantedClientScopes", header: t("grantedClientScopes"), cell: ({ row }) => clientScopesRenderer(row.original) },
-        { accessorKey: "createdDate", header: t("created"), cell: ({ row }) => row.original.createdDate ? formatDate(new Date(row.original.createdDate)) : "—" },
-        { accessorKey: "lastUpdatedDate", header: t("lastUpdated"), cell: ({ row }) => row.original.lastUpdatedDate ? formatDate(new Date(row.original.lastUpdatedDate)) : "—" },
+        {
+            accessorKey: "clientId",
+            header: t("Client"),
+            cell: ({ getValue }) => getValue() ?? "—"
+        },
+        {
+            accessorKey: "grantedClientScopes",
+            header: t("grantedClientScopes"),
+            cell: ({ row }) => clientScopesRenderer(row.original)
+        },
+        {
+            accessorKey: "createdDate",
+            header: t("created"),
+            cell: ({ row }) =>
+                row.original.createdDate
+                    ? formatDate(new Date(row.original.createdDate))
+                    : "—"
+        },
+        {
+            accessorKey: "lastUpdatedDate",
+            header: t("lastUpdated"),
+            cell: ({ row }) =>
+                row.original.lastUpdatedDate
+                    ? formatDate(new Date(row.original.lastUpdatedDate))
+                    : "—"
+        },
         {
             id: "actions",
             cell: ({ row }) => (
                 <DataTableRowActions row={row}>
                     <DropdownMenuItem
-                        onClick={() => { setSelectedClient(row.original); toggleDeleteDialog(); }}
+                        onClick={() => {
+                            setSelectedClient(row.original);
+                            toggleDeleteDialog();
+                        }}
                     >
                         <Trash className="size-4" />
                         {t("revoke")}
@@ -100,9 +125,15 @@ const formatDate = useFormatDate();
 
     const emptyContent = (
         <Empty className="py-12">
-            <EmptyMedia><Cube className="size-12 text-muted-foreground" /></EmptyMedia>
-            <EmptyHeader><EmptyTitle>{t("noConsents")}</EmptyTitle></EmptyHeader>
-            <EmptyContent><EmptyDescription>{t("noConsentsText")}</EmptyDescription></EmptyContent>
+            <EmptyMedia>
+                <Cube className="size-12 text-muted-foreground" />
+            </EmptyMedia>
+            <EmptyHeader>
+                <EmptyTitle>{t("noConsents")}</EmptyTitle>
+            </EmptyHeader>
+            <EmptyContent>
+                <EmptyDescription>{t("noConsentsText")}</EmptyDescription>
+            </EmptyContent>
         </Empty>
     );
 
@@ -110,7 +141,6 @@ const formatDate = useFormatDate();
         <>
             <DeleteConfirm />
             <DataTable<UserConsentRepresentation>
-                key={key}
                 columns={columns}
                 data={consents}
                 searchColumnId="clientId"

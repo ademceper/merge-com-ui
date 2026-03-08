@@ -1,14 +1,6 @@
-import ComponentRepresentation from "@keycloak/keycloak-admin-client/lib/defs/componentRepresentation";
-import ComponentTypeRepresentation from "@keycloak/keycloak-admin-client/lib/defs/componentTypeRepresentation";
-import { getErrorDescription, getErrorMessage, TextControl, useFetch } from "../../../../shared/keycloak-ui-shared";
-import { toast } from "sonner";
-import { Button, buttonVariants } from "@merge-rd/ui/components/button";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@merge-rd/ui/components/dropdown-menu";
-import { useState } from "react";
-import { FormProvider, useForm, useWatch } from "react-hook-form";
+import type ComponentRepresentation from "@keycloak/keycloak-admin-client/lib/defs/componentRepresentation";
+import type ComponentTypeRepresentation from "@keycloak/keycloak-admin-client/lib/defs/componentTypeRepresentation";
 import { useTranslation } from "@merge-rd/i18n";
-import { Link, useNavigate } from "@tanstack/react-router";
-import { useAdminClient } from "../../../app/admin-client";
 import {
     AlertDialog,
     AlertDialogAction,
@@ -19,16 +11,34 @@ import {
     AlertDialogHeader,
     AlertDialogTitle
 } from "@merge-rd/ui/components/alert-dialog";
-import { DynamicComponents } from "../../../shared/ui/dynamic/dynamic-components";
-import { FormAccess } from "../../../shared/ui/form/form-access";
-import { KeycloakSpinner } from "../../../../shared/keycloak-ui-shared";
+import { Button, buttonVariants } from "@merge-rd/ui/components/button";
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuTrigger
+} from "@merge-rd/ui/components/dropdown-menu";
+import { Link, useNavigate } from "@tanstack/react-router";
+import { useEffect, useState } from "react";
+import { FormProvider, useForm, useWatch } from "react-hook-form";
+import { toast } from "sonner";
+import {
+    getErrorDescription,
+    getErrorMessage,
+    KeycloakSpinner,
+    TextControl
+} from "../../../../shared/keycloak-ui-shared";
+import { useAdminClient } from "../../../app/admin-client";
 import { useRealm } from "../../../app/providers/realm-context/realm-context";
 import { useParams } from "../../../shared/lib/useParams";
+import { DynamicComponents } from "../../../shared/ui/dynamic/dynamic-components";
+import { FormAccess } from "../../../shared/ui/form/form-access";
+import { useRegistrationProvider } from "../api/use-registration-provider";
 import {
-    RegistrationProviderParams,
+    type RegistrationProviderParams,
     toRegistrationProvider
-} from "../routes/add-registration-provider";
-import { toClientRegistration } from "../routes/client-registration-path";
+} from "../../../shared/lib/routes/clients";
+import { toClientRegistration } from "../../../shared/lib/routes/clients";
 
 export default function DetailProvider() {
     const { adminClient } = useAdminClient();
@@ -42,20 +52,16 @@ export default function DetailProvider() {
     const { control, handleSubmit, reset } = form;
 
     const { realm, realmRepresentation } = useRealm();
-const [provider, setProvider] = useState<ComponentTypeRepresentation>();
+    const [provider, setProvider] = useState<ComponentTypeRepresentation>();
 
-    useFetch(
-        async () =>
-            await Promise.all([
-                adminClient.realms.getClientRegistrationPolicyProviders({ realm }),
-                id ? adminClient.components.findOne({ id }) : Promise.resolve()
-            ]),
-        ([providers, data]) => {
-            setProvider(providers.find(p => p.id === providerId));
-            reset(data || { providerId });
-        },
-        []
-    );
+    const { data: registrationData } = useRegistrationProvider(providerId, id);
+
+    useEffect(() => {
+        if (registrationData) {
+            setProvider(registrationData.provider);
+            reset(registrationData.data || { providerId });
+        }
+    }, [registrationData]);
 
     const providerName = useWatch({ control, defaultValue: "", name: "name" });
 
@@ -78,11 +84,23 @@ const [provider, setProvider] = useState<ComponentTypeRepresentation>();
                 await adminClient.components.update({ id }, updatedComponent);
             } else {
                 const { id } = await adminClient.components.create(updatedComponent);
-                navigate({ to: toRegistrationProvider({ id, realm, subTab, providerId }) as string });
+                navigate({
+                    to: toRegistrationProvider({
+                        id,
+                        realm,
+                        subTab,
+                        providerId
+                    }) as string
+                });
             }
             toast.success(t(`provider${id ? "Updated" : "Create"}Success`));
         } catch (error) {
-            toast.error(t(`provider${id ? "Updated" : "Create"}Error`, { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
+            toast.error(
+                t(`provider${id ? "Updated" : "Create"}Error`, {
+                    error: getErrorMessage(error)
+                }),
+                { description: getErrorDescription(error) }
+            );
         }
     };
 
@@ -99,7 +117,10 @@ const [provider, setProvider] = useState<ComponentTypeRepresentation>();
             toast.success(t("clientRegisterPolicyDeleteSuccess"));
             navigate({ to: toClientRegistration({ realm, subTab }) as string });
         } catch (error) {
-            toast.error(t("clientRegisterPolicyDeleteError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
+            toast.error(
+                t("clientRegisterPolicyDeleteError", { error: getErrorMessage(error) }),
+                { description: getErrorDescription(error) }
+            );
         }
     };
 
@@ -114,7 +135,10 @@ const [provider, setProvider] = useState<ComponentTypeRepresentation>();
                     <div className="flex flex-wrap items-center gap-2" />
                     <div className="flex items-center gap-2">
                         <DropdownMenu>
-                            <DropdownMenuTrigger data-testid="action-dropdown" className={buttonVariants()}>
+                            <DropdownMenuTrigger
+                                data-testid="action-dropdown"
+                                className={buttonVariants()}
+                            >
                                 {t("action")}
                             </DropdownMenuTrigger>
                             <DropdownMenuContent align="end">
@@ -133,14 +157,22 @@ const [provider, setProvider] = useState<ComponentTypeRepresentation>();
             <AlertDialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
                 <AlertDialogContent>
                     <AlertDialogHeader>
-                        <AlertDialogTitle>{t("clientRegisterPolicyDeleteConfirmTitle")}</AlertDialogTitle>
+                        <AlertDialogTitle>
+                            {t("clientRegisterPolicyDeleteConfirmTitle")}
+                        </AlertDialogTitle>
                         <AlertDialogDescription>
-                            {t("clientRegisterPolicyDeleteConfirm", { name: providerName })}
+                            {t("clientRegisterPolicyDeleteConfirm", {
+                                name: providerName
+                            })}
                         </AlertDialogDescription>
                     </AlertDialogHeader>
                     <AlertDialogFooter>
                         <AlertDialogCancel>{t("cancel")}</AlertDialogCancel>
-                        <AlertDialogAction variant="destructive" data-testid="confirm" onClick={onDeleteConfirm}>
+                        <AlertDialogAction
+                            variant="destructive"
+                            data-testid="confirm"
+                            onClick={onDeleteConfirm}
+                        >
                             {t("delete")}
                         </AlertDialogAction>
                     </AlertDialogFooter>
@@ -161,23 +193,25 @@ const [provider, setProvider] = useState<ComponentTypeRepresentation>();
                             rules={{ required: t("required") }}
                         />
                         <DynamicComponents
-                                properties={provider.properties}
-                                layoutOverridesByType={{
-                                    List: { hideLabel: true, helpIconAfterControl: true },
-                                    MultivaluedList: { hideLabel: true, helpIconAfterControl: true },
-                                    MultivaluedString: { hideLabel: true, helpIconAfterControl: true },
-                                    boolean: { booleanLabelTextSwitchHelp: true },
-                                }}
-                            />
+                            properties={provider.properties}
+                            layoutOverridesByType={{
+                                List: { hideLabel: true, helpIconAfterControl: true },
+                                MultivaluedList: {
+                                    hideLabel: true,
+                                    helpIconAfterControl: true
+                                },
+                                MultivaluedString: {
+                                    hideLabel: true,
+                                    helpIconAfterControl: true
+                                },
+                                boolean: { booleanLabelTextSwitchHelp: true }
+                            }}
+                        />
                         <div className="flex gap-2 mt-4">
                             <Button data-testid="save" type="submit">
                                 {t("save")}
                             </Button>
-                            <Button
-                                data-testid="cancel"
-                                variant="link"
-                                asChild
-                            >
+                            <Button data-testid="cancel" variant="link" asChild>
                                 <Link
                                     to={toClientRegistration({ realm, subTab }) as string}
                                 >

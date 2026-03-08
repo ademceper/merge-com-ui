@@ -1,6 +1,6 @@
-import { TextControl } from "../../../../shared/keycloak-ui-shared";
 import { useTranslation } from "@merge-rd/i18n";
-import { NumberComponentProps } from "./components";
+import { TextControl } from "../../../../shared/keycloak-ui-shared";
+import type { NumberComponentProps } from "./components";
 
 export const NumberComponent = ({
     name,

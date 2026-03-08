@@ -1,30 +1,40 @@
 import type PolicyRepresentation from "@keycloak/keycloak-admin-client/lib/defs/policyRepresentation";
-import { getErrorDescription, getErrorMessage, useFetch } from "../../../../../shared/keycloak-ui-shared";
-import { toast } from "sonner";
-import { Button, buttonVariants } from "@merge-rd/ui/components/button";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@merge-rd/ui/components/dropdown-menu";
-import type { ComponentType } from "react";
-import { useState, type JSX } from "react";
-import { FormProvider, useForm } from "react-hook-form";
 import { useTranslation } from "@merge-rd/i18n";
+import { Button, buttonVariants } from "@merge-rd/ui/components/button";
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuTrigger
+} from "@merge-rd/ui/components/dropdown-menu";
 import { Link, type LinkProps, useNavigate } from "@tanstack/react-router";
+import type { ComponentType } from "react";
+import { type JSX, useEffect, useState } from "react";
+import { FormProvider, useForm } from "react-hook-form";
+import { toast } from "sonner";
+import {
+    getErrorDescription,
+    getErrorMessage
+} from "../../../../../shared/keycloak-ui-shared";
 
 const RouterLink = Link as ComponentType<LinkProps>;
+
+import { KeycloakSpinner } from "../../../../../shared/keycloak-ui-shared";
 import { useAdminClient } from "../../../../app/admin-client";
+import { toPermissionsConfigurationTabs } from "../../../../shared/lib/route-helpers";
+import { useIsAdminPermissionsClient } from "../../../../shared/lib/useIsAdminPermissionsClient";
+import { useParams } from "../../../../shared/lib/useParams";
 import { useConfirmDialog } from "../../../../shared/ui/confirm-dialog/confirm-dialog";
 import { FormAccess } from "../../../../shared/ui/form/form-access";
-import { KeycloakSpinner } from "../../../../../shared/keycloak-ui-shared";
-import { useParams } from "../../../../shared/lib/useParams";
-import { toAuthorizationTab } from "../../routes/authentication-tab";
-import { PolicyDetailsParams, toPolicyDetails } from "../../routes/policy-details";
-import { useIsAdminPermissionsClient } from "../../../../shared/lib/useIsAdminPermissionsClient";
-import { toPermissionsConfigurationTabs } from "../../../../shared/lib/route-helpers";
-import { NewPermissionPolicyDetailsParams } from "../../../permissions-configuration/routes/new-permission-policy";
-import { toPermissionPolicyDetails } from "../../../permissions-configuration/routes/permission-policy-details";
+import type { NewPermissionPolicyDetailsParams } from "../../../../shared/lib/routes/permissions";
+import { toPermissionPolicyDetails } from "../../../../shared/lib/routes/permissions";
+import { toAuthorizationTab } from "../../../../shared/lib/routes/clients";
+import { type PolicyDetailsParams, toPolicyDetails } from "../../../../shared/lib/routes/clients";
+import { usePolicyDetails as usePolicyDetailsQuery } from "../api/use-policy-details";
 import { Aggregate } from "./aggregate";
 import { Client } from "./client";
-import { ClientScope, RequiredIdValue } from "./client-scope";
-import { Group, GroupValue } from "./group";
+import { ClientScope, type RequiredIdValue } from "./client-scope";
+import { Group, type GroupValue } from "./group";
 import { JavaScript } from "./java-script";
 import { LogicSelector } from "./logic-selector";
 import { NameDescription } from "./name-description";
@@ -63,42 +73,26 @@ export default function PolicyDetails() {
     const navigate = useNavigate();
     const form = useForm();
     const { reset, handleSubmit } = form;
-const [policy, setPolicy] = useState<PolicyRepresentation>();
+    const [policy, setPolicy] = useState<PolicyRepresentation>();
     const isDisabled = policyType === "js";
     const isAdminPermissionsClient = useIsAdminPermissionsClient(permissionClientId);
 
-    useFetch(
-        async () => {
-            if (policyId) {
-                const result = await Promise.all([
-                    adminClient.clients.findOnePolicyWithType({
-                        id: permissionClientId ?? id,
-                        type: policyType!,
-                        policyId
-                    }) as PolicyRepresentation | undefined,
-                    adminClient.clients.getAssociatedPolicies({
-                        id: permissionClientId ?? id,
-                        permissionId: policyId
-                    })
-                ]);
-
-                if (!result[0]) {
-                    throw new Error(t("notFound"));
-                }
-
-                return {
-                    policy: result[0],
-                    policies: result[1].map(p => p.id)
-                };
-            }
-            return {};
-        },
-        ({ policy, policies }) => {
-            reset({ ...policy, policies });
-            setPolicy(policy);
-        },
-        [permissionClientId, id, policyType, policyId]
+    const { data: policyDetailsData } = usePolicyDetailsQuery(
+        permissionClientId ?? id,
+        policyType!,
+        policyId
     );
+
+    useEffect(() => {
+        if (policyDetailsData) {
+            const { policy: pol, policies } = policyDetailsData as {
+                policy?: PolicyRepresentation;
+                policies?: (string | undefined)[];
+            };
+            reset({ ...pol, policies });
+            setPolicy(pol);
+        }
+    }, [policyDetailsData]);
 
     const onSubmitPolicy = async (policy: Policy) => {
         policy.groups = policy.groups?.filter(g => g.id);
@@ -124,8 +118,8 @@ const [policy, setPolicy] = useState<PolicyRepresentation>();
                     policy
                 );
 
-                navigate({ to:
-                    navigateTo({
+                navigate({
+                    to: navigateTo({
                         realm: realm!,
                         id: clientId!,
                         permissionClientId: clientId!,
@@ -134,11 +128,11 @@ const [policy, setPolicy] = useState<PolicyRepresentation>();
                     }) as string
                 });
             }
-            toast.success(
-                t((policyId ? "update" : "create") + "PolicySuccess")
-            );
+            toast.success(t(`${policyId ? "update" : "create"}PolicySuccess`));
         } catch (error) {
-            toast.error(t("policySaveError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
+            toast.error(t("policySaveError", { error: getErrorMessage(error) }), {
+                description: getErrorDescription(error)
+            });
         }
     };
 
@@ -153,17 +147,23 @@ const [policy, setPolicy] = useState<PolicyRepresentation>();
                     policyId
                 });
                 toast.success(t("policyDeletedSuccess"));
-                navigate({ to:
-                    (isAdminPermissionsClient
+                navigate({
+                    to: (isAdminPermissionsClient
                         ? toPermissionsConfigurationTabs({
                               realm: realm!,
                               permissionClientId,
                               tab: "policies"
                           })
-                        : toAuthorizationTab({ realm, clientId: id, tab: "policies" })) as string
+                        : toAuthorizationTab({
+                              realm,
+                              clientId: id,
+                              tab: "policies"
+                          })) as string
                 });
             } catch (error) {
-                toast.error(t("policyDeletedError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
+                toast.error(t("policyDeletedError", { error: getErrorMessage(error) }), {
+                    description: getErrorDescription(error)
+                });
             }
         }
     });
@@ -173,9 +173,7 @@ const [policy, setPolicy] = useState<PolicyRepresentation>();
     }
 
     function getComponentType() {
-        return isValidComponentType(policyType)
-            ? COMPONENTS[policyType]
-            : COMPONENTS["js"];
+        return isValidComponentType(policyType) ? COMPONENTS[policyType] : COMPONENTS.js;
     }
 
     const ComponentType = getComponentType();
@@ -188,7 +186,10 @@ const [policy, setPolicy] = useState<PolicyRepresentation>();
                     <div className="flex flex-wrap items-center gap-2" />
                     <div className="flex items-center gap-2">
                         <DropdownMenu>
-                            <DropdownMenuTrigger data-testid="action-dropdown" className={buttonVariants()}>
+                            <DropdownMenuTrigger
+                                data-testid="action-dropdown"
+                                className={buttonVariants()}
+                            >
                                 {t("action")}
                             </DropdownMenuTrigger>
                             <DropdownMenuContent align="end">
@@ -216,18 +217,10 @@ const [policy, setPolicy] = useState<PolicyRepresentation>();
                         <LogicSelector isDisabled={isDisabled} />
                     </FormProvider>
                     <div className="flex gap-2 mt-4">
-                        <Button
-                            disabled={isDisabled}
-                            type="submit"
-                            data-testid="save"
-                        >
+                        <Button disabled={isDisabled} type="submit" data-testid="save">
                             {t("save")}
                         </Button>
-                        <Button
-                            variant="ghost"
-                            data-testid="cancel"
-                            asChild
-                        >
+                        <Button variant="ghost" data-testid="cancel" asChild>
                             <RouterLink
                                 to={
                                     (isAdminPermissionsClient

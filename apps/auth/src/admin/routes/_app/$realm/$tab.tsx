@@ -1,10 +1,5 @@
-import { createFileRoute } from "@tanstack/react-router";
-import { lazy } from "react";
-
-const DashboardSection = lazy(
-    () => import("../../../pages/dashboard/dashboard"),
-);
+import { createFileRoute, lazyRouteComponent } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/_app/$realm/$tab")({
-    component: DashboardSection,
+    component: lazyRouteComponent(() => import("../../../pages/dashboard/dashboard")),
 });

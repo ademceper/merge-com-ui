@@ -1,38 +1,48 @@
 import type PolicyRepresentation from "@keycloak/keycloak-admin-client/lib/defs/policyRepresentation";
-import ResourceRepresentation from "@keycloak/keycloak-admin-client/lib/defs/resourceRepresentation";
-import ScopeRepresentation from "@keycloak/keycloak-admin-client/lib/defs/scopeRepresentation";
-import { getErrorDescription, getErrorMessage, KeycloakSpinner, useFetch } from "../../../../shared/keycloak-ui-shared";
-import { Empty, EmptyContent, EmptyDescription, EmptyHeader, EmptyTitle } from "@merge-rd/ui/components/empty";
-import { toast } from "sonner";
+import type ResourceRepresentation from "@keycloak/keycloak-admin-client/lib/defs/resourceRepresentation";
+import type ScopeRepresentation from "@keycloak/keycloak-admin-client/lib/defs/scopeRepresentation";
+import { useTranslation } from "@merge-rd/i18n";
 import { Button } from "@merge-rd/ui/components/button";
 import {
     DropdownMenu,
     DropdownMenuContent,
     DropdownMenuItem,
-    DropdownMenuTrigger,
+    DropdownMenuTrigger
 } from "@merge-rd/ui/components/dropdown-menu";
+import {
+    Empty,
+    EmptyContent,
+    EmptyDescription,
+    EmptyHeader,
+    EmptyTitle
+} from "@merge-rd/ui/components/empty";
+import { CaretDown, CaretRight, DotsThreeVertical } from "@phosphor-icons/react";
+import { Link, useNavigate } from "@tanstack/react-router";
+import { Fragment, useState } from "react";
+import { toast } from "sonner";
 import {
     Table,
     TableBody,
     TableCell,
     TableHead,
     TableHeader,
-    TableRow,
+    TableRow
 } from "@/admin/shared/ui/data-table";
 import { TablePagination } from "@/admin/shared/ui/table-pagination";
-import { CaretDown, CaretRight, DotsThreeVertical } from "@phosphor-icons/react";
-import { Fragment, useState } from "react";
-import { useTranslation } from "@merge-rd/i18n";
-import { Link, useNavigate } from "@tanstack/react-router";
+import {
+    getErrorDescription,
+    getErrorMessage,
+    KeycloakSpinner
+} from "../../../../shared/keycloak-ui-shared";
 import { useAdminClient } from "../../../app/admin-client";
-import { useConfirmDialog } from "../../../shared/ui/confirm-dialog/confirm-dialog";
 import { useRealm } from "../../../app/providers/realm-context/realm-context";
 import useSortedResourceTypes from "../../../shared/lib/useSortedResourceTypes";
 import useToggle from "../../../shared/lib/useToggle";
+import { useConfirmDialog } from "../../../shared/ui/confirm-dialog/confirm-dialog";
+import { usePermissionsList } from "../api/use-permissions-list";
+import { SearchDropdown, type SearchForm } from "../resource-types/search-dropdown";
+import { toCreatePermissionConfiguration, toPermissionConfigurationDetails } from "../../../shared/lib/routes/permissions";
 import { AuthorizationScopesDetails } from "./authorization-scopes-details";
-import { SearchDropdown, SearchForm } from "../resource-types/search-dropdown";
-import { toCreatePermissionConfiguration } from "../routes/new-permission-configuration";
-import { toPermissionConfigurationDetails } from "../routes/permission-configuration-details";
 import { NewPermissionConfigurationDialog } from "./new-permission-configuration-dialog";
 
 type PermissionsConfigurationProps = {
@@ -52,60 +62,26 @@ export const PermissionsConfigurationTab = ({
     const { adminClient } = useAdminClient();
     const { t } = useTranslation();
     const navigate = useNavigate();
-const { realm } = useRealm();
-    const [permissions, setPermissions] = useState<ExpandablePolicyRepresentation[]>();
+    const { realm } = useRealm();
     const [selectedPermission, setSelectedPermission] = useState<PolicyRepresentation>();
     const [search, setSearch] = useState<SearchForm>({});
-    const [key, setKey] = useState(0);
-    const refresh = () => setKey(key + 1);
     const [max, setMax] = useState(10);
     const [first, setFirst] = useState(0);
     const [newDialog, toggleDialog] = useToggle();
     const resourceTypes = useSortedResourceTypes({ clientId });
 
-    useFetch(
-        async () => {
-            const permissions = await adminClient.clients.listPermissionScope({
-                first,
-                max: max + 1,
-                id: clientId,
-                ...search
-            });
-
-            const processedPermissions = await Promise.all(
-                (permissions || []).map(async permission => {
-                    const policies = await adminClient.clients.getAssociatedPolicies({
-                        id: clientId,
-                        permissionId: permission.id!
-                    });
-
-                    const scopes = await adminClient.clients.getAssociatedScopes({
-                        id: clientId,
-                        permissionId: permission.id!
-                    });
-
-                    const resources = await adminClient.clients.getAssociatedResources({
-                        id: clientId,
-                        permissionId: permission.id!
-                    });
-
-                    return {
-                        ...permission,
-                        policies,
-                        scopes,
-                        resources,
-                        isExpanded: false
-                    };
-                })
-            );
-
-            return processedPermissions;
-        },
-        permissions => {
-            setPermissions(permissions as any[]);
-        },
-        [key, search, first, max]
+    const { data: rawPermissions, refetch: refresh } = usePermissionsList(
+        clientId,
+        search,
+        first,
+        max + 1
     );
+    const [permissions, setPermissions] = useState<ExpandablePolicyRepresentation[]>();
+
+    // Sync query data to local state for expand/collapse
+    if (rawPermissions && !permissions) {
+        setPermissions(rawPermissions as ExpandablePolicyRepresentation[]);
+    }
 
     const [toggleDeleteDialog, DeleteConfirm] = useConfirmDialog({
         titleKey: "deletePermission",
@@ -124,7 +100,10 @@ const { realm } = useRealm();
                 toast.success(t("permissionDeletedSuccess"));
                 refresh();
             } catch (error) {
-                toast.error(t("permissionDeletedError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
+                toast.error(
+                    t("permissionDeletedError", { error: getErrorMessage(error) }),
+                    { description: getErrorDescription(error) }
+                );
             }
         }
     });
@@ -157,25 +136,34 @@ const { realm } = useRealm();
                     )}
                     <div className="space-y-2">
                         <div className="flex flex-wrap items-center gap-2">
-                            <SearchDropdown types={resourceTypes} search={search} onSearch={setSearch} />
+                            <SearchDropdown
+                                types={resourceTypes}
+                                search={search}
+                                onSearch={setSearch}
+                            />
                             <TablePagination
                                 count={permissions.length}
                                 first={first}
                                 max={max}
                                 onNextClick={setFirst}
                                 onPreviousClick={setFirst}
-                                onPerPageSelect={(_first, newMax) => { setMax(newMax); setFirst(0); }}
+                                onPerPageSelect={(_first, newMax) => {
+                                    setMax(newMax);
+                                    setFirst(0);
+                                }}
                                 t={t}
                             />
-                            <Button data-testid="createScopeBasedPermissionBtn" key="confirm" variant="default" onClick={toggleDialog}>
+                            <Button
+                                data-testid="createScopeBasedPermissionBtn"
+                                key="confirm"
+                                variant="default"
+                                onClick={toggleDialog}
+                            >
                                 {t("createPermission")}
                             </Button>
                         </div>
                         {!noData && (
-                            <Table
-                                aria-label={t("permissions")}
-                                className="text-sm"
-                            >
+                            <Table aria-label={t("permissions")} className="text-sm">
                                 <TableHeader>
                                     <TableRow>
                                         <TableHead aria-hidden="true" className="w-10" />
@@ -195,7 +183,9 @@ const { realm } = useRealm();
                                                         variant="ghost"
                                                         size="icon"
                                                         className="h-8 w-8"
-                                                        aria-expanded={permission.isExpanded}
+                                                        aria-expanded={
+                                                            permission.isExpanded
+                                                        }
                                                         onClick={() => {
                                                             const rows = permissions.map(
                                                                 (p, index) =>
@@ -221,35 +211,48 @@ const { realm } = useRealm();
                                                     data-testid={`name-column-${permission.name}`}
                                                 >
                                                     <Link
-                                                        to={toPermissionConfigurationDetails({
-                                                            realm,
-                                                            permissionClientId: clientId,
-                                                            permissionId: permission.id!,
-                                                            resourceType:
-                                                                permission.resourceType!
-                                                        }) as string}
+                                                        to={
+                                                            toPermissionConfigurationDetails(
+                                                                {
+                                                                    realm,
+                                                                    permissionClientId:
+                                                                        clientId,
+                                                                    permissionId:
+                                                                        permission.id!,
+                                                                    resourceType:
+                                                                        permission.resourceType!
+                                                                }
+                                                            ) as string
+                                                        }
                                                     >
                                                         {permission.name}
                                                     </Link>
                                                 </TableCell>
-                                                <TableCell>{permission.resourceType}</TableCell>
+                                                <TableCell>
+                                                    {permission.resourceType}
+                                                </TableCell>
                                                 <TableCell>
                                                     <AuthorizationScopesDetails
                                                         row={{
                                                             resourceType:
-                                                                permission.resourceType || "",
+                                                                permission.resourceType ||
+                                                                "",
                                                             associatedScopes:
                                                                 permission.scopes?.map(
                                                                     (
                                                                         scope: ScopeRepresentation
                                                                     ) => ({
-                                                                        name: scope.name || ""
+                                                                        name:
+                                                                            scope.name ||
+                                                                            ""
                                                                     })
                                                                 )
                                                         }}
                                                     />
                                                 </TableCell>
-                                                <TableCell>{permission.description || "—"}</TableCell>
+                                                <TableCell>
+                                                    {permission.description || "—"}
+                                                </TableCell>
                                                 <TableCell className="w-10">
                                                     <DropdownMenu>
                                                         <DropdownMenuTrigger asChild>
@@ -290,26 +293,31 @@ const { realm } = useRealm();
                                                             </div>
                                                             <div className="flex flex-wrap gap-2">
                                                                 {permission.resources &&
-                                                                permission.resources?.length > 0
-                                                                    ? permission.resources.map(
-                                                                          (
-                                                                              resource: ResourceRepresentation,
-                                                                              index: number
-                                                                          ) => (
-                                                                              <span
-                                                                                  key={index}
-                                                                                  className="ml-2"
-                                                                              >
-                                                                                  {resource.displayName ||
-                                                                                      resource.name}
-                                                                              </span>
-                                                                          )
-                                                                      )
-                                                                    : (
-                                                                        <span className="ml-2">
-                                                                            {t("allResources")}
-                                                                        </span>
-                                                                    )}
+                                                                permission.resources
+                                                                    ?.length > 0 ? (
+                                                                    permission.resources.map(
+                                                                        (
+                                                                            resource: ResourceRepresentation,
+                                                                            index: number
+                                                                        ) => (
+                                                                            <span
+                                                                                key={
+                                                                                    index
+                                                                                }
+                                                                                className="ml-2"
+                                                                            >
+                                                                                {resource.displayName ||
+                                                                                    resource.name}
+                                                                            </span>
+                                                                        )
+                                                                    )
+                                                                ) : (
+                                                                    <span className="ml-2">
+                                                                        {t(
+                                                                            "allResources"
+                                                                        )}
+                                                                    </span>
+                                                                )}
                                                             </div>
                                                             <div className="font-medium">
                                                                 {t("assignedPolicies")}
@@ -347,22 +355,42 @@ const { realm } = useRealm();
                         <NewPermissionConfigurationDialog
                             resourceTypes={resourceTypes}
                             onSelect={resourceType =>
-                                navigate({ to: toCreatePermissionConfiguration({ realm, permissionClientId: clientId, resourceType: resourceType.type! }) as string })
+                                navigate({
+                                    to: toCreatePermissionConfiguration({
+                                        realm,
+                                        permissionClientId: clientId,
+                                        resourceType: resourceType.type!
+                                    }) as string
+                                })
                             }
                             toggleDialog={toggleDialog}
                         />
                     )}
                     <Empty className="py-12">
-                        <EmptyHeader><EmptyTitle>{t("emptyPermissions")}</EmptyTitle></EmptyHeader>
-                        <EmptyContent><EmptyDescription>{t("emptyPermissionsInstructions")}</EmptyDescription></EmptyContent>
-                        <Button className="mt-2" onClick={toggleDialog}>{t("createPermission")}</Button>
+                        <EmptyHeader>
+                            <EmptyTitle>{t("emptyPermissions")}</EmptyTitle>
+                        </EmptyHeader>
+                        <EmptyContent>
+                            <EmptyDescription>
+                                {t("emptyPermissionsInstructions")}
+                            </EmptyDescription>
+                        </EmptyContent>
+                        <Button className="mt-2" onClick={toggleDialog}>
+                            {t("createPermission")}
+                        </Button>
                     </Empty>
                 </>
             )}
             {noData && searching && (
                 <Empty className="py-12">
-                    <EmptyHeader><EmptyTitle>{t("noSearchResults")}</EmptyTitle></EmptyHeader>
-                    <EmptyContent><EmptyDescription>{t("noPermissionSearchResultsInstructions")}</EmptyDescription></EmptyContent>
+                    <EmptyHeader>
+                        <EmptyTitle>{t("noSearchResults")}</EmptyTitle>
+                    </EmptyHeader>
+                    <EmptyContent>
+                        <EmptyDescription>
+                            {t("noPermissionSearchResultsInstructions")}
+                        </EmptyDescription>
+                    </EmptyContent>
                 </Empty>
             )}
         </div>

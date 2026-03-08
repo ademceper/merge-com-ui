@@ -9,10 +9,7 @@
 
 // @ts-nocheck
 
-import {
-    useEnvironment,
-    label
-} from "../../../shared/keycloak-ui-shared";
+import { useTranslation } from "@merge-rd/i18n";
 import {
     AlertDialog,
     AlertDialogAction,
@@ -24,22 +21,21 @@ import {
     AlertDialogTitle,
     AlertDialogTrigger
 } from "@merge-rd/ui/components/alert-dialog";
+import { Badge } from "@merge-rd/ui/components/badge";
+import { Button } from "@merge-rd/ui/components/button";
+import { DeviceMobile, Monitor } from "@phosphor-icons/react";
 import { useState } from "react";
-import { useTranslation } from "@merge-rd/i18n";
-
+import { label, useEnvironment } from "../../../shared/keycloak-ui-shared";
 import { deleteSession, getDevices } from "../../shared/api/methods";
-import {
+import type {
     ClientRepresentation,
     DeviceRepresentation,
     SessionRepresentation
 } from "../../shared/api/representations";
-import { Page } from "../../shared/ui/page/page";
 import { formatDate } from "../../shared/lib/formatDate";
 import { useAccountAlerts } from "../../shared/lib/useAccountAlerts";
 import { usePromise } from "../../shared/lib/usePromise";
-import { Button } from "@merge-rd/ui/components/button";
-import { Badge } from "@merge-rd/ui/components/badge";
-import { Monitor, DeviceMobile } from "@phosphor-icons/react";
+import { Page } from "../../shared/ui/page/page";
 
 const DeviceActivity = () => {
     const { t } = useTranslation();
@@ -122,12 +118,19 @@ const DeviceActivity = () => {
                         </AlertDialogTrigger>
                         <AlertDialogContent>
                             <AlertDialogHeader>
-                                <AlertDialogTitle>{t("signOutAllDevices")}</AlertDialogTitle>
-                                <AlertDialogDescription>{t("signOutAllDevicesWarning")}</AlertDialogDescription>
+                                <AlertDialogTitle>
+                                    {t("signOutAllDevices")}
+                                </AlertDialogTitle>
+                                <AlertDialogDescription>
+                                    {t("signOutAllDevicesWarning")}
+                                </AlertDialogDescription>
                             </AlertDialogHeader>
                             <AlertDialogFooter>
                                 <AlertDialogCancel>{t("cancel")}</AlertDialogCancel>
-                                <AlertDialogAction variant="destructive" onClick={() => signOutAll()}>
+                                <AlertDialogAction
+                                    variant="destructive"
+                                    onClick={() => signOutAll()}
+                                >
                                     {t("confirm")}
                                 </AlertDialogAction>
                             </AlertDialogFooter>
@@ -154,9 +157,7 @@ const DeviceActivity = () => {
                                     </div>
                                     <div>
                                         <div className="text-base font-medium">
-                                            {device.os
-                                                .toLowerCase()
-                                                .includes("unknown")
+                                            {device.os.toLowerCase().includes("unknown")
                                                 ? t("unknownOperatingSystem")
                                                 : device.os}{" "}
                                             {!device.osVersion
@@ -185,12 +186,23 @@ const DeviceActivity = () => {
                                         </AlertDialogTrigger>
                                         <AlertDialogContent>
                                             <AlertDialogHeader>
-                                                <AlertDialogTitle>{t("signOut")}</AlertDialogTitle>
-                                                <AlertDialogDescription>{t("signOutWarning")}</AlertDialogDescription>
+                                                <AlertDialogTitle>
+                                                    {t("signOut")}
+                                                </AlertDialogTitle>
+                                                <AlertDialogDescription>
+                                                    {t("signOutWarning")}
+                                                </AlertDialogDescription>
                                             </AlertDialogHeader>
                                             <AlertDialogFooter>
-                                                <AlertDialogCancel>{t("cancel")}</AlertDialogCancel>
-                                                <AlertDialogAction variant="destructive" onClick={() => signOutSession(session, device)}>
+                                                <AlertDialogCancel>
+                                                    {t("cancel")}
+                                                </AlertDialogCancel>
+                                                <AlertDialogAction
+                                                    variant="destructive"
+                                                    onClick={() =>
+                                                        signOutSession(session, device)
+                                                    }
+                                                >
                                                     {t("confirm")}
                                                 </AlertDialogAction>
                                             </AlertDialogFooter>
@@ -201,23 +213,31 @@ const DeviceActivity = () => {
 
                             <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
                                 <div>
-                                    <div className="text-muted-foreground">{t("ipAddress")}</div>
+                                    <div className="text-muted-foreground">
+                                        {t("ipAddress")}
+                                    </div>
                                     <div className="font-medium">{session.ipAddress}</div>
                                 </div>
                                 <div>
-                                    <div className="text-muted-foreground">{t("lastAccessedOn")}</div>
+                                    <div className="text-muted-foreground">
+                                        {t("lastAccessedOn")}
+                                    </div>
                                     <div className="font-medium">
                                         {formatDate(new Date(session.lastAccess * 1000))}
                                     </div>
                                 </div>
                                 <div>
-                                    <div className="text-muted-foreground">{t("started")}</div>
+                                    <div className="text-muted-foreground">
+                                        {t("started")}
+                                    </div>
                                     <div className="font-medium">
                                         {formatDate(new Date(session.started * 1000))}
                                     </div>
                                 </div>
                                 <div>
-                                    <div className="text-muted-foreground">{t("expires")}</div>
+                                    <div className="text-muted-foreground">
+                                        {t("expires")}
+                                    </div>
                                     <div className="font-medium">
                                         {formatDate(new Date(session.expires * 1000))}
                                     </div>

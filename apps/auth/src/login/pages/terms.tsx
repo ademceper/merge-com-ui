@@ -1,18 +1,22 @@
-import type { PageProps } from "keycloakify/login/pages/PageProps";
-import type { KcContext } from "../kc-context";
-import type { I18n } from "../i18n";
-import AuthLayout from "../components/auth-layout";
 import { Button } from "@merge-rd/ui/components/button";
+import type { PageProps } from "keycloakify/login/pages/PageProps";
+import AuthLayout from "../components/auth-layout";
+import type { I18n } from "../i18n";
+import type { KcContext } from "../kc-context";
 
-export default function Terms(props: PageProps<Extract<KcContext, { pageId: "terms.ftl" }>, I18n>) {
+export default function Terms(
+    props: PageProps<Extract<KcContext, { pageId: "terms.ftl" }>, I18n>
+) {
     const { kcContext, i18n } = props;
     const { url } = kcContext;
     const { msg, msgStr } = i18n;
 
     return (
-        <AuthLayout>    
+        <AuthLayout>
             <div className="space-y-5">
-                <h1 className="text-xl font-semibold text-foreground tracking-tight">{msg("termsTitle")}</h1>
+                <h1 className="text-xl font-semibold text-foreground tracking-tight">
+                    {msg("termsTitle")}
+                </h1>
 
                 <div
                     id="kc-terms-text"
@@ -21,11 +25,29 @@ export default function Terms(props: PageProps<Extract<KcContext, { pageId: "ter
                     {msg("termsText")}
                 </div>
 
-                <form id="kc-terms-form" action={url.loginAction} method="post" className="flex flex-col gap-3">
-                    <Button type="submit" name="accept" id="kc-accept" size="xl" className="w-full">
+                <form
+                    id="kc-terms-form"
+                    action={url.loginAction}
+                    method="post"
+                    className="flex flex-col gap-3"
+                >
+                    <Button
+                        type="submit"
+                        name="accept"
+                        id="kc-accept"
+                        size="xl"
+                        className="w-full"
+                    >
                         {msgStr("doAccept")}
                     </Button>
-                    <Button type="submit" name="cancel" id="kc-decline" variant="outline" size="xl" className="w-full">
+                    <Button
+                        type="submit"
+                        name="cancel"
+                        id="kc-decline"
+                        variant="outline"
+                        size="xl"
+                        className="w-full"
+                    >
                         {msgStr("doDecline")}
                     </Button>
                 </form>

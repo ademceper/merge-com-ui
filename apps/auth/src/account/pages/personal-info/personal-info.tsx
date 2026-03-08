@@ -9,29 +9,34 @@
 
 // @ts-nocheck
 
-import {
-    UserProfileFields,
-    beerify,
-    debeerify,
-    setUserProfileServerError,
-    useEnvironment
-} from "../../../shared/keycloak-ui-shared";
-import { TFunction } from "@merge-rd/i18n";
-import { useState } from "react";
-import { ErrorOption, useForm } from "react-hook-form";
-import { useTranslation } from "@merge-rd/i18n";
-
-import { getPersonalInfo, getSupportedLocales, savePersonalInfo } from "../../shared/api/methods";
-import { UserProfileMetadata, UserRepresentation } from "../../shared/api/representations";
-import { Page } from "../../shared/ui/page/page";
-import type { Environment } from "../../app/environment";
 import type { TFuncKey } from "@merge-rd/i18n";
-import { i18n } from "../../app/i18n";
-import { useAccountAlerts } from "../../shared/lib/useAccountAlerts";
-import { usePromise } from "../../shared/lib/usePromise";
+import { type TFunction, useTranslation } from "@merge-rd/i18n";
 import { Button } from "@merge-rd/ui/components/button";
 import { Link } from "@merge-rd/ui/components/link";
 import { ArrowSquareOut } from "@phosphor-icons/react";
+import { useState } from "react";
+import { type ErrorOption, useForm } from "react-hook-form";
+import {
+    beerify,
+    debeerify,
+    setUserProfileServerError,
+    UserProfileFields,
+    useEnvironment
+} from "../../../shared/keycloak-ui-shared";
+import type { Environment } from "../../app/environment";
+import { i18n } from "../../app/i18n";
+import {
+    getPersonalInfo,
+    getSupportedLocales,
+    savePersonalInfo
+} from "../../shared/api/methods";
+import type {
+    UserProfileMetadata,
+    UserRepresentation
+} from "../../shared/api/representations";
+import { useAccountAlerts } from "../../shared/lib/useAccountAlerts";
+import { usePromise } from "../../shared/lib/usePromise";
+import { Page } from "../../shared/ui/page/page";
 
 const PersonalInfo = () => {
     const { t } = useTranslation();
@@ -64,7 +69,7 @@ const PersonalInfo = () => {
                 Object.entries(user.attributes || {}).map(([k, v]) => [debeerify(k), v])
             );
             await savePersonalInfo(context, { ...user, attributes });
-            const locale = attributes["locale"]?.toString();
+            const locale = attributes.locale?.toString();
             if (locale) {
                 await i18n.changeLanguage(locale, error => {
                     if (error) {
@@ -110,16 +115,21 @@ const PersonalInfo = () => {
         <Page
             title={t("personalInfo")}
             description={t("personalInfoDescription")}
-            action={context.environment.features.deleteAccountAllowed ? (
-                <Link
-                    href="#"
-                    data-testid="delete-account"
-                    onClick={(e) => { e.preventDefault(); context.keycloak.login({ action: "delete_account" }); }}
-                    className="text-destructive hover:text-destructive text-sm font-medium shrink-0"
-                >
-                    {t("deleteAccount")}
-                </Link>
-            ) : undefined}
+            action={
+                context.environment.features.deleteAccountAllowed ? (
+                    <Link
+                        href="#"
+                        data-testid="delete-account"
+                        onClick={e => {
+                            e.preventDefault();
+                            context.keycloak.login({ action: "delete_account" });
+                        }}
+                        className="text-destructive hover:text-destructive text-sm font-medium shrink-0"
+                    >
+                        {t("deleteAccount")}
+                    </Link>
+                ) : undefined
+            }
         >
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
                 <UserProfileFields

@@ -6,8 +6,8 @@ export type PathParam<Path extends string> =
     Path extends `${string}:${infer Param}/${infer Rest}`
         ? Param | PathParam<`/${Rest}`>
         : Path extends `${string}:${infer Param}`
-            ? Param
-            : never;
+          ? Param
+          : never;
 
 /**
  * Represents an object that contains the parameters to be included in a path.

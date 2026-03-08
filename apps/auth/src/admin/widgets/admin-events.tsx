@@ -1,17 +1,25 @@
 import type AdminEventRepresentation from "@keycloak/keycloak-admin-client/lib/defs/adminEventRepresentation";
-import {
-    DataTable,
-    DataTableRowActions,
-    type ColumnDef
-} from "@/admin/shared/ui/data-table";
+import { useTranslation } from "@merge-rd/i18n";
+import { Badge } from "@merge-rd/ui/components/badge";
+import { Button } from "@merge-rd/ui/components/button";
 import {
     Dialog,
     DialogContent,
+    DialogFooter,
     DialogHeader,
-    DialogTitle,
-    DialogFooter
+    DialogTitle
 } from "@merge-rd/ui/components/dialog";
+import { Input } from "@merge-rd/ui/components/input";
+import { Label } from "@merge-rd/ui/components/label";
+import { Funnel } from "@phosphor-icons/react";
+import { pickBy } from "lodash-es";
+import type { PropsWithChildren } from "react";
+import { useEffect, useMemo, useState } from "react";
+import { Controller, FormProvider, useForm } from "react-hook-form";
 import {
+    type ColumnDef,
+    DataTable,
+    DataTableRowActions,
     Table,
     TableBody,
     TableCell,
@@ -19,32 +27,17 @@ import {
     TableHeader,
     TableRow
 } from "@/admin/shared/ui/data-table";
-import { Button } from "@merge-rd/ui/components/button";
-import { Checkbox } from "@merge-rd/ui/components/checkbox";
-import { Input } from "@merge-rd/ui/components/input";
-import { Label } from "@merge-rd/ui/components/label";
-import { Badge } from "@merge-rd/ui/components/badge";
-import {
-    Popover,
-    PopoverContent,
-    PopoverTrigger,
-} from "@merge-rd/ui/components/popover";
-import { pickBy } from "lodash-es";
-import type { PropsWithChildren } from "react";
-import { useMemo, useState, useEffect } from "react";
-import { Controller, FormProvider, useForm } from "react-hook-form";
-import { useTranslation } from "@merge-rd/i18n";
-import { Funnel } from "@phosphor-icons/react";
-import { useAdminClient } from "../app/admin-client";
-import { TextControl, useFetch } from "../../shared/keycloak-ui-shared";
+import { TextControl } from "../../shared/keycloak-ui-shared";
 import { MultiSelectField } from "../../shared/keycloak-ui-shared/controls/multi-select-field";
-import { EventsBanners } from "./banners";
-import CodeEditor from "../shared/ui/form/code-editor";
 import { useRealm } from "../app/providers/realm-context/realm-context";
 import { useServerInfo } from "../app/providers/server-info/server-info-provider";
-import { prettyPrintJSON } from "../shared/lib/util";
-import useFormatDate, { FORMAT_DATE_AND_TIME } from "../shared/lib/useFormatDate";
+import { useAdminEvents } from "../pages/events/api/use-admin-events";
+import { useEventsConfig } from "../pages/events/api/use-events-config";
 import { CellResourceLinkRenderer } from "../pages/events/resource-links";
+import useFormatDate, { FORMAT_DATE_AND_TIME } from "../shared/lib/useFormatDate";
+import { prettyPrintJSON } from "../shared/lib/util";
+import CodeEditor from "../shared/ui/form/code-editor";
+import { EventsBanners } from "./banners";
 
 type DisplayDialogProps = PropsWithChildren<{
     titleKey: string;
@@ -72,7 +65,7 @@ const DisplayDialog = ({
 }: DisplayDialogProps) => {
     const { t } = useTranslation();
     return (
-        <Dialog open onOpenChange={(open) => !open && onClose()}>
+        <Dialog open onOpenChange={open => !open && onClose()}>
             <DialogContent className="max-w-2xl" data-testid={dataTestId}>
                 <DialogHeader>
                     <DialogTitle>{t(titleKey)}</DialogTitle>
@@ -83,7 +76,13 @@ const DisplayDialog = ({
     );
 };
 
-const DetailCell = ({ details, error }: { details?: Record<string, unknown>; error?: string }) => (
+const DetailCell = ({
+    details,
+    error
+}: {
+    details?: Record<string, unknown>;
+    error?: string;
+}) => (
     <Table>
         <TableBody>
             {details &&
@@ -108,23 +107,20 @@ type AdminEventsProps = {
 };
 
 export const AdminEvents = ({ resourcePath }: AdminEventsProps) => {
-    const { adminClient } = useAdminClient();
     const { t } = useTranslation();
     const { realm } = useRealm();
     const serverInfo = useServerInfo();
     const formatDate = useFormatDate();
-    const resourceTypes = serverInfo.enums?.["resourceType"] ?? [];
-    const operationTypes = serverInfo.enums?.["operationType"] ?? [];
+    const resourceTypes = serverInfo.enums?.resourceType ?? [];
+    const operationTypes = serverInfo.enums?.operationType ?? [];
 
-    const [key, setKey] = useState(0);
     const [searchDropdownOpen, setSearchDropdownOpen] = useState(false);
     const [selectResourceTypesOpen, setSelectResourceTypesOpen] = useState(false);
     const [selectOperationTypesOpen, setSelectOperationTypesOpen] = useState(false);
     const [activeFilters, setActiveFilters] = useState<Partial<AdminEventSearchForm>>({});
-    const [eventList, setEventList] = useState<AdminEventRepresentation[]>([]);
     const [authEvent, setAuthEvent] = useState<AdminEventRepresentation>();
-    const [adminEventsEnabled, setAdminEventsEnabled] = useState<boolean>(false);
-    const [representationEvent, setRepresentationEvent] = useState<AdminEventRepresentation>();
+    const [representationEvent, setRepresentationEvent] =
+        useState<AdminEventRepresentation>();
 
     const defaultValues: AdminEventSearchForm = {
         resourceTypes: [],
@@ -151,25 +147,19 @@ export const AdminEvents = ({ resourcePath }: AdminEventsProps) => {
     };
 
     const form = useForm<AdminEventSearchForm>({ mode: "onChange", defaultValues });
-    const { getValues, reset, formState: { isDirty }, control } = form;
+    const {
+        getValues,
+        reset,
+        formState: { isDirty },
+        control
+    } = form;
 
-    useFetch(
-        () => adminClient.realms.getConfigEvents({ realm }),
-        (events) => setAdminEventsEnabled(events?.adminEventsEnabled ?? false),
-        []
-    );
+    const { data: eventsConfig } = useEventsConfig();
+    const adminEventsEnabled = eventsConfig?.adminEventsEnabled ?? false;
 
-    useFetch(
-        () =>
-            adminClient.realms.findAdminEvents({
-                resourcePath,
-                ...(activeFilters as Record<string, unknown>),
-                realm,
-                first: 0,
-                max: 1000
-            }),
-        (data) => setEventList(data),
-        [key, activeFilters]
+    const { data: eventList = [] } = useAdminEvents(
+        activeFilters as Record<string, unknown>,
+        resourcePath
     );
 
     function submitSearch() {
@@ -189,11 +179,14 @@ export const AdminEvents = ({ resourcePath }: AdminEventsProps) => {
         commitFilters();
     }
 
-    function removeFilterValue(filterKey: keyof AdminEventSearchForm, valueToRemove: string) {
+    function removeFilterValue(
+        filterKey: keyof AdminEventSearchForm,
+        valueToRemove: string
+    ) {
         const formValues = getValues();
         const fieldValue = formValues[filterKey];
         const newFieldValue = Array.isArray(fieldValue)
-            ? fieldValue.filter((val) => val !== valueToRemove)
+            ? fieldValue.filter(val => val !== valueToRemove)
             : fieldValue;
         reset({ ...formValues, [filterKey]: newFieldValue });
         commitFilters();
@@ -202,11 +195,10 @@ export const AdminEvents = ({ resourcePath }: AdminEventsProps) => {
     function commitFilters() {
         const newFilters: Partial<AdminEventSearchForm> = pickBy(
             getValues(),
-            (value) => value !== "" && (!Array.isArray(value) || value.length > 0)
+            value => value !== "" && (!Array.isArray(value) || value.length > 0)
         );
         if (resourcePath) delete newFilters.resourcePath;
         setActiveFilters(newFilters);
-        setKey((k) => k + 1);
     }
 
     const code = useMemo(
@@ -221,7 +213,8 @@ export const AdminEvents = ({ resourcePath }: AdminEventsProps) => {
         {
             accessorKey: "time",
             header: t("time"),
-            cell: ({ row }) => formatDate(new Date(row.original.time!), FORMAT_DATE_AND_TIME)
+            cell: ({ row }) =>
+                formatDate(new Date(row.original.time!), FORMAT_DATE_AND_TIME)
         },
         {
             accessorKey: "resourcePath",
@@ -267,7 +260,9 @@ export const AdminEvents = ({ resourcePath }: AdminEventsProps) => {
         }
     ];
 
-    const [isMobile, setIsMobile] = useState<boolean>(typeof window !== "undefined" ? window.innerWidth < 640 : false);
+    const [isMobile, setIsMobile] = useState<boolean>(
+        typeof window !== "undefined" ? window.innerWidth < 640 : false
+    );
     useEffect(() => {
         const onResize = () => setIsMobile(window.innerWidth < 640);
         window.addEventListener("resize", onResize);
@@ -290,37 +285,64 @@ export const AdminEvents = ({ resourcePath }: AdminEventsProps) => {
                                 <Funnel className="size-4" />
                             </button>
                             {searchDropdownOpen && (
-                                <Dialog open onOpenChange={(open) => !open && setSearchDropdownOpen(false)}>
+                                <Dialog
+                                    open
+                                    onOpenChange={open =>
+                                        !open && setSearchDropdownOpen(false)
+                                    }
+                                >
                                     <DialogContent className="max-w-2xl" showCloseButton>
                                         <DialogHeader>
-                                            <DialogTitle>{t("searchAdminEvents")}</DialogTitle>
+                                            <DialogTitle>
+                                                {t("searchAdminEvents")}
+                                            </DialogTitle>
                                         </DialogHeader>
-                                        <form className="keycloak__events_search__form space-y-4" data-testid="searchForm">
+                                        <form
+                                            className="keycloak__events_search__form space-y-4"
+                                            data-testid="searchForm"
+                                        >
                                             <div className="space-y-2">
-                                <MultiSelectField
-                                    name="resourceTypes"
-                                    label={t("resourceTypes")}
-                                    options={resourceTypes}
-                                    placeholderText={t("select")}
-                                />
+                                                <MultiSelectField
+                                                    name="resourceTypes"
+                                                    label={t("resourceTypes")}
+                                                    options={resourceTypes}
+                                                    placeholderText={t("select")}
+                                                />
                                             </div>
                                             <div className="space-y-2">
-                                <MultiSelectField
-                                    name="operationTypes"
-                                    label={t("operationTypes")}
-                                    options={operationTypes}
-                                    placeholderText={t("select")}
-                                />
+                                                <MultiSelectField
+                                                    name="operationTypes"
+                                                    label={t("operationTypes")}
+                                                    options={operationTypes}
+                                                    placeholderText={t("select")}
+                                                />
                                             </div>
                                             {!resourcePath && (
-                                                <TextControl name="resourcePath" label={t("resourcePath")} />
+                                                <TextControl
+                                                    name="resourcePath"
+                                                    label={t("resourcePath")}
+                                                />
                                             )}
-                                            <TextControl name="authRealm" label={t("realm")} />
-                                            <TextControl name="authClient" label={t("client")} />
-                                            <TextControl name="authUser" label={t("userId")} />
-                                            <TextControl name="authIpAddress" label={t("ipAddress")} />
+                                            <TextControl
+                                                name="authRealm"
+                                                label={t("realm")}
+                                            />
+                                            <TextControl
+                                                name="authClient"
+                                                label={t("client")}
+                                            />
+                                            <TextControl
+                                                name="authUser"
+                                                label={t("userId")}
+                                            />
+                                            <TextControl
+                                                name="authIpAddress"
+                                                label={t("ipAddress")}
+                                            />
                                             <div className="space-y-2">
-                                                <Label htmlFor="kc-dateFrom">{t("dateFrom")}</Label>
+                                                <Label htmlFor="kc-dateFrom">
+                                                    {t("dateFrom")}
+                                                </Label>
                                                 <Controller
                                                     name="dateFrom"
                                                     control={control}
@@ -330,13 +352,19 @@ export const AdminEvents = ({ resourcePath }: AdminEventsProps) => {
                                                             type="date"
                                                             className="w-full h-9"
                                                             value={field.value}
-                                                            onChange={(e) => field.onChange(e.target.value)}
+                                                            onChange={e =>
+                                                                field.onChange(
+                                                                    e.target.value
+                                                                )
+                                                            }
                                                         />
                                                     )}
                                                 />
                                             </div>
                                             <div className="space-y-2">
-                                                <Label htmlFor="kc-dateTo">{t("dateTo")}</Label>
+                                                <Label htmlFor="kc-dateTo">
+                                                    {t("dateTo")}
+                                                </Label>
                                                 <Controller
                                                     name="dateTo"
                                                     control={control}
@@ -346,7 +374,11 @@ export const AdminEvents = ({ resourcePath }: AdminEventsProps) => {
                                                             type="date"
                                                             className="w-full h-9"
                                                             value={field.value}
-                                                            onChange={(e) => field.onChange(e.target.value)}
+                                                            onChange={e =>
+                                                                field.onChange(
+                                                                    e.target.value
+                                                                )
+                                                            }
                                                         />
                                                     )}
                                                 />
@@ -382,12 +414,25 @@ export const AdminEvents = ({ resourcePath }: AdminEventsProps) => {
                                 <Funnel className="size-4" />
                             </button>
                             {searchDropdownOpen && (
-                                <Dialog open onOpenChange={(open) => !open && setSearchDropdownOpen(false)}>
-                                    <DialogContent className="max-w-none w-full h-[90vh]" showCloseButton>
+                                <Dialog
+                                    open
+                                    onOpenChange={open =>
+                                        !open && setSearchDropdownOpen(false)
+                                    }
+                                >
+                                    <DialogContent
+                                        className="max-w-none w-full h-[90vh]"
+                                        showCloseButton
+                                    >
                                         <DialogHeader>
-                                            <DialogTitle>{t("searchAdminEvents")}</DialogTitle>
+                                            <DialogTitle>
+                                                {t("searchAdminEvents")}
+                                            </DialogTitle>
                                         </DialogHeader>
-                                        <form className="keycloak__events_search__form space-y-4" data-testid="searchForm">
+                                        <form
+                                            className="keycloak__events_search__form space-y-4"
+                                            data-testid="searchForm"
+                                        >
                                             <div className="space-y-2">
                                                 <MultiSelectField
                                                     name="resourceTypes"
@@ -405,29 +450,68 @@ export const AdminEvents = ({ resourcePath }: AdminEventsProps) => {
                                                 />
                                             </div>
                                             {!resourcePath && (
-                                                <TextControl name="resourcePath" label={t("resourcePath")} />
+                                                <TextControl
+                                                    name="resourcePath"
+                                                    label={t("resourcePath")}
+                                                />
                                             )}
-                                            <TextControl name="authRealm" label={t("realm")} />
-                                            <TextControl name="authClient" label={t("client")} />
-                                            <TextControl name="authUser" label={t("userId")} />
-                                            <TextControl name="authIpAddress" label={t("ipAddress")} />
+                                            <TextControl
+                                                name="authRealm"
+                                                label={t("realm")}
+                                            />
+                                            <TextControl
+                                                name="authClient"
+                                                label={t("client")}
+                                            />
+                                            <TextControl
+                                                name="authUser"
+                                                label={t("userId")}
+                                            />
+                                            <TextControl
+                                                name="authIpAddress"
+                                                label={t("ipAddress")}
+                                            />
                                             <div className="space-y-2">
-                                                <Label htmlFor="kc-dateFrom">{t("dateFrom")}</Label>
+                                                <Label htmlFor="kc-dateFrom">
+                                                    {t("dateFrom")}
+                                                </Label>
                                                 <Controller
                                                     name="dateFrom"
                                                     control={control}
                                                     render={({ field }) => (
-                                                        <Input id="kc-dateFrom" type="date" className="w-full h-9" value={field.value} onChange={(e) => field.onChange(e.target.value)} />
+                                                        <Input
+                                                            id="kc-dateFrom"
+                                                            type="date"
+                                                            className="w-full h-9"
+                                                            value={field.value}
+                                                            onChange={e =>
+                                                                field.onChange(
+                                                                    e.target.value
+                                                                )
+                                                            }
+                                                        />
                                                     )}
                                                 />
                                             </div>
                                             <div className="space-y-2">
-                                                <Label htmlFor="kc-dateTo">{t("dateTo")}</Label>
+                                                <Label htmlFor="kc-dateTo">
+                                                    {t("dateTo")}
+                                                </Label>
                                                 <Controller
                                                     name="dateTo"
                                                     control={control}
                                                     render={({ field }) => (
-                                                        <Input id="kc-dateTo" type="date" className="w-full h-9" value={field.value} onChange={(e) => field.onChange(e.target.value)} />
+                                                        <Input
+                                                            id="kc-dateTo"
+                                                            type="date"
+                                                            className="w-full h-9"
+                                                            value={field.value}
+                                                            onChange={e =>
+                                                                field.onChange(
+                                                                    e.target.value
+                                                                )
+                                                            }
+                                                        />
                                                     )}
                                                 />
                                             </div>
@@ -443,7 +527,12 @@ export const AdminEvents = ({ resourcePath }: AdminEventsProps) => {
                                             >
                                                 {t("searchAdminEventsBtn")}
                                             </Button>
-                                            <Button variant="ghost" onClick={() => { resetSearch(); }}>
+                                            <Button
+                                                variant="ghost"
+                                                onClick={() => {
+                                                    resetSearch();
+                                                }}
+                                            >
                                                 {t("resetBtn")}
                                             </Button>
                                         </DialogFooter>
@@ -455,25 +544,38 @@ export const AdminEvents = ({ resourcePath }: AdminEventsProps) => {
                 </div>
                 {Object.entries(activeFilters).length > 0 && (
                     <div className="keycloak__searchChips ml-0 flex flex-wrap gap-2 items-center">
-                        {Object.entries(activeFilters).map((filter) => {
-                            const [filterKey, value] = filter as [keyof AdminEventSearchForm, string | string[]];
+                        {Object.entries(activeFilters).map(filter => {
+                            const [filterKey, value] = filter as [
+                                keyof AdminEventSearchForm,
+                                string | string[]
+                            ];
                             // don't show certain multi-select filters as chips
-                            if (filterKey === "resourcePath" && !!resourcePath) return null;
-                            if (filterKey === "resourceTypes" || filterKey === "operationTypes") return null;
+                            if (filterKey === "resourcePath" && !!resourcePath)
+                                return null;
+                            if (
+                                filterKey === "resourceTypes" ||
+                                filterKey === "operationTypes"
+                            )
+                                return null;
                             return (
-                                <div className="flex items-center gap-1 mr-2" key={filterKey}>
+                                <div
+                                    className="flex items-center gap-1 mr-2"
+                                    key={filterKey}
+                                >
                                     <span className="text-sm font-medium text-muted-foreground">
                                         {filterLabels[filterKey]}:
                                     </span>
                                     {typeof value === "string" ? (
                                         <Badge variant="secondary">{value}</Badge>
                                     ) : (
-                                        value.map((entry) => (
+                                        value.map(entry => (
                                             <Badge
                                                 key={entry}
                                                 variant="secondary"
                                                 className="cursor-pointer"
-                                                onClick={() => removeFilterValue(filterKey, entry)}
+                                                onClick={() =>
+                                                    removeFilterValue(filterKey, entry)
+                                                }
                                             >
                                                 {entry} ×
                                             </Badge>
@@ -540,16 +642,18 @@ export const AdminEvents = ({ resourcePath }: AdminEventsProps) => {
             )}
             {!adminEventsEnabled && <EventsBanners type="adminEvents" />}
             <DataTable<AdminEventRepresentation>
-                key={key}
                 columns={columns}
                 data={eventList}
                 searchColumnId="resourcePath"
                 searchPlaceholder={t("resourcePath")}
                 emptyMessage={t("emptyAdminEvents")}
                 toolbar={searchToolbar}
-                getRowCanExpand={(row) => row.original.details !== undefined}
-                renderSubRow={(row) => (
-                    <DetailCell details={row.original.details} error={row.original.error} />
+                getRowCanExpand={row => row.original.details !== undefined}
+                renderSubRow={row => (
+                    <DetailCell
+                        details={row.original.details}
+                        error={row.original.error}
+                    />
                 )}
             />
         </>

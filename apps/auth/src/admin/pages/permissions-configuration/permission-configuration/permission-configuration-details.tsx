@@ -1,30 +1,38 @@
-import PolicyProviderRepresentation from "@keycloak/keycloak-admin-client/lib/defs/policyProviderRepresentation";
-import { getErrorDescription, getErrorMessage, useFetch } from "../../../../shared/keycloak-ui-shared";
-import { toast } from "sonner";
-import { Button, buttonVariants } from "@merge-rd/ui/components/button";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@merge-rd/ui/components/dropdown-menu";
-import { useMemo, useState } from "react";
-import { FormProvider, useForm } from "react-hook-form";
+import type PolicyRepresentation from "@keycloak/keycloak-admin-client/lib/defs/policyRepresentation";
 import { useTranslation } from "@merge-rd/i18n";
+import { Button, buttonVariants } from "@merge-rd/ui/components/button";
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuTrigger
+} from "@merge-rd/ui/components/dropdown-menu";
 import { Link, useNavigate } from "@tanstack/react-router";
+import { useEffect, useMemo, useState } from "react";
+import { FormProvider, useForm } from "react-hook-form";
+import { toast } from "sonner";
+import {
+    getErrorDescription,
+    getErrorMessage,
+    KeycloakSpinner
+} from "../../../../shared/keycloak-ui-shared";
 import { useAdminClient } from "../../../app/admin-client";
-import { useConfirmDialog } from "../../../shared/ui/confirm-dialog/confirm-dialog";
-import { FormAccess } from "../../../shared/ui/form/form-access";
-import { KeycloakSpinner } from "../../../../shared/keycloak-ui-shared";
+import { toPermissionsConfigurationTabs } from "../../../shared/lib/route-helpers";
 
 import { useParams } from "../../../shared/lib/useParams";
-import {
-    PermissionConfigurationDetailsParams,
-    toPermissionConfigurationDetails
-} from "../routes/permission-configuration-details";
-import { toPermissionsConfigurationTabs } from "../../../shared/lib/route-helpers";
-import PolicyRepresentation from "@keycloak/keycloak-admin-client/lib/defs/policyRepresentation";
-import { AssignedPolicies } from "./assigned-policies";
-import { ScopePicker } from "../../clients/authorization/scope-picker";
-import { ResourceType } from "../resource-types/resource-type";
-import { sortBy } from "lodash-es";
-import { NameDescription } from "../../clients/authorization/policy/name-description";
 import useSortedResourceTypes from "../../../shared/lib/useSortedResourceTypes";
+import { useConfirmDialog } from "../../../shared/ui/confirm-dialog/confirm-dialog";
+import { FormAccess } from "../../../shared/ui/form/form-access";
+import { NameDescription } from "../../clients/authorization/policy/name-description";
+import { ScopePicker } from "../../clients/authorization/scope-picker";
+import { usePermissionDetail } from "../api/use-permission-detail";
+import { useProvidersAndPolicies } from "../api/use-providers-and-policies";
+import { ResourceType } from "../resource-types/resource-type";
+import {
+    type PermissionConfigurationDetailsParams,
+    toPermissionConfigurationDetails
+} from "../../../shared/lib/routes/permissions";
+import { AssignedPolicies } from "./assigned-policies";
 
 export default function PermissionConfigurationDetails() {
     const { adminClient } = useAdminClient();
@@ -34,9 +42,7 @@ export default function PermissionConfigurationDetails() {
     const navigate = useNavigate();
     const form = useForm();
     const { handleSubmit, reset } = form;
-const [permission, setPermission] = useState<PolicyRepresentation>();
-    const [providers, setProviders] = useState<PolicyProviderRepresentation[]>();
-    const [policies, setPolicies] = useState<PolicyRepresentation[]>();
+    const [permission, setPermission] = useState<PolicyRepresentation>();
     const resourceTypes = useSortedResourceTypes({
         clientId: permissionClientId
     });
@@ -50,95 +56,42 @@ const [permission, setPermission] = useState<PolicyRepresentation>();
         [resourceTypes, resourceType]
     );
 
-    useFetch(
-        async () => {
-            if (!permissionClientId) {
-                return {};
-            }
+    const { data: providersAndPolicies } = useProvidersAndPolicies(permissionClientId);
+    const providers = providersAndPolicies?.providers;
+    const policies = providersAndPolicies?.policies;
 
-            const [providers, policies] = await Promise.all([
-                adminClient.clients.listPolicyProviders({ id: permissionClientId }),
-                adminClient.clients.listPolicies({
-                    id: permissionClientId,
-                    permission: "false"
-                })
-            ]);
-
-            return { providers, policies };
-        },
-        ({ providers, policies }) => {
-            const filteredProviders = providers?.filter(
-                p => p.type !== "resource" && p.type !== "scope"
-            );
-
-            setProviders(
-                sortBy(
-                    filteredProviders,
-                    (provider: PolicyProviderRepresentation) => provider.type
-                )
-            );
-            setPolicies(policies || []);
-        },
-        [permissionClientId]
+    const { data: permDetailData } = usePermissionDetail(
+        permissionClientId,
+        permissionId ?? ""
     );
 
-    useFetch(
-        async () => {
-            if (!permissionId) {
-                return {};
-            }
-            const [permission, resources, policies, scopes] = await Promise.all([
-                adminClient.clients.findOnePermission({
-                    id: permissionClientId,
-                    type: "scope",
-                    permissionId
-                }),
-                adminClient.clients.getAssociatedResources({
-                    id: permissionClientId,
-                    permissionId
-                }),
-                adminClient.clients.getAssociatedPolicies({
-                    id: permissionClientId,
-                    permissionId
-                }),
-                adminClient.clients.getAssociatedScopes({
-                    id: permissionClientId,
-                    permissionId
-                })
-            ]);
-
-            if (!permission) {
-                throw new Error(t("notFound"));
-            }
-
-            return {
-                permission,
+    useEffect(() => {
+        if (permDetailData) {
+            const {
+                permission: perm,
                 resources,
-                policies,
+                policies: assocPolicies,
                 scopes
-            };
-        },
-        ({ permission, resources, policies, scopes }) => {
+            } = permDetailData;
             const resourceIds = resources?.map(resource => resource.name!) || [];
-            const policyIds = policies?.map(policy => policy.id!) || [];
+            const policyIds = assocPolicies?.map(policy => policy.id!) || [];
             const scopeNames = scopes?.map(scope => scope.name) || [];
 
             reset({
-                ...permission,
+                ...perm,
                 resources: resourceIds!,
-                policies,
+                policies: assocPolicies,
                 scopes
             });
 
             setPermission({
-                ...permission,
+                ...perm,
                 resources: resourceIds!,
                 policies: policyIds,
                 scopes: scopeNames
             });
-        },
-        [permissionClientId, permissionId]
-    );
+        }
+    }, [permDetailData]);
 
     const save = async (permission: PolicyRepresentation) => {
         try {
@@ -170,9 +123,13 @@ const [permission, setPermission] = useState<PolicyRepresentation>();
                 });
             }
 
-            toast.success(t(permissionId ? "updatePermissionSuccess" : "createPermissionSuccess"));
+            toast.success(
+                t(permissionId ? "updatePermissionSuccess" : "createPermissionSuccess")
+            );
         } catch (error) {
-            toast.error(t("permissionSaveError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
+            toast.error(t("permissionSaveError", { error: getErrorMessage(error) }), {
+                description: getErrorDescription(error)
+            });
         }
     };
 
@@ -199,7 +156,10 @@ const [permission, setPermission] = useState<PolicyRepresentation>();
                     }) as string
                 });
             } catch (error) {
-                toast.error(t("permissionDeletedError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
+                toast.error(
+                    t("permissionDeletedError", { error: getErrorMessage(error) }),
+                    { description: getErrorDescription(error) }
+                );
             }
         }
     });
@@ -216,7 +176,10 @@ const [permission, setPermission] = useState<PolicyRepresentation>();
                     <div className="flex flex-wrap items-center gap-2" />
                     <div className="flex items-center gap-2">
                         <DropdownMenu>
-                            <DropdownMenuTrigger data-testid="action-dropdown" className={buttonVariants()}>
+                            <DropdownMenuTrigger
+                                data-testid="action-dropdown"
+                                className={buttonVariants()}
+                            >
                                 {t("action")}
                             </DropdownMenuTrigger>
                             <DropdownMenuContent align="end">
@@ -249,24 +212,18 @@ const [permission, setPermission] = useState<PolicyRepresentation>();
                         />
                     </FormProvider>
                     <div className="flex gap-2 mt-4">
-                        <Button
-                            className="mr-2"
-                            type="submit"
-                            data-testid="save"
-                        >
+                        <Button className="mr-2" type="submit" data-testid="save">
                             {t("save")}
                         </Button>
-                        <Button
-                            variant="link"
-                            data-testid="cancel"
-                            asChild
-                        >
+                        <Button variant="link" data-testid="cancel" asChild>
                             <Link
-                                to={toPermissionsConfigurationTabs({
-                                    realm,
-                                    permissionClientId,
-                                    tab: "permissions"
-                                }) as string}
+                                to={
+                                    toPermissionsConfigurationTabs({
+                                        realm,
+                                        permissionClientId,
+                                        tab: "permissions"
+                                    }) as string
+                                }
                             >
                                 {t("cancel")}
                             </Link>

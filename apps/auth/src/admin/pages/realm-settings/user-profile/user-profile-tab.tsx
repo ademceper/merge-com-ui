@@ -1,9 +1,8 @@
 import { useTranslation } from "@merge-rd/i18n";
-import { useNavigate } from "@tanstack/react-router";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@merge-rd/ui/components/tabs";
+import { useNavigate } from "@tanstack/react-router";
 import { useRealm } from "../../../app/providers/realm-context/realm-context";
-import { toUserProfile } from "../routes/user-profile";
-import type { UserProfileTab as UserProfileTabType } from "../routes/user-profile";
+import { type UserProfileTab as UserProfileTabType, toUserProfile } from "../../../shared/lib/routes/realm-settings";
 import { AttributesGroupTab } from "./attributes-group-tab";
 import { AttributesTab } from "./attributes-tab";
 import { JsonEditorTab } from "./json-editor-tab";
@@ -16,7 +15,10 @@ type UserProfileTabProps = {
     subTab?: string;
 };
 
-export const UserProfileTab = ({ setTableData, subTab = "attributes" }: UserProfileTabProps) => {
+export const UserProfileTab = ({
+    setTableData,
+    subTab = "attributes"
+}: UserProfileTabProps) => {
     const { t } = useTranslation();
     const navigate = useNavigate();
     const { realm } = useRealm();
@@ -31,19 +33,36 @@ export const UserProfileTab = ({ setTableData, subTab = "attributes" }: UserProf
         <UserProfileProvider>
             <Tabs
                 value={currentTab}
-                onValueChange={(value) =>
-                    navigate({ to: toUserProfile({ realm: realm!, tab: value as UserProfileTabType }) as string })
+                onValueChange={value =>
+                    navigate({
+                        to: toUserProfile({
+                            realm: realm!,
+                            tab: value as UserProfileTabType
+                        }) as string
+                    })
                 }
             >
                 <div className="w-full min-w-0 overflow-x-auto overflow-y-hidden mb-4">
-                    <TabsList variant="line" className="mb-0 w-max min-w-0 **:data-[slot=tabs-trigger]:flex-none">
-                        <TabsTrigger value="attributes" data-testid="rs-user-profile-attributes-tab">
+                    <TabsList
+                        variant="line"
+                        className="mb-0 w-max min-w-0 **:data-[slot=tabs-trigger]:flex-none"
+                    >
+                        <TabsTrigger
+                            value="attributes"
+                            data-testid="rs-user-profile-attributes-tab"
+                        >
                             {t("attributes")}
                         </TabsTrigger>
-                        <TabsTrigger value="attributes-group" data-testid="rs-user-profile-attributes-group-tab">
+                        <TabsTrigger
+                            value="attributes-group"
+                            data-testid="rs-user-profile-attributes-group-tab"
+                        >
                             {t("attributesGroup")}
                         </TabsTrigger>
-                        <TabsTrigger value="json-editor" data-testid="rs-user-profile-json-editor-tab">
+                        <TabsTrigger
+                            value="json-editor"
+                            data-testid="rs-user-profile-json-editor-tab"
+                        >
                             {t("jsonEditor")}
                         </TabsTrigger>
                     </TabsList>

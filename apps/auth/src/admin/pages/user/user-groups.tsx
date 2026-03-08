@@ -1,20 +1,8 @@
 import type GroupRepresentation from "@keycloak/keycloak-admin-client/lib/defs/groupRepresentation";
 import type UserRepresentation from "@keycloak/keycloak-admin-client/lib/defs/userRepresentation";
-import { useHelp } from "../../../shared/keycloak-ui-shared";
+import { useTranslation } from "@merge-rd/i18n";
 import { Button } from "@merge-rd/ui/components/button";
 import { Checkbox } from "@merge-rd/ui/components/checkbox";
-import { Popover, PopoverContent, PopoverTrigger } from "@merge-rd/ui/components/popover";
-import { Question } from "@phosphor-icons/react";
-import { intersectionBy, sortBy, uniqBy } from "lodash-es";
-import { useState } from "react";
-import { useTranslation } from "@merge-rd/i18n";
-import { useAdminClient } from "../../app/admin-client";
-import { getErrorDescription, getErrorMessage, useFetch } from "../../../shared/keycloak-ui-shared";
-import { toast } from "sonner";
-import { useConfirmDialog } from "../../shared/ui/confirm-dialog/confirm-dialog";
-import { GroupPath } from "../../shared/ui/group/group-path";
-import { GroupPickerDialog } from "../../shared/ui/group/group-picker-dialog";
-import { DataTable } from "@/admin/shared/ui/data-table";
 import {
     Empty,
     EmptyContent,
@@ -22,7 +10,23 @@ import {
     EmptyHeader,
     EmptyTitle
 } from "@merge-rd/ui/components/empty";
+import { Popover, PopoverContent, PopoverTrigger } from "@merge-rd/ui/components/popover";
+import { Question } from "@phosphor-icons/react";
+import { intersectionBy } from "lodash-es";
+import { useState } from "react";
+import { toast } from "sonner";
+import { DataTable } from "@/admin/shared/ui/data-table";
+import {
+    getErrorDescription,
+    getErrorMessage,
+    useHelp
+} from "../../../shared/keycloak-ui-shared";
+import { useAdminClient } from "../../app/admin-client";
 import { useAccess } from "../../app/providers/access/access";
+import { useConfirmDialog } from "../../shared/ui/confirm-dialog/confirm-dialog";
+import { GroupPath } from "../../shared/ui/group/group-path";
+import { GroupPickerDialog } from "../../shared/ui/group/group-picker-dialog";
+import { useUserGroups as useUserGroupsQuery } from "./api/use-user-groups";
 
 type UserGroupsProps = {
     user: UserRepresentation;
@@ -32,15 +36,10 @@ export const UserGroups = ({ user }: UserGroupsProps) => {
     const { adminClient } = useAdminClient();
 
     const { t } = useTranslation();
-const [key, setKey] = useState(0);
-    const refresh = () => setKey(key + 1);
 
     const [selectedGroups, setSelectedGroups] = useState<GroupRepresentation[]>([]);
 
     const [isDirectMembership, setDirectMembership] = useState(true);
-    const [directMembershipList, setDirectMembershipList] = useState<
-        GroupRepresentation[]
-    >([]);
     const [open, setOpen] = useState(false);
 
     const { enabled } = useHelp();
@@ -48,34 +47,13 @@ const [key, setKey] = useState(0);
     const { hasAccess } = useAccess();
     const isManager = hasAccess("manage-users");
 
-    const alphabetize = (groupsList: GroupRepresentation[]) =>
-        sortBy(groupsList, group => group.path?.toUpperCase());
-
-    const [groups, setGroups] = useState<GroupRepresentation[]>([]);
-    useFetch(
-        async () => {
-            const joinedUserGroups = await adminClient.users.listGroups({
-                id: user.id!,
-                first: 0,
-                max: 500
-            });
-            setDirectMembershipList([...joinedUserGroups]);
-            const indirect: GroupRepresentation[] = [];
-            if (!isDirectMembership)
-                joinedUserGroups.forEach(g => {
-                    const paths = (g.path?.substring(1).match(/((~\/)|[^/])+/g) || []).slice(0, -1);
-                    indirect.push(
-                        ...paths.map(p => ({
-                            name: p,
-                            path: g.path?.substring(0, g.path!.indexOf(p) + p.length)
-                        } as GroupRepresentation))
-                    );
-                });
-            return alphabetize(uniqBy([...joinedUserGroups, ...indirect], "path"));
-        },
-        setGroups,
-        [key, isDirectMembership]
+    const { data: userGroupsData, refetch: refetchGroups } = useUserGroupsQuery(
+        user.id!,
+        isDirectMembership
     );
+    const groups = userGroupsData?.groups ?? [];
+    const directMembershipList = userGroupsData?.directMembershipList ?? [];
+    const refresh = () => refetchGroups();
 
     const toggleModal = () => {
         setOpen(!open);
@@ -107,7 +85,10 @@ const [key, setKey] = useState(0);
                 setSelectedGroups([]);
                 toast.success(t("removedGroupMembership"));
             } catch (error) {
-                toast.error(t("removedGroupMembershipError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
+                toast.error(
+                    t("removedGroupMembershipError", { error: getErrorMessage(error) }),
+                    { description: getErrorDescription(error) }
+                );
             }
             refresh();
         }
@@ -131,7 +112,10 @@ const [key, setKey] = useState(0);
 
             toast.success(t("addedGroupMembership"));
         } catch (error) {
-            toast.error(t("addedGroupMembershipError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
+            toast.error(
+                t("addedGroupMembershipError", { error: getErrorMessage(error) }),
+                { description: getErrorDescription(error) }
+            );
         }
         refresh();
     };
@@ -156,7 +140,6 @@ const [key, setKey] = useState(0);
                 />
             )}
             <DataTable<GroupRepresentation>
-                key={key}
                 columns={[
                     {
                         id: "select",
@@ -165,19 +148,29 @@ const [key, setKey] = useState(0);
                         cell: ({ row }) => {
                             const disabled =
                                 !isDirectMembership &&
-                                directMembershipList.every(item => item.id !== row.original.id);
+                                directMembershipList.every(
+                                    item => item.id !== row.original.id
+                                );
                             return (
                                 <Checkbox
-                                    checked={selectedGroups.some(s => s.id === row.original.id)}
+                                    checked={selectedGroups.some(
+                                        s => s.id === row.original.id
+                                    )}
                                     disabled={disabled}
                                     onCheckedChange={() => {
                                         if (disabled) return;
                                         setSelectedGroups(prev =>
                                             prev.some(s => s.id === row.original.id)
-                                                ? prev.filter(s => s.id !== row.original.id)
+                                                ? prev.filter(
+                                                      s => s.id !== row.original.id
+                                                  )
                                                 : isDirectMembership
                                                   ? [...prev, row.original]
-                                                  : intersectionBy([...prev, row.original], directMembershipList, "id")
+                                                  : intersectionBy(
+                                                        [...prev, row.original],
+                                                        directMembershipList,
+                                                        "id"
+                                                    )
                                         );
                                     }}
                                 />
@@ -199,7 +192,9 @@ const [key, setKey] = useState(0);
                         header: "",
                         cell: ({ row }) => {
                             const canLeave =
-                                directMembershipList.some(item => item.id === row.original.id) ||
+                                directMembershipList.some(
+                                    item => item.id === row.original.id
+                                ) ||
                                 directMembershipList.length === 0 ||
                                 isDirectMembership;
                             return canLeave ? (
@@ -222,9 +217,17 @@ const [key, setKey] = useState(0);
                 searchPlaceholder={t("searchGroup")}
                 emptyContent={
                     <Empty className="py-12">
-                        <EmptyHeader><EmptyTitle>{t("noGroups")}</EmptyTitle></EmptyHeader>
-                        <EmptyContent><EmptyDescription>{t("noGroupsText")}</EmptyDescription></EmptyContent>
-                        <Button className="mt-2" onClick={toggleModal} disabled={!user.access?.manageGroupMembership}>
+                        <EmptyHeader>
+                            <EmptyTitle>{t("noGroups")}</EmptyTitle>
+                        </EmptyHeader>
+                        <EmptyContent>
+                            <EmptyDescription>{t("noGroupsText")}</EmptyDescription>
+                        </EmptyContent>
+                        <Button
+                            className="mt-2"
+                            onClick={toggleModal}
+                            disabled={!user.access?.manageGroupMembership}
+                        >
                             {t("joinGroup")}
                         </Button>
                     </Empty>
@@ -245,9 +248,15 @@ const [key, setKey] = useState(0);
                             <Checkbox
                                 id="kc-direct-membership-checkbox"
                                 checked={isDirectMembership}
-                                onCheckedChange={() => { setDirectMembership(!isDirectMembership); refresh(); }}
+                                onCheckedChange={() => {
+                                    setDirectMembership(!isDirectMembership);
+                                    refresh();
+                                }}
                             />
-                            <label htmlFor="kc-direct-membership-checkbox" className="text-sm">
+                            <label
+                                htmlFor="kc-direct-membership-checkbox"
+                                className="text-sm"
+                            >
                                 {t("directMembership")}
                             </label>
                         </div>
@@ -263,7 +272,11 @@ const [key, setKey] = useState(0);
                         {enabled && (
                             <Popover>
                                 <PopoverTrigger asChild>
-                                    <Button variant="link" className="kc-who-will-appear-button" key="who-will-appear-button">
+                                    <Button
+                                        variant="link"
+                                        className="kc-who-will-appear-button"
+                                        key="who-will-appear-button"
+                                    >
                                         <Question className="size-4" />
                                         {t("whoWillAppearLinkTextUsers")}
                                     </Button>

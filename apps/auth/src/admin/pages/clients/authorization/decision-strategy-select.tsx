@@ -1,7 +1,7 @@
-import { RadioGroup, RadioGroupItem } from "@merge-rd/ui/components/radio-group";
-import { Label } from "@merge-rd/ui/components/label";
-import { Controller, useFormContext } from "react-hook-form";
 import { useTranslation } from "@merge-rd/i18n";
+import { Label } from "@merge-rd/ui/components/label";
+import { RadioGroup, RadioGroupItem } from "@merge-rd/ui/components/radio-group";
+import { Controller, useFormContext } from "react-hook-form";
 
 import { HelpItem } from "../../../../shared/keycloak-ui-shared";
 
@@ -46,9 +46,15 @@ export const DecisionStrategySelect = ({
                             ? DECISION_STRATEGY.slice(0, 2)
                             : DECISION_STRATEGY
                         ).map(strategy => (
-                            <div key={strategy} className="flex items-center gap-2" data-testid={strategy}>
+                            <div
+                                key={strategy}
+                                className="flex items-center gap-2"
+                                data-testid={strategy}
+                            >
                                 <RadioGroupItem value={strategy} id={strategy} />
-                                <Label htmlFor={strategy}>{t(`decisionStrategies.${strategy}`)}</Label>
+                                <Label htmlFor={strategy}>
+                                    {t(`decisionStrategies.${strategy}`)}
+                                </Label>
                             </div>
                         ))}
                     </RadioGroup>

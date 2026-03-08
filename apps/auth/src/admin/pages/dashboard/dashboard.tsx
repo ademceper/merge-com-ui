@@ -1,19 +1,23 @@
 const baseUrl = import.meta.env.BASE_URL;
-import FeatureRepresentation, {
-    FeatureType
-} from "@keycloak/keycloak-admin-client/lib/defs/featureRepresentation";
-import { HelpItem, label } from "../../../shared/keycloak-ui-shared";
+
+import type FeatureRepresentation from "@keycloak/keycloak-admin-client/lib/defs/featureRepresentation";
+import { FeatureType } from "@keycloak/keycloak-admin-client/lib/defs/featureRepresentation";
+import { useTranslation } from "@merge-rd/i18n";
+import { Badge } from "@merge-rd/ui/components/badge";
 import { Button } from "@merge-rd/ui/components/button";
 import { Card, CardContent, CardTitle } from "@merge-rd/ui/components/card";
-import { Badge } from "@merge-rd/ui/components/badge";
-import { Empty, EmptyHeader, EmptyTitle, EmptyDescription } from "@merge-rd/ui/components/empty";
+import {
+    Empty,
+    EmptyDescription,
+    EmptyHeader,
+    EmptyTitle
+} from "@merge-rd/ui/components/empty";
 import { useMemo } from "react";
-import { useTranslation } from "@merge-rd/i18n";
-import { useParams } from "../../shared/lib/useParams";
-import { KeycloakSpinner } from "../../../shared/keycloak-ui-shared";
+import { HelpItem, KeycloakSpinner, label } from "../../../shared/keycloak-ui-shared";
 import { useRealm } from "../../app/providers/realm-context/realm-context";
 import { useServerInfo } from "../../app/providers/server-info/server-info-provider";
 import useLocaleSort, { mapByKey } from "../../shared/lib/useLocaleSort";
+import { useParams } from "../../shared/lib/useParams";
 import { ProviderInfo } from "./provider-info";
 
 const EmptyDashboard = () => {
@@ -39,7 +43,9 @@ const EmptyDashboard = () => {
                 </div>
                 <EmptyHeader>
                     <EmptyTitle className="text-2xl">{t("welcome")}</EmptyTitle>
-                    <EmptyTitle className="text-3xl font-semibold">{realmDisplayInfo}</EmptyTitle>
+                    <EmptyTitle className="text-3xl font-semibold">
+                        {realmDisplayInfo}
+                    </EmptyTitle>
                 </EmptyHeader>
                 <EmptyDescription>{t("introduction")}</EmptyDescription>
             </Empty>
@@ -53,16 +59,44 @@ type FeatureItemProps = {
 
 const FeatureItem = ({ feature }: FeatureItemProps) => {
     const { t } = useTranslation();
-    const badgeVariant = feature.type === FeatureType.Experimental ? "secondary" : feature.type === FeatureType.Preview || feature.type === FeatureType.PreviewDisabledByDefault ? "default" : feature.type === FeatureType.Deprecated ? "outline" : "default";
-    const badgeClass = feature.type === FeatureType.Experimental ? "bg-orange-500/20 text-orange-700 dark:text-orange-300" : feature.type === FeatureType.Preview || feature.type === FeatureType.PreviewDisabledByDefault ? "bg-blue-500/20 text-blue-700 dark:text-blue-300" : feature.type === FeatureType.Default || feature.type === FeatureType.DisabledByDefault ? "bg-green-500/20 text-green-700 dark:text-green-300" : feature.type === FeatureType.Deprecated ? "bg-muted text-muted-foreground" : "";
+    const badgeVariant =
+        feature.type === FeatureType.Experimental
+            ? "secondary"
+            : feature.type === FeatureType.Preview ||
+                feature.type === FeatureType.PreviewDisabledByDefault
+              ? "default"
+              : feature.type === FeatureType.Deprecated
+                ? "outline"
+                : "default";
+    const badgeClass =
+        feature.type === FeatureType.Experimental
+            ? "bg-orange-500/20 text-orange-700 dark:text-orange-300"
+            : feature.type === FeatureType.Preview ||
+                feature.type === FeatureType.PreviewDisabledByDefault
+              ? "bg-blue-500/20 text-blue-700 dark:text-blue-300"
+              : feature.type === FeatureType.Default ||
+                  feature.type === FeatureType.DisabledByDefault
+                ? "bg-green-500/20 text-green-700 dark:text-green-300"
+                : feature.type === FeatureType.Deprecated
+                  ? "bg-muted text-muted-foreground"
+                  : "";
     return (
         <li className="mb-1.5 inline-block mr-2">
             {feature.name}&nbsp;
-            {(feature.type === FeatureType.Experimental || feature.type === FeatureType.Preview || feature.type === FeatureType.PreviewDisabledByDefault || feature.type === FeatureType.Default || feature.type === FeatureType.DisabledByDefault || feature.type === FeatureType.Deprecated) && (
+            {(feature.type === FeatureType.Experimental ||
+                feature.type === FeatureType.Preview ||
+                feature.type === FeatureType.PreviewDisabledByDefault ||
+                feature.type === FeatureType.Default ||
+                feature.type === FeatureType.DisabledByDefault ||
+                feature.type === FeatureType.Deprecated) && (
                 <Badge variant={badgeVariant} className={badgeClass}>
                     {feature.type === FeatureType.Experimental && t("experimental")}
-                    {(feature.type === FeatureType.Preview || feature.type === FeatureType.PreviewDisabledByDefault) && t("preview")}
-                    {(feature.type === FeatureType.Default || feature.type === FeatureType.DisabledByDefault) && t("supported")}
+                    {(feature.type === FeatureType.Preview ||
+                        feature.type === FeatureType.PreviewDisabledByDefault) &&
+                        t("preview")}
+                    {(feature.type === FeatureType.Default ||
+                        feature.type === FeatureType.DisabledByDefault) &&
+                        t("supported")}
                     {feature.type === FeatureType.Deprecated && t("deprecated")}
                 </Badge>
             )}
@@ -110,8 +144,12 @@ const Dashboard = () => {
                                     <CardContent>
                                         <dl className="space-y-2">
                                             <div>
-                                                <dt className="font-medium">{t("version")}</dt>
-                                                <dd className="text-muted-foreground">{serverInfo.systemInfo?.version}</dd>
+                                                <dt className="font-medium">
+                                                    {t("version")}
+                                                </dt>
+                                                <dd className="text-muted-foreground">
+                                                    {serverInfo.systemInfo?.version}
+                                                </dd>
                                             </div>
                                         </dl>
                                     </CardContent>
@@ -119,8 +157,12 @@ const Dashboard = () => {
                                     <CardContent>
                                         <dl className="space-y-2">
                                             <div>
-                                                <dt className="font-medium">{t("processorCount")}</dt>
-                                                <dd className="text-muted-foreground">{serverInfo.cpuInfo?.processorCount}</dd>
+                                                <dt className="font-medium">
+                                                    {t("processorCount")}
+                                                </dt>
+                                                <dd className="text-muted-foreground">
+                                                    {serverInfo.cpuInfo?.processorCount}
+                                                </dd>
                                             </div>
                                         </dl>
                                     </CardContent>
@@ -128,16 +170,28 @@ const Dashboard = () => {
                                     <CardContent>
                                         <dl className="space-y-2">
                                             <div>
-                                                <dt className="font-medium">{t("totalMemory")}</dt>
-                                                <dd className="text-muted-foreground">{serverInfo.memoryInfo?.totalFormated}</dd>
+                                                <dt className="font-medium">
+                                                    {t("totalMemory")}
+                                                </dt>
+                                                <dd className="text-muted-foreground">
+                                                    {serverInfo.memoryInfo?.totalFormated}
+                                                </dd>
                                             </div>
                                             <div>
-                                                <dt className="font-medium">{t("freeMemory")}</dt>
-                                                <dd className="text-muted-foreground">{serverInfo.memoryInfo?.freeFormated}</dd>
+                                                <dt className="font-medium">
+                                                    {t("freeMemory")}
+                                                </dt>
+                                                <dd className="text-muted-foreground">
+                                                    {serverInfo.memoryInfo?.freeFormated}
+                                                </dd>
                                             </div>
                                             <div>
-                                                <dt className="font-medium">{t("usedMemory")}</dt>
-                                                <dd className="text-muted-foreground">{serverInfo.memoryInfo?.usedFormated}</dd>
+                                                <dt className="font-medium">
+                                                    {t("usedMemory")}
+                                                </dt>
+                                                <dd className="text-muted-foreground">
+                                                    {serverInfo.memoryInfo?.usedFormated}
+                                                </dd>
                                             </div>
                                         </dl>
                                     </CardContent>
@@ -153,13 +207,18 @@ const Dashboard = () => {
                                                     {t("enabledFeatures")}{" "}
                                                     <HelpItem
                                                         fieldLabelId="enabledFeatures"
-                                                        helpText={t("infoEnabledFeatures")}
+                                                        helpText={t(
+                                                            "infoEnabledFeatures"
+                                                        )}
                                                     />
                                                 </dt>
                                                 <dd>
                                                     <ul className="flex flex-wrap list-none gap-x-2 p-0 m-0">
                                                         {enabledFeatures.map(feature => (
-                                                            <FeatureItem key={feature.name} feature={feature} />
+                                                            <FeatureItem
+                                                                key={feature.name}
+                                                                feature={feature}
+                                                            />
                                                         ))}
                                                     </ul>
                                                 </dd>
@@ -169,13 +228,18 @@ const Dashboard = () => {
                                                     {t("disabledFeatures")}{" "}
                                                     <HelpItem
                                                         fieldLabelId="disabledFeatures"
-                                                        helpText={t("infoDisabledFeatures")}
+                                                        helpText={t(
+                                                            "infoDisabledFeatures"
+                                                        )}
                                                     />
                                                 </dt>
                                                 <dd>
                                                     <ul className="flex flex-wrap list-none gap-x-2 p-0 m-0">
                                                         {disabledFeatures.map(feature => (
-                                                            <FeatureItem key={feature.name} feature={feature} />
+                                                            <FeatureItem
+                                                                key={feature.name}
+                                                                feature={feature}
+                                                            />
                                                         ))}
                                                     </ul>
                                                 </dd>
@@ -202,28 +266,46 @@ const Dashboard = () => {
                                 </h2>
                             </div>
                             <div className="keycloak__dashboard_welcome_tab">
-                                <h3 className="text-xl font-medium">{t("welcomeText")}</h3>
+                                <h3 className="text-xl font-medium">
+                                    {t("welcomeText")}
+                                </h3>
                             </div>
                             <div className="mt-4">
                                 <Button asChild>
-                                    <a href="https://www.keycloak.org/documentation" target="_blank" rel="noreferrer">
+                                    <a
+                                        href="https://www.keycloak.org/documentation"
+                                        target="_blank"
+                                        rel="noreferrer"
+                                    >
                                         {t("viewDocumentation")}
                                     </a>
                                 </Button>
                             </div>
                             <div className="flex flex-wrap gap-2 mt-2">
                                 <Button variant="ghost" asChild>
-                                    <a href="https://www.keycloak.org/guides" target="_blank" rel="noreferrer">
+                                    <a
+                                        href="https://www.keycloak.org/guides"
+                                        target="_blank"
+                                        rel="noreferrer"
+                                    >
                                         {t("viewGuides")}
                                     </a>
                                 </Button>
                                 <Button variant="ghost" asChild>
-                                    <a href="https://www.keycloak.org/community" target="_blank" rel="noreferrer">
+                                    <a
+                                        href="https://www.keycloak.org/community"
+                                        target="_blank"
+                                        rel="noreferrer"
+                                    >
                                         {t("joinCommunity")}
                                     </a>
                                 </Button>
                                 <Button variant="ghost" asChild>
-                                    <a href="https://www.keycloak.org/blog" target="_blank" rel="noreferrer">
+                                    <a
+                                        href="https://www.keycloak.org/blog"
+                                        target="_blank"
+                                        rel="noreferrer"
+                                    >
                                         {t("readBlog")}
                                     </a>
                                 </Button>
@@ -237,11 +319,11 @@ const Dashboard = () => {
     return (
         <>
             <section className="py-6">
-                <h1 className="text-2xl font-semibold">{t("realmNameTitle", { name: realm })}</h1>
+                <h1 className="text-2xl font-semibold">
+                    {t("realmNameTitle", { name: realm })}
+                </h1>
             </section>
-            <section className="py-0">
-                {renderContent()}
-            </section>
+            <section className="py-0">{renderContent()}</section>
         </>
     );
 };

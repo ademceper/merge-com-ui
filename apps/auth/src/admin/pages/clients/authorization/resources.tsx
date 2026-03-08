@@ -1,39 +1,49 @@
 import type ResourceRepresentation from "@keycloak/keycloak-admin-client/lib/defs/resourceRepresentation";
 import type ResourceServerRepresentation from "@keycloak/keycloak-admin-client/lib/defs/resourceServerRepresentation";
-import { getErrorDescription, getErrorMessage, useFetch } from "../../../../shared/keycloak-ui-shared";
-import { Empty, EmptyContent, EmptyDescription, EmptyHeader, EmptyTitle } from "@merge-rd/ui/components/empty";
-import { toast } from "sonner";
+import { useTranslation } from "@merge-rd/i18n";
 import { Alert, AlertTitle } from "@merge-rd/ui/components/alert";
 import { Button } from "@merge-rd/ui/components/button";
 import {
     DropdownMenu,
     DropdownMenuContent,
     DropdownMenuItem,
-    DropdownMenuTrigger,
+    DropdownMenuTrigger
 } from "@merge-rd/ui/components/dropdown-menu";
+import {
+    Empty,
+    EmptyContent,
+    EmptyDescription,
+    EmptyHeader,
+    EmptyTitle
+} from "@merge-rd/ui/components/empty";
+import { CaretDown, CaretRight, DotsThreeVertical } from "@phosphor-icons/react";
+import { Link } from "@tanstack/react-router";
+import { Fragment, useEffect, useState } from "react";
+import { toast } from "sonner";
 import {
     Table,
     TableBody,
     TableCell,
     TableHead,
     TableHeader,
-    TableRow,
+    TableRow
 } from "@/admin/shared/ui/data-table";
 import { TablePagination } from "@/admin/shared/ui/table-pagination";
-import { CaretDown, CaretRight, DotsThreeVertical } from "@phosphor-icons/react";
-import { Fragment, useState } from "react";
-import { useTranslation } from "@merge-rd/i18n";
-import { Link } from "@tanstack/react-router";
+import {
+    getErrorDescription,
+    getErrorMessage,
+    KeycloakSpinner
+} from "../../../../shared/keycloak-ui-shared";
 import { useAdminClient } from "../../../app/admin-client";
-import { useConfirmDialog } from "../../../shared/ui/confirm-dialog/confirm-dialog";
-import { KeycloakSpinner } from "../../../../shared/keycloak-ui-shared";
 import { useRealm } from "../../../app/providers/realm-context/realm-context";
-import { toNewPermission } from "../routes/new-permission";
-import { toCreateResource } from "../routes/new-resource";
-import { toResourceDetails } from "../routes/resource";
+import { useConfirmDialog } from "../../../shared/ui/confirm-dialog/confirm-dialog";
+import { toNewPermission } from "../../../shared/lib/routes/clients";
+import { toCreateResource } from "../../../shared/lib/routes/clients";
+import { toResourceDetails } from "../../../shared/lib/routes/clients";
+import { useResources as useResourcesQuery } from "./api/use-resources";
 import { DetailCell } from "./detail-cell";
 import { MoreLabel } from "./more-label";
-import { SearchDropdown, SearchForm } from "./search-dropdown";
+import { SearchDropdown, type SearchForm } from "./search-dropdown";
 
 type ResourcesProps = {
     clientId: string;
@@ -57,36 +67,33 @@ export const AuthorizationResources = ({
     const { adminClient } = useAdminClient();
 
     const { t } = useTranslation();
-const { realm } = useRealm();
+    const { realm } = useRealm();
 
     const [resources, setResources] = useState<ExpandableResourceRepresentation[]>();
     const [selectedResource, setSelectedResource] = useState<ResourceRepresentation>();
     const [permissions, setPermission] = useState<ResourceServerRepresentation[]>();
 
-    const [key, setKey] = useState(0);
-    const refresh = () => setKey(key + 1);
-
     const [max, setMax] = useState(10);
     const [first, setFirst] = useState(0);
     const [search, setSearch] = useState<SearchForm>({});
 
-    useFetch(
-        () => {
-            const params = {
-                first,
-                max: max + 1,
-                deep: false,
-                ...search
-            };
-            return adminClient.clients.listResources({
-                ...params,
-                id: clientId
-            });
-        },
-        resources =>
-            setResources(resources.map(resource => ({ ...resource, isExpanded: false }))),
-        [key, search, first, max]
+    const { data: resourcesData, refetch } = useResourcesQuery(
+        clientId,
+        first,
+        max,
+        search
     );
+    const refresh = () => {
+        refetch();
+    };
+
+    useEffect(() => {
+        if (resourcesData) {
+            setResources(
+                resourcesData.map(resource => ({ ...resource, isExpanded: false }))
+            );
+        }
+    }, [resourcesData]);
 
     const fetchPermissions = async (id: string) => {
         return adminClient.clients.listPermissionsByResource({
@@ -124,7 +131,10 @@ const { realm } = useRealm();
                 toast.success(t("resourceDeletedSuccess"));
                 refresh();
             } catch (error) {
-                toast.error(t("resourceDeletedError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
+                toast.error(
+                    t("resourceDeletedError", { error: getErrorMessage(error) }),
+                    { description: getErrorDescription(error) }
+                );
             }
         }
     });
@@ -141,18 +151,33 @@ const { realm } = useRealm();
             {(!noData || searching) && (
                 <div className="space-y-2">
                     <div className="flex flex-wrap items-center gap-2">
-                        <SearchDropdown search={search} onSearch={setSearch} type="resource" />
+                        <SearchDropdown
+                            search={search}
+                            onSearch={setSearch}
+                            type="resource"
+                        />
                         <TablePagination
                             count={resources.length}
                             first={first}
                             max={max}
                             onNextClick={setFirst}
                             onPreviousClick={setFirst}
-                            onPerPageSelect={(_first, newMax) => { setMax(newMax); setFirst(0); }}
+                            onPerPageSelect={(_first, newMax) => {
+                                setMax(newMax);
+                                setFirst(0);
+                            }}
                             t={t}
                         />
-                        <Button data-testid="createResource" disabled={isDisabled} asChild>
-                            <Link to={toCreateResource({ realm, id: clientId }) as string}>{t("createResource")}</Link>
+                        <Button
+                            data-testid="createResource"
+                            disabled={isDisabled}
+                            asChild
+                        >
+                            <Link
+                                to={toCreateResource({ realm, id: clientId }) as string}
+                            >
+                                {t("createResource")}
+                            </Link>
                         </Button>
                     </div>
                     {!noData && (
@@ -168,7 +193,10 @@ const { realm } = useRealm();
                                     {!isDisabled && (
                                         <>
                                             <TableHead className="w-10" />
-                                            <TableHead aria-hidden="true" className="w-10" />
+                                            <TableHead
+                                                aria-hidden="true"
+                                                className="w-10"
+                                            />
                                         </>
                                     )}
                                 </TableRow>
@@ -209,11 +237,13 @@ const { realm } = useRealm();
                                                 className="max-w-[150px] truncate"
                                             >
                                                 <Link
-                                                    to={toResourceDetails({
-                                                        realm,
-                                                        id: clientId,
-                                                        resourceId: resource._id!
-                                                    }) as string}
+                                                    to={
+                                                        toResourceDetails({
+                                                            realm,
+                                                            id: clientId,
+                                                            resourceId: resource._id!
+                                                        }) as string
+                                                    }
                                                 >
                                                     {resource.name}
                                                 </Link>
@@ -235,14 +265,16 @@ const { realm } = useRealm();
                                                     <TableCell className="w-10">
                                                         <Button variant="link" asChild>
                                                             <Link
-                                                                to={toNewPermission({
-                                                                    realm,
-                                                                    id: clientId,
-                                                                    permissionType:
-                                                                        "resource",
-                                                                    selectedId:
-                                                                        resource._id
-                                                                }) as string}
+                                                                to={
+                                                                    toNewPermission({
+                                                                        realm,
+                                                                        id: clientId,
+                                                                        permissionType:
+                                                                            "resource",
+                                                                        selectedId:
+                                                                            resource._id
+                                                                    }) as string
+                                                                }
                                                             >
                                                                 {t("createPermission")}
                                                             </Link>
@@ -255,7 +287,9 @@ const { realm } = useRealm();
                                                                     variant="ghost"
                                                                     size="icon"
                                                                     className="h-8 w-8"
-                                                                    aria-label={t("delete")}
+                                                                    aria-label={t(
+                                                                        "delete"
+                                                                    )}
                                                                 >
                                                                     <DotsThreeVertical className="size-4" />
                                                                 </Button>
@@ -286,9 +320,7 @@ const { realm } = useRealm();
                                             <TableRow>
                                                 <TableCell />
                                                 <TableCell
-                                                    colSpan={
-                                                        isDisabled ? 5 : 7
-                                                    }
+                                                    colSpan={isDisabled ? 5 : 7}
                                                     className="bg-muted/30 p-4"
                                                 >
                                                     <DetailCell
@@ -308,15 +340,35 @@ const { realm } = useRealm();
             )}
             {noData && searching && (
                 <Empty className="py-12">
-                    <EmptyHeader><EmptyTitle>{t("noSearchResults")}</EmptyTitle></EmptyHeader>
-                    <EmptyContent><EmptyDescription>{t("noSearchResultsInstructions")}</EmptyDescription></EmptyContent>
+                    <EmptyHeader>
+                        <EmptyTitle>{t("noSearchResults")}</EmptyTitle>
+                    </EmptyHeader>
+                    <EmptyContent>
+                        <EmptyDescription>
+                            {t("noSearchResultsInstructions")}
+                        </EmptyDescription>
+                    </EmptyContent>
                 </Empty>
             )}
             {noData && !searching && (
                 <Empty className="py-12">
-                    <EmptyHeader><EmptyTitle>{t("emptyResources")}</EmptyTitle></EmptyHeader>
-                    <EmptyContent><EmptyDescription>{t("emptyResourcesInstructions")}</EmptyDescription></EmptyContent>
-                    {!isDisabled && <Button className="mt-2" asChild><Link to={toCreateResource({ realm, id: clientId }) as string}>{t("createResource")}</Link></Button>}
+                    <EmptyHeader>
+                        <EmptyTitle>{t("emptyResources")}</EmptyTitle>
+                    </EmptyHeader>
+                    <EmptyContent>
+                        <EmptyDescription>
+                            {t("emptyResourcesInstructions")}
+                        </EmptyDescription>
+                    </EmptyContent>
+                    {!isDisabled && (
+                        <Button className="mt-2" asChild>
+                            <Link
+                                to={toCreateResource({ realm, id: clientId }) as string}
+                            >
+                                {t("createResource")}
+                            </Link>
+                        </Button>
+                    )}
                 </Empty>
             )}
         </div>

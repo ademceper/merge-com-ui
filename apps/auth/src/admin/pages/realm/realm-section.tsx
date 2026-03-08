@@ -1,32 +1,5 @@
 import { NetworkError } from "@keycloak/keycloak-admin-client";
-import {
-    getErrorDescription,
-    getErrorMessage,
-} from "../../../shared/keycloak-ui-shared";
-import { toast } from "sonner";
-import { Badge } from "@merge-rd/ui/components/badge";
-import { Button } from "@merge-rd/ui/components/button";
-import {
-    DropdownMenu,
-    DropdownMenuContent,
-    DropdownMenuItem,
-    DropdownMenuTrigger,
-} from "@merge-rd/ui/components/dropdown-menu";
-import {
-    DataTable,
-    DataTableRowActions,
-    type ColumnDef,
-} from "@/admin/shared/ui/data-table";
-import {
-    Popover,
-    PopoverContent,
-    PopoverTrigger,
-} from "@merge-rd/ui/components/popover";
-import { Trash } from "@phosphor-icons/react";
-import { useCallback, useEffect, useMemo, useState } from "react";
 import { useTranslation } from "@merge-rd/i18n";
-import { Link, useNavigate } from "@tanstack/react-router";
-import { useAdminClient } from "../../app/admin-client";
 import {
     AlertDialog,
     AlertDialogAction,
@@ -37,14 +10,34 @@ import {
     AlertDialogHeader,
     AlertDialogTitle
 } from "@merge-rd/ui/components/alert-dialog";
+import { Badge } from "@merge-rd/ui/components/badge";
+import { Button } from "@merge-rd/ui/components/button";
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuTrigger
+} from "@merge-rd/ui/components/dropdown-menu";
+import { Popover, PopoverContent, PopoverTrigger } from "@merge-rd/ui/components/popover";
+import { Trash } from "@phosphor-icons/react";
+import { Link, useNavigate } from "@tanstack/react-router";
+import { useCallback, useEffect, useMemo, useState } from "react";
+import { toast } from "sonner";
+import {
+    type ColumnDef,
+    DataTable,
+    DataTableRowActions
+} from "@/admin/shared/ui/data-table";
+import { getErrorDescription, getErrorMessage } from "../../../shared/keycloak-ui-shared";
+import { useAdminClient } from "../../app/admin-client";
 import { fetchAdminUI } from "../../app/providers/auth/admin-ui-endpoint";
 import { useRealm } from "../../app/providers/realm-context/realm-context";
 import { useRecentRealms } from "../../app/providers/recent-realms";
 import { useWhoAmI } from "../../app/providers/whoami/who-am-i";
+import { toDashboard } from "../../shared/lib/route-helpers";
 import { translationFormatter } from "../../shared/lib/translationFormatter";
 import NewRealmForm from "./add/new-realm-form";
 import { toRealm } from "./realm-routes";
-import { toDashboard } from "../../shared/lib/route-helpers";
 
 export type RealmNameRepresentation = {
     name: string;
@@ -92,7 +85,7 @@ export default function RealmSection() {
     const [selected, setSelected] = useState<RealmRow[]>([]);
     const [openNewRealm, setOpenNewRealm] = useState(false);
     const [key, setKey] = useState(0);
-    const refresh = useCallback(() => setKey((k) => k + 1), []);
+    const refresh = useCallback(() => setKey(k => k + 1), []);
 
     useEffect(() => {
         let cancelled = false;
@@ -101,17 +94,12 @@ export default function RealmSection() {
                 const result = await fetchAdminUI<RealmNameRepresentation[]>(
                     adminClient,
                     "ui-ext/realms/names",
-                    { first: "0", max: "1000" },
+                    { first: "0", max: "1000" }
                 );
                 if (cancelled) return;
-                setRealms(
-                    (result ?? []).map((r) => ({ ...r, id: r.name })),
-                );
+                setRealms((result ?? []).map(r => ({ ...r, id: r.name })));
             } catch (error) {
-                if (
-                    error instanceof NetworkError &&
-                    error.response.status < 500
-                ) {
+                if (error instanceof NetworkError && error.response.status < 500) {
                     if (!cancelled) setRealms([]);
                 } else if (!cancelled) {
                     setRealms([]);
@@ -125,22 +113,18 @@ export default function RealmSection() {
 
     const onDeleteConfirm = async () => {
         try {
-            if (
-                selected.filter(({ name }) => name === "master").length > 0
-            ) {
+            if (selected.filter(({ name }) => name === "master").length > 0) {
                 toast.warning(t("cantDeleteMasterRealm"));
             }
-            const filtered = selected.filter(
-                ({ name }) => name !== "master",
-            );
+            const filtered = selected.filter(({ name }) => name !== "master");
             if (filtered.length === 0) {
                 setSelected([]);
                 return;
             }
             await Promise.all(
                 filtered.map(({ name: realmName }) =>
-                    adminClient.realms.del({ realm: realmName }),
-                ),
+                    adminClient.realms.del({ realm: realmName })
+                )
             );
             toast.success(t("deletedSuccessRealmSetting"));
             if (selected.filter(({ name }) => name === realm).length > 0) {
@@ -149,10 +133,9 @@ export default function RealmSection() {
             refresh();
             setSelected([]);
         } catch (error) {
-            toast.error(
-                t("deleteError", { error: getErrorMessage(error) }),
-                { description: getErrorDescription(error) },
-            );
+            toast.error(t("deleteError", { error: getErrorMessage(error) }), {
+                description: getErrorDescription(error)
+            });
         }
     };
 
@@ -178,9 +161,7 @@ export default function RealmSection() {
                             <PopoverTrigger asChild>
                                 <span className="inline-flex cursor-help items-center gap-1">
                                     {name}{" "}
-                                    <Badge variant="secondary">
-                                        {t("currentRealm")}
-                                    </Badge>
+                                    <Badge variant="secondary">{t("currentRealm")}</Badge>
                                 </span>
                             </PopoverTrigger>
                             <PopoverContent className="max-w-xs">
@@ -188,14 +169,13 @@ export default function RealmSection() {
                             </PopoverContent>
                         </Popover>
                     );
-                },
+                }
             },
             {
                 accessorKey: "displayName",
                 header: t("displayName"),
                 cell: ({ row }) =>
-                    (translationFormatter(t)(row.original.displayName) as string) ??
-                    "-",
+                    (translationFormatter(t)(row.original.displayName) as string) ?? "-"
             },
             {
                 id: "actions",
@@ -218,28 +198,37 @@ export default function RealmSection() {
                             </button>
                         </DataTableRowActions>
                     );
-                },
-            },
+                }
+            }
         ],
-        [t, realm],
+        [t, realm]
     );
 
     return (
         <>
-            <AlertDialog open={selected.length > 0} onOpenChange={(open) => !open && setSelected([])}>
+            <AlertDialog
+                open={selected.length > 0}
+                onOpenChange={open => !open && setSelected([])}
+            >
                 <AlertDialogContent>
                     <AlertDialogHeader>
                         <AlertDialogTitle>
                             {t("deleteConfirmRealm", {
                                 count: selected.length,
-                                name: selected[0]?.name,
+                                name: selected[0]?.name
                             })}
                         </AlertDialogTitle>
-                        <AlertDialogDescription>{t("deleteConfirmRealmSetting")}</AlertDialogDescription>
+                        <AlertDialogDescription>
+                            {t("deleteConfirmRealmSetting")}
+                        </AlertDialogDescription>
                     </AlertDialogHeader>
                     <AlertDialogFooter>
                         <AlertDialogCancel>{t("cancel")}</AlertDialogCancel>
-                        <AlertDialogAction variant="destructive" data-testid="confirm" onClick={onDeleteConfirm}>
+                        <AlertDialogAction
+                            variant="destructive"
+                            data-testid="confirm"
+                            onClick={onDeleteConfirm}
+                        >
                             {t("delete")}
                         </AlertDialogAction>
                     </AlertDialogFooter>
@@ -253,7 +242,7 @@ export default function RealmSection() {
                     }}
                 />
             )}
-                        <div className="space-y-4 py-6">
+            <div className="space-y-4 py-6">
                 <DataTable<RealmRow>
                     columns={columns}
                     data={realms}

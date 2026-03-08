@@ -1,8 +1,13 @@
-import type GroupRepresentation from "@keycloak/keycloak-admin-client/lib/defs/groupRepresentation";
 import type UserRepresentation from "@keycloak/keycloak-admin-client/lib/defs/userRepresentation";
-import { SubGroupQuery } from "@keycloak/keycloak-admin-client/lib/resources/groups";
-import { getErrorDescription, getErrorMessage, useFetch } from "../../../shared/keycloak-ui-shared";
-import { DataTable, DataTableRowActions } from "@/admin/shared/ui/data-table";
+import { useTranslation } from "@merge-rd/i18n";
+import { Button } from "@merge-rd/ui/components/button";
+import { Checkbox } from "@merge-rd/ui/components/checkbox";
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuTrigger
+} from "@merge-rd/ui/components/dropdown-menu";
 import {
     Empty,
     EmptyContent,
@@ -10,33 +15,38 @@ import {
     EmptyHeader,
     EmptyTitle
 } from "@merge-rd/ui/components/empty";
-import { toast } from "sonner";
-import { Button } from "@merge-rd/ui/components/button";
-import { Checkbox } from "@merge-rd/ui/components/checkbox";
 import { Label } from "@merge-rd/ui/components/label";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@merge-rd/ui/components/dropdown-menu";
 import { DotsThreeVertical, Info } from "@phosphor-icons/react";
-import { uniqBy } from "lodash-es";
-import { useState } from "react";
-import { useTranslation } from "@merge-rd/i18n";
 import { Link, useLocation } from "@tanstack/react-router";
+import { useState } from "react";
+import { toast } from "sonner";
+import { DataTable, DataTableRowActions } from "@/admin/shared/ui/data-table";
+import {
+    getErrorDescription,
+    getErrorMessage,
+    KeycloakSpinner
+} from "../../../shared/keycloak-ui-shared";
 import { useAdminClient } from "../../app/admin-client";
-import { KeycloakSpinner } from "../../../shared/keycloak-ui-shared";
 import { useAccess } from "../../app/providers/access/access";
 import { useRealm } from "../../app/providers/realm-context/realm-context";
-import { toUser } from "../user/routes/user";
-import { emptyFormatter } from "../../shared/lib/util";
-import { MemberModal } from "./members-modal";
-import { useSubGroups } from "./sub-groups-context";
-import { getLastId } from "./groupIdUtils";
-import { MembershipsModal } from "./memberships-modal";
 import useToggle from "../../shared/lib/useToggle";
+import { emptyFormatter } from "../../shared/lib/util";
+import { toUser } from "../../shared/lib/routes/user";
+import { useGroup } from "./api/use-group";
+import { useGroupMembers } from "./api/use-group-members";
+import { getLastId } from "./groupIdUtils";
+import { MemberModal } from "./members-modal";
+import { MembershipsModal } from "./memberships-modal";
+import { useSubGroups } from "./sub-groups-context";
 
 const UserDetailLink = (user: UserRepresentation) => {
     const { realm } = useRealm();
     const { t } = useTranslation();
     return (
-        <Link key={user.id} to={toUser({ realm, id: user.id!, tab: "settings" }) as string}>
+        <Link
+            key={user.id}
+            to={toUser({ realm, id: user.id!, tab: "settings" }) as string}
+        >
             {user.username}{" "}
             {!user.enabled && (
                 <Label className="text-red-500">
@@ -51,11 +61,10 @@ const UserDetailLink = (user: UserRepresentation) => {
 export const Members = () => {
     const { adminClient } = useAdminClient();
     const { t } = useTranslation();
-const location = useLocation();
+    const location = useLocation();
     const id = getLastId(location.pathname);
     const [includeSubGroup, setIncludeSubGroup] = useState(false);
     const { currentGroup: group } = useSubGroups();
-    const [currentGroup, setCurrentGroup] = useState<GroupRepresentation>();
     const [addMembers, setAddMembers] = useState(false);
     const [_isKebabOpen, _setIsKebabOpen] = useState(false);
     const [selectedRows, setSelectedRows] = useState<UserRepresentation[]>([]);
@@ -63,54 +72,15 @@ const location = useLocation();
     const [showMemberships, toggleShowMemberships] = useToggle();
     const { hasAccess } = useAccess();
 
-    useFetch(() => adminClient.groups.findOne({ id: group()!.id! }), setCurrentGroup, []);
+    const { data: currentGroup } = useGroup(group()!.id!);
 
     const isManager = hasAccess("manage-users") || currentGroup?.access!.manageMembership;
 
-    const [key, setKey] = useState(0);
-    const refresh = () => setKey(new Date().getTime());
-
-    // this queries the subgroups using the new search paradigm but doesn't
-    // account for pagination and therefore isn't going to scale well
-    const getSubGroups = async (groupId?: string, count = 0) => {
-        let nestedGroups: GroupRepresentation[] = [];
-        if (!count || !groupId) {
-            return nestedGroups;
-        }
-        const args: SubGroupQuery = {
-            parentId: groupId,
-            first: 0,
-            max: count
-        };
-        const subGroups: GroupRepresentation[] =
-            await adminClient.groups.listSubGroups(args);
-        nestedGroups = nestedGroups.concat(subGroups);
-
-        await Promise.all(subGroups.map(g => getSubGroups(g.id, g.subGroupCount))).then(
-            (values: GroupRepresentation[][]) => {
-                values.forEach(groups => (nestedGroups = nestedGroups.concat(groups)));
-            }
-        );
-        return nestedGroups;
-    };
-
-    const [members, setMembers] = useState<UserRepresentation[]>([]);
-
-    useFetch(
-        async () => {
-            if (!id) return [];
-            let list = await adminClient.groups.listMembers({ id: id!, briefRepresentation: true, first: 0, max: 500 });
-            if (includeSubGroup && currentGroup?.subGroupCount && currentGroup.id) {
-                const subGroups = await getSubGroups(currentGroup.id, currentGroup.subGroupCount);
-                const values = await Promise.all(subGroups.map(g => adminClient.groups.listMembers({ id: g.id!, briefRepresentation: true })));
-                values.forEach(users => (list = list.concat(users)));
-                list = uniqBy(list, member => member.username);
-            }
-            return list;
-        },
-        setMembers,
-        [id, key, includeSubGroup, currentGroup?.id, currentGroup?.subGroupCount]
-    );
+    const { data: members = [], refetch: refreshMembers } = useGroupMembers(id, {
+        includeSubGroup,
+        currentGroup
+    });
+    const refresh = () => refreshMembers();
 
     if (!currentGroup) {
         return <KeycloakSpinner />;
@@ -133,9 +103,14 @@ const location = useLocation();
                                     })
                                 )
                             );
-                            toast.success(t("usersAdded", { count: selectedRows.length }));
+                            toast.success(
+                                t("usersAdded", { count: selectedRows.length })
+                            );
                         } catch (error) {
-                            toast.error(t("usersAddedError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
+                            toast.error(
+                                t("usersAddedError", { error: getErrorMessage(error) }),
+                                { description: getErrorDescription(error) }
+                            );
                         }
                     }}
                     onClose={() => {
@@ -154,7 +129,7 @@ const location = useLocation();
             )}
             <DataTable<UserRepresentation>
                 data-testid="members-table"
-                key={`${id}${key}${includeSubGroup}`}
+                key={`${id}${includeSubGroup}`}
                 columns={[
                     {
                         id: "select",
@@ -173,10 +148,26 @@ const location = useLocation();
                             />
                         )
                     },
-                    { accessorKey: "username", header: t("name"), cell: ({ row }) => <UserDetailLink {...row.original} /> },
-                    { accessorKey: "email", header: t("email"), cell: ({ getValue }) => emptyFormatter()(getValue()) },
-                    { accessorKey: "firstName", header: t("firstName"), cell: ({ getValue }) => emptyFormatter()(getValue()) },
-                    { accessorKey: "lastName", header: t("lastName"), cell: ({ getValue }) => emptyFormatter()(getValue()) },
+                    {
+                        accessorKey: "username",
+                        header: t("name"),
+                        cell: ({ row }) => <UserDetailLink {...row.original} />
+                    },
+                    {
+                        accessorKey: "email",
+                        header: t("email"),
+                        cell: ({ getValue }) => emptyFormatter()(getValue())
+                    },
+                    {
+                        accessorKey: "firstName",
+                        header: t("firstName"),
+                        cell: ({ getValue }) => emptyFormatter()(getValue())
+                    },
+                    {
+                        accessorKey: "lastName",
+                        header: t("lastName"),
+                        cell: ({ getValue }) => emptyFormatter()(getValue())
+                    },
                     {
                         id: "actions",
                         cell: ({ row }) => (
@@ -185,10 +176,23 @@ const location = useLocation();
                                     <DropdownMenuItem
                                         onClick={async () => {
                                             try {
-                                                await adminClient.users.delFromGroup({ id: row.original.id!, groupId: id! });
-                                                toast.success(t("usersLeft", { count: 1 }));
+                                                await adminClient.users.delFromGroup({
+                                                    id: row.original.id!,
+                                                    groupId: id!
+                                                });
+                                                toast.success(
+                                                    t("usersLeft", { count: 1 })
+                                                );
                                             } catch (error) {
-                                                toast.error(t("usersLeftError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
+                                                toast.error(
+                                                    t("usersLeftError", {
+                                                        error: getErrorMessage(error)
+                                                    }),
+                                                    {
+                                                        description:
+                                                            getErrorDescription(error)
+                                                    }
+                                                );
                                             }
                                             refresh();
                                         }}
@@ -196,7 +200,12 @@ const location = useLocation();
                                         {t("leave")}
                                     </DropdownMenuItem>
                                 )}
-                                <DropdownMenuItem onClick={() => { setSelectedUser(row.original); toggleShowMemberships(); }}>
+                                <DropdownMenuItem
+                                    onClick={() => {
+                                        setSelectedUser(row.original);
+                                        toggleShowMemberships();
+                                    }}
+                                >
                                     {t("showMemberships")}
                                 </DropdownMenuItem>
                             </DataTableRowActions>
@@ -208,11 +217,28 @@ const location = useLocation();
                 searchPlaceholder={t("search")}
                 emptyContent={
                     <Empty className="py-12">
-                        <EmptyHeader><EmptyTitle>{t("noUsersFound")}</EmptyTitle></EmptyHeader>
+                        <EmptyHeader>
+                            <EmptyTitle>{t("noUsersFound")}</EmptyTitle>
+                        </EmptyHeader>
                         <EmptyContent>
-                            <EmptyDescription>{isManager ? t("emptyInstructions") : undefined}</EmptyDescription>
-                            {isManager && <Button className="mt-2" onClick={() => setAddMembers(true)}>{t("addMember")}</Button>}
-                            <Button variant="outline" className="mt-2 ml-2" onClick={() => setIncludeSubGroup(true)}>{t("includeSubGroups")}</Button>
+                            <EmptyDescription>
+                                {isManager ? t("emptyInstructions") : undefined}
+                            </EmptyDescription>
+                            {isManager && (
+                                <Button
+                                    className="mt-2"
+                                    onClick={() => setAddMembers(true)}
+                                >
+                                    {t("addMember")}
+                                </Button>
+                            )}
+                            <Button
+                                variant="outline"
+                                className="mt-2 ml-2"
+                                onClick={() => setIncludeSubGroup(true)}
+                            >
+                                {t("includeSubGroups")}
+                            </Button>
                         </EmptyContent>
                     </Empty>
                 }
@@ -220,19 +246,34 @@ const location = useLocation();
                 toolbar={
                     isManager && (
                         <>
-                            <Button data-testid="addMember" variant="default" onClick={() => setAddMembers(true)}>{t("addMember")}</Button>
+                            <Button
+                                data-testid="addMember"
+                                variant="default"
+                                onClick={() => setAddMembers(true)}
+                            >
+                                {t("addMember")}
+                            </Button>
                             <div className="flex items-center gap-2">
                                 <Checkbox
                                     data-testid="includeSubGroupsCheck"
                                     id="kc-include-sub-groups"
                                     checked={includeSubGroup}
-                                    onCheckedChange={() => setIncludeSubGroup(!includeSubGroup)}
+                                    onCheckedChange={() =>
+                                        setIncludeSubGroup(!includeSubGroup)
+                                    }
                                 />
-                                <label htmlFor="kc-include-sub-groups">{t("includeSubGroups")}</label>
+                                <label htmlFor="kc-include-sub-groups">
+                                    {t("includeSubGroups")}
+                                </label>
                             </div>
                             <DropdownMenu>
                                 <DropdownMenuTrigger asChild>
-                                    <Button data-testid="kebab" variant="ghost" disabled={selectedRows.length === 0} aria-label="Actions">
+                                    <Button
+                                        data-testid="kebab"
+                                        variant="ghost"
+                                        disabled={selectedRows.length === 0}
+                                        aria-label="Actions"
+                                    >
                                         <DotsThreeVertical className="size-4" />
                                     </Button>
                                 </DropdownMenuTrigger>
@@ -240,10 +281,29 @@ const location = useLocation();
                                     <DropdownMenuItem
                                         onClick={async () => {
                                             try {
-                                                await Promise.all(selectedRows.map(user => adminClient.users.delFromGroup({ id: user.id!, groupId: id! })));
-                                                toast.success(t("usersLeft", { count: selectedRows.length }));
+                                                await Promise.all(
+                                                    selectedRows.map(user =>
+                                                        adminClient.users.delFromGroup({
+                                                            id: user.id!,
+                                                            groupId: id!
+                                                        })
+                                                    )
+                                                );
+                                                toast.success(
+                                                    t("usersLeft", {
+                                                        count: selectedRows.length
+                                                    })
+                                                );
                                             } catch (error) {
-                                                toast.error(t("usersLeftError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
+                                                toast.error(
+                                                    t("usersLeftError", {
+                                                        error: getErrorMessage(error)
+                                                    }),
+                                                    {
+                                                        description:
+                                                            getErrorDescription(error)
+                                                    }
+                                                );
                                             }
                                             refresh();
                                         }}

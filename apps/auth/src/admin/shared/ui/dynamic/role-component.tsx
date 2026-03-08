@@ -1,16 +1,16 @@
-import { FormErrorText, HelpItem } from "../../../../shared/keycloak-ui-shared";
-import { Label } from "@merge-rd/ui/components/label";
+import { useTranslation } from "@merge-rd/i18n";
 import { Badge } from "@merge-rd/ui/components/badge";
+import { Label } from "@merge-rd/ui/components/label";
 import { useState } from "react";
 import { Controller, useFormContext } from "react-hook-form";
-import { useTranslation } from "@merge-rd/i18n";
+import { FormErrorText, HelpItem } from "../../../../shared/keycloak-ui-shared";
 import useToggle from "../../lib/useToggle";
 import {
     AddRoleButton,
     AddRoleMappingModal,
-    FilterType
+    type FilterType
 } from "../role-mapping/add-role-mapping-modal";
-import { Row, ServiceRole } from "../role-mapping/role-mapping";
+import { type Row, ServiceRole } from "../role-mapping/role-mapping";
 import type { ComponentProps } from "./components";
 
 const parseValue = (value: any) =>
@@ -45,7 +45,10 @@ export const RoleComponent = ({
     return (
         <div className="space-y-2">
             <div className="flex items-center gap-1">
-                <Label htmlFor={name!}>{t(label!)}{required && " *"}</Label>
+                <Label htmlFor={name!}>
+                    {t(label!)}
+                    {required && " *"}
+                </Label>
                 <HelpItem helpText={t(helpText!)} fieldLabelId={`${label}`} />
             </div>
             <Controller

@@ -1,15 +1,4 @@
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@merge-rd/ui/components/dropdown-menu";
-import { Label } from "@merge-rd/ui/components/label";
-import { Switch } from "@merge-rd/ui/components/switch";
-import { buttonVariants } from "@merge-rd/ui/components/button";
-import { ReactElement } from "react";
-import { Controller, useFormContext } from "react-hook-form";
 import { useTranslation } from "@merge-rd/i18n";
-import { useNavigate } from "@tanstack/react-router";
-import { useParams } from "../../../shared/lib/useParams";
-import { useAdminClient } from "../../../app/admin-client";
-import { getErrorDescription, getErrorMessage } from "../../../../shared/keycloak-ui-shared";
-import { toast } from "sonner";
 import {
     AlertDialog,
     AlertDialogAction,
@@ -20,12 +9,29 @@ import {
     AlertDialogHeader,
     AlertDialogTitle
 } from "@merge-rd/ui/components/alert-dialog";
-import { useConfirmDialog } from "../../../shared/ui/confirm-dialog/confirm-dialog";
-import { useState } from "react";
-
+import { buttonVariants } from "@merge-rd/ui/components/button";
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuTrigger
+} from "@merge-rd/ui/components/dropdown-menu";
+import { Label } from "@merge-rd/ui/components/label";
+import { Switch } from "@merge-rd/ui/components/switch";
+import { useNavigate } from "@tanstack/react-router";
+import { type ReactElement, useState } from "react";
+import { Controller, useFormContext } from "react-hook-form";
+import { toast } from "sonner";
+import {
+    getErrorDescription,
+    getErrorMessage
+} from "../../../../shared/keycloak-ui-shared";
+import { useAdminClient } from "../../../app/admin-client";
 import { useRealm } from "../../../app/providers/realm-context/realm-context";
-import { CustomUserFederationRouteParams } from "../routes/custom-user-federation";
-import { toUserFederation } from "../routes/user-federation";
+import { useParams } from "../../../shared/lib/useParams";
+import { useConfirmDialog } from "../../../shared/ui/confirm-dialog/confirm-dialog";
+import type { CustomUserFederationRouteParams } from "../../../shared/lib/routes/user-federation";
+import { toUserFederation } from "../../../shared/lib/routes/user-federation";
 
 type HeaderProps = {
     provider: string;
@@ -45,7 +51,7 @@ export const Header = ({
     const { t } = useTranslation();
     const { id } = useParams<Partial<CustomUserFederationRouteParams>>();
     const navigate = useNavigate();
-const { realm } = useRealm();
+    const { realm } = useRealm();
 
     const { control, setValue } = useFormContext();
 
@@ -69,7 +75,9 @@ const { realm } = useRealm();
             toast.success(t("userFedDeletedSuccess"));
             navigate({ to: toUserFederation({ realm }) as string, replace: true });
         } catch (error) {
-            toast.error(t("userFedDeleteError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
+            toast.error(t("userFedDeleteError", { error: getErrorMessage(error) }), {
+                description: getErrorDescription(error)
+            });
         }
     };
 
@@ -79,12 +87,20 @@ const { realm } = useRealm();
             <AlertDialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
                 <AlertDialogContent>
                     <AlertDialogHeader>
-                        <AlertDialogTitle>{t("userFedDeleteConfirmTitle")}</AlertDialogTitle>
-                        <AlertDialogDescription>{t("userFedDeleteConfirm")}</AlertDialogDescription>
+                        <AlertDialogTitle>
+                            {t("userFedDeleteConfirmTitle")}
+                        </AlertDialogTitle>
+                        <AlertDialogDescription>
+                            {t("userFedDeleteConfirm")}
+                        </AlertDialogDescription>
                     </AlertDialogHeader>
                     <AlertDialogFooter>
                         <AlertDialogCancel>{t("cancel")}</AlertDialogCancel>
-                        <AlertDialogAction variant="destructive" data-testid="confirm" onClick={onDeleteConfirm}>
+                        <AlertDialogAction
+                            variant="destructive"
+                            data-testid="confirm"
+                            onClick={onDeleteConfirm}
+                        >
                             {t("delete")}
                         </AlertDialogAction>
                     </AlertDialogFooter>
@@ -100,18 +116,35 @@ const { realm } = useRealm();
                             <div className="flex flex-wrap items-center gap-2" />
                             <div className="flex items-center gap-2">
                                 <div className="flex items-center gap-2 mr-4">
-                                    <Label htmlFor="user-federation-switch" className="text-sm">{t("enabled")}</Label>
-                                    <Switch id="user-federation-switch" data-testid="user-federation-switch" checked={field.value?.[0] === "true" || field.value === "true"} aria-label={t("enabled")} onCheckedChange={value => {
-                                        if (!value) {
-                                            toggleDisableDialog();
-                                        } else {
-                                            field.onChange([value.toString()]);
-                                            save();
+                                    <Label
+                                        htmlFor="user-federation-switch"
+                                        className="text-sm"
+                                    >
+                                        {t("enabled")}
+                                    </Label>
+                                    <Switch
+                                        id="user-federation-switch"
+                                        data-testid="user-federation-switch"
+                                        checked={
+                                            field.value?.[0] === "true" ||
+                                            field.value === "true"
                                         }
-                                    }} />
+                                        aria-label={t("enabled")}
+                                        onCheckedChange={value => {
+                                            if (!value) {
+                                                toggleDisableDialog();
+                                            } else {
+                                                field.onChange([value.toString()]);
+                                                save();
+                                            }
+                                        }}
+                                    />
                                 </div>
                                 <DropdownMenu>
-                                    <DropdownMenuTrigger data-testid="action-dropdown" className={buttonVariants()}>
+                                    <DropdownMenuTrigger
+                                        data-testid="action-dropdown"
+                                        className={buttonVariants()}
+                                    >
                                         {t("action")}
                                     </DropdownMenuTrigger>
                                     <DropdownMenuContent align="end">

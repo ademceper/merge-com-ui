@@ -1,38 +1,37 @@
 import type RealmRepresentation from "@keycloak/keycloak-admin-client/lib/defs/realmRepresentation";
 import {
     UnmanagedAttributePolicy,
-    UserProfileConfig
+    type UserProfileConfig
 } from "@keycloak/keycloak-admin-client/lib/defs/userProfileMetadata";
+import { useTranslation } from "@merge-rd/i18n";
+import { Button } from "@merge-rd/ui/components/button";
+import { Link } from "@merge-rd/ui/components/link";
+import { ArrowSquareOut, Copy } from "@phosphor-icons/react";
+import { useEffect } from "react";
+import { Controller, FormProvider, useForm } from "react-hook-form";
 import {
     FormErrorText,
     HelpItem,
     KeycloakSpinner,
     SelectField,
     TextControl,
-    useEnvironment,
-    useFetch
+    useEnvironment
 } from "../../../shared/keycloak-ui-shared";
 import { FormPanel } from "../../../shared/keycloak-ui-shared/scroll-form/form-panel";
-import { Button } from "@merge-rd/ui/components/button";
-import { Link } from "@merge-rd/ui/components/link";
-import { Copy, ArrowSquareOut } from "@phosphor-icons/react";
-import { useEffect, useState } from "react";
-import { Controller, FormProvider, useForm } from "react-hook-form";
-import { useTranslation } from "@merge-rd/i18n";
-import { useAdminClient } from "../../app/admin-client";
-import { DefaultSwitchControl } from "../../shared/ui/switch-control";
-import { FixedButtonsGroup } from "../../shared/ui/form/fixed-button-group";
-import { FormAccess } from "../../shared/ui/form/form-access";
-import { KeyValueInput } from "../../shared/ui/key-value-form/key-value-input";
 import { useRealm } from "../../app/providers/realm-context/realm-context";
+import useIsFeatureEnabled, { Feature } from "../../shared/lib/useIsFeatureEnabled";
 import {
     addTrailingSlash,
     convertAttributeNameToForm,
     convertToFormValues
 } from "../../shared/lib/util";
-import useIsFeatureEnabled, { Feature } from "../../shared/lib/useIsFeatureEnabled";
-import { UIRealmRepresentation } from "./realm-settings-tabs";
+import { FixedButtonsGroup } from "../../shared/ui/form/fixed-button-group";
+import { FormAccess } from "../../shared/ui/form/form-access";
+import { KeyValueInput } from "../../shared/ui/key-value-form/key-value-input";
+import { DefaultSwitchControl } from "../../shared/ui/switch-control";
 import { SIGNATURE_ALGORITHMS } from "../clients/add/saml-signature";
+import { useUserProfileConfig } from "./api/use-user-profile-config";
+import type { UIRealmRepresentation } from "./realm-settings-tabs";
 
 type RealmSettingsGeneralTabProps = {
     realm: UIRealmRepresentation;
@@ -43,16 +42,7 @@ export const RealmSettingsGeneralTab = ({
     realm,
     save
 }: RealmSettingsGeneralTabProps) => {
-    const { adminClient } = useAdminClient();
-
-    const { realm: realmName } = useRealm();
-    const [userProfileConfig, setUserProfileConfig] = useState<UserProfileConfig>();
-
-    useFetch(
-        () => adminClient.users.getProfile({ realm: realmName }),
-        config => setUserProfileConfig(config),
-        []
-    );
+    const { data: userProfileConfig } = useUserProfileConfig();
 
     if (!userProfileConfig) {
         return <KeycloakSpinner />;
@@ -150,7 +140,10 @@ function RealmSettingsGeneralTabForm({
                     <FormPanel title={t("realmName")}>
                         <div className="space-y-4">
                             <div className="space-y-2">
-                                <label htmlFor="kc-realm-id" className="text-sm font-medium">
+                                <label
+                                    htmlFor="kc-realm-id"
+                                    className="text-sm font-medium"
+                                >
                                     {t("realmName")} *
                                 </label>
                                 <Controller
@@ -161,7 +154,10 @@ function RealmSettingsGeneralTabForm({
                                     }}
                                     defaultValue=""
                                     render={({ field }) => (
-                                        <div className="flex items-center gap-2" data-testid="realmName">
+                                        <div
+                                            className="flex items-center gap-2"
+                                            data-testid="realmName"
+                                        >
                                             <span className="font-mono rounded-md border border-input bg-muted/30 px-3 py-2 text-sm">
                                                 {field.value}
                                             </span>
@@ -170,7 +166,11 @@ function RealmSettingsGeneralTabForm({
                                                 variant="outline"
                                                 size="icon"
                                                 className="size-8 shrink-0"
-                                                onClick={() => navigator.clipboard.writeText(field.value || "")}
+                                                onClick={() =>
+                                                    navigator.clipboard.writeText(
+                                                        field.value || ""
+                                                    )
+                                                }
                                                 aria-label={t("copy")}
                                             >
                                                 <Copy className="size-4" />
@@ -186,9 +186,14 @@ function RealmSettingsGeneralTabForm({
                                 )}
                             </div>
                             <TextControl name="displayName" label={t("displayName")} />
-                            <TextControl name="displayNameHtml" label={t("htmlDisplayName")} />
                             <TextControl
-                                name={convertAttributeNameToForm("attributes.frontendUrl")}
+                                name="displayNameHtml"
+                                label={t("htmlDisplayName")}
+                            />
+                            <TextControl
+                                name={convertAttributeNameToForm(
+                                    "attributes.frontendUrl"
+                                )}
                                 type="url"
                                 label={t("frontendUrl")}
                                 labelIcon={t("frontendUrlHelp")}
@@ -209,7 +214,10 @@ function RealmSettingsGeneralTabForm({
                     <FormPanel title={t("acrToLoAMapping")}>
                         <div className="space-y-2">
                             <div className="flex items-center gap-1">
-                                <label htmlFor="acrToLoAMapping" className="text-sm font-medium">
+                                <label
+                                    htmlFor="acrToLoAMapping"
+                                    className="text-sm font-medium"
+                                >
                                     {t("acrToLoAMapping")}
                                 </label>
                                 <HelpItem
@@ -219,7 +227,9 @@ function RealmSettingsGeneralTabForm({
                             </div>
                             <KeyValueInput
                                 label={t("acrToLoAMapping")}
-                                name={convertAttributeNameToForm("attributes.acr.loa.map")}
+                                name={convertAttributeNameToForm(
+                                    "attributes.acr.loa.map"
+                                )}
                             />
                         </div>
                     </FormPanel>
@@ -267,10 +277,15 @@ function RealmSettingsGeneralTabForm({
                                     "attributes.saml.signature.algorithm"
                                 )}
                                 label={t("signatureAlgorithmIdentityProviderMetadata")}
-                                labelIcon={t("signatureAlgorithmIdentityProviderMetadataHelp")}
+                                labelIcon={t(
+                                    "signatureAlgorithmIdentityProviderMetadataHelp"
+                                )}
                                 defaultValue=""
                                 placeholderText={t("choose")}
-                                options={SIGNATURE_ALGORITHMS.map(v => ({ key: v, value: v }))}
+                                options={SIGNATURE_ALGORITHMS.map(v => ({
+                                    key: v,
+                                    value: v
+                                }))}
                             />
                         </div>
                     </FormPanel>
@@ -278,7 +293,10 @@ function RealmSettingsGeneralTabForm({
                     <FormPanel title={t("endpoints")}>
                         <div className="space-y-2">
                             <div className="flex items-center gap-1">
-                                <label htmlFor="kc-endpoints" className="text-sm font-medium">
+                                <label
+                                    htmlFor="kc-endpoints"
+                                    className="text-sm font-medium"
+                                >
                                     {t("endpoints")}
                                 </label>
                                 <HelpItem
@@ -307,19 +325,23 @@ function RealmSettingsGeneralTabForm({
                                 >
                                     {t("samlIdentityProviderMetadata")}
                                 </Link>
-                                {isOpenid4vciEnabled && realm.verifiableCredentialsEnabled && (
-                                    <Link
-                                        href={`${addTrailingSlash(
-                                            serverBaseUrl
-                                        )}.well-known/openid-credential-issuer/realms/${realmName}`}
-                                        target="_blank"
-                                        rel="noreferrer noopener"
-                                        className="inline-flex w-fit items-center gap-1.5"
-                                    >
-                                        {t("oid4vcIssuerMetadata")}
-                                        <ArrowSquareOut className="size-4 shrink-0" aria-hidden />
-                                    </Link>
-                                )}
+                                {isOpenid4vciEnabled &&
+                                    realm.verifiableCredentialsEnabled && (
+                                        <Link
+                                            href={`${addTrailingSlash(
+                                                serverBaseUrl
+                                            )}.well-known/openid-credential-issuer/realms/${realmName}`}
+                                            target="_blank"
+                                            rel="noreferrer noopener"
+                                            className="inline-flex w-fit items-center gap-1.5"
+                                        >
+                                            {t("oid4vcIssuerMetadata")}
+                                            <ArrowSquareOut
+                                                className="size-4 shrink-0"
+                                                aria-hidden
+                                            />
+                                        </Link>
+                                    )}
                             </div>
                         </div>
                     </FormPanel>

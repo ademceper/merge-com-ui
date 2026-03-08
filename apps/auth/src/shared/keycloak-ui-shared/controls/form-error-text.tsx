@@ -1,5 +1,5 @@
-import { WarningCircle } from "@phosphor-icons/react";
 import { FieldError } from "@merge-rd/ui/components/field";
+import { WarningCircle } from "@phosphor-icons/react";
 
 type FormErrorTextProps = React.ComponentProps<"div"> & {
     message: string;
@@ -7,7 +7,10 @@ type FormErrorTextProps = React.ComponentProps<"div"> & {
 
 export const FormErrorText = ({ message, ...props }: FormErrorTextProps) => {
     return (
-        <FieldError className="flex items-center gap-1.5 text-destructive text-sm" {...props}>
+        <FieldError
+            className="flex items-center gap-1.5 text-destructive text-sm"
+            {...props}
+        >
             <WarningCircle size={16} className="shrink-0" />
             {message}
         </FieldError>

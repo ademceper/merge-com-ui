@@ -1,15 +1,17 @@
-import { useState } from "react";
-import type { PageProps } from "keycloakify/login/pages/PageProps";
-import type { KcContext } from "../kc-context";
-import type { I18n } from "../i18n";
-import AuthLayout from "../components/auth-layout";
-import { Link } from "@merge-rd/ui/components/link";
-import { Input } from "@merge-rd/ui/components/input";
-import { Button } from "@merge-rd/ui/components/button";
 import { Alert, AlertDescription } from "@merge-rd/ui/components/alert";
+import { Button } from "@merge-rd/ui/components/button";
+import { Input } from "@merge-rd/ui/components/input";
+import { Link } from "@merge-rd/ui/components/link";
 import { cn } from "@merge-rd/ui/lib/utils";
+import type { PageProps } from "keycloakify/login/pages/PageProps";
+import { useState } from "react";
+import AuthLayout from "../components/auth-layout";
+import type { I18n } from "../i18n";
+import type { KcContext } from "../kc-context";
 
-export default function LoginResetPassword(props: PageProps<Extract<KcContext, { pageId: "login-reset-password.ftl" }>, I18n>) {
+export default function LoginResetPassword(
+    props: PageProps<Extract<KcContext, { pageId: "login-reset-password.ftl" }>, I18n>
+) {
     const { kcContext, i18n } = props;
 
     const { url, realm, auth, messagesPerField, message } = kcContext;
@@ -21,11 +23,18 @@ export default function LoginResetPassword(props: PageProps<Extract<KcContext, {
     return (
         <AuthLayout>
             <div className="space-y-5">
-                <h1 className="text-xl font-semibold text-foreground tracking-tight">{msg("emailForgotTitle")}</h1>
-                <p className="text-sm text-muted-foreground">{msg("emailForgotDescription")}</p>
+                <h1 className="text-xl font-semibold text-foreground tracking-tight">
+                    {msg("emailForgotTitle")}
+                </h1>
+                <p className="text-sm text-muted-foreground">
+                    {msg("emailForgotDescription")}
+                </p>
 
                 {message && (
-                    <Alert variant={message.type === "error" ? "destructive" : "default"} className="rounded-lg">
+                    <Alert
+                        variant={message.type === "error" ? "destructive" : "default"}
+                        className="rounded-lg"
+                    >
                         <AlertDescription>{message.summary}</AlertDescription>
                     </Alert>
                 )}
@@ -58,12 +67,24 @@ export default function LoginResetPassword(props: PageProps<Extract<KcContext, {
                             }
                             autoComplete="username"
                             aria-invalid={messagesPerField.existsError("username")}
-                            className={cn(messagesPerField.existsError("username") && "border border-destructive")}
+                            className={cn(
+                                messagesPerField.existsError("username") &&
+                                    "border border-destructive"
+                            )}
                         />
-                        {messagesPerField.existsError("username") && <p className="text-sm text-destructive">{messagesPerField.get("username")}</p>}
+                        {messagesPerField.existsError("username") && (
+                            <p className="text-sm text-destructive">
+                                {messagesPerField.get("username")}
+                            </p>
+                        )}
                     </div>
 
-                    <Button type="submit" disabled={isSubmitting} size="xl" className="w-full">
+                    <Button
+                        type="submit"
+                        disabled={isSubmitting}
+                        size="xl"
+                        className="w-full"
+                    >
                         {msgStr("doSubmit")}
                     </Button>
                 </form>

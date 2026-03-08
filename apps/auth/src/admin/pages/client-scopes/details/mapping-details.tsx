@@ -1,32 +1,42 @@
 import type ProtocolMapperRepresentation from "@keycloak/keycloak-admin-client/lib/defs/protocolMapperRepresentation";
 import type { ProtocolMapperTypeRepresentation } from "@keycloak/keycloak-admin-client/lib/defs/serverInfoRepesentation";
-import { getErrorDescription, getErrorMessage, TextControl, useFetch } from "../../../../shared/keycloak-ui-shared";
-import { toast } from "sonner";
-import { Button, buttonVariants } from "@merge-rd/ui/components/button";
-import { Label } from "@merge-rd/ui/components/label";
-import { Input } from "@merge-rd/ui/components/input";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@merge-rd/ui/components/dropdown-menu";
-import { useState } from "react";
-import { FormProvider, useForm } from "react-hook-form";
 import { useTranslation } from "@merge-rd/i18n";
-import { Link, useNavigate, useLocation } from "@tanstack/react-router";
+import { Button, buttonVariants } from "@merge-rd/ui/components/button";
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuTrigger
+} from "@merge-rd/ui/components/dropdown-menu";
+import { Input } from "@merge-rd/ui/components/input";
+import { Label } from "@merge-rd/ui/components/label";
+import { Link, useLocation, useNavigate } from "@tanstack/react-router";
+import { useEffect, useState } from "react";
+import { FormProvider, useForm } from "react-hook-form";
+import { toast } from "sonner";
+import {
+    getErrorDescription,
+    getErrorMessage,
+    TextControl
+} from "../../../../shared/keycloak-ui-shared";
 import { useAdminClient } from "../../../app/admin-client";
-import { toDedicatedScope } from "../../clients/routes/dedicated-scope-details";
+import { useRealm } from "../../../app/providers/realm-context/realm-context";
+import { useServerInfo } from "../../../app/providers/server-info/server-info-provider";
+import { useParams } from "../../../shared/lib/useParams";
+import { convertFormValuesToObject, convertToFormValues } from "../../../shared/lib/util";
 import { useConfirmDialog } from "../../../shared/ui/confirm-dialog/confirm-dialog";
 import { DynamicComponents } from "../../../shared/ui/dynamic/dynamic-components";
 import { FormAccess } from "../../../shared/ui/form/form-access";
-import { useRealm } from "../../../app/providers/realm-context/realm-context";
-import { useServerInfo } from "../../../app/providers/server-info/server-info-provider";
-import { convertFormValuesToObject, convertToFormValues } from "../../../shared/lib/util";
-import { useParams } from "../../../shared/lib/useParams";
-import { toClientScope } from "../routes/client-scope";
-import { MapperParams } from "../routes/mapper";
+import { toDedicatedScope } from "../../../shared/lib/routes/clients";
+import { useProtocolMapper } from "../api/use-protocol-mapper";
+import { toClientScope } from "../../../shared/lib/routes/client-scopes";
+import type { MapperParams } from "../../../shared/lib/routes/client-scopes";
 
 export default function MappingDetails() {
     const { adminClient } = useAdminClient();
 
     const { t } = useTranslation();
-const { id, mapperId, viewMode } = useParams<MapperParams>();
+    const { id, mapperId, viewMode } = useParams<MapperParams>();
     const form = useForm();
     const { setValue, handleSubmit } = form;
     const [mapping, setMapping] = useState<ProtocolMapperTypeRepresentation>();
@@ -47,68 +57,36 @@ const { id, mapperId, viewMode } = useParams<MapperParams>();
             ? toClientScope({ realm, id, tab: "mappers" })
             : toDedicatedScope({ realm, clientId: id, tab: "mappers" });
 
-    useFetch(
-        async () => {
-            let data: ProtocolMapperRepresentation | undefined;
-            if (isUpdating) {
-                if (isOnClientScope) {
-                    data = await adminClient.clientScopes.findProtocolMapper({
-                        id,
-                        mapperId
-                    });
-                } else {
-                    data = await adminClient.clients.findProtocolMapperById({
-                        id,
-                        mapperId
-                    });
-                }
-                if (!data) {
-                    throw new Error(t("notFound"));
-                }
-
-                const mapperTypes = serverInfo.protocolMapperTypes![data!.protocol!];
-                const mapping = mapperTypes.find(
-                    type => type.id === data!.protocolMapper
-                );
-
-                return {
-                    config: {
-                        protocol: data.protocol,
-                        protocolMapper: data.protocolMapper
-                    },
-                    mapping,
-                    data
-                };
-            } else {
-                const model = isOnClientScope
-                    ? await adminClient.clientScopes.findOne({ id })
-                    : await adminClient.clients.findOne({ id });
-                if (!model) {
-                    throw new Error(t("notFound"));
-                }
-                const protocolMappers = serverInfo.protocolMapperTypes![model.protocol!];
-                const mapping = protocolMappers.find(mapper => mapper.id === mapperId);
-                if (!mapping) {
-                    throw new Error(t("notFound"));
-                }
-                return {
-                    mapping,
-                    config: {
-                        protocol: model.protocol,
-                        protocolMapper: mapperId
-                    }
-                };
-            }
-        },
-        ({ config, mapping, data }) => {
-            setConfig(config);
-            setMapping(mapping);
-            if (data) {
-                convertToFormValues(data, setValue);
-            }
-        },
-        []
+    const { query: mapperQuery } = useProtocolMapper(
+        id,
+        mapperId,
+        isUpdating,
+        isOnClientScope
     );
+
+    useEffect(() => {
+        if (mapperQuery.data) {
+            const { config: fetchedConfig, data: fetchedData } = mapperQuery.data;
+            setConfig(fetchedConfig);
+            if (fetchedData) {
+                const mapperTypes =
+                    serverInfo.protocolMapperTypes![fetchedData.protocol!];
+                const foundMapping = mapperTypes.find(
+                    type => type.id === fetchedData.protocolMapper
+                );
+                setMapping(foundMapping);
+                convertToFormValues(fetchedData, setValue);
+            } else {
+                // New mapper mode
+                const protocolMappers =
+                    serverInfo.protocolMapperTypes![fetchedConfig.protocol!];
+                const foundMapping = protocolMappers.find(
+                    mapper => mapper.id === mapperId
+                );
+                setMapping(foundMapping);
+            }
+        }
+    }, [mapperQuery.data]);
 
     const [toggleDeleteDialog, DeleteConfirm] = useConfirmDialog({
         titleKey: "deleteMappingTitle",
@@ -131,7 +109,9 @@ const { id, mapperId, viewMode } = useParams<MapperParams>();
                 toast.success(t("mappingDeletedSuccess"));
                 navigate({ to: toDetails() as string });
             } catch (error) {
-                toast.error(t("mappingDeletedError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
+                toast.error(t("mappingDeletedError", { error: getErrorMessage(error) }), {
+                    description: getErrorDescription(error)
+                });
             }
         }
     });
@@ -164,7 +144,9 @@ const { id, mapperId, viewMode } = useParams<MapperParams>();
                 navigate({ to: toDetails() as string });
             }
         } catch (error) {
-            toast.error(t(`mapping${key}Error`, { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
+            toast.error(t(`mapping${key}Error`, { error: getErrorMessage(error) }), {
+                description: getErrorDescription(error)
+            });
         }
     };
 
@@ -176,11 +158,17 @@ const { id, mapperId, viewMode } = useParams<MapperParams>();
                     <div className="flex flex-wrap items-center gap-2" />
                     <div className="flex items-center gap-2">
                         <DropdownMenu>
-                            <DropdownMenuTrigger data-testid="action-dropdown" className={buttonVariants()}>
+                            <DropdownMenuTrigger
+                                data-testid="action-dropdown"
+                                className={buttonVariants()}
+                            >
                                 {t("action")}
                             </DropdownMenuTrigger>
                             <DropdownMenuContent align="end">
-                                <DropdownMenuItem key="delete" onClick={toggleDeleteDialog}>
+                                <DropdownMenuItem
+                                    key="delete"
+                                    onClick={toggleDeleteDialog}
+                                >
                                     {t("delete")}
                                 </DropdownMenuItem>
                             </DropdownMenuContent>
@@ -221,11 +209,7 @@ const { id, mapperId, viewMode } = useParams<MapperParams>();
                             <Button type="submit" data-testid="save">
                                 {t("save")}
                             </Button>
-                            <Button
-                                data-testid="cancel"
-                                variant="link"
-                                asChild
-                            >
+                            <Button data-testid="cancel" variant="link" asChild>
                                 <Link to={toDetails() as string}>{t("cancel")}</Link>
                             </Button>
                         </div>

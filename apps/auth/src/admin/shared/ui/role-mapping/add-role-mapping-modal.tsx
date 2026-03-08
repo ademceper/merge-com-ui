@@ -1,13 +1,5 @@
-import RoleRepresentation from "@keycloak/keycloak-admin-client/lib/defs/roleRepresentation";
-import { useFetch } from "../../../../shared/keycloak-ui-shared";
-import { DataTable, type ColumnDef } from "@/admin/shared/ui/data-table";
-import {
-    Empty,
-    EmptyContent,
-    EmptyDescription,
-    EmptyHeader,
-    EmptyTitle
-} from "@merge-rd/ui/components/empty";
+import type RoleRepresentation from "@keycloak/keycloak-admin-client/lib/defs/roleRepresentation";
+import { useTranslation } from "@merge-rd/i18n";
 import { Button } from "@merge-rd/ui/components/button";
 import { Checkbox } from "@merge-rd/ui/components/checkbox";
 import {
@@ -15,23 +7,28 @@ import {
     DialogContent,
     DialogFooter,
     DialogHeader,
-    DialogTitle,
+    DialogTitle
 } from "@merge-rd/ui/components/dialog";
 import {
     DropdownMenu,
     DropdownMenuContent,
     DropdownMenuItem,
-    DropdownMenuTrigger,
+    DropdownMenuTrigger
 } from "@merge-rd/ui/components/dropdown-menu";
+import {
+    Empty,
+    EmptyContent,
+    EmptyDescription,
+    EmptyHeader,
+    EmptyTitle
+} from "@merge-rd/ui/components/empty";
 import { useState } from "react";
-import { useTranslation } from "@merge-rd/i18n";
-import { useAdminClient } from "../../../app/admin-client";
+import { type ColumnDef, DataTable } from "@/admin/shared/ui/data-table";
 import { useAccess } from "../../../app/providers/access/access";
+import { useAvailableRoleMappings } from "../../api/use-available-role-mappings";
 import { translationFormatter } from "../../lib/translationFormatter";
 import useLocaleSort from "../../lib/useLocaleSort";
-import { ResourcesKey, Row } from "./role-mapping";
-import { getAvailableRoles } from "./queries";
-import { getAvailableClientRoles } from "./resource";
+import type { ResourcesKey, Row } from "./role-mapping";
 
 type AddRoleMappingModalProps = {
     id: string;
@@ -125,33 +122,16 @@ export const AddRoleMappingModal = ({
     title,
     actionLabel
 }: AddRoleMappingModalProps) => {
-    const { adminClient } = useAdminClient();
-
     const { t } = useTranslation();
     const [selectedRows, setSelectedRows] = useState<Row[]>([]);
-    const [rolesData, setRolesData] = useState<Row[]>([]);
 
     const localeSort = useLocaleSort();
-    const compareRow = ({ role: { name: n } }: Row) => n?.toUpperCase();
 
-    useFetch(
-        async () => {
-            if (filterType === "roles") {
-                const roles = await getAvailableRoles(adminClient, type, { id, first: 0, max: 500 });
-                return localeSort(roles, compareRow).map(row => ({ role: row.role, id: row.role.id }));
-            }
-            const roles = await getAvailableClientRoles(adminClient, { id, type, first: 0, max: 500 });
-            return localeSort(
-                roles.map(e => ({
-                    client: { clientId: e.client, id: e.clientId },
-                    role: { id: e.id, name: e.role, description: e.description },
-                    id: e.id
-                })),
-                ({ client: { clientId }, role: { name: n } }) => `${clientId}${n}`
-            );
-        },
-        setRolesData,
-        [id, type, filterType]
+    const { data: rolesData = [] } = useAvailableRoleMappings(
+        id,
+        type,
+        filterType,
+        localeSort
     );
 
     const columns: ColumnDef<Row>[] = [
@@ -176,17 +156,36 @@ export const AddRoleMappingModal = ({
                 />
             )
         },
-        { accessorKey: "role.name", header: t("name"), cell: ({ row }) => row.original.role?.name ?? "—" },
+        {
+            accessorKey: "role.name",
+            header: t("name"),
+            cell: ({ row }) => row.original.role?.name ?? "—"
+        },
         ...(filterType === "clients"
-            ? [{ accessorKey: "client.clientId", header: t("clientId"), cell: ({ row }: { row: { original: Row } }) => row.original.client?.clientId ?? "—" } as ColumnDef<Row>]
+            ? [
+                  {
+                      accessorKey: "client.clientId",
+                      header: t("clientId"),
+                      cell: ({ row }: { row: { original: Row } }) =>
+                          row.original.client?.clientId ?? "—"
+                  } as ColumnDef<Row>
+              ]
             : []),
-        { accessorKey: "role.description", header: t("description"), cell: ({ row }) => <RoleDescription role={row.original.role!} /> }
+        {
+            accessorKey: "role.description",
+            header: t("description"),
+            cell: ({ row }) => <RoleDescription role={row.original.role!} />
+        }
     ];
 
     const emptyContent = (
         <Empty className="py-12">
-            <EmptyHeader><EmptyTitle>{t("noRoles")}</EmptyTitle></EmptyHeader>
-            <EmptyContent><EmptyDescription>{t("noRealmRolesToAssign")}</EmptyDescription></EmptyContent>
+            <EmptyHeader>
+                <EmptyTitle>{t("noRoles")}</EmptyTitle>
+            </EmptyHeader>
+            <EmptyContent>
+                <EmptyDescription>{t("noRealmRolesToAssign")}</EmptyDescription>
+            </EmptyContent>
         </Empty>
     );
 
@@ -206,7 +205,9 @@ export const AddRoleMappingModal = ({
                     columns={columns}
                     data={rolesData}
                     searchColumnId={filterType === "roles" ? "role.name" : "role.name"}
-                    searchPlaceholder={filterType === "roles" ? t("searchByRoleName") : t("search")}
+                    searchPlaceholder={
+                        filterType === "roles" ? t("searchByRoleName") : t("search")
+                    }
                     emptyContent={emptyContent}
                     emptyMessage={t("noRoles")}
                 />

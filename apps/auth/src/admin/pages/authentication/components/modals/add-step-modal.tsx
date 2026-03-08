@@ -1,23 +1,22 @@
 import type { AuthenticationProviderRepresentation } from "@keycloak/keycloak-admin-client/lib/defs/authenticatorConfigRepresentation";
-import { useFetch } from "../../../../../shared/keycloak-ui-shared";
+import { useTranslation } from "@merge-rd/i18n";
 import { Button } from "@merge-rd/ui/components/button";
-import { Input } from "@merge-rd/ui/components/input";
-import { RadioGroup, RadioGroupItem } from "@merge-rd/ui/components/radio-group";
-import { Label } from "@merge-rd/ui/components/label";
-import { MagnifyingGlass } from "@phosphor-icons/react";
 import {
     Dialog,
     DialogContent,
+    DialogFooter,
     DialogHeader,
-    DialogTitle,
-    DialogFooter
+    DialogTitle
 } from "@merge-rd/ui/components/dialog";
-import { TablePagination } from "@/admin/shared/ui/table-pagination";
+import { Input } from "@merge-rd/ui/components/input";
+import { Label } from "@merge-rd/ui/components/label";
+import { RadioGroup, RadioGroupItem } from "@merge-rd/ui/components/radio-group";
+import { MagnifyingGlass } from "@phosphor-icons/react";
 import { useMemo, useState } from "react";
-import { useTranslation } from "@merge-rd/i18n";
-import { useAdminClient } from "../../../../app/admin-client";
+import { TablePagination } from "@/admin/shared/ui/table-pagination";
 import useLocaleSort, { mapByKey } from "../../../../shared/lib/useLocaleSort";
-import { providerConditionFilter } from "../../flow-details";
+import { type FlowType as QueryFlowType } from "../../api/keys";
+import { useStepProviders } from "../../api/use-step-providers";
 
 type AuthenticationProviderListProps = {
     list?: AuthenticationProviderRepresentation[];
@@ -34,7 +33,7 @@ const AuthenticationProviderList = ({
             <form>
                 <RadioGroup
                     value={selectedId ?? "__none__"}
-                    onValueChange={(id) => {
+                    onValueChange={id => {
                         const provider = list?.find(p => p.id === id);
                         setValue(provider);
                     }}
@@ -53,7 +52,11 @@ const AuthenticationProviderList = ({
                                 className="cursor-pointer flex-1"
                             >
                                 <div>{provider.displayName}</div>
-                                {provider.description && <div className="text-sm text-muted-foreground">{provider.description}</div>}
+                                {provider.description && (
+                                    <div className="text-sm text-muted-foreground">
+                                        {provider.description}
+                                    </div>
+                                )}
                             </Label>
                         </div>
                     ))}
@@ -72,40 +75,14 @@ type AddStepModalProps = {
 };
 
 export const AddStepModal = ({ name, type, onSelect }: AddStepModalProps) => {
-    const { adminClient } = useAdminClient();
-
     const { t } = useTranslation();
 
     const [value, setValue] = useState<AuthenticationProviderRepresentation>();
-    const [providers, setProviders] = useState<AuthenticationProviderRepresentation[]>();
+    const { data: providers } = useStepProviders(type as QueryFlowType);
     const [max, setMax] = useState(10);
     const [first, setFirst] = useState(0);
     const [search, setSearch] = useState("");
     const localeSort = useLocaleSort();
-
-    useFetch(
-        async () => {
-            switch (type) {
-                case "client":
-                    return adminClient.authenticationManagement.getClientAuthenticatorProviders();
-                case "form":
-                    return adminClient.authenticationManagement.getFormActionProviders();
-                case "condition": {
-                    const providers =
-                        await adminClient.authenticationManagement.getAuthenticatorProviders();
-                    return providers.filter(providerConditionFilter);
-                }
-                case "basic":
-                default: {
-                    const providers =
-                        await adminClient.authenticationManagement.getAuthenticatorProviders();
-                    return providers.filter(p => !providerConditionFilter(p));
-                }
-            }
-        },
-        providers => setProviders(providers),
-        []
-    );
 
     const page = useMemo(() => {
         const normalizedSearch = search.trim().toLowerCase();
@@ -119,11 +96,16 @@ export const AddStepModal = ({ name, type, onSelect }: AddStepModalProps) => {
     }, [providers, search, first, max]);
 
     return (
-        <Dialog open onOpenChange={(open) => { if (!open) onSelect(); }}>
+        <Dialog
+            open
+            onOpenChange={open => {
+                if (!open) onSelect();
+            }}
+        >
             <DialogContent className="max-w-2xl">
                 <DialogHeader>
                     <DialogTitle>
-                        {type == "condition"
+                        {type === "condition"
                             ? t("addConditionTo", { name })
                             : t("addExecutionTo", { name })}
                     </DialogTitle>
@@ -137,17 +119,23 @@ export const AddStepModal = ({ name, type, onSelect }: AddStepModalProps) => {
                                     placeholder={t("search")}
                                     aria-label={t("search")}
                                     value={search}
-                                    onChange={(e) => setSearch(e.target.value)}
+                                    onChange={e => setSearch(e.target.value)}
                                     className="border-0 bg-transparent shadow-none focus-visible:ring-0 flex-1 min-w-0"
                                 />
                             </div>
                             <TablePagination
-                                count={localeSort(providers ?? [], mapByKey("displayName")).filter(
-                                    ({ displayName, description }) => {
+                                count={
+                                    localeSort(
+                                        providers ?? [],
+                                        mapByKey("displayName")
+                                    ).filter(({ displayName, description }) => {
                                         const n = search.trim().toLowerCase();
-                                        return displayName?.toLowerCase().includes(n) || description?.toLowerCase().includes(n);
-                                    }
-                                ).length}
+                                        return (
+                                            displayName?.toLowerCase().includes(n) ||
+                                            description?.toLowerCase().includes(n)
+                                        );
+                                    }).length
+                                }
                                 first={first}
                                 max={max}
                                 onNextClick={setFirst}

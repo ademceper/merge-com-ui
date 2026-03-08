@@ -1,10 +1,10 @@
 import { Input } from "@merge-rd/ui/components/input";
 import {
     Controller,
-    ControllerProps,
-    FieldPath,
-    FieldValues,
-    UseControllerProps,
+    type ControllerProps,
+    type FieldPath,
+    type FieldValues,
+    type UseControllerProps,
     useFormContext
 } from "react-hook-form";
 
@@ -84,10 +84,12 @@ export const NumberControl = <
                             disabled={isDisabled}
                             min={min !== undefined ? Number(min) : undefined}
                             max={max !== undefined ? Number(max) : undefined}
-                            onChange={(event) => {
+                            onChange={event => {
                                 const newValue = Number(event.currentTarget.value);
                                 setValue(
-                                    !Number.isNaN(newValue) ? newValue : (controller.defaultValue ?? 0)
+                                    !Number.isNaN(newValue)
+                                        ? newValue
+                                        : (controller.defaultValue ?? 0)
                                 );
                             }}
                             onBlur={field.onBlur}

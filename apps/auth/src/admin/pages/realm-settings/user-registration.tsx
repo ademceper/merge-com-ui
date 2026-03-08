@@ -1,21 +1,16 @@
 import type RoleRepresentation from "@keycloak/keycloak-admin-client/lib/defs/roleRepresentation";
-import { useState } from "react";
 import { useTranslation } from "@merge-rd/i18n";
-import {
-    Tabs,
-    TabsContent,
-    TabsList,
-    TabsTrigger,
-} from "@merge-rd/ui/components/tabs";
-import { useAdminClient } from "../../app/admin-client";
-import {
-    getErrorDescription,
-    getErrorMessage,
-} from "../../../shared/keycloak-ui-shared";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@merge-rd/ui/components/tabs";
+import { useState } from "react";
 import { toast } from "sonner";
-import { FormPanel } from "../../../shared/keycloak-ui-shared";
-import { RoleMapping } from "../../shared/ui/role-mapping/role-mapping";
+import {
+    FormPanel,
+    getErrorDescription,
+    getErrorMessage
+} from "../../../shared/keycloak-ui-shared";
+import { useAdminClient } from "../../app/admin-client";
 import { useRealm } from "../../app/providers/realm-context/realm-context";
+import { RoleMapping } from "../../shared/ui/role-mapping/role-mapping";
 import { DefaultGroupsTab } from "./default-groups-tab";
 
 export const UserRegistration = () => {
@@ -29,16 +24,16 @@ export const UserRegistration = () => {
         try {
             await adminClient.roles.createComposite(
                 { roleId: realm?.defaultRole!.id!, realm: realmName },
-                composites,
+                composites
             );
             setKey(key + 1);
             toast.success(t("addAssociatedRolesSuccess"));
         } catch (error) {
             toast.error(
                 t("addAssociatedRolesError", {
-                    error: getErrorMessage(error),
+                    error: getErrorMessage(error)
                 }),
-                { description: getErrorDescription(error) },
+                { description: getErrorDescription(error) }
             );
         }
     };
@@ -59,28 +54,20 @@ export const UserRegistration = () => {
                 </TabsList>
             </div>
             <TabsContent value="roles" className="mt-0 pt-0 outline-none">
-                <FormPanel
-                    title={t("defaultRoles")}
-                    className="mt-6 space-y-6"
-                >
+                <FormPanel title={t("defaultRoles")} className="mt-6 space-y-6">
                     <div className="space-y-4">
                         <RoleMapping
                             name={realm?.defaultRole!.name!}
                             id={realm?.defaultRole!.id!}
                             type="roles"
                             isManager
-                            save={(rows) =>
-                                addComposites(rows.map((r) => r.role))
-                            }
+                            save={rows => addComposites(rows.map(r => r.role))}
                         />
                     </div>
                 </FormPanel>
             </TabsContent>
             <TabsContent value="groups" className="mt-0 pt-0 outline-none">
-                <FormPanel
-                    title={t("defaultGroups")}
-                    className="mt-6 space-y-6"
-                >
+                <FormPanel title={t("defaultGroups")} className="mt-6 space-y-6">
                     <DefaultGroupsTab />
                 </FormPanel>
             </TabsContent>

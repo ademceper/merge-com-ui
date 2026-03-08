@@ -1,12 +1,7 @@
-import { createFileRoute } from "@tanstack/react-router";
-import { lazy } from "react";
-
-const DedicatedScopes = lazy(
-    () => import("../../../../../../../pages/clients/scopes/dedicated-scopes"),
-);
+import { createFileRoute, lazyRouteComponent } from "@tanstack/react-router";
 
 export const Route = createFileRoute(
     "/_app/$realm/clients/$clientId/clientScopes/dedicated/$tab",
 )({
-    component: DedicatedScopes,
+    component: lazyRouteComponent(() => import("../../../../../../../pages/clients/scopes/dedicated-scopes")),
 });

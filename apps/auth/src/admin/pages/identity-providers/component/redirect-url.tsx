@@ -1,8 +1,8 @@
+import { useTranslation } from "@merge-rd/i18n";
 import { Button } from "@merge-rd/ui/components/button";
 import { Input } from "@merge-rd/ui/components/input";
 import { Label } from "@merge-rd/ui/components/label";
 import { Copy } from "@phosphor-icons/react";
-import { useTranslation } from "@merge-rd/i18n";
 import { HelpItem, useEnvironment } from "../../../../shared/keycloak-ui-shared";
 import { useRealm } from "../../../app/providers/realm-context/realm-context";
 import { addTrailingSlash } from "../../../shared/lib/util";
@@ -23,8 +23,17 @@ export const RedirectUrl = ({ id }: { id: string }) => {
                 <HelpItem helpText={t("redirectURIHelp")} fieldLabelId="redirectURI" />
             </div>
             <div className="flex gap-2">
-                <Input id="kc-redirect-uri" readOnly value={`${callbackUrl}/${id}/endpoint`} />
-                <Button variant="outline" onClick={() => navigator.clipboard.writeText(`${callbackUrl}/${id}/endpoint`)}>
+                <Input
+                    id="kc-redirect-uri"
+                    readOnly
+                    value={`${callbackUrl}/${id}/endpoint`}
+                />
+                <Button
+                    variant="outline"
+                    onClick={() =>
+                        navigator.clipboard.writeText(`${callbackUrl}/${id}/endpoint`)
+                    }
+                >
                     <Copy className="size-4" />
                 </Button>
             </div>

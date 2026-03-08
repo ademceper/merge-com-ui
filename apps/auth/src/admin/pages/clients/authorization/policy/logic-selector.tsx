@@ -1,7 +1,7 @@
 import { useTranslation } from "@merge-rd/i18n";
-import { Controller, useFormContext } from "react-hook-form";
 import { Label } from "@merge-rd/ui/components/label";
 import { RadioGroup, RadioGroupItem } from "@merge-rd/ui/components/radio-group";
+import { Controller, useFormContext } from "react-hook-form";
 
 import { HelpItem } from "../../../../../shared/keycloak-ui-shared";
 
@@ -34,9 +34,15 @@ export const LogicSelector = ({ isDisabled }: LogicSelectorProps) => {
                         className="flex flex-col gap-2"
                     >
                         {LOGIC_TYPES.map(type => (
-                            <div key={type} className="flex items-center gap-2" data-testid={type}>
+                            <div
+                                key={type}
+                                className="flex items-center gap-2"
+                                data-testid={type}
+                            >
                                 <RadioGroupItem value={type} id={type} />
-                                <Label htmlFor={type}>{t(`logicType.${type.toLowerCase()}`)}</Label>
+                                <Label htmlFor={type}>
+                                    {t(`logicType.${type.toLowerCase()}`)}
+                                </Label>
                             </div>
                         ))}
                     </RadioGroup>

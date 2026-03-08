@@ -1,4 +1,5 @@
-import { HelpItem } from "../../../../shared/keycloak-ui-shared";
+import { useTranslation } from "@merge-rd/i18n";
+import { Label } from "@merge-rd/ui/components/label";
 import {
     Select,
     SelectContent,
@@ -6,10 +7,9 @@ import {
     SelectTrigger,
     SelectValue
 } from "@merge-rd/ui/components/select";
-import { Label } from "@merge-rd/ui/components/label";
 import { useState } from "react";
 import { Controller, useFormContext } from "react-hook-form";
-import { useTranslation } from "@merge-rd/i18n";
+import { HelpItem } from "../../../../shared/keycloak-ui-shared";
 import type { ComponentProps } from "./components";
 
 export const ListComponent = ({
@@ -33,7 +33,10 @@ export const ListComponent = ({
             {!(hideLabel && helpIconAfterControl) && (
                 <div className="flex items-center gap-1">
                     {!hideLabel && (
-                        <Label htmlFor={name!}>{t(label!)}{required && " *"}</Label>
+                        <Label htmlFor={name!}>
+                            {t(label!)}
+                            {required && " *"}
+                        </Label>
                     )}
                     {!helpIconAfterControl && helpText && (
                         <HelpItem helpText={t(helpText!)} fieldLabelId={`${label}`} />
@@ -46,12 +49,18 @@ export const ListComponent = ({
                 defaultValue={defaultValue || options?.[0] || ""}
                 control={control}
                 render={({ field }) => (
-                    <div className={helpIconAfterControl ? "flex w-full items-center gap-2" : undefined}>
+                    <div
+                        className={
+                            helpIconAfterControl
+                                ? "flex w-full items-center gap-2"
+                                : undefined
+                        }
+                    >
                         <Select
                             open={open}
                             onOpenChange={setOpen}
                             value={field.value ?? ""}
-                            onValueChange={(v) => {
+                            onValueChange={v => {
                                 field.onChange(v);
                                 setOpen(false);
                             }}
@@ -60,7 +69,9 @@ export const ListComponent = ({
                         >
                             <SelectTrigger
                                 id={name}
-                                className={helpIconAfterControl ? "flex-1 min-w-0" : undefined}
+                                className={
+                                    helpIconAfterControl ? "flex-1 min-w-0" : undefined
+                                }
                             >
                                 <SelectValue />
                             </SelectTrigger>

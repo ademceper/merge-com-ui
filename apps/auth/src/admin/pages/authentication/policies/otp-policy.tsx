@@ -1,26 +1,26 @@
 import type RealmRepresentation from "@keycloak/keycloak-admin-client/lib/defs/realmRepresentation";
+import { useTranslation } from "@merge-rd/i18n";
+import { Badge } from "@merge-rd/ui/components/badge";
+import { Label } from "@merge-rd/ui/components/label";
+import { RadioGroup, RadioGroupItem } from "@merge-rd/ui/components/radio-group";
+import { useMemo } from "react";
+import { Controller, FormProvider, useForm, useWatch } from "react-hook-form";
+import { toast } from "sonner";
 import {
+    FormPanel,
     getErrorDescription,
     getErrorMessage,
     HelpItem,
     NumberControl,
     SelectField,
-    SwitchControl,
+    SwitchControl
 } from "../../../../shared/keycloak-ui-shared";
-import { RadioGroup, RadioGroupItem } from "@merge-rd/ui/components/radio-group";
-import { Label } from "@merge-rd/ui/components/label";
-import { toast } from "sonner";
-import { Badge } from "@merge-rd/ui/components/badge";
-import { useMemo } from "react";
-import { Controller, FormProvider, useForm, useWatch } from "react-hook-form";
-import { useTranslation } from "@merge-rd/i18n";
 import { useAdminClient } from "../../../app/admin-client";
-import { FormAccess } from "../../../shared/ui/form/form-access";
-import { FixedButtonsGroup } from "../../../shared/ui/form/fixed-button-group";
-import { FormPanel } from "../../../../shared/keycloak-ui-shared";
-import { TimeSelectorControl } from "../../../shared/ui/time-selector/time-selector-control";
 import { useRealm } from "../../../app/providers/realm-context/realm-context";
 import useLocaleSort from "../../../shared/lib/useLocaleSort";
+import { FixedButtonsGroup } from "../../../shared/ui/form/fixed-button-group";
+import { FormAccess } from "../../../shared/ui/form/form-access";
+import { TimeSelectorControl } from "../../../shared/ui/time-selector/time-selector-control";
 
 const POLICY_TYPES = ["totp", "hotp"] as const;
 const OTP_HASH_ALGORITHMS = ["SHA1", "SHA256", "SHA512"] as const;
@@ -60,7 +60,7 @@ export const OtpPolicy = ({ realm, realmUpdated }: OtpPolicyProps) => {
         formState: { isValid, isDirty }
     } = form;
     const { realm: realmName } = useRealm();
-const localeSort = useLocaleSort();
+    const localeSort = useLocaleSort();
 
     const otpType = useWatch({ name: "otpPolicyType", control });
 
@@ -84,7 +84,9 @@ const localeSort = useLocaleSort();
             setupForm(updatedRealm!);
             toast.success(t("updateOtpSuccess"));
         } catch (error) {
-            toast.error(t("updateOtpError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
+            toast.error(t("updateOtpError", { error: getErrorMessage(error) }), {
+                description: getErrorDescription(error)
+            });
         }
     };
 
@@ -100,7 +102,9 @@ const localeSort = useLocaleSort();
                     <div className="space-y-6">
                         <div className="space-y-2">
                             <div className="flex items-center gap-2">
-                                <label className="text-sm font-medium">{t("otpType")}</label>
+                                <label className="text-sm font-medium">
+                                    {t("otpType")}
+                                </label>
                                 <HelpItem
                                     helpText={t("otpTypeHelp")}
                                     fieldLabelId="otpType"
@@ -118,9 +122,21 @@ const localeSort = useLocaleSort();
                                         className="flex flex-wrap gap-4"
                                     >
                                         {POLICY_TYPES.map(type => (
-                                            <div key={type} className="flex items-center gap-2">
-                                                <RadioGroupItem value={type} id={type} data-testid={type} />
-                                                <Label htmlFor={type} className="cursor-pointer">{t(`policyType.${type}`)}</Label>
+                                            <div
+                                                key={type}
+                                                className="flex items-center gap-2"
+                                            >
+                                                <RadioGroupItem
+                                                    value={type}
+                                                    id={type}
+                                                    data-testid={type}
+                                                />
+                                                <Label
+                                                    htmlFor={type}
+                                                    className="cursor-pointer"
+                                                >
+                                                    {t(`policyType.${type}`)}
+                                                </Label>
                                             </div>
                                         ))}
                                     </RadioGroup>
@@ -139,7 +155,9 @@ const localeSort = useLocaleSort();
                         />
                         <div className="space-y-2">
                             <div className="flex items-center gap-2">
-                                <label className="text-sm font-medium">{t("otpPolicyDigits")}</label>
+                                <label className="text-sm font-medium">
+                                    {t("otpPolicyDigits")}
+                                </label>
                                 <HelpItem
                                     helpText={t("otpPolicyDigitsHelp")}
                                     fieldLabelId="otpPolicyDigits"
@@ -157,9 +175,21 @@ const localeSort = useLocaleSort();
                                         className="flex flex-wrap gap-4"
                                     >
                                         {NUMBER_OF_DIGITS.map(type => (
-                                            <div key={type} className="flex items-center gap-2">
-                                                <RadioGroupItem value={String(type)} id={`digit-${type}`} data-testid={`digit-${type}`} />
-                                                <Label htmlFor={`digit-${type}`} className="cursor-pointer">{type}</Label>
+                                            <div
+                                                key={type}
+                                                className="flex items-center gap-2"
+                                            >
+                                                <RadioGroupItem
+                                                    value={String(type)}
+                                                    id={`digit-${type}`}
+                                                    data-testid={`digit-${type}`}
+                                                />
+                                                <Label
+                                                    htmlFor={`digit-${type}`}
+                                                    className="cursor-pointer"
+                                                >
+                                                    {type}
+                                                </Label>
                                             </div>
                                         ))}
                                     </RadioGroup>
@@ -188,7 +218,7 @@ const localeSort = useLocaleSort();
                                             max: {
                                                 value: 120,
                                                 message: t("maxLength", {
-                                                    length: "2 " + t("minutes")
+                                                    length: `2 ${t("minutes")}`
                                                 })
                                             }
                                         }
@@ -202,19 +232,27 @@ const localeSort = useLocaleSort();
                                     name="otpPolicyInitialCounter"
                                     label={t("initialCounter")}
                                     labelIcon={t("initialCounterHelp")}
-                                    controller={{ defaultValue: 30, rules: { min: 1, max: 120 } }}
+                                    controller={{
+                                        defaultValue: 30,
+                                        rules: { min: 1, max: 120 }
+                                    }}
                                 />
                             </div>
                         )}
                         <div className="space-y-2">
                             <div className="flex items-center gap-2">
-                                <label className="text-sm font-medium">{t("supportedApplications")}</label>
+                                <label className="text-sm font-medium">
+                                    {t("supportedApplications")}
+                                </label>
                                 <HelpItem
                                     helpText={t("supportedApplicationsHelp")}
                                     fieldLabelId="supportedApplications"
                                 />
                             </div>
-                            <span data-testid="supportedApplications" className="flex flex-wrap gap-1">
+                            <span
+                                data-testid="supportedApplications"
+                                className="flex flex-wrap gap-1"
+                            >
                                 {supportedApplications.map(label => (
                                     <Badge key={label} variant="secondary">
                                         {label}

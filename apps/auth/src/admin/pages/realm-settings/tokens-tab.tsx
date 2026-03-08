@@ -1,8 +1,6 @@
 import type RealmRepresentation from "@keycloak/keycloak-admin-client/lib/defs/realmRepresentation";
-import { HelpItem,
-    ScrollForm,
-    SelectField,
-    NumberControl } from "../../../shared/keycloak-ui-shared";
+import { useTranslation } from "@merge-rd/i18n";
+import { Input } from "@merge-rd/ui/components/input";
 import {
     Select,
     SelectContent,
@@ -10,23 +8,30 @@ import {
     SelectTrigger,
     SelectValue
 } from "@merge-rd/ui/components/select";
-import { toast } from "sonner";
-import { Input } from "@merge-rd/ui/components/input";
-import { Textarea } from "@merge-rd/ui/components/textarea";
 import { Switch } from "@merge-rd/ui/components/switch";
+import { Textarea } from "@merge-rd/ui/components/textarea";
 import { useState } from "react";
 import { Controller, useFormContext, useWatch } from "react-hook-form";
-import { useTranslation } from "@merge-rd/i18n";
-import { FormAccess } from "../../shared/ui/form/form-access";
-import { FixedButtonsGroup } from "../../shared/ui/form/fixed-button-group";
-import { DefaultSwitchControl } from "../../shared/ui/switch-control";
-import { convertAttributeNameToForm } from "../../shared/lib/util";
-import { TimeSelector, toHumanFormat } from "../../shared/ui/time-selector/time-selector";
-import { TimeSelectorControl } from "../../shared/ui/time-selector/time-selector-control";
+import { toast } from "sonner";
+import {
+    HelpItem,
+    NumberControl,
+    ScrollForm,
+    SelectField
+} from "../../../shared/keycloak-ui-shared";
 import { useServerInfo } from "../../app/providers/server-info/server-info-provider";
 import { useWhoAmI } from "../../app/providers/whoami/who-am-i";
-import { beerify, sortProviders } from "../../shared/lib/util";
 import useIsFeatureEnabled, { Feature } from "../../shared/lib/useIsFeatureEnabled";
+import {
+    beerify,
+    convertAttributeNameToForm,
+    sortProviders
+} from "../../shared/lib/util";
+import { FixedButtonsGroup } from "../../shared/ui/form/fixed-button-group";
+import { FormAccess } from "../../shared/ui/form/form-access";
+import { DefaultSwitchControl } from "../../shared/ui/switch-control";
+import { TimeSelector, toHumanFormat } from "../../shared/ui/time-selector/time-selector";
+import { TimeSelectorControl } from "../../shared/ui/time-selector/time-selector-control";
 
 type RealmSettingsTokensTabProps = {
     realm: RealmRepresentation;
@@ -41,9 +46,7 @@ export const RealmSettingsTokensTab = ({ realm, save }: RealmSettingsTokensTabPr
 
     const [defaultSigAlgDrpdwnIsOpen, setDefaultSigAlgDrpdwnOpen] = useState(false);
 
-    const defaultSigAlgOptions = sortProviders(
-        serverInfo.providers!["signature"].providers
-    );
+    const defaultSigAlgOptions = sortProviders(serverInfo.providers!.signature.providers);
 
     const asymmetricSigAlgOptions =
         serverInfo.cryptoInfo?.clientSignatureAsymmetricAlgorithms ?? [];
@@ -103,7 +106,9 @@ export const RealmSettingsTokensTab = ({ realm, save }: RealmSettingsTokensTabPr
                 >
                     <div className="space-y-2">
                         <div className="flex items-center gap-1">
-                            <label htmlFor="kc-default-signature-algorithm">{t("defaultSigAlg")}</label>
+                            <label htmlFor="kc-default-signature-algorithm">
+                                {t("defaultSigAlg")}
+                            </label>
                             <HelpItem
                                 helpText={t("defaultSigAlgHelp")}
                                 fieldLabelId="algorithm"
@@ -118,7 +123,7 @@ export const RealmSettingsTokensTab = ({ realm, save }: RealmSettingsTokensTabPr
                                     open={defaultSigAlgDrpdwnIsOpen}
                                     onOpenChange={setDefaultSigAlgDrpdwnOpen}
                                     value={field.value?.toString() ?? "RS256"}
-                                    onValueChange={(v) => {
+                                    onValueChange={v => {
                                         field.onChange(v);
                                         setDefaultSigAlgDrpdwnOpen(false);
                                     }}
@@ -147,7 +152,9 @@ export const RealmSettingsTokensTab = ({ realm, save }: RealmSettingsTokensTabPr
                         <>
                             <div className="space-y-2">
                                 <div className="flex items-center gap-1">
-                                    <label htmlFor="oAuthDeviceCodeLifespan">{t("oAuthDeviceCodeLifespan")}</label>
+                                    <label htmlFor="oAuthDeviceCodeLifespan">
+                                        {t("oAuthDeviceCodeLifespan")}
+                                    </label>
                                     <HelpItem
                                         helpText={t("oAuthDeviceCodeLifespanHelp")}
                                         fieldLabelId="oAuthDeviceCodeLifespan"
@@ -170,7 +177,9 @@ export const RealmSettingsTokensTab = ({ realm, save }: RealmSettingsTokensTabPr
                             </div>
                             <div className="space-y-2">
                                 <div className="flex items-center gap-1">
-                                    <label htmlFor="oAuthDevicePollingInterval">{t("oAuthDevicePollingInterval")}</label>
+                                    <label htmlFor="oAuthDevicePollingInterval">
+                                        {t("oAuthDevicePollingInterval")}
+                                    </label>
                                     <HelpItem
                                         helpText={t("oAuthDevicePollingIntervalHelp")}
                                         fieldLabelId="oAuthDevicePollingInterval"
@@ -191,7 +200,7 @@ export const RealmSettingsTokensTab = ({ realm, save }: RealmSettingsTokensTabPr
                                                     event.currentTarget.value
                                                 );
                                                 field.onChange(
-                                                    !isNaN(newValue) ? newValue : 0
+                                                    !Number.isNaN(newValue) ? newValue : 0
                                                 );
                                             }}
                                             placeholder={t("oAuthDevicePollingInterval")}
@@ -201,7 +210,9 @@ export const RealmSettingsTokensTab = ({ realm, save }: RealmSettingsTokensTabPr
                             </div>
                             <div className="space-y-2">
                                 <div className="flex items-center gap-1">
-                                    <label htmlFor="shortVerificationUri">{t("shortVerificationUri")}</label>
+                                    <label htmlFor="shortVerificationUri">
+                                        {t("shortVerificationUri")}
+                                    </label>
                                     <HelpItem
                                         helpText={t("shortVerificationUriTooltipHelp")}
                                         fieldLabelId="shortVerificationUri"
@@ -215,7 +226,9 @@ export const RealmSettingsTokensTab = ({ realm, save }: RealmSettingsTokensTabPr
                             </div>
                             <div className="space-y-2">
                                 <div className="flex items-center gap-1">
-                                    <label htmlFor="parRequestUriLifespan">{t("parRequestUriLifespan")}</label>
+                                    <label htmlFor="parRequestUriLifespan">
+                                        {t("parRequestUriLifespan")}
+                                    </label>
                                     <HelpItem
                                         helpText={t("parRequestUriLifespanHelp")}
                                         fieldLabelId="parRequestUriLifespan"
@@ -252,7 +265,12 @@ export const RealmSettingsTokensTab = ({ realm, save }: RealmSettingsTokensTabPr
                 >
                     <div className="flex w-full items-center justify-between gap-2">
                         <div className="flex items-center gap-1.5">
-                            <label htmlFor="kc-revoke-refresh-token" className="text-sm font-medium">{t("revokeRefreshToken")}</label>
+                            <label
+                                htmlFor="kc-revoke-refresh-token"
+                                className="text-sm font-medium"
+                            >
+                                {t("revokeRefreshToken")}
+                            </label>
                             <HelpItem
                                 helpText={t("revokeRefreshTokenHelp")}
                                 fieldLabelId="revokeRefreshToken"
@@ -265,7 +283,9 @@ export const RealmSettingsTokensTab = ({ realm, save }: RealmSettingsTokensTabPr
                                 defaultValue={false}
                                 render={({ field }) => (
                                     <>
-                                        <span className="text-sm text-muted-foreground">{field.value ? t("on") : t("off")}</span>
+                                        <span className="text-sm text-muted-foreground">
+                                            {field.value ? t("on") : t("off")}
+                                        </span>
                                         <Switch
                                             id="kc-revoke-refresh-token"
                                             data-testid="revoke-refresh-token-switch"
@@ -281,7 +301,9 @@ export const RealmSettingsTokensTab = ({ realm, save }: RealmSettingsTokensTabPr
                     {revokeRefreshToken && (
                         <div className="space-y-2">
                             <div className="flex items-center gap-1">
-                                <label htmlFor="refreshTokenMaxReuse">{t("refreshTokenMaxReuse")}</label>
+                                <label htmlFor="refreshTokenMaxReuse">
+                                    {t("refreshTokenMaxReuse")}
+                                </label>
                                 <HelpItem
                                     helpText={t("refreshTokenMaxReuseHelp")}
                                     fieldLabelId="refreshTokenMaxReuse"
@@ -323,7 +345,9 @@ export const RealmSettingsTokensTab = ({ realm, save }: RealmSettingsTokensTabPr
                 >
                     <div className="space-y-2">
                         <div className="flex items-center gap-1">
-                            <label htmlFor="accessTokenLifespan">{t("accessTokenLifespan")}</label>
+                            <label htmlFor="accessTokenLifespan">
+                                {t("accessTokenLifespan")}
+                            </label>
                             <HelpItem
                                 helpText={t("accessTokenLifespanHelp")}
                                 fieldLabelId="accessTokenLifespan"
@@ -350,17 +374,16 @@ export const RealmSettingsTokensTab = ({ realm, save }: RealmSettingsTokensTabPr
                         />
                         <p className="text-sm text-muted-foreground">
                             {t("recommendedSsoTimeout", {
-                                time: toHumanFormat(
-                                    ssoSessionIdleTimeout!,
-                                    whoAmI.locale
-                                )
+                                time: toHumanFormat(ssoSessionIdleTimeout!, whoAmI.locale)
                             })}
                         </p>
                     </div>
 
                     <div className="space-y-2">
                         <div className="flex items-center gap-1">
-                            <label htmlFor="accessTokenLifespanImplicitFlow">{t("accessTokenLifespanImplicitFlow")}</label>
+                            <label htmlFor="accessTokenLifespanImplicitFlow">
+                                {t("accessTokenLifespanImplicitFlow")}
+                            </label>
                             <HelpItem
                                 helpText={t("accessTokenLifespanImplicitFlow")}
                                 fieldLabelId="accessTokenLifespanImplicitFlow"
@@ -382,7 +405,9 @@ export const RealmSettingsTokensTab = ({ realm, save }: RealmSettingsTokensTabPr
                     </div>
                     <div className="space-y-2">
                         <div className="flex items-center gap-1">
-                            <label htmlFor="clientLoginTimeout">{t("clientLoginTimeout")}</label>
+                            <label htmlFor="clientLoginTimeout">
+                                {t("clientLoginTimeout")}
+                            </label>
                             <HelpItem
                                 helpText={t("clientLoginTimeoutHelp")}
                                 fieldLabelId="clientLoginTimeout"
@@ -407,7 +432,9 @@ export const RealmSettingsTokensTab = ({ realm, save }: RealmSettingsTokensTabPr
                     {offlineSessionMaxEnabled && (
                         <div className="space-y-2" id="offline-session-max-label">
                             <div className="flex items-center gap-1">
-                                <label htmlFor="offlineSessionMax">{t("offlineSessionMax")}</label>
+                                <label htmlFor="offlineSessionMax">
+                                    {t("offlineSessionMax")}
+                                </label>
                                 <HelpItem
                                     helpText={t("offlineSessionMaxHelp")}
                                     fieldLabelId="offlineSessionMax"
@@ -442,7 +469,9 @@ export const RealmSettingsTokensTab = ({ realm, save }: RealmSettingsTokensTabPr
                 >
                     <div className="space-y-2" id="kc-user-initiated-action-lifespan">
                         <div className="flex items-center gap-1">
-                            <label htmlFor="userInitiatedActionLifespan">{t("userInitiatedActionLifespan")}</label>
+                            <label htmlFor="userInitiatedActionLifespan">
+                                {t("userInitiatedActionLifespan")}
+                            </label>
                             <HelpItem
                                 helpText={t("userInitiatedActionLifespanHelp")}
                                 fieldLabelId="userInitiatedActionLifespan"
@@ -465,7 +494,9 @@ export const RealmSettingsTokensTab = ({ realm, save }: RealmSettingsTokensTabPr
                     </div>
                     <div className="space-y-2" id="default-admin-initiated-label">
                         <div className="flex items-center gap-1">
-                            <label htmlFor="defaultAdminInitiated">{t("defaultAdminInitiated")}</label>
+                            <label htmlFor="defaultAdminInitiated">
+                                {t("defaultAdminInitiated")}
+                            </label>
                             <HelpItem
                                 helpText={t("defaultAdminInitiatedActionLifespanHelp")}
                                 fieldLabelId="defaultAdminInitiated"
@@ -491,7 +522,9 @@ export const RealmSettingsTokensTab = ({ realm, save }: RealmSettingsTokensTabPr
                     </h1>
                     <div className="space-y-2" id="email-verification">
                         <div className="flex items-center gap-1">
-                            <label htmlFor="emailVerification">{t("emailVerification")}</label>
+                            <label htmlFor="emailVerification">
+                                {t("emailVerification")}
+                            </label>
                             <HelpItem
                                 helpText={t("emailVerificationHelp")}
                                 fieldLabelId="emailVerification"
@@ -516,7 +549,9 @@ export const RealmSettingsTokensTab = ({ realm, save }: RealmSettingsTokensTabPr
                     </div>
                     <div className="space-y-2" id="idp-acct-label">
                         <div className="flex items-center gap-1">
-                            <label htmlFor="idpAccountEmailVerification">{t("idpAccountEmailVerification")}</label>
+                            <label htmlFor="idpAccountEmailVerification">
+                                {t("idpAccountEmailVerification")}
+                            </label>
                             <HelpItem
                                 helpText={t("idpAccountEmailVerificationHelp")}
                                 fieldLabelId="idpAccountEmailVerification"

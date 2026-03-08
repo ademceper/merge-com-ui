@@ -1,44 +1,63 @@
 import type ClientRepresentation from "@keycloak/keycloak-admin-client/lib/defs/clientRepresentation";
-import { getErrorDescription, getErrorMessage, useFetch } from "../../../shared/keycloak-ui-shared";
-import { toast } from "sonner";
-import { Badge } from "@merge-rd/ui/components/badge";
-import { Tooltip, TooltipContent, TooltipTrigger, TooltipProvider } from "@merge-rd/ui/components/tooltip";
-import { Separator } from "@merge-rd/ui/components/separator";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@merge-rd/ui/components/dropdown-menu";
-import { buttonVariants } from "@merge-rd/ui/components/button";
-import { Label } from "@merge-rd/ui/components/label";
-import { Switch } from "@merge-rd/ui/components/switch";
-import { Info } from "@phosphor-icons/react";
-import { cloneDeep, sortBy } from "lodash-es";
-import { Fragment, isValidElement, useMemo, useState } from "react";
-import { Controller, FormProvider, useForm, useWatch } from "react-hook-form";
 import { useTranslation } from "@merge-rd/i18n";
-import { useNavigate, useLocation, useParams as useRouterParams } from "@tanstack/react-router";
-import { useAdminClient } from "../../app/admin-client";
+import { Badge } from "@merge-rd/ui/components/badge";
+import { buttonVariants } from "@merge-rd/ui/components/button";
 import {
-    ConfirmDialogModal,
-    useConfirmDialog
-} from "../../shared/ui/confirm-dialog/confirm-dialog";
-import { DownloadDialog } from "../../shared/ui/download-dialog/download-dialog";
-import type { KeyValueType } from "../../shared/ui/key-value-form/key-value-convert";
-import { KeycloakSpinner } from "../../../shared/keycloak-ui-shared";
-import { PermissionsTab } from "../../shared/ui/permission-tab/permission-tab";
-import { RolesList } from "../../shared/ui/roles-list/roles-list";
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuTrigger
+} from "@merge-rd/ui/components/dropdown-menu";
+import { Label } from "@merge-rd/ui/components/label";
+import { Separator } from "@merge-rd/ui/components/separator";
+import { Switch } from "@merge-rd/ui/components/switch";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@merge-rd/ui/components/tabs";
+import {
+    Tooltip,
+    TooltipContent,
+    TooltipProvider,
+    TooltipTrigger
+} from "@merge-rd/ui/components/tooltip";
+import { Info } from "@phosphor-icons/react";
+import {
+    useLocation,
+    useNavigate,
+    useParams as useRouterParams
+} from "@tanstack/react-router";
+import { cloneDeep, sortBy } from "lodash-es";
+import { Fragment, isValidElement, useEffect, useMemo, useState } from "react";
+import { Controller, FormProvider, useForm, useWatch } from "react-hook-form";
+import { toast } from "sonner";
+import {
+    getErrorDescription,
+    getErrorMessage,
+    KeycloakSpinner
+} from "../../../shared/keycloak-ui-shared";
+import { useAdminClient } from "../../app/admin-client";
 import { useAccess } from "../../app/providers/access/access";
 import { useRealm } from "../../app/providers/realm-context/realm-context";
+import { useIsAdminPermissionsClient } from "../../shared/lib/useIsAdminPermissionsClient";
+import useIsFeatureEnabled, { Feature } from "../../shared/lib/useIsFeatureEnabled";
+import { useParams } from "../../shared/lib/useParams";
+import useToggle from "../../shared/lib/useToggle";
 import {
     convertAttributeNameToForm,
     convertFormValuesToObject,
     convertToFormValues,
     exportClient
 } from "../../shared/lib/util";
-import useIsFeatureEnabled, { Feature } from "../../shared/lib/useIsFeatureEnabled";
-import { useParams } from "../../shared/lib/useParams";
-import useToggle from "../../shared/lib/useToggle";
+import {
+    ConfirmDialogModal,
+    useConfirmDialog
+} from "../../shared/ui/confirm-dialog/confirm-dialog";
+import { DownloadDialog } from "../../shared/ui/download-dialog/download-dialog";
+import type { KeyValueType } from "../../shared/ui/key-value-form/key-value-convert";
+import { PermissionsTab } from "../../shared/ui/permission-tab/permission-tab";
+import { RolesList } from "../../shared/ui/roles-list/roles-list";
+import { AdminEvents } from "../events/admin-events";
+import { UserEvents } from "../events/user-events";
 import { AdvancedTab } from "./advanced-tab";
-import { ClientSessions } from "./client-sessions";
-import { ClientSettings } from "./client-settings";
+import { useClient } from "./api/use-client";
 import { AuthorizationEvaluate } from "./authorization/authorization-evaluate";
 import { AuthorizationExport } from "./authorization/authorization-export";
 import { AuthorizationPermissions } from "./authorization/permissions";
@@ -46,20 +65,19 @@ import { AuthorizationPolicies } from "./authorization/policies";
 import { AuthorizationResources } from "./authorization/resources";
 import { AuthorizationScopes } from "./authorization/scopes";
 import { AuthorizationSettings } from "./authorization/settings";
+import { ClientSessions } from "./client-sessions";
+import { ClientSettings } from "./client-settings";
 import { Credentials } from "./credentials/credentials";
 import { Keys } from "./keys/keys";
 import { SamlKeys } from "./keys/saml-keys";
-import { ClientParams } from "./routes/client";
-import { toClientRole } from "./routes/client-role";
-import { toClients } from "./routes/clients";
-import { toCreateRole } from "./routes/new-role";
+import type { ClientParams } from "../../shared/lib/routes/clients";
+import { toClientRole } from "../../shared/lib/routes/clients";
+import { toClients } from "../../shared/lib/routes/clients";
+import { toCreateRole } from "../../shared/lib/routes/clients";
 import { ClientScopes } from "./scopes/client-scopes";
 import { EvaluateScopes } from "./scopes/evaluate-scopes";
 import { ServiceAccount } from "./service-account/service-account";
 import { isRealmClient } from "./utils";
-import { UserEvents } from "../events/user-events";
-import { useIsAdminPermissionsClient } from "../../shared/lib/useIsAdminPermissionsClient";
-import { AdminEvents } from "../events/admin-events";
 
 type ClientDetailHeaderProps = {
     onChange: (value: boolean) => void;
@@ -89,10 +107,18 @@ const ClientDetailHeader = ({
         }
     });
 
-    const badges = useMemo<{ id?: string; text?: string | React.ReactNode; readonly?: boolean }[]>(() => {
+    const badges = useMemo<
+        { id?: string; text?: string | React.ReactNode; readonly?: boolean }[]
+    >(() => {
         const protocol = client.protocol ?? "openid-connect";
         const label =
-            protocol === "openid-connect" ? "OIDC" : protocol === "saml" ? "SAML" : protocol === "oid4vc" ? "OID4VC" : protocol ?? "";
+            protocol === "openid-connect"
+                ? "OIDC"
+                : protocol === "saml"
+                  ? "SAML"
+                  : protocol === "oid4vc"
+                    ? "OID4VC"
+                    : (protocol ?? "");
 
         const text = client.bearerOnly ? (
             <TooltipProvider>
@@ -103,7 +129,10 @@ const ClientDetailHeader = ({
                             className="inline-flex items-center gap-1"
                         >
                             <Info className="size-4" />
-                            <Badge variant="secondary" className="max-w-full truncate font-medium rounded-sm bg-indigo-500/15 text-indigo-700 dark:bg-indigo-400/20 dark:text-indigo-300 border-0 h-auto py-1 px-2">
+                            <Badge
+                                variant="secondary"
+                                className="max-w-full truncate font-medium rounded-sm bg-indigo-500/15 text-indigo-700 dark:bg-indigo-400/20 dark:text-indigo-300 border-0 h-auto py-1 px-2"
+                            >
                                 {label}
                             </Badge>
                         </span>
@@ -114,7 +143,10 @@ const ClientDetailHeader = ({
                 </Tooltip>
             </TooltipProvider>
         ) : (
-            <Badge variant="secondary" className="max-w-full truncate font-medium rounded-sm bg-indigo-500/15 text-indigo-700 dark:bg-indigo-400/20 dark:text-indigo-300 border-0 h-auto py-1 px-2">
+            <Badge
+                variant="secondary"
+                className="max-w-full truncate font-medium rounded-sm bg-indigo-500/15 text-indigo-700 dark:bg-indigo-400/20 dark:text-indigo-300 border-0 h-auto py-1 px-2"
+            >
                 {label}
             </Badge>
         );
@@ -154,7 +186,10 @@ const ClientDetailHeader = ({
                     {badges.map((badge, index) => (
                         <Fragment key={index}>
                             {!isValidElement(badge.text) && (
-                                <Badge data-testid={badge.id} variant={badge.readonly ? "secondary" : "default"}>
+                                <Badge
+                                    data-testid={badge.id}
+                                    variant={badge.readonly ? "secondary" : "default"}
+                                >
                                     {badge.text}
                                 </Badge>
                             )}
@@ -164,7 +199,10 @@ const ClientDetailHeader = ({
                 </div>
                 <div className="flex items-center gap-2">
                     <div className="flex items-center gap-2 mr-4">
-                        <Label htmlFor={`${client.clientId!.replace(/\s/g, "-")}-switch`} className="text-sm">
+                        <Label
+                            htmlFor={`${client.clientId!.replace(/\s/g, "-")}-switch`}
+                            className="text-sm"
+                        >
                             {t("enabled")}
                         </Label>
                         <Switch
@@ -185,10 +223,15 @@ const ClientDetailHeader = ({
                     </div>
                     {dropdownItems.length > 0 && (
                         <DropdownMenu>
-                            <DropdownMenuTrigger data-testid="action-dropdown" className={buttonVariants()}>
+                            <DropdownMenuTrigger
+                                data-testid="action-dropdown"
+                                className={buttonVariants()}
+                            >
                                 {t("action")}
                             </DropdownMenuTrigger>
-                            <DropdownMenuContent align="end">{dropdownItems}</DropdownMenuContent>
+                            <DropdownMenuContent align="end">
+                                {dropdownItems}
+                            </DropdownMenuContent>
                         </DropdownMenu>
                     )}
                 </div>
@@ -233,8 +276,6 @@ export default function ClientDetails() {
 
     const form = useForm<FormFields>();
     const { clientId } = useParams<ClientParams>();
-    const [key, setKey] = useState(0);
-    const refresh = () => setKey(key + 1);
 
     const isAdminPermissionsClient = useIsAdminPermissionsClient(clientId);
 
@@ -245,6 +286,20 @@ export default function ClientDetails() {
     });
 
     const [client, setClient] = useState<ClientRepresentation>();
+    const { data: fetchedClient, refetch } = useClient(clientId);
+    const refresh = () => {
+        refetch();
+    };
+
+    useEffect(() => {
+        if (fetchedClient) {
+            if (!fetchedClient) {
+                throw new Error(t("notFound"));
+            }
+            setClient(cloneDeep(fetchedClient));
+            setupForm(fetchedClient);
+        }
+    }, [fetchedClient]);
 
     const loader = async () => {
         const roles = await adminClient.clients.listRoles({ id: clientId });
@@ -254,8 +309,12 @@ export default function ClientDetails() {
     const [activeEventsTab, setActiveEventsTab] = useState("userEvents");
 
     // Check if we're in a sub-tab route
-    const isClientScopesSubTab = location.pathname.includes(`/clients/${clientId}/clientScopes/`);
-    const isAuthorizationSubTab = location.pathname.includes(`/clients/${clientId}/authorization/`);
+    const isClientScopesSubTab = location.pathname.includes(
+        `/clients/${clientId}/clientScopes/`
+    );
+    const isAuthorizationSubTab = location.pathname.includes(
+        `/clients/${clientId}/authorization/`
+    );
 
     const [toggleDeleteDialog, DeleteConfirm] = useConfirmDialog({
         titleKey: "clientDeleteConfirmTitle",
@@ -268,7 +327,9 @@ export default function ClientDetails() {
                 toast.success(t("clientDeletedSuccess"));
                 navigate({ to: toClients({ realm }) as string });
             } catch (error) {
-                toast.error(t("clientDeleteError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
+                toast.error(t("clientDeleteError", { error: getErrorMessage(error) }), {
+                    description: getErrorDescription(error)
+                });
             }
         }
     });
@@ -286,18 +347,6 @@ export default function ClientDetails() {
         // reset dirty as for reason it is not resetting
         form.reset(form.getValues(), { keepDirty: false });
     };
-
-    useFetch(
-        () => adminClient.clients.findOne({ id: clientId }),
-        fetchedClient => {
-            if (!fetchedClient) {
-                throw new Error(t("notFound"));
-            }
-            setClient(cloneDeep(fetchedClient));
-            setupForm(fetchedClient);
-        },
-        [clientId, key]
-    );
 
     const save = async (
         { confirmed = false, messageKey = "clientSaveSuccess" }: SaveOptions = {
@@ -345,7 +394,9 @@ export default function ClientDetails() {
             setClient(newClient);
             toast.success(t(messageKey));
         } catch (error) {
-            toast.error(t("clientSaveError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
+            toast.error(t("clientSaveError", { error: getErrorMessage(error) }), {
+                description: getErrorDescription(error)
+            });
         }
     };
 
@@ -357,10 +408,7 @@ export default function ClientDetails() {
         switch (tab) {
             case "evaluate":
                 return (
-                    <EvaluateScopes
-                        clientId={clientId}
-                        protocol={client!.protocol!}
-                    />
+                    <EvaluateScopes clientId={clientId} protocol={client!.protocol!} />
                 );
             default:
                 return (
@@ -406,15 +454,10 @@ export default function ClientDetails() {
                 );
             case "evaluate":
                 return hasViewUsers ? (
-                    <AuthorizationEvaluate
-                        client={client}
-                        save={save}
-                    />
+                    <AuthorizationEvaluate client={client} save={save} />
                 ) : null;
             case "export":
-                return hasAccess("manage-authorization") ? (
-                    <AuthorizationExport />
-                ) : null;
+                return hasAccess("manage-authorization") ? <AuthorizationExport /> : null;
             default:
                 return <AuthorizationSettings clientId={clientId} />;
         }
@@ -431,7 +474,8 @@ export default function ClientDetails() {
 
         switch (tab) {
             case "keys":
-                return ((!client.publicClient && !isRealmClient(client)) || client.protocol === "saml") ? (
+                return (!client.publicClient && !isRealmClient(client)) ||
+                    client.protocol === "saml" ? (
                     <>
                         {client.protocol === "openid-connect" && (
                             <Keys
@@ -447,10 +491,12 @@ export default function ClientDetails() {
                     </>
                 ) : null;
             case "credentials":
-                return (!client.publicClient && !isRealmClient(client) &&
-                    (hasViewClients || client.access?.configure || client.access?.view)) ? (
+                return !client.publicClient &&
+                    !isRealmClient(client) &&
+                    (hasViewClients ||
+                        client.access?.configure ||
+                        client.access?.view) ? (
                     <Credentials
-                        key={key}
                         client={client}
                         save={save}
                         refresh={refresh}
@@ -475,7 +521,7 @@ export default function ClientDetails() {
                     />
                 );
             case "clientScopes":
-                return (!isRealmClient(client) && !client.bearerOnly) ? (
+                return !isRealmClient(client) && !client.bearerOnly ? (
                     <ClientScopes
                         clientName={client.clientId!}
                         clientId={clientId}
@@ -484,29 +530,27 @@ export default function ClientDetails() {
                     />
                 ) : null;
             case "authorization":
-                return (client!.authorizationServicesEnabled &&
+                return client!.authorizationServicesEnabled &&
                     !isAdminPermissionsClient &&
-                    (hasManageAuthorization || hasViewAuthorization)) ? (
+                    (hasManageAuthorization || hasViewAuthorization) ? (
                     <AuthorizationSettings clientId={clientId} />
                 ) : null;
             case "serviceAccount":
-                return (client!.serviceAccountsEnabled && hasViewUsers) ? (
+                return client!.serviceAccountsEnabled && hasViewUsers ? (
                     <ServiceAccount client={client} />
                 ) : null;
             case "sessions":
                 return <ClientSessions client={client} />;
             case "permissions":
-                return (permissionsEnabled && (hasManageClients || client.access?.manage)) ? (
+                return permissionsEnabled &&
+                    (hasManageClients || client.access?.manage) ? (
                     <PermissionsTab id={client.id!} type="clients" />
                 ) : null;
             case "advanced":
                 return <AdvancedTab save={save} client={client} />;
             case "events":
                 return hasAccess("view-events") ? (
-                    <Tabs
-                        value={activeEventsTab}
-                        onValueChange={setActiveEventsTab}
-                    >
+                    <Tabs value={activeEventsTab} onValueChange={setActiveEventsTab}>
                         <TabsList>
                             <TabsTrigger value="userEvents">
                                 {t("userEvents")}
@@ -519,9 +563,7 @@ export default function ClientDetails() {
                             <UserEvents client={client.clientId} />
                         </TabsContent>
                         <TabsContent value="adminEvents">
-                            <AdminEvents
-                                resourcePath={`clients/${client.id}`}
-                            />
+                            <AdminEvents resourcePath={`clients/${client.id}`} />
                         </TabsContent>
                     </Tabs>
                 ) : null;
@@ -548,11 +590,9 @@ export default function ClientDetails() {
                 toggleDialog={toggleChangeAuthenticatorOpen}
                 onConfirm={() => save({ confirmed: true })}
             >
-                <>
-                    {t("changeAuthenticatorConfirm", {
-                        clientAuthenticatorType: clientAuthenticatorType
-                    })}
-                </>
+                {t("changeAuthenticatorConfirm", {
+                    clientAuthenticatorType: clientAuthenticatorType
+                })}
             </ConfirmDialogModal>
             <DeleteConfirm />
             {downloadDialogOpen && (
@@ -579,9 +619,7 @@ export default function ClientDetails() {
                 )}
             />
             <div className="pt-4 pb-6 px-0">
-                <FormProvider {...form}>
-                    {renderContent()}
-                </FormProvider>
+                <FormProvider {...form}>{renderContent()}</FormProvider>
             </div>
         </>
     );

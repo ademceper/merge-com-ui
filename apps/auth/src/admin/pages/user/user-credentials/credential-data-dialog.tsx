@@ -3,7 +3,7 @@ import {
     Dialog,
     DialogContent,
     DialogHeader,
-    DialogTitle,
+    DialogTitle
 } from "@merge-rd/ui/components/dialog";
 import {
     Table,
@@ -11,7 +11,7 @@ import {
     TableCell,
     TableHead,
     TableHeader,
-    TableRow,
+    TableRow
 } from "@/admin/shared/ui/data-table";
 
 type CredentialDataDialogProps = {
@@ -27,12 +27,20 @@ export const CredentialDataDialog = ({
 }: CredentialDataDialogProps) => {
     const { t } = useTranslation();
     return (
-        <Dialog open={true} onOpenChange={(v) => !v && onClose()}>
-            <DialogContent showCloseButton className="sm:max-w-lg" data-testid="passwordDataDialog">
+        <Dialog open={true} onOpenChange={v => !v && onClose()}>
+            <DialogContent
+                showCloseButton
+                className="sm:max-w-lg"
+                data-testid="passwordDataDialog"
+            >
                 <DialogHeader>
                     <DialogTitle>{title}</DialogTitle>
                 </DialogHeader>
-                <Table aria-label={title} data-testid="password-data-dialog" className="text-sm">
+                <Table
+                    aria-label={title}
+                    data-testid="password-data-dialog"
+                    className="text-sm"
+                >
                     <TableHeader>
                         <TableRow>
                             <TableHead>{t("showPasswordDataName")}</TableHead>

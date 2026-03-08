@@ -1,10 +1,10 @@
 import { Textarea } from "@merge-rd/ui/components/textarea";
 import { cn } from "@merge-rd/ui/lib/utils";
 import {
-    FieldPath,
-    FieldValues,
-    PathValue,
-    UseControllerProps,
+    type FieldPath,
+    type FieldValues,
+    type PathValue,
+    type UseControllerProps,
     useController
 } from "react-hook-form";
 

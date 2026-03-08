@@ -1,0 +1,7 @@
+export const roleKeys = {
+    all: ["roles"] as const,
+    lists: () => [...roleKeys.all, "list"] as const,
+    detail: (id: string) => [...roleKeys.all, "detail", id] as const,
+    clientDetail: (clientId: string) =>
+        [...roleKeys.all, "clientDetail", clientId] as const
+};

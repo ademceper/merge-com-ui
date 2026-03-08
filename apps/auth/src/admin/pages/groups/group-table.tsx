@@ -1,5 +1,5 @@
 import type GroupRepresentation from "@keycloak/keycloak-admin-client/lib/defs/groupRepresentation";
-import { Button } from "@merge-rd/ui/components/button";
+import { useTranslation } from "@merge-rd/i18n";
 import {
     AlertDialog,
     AlertDialogAction,
@@ -10,24 +10,31 @@ import {
     AlertDialogHeader,
     AlertDialogTitle
 } from "@merge-rd/ui/components/alert-dialog";
+import { Button } from "@merge-rd/ui/components/button";
 import {
+    ArrowsDownUp,
+    CopySimple,
+    PencilSimple,
+    Plus,
+    Trash
+} from "@phosphor-icons/react";
+import { Link, useLocation } from "@tanstack/react-router";
+import { useState } from "react";
+import { toast } from "sonner";
+import {
+    type ColumnDef,
     DataTable,
     DataTableRowActions,
-    type ColumnDef,
     type Row
 } from "@/admin/shared/ui/data-table";
-import { ArrowsDownUp, CopySimple, PencilSimple, Plus, Trash } from "@phosphor-icons/react";
-import { useState } from "react";
-import { useTranslation } from "@merge-rd/i18n";
-import { Link, useLocation } from "@tanstack/react-router";
+import { getErrorDescription, getErrorMessage } from "../../../shared/keycloak-ui-shared";
 import { useAdminClient } from "../../app/admin-client";
-import { getErrorDescription, getErrorMessage, useFetch } from "../../../shared/keycloak-ui-shared";
-import { toast } from "sonner";
 import { useAccess } from "../../app/providers/access/access";
-import { GroupsModal } from "./groups-modal";
-import { useSubGroups } from "./sub-groups-context";
-import { MoveDialog } from "./move-dialog";
+import { useGroupsList } from "./api/use-groups-list";
 import { getLastId } from "./groupIdUtils";
+import { GroupsModal } from "./groups-modal";
+import { MoveDialog } from "./move-dialog";
+import { useSubGroups } from "./sub-groups-context";
 
 type GroupTableProps = {
     refresh: () => void;
@@ -42,33 +49,17 @@ export const GroupTable = ({ refresh: viewRefresh }: GroupTableProps) => {
     const { hasAccess } = useAccess();
     const isManager = hasAccess("manage-users") || currentGroup()?.access?.manage;
 
-    const [key, setKey] = useState(0);
+    const { data: groups = [], refetch } = useGroupsList(id);
     const refresh = () => {
-        setKey((k) => k + 1);
+        refetch();
         viewRefresh();
     };
-    const [groups, setGroups] = useState<GroupRepresentation[]>([]);
     const [groupToDelete, setGroupToDelete] = useState<GroupRepresentation | undefined>();
     const [editGroup, setEditGroup] = useState<GroupRepresentation | undefined>();
     const [createOpen, setCreateOpen] = useState(false);
     const [duplicateId, setDuplicateId] = useState<string | undefined>();
     const [moveGroup, setMoveGroup] = useState<GroupRepresentation | undefined>();
     const [parentIdForCreate, setParentIdForCreate] = useState<string | undefined>();
-
-    useFetch(
-        async () => {
-            if (id) {
-                return adminClient.groups.listSubGroups({
-                    parentId: id,
-                    first: 0,
-                    max: 1000
-                });
-            }
-            return adminClient.groups.find({ first: 0, max: 1000 });
-        },
-        (data) => setGroups(data),
-        [key, id]
-    );
 
     const onDeleteConfirm = async () => {
         if (!groupToDelete?.id) return;
@@ -168,11 +159,13 @@ export const GroupTable = ({ refresh: viewRefresh }: GroupTableProps) => {
         <>
             <AlertDialog
                 open={!!groupToDelete}
-                onOpenChange={(open) => !open && setGroupToDelete(undefined)}
+                onOpenChange={open => !open && setGroupToDelete(undefined)}
             >
                 <AlertDialogContent className="max-w-lg sm:max-w-lg">
                     <AlertDialogHeader>
-                        <AlertDialogTitle>{t("deleteConfirmTitle", { count: 1 })}</AlertDialogTitle>
+                        <AlertDialogTitle>
+                            {t("deleteConfirmTitle", { count: 1 })}
+                        </AlertDialogTitle>
                         <AlertDialogDescription>
                             {t("deleteConfirmGroup", {
                                 count: 1,
@@ -181,7 +174,9 @@ export const GroupTable = ({ refresh: viewRefresh }: GroupTableProps) => {
                         </AlertDialogDescription>
                     </AlertDialogHeader>
                     <AlertDialogFooter className="flex flex-col-reverse gap-2 sm:flex-row sm:justify-end sm:gap-4">
-                        <AlertDialogCancel className="h-9 min-h-9 w-full sm:w-auto">{t("cancel")}</AlertDialogCancel>
+                        <AlertDialogCancel className="h-9 min-h-9 w-full sm:w-auto">
+                            {t("cancel")}
+                        </AlertDialogCancel>
                         <AlertDialogAction
                             variant="destructive"
                             data-testid="confirm"
@@ -197,7 +192,7 @@ export const GroupTable = ({ refresh: viewRefresh }: GroupTableProps) => {
             {editGroup && (
                 <GroupsModal
                     open={true}
-                    onOpenChange={(open) => !open && setEditGroup(undefined)}
+                    onOpenChange={open => !open && setEditGroup(undefined)}
                     id={editGroup.id}
                     rename={editGroup}
                     refresh={() => {
@@ -211,7 +206,7 @@ export const GroupTable = ({ refresh: viewRefresh }: GroupTableProps) => {
             {createOpen && (
                 <GroupsModal
                     open={true}
-                    onOpenChange={(open) => {
+                    onOpenChange={open => {
                         if (!open) setCreateOpen(false);
                     }}
                     id={parentIdForCreate ?? id}
@@ -226,7 +221,7 @@ export const GroupTable = ({ refresh: viewRefresh }: GroupTableProps) => {
             {duplicateId && (
                 <GroupsModal
                     open={true}
-                    onOpenChange={(open) => !open && setDuplicateId(undefined)}
+                    onOpenChange={open => !open && setDuplicateId(undefined)}
                     id={duplicateId}
                     duplicateId={duplicateId}
                     refresh={() => {
@@ -249,13 +244,13 @@ export const GroupTable = ({ refresh: viewRefresh }: GroupTableProps) => {
             )}
 
             <DataTable
-                key={`${id}-${key}`}
+                key={id}
                 columns={columns}
                 data={groups}
                 searchColumnId="name"
                 searchPlaceholder={t("filterGroups")}
                 emptyMessage={t(emptyMessageKey)}
-                onRowClick={(row) => isManager && setEditGroup(row.original)}
+                onRowClick={row => isManager && setEditGroup(row.original)}
                 toolbar={
                     isManager ? (
                         <Button

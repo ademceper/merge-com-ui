@@ -1,10 +1,12 @@
-import type { PageProps } from "keycloakify/login/pages/PageProps";
-import type { KcContext } from "../kc-context";
-import type { I18n } from "../i18n";
-import AuthLayout from "../components/auth-layout";
 import { Button } from "@merge-rd/ui/components/button";
+import type { PageProps } from "keycloakify/login/pages/PageProps";
+import AuthLayout from "../components/auth-layout";
+import type { I18n } from "../i18n";
+import type { KcContext } from "../kc-context";
 
-export default function LoginIdpLinkEmail(props: PageProps<Extract<KcContext, { pageId: "login-idp-link-email.ftl" }>, I18n>) {
+export default function LoginIdpLinkEmail(
+    props: PageProps<Extract<KcContext, { pageId: "login-idp-link-email.ftl" }>, I18n>
+) {
     const { kcContext, i18n } = props;
 
     const { url, brokerContext, idpAlias } = kcContext;
@@ -14,20 +16,30 @@ export default function LoginIdpLinkEmail(props: PageProps<Extract<KcContext, { 
     return (
         <AuthLayout>
             <div className="space-y-5">
-                <h1 className="text-xl font-semibold text-foreground tracking-tight">{msg("emailLinkIdpTitle", idpAlias)}</h1>
+                <h1 className="text-xl font-semibold text-foreground tracking-tight">
+                    {msg("emailLinkIdpTitle", idpAlias)}
+                </h1>
 
                 <div className="space-y-3 text-sm text-muted-foreground">
-                    <p id="instruction1">{msg("emailLinkIdp1", idpAlias, brokerContext.username ?? "")}</p>
+                    <p id="instruction1">
+                        {msg("emailLinkIdp1", idpAlias, brokerContext.username ?? "")}
+                    </p>
                     <p id="instruction2">
                         {msg("emailLinkIdp2")}{" "}
-                        <a href={url.loginAction} className="text-primary hover:underline font-medium">
+                        <a
+                            href={url.loginAction}
+                            className="text-primary hover:underline font-medium"
+                        >
                             {msg("doClickHere")}
                         </a>{" "}
                         {msg("emailLinkIdp3")}
                     </p>
                     <p id="instruction3">
                         {msg("emailLinkIdp4")}{" "}
-                        <a href={url.loginAction} className="text-primary hover:underline font-medium">
+                        <a
+                            href={url.loginAction}
+                            className="text-primary hover:underline font-medium"
+                        >
                             {msg("doClickHere")}
                         </a>{" "}
                         {msg("emailLinkIdp5")}

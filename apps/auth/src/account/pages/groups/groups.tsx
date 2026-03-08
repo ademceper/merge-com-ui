@@ -9,13 +9,13 @@
 
 // @ts-nocheck
 
-import { useState } from "react";
 import { useTranslation } from "@merge-rd/i18n";
+import { useState } from "react";
 import { useEnvironment } from "../../../shared/keycloak-ui-shared";
 import { getGroups } from "../../shared/api/methods";
-import { Group } from "../../shared/api/representations";
-import { Page } from "../../shared/ui/page/page";
+import type { Group } from "../../shared/api/representations";
 import { usePromise } from "../../shared/lib/usePromise";
+import { Page } from "../../shared/ui/page/page";
 
 const Groups = () => {
     const { t } = useTranslation();
@@ -65,7 +65,7 @@ const Groups = () => {
                     <tbody>
                         {groups.map((group, appIndex) => (
                             <tr
-                                key={"group-" + appIndex}
+                                key={`group-${appIndex}`}
                                 id={`${appIndex}-group`}
                                 className="border-b last:border-b-0"
                             >

@@ -1,13 +1,13 @@
-import {
-    getErrorDescription,
-    getErrorMessage,
-} from "../../../../shared/keycloak-ui-shared";
-import { toast } from "sonner";
-import CodeEditor from "../../../shared/ui/form/code-editor";
-import { useState } from "react";
 import { useTranslation } from "@merge-rd/i18n";
+import { useState } from "react";
+import { toast } from "sonner";
+import {
+    FormPanel,
+    getErrorDescription,
+    getErrorMessage
+} from "../../../../shared/keycloak-ui-shared";
 import { prettyPrintJSON } from "../../../shared/lib/util";
-import { FormPanel } from "../../../../shared/keycloak-ui-shared";
+import CodeEditor from "../../../shared/ui/form/code-editor";
 import { FixedButtonsGroup } from "../../../shared/ui/form/fixed-button-group";
 import { useUserProfile } from "./user-profile-context";
 
@@ -30,10 +30,9 @@ export const JsonEditorTab = () => {
         try {
             await save(JSON.parse(value));
         } catch (error) {
-            toast.error(
-                t("invalidJsonError", { error: getErrorMessage(error) }),
-                { description: getErrorDescription(error) },
-            );
+            toast.error(t("invalidJsonError", { error: getErrorMessage(error) }), {
+                description: getErrorDescription(error)
+            });
             return;
         }
     }
@@ -44,7 +43,7 @@ export const JsonEditorTab = () => {
                 <CodeEditor
                     language="json"
                     value={code}
-                    onChange={(value) => setCode(value ?? "")}
+                    onChange={value => setCode(value ?? "")}
                     height={480}
                 />
             </FormPanel>

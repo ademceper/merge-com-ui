@@ -5,11 +5,11 @@
  * $ npx keycloakify own --path "account/account-security/LinkedAccountsToolbar.tsx" --revert
  */
 
-import { useState } from "react";
 import { useTranslation } from "@merge-rd/i18n";
-import { Input } from "@merge-rd/ui/components/input";
 import { Button } from "@merge-rd/ui/components/button";
+import { Input } from "@merge-rd/ui/components/input";
 import { CaretLeft, CaretRight, MagnifyingGlass, X } from "@phosphor-icons/react";
+import { useState } from "react";
 
 type LinkedAccountsToolbarProps = {
     onFilter: (nameFilter: string) => void;

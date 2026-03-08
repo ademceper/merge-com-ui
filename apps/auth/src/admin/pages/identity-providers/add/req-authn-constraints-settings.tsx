@@ -1,4 +1,5 @@
-import { HelpItem } from "../../../../shared/keycloak-ui-shared";
+import { useTranslation } from "@merge-rd/i18n";
+import { Label } from "@merge-rd/ui/components/label";
 import {
     Select,
     SelectContent,
@@ -6,10 +7,9 @@ import {
     SelectTrigger,
     SelectValue
 } from "@merge-rd/ui/components/select";
-import { Label } from "@merge-rd/ui/components/label";
 import { useState } from "react";
 import { Controller, useFormContext } from "react-hook-form";
-import { useTranslation } from "@merge-rd/i18n";
+import { HelpItem } from "../../../../shared/keycloak-ui-shared";
 import { MultiLineInput } from "../../../shared/ui/multi-line-input/multi-line-input";
 
 const comparisonValues = ["exact", "minimum", "maximum", "better"];
@@ -34,7 +34,7 @@ export const ReqAuthnConstraints = () => {
                             open={comparisonOpen}
                             onOpenChange={setComparisonOpen}
                             value={field.value ?? comparisonValues[0]}
-                            onValueChange={(v) => {
+                            onValueChange={v => {
                                 field.onChange(v);
                                 setComparisonOpen(false);
                             }}
@@ -56,7 +56,9 @@ export const ReqAuthnConstraints = () => {
             </div>
             <div className="space-y-2">
                 <div className="flex items-center gap-2">
-                    <Label htmlFor="kc-authnContextClassRefs">{t("authnContextClassRefs")}</Label>
+                    <Label htmlFor="kc-authnContextClassRefs">
+                        {t("authnContextClassRefs")}
+                    </Label>
                     <HelpItem
                         helpText={t("authnContextClassRefsHelp")}
                         fieldLabelId="authnContextClassRefs"
@@ -71,7 +73,9 @@ export const ReqAuthnConstraints = () => {
             </div>
             <div className="space-y-2">
                 <div className="flex items-center gap-2">
-                    <Label htmlFor="kc-authnContextDeclRefs">{t("authnContextDeclRefs")}</Label>
+                    <Label htmlFor="kc-authnContextDeclRefs">
+                        {t("authnContextDeclRefs")}
+                    </Label>
                     <HelpItem
                         helpText={t("authnContextDeclRefsHelp")}
                         fieldLabelId="authnContextDeclRefs"

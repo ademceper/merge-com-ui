@@ -1,4 +1,4 @@
-import { Path, PathValue } from "react-hook-form";
+import type { Path, PathValue } from "react-hook-form";
 
 export type KeyValueType = { key: string; value: string };
 

@@ -1,3 +1,4 @@
+import { useTranslation } from "@merge-rd/i18n";
 import { Button } from "@merge-rd/ui/components/button";
 import {
     Dialog,
@@ -6,8 +7,7 @@ import {
     DialogHeader,
     DialogTitle
 } from "@merge-rd/ui/components/dialog";
-import { FormProvider, SubmitHandler, UseFormReturn } from "react-hook-form";
-import { useTranslation } from "@merge-rd/i18n";
+import { FormProvider, type SubmitHandler, type UseFormReturn } from "react-hook-form";
 import { TextControl } from "../../../shared/keycloak-ui-shared";
 import type { KeyValueType } from "../../shared/ui/key-value-form/key-value-convert";
 
@@ -32,7 +32,12 @@ export const AddTranslationModal = ({
     const { t } = useTranslation();
 
     return (
-        <Dialog open onOpenChange={(open) => { if (!open) handleModalToggle(); }}>
+        <Dialog
+            open
+            onOpenChange={open => {
+                if (!open) handleModalToggle();
+            }}
+        >
             <DialogContent className="max-w-md">
                 <DialogHeader>
                     <DialogTitle>{t("addTranslation")}</DialogTitle>

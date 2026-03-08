@@ -1,23 +1,41 @@
-import type { PageProps } from "keycloakify/login/pages/PageProps";
-import type { KcContext } from "../kc-context";
-import type { I18n } from "../i18n";
-import AuthLayout from "../components/auth-layout";
-import { Link } from "@merge-rd/ui/components/link";
-import { SocialLoginButtons } from "../components/social-login-buttons";
-import { Input } from "@merge-rd/ui/components/input";
-import { Button } from "@merge-rd/ui/components/button";
 import { Alert, AlertDescription } from "@merge-rd/ui/components/alert";
+import { Button } from "@merge-rd/ui/components/button";
+import { Input } from "@merge-rd/ui/components/input";
+import { Link } from "@merge-rd/ui/components/link";
 import { cn } from "@merge-rd/ui/lib/utils";
+import type { PageProps } from "keycloakify/login/pages/PageProps";
+import AuthLayout from "../components/auth-layout";
+import { SocialLoginButtons } from "../components/social-login-buttons";
+import type { I18n } from "../i18n";
+import type { KcContext } from "../kc-context";
 
 type RegisterWithSocial = Extract<KcContext, { pageId: "register.ftl" }> & {
-    social?: { providers?: { loginUrl: string; alias: string; providerId: string; displayName: string; iconClasses?: string }[] };
+    social?: {
+        providers?: {
+            loginUrl: string;
+            alias: string;
+            providerId: string;
+            displayName: string;
+            iconClasses?: string;
+        }[];
+    };
 };
 
-export default function Register(props: PageProps<Extract<KcContext, { pageId: "register.ftl" }>, I18n>) {
+export default function Register(
+    props: PageProps<Extract<KcContext, { pageId: "register.ftl" }>, I18n>
+) {
     const { kcContext, i18n } = props;
     const kc = kcContext as RegisterWithSocial;
 
-    const { url, messagesPerField, realm, passwordRequired, recaptchaRequired, recaptchaSiteKey, message } = kc;
+    const {
+        url,
+        messagesPerField,
+        realm,
+        passwordRequired,
+        recaptchaRequired,
+        recaptchaSiteKey,
+        message
+    } = kc;
     const socialProviders = kc.social?.providers;
 
     const { msg, msgStr } = i18n;
@@ -25,21 +43,33 @@ export default function Register(props: PageProps<Extract<KcContext, { pageId: "
     return (
         <AuthLayout>
             <div className="space-y-5">
-                <h1 className="text-xl font-semibold text-foreground tracking-tight">{msg("registerTitle")}</h1>
+                <h1 className="text-xl font-semibold text-foreground tracking-tight">
+                    {msg("registerTitle")}
+                </h1>
 
                 {message && (
-                    <Alert variant={message.type === "error" ? "destructive" : "default"} className="rounded-lg">
+                    <Alert
+                        variant={message.type === "error" ? "destructive" : "default"}
+                        className="rounded-lg"
+                    >
                         <AlertDescription>{message.summary}</AlertDescription>
                     </Alert>
                 )}
 
                 {messagesPerField.exists("global") && (
                     <Alert variant="destructive" className="rounded-lg">
-                        <AlertDescription>{messagesPerField.get("global")}</AlertDescription>
+                        <AlertDescription>
+                            {messagesPerField.get("global")}
+                        </AlertDescription>
                     </Alert>
                 )}
 
-                <form id="kc-register-form" action={url.registrationAction} method="post" className="space-y-4">
+                <form
+                    id="kc-register-form"
+                    action={url.registrationAction}
+                    method="post"
+                    className="space-y-4"
+                >
                     <div className="grid grid-cols-2 gap-4">
                         <div className="space-y-2">
                             <Input
@@ -50,10 +80,15 @@ export default function Register(props: PageProps<Extract<KcContext, { pageId: "
                                 name="firstName"
                                 placeholder={msgStr("firstName")}
                                 aria-invalid={messagesPerField.existsError("firstName")}
-                                className={cn(messagesPerField.existsError("firstName") && "border border-destructive")}
+                                className={cn(
+                                    messagesPerField.existsError("firstName") &&
+                                        "border border-destructive"
+                                )}
                             />
                             {messagesPerField.existsError("firstName") && (
-                                <p className="text-sm text-destructive">{messagesPerField.get("firstName")}</p>
+                                <p className="text-sm text-destructive">
+                                    {messagesPerField.get("firstName")}
+                                </p>
                             )}
                         </div>
                         <div className="space-y-2">
@@ -65,10 +100,15 @@ export default function Register(props: PageProps<Extract<KcContext, { pageId: "
                                 name="lastName"
                                 placeholder={msgStr("lastName")}
                                 aria-invalid={messagesPerField.existsError("lastName")}
-                                className={cn(messagesPerField.existsError("lastName") && "border border-destructive")}
+                                className={cn(
+                                    messagesPerField.existsError("lastName") &&
+                                        "border border-destructive"
+                                )}
                             />
                             {messagesPerField.existsError("lastName") && (
-                                <p className="text-sm text-destructive">{messagesPerField.get("lastName")}</p>
+                                <p className="text-sm text-destructive">
+                                    {messagesPerField.get("lastName")}
+                                </p>
                             )}
                         </div>
                     </div>
@@ -83,9 +123,16 @@ export default function Register(props: PageProps<Extract<KcContext, { pageId: "
                             placeholder={msgStr("email")}
                             autoComplete="email"
                             aria-invalid={messagesPerField.existsError("email")}
-                            className={cn(messagesPerField.existsError("email") && "border border-destructive")}
+                            className={cn(
+                                messagesPerField.existsError("email") &&
+                                    "border border-destructive"
+                            )}
                         />
-                        {messagesPerField.existsError("email") && <p className="text-sm text-destructive">{messagesPerField.get("email")}</p>}
+                        {messagesPerField.existsError("email") && (
+                            <p className="text-sm text-destructive">
+                                {messagesPerField.get("email")}
+                            </p>
+                        )}
                     </div>
 
                     {!realm.registrationEmailAsUsername && (
@@ -99,10 +146,15 @@ export default function Register(props: PageProps<Extract<KcContext, { pageId: "
                                 placeholder={msgStr("username")}
                                 autoComplete="username"
                                 aria-invalid={messagesPerField.existsError("username")}
-                                className={cn(messagesPerField.existsError("username") && "border border-destructive")}
+                                className={cn(
+                                    messagesPerField.existsError("username") &&
+                                        "border border-destructive"
+                                )}
                             />
                             {messagesPerField.existsError("username") && (
-                                <p className="text-sm text-destructive">{messagesPerField.get("username")}</p>
+                                <p className="text-sm text-destructive">
+                                    {messagesPerField.get("username")}
+                                </p>
                             )}
                         </div>
                     )}
@@ -118,11 +170,18 @@ export default function Register(props: PageProps<Extract<KcContext, { pageId: "
                                     name="password"
                                     placeholder={msgStr("password")}
                                     autoComplete="new-password"
-                                    aria-invalid={messagesPerField.existsError("password")}
-                                    className={cn(messagesPerField.existsError("password") && "border border-destructive")}
+                                    aria-invalid={messagesPerField.existsError(
+                                        "password"
+                                    )}
+                                    className={cn(
+                                        messagesPerField.existsError("password") &&
+                                            "border border-destructive"
+                                    )}
                                 />
                                 {messagesPerField.existsError("password") && (
-                                    <p className="text-sm text-destructive">{messagesPerField.get("password")}</p>
+                                    <p className="text-sm text-destructive">
+                                        {messagesPerField.get("password")}
+                                    </p>
                                 )}
                             </div>
                             <div className="space-y-2">
@@ -134,11 +193,19 @@ export default function Register(props: PageProps<Extract<KcContext, { pageId: "
                                     name="password-confirm"
                                     placeholder={msgStr("passwordConfirm")}
                                     autoComplete="new-password"
-                                    aria-invalid={messagesPerField.existsError("password-confirm")}
-                                    className={cn(messagesPerField.existsError("password-confirm") && "border border-destructive")}
+                                    aria-invalid={messagesPerField.existsError(
+                                        "password-confirm"
+                                    )}
+                                    className={cn(
+                                        messagesPerField.existsError(
+                                            "password-confirm"
+                                        ) && "border border-destructive"
+                                    )}
                                 />
                                 {messagesPerField.existsError("password-confirm") && (
-                                    <p className="text-sm text-destructive">{messagesPerField.get("password-confirm")}</p>
+                                    <p className="text-sm text-destructive">
+                                        {messagesPerField.get("password-confirm")}
+                                    </p>
                                 )}
                             </div>
                         </>
@@ -146,7 +213,11 @@ export default function Register(props: PageProps<Extract<KcContext, { pageId: "
 
                     {recaptchaRequired && (
                         <div className="flex justify-center">
-                            <div className="g-recaptcha" data-size="compact" data-sitekey={recaptchaSiteKey} />
+                            <div
+                                className="g-recaptcha"
+                                data-size="compact"
+                                data-sitekey={recaptchaSiteKey}
+                            />
                         </div>
                     )}
 
@@ -160,7 +231,10 @@ export default function Register(props: PageProps<Extract<KcContext, { pageId: "
                         providers={socialProviders}
                         dividerLabel={msgStr("orSeparator") || "Veya"}
                         getButtonLabel={displayName =>
-                            msgStr("continueWithProvider")?.replace("{{provider}}", displayName) || `${displayName} ile devam edin`
+                            msgStr("continueWithProvider")?.replace(
+                                "{{provider}}",
+                                displayName
+                            ) || `${displayName} ile devam edin`
                         }
                     />
                 )}

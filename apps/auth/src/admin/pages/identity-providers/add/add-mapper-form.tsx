@@ -1,6 +1,7 @@
 import type IdentityProviderMapperRepresentation from "@keycloak/keycloak-admin-client/lib/defs/identityProviderMapperRepresentation";
 import type { IdentityProviderMapperTypeRepresentation } from "@keycloak/keycloak-admin-client/lib/defs/identityProviderMapperTypeRepresentation";
-import { FormLabel, HelpItem, TextControl } from "../../../../shared/keycloak-ui-shared";
+import { useTranslation } from "@merge-rd/i18n";
+import { Label } from "@merge-rd/ui/components/label";
 import {
     Select,
     SelectContent,
@@ -8,11 +9,10 @@ import {
     SelectTrigger,
     SelectValue
 } from "@merge-rd/ui/components/select";
-import { Label } from "@merge-rd/ui/components/label";
 import { get } from "lodash-es";
 import { useState } from "react";
-import { Controller, UseFormReturn } from "react-hook-form";
-import { useTranslation } from "@merge-rd/i18n";
+import { Controller, type UseFormReturn } from "react-hook-form";
+import { FormLabel, HelpItem, TextControl } from "../../../../shared/keycloak-ui-shared";
 import type { IdPMapperRepresentationWithAttributes } from "./add-mapper";
 
 type AddMapperFormProps = {
@@ -65,7 +65,7 @@ export const AddMapperForm = ({
                                 <SelectValue placeholder={t("syncModeOverride")} />
                             </SelectTrigger>
                             <SelectContent>
-                                {syncModes.map((option) => (
+                                {syncModes.map(option => (
                                     <SelectItem key={option} value={option.toUpperCase()}>
                                         {t(`syncModes.${option}`)}
                                     </SelectItem>
@@ -89,7 +89,7 @@ export const AddMapperForm = ({
                             open={mapperTypeOpen}
                             onOpenChange={setMapperTypeOpen}
                             value={mapperType.name ?? mapperType.id ?? ""}
-                            onValueChange={(v) => {
+                            onValueChange={v => {
                                 const selected = mapperTypes.find(
                                     m => (m.name ?? m.id) === v
                                 );

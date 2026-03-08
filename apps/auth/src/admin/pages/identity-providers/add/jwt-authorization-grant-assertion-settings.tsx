@@ -1,11 +1,11 @@
 import { useTranslation } from "@merge-rd/i18n";
-import { DefaultSwitchControl } from "../../../shared/ui/switch-control";
 import { Label } from "@merge-rd/ui/components/label";
-import { useFormContext, Controller } from "react-hook-form";
-import { TimeSelector } from "../../../shared/ui/time-selector/time-selector";
-import { SelectField, HelpItem } from "../../../../shared/keycloak-ui-shared";
-import { sortProviders } from "../../../shared/lib/util";
+import { Controller, useFormContext } from "react-hook-form";
+import { HelpItem, SelectField } from "../../../../shared/keycloak-ui-shared";
 import { useServerInfo } from "../../../app/providers/server-info/server-info-provider";
+import { sortProviders } from "../../../shared/lib/util";
+import { DefaultSwitchControl } from "../../../shared/ui/switch-control";
+import { TimeSelector } from "../../../shared/ui/time-selector/time-selector";
 
 export const JWTAuthorizationGrantAssertionSettings = () => {
     const { t } = useTranslation();
@@ -22,7 +22,9 @@ export const JWTAuthorizationGrantAssertionSettings = () => {
 
             <div className="space-y-2">
                 <div className="flex items-center gap-1">
-                    <Label htmlFor="jwtAuthorizationGrantMaxAllowedAssertionExpiration">{t("jwtAuthorizationGrantMaxAllowedAssertionExpiration")}</Label>
+                    <Label htmlFor="jwtAuthorizationGrantMaxAllowedAssertionExpiration">
+                        {t("jwtAuthorizationGrantMaxAllowedAssertionExpiration")}
+                    </Label>
                     <HelpItem
                         helpText={t(
                             "jwtAuthorizationGrantMaxAllowedAssertionExpirationHelp"

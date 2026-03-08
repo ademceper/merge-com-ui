@@ -1,15 +1,20 @@
-import type { ComponentType } from "react";
-import { SubmitHandler, UseFormReturn, useFormContext, useWatch } from "react-hook-form";
 import { useTranslation } from "@merge-rd/i18n";
 import { Link, type LinkProps } from "@tanstack/react-router";
+import type { ComponentType } from "react";
+import {
+    type SubmitHandler,
+    type UseFormReturn,
+    useFormContext,
+    useWatch
+} from "react-hook-form";
 
 const RouterLink = Link as ComponentType<LinkProps>;
-import { Button } from "@merge-rd/ui/components/button";
-import { TextAreaControl, TextControl } from "../../../../shared/keycloak-ui-shared";
 
+import { Button } from "@merge-rd/ui/components/button";
 import { cn } from "@merge-rd/ui/lib/utils";
+import { TextAreaControl, TextControl } from "../../../../shared/keycloak-ui-shared";
 import { FormAccess } from "../form/form-access";
-import { AttributeForm } from "../key-value-form/attribute-form";
+import type { AttributeForm } from "../key-value-form/attribute-form";
 
 type RoleFormProps = {
     form: UseFormReturn<AttributeForm>;

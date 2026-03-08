@@ -1,5 +1,5 @@
 import { useController } from "react-hook-form";
-import { TimeSelector, TimeSelectorProps } from "./time-selector";
+import { TimeSelector, type TimeSelectorProps } from "./time-selector";
 
 type TimeSelectorFormProps = TimeSelectorProps & {
     name: string;

@@ -1,19 +1,7 @@
 import type RoleRepresentation from "@keycloak/keycloak-admin-client/lib/defs/roleRepresentation";
-import { getErrorDescription, getErrorMessage, HelpItem } from "../../../../shared/keycloak-ui-shared";
-import { toast } from "sonner";
-import { Button } from "@merge-rd/ui/components/button";
-import { useState } from "react";
 import { useTranslation } from "@merge-rd/i18n";
-import { Link } from "@tanstack/react-router";
-import { useAdminClient } from "../../../app/admin-client";
-import { useAccess } from "../../../app/providers/access/access";
-import { useRealm } from "../../../app/providers/realm-context/realm-context";
-import { toRealmSettings } from "../../lib/route-helpers";
-import { emptyFormatter, upperCaseFormatter } from "../../lib/util";
-import { translationFormatter } from "../../lib/translationFormatter";
-import { useConfirmDialog } from "../confirm-dialog/confirm-dialog";
-import { useFetch } from "../../../../shared/keycloak-ui-shared";
-import { DataTable, DataTableRowActions, type ColumnDef } from "@/admin/shared/ui/data-table";
+import { Button } from "@merge-rd/ui/components/button";
+import { DropdownMenuItem } from "@merge-rd/ui/components/dropdown-menu";
 import {
     Empty,
     EmptyContent,
@@ -21,7 +9,27 @@ import {
     EmptyHeader,
     EmptyTitle
 } from "@merge-rd/ui/components/empty";
-import { DropdownMenuItem } from "@merge-rd/ui/components/dropdown-menu";
+import { Link } from "@tanstack/react-router";
+import { useState } from "react";
+import { toast } from "sonner";
+import {
+    type ColumnDef,
+    DataTable,
+    DataTableRowActions
+} from "@/admin/shared/ui/data-table";
+import {
+    getErrorDescription,
+    getErrorMessage,
+    HelpItem
+} from "../../../../shared/keycloak-ui-shared";
+import { useAdminClient } from "../../../app/admin-client";
+import { useAccess } from "../../../app/providers/access/access";
+import { useRealm } from "../../../app/providers/realm-context/realm-context";
+import { useRolesList as useRolesListQuery } from "../../api/use-roles-list";
+import { toRealmSettings } from "../../lib/route-helpers";
+import { translationFormatter } from "../../lib/translationFormatter";
+import { emptyFormatter, upperCaseFormatter } from "../../lib/util";
+import { useConfirmDialog } from "../confirm-dialog/confirm-dialog";
 
 type RoleDetailLinkProps = RoleRepresentation & {
     defaultRoleName?: string;
@@ -80,9 +88,8 @@ export const RolesList = ({
     const { realmRepresentation: realm } = useRealm();
 
     const [selectedRole, setSelectedRole] = useState<RoleRepresentation>();
-    const [roles, setRoles] = useState<RoleRepresentation[]>([]);
 
-    useFetch(() => loader!(0, 500), setRoles, [parentRoleId]);
+    const { data: roles = [] } = useRolesListQuery(loader!, parentRoleId);
 
     const [toggleDeleteDialog, DeleteConfirm] = useConfirmDialog({
         titleKey: "roleDeleteConfirm",
@@ -105,7 +112,9 @@ export const RolesList = ({
                 setSelectedRole(undefined);
                 toast.success(t("roleDeletedSuccess"));
             } catch (error) {
-                toast.error(t("roleDeleteError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
+                toast.error(t("roleDeleteError", { error: getErrorMessage(error) }), {
+                    description: getErrorDescription(error)
+                });
             }
         }
     });
@@ -123,33 +132,58 @@ export const RolesList = ({
                 />
             )
         },
-        { accessorKey: "composite", header: t("composite"), cell: ({ getValue }) => upperCaseFormatter()(emptyFormatter()(getValue())) },
-        { accessorKey: "description", header: t("description"), cell: ({ row }) => translationFormatter(t)(row.original.description) },
-        ...(isReadOnly ? [] : [{
-            id: "actions",
-            cell: ({ row }) => (
-                <DataTableRowActions row={row}>
-                    <DropdownMenuItem
-                        onClick={() => {
-                            setSelectedRole(row.original);
-                            if (realm?.defaultRole && row.original.name === realm.defaultRole.name) {
-                                toast.error(t("defaultRoleDeleteError"));
-                            } else toggleDeleteDialog();
-                        }}
-                        className="text-destructive"
-                    >
-                        {t("delete")}
-                    </DropdownMenuItem>
-                </DataTableRowActions>
-            )
-        }] as ColumnDef<RoleRepresentation>[])
+        {
+            accessorKey: "composite",
+            header: t("composite"),
+            cell: ({ getValue }) => upperCaseFormatter()(emptyFormatter()(getValue()))
+        },
+        {
+            accessorKey: "description",
+            header: t("description"),
+            cell: ({ row }) => translationFormatter(t)(row.original.description)
+        },
+        ...(isReadOnly
+            ? []
+            : ([
+                  {
+                      id: "actions",
+                      cell: ({ row }) => (
+                          <DataTableRowActions row={row}>
+                              <DropdownMenuItem
+                                  onClick={() => {
+                                      setSelectedRole(row.original);
+                                      if (
+                                          realm?.defaultRole &&
+                                          row.original.name === realm.defaultRole.name
+                                      ) {
+                                          toast.error(t("defaultRoleDeleteError"));
+                                      } else toggleDeleteDialog();
+                                  }}
+                                  className="text-destructive"
+                              >
+                                  {t("delete")}
+                              </DropdownMenuItem>
+                          </DataTableRowActions>
+                      )
+                  }
+              ] as ColumnDef<RoleRepresentation>[]))
     ];
 
     const emptyContent = (
         <Empty className="py-12">
-            <EmptyHeader><EmptyTitle>{t(`noRoles-${messageBundle}`)}</EmptyTitle></EmptyHeader>
-            <EmptyContent><EmptyDescription>{isReadOnly ? "" : t(`noRolesInstructions-${messageBundle}`)}</EmptyDescription></EmptyContent>
-            {!isReadOnly && <Button className="mt-2" asChild><Link to={toCreate as string}>{t("createRole")}</Link></Button>}
+            <EmptyHeader>
+                <EmptyTitle>{t(`noRoles-${messageBundle}`)}</EmptyTitle>
+            </EmptyHeader>
+            <EmptyContent>
+                <EmptyDescription>
+                    {isReadOnly ? "" : t(`noRolesInstructions-${messageBundle}`)}
+                </EmptyDescription>
+            </EmptyContent>
+            {!isReadOnly && (
+                <Button className="mt-2" asChild>
+                    <Link to={toCreate as string}>{t("createRole")}</Link>
+                </Button>
+            )}
         </Empty>
     );
 
@@ -164,11 +198,13 @@ export const RolesList = ({
                 searchPlaceholder={t("searchForRoles")}
                 emptyContent={emptyContent}
                 emptyMessage={t(`noRoles-${messageBundle}`)}
-                toolbar={!isReadOnly ? (
-                    <Button data-testid="create-role" asChild>
-                        <Link to={toCreate as string}>{t("createRole")}</Link>
-                    </Button>
-                ) : undefined}
+                toolbar={
+                    !isReadOnly ? (
+                        <Button data-testid="create-role" asChild>
+                            <Link to={toCreate as string}>{t("createRole")}</Link>
+                        </Button>
+                    ) : undefined
+                }
             />
         </>
     );

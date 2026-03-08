@@ -1,5 +1,5 @@
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@merge-rd/ui/components/tabs";
 import { useTranslation } from "@merge-rd/i18n";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@merge-rd/ui/components/tabs";
 import { KeycloakSpinner } from "../../../../shared/keycloak-ui-shared";
 import { useRealm } from "../../../app/providers/realm-context/realm-context";
 import { CibaPolicy } from "./ciba-policy";
@@ -18,7 +18,10 @@ export const Policies = () => {
     return (
         <Tabs defaultValue="password">
             <div className="mb-4 w-full min-w-0 overflow-x-auto overflow-y-hidden">
-                <TabsList variant="line" className="mb-0 w-max min-w-0 **:data-[slot=tabs-trigger]:flex-none">
+                <TabsList
+                    variant="line"
+                    className="mb-0 w-max min-w-0 **:data-[slot=tabs-trigger]:flex-none"
+                >
                     <TabsTrigger value="password" data-testid="passwordPolicy">
                         {t("passwordPolicy")}
                     </TabsTrigger>
@@ -28,7 +31,10 @@ export const Policies = () => {
                     <TabsTrigger value="webauthn" data-testid="webauthnPolicy">
                         {t("webauthnPolicy")}
                     </TabsTrigger>
-                    <TabsTrigger value="webauthnPasswordless" data-testid="webauthnPasswordlessPolicy">
+                    <TabsTrigger
+                        value="webauthnPasswordless"
+                        data-testid="webauthnPasswordlessPolicy"
+                    >
                         {t("webauthnPasswordlessPolicy")}
                     </TabsTrigger>
                     <TabsTrigger value="ciba" data-testid="tab-ciba-policy">

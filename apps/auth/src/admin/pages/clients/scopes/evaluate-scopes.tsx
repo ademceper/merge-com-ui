@@ -2,24 +2,26 @@ import type ClientScopeRepresentation from "@keycloak/keycloak-admin-client/lib/
 import type ProtocolMapperRepresentation from "@keycloak/keycloak-admin-client/lib/defs/protocolMapperRepresentation";
 import type RoleRepresentation from "@keycloak/keycloak-admin-client/lib/defs/roleRepresentation";
 import type { ProtocolMapperTypeRepresentation } from "@keycloak/keycloak-admin-client/lib/defs/serverInfoRepesentation";
-import { HelpItem, SelectVariant, useFetch, useHelp } from "../../../../shared/keycloak-ui-shared";
-import { DataTable, type ColumnDef } from "@/admin/shared/ui/data-table";
+import { useTranslation } from "@merge-rd/i18n";
 import { Button } from "@merge-rd/ui/components/button";
 import { Input } from "@merge-rd/ui/components/input";
 import { Label } from "@merge-rd/ui/components/label";
 import { Popover, PopoverContent, PopoverTrigger } from "@merge-rd/ui/components/popover";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@merge-rd/ui/components/tabs";
 import { Question } from "@phosphor-icons/react";
+import { useQuery } from "@tanstack/react-query";
 import { useEffect, useMemo, useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
-import { useTranslation } from "@merge-rd/i18n";
+import { type ColumnDef, DataTable } from "@/admin/shared/ui/data-table";
+import { HelpItem, SelectVariant, useHelp } from "../../../../shared/keycloak-ui-shared";
 import { useAdminClient } from "../../../app/admin-client";
-import { ClientSelect } from "../../../shared/ui/client/client-select";
-import { UserSelect } from "../../../shared/ui/users/user-select";
 import { useAccess } from "../../../app/providers/access/access";
 import { useRealm } from "../../../app/providers/realm-context/realm-context";
 import { useServerInfo } from "../../../app/providers/server-info/server-info-provider";
 import { prettyPrintJSON } from "../../../shared/lib/util";
+import { ClientSelect } from "../../../shared/ui/client/client-select";
+import { UserSelect } from "../../../shared/ui/users/user-select";
+import { useClientAssignedScopes } from "../api/use-client-assigned-scopes";
 import { GeneratedCodeTab } from "./generated-code-tab";
 
 type EvaluateScopesProps = {
@@ -38,28 +40,35 @@ const ProtocolMappers = ({
         setKey(key + 1);
     }, [protocolMappers]);
 
-    const columns: ColumnDef<ProtocolMapperRepresentation>[] = useMemo(() => [
-        {
-            accessorKey: "mapperName",
-            header: t("name"),
-            cell: ({ row }) => (row.original as Record<string, unknown>).mapperName as string || "-"
-        },
-        {
-            accessorKey: "containerName",
-            header: t("parentClientScope"),
-            cell: ({ row }) => (row.original as Record<string, unknown>).containerName as string || "-"
-        },
-        {
-            id: "category",
-            header: t("category"),
-            cell: ({ row }) => (row.original as any).type?.category || "-"
-        },
-        {
-            id: "priority",
-            header: t("priority"),
-            cell: ({ row }) => (row.original as any).type?.priority || "-"
-        }
-    ], [t]);
+    const columns: ColumnDef<ProtocolMapperRepresentation>[] = useMemo(
+        () => [
+            {
+                accessorKey: "mapperName",
+                header: t("name"),
+                cell: ({ row }) =>
+                    ((row.original as Record<string, unknown>).mapperName as string) ||
+                    "-"
+            },
+            {
+                accessorKey: "containerName",
+                header: t("parentClientScope"),
+                cell: ({ row }) =>
+                    ((row.original as Record<string, unknown>).containerName as string) ||
+                    "-"
+            },
+            {
+                id: "category",
+                header: t("category"),
+                cell: ({ row }) => (row.original as any).type?.category || "-"
+            },
+            {
+                id: "priority",
+                header: t("priority"),
+                cell: ({ row }) => (row.original as any).type?.priority || "-"
+            }
+        ],
+        [t]
+    );
 
     return (
         <DataTable
@@ -80,18 +89,21 @@ const EffectiveRoles = ({ effectiveRoles }: { effectiveRoles: RoleRepresentation
         setKey(key + 1);
     }, [effectiveRoles]);
 
-    const columns: ColumnDef<RoleRepresentation>[] = useMemo(() => [
-        {
-            accessorKey: "name",
-            header: t("role"),
-            cell: ({ row }) => row.original.name || "-"
-        },
-        {
-            accessorKey: "containerId",
-            header: t("origin"),
-            cell: ({ row }) => row.original.containerId || "-"
-        }
-    ], [t]);
+    const columns: ColumnDef<RoleRepresentation>[] = useMemo(
+        () => [
+            {
+                accessorKey: "name",
+                header: t("role"),
+                cell: ({ row }) => row.original.name || "-"
+            },
+            {
+                accessorKey: "containerId",
+                header: t("origin"),
+                cell: ({ row }) => row.original.containerId || "-"
+            }
+        ],
+        [t]
+    );
 
     return (
         <DataTable
@@ -121,8 +133,6 @@ export const EvaluateScopes = ({ clientId, protocol }: EvaluateScopesProps) => {
     const [selected, setSelected] = useState<string[]>([prefix]);
     const [activeTab, setActiveTab] = useState(0);
 
-    const [_key, setKey] = useState("");
-    const refresh = () => setKey(`${new Date().getTime()}`);
     const [effectiveRoles, setEffectiveRoles] = useState<RoleRepresentation[]>([]);
     const [protocolMappers, setProtocolMappers] = useState<
         ProtocolMapperRepresentation[]
@@ -138,83 +148,78 @@ export const EvaluateScopes = ({ clientId, protocol }: EvaluateScopesProps) => {
     const { hasAccess } = useAccess();
     const hasViewUsers = hasAccess("view-users");
 
-    useFetch(
-        () => adminClient.clients.listOptionalClientScopes({ id: clientId }),
-        optionalClientScopes => setSelectableScopes(optionalClientScopes),
-        []
-    );
+    const { data: optionalScopesData } = useClientAssignedScopes(clientId);
+    useEffect(() => {
+        if (optionalScopesData?.optionalClientScopes) {
+            setSelectableScopes(optionalScopesData.optionalClientScopes);
+        }
+    }, [optionalScopesData]);
 
-    useFetch(
-        async () => {
-            const scope = selected.join(" ");
+    const scopeStr = selected.join(" ");
+    const { data: evalData } = useQuery({
+        queryKey: ["clientEvaluate", clientId, scopeStr],
+        queryFn: async () => {
             const effectiveRoles = await adminClient.clients.evaluatePermission({
                 id: clientId,
                 roleContainer: realm,
-                scope,
+                scope: scopeStr,
                 type: "granted"
             });
-
             const mapperList = (await adminClient.clients.evaluateListProtocolMapper({
                 id: clientId,
-                scope
+                scope: scopeStr
             })) as ({
                 type: ProtocolMapperTypeRepresentation;
             } & ProtocolMapperRepresentation)[];
+            return { mapperList, effectiveRoles };
+        }
+    });
 
-            return {
-                mapperList,
-                effectiveRoles
-            };
-        },
-        ({ mapperList, effectiveRoles }) => {
-            setEffectiveRoles(effectiveRoles);
-            mapperList.map(mapper => {
-                mapper.type = mapperTypes.find(
-                    type => type.id === mapper.protocolMapper
-                )!;
-            });
+    useEffect(() => {
+        if (!evalData) return;
+        setEffectiveRoles(evalData.effectiveRoles);
+        const mapped = evalData.mapperList.map(mapper => ({
+            ...mapper,
+            type: mapperTypes.find(type => type.id === mapper.protocolMapper)!
+        }));
+        setProtocolMappers(mapped);
+    }, [evalData, mapperTypes]);
 
-            setProtocolMappers(mapperList);
-            refresh();
-        },
-        [selected]
-    );
-
-    useFetch(
-        async () => {
-            const scope = selected.join(" ");
-            const user = form.getValues("user");
-            if (user.length === 0) {
-                return [];
-            }
-            const audience = selectedAudience.join(" ");
-
-            return await Promise.all([
+    const userValue = form.getValues("user");
+    const audienceStr = selectedAudience?.join(" ") ?? "";
+    const { data: tokenData } = useQuery({
+        queryKey: ["clientEvaluateTokens", clientId, scopeStr, userValue, audienceStr],
+        queryFn: async () => {
+            if (!userValue || userValue.length === 0) return null;
+            const [at, ui, it] = await Promise.all([
                 adminClient.clients.evaluateGenerateAccessToken({
                     id: clientId,
-                    userId: user[0],
-                    scope,
-                    audience
+                    userId: userValue[0],
+                    scope: scopeStr,
+                    audience: audienceStr
                 }),
                 adminClient.clients.evaluateGenerateUserInfo({
                     id: clientId,
-                    userId: user[0],
-                    scope
+                    userId: userValue[0],
+                    scope: scopeStr
                 }),
                 adminClient.clients.evaluateGenerateIdToken({
                     id: clientId,
-                    userId: user[0],
-                    scope
+                    userId: userValue[0],
+                    scope: scopeStr
                 })
             ]);
+            return { accessToken: at, userInfo: ui, idToken: it };
         },
-        ([accessToken, userInfo, idToken]) => {
-            setAccessToken(prettyPrintJSON(accessToken));
-            setUserInfo(prettyPrintJSON(userInfo));
-            setIdToken(prettyPrintJSON(idToken));
-        },
-        [form.getValues("user"), selected, selectedAudience]
-    );
+        enabled: !!userValue && userValue.length > 0
+    });
+
+    useEffect(() => {
+        if (!tokenData) return;
+        setAccessToken(prettyPrintJSON(tokenData.accessToken));
+        setUserInfo(prettyPrintJSON(tokenData.userInfo));
+        setIdToken(prettyPrintJSON(tokenData.idToken));
+    }, [tokenData]);
 
     const copyScopeToClipboard = () => {
         void navigator.clipboard.writeText(selected.join(" "));
@@ -230,7 +235,10 @@ export const EvaluateScopes = ({ clientId, protocol }: EvaluateScopesProps) => {
                 )}
                 <form className="space-y-4">
                     <div className="space-y-2">
-                        <Label htmlFor="scopeParameter" className="flex items-center gap-1">
+                        <Label
+                            htmlFor="scopeParameter"
+                            className="flex items-center gap-1"
+                        >
                             {t("scopeParameter")}
                             <HelpItem
                                 helpText={t("scopeParameterHelp")}
@@ -256,25 +264,39 @@ export const EvaluateScopes = ({ clientId, protocol }: EvaluateScopesProps) => {
                                             </span>
                                         </Button>
                                     </PopoverTrigger>
-                                    <PopoverContent className="w-(--radix-popover-trigger-width) p-0" align="start">
+                                    <PopoverContent
+                                        className="w-(--radix-popover-trigger-width) p-0"
+                                        align="start"
+                                    >
                                         <ul className="max-h-64 overflow-auto py-1">
-                                            {selectableScopes.map((scope) => {
+                                            {selectableScopes.map(scope => {
                                                 const option = scope.name ?? "";
-                                                const isSelected = selected.includes(option);
+                                                const isSelected =
+                                                    selected.includes(option);
                                                 return (
                                                     <li
                                                         key={option}
-                                                        role="option"
                                                         aria-selected={isSelected}
                                                         className="hover:bg-accent cursor-pointer px-2 py-1.5 text-sm"
-                                                        onMouseDown={(e) => e.preventDefault()}
+                                                        onMouseDown={e =>
+                                                            e.preventDefault()
+                                                        }
                                                         onClick={() => {
                                                             if (isSelected) {
                                                                 if (option !== prefix) {
-                                                                    setSelected(selected.filter((item) => item !== option));
+                                                                    setSelected(
+                                                                        selected.filter(
+                                                                            item =>
+                                                                                item !==
+                                                                                option
+                                                                        )
+                                                                    );
                                                                 }
                                                             } else {
-                                                                setSelected([...selected, option]);
+                                                                setSelected([
+                                                                    ...selected,
+                                                                    option
+                                                                ]);
                                                             }
                                                         }}
                                                     >
@@ -344,15 +366,28 @@ export const EvaluateScopes = ({ clientId, protocol }: EvaluateScopesProps) => {
 
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 keycloak__scopes_evaluate__tabs">
                 <div className="lg:col-span-2">
-                    <Tabs value={String(activeTab)} onValueChange={v => setActiveTab(Number(v))} className="w-full">
+                    <Tabs
+                        value={String(activeTab)}
+                        onValueChange={v => setActiveTab(Number(v))}
+                        className="w-full"
+                    >
                         <TabsList className="grid w-full grid-cols-5">
-                            <TabsTrigger value="0" data-testid="effective-protocol-mappers-tab">
+                            <TabsTrigger
+                                value="0"
+                                data-testid="effective-protocol-mappers-tab"
+                            >
                                 {t("effectiveProtocolMappers")}
                             </TabsTrigger>
-                            <TabsTrigger value="1" data-testid="effective-role-scope-mappings-tab">
+                            <TabsTrigger
+                                value="1"
+                                data-testid="effective-role-scope-mappings-tab"
+                            >
                                 {t("effectiveRoleScopeMappings")}
                             </TabsTrigger>
-                            <TabsTrigger value="2" data-testid="generated-access-token-tab">
+                            <TabsTrigger
+                                value="2"
+                                data-testid="generated-access-token-tab"
+                            >
                                 {t("generatedAccessToken")}
                             </TabsTrigger>
                             <TabsTrigger value="3" data-testid="generated-id-token-tab">

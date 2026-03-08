@@ -7,9 +7,7 @@ export const UserProfileClaimsSettings = () => {
 
     return (
         <form className="py-4">
-            <h2 className="text-xl font-semibold mb-4">
-                {t("userProfileClaims")}
-            </h2>
+            <h2 className="text-xl font-semibold mb-4">{t("userProfileClaims")}</h2>
             <TextControl
                 name="config.userIDClaim"
                 label={t("userIDClaim")}

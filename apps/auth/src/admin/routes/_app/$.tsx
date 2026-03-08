@@ -1,12 +1,5 @@
-import { createFileRoute } from "@tanstack/react-router";
-import { lazy } from "react";
-
-const CatchAllRoute = lazy(() =>
-    import("../../pages/catch-all-route").then((m) => ({
-        default: m.CatchAllRoute,
-    })),
-);
+import { createFileRoute, lazyRouteComponent } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/_app/$")({
-    component: CatchAllRoute,
+    component: lazyRouteComponent(() => import("../../pages/catch-all-route"), "CatchAllRoute"),
 });

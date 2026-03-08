@@ -1,14 +1,14 @@
 import { Label } from "@merge-rd/ui/components/label";
 import {
     Controller,
-    ControllerProps,
-    FieldPath,
-    FieldValues,
-    UseControllerProps,
+    type ControllerProps,
+    type FieldPath,
+    type FieldValues,
+    type UseControllerProps,
     useFormContext
 } from "react-hook-form";
 import { FormErrorText, HelpItem } from "../../../../shared/keycloak-ui-shared";
-import { TimeSelector, TimeSelectorProps } from "./time-selector";
+import { TimeSelector, type TimeSelectorProps } from "./time-selector";
 
 type NumberControlOption = {
     key: string;
@@ -46,7 +46,9 @@ export const TimeSelectorControl = <
     return (
         <div className="space-y-2">
             <Label htmlFor={name} className="flex items-center gap-1">
-                {controller.rules?.required === true && <span className="text-destructive">*</span>}
+                {controller.rules?.required === true && (
+                    <span className="text-destructive">*</span>
+                )}
                 {label || name}
                 {labelIcon && <HelpItem helpText={labelIcon} fieldLabelId={name} />}
             </Label>

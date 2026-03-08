@@ -1,33 +1,32 @@
 import type UserSessionRepresentation from "@keycloak/keycloak-admin-client/lib/defs/userSessionRepresentation";
-import { useEnvironment } from "../../../shared/keycloak-ui-shared";
+import { useTranslation } from "@merge-rd/i18n";
 import { Badge } from "@merge-rd/ui/components/badge";
 import { Button } from "@merge-rd/ui/components/button";
-import {
-    DataTable,
-    DataTableRowActions,
-    type ColumnDef
-} from "@/admin/shared/ui/data-table";
-import {
-    Tooltip,
-    TooltipContent,
-    TooltipTrigger
-} from "@merge-rd/ui/components/tooltip";
-import { Info, SignOut, ProhibitInset } from "@phosphor-icons/react";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@merge-rd/ui/components/tooltip";
+import { Info, ProhibitInset, SignOut } from "@phosphor-icons/react";
+import { Link, useLocation, useNavigate } from "@tanstack/react-router";
 import type { ReactNode } from "react";
 import { useMemo } from "react";
-import { useTranslation } from "@merge-rd/i18n";
-import { Link, useNavigate, useLocation } from "@tanstack/react-router";
-import { useAdminClient } from "../../app/admin-client";
-import { getErrorDescription, getErrorMessage } from "../../../shared/keycloak-ui-shared";
 import { toast } from "sonner";
-import { useConfirmDialog } from "../../shared/ui/confirm-dialog/confirm-dialog";
+import {
+    type ColumnDef,
+    DataTable,
+    DataTableRowActions
+} from "@/admin/shared/ui/data-table";
+import {
+    getErrorDescription,
+    getErrorMessage,
+    useEnvironment
+} from "../../../shared/keycloak-ui-shared";
+import { useAdminClient } from "../../app/admin-client";
 import { useRealm } from "../../app/providers/realm-context/realm-context";
 import { useWhoAmI } from "../../app/providers/whoami/who-am-i";
-import { toClient } from "../clients/routes/client";
-import { toUser } from "../user/routes/user";
-import { toUsers } from "../user/routes/users";
-import { isLightweightUser } from "../user/utils";
 import useFormatDate from "../../shared/lib/useFormatDate";
+import { useConfirmDialog } from "../../shared/ui/confirm-dialog/confirm-dialog";
+import { toClient } from "../../shared/lib/routes/clients";
+import { toUser } from "../../shared/lib/routes/user";
+import { toUsers } from "../../shared/lib/routes/user";
+import { isLightweightUser } from "../user/utils";
 
 type ColumnName = "username" | "start" | "lastAccess" | "clients" | "type" | "ipAddress";
 
@@ -72,9 +71,12 @@ export default function SessionsTable({
                     refreshInternal();
                 }
             } catch (error) {
-                toast.error(t("logoutAllSessionsError", { error: getErrorMessage(error) }), {
-                    description: getErrorDescription(error)
-                });
+                toast.error(
+                    t("logoutAllSessionsError", { error: getErrorMessage(error) }),
+                    {
+                        description: getErrorDescription(error)
+                    }
+                );
             }
         }
     });
@@ -113,7 +115,13 @@ export default function SessionsTable({
                     const r = row.original;
                     return (
                         <Link
-                            to={toUser({ realm, id: r.userId!, tab: "sessions" }) as string}
+                            to={
+                                toUser({
+                                    realm,
+                                    id: r.userId!,
+                                    tab: "sessions"
+                                }) as string
+                            }
                             className="text-primary hover:underline"
                         >
                             {r.username}
@@ -131,7 +139,9 @@ export default function SessionsTable({
                                                 {t("transientUser")}
                                             </Badge>
                                         </TooltipTrigger>
-                                        <TooltipContent>{t("transientUserTooltip")}</TooltipContent>
+                                        <TooltipContent>
+                                            {t("transientUserTooltip")}
+                                        </TooltipContent>
                                     </Tooltip>
                                 </>
                             )}
@@ -162,15 +172,23 @@ export default function SessionsTable({
                 header: t("clients"),
                 cell: ({ row }) => (
                     <div className="flex flex-wrap gap-x-2 gap-y-1">
-                        {Object.entries(row.original.clients ?? {}).map(([clientId, client]) => (
-                            <Link
-                                key={clientId}
-                                to={toClient({ realm, clientId, tab: "sessions" }) as string}
-                                className="text-primary hover:underline"
-                            >
-                                {client}
-                            </Link>
-                        ))}
+                        {Object.entries(row.original.clients ?? {}).map(
+                            ([clientId, client]) => (
+                                <Link
+                                    key={clientId}
+                                    to={
+                                        toClient({
+                                            realm,
+                                            clientId,
+                                            tab: "sessions"
+                                        }) as string
+                                    }
+                                    className="text-primary hover:underline"
+                                >
+                                    {client}
+                                </Link>
+                            )
+                        )}
                     </div>
                 )
             },
@@ -180,8 +198,11 @@ export default function SessionsTable({
                 size: 50,
                 enableHiding: false,
                 cell: ({ row }) => {
-                    const session = row.original as UserSessionRepresentation & { type?: string };
-                    const isOffline = session.type === "Offline" || session.type === "OFFLINE";
+                    const session = row.original as UserSessionRepresentation & {
+                        type?: string;
+                    };
+                    const isOffline =
+                        session.type === "Offline" || session.type === "OFFLINE";
                     return (
                         <DataTableRowActions row={row}>
                             {isOffline ? (
@@ -209,10 +230,12 @@ export default function SessionsTable({
             }
         ];
         if (hiddenColumns.length === 0) return cols;
-        return cols.filter((col) => {
-        const key = (col as ColumnDef<UserSessionRepresentation> & { accessorKey?: string }).accessorKey;
-        return !key || !hiddenColumns.includes(key as ColumnName);
-    });
+        return cols.filter(col => {
+            const key = (
+                col as ColumnDef<UserSessionRepresentation> & { accessorKey?: string }
+            ).accessorKey;
+            return !key || !hiddenColumns.includes(key as ColumnName);
+        });
     }, [realm, hiddenColumns, t, formatDate]);
 
     return (
@@ -237,7 +260,9 @@ export default function SessionsTable({
                                     data-testid="logout-all"
                                 >
                                     <SignOut size={20} className="shrink-0 sm:hidden" />
-                                    <span className="hidden sm:inline">{t("logoutAllSessions")}</span>
+                                    <span className="hidden sm:inline">
+                                        {t("logoutAllSessions")}
+                                    </span>
                                 </Button>
                             )}
                         </>

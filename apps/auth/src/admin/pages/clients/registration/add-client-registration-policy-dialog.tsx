@@ -1,7 +1,6 @@
 import type ComponentRepresentation from "@keycloak/keycloak-admin-client/lib/defs/componentRepresentation";
 import type ComponentTypeRepresentation from "@keycloak/keycloak-admin-client/lib/defs/componentTypeRepresentation";
-import { getErrorDescription, getErrorMessage, TextControl } from "../../../../shared/keycloak-ui-shared";
-import { toast } from "sonner";
+import { useTranslation } from "@merge-rd/i18n";
 import { Button } from "@merge-rd/ui/components/button";
 import {
     Dialog,
@@ -10,20 +9,26 @@ import {
     DialogFooter,
     DialogHeader,
     DialogTitle,
-    DialogTrigger,
+    DialogTrigger
 } from "@merge-rd/ui/components/dialog";
-import { FormProvider, useForm } from "react-hook-form";
-import { useTranslation } from "@merge-rd/i18n";
 import { cn } from "@merge-rd/ui/lib/utils";
 import { useEffect, useMemo, useRef, useState } from "react";
+import { FormProvider, useForm } from "react-hook-form";
+import { toast } from "sonner";
+import {
+    getErrorDescription,
+    getErrorMessage,
+    TextControl
+} from "../../../../shared/keycloak-ui-shared";
 import { useAdminClient } from "../../../app/admin-client";
-import { DynamicComponents } from "../../../shared/ui/dynamic/dynamic-components";
-import { FormAccess } from "../../../shared/ui/form/form-access";
 import { useRealm } from "../../../app/providers/realm-context/realm-context";
 import { useServerInfo } from "../../../app/providers/server-info/server-info-provider";
 import useLocaleSort, { mapByKey } from "../../../shared/lib/useLocaleSort";
+import { DynamicComponents } from "../../../shared/ui/dynamic/dynamic-components";
+import { FormAccess } from "../../../shared/ui/form/form-access";
 
-const POLICY_TYPE = "org.keycloak.services.clientregistration.policy.ClientRegistrationPolicy";
+const POLICY_TYPE =
+    "org.keycloak.services.clientregistration.policy.ClientRegistrationPolicy";
 
 type AddClientRegistrationPolicyDialogProps = {
     trigger: React.ReactNode;
@@ -34,7 +39,7 @@ type AddClientRegistrationPolicyDialogProps = {
 export function AddClientRegistrationPolicyDialog({
     trigger,
     subTab,
-    onSuccess,
+    onSuccess
 }: AddClientRegistrationPolicyDialogProps) {
     const { adminClient } = useAdminClient();
     const { t } = useTranslation();
@@ -42,7 +47,8 @@ export function AddClientRegistrationPolicyDialog({
     const serverInfo = useServerInfo();
     const [open, setOpen] = useState(false);
     const [currentStep, setCurrentStep] = useState(0);
-    const [selectedProvider, setSelectedProvider] = useState<ComponentTypeRepresentation | null>(null);
+    const [selectedProvider, setSelectedProvider] =
+        useState<ComponentTypeRepresentation | null>(null);
     const [saving, setSaving] = useState(false);
     const closeTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
@@ -60,14 +66,14 @@ export function AddClientRegistrationPolicyDialog({
     const providerRows = useMemo(
         () =>
             localeSort(
-                descriptions?.filter((d) => providers.includes(d.id!)) || [],
+                descriptions?.filter(d => providers.includes(d.id!)) || [],
                 mapByKey("id")
             ),
         [providers, descriptions, localeSort]
     );
 
     const form = useForm<ComponentRepresentation>({
-        defaultValues: { providerId: "", name: "" },
+        defaultValues: { providerId: "", name: "" }
     });
     const { handleSubmit, reset } = form;
 
@@ -112,7 +118,7 @@ export function AddClientRegistrationPolicyDialog({
                 subType: subTab,
                 parentId: realmRepresentation?.id,
                 providerType: POLICY_TYPE,
-                providerId: selectedProvider.id,
+                providerId: selectedProvider.id
             };
             await adminClient.components.create(updatedComponent);
             toast.success(t("providerCreateSuccess"));
@@ -120,10 +126,9 @@ export function AddClientRegistrationPolicyDialog({
             handleOpenChange(false);
             onSuccess?.();
         } catch (error) {
-            toast.error(
-                t("providerCreateError", { error: getErrorMessage(error) }),
-                { description: getErrorDescription(error) }
-            );
+            toast.error(t("providerCreateError", { error: getErrorMessage(error) }), {
+                description: getErrorDescription(error)
+            });
         } finally {
             setSaving(false);
         }
@@ -151,7 +156,7 @@ export function AddClientRegistrationPolicyDialog({
                                 {currentStep + 1} / {totalSteps}
                             </span>
                             <div className="flex shrink-0 gap-1">
-                                {[0, 1].map((index) => (
+                                {[0, 1].map(index => (
                                     <div
                                         key={index}
                                         className={cn(
@@ -175,7 +180,7 @@ export function AddClientRegistrationPolicyDialog({
                                 <span>{t("name")}</span>
                                 <span>{t("description")}</span>
                             </div>
-                            {providerRows.map((provider) => (
+                            {providerRows.map(provider => (
                                 <div
                                     key={provider.id}
                                     data-testid={provider.id}
@@ -211,10 +216,19 @@ export function AddClientRegistrationPolicyDialog({
                                 <DynamicComponents
                                     properties={selectedProvider.properties!}
                                     layoutOverridesByType={{
-                                        List: { hideLabel: true, helpIconAfterControl: true },
-                                        MultivaluedList: { hideLabel: true, helpIconAfterControl: true },
-                                        MultivaluedString: { hideLabel: true, helpIconAfterControl: true },
-                                        boolean: { booleanLabelTextSwitchHelp: true },
+                                        List: {
+                                            hideLabel: true,
+                                            helpIconAfterControl: true
+                                        },
+                                        MultivaluedList: {
+                                            hideLabel: true,
+                                            helpIconAfterControl: true
+                                        },
+                                        MultivaluedString: {
+                                            hideLabel: true,
+                                            helpIconAfterControl: true
+                                        },
+                                        boolean: { booleanLabelTextSwitchHelp: true }
                                     }}
                                 />
                             </div>
@@ -233,7 +247,7 @@ export function AddClientRegistrationPolicyDialog({
                                 : t("createPolicy")}
                         </span>
                         <div className="ml-1 flex gap-1.5">
-                            {[0, 1].map((index) => (
+                            {[0, 1].map(index => (
                                 <div
                                     key={index}
                                     className={cn(

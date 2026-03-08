@@ -1,10 +1,12 @@
-import type { PageProps } from "keycloakify/login/pages/PageProps";
-import type { KcContext } from "../kc-context";
-import type { I18n } from "../i18n";
-import AuthLayout from "../components/auth-layout";
 import { Button } from "@merge-rd/ui/components/button";
+import type { PageProps } from "keycloakify/login/pages/PageProps";
+import AuthLayout from "../components/auth-layout";
+import type { I18n } from "../i18n";
+import type { KcContext } from "../kc-context";
 
-export default function DeleteCredential(props: PageProps<Extract<KcContext, { pageId: "delete-credential.ftl" }>, I18n>) {
+export default function DeleteCredential(
+    props: PageProps<Extract<KcContext, { pageId: "delete-credential.ftl" }>, I18n>
+) {
     const { kcContext, i18n } = props;
 
     const { url, credentialLabel } = kcContext;
@@ -22,11 +24,28 @@ export default function DeleteCredential(props: PageProps<Extract<KcContext, { p
                     {msg("deleteCredentialMessage", credentialLabel)}
                 </p>
 
-                <form action={url.loginAction} method="post" className="flex flex-col gap-3 pt-2">
-                    <Button type="submit" name="accept" variant="destructive" size="xl" className="w-full">
+                <form
+                    action={url.loginAction}
+                    method="post"
+                    className="flex flex-col gap-3 pt-2"
+                >
+                    <Button
+                        type="submit"
+                        name="accept"
+                        variant="destructive"
+                        size="xl"
+                        className="w-full"
+                    >
                         {msgStr("doConfirmDelete")}
                     </Button>
-                    <Button type="submit" name="cancel-aia" value="true" variant="secondary" size="xl" className="w-full">
+                    <Button
+                        type="submit"
+                        name="cancel-aia"
+                        value="true"
+                        variant="secondary"
+                        size="xl"
+                        className="w-full"
+                    >
                         {msgStr("doCancel")}
                     </Button>
                 </form>

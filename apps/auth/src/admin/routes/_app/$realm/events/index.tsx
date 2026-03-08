@@ -1,10 +1,5 @@
-import { createFileRoute } from "@tanstack/react-router";
-import { lazy } from "react";
-
-const EventsSection = lazy(
-    () => import("../../../../pages/events/events-section"),
-);
+import { createFileRoute, lazyRouteComponent } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/_app/$realm/events/")({
-    component: EventsSection,
+    component: lazyRouteComponent(() => import("../../../../pages/events/events-section")),
 });

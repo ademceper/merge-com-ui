@@ -1,15 +1,7 @@
 import type CredentialRepresentation from "@keycloak/keycloak-admin-client/lib/defs/credentialRepresentation";
 import type UserRepresentation from "@keycloak/keycloak-admin-client/lib/defs/userRepresentation";
-import { getErrorDescription, getErrorMessage, HelpItem, useFetch } from "../../../shared/keycloak-ui-shared";
-import { toast } from "sonner";
-import { Button } from "@merge-rd/ui/components/button";
-import { Separator } from "@merge-rd/ui/components/separator";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/admin/shared/ui/data-table";
-import { Fragment, DragEvent as ReactDragEvent, useMemo, useRef, useState } from "react";
 import { useTranslation } from "@merge-rd/i18n";
-import { useAdminClient } from "../../app/admin-client";
-import { useConfirmDialog } from "../../shared/ui/confirm-dialog/confirm-dialog";
-import { KeycloakSpinner } from "../../../shared/keycloak-ui-shared";
+import { Button } from "@merge-rd/ui/components/button";
 import {
     Empty,
     EmptyContent,
@@ -17,13 +9,39 @@ import {
     EmptyHeader,
     EmptyTitle
 } from "@merge-rd/ui/components/empty";
+import { Separator } from "@merge-rd/ui/components/separator";
+import {
+    Fragment,
+    type DragEvent as ReactDragEvent,
+    useEffect,
+    useMemo,
+    useRef,
+    useState
+} from "react";
+import { toast } from "sonner";
+import {
+    Table,
+    TableBody,
+    TableCell,
+    TableHead,
+    TableHeader,
+    TableRow
+} from "@/admin/shared/ui/data-table";
+import {
+    getErrorDescription,
+    getErrorMessage,
+    HelpItem
+} from "../../../shared/keycloak-ui-shared";
+import { useAdminClient } from "../../app/admin-client";
+import useFormatDate from "../../shared/lib/useFormatDate";
 import { toUpperCase } from "../../shared/lib/util";
+import { useConfirmDialog } from "../../shared/ui/confirm-dialog/confirm-dialog";
+import { useUserCredentials as useUserCredentialsQuery } from "./api/use-user-credentials";
 import { FederatedUserLink } from "./federated-user-link";
 import { CredentialRow } from "./user-credentials/credential-row";
 import { InlineLabelEdit } from "./user-credentials/inline-label-edit";
 import { ResetCredentialDialog } from "./user-credentials/reset-credential-dialog";
 import { ResetPasswordDialog } from "./user-credentials/reset-password-dialog";
-import useFormatDate from "../../shared/lib/useFormatDate";
 
 type UserCredentialsProps = {
     user: UserRepresentation;
@@ -90,9 +108,7 @@ export const UserCredentials = ({ user, setUser }: UserCredentialsProps) => {
     const { adminClient } = useAdminClient();
 
     const { t } = useTranslation();
-const [key, setKey] = useState(0);
     const formatDate = useFormatDate();
-    const refresh = () => setKey(key + 1);
     const [isOpen, setIsOpen] = useState(false);
     const [openCredentialReset, setOpenCredentialReset] = useState(false);
     const [userCredentials, setUserCredentials] = useState<CredentialRepresentation[]>(
@@ -114,41 +130,34 @@ const [key, setKey] = useState(0);
         tempItemOrder: [""]
     });
 
-    useFetch(
-        () => {
-            if (user.enabled) {
-                return adminClient.users.getCredentials({ id: user.id! });
-            }
-            return Promise.resolve([]);
-        },
-        credentials => {
-            credentials = [
-                ...credentials.filter((c: CredentialRepresentation) => {
-                    return c.federationLink === undefined;
-                })
-            ];
-            setUserCredentials(credentials);
+    const { data: allCredentials = [], refetch: refetchCredentials } =
+        useUserCredentialsQuery(user.id!, !!user.enabled);
+    const refresh = () => refetchCredentials();
 
-            const groupedCredentials = credentials.reduce((r, a) => {
-                r[a.type!] = r[a.type!] || [];
-                r[a.type!].push(a);
-                return r;
-            }, Object.create(null));
+    useEffect(() => {
+        const credentials = allCredentials.filter(
+            (c: CredentialRepresentation) => c.federationLink === undefined
+        );
+        setUserCredentials(credentials);
 
-            const groupedCredentialsArray = Object.keys(groupedCredentials).map(key => ({
-                key,
-                value: groupedCredentials[key]
-            }));
+        const groupedCredentials = credentials.reduce((r, a) => {
+            r[a.type!] = r[a.type!] || [];
+            r[a.type!].push(a);
+            return r;
+        }, Object.create(null));
 
-            setGroupedUserCredentials(
-                groupedCredentialsArray.map(groupedCredential => ({
-                    ...groupedCredential,
-                    isExpanded: false
-                }))
-            );
-        },
-        [key]
-    );
+        const groupedCredentialsArray = Object.keys(groupedCredentials).map(key => ({
+            key,
+            value: groupedCredentials[key]
+        }));
+
+        setGroupedUserCredentials(
+            groupedCredentialsArray.map(groupedCredential => ({
+                ...groupedCredential,
+                isExpanded: false
+            }))
+        );
+    }, [allCredentials]);
 
     const toggleModal = () => setIsOpen(!isOpen);
 
@@ -173,9 +182,12 @@ const [key, setKey] = useState(0);
                     credentialId: selectedCredential.id!
                 });
                 toast.success(t("deleteCredentialsSuccess"));
-                setKey(key => key + 1);
+                refresh();
             } catch (error) {
-                toast.error(t("deleteCredentialsError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
+                toast.error(
+                    t("deleteCredentialsError", { error: getErrorMessage(error) }),
+                    { description: getErrorDescription(error) }
+                );
             }
         }
     });
@@ -317,8 +329,8 @@ const [key, setKey] = useState(0);
     };
 
     const onDragFinish = async (dragged: string, newOrder: string[]) => {
-        const oldIndex = itemOrder.findIndex(key => key === dragged);
-        const newIndex = newOrder.findIndex(key => key === dragged);
+        const oldIndex = itemOrder.indexOf(dragged);
+        const newIndex = newOrder.indexOf(dragged);
         const times = newIndex - oldIndex;
 
         const ids = dragged.split(",");
@@ -343,7 +355,10 @@ const [key, setKey] = useState(0);
             refresh();
             toast.success(t("updatedCredentialMoveSuccess"));
         } catch (error) {
-            toast.error(t("updatedCredentialMoveError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
+            toast.error(
+                t("updatedCredentialMoveError", { error: getErrorMessage(error) }),
+                { description: getErrorDescription(error) }
+            );
         }
     };
 
@@ -353,31 +368,9 @@ const [key, setKey] = useState(0);
     };
 
     const useFederatedCredentials = user.federationLink;
-    const [credentialTypes, setCredentialTypes] = useState<CredentialRepresentation[]>(
-        []
+    const credentialTypes = allCredentials.filter(
+        (c: CredentialRepresentation) => c.federationLink !== undefined
     );
-
-    useFetch(
-        () => {
-            if (user.enabled) {
-                return adminClient.users.getCredentials({ id: user.id! });
-            }
-            return Promise.resolve([]);
-        },
-        credentials => {
-            credentials = [
-                ...credentials.filter((c: CredentialRepresentation) => {
-                    return c.federationLink !== undefined;
-                })
-            ];
-            setCredentialTypes(credentials);
-        },
-        [key]
-    );
-
-    if (!credentialTypes) {
-        return <KeycloakSpinner />;
-    }
 
     const hasCredentialTypes = credentialTypes.length > 0;
     const noCredentials = groupedUserCredentials.length === 0;
@@ -480,7 +473,9 @@ const [key, setKey] = useState(0);
                                                     type="button"
                                                     variant="ghost"
                                                     size="icon-sm"
-                                                    aria-expanded={groupedCredential.isExpanded}
+                                                    aria-expanded={
+                                                        groupedCredential.isExpanded
+                                                    }
                                                     onClick={() => {
                                                         const rows =
                                                             groupedUserCredentials.map(
@@ -496,7 +491,9 @@ const [key, setKey] = useState(0);
                                                         setGroupedUserCredentials(rows);
                                                     }}
                                                 >
-                                                    {groupedCredential.isExpanded ? "▼" : "▶"}
+                                                    {groupedCredential.isExpanded
+                                                        ? "▼"
+                                                        : "▶"}
                                                 </Button>
                                             </TableCell>
                                         ) : (

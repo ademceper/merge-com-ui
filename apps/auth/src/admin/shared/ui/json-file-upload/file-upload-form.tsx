@@ -2,12 +2,13 @@ import { Button } from "@merge-rd/ui/components/button";
 import {
     Dialog,
     DialogContent,
+    DialogFooter,
     DialogHeader,
-    DialogTitle,
-    DialogFooter
+    DialogTitle
 } from "@merge-rd/ui/components/dialog";
-import { Label } from "@merge-rd/ui/components/label";
 import { Input } from "@merge-rd/ui/components/input";
+import { Label } from "@merge-rd/ui/components/label";
+
 /** Local type replacing PatternFly FileUploadProps; only used for Omit. */
 type FileUploadProps = {
     id?: string;
@@ -19,13 +20,14 @@ type FileUploadProps = {
     hideDefaultPreview?: boolean;
     allowEditingUploadedText?: boolean;
 };
+
+import { useTranslation } from "@merge-rd/i18n";
 import {
-    ChangeEvent,
-    DragEvent as ReactDragEvent,
-    MouseEvent as ReactMouseEvent,
+    type ChangeEvent,
+    type DragEvent as ReactDragEvent,
+    type MouseEvent as ReactMouseEvent,
     useState
 } from "react";
-import { useTranslation } from "@merge-rd/i18n";
 import CodeEditor from "../form/code-editor";
 
 type FileUploadType = {
@@ -83,7 +85,12 @@ export const FileUploadForm = ({
     return (
         <>
             {fileUpload.modal && (
-                <Dialog open onOpenChange={(open) => { if (!open) removeDialog(); }}>
+                <Dialog
+                    open
+                    onOpenChange={open => {
+                        if (!open) removeDialog();
+                    }}
+                >
                     <DialogContent className="max-w-md">
                         <DialogHeader>
                             <DialogTitle>{t("clearFile")}</DialogTitle>
@@ -118,51 +125,77 @@ export const FileUploadForm = ({
                         id={id}
                         type="file"
                         accept={extension}
-                        onChange={(e) => {
+                        onChange={e => {
                             const file = e.target.files?.[0];
                             if (file) {
-                                setFileUpload({ ...fileUpload, filename: file.name, isLoading: true });
+                                setFileUpload({
+                                    ...fileUpload,
+                                    filename: file.name,
+                                    isLoading: true
+                                });
                                 const reader = new FileReader();
                                 reader.onload = () => {
                                     handleTextOrDataChange(String(reader.result ?? ""));
-                                    setFileUpload(prev => ({ ...prev, isLoading: false }));
+                                    setFileUpload(prev => ({
+                                        ...prev,
+                                        isLoading: false
+                                    }));
                                 };
                                 reader.readAsText(file);
                             }
                         }}
                     />
-                    <Button type="button" variant="outline" size="sm" onClick={handleClear}>
+                    <Button
+                        type="button"
+                        variant="outline"
+                        size="sm"
+                        onClick={handleClear}
+                    >
                         {t("clear")}
                     </Button>
                 </div>
             )}
             {!unWrap && (
                 <div className="space-y-2">
-                    <Label htmlFor={id + "-filename"}>{t("resourceFile")}</Label>
+                    <Label htmlFor={`${id}-filename`}>{t("resourceFile")}</Label>
                     <Input
                         data-testid={id}
                         id={id}
                         type="file"
                         accept={extension}
                         className="mb-2"
-                        onChange={(e) => {
+                        onChange={e => {
                             const file = e.target.files?.[0];
                             if (file) {
-                                setFileUpload({ ...fileUpload, filename: file.name, isLoading: true });
+                                setFileUpload({
+                                    ...fileUpload,
+                                    filename: file.name,
+                                    isLoading: true
+                                });
                                 const reader = new FileReader();
                                 reader.onload = () => {
                                     handleTextOrDataChange(String(reader.result ?? ""));
-                                    setFileUpload(prev => ({ ...prev, isLoading: false }));
+                                    setFileUpload(prev => ({
+                                        ...prev,
+                                        isLoading: false
+                                    }));
                                 };
                                 reader.readAsText(file);
                             }
                         }}
                     />
-                    <Button type="button" variant="outline" size="sm" onClick={handleClear} className="mb-2">
+                    <Button
+                        type="button"
+                        variant="outline"
+                        size="sm"
+                        onClick={handleClear}
+                        className="mb-2"
+                    >
                         {t("clear")}
                     </Button>
                     {!rest.hideDefaultPreview &&
-                        (!fileUpload.value || fileUpload.value.length < previewMaxLength ? (
+                        (!fileUpload.value ||
+                        fileUpload.value.length < previewMaxLength ? (
                             <CodeEditor
                                 aria-label="File content"
                                 value={fileUpload.value}

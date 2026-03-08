@@ -1,7 +1,5 @@
 import type RoleRepresentation from "@keycloak/keycloak-admin-client/lib/defs/roleRepresentation";
-import { FormProvider, SubmitHandler, useForm } from "react-hook-form";
-import { getErrorDescription, getErrorMessage, KeycloakSpinner } from "../../../shared/keycloak-ui-shared";
-import { toast } from "sonner";
+import { useTranslation } from "@merge-rd/i18n";
 import { Button } from "@merge-rd/ui/components/button";
 import {
     Dialog,
@@ -12,9 +10,15 @@ import {
     DialogTitle
 } from "@merge-rd/ui/components/dialog";
 import { useEffect, useState } from "react";
-import { useTranslation } from "@merge-rd/i18n";
+import { FormProvider, type SubmitHandler, useForm } from "react-hook-form";
+import { toast } from "sonner";
+import {
+    getErrorDescription,
+    getErrorMessage,
+    KeycloakSpinner
+} from "../../../shared/keycloak-ui-shared";
 import { useAdminClient } from "../../app/admin-client";
-import { AttributeForm } from "../../shared/ui/key-value-form/attribute-form";
+import type { AttributeForm } from "../../shared/ui/key-value-form/attribute-form";
 import { RoleForm } from "../../shared/ui/role-form/role-form";
 
 const FORM_ID = "edit-realm-role-form";
@@ -47,7 +51,7 @@ export function EditRealmRoleDialog({
         setLoading(true);
         adminClient.roles
             .findOneById({ id: roleId })
-            .then((r) => {
+            .then(r => {
                 if (!r) throw new Error(t("notFound"));
                 setRole(r);
                 form.reset({
@@ -59,7 +63,7 @@ export function EditRealmRoleDialog({
             .finally(() => setLoading(false));
     }, [roleId, open, adminClient, t]);
 
-    const onSubmit: SubmitHandler<AttributeForm> = async (formValues) => {
+    const onSubmit: SubmitHandler<AttributeForm> = async formValues => {
         if (!roleId) return;
         const payload: RoleRepresentation = {
             ...role,

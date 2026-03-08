@@ -1,16 +1,16 @@
-import { HelpItem, TextControl } from "../../../../shared/keycloak-ui-shared";
+import { useTranslation } from "@merge-rd/i18n";
 import { Button } from "@merge-rd/ui/components/button";
 import { Label } from "@merge-rd/ui/components/label";
 import { Controller, useFormContext } from "react-hook-form";
-import { useTranslation } from "@merge-rd/i18n";
-import { DefaultSwitchControl } from "../../../shared/ui/switch-control";
+import { HelpItem, TextControl } from "../../../../shared/keycloak-ui-shared";
+import { useRealm } from "../../../app/providers/realm-context/realm-context";
+import { convertAttributeNameToForm } from "../../../shared/lib/util";
 import { FormAccess } from "../../../shared/ui/form/form-access";
 import { KeyValueInput } from "../../../shared/ui/key-value-form/key-value-input";
 import { MultiLineInput } from "../../../shared/ui/multi-line-input/multi-line-input";
+import { DefaultSwitchControl } from "../../../shared/ui/switch-control";
 import { TimeSelector } from "../../../shared/ui/time-selector/time-selector";
-import { useRealm } from "../../../app/providers/realm-context/realm-context";
-import { convertAttributeNameToForm } from "../../../shared/lib/util";
-import { FormFields } from "../client-details";
+import type { FormFields } from "../client-details";
 import { TokenLifespan } from "./token-lifespan";
 
 type AdvancedSettingsProps = {
@@ -40,7 +40,9 @@ export const AdvancedSettings = ({
             {protocol !== "openid-connect" && (
                 <div className="space-y-2">
                     <div className="flex items-center gap-2">
-                        <Label htmlFor="assertionLifespan">{t("assertionLifespan")}</Label>
+                        <Label htmlFor="assertionLifespan">
+                            {t("assertionLifespan")}
+                        </Label>
                         <HelpItem
                             helpText={t("assertionLifespanHelp")}
                             fieldLabelId="assertionLifespan"
@@ -146,7 +148,9 @@ export const AdvancedSettings = ({
                     />
                     <div className="space-y-2">
                         <div className="flex items-center gap-2">
-                            <Label htmlFor="acrToLoAMapping">{t("acrToLoAMapping")}</Label>
+                            <Label htmlFor="acrToLoAMapping">
+                                {t("acrToLoAMapping")}
+                            </Label>
                             <HelpItem
                                 helpText={t("acrToLoAMappingHelp")}
                                 fieldLabelId="acrToLoAMapping"
@@ -159,7 +163,9 @@ export const AdvancedSettings = ({
                     </div>
                     <div className="space-y-2">
                         <div className="flex items-center gap-2">
-                            <Label htmlFor="defaultACRValues">{t("defaultACRValues")}</Label>
+                            <Label htmlFor="defaultACRValues">
+                                {t("defaultACRValues")}
+                            </Label>
                             <HelpItem
                                 helpText={t("defaultACRValuesHelp")}
                                 fieldLabelId="defaultACRValues"

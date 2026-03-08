@@ -30,8 +30,6 @@ type MultiSelectFieldProps = {
     className?: string;
 };
 
-;
-
 export function MultiSelectField({
     id,
     name,
@@ -41,9 +39,12 @@ export function MultiSelectField({
     defaultValue = [],
     rules,
     placeholderText,
-    isDisabled,
+    isDisabled
 }: MultiSelectFieldProps) {
-    const { control, formState: { errors } } = useFormContext();
+    const {
+        control,
+        formState: { errors }
+    } = useFormContext();
     const [open, setOpen] = useState(false);
     const required = getRuleValue(rules?.required) === true;
     return (
@@ -72,26 +73,45 @@ export function MultiSelectField({
                             >
                                 <span className="truncate">
                                     {(field.value ?? []).length > 0
-                                        ? (field.value ?? []).map((k: string) => optVal(options.find((o) => optKey(o) === k) ?? k)).join(", ")
+                                        ? (field.value ?? [])
+                                              .map((k: string) =>
+                                                  optVal(
+                                                      options.find(
+                                                          o => optKey(o) === k
+                                                      ) ?? k
+                                                  )
+                                              )
+                                              .join(", ")
                                         : placeholderText}
                                 </span>
                             </Button>
                         </PopoverTrigger>
-                        <PopoverContent className="w-(--radix-popover-trigger-width) p-0" align="start">
+                        <PopoverContent
+                            className="w-(--radix-popover-trigger-width) p-0"
+                            align="start"
+                        >
                             <ul className="max-h-64 overflow-auto py-1">
-                                {options.map((opt) => {
+                                {options.map(opt => {
                                     const key = optKey(opt);
                                     const selected = (field.value ?? []).includes(key);
                                     return (
                                         <li
                                             key={key}
-                                            role="option"
                                             aria-selected={selected}
                                             className="hover:bg-accent cursor-pointer px-2 py-1.5 text-sm"
-                                            onMouseDown={(e) => e.preventDefault()}
+                                            onMouseDown={e => e.preventDefault()}
                                             onClick={() => {
-                                                if (selected) field.onChange((field.value ?? []).filter((x: string) => x !== key));
-                                                else field.onChange([...(field.value ?? []), key]);
+                                                if (selected)
+                                                    field.onChange(
+                                                        (field.value ?? []).filter(
+                                                            (x: string) => x !== key
+                                                        )
+                                                    );
+                                                else
+                                                    field.onChange([
+                                                        ...(field.value ?? []),
+                                                        key
+                                                    ]);
                                             }}
                                         >
                                             {optVal(opt)}
@@ -101,7 +121,16 @@ export function MultiSelectField({
                             </ul>
                             {(field.value ?? []).length > 0 && (
                                 <div className="border-t px-2 py-1">
-                                    <Button type="button" variant="ghost" size="sm" className="h-7 w-full justify-center" onClick={() => { field.onChange([]); setOpen(false); }}>
+                                    <Button
+                                        type="button"
+                                        variant="ghost"
+                                        size="sm"
+                                        className="h-7 w-full justify-center"
+                                        onClick={() => {
+                                            field.onChange([]);
+                                            setOpen(false);
+                                        }}
+                                    >
                                         Clear
                                     </Button>
                                 </div>

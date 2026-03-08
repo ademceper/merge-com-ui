@@ -1,13 +1,13 @@
-import IdentityProviderRepresentation from "@keycloak/keycloak-admin-client/lib/defs/identityProviderRepresentation";
+import type IdentityProviderRepresentation from "@keycloak/keycloak-admin-client/lib/defs/identityProviderRepresentation";
+import { useTranslation } from "@merge-rd/i18n";
+import { Button } from "@merge-rd/ui/components/button";
 import {
     Collapsible,
     CollapsibleContent,
-    CollapsibleTrigger,
+    CollapsibleTrigger
 } from "@merge-rd/ui/components/collapsible";
-import { Button } from "@merge-rd/ui/components/button";
 import { useState } from "react";
 import { useFormContext, useWatch } from "react-hook-form";
-import { useTranslation } from "@merge-rd/i18n";
 import { SelectField, TextControl } from "../../../../shared/keycloak-ui-shared";
 import { DefaultSwitchControl } from "../../../shared/ui/switch-control";
 import { JwksSettings } from "./jwks-settings";
@@ -99,7 +99,7 @@ const Fields = ({ readOnly, isOIDC }: DiscoverySettingsProps) => {
                     />
                     {(validateSignature === "true" ||
                         jwtAuthorizationGrantEnabled === "true" ||
-                        supportsClientAssertions == "true") && (
+                        supportsClientAssertions === "true") && (
                         <JwksSettings readOnly={readOnly} />
                     )}
                 </>

@@ -1,12 +1,7 @@
-import { createFileRoute } from "@tanstack/react-router";
-import { lazy } from "react";
-
-const AddIdentityProvider = lazy(
-    () => import("../../../../../pages/identity-providers/add/add-identity-provider"),
-);
+import { createFileRoute, lazyRouteComponent } from "@tanstack/react-router";
 
 export const Route = createFileRoute(
     "/_app/$realm/identity-providers/$providerId/add",
 )({
-    component: AddIdentityProvider,
+    component: lazyRouteComponent(() => import("../../../../../pages/identity-providers/add/add-identity-provider")),
 });

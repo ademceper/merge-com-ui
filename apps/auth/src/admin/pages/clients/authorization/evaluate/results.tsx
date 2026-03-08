@@ -1,5 +1,15 @@
-import { MagnifyingGlass } from "@phosphor-icons/react";
+import type EvaluationResultRepresentation from "@keycloak/keycloak-admin-client/lib/defs/evaluationResultRepresentation";
+import type PolicyEvaluationResponse from "@keycloak/keycloak-admin-client/lib/defs/policyEvaluationResponse";
+import { useTranslation } from "@merge-rd/i18n";
 import { Button } from "@merge-rd/ui/components/button";
+import {
+    Empty,
+    EmptyContent,
+    EmptyDescription,
+    EmptyHeader,
+    EmptyMedia,
+    EmptyTitle
+} from "@merge-rd/ui/components/empty";
 import { Input } from "@merge-rd/ui/components/input";
 import {
     Select,
@@ -9,27 +19,11 @@ import {
     SelectValue
 } from "@merge-rd/ui/components/select";
 import { Separator } from "@merge-rd/ui/components/separator";
-import {
-    Table,
-    TableHead,
-    TableHeader,
-    TableRow
-} from "@/admin/shared/ui/data-table";
-import { KeyboardEvent, useMemo, useState } from "react";
-import { useTranslation } from "@merge-rd/i18n";
-
-import type EvaluationResultRepresentation from "@keycloak/keycloak-admin-client/lib/defs/evaluationResultRepresentation";
-import type PolicyEvaluationResponse from "@keycloak/keycloak-admin-client/lib/defs/policyEvaluationResponse";
+import { MagnifyingGlass } from "@phosphor-icons/react";
+import { type KeyboardEvent, useMemo, useState } from "react";
+import { Table, TableHead, TableHeader, TableRow } from "@/admin/shared/ui/data-table";
 import useToggle from "../../../../shared/lib/useToggle";
 import { FixedButtonsGroup } from "../../../../shared/ui/form/fixed-button-group";
-import {
-    Empty,
-    EmptyContent,
-    EmptyDescription,
-    EmptyHeader,
-    EmptyMedia,
-    EmptyTitle
-} from "@merge-rd/ui/components/empty";
 import { AuthorizationDataModal } from "../authorization-data-modal";
 import { AuthorizationEvaluateResource } from "../authorization-evaluate-resource";
 
@@ -177,14 +171,21 @@ export const Results = ({ evaluateResult, refresh, back }: ResultProps) => {
                             <EmptyTitle>{t("noSearchResults")}</EmptyTitle>
                         </EmptyHeader>
                         <EmptyContent>
-                            <EmptyDescription>{t("noSearchResultsInstructions")}</EmptyDescription>
+                            <EmptyDescription>
+                                {t("noSearchResultsInstructions")}
+                            </EmptyDescription>
                         </EmptyContent>
                     </Empty>
                 </>
             )}
             <form onSubmit={e => e.preventDefault()}>
                 <FixedButtonsGroup name="authorization">
-                    <Button type="button" data-testid="authorization-eval" id="back-btn" onClick={back}>
+                    <Button
+                        type="button"
+                        data-testid="authorization-eval"
+                        id="back-btn"
+                        onClick={back}
+                    >
                         {t("back")}
                     </Button>
                     <Button

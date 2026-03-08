@@ -1,17 +1,20 @@
 import type ClientRepresentation from "@keycloak/keycloak-admin-client/lib/defs/clientRepresentation";
+import { useTranslation } from "@merge-rd/i18n";
 import { Alert, AlertTitle } from "@merge-rd/ui/components/alert";
 import { Button } from "@merge-rd/ui/components/button";
 import { Label } from "@merge-rd/ui/components/label";
 import { useEffect, useState } from "react";
 import { useFormContext } from "react-hook-form";
-import { useTranslation } from "@merge-rd/i18n";
-import { PasswordInput } from "../../../../shared/keycloak-ui-shared";
-import { useAdminClient } from "../../../app/admin-client";
-import { getErrorDescription, getErrorMessage } from "../../../../shared/keycloak-ui-shared";
 import { toast } from "sonner";
-import { useConfirmDialog } from "../../../shared/ui/confirm-dialog/confirm-dialog";
+import {
+    getErrorDescription,
+    getErrorMessage,
+    PasswordInput
+} from "../../../../shared/keycloak-ui-shared";
+import { useAdminClient } from "../../../app/admin-client";
 import { useAccess } from "../../../app/providers/access/access";
 import useFormatDate from "../../../shared/lib/useFormatDate";
+import { useConfirmDialog } from "../../../shared/ui/confirm-dialog/confirm-dialog";
 import { CopyToClipboardButton } from "../../../shared/ui/copy-to-clipboard-button/copy-to-clipboard-button";
 
 type ClientSecretProps = {
@@ -77,7 +80,7 @@ export const ClientSecret = ({ client, secret, toggle }: ClientSecretProps) => {
     const { adminClient } = useAdminClient();
 
     const { t } = useTranslation();
-const [secretRotated, setSecretRotated] = useState<string | undefined>(
+    const [secretRotated, setSecretRotated] = useState<string | undefined>(
         client.attributes?.["client.secret.rotated"]
     );
     const secretExpirationTime: number =
@@ -85,7 +88,7 @@ const [secretRotated, setSecretRotated] = useState<string | undefined>(
     const secretRotatedExpirationTime: number =
         client.attributes?.["client.secret.rotated.expiration.time"];
 
-    const expired = (time: number) => new Date().getTime() >= time * 1000;
+    const expired = (time: number) => Date.now() >= time * 1000;
 
     const [toggleInvalidateConfirm, InvalidateConfirm] = useConfirmDialog({
         titleKey: "invalidateRotatedSecret",
@@ -99,7 +102,10 @@ const [secretRotated, setSecretRotated] = useState<string | undefined>(
                 setSecretRotated(undefined);
                 toast.success(t("invalidateRotatedSuccess"));
             } catch (error) {
-                toast.error(t("invalidateRotatedError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
+                toast.error(
+                    t("invalidateRotatedError", { error: getErrorMessage(error) }),
+                    { description: getErrorDescription(error) }
+                );
             }
         }
     });

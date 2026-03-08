@@ -1,7 +1,3 @@
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@merge-rd/ui/components/dropdown-menu";
-import { Label } from "@merge-rd/ui/components/label";
-import { Switch } from "@merge-rd/ui/components/switch";
-import { buttonVariants } from "@merge-rd/ui/components/button";
 import { useTranslation } from "@merge-rd/i18n";
 import {
     AlertDialog,
@@ -13,15 +9,24 @@ import {
     AlertDialogHeader,
     AlertDialogTitle
 } from "@merge-rd/ui/components/alert-dialog";
-import { useConfirmDialog } from "../../shared/ui/confirm-dialog/confirm-dialog";
-import { useState } from "react";
-import { useAdminClient } from "../../app/admin-client";
+import { buttonVariants } from "@merge-rd/ui/components/button";
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuTrigger
+} from "@merge-rd/ui/components/dropdown-menu";
+import { Label } from "@merge-rd/ui/components/label";
+import { Switch } from "@merge-rd/ui/components/switch";
 import { useNavigate } from "@tanstack/react-router";
-import { getErrorDescription, getErrorMessage } from "../../../shared/keycloak-ui-shared";
-import { toast } from "sonner";
+import { useState } from "react";
 import { Controller, useFormContext, useWatch } from "react-hook-form";
-import { toOrganizations } from "./routes/organizations";
+import { toast } from "sonner";
+import { getErrorDescription, getErrorMessage } from "../../../shared/keycloak-ui-shared";
+import { useAdminClient } from "../../app/admin-client";
 import { useRealm } from "../../app/providers/realm-context/realm-context";
+import { useConfirmDialog } from "../../shared/ui/confirm-dialog/confirm-dialog";
+import { toOrganizations } from "../../shared/lib/routes/organizations";
 
 type DetailOrganizationHeaderProps = {
     save: () => void;
@@ -33,7 +38,7 @@ export const DetailOrganizationHeader = ({ save }: DetailOrganizationHeaderProps
     const navigate = useNavigate();
 
     const { t } = useTranslation();
-const id = useWatch({ name: "id" });
+    const id = useWatch({ name: "id" });
     const name = useWatch({ name: "name" });
 
     const { setValue } = useFormContext();
@@ -57,7 +62,9 @@ const id = useWatch({ name: "id" });
             toast.success(t("organizationDeletedSuccess"));
             navigate({ to: toOrganizations({ realm }) as string });
         } catch (error) {
-            toast.error(t("organizationDeleteError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
+            toast.error(t("organizationDeleteError", { error: getErrorMessage(error) }), {
+                description: getErrorDescription(error)
+            });
         }
     };
 
@@ -66,15 +73,26 @@ const id = useWatch({ name: "id" });
             name="enabled"
             render={({ field: { value, onChange } }) => (
                 <>
-                    <AlertDialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
+                    <AlertDialog
+                        open={deleteDialogOpen}
+                        onOpenChange={setDeleteDialogOpen}
+                    >
                         <AlertDialogContent>
                             <AlertDialogHeader>
-                                <AlertDialogTitle>{t("organizationDelete")}</AlertDialogTitle>
-                                <AlertDialogDescription>{t("organizationDeleteConfirm")}</AlertDialogDescription>
+                                <AlertDialogTitle>
+                                    {t("organizationDelete")}
+                                </AlertDialogTitle>
+                                <AlertDialogDescription>
+                                    {t("organizationDeleteConfirm")}
+                                </AlertDialogDescription>
                             </AlertDialogHeader>
                             <AlertDialogFooter>
                                 <AlertDialogCancel>{t("cancel")}</AlertDialogCancel>
-                                <AlertDialogAction variant="destructive" data-testid="confirm" onClick={onDeleteConfirm}>
+                                <AlertDialogAction
+                                    variant="destructive"
+                                    data-testid="confirm"
+                                    onClick={onDeleteConfirm}
+                                >
                                     {t("delete")}
                                 </AlertDialogAction>
                             </AlertDialogFooter>
@@ -85,18 +103,29 @@ const id = useWatch({ name: "id" });
                         <div className="flex flex-wrap items-center gap-2" />
                         <div className="flex items-center gap-2">
                             <div className="flex items-center gap-2 mr-4">
-                                <Label htmlFor="organization-switch" className="text-sm">{t("enabled")}</Label>
-                                <Switch id="organization-switch" data-testid="organization-switch" checked={value} aria-label={t("enabled")} onCheckedChange={val => {
-                                    if (!val) {
-                                        toggleDisableDialog();
-                                    } else {
-                                        onChange(val);
-                                        save();
-                                    }
-                                }} />
+                                <Label htmlFor="organization-switch" className="text-sm">
+                                    {t("enabled")}
+                                </Label>
+                                <Switch
+                                    id="organization-switch"
+                                    data-testid="organization-switch"
+                                    checked={value}
+                                    aria-label={t("enabled")}
+                                    onCheckedChange={val => {
+                                        if (!val) {
+                                            toggleDisableDialog();
+                                        } else {
+                                            onChange(val);
+                                            save();
+                                        }
+                                    }}
+                                />
                             </div>
                             <DropdownMenu>
-                                <DropdownMenuTrigger data-testid="action-dropdown" className={buttonVariants()}>
+                                <DropdownMenuTrigger
+                                    data-testid="action-dropdown"
+                                    className={buttonVariants()}
+                                >
                                     {t("action")}
                                 </DropdownMenuTrigger>
                                 <DropdownMenuContent align="end">

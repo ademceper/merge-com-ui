@@ -1,31 +1,29 @@
-import { HelpItem, useFetch, FormLabel } from "../../../../../shared/keycloak-ui-shared";
+import { useTranslation } from "@merge-rd/i18n";
 import { Button } from "@merge-rd/ui/components/button";
 import { Checkbox } from "@merge-rd/ui/components/checkbox";
+import { MinusCircle } from "@phosphor-icons/react";
+import { useEffect, useState } from "react";
+import { Controller, useFormContext } from "react-hook-form";
 import {
     Table,
     TableBody,
     TableCell,
     TableHead,
     TableHeader,
-    TableRow,
+    TableRow
 } from "@/admin/shared/ui/data-table";
-import { MinusCircle } from "@phosphor-icons/react";
-import { useState } from "react";
-import { Controller, useFormContext } from "react-hook-form";
-import { useTranslation } from "@merge-rd/i18n";
-import { useAdminClient } from "../../../../app/admin-client";
-import { DefaultSwitchControl } from "../../../../shared/ui/switch-control";
+import { FormLabel, HelpItem } from "../../../../../shared/keycloak-ui-shared";
 import {
     AddRoleButton,
     AddRoleMappingModal,
-    FilterType
+    type FilterType
 } from "../../../../shared/ui/role-mapping/add-role-mapping-modal";
-import { Row, ServiceRole } from "../../../../shared/ui/role-mapping/role-mapping";
+import { type Row, ServiceRole } from "../../../../shared/ui/role-mapping/role-mapping";
+import { DefaultSwitchControl } from "../../../../shared/ui/switch-control";
+import { useRolesById } from "../api/use-roles-by-id";
 import type { RequiredIdValue } from "./client-scope";
 
 export const Role = () => {
-    const { adminClient } = useAdminClient();
-
     const { t } = useTranslation();
     const { control, getValues, setValue } = useFormContext<{
         roles?: RequiredIdValue[];
@@ -38,28 +36,14 @@ export const Role = () => {
 
     const [selectedRoles, setSelectedRoles] = useState<Row[]>([]);
 
-    useFetch(
-        async () => {
-            if (values && values.length > 0) {
-                const roles = await Promise.all(
-                    values.map(r => adminClient.roles.findOneById({ id: r.id }))
-                );
-                return Promise.all(
-                    roles.map(async role => ({
-                        role: role!,
-                        client: role!.clientRole
-                            ? await adminClient.clients.findOne({
-                                  id: role?.containerId!
-                              })
-                            : undefined
-                    }))
-                );
-            }
-            return Promise.resolve([]);
-        },
-        setSelectedRoles,
-        []
-    );
+    const roleIds = (values || []).map(r => r.id);
+    const { data: rolesData } = useRolesById(roleIds);
+
+    useEffect(() => {
+        if (rolesData) {
+            setSelectedRoles(rolesData);
+        }
+    }, [rolesData]);
 
     return (
         <>

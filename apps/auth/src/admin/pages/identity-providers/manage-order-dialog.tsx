@@ -1,13 +1,24 @@
-import type IdentityProviderRepresentation from "@keycloak/keycloak-admin-client/lib/defs/identityProviderRepresentation";
-import { getErrorDescription, getErrorMessage, KeycloakSpinner, useFetch } from "../../../shared/keycloak-ui-shared";
-import { toast } from "sonner";
+import { useTranslation } from "@merge-rd/i18n";
 import { Button } from "@merge-rd/ui/components/button";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@merge-rd/ui/components/dialog";
+import {
+    Dialog,
+    DialogContent,
+    DialogFooter,
+    DialogHeader,
+    DialogTitle
+} from "@merge-rd/ui/components/dialog";
 import { DotsSixVertical } from "@phosphor-icons/react";
 import { sortBy } from "lodash-es";
-import { useState } from "react";
-import { useTranslation } from "@merge-rd/i18n";
+import { useEffect, useState } from "react";
+import { toast } from "sonner";
+import {
+    getErrorDescription,
+    getErrorMessage,
+    KeycloakSpinner
+} from "../../../shared/keycloak-ui-shared";
 import { useAdminClient } from "../../app/admin-client";
+import { useIdentityProviders } from "./api/use-identity-providers";
+import { useOrgIdentityProviders } from "./api/use-org-identity-providers";
 
 type ManageOrderDialogProps = {
     orgId?: string;
@@ -23,26 +34,26 @@ export const ManageOrderDialog = ({
     const { adminClient } = useAdminClient();
 
     const { t } = useTranslation();
-const [liveText, setLiveText] = useState("");
-    const [providers, setProviders] = useState<IdentityProviderRepresentation[]>();
+    const [liveText, setLiveText] = useState("");
     const [order, setOrder] = useState<string[]>([]);
     const [dragIndex, setDragIndex] = useState<number | null>(null);
 
-    useFetch(
-        () =>
-            orgId
-                ? adminClient.organizations.listIdentityProviders({ orgId })
-                : adminClient.identityProviders.find({ realmOnly: hideRealmBasedIdps }),
-        providers => {
-            setProviders(providers);
+    const { data: realmProviders } = useIdentityProviders({
+        realmOnly: hideRealmBasedIdps,
+        enabled: !orgId
+    });
+    const { data: orgProviders } = useOrgIdentityProviders(orgId ?? "");
+    const providers = orgId ? orgProviders : realmProviders;
+
+    useEffect(() => {
+        if (providers) {
             setOrder(
                 sortBy(providers, ["config.guiOrder", "alias"]).map(
                     provider => provider.alias!
                 )
             );
-        },
-        []
-    );
+        }
+    }, [providers]);
 
     if (!providers) {
         return <KeycloakSpinner />;
@@ -71,14 +82,17 @@ const [liveText, setLiveText] = useState("");
     };
 
     return (
-        <Dialog open onOpenChange={(open) => { if (!open) onClose(); }}>
+        <Dialog
+            open
+            onOpenChange={open => {
+                if (!open) onClose();
+            }}
+        >
             <DialogContent>
                 <DialogHeader>
                     <DialogTitle>{t("manageDisplayOrder")}</DialogTitle>
                 </DialogHeader>
-                <p className="pb-4">
-                    {t("orderDialogIntro")}
-                </p>
+                <p className="pb-4">{t("orderDialogIntro")}</p>
 
                 <div
                     aria-label={t("manageOrderTableAria")}
@@ -89,14 +103,17 @@ const [liveText, setLiveText] = useState("");
                         <div
                             key={alias}
                             draggable
-                            onDragStart={(e) => onDragStart(e, index)}
-                            onDragOver={(e) => onDragOver(e, index)}
+                            onDragStart={e => onDragStart(e, index)}
+                            onDragOver={e => onDragOver(e, index)}
                             onDragEnd={onDragEnd}
                             aria-label={alias}
                             id={alias}
                             className="flex items-center gap-2 p-2 border rounded cursor-grab active:cursor-grabbing"
                         >
-                            <DotsSixVertical className="size-4" aria-label={t("dragHelp")} />
+                            <DotsSixVertical
+                                className="size-4"
+                                aria-label={t("dragHelp")}
+                            />
                             <span data-testid={alias}>{alias}</span>
                         </div>
                     ))}
@@ -122,7 +139,12 @@ const [liveText, setLiveText] = useState("");
                                 await Promise.all(updates);
                                 toast.success(t("orderChangeSuccess"));
                             } catch (error) {
-                                toast.error(t("orderChangeError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
+                                toast.error(
+                                    t("orderChangeError", {
+                                        error: getErrorMessage(error)
+                                    }),
+                                    { description: getErrorDescription(error) }
+                                );
                             }
 
                             onClose();

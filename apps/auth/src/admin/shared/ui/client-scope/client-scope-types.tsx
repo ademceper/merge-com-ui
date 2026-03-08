@@ -1,10 +1,7 @@
+import type KeycloakAdminClient from "@keycloak/keycloak-admin-client";
 import type ClientScopeRepresentation from "@keycloak/keycloak-admin-client/lib/defs/clientScopeRepresentation";
-
-import KeycloakAdminClient from "@keycloak/keycloak-admin-client";
 import type { TFunction } from "@merge-rd/i18n";
-import { useState } from "react";
 import { useTranslation } from "@merge-rd/i18n";
-import { toUpperCase } from "../../lib/util";
 import { DropdownMenuItem } from "@merge-rd/ui/components/dropdown-menu";
 import {
     Select,
@@ -13,6 +10,8 @@ import {
     SelectTrigger,
     SelectValue
 } from "@merge-rd/ui/components/select";
+import { useState } from "react";
+import { toUpperCase } from "../../lib/util";
 
 export enum ClientScope {
     default = "default",
@@ -79,7 +78,7 @@ export const CellDropdown = ({
             open={open}
             onOpenChange={setOpen}
             value={type}
-            onValueChange={(value) => {
+            onValueChange={value => {
                 onSelect(
                     all ? (value as ClientScopeType) : (value as AllClientScopeType)
                 );

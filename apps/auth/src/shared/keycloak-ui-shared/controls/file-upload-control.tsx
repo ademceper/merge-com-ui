@@ -1,20 +1,20 @@
 import {
     InputGroup,
     InputGroupButton,
-    InputGroupInput,
+    InputGroupInput
 } from "@merge-rd/ui/components/input-group";
-import { ReactNode, useRef, useState } from "react";
+import { cn } from "@merge-rd/ui/lib/utils";
+import { type ReactNode, useRef, useState } from "react";
 import {
-    FieldPath,
-    FieldValues,
-    PathValue,
-    UseControllerProps,
+    type FieldPath,
+    type FieldValues,
+    type PathValue,
+    type UseControllerProps,
     useController
 } from "react-hook-form";
+import { useTranslation } from "react-i18next";
 import { getRuleValue } from "../utils/getRuleValue";
 import { FormLabel } from "./form-label";
-import { useTranslation } from "react-i18next";
-import { cn } from "@merge-rd/ui/lib/utils";
 
 type FileUploadControlProps<
     T extends FieldValues,
@@ -72,10 +72,11 @@ export const FileUploadControl = <
             error={fieldState.error}
         >
             <input
-                ref={(el) => {
+                ref={el => {
                     fileInputRef.current = el;
                     if (typeof field.ref === "function") field.ref(el);
-                    else if (field.ref) (field.ref as { current: HTMLInputElement | null }).current = el;
+                    else if (field.ref)
+                        (field.ref as { current: HTMLInputElement | null }).current = el;
                 }}
                 type="file"
                 className="sr-only"
@@ -88,7 +89,8 @@ export const FileUploadControl = <
             />
             <InputGroup
                 className={cn(
-                    fieldState.error && "border-destructive aria-invalid:ring-destructive/20"
+                    fieldState.error &&
+                        "border-destructive aria-invalid:ring-destructive/20"
                 )}
             >
                 <InputGroupInput

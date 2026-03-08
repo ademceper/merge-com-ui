@@ -1,9 +1,9 @@
-import { lazy } from "react";
 import { KcAdminUiLoader } from "@keycloakify/keycloak-admin-ui";
-import type { KcContext } from "./kc-context";
-import { oidcEarlyInit } from "oidc-spa/entrypoint";
 import { browserRuntimeFreeze } from "oidc-spa/browser-runtime-freeze";
 import { DPoP } from "oidc-spa/DPoP";
+import { oidcEarlyInit } from "oidc-spa/entrypoint";
+import { lazy } from "react";
+import type { KcContext } from "./kc-context";
 
 const { shouldLoadApp } = oidcEarlyInit({
     BASE_URL: location.pathname,

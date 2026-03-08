@@ -1,8 +1,7 @@
 import type { ConfigPropertyRepresentation } from "@keycloak/keycloak-admin-client/lib/defs/authenticatorConfigInfoRepresentation";
 import type ClientPolicyConditionRepresentation from "@keycloak/keycloak-admin-client/lib/defs/clientPolicyConditionRepresentation";
 import type ClientPolicyRepresentation from "@keycloak/keycloak-admin-client/lib/defs/clientPolicyRepresentation";
-import { getErrorDescription, getErrorMessage, HelpItem, useFetch } from "../../../shared/keycloak-ui-shared";
-import { toast } from "sonner";
+import { useTranslation } from "@merge-rd/i18n";
 import { Button } from "@merge-rd/ui/components/button";
 import { Label } from "@merge-rd/ui/components/label";
 import {
@@ -12,19 +11,24 @@ import {
     SelectTrigger,
     SelectValue
 } from "@merge-rd/ui/components/select";
-import { camelCase } from "lodash-es";
-import { useState } from "react";
-import { Controller, FormProvider, useForm } from "react-hook-form";
-import { useTranslation } from "@merge-rd/i18n";
 import { Link, useNavigate } from "@tanstack/react-router";
-import { useParams } from "../../shared/lib/useParams";
+import { camelCase } from "lodash-es";
+import { useEffect, useState } from "react";
+import { Controller, FormProvider, useForm } from "react-hook-form";
+import { toast } from "sonner";
+import {
+    getErrorDescription,
+    getErrorMessage,
+    HelpItem
+} from "../../../shared/keycloak-ui-shared";
 import { useAdminClient } from "../../app/admin-client";
-import { DynamicComponents } from "../../shared/ui/dynamic/dynamic-components";
-import { FormAccess } from "../../shared/ui/form/form-access";
 import { useRealm } from "../../app/providers/realm-context/realm-context";
 import { useServerInfo } from "../../app/providers/server-info/server-info-provider";
-import { toEditClientPolicy } from "./routes/edit-client-policy";
-import type { EditClientPolicyConditionParams } from "./routes/edit-condition";
+import { useParams } from "../../shared/lib/useParams";
+import { DynamicComponents } from "../../shared/ui/dynamic/dynamic-components";
+import { FormAccess } from "../../shared/ui/form/form-access";
+import { useClientPolicies } from "./api/use-client-policies";
+import { toEditClientPolicy, type EditClientPolicyConditionParams } from "../../shared/lib/routes/realm-settings";
 
 export type ItemType = { value: string };
 
@@ -37,7 +41,7 @@ export default function NewClientPolicyCondition() {
     const { adminClient } = useAdminClient();
 
     const { t } = useTranslation();
-const navigate = useNavigate();
+    const navigate = useNavigate();
     const { realm } = useRealm();
 
     const [_openConditionType, setOpenConditionType] = useState(false);
@@ -66,21 +70,18 @@ const navigate = useNavigate();
         form.reset({ config: condition.configuration || {} });
     };
 
-    useFetch(
-        () =>
-            adminClient.clientPolicies.listPolicies({
-                includeGlobalPolicies: true
-            }),
+    const { data: policiesData } = useClientPolicies();
 
-        policies => {
-            setPolicies(policies.policies ?? []);
+    useEffect(() => {
+        if (policiesData) {
+            setPolicies(policiesData.policies ?? []);
 
             if (conditionName) {
-                let currentPolicy = policies.policies?.find(
+                let currentPolicy = policiesData.policies?.find(
                     item => item.name === policyName
                 );
                 if (currentPolicy === undefined) {
-                    currentPolicy = policies.globalPolicies?.find(
+                    currentPolicy = policiesData.globalPolicies?.find(
                         item => item.name === policyName
                     );
                     setIsGlobalPolicy(currentPolicy !== undefined);
@@ -98,9 +99,8 @@ const navigate = useNavigate();
                 setConditionProperties(currentCondition?.properties!);
                 setupForm(typeAndConfigData!);
             }
-        },
-        []
-    );
+        }
+    }, [policiesData]);
 
     const save = async (configPolicy: ConfigProperty) => {
         const configValues = configPolicy.config;
@@ -161,138 +161,146 @@ const navigate = useNavigate();
                 policies: updatedPolicies
             });
             setPolicies(updatedPolicies);
-            navigate({ to: toEditClientPolicy({ realm, policyName: policyName! }) as string });
+            navigate({
+                to: toEditClientPolicy({ realm, policyName: policyName! }) as string
+            });
             toast.success(
                 conditionName
                     ? t("updateClientConditionSuccess")
                     : t("createClientConditionSuccess")
             );
         } catch (error) {
-            toast.error(t("createClientConditionError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
+            toast.error(
+                t("createClientConditionError", { error: getErrorMessage(error) }),
+                { description: getErrorDescription(error) }
+            );
         }
     };
 
     return (
-        <>
-                        <div className="p-6">
-                <FormAccess
-                    isHorizontal
-                    role="manage-realm"
-                    isReadOnly={isGlobalPolicy}
-                    className="mt-6"
-                    onSubmit={form.handleSubmit(save)}
-                >
-                    <div className="space-y-2">
-                        <div className="flex items-center gap-1">
-                            <Label htmlFor="conditionType">{t("conditionType")}</Label>
-                            <HelpItem
-                                helpText={
-                                    conditionType
-                                        ? `${camelCase(conditionType.replace(/-/g, " "))}Help`
-                                        : "conditionsHelp"
-                                }
-                                fieldLabelId="conditionType"
-                            />
-                        </div>
-                        <Controller
-                            name="conditions"
-                            defaultValue={"any-client"}
-                            control={form.control}
-                            render={({ field }) => {
-                                const selectedId =
-                                    conditionName ||
-                                    conditionType ||
-                                    (typeof field.value === "object" && field.value?.id
-                                        ? field.value.id
-                                        : field.value);
-                                return (
-                                    <Select
-                                        value={selectedId || ""}
-                                        onValueChange={value => {
-                                            const item = conditionTypes?.find(
-                                                c => c.id === value
-                                            );
-                                            if (item) {
-                                                field.onChange(item);
-                                                setConditionProperties(item.properties);
-                                                setConditionType(item.id);
-                                                setCondition([{ condition: item.id }]);
-                                                setOpenConditionType(false);
-                                            }
-                                        }}
-                                        disabled={!!conditionName}
-                                        onOpenChange={setOpenConditionType}
-                                    >
-                                        <SelectTrigger
-                                            id="provider"
-                                            className="kc-conditionType-select w-full"
-                                            data-testid="conditionType-select"
-                                            aria-label={t("conditionType")}
-                                        >
-                                            <SelectValue
-                                                placeholder={t("selectACondition")}
-                                            />
-                                        </SelectTrigger>
-                                        <SelectContent>
-                                            {conditionTypes?.map(condition => (
-                                                <SelectItem
-                                                    key={condition.id}
-                                                    value={condition.id}
-                                                    data-testid={condition.id}
-                                                >
-                                                    {condition.id}
-                                                </SelectItem>
-                                            ))}
-                                        </SelectContent>
-                                    </Select>
-                                );
-                            }}
+        <div className="p-6">
+            <FormAccess
+                isHorizontal
+                role="manage-realm"
+                isReadOnly={isGlobalPolicy}
+                className="mt-6"
+                onSubmit={form.handleSubmit(save)}
+            >
+                <div className="space-y-2">
+                    <div className="flex items-center gap-1">
+                        <Label htmlFor="conditionType">{t("conditionType")}</Label>
+                        <HelpItem
+                            helpText={
+                                conditionType
+                                    ? `${camelCase(conditionType.replace(/-/g, " "))}Help`
+                                    : "conditionsHelp"
+                            }
+                            fieldLabelId="conditionType"
                         />
                     </div>
+                    <Controller
+                        name="conditions"
+                        defaultValue={"any-client"}
+                        control={form.control}
+                        render={({ field }) => {
+                            const selectedId =
+                                conditionName ||
+                                conditionType ||
+                                (typeof field.value === "object" && field.value?.id
+                                    ? field.value.id
+                                    : field.value);
+                            return (
+                                <Select
+                                    value={selectedId || ""}
+                                    onValueChange={value => {
+                                        const item = conditionTypes?.find(
+                                            c => c.id === value
+                                        );
+                                        if (item) {
+                                            field.onChange(item);
+                                            setConditionProperties(item.properties);
+                                            setConditionType(item.id);
+                                            setCondition([{ condition: item.id }]);
+                                            setOpenConditionType(false);
+                                        }
+                                    }}
+                                    disabled={!!conditionName}
+                                    onOpenChange={setOpenConditionType}
+                                >
+                                    <SelectTrigger
+                                        id="provider"
+                                        className="kc-conditionType-select w-full"
+                                        data-testid="conditionType-select"
+                                        aria-label={t("conditionType")}
+                                    >
+                                        <SelectValue
+                                            placeholder={t("selectACondition")}
+                                        />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                        {conditionTypes?.map(condition => (
+                                            <SelectItem
+                                                key={condition.id}
+                                                value={condition.id}
+                                                data-testid={condition.id}
+                                            >
+                                                {condition.id}
+                                            </SelectItem>
+                                        ))}
+                                    </SelectContent>
+                                </Select>
+                            );
+                        }}
+                    />
+                </div>
 
-                    <FormProvider {...form}>
-                        <DynamicComponents properties={conditionProperties} />
-                    </FormProvider>
-                    {!isGlobalPolicy && (
-                        <div className="flex gap-2">
-                            <Button
-                                type="submit"
-                                data-testid="addCondition-saveBtn"
-                                disabled={
-                                    conditionType === "" &&
-                                    !conditionName &&
-                                    isGlobalPolicy
-                                }
-                            >
-                                {conditionName ? t("save") : t("add")}
-                            </Button>
-                            <Button
-                                variant="ghost"
-                                data-testid="addCondition-cancelBtn"
-                                onClick={() =>
-                                    navigate({
-                                        to: toEditClientPolicy({
-                                            realm,
-                                            policyName: policyName!
-                                        }) as string
-                                    })
-                                }
-                            >
-                                {t("cancel")}
-                            </Button>
-                        </div>
-                    )}
-                </FormAccess>
-                {isGlobalPolicy && (
-                    <div className="kc-backToProfile">
-                        <Button asChild>
-                            <Link to={toEditClientPolicy({ realm, policyName: policyName! }) as string}>
-                                {t("back")}
-                            </Link>
+                <FormProvider {...form}>
+                    <DynamicComponents properties={conditionProperties} />
+                </FormProvider>
+                {!isGlobalPolicy && (
+                    <div className="flex gap-2">
+                        <Button
+                            type="submit"
+                            data-testid="addCondition-saveBtn"
+                            disabled={
+                                conditionType === "" && !conditionName && isGlobalPolicy
+                            }
+                        >
+                            {conditionName ? t("save") : t("add")}
+                        </Button>
+                        <Button
+                            variant="ghost"
+                            data-testid="addCondition-cancelBtn"
+                            onClick={() =>
+                                navigate({
+                                    to: toEditClientPolicy({
+                                        realm,
+                                        policyName: policyName!
+                                    }) as string
+                                })
+                            }
+                        >
+                            {t("cancel")}
                         </Button>
                     </div>
                 )}
-            </div>
-        </>
+            </FormAccess>
+            {isGlobalPolicy && (
+                <div className="kc-backToProfile">
+                    <Button asChild>
+                        <Link
+                            to={
+                                toEditClientPolicy({
+                                    realm,
+                                    policyName: policyName!
+                                }) as string
+                            }
+                        >
+                            {t("back")}
+                        </Link>
+                    </Button>
+                </div>
+            )}
+        </div>
     );
 }

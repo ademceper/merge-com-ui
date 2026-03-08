@@ -1,14 +1,14 @@
+import { Switch } from "@merge-rd/ui/components/switch";
 import {
     Controller,
-    FieldValues,
-    FieldPath,
-    UseControllerProps,
-    PathValue,
+    type FieldPath,
+    type FieldValues,
+    type PathValue,
+    type UseControllerProps,
     useFormContext
 } from "react-hook-form";
-import { Switch } from "@merge-rd/ui/components/switch";
-import { FormLabel } from "./form-label";
 import { debeerify } from "../user-profile/utils";
+import { FormLabel } from "./form-label";
 
 export type SwitchControlProps<
     T extends FieldValues,
@@ -58,7 +58,13 @@ export const SwitchControl = <
                         <span className="text-sm font-medium">{props.label}</span>
                         <div className="flex shrink-0 items-center gap-2">
                             <span className="text-sm text-muted-foreground">
-                                {stringify ? (value === "true" ? labelOn : props.labelOff) : (value ? labelOn : props.labelOff)}
+                                {stringify
+                                    ? value === "true"
+                                        ? labelOn
+                                        : props.labelOff
+                                    : value
+                                      ? labelOn
+                                      : props.labelOff}
                             </span>
                             <Switch
                                 {...props}
@@ -67,8 +73,10 @@ export const SwitchControl = <
                                 aria-label={props.label}
                                 checked={stringify ? value === "true" : value}
                                 disabled={isDisabled}
-                                onCheckedChange={(checked) => {
-                                    const value = stringify ? checked.toString() : checked;
+                                onCheckedChange={checked => {
+                                    const value = stringify
+                                        ? checked.toString()
+                                        : checked;
                                     onChange(value);
                                     onValueChangeProp?.(checked);
                                 }}

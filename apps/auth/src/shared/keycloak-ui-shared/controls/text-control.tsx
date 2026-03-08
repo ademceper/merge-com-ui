@@ -1,10 +1,10 @@
 import { Input } from "@merge-rd/ui/components/input";
-import { ReactNode } from "react";
+import type { ReactNode } from "react";
 import {
-    FieldPath,
-    FieldValues,
-    PathValue,
-    UseControllerProps,
+    type FieldPath,
+    type FieldValues,
+    type PathValue,
+    type UseControllerProps,
     useController
 } from "react-hook-form";
 import { getRuleValue } from "../utils/getRuleValue";

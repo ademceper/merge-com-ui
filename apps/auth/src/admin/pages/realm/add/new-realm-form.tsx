@@ -1,6 +1,5 @@
 import type RealmRepresentation from "@keycloak/keycloak-admin-client/lib/defs/realmRepresentation";
-import { getErrorDescription, getErrorMessage, TextControl } from "../../../../shared/keycloak-ui-shared";
-import { toast } from "sonner";
+import { useTranslation } from "@merge-rd/i18n";
 import { Button } from "@merge-rd/ui/components/button";
 import {
     Dialog,
@@ -8,18 +7,23 @@ import {
     DialogDescription,
     DialogFooter,
     DialogHeader,
-    DialogTitle,
+    DialogTitle
 } from "@merge-rd/ui/components/dialog";
+import { useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
-import { useTranslation } from "@merge-rd/i18n";
-import { useNavigate } from "@tanstack/react-router";
+import { toast } from "sonner";
+import {
+    getErrorDescription,
+    getErrorMessage,
+    TextControl
+} from "../../../../shared/keycloak-ui-shared";
 import { useAdminClient } from "../../../app/admin-client";
+import { useWhoAmI } from "../../../app/providers/whoami/who-am-i";
+import { convertFormValuesToObject, convertToFormValues } from "../../../shared/lib/util";
 import { FormAccess } from "../../../shared/ui/form/form-access";
 import { JsonFileUpload } from "../../../shared/ui/json-file-upload/json-file-upload";
 import { DefaultSwitchControl } from "../../../shared/ui/switch-control";
-import { useWhoAmI } from "../../../app/providers/whoami/who-am-i";
-import { convertFormValuesToObject, convertToFormValues } from "../../../shared/lib/util";
 import { toRealm } from "../realm-routes";
 
 type NewRealmFormProps = {
@@ -32,7 +36,7 @@ export default function NewRealmForm({ onClose }: NewRealmFormProps) {
     const { t } = useTranslation();
     const navigate = useNavigate();
     const { refresh, whoAmI } = useWhoAmI();
-const [realm, setRealm] = useState<RealmRepresentation>();
+    const [realm, setRealm] = useState<RealmRepresentation>();
 
     const form = useForm<RealmRepresentation>({
         mode: "onChange"
@@ -58,48 +62,54 @@ const [realm, setRealm] = useState<RealmRepresentation>();
             onClose();
             navigate({ to: toRealm({ realm: fields.realm! }) as string });
         } catch (error) {
-            toast.error(t("saveRealmError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
+            toast.error(t("saveRealmError", { error: getErrorMessage(error) }), {
+                description: getErrorDescription(error)
+            });
         }
     };
 
     return (
-        <Dialog open={true} onOpenChange={(v) => !v && onClose()}>
+        <Dialog open={true} onOpenChange={v => !v && onClose()}>
             <DialogContent showCloseButton className="sm:max-w-lg">
                 <DialogHeader>
                     <DialogTitle>{t("createRealm")}</DialogTitle>
                     <DialogDescription>{t("realmExplain")}</DialogDescription>
                 </DialogHeader>
                 <FormProvider {...form}>
-                <FormAccess
-                    id="realm-form"
-                    isHorizontal
-                    onSubmit={handleSubmit(save)}
-                    role="query-realms"
-                    isReadOnly={!whoAmI.createRealm}
-                >
-                    <JsonFileUpload
-                        id="kc-realm-filename"
-                        allowEditingUploadedText
-                        onChange={handleFileChange}
-                    />
-                    <TextControl
-                        name="realm"
-                        label={t("realmNameField")}
-                        rules={{ required: t("required") }}
-                    />
-                    <DefaultSwitchControl
-                        name="enabled"
-                        label={t("enabled")}
-                        defaultValue={true}
-                    />
-                </FormAccess>
-            </FormProvider>
+                    <FormAccess
+                        id="realm-form"
+                        isHorizontal
+                        onSubmit={handleSubmit(save)}
+                        role="query-realms"
+                        isReadOnly={!whoAmI.createRealm}
+                    >
+                        <JsonFileUpload
+                            id="kc-realm-filename"
+                            allowEditingUploadedText
+                            onChange={handleFileChange}
+                        />
+                        <TextControl
+                            name="realm"
+                            label={t("realmNameField")}
+                            rules={{ required: t("required") }}
+                        />
+                        <DefaultSwitchControl
+                            name="enabled"
+                            label={t("enabled")}
+                            defaultValue={true}
+                        />
+                    </FormAccess>
+                </FormProvider>
                 <DialogFooter>
                     <Button
                         type="submit"
                         form="realm-form"
                         data-testid="create"
-                        disabled={formState.isLoading || formState.isValidating || formState.isSubmitting}
+                        disabled={
+                            formState.isLoading ||
+                            formState.isValidating ||
+                            formState.isSubmitting
+                        }
                     >
                         {t("create")}
                     </Button>

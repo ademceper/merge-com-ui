@@ -1,11 +1,10 @@
 import type ResourceServerRepresentation from "@keycloak/keycloak-admin-client/lib/defs/resourceServerRepresentation";
-import { useFetch } from "../../../../shared/keycloak-ui-shared";
-import { useState } from "react";
-import { useAdminClient } from "../../../app/admin-client";
+import { useEffect, useState } from "react";
 import { KeycloakSpinner } from "../../../../shared/keycloak-ui-shared";
 import { useRealm } from "../../../app/providers/realm-context/realm-context";
-import { toPermissionDetails } from "../routes/permission-details";
-import { toScopeDetails } from "../routes/scope";
+import { toPermissionDetails } from "../../../shared/lib/routes/clients";
+import { toScopeDetails } from "../../../shared/lib/routes/clients";
+import { useDetailCell } from "./api/use-detail-cell";
 import { DetailDescription, DetailDescriptionLink } from "./detail-description";
 
 type Scope = { id: string; name: string }[];
@@ -17,30 +16,18 @@ type DetailCellProps = {
 };
 
 export const DetailCell = ({ id, clientId, uris }: DetailCellProps) => {
-    const { adminClient } = useAdminClient();
-
     const { realm } = useRealm();
     const [scope, setScope] = useState<Scope>();
     const [permissions, setPermissions] = useState<ResourceServerRepresentation[]>();
 
-    useFetch(
-        () =>
-            Promise.all([
-                adminClient.clients.listScopesByResource({
-                    id: clientId,
-                    resourceName: id
-                }),
-                adminClient.clients.listPermissionsByResource({
-                    id: clientId,
-                    resourceId: id
-                })
-            ]),
-        ([scopes, permissions]) => {
-            setScope(scopes);
-            setPermissions(permissions);
-        },
-        []
-    );
+    const { data: detailCellData } = useDetailCell(clientId, id);
+
+    useEffect(() => {
+        if (detailCellData) {
+            setScope(detailCellData[0]);
+            setPermissions(detailCellData[1]);
+        }
+    }, [detailCellData]);
 
     if (!permissions || !scope) {
         return <KeycloakSpinner />;

@@ -1,14 +1,5 @@
-import { Button } from "@merge-rd/ui/components/button";
-import { Label } from "@merge-rd/ui/components/label";
-import { Switch } from "@merge-rd/ui/components/switch";
-import { getErrorDescription, getErrorMessage, useFetch } from "../../../shared/keycloak-ui-shared";
-import { toast } from "sonner";
-import WorkflowRepresentation from "@keycloak/keycloak-admin-client/lib/defs/workflowRepresentation";
-import { useState } from "react";
+import type WorkflowRepresentation from "@keycloak/keycloak-admin-client/lib/defs/workflowRepresentation";
 import { useTranslation } from "@merge-rd/i18n";
-import { Link, useNavigate } from "@tanstack/react-router";
-import { useAdminClient } from "../../app/admin-client";
-import { useRealm } from "../../app/providers/realm-context/realm-context";
 import {
     AlertDialog,
     AlertDialogAction,
@@ -19,11 +10,7 @@ import {
     AlertDialogHeader,
     AlertDialogTitle
 } from "@merge-rd/ui/components/alert-dialog";
-import {
-    DataTable,
-    DataTableRowActions,
-    type ColumnDef
-} from "@/admin/shared/ui/data-table";
+import { Button } from "@merge-rd/ui/components/button";
 import {
     Empty,
     EmptyContent,
@@ -31,35 +18,44 @@ import {
     EmptyHeader,
     EmptyTitle
 } from "@merge-rd/ui/components/empty";
-import { toWorkflowDetail } from "./routes/workflow-detail";
+import { Label } from "@merge-rd/ui/components/label";
+import { Switch } from "@merge-rd/ui/components/switch";
+import { Link, useNavigate } from "@tanstack/react-router";
+import { useState } from "react";
+import { toast } from "sonner";
+import {
+    type ColumnDef,
+    DataTable,
+    DataTableRowActions
+} from "@/admin/shared/ui/data-table";
+import { getErrorDescription, getErrorMessage } from "../../../shared/keycloak-ui-shared";
+import { useAdminClient } from "../../app/admin-client";
+import { useRealm } from "../../app/providers/realm-context/realm-context";
+import { useWorkflows as useWorkflowsQuery } from "./api/use-workflows";
+import { toWorkflowDetail } from "../../shared/lib/routes/workflows";
 
 export default function WorkflowsSection() {
     const { adminClient } = useAdminClient();
     const { realm } = useRealm();
     const { t } = useTranslation();
     const navigate = useNavigate();
-    const [key, setKey] = useState(0);
-    const refresh = () => setKey(k => k + 1);
+    const { data: workflows = [], refetch: refreshWorkflows } = useWorkflowsQuery();
+    const refresh = () => refreshWorkflows();
     const [workflowToDelete, setWorkflowToDelete] = useState<WorkflowRepresentation>();
-    const [workflows, setWorkflows] = useState<WorkflowRepresentation[]>([]);
-
-    useFetch(
-        async () => {
-            const list = await adminClient.workflows.find();
-            return list.sort((a: WorkflowRepresentation, b: WorkflowRepresentation) => (a.name ?? "").localeCompare(b.name ?? ""));
-        },
-        setWorkflows,
-        [key]
-    );
 
     const toggleEnabled = async (workflow: WorkflowRepresentation) => {
         const enabled = !(workflow.enabled ?? true);
         try {
-            await adminClient.workflows.update({ id: workflow.id! }, { ...workflow, enabled });
+            await adminClient.workflows.update(
+                { id: workflow.id! },
+                { ...workflow, enabled }
+            );
             toast.success(enabled ? t("workflowEnabled") : t("workflowDisabled"));
             refresh();
         } catch (error) {
-            toast.error(t("workflowUpdateError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
+            toast.error(t("workflowUpdateError", { error: getErrorMessage(error) }), {
+                description: getErrorDescription(error)
+            });
         }
     };
 
@@ -71,7 +67,9 @@ export default function WorkflowsSection() {
             toast.success(t("workflowDeletedSuccess"));
             refresh();
         } catch (error) {
-            toast.error(t("workflowDeleteError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
+            toast.error(t("workflowDeleteError", { error: getErrorMessage(error) }), {
+                description: getErrorDescription(error)
+            });
         }
     };
 
@@ -80,7 +78,16 @@ export default function WorkflowsSection() {
             accessorKey: "name",
             header: t("name"),
             cell: ({ row }) => (
-                <Link to={toWorkflowDetail({ realm, mode: "update", id: row.original.id! }) as string} className="text-primary hover:underline">
+                <Link
+                    to={
+                        toWorkflowDetail({
+                            realm,
+                            mode: "update",
+                            id: row.original.id!
+                        }) as string
+                    }
+                    className="text-primary hover:underline"
+                >
                     {row.original.name}
                 </Link>
             )
@@ -117,7 +124,15 @@ export default function WorkflowsSection() {
                     <button
                         type="button"
                         className="flex w-full items-center gap-2 rounded-md px-1.5 py-1 text-left text-sm hover:bg-accent hover:text-accent-foreground"
-                        onClick={() => navigate({ to: toWorkflowDetail({ realm, mode: "copy", id: row.original.id! }) as string })}
+                        onClick={() =>
+                            navigate({
+                                to: toWorkflowDetail({
+                                    realm,
+                                    mode: "copy",
+                                    id: row.original.id!
+                                }) as string
+                            })
+                        }
                     >
                         {t("copy")}
                     </button>
@@ -133,7 +148,18 @@ export default function WorkflowsSection() {
             </EmptyHeader>
             <EmptyContent>
                 <EmptyDescription>{t("emptyWorkflowsInstructions")}</EmptyDescription>
-                <Button variant="default" onClick={() => navigate({ to: toWorkflowDetail({ realm, mode: "create", id: "new" }) as string })}>
+                <Button
+                    variant="default"
+                    onClick={() =>
+                        navigate({
+                            to: toWorkflowDetail({
+                                realm,
+                                mode: "create",
+                                id: "new"
+                            }) as string
+                        })
+                    }
+                >
                     {t("createWorkflow")}
                 </Button>
             </EmptyContent>
@@ -141,41 +167,55 @@ export default function WorkflowsSection() {
     );
 
     return (
-        <>
-                        <div className="bg-muted/30 p-0">
-                <AlertDialog open={!!workflowToDelete} onOpenChange={(open) => !open && setWorkflowToDelete(undefined)}>
-                    <AlertDialogContent>
-                        <AlertDialogHeader>
-                            <AlertDialogTitle>{t("workflowDeleteConfirm")}</AlertDialogTitle>
-                            <AlertDialogDescription>
-                                {t("workflowDeleteConfirmDialog", { selectedRoleName: workflowToDelete?.name ?? "" })}
-                            </AlertDialogDescription>
-                        </AlertDialogHeader>
-                        <AlertDialogFooter>
-                            <AlertDialogCancel>{t("cancel")}</AlertDialogCancel>
-                            <AlertDialogAction variant="destructive" data-testid="confirm" onClick={onDeleteConfirm}>
-                                {t("delete")}
-                            </AlertDialogAction>
-                        </AlertDialogFooter>
-                    </AlertDialogContent>
-                </AlertDialog>
-                <DataTable<WorkflowRepresentation>
-                    key={key}
-                    columns={columns}
-                    data={workflows}
-                    searchColumnId="name"
-                    searchPlaceholder={t("search")}
-                    emptyContent={emptyContent}
-                    emptyMessage={t("emptyWorkflows")}
-                    toolbar={
-                        <Button asChild data-testid="create-workflow">
-                            <Link to={toWorkflowDetail({ realm, mode: "create", id: "new" }) as string}>
-                                {t("createWorkflow")}
-                            </Link>
-                        </Button>
-                    }
-                />
-            </div>
-        </>
+        <div className="bg-muted/30 p-0">
+            <AlertDialog
+                open={!!workflowToDelete}
+                onOpenChange={open => !open && setWorkflowToDelete(undefined)}
+            >
+                <AlertDialogContent>
+                    <AlertDialogHeader>
+                        <AlertDialogTitle>{t("workflowDeleteConfirm")}</AlertDialogTitle>
+                        <AlertDialogDescription>
+                            {t("workflowDeleteConfirmDialog", {
+                                selectedRoleName: workflowToDelete?.name ?? ""
+                            })}
+                        </AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter>
+                        <AlertDialogCancel>{t("cancel")}</AlertDialogCancel>
+                        <AlertDialogAction
+                            variant="destructive"
+                            data-testid="confirm"
+                            onClick={onDeleteConfirm}
+                        >
+                            {t("delete")}
+                        </AlertDialogAction>
+                    </AlertDialogFooter>
+                </AlertDialogContent>
+            </AlertDialog>
+            <DataTable<WorkflowRepresentation>
+                columns={columns}
+                data={workflows}
+                searchColumnId="name"
+                searchPlaceholder={t("search")}
+                emptyContent={emptyContent}
+                emptyMessage={t("emptyWorkflows")}
+                toolbar={
+                    <Button asChild data-testid="create-workflow">
+                        <Link
+                            to={
+                                toWorkflowDetail({
+                                    realm,
+                                    mode: "create",
+                                    id: "new"
+                                }) as string
+                            }
+                        >
+                            {t("createWorkflow")}
+                        </Link>
+                    </Button>
+                }
+            />
+        </div>
     );
 }

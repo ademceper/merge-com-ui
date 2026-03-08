@@ -1,7 +1,7 @@
-import { UserProfileAttributeMetadata } from "@keycloak/keycloak-admin-client/lib/defs/userProfileMetadata";
-import UserRepresentation from "@keycloak/keycloak-admin-client/lib/defs/userRepresentation";
-import { TFunction } from "i18next";
-import { FieldPath } from "react-hook-form";
+import type { UserProfileAttributeMetadata } from "@keycloak/keycloak-admin-client/lib/defs/userProfileMetadata";
+import type UserRepresentation from "@keycloak/keycloak-admin-client/lib/defs/userRepresentation";
+import type { TFunction } from "i18next";
+import type { FieldPath } from "react-hook-form";
 
 export type KeyValueType = { key: string; value: string };
 

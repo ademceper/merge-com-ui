@@ -1,6 +1,5 @@
 import type ClientInitialAccessPresentation from "@keycloak/keycloak-admin-client/lib/defs/clientInitialAccessPresentation";
-import { getErrorDescription, getErrorMessage } from "../../../../shared/keycloak-ui-shared";
-import { toast } from "sonner";
+import { useTranslation } from "@merge-rd/i18n";
 import { Button } from "@merge-rd/ui/components/button";
 import {
     Dialog,
@@ -8,18 +7,23 @@ import {
     DialogFooter,
     DialogHeader,
     DialogTitle,
-    DialogTrigger,
+    DialogTrigger
 } from "@merge-rd/ui/components/dialog";
-import { Controller, FormProvider, useForm } from "react-hook-form";
-import { useTranslation } from "@merge-rd/i18n";
 import { useState } from "react";
-import { useAdminClient } from "../../../app/admin-client";
-import { FormAccess } from "../../../shared/ui/form/form-access";
-import { useRealm } from "../../../app/providers/realm-context/realm-context";
+import { Controller, FormProvider, useForm } from "react-hook-form";
+import { toast } from "sonner";
 import { NumberInput } from "@/admin/shared/ui/number-input";
-import { TimeSelector } from "../../../shared/ui/time-selector/time-selector";
+import {
+    FormErrorText,
+    getErrorDescription,
+    getErrorMessage,
+    HelpItem
+} from "../../../../shared/keycloak-ui-shared";
+import { useAdminClient } from "../../../app/admin-client";
+import { useRealm } from "../../../app/providers/realm-context/realm-context";
+import { FormAccess } from "../../../shared/ui/form/form-access";
 import { MultiLineInput } from "../../../shared/ui/multi-line-input/multi-line-input";
-import { FormErrorText, HelpItem } from "../../../../shared/keycloak-ui-shared";
+import { TimeSelector } from "../../../shared/ui/time-selector/time-selector";
 import { AccessTokenDialog } from "./access-token-dialog";
 
 type AddInitialAccessTokenDialogProps = {
@@ -27,7 +31,10 @@ type AddInitialAccessTokenDialogProps = {
     onSuccess?: () => void;
 };
 
-export function AddInitialAccessTokenDialog({ trigger, onSuccess }: AddInitialAccessTokenDialogProps) {
+export function AddInitialAccessTokenDialog({
+    trigger,
+    onSuccess
+}: AddInitialAccessTokenDialogProps) {
     const { adminClient } = useAdminClient();
     const { t } = useTranslation();
     const { realm } = useRealm();
@@ -35,7 +42,10 @@ export function AddInitialAccessTokenDialog({ trigger, onSuccess }: AddInitialAc
     const [token, setToken] = useState("");
 
     const form = useForm({ mode: "onChange" });
-    const { handleSubmit, formState: { isValid, isSubmitting, isValidating } } = form;
+    const {
+        handleSubmit,
+        formState: { isValid, isSubmitting, isValidating }
+    } = form;
 
     const save = async (clientToken: ClientInitialAccessPresentation) => {
         try {
@@ -46,7 +56,9 @@ export function AddInitialAccessTokenDialog({ trigger, onSuccess }: AddInitialAc
             setOpen(false);
             setToken(access.token!);
         } catch (error) {
-            toast.error(t("tokenSaveError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
+            toast.error(t("tokenSaveError", { error: getErrorMessage(error) }), {
+                description: getErrorDescription(error)
+            });
         }
     };
 
@@ -59,15 +71,10 @@ export function AddInitialAccessTokenDialog({ trigger, onSuccess }: AddInitialAc
     return (
         <>
             {token && (
-                <AccessTokenDialog
-                    token={token}
-                    toggleDialog={onTokenDialogClose}
-                />
+                <AccessTokenDialog token={token} toggleDialog={onTokenDialogClose} />
             )}
             <Dialog open={open} onOpenChange={setOpen}>
-                <DialogTrigger asChild>
-                    {trigger}
-                </DialogTrigger>
+                <DialogTrigger asChild>{trigger}</DialogTrigger>
                 <FormProvider {...form}>
                     <DialogContent className="max-w-lg">
                         <DialogHeader>
@@ -99,16 +106,26 @@ export function AddInitialAccessTokenDialog({ trigger, onSuccess }: AddInitialAc
                                                     fullWidth
                                                     value={field.value}
                                                     onChange={field.onChange}
-                                                    validated={fieldState.invalid ? "error" : "default"}
+                                                    validated={
+                                                        fieldState.invalid
+                                                            ? "error"
+                                                            : "default"
+                                                    }
                                                 />
                                             )}
                                         />
-                                        <HelpItem helpText={t("tokenExpirationHelp")} fieldLabelId="expiration" />
+                                        <HelpItem
+                                            helpText={t("tokenExpirationHelp")}
+                                            fieldLabelId="expiration"
+                                        />
                                     </div>
                                     {form.formState.errors.expiration && (
                                         <FormErrorText
                                             data-testid="expiration-helper"
-                                            message={form.formState.errors.expiration.message as string}
+                                            message={
+                                                form.formState.errors.expiration
+                                                    .message as string
+                                            }
                                         />
                                     )}
                                 </div>
@@ -126,18 +143,26 @@ export function AddInitialAccessTokenDialog({ trigger, onSuccess }: AddInitialAc
                                                     className="w-full"
                                                     min={1}
                                                     value={field.value ?? ""}
-                                                    onChange={(v) => field.onChange(v === "" ? 1 : v)}
+                                                    onChange={v =>
+                                                        field.onChange(v === "" ? 1 : v)
+                                                    }
                                                     onBlur={field.onBlur}
                                                     ref={field.ref}
                                                 />
                                             )}
                                         />
-                                        <HelpItem helpText={t("countHelp")} fieldLabelId="count" />
+                                        <HelpItem
+                                            helpText={t("countHelp")}
+                                            fieldLabelId="count"
+                                        />
                                     </div>
                                     {form.formState.errors.count && (
                                         <FormErrorText
                                             data-testid="count-helper"
-                                            message={form.formState.errors.count.message as string}
+                                            message={
+                                                form.formState.errors.count
+                                                    .message as string
+                                            }
                                         />
                                     )}
                                 </div>

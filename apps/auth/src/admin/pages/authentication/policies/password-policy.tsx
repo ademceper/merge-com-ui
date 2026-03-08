@@ -1,7 +1,6 @@
 import type PasswordPolicyTypeRepresentation from "@keycloak/keycloak-admin-client/lib/defs/passwordPolicyTypeRepresentation";
 import type RealmRepresentation from "@keycloak/keycloak-admin-client/lib/defs/realmRepresentation";
-import { getErrorDescription, getErrorMessage } from "../../../../shared/keycloak-ui-shared";
-import { toast } from "sonner";
+import { useTranslation } from "@merge-rd/i18n";
 import { Button } from "@merge-rd/ui/components/button";
 import {
     DropdownMenu,
@@ -12,15 +11,19 @@ import {
 import { PlusCircle } from "@phosphor-icons/react";
 import { useEffect, useMemo, useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
-import { useTranslation } from "@merge-rd/i18n";
+import { toast } from "sonner";
+import {
+    FormPanel,
+    getErrorDescription,
+    getErrorMessage
+} from "../../../../shared/keycloak-ui-shared";
 import { useAdminClient } from "../../../app/admin-client";
-import { FormAccess } from "../../../shared/ui/form/form-access";
-import { FixedButtonsGroup } from "../../../shared/ui/form/fixed-button-group";
-import { FormPanel } from "../../../../shared/keycloak-ui-shared";
 import { useRealm } from "../../../app/providers/realm-context/realm-context";
 import { useServerInfo } from "../../../app/providers/server-info/server-info-provider";
+import { FixedButtonsGroup } from "../../../shared/ui/form/fixed-button-group";
+import { FormAccess } from "../../../shared/ui/form/form-access";
 import { PolicyRow } from "./policy-row";
-import { SubmittedValues, parsePolicy, serializePolicy } from "./util";
+import { parsePolicy, type SubmittedValues, serializePolicy } from "./util";
 
 type PolicySelectProps = {
     onSelect: (row: PasswordPolicyTypeRepresentation) => void;
@@ -79,7 +82,7 @@ export const PasswordPolicy = ({ realm, realmUpdated }: PasswordPolicyProps) => 
 
     const { t } = useTranslation();
     const { passwordPolicies } = useServerInfo();
-const { realm: realmName, refresh } = useRealm();
+    const { realm: realmName, refresh } = useRealm();
 
     const [rows, setRows] = useState<PasswordPolicyTypeRepresentation[]>([]);
     const onSelect = (row: PasswordPolicyTypeRepresentation) => {
@@ -120,7 +123,10 @@ const { realm: realmName, refresh } = useRealm();
             refresh();
             toast.success(t("updatePasswordPolicySuccess"));
         } catch (error: any) {
-            toast.error(t("updatePasswordPolicyError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
+            toast.error(
+                t("updatePasswordPolicyError", { error: getErrorMessage(error) }),
+                { description: getErrorDescription(error) }
+            );
         }
     };
 
@@ -153,10 +159,7 @@ const { realm: realmName, refresh } = useRealm();
                 <FormPanel title={t("passwordPolicy")}>
                     <div className="space-y-6">
                         <div className="flex flex-wrap items-center justify-between gap-2">
-                            <PolicySelect
-                                onSelect={onSelect}
-                                selectedPolicies={rows}
-                            />
+                            <PolicySelect onSelect={onSelect} selectedPolicies={rows} />
                         </div>
                         <div className="space-y-4">
                             {rows.map((r, index) => (

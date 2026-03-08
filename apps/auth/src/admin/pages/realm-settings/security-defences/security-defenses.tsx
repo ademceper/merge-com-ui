@@ -1,8 +1,8 @@
+import type RealmRepresentation from "@keycloak/keycloak-admin-client/lib/defs/realmRepresentation";
 import { useTranslation } from "@merge-rd/i18n";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@merge-rd/ui/components/tabs";
-import type RealmRepresentation from "@keycloak/keycloak-admin-client/lib/defs/realmRepresentation";
-import { HeadersForm } from "./headers-form";
 import { BruteForceDetection } from "./brute-force-detection";
+import { HeadersForm } from "./headers-form";
 
 type SecurityDefensesProps = {
     realm: RealmRepresentation;
@@ -14,11 +14,20 @@ export const SecurityDefenses = ({ realm, save }: SecurityDefensesProps) => {
     return (
         <Tabs defaultValue="headers">
             <div className="w-full min-w-0 overflow-x-auto overflow-y-hidden mb-4">
-                <TabsList variant="line" className="mb-0 w-max min-w-0 **:data-[slot=tabs-trigger]:flex-none">
-                    <TabsTrigger value="headers" data-testid="security-defenses-headers-tab">
+                <TabsList
+                    variant="line"
+                    className="mb-0 w-max min-w-0 **:data-[slot=tabs-trigger]:flex-none"
+                >
+                    <TabsTrigger
+                        value="headers"
+                        data-testid="security-defenses-headers-tab"
+                    >
                         {t("headers")}
                     </TabsTrigger>
-                    <TabsTrigger value="brute-force" data-testid="security-defenses-brute-force-tab">
+                    <TabsTrigger
+                        value="brute-force"
+                        data-testid="security-defenses-brute-force-tab"
+                    >
                         {t("bruteForceDetection")}
                     </TabsTrigger>
                 </TabsList>

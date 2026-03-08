@@ -1,15 +1,24 @@
-import KeyStoreConfig from "@keycloak/keycloak-admin-client/lib/defs/keystoreConfig";
+import type KeyStoreConfig from "@keycloak/keycloak-admin-client/lib/defs/keystoreConfig";
+import { useTranslation } from "@merge-rd/i18n";
 import { Button } from "@merge-rd/ui/components/button";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@merge-rd/ui/components/dialog";
+import {
+    Dialog,
+    DialogContent,
+    DialogFooter,
+    DialogHeader,
+    DialogTitle
+} from "@merge-rd/ui/components/dialog";
 import { saveAs } from "file-saver";
 import { FormProvider, useForm } from "react-hook-form";
-import { useTranslation } from "@merge-rd/i18n";
-import { useAdminClient } from "../../../app/admin-client";
-import { getErrorDescription, getErrorMessage } from "../../../../shared/keycloak-ui-shared";
 import { toast } from "sonner";
+import {
+    getErrorDescription,
+    getErrorMessage
+} from "../../../../shared/keycloak-ui-shared";
+import { useAdminClient } from "../../../app/admin-client";
 import { useRealm } from "../../../app/providers/realm-context/realm-context";
-import { KeyForm, getFileExtension } from "./generate-key-dialog";
-import { KeyTypes } from "./saml-keys";
+import { getFileExtension, KeyForm } from "./generate-key-dialog";
+import type { KeyTypes } from "./saml-keys";
 
 type ExportSamlKeyDialogProps = {
     clientId: string;
@@ -26,7 +35,7 @@ export const ExportSamlKeyDialog = ({
 
     const { t } = useTranslation();
     const { realm } = useRealm();
-const form = useForm<KeyStoreConfig>({
+    const form = useForm<KeyStoreConfig>({
         defaultValues: { realmAlias: realm }
     });
 
@@ -46,12 +55,19 @@ const form = useForm<KeyStoreConfig>({
             toast.success(t("samlKeysExportSuccess"));
             close();
         } catch (error) {
-            toast.error(t("samlKeysExportError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
+            toast.error(t("samlKeysExportError", { error: getErrorMessage(error) }), {
+                description: getErrorDescription(error)
+            });
         }
     };
 
     return (
-        <Dialog open onOpenChange={(open) => { if (!open) close(); }}>
+        <Dialog
+            open
+            onOpenChange={open => {
+                if (!open) close();
+            }}
+        >
             <DialogContent className="max-w-lg">
                 <DialogHeader>
                     <DialogTitle>{t("exportSamlKeyTitle")}</DialogTitle>

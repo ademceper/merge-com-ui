@@ -1,16 +1,16 @@
-import { ProviderRepresentation } from "@keycloak/keycloak-admin-client/lib/defs/serverInfoRepesentation";
-import { Button } from "@merge-rd/ui/components/button";
-import { Switch } from "@merge-rd/ui/components/switch";
-import { Label } from "@merge-rd/ui/components/label";
+import type { ProviderRepresentation } from "@keycloak/keycloak-admin-client/lib/defs/serverInfoRepesentation";
 import { useTranslation } from "@merge-rd/i18n";
+import { Button } from "@merge-rd/ui/components/button";
+import { Label } from "@merge-rd/ui/components/label";
+import { Switch } from "@merge-rd/ui/components/switch";
+import { Controller, useFormContext } from "react-hook-form";
 import { HelpItem, SelectField } from "../../../../shared/keycloak-ui-shared";
-import { FormAccess } from "../../../shared/ui/form/form-access";
-import { MultiLineInput } from "../../../shared/ui/multi-line-input/multi-line-input";
 import { useServerInfo } from "../../../app/providers/server-info/server-info-provider";
 import { convertAttributeNameToForm, sortProviders } from "../../../shared/lib/util";
-import { FormFields } from "../client-details";
+import { FormAccess } from "../../../shared/ui/form/form-access";
+import { MultiLineInput } from "../../../shared/ui/multi-line-input/multi-line-input";
+import type { FormFields } from "../client-details";
 import { ApplicationUrls } from "./application-urls";
-import { Controller, useFormContext } from "react-hook-form";
 
 type FineGrainOpenIdConnectProps = {
     save: () => void;
@@ -62,7 +62,9 @@ export const FineGrainOpenIdConnect = ({
             />
             <div className="space-y-2">
                 <div className="flex items-center gap-2">
-                    <Label htmlFor="useRfc9068AccessTokenType">{t("useRfc9068AccessTokenType")}</Label>
+                    <Label htmlFor="useRfc9068AccessTokenType">
+                        {t("useRfc9068AccessTokenType")}
+                    </Label>
                     <HelpItem
                         helpText={t("useRfc9068AccessTokenTypeHelp")}
                         fieldLabelId="useRfc9068AccessTokenType"
@@ -78,7 +80,7 @@ export const FineGrainOpenIdConnect = ({
                         <Switch
                             id="useRfc9068AccessTokenType"
                             checked={field.value === "true"}
-                            onCheckedChange={(value) => field.onChange(value.toString())}
+                            onCheckedChange={value => field.onChange(value.toString())}
                             aria-label={t("useRfc9068AccessTokenType")}
                         />
                     )}
@@ -113,7 +115,9 @@ export const FineGrainOpenIdConnect = ({
             />
             <div className="space-y-2">
                 <div className="flex items-center gap-2">
-                    <Label htmlFor="idTokenAsDetachedSignature">{t("idTokenAsDetachedSignature")}</Label>
+                    <Label htmlFor="idTokenAsDetachedSignature">
+                        {t("idTokenAsDetachedSignature")}
+                    </Label>
                     <HelpItem
                         helpText={t("idTokenAsDetachedSignatureHelp")}
                         fieldLabelId="idTokenAsDetachedSignature"
@@ -129,7 +133,7 @@ export const FineGrainOpenIdConnect = ({
                         <Switch
                             id="idTokenAsDetachedSignature"
                             checked={field.value === "true"}
-                            onCheckedChange={(value) => field.onChange(value.toString())}
+                            onCheckedChange={value => field.onChange(value.toString())}
                             aria-label={t("idTokenAsDetachedSignature")}
                         />
                     )}

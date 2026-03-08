@@ -13,8 +13,8 @@
 
 import { lazy } from "react";
 import type { IndexRouteObject, RouteObject } from "react-router-dom";
-import { environment } from "./environment";
 import { Organizations } from "../pages/organizations/organizations";
+import { environment } from "./environment";
 
 const DeviceActivity = lazy(() => import("../pages/account-security/device-activity"));
 const LinkedAccounts = lazy(() => import("../pages/account-security/linked-accounts"));

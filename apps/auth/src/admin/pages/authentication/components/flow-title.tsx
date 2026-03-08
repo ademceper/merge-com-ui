@@ -1,9 +1,9 @@
-import { HelpItem } from "../../../../shared/keycloak-ui-shared";
-import { Badge } from "@merge-rd/ui/components/badge";
-import { GitBranch, MapPin, Robot, ListChecks } from "@phosphor-icons/react";
 import { useTranslation } from "@merge-rd/i18n";
+import { Badge } from "@merge-rd/ui/components/badge";
+import { GitBranch, ListChecks, MapPin, Robot } from "@phosphor-icons/react";
+import { HelpItem } from "../../../../shared/keycloak-ui-shared";
 import { useAuthenticationProvider } from "./authentication-provider-context";
-import { FlowType } from "./flow-row";
+import type { FlowType } from "./flow-row";
 
 type FlowTitleProps = {
     id?: string;

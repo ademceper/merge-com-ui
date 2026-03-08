@@ -1,0 +1,109 @@
+{
+    "$schema": "https://biomejs.dev/schemas/2.2.0/schema.json",
+    "formatter": {
+        "enabled": true,
+        "indentStyle": "space",
+        "indentWidth": 4,
+        "lineWidth": 90
+    },
+    "linter": {
+        "enabled": true,
+        "rules": {
+            "recommended": true,
+            "correctness": {
+                "noUnusedImports": "warn",
+                "useExhaustiveDependencies": "off",
+                "useUniqueElementIds": "off",
+                "noUnusedVariables": "off",
+                "noUnusedFunctionParameters": "off",
+                "noNestedComponentDefinitions": "off",
+                "useHookAtTopLevel": "off",
+                "noUnreachable": "warn"
+            },
+            "style": {
+                "noNonNullAssertion": "off",
+                "useImportType": "warn"
+            },
+            "suspicious": {
+                "noExplicitAny": "off",
+                "noArrayIndexKey": "off",
+                "noAssignInExpressions": "off",
+                "noImplicitAnyLet": "off",
+                "useIterableCallbackReturn": "off",
+                "noShadowRestrictedNames": "off",
+                "noThenProperty": "off",
+                "noDocumentCookie": "off"
+            },
+            "complexity": {
+                "noForEach": "off",
+                "noCommaOperator": "off",
+                "noBannedTypes": "off",
+                "noStaticOnlyClass": "off"
+            },
+            "performance": {
+                "noAccumulatingSpread": "off"
+            },
+            "security": {
+                "noDangerouslySetInnerHtml": "off"
+            },
+            "a11y": {
+                "noLabelWithoutControl": "off",
+                "useValidAriaRole": "off",
+                "noSvgWithoutTitle": "off",
+                "useSemanticElements": "off",
+                "useKeyWithClickEvents": "off",
+                "useFocusableInteractive": "off",
+                "noAriaHiddenOnFocusable": "off",
+                "useButtonType": "off",
+                "noStaticElementInteractions": "off",
+                "useAriaPropsSupportedByRole": "off",
+                "useValidAnchor": "off",
+                "useAltText": "off",
+                "useAriaPropsForRole": "off"
+            }
+        }
+    },
+    "assist": {
+        "actions": {
+            "source": {
+                "organizeImports": "on"
+            }
+        }
+    },
+    "css": {
+        "linter": {
+            "enabled": false
+        }
+    },
+    "javascript": {
+        "formatter": {
+            "quoteStyle": "double",
+            "trailingCommas": "none",
+            "semicolons": "always",
+            "arrowParentheses": "asNeeded"
+        }
+    },
+    "files": {
+        "includes": [
+            "**/*.ts",
+            "**/*.tsx",
+            "**/*.js",
+            "**/*.jsx",
+            "**/*.json",
+            "**/*.css"
+        ]
+    },
+    "overrides": [
+        {
+            "includes": ["**/routeTree.gen.ts"],
+            "linter": { "enabled": false },
+            "formatter": { "enabled": false },
+            "assist": { "enabled": false }
+        }
+    ],
+    "vcs": {
+        "enabled": true,
+        "clientKind": "git",
+        "useIgnoreFile": true
+    }
+}

@@ -1,25 +1,5 @@
 import type ClientPolicyRepresentation from "@keycloak/keycloak-admin-client/lib/defs/clientPolicyRepresentation";
-import { getErrorDescription, getErrorMessage, KeycloakSpinner, useFetch } from "../../../shared/keycloak-ui-shared";
-import { DataTable, DataTableRowActions } from "@/admin/shared/ui/data-table";
-import {
-    Empty,
-    EmptyContent,
-    EmptyDescription,
-    EmptyHeader,
-    EmptyTitle
-} from "@merge-rd/ui/components/empty";
-import { toast } from "sonner";
-import { Button } from "@merge-rd/ui/components/button";
-import { Switch } from "@merge-rd/ui/components/switch";
-import { Separator } from "@merge-rd/ui/components/separator";
-import { RadioGroup, RadioGroupItem } from "@merge-rd/ui/components/radio-group";
-import { Label } from "@merge-rd/ui/components/label";
-import { omit } from "lodash-es";
-import { useState } from "react";
-import { Controller, useForm, type UseFormReturn } from "react-hook-form";
 import { useTranslation } from "@merge-rd/i18n";
-import { Link, useNavigate } from "@tanstack/react-router";
-import { useAdminClient } from "../../app/admin-client";
 import {
     AlertDialog,
     AlertDialogAction,
@@ -30,14 +10,37 @@ import {
     AlertDialogHeader,
     AlertDialogTitle
 } from "@merge-rd/ui/components/alert-dialog";
+import { Button } from "@merge-rd/ui/components/button";
+import {
+    Empty,
+    EmptyContent,
+    EmptyDescription,
+    EmptyHeader,
+    EmptyTitle
+} from "@merge-rd/ui/components/empty";
+import { Label } from "@merge-rd/ui/components/label";
+import { RadioGroup, RadioGroupItem } from "@merge-rd/ui/components/radio-group";
+import { Separator } from "@merge-rd/ui/components/separator";
+import { Switch } from "@merge-rd/ui/components/switch";
+import { Link, useNavigate } from "@tanstack/react-router";
+import { omit } from "lodash-es";
+import { useEffect, useState } from "react";
+import { Controller, type UseFormReturn, useForm } from "react-hook-form";
+import { toast } from "sonner";
+import { DataTable, DataTableRowActions } from "@/admin/shared/ui/data-table";
+import {
+    getErrorDescription,
+    getErrorMessage,
+    KeycloakSpinner
+} from "../../../shared/keycloak-ui-shared";
+import { useAdminClient } from "../../app/admin-client";
+import { useRealm } from "../../app/providers/realm-context/realm-context";
+import { translationFormatter } from "../../shared/lib/translationFormatter";
+import { prettyPrintJSON } from "../../shared/lib/util";
 import { useConfirmDialog } from "../../shared/ui/confirm-dialog/confirm-dialog";
 import CodeEditor from "../../shared/ui/form/code-editor";
-import { useRealm } from "../../app/providers/realm-context/realm-context";
-import { prettyPrintJSON } from "../../shared/lib/util";
-import { translationFormatter } from "../../shared/lib/translationFormatter";
-import { toAddClientPolicy } from "./routes/add-client-policy";
-import { toClientPolicies } from "./routes/client-policies";
-import { toEditClientPolicy } from "./routes/edit-client-policy";
+import { useClientPolicies } from "./api/use-client-policies";
+import { toAddClientPolicy, toClientPolicies, toEditClientPolicy } from "../../shared/lib/routes/realm-settings";
 
 type ClientPolicy = ClientPolicyRepresentation & {
     global?: boolean;
@@ -47,42 +50,37 @@ export const PoliciesTab = () => {
     const { adminClient } = useAdminClient();
 
     const { t } = useTranslation();
-const { realm } = useRealm();
+    const { realm } = useRealm();
     const navigate = useNavigate();
     const [show, setShow] = useState(false);
     const [policies, setPolicies] = useState<ClientPolicy[]>();
     const [selectedPolicy, setSelectedPolicy] = useState<ClientPolicy>();
-    const [key, setKey] = useState(0);
     const [code, setCode] = useState<string>();
     const [tablePolicies, setTablePolicies] = useState<ClientPolicy[]>();
-    const refresh = () => setKey(key + 1);
 
     const form = useForm<Record<string, boolean>>({ mode: "onChange" });
 
-    useFetch(
-        () =>
-            adminClient.clientPolicies.listPolicies({
-                includeGlobalPolicies: true
-            }),
-        allPolicies => {
-            const globalPolicies = allPolicies.globalPolicies?.map(globalPolicies => ({
-                ...globalPolicies,
+    const { data: allPoliciesData, refetch: refetchPolicies } = useClientPolicies();
+
+    useEffect(() => {
+        if (allPoliciesData) {
+            const globalPolicies = allPoliciesData.globalPolicies?.map(p => ({
+                ...p,
                 global: true
             }));
 
-            const policies = allPolicies.policies?.map(policies => ({
-                ...policies,
+            const pols = allPoliciesData.policies?.map(p => ({
+                ...p,
                 global: false
             }));
 
-            const allClientPolicies = globalPolicies?.concat(policies ?? []);
+            const allClientPolicies = globalPolicies?.concat(pols ?? []);
 
             setPolicies(allClientPolicies);
             setTablePolicies(allClientPolicies || []);
             setCode(prettyPrintJSON(allClientPolicies));
-        },
-        [key]
-    );
+        }
+    }, [allPoliciesData]);
 
     const saveStatus = async () => {
         const switchValues = form.getValues();
@@ -108,7 +106,9 @@ const { realm } = useRealm();
             navigate({ to: toClientPolicies({ realm, tab: "policies" }) as string });
             toast.success(t("updateClientPolicySuccess"));
         } catch (error) {
-            toast.error(t("updateClientPolicyError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
+            toast.error(t("updateClientPolicyError", { error: getErrorMessage(error) }), {
+                description: getErrorDescription(error)
+            });
         }
     };
 
@@ -137,13 +137,19 @@ const { realm } = useRealm();
                     globalPolicies: changedGlobalPolicies
                 });
                 toast.success(t("updateClientPoliciesSuccess"));
-                refresh();
+                refetchPolicies();
             } catch (error) {
-                toast.error(t("updateClientPoliciesError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
+                toast.error(
+                    t("updateClientPoliciesError", { error: getErrorMessage(error) }),
+                    { description: getErrorDescription(error) }
+                );
             }
         } catch (error) {
             console.warn("Invalid json, ignoring value using {}");
-            toast.error(t("invalidJsonClientPoliciesError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
+            toast.error(
+                t("invalidJsonClientPoliciesError", { error: getErrorMessage(error) }),
+                { description: getErrorDescription(error) }
+            );
         }
     };
 
@@ -165,9 +171,11 @@ const { realm } = useRealm();
             });
             setSelectedPolicy(undefined);
             toast.success(t("deleteClientPolicySuccess"));
-            refresh();
+            refetchPolicies();
         } catch (error) {
-            toast.error(t("deleteClientPolicyError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
+            toast.error(t("deleteClientPolicyError", { error: getErrorMessage(error) }), {
+                description: getErrorDescription(error)
+            });
         }
     };
 
@@ -176,17 +184,28 @@ const { realm } = useRealm();
     }
     return (
         <>
-            <AlertDialog open={!!selectedPolicy} onOpenChange={(open) => !open && setSelectedPolicy(undefined)}>
+            <AlertDialog
+                open={!!selectedPolicy}
+                onOpenChange={open => !open && setSelectedPolicy(undefined)}
+            >
                 <AlertDialogContent>
                     <AlertDialogHeader>
-                        <AlertDialogTitle>{t("deleteClientPolicyConfirmTitle")}</AlertDialogTitle>
+                        <AlertDialogTitle>
+                            {t("deleteClientPolicyConfirmTitle")}
+                        </AlertDialogTitle>
                         <AlertDialogDescription>
-                            {t("deleteClientPolicyConfirm", { policyName: selectedPolicy?.name })}
+                            {t("deleteClientPolicyConfirm", {
+                                policyName: selectedPolicy?.name
+                            })}
                         </AlertDialogDescription>
                     </AlertDialogHeader>
                     <AlertDialogFooter>
                         <AlertDialogCancel>{t("cancel")}</AlertDialogCancel>
-                        <AlertDialogAction variant="destructive" data-testid="confirm" onClick={onDeleteConfirm}>
+                        <AlertDialogAction
+                            variant="destructive"
+                            data-testid="confirm"
+                            onClick={onDeleteConfirm}
+                        >
                             {t("delete")}
                         </AlertDialogAction>
                     </AlertDialogFooter>
@@ -200,14 +219,19 @@ const { realm } = useRealm();
                         </h1>
                     </div>
                     <div className="flex items-center gap-2">
-                        <RadioGroup value={show ? "json" : "form"} onValueChange={(v) => setShow(v === "json")}>
+                        <RadioGroup
+                            value={show ? "json" : "form"}
+                            onValueChange={v => setShow(v === "json")}
+                        >
                             <div className="flex items-center gap-2">
                                 <RadioGroupItem
                                     value="form"
                                     id="formView-policiesView"
                                     data-testid="formView-policiesView"
                                 />
-                                <Label htmlFor="formView-policiesView">{t("policiesConfigTypes.formView")}</Label>
+                                <Label htmlFor="formView-policiesView">
+                                    {t("policiesConfigTypes.formView")}
+                                </Label>
                             </div>
                             <div className="flex items-center gap-2">
                                 <RadioGroupItem
@@ -215,7 +239,9 @@ const { realm } = useRealm();
                                     id="jsonEditor-policiesView"
                                     data-testid="jsonEditor-policiesView"
                                 />
-                                <Label htmlFor="jsonEditor-policiesView">{t("policiesConfigTypes.jsonEditor")}</Label>
+                                <Label htmlFor="jsonEditor-policiesView">
+                                    {t("policiesConfigTypes.jsonEditor")}
+                                </Label>
                             </div>
                         </RadioGroup>
                     </div>
@@ -229,15 +255,21 @@ const { realm } = useRealm();
                         {
                             accessorKey: "name",
                             header: t("name"),
-                            cell: ({ row }) => (
+                            cell: ({ row }) =>
                                 row.original.global ? (
                                     row.original.name
                                 ) : (
-                                    <Link to={toEditClientPolicy({ realm, policyName: row.original.name! }) as string}>
+                                    <Link
+                                        to={
+                                            toEditClientPolicy({
+                                                realm,
+                                                policyName: row.original.name!
+                                            }) as string
+                                        }
+                                    >
                                         {row.original.name}
                                     </Link>
                                 )
-                            )
                         },
                         {
                             accessorKey: "enabled",
@@ -257,7 +289,8 @@ const { realm } = useRealm();
                         {
                             accessorKey: "description",
                             header: t("description"),
-                            cell: ({ row }) => translationFormatter(t)(row.original.description)
+                            cell: ({ row }) =>
+                                translationFormatter(t)(row.original.description)
                         },
                         {
                             id: "actions",
@@ -267,7 +300,9 @@ const { realm } = useRealm();
                                         <button
                                             type="button"
                                             className="rounded-md px-1.5 py-1 text-left text-sm text-destructive hover:bg-destructive/10"
-                                            onClick={() => setSelectedPolicy(row.original)}
+                                            onClick={() =>
+                                                setSelectedPolicy(row.original)
+                                            }
                                         >
                                             {t("delete")}
                                         </button>
@@ -280,17 +315,27 @@ const { realm } = useRealm();
                     searchPlaceholder={t("clientPolicySearch")}
                     emptyContent={
                         <Empty className="py-12">
-                            <EmptyHeader><EmptyTitle>{t("noClientPolicies")}</EmptyTitle></EmptyHeader>
-                            <EmptyContent><EmptyDescription>{t("noClientPoliciesInstructions")}</EmptyDescription></EmptyContent>
+                            <EmptyHeader>
+                                <EmptyTitle>{t("noClientPolicies")}</EmptyTitle>
+                            </EmptyHeader>
+                            <EmptyContent>
+                                <EmptyDescription>
+                                    {t("noClientPoliciesInstructions")}
+                                </EmptyDescription>
+                            </EmptyContent>
                             <Button asChild className="mt-2">
-                                <Link to={toAddClientPolicy({ realm }) as string}>{t("createClientPolicy")}</Link>
+                                <Link to={toAddClientPolicy({ realm }) as string}>
+                                    {t("createClientPolicy")}
+                                </Link>
                             </Button>
                         </Empty>
                     }
                     emptyMessage={t("noClientPolicies")}
                     toolbar={
                         <Button id="createPolicy" asChild data-testid="createPolicy">
-                            <Link to={toAddClientPolicy({ realm }) as string}>{t("createClientPolicy")}</Link>
+                            <Link to={toAddClientPolicy({ realm }) as string}>
+                                {t("createClientPolicy")}
+                            </Link>
                         </Button>
                     }
                 />
@@ -305,10 +350,7 @@ const { realm } = useRealm();
                         />
                     </div>
                     <div className="mt-4 flex gap-2 ml-4">
-                        <Button
-                            data-testid="jsonEditor-policies-saveBtn"
-                            onClick={save}
-                        >
+                        <Button data-testid="jsonEditor-policies-saveBtn" onClick={save}>
                             {t("save")}
                         </Button>
                         <Button
@@ -361,7 +403,7 @@ const SwitchRenderer = ({
                         <Switch
                             checked={field.value}
                             disabled={clientPolicy.global}
-                            onCheckedChange={(value) => {
+                            onCheckedChange={value => {
                                 if (!value) {
                                     toggleDisableDialog();
                                 } else {
@@ -371,7 +413,9 @@ const SwitchRenderer = ({
                             }}
                             aria-label={clientPolicy.name!}
                         />
-                        <span className="text-sm">{field.value ? t("enabled") : t("disabled")}</span>
+                        <span className="text-sm">
+                            {field.value ? t("enabled") : t("disabled")}
+                        </span>
                     </div>
                 )}
             />

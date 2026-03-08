@@ -1,16 +1,19 @@
 import type RoleRepresentation from "@keycloak/keycloak-admin-client/lib/defs/roleRepresentation";
-import { FormProvider, SubmitHandler, useForm } from "react-hook-form";
 import { useTranslation } from "@merge-rd/i18n";
 import { useNavigate, useParams } from "@tanstack/react-router";
-import { useAdminClient } from "../../../app/admin-client";
-import { getErrorDescription, getErrorMessage } from "../../../../shared/keycloak-ui-shared";
+import { FormProvider, type SubmitHandler, useForm } from "react-hook-form";
 import { toast } from "sonner";
-import { AttributeForm } from "../../../shared/ui/key-value-form/attribute-form";
-import { RoleForm } from "../../../shared/ui/role-form/role-form";
+import {
+    getErrorDescription,
+    getErrorMessage
+} from "../../../../shared/keycloak-ui-shared";
+import { useAdminClient } from "../../../app/admin-client";
 import { useRealm } from "../../../app/providers/realm-context/realm-context";
-import { toClient } from "../routes/client";
-import { toClientRole } from "../routes/client-role";
-import { NewRoleParams } from "../routes/new-role";
+import type { AttributeForm } from "../../../shared/ui/key-value-form/attribute-form";
+import { RoleForm } from "../../../shared/ui/role-form/role-form";
+import { toClient } from "../../../shared/lib/routes/clients";
+import { toClientRole } from "../../../shared/lib/routes/clients";
+import type { NewRoleParams } from "../../../shared/lib/routes/clients";
 
 export default function CreateClientRole() {
     const { adminClient } = useAdminClient();
@@ -20,7 +23,7 @@ export default function CreateClientRole() {
     const navigate = useNavigate();
     const { clientId } = useParams({ strict: false }) as NewRoleParams;
     const { realm } = useRealm();
-const onSubmit: SubmitHandler<AttributeForm> = async formValues => {
+    const onSubmit: SubmitHandler<AttributeForm> = async formValues => {
         const role: RoleRepresentation = {
             ...formValues,
             name: formValues.name?.trim(),
@@ -39,8 +42,8 @@ const onSubmit: SubmitHandler<AttributeForm> = async formValues => {
             }))!;
 
             toast.success(t("roleCreated"));
-            navigate({ to:
-                toClientRole({
+            navigate({
+                to: toClientRole({
                     realm,
                     clientId: clientId!,
                     id: createdRole.id!,
@@ -48,7 +51,9 @@ const onSubmit: SubmitHandler<AttributeForm> = async formValues => {
                 }) as string
             });
         } catch (error) {
-            toast.error(t("roleCreateError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
+            toast.error(t("roleCreateError", { error: getErrorMessage(error) }), {
+                description: getErrorDescription(error)
+            });
         }
     };
 

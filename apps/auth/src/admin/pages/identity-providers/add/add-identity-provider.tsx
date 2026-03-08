@@ -1,21 +1,21 @@
 import type IdentityProviderRepresentation from "@keycloak/keycloak-admin-client/lib/defs/identityProviderRepresentation";
+import { useTranslation } from "@merge-rd/i18n";
 import { Button } from "@merge-rd/ui/components/button";
+import { Link, useNavigate } from "@tanstack/react-router";
 import { useMemo } from "react";
 import { FormProvider, useForm } from "react-hook-form";
-import { useTranslation } from "@merge-rd/i18n";
-import { Link, useNavigate } from "@tanstack/react-router";
-import { useAdminClient } from "../../../app/admin-client";
-import { getErrorDescription, getErrorMessage } from "../../../../shared/keycloak-ui-shared";
 import { toast } from "sonner";
-import { DynamicComponents } from "../../../shared/ui/dynamic/dynamic-components";
-import { FormAccess } from "../../../shared/ui/form/form-access";
+import {
+    getErrorDescription,
+    getErrorMessage
+} from "../../../../shared/keycloak-ui-shared";
+import { useAdminClient } from "../../../app/admin-client";
 import { useRealm } from "../../../app/providers/realm-context/realm-context";
 import { useServerInfo } from "../../../app/providers/server-info/server-info-provider";
-import { toUpperCase } from "../../../shared/lib/util";
 import { useParams } from "../../../shared/lib/useParams";
-import { toIdentityProvider } from "../routes/identity-provider";
-import type { IdentityProviderCreateParams } from "../routes/identity-provider-create";
-import { toIdentityProviders } from "../routes/identity-providers";
+import { DynamicComponents } from "../../../shared/ui/dynamic/dynamic-components";
+import { FormAccess } from "../../../shared/ui/form/form-access";
+import { toIdentityProvider, type IdentityProviderCreateParams, toIdentityProviders } from "../../../shared/lib/routes/identity-providers";
 import { GeneralSettings } from "./general-settings";
 
 export default function AddIdentityProvider() {
@@ -47,7 +47,7 @@ export default function AddIdentityProvider() {
         handleSubmit,
         formState: { isValid }
     } = form;
-const navigate = useNavigate();
+    const navigate = useNavigate();
     const { realm } = useRealm();
 
     const onSubmit = async (provider: IdentityProviderRepresentation) => {
@@ -67,7 +67,9 @@ const navigate = useNavigate();
                 }) as string
             });
         } catch (error) {
-            toast.error(t("createError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
+            toast.error(t("createError", { error: getErrorMessage(error) }), {
+                description: getErrorDescription(error)
+            });
         }
     };
 
@@ -78,42 +80,36 @@ const navigate = useNavigate();
     }
 
     return (
-        <>
-                        <div className="p-6">
-                <FormAccess
-                    role="manage-identity-providers"
-                    isHorizontal
-                    onSubmit={handleSubmit(onSubmit)}
-                >
-                    <FormProvider {...form}>
-                        <GeneralSettings id={providerId} />
-                        {providerInfo && (
-                            <DynamicComponents
-                                stringify
-                                properties={providerInfo.properties}
-                            />
-                        )}
-                    </FormProvider>
-                    <div className="flex gap-2">
-                        <Button
-                            disabled={!isValid}
-                            type="submit"
-                            data-testid="createProvider"
-                        >
-                            {t("add")}
-                        </Button>
-                        <Button
-                            variant="link"
-                            data-testid="cancel"
-                            asChild
-                        >
-                            <Link to={toIdentityProviders({ realm }) as string}>
-                                {t("cancel")}
-                            </Link>
-                        </Button>
-                    </div>
-                </FormAccess>
-            </div>
-        </>
+        <div className="p-6">
+            <FormAccess
+                role="manage-identity-providers"
+                isHorizontal
+                onSubmit={handleSubmit(onSubmit)}
+            >
+                <FormProvider {...form}>
+                    <GeneralSettings id={providerId} />
+                    {providerInfo && (
+                        <DynamicComponents
+                            stringify
+                            properties={providerInfo.properties}
+                        />
+                    )}
+                </FormProvider>
+                <div className="flex gap-2">
+                    <Button
+                        disabled={!isValid}
+                        type="submit"
+                        data-testid="createProvider"
+                    >
+                        {t("add")}
+                    </Button>
+                    <Button variant="link" data-testid="cancel" asChild>
+                        <Link to={toIdentityProviders({ realm }) as string}>
+                            {t("cancel")}
+                        </Link>
+                    </Button>
+                </div>
+            </FormAccess>
+        </div>
     );
 }

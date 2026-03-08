@@ -1,21 +1,25 @@
-import GroupRepresentation from "@keycloak/keycloak-admin-client/lib/defs/groupRepresentation";
-import { FormErrorText, HelpItem, useFetch, FormLabel } from "../../../../shared/keycloak-ui-shared";
+import type GroupRepresentation from "@keycloak/keycloak-admin-client/lib/defs/groupRepresentation";
+import { useTranslation } from "@merge-rd/i18n";
 import { Button } from "@merge-rd/ui/components/button";
+import { MinusCircle } from "@phosphor-icons/react";
+import { useEffect, useState } from "react";
+import { Controller, useFormContext } from "react-hook-form";
 import {
     Table,
     TableBody,
     TableCell,
     TableHead,
     TableHeader,
-    TableRow,
+    TableRow
 } from "@/admin/shared/ui/data-table";
-import { MinusCircle } from "@phosphor-icons/react";
-import { useState } from "react";
-import { Controller, useFormContext } from "react-hook-form";
-import { useTranslation } from "@merge-rd/i18n";
-import { useAdminClient } from "../../../app/admin-client";
+import {
+    FormErrorText,
+    FormLabel,
+    HelpItem
+} from "../../../../shared/keycloak-ui-shared";
 import type { ComponentProps } from "../../../shared/ui/dynamic/components";
 import { GroupPickerDialog } from "../../../shared/ui/group/group-picker-dialog";
+import { useGroupDetails } from "../api/use-group-details";
 
 type GroupSelectProps = Omit<ComponentProps, "convertToName"> & {
     variant?: "typeahead" | "typeaheadMulti";
@@ -34,7 +38,6 @@ export const GroupSelect = ({
     isRequired,
     variant = "typeaheadMulti"
 }: GroupSelectProps) => {
-    const { adminClient } = useAdminClient();
     const { t } = useTranslation();
     const {
         control,
@@ -46,20 +49,13 @@ export const GroupSelect = ({
     const [open, setOpen] = useState(false);
     const [groups, setGroups] = useState<GroupRepresentation[]>([]);
 
-    useFetch(
-        () => {
-            if (values && values.length > 0) {
-                return Promise.all(
-                    (values as string[]).map(id => adminClient.groups.findOne({ id }))
-                );
-            }
-            return Promise.resolve([]);
-        },
-        groups => {
-            setGroups(groups.flat().filter(g => g) as GroupRepresentation[]);
-        },
-        []
-    );
+    const { data: groupDetailsData } = useGroupDetails(values || []);
+
+    useEffect(() => {
+        if (groupDetailsData) {
+            setGroups(groupDetailsData);
+        }
+    }, [groupDetailsData]);
 
     const selectOne = variant === "typeahead";
 

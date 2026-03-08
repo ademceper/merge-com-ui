@@ -1,30 +1,35 @@
 import type ClientProfileRepresentation from "@keycloak/keycloak-admin-client/lib/defs/clientProfileRepresentation";
 import type ClientProfilesRepresentation from "@keycloak/keycloak-admin-client/lib/defs/clientProfilesRepresentation";
-import { getErrorDescription, getErrorMessage, HelpItem,
-    TextAreaControl,
-    TextControl,
-    useFetch } from "../../../shared/keycloak-ui-shared";
-import { toast } from "sonner";
+import { useTranslation } from "@merge-rd/i18n";
 import { Button, buttonVariants } from "@merge-rd/ui/components/button";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@merge-rd/ui/components/dropdown-menu";
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuTrigger
+} from "@merge-rd/ui/components/dropdown-menu";
 import { Label } from "@merge-rd/ui/components/label";
 import { Separator } from "@merge-rd/ui/components/separator";
 import { Plus, Trash } from "@phosphor-icons/react";
-import { Fragment, useMemo, useState } from "react";
-import { FormProvider, useFieldArray, useForm } from "react-hook-form";
-import { useTranslation } from "@merge-rd/i18n";
 import { Link, useNavigate } from "@tanstack/react-router";
+import { Fragment, useEffect, useMemo, useState } from "react";
+import { FormProvider, useFieldArray, useForm } from "react-hook-form";
+import { toast } from "sonner";
+import {
+    getErrorDescription,
+    getErrorMessage,
+    HelpItem,
+    KeycloakSpinner,
+    TextAreaControl,
+    TextControl
+} from "../../../shared/keycloak-ui-shared";
 import { useAdminClient } from "../../app/admin-client";
-import { useConfirmDialog } from "../../shared/ui/confirm-dialog/confirm-dialog";
-import { FormAccess } from "../../shared/ui/form/form-access";
-import { KeycloakSpinner } from "../../../shared/keycloak-ui-shared";
-
 import { useServerInfo } from "../../app/providers/server-info/server-info-provider";
 import { useParams } from "../../shared/lib/useParams";
-import { toAddExecutor } from "./routes/add-executor";
-import { toClientPolicies } from "./routes/client-policies";
-import { ClientProfileParams, toClientProfile } from "./routes/client-profile";
-import { toExecutor } from "./routes/executor";
+import { useConfirmDialog } from "../../shared/ui/confirm-dialog/confirm-dialog";
+import { FormAccess } from "../../shared/ui/form/form-access";
+import { useClientProfiles } from "./api/use-client-profiles";
+import { toAddExecutor, toClientPolicies, type ClientProfileParams, toClientProfile, toExecutor } from "../../shared/lib/routes/realm-settings";
 
 type ClientProfileForm = Required<ClientProfileRepresentation>;
 
@@ -56,7 +61,7 @@ export default function ClientProfileForm() {
         name: "executors",
         control
     });
-const [profiles, setProfiles] = useState<ClientProfilesRepresentation>();
+    const [profiles, setProfiles] = useState<ClientProfilesRepresentation>();
     const [isGlobalProfile, setIsGlobalProfile] = useState(false);
     const { realm, profileName } = useParams<ClientProfileParams>();
     const serverInfo = useServerInfo();
@@ -71,21 +76,20 @@ const [profiles, setProfiles] = useState<ClientProfilesRepresentation>();
         idx: number;
         name: string;
     }>();
-    const editMode = profileName ? true : false;
-    const [key, setKey] = useState(0);
-    const reload = () => setKey(key + 1);
+    const editMode = !!profileName;
 
-    useFetch(
-        () => adminClient.clientPolicies.listProfiles({ includeGlobalProfiles: true }),
-        profiles => {
+    const { data: allProfilesData, refetch: reloadProfiles } = useClientProfiles();
+
+    useEffect(() => {
+        if (allProfilesData) {
             setProfiles({
-                globalProfiles: profiles.globalProfiles,
-                profiles: profiles.profiles?.filter(p => p.name !== profileName)
+                globalProfiles: allProfilesData.globalProfiles,
+                profiles: allProfilesData.profiles?.filter(p => p.name !== profileName)
             });
-            const globalProfile = profiles.globalProfiles?.find(
+            const globalProfile = allProfilesData.globalProfiles?.find(
                 p => p.name === profileName
             );
-            const profile = profiles.profiles?.find(p => p.name === profileName);
+            const profile = allProfilesData.profiles?.find(p => p.name === profileName);
             setIsGlobalProfile(globalProfile !== undefined);
             setValue("name", globalProfile?.name ?? profile?.name ?? "");
             setValue(
@@ -93,9 +97,8 @@ const [profiles, setProfiles] = useState<ClientProfilesRepresentation>();
                 globalProfile?.description ?? profile?.description ?? ""
             );
             setValue("executors", globalProfile?.executors ?? profile?.executors ?? []);
-        },
-        [key]
-    );
+        }
+    }, [allProfilesData]);
 
     const save = async (form: ClientProfileForm) => {
         const updatedProfiles = form;
@@ -112,10 +115,14 @@ const [profiles, setProfiles] = useState<ClientProfilesRepresentation>();
                     : t("createClientProfileSuccess")
             );
 
-            navigate({ to: toClientProfile({ realm, profileName: form.name }) as string });
+            navigate({
+                to: toClientProfile({ realm, profileName: form.name }) as string
+            });
         } catch (error) {
             toast.error(
-                t(editMode ? "updateClientProfileError" : "createClientProfileError", { error: getErrorMessage(error) }),
+                t(editMode ? "updateClientProfileError" : "createClientProfileError", {
+                    error: getErrorMessage(error)
+                }),
                 { description: getErrorDescription(error) }
             );
         }
@@ -146,15 +153,23 @@ const [profiles, setProfiles] = useState<ClientProfilesRepresentation>();
                     toast.success(t("deleteExecutorSuccess"));
                     navigate({ to: toClientProfile({ realm, profileName }) as string });
                 } catch (error) {
-                    toast.error(t("deleteExecutorError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
+                    toast.error(
+                        t("deleteExecutorError", { error: getErrorMessage(error) }),
+                        { description: getErrorDescription(error) }
+                    );
                 }
             } else {
                 try {
                     await adminClient.clientPolicies.createProfiles(profiles);
                     toast.success(t("deleteClientSuccess"));
-                    navigate({ to: toClientPolicies({ realm, tab: "profiles" }) as string });
+                    navigate({
+                        to: toClientPolicies({ realm, tab: "profiles" }) as string
+                    });
                 } catch (error) {
-                    toast.error(t("deleteClientError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
+                    toast.error(
+                        t("deleteClientError", { error: getErrorMessage(error) }),
+                        { description: getErrorDescription(error) }
+                    );
                 }
             }
         }
@@ -170,14 +185,15 @@ const [profiles, setProfiles] = useState<ClientProfilesRepresentation>();
             {(isGlobalProfile || (editMode && !isGlobalProfile)) && (
                 <div className="flex flex-wrap items-center justify-between gap-2">
                     <div className="flex flex-wrap items-center gap-2">
-                        {isGlobalProfile && (
-                            <Label color="blue">{t("global")}</Label>
-                        )}
+                        {isGlobalProfile && <Label color="blue">{t("global")}</Label>}
                     </div>
                     <div className="flex items-center gap-2">
                         {editMode && !isGlobalProfile && (
                             <DropdownMenu>
-                                <DropdownMenuTrigger data-testid="action-dropdown" className={buttonVariants()}>
+                                <DropdownMenuTrigger
+                                    data-testid="action-dropdown"
+                                    className={buttonVariants()}
+                                >
                                     {t("action")}
                                 </DropdownMenuTrigger>
                                 <DropdownMenuContent align="end">
@@ -227,7 +243,7 @@ const [profiles, setProfiles] = useState<ClientProfilesRepresentation>();
                                     variant="ghost"
                                     data-testid="reloadProfile"
                                     disabled={!isDirty}
-                                    onClick={reload}
+                                    onClick={() => reloadProfiles()}
                                 >
                                     {t("reload")}
                                 </Button>
@@ -239,7 +255,14 @@ const [profiles, setProfiles] = useState<ClientProfilesRepresentation>();
                                     data-testid="cancelCreateProfile"
                                     asChild
                                 >
-                                    <Link to={toClientPolicies({ realm, tab: "profiles" }) as string}>
+                                    <Link
+                                        to={
+                                            toClientPolicies({
+                                                realm,
+                                                tab: "profiles"
+                                            }) as string
+                                        }
+                                    >
                                         {t("cancel")}
                                     </Link>
                                 </Button>
@@ -250,7 +273,10 @@ const [profiles, setProfiles] = useState<ClientProfilesRepresentation>();
                                 <div className="flex flex-wrap items-center justify-between gap-4 mt-6">
                                     <h2 className="kc-executors text-lg font-medium">
                                         {t("executors")}
-                                        <HelpItem helpText={t("executorsHelpText")} fieldLabelId="executors" />
+                                        <HelpItem
+                                            helpText={t("executorsHelpText")}
+                                            fieldLabelId="executors"
+                                        />
                                     </h2>
                                     {!isGlobalProfile && (
                                         <Button
@@ -260,7 +286,14 @@ const [profiles, setProfiles] = useState<ClientProfilesRepresentation>();
                                             data-testid="addExecutor"
                                             asChild
                                         >
-                                            <Link to={toAddExecutor({ realm, profileName }) as string}>
+                                            <Link
+                                                to={
+                                                    toAddExecutor({
+                                                        realm,
+                                                        profileName
+                                                    }) as string
+                                                }
+                                            >
                                                 <Plus className="size-4 mr-1 inline" />
                                                 {t("addExecutor")}
                                             </Link>
@@ -269,47 +302,105 @@ const [profiles, setProfiles] = useState<ClientProfilesRepresentation>();
                                 </div>
                                 {profileExecutors.length > 0 && (
                                     <>
-                                        <ul className="mt-2 space-y-1 border rounded-md divide-y" aria-label={t("executors")}>
+                                        <ul
+                                            className="mt-2 space-y-1 border rounded-md divide-y"
+                                            aria-label={t("executors")}
+                                        >
                                             {profileExecutors.map((executor, idx) => (
-                                                <li key={executor.executor} id={executor.executor} className="flex items-center justify-between gap-2 py-2 px-3">
-                                                    <span data-testid="executor-type" className="flex items-center gap-2 min-w-0">
+                                                <li
+                                                    key={executor.executor}
+                                                    id={executor.executor}
+                                                    className="flex items-center justify-between gap-2 py-2 px-3"
+                                                >
+                                                    <span
+                                                        data-testid="executor-type"
+                                                        className="flex items-center gap-2 min-w-0"
+                                                    >
                                                         {executor.configuration ? (
-                                                            <Button variant="ghost" className="p-0 h-auto font-normal text-primary underline" data-testid="editExecutor" asChild>
-                                                                <Link to={toExecutor({ realm, profileName, executorName: executor.executor! }) as string}>
+                                                            <Button
+                                                                variant="ghost"
+                                                                className="p-0 h-auto font-normal text-primary underline"
+                                                                data-testid="editExecutor"
+                                                                asChild
+                                                            >
+                                                                <Link
+                                                                    to={
+                                                                        toExecutor({
+                                                                            realm,
+                                                                            profileName,
+                                                                            executorName:
+                                                                                executor.executor!
+                                                                        }) as string
+                                                                    }
+                                                                >
                                                                     {executor.executor}
                                                                 </Link>
                                                             </Button>
                                                         ) : (
-                                                            <span className="kc-unclickable-executor">{executor.executor}</span>
+                                                            <span className="kc-unclickable-executor">
+                                                                {executor.executor}
+                                                            </span>
                                                         )}
-                                                        {executorTypes?.filter(type => type.id === executor.executor).map(type => (
-                                                            <Fragment key={type.id}>
-                                                                <HelpItem helpText={type.helpText} fieldLabelId="executorTypeTextHelpText" />
-                                                                {!isGlobalProfile && (
-                                                                    <Button
-                                                                        type="button"
-                                                                        variant="ghost"
-                                                                        size="icon"
-                                                                        data-testid={`deleteExecutor-${type.id}`}
-                                                                        className="kc-executor-trash-icon shrink-0"
-                                                                        onClick={() => {
-                                                                            toggleDeleteDialog();
-                                                                            setExecutorToDelete({ idx, name: type.id });
-                                                                        }}
-                                                                        aria-label={t("remove")}
-                                                                    >
-                                                                        <Trash className="size-4" />
-                                                                    </Button>
-                                                                )}
-                                                            </Fragment>
-                                                        ))}
+                                                        {executorTypes
+                                                            ?.filter(
+                                                                type =>
+                                                                    type.id ===
+                                                                    executor.executor
+                                                            )
+                                                            .map(type => (
+                                                                <Fragment key={type.id}>
+                                                                    <HelpItem
+                                                                        helpText={
+                                                                            type.helpText
+                                                                        }
+                                                                        fieldLabelId="executorTypeTextHelpText"
+                                                                    />
+                                                                    {!isGlobalProfile && (
+                                                                        <Button
+                                                                            type="button"
+                                                                            variant="ghost"
+                                                                            size="icon"
+                                                                            data-testid={`deleteExecutor-${type.id}`}
+                                                                            className="kc-executor-trash-icon shrink-0"
+                                                                            onClick={() => {
+                                                                                toggleDeleteDialog();
+                                                                                setExecutorToDelete(
+                                                                                    {
+                                                                                        idx,
+                                                                                        name: type.id
+                                                                                    }
+                                                                                );
+                                                                            }}
+                                                                            aria-label={t(
+                                                                                "remove"
+                                                                            )}
+                                                                        >
+                                                                            <Trash className="size-4" />
+                                                                        </Button>
+                                                                    )}
+                                                                </Fragment>
+                                                            ))}
                                                     </span>
                                                 </li>
                                             ))}
                                         </ul>
                                         {isGlobalProfile && (
-                                            <Button id="backToClientPolicies" className="kc-backToPolicies mt-4" data-testid="backToClientPolicies" asChild>
-                                                <Link to={toClientPolicies({ realm, tab: "profiles" }) as string}>{t("back")}</Link>
+                                            <Button
+                                                id="backToClientPolicies"
+                                                className="kc-backToPolicies mt-4"
+                                                data-testid="backToClientPolicies"
+                                                asChild
+                                            >
+                                                <Link
+                                                    to={
+                                                        toClientPolicies({
+                                                            realm,
+                                                            tab: "profiles"
+                                                        }) as string
+                                                    }
+                                                >
+                                                    {t("back")}
+                                                </Link>
                                             </Button>
                                         )}
                                     </>

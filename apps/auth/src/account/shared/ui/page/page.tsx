@@ -9,8 +9,8 @@
 
 // @ts-nocheck
 
-import { PropsWithChildren } from "react";
 import { Separator } from "@merge-rd/ui/components/separator";
+import type { PropsWithChildren } from "react";
 
 type PageProps = {
     title: string;
@@ -18,12 +18,19 @@ type PageProps = {
     action?: React.ReactNode;
 };
 
-export const Page = ({ title, description, action, children }: PropsWithChildren<PageProps>) => {
+export const Page = ({
+    title,
+    description,
+    action,
+    children
+}: PropsWithChildren<PageProps>) => {
     return (
         <div className="space-y-6">
             <div className="flex items-center justify-between gap-4">
                 <div>
-                    <h3 className="text-lg font-medium" data-testid="page-heading">{title}</h3>
+                    <h3 className="text-lg font-medium" data-testid="page-heading">
+                        {title}
+                    </h3>
                     <p className="text-sm text-muted-foreground">{description}</p>
                 </div>
                 {action}

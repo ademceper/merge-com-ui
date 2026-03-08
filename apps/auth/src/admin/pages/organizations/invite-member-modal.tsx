@@ -1,11 +1,20 @@
-import { TextControl } from "../../../shared/keycloak-ui-shared";
-import { Button } from "@merge-rd/ui/components/button";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@merge-rd/ui/components/dialog";
-import { FormProvider, useForm } from "react-hook-form";
 import { useTranslation } from "@merge-rd/i18n";
-import { useAdminClient } from "../../app/admin-client";
-import { getErrorDescription, getErrorMessage } from "../../../shared/keycloak-ui-shared";
+import { Button } from "@merge-rd/ui/components/button";
+import {
+    Dialog,
+    DialogContent,
+    DialogFooter,
+    DialogHeader,
+    DialogTitle
+} from "@merge-rd/ui/components/dialog";
+import { FormProvider, useForm } from "react-hook-form";
 import { toast } from "sonner";
+import {
+    getErrorDescription,
+    getErrorMessage,
+    TextControl
+} from "../../../shared/keycloak-ui-shared";
+import { useAdminClient } from "../../app/admin-client";
 
 type InviteMemberModalProps = {
     orgId: string;
@@ -14,7 +23,7 @@ type InviteMemberModalProps = {
 
 export const InviteMemberModal = ({ orgId, onClose }: InviteMemberModalProps) => {
     const { adminClient } = useAdminClient();
-const { t } = useTranslation();
+    const { t } = useTranslation();
     const form = useForm<Record<string, string>>();
     const { handleSubmit, formState } = form;
 
@@ -28,12 +37,19 @@ const { t } = useTranslation();
             toast.success(t("inviteSent"));
             onClose();
         } catch (error) {
-            toast.error(t("inviteSentError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
+            toast.error(t("inviteSentError", { error: getErrorMessage(error) }), {
+                description: getErrorDescription(error)
+            });
         }
     };
 
     return (
-        <Dialog open onOpenChange={(open) => { if (!open) onClose(); }}>
+        <Dialog
+            open
+            onOpenChange={open => {
+                if (!open) onClose();
+            }}
+        >
             <DialogContent>
                 <DialogHeader>
                     <DialogTitle>{t("inviteMember")}</DialogTitle>
@@ -55,7 +71,11 @@ const { t } = useTranslation();
                         type="submit"
                         form="form"
                         data-testid="save"
-                        disabled={formState.isLoading || formState.isValidating || formState.isSubmitting}
+                        disabled={
+                            formState.isLoading ||
+                            formState.isValidating ||
+                            formState.isSubmitting
+                        }
                     >
                         {t("send")}
                     </Button>

@@ -1,7 +1,7 @@
-import { Switch } from "@merge-rd/ui/components/switch";
-import { Label } from "@merge-rd/ui/components/label";
-import { Controller, useFormContext } from "react-hook-form";
 import { useTranslation } from "@merge-rd/i18n";
+import { Label } from "@merge-rd/ui/components/label";
+import { Switch } from "@merge-rd/ui/components/switch";
+import { Controller, useFormContext } from "react-hook-form";
 
 import { HelpItem } from "../../../../shared/keycloak-ui-shared";
 import type { ComponentProps } from "./components";
@@ -20,7 +20,9 @@ export const BooleanComponent = ({
     const { control } = useFormContext();
 
     const isOn = (value: unknown) =>
-        value === "true" || value === true || (Array.isArray(value) && value[0] === "true");
+        value === "true" ||
+        value === true ||
+        (Array.isArray(value) && value[0] === "true");
 
     return (
         <div className="space-y-2">
@@ -41,12 +43,15 @@ export const BooleanComponent = ({
                                     id={name!}
                                     disabled={isDisabled}
                                     checked={isOn(field.value)}
-                                    onCheckedChange={(value) => field.onChange("" + value)}
+                                    onCheckedChange={value => field.onChange(`${value}`)}
                                     data-testid={name}
                                     aria-label={t(label!)}
                                 />
                                 {helpText && (
-                                    <HelpItem helpText={t(helpText)} fieldLabelId={`${label}`} />
+                                    <HelpItem
+                                        helpText={t(helpText)}
+                                        fieldLabelId={`${label}`}
+                                    />
                                 )}
                             </div>
                         </div>
@@ -69,7 +74,7 @@ export const BooleanComponent = ({
                                     id={name!}
                                     disabled={isDisabled}
                                     checked={isOn(field.value)}
-                                    onCheckedChange={(value) => field.onChange("" + value)}
+                                    onCheckedChange={value => field.onChange(`${value}`)}
                                     data-testid={name}
                                     aria-label={t(label!)}
                                 />

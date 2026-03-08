@@ -1,21 +1,21 @@
-import { ResourceTypesRepresentation } from "@keycloak/keycloak-admin-client/lib/defs/resourceServerRepresentation";
+import type { ResourceTypesRepresentation } from "@keycloak/keycloak-admin-client/lib/defs/resourceServerRepresentation";
 import { useTranslation } from "@merge-rd/i18n";
+import { Alert, AlertTitle } from "@merge-rd/ui/components/alert";
 import {
     Dialog,
     DialogContent,
     DialogHeader,
-    DialogTitle,
+    DialogTitle
 } from "@merge-rd/ui/components/dialog";
-import { Alert, AlertTitle } from "@merge-rd/ui/components/alert";
+import { cn } from "@merge-rd/ui/lib/utils";
 import {
     Table,
     TableBody,
     TableCell,
     TableHead,
     TableHeader,
-    TableRow,
+    TableRow
 } from "@/admin/shared/ui/data-table";
-import { cn } from "@merge-rd/ui/lib/utils";
 
 type NewPermissionConfigurationDialogProps = {
     resourceTypes?: ResourceTypesRepresentation[];
@@ -31,8 +31,12 @@ export const NewPermissionConfigurationDialog = ({
     const { t } = useTranslation();
 
     return (
-        <Dialog open={true} onOpenChange={(v) => !v && toggleDialog()}>
-            <DialogContent showCloseButton className="sm:max-w-lg" aria-label={t("createPermission")}>
+        <Dialog open={true} onOpenChange={v => !v && toggleDialog()}>
+            <DialogContent
+                showCloseButton
+                className="sm:max-w-lg"
+                aria-label={t("createPermission")}
+            >
                 <DialogHeader>
                     <DialogTitle>{t("chooseAResourceType")}</DialogTitle>
                     <Alert className="mt-2">

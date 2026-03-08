@@ -1,10 +1,5 @@
-import { createFileRoute } from "@tanstack/react-router";
-import { lazy } from "react";
-
-const WorkflowDetailForm = lazy(
-    () => import("../../../../../pages/workflows/workflow-detail-form"),
-);
+import { createFileRoute, lazyRouteComponent } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/_app/$realm/workflows/$mode/$id")({
-    component: WorkflowDetailForm,
+    component: lazyRouteComponent(() => import("../../../../../pages/workflows/workflow-detail-form")),
 });

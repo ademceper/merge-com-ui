@@ -1,20 +1,20 @@
 import type RealmRepresentation from "@keycloak/keycloak-admin-client/lib/defs/realmRepresentation";
+import { useTranslation } from "@merge-rd/i18n";
+import { useEffect } from "react";
+import { FormProvider, useForm } from "react-hook-form";
+import { toast } from "sonner";
 import {
+    FormPanel,
     getErrorDescription,
     getErrorMessage,
     SelectField,
-    TextControl,
+    TextControl
 } from "../../../../shared/keycloak-ui-shared";
-import { toast } from "sonner";
-import { useEffect } from "react";
-import { FormProvider, useForm } from "react-hook-form";
-import { useTranslation } from "@merge-rd/i18n";
 import { useAdminClient } from "../../../app/admin-client";
-import { FormAccess } from "../../../shared/ui/form/form-access";
-import { FixedButtonsGroup } from "../../../shared/ui/form/fixed-button-group";
-import { FormPanel } from "../../../../shared/keycloak-ui-shared";
 import { useRealm } from "../../../app/providers/realm-context/realm-context";
 import { convertFormValuesToObject, convertToFormValues } from "../../../shared/lib/util";
+import { FixedButtonsGroup } from "../../../shared/ui/form/fixed-button-group";
+import { FormAccess } from "../../../shared/ui/form/form-access";
 
 const CIBA_BACKHANNEL_TOKEN_DELIVERY_MODES = ["poll", "ping"] as const;
 const CIBA_EXPIRES_IN_MIN = 10;
@@ -35,7 +35,7 @@ export const CibaPolicy = ({ realm, realmUpdated }: CibaPolicyProps) => {
     const { t } = useTranslation();
     const form = useForm<FormFields>({ mode: "onChange" });
     const { realm: realmName } = useRealm();
-const setupForm = (realm: RealmRepresentation) =>
+    const setupForm = (realm: RealmRepresentation) =>
         convertToFormValues(realm, form.setValue);
 
     useEffect(() => setupForm(realm), []);
@@ -55,7 +55,9 @@ const setupForm = (realm: RealmRepresentation) =>
             setupForm(updatedRealm!);
             toast.success(t("updateCibaSuccess"));
         } catch (error) {
-            toast.error(t("updateCibaError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
+            toast.error(t("updateCibaError", { error: getErrorMessage(error) }), {
+                description: getErrorDescription(error)
+            });
         }
     };
 
@@ -74,10 +76,14 @@ const setupForm = (realm: RealmRepresentation) =>
                                 name="attributes.cibaBackchannelTokenDeliveryMode"
                                 label={t("cibaBackchannelTokenDeliveryMode")}
                                 labelIcon={t("cibaBackchannelTokenDeliveryModeHelp")}
-                                options={CIBA_BACKHANNEL_TOKEN_DELIVERY_MODES.map(mode => ({
-                                    key: mode,
-                                    value: t(`cibaBackhannelTokenDeliveryModes.${mode}`)
-                                }))}
+                                options={CIBA_BACKHANNEL_TOKEN_DELIVERY_MODES.map(
+                                    mode => ({
+                                        key: mode,
+                                        value: t(
+                                            `cibaBackhannelTokenDeliveryModes.${mode}`
+                                        )
+                                    })
+                                )}
                                 defaultValue=""
                             />
                         </div>
@@ -98,7 +104,9 @@ const setupForm = (realm: RealmRepresentation) =>
                                     },
                                     max: {
                                         value: CIBA_EXPIRES_IN_MAX,
-                                        message: t("lessThan", { value: CIBA_EXPIRES_IN_MAX })
+                                        message: t("lessThan", {
+                                            value: CIBA_EXPIRES_IN_MAX
+                                        })
                                     },
                                     required: t("required")
                                 }}
@@ -121,7 +129,9 @@ const setupForm = (realm: RealmRepresentation) =>
                                     },
                                     max: {
                                         value: CIBA_INTERVAL_MAX,
-                                        message: t("lessThan", { value: CIBA_INTERVAL_MAX })
+                                        message: t("lessThan", {
+                                            value: CIBA_INTERVAL_MAX
+                                        })
                                     },
                                     required: t("required")
                                 }}
@@ -132,7 +142,11 @@ const setupForm = (realm: RealmRepresentation) =>
                                 name="attributes.cibaAuthRequestedUserHint"
                                 label={t("cibaAuthRequestedUserHint")}
                                 labelIcon={t("cibaAuthRequestedUserHintHelp")}
-                                options={["login_hint", "id_token_hint", "login_hint_token"]}
+                                options={[
+                                    "login_hint",
+                                    "id_token_hint",
+                                    "login_hint_token"
+                                ]}
                                 defaultValue=""
                                 isDisabled
                             />

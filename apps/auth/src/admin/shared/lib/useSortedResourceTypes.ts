@@ -1,8 +1,6 @@
-import ResourceServerRepresentation from "@keycloak/keycloak-admin-client/lib/defs/resourceServerRepresentation";
-import { useMemo, useState } from "react";
-import { useAdminClient } from "../../app/admin-client";
-import { useFetch } from "../../../shared/keycloak-ui-shared";
 import { sortBy } from "lodash-es";
+import { useMemo } from "react";
+import { useResourceServer } from "../api/use-resource-server";
 
 type UseSortedResourceTypesProps = {
     clientId: string;
@@ -11,17 +9,7 @@ type UseSortedResourceTypesProps = {
 export default function useSortedResourceTypes({
     clientId
 }: UseSortedResourceTypesProps) {
-    const { adminClient } = useAdminClient();
-    const [resourceServer, setResourceServer] = useState<ResourceServerRepresentation>();
-
-    useFetch(
-        () =>
-            adminClient.clients.getResourceServer({
-                id: clientId
-            }),
-        setResourceServer,
-        [clientId]
-    );
+    const { data: resourceServer } = useResourceServer(clientId);
 
     const resourceTypes = useMemo(() => {
         const allResourceTypes = resourceServer?.authorizationSchema?.resourceTypes;

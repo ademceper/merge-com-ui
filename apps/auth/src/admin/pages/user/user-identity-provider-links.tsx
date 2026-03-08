@@ -1,25 +1,31 @@
 import type FederatedIdentityRepresentation from "@keycloak/keycloak-admin-client/lib/defs/federatedIdentityRepresentation";
 import type IdentityProviderRepresentation from "@keycloak/keycloak-admin-client/lib/defs/identityProviderRepresentation";
-import { KeycloakSpinner } from "../../../shared/keycloak-ui-shared";
-import { Button } from "@merge-rd/ui/components/button";
-import { Badge } from "@merge-rd/ui/components/badge";
-import { capitalize } from "lodash-es";
-import { useState } from "react";
 import { useTranslation } from "@merge-rd/i18n";
-import { Link } from "@tanstack/react-router";
-import { FormPanel } from "../../../shared/keycloak-ui-shared";
-import { useAdminClient } from "../../app/admin-client";
-import { getErrorDescription, getErrorMessage, useFetch } from "../../../shared/keycloak-ui-shared";
-import { toast } from "sonner";
-import { useConfirmDialog } from "../../shared/ui/confirm-dialog/confirm-dialog";
-import { DataTable, type ColumnDef } from "@/admin/shared/ui/data-table";
+import { Badge } from "@merge-rd/ui/components/badge";
+import { Button } from "@merge-rd/ui/components/button";
 import { Empty, EmptyHeader, EmptyTitle } from "@merge-rd/ui/components/empty";
+import { Link } from "@tanstack/react-router";
+import { capitalize } from "lodash-es";
+import { useEffect, useState } from "react";
+import { toast } from "sonner";
+import { type ColumnDef, DataTable } from "@/admin/shared/ui/data-table";
+import {
+    FormPanel,
+    getErrorDescription,
+    getErrorMessage,
+    KeycloakSpinner
+} from "../../../shared/keycloak-ui-shared";
+import { useAdminClient } from "../../app/admin-client";
+import { useAccess } from "../../app/providers/access/access";
 import { useRealm } from "../../app/providers/realm-context/realm-context";
 import { useServerInfo } from "../../app/providers/server-info/server-info-provider";
-import { toIdentityProvider } from "../identity-providers/routes/identity-provider";
 import { emptyFormatter, upperCaseFormatter } from "../../shared/lib/util";
+import { useConfirmDialog } from "../../shared/ui/confirm-dialog/confirm-dialog";
+import { toIdentityProvider } from "../../shared/lib/routes/identity-providers";
+import { useAvailableIdPs as useAvailableIdPsQuery } from "./api/use-available-idps";
+import { useFederatedIdentities } from "./api/use-federated-identities";
+import { useLinkedIdPs } from "./api/use-linked-idps";
 import { UserIdpModal } from "./user-id-p-modal";
-import { useAccess } from "../../app/providers/access/access";
 
 type UserIdentityProviderLinksProps = {
     userId: string;
@@ -27,13 +33,11 @@ type UserIdentityProviderLinksProps = {
 
 export const UserIdentityProviderLinks = ({ userId }: UserIdentityProviderLinksProps) => {
     const { adminClient } = useAdminClient();
-    const [key, setKey] = useState(0);
     const [linkedNames, setLinkedNames] = useState<string[]>([]);
-    const [isLoading, setIsLoading] = useState(true);
     const [federatedId, setFederatedId] = useState("");
     const [isLinkIdPModalOpen, setIsLinkIdPModalOpen] = useState(false);
     const { realm } = useRealm();
-const { t } = useTranslation();
+    const { t } = useTranslation();
     const { hasAccess, hasSomeAccess } = useAccess();
 
     const canQueryIDPDetails = hasSomeAccess(
@@ -41,18 +45,23 @@ const { t } = useTranslation();
         "view-identity-providers"
     );
 
-    useFetch(
-        () => adminClient.users.listFederatedIdentities({ id: userId }),
-        linkedIdentities => {
-            setLinkedNames(linkedIdentities.map(identity => identity.identityProvider!));
-            setIsLoading(false);
-        },
-        [userId, key]
-    );
+    const { data: federatedIdentities, refetch: refetchFederated } =
+        useFederatedIdentities(userId);
+
+    useEffect(() => {
+        if (federatedIdentities) {
+            setLinkedNames(
+                federatedIdentities.map(identity => identity.identityProvider!)
+            );
+        }
+    }, [federatedIdentities]);
+
+    const isLoading = !federatedIdentities;
 
     const refresh = () => {
-        setKey(new Date().getTime());
-        setIsLoading(true);
+        refetchFederated();
+        refetchLinkedIdPs();
+        refetchAvailableIdPs();
     };
 
     type WithProviderId = FederatedIdentityRepresentation & {
@@ -60,23 +69,6 @@ const { t } = useTranslation();
     };
 
     const identityProviders = useServerInfo().identityProviders;
-
-    const getFederatedIdentities = async () => {
-        const allFedIds = (await adminClient.users.listFederatedIdentities({
-            id: userId
-        })) as WithProviderId[];
-
-        if (canQueryIDPDetails) {
-            const allProviders = await adminClient.identityProviders.find();
-            for (const element of allFedIds) {
-                element.providerId = allProviders.find(
-                    item => item.alias === element.identityProvider
-                )?.providerId!;
-            }
-        }
-
-        return allFedIds;
-    };
 
     const [toggleUnlinkDialog, UnlinkConfirm] = useConfirmDialog({
         titleKey: t("unlinkAccountTitle", {
@@ -96,7 +88,9 @@ const { t } = useTranslation();
                 toast.success(t("idpUnlinkSuccess"));
                 refresh();
             } catch (error) {
-                toast.error(t("mappingDeletedError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
+                toast.error(t("mappingDeletedError", { error: getErrorMessage(error) }), {
+                    description: getErrorDescription(error)
+                });
             }
         }
     });
@@ -106,12 +100,14 @@ const { t } = useTranslation();
 
         return (
             <Link
-                to={toIdentityProvider({
-                    realm,
-                    providerId: idp.providerId,
-                    alias: idp.identityProvider!,
-                    tab: "settings"
-                }) as string}
+                to={
+                    toIdentityProvider({
+                        realm,
+                        providerId: idp.providerId,
+                        alias: idp.identityProvider!,
+                        tab: "settings"
+                    }) as string
+                }
             >
                 {capitalize(idp.identityProvider)}
             </Link>
@@ -120,7 +116,7 @@ const { t } = useTranslation();
 
     const badgeRenderer1 = (idp: FederatedIdentityRepresentation) => {
         const groupName = identityProviders?.find(
-            provider => provider["id"] === idp.identityProvider
+            provider => provider.id === idp.identityProvider
         )?.groupName!;
         return (
             <Badge variant={groupName === "Social" ? "default" : "secondary"}>
@@ -131,7 +127,7 @@ const { t } = useTranslation();
 
     const badgeRenderer2 = (idp: IdentityProviderRepresentation) => {
         const groupName = identityProviders?.find(
-            provider => provider["id"] === idp.providerId
+            provider => provider.id === idp.providerId
         )?.groupName!;
         return (
             <Badge variant={groupName === "User-defined" ? "secondary" : "default"}>
@@ -176,23 +172,53 @@ const { t } = useTranslation();
         );
     };
 
-    const [linkedIdPs, setLinkedIdPs] = useState<WithProviderId[]>([]);
-    useFetch(() => getFederatedIdentities(), setLinkedIdPs, [userId, key]);
+    const { data: linkedIdPs = [], refetch: refetchLinkedIdPs } = useLinkedIdPs(
+        userId,
+        canQueryIDPDetails
+    );
 
     const linkedColumns: ColumnDef<WithProviderId>[] = [
-        { accessorKey: "identityProvider", header: t("name"), cell: ({ row }) => idpLinkRenderer(row.original) },
-        ...(canQueryIDPDetails ? [{ accessorKey: "type", header: t("type"), cell: ({ row }) => badgeRenderer1(row.original) }] as ColumnDef<WithProviderId>[] : []),
-        { accessorKey: "userId", header: t("userID"), cell: ({ getValue }) => emptyFormatter()(getValue()) },
-        { accessorKey: "userName", header: t("username"), cell: ({ getValue }) => emptyFormatter()(getValue()) },
+        {
+            accessorKey: "identityProvider",
+            header: t("name"),
+            cell: ({ row }) => idpLinkRenderer(row.original)
+        },
+        ...(canQueryIDPDetails
+            ? ([
+                  {
+                      accessorKey: "type",
+                      header: t("type"),
+                      cell: ({ row }) => badgeRenderer1(row.original)
+                  }
+              ] as ColumnDef<WithProviderId>[])
+            : []),
+        {
+            accessorKey: "userId",
+            header: t("userID"),
+            cell: ({ getValue }) => emptyFormatter()(getValue())
+        },
+        {
+            accessorKey: "userName",
+            header: t("username"),
+            cell: ({ getValue }) => emptyFormatter()(getValue())
+        },
         { id: "unlink", header: "", cell: ({ row }) => unlinkRenderer(row.original) }
     ];
 
-    const [availableIdPs, setAvailableIdPs] = useState<IdentityProviderRepresentation[]>([]);
-    useFetch(() => adminClient.identityProviders.find({ first: 0, max: 500, realmOnly: false, capability: "USER_LINKING" }), setAvailableIdPs, [key]);
+    const { data: availableIdPs = [], refetch: refetchAvailableIdPs } =
+        useAvailableIdPsQuery();
 
     const availableColumns: ColumnDef<IdentityProviderRepresentation>[] = [
-        { accessorKey: "alias", header: t("name"), cell: ({ getValue }) => upperCaseFormatter()(emptyFormatter()(getValue())) },
-        { accessorKey: "type", header: t("type"), cell: ({ row }) => badgeRenderer2(row.original) },
+        {
+            accessorKey: "alias",
+            header: t("name"),
+            cell: ({ getValue }) => upperCaseFormatter()(emptyFormatter()(getValue()))
+        },
+        {
+            accessorKey: "type",
+            header: t("type"),
+            cell: ({ row }) => badgeRenderer2(row.original)
+        },
         { id: "link", header: "", cell: ({ row }) => linkRenderer(row.original) }
     ];
 
@@ -211,12 +237,13 @@ const { t } = useTranslation();
                 <FormPanel title={t("linkedIdPs")} className="kc-linked-idps">
                     <p className="kc-available-idps-text">{t("linkedIdPsText")}</p>
                     <DataTable<WithProviderId>
-                        key={key}
                         columns={linkedColumns}
                         data={linkedIdPs}
                         emptyContent={
                             <Empty className="py-8">
-                                <EmptyHeader><EmptyTitle>{t("noProvidersLinked")}</EmptyTitle></EmptyHeader>
+                                <EmptyHeader>
+                                    <EmptyTitle>{t("noProvidersLinked")}</EmptyTitle>
+                                </EmptyHeader>
                             </Empty>
                         }
                         emptyMessage={t("noProvidersLinked")}
@@ -230,14 +257,17 @@ const { t } = useTranslation();
                             <KeycloakSpinner />
                         ) : (
                             <DataTable<IdentityProviderRepresentation>
-                                key={key}
                                 columns={availableColumns}
                                 data={availableIdPs}
                                 searchColumnId="alias"
                                 searchPlaceholder={t("searchForProvider")}
                                 emptyContent={
                                     <Empty className="py-8">
-                                        <EmptyHeader><EmptyTitle>{t("noAvailableIdentityProviders")}</EmptyTitle></EmptyHeader>
+                                        <EmptyHeader>
+                                            <EmptyTitle>
+                                                {t("noAvailableIdentityProviders")}
+                                            </EmptyTitle>
+                                        </EmptyHeader>
                                     </Empty>
                                 }
                                 emptyMessage={t("noAvailableIdentityProviders")}

@@ -1,15 +1,24 @@
 import type FederatedIdentityRepresentation from "@keycloak/keycloak-admin-client/lib/defs/federatedIdentityRepresentation";
+import { useTranslation } from "@merge-rd/i18n";
 import { Button } from "@merge-rd/ui/components/button";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@merge-rd/ui/components/dialog";
+import {
+    Dialog,
+    DialogContent,
+    DialogFooter,
+    DialogHeader,
+    DialogTitle
+} from "@merge-rd/ui/components/dialog";
 import { Input } from "@merge-rd/ui/components/input";
 import { Label } from "@merge-rd/ui/components/label";
 import { capitalize } from "lodash-es";
 import { FormProvider, useForm } from "react-hook-form";
-import { useTranslation } from "@merge-rd/i18n";
-import { TextControl } from "../../../shared/keycloak-ui-shared";
-import { useAdminClient } from "../../app/admin-client";
-import { getErrorDescription, getErrorMessage } from "../../../shared/keycloak-ui-shared";
 import { toast } from "sonner";
+import {
+    getErrorDescription,
+    getErrorMessage,
+    TextControl
+} from "../../../shared/keycloak-ui-shared";
+import { useAdminClient } from "../../app/admin-client";
 
 type UserIdpModalProps = {
     userId: string;
@@ -27,7 +36,7 @@ export const UserIdpModal = ({
     const { adminClient } = useAdminClient();
 
     const { t } = useTranslation();
-const form = useForm<FederatedIdentityRepresentation>({
+    const form = useForm<FederatedIdentityRepresentation>({
         mode: "onChange"
     });
     const {
@@ -46,12 +55,19 @@ const form = useForm<FederatedIdentityRepresentation>({
             onClose();
             onRefresh();
         } catch (error) {
-            toast.error(t("couldNotLinkIdP", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
+            toast.error(t("couldNotLinkIdP", { error: getErrorMessage(error) }), {
+                description: getErrorDescription(error)
+            });
         }
     };
 
     return (
-        <Dialog open onOpenChange={(open) => { if (!open) onClose(); }}>
+        <Dialog
+            open
+            onOpenChange={open => {
+                if (!open) onClose();
+            }}
+        >
             <DialogContent className="sm:max-w-md">
                 <DialogHeader>
                     <DialogTitle>
@@ -60,10 +76,16 @@ const form = useForm<FederatedIdentityRepresentation>({
                         })}
                     </DialogTitle>
                 </DialogHeader>
-                <form id="group-form" onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+                <form
+                    id="group-form"
+                    onSubmit={handleSubmit(onSubmit)}
+                    className="space-y-4"
+                >
                     <FormProvider {...form}>
                         <div className="space-y-2">
-                            <Label htmlFor="identityProvider">{t("identityProvider")}</Label>
+                            <Label htmlFor="identityProvider">
+                                {t("identityProvider")}
+                            </Label>
                             <Input
                                 id="identityProvider"
                                 data-testid="idpNameInput"

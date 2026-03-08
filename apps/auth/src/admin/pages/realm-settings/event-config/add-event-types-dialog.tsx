@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { useTranslation } from "@merge-rd/i18n";
 import { Button } from "@merge-rd/ui/components/button";
 import {
@@ -8,9 +7,9 @@ import {
     DialogHeader,
     DialogTitle
 } from "@merge-rd/ui/components/dialog";
-
-import { EventsTypeTable, EventType } from "./events-type-table";
+import { useState } from "react";
 import { useServerInfo } from "../../../app/providers/server-info/server-info-provider";
+import { EventsTypeTable, type EventType } from "./events-type-table";
 
 type AddEventTypesDialogProps = {
     onConfirm: (selected: EventType[]) => void;
@@ -28,7 +27,12 @@ export const AddEventTypesDialog = ({
 
     const [selectedTypes, setSelectedTypes] = useState<EventType[]>([]);
     return (
-        <Dialog open onOpenChange={(open) => { if (!open) onClose(); }}>
+        <Dialog
+            open
+            onOpenChange={open => {
+                if (!open) onClose();
+            }}
+        >
             <DialogContent className="max-w-2xl">
                 <DialogHeader>
                     <DialogTitle>{t("addTypes")}</DialogTitle>
@@ -36,7 +40,7 @@ export const AddEventTypesDialog = ({
                 <EventsTypeTable
                     ariaLabelKey="addTypes"
                     onSelect={selected => setSelectedTypes(selected)}
-                    eventTypes={enums!["eventType"].filter(
+                    eventTypes={enums!.eventType.filter(
                         type => !configured.includes(type)
                     )}
                 />
@@ -47,11 +51,7 @@ export const AddEventTypesDialog = ({
                     >
                         {t("add")}
                     </Button>
-                    <Button
-                        data-testid="moveCancel"
-                        variant="ghost"
-                        onClick={onClose}
-                    >
+                    <Button data-testid="moveCancel" variant="ghost" onClick={onClose}>
                         {t("cancel")}
                     </Button>
                 </DialogFooter>

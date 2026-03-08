@@ -1,11 +1,10 @@
-import { AuthenticationProviderRepresentation } from "@keycloak/keycloak-admin-client/lib/defs/authenticatorConfigRepresentation";
+import type { AuthenticationProviderRepresentation } from "@keycloak/keycloak-admin-client/lib/defs/authenticatorConfigRepresentation";
+import type { PropsWithChildren } from "react";
 import {
     createNamedContext,
-    useFetch,
     useRequiredContext
 } from "../../../../shared/keycloak-ui-shared";
-import { PropsWithChildren, useState } from "react";
-import { useAdminClient } from "../../../app/admin-client";
+import { useAuthenticationProviders } from "../api/use-authentication-providers";
 
 const AuthenticationProviderContext = createNamedContext<
     { providers?: AuthenticationProviderRepresentation[] } | undefined
@@ -14,19 +13,7 @@ const AuthenticationProviderContext = createNamedContext<
 export const AuthenticationProviderContextProvider = ({
     children
 }: PropsWithChildren) => {
-    const { adminClient } = useAdminClient();
-    const [providers, setProviders] = useState<AuthenticationProviderRepresentation[]>();
-
-    useFetch(
-        async () =>
-            Promise.all([
-                adminClient.authenticationManagement.getClientAuthenticatorProviders(),
-                adminClient.authenticationManagement.getFormActionProviders(),
-                adminClient.authenticationManagement.getAuthenticatorProviders()
-            ]),
-        providers => setProviders(providers.flat()),
-        []
-    );
+    const { data: providers } = useAuthenticationProviders();
 
     return (
         <AuthenticationProviderContext.Provider value={{ providers }}>

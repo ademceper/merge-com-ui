@@ -1,16 +1,15 @@
-import { ReactElement } from "react";
-import { Link } from "@tanstack/react-router";
-import { Tooltip, TooltipContent, TooltipTrigger } from "@merge-rd/ui/components/tooltip";
-
 import type AdminEventRepresentation from "@keycloak/keycloak-admin-client/lib/defs/adminEventRepresentation";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@merge-rd/ui/components/tooltip";
+import { Link } from "@tanstack/react-router";
+import type { ReactElement } from "react";
 import { useRealm } from "../../app/providers/realm-context/realm-context";
-import { toClient } from "../clients/routes/client";
-import { toGroups } from "../groups/routes/groups";
-import { toClientScope } from "../client-scopes/routes/client-scope";
-import { toUser } from "../user/routes/user";
-import { toRealmRole } from "../realm-roles/routes/realm-role";
-import { toFlow } from "../authentication/routes/flow";
-import { toEditOrganization } from "../organizations/routes/edit-organization";
+import { toFlow } from "../../shared/lib/routes/authentication";
+import { toClientScope } from "../../shared/lib/routes/client-scopes";
+import { toClient } from "../../shared/lib/routes/clients";
+import { toGroups } from "../../shared/lib/routes/groups";
+import { toEditOrganization } from "../../shared/lib/routes/organizations";
+import { toRealmRole } from "../../shared/lib/routes/realm-roles";
+import { toUser } from "../../shared/lib/routes/user";
 
 type ResourceLinkProps = {
     event: AdminEventRepresentation;
@@ -30,7 +29,7 @@ const Truncate = ({
     return needsTruncation ? (
         <Tooltip>
             <TooltipTrigger asChild>
-                <span className="cursor-default">{children(truncatedText + "…")}</span>
+                <span className="cursor-default">{children(`${truncatedText}…`)}</span>
             </TooltipTrigger>
             <TooltipContent>{text}</TooltipContent>
         </Tooltip>

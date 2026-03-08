@@ -1,7 +1,7 @@
+import { useTranslation } from "@merge-rd/i18n";
 import { Input } from "@merge-rd/ui/components/input";
 import { Label } from "@merge-rd/ui/components/label";
 import { Controller, useFormContext } from "react-hook-form";
-import { useTranslation } from "@merge-rd/i18n";
 
 import { HelpItem } from "../../../../shared/keycloak-ui-shared";
 
@@ -27,7 +27,7 @@ export const DisplayOrder = () => {
                         value={field.value}
                         data-testid="displayOrder"
                         min={0}
-                        onChange={(e) => {
+                        onChange={e => {
                             const value = e.target.value;
                             const num = Number(value);
                             field.onChange(value === "" ? value : num < 0 ? 0 : num);

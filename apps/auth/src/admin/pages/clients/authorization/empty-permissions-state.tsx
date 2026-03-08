@@ -1,12 +1,16 @@
-import { useNavigate } from "@tanstack/react-router";
 import { useTranslation } from "@merge-rd/i18n";
 import { Button } from "@merge-rd/ui/components/button";
-import { Tooltip, TooltipContent, TooltipTrigger, TooltipProvider } from "@merge-rd/ui/components/tooltip";
+import {
+    Tooltip,
+    TooltipContent,
+    TooltipProvider,
+    TooltipTrigger
+} from "@merge-rd/ui/components/tooltip";
 import { PlusCircle } from "@phosphor-icons/react";
-
-import { PermissionType, toNewPermission } from "../routes/new-permission";
+import { useNavigate } from "@tanstack/react-router";
 import { useRealm } from "../../../app/providers/realm-context/realm-context";
 import { toUpperCase } from "../../../shared/lib/util";
+import { type PermissionType, toNewPermission } from "../../../shared/lib/routes/clients";
 
 type EmptyButtonProps = {
     permissionType: PermissionType;
@@ -29,7 +33,9 @@ const EmptyButton = ({
             variant="secondary"
             onClick={() =>
                 !disabled &&
-                navigate({ to: toNewPermission({ realm, id: clientId, permissionType }) as string })
+                navigate({
+                    to: toNewPermission({ realm, id: clientId, permissionType }) as string
+                })
             }
         >
             {t(`create${toUpperCase(permissionType)}BasedPermission`)}
@@ -44,10 +50,16 @@ const TooltipEmptyButton = ({ permissionType, disabled, ...props }: EmptyButtonP
             <Tooltip>
                 <TooltipTrigger asChild>
                     <span>
-                        <EmptyButton {...props} disabled={disabled} permissionType={permissionType} />
+                        <EmptyButton
+                            {...props}
+                            disabled={disabled}
+                            permissionType={permissionType}
+                        />
                     </span>
                 </TooltipTrigger>
-                <TooltipContent>{t(`no${toUpperCase(permissionType)}CreateHint`)}</TooltipContent>
+                <TooltipContent>
+                    {t(`no${toUpperCase(permissionType)}CreateHint`)}
+                </TooltipContent>
             </Tooltip>
         </TooltipProvider>
     ) : (
@@ -68,7 +80,10 @@ export const EmptyPermissionsState = ({
 }: EmptyPermissionsStateProps) => {
     const { t } = useTranslation();
     return (
-        <div data-testid="empty-state" className="flex flex-col items-center justify-center py-12 gap-4">
+        <div
+            data-testid="empty-state"
+            className="flex flex-col items-center justify-center py-12 gap-4"
+        >
             <PlusCircle className="size-12 text-muted-foreground" />
             <h1 className="text-xl font-semibold">{t("emptyPermissions")}</h1>
             <p className="text-muted-foreground">{t("emptyPermissionInstructions")}</p>

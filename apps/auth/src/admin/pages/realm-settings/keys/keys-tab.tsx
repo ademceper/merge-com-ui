@@ -1,28 +1,14 @@
-import type ComponentRepresentation from "@keycloak/keycloak-admin-client/lib/defs/componentRepresentation";
-import { useState } from "react";
 import { useTranslation } from "@merge-rd/i18n";
-import { useNavigate } from "@tanstack/react-router";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@merge-rd/ui/components/tabs";
-import { useFetch } from "../../../../shared/keycloak-ui-shared";
-import { useAdminClient } from "../../../app/admin-client";
+import { useQueryClient } from "@tanstack/react-query";
+import { useNavigate } from "@tanstack/react-router";
 import { KeycloakSpinner } from "../../../../shared/keycloak-ui-shared";
 import { useRealm } from "../../../app/providers/realm-context/realm-context";
-import { toKeysTab } from "../routes/keys-tab";
-import type { KeySubTab } from "../routes/keys-tab";
-import { KEY_PROVIDER_TYPE } from "../../../shared/lib/util";
+import { realmSettingsKeys } from "../api/keys";
+import { useKeyProviderComponents } from "../api/use-key-provider-components";
+import { type KeySubTab, toKeysTab } from "../../../shared/lib/routes/realm-settings";
 import { KeysListTab } from "./keys-list-tab";
 import { KeysProvidersTab } from "./keys-providers-tab";
-
-const sortByPriority = (components: ComponentRepresentation[]) => {
-    const sortedComponents = [...components].sort((a, b) => {
-        const priorityA = Number(a.config?.priority);
-        const priorityB = Number(b.config?.priority);
-
-        return (!isNaN(priorityB) ? priorityB : 0) - (!isNaN(priorityA) ? priorityA : 0);
-    });
-
-    return sortedComponents;
-};
 
 type KeysTabProps = {
     subTab?: string;
@@ -31,24 +17,15 @@ type KeysTabProps = {
 export const KeysTab = ({ subTab = "list" }: KeysTabProps) => {
     const { t } = useTranslation();
     const navigate = useNavigate();
-    const { adminClient } = useAdminClient();
     const { realm: realmName } = useRealm();
+    const queryClient = useQueryClient();
 
-    const [realmComponents, setRealmComponents] = useState<ComponentRepresentation[]>();
-    const [key, setKey] = useState(0);
+    const { data: realmComponents } = useKeyProviderComponents();
     const refresh = () => {
-        setKey(key + 1);
+        queryClient.invalidateQueries({
+            queryKey: realmSettingsKeys.keyProviderComponents(realmName)
+        });
     };
-
-    useFetch(
-        () =>
-            adminClient.components.find({
-                type: KEY_PROVIDER_TYPE,
-                realm: realmName
-            }),
-        components => setRealmComponents(sortByPriority(components)),
-        [key]
-    );
 
     const currentTab: KeySubTab = subTab === "providers" ? "providers" : "list";
 
@@ -59,12 +36,20 @@ export const KeysTab = ({ subTab = "list" }: KeysTabProps) => {
     return (
         <Tabs
             value={currentTab}
-            onValueChange={(value) =>
-                navigate({ to: toKeysTab({ realm: realmName!, tab: value as KeySubTab }) as string })
+            onValueChange={value =>
+                navigate({
+                    to: toKeysTab({
+                        realm: realmName!,
+                        tab: value as KeySubTab
+                    }) as string
+                })
             }
         >
             <div className="w-full min-w-0 overflow-x-auto overflow-y-hidden mb-4">
-                <TabsList variant="line" className="mb-0 w-max min-w-0 **:data-[slot=tabs-trigger]:flex-none">
+                <TabsList
+                    variant="line"
+                    className="mb-0 w-max min-w-0 **:data-[slot=tabs-trigger]:flex-none"
+                >
                     <TabsTrigger value="list" data-testid="rs-keys-list-tab">
                         {t("keysList")}
                     </TabsTrigger>

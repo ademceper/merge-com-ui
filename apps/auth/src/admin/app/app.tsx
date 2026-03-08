@@ -1,35 +1,40 @@
-import { SessionExpirationWarningOverlay } from "../../shared/session-expiration-warning-overlay";
-import KeycloakAdminClient from "@keycloak/keycloak-admin-client";
-import { mainPageContentId, useEnvironment } from "../../shared/keycloak-ui-shared";
-import { SidebarInset, SidebarPage, SidebarProvider } from "@merge-rd/ui/components/sidebar";
+import type KeycloakAdminClient from "@keycloak/keycloak-admin-client";
+import {
+    SidebarInset,
+    SidebarPage,
+    SidebarProvider
+} from "@merge-rd/ui/components/sidebar";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { PropsWithChildren, Suspense, useEffect, useState } from "react";
 import { Outlet, useMatches } from "@tanstack/react-router";
-
+import { type PropsWithChildren, Suspense, useEffect, useState } from "react";
 import {
     ErrorBoundaryFallback,
     ErrorBoundaryProvider,
-    KeycloakSpinner
+    KeycloakSpinner,
+    mainPageContentId,
+    useEnvironment
 } from "../../shared/keycloak-ui-shared";
-import { AdminClientContext, initAdminClient } from "./admin-client";
-import { AdminAppSidebar } from "../widgets/admin-app-sidebar";
+import { SessionExpirationWarningOverlay } from "../../shared/session-expiration-warning-overlay";
+import { SubGroups } from "../pages/groups/sub-groups-context";
 import { ErrorRenderer } from "../shared/ui/error/error-renderer";
-import { RecentRealmsProvider } from "./providers/recent-realms";
+import { AdminAppSidebar } from "../widgets/admin-app-sidebar";
+import { AdminHeader } from "../widgets/admin-header";
+import { Banners } from "../widgets/banners";
+import { AdminClientContext, initAdminClient } from "./admin-client";
+import type { Environment } from "./environment";
 import { AccessContextProvider } from "./providers/access/access";
 import { RealmContextProvider } from "./providers/realm-context/realm-context";
+import { RecentRealmsProvider } from "./providers/recent-realms";
 import { ServerInfoProvider } from "./providers/server-info/server-info-provider";
 import { WhoAmIContextProvider } from "./providers/whoami/who-am-i";
-import type { Environment } from "./environment";
-import { SubGroups } from "../pages/groups/sub-groups-context";
 import { AuthWall } from "./root/auth-wall";
-import { Banners } from "../widgets/banners";
-import { AdminHeader } from "../widgets/admin-header";
 
 const queryClient = new QueryClient({
     defaultOptions: {
         queries: {
             refetchOnWindowFocus: false,
-            retry: false
+            retry: false,
+            staleTime: 30_000
         }
     }
 });
@@ -71,7 +76,8 @@ export const App = () => {
 
     const matches = useMatches();
     const isNotFound = matches.some(
-        (m: any) => m.routeContext?.isNotFound === true || (m as any).handle?.isNotFound === true
+        (m: any) =>
+            m.routeContext?.isNotFound === true || (m as any).handle?.isNotFound === true
     );
 
     if (!adminClient) return <KeycloakSpinner />;
@@ -85,7 +91,9 @@ export const App = () => {
                         <div className="min-h-svh flex flex-1 flex-col">
                             <Outlet />
                         </div>
-                        <SessionExpirationWarningOverlay warnUserSecondsBeforeAutoLogout={45} />
+                        <SessionExpirationWarningOverlay
+                            warnUserSecondsBeforeAutoLogout={45}
+                        />
                     </AppContexts>
                 </AdminClientContext.Provider>
             </QueryClientProvider>
@@ -96,27 +104,31 @@ export const App = () => {
         <QueryClientProvider client={queryClient}>
             <AdminClientContext.Provider value={{ keycloak, adminClient }}>
                 <AppContexts>
-                <Banners />
-                <SidebarProvider defaultOpen={true} className="h-svh bg-sidebar overflow-hidden" data-scale-wrapper>
-                    <AdminAppSidebar />
-                    <SidebarInset>
-                        <AdminHeader />
-                        <SidebarPage
-                            id={mainPageContentId}
-                        >
-                            <ErrorBoundaryFallback fallback={ErrorRenderer}>
-                                <Suspense fallback={<KeycloakSpinner />}>
-                                    <AuthWall>
-                                        <Outlet />
-                                    </AuthWall>
-                                </Suspense>
-                            </ErrorBoundaryFallback>
-                        </SidebarPage>
-                    </SidebarInset>
-                </SidebarProvider>
-                <SessionExpirationWarningOverlay warnUserSecondsBeforeAutoLogout={45} />
-            </AppContexts>
-        </AdminClientContext.Provider>
+                    <Banners />
+                    <SidebarProvider
+                        defaultOpen={true}
+                        className="h-svh bg-sidebar overflow-hidden"
+                        data-scale-wrapper
+                    >
+                        <AdminAppSidebar />
+                        <SidebarInset>
+                            <AdminHeader />
+                            <SidebarPage id={mainPageContentId}>
+                                <ErrorBoundaryFallback fallback={ErrorRenderer}>
+                                    <Suspense fallback={<KeycloakSpinner />}>
+                                        <AuthWall>
+                                            <Outlet />
+                                        </AuthWall>
+                                    </Suspense>
+                                </ErrorBoundaryFallback>
+                            </SidebarPage>
+                        </SidebarInset>
+                    </SidebarProvider>
+                    <SessionExpirationWarningOverlay
+                        warnUserSecondsBeforeAutoLogout={45}
+                    />
+                </AppContexts>
+            </AdminClientContext.Provider>
         </QueryClientProvider>
     );
 };

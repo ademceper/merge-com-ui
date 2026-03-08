@@ -1,14 +1,17 @@
 import type { RequiredActionAlias } from "@keycloak/keycloak-admin-client/lib/defs/requiredActionProviderRepresentation";
+import { useTranslation } from "@merge-rd/i18n";
 import { isEmpty } from "lodash-es";
 import { FormProvider, useForm, useWatch } from "react-hook-form";
-import { useTranslation } from "@merge-rd/i18n";
-import { useAdminClient } from "../../../app/admin-client";
-import { getErrorDescription, getErrorMessage } from "../../../../shared/keycloak-ui-shared";
 import { toast } from "sonner";
+import {
+    getErrorDescription,
+    getErrorMessage
+} from "../../../../shared/keycloak-ui-shared";
+import { useAdminClient } from "../../../app/admin-client";
+import { useRealm } from "../../../app/providers/realm-context/realm-context";
 import { ConfirmDialogModal } from "../../../shared/ui/confirm-dialog/confirm-dialog";
 import { LifespanField } from "./lifespan-field";
 import { RequiredActionMultiSelect } from "./required-action-multi-select";
-import { useRealm } from "../../../app/providers/realm-context/realm-context";
 
 type ResetCredentialDialogProps = {
     userId: string;
@@ -40,7 +43,7 @@ export const ResetCredentialDialog = ({
         name: "actions"
     });
     const resetIsNotDisabled = !isEmpty(resetActionWatcher);
-const sendCredentialsResetEmail = async ({
+    const sendCredentialsResetEmail = async ({
         actions,
         lifespan
     }: CredentialResetForm) => {
@@ -57,7 +60,10 @@ const sendCredentialsResetEmail = async ({
             toast.success(t("credentialResetEmailSuccess"));
             onClose();
         } catch (error) {
-            toast.error(t("credentialResetEmailError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
+            toast.error(
+                t("credentialResetEmailError", { error: getErrorMessage(error) }),
+                { description: getErrorDescription(error) }
+            );
         }
     };
 

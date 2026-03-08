@@ -1,45 +1,50 @@
 import type ClientScopeRepresentation from "@keycloak/keycloak-admin-client/lib/defs/clientScopeRepresentation";
-import { getErrorDescription, getErrorMessage, useFetch } from "../../../../shared/keycloak-ui-shared";
-import { toast } from "sonner";
+import { useTranslation } from "@merge-rd/i18n";
 import { Button } from "@merge-rd/ui/components/button";
-import {
-    DataTable,
-    DataTableRowActions,
-    type ColumnDef
-} from "@/admin/shared/ui/data-table";
 import {
     DropdownMenu,
     DropdownMenuContent,
     DropdownMenuItem,
-    DropdownMenuTrigger,
+    DropdownMenuTrigger
 } from "@merge-rd/ui/components/dropdown-menu";
 import { DotsThreeVertical } from "@phosphor-icons/react";
-import type { ComponentType } from "react";
-import { useState } from "react";
-import { useTranslation } from "@merge-rd/i18n";
 import { Link, type LinkProps } from "@tanstack/react-router";
+import type { ComponentType } from "react";
+import { useEffect, useState } from "react";
+import { toast } from "sonner";
+import {
+    type ColumnDef,
+    DataTable,
+    DataTableRowActions
+} from "@/admin/shared/ui/data-table";
+import {
+    getErrorDescription,
+    getErrorMessage
+} from "../../../../shared/keycloak-ui-shared";
 import { useAdminClient } from "../../../app/admin-client";
+import { useClientAssignedScopes } from "../api/use-client-assigned-scopes";
 
 const RouterLink = Link as ComponentType<LinkProps>;
-import { ChangeTypeDropdown } from "../../client-scopes/change-type-dropdown";
+
+import { useAccess } from "../../../app/providers/access/access";
+import { useRealm } from "../../../app/providers/realm-context/realm-context";
+import { translationFormatter } from "../../../shared/lib/translationFormatter";
+import useIsFeatureEnabled, { Feature } from "../../../shared/lib/useIsFeatureEnabled";
+import useLocaleSort, { mapByKey } from "../../../shared/lib/useLocaleSort";
 import {
-    AllClientScopeType,
     AllClientScopes,
+    type AllClientScopeType,
+    addClientScope,
     CellDropdown,
     ClientScope,
-    addClientScope,
     changeClientScope,
     removeClientScope
 } from "../../../shared/ui/client-scope/client-scope-types";
 import { useConfirmDialog } from "../../../shared/ui/confirm-dialog/confirm-dialog";
-import { useAccess } from "../../../app/providers/access/access";
-import { useRealm } from "../../../app/providers/realm-context/realm-context";
-import { translationFormatter } from "../../../shared/lib/translationFormatter";
-import useLocaleSort, { mapByKey } from "../../../shared/lib/useLocaleSort";
-import { toDedicatedScope } from "../routes/dedicated-scope-details";
+import { ChangeTypeDropdown } from "../../client-scopes/change-type-dropdown";
+import { PROTOCOL_OID4VC, PROTOCOL_OIDC } from "../constants";
+import { toDedicatedScope } from "../../../shared/lib/routes/clients";
 import { AddScopeDialog } from "./add-scope-dialog";
-import useIsFeatureEnabled, { Feature } from "../../../shared/lib/useIsFeatureEnabled";
-import { PROTOCOL_OIDC, PROTOCOL_OID4VC } from "../constants";
 
 type ClientScopesProps = {
     clientId: string;
@@ -70,7 +75,7 @@ const TypeSelector = ({
     const { adminClient } = useAdminClient();
 
     const { t } = useTranslation();
-const { hasAccess } = useAccess();
+    const { hasAccess } = useAccess();
 
     const isDedicatedRow = (value: Row) => value.id === DEDICATED_ROW;
     const isManager = hasAccess("manage-clients") || fineGrainedAccess;
@@ -92,7 +97,10 @@ const { hasAccess } = useAccess();
                     toast.success(t("clientScopeSuccess"));
                     refresh();
                 } catch (error) {
-                    toast.error(t("clientScopeError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
+                    toast.error(
+                        t("clientScopeError", { error: getErrorMessage(error) }),
+                        { description: getErrorDescription(error) }
+                    );
                 }
             }}
         />
@@ -109,7 +117,7 @@ export const ClientScopes = ({
     const isFeatureEnabled = useIsFeatureEnabled();
 
     const { t } = useTranslation();
-const { realm } = useRealm();
+    const { realm } = useRealm();
     const localeSort = useLocaleSort();
 
     const [addDialogOpen, setAddDialogOpen] = useState(false);
@@ -121,84 +129,75 @@ const { realm } = useRealm();
         setSelectedRowState(rows.filter(({ id }) => id !== DEDICATED_ROW));
     const [kebabOpen, setKebabOpen] = useState(false);
 
-    const [key, setKey] = useState(0);
-    const refresh = () => setKey(key + 1);
     const isDedicatedRow = (value: Row) => value.id === DEDICATED_ROW;
 
     const { hasAccess } = useAccess();
     const isManager = hasAccess("manage-clients") || fineGrainedAccess;
     const isViewer = hasAccess("view-clients") || fineGrainedAccess;
 
-    useFetch(
-        async () => {
-            const defaultClientScopes = await adminClient.clients.listDefaultClientScopes({
-                id: clientId
-            });
-            const optionalClientScopes = await adminClient.clients.listOptionalClientScopes({
-                id: clientId
-            });
-            const clientScopes = await adminClient.clientScopes.find();
+    const { data: assignedScopesData, refetch } = useClientAssignedScopes(clientId);
+    const refresh = () => {
+        refetch();
+    };
 
-            const find = (id: string) =>
-                clientScopes.find(clientScope => id === clientScope.id);
+    useEffect(() => {
+        if (!assignedScopesData) return;
+        const { defaultClientScopes, optionalClientScopes, clientScopes } =
+            assignedScopesData;
 
-            const optional = optionalClientScopes.map(c => {
-                const scope = find(c.id!);
-                const row: Row = {
-                    ...c,
-                    type: ClientScope.optional,
-                    description: scope?.description
-                };
-                return row;
-            });
+        const find = (id: string) =>
+            clientScopes.find(clientScope => id === clientScope.id);
 
-            const defaultScopes = defaultClientScopes.map(c => {
-                const scope = find(c.id!);
-                const row: Row = {
-                    ...c,
-                    type: ClientScope.default,
-                    description: scope?.description
-                };
-                return row;
-            });
+        const optional = optionalClientScopes.map(c => {
+            const scope = find(c.id!);
+            const row: Row = {
+                ...c,
+                type: ClientScope.optional,
+                description: scope?.description
+            };
+            return row;
+        });
 
-            let resultRows = [...optional, ...defaultScopes];
-            const names = resultRows.map(row => row.name);
+        const defaultScopes = defaultClientScopes.map(c => {
+            const scope = find(c.id!);
+            const row: Row = {
+                ...c,
+                type: ClientScope.default,
+                description: scope?.description
+            };
+            return row;
+        });
 
-            const allowedProtocols = (() => {
-                if (protocol === PROTOCOL_OIDC) {
-                    return isFeatureEnabled(Feature.OpenId4VCI)
-                        ? [PROTOCOL_OIDC, PROTOCOL_OID4VC]
-                        : [PROTOCOL_OIDC];
-                }
-                return [protocol];
-            })();
+        let resultRows = [...optional, ...defaultScopes];
+        const names = resultRows.map(row => row.name);
 
-            const restScopes = clientScopes
-                .filter(scope => !names.includes(scope.name))
-                .filter(
-                    scope => scope.protocol && allowedProtocols.includes(scope.protocol)
-                );
-
-            resultRows = localeSort(resultRows, mapByKey("name"));
-
-            if (isViewer) {
-                resultRows.unshift({
-                    id: DEDICATED_ROW,
-                    name: t("dedicatedScopeName", { clientName }),
-                    type: AllClientScopes.none,
-                    description: t("dedicatedScopeDescription")
-                });
+        const allowedProtocols = (() => {
+            if (protocol === PROTOCOL_OIDC) {
+                return isFeatureEnabled(Feature.OpenId4VCI)
+                    ? [PROTOCOL_OIDC, PROTOCOL_OID4VC]
+                    : [PROTOCOL_OIDC];
             }
+            return [protocol];
+        })();
 
-            return { rows: resultRows, rest: restScopes };
-        },
-        (data) => {
-            setRows(data.rows);
-            setRest(data.rest);
-        },
-        [key]
-    );
+        const restScopes = clientScopes
+            .filter(scope => !names.includes(scope.name))
+            .filter(scope => scope.protocol && allowedProtocols.includes(scope.protocol));
+
+        resultRows = localeSort(resultRows, mapByKey("name"));
+
+        if (isViewer) {
+            resultRows.unshift({
+                id: DEDICATED_ROW,
+                name: t("dedicatedScopeName", { clientName }),
+                type: AllClientScopes.none,
+                description: t("dedicatedScopeDescription")
+            });
+        }
+
+        setRows(resultRows);
+        setRest(restScopes);
+    }, [assignedScopesData]);
 
     const [toggleDeleteDialog, DeleteConfirm] = useConfirmDialog({
         titleKey: t("deleteClientScope", {
@@ -219,7 +218,10 @@ const { realm } = useRealm();
                 toast.success(t("clientScopeRemoveSuccess"));
                 refresh();
             } catch (error) {
-                toast.error(t("clientScopeRemoveError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
+                toast.error(
+                    t("clientScopeRemoveError", { error: getErrorMessage(error) }),
+                    { description: getErrorDescription(error) }
+                );
             }
         }
     });
@@ -257,7 +259,8 @@ const { realm } = useRealm();
         {
             accessorKey: "description",
             header: t("description"),
-            cell: ({ row }) => translationFormatter(t)(row.original.description) as string || "-"
+            cell: ({ row }) =>
+                (translationFormatter(t)(row.original.description) as string) || "-"
         },
         {
             id: "actions",
@@ -308,14 +311,16 @@ const { realm } = useRealm();
                             toast.success(t("clientScopeSuccess"));
                             refresh();
                         } catch (error) {
-                            toast.error(t("clientScopeError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
+                            toast.error(
+                                t("clientScopeError", { error: getErrorMessage(error) }),
+                                { description: getErrorDescription(error) }
+                            );
                         }
                     }}
                 />
             )}
             <DeleteConfirm />
             <DataTable
-                key={key}
                 columns={columns}
                 data={rows}
                 searchColumnId="name"
@@ -362,10 +367,20 @@ const { realm } = useRealm();
 
                                                 setKebabOpen(false);
                                                 setSelectedRows([]);
-                                                toast.success(t("clientScopeRemoveSuccess"));
+                                                toast.success(
+                                                    t("clientScopeRemoveSuccess")
+                                                );
                                                 refresh();
                                             } catch (error) {
-                                                toast.error(t("clientScopeRemoveError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
+                                                toast.error(
+                                                    t("clientScopeRemoveError", {
+                                                        error: getErrorMessage(error)
+                                                    }),
+                                                    {
+                                                        description:
+                                                            getErrorDescription(error)
+                                                    }
+                                                );
                                             }
                                         }}
                                     >

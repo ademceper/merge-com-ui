@@ -1,15 +1,9 @@
-import { createFileRoute } from "@tanstack/react-router";
-import { lazy } from "react";
-
-const AddJWTAuthorizationGrantConnect = lazy(
-    () =>
-        import(
-            "../../../../../pages/identity-providers/add/add-jwt-authorization-grant"
-        ),
-);
+import { createFileRoute, lazyRouteComponent } from "@tanstack/react-router";
 
 export const Route = createFileRoute(
     "/_app/$realm/identity-providers/jwt-authorization-grant/add",
 )({
-    component: AddJWTAuthorizationGrantConnect,
+    component: lazyRouteComponent(() => import(
+            "../../../../../pages/identity-providers/add/add-jwt-authorization-grant"
+        )),
 });

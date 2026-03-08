@@ -1,19 +1,19 @@
-import { ReactNode, useMemo } from "react";
+import type CredentialRepresentation from "@keycloak/keycloak-admin-client/lib/defs/credentialRepresentation";
 import { useTranslation } from "@merge-rd/i18n";
+import { Button } from "@merge-rd/ui/components/button";
 import {
     DropdownMenu,
     DropdownMenuContent,
     DropdownMenuItem,
-    DropdownMenuTrigger,
+    DropdownMenuTrigger
 } from "@merge-rd/ui/components/dropdown-menu";
-import { Button } from "@merge-rd/ui/components/button";
-import { TableCell } from "@/admin/shared/ui/data-table";
-import type CredentialRepresentation from "@keycloak/keycloak-admin-client/lib/defs/credentialRepresentation";
-import useToggle from "../../../shared/lib/useToggle";
-import useLocaleSort from "../../../shared/lib/useLocaleSort";
-import { CredentialDataDialog } from "./credential-data-dialog";
-import useFormatDate from "../../../shared/lib/useFormatDate";
 import { DotsThreeVertical } from "@phosphor-icons/react";
+import { type ReactNode, useMemo } from "react";
+import { TableCell } from "@/admin/shared/ui/data-table";
+import useFormatDate from "../../../shared/lib/useFormatDate";
+import useLocaleSort from "../../../shared/lib/useLocaleSort";
+import useToggle from "../../../shared/lib/useToggle";
+import { CredentialDataDialog } from "./credential-data-dialog";
 
 type CredentialRowProps = {
     credential: CredentialRepresentation;
@@ -93,11 +93,7 @@ export const CredentialRow = ({
             <TableCell>
                 <DropdownMenu open={kebabOpen} onOpenChange={toggleKebab}>
                     <DropdownMenuTrigger asChild>
-                        <Button
-                            variant="ghost"
-                            size="icon-sm"
-                            aria-label="Kebab toggle"
-                        >
+                        <Button variant="ghost" size="icon-sm" aria-label="Kebab toggle">
                             <DotsThreeVertical className="size-4" />
                         </Button>
                     </DropdownMenuTrigger>

@@ -1,4 +1,5 @@
 import type ResourceRepresentation from "@keycloak/keycloak-admin-client/lib/defs/resourceRepresentation";
+import { useTranslation } from "@merge-rd/i18n";
 import { Button } from "@merge-rd/ui/components/button";
 import { Input } from "@merge-rd/ui/components/input";
 import {
@@ -8,19 +9,18 @@ import {
     SelectTrigger,
     SelectValue
 } from "@merge-rd/ui/components/select";
+import { MinusCircle, Plus } from "@phosphor-icons/react";
+import { camelCase } from "lodash-es";
+import { useEffect, useMemo, useState } from "react";
+import { Controller, useFieldArray, useFormContext } from "react-hook-form";
 import {
     Table,
     TableBody,
     TableCell,
     TableHead,
     TableHeader,
-    TableRow,
+    TableRow
 } from "@/admin/shared/ui/data-table";
-import { MinusCircle, Plus } from "@phosphor-icons/react";
-import { camelCase } from "lodash-es";
-import { useEffect, useMemo, useState } from "react";
-import { Controller, useFieldArray, useFormContext } from "react-hook-form";
-import { useTranslation } from "@merge-rd/i18n";
 import { defaultContextAttributes } from "../utils";
 
 type AttributeType = {
@@ -109,7 +109,9 @@ const ValueInput = ({
                         <Select
                             open={isValueOpenArray[rowIndex]}
                             onOpenChange={open => toggleValueSelect(rowIndex, open)}
-                            value={Array.isArray(field.value) ? field.value[0] : field.value}
+                            value={
+                                Array.isArray(field.value) ? field.value[0] : field.value
+                            }
                             onValueChange={v => {
                                 field.onChange(v);
                                 toggleValueSelect(rowIndex, false);
@@ -122,9 +124,7 @@ const ValueInput = ({
                             >
                                 <SelectValue placeholder={t("selectOrTypeAKey")} />
                             </SelectTrigger>
-                            <SelectContent>
-                                {renderSelectOptionType()}
-                            </SelectContent>
+                            <SelectContent>{renderSelectOptionType()}</SelectContent>
                         </Select>
                     )}
                 />
@@ -192,7 +192,9 @@ export const KeyBasedAttributeInput = ({
                                 render={({ field }) => (
                                     <Select
                                         open={isKeyOpenArray[rowIndex]}
-                                        onOpenChange={open => toggleKeySelect(rowIndex, open)}
+                                        onOpenChange={open =>
+                                            toggleKeySelect(rowIndex, open)
+                                        }
                                         value={field.value ?? ""}
                                         onValueChange={v => {
                                             field.onChange(v);
@@ -204,7 +206,9 @@ export const KeyBasedAttributeInput = ({
                                             id={`${name}.${rowIndex}.key`}
                                             className="kc-attribute-key-selectable"
                                         >
-                                            <SelectValue placeholder={t("selectOrTypeAKey")} />
+                                            <SelectValue
+                                                placeholder={t("selectOrTypeAKey")}
+                                            />
                                         </SelectTrigger>
                                         <SelectContent>
                                             {selectableValues?.map(attr => (
@@ -212,8 +216,8 @@ export const KeyBasedAttributeInput = ({
                                                     key={attr.key}
                                                     value={
                                                         resources
-                                                            ? attr.name ?? ""
-                                                            : attr.key ?? ""
+                                                            ? (attr.name ?? "")
+                                                            : (attr.key ?? "")
                                                     }
                                                 >
                                                     {attr.name}

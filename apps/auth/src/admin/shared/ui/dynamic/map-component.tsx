@@ -1,12 +1,12 @@
-import { HelpItem, generateId } from "../../../../shared/keycloak-ui-shared";
+import { useTranslation } from "@merge-rd/i18n";
 import { Button } from "@merge-rd/ui/components/button";
 import { Input } from "@merge-rd/ui/components/input";
 import { Label } from "@merge-rd/ui/components/label";
 import { MinusCircle, PlusCircle } from "@phosphor-icons/react";
 import { useEffect, useState } from "react";
 import { useFormContext } from "react-hook-form";
-import { useTranslation } from "@merge-rd/i18n";
-import { KeyValueType } from "../key-value-form/key-value-convert";
+import { generateId, HelpItem } from "../../../../shared/keycloak-ui-shared";
+import type { KeyValueType } from "../key-value-form/key-value-convert";
 import type { ComponentProps } from "./components";
 
 type IdKeyValueType = KeyValueType & {
@@ -41,9 +41,7 @@ export const MapComponent = ({
     const update = (val = map) => {
         setValue(
             fieldName,
-            JSON.stringify(
-                val.filter(e => e.key !== "").map(({ id, ...entry }) => entry)
-            )
+            JSON.stringify(val.filter(e => e.key !== "").map(({ id, ...entry }) => entry))
         );
     };
 
@@ -67,7 +65,10 @@ export const MapComponent = ({
     return map.length !== 0 ? (
         <div className="space-y-2">
             <div className="flex items-center gap-1">
-                <Label htmlFor={name!}>{t(label!)}{required && " *"}</Label>
+                <Label htmlFor={name!}>
+                    {t(label!)}
+                    {required && " *"}
+                </Label>
                 <HelpItem helpText={t(helpText!)} fieldLabelId={`${label}`} />
             </div>
             <div className="flex flex-col gap-2">
@@ -88,7 +89,7 @@ export const MapComponent = ({
                                 aria-label={t("key")}
                                 defaultValue={attribute.key}
                                 data-testid={`${fieldName}.${index}.key`}
-                                onChange={(e) => updateKey(index, e.target.value)}
+                                onChange={e => updateKey(index, e.target.value)}
                                 onBlur={() => update()}
                             />
                         </div>
@@ -99,7 +100,7 @@ export const MapComponent = ({
                                 aria-label={t("value")}
                                 defaultValue={attribute.value}
                                 data-testid={`${fieldName}.${index}.value`}
-                                onChange={(e) => updateValue(index, e.target.value)}
+                                onChange={e => updateValue(index, e.target.value)}
                                 onBlur={() => update()}
                             />
                         </div>
@@ -130,10 +131,7 @@ export const MapComponent = ({
             </div>
         </div>
     ) : (
-        <div
-            data-testid={`${name}-empty-state`}
-            className="p-0 text-center"
-        >
+        <div data-testid={`${name}-empty-state`} className="p-0 text-center">
             <p className="text-muted-foreground">{t("missingAttributes", { label })}</p>
             <div className="mt-2">
                 <Button

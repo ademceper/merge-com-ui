@@ -1,17 +1,19 @@
 import type ClientScopeRepresentation from "@keycloak/keycloak-admin-client/lib/defs/clientScopeRepresentation";
+import { useTranslation } from "@merge-rd/i18n";
 import { Button } from "@merge-rd/ui/components/button";
+import { Checkbox } from "@merge-rd/ui/components/checkbox";
 import {
     Dialog,
     DialogContent,
     DialogFooter,
     DialogHeader,
-    DialogTitle,
+    DialogTitle
 } from "@merge-rd/ui/components/dialog";
 import {
     DropdownMenu,
     DropdownMenuContent,
     DropdownMenuItem,
-    DropdownMenuTrigger,
+    DropdownMenuTrigger
 } from "@merge-rd/ui/components/dropdown-menu";
 import {
     Select,
@@ -20,21 +22,16 @@ import {
     SelectTrigger,
     SelectValue
 } from "@merge-rd/ui/components/select";
-import {
-    DataTable,
-    type ColumnDef
-} from "@/admin/shared/ui/data-table";
-import { Checkbox } from "@merge-rd/ui/components/checkbox";
 import { CaretDown, CaretUp, Funnel } from "@phosphor-icons/react";
 import { useMemo, useState } from "react";
-import { useTranslation } from "@merge-rd/i18n";
+import { type ColumnDef, DataTable } from "@/admin/shared/ui/data-table";
+import useIsFeatureEnabled, { Feature } from "../../../shared/lib/useIsFeatureEnabled";
+import useToggle from "../../../shared/lib/useToggle";
 import {
-    ClientScopeType,
+    type ClientScopeType,
     clientScopeTypesDropdown
 } from "../../../shared/ui/client-scope/client-scope-types";
-import useToggle from "../../../shared/lib/useToggle";
 import { getProtocolName } from "../utils";
-import useIsFeatureEnabled, { Feature } from "../../../shared/lib/useIsFeatureEnabled";
 
 type AddScopeDialogProps = {
     clientScopes: ClientScopeRepresentation[];
@@ -167,8 +164,10 @@ export const AddScopeDialog = ({
             id: "select",
             header: () => (
                 <Checkbox
-                    checked={rows.length === clientScopes.length && clientScopes.length > 0}
-                    onCheckedChange={(checked) => {
+                    checked={
+                        rows.length === clientScopes.length && clientScopes.length > 0
+                    }
+                    onCheckedChange={checked => {
                         if (checked) {
                             setRows([...clientScopes]);
                         } else {
@@ -194,7 +193,8 @@ export const AddScopeDialog = ({
         {
             accessorKey: "protocol",
             header: t("protocol"),
-            cell: ({ row }) => getProtocolName(t, row.original.protocol ?? "openid-connect")
+            cell: ({ row }) =>
+                getProtocolName(t, row.original.protocol ?? "openid-connect")
         },
         {
             accessorKey: "description",
@@ -221,7 +221,10 @@ export const AddScopeDialog = ({
                     emptyMessage={t("emptyAddClientScopes")}
                     toolbar={
                         <div className="flex gap-2">
-                            <DropdownMenu open={isFilterTypeDropdownOpen} onOpenChange={toggleIsFilterTypeDropdownOpen}>
+                            <DropdownMenu
+                                open={isFilterTypeDropdownOpen}
+                                onOpenChange={toggleIsFilterTypeDropdownOpen}
+                            >
                                 <DropdownMenuTrigger asChild>
                                     <Button
                                         data-testid="filter-type-dropdown"
@@ -236,7 +239,9 @@ export const AddScopeDialog = ({
                                 <DropdownMenuContent>
                                     <DropdownMenuItem
                                         data-testid="filter-type-dropdown-item"
-                                        onClick={() => onFilterTypeDropdownSelect(filterType)}
+                                        onClick={() =>
+                                            onFilterTypeDropdownSelect(filterType)
+                                        }
                                     >
                                         {filterType === FilterType.Name
                                             ? t("protocol")
@@ -249,17 +254,13 @@ export const AddScopeDialog = ({
                                     open={isProtocolTypeDropdownOpen}
                                     onOpenChange={toggleIsProtocolTypeDropdownOpen}
                                     value={protocolType}
-                                    onValueChange={(v) =>
-                                        onProtocolTypeDropdownSelect(v)
-                                    }
+                                    onValueChange={v => onProtocolTypeDropdownSelect(v)}
                                     aria-label={t("selectOne")}
                                 >
                                     <SelectTrigger className="kc-protocolType-select">
                                         <SelectValue />
                                     </SelectTrigger>
-                                    <SelectContent>
-                                        {protocolTypeOptions}
-                                    </SelectContent>
+                                    <SelectContent>{protocolTypeOptions}</SelectContent>
                                 </Select>
                             )}
                         </div>

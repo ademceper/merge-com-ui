@@ -1,4 +1,5 @@
 import { createFileRoute, Outlet } from "@tanstack/react-router";
+import { Suspense } from "react";
 import { CommandPalette } from "@/widgets/command-palette";
 import { CommandPaletteProvider } from "@/widgets/command-palette/command-palette-provider";
 import { Toaster } from "@/shared/ui/primitives/sonner";
@@ -10,7 +11,9 @@ function DashboardLayout() {
 		<EnvironmentProvider>
 			<OptInProvider>
 				<CommandPaletteProvider>
-					<Outlet />
+					<Suspense>
+						<Outlet />
+					</Suspense>
 					<CommandPalette />
 					<Toaster />
 				</CommandPaletteProvider>

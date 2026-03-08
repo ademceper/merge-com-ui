@@ -1,5 +1,8 @@
-import { useState } from "react";
+import type EvaluationResultRepresentation from "@keycloak/keycloak-admin-client/lib/defs/evaluationResultRepresentation";
+import type PolicyResultRepresentation from "@keycloak/keycloak-admin-client/lib/defs/policyResultRepresentation";
+import { useTranslation } from "@merge-rd/i18n";
 import { Button } from "@merge-rd/ui/components/button";
+import { useState } from "react";
 import {
     Table,
     TableBody,
@@ -8,10 +11,7 @@ import {
     TableHeader,
     TableRow
 } from "@/admin/shared/ui/data-table";
-import { useTranslation } from "@merge-rd/i18n";
 import { AuthorizationEvaluateResourcePolicies } from "./authorization-evaluate-resource-policies";
-import type EvaluationResultRepresentation from "@keycloak/keycloak-admin-client/lib/defs/evaluationResultRepresentation";
-import type PolicyResultRepresentation from "@keycloak/keycloak-admin-client/lib/defs/policyResultRepresentation";
 
 type Props = {
     rowIndex: number;
@@ -58,7 +58,10 @@ export const AuthorizationEvaluateResource = ({
                     <TableCell />
                     <TableCell colSpan={5}>
                         <div className="keycloak_resource_details py-2">
-                            <Table aria-label={t("evaluationResults")} className="text-sm">
+                            <Table
+                                aria-label={t("evaluationResults")}
+                                className="text-sm"
+                            >
                                 <TableHeader>
                                     <TableRow>
                                         <TableHead aria-hidden="true" />

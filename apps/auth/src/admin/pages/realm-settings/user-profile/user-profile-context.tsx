@@ -1,12 +1,18 @@
 import type { UserProfileConfig } from "@keycloak/keycloak-admin-client/lib/defs/userProfileMetadata";
-import { getErrorDescription, getErrorMessage, createNamedContext,
-    useFetch,
-    useRequiredContext } from "../../../../shared/keycloak-ui-shared";
-import { toast } from "sonner";
-import { PropsWithChildren, useState } from "react";
 import { useTranslation } from "@merge-rd/i18n";
+import { useQueryClient } from "@tanstack/react-query";
+import { type PropsWithChildren, useState } from "react";
+import { toast } from "sonner";
+import {
+    createNamedContext,
+    getErrorDescription,
+    getErrorMessage,
+    useRequiredContext
+} from "../../../../shared/keycloak-ui-shared";
 import { useAdminClient } from "../../../app/admin-client";
 import { useRealm } from "../../../app/providers/realm-context/realm-context";
+import { realmSettingsKeys } from "../api/keys";
+import { useUserProfileConfig } from "../api/use-user-profile-config";
 
 type UserProfileProps = {
     config: UserProfileConfig | null;
@@ -33,16 +39,11 @@ export const UserProfileProvider = ({ children }: PropsWithChildren) => {
     const { adminClient } = useAdminClient();
 
     const { realm } = useRealm();
-const { t } = useTranslation();
-    const [config, setConfig] = useState<UserProfileConfig | null>(null);
-    const [refreshCount, setRefreshCount] = useState(0);
+    const { t } = useTranslation();
     const [isSaving, setIsSaving] = useState(false);
+    const queryClient = useQueryClient();
 
-    useFetch(
-        () => adminClient.users.getProfile({ realm }),
-        config => setConfig(config),
-        [refreshCount]
-    );
+    const { data: config = null } = useUserProfileConfig();
 
     const save: SaveCallback = async (updatedConfig, options) => {
         setIsSaving(true);
@@ -54,13 +55,20 @@ const { t } = useTranslation();
             });
 
             setIsSaving(false);
-            setRefreshCount(refreshCount + 1);
+            queryClient.invalidateQueries({
+                queryKey: realmSettingsKeys.userProfile(realm)
+            });
             toast.success(t(options?.successMessageKey ?? "userProfileSuccess"));
 
             return true;
         } catch (error) {
             setIsSaving(false);
-            toast.error(t(options?.errorMessageKey ?? "userProfileError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
+            toast.error(
+                t(options?.errorMessageKey ?? "userProfileError", {
+                    error: getErrorMessage(error)
+                }),
+                { description: getErrorDescription(error) }
+            );
 
             return false;
         }

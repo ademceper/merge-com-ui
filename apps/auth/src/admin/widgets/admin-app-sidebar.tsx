@@ -1,4 +1,4 @@
-import { label, useEnvironment } from "../../shared/keycloak-ui-shared";
+import { useTranslation } from "@merge-rd/i18n";
 import {
     Sidebar,
     SidebarContent,
@@ -11,37 +11,38 @@ import {
     SidebarMenuItem
 } from "@merge-rd/ui/components/sidebar";
 import { Switcher, type SwitcherItem } from "@merge-rd/ui/components/switcher";
-import { useTranslation } from "@merge-rd/i18n";
-import { Link, useLocation, useNavigate } from "@tanstack/react-router";
-import { useAccess } from "../app/providers/access/access";
-import { useRealm } from "../app/providers/realm-context/realm-context";
-import { useServerInfo } from "../app/providers/server-info/server-info-provider";
-import type { Environment } from "../app/environment";
-import { toPage } from "../shared/lib/route-helpers-page";
-import { routes } from "../app/routes";
-import useIsFeatureEnabled, { Feature } from "../shared/lib/useIsFeatureEnabled";
-import { useAdminClient } from "../app/admin-client";
-import { fetchAdminUI } from "../app/providers/auth/admin-ui-endpoint";
-import { toDashboard } from "../shared/lib/route-helpers";
-import { useEffect, useState } from "react";
-import type { RealmNameRepresentation } from "../app/providers/recent-realms";
 import {
-    BuildingsIcon,
+    ArrowsClockwiseIcon,
     BrowserIcon,
+    BuildingsIcon,
     CirclesThreeIcon,
     ClockCounterClockwiseIcon,
     GearSixIcon,
     GlobeIcon,
+    KeyIcon,
+    ListBulletsIcon,
     LockKeyIcon,
     ShieldCheckIcon,
     StackIcon,
     TreeStructureIcon,
     UsersIcon,
-    UsersThreeIcon,
-    KeyIcon,
-    ArrowsClockwiseIcon,
-    ListBulletsIcon
+    UsersThreeIcon
 } from "@phosphor-icons/react";
+import { useQuery } from "@tanstack/react-query";
+import { Link, useLocation, useNavigate } from "@tanstack/react-router";
+import { useCallback, useMemo } from "react";
+import { label, useEnvironment } from "../../shared/keycloak-ui-shared";
+import { useAdminClient } from "../app/admin-client";
+import type { Environment } from "../app/environment";
+import { useAccess } from "../app/providers/access/access";
+import { fetchAdminUI } from "../app/providers/auth/admin-ui-endpoint";
+import { useRealm } from "../app/providers/realm-context/realm-context";
+import type { RealmNameRepresentation } from "../app/providers/recent-realms";
+import { useServerInfo } from "../app/providers/server-info/server-info-provider";
+import { routes } from "../app/routes";
+import { toDashboard } from "../shared/lib/route-helpers";
+import { toPage } from "../shared/lib/routes/page";
+import useIsFeatureEnabled, { Feature } from "../shared/lib/useIsFeatureEnabled";
 
 const baseUrl = import.meta.env.BASE_URL;
 
@@ -64,7 +65,7 @@ function LeftNav({ title, path, icon: Icon, id }: LeftNavProps) {
 
     const accessAllowed =
         route &&
-        (route.handle.access instanceof Array
+        (Array.isArray(route.handle.access)
             ? hasAccess(...route.handle.access)
             : hasAccess(route.handle.access));
 
@@ -73,14 +74,11 @@ function LeftNav({ title, path, icon: Icon, id }: LeftNavProps) {
     }
 
     const to = `/${encodedRealm}${path}`;
-    const isActive = location.pathname === to || location.pathname.startsWith(to + "/");
+    const isActive = location.pathname === to || location.pathname.startsWith(`${to}/`);
     return (
         <SidebarMenuItem>
             <SidebarMenuButton asChild isActive={isActive} tooltip={t(title)}>
-                <Link
-                    to={to as string}
-                    data-testid={"nav-item" + path.replace("/", "-")}
-                >
+                <Link to={to as string} data-testid={`nav-item${path.replace("/", "-")}`}>
                     <Icon className="size-4" />
                     <span>{t(title)}</span>
                 </Link>
@@ -100,35 +98,31 @@ export function AdminAppSidebar({ ...props }: React.ComponentProps<typeof Sideba
     const { realm, realmRepresentation } = useRealm();
     const { adminClient } = useAdminClient();
 
-    const [realms, setRealms] = useState<RealmNameRepresentation[]>([]);
+    const { data: realms = [] } = useQuery({
+        queryKey: ["realmNames", adminClient.realmName],
+        queryFn: () =>
+            fetchAdminUI<RealmNameRepresentation[]>(
+                adminClient,
+                "ui-ext/realms/names",
+                { first: "0", max: "1000" }
+            ).then(result => result ?? []),
+        staleTime: 5 * 60_000
+    });
 
-    useEffect(() => {
-        let cancelled = false;
-        (async () => {
-            try {
-                const result = await fetchAdminUI<RealmNameRepresentation[]>(
-                    adminClient,
-                    "ui-ext/realms/names",
-                    { first: "0", max: "1000" }
-                );
-                if (!cancelled) setRealms(result ?? []);
-            } catch {
-                if (!cancelled) setRealms([]);
-            }
-        })();
-        return () => {
-            cancelled = true;
-        };
-    }, [adminClient]);
+    const realmItems: SwitcherItem[] = useMemo(
+        () => realms.map(r => ({
+            value: r.name,
+            label: label(t, r.displayName, r.name) as string
+        })),
+        [realms, t]
+    );
 
-    const realmItems: SwitcherItem[] = realms.map((r) => ({
-        value: r.name,
-        label: label(t, r.displayName, r.name) as string,
-    }));
-
-    const onRealmChange = (value: string) => {
-        navigate({ to: toDashboard({ realm: value }) as string });
-    };
+    const onRealmChange = useCallback(
+        (value: string) => {
+            navigate({ to: toDashboard({ realm: value }) as string });
+        },
+        [navigate]
+    );
 
     const showManage = hasSomeAccess(
         "view-realm",
@@ -164,7 +158,12 @@ export function AdminAppSidebar({ ...props }: React.ComponentProps<typeof Sideba
                         className="hidden h-8 w-full object-contain object-left dark:block"
                     />
                 </div>
-                <Switcher value={realm} items={realmItems} onChange={onRealmChange} singleBadge={t("currentRealm")} />
+                <Switcher
+                    value={realm}
+                    items={realmItems}
+                    onChange={onRealmChange}
+                    singleBadge={t("currentRealm")}
+                />
             </SidebarHeader>
             <SidebarContent>
                 {showManage && (

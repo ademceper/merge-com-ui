@@ -1,13 +1,17 @@
-import { HelpItem, SelectField, TextControl } from "../../../../shared/keycloak-ui-shared";
+import { useTranslation } from "@merge-rd/i18n";
 import { Switch } from "@merge-rd/ui/components/switch";
-import { FormLabel } from "../../../../shared/keycloak-ui-shared";
 import { isEqual } from "lodash-es";
 import { useEffect } from "react";
-import { Controller, FormProvider, UseFormReturn, useWatch } from "react-hook-form";
-import { useTranslation } from "@merge-rd/i18n";
+import { Controller, FormProvider, type UseFormReturn, useWatch } from "react-hook-form";
+import {
+    FormLabel,
+    HelpItem,
+    SelectField,
+    TextControl
+} from "../../../../shared/keycloak-ui-shared";
+import { useRealm } from "../../../app/providers/realm-context/realm-context";
 import { FormAccess } from "../../../shared/ui/form/form-access";
 import { WizardSectionHeader } from "../../../shared/ui/wizard-section-header/wizard-section-header";
-import { useRealm } from "../../../app/providers/realm-context/realm-context";
 
 type KerberosSettingsRequiredProps = {
     form: UseFormReturn;
@@ -42,7 +46,6 @@ export const KerberosSettingsRequired = ({
 
             <FormAccess role="manage-realm" isHorizontal>
                 <div className="space-y-6">
-                
                     <input
                         type="hidden"
                         defaultValue="kerberos"
@@ -103,7 +106,10 @@ export const KerberosSettingsRequired = ({
                             name="kc-debug"
                             label={t("debug")}
                             labelIcon={
-                                <HelpItem helpText={t("debugHelp")} fieldLabelId="debug" />
+                                <HelpItem
+                                    helpText={t("debugHelp")}
+                                    fieldLabelId="debug"
+                                />
                             }
                             hasNoPaddingTop
                         >
@@ -116,7 +122,9 @@ export const KerberosSettingsRequired = ({
                                         id="kc-debug"
                                         data-testid="debug"
                                         checked={field.value?.[0] === "true"}
-                                        onCheckedChange={(value) => field.onChange([`${value}`])}
+                                        onCheckedChange={value =>
+                                            field.onChange([`${value}`])
+                                        }
                                         aria-label={t("debug")}
                                     />
                                 )}
@@ -144,7 +152,9 @@ export const KerberosSettingsRequired = ({
                                         id="kc-allow-password-authentication"
                                         data-testid="allow-password-authentication"
                                         checked={field.value?.[0] === "true"}
-                                        onCheckedChange={(value) => field.onChange([`${value}`])}
+                                        onCheckedChange={value =>
+                                            field.onChange([`${value}`])
+                                        }
                                         aria-label={t("allowPasswordAuthentication")}
                                     />
                                 )}
@@ -154,11 +164,11 @@ export const KerberosSettingsRequired = ({
                     {isEqual(allowPassAuth, ["true"]) ? (
                         <div className="space-y-2">
                             <SelectField
-                        name="config.editMode[0]"
-                        label={t("editMode")}
-                        labelIcon={t("editModeKerberosHelp")}
-                        defaultValue="READ_ONLY"
-                        rules={{ required: t("required") }}
+                                name="config.editMode[0]"
+                                label={t("editMode")}
+                                labelIcon={t("editModeKerberosHelp")}
+                                defaultValue="READ_ONLY"
+                                rules={{ required: t("required") }}
                                 options={["READ_ONLY", "UNSYNCED"]}
                             />
                         </div>
@@ -184,7 +194,9 @@ export const KerberosSettingsRequired = ({
                                         id="kc-update-first-login"
                                         data-testid="update-first-login"
                                         checked={field.value?.[0] === "true"}
-                                        onCheckedChange={(value) => field.onChange([`${value}`])}
+                                        onCheckedChange={value =>
+                                            field.onChange([`${value}`])
+                                        }
                                         aria-label={t("updateFirstLogin")}
                                     />
                                 )}

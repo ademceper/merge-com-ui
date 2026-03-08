@@ -1,14 +1,17 @@
-import type ScopeRepresentation from "@keycloak/keycloak-admin-client/lib/defs/scopeRepresentation";
-import { FormErrorText, HelpItem, KeycloakSpinner, useFetch } from "../../../../shared/keycloak-ui-shared";
+import { useTranslation } from "@merge-rd/i18n";
 import { Button } from "@merge-rd/ui/components/button";
 import { Input } from "@merge-rd/ui/components/input";
 import { Label } from "@merge-rd/ui/components/label";
 import { Popover, PopoverContent, PopoverTrigger } from "@merge-rd/ui/components/popover";
 import { useState } from "react";
 import { Controller, useFormContext } from "react-hook-form";
-import { useTranslation } from "@merge-rd/i18n";
-import { useAdminClient } from "../../../app/admin-client";
+import {
+    FormErrorText,
+    HelpItem,
+    KeycloakSpinner
+} from "../../../../shared/keycloak-ui-shared";
 import { useIsAdminPermissionsClient } from "../../../shared/lib/useIsAdminPermissionsClient";
+import { useScopePickerScopes } from "./api/use-scope-picker-scopes";
 
 type Scope = {
     id: string;
@@ -21,38 +24,23 @@ type ScopePickerProps = {
 };
 
 export const ScopePicker = ({ clientId, resourceTypeScopes }: ScopePickerProps) => {
-    const { adminClient } = useAdminClient();
     const { t } = useTranslation();
     const {
         control,
         formState: { errors }
     } = useFormContext();
     const [open, setOpen] = useState(false);
-    const [scopes, setScopes] = useState<ScopeRepresentation[]>();
     const [search, setSearch] = useState("");
     const isAdminPermissionsClient = useIsAdminPermissionsClient(clientId);
 
-    useFetch(
-        () => {
-            const params = {
-                id: clientId,
-                first: 0,
-                max: 20,
-                deep: false,
-                name: search
-            };
-            return adminClient.clients.listAllScopes(params);
-        },
-        setScopes,
-        [search]
-    );
+    const { data: scopes } = useScopePickerScopes(clientId, search);
 
     if (!scopes && !resourceTypeScopes) return <KeycloakSpinner />;
 
     const allScopes: string[] =
         isAdminPermissionsClient && resourceTypeScopes
             ? resourceTypeScopes
-            : (scopes?.map((scope) => scope.name!) ?? []);
+            : (scopes?.map(scope => scope.name!) ?? []);
 
     return (
         <div className="space-y-2">
@@ -68,7 +56,9 @@ export const ScopePicker = ({ clientId, resourceTypeScopes }: ScopePickerProps) 
                 render={({ field }) => {
                     const selectedValues = (field.value ?? []).map((o: Scope) => o.name);
                     const filteredScopes = search
-                        ? allScopes.filter((name) => name.toLowerCase().includes(search.toLowerCase()))
+                        ? allScopes.filter(name =>
+                              name.toLowerCase().includes(search.toLowerCase())
+                          )
                         : allScopes;
                     return (
                         <>
@@ -89,27 +79,36 @@ export const ScopePicker = ({ clientId, resourceTypeScopes }: ScopePickerProps) 
                                         </span>
                                     </Button>
                                 </PopoverTrigger>
-                                <PopoverContent className="w-(--radix-popover-trigger-width) p-0" align="start">
+                                <PopoverContent
+                                    className="w-(--radix-popover-trigger-width) p-0"
+                                    align="start"
+                                >
                                     <Input
                                         placeholder={t("filter")}
                                         value={search}
-                                        onChange={(e) => setSearch(e.target.value)}
+                                        onChange={e => setSearch(e.target.value)}
                                         className="m-2 h-8"
                                     />
                                     <ul className="max-h-64 overflow-auto py-1">
-                                        {filteredScopes.map((name) => {
-                                            const isSelected = selectedValues.includes(name);
+                                        {filteredScopes.map(name => {
+                                            const isSelected =
+                                                selectedValues.includes(name);
                                             return (
                                                 <li
                                                     key={name}
-                                                    role="option"
                                                     aria-selected={isSelected}
                                                     className="hover:bg-accent cursor-pointer px-2 py-1.5 text-sm"
-                                                    onMouseDown={(e) => e.preventDefault()}
+                                                    onMouseDown={e => e.preventDefault()}
                                                     onClick={() => {
                                                         const changedValue = isSelected
-                                                            ? field.value.filter((o: Scope) => o.name !== name)
-                                                            : [...(field.value ?? []), { name }];
+                                                            ? field.value.filter(
+                                                                  (o: Scope) =>
+                                                                      o.name !== name
+                                                              )
+                                                            : [
+                                                                  ...(field.value ?? []),
+                                                                  { name }
+                                                              ];
                                                         field.onChange(changedValue);
                                                     }}
                                                 >

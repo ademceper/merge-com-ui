@@ -1,12 +1,11 @@
 import type RealmRepresentation from "@keycloak/keycloak-admin-client/lib/defs/realmRepresentation";
-import JSZip from "jszip";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@merge-rd/ui/components/tabs";
 import { useTranslation } from "@merge-rd/i18n";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@merge-rd/ui/components/tabs";
 import { useNavigate } from "@tanstack/react-router";
+import JSZip from "jszip";
 import { useRealm } from "../../../app/providers/realm-context/realm-context";
-import { toThemesTab } from "../routes/themes-tab";
-import type { ThemesTabType } from "../routes/themes-tab";
 import useIsFeatureEnabled, { Feature } from "../../../shared/lib/useIsFeatureEnabled";
+import { type ThemesTabType, toThemesTab } from "../../../shared/lib/routes/realm-settings";
 import { LogoContext } from "./logo-context";
 import { ThemeColors } from "./theme-colors";
 import { ThemeSettingsTab } from "./theme-settings";
@@ -30,7 +29,11 @@ export default function ThemesTab({ realm, save, subTab = "settings" }: ThemesTa
     const { realm: realmName } = useRealm();
     const isFeatureEnabled = useIsFeatureEnabled();
     const currentTab: ThemesTabType =
-        subTab === "lightColors" ? "lightColors" : subTab === "darkColors" ? "darkColors" : "settings";
+        subTab === "lightColors"
+            ? "lightColors"
+            : subTab === "darkColors"
+              ? "darkColors"
+              : "settings";
 
     const saveTheme = async (realm: ThemeRealmRepresentation) => {
         const zip = new JSZip();
@@ -38,9 +41,8 @@ export default function ThemesTab({ realm, save, subTab = "settings" }: ThemesTa
         const styles = JSON.parse(realm.attributes?.style ?? "{}");
         const { favicon, logo, bgimage, fileName } = realm;
 
-        const logoName = "img/logo" + logo?.name?.substring(logo?.name?.lastIndexOf("."));
-        const bgimageName =
-            "img/bgimage" + bgimage?.name?.substring(bgimage?.name?.lastIndexOf("."));
+        const logoName = `img/logo${logo?.name?.substring(logo?.name?.lastIndexOf("."))}`;
+        const bgimageName = `img/bgimage${bgimage?.name?.substring(bgimage?.name?.lastIndexOf("."))}`;
 
         if (favicon) {
             zip.file(`theme/quick-theme/common/resources/img/favicon.ico`, favicon);
@@ -58,7 +60,7 @@ export default function ThemesTab({ realm, save, subTab = "settings" }: ThemesTa
 parent=keycloak.v2
 import=common/quick-theme
 
-${logo ? "logo=" + logoName : ""}
+${logo ? `logo=${logoName}` : ""}
 styles=css/theme-styles.css
 `
         );
@@ -69,7 +71,7 @@ styles=css/theme-styles.css
 parent=keycloak.v3
 import=common/quick-theme
 
-${logo ? "logo=" + logoName : ""}
+${logo ? `logo=${logoName}` : ""}
 styles=css/theme-styles.css
 `
         );
@@ -147,8 +149,13 @@ styles=css/login.css css/theme-styles.css
     return (
         <Tabs
             value={currentTab}
-            onValueChange={(value) =>
-                navigate({ to: toThemesTab({ realm: realmName!, tab: value as ThemesTabType }) as string })
+            onValueChange={value =>
+                navigate({
+                    to: toThemesTab({
+                        realm: realmName!,
+                        tab: value as ThemesTabType
+                    }) as string
+                })
             }
         >
             <TabsList variant="line" className="mb-4">

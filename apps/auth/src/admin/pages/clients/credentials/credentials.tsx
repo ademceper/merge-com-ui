@@ -1,27 +1,30 @@
-import type { AuthenticationProviderRepresentation } from "@keycloak/keycloak-admin-client/lib/defs/authenticatorConfigRepresentation";
 import type ClientRepresentation from "@keycloak/keycloak-admin-client/lib/defs/clientRepresentation";
 import type CredentialRepresentation from "@keycloak/keycloak-admin-client/lib/defs/credentialRepresentation";
-import { getErrorDescription, getErrorMessage, HelpItem,
-    SelectField,
-    useFetch } from "../../../../shared/keycloak-ui-shared";
-import { toast } from "sonner";
+import { useTranslation } from "@merge-rd/i18n";
 import { Alert, AlertTitle } from "@merge-rd/ui/components/alert";
 import { Button } from "@merge-rd/ui/components/button";
 import { Label } from "@merge-rd/ui/components/label";
 import { Separator } from "@merge-rd/ui/components/separator";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useFormContext, useWatch } from "react-hook-form";
-import { useTranslation } from "@merge-rd/i18n";
+import { toast } from "sonner";
+import {
+    getErrorDescription,
+    getErrorMessage,
+    HelpItem,
+    SelectField
+} from "../../../../shared/keycloak-ui-shared";
 import { useAdminClient } from "../../../app/admin-client";
+import { useServerInfo } from "../../../app/providers/server-info/server-info-provider";
+import { convertAttributeNameToForm } from "../../../shared/lib/util";
 import { useConfirmDialog } from "../../../shared/ui/confirm-dialog/confirm-dialog";
 import { DynamicComponents } from "../../../shared/ui/dynamic/dynamic-components";
 import { FormAccess } from "../../../shared/ui/form/form-access";
-import { useServerInfo } from "../../../app/providers/server-info/server-info-provider";
-import { FormFields } from "../client-details";
+import { useClientCredentials } from "../api/use-client-credentials";
+import type { FormFields } from "../client-details";
 import { ClientSecret } from "./client-secret";
 import { SignedJWT } from "./signed-jwt";
 import { X509 } from "./x509";
-import { convertAttributeNameToForm } from "../../../shared/lib/util";
 
 type AccessToken = {
     registrationAccessToken: string;
@@ -37,11 +40,10 @@ export const Credentials = ({ client, save, refresh }: CredentialsProps) => {
     const { adminClient } = useAdminClient();
 
     const { t } = useTranslation();
-const clientId = client.id!;
+    const clientId = client.id!;
 
-    const [providers, setProviders] = useState<AuthenticationProviderRepresentation[]>(
-        []
-    );
+    const { data: credentialsData } = useClientCredentials(clientId);
+    const providers = credentialsData?.providers ?? [];
 
     const {
         control,
@@ -58,6 +60,12 @@ const clientId = client.id!;
     const [secret, setSecret] = useState("");
     const [accessToken, setAccessToken] = useState("");
 
+    useEffect(() => {
+        if (credentialsData?.secret) {
+            setSecret(credentialsData.secret);
+        }
+    }, [credentialsData]);
+
     const selectedProvider = providers.find(
         provider => provider.id === clientAuthenticatorType
     );
@@ -71,21 +79,6 @@ const clientId = client.id!;
         [clientAuthenticatorType, componentTypes]
     );
 
-    useFetch(
-        () =>
-            Promise.all([
-                adminClient.authenticationManagement.getClientAuthenticatorProviders(),
-                adminClient.clients.getClientSecret({
-                    id: clientId
-                })
-            ]),
-        ([providers, secret]) => {
-            setProviders(providers);
-            setSecret(secret.value!);
-        },
-        []
-    );
-
     async function regenerate<T>(
         call: (clientId: string) => Promise<T>,
         message: string
@@ -95,7 +88,9 @@ const clientId = client.id!;
             toast.success(t(`${message}Success`));
             return data;
         } catch (error) {
-            toast.error(t(`${message}Error`, { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
+            toast.error(t(`${message}Error`, { error: getErrorMessage(error) }), {
+                description: getErrorDescription(error)
+            });
         }
     }
 
@@ -211,7 +206,10 @@ const clientId = client.id!;
                             </div>
                             <div className="flex gap-2">
                                 <div className="flex-1">
-                                    <code className="block p-2 bg-muted rounded text-sm break-all" id="kc-access-token">
+                                    <code
+                                        className="block p-2 bg-muted rounded text-sm break-all"
+                                        id="kc-access-token"
+                                    >
                                         {accessToken}
                                     </code>
                                 </div>

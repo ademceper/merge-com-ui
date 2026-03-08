@@ -1,14 +1,20 @@
 import type KeyStoreConfig from "@keycloak/keycloak-admin-client/lib/defs/keystoreConfig";
+import { useTranslation } from "@merge-rd/i18n";
+import { Button } from "@merge-rd/ui/components/button";
 import {
+    Dialog,
+    DialogContent,
+    DialogFooter,
+    DialogHeader,
+    DialogTitle
+} from "@merge-rd/ui/components/dialog";
+import { FormProvider, useForm, useFormContext } from "react-hook-form";
+import {
+    FileUploadControl,
     HelpItem,
     NumberControl,
-    SelectField,
-    FileUploadControl
+    SelectField
 } from "../../../../shared/keycloak-ui-shared";
-import { Button } from "@merge-rd/ui/components/button";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@merge-rd/ui/components/dialog";
-import { FormProvider, useForm, useFormContext } from "react-hook-form";
-import { useTranslation } from "@merge-rd/i18n";
 import { useServerInfo } from "../../../app/providers/server-info/server-info-provider";
 import { StoreSettings } from "./store-settings";
 
@@ -124,12 +130,19 @@ export const GenerateKeyDialog = ({
     } = form;
 
     return (
-        <Dialog open onOpenChange={(open) => { if (!open) toggleDialog(); }}>
+        <Dialog
+            open
+            onOpenChange={open => {
+                if (!open) toggleDialog();
+            }}
+        >
             <DialogContent className="max-w-lg">
                 <DialogHeader>
                     <DialogTitle>{t("generateKeys")}</DialogTitle>
                 </DialogHeader>
-                <p className="text-sm text-muted-foreground">{t("generateKeysDescription")}</p>
+                <p className="text-sm text-muted-foreground">
+                    {t("generateKeysDescription")}
+                </p>
                 <FormProvider {...form}>
                     <KeyForm />
                 </FormProvider>

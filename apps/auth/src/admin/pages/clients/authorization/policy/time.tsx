@@ -1,10 +1,10 @@
+import { useTranslation } from "@merge-rd/i18n";
 import { Input } from "@merge-rd/ui/components/input";
 import { Label } from "@merge-rd/ui/components/label";
 import { RadioGroup, RadioGroupItem } from "@merge-rd/ui/components/radio-group";
 import { useState } from "react";
-import { FormErrorText, HelpItem } from "../../../../../shared/keycloak-ui-shared";
-import { useTranslation } from "@merge-rd/i18n";
 import { Controller, useFormContext } from "react-hook-form";
+import { FormErrorText, HelpItem } from "../../../../../shared/keycloak-ui-shared";
 
 const DATE_TIME_FORMAT = /(\d\d\d\d-\d\d-\d\d)? (\d\d?):(\d\d?)/;
 const padDateSegment = (value: number) => value.toString().padStart(2, "0");
@@ -59,16 +59,16 @@ const DateTime = ({ name }: { name: string }) => {
                         <Input
                             type="date"
                             value={dateTime[1]}
-                            onChange={(e) => {
+                            onChange={e => {
                                 const date = e.target.valueAsDate;
                                 field.onChange(parseDate(field.value, date || undefined));
                             }}
                         />
                         <Input
                             type="time"
-                            value={`${dateTime[2].padStart(2, '0')}:${dateTime[3]}`}
-                            onChange={(e) => {
-                                const [h, m] = e.target.value.split(':').map(Number);
+                            value={`${dateTime[2].padStart(2, "0")}:${dateTime[3]}`}
+                            onChange={e => {
+                                const [h, m] = e.target.value.split(":").map(Number);
                                 field.onChange(parseTime(field.value, h, m));
                             }}
                         />
@@ -103,7 +103,7 @@ const NumberControl = ({ name, min, max }: NumberControlProps) => {
                     max={max}
                     onChange={event => {
                         const newValue = Number(event.currentTarget.value);
-                        field.onChange(setValue(!isNaN(newValue) ? newValue : 0));
+                        field.onChange(setValue(!Number.isNaN(newValue) ? newValue : 0));
                     }}
                 />
             )}
@@ -145,7 +145,7 @@ export const Time = () => {
                 </div>
                 <RadioGroup
                     value={repeat ? "repeat" : "notRepeat"}
-                    onValueChange={(v) => setRepeat(v === "repeat")}
+                    onValueChange={v => setRepeat(v === "repeat")}
                     className="flex gap-4"
                 >
                     <div className="flex items-center gap-2" data-testid="notRepeat">

@@ -1,18 +1,23 @@
 import type ComponentRepresentation from "@keycloak/keycloak-admin-client/lib/defs/componentRepresentation";
-import { getErrorDescription, getErrorMessage, TextControl, useFetch } from "../../../../../shared/keycloak-ui-shared";
-import { toast } from "sonner";
-import { Button } from "@merge-rd/ui/components/button";
-import { FormProvider, useForm } from "react-hook-form";
 import { useTranslation } from "@merge-rd/i18n";
+import { Button } from "@merge-rd/ui/components/button";
 import { useNavigate } from "@tanstack/react-router";
+import { useEffect } from "react";
+import { FormProvider, useForm } from "react-hook-form";
+import { toast } from "sonner";
+import {
+    getErrorDescription,
+    getErrorMessage,
+    TextControl
+} from "../../../../../shared/keycloak-ui-shared";
 import { useAdminClient } from "../../../../app/admin-client";
+import { useServerInfo } from "../../../../app/providers/server-info/server-info-provider";
+import { useParams } from "../../../../shared/lib/useParams";
+import { KEY_PROVIDER_TYPE } from "../../../../shared/lib/util";
 import { DynamicComponents } from "../../../../shared/ui/dynamic/dynamic-components";
 import { FormAccess } from "../../../../shared/ui/form/form-access";
-import { useServerInfo } from "../../../../app/providers/server-info/server-info-provider";
-import { KEY_PROVIDER_TYPE } from "../../../../shared/lib/util";
-import { useParams } from "../../../../shared/lib/useParams";
-import { KeyProviderParams, ProviderType } from "../../routes/key-provider";
-import { toKeysTab } from "../../routes/keys-tab";
+import { useComponent } from "../../api/use-component";
+import { type KeyProviderParams, type ProviderType, toKeysTab } from "../../../../shared/lib/routes/realm-settings";
 
 type KeyProviderFormProps = {
     id?: string;
@@ -25,7 +30,7 @@ export const KeyProviderForm = ({ providerType, onClose }: KeyProviderFormProps)
 
     const { t } = useTranslation();
     const { id } = useParams<{ id: string }>();
-const serverInfo = useServerInfo();
+    const serverInfo = useServerInfo();
     const allComponentTypes = serverInfo.componentTypes?.[KEY_PROVIDER_TYPE] ?? [];
 
     const form = useForm<ComponentRepresentation>({
@@ -59,21 +64,19 @@ const serverInfo = useServerInfo();
                 onClose?.();
             }
         } catch (error) {
-            toast.error(t("saveProviderError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
+            toast.error(t("saveProviderError", { error: getErrorMessage(error) }), {
+                description: getErrorDescription(error)
+            });
         }
     };
 
-    useFetch(
-        async () => {
-            if (id) return await adminClient.components.findOne({ id });
-        },
-        result => {
-            if (result) {
-                reset({ ...result });
-            }
-        },
-        []
-    );
+    const { data: componentData } = useComponent(id);
+
+    useEffect(() => {
+        if (componentData) {
+            reset({ ...componentData });
+        }
+    }, [componentData]);
 
     return (
         <FormAccess isHorizontal role="manage-realm" onSubmit={handleSubmit(save)}>
@@ -105,10 +108,7 @@ const serverInfo = useServerInfo();
                     }
                 />
                 <div className="flex gap-2">
-                    <Button
-                        data-testid="add-provider-button"
-                        type="submit"
-                    >
+                    <Button data-testid="add-provider-button" type="submit">
                         {t("save")}
                     </Button>
                     <Button onClick={() => onClose?.()} variant="ghost">
@@ -126,15 +126,15 @@ export default function KeyProviderFormPage() {
     const navigate = useNavigate();
 
     return (
-        <>
-                        <div className="p-6">
-                <KeyProviderForm
-                    {...params}
-                    onClose={() =>
-                        navigate({ to: toKeysTab({ realm: params.realm, tab: "providers" }) as string })
-                    }
-                />
-            </div>
-        </>
+        <div className="p-6">
+            <KeyProviderForm
+                {...params}
+                onClose={() =>
+                    navigate({
+                        to: toKeysTab({ realm: params.realm, tab: "providers" }) as string
+                    })
+                }
+            />
+        </div>
     );
 }

@@ -1,10 +1,9 @@
 import type { UserProfileConfig } from "@keycloak/keycloak-admin-client/lib/defs/userProfileMetadata";
-import { FormErrorText, HelpItem, useFetch } from "../../../../shared/keycloak-ui-shared";
-import { Label } from "@merge-rd/ui/components/label";
-import { useState } from "react";
-import { useFormContext } from "react-hook-form";
 import { useTranslation } from "@merge-rd/i18n";
-import { useAdminClient } from "../../../app/admin-client";
+import { Label } from "@merge-rd/ui/components/label";
+import { useFormContext } from "react-hook-form";
+import { FormErrorText, HelpItem } from "../../../../shared/keycloak-ui-shared";
+import { useUserProfile } from "../../api/use-user-profile";
 import { KeySelect } from "../key-select";
 import type { ComponentProps } from "./components";
 
@@ -15,21 +14,13 @@ export const UserProfileAttributeListComponent = ({
     required = false,
     convertToName
 }: ComponentProps) => {
-    const { adminClient } = useAdminClient();
-
     const { t } = useTranslation();
     const {
         formState: { errors }
     } = useFormContext();
 
-    const [config, setConfig] = useState<UserProfileConfig>();
+    const { data: config } = useUserProfile();
     const convertedName = convertToName(name!);
-
-    useFetch(
-        () => adminClient.users.getProfile(),
-        cfg => setConfig(cfg),
-        []
-    );
 
     const convert = (config?: UserProfileConfig) => {
         if (!config?.attributes) return [];
@@ -51,7 +42,10 @@ export const UserProfileAttributeListComponent = ({
     return (
         <div className="space-y-2">
             <div className="flex items-center gap-1">
-                <Label htmlFor={convertedName!}>{t(label!)}{required && " *"}</Label>
+                <Label htmlFor={convertedName!}>
+                    {t(label!)}
+                    {required && " *"}
+                </Label>
                 <HelpItem helpText={t(helpText!)} fieldLabelId={label!} />
             </div>
             <KeySelect

@@ -1,4 +1,4 @@
-import { DependencyList, EffectCallback, useEffect, useRef } from "react";
+import { type DependencyList, type EffectCallback, useEffect, useRef } from "react";
 
 /**
  * A `useEffect` hook that only triggers on updates, not on initial render.

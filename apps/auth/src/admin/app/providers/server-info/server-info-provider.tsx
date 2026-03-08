@@ -1,13 +1,13 @@
 import type { ServerInfoRepresentation } from "@keycloak/keycloak-admin-client/lib/defs/serverInfoRepesentation";
+import { useQuery } from "@tanstack/react-query";
+import type { PropsWithChildren } from "react";
 import {
     createNamedContext,
     KeycloakSpinner,
-    useFetch,
     useRequiredContext
 } from "../../../../shared/keycloak-ui-shared";
-import { PropsWithChildren, useState } from "react";
-import { useAdminClient } from "../../admin-client";
 import { sortProviders } from "../../../shared/lib/util";
+import { useAdminClient } from "../../admin-client";
 
 const ServerInfoContext = createNamedContext<ServerInfoRepresentation | undefined>(
     "ServerInfoContext",
@@ -21,9 +21,12 @@ export const useLoginProviders = () =>
 
 export const ServerInfoProvider = ({ children }: PropsWithChildren) => {
     const { adminClient } = useAdminClient();
-    const [serverInfo, setServerInfo] = useState<ServerInfoRepresentation>();
 
-    useFetch(() => adminClient.serverInfo.find(), setServerInfo, []);
+    const { data: serverInfo } = useQuery({
+        queryKey: ["serverInfo"],
+        queryFn: () => adminClient.serverInfo.find(),
+        staleTime: Number.POSITIVE_INFINITY
+    });
 
     if (!serverInfo) {
         return <KeycloakSpinner />;

@@ -1,4 +1,4 @@
-import { FormLabel } from "../../../../shared/keycloak-ui-shared";
+import { useTranslation } from "@merge-rd/i18n";
 import {
     Select,
     SelectContent,
@@ -8,7 +8,7 @@ import {
 } from "@merge-rd/ui/components/select";
 import { get } from "lodash-es";
 import { Controller, useFormContext, useWatch } from "react-hook-form";
-import { useTranslation } from "@merge-rd/i18n";
+import { FormLabel } from "../../../../shared/keycloak-ui-shared";
 import { useServerInfo } from "../../../app/providers/server-info/server-info-provider";
 import { sortProviders } from "../../../shared/lib/util";
 import { ClientIdSecret } from "../component/client-id-secret";
@@ -34,20 +34,31 @@ export const OIDCAuthentication = ({ create = true }: { create?: boolean }) => {
         name: "config.clientAuthMethod"
     });
 
-    const { formState: { errors } } = useFormContext();
+    const {
+        formState: { errors }
+    } = useFormContext();
     return (
         <>
-            <FormLabel name="config.clientAuthMethod" label={t("clientAuthentication")} labelIcon={t("clientAuthenticationHelp")} error={get(errors, "config.clientAuthMethod")}>
+            <FormLabel
+                name="config.clientAuthMethod"
+                label={t("clientAuthentication")}
+                labelIcon={t("clientAuthenticationHelp")}
+                error={get(errors, "config.clientAuthMethod")}
+            >
                 <Controller
                     name="config.clientAuthMethod"
                     control={control}
                     defaultValue={clientAuthentications[0]}
                     render={({ field }) => (
                         <Select value={field.value ?? ""} onValueChange={field.onChange}>
-                            <SelectTrigger id="config.clientAuthMethod"><SelectValue /></SelectTrigger>
+                            <SelectTrigger id="config.clientAuthMethod">
+                                <SelectValue />
+                            </SelectTrigger>
                             <SelectContent>
-                                {clientAuthentications.map((auth) => (
-                                    <SelectItem key={auth} value={auth}>{t(`clientAuthentications.${auth}`)}</SelectItem>
+                                {clientAuthentications.map(auth => (
+                                    <SelectItem key={auth} value={auth}>
+                                        {t(`clientAuthentications.${auth}`)}
+                                    </SelectItem>
                                 ))}
                             </SelectContent>
                         </Select>
@@ -58,18 +69,29 @@ export const OIDCAuthentication = ({ create = true }: { create?: boolean }) => {
                 secretRequired={clientAuthMethod !== "private_key_jwt"}
                 create={create}
             />
-            <FormLabel name="config.clientAssertionSigningAlg" label={t("clientAssertionSigningAlg")} labelIcon={t("clientAssertionSigningAlgHelp")} error={get(errors, "config.clientAssertionSigningAlg")}>
+            <FormLabel
+                name="config.clientAssertionSigningAlg"
+                label={t("clientAssertionSigningAlg")}
+                labelIcon={t("clientAssertionSigningAlgHelp")}
+                error={get(errors, "config.clientAssertionSigningAlg")}
+            >
                 <Controller
                     name="config.clientAssertionSigningAlg"
                     control={control}
                     defaultValue=""
                     render={({ field }) => (
                         <Select value={field.value ?? ""} onValueChange={field.onChange}>
-                            <SelectTrigger id="config.clientAssertionSigningAlg"><SelectValue /></SelectTrigger>
+                            <SelectTrigger id="config.clientAssertionSigningAlg">
+                                <SelectValue />
+                            </SelectTrigger>
                             <SelectContent>
-                                <SelectItem value="">{t("algorithmNotSpecified")}</SelectItem>
-                                {sortProviders(providers).map((p) => (
-                                    <SelectItem key={p} value={p}>{p}</SelectItem>
+                                <SelectItem value="">
+                                    {t("algorithmNotSpecified")}
+                                </SelectItem>
+                                {sortProviders(providers).map(p => (
+                                    <SelectItem key={p} value={p}>
+                                        {p}
+                                    </SelectItem>
                                 ))}
                             </SelectContent>
                         </Select>

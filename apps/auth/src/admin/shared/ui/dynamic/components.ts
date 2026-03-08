@@ -1,16 +1,18 @@
 import type { ConfigPropertyRepresentation } from "@keycloak/keycloak-admin-client/lib/defs/authenticatorConfigInfoRepresentation";
-import { FunctionComponent } from "react";
+import type { FunctionComponent } from "react";
 
 import { BooleanComponent } from "./boolean-component";
-import { ClientSelectComponent } from "./client-select-component";
 import { ClaimDisplayComponent } from "./claim-display-component";
-import { IdentityProviderMultiSelectComponent } from "./identity-provider-multi-select-component";
+import { ClientSelectComponent } from "./client-select-component";
 import { FileComponent } from "./file-component";
 import { GroupComponent } from "./group-component";
+import { IdentityProviderMultiSelectComponent } from "./identity-provider-multi-select-component";
+import { IntComponent } from "./int-component";
 import { ListComponent } from "./list-component";
 import { MapComponent } from "./map-component";
 import { MultiValuedListComponent } from "./multivalued-list-component";
 import { MultiValuedStringComponent } from "./multivalued-string-component";
+import { NumberComponent } from "./number-component";
 import { PasswordComponent } from "./password-component";
 import { RoleComponent } from "./role-component";
 import { ScriptComponent } from "./script-component";
@@ -18,8 +20,6 @@ import { StringComponent } from "./string-component";
 import { TextComponent } from "./text-component";
 import { UrlComponent } from "./url-component";
 import { UserProfileAttributeListComponent } from "./user-profile-attribute-list-component";
-import { IntComponent } from "./int-component";
-import { NumberComponent } from "./number-component";
 
 /** Optional layout overrides for dynamic form fields (e.g. hide label, help after control). */
 export type ComponentLayoutOptions = {

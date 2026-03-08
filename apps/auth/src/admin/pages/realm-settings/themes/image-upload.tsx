@@ -1,8 +1,8 @@
-import { KeycloakSpinner } from "../../../../shared/keycloak-ui-shared";
 import { Button } from "@merge-rd/ui/components/button";
 import { Input } from "@merge-rd/ui/components/input";
 import { useEffect, useState } from "react";
 import { Controller, useFormContext } from "react-hook-form";
+import { KeycloakSpinner } from "../../../../shared/keycloak-ui-shared";
 
 type ImageUploadProps = {
     name: string;
@@ -51,19 +51,27 @@ export const ImageUpload = ({ name, onChange }: ImageUploadProps) => {
             render={({ field }) => (
                 <div className="space-y-2">
                     {isLoading && <KeycloakSpinner />}
-                    {dataUri && <img src={dataUri} width={200} height={200} alt="" className="rounded border" />}
+                    {dataUri && (
+                        <img
+                            src={dataUri}
+                            width={200}
+                            height={200}
+                            alt=""
+                            className="rounded border"
+                        />
+                    )}
                     <div className="flex gap-2 items-center">
                         <Input
                             id={name}
                             type="file"
                             accept=".png,.gif,.jpeg,.jpg,.svg,.webp,image/*"
-                            onChange={(e) => {
+                            onChange={e => {
                                 const f = e.target.files?.[0];
                                 if (f) {
                                     setFile(f);
                                     setIsLoading(true);
                                     const reader = new FileReader();
-                                    reader.onload = (ev) => {
+                                    reader.onload = ev => {
                                         const dataUrl = ev.target?.result as string;
                                         setDataUri(dataUrl);
                                         field.onChange(dataUrl);
@@ -86,7 +94,9 @@ export const ImageUpload = ({ name, onChange }: ImageUploadProps) => {
                             Clear
                         </Button>
                     </div>
-                    {file?.name && <span className="text-sm text-muted-foreground">{file.name}</span>}
+                    {file?.name && (
+                        <span className="text-sm text-muted-foreground">{file.name}</span>
+                    )}
                 </div>
             )}
         />

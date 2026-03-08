@@ -1,5 +1,13 @@
-import { useFetch } from "../../../../../shared/keycloak-ui-shared";
-import { MagnifyingGlass } from "@phosphor-icons/react";
+import { Trans, useTranslation } from "@merge-rd/i18n";
+import { Badge } from "@merge-rd/ui/components/badge";
+import { Button } from "@merge-rd/ui/components/button";
+import {
+    Dialog,
+    DialogContent,
+    DialogFooter,
+    DialogHeader,
+    DialogTitle
+} from "@merge-rd/ui/components/dialog";
 import {
     Empty,
     EmptyContent,
@@ -8,17 +16,11 @@ import {
     EmptyMedia,
     EmptyTitle
 } from "@merge-rd/ui/components/empty";
-import {
-    Dialog,
-    DialogContent,
-    DialogFooter,
-    DialogHeader,
-    DialogTitle
-} from "@merge-rd/ui/components/dialog";
-import { Badge } from "@merge-rd/ui/components/badge";
-import { Button } from "@merge-rd/ui/components/button";
 import { Input } from "@merge-rd/ui/components/input";
 import { Label } from "@merge-rd/ui/components/label";
+import { MagnifyingGlass } from "@phosphor-icons/react";
+import { useEffect, useState } from "react";
+import { useFormContext } from "react-hook-form";
 import {
     Table,
     TableBody,
@@ -28,15 +30,12 @@ import {
     TableRow
 } from "@/admin/shared/ui/data-table";
 import { TablePagination } from "@/admin/shared/ui/table-pagination";
-import { useState } from "react";
-import { useFormContext } from "react-hook-form";
-import { Trans, useTranslation } from "@merge-rd/i18n";
-import { useAdminClient } from "../../../../app/admin-client";
 import { useRealm } from "../../../../app/providers/realm-context/realm-context";
 import { useWhoAmI } from "../../../../app/providers/whoami/who-am-i";
-import { beerify, localeToDisplayName } from "../../../../shared/lib/util";
 import useLocale from "../../../../shared/lib/useLocale";
-import { Translation, TranslationForm } from "./translatable-field";
+import { beerify, localeToDisplayName } from "../../../../shared/lib/util";
+import { useRealmLocalizationTexts } from "../../api/use-realm-localization-texts";
+import type { Translation, TranslationForm } from "./translatable-field";
 
 type AddTranslationsDialogProps = {
     orgKey: string;
@@ -53,9 +52,8 @@ export const AddTranslationsDialog = ({
     toggleDialog,
     predefinedAttributes
 }: AddTranslationsDialogProps) => {
-    const { adminClient } = useAdminClient();
     const { t } = useTranslation();
-    const { realm: realmName, realmRepresentation: realm } = useRealm();
+    const { realmRepresentation: realm } = useRealm();
     const combinedLocales = useLocale();
     const { whoAmI } = useWhoAmI();
     const [max, setMax] = useState(10);
@@ -84,36 +82,24 @@ export const AddTranslationsDialog = ({
         });
     };
 
-    useFetch(
-        async () => {
-            const selectedLocales = combinedLocales
-                .filter(l =>
-                    localeToDisplayName(l, whoAmI.locale)
-                        ?.toLocaleLowerCase(realm?.defaultLocale)
-                        ?.includes(filter.toLocaleLowerCase(realm?.defaultLocale))
-                )
-                .slice(first, first + max + 1);
+    const filteredLocales = combinedLocales.filter(l =>
+        localeToDisplayName(l, whoAmI.locale)
+            ?.toLocaleLowerCase(realm?.defaultLocale)
+            ?.includes(filter.toLocaleLowerCase(realm?.defaultLocale))
+    );
 
-            const results = await Promise.all(
-                selectedLocales.map(selectedLocale =>
-                    adminClient.realms.getRealmLocalizationTexts({
-                        realm: realmName,
-                        selectedLocale
-                    })
-                )
-            );
+    const { data: fetchedData } = useRealmLocalizationTexts(
+        filteredLocales,
+        translationKey,
+        { first, max, filter }
+    );
 
-            return results.map((result, index) => ({
-                locale: selectedLocales[index],
-                value: result[translationKey]
-            }));
-        },
-        fetchedData => {
+    useEffect(() => {
+        if (fetchedData) {
             setTranslations(fetchedData);
             setupForm({ [translationKey]: fetchedData });
-        },
-        [combinedLocales, first, max, filter]
-    );
+        }
+    }, [fetchedData]);
 
     return (
         <Dialog open onOpenChange={open => !open && toggleDialog()}>
@@ -129,7 +115,11 @@ export const AddTranslationsDialog = ({
                         You are able to translate the fieldName based on your locale or
                         <strong>location</strong>
                     </Trans>
-                    <form id="add-translation" data-testid="addTranslationForm" className="flex flex-col gap-4">
+                    <form
+                        id="add-translation"
+                        data-testid="addTranslationForm"
+                        className="flex flex-col gap-4"
+                    >
                         <div className="space-y-2">
                             <Label htmlFor="translationKey">{t("translationKey")}</Label>
                             <Input
@@ -156,9 +146,11 @@ export const AddTranslationsDialog = ({
                                         placeholder={t("searchForLanguage")}
                                         aria-label={t("search")}
                                         className="border-0 bg-transparent shadow-none focus-visible:ring-0 flex-1 min-w-0"
-                                        onKeyDown={(e) => {
+                                        onKeyDown={e => {
                                             if (e.key === "Enter") {
-                                                setFilter((e.target as HTMLInputElement).value);
+                                                setFilter(
+                                                    (e.target as HTMLInputElement).value
+                                                );
                                                 setFirst(0);
                                                 setMax(10);
                                             }
@@ -180,75 +172,82 @@ export const AddTranslationsDialog = ({
                             </div>
                             {translations.length === 0 && filter && (
                                 <Empty className="py-8">
-                                    <EmptyMedia><MagnifyingGlass className="size-12 text-muted-foreground" /></EmptyMedia>
-                                    <EmptyHeader><EmptyTitle>{t("noSearchResults")}</EmptyTitle></EmptyHeader>
-                                    <EmptyContent><EmptyDescription>{t("noLanguagesSearchResultsInstructions")}</EmptyDescription></EmptyContent>
+                                    <EmptyMedia>
+                                        <MagnifyingGlass className="size-12 text-muted-foreground" />
+                                    </EmptyMedia>
+                                    <EmptyHeader>
+                                        <EmptyTitle>{t("noSearchResults")}</EmptyTitle>
+                                    </EmptyHeader>
+                                    <EmptyContent>
+                                        <EmptyDescription>
+                                            {t("noLanguagesSearchResultsInstructions")}
+                                        </EmptyDescription>
+                                    </EmptyContent>
                                 </Empty>
                             )}
                             {translations.length !== 0 && (
-                                    <Table
-                                        aria-label={t("addTranslationsDialogRowsTable")}
-                                        data-testid="add-translations-dialog-rows-table"
-                                        className="text-sm"
-                                    >
-                                        <TableHeader>
-                                            <TableRow>
-                                                <TableHead className="py-2">
-                                                    {t(
-                                                        "supportedLanguagesTableColumnName"
-                                                    )}
-                                                </TableHead>
-                                                <TableHead className="py-2">
-                                                    {t("translationTableColumnName")}
-                                                </TableHead>
-                                            </TableRow>
-                                        </TableHeader>
-                                        <TableBody>
-                                            {translations
-                                                .slice(0, max)
-                                                .map((translation, index) => (
-                                                    <TableRow key={index}>
-                                                        <TableCell
-                                                            data-label={t(
-                                                                "supportedLanguage"
-                                                            )}
-                                                        >
-                                                            {localeToDisplayName(
-                                                                translation.locale,
-                                                                whoAmI.locale
-                                                            )}
-                                                            {translation.locale ===
-                                                                realm?.defaultLocale && (
-                                                                <Badge variant="secondary" className="ml-1">
-                                                                    {t("defaultLanguage")}
-                                                                </Badge>
-                                                            )}
-                                                        </TableCell>
-                                                        <TableCell>
-                                                            <Input
-                                                                id={`${prefix}.${index}.value`}
-                                                                data-testid={`translation-value-${index}`}
-                                                                {...register(
-                                                                    `${prefix}.${index}.value`,
-                                                                    {
-                                                                        required: {
-                                                                            value:
-                                                                                translation.locale ===
-                                                                                realm?.defaultLocale,
-                                                                            message:
-                                                                                t(
-                                                                                    "required"
-                                                                                )
-                                                                        }
+                                <Table
+                                    aria-label={t("addTranslationsDialogRowsTable")}
+                                    data-testid="add-translations-dialog-rows-table"
+                                    className="text-sm"
+                                >
+                                    <TableHeader>
+                                        <TableRow>
+                                            <TableHead className="py-2">
+                                                {t("supportedLanguagesTableColumnName")}
+                                            </TableHead>
+                                            <TableHead className="py-2">
+                                                {t("translationTableColumnName")}
+                                            </TableHead>
+                                        </TableRow>
+                                    </TableHeader>
+                                    <TableBody>
+                                        {translations
+                                            .slice(0, max)
+                                            .map((translation, index) => (
+                                                <TableRow key={index}>
+                                                    <TableCell
+                                                        data-label={t(
+                                                            "supportedLanguage"
+                                                        )}
+                                                    >
+                                                        {localeToDisplayName(
+                                                            translation.locale,
+                                                            whoAmI.locale
+                                                        )}
+                                                        {translation.locale ===
+                                                            realm?.defaultLocale && (
+                                                            <Badge
+                                                                variant="secondary"
+                                                                className="ml-1"
+                                                            >
+                                                                {t("defaultLanguage")}
+                                                            </Badge>
+                                                        )}
+                                                    </TableCell>
+                                                    <TableCell>
+                                                        <Input
+                                                            id={`${prefix}.${index}.value`}
+                                                            data-testid={`translation-value-${index}`}
+                                                            {...register(
+                                                                `${prefix}.${index}.value`,
+                                                                {
+                                                                    required: {
+                                                                        value:
+                                                                            translation.locale ===
+                                                                            realm?.defaultLocale,
+                                                                        message:
+                                                                            t("required")
                                                                     }
-                                                                )}
-                                                            />
-                                                        </TableCell>
-                                                    </TableRow>
-                                                ))}
-                                        </TableBody>
-                                    </Table>
-                                )}
+                                                                }
+                                                            )}
+                                                        />
+                                                    </TableCell>
+                                                </TableRow>
+                                            ))}
+                                    </TableBody>
+                                </Table>
+                            )}
                         </div>
                     </form>
                 </div>

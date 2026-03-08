@@ -1,5 +1,5 @@
-import { FieldPath, FieldValues } from "react-hook-form";
 import { useTranslation } from "@merge-rd/i18n";
+import type { FieldPath, FieldValues } from "react-hook-form";
 import type { SwitchControlProps } from "../../../shared/keycloak-ui-shared";
 import { SwitchControl } from "../../../shared/keycloak-ui-shared";
 

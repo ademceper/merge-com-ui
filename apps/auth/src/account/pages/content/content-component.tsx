@@ -5,11 +5,11 @@
  * $ npx keycloakify own --path "account/content/ContentComponent.tsx" --revert
  */
 
-import { Suspense, lazy, useMemo, useState } from "react";
 import { useParams } from "@tanstack/react-router";
+import { lazy, Suspense, useMemo, useState } from "react";
 import { useEnvironment } from "../../../shared/keycloak-ui-shared";
-import type { MenuItem } from "../../shared/lib/menu-item";
 import { joinPath } from "../../shared/lib/joinPath";
+import type { MenuItem } from "../../shared/lib/menu-item";
 import { usePromise } from "../../shared/lib/usePromise";
 import fetchContentJson from "./fetchContent";
 

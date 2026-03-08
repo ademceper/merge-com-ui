@@ -1,0 +1,14 @@
+import { useQuery } from "@tanstack/react-query";
+import { useAdminClient } from "../../../app/admin-client";
+import { useRealm } from "../../../app/providers/realm-context/realm-context";
+import { fetchKeyProviderComponents } from "../../../api/realm-settings";
+import { realmSettingsKeys } from "./keys";
+
+export function useKeyProviderComponents() {
+    const { adminClient } = useAdminClient();
+    const { realm } = useRealm();
+    return useQuery({
+        queryKey: realmSettingsKeys.keyProviderComponents(realm),
+        queryFn: () => fetchKeyProviderComponents(adminClient, realm)
+    });
+}

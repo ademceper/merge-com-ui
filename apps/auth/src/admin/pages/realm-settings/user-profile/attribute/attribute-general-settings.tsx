@@ -1,16 +1,8 @@
-import type ClientScopeRepresentation from "@keycloak/keycloak-admin-client/lib/defs/clientScopeRepresentation";
-import type { UserProfileConfig } from "@keycloak/keycloak-admin-client/lib/defs/userProfileMetadata";
-import {
-    HelpItem,
-    KeycloakSpinner,
-    TextControl,
-    useFetch
-} from "../../../../../shared/keycloak-ui-shared";
+import { useTranslation } from "@merge-rd/i18n";
 import { Button } from "@merge-rd/ui/components/button";
 import { Label } from "@merge-rd/ui/components/label";
 import { Popover, PopoverContent, PopoverTrigger } from "@merge-rd/ui/components/popover";
 import { RadioGroup, RadioGroupItem } from "@merge-rd/ui/components/radio-group";
-import { Separator } from "@merge-rd/ui/components/separator";
 import {
     Select,
     SelectContent,
@@ -18,20 +10,24 @@ import {
     SelectTrigger,
     SelectValue
 } from "@merge-rd/ui/components/select";
+import { Separator } from "@merge-rd/ui/components/separator";
 import { Switch } from "@merge-rd/ui/components/switch";
 import { isEqual } from "lodash-es";
-import { useState } from "react";
 import { Controller, FormProvider, useFormContext, useWatch } from "react-hook-form";
-import { useTranslation } from "@merge-rd/i18n";
-import { useAdminClient } from "../../../../app/admin-client";
+import {
+    HelpItem,
+    KeycloakSpinner,
+    TextControl
+} from "../../../../../shared/keycloak-ui-shared";
+import useLocaleSort, { mapByKey } from "../../../../shared/lib/useLocaleSort";
+import { useParams } from "../../../../shared/lib/useParams";
 import { FormAccess } from "../../../../shared/ui/form/form-access";
 import { DefaultSwitchControl } from "../../../../shared/ui/switch-control";
-import { useParams } from "../../../../shared/lib/useParams";
+import { useClientScopes } from "../../api/use-client-scopes";
+import { useUserProfileConfigGlobal } from "../../api/use-user-profile-config-global";
 import { USERNAME_EMAIL } from "../../new-attribute-settings";
-import { AttributeParams } from "../../routes/attribute";
+import type { AttributeParams } from "../../../../shared/lib/routes/realm-settings";
 import { TranslatableField } from "./translatable-field";
-
-import useLocaleSort, { mapByKey } from "../../../../shared/lib/useLocaleSort";
 
 const REQUIRED_FOR = [
     { label: "requiredForLabel.both", value: ["admin", "user"] },
@@ -40,15 +36,12 @@ const REQUIRED_FOR = [
 ] as const;
 
 export const AttributeGeneralSettings = () => {
-    const { adminClient } = useAdminClient();
     const { t } = useTranslation();
     const form = useFormContext();
-    const [clientScopes, setClientScopes] = useState<ClientScopeRepresentation[]>();
-    const [config, setConfig] = useState<UserProfileConfig>();
     const localeSort = useLocaleSort();
 
     const { attributeName } = useParams<AttributeParams>();
-    const editMode = attributeName ? true : false;
+    const editMode = !!attributeName;
 
     const hasSelector = useWatch({
         control: form.control,
@@ -66,8 +59,8 @@ export const AttributeGeneralSettings = () => {
         defaultValue: false
     });
 
-    useFetch(() => adminClient.clientScopes.find(), setClientScopes, []);
-    useFetch(() => adminClient.users.getProfile(), setConfig, []);
+    const { data: clientScopes } = useClientScopes();
+    const { data: config } = useUserProfileConfigGlobal();
 
     if (!clientScopes) {
         return <KeycloakSpinner />;
@@ -99,7 +92,9 @@ export const AttributeGeneralSettings = () => {
                 />
                 <div className="space-y-2">
                     <div className="flex items-center gap-1">
-                        <Label htmlFor="kc-attribute-displayName">{t("attributeDisplayName")}</Label>
+                        <Label htmlFor="kc-attribute-displayName">
+                            {t("attributeDisplayName")}
+                        </Label>
                         <HelpItem
                             helpText={t("attributeDisplayNameHelp")}
                             fieldLabelId="attributeDisplayName"
@@ -132,7 +127,10 @@ export const AttributeGeneralSettings = () => {
                 <div className="space-y-2">
                     <div className="flex items-center gap-1">
                         <Label htmlFor="attribute-group">{t("attributeGroup")}</Label>
-                        <HelpItem helpText={t("attributeGroupHelp")} fieldLabelId="attributeGroup" />
+                        <HelpItem
+                            helpText={t("attributeGroupHelp")}
+                            fieldLabelId="attributeGroup"
+                        />
                     </div>
                     <Controller
                         name="group"
@@ -140,8 +138,14 @@ export const AttributeGeneralSettings = () => {
                         defaultValue=""
                         render={({ field }) => (
                             <Select
-                                value={field.value === "" || field.value == null ? "__none__" : field.value}
-                                onValueChange={(v) => field.onChange(v === "__none__" ? "" : v)}
+                                value={
+                                    field.value === "" || field.value == null
+                                        ? "__none__"
+                                        : field.value
+                                }
+                                onValueChange={v =>
+                                    field.onChange(v === "__none__" ? "" : v)
+                                }
                             >
                                 <SelectTrigger id="attribute-group">
                                     <SelectValue placeholder={t("none")} />
@@ -149,8 +153,8 @@ export const AttributeGeneralSettings = () => {
                                 <SelectContent>
                                     <SelectItem value="__none__">{t("none")}</SelectItem>
                                     {(config?.groups ?? [])
-                                        .filter((g) => g.name != null && g.name !== "")
-                                        .map((g) => (
+                                        .filter(g => g.name != null && g.name !== "")
+                                        .map(g => (
                                             <SelectItem key={g.name!} value={g.name!}>
                                                 {g.name}
                                             </SelectItem>
@@ -173,15 +177,27 @@ export const AttributeGeneralSettings = () => {
                             </div>
                             <RadioGroup
                                 value={hasSelector ? "scopesAsRequested" : "always"}
-                                onValueChange={value => setHasSelector(value === "scopesAsRequested")}
+                                onValueChange={value =>
+                                    setHasSelector(value === "scopesAsRequested")
+                                }
                             >
                                 <div className="flex items-center gap-2 mb-2">
-                                    <RadioGroupItem value="always" id="always" data-testid="always" />
+                                    <RadioGroupItem
+                                        value="always"
+                                        id="always"
+                                        data-testid="always"
+                                    />
                                     <Label htmlFor="always">{t("always")}</Label>
                                 </div>
                                 <div className="flex items-center gap-2 mb-2">
-                                    <RadioGroupItem value="scopesAsRequested" id="scopesAsRequested" data-testid="scopesAsRequested" />
-                                    <Label htmlFor="scopesAsRequested">{t("scopesAsRequested")}</Label>
+                                    <RadioGroupItem
+                                        value="scopesAsRequested"
+                                        id="scopesAsRequested"
+                                        data-testid="scopesAsRequested"
+                                    />
+                                    <Label htmlFor="scopesAsRequested">
+                                        {t("scopesAsRequested")}
+                                    </Label>
                                 </div>
                             </RadioGroup>
                         </div>
@@ -201,7 +217,8 @@ export const AttributeGeneralSettings = () => {
                                                     data-testid="enabled-when-scope-field"
                                                 >
                                                     <span className="truncate">
-                                                        {Array.isArray(field.value) && field.value.length > 0
+                                                        {Array.isArray(field.value) &&
+                                                        field.value.length > 0
                                                             ? field.value.join(", ")
                                                             : t("selectScopes")}
                                                     </span>
@@ -212,21 +229,36 @@ export const AttributeGeneralSettings = () => {
                                                 align="start"
                                             >
                                                 <ul className="max-h-64 overflow-auto py-1">
-                                                    {scopeOptions.map((s) => {
+                                                    {scopeOptions.map(s => {
                                                         const name = s.name ?? "";
-                                                        const selected = Array.isArray(field.value) && field.value.includes(name);
+                                                        const selected =
+                                                            Array.isArray(field.value) &&
+                                                            field.value.includes(name);
                                                         return (
                                                             <li
                                                                 key={name}
-                                                                role="option"
                                                                 aria-selected={selected}
                                                                 className="hover:bg-accent cursor-pointer px-2 py-1.5 text-sm"
-                                                                onMouseDown={(e) => e.preventDefault()}
+                                                                onMouseDown={e =>
+                                                                    e.preventDefault()
+                                                                }
                                                                 onClick={() => {
                                                                     if (selected) {
-                                                                        field.onChange(field.value.filter((x: string) => x !== name));
+                                                                        field.onChange(
+                                                                            field.value.filter(
+                                                                                (
+                                                                                    x: string
+                                                                                ) =>
+                                                                                    x !==
+                                                                                    name
+                                                                            )
+                                                                        );
                                                                     } else {
-                                                                        field.onChange([...(field.value || []), name]);
+                                                                        field.onChange([
+                                                                            ...(field.value ||
+                                                                                []),
+                                                                            name
+                                                                        ]);
                                                                     }
                                                                 }}
                                                             >
@@ -235,19 +267,22 @@ export const AttributeGeneralSettings = () => {
                                                         );
                                                     })}
                                                 </ul>
-                                                {Array.isArray(field.value) && field.value.length > 0 && (
-                                                    <div className="border-t px-2 py-1">
-                                                        <Button
-                                                            type="button"
-                                                            variant="ghost"
-                                                            size="sm"
-                                                            className="h-7 w-full justify-center"
-                                                            onClick={() => field.onChange([])}
-                                                        >
-                                                            {t("clear")}
-                                                        </Button>
-                                                    </div>
-                                                )}
+                                                {Array.isArray(field.value) &&
+                                                    field.value.length > 0 && (
+                                                        <div className="border-t px-2 py-1">
+                                                            <Button
+                                                                type="button"
+                                                                variant="ghost"
+                                                                size="sm"
+                                                                className="h-7 w-full justify-center"
+                                                                onClick={() =>
+                                                                    field.onChange([])
+                                                                }
+                                                            >
+                                                                {t("clear")}
+                                                            </Button>
+                                                        </div>
+                                                    )}
                                             </PopoverContent>
                                         </Popover>
                                     )}
@@ -292,19 +327,34 @@ export const AttributeGeneralSettings = () => {
                                         defaultValue={REQUIRED_FOR[0].value}
                                         control={form.control}
                                         render={({ field }) => {
-                                            const selectedLabel = REQUIRED_FOR.find(opt => isEqual(field.value, opt.value))?.label ?? REQUIRED_FOR[0].label;
+                                            const selectedLabel =
+                                                REQUIRED_FOR.find(opt =>
+                                                    isEqual(field.value, opt.value)
+                                                )?.label ?? REQUIRED_FOR[0].label;
                                             return (
                                                 <RadioGroup
                                                     value={selectedLabel}
-                                                    onValueChange={(label) => {
-                                                        const option = REQUIRED_FOR.find(o => o.label === label);
-                                                        if (option) field.onChange(option.value);
+                                                    onValueChange={label => {
+                                                        const option = REQUIRED_FOR.find(
+                                                            o => o.label === label
+                                                        );
+                                                        if (option)
+                                                            field.onChange(option.value);
                                                     }}
                                                 >
                                                     {REQUIRED_FOR.map(option => (
-                                                        <div key={option.label} className="flex items-center gap-2 mb-2">
-                                                            <RadioGroupItem value={option.label} id={option.label} data-testid={option.label} />
-                                                            <Label htmlFor={option.label}>{t(option.label)}</Label>
+                                                        <div
+                                                            key={option.label}
+                                                            className="flex items-center gap-2 mb-2"
+                                                        >
+                                                            <RadioGroupItem
+                                                                value={option.label}
+                                                                id={option.label}
+                                                                data-testid={option.label}
+                                                            />
+                                                            <Label htmlFor={option.label}>
+                                                                {t(option.label)}
+                                                            </Label>
                                                         </div>
                                                     ))}
                                                 </RadioGroup>
@@ -321,16 +371,36 @@ export const AttributeGeneralSettings = () => {
                                         />
                                     </div>
                                     <RadioGroup
-                                        value={hasRequiredScopes ? "requiredScopesAsRequested" : "requiredAlways"}
-                                        onValueChange={value => setHasRequiredScopes(value === "requiredScopesAsRequested")}
+                                        value={
+                                            hasRequiredScopes
+                                                ? "requiredScopesAsRequested"
+                                                : "requiredAlways"
+                                        }
+                                        onValueChange={value =>
+                                            setHasRequiredScopes(
+                                                value === "requiredScopesAsRequested"
+                                            )
+                                        }
                                     >
                                         <div className="flex items-center gap-2 mb-2">
-                                            <RadioGroupItem value="requiredAlways" id="requiredAlways" data-testid="requiredAlways" />
-                                            <Label htmlFor="requiredAlways">{t("always")}</Label>
+                                            <RadioGroupItem
+                                                value="requiredAlways"
+                                                id="requiredAlways"
+                                                data-testid="requiredAlways"
+                                            />
+                                            <Label htmlFor="requiredAlways">
+                                                {t("always")}
+                                            </Label>
                                         </div>
                                         <div className="flex items-center gap-2 mb-2">
-                                            <RadioGroupItem value="requiredScopesAsRequested" id="requiredScopesAsRequested" data-testid="requiredScopesAsRequested" />
-                                            <Label htmlFor="requiredScopesAsRequested">{t("scopesAsRequested")}</Label>
+                                            <RadioGroupItem
+                                                value="requiredScopesAsRequested"
+                                                id="requiredScopesAsRequested"
+                                                data-testid="requiredScopesAsRequested"
+                                            />
+                                            <Label htmlFor="requiredScopesAsRequested">
+                                                {t("scopesAsRequested")}
+                                            </Label>
                                         </div>
                                     </RadioGroup>
                                 </div>
@@ -350,8 +420,13 @@ export const AttributeGeneralSettings = () => {
                                                             data-testid="required-when-scope-field"
                                                         >
                                                             <span className="truncate">
-                                                                {Array.isArray(field.value) && field.value.length > 0
-                                                                    ? field.value.join(", ")
+                                                                {Array.isArray(
+                                                                    field.value
+                                                                ) &&
+                                                                field.value.length > 0
+                                                                    ? field.value.join(
+                                                                          ", "
+                                                                      )
                                                                     : t("selectScopes")}
                                                             </span>
                                                         </Button>
@@ -361,21 +436,46 @@ export const AttributeGeneralSettings = () => {
                                                         align="start"
                                                     >
                                                         <ul className="max-h-64 overflow-auto py-1">
-                                                            {scopeOptions.map((s) => {
+                                                            {scopeOptions.map(s => {
                                                                 const name = s.name ?? "";
-                                                                const selected = Array.isArray(field.value) && field.value.includes(name);
+                                                                const selected =
+                                                                    Array.isArray(
+                                                                        field.value
+                                                                    ) &&
+                                                                    field.value.includes(
+                                                                        name
+                                                                    );
                                                                 return (
                                                                     <li
                                                                         key={name}
-                                                                        role="option"
-                                                                        aria-selected={selected}
+                                                                        aria-selected={
+                                                                            selected
+                                                                        }
                                                                         className="hover:bg-accent cursor-pointer px-2 py-1.5 text-sm"
-                                                                        onMouseDown={(e) => e.preventDefault()}
+                                                                        onMouseDown={e =>
+                                                                            e.preventDefault()
+                                                                        }
                                                                         onClick={() => {
-                                                                            if (selected) {
-                                                                                field.onChange(field.value.filter((x: string) => x !== name));
+                                                                            if (
+                                                                                selected
+                                                                            ) {
+                                                                                field.onChange(
+                                                                                    field.value.filter(
+                                                                                        (
+                                                                                            x: string
+                                                                                        ) =>
+                                                                                            x !==
+                                                                                            name
+                                                                                    )
+                                                                                );
                                                                             } else {
-                                                                                field.onChange([...(field.value || []), name]);
+                                                                                field.onChange(
+                                                                                    [
+                                                                                        ...(field.value ||
+                                                                                            []),
+                                                                                        name
+                                                                                    ]
+                                                                                );
                                                                             }
                                                                         }}
                                                                     >
@@ -384,19 +484,24 @@ export const AttributeGeneralSettings = () => {
                                                                 );
                                                             })}
                                                         </ul>
-                                                        {Array.isArray(field.value) && field.value.length > 0 && (
-                                                            <div className="border-t px-2 py-1">
-                                                                <Button
-                                                                    type="button"
-                                                                    variant="ghost"
-                                                                    size="sm"
-                                                                    className="h-7 w-full justify-center"
-                                                                    onClick={() => field.onChange([])}
-                                                                >
-                                                                    {t("clear")}
-                                                                </Button>
-                                                            </div>
-                                                        )}
+                                                        {Array.isArray(field.value) &&
+                                                            field.value.length > 0 && (
+                                                                <div className="border-t px-2 py-1">
+                                                                    <Button
+                                                                        type="button"
+                                                                        variant="ghost"
+                                                                        size="sm"
+                                                                        className="h-7 w-full justify-center"
+                                                                        onClick={() =>
+                                                                            field.onChange(
+                                                                                []
+                                                                            )
+                                                                        }
+                                                                    >
+                                                                        {t("clear")}
+                                                                    </Button>
+                                                                </div>
+                                                            )}
                                                     </PopoverContent>
                                                 </Popover>
                                             )}

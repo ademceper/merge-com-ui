@@ -1,15 +1,19 @@
-import IdentityProviderRepresentation from "@keycloak/keycloak-admin-client/lib/defs/identityProviderRepresentation";
+import type IdentityProviderRepresentation from "@keycloak/keycloak-admin-client/lib/defs/identityProviderRepresentation";
+import { useTranslation } from "@merge-rd/i18n";
 import { Button } from "@merge-rd/ui/components/button";
 import { Field } from "@merge-rd/ui/components/field";
 import { useFormContext, useWatch } from "react-hook-form";
-import { DefaultSwitchControl } from "../../../shared/ui/switch-control";
-import { useTranslation } from "@merge-rd/i18n";
-import { getErrorDescription, getErrorMessage, TextAreaControl,
-    TextControl } from "../../../../shared/keycloak-ui-shared";
 import { toast } from "sonner";
-import { ImportFile, ImportKeyDialog } from "../../clients/keys/import-key-dialog";
-import useToggle from "../../../shared/lib/useToggle";
+import {
+    getErrorDescription,
+    getErrorMessage,
+    TextAreaControl,
+    TextControl
+} from "../../../../shared/keycloak-ui-shared";
 import { useAdminClient } from "../../../app/admin-client";
+import useToggle from "../../../shared/lib/useToggle";
+import { DefaultSwitchControl } from "../../../shared/ui/switch-control";
+import { type ImportFile, ImportKeyDialog } from "../../clients/keys/import-key-dialog";
 
 type JwksSettingsProps = {
     readOnly?: boolean;
@@ -19,7 +23,7 @@ export const JwksSettings = ({ readOnly = false }: JwksSettingsProps) => {
     const { t } = useTranslation();
     const { control, setValue } = useFormContext<IdentityProviderRepresentation>();
     const { adminClient } = useAdminClient();
-const [openImportKeys, toggleOpenImportKeys, setOpenImportKeys] = useToggle();
+    const [openImportKeys, toggleOpenImportKeys, setOpenImportKeys] = useToggle();
     const useJwks = useWatch({
         control,
         name: "config.useJwksUrl",
@@ -55,7 +59,9 @@ const [openImportKeys, toggleOpenImportKeys, setOpenImportKeys] = useToggle();
                 toast.error(t("importError", { error: t("emptyResources") }));
             }
         } catch (error) {
-            toast.error(t("importError", { error: getErrorMessage(error) }), { description: getErrorDescription(error) });
+            toast.error(t("importError", { error: getErrorMessage(error) }), {
+                description: getErrorDescription(error)
+            });
         }
     };
 
